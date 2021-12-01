@@ -10,11 +10,11 @@ on:
       - 'nodejs-server-server/**'
 defaults:
   run:
-    working-directory: 'nodejs-server-server'
+    working-directory: ./nodejs-server-server
 
 jobs:
   build:
-
+    
     runs-on: self-hosted
 
     strategy:
