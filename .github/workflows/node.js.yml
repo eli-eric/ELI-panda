@@ -8,7 +8,10 @@ on:
     branches: [ main ]
     paths:
       - 'nodejs-server-server/**'
-  
+defaults:
+  run:
+    working-directory: 'nodejs-server-server'
+
 jobs:
   build:
 
