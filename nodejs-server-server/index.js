@@ -10,8 +10,6 @@ var jsyaml = require('js-yaml');
 var serverPort = 3000;
 
 
-
-
 // swaggerRouter configuration
 var options = {
   swaggerUi: path.join(__dirname, '/swagger.json'),
