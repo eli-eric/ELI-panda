@@ -1,2 +1,2 @@
-# ELI-panda-database
-ELI oPerations And maiNtenance DAtabase - database part
+# ELI-panda
+ELI oPerations And maiNtenance DAtabase
