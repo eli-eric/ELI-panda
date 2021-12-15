@@ -76,7 +76,7 @@ If you want to run the application locally, without using Docker, then:
 * Start the application. Run:
 
     ```bash
-    uvicorn app.main:app --port 5000 --reload
+    uvicorn app.main:app --port 5001 --reload
     ```
 
 ### Check the APIs
@@ -84,7 +84,7 @@ If you want to run the application locally, without using Docker, then:
 * To play around with the APIs, go to the following link on your browser:
 
     ```
-    http://localhost:5000/docs
+    http://localhost:5001/docs
     ```
 
     This will take you to an UI like below:
@@ -141,7 +141,7 @@ If you want to run the application locally, without using Docker, then:
 
         # Collect the API token.
         r = client.post(
-            "http://localhost:5000/token",
+            "http://localhost:5001/token",
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             data={"username": "ubuntu", "password": "debian"},
         )
@@ -149,7 +149,7 @@ If you want to run the application locally, without using Docker, then:
 
         # Use the token value to hit the API.
         r = client.get(
-            "http://localhost:5000/api_a/22",
+            "http://localhost:5001/api_a/22",
             headers={"Accept": "application/json", "Authorization": f"Bearer {token}"},
         )
         print(r.json())

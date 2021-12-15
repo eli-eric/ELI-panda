@@ -17,10 +17,10 @@ services:
       - -c
       - |
         gunicorn app.main:app --workers 2 \
-        --worker-class uvicorn.workers.UvicornWorker -b 0.0.0.0:6969
+        --worker-class uvicorn.workers.UvicornWorker -b 0.0.0.0:5001
 
     ports:
-      - 6969:6969
+      - 5001:5001
 
   caddy:
     image: caddy:2-alpine
