@@ -38,6 +38,7 @@ Preconfigured tempalte [fast-nano](https://github.com/rednafi/fastapi-nano)
 
 Please follow the instructions in backend's [readme.md](https://github.com/eli-eric/ELI-panda/tree/main/backend/api_gateway_py#alternatively-run-the-app-locally) to run localy(debug)
 
+If you run it localy for example on port 3001 - you can interact/see the documentaion on http://localhost:3001/docs
 
 # Frontend
 
@@ -47,4 +48,11 @@ We are waiting for finalize the purchase. Expected 16.12.2021
 
 # Docker
 
-We will use Docker for the production(for now dev) deployment. 
+We will use [Docker](https://www.docker.com/get-started) for the deployment.
+
+On the deplyoment server we have nginx web server wich is working like a reverse proxy and forward the requests like that:
+
+panda.eli-beamlines.eu -> localhost:5000(docker container) - frontend 
+api.panda.eli-beamlines.eu -> localhost:5001(docker container) - backend
+
+We can configure GitHub actions to automate build/test/deploy - for now Jiří Švácha will do that manualy and prepare these [Actions](https://github.com/eli-eric/ELI-panda/actions)
