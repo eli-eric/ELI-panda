@@ -50,9 +50,9 @@ We are waiting for finalize the purchase. Expected 16.12.2021
 
 We will use [Docker](https://www.docker.com/get-started) for the deployment.
 
-On the deplyoment server we have nginx web server wich is working like a reverse proxy and forward the requests like that:
+On the deployment server we have nginx web server wich is working like a reverse proxy and forward the requests like that:
 
-panda.eli-beamlines.eu -> localhost:5000(docker container) - frontend 
-api.panda.eli-beamlines.eu -> localhost:5001(docker container) - backend
+http://panda.eli-beamlines.eu -> localhost:5000(docker container) - frontend 
+http://api.panda.eli-beamlines.eu -> localhost:5001(docker container) - backend
 
-We can configure GitHub actions to automate build/test/deploy - for now Jiří Švácha will do that manualy and prepare these [Actions](https://github.com/eli-eric/ELI-panda/actions)
+We can configure GitHub actions to automate build/test/deploy - for now Jiří Švácha will do that manualy and prepare these [Actions](https://github.com/eli-eric/ELI-panda/actions).
