@@ -37,3 +37,7 @@ Please follow the instructions in backend's [readme.md](https://github.com/eli-e
 
 
 # frontend
+
+We will use react framework [Next.js](https://nextjs.org/) and ready to go [Material UI Template](https://crema-next.herokuapp.com/dashboards/metrics)
+
+We are waiting for finalize the purchase. Expected 16.12.2021
