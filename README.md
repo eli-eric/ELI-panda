@@ -3,7 +3,7 @@ ELI oPerations And maiNtenance DAtabase
 
 The project has three main sections:
 
-## database - database(s) where we store ELI-PANDA data
+### database - database(s) where we store ELI-PANDA data
 
 ## backend - API Gateway(FastAPI - python) to access the database - for now it is one REST API but in latest production version it will have microservices architecture
 
