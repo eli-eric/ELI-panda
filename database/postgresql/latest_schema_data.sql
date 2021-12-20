@@ -32,6 +32,21 @@ CREATE SEQUENCE panda.t_catalog_availability_id_seq1
 ALTER SEQUENCE panda.t_catalog_availability_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_catalog_availability_id_seq1 TO postgres;
 
+-- DROP SEQUENCE panda.t_catalog_availability_id_seq2;
+
+CREATE SEQUENCE panda.t_catalog_availability_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_catalog_availability_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_catalog_availability_id_seq2 TO postgres;
+
 -- DROP SEQUENCE panda.t_catalog_category_id_seq;
 
 CREATE SEQUENCE panda.t_catalog_category_id_seq
@@ -61,6 +76,21 @@ CREATE SEQUENCE panda.t_catalog_category_id_seq1
 
 ALTER SEQUENCE panda.t_catalog_category_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_catalog_category_id_seq1 TO postgres;
+
+-- DROP SEQUENCE panda.t_catalog_category_id_seq2;
+
+CREATE SEQUENCE panda.t_catalog_category_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_catalog_category_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_group_id_seq;
 
@@ -92,6 +122,21 @@ CREATE SEQUENCE panda.t_catalog_category_property_group_id_seq1
 ALTER SEQUENCE panda.t_catalog_category_property_group_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_catalog_category_property_group_id_seq1 TO postgres;
 
+-- DROP SEQUENCE panda.t_catalog_category_property_group_id_seq2;
+
+CREATE SEQUENCE panda.t_catalog_category_property_group_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_catalog_category_property_group_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_group_id_seq2 TO postgres;
+
 -- DROP SEQUENCE panda.t_catalog_category_property_id_seq;
 
 CREATE SEQUENCE panda.t_catalog_category_property_id_seq
@@ -121,6 +166,21 @@ CREATE SEQUENCE panda.t_catalog_category_property_id_seq1
 
 ALTER SEQUENCE panda.t_catalog_category_property_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_catalog_category_property_id_seq1 TO postgres;
+
+-- DROP SEQUENCE panda.t_catalog_category_property_id_seq2;
+
+CREATE SEQUENCE panda.t_catalog_category_property_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_catalog_category_property_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_lov_id_seq;
 
@@ -152,6 +212,21 @@ CREATE SEQUENCE panda.t_catalog_category_property_lov_id_seq1
 ALTER SEQUENCE panda.t_catalog_category_property_lov_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_catalog_category_property_lov_id_seq1 TO postgres;
 
+-- DROP SEQUENCE panda.t_catalog_category_property_lov_id_seq2;
+
+CREATE SEQUENCE panda.t_catalog_category_property_lov_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_catalog_category_property_lov_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_lov_id_seq2 TO postgres;
+
 -- DROP SEQUENCE panda.t_catalog_category_property_type_id_seq;
 
 CREATE SEQUENCE panda.t_catalog_category_property_type_id_seq
@@ -181,6 +256,21 @@ CREATE SEQUENCE panda.t_catalog_category_property_type_id_seq1
 
 ALTER SEQUENCE panda.t_catalog_category_property_type_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_catalog_category_property_type_id_seq1 TO postgres;
+
+-- DROP SEQUENCE panda.t_catalog_category_property_type_id_seq2;
+
+CREATE SEQUENCE panda.t_catalog_category_property_type_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_catalog_category_property_type_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_type_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_documents_id_seq;
 
@@ -212,6 +302,21 @@ CREATE SEQUENCE panda.t_catalog_documents_id_seq1
 ALTER SEQUENCE panda.t_catalog_documents_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_catalog_documents_id_seq1 TO postgres;
 
+-- DROP SEQUENCE panda.t_catalog_documents_id_seq2;
+
+CREATE SEQUENCE panda.t_catalog_documents_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_catalog_documents_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_catalog_documents_id_seq2 TO postgres;
+
 -- DROP SEQUENCE panda.t_catalog_item_id_seq;
 
 CREATE SEQUENCE panda.t_catalog_item_id_seq
@@ -241,6 +346,21 @@ CREATE SEQUENCE panda.t_catalog_item_id_seq1
 
 ALTER SEQUENCE panda.t_catalog_item_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_catalog_item_id_seq1 TO postgres;
+
+-- DROP SEQUENCE panda.t_catalog_item_id_seq2;
+
+CREATE SEQUENCE panda.t_catalog_item_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_catalog_item_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_catalog_item_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_item_documents_id_seq;
 
@@ -272,6 +392,21 @@ CREATE SEQUENCE panda.t_item_documents_id_seq1
 ALTER SEQUENCE panda.t_item_documents_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_item_documents_id_seq1 TO postgres;
 
+-- DROP SEQUENCE panda.t_item_documents_id_seq2;
+
+CREATE SEQUENCE panda.t_item_documents_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_item_documents_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_item_documents_id_seq2 TO postgres;
+
 -- DROP SEQUENCE panda.t_item_id_seq;
 
 CREATE SEQUENCE panda.t_item_id_seq
@@ -301,6 +436,21 @@ CREATE SEQUENCE panda.t_item_id_seq1
 
 ALTER SEQUENCE panda.t_item_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_item_id_seq1 TO postgres;
+
+-- DROP SEQUENCE panda.t_item_id_seq2;
+
+CREATE SEQUENCE panda.t_item_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_item_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_item_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_location_id_seq;
 
@@ -332,6 +482,21 @@ CREATE SEQUENCE panda.t_location_id_seq1
 ALTER SEQUENCE panda.t_location_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_location_id_seq1 TO postgres;
 
+-- DROP SEQUENCE panda.t_location_id_seq2;
+
+CREATE SEQUENCE panda.t_location_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_location_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_location_id_seq2 TO postgres;
+
 -- DROP SEQUENCE panda.t_security_access_entity_id_seq;
 
 CREATE SEQUENCE panda.t_security_access_entity_id_seq
@@ -361,6 +526,21 @@ CREATE SEQUENCE panda.t_security_access_entity_id_seq1
 
 ALTER SEQUENCE panda.t_security_access_entity_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_security_access_entity_id_seq1 TO postgres;
+
+-- DROP SEQUENCE panda.t_security_access_entity_id_seq2;
+
+CREATE SEQUENCE panda.t_security_access_entity_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_security_access_entity_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_security_access_entity_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_security_access_id_seq;
 
@@ -392,6 +572,21 @@ CREATE SEQUENCE panda.t_security_access_id_seq1
 ALTER SEQUENCE panda.t_security_access_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_security_access_id_seq1 TO postgres;
 
+-- DROP SEQUENCE panda.t_security_access_id_seq2;
+
+CREATE SEQUENCE panda.t_security_access_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_security_access_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_security_access_id_seq2 TO postgres;
+
 -- DROP SEQUENCE panda.t_security_role_id_seq;
 
 CREATE SEQUENCE panda.t_security_role_id_seq
@@ -421,6 +616,21 @@ CREATE SEQUENCE panda.t_security_role_id_seq1
 
 ALTER SEQUENCE panda.t_security_role_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_security_role_id_seq1 TO postgres;
+
+-- DROP SEQUENCE panda.t_security_role_id_seq2;
+
+CREATE SEQUENCE panda.t_security_role_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_security_role_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_security_role_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_security_team_id_seq;
 
@@ -452,6 +662,21 @@ CREATE SEQUENCE panda.t_security_team_id_seq1
 ALTER SEQUENCE panda.t_security_team_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_security_team_id_seq1 TO postgres;
 
+-- DROP SEQUENCE panda.t_security_team_id_seq2;
+
+CREATE SEQUENCE panda.t_security_team_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_security_team_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_security_team_id_seq2 TO postgres;
+
 -- DROP SEQUENCE panda.t_security_user_id_seq;
 
 CREATE SEQUENCE panda.t_security_user_id_seq
@@ -481,6 +706,21 @@ CREATE SEQUENCE panda.t_security_user_id_seq1
 
 ALTER SEQUENCE panda.t_security_user_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_security_user_id_seq1 TO postgres;
+
+-- DROP SEQUENCE panda.t_security_user_id_seq2;
+
+CREATE SEQUENCE panda.t_security_user_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_security_user_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_security_user_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_supplier_id_seq;
 
@@ -512,6 +752,21 @@ CREATE SEQUENCE panda.t_supplier_id_seq1
 ALTER SEQUENCE panda.t_supplier_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_supplier_id_seq1 TO postgres;
 
+-- DROP SEQUENCE panda.t_supplier_id_seq2;
+
+CREATE SEQUENCE panda.t_supplier_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_supplier_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_supplier_id_seq2 TO postgres;
+
 -- DROP SEQUENCE panda.t_system_id_seq;
 
 CREATE SEQUENCE panda.t_system_id_seq
@@ -542,6 +797,21 @@ CREATE SEQUENCE panda.t_system_id_seq1
 ALTER SEQUENCE panda.t_system_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_system_id_seq1 TO postgres;
 
+-- DROP SEQUENCE panda.t_system_id_seq2;
+
+CREATE SEQUENCE panda.t_system_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_system_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_system_id_seq2 TO postgres;
+
 -- DROP SEQUENCE panda.t_system_relationship_type_id_seq;
 
 CREATE SEQUENCE panda.t_system_relationship_type_id_seq
@@ -571,6 +841,21 @@ CREATE SEQUENCE panda.t_system_relationship_type_id_seq1
 
 ALTER SEQUENCE panda.t_system_relationship_type_id_seq1 OWNER TO postgres;
 GRANT ALL ON SEQUENCE panda.t_system_relationship_type_id_seq1 TO postgres;
+
+-- DROP SEQUENCE panda.t_system_relationship_type_id_seq2;
+
+CREATE SEQUENCE panda.t_system_relationship_type_id_seq2
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 2147483647
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE panda.t_system_relationship_type_id_seq2 OWNER TO postgres;
+GRANT ALL ON SEQUENCE panda.t_system_relationship_type_id_seq2 TO postgres;
 -- panda.t_catalog_availability definition
 
 -- Drop table
@@ -773,7 +1058,6 @@ CREATE TABLE panda.t_security_team (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"name" varchar(100) NOT NULL,
 	description varchar(500) NULL,
-	is_leader bool NOT NULL DEFAULT false,
 	CONSTRAINT t_security_team_pk PRIMARY KEY (id)
 );
 
@@ -1054,6 +1338,7 @@ GRANT ALL ON TABLE panda.t_security_user_role TO postgres;
 CREATE TABLE panda.t_security_user_team (
 	id_user int4 NOT NULL,
 	id_team int4 NOT NULL,
+	is_leader bool NOT NULL DEFAULT false,
 	CONSTRAINT t_security_user_team_pk PRIMARY KEY (id_user, id_team),
 	CONSTRAINT t_security_user_team_team_fk FOREIGN KEY (id_team) REFERENCES panda.t_security_team(id),
 	CONSTRAINT t_security_user_team_user_fk FOREIGN KEY (id_user) REFERENCES panda.t_security_user(id)
@@ -1236,3 +1521,9 @@ GRANT ALL ON TABLE panda.t_security_access TO postgres;
 -- Permissions
 
 GRANT ALL ON SCHEMA panda TO postgres;
+
+-- Now we try to add some test data to the t_security_team table:
+
+INSERT INTO panda.t_security_team
+(name, description)
+VALUES('PANDA', 'PANDA development team');
