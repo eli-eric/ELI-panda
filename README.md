@@ -14,7 +14,7 @@ API Gateway([FastAPI](https://fastapi.tiangolo.com/) - python) to access the dat
 
 ### Frontend:
 
-GUI to acces our data written in React using [Next.js](https://nextjs.org/) framework
+GUI to acces our data written in React with TypeScript
 
 # Database
 
