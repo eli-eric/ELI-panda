@@ -5,7 +5,7 @@ from app.core import auth
 from app.routes import views
 
 app = FastAPI()
-
+app.title = "ELI PANDA API"
 # Set all CORS enabled origins
 app.add_middleware(
     CORSMiddleware,

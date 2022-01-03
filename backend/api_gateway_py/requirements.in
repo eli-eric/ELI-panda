@@ -16,3 +16,4 @@ python-dotenv
 python-multipart
 uvicorn
 gunicorn
+psycopg
