@@ -1,14 +1,19 @@
 from __future__ import annotations
+from dataclasses import dataclass
 
 from datetime import datetime, timedelta
 from http import HTTPStatus
 from typing import Any, Optional, Union
+from app.core.database import dbConnection
+from app.models.base_models import BaseDbModel
+import fastapi
 
 import jwt
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jwt import PyJWTError
 from passlib.context import CryptContext
+from psycopg.rows import class_row, tuple_row
 from pydantic import BaseModel
 
 from app.core import config
@@ -22,14 +27,12 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     username: Optional[str] = None
 
-
-class User(BaseModel):
+# represent t_security_user
+@dataclass
+class SecurityUser(BaseDbModel):
     username: str
-    disabled: Optional[bool] = None
-
-
-class UserInDB(User):
-    hashed_password: str
+    is_enabled: bool
+    password_hash: str
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -45,34 +48,36 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-fake_users_db = {
-    "ubuntu": {
-        "username": config.API_USERNAME,
-        "hashed_password": get_password_hash(config.API_PASSWORD),
-    }
-}
-
-
-def get_user(
-    db: dict[str, dict[str, str]],
+def get_user(   
     username: Optional[str],
-) -> UserInDB:
+) -> SecurityUser:
+    res:SecurityUser = None
 
-    if username in db:
-        user_dict = db[username]
-        return UserInDB(**user_dict)
+     # Connect to an existing database
+    with dbConnection() as conn:
+        # Open a cursor to perform database operations
+        with conn.cursor(row_factory=class_row(SecurityUser)) as cur:
+            
+            # Execute a command: this creates a new table
+            cur.execute("""
+            select "id", "username", "password_hash", "is_enabled" from panda.t_security_user where username=%s
+            """,(username,))
+
+            res = cur.fetchone()
+
+    return res           
+            
 
 
-def authenticate_user(
-    fake_db: dict[str, dict[str, str]],
+def authenticate_user(    
     username: str,
     password: str,
-) -> Union[bool, UserInDB]:
+) -> Union[bool, SecurityUser]:
 
-    user = get_user(fake_db, username)
+    user = get_user(username)
     if not user:
         return False
-    if not verify_password(password, user.hashed_password):
+    if not verify_password(password, user.password_hash):
         return False
     return user
 
@@ -94,7 +99,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None) -> bytes:
     return encoded_jwt
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserInDB:
+async def get_current_user(token: str = Depends(oauth2_scheme)) -> SecurityUser:
     credentials_exception = HTTPException(
         status_code=HTTPStatus.UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -116,20 +121,19 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserInDB:
     except PyJWTError:
         raise credentials_exception
 
-    user = get_user(fake_users_db, username=token_data.username)
+    user = get_user(username=token_data.username)
 
     if user is None:
         raise credentials_exception
     return user
 
 
-@router.post("/token", response_model=Token)
+@router.post("/authenticate", response_model=Token, tags=["security"])
 async def login_for_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(),
 ) -> dict[str, Any]:
 
-    user = authenticate_user(
-        fake_users_db,
+    user = authenticate_user(        
         form_data.username,
         form_data.password,
     )
@@ -149,3 +153,4 @@ async def login_for_access_token(
         expires_delta=access_token_expires,
     )
     return {"access_token": access_token, "token_type": "bearer"}
+

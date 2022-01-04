@@ -24,6 +24,8 @@ idna==3.2
     # via anyio
 passlib==1.7.4
     # via -r requirements.in
+psycopg==3.0.7
+    # via -r requirements.in
 pycparser==2.20
     # via cffi
 pydantic==1.8.2

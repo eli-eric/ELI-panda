@@ -60,6 +60,8 @@ platformdirs==2.3.0
     # via black
 pluggy==1.0.0
     # via pytest
+psycopg==3.0.7
+    # via -r requirements-dev.in
 py==1.10.0
     # via pytest
 pycodestyle==2.8.0

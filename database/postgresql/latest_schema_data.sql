@@ -1,10 +1,10 @@
 -- DROP SCHEMA panda;
 
-CREATE SCHEMA panda AUTHORIZATION postgres;
+CREATE SCHEMA IF NOT EXISTS panda AUTHORIZATION postgres;
 
 -- DROP SEQUENCE panda.t_catalog_availability_id_seq;
 
-CREATE SEQUENCE panda.t_catalog_availability_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_availability_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -19,7 +19,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_availability_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_availability_id_seq1;
 
-CREATE SEQUENCE panda.t_catalog_availability_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_availability_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -34,7 +34,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_availability_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_availability_id_seq2;
 
-CREATE SEQUENCE panda.t_catalog_availability_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_availability_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -49,7 +49,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_availability_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_category_id_seq;
 
-CREATE SEQUENCE panda.t_catalog_category_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -64,7 +64,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_category_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_category_id_seq1;
 
-CREATE SEQUENCE panda.t_catalog_category_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -79,7 +79,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_category_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_category_id_seq2;
 
-CREATE SEQUENCE panda.t_catalog_category_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -94,7 +94,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_category_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_group_id_seq;
 
-CREATE SEQUENCE panda.t_catalog_category_property_group_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_group_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -109,7 +109,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_category_property_group_id_seq TO postgres
 
 -- DROP SEQUENCE panda.t_catalog_category_property_group_id_seq1;
 
-CREATE SEQUENCE panda.t_catalog_category_property_group_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_group_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -124,7 +124,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_category_property_group_id_seq1 TO postgre
 
 -- DROP SEQUENCE panda.t_catalog_category_property_group_id_seq2;
 
-CREATE SEQUENCE panda.t_catalog_category_property_group_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_group_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -139,7 +139,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_category_property_group_id_seq2 TO postgre
 
 -- DROP SEQUENCE panda.t_catalog_category_property_id_seq;
 
-CREATE SEQUENCE panda.t_catalog_category_property_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -154,7 +154,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_category_property_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_id_seq1;
 
-CREATE SEQUENCE panda.t_catalog_category_property_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -169,7 +169,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_category_property_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_id_seq2;
 
-CREATE SEQUENCE panda.t_catalog_category_property_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -184,7 +184,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_category_property_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_lov_id_seq;
 
-CREATE SEQUENCE panda.t_catalog_category_property_lov_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_lov_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -199,7 +199,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_category_property_lov_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_lov_id_seq1;
 
-CREATE SEQUENCE panda.t_catalog_category_property_lov_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_lov_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -214,7 +214,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_category_property_lov_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_lov_id_seq2;
 
-CREATE SEQUENCE panda.t_catalog_category_property_lov_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_lov_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -229,7 +229,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_category_property_lov_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_type_id_seq;
 
-CREATE SEQUENCE panda.t_catalog_category_property_type_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_type_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -244,7 +244,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_category_property_type_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_type_id_seq1;
 
-CREATE SEQUENCE panda.t_catalog_category_property_type_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_type_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -259,7 +259,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_category_property_type_id_seq1 TO postgres
 
 -- DROP SEQUENCE panda.t_catalog_category_property_type_id_seq2;
 
-CREATE SEQUENCE panda.t_catalog_category_property_type_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_type_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -274,7 +274,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_category_property_type_id_seq2 TO postgres
 
 -- DROP SEQUENCE panda.t_catalog_documents_id_seq;
 
-CREATE SEQUENCE panda.t_catalog_documents_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_documents_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -289,7 +289,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_documents_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_documents_id_seq1;
 
-CREATE SEQUENCE panda.t_catalog_documents_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_documents_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -304,7 +304,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_documents_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_documents_id_seq2;
 
-CREATE SEQUENCE panda.t_catalog_documents_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_documents_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -319,7 +319,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_documents_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_item_id_seq;
 
-CREATE SEQUENCE panda.t_catalog_item_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_item_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 9223372036854775807
@@ -334,7 +334,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_item_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_item_id_seq1;
 
-CREATE SEQUENCE panda.t_catalog_item_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_item_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 9223372036854775807
@@ -349,7 +349,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_item_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_catalog_item_id_seq2;
 
-CREATE SEQUENCE panda.t_catalog_item_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_item_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 9223372036854775807
@@ -364,7 +364,7 @@ GRANT ALL ON SEQUENCE panda.t_catalog_item_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_item_documents_id_seq;
 
-CREATE SEQUENCE panda.t_item_documents_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_item_documents_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -379,7 +379,7 @@ GRANT ALL ON SEQUENCE panda.t_item_documents_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_item_documents_id_seq1;
 
-CREATE SEQUENCE panda.t_item_documents_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_item_documents_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -394,7 +394,7 @@ GRANT ALL ON SEQUENCE panda.t_item_documents_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_item_documents_id_seq2;
 
-CREATE SEQUENCE panda.t_item_documents_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_item_documents_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -409,7 +409,7 @@ GRANT ALL ON SEQUENCE panda.t_item_documents_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_item_id_seq;
 
-CREATE SEQUENCE panda.t_item_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_item_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -424,7 +424,7 @@ GRANT ALL ON SEQUENCE panda.t_item_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_item_id_seq1;
 
-CREATE SEQUENCE panda.t_item_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_item_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -439,7 +439,7 @@ GRANT ALL ON SEQUENCE panda.t_item_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_item_id_seq2;
 
-CREATE SEQUENCE panda.t_item_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_item_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -454,7 +454,7 @@ GRANT ALL ON SEQUENCE panda.t_item_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_location_id_seq;
 
-CREATE SEQUENCE panda.t_location_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_location_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -469,7 +469,7 @@ GRANT ALL ON SEQUENCE panda.t_location_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_location_id_seq1;
 
-CREATE SEQUENCE panda.t_location_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_location_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -484,7 +484,7 @@ GRANT ALL ON SEQUENCE panda.t_location_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_location_id_seq2;
 
-CREATE SEQUENCE panda.t_location_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_location_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -499,7 +499,7 @@ GRANT ALL ON SEQUENCE panda.t_location_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_security_access_entity_id_seq;
 
-CREATE SEQUENCE panda.t_security_access_entity_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_security_access_entity_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -514,7 +514,7 @@ GRANT ALL ON SEQUENCE panda.t_security_access_entity_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_security_access_entity_id_seq1;
 
-CREATE SEQUENCE panda.t_security_access_entity_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_security_access_entity_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -529,7 +529,7 @@ GRANT ALL ON SEQUENCE panda.t_security_access_entity_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_security_access_entity_id_seq2;
 
-CREATE SEQUENCE panda.t_security_access_entity_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_security_access_entity_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -544,7 +544,7 @@ GRANT ALL ON SEQUENCE panda.t_security_access_entity_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_security_access_id_seq;
 
-CREATE SEQUENCE panda.t_security_access_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_security_access_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -559,7 +559,7 @@ GRANT ALL ON SEQUENCE panda.t_security_access_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_security_access_id_seq1;
 
-CREATE SEQUENCE panda.t_security_access_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_security_access_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -574,7 +574,7 @@ GRANT ALL ON SEQUENCE panda.t_security_access_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_security_access_id_seq2;
 
-CREATE SEQUENCE panda.t_security_access_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_security_access_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -589,7 +589,7 @@ GRANT ALL ON SEQUENCE panda.t_security_access_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_security_role_id_seq;
 
-CREATE SEQUENCE panda.t_security_role_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_security_role_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -604,7 +604,7 @@ GRANT ALL ON SEQUENCE panda.t_security_role_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_security_role_id_seq1;
 
-CREATE SEQUENCE panda.t_security_role_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_security_role_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -619,7 +619,7 @@ GRANT ALL ON SEQUENCE panda.t_security_role_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_security_role_id_seq2;
 
-CREATE SEQUENCE panda.t_security_role_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_security_role_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -634,7 +634,7 @@ GRANT ALL ON SEQUENCE panda.t_security_role_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_security_team_id_seq;
 
-CREATE SEQUENCE panda.t_security_team_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_security_team_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -649,7 +649,7 @@ GRANT ALL ON SEQUENCE panda.t_security_team_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_security_team_id_seq1;
 
-CREATE SEQUENCE panda.t_security_team_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_security_team_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -664,7 +664,7 @@ GRANT ALL ON SEQUENCE panda.t_security_team_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_security_team_id_seq2;
 
-CREATE SEQUENCE panda.t_security_team_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_security_team_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -679,7 +679,7 @@ GRANT ALL ON SEQUENCE panda.t_security_team_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_security_user_id_seq;
 
-CREATE SEQUENCE panda.t_security_user_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_security_user_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -694,7 +694,7 @@ GRANT ALL ON SEQUENCE panda.t_security_user_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_security_user_id_seq1;
 
-CREATE SEQUENCE panda.t_security_user_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_security_user_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -709,7 +709,7 @@ GRANT ALL ON SEQUENCE panda.t_security_user_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_security_user_id_seq2;
 
-CREATE SEQUENCE panda.t_security_user_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_security_user_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -724,7 +724,7 @@ GRANT ALL ON SEQUENCE panda.t_security_user_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_supplier_id_seq;
 
-CREATE SEQUENCE panda.t_supplier_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_supplier_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -739,7 +739,7 @@ GRANT ALL ON SEQUENCE panda.t_supplier_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_supplier_id_seq1;
 
-CREATE SEQUENCE panda.t_supplier_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_supplier_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -754,7 +754,7 @@ GRANT ALL ON SEQUENCE panda.t_supplier_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_supplier_id_seq2;
 
-CREATE SEQUENCE panda.t_supplier_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_supplier_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -769,7 +769,7 @@ GRANT ALL ON SEQUENCE panda.t_supplier_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_system_id_seq;
 
-CREATE SEQUENCE panda.t_system_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_system_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -784,7 +784,7 @@ GRANT ALL ON SEQUENCE panda.t_system_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_system_id_seq1;
 
-CREATE SEQUENCE panda.t_system_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_system_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -799,7 +799,7 @@ GRANT ALL ON SEQUENCE panda.t_system_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_system_id_seq2;
 
-CREATE SEQUENCE panda.t_system_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_system_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -814,7 +814,7 @@ GRANT ALL ON SEQUENCE panda.t_system_id_seq2 TO postgres;
 
 -- DROP SEQUENCE panda.t_system_relationship_type_id_seq;
 
-CREATE SEQUENCE panda.t_system_relationship_type_id_seq
+CREATE SEQUENCE  IF NOT EXISTS panda.t_system_relationship_type_id_seq
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -829,7 +829,7 @@ GRANT ALL ON SEQUENCE panda.t_system_relationship_type_id_seq TO postgres;
 
 -- DROP SEQUENCE panda.t_system_relationship_type_id_seq1;
 
-CREATE SEQUENCE panda.t_system_relationship_type_id_seq1
+CREATE SEQUENCE  IF NOT EXISTS panda.t_system_relationship_type_id_seq1
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -844,7 +844,7 @@ GRANT ALL ON SEQUENCE panda.t_system_relationship_type_id_seq1 TO postgres;
 
 -- DROP SEQUENCE panda.t_system_relationship_type_id_seq2;
 
-CREATE SEQUENCE panda.t_system_relationship_type_id_seq2
+CREATE SEQUENCE  IF NOT EXISTS panda.t_system_relationship_type_id_seq2
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 2147483647
@@ -862,7 +862,7 @@ GRANT ALL ON SEQUENCE panda.t_system_relationship_type_id_seq2 TO postgres;
 
 -- DROP TABLE panda.t_catalog_availability;
 
-CREATE TABLE panda.t_catalog_availability (
+CREATE TABLE  IF NOT EXISTS panda.t_catalog_availability (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"name" varchar(100) NOT NULL,
 	description varchar(500) NULL,
@@ -881,7 +881,7 @@ GRANT ALL ON TABLE panda.t_catalog_availability TO postgres;
 
 -- DROP TABLE panda.t_catalog_category_property_type;
 
-CREATE TABLE panda.t_catalog_category_property_type (
+CREATE TABLE  IF NOT EXISTS panda.t_catalog_category_property_type (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"name" varchar(200) NOT NULL,
 	is_lov bool NOT NULL DEFAULT false,
@@ -901,7 +901,7 @@ GRANT ALL ON TABLE panda.t_catalog_category_property_type TO postgres;
 
 -- DROP TABLE panda.t_facility;
 
-CREATE TABLE panda.t_facility (
+CREATE TABLE  IF NOT EXISTS panda.t_facility (
 	id int4 NOT NULL,
 	"name" int4 NOT NULL,
 	description varchar(500) NULL,
@@ -920,7 +920,7 @@ GRANT ALL ON TABLE panda.t_facility TO postgres;
 
 -- DROP TABLE panda.t_item_condition;
 
-CREATE TABLE panda.t_item_condition (
+CREATE TABLE  IF NOT EXISTS panda.t_item_condition (
 	id int4 NOT NULL,
 	"name" int4 NOT NULL,
 	description varchar(500) NULL,
@@ -939,7 +939,7 @@ GRANT ALL ON TABLE panda.t_item_condition TO postgres;
 
 -- DROP TABLE panda.t_item_proucrement_status;
 
-CREATE TABLE panda.t_item_proucrement_status (
+CREATE TABLE  IF NOT EXISTS panda.t_item_proucrement_status (
 	id int4 NOT NULL,
 	"name" int4 NOT NULL,
 	description varchar(500) NULL,
@@ -958,7 +958,7 @@ GRANT ALL ON TABLE panda.t_item_proucrement_status TO postgres;
 
 -- DROP TABLE panda.t_item_serviceability;
 
-CREATE TABLE panda.t_item_serviceability (
+CREATE TABLE  IF NOT EXISTS panda.t_item_serviceability (
 	id int4 NOT NULL,
 	"name" int4 NOT NULL,
 	description varchar(500) NULL,
@@ -977,7 +977,7 @@ GRANT ALL ON TABLE panda.t_item_serviceability TO postgres;
 
 -- DROP TABLE panda.t_item_status;
 
-CREATE TABLE panda.t_item_status (
+CREATE TABLE  IF NOT EXISTS panda.t_item_status (
 	id int4 NOT NULL,
 	"name" int4 NOT NULL,
 	description varchar(500) NULL,
@@ -996,7 +996,7 @@ GRANT ALL ON TABLE panda.t_item_status TO postgres;
 
 -- DROP TABLE panda.t_location;
 
-CREATE TABLE panda.t_location (
+CREATE TABLE  IF NOT EXISTS panda.t_location (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"name" varchar(100) NOT NULL,
 	description varchar(500) NULL,
@@ -1015,7 +1015,7 @@ GRANT ALL ON TABLE panda.t_location TO postgres;
 
 -- DROP TABLE panda.t_manufacturer;
 
-CREATE TABLE panda.t_manufacturer (
+CREATE TABLE  IF NOT EXISTS panda.t_manufacturer (
 	id int4 NOT NULL,
 	"name" int4 NOT NULL,
 	description varchar(500) NULL,
@@ -1034,7 +1034,7 @@ GRANT ALL ON TABLE panda.t_manufacturer TO postgres;
 
 -- DROP TABLE panda.t_security_role;
 
-CREATE TABLE panda.t_security_role (
+CREATE TABLE  IF NOT EXISTS panda.t_security_role (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"name" varchar(50) NOT NULL,
 	code varchar(50) NOT NULL,
@@ -1054,7 +1054,7 @@ GRANT ALL ON TABLE panda.t_security_role TO postgres;
 
 -- DROP TABLE panda.t_security_team;
 
-CREATE TABLE panda.t_security_team (
+CREATE TABLE  IF NOT EXISTS panda.t_security_team (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"name" varchar(100) NOT NULL,
 	description varchar(500) NULL,
@@ -1073,7 +1073,7 @@ GRANT ALL ON TABLE panda.t_security_team TO postgres;
 
 -- DROP TABLE panda.t_supplier;
 
-CREATE TABLE panda.t_supplier (
+CREATE TABLE  IF NOT EXISTS panda.t_supplier (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"name" varchar(200) NOT NULL,
 	note text NULL,
@@ -1093,7 +1093,7 @@ GRANT ALL ON TABLE panda.t_supplier TO postgres;
 
 -- DROP TABLE panda.t_system_relationship_type;
 
-CREATE TABLE panda.t_system_relationship_type (
+CREATE TABLE  IF NOT EXISTS panda.t_system_relationship_type (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"name" varchar(300) NOT NULL,
 	description varchar(500) NULL,
@@ -1112,7 +1112,7 @@ GRANT ALL ON TABLE panda.t_system_relationship_type TO postgres;
 
 -- DROP TABLE panda.t_catalog_category;
 
-CREATE TABLE panda.t_catalog_category (
+CREATE TABLE  IF NOT EXISTS panda.t_catalog_category (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	id_parent int4 NULL,
 	"name" varchar(200) NOT NULL,
@@ -1135,7 +1135,7 @@ GRANT ALL ON TABLE panda.t_catalog_category TO postgres;
 
 -- DROP TABLE panda.t_catalog_category_property_group;
 
-CREATE TABLE panda.t_catalog_category_property_group (
+CREATE TABLE  IF NOT EXISTS panda.t_catalog_category_property_group (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"name" varchar(200) NOT NULL,
 	id_category int4 NOT NULL,
@@ -1155,7 +1155,7 @@ GRANT ALL ON TABLE panda.t_catalog_category_property_group TO postgres;
 
 -- DROP TABLE panda.t_catalog_category_property_lov;
 
-CREATE TABLE panda.t_catalog_category_property_lov (
+CREATE TABLE  IF NOT EXISTS panda.t_catalog_category_property_lov (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"name" varchar(200) NOT NULL,
 	id_property_type int4 NOT NULL,
@@ -1176,7 +1176,7 @@ GRANT ALL ON TABLE panda.t_catalog_category_property_lov TO postgres;
 
 -- DROP TABLE panda.t_catalog_item;
 
-CREATE TABLE panda.t_catalog_item (
+CREATE TABLE  IF NOT EXISTS panda.t_catalog_item (
 	id int8 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"name" varchar(200) NOT NULL,
 	id_category int4 NULL,
@@ -1207,7 +1207,7 @@ GRANT ALL ON TABLE panda.t_catalog_item TO postgres;
 
 -- DROP TABLE panda.t_item;
 
-CREATE TABLE panda.t_item (
+CREATE TABLE  IF NOT EXISTS panda.t_item (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	eun varchar(30) NOT NULL,
 	id_item_status int4 NOT NULL,
@@ -1244,7 +1244,7 @@ GRANT ALL ON TABLE panda.t_item TO postgres;
 
 -- DROP TABLE panda.t_item_documents;
 
-CREATE TABLE panda.t_item_documents (
+CREATE TABLE  IF NOT EXISTS panda.t_item_documents (
 	gid uuid NOT NULL,
 	"name" varchar(300) NOT NULL,
 	file_type varchar(50) NOT NULL,
@@ -1268,7 +1268,7 @@ GRANT ALL ON TABLE panda.t_item_documents TO postgres;
 
 -- DROP TABLE panda.t_security_access_entity;
 
-CREATE TABLE panda.t_security_access_entity (
+CREATE TABLE  IF NOT EXISTS panda.t_security_access_entity (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"name" varchar(100) NOT NULL,
 	id_parent int4 NULL,
@@ -1290,7 +1290,7 @@ GRANT ALL ON TABLE panda.t_security_access_entity TO postgres;
 
 -- DROP TABLE panda.t_security_user;
 
-CREATE TABLE panda.t_security_user (
+CREATE TABLE  IF NOT EXISTS panda.t_security_user (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	username varchar(200) NOT NULL,
 	email varchar(200) NULL,
@@ -1315,7 +1315,7 @@ GRANT ALL ON TABLE panda.t_security_user TO postgres;
 
 -- DROP TABLE panda.t_security_user_role;
 
-CREATE TABLE panda.t_security_user_role (
+CREATE TABLE  IF NOT EXISTS panda.t_security_user_role (
 	id_user int4 NOT NULL,
 	id_role int4 NOT NULL,
 	CONSTRAINT t_security_user_role_pk PRIMARY KEY (id_user, id_role),
@@ -1335,7 +1335,7 @@ GRANT ALL ON TABLE panda.t_security_user_role TO postgres;
 
 -- DROP TABLE panda.t_security_user_team;
 
-CREATE TABLE panda.t_security_user_team (
+CREATE TABLE  IF NOT EXISTS panda.t_security_user_team (
 	id_user int4 NOT NULL,
 	id_team int4 NOT NULL,
 	is_leader bool NOT NULL DEFAULT false,
@@ -1356,7 +1356,7 @@ GRANT ALL ON TABLE panda.t_security_user_team TO postgres;
 
 -- DROP TABLE panda.t_system;
 
-CREATE TABLE panda.t_system (
+CREATE TABLE  IF NOT EXISTS panda.t_system (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"name" varchar(300) NOT NULL,
 	description text NULL,
@@ -1384,7 +1384,7 @@ GRANT ALL ON TABLE panda.t_system TO postgres;
 
 -- DROP TABLE panda.t_system_item;
 
-CREATE TABLE panda.t_system_item (
+CREATE TABLE  IF NOT EXISTS panda.t_system_item (
 	id_system int4 NOT NULL,
 	id_item int4 NOT NULL,
 	CONSTRAINT t_system_item_pk PRIMARY KEY (id_system, id_item),
@@ -1404,7 +1404,7 @@ GRANT ALL ON TABLE panda.t_system_item TO postgres;
 
 -- DROP TABLE panda.t_system_relationship;
 
-CREATE TABLE panda.t_system_relationship (
+CREATE TABLE  IF NOT EXISTS panda.t_system_relationship (
 	id_system_from int4 NOT NULL,
 	id_system_to int4 NOT NULL,
 	id_relationship_type int4 NOT NULL,
@@ -1426,7 +1426,7 @@ GRANT ALL ON TABLE panda.t_system_relationship TO postgres;
 
 -- DROP TABLE panda.t_catalog_category_property;
 
-CREATE TABLE panda.t_catalog_category_property (
+CREATE TABLE  IF NOT EXISTS panda.t_catalog_category_property (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	"name" varchar(200) NOT NULL,
 	position_column int4 NOT NULL DEFAULT 0,
@@ -1452,7 +1452,7 @@ GRANT ALL ON TABLE panda.t_catalog_category_property TO postgres;
 
 -- DROP TABLE panda.t_catalog_documents;
 
-CREATE TABLE panda.t_catalog_documents (
+CREATE TABLE  IF NOT EXISTS panda.t_catalog_documents (
 	gid uuid NOT NULL,
 	"name" varchar(300) NOT NULL,
 	file_type varchar(50) NOT NULL,
@@ -1476,7 +1476,7 @@ GRANT ALL ON TABLE panda.t_catalog_documents TO postgres;
 
 -- DROP TABLE panda.t_catalog_item_property_value;
 
-CREATE TABLE panda.t_catalog_item_property_value (
+CREATE TABLE  IF NOT EXISTS panda.t_catalog_item_property_value (
 	id_item int4 NOT NULL,
 	id_property int4 NOT NULL,
 	value jsonb NULL,
@@ -1497,7 +1497,7 @@ GRANT ALL ON TABLE panda.t_catalog_item_property_value TO postgres;
 
 -- DROP TABLE panda.t_security_access;
 
-CREATE TABLE panda.t_security_access (
+CREATE TABLE  IF NOT EXISTS panda.t_security_access (
 	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
 	id_role int4 NOT NULL,
 	id_entity int4 NOT NULL,
@@ -1516,8 +1516,6 @@ ALTER TABLE panda.t_security_access OWNER TO postgres;
 GRANT ALL ON TABLE panda.t_security_access TO postgres;
 
 
-
-
 -- Permissions
 
 GRANT ALL ON SCHEMA panda TO postgres;
@@ -1525,5 +1523,26 @@ GRANT ALL ON SCHEMA panda TO postgres;
 -- Now we try to add some test data to the t_security_team table:
 
 INSERT INTO panda.t_security_team
-(name, description)
-VALUES('PANDA', 'PANDA development team');
+("name", "description")
+SELECT 'PANDA', 'PANDA development team'
+WHERE NOT EXISTS(SELECT 1 FROM panda.t_security_team WHERE "name" = 'PANDA');
+
+
+--add default facilities ELI-ALPS, ELI-BEAMLINES, ELI-NP
+--one little fix
+ALTER TABLE panda.t_facility ALTER COLUMN "name" TYPE varchar(50) USING "name"::varchar;
+
+INSERT INTO panda.t_facility (id , "name", description) select 1, 'ELI-ALPS', 'Extreme Light Infrastructure Attosecond Light Pulse Source' WHERE NOT EXISTS(SELECT 1 FROM panda.t_facility WHERE "name" = 'ELI-ALPS');
+INSERT INTO panda.t_facility (id , "name", description) select 2, 'ELI-BEAMLINES', 'Extreme Light Infrastructure Beamlines' WHERE NOT EXISTS(SELECT 1 FROM panda.t_facility WHERE "name" = 'ELI-BEAMLINES');
+INSERT INTO panda.t_facility (id , "name", description) select 3, 'ELI-NP', 'Extreme Light Infrastructure Nuclear Physics' WHERE NOT EXISTS(SELECT 1 FROM panda.t_facility WHERE "name" = 'ELI-NP');
+
+
+--add is_enabled to the user table
+ALTER TABLE panda.t_security_user add if not exists is_enabled bool NOT NULL DEFAULT false;
+--add test admin user and admin role - pwd elipanda2022
+INSERT INTO panda.t_security_user (username, email, password_hash,first_name,last_name,is_enabled) select 'admin', 'admin@eli', '$2b$12$X8TY4Sx5hcJGJCrIhUo0.OyNx6PYbkX90BWKwDsr9fhq.XDW0m5.m', 'Admin', 'Administrator', true WHERE NOT EXISTS(SELECT 1 FROM panda.t_security_user WHERE username = 'admin');
+
+
+
+
+
