@@ -110,10 +110,20 @@ const JWTAuthAuthProvider: React.FC<JWTAuthAuthProviderProps> = ({
   }) => {
     dispatch(fetchStart());
     try {
-      const { data } = await jwtAxios.post("authenticate", { email, password });
-      localStorage.setItem("token", data.token);
-      setAuthToken(data.token);
-      const res = await jwtAxios.get("/auth");
+      let bodyForm = new FormData();
+      bodyForm.append("username", email);
+      bodyForm.append("password", password);
+      bodyForm.append("grant_type", "");
+      bodyForm.append("scope", "");
+      bodyForm.append("client_id", "");
+      bodyForm.append("client_secret", "");
+
+      const { data } = await jwtAxios.post("authenticate", bodyForm, {
+        headers: { ContentType: "application/x-www-form-urlencoded" },
+      });
+      localStorage.setItem("token", data.access_token);
+      setAuthToken(data.access_token);
+      const res = await jwtAxios.get("/authenticate");
       setJWTAuthData({
         user: res.data,
         isAuthenticated: true,

@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any, List
 from app.models.catalog_models import CatalogItem
 from app.core.database import dbConnection
+from app.core.auth import AuthUser, get_current_user
 from fastapi.exceptions import HTTPException
 from fastapi import Depends
 
@@ -10,7 +11,7 @@ from fastapi import Depends
 from psycopg.rows import TupleRow, class_row
 
 
-def get_all_items(auth:Depends) -> dict[str, Any]:
+def get_all_items(auth:AuthUser ) -> dict[str, Any]:
        
     response: dict[str, Any] = {
         "data": [1,'test']

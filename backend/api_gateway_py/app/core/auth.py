@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from datetime import datetime, timedelta
 from http import HTTPStatus
-from typing import Any, Optional, Union
+from typing import Any, List, Optional, Union
 from app.core.database import dbConnection
 from app.models.base_models import BaseDbModel
 import fastapi
@@ -31,6 +31,15 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     username: Optional[str] = None
 
+class AuthUser(BaseModel):
+    id:int
+    displayName:str
+    email:str
+    uid:Optional[str]    
+    photoURL:Optional[str]
+    token:Optional[str]
+    role:Optional[List[str]]
+
 
 @dataclass
 class SecurityUser(BaseDbModel):
@@ -40,6 +49,8 @@ class SecurityUser(BaseDbModel):
     username: str
     is_enabled: bool
     password_hash: str
+    email: str
+    
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -65,8 +76,8 @@ def get_user(username: Optional[str],) -> SecurityUser:
             
             # Execute a command: this creates a new table
             cur.execute("""
-            select "id", "username", "password_hash", "is_enabled" from panda.t_security_user where username=%s
-            """,(username,))
+            select "id", "username", "password_hash", "is_enabled", "email" from panda.t_security_user where username=%s or email=%s
+            """,(username,username,))
 
             res = cur.fetchone()
             res.id
@@ -105,7 +116,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None) -> bytes:
     return encoded_jwt
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)) -> SecurityUser:
+async def get_current_user(token: str = Depends(oauth2_scheme)) -> AuthUser:
     credentials_exception = HTTPException(
         status_code=HTTPStatus.UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -128,10 +139,12 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> SecurityUser:
         raise credentials_exception
 
     user = get_user(username=token_data.username)
-
     if user is None:
         raise credentials_exception
-    return user
+
+    authUser = AuthUser(id=user.id, displayName=user.username, email=user.email, role=["admin", "user"])
+   
+    return authUser
 
 
 @router.post("/authenticate",
@@ -165,3 +178,12 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
+@router.get("/authenticate",
+ response_model=AuthUser, 
+ tags=["security"], 
+ description='Get authenticated user by token',
+ name="Get authenticated user by token")
+async def get_user_by_token(auth: AuthUser = Depends(get_current_user),) -> dict[str,Any]:
+
+    return auth
+    
