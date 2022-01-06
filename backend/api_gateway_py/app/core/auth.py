@@ -18,6 +18,10 @@ from pydantic import BaseModel
 
 from app.core import config
 
+"""
+In this module we have everything about the API security.
+The API uses OAuth2 (with hashed password and Bearer with JWT) based authentication
+"""
 
 class Token(BaseModel):
     access_token: str
@@ -27,16 +31,19 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     username: Optional[str] = None
 
-# represent t_security_user
+
 @dataclass
 class SecurityUser(BaseDbModel):
+    """
+    Represent t_security_user
+    """
     username: str
     is_enabled: bool
     password_hash: str
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/authenticate")
 router = APIRouter()
 
 
@@ -48,9 +55,7 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-def get_user(   
-    username: Optional[str],
-) -> SecurityUser:
+def get_user(username: Optional[str],) -> SecurityUser:
     res:SecurityUser = None
 
      # Connect to an existing database
@@ -64,6 +69,7 @@ def get_user(
             """,(username,))
 
             res = cur.fetchone()
+            res.id
 
     return res           
             
@@ -128,10 +134,12 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> SecurityUser:
     return user
 
 
-@router.post("/authenticate", response_model=Token, tags=["security"])
-async def login_for_access_token(
-    form_data: OAuth2PasswordRequestForm = Depends(),
-) -> dict[str, Any]:
+@router.post("/authenticate",
+ response_model=Token, 
+ tags=["security"], 
+ description='Authentication using: username and password',
+ name="Authentication using: username and password")
+async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),) -> dict[str, Any]:
 
     user = authenticate_user(        
         form_data.username,
@@ -149,8 +157,11 @@ async def login_for_access_token(
         seconds=config.API_ACCESS_TOKEN_EXPIRE_MINUTES,
     )
     access_token = create_access_token(
-        data={"sub": user.username},  # type: ignore
-        expires_delta=access_token_expires,
+        data={
+            "sub": user.username,
+            "roles": [ 'admin(cr)', 'user']
+            },  # type: ignore
+        expires_delta=access_token_expires,        
     )
     return {"access_token": access_token, "token_type": "bearer"}
 

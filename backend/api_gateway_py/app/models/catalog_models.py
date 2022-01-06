@@ -10,3 +10,6 @@ from dataclasses import dataclass
 class CatalogItem(BaseDbModel):   
     name: str
    
+class CatalogItemResponse(BaseModel):
+    id:int
+    name:str

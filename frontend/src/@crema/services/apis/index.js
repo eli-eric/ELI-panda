@@ -1,9 +1,0 @@
-import "./dashboard";
-import "./contact";
-import "./todo";
-import "./mail";
-import "./ecommerce";
-import "./scrumboard";
-import "./chat";
-import "./wall";
-import "./userList";
