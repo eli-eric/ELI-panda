@@ -3,6 +3,10 @@ name: Compose docker backend
 on:
   workflow_dispatch:
 
+defaults:
+  run:
+    working-directory: backend/api_gateway_py
+
 jobs:
   build:
     runs-on: self-hosted
@@ -10,4 +14,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build the Docker compose
-        run: docker-compose up -d --file backend/api_gateway_py/docker-compose.yml
+        run: docker-compose up -d
