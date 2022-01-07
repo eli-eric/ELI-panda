@@ -96,6 +96,6 @@ kill-container: ## Stop the running docker container.
 	docker-compose down
 
 
-.PHONY: run-local
-run-local: ## Run the app locally.
+.PHONY: dev
+dev: ## Run the app locally for the developmented57b97fb227.
 	uvicorn app.main:app --port 5001 --reload

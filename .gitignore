@@ -3,3 +3,4 @@ __pycache__
 .vscode/settings.json
 backend/api_gateway_py/.env
 backend/api_gateway_py/.venv
+frontend/build/*

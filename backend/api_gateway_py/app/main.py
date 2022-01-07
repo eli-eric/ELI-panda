@@ -6,7 +6,7 @@ from app.routes import catalog_routes
 
 # an instance of the main FastAPI object to run the API
 app = FastAPI()
- # these properties are used for OpenAPI documentation
+# these properties are used for OpenAPI documentation
 app.title = "ELI PANDA GATEWAY"
 app.description = "REST API GATEWAY for ELI oPerations And maiNtenance DAtabase"
 

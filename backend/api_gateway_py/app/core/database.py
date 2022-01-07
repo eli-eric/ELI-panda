@@ -1,5 +1,6 @@
-from app.core import config
 import psycopg
+
+from app.core import config
 
 
 def dbConnection():

@@ -1,13 +1,11 @@
 from __future__ import annotations
-from dataclasses import dataclass
 
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from http import HTTPStatus
 from typing import Any, List, Optional, Union
-from app.core.database import dbConnection
-from app.models.base_models import BaseDbModel
-import fastapi
 
+import fastapi
 import jwt
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -17,11 +15,14 @@ from psycopg.rows import class_row, tuple_row
 from pydantic import BaseModel
 
 from app.core import config
+from app.core.database import dbConnection
+from app.models.base_models import BaseDbModel
 
 """
 In this module we have everything about the API security.
 The API uses OAuth2 (with hashed password and Bearer with JWT) based authentication
 """
+
 
 class Token(BaseModel):
     access_token: str
@@ -31,14 +32,15 @@ class Token(BaseModel):
 class TokenData(BaseModel):
     username: Optional[str] = None
 
+
 class AuthUser(BaseModel):
-    id:int
-    displayName:str
-    email:str
-    uid:Optional[str]    
-    photoURL:Optional[str]
-    token:Optional[str]
-    role:Optional[List[str]]
+    id: int
+    displayName: str
+    email: str
+    uid: Optional[str]
+    photoURL: Optional[str]
+    token: Optional[str]
+    role: Optional[List[str]]
 
 
 @dataclass
@@ -46,11 +48,11 @@ class SecurityUser(BaseDbModel):
     """
     Represent t_security_user
     """
+
     username: str
     is_enabled: bool
     password_hash: str
     email: str
-    
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -66,27 +68,34 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-def get_user(username: Optional[str],) -> SecurityUser:
-    res:SecurityUser = None
+def get_user(
+    username: Optional[str],
+) -> SecurityUser:
+    res: SecurityUser = None
 
-     # Connect to an existing database
+    # Connect to an existing database
     with dbConnection() as conn:
         # Open a cursor to perform database operations
         with conn.cursor(row_factory=class_row(SecurityUser)) as cur:
-            
+
             # Execute a command: this creates a new table
-            cur.execute("""
+            cur.execute(
+                """
             select "id", "username", "password_hash", "is_enabled", "email" from panda.t_security_user where username=%s or email=%s
-            """,(username,username,))
+            """,
+                (
+                    username,
+                    username,
+                ),
+            )
 
             res = cur.fetchone()
             res.id
 
-    return res           
-            
+    return res
 
 
-def authenticate_user(    
+def authenticate_user(
     username: str,
     password: str,
 ) -> Union[bool, SecurityUser]:
@@ -142,19 +151,25 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> AuthUser:
     if user is None:
         raise credentials_exception
 
-    authUser = AuthUser(id=user.id, displayName=user.username, email=user.email, role=["admin", "user"])
-   
+    authUser = AuthUser(
+        id=user.id, displayName=user.username, email=user.email, role=["admin", "user"]
+    )
+
     return authUser
 
 
-@router.post("/authenticate",
- response_model=Token, 
- tags=["security"], 
- description='Authentication using: username and password',
- name="Authentication using: username and password")
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(),) -> dict[str, Any]:
+@router.post(
+    "/authenticate",
+    response_model=Token,
+    tags=["security"],
+    description="Authentication using: username and password",
+    name="Authentication using: username and password",
+)
+async def login_for_access_token(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+) -> dict[str, Any]:
 
-    user = authenticate_user(        
+    user = authenticate_user(
         form_data.username,
         form_data.password,
     )
@@ -170,20 +185,21 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
         seconds=config.API_ACCESS_TOKEN_EXPIRE_MINUTES,
     )
     access_token = create_access_token(
-        data={
-            "sub": user.username,
-            "roles": [ 'admin', 'user']
-            },  # type: ignore
-        expires_delta=access_token_expires,        
+        data={"sub": user.username, "roles": ["admin", "user"]},  # type: ignore
+        expires_delta=access_token_expires,
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@router.get("/authenticate",
- response_model=AuthUser, 
- tags=["security"], 
- description='Get authenticated user by token',
- name="Get authenticated user by token")
-async def get_user_by_token(auth: AuthUser = Depends(get_current_user),) -> dict[str,Any]:
+
+@router.get(
+    "/authenticate",
+    response_model=AuthUser,
+    tags=["security"],
+    description="Get authenticated user by token",
+    name="Get authenticated user by token",
+)
+async def get_user_by_token(
+    auth: AuthUser = Depends(get_current_user),
+) -> dict[str, Any]:
 
     return auth
-    
