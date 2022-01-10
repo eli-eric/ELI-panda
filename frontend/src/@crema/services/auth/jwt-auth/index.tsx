@@ -1,7 +1,12 @@
 import axios from "axios";
 
 const jwtAxios = axios.create({
-  baseURL: "http://localhost:5001/", // YOUR_API_URL HERE
+  baseURL:
+    process.env.NODE_ENV === "production"
+      ? "http://api.panda.eli-beams.eu/"
+      : process.env.PANDA_BACKEND_URL_DEVELOPMENT
+      ? process.env.PANDA_BACKEND_URL_DEVELOPMENT
+      : "http://localhost:5002/", //
   headers: {
     "Content-Type": "application/json",
   },

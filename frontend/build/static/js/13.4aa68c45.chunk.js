@@ -1,2 +1,0 @@
-(this.webpackJsonphister=this.webpackJsonphister||[]).push([[13],{848:function(e,t,s){"use strict";s.r(t);s(0);var c=s(702),r=s(1);t.default=function(){return Object(r.jsxs)(r.Fragment,{children:[Object(r.jsx)("h2",{children:"Sample page 2"}),Object(r.jsx)(c.a,{sx:{my:2},children:"You can kick start your app"})]})}}}]);
-//# sourceMappingURL=13.4aa68c45.chunk.js.map
