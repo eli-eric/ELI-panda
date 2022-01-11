@@ -121,7 +121,7 @@ const UserInfo: React.FC<UserInfoProps> = ({ color = "text.secondary" }) => {
               color: "inherit",
             }}
           >
-            System Manager
+            {/* System Manager */}
           </Box>
         </Box>
       </Box>

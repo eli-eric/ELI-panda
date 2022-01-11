@@ -1,8 +1,13 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from app.core import auth
+from app.core import auth, config
 from app.routes import catalog_routes
+from app.core.database import updateDbSchemaAndBaseData 
+
+#before app init we try to upadte DB to have the right schema and base data
+if config.DB_AUTO_UPDATE_SCHEMA_AND_BASE_DATA_ON_START:
+    updateDbSchemaAndBaseData()
 
 # an instance of the main FastAPI object to run the API
 app = FastAPI()

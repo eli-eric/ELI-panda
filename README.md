@@ -2,11 +2,7 @@
 
 ELI oPerations And maiNtenance DAtabase
 
-The project has three main sections:
-
-### Database:
-
-database(s) where we store ELI-PANDA data
+The project has two main sections:
 
 ### Backend:
 
@@ -31,11 +27,14 @@ After you finish local PostgreSQL engine installation, create new database(e.g. 
 We will use change script to keep the database up to date - both schema and data(some required data to run the frontend correctly).
 For now we will use only one script - but in the future we can split it to more migration scripts.
 
-So we have a file database/postgresql/latest_schema_data.sql
+So we have a file backend/api_gateway_py/database/latest_schema_data.sql
 
 Until the line: GRANT ALL ON SCHEMA panda TO postgres; is it init schmea script - first version
 
 If we want to do some changes in the database we will add a script at the end of the file.
+
+This script is executed in backend while the app is starting -> it depends on env configuration DB_AUTO_UPDATE_SCHEMA_AND_BASE_DATA_ON_START
+-> in production we set this better to false, in development to true so you will have the DB always up to date when you start the backend...
 
 # Backend
 

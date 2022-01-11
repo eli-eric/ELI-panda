@@ -1,7 +1,7 @@
 import { AuthUser } from "../../types/models/AuthUser";
 
 export const authRole = {
-  admin: ["admin"],
+  admin: ["admin","superadmin"],
   user: ["user", "admin"],
 };
 

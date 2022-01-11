@@ -33,8 +33,8 @@ const SigninJwtAuth = () => {
         <Formik
           validateOnChange={true}
           initialValues={{
-            email: "admin",
-            password: "elipanda2022",
+            email: "",
+            password: "",
           }}
           validationSchema={validationSchema}
           onSubmit={(data, { setSubmitting }) => {

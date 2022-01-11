@@ -6,7 +6,7 @@ const jwtAxios = axios.create({
       ? "http://api.panda.eli-beams.eu/"
       : process.env.PANDA_BACKEND_URL_DEVELOPMENT
       ? process.env.PANDA_BACKEND_URL_DEVELOPMENT
-      : "http://localhost:5002/", //
+      : "http://localhost:5001/", //
   headers: {
     "Content-Type": "application/json",
   },

@@ -1543,6 +1543,7 @@ ALTER TABLE panda.t_security_user add if not exists is_enabled bool NOT NULL DEF
 INSERT INTO panda.t_security_user (username, email, password_hash,first_name,last_name,is_enabled) select 'admin', 'admin@eli', '$2b$12$X8TY4Sx5hcJGJCrIhUo0.OyNx6PYbkX90BWKwDsr9fhq.XDW0m5.m', 'Admin', 'Administrator', true WHERE NOT EXISTS(SELECT 1 FROM panda.t_security_user WHERE username = 'admin');
 
 
+ALTER TABLE panda.t_facility DROP COLUMN if exists is_enabled;
 
 
 
