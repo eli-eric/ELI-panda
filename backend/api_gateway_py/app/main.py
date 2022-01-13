@@ -8,6 +8,7 @@ from app.core.database import updateDbSchemaAndBaseData
 #before app init we try to upadte DB to have the right schema and base data
 if config.DB_AUTO_UPDATE_SCHEMA_AND_BASE_DATA_ON_START:
     updateDbSchemaAndBaseData()
+    print("Sucessfully updated databse with latest version of database/latest_schema_data.sql")
 
 # an instance of the main FastAPI object to run the API
 app = FastAPI()
