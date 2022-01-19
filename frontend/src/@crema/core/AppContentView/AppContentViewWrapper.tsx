@@ -15,7 +15,7 @@ const AppContentViewWrapper: React.FC<AppContentViewWrapperProps> = ({
         display: "flex",
         flexDirection: "column",
         flex: 1,
-        maxWidth: { xl: 1650 },
+        maxWidth: { xl: 1850 },
         mx: { xl: "auto" },
         width: { xl: "100%" },
       }}

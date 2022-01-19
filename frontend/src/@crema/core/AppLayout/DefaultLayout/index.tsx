@@ -35,7 +35,7 @@ const DefaultLayout = () => {
           <AppContentView />
           <AppFixedFooter />
         </MainContent>
-        <AppThemeSetting />
+        {/* <AppThemeSetting /> */}
       </DefaultLayoutWrapper>
     </DefaultLayoutContainer>
   );

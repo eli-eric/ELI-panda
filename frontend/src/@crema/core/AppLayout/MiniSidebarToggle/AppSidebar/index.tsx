@@ -26,6 +26,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
   const navCollapsed = useSelector<AppState, AppState["settings"]>(
     ({ settings }) => settings
   ).navCollapsed;
+
   const { footer, footerType } = useLayoutContext();
 
   const { sidebarTextColor } = useSidebarContext();

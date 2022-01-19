@@ -38,10 +38,10 @@ const AppMessages: React.FC<AppMessagesProps> = ({
     <>
       {isMenu ? (
         <Box component="span" onClick={() => setShowMessage(true)}>
-          Message
+          Messages
         </Box>
       ) : (
-        <AppTooltip title="Message" placement={tooltipPosition}>
+        <AppTooltip title="Messages" placement={tooltipPosition}>
           <IconButton
             className="icon-btn"
             sx={{

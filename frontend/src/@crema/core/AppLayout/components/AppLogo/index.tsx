@@ -7,9 +7,10 @@ import EliLogo from "../../../../../assets/icon/eli-logo-small.png";
 
 interface AppLogoProps {
   color?: string;
+  height?: number;
 }
 
-const AppLogo: React.FC<AppLogoProps> = ({ color }) => {
+const AppLogo: React.FC<AppLogoProps> = ({ color, height = 50 }) => {
   const { theme } = useThemeContext();
 
   return (
@@ -39,7 +40,7 @@ const AppLogo: React.FC<AppLogoProps> = ({ color }) => {
       >
         {/* <LogoText fill={alpha(theme.palette.text.primary, 0.8)} /> */}
 
-        <img src={EliLogo} alt="Logo" style={{ height: 50 }} />
+        <img src={EliLogo} alt="Logo" style={{ height: height }} />
       </Box>
     </Box>
   );

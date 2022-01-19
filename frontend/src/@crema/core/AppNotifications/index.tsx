@@ -39,10 +39,10 @@ const AppNotifications: React.FC<AppNotificationsProps> = ({
     <>
       {isMenu ? (
         <Box component="span" onClick={() => setShowNotification(true)}>
-          Message
+          Notifications
         </Box>
       ) : (
-        <AppTooltip title="Notification" placement={tooltipPosition}>
+        <AppTooltip title="Notifications" placement={tooltipPosition}>
           <IconButton
             className="icon-btn"
             sx={{

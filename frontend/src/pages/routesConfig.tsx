@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
-import { BiAlignLeft } from "react-icons/bi";
+import { GrCatalog } from "react-icons/gr";
+import { BiCustomize } from "react-icons/bi";
 import { RoutePermittedRole } from "../shared/constants/AppConst";
 
 export interface RouterConfigData {
@@ -19,24 +20,24 @@ export interface RouterConfigData {
 const routesConfig: RouterConfigData[] = [
   {
     id: "app",
-    title: "Sample",
-    messageId: "sidebar.sample",
+    title: "Catalogue",
+    messageId: "Catalogue",
     type: "group",
     children: [
       {
         id: "page-1",
         title: "Page 1",
-        messageId: "sidebar.sample.page1",
+        messageId: "Catalogue items",
         type: "item",
-        icon: <BiAlignLeft />,
+        icon: <GrCatalog />,
         url: "/sample/page-1",
       },
       {
         id: "page-2",
-        title: "Page 2",
-        messageId: "sidebar.sample.page2",
+        title: "Catalog categories",
+        messageId: "Catalogue categories",
         type: "item",
-        icon: <BiAlignLeft />,
+        icon: <BiCustomize />,
         url: "/sample/page-2",
       },
     ],

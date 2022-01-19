@@ -78,7 +78,7 @@ const AppHeader = () => {
             },
           }}
         >
-          <AppLogo />
+          {/* <AppLogo /> */}
         </Box>
         <Box
           sx={{
@@ -96,12 +96,13 @@ const AppHeader = () => {
             },
           }}
         >
-          <AppSearchBar iconPosition="right" placeholder="Search…" />
+          <AppSearchBar iconPosition="right" placeholder="SearchX…" />
         </Box>
 
-        <Box sx={{ ml: 4 }}>
+        {/* we want to have only englis - for now */}
+        {/* <Box sx={{ ml: 4 }}>
           <AppLngSwitcher iconOnly={true} tooltipPosition="bottom" />
-        </Box>
+        </Box> */}
 
         <Box sx={{ ml: 4 }}>
           <Hidden smDown>
@@ -187,7 +188,6 @@ const AppHeader = () => {
             <MenuItem>
               <AppMessages isMenu />
             </MenuItem>
-            <MenuItem>Setting</MenuItem>
           </Menu>
         </Box>
       </Toolbar>

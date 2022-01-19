@@ -101,10 +101,6 @@ const AppHeader = () => {
           <AppSearchBar iconPosition="right" placeholder="Search…" />
         </Box>
 
-        <Box sx={{ ml: 4 }}>
-          <AppLngSwitcher iconOnly={true} tooltipPosition="bottom" />
-        </Box>
-
         <Box
           sx={{
             ml: 4,

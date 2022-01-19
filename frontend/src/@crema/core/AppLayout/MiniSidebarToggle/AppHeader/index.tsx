@@ -33,6 +33,13 @@ const AppHeader: React.FC<AppHeaderProps> = ({ isCollapsed, setCollapsed }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleToggleSettings = () => {
+    setCollapsed(!isCollapsed);
+    console.log(isCollapsed);
+    localStorage.setItem("navCollapsed", isCollapsed ? "1" : "0");
+  };
+
   const dispatch = useDispatch();
 
   return (
@@ -66,7 +73,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ isCollapsed, setCollapsed }) => {
             className="menu-btn"
             color="inherit"
             aria-label="open drawer"
-            onClick={() => setCollapsed(!isCollapsed)}
+            onClick={() => handleToggleSettings()}
             size="large"
           >
             <MenuIcon
@@ -105,7 +112,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ isCollapsed, setCollapsed }) => {
             },
           }}
         >
-          <AppLogo />
+          <AppLogo height={30} />
         </Box>
         <Box
           sx={{
@@ -126,9 +133,9 @@ const AppHeader: React.FC<AppHeaderProps> = ({ isCollapsed, setCollapsed }) => {
           <AppSearchBar iconPosition="right" placeholder="Search…" />
         </Box>
 
-        <Box sx={{ ml: 4 }}>
+        {/* <Box sx={{ ml: 4 }}>
           <AppLngSwitcher iconOnly={true} tooltipPosition="bottom" />
-        </Box>
+        </Box> */}
 
         <Box sx={{ ml: 4 }}>
           <Hidden smDown>
@@ -214,7 +221,6 @@ const AppHeader: React.FC<AppHeaderProps> = ({ isCollapsed, setCollapsed }) => {
             <MenuItem>
               <AppMessages isMenu />
             </MenuItem>
-            <MenuItem>Setting</MenuItem>
           </Menu>
         </Box>
       </Toolbar>

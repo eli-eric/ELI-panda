@@ -12,7 +12,9 @@ import { LayoutType } from "../../../../shared/constants/AppEnums";
 import MiniSidebarToggleContainer from "./MiniSidebarToggleContainer";
 
 const MiniSidebarToggle = () => {
-  const [isCollapsed, setCollapsed] = useState(false);
+  const [isCollapsed, setCollapsed] = useState(
+    localStorage.getItem("navCollapsed") == "0" ? true : false
+  );
   const { footer, layoutType, headerType, footerType } = useLayoutContext();
 
   return (
@@ -36,7 +38,8 @@ const MiniSidebarToggle = () => {
           <AppContentView />
           <AppFixedFooter />
         </Box>
-        <AppThemeSetting />
+
+        {/* <AppThemeSetting /> */}
       </MiniSidebarToggleWrapper>
     </MiniSidebarToggleContainer>
   );

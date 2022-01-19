@@ -223,14 +223,14 @@ export const LightSidebar: SidebarData = {
 const defaultConfig = {
   sidebar: {
     borderColor: "#757575",
-    menuStyle: MenuStyle.DEFAULT,
+    menuStyle: MenuStyle.STANDARD,
     isSidebarBgImage: false,
     sidebarBgImage: 1,
     colorSet: LightSidebar,
   },
   themeStyle: ThemeStyle.STANDARD,
   themeMode: ThemeMode.LIGHT,
-  navStyle: NavStyle.DEFAULT,
+  navStyle: NavStyle.MINI_SIDEBAR_TOGGLE,
   layoutType: LayoutType.FULL_WIDTH,
   footerType: FooterType.FLUID,
   headerType: HeaderType.FIXED,

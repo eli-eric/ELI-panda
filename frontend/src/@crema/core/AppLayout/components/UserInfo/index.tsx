@@ -140,14 +140,14 @@ const UserInfo: React.FC<UserInfoProps> = ({ color = "text.secondary" }) => {
           horizontal: "right",
         }}
       >
-        <MenuItem
+        {/* <MenuItem
           onClick={() => {
             handleClose();
             history.push("/my-account");
           }}
         >
           My account
-        </MenuItem>
+        </MenuItem> */}
         <MenuItem onClick={logout}>Logout</MenuItem>
       </Menu>
     </>

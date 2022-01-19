@@ -33,7 +33,7 @@ const Standard = () => {
           <AppContentView />
           <AppFixedFooter />
         </Box>
-        <AppThemeSetting />
+        {/* <AppThemeSetting /> */}
       </StandardWrapper>
     </StandardContainer>
   );

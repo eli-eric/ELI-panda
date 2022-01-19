@@ -80,7 +80,7 @@ const AppHeader = () => {
             flexGrow: 1,
           }}
         />
-        <AppLngSwitcher iconOnly={true} tooltipPosition="bottom" />
+        {/* <AppLngSwitcher iconOnly={true} tooltipPosition="bottom" /> */}
 
         <Box sx={{ ml: 4 }}>
           <Hidden smDown>
