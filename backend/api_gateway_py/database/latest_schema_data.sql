@@ -1545,5 +1545,6 @@ INSERT INTO panda.t_security_user (username, email, password_hash,first_name,las
 
 ALTER TABLE panda.t_facility DROP COLUMN if exists is_enabled;
 
-
+--fix some mistakes in the base schema
 ALTER TABLE panda.t_manufacturer ALTER COLUMN "name" TYPE varchar(50) USING "name"::varchar;
+ALTER TABLE panda.t_manufacturer ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY;
