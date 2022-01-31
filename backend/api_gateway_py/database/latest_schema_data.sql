@@ -1546,4 +1546,4 @@ INSERT INTO panda.t_security_user (username, email, password_hash,first_name,las
 ALTER TABLE panda.t_facility DROP COLUMN if exists is_enabled;
 
 
-
+ALTER TABLE panda.t_manufacturer ALTER COLUMN "name" TYPE varchar(50) USING "name"::varchar;
