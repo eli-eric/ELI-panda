@@ -130,7 +130,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ isCollapsed, setCollapsed }) => {
             },
           }}
         >
-          <AppSearchBar iconPosition="right" placeholder="Search…" />
+          <AppSearchBar iconPosition="right" placeholder="Search in all modules…" />
         </Box>
 
         {/* <Box sx={{ ml: 4 }}>
@@ -187,16 +187,13 @@ const AppHeader: React.FC<AppHeaderProps> = ({ isCollapsed, setCollapsed }) => {
                       width: 40,
                       height: 40,
                       color: (theme) => theme.palette.text.secondary,
-                      backgroundColor: (theme) =>
-                        theme.palette.background.default,
+                      backgroundColor: (theme) => theme.palette.background.default,
                       border: 1,
                       borderColor: "transparent",
                       "&:hover, &:focus": {
                         color: (theme) => theme.palette.text.primary,
-                        backgroundColor: (theme) =>
-                          alpha(theme.palette.background.default, 0.9),
-                        borderColor: (theme) =>
-                          alpha(theme.palette.text.secondary, 0.25),
+                        backgroundColor: (theme) => alpha(theme.palette.background.default, 0.9),
+                        borderColor: (theme) => alpha(theme.palette.text.secondary, 0.25),
                       },
                     }}
                     onClick={handleClick}
@@ -208,13 +205,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ isCollapsed, setCollapsed }) => {
               </Box>
             </Box>
           </Hidden>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
+          <Menu id="simple-menu" anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleClose}>
             <MenuItem>
               <AppNotifications isMenu />
             </MenuItem>

@@ -51,7 +51,7 @@ def get_catalog_items_with_paging(
             dbData = cur.fetchall()
             for dbRow in dbData:
                 resData = CatalogItemResponse()                
-                resData.ID = dbRow.ID
+                resData.id = dbRow.ID
                 resData.Name = dbRow.Name
                 resData.Category = dbRow.Category
                 resData.Availability = dbRow.Availability

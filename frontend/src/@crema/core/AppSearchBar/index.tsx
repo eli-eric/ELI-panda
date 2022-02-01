@@ -1,12 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import SearchIcon from "@mui/icons-material/Search";
-import {
-  SearchIconBox,
-  SearchIconWrapper,
-  SearchInputBase,
-  SearchWrapper,
-} from "./index.style";
+import { SearchIconBox, SearchIconWrapper, SearchInputBase, SearchWrapper } from "./index.style";
 import { SxProps } from "@mui/system/styleFunctionSx";
 import { Theme } from "@mui/material";
 
@@ -42,12 +37,7 @@ const AppSearch: React.FC<AppSearchProps> = ({
     <SearchWrapper sx={sx} iconPosition={iconPosition}>
       <SearchIconBox
         align={align}
-        className={clsx(
-          "searchRoot",
-          { "hs-search": overlap },
-          { "hs-disableFocus": disableFocus },
-          { searchIconBox: onlyIcon }
-        )}
+        className={clsx("searchRoot", { "hs-search": overlap }, { "hs-disableFocus": disableFocus }, { searchIconBox: onlyIcon })}
       >
         <SearchIconWrapper
           className={clsx({
@@ -57,11 +47,7 @@ const AppSearch: React.FC<AppSearchProps> = ({
         >
           <SearchIcon />
         </SearchIconWrapper>
-        <SearchInputBase
-          {...rest}
-          placeholder={placeholder || "Search…"}
-          inputProps={{ "aria-label": "search" }}
-        />
+        <SearchInputBase {...rest} placeholder={placeholder || "Search…"} inputProps={{ "aria-label": "search" }} />
       </SearchIconBox>
     </SearchWrapper>
   );

@@ -6,9 +6,6 @@ from app.core.database import updateDbSchemaAndBaseData
 from app.routes import catalog_routes
 
 
-print("ENV DB_AUTO_UPDATE_SCHEMA_AND_BASE_DATA_ON_START")
-print(config.DB_AUTO_UPDATE_SCHEMA_AND_BASE_DATA_ON_START)
-
 # before app init we try to upadte DB to have the right schema and base data
 if config.DB_AUTO_UPDATE_SCHEMA_AND_BASE_DATA_ON_START == "True":    
     updateDbSchemaAndBaseData()

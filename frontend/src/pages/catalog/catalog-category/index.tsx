@@ -1,7 +1,12 @@
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, Button, Divider, Link } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { red } from "@mui/material/colors";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import AppSearchBar from "@crema/core/AppSearchBar";
+import CustomLoadingOverlay from "@crema/core/GridLoadingOverlay";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 90 },
@@ -43,19 +48,23 @@ const rows = [
 const Page1 = () => {
   return (
     <>
-      <h2>Catalogue items</h2>
-      <Box sx={{ my: 2 }}>
-        <div style={{ height: 400, width: "100%", background: "white" }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
-            checkboxSelection
-            disableSelectionOnClick
-            editMode="row"
-          />
-        </div>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static" color="default">
+          <Toolbar>
+            <Button variant="contained" color="primary">
+              New catalog category
+            </Button>
+
+            <Divider orientation="vertical" variant="middle" flexItem sx={{ ml: 4, mr: 4 }} />
+
+            <AppSearchBar iconPosition="right" placeholder="Search in catalog categories" />
+
+            <Box sx={{ flexGrow: 1 }} />
+            <Typography color="GrayText" variant="h1" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
+              Catalog categories
+            </Typography>
+          </Toolbar>
+        </AppBar>
       </Box>
     </>
   );

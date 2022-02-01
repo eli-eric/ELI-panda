@@ -27,7 +27,7 @@ class CatalogItemPagingResponse:
 
 
 class CatalogItemResponse:
-    ID:int
+    id:int
     Name: str
     Category:str
     Manufacturer:str

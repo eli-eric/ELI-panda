@@ -11,17 +11,15 @@ interface SearchWrapperProps {
   [x: string]: any;
 }
 
-export const SearchWrapper = styled("div")(
-  ({ iconPosition }: SearchWrapperProps) => ({
-    borderRadius: 4,
-    display: "block",
-    cursor: "pointer",
-    "& .searchRoot .MuiInputBase-input": {
-      paddingLeft: iconPosition === "right" ? 20 : "calc(1em + 28px)",
-      paddingRight: iconPosition === "right" ? "calc(1em + 28px)" : 20,
-    },
-  })
-);
+export const SearchWrapper = styled("div")(({ iconPosition }: SearchWrapperProps) => ({
+  borderRadius: 4,
+  display: "block",
+  cursor: "pointer",
+  "& .searchRoot .MuiInputBase-input": {
+    paddingLeft: iconPosition === "right" ? 20 : "calc(1em + 28px)",
+    paddingRight: iconPosition === "right" ? "calc(1em + 28px)" : 20,
+  },
+}));
 
 export const SearchInputBase = styled(InputBase)(({ theme }) => ({
   fontWeight: Fonts.MEDIUM,
@@ -31,28 +29,28 @@ export const SearchInputBase = styled(InputBase)(({ theme }) => ({
     width: "100%",
   },
   [`& .${inputBaseClasses.input}`]: {
-    border: "0 none",
-    backgroundColor: lighten(theme.palette.background.default, 0.25),
+    border: "1px solid #e8e7e7",
+    backgroundColor: lighten(theme.palette.background.default, 0.55),
     color: theme.palette.text.primary,
     borderRadius: 30,
     padding: theme.spacing(2, 2, 2, 0),
     paddingLeft: `calc(1em + ${theme.spacing(6)})`,
     transition: theme.transitions.create("width"),
-    width: 200,
+    width: 300,
     height: 40,
     boxSizing: "border-box",
     [theme.breakpoints.down("md")]: {
       width: 110,
     },
     "&:focus": {
-      backgroundColor: lighten(theme.palette.background.default, 0.25),
-      width: 240,
+      backgroundColor: lighten(theme.palette.background.default, 0.55),
+      width: 400,
       [theme.breakpoints.down("md")]: {
         width: 162,
       },
     },
     "&:hover": {
-      backgroundColor: lighten(theme.palette.background.default, 0.2),
+      backgroundColor: lighten(theme.palette.background.default, 0.45),
     },
   },
 }));
@@ -64,36 +62,34 @@ interface SearchIconBoxProps {
   [x: string]: any;
 }
 
-export const SearchIconBox = styled("div")(
-  ({ theme, align }: SearchIconBoxProps) => ({
+export const SearchIconBox = styled("div")(({ theme, align }: SearchIconBoxProps) => ({
+  position: "relative",
+  marginLeft: align === "right" ? "auto" : 0,
+  "& .searchIconBox": {
     position: "relative",
-    marginLeft: align === "right" ? "auto" : 0,
-    "& .searchIconBox": {
-      position: "relative",
-      "& $inputInput": {
-        width: 220,
+    "& $inputInput": {
+      width: 220,
+      borderRadius: 50,
+      paddingLeft: 27,
+      "&:focus": {
+        width: 235,
         borderRadius: 50,
-        paddingLeft: 27,
-        "&:focus": {
-          width: 235,
-          borderRadius: 50,
-          paddingLeft: `calc(1em + ${4})`,
-        },
+        paddingLeft: `calc(1em + ${4})`,
       },
     },
-    "&.hs-disableFocus": {
-      "& .MuiInputBase-root": {
+  },
+  "&.hs-disableFocus": {
+    "& .MuiInputBase-root": {
+      width: "100%",
+    },
+    "& .MuiInputBase-input": {
+      width: "100%",
+      "&:focus": {
         width: "100%",
-      },
-      "& .MuiInputBase-input": {
-        width: "100%",
-        "&:focus": {
-          width: "100%",
-        },
       },
     },
-  })
-);
+  },
+}));
 export const SearchIconWrapper = styled("div")(({ theme }) => ({
   height: "100%",
   position: "absolute",

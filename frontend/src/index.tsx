@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "@crema/services";
 
 import App from "./App";
 

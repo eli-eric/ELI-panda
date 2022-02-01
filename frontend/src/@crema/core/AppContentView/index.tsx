@@ -1,11 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { AppSuspense } from "../../index";
-import {
-  anonymousStructure,
-  authorizedStructure,
-  unAuthorizedStructure,
-} from "../../../pages";
+import { anonymousStructure, authorizedStructure, unAuthorizedStructure } from "../../../pages";
 import AppFooter from "../AppLayout/components/AppFooter";
 import AppErrorBoundary from "../AppErrorBoundary";
 import generateRoutes from "../../utility/RouteGenerator";
@@ -29,7 +25,7 @@ const AppContentView: React.FC<AppContentViewProps> = ({ sxStyle }) => {
           display: "flex",
           flex: 1,
           flexDirection: "column",
-          p: { xs: 5, md: 7.5, xl: 5 },
+          p: { xs: 0, md: 0, xl: 0 },
           ...sxStyle,
         }}
         className="app-content"
