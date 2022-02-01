@@ -1,19 +1,39 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
+from datetime import datetime
+from typing import List
 
 from pydantic import BaseModel
 
-from app.models.base_models import BaseDbModel
 
-
-# represent DB object t_catalog_item
+# represent DB object from f_get_catalog_items_paged function
 @dataclass
-class CatalogItem(BaseDbModel):
-    name: str
+class CatalogItemPaged:
+    ID:int
+    Name: str
+    Category:str
+    Manufacturer:str
+    Availability:str
+    Facility:str
+    EstimatedPrice:str
+    Note:str
+    TypicalAvailableInDays:int
+    SupportedToDate:datetime
+
+class CatalogItemPagingResponse:
+    Data: List[CatalogItemResponse]
+    TotalCount: int = 0
 
 
-class CatalogItemResponse(BaseModel):
-    id: int
-    name: str
+class CatalogItemResponse:
+    ID:int
+    Name: str
+    Category:str
+    Manufacturer:str
+    Availability:str
+    Facility:str
+    EstimatedPrice:str
+    Note:str
+    TypicalAvailableInDays:int
+    SupportedToDate:datetime

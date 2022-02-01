@@ -1547,4 +1547,83 @@ ALTER TABLE panda.t_facility DROP COLUMN if exists is_enabled;
 
 --fix some mistakes in the base schema
 ALTER TABLE panda.t_manufacturer ALTER COLUMN "name" TYPE varchar(50) USING "name"::varchar;
-ALTER TABLE panda.t_manufacturer ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY;
+
+DO
+$$
+BEGIN
+  IF NOT EXISTS (SELECT * FROM information_schema.columns WHERE table_schema = 'panda' AND table_name = 't_manufacturer' AND column_name = 'id' AND is_identity = 'YES') THEN
+     ALTER TABLE panda.t_manufacturer ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY;
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;
+
+--function to get the catalog items and paging
+DROP FUNCTION IF EXISTS panda.f_get_catalog_items_paged(int4,int4,varchar,int4);
+
+CREATE OR REPLACE FUNCTION panda.f_get_catalog_items_paged(page_size integer DEFAULT 20, page_num integer DEFAULT 0, search_pattern character varying DEFAULT NULL::character varying, orderby_name integer DEFAULT 0)
+ RETURNS TABLE("ID" int8, 
+ "Name" character varying,
+ "Category" character varying, 
+ "Manufacturer" character varying,
+ "Availability" character varying, 
+ "Facility" character varying, 
+ "EstimatedPrice" NUMERIC(10,2), 
+ "Note" text,
+ "TypicalAvailableInDays" integer, 
+ "SupportedToDate" date)
+ LANGUAGE plpgsql
+AS $function$
+begin
+	return query 
+		SELECT tci.id, tci."name" , tcc."name" AS category, tm."name" AS manufacturer, tca."name" AS availability, tf."name" AS facility,estimated_price ,note, typical_available_in_days, supported_to_date
+		FROM panda.t_catalog_item tci 
+		LEFT JOIN panda.t_catalog_category tcc ON tci.id_category =tcc.id
+		LEFT JOIN panda.t_manufacturer tm ON tci.id_manufacturer = tm.id 
+		LEFT JOIN panda.t_catalog_availability tca ON tci.id_availability = tca.id 
+		LEFT JOIN panda.t_facility tf ON tci.id_facility = tf.id  		
+		WHERE 			
+		(search_pattern IS NULL OR tci."name" ILIKE search_pattern)
+		ORDER BY 
+		CASE WHEN orderby_name = 1 THEN tci."name" END, 
+		CASE WHEN orderby_name = 2 THEN tci."name" END DESC, 
+		tci."id" ASC 
+
+		LIMIT page_size
+		OFFSET page_num * page_size;
+		
+end; $function$
+;
+
+-- Permissions for f_get_catalog_items_paged
+
+ALTER FUNCTION panda.f_get_catalog_items_paged(int4,int4,varchar,int4) OWNER TO postgres;
+GRANT ALL ON FUNCTION panda.f_get_catalog_items_paged(int4,int4,varchar,int4) TO postgres;
+
+--we also need a function to count total items for the function above
+DROP FUNCTION IF EXISTS panda.f_get_catalog_items_count(varchar);
+
+CREATE OR REPLACE FUNCTION panda.f_get_catalog_items_count(search_pattern character varying DEFAULT NULL::character varying)
+ RETURNS TABLE("Count" int8)
+ LANGUAGE plpgsql
+AS $function$
+begin
+	return query 
+		SELECT count(*)
+		FROM panda.t_catalog_item tci 
+		LEFT JOIN panda.t_catalog_category tcc ON tci.id_category =tcc.id
+		LEFT JOIN panda.t_manufacturer tm ON tci.id_manufacturer = tm.id 
+		LEFT JOIN panda.t_catalog_availability tca ON tci.id_availability = tca.id 
+		LEFT JOIN panda.t_facility tf ON tci.id_facility = tf.id  		
+		WHERE 			
+		(search_pattern IS NULL OR tci."name" ILIKE search_pattern)
+		;
+		
+end; $function$
+;
+
+-- Permissions for f_get_catalog_items_count
+
+ALTER FUNCTION panda.f_get_catalog_items_count(varchar) OWNER TO postgres;
+GRANT ALL ON FUNCTION panda.f_get_catalog_items_count(varchar) TO postgres;
+

@@ -1,4 +1,7 @@
 from dataclasses import dataclass
+from typing import Any,List
+
+from pydantic import BaseModel
 
 
 @dataclass
@@ -12,3 +15,7 @@ class BaseDbModel:
 
     # in most of the DB tables we have id as a primary key
     id: int
+
+class GridPagingModelResponse(BaseModel):
+    Data: List[Any]
+    TotalCount: int = 0
