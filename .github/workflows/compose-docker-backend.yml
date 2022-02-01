@@ -12,6 +12,7 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      - run: sudo chown -R $USER:$USER /home/svachaj/actions-runner/_work/
       - uses: actions/checkout@v2
       - name: Build the Docker compose
         run: docker-compose up -d --build
