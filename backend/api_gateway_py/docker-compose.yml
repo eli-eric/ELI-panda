@@ -1,7 +1,7 @@
 version: "3.9"
 services:
-  fnano:
-    container_name: fnano
+  panda-backend:
+    container_name: panda-backend
     restart: unless-stopped
     env_file:
       - /home/svachaj/publish_backend/.env
@@ -9,7 +9,7 @@ services:
       context: ./
       dockerfile: Dockerfile
       labels:
-        - fnano
+        - panda-backend
     ports:
       - 127.0.0.1:6969:6969
  
