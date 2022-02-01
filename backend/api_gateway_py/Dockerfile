@@ -1,6 +1,6 @@
 # https://github.com/tiangolo/uvicorn-gunicorn-fastapi-docker
 
-FROM python:3.9-slim-bullseye
+FROM python:3.9
 
 # set environment variables
 ENV PYTHONWRITEBYTECODE 1
@@ -16,4 +16,7 @@ COPY requirements.txt /code/
 RUN pip install -r requirements.txt
 
 # copy project
-COPY . /code/
+COPY ./app /code/app
+
+CMD ["gunicorn", "app.main:app", "--workers", "2", "--worker-class", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:6969"]
+# CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]

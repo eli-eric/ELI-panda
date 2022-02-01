@@ -10,14 +10,6 @@ services:
       dockerfile: Dockerfile
       labels:
         - fnano
-    volumes:
-        - .:/code
-    command:
-      - /bin/sh
-      - -c
-      - |
-        gunicorn app.main:app --workers 2 --worker-class uvicorn.workers.UvicornWorker -b 0.0.0.0:6969
-
     ports:
       - 127.0.0.1:6969:6969
  
