@@ -6,6 +6,14 @@ export const catalogPagesConfigs = [
     component: React.lazy(() => import("./catalog-list")),
   },
   {
+    path: "/catalog/catalog-list/edit/:id",
+    component: React.lazy(() => import("./catalog-list/edit")),
+  },
+  {
+    path: "/catalog/catalog-list/edit",
+    component: React.lazy(() => import("./catalog-list/edit")),
+  },
+  {
     path: "/catalog/catalog-category",
     component: React.lazy(() => import("./catalog-category")),
   },

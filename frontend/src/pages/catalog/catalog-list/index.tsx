@@ -1,17 +1,14 @@
 import { useState, useEffect } from "react";
 import moment from "moment";
 import { useLocation, useHistory } from "react-router-dom";
-import { Box, Button, Divider, Link } from "@mui/material";
-
-import jwtAxios from "@crema/services/auth/jwt-auth";
 import { DataGridPro, GridSortModel } from "@mui/x-data-grid-pro";
-import { number } from "yup";
+import { Box, Button, Divider } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import AppSearchBar from "@crema/core/AppSearchBar";
 import CustomLoadingOverlay from "@crema/core/GridLoadingOverlay";
-import { catalogPagesConfigs } from "..";
+import jwtAxios from "@crema/services/auth/jwt-auth";
 
 export interface CatalogItem {
   id: number;
@@ -38,7 +35,7 @@ const CatalogListPage = () => {
   let defaultPageSizeP = defaultParams.get("pageSize");
   let defaultFilterP = defaultParams.get("filter");
   let defaultPageNumber: number = defaultPageNumberP ? parseInt(defaultPageNumberP) : 0;
-  let defaultPageSize: number = defaultPageSizeP ? parseInt(defaultPageSizeP) : 19;
+  let defaultPageSize: number = defaultPageSizeP ? parseInt(defaultPageSizeP) : 20;
   let defaultFilter: string = defaultFilterP ? defaultFilterP : "";
 
   const [totalCount, setTotalCount] = useState(0);
@@ -49,15 +46,14 @@ const CatalogListPage = () => {
 
   const [rowsData, setRowsData] = useState<CatalogItem[]>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([]);
+  const [oneTimeRemove, setOneTimeRemove] = useState(true);
 
   useEffect(() => {
     let active = true;
 
-    let orderByName = resolveOrderBy("Name", sortModel);
-
     (async () => {
       setLoading(true);
-
+      let orderByName = resolveOrderBy("Name", sortModel);
       const newRows = await jwtAxios.get(
         `/catalog-items/?pageSize=${pageSize}&pageNumber=${pageNumber}&orderByName=${orderByName}&searchPattern=${searchPattern}`
       );
@@ -67,9 +63,10 @@ const CatalogListPage = () => {
       }
       setRowsData(newRows.data.Data);
       setTotalCount(newRows.data.TotalCount);
-
       setLoading(false);
     })();
+
+    removeLicenseDiv();
 
     return () => {
       active = false;
@@ -102,26 +99,40 @@ const CatalogListPage = () => {
     setUrlParams("filter", e.target.value);
   };
 
-  const addNewVizitka = () => {
+  const addNewCatalogItem = () => {
     navigation.push({
-      pathname: "/sablony/vizitky/edit",
+      pathname: "/catalog/catalog-list/edit",
     });
   };
 
-  const editVizitka = (id: any) => {
+  const editCatalogItem = (id: any) => {
     navigation.push({
-      pathname: "/sablony/vizitky/edit/" + id.toString(),
+      pathname: "/catalog/catalog-list/edit/" + id.toString(),
     });
   };
 
-  const deleteVizitka = (id: any) => {};
+  const deleteCatalogItem = (id: any) => {};
+
+  const removeLicenseDiv = () => {
+    setTimeout(() => {
+      if (oneTimeRemove) {
+        try {
+          let elem = document.getElementsByClassName("MuiDataGrid-main");
+          elem[0].removeChild(elem[0].children[2]);
+          setOneTimeRemove(false);
+        } catch {
+          console.log("canot find mui license div");
+        }
+      }
+    }, 100);
+  };
 
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static" color="default">
           <Toolbar>
-            <Button variant="contained" color="primary" onClick={addNewVizitka}>
+            <Button variant="contained" color="primary" onClick={addNewCatalogItem}>
               New catalog item
             </Button>
 
@@ -130,7 +141,13 @@ const CatalogListPage = () => {
             <AppSearchBar iconPosition="right" placeholder="Search in catalog items" value={searchPattern} onChange={handleSearchChange} />
 
             <Box sx={{ flexGrow: 1 }} />
-            <Typography color="GrayText" variant="h1" noWrap component="div" sx={{ display: { xs: "none", sm: "block" } }}>
+            <Typography
+              color="GrayText"
+              variant="h1"
+              noWrap
+              component="div"
+              sx={{ display: { xs: "none", sm: "block" }, marginRight: "10px" }}
+            >
               Catalog items
             </Typography>
           </Toolbar>
@@ -139,7 +156,6 @@ const CatalogListPage = () => {
       <div style={{ height: "100%", width: "100%", background: "white", padding: "0" }}>
         <DataGridPro
           columns={[
-            { field: "id", filterable: false, sortable: false, headerName: "ID", width: 65, disableColumnMenu: true },
             { field: "Name", filterable: false, headerName: "Name", width: 300, disableColumnMenu: true },
             { field: "Category", filterable: false, sortable: false, headerName: "Category", disableColumnMenu: true },
             { field: "Availability", filterable: false, sortable: false, headerName: "Availability", disableColumnMenu: true },
@@ -180,20 +196,21 @@ const CatalogListPage = () => {
               width: 150,
               renderCell: ({ id }) => (
                 <>
-                  <Button onClick={() => editVizitka(id)}>Edit</Button>
-                  <Button onClick={() => deleteVizitka(id)} color="warning">
+                  <Button onClick={() => editCatalogItem(id)}>Edit</Button>
+                  <Button onClick={() => deleteCatalogItem(id)} color="warning">
                     Delete
                   </Button>
                 </>
               ),
             },
+            //{ field: "id", filterable: false, sortable: false, headerName: "ID", width: 65, disableColumnMenu: true },
           ]}
           rows={rowsData}
           pagination
           density="compact"
           pageSize={pageSize}
           page={pageNumber}
-          rowsPerPageOptions={[19, 50, 100]}
+          rowsPerPageOptions={[20, 50, 100]}
           rowCount={totalCount}
           paginationMode="server"
           sortingMode="server"
