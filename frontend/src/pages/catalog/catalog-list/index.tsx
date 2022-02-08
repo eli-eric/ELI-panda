@@ -155,7 +155,7 @@ const CatalogListPage = () => {
                         placement="right"
                         title={
                           <Fragment>
-                            <img width={100} height={100} src={value} alt="catalog item" />
+                            <img width={150} height={150} src={value} alt="catalog item" />
                           </Fragment>
                         }
                       >
