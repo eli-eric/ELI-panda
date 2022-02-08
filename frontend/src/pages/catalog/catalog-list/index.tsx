@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import moment from "moment";
 import { useLocation, useHistory } from "react-router-dom";
 import { DataGridPro, GridSortModel } from "@mui/x-data-grid-pro";
@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import AppSearchBar from "@crema/core/AppSearchBar";
 import CustomLoadingOverlay from "@crema/core/GridLoadingOverlay";
 import jwtAxios from "@crema/services/auth/jwt-auth";
+import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 
 export interface CatalogItem {
   id: number;
@@ -66,8 +67,6 @@ const CatalogListPage = () => {
       setLoading(false);
     })();
 
-    removeLicenseDiv();
-
     return () => {
       active = false;
     };
@@ -113,20 +112,6 @@ const CatalogListPage = () => {
 
   const deleteCatalogItem = (id: any) => {};
 
-  const removeLicenseDiv = () => {
-    setTimeout(() => {
-      if (oneTimeRemove) {
-        try {
-          let elem = document.getElementsByClassName("MuiDataGrid-main");
-          elem[0].removeChild(elem[0].children[2]);
-          setOneTimeRemove(false);
-        } catch {
-          console.log("canot find mui license div");
-        }
-      }
-    }, 100);
-  };
-
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
@@ -156,6 +141,31 @@ const CatalogListPage = () => {
       <div style={{ height: "100%", width: "100%", background: "white", padding: "0" }}>
         <DataGridPro
           columns={[
+            {
+              field: "Image",
+              filterable: false,
+              headerName: "",
+              width: 50,
+              disableColumnMenu: true,
+              renderCell: ({ id, value }) => {
+                if (value)
+                  return (
+                    <>
+                      <Tooltip
+                        placement="right"
+                        title={
+                          <Fragment>
+                            <img width={100} height={100} src={value} alt="catalog item" />
+                          </Fragment>
+                        }
+                      >
+                        <img width={25} height={25} src={value} alt="catalog item" />
+                      </Tooltip>
+                    </>
+                  );
+                else return <></>;
+              },
+            },
             { field: "Name", filterable: false, headerName: "Name", width: 300, disableColumnMenu: true },
             { field: "Category", filterable: false, sortable: false, headerName: "Category", disableColumnMenu: true },
             { field: "Availability", filterable: false, sortable: false, headerName: "Availability", disableColumnMenu: true },

@@ -20,6 +20,7 @@ class CatalogItemPaged:
     Note:str
     TypicalAvailableInDays:int
     SupportedToDate:datetime
+    Image:str
 
 class CatalogItemPagingResponse:
     Data: List[CatalogItemResponse]
@@ -37,3 +38,4 @@ class CatalogItemResponse:
     Note:str
     TypicalAvailableInDays:int
     SupportedToDate:datetime
+    Image:str

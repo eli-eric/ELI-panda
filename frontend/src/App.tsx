@@ -12,6 +12,10 @@ import configureStore, { history } from "redux/store";
 
 import JWTAuthAuthProvider from "./@crema/services/auth/jwt-auth/JWTAuthProvider";
 
+import { LicenseInfo } from "@mui/x-data-grid-pro";
+
+LicenseInfo.setLicenseKey("aec8ce9b5820bdc372655e81b0c242d0T1JERVI6MzcxODIsRVhQSVJZPTE2NzU1OTI0MTEwMDAsS0VZVkVSU0lPTj0x");
+
 const store = configureStore();
 
 const App = () => (

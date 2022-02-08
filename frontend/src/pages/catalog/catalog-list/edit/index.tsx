@@ -199,7 +199,7 @@ const CatalogListEditPage = () => {
                     <CardHeader title="General properties" sx={{ paddingBottom: 0 }} />
                     <CardContent>
                       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
                           <Box sx={{ mb: { xs: 4, xl: 4 } }}>
                             <AppTextField
                               placeholder="Name"
@@ -243,7 +243,7 @@ const CatalogListEditPage = () => {
                             />
                           </Box>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={3}>
                           <Box sx={{ mb: { xs: 4, xl: 4 } }}>
                             <Autocomplete
                               disablePortal
@@ -298,7 +298,7 @@ const CatalogListEditPage = () => {
                             </LocalizationProvider>
                           </Box>
                         </Grid>
-                        <Grid item xs={4}>
+                        <Grid item xs={6}>
                           <Box sx={{ mb: { xs: 0, xl: 0 } }}>
                             <AppTextField
                               placeholder="Note"

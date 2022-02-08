@@ -61,6 +61,7 @@ def get_catalog_items_with_paging(
                 resData.Note = dbRow.Note
                 resData.SupportedToDate = dbRow.SupportedToDate
                 resData.TypicalAvailableInDays = dbRow.TypicalAvailableInDays
+                resData.Image = dbRow.Image
                 result.Data.append(resData)
 
         with conn.cursor() as cur:
@@ -75,4 +76,29 @@ def get_catalog_items_with_paging(
             )            
             result.TotalCount = cur.fetchone()[0]
 
+    return result
+
+
+def get_catalog_item_image_main(auth: AuthUser, id: int) -> str:
+    result = ""
+
+    # Connect to an existing database
+    with dbConnection() as conn:
+        # Open a cursor to perform database operations
+        with conn.cursor() as cur:
+
+            # get data
+            cur.execute(
+                """
+            select image_main from panda.t_catalog_item where id = %s
+            """,
+                (
+                    id,
+                ),
+            )
+            # return the image from t_catalog_item for the id provided
+            dbData = cur.fetchone()            
+            if dbData:
+                result = dbData[0]
+    
     return result
