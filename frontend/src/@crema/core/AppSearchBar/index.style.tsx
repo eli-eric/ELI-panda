@@ -19,6 +19,9 @@ export const SearchWrapper = styled("div")(({ iconPosition }: SearchWrapperProps
     paddingLeft: iconPosition === "right" ? 20 : "calc(1em + 28px)",
     paddingRight: iconPosition === "right" ? "calc(1em + 28px)" : 20,
   },
+  "&  .searchRoot:hover .right": {
+    visibility: "visible",
+  },
 }));
 
 export const SearchInputBase = styled(InputBase)(({ theme }) => ({
@@ -36,17 +39,17 @@ export const SearchInputBase = styled(InputBase)(({ theme }) => ({
     padding: theme.spacing(2, 2, 2, 0),
     paddingLeft: `calc(1em + ${theme.spacing(6)})`,
     transition: theme.transitions.create("width"),
-    width: 300,
+    width: 350,
     height: 40,
     boxSizing: "border-box",
     [theme.breakpoints.down("md")]: {
-      width: 110,
+      width: 150,
     },
     "&:focus": {
       backgroundColor: lighten(theme.palette.background.default, 0.55),
-      width: 400,
+      width: 350,
       [theme.breakpoints.down("md")]: {
-        width: 162,
+        width: 150,
       },
     },
     "&:hover": {
@@ -103,6 +106,27 @@ export const SearchIconWrapper = styled("div")(({ theme }) => ({
   "&.right": {
     left: "auto",
     right: 12,
+    "& + $inputRoot $inputInput": {
+      paddingLeft: theme.spacing(5),
+      paddingRight: `calc(1em + ${theme.spacing(7)})`,
+    },
+  },
+}));
+
+export const ClearIconWrapper = styled("div")(({ theme }) => ({
+  height: "100%",
+  position: "absolute",
+  top: 0,
+  left: 12,
+  zIndex: 1,
+  visibility: "hidden",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  "&.right": {
+    left: "auto",
+    right: 36,
+    top: 1,
     "& + $inputRoot $inputInput": {
       paddingLeft: theme.spacing(5),
       paddingRight: `calc(1em + ${theme.spacing(7)})`,

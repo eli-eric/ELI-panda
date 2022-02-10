@@ -29,7 +29,7 @@ const CatalogListPage = () => {
   const location = useLocation();
   const navigation = useHistory();
   const mom = moment();
-  mom.locale(moment.locales()["cs-CZ"]);
+  mom.locale(moment.locales()["en-US"]);
 
   let defaultParams = new URLSearchParams(search);
   let defaultPageNumberP = defaultParams.get("pageNumber");
@@ -43,7 +43,7 @@ const CatalogListPage = () => {
   const [pageNumber, setPageNumber] = useState(defaultPageNumber);
   const [pageSize, setPageSize] = useState(defaultPageSize);
   const [loading, setLoading] = useState<boolean>(false);
-  const [searchPattern, setSearchPattern] = useState<string>(defaultFilter);
+  const [searchPattern, setSearchPattern] = useState<string | undefined | null>(defaultFilter);
 
   const [rowsData, setRowsData] = useState<CatalogItem[]>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([]);
@@ -84,7 +84,7 @@ const CatalogListPage = () => {
     return result;
   };
 
-  const setUrlParams = (name: string, value: string | null) => {
+  const setUrlParams = (name: string, value: string | null | undefined) => {
     setTimeout(() => {
       let params = new URLSearchParams(search);
       if (value != null && value != "") params.set(name, value);
@@ -93,9 +93,9 @@ const CatalogListPage = () => {
     }, 1);
   };
 
-  const handleSearchChange = (e) => {
-    setSearchPattern(e.target.value);
-    setUrlParams("filter", e.target.value);
+  const handleSearchChange = (searchText?: string | null) => {
+    setSearchPattern(searchText);
+    setUrlParams("filter", searchText);
   };
 
   const addNewCatalogItem = () => {
@@ -123,7 +123,21 @@ const CatalogListPage = () => {
 
             <Divider orientation="vertical" variant="middle" flexItem sx={{ ml: 4, mr: 4 }} />
 
-            <AppSearchBar iconPosition="right" placeholder="Search in catalog items" value={searchPattern} onChange={handleSearchChange} />
+            <AppSearchBar
+              iconPosition="right"
+              startSearchMode="onChange"
+              placeholder="Search auto after 600ms"
+              searchInitValue={defaultFilter}
+              onSearch={handleSearchChange}
+            />
+
+            <AppSearchBar
+              iconPosition="right"
+              startSearchMode="onEnter"
+              placeholder="Search after you hit ENTER"
+              searchInitValue={defaultFilter}
+              onSearch={handleSearchChange}
+            />
 
             <Box sx={{ flexGrow: 1 }} />
             <Typography
@@ -241,6 +255,12 @@ const CatalogListPage = () => {
           loading={loading}
           components={{
             LoadingOverlay: CustomLoadingOverlay,
+          }}
+          onCellDoubleClick={(params, event) => {
+            if (!event.ctrlKey) {
+              event.defaultMuiPrevented = true;
+              editCatalogItem(params.id);
+            }
           }}
         />
       </div>
