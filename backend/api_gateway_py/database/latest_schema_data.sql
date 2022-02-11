@@ -1671,3 +1671,8 @@ end; $function$
 ALTER FUNCTION panda.f_get_catalog_items_paged(int4,int4,varchar,int4) OWNER TO postgres;
 GRANT ALL ON FUNCTION panda.f_get_catalog_items_paged(int4,int4,varchar,int4) TO postgres;
 
+-- add order to catalog item prop group
+ALTER TABLE panda.t_catalog_category_property_group ADD order_position int4 NOT NULL DEFAULT 0;
+
+
+
