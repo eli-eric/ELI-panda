@@ -100,6 +100,3 @@ kill-container: ## Stop the running docker container.
 dev: ## Run the app locally for the developmented57b97fb227.
 	uvicorn app.main:app --port 5001 --reload
 
-.PHONY: env
-env: ## Load the virtual enviroment .venv
-	@source .venv/bin/activate

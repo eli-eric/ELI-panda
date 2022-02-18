@@ -1672,7 +1672,32 @@ ALTER FUNCTION panda.f_get_catalog_items_paged(int4,int4,varchar,int4) OWNER TO 
 GRANT ALL ON FUNCTION panda.f_get_catalog_items_paged(int4,int4,varchar,int4) TO postgres;
 
 -- add order to catalog item prop group
-ALTER TABLE panda.t_catalog_category_property_group ADD order_position int4 NOT NULL DEFAULT 0;
+ALTER TABLE panda.t_catalog_category_property_group ADD IF NOT EXISTS order_position int4 NOT NULL DEFAULT 0;
 
 
+--add units table for catalogue
+CREATE TABLE IF NOT EXISTS  panda.t_catalog_category_property_unit (
+	id int4 NOT NULL GENERATED ALWAYS AS IDENTITY,
+	"name" varchar(50) NOT NULL,
+	description varchar(200) NULL,
+	CONSTRAINT t_catalog_category_property_unit_pk PRIMARY KEY (id),
+	CONSTRAINT t_catalog_category_property_unit_un UNIQUE (name)
+);
 
+-- Permissions
+ALTER TABLE panda.t_catalog_category_property_unit OWNER TO postgres;
+GRANT ALL ON TABLE panda.t_catalog_category_property_unit TO postgres;
+
+
+ALTER TABLE panda.t_catalog_category_property ADD IF NOT EXISTS id_unit int4 NULL;
+ALTER TABLE panda.t_catalog_category_property ADD IF NOT EXISTS default_value jsonb NULL;
+
+DO
+$$
+BEGIN
+  IF NOT EXISTS (SELECT * FROM information_schema.table_constraints tc WHERE table_schema = 'panda' AND table_name = 't_catalog_category_property' AND  constraint_type = 'FOREIGN KEY' AND constraint_name = 't_catalog_category_property_unit_fk') THEN
+     ALTER TABLE panda.t_catalog_category_property ADD CONSTRAINT t_catalog_category_property_unit_fk FOREIGN KEY (id_unit) REFERENCES panda.t_catalog_category_property_unit(id);
+  END IF;
+END;
+$$
+LANGUAGE plpgsql;

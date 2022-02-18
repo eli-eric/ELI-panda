@@ -34,6 +34,27 @@ export interface CatalogItem {
   SupportedToDate: string;
 }
 
+export interface CatalogItemCategoryGroup {
+  id: number;
+  name: string;
+  properties: CatalogItemProperty[];
+}
+
+export interface CatalogItemProperty {
+  id_group_property: number;
+  name: string;
+  type: string;
+  column: number;
+  row: number;
+  lov?: CatalogItemPropertyLov[];
+  value?: any;
+}
+
+export interface CatalogItemPropertyLov {
+  id: number;
+  label: string;
+}
+
 const CatalogListEditPage = () => {
   const { search } = useLocation();
   const location = useLocation();
@@ -62,7 +83,7 @@ const CatalogListEditPage = () => {
     (async () => {
       setLoading(true);
 
-      const editItem = await jwtAxios.get(`/catalog-items/${pageSize}`);
+      //const editItem = await jwtAxios.get(`/catalog-items/${pageSize}`);
 
       if (!active) {
         return;
@@ -144,6 +165,194 @@ const CatalogListEditPage = () => {
     {
       id: 3,
       label: "National Instruments",
+    },
+  ];
+
+  const itemGroups: CatalogItemCategoryGroup[] = [
+    {
+      id: 1,
+      name: "Optics General",
+      properties: [
+        {
+          id_group_property: 1,
+          name: "Wavelength Region",
+          type: "List",
+          row: 1,
+          column: 1,
+          lov: [
+            {
+              id: 1,
+              label: "XUV",
+            },
+            {
+              id: 2,
+              label: "UV",
+            },
+            {
+              id: 3,
+              label: "VIS-NIR",
+            },
+            {
+              id: 4,
+              label: "MIR",
+            },
+            {
+              id: 5,
+              label: "IR",
+            },
+          ],
+        },
+        {
+          id_group_property: 2,
+          name: "Optics Type",
+          type: "List",
+          row: 1,
+          column: 2,
+          lov: [
+            {
+              id: 1,
+              label: "Mirror",
+            },
+            {
+              id: 2,
+              label: "Lens",
+            },
+            {
+              id: 3,
+              label: "Window",
+            },
+            {
+              id: 4,
+              label: "Substrate",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 1,
+      name: "Substrate",
+      properties: [
+        {
+          id_group_property: 1,
+          name: "Substrate 1",
+          type: "Text",
+          row: 1,
+          column: 1,
+        },
+        {
+          id_group_property: 2,
+          name: "Substrate 2",
+          type: "Date",
+          row: 2,
+          column: 1,
+          value: null,
+        },
+        {
+          id_group_property: 3,
+          name: "Substrate 3",
+          type: "Number",
+          row: 3,
+          column: 1,
+        },
+        {
+          id_group_property: 4,
+          name: "Substrate 4",
+          type: "Text",
+          row: 4,
+          column: 1,
+        },
+        {
+          id_group_property: 5,
+          name: "Substrate 5",
+          type: "Text",
+          row: 5,
+          column: 1,
+        },
+        {
+          id_group_property: 6,
+          name: "Substrate 6",
+          type: "Text",
+          row: 1,
+          column: 2,
+        },
+        {
+          id_group_property: 7,
+          name: "Substrate 7",
+          type: "List",
+          row: 2,
+          column: 2,
+          lov: [
+            {
+              id: 1,
+              label: "Jedna",
+            },
+          ],
+        },
+        {
+          id_group_property: 8,
+          name: "Substrate 8",
+          type: "Text",
+          row: 3,
+          column: 2,
+        },
+        {
+          id_group_property: 9,
+          name: "Substrate 9",
+          type: "Text",
+          row: 4,
+          column: 2,
+        },
+        {
+          id_group_property: 10,
+          name: "Substrate 10",
+          type: "Text",
+          row: 5,
+          column: 2,
+        },
+        {
+          id_group_property: 11,
+          name: "Substrate 11",
+          type: "Text",
+          row: 1,
+          column: 3,
+        },
+        {
+          id_group_property: 12,
+          name: "Substrate 12",
+          type: "Text",
+          row: 2,
+          column: 3,
+        },
+        {
+          id_group_property: 13,
+          name: "Substrate 14",
+          type: "Text",
+          row: 3,
+          column: 3,
+        },
+        {
+          id_group_property: 15,
+          name: "Substrate 15",
+          type: "Text",
+          row: 4,
+          column: 3,
+        },
+        {
+          id_group_property: 16,
+          name: "Substrate 16",
+          type: "Text",
+          row: 5,
+          column: 3,
+        },
+        {
+          id_group_property: 17,
+          name: "Substrate 17",
+          type: "Text",
+          row: 1,
+          column: 4,
+        },
+      ],
     },
   ];
 
@@ -321,7 +530,115 @@ const CatalogListEditPage = () => {
                       </Grid>
                     </CardContent>
                   </Card>
-                  <Card variant="outlined" sx={{ width: "100%", mb: 2 }}>
+
+                  {itemGroups.map((groupItem) => {
+                    return (
+                      <>
+                        <Card variant="outlined" sx={{ width: "100%", mb: 2 }}>
+                          <CardHeader title={groupItem.name} sx={{ paddingBottom: 0 }} />
+                          <CardContent>
+                            <Box display="grid" gap={0}>
+                              {groupItem.properties.map((propItem) => {
+                                if (propItem.type === "Text") {
+                                  return (
+                                    <>
+                                      <Box
+                                        key={propItem.id_group_property}
+                                        gridColumn={propItem.column}
+                                        gridRow={propItem.row}
+                                        sx={{ mb: { xs: 4, xl: 4 }, mr: 3 }}
+                                      >
+                                        <AppTextField
+                                          placeholder={propItem.name}
+                                          name={propItem.name}
+                                          label={propItem.name}
+                                          variant="outlined"
+                                          sx={{
+                                            width: "100%",
+                                            "& .MuiInputBase-input": {
+                                              fontSize: 14,
+                                            },
+                                          }}
+                                        />
+                                      </Box>
+                                    </>
+                                  );
+                                } else if (propItem.type === "List") {
+                                  return (
+                                    <>
+                                      <Box
+                                        key={propItem.id_group_property}
+                                        gridColumn={propItem.column}
+                                        gridRow={propItem.row}
+                                        sx={{ mb: { xs: 4, xl: 4 }, mr: 3 }}
+                                      >
+                                        <Autocomplete
+                                          disablePortal
+                                          id={"cmb-" + propItem.name + propItem.id_group_property.toString()}
+                                          options={propItem.lov ? propItem.lov : []}
+                                          sx={{ width: "100%" }}
+                                          renderInput={(params) => <TextField {...params} label={propItem.name} />}
+                                        />
+                                      </Box>
+                                    </>
+                                  );
+                                } else if (propItem.type === "Date") {
+                                  return (
+                                    <>
+                                      <Box
+                                        key={propItem.id_group_property}
+                                        gridColumn={propItem.column}
+                                        gridRow={propItem.row}
+                                        sx={{ mb: { xs: 4, xl: 4 }, mr: 3 }}
+                                      >
+                                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                          <DatePicker
+                                            label={propItem.name}
+                                            value={propItem.value}
+                                            onChange={(newValue) => {
+                                              console.log(newValue);
+                                            }}
+                                            renderInput={(params) => <TextField {...params} sx={{ width: "100%" }} />}
+                                          />
+                                        </LocalizationProvider>
+                                      </Box>
+                                    </>
+                                  );
+                                } else if (propItem.type === "Number") {
+                                  return (
+                                    <>
+                                      <Box
+                                        key={propItem.id_group_property}
+                                        gridColumn={propItem.column}
+                                        gridRow={propItem.row}
+                                        sx={{ mb: { xs: 4, xl: 4 }, mr: 3 }}
+                                      >
+                                        <AppTextField
+                                          placeholder={propItem.name}
+                                          name={"num-" + propItem.name + propItem.id_group_property.toString()}
+                                          type="number"
+                                          label={propItem.name}
+                                          variant="outlined"
+                                          sx={{
+                                            width: "100%",
+                                            "& .MuiInputBase-input": {
+                                              fontSize: 14,
+                                            },
+                                          }}
+                                        />
+                                      </Box>
+                                    </>
+                                  );
+                                }
+                              })}
+                            </Box>
+                          </CardContent>
+                        </Card>
+                      </>
+                    );
+                  })}
+
+                  {/* <Card variant="outlined" sx={{ width: "100%", mb: 2 }}>
                     <CardHeader title="Substarte" sx={{ paddingBottom: 0 }} />
                     <CardContent>auto generate props...</CardContent>
                   </Card>
@@ -332,7 +649,7 @@ const CatalogListEditPage = () => {
                   <Card variant="outlined" sx={{ width: "100%" }}>
                     <CardHeader title="S2 coating" sx={{ paddingBottom: 0 }} />
                     <CardContent>auto generate props...</CardContent>
-                  </Card>
+                  </Card> */}
                 </Form>
               )}
             </Formik>
