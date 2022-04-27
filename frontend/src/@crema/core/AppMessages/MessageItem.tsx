@@ -19,7 +19,7 @@ const MessageItem: React.FC<MessageItemProps> = ({ item }) => {
       sx={{
         padding: "8px 20px",
       }}
-      className="item-hover"
+      className="item-hover "
     >
       <ListItemAvatar
         sx={{
