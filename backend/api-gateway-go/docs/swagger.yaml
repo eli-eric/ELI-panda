@@ -1,0 +1,74 @@
+info:
+  contact:
+    email: jiri.svacha@eli-beams.eu
+    name: Jiří Švácha
+  description: This is a API Gateway to the PANDA database
+  title: PANDA API Gateway
+  version: "0.1"
+paths:
+  /authenticate:
+    get:
+      consumes:
+      - application/json
+      description: Get authenticated user data by token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: Get authenticated user data
+      tags:
+      - Security
+    post:
+      consumes:
+      - application/json
+      description: Login with username and password and get jwt token to play with
+        rest of API
+      parameters:
+      - description: username
+        in: formData
+        name: username
+        required: true
+        type: string
+      - description: password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Login and get security token
+      tags:
+      - Security
+  /system:
+    post:
+      consumes:
+      - application/json
+      description: Create new System without any relationship and return its id
+      parameters:
+      - description: System name
+        in: formData
+        name: Name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: Create new standalone system
+      tags:
+      - Systems
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
