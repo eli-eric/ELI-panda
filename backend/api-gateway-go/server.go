@@ -23,7 +23,7 @@ import (
 // @Tags Systems
 // @Accept json
 // @Produce json
-// @Param Name formData string true "System name"
+// @Param Name formData string true "System name "
 // @Success 200
 // @Router /system [post]
 // @Security ApiKeyAuth
