@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
 
-  panda-frontend:
+  panda-backend:
     container_name: panda-backend
     restart: unless-stopped
     build:
