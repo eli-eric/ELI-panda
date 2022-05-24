@@ -49,13 +49,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create new System without any relationship and return its id
-      parameters:
-      - description: System name
-        in: formData
-        name: Name
-        required: true
-        type: string
+      description: Create new system and return new System ID
       produces:
       - application/json
       responses:
@@ -63,7 +57,7 @@ paths:
           description: ""
       security:
       - ApiKeyAuth: []
-      summary: Create new standalone system
+      summary: Create new system
       tags:
       - Systems
 securityDefinitions:

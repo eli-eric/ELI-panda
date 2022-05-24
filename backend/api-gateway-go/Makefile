@@ -8,5 +8,6 @@ build:
 install:
 	go mod download && go mod verify
 
+#if swag command not found run: export PATH=$PATH:$HOME/go/bin
 swagger:
-	swag init -g server.go
+	swag init -g server.go 

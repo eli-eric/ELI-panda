@@ -85,7 +85,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Create new System without any relationship and return its id",
+                "description": "Create new system and return new System ID",
                 "consumes": [
                     "application/json"
                 ],
@@ -95,16 +95,7 @@ const docTemplate = `{
                 "tags": [
                     "Systems"
                 ],
-                "summary": "Create new standalone system",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "System name",
-                        "name": "Name",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
+                "summary": "Create new system",
                 "responses": {
                     "200": {
                         "description": ""
