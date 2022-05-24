@@ -5,3 +5,4 @@ backend/api_gateway_py/.env
 backend/api_gateway_py/.venv
 frontend/build
 frontend/build/index.html
+backend/api-gateway-go/apigateway

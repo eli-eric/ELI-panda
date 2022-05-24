@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+
+  panda-frontend:
+    container_name: panda-backend
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      labels: 
+        - panda-backend
+    ports:
+      - '127.0.0.1:5001:5001'
