@@ -1,6 +1,10 @@
+# How to run this backend localy
+
 1. install go 1.18 or above https://go.dev/dl/
 2. run(to get required packages): go mod download && go mod verify
 3. run(to run webapi localy) go run server.go
+
+The server is running localy on port 1323
 
 # Optionaly to update OpenAPI(Swagger) docs:
 

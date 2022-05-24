@@ -23,7 +23,7 @@ func NewSecurityHandlers(securitySvc services.ISecurityService) ISecurityHandler
 	return &SecurityHandlers{securityService: securitySvc}
 }
 
-// Login godoc
+// Authenticate godoc
 // @Summary Login and get security token
 // @Description Login with username and password and get jwt token to play with rest of API
 // @Tags Security

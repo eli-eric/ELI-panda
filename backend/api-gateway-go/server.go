@@ -1,7 +1,6 @@
 package main
 
 import (
-	"net/http"
 	"os"
 
 	_ "panda/apigateway/docs"
@@ -14,34 +13,33 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger" // echo-swagger middleware
 
-	uuid "github.com/google/uuid"
 	"github.com/neo4j/neo4j-go-driver/v4/neo4j"
 )
 
-// CreateNewSystem godoc
-// @Summary Create new standalone system
-// @Description Create new System without any relationship and return its id
-// @Tags Systems
-// @Accept json
-// @Produce json
-// @Param Name formData string true "System name "
-// @Success 200
-// @Router /system [post]
-// @Security ApiKeyAuth
-func createNewSystem(driver neo4j.Driver) echo.HandlerFunc {
-	return func(c echo.Context) error {
+// // CreateNewSystem godoc
+// // @Summary Create new standalone system
+// // @Description Create new System without any relationship and return its id
+// // @Tags Systems
+// // @Accept json
+// // @Produce json
+// // @Param name formData string true "System name "
+// // @Success 200
+// // @Router /system [post]
+// // @Security ApiKeyAuth
+// func createNewSystem(driver neo4j.Driver) echo.HandlerFunc {
+// 	return func(c echo.Context) error {
 
-		systemItem := models.System{
-			Name: c.FormValue("name"),
-		}
-		err := insertSystem(driver, &systemItem)
-		if err != nil {
-			return c.JSON(http.StatusUnauthorized, err.Error())
-		}
+// 		systemItem := models.System{
+// 			Name: c.FormValue("name"),
+// 		}
+// 		err := insertSystem(driver, &systemItem)
+// 		if err != nil {
+// 			return c.JSON(http.StatusUnauthorized, err.Error())
+// 		}
 
-		return c.JSON(http.StatusOK, systemItem)
-	}
-}
+// 		return c.JSON(http.StatusOK, systemItem)
+// 	}
+// }
 
 // @title          PANDA API Gateway
 // @version        0.1
@@ -115,54 +113,55 @@ func main() {
 	securityHandlers := handlers.NewSecurityHandlers(securityService)
 	routes.MapSecurityRoutes(e, securityHandlers, jwtMiddleware)
 
-	// Restricted group for systems
+	//Group of routes for Systems
 	systemGroup := e.Group("/system")
 	systemGroup.Use(jwtMiddleware)
-	//endpoint to create new standalone system
-	systemGroup.POST("", createNewSystem(neo4jDriver))
+	systemsService := services.NewSystemsService(neo4jDriver)
+	systemsHandlers := handlers.NewSystemsHandlers(systemsService)
+	routes.MapSystemsRoutes(systemGroup, systemsHandlers)
 
 	e.Logger.Fatal(e.Start(port))
 }
 
-func insertSystem(driver neo4j.Driver, systemItem *models.System) error {
-	// Sessions are short-lived, cheap to create and NOT thread safe. Typically create one or more sessions
-	// per request in your web application. Make sure to call Close on the session when done.
-	// For multi-database support, set sessionConfig.DatabaseName to requested database
-	// Session config will default to write mode, if only reads are to be used configure session for
-	// read mode.
-	session := driver.NewSession(neo4j.SessionConfig{})
-	defer session.Close()
-	_, err := session.WriteTransaction(createSystemTx(systemItem))
-	if err != nil {
-		return err
-	}
-	return nil
-}
+// func insertSystem(driver neo4j.Driver, systemItem *models.System) error {
+// 	// Sessions are short-lived, cheap to create and NOT thread safe. Typically create one or more sessions
+// 	// per request in your web application. Make sure to call Close on the session when done.
+// 	// For multi-database support, set sessionConfig.DatabaseName to requested database
+// 	// Session config will default to write mode, if only reads are to be used configure session for
+// 	// read mode.
+// 	session := driver.NewSession(neo4j.SessionConfig{})
+// 	defer session.Close()
+// 	_, err := session.WriteTransaction(createSystemTx(systemItem))
+// 	if err != nil {
+// 		return err
+// 	}
+// 	return nil
+// }
 
-func createSystemTx(systemItem *models.System) neo4j.TransactionWork {
-	return func(tx neo4j.Transaction) (interface{}, error) {
-		newUid, err := uuid.NewRandom()
-		if err != nil {
-			return nil, err
-		}
-		records, err := tx.Run("CREATE (s:System { name: $name, uid: $uid }) RETURN id(s), s.name, s.uid", map[string]interface{}{
-			"name": systemItem.Name,
-			"uid":  newUid.String(),
-		})
-		// In face of driver native errors, make sure to return them directly.
-		// Depending on the error, the driver may try to execute the function again.
-		if err != nil {
-			return nil, err
-		}
-		record, err := records.Single()
-		if err != nil {
-			return nil, err
-		}
+// func createSystemTx(systemItem *models.System) neo4j.TransactionWork {
+// 	return func(tx neo4j.Transaction) (interface{}, error) {
+// 		newUid, err := uuid.NewRandom()
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 		records, err := tx.Run("CREATE (s:System { name: $name, uid: $uid }) RETURN id(s), s.name, s.uid", map[string]interface{}{
+// 			"name": systemItem.Name,
+// 			"uid":  newUid.String(),
+// 		})
+// 		// In face of driver native errors, make sure to return them directly.
+// 		// Depending on the error, the driver may try to execute the function again.
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 		record, err := records.Single()
+// 		if err != nil {
+// 			return nil, err
+// 		}
 
-		systemItem.Id = record.Values[0].(int64)
-		systemItem.Name = record.Values[1].(string)
-		systemItem.Uid = record.Values[2].(string)
+// 		systemItem.Id = record.Values[0].(int64)
+// 		systemItem.Name = record.Values[1].(string)
+// 		systemItem.Uid = record.Values[2].(string)
 
-		return systemItem, nil
-	}
-}
+// 		return systemItem, nil
+// 	}
+// }
