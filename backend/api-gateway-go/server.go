@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"os"
 
 	_ "panda/apigateway/docs"
 	"panda/apigateway/handlers"
@@ -33,7 +34,10 @@ func createNewSystem(driver neo4j.Driver) echo.HandlerFunc {
 		systemItem := models.System{
 			Name: c.FormValue("name"),
 		}
-		insertSystem(driver, &systemItem)
+		err := insertSystem(driver, &systemItem)
+		if err != nil {
+			return c.JSON(http.StatusUnauthorized, err.Error())
+		}
 
 		return c.JSON(http.StatusOK, systemItem)
 	}
@@ -51,8 +55,31 @@ func createNewSystem(driver neo4j.Driver) echo.HandlerFunc {
 // test token Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9uIFNub3ciLCJhZG1pbiI6dHJ1ZSwiZXhwIjoyMDEzMDUxNDQzfQ.8TiZTEriPIkTITF2DXpEsJKNL8qwE6ImxN_HJkYdGug
 func main() {
 
-	neo4jUri := "bolt://localhost:7687"
-	neo4jDriver, err := neo4j.NewDriver(neo4jUri, neo4j.BasicAuth("neo4j", "fw34-sdRF", ""))
+	//here we recognize if we run in production via app start argument -
+	isProduction := false
+	if len(os.Args) > 0 {
+		for _, arg := range os.Args {
+			if arg == "prod" {
+				isProduction = true
+			}
+		}
+	}
+
+	neo4jUri := "bolt://127.0.0.1:7687"
+	port := ":1323"
+	if isProduction {
+		neo4jUri = "bolt://172.17.0.1:7687"
+		port = ":5001"
+	}
+
+	useConsoleLogger := func(level neo4j.LogLevel) func(config *neo4j.Config) {
+		return func(config *neo4j.Config) {
+			config.Log = neo4j.ConsoleLogger(level)
+		}
+	}
+
+	neo4jDriver, err := neo4j.NewDriver(neo4jUri, neo4j.BasicAuth("neo4j", "fw34-sdRF", ""), useConsoleLogger(neo4j.ERROR))
+
 	if err != nil {
 		panic(err)
 	}
@@ -94,7 +121,7 @@ func main() {
 	//endpoint to create new standalone system
 	systemGroup.POST("", createNewSystem(neo4jDriver))
 
-	e.Logger.Fatal(e.Start(":5001"))
+	e.Logger.Fatal(e.Start(port))
 }
 
 func insertSystem(driver neo4j.Driver, systemItem *models.System) error {

@@ -5,7 +5,7 @@ on:
 
 defaults:
   run:
-    working-directory: backend/api_gateway_py
+    working-directory: backend/api-gateway-go
 
 jobs:
   build:
