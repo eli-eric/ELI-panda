@@ -9,4 +9,10 @@ import (
 func MapSystemsRoutes(g *echo.Group, h handlers.ISystemsHandlers) {
 	// Create new system route
 	g.POST("", h.CreateNewSystem())
+	// Create new subsystem
+	g.POST("/subsystem", h.CreateNewSubsystem())
+	// Create new hierarchical relationship between two existing Systems
+	g.POST("/relationship/hierarchical", h.CreateNewHierarchicalRelationship())
+	// Delete System and all its relationships
+	g.DELETE("", h.DeleteSystemAndRelationships())
 }
