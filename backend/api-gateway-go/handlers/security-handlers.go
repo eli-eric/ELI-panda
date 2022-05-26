@@ -57,11 +57,11 @@ func (h *SecurityHandlers) Login() echo.HandlerFunc {
 
 // Authenticate godoc
 // @Summary Get authenticated user data
-// @Description Get authenticated user data by token
+// @Description Get authenticated user data by token - Bearer auth header
 // @Tags Security
 // @Accept json
 // @Produce json
-// @Success 200
+// @Success 200 {object} models.AuthUser
 // @Router /authenticate [get]
 // @Security ApiKeyAuth
 func (h *SecurityHandlers) GetAuthUser() echo.HandlerFunc {

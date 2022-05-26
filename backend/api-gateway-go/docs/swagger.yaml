@@ -1,3 +1,23 @@
+definitions:
+  models.AuthUser:
+    properties:
+      displayName:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      photoURL:
+        type: string
+      role:
+        items:
+          type: string
+        type: array
+      token:
+        type: string
+      uid:
+        type: string
+    type: object
 info:
   contact:
     email: jiri.svacha@eli-beams.eu
@@ -10,12 +30,14 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get authenticated user data by token
+      description: Get authenticated user data by token - Bearer auth header
       produces:
       - application/json
       responses:
         "200":
-          description: ""
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AuthUser'
       security:
       - ApiKeyAuth: []
       summary: Get authenticated user data
@@ -45,6 +67,19 @@ paths:
       summary: Login and get security token
       tags:
       - Security
+  /catalogue/test:
+    get:
+      consumes:
+      - application/json
+      description: Test
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Test
+      tags:
+      - Catalogue
   /system:
     post:
       consumes:
@@ -58,6 +93,53 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Create new system
+      tags:
+      - Systems
+    put:
+      consumes:
+      - application/json
+      description: Update System by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: Update System
+      tags:
+      - Systems
+  /system/relationship/hierarchical:
+    post:
+      consumes:
+      - application/json
+      description: Create new hierarchical relationship between two existing Systems.
+        You can pass existing System id, uid or name(be careful because the name could
+        not be unique)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: Create new hierarchical relationship between two existing Systems
+      tags:
+      - Systems
+  /system/subsystem:
+    post:
+      consumes:
+      - application/json
+      description: Create new subsystem as child of and existing System. You can pass
+        existing System id, uid or name(be careful because the name could not be unique)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      security:
+      - ApiKeyAuth: []
+      summary: Create new subsystem
       tags:
       - Systems
 securityDefinitions:
