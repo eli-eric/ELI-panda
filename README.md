@@ -6,11 +6,12 @@ The project has two main sections:
 
 ### Backend:
 
-API Gateway - [Echo](https://echo.labstack.com/) - High performance, extensible, minimalist Go web framework - for now it is one classic REST API but in one of the latest version it will have microservices architecture
+API Gateway - [Echo](https://echo.labstack.com/) - High performance, extensible, minimalist Go web framework - for now it is one classic REST API but in one of the future versions it will have microservices architecture
 
 ### Frontend:
 
-GUI to acces our data written in React using TypeScript
+GUI to acces our data written in [React](https://reactjs.org/) using [TypeScript](https://reactjs.org/docs/static-type-checking.html#typescript)
+
 
 # Database
 
