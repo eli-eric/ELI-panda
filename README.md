@@ -2,15 +2,13 @@
 
 ELI oPerations And maiNtenance DAtabase
 
-The project has two main sections:
-
-## Backend:
+## Backend
 
 API Gateway - the only way how to access data in PANDA database. Using [Echo](https://echo.labstack.com/) - High performance, extensible, minimalist Go web framework - for now it is one classic REST API but in one of the future versions it will have microservices architecture
 
 Please follow the instructions in backend's [readme.md](https://github.com/eli-eric/ELI-panda/tree/main/backend/api-gateway-go) 
 
-## Frontend:
+## Frontend
 
 GUI to acces our data written in [React](https://reactjs.org/) using [TypeScript](https://reactjs.org/docs/static-type-checking.html#typescript)
 
