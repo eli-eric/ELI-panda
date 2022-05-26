@@ -19,6 +19,8 @@ type ISystemsHandlers interface {
 	CreateNewSubsystem() echo.HandlerFunc
 	CreateNewHierarchicalRelationship() echo.HandlerFunc
 	DeleteSystemAndRelationships() echo.HandlerFunc
+	DeleteRelationshipByID() echo.HandlerFunc
+	DeleteRelationshipByParentChildIds() echo.HandlerFunc
 }
 
 // NewCommentsHandlers Comments handlers constructor
@@ -103,7 +105,7 @@ func (h *SystemsHandlers) CreateNewSubsystem() echo.HandlerFunc {
 		}
 
 		var parentName string
-		var parentId int64
+		var parentId int64 = -1
 		var parentUid string
 		formParams, _ := c.FormParams()
 
@@ -142,10 +144,10 @@ func (h *SystemsHandlers) CreateNewHierarchicalRelationship() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		var parentName string
-		var parentId int64
+		var parentId int64 = -1
 		var parentUid string
 		var childName string
-		var childId int64
+		var childId int64 = -1
 		var childUid string
 
 		formParams, _ := c.FormParams()
@@ -196,12 +198,64 @@ func (h *SystemsHandlers) DeleteSystemAndRelationships() echo.HandlerFunc {
 			}
 		}
 
-		err := h.systemsService.DeleteSystemAndRelationships(systemId)
+		msg, err := h.systemsService.DeleteSystemAndRelationships(systemId)
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, "Unexpected server error: "+err.Error())
 		}
 
-		return c.JSON(http.StatusOK, echo.Map{"Result": "OK"})
+		return c.JSON(http.StatusOK, echo.Map{"Result": msg})
+	}
+}
+
+// Delete relationship by id
+func (h *SystemsHandlers) DeleteRelationshipByID() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		formParams, _ := c.FormParams()
+
+		var relId int64
+		if formParams.Has("id") {
+			if vid, err := strconv.ParseInt(c.FormValue("id"), 10, 64); err == nil {
+				relId = vid
+			}
+		}
+
+		msg, err := h.systemsService.DeleteRelationshipByID(relId)
+
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, "Unexpected server error: "+err.Error())
+		}
+
+		return c.JSON(http.StatusOK, echo.Map{"Result": msg})
+	}
+}
+
+// Delete relationship by parent and child ids
+func (h *SystemsHandlers) DeleteRelationshipByParentChildIds() echo.HandlerFunc {
+	return func(c echo.Context) error {
+
+		formParams, _ := c.FormParams()
+
+		var parentId int64
+		if formParams.Has("parentId") {
+			if vid, err := strconv.ParseInt(c.FormValue("parentId"), 10, 64); err == nil {
+				parentId = vid
+			}
+		}
+		var childId int64
+		if formParams.Has("childId") {
+			if vid, err := strconv.ParseInt(c.FormValue("childId"), 10, 64); err == nil {
+				childId = vid
+			}
+		}
+
+		msg, err := h.systemsService.DeleteRelationshipByParentChildIds(parentId, childId)
+
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, "Unexpected server error: "+err.Error())
+		}
+
+		return c.JSON(http.StatusOK, echo.Map{"Result": msg})
 	}
 }

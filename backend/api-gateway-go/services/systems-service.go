@@ -5,6 +5,7 @@ package services
 
 import (
 	"panda/apigateway/models"
+	"strconv"
 
 	uuid "github.com/google/uuid"
 
@@ -19,7 +20,9 @@ type ISystemsService interface {
 	CreateNewSystem(system models.System) (int64, error)
 	CreateNewSubsystem(subSystem models.System, parentID int64, parentUID string, parentName string) (int64, error)
 	CreateParentChildRelationship(parentID int64, parentUID string, parentName string, childID int64, childUID string, childName string) (int64, error)
-	DeleteSystemAndRelationships(systemId int64) error
+	DeleteSystemAndRelationships(systemId int64) (string, error)
+	DeleteRelationshipByID(id int64) (string, error)
+	DeleteRelationshipByParentChildIds(parentId int64, childId int64) (string, error)
 }
 
 func NewSystemsService(driver neo4j.Driver) ISystemsService {
@@ -65,8 +68,6 @@ func (svc *SystemsService) CreateNewSystem(system models.System) (int64, error) 
 			"responsible":  system.ResponsiblePerson,
 			"maintainedBy": system.MaintainedByPerson,
 		})
-		// In face of driver native errors, make sure to return them directly.
-		// Depending on the error, the driver may try to execute the function again.
 		if err != nil {
 			return nil, err
 		}
@@ -133,8 +134,6 @@ func (svc *SystemsService) CreateNewSubsystem(subSystem models.System, parentID 
 			"responsible":  subSystem.ResponsiblePerson,
 			"maintainedBy": subSystem.MaintainedByPerson,
 		})
-		// In face of driver native errors, make sure to return them directly.
-		// Depending on the error, the driver may try to execute the function again.
 		if err != nil {
 			return nil, err
 		}
@@ -180,8 +179,6 @@ func (svc *SystemsService) CreateParentChildRelationship(parentID int64, parentU
 			"childUid":   childUID,
 			"childName":  childName,
 		})
-		// In face of driver native errors, make sure to return them directly.
-		// Depending on the error, the driver may try to execute the function again.
 		if err != nil {
 			return nil, err
 		}
@@ -205,17 +202,15 @@ func (svc *SystemsService) CreateParentChildRelationship(parentID int64, parentU
 }
 
 // delete one System by id and all its relationships
-func (svc *SystemsService) DeleteSystemAndRelationships(systemId int64) error {
+func (svc *SystemsService) DeleteSystemAndRelationships(systemId int64) (string, error) {
 
 	session := svc.neo4jDriver.NewSession(neo4j.SessionConfig{})
 	defer session.Close()
-	_, err := session.WriteTransaction(func(tx neo4j.Transaction) (interface{}, error) {
+	summary, err := session.WriteTransaction(func(tx neo4j.Transaction) (interface{}, error) {
 
 		records, err := tx.Run(`MATCH(s:System) WHERE id(s) = $systemId detach delete s`, map[string]interface{}{
 			"systemId": systemId,
 		})
-		// In face of driver native errors, make sure to return them directly.
-		// Depending on the error, the driver may try to execute the function again.
 		if err != nil {
 			return nil, err
 		}
@@ -228,8 +223,87 @@ func (svc *SystemsService) DeleteSystemAndRelationships(systemId int64) error {
 	})
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	return nil
+	resultMessage := ""
+	if summary != nil {
+		rs := summary.(neo4j.ResultSummary)
+
+		resultMessage += strconv.Itoa(rs.Counters().NodesDeleted()) + " node(s) deleted, "
+		resultMessage += strconv.Itoa(rs.Counters().RelationshipsDeleted()) + " relationship(s) deleted"
+	}
+
+	return resultMessage, nil
+}
+
+// delete one relationship by id
+func (svc *SystemsService) DeleteRelationshipByID(id int64) (string, error) {
+
+	session := svc.neo4jDriver.NewSession(neo4j.SessionConfig{})
+	defer session.Close()
+	summary, err := session.WriteTransaction(func(tx neo4j.Transaction) (interface{}, error) {
+
+		records, err := tx.Run(`MATCH(parent:System)-[r:HAS_SUBSYSTEM]->(child:System) WHERE id(r)=$id DELETE r`, map[string]interface{}{
+			"id": id,
+		})
+		if err != nil {
+			return nil, err
+		}
+		resultSummary, err := records.Consume()
+		if err != nil {
+			return nil, err
+		}
+
+		return resultSummary, nil
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	resultMessage := ""
+	if summary != nil {
+		rs := summary.(neo4j.ResultSummary)
+
+		resultMessage += strconv.Itoa(rs.Counters().RelationshipsDeleted()) + " relationship(s) deleted"
+	}
+
+	return resultMessage, nil
+}
+
+// delete one relationship by parent and child ids
+func (svc *SystemsService) DeleteRelationshipByParentChildIds(parentId int64, childId int64) (string, error) {
+
+	session := svc.neo4jDriver.NewSession(neo4j.SessionConfig{})
+	defer session.Close()
+	summary, err := session.WriteTransaction(func(tx neo4j.Transaction) (interface{}, error) {
+
+		records, err := tx.Run(`MATCH (parent:System)-[r:HAS_SUBSYSTEM]->(child:System) WHERE id(parent)=$parentId and id(child)=$childId DELETE r`, map[string]interface{}{
+			"parentId": parentId,
+			"childId":  childId,
+		})
+		if err != nil {
+			return nil, err
+		}
+		resultSummary, err := records.Consume()
+		if err != nil {
+			return nil, err
+		}
+
+		return resultSummary, nil
+	})
+
+	if err != nil {
+		return "", err
+	}
+
+	resultMessage := ""
+	if summary != nil {
+		rs := summary.(neo4j.ResultSummary)
+
+		resultMessage += strconv.Itoa(rs.Counters().RelationshipsDeleted()) + " relationship(s) deleted"
+	}
+
+	return resultMessage, nil
 }

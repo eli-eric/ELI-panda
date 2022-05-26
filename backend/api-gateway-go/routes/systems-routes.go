@@ -15,4 +15,8 @@ func MapSystemsRoutes(g *echo.Group, h handlers.ISystemsHandlers) {
 	g.POST("/relationship/hierarchical", h.CreateNewHierarchicalRelationship())
 	// Delete System and all its relationships
 	g.DELETE("", h.DeleteSystemAndRelationships())
+	// Delete relationship by id
+	g.DELETE("/relationship", h.DeleteRelationshipByID())
+	// Delete relationship by parent and child ids
+	g.DELETE("/relationship/byparentchild", h.DeleteRelationshipByParentChildIds())
 }
