@@ -52,20 +52,21 @@ const CatalogListPage = () => {
   useEffect(() => {
     let active = true;
 
-    (async () => {
-      setLoading(true);
-      let orderByName = resolveOrderBy("Name", sortModel);
-      const newRows = await jwtAxios.get(
-        `/catalog-items/?pageSize=${pageSize}&pageNumber=${pageNumber}&orderByName=${orderByName}&searchPattern=${searchPattern}`
-      );
+    //TODO ....
+    // (async () => {
+    //   setLoading(true);
+    //   let orderByName = resolveOrderBy("Name", sortModel);
+    //   const newRows = await jwtAxios.get(
+    //     `/catalog-items/?pageSize=${pageSize}&pageNumber=${pageNumber}&orderByName=${orderByName}&searchPattern=${searchPattern}`
+    //   );
 
-      if (!active) {
-        return;
-      }
-      setRowsData(newRows.data.Data);
-      setTotalCount(newRows.data.TotalCount);
-      setLoading(false);
-    })();
+    //   if (!active) {
+    //     return;
+    //   }
+    //   setRowsData(newRows.data.Data);
+    //   setTotalCount(newRows.data.TotalCount);
+    //   setLoading(false);
+    // })();
 
     return () => {
       active = false;
