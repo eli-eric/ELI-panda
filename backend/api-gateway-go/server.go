@@ -120,6 +120,13 @@ func main() {
 	systemsHandlers := handlers.NewSystemsHandlers(systemsService)
 	routes.MapSystemsRoutes(systemGroup, systemsHandlers)
 
+	//Group of routes for Catalogue
+	catalogueGroup := e.Group("/catalogue")
+	catalogueGroup.Use(jwtMiddleware)
+	catalogueService := services.NewCatalogueService()
+	catalogueHandlers := handlers.NewCatalogueHandlers(catalogueService)
+	routes.MapCatalogueRoutes(catalogueGroup, catalogueHandlers)
+
 	e.Logger.Fatal(e.Start(port))
 }
 
