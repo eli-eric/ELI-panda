@@ -169,15 +169,15 @@ func (svc *SystemsService) UpdateSystem(system models.System) (string, error) {
 		records, err := tx.Run(`
 		MATCH(s:System) WHERE id(s) = $id
 			SET 
-			s.name= $name, 			
-			s.description= $description, 
-			s.systemCode= $systemCode, 
-			s.systemAlias= $systemAlias,
-			s.facilityZone= $facilityZone,
-			s.location= $location,
-			s.owner= $owner,
-			s.responsible= $responsible,
-			s.maintainedBy= $maintainedBy
+			s.name = case when $name is not null then $name else s.name end,
+			s.description= case when $description is not null then $description else s.description end,
+			s.systemCode= case when $systemCode is not null then $systemCode else s.systemCode end,
+			s.systemAlias= case when $systemAlias is not null then $systemAlias else s.systemAlias end,
+			s.facilityZone= case when $facilityZone is not null then $facilityZone else s.facilityZone end,
+			s.location= case when $location is not null then $location else s.location end,
+			s.owner= case when $owner is not null then $owner else s.owner end,
+			s.responsible= case when $responsible is not null then $responsible else s.responsible end,
+			s.maintainedBy= case when $maintainedBy is not null then $maintainedBy else s.maintainedBy end
 
 		RETURN id(s)`, map[string]interface{}{
 			"id":           system.Id,

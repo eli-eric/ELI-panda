@@ -51,15 +51,15 @@ func (h *SystemsHandlers) CreateNewSystem() echo.HandlerFunc {
 		maintainedByPerson := c.FormValue("maintainedByPerson")
 
 		system := models.System{
-			Name:               name,
-			Description:        description,
-			SystemCode:         systemCode,
-			SystemAlias:        systemAlias,
-			FacilityZone:       facilityZone,
-			Location:           location,
-			OwnerPerson:        ownerPerson,
-			ResponsiblePerson:  responsiblePerson,
-			MaintainedByPerson: maintainedByPerson,
+			Name:               &name,
+			Description:        &description,
+			SystemCode:         &systemCode,
+			SystemAlias:        &systemAlias,
+			FacilityZone:       &facilityZone,
+			Location:           &location,
+			OwnerPerson:        &ownerPerson,
+			ResponsiblePerson:  &responsiblePerson,
+			MaintainedByPerson: &maintainedByPerson,
 		}
 
 		newSystemID, err := h.systemsService.CreateNewSystem(system)
@@ -84,7 +84,7 @@ func (h *SystemsHandlers) CreateNewSystem() echo.HandlerFunc {
 func (h *SystemsHandlers) UpdateSystem() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		formParams, _ := c.FormParams()
-
+		system := models.System{}
 		name := c.FormValue("name")
 		description := c.FormValue("description")
 		systemCode := c.FormValue("systemCode")
@@ -95,16 +95,32 @@ func (h *SystemsHandlers) UpdateSystem() echo.HandlerFunc {
 		responsiblePerson := c.FormValue("responsiblePerson")
 		maintainedByPerson := c.FormValue("maintainedByPerson")
 
-		system := models.System{
-			Name:               name,
-			Description:        description,
-			SystemCode:         systemCode,
-			SystemAlias:        systemAlias,
-			FacilityZone:       facilityZone,
-			Location:           location,
-			OwnerPerson:        ownerPerson,
-			ResponsiblePerson:  responsiblePerson,
-			MaintainedByPerson: maintainedByPerson,
+		if formParams.Has("name") {
+			system.Name = &name
+		}
+		if formParams.Has("description") {
+			system.Description = &description
+		}
+		if formParams.Has("systemCode") {
+			system.SystemCode = &systemCode
+		}
+		if formParams.Has("systemAlias") {
+			system.SystemAlias = &systemAlias
+		}
+		if formParams.Has("facilityZone") {
+			system.FacilityZone = &facilityZone
+		}
+		if formParams.Has("location") {
+			system.Location = &location
+		}
+		if formParams.Has("ownerPerson") {
+			system.OwnerPerson = &ownerPerson
+		}
+		if formParams.Has("responsiblePerson") {
+			system.ResponsiblePerson = &responsiblePerson
+		}
+		if formParams.Has("maintainedByPerson") {
+			system.MaintainedByPerson = &maintainedByPerson
 		}
 
 		if formParams.Has("id") {
@@ -145,15 +161,15 @@ func (h *SystemsHandlers) CreateNewSubsystem() echo.HandlerFunc {
 		maintainedByPerson := c.FormValue("maintainedByPerson")
 
 		system := models.System{
-			Name:               name,
-			Description:        description,
-			SystemCode:         systemCode,
-			SystemAlias:        systemAlias,
-			FacilityZone:       facilityZone,
-			Location:           location,
-			OwnerPerson:        ownerPerson,
-			ResponsiblePerson:  responsiblePerson,
-			MaintainedByPerson: maintainedByPerson,
+			Name:               &name,
+			Description:        &description,
+			SystemCode:         &systemCode,
+			SystemAlias:        &systemAlias,
+			FacilityZone:       &facilityZone,
+			Location:           &location,
+			OwnerPerson:        &ownerPerson,
+			ResponsiblePerson:  &responsiblePerson,
+			MaintainedByPerson: &maintainedByPerson,
 		}
 
 		var parentName string
