@@ -21,6 +21,7 @@ type ISystemsHandlers interface {
 	DeleteSystemAndRelationships() echo.HandlerFunc
 	DeleteRelationshipByID() echo.HandlerFunc
 	DeleteRelationshipByParentChildIds() echo.HandlerFunc
+	UpdateSystem() echo.HandlerFunc
 }
 
 // NewCommentsHandlers Comments handlers constructor
@@ -68,6 +69,57 @@ func (h *SystemsHandlers) CreateNewSystem() echo.HandlerFunc {
 		}
 
 		return c.JSON(http.StatusOK, echo.Map{"id": newSystemID})
+	}
+}
+
+// UpdateSystem godoc
+// @Summary Update System
+// @Description Update System by id
+// @Tags Systems
+// @Accept json
+// @Produce json
+// @Success 200
+// @Router /system [put]
+// @Security ApiKeyAuth
+func (h *SystemsHandlers) UpdateSystem() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		formParams, _ := c.FormParams()
+
+		name := c.FormValue("name")
+		description := c.FormValue("description")
+		systemCode := c.FormValue("systemCode")
+		systemAlias := c.FormValue("systemAlias")
+		facilityZone := c.FormValue("facilityZone")
+		location := c.FormValue("location")
+		ownerPerson := c.FormValue("ownerPerson")
+		responsiblePerson := c.FormValue("responsiblePerson")
+		maintainedByPerson := c.FormValue("maintainedByPerson")
+
+		system := models.System{
+			Name:               name,
+			Description:        description,
+			SystemCode:         systemCode,
+			SystemAlias:        systemAlias,
+			FacilityZone:       facilityZone,
+			Location:           location,
+			OwnerPerson:        ownerPerson,
+			ResponsiblePerson:  responsiblePerson,
+			MaintainedByPerson: maintainedByPerson,
+		}
+
+		if formParams.Has("id") {
+			if vid, err := strconv.ParseInt(c.FormValue("id"), 10, 64); err == nil {
+				system.Id = vid
+			}
+		}
+
+		msg, err := h.systemsService.UpdateSystem(system)
+
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, "Unexpected server error: "+err.Error())
+		}
+
+		return c.JSON(http.StatusOK, echo.Map{"Result": msg})
 	}
 }
 

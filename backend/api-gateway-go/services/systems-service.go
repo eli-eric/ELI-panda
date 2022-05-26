@@ -19,6 +19,7 @@ type SystemsService struct {
 type ISystemsService interface {
 	CreateNewSystem(system models.System) (int64, error)
 	CreateNewSubsystem(subSystem models.System, parentID int64, parentUID string, parentName string) (int64, error)
+	UpdateSystem(system models.System) (string, error)
 	CreateParentChildRelationship(parentID int64, parentUID string, parentName string, childID int64, childUID string, childName string) (int64, error)
 	DeleteSystemAndRelationships(systemId int64) (string, error)
 	DeleteRelationshipByID(id int64) (string, error)
@@ -152,6 +153,57 @@ func (svc *SystemsService) CreateNewSubsystem(subSystem models.System, parentID 
 	}
 
 	result = res.(int64)
+
+	return result, nil
+}
+
+//update existing System by id
+//return success message
+func (svc *SystemsService) UpdateSystem(system models.System) (string, error) {
+
+	result := "Successfully updated"
+
+	session := svc.neo4jDriver.NewSession(neo4j.SessionConfig{})
+	defer session.Close()
+	_, err := session.WriteTransaction(func(tx neo4j.Transaction) (interface{}, error) {
+		records, err := tx.Run(`
+		MATCH(s:System) WHERE id(s) = $id
+			SET 
+			s.name= $name, 			
+			s.description= $description, 
+			s.systemCode= $systemCode, 
+			s.systemAlias= $systemAlias,
+			s.facilityZone= $facilityZone,
+			s.location= $location,
+			s.owner= $owner,
+			s.responsible= $responsible,
+			s.maintainedBy= $maintainedBy
+
+		RETURN id(s)`, map[string]interface{}{
+			"id":           system.Id,
+			"name":         system.Name,
+			"description":  system.Description,
+			"systemCode":   system.SystemCode,
+			"systemAlias":  system.SystemAlias,
+			"facilityZone": system.FacilityZone,
+			"location":     system.Location,
+			"owner":        system.OwnerPerson,
+			"responsible":  system.ResponsiblePerson,
+			"maintainedBy": system.MaintainedByPerson,
+		})
+		if err != nil {
+			return nil, err
+		}
+		summary, err := records.Consume()
+		if err != nil {
+			return nil, err
+		}
+		return summary, nil
+	})
+
+	if err != nil {
+		return "", err
+	}
 
 	return result, nil
 }
