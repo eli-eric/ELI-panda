@@ -26,7 +26,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get authenticated user data by token",
+                "description": "Get authenticated user data by token - Bearer auth header",
                 "consumes": [
                     "application/json"
                 ],
@@ -39,7 +39,10 @@ const docTemplate = `{
                 "summary": "Get authenticated user data",
                 "responses": {
                     "200": {
-                        "description": ""
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.AuthUser"
+                        }
                     }
                 }
             },
@@ -78,7 +81,50 @@ const docTemplate = `{
                 }
             }
         },
+        "/catalogue/test": {
+            "get": {
+                "description": "Test",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Catalogue"
+                ],
+                "summary": "Test",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/system": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update System by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Systems"
+                ],
+                "summary": "Update System",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -100,6 +146,87 @@ const docTemplate = `{
                     "200": {
                         "description": ""
                     }
+                }
+            }
+        },
+        "/system/relationship/hierarchical": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create new hierarchical relationship between two existing Systems. You can pass existing System id, uid or name(be careful because the name could not be unique)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Systems"
+                ],
+                "summary": "Create new hierarchical relationship between two existing Systems",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/system/subsystem": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create new subsystem as child of and existing System. You can pass existing System id, uid or name(be careful because the name could not be unique)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Systems"
+                ],
+                "summary": "Create new subsystem",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.AuthUser": {
+            "type": "object",
+            "properties": {
+                "displayName": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "photoURL": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "token": {
+                    "type": "string"
+                },
+                "uid": {
+                    "type": "string"
                 }
             }
         }

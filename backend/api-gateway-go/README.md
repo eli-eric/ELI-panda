@@ -1,7 +1,7 @@
 ## How to run this backend localy
 
 1. install go 1.18 or above https://go.dev/dl/
-2. to get required packages execute: make install
+2. to get required packages execute: make run
 3. to run webapi localy execute: make dev
 
 The server is running localy on port :1323

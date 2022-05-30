@@ -2,62 +2,33 @@
 
 ELI oPerations And maiNtenance DAtabase
 
-The project has two main sections:
+## Backend
 
-### Backend:
+API Gateway - the only way how to access data in PANDA database. Using [Echo](https://echo.labstack.com/) - High performance, extensible, minimalist Go web framework - for now it is one classic REST API but in one of the future versions it will have microservices architecture
 
-API Gateway([FastAPI](https://fastapi.tiangolo.com/) - python) to access the database - for now it is one REST API but in latest production version it will have microservices architecture
+Please follow the instructions in backend's [readme.md](https://github.com/eli-eric/ELI-panda/tree/main/backend/api-gateway-go) 
 
-### Frontend:
+## Frontend
 
-GUI to acces our data written in React with TypeScript
-
-# Database
-
-Here is everything about the databases.
-For now we are using one PostgreSQL database.
-Please use [PostgreSQL version 14](https://www.postgresql.org/about/news/postgresql-141-135-129-1114-1019-and-9624-released-2349/).
-
-### Setup DB
-
-After you finish local PostgreSQL engine installation, create new database(e.g. panda_dev) and run the [DB change script](https://github.com/eli-eric/ELI-panda/blob/main/database/postgresql/latest_schema_data.sql) to init the DB
-
-### DB chnages
-
-We will use change script to keep the database up to date - both schema and data(some required data to run the frontend correctly).
-For now we will use only one script - but in the future we can split it to more migration scripts.
-
-So we have a file backend/api_gateway_py/database/latest_schema_data.sql
-
-Until the line: GRANT ALL ON SCHEMA panda TO postgres; is it init schmea script - first version
-
-If we want to do some changes in the database we will add a script at the end of the file.
-
-This script is executed in backend while the app is starting -> it depends on env configuration DB_AUTO_UPDATE_SCHEMA_AND_BASE_DATA_ON_START
--> in production we set this better to false, in development to true so you will have the DB always up to date when you start the backend...
-
-# Backend
-
-We are using [FastAPI](https://fastapi.tiangolo.com/).
-Preconfigured tempalte [fast-nano](https://github.com/rednafi/fastapi-nano)
-
-Please follow the instructions in backend's [readme.md](https://github.com/eli-eric/ELI-panda/tree/main/backend/api_gateway_py#alternatively-run-the-app-locally) to run localy(debug)
-
-If you run it localy for example on port 5001 - you can interact/see the documentaion on http://localhost:5001/docs
-
-# Frontend
+GUI to acces our data written in [React](https://reactjs.org/) using [TypeScript](https://reactjs.org/docs/static-type-checking.html#typescript)
 
 We are using React([create-react-app](https://create-react-app.dev/) and ready to go [Material UI Template](https://crema-next.herokuapp.com/dashboards/metrics) with TypeScript instead of pure Javascript.
 
 Please follow the instructions in frontend's [readme.md](https://github.com/eli-eric/ELI-panda/tree/main/frontend)
 
-# Docker
+## Database
 
-We will use [Docker](https://www.docker.com/get-started) for the deployment.
+We will use microservices. So we are able to mix technologies. For some microservices we will use [PostgreSQL](https://www.postgresql.org/) and for example for the Systems microservice we will use graph database [neo4j](https://neo4j.com/)
+
+More details will be part of each backend project - now in the one API Gateway backend go project - [Backend](https://github.com/eli-eric/ELI-panda/tree/main/backend/api-gateway-go)
+
+## Docker
+
+We are using [Docker](https://www.docker.com/get-started) for the deployment.
 
 On the deployment server we have nginx web server wich is working like a reverse proxy and forward the requests like that:
 
 http://panda.eli-beamlines.eu -> localhost:5000(docker container) - frontend
-http://api.panda.eli-beamlines.eu -> localhost:5001(docker container) - backend
+http://api.panda.eli-beamlines.eu -> localhost:1323(docker container) - backend
 
 We can configure GitHub actions to automate build/test/deploy - for now Jiří Švácha will do that manualy and prepare these [Actions](https://github.com/eli-eric/ELI-panda/actions).
