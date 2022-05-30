@@ -8,7 +8,7 @@ import (
 func GenerateCatalogueItems() *[]models.CatalogItemResponse {
 	result := make([]models.CatalogItemResponse, 0)
 
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 10000; i++ {
 		newItem := models.CatalogItemResponse{
 			ID:   int32(i),
 			Name: "Mirror " + strconv.Itoa(i),
