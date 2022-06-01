@@ -1,0 +1,13 @@
+{
+    "openapi":"3.0.2",
+    "info": {
+      "title":"PANDA API Gateway",
+      "description": "This is a API Gateway to the PANDA database",
+      "version":"0.2"
+    },
+    "servers": [
+      {"url":"http://api.panda.eli-beams.eu"}
+    ],
+    "paths": {
+    }
+  }

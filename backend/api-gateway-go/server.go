@@ -3,7 +3,6 @@ package main
 import (
 	"os"
 
-	_ "panda/apigateway/docs"
 	"panda/apigateway/handlers"
 	"panda/apigateway/models"
 	"panda/apigateway/routes"
@@ -11,7 +10,6 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	echoSwagger "github.com/swaggo/echo-swagger" // echo-swagger middleware
 
 	"github.com/neo4j/neo4j-go-driver/v4/neo4j"
 )
@@ -89,7 +87,11 @@ func main() {
 
 	// Middleware
 	//Swagger documentation from docs
-	e.GET("/*", echoSwagger.WrapHandler)
+	swaggerGroup := e.Group("")
+	swaggerGroup.Use(middleware.StaticWithConfig(middleware.StaticConfig{
+		Root:   "swagger",
+		Browse: true,
+	}))
 	//CORS middleware to allow cross origin access
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins:     []string{"*"},
@@ -129,46 +131,3 @@ func main() {
 
 	e.Logger.Fatal(e.Start(port))
 }
-
-// func insertSystem(driver neo4j.Driver, systemItem *models.System) error {
-// 	// Sessions are short-lived, cheap to create and NOT thread safe. Typically create one or more sessions
-// 	// per request in your web application. Make sure to call Close on the session when done.
-// 	// For multi-database support, set sessionConfig.DatabaseName to requested database
-// 	// Session config will default to write mode, if only reads are to be used configure session for
-// 	// read mode.
-// 	session := driver.NewSession(neo4j.SessionConfig{})
-// 	defer session.Close()
-// 	_, err := session.WriteTransaction(createSystemTx(systemItem))
-// 	if err != nil {
-// 		return err
-// 	}
-// 	return nil
-// }
-
-// func createSystemTx(systemItem *models.System) neo4j.TransactionWork {
-// 	return func(tx neo4j.Transaction) (interface{}, error) {
-// 		newUid, err := uuid.NewRandom()
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 		records, err := tx.Run("CREATE (s:System { name: $name, uid: $uid }) RETURN id(s), s.name, s.uid", map[string]interface{}{
-// 			"name": systemItem.Name,
-// 			"uid":  newUid.String(),
-// 		})
-// 		// In face of driver native errors, make sure to return them directly.
-// 		// Depending on the error, the driver may try to execute the function again.
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 		record, err := records.Single()
-// 		if err != nil {
-// 			return nil, err
-// 		}
-
-// 		systemItem.Id = record.Values[0].(int64)
-// 		systemItem.Name = record.Values[1].(string)
-// 		systemItem.Uid = record.Values[2].(string)
-
-// 		return systemItem, nil
-// 	}
-// }
