@@ -1,0 +1,48 @@
+openapi: 3.0.2
+info:
+  title: PANDA API Gateway
+  description: This is a API Gateway to the PANDA database. This is the only place to access data of the PANDA database.
+  version: '0.1'
+  contact:
+    name: Jiří Švácha
+    email: jiri.svacha@eli-beams.eu
+paths:
+  /system:    
+    post:
+      description: Create new standalone system
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "##/components/schemas/NewID"
+      tags:
+        - Systems
+      responses:
+        '200':
+          description: Return new System id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewID"
+
+components:
+  schemas:
+    NewID:
+      type: object
+      description: Typicaly if we create new object we return new object id
+      properties:
+        id:
+          type: integer
+          format: int64
+    NewSystemForm:
+      type: object
+      description: Form to create new System
+      properties:
+        name:
+          type: string
+          required:
+            - "true"          
+        description:
+          type: string
+ 
