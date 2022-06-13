@@ -1,11 +1,11 @@
-import { enUS } from "@mui/material/locale";
-import enMessages from "../locales/en_US.json";
+import { enUS } from '@mui/material/locale'
+import { messages } from '../messages'
 
 const EnLang = {
   messages: {
-    ...enMessages,
+    ...messages
   },
   muiLocale: enUS,
-  locale: "en-US",
-};
-export default EnLang;
+  locale: 'en-US'
+}
+export default EnLang

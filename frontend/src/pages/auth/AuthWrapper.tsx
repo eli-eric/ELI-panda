@@ -1,62 +1,63 @@
-import React from "react";
-import Card from "@mui/material/Card";
-import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
-import { Fonts } from "../../shared/constants/AppEnums";
+import React from 'react'
+import Card from '@mui/material/Card'
+import Box from '@mui/material/Box'
+import { Typography } from '@mui/material'
+import { Fonts } from '../../shared/constants/AppEnums'
+import IntlMessages from '@crema/utility/IntlMessages'
 
 interface AuthWrapperProps {
-  children: any;
+  children: any
 }
 
-const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
+const AuthWrapper = ({ children }: AuthWrapperProps) => {
   return (
     <Box
       sx={{
         flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center'
       }}
     >
       <Card
         sx={{
           maxWidth: 900,
           minHeight: { xs: 320, sm: 450 },
-          width: "100%",
-          overflow: "hidden",
-          position: "relative",
-          display: "flex",
+          width: '100%',
+          overflow: 'hidden',
+          position: 'relative',
+          display: 'flex'
         }}
       >
         <Box
           sx={{
-            width: { xs: "100%", sm: "50%", lg: "40%" },
+            width: { xs: '100%', sm: '50%', lg: '40%' },
             padding: { xs: 5, lg: 10 },
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center'
           }}
         >
           {children}
         </Box>
         <Box
           sx={{
-            width: { xs: "100%", sm: "50%", lg: "60%" },
-            position: "relative",
+            width: { xs: '100%', sm: '50%', lg: '60%' },
+            position: 'relative',
             padding: { xs: 5, lg: 10 },
-            display: { xs: "none", sm: "flex" },
-            alignItems: { sm: "center" },
-            justifyContent: { sm: "center" },
-            flexDirection: { sm: "column" },
-            backgroundColor: (theme) => theme.palette.grey[900],
-            color: (theme) => theme.palette.common.white,
-            fontSize: 14,
+            display: { xs: 'none', sm: 'flex' },
+            alignItems: { sm: 'center' },
+            justifyContent: { sm: 'center' },
+            flexDirection: { sm: 'column' },
+            backgroundColor: theme => theme.palette.grey[900],
+            color: theme => theme.palette.common.white,
+            fontSize: 14
           }}
         >
           <Box
             sx={{
-              maxWidth: 320,
+              maxWidth: 320
             }}
           >
             <Typography
@@ -64,17 +65,19 @@ const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => {
               sx={{
                 fontWeight: Fonts.BOLD,
                 fontSize: 30,
-                mb: 4,
+                mb: 4
               }}
             >
-              Welcome to ELI PANDA
+              <IntlMessages id={'login.title'} />
             </Typography>
-            <Typography>ELI oPerations And maiNtenance DAtabase</Typography>
+            <Typography>
+              <IntlMessages id={'login.subTitle'} />
+            </Typography>
           </Box>
         </Box>
       </Card>
     </Box>
-  );
-};
+  )
+}
 
-export default AuthWrapper;
+export default AuthWrapper

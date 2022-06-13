@@ -1,31 +1,26 @@
-import React from "react";
-import { useThemeContext } from "../../../../utility/AppContextProvider/ThemeContextProvider";
-import { alpha, Box } from "@mui/material";
-import { ReactComponent as Logo } from "../../../../../assets/icon/logo.svg";
-import { ReactComponent as LogoText } from "../../../../../assets/icon/logo_text.svg";
-import EliLogo from "../../../../../assets/icon/eli-logo-small.png";
+import React from 'react'
+import { Box } from '@mui/material'
+import EliLogo from '../../../../../assets/icon/eli-logo-small.png'
 
 interface AppLogoProps {
-  color?: string;
-  height?: number;
+  color?: string
+  height?: number
 }
 
-const AppLogo: React.FC<AppLogoProps> = ({ color, height = 50 }) => {
-  const { theme } = useThemeContext();
-
+const AppLogo = ({ color, height = 50 }: AppLogoProps) => {
   return (
     <Box
       sx={{
         height: { xs: 56, sm: 70 },
         padding: 2.5,
-        display: "flex",
-        flexDirection: "row",
-        cursor: "pointer",
-        alignItems: "center",
-        justifyContent: "center",
-        "& svg": {
-          height: { xs: 40, sm: 45 },
-        },
+        display: 'flex',
+        flexDirection: 'row',
+        cursor: 'pointer',
+        alignItems: 'center',
+        justifyContent: 'center',
+        '& svg': {
+          height: { xs: 40, sm: 45 }
+        }
       }}
       className="app-logo"
     >
@@ -33,9 +28,9 @@ const AppLogo: React.FC<AppLogoProps> = ({ color, height = 50 }) => {
       <Box
         sx={{
           mt: 1,
-          "& svg": {
-            height: { xs: 25, sm: 30 },
-          },
+          '& svg': {
+            height: { xs: 25, sm: 30 }
+          }
         }}
       >
         {/* <LogoText fill={alpha(theme.palette.text.primary, 0.8)} /> */}
@@ -43,7 +38,7 @@ const AppLogo: React.FC<AppLogoProps> = ({ color, height = 50 }) => {
         <img src={EliLogo} alt="Logo" style={{ height: height }} />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default AppLogo;
+export default AppLogo
