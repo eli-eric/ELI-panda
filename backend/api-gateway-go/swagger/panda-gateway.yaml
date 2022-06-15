@@ -7,42 +7,141 @@ info:
     name: Jiří Švácha
     email: jiri.svacha@eli-beams.eu
 paths:
-  /system:    
+  /authenticate:
+    get:
+      description: Get user data based on JWT token in auth bearer header.      
+      tags:
+        - Security
+      responses:
+        '200':
+          description: Returns authenticated user data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthenticatedUser"
     post:
-      description: Create new standalone system
+      description: Authenticate user by username and password and return JWT token.
       requestBody:
         required: true
         content:
           application/x-www-form-urlencoded:
             schema:
-              $ref: "##/components/schemas/NewID"
+              $ref: "#/components/schemas/LoginForm"
+      tags:
+        - Security
+      responses:
+        '200':
+          description: Returns JWT token
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Token"
+  /system:    
+    post:
+      description: Create new standalone system and return its new identifier(id)
+      security:
+        - jwtAuth: []      
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/NewSystemForm"
       tags:
         - Systems
       responses:
         '200':
-          description: Return new System id
+          description: Returns new System id
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/NewID"
 
 components:
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
+    Token:
+      type: object
+      description: Represent JWT token
+      properties:
+        access_token:
+          type: string
     NewID:
       type: object
       description: Typicaly if we create new object we return new object id
       properties:
         id:
           type: integer
-          format: int64
+          format: int64          
     NewSystemForm:
       type: object
-      description: Form to create new System
+      description: Object to create new System
       properties:
         name:
-          type: string
-          required:
-            - "true"          
+          type: string          
         description:
           type: string
- 
+        systemCode:
+          type: string
+        systemAlias:
+          type: string
+        facilityZone:
+          type: string
+        location:
+          type: string
+        ownerPerson:
+          type: string
+        responsiblePerson:
+          type: string
+        maintainedByPerson:
+          type: string
+      required:
+        - name
+    UpdateSystemForm:
+      type: object
+      description: Object to update existing System
+      properties:
+        name:
+          type: string          
+        description:
+          type: string
+        systemCode:
+          type: string
+        systemAlias:
+          type: string
+        facilityZone:
+          type: string
+        location:
+          type: string
+        ownerPerson:
+          type: string
+        responsiblePerson:
+          type: string
+        maintainedByPerson:
+          type: string      
+    LoginForm:
+      type: object
+      description: Object to authenticate user
+      properties:
+        username:
+          type: string          
+        password:
+          type: string
+      required: [username, password]
+    AuthenticatedUser:
+      type: object
+      description: Information about user authenticated via JWT token
+      properties:
+        DisplayName:
+          type: string          
+        Id:
+          type: integer
+          format: int64
+        Email:
+          type: string
+        Role:
+          type: string       
