@@ -1,84 +1,81 @@
-import React, { isValidElement, ReactNode } from "react";
-import Card from "@mui/material/Card";
-import { Box, CardHeader } from "@mui/material";
-import { Fonts } from "shared/constants/AppEnums";
-import Link from "@mui/material/Link";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import { MessageFormatElement } from "react-intl";
+import React, { isValidElement, ReactNode } from 'react'
+import Card from '@mui/material/Card'
+import { Box, CardHeader } from '@mui/material'
+import { Fonts } from 'shared/constants/AppEnums'
+import Link from '@mui/material/Link'
+import CardContent from '@mui/material/CardContent'
+import CardActions from '@mui/material/CardActions'
+import { MessageFormatElement } from 'react-intl'
 
 interface AppCardProps {
-  title?: string | MessageFormatElement[] | ReactNode;
-  titleStyle?: any;
-  contentStyle?: any;
-  headerStyle?: any;
-  action?: ReactNode | string | MessageFormatElement[];
-  actionStyle?: any;
-  footer?: any;
-  footerPosition?: string;
-  footerStyle?: any;
-  children: ReactNode;
+  title?: string | MessageFormatElement[] | ReactNode
+  titleStyle?: any
+  contentStyle?: any
+  headerStyle?: any
+  action?: ReactNode | string | MessageFormatElement[]
+  actionStyle?: any
+  footer?: any
+  footerPosition?: string
+  footerStyle?: any
+  children: ReactNode
 
-  [x: string]: any;
+  [x: string]: any
 }
 
 const AppCard: React.FC<AppCardProps> = ({
   sxStyle,
-  title = "",
+  title = '',
   titleStyle,
   headerStyle,
   contentStyle,
   action,
   actionStyle,
   footer,
-  footerPosition = "left",
+  footerPosition = 'left',
   footerStyle,
   children,
   ...rest
 }) => {
   return (
-    <Card
-      sx={{ display: "flex", flexDirection: "column", ...sxStyle }}
-      {...rest}
-    >
+    <Card sx={{ display: 'flex', flexDirection: 'column', ...sxStyle }} {...rest}>
       {title || action ? (
         <CardHeader
           sx={{
             px: 6,
             pb: 0,
-            "& .MuiCardHeader-action": {
+            '& .MuiCardHeader-action': {
               marginTop: 0,
-              marginRight: 0,
+              marginRight: 0
             },
-            "& .MuiCardHeader-content": {
-              overflow: "hidden",
+            '& .MuiCardHeader-content': {
+              overflow: 'hidden'
             },
-            ...headerStyle,
+            ...headerStyle
           }}
           title={
-            typeof title === "object" ? (
-              title
+            typeof title === 'object' ? (
+              (title as string)
             ) : (
               <Box
                 component="h3"
                 sx={{
-                  color: "text.primary",
+                  color: 'text.primary',
                   fontWeight: Fonts.SEMI_BOLD,
                   fontSize: 16,
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  width: "100%",
-                  ...titleStyle,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  width: '100%',
+                  ...titleStyle
                 }}
               >
-                {title}
+                {title as string}
               </Box>
             )
           }
           action={
-            typeof action === "object" ? (
-              action
+            typeof action === 'object' ? (
+              (action as string)
             ) : (
               <span {...actionStyle}>
                 <Link
@@ -87,10 +84,10 @@ const AppCard: React.FC<AppCardProps> = ({
                   underline="none"
                   sx={{
                     fontSize: 14,
-                    fontWeight: Fonts.MEDIUM,
+                    fontWeight: Fonts.MEDIUM
                   }}
                 >
-                  {action}
+                  {action as string}
                 </Link>
               </span>
             )
@@ -99,12 +96,12 @@ const AppCard: React.FC<AppCardProps> = ({
       ) : null}
       <CardContent
         sx={{
-          height: "100%",
+          height: '100%',
           px: 6,
-          "&:last-of-type": {
-            pb: 4,
+          '&:last-of-type': {
+            pb: 4
           },
-          ...contentStyle,
+          ...contentStyle
         }}
       >
         {children}
@@ -114,23 +111,20 @@ const AppCard: React.FC<AppCardProps> = ({
           sx={{
             px: 6,
             pb: 4,
-            ...footerStyle,
+            ...footerStyle
           }}
         >
           {isValidElement(footer) ? (
             footer
           ) : (
-            <Box
-              component="span"
-              sx={{ ml: footerPosition === "right" ? "auto" : 0 }}
-            >
+            <Box component="span" sx={{ ml: footerPosition === 'right' ? 'auto' : 0 }}>
               <Link
                 color="secondary"
                 component="button"
                 underline="none"
                 sx={{
                   fontSize: 14,
-                  fontWeight: Fonts.MEDIUM,
+                  fontWeight: Fonts.MEDIUM
                 }}
               >
                 {footer}
@@ -140,7 +134,7 @@ const AppCard: React.FC<AppCardProps> = ({
         </CardActions>
       ) : null}
     </Card>
-  );
-};
+  )
+}
 
-export default AppCard;
+export default AppCard

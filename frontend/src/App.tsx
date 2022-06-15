@@ -14,6 +14,10 @@ import JWTAuthAuthProvider from './@crema/services/auth/jwt-auth/JWTAuthProvider
 
 import { LicenseInfo } from '@mui/x-data-grid-pro'
 
+//TODO bude potřeba opravit s novou verzí Reactu
+// viz https://github.com/supasate/connected-react-router/issues/570
+const ConnectedRouter2 = ConnectedRouter as any
+
 LicenseInfo.setLicenseKey(
   'aec8ce9b5820bdc372655e81b0c242d0T1JERVI6MzcxODIsRVhQSVJZPTE2NzU1OTI0MTEwMDAsS0VZVkVSU0lPTj0x'
 )
@@ -26,14 +30,14 @@ const App = () => (
       <AppThemeProvider>
         <AppStyleProvider>
           <AppLocaleProvider>
-            <ConnectedRouter history={history}>
+            <ConnectedRouter2 history={history}>
               <JWTAuthAuthProvider>
                 <AuthRoutes>
                   <CssBaseline />
                   <AppLayout />
                 </AuthRoutes>
               </JWTAuthAuthProvider>
-            </ConnectedRouter>
+            </ConnectedRouter2>
           </AppLocaleProvider>
         </AppStyleProvider>
       </AppThemeProvider>

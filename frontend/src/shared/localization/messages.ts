@@ -37,7 +37,7 @@ export const messages = {
   }
 }
 
-const getMessageMap = <T>(messages: T, previousPath = ''): T =>
+const getMessageMap = <T extends {}>(messages: T, previousPath = ''): T =>
   Object.keys(messages).reduce((prev, cur) => {
     const newPath = `${previousPath}${cur}`
     if (typeof messages[cur] === 'string') {
