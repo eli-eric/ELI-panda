@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: PANDA API Gateway
-  description: This is a API Gateway to the PANDA database. This is the only place to access data of the PANDA database.
+  description: This is an API Gateway to the PANDA database. This is the only place to access data from the PANDA database.
   version: '0.1'
   contact:
     name: Jiří Švácha
@@ -9,7 +9,9 @@ info:
 paths:
   /authenticate:
     get:
-      description: Get user data based on JWT token in auth bearer header.      
+      description: Get user data based on JWT token in the authentication Bearer header.    
+      security:
+        - jwtAuth: []   
       tags:
         - Security
       responses:
@@ -136,12 +138,14 @@ components:
       type: object
       description: Information about user authenticated via JWT token
       properties:
-        DisplayName:
+        displayName:
           type: string          
-        Id:
+        id:
           type: integer
           format: int64
-        Email:
+        email:
           type: string
-        Role:
-          type: string       
+        role:
+          type: array
+          items:
+            type: string       
