@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export const catalogPagesConfigs = [
   {
@@ -17,4 +17,4 @@ export const catalogPagesConfigs = [
     path: '/catalog/catalog-category',
     component: React.lazy(() => import('./catalog-category'))
   }
-]
+];

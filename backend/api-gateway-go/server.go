@@ -14,44 +14,9 @@ import (
 	"github.com/neo4j/neo4j-go-driver/v4/neo4j"
 )
 
-// // CreateNewSystem godoc
-// // @Summary Create new standalone system
-// // @Description Create new System without any relationship and return its id
-// // @Tags Systems
-// // @Accept json
-// // @Produce json
-// // @Param name formData string true "System name "
-// // @Success 200
-// // @Router /system [post]
-// // @Security ApiKeyAuth
-// func createNewSystem(driver neo4j.Driver) echo.HandlerFunc {
-// 	return func(c echo.Context) error {
-
-// 		systemItem := models.System{
-// 			Name: c.FormValue("name"),
-// 		}
-// 		err := insertSystem(driver, &systemItem)
-// 		if err != nil {
-// 			return c.JSON(http.StatusUnauthorized, err.Error())
-// 		}
-
-// 		return c.JSON(http.StatusOK, systemItem)
-// 	}
-// }
-
-// @title          PANDA API Gateway
-// @version        0.1
-// @description    This is a API Gateway to the PANDA database
-// @contact.name   Jiří Švácha
-// @contact.email  jiri.svacha@eli-beams.eu
-
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
-// test token Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSm9uIFNub3ciLCJhZG1pbiI6dHJ1ZSwiZXhwIjoyMDEzMDUxNDQzfQ.8TiZTEriPIkTITF2DXpEsJKNL8qwE6ImxN_HJkYdGug
 func main() {
 
-	//here we recognize if we run in production via app start argument -
+	//here we recognize if we run in production via app start argument
 	isProduction := false
 	if len(os.Args) > 0 {
 		for _, arg := range os.Args {
