@@ -1,50 +1,44 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import defaultConfig, {
-  backgroundDark,
-  backgroundLight,
-  defaultTheme,
-  textDark,
-  textLight,
-} from "./defaultConfig";
-import PropTypes from "prop-types";
-import { LayoutDirection, ThemeMode } from "../../../shared/constants/AppEnums";
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
+import defaultConfig, { backgroundDark, backgroundLight, defaultTheme, textDark, textLight } from './defaultConfig'
+import PropTypes from 'prop-types'
+import { LayoutDirection, ThemeMode } from '../../../shared/constants/AppEnums'
 
 export interface ThemeData {
-  theme: any;
-  themeMode: string;
-  themeStyle: string;
+  theme: any
+  themeMode: string
+  themeStyle: string
 }
 
 export interface ThemeActions {
-  updateTheme: (theme: any) => void;
-  updateThemeMode: (themeMode: string) => void;
-  updateThemeStyle: (themeStyle: string) => void;
+  updateTheme: (theme: any) => void
+  updateThemeMode: (themeMode: string) => void
+  updateThemeStyle: (themeStyle: string) => void
 }
 
 export const ThemeContext = createContext<ThemeData>({
   theme: defaultTheme.theme,
   themeMode: defaultConfig.themeMode,
-  themeStyle: defaultConfig.themeStyle,
-});
+  themeStyle: defaultConfig.themeStyle
+})
 
 const ThemeActionsContext = createContext<ThemeActions>({
   updateTheme: () => {},
   updateThemeMode: () => {},
-  updateThemeStyle: () => {},
-});
+  updateThemeStyle: () => {}
+})
 
-export const useThemeContext = () => useContext(ThemeContext);
+export const useThemeContext = () => useContext(ThemeContext)
 
-export const useThemeActionsContext = () => useContext(ThemeActionsContext);
+export const useThemeActionsContext = () => useContext(ThemeActionsContext)
 
-const ThemeContextProvider: React.FC<React.ReactNode> = ({ children }) => {
-  const [theme, updateTheme] = useState<any>(defaultTheme.theme);
-  const [themeMode, updateThemeMode] = useState<string>(
-    defaultConfig.themeMode
-  );
-  const [themeStyle, updateThemeStyle] = useState<string>(
-    defaultConfig.themeStyle
-  );
+interface Props {
+  children: React.ReactNode
+}
+
+const ThemeContextProvider = ({ children }: Props) => {
+  const [theme, updateTheme] = useState<any>(defaultTheme.theme)
+  const [themeMode, updateThemeMode] = useState<string>(defaultConfig.themeMode)
+  const [themeStyle, updateThemeStyle] = useState<string>(defaultConfig.themeStyle)
 
   useEffect(() => {
     updateTheme({
@@ -52,44 +46,43 @@ const ThemeContextProvider: React.FC<React.ReactNode> = ({ children }) => {
       palette: {
         ...theme.palette,
         mode: themeMode === ThemeMode.DARK ? ThemeMode.DARK : ThemeMode.LIGHT,
-        background:
-          themeMode === ThemeMode.DARK ? backgroundDark : backgroundLight,
-        text: themeMode === ThemeMode.DARK ? textDark : textLight,
-      },
-    });
-  }, [themeMode]);
+        background: themeMode === ThemeMode.DARK ? backgroundDark : backgroundLight,
+        text: themeMode === ThemeMode.DARK ? textDark : textLight
+      }
+    })
+  }, [themeMode])
 
   useEffect(() => {
     if (theme.direction === LayoutDirection.RTL) {
-      document.body.setAttribute("dir", LayoutDirection.RTL);
+      document.body.setAttribute('dir', LayoutDirection.RTL)
     } else {
-      document.body.setAttribute("dir", LayoutDirection.LTR);
+      document.body.setAttribute('dir', LayoutDirection.LTR)
     }
-  }, [theme]);
+  }, [theme])
 
   return (
     <ThemeContext.Provider
       value={{
         theme,
         themeStyle,
-        themeMode,
+        themeMode
       }}
     >
       <ThemeActionsContext.Provider
         value={{
           updateTheme,
           updateThemeStyle,
-          updateThemeMode,
+          updateThemeMode
         }}
       >
         {children}
       </ThemeActionsContext.Provider>
     </ThemeContext.Provider>
-  );
-};
+  )
+}
 
-export default ThemeContextProvider;
+export default ThemeContextProvider
 
 ThemeContextProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
+  children: PropTypes.node.isRequired
+}

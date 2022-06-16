@@ -1,37 +1,37 @@
-import React, { memo } from "react";
-import { VelocityComponent, VelocityComponentProps } from "velocity-react";
-import "velocity-animate/velocity.ui";
+import React, { memo } from 'react'
+import { VelocityComponent, VelocityComponentProps } from 'velocity-react'
+import 'velocity-animate/velocity.ui'
 
 interface AppAnimateProps extends VelocityComponentProps {
-  visibility?: string;
-  duration?: number;
-  delay?: number;
-  easing?: any;
-  display?: any;
-  children: any;
+  visibility?: string
+  duration?: number
+  delay?: number
+  easing?: any
+  display?: any
+  children: any
 
-  [x: string]: any;
+  [x: string]: any
 }
 
 const AppAnimate: React.FC<AppAnimateProps> = ({
-  animation = "transition.fadeIn",
+  animation = 'transition.fadeIn',
   runOnMount = true,
   targetQuerySelector = null,
-  interruptBehavior = "stop",
-  visibility = "visible",
+  interruptBehavior = 'stop',
+  visibility = 'visible',
   duration = 400,
   delay = 100,
   easing = [0.4, 0.0, 0.2, 1],
   display = null,
   children,
-  rest,
+  rest
 }) => {
   const child = React.cloneElement(children, {
     style: {
       ...children.style,
-      visibility: "hidden",
-    },
-  });
+      visibility: 'hidden'
+    }
+  })
   return (
     <VelocityComponent
       animation={animation}
@@ -47,7 +47,7 @@ const AppAnimate: React.FC<AppAnimateProps> = ({
     >
       {child}
     </VelocityComponent>
-  );
-};
+  )
+}
 
-export default memo(AppAnimate);
+export default memo(AppAnimate)

@@ -1,25 +1,25 @@
-import React, { createContext, useContext, useState } from "react";
-import PropTypes from "prop-types";
-import defaultConfig, { SidebarData } from "./defaultConfig";
+import React, { createContext, useContext, useState } from 'react'
+import PropTypes from 'prop-types'
+import defaultConfig, { SidebarData } from './defaultConfig'
 
 export interface SidebarContextData {
-  menuStyle: string;
-  sidebarBgColor: string;
-  sidebarTextColor: string;
-  sidebarHeaderColor: string;
-  sidebarMenuSelectedBgColor: string;
-  sidebarMenuSelectedTextColor: string;
-  mode: string;
-  isSidebarBgImage: boolean;
-  sidebarBgImage: string | number;
-  borderColor?: string;
+  menuStyle: string
+  sidebarBgColor: string
+  sidebarTextColor: string
+  sidebarHeaderColor: string
+  sidebarMenuSelectedBgColor: string
+  sidebarMenuSelectedTextColor: string
+  mode: string
+  isSidebarBgImage: boolean
+  sidebarBgImage: string | number
+  borderColor?: string
 }
 
 export interface SidebarActions {
-  updateMenuStyle: (style: string) => void;
-  updateSidebarColorSet: (color: SidebarData) => void;
-  setSidebarBgImage: (isImage: boolean) => void;
-  updateSidebarBgImage: (image: number) => void;
+  updateMenuStyle: (style: string) => void
+  updateSidebarColorSet: (color: SidebarData) => void
+  setSidebarBgImage: (isImage: boolean) => void
+  updateSidebarBgImage: (image: number) => void
 }
 
 const SidebarContext = createContext<SidebarContextData>({
@@ -27,33 +27,29 @@ const SidebarContext = createContext<SidebarContextData>({
   ...defaultConfig.sidebar.colorSet,
   isSidebarBgImage: defaultConfig.sidebar.isSidebarBgImage,
   sidebarBgImage: defaultConfig.sidebar.sidebarBgImage,
-  borderColor: defaultConfig.sidebar.borderColor,
-});
+  borderColor: defaultConfig.sidebar.borderColor
+})
 
 const SidebarActionsContext = createContext<SidebarActions>({
   updateMenuStyle: () => {},
   updateSidebarColorSet: () => {},
   setSidebarBgImage: () => {},
-  updateSidebarBgImage: () => {},
-});
+  updateSidebarBgImage: () => {}
+})
 
-export const useSidebarContext = () => useContext(SidebarContext);
+export const useSidebarContext = () => useContext(SidebarContext)
 
-export const useSidebarActionsContext = () => useContext(SidebarActionsContext);
+export const useSidebarActionsContext = () => useContext(SidebarActionsContext)
 
-const SidebarContextProvider: React.FC<React.ReactNode> = ({ children }) => {
-  const [menuStyle, updateMenuStyle] = useState<string>(
-    defaultConfig.sidebar.menuStyle
-  );
-  const [sidebarColorSet, updateSidebarColorSet] = useState<SidebarData>(
-    defaultConfig.sidebar.colorSet
-  );
-  const [isSidebarBgImage, setSidebarBgImage] = useState<boolean>(
-    defaultConfig.sidebar.isSidebarBgImage
-  );
-  const [sidebarBgImage, updateSidebarBgImage] = useState<string | number>(
-    defaultConfig.sidebar.sidebarBgImage
-  );
+interface Props {
+  children: React.ReactNode
+}
+
+const SidebarContextProvider = ({ children }: Props) => {
+  const [menuStyle, updateMenuStyle] = useState<string>(defaultConfig.sidebar.menuStyle)
+  const [sidebarColorSet, updateSidebarColorSet] = useState<SidebarData>(defaultConfig.sidebar.colorSet)
+  const [isSidebarBgImage, setSidebarBgImage] = useState<boolean>(defaultConfig.sidebar.isSidebarBgImage)
+  const [sidebarBgImage, updateSidebarBgImage] = useState<string | number>(defaultConfig.sidebar.sidebarBgImage)
 
   return (
     <SidebarContext.Provider
@@ -62,7 +58,7 @@ const SidebarContextProvider: React.FC<React.ReactNode> = ({ children }) => {
         menuStyle,
         isSidebarBgImage,
         sidebarBgImage,
-        borderColor: defaultConfig.sidebar.borderColor,
+        borderColor: defaultConfig.sidebar.borderColor
       }}
     >
       <SidebarActionsContext.Provider
@@ -70,17 +66,17 @@ const SidebarContextProvider: React.FC<React.ReactNode> = ({ children }) => {
           updateMenuStyle,
           updateSidebarColorSet,
           setSidebarBgImage,
-          updateSidebarBgImage,
+          updateSidebarBgImage
         }}
       >
         {children}
       </SidebarActionsContext.Provider>
     </SidebarContext.Provider>
-  );
-};
+  )
+}
 
-export default SidebarContextProvider;
+export default SidebarContextProvider
 
 SidebarContextProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
+  children: PropTypes.node.isRequired
+}
