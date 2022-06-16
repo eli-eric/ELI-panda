@@ -1,61 +1,49 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import clsx from "clsx";
-import {
-  useSidebarActionsContext,
-  useSidebarContext,
-} from "../../../utility/AppContextProvider/SidebarContextProvider";
-import {
-  MenuStyle,
-  NavStyle,
-  ThemeMode,
-} from "../../../../shared/constants/AppEnums";
-import { useLayoutContext } from "../../../utility/AppContextProvider/LayoutContextProvider";
-import AppSelectedIcon from "../../AppSelectedIcon";
-import { useThemeContext } from "../../../utility/AppContextProvider/ThemeContextProvider";
-import { SidebarData } from "../../../utility/AppContextProvider/defaultConfig";
+import React from 'react'
+import Box from '@mui/material/Box'
+import clsx from 'clsx'
+import { useSidebarActionsContext, useSidebarContext } from '../../../utility/AppContextProvider/SidebarContextProvider'
+import { MenuStyle, NavStyle, ThemeMode } from '../../../../shared/constants/AppEnums'
+import { useLayoutContext } from '../../../utility/AppContextProvider/LayoutContextProvider'
+import AppSelectedIcon from '../../AppSelectedIcon'
+import { useThemeContext } from '../../../utility/AppContextProvider/ThemeContextProvider'
+import { SidebarData } from '../../../utility/AppContextProvider/defaultConfig'
 
 interface MenuColorCellProps {
-  sidebarColors: SidebarData;
+  sidebarColors: SidebarData
 }
 
 const MenuColorCell: React.FC<MenuColorCellProps> = ({ sidebarColors }) => {
-  const {
-    sidebarBgColor,
-    sidebarTextColor,
-    sidebarMenuSelectedBgColor,
-    sidebarMenuSelectedTextColor,
-    menuStyle,
-  } = useSidebarContext();
-  const { updateSidebarColorSet } = useSidebarActionsContext();
-  const { navStyle } = useLayoutContext();
-  const { theme } = useThemeContext();
+  const { sidebarBgColor, sidebarTextColor, sidebarMenuSelectedBgColor, sidebarMenuSelectedTextColor, menuStyle } =
+    useSidebarContext()
+  const { updateSidebarColorSet } = useSidebarActionsContext()
+  const { navStyle } = useLayoutContext()
+  const { theme } = useThemeContext()
 
   return (
     <Box
       sx={{
-        border: (theme) =>
+        border: theme =>
           sidebarColors.mode === ThemeMode.LIGHT
             ? `solid 2px ${theme.palette.text.disabled}`
             : `solid 2px ${sidebarColors.sidebarBgColor}`,
         borderRadius: 2,
-        cursor: "pointer",
-        overflow: "hidden",
-        position: "relative",
+        cursor: 'pointer',
+        overflow: 'hidden',
+        position: 'relative'
       }}
       onClick={() => updateSidebarColorSet(sidebarColors)}
     >
       {navStyle === NavStyle.DEFAULT ? (
         <Box
           sx={{
-            width: "100%",
+            width: '100%',
             height: 60,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
             backgroundColor: sidebarColors.sidebarHeaderColor,
-            borderBottom: `solid 1px ${sidebarColors.sidebarTextColor}`,
+            borderBottom: `solid 1px ${sidebarColors.sidebarTextColor}`
           }}
         >
           <Box
@@ -63,7 +51,7 @@ const MenuColorCell: React.FC<MenuColorCellProps> = ({ sidebarColors }) => {
               width: 30,
               height: 30,
               border: `solid 1px ${sidebarColors.sidebarTextColor}`,
-              borderRadius: "50%",
+              borderRadius: '50%'
             }}
           />
           <Box
@@ -71,7 +59,7 @@ const MenuColorCell: React.FC<MenuColorCellProps> = ({ sidebarColors }) => {
               width: 50,
               height: 4,
               marginTop: 2,
-              backgroundColor: sidebarColors.sidebarTextColor,
+              backgroundColor: sidebarColors.sidebarTextColor
             }}
           />
         </Box>
@@ -79,44 +67,44 @@ const MenuColorCell: React.FC<MenuColorCellProps> = ({ sidebarColors }) => {
       <Box
         sx={{
           maxWidth: 200,
-          backgroundColor: sidebarColors.sidebarBgColor,
+          backgroundColor: sidebarColors.sidebarBgColor
         }}
       >
         <Box
           sx={{
-            width: "100%",
+            width: '100%',
             minHeight: 40,
             padding: 2.5,
             py: 2.5,
             px: 4.5,
             color: sidebarColors.sidebarTextColor,
             fontSize: { xs: 12, md: 14 },
-            whiteSpace: "nowrap",
+            whiteSpace: 'nowrap'
           }}
         >
           Menu-1
         </Box>
         <Box
           sx={{
-            width: "100%",
+            width: '100%',
             minHeight: 40,
             py: 2.5,
             px: 4.5,
             color: sidebarColors.sidebarTextColor,
             fontSize: { xs: 12, md: 14 },
-            whiteSpace: "nowrap",
+            whiteSpace: 'nowrap'
           }}
         >
           Menu-2
         </Box>
         <Box
           className={clsx({
-            "rounded-menu": menuStyle === MenuStyle.ROUNDED,
-            "rounded-menu-reverse": menuStyle === MenuStyle.ROUNDED_REVERSE,
-            "standard-menu": menuStyle === MenuStyle.STANDARD,
+            'rounded-menu': menuStyle === MenuStyle.ROUNDED,
+            'rounded-menu-reverse': menuStyle === MenuStyle.ROUNDED_REVERSE,
+            'standard-menu': menuStyle === MenuStyle.STANDARD
           })}
           sx={{
-            width: "calc(100% - 16px)",
+            width: 'calc(100% - 16px)',
             minHeight: 40,
             py: 2.5,
             px: 2.5,
@@ -124,56 +112,56 @@ const MenuColorCell: React.FC<MenuColorCellProps> = ({ sidebarColors }) => {
             borderRadius: 1,
             backgroundColor: sidebarColors.sidebarMenuSelectedBgColor,
             color: sidebarColors.sidebarMenuSelectedTextColor,
-            position: "relative",
-            transition: "all 0.4s ease",
+            position: 'relative',
+            transition: 'all 0.4s ease',
             fontSize: { xs: 12, md: 14 },
-            whiteSpace: "nowrap",
-            "&.rounded-menu": {
+            whiteSpace: 'nowrap',
+            '&.rounded-menu': {
               mr: 2,
               ml: 0,
-              width: "calc(100% - 8px)",
+              width: 'calc(100% - 8px)',
               pl: 4.5,
               pr: 2.5,
-              borderRadius: "0 30px 30px 0",
+              borderRadius: '0 30px 30px 0'
             },
-            "&.rounded-menu-reverse": {
+            '&.rounded-menu-reverse': {
               ml: 2,
               mr: 0,
-              width: "calc(100% - 8px)",
+              width: 'calc(100% - 8px)',
               pl: 2.5,
               pr: 2.5,
-              borderRadius: "30px 0 0 30px",
-              "&.active:after": {
-                display: "none",
-              },
+              borderRadius: '30px 0 0 30px',
+              '&.active:after': {
+                display: 'none'
+              }
             },
-            "&.standard-menu": {
+            '&.standard-menu': {
               mx: 0,
-              width: "100%",
+              width: '100%',
               pl: 4.5,
               pr: 2.5,
               borderRadius: 0,
-              "&:after": {
+              '&:after': {
                 content: '""',
-                position: "absolute",
+                position: 'absolute',
                 right: 0,
                 top: 0,
-                height: "100%",
+                height: '100%',
                 width: 4,
-                backgroundColor: (theme) => theme.palette.primary.main,
-              },
-            },
+                backgroundColor: theme => theme.palette.primary.main
+              }
+            }
           }}
         >
           Selected Menu
         </Box>
         <Box
           sx={{
-            width: "100%",
+            width: '100%',
             minHeight: 40,
             py: 2.5,
             px: 4.5,
-            color: sidebarColors.sidebarTextColor,
+            color: sidebarColors.sidebarTextColor
           }}
         >
           Menu-4
@@ -182,24 +170,17 @@ const MenuColorCell: React.FC<MenuColorCellProps> = ({ sidebarColors }) => {
       {sidebarColors.sidebarBgColor === sidebarBgColor &&
       sidebarColors.sidebarTextColor === sidebarTextColor &&
       sidebarColors.sidebarMenuSelectedBgColor === sidebarMenuSelectedBgColor &&
-      sidebarColors.sidebarMenuSelectedTextColor ===
-        sidebarMenuSelectedTextColor ? (
+      sidebarColors.sidebarMenuSelectedTextColor === sidebarMenuSelectedTextColor ? (
         <AppSelectedIcon
           isCenter={false}
           backgroundColor={
-            sidebarColors.mode === ThemeMode.LIGHT
-              ? theme.palette.text.primary
-              : theme.palette.background.default
+            sidebarColors.mode === ThemeMode.LIGHT ? theme.palette.text.primary : theme.palette.background.default
           }
-          color={
-            sidebarColors.mode === ThemeMode.LIGHT
-              ? theme.palette.background.default
-              : theme.palette.text.primary
-          }
+          color={sidebarColors.mode === ThemeMode.LIGHT ? theme.palette.background.default : theme.palette.text.primary}
         />
       ) : null}
     </Box>
-  );
-};
+  )
+}
 
-export default MenuColorCell;
+export default MenuColorCell

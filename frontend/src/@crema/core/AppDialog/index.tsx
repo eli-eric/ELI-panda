@@ -1,41 +1,41 @@
-import React, { ReactNode } from "react";
-import { Dialog, DialogTitle, Slide, Theme } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import Button from "@mui/material/Button";
-import AppScrollbar from "../AppScrollbar";
-import { Fonts } from "../../../shared/constants/AppEnums";
-import { TransitionProps } from "@mui/material/transitions";
-import { Breakpoint, SxProps } from "@mui/system";
+import React, { ReactNode } from 'react'
+import { Dialog, DialogTitle, Slide, Theme } from '@mui/material'
+import IconButton from '@mui/material/IconButton'
+import CloseIcon from '@mui/icons-material/Close'
+import DialogContent from '@mui/material/DialogContent'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
+import AppScrollbar from '../AppScrollbar'
+import { Fonts } from '../../../shared/constants/AppEnums'
+import { TransitionProps } from '@mui/material/transitions'
+import { Breakpoint, SxProps } from '@mui/system'
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
-    children: React.ReactElement<any, any>;
+    children: React.ReactElement<any, any>
   },
   // eslint-disable-next-line no-undef
   ref: React.Ref<unknown>
 ) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+  return <Slide direction="up" ref={ref} {...props} />
+})
 
 interface AppDialogProps {
-  maxWidth?: Breakpoint;
-  open: boolean;
-  onClose: () => void;
-  children: ReactNode;
-  title?: string | ReactNode;
-  dividers?: boolean;
-  hideClose?: boolean;
-  fullHeight?: boolean;
-  actionTitle?: string;
-  sxStyle?: SxProps<Theme>;
+  maxWidth?: Breakpoint
+  open: boolean
+  onClose: () => void
+  children: ReactNode
+  title?: string | ReactNode
+  dividers?: boolean
+  hideClose?: boolean
+  fullHeight?: boolean
+  actionTitle?: string
+  sxStyle?: SxProps<Theme>
 }
 
 const AppDialog: React.FC<AppDialogProps> = ({
   sxStyle,
-  maxWidth = "sm",
+  maxWidth = 'sm',
   hideClose = false,
   open,
   onClose,
@@ -43,20 +43,20 @@ const AppDialog: React.FC<AppDialogProps> = ({
   dividers = false,
   title,
   actionTitle,
-  fullHeight = false,
+  fullHeight = false
 }) => {
   return (
     <Dialog
       sx={{
-        "& .MuiDialog-paper": {
-          width: "100%",
+        '& .MuiDialog-paper': {
+          width: '100%'
         },
-        "& .MuiDialogContent-root": {
-          overflowY: "hidden",
+        '& .MuiDialogContent-root': {
+          overflowY: 'hidden',
           paddingLeft: 0,
-          paddingRight: 0,
+          paddingRight: 0
         },
-        ...sxStyle,
+        ...sxStyle
       }}
       maxWidth={maxWidth}
       TransitionComponent={Transition}
@@ -66,7 +66,7 @@ const AppDialog: React.FC<AppDialogProps> = ({
       <DialogTitle
         sx={{
           fontSize: 14,
-          fontWeight: Fonts.MEDIUM,
+          fontWeight: Fonts.MEDIUM
         }}
         id="app-dialog-title"
       >
@@ -75,10 +75,10 @@ const AppDialog: React.FC<AppDialogProps> = ({
           <IconButton
             aria-label="close"
             sx={{
-              position: "absolute",
+              position: 'absolute',
               right: 4,
               top: 4,
-              color: "grey.500",
+              color: 'grey.500'
             }}
             onClick={onClose}
             size="large"
@@ -91,11 +91,11 @@ const AppDialog: React.FC<AppDialogProps> = ({
         <AppScrollbar
           sx={{
             paddingTop: 1,
-            height: fullHeight ? "70vh" : "100%",
-            minHeight: "300px",
-            maxHeight: "400px",
+            height: fullHeight ? '70vh' : '100%',
+            minHeight: '300px',
+            maxHeight: '400px',
             paddingRight: 6,
-            paddingLeft: 6,
+            paddingLeft: 6
           }}
         >
           {children}
@@ -109,6 +109,6 @@ const AppDialog: React.FC<AppDialogProps> = ({
         </DialogActions>
       ) : null}
     </Dialog>
-  );
-};
-export default AppDialog;
+  )
+}
+export default AppDialog

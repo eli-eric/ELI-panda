@@ -1,46 +1,46 @@
-import React from "react";
-import orange from "@mui/material/colors/orange";
-import { useAuthMethod, useAuthUser } from "../../../../../utility/AuthHooks";
-import { alpha, Box } from "@mui/material";
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { Fonts } from "../../../../../../shared/constants/AppEnums";
-import { useHistory } from "react-router-dom";
+import React from 'react'
+import orange from '@mui/material/colors/orange'
+import { useAuthMethod, useAuthUser } from '../../../../../utility/AuthHooks'
+import { alpha, Box } from '@mui/material'
+import Avatar from '@mui/material/Avatar'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import { Fonts } from '../../../../../../shared/constants/AppEnums'
+import { useHistory } from 'react-router-dom'
 
 const UserInfo = () => {
-  const { logout } = useAuthMethod();
-  const { user } = useAuthUser();
-  const history = useHistory();
+  const { logout } = useAuthMethod()
+  const { user } = useAuthUser()
+  const history = useHistory()
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   const getUserAvatar = () => {
     if (user.displayName) {
-      return user.displayName.charAt(0).toUpperCase();
+      return user.displayName.charAt(0).toUpperCase()
     }
     if (user.email) {
-      return user.email.charAt(0).toUpperCase();
+      return user.email.charAt(0).toUpperCase()
     }
-  };
+  }
 
   return (
     <Box
       sx={{
         py: 3,
         px: 3,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        cursor: "pointer",
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer'
       }}
     >
       <Box onClick={handleClick}>
@@ -49,7 +49,7 @@ const UserInfo = () => {
             sx={{
               height: 30,
               width: 30,
-              backgroundColor: orange[500],
+              backgroundColor: orange[500]
             }}
             src={user.photoURL}
           />
@@ -59,7 +59,7 @@ const UserInfo = () => {
               height: 30,
               width: 30,
               fontSize: 20,
-              backgroundColor: orange[500],
+              backgroundColor: orange[500]
             }}
           >
             {getUserAvatar()}
@@ -73,26 +73,26 @@ const UserInfo = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
         sx={{
-          py: 4,
+          py: 4
         }}
       >
         <MenuItem
           sx={{
-            backgroundColor: (theme) => alpha(theme.palette.common.black, 0.08),
+            backgroundColor: theme => alpha(theme.palette.common.black, 0.08),
             px: 6,
-            py: 3,
+            py: 3
           }}
         >
           <Box
             sx={{
-              mr: 3.5,
+              mr: 3.5
             }}
           >
             {user.photoURL ? (
               <Avatar
                 sx={{
                   height: 40,
-                  width: 40,
+                  width: 40
                 }}
                 src={user.photoURL}
               />
@@ -102,7 +102,7 @@ const UserInfo = () => {
                   height: 40,
                   width: 40,
                   fontSize: 20,
-                  backgroundColor: orange[500],
+                  backgroundColor: orange[500]
                 }}
               >
                 {getUserAvatar()}
@@ -114,23 +114,23 @@ const UserInfo = () => {
             <Box
               sx={{
                 mb: 0,
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
                 fontSize: 14,
-                fontWeight: Fonts.MEDIUM,
+                fontWeight: Fonts.MEDIUM
               }}
               component="span"
             >
-              {user.displayName ? user.displayName : "Admin User "}
+              {user.displayName ? user.displayName : 'Admin User '}
             </Box>
             <Box
               sx={{
                 mt: -0.5,
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
                 fontSize: 12,
-                color: (theme) => theme.palette.text.secondary,
+                color: theme => theme.palette.text.secondary
               }}
             >
               System Manager
@@ -139,12 +139,12 @@ const UserInfo = () => {
         </MenuItem>
         <MenuItem
           onClick={() => {
-            handleClose();
-            history.push("/my-account");
+            handleClose()
+            history.push('/my-account')
           }}
           sx={{
             px: 6,
-            py: 1.5,
+            py: 1.5
           }}
         >
           My account
@@ -152,7 +152,7 @@ const UserInfo = () => {
         <MenuItem
           sx={{
             px: 6,
-            py: 1.5,
+            py: 1.5
           }}
           onClick={logout}
         >
@@ -160,7 +160,7 @@ const UserInfo = () => {
         </MenuItem>
       </Menu>
     </Box>
-  );
-};
+  )
+}
 
-export default UserInfo;
+export default UserInfo

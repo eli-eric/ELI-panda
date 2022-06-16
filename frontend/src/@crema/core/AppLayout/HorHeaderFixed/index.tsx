@@ -1,30 +1,30 @@
-import React from "react";
-import clsx from "clsx";
-import AppContentView from "@crema/core/AppContentView";
-import AppFixedFooter from "./AppFixedFooter";
-import AppHeader from "./AppHeader";
-import AppSidebar from "./AppSidebar";
-import { useLayoutContext } from "../../../utility/AppContextProvider/LayoutContextProvider";
-import AppThemeSetting from "../../AppThemeSetting";
-import HorHeaderFixedWrapper from "./HorHeaderFixedWrapper";
-import MainContent from "./MainContent";
-import { LayoutType } from "../../../../shared/constants/AppEnums";
-import HorHeaderFixedContainer from "./HorHeaderFixedContainer";
+import React from 'react'
+import clsx from 'clsx'
+import AppContentView from '@crema/core/AppContentView'
+import AppFixedFooter from './AppFixedFooter'
+import AppHeader from './AppHeader'
+import AppSidebar from './AppSidebar'
+import { useLayoutContext } from '../../../utility/AppContextProvider/LayoutContextProvider'
+import AppThemeSetting from '../../AppThemeSetting'
+import HorHeaderFixedWrapper from './HorHeaderFixedWrapper'
+import MainContent from './MainContent'
+import { LayoutType } from '../../../../shared/constants/AppEnums'
+import HorHeaderFixedContainer from './HorHeaderFixedContainer'
 
 const HorHeaderFixed = () => {
-  const { footer, layoutType, footerType } = useLayoutContext();
+  const { footer, layoutType, footerType } = useLayoutContext()
 
   return (
     <HorHeaderFixedContainer
       className={clsx({
         boxedLayout: layoutType === LayoutType.BOXED,
-        framedLayout: layoutType === LayoutType.FRAMED,
+        framedLayout: layoutType === LayoutType.FRAMED
       })}
     >
       <HorHeaderFixedWrapper
-        className={clsx("horHeaderFixedWrapper", {
-          appMainFooter: footer && footerType === "fluid",
-          appMainFixedFooter: footer && footerType === "fixed",
+        className={clsx('horHeaderFixedWrapper', {
+          appMainFooter: footer && footerType === 'fluid',
+          appMainFixedFooter: footer && footerType === 'fixed'
         })}
       >
         <AppSidebar />
@@ -37,7 +37,7 @@ const HorHeaderFixed = () => {
         <AppThemeSetting />
       </HorHeaderFixedWrapper>
     </HorHeaderFixedContainer>
-  );
-};
+  )
+}
 
-export default HorHeaderFixed;
+export default HorHeaderFixed

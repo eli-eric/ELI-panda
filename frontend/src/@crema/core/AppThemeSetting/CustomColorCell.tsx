@@ -1,45 +1,42 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import CheckIcon from "@mui/icons-material/Check";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import IntlMessages from "../../utility/IntlMessages";
-import { useThemeContext } from "../../utility/AppContextProvider/ThemeContextProvider";
-import { ThemeColorsProps } from "./ThemeColors";
+import React from 'react'
+import Box from '@mui/material/Box'
+import CheckIcon from '@mui/icons-material/Check'
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined'
+import IntlMessages from '../../utility/IntlMessages'
+import { useThemeContext } from '../../utility/AppContextProvider/ThemeContextProvider'
+import { ThemeColorsProps } from './ThemeColors'
 
 interface CustomColorCellTypes {
-  themeColorSet: ThemeColorsProps;
-  updateThemeColors: (colorSet: ThemeColorsProps) => void;
+  themeColorSet: ThemeColorsProps
+  updateThemeColors: (colorSet: ThemeColorsProps) => void
 }
 
-const CustomColorCell: React.FC<CustomColorCellTypes> = ({
-  themeColorSet,
-  updateThemeColors,
-}) => {
-  const { theme } = useThemeContext();
+const CustomColorCell: React.FC<CustomColorCellTypes> = ({ themeColorSet, updateThemeColors }) => {
+  const { theme } = useThemeContext()
   return (
     <Box
       onClick={() => {
-        updateThemeColors(themeColorSet);
+        updateThemeColors(themeColorSet)
       }}
     >
       <Box
         sx={{
-          width: "100%",
+          width: '100%',
           borderRadius: 1,
-          position: "relative",
-          overflow: "hidden",
-          cursor: "pointer",
+          position: 'relative',
+          overflow: 'hidden',
+          cursor: 'pointer'
         }}
       >
         <Box
           sx={{
             px: 2.5,
             py: 2,
-            position: "relative",
-            display: "flex",
-            alignItems: "center",
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
             backgroundColor: themeColorSet.primary.main,
-            color: (theme) => theme.palette.common.white,
+            color: theme => theme.palette.common.white
           }}
         >
           Primary
@@ -48,21 +45,21 @@ const CustomColorCell: React.FC<CustomColorCellTypes> = ({
           theme.palette.mode === themeColorSet.mode ? (
             <Box
               sx={{
-                ml: "auto",
+                ml: 'auto',
                 width: 20,
                 height: 20,
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                overflow: "hidden",
-                backgroundColor: "#fff",
-                color: theme.palette.primary.main,
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                overflow: 'hidden',
+                backgroundColor: '#fff',
+                color: theme.palette.primary.main
               }}
             >
               <CheckIcon
                 sx={{
-                  fontSize: 16,
+                  fontSize: 16
                 }}
               >
                 <IntlMessages id="customizer.checked" />
@@ -74,7 +71,7 @@ const CustomColorCell: React.FC<CustomColorCellTypes> = ({
           sx={{
             p: 2.5,
             backgroundColor: themeColorSet.background.default,
-            color: themeColorSet.text.primary,
+            color: themeColorSet.text.primary
           }}
         >
           <Box
@@ -83,13 +80,12 @@ const CustomColorCell: React.FC<CustomColorCellTypes> = ({
               py: 1.5,
               px: 2.5,
               mb: 2.5,
-              boxShadow:
-                "rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px",
+              boxShadow: 'rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px',
               borderRadius: 1,
               backgroundColor: themeColorSet.background.paper,
               color: themeColorSet.text.primary,
-              display: "flex",
-              flexDirection: "column",
+              display: 'flex',
+              flexDirection: 'column'
             }}
           >
             Paper
@@ -97,18 +93,18 @@ const CustomColorCell: React.FC<CustomColorCellTypes> = ({
               sx={{
                 width: 30,
                 height: 30,
-                borderRadius: "50%",
+                borderRadius: '50%',
                 p: 1,
                 backgroundColor: themeColorSet.secondary.main,
-                color: (theme) => theme.palette.common.white,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                mt: "auto",
-                ml: "auto",
-                "& svg": {
-                  fontSize: 20,
-                },
+                color: theme => theme.palette.common.white,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mt: 'auto',
+                ml: 'auto',
+                '& svg': {
+                  fontSize: 20
+                }
               }}
             >
               <AddOutlinedIcon />
@@ -119,8 +115,7 @@ const CustomColorCell: React.FC<CustomColorCellTypes> = ({
       </Box>
       <Box sx={{ pt: 2, px: 3, pb: 3 }}>{themeColorSet.title}</Box>
     </Box>
-  );
-};
+  )
+}
 
-export default CustomColorCell;
-
+export default CustomColorCell

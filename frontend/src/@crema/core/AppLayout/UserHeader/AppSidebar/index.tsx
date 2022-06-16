@@ -1,34 +1,29 @@
-import React from "react";
-import { toggleNavCollapsed } from "../../../../../redux/actions";
-import { useDispatch, useSelector } from "react-redux";
-import clsx from "clsx";
-import AppScrollbar from "../../../AppScrollbar";
-import MainSidebar from "../../components/MainSidebar";
-import Hidden from "@mui/material/Hidden";
-import Drawer from "@mui/material/Drawer";
-import VerticalNav from "../../components/VerticalNav";
-import UserHeaderSidebarWrapper from "./UserHeaderSidebarWrapper";
-import { useLayoutContext } from "../../../../utility/AppContextProvider/LayoutContextProvider";
-import { AppState } from "../../../../../redux/store";
+import React from 'react'
+import { toggleNavCollapsed } from '../../../../../redux/actions'
+import { useDispatch, useSelector } from 'react-redux'
+import clsx from 'clsx'
+import AppScrollbar from '../../../AppScrollbar'
+import MainSidebar from '../../components/MainSidebar'
+import Hidden from '@mui/material/Hidden'
+import Drawer from '@mui/material/Drawer'
+import VerticalNav from '../../components/VerticalNav'
+import UserHeaderSidebarWrapper from './UserHeaderSidebarWrapper'
+import { useLayoutContext } from '../../../../utility/AppContextProvider/LayoutContextProvider'
+import { AppState } from '../../../../../redux/store'
 
 interface AppSidebarProps {
-  position?: "left" | "top" | "right" | "bottom";
-  variant?: string;
+  position?: 'left' | 'top' | 'right' | 'bottom'
+  variant?: string
 }
 
-const AppSidebar: React.FC<AppSidebarProps> = ({
-  variant = "",
-  position = "left",
-}) => {
-  const dispatch = useDispatch();
-  const navCollapsed = useSelector<AppState, AppState["settings"]>(
-    ({ settings }) => settings
-  ).navCollapsed;
-  const { footer, footerType } = useLayoutContext();
+const AppSidebar: React.FC<AppSidebarProps> = ({ variant = '', position = 'left' }) => {
+  const dispatch = useDispatch()
+  const navCollapsed = useSelector<AppState, AppState['settings']>(({ settings }) => settings).navCollapsed
+  const { footer, footerType } = useLayoutContext()
 
   const handleToggleDrawer = () => {
-    dispatch(toggleNavCollapsed());
-  };
+    dispatch(toggleNavCollapsed())
+  }
 
   return (
     <>
@@ -39,15 +34,15 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
           onClose={() => handleToggleDrawer()}
           classes={{
             root: clsx(variant),
-            paper: clsx(variant),
+            paper: clsx(variant)
           }}
-          style={{ position: "absolute" }}
+          style={{ position: 'absolute' }}
         >
           <UserHeaderSidebarWrapper className="user-header-sidebar">
             <MainSidebar>
               <AppScrollbar
                 sx={{
-                  py: 2,
+                  py: 2
                 }}
                 scrollToTop={false}
               >
@@ -62,17 +57,17 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
           <MainSidebar>
             <AppScrollbar
               className={clsx({
-                "has-footer-fixed": footer && footerType === "fixed",
+                'has-footer-fixed': footer && footerType === 'fixed'
               })}
               sx={{
                 py: 2,
-                height: "calc(100vh - 71px) !important",
-                "&.has-footer-fixed": {
+                height: 'calc(100vh - 71px) !important',
+                '&.has-footer-fixed': {
                   height: {
-                    xs: "calc(100vh - 119px) !important",
-                    xl: "calc(100vh - 131px) !important",
-                  },
-                },
+                    xs: 'calc(100vh - 119px) !important',
+                    xl: 'calc(100vh - 131px) !important'
+                  }
+                }
               }}
               scrollToTop={false}
             >
@@ -82,6 +77,6 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
         </UserHeaderSidebarWrapper>
       </Hidden>
     </>
-  );
-};
-export default AppSidebar;
+  )
+}
+export default AppSidebar

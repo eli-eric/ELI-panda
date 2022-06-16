@@ -1,9 +1,9 @@
-import saMessages from "../locales/ar_SA.json";
+import saMessages from '../locales/ar_SA.json'
 
 const saLang = {
   messages: {
-    ...saMessages,
+    ...saMessages
   },
-  locale: "ar-SA",
-};
-export default saLang;
+  locale: 'ar-SA'
+}
+export default saLang

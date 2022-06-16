@@ -1,5 +1,5 @@
-import React from "react";
-import ContentLoader from "react-content-loader";
+import React from 'react'
+import ContentLoader from 'react-content-loader'
 
 export const TodoItem = () => (
   <ContentLoader viewBox="0 0 400 25">
@@ -10,7 +10,7 @@ export const TodoItem = () => (
     <rect height="10" rx="0" ry="0" width="10" x="370" y="10" />
     <circle cx="390" cy="15" r="5" />
   </ContentLoader>
-);
+)
 const TodoListSkeleton = () => {
   return (
     <React.Fragment>
@@ -25,7 +25,7 @@ const TodoListSkeleton = () => {
       <TodoItem />
       <TodoItem />
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default TodoListSkeleton;
+export default TodoListSkeleton

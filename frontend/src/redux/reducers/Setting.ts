@@ -1,39 +1,39 @@
-import { Setting } from "../../types/models/Setting";
+import { Setting } from '../../types/models/Setting'
 import {
   ROUTE_CHANGE,
   SET_INITIAL_PATH,
   SettingsActionTypes,
-  TOGGLE_NAV_COLLAPSED,
-} from "../../types/actions/Settings.action";
+  TOGGLE_NAV_COLLAPSED
+} from '../../types/actions/Settings.action'
 
 const initialSettings: Setting = {
   navCollapsed: false,
-  initialPath: "/",
-};
+  initialPath: '/'
+}
 
 const Settings = (state = initialSettings, action: SettingsActionTypes) => {
   switch (action.type) {
     case ROUTE_CHANGE:
       return {
         ...state,
-        navCollapsed: false,
-      };
+        navCollapsed: false
+      }
 
     case TOGGLE_NAV_COLLAPSED:
       return {
         ...state,
-        navCollapsed: !state.navCollapsed,
-      };
+        navCollapsed: !state.navCollapsed
+      }
 
     case SET_INITIAL_PATH:
       return {
         ...state,
-        initialPath: action.initialPath,
-      };
+        initialPath: action.initialPath
+      }
 
     default:
-      return state;
+      return state
   }
-};
+}
 
-export default Settings;
+export default Settings

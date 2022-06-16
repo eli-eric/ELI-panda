@@ -1,24 +1,24 @@
-import React from "react";
-import Hidden from "@mui/material/Hidden";
-import { Box } from "@mui/material";
+import React from 'react'
+import Hidden from '@mui/material/Hidden'
+import { Box } from '@mui/material'
 
 const AppLogoWhite = () => {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "row",
-        cursor: "pointer",
-        alignItems: "center",
+        display: 'flex',
+        flexDirection: 'row',
+        cursor: 'pointer',
+        alignItems: 'center'
       }}
     >
       <Hidden smUp>
         <img
           style={{
             height: 30,
-            marginRight: 10,
+            marginRight: 10
           }}
-          src={"/assets/images/logo-white.png"}
+          src={'/assets/images/logo-white.png'}
           alt="crema-logo"
         />
       </Hidden>
@@ -26,14 +26,14 @@ const AppLogoWhite = () => {
         <img
           style={{
             height: 30,
-            marginRight: 10,
+            marginRight: 10
           }}
-          src={"/assets/images/logo-white-with-name.png"}
+          src={'/assets/images/logo-white-with-name.png'}
           alt="crema-logo"
         />
       </Hidden>
     </Box>
-  );
-};
+  )
+}
 
-export default AppLogoWhite;
+export default AppLogoWhite

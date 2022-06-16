@@ -1,52 +1,48 @@
-import React, { ReactNode } from "react";
-import { alpha, Box } from "@mui/material";
-import { useSidebarContext } from "../../../../utility/AppContextProvider/SidebarContextProvider";
+import React, { ReactNode } from 'react'
+import { alpha, Box } from '@mui/material'
+import { useSidebarContext } from '../../../../utility/AppContextProvider/SidebarContextProvider'
 
 interface HeaderNavWrapperProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 const HeaderNavWrapper: React.FC<HeaderNavWrapperProps> = ({ children }) => {
-  const {
-    sidebarBgColor,
-    sidebarTextColor,
-    sidebarMenuSelectedBgColor,
-    sidebarMenuSelectedTextColor,
-  } = useSidebarContext();
+  const { sidebarBgColor, sidebarTextColor, sidebarMenuSelectedBgColor, sidebarMenuSelectedTextColor } =
+    useSidebarContext()
   return (
     <Box
       sx={{
         backgroundColor: sidebarBgColor,
         color: sidebarTextColor,
         py: 2.5,
-        "& .navbarNav": {
-          display: "flex",
-          padding: 0,
+        '& .navbarNav': {
+          display: 'flex',
+          padding: 0
         },
-        "& .navItem": {
-          width: "auto",
-          cursor: "pointer",
+        '& .navItem': {
+          width: 'auto',
+          cursor: 'pointer',
           py: 1,
           px: { xs: 4, lg: 5 },
           borderRadius: 1,
-          "&.active": {
+          '&.active': {
             color: sidebarMenuSelectedTextColor,
             backgroundColor: alpha(sidebarMenuSelectedBgColor, 0.8),
-            "& .navLinkIcon": {
-              color: (theme) => theme.palette.secondary.main,
-            },
-          },
+            '& .navLinkIcon': {
+              color: theme => theme.palette.secondary.main
+            }
+          }
         },
-        "& .navLinkIcon": {
+        '& .navLinkIcon': {
           mr: 2.5,
-          color: (theme) => theme.palette.common.white,
-          fontSize: 20,
-        },
+          color: theme => theme.palette.common.white,
+          fontSize: 20
+        }
       }}
     >
       {children}
     </Box>
-  );
-};
+  )
+}
 
-export default HeaderNavWrapper;
+export default HeaderNavWrapper

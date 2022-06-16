@@ -1,24 +1,24 @@
-import React, { ReactNode, useState } from "react";
-import { Card } from "@mui/material";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
-import CodeIcon from "@mui/icons-material/Code";
-import Highlight, { defaultProps } from "prism-react-renderer";
-import IconButton from "@mui/material/IconButton";
-import Collapse from "@mui/material/Collapse";
-import AppScrollbar from "../AppScrollbar";
-import { highlightTheme } from "./highlightTheme";
-import Box from "@mui/material/Box";
-import AppAnimate from "../AppAnimate";
-import { Fonts } from "../../../shared/constants/AppEnums";
+import React, { ReactNode, useState } from 'react'
+import { Card } from '@mui/material'
+import CardHeader from '@mui/material/CardHeader'
+import CardContent from '@mui/material/CardContent'
+import CodeIcon from '@mui/icons-material/Code'
+import Highlight, { defaultProps } from 'prism-react-renderer'
+import IconButton from '@mui/material/IconButton'
+import Collapse from '@mui/material/Collapse'
+import AppScrollbar from '../AppScrollbar'
+import { highlightTheme } from './highlightTheme'
+import Box from '@mui/material/Box'
+import AppAnimate from '../AppAnimate'
+import { Fonts } from '../../../shared/constants/AppEnums'
 
 interface AppComponentCardProps {
-  title: ReactNode;
-  component: any;
-  source?: any;
-  maxHeight?: number;
-  description?: ReactNode;
-  noScrollbar?: boolean;
+  title: ReactNode
+  component: any
+  source?: any
+  maxHeight?: number
+  description?: ReactNode
+  noScrollbar?: boolean
 }
 
 const AppComponentCard: React.FC<AppComponentCardProps> = ({
@@ -27,10 +27,10 @@ const AppComponentCard: React.FC<AppComponentCardProps> = ({
   description,
   component: Component,
   source,
-  noScrollbar,
+  noScrollbar
 }) => {
-  const [viewSource, setToggleViewSource] = useState(false);
-  const [animation, setAnimation] = useState(false);
+  const [viewSource, setToggleViewSource] = useState(false)
+  const [animation, setAnimation] = useState(false)
 
   return (
     <AppAnimate animation="transition.slideUpIn" delay={200}>
@@ -40,22 +40,22 @@ const AppComponentCard: React.FC<AppComponentCardProps> = ({
             py: 4,
             pb: 1,
             px: 5,
-            display: "flex",
-            alignItems: "center",
+            display: 'flex',
+            alignItems: 'center',
             minHeight: 50,
-            boxSizing: "border-box",
-            "& .MuiTypography-h5": {
+            boxSizing: 'border-box',
+            '& .MuiTypography-h5': {
               fontSize: 14,
               fontWeight: Fonts.BOLD,
-              marginBottom: 0.25,
-            },
+              marginBottom: 0.25
+            }
           }}
           title={title}
           subheader={description}
           root={{
             subheader: {
-              fontSize: 13,
-            },
+              fontSize: 13
+            }
           }}
           action={
             source ? (
@@ -64,11 +64,11 @@ const AppComponentCard: React.FC<AppComponentCardProps> = ({
                   aria-label="view code"
                   onClick={() => {
                     if (animation) {
-                      setAnimation(!animation);
-                      setTimeout(() => setToggleViewSource(!viewSource), 400);
+                      setAnimation(!animation)
+                      setTimeout(() => setToggleViewSource(!viewSource), 400)
                     } else {
-                      setAnimation(!animation);
-                      setToggleViewSource(!viewSource);
+                      setAnimation(!animation)
+                      setToggleViewSource(!viewSource)
                     }
                   }}
                   size="large"
@@ -86,34 +86,23 @@ const AppComponentCard: React.FC<AppComponentCardProps> = ({
               <AppScrollbar
                 sx={{
                   borderRadius: 3,
-                  background: "#333333",
+                  background: '#333333'
                 }}
               >
-                <Highlight
-                  {...defaultProps}
-                  code={source}
-                  language="jsx"
-                  theme={highlightTheme}
-                >
+                <Highlight {...defaultProps} code={source} language="jsx" theme={highlightTheme}>
                   {({ style, tokens, getLineProps, getTokenProps }) => (
                     <pre
                       style={{
                         ...style,
                         maxHeight: 500,
                         borderRadius: 8,
-                        padding: 12,
+                        padding: 12
                       }}
                     >
                       {tokens.map((line, i) => (
-                        <Box
-                          key={"line-" + i}
-                          {...getLineProps({ line, key: i })}
-                        >
+                        <Box key={'line-' + i} {...getLineProps({ line, key: i })}>
                           {line.map((token, key) => (
-                            <span
-                              key={"token-" + key}
-                              {...getTokenProps({ token, key })}
-                            />
+                            <span key={'token-' + key} {...getTokenProps({ token, key })} />
                           ))}
                         </Box>
                       ))}
@@ -126,11 +115,11 @@ const AppComponentCard: React.FC<AppComponentCardProps> = ({
           {noScrollbar ? (
             <Box
               sx={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                pt: 6,
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                pt: 6
               }}
             >
               <Component />
@@ -141,15 +130,15 @@ const AppComponentCard: React.FC<AppComponentCardProps> = ({
                 mt: 2,
                 p: 4,
                 borderRadius: 3,
-                maxHeight: maxHeight,
+                maxHeight: maxHeight
               }}
             >
               <Box
                 sx={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
                 }}
               >
                 <Component />
@@ -159,7 +148,7 @@ const AppComponentCard: React.FC<AppComponentCardProps> = ({
         </CardContent>
       </Card>
     </AppAnimate>
-  );
-};
+  )
+}
 
-export default AppComponentCard;
+export default AppComponentCard

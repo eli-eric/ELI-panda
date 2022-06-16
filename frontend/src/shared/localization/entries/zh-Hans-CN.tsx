@@ -1,11 +1,11 @@
-import { zhCN } from "@mui/material/locale";
-import zhMessages from "../locales/zh-Hans.json";
+import { zhCN } from '@mui/material/locale'
+import zhMessages from '../locales/zh-Hans.json'
 
 const ZhLan = {
   messages: {
-    ...zhMessages,
+    ...zhMessages
   },
   muiLocale: zhCN,
-  locale: "zh-Hans-CN",
-};
-export default ZhLan;
+  locale: 'zh-Hans-CN'
+}
+export default ZhLan

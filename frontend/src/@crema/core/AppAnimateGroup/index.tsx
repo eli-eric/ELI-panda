@@ -169,16 +169,16 @@
 //
 // export default memo(AppAnimateGroup);
 
-import React, { ReactNode } from "react";
+import React, { ReactNode } from 'react'
 
 interface AppAnimateGroupProps {
-  children: ReactNode;
+  children: ReactNode
 
-  [x: string]: any;
+  [x: string]: any
 }
 
-const AppAnimateGroup: React.FC<AppAnimateGroupProps> = (props) => {
-  return <div style={props.style}>{props.children}</div>;
-};
+const AppAnimateGroup: React.FC<AppAnimateGroupProps> = props => {
+  return <div style={props.style}>{props.children}</div>
+}
 
-export default AppAnimateGroup;
+export default AppAnimateGroup

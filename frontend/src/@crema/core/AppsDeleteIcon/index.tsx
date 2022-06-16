@@ -1,24 +1,20 @@
-import React, { ReactNode, useState } from "react";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import IntlMessages from "../../utility/IntlMessages";
-import AppConfirmDialog from "../AppConfirmDialog";
-import IconButton from "@mui/material/IconButton";
-import AppTooltip from "../AppTooltip";
-import { SxProps } from "@mui/system";
-import { Theme } from "@mui/material";
+import React, { ReactNode, useState } from 'react'
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined'
+import IntlMessages from '../../utility/IntlMessages'
+import AppConfirmDialog from '../AppConfirmDialog'
+import IconButton from '@mui/material/IconButton'
+import AppTooltip from '../AppTooltip'
+import { SxProps } from '@mui/system'
+import { Theme } from '@mui/material'
 
 interface AppsDeleteIconProps {
-  deleteAction: () => void;
-  deleteTitle: string | ReactNode;
-  sx: SxProps<Theme>;
+  deleteAction: () => void
+  deleteTitle: string | ReactNode
+  sx: SxProps<Theme>
 }
 
-const AppsDeleteIcon: React.FC<AppsDeleteIconProps> = ({
-  deleteAction,
-  deleteTitle,
-  sx,
-}) => {
-  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+const AppsDeleteIcon: React.FC<AppsDeleteIconProps> = ({ deleteAction, deleteTitle, sx }) => {
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false)
 
   return (
     <>
@@ -35,7 +31,7 @@ const AppsDeleteIcon: React.FC<AppsDeleteIconProps> = ({
         dialogTitle={<IntlMessages id="common.deleteItem" />}
       />
     </>
-  );
-};
+  )
+}
 
-export default AppsDeleteIcon;
+export default AppsDeleteIcon

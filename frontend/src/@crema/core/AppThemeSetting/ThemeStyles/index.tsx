@@ -1,37 +1,29 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import clsx from "clsx";
-import { CustomizerItemWrapper, StyledToggleButton } from "../index.style";
-import IntlMessages from "../../../utility/IntlMessages";
-import { ThemeStyle } from "../../../../shared/constants/AppEnums";
-import {
-  useThemeActionsContext,
-  useThemeContext,
-} from "../../../utility/AppContextProvider/ThemeContextProvider";
+import React from 'react'
+import Box from '@mui/material/Box'
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
+import clsx from 'clsx'
+import { CustomizerItemWrapper, StyledToggleButton } from '../index.style'
+import IntlMessages from '../../../utility/IntlMessages'
+import { ThemeStyle } from '../../../../shared/constants/AppEnums'
+import { useThemeActionsContext, useThemeContext } from '../../../utility/AppContextProvider/ThemeContextProvider'
 
 const ThemeStyles = () => {
-  const { themeStyle } = useThemeContext();
-  const { updateThemeStyle } = useThemeActionsContext();
+  const { themeStyle } = useThemeContext()
+  const { updateThemeStyle } = useThemeActionsContext()
 
   const onStyleChange = (event: any, themeStyle: string) => {
-    if (themeStyle) updateThemeStyle(themeStyle);
-  };
+    if (themeStyle) updateThemeStyle(themeStyle)
+  }
   return (
     <CustomizerItemWrapper>
       <Box component="h4" sx={{ mb: 2 }}>
         <IntlMessages id="customizer.themeStyle" />
       </Box>
-      <ToggleButtonGroup
-        value={themeStyle}
-        exclusive
-        onChange={onStyleChange}
-        aria-label="text alignment"
-      >
+      <ToggleButtonGroup value={themeStyle} exclusive onChange={onStyleChange} aria-label="text alignment">
         <StyledToggleButton
           value={ThemeStyle.MODERN}
           className={clsx({
-            active: themeStyle === ThemeStyle.MODERN,
+            active: themeStyle === ThemeStyle.MODERN
           })}
           aria-label="left aligned"
         >
@@ -40,7 +32,7 @@ const ThemeStyles = () => {
         <StyledToggleButton
           value={ThemeStyle.STANDARD}
           className={clsx({
-            active: themeStyle === ThemeStyle.STANDARD,
+            active: themeStyle === ThemeStyle.STANDARD
           })}
           aria-label="centered"
         >
@@ -48,7 +40,7 @@ const ThemeStyles = () => {
         </StyledToggleButton>
       </ToggleButtonGroup>
     </CustomizerItemWrapper>
-  );
-};
+  )
+}
 
-export default ThemeStyles;
+export default ThemeStyles

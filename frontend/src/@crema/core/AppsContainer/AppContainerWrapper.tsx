@@ -1,28 +1,23 @@
-import React, { ReactNode } from "react";
-import Box from "@mui/material/Box";
-import { NavStyle } from "../../../shared/constants/AppEnums";
+import React, { ReactNode } from 'react'
+import Box from '@mui/material/Box'
+import { NavStyle } from '../../../shared/constants/AppEnums'
 
 const getMainHeaderHeight = (navStyle: NavStyle, screenSize: number) => {
-  if (navStyle === NavStyle.BIT_BUCKET) return screenSize >= 1200 ? 0 : 70; // Header Height
-  return screenSize >= 600 ? 70 : 56;
-};
-
-interface AppContainerWrapperProps {
-  children: ReactNode;
-  navStyle: NavStyle;
-  footer?: boolean;
+  if (navStyle === NavStyle.BIT_BUCKET) return screenSize >= 1200 ? 0 : 70 // Header Height
+  return screenSize >= 600 ? 70 : 56
 }
 
-const AppContainerWrapper: React.FC<AppContainerWrapperProps> = ({
-  children,
-  navStyle,
-  footer,
-  ...rest
-}) => {
+interface AppContainerWrapperProps {
+  children: ReactNode
+  navStyle: NavStyle
+  footer?: boolean
+}
+
+const AppContainerWrapper: React.FC<AppContainerWrapperProps> = ({ children, navStyle, footer, ...rest }) => {
   return (
     <Box
       sx={{
-        display: "flex",
+        display: 'flex',
         height: {
           xs: `calc(100vh - ${
             47 + // AppsHeader Height // apps title block height
@@ -53,14 +48,14 @@ const AppContainerWrapper: React.FC<AppContainerWrapperProps> = ({
             100 + //Container Padding
             getMainHeaderHeight(navStyle, 1536) +
             (footer ? 57 : 0)
-          }px) !important`,
-        },
+          }px) !important`
+        }
       }}
       {...rest}
     >
       {children}
     </Box>
-  );
-};
+  )
+}
 
-export default AppContainerWrapper;
+export default AppContainerWrapper

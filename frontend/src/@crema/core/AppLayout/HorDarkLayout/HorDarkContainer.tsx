@@ -1,78 +1,75 @@
-import React, { ReactNode } from "react";
-import { Box } from "@mui/material";
+import React, { ReactNode } from 'react'
+import { Box } from '@mui/material'
 
 interface HorDarkContainerProps {
-  children: ReactNode;
+  children: ReactNode
 
-  [x: string]: any;
+  [x: string]: any
 }
 
-const HorDarkContainer: React.FC<HorDarkContainerProps> = ({
-  children,
-  ...rest
-}) => {
+const HorDarkContainer: React.FC<HorDarkContainerProps> = ({ children, ...rest }) => {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        position: "relative",
-        backgroundColor: (theme) => theme.palette.background.default,
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        backgroundColor: theme => theme.palette.background.default,
 
-        "&.boxedLayout": {
+        '&.boxedLayout': {
           maxWidth: { xl: 1480 },
-          mx: { xl: "auto" },
-          boxShadow: "none",
-          borderLeft: "1px solid #e8e5dd",
-          borderRight: "1px solid #e8e5dd",
+          mx: { xl: 'auto' },
+          boxShadow: 'none',
+          borderLeft: '1px solid #e8e5dd',
+          borderRight: '1px solid #e8e5dd',
           pt: { xl: 0 },
 
-          "& .mainContent": {
-            position: { xl: "static" },
+          '& .mainContent': {
+            position: { xl: 'static' }
           },
-          "& .fixed-footer": {
-            position: { xl: "sticky" },
+          '& .fixed-footer': {
+            position: { xl: 'sticky' }
           },
-          "& .appMainFixedFooter": {
-            pb: { xl: 0 },
-          },
+          '& .appMainFixedFooter': {
+            pb: { xl: 0 }
+          }
         },
-        "&.framedLayout": {
+        '&.framedLayout': {
           padding: { xl: 5 },
-          backgroundColor: (theme) => theme.palette.primary.main,
+          backgroundColor: theme => theme.palette.primary.main,
 
-          "& .horDarkWrapper": {
-            borderRadius: { xl: 3 },
+          '& .horDarkWrapper': {
+            borderRadius: { xl: 3 }
           },
 
-          "& .app-bar": {
+          '& .app-bar': {
             borderTopLeftRadius: { xl: 12 },
             borderTopRightRadius: { xl: 12 },
-            overflow: "hidden",
+            overflow: 'hidden'
           },
 
-          "& .footer": {
+          '& .footer': {
             borderBottomLeftRadius: { xl: 12 },
-            borderBottomRightRadius: { xl: 12 },
+            borderBottomRightRadius: { xl: 12 }
           },
 
-          "& .mainContent": {
-            position: { xl: "static" },
+          '& .mainContent': {
+            position: { xl: 'static' }
           },
-          "& .fixed-footer": {
-            position: { xl: "sticky" },
+          '& .fixed-footer': {
+            position: { xl: 'sticky' }
           },
-          "& .appMainFixedFooter": {
-            pb: { xl: 0 },
-          },
-        },
+          '& .appMainFixedFooter': {
+            pb: { xl: 0 }
+          }
+        }
       }}
       {...rest}
     >
       {children}
     </Box>
-  );
-};
+  )
+}
 
-export default HorDarkContainer;
+export default HorDarkContainer

@@ -1,5 +1,5 @@
-import React from "react";
-import "./loader.css";
+import React from 'react'
+import './loader.css'
 
 const AppLoader = () => {
   return (
@@ -14,7 +14,7 @@ const AppLoader = () => {
         </span>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AppLoader;
+export default AppLoader

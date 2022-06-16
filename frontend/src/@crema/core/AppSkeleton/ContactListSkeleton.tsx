@@ -1,5 +1,5 @@
-import React from "react";
-import ContentLoader from "react-content-loader";
+import React from 'react'
+import ContentLoader from 'react-content-loader'
 
 export const ContactItem = () => (
   <ContentLoader viewBox="0 0 400 21">
@@ -12,7 +12,7 @@ export const ContactItem = () => (
     <circle cx="360" cy="12" r="5" />
     <circle cx="380" cy="12" r="5" />
   </ContentLoader>
-);
+)
 const ContactListSkeleton = () => {
   return (
     <React.Fragment>
@@ -27,7 +27,7 @@ const ContactListSkeleton = () => {
       <ContactItem />
       <ContactItem />
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default ContactListSkeleton;
+export default ContactListSkeleton

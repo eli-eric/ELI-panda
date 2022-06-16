@@ -2,407 +2,407 @@ import {
   backgroundDark,
   backgroundLight,
   textDark,
-  textLight,
-} from "../../@crema/utility/AppContextProvider/defaultConfig";
+  textLight
+} from '../../@crema/utility/AppContextProvider/defaultConfig'
 
 const colorSet = [
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#0A8FDC",
+      main: '#0A8FDC'
     },
     secondary: {
-      main: "#F04F47",
+      main: '#F04F47'
     },
     background: backgroundLight,
     text: textLight,
-    title: "Light",
+    title: 'Light'
   },
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#0A8FDC",
+      main: '#0A8FDC'
     },
     secondary: {
-      main: "#F04F47",
+      main: '#F04F47'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark",
+    title: 'Dark'
   },
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#2196F2",
+      main: '#2196F2'
     },
     secondary: {
-      main: "#FF4981",
+      main: '#FF4981'
     },
     background: backgroundLight,
     text: textLight,
-    title: "Light-1",
+    title: 'Light-1'
   },
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#6E3A4B",
+      main: '#6E3A4B'
     },
     secondary: {
-      main: "#D38C48",
+      main: '#D38C48'
     },
     background: {
-      paper: "#FFFFFF",
-      default: "#FCF8F5",
+      paper: '#FFFFFF',
+      default: '#FCF8F5'
     },
     text: textLight,
-    title: "Light-2",
+    title: 'Light-2'
   },
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#079CE9",
+      main: '#079CE9'
     },
     secondary: {
-      main: "#232EC0",
+      main: '#232EC0'
     },
     background: backgroundLight,
     text: textLight,
-    title: "Light-3",
+    title: 'Light-3'
   },
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#1B9E85",
+      main: '#1B9E85'
     },
     secondary: {
-      main: "#FF916E",
+      main: '#FF916E'
     },
     background: {
-      paper: "#FFFFFF",
-      default: "#FFFFFF",
+      paper: '#FFFFFF',
+      default: '#FFFFFF'
     },
     text: textLight,
-    title: "Light-4",
+    title: 'Light-4'
   },
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#905EAE",
+      main: '#905EAE'
     },
     secondary: {
-      main: "#2D755A",
+      main: '#2D755A'
     },
     background: backgroundLight,
     text: textLight,
-    title: "Light-5",
+    title: 'Light-5'
   },
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#266BB0",
+      main: '#266BB0'
     },
     secondary: {
-      main: "#587527",
+      main: '#587527'
     },
     background: backgroundLight,
     text: textLight,
-    title: "Light-6",
+    title: 'Light-6'
   },
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#F0464D",
+      main: '#F0464D'
     },
     secondary: {
-      main: "#00B6EF",
+      main: '#00B6EF'
     },
     background: backgroundLight,
     text: textLight,
-    title: "Light-7",
+    title: 'Light-7'
   },
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#639F52",
+      main: '#639F52'
     },
     secondary: {
-      main: "#7C4D30",
+      main: '#7C4D30'
     },
     background: backgroundLight,
     text: textLight,
-    title: "Light-8",
+    title: 'Light-8'
   },
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#FFD955",
+      main: '#FFD955'
     },
     secondary: {
-      main: "#C4476D",
+      main: '#C4476D'
     },
     background: backgroundLight,
     text: textLight,
-    title: "Light-9",
+    title: 'Light-9'
   },
 
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#FD933A",
+      main: '#FD933A'
     },
     secondary: {
-      main: "#5A63C8",
+      main: '#5A63C8'
     },
     background: backgroundLight,
     text: textLight,
-    title: "Light-10",
+    title: 'Light-10'
   },
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#03A9F4",
+      main: '#03A9F4'
     },
     secondary: {
-      main: "#FFC107",
+      main: '#FFC107'
     },
     background: backgroundLight,
     text: textLight,
-    title: "Light-11",
+    title: 'Light-11'
   },
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#03A9F4",
+      main: '#03A9F4'
     },
     secondary: {
-      main: "#FF80AB",
+      main: '#FF80AB'
     },
     background: backgroundLight,
     text: textLight,
-    title: "Light-12",
+    title: 'Light-12'
   },
 
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#3F51B5",
+      main: '#3F51B5'
     },
     secondary: {
-      main: "#2196F3",
+      main: '#2196F3'
     },
     background: backgroundLight,
     text: textLight,
-    title: "Light-13",
+    title: 'Light-13'
   },
 
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#9C27B0",
+      main: '#9C27B0'
     },
     secondary: {
-      main: "#FFCA28",
+      main: '#FFCA28'
     },
     background: backgroundLight,
     text: textLight,
-    title: "Light-14",
+    title: 'Light-14'
   },
 
   {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#673AB7",
+      main: '#673AB7'
     },
     secondary: {
-      main: "#2196F3",
+      main: '#2196F3'
     },
     background: backgroundLight,
     text: textLight,
-    title: "Light-15",
+    title: 'Light-15'
   },
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#0A8FDC",
+      main: '#0A8FDC'
     },
     secondary: {
-      main: "#F04F47",
+      main: '#F04F47'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark-1",
+    title: 'Dark-1'
   },
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#6E3A4B",
+      main: '#6E3A4B'
     },
     secondary: {
-      main: "#D38C48",
+      main: '#D38C48'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark-2",
+    title: 'Dark-2'
   },
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#079CE9",
+      main: '#079CE9'
     },
     secondary: {
-      main: "#232EC0",
+      main: '#232EC0'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark-3",
+    title: 'Dark-3'
   },
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#1B9E85",
+      main: '#1B9E85'
     },
     secondary: {
-      main: "#FF916E",
+      main: '#FF916E'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark-4",
+    title: 'Dark-4'
   },
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#905EAE",
+      main: '#905EAE'
     },
     secondary: {
-      main: "#2D755A",
+      main: '#2D755A'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark-5",
+    title: 'Dark-5'
   },
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#266BB0",
+      main: '#266BB0'
     },
     secondary: {
-      main: "#587527",
+      main: '#587527'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark-6",
+    title: 'Dark-6'
   },
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#F0464D",
+      main: '#F0464D'
     },
     secondary: {
-      main: "#00B6EF",
+      main: '#00B6EF'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark-7",
+    title: 'Dark-7'
   },
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#639F52",
+      main: '#639F52'
     },
     secondary: {
-      main: "#7C4D30",
+      main: '#7C4D30'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark-8",
+    title: 'Dark-8'
   },
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#FFD955",
+      main: '#FFD955'
     },
     secondary: {
-      main: "#C4476D",
+      main: '#C4476D'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark-9",
+    title: 'Dark-9'
   },
 
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#FD933A",
+      main: '#FD933A'
     },
     secondary: {
-      main: "#5A63C8",
+      main: '#5A63C8'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark-10",
+    title: 'Dark-10'
   },
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#03A9F4",
+      main: '#03A9F4'
     },
     secondary: {
-      main: "#FFC107",
+      main: '#FFC107'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark-11",
+    title: 'Dark-11'
   },
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#03A9F4",
+      main: '#03A9F4'
     },
     secondary: {
-      main: "#FF80AB",
+      main: '#FF80AB'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark-12",
+    title: 'Dark-12'
   },
 
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#3F51B5",
+      main: '#3F51B5'
     },
     secondary: {
-      main: "#2196F3",
+      main: '#2196F3'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark-13",
+    title: 'Dark-13'
   },
 
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#9C27B0",
+      main: '#9C27B0'
     },
     secondary: {
-      main: "#FFCA28",
+      main: '#FFCA28'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark-14",
+    title: 'Dark-14'
   },
 
   {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#673AB7",
+      main: '#673AB7'
     },
     secondary: {
-      main: "#2196F3",
+      main: '#2196F3'
     },
     background: backgroundDark,
     text: textDark,
-    title: "Dark-15",
-  },
-];
-export default colorSet;
+    title: 'Dark-15'
+  }
+]
+export default colorSet

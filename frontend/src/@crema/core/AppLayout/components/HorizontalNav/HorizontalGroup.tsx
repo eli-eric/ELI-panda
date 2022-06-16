@@ -1,60 +1,49 @@
-import React, { useState } from "react";
-import {
-  Grow,
-  Icon,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Paper,
-} from "@mui/material";
-import clsx from "clsx";
-import { Manager, Popper, Reference } from "react-popper";
-import HorizontalCollapse from "./HorizontalCollapse";
-import HorizontalItem from "./HorizontalItem";
-import Box from "@mui/material/Box";
-import IntlMessages from "../../../../utility/IntlMessages";
-import { Fonts } from "../../../../../shared/constants/AppEnums";
-import ClientOnlyPortal from "./ClientPortal";
-import { useLocation } from "react-router-dom";
-import { RouterConfigData } from "../../../../../pages/routesConfig";
+import React, { useState } from 'react'
+import { Grow, Icon, IconButton, List, ListItem, ListItemText, Paper } from '@mui/material'
+import clsx from 'clsx'
+import { Manager, Popper, Reference } from 'react-popper'
+import HorizontalCollapse from './HorizontalCollapse'
+import HorizontalItem from './HorizontalItem'
+import Box from '@mui/material/Box'
+import IntlMessages from '../../../../utility/IntlMessages'
+import { Fonts } from '../../../../../shared/constants/AppEnums'
+import ClientOnlyPortal from './ClientPortal'
+import { useLocation } from 'react-router-dom'
+import { RouterConfigData } from '../../../../../pages/routesConfig'
 
 interface HorizontalCollapseProps {
-  item: RouterConfigData;
-  nestedLevel: number;
-  dense?: number;
+  item: RouterConfigData
+  nestedLevel: number
+  dense?: number
 }
 
-const HorizontalGroup: React.FC<HorizontalCollapseProps> = (props) => {
-  const [opened, setOpened] = useState<boolean>(false);
-  const { item, nestedLevel } = props;
-  const location = useLocation();
+const HorizontalGroup: React.FC<HorizontalCollapseProps> = props => {
+  const [opened, setOpened] = useState<boolean>(false)
+  const { item, nestedLevel } = props
+  const location = useLocation()
 
   const handleToggle = (open: boolean) => {
-    setOpened(open);
-  };
+    setOpened(open)
+  }
 
   function isUrlInChildren(parent: RouterConfigData, url: string) {
     if (!parent.children) {
-      return false;
+      return false
     }
 
     for (let i = 0; i < parent.children.length; i++) {
       if (parent.children[i].children) {
         if (isUrlInChildren(parent.children[i], url)) {
-          return true;
+          return true
         }
       }
 
-      if (
-        parent.children[i].url === url ||
-        url.includes(parent!.children![i].url!)
-      ) {
-        return true;
+      if (parent.children[i].url === url || url.includes(parent!.children![i].url!)) {
+        return true
       }
     }
 
-    return false;
+    return false
   }
 
   return (
@@ -63,10 +52,7 @@ const HorizontalGroup: React.FC<HorizontalCollapseProps> = (props) => {
         {({ ref }) => (
           <ListItem
             ref={ref}
-            className={clsx(
-              "navItem",
-              isUrlInChildren(item, location.pathname) && "active"
-            )}
+            className={clsx('navItem', isUrlInChildren(item, location.pathname) && 'active')}
             onMouseEnter={() => handleToggle(true)}
             onMouseLeave={() => handleToggle(false)}
           >
@@ -78,19 +64,19 @@ const HorizontalGroup: React.FC<HorizontalCollapseProps> = (props) => {
             <ListItemText
               primary={<IntlMessages id={item.messageId} />}
               sx={{
-                fontWeight: Fonts.MEDIUM,
+                fontWeight: Fonts.MEDIUM
               }}
             />
             {nestedLevel > 0 && (
               <IconButton
                 sx={{
-                  ml: 2,
+                  ml: 2
                 }}
                 disableRipple
               >
                 <Icon
                   sx={{
-                    fontSize: 18,
+                    fontSize: 18
                   }}
                   className="arrow-icon"
                 >
@@ -102,57 +88,39 @@ const HorizontalGroup: React.FC<HorizontalCollapseProps> = (props) => {
         )}
       </Reference>
       <ClientOnlyPortal selector="#root">
-        <Popper placement={nestedLevel === 0 ? "bottom-start" : "right"}>
+        <Popper placement={nestedLevel === 0 ? 'bottom-start' : 'right'}>
           {({ ref, style, placement }) =>
             opened && (
               <Box
                 ref={ref}
                 sx={{
                   ...style,
-                  boxShadow: "0 0 3px 0 rgba(0, 0, 0, 0.2)",
+                  boxShadow: '0 0 3px 0 rgba(0, 0, 0, 0.2)',
                   zIndex: 1110 + nestedLevel,
-                  "& .popperClose": {
-                    pointerEvents: "none",
-                  },
+                  '& .popperClose': {
+                    pointerEvents: 'none'
+                  }
                 }}
                 data-placement={placement}
                 className={clsx({
-                  popperClose: !opened,
+                  popperClose: !opened
                 })}
               >
                 <Grow in={opened}>
-                  <Paper
-                    onMouseEnter={() => handleToggle(true)}
-                    onMouseLeave={() => handleToggle(false)}
-                  >
+                  <Paper onMouseEnter={() => handleToggle(true)} onMouseLeave={() => handleToggle(false)}>
                     {item.children && (
                       <List
                         sx={{
-                          px: 0,
+                          px: 0
                         }}
                       >
-                        {item.children.map((item) => (
+                        {item.children.map(item => (
                           <React.Fragment key={item.id}>
-                            {item.type === "group" && (
-                              <HorizontalGroup
-                                item={item}
-                                nestedLevel={nestedLevel}
-                              />
-                            )}
+                            {item.type === 'group' && <HorizontalGroup item={item} nestedLevel={nestedLevel} />}
 
-                            {item.type === "collapse" && (
-                              <HorizontalCollapse
-                                item={item}
-                                nestedLevel={nestedLevel}
-                              />
-                            )}
+                            {item.type === 'collapse' && <HorizontalCollapse item={item} nestedLevel={nestedLevel} />}
 
-                            {item.type === "item" && (
-                              <HorizontalItem
-                                item={item}
-                                nestedLevel={nestedLevel}
-                              />
-                            )}
+                            {item.type === 'item' && <HorizontalItem item={item} nestedLevel={nestedLevel} />}
                           </React.Fragment>
                         ))}
                       </List>
@@ -165,7 +133,7 @@ const HorizontalGroup: React.FC<HorizontalCollapseProps> = (props) => {
         </Popper>
       </ClientOnlyPortal>
     </Manager>
-  );
-};
+  )
+}
 
-export default HorizontalGroup;
+export default HorizontalGroup

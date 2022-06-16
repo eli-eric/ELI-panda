@@ -1,76 +1,72 @@
-import React, { ReactNode } from "react";
-import ListItem from "@mui/material/ListItem";
-import { Fonts } from "../../../../../../shared/constants/AppEnums";
-import { alpha } from "@mui/material";
+import React, { ReactNode } from 'react'
+import ListItem from '@mui/material/ListItem'
+import { Fonts } from '../../../../../../shared/constants/AppEnums'
+import { alpha } from '@mui/material'
 
 interface VerticalCollapseItemProps {
-  children: ReactNode;
-  sidebarTextColor: string;
+  children: ReactNode
+  sidebarTextColor: string
 
-  [x: string]: any;
+  [x: string]: any
 }
 
-const VerticalCollapseItem: React.FC<VerticalCollapseItemProps> = ({
-  children,
-  sidebarTextColor,
-  ...rest
-}) => {
+const VerticalCollapseItem: React.FC<VerticalCollapseItemProps> = ({ children, sidebarTextColor, ...rest }) => {
   return (
     <ListItem
       sx={{
         height: 40,
         my: 0.25,
-        pl: "31px",
+        pl: '31px',
         pr: 3.75,
-        whiteSpace: "nowrap",
-        transition: "all 0.4s ease",
-        "& .nav-item-text": {
+        whiteSpace: 'nowrap',
+        transition: 'all 0.4s ease',
+        '& .nav-item-text': {
           fontWeight: Fonts.MEDIUM,
-          color: alpha(sidebarTextColor, 0.7),
+          color: alpha(sidebarTextColor, 0.7)
         },
 
-        "& .nav-item-icon": {
+        '& .nav-item-icon': {
           color: alpha(sidebarTextColor, 0.7),
           fontSize: 20,
-          display: "block",
+          display: 'block'
         },
 
-        "& .nav-item-icon-arrow": {
-          color: alpha(sidebarTextColor, 0.7),
+        '& .nav-item-icon-arrow': {
+          color: alpha(sidebarTextColor, 0.7)
         },
 
-        "& .MuiIconButton-root": {
+        '& .MuiIconButton-root': {
           mr: 3,
-          padding: 0,
+          padding: 0
         },
 
-        "& .MuiTouchRipple-root": {
-          zIndex: 10,
+        '& .MuiTouchRipple-root': {
+          zIndex: 10
         },
 
-        "&.open, &:hover, &:focus": {
-          "& .nav-item-text": {
+        '&.open, &:hover, &:focus': {
+          '& .nav-item-text': {
             fontWeight: Fonts.MEDIUM,
-            color: sidebarTextColor,
+            color: sidebarTextColor
           },
 
-          "& .nav-item-icon": {
-            color: sidebarTextColor,
+          '& .nav-item-icon': {
+            color: sidebarTextColor
           },
 
-          "& .nav-item-icon-arrow": {
-            color: sidebarTextColor,
-          },
+          '& .nav-item-icon-arrow': {
+            color: sidebarTextColor
+          }
         },
-        "&:hover": {
-          backgroundColor: "transparent",
-        },
+        '&:hover': {
+          backgroundColor: 'transparent'
+        }
       }}
       {...rest}
     >
       {children}
     </ListItem>
-  );
-};
+  )
+}
 
-export default VerticalCollapseItem;
+export default VerticalCollapseItem

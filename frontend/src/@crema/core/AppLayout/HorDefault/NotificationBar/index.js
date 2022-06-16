@@ -1,41 +1,41 @@
-import React from "react";
-import IconButton from "@mui/material/IconButton";
-import Collapse from "@mui/material/Collapse";
-import Box from "@mui/material/Box";
-import Alert from "@mui/material/Alert";
-import CloseIcon from "@mui/icons-material/Close";
+import React from 'react'
+import IconButton from '@mui/material/IconButton'
+import Collapse from '@mui/material/Collapse'
+import Box from '@mui/material/Box'
+import Alert from '@mui/material/Alert'
+import CloseIcon from '@mui/icons-material/Close'
 
 const NotificationBar = () => {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(true)
 
   return (
     <Collapse in={open}>
       <Box
         sx={{
-          borderBottom: (theme) => `solid 1px ${theme.palette.divider}`,
-          padding: "2px 0",
-          backgroundColor: (theme) => theme.palette.background.paper,
+          borderBottom: theme => `solid 1px ${theme.palette.divider}`,
+          padding: '2px 0',
+          backgroundColor: theme => theme.palette.background.paper
         }}
       >
         <Box
           sx={{
-            width: "100%",
+            width: '100%',
             maxWidth: { lg: 1140, xl: 1420 },
-            mx: "auto",
-            px: 5,
+            mx: 'auto',
+            px: 5
           }}
         >
           <Alert
             sx={{
-              backgroundColor: "transparent !important",
+              backgroundColor: 'transparent !important',
               padding: 0,
-              textAlign: "center",
-              "& .MuiAlert-message": {
-                flex: 1,
+              textAlign: 'center',
+              '& .MuiAlert-message': {
+                flex: 1
               },
-              "& .MuiAlert-action": {
-                ml: 2.5,
-              },
+              '& .MuiAlert-action': {
+                ml: 2.5
+              }
             }}
             icon={false}
             action={
@@ -44,7 +44,7 @@ const NotificationBar = () => {
                 color="inherit"
                 size="small"
                 onClick={() => {
-                  setOpen(false);
+                  setOpen(false)
                 }}
               >
                 <CloseIcon fontSize="inherit" />
@@ -56,7 +56,7 @@ const NotificationBar = () => {
         </Box>
       </Box>
     </Collapse>
-  );
-};
+  )
+}
 
-export default NotificationBar;
+export default NotificationBar

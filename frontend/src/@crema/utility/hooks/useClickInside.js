@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react'
 
 export const useClickInside = (ref, callback) => {
-  const handleClick = (e) => {
+  const handleClick = e => {
     if (ref.current && ref.current.contains(e.target)) {
-      callback();
+      callback()
     }
-  };
+  }
   React.useEffect(() => {
-    document.addEventListener("click", handleClick);
+    document.addEventListener('click', handleClick)
     return () => {
-      document.removeEventListener("click", handleClick);
-    };
-  });
-};
+      document.removeEventListener('click', handleClick)
+    }
+  })
+}
