@@ -1,0 +1,17 @@
+name: Compose docker kafka
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: backend/kafka
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the Docker compose
+        run: docker-compose up -d --build

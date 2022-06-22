@@ -1,0 +1,32 @@
+# we have to use:
+# chown -R 1001:1001 $HOME/kafka
+# chown -R 1001:1001 $HOME/zookeeper
+version: '3.9'
+
+networks:
+  panda-net:
+    name: panda-net
+    driver: bridge
+
+services:
+  zookeeper:
+    image: 'bitnami/zookeeper:3.8.0@sha256:a7dd930c1a2065dd98b81b9f38d54806c6202b518c1ca6786a5db8989b4c0a44'
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    container_name: zookeeper
+    volumes:
+      - "$HOME/zookeeper:/bitnami/zookeeper:rw"
+    networks:
+      - panda-net
+  kafka:
+    image: 'bitnami/kafka:3.2.0@sha256:254b82496e0e7b8fac5d546d7b1ac2266d9f737a4d5a6f1a35ca15474164d1bd'
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    container_name: kafka
+    volumes:
+      - "$HOME/kafka:/bitnami:rw"
+    networks:
+      - panda-net
+    depends_on:
+      - zookeeper
