@@ -3,6 +3,7 @@ version: '3.9'
 networks:
   panda-net:
     driver: bridge
+    name: panda-net
 
 services:
 
