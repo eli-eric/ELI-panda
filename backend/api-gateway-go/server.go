@@ -29,7 +29,7 @@ func main() {
 	neo4jUri := "bolt://127.0.0.1:7687"
 	port := ":1323"
 	if isProduction {
-		neo4jUri = "bolt://172.17.0.1:7687"
+		neo4jUri = "bolt://neo4j:7687"
 		port = ":5001"
 	}
 
