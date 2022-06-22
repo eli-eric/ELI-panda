@@ -1,5 +1,9 @@
 version: '3.9'
 
+networks:
+  panda-net:
+    driver: bridge
+
 services:
 
   panda-frontend:
@@ -10,5 +14,7 @@ services:
       dockerfile: Dockerfile
       labels: 
         - panda-frontend
+    networks:
+      - panda-net        
     ports:
       - '127.0.0.1:5000:80'
