@@ -20,9 +20,13 @@ services:
       - panda-net
   kafka:
     image: 'bitnami/kafka:3.2.0@sha256:254b82496e0e7b8fac5d546d7b1ac2266d9f737a4d5a6f1a35ca15474164d1bd'
+    ports:
+      - '9092:9092'
     environment:
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092
     container_name: kafka
     volumes:
       - "$HOME/kafka:/bitnami:rw"
