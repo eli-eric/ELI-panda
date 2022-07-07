@@ -8,6 +8,4 @@ build:
 install:
 	go mod download && go mod verify
 
-#if swag command not found run: export PATH=$PATH:$HOME/go/bin
-swagger:
-	swag init -g server.go 
+#protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative proto/systems-service.proto

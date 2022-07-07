@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "panda/microservices/systems-service";
+
+package microservices;
+
+service SystemsService {
+   rpc DeleteRelationshipByID (IDRequest) returns (MessageResponse);
+}
+
+message IDRequest {
+    int64 id = 1;
+} 
+
+message MessageResponse {
+    string message = 1;    
+}
+
