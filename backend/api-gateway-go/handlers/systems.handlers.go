@@ -1,13 +1,27 @@
 package handlers
 
 import (
+	"context"
+	"flag"
+	"log"
 	"net/http"
 	"panda/apigateway/models"
 	"panda/apigateway/services"
+	"time"
 
 	"strconv"
 
 	"github.com/labstack/echo/v4"
+
+	pb "panda/apigateway/services/systems"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
+)
+
+var (
+	addrClient  = flag.String("address", "localhost:50051", "The Systems microservice address")
+	serviceName = flag.String("serviceName", "SystemsService", "Name of the microservice")
 )
 
 type SystemsHandlers struct {
@@ -289,13 +303,26 @@ func (h *SystemsHandlers) DeleteRelationshipByID() echo.HandlerFunc {
 			}
 		}
 
-		msg, err := h.systemsService.DeleteRelationshipByID(relId)
+		conn, err := grpc.Dial(*addrClient, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			log.Fatalf("%s did not connect: %v", serviceName, err)
+		}
+		defer conn.Close()
+		client := pb.NewSystemsServiceClient(conn)
+
+		// Contact the server and print out its response.
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+		r, err := client.DeleteRelationshipByID(ctx, &pb.IDRequest{Id: relId})
+		if err != nil {
+			log.Fatalf("Faild to delete relationship: %v", err)
+		}
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, "Unexpected server error: "+err.Error())
 		}
 
-		return c.JSON(http.StatusOK, echo.Map{"Result": msg})
+		return c.JSON(http.StatusOK, echo.Map{"Result": r.GetMessage()})
 	}
 }
 
