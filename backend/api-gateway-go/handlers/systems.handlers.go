@@ -305,7 +305,7 @@ func (h *SystemsHandlers) DeleteRelationshipByID() echo.HandlerFunc {
 
 		conn, err := grpc.Dial(*addrClient, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
-			log.Fatalf("%s did not connect: %v", serviceName, err)
+			log.Printf("%s did not connect: %v", serviceName, err)
 		}
 		defer conn.Close()
 		client := pb.NewSystemsServiceClient(conn)
@@ -315,11 +315,11 @@ func (h *SystemsHandlers) DeleteRelationshipByID() echo.HandlerFunc {
 		defer cancel()
 		r, err := client.DeleteRelationshipByID(ctx, &pb.IDRequest{Id: relId})
 		if err != nil {
-			log.Fatalf("Faild to delete relationship: %v", err)
+			log.Printf("Faild to delete relationship: %v", err)
 		}
 
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, "Unexpected server error: "+err.Error())
+			return c.JSON(http.StatusInternalServerError, "Unexpected server error")
 		}
 
 		return c.JSON(http.StatusOK, echo.Map{"Result": r.GetMessage()})
