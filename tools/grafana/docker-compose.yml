@@ -8,7 +8,7 @@ networks:
 
 services:
   neo4j:
-    container_name: grafana2
+    container_name: grafana
     user: "472:472"
     image: grafana/grafana-oss:9.0.2@sha256:1e180fcaede581b8cc8e2ce8bc010daff9c64972023a0faaf226d92bd9840113   
     restart: unless-stopped   
