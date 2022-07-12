@@ -8,12 +8,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jackc/pgx/v4"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/xuri/excelize/v2"
 )
 
 var categorySheetsCount int
 var itemsSheetsCount int
+var catalogueCategories []CatalogueCategory
 
 type Configuration struct {
 	PostgresqlHost     string
@@ -22,7 +23,14 @@ type Configuration struct {
 	PostgresqlDatabase string
 }
 
-var pgConn *pgx.Conn
+type CatalogueCategory struct {
+	ID        int32
+	ID_parent *int32
+	Name      string
+	Code      string
+}
+
+var pgPool *pgxpool.Pool
 var connErr error
 
 var excelFile *excelize.File
@@ -66,12 +74,15 @@ func main() {
 
 		//init postgresql
 		connString := "postgres://" + configuration.PostgresqlUsername + ":" + configuration.PostgresqlPassword + "@" + configuration.PostgresqlHost + "/" + configuration.PostgresqlDatabase
-		pgConn, connErr = pgx.Connect(context.Background(), connString)
+		pgPool, connErr = pgxpool.Connect(context.Background(), connString)
 		if connErr != nil {
 			fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", connErr)
 			os.Exit(1)
 		}
-		defer pgConn.Close(context.Background())
+		defer pgPool.Close()
+
+		//we get all catgories from DB and cache it in memory to speedup the process - minimize DB access
+		getAndCacheAllCategories()
 
 		//so we have regular excel file and now we can process this file
 		//we will start by extracting sheet names
@@ -104,6 +115,32 @@ func main() {
 	}
 }
 
+func getAndCacheAllCategories() error {
+	rows, err := pgPool.Query(context.Background(), `SELECT tcc.id , tcc.id_parent , tcc.name , tcc.code  FROM panda.t_catalog_category tcc;`)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	} else {
+		var nextRow bool = rows.Next()
+		fmt.Println("Start reading all categories: ", nextRow)
+		for {
+			if nextRow {
+				category := CatalogueCategory{}
+				errScan := rows.Scan(&category.ID, &category.ID_parent, &category.Name, &category.Code)
+				if errScan == nil {
+					catalogueCategories = append(catalogueCategories, category)
+				} else {
+					fmt.Println(errScan)
+				}
+			} else {
+				break
+			}
+			nextRow = rows.Next()
+		}
+	}
+	return nil
+}
+
 func processCatalogueCategorySheet(sheetName string) {
 
 	//job start log
@@ -119,7 +156,7 @@ func processCatalogueCategorySheet(sheetName string) {
 
 	//lets find if this category exist - if so do nothing
 	var categoryExist int
-	pgConn.QueryRow(context.Background(), `SELECT count(*) FROM panda.t_catalog_category tcc WHERE tcc."name" ILIKE $1`, categoryName).Scan(&categoryExist)
+	pgPool.QueryRow(context.Background(), `SELECT count(*) FROM panda.t_catalog_category tcc WHERE tcc."name" ILIKE $1`, categoryName).Scan(&categoryExist)
 
 	if categoryExist > 0 {
 		fmt.Println(categoryName + " EXISTS")
@@ -140,7 +177,7 @@ func processCatalogueCategorySheet(sheetName string) {
 
 func createCatalogueCategory(categoryName string) error {
 	insertQuery := `INSERT INTO panda.t_catalog_category (id_parent, "name", code) VALUES (NULL,$1, $1)`
-	_, err := pgConn.Exec(context.Background(), insertQuery, categoryName)
+	_, err := pgPool.Exec(context.Background(), insertQuery, categoryName)
 	if err != nil {
 		return err
 	}

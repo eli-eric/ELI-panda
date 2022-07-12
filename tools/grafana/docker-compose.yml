@@ -1,0 +1,20 @@
+# sudo chown -R 472:472 $HOME/grafana
+version: '3.9'
+
+networks:
+  panda-net:
+    name: panda-net
+    driver: bridge
+
+services:
+  neo4j:
+    container_name: grafana2
+    user: "472:472"
+    image: grafana/grafana-oss:9.0.2@sha256:1e180fcaede581b8cc8e2ce8bc010daff9c64972023a0faaf226d92bd9840113   
+    restart: unless-stopped   
+    volumes:
+      - "$HOME/grafana/data:/var/lib/grafana"      
+    networks:
+      - panda-net
+    ports:
+      - "3000:3000"
