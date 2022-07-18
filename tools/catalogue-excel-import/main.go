@@ -17,6 +17,9 @@ var categorySheetsCount int
 var itemsSheetsCount int
 var catalogueCategories []CatalogueCategory
 
+// var catalogueCategoryGroups []CatalogueCatgeoryGroup
+// var catalogueCatgeoryProperties []CatalogueCategoryProperty
+
 type Configuration struct {
 	PostgresqlHost     string
 	PostgresqlUsername string
@@ -33,9 +36,10 @@ type CatalogueCategory struct {
 }
 
 type CatalogueCatgeoryGroup struct {
-	ID         int32
-	Name       string
-	Properties []CatalogueCategoryProperty
+	ID          int32
+	Name        string
+	ID_category int32
+	Properties  []CatalogueCategoryProperty
 }
 
 type CatalogueCategoryProperty struct {
@@ -136,6 +140,7 @@ func main() {
 }
 
 func getAndCacheAllCategories() error {
+	//get and cache categories
 	rows, err := pgPool.Query(context.Background(), `SELECT tcc.id , tcc.id_parent , tcc.name , tcc.code  FROM panda.t_catalog_category tcc;`)
 	if err != nil {
 		fmt.Println(err)
@@ -158,7 +163,93 @@ func getAndCacheAllCategories() error {
 			nextRow = rows.Next()
 		}
 	}
+	//get and cache category groups
+	rows, err = pgPool.Query(context.Background(), `SELECT tcg.id, tcg.name , tcg.id_category  FROM panda.t_catalog_category_property_group tcg;`)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	} else {
+		var nextRow bool = rows.Next()
+		fmt.Println("Start reading all category groups: ", nextRow)
+		for {
+			if nextRow {
+				categoryGroup := CatalogueCatgeoryGroup{}
+				errScan := rows.Scan(&categoryGroup.ID, &categoryGroup.Name, &categoryGroup.ID_category)
+				if errScan == nil {
+					category := existingCategoryByID(categoryGroup.ID_category)
+					if category != nil {
+						category.Groups = append(category.Groups, categoryGroup)
+					} else {
+						fmt.Println("CATEGORY NOT FOUND: ", categoryGroup.ID)
+					}
+				} else {
+					fmt.Println(errScan)
+				}
+			} else {
+				break
+			}
+			nextRow = rows.Next()
+		}
+	}
+	//get and cache properties
+	rows, err = pgPool.Query(context.Background(), `SELECT tccp.id,tccp.name, tccp.id_group  FROM panda.t_catalog_category_property tccp;`)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	} else {
+		var nextRow bool = rows.Next()
+		fmt.Println("Start reading all category properties: ", nextRow)
+		for {
+			if nextRow {
+				categoryGroupProperty := CatalogueCategoryProperty{}
+				errScan := rows.Scan(&categoryGroupProperty.ID, &categoryGroupProperty.Name, &categoryGroupProperty.ID_group)
+				if errScan == nil {
+					group := existingCategoryGroupByID(categoryGroupProperty.ID_group)
+					if group != nil {
+						group.Properties = append(group.Properties, categoryGroupProperty)
+					} else {
+						fmt.Println("PROPERTY NOT FOUND: ", categoryGroupProperty.ID)
+					}
+				} else {
+					fmt.Println(errScan)
+				}
+			} else {
+				break
+			}
+			nextRow = rows.Next()
+		}
+	}
 	return nil
+}
+
+func existingCategoryGroupByID(id_group int32) *CatalogueCatgeoryGroup {
+	var result *CatalogueCatgeoryGroup
+
+mainLoop:
+	for c := range catalogueCategories {
+		for g := range catalogueCategories[c].Groups {
+			if catalogueCategories[c].Groups[g].ID == id_group {
+				result = &catalogueCategories[c].Groups[g]
+				break mainLoop
+			}
+		}
+	}
+
+	return result
+}
+
+func existingCategoryByID(id_category int32) *CatalogueCategory {
+	var result *CatalogueCategory
+
+	for i := range catalogueCategories {
+
+		if catalogueCategories[i].ID == id_category {
+			result = &catalogueCategories[i]
+			break
+		}
+	}
+
+	return result
 }
 
 //this funtion check if the category exists by passing name as a parameter
@@ -173,6 +264,48 @@ func existCategoryByName(name string) (bool, int32) {
 			resultID = catalogueCategories[i].ID
 
 			break
+		}
+	}
+
+	return resultExists, resultID
+}
+
+//this funtion check if the category group exists by passing name as a parameter and id of the category
+func existCategoryGroupByName(id_category int32, name string) (bool, int32) {
+	var resultExists bool
+	var resultID int32
+
+mainLoop:
+	for i := range catalogueCategories {
+		for g := range catalogueCategories[i].Groups {
+			if catalogueCategories[i].ID == id_category && strings.Contains(strings.ToLower(catalogueCategories[i].Groups[g].Name), strings.ToLower(name)) {
+				resultExists = true
+				resultID = catalogueCategories[i].Groups[g].ID
+
+				break mainLoop
+			}
+		}
+	}
+
+	return resultExists, resultID
+}
+
+//this funtion check if the category group exists by passing name as a parameter and id of the group
+func existCategoryGroupPropertyByGroupName(id_group int32, name string) (bool, int32) {
+	var resultExists bool
+	var resultID int32
+
+mainLoop:
+	for i := range catalogueCategories {
+		for g := range catalogueCategories[i].Groups {
+			for p := range catalogueCategories[i].Groups[g].Properties {
+				if catalogueCategories[i].Groups[g].ID == id_group && strings.Contains(strings.ToLower(catalogueCategories[i].Groups[g].Name), strings.ToLower(name)) {
+					resultExists = true
+					resultID = catalogueCategories[i].Groups[g].Properties[p].ID
+
+					break mainLoop
+				}
+			}
 		}
 	}
 
@@ -221,6 +354,22 @@ func processCatalogueCategorySheet(sheetName string) {
 		setCategoryParentID(categoryID, parentID)
 
 	}
+
+	//next step is to read all category properties and their groups
+	//properties continues in the sheet from the position D1([0][3])
+	allColumns, _ := excelFile.GetCols(sheetName)
+	if len(allColumns) > 3 {
+
+		for c := 3; c < len(allColumns); c++ {
+			prop := CatalogueCategoryProperty{}
+			// for r := range allColumns[c] {
+			// 	prop.Name = allColumns[c][r]
+			// }
+			prop.Name = allColumns[c][0]
+			fmt.Println("PROPERTY DATA: ", prop)
+		}
+	}
+
 	//job end log
 	end := time.Now()
 	fmt.Printf("Finished at: %s", end.String())
