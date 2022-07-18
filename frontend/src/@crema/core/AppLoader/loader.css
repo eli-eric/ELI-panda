@@ -11,79 +11,128 @@
   bottom: 0;
   z-index: 99999;
 }
-
-.loader-spin {
-  text-align: center;
+.eli-logo {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 6%;
 }
 
-.crema-dot {
-  position: relative;
-  display: inline-block;
-  font-size: 20px;
-  width: 30px;
-  height: 30px;
+.eli-logo-p {
+  width: 12.29%;
+  display: flex;
+  background-color: #ff6633;
 }
 
-.crema-dot-spin {
-  transform: rotate(45deg);
-  animation: hipsterRotate 1.2s infinite linear;
+.eli-logo-p1 {
+  height: 55%;
+  animation: elibusy1 1.6s infinite;
+}
+.eli-logo-p2 {
+  height: 75%;
+  animation: elibusy2 1.6s infinite;
+}
+.eli-logo-p3 {
+  height: 95%;
+  animation: elibusy3 1.6s infinite;
+}
+.eli-logo-p4 {
+  height: 100%;
+  animation: elibusy4 1.6s infinite;
 }
 
-.crema-dot i {
-  width: 9px;
-  height: 9px;
-  border-radius: 100%;
-  background-color: #1890ff;
-  transform: scale(0.75);
-  display: block;
-  position: absolute;
-  opacity: 0.5;
-  animation: hipsterSpinMove 1s infinite linear alternate;
-  transform-origin: 50% 50%;
+.eli-logo-p5 {
+  height: 100%;
+  animation: elibusy5 1.6s infinite;
 }
 
-.crema-dot i:nth-child(1) {
-  left: 10px;
-  background-color: #1890ff;
-  top: 0;
+.eli-logo-p6 {
+  height: 85%;
+  animation: elibusy6 1.6s infinite;
 }
 
-.crema-dot i:nth-child(2) {
-  right: 0;
-  top: 8px;
-  background-color: #1890ff;
-  animation-delay: 0.4s;
+.eli-logo-p7 {
+  height: 65%;
+  animation: elibusy7 1.6s infinite;
 }
 
-.crema-dot i:nth-child(3) {
-  right: 4px;
-  bottom: 0;
-  background-color: #1890ff;
-  animation-delay: 0.8s;
-}
-
-.crema-dot i:nth-child(4) {
-  left: 4px;
-  bottom: 0;
-  background-color: #1890ff;
-  animation-delay: 1.2s;
-}
-
-.crema-dot i:nth-child(5) {
-  left: 0;
-  top: 8px;
-  background-color: #1890ff;
-  animation-delay: 1.2s;
-}
-
-@keyframes hipsterSpinMove {
+@keyframes elibusy1 {
+  from {
+    opacity: 1;
+  }
+  12.29% {
+    opacity: 0;
+  }
   to {
     opacity: 1;
   }
 }
-
-@keyframes hipsterRotate {
+@keyframes elibusy2 {
+  from {
+    opacity: 1;
+  }
+  24.58% {
+    opacity: 0;
+  }
   to {
-    transform: rotate(405deg);
+    opacity: 1;
+  }
+}
+@keyframes elibusy3 {
+  from {
+    opacity: 1;
+  }
+  36.87% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes elibusy4 {
+  from {
+    opacity: 1;
+  }
+  49.16% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes elibusy5 {
+  from {
+    opacity: 1;
+  }
+  61.45% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes elibusy6 {
+  from {
+    opacity: 1;
+  }
+  73.74% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes elibusy7 {
+  from {
+    opacity: 1;
+  }
+  86.03% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }
