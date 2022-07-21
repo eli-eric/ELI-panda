@@ -52,8 +52,8 @@ type CatalogueCategoryProperty struct {
 	LOV              string
 	AllowCustomValue bool
 	ID_group         int32
-	ID_unit          string
-	ID_type          int32
+	ID_unit          *string
+	ID_property_type int32
 }
 
 type CatalogCategoryPropertyUnit struct {
@@ -280,7 +280,7 @@ func getAndCacheAllCategories() error {
 		}
 	}
 	//get and cache properties
-	rows, err = pgPool.Query(context.Background(), `SELECT tccp.id,tccp.name, tccp.id_group  FROM panda.t_catalog_category_property tccp;`)
+	rows, err = pgPool.Query(context.Background(), `SELECT tccp.id,tccp.name, tccp.id_group, tccp.id_unit, tccp.id_property_type  FROM panda.t_catalog_category_property tccp;`)
 	if err != nil {
 		fmt.Println(err)
 		return err
@@ -290,7 +290,7 @@ func getAndCacheAllCategories() error {
 		for {
 			if nextRow {
 				categoryGroupProperty := CatalogueCategoryProperty{}
-				errScan := rows.Scan(&categoryGroupProperty.ID, &categoryGroupProperty.Name, &categoryGroupProperty.ID_group)
+				errScan := rows.Scan(&categoryGroupProperty.ID, &categoryGroupProperty.Name, &categoryGroupProperty.ID_group, &categoryGroupProperty.ID_unit, &categoryGroupProperty.ID_property_type)
 				if errScan == nil {
 					group := existingCategoryGroupByID(categoryGroupProperty.ID_group)
 					if group != nil {
