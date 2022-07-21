@@ -16,6 +16,9 @@ import (
 var categorySheetsCount int
 var itemsSheetsCount int
 var catalogueCategories []CatalogueCategory
+var catalogueUnits []CatalogCategoryPropertyUnit
+var cataloguePropertyTypes []CatalogCategoryPropertyType
+var catalogueLOVs []CatalogCategoryPropertyTypeLOV
 
 // var catalogueCategoryGroups []CatalogueCatgeoryGroup
 // var catalogueCatgeoryProperties []CatalogueCategoryProperty
@@ -43,15 +46,31 @@ type CatalogueCatgeoryGroup struct {
 }
 
 type CatalogueCategoryProperty struct {
-	ID       int32
-	Name     string
-	ID_group int32
+	ID               int32
+	Name             string
+	Type             string
+	LOV              string
+	AllowCustomValue bool
+	ID_group         int32
+	ID_unit          string
+	ID_type          int32
+}
+
+type CatalogCategoryPropertyUnit struct {
+	ID   int32
+	Name string
 }
 
 type CatalogCategoryPropertyType struct {
 	ID    int32
 	Name  string
 	IsLOV bool
+}
+
+type CatalogCategoryPropertyTypeLOV struct {
+	ID               int32
+	Name             string
+	ID_property_type int32
 }
 
 var pgPool *pgxpool.Pool
@@ -182,6 +201,75 @@ func getAndCacheAllCategories() error {
 					} else {
 						fmt.Println("CATEGORY NOT FOUND: ", categoryGroup.ID)
 					}
+				} else {
+					fmt.Println(errScan)
+				}
+			} else {
+				break
+			}
+			nextRow = rows.Next()
+		}
+	}
+	//get and cache units
+	rows, err = pgPool.Query(context.Background(), `SELECT unit.id , unit.name FROM panda.t_catalog_category_property_unit unit;`)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	} else {
+		var nextRow bool = rows.Next()
+		fmt.Println("Start reading all units: ", nextRow)
+		for {
+			if nextRow {
+				unit := CatalogCategoryPropertyUnit{}
+				errScan := rows.Scan(&unit.ID, &unit.Name)
+				if errScan == nil {
+					catalogueUnits = append(catalogueUnits, unit)
+				} else {
+					fmt.Println(errScan)
+				}
+			} else {
+				break
+			}
+			nextRow = rows.Next()
+		}
+	}
+	//get and cache property types
+	rows, err = pgPool.Query(context.Background(), `SELECT tp.id , tp.name, tp.is_lov  FROM panda.t_catalog_category_property_type tp;`)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	} else {
+		var nextRow bool = rows.Next()
+		fmt.Println("Start reading all property types: ", nextRow)
+		for {
+			if nextRow {
+				propType := CatalogCategoryPropertyType{}
+				errScan := rows.Scan(&propType.ID, &propType.Name, &propType.IsLOV)
+				if errScan == nil {
+					cataloguePropertyTypes = append(cataloguePropertyTypes, propType)
+				} else {
+					fmt.Println(errScan)
+				}
+			} else {
+				break
+			}
+			nextRow = rows.Next()
+		}
+	}
+	//get and cache property LOVs
+	rows, err = pgPool.Query(context.Background(), `SELECT lov.id , lov.name, lov.id_property_type  FROM panda.t_catalog_category_property_lov lov;`)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	} else {
+		var nextRow bool = rows.Next()
+		fmt.Println("Start reading all LOV(list of values): ", nextRow)
+		for {
+			if nextRow {
+				lov := CatalogCategoryPropertyTypeLOV{}
+				errScan := rows.Scan(&lov.ID, &lov.Name, &lov.ID_property_type)
+				if errScan == nil {
+					catalogueLOVs = append(catalogueLOVs, lov)
 				} else {
 					fmt.Println(errScan)
 				}
@@ -366,6 +454,7 @@ func processCatalogueCategorySheet(sheetName string) {
 			// 	prop.Name = allColumns[c][r]
 			// }
 			prop.Name = allColumns[c][0]
+			prop.Type = allColumns[c][1]
 			fmt.Println("PROPERTY DATA: ", prop)
 		}
 	}
