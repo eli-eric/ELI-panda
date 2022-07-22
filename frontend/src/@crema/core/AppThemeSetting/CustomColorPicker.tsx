@@ -1,30 +1,26 @@
-import React, { useState } from "react";
-import { SketchPicker } from "react-color";
-import Box from "@mui/material/Box";
+import React, { useState } from 'react'
+import { SketchPicker } from 'react-color'
+import Box from '@mui/material/Box'
 
 interface CustomColorPickerProps {
-  title: string;
-  color: string;
-  onUpdateColor: (color: string) => void;
+  title: string
+  color: string
+  onUpdateColor: (color: string) => void
 }
 
-const CustomColorPicker: React.FC<CustomColorPickerProps> = ({
-  title,
-  color,
-  onUpdateColor,
-}) => {
-  const [visible, setVisibility] = useState(false);
+const CustomColorPicker: React.FC<CustomColorPickerProps> = ({ title, color, onUpdateColor }) => {
+  const [visible, setVisibility] = useState(false)
 
   return (
     <>
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          position: "relative",
-          cursor: "pointer",
+          display: 'flex',
+          alignItems: 'center',
+          position: 'relative',
+          cursor: 'pointer',
           marginBottom: 2.5,
-          marginRight: 2.5,
+          marginRight: 2.5
         }}
         onClick={() => setVisibility(!visible)}
       >
@@ -35,7 +31,7 @@ const CustomColorPicker: React.FC<CustomColorPickerProps> = ({
             mx: 1,
             my: 1,
             borderRadius: 1,
-            backgroundColor: color,
+            backgroundColor: color
           }}
         />
         <Box component="span" className="font-extrabold">
@@ -45,21 +41,18 @@ const CustomColorPicker: React.FC<CustomColorPickerProps> = ({
       {visible ? (
         <Box
           sx={{
-            position: "absolute",
+            position: 'absolute',
             left: 0,
             top: 0,
-            zIndex: 1,
+            zIndex: 1
           }}
           onClick={() => setVisibility(!visible)}
         >
-          <SketchPicker
-            color={color}
-            onChangeComplete={(color) => onUpdateColor(color.hex)}
-          />
+          <SketchPicker color={color} onChangeComplete={color => onUpdateColor(color.hex)} />
         </Box>
       ) : null}
     </>
-  );
-};
+  )
+}
 
-export default CustomColorPicker;
+export default CustomColorPicker

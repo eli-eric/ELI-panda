@@ -1,20 +1,20 @@
-import React, { useEffect } from "react";
-import { styled } from "@mui/material/styles";
-import clsx from "clsx";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import ErrorIcon from "@mui/icons-material/Error";
-import InfoIcon from "@mui/icons-material/Info";
-import CloseIcon from "@mui/icons-material/Close";
-import IconButton from "@mui/material/IconButton";
-import SnackbarContent from "@mui/material/SnackbarContent";
-import WarningIcon from "@mui/icons-material/Warning";
-import Snackbar from "@mui/material/Snackbar";
-import { hideMessage } from "../../../redux/actions";
-import { useDispatch } from "react-redux";
-import { Slide } from "@mui/material";
-import { amber, green } from "@mui/material/colors";
+import React, { useEffect } from 'react'
+import { styled } from '@mui/material/styles'
+import clsx from 'clsx'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import ErrorIcon from '@mui/icons-material/Error'
+import InfoIcon from '@mui/icons-material/Info'
+import CloseIcon from '@mui/icons-material/Close'
+import IconButton from '@mui/material/IconButton'
+import SnackbarContent from '@mui/material/SnackbarContent'
+import WarningIcon from '@mui/icons-material/Warning'
+import Snackbar from '@mui/material/Snackbar'
+import { hideMessage } from '../../../redux/actions'
+import { useDispatch } from 'react-redux'
+import { Slide } from '@mui/material'
+import { amber, green } from '@mui/material/colors'
 
-const PREFIX = "AppMessageView";
+const PREFIX = 'AppMessageView'
 
 const classes = {
   success: `${PREFIX}-success`,
@@ -23,80 +23,80 @@ const classes = {
   warning: `${PREFIX}-warning`,
   icon: `${PREFIX}-icon`,
   iconVariant: `${PREFIX}-iconVariant`,
-  message: `${PREFIX}-message`,
-};
+  message: `${PREFIX}-message`
+}
 
 const StyledSnackbar = styled(Snackbar)(({ theme }) => ({
   [`& .${classes.success}`]: {
-    backgroundColor: green[600],
+    backgroundColor: green[600]
   },
 
   [`& .${classes.error}`]: {
-    backgroundColor: theme.palette.error.main,
+    backgroundColor: theme.palette.error.main
   },
 
   [`& .${classes.info}`]: {
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: theme.palette.primary.light
   },
 
   [`& .${classes.warning}`]: {
-    backgroundColor: amber[700],
+    backgroundColor: amber[700]
   },
 
   [`& .${classes.icon}`]: {
-    fontSize: 20,
+    fontSize: 20
   },
 
   [`& .${classes.iconVariant}`]: {
     opacity: 0.9,
-    marginRight: theme.spacing(1),
+    marginRight: theme.spacing(1)
   },
 
   [`& .${classes.message}`]: {
-    display: "flex",
-    alignItems: "center",
-  },
-}));
+    display: 'flex',
+    alignItems: 'center'
+  }
+}))
 
 const variantIcon = {
   success: CheckCircleIcon,
   warning: WarningIcon,
   error: ErrorIcon,
-  info: InfoIcon,
-};
+  info: InfoIcon
+}
 
 function TransitionLeft(props: any) {
-  return <Slide {...props} direction="left" />;
+  return <Slide {...props} direction="left" />
 }
 
 interface AppMessageViewProps {
-  className?: string;
-  message: string;
-  variant: "success" | "error" | "warning" | "info";
+  className?: string
+  message: string
+  variant: 'success' | 'error' | 'warning' | 'info'
 
-  [x: string]: any;
+  [x: string]: any
 }
 
-const AppMessageView: React.FC<AppMessageViewProps> = (props) => {
-  const [open, setOpen] = React.useState(false);
-  const { className, message, variant, ...other } = props;
-  const Icon = variantIcon[variant];
-  const dispatch = useDispatch();
+const AppMessageView: React.FC<AppMessageViewProps> = props => {
+  const [open, setOpen] = React.useState(false)
+  const { className, message, variant, ...other } = props
+  const Icon = variantIcon[variant]
+  const dispatch = useDispatch()
   const onClose = () => {
-    setOpen(false);
-    setTimeout(() => dispatch(hideMessage()), 500);
-  };
+    setOpen(false)
+    setTimeout(() => dispatch(hideMessage()), 500)
+  }
   useEffect(() => {
     if (message) {
-      setOpen(true);
+      setOpen(true)
     }
-  }, [message]);
+  }, [message])
 
   return (
     <StyledSnackbar
       anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "right",
+        vertical: 'bottom',
+        horizontal: 'right'
       }}
       open={open}
       onClose={onClose}
@@ -113,20 +113,14 @@ const AppMessageView: React.FC<AppMessageViewProps> = (props) => {
           </span>
         }
         action={[
-          <IconButton
-            key="close"
-            aria-label="close"
-            color="inherit"
-            onClick={onClose}
-            size="large"
-          >
+          <IconButton key="close" aria-label="close" color="inherit" onClick={onClose} size="large">
             <CloseIcon className={classes.icon} />
-          </IconButton>,
+          </IconButton>
         ]}
         {...other}
       />
     </StyledSnackbar>
-  );
-};
+  )
+}
 
-export default AppMessageView;
+export default AppMessageView

@@ -1,118 +1,115 @@
-import React, { ReactNode } from "react";
-import { Box } from "@mui/material";
+import React, { ReactNode } from 'react'
+import { Box } from '@mui/material'
 
 interface UserHeaderContainerProps {
-  children: ReactNode;
+  children: ReactNode
 
-  [x: string]: any;
+  [x: string]: any
 }
 
-const UserHeaderContainer: React.FC<UserHeaderContainerProps> = ({
-  children,
-  ...rest
-}) => {
+const UserHeaderContainer: React.FC<UserHeaderContainerProps> = ({ children, ...rest }) => {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        position: "relative",
-        backgroundColor: (theme) => theme.palette.background.default,
-        "&.boxedLayout": {
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        backgroundColor: theme => theme.palette.background.default,
+        '&.boxedLayout': {
           maxWidth: { xl: 1480 },
-          mx: { xl: "auto" },
-          boxShadow: "none",
-          borderLeft: "1px solid #e8e5dd",
-          borderRight: "1px solid #e8e5dd",
-          flexDirection: { xl: "column" },
-          "& .userHeaderWrapper": {
-            pt: { xl: 0 },
+          mx: { xl: 'auto' },
+          boxShadow: 'none',
+          borderLeft: '1px solid #e8e5dd',
+          borderRight: '1px solid #e8e5dd',
+          flexDirection: { xl: 'column' },
+          '& .userHeaderWrapper': {
+            pt: { xl: 0 }
           },
-          "& .user-header-sidebar": {
-            position: { xl: "sticky" },
-            height: { xl: "100%" },
-            "& [data-simplebar]": {
-              height: { xl: "calc(100vh - 71px) !important" },
-            },
+          '& .user-header-sidebar': {
+            position: { xl: 'sticky' },
+            height: { xl: '100%' },
+            '& [data-simplebar]': {
+              height: { xl: 'calc(100vh - 71px) !important' }
+            }
           },
-          "& .app-bar": {
-            position: { xl: "sticky" },
-            width: { xl: "100%" },
+          '& .app-bar': {
+            position: { xl: 'sticky' },
+            width: { xl: '100%' }
           },
-          "& .mainContent": {
-            position: { xl: "static" },
+          '& .mainContent': {
+            position: { xl: 'static' },
             ml: { xl: 0 },
-            width: { xl: "100%" },
-            flexDirection: { xl: "row" },
-            flexWrap: { xl: "wrap" },
+            width: { xl: '100%' },
+            flexDirection: { xl: 'row' },
+            flexWrap: { xl: 'wrap' }
           },
-          "& .fixed-footer": {
-            position: { xl: "sticky" },
+          '& .fixed-footer': {
+            position: { xl: 'sticky' }
           },
-          "& .appMainFixedFooter": {
+          '& .appMainFixedFooter': {
             pb: { xl: 0 },
-            "& .user-header-sidebar": {
-              "& [data-simplebar]": {
-                height: { xl: "calc(100vh - 131px) !important" },
-              },
-            },
-          },
+            '& .user-header-sidebar': {
+              '& [data-simplebar]': {
+                height: { xl: 'calc(100vh - 131px) !important' }
+              }
+            }
+          }
         },
-        "&.framedLayout": {
+        '&.framedLayout': {
           padding: { xl: 5 },
-          backgroundColor: (theme) => theme.palette.primary.main,
+          backgroundColor: theme => theme.palette.primary.main,
 
-          "& .userHeaderWrapper": {
+          '& .userHeaderWrapper': {
             borderRadius: { xl: 3 },
-            pt: { xl: 0 },
+            pt: { xl: 0 }
           },
-          "& .user-header-sidebar": {
-            position: { xl: "sticky" },
-            height: { xl: "100%" },
+          '& .user-header-sidebar': {
+            position: { xl: 'sticky' },
+            height: { xl: '100%' },
             borderBottomLeftRadius: { xl: 12 },
-            overflow: { xl: "hidden" },
-            "& [data-simplebar]": {
-              height: { xl: "calc(100vh - 91px) !important" },
-            },
+            overflow: { xl: 'hidden' },
+            '& [data-simplebar]': {
+              height: { xl: 'calc(100vh - 91px) !important' }
+            }
           },
-          "& .app-bar": {
-            position: { xl: "sticky" },
-            width: { xl: "100%" },
+          '& .app-bar': {
+            position: { xl: 'sticky' },
+            width: { xl: '100%' },
             borderTopLeftRadius: { xl: 12 },
-            borderTopRightRadius: { xl: 12 },
+            borderTopRightRadius: { xl: 12 }
           },
-          "& .footer": {
-            borderBottomRightRadius: { xl: 12 },
+          '& .footer': {
+            borderBottomRightRadius: { xl: 12 }
           },
-          "& .mainContent": {
-            position: { xl: "static" },
+          '& .mainContent': {
+            position: { xl: 'static' },
             ml: { xl: 0 },
-            width: { xl: "100%" },
-            flexDirection: { xl: "row" },
-            flexWrap: { xl: "wrap" },
+            width: { xl: '100%' },
+            flexDirection: { xl: 'row' },
+            flexWrap: { xl: 'wrap' }
           },
-          "& .fixed-footer": {
-            position: { xl: "sticky" },
+          '& .fixed-footer': {
+            position: { xl: 'sticky' }
           },
-          "& .appMainFixedFooter": {
+          '& .appMainFixedFooter': {
             pb: { xl: 0 },
-            "& .footer": {
-              borderBottomLeftRadius: { xl: 12 },
+            '& .footer': {
+              borderBottomLeftRadius: { xl: 12 }
             },
-            "& .user-header-sidebar": {
-              "& [data-simplebar]": {
-                height: { xl: "calc(100vh - 151px) !important" },
-              },
-            },
-          },
-        },
+            '& .user-header-sidebar': {
+              '& [data-simplebar]': {
+                height: { xl: 'calc(100vh - 151px) !important' }
+              }
+            }
+          }
+        }
       }}
       {...rest}
     >
       {children}
     </Box>
-  );
-};
+  )
+}
 
-export default UserHeaderContainer;
+export default UserHeaderContainer

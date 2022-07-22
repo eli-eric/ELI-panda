@@ -1,30 +1,30 @@
-import React, { useState } from "react";
-import AppSidebar from "./AppSidebar";
-import { AppContentView } from "../../../index";
-import AppThemeSetting from "../../AppThemeSetting";
-import AppHeader from "./AppHeader";
-import clsx from "clsx";
-import Hidden from "@mui/material/Hidden";
-import Box from "@mui/material/Box";
-import BitBucketWrapper from "./BitBucketWrapper";
-import { LayoutType } from "../../../../shared/constants/AppEnums";
-import { useLayoutContext } from "../../../utility/AppContextProvider/LayoutContextProvider";
-import BitBucketContainer from "./BitBucketContainer";
+import React, { useState } from 'react'
+import AppSidebar from './AppSidebar'
+import { AppContentView } from '../../../index'
+import AppThemeSetting from '../../AppThemeSetting'
+import AppHeader from './AppHeader'
+import clsx from 'clsx'
+import Hidden from '@mui/material/Hidden'
+import Box from '@mui/material/Box'
+import BitBucketWrapper from './BitBucketWrapper'
+import { LayoutType } from '../../../../shared/constants/AppEnums'
+import { useLayoutContext } from '../../../utility/AppContextProvider/LayoutContextProvider'
+import BitBucketContainer from './BitBucketContainer'
 
 const BitBucket = () => {
-  const [isCollapsed, setCollapsed] = useState(false);
-  const { layoutType } = useLayoutContext();
+  const [isCollapsed, setCollapsed] = useState(false)
+  const { layoutType } = useLayoutContext()
 
   return (
     <BitBucketContainer
       className={clsx({
         boxedLayout: layoutType === LayoutType.BOXED,
-        framedLayout: layoutType === LayoutType.FRAMED,
+        framedLayout: layoutType === LayoutType.FRAMED
       })}
     >
       <BitBucketWrapper
-        className={clsx("bitBucketWrapper", {
-          bitBucketCollapsed: isCollapsed,
+        className={clsx('bitBucketWrapper', {
+          bitBucketCollapsed: isCollapsed
         })}
       >
         <Hidden lgUp>
@@ -37,7 +37,7 @@ const BitBucket = () => {
         <AppThemeSetting />
       </BitBucketWrapper>
     </BitBucketContainer>
-  );
-};
+  )
+}
 
-export default BitBucket;
+export default BitBucket

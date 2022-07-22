@@ -1,10 +1,10 @@
-import React, { ReactNode } from "react";
-import { Box } from "@mui/material";
+import React, { ReactNode } from 'react'
+import { Box } from '@mui/material'
 
 interface MainContentProps {
-  children: ReactNode;
+  children: ReactNode
 
-  [x: string]: any;
+  [x: string]: any
 }
 
 const MainContent: React.FC<MainContentProps> = ({ children, ...rest }) => {
@@ -12,18 +12,18 @@ const MainContent: React.FC<MainContentProps> = ({ children, ...rest }) => {
     <Box
       sx={{
         flex: 1,
-        display: "flex",
-        width: "100%",
-        flexDirection: "column",
-        position: "relative",
-        transition: "all 0.5s ease",
+        display: 'flex',
+        width: '100%',
+        flexDirection: 'column',
+        position: 'relative',
+        transition: 'all 0.5s ease'
       }}
       className="mainContent"
       {...rest}
     >
       {children}
     </Box>
-  );
-};
+  )
+}
 
-export default MainContent;
+export default MainContent

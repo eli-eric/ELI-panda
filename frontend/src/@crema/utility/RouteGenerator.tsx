@@ -1,9 +1,9 @@
-import React from 'react';
-import {Redirect, Route} from 'react-router-dom';
+import React from 'react'
+import { Redirect, Route } from 'react-router-dom'
 
 // @ts-ignore
-import _extends from '@babel/runtime/helpers/esm/extends';
-import {authRole, RoutePermittedRole} from 'shared/constants/AppConst';
+import _extends from '@babel/runtime/helpers/esm/extends'
+import { authRole, RoutePermittedRole } from 'shared/constants/AppConst'
 
 /**
  * @param {Object} structure - The passed object that defines the routes.
@@ -23,36 +23,27 @@ const generateRoutes = (structure: any) => {
     anonymousStructure = {},
     authorizedStructure = {},
     unAuthorizedStructure = {},
-    userRole = authRole.user,
-  } = structure || {};
+    userRole = authRole.user
+  } = structure || {}
 
-  const dynamicRoutes: any[] = [];
+  const dynamicRoutes: any[] = []
 
   if (structure?.anonymousStructure) {
-    dynamicRoutes.push(
-      ...routesGenerator(isAuthenticated, anonymousStructure, "anonymous")
-    );
+    dynamicRoutes.push(...routesGenerator(isAuthenticated, anonymousStructure, 'anonymous'))
   }
 
   if (structure?.authorizedStructure) {
     dynamicRoutes.push(
-      ...routesGenerator(
-        isAuthenticated,
-        authorizedStructure,
-        "authorized",
-        isAuthenticated ? userRole : null
-      )
-    );
+      ...routesGenerator(isAuthenticated, authorizedStructure, 'authorized', isAuthenticated ? userRole : null)
+    )
   }
 
   if (structure?.unAuthorizedStructure) {
-    dynamicRoutes.push(
-      ...routesGenerator(isAuthenticated, unAuthorizedStructure, "unAuthorized")
-    );
+    dynamicRoutes.push(...routesGenerator(isAuthenticated, unAuthorizedStructure, 'unAuthorized'))
   }
 
-  return dynamicRoutes;
-};
+  return dynamicRoutes
+}
 
 /**
  * path: string
@@ -65,34 +56,34 @@ const generateRoutes = (structure: any) => {
 const routesGenerator = (
   isAuthenticated: boolean = false,
   routeSet: any = {},
-  type: string = "anonymous",
+  type: string = 'anonymous',
   userRole?: any
 ): any => {
-  const generatedRoutes: any[] = [];
-  const { fallbackPath = "" } = routeSet || {};
+  const generatedRoutes: any[] = []
+  const { fallbackPath = '' } = routeSet || {}
 
-  const isAnonymous = type === "anonymous";
-  const isAuthorized = type === "authorized";
+  const isAnonymous = type === 'anonymous'
+  const isAuthorized = type === 'authorized'
 
   if (routeSet?.routes) {
-    const setRoutes = routeSet.routes;
+    const setRoutes = routeSet.routes
     if (Array.isArray(setRoutes) && setRoutes.length > 0) {
       setRoutes.forEach((route, index) => {
         const {
-          path = "",
+          path = '',
           component,
           permittedRole = RoutePermittedRole.User,
           routeProps = {},
-          redirectPath = "",
-          showRouteIf = true,
-        } = route || {};
+          redirectPath = '',
+          showRouteIf = true
+        } = route || {}
         // Show Route only [ in The list ] if this prop is true
         if (showRouteIf) {
           // check the mandatory props for a routes
           if (!path) {
             console.log(
               `A [route] is skipped because one of the following, No valid [path] prop provided for the route`
-            );
+            )
           } else {
             if (isAnonymous) {
               return generatedRoutes.push(
@@ -100,7 +91,7 @@ const routesGenerator = (
                   exact
                   key={`${path}_${index}`}
                   path={path}
-                  render={(props) =>
+                  render={props =>
                     React.createElement(
                       component,
                       _extends(
@@ -108,25 +99,23 @@ const routesGenerator = (
                         props,
                         {},
                         {
-                          route: route,
+                          route: route
                         }
                       )
                     )
                   }
                   {...routeProps}
                 />
-              );
+              )
             }
             if (isAuthorized) {
-              const renderCondition = isAuthorized
-                ? isAuthenticated
-                : !isAuthenticated;
+              const renderCondition = isAuthorized ? isAuthenticated : !isAuthenticated
               return generatedRoutes.push(
                 <Route
                   exact
                   key={`${route.path}_${index}`}
                   path={route.path}
-                  render={(props) => {
+                  render={props => {
                     return renderCondition ? (
                       userRole.indexOf(permittedRole) > -1 ? (
                         React.createElement(
@@ -136,7 +125,7 @@ const routesGenerator = (
                             props,
                             {},
                             {
-                              route: route,
+                              route: route
                             }
                           )
                         )
@@ -145,20 +134,18 @@ const routesGenerator = (
                       )
                     ) : (
                       <Redirect to={redirectPath || fallbackPath} />
-                    );
+                    )
                   }}
                 />
-              );
+              )
             }
-            const renderCondition = isAuthorized
-              ? isAuthenticated
-              : !isAuthenticated;
+            const renderCondition = isAuthorized ? isAuthenticated : !isAuthenticated
             return generatedRoutes.push(
               <Route
                 exact
                 key={`${route.path}_${index}`}
                 path={route.path}
-                render={(props) => {
+                render={props => {
                   return renderCondition ? (
                     React.createElement(
                       component,
@@ -167,24 +154,24 @@ const routesGenerator = (
                         props,
                         {},
                         {
-                          route: route,
+                          route: route
                         }
                       )
                     )
                   ) : (
                     <Redirect to={redirectPath || fallbackPath} />
-                  );
+                  )
                 }}
               />
-            );
+            )
           }
         }
-      });
+      })
     }
   } else {
-    console.log(`[routes] prop can't be found in ${type}Structure Object`);
+    console.log(`[routes] prop can't be found in ${type}Structure Object`)
   }
-  return generatedRoutes;
-};
+  return generatedRoutes
+}
 
-export default generateRoutes;
+export default generateRoutes

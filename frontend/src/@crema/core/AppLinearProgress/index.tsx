@@ -1,20 +1,18 @@
-import React from "react";
-import LinearProgress, {
-  linearProgressClasses,
-} from "@mui/material/LinearProgress";
+import React from 'react'
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress'
 
 interface CustomLinearProgressProps {
-  pathColor: string;
-  activeColor: string;
-  thickness: number;
-  borderRadius: number;
+  pathColor: string
+  activeColor: string
+  thickness: number
+  borderRadius: number
 
-  [x: string]: any;
+  [x: string]: any
 }
 
 const CustomLinearProgress: React.FC<CustomLinearProgressProps> = ({
-  pathColor = "#d6d6d6",
-  activeColor = "#1a90ff",
+  pathColor = '#d6d6d6',
+  activeColor = '#1a90ff',
   thickness = 5,
   borderRadius = 10,
   ...rest
@@ -26,34 +24,34 @@ const CustomLinearProgress: React.FC<CustomLinearProgressProps> = ({
         borderRadius: borderRadius,
 
         [`&.${linearProgressClasses.colorPrimary}`]: {
-          backgroundColor: pathColor,
+          backgroundColor: pathColor
         },
         [`& .${linearProgressClasses.bar}`]: {
           borderRadius: pathColor,
-          backgroundColor: activeColor,
-        },
+          backgroundColor: activeColor
+        }
       }}
       {...rest}
     />
-  );
-};
+  )
+}
 
 interface AppLinearProgressProps {
-  thickness?: number;
-  borderRadius?: number;
-  pathColor?: string;
-  activeColor?: string;
-  variant?: "buffer" | "determinate" | "indeterminate" | "query";
+  thickness?: number
+  borderRadius?: number
+  pathColor?: string
+  activeColor?: string
+  variant?: 'buffer' | 'determinate' | 'indeterminate' | 'query'
 
-  [x: string]: any;
+  [x: string]: any
 }
 
 const AppLinearProgress: React.FC<AppLinearProgressProps> = ({
   thickness = 3,
   borderRadius = 10,
-  pathColor = "#F5F6FA",
-  activeColor = "#00905F",
-  variant = "determinate",
+  pathColor = '#F5F6FA',
+  activeColor = '#00905F',
+  variant = 'determinate',
   ...rest
 }) => {
   return (
@@ -65,7 +63,7 @@ const AppLinearProgress: React.FC<AppLinearProgressProps> = ({
       activeColor={activeColor}
       {...rest}
     />
-  );
-};
+  )
+}
 
-export default AppLinearProgress;
+export default AppLinearProgress

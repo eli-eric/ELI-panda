@@ -1,32 +1,32 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
-import { AppSuspense } from "../../index";
-import { anonymousStructure, authorizedStructure, unAuthorizedStructure } from "../../../pages";
-import AppFooter from "../AppLayout/components/AppFooter";
-import AppErrorBoundary from "../AppErrorBoundary";
-import generateRoutes from "../../utility/RouteGenerator";
-import { useAuthUser } from "../../utility/AuthHooks";
-import Error404 from "../../../pages/errorPages/Error404";
-import Box from "@mui/material/Box";
-import AppContentViewWrapper from "./AppContentViewWrapper";
-import { SxProps } from "@mui/system";
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
+import { AppSuspense } from '../../index'
+import { anonymousStructure, authorizedStructure, unAuthorizedStructure } from '../../../pages'
+import AppFooter from '../AppLayout/components/AppFooter'
+import AppErrorBoundary from '../AppErrorBoundary'
+import generateRoutes from '../../utility/RouteGenerator'
+import { useAuthUser } from '../../utility/AuthHooks'
+import Error404 from '../../../pages/errorPages/Error404'
+import Box from '@mui/material/Box'
+import AppContentViewWrapper from './AppContentViewWrapper'
+import { SxProps } from '@mui/system'
 
 interface AppContentViewProps {
-  sxStyle?: SxProps;
+  sxStyle?: SxProps
 }
 
 const AppContentView: React.FC<AppContentViewProps> = ({ sxStyle }) => {
-  const { user, isAuthenticated } = useAuthUser();
+  const { user, isAuthenticated } = useAuthUser()
 
   return (
     <AppContentViewWrapper>
       <Box
         sx={{
-          display: "flex",
+          display: 'flex',
           flex: 1,
-          flexDirection: "column",
+          flexDirection: 'column',
           p: { xs: 0, md: 0, xl: 0 },
-          ...sxStyle,
+          ...sxStyle
         }}
         className="app-content"
       >
@@ -38,7 +38,7 @@ const AppContentView: React.FC<AppContentViewProps> = ({ sxStyle }) => {
                 userRole: user?.role,
                 unAuthorizedStructure,
                 authorizedStructure,
-                anonymousStructure,
+                anonymousStructure
               })}
               <Route path="/">
                 <Error404 />
@@ -49,7 +49,7 @@ const AppContentView: React.FC<AppContentViewProps> = ({ sxStyle }) => {
       </Box>
       <AppFooter />
     </AppContentViewWrapper>
-  );
-};
+  )
+}
 
-export default AppContentView;
+export default AppContentView

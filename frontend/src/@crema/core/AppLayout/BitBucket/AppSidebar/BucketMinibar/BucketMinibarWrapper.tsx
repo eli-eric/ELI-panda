@@ -1,19 +1,16 @@
-import React, { ReactNode } from "react";
-import { alpha, Box } from "@mui/material";
-import { useSidebarContext } from "../../../../../utility/AppContextProvider/SidebarContextProvider";
-import { ThemeMode } from "../../../../../../shared/constants/AppEnums";
+import React, { ReactNode } from 'react'
+import { alpha, Box } from '@mui/material'
+import { useSidebarContext } from '../../../../../utility/AppContextProvider/SidebarContextProvider'
+import { ThemeMode } from '../../../../../../shared/constants/AppEnums'
 
 interface BucketMinibarWrapperProps {
-  children: ReactNode;
+  children: ReactNode
 
-  [x: string]: any;
+  [x: string]: any
 }
 
-const BucketMinibarWrapper: React.FC<BucketMinibarWrapperProps> = ({
-  children,
-  ...rest
-}) => {
-  const { sidebarBgColor, mode, sidebarTextColor } = useSidebarContext();
+const BucketMinibarWrapper: React.FC<BucketMinibarWrapperProps> = ({ children, ...rest }) => {
+  const { sidebarBgColor, mode, sidebarTextColor } = useSidebarContext()
 
   return (
     <Box
@@ -21,60 +18,58 @@ const BucketMinibarWrapper: React.FC<BucketMinibarWrapperProps> = ({
       sx={{
         width: 64,
         backgroundColor: sidebarBgColor,
-        display: "flex",
-        flexDirection: "column",
-        position: "relative",
-        "&:before": {
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        '&:before': {
           content: '""',
-          position: "absolute",
+          position: 'absolute',
           left: 0,
           top: 0,
           zIndex: 1,
-          width: "100%",
-          height: "100%",
-          backgroundColor: (theme) =>
-            mode === ThemeMode.LIGHT
-              ? alpha(theme.palette.common.black, 0.05)
-              : alpha(theme.palette.common.white, 0.05),
+          width: '100%',
+          height: '100%',
+          backgroundColor: theme =>
+            mode === ThemeMode.LIGHT ? alpha(theme.palette.common.black, 0.05) : alpha(theme.palette.common.white, 0.05)
         },
-        "& > *": {
-          position: "relative",
-          zIndex: 3,
+        '& > *': {
+          position: 'relative',
+          zIndex: 3
         },
-        "& .logo": {
-          cursor: "pointer",
-          width: 30,
+        '& .logo': {
+          cursor: 'pointer',
+          width: 30
         },
-        "& .search-icon-btn": {
+        '& .search-icon-btn': {
           color: sidebarTextColor,
           mb: 2.5,
           width: 40,
           height: 40,
-          backgroundColor: "transparent",
-          "& svg": {
-            fontSize: 20,
-          },
+          backgroundColor: 'transparent',
+          '& svg': {
+            fontSize: 20
+          }
         },
-        "& .icon-btn": {
+        '& .icon-btn': {
           color: sidebarTextColor,
           mb: 2.5,
-          border: "0 none",
-          backgroundColor: "transparent",
+          border: '0 none',
+          backgroundColor: 'transparent'
         },
-        "& .lang-switcher-btn": {
+        '& .lang-switcher-btn': {
           mb: 2.5,
           width: 40,
           height: 40,
-          border: "0 none",
+          border: '0 none',
           color: sidebarTextColor,
-          backgroundColor: "transparent",
-        },
+          backgroundColor: 'transparent'
+        }
       }}
       {...rest}
     >
       {children}
     </Box>
-  );
-};
+  )
+}
 
-export default BucketMinibarWrapper;
+export default BucketMinibarWrapper

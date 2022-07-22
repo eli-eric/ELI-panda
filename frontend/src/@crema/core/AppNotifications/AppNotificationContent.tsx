@@ -1,43 +1,40 @@
-import React from "react";
-import notification from "@crema/services/db/notifications";
-import { IconButton, Theme } from "@mui/material";
-import List from "@mui/material/List";
-import Button from "@mui/material/Button";
-import AppScrollbar from "@crema/core/AppScrollbar";
-import IntlMessages from "@crema/utility/IntlMessages";
-import NotificationItem from "./NotificationItem";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import { SxProps } from "@mui/system";
+import React from 'react'
+import notification from '@crema/services/db/notifications'
+import { IconButton, Theme } from '@mui/material'
+import List from '@mui/material/List'
+import Button from '@mui/material/Button'
+import AppScrollbar from '@crema/core/AppScrollbar'
+import IntlMessages from '@crema/utility/IntlMessages'
+import NotificationItem from './NotificationItem'
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
+import { SxProps } from '@mui/system'
 
 interface AppNotificationContentProps {
-  onClose: () => void;
-  sxStyle: SxProps<Theme>;
+  onClose: () => void
+  sxStyle: SxProps<Theme>
 }
 
-const AppNotificationContent: React.FC<AppNotificationContentProps> = ({
-  onClose,
-  sxStyle,
-}) => {
+const AppNotificationContent: React.FC<AppNotificationContentProps> = ({ onClose, sxStyle }) => {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
         width: 280,
-        height: "100%",
-        ...sxStyle,
+        height: '100%',
+        ...sxStyle
       }}
     >
       <Box
         sx={{
-          padding: "5px 20px",
-          display: "flex",
-          alignItems: "center",
+          padding: '5px 20px',
+          display: 'flex',
+          alignItems: 'center',
           borderBottom: 1,
-          borderBottomColor: (theme) => theme.palette.divider,
-          minHeight: { xs: 56, sm: 70 },
+          borderBottomColor: theme => theme.palette.divider,
+          minHeight: { xs: 56, sm: 70 }
         }}
       >
         <Typography component="h3">
@@ -47,8 +44,8 @@ const AppNotificationContent: React.FC<AppNotificationContentProps> = ({
           sx={{
             height: 40,
             width: 40,
-            marginLeft: "auto",
-            color: "text.secondary",
+            marginLeft: 'auto',
+            color: 'text.secondary'
           }}
           onClick={onClose}
           size="large"
@@ -58,11 +55,11 @@ const AppNotificationContent: React.FC<AppNotificationContentProps> = ({
       </Box>
       <AppScrollbar
         sx={{
-          height: { xs: "calc(100% - 96px)", sm: "calc(100% - 110px)" },
+          height: { xs: 'calc(100% - 96px)', sm: 'calc(100% - 110px)' }
         }}
       >
         <List sx={{ py: 0 }}>
-          {notification.map((item) => (
+          {notification.map(item => (
             <NotificationItem key={item.id} item={item} />
           ))}
         </List>
@@ -70,10 +67,10 @@ const AppNotificationContent: React.FC<AppNotificationContentProps> = ({
       <Button
         sx={{
           borderRadius: 0,
-          width: "100%",
-          textTransform: "capitalize",
-          marginTop: "auto",
-          height: 40,
+          width: '100%',
+          textTransform: 'capitalize',
+          marginTop: 'auto',
+          height: 40
         }}
         variant="contained"
         color="primary"
@@ -81,7 +78,7 @@ const AppNotificationContent: React.FC<AppNotificationContentProps> = ({
         <IntlMessages id="common.viewAll" />
       </Button>
     </Box>
-  );
-};
+  )
+}
 
-export default AppNotificationContent;
+export default AppNotificationContent

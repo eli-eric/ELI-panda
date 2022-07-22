@@ -1,16 +1,14 @@
-import React, { ReactNode } from "react";
-import ThemeContextProvider from "./ThemeContextProvider";
-import LocaleContextProvider from "./LocaleContextProvide";
-import LayoutContextProvider from "./LayoutContextProvider";
-import SidebarContextProvider from "./SidebarContextProvider";
+import React, { ReactNode } from 'react'
+import ThemeContextProvider from './ThemeContextProvider'
+import LocaleContextProvider from './LocaleContextProvide'
+import LayoutContextProvider from './LayoutContextProvider'
+import SidebarContextProvider from './SidebarContextProvider'
 
 interface AppContextProviderProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
-const AppContextProvider: React.FC<AppContextProviderProps> = ({
-  children,
-}) => {
+const AppContextProvider: React.FC<AppContextProviderProps> = ({ children }) => {
   return (
     <ThemeContextProvider>
       <LocaleContextProvider>
@@ -19,7 +17,7 @@ const AppContextProvider: React.FC<AppContextProviderProps> = ({
         </LayoutContextProvider>
       </LocaleContextProvider>
     </ThemeContextProvider>
-  );
-};
+  )
+}
 
-export default AppContextProvider;
+export default AppContextProvider

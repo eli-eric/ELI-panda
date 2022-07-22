@@ -1,37 +1,32 @@
-import React from "react";
-import Drawer from "@mui/material/Drawer";
-import Hidden from "@mui/material/Hidden";
-import clsx from "clsx";
-import { toggleNavCollapsed } from "../../../../redux/actions";
-import { useDispatch, useSelector } from "react-redux";
-import AppScrollbar from "../../AppScrollbar";
-import VerticalNav from "../components/VerticalNav";
-import MainSidebar from "../components/MainSidebar";
-import { useLayoutContext } from "../../../utility/AppContextProvider/LayoutContextProvider";
-import UserInfo from "../components/UserInfo";
-import { useSidebarContext } from "../../../utility/AppContextProvider/SidebarContextProvider";
-import { AppState } from "../../../../redux/store";
+import React from 'react'
+import Drawer from '@mui/material/Drawer'
+import Hidden from '@mui/material/Hidden'
+import clsx from 'clsx'
+import { toggleNavCollapsed } from '../../../../redux/actions'
+import { useDispatch, useSelector } from 'react-redux'
+import AppScrollbar from '../../AppScrollbar'
+import VerticalNav from '../components/VerticalNav'
+import MainSidebar from '../components/MainSidebar'
+import { useLayoutContext } from '../../../utility/AppContextProvider/LayoutContextProvider'
+import UserInfo from '../components/UserInfo'
+import { useSidebarContext } from '../../../utility/AppContextProvider/SidebarContextProvider'
+import { AppState } from '../../../../redux/store'
 
 interface AppSidebarProps {
-  position?: "left" | "top" | "right" | "bottom";
-  variant?: string;
+  position?: 'left' | 'top' | 'right' | 'bottom'
+  variant?: string
 }
 
-const AppSidebar: React.FC<AppSidebarProps> = ({
-  variant = "",
-  position = "left",
-}) => {
-  const dispatch = useDispatch();
-  const navCollapsed = useSelector<AppState, AppState["settings"]>(
-    ({ settings }) => settings
-  ).navCollapsed;
-  const { footer, footerType } = useLayoutContext();
+const AppSidebar: React.FC<AppSidebarProps> = ({ variant = '', position = 'left' }) => {
+  const dispatch = useDispatch()
+  const navCollapsed = useSelector<AppState, AppState['settings']>(({ settings }) => settings).navCollapsed
+  const { footer, footerType } = useLayoutContext()
 
-  const { sidebarTextColor } = useSidebarContext();
+  const { sidebarTextColor } = useSidebarContext()
 
   const handleToggleDrawer = () => {
-    dispatch(toggleNavCollapsed());
-  };
+    dispatch(toggleNavCollapsed())
+  }
   return (
     <>
       <Hidden lgUp>
@@ -41,19 +36,18 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
           onClose={() => handleToggleDrawer()}
           classes={{
             root: clsx(variant),
-            paper: clsx(variant),
+            paper: clsx(variant)
           }}
-          style={{ position: "absolute" }}
+          style={{ position: 'absolute' }}
         >
           <MainSidebar>
             <UserInfo color={sidebarTextColor} />
             <AppScrollbar
               sx={{
                 py: 2,
-                height: "calc(100vh - 70px) !important",
-                borderTop: (theme: { palette: { divider: string } }) =>
-                  `solid 1px ${theme.palette.divider}`,
-                mt: 0.5,
+                height: 'calc(100vh - 70px) !important',
+                borderTop: (theme: { palette: { divider: string } }) => `solid 1px ${theme.palette.divider}`,
+                mt: 0.5
               }}
             >
               <VerticalNav />
@@ -66,20 +60,19 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
           <UserInfo color={sidebarTextColor} />
           <AppScrollbar
             className={clsx({
-              "has-footer-fixed": footer && footerType === "fixed",
+              'has-footer-fixed': footer && footerType === 'fixed'
             })}
             sx={{
               py: 2,
-              height: "calc(100vh - 70px) !important",
-              borderTop: (theme: { palette: { divider: string } }) =>
-                `solid 1px ${theme.palette.divider}`,
+              height: 'calc(100vh - 70px) !important',
+              borderTop: (theme: { palette: { divider: string } }) => `solid 1px ${theme.palette.divider}`,
               mt: 0.5,
-              "&.has-footer-fixed": {
+              '&.has-footer-fixed': {
                 height: {
-                  xs: "calc(100vh - 117px) !important",
-                  xl: "calc(100vh - 127px) !important",
-                },
-              },
+                  xs: 'calc(100vh - 117px) !important',
+                  xl: 'calc(100vh - 127px) !important'
+                }
+              }
             }}
           >
             <VerticalNav />
@@ -87,7 +80,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
         </MainSidebar>
       </Hidden>
     </>
-  );
-};
+  )
+}
 
-export default AppSidebar;
+export default AppSidebar

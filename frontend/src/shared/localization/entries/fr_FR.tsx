@@ -1,11 +1,11 @@
-import { frFR } from "@mui/material/locale";
-import saMessages from "../locales/fr_FR.json";
+import { frFR } from '@mui/material/locale'
+import saMessages from '../locales/fr_FR.json'
 
 const saLang = {
   messages: {
-    ...saMessages,
+    ...saMessages
   },
   muiLocale: frFR,
-  locale: "fr-FR",
-};
-export default saLang;
+  locale: 'fr-FR'
+}
+export default saLang

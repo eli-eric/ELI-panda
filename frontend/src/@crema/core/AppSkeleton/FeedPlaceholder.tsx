@@ -1,5 +1,5 @@
-import React from "react";
-import ContentLoader from "react-content-loader";
+import React from 'react'
+import ContentLoader from 'react-content-loader'
 
 const PostItem = () => (
   <ContentLoader viewBox="0 0 400 240">
@@ -10,7 +10,7 @@ const PostItem = () => (
     <rect x="10" y="210" rx="1" ry="1" width="400" height="8" />
     <rect x="10" y="225" rx="1" ry="1" width="400" height="8" />
   </ContentLoader>
-);
+)
 const FeedPlaceholder = () => {
   return (
     <React.Fragment>
@@ -21,7 +21,7 @@ const FeedPlaceholder = () => {
       <PostItem />
       <PostItem />
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default FeedPlaceholder;
+export default FeedPlaceholder

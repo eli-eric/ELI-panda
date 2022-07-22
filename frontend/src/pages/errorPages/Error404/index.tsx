@@ -1,23 +1,23 @@
-import React from "react";
-import Button from "@mui/material/Button";
-import { useHistory } from "react-router-dom";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { grey } from "@mui/material/colors";
-import { Fonts } from "shared/constants/AppEnums";
-import { initialUrl } from "shared/constants/AppConst";
-import { AppAnimate } from "@crema";
-import IntlMessages from "@crema/utility/IntlMessages";
-import { ReactComponent as Logo } from "../../../assets/icon/404.svg";
-import { useTheme } from "@mui/material";
+import React from 'react'
+import Button from '@mui/material/Button'
+import { useHistory } from 'react-router-dom'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import { grey } from '@mui/material/colors'
+import { Fonts } from 'shared/constants/AppEnums'
+import { initialUrl } from 'shared/constants/AppConst'
+import { AppAnimate } from '@crema'
+import IntlMessages from '@crema/utility/IntlMessages'
+import { ReactComponent as Logo } from '../../../assets/icon/404.svg'
+import { useTheme } from '@mui/material'
 
 const Error404 = () => {
-  const theme = useTheme();
-  const history = useHistory();
+  const theme = useTheme()
+  const history = useHistory()
 
   const onGoBackToHome = () => {
-    history.push(initialUrl);
-  };
+    history.push(initialUrl)
+  }
 
   return (
     <AppAnimate animation="transition.slideUpIn" delay={200}>
@@ -25,29 +25,29 @@ const Error404 = () => {
         sx={{
           py: { xl: 8 },
           flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          textAlign: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          textAlign: 'center'
         }}
       >
         <Box
           sx={{
             mb: { xs: 4, xl: 8 },
-            width: "100%",
+            width: '100%',
             maxWidth: { xs: 200, sm: 300, xl: 706 },
-            "& svg": {
-              width: "100%",
-              maxWidth: 400,
-            },
+            '& svg': {
+              width: '100%',
+              maxWidth: 400
+            }
           }}
         >
           <Logo fill={theme.palette.primary.main} />
         </Box>
         <Box
           sx={{
-            mb: { xs: 4, xl: 5 },
+            mb: { xs: 4, xl: 5 }
           }}
         >
           <Box
@@ -55,7 +55,7 @@ const Error404 = () => {
             sx={{
               mb: { xs: 3, xl: 4 },
               fontSize: { xs: 20, md: 24 },
-              fontWeight: Fonts.MEDIUM,
+              fontWeight: Fonts.MEDIUM
             }}
           >
             <IntlMessages id="error.404Error" />.
@@ -65,7 +65,7 @@ const Error404 = () => {
               mb: { xs: 4, xl: 5 },
               color: grey[600],
               fontSize: 16,
-              fontWeight: Fonts.MEDIUM,
+              fontWeight: Fonts.MEDIUM
             }}
           >
             <Typography>
@@ -81,7 +81,7 @@ const Error404 = () => {
             sx={{
               fontWeight: Fonts.MEDIUM,
               fontSize: 16,
-              textTransform: "capitalize",
+              textTransform: 'capitalize'
             }}
             onClick={onGoBackToHome}
           >
@@ -90,7 +90,7 @@ const Error404 = () => {
         </Box>
       </Box>
     </AppAnimate>
-  );
-};
+  )
+}
 
-export default Error404;
+export default Error404

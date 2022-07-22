@@ -1,26 +1,19 @@
-import React, { ReactNode } from "react";
-import {
-  alpha,
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-} from "@mui/material";
-import { Fonts } from "../../../shared/constants/AppEnums";
+import React, { ReactNode } from 'react'
+import { alpha, Box, Card, CardActions, CardContent, CardMedia } from '@mui/material'
+import { Fonts } from '../../../shared/constants/AppEnums'
 
 interface AppCardProps {
-  sxStyle?: any;
-  contentStyle?: any;
-  cardMedia?: string;
-  sxCardMedia?: any;
-  cardMediaAction?: any;
-  sxCardMediaAction?: any;
-  footer?: any;
-  footerStyle?: any;
-  children: ReactNode;
+  sxStyle?: any
+  contentStyle?: any
+  cardMedia?: string
+  sxCardMedia?: any
+  cardMediaAction?: any
+  sxCardMediaAction?: any
+  footer?: any
+  footerStyle?: any
+  children: ReactNode
 
-  [x: string]: any;
+  [x: string]: any
 }
 
 const AppCardMedia: React.FC<AppCardProps> = ({
@@ -36,40 +29,36 @@ const AppCardMedia: React.FC<AppCardProps> = ({
   ...rest
 }) => {
   return (
-    <Card
-      sx={{ display: "flex", flexDirection: "column", ...sxStyle }}
-      {...rest}
-    >
-      <Box sx={{ position: "relative" }}>
+    <Card sx={{ display: 'flex', flexDirection: 'column', ...sxStyle }} {...rest}>
+      <Box sx={{ position: 'relative' }}>
         <CardMedia
           component="img"
           image={cardMedia}
           alt="card media"
           sx={{
             minHeight: 140,
-            width: "100%",
+            width: '100%',
             maxHeight: 500,
-            ...sxCardMedia,
+            ...sxCardMedia
           }}
         />
         {cardMediaAction ? (
           <Box
             component="span"
             sx={{
-              backgroundColor: (theme) =>
-                alpha(theme.palette.text.primary, 0.7),
-              color: (theme) => theme.palette.background.paper,
+              backgroundColor: theme => alpha(theme.palette.text.primary, 0.7),
+              color: theme => theme.palette.background.paper,
               pt: 0.75,
               pb: 1.75,
               px: 4,
               borderRadius: 7.5,
-              position: "absolute",
+              position: 'absolute',
               right: 15,
               top: 15,
               zIndex: 1,
               fontSize: 12,
               fontWeight: Fonts.BOLD,
-              ...sxCardMediaAction,
+              ...sxCardMediaAction
             }}
           >
             {cardMediaAction}
@@ -81,8 +70,8 @@ const AppCardMedia: React.FC<AppCardProps> = ({
         style={{
           paddingLeft: 20,
           paddingRight: 20,
-          height: "100%",
-          ...contentStyle,
+          height: '100%',
+          ...contentStyle
         }}
       >
         {children}
@@ -93,14 +82,14 @@ const AppCardMedia: React.FC<AppCardProps> = ({
             paddingLeft: 20,
             paddingRight: 20,
             paddingBottom: 16,
-            ...footerStyle,
+            ...footerStyle
           }}
         >
           {footer}
         </CardActions>
       ) : null}
     </Card>
-  );
-};
+  )
+}
 
-export default AppCardMedia;
+export default AppCardMedia

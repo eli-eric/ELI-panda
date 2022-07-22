@@ -1,5 +1,5 @@
-import React from "react";
-import ContentLoader from "react-content-loader";
+import React from 'react'
+import ContentLoader from 'react-content-loader'
 
 export const MailItem = () => (
   <ContentLoader viewBox="10 0 430 25">
@@ -9,7 +9,7 @@ export const MailItem = () => (
     <rect x="100" y="10" rx="0" ry="0" width="300" height="10" />
     <rect x="410" y="10" rx="0" ry="0" width="20" height="10" />
   </ContentLoader>
-);
+)
 const EmailListSkeleton = () => {
   return (
     <React.Fragment>
@@ -24,7 +24,7 @@ const EmailListSkeleton = () => {
       <MailItem />
       <MailItem />
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default EmailListSkeleton;
+export default EmailListSkeleton

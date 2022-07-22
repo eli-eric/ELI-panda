@@ -1,9 +1,9 @@
-import Settings from "./Setting";
-import Common from "./Common";
+import Settings from './Setting'
+import Common from './Common'
 
 const reducers = {
   settings: Settings,
-  common: Common,
-};
+  common: Common
+}
 
-export default reducers;
+export default reducers

@@ -1,42 +1,39 @@
-import React from "react";
-import messages from "@crema/services/db/messages";
-import { Box, IconButton, Theme } from "@mui/material";
-import MessageItem from "./MessageItem";
-import List from "@mui/material/List";
-import Button from "@mui/material/Button";
-import AppScrollbar from "@crema/core/AppScrollbar";
-import IntlMessages from "@crema/utility/IntlMessages";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import Typography from "@mui/material/Typography";
-import { SxProps } from "@mui/system";
+import React from 'react'
+import messages from '@crema/services/db/messages'
+import { Box, IconButton, Theme } from '@mui/material'
+import MessageItem from './MessageItem'
+import List from '@mui/material/List'
+import Button from '@mui/material/Button'
+import AppScrollbar from '@crema/core/AppScrollbar'
+import IntlMessages from '@crema/utility/IntlMessages'
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
+import Typography from '@mui/material/Typography'
+import { SxProps } from '@mui/system'
 
 interface AppMessageContentProps {
-  onClose: () => void;
-  sxStyle: SxProps<Theme>;
+  onClose: () => void
+  sxStyle: SxProps<Theme>
 }
 
-const AppMessageContent: React.FC<AppMessageContentProps> = ({
-  onClose,
-  sxStyle,
-}) => {
+const AppMessageContent: React.FC<AppMessageContentProps> = ({ onClose, sxStyle }) => {
   return (
     <Box
       sx={{
-        display: "flex",
-        flexDirection: "column",
+        display: 'flex',
+        flexDirection: 'column',
         width: 280,
-        height: "100%",
-        ...sxStyle,
+        height: '100%',
+        ...sxStyle
       }}
     >
       <Box
         sx={{
-          padding: "5px 20px",
-          display: "flex",
-          alignItems: "center",
+          padding: '5px 20px',
+          display: 'flex',
+          alignItems: 'center',
           borderBottom: 1,
-          borderBottomColor: (theme) => theme.palette.divider,
-          minHeight: { xs: 56, sm: 70 },
+          borderBottomColor: theme => theme.palette.divider,
+          minHeight: { xs: 56, sm: 70 }
         }}
       >
         <Typography component="h3">
@@ -46,8 +43,8 @@ const AppMessageContent: React.FC<AppMessageContentProps> = ({
           sx={{
             height: 40,
             width: 40,
-            ml: "auto",
-            color: "text.secondary",
+            ml: 'auto',
+            color: 'text.secondary'
           }}
           onClick={onClose}
           size="large"
@@ -57,15 +54,15 @@ const AppMessageContent: React.FC<AppMessageContentProps> = ({
       </Box>
       <AppScrollbar
         sx={{
-          height: { xs: "calc(100% - 96px)", sm: "calc(100% - 110px)" },
+          height: { xs: 'calc(100% - 96px)', sm: 'calc(100% - 110px)' }
         }}
       >
         <List
           sx={{
-            py: 0,
+            py: 0
           }}
         >
-          {messages.map((item) => (
+          {messages.map(item => (
             <MessageItem key={item.id} item={item} />
           ))}
         </List>
@@ -73,10 +70,10 @@ const AppMessageContent: React.FC<AppMessageContentProps> = ({
       <Button
         sx={{
           borderRadius: 0,
-          width: "100%",
-          textTransform: "capitalize",
-          marginTop: "auto",
-          height: 40,
+          width: '100%',
+          textTransform: 'capitalize',
+          marginTop: 'auto',
+          height: 40
         }}
         variant="contained"
         color="primary"
@@ -84,7 +81,7 @@ const AppMessageContent: React.FC<AppMessageContentProps> = ({
         <IntlMessages id="common.viewAll" />
       </Button>
     </Box>
-  );
-};
+  )
+}
 
-export default AppMessageContent;
+export default AppMessageContent

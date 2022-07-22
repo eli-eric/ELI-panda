@@ -1,46 +1,45 @@
-import React from "react";
-import IconButton from "@mui/material/IconButton";
-import Collapse from "@mui/material/Collapse";
-import { alpha, Box } from "@mui/material";
-import Alert from "@mui/material/Alert";
-import CloseIcon from "@mui/icons-material/Close";
-import { useSidebarContext } from "../../../../utility/AppContextProvider/SidebarContextProvider";
+import React from 'react'
+import IconButton from '@mui/material/IconButton'
+import Collapse from '@mui/material/Collapse'
+import { alpha, Box } from '@mui/material'
+import Alert from '@mui/material/Alert'
+import CloseIcon from '@mui/icons-material/Close'
+import { useSidebarContext } from '../../../../utility/AppContextProvider/SidebarContextProvider'
 
 const NotificationBar = () => {
-  const [open, setOpen] = React.useState(true);
-  const { sidebarBgColor, sidebarTextColor } = useSidebarContext();
+  const [open, setOpen] = React.useState(true)
+  const { sidebarBgColor, sidebarTextColor } = useSidebarContext()
 
   return (
     <Collapse in={open}>
       <Box
         sx={{
-          borderBottom: (theme) =>
-            `solid 1px ${alpha(theme.palette.common.black, 0.15)}`,
-          padding: "2px 0",
+          borderBottom: theme => `solid 1px ${alpha(theme.palette.common.black, 0.15)}`,
+          padding: '2px 0',
           backgroundColor: sidebarBgColor,
-          color: sidebarTextColor,
+          color: sidebarTextColor
         }}
       >
         <Box
           sx={{
-            width: "100%",
+            width: '100%',
             maxWidth: { lg: 1140, xl: 1420 },
-            mx: "auto",
-            px: 5,
+            mx: 'auto',
+            px: 5
           }}
         >
           <Alert
             sx={{
-              backgroundColor: "transparent !important",
+              backgroundColor: 'transparent !important',
               padding: 0,
-              textAlign: "center",
-              color: "inherit",
-              "& .MuiAlert-message": {
-                flex: 1,
+              textAlign: 'center',
+              color: 'inherit',
+              '& .MuiAlert-message': {
+                flex: 1
               },
-              "& .MuiAlert-action": {
-                ml: 2.5,
-              },
+              '& .MuiAlert-action': {
+                ml: 2.5
+              }
             }}
             icon={false}
             action={
@@ -49,7 +48,7 @@ const NotificationBar = () => {
                 color="inherit"
                 size="small"
                 onClick={() => {
-                  setOpen(false);
+                  setOpen(false)
                 }}
               >
                 <CloseIcon fontSize="inherit" />
@@ -61,7 +60,7 @@ const NotificationBar = () => {
         </Box>
       </Box>
     </Collapse>
-  );
-};
+  )
+}
 
-export default NotificationBar;
+export default NotificationBar

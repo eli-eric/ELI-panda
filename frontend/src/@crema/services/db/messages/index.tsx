@@ -1,9 +1,9 @@
 export interface MessageData {
-  id: number;
-  image: string;
-  message: string;
-  name: string;
+  id: number
+  image: string
+  message: string
+  name: string
 }
 
-const messageData: MessageData[] = [];
-export default messageData;
+const messageData: MessageData[] = []
+export default messageData

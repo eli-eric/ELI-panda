@@ -1,3 +1,3 @@
 export const getStringFromHtml = (htmlContent: string) => {
-  return htmlContent.replace(/(<([^>]+)>)/gi, "");
-};
+  return htmlContent.replace(/(<([^>]+)>)/gi, '')
+}

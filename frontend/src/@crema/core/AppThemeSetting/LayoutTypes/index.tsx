@@ -1,21 +1,18 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import { CustomizerItemWrapper } from "../index.style";
-import IntlMessages from "../../../utility/IntlMessages";
-import { layoutTypes } from "../../../services/db/navigationStyle";
-import {
-  useLayoutActionsContext,
-  useLayoutContext,
-} from "../../../utility/AppContextProvider/LayoutContextProvider";
-import AppSelectedIcon from "../../AppSelectedIcon";
+import React from 'react'
+import Box from '@mui/material/Box'
+import { CustomizerItemWrapper } from '../index.style'
+import IntlMessages from '../../../utility/IntlMessages'
+import { layoutTypes } from '../../../services/db/navigationStyle'
+import { useLayoutActionsContext, useLayoutContext } from '../../../utility/AppContextProvider/LayoutContextProvider'
+import AppSelectedIcon from '../../AppSelectedIcon'
 
 const LayoutTypes = () => {
-  const { updateLayoutType } = useLayoutActionsContext();
-  const { layoutType } = useLayoutContext();
+  const { updateLayoutType } = useLayoutActionsContext()
+  const { layoutType } = useLayoutContext()
 
   const onLayoutChange = (layoutType: string) => {
-    updateLayoutType(layoutType);
-  };
+    updateLayoutType(layoutType)
+  }
   return (
     <CustomizerItemWrapper pb={1}>
       <Box component="h4" sx={{ mb: 3 }}>
@@ -23,28 +20,28 @@ const LayoutTypes = () => {
       </Box>
       <Box
         sx={{
-          display: "flex",
-          alignItems: "center",
-          flexWrap: "wrap",
-          marginLeft: "-10px",
-          marginRight: "-10px",
+          display: 'flex',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          marginLeft: '-10px',
+          marginRight: '-10px'
         }}
       >
-        {layoutTypes.map((layout) => {
+        {layoutTypes.map(layout => {
           return (
             <Box
               sx={{
                 paddingLeft: 2.5,
                 paddingRight: 2.5,
                 minWidth: 84,
-                maxHeight: 48,
+                maxHeight: 48
               }}
               key={layout.id}
             >
               <Box
                 sx={{
-                  position: "relative",
-                  cursor: "pointer",
+                  position: 'relative',
+                  cursor: 'pointer'
                 }}
                 onClick={() => onLayoutChange(layout.alias)}
               >
@@ -52,11 +49,11 @@ const LayoutTypes = () => {
                 {layoutType === layout.alias ? <AppSelectedIcon /> : null}
               </Box>
             </Box>
-          );
+          )
         })}
       </Box>
     </CustomizerItemWrapper>
-  );
-};
+  )
+}
 
-export default LayoutTypes;
+export default LayoutTypes

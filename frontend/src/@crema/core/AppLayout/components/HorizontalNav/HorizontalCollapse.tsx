@@ -1,74 +1,63 @@
-import React, { useState } from "react";
-import {
-  Grow,
-  Icon,
-  IconButton,
-  ListItem,
-  ListItemText,
-  Paper,
-} from "@mui/material";
-import { useLocation } from "react-router-dom";
-import clsx from "clsx";
-import List from "@mui/material/List";
-import Box from "@mui/material/Box";
-import { Manager, Popper, Reference } from "react-popper";
-import HorizontalItem from "./HorizontalItem";
-import HorizontalGroup from "./HorizontalGroup";
-import IntlMessages from "../../../../utility/IntlMessages";
-import { useThemeContext } from "../../../../utility/AppContextProvider/ThemeContextProvider";
-import { RouterConfigData } from "../../../../../pages/routesConfig";
-import ClientOnlyPortal from "./ClientPortal";
-import { useSidebarContext } from "../../../../utility/AppContextProvider/SidebarContextProvider";
+import React, { useState } from 'react'
+import { Grow, Icon, IconButton, ListItem, ListItemText, Paper } from '@mui/material'
+import { useLocation } from 'react-router-dom'
+import clsx from 'clsx'
+import List from '@mui/material/List'
+import Box from '@mui/material/Box'
+import { Manager, Popper, Reference } from 'react-popper'
+import HorizontalItem from './HorizontalItem'
+import HorizontalGroup from './HorizontalGroup'
+import IntlMessages from '../../../../utility/IntlMessages'
+import { useThemeContext } from '../../../../utility/AppContextProvider/ThemeContextProvider'
+import { RouterConfigData } from '../../../../../pages/routesConfig'
+import ClientOnlyPortal from './ClientPortal'
+import { useSidebarContext } from '../../../../utility/AppContextProvider/SidebarContextProvider'
 
 interface HorizontalCollapseProps {
-  item: RouterConfigData;
-  nestedLevel: number;
-  dense?: number;
+  item: RouterConfigData
+  nestedLevel: number
+  dense?: number
 }
 
-const HorizontalCollapse: React.FC<HorizontalCollapseProps> = (props) => {
-  const [opened, setOpened] = useState<boolean>(false);
-  const { theme } = useThemeContext();
-  const { item, nestedLevel, dense } = props;
-  const location = useLocation();
-  const active = isUrlInChildren(item, location.pathname);
-  const { sidebarMenuSelectedBgColor, sidebarMenuSelectedTextColor } =
-    useSidebarContext();
+const HorizontalCollapse: React.FC<HorizontalCollapseProps> = props => {
+  const [opened, setOpened] = useState<boolean>(false)
+  const { theme } = useThemeContext()
+  const { item, nestedLevel, dense } = props
+  const location = useLocation()
+  const active = isUrlInChildren(item, location.pathname)
+  const { sidebarMenuSelectedBgColor, sidebarMenuSelectedTextColor } = useSidebarContext()
 
   const handleToggle = (open: boolean) => {
-    setOpened(open);
-  };
+    setOpened(open)
+  }
 
   function isUrlInChildren(parent: RouterConfigData, url: string) {
     if (!parent.children) {
-      return false;
+      return false
     }
 
     for (let i = 0; i < parent.children.length; i++) {
       if (parent.children[i].children) {
         if (isUrlInChildren(parent.children[i], url)) {
-          return true;
+          return true
         }
       }
 
-      if (
-        parent.children[i].url === url ||
-        url.includes(parent!.children![i].url!)
-      ) {
-        return true;
+      if (parent.children[i].url === url || url.includes(parent!.children![i].url!)) {
+        return true
       }
     }
 
-    return false;
+    return false
   }
 
   return (
     <List
       sx={{
         py: 0,
-        "& .list-item-text": {
-          padding: "0 0 0 16px",
-        },
+        '& .list-item-text': {
+          padding: '0 0 0 16px'
+        }
       }}
       className="navbarNavSubmenu"
     >
@@ -79,55 +68,45 @@ const HorizontalCollapse: React.FC<HorizontalCollapseProps> = (props) => {
               ref={ref}
               sx={{
                 color: theme.palette.text.primary,
-                padding: "0px 12px",
-                "&.active, &.active:hover, &.active:focus": {
-                  backgroundColor: sidebarMenuSelectedBgColor + "!important",
-                  color: sidebarMenuSelectedTextColor + "!important",
+                padding: '0px 12px',
+                '&.active, &.active:hover, &.active:focus': {
+                  backgroundColor: sidebarMenuSelectedBgColor + '!important',
+                  color: sidebarMenuSelectedTextColor + '!important'
                 },
-                "&.open": {
-                  backgroundColor: "rgba(0,0,0,.08)",
+                '&.open': {
+                  backgroundColor: 'rgba(0,0,0,.08)'
                 },
-                "&.dense": {
-                  padding: "0px 12px",
-                  "& .list-item-text": {
-                    padding: "0 0 0 8px",
-                  },
-                },
+                '&.dense': {
+                  padding: '0px 12px',
+                  '& .list-item-text': {
+                    padding: '0 0 0 8px'
+                  }
+                }
               }}
-              className={clsx(
-                "navItemSubmenu",
-                opened && "open",
-                dense && "dense",
-                active && "active"
-              )}
+              className={clsx('navItemSubmenu', opened && 'open', dense && 'dense', active && 'active')}
               onMouseEnter={() => handleToggle(true)}
               onMouseLeave={() => handleToggle(false)}
             >
               {item.icon && (
                 <Icon
                   sx={{
-                    color: active ? sidebarMenuSelectedTextColor : "action",
+                    color: active ? sidebarMenuSelectedTextColor : 'action',
                     mr: 3.5,
-                    fontSize: { xs: 16, xl: 18 },
+                    fontSize: { xs: 16, xl: 18 }
                   }}
                 >
                   {item.icon}
                 </Icon>
               )}
-              <ListItemText
-                className="navLinkTextSubmenu"
-                primary={<IntlMessages id={item.messageId} />}
-              />
+              <ListItemText className="navLinkTextSubmenu" primary={<IntlMessages id={item.messageId} />} />
               <Box p={0}>
                 <IconButton disableRipple>
                   <Icon
                     sx={{
-                      color: active ? sidebarMenuSelectedTextColor : "action",
+                      color: active ? sidebarMenuSelectedTextColor : 'action'
                     }}
                   >
-                    {theme.direction === "ltr"
-                      ? "chevron_right"
-                      : "chevron_left"}
+                    {theme.direction === 'ltr' ? 'chevron_right' : 'chevron_left'}
                   </Icon>
                 </IconButton>
               </Box>
@@ -141,51 +120,35 @@ const HorizontalCollapse: React.FC<HorizontalCollapseProps> = (props) => {
                 <Box
                   ref={ref}
                   sx={{
-                    boxShadow: "0 0 3px 0 rgba(0, 0, 0, 0.2)",
+                    boxShadow: '0 0 3px 0 rgba(0, 0, 0, 0.2)',
                     zIndex: 1110 + nestedLevel + 1,
                     ...style,
-                    "& .popperClose": {
-                      pointerEvents: "none",
-                    },
+                    '& .popperClose': {
+                      pointerEvents: 'none'
+                    }
                   }}
                   data-placement={placement}
                   className={clsx({
-                    popperClose: !opened,
+                    popperClose: !opened
                   })}
                 >
                   <Grow in={opened}>
-                    <Paper
-                      onMouseEnter={() => handleToggle(true)}
-                      onMouseLeave={() => handleToggle(false)}
-                    >
+                    <Paper onMouseEnter={() => handleToggle(true)} onMouseLeave={() => handleToggle(false)}>
                       {item.children && (
                         <List
                           sx={{
-                            px: 0,
+                            px: 0
                           }}
                         >
-                          {item.children.map((item) => (
+                          {item.children.map(item => (
                             <React.Fragment key={item.id}>
-                              {item.type === "group" && (
-                                <HorizontalGroup
-                                  item={item}
-                                  nestedLevel={nestedLevel + 1}
-                                />
+                              {item.type === 'group' && <HorizontalGroup item={item} nestedLevel={nestedLevel + 1} />}
+
+                              {item.type === 'collapse' && (
+                                <HorizontalCollapse item={item} nestedLevel={nestedLevel + 1} />
                               )}
 
-                              {item.type === "collapse" && (
-                                <HorizontalCollapse
-                                  item={item}
-                                  nestedLevel={nestedLevel + 1}
-                                />
-                              )}
-
-                              {item.type === "item" && (
-                                <HorizontalItem
-                                  item={item}
-                                  nestedLevel={nestedLevel + 1}
-                                />
-                              )}
+                              {item.type === 'item' && <HorizontalItem item={item} nestedLevel={nestedLevel + 1} />}
                             </React.Fragment>
                           ))}
                         </List>
@@ -199,7 +162,7 @@ const HorizontalCollapse: React.FC<HorizontalCollapseProps> = (props) => {
         </ClientOnlyPortal>
       </Manager>
     </List>
-  );
-};
+  )
+}
 
-export default HorizontalCollapse;
+export default HorizontalCollapse
