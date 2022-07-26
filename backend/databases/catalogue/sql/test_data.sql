@@ -15,6 +15,19 @@ INSERT INTO panda.t_catalog_category (id_parent , "name", "code", order_position
 INSERT INTO panda.t_catalog_category (id_parent , "name", "code", order_position) SELECT (SELECT id FROM panda.t_catalog_category WHERE code = 'O' LIMIT 1), 'Lens', 'O-L',1 WHERE NOT EXISTS(SELECT 1 FROM panda.t_catalog_category WHERE "code" = 'O-L');
 
 
+INSERT INTO panda.t_catalog_category_property_unit("name") SELECT 'W' WHERE NOT EXISTS(SELECT 1 FROM panda.t_catalog_category_property_unit WHERE "name" = 'W');
+INSERT INTO panda.t_catalog_category_property_unit("name") SELECT 'm3/h' WHERE NOT EXISTS(SELECT 1 FROM panda.t_catalog_category_property_unit WHERE "name" = 'm3/h');
+INSERT INTO panda.t_catalog_category_property_unit("name") SELECT 'mbar' WHERE NOT EXISTS(SELECT 1 FROM panda.t_catalog_category_property_unit WHERE "name" = 'mbar');
+INSERT INTO panda.t_catalog_category_property_unit("name") SELECT 'l/sec' WHERE NOT EXISTS(SELECT 1 FROM panda.t_catalog_category_property_unit WHERE "name" = 'l/sec');
+INSERT INTO panda.t_catalog_category_property_unit("name") SELECT 'min' WHERE NOT EXISTS(SELECT 1 FROM panda.t_catalog_category_property_unit WHERE "name" = 'min');
+
+
+INSERT INTO panda.t_catalog_category_property_type("name", is_lov) SELECT 'text', false WHERE NOT EXISTS(SELECT 1 FROM panda.t_catalog_category_property_type WHERE "name" = 'text');
+INSERT INTO panda.t_catalog_category_property_type("name", is_lov) SELECT 'number', false WHERE NOT EXISTS(SELECT 1 FROM panda.t_catalog_category_property_type WHERE "name" = 'number');
+INSERT INTO panda.t_catalog_category_property_type("name", is_lov) SELECT 'bool', false WHERE NOT EXISTS(SELECT 1 FROM panda.t_catalog_category_property_type WHERE "name" = 'bool');
+INSERT INTO panda.t_catalog_category_property_type("name", is_lov) SELECT 'date', false WHERE NOT EXISTS(SELECT 1 FROM panda.t_catalog_category_property_type WHERE "name" = 'date');
+
+
 
 --one specific mirror from ELI-BEAMLINES DB
 INSERT INTO panda.t_catalog_item ("name", id_category, estimated_price, note, image_main,id_availability,supported_to_date,typical_available_in_days,id_manufacturer, id_facility)

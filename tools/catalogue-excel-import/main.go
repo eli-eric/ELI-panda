@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -48,11 +50,10 @@ type CatalogueCatgeoryGroup struct {
 type CatalogueCategoryProperty struct {
 	ID               int32
 	Name             string
-	Type             string
 	LOV              string
 	AllowCustomValue bool
 	ID_group         int32
-	ID_unit          *string
+	ID_unit          *int32
 	ID_property_type int32
 }
 
@@ -358,6 +359,57 @@ func existCategoryByName(name string) (bool, int32) {
 	return resultExists, resultID
 }
 
+func existCategoryPropUnitByName(name string) (bool, int32) {
+	var resultExists bool
+	var resultID int32
+
+	for i := range catalogueUnits {
+
+		if strings.Contains(strings.ToLower(catalogueUnits[i].Name), strings.ToLower(name)) {
+			resultExists = true
+			resultID = catalogueUnits[i].ID
+
+			break
+		}
+	}
+
+	return resultExists, resultID
+}
+
+func existCategoryPropTypeByName(name string) (bool, int32) {
+	var resultExists bool
+	var resultID int32
+
+	for i := range cataloguePropertyTypes {
+
+		if strings.Contains(strings.ToLower(cataloguePropertyTypes[i].Name), strings.ToLower(name)) {
+			resultExists = true
+			resultID = cataloguePropertyTypes[i].ID
+
+			break
+		}
+	}
+
+	return resultExists, resultID
+}
+
+func existCategoryPropTypeLOVByName(name string) (bool, int32) {
+	var resultExists bool
+	var resultID int32
+
+	for i := range catalogueLOVs {
+
+		if strings.Contains(strings.ToLower(catalogueLOVs[i].Name), strings.ToLower(name)) {
+			resultExists = true
+			resultID = catalogueLOVs[i].ID
+
+			break
+		}
+	}
+
+	return resultExists, resultID
+}
+
 //this funtion check if the category group exists by passing name as a parameter and id of the category
 func existCategoryGroupByName(id_category int32, name string) (bool, int32) {
 	var resultExists bool
@@ -444,17 +496,41 @@ func processCatalogueCategorySheet(sheetName string) {
 	}
 
 	//next step is to read all category properties and their groups
-	//properties continues in the sheet from the position D1([0][3])
+	//properties continues in the sheet from the position "D1"([0][3])
 	allColumns, _ := excelFile.GetCols(sheetName)
 	if len(allColumns) > 3 {
-
+		//if the lenght of the field of the columns is more then 3, it means there are some other properties for this category, so lets process them
 		for c := 3; c < len(allColumns); c++ {
 			prop := CatalogueCategoryProperty{}
-			// for r := range allColumns[c] {
-			// 	prop.Name = allColumns[c][r]
-			// }
-			prop.Name = allColumns[c][0]
-			prop.Type = allColumns[c][1]
+			//we will comapre property name, type and group so we have to trim white spaces
+			prop.Name = strings.TrimSpace(allColumns[c][0])
+			propType := strings.TrimSpace(allColumns[c][1])
+			propLOVs := strings.TrimSpace(allColumns[c][2])
+			propDefaultValue := strings.TrimSpace(allColumns[c][3])
+			propCustomValue := strings.TrimSpace(allColumns[c][4])
+			propUnit := strings.TrimSpace(allColumns[c][5])
+			groupName := strings.TrimSpace(allColumns[c][6])
+			//we check if a group of this name exists for processing category
+			groupExist, groupID := existCategoryGroupByName(categoryID, groupName)
+			//if it already exists we can assign existing groupID to the property
+			if groupExist {
+				prop.ID_group = groupID
+			} else {
+				//otherwise we creta new group for this category
+				newGroupID, errGroup := createCatalogueCategoryGroup(categoryID, groupName)
+				if errGroup != nil {
+					fmt.Println(errGroup)
+				} else {
+					prop.ID_group = newGroupID
+				}
+			}
+
+			//check unit
+			unitExists, unitID := existCategoryPropUnitByName(propUnit)
+			if unitExists {
+				prop.ID_unit = &unitID
+			}
+
 			fmt.Println("PROPERTY DATA: ", prop)
 		}
 	}
@@ -515,6 +591,46 @@ func createCatalogueCategory(categoryName string) (int32, error) {
 		newCategory.Code = categoryName
 		newCategory.ID = newID
 		catalogueCategories = append(catalogueCategories, newCategory)
+	} else {
+		return newID, txErr
+	}
+
+	return newID, nil
+}
+
+func createCatalogueCategoryGroup(categoryID int32, groupName string) (int32, error) {
+	var newID int32
+	//one thing is to add category into the database
+	//in the second step we have to add category to local cache
+	tx, txErr := pgPool.BeginTx(context.Background(), pgx.TxOptions{})
+	if txErr == nil {
+		insertQuery := `INSERT INTO panda.t_catalog_category_property_group ("name", id_category) VALUES ($1, $2)`
+		_, err := tx.Exec(context.Background(), insertQuery, groupName, categoryID)
+		if err != nil {
+			return newID, err
+		}
+		//we are interested in a new record id
+		newIdQuery := `SELECT LASTVAL()`
+		newIdRowErr := tx.QueryRow(context.Background(), newIdQuery).Scan(&newID)
+		if newIdRowErr != nil {
+			return newID, newIdRowErr
+		}
+		commitErr := tx.Commit(context.Background())
+		if commitErr != nil {
+			return newID, commitErr
+		}
+		//so after succesfull insert into db we can add the record to the memory
+		newGroup := CatalogueCatgeoryGroup{}
+		newGroup.Name = groupName
+		newGroup.ID_category = categoryID
+		//we have a instance of the new group and now we have to find existing category and add this group to the Groups list
+		existingCategory := existingCategoryByID(categoryID)
+		if existingCategory != nil {
+			existingCategory.Groups = append(existingCategory.Groups, newGroup)
+		} else {
+			return 0, errors.New("Can not find specified category by ID: " + strconv.Itoa(int(categoryID)))
+		}
+
 	} else {
 		return newID, txErr
 	}
