@@ -1704,3 +1704,5 @@ LANGUAGE plpgsql;
 
 
 ALTER TABLE panda.t_catalog_category_property ADD IF NOT EXISTS AllowCustomValue bool NOT NULL DEFAULT False;
+
+ALTER TABLE panda.t_catalog_category ALTER COLUMN code TYPE varchar(200) USING code::varchar;

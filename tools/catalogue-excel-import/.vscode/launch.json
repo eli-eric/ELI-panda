@@ -10,7 +10,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${fileDirname}",
-            "args": ["test-data/TMP.xlsx"]
+            "args": ["import-data/actuators.xlsx"]
         }
     ]
 }

@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fatih/color"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/xuri/excelize/v2"
@@ -50,8 +51,8 @@ type CatalogueCatgeoryGroup struct {
 type CatalogueCategoryProperty struct {
 	ID               int32
 	Name             string
-	LOV              string
 	AllowCustomValue bool
+	DefaultValue     *string
 	ID_group         int32
 	ID_unit          *int32
 	ID_property_type int32
@@ -82,16 +83,22 @@ var execlErr error
 
 var totalStart time.Time
 
+var okPrint, errPrint, infoPrint color.Color
+
 func main() {
 
+	okPrint = *color.New(color.FgGreen)
+	errPrint = *color.New(color.FgRed)
+	infoPrint = *color.New(color.FgHiBlue)
+
 	if len(os.Args) == 1 {
-		fmt.Println("Please specify the file name as a first cmd-line argument")
+		errPrint.Println("Please specify the file name as a first cmd-line argument")
 	} else {
 		totalStart = time.Now()
 		//init excel file
 		fileName := os.Args[1]
 
-		fmt.Printf("Process file: %s", fileName)
+		infoPrint.Printf("Process file: %s", fileName)
 		fmt.Println()
 		fmt.Println("_________________________________________________________________________")
 
@@ -120,7 +127,7 @@ func main() {
 		connString := "postgres://" + configuration.PostgresqlUsername + ":" + configuration.PostgresqlPassword + "@" + configuration.PostgresqlHost + "/" + configuration.PostgresqlDatabase
 		pgPool, connErr = pgxpool.Connect(context.Background(), connString)
 		if connErr != nil {
-			fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", connErr)
+			errPrint.Fprintf(os.Stderr, "Unable to connect to database: %v\n", connErr)
 			os.Exit(1)
 		}
 		defer pgPool.Close()
@@ -143,7 +150,7 @@ func main() {
 
 			switch sheetType {
 			case 0:
-				fmt.Printf("Sheet %s ignored - not valid sheet.", name)
+				errPrint.Printf("Sheet %s ignored - not valid sheet.", name)
 				fmt.Println()
 				fmt.Println("_________________________________________________________________________")
 			case 1:
@@ -154,9 +161,170 @@ func main() {
 		}
 
 		totalEnd := time.Now()
-		fmt.Println("Total category sheets processed: ", categorySheetsCount)
-		fmt.Println("Total duration: ", totalEnd.Sub(totalStart).String())
+		infoPrint.Println("Total category sheets processed: ", categorySheetsCount)
+		infoPrint.Println("Total duration: ", totalEnd.Sub(totalStart).String())
 	}
+}
+
+func processCatalogueCategorySheet(sheetName string) {
+
+	//job start log
+	infoPrint.Printf("Job: Process catalogue category sheet: %s", sheetName)
+	fmt.Println()
+	start := time.Now()
+	fmt.Printf("Started at: %s", start.String())
+	fmt.Println()
+
+	//get category and parent cateogry names
+	categoryName, _ := excelFile.GetCellValue(sheetName, "B4")
+	parentCategoryName, _ := excelFile.GetCellValue(sheetName, "C4")
+
+	//lets find if this category exist - if so do nothing
+	var categoryExists, categoryID = existCategoryByName(categoryName)
+	//if category doesnt exist -> create into the DB -> get back new id and store in memory
+	if !categoryExists {
+		id, err := createCatalogueCategory(categoryName)
+		categoryID = id
+		if err != nil {
+			errPrint.Println("ERROR: ", err)
+		}
+	}
+	//now lets have a look on parent category
+	//check if already exists such a category
+	//if parent name is empty do nothing
+	if parentCategoryName != "" {
+
+		var parentExists, parentID = existCategoryByName(parentCategoryName)
+
+		//if doesnt create this category first
+		if !parentExists {
+			id, err := createCatalogueCategory(parentCategoryName)
+			if err != nil {
+				errPrint.Println("ERROR: ", err)
+			}
+			parentID = id
+		}
+		//finally set parent id to the category - we are doing it everytime for sure
+		setCategoryParentID(categoryID, parentID)
+
+	}
+
+	//next step is to read all category properties and their groups
+	//properties continues in the sheet from the position "D1"([0][3])
+	allColumns, _ := excelFile.GetCols(sheetName)
+	if len(allColumns) > 3 {
+		//if the lenght of the field of the columns is more then 3, it means there are some other properties for this category, so lets process them
+		for c := 3; c < len(allColumns); c++ {
+			//skip white spaces columns
+			if strings.TrimSpace(allColumns[c][0]) != "" {
+				prop := CatalogueCategoryProperty{}
+				//we will comapre property name, type and group so we have to trim white spaces
+				prop.Name = strings.TrimSpace(allColumns[c][0])
+				propType := strings.TrimSpace(allColumns[c][1])
+				propLOVs := strings.TrimSpace(allColumns[c][2])
+				propDefaultValue := strings.TrimSpace(allColumns[c][3])
+				propCustomValue := strings.TrimSpace(allColumns[c][4])
+				propUnit := strings.TrimSpace(allColumns[c][5])
+				groupName := strings.TrimSpace(allColumns[c][6])
+				//we check if a group of this name exists for processing category
+				groupExist, groupID := existCategoryGroupByName(categoryID, groupName)
+				//if it already exists we can assign existing groupID to the property
+				if groupExist {
+					prop.ID_group = groupID
+				} else {
+					//otherwise we creta new group for this category
+					newGroupID, errGroup := createCatalogueCategoryGroup(categoryID, groupName)
+					if errGroup != nil {
+						fmt.Println(errGroup)
+					} else {
+						prop.ID_group = newGroupID
+					}
+				}
+
+				//check unit
+				if propUnit != "" {
+					unitExists, unitID := existCategoryPropUnitByName(propUnit)
+					if unitExists {
+						prop.ID_unit = &unitID
+					} else {
+						unitID, unitErr := createCatalogueCategoryPropertyUnit(propUnit)
+						if unitErr != nil {
+							errPrint.Println("ERROR: ", unitErr)
+							break
+						} else {
+							prop.ID_unit = &unitID
+						}
+					}
+				}
+
+				//check property type
+				//if its list check list of values types
+				if strings.ToLower(propType) == "list" {
+					lovTypeExists, lovTypeID := existCategoryPropTypeByName(prop.Name)
+					if lovTypeExists {
+						prop.ID_property_type = lovTypeID
+					} else {
+						//if lov type doesnt exist we will create this type for lovs
+						propTypeLovID, propTypeLOVerr := createCatalogueCategoryPropertyTypeLOV(prop.Name)
+						if propTypeLOVerr != nil {
+							errPrint.Println("ERROR: ", propTypeLOVerr)
+							break
+						} else {
+							prop.ID_property_type = propTypeLovID
+						}
+					}
+
+					//and then we can process LOV items
+					lovs := strings.Split(propLOVs, ";")
+					for _, lov := range lovs {
+						//check lov item if exists, if not create it
+						lovExists, _ := existCategoryPropTypeLOVByName(strings.ToLower(strings.TrimSpace(lov)), prop.ID_property_type)
+						if !lovExists {
+							createCatalogueCategoryPropertyLOV(lov, prop.ID_property_type)
+						}
+					}
+
+				} else {
+					//else check standard types
+					propTypeExists, propTypeID := existCategoryPropTypeByName(propType)
+					if propTypeExists {
+						prop.ID_property_type = propTypeID
+					} else {
+						errPrint.Println("ERROR: This property type doesnt exist: ", propType)
+						break
+					}
+				}
+
+				//set default value
+				if propDefaultValue != "" {
+					prop.DefaultValue = &propDefaultValue
+				}
+				//sett if prop allow custom vlaues
+				if propCustomValue == "1" {
+					prop.AllowCustomValue = true
+				}
+
+				//finally chekc if this property alread exists or not
+				propExists, _ := existCategoryGroupPropertyByGroupIDAndName(prop.ID_group, prop.Name)
+				if !propExists {
+					_, errProp := createCatalogueCategoryProperty(prop)
+					if errProp != nil {
+						errPrint.Println("ERROR: ", errProp)
+						break
+					}
+				}
+			}
+		}
+	}
+
+	//job end log
+	end := time.Now()
+	fmt.Printf("Finished at: %s", end.String())
+	fmt.Println()
+	fmt.Printf("Job duration: %s", end.Sub(start).String())
+	fmt.Println()
+	infoPrint.Println("_________________________________________________________________________")
+	categorySheetsCount++
 }
 
 func getAndCacheAllCategories() error {
@@ -167,7 +335,7 @@ func getAndCacheAllCategories() error {
 		return err
 	} else {
 		var nextRow bool = rows.Next()
-		fmt.Println("Start reading all categories: ", nextRow)
+
 		for {
 			if nextRow {
 				category := CatalogueCategory{}
@@ -175,7 +343,7 @@ func getAndCacheAllCategories() error {
 				if errScan == nil {
 					catalogueCategories = append(catalogueCategories, category)
 				} else {
-					fmt.Println(errScan)
+					errPrint.Println(errScan)
 				}
 			} else {
 				break
@@ -190,7 +358,7 @@ func getAndCacheAllCategories() error {
 		return err
 	} else {
 		var nextRow bool = rows.Next()
-		fmt.Println("Start reading all category groups: ", nextRow)
+
 		for {
 			if nextRow {
 				categoryGroup := CatalogueCatgeoryGroup{}
@@ -200,10 +368,10 @@ func getAndCacheAllCategories() error {
 					if category != nil {
 						category.Groups = append(category.Groups, categoryGroup)
 					} else {
-						fmt.Println("CATEGORY NOT FOUND: ", categoryGroup.ID)
+						errPrint.Println("CATEGORY NOT FOUND: ", categoryGroup.ID)
 					}
 				} else {
-					fmt.Println(errScan)
+					errPrint.Println(errScan)
 				}
 			} else {
 				break
@@ -218,7 +386,7 @@ func getAndCacheAllCategories() error {
 		return err
 	} else {
 		var nextRow bool = rows.Next()
-		fmt.Println("Start reading all units: ", nextRow)
+
 		for {
 			if nextRow {
 				unit := CatalogCategoryPropertyUnit{}
@@ -226,7 +394,7 @@ func getAndCacheAllCategories() error {
 				if errScan == nil {
 					catalogueUnits = append(catalogueUnits, unit)
 				} else {
-					fmt.Println(errScan)
+					errPrint.Println(errScan)
 				}
 			} else {
 				break
@@ -241,7 +409,7 @@ func getAndCacheAllCategories() error {
 		return err
 	} else {
 		var nextRow bool = rows.Next()
-		fmt.Println("Start reading all property types: ", nextRow)
+
 		for {
 			if nextRow {
 				propType := CatalogCategoryPropertyType{}
@@ -249,7 +417,7 @@ func getAndCacheAllCategories() error {
 				if errScan == nil {
 					cataloguePropertyTypes = append(cataloguePropertyTypes, propType)
 				} else {
-					fmt.Println(errScan)
+					errPrint.Println(errScan)
 				}
 			} else {
 				break
@@ -264,7 +432,7 @@ func getAndCacheAllCategories() error {
 		return err
 	} else {
 		var nextRow bool = rows.Next()
-		fmt.Println("Start reading all LOV(list of values): ", nextRow)
+
 		for {
 			if nextRow {
 				lov := CatalogCategoryPropertyTypeLOV{}
@@ -272,7 +440,7 @@ func getAndCacheAllCategories() error {
 				if errScan == nil {
 					catalogueLOVs = append(catalogueLOVs, lov)
 				} else {
-					fmt.Println(errScan)
+					errPrint.Println(errScan)
 				}
 			} else {
 				break
@@ -287,7 +455,7 @@ func getAndCacheAllCategories() error {
 		return err
 	} else {
 		var nextRow bool = rows.Next()
-		fmt.Println("Start reading all category properties: ", nextRow)
+
 		for {
 			if nextRow {
 				categoryGroupProperty := CatalogueCategoryProperty{}
@@ -297,10 +465,10 @@ func getAndCacheAllCategories() error {
 					if group != nil {
 						group.Properties = append(group.Properties, categoryGroupProperty)
 					} else {
-						fmt.Println("PROPERTY NOT FOUND: ", categoryGroupProperty.ID)
+						errPrint.Println("PROPERTY NOT FOUND: ", categoryGroupProperty.ID)
 					}
 				} else {
-					fmt.Println(errScan)
+					errPrint.Println(errScan)
 				}
 			} else {
 				break
@@ -382,7 +550,7 @@ func existCategoryPropTypeByName(name string) (bool, int32) {
 
 	for i := range cataloguePropertyTypes {
 
-		if strings.Contains(strings.ToLower(cataloguePropertyTypes[i].Name), strings.ToLower(name)) {
+		if strings.EqualFold(strings.TrimSpace(cataloguePropertyTypes[i].Name), name) {
 			resultExists = true
 			resultID = cataloguePropertyTypes[i].ID
 
@@ -393,13 +561,13 @@ func existCategoryPropTypeByName(name string) (bool, int32) {
 	return resultExists, resultID
 }
 
-func existCategoryPropTypeLOVByName(name string) (bool, int32) {
+func existCategoryPropTypeLOVByName(name string, id_property_type int32) (bool, int32) {
 	var resultExists bool
 	var resultID int32
 
 	for i := range catalogueLOVs {
 
-		if strings.Contains(strings.ToLower(catalogueLOVs[i].Name), strings.ToLower(name)) {
+		if id_property_type == catalogueLOVs[i].ID_property_type && strings.Contains(strings.ToLower(catalogueLOVs[i].Name), strings.ToLower(name)) {
 			resultExists = true
 			resultID = catalogueLOVs[i].ID
 
@@ -431,7 +599,7 @@ mainLoop:
 }
 
 //this funtion check if the category group exists by passing name as a parameter and id of the group
-func existCategoryGroupPropertyByGroupName(id_group int32, name string) (bool, int32) {
+func existCategoryGroupPropertyByGroupIDAndName(id_group int32, name string) (bool, int32) {
 	var resultExists bool
 	var resultID int32
 
@@ -450,99 +618,6 @@ mainLoop:
 	}
 
 	return resultExists, resultID
-}
-
-func processCatalogueCategorySheet(sheetName string) {
-
-	//job start log
-	fmt.Printf("Job: Process catalogue category sheet: %s", sheetName)
-	fmt.Println()
-	start := time.Now()
-	fmt.Printf("Started at: %s", start.String())
-	fmt.Println()
-
-	//get category and parent cateogry names
-	categoryName, _ := excelFile.GetCellValue(sheetName, "B4")
-	parentCategoryName, _ := excelFile.GetCellValue(sheetName, "C4")
-
-	//lets find if this category exist - if so do nothing
-	var categoryExists, categoryID = existCategoryByName(categoryName)
-	//if category doesnt exist -> create into the DB -> get back new id and store in memory
-	if !categoryExists {
-		id, err := createCatalogueCategory(categoryName)
-		categoryID = id
-		if err != nil {
-			fmt.Println("ERROR: ", err)
-		}
-	}
-	//now lets have a look on parent category
-	//check if already exists such a category
-	//if parent name is empty do nothing
-	if parentCategoryName != "" {
-
-		var parentExists, parentID = existCategoryByName(parentCategoryName)
-
-		//if doesnt create this category first
-		if !parentExists {
-			id, err := createCatalogueCategory(parentCategoryName)
-			if err != nil {
-				fmt.Println("ERROR: ", err)
-			}
-			parentID = id
-		}
-		//finally set parent id to the category - we are doing it everytime for sure
-		setCategoryParentID(categoryID, parentID)
-
-	}
-
-	//next step is to read all category properties and their groups
-	//properties continues in the sheet from the position "D1"([0][3])
-	allColumns, _ := excelFile.GetCols(sheetName)
-	if len(allColumns) > 3 {
-		//if the lenght of the field of the columns is more then 3, it means there are some other properties for this category, so lets process them
-		for c := 3; c < len(allColumns); c++ {
-			prop := CatalogueCategoryProperty{}
-			//we will comapre property name, type and group so we have to trim white spaces
-			prop.Name = strings.TrimSpace(allColumns[c][0])
-			propType := strings.TrimSpace(allColumns[c][1])
-			propLOVs := strings.TrimSpace(allColumns[c][2])
-			propDefaultValue := strings.TrimSpace(allColumns[c][3])
-			propCustomValue := strings.TrimSpace(allColumns[c][4])
-			propUnit := strings.TrimSpace(allColumns[c][5])
-			groupName := strings.TrimSpace(allColumns[c][6])
-			//we check if a group of this name exists for processing category
-			groupExist, groupID := existCategoryGroupByName(categoryID, groupName)
-			//if it already exists we can assign existing groupID to the property
-			if groupExist {
-				prop.ID_group = groupID
-			} else {
-				//otherwise we creta new group for this category
-				newGroupID, errGroup := createCatalogueCategoryGroup(categoryID, groupName)
-				if errGroup != nil {
-					fmt.Println(errGroup)
-				} else {
-					prop.ID_group = newGroupID
-				}
-			}
-
-			//check unit
-			unitExists, unitID := existCategoryPropUnitByName(propUnit)
-			if unitExists {
-				prop.ID_unit = &unitID
-			}
-
-			fmt.Println("PROPERTY DATA: ", prop)
-		}
-	}
-
-	//job end log
-	end := time.Now()
-	fmt.Printf("Finished at: %s", end.String())
-	fmt.Println()
-	fmt.Printf("Job duration: %s", end.Sub(start).String())
-	fmt.Println()
-	fmt.Println("_________________________________________________________________________")
-	categorySheetsCount++
 }
 
 func setCategoryParentID(categoryID, parentID int32) error {
@@ -598,6 +673,107 @@ func createCatalogueCategory(categoryName string) (int32, error) {
 	return newID, nil
 }
 
+func createCatalogueCategoryPropertyTypeLOV(name string) (int32, error) {
+	var newID int32
+	//one thing is to add property type of LOVs into the database
+	//in the second step we have to add this item to local cache
+	tx, txErr := pgPool.BeginTx(context.Background(), pgx.TxOptions{})
+	if txErr == nil {
+		insertQuery := `INSERT INTO panda.t_catalog_category_property_type ("name", is_lov) VALUES ($1, True)`
+		_, err := tx.Exec(context.Background(), insertQuery, name)
+		if err != nil {
+			return newID, err
+		}
+		//we are interested in a new record id
+		newIdQuery := `SELECT LASTVAL()`
+		newIdRowErr := tx.QueryRow(context.Background(), newIdQuery).Scan(&newID)
+		if newIdRowErr != nil {
+			return newID, newIdRowErr
+		}
+		commitErr := tx.Commit(context.Background())
+		if commitErr != nil {
+			return newID, commitErr
+		}
+		//so after succesfull insert into db we can add the record to the memory
+		newItem := CatalogCategoryPropertyType{}
+		newItem.Name = name
+		newItem.ID = newID
+		newItem.IsLOV = true
+		cataloguePropertyTypes = append(cataloguePropertyTypes, newItem)
+	} else {
+		return newID, txErr
+	}
+
+	return newID, nil
+}
+
+func createCatalogueCategoryPropertyLOV(name string, id_property_type int32) (int32, error) {
+	var newID int32
+	//one thing is to add LOV item into the database
+	//in the second step we have to add thi item to local cache
+	tx, txErr := pgPool.BeginTx(context.Background(), pgx.TxOptions{})
+	if txErr == nil {
+		insertQuery := `INSERT INTO panda.t_catalog_category_property_lov ("name", id_property_type) VALUES ($1, $2)`
+		_, err := tx.Exec(context.Background(), insertQuery, name, id_property_type)
+		if err != nil {
+			return newID, err
+		}
+		//we are interested in a new record id
+		newIdQuery := `SELECT LASTVAL()`
+		newIdRowErr := tx.QueryRow(context.Background(), newIdQuery).Scan(&newID)
+		if newIdRowErr != nil {
+			return newID, newIdRowErr
+		}
+		commitErr := tx.Commit(context.Background())
+		if commitErr != nil {
+			return newID, commitErr
+		}
+		//so after succesfull insert into db we can add the record to the memory
+		newItem := CatalogCategoryPropertyTypeLOV{}
+		newItem.Name = name
+		newItem.ID = newID
+		newItem.ID_property_type = id_property_type
+		catalogueLOVs = append(catalogueLOVs, newItem)
+	} else {
+		return newID, txErr
+	}
+
+	return newID, nil
+}
+
+func createCatalogueCategoryPropertyUnit(name string) (int32, error) {
+	var newID int32
+	//one thing is to add LOV item into the database
+	//in the second step we have to add thi item to local cache
+	tx, txErr := pgPool.BeginTx(context.Background(), pgx.TxOptions{})
+	if txErr == nil {
+		insertQuery := `INSERT INTO panda.t_catalog_category_property_unit ("name") VALUES ($1)`
+		_, err := tx.Exec(context.Background(), insertQuery, name)
+		if err != nil {
+			return newID, err
+		}
+		//we are interested in a new record id
+		newIdQuery := `SELECT LASTVAL()`
+		newIdRowErr := tx.QueryRow(context.Background(), newIdQuery).Scan(&newID)
+		if newIdRowErr != nil {
+			return newID, newIdRowErr
+		}
+		commitErr := tx.Commit(context.Background())
+		if commitErr != nil {
+			return newID, commitErr
+		}
+		//so after succesfull insert into db we can add the record to the memory
+		newItem := CatalogCategoryPropertyUnit{}
+		newItem.Name = name
+		newItem.ID = newID
+		catalogueUnits = append(catalogueUnits, newItem)
+	} else {
+		return newID, txErr
+	}
+
+	return newID, nil
+}
+
 func createCatalogueCategoryGroup(categoryID int32, groupName string) (int32, error) {
 	var newID int32
 	//one thing is to add category into the database
@@ -623,12 +799,55 @@ func createCatalogueCategoryGroup(categoryID int32, groupName string) (int32, er
 		newGroup := CatalogueCatgeoryGroup{}
 		newGroup.Name = groupName
 		newGroup.ID_category = categoryID
+		newGroup.ID = newID
 		//we have a instance of the new group and now we have to find existing category and add this group to the Groups list
 		existingCategory := existingCategoryByID(categoryID)
 		if existingCategory != nil {
 			existingCategory.Groups = append(existingCategory.Groups, newGroup)
 		} else {
 			return 0, errors.New("Can not find specified category by ID: " + strconv.Itoa(int(categoryID)))
+		}
+
+	} else {
+		return newID, txErr
+	}
+
+	return newID, nil
+}
+
+func createCatalogueCategoryProperty(property CatalogueCategoryProperty) (int32, error) {
+	var newID int32
+	//one thing is to add category into the database
+	//in the second step we have to add category to local cache
+	tx, txErr := pgPool.BeginTx(context.Background(), pgx.TxOptions{})
+	if txErr == nil {
+		if property.DefaultValue != nil {
+			defVal := `{"value":"` + *property.DefaultValue + `"}`
+			property.DefaultValue = &defVal
+		}
+		insertQuery := `INSERT INTO panda.t_catalog_category_property ("name", id_group, id_property_type, id_unit, default_value, AllowCustomValue) VALUES ($1, $2, $3, $4, $5, $6)`
+		_, err := tx.Exec(context.Background(), insertQuery, property.Name, property.ID_group, property.ID_property_type, property.ID_unit, property.DefaultValue, property.AllowCustomValue)
+		if err != nil {
+			return newID, err
+		}
+		//we are interested in a new record id
+		newIdQuery := `SELECT LASTVAL()`
+		newIdRowErr := tx.QueryRow(context.Background(), newIdQuery).Scan(&newID)
+		if newIdRowErr != nil {
+			return newID, newIdRowErr
+		}
+		commitErr := tx.Commit(context.Background())
+		if commitErr != nil {
+			return newID, commitErr
+		}
+
+		property.ID = newID
+
+		existingCategoryGroup := existingCategoryGroupByID(property.ID_group)
+		if existingCategoryGroup != nil {
+			existingCategoryGroup.Properties = append(existingCategoryGroup.Properties, property)
+		} else {
+			return 0, errors.New("Can not find specified category group by ID: " + strconv.Itoa(int(property.ID_group)))
 		}
 
 	} else {

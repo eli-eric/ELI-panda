@@ -1,5 +1,5 @@
 {
-    "PostgresqlHost" : "localhost:5432",
+    "PostgresqlHost" : "10.58.50.11:5432",
     "PostgresqlUsername" : "postgres",
     "PostgresqlPassword" : "Solu1058",
     "PostgresqlDatabase" : "panda_dev"
