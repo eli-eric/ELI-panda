@@ -22,6 +22,9 @@ var catalogueCategories []CatalogueCategory
 var catalogueUnits []CatalogCategoryPropertyUnit
 var cataloguePropertyTypes []CatalogCategoryPropertyType
 var catalogueLOVs []CatalogCategoryPropertyTypeLOV
+var manufacturers []Manufacturer
+var catalogueItems []CatalogueItem
+var catalogueItemValues []CatalogueItemValue
 
 // var catalogueCategoryGroups []CatalogueCatgeoryGroup
 // var catalogueCatgeoryProperties []CatalogueCategoryProperty
@@ -75,6 +78,22 @@ type CatalogCategoryPropertyTypeLOV struct {
 	ID_property_type int32
 }
 
+type Manufacturer struct {
+	ID   int32
+	Name string
+}
+
+type CatalogueItem struct {
+	ID         int32
+	Name       string
+	CategoryID int32
+}
+
+type CatalogueItemValue struct {
+	ID_item     int32
+	ID_property int32
+}
+
 var pgPool *pgxpool.Pool
 var connErr error
 
@@ -83,13 +102,14 @@ var execlErr error
 
 var totalStart time.Time
 
-var okPrint, errPrint, infoPrint color.Color
+var okPrint, errPrint, infoPrint, warningPrint color.Color
 
 func main() {
 
 	okPrint = *color.New(color.FgGreen)
 	errPrint = *color.New(color.FgRed)
 	infoPrint = *color.New(color.FgHiBlue)
+	warningPrint = *color.New(color.FgYellow)
 
 	if len(os.Args) == 1 {
 		errPrint.Println("Please specify the file name as a first cmd-line argument")
@@ -150,20 +170,117 @@ func main() {
 
 			switch sheetType {
 			case 0:
-				errPrint.Printf("Sheet %s ignored - not valid sheet.", name)
+				warningPrint.Printf("Sheet %s ignored.", name)
 				fmt.Println()
 				fmt.Println("_________________________________________________________________________")
 			case 1:
 				processCatalogueCategorySheet(name)
+			case 2:
+				processCatalogueItemsSheet(name)
 			}
-
-			//fmt.Println("_________________________________________________________________________")
 		}
-
-		totalEnd := time.Now()
-		infoPrint.Println("Total category sheets processed: ", categorySheetsCount)
-		infoPrint.Println("Total duration: ", totalEnd.Sub(totalStart).String())
 	}
+
+	totalEnd := time.Now()
+	infoPrint.Println("Total category sheets processed: ", categorySheetsCount)
+	infoPrint.Println("Total duration: ", totalEnd.Sub(totalStart).String())
+}
+
+func processCatalogueItemsSheet(sheetName string) {
+	//job start log
+	infoPrint.Printf("Job: Process catalogue items sheet: %s", sheetName)
+	fmt.Println()
+	start := time.Now()
+	fmt.Printf("Started at: %s", start.String())
+	fmt.Println()
+	itemsProcessed := 0
+	//first get category and its properties(to the top most parent)
+	categoryName, catErr := excelFile.GetCellValue(sheetName, "A1")
+	if catErr != nil {
+		errPrint.Println("Cant read category from the sheet: ", sheetName)
+	} else {
+		catExists, categoryID := existCategoryByName(categoryName)
+		if !catExists {
+			errPrint.Println("Cant find category by name: ", categoryName)
+		} else {
+			var allCategories []CatalogueCategory
+			cateogry := existingCategoryByID(categoryID)
+			allCategories = append(allCategories, *cateogry)
+			var parentID *int32 = cateogry.ID_parent
+			for parentID != nil {
+				cateogry = existingCategoryByID(*parentID)
+				allCategories = append(allCategories, *cateogry)
+				parentID = cateogry.ID_parent
+			}
+			// //now we have all relevant categories, so we can start to process excel rows
+			rows, _ := excelFile.GetRows(sheetName)
+			if len(rows) > 2 {
+				//read header
+				headerRow := rows[1]
+				var headerProps map[int]string = make(map[int]string)
+				if len(headerRow) > 5 {
+					for c := 5; c < len(headerRow); c++ {
+						headerProps[c] = normalizeHeader(headerRow[c])
+					}
+				}
+				//go row by row
+				for r := 2; r < len(rows); r++ {
+					//first 5 columns are fixed - general catalogue item properties
+					itemName := strings.TrimSpace(rows[r][0])
+					itemDescription := strings.TrimSpace(rows[r][1])
+					manufacturerName := strings.TrimSpace(rows[r][2])
+					manufacturerPartNumber := strings.TrimSpace(rows[r][3])
+					manufacturerURL := strings.TrimSpace(rows[r][4])
+					//check manufacturer
+					manufacturerID, manErr := checkAndGetManufacturerID(manufacturerName)
+					if manErr != nil {
+						errPrint.Println(manErr)
+					} else {
+						//lets check and/or create catalogue item
+						catalogueItemID, catErr := checkAndGetCatalogueItemID(categoryID, itemName, itemDescription, manufacturerID, manufacturerPartNumber, manufacturerURL)
+						if catErr != nil {
+							errPrint.Println(catErr)
+						} else {
+							itemsProcessed++
+
+							//now we will go column by column and process each property
+							for c := 5; c < len(rows[r]); c++ {
+								propName := headerProps[c]
+								if propName != "" {
+									var propFound bool
+									for catIdx := 0; catIdx < len(allCategories); catIdx++ {
+										propExists, propID := existCategoryGroupPropertyByCategoryIDAndPropName(allCategories[catIdx].ID, propName)
+										if propExists {
+											propValErr := checkAndCreateCatalogueItemValue(catalogueItemID, propID, strings.TrimSpace(rows[r][c]))
+											if propValErr != nil {
+												errPrint.Println(propValErr)
+											} else {
+												propFound = true
+											}
+										}
+									}
+									if !propFound && !strings.Contains(propName, "EUN") {
+										errPrint.Println("Property not found: ", propName)
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	//job end log
+	end := time.Now()
+
+	fmt.Printf("Finished at: %s", end.String())
+	fmt.Println()
+	fmt.Printf("Job duration: %s", end.Sub(start).String())
+	fmt.Println()
+	fmt.Println("Catalogue items processed: ", itemsProcessed)
+	infoPrint.Println("_________________________________________________________________________")
+	categorySheetsCount++
 }
 
 func processCatalogueCategorySheet(sheetName string) {
@@ -476,6 +593,75 @@ func getAndCacheAllCategories() error {
 			nextRow = rows.Next()
 		}
 	}
+	//get and cache manufacturers
+	rows, err = pgPool.Query(context.Background(), `SELECT m.id , m.name FROM panda.t_manufacturer m;`)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	} else {
+		var nextRow bool = rows.Next()
+
+		for {
+			if nextRow {
+				newItem := Manufacturer{}
+				errScan := rows.Scan(&newItem.ID, &newItem.Name)
+				if errScan == nil {
+					manufacturers = append(manufacturers, newItem)
+				} else {
+					errPrint.Println(errScan)
+				}
+			} else {
+				break
+			}
+			nextRow = rows.Next()
+		}
+	}
+	//get and cache catalogue items - only id , id_category and name
+	rows, err = pgPool.Query(context.Background(), `SELECT c.id , c.id_category, c.name FROM panda.t_catalog_item c;`)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	} else {
+		var nextRow bool = rows.Next()
+
+		for {
+			if nextRow {
+				newItem := CatalogueItem{}
+				errScan := rows.Scan(&newItem.ID, &newItem.CategoryID, &newItem.Name)
+				if errScan == nil {
+					catalogueItems = append(catalogueItems, newItem)
+				} else {
+					errPrint.Println(errScan)
+				}
+			} else {
+				break
+			}
+			nextRow = rows.Next()
+		}
+	}
+	//get and cache catalogue item values
+	rows, err = pgPool.Query(context.Background(), `SELECT c.id_item , c.id_property FROM panda.t_catalog_item_property_value c;`)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	} else {
+		var nextRow bool = rows.Next()
+
+		for {
+			if nextRow {
+				newItem := CatalogueItemValue{}
+				errScan := rows.Scan(&newItem.ID_item, &newItem.ID_property)
+				if errScan == nil {
+					catalogueItemValues = append(catalogueItemValues, newItem)
+				} else {
+					errPrint.Println(errScan)
+				}
+			} else {
+				break
+			}
+			nextRow = rows.Next()
+		}
+	}
 	return nil
 }
 
@@ -516,7 +702,7 @@ func existCategoryByName(name string) (bool, int32) {
 
 	for i := range catalogueCategories {
 
-		if strings.Contains(strings.ToLower(catalogueCategories[i].Name), strings.ToLower(name)) {
+		if strings.EqualFold(catalogueCategories[i].Name, name) {
 			resultExists = true
 			resultID = catalogueCategories[i].ID
 
@@ -525,6 +711,56 @@ func existCategoryByName(name string) (bool, int32) {
 	}
 
 	return resultExists, resultID
+}
+
+func checkAndGetManufacturerID(name string) (int32, error) {
+	var resultExists bool
+	var resultID int32
+
+	for i := range manufacturers {
+
+		if strings.EqualFold(manufacturers[i].Name, name) {
+			resultExists = true
+			resultID = manufacturers[i].ID
+
+			break
+		}
+	}
+	if !resultExists {
+		id, err := createManufacturer(name)
+		if err != nil {
+			return 0, err
+		} else {
+			resultID = id
+		}
+	}
+
+	return resultID, nil
+}
+
+func checkAndGetCatalogueItemID(id_category int32, itemName, itemDescription string, manufacturerID int32, manufacturerPartNumber, manufacturerURL string) (int32, error) {
+	var resultExists bool
+	var resultID int32
+
+	for i := range catalogueItems {
+
+		if catalogueItems[i].CategoryID == id_category && strings.EqualFold(catalogueItems[i].Name, itemName) {
+			resultExists = true
+			resultID = catalogueItems[i].ID
+
+			break
+		}
+	}
+	if !resultExists {
+		id, err := createCatalogueItem(id_category, itemName, itemDescription, manufacturerID, manufacturerPartNumber, manufacturerURL)
+		if err != nil {
+			return 0, err
+		} else {
+			resultID = id
+		}
+	}
+
+	return resultID, nil
 }
 
 func existCategoryPropUnitByName(name string) (bool, int32) {
@@ -559,6 +795,62 @@ func existCategoryPropTypeByName(name string) (bool, int32) {
 	}
 
 	return resultExists, resultID
+}
+
+func checkAndCreateCatalogueItemValue(id_item int32, id_property int32, value string) error {
+	var resultExists bool
+
+	for i := range catalogueItemValues {
+
+		if catalogueItemValues[i].ID_item == id_item && catalogueItemValues[i].ID_property == id_property {
+			resultExists = true
+			break
+		}
+	}
+	value = strings.ReplaceAll(value, `"`, `\"`)
+
+	valueJson := `{ "value" : "` + value + `" }`
+	if !resultExists {
+		tx, txErr := pgPool.BeginTx(context.Background(), pgx.TxOptions{})
+		if txErr == nil {
+
+			insertQuery := `INSERT INTO panda.t_catalog_item_property_value (id_item, id_property, value) VALUES ($1, $2, $3)`
+			_, err := tx.Exec(context.Background(), insertQuery, id_item, id_property, valueJson)
+			if err != nil {
+				tx.Rollback(context.Background())
+				return err
+			}
+			commitErr := tx.Commit(context.Background())
+			if commitErr != nil {
+				return commitErr
+			}
+			//so after succesfull insert into db we can add the record to the memory
+			newItem := CatalogueItemValue{}
+			newItem.ID_item = id_item
+			newItem.ID_property = id_property
+			catalogueItemValues = append(catalogueItemValues, newItem)
+		} else {
+			return txErr
+		}
+	} else {
+		tx, txErr := pgPool.BeginTx(context.Background(), pgx.TxOptions{})
+		if txErr == nil {
+			insertQuery := `UPDATE panda.t_catalog_item_property_value SET value = $3 WHERE id_item = $1 AND id_property = $2`
+			_, err := tx.Exec(context.Background(), insertQuery, id_item, id_property, valueJson)
+			if err != nil {
+				tx.Rollback(context.Background())
+				return err
+			}
+			commitErr := tx.Commit(context.Background())
+			if commitErr != nil {
+				return commitErr
+			}
+		} else {
+			return txErr
+		}
+	}
+
+	return nil
 }
 
 func existCategoryPropTypeLOVByName(name string, id_property_type int32) (bool, int32) {
@@ -598,7 +890,7 @@ mainLoop:
 	return resultExists, resultID
 }
 
-//this funtion check if the category group exists by passing name as a parameter and id of the group
+//this funtion check if the property exists by passing property name as a parameter and id of the group
 func existCategoryGroupPropertyByGroupIDAndName(id_group int32, name string) (bool, int32) {
 	var resultExists bool
 	var resultID int32
@@ -607,7 +899,28 @@ mainLoop:
 	for i := range catalogueCategories {
 		for g := range catalogueCategories[i].Groups {
 			for p := range catalogueCategories[i].Groups[g].Properties {
-				if catalogueCategories[i].Groups[g].ID == id_group && strings.Contains(strings.ToLower(catalogueCategories[i].Groups[g].Name), strings.ToLower(name)) {
+				if catalogueCategories[i].Groups[g].ID == id_group && strings.EqualFold(catalogueCategories[i].Groups[g].Properties[p].Name, name) {
+					resultExists = true
+					resultID = catalogueCategories[i].Groups[g].Properties[p].ID
+
+					break mainLoop
+				}
+			}
+		}
+	}
+
+	return resultExists, resultID
+}
+
+func existCategoryGroupPropertyByCategoryIDAndPropName(id_category int32, name string) (bool, int32) {
+	var resultExists bool
+	var resultID int32
+
+mainLoop:
+	for i := range catalogueCategories {
+		for g := range catalogueCategories[i].Groups {
+			for p := range catalogueCategories[i].Groups[g].Properties {
+				if catalogueCategories[i].Groups[g].ID_category == id_category && strings.EqualFold(catalogueCategories[i].Groups[g].Properties[p].Name, name) {
 					resultExists = true
 					resultID = catalogueCategories[i].Groups[g].Properties[p].ID
 
@@ -666,6 +979,74 @@ func createCatalogueCategory(categoryName string) (int32, error) {
 		newCategory.Code = categoryName
 		newCategory.ID = newID
 		catalogueCategories = append(catalogueCategories, newCategory)
+	} else {
+		return newID, txErr
+	}
+
+	return newID, nil
+}
+
+func createManufacturer(name string) (int32, error) {
+	var newID int32
+	//one thing is to add category into the database
+	//in the second step we have to add category to local cache
+	tx, txErr := pgPool.BeginTx(context.Background(), pgx.TxOptions{})
+	if txErr == nil {
+		insertQuery := `INSERT INTO panda.t_manufacturer ("name") VALUES ($1)`
+		_, err := tx.Exec(context.Background(), insertQuery, name)
+		if err != nil {
+			return newID, err
+		}
+		//we are interested in a new record id
+		newIdQuery := `SELECT LASTVAL()`
+		newIdRowErr := tx.QueryRow(context.Background(), newIdQuery).Scan(&newID)
+		if newIdRowErr != nil {
+			return newID, newIdRowErr
+		}
+		commitErr := tx.Commit(context.Background())
+		if commitErr != nil {
+			return newID, commitErr
+		}
+		//so after succesfull insert into db we can add the record to the memory
+		newItem := Manufacturer{}
+		newItem.ID = newID
+		newItem.Name = name
+		manufacturers = append(manufacturers, newItem)
+	} else {
+		return newID, txErr
+	}
+
+	return newID, nil
+}
+
+func createCatalogueItem(id_category int32, itemName, itemDescription string, manufacturerID int32, manufacturerPartNumber, manufacturerURL string) (int32, error) {
+	var newID int32
+	//one thing is to add category into the database
+	//in the second step we have to add category to local cache
+	tx, txErr := pgPool.BeginTx(context.Background(), pgx.TxOptions{})
+	if txErr == nil {
+		insertQuery := `INSERT INTO panda.t_catalog_item ("name", id_category, note, id_manufacturer, manufacturerpartnumber, manufactureritemurl)
+		VALUES($1, $2, $3, $4, $5, $6);`
+		_, err := tx.Exec(context.Background(), insertQuery, itemName, id_category, itemDescription, manufacturerID, manufacturerPartNumber, manufacturerURL)
+		if err != nil {
+			return newID, err
+		}
+		//we are interested in a new record id
+		newIdQuery := `SELECT LASTVAL()`
+		newIdRowErr := tx.QueryRow(context.Background(), newIdQuery).Scan(&newID)
+		if newIdRowErr != nil {
+			return newID, newIdRowErr
+		}
+		commitErr := tx.Commit(context.Background())
+		if commitErr != nil {
+			return newID, commitErr
+		}
+		//so after succesfull insert into db we can add the record to the memory
+		newItem := CatalogueItem{}
+		newItem.ID = newID
+		newItem.Name = itemName
+		newItem.CategoryID = id_category
+		catalogueItems = append(catalogueItems, newItem)
 	} else {
 		return newID, txErr
 	}

@@ -10,7 +10,7 @@
             "request": "launch",
             "mode": "auto",
             "program": "${fileDirname}",
-            "args": ["import-data/actuators.xlsx"]
+            "args": ["import-data/BeamCharacterization.xlsx"]
         }
     ]
 }
