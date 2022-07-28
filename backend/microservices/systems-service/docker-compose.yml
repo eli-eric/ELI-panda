@@ -1,0 +1,21 @@
+version: '3.9'
+
+networks:
+  panda-net:
+    name: panda-net
+    driver: bridge
+
+services:
+
+  panda-backend:
+    container_name: panda-microservices-systems-service
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      labels: 
+        - panda-microservices-systems-service
+    networks:
+      - panda-net
+    ports:
+      - '127.0.0.1:50051:50051'
