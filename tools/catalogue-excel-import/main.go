@@ -417,7 +417,7 @@ func processCatalogueCategorySheet(sheetName string) {
 					prop.DefaultValue = &propDefaultValue
 				}
 				//sett if prop allow custom vlaues
-				if propCustomValue == "1" {
+				if propCustomValue == "1" || strings.EqualFold(propCustomValue, "true") {
 					prop.AllowCustomValue = true
 				}
 
