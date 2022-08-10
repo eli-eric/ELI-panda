@@ -172,7 +172,7 @@ func main() {
 			case 0:
 				warningPrint.Printf("Sheet %s ignored.", name)
 				fmt.Println()
-				fmt.Println("_________________________________________________________________________")
+				infoPrint.Println("_________________________________________________________________________")
 			case 1:
 				processCatalogueCategorySheet(name)
 			case 2:
@@ -183,6 +183,7 @@ func main() {
 
 	totalEnd := time.Now()
 	infoPrint.Println("Total category sheets processed: ", categorySheetsCount)
+	infoPrint.Println("Total catalogue items sheets processed: ", itemsSheetsCount)
 	infoPrint.Println("Total duration: ", totalEnd.Sub(totalStart).String())
 }
 
@@ -274,13 +275,14 @@ func processCatalogueItemsSheet(sheetName string) {
 	//job end log
 	end := time.Now()
 
+	fmt.Println("Catalogue items processed: ", itemsProcessed)
 	fmt.Printf("Finished at: %s", end.String())
 	fmt.Println()
 	fmt.Printf("Job duration: %s", end.Sub(start).String())
 	fmt.Println()
-	fmt.Println("Catalogue items processed: ", itemsProcessed)
+
 	infoPrint.Println("_________________________________________________________________________")
-	categorySheetsCount++
+	itemsSheetsCount++
 }
 
 func processCatalogueCategorySheet(sheetName string) {

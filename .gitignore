@@ -7,3 +7,4 @@ frontend/build
 frontend/build/index.html
 backend/api-gateway-go/apigateway
 ELI-PANDA.code-workspace
+tools/catalogue-excel-import/catalogue-excel-import
