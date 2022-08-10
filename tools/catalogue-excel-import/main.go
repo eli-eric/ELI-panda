@@ -299,6 +299,7 @@ func processCatalogueCategorySheet(sheetName string) {
 	parentCategoryName, _ := excelFile.GetCellValue(sheetName, "C4")
 
 	//lets find if this category exist - if so do nothing
+	//we have to traverse up the tree to the root category - id_parent == NULL
 	var categoryExists, categoryID = existCategoryByName(categoryName)
 	//if category doesnt exist -> create into the DB -> get back new id and store in memory
 	if !categoryExists {
@@ -419,7 +420,7 @@ func processCatalogueCategorySheet(sheetName string) {
 					prop.DefaultValue = &propDefaultValue
 				}
 				//sett if prop allow custom vlaues
-				if propCustomValue == "1" {
+				if propCustomValue == "1" || strings.EqualFold(propCustomValue, "true") {
 					prop.AllowCustomValue = true
 				}
 
@@ -468,6 +469,24 @@ func getAndCacheAllCategories() error {
 				break
 			}
 			nextRow = rows.Next()
+		}
+
+		for _, cat := range catalogueCategories {
+			var parentCategories []string
+			parentCategories = append(parentCategories, cat.Name)
+			parentID := cat.ID_parent
+
+			for parentID != nil {
+				category := existingCategoryByID(*parentID)
+				if category != nil {
+					parentCategories = append(parentCategories, category.Name)
+					parentID = category.ID_parent
+				} else {
+					break
+				}
+			}
+
+			okPrint.Println(strings.Join(parentCategories, ";"))
 		}
 	}
 	//get and cache category groups

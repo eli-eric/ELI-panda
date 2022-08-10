@@ -1709,3 +1709,6 @@ ALTER TABLE panda.t_catalog_category ALTER COLUMN code TYPE varchar(200) USING c
 
 ALTER TABLE panda.t_catalog_item ADD IF NOT EXISTS ManufacturerItemUrl varchar(500) NULL;
 ALTER TABLE panda.t_catalog_item ADD IF NOT EXISTS ManufacturerPartNumber varchar(500) NULL;
+
+ALTER TABLE panda.t_catalog_item_property_value DROP CONSTRAINT t_catalog_item_property_value_item_fk;
+ALTER TABLE panda.t_catalog_item_property_value ADD CONSTRAINT t_catalog_item_property_value_item_fk FOREIGN KEY (id_item) REFERENCES panda.t_catalog_item(id) ON DELETE CASCADE;

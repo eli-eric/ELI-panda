@@ -9,7 +9,7 @@ services:
   neo4j:
     container_name: neo4j
     image: neo4j:4.4.6@sha256:ac30efa12f5a78ea981784d538243afc743ec59bb7823cbbeabe336beb68354b
-    user: "1020:1020"
+    # user: "1020:1020"
     restart: unless-stopped
     environment:
       - NEO4J_AUTH=neo4j/fw34-sdRF
