@@ -1,6 +1,6 @@
 -- DROP SCHEMA panda;
 
-CREATE SCHEMA IF NOT EXISTS panda AUTHORIZATION postgres;
+CREATE SCHEMA IF NOT EXISTS panda AUTHORIZATION panda;
 
 -- DROP SEQUENCE panda.t_catalog_availability_id_seq;
 
@@ -14,8 +14,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_availability_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_availability_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_availability_id_seq TO postgres;
+ALTER SEQUENCE panda.t_catalog_availability_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_availability_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_availability_id_seq1;
 
@@ -29,8 +29,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_availability_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_availability_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_availability_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_catalog_availability_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_availability_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_availability_id_seq2;
 
@@ -44,8 +44,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_availability_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_availability_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_availability_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_catalog_availability_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_availability_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_category_id_seq;
 
@@ -59,8 +59,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_category_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_category_id_seq TO postgres;
+ALTER SEQUENCE panda.t_catalog_category_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_category_id_seq1;
 
@@ -74,8 +74,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_category_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_category_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_catalog_category_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_category_id_seq2;
 
@@ -89,8 +89,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_category_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_category_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_catalog_category_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_group_id_seq;
 
@@ -104,8 +104,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_group_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_category_property_group_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_category_property_group_id_seq TO postgres;
+ALTER SEQUENCE panda.t_catalog_category_property_group_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_group_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_group_id_seq1;
 
@@ -119,8 +119,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_group_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_category_property_group_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_category_property_group_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_catalog_category_property_group_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_group_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_group_id_seq2;
 
@@ -134,8 +134,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_group_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_category_property_group_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_category_property_group_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_catalog_category_property_group_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_group_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_id_seq;
 
@@ -149,8 +149,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_category_property_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_category_property_id_seq TO postgres;
+ALTER SEQUENCE panda.t_catalog_category_property_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_id_seq1;
 
@@ -164,8 +164,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_category_property_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_category_property_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_catalog_category_property_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_id_seq2;
 
@@ -179,8 +179,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_category_property_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_category_property_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_catalog_category_property_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_lov_id_seq;
 
@@ -194,8 +194,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_lov_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_category_property_lov_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_category_property_lov_id_seq TO postgres;
+ALTER SEQUENCE panda.t_catalog_category_property_lov_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_lov_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_lov_id_seq1;
 
@@ -209,8 +209,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_lov_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_category_property_lov_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_category_property_lov_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_catalog_category_property_lov_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_lov_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_lov_id_seq2;
 
@@ -224,8 +224,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_lov_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_category_property_lov_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_category_property_lov_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_catalog_category_property_lov_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_lov_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_type_id_seq;
 
@@ -239,8 +239,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_type_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_category_property_type_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_category_property_type_id_seq TO postgres;
+ALTER SEQUENCE panda.t_catalog_category_property_type_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_type_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_type_id_seq1;
 
@@ -254,8 +254,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_type_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_category_property_type_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_category_property_type_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_catalog_category_property_type_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_type_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_category_property_type_id_seq2;
 
@@ -269,8 +269,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_category_property_type_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_category_property_type_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_category_property_type_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_catalog_category_property_type_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_category_property_type_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_documents_id_seq;
 
@@ -284,8 +284,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_documents_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_documents_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_documents_id_seq TO postgres;
+ALTER SEQUENCE panda.t_catalog_documents_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_documents_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_documents_id_seq1;
 
@@ -299,8 +299,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_documents_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_documents_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_documents_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_catalog_documents_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_documents_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_documents_id_seq2;
 
@@ -314,8 +314,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_documents_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_documents_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_documents_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_catalog_documents_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_documents_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_item_id_seq;
 
@@ -329,8 +329,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_item_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_item_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_item_id_seq TO postgres;
+ALTER SEQUENCE panda.t_catalog_item_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_item_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_item_id_seq1;
 
@@ -344,8 +344,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_item_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_item_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_item_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_catalog_item_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_item_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_catalog_item_id_seq2;
 
@@ -359,8 +359,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_catalog_item_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_catalog_item_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_catalog_item_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_catalog_item_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_catalog_item_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_item_documents_id_seq;
 
@@ -374,8 +374,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_item_documents_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_item_documents_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_item_documents_id_seq TO postgres;
+ALTER SEQUENCE panda.t_item_documents_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_item_documents_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_item_documents_id_seq1;
 
@@ -389,8 +389,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_item_documents_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_item_documents_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_item_documents_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_item_documents_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_item_documents_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_item_documents_id_seq2;
 
@@ -404,8 +404,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_item_documents_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_item_documents_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_item_documents_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_item_documents_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_item_documents_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_item_id_seq;
 
@@ -419,8 +419,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_item_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_item_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_item_id_seq TO postgres;
+ALTER SEQUENCE panda.t_item_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_item_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_item_id_seq1;
 
@@ -434,8 +434,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_item_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_item_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_item_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_item_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_item_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_item_id_seq2;
 
@@ -449,8 +449,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_item_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_item_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_item_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_item_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_item_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_location_id_seq;
 
@@ -464,8 +464,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_location_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_location_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_location_id_seq TO postgres;
+ALTER SEQUENCE panda.t_location_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_location_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_location_id_seq1;
 
@@ -479,8 +479,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_location_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_location_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_location_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_location_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_location_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_location_id_seq2;
 
@@ -494,8 +494,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_location_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_location_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_location_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_location_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_location_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_security_access_entity_id_seq;
 
@@ -509,8 +509,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_security_access_entity_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_security_access_entity_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_security_access_entity_id_seq TO postgres;
+ALTER SEQUENCE panda.t_security_access_entity_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_security_access_entity_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_security_access_entity_id_seq1;
 
@@ -524,8 +524,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_security_access_entity_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_security_access_entity_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_security_access_entity_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_security_access_entity_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_security_access_entity_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_security_access_entity_id_seq2;
 
@@ -539,8 +539,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_security_access_entity_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_security_access_entity_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_security_access_entity_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_security_access_entity_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_security_access_entity_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_security_access_id_seq;
 
@@ -554,8 +554,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_security_access_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_security_access_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_security_access_id_seq TO postgres;
+ALTER SEQUENCE panda.t_security_access_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_security_access_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_security_access_id_seq1;
 
@@ -569,8 +569,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_security_access_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_security_access_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_security_access_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_security_access_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_security_access_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_security_access_id_seq2;
 
@@ -584,8 +584,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_security_access_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_security_access_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_security_access_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_security_access_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_security_access_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_security_role_id_seq;
 
@@ -599,8 +599,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_security_role_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_security_role_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_security_role_id_seq TO postgres;
+ALTER SEQUENCE panda.t_security_role_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_security_role_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_security_role_id_seq1;
 
@@ -614,8 +614,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_security_role_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_security_role_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_security_role_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_security_role_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_security_role_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_security_role_id_seq2;
 
@@ -629,8 +629,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_security_role_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_security_role_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_security_role_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_security_role_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_security_role_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_security_team_id_seq;
 
@@ -644,8 +644,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_security_team_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_security_team_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_security_team_id_seq TO postgres;
+ALTER SEQUENCE panda.t_security_team_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_security_team_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_security_team_id_seq1;
 
@@ -659,8 +659,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_security_team_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_security_team_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_security_team_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_security_team_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_security_team_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_security_team_id_seq2;
 
@@ -674,8 +674,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_security_team_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_security_team_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_security_team_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_security_team_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_security_team_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_security_user_id_seq;
 
@@ -689,8 +689,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_security_user_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_security_user_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_security_user_id_seq TO postgres;
+ALTER SEQUENCE panda.t_security_user_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_security_user_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_security_user_id_seq1;
 
@@ -704,8 +704,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_security_user_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_security_user_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_security_user_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_security_user_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_security_user_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_security_user_id_seq2;
 
@@ -719,8 +719,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_security_user_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_security_user_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_security_user_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_security_user_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_security_user_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_supplier_id_seq;
 
@@ -734,8 +734,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_supplier_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_supplier_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_supplier_id_seq TO postgres;
+ALTER SEQUENCE panda.t_supplier_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_supplier_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_supplier_id_seq1;
 
@@ -749,8 +749,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_supplier_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_supplier_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_supplier_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_supplier_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_supplier_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_supplier_id_seq2;
 
@@ -764,8 +764,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_supplier_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_supplier_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_supplier_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_supplier_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_supplier_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_system_id_seq;
 
@@ -779,8 +779,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_system_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_system_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_system_id_seq TO postgres;
+ALTER SEQUENCE panda.t_system_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_system_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_system_id_seq1;
 
@@ -794,8 +794,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_system_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_system_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_system_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_system_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_system_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_system_id_seq2;
 
@@ -809,8 +809,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_system_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_system_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_system_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_system_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_system_id_seq2 TO panda;
 
 -- DROP SEQUENCE panda.t_system_relationship_type_id_seq;
 
@@ -824,8 +824,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_system_relationship_type_id_seq
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_system_relationship_type_id_seq OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_system_relationship_type_id_seq TO postgres;
+ALTER SEQUENCE panda.t_system_relationship_type_id_seq OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_system_relationship_type_id_seq TO panda;
 
 -- DROP SEQUENCE panda.t_system_relationship_type_id_seq1;
 
@@ -839,8 +839,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_system_relationship_type_id_seq1
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_system_relationship_type_id_seq1 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_system_relationship_type_id_seq1 TO postgres;
+ALTER SEQUENCE panda.t_system_relationship_type_id_seq1 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_system_relationship_type_id_seq1 TO panda;
 
 -- DROP SEQUENCE panda.t_system_relationship_type_id_seq2;
 
@@ -854,8 +854,8 @@ CREATE SEQUENCE  IF NOT EXISTS panda.t_system_relationship_type_id_seq2
 
 -- Permissions
 
-ALTER SEQUENCE panda.t_system_relationship_type_id_seq2 OWNER TO postgres;
-GRANT ALL ON SEQUENCE panda.t_system_relationship_type_id_seq2 TO postgres;
+ALTER SEQUENCE panda.t_system_relationship_type_id_seq2 OWNER TO panda;
+GRANT ALL ON SEQUENCE panda.t_system_relationship_type_id_seq2 TO panda;
 -- panda.t_catalog_availability definition
 
 -- Drop table
@@ -871,8 +871,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_catalog_availability (
 
 -- Permissions
 
-ALTER TABLE panda.t_catalog_availability OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_catalog_availability TO postgres;
+ALTER TABLE panda.t_catalog_availability OWNER TO panda;
+GRANT ALL ON TABLE panda.t_catalog_availability TO panda;
 
 
 -- panda.t_catalog_category_property_type definition
@@ -891,8 +891,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_catalog_category_property_type (
 
 -- Permissions
 
-ALTER TABLE panda.t_catalog_category_property_type OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_catalog_category_property_type TO postgres;
+ALTER TABLE panda.t_catalog_category_property_type OWNER TO panda;
+GRANT ALL ON TABLE panda.t_catalog_category_property_type TO panda;
 
 
 -- panda.t_facility definition
@@ -910,8 +910,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_facility (
 
 -- Permissions
 
-ALTER TABLE panda.t_facility OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_facility TO postgres;
+ALTER TABLE panda.t_facility OWNER TO panda;
+GRANT ALL ON TABLE panda.t_facility TO panda;
 
 
 -- panda.t_item_condition definition
@@ -929,8 +929,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_item_condition (
 
 -- Permissions
 
-ALTER TABLE panda.t_item_condition OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_item_condition TO postgres;
+ALTER TABLE panda.t_item_condition OWNER TO panda;
+GRANT ALL ON TABLE panda.t_item_condition TO panda;
 
 
 -- panda.t_item_proucrement_status definition
@@ -948,8 +948,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_item_proucrement_status (
 
 -- Permissions
 
-ALTER TABLE panda.t_item_proucrement_status OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_item_proucrement_status TO postgres;
+ALTER TABLE panda.t_item_proucrement_status OWNER TO panda;
+GRANT ALL ON TABLE panda.t_item_proucrement_status TO panda;
 
 
 -- panda.t_item_serviceability definition
@@ -967,8 +967,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_item_serviceability (
 
 -- Permissions
 
-ALTER TABLE panda.t_item_serviceability OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_item_serviceability TO postgres;
+ALTER TABLE panda.t_item_serviceability OWNER TO panda;
+GRANT ALL ON TABLE panda.t_item_serviceability TO panda;
 
 
 -- panda.t_item_status definition
@@ -986,8 +986,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_item_status (
 
 -- Permissions
 
-ALTER TABLE panda.t_item_status OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_item_status TO postgres;
+ALTER TABLE panda.t_item_status OWNER TO panda;
+GRANT ALL ON TABLE panda.t_item_status TO panda;
 
 
 -- panda.t_location definition
@@ -1005,8 +1005,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_location (
 
 -- Permissions
 
-ALTER TABLE panda.t_location OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_location TO postgres;
+ALTER TABLE panda.t_location OWNER TO panda;
+GRANT ALL ON TABLE panda.t_location TO panda;
 
 
 -- panda.t_manufacturer definition
@@ -1024,8 +1024,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_manufacturer (
 
 -- Permissions
 
-ALTER TABLE panda.t_manufacturer OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_manufacturer TO postgres;
+ALTER TABLE panda.t_manufacturer OWNER TO panda;
+GRANT ALL ON TABLE panda.t_manufacturer TO panda;
 
 
 -- panda.t_security_role definition
@@ -1044,8 +1044,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_security_role (
 
 -- Permissions
 
-ALTER TABLE panda.t_security_role OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_security_role TO postgres;
+ALTER TABLE panda.t_security_role OWNER TO panda;
+GRANT ALL ON TABLE panda.t_security_role TO panda;
 
 
 -- panda.t_security_team definition
@@ -1063,8 +1063,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_security_team (
 
 -- Permissions
 
-ALTER TABLE panda.t_security_team OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_security_team TO postgres;
+ALTER TABLE panda.t_security_team OWNER TO panda;
+GRANT ALL ON TABLE panda.t_security_team TO panda;
 
 
 -- panda.t_supplier definition
@@ -1083,8 +1083,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_supplier (
 
 -- Permissions
 
-ALTER TABLE panda.t_supplier OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_supplier TO postgres;
+ALTER TABLE panda.t_supplier OWNER TO panda;
+GRANT ALL ON TABLE panda.t_supplier TO panda;
 
 
 -- panda.t_system_relationship_type definition
@@ -1102,8 +1102,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_system_relationship_type (
 
 -- Permissions
 
-ALTER TABLE panda.t_system_relationship_type OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_system_relationship_type TO postgres;
+ALTER TABLE panda.t_system_relationship_type OWNER TO panda;
+GRANT ALL ON TABLE panda.t_system_relationship_type TO panda;
 
 
 -- panda.t_catalog_category definition
@@ -1125,8 +1125,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_catalog_category (
 
 -- Permissions
 
-ALTER TABLE panda.t_catalog_category OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_catalog_category TO postgres;
+ALTER TABLE panda.t_catalog_category OWNER TO panda;
+GRANT ALL ON TABLE panda.t_catalog_category TO panda;
 
 
 -- panda.t_catalog_category_property_group definition
@@ -1145,8 +1145,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_catalog_category_property_group (
 
 -- Permissions
 
-ALTER TABLE panda.t_catalog_category_property_group OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_catalog_category_property_group TO postgres;
+ALTER TABLE panda.t_catalog_category_property_group OWNER TO panda;
+GRANT ALL ON TABLE panda.t_catalog_category_property_group TO panda;
 
 
 -- panda.t_catalog_category_property_lov definition
@@ -1166,8 +1166,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_catalog_category_property_lov (
 
 -- Permissions
 
-ALTER TABLE panda.t_catalog_category_property_lov OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_catalog_category_property_lov TO postgres;
+ALTER TABLE panda.t_catalog_category_property_lov OWNER TO panda;
+GRANT ALL ON TABLE panda.t_catalog_category_property_lov TO panda;
 
 
 -- panda.t_catalog_item definition
@@ -1197,8 +1197,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_catalog_item (
 
 -- Permissions
 
-ALTER TABLE panda.t_catalog_item OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_catalog_item TO postgres;
+ALTER TABLE panda.t_catalog_item OWNER TO panda;
+GRANT ALL ON TABLE panda.t_catalog_item TO panda;
 
 
 -- panda.t_item definition
@@ -1234,8 +1234,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_item (
 
 -- Permissions
 
-ALTER TABLE panda.t_item OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_item TO postgres;
+ALTER TABLE panda.t_item OWNER TO panda;
+GRANT ALL ON TABLE panda.t_item TO panda;
 
 
 -- panda.t_item_documents definition
@@ -1258,8 +1258,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_item_documents (
 
 -- Permissions
 
-ALTER TABLE panda.t_item_documents OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_item_documents TO postgres;
+ALTER TABLE panda.t_item_documents OWNER TO panda;
+GRANT ALL ON TABLE panda.t_item_documents TO panda;
 
 
 -- panda.t_security_access_entity definition
@@ -1280,8 +1280,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_security_access_entity (
 
 -- Permissions
 
-ALTER TABLE panda.t_security_access_entity OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_security_access_entity TO postgres;
+ALTER TABLE panda.t_security_access_entity OWNER TO panda;
+GRANT ALL ON TABLE panda.t_security_access_entity TO panda;
 
 
 -- panda.t_security_user definition
@@ -1305,8 +1305,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_security_user (
 
 -- Permissions
 
-ALTER TABLE panda.t_security_user OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_security_user TO postgres;
+ALTER TABLE panda.t_security_user OWNER TO panda;
+GRANT ALL ON TABLE panda.t_security_user TO panda;
 
 
 -- panda.t_security_user_role definition
@@ -1325,8 +1325,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_security_user_role (
 
 -- Permissions
 
-ALTER TABLE panda.t_security_user_role OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_security_user_role TO postgres;
+ALTER TABLE panda.t_security_user_role OWNER TO panda;
+GRANT ALL ON TABLE panda.t_security_user_role TO panda;
 
 
 -- panda.t_security_user_team definition
@@ -1346,8 +1346,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_security_user_team (
 
 -- Permissions
 
-ALTER TABLE panda.t_security_user_team OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_security_user_team TO postgres;
+ALTER TABLE panda.t_security_user_team OWNER TO panda;
+GRANT ALL ON TABLE panda.t_security_user_team TO panda;
 
 
 -- panda.t_system definition
@@ -1374,8 +1374,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_system (
 
 -- Permissions
 
-ALTER TABLE panda.t_system OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_system TO postgres;
+ALTER TABLE panda.t_system OWNER TO panda;
+GRANT ALL ON TABLE panda.t_system TO panda;
 
 
 -- panda.t_system_item definition
@@ -1394,8 +1394,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_system_item (
 
 -- Permissions
 
-ALTER TABLE panda.t_system_item OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_system_item TO postgres;
+ALTER TABLE panda.t_system_item OWNER TO panda;
+GRANT ALL ON TABLE panda.t_system_item TO panda;
 
 
 -- panda.t_system_relationship definition
@@ -1416,8 +1416,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_system_relationship (
 
 -- Permissions
 
-ALTER TABLE panda.t_system_relationship OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_system_relationship TO postgres;
+ALTER TABLE panda.t_system_relationship OWNER TO panda;
+GRANT ALL ON TABLE panda.t_system_relationship TO panda;
 
 
 -- panda.t_catalog_category_property definition
@@ -1442,8 +1442,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_catalog_category_property (
 
 -- Permissions
 
-ALTER TABLE panda.t_catalog_category_property OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_catalog_category_property TO postgres;
+ALTER TABLE panda.t_catalog_category_property OWNER TO panda;
+GRANT ALL ON TABLE panda.t_catalog_category_property TO panda;
 
 
 -- panda.t_catalog_documents definition
@@ -1466,8 +1466,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_catalog_documents (
 
 -- Permissions
 
-ALTER TABLE panda.t_catalog_documents OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_catalog_documents TO postgres;
+ALTER TABLE panda.t_catalog_documents OWNER TO panda;
+GRANT ALL ON TABLE panda.t_catalog_documents TO panda;
 
 
 -- panda.t_catalog_item_property_value definition
@@ -1487,8 +1487,8 @@ CREATE TABLE  IF NOT EXISTS panda.t_catalog_item_property_value (
 
 -- Permissions
 
-ALTER TABLE panda.t_catalog_item_property_value OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_catalog_item_property_value TO postgres;
+ALTER TABLE panda.t_catalog_item_property_value OWNER TO panda;
+GRANT ALL ON TABLE panda.t_catalog_item_property_value TO panda;
 
 
 -- panda.t_security_access definition
@@ -1512,13 +1512,13 @@ CREATE TABLE  IF NOT EXISTS panda.t_security_access (
 
 -- Permissions
 
-ALTER TABLE panda.t_security_access OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_security_access TO postgres;
+ALTER TABLE panda.t_security_access OWNER TO panda;
+GRANT ALL ON TABLE panda.t_security_access TO panda;
 
 
 -- Permissions
 
-GRANT ALL ON SCHEMA panda TO postgres;
+GRANT ALL ON SCHEMA panda TO panda;
 
 -- Now we try to add some test data to the t_security_team table:
 
@@ -1597,8 +1597,8 @@ end; $function$
 
 -- Permissions for f_get_catalog_items_paged
 
-ALTER FUNCTION panda.f_get_catalog_items_paged(int4,int4,varchar,int4) OWNER TO postgres;
-GRANT ALL ON FUNCTION panda.f_get_catalog_items_paged(int4,int4,varchar,int4) TO postgres;
+ALTER FUNCTION panda.f_get_catalog_items_paged(int4,int4,varchar,int4) OWNER TO panda;
+GRANT ALL ON FUNCTION panda.f_get_catalog_items_paged(int4,int4,varchar,int4) TO panda;
 
 --we also need a function to count total items for the function above
 DROP FUNCTION IF EXISTS panda.f_get_catalog_items_count(varchar);
@@ -1624,8 +1624,8 @@ end; $function$
 
 -- Permissions for f_get_catalog_items_count
 
-ALTER FUNCTION panda.f_get_catalog_items_count(varchar) OWNER TO postgres;
-GRANT ALL ON FUNCTION panda.f_get_catalog_items_count(varchar) TO postgres;
+ALTER FUNCTION panda.f_get_catalog_items_count(varchar) OWNER TO panda;
+GRANT ALL ON FUNCTION panda.f_get_catalog_items_count(varchar) TO panda;
 
 
 --return type changed so we have to re-create the this function to ge catalog items
@@ -1668,8 +1668,8 @@ end; $function$
 
 -- Permissions for f_get_catalog_items_paged
 
-ALTER FUNCTION panda.f_get_catalog_items_paged(int4,int4,varchar,int4) OWNER TO postgres;
-GRANT ALL ON FUNCTION panda.f_get_catalog_items_paged(int4,int4,varchar,int4) TO postgres;
+ALTER FUNCTION panda.f_get_catalog_items_paged(int4,int4,varchar,int4) OWNER TO panda;
+GRANT ALL ON FUNCTION panda.f_get_catalog_items_paged(int4,int4,varchar,int4) TO panda;
 
 -- add order to catalog item prop group
 ALTER TABLE panda.t_catalog_category_property_group ADD IF NOT EXISTS order_position int4 NOT NULL DEFAULT 0;
@@ -1685,8 +1685,8 @@ CREATE TABLE IF NOT EXISTS  panda.t_catalog_category_property_unit (
 );
 
 -- Permissions
-ALTER TABLE panda.t_catalog_category_property_unit OWNER TO postgres;
-GRANT ALL ON TABLE panda.t_catalog_category_property_unit TO postgres;
+ALTER TABLE panda.t_catalog_category_property_unit OWNER TO panda;
+GRANT ALL ON TABLE panda.t_catalog_category_property_unit TO panda;
 
 
 ALTER TABLE panda.t_catalog_category_property ADD IF NOT EXISTS id_unit int4 NULL;
@@ -1712,3 +1712,5 @@ ALTER TABLE panda.t_catalog_item ADD IF NOT EXISTS ManufacturerPartNumber varcha
 
 ALTER TABLE panda.t_catalog_item_property_value DROP CONSTRAINT t_catalog_item_property_value_item_fk;
 ALTER TABLE panda.t_catalog_item_property_value ADD CONSTRAINT t_catalog_item_property_value_item_fk FOREIGN KEY (id_item) REFERENCES panda.t_catalog_item(id) ON DELETE CASCADE;
+
+ALTER TABLE panda.t_catalog_item ADD IF NOT EXISTS helper_pbs_eun varchar(50) NULL;

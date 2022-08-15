@@ -4,3 +4,11 @@
     "PostgresqlPassword" : "Solu1058",
     "PostgresqlDatabase" : "panda_dev"
 }
+
+
+// {
+//     "PostgresqlHost" : "10.11.4.151:5432",
+//     "PostgresqlUsername" : "panda",
+//     "PostgresqlPassword" : "elipand74!G",
+//     "PostgresqlDatabase" : "pgpandatest"
+// }

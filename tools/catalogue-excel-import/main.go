@@ -87,6 +87,7 @@ type CatalogueItem struct {
 	ID         int32
 	Name       string
 	CategoryID int32
+	PBSEUN     string
 }
 
 type CatalogueItemValue struct {
@@ -218,10 +219,15 @@ func processCatalogueItemsSheet(sheetName string) {
 			if len(rows) > 2 {
 				//read header
 				headerRow := rows[1]
+				//idx for EUN column
+				pbs_eun_idx := len(rows[1]) - 1
 				var headerProps map[int]string = make(map[int]string)
 				if len(headerRow) > 5 {
 					for c := 5; c < len(headerRow); c++ {
 						headerProps[c] = normalizeHeader(headerRow[c])
+						if strings.Contains(headerProps[c], "eun") {
+							pbs_eun_idx = c
+						}
 					}
 				}
 				//go row by row
@@ -232,13 +238,17 @@ func processCatalogueItemsSheet(sheetName string) {
 					manufacturerName := strings.TrimSpace(rows[r][2])
 					manufacturerPartNumber := strings.TrimSpace(rows[r][3])
 					manufacturerURL := strings.TrimSpace(rows[r][4])
+					pbs_eun := ""
+					if len(rows[r]) > pbs_eun_idx {
+						pbs_eun = strings.TrimSpace(rows[r][pbs_eun_idx])
+					}
 					//check manufacturer
 					manufacturerID, manErr := checkAndGetManufacturerID(manufacturerName)
 					if manErr != nil {
 						errPrint.Println(manErr)
 					} else {
 						//lets check and/or create catalogue item
-						catalogueItemID, catErr := checkAndGetCatalogueItemID(categoryID, itemName, itemDescription, manufacturerID, manufacturerPartNumber, manufacturerURL)
+						catalogueItemID, catErr := checkAndGetCatalogueItemID(categoryID, itemName, itemDescription, manufacturerID, manufacturerPartNumber, manufacturerURL, pbs_eun)
 						if catErr != nil {
 							errPrint.Println(catErr)
 						} else {
@@ -759,7 +769,7 @@ func checkAndGetManufacturerID(name string) (int32, error) {
 	return resultID, nil
 }
 
-func checkAndGetCatalogueItemID(id_category int32, itemName, itemDescription string, manufacturerID int32, manufacturerPartNumber, manufacturerURL string) (int32, error) {
+func checkAndGetCatalogueItemID(id_category int32, itemName, itemDescription string, manufacturerID int32, manufacturerPartNumber, manufacturerURL string, pbs_eun string) (int32, error) {
 	var resultExists bool
 	var resultID int32
 
@@ -773,7 +783,7 @@ func checkAndGetCatalogueItemID(id_category int32, itemName, itemDescription str
 		}
 	}
 	if !resultExists {
-		id, err := createCatalogueItem(id_category, itemName, itemDescription, manufacturerID, manufacturerPartNumber, manufacturerURL)
+		id, err := createCatalogueItem(id_category, itemName, itemDescription, manufacturerID, manufacturerPartNumber, manufacturerURL, pbs_eun)
 		if err != nil {
 			return 0, err
 		} else {
@@ -1040,15 +1050,15 @@ func createManufacturer(name string) (int32, error) {
 	return newID, nil
 }
 
-func createCatalogueItem(id_category int32, itemName, itemDescription string, manufacturerID int32, manufacturerPartNumber, manufacturerURL string) (int32, error) {
+func createCatalogueItem(id_category int32, itemName, itemDescription string, manufacturerID int32, manufacturerPartNumber, manufacturerURL string, pbs_eun string) (int32, error) {
 	var newID int32
 	//one thing is to add category into the database
 	//in the second step we have to add category to local cache
 	tx, txErr := pgPool.BeginTx(context.Background(), pgx.TxOptions{})
 	if txErr == nil {
-		insertQuery := `INSERT INTO panda.t_catalog_item ("name", id_category, note, id_manufacturer, manufacturerpartnumber, manufactureritemurl)
-		VALUES($1, $2, $3, $4, $5, $6);`
-		_, err := tx.Exec(context.Background(), insertQuery, itemName, id_category, itemDescription, manufacturerID, manufacturerPartNumber, manufacturerURL)
+		insertQuery := `INSERT INTO panda.t_catalog_item ("name", id_category, note, id_manufacturer, manufacturerpartnumber, manufactureritemurl,helper_pbs_eun)
+		VALUES($1, $2, $3, $4, $5, $6, $7);`
+		_, err := tx.Exec(context.Background(), insertQuery, itemName, id_category, itemDescription, manufacturerID, manufacturerPartNumber, manufacturerURL, pbs_eun)
 		if err != nil {
 			return newID, err
 		}
@@ -1067,6 +1077,7 @@ func createCatalogueItem(id_category int32, itemName, itemDescription string, ma
 		newItem.ID = newID
 		newItem.Name = itemName
 		newItem.CategoryID = id_category
+		newItem.PBSEUN = pbs_eun
 		catalogueItems = append(catalogueItems, newItem)
 	} else {
 		return newID, txErr
