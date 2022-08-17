@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option go_package = "panda/microservices/catalogue-service";
+
+package microservices;
+
+service CatalogueService {
+   rpc GetCatalogueItemByID (IDRequest) returns (CatalogueItemResponse);
+}
+
+message IDRequest {
+    int64 id = 1;
+} 
+
+message CatalogueItemResponse {
+    string name = 1;    
+    string catalogue_number = 2;
+}
+
