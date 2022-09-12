@@ -6,8 +6,8 @@ positions:
   filename: /var/log/promtail/positions.yaml
 
 clients:
-  - url: http://10.11.4.154/api/prom/push
-    tenant_id: panda_nginx
+  - url: http://10.11.4.154/loki/api/v1/push
+    tenant_id: 2
 
 scrape_configs:
     - job_name: system
