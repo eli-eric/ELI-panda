@@ -1,0 +1,16 @@
+version: "3"
+
+networks:
+  panda-net:
+
+
+services:
+
+  promtail:
+    image: grafana/promtail:2.6.1@sha256:bbd169097144c1dd4a14d1369bf147d2ade0703dedbd5189d7f735c38ae61d3b
+    volumes:
+      - /var/log:/var/log
+      - ./config.yml:/etc/promtail/config.yml
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - panda-net
