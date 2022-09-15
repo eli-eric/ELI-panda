@@ -6,3 +6,7 @@ run:
 
 build:
 	go build
+
+grpcurl:
+	grpcurl -plaintext -d '{"id":1235}' localhost:50052 microservices.CatalogueService.GetCatalogueItemByID
+	grpcurl -plaintext -d '{"id":666}' localhost:50052 microservices.CatalogueService.GetCatalogueItemByID
