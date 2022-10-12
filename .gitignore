@@ -9,3 +9,4 @@ backend/api-gateway-go/apigateway
 ELI-PANDA.code-workspace
 tools/catalogue-excel-import/catalogue-excel-import
 backend/microservices/systems-service/systems-service
+tools/catalogue-excel-import/import-data/.~lock.BeamCharacterization.xlsx#
