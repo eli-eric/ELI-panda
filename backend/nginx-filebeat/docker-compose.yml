@@ -12,7 +12,7 @@ services:
 
     #user: 0:0
 
-    user: 1003:1003
+    user: 1000:1000
 
     image: docker.elastic.co/beats/filebeat:8.4.1@sha256:c660c462168af37bc3e561547f73b34340d6719f6d0d0c4ea8f21d1dc268cb52
 
