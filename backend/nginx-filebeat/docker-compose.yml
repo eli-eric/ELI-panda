@@ -18,11 +18,11 @@ services:
 
     volumes:
 
-    - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+    - $HOME/config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
 
-    - ./data:/usr/share/filebeat/data:rw
+    - $HOME/data:/usr/share/filebeat/data:rw
 
-    - ./logs:/usr/share/filebeat/logs:rw
+    - $HOME/logs:/usr/share/filebeat/logs:rw
 
     - /var/log/nginx:/var/log/nginx:ro
 
