@@ -7,7 +7,7 @@ version: '3.9'
 services:
 
   filebeat:
-
+    container_name: panda-nginx-filebeat
     restart: unless-stopped
 
     #user: 0:0
@@ -20,9 +20,9 @@ services:
 
     - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
 
-    - ./data:/usr/share/filebeat/data:rw
+    - $HOME/nginx-filebeat/data:/usr/share/filebeat/data:rw
 
-    - ./logs:/usr/share/filebeat/logs:rw
+    - $HOME/nginx-filebeat/logs:/usr/share/filebeat/logs:rw
 
     - /var/log/nginx:/var/log/nginx:ro
 
