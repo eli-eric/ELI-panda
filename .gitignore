@@ -10,3 +10,5 @@ ELI-PANDA.code-workspace
 tools/catalogue-excel-import/catalogue-excel-import
 backend/microservices/systems-service/systems-service
 tools/catalogue-excel-import/import-data/.~lock.BeamCharacterization.xlsx#
+.github/workflows/compose-minio1.yml
+tools/catalogue-excel-import/import-data/.~lock.TMP.xlsx#

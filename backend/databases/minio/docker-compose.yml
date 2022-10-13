@@ -1,0 +1,25 @@
+version: '3.9'
+
+networks:
+  panda-net:
+    name: panda-net
+    driver: bridge
+
+services:
+  minio1:
+    restart: unless-stopped
+    user: 1002:1002
+    ports:
+    - 9000:9000
+    - 9090:9090
+    image: quay.io/minio/minio:RELEASE.2022-09-22T18-57-27Z.fips@sha256:ca70bb63ce0b4f942c421a15f835181e6dc9fcb2d7cf1a2295e47cae5d57c530
+    volumes:
+    - $HOME/minio/data:/data:rw
+    - $HOME/minio/certs:/certs:rw
+    environment:
+    - "MINIO_ROOT_USER=admin"
+    - "MINIO_ROOT_PASSWORD=fw34-sdRF"
+    - "MINIO_SERVER_URL=https://panda.eli-beams.eu:9000" # - "MINIO_SERVER_URL=https://minio1:9000"
+    command: server /data --console-address ":9090" --certs-dir "/certs"
+
+
