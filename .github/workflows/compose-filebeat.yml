@@ -1,0 +1,17 @@
+name: Compose docker filebeat-nginx
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: backend/nginx-filebeat
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker compose
+        run: docker-compose up -d --build

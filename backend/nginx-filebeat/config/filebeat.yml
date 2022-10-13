@@ -1,0 +1,40 @@
+
+filebeat.inputs:
+
+- type: log
+
+  json.keys_under_root: true
+
+  #json.overwrite_keys: true
+
+  json.add_error_key: true
+
+  #json.expand_keys: true
+
+ 
+
+  # Change to true to enable this input configuration.
+
+  enabled: true
+
+ 
+
+  # Paths that should be crawled and fetched. Glob based paths.
+
+  paths:
+
+  - /var/log/nginx/json_access.log
+
+ 
+
+output.logstash:
+
+  # Boolean flag to enable or disable the output module.
+
+  enabled: true
+
+ 
+
+  # The Logstash hosts
+
+  hosts: ["10.2.2.3:1675"]

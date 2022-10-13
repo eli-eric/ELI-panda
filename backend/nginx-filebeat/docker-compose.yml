@@ -1,0 +1,29 @@
+# mkdir nginx-filebeat
+# mkdir nginx-filebeat/data
+# mkdir nginx-filebeat/config
+# mkdir nginx-filebeat/logs
+version: '3.9'
+
+services:
+
+  filebeat:
+
+    restart: unless-stopped
+
+    #user: 0:0
+
+    user: 1003:1003
+
+    image: docker.elastic.co/beats/filebeat:8.4.1@sha256:c660c462168af37bc3e561547f73b34340d6719f6d0d0c4ea8f21d1dc268cb52
+
+    volumes:
+
+    - ./config/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
+
+    - ./data:/usr/share/filebeat/data:rw
+
+    - ./logs:/usr/share/filebeat/logs:rw
+
+    - /var/log/nginx:/var/log/nginx:ro
+
+    command: --strict.perms=false
