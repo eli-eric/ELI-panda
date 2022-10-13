@@ -1,0 +1,17 @@
+name: Compose docker minio1
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: backend/databases/minio
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the Docker compose
+        run: docker-compose up -d --build
