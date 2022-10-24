@@ -5,7 +5,7 @@ on:
 
 defaults:
   run:
-    working-directory: backend/kafka
+    working-directory: tools/kafka
 
 jobs:
   build:

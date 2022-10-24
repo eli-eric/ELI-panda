@@ -5,7 +5,7 @@ on:
 
 defaults:
   run:
-    working-directory: backend/nginx-filebeat
+    working-directory: tools/nginx-filebeat
 
 jobs:
   build:
@@ -14,6 +14,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: copy yml config        
-        run: cp $HOME/actions-runner/_work/ELI-panda/ELI-panda/backend/nginx-filebeat/config/filebeat.yml $HOME/nginx-filebeat/filebeat.yml
+        run: cp $HOME/actions-runner/_work/ELI-panda/ELI-panda/tools/nginx-filebeat/config/filebeat.yml $HOME/nginx-filebeat/filebeat.yml
       - name: Build the Docker compose
         run: docker-compose up -d --build
