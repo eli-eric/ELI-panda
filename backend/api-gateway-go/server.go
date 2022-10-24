@@ -39,6 +39,7 @@ func main() {
 		}
 	}
 
+	// this will disappear
 	neo4jDriver, err := neo4j.NewDriver(neo4jUri, neo4j.BasicAuth("neo4j", "fw34-sdRF", ""), useConsoleLogger(neo4j.ERROR))
 
 	if err != nil {
