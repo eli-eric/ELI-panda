@@ -4,7 +4,7 @@
 // - protoc             v3.6.1
 // source: proto/systems-service.proto
 
-package systems_service
+package systemsService
 
 import (
 	context "context"

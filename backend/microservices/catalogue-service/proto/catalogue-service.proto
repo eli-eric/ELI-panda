@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-option go_package = "panda/microservices/catalogue-service";
+option go_package = "panda/microservices/catalogueService";
 
-package microservices;
+package pandaMicroservices;
 
 service CatalogueService {
    rpc GetCatalogueItemByID (IDRequest) returns (CatalogueItemResponse);
