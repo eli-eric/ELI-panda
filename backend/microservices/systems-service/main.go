@@ -17,8 +17,7 @@ import (
 )
 
 var (
-	port        = flag.Int("port", 50051, "The microservice port")
-	serviceName = flag.String("serviceName", "SystemsService", "Name of the microservice")
+	port = flag.Int("port", 50020, "The microservice port")
 )
 var neo4jDriver neo4j.Driver
 
@@ -67,7 +66,7 @@ func (s *server) DeleteRelationshipByID(ctx context.Context, in *pb.IDRequest) (
 func main() {
 	flag.Parse()
 
-	log.Printf("Microservice starting: %v", *serviceName)
+	log.Printf("Microservice starting: %v", pb.SystemsService_ServiceDesc.ServiceName)
 	neo4jUri := "bolt://127.0.0.1:7687"
 	useConsoleLogger := func(level neo4j.LogLevel) func(config *neo4j.Config) {
 		return func(config *neo4j.Config) {
@@ -93,7 +92,7 @@ func main() {
 	reflection.Register(s)
 	pb.RegisterSystemsServiceServer(s, &server{})
 
-	log.Printf("Microservice %v listening at %v", *serviceName, lis.Addr())
+	log.Printf("Microservice %v listening at %v", pb.SystemsService_ServiceDesc.ServiceName, lis.Addr())
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

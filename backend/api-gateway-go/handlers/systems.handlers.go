@@ -2,11 +2,9 @@ package handlers
 
 import (
 	"context"
-	"flag"
 	"log"
 	"net/http"
 	"panda/apigateway/models"
-	"panda/apigateway/services"
 	"time"
 
 	"strconv"
@@ -14,18 +12,10 @@ import (
 	"github.com/labstack/echo/v4"
 
 	pb "panda/apigateway/services/systems"
-
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
-)
-
-var (
-	addrClient  = flag.String("address", "localhost:50051", "The Systems microservice address")
-	serviceName = flag.String("serviceName", "SystemsService", "Name of the microservice")
 )
 
 type SystemsHandlers struct {
-	systemsService services.ISystemsService
+	systemsService pb.SystemsServiceClient
 }
 
 type ISystemsHandlers interface {
@@ -39,7 +29,7 @@ type ISystemsHandlers interface {
 }
 
 // NewCommentsHandlers Comments handlers constructor
-func NewSystemsHandlers(systemsSvc services.ISystemsService) ISystemsHandlers {
+func NewSystemsHandlers(systemsSvc pb.SystemsServiceClient) ISystemsHandlers {
 	return &SystemsHandlers{systemsService: systemsSvc}
 }
 
@@ -76,7 +66,8 @@ func (h *SystemsHandlers) CreateNewSystem() echo.HandlerFunc {
 			MaintainedByPerson: &maintainedByPerson,
 		}
 
-		newSystemID, err := h.systemsService.CreateNewSystem(system)
+		//TODO
+		newSystemID, err := system.Name, error(nil) //h.systemsService.CreateNewSystem(system)
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, "Unexpected server error: "+err.Error())
@@ -143,7 +134,8 @@ func (h *SystemsHandlers) UpdateSystem() echo.HandlerFunc {
 			}
 		}
 
-		msg, err := h.systemsService.UpdateSystem(system)
+		//TODO
+		msg, err := system.Name, error(nil) //h.systemsService.UpdateSystem(system)
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, "Unexpected server error: "+err.Error())
@@ -186,24 +178,25 @@ func (h *SystemsHandlers) CreateNewSubsystem() echo.HandlerFunc {
 			MaintainedByPerson: &maintainedByPerson,
 		}
 
-		var parentName string
-		var parentId int64 = -1
-		var parentUid string
-		formParams, _ := c.FormParams()
+		// // var parentName string
+		// // var parentId int64 = -1
+		// // var parentUid string
+		// // formParams, _ := c.FormParams()
 
-		if formParams.Has("parentName") {
-			parentName = c.FormValue("parentName")
-		}
-		if formParams.Has("parentUid") {
-			parentUid = c.FormValue("parentUid")
-		}
-		if formParams.Has("parentId") {
-			if vid, err := strconv.ParseInt(c.FormValue("parentId"), 10, 64); err == nil {
-				parentId = vid
-			}
-		}
+		// // if formParams.Has("parentName") {
+		// // 	parentName = c.FormValue("parentName")
+		// // }
+		// // if formParams.Has("parentUid") {
+		// // 	parentUid = c.FormValue("parentUid")
+		// // }
+		// // if formParams.Has("parentId") {
+		// // 	if vid, err := strconv.ParseInt(c.FormValue("parentId"), 10, 64); err == nil {
+		// // 		parentId = vid
+		// // 	}
+		// // }
 
-		newSystemID, err := h.systemsService.CreateNewSubsystem(system, parentId, parentUid, parentName)
+		//TODO
+		newSystemID, err := system.Name, error(nil) // h.systemsService.CreateNewSubsystem(system, parentId, parentUid, parentName)
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, "Unexpected server error: "+err.Error())
@@ -225,39 +218,40 @@ func (h *SystemsHandlers) CreateNewSubsystem() echo.HandlerFunc {
 func (h *SystemsHandlers) CreateNewHierarchicalRelationship() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
-		var parentName string
-		var parentId int64 = -1
-		var parentUid string
-		var childName string
-		var childId int64 = -1
-		var childUid string
+		// // var parentName string
+		// // var parentId int64 = -1
+		// // var parentUid string
+		// // var childName string
+		// // var childId int64 = -1
+		// // var childUid string
 
-		formParams, _ := c.FormParams()
+		// // formParams, _ := c.FormParams()
 
-		if formParams.Has("parentName") {
-			parentName = c.FormValue("parentName")
-		}
-		if formParams.Has("parentUid") {
-			parentUid = c.FormValue("parentUid")
-		}
-		if formParams.Has("parentId") {
-			if vid, err := strconv.ParseInt(c.FormValue("parentId"), 10, 64); err == nil {
-				parentId = vid
-			}
-		}
-		if formParams.Has("childName") {
-			childName = c.FormValue("childName")
-		}
-		if formParams.Has("childUid") {
-			childUid = c.FormValue("childUid")
-		}
-		if formParams.Has("childId") {
-			if vid, err := strconv.ParseInt(c.FormValue("childId"), 10, 64); err == nil {
-				childId = vid
-			}
-		}
+		// // if formParams.Has("parentName") {
+		// // 	parentName = c.FormValue("parentName")
+		// // }
+		// // if formParams.Has("parentUid") {
+		// // 	parentUid = c.FormValue("parentUid")
+		// // }
+		// // if formParams.Has("parentId") {
+		// // 	if vid, err := strconv.ParseInt(c.FormValue("parentId"), 10, 64); err == nil {
+		// // 		parentId = vid
+		// // 	}
+		// // }
+		// // if formParams.Has("childName") {
+		// // 	childName = c.FormValue("childName")
+		// // }
+		// // if formParams.Has("childUid") {
+		// // 	childUid = c.FormValue("childUid")
+		// // }
+		// // if formParams.Has("childId") {
+		// // 	if vid, err := strconv.ParseInt(c.FormValue("childId"), 10, 64); err == nil {
+		// // 		childId = vid
+		// // 	}
+		// // }
 
-		newSystemID, err := h.systemsService.CreateParentChildRelationship(parentId, parentUid, parentName, childId, childUid, childName)
+		//TODO
+		newSystemID, err := "1", error(nil) //h.systemsService.CreateParentChildRelationship(parentId, parentUid, parentName, childId, childUid, childName)
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, "Unexpected server error: "+err.Error())
@@ -271,16 +265,17 @@ func (h *SystemsHandlers) CreateNewHierarchicalRelationship() echo.HandlerFunc {
 func (h *SystemsHandlers) DeleteSystemAndRelationships() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
-		formParams, _ := c.FormParams()
+		// // formParams, _ := c.FormParams()
 
-		var systemId int64
-		if formParams.Has("systemId") {
-			if vid, err := strconv.ParseInt(c.FormValue("systemId"), 10, 64); err == nil {
-				systemId = vid
-			}
-		}
+		// // var systemId int64
+		// // if formParams.Has("systemId") {
+		// // 	if vid, err := strconv.ParseInt(c.FormValue("systemId"), 10, 64); err == nil {
+		// // 		systemId = vid
+		// // 	}
+		// // }
 
-		msg, err := h.systemsService.DeleteSystemAndRelationships(systemId)
+		//TODO
+		msg, err := "", error(nil) //h.systemsService.DeleteSystemAndRelationships(systemId)
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, "Unexpected server error: "+err.Error())
@@ -303,17 +298,10 @@ func (h *SystemsHandlers) DeleteRelationshipByID() echo.HandlerFunc {
 			}
 		}
 
-		conn, err := grpc.Dial(*addrClient, grpc.WithTransportCredentials(insecure.NewCredentials()))
-		if err != nil {
-			log.Printf("%s did not connect: %v", serviceName, err)
-		}
-		defer conn.Close()
-		client := pb.NewSystemsServiceClient(conn)
-
 		// Contact the server and print out its response.
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
-		r, err := client.DeleteRelationshipByID(ctx, &pb.IDRequest{Id: relId})
+		r, err := h.systemsService.DeleteRelationshipByID(ctx, &pb.IDRequest{Id: relId})
 		if err != nil {
 			log.Printf("Faild to delete relationship: %v", err)
 		}
@@ -330,22 +318,23 @@ func (h *SystemsHandlers) DeleteRelationshipByID() echo.HandlerFunc {
 func (h *SystemsHandlers) DeleteRelationshipByParentChildIds() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
-		formParams, _ := c.FormParams()
+		// // formParams, _ := c.FormParams()
 
-		var parentId int64
-		if formParams.Has("parentId") {
-			if vid, err := strconv.ParseInt(c.FormValue("parentId"), 10, 64); err == nil {
-				parentId = vid
-			}
-		}
-		var childId int64
-		if formParams.Has("childId") {
-			if vid, err := strconv.ParseInt(c.FormValue("childId"), 10, 64); err == nil {
-				childId = vid
-			}
-		}
+		// // var parentId int64
+		// // if formParams.Has("parentId") {
+		// // 	if vid, err := strconv.ParseInt(c.FormValue("parentId"), 10, 64); err == nil {
+		// // 		parentId = vid
+		// // 	}
+		// // }
+		// // var childId int64
+		// // if formParams.Has("childId") {
+		// // 	if vid, err := strconv.ParseInt(c.FormValue("childId"), 10, 64); err == nil {
+		// // 		childId = vid
+		// // 	}
+		// // }
 
-		msg, err := h.systemsService.DeleteRelationshipByParentChildIds(parentId, childId)
+		//TODO
+		msg, err := "", error(nil) //h.systemsService.DeleteRelationshipByParentChildIds(parentId, childId)
 
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, "Unexpected server error: "+err.Error())
