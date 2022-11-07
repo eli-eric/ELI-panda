@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"log"
 	"os"
 
 	"panda/apigateway/handlers"
@@ -11,42 +13,43 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
-	"github.com/neo4j/neo4j-go-driver/v4/neo4j"
+	microSystems "panda/apigateway/services/systems"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
 
-	//here we recognize if we run in production via app start argument
-	isProduction := false
+	//here we recognize if we run in localhost via app start argument
+	isLocalhost := false //otherwise it is in container and comuniate via docker network using dns
 	if len(os.Args) > 0 {
 		for _, arg := range os.Args {
-			if arg == "prod" {
-				isProduction = true
+			if arg == "localhost" {
+				isLocalhost = true
 			}
 		}
 	}
 
-	neo4jUri := "bolt://127.0.0.1:7687"
-	port := ":1323"
-	if isProduction {
-		neo4jUri = "bolt://neo4j:7687"
-		port = ":5001"
+	apiPort := ":50000" //default api gateway port
+	// msCatalogueAddrClient  := flag.String("address", "localhost:50010", "Catalogue microservice address")
+	// msCatalogueServiceName := flag.String("serviceName", "CatalogueService", "Name of the microservice")
+
+	mySystemsAddr := "pandaMicroservicesSystemsService"
+	if isLocalhost {
+		mySystemsAddr = "localhost"
 	}
+	msSystemsAddrClient := flag.String("address", mySystemsAddr+":50020", "Systems microservice address")
 
-	useConsoleLogger := func(level neo4j.LogLevel) func(config *neo4j.Config) {
-		return func(config *neo4j.Config) {
-			config.Log = neo4j.ConsoleLogger(level)
-		}
-	}
+	//lets define microservices
+	//Systems service
 
-	neo4jDriver, err := neo4j.NewDriver(neo4jUri, neo4j.BasicAuth("neo4j", "fw34-sdRF", ""), useConsoleLogger(neo4j.ERROR))
-
+	connSystemsService, err := grpc.Dial(*msSystemsAddrClient, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		panic(err)
+		log.Printf("%s did not connect: %v", microSystems.SystemsService_ServiceDesc.ServiceName, err)
 	}
-	// Handle driver lifetime based on your application lifetime requirements  driver's lifetime is usually
-	// bound by the application lifetime, which usually implies one driver instance per application
-	defer neo4jDriver.Close()
+	defer connSystemsService.Close()
+	systemsServiceClient := microSystems.NewSystemsServiceClient(connSystemsService)
 
 	e := echo.New()
 
@@ -83,8 +86,7 @@ func main() {
 	//Group of routes for Systems
 	systemGroup := e.Group("/system")
 	systemGroup.Use(jwtMiddleware)
-	systemsService := services.NewSystemsService(neo4jDriver)
-	systemsHandlers := handlers.NewSystemsHandlers(systemsService)
+	systemsHandlers := handlers.NewSystemsHandlers(systemsServiceClient)
 	routes.MapSystemsRoutes(systemGroup, systemsHandlers)
 
 	//Group of routes for Catalogue
@@ -94,5 +96,5 @@ func main() {
 	catalogueHandlers := handlers.NewCatalogueHandlers(catalogueService)
 	routes.MapCatalogueRoutes(catalogueGroup, catalogueHandlers)
 
-	e.Logger.Fatal(e.Start(port))
+	e.Logger.Fatal(e.Start(apiPort))
 }

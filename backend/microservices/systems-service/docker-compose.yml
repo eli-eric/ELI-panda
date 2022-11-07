@@ -13,9 +13,9 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-      labels: 
+      labels:
         - panda-microservices-systems-service
     networks:
       - panda-net
     ports:
-      - '127.0.0.1:50051:50051'
+      - '50051:50051'

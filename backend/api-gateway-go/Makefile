@@ -1,6 +1,6 @@
 # Main go commands
 run:
-	go run server.go
+	go run server.go "localhost"
 
 build:
 	go build -v

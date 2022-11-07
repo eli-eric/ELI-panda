@@ -1,4 +1,4 @@
-module panda/microservices/catalogue-service
+module panda/microservices/catalogueService
 
 go 1.18
 

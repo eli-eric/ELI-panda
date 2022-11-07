@@ -7,14 +7,14 @@ import (
 	"log"
 	"net"
 
-	pb "panda/microservices/catalogue-service/proto"
+	pb "panda/microservices/catalogueService/proto"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
 var (
-	port        = flag.Int("port", 50052, "The microservice port")
+	port        = flag.Int("port", 50010, "The microservice port")
 	serviceName = flag.String("serviceName", "SystemsService", "Name of the microservice")
 )
 
