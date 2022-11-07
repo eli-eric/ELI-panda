@@ -1,0 +1,21 @@
+version: '3.9'
+
+networks:
+  panda-net:
+    driver: bridge
+    name: panda-net
+
+services:
+
+  panda-ui-main-app:
+    container_name: panda-ui-main-app
+    restart: unless-stopped
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      labels:
+        - panda-ui-main-app
+    networks:
+      - panda-net
+    ports:
+      - '127.0.0.1:5000:5000'
