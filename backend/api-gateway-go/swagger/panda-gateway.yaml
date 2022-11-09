@@ -2,150 +2,120 @@ openapi: 3.0.2
 info:
   title: PANDA API Gateway
   description: This is an API Gateway to the PANDA database. This is the only place to access data from the PANDA database.
-  version: '0.1'
+  version: "1.0"
   contact:
     name: Jiří Švácha
     email: jiri.svacha@eli-beams.eu
-paths:
-  /authenticate:
-    get:
-      description: Get user data based on JWT token in the authentication Bearer header.    
-      security:
-        - jwtAuth: []   
-      tags:
-        - Security
-      responses:
-        '200':
-          description: Returns authenticated user data
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/AuthenticatedUser"
-    post:
-      description: Authenticate user by username and password and return JWT token.
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: "#/components/schemas/LoginForm"
-      tags:
-        - Security
-      responses:
-        '200':
-          description: Returns JWT token
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Token"
-  /system:    
-    post:
-      description: Create new standalone system and return its new identifier(id)
-      security:
-        - jwtAuth: []      
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: "#/components/schemas/NewSystemForm"
-      tags:
-        - Systems
-      responses:
-        '200':
-          description: Returns new System id
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/NewID"
-
+servers:
+  - url: http://localhost:50000/v1
+tags:
+  - name: Security
+    description: Everything about authentication and authorization
 components:
   securitySchemes:
     jwtAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+      description: "You can get the JWT if you successfully authenticate via /authenticate POST endpoint"
   schemas:
-    Token:
+    UserCredentials:
       type: object
-      description: Represent JWT token
-      properties:
-        access_token:
-          type: string
-    NewID:
-      type: object
-      description: Typicaly if we create new object we return new object id
-      properties:
-        id:
-          type: integer
-          format: int64          
-    NewSystemForm:
-      type: object
-      description: Object to create new System
-      properties:
-        name:
-          type: string          
-        description:
-          type: string
-        systemCode:
-          type: string
-        systemAlias:
-          type: string
-        facilityZone:
-          type: string
-        location:
-          type: string
-        ownerPerson:
-          type: string
-        responsiblePerson:
-          type: string
-        maintainedByPerson:
-          type: string
-      required:
-        - name
-    UpdateSystemForm:
-      type: object
-      description: Object to update existing System
-      properties:
-        name:
-          type: string          
-        description:
-          type: string
-        systemCode:
-          type: string
-        systemAlias:
-          type: string
-        facilityZone:
-          type: string
-        location:
-          type: string
-        ownerPerson:
-          type: string
-        responsiblePerson:
-          type: string
-        maintainedByPerson:
-          type: string      
-    LoginForm:
-      type: object
-      description: Object to authenticate user
       properties:
         username:
-          type: string          
+          type: string
+          example: albert.einstein@eli-laser.eu
         password:
           type: string
-      required: [username, password]
-    AuthenticatedUser:
+          example: E=mc2
+    UserInfo:
       type: object
-      description: Information about user authenticated via JWT token
       properties:
-        displayName:
-          type: string          
-        id:
-          type: integer
-          format: int64
-        email:
+        uid:
           type: string
-        role:
-          type: array
-          items:
-            type: string       
+          example: 71864520-9e86-427c-901c-0c220f951775
+        username:
+          type: string
+          example: albert.einstein@eli-laser.eu
+        fullName:
+          type: string
+          example: Albert Einstein
+        facility:
+          type: string
+          example: ELI ERIC
+    ResponseMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          example: System was successfully created.
+    AccessToken:
+      type: object
+      properties:
+        access-token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOiIxMjM0NTY3ODk5In0.4UuocEvJTR3c1t2kB4f5lbRKfs5yKe7dW1Qtm_LITII
+paths:
+  /authenticate:
+    post:
+      summary: Authentication of the user
+      description: Authenticate user by username and password and return JWT (json web token)
+      operationId: authenticateByUsernameAndPassword
+      tags:
+        - Security
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserCredentials"
+      responses:
+        "500":
+          description: General server error
+        "401":
+          description: Authentication failed
+        "200":
+          description: Successfully authenticated. Returns JWT.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessToken"
+  /reauthenticate:
+    post:
+      summary: Reauthentication of the user
+      description: Reauthentication because of the token expiration. Authenticate user by JWT (json web token) presented in the Authorization header and if the JWT is still ok create and returns new JWT.
+      operationId: reauthenticateUser
+      security:
+        - jwtAuth: []
+      tags:
+        - Security
+      responses:
+        "500":
+          description: General server error
+        "401":
+          description: Authentication failed
+        "200":
+          description: Successfully reauthenticated. Returns new JWT.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccessToken"
+  /authenticated-user:
+    get:
+      summary: Get user info by JWT presented in header
+      description: Get user info by JWT (json we token) presented in Authorization header in the request
+      operationId: getUserByJWT
+      security:
+        - jwtAuth: []
+      tags:
+        - Security
+      responses:
+        "500":
+          description: General server error
+        "401":
+          description: Unauthorized
+        "200":
+          description: Returns user information from the JWT that was successfully chekced
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserInfo"

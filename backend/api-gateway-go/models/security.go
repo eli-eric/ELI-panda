@@ -21,3 +21,8 @@ type AuthUser struct {
 	Token       string   `json:"token"`
 	Role        []string `json:"role"`
 }
+
+type UserCredentials struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}

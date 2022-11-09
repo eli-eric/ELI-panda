@@ -14,8 +14,9 @@ type SecurityHandlers struct {
 }
 
 type ISecurityHandlers interface {
-	Login() echo.HandlerFunc
-	GetAuthUser() echo.HandlerFunc
+	AuthenticateByUsernameAndPassword() echo.HandlerFunc
+	GetUserByJWT() echo.HandlerFunc
+	ReauthenticateUser() echo.HandlerFunc
 }
 
 // NewCommentsHandlers Comments handlers constructor
@@ -23,24 +24,40 @@ func NewSecurityHandlers(securitySvc services.ISecurityService) ISecurityHandler
 	return &SecurityHandlers{securityService: securitySvc}
 }
 
-// Authenticate godoc
-// @Summary Login and get security token
 // @Description Login with username and password and get jwt token to play with rest of API
-// @Tags Security
-// @Accept json
-// @Produce json
-// @Param username formData string true "username"
-// @Param password formData string true "password"
-// @Success 200
-// @Router /authenticate [post]
-func (h *SecurityHandlers) Login() echo.HandlerFunc {
+func (h *SecurityHandlers) AuthenticateByUsernameAndPassword() echo.HandlerFunc {
 
 	return func(c echo.Context) error {
-		username := c.FormValue("username")
-		password := c.FormValue("password")
+
+		cred := new(models.UserCredentials)
+		if err := c.Bind(cred); err == nil {
+			// authenticate and Generate encoded token and send it as response.
+			t, err := h.securityService.AuthenticateByUsernameAndPassword(cred.Username, cred.Password)
+			if err != nil {
+				if err.Error() == "Unauthorized" {
+					return echo.ErrUnauthorized
+				} else {
+					return err
+				}
+			}
+			return c.JSON(http.StatusOK, echo.Map{
+				"access_token": t,
+			})
+		} else {
+			return echo.ErrUnauthorized
+		}
+	}
+}
+
+func (h *SecurityHandlers) ReauthenticateUser() echo.HandlerFunc {
+
+	return func(c echo.Context) error {
+
+		user := c.Get("user").(*jwt.Token)
+		claims := user.Claims.(*models.JwtCustomClaims)
 
 		// authenticate and Generate encoded token and send it as response.
-		t, err := h.securityService.Login(username, password)
+		t, err := h.securityService.ReauthenticateUser(claims)
 		if err != nil {
 			if err.Error() == "Unauthorized" {
 				return echo.ErrUnauthorized
@@ -48,7 +65,6 @@ func (h *SecurityHandlers) Login() echo.HandlerFunc {
 				return err
 			}
 		}
-
 		return c.JSON(http.StatusOK, echo.Map{
 			"access_token": t,
 		})
@@ -64,7 +80,7 @@ func (h *SecurityHandlers) Login() echo.HandlerFunc {
 // @Success 200 {object} models.AuthUser
 // @Router /authenticate [get]
 // @Security ApiKeyAuth
-func (h *SecurityHandlers) GetAuthUser() echo.HandlerFunc {
+func (h *SecurityHandlers) GetUserByJWT() echo.HandlerFunc {
 
 	return func(c echo.Context) error {
 		user := c.Get("user").(*jwt.Token)

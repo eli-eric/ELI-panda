@@ -75,6 +75,13 @@ func main() {
 	config := middleware.JWTConfig{
 		Claims:     &models.JwtCustomClaims{},
 		SigningKey: []byte("12554114ad74624b588c910f6fa2bbc0"),
+		ErrorHandler: func(err error) error {
+			if err != nil {
+				return echo.ErrUnauthorized
+			} else {
+				return nil
+			}
+		},
 	}
 	jwtMiddleware := middleware.JWTWithConfig(config)
 
@@ -84,13 +91,13 @@ func main() {
 	routes.MapSecurityRoutes(e, securityHandlers, jwtMiddleware)
 
 	//Group of routes for Systems
-	systemGroup := e.Group("/system")
+	systemGroup := e.Group("/v1/system")
 	systemGroup.Use(jwtMiddleware)
 	systemsHandlers := handlers.NewSystemsHandlers(systemsServiceClient)
 	routes.MapSystemsRoutes(systemGroup, systemsHandlers)
 
 	//Group of routes for Catalogue
-	catalogueGroup := e.Group("/catalogue")
+	catalogueGroup := e.Group("/v1/catalogue")
 	catalogueGroup.Use(jwtMiddleware)
 	catalogueService := services.NewCatalogueService()
 	catalogueHandlers := handlers.NewCatalogueHandlers(catalogueService)
