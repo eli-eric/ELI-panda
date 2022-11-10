@@ -29,6 +29,18 @@ We are using [Docker](https://www.docker.com/get-started) for the deployment.
 On the deployment server we have nginx web server wich is working like a reverse proxy and forward the requests like that:
 
 http://panda.eli-beamlines.eu -> localhost:5000(docker container) - frontend
-http://api.panda.eli-beamlines.eu -> localhost:1323(docker container) - backend
+http://api.panda.eli-beamlines.eu -> localhost:50000(docker container) - backend
 
 We can configure GitHub actions to automate build/test/deploy - for now Jiří Švácha will do that manualy and prepare these [Actions](https://github.com/eli-eric/ELI-panda/actions).
+
+## Microservices
+
+### How to add new microservice
+
+Create new folder with the name of the new microservice inside ELI-panda/backend/microservices folder
+
+`cd $projectdestination/ELI-panda/backend/microservices`
+
+`mkdir new-microservice-name`
+
+
