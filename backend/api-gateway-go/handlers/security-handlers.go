@@ -41,7 +41,7 @@ func (h *SecurityHandlers) AuthenticateByUsernameAndPassword() echo.HandlerFunc 
 				}
 			}
 			return c.JSON(http.StatusOK, echo.Map{
-				"access_token": t,
+				"accessToken": t,
 			})
 		} else {
 			return echo.ErrUnauthorized
@@ -66,7 +66,7 @@ func (h *SecurityHandlers) RefreshToken() echo.HandlerFunc {
 			}
 		}
 		return c.JSON(http.StatusOK, echo.Map{
-			"access_token": t,
+			"accessToken": t,
 		})
 	}
 }

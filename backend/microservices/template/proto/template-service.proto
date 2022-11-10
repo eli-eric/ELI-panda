@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "panda/microservices/templateService";
+
+package pandaMicroservices;
+
+service TemplateService {
+   rpc Test (IDRequest) returns (MessageResponse);
+}
+
+message IDRequest {
+    string id = 1;
+} 
+
+message MessageResponse {
+    string message = 1;    
+}
+

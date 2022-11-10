@@ -41,6 +41,14 @@ Create new folder with the name of the new microservice inside ELI-panda/backend
 
 `cd $projectdestination/ELI-panda/backend/microservices`
 
-`mkdir new-microservice-name`
+`mkdir NEW-MICROSERVICE-NAME`
+
+Init new go project
+
+`go mod init panda/microservices/NEW-MICROSERVICE-NAME`
+
+Create entrypoint file
+
+`echo > main.go`
 
 
