@@ -86,8 +86,8 @@ paths:
                 $ref: "#/components/schemas/AccessToken"
   /refresh-token:
     post:
-      summary: Reauthentication of the user
-      description: Reauthentication because of the token expiration. Authenticate user by JWT (json web token) presented in the Authorization header and if the JWT is still ok create and returns new JWT.
+      summary: Refresh JWT
+      description: Refresh JWT (json web token) presented in the Authorization header. If the JWT have not expired yet, update and returns new JWT.
       operationId: RefreshToken
       security:
         - jwtAuth: []
