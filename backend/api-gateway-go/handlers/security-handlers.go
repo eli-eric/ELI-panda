@@ -16,7 +16,7 @@ type SecurityHandlers struct {
 type ISecurityHandlers interface {
 	AuthenticateByUsernameAndPassword() echo.HandlerFunc
 	GetUserByJWT() echo.HandlerFunc
-	ReauthenticateUser() echo.HandlerFunc
+	RefreshToken() echo.HandlerFunc
 }
 
 // NewCommentsHandlers Comments handlers constructor
@@ -49,7 +49,7 @@ func (h *SecurityHandlers) AuthenticateByUsernameAndPassword() echo.HandlerFunc 
 	}
 }
 
-func (h *SecurityHandlers) ReauthenticateUser() echo.HandlerFunc {
+func (h *SecurityHandlers) RefreshToken() echo.HandlerFunc {
 
 	return func(c echo.Context) error {
 
@@ -57,7 +57,7 @@ func (h *SecurityHandlers) ReauthenticateUser() echo.HandlerFunc {
 		claims := user.Claims.(*models.JwtCustomClaims)
 
 		// authenticate and Generate encoded token and send it as response.
-		t, err := h.securityService.ReauthenticateUser(claims)
+		t, err := h.securityService.RefreshToken(claims)
 		if err != nil {
 			if err.Error() == "Unauthorized" {
 				return echo.ErrUnauthorized

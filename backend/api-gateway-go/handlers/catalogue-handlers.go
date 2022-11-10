@@ -15,19 +15,10 @@ type ICatalogueHandlers interface {
 	TestCatalogue() echo.HandlerFunc
 }
 
-// NewCommentsHandlers Comments handlers constructor
 func NewCatalogueHandlers(catalogueSvc services.ICatalogueService) ICatalogueHandlers {
 	return &CatalogueHandlers{catalogueService: catalogueSvc}
 }
 
-// Test godoc
-// @Summary Test
-// @Description Test
-// @Tags Catalogue
-// @Accept json
-// @Produce json
-// @Success 200
-// @Router /catalogue/test [get]
 func (h *CatalogueHandlers) TestCatalogue() echo.HandlerFunc {
 
 	return func(c echo.Context) error {

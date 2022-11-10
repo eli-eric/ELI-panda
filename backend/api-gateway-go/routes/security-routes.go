@@ -9,6 +9,6 @@ import (
 func MapSecurityRoutes(e *echo.Echo, h handlers.ISecurityHandlers, jwtMiddleware echo.MiddlewareFunc) {
 	// Login route
 	e.POST("/v1/authenticate", h.AuthenticateByUsernameAndPassword())
-	e.POST("/v1/reauthenticate", h.ReauthenticateUser(), jwtMiddleware)
+	e.POST("/v1/refresh-token", h.RefreshToken(), jwtMiddleware)
 	e.GET("/v1/authenticated-user", h.GetUserByJWT(), jwtMiddleware)
 }

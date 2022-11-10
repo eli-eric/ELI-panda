@@ -13,7 +13,7 @@ type SecurityService struct {
 
 type ISecurityService interface {
 	AuthenticateByUsernameAndPassword(username string, password string) (string, error)
-	ReauthenticateUser(claims *models.JwtCustomClaims) (string, error)
+	RefreshToken(claims *models.JwtCustomClaims) (string, error)
 }
 
 func NewSecurityService() ISecurityService {
@@ -49,7 +49,7 @@ func (svc *SecurityService) AuthenticateByUsernameAndPassword(username string, p
 	return t, nil
 }
 
-func (svc *SecurityService) ReauthenticateUser(claims *models.JwtCustomClaims) (string, error) {
+func (svc *SecurityService) RefreshToken(claims *models.JwtCustomClaims) (string, error) {
 
 	claims.StandardClaims.ExpiresAt = time.Now().Add(time.Hour * 2).Unix()
 
