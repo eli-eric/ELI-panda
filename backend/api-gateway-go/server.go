@@ -57,7 +57,7 @@ func main() {
 	//Swagger documentation from docs
 	swaggerGroup := e.Group("")
 	swaggerGroup.Use(middleware.StaticWithConfig(middleware.StaticConfig{
-		Root:   "openapi-docs/dist",
+		Root:   "docs",
 		Browse: true,
 	}))
 	//CORS middleware to allow cross origin access
