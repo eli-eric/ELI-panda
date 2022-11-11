@@ -9,7 +9,7 @@ info:
 servers:
   - url: http://localhost:50000/v1
     description: Local DEV server.
-  - url: http://localhost:5000/api/v1
+  - url: http://localhost:5000/api/mock-server
     description: Mock server. Part of the Next.js UI ui-main-app.
   - url: http://api.panda.eli-beams.eu/v1
     description: Production server.
