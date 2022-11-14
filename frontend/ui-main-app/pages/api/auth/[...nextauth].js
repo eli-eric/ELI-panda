@@ -16,7 +16,7 @@ export default NextAuth({
           facility: 'ELI ERIC'
         }
 
-        if (credentials?.username !== 'admin' && credentials?.password !== 'elipanda2022') {
+        if (credentials?.userName !== 'admin' && credentials?.password !== 'elipanda2022') {
           console.log('failed to log in')
           throw new Error('Wrong password or user name')
         }
