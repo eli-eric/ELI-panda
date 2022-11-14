@@ -13,13 +13,12 @@ type JwtCustomClaims struct {
 }
 
 type AuthUser struct {
-	Id          int      `json:"id"`
-	DisplayName string   `json:"displayName"`
+	Username    string   `json:"username"`
 	Email       string   `json:"email"`
 	Uid         string   `json:"uid"`
-	PhotoURL    string   `json:"photoURL"`
-	Token       string   `json:"token"`
-	Role        []string `json:"role"`
+	AccessToken string   `json:"accessToken"`
+	Roles       []string `json:"roles"`
+	Facility    string   `json:"facility"`
 }
 
 type UserCredentials struct {

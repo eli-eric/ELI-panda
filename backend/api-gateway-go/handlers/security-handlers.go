@@ -40,9 +40,17 @@ func (h *SecurityHandlers) AuthenticateByUsernameAndPassword() echo.HandlerFunc 
 					return err
 				}
 			}
-			return c.JSON(http.StatusOK, echo.Map{
-				"accessToken": t,
-			})
+
+			authUser := models.AuthUser{}
+
+			authUser.Username = cred.Username
+			authUser.Uid = "71864520-9e86-427c-901c-0c220f95177"
+			authUser.Email = "admin@eli"
+			authUser.Facility = "ELI-Beamlines"
+			authUser.AccessToken = t
+			authUser.Roles = []string{"catalogue-view", "systems-view"}
+
+			return c.JSON(http.StatusOK, authUser)
 		} else {
 			return echo.ErrUnauthorized
 		}
@@ -88,10 +96,12 @@ func (h *SecurityHandlers) GetUserByJWT() echo.HandlerFunc {
 
 		authUser := models.AuthUser{}
 
-		authUser.DisplayName = claims.Name
-		authUser.Id = 1
+		authUser.Username = claims.Name
+		authUser.Uid = "71864520-9e86-427c-901c-0c220f95177"
 		authUser.Email = "admin@eli"
-		authUser.Role = []string{"admin", "user"}
+		authUser.Facility = "ELI-Beamlines"
+		authUser.AccessToken = user.Raw
+		authUser.Roles = []string{"catalogue-view", "systems-view"}
 
 		return c.JSON(http.StatusOK, authUser)
 	}

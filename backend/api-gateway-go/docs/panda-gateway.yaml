@@ -33,7 +33,7 @@ components:
         password:
           type: string
           example: E=mc2
-    UserInfo:
+    UserAuthInfo:
       type: object
       properties:
         uid:
@@ -48,6 +48,14 @@ components:
         facility:
           type: string
           example: ELI ERIC
+        accessToken:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOiIxMjM0NTY3ODk5In0.4UuocEvJTR3c1t2kB4f5lbRKfs5yKe7dW1Qtm_LITII
+        roles:
+          type: array
+          items: 
+            type: string
+          example: [ 'catalogue-view', 'spare-parts-view' ]
     ResponseMessage:
       type: object
       properties:
@@ -64,7 +72,7 @@ paths:
   /authenticate:
     post:
       summary: Authentication of the user
-      description: Authenticate user by username and password and return JWT (json web token)
+      description: Authenticate user by username and password and return user info and JWT (json web token)
       operationId: AuthenticateByUsernameAndPassword
       tags:
         - Security
@@ -79,11 +87,11 @@ paths:
         "401":
           description: Unauthorized
         "200":
-          description: Successfully authenticated. Returns JWT.
+          description: Successfully authenticated. Returns user info with JWT.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AccessToken"
+                $ref: "#/components/schemas/UserAuthInfo"
   /refresh-token:
     post:
       summary: Refresh JWT
@@ -123,4 +131,4 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserInfo"
+                $ref: "#/components/schemas/UserAuthInfo"

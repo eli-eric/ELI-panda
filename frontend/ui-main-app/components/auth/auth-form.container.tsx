@@ -1,6 +1,6 @@
 import { FormEvent, useRef } from 'react'
 import { signIn } from 'next-auth/react'
-
+import Router from 'next/router'
 import AuthFormComponent from './auth-form.component'
 
 const AuthFormContainer = () => {
@@ -14,11 +14,13 @@ const AuthFormContainer = () => {
     console.log('submited sign in', enteredUserName, enteredPassword)
     const result = await signIn('credentials', {
       redirect: false,
-      userName: enteredUserName,
+      username: enteredUserName,
       password: enteredPassword
     })
+    console.log(result)
     if (!result?.error) {
       // set some auth state
+      Router.replace('/dashboard')
     }
 
     //TODO: login

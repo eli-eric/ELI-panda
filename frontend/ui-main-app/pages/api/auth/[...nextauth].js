@@ -1,6 +1,9 @@
 import NextAuth from 'next-auth/next'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
+const PANDA_API_GW_URL = 'http://localhost:5001/api/mock-server/'
+//const PANDA_API_GW_URL = 'http://localhost:50000/v1/'
+
 export default NextAuth({
   session: {
     jwt: true
@@ -8,20 +11,44 @@ export default NextAuth({
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
-        console.log(credentials)
-        const user = {
-          uid: '71864520-9e86-427c-901c-0c220f951775',
-          username: 'admin',
-          email: 'albert.einstein@eli-laser.eu',
-          facility: 'ELI ERIC'
-        }
+        const result = await fetch(PANDA_API_GW_URL + 'authenticate', {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify({ username: credentials?.username, password: credentials?.password })
+        })
 
-        if (credentials?.userName !== 'admin' && credentials?.password !== 'elipanda2022') {
+        if (result.ok) {
+          let user = result.json()
+          console.log(user)
+          return user
+        } else {
           console.log('failed to log in')
           throw new Error('Wrong password or user name')
         }
-        return { user: user.username }
       }
     })
-  ]
+  ],
+  pages: {
+    signIn: '/'
+  },
+  callbacks: {
+    jwt(params) {
+      // update token
+      if (params.user?.roles) {
+        params.token.roles = params.user.roles
+        params.token.apiAccessToken = params.user.accessToken
+      }
+      // return final_token
+      return params.token
+    },
+    session(params) {
+      params.session.user.roles = params.token.roles
+      params.session.user.apiAccessToken = params.token.apiAccessToken
+
+      return params.session
+    }
+  }
 })
