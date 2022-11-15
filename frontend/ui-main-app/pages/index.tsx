@@ -1,7 +1,7 @@
-import { useAuthRedirect } from 'helpers/hooks/useAuth'
+import { useAuth } from 'helpers/hooks/useAuth'
 
 const HomePage = () => {
-  useAuthRedirect()
+  useAuth()
 }
 
 export default HomePage

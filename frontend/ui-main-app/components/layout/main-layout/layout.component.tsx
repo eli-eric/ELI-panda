@@ -4,7 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Bars3Icon } from '@heroicons/react/20/solid'
 import NavigationComponent from '../main-navigation/navigation.component'
 import LogoutButton from '../main-navigation/logout'
-import { useAuthRedirect } from 'helpers/hooks/useAuth'
+import { useAuth } from 'helpers/hooks/useAuth'
 
 interface Props {
   children: React.ReactNode
@@ -12,7 +12,7 @@ interface Props {
 
 const LayoutComponent = ({ children }: Props) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const auth = useAuthRedirect()
+  const auth = useAuth()
   return (
     <>
       <div>

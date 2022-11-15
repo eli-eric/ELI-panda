@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { PATHS } from 'types/paths'
 
-export const useAuthRedirect = () => {
+export const useAuth = () => {
   const router = useRouter()
   const pathname = router.pathname
 

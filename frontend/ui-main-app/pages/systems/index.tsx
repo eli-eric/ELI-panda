@@ -1,11 +1,11 @@
-import { useAuthRedirect } from 'helpers/hooks/useAuth'
+import { useAuth } from 'helpers/hooks/useAuth'
 import { NextPage } from 'next'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { Fragment, useEffect } from 'react'
 
 const SystemsPage: NextPage = (): JSX.Element => {
-  const { status } = useAuthRedirect()
+  const { status } = useAuth()
 
   return (
     <Fragment>

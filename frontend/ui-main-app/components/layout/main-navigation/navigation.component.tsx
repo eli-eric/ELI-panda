@@ -1,5 +1,5 @@
 import { ChartBarIcon, FolderIcon, HomeIcon, InboxIcon } from '@heroicons/react/24/outline'
-import { useAuthRedirect } from 'helpers/hooks/useAuth'
+import { useAuth } from 'helpers/hooks/useAuth'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -18,12 +18,19 @@ function classNames(...classes: any) {
 }
 
 const NavigationComponent = () => {
-  const { status } = useAuthRedirect()
+  const { status } = useAuth()
   const router = useRouter()
   return (
     <Fragment>
       <div className="flex flex-shrink-0 items-center px-4">
-        <Image className="h-8 w-auto" src="/../public/eli-logo-small.png" alt="Your Company" width={200} height={200} />
+        <Image
+          className="h-8 w-auto"
+          src="/../public/eli-logo-small.png"
+          alt="Your Company"
+          width={200}
+          height={200}
+          priority={true}
+        />
       </div>
       <nav className="mt-5 flex-1 space-y-1 bg-white px-2">
         {status === 'authenticated' ? (

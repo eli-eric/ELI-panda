@@ -1,9 +1,9 @@
-import { useAuthRedirect } from 'helpers/hooks/useAuth'
+import { useAuth } from 'helpers/hooks/useAuth'
 import { NextPage } from 'next'
 import { Fragment } from 'react'
 
 const CataloguePage: NextPage = (): JSX.Element => {
-  const { status } = useAuthRedirect()
+  const { status } = useAuth()
 
   return (
     <Fragment>
