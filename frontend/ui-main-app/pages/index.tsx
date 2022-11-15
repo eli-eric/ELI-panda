@@ -1,7 +1,7 @@
-import Image from 'next/image'
-import AuthFormContainer from '../components/auth/auth-form.container'
-import Container from '../components/layout/container'
+import { useAuthRedirect } from 'helpers/hooks/useAuth'
 
-export default function Home() {
-  return <AuthFormContainer />
+const HomePage = () => {
+  useAuthRedirect()
 }
+
+export default HomePage

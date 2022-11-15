@@ -1,32 +1,50 @@
-import { FormEvent, useRef } from 'react'
+import { FormEvent, Fragment, useRef, useState } from 'react'
 import { signIn } from 'next-auth/react'
-import Router from 'next/router'
 import AuthFormComponent from './auth-form.component'
+import Alert from '../ui/alert'
+import ContainerComponent from 'components/layout/container.component'
 
 const AuthFormContainer = () => {
+  const [authFailed, setAuthFailed] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+  const [loading, setLoading] = useState(false)
   const userNameRef = useRef<HTMLInputElement | null>(null)
   const passwordRef = useRef<HTMLInputElement | null>(null)
 
   const handleLoginSubmit = async (e: FormEvent) => {
     e.preventDefault()
+    setAuthFailed(false)
+    setLoading(true)
     const enteredUserName = userNameRef.current?.value
     const enteredPassword = passwordRef.current?.value
-    console.log('submited sign in', enteredUserName, enteredPassword)
     const result = await signIn('credentials', {
       redirect: false,
       username: enteredUserName,
       password: enteredPassword
     })
-    console.log(result)
     if (!result?.error) {
-      // set some auth state
-      Router.replace('/dashboard')
+      setErrorMessage('')
+    } else {
+      setErrorMessage(result.error)
+      setAuthFailed(true)
+      setLoading(false)
+      console.log(result.error)
     }
-
-    //TODO: login
   }
 
-  return <AuthFormComponent onSubmit={handleLoginSubmit} usernameRef={userNameRef} passwordRef={passwordRef} />
+  return (
+    <Fragment>
+      <ContainerComponent>
+        <AuthFormComponent
+          onSubmit={handleLoginSubmit}
+          usernameRef={userNameRef}
+          passwordRef={passwordRef}
+          loading={loading}
+        />
+        {authFailed && <Alert message={errorMessage} />}
+      </ContainerComponent>
+    </Fragment>
+  )
 }
 
 export default AuthFormContainer

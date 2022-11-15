@@ -11,6 +11,7 @@ export default NextAuth({
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
+        console.log(process.env.PANDA_API_GW_URL, process.env.NEXTAUTH_URL)
         const result = await fetch(PANDA_API_GW_URL + 'authenticate', {
           headers: {
             Accept: 'application/json',
@@ -32,7 +33,7 @@ export default NextAuth({
     })
   ],
   pages: {
-    signIn: '/'
+    signIn: '/auth'
   },
   callbacks: {
     jwt(params) {
