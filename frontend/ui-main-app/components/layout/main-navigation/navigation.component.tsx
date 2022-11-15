@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Fragment } from 'react'
 import { PATHS } from 'types/constants/paths'
 import { ROLES } from 'types/constants/roles'
-import NavigationLink from './navigationLink.comp'
+import NavigationLink from './navigation-link.comp'
 
 const NavigationComponent = () => {
   const { status, userRoles } = useAuth()

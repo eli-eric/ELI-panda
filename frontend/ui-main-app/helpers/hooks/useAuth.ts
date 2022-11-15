@@ -1,8 +1,8 @@
-import { ROLES_CONFIG } from 'helpers/roles-config'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { PATHS } from 'types/constants/paths'
+import { ROLES_CONFIG } from 'types/constants/roles-config'
 
 export const useAuth = () => {
   const router = useRouter()
