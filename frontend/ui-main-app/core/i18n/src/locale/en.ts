@@ -14,6 +14,13 @@ export const messages = {
     userMenu: {
       profile: 'Profile',
       singout: 'Sign Out'
+    },
+    profile: {
+      title: 'Profile',
+      subTitle: 'Personal details.',
+      fullName: 'Full name',
+      email: 'Email address',
+      facility: 'Facility'
     }
   },
   authPage: {

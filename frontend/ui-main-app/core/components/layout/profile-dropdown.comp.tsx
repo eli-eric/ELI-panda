@@ -1,11 +1,10 @@
 import { Menu, Transition } from '@headlessui/react'
 import { message } from 'core/i18n/src/messages'
-import { signOut } from 'next-auth/react'
-import Image from 'next/image'
 import { Fragment, MouseEvent, useEffect, useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 import ProfileCardComponent from './profile-card.comp'
 import ModalComponent from '../ui/modal.comp'
+import { signOut, useSession } from 'next-auth/react'
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
@@ -14,12 +13,20 @@ function classNames(...classes: any) {
 const messages = message.layout.userMenu
 
 const ProfileDropdownComponent = () => {
+  const fullName = useSession().data?.user.fullName
+  const [inicials, setInicials] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
-  useEffect(() => {
-    console.log(modalOpen)
-  }, [modalOpen])
 
-  const signOutHandler = () => {
+  useEffect(() => {
+    if (!fullName) return
+    const split = fullName.split(' ')
+    const firstLetter = split[0].substring(0, 1)
+    const secondLetter = split[1].substring(0, 1)
+    setInicials(firstLetter + secondLetter)
+  }, [fullName])
+
+  const signOutHandler = (e: MouseEvent) => {
+    e.preventDefault()
     signOut()
   }
 
@@ -35,7 +42,7 @@ const ProfileDropdownComponent = () => {
           <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
             <span className="sr-only">Open user menu</span>
             <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
-              <span className="font-medium leading-none text-white">TW</span>
+              <span className="font-medium leading-none text-white">{inicials}</span>
             </span>
           </Menu.Button>
         </div>

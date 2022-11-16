@@ -39,6 +39,8 @@ export default NextAuth({
       if (params.user?.roles) {
         params.token.roles = params.user.roles
         params.token.apiAccessToken = params.user.accessToken
+        params.token.facility = params.user.facility
+        params.token.fullName = params.user.fullName
       }
       // return final_token
       return params.token
@@ -46,6 +48,8 @@ export default NextAuth({
     session(params) {
       params.session.user.roles = params.token.roles
       params.session.user.apiAccessToken = params.token.apiAccessToken
+      params.session.user.facility = params.token.facility
+      params.session.user.fullName = params.token.fullName
 
       return params.session
     }

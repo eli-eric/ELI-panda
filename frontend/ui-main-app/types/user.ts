@@ -6,5 +6,5 @@ export interface User {
   email: string
   facility: string
   roles: Array<ROLES>
-  accessToken: string
+  apiAccessToken: string
 }

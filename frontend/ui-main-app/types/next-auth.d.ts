@@ -7,6 +7,7 @@ declare module 'next-auth' {
       uid: string
       username: string
       email: string
+      fullName: string
       facility: string
       roles: Array<ROLES>
       accessToken: string
