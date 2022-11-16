@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Bars3Icon } from '@heroicons/react/20/solid'
-import NavigationComponent from '../main-navigation/navigation.component'
+import NavigationComponent from '../main-navigation/navigation.comp'
 import LogoutButton from '../main-navigation/logout'
 import { useAuth } from 'helpers/hooks/useAuth'
 
@@ -67,7 +67,9 @@ const LayoutComponent = ({ children }: Props) => {
                   {auth.status === 'authenticated' && <LogoutButton />}
                 </Dialog.Panel>
               </Transition.Child>
-              <div className="w-14 flex-shrink-0">{/* Force sidebar to shrink to fit close icon */}</div>
+              <div className="w-14 flex-shrink-0">
+                {/* Force sidebar to shrink to fit close icon */}
+              </div>
             </div>
           </Dialog>
         </Transition.Root>

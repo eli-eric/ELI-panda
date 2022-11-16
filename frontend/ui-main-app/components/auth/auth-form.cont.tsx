@@ -1,8 +1,8 @@
 import { FormEvent, Fragment, useRef, useState } from 'react'
 import { signIn } from 'next-auth/react'
-import AuthFormComponent from './auth-form.component'
+import AuthFormComponent from './auth-form.comp'
 import Alert from '../ui/alert'
-import ContainerComponent from 'components/layout/container.component'
+import ContainerComponent from 'components/layout/container.comp'
 
 const AuthFormContainer = () => {
   const [authFailed, setAuthFailed] = useState(false)

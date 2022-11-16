@@ -1,5 +1,5 @@
 import { Fragment } from 'react'
-import LayoutComponent from './layout.component'
+import LayoutComponent from './layout.comp'
 
 interface Props {
   children: React.ReactNode

@@ -4,6 +4,11 @@ import { useEffect } from 'react'
 import { PATHS } from 'types/constants/paths'
 import { ROLES_CONFIG } from 'types/constants/roles-config'
 
+/* Hook wrapping next-auth that provides protection for pages
+based on ROLES_CONFIG and possible redirect to an allowed page.
+It must be called on every page.
+Returns status from next-auth and the logged user roles. */
+
 export const useAuth = () => {
   const router = useRouter()
   const pathname = router.pathname
@@ -12,22 +17,24 @@ export const useAuth = () => {
 
   useEffect(() => {
     if (status === 'authenticated') {
+      // after sign in redirect to dashboard and protecting loging page for auth users
       if (pathname === PATHS.AUTH || pathname === PATHS.ROOT) {
         router.replace(PATHS.DASHBOARD)
-        console.log('dashboard')
       }
+
+      // logic based on ROLES_CONFIG a protecting pages based on user roles
       const alowedPages = data.user.roles.map(role => {
         return ROLES_CONFIG[role].toString()
       })
-      console.log(alowedPages)
       if (!alowedPages.includes(pathname)) {
         router.replace(PATHS.DASHBOARD)
       }
     }
+
+    //protecting all pages exept /auth for unauthorized acces
     if (status === 'unauthenticated') {
       if (pathname !== PATHS.AUTH) {
         router.replace(PATHS.AUTH)
-        console.log('auth')
       }
     }
   }, [status])

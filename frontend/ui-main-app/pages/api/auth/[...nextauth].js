@@ -1,7 +1,6 @@
 import NextAuth from 'next-auth/next'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
-const PANDA_API_GW_URL = 'http://localhost:5001/api/mock-server/'
 //const PANDA_API_GW_URL = 'http://localhost:50000/v1/'
 
 export default NextAuth({
@@ -11,8 +10,7 @@ export default NextAuth({
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
-        console.log(process.env.PANDA_API_GW_URL, process.env.NEXTAUTH_URL)
-        const result = await fetch(PANDA_API_GW_URL + 'authenticate', {
+        const result = await fetch(process.env.PANDA_API_GW_URL + 'authenticate', {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json'

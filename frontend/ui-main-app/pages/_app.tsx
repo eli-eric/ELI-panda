@@ -1,7 +1,7 @@
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
-import LayoutContainer from '../components/layout/main-layout/layout.container'
+import LayoutContainer from '../components/layout/main-layout/layout.cont'
 
 export default function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
