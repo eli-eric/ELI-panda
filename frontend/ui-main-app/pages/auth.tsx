@@ -1,11 +1,24 @@
 import AuthFormContainer from 'components/auth/auth-form.cont'
-import { useAuth } from 'helpers/hooks/useAuth'
-import { redirect } from 'next/dist/server/api-utils'
+import { useAuth } from 'core/helpers/hooks/useAuth'
+import { message } from 'core/i18n/src/messages'
+import Head from 'next/head'
+import { Fragment } from 'react'
+import { useIntl } from 'react-intl'
+
+const messages = message.authPage
 
 const AuthPage = () => {
   const auth = useAuth()
-
-  return <AuthFormContainer />
+  const intl = useIntl()
+  return (
+    <Fragment>
+      <Head>
+        <title>{intl.formatMessage({ id: messages.head })}</title>
+        <meta name="description" content="...." />
+      </Head>
+      <AuthFormContainer />
+    </Fragment>
+  )
 }
 
 export default AuthPage

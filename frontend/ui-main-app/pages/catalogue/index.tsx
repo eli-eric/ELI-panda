@@ -1,12 +1,22 @@
-import { useAuth } from 'helpers/hooks/useAuth'
+import { useAuth } from 'core/helpers/hooks/useAuth'
+import { message } from 'core/i18n/src/messages'
 import { NextPage } from 'next'
+import Head from 'next/head'
 import { Fragment } from 'react'
+import { useIntl } from 'react-intl'
+
+const messages = message.cataloguePage
 
 const CataloguePage: NextPage = (): JSX.Element => {
   const { status } = useAuth()
+  const intl = useIntl()
 
   return (
     <Fragment>
+      <Head>
+        <title>{intl.formatMessage({ id: messages.head })}</title>
+        <meta name="description" content="...." />
+      </Head>
       {status === 'authenticated' && (
         <main className="flex-1">
           <div className="py-6">

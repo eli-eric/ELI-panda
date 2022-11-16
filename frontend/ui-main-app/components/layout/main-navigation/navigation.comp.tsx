@@ -1,14 +1,19 @@
 import { ChartBarIcon, FolderIcon, HomeIcon, InboxIcon } from '@heroicons/react/24/outline'
-import { useAuth } from 'helpers/hooks/useAuth'
+import { useAuth } from 'core/helpers/hooks/useAuth'
+import { message } from 'core/i18n/src/messages'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Fragment } from 'react'
+import { useIntl } from 'react-intl'
 import { PATHS } from 'types/constants/paths'
 import { ROLES } from 'types/constants/roles'
 import NavigationLink from './navigation-link.comp'
 
+const navMessages = message.navigationBar
+
 const NavigationComponent = () => {
   const { status, userRoles } = useAuth()
+  const intl = useIntl()
   return (
     <Fragment>
       <div className="flex flex-shrink-0 items-center px-4">
@@ -24,19 +29,39 @@ const NavigationComponent = () => {
       <nav className="mt-5 flex-1 space-y-1 bg-white px-2">
         {status === 'authenticated' ? (
           <Fragment>
-            <NavigationLink name={'Dashboard'} href={PATHS.DASHBOARD} Icon={HomeIcon} />
+            <NavigationLink
+              name={intl.formatMessage({ id: navMessages.dashboard })}
+              href={PATHS.DASHBOARD}
+              Icon={HomeIcon}
+            />
             {userRoles?.includes(ROLES.CATALOGUE_VIEW) && (
-              <NavigationLink name={'Catalogue'} href={PATHS.CATALOGUE} Icon={FolderIcon} />
+              <NavigationLink
+                name={intl.formatMessage({ id: navMessages.catalogue })}
+                href={PATHS.CATALOGUE}
+                Icon={FolderIcon}
+              />
             )}
             {userRoles?.includes(ROLES.SYSTEMS_VIEW) && (
-              <NavigationLink name={'Systems'} href={PATHS.SYSTEMS} Icon={InboxIcon} />
+              <NavigationLink
+                name={intl.formatMessage({ id: navMessages.systems })}
+                href={PATHS.SYSTEMS}
+                Icon={InboxIcon}
+              />
             )}
             {userRoles?.includes(ROLES.REPORTS_VIEW) && (
-              <NavigationLink name={'Reports'} href={PATHS.REPORTS} Icon={ChartBarIcon} />
+              <NavigationLink
+                name={intl.formatMessage({ id: navMessages.reports })}
+                href={PATHS.REPORTS}
+                Icon={ChartBarIcon}
+              />
             )}
           </Fragment>
         ) : (
-          <NavigationLink name={'Log In'} href={PATHS.AUTH} Icon={HomeIcon} />
+          <NavigationLink
+            name={intl.formatMessage({ id: navMessages.login })}
+            href={PATHS.AUTH}
+            Icon={HomeIcon}
+          />
         )}
       </nav>
     </Fragment>

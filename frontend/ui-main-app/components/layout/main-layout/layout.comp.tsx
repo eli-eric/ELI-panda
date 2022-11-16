@@ -4,7 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Bars3Icon } from '@heroicons/react/20/solid'
 import NavigationComponent from '../main-navigation/navigation.comp'
 import LogoutButton from '../main-navigation/logout'
-import { useAuth } from 'helpers/hooks/useAuth'
+import { useAuth } from 'core/helpers/hooks/useAuth'
 
 interface Props {
   children: React.ReactNode

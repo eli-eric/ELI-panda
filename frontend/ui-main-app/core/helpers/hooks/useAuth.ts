@@ -26,7 +26,16 @@ export const useAuth = () => {
       const alowedPages = data.user.roles.map(role => {
         return ROLES_CONFIG[role].toString()
       })
-      if (!alowedPages.includes(pathname)) {
+
+      // protecting all sub pages
+      let currentRootPage
+      alowedPages.forEach(page => {
+        if (pathname.startsWith(page)) {
+          currentRootPage = page
+        }
+      })
+
+      if (!alowedPages.includes(currentRootPage || pathname)) {
         router.replace(PATHS.DASHBOARD)
       }
     }

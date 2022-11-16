@@ -1,4 +1,4 @@
-import { useAuth } from 'helpers/hooks/useAuth'
+import { useAuth } from 'core/helpers/hooks/useAuth'
 
 const HomePage = () => {
   useAuth()

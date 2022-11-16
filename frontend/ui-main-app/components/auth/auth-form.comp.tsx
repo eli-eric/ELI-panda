@@ -1,5 +1,9 @@
+import { message } from 'core/i18n/src/messages'
 import Image from 'next/image'
-import { ClassAttributes, FormEventHandler, LegacyRef, MutableRefObject, RefObject } from 'react'
+import { FormEventHandler, LegacyRef } from 'react'
+import { FormattedMessage } from 'react-intl'
+
+const authMessages = message.authPage
 
 interface Props {
   onSubmit: FormEventHandler<HTMLFormElement>
@@ -12,8 +16,16 @@ const AuthFormComponent = ({ onSubmit, usernameRef, passwordRef, loading }: Prop
   return (
     <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <Image className="mx-auto h-12 w-auto" src="/../public/logo192.png" alt="Eli" width={250} height={250} />
-        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Sign in to your account</h2>
+        <Image
+          className="mx-auto h-12 w-auto"
+          src="/../public/logo192.png"
+          alt="Eli"
+          width={250}
+          height={250}
+        />
+        <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+          <FormattedMessage id={authMessages.title} />
+        </h2>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -21,7 +33,7 @@ const AuthFormComponent = ({ onSubmit, usernameRef, passwordRef, loading }: Prop
           <form className="space-y-6" action="#" method="POST" onSubmit={onSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                User Name
+                <FormattedMessage id={authMessages.form.userName} />
               </label>
               <div className="mt-1">
                 <input
@@ -38,7 +50,7 @@ const AuthFormComponent = ({ onSubmit, usernameRef, passwordRef, loading }: Prop
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+                <FormattedMessage id={authMessages.form.password} />
               </label>
               <div className="mt-1">
                 <input
@@ -59,7 +71,7 @@ const AuthFormComponent = ({ onSubmit, usernameRef, passwordRef, loading }: Prop
                   type="submit"
                   className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                  Sign in
+                  <FormattedMessage id={authMessages.form.button.default} />
                 </button>
               ) : (
                 <button
@@ -82,7 +94,7 @@ const AuthFormComponent = ({ onSubmit, usernameRef, passwordRef, loading }: Prop
                       fill="#1C64F2"
                     />
                   </svg>
-                  Loading...
+                  <FormattedMessage id={authMessages.form.button.isLoading} />
                 </button>
               )}
             </div>

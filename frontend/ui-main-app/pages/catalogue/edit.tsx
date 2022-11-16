@@ -1,27 +1,17 @@
 import { useAuth } from 'core/helpers/hooks/useAuth'
-import { message } from 'core/i18n/src/messages'
 import { NextPage } from 'next'
-import Head from 'next/head'
 import { Fragment } from 'react'
-import { useIntl } from 'react-intl'
 
-const messages = message.reportsPage
-
-const ReportsPage: NextPage = (): JSX.Element => {
+const CatalogueEditPage: NextPage = (): JSX.Element => {
   const { status } = useAuth()
-  const intl = useIntl()
 
   return (
     <Fragment>
-      <Head>
-        <title>{intl.formatMessage({ id: messages.head })}</title>
-        <meta name="description" content="...." />
-      </Head>
       {status === 'authenticated' && (
         <main className="flex-1">
           <div className="py-6">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-              <h1 className="text-2xl font-semibold text-gray-900">Reports</h1>
+              <h1 className="text-2xl font-semibold text-gray-900">EDIT </h1>
             </div>
             <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
               {/* Replace with your content */}
@@ -37,4 +27,4 @@ const ReportsPage: NextPage = (): JSX.Element => {
   )
 }
 
-export default ReportsPage
+export default CatalogueEditPage
