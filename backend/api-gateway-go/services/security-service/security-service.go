@@ -1,8 +1,7 @@
-package services
+package securityService
 
 import (
 	"errors"
-	"panda/apigateway/models"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -13,7 +12,7 @@ type SecurityService struct {
 
 type ISecurityService interface {
 	AuthenticateByUsernameAndPassword(username string, password string) (string, error)
-	RefreshToken(claims *models.JwtCustomClaims) (string, error)
+	RefreshToken(claims *JwtCustomClaims) (string, error)
 }
 
 func NewSecurityService() ISecurityService {
@@ -28,7 +27,7 @@ func (svc *SecurityService) AuthenticateByUsernameAndPassword(username string, p
 	}
 
 	// Set custom claims
-	claims := &models.JwtCustomClaims{
+	claims := &JwtCustomClaims{
 		Name:  "Eli Panda",
 		Admin: true,
 		StandardClaims: jwt.StandardClaims{
@@ -49,7 +48,7 @@ func (svc *SecurityService) AuthenticateByUsernameAndPassword(username string, p
 	return t, nil
 }
 
-func (svc *SecurityService) RefreshToken(claims *models.JwtCustomClaims) (string, error) {
+func (svc *SecurityService) RefreshToken(claims *JwtCustomClaims) (string, error) {
 
 	claims.StandardClaims.ExpiresAt = time.Now().Add(time.Hour * 2).Unix()
 

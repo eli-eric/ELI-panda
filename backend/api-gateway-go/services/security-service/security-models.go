@@ -1,4 +1,4 @@
-package models
+package securityService
 
 import (
 	"github.com/golang-jwt/jwt"

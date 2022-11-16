@@ -1,16 +1,14 @@
-package handlers
+package securityService
 
 import (
 	"net/http"
-	"panda/apigateway/models"
-	"panda/apigateway/services"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 )
 
 type SecurityHandlers struct {
-	securityService services.ISecurityService
+	securityService ISecurityService
 }
 
 type ISecurityHandlers interface {
@@ -20,16 +18,16 @@ type ISecurityHandlers interface {
 }
 
 // NewCommentsHandlers Comments handlers constructor
-func NewSecurityHandlers(securitySvc services.ISecurityService) ISecurityHandlers {
+func NewSecurityHandlers(securitySvc ISecurityService) ISecurityHandlers {
 	return &SecurityHandlers{securityService: securitySvc}
 }
 
-// @Description Login with username and password and get jwt token to play with rest of API
+// Login with username and password and get jwt token to play with rest of API
 func (h *SecurityHandlers) AuthenticateByUsernameAndPassword() echo.HandlerFunc {
 
 	return func(c echo.Context) error {
 
-		cred := new(models.UserCredentials)
+		cred := new(UserCredentials)
 		if err := c.Bind(cred); err == nil {
 			// authenticate and Generate encoded token and send it as response.
 			t, err := h.securityService.AuthenticateByUsernameAndPassword(cred.Username, cred.Password)
@@ -41,7 +39,7 @@ func (h *SecurityHandlers) AuthenticateByUsernameAndPassword() echo.HandlerFunc 
 				}
 			}
 
-			authUser := models.AuthUser{}
+			authUser := AuthUser{}
 
 			authUser.Username = cred.Username
 			authUser.Uid = "71864520-9e86-427c-901c-0c220f95177"
@@ -62,7 +60,7 @@ func (h *SecurityHandlers) RefreshToken() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(*models.JwtCustomClaims)
+		claims := user.Claims.(*JwtCustomClaims)
 
 		// authenticate and Generate encoded token and send it as response.
 		t, err := h.securityService.RefreshToken(claims)
@@ -79,22 +77,13 @@ func (h *SecurityHandlers) RefreshToken() echo.HandlerFunc {
 	}
 }
 
-// Authenticate godoc
-// @Summary Get authenticated user data
-// @Description Get authenticated user data by token - Bearer auth header
-// @Tags Security
-// @Accept json
-// @Produce json
-// @Success 200 {object} models.AuthUser
-// @Router /authenticate [get]
-// @Security ApiKeyAuth
 func (h *SecurityHandlers) GetUserByJWT() echo.HandlerFunc {
 
 	return func(c echo.Context) error {
 		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(*models.JwtCustomClaims)
+		claims := user.Claims.(*JwtCustomClaims)
 
-		authUser := models.AuthUser{}
+		authUser := AuthUser{}
 
 		authUser.Username = claims.Name
 		authUser.Uid = "71864520-9e86-427c-901c-0c220f95177"
