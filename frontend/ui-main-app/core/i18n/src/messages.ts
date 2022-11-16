@@ -8,7 +8,6 @@ interface Payload {
 const dictionary: Record<string, Record<string, string>> = { en: {} }
 
 const enhanceMessages = (path: string, pureMessages: Payload, language: string): void => {
-  console.log(en)
   const actualObject: Record<string, string> = path ? get(pureMessages, path) : pureMessages
   const keys = Object.keys(actualObject)
 

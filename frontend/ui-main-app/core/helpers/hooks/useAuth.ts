@@ -1,7 +1,7 @@
+import { PATHS } from 'types/constants/paths'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
-import { PATHS } from 'types/constants/paths'
 import { ROLES_CONFIG } from 'types/constants/roles-config'
 
 /* Hook wrapping next-auth that provides protection for pages

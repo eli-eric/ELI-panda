@@ -1,4 +1,4 @@
-import AuthFormContainer from 'components/auth/auth-form.cont'
+import AuthFormContainer from 'core/components/auth/auth-form.cont'
 import { useAuth } from 'core/helpers/hooks/useAuth'
 import { message } from 'core/i18n/src/messages'
 import Head from 'next/head'
@@ -8,7 +8,7 @@ import { useIntl } from 'react-intl'
 const messages = message.authPage
 
 const AuthPage = () => {
-  const auth = useAuth()
+  useAuth()
   const intl = useIntl()
   return (
     <Fragment>

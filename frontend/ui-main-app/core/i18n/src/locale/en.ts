@@ -1,5 +1,8 @@
 export const messages = {
-  navigationBar: {
+  common: {
+    buttons: { close: 'Close' }
+  },
+  layout: {
     login: 'Log In',
     dashboard: 'Dashboard',
     catalogue: 'Catalogue',
@@ -7,6 +10,10 @@ export const messages = {
     reports: 'Reports',
     button: {
       signout: 'Sign Out'
+    },
+    userMenu: {
+      profile: 'Profile',
+      singout: 'Sign Out'
     }
   },
   authPage: {
@@ -15,8 +22,9 @@ export const messages = {
     form: {
       userName: 'User Name',
       password: 'Password',
-      button: { default: 'Sign In', isLoading: 'Loading' }
-    }
+      button: { default: 'Sign In', isLoading: 'Loading...' }
+    },
+    alert: { title: 'Something went wrong!' }
   },
   dashboardPage: { head: 'Eli Panda - Dashboard' },
   cataloguePage: { head: 'Eli Panda - Catalogue' },
