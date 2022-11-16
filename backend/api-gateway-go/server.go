@@ -1,25 +1,28 @@
 package main
 
 import (
+	"fmt"
 	securityService "panda/apigateway/services/security-service"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/spf13/viper"
 )
 
 func main() {
 
-	//here we recognize if we run in localhost via app start argument
-	// isLocalhost := false //otherwise it is in container and comuniate via docker network using dns
-	// if len(os.Args) > 0 {
-	// 	for _, arg := range os.Args {
-	// 		if arg == "localhost" {
-	// 			isLocalhost = true
-	// 		}
-	// 	}
-	// }
+	// configuration settings
+	viper.SetConfigName("appsettings")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath(".")
+	err := viper.ReadInConfig()
+	if err != nil {
+		fmt.Println(err)
+		//if there was no config file presented in root folder we will use some defaults - its ok only for local development
+		viper.SetDefault("PANDA_API_GATEWAY_PORT", "50000")
+	}
 
-	apiPort := ":50000" //default api gateway port
+	apiPort := ":" + viper.GetString("PANDA_API_GATEWAY_PORT")
 
 	e := echo.New()
 
