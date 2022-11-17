@@ -31,7 +31,7 @@ export default NextAuth({
     })
   ],
   pages: {
-    signIn: '/auth'
+    signIn: '/'
   },
   callbacks: {
     jwt(params) {

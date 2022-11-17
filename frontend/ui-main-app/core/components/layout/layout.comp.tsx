@@ -5,13 +5,14 @@ import NavigationListContainer from './navigation/navigation-list.cont'
 import Image from 'next/image'
 import SearchBarComp from './search-bar.comp'
 import { useAuth } from 'core/helpers/hooks/useAuth'
+import { useSession } from 'next-auth/react'
 
 interface Props {
   children: React.ReactNode
 }
 
 export default function LayoutComponent({ children }: Props) {
-  const { status } = useAuth()
+  const { status } = useSession()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (

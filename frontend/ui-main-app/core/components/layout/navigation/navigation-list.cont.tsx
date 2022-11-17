@@ -6,10 +6,12 @@ import NavigationLinkComponent from './navigation-link.comp'
 import { ChartBarIcon, FolderIcon, HomeIcon, InboxIcon } from '@heroicons/react/24/outline'
 import { PATHS } from 'types/constants/paths'
 import { ROLES } from 'types/constants/roles'
+import { useSession } from 'next-auth/react'
 const navMessages = message.layout
 
 const NavigationListContainer = () => {
-  const { status, userRoles } = useAuth()
+  const { status, data } = useSession()
+  const userRoles = data?.user.roles
   const intl = useIntl()
   return (
     <>
