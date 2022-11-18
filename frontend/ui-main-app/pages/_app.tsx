@@ -13,13 +13,13 @@ export default function App({ Component, pageProps: { session, ...pageProps }, r
     <SessionProvider session={session}>
       <IntlProvider locale="en" messages={messages['en']}>
         <LoadingContextProvider>
-          <LoaderComponent>
-            <LayoutComponent>
+          <LayoutComponent>
+            <LoaderComponent>
               <PageGuardWrapper>
                 <Component {...pageProps} />
               </PageGuardWrapper>
-            </LayoutComponent>
-          </LoaderComponent>
+            </LoaderComponent>
+          </LayoutComponent>
         </LoadingContextProvider>
       </IntlProvider>
     </SessionProvider>

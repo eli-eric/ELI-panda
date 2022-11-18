@@ -31,9 +31,7 @@ export const LoadingContextProvider = ({ children }: Props) => {
       setLoading(false)
       return
     })
-    if (status === 'authenticated') {
-      //setLoading(false)
-    }
+
     if (status === 'unauthenticated') {
       setLoading(false)
     }
