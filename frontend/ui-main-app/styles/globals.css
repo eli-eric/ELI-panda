@@ -9,3 +9,16 @@
     @apply mt-6 text-center text-3xl font-bold tracking-tight text-gray-900;
   }
 }
+#globalLoader {
+  position: fixed;
+  z-index: 9999;
+  top: 50%;
+  left: 50%;
+  background-color: #fff;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}

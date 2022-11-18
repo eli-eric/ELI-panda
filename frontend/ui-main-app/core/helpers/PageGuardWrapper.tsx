@@ -1,9 +1,11 @@
 import { signIn, useSession } from 'next-auth/react'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { PATHS, RESTRICTED_PATHS } from 'types/constants/paths'
 import { ROLES_CONFIG } from 'types/constants/roles-config'
 import { useRouter } from 'next/router'
-import EliLoaderComponent from 'core/components/ui/eli-loader.comp'
+import LoaderComponent from 'core/components/ui/loader.comp'
+import LoadingContext from 'core/store/loading-context'
+import AuthFormContainer from 'core/components/auth/auth-form.cont'
 
 interface Props {
   children: React.ReactNode
@@ -13,18 +15,15 @@ const PageGuardWrapper = ({ children }: Props) => {
   const router = useRouter()
   const pathname = router.pathname
   const requireAuth = RESTRICTED_PATHS.some(path => router.route.startsWith(path))
+  const { loading, setLoading } = useContext(LoadingContext)
 
   useEffect(() => {
-    if (status === 'loading') return // Do nothing while loading
-    if (status === 'unauthenticated') {
-      if (requireAuth) {
-        router.replace(PATHS.ROOT)
-      }
-    } // If not authenticated and some restricted path, force log in
+    console.log('status:', status)
 
     if (status === 'authenticated') {
+      setLoading(false)
       if (pathname === PATHS.ROOT) {
-        router.replace(PATHS.DASHBOARD)
+        router.push(PATHS.DASHBOARD)
       }
       const alowedPages = data?.user.roles.map(role => {
         return ROLES_CONFIG[role].toString()
@@ -36,22 +35,25 @@ const PageGuardWrapper = ({ children }: Props) => {
         }
       })
       if (!alowedPages.includes(currentRootPage || pathname)) {
-        router.replace(PATHS.DASHBOARD)
+        router.push(PATHS.DASHBOARD)
       }
     } // protecting pages based on user Roles
-  }, [status, router, data, pathname, requireAuth])
+  }, [status, router, data, pathname, requireAuth, loading, setLoading])
 
   if (status === 'authenticated') {
+    setLoading(false)
+
     return <>{children}</>
   }
 
-  if (status === 'unauthenticated' && !requireAuth) {
-    return <>{children}</>
+  if (status === 'unauthenticated') {
+    setLoading(false)
+    return <AuthFormContainer />
   }
 
   // Session is being fetched
   // If loading, useEffect() will redirect.
-  return <EliLoaderComponent />
+  return <LoaderComponent>{children}</LoaderComponent>
 }
 
 export default PageGuardWrapper

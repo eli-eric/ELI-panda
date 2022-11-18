@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import eliLogo from '../../../public/eli-logo-svg.svg'
 
 interface Props {
   customClass: string
@@ -8,8 +9,8 @@ const EliLogoComponent = ({ customClass }: Props) => {
   return (
     <Image
       className={customClass}
-      src="/../public/eli-logo-svg.svg"
-      alt="Eli"
+      src={eliLogo}
+      alt="Eli Logo"
       width={200}
       height={200}
       priority={true}

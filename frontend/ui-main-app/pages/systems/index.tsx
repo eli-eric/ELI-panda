@@ -1,4 +1,3 @@
-import { useAuth } from 'core/helpers/hooks/useAuth'
 import { message } from 'core/i18n/src/messages'
 import { NextPage } from 'next'
 import Head from 'next/head'
