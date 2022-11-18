@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import 'eli-busy.css';
+
+@layer base {
+  h2 {
+    @apply mt-6 text-center text-3xl font-bold tracking-tight text-gray-900;
+  }
+}

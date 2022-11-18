@@ -11,14 +11,6 @@ const messages = message.authPage
 
 const HomePage = () => {
   const intl = useIntl()
-  const { status } = useSession()
-  const route = useRouter()
-
-  useEffect(() => {
-    if (status === 'authenticated') {
-      route.replace(PATHS.DASHBOARD)
-    }
-  }, [status, route])
 
   return (
     <Fragment>

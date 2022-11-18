@@ -20,7 +20,8 @@ export const messages = {
       subTitle: 'Personal details.',
       fullName: 'Full name',
       email: 'Email address',
-      facility: 'Facility'
+      facility: 'Facility',
+      roles: 'Roles'
     }
   },
   authPage: {

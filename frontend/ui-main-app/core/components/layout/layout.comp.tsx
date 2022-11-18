@@ -4,8 +4,8 @@ import NavigationComponent from './navigation/navigation.comp'
 import NavigationListContainer from './navigation/navigation-list.cont'
 import Image from 'next/image'
 import SearchBarComp from './search-bar.comp'
-import { useAuth } from 'core/helpers/hooks/useAuth'
 import { useSession } from 'next-auth/react'
+import EliLogoComponent from '../ui/eli-logo.comp'
 
 interface Props {
   children: React.ReactNode
@@ -25,14 +25,7 @@ export default function LayoutComponent({ children }: Props) {
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5">
             <div className="flex flex-shrink-0 items-center px-4">
-              <Image
-                className="h-8 w-auto"
-                src="/../public/eli-logo-small.png"
-                alt="Your Company"
-                width={200}
-                height={200}
-                priority={true}
-              />
+              <EliLogoComponent customClass="h-8 w-auto" />
             </div>
             <div className="mt-5 flex flex-grow flex-col">
               <nav className="flex-1 space-y-1 px-2 pb-4">
