@@ -8,7 +8,17 @@ const messages = message.layout.profile
 const ProfileCardComponent = () => {
   const user = useSession().data?.user
 
-  console.log(user)
+  const useRolesBadges = user?.roles.map(role => {
+    return (
+      <span
+        key={role}
+        className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-gray-800"
+      >
+        {role}
+      </span>
+    )
+  })
+
   return (
     <Fragment>
       <div>
@@ -43,6 +53,14 @@ const ProfileCardComponent = () => {
             </dt>
             <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
               <span className="flex-grow">{user?.facility}</span>
+            </dd>
+          </div>
+          <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+            <dt className="text-sm font-medium text-gray-500">
+              <FormattedMessage id={messages.roles} />
+            </dt>
+            <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+              <span className="flex-grow">{useRolesBadges}</span>
             </dd>
           </div>
         </dl>

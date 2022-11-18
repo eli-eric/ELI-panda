@@ -3,6 +3,7 @@ import { Dispatch, Fragment, LegacyRef, SetStateAction } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import NavigationListContainer from './navigation-list.cont'
+import EliLogoComponent from 'core/components/ui/eli-logo.comp'
 
 interface Props {
   setSidebarOpen: Dispatch<SetStateAction<boolean>>
@@ -57,14 +58,7 @@ const NavigationComponent = ({ setSidebarOpen, sidebarOpen }: Props) => {
                 </div>
               </Transition.Child>
               <div className="flex flex-shrink-0 items-center px-4">
-                <Image
-                  className="h-8 w-auto"
-                  src="/../public/eli-logo-small.png"
-                  alt="Your Company"
-                  width={200}
-                  height={200}
-                  priority={true}
-                />
+                <EliLogoComponent customClass="h-8 w-auto" />
               </div>
               <div className="mt-5 h-0 flex-1 overflow-y-auto">
                 <nav className="space-y-1 px-2">

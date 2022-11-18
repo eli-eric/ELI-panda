@@ -1,21 +1,26 @@
 import { signIn, useSession } from 'next-auth/react'
-import { useEffect } from 'react'
-import { PATHS } from 'types/constants/paths'
+import { useEffect, useState } from 'react'
+import { PATHS, RESTRICTED_PATHS } from 'types/constants/paths'
 import { ROLES_CONFIG } from 'types/constants/roles-config'
 import { useRouter } from 'next/router'
+import EliLoaderComponent from 'core/components/ui/eli-loader.comp'
 
 interface Props {
   children: React.ReactNode
 }
-const PageAuthGuard = ({ children }: Props) => {
+const PageGuardWrapper = ({ children }: Props) => {
   const { status, data } = useSession()
   const router = useRouter()
   const pathname = router.pathname
+  const requireAuth = RESTRICTED_PATHS.some(path => router.route.startsWith(path))
+
   useEffect(() => {
     if (status === 'loading') return // Do nothing while loading
     if (status === 'unauthenticated') {
-      signIn()
-    } // If not authenticated, force log in
+      if (requireAuth) {
+        router.replace(PATHS.ROOT)
+      }
+    } // If not authenticated and some restricted path, force log in
 
     if (status === 'authenticated') {
       if (pathname === PATHS.ROOT) {
@@ -34,14 +39,19 @@ const PageAuthGuard = ({ children }: Props) => {
         router.replace(PATHS.DASHBOARD)
       }
     } // protecting pages based on user Roles
-  }, [status, router, data, pathname])
+  }, [status, router, data, pathname, requireAuth])
 
   if (status === 'authenticated') {
     return <>{children}</>
   }
+
+  if (status === 'unauthenticated' && !requireAuth) {
+    return <>{children}</>
+  }
+
   // Session is being fetched
   // If loading, useEffect() will redirect.
-  return <div>Loading...</div>
+  return <EliLoaderComponent />
 }
 
-export default PageAuthGuard
+export default PageGuardWrapper

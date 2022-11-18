@@ -1,4 +1,3 @@
-import { useAuth } from 'core/helpers/hooks/useAuth'
 import { message } from 'core/i18n/src/messages'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
@@ -47,7 +46,7 @@ const NavigationListContainer = () => {
       ) : (
         <NavigationLinkComponent
           name={intl.formatMessage({ id: navMessages.login })}
-          href={PATHS.AUTH}
+          href={PATHS.ROOT}
           Icon={HomeIcon}
         />
       )}
