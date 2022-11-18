@@ -1,10 +1,7 @@
 import { Menu, Transition } from '@headlessui/react'
 import { message } from 'core/i18n/src/messages'
-import { DOMAttributes, Fragment, MouseEvent, MouseEventHandler, useEffect, useState } from 'react'
+import { Fragment, MouseEventHandler } from 'react'
 import { FormattedMessage } from 'react-intl'
-import ProfileCardComponent from './profile-card.comp'
-import ModalComponent from '../ui/modal.comp'
-import { signOut, useSession } from 'next-auth/react'
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')

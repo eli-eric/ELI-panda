@@ -1,4 +1,3 @@
-import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import { createContext, useEffect, useState } from 'react'
 
@@ -18,15 +17,14 @@ interface Props {
 
 export const LoadingComponentProvider = ({ children }: Props) => {
   const [loading, setLoading] = useState(false)
-  const { status } = useSession()
   const router = useRouter()
   useEffect(() => {
-    router.events.on('routeChangeStart', url => {
+    router.events.on('routeChangeStart', () => {
       setLoading(true)
       return
     })
 
-    router.events.on('routeChangeComplete', url => {
+    router.events.on('routeChangeComplete', () => {
       setLoading(false)
       return
     })

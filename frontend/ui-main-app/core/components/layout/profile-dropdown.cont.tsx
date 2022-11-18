@@ -1,4 +1,4 @@
-import { Fragment, MouseEvent, useContext, useEffect, useState } from 'react'
+import { Fragment, useContext, useEffect, useState } from 'react'
 import ProfileCardComponent from './profile-card.comp'
 import ModalComponent from '../ui/modal.comp'
 import { signOut, useSession } from 'next-auth/react'
@@ -19,18 +19,16 @@ const ProfileDropdownContainer = () => {
     setInicials(firstLetter + secondLetter)
   }, [fullName])
 
-  const signOutHandler = (e: MouseEvent) => {
+  const signOutHandler = () => {
     setLoadingApp(true)
     signOut({ redirect: false })
-      .then(e => {
-        setLoadingApp(false)
-      })
+      .then()
       .finally(() => {
         setLoadingApp(false)
       })
   }
 
-  const showModalHandler = (e: MouseEvent) => {
+  const showModalHandler = () => {
     setModalOpen(true)
   }
 

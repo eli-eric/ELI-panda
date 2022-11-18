@@ -18,7 +18,6 @@ export const LoadingAppProvider = ({ children }: Props) => {
   const [loading, setLoading] = useState(false)
 
   const setLoadingHandler = (loading: boolean) => {
-    console.log(loading)
     setLoading(loading)
   }
 
