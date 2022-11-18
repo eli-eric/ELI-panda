@@ -3,13 +3,13 @@ import ProfileCardComponent from './profile-card.comp'
 import ModalComponent from '../ui/modal.comp'
 import { signOut, useSession } from 'next-auth/react'
 import ProfileDropdownComponent from './profile-dropdown.comp'
-import LoadingContext from 'core/store/loading-context'
+import LoadingAppContext from 'core/store/loading-app.context'
 
 const ProfileDropdownContainer = () => {
   const fullName = useSession().data?.user.fullName
   const [inicials, setInicials] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
-  const { setLoading } = useContext(LoadingContext)
+  const { setLoadingApp } = useContext(LoadingAppContext)
 
   useEffect(() => {
     if (!fullName) return
@@ -20,8 +20,14 @@ const ProfileDropdownContainer = () => {
   }, [fullName])
 
   const signOutHandler = (e: MouseEvent) => {
-    setLoading(true)
+    setLoadingApp(true)
     signOut({ redirect: false })
+      .then(e => {
+        setLoadingApp(false)
+      })
+      .finally(() => {
+        setLoadingApp(false)
+      })
   }
 
   const showModalHandler = (e: MouseEvent) => {

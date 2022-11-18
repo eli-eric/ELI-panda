@@ -1,4 +1,4 @@
-import EliLoaderComponent from 'core/components/ui/loader.comp'
+import EliLoaderComponent from 'core/components/loaders/component-loader.comp'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 class MyDocument extends Document {
   render() {

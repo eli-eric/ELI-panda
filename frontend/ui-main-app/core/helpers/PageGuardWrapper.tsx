@@ -1,11 +1,10 @@
-import { signIn, useSession } from 'next-auth/react'
-import { useContext, useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { useEffect } from 'react'
 import { PATHS, RESTRICTED_PATHS } from 'types/constants/paths'
 import { ROLES_CONFIG } from 'types/constants/roles-config'
 import { useRouter } from 'next/router'
-import LoaderComponent from 'core/components/ui/loader.comp'
-import LoadingContext from 'core/store/loading-context'
 import AuthFormContainer from 'core/components/auth/auth-form.cont'
+import ComponentLoader from 'core/components/loaders/component-loader.comp'
 
 interface Props {
   children: React.ReactNode
@@ -15,13 +14,10 @@ const PageGuardWrapper = ({ children }: Props) => {
   const router = useRouter()
   const pathname = router.pathname
   const requireAuth = RESTRICTED_PATHS.some(path => router.route.startsWith(path))
-  const { loading, setLoading } = useContext(LoadingContext)
 
   useEffect(() => {
-    console.log('status:', status)
-
+    if (status === 'loading') return
     if (status === 'authenticated') {
-      setLoading(false)
       if (pathname === PATHS.ROOT) {
         router.push(PATHS.DASHBOARD)
       }
@@ -38,22 +34,17 @@ const PageGuardWrapper = ({ children }: Props) => {
         router.push(PATHS.DASHBOARD)
       }
     } // protecting pages based on user Roles
-  }, [status, router, data, pathname, requireAuth, loading, setLoading])
+  }, [status, router, data, pathname, requireAuth])
 
   if (status === 'authenticated') {
-    setLoading(false)
-
     return <>{children}</>
   }
 
   if (status === 'unauthenticated') {
-    setLoading(false)
     return <AuthFormContainer />
   }
 
-  // Session is being fetched
-  // If loading, useEffect() will redirect.
-  return <LoaderComponent>{children}</LoaderComponent>
+  return <ComponentLoader />
 }
 
 export default PageGuardWrapper

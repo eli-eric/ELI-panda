@@ -1,14 +1,10 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import LoadingContext from 'core/store/loading-context'
-import { FormEvent, useContext } from 'react'
+import { FormEvent } from 'react'
 import ProfileDropdownContainer from './profile-dropdown.cont'
 
 const SearchBarComp = () => {
-  const { setLoading } = useContext(LoadingContext)
-
   function handler(e: FormEvent) {
     e.preventDefault()
-    setLoading(true)
   }
   return (
     <div className="flex flex-1 justify-between px-4">

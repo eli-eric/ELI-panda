@@ -1,23 +1,22 @@
-import LoaderComponent from 'core/components/ui/loader.comp'
 import { useSession } from 'next-auth/react'
-import Router, { useRouter } from 'next/router'
-import { createContext, Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { createContext, useEffect, useState } from 'react'
 
-interface LoadingContext {
+interface LoadingComponentContext {
   loading: boolean
   setLoading: (loading: boolean) => void
 }
 
-const LoadingContext = createContext({
+const LoadingComponentContext = createContext({
   loading: false, // {title, message, status}
   setLoading: loading => {}
-} as LoadingContext)
+} as LoadingComponentContext)
 
 interface Props {
   children: React.ReactNode
 }
 
-export const LoadingContextProvider = ({ children }: Props) => {
+export const LoadingComponentProvider = ({ children }: Props) => {
   const [loading, setLoading] = useState(false)
   const { status } = useSession()
   const router = useRouter()
@@ -31,18 +30,9 @@ export const LoadingContextProvider = ({ children }: Props) => {
       setLoading(false)
       return
     })
-
-    if (status === 'unauthenticated') {
-      setLoading(false)
-    }
-    if (status === 'loading') {
-      setLoading(true)
-    }
-    console.log('loading', loading)
-  }, [router, loading, status])
+  }, [router, loading])
 
   const setLoadingHandler = (loading: boolean) => {
-    console.log(loading)
     setLoading(loading)
   }
 
@@ -51,6 +41,8 @@ export const LoadingContextProvider = ({ children }: Props) => {
     setLoading: setLoadingHandler
   }
 
-  return <LoadingContext.Provider value={context}>{children}</LoadingContext.Provider>
+  return (
+    <LoadingComponentContext.Provider value={context}>{children}</LoadingComponentContext.Provider>
+  )
 }
-export default LoadingContext
+export default LoadingComponentContext
