@@ -2,6 +2,7 @@ package securityService
 
 import (
 	"net/http"
+	"panda/apigateway/services/security-service/models"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
@@ -27,7 +28,7 @@ func (h *SecurityHandlers) AuthenticateByUsernameAndPassword() echo.HandlerFunc 
 
 	return func(c echo.Context) error {
 
-		cred := new(UserCredentials)
+		cred := new(models.UserCredentials)
 		if err := c.Bind(cred); err == nil {
 			// authenticate and Generate encoded token and send it as response.
 			t, err := h.securityService.AuthenticateByUsernameAndPassword(cred.Username, cred.Password)
@@ -39,11 +40,10 @@ func (h *SecurityHandlers) AuthenticateByUsernameAndPassword() echo.HandlerFunc 
 				}
 			}
 
-			authUser := AuthUser{}
+			authUser := models.UserAuthInfo{}
 
 			authUser.Username = cred.Username
 			authUser.Uid = "71864520-9e86-427c-901c-0c220f95177"
-			authUser.Email = "admin@eli"
 			authUser.Facility = "ELI-Beamlines"
 			authUser.AccessToken = t
 			authUser.Roles = []string{"catalogue-view", "systems-view"}
@@ -60,7 +60,7 @@ func (h *SecurityHandlers) RefreshToken() echo.HandlerFunc {
 	return func(c echo.Context) error {
 
 		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(*JwtCustomClaims)
+		claims := user.Claims.(*models.JwtCustomClaims)
 
 		// authenticate and Generate encoded token and send it as response.
 		t, err := h.securityService.RefreshToken(claims)
@@ -81,13 +81,12 @@ func (h *SecurityHandlers) GetUserByJWT() echo.HandlerFunc {
 
 	return func(c echo.Context) error {
 		user := c.Get("user").(*jwt.Token)
-		claims := user.Claims.(*JwtCustomClaims)
+		claims := user.Claims.(*models.JwtCustomClaims)
 
-		authUser := AuthUser{}
+		authUser := models.UserAuthInfo{}
 
 		authUser.Username = claims.Name
 		authUser.Uid = "71864520-9e86-427c-901c-0c220f95177"
-		authUser.Email = "admin@eli"
 		authUser.Facility = "ELI-Beamlines"
 		authUser.AccessToken = user.Raw
 		authUser.Roles = []string{"catalogue-view", "systems-view"}

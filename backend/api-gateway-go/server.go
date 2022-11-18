@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	securityService "panda/apigateway/services/security-service"
+	"panda/apigateway/services/security-service/models"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -57,7 +58,7 @@ func main() {
 
 	//JWT middleware - Configure middleware with the custom claims type
 	config := middleware.JWTConfig{
-		Claims:     &securityService.JwtCustomClaims{},
+		Claims:     &models.JwtCustomClaims{},
 		SigningKey: []byte(jwtSecret),
 		ErrorHandler: func(err error) error {
 			if err != nil {
