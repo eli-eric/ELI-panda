@@ -1,0 +1,23 @@
+version: '3.9'
+
+networks:
+  panda-net:
+    name: panda-net
+    driver: bridge
+
+services:
+  panda-security-neo4j:
+    container_name: panda-security-neo4j
+    image: neo4j:4.4.6@sha256:ac30efa12f5a78ea981784d538243afc743ec59bb7823cbbeabe336beb68354b
+    # user: "1020:1020"
+    restart: unless-stopped
+    environment:
+      - NEO4J_AUTH=neo4j/elipanda2022
+    volumes:
+      - "$HOME/panda-dev/neo4j-security/data:/data:rw"
+      - "$HOME/panda-dev/neo4j-security/logs:/logs:rw"
+    networks:
+      - panda-net
+    ports:
+      - "7400:7474"
+      - "7600:7687"
