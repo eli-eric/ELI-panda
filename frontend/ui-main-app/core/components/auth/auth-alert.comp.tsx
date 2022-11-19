@@ -8,7 +8,7 @@ interface Props {
   message: string
 }
 
-export default function AuthAlertComponent({ message }: Props) {
+const AuthAlertComponent = ({ message }: Props) => {
   return (
     <div className="rounded-md bg-yellow-50 p-4">
       <div className="flex">
@@ -27,3 +27,5 @@ export default function AuthAlertComponent({ message }: Props) {
     </div>
   )
 }
+
+export default AuthAlertComponent

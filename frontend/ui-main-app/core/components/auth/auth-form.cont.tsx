@@ -1,7 +1,8 @@
-import { FormEvent, Fragment, useRef, useState } from 'react'
-import { signIn } from 'next-auth/react'
-import AuthFormComponent from './auth-form.comp'
 import AuthAlertComponent from 'core/components/auth/auth-alert.comp'
+import { signIn } from 'next-auth/react'
+import { FormEvent, Fragment, useRef, useState } from 'react'
+
+import AuthFormComponent from './auth-form.comp'
 
 const AuthFormContainer = () => {
   const [authFailed, setAuthFailed] = useState<boolean>(false)

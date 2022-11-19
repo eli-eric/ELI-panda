@@ -1,6 +1,7 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { FormEvent } from 'react'
-import ProfileDropdownContainer from './profile-dropdown.cont'
+
+import ProfileDropdownContainer from './dropdown-menu/dropdown-menu.cont'
 
 const SearchBarComp = () => {
   function handler(e: FormEvent) {

@@ -1,10 +1,11 @@
-import { useState } from 'react'
 import { Bars3BottomLeftIcon } from '@heroicons/react/24/outline'
+import { useSession } from 'next-auth/react'
+import { useState } from 'react'
+
+import EliLogoComponent from '../ui/eli-logo.comp'
 import NavigationComponent from './navigation/navigation.comp'
 import NavigationListContainer from './navigation/navigation-list.cont'
 import SearchBarComp from './search-bar.comp'
-import { useSession } from 'next-auth/react'
-import EliLogoComponent from '../ui/eli-logo.comp'
 
 interface Props {
   children: React.ReactNode

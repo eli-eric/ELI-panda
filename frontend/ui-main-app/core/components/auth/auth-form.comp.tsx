@@ -1,6 +1,7 @@
 import { message } from 'core/i18n/src/messages'
 import { FormEventHandler, LegacyRef } from 'react'
 import { FormattedMessage } from 'react-intl'
+
 import EliLogoComponent from '../ui/eli-logo.comp'
 import AuthButton from './auth-button.comp'
 

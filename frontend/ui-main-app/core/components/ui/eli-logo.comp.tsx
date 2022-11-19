@@ -1,4 +1,5 @@
 import Image from 'next/image'
+
 import eliLogo from '../../../public/eli-logo-svg.svg'
 
 interface Props {

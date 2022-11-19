@@ -1,21 +1,21 @@
 import { useRouter } from 'next/router'
 import { createContext, useEffect, useState } from 'react'
 
-interface LoadingComponentContext {
-  loading: boolean
-  setLoading: (loading: boolean) => void
+interface ComponentLoadingContext {
+  componentLoading: boolean
+  setComponentLoading: (_loading: boolean) => void
 }
 
-const LoadingComponentContext = createContext({
-  loading: false, // {title, message, status}
-  setLoading: loading => {}
-} as LoadingComponentContext)
+const ComponentLoadingContext = createContext({
+  componentLoading: false, // {title, message, status}
+  setComponentLoading: _loading => {}
+} as ComponentLoadingContext)
 
 interface Props {
   children: React.ReactNode
 }
 
-export const LoadingComponentProvider = ({ children }: Props) => {
+export const ComponentLoadingProvider = ({ children }: Props) => {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   useEffect(() => {
@@ -35,12 +35,12 @@ export const LoadingComponentProvider = ({ children }: Props) => {
   }
 
   const context = {
-    loading: loading,
-    setLoading: setLoadingHandler
+    componentLoading: loading,
+    setComponentLoading: setLoadingHandler
   }
 
   return (
-    <LoadingComponentContext.Provider value={context}>{children}</LoadingComponentContext.Provider>
+    <ComponentLoadingContext.Provider value={context}>{children}</ComponentLoadingContext.Provider>
   )
 }
-export default LoadingComponentContext
+export default ComponentLoadingContext

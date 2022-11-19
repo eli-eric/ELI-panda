@@ -15,7 +15,7 @@ interface Props {
   signOutHandler: MouseEventHandler<HTMLButtonElement> | undefined
 }
 
-const ProfileDropdownComponent = ({ inicials, showModalHandler, signOutHandler }: Props) => {
+const DropdownMenuComponent = ({ inicials, showModalHandler, signOutHandler }: Props) => {
   return (
     <Menu as="div" className="relative ml-3">
       <div>
@@ -70,4 +70,4 @@ const ProfileDropdownComponent = ({ inicials, showModalHandler, signOutHandler }
   )
 }
 
-export default ProfileDropdownComponent
+export default DropdownMenuComponent

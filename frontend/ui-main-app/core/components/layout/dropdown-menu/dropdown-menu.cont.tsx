@@ -1,9 +1,10 @@
-import { Fragment, useContext, useEffect, useState } from 'react'
-import ProfileCardComponent from './profile-card.comp'
-import ModalComponent from '../ui/modal.comp'
+import LoadingAppContext from 'core/store/app-loading.context'
 import { signOut, useSession } from 'next-auth/react'
-import ProfileDropdownComponent from './profile-dropdown.comp'
-import LoadingAppContext from 'core/store/loading-app.context'
+import { Fragment, useContext, useEffect, useState } from 'react'
+
+import ModalComponent from '../../ui/modal.comp'
+import ProfileCardComponent from '../profile/profile-card.comp'
+import DropdownMenuComponent from './dropdown-menu.comp'
 
 const ProfileDropdownContainer = () => {
   const fullName = useSession().data?.user.fullName
@@ -34,7 +35,7 @@ const ProfileDropdownContainer = () => {
 
   return (
     <Fragment>
-      <ProfileDropdownComponent
+      <DropdownMenuComponent
         inicials={inicials}
         showModalHandler={showModalHandler}
         signOutHandler={signOutHandler}

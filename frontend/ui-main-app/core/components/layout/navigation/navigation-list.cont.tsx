@@ -1,11 +1,12 @@
+import { ChartBarIcon, FolderIcon, HomeIcon, InboxIcon } from '@heroicons/react/24/outline'
 import { message } from 'core/i18n/src/messages'
+import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
-import NavigationLinkComponent from './navigation-link.comp'
-import { ChartBarIcon, FolderIcon, HomeIcon, InboxIcon } from '@heroicons/react/24/outline'
 import { PATHS } from 'types/constants/paths'
 import { ROLES } from 'types/constants/roles'
-import { useSession } from 'next-auth/react'
+
+import NavigationLinkComponent from './navigation-link.comp'
 const navMessages = message.layout
 
 const NavigationListContainer = () => {

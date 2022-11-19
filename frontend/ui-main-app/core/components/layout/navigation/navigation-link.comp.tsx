@@ -10,9 +10,9 @@ interface Props {
   href: string
   name: string
   Icon: (
-    props: SVGProps<SVGSVGElement> & {
-      title?: string | undefined
-      titleId?: string | undefined
+    _props: SVGProps<SVGSVGElement> & {
+      _title?: string | undefined
+      _titleId?: string | undefined
     }
   ) => JSX.Element
 }

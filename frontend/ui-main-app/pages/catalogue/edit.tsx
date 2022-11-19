@@ -1,5 +1,4 @@
 import { NextPage } from 'next'
-import { Fragment } from 'react'
 
 const CatalogueEditPage: NextPage = (): JSX.Element => {
   return (

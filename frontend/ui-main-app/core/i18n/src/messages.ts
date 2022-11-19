@@ -1,4 +1,5 @@
 import { get } from 'lodash'
+
 import { messages as en } from './locale/en'
 
 interface Payload {
@@ -38,10 +39,9 @@ export const messages = {
 const getMessageMap = <T extends {}>(messages: T, previousPath = ''): T =>
   Object.keys(messages).reduce((prev, cur) => {
     const newPath = `${previousPath}${cur}`
-    // @ts-ignore
     if (typeof messages[cur] === 'string') {
       return { ...prev, [cur]: newPath }
-    } // @ts-ignore
+    }
     return { ...prev, [cur]: getMessageMap(messages[cur], `${newPath}.`) }
   }, {}) as T
 

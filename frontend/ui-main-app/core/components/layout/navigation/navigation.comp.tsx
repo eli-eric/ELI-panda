@@ -1,9 +1,9 @@
-import Image from 'next/image'
-import { Dispatch, Fragment, LegacyRef, SetStateAction } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import NavigationListContainer from './navigation-list.cont'
 import EliLogoComponent from 'core/components/ui/eli-logo.comp'
+import { Dispatch, Fragment, SetStateAction } from 'react'
+
+import NavigationListContainer from './navigation-list.cont'
 
 interface Props {
   setSidebarOpen: Dispatch<SetStateAction<boolean>>

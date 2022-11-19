@@ -1,6 +1,6 @@
-import { Dispatch, Fragment, SetStateAction } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { message } from 'core/i18n/src/messages'
+import { Dispatch, Fragment, SetStateAction } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 interface Props {
