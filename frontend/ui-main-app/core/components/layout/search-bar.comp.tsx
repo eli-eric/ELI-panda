@@ -1,11 +1,16 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import ProfileDropdownComponent from './profile-dropdown.comp'
+import { FormEvent } from 'react'
+
+import ProfileDropdownContainer from './dropdown-menu/dropdown-menu.cont'
 
 const SearchBarComp = () => {
+  function handler(e: FormEvent) {
+    e.preventDefault()
+  }
   return (
     <div className="flex flex-1 justify-between px-4">
       <div className="flex flex-1">
-        <form className="flex w-full md:ml-0" action="#" method="GET">
+        <form className="flex w-full md:ml-0" action="#" method="GET" onSubmit={handler}>
           <label htmlFor="search-field" className="sr-only">
             Search
           </label>
@@ -25,7 +30,7 @@ const SearchBarComp = () => {
       </div>
       <div className="ml-4 flex items-center md:ml-6">
         {/* Profile dropdown */}
-        <ProfileDropdownComponent />
+        <ProfileDropdownContainer />
       </div>
     </div>
   )

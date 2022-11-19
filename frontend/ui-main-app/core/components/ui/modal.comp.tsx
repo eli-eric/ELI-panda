@@ -1,7 +1,6 @@
-import { Dispatch, Fragment, SetStateAction, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { CheckIcon } from '@heroicons/react/24/outline'
 import { message } from 'core/i18n/src/messages'
+import { Dispatch, Fragment, SetStateAction } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 interface Props {

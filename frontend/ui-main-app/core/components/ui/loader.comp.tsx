@@ -1,4 +1,4 @@
-const EliLoaderComponent = () => {
+const LoaderComponent = () => {
   return (
     <div className="app-loader">
       <div className="eli-logo">
@@ -14,4 +14,4 @@ const EliLoaderComponent = () => {
   )
 }
 
-export default EliLoaderComponent
+export default LoaderComponent

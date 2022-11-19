@@ -1,6 +1,4 @@
-import { useAuth } from 'core/helpers/hooks/useAuth'
 import { NextPage } from 'next'
-import { Fragment } from 'react'
 
 const CatalogueEditPage: NextPage = (): JSX.Element => {
   return (
