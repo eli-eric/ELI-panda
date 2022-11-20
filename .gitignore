@@ -11,3 +11,5 @@ tools/catalogue-excel-import/catalogue-excel-import
 backend/microservices/systems-service/systems-service
 tools/catalogue-excel-import/import-data/.~lock.BeamCharacterization.xlsx#
 tools/catalogue-excel-import/import-data/.~lock.TMP.xlsx#
+backend/api-gateway-go/.env
+backend/api-gateway-go/appsettings.yaml
