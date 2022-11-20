@@ -1,11 +1,11 @@
-name: Compose docker frontend
+name: Compose up backend API GATEWAY
 
 on:
   workflow_dispatch:
 
 defaults:
   run:
-    working-directory: frontend
+    working-directory: backend/api-gateway-go
 
 jobs:
   build:

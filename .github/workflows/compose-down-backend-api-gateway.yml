@@ -1,11 +1,11 @@
-name: Compose microservice catalogue
+name: Compose down backend API GATEWAY
 
 on:
   workflow_dispatch:
 
 defaults:
   run:
-    working-directory: backend/microservices/catalogue-service
+    working-directory: backend/api-gateway-go
 
 jobs:
   build:
@@ -14,4 +14,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build the Docker compose
-        run: docker-compose up -d --build
+        run: docker-compose down

@@ -1,11 +1,11 @@
-name: Compose docker backend
+name: Compose up frontend MAIN UI APP
 
 on:
   workflow_dispatch:
 
 defaults:
   run:
-    working-directory: backend/api-gateway-go
+    working-directory: frontend/ui-main-app
 
 jobs:
   build:
