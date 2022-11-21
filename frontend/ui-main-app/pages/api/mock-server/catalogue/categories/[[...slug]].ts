@@ -14,7 +14,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
         let parentPath = ""
         //if slug is definded we want children of presented parentPath
         if (slug && typeof (slug) === "object") {
-            let parentPath = slug.join("/").toLowerCase()
+            parentPath = slug.join("/").toLowerCase()
         }
 
         result = AllCategories.filter(f => f.parentPath === parentPath)
