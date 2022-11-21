@@ -7,15 +7,15 @@ networks:
 
 services:
 
-  panda-ui-main-app:
-    container_name: panda-ui-main-app
+  panda-frontend-ui-main-app:
+    container_name: panda-frontend-ui-main-app
     restart: unless-stopped
     build:
       context: ./
       dockerfile: Dockerfile
       labels:
-        - panda-ui-main-app
+        - panda-frontend-ui-main-app
     networks:
       - panda-net
     ports:
-      - '127.0.0.1:5001:5001'
+      - '127.0.0.1:5000:5001'
