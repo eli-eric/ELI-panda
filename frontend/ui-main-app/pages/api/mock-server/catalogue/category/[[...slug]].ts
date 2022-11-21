@@ -11,9 +11,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
         if (slug && slug.length === 2 && slug[1] === "image") {
             const uid = slug[0]
 
-            let filePath = path.resolve('.', 'images-mock-data/catalogue/category/' + uid + "/image.png")
+            let filePath = path.resolve('.', 'mock-data/images/catalogue/category/' + uid + "/image.png")
             if (!fs.existsSync(filePath))
-                filePath = path.resolve('.', 'images-mock-data/catalogue/category/no-image.png')
+                filePath = path.resolve('.', 'mock-data/images/catalogue/category/no-image.png')
 
             const imageBuffer = fs.readFileSync(filePath)
 
