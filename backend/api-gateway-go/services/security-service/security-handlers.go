@@ -39,14 +39,20 @@ func (h *SecurityHandlers) AuthenticateByUsernameAndPassword() echo.HandlerFunc 
 					return err
 				}
 			}
-
 			authUser := models.UserAuthInfo{}
-
-			authUser.Username = cred.Username
-			authUser.Uid = "71864520-9e86-427c-901c-0c220f95177"
-			authUser.Facility = "ELI-Beamlines"
-			authUser.AccessToken = t
-			authUser.Roles = []string{"catalogue-view", "systems-view"}
+			if cred.Username == "admin" {
+				authUser.Username = cred.Username
+				authUser.Uid = "71864520-9e86-427c-901c-0c220f95177"
+				authUser.Facility = "ELI-Beamlines"
+				authUser.AccessToken = t
+				authUser.Roles = []string{"catalogue-view", "systems-view"}
+			} else if cred.Username == "control.systems" {
+				authUser.Username = cred.Username
+				authUser.Uid = "25038ff7-0e9c-4afe-9198-210c1e94b2ef"
+				authUser.Facility = "ELI-Beamlines"
+				authUser.AccessToken = t
+				authUser.Roles = []string{"pvs-view"}
+			}
 
 			return c.JSON(http.StatusOK, authUser)
 		} else {
@@ -84,6 +90,20 @@ func (h *SecurityHandlers) GetUserByJWT() echo.HandlerFunc {
 		claims := user.Claims.(*models.JwtCustomClaims)
 
 		authUser := models.UserAuthInfo{}
+
+		if claims.Subject == "admin" {
+			authUser.Username = claims.Subject
+			authUser.Uid = "71864520-9e86-427c-901c-0c220f95177"
+			authUser.Facility = "ELI-Beamlines"
+
+			authUser.Roles = []string{"catalogue-view", "systems-view"}
+		} else if authUser.Username == "control.systems" {
+			authUser.Username = claims.Subject
+			authUser.Uid = "25038ff7-0e9c-4afe-9198-210c1e94b2ef"
+			authUser.Facility = "ELI-Beamlines"
+
+			authUser.Roles = []string{"pvs-view"}
+		}
 
 		authUser.Username = claims.Name
 		authUser.Uid = "71864520-9e86-427c-901c-0c220f95177"

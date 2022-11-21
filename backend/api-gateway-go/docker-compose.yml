@@ -7,15 +7,15 @@ networks:
 
 services:
 
-  panda-backend:
-    container_name: panda-backend
+  panda-backend-api-gateway:
+    container_name: panda-backend-api-gateway
     restart: unless-stopped
     build:
       context: ./
       dockerfile: Dockerfile
       labels:
-        - panda-backend
+        - panda-backend-api-gateway
     networks:
       - panda-net
     ports:
-      - '127.0.0.1:50000:50000'
+      - '127.0.0.1:5001:50000'

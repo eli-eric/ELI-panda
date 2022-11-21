@@ -1,4 +1,4 @@
-name: Compose docker backend
+name: Compose down backend API GATEWAY
 
 on:
   workflow_dispatch:
@@ -8,10 +8,10 @@ defaults:
     working-directory: backend/api-gateway-go
 
 jobs:
-  build:
+  compose-down:
     runs-on: self-hosted
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Build the Docker compose
-        run: docker-compose up -d --build
+        run: docker-compose down

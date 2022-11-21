@@ -1,17 +1,17 @@
-name: Compose microservice catalogue
+name: Compose up frontend MAIN UI APP
 
 on:
   workflow_dispatch:
 
 defaults:
   run:
-    working-directory: backend/microservices/catalogue-service
+    working-directory: frontend/ui-main-app
 
 jobs:
   build:
     runs-on: self-hosted
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Build the Docker compose
         run: docker-compose up -d --build

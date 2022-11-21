@@ -31,7 +31,7 @@ func main() {
 
 	//init settings
 	apiPort := ":" + viper.GetString("PANDA_API_GATEWAY_PORT")
-	jwtSecret := viper.GetString("PANDA_API_GATEWAY_JWT_SECRET")
+	//jwtSecret := viper.GetString("PANDA_API_GATEWAY_JWT_SECRET")
 
 	e := echo.New()
 
@@ -59,9 +59,10 @@ func main() {
 	//JWT middleware - Configure middleware with the custom claims type
 	config := middleware.JWTConfig{
 		Claims:     &models.JwtCustomClaims{},
-		SigningKey: []byte(jwtSecret),
+		SigningKey: []byte("12554114ad74624b588c910f6fa2bbc0"),
 		ErrorHandler: func(err error) error {
 			if err != nil {
+				fmt.Println(err)
 				return echo.ErrUnauthorized
 			} else {
 				return nil
