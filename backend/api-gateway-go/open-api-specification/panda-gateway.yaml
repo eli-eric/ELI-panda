@@ -1,6 +1,6 @@
 openapi: 3.0.2
 info:
-  title: PANDA API Gateway
+  title: PANDA - API Gateway
   description: This is an API Gateway to the PANDA database. This is the only place to access data from the PANDA database.
   version: "1.0"
   contact:
