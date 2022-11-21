@@ -8,7 +8,7 @@ defaults:
     working-directory: frontend/ui-main-app
 
 jobs:
-  build:
+  compose-down:
     runs-on: self-hosted
 
     steps:

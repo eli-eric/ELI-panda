@@ -8,7 +8,7 @@ defaults:
     working-directory: backend/api-gateway-go
 
 jobs:
-  build:
+  compose-down:
     runs-on: self-hosted
 
     steps:
