@@ -32,7 +32,7 @@ func (svc *SecurityService) AuthenticateByUsernameAndPassword(username string, p
 		Name:  "Eli Panda",
 		Admin: true,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 2).Unix(),
+			ExpiresAt: time.Now().Add(time.Hour * 876000).Unix(),
 			Subject:   "admin",
 		},
 	}
@@ -51,7 +51,7 @@ func (svc *SecurityService) AuthenticateByUsernameAndPassword(username string, p
 
 func (svc *SecurityService) RefreshToken(claims *models.JwtCustomClaims) (string, error) {
 
-	claims.StandardClaims.ExpiresAt = time.Now().Add(time.Hour * 2).Unix()
+	claims.StandardClaims.ExpiresAt = time.Now().Add(time.Hour * 876000).Unix()
 
 	// Create token with claims
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
