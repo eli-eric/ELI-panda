@@ -18,7 +18,7 @@ interface Props {
 const DropdownMenuComponent = ({ inicials, showModalHandler, signOutHandler }: Props) => {
   return (
     <Menu as="div" className="relative ml-3">
-      <div>
+      <div data-testid="dropdown-menu">
         <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
           <span className="sr-only">Open user menu</span>
           <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
@@ -53,6 +53,7 @@ const DropdownMenuComponent = ({ inicials, showModalHandler, signOutHandler }: P
           <Menu.Item>
             {({ active }) => (
               <button
+                data-testid="dropdown-menu-signout"
                 type="button"
                 className={classNames(
                   active ? 'bg-gray-100' : '',
