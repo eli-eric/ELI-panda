@@ -1,0 +1,29 @@
+name: Compose up frontend and backend after push
+
+on:
+  push:    
+    branches:
+      - 'main'
+
+jobs:
+  build_backend_if_merged:
+    if: github.event.pull_request.merged == true
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: backend/api-gateway-go
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker compose
+        run: docker-compose up -d --build
+  build_frontend_if_merged:
+    needs: [build_backend_if_merged]
+    if: github.event.pull_request.merged == true
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: frontend/ui-main-app
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker compose
+        run: docker-compose up -d --build
