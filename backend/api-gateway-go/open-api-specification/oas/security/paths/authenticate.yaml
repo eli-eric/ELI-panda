@@ -19,4 +19,4 @@ post:
       content:
         application/json:
           schema:
-            $ref: "../components/schemas/UserAuthInfo.yaml"
+            $ref: "../components/schemas/UserCredentials.yaml"

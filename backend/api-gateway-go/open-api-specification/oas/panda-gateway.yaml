@@ -16,10 +16,10 @@ servers:
   - url: http://api.panda.eli-beams.eu/v1
     description: Production server.
 tags:
-  - name: Security
-    description: Everything about authentication and authorization
   - name: Catalogue
     description: Everything about catalogue
+  - name: Security
+    description: Everything about authentication and authorization
 components:
   securitySchemes:
     jwtAuth:
