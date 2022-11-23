@@ -1,0 +1,26 @@
+type: object
+properties:
+  uid:
+    type: string
+    example: a194f926-754f-4496-9bde-daa30bca5eee
+  name:
+    type: string
+    example: Manta G-507B
+  description:
+    type: string
+    example: Allied Vision Manta G-507B Monochrome CMOS PoE Camera
+  categoryName:
+    type: string
+    example: Cameras
+  categoryPath:
+    type: string
+    example: beam-characterization/cameras
+  manufacturer:
+    type: string
+    example: Allied Vision Technologies
+  manufacturerUrl:
+    type: string
+    example: https:\\www.edmundoptics.com\allied-vision-manta-g-507b-monochrome-cmos-poe-camera\40123\
+  manufacturerNumber:
+    type: string
+    example: G-507B
