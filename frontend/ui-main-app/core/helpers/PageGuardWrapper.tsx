@@ -2,9 +2,12 @@ import AuthFormContainer from 'core/components/auth/auth-form.cont'
 import ComponentLoader from 'core/components/loaders/component-loader.cont'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import { PATHS } from 'types/constants/paths'
 import { ROLES_CONFIG } from 'types/constants/roles-config'
+import { Category } from 'types/responses'
+
+import { useFetch } from './hooks/useFetch'
 
 interface Props {
   children: React.ReactNode
@@ -20,6 +23,8 @@ const PageGuardWrapper = ({ children }: Props) => {
   const { status, data } = useSession()
   const router = useRouter()
   const pathname = router.pathname
+
+  const categoryList = useFetch<Array<Category>>('/catalogue/categories')
 
   useEffect(() => {
     if (status === 'loading') return

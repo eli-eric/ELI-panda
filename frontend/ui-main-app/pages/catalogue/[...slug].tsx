@@ -2,18 +2,39 @@ import BreadcrumbComponent from 'core/components/catalogue/breadcrump/breadcrump
 import CategoryListComponent from 'core/components/catalogue/categories/category-list.comp'
 import { useFetch } from 'core/helpers/hooks/useFetch'
 import { message } from 'core/i18n/src/messages'
+import CataloguePathContext from 'core/store/catalogue-path.context'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import { Fragment } from 'react'
+import { useRouter } from 'next/router'
+import { Fragment, useContext, useEffect } from 'react'
 import { useIntl } from 'react-intl'
 import { Category } from 'types/responses'
 
 const messages = message.cataloguePage
 
-const CataloguePage: NextPage = (): JSX.Element => {
+const CatalogueSubCategory: NextPage = (): JSX.Element => {
   const intl = useIntl()
+  const router = useRouter()
+  const { cataloguePath, setCataloguePath } = useContext(CataloguePathContext)
+  const categoryList = useFetch<Array<Category>>(`/catalogue/categories/${cataloguePath}`)
 
-  const categoryList = useFetch<Array<Category>>('/catalogue/categories')
+  useEffect(() => {
+    const { slug } = router.query
+    if (router.query.slug) {
+      const { slug } = router.query
+
+      const slugArray: string[] = []
+      for (let i = 0; i < slug.length; i++) {
+        slugArray.push(slug[i])
+      }
+      let path = ''
+      slugArray.forEach(slug => {
+        path += `/${slug}`
+      })
+      setCataloguePath(path)
+    }
+  }, [router, setCataloguePath])
+
   return (
     <Fragment>
       <Head>
@@ -29,4 +50,4 @@ const CataloguePage: NextPage = (): JSX.Element => {
   )
 }
 
-export default CataloguePage
+export default CatalogueSubCategory

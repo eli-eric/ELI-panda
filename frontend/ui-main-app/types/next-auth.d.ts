@@ -1,4 +1,5 @@
 import 'next-auth'
+
 import { ROLES } from 'types/constants/roles'
 
 declare module 'next-auth' {
@@ -10,7 +11,7 @@ declare module 'next-auth' {
       fullName: string
       facility: string
       roles: Array<ROLES>
-      accessToken: string
+      apiAccessToken: string
     }
   }
 }
