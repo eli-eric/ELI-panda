@@ -1,5 +1,5 @@
-import { PATHS } from 'types/constants/paths'
-import { ROLES } from 'types/constants/roles'
+import { PATHS } from './paths'
+import { ROLES } from './roles'
 
 /* The rights matrix for each page according to the user's role must be maintained 1:1 with beckend */
 

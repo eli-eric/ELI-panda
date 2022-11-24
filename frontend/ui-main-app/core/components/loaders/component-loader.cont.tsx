@@ -1,7 +1,12 @@
+import { message } from 'core/i18n/src/messages'
 import ComponentLoadingContext from 'core/store/component-loading.context'
+import Head from 'next/head'
 import { Fragment, useContext } from 'react'
+import { useIntl } from 'react-intl'
 
 import LoaderComponent from '../ui/loader.comp'
+
+const messages = message.defaul
 
 interface Props {
   children?: React.ReactNode
@@ -12,8 +17,18 @@ ComponentLoader wrapping all components and replace all component with Loader if
 */
 
 const ComponentLoader = ({ children }: Props) => {
+  const intl = useIntl()
+
   const { componentLoading } = useContext(ComponentLoadingContext)
-  return <Fragment>{componentLoading ? <LoaderComponent /> : children}</Fragment>
+  return (
+    <Fragment>
+      <Head>
+        <title>{intl.formatMessage({ id: messages.head })}</title>
+        <meta name="description" content="...." />
+      </Head>
+      {componentLoading ? <LoaderComponent /> : children}
+    </Fragment>
+  )
 }
 
 export default ComponentLoader

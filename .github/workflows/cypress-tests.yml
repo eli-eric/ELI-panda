@@ -1,0 +1,35 @@
+name: Cypress Tests
+
+on: [push]
+
+defaults:
+  run:
+    working-directory: frontend/ui-main-app
+
+jobs:
+  cypress-run:
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: frontend/ui-main-app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      # # Install NPM dependencies, cache them correctly
+      # - name: Set up pnpm
+      #   uses: pnpm/action-setup@v2.2.4
+      #   with:
+      #     version: 7
+      #     # Only install what we need to run the client in-action and tests against it
+      #     # format:    `--filter <packagename>...`
+      #     run_install: true
+      # and run all Cypress tests
+      - name: Setup npm packages
+        run: yarn install
+      - name: Cypress run
+        uses: cypress-io/github-action@v4.2.1 # use the explicit version number
+        with:
+          install: false
+          build: npm run build
+          start: npm run start
+          wait-on: http://localhost:5001
