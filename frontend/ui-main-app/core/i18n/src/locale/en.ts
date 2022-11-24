@@ -37,5 +37,6 @@ export const messages = {
   dashboardPage: { head: 'Eli Panda - Dashboard' },
   cataloguePage: { head: 'Eli Panda - Catalogue' },
   systemsPage: { head: 'Eli Panda - Systems' },
-  reportsPage: { head: 'Eli Panda - Reports' }
+  reportsPage: { head: 'Eli Panda - Reports' },
+  defaul: { head: 'Eli Panda' }
 }

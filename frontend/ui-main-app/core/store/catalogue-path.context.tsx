@@ -1,12 +1,16 @@
-import { createContext, useState } from 'react'
+import { ENDPOINTS } from 'core/types/constants/common'
+import { createContext, useEffect, useState } from 'react'
 
+/*
+context for store path for fetching catalogue items
+ */
 interface CataloguePathContext {
   cataloguePath: string
   setCataloguePath: (_path: string) => void
 }
 
 const CataloguePathContext = createContext({
-  cataloguePath: '',
+  cataloguePath: ENDPOINTS.categoryList,
   setCataloguePath: _path => {}
 } as CataloguePathContext)
 
@@ -15,7 +19,9 @@ interface Props {
 }
 
 export const CataloguePathContextProvider = ({ children }: Props) => {
-  const [cataloguePath, setCataloguePath] = useState('')
+  const [cataloguePath, setCataloguePath] = useState<string>(ENDPOINTS.categoryList)
+
+  useEffect(() => {}, [cataloguePath, setCataloguePath])
 
   const setCataloguePathHandler = (cataloguePath: string) => {
     setCataloguePath(cataloguePath)

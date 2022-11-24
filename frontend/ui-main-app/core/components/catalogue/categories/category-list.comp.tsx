@@ -1,7 +1,7 @@
+import { Category } from 'core/types/responses'
 import { Fragment } from 'react'
-import { Category } from 'types/responses'
 
-import CategoryComponent from './category.comp'
+import CategoryItemComponent from './category-item.comp'
 
 interface Props {
   categoryList: Array<Category>
@@ -15,7 +15,7 @@ const CategoryListComponent = ({ categoryList }: Props) => {
           {/* Content goes here */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 3xl:grid-cols-8">
             {categoryList.map(category => (
-              <CategoryComponent key={category.code} category={category} />
+              <CategoryItemComponent key={category.code} category={category} />
             ))}
           </div>
         </div>

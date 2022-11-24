@@ -30,7 +30,6 @@ export default NextAuth({
             }
           }
         })
-        console.log(process.env.PANDA_API_GW_URL)
         return result.data
       }
     })

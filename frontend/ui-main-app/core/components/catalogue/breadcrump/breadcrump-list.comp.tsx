@@ -1,36 +1,11 @@
 import { HomeIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { useMemo } from 'react'
 
-import BreadcrumpItemComponent from './breadcrump-item.comp'
+interface Props {
+  navigationList: JSX.Element[] | undefined
+}
 
-const pages = [
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Project Nero', href: '#', current: true }
-]
-
-const BreadcrumbComponent = () => {
-  const router = useRouter()
-
-  const comp = useMemo(() => {
-    console.log(router.query.slug?.length)
-    if (router.query.slug) {
-      const { slug } = router.query
-
-      const links: JSX.Element[] = []
-      let link = '/catalogue'
-      console.log(link)
-      for (let i = 0; i < slug.length; i++) {
-        link += `/${slug[i]}`
-        console.log(link)
-        links.push(<BreadcrumpItemComponent key={i} name={slug[i]} link={link} />)
-      }
-      return <>{links}</>
-    }
-    return undefined
-  }, [router])
-
+const BreadcrumbListComponent = ({ navigationList }: Props) => {
   return (
     <nav className="flex" aria-label="Breadcrumb">
       <ol role="list" className="flex space-x-4 rounded-md bg-white px-6 shadow">
@@ -40,7 +15,7 @@ const BreadcrumbComponent = () => {
               <HomeIcon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
               <span className="sr-only">Home</span>
             </Link>
-            {!comp && (
+            {!navigationList && (
               <div className="ml-4">
                 <svg
                   className="h-full w-6 flex-shrink-0 text-gray-200"
@@ -56,9 +31,9 @@ const BreadcrumbComponent = () => {
             )}
           </div>
         </li>
-        {comp}
+        {navigationList}
       </ol>
     </nav>
   )
 }
-export default BreadcrumbComponent
+export default BreadcrumbListComponent

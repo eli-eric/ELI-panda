@@ -5,4 +5,3 @@ export enum PATHS {
   SYSTEMS = '/systems',
   REPORTS = '/reports'
 }
-export const RESTRICTED_PATHS = [PATHS.DASHBOARD, PATHS.CATALOGUE, PATHS.REPORTS, PATHS.SYSTEMS]
