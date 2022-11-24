@@ -7,17 +7,10 @@ defaults:
     working-directory: frontend/ui-main-app
 
 jobs:
-  cypress-run:
+  build:
     runs-on: self-hosted
-    container: cypress/browsers:node12.18.3-chrome87-ff82
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
 
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
-      - name: Cypress run
-        uses: cypress-io/github-action@v4.2.1 # use the explicit version number
-        with:
-          # Specify Browser since container image is compile with Firefox
-          browser: firefox         
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker compose
+        run: docker-compose -f docker-compose-cypress.yaml up -d --build
