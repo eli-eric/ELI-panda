@@ -11,20 +11,20 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      # Install NPM dependencies, cache them correctly
-      - name: Set up pnpm
-        uses: pnpm/action-setup@v2.2.4
-        with:
-          version: 7
-          # Only install what we need to run the client in-action and tests against it
-          # format:    `--filter <packagename>...`
-          run_install: true
+        uses: actions/checkout@v2
+      # # Install NPM dependencies, cache them correctly
+      # - name: Set up pnpm
+      #   uses: pnpm/action-setup@v2.2.4
+      #   with:
+      #     version: 7
+      #     # Only install what we need to run the client in-action and tests against it
+      #     # format:    `--filter <packagename>...`
+      #     run_install: true
       # and run all Cypress tests
       - name: Cypress run
         uses: cypress-io/github-action@v4.2.1 # use the explicit version number
         with:
-          install: false
+          # install: false
           build: pnpm build
           start: pnpm start
           wait-on: http://localhost:5001
