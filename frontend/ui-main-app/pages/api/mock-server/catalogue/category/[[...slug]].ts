@@ -4,8 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import path from 'path'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
-  if (req.headers.authorization) {
-    //get category image
+  
     const { slug } = req.query
     if (slug && slug.length === 2 && slug[1] === 'image') {
       const uid = slug[0]
@@ -18,8 +17,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
 
       res.setHeader('Content-Type', 'image/png')
       res.send(imageBuffer)
-    } else res.status(400).json({ message: 'Bad request' })
-  } else {
-    res.status(401).json({ message: 'Unauthorized' })
-  }
+  
+}
 }

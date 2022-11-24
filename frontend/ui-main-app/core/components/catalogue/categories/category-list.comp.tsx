@@ -13,7 +13,7 @@ const CategoryListComponent = ({ categoryList }: Props) => {
       {categoryList.length !== 0 && (
         <div className="px-4 py-5 sm:p-6">
           {/* Content goes here */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 3xl:grid-cols-8">
             {categoryList.map(category => (
               <CategoryComponent key={category.code} category={category} />
             ))}
