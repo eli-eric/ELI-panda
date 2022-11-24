@@ -24,8 +24,8 @@ jobs:
       #     # format:    `--filter <packagename>...`
       #     run_install: true
       # and run all Cypress tests
-      - name: Setup npm package
-        run: npm init -y && npm install
+      - name: Setup npm packages
+        run: yarn install
       - name: Cypress run
         uses: cypress-io/github-action@v4.2.1 # use the explicit version number
         with:
