@@ -4,9 +4,7 @@ const nextConfig = {
   swcMinify: true,
   output: 'standalone',
   images: {
-    domains: ['localhost', 'eli-beams.eu'],
-    dangerouslyAllowSVG: true,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;"
+    domains: ['localhost', 'eli-beams.eu']
   }
 }
 
