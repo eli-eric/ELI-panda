@@ -4,8 +4,6 @@ import Head from 'next/head'
 import { Fragment, useContext } from 'react'
 import { useIntl } from 'react-intl'
 
-import LoaderComponent from '../ui/loader.comp'
-
 const messages = message.defaul
 
 interface Props {
@@ -26,7 +24,8 @@ const ComponentLoader = ({ children }: Props) => {
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-      {componentLoading ? <LoaderComponent /> : children}
+      {/* {componentLoading ? <LoaderComponent /> : children} */}
+      {children}
     </Fragment>
   )
 }

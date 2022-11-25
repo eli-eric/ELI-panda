@@ -9,10 +9,10 @@ const SearchBarComp = () => {
   const route = useRouter()
 
   const submitHandler = (e: FormEvent) => {
-    e.preventDefault()
+    //e.preventDefault()
     const query = route.query
     const enteredSearch = searchValueRef.current?.value
-    route.replace({ query: { ...query, search: enteredSearch } })
+    route.push({ query: { ...query, search: enteredSearch } }, undefined, { shallow: true })
   }
 
   return (
