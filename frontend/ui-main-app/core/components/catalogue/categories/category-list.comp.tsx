@@ -1,10 +1,10 @@
-import { Category } from 'core/types/responses'
+import { CatalogueCategoryResponse } from 'core/types/responses'
 import { Fragment } from 'react'
 
 import CategoryItemComponent from './category-item.comp'
 
 interface Props {
-  categoryList: Array<Category>
+  categoryList: Array<CatalogueCategoryResponse>
 }
 
 const CategoryListComponent = ({ categoryList }: Props) => {

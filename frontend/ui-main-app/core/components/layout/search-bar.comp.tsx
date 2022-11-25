@@ -1,8 +1,11 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { useRef } from 'react'
 
 import ProfileDropdownContainer from './dropdown-menu/dropdown-menu.cont'
 
 const SearchBarComp = () => {
+  const searchValue = useRef(null)
+
   return (
     <div className="flex flex-1 justify-between px-4">
       <div className="flex flex-1">
@@ -15,6 +18,7 @@ const SearchBarComp = () => {
               <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
             </div>
             <input
+              ref={searchValue}
               id="search-field"
               className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm"
               placeholder="Search"

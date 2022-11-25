@@ -1,17 +1,14 @@
-import axios from 'axios'
 import { BASE_URL } from 'core/types/constants/common'
-import { useSession } from 'next-auth/react'
 import useSWR from 'swr'
 
 export const useFetch = <ResponseType = Response>(
   endpointUri: string
 ): ResponseType | undefined => {
-  const { data } = useSession()
-  const { data: response, error } = useSWR(BASE_URL + endpointUri)
-  return response
+  const { data, error } = useSWR(BASE_URL + endpointUri)
+  return data
 }
 
-export const useFetchImage = (endpointUri: string): string | undefined => {
+/* export const useFetchImage = (endpointUri: string): string | undefined => {
   const { data } = useSession()
   const fetcher = url =>
     axios
@@ -26,4 +23,4 @@ export const useFetchImage = (endpointUri: string): string | undefined => {
   const { data: response, error } = useSWR(BASE_URL + endpointUri, fetcher)
 
   return response
-}
+} */

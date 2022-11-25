@@ -1,4 +1,3 @@
-import { ENDPOINTS } from 'core/types/constants/common'
 import { createContext, useEffect, useState } from 'react'
 
 /*
@@ -10,7 +9,7 @@ interface CataloguePathContext {
 }
 
 const CataloguePathContext = createContext({
-  cataloguePath: ENDPOINTS.categoryList,
+  cataloguePath: '',
   setCataloguePath: _path => {}
 } as CataloguePathContext)
 
@@ -19,7 +18,7 @@ interface Props {
 }
 
 export const CataloguePathContextProvider = ({ children }: Props) => {
-  const [cataloguePath, setCataloguePath] = useState<string>(ENDPOINTS.categoryList)
+  const [cataloguePath, setCataloguePath] = useState<string>('')
 
   useEffect(() => {}, [cataloguePath, setCataloguePath])
 
