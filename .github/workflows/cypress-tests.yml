@@ -1,4 +1,4 @@
-name: Cypress Tests
+name: Cypress all in one
 
 on: [push]
 
@@ -7,10 +7,10 @@ defaults:
     working-directory: frontend/ui-main-app
 
 jobs:
-  build:
+  build-run-test:
     runs-on: self-hosted
 
     steps:
       - uses: actions/checkout@v3
       - name: Build the Docker compose
-        run: docker-compose -f docker-compose-cypress.yml up -d --build
+        run: docker-compose -f docker/cypress-all-in-container/docker-compose.yaml up -d --build
