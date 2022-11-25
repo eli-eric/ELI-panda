@@ -1,4 +1,4 @@
-name: Cypress all in one
+name: Cypress test
 
 on: [push]
 
@@ -18,10 +18,10 @@ jobs:
         with:
           node-version: 16
       - run: yarn install
-      - run: yarn build
-      # - name: Cypress run
-      #   uses: cypress-io/github-action@v4.2.0
-      #   with:
-      #     install: false
-      #     build: yarn build
-      #     start: yarn start
+      - name: Cypress run
+        uses: cypress-io/github-action@v4.2.0
+        with:
+          install: false
+          build: yarn build
+          start: yarn start
+          wait-on: "https://localhost:5001"
