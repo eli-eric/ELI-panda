@@ -1,6 +1,6 @@
-name: Cypress all in one
+name: Cypress all in one docker
 
-on: [push]
+on: workflow_dispatch
 
 defaults:
   run:
