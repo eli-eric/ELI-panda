@@ -13,4 +13,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build the Docker compose
-        run: docker-compose -f docker/cypress-all-in-container/docker-compose.yaml up -d --build
+        run: docker-compose -f docker/cypress-all-in-container/docker-compose.yaml up --build

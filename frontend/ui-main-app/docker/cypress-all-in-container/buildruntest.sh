@@ -4,9 +4,9 @@
 yarn start &
   
 # Start the second process
-yarn cypress run --browser chrome --tag "chrome" --env host=http://localhost:5001
-yarn cypress run --browser edge --tag "edge" --env host=http://localhost:5001
-yarn cypress run --browser firefox --tag "firefox" --env host=http://localhost:5001 &
+yarn cypress run --browser chrome --env host=http://localhost:5001
+yarn cypress run --browser edge --env host=http://localhost:5001
+yarn cypress run --browser firefox --env host=http://localhost:5001 &
   
 # Wait for any process to exit
 wait -n
