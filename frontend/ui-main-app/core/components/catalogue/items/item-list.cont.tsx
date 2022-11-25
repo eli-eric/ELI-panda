@@ -46,7 +46,7 @@ const ItemListContainer = ({ itemList }: Props) => {
                   >
                     <a href="#" className="group inline-flex">
                       Category Name
-                      <span className="ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300">
+                      <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
                         <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
                       </span>
                     </a>
@@ -57,7 +57,7 @@ const ItemListContainer = ({ itemList }: Props) => {
                   >
                     <a href="#" className="group inline-flex">
                       Manufacturer
-                      <span className="ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300">
+                      <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
                         <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
                       </span>
                     </a>
@@ -68,7 +68,7 @@ const ItemListContainer = ({ itemList }: Props) => {
                   >
                     <a href="#" className="group inline-flex">
                       Manufacturer Number
-                      <span className="ml-2 flex-none rounded bg-gray-200 text-gray-900 group-hover:bg-gray-300">
+                      <span className="invisible ml-2 flex-none rounded text-gray-400 group-hover:visible group-focus:visible">
                         <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
                       </span>
                     </a>
@@ -99,7 +99,14 @@ const ItemListContainer = ({ itemList }: Props) => {
               </thead>
               <tbody className="bg-white">
                 {itemList.map((item, personIdx) => (
-                  <tr key={personIdx} className={personIdx % 2 === 0 ? undefined : 'bg-gray-50'}>
+                  <tr
+                    key={personIdx}
+                    className={
+                      (personIdx % 2 === 0 ? undefined : 'bg-gray-100') +
+                      ' ' +
+                      'hover:bg-orange-200'
+                    }
+                  >
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                       <div className="flex items-center">
                         <div className="h-10 w-10 flex-shrink-0">
@@ -132,7 +139,7 @@ const ItemListContainer = ({ itemList }: Props) => {
                         Link
                       </a>
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500 max-w-none">
                       {item.description}
                     </td>
                   </tr>

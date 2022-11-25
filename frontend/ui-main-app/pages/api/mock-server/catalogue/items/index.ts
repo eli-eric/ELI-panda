@@ -19,7 +19,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     let endIndex = startIndex + pageSize
 
     if (searchParam && typeof searchParam === 'string') {
-      dataResult = dataResult.filter(f => f.name.toLowerCase().includes(searchParam))
+      dataResult = dataResult.filter(f =>
+        f.name.toLowerCase().includes(searchParam.toLocaleLowerCase())
+      )
     }
 
     if (categoryPathParam && typeof categoryPathParam === 'string') {

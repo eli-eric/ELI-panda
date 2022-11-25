@@ -10,12 +10,18 @@ const BreadcrumbContainer = () => {
 
   const navigationList = useMemo(() => {
     if (router.query.slug) {
-      const { slug } = router.query
+      const { slug, search } = router.query
       let link = PATHS.CATALOGUE as string
       if (slug && typeof slug === 'object') {
         return slug.map((slug, i) => {
           link += `/${slug}`
-          return <BreadcrumpItemComponent key={i} name={slug} link={link} />
+          return (
+            <BreadcrumpItemComponent
+              key={i}
+              name={slug}
+              link={link + (search ? `?search=${search}` : '')}
+            />
+          )
         })
       }
       return

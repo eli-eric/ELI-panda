@@ -1,7 +1,6 @@
 import CataloguePathContext from 'core/store/catalogue-path.context'
 import { BASE_URL } from 'core/types/constants/common'
 import { ENDPOINTS } from 'core/types/constants/endpoints'
-import { PATHS } from 'core/types/constants/paths'
 import { CatalogueCategoryResponse, CatalogueItemResponse } from 'core/types/responses'
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
@@ -15,7 +14,7 @@ import ItemsPaginationComponent from './items/items-pagination.comp'
 const CatalogueContainer = () => {
   const router = useRouter()
   const { cataloguePath, setCataloguePath } = useContext(CataloguePathContext)
-  const [search, setSearch] = useState<string>()
+  const [search, setSearch] = useState<string>('')
 
   const { data: categoryList } = useSWR<Array<CatalogueCategoryResponse>>(
     BASE_URL + ENDPOINTS.catalogueCategories + `/${cataloguePath}`
@@ -34,11 +33,11 @@ const CatalogueContainer = () => {
     const { search } = router.query
     if (search && typeof search === 'string') {
       setSearch(`&search=${search}`)
-    } else setSearch('')
+    }
   }, [router.query])
 
   useEffect(() => {
-    if (router.asPath === PATHS.CATALOGUE) setCataloguePath('')
+    if (!router.query.slug) setCataloguePath('')
     const { slug } = router.query
     if (slug && typeof slug === 'object') {
       let path = ''

@@ -14,7 +14,8 @@ const CategoryItemComponent = ({ category }: Props) => {
 
   const catalogSelectHandler = () => {
     const path = (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
-    router.push(PATHS.CATALOGUE + path)
+    const { search } = router.query
+    router.push(PATHS.CATALOGUE + path + (search ? `?search=${search}` : ''))
   }
 
   return (

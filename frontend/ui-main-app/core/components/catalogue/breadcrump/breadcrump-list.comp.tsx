@@ -1,17 +1,26 @@
 import { HomeIcon } from '@heroicons/react/20/solid'
+import { PATHS } from 'core/types/constants/paths'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 interface Props {
   navigationList: JSX.Element[] | undefined
 }
 
 const BreadcrumbListComponent = ({ navigationList }: Props) => {
+  const router = useRouter()
+
+  const { search } = router.query
+
   return (
     <nav className="flex" aria-label="Breadcrumb">
       <ol role="list" className="flex space-x-4 rounded-md bg-white px-6 shadow">
         <li className="flex">
           <div className="flex items-center">
-            <Link href="/catalogue" className="text-gray-400 hover:text-gray-500">
+            <Link
+              href={PATHS.CATALOGUE + (search ? `?search=${search}` : '')}
+              className="text-gray-400 hover:text-gray-500"
+            >
               <HomeIcon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
               <span className="sr-only">Home</span>
             </Link>
