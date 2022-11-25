@@ -22,4 +22,5 @@ jobs:
           node-version: 16
       - run: yarn install
       - run: yarn build
-      - run: yarn cypress run --browser chrome --tag "chrome" --env host=http://localhost:5001
+      - run: yarn start
+      - run: yarn cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }} --browser chrome --tag "chrome" --env host=http://localhost:5001
