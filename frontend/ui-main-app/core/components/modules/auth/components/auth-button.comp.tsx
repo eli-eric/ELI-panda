@@ -1,7 +1,6 @@
+import ButtonLoaderComponent from 'core/components/ui/button-loader.comp'
 import { message } from 'core/i18n/src/messages'
 import { FormattedMessage } from 'react-intl'
-
-import ButtonLoaderComponent from '../ui/button-loader.comp'
 
 const authButtonMessages = message.authPage.form.button
 

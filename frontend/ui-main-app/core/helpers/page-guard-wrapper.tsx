@@ -1,5 +1,5 @@
-import AuthFormContainer from 'core/components/auth/auth-form.cont'
 import ComponentLoader from 'core/components/loaders/component-loader.cont'
+import AuthFormContainer from 'core/components/modules/auth/auth-form.cont'
 import { PATHS } from 'core/types/constants/paths'
 import { ROLES_CONFIG } from 'core/types/constants/roles-config'
 import { useRouter } from 'next/router'

@@ -14,6 +14,10 @@ interface Props {
 ComponentLoader wrapping all components and replace all component with Loader if ComponentLoader is true
 */
 
+/*
+TODO: Potřeba předělat loader na komponenty, kvůli nepříjemnému problikávání
+*/
+
 const ComponentLoader = ({ children }: Props) => {
   const intl = useIntl()
 

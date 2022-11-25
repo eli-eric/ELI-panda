@@ -1,4 +1,4 @@
-import CatalogueContainer from 'core/components/catalogue/catalogue.cont'
+import CatalogueContainer from 'core/components/modules/catalogue/catalogue.cont'
 import { message } from 'core/i18n/src/messages'
 import { NextPage } from 'next'
 import Head from 'next/head'

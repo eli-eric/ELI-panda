@@ -8,17 +8,28 @@ const SearchBarComp = () => {
   const searchValueRef = useRef<HTMLInputElement | null>(null)
   const route = useRouter()
 
-  const submitHandler = (e: FormEvent) => {
-    //e.preventDefault()
+  const setSearch = () => {
     const query = route.query
     const enteredSearch = searchValueRef.current?.value
-    route.push({ query: { ...query, search: enteredSearch } }, undefined, { shallow: true })
+    route.push(`?search=${enteredSearch}`, undefined, { shallow: true })
+  }
+  let timer: NodeJS.Timeout
+  searchValueRef.current?.addEventListener('keypress', ev => {
+    clearTimeout(timer)
+    timer = setTimeout(() => {
+      setSearch()
+    }, 1000)
+  })
+
+  const submitHandler = (e: FormEvent) => {
+    e.preventDefault()
+    setSearch()
   }
 
   return (
     <div className="flex flex-1 justify-between px-4">
       <div className="flex flex-1">
-        <form className="flex w-full md:ml-0" action="#" method="GET" onSubmit={submitHandler}>
+        <form className="flex w-full md:ml-0" action="#" method="GET">
           <label htmlFor="search-field" className="sr-only">
             Search
           </label>
