@@ -1,0 +1,28 @@
+name: Cypress test on pull request
+
+on:
+  pull_request:
+    types: [opened, reopened]
+
+defaults:
+  run:
+    working-directory: frontend/ui-main-app
+
+jobs:
+  build-run-test:
+    runs-on: self-hosted
+    defaults:
+      run:
+        working-directory: frontend/ui-main-app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm install
+      - run: npm run build
+      - run: npm run start &
+      - run: node_modules/cypress/bin/cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }} --browser chrome --tag "chrome" --env host=http://localhost:5001

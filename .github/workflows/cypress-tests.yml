@@ -1,35 +1,20 @@
-name: Cypress Tests
+name: Cypress all in one docker
 
-on: [push]
+on: workflow_dispatch
 
 defaults:
   run:
     working-directory: frontend/ui-main-app
 
 jobs:
-  cypress-run:
+  build-run-test:
     runs-on: self-hosted
     defaults:
       run:
         working-directory: frontend/ui-main-app
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      # # Install NPM dependencies, cache them correctly
-      # - name: Set up pnpm
-      #   uses: pnpm/action-setup@v2.2.4
-      #   with:
-      #     version: 7
-      #     # Only install what we need to run the client in-action and tests against it
-      #     # format:    `--filter <packagename>...`
-      #     run_install: true
-      # and run all Cypress tests
-      - name: Setup npm packages
-        run: yarn install
-      - name: Cypress run
-        uses: cypress-io/github-action@v4.2.1 # use the explicit version number
-        with:
-          install: false
-          build: npm run build
-          start: npm run start
-          wait-on: http://localhost:5001
+      - uses: actions/checkout@v3
+      - name: Build the Docker compose
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+        run: docker-compose -f docker/cypress-all-in-container/docker-compose.yaml up --build
