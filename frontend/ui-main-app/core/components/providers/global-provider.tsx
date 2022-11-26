@@ -2,7 +2,6 @@ import axios from 'axios'
 import PageGuardWrapper from 'core/helpers/page-guard-wrapper'
 import { messages } from 'core/i18n/src'
 import { AppLoadingProvider } from 'core/store/app-loading.context'
-import { CataloguePathContextProvider } from 'core/store/catalogue-path.context'
 import { ComponentLoadingProvider } from 'core/store/component-loading.context'
 import { useSession } from 'next-auth/react'
 import { IntlProvider } from 'react-intl'
@@ -31,13 +30,11 @@ const GlobalProvider = ({ children }: Props) => {
         <AppLoadingProvider>
           <ComponentLoadingProvider>
             <AppLoader>
-              <CataloguePathContextProvider>
-                <LayoutComponent>
-                  <ComponentLoader>
-                    <PageGuardWrapper>{children}</PageGuardWrapper>
-                  </ComponentLoader>
-                </LayoutComponent>
-              </CataloguePathContextProvider>
+              <LayoutComponent>
+                <ComponentLoader>
+                  <PageGuardWrapper>{children}</PageGuardWrapper>
+                </ComponentLoader>
+              </LayoutComponent>
             </AppLoader>
           </ComponentLoadingProvider>
         </AppLoadingProvider>

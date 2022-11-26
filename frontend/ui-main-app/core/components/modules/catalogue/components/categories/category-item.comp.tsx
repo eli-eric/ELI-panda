@@ -1,23 +1,21 @@
-import CataloguePathContext from 'core/store/catalogue-path.context'
-import { BASE_URL, ENDPOINTS } from 'core/types/constants/common'
+import { BASE_URL } from 'core/types/constants/common'
+import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { PATHS } from 'core/types/constants/paths'
-import { Category } from 'core/types/responses'
+import { CatalogueCategoryResponse } from 'core/types/responses'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { useContext } from 'react'
 
 interface Props {
-  category: Category
+  category: CatalogueCategoryResponse
 }
 
 const CategoryItemComponent = ({ category }: Props) => {
   const router = useRouter()
-  const { setCataloguePath } = useContext(CataloguePathContext)
 
   const catalogSelectHandler = () => {
     const path = (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
-    setCataloguePath(ENDPOINTS.categoryList + path)
-    router.push(PATHS.CATALOGUE + path)
+    const { search } = router.query
+    router.push(PATHS.CATALOGUE + path + (search ? `?search=${search}` : ''))
   }
 
   return (
@@ -32,7 +30,7 @@ const CategoryItemComponent = ({ category }: Props) => {
           width={200}
           height={200}
           alt={category.code}
-          src={BASE_URL + ENDPOINTS.catalogueCategory + category.uid + '/image'}
+          src={BASE_URL + `${ENDPOINTS.catalogueCategory}/` + category.uid + '/image'}
         />
       </div>
       <div className="min-w-0 flex-1">

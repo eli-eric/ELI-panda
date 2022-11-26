@@ -8,14 +8,24 @@ import BreadcrumbListComponent from './breadcrump-list.comp'
 const BreadcrumbContainer = () => {
   const router = useRouter()
 
+  const handleClick = (path: string) => {
+    router.replace(path, undefined, { shallow: false })
+  }
+
   const navigationList = useMemo(() => {
     if (router.query.slug) {
-      const { slug } = router.query
+      const { slug, search } = router.query
       let link = PATHS.CATALOGUE as string
       if (slug && typeof slug === 'object') {
         return slug.map((slug, i) => {
           link += `/${slug}`
-          return <BreadcrumpItemComponent key={i} name={slug} link={link} />
+          return (
+            <BreadcrumpItemComponent
+              key={i}
+              name={slug}
+              link={link + (search ? `?search=${search}` : '')}
+            />
+          )
         })
       }
       return
@@ -24,6 +34,6 @@ const BreadcrumbContainer = () => {
     return undefined
   }, [router])
 
-  return <BreadcrumbListComponent navigationList={navigationList} />
+  return <BreadcrumbListComponent navigationList={navigationList} handleClick={handleClick} />
 }
 export default BreadcrumbContainer
