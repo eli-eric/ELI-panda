@@ -28,7 +28,7 @@ const PageGuardWrapper = ({ children }: Props) => {
         router.push(PATHS.DASHBOARD)
       } // from root after auth redirect to dashboard
       const alowedPages = data?.user.roles.map(role => {
-        return ROLES_CONFIG[role].toString()
+        return ROLES_CONFIG[role]?.toString()
       }) // allowed pages by user roles
       let currentRootPage
       alowedPages.forEach(page => {
