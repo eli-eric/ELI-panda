@@ -1,8 +1,7 @@
 name: Cypress test on pull request
 
 on:
-  pull_request:
-    types: [opened, reopened]
+  push
 
 defaults:
   run:
