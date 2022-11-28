@@ -8,6 +8,72 @@ const messages = message.dashboardPage
 const DashboardPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
 
+  const data = [
+    {
+      id: 1,
+      name: 'Jirka',
+      details: [
+        {
+          name: 'height',
+          value: 175,
+          type: 'number'
+        },
+        {
+          name: 'hobby',
+          value: 'climbing',
+          type: 'string'
+        },
+        {
+          name: 'age',
+          value: 36,
+          type: 'number'
+        }
+      ]
+    },
+    {
+      id: 2,
+      name: 'Sirka',
+      details: [
+        {
+          name: 'height',
+          value: 181,
+          type: 'number'
+        },
+        {
+          name: 'hobby',
+          value: 'nothing',
+          type: 'string'
+        },
+        {
+          name: 'age',
+          value: 18,
+          type: 'number'
+        }
+      ]
+    },
+    {
+      id: 3,
+      name: 'Bublinka',
+      details: [
+        {
+          name: 'height',
+          value: 190,
+          type: 'number'
+        },
+        {
+          name: 'hobby',
+          value: 'bike',
+          type: 'string'
+        },
+        {
+          name: 'age',
+          value: 25,
+          type: 'number'
+        }
+      ]
+    }
+  ]
+
   return (
     <Fragment>
       <Head>
@@ -16,42 +82,54 @@ const DashboardPage: NextPage = (): JSX.Element => {
       </Head>
 
       <main className="flex-1">
-        <div className="py-6">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-            <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
+        <div className="flex-col h-[calc(100vh-176px)] bg-purple-400">
+          <div className="bg-green-200 h-14">01</div>
+          <div className="bg-blue-500 h-full overflow-auto">
+            <table className="min-w-full divide-y divide-gray-300">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th
+                    scope="col"
+                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold bg-blue-50 text-gray-900 sm:pl-6 lg:pl-8"
+                  >
+                    ID
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold bg-blue-50 text-gray-900"
+                  >
+                    Name
+                  </th>
+                  {data[0].details.map(itm => (
+                    <th
+                      scope="col"
+                      className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    >
+                      {itm.name}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 bg-white">
+                {data.map(item => (
+                  <tr key={item.id}>
+                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium bg-blue-50 text-gray-900 sm:pl-6 lg:pl-8">
+                      {item.id}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm bg-blue-50 text-gray-500">
+                      {item.name}
+                    </td>
+                    {item.details.map(itm => (
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        {itm.value}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-            <div className="z-20 -mt-20 w-64 absolute transition duration-150 ease-in-out left-0 ml-8 shadow-lg bg-orange-100 p-4 rounded">
-              <svg
-                className="absolute left-0 -ml-2 bottom-0 top-0 h-full"
-                width="9px"
-                height="16px"
-                viewBox="0 0 9 16"
-                version="1.1"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlnsXlink="http://www.w3.org/1999/xlink"
-              >
-                <g id="Page-1" stroke="none" strokeWidth={1} fill="none" fillRule="evenodd">
-                  <g id="Tooltips-" transform="translate(-874.000000, -1029.000000)" fill="#FFFFFF">
-                    <g id="Group-3-Copy-16" transform="translate(850.000000, 975.000000)">
-                      <g id="Group-2" transform="translate(24.000000, 0.000000)">
-                        <polygon
-                          id="Triangle"
-                          transform="translate(4.500000, 62.000000) rotate(-90.000000) translate(-4.500000, -62.000000) "
-                          points="4.5 57.5 12.5 66.5 -3.5 66.5"
-                        />
-                      </g>
-                    </g>
-                  </g>
-                </g>
-              </svg>
-              <p className="text-sm font-bold text-gray-800 pb-1">Description</p>
-              <p className="text-xs leading-4 w-64 text-gray-600 pb-3 pr-3 break-normal">
-                huiozg eru ueoiut ertiueropitu oer te eur toiueroi uoioieroi ueoi
-                oieroieuroiueoiuoeiuoi eoritu oer eroiutoire uoi er toore werr wer wer eewreewrre
-              </p>
-            </div>
-          </div>
+          <div className="bg-green-200 h-14">03</div>
         </div>
       </main>
     </Fragment>

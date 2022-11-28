@@ -22,78 +22,79 @@ export interface CatalogueItemPagingResponse {
 
 export const AllCategories: Array<CategoryResponse> = [
     {
-        uid: "a9c5542d-0a02-40b8-bff6-678df4243860",
-        name: "Beam characterization",
-        code: "beam-characterization",
-        parentPath: ""
+      "uid": "84372d2b-b7de-4a4f-a0d8-5888ad27a5a0",
+      "code": "actuators",
+      "name": "Actuators",
+      "parentPath": "motion"
     },
     {
-        uid: "636b41a9-d4f5-4cba-9dd5-0ada092cc804",
-        name: "Cameras",
-        code: "cameras",
-        parentPath: "beam-characterization"
+      "uid": "56db8fba-6e9a-4bea-8d37-525e7625e848",
+      "code": "motorized-actuators",
+      "name": "Motorized actuators",
+      "parentPath": "motion/actuators"
     },
     {
-        uid: "4f7c9c9f-b32c-4387-af59-82452cc70289",
-        name: "Wavefront sensors",
-        code: "wavefront-sensors",
-        parentPath: "beam-characterization"
+      "uid": "7b78a4ac-e11b-4fb3-96d1-400b783535e4",
+      "code": "cameras",
+      "name": "Cameras",
+      "parentPath": "beam-characterization"
     },
     {
-        uid: "af2cb008-0149-4f9a-b2d1-4befb4fec8ef",
-        name: "Energy meters",
-        code: "energy-meters",
-        parentPath: "beam-characterization"
+      "uid": "923fd684-59ea-49d5-ab1e-6299b215504e",
+      "code": "wavefront-sensors",
+      "name": "Wavefront sensors",
+      "parentPath": "beam-characterization"
     },
     {
-        uid: "80a9f0c7-1f46-4d96-a94c-c1d8825eff4b",
-        name: "Vacuum technology",
-        code: "vacuum-technology",
-        parentPath: ""
+      "uid": "c0baeda8-c954-4505-9cd1-fd6b025561c6",
+      "code": "energy-meters",
+      "name": "Energy meters",
+      "parentPath": "beam-characterization"
     },
     {
-        uid: "8b76b1bb-654f-4ec9-956d-be9f3d28cd0a",
-        name: "Vacuum pumps",
-        code: "vacuum-pumps",
-        parentPath: "vacuum-technology"
+      "uid": "013bcba6-9381-49cf-bf35-ab9aef72ea68",
+      "code": "vacuum-pumps",
+      "name": "Vacuum pumps",
+      "parentPath": "vacuum-technology"
     },
     {
-        uid: "f70dd82e-04d8-4a30-894a-2bee30c44276",
-        name: "Turbomolecular pumps",
-        code: "turbomolecular-pumps",
-        parentPath: "vacuum-technology/vacuum-pumps"
+      "uid": "f33c675b-05e4-46d1-93a7-da8f2923220f",
+      "code": "turbomolecular-pumps",
+      "name": "Turbomolecular pumps",
+      "parentPath": "vacuum-technology/vacuum-pumps"
     },
     {
-        uid: "55222585-a06f-4cc1-a947-9aae6d24d8ee",
-        name: "Dry vacuum pumps",
-        code: "dry-vacuum-pumps",
-        parentPath: "vacuum-technology/vacuum-pumps"
+      "uid": "7ba15530-e7ed-463f-821e-2aeda949d131",
+      "code": "dry-vacuum-pumps",
+      "name": "Dry vacuum pumps",
+      "parentPath": "vacuum-technology/vacuum-pumps"
     },
     {
-        uid: "f1ef0da8-6c10-4acc-968c-eaa536e315e7",
-        name: "Cryopumps",
-        code: "cryopumps",
-        parentPath: "vacuum-technology/vacuum-pumps"
+      "uid": "60e00434-db07-432f-98a3-2d91bbe4d71e",
+      "code": "cryopumps",
+      "name": "Cryopumps",
+      "parentPath": "vacuum-technology/vacuum-pumps"
     },
     {
-        uid: "7722c01e-7797-4b23-95b7-8808c28e484f",
-        name: "Motion",
-        code: "motion",
-        parentPath: ""
+      "uid": "c584bf8b-07e3-4758-8b62-4e05e2307d09",
+      "code": "motion",
+      "name": "Motion",
+      "parentPath": ""
     },
     {
-        uid: "e88a35a4-83b4-41f9-89e3-83ad5649ab5d",
-        name: "Actuators",
-        code: "actuators",
-        parentPath: "motion"
+      "uid": "d929ea89-f2f7-4b27-9dbd-1ba552f11a06",
+      "code": "beam-characterization",
+      "name": "Beam characterization",
+      "parentPath": ""
     },
     {
-        uid: "dfb5f306-2dde-4342-a419-f2a8975e5790",
-        name: "Motorized actuators",
-        code: "motorized-actuators",
-        parentPath: "motion/actuators"
+      "uid": "62df85f8-83fb-4be6-9b8b-45a3d5fcd917",
+      "code": "vacuum-technology",
+      "name": "Vacuum Technology",
+      "parentPath": ""
     }
-]
+  ]
+  
 
 export const AllCatalogueItems: Array<CatalogueItemResponse> = [
 
@@ -852,8 +853,8 @@ export const AllCatalogueItems: Array<CatalogueItemResponse> = [
         name: "L50(300)A-PF-65",
         description: "The L50(300)A-PF-65 is a thermal power\/energy laser measurement sensor for high peak power pulsed lasers. It has a 65mm aperture and can measure from 400mW to 300W intermittently and to 50W continuously. It measures energy from 200mJ to 300J. It has a damage threshold of up to 3J\/cm² for ns pulses and covers the spectral range from 0.15 to 20µm. The sensor comes with a standard 1.5 meter cable for connecting to a meter or PC interface.",
         categoryName: "Energy meters",
-        categoryPath: "beam-characterization/energy-meters",
-        manufacturer: "Ophir",
+      
+ manufacturer: "Ophir",
         manufacturerUrl: "https:\/\/www.ophiropt.com\/laser--measurement\/laser-power-energy-meters\/products\/Laser-Thermal-Power-Sensors\/Medium-Power-Thermal-Sensors\/L50%28300%29A-PF-65",
         manufacturerNumber: "P\/N 7Z02743"
     },
@@ -1418,5 +1419,3 @@ export const AllCatalogueItems: Array<CatalogueItemResponse> = [
         manufacturerNumber: "8MS00V-10-VSS43"
     }
 ]
-
-
