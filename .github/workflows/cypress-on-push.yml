@@ -2,6 +2,7 @@ name: Cypress test on pull request
 
 on:
   push
+  
 
 defaults:
   run:
@@ -24,4 +25,4 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: npm run start &
-      - run: node_modules/cypress/bin/cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }} --browser chrome --tag "chrome" --env host=http://localhost:5001
+      - run: node_modules/cypress/bin/cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }} --browser chrome --tag "chrome,${{ github.event.head_commit.commiter.name }},${{ github.event.head_commit.id }}"  --env host=http://localhost:5001
