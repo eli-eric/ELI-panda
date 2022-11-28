@@ -30,8 +30,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
 
     dataResult = dataResult.sort((a, b) => (a.name < b.name ? -1 : 0)).slice(startIndex, endIndex) //.filter(f => f.parentPath === parentPath)
 
+    const totalCount = dataResult.length
+
     const result: CatalogueItemPagingResponse = {
-      totalCount: AllCatalogueItems.length,
+      totalCount: totalCount,
       data: dataResult
     }
 
