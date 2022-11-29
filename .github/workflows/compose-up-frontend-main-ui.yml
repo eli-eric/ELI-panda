@@ -19,4 +19,4 @@ jobs:
       - name: Build the Docker compose
         env:
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-        run: docker-compose up -d --build
+        run: docker-compose up -d --build --build-arg NEXTAUTH_SECRET="${{ secrets.NEXTAUTH_SECRET }}"
