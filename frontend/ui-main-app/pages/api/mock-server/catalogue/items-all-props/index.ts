@@ -1,11 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import { AllCatalogueItems, CatalogueItemPagingResponse } from '../catalogue-mock-data'
+import { CatalogueItems, CatalogueItemPagingResponse } from '../catalogue-mock-data'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
-    let dataResult = AllCatalogueItems
+    let dataResult = CatalogueItems
 
     const pageNumParam = req.query['page']
     const pageSizeParam = req.query['pageSize']

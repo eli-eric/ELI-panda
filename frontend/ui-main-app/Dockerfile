@@ -21,8 +21,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ENV PANDA_API_GW_URL="http://localhost:5001/api/mock-server/"
-ENV NEXTAUTH_URL="http://localhost:5001/"
+ENV PANDA_API_GW_URL="http://panda.eli-beams.eu/api/mock-server"
+ENV NEXTAUTH_URL="http://panda.eli-beams.eu/"
 ENV NEXTAUTH_SECRET="Z8yA7DUXm9BzF5uMP8LVqKcYeFjgcHoqErhwu7cTiWw="
 
 # This will do the trick, use the corresponding env file for each environment.
@@ -34,7 +34,9 @@ FROM node:16-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-
+ENV PANDA_API_GW_URL="http://panda.eli-beams.eu/api/mock-server"
+ENV NEXTAUTH_URL="http://panda.eli-beams.eu/"
+ENV NEXTAUTH_SECRET="Z8yA7DUXm9BzF5uMP8LVqKcYeFjgcHoqErhwu7cTiWw="
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
