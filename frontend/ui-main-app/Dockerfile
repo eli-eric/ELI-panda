@@ -33,6 +33,8 @@ ENV NODE_ENV=production
 ENV PANDA_API_GW_URL="http://panda.eli-beams.eu/api/mock-server"
 ENV NEXTAUTH_URL="http://panda.eli-beams.eu/"
 
+RUN echo "next auth secret" $NEXTAUTH_SECRET
+
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
