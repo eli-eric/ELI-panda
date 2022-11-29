@@ -4,18 +4,18 @@
         "name": "Basler acA1440-73gm",
         "details": [
             {
-                "value": "73",
-                "propertyName": "Frame Rate at full resolution",
-                "propertyGroup": "Sensor"
-            },
-            {
                 "value": "CMOS",
                 "propertyName": "Sensor Type",
                 "propertyGroup": "Sensor"
             },
             {
-                "value": "12",
-                "propertyName": "Pixel bit depth",
+                "value": "1.6",
+                "propertyName": "Resolution",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": "73",
+                "propertyName": "Frame Rate at full resolution",
                 "propertyGroup": "Sensor"
             },
             {
@@ -24,8 +24,13 @@
                 "propertyGroup": "Sensor"
             },
             {
-                "value": "1.6",
-                "propertyName": "Resolution",
+                "value": "12",
+                "propertyName": "Pixel bit depth",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Quantum efficiency",
                 "propertyGroup": "Sensor"
             },
             {
@@ -123,18 +128,18 @@
         "name": "Basler acA2040-35gm",
         "details": [
             {
-                "value": "36",
-                "propertyName": "Frame Rate at full resolution",
-                "propertyGroup": "Sensor"
-            },
-            {
                 "value": "CMOS",
                 "propertyName": "Sensor Type",
                 "propertyGroup": "Sensor"
             },
             {
-                "value": "12",
-                "propertyName": "Pixel bit depth",
+                "value": "3",
+                "propertyName": "Resolution",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": "36",
+                "propertyName": "Frame Rate at full resolution",
                 "propertyGroup": "Sensor"
             },
             {
@@ -143,8 +148,13 @@
                 "propertyGroup": "Sensor"
             },
             {
-                "value": "3",
-                "propertyName": "Resolution",
+                "value": "12",
+                "propertyName": "Pixel bit depth",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Quantum efficiency",
                 "propertyGroup": "Sensor"
             },
             {
@@ -180,18 +190,18 @@
         "name": "BFLY-PGE-12A2M-CS",
         "details": [
             {
-                "value": "52",
-                "propertyName": "Frame Rate at full resolution",
-                "propertyGroup": "Sensor"
-            },
-            {
                 "value": "CMOS",
                 "propertyName": "Sensor Type",
                 "propertyGroup": "Sensor"
             },
             {
-                "value": "12",
-                "propertyName": "Pixel bit depth",
+                "value": "1.2",
+                "propertyName": "Resolution",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": "52",
+                "propertyName": "Frame Rate at full resolution",
                 "propertyGroup": "Sensor"
             },
             {
@@ -200,8 +210,13 @@
                 "propertyGroup": "Sensor"
             },
             {
-                "value": "1.2",
-                "propertyName": "Resolution",
+                "value": "12",
+                "propertyName": "Pixel bit depth",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Quantum efficiency",
                 "propertyGroup": "Sensor"
             },
             {
@@ -237,18 +252,18 @@
         "name": "BFLY-PGE-31S4M-C",
         "details": [
             {
-                "value": "35",
-                "propertyName": "Frame Rate at full resolution",
-                "propertyGroup": "Sensor"
-            },
-            {
                 "value": "CMOS",
                 "propertyName": "Sensor Type",
                 "propertyGroup": "Sensor"
             },
             {
-                "value": "12",
-                "propertyName": "Pixel bit depth",
+                "value": "3.2",
+                "propertyName": "Resolution",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": "35",
+                "propertyName": "Frame Rate at full resolution",
                 "propertyGroup": "Sensor"
             },
             {
@@ -257,8 +272,13 @@
                 "propertyGroup": "Sensor"
             },
             {
-                "value": "3.2",
-                "propertyName": "Resolution",
+                "value": "12",
+                "propertyName": "Pixel bit depth",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Quantum efficiency",
                 "propertyGroup": "Sensor"
             },
             {
@@ -314,6 +334,21 @@
                 "propertyGroup": "Sensor"
             },
             {
+                "value": null,
+                "propertyName": "Pixel bit depth",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Quantum efficiency",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Triggerable",
+                "propertyGroup": "Camera data"
+            },
+            {
                 "value": "http",
                 "propertyName": "Interface",
                 "propertyGroup": "Camera data"
@@ -322,6 +357,11 @@
                 "value": "12-24VDC",
                 "propertyName": "Power supply",
                 "propertyGroup": "Camera data"
+            },
+            {
+                "value": null,
+                "propertyName": "Lens mount",
+                "propertyGroup": "Housing"
             }
         ],
         "description": "",
@@ -356,9 +396,34 @@
                 "propertyGroup": "Sensor"
             },
             {
+                "value": null,
+                "propertyName": "Pixel bit depth",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Quantum efficiency",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Triggerable",
+                "propertyGroup": "Camera data"
+            },
+            {
                 "value": "http",
                 "propertyName": "Interface",
                 "propertyGroup": "Camera data"
+            },
+            {
+                "value": null,
+                "propertyName": "Power supply",
+                "propertyGroup": "Camera data"
+            },
+            {
+                "value": null,
+                "propertyName": "Lens mount",
+                "propertyGroup": "Housing"
             }
         ],
         "description": "",
@@ -393,9 +458,34 @@
                 "propertyGroup": "Sensor"
             },
             {
+                "value": null,
+                "propertyName": "Pixel bit depth",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Quantum efficiency",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Triggerable",
+                "propertyGroup": "Camera data"
+            },
+            {
                 "value": "USB2",
                 "propertyName": "Interface",
                 "propertyGroup": "Camera data"
+            },
+            {
+                "value": null,
+                "propertyName": "Power supply",
+                "propertyGroup": "Camera data"
+            },
+            {
+                "value": null,
+                "propertyName": "Lens mount",
+                "propertyGroup": "Housing"
             }
         ],
         "description": "The high-end USB 2.0 Newton CCD series brings together Andor’s ultra fast, low-noise electronics platform and market-leading deep thermo-electric cooling to -100°C, complemented by Andor’s UltravacTM technology with its un-matched reliability track record in the scientific and industrial communities",
@@ -410,18 +500,18 @@
         "name": "Grasshopper3 GS3-PGE-23S6M",
         "details": [
             {
-                "value": "48",
-                "propertyName": "Frame Rate at full resolution",
-                "propertyGroup": "Sensor"
-            },
-            {
                 "value": "CMOS",
                 "propertyName": "Sensor Type",
                 "propertyGroup": "Sensor"
             },
             {
-                "value": "12",
-                "propertyName": "Pixel bit depth",
+                "value": "2.3",
+                "propertyName": "Resolution",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": "48",
+                "propertyName": "Frame Rate at full resolution",
                 "propertyGroup": "Sensor"
             },
             {
@@ -430,8 +520,13 @@
                 "propertyGroup": "Sensor"
             },
             {
-                "value": "2.3",
-                "propertyName": "Resolution",
+                "value": "12",
+                "propertyName": "Pixel bit depth",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Quantum efficiency",
                 "propertyGroup": "Sensor"
             },
             {
@@ -487,9 +582,34 @@
                 "propertyGroup": "Sensor"
             },
             {
+                "value": null,
+                "propertyName": "Pixel bit depth",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Quantum efficiency",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Triggerable",
+                "propertyGroup": "Camera data"
+            },
+            {
                 "value": "USB2",
                 "propertyName": "Interface",
                 "propertyGroup": "Camera data"
+            },
+            {
+                "value": null,
+                "propertyName": "Power supply",
+                "propertyGroup": "Camera data"
+            },
+            {
+                "value": null,
+                "propertyName": "Lens mount",
+                "propertyGroup": "Housing"
             }
         ],
         "description": "",
@@ -522,6 +642,21 @@
                 "value": "Color",
                 "propertyName": "Chroma",
                 "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Pixel bit depth",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Quantum efficiency",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Triggerable",
+                "propertyGroup": "Camera data"
             },
             {
                 "value": "USB3",
@@ -1605,18 +1740,18 @@
         "name": "Basler acA2040-25gm",
         "details": [
             {
-                "value": "25",
-                "propertyName": "Frame Rate at full resolution",
-                "propertyGroup": "Sensor"
-            },
-            {
                 "value": "CMOS",
                 "propertyName": "Sensor Type",
                 "propertyGroup": "Sensor"
             },
             {
-                "value": "",
-                "propertyName": "Pixel bit depth",
+                "value": "4",
+                "propertyName": "Resolution",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": "25",
+                "propertyName": "Frame Rate at full resolution",
                 "propertyGroup": "Sensor"
             },
             {
@@ -1625,8 +1760,13 @@
                 "propertyGroup": "Sensor"
             },
             {
-                "value": "4",
-                "propertyName": "Resolution",
+                "value": "",
+                "propertyName": "Pixel bit depth",
+                "propertyGroup": "Sensor"
+            },
+            {
+                "value": null,
+                "propertyName": "Quantum efficiency",
                 "propertyGroup": "Sensor"
             },
             {

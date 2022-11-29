@@ -5,6 +5,9 @@ const nextConfig = {
   output: 'standalone',
   images: {
     domains: ['localhost', 'eli-beams.eu']
+  },
+  env: {
+    PANDA_API_GW_URL: process.env.PANDA_API_GW_URL
   }
 }
 

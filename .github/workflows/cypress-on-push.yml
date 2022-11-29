@@ -6,6 +6,8 @@ on:
 defaults:
   run:
     working-directory: frontend/ui-main-app
+env:
+  NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
 
 jobs:
   build-run-test:
