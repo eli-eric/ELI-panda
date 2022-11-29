@@ -21,10 +21,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ENV PANDA_API_GW_URL="http://panda.eli-beams.eu/api/mock-server"
-ENV NEXTAUTH_URL="http://panda.eli-beams.eu/"
-ENV NEXTAUTH_SECRET="Z8yA7DUXm9BzF5uMP8LVqKcYeFjgcHoqErhwu7cTiWw="
-
 # This will do the trick, use the corresponding env file for each environment.
 # COPY .env.production.sample .env.production
 RUN yarn build
@@ -34,7 +30,7 @@ FROM node:16-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PANDA_API_GW_URL="http://panda.eli-beams.eu/api/mock-server"
+ENV PANDA_API_GW_URL="http://panda.eli-beams.eu/api/mock-server/"
 ENV NEXTAUTH_URL="http://panda.eli-beams.eu/"
 ENV NEXTAUTH_SECRET="Z8yA7DUXm9BzF5uMP8LVqKcYeFjgcHoqErhwu7cTiWw="
 
