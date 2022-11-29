@@ -2,7 +2,7 @@ import { useCategoryPath, useItemSearch } from 'core/components/modules/catalogu
 import { BASE_URL } from 'core/types/constants/common'
 import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { CatalogueCategoryResponse, CatalogueItemResponse } from 'core/types/responses'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import useSWR from 'swr'
 
 import BreadcrumbContainer from './components/breadcrump/breadcrump.cont'
@@ -13,14 +13,19 @@ import ItemsPaginationComponent from './components/paging/items-pagination.comp'
 const CatalogueContainer = () => {
   const categoryPath = useCategoryPath()
   const search = useItemSearch()
-  const [page, setPage] = useState<number>(2)
-  const [pageSize, setPageSize] = useState<number>(4)
-  const [pageNumbers, setPageNumbers] = useState<number>(4)
+  const [page, setPage] = useState<number>(1)
+  const [height, setHeight] = useState<number>(window.innerHeight)
+
+  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageNumbers, setPageNumbers] = useState<number>(0)
 
   const { data: categoryList } = useSWR<Array<CatalogueCategoryResponse>>(
     BASE_URL + ENDPOINTS.catalogueCategories + `/${categoryPath}`
   )
 
+  /*
+  conditionaly
+  */
   const { data: catalogueItems } = useSWR<CatalogueItemResponse>(
     categoryList?.length === 0 || search
       ? BASE_URL +
@@ -44,20 +49,44 @@ const CatalogueContainer = () => {
   }, [catalogueItems, pageSize])
 
   return (
-    <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
-      <BreadcrumbContainer />
-      {categoryList && <CategoryListComponent categoryList={categoryList} />}
-      {catalogueItems && <ItemListContainer itemList={catalogueItems.data} />}
-      {catalogueItems && (
-        <ItemsPaginationComponent
-          itemsTotalCount={catalogueItems?.totalCount}
-          page={page}
-          pageSize={pageSize}
-          previousPageHandler={previousPageHandler}
-          nextPageHandler={nextPageHandler}
-        />
-      )}
-    </div>
+    <Fragment>
+      <div
+        className={` flex-col ${
+          categoryList
+            ? categoryList.length === 0
+              ? 'h-[calc(100vh-176px)]'
+              : catalogueItems
+              ? 'h-[calc(100vh-304px)]'
+              : ''
+            : 'h-[calc(100vh-304px)]'
+        }`}
+      >
+        <BreadcrumbContainer />
+
+        {categoryList && (
+          <Fragment>
+            <CategoryListComponent categoryList={categoryList} />
+          </Fragment>
+        )}
+
+        {catalogueItems && (
+          <div className="h-full overflow-auto border-t border-gray-300">
+            <ItemListContainer itemList={catalogueItems?.data} />
+          </div>
+        )}
+
+        {catalogueItems && (
+          <ItemsPaginationComponent
+            itemsTotalCount={catalogueItems?.totalCount}
+            page={page}
+            pageSize={pageSize}
+            pageNumbers={pageNumbers}
+            previousPageHandler={previousPageHandler}
+            nextPageHandler={nextPageHandler}
+          />
+        )}
+      </div>
+    </Fragment>
   )
 }
 
