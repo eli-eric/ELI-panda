@@ -101,7 +101,8 @@ const DashboardPage: NextPage = (): JSX.Element => {
                     Name
                   </th>
                   {data[0].details.map(itm => (
-                    <th key={itm.name}
+                    <th
+                      key={itm.name}
                       scope="col"
                       className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                     >
@@ -120,7 +121,10 @@ const DashboardPage: NextPage = (): JSX.Element => {
                       {item.name}
                     </td>
                     {item.details.map(itm => (
-                      <td key={itm.name} className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                      <td
+                        key={itm.name}
+                        className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                      >
                         {itm.value}
                       </td>
                     ))}
