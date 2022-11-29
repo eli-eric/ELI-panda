@@ -1,0 +1,14 @@
+type: object
+properties:
+  uid:
+    type: string
+    example: 50b3844d-6cde-4980-bed5-388618cad292
+  name:
+    type: string
+    example: Dry Vacuum Pumps
+  code:
+    type: string
+    example: dry-vacuum-pumps
+  parent-path:
+    type: string
+    example: vacuum-technology/vacuum-pumps

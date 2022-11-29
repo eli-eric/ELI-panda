@@ -1,0 +1,29 @@
+get:
+  summary: Get catalogue categories by parent path
+  description: Get catalogue categories by parent path
+  operationId: GetCatalogueCategoriesByParentPath
+  security:
+    - jwtAuth: []
+  tags:
+    - Catalogue
+  parameters:
+    - name: parentPath
+      in: path
+      description: Parent category path
+      required: true
+      schema:
+        type: string
+        example: vacuum-technology/vacuum-pumps
+  responses:
+    "500":
+      description: General server error
+    "401":
+      description: Unauthorized
+    "200":
+      description: Returns array of catalogue categories
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../components/schemas/CatalogueCategory.yaml"
