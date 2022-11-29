@@ -1,8 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-
-import { CatalogueItems, CatalogueItemPagingResponse } from '../catalogue-mock-data'
+import { CatalogueItemPagingResponse, CatalogueItems } from '../catalogue-mock-data'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
@@ -20,18 +19,16 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     let endIndex = startIndex + pageSize
 
     if (searchParam && typeof searchParam === 'string') {
-      dataResult = dataResult.filter(f =>
-        f.name.toLowerCase().includes(searchParam.toLocaleLowerCase())
-      )
+      dataResult = dataResult.filter(f => f.name.toLowerCase().includes(searchParam.toLocaleLowerCase()))
     }
 
     if (categoryPathParam && typeof categoryPathParam === 'string') {
       dataResult = dataResult.filter(f => f.categoryPath === categoryPathParam.toLowerCase())
     }
 
-    dataResult = dataResult.sort((a, b) => (a.name < b.name ? -1 : 0)).slice(startIndex, endIndex) //.filter(f => f.parentPath === parentPath)
-
     const totalCount = dataResult.length
+
+    dataResult = dataResult.sort((a, b) => (a.name < b.name ? -1 : 0)).slice(startIndex, endIndex) //.filter(f => f.parentPath === parentPath)
 
     const result: CatalogueItemPagingResponse = {
       totalCount: totalCount,

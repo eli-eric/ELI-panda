@@ -14,10 +14,8 @@ const CatalogueContainer = () => {
   const categoryPath = useCategoryPath()
   const search = useItemSearch()
   const [page, setPage] = useState<number>(1)
-  const [height, setHeight] = useState<number>(window.innerHeight)
-
   const [pageSize, setPageSize] = useState<number>(20)
-  const [pageNumbers, setPageNumbers] = useState<number>(0)
+  const [pageNumbers, setPageNumbers] = useState<number>()
 
   const { data: categoryList } = useSWR<Array<CatalogueCategoryResponse>>(
     BASE_URL + ENDPOINTS.catalogueCategories + `/${categoryPath}`
@@ -36,10 +34,10 @@ const CatalogueContainer = () => {
   )
 
   const previousPageHandler = () => {
-    if (page !== 1) setPage(prev => prev - 1)
+    setPage(prev => prev - 1)
   }
   const nextPageHandler = () => {
-    if (page !== pageNumbers) setPage(prev => prev + 1)
+    setPage(prev => prev + 1)
   }
   useEffect(() => {
     if (catalogueItems) {
@@ -71,7 +69,15 @@ const CatalogueContainer = () => {
 
         {catalogueItems && (
           <div className="h-full overflow-auto border-t border-gray-300">
-            <ItemListContainer itemList={catalogueItems?.data} />
+            <ItemListContainer itemList={catalogueItems.data} />
+            {catalogueItems.data.length === 0 && (
+              <div className="text-center align-middle">
+                <h3 className="mt-2 text-sm font-medium text-gray-900">No results found</h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  We can’t find anything with that term at the moment, try searching something else.
+                </p>
+              </div>
+            )}
           </div>
         )}
 
