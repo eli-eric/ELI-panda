@@ -1,11 +1,11 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import { AllCatalogueItems, CatalogueItemPagingResponse } from '../catalogue-mock-data'
+import { CatalogueItems, CatalogueItemPagingResponse } from '../catalogue-mock-data'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
-    let dataResult = AllCatalogueItems
+    let dataResult = CatalogueItems
 
     const pageNumParam = req.query['page']
     const pageSizeParam = req.query['pageSize']
@@ -21,6 +21,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     if (searchParam && typeof searchParam === 'string') {
       dataResult = dataResult.filter(f =>
         f.name.toLowerCase().includes(searchParam.toLocaleLowerCase())
+        || f.description.toLowerCase().includes(searchParam.toLocaleLowerCase())
+        || f.manufacturer.toLowerCase().includes(searchParam.toLocaleLowerCase())
+        || f.manufacturerNumber.toLowerCase().includes(searchParam.toLocaleLowerCase())
+        || f.details != null && f.details?.filter(df => df.value.toLowerCase().includes(searchParam.toLocaleLowerCase())).length > 0
       )
     }
 
@@ -31,6 +35,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     const totalCount = dataResult.length
 
     dataResult = dataResult.sort((a, b) => (a.name < b.name ? -1 : 0)).slice(startIndex, endIndex) //.filter(f => f.parentPath === parentPath)
+
+    const totalCount = dataResult.length
 
     const result: CatalogueItemPagingResponse = {
       totalCount: totalCount,

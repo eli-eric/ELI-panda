@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import { AllCategories, CategoryResponse } from '../catalogue-mock-data'
+import { CatalogueCategories, CategoryResponse } from '../catalogue-mock-data'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
@@ -17,7 +17,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
       parentPath = slug.join('/').toLowerCase()
     }
 
-    result = AllCategories.filter(f => f.parentPath === parentPath)
+    result = CatalogueCategories.filter(f => f.parentPath === parentPath).sort((a, b) => a.name > b.name ? 0 : -1)
 
     res.status(200).json(result)
   } else {
