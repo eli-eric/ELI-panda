@@ -35,7 +35,7 @@ export default function LayoutComponent({ children }: Props) {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col md:pl-64">
+        <div className="flex-1 md:pl-64">
           {status === 'authenticated' && (
             <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
               <button
@@ -49,6 +49,7 @@ export default function LayoutComponent({ children }: Props) {
               <SearchBarComp />
             </div>
           )}
+
           {children}
         </div>
       </div>

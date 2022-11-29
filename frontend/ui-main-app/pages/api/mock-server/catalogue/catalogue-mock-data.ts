@@ -33,3 +33,4 @@ export interface CatalogueItemPagingResponse {
 export const CatalogueItems: Array<CatalogueItemResponse> = items_with_details;
 
 export const CatalogueCategories: Array<CategoryResponse> = categories
+
