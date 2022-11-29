@@ -1,6 +1,5 @@
 import { BASE_URL } from 'core/types/constants/common'
 import { ENDPOINTS } from 'core/types/constants/endpoints'
-import { PATHS } from 'core/types/constants/paths'
 import { CatalogueCategoryResponse } from 'core/types/responses'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -11,11 +10,15 @@ interface Props {
 
 const CategoryItemComponent = ({ category }: Props) => {
   const router = useRouter()
+  const { search } = router.query
 
-  const catalogSelectHandler = () => {
-    const path = (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
-    const { search } = router.query
-    router.push(PATHS.CATALOGUE + path + (search ? `?search=${search}` : ''))
+  router.prefetch(router.pathname + '/' + category.code + (search ? `?search=${search}` : ''))
+
+  const catalogSelectHandler = e => {
+    e.preventDefault()
+    router.push({ pathname: router.pathname + '/' + category.code, query: { ...router.query } }, undefined, {
+      shallow: true
+    })
   }
 
   return (

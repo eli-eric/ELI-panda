@@ -14,14 +14,16 @@ const SearchBarComp = () => {
   }, [])
 
   const setSearch = () => {
-    console.log(router.query)
     const query = router.query
     const enteredSearch = searchValueRef.current?.value
-    router.push({ query: { ...query, search: enteredSearch } }, undefined, { shallow: true })
+    router.replace({ query: { ...query, search: enteredSearch } }, undefined, {
+      shallow: true
+    })
   }
 
   let timer: NodeJS.Timeout
   searchValueRef.current?.addEventListener('keyup', ev => {
+    ev.preventDefault()
     clearTimeout(timer)
     timer = setTimeout(() => {
       setSearch()

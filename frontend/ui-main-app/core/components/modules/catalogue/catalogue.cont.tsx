@@ -15,7 +15,7 @@ const CatalogueContainer = () => {
   const search = useItemSearch()
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
-  const [pageNumbers, setPageNumbers] = useState<number>()
+  const [pageNumbers, setPageNumbers] = useState<number | undefined>()
 
   const { data: categoryList } = useSWR<Array<CatalogueCategoryResponse>>(
     BASE_URL + ENDPOINTS.catalogueCategories + `/${categoryPath}`
@@ -26,10 +26,7 @@ const CatalogueContainer = () => {
   */
   const { data: catalogueItems } = useSWR<CatalogueItemResponse>(
     categoryList?.length === 0 || search
-      ? BASE_URL +
-          ENDPOINTS.catalogueItems +
-          `?pageSize=${pageSize}&page=${page}&categoryPath=${categoryPath}` +
-          search
+      ? BASE_URL + ENDPOINTS.catalogueItems + `?pageSize=${pageSize}&page=${page}&categoryPath=${categoryPath}` + search
       : null
   )
 
