@@ -1,0 +1,5 @@
+PANDA_API_GW_URL="http://localhost:5001/api/mock-server"
+# PANDA_API_GW_URL="http://panda.eli-beams.eu/api/mock-server"
+# NEXTAUTH_URL="ttp://panda.eli-beams.eu/"
+NEXTAUTH_URL="http://localhost:5001/"
+NEXTAUTH_SECRET="Z8yA7DUXm9BzF5uMP8LVqKcYeFjgcHoqErhwu7cTiWw="

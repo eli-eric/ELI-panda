@@ -8,7 +8,6 @@ RUN chmod +x docker/cypress-all-in-container/buildruntest.sh
 
 ENV PANDA_API_GW_URL="http://localhost:5001/api/mock-server"
 ENV NEXTAUTH_URL="http://localhost:5001/"
-ENV NEXTAUTH_SECRET="Z8yA7DUXm9BzF5uMP8LVqKcYeFjgcHoqErhwu7cTiWw="
 
 RUN yarn install
 

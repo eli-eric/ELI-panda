@@ -7,6 +7,9 @@ defaults:
   run:
     working-directory: frontend/ui-main-app
 
+env:
+  NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+
 jobs:
   build:
     runs-on: self-hosted
