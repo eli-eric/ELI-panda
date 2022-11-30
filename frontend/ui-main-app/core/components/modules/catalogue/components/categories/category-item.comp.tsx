@@ -1,5 +1,6 @@
 import { BASE_URL } from 'core/types/constants/common'
 import { ENDPOINTS } from 'core/types/constants/endpoints'
+import { PATHS } from 'core/types/constants/paths'
 import { CatalogueCategoryResponse } from 'core/types/responses'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -12,11 +13,20 @@ const CategoryItemComponent = ({ category }: Props) => {
   const router = useRouter()
   const { search } = router.query
 
-  router.prefetch(router.pathname + '/' + category.code + (search ? `?search=${search}` : ''))
+  const catalogSelectHandler2 = () => {
+    const path = PATHS.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code + '/'
+    console.log(path)
+    const { search } = router.query
 
-  const catalogSelectHandler = e => {
-    e.preventDefault()
-    router.push({ pathname: router.pathname + '/' + category.code, query: { ...router.query } }, undefined, {
+    router.push({ pathname: path, query: search && { search: search } }, undefined, {
+      shallow: true
+    })
+  }
+
+  const catalogSelectHandler = () => {
+    const path = PATHS.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
+    const { search } = router.query
+    router.push(path + (search ? '?search=' + search : ''), undefined, {
       shallow: true
     })
   }
@@ -24,7 +34,7 @@ const CategoryItemComponent = ({ category }: Props) => {
   return (
     <button
       key={category.code}
-      onClick={catalogSelectHandler}
+      onClick={catalogSelectHandler2}
       className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
     >
       <div className="flex-shrink-0">
