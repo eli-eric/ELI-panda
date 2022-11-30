@@ -6,6 +6,7 @@ import { PATHS } from 'core/types/constants/paths'
 import { CatalogueItem } from 'core/types/responses'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 interface Props {
   item: CatalogueItem
@@ -14,6 +15,9 @@ interface Props {
 }
 
 const ItemComponent = ({ item, index, categoryListLength }: Props) => {
+  const router = useRouter()
+  const { search } = router.query
+  const path = PATHS.CATALOGUE + '/' + item.categoryPath
   return (
     <tr className={(index % 2 === 0 ? undefined : 'bg-gray-100') + ' ' + 'hover:bg-orange-200'}>
       <td className="whitespace-nowrap py-4 text-sm sm:pl-6">
@@ -48,7 +52,7 @@ const ItemComponent = ({ item, index, categoryListLength }: Props) => {
         ))}
       {categoryListLength !== 0 && (
         <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-500">
-          <Link href={PATHS.CATALOGUE + '/' + item.categoryPath}>{item.categoryName}</Link>
+          <Link href={{ pathname: path, query: search && { search: search } }}>{item.categoryName}</Link>
         </td>
       )}
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{item.manufacturer}</td>
