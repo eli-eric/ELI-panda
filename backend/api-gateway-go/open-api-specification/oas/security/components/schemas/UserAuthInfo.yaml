@@ -1,0 +1,22 @@
+type: object
+properties:
+  uid:
+    type: string
+    example: 71864520-9e86-427c-901c-0c220f951775
+  username:
+    type: string
+    example: albert.einstein@eli-laser.eu
+  fullName:
+    type: string
+    example: Albert Einstein
+  facility:
+    type: string
+    example: ELI ERIC
+  accessToken:
+    type: string
+    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOiIxMjM0NTY3ODk5In0.4UuocEvJTR3c1t2kB4f5lbRKfs5yKe7dW1Qtm_LITII
+  roles:
+    type: array
+    items:
+      type: string
+    example: ["catalogue-view", "spare-parts-view"]

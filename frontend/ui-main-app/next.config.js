@@ -4,8 +4,10 @@ const nextConfig = {
   swcMinify: true,
   output: 'standalone',
   images: {
-    dangerouslyAllowSVG: true,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;"
+    domains: ['localhost', 'eli-beams.eu']
+  },
+  env: {
+    PANDA_API_GW_URL: process.env.PANDA_API_GW_URL
   }
 }
 

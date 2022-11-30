@@ -1,0 +1,19 @@
+get:
+  summary: Get user info by JWT presented in header
+  description: Get user info by JWT (json we token) presented in Authorization header in the request
+  operationId: GetUserByJWT
+  security:
+    - jwtAuth: []
+  tags:
+    - Security
+  responses:
+    "500":
+      description: General server error
+    "401":
+      description: Unauthorized
+    "200":
+      description: Returns user information from the JWT that was successfully chekced
+      content:
+        application/json:
+          schema:
+            $ref: "../components/schemas/UserAuthInfo.yaml"

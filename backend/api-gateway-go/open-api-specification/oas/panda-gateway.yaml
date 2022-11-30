@@ -1,0 +1,35 @@
+openapi: 3.0.2
+info:
+  title: PANDA - API Gateway
+  description: This is an API Gateway to the PANDA database. This is the only place to access data from the PANDA database.
+  version: "1.0"
+  contact:
+    name: Jiří Švácha
+    email: jiri.svacha@eli-beams.eu
+  x-logo:
+    url: "eli-logo-small.png"
+servers:
+  - url: http://localhost:50000/v1
+    description: Local DEV server.
+  - url: http://localhost:5000/api/mock-server
+    description: Mock server. Part of the Next.js UI ui-main-app.
+  - url: http://api.panda.eli-beams.eu/v1
+    description: Production server.
+tags:
+  - name: Catalogue
+    description: Everything about catalogue
+  - name: Security
+    description: Everything about authentication and authorization
+components:
+  securitySchemes:
+    jwtAuth:
+      $ref: "general-components/security-schemas/jwtAuth.yaml"
+paths:
+  /authenticate:
+    $ref: "security/paths/authenticate.yaml"
+  /refresh-token:
+    $ref: "security/paths/refresh-token.yaml"
+  /authenticated-user:
+    $ref: "security/paths/authenticated-user.yaml"
+  /catalogue/categories:
+    $ref: "catalogue/paths/categories.yaml"

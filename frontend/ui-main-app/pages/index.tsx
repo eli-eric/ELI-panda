@@ -1,4 +1,4 @@
-import AuthFormContainer from 'core/components/auth/auth-form.cont'
+import AuthFormContainer from 'core/components/modules/auth/auth-form.cont'
 import { message } from 'core/i18n/src/messages'
 import Head from 'next/head'
 import { Fragment } from 'react'

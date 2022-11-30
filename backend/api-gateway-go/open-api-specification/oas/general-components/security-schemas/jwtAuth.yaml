@@ -1,0 +1,4 @@
+type: http
+scheme: bearer
+bearerFormat: JWT
+description: "You can get the JWT if you successfully authenticate via /authenticate POST endpoint"

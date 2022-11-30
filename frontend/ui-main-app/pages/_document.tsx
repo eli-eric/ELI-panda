@@ -3,7 +3,7 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en" className="h-full bg-gray-100">
-        <Head />
+        <Head title="Eli Panda - " />
         <body className="h-full">
           <div id="overlays" />
           <Main />

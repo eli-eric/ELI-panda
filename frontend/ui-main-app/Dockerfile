@@ -20,6 +20,9 @@ FROM node:16-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+RUN env
+
 # This will do the trick, use the corresponding env file for each environment.
 # COPY .env.production.sample .env.production
 RUN yarn build
@@ -29,6 +32,11 @@ FROM node:16-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
+ENV PANDA_API_GW_URL="http://panda.eli-beams.eu/api/mock-server"
+ENV NEXTAUTH_URL="http://panda.eli-beams.eu/"
+
+RUN env
+
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
