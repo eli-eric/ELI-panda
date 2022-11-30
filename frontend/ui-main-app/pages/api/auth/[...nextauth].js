@@ -18,9 +18,10 @@ export default NextAuth({
             'Content-Type': 'application/json'
           },
           method: 'post',
-          url: process.env.PANDA_API_GW_URL + 'authenticate',
+          url: process.env.PANDA_API_GW_URL + '/authenticate',
           data: { username: credentials?.username, password: credentials?.password }
         }).catch(error => {
+          console.log(error)
           //catching erros
           if (error.response) {
             if (error.request.res.statusCode === 401) {
