@@ -11,17 +11,30 @@ interface Props {
 
 const CategoryItemComponent = ({ category }: Props) => {
   const router = useRouter()
+  const { search } = router.query
+
+  const catalogSelectHandler2 = () => {
+    const path = PATHS.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code + '/'
+    console.log(path)
+    const { search } = router.query
+
+    router.push({ pathname: path, query: search && { search: search } }, undefined, {
+      shallow: true
+    })
+  }
 
   const catalogSelectHandler = () => {
-    const path = (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
+    const path = PATHS.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
     const { search } = router.query
-    router.push(PATHS.CATALOGUE + path + (search ? `?search=${search}` : ''))
+    router.push(path + (search ? '?search=' + search : ''), undefined, {
+      shallow: true
+    })
   }
 
   return (
     <button
       key={category.code}
-      onClick={catalogSelectHandler}
+      onClick={catalogSelectHandler2}
       className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
     >
       <div className="flex-shrink-0">

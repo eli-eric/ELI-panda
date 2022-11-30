@@ -2,15 +2,18 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import TooltipComponent from 'core/components/ui/tooltip.comp'
 import { BASE_URL } from 'core/types/constants/common'
 import { ENDPOINTS } from 'core/types/constants/endpoints'
+import { PATHS } from 'core/types/constants/paths'
 import { CatalogueItem } from 'core/types/responses'
 import Image from 'next/image'
+import Link from 'next/link'
 
 interface Props {
   item: CatalogueItem
   index: number
+  categoryListLength: number | undefined
 }
 
-const ItemComponent = ({ item, index }: Props) => {
+const ItemComponent = ({ item, index, categoryListLength }: Props) => {
   return (
     <tr className={(index % 2 === 0 ? undefined : 'bg-gray-100') + ' ' + 'hover:bg-orange-200'}>
       <td className="whitespace-nowrap py-4 text-sm sm:pl-6">
@@ -36,12 +39,20 @@ const ItemComponent = ({ item, index }: Props) => {
           </TooltipComponent>
         )}
       </td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{item.categoryName}</td>
-
+      {categoryListLength === 0 &&
+        item.details &&
+        item.details.map(item => (
+          <td key={item.propertyName} className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+            {item.value}
+          </td>
+        ))}
+      {categoryListLength !== 0 && (
+        <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-500">
+          <Link href={PATHS.CATALOGUE + '/' + item.categoryPath}>{item.categoryName}</Link>
+        </td>
+      )}
       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{item.manufacturer}</td>
-      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-        {item.manufacturerNumber}
-      </td>
+      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{item.manufacturerNumber}</td>
       <td className="whitespace-nowrap px-3 py-4 text-sm text-blue-500">
         <a target="_blank" href={item.manufacturerUrl} rel="noopener noreferrer">
           Link

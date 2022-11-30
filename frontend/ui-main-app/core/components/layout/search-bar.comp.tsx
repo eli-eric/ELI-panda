@@ -1,25 +1,43 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { useRouter } from 'next/router'
-import { FormEvent, useRef } from 'react'
+import { FormEvent, useEffect, useRef } from 'react'
 
 import ProfileDropdownContainer from './dropdown-menu/dropdown-menu.cont'
 
 const SearchBarComp = () => {
   const searchValueRef = useRef<HTMLInputElement | null>(null)
-  const route = useRouter()
+  const router = useRouter()
+
+  useEffect(() => {
+    //@ts-ignore
+    searchValueRef.current.value = router.query.search || null
+  }, [])
 
   const setSearch = () => {
-    const query = route.query
+    const query = router.query
+    const { slug } = router.query
+
     const enteredSearch = searchValueRef.current?.value
-    route.push(`?search=${enteredSearch}`, undefined, { shallow: true })
+    console.log(query)
+    router.push({ query: enteredSearch ? { ...query, search: enteredSearch } : { slug: slug } }, undefined, {
+      shallow: true
+    })
   }
-  let timer: NodeJS.Timeout
-  searchValueRef.current?.addEventListener('keypress', ev => {
+
+  /* let timer: NodeJS.Timeout
+  searchValueRef.current?.addEventListener('keyup', ev => {
+    ev.preventDefault()
     clearTimeout(timer)
     timer = setTimeout(() => {
       setSearch()
-    }, 1000)
-  })
+    }, 400)
+  }) */
+
+  /*   const setSearch = () => {
+    const query = route.query
+    const enteredSearch = searchValueRef.current?.value
+    route.push(`?search=${enteredSearch}`, undefined, { shallow: true })
+  } */
 
   const submitHandler = (e: FormEvent) => {
     e.preventDefault()
@@ -29,7 +47,7 @@ const SearchBarComp = () => {
   return (
     <div className="flex flex-1 justify-between px-4">
       <div className="flex flex-1">
-        <form className="flex w-full md:ml-0" action="#" method="GET">
+        <form className="flex w-full md:ml-0" action="#" method="GET" onSubmit={submitHandler}>
           <label htmlFor="search-field" className="sr-only">
             Search
           </label>
