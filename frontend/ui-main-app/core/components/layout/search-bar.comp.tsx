@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { useRouter } from 'next/router'
-import { useEffect, useRef } from 'react'
+import { FormEvent, useEffect, useRef } from 'react'
 
 import ProfileDropdownContainer from './dropdown-menu/dropdown-menu.cont'
 
@@ -15,25 +15,39 @@ const SearchBarComp = () => {
 
   const setSearch = () => {
     const query = router.query
+    const { slug } = router.query
+
     const enteredSearch = searchValueRef.current?.value
-    router.replace({ query: { ...query, search: enteredSearch } }, undefined, {
+    console.log(query)
+    router.push({ query: enteredSearch ? { ...query, search: enteredSearch } : { slug: slug } }, undefined, {
       shallow: true
     })
   }
 
-  let timer: NodeJS.Timeout
+  /* let timer: NodeJS.Timeout
   searchValueRef.current?.addEventListener('keyup', ev => {
     ev.preventDefault()
     clearTimeout(timer)
     timer = setTimeout(() => {
       setSearch()
     }, 400)
-  })
+  }) */
+
+  /*   const setSearch = () => {
+    const query = route.query
+    const enteredSearch = searchValueRef.current?.value
+    route.push(`?search=${enteredSearch}`, undefined, { shallow: true })
+  } */
+
+  const submitHandler = (e: FormEvent) => {
+    e.preventDefault()
+    setSearch()
+  }
 
   return (
     <div className="flex flex-1 justify-between px-4">
       <div className="flex flex-1">
-        <form className="flex w-full md:ml-0" action="#" method="GET">
+        <form className="flex w-full md:ml-0" action="#" method="GET" onSubmit={submitHandler}>
           <label htmlFor="search-field" className="sr-only">
             Search
           </label>

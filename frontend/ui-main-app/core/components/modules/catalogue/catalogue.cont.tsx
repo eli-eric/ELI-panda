@@ -58,15 +58,11 @@ const CatalogueContainer = () => {
       >
         <BreadcrumbContainer />
 
-        {categoryList && (
-          <Fragment>
-            <CategoryListComponent categoryList={categoryList} />
-          </Fragment>
-        )}
+        <CategoryListComponent categoryList={categoryList} />
 
-        {catalogueItems && (
+        {catalogueItems ? (
           <div className="h-full overflow-auto border-t border-gray-300">
-            <ItemListContainer itemList={catalogueItems.data} />
+            <ItemListContainer itemList={catalogueItems.data} categoryListLength={categoryList?.length} />
             {catalogueItems.data.length === 0 && (
               <div className="text-center align-middle">
                 <h3 className="mt-2 text-sm font-medium text-gray-900">No results found</h3>
@@ -75,6 +71,10 @@ const CatalogueContainer = () => {
                 </p>
               </div>
             )}
+          </div>
+        ) : (
+          <div className="text-center align-middle">
+            <h3 className="mt-2 text-sm font-medium text-gray-900">Select category or use Search bar</h3>
           </div>
         )}
 
