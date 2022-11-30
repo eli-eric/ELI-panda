@@ -5,6 +5,12 @@ export interface CatalogueCategoryResponse {
   parentPath: string
 }
 
+export interface CatalogueItemDetail {
+  propertyName: string
+  propertyGroup: string
+  value: string
+}
+
 export interface CatalogueItem {
   uid: string
   name: string
@@ -14,6 +20,7 @@ export interface CatalogueItem {
   manufacturer: string
   manufacturerUrl: string
   manufacturerNumber: string
+  details?: CatalogueItemDetail[]
 }
 
 export interface CatalogueItemResponse {

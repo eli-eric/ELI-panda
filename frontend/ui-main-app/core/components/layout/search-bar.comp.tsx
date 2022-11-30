@@ -1,30 +1,34 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { useRouter } from 'next/router'
-import { FormEvent, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 import ProfileDropdownContainer from './dropdown-menu/dropdown-menu.cont'
 
 const SearchBarComp = () => {
   const searchValueRef = useRef<HTMLInputElement | null>(null)
-  const route = useRouter()
+  const router = useRouter()
+
+  useEffect(() => {
+    //@ts-ignore
+    searchValueRef.current.value = router.query.search || null
+  }, [])
 
   const setSearch = () => {
-    const query = route.query
+    const query = router.query
     const enteredSearch = searchValueRef.current?.value
-    route.push(`?search=${enteredSearch}`, undefined, { shallow: true })
+    router.replace({ query: { ...query, search: enteredSearch } }, undefined, {
+      shallow: true
+    })
   }
+
   let timer: NodeJS.Timeout
-  searchValueRef.current?.addEventListener('keypress', ev => {
+  searchValueRef.current?.addEventListener('keyup', ev => {
+    ev.preventDefault()
     clearTimeout(timer)
     timer = setTimeout(() => {
       setSearch()
-    }, 1000)
+    }, 400)
   })
-
-  const submitHandler = (e: FormEvent) => {
-    e.preventDefault()
-    setSearch()
-  }
 
   return (
     <div className="flex flex-1 justify-between px-4">

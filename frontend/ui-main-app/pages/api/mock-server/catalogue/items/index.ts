@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import { CatalogueItems, CatalogueItemPagingResponse } from '../catalogue-mock-data'
+import { CatalogueItemPagingResponse, CatalogueItems } from '../catalogue-mock-data'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
@@ -35,7 +35,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     const totalCount = dataResult.length
 
     dataResult = dataResult.sort((a, b) => (a.name < b.name ? -1 : 0)).slice(startIndex, endIndex) //.filter(f => f.parentPath === parentPath)
-
 
     const result: CatalogueItemPagingResponse = {
       totalCount: totalCount,
