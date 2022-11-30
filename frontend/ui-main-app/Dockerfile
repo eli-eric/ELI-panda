@@ -21,6 +21,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+ENV NEXTAUTH_URL="http://panda.eli-beams.eu/"
+ENV NEXTAUTH_SECRET="Z8yA7DUXm9BzF5uMP8LVqKcYeFjgcHoqErhwu7cTiWw="
+
 RUN env
 
 # This will do the trick, use the corresponding env file for each environment.
