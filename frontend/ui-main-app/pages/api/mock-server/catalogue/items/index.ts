@@ -24,7 +24,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
         || f.description.toLowerCase().includes(searchParam.toLocaleLowerCase())
         || f.manufacturer.toLowerCase().includes(searchParam.toLocaleLowerCase())
         || f.manufacturerNumber.toLowerCase().includes(searchParam.toLocaleLowerCase())
-        || f.details != null && f.details?.filter(df => df.value.toLowerCase().includes(searchParam.toLocaleLowerCase())).length > 0
+        || f.details != null && f.details?.filter(df => df.value !== null && df.value.toLowerCase().includes(searchParam.toLocaleLowerCase())).length > 0
       )
     }
 

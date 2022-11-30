@@ -11,7 +11,7 @@ export interface CategoryResponse {
 export interface CatalogueItemDetail {
     propertyName: string;
     propertyGroup: string;
-    value: string;
+    value: string | null;
 }
 export interface CatalogueItemResponse {
     uid: string;
