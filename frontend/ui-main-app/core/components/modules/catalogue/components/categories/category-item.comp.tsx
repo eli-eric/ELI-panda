@@ -3,6 +3,7 @@ import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { PATHS } from 'core/types/constants/paths'
 import { CatalogueCategoryResponse } from 'core/types/responses'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 interface Props {
@@ -12,29 +13,12 @@ interface Props {
 const CategoryItemComponent = ({ category }: Props) => {
   const router = useRouter()
   const { search } = router.query
-
-  const catalogSelectHandler2 = () => {
-    const path = PATHS.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code + '/'
-    console.log(path)
-    const { search } = router.query
-
-    router.push({ pathname: path, query: search && { search: search } }, undefined, {
-      shallow: true
-    })
-  }
-
-  const catalogSelectHandler = () => {
-    const path = PATHS.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
-    const { search } = router.query
-    router.push(path + (search ? '?search=' + search : ''), undefined, {
-      shallow: true
-    })
-  }
+  const path = PATHS.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
 
   return (
-    <button
+    <Link
+      href={{ pathname: path, query: search && { search: search } }}
       key={category.code}
-      onClick={catalogSelectHandler2}
       className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:border-gray-400"
     >
       <div className="flex-shrink-0">
@@ -52,7 +36,7 @@ const CategoryItemComponent = ({ category }: Props) => {
           <p className="text-sm font-medium text-gray-900">{category.name}</p>
         </a>
       </div>
-    </button>
+    </Link>
   )
 }
 
