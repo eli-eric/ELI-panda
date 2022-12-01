@@ -7,6 +7,8 @@ import ProfileDropdownContainer from './dropdown-menu/dropdown-menu.cont'
 const SearchBarComp = () => {
   const searchValueRef = useRef<HTMLInputElement | null>(null)
   const router = useRouter()
+  const query = router.query
+  const { slug } = router.query
 
   useEffect(() => {
     //@ts-ignore
@@ -14,11 +16,7 @@ const SearchBarComp = () => {
   }, [])
 
   const setSearch = () => {
-    const query = router.query
-    const { slug } = router.query
-
     const enteredSearch = searchValueRef.current?.value
-    console.log(query)
     router.push({ query: enteredSearch ? { ...query, search: enteredSearch } : { slug: slug } }, undefined, {
       shallow: true
     })
