@@ -12,7 +12,7 @@ export interface CatalogueItemDetail {
     propertyName: string;
     propertyGroup: string;
     value: string | null;
-    unit: string | null;
+    propertyUnit: string | null;
 }
 export interface CatalogueItemResponse {
     uid: string;

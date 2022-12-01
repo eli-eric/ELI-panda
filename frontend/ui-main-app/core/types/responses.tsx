@@ -9,6 +9,7 @@ export interface CatalogueItemDetail {
   propertyName: string
   propertyGroup: string
   value: string
+  propertyUnit: string
 }
 
 export interface CatalogueItem {
