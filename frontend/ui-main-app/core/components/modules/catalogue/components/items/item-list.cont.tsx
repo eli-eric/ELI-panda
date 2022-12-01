@@ -17,7 +17,7 @@ const ItemListContainer = ({ itemList, categoryListLength }: Props) => {
             <table className="min-w-full divide-y divide-gray-300">
               <ItemListHeaderComponent
                 categoryListLength={categoryListLength}
-                details={itemList && itemList[0].details}
+                details={itemList && itemList[0]?.details}
               />
               {itemList && (
                 <tbody className="bg-white">

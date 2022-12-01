@@ -33,12 +33,6 @@ const SearchBarComp = () => {
     }, 400)
   }) */
 
-  /*   const setSearch = () => {
-    const query = route.query
-    const enteredSearch = searchValueRef.current?.value
-    route.push(`?search=${enteredSearch}`, undefined, { shallow: true })
-  } */
-
   const submitHandler = (e: FormEvent) => {
     e.preventDefault()
     setSearch()

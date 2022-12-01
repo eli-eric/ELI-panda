@@ -19,13 +19,22 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     let endIndex = startIndex + pageSize
 
     if (searchParam && typeof searchParam === 'string') {
-      dataResult = dataResult.filter(f =>
-        f.name.toLowerCase().includes(searchParam.toLocaleLowerCase())
-        || f.description.toLowerCase().includes(searchParam.toLocaleLowerCase())
-        || f.manufacturer.toLowerCase().includes(searchParam.toLocaleLowerCase())
-        || f.manufacturerNumber.toLowerCase().includes(searchParam.toLocaleLowerCase())
-        || f.details != null && f.details?.filter(df => df.value !== null && df.value.toLowerCase().includes(searchParam.toLocaleLowerCase())).length > 0
-      )
+      //ther could be possibly more words - we will split them by space and will filter by all of them by AND logic
+      const searchWords = searchParam.split(" ");
+
+      searchWords.forEach(wordToSearch => {
+        const searchString = wordToSearch.toLocaleLowerCase()
+
+        dataResult = dataResult.filter(f =>
+          f.name.toLowerCase().includes(searchString)
+          || f.description.toLowerCase().includes(searchString)
+          || f.manufacturer.toLowerCase().includes(searchString)
+          || f.manufacturerNumber.toLowerCase().includes(searchString)
+          || f.details != null && f.details?.filter(df => df.value !== null && df.value.toLowerCase().includes(searchString)).length > 0
+        )
+      });
+
+
     }
 
     if (categoryPathParam && typeof categoryPathParam === 'string') {
