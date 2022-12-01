@@ -19,13 +19,7 @@ const BreadcrumbContainer = () => {
       if (slug && typeof slug === 'object') {
         return slug.map((slug, i) => {
           link += `/${slug}`
-          return (
-            <BreadcrumpItemComponent
-              key={i}
-              name={slug}
-              link={link + (search ? `?search=${search}` : '')}
-            />
-          )
+          return <BreadcrumpItemComponent key={i} name={slug} link={link} />
         })
       }
       return
