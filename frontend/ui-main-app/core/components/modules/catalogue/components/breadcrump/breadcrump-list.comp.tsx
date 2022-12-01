@@ -17,7 +17,7 @@ const BreadcrumbListComponent = ({ navigationList, handleClick }: Props) => {
   }
 
   return (
-    <div className="bg-white pt-3 pb-3 ">
+    <div id="catalogue-breadcrump" className="bg-white pt-3 pb-3 ">
       <nav className="flex" aria-label="Breadcrumb">
         <ol role="list" className="flex space-x-4 bg-white px-6  ">
           <li className="flex">
