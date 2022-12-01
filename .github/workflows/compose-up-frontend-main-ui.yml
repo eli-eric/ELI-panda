@@ -17,9 +17,9 @@ jobs:
         id: secret
         run: |
           if [ -n "${{ secrets.NEXTAUTH_SECRET }}" ]; then
-              echo "::set-output name=secret_present::true"
+              echo "name=secret_present::true" >> $GITHUB_OUTPUT
           else
-              echo "::set-output name=secret_present::false"
+              echo "name=secret_present::false" >> $GITHUB_OUTPUT
           fi
   show-output:
     runs-on: self-hosted
