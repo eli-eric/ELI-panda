@@ -8,30 +8,8 @@ defaults:
     working-directory: frontend/ui-main-app
 
 jobs:
-  check-secret:
-    runs-on: self-hosted
-    outputs:
-      secret_present: ${{ steps.secret.outputs.secret_present }}
-    steps:
-      - name: Check secret presence
-        id: secret
-        run: |
-          if [ -n "${{ secrets.NEXTAUTH_SECRET }}" ]; then
-              echo "name=secret_present::true" >> $GITHUB_OUTPUT
-          else
-              echo "name=secret_present::false" >> $GITHUB_OUTPUT
-          fi
-  show-output:
-    runs-on: self-hosted
-    needs: check-secret
-    steps:
-      - name: Show output of check-secret
-        run: |
-          echo "secret_present: ${{ needs.check-secret.outputs.secret_present }}"
   use-secret:
     runs-on: self-hosted
-    needs: check-secret
-    if: needs.check-secret.outputs.secret_present == 'true'
     steps:
       - name: Show secret stats
         run: |
