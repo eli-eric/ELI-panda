@@ -56,8 +56,10 @@ const CatalogueContainer = () => {
   return (
     <CatalogLayoutContainer catalogueItems={catalogueItems} categoryList={categoryList}>
       <Fragment>
-        <BreadcrumbContainer />
-        <CategoryListComponent categoryList={categoryList} />
+        <div id="catalogue-nav">
+          <BreadcrumbContainer />
+          <CategoryListComponent categoryList={categoryList} />
+        </div>
 
         {catalogueItems ? (
           <TableLayoutComponent>
@@ -74,14 +76,16 @@ const CatalogueContainer = () => {
         )}
 
         {catalogueItems && (
-          <ItemsPaginationComponent
-            itemsTotalCount={catalogueItems?.totalCount}
-            page={page}
-            pageSize={pageSize}
-            pageNumbers={pageNumbers}
-            previousPageHandler={previousPageHandler}
-            nextPageHandler={nextPageHandler}
-          />
+          <div id="catalogue-paging">
+            <ItemsPaginationComponent
+              itemsTotalCount={catalogueItems?.totalCount}
+              page={page}
+              pageSize={pageSize}
+              pageNumbers={pageNumbers}
+              previousPageHandler={previousPageHandler}
+              nextPageHandler={nextPageHandler}
+            />
+          </div>
         )}
       </Fragment>
     </CatalogLayoutContainer>

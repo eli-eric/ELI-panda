@@ -3,11 +3,7 @@ interface Props {
 }
 
 const TableLayoutComponent = ({ children }: Props) => {
-  return (
-    <div className="h-full overflow-auto ">
-      <div className="border-t border-gray-300">{children}</div>
-    </div>
-  )
+  return <div className="h-full overflow-auto border-t border-gray-300  ">{children}</div>
 }
 
 export default TableLayoutComponent
