@@ -1,4 +1,4 @@
-name: Cypress test on pull request
+name: Cypress test on push
 
 on:
   - push

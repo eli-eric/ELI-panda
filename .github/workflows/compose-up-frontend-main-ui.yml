@@ -7,16 +7,44 @@ defaults:
   run:
     working-directory: frontend/ui-main-app
 
-env:
-  NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-
 jobs:
-  build:
+  check-secret:
     runs-on: self-hosted
-
+    outputs:
+      secret_present: ${{ steps.secret.outputs.secret_present }}
+    steps:
+      - name: Check secret presence
+        id: secret
+        run: |
+          if [ -n "${{ secrets.NEXTAUTH_SECRET }}" ]; then
+              echo "::set-output name=secret_present::true"
+          else
+              echo "::set-output name=secret_present::false"
+          fi
+  show-output:
+    runs-on: self-hosted
+    needs: check-secret
+    steps:
+      - name: Show output of check-secret
+        run: |
+          echo "secret_present: ${{ needs.check-secret.outputs.secret_present }}"
+  use-secret:
+    runs-on: self-hosted
+    needs: check-secret
+    if: needs.check-secret.outputs.secret_present == 'true'
+    steps:
+      - name: Show secret stats
+        run: |
+          echo "${{ secrets.NEXTAUTH_SECRET }}" | wc
+  compose-up:
+    runs-on: self-hosted
+    needs: check-secret
+    if: needs.check-secret.outputs.secret_present == 'true'
     steps:
       - uses: actions/checkout@v3
       - name: Build the Docker compose
+      - run: |
+          docker-compose up -d --build
+        working-directory: frontend/ui-main-app
         env:
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-        run: docker-compose up -d --build
+          NEXTAUTH_SECRET: "${{ secrets.NEXTAUTH_SECRET }}"
