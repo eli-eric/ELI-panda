@@ -25,39 +25,37 @@ export default function ItemsPaginationComponent({
   const from = noResults ? 0 : 1 + (page - 1) * pageSize
   const to = noResults ? 0 : pageNumbers === page ? itemsTotalCount : page * pageSize
   return (
-    <div id="catalogue-paging">
-      <nav
-        className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
-        aria-label="Pagination"
-      >
-        <div className="hidden sm:block pr-2">
-          <p className="text-sm text-gray-700">
-            Showing <span className="font-medium">{from}</span> to <span className="font-medium">{to}</span> of{' '}
-            <span className="font-medium">{itemsTotalCount}</span> results
-          </p>
-        </div>
-        <div className="flex flex-1 justify-between sm:justify-end">
-          <button
-            disabled={previousIsDisabled}
-            onClick={previousPageHandler}
-            className={`relative inline-flex items-center rounded-md border border-gray-300  px-4 py-2 ${
-              previousIsDisabled ? 'bg-gray-200' : 'hover:bg-gray-50'
-            }`}
-          >
-            <ChevronLeftIcon className="h-6 w-6 flex-shrink-0" />
-          </button>
+    <nav
+      className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+      aria-label="Pagination"
+    >
+      <div className="hidden sm:block pr-2">
+        <p className="text-sm text-gray-700">
+          Showing <span className="font-medium">{from}</span> to <span className="font-medium">{to}</span> of{' '}
+          <span className="font-medium">{itemsTotalCount}</span> results
+        </p>
+      </div>
+      <div className="flex flex-1 justify-between sm:justify-end">
+        <button
+          disabled={previousIsDisabled}
+          onClick={previousPageHandler}
+          className={`relative inline-flex items-center rounded-md border border-gray-300  px-4 py-2 ${
+            previousIsDisabled ? 'bg-gray-200' : 'hover:bg-gray-50'
+          }`}
+        >
+          <ChevronLeftIcon className="h-6 w-6 flex-shrink-0" />
+        </button>
 
-          <button
-            disabled={nextIsDisabled}
-            onClick={nextPageHandler}
-            className={`relative ml-3 inline-flex items-center rounded-md border border-gray-300  px-4 py-2 ${
-              nextIsDisabled ? 'bg-gray-200' : 'hover:bg-gray-50'
-            }`}
-          >
-            <ChevronRightIcon className="h-6 w-6 flex-shrink-0" />
-          </button>
-        </div>
-      </nav>
-    </div>
+        <button
+          disabled={nextIsDisabled}
+          onClick={nextPageHandler}
+          className={`relative ml-3 inline-flex items-center rounded-md border border-gray-300  px-4 py-2 ${
+            nextIsDisabled ? 'bg-gray-200' : 'hover:bg-gray-50'
+          }`}
+        >
+          <ChevronRightIcon className="h-6 w-6 flex-shrink-0" />
+        </button>
+      </div>
+    </nav>
   )
 }
