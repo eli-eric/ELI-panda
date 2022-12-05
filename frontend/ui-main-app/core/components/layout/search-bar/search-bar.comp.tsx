@@ -2,9 +2,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { useRouter } from 'next/router'
 import { FormEvent, useEffect, useRef } from 'react'
 
-import ProfileDropdownContainer from './dropdown-menu/dropdown-menu.cont'
-
-const SearchBarComp = () => {
+const SearchBarComponent = () => {
   const searchValueRef = useRef<HTMLInputElement | null>(null)
   const router = useRouter()
   const query = router.query
@@ -13,7 +11,7 @@ const SearchBarComp = () => {
   useEffect(() => {
     //@ts-ignore
     searchValueRef.current.value = router.query.search || null
-  }, [])
+  }, []) // eslint-disable-line
 
   const setSearch = () => {
     const enteredSearch = searchValueRef.current?.value
@@ -37,7 +35,7 @@ const SearchBarComp = () => {
   }
 
   return (
-    <div className="flex flex-1 justify-between px-4">
+    <div id="layout-search-bar" className="flex flex-1 justify-between px-4">
       <div className="flex flex-1">
         <form className="flex w-full md:ml-0" action="#" method="GET" onSubmit={submitHandler}>
           <label htmlFor="search-field" className="sr-only">
@@ -58,12 +56,8 @@ const SearchBarComp = () => {
           </div>
         </form>
       </div>
-      <div className="ml-4 flex items-center md:ml-6">
-        {/* Profile dropdown */}
-        <ProfileDropdownContainer />
-      </div>
     </div>
   )
 }
 
-export default SearchBarComp
+export default SearchBarComponent

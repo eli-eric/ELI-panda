@@ -1,11 +1,11 @@
 import { useCatalogueItemsPath, useCategoryPath } from 'core/components/modules/catalogue/hooks/usePath'
-import { CatalogueCategoryResponse, CatalogueItemResponse } from 'core/types/responses'
+import { CatalogueCategoryResponse, CatalogueItemsResponse } from 'core/types/responses'
 import { useRouter } from 'next/router'
 import { Fragment, useEffect, useState } from 'react'
 import useSWR from 'swr'
 
 import BreadcrumbContainer from './components/breadcrump/breadcrump.cont'
-import CategoryListComponent from './components/categories/category-list.comp'
+import CategoryListComponent from './components/category-list/category-list.comp'
 import ItemListContainer from './components/items/item-list.cont'
 import CatalogLayoutContainer from './components/layout/catalog-layout.cont'
 import DefaultMessageComponent from './components/layout/default-message.comp'
@@ -27,7 +27,7 @@ const CatalogueContainer = () => {
   const { data: categoryList } = useSWR<Array<CatalogueCategoryResponse>>(categoryPath)
 
   /* conditionaly fetch catalogue Items if category list dont return categories or search is not in query */
-  const { data: catalogueItems } = useSWR<CatalogueItemResponse>(
+  const { data: catalogueItems } = useSWR<CatalogueItemsResponse>(
     categoryList?.length === 0 || search ? catalogueItemsPath : null
   )
 
@@ -51,7 +51,7 @@ const CatalogueContainer = () => {
         shallow: true
       })
     }
-  }, [catalogueItems, pageSize, page])
+  }, [catalogueItems, pageSize, page]) // eslint-disable-line
 
   return (
     <CatalogLayoutContainer catalogueItems={catalogueItems} categoryList={categoryList}>

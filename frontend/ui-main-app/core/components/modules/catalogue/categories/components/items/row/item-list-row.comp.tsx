@@ -14,12 +14,16 @@ interface Props {
   categoryListLength: number | undefined
 }
 
-const ItemComponent = ({ item, index, categoryListLength }: Props) => {
+const ItemListRow = ({ item, index, categoryListLength }: Props) => {
   const router = useRouter()
   const { search } = router.query
   const path = PATHS.CATALOGUE + '/' + item.categoryPath
+
+  const handleClick = () => {
+    router.push('/catalogue/item/' + item.uid)
+  }
   return (
-    <tr className={(index % 2 === 0 ? undefined : 'bg-gray-100') + ' ' + 'hover:bg-orange-200'}>
+    <tr className={(index % 2 === 0 ? undefined : 'bg-gray-100') + ' ' + 'hover:bg-orange-200'} onClick={handleClick}>
       <td className="whitespace-nowrap py-4 text-sm sm:pl-6">
         <div className="flex items-center">
           <div className="h-10 w-10 flex-shrink-0">
@@ -66,4 +70,4 @@ const ItemComponent = ({ item, index, categoryListLength }: Props) => {
   )
 }
 
-export default ItemComponent
+export default ItemListRow

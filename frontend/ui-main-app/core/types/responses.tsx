@@ -24,7 +24,7 @@ export interface CatalogueItem {
   details?: CatalogueItemDetail[]
 }
 
-export interface CatalogueItemResponse {
+export interface CatalogueItemsResponse {
   totalCount: number
   data: CatalogueItem[]
 }

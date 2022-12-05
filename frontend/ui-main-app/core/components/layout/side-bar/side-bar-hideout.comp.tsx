@@ -3,14 +3,15 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import EliLogoComponent from 'core/components/ui/eli-logo.comp'
 import { Dispatch, Fragment, SetStateAction } from 'react'
 
-import NavigationListContainer from './navigation-list.cont'
+import ProfileActionsComponent from '../profile/profile-actions.cont'
+import NavigationListContainer from './navigation/navigation-list.cont'
 
 interface Props {
   setSidebarOpen: Dispatch<SetStateAction<boolean>>
   sidebarOpen: boolean
 }
 
-const NavigationComponent = ({ setSidebarOpen, sidebarOpen }: Props) => {
+const SideBarHideoutComponent = ({ setSidebarOpen, sidebarOpen }: Props) => {
   return (
     <Transition.Root show={sidebarOpen} as={Fragment}>
       <Dialog as="div" className="relative z-40 md:hidden" onClose={setSidebarOpen}>
@@ -65,8 +66,10 @@ const NavigationComponent = ({ setSidebarOpen, sidebarOpen }: Props) => {
                   <NavigationListContainer />
                 </nav>
               </div>
+              <ProfileActionsComponent />
             </Dialog.Panel>
           </Transition.Child>
+
           <div className="w-14 flex-shrink-0" aria-hidden="true">
             {/* Dummy element to force sidebar to shrink to fit close icon */}
           </div>
@@ -76,4 +79,4 @@ const NavigationComponent = ({ setSidebarOpen, sidebarOpen }: Props) => {
   )
 }
 
-export default NavigationComponent
+export default SideBarHideoutComponent
