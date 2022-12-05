@@ -31,27 +31,13 @@ func (h *SecurityHandlers) AuthenticateByUsernameAndPassword() echo.HandlerFunc 
 		cred := new(models.UserCredentials)
 		if err := c.Bind(cred); err == nil {
 			// authenticate and Generate encoded token and send it as response.
-			t, err := h.securityService.AuthenticateByUsernameAndPassword(cred.Username, cred.Password)
+			authUser, err := h.securityService.AuthenticateByUsernameAndPassword(cred.Username, cred.Password)
 			if err != nil {
 				if err.Error() == "Unauthorized" {
 					return echo.ErrUnauthorized
 				} else {
 					return err
 				}
-			}
-			authUser := models.UserAuthInfo{}
-			if cred.Username == "admin" {
-				authUser.Username = cred.Username
-				authUser.Uid = "71864520-9e86-427c-901c-0c220f95177"
-				authUser.Facility = "ELI-Beamlines"
-				authUser.AccessToken = t
-				authUser.Roles = []string{"catalogue-view", "systems-view"}
-			} else if cred.Username == "control.systems" {
-				authUser.Username = cred.Username
-				authUser.Uid = "25038ff7-0e9c-4afe-9198-210c1e94b2ef"
-				authUser.Facility = "ELI-Beamlines"
-				authUser.AccessToken = t
-				authUser.Roles = []string{"pvs-view"}
 			}
 
 			return c.JSON(http.StatusOK, authUser)
@@ -105,7 +91,7 @@ func (h *SecurityHandlers) GetUserByJWT() echo.HandlerFunc {
 			authUser.Roles = []string{"pvs-view"}
 		}
 
-		authUser.Username = claims.Name
+		authUser.Username = claims.Subject
 		authUser.Uid = "71864520-9e86-427c-901c-0c220f95177"
 		authUser.Facility = "ELI-Beamlines"
 		authUser.AccessToken = user.Raw

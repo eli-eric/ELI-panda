@@ -9,4 +9,4 @@ MERGE (admin:User{ uid: '71864520-9e86-427c-901c-0c220f951775', username: 'admin
 MERGE (basicRole:Role{ uid: '0f356f0c-e78a-420f-965b-d23d93e26d12', name: 'basics', code: 'basics' })
 
 // Add admin to basics role
-MERGE (admin)-[:BELONGS_TO]->(basicRole);
+MERGE (admin)-[:HAS_ROLE]->(basicRole);
