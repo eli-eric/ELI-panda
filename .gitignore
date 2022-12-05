@@ -15,3 +15,4 @@ backend/api-gateway-go/.env
 backend/api-gateway-go/appsettings.yaml
 frontend/ui-main-app/.env
 backend/api-gateway-go/config.json
+backend/api-gateway-go/services/security-service/db/userAndPassword.txt
