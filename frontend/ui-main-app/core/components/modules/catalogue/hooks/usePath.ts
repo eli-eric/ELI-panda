@@ -45,3 +45,8 @@ export const useCatalogueItemsPath = (pageSize: number, page: number) => {
     BASE_URL + ENDPOINTS.catalogueItems + `?pageSize=${pageSize}&page=${page}&categoryPath=${categoryPath}` + search
   )
 }
+
+export const useCatalogueItemDetailPath = () => {
+  const router = useRouter()
+  return BASE_URL + ENDPOINTS.catalogueItem + '/' + router.query.uid
+}

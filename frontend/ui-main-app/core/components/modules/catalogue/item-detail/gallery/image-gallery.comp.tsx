@@ -52,7 +52,7 @@ const ImageGalleryComponent = ({ images }: Props) => {
             <Image
               src={image.src}
               alt=""
-              className="h-full w-full object-cover object-center sm:rounded-lg rounded-full"
+              className="h-96 w-full object-cover object-center sm:rounded-lg"
               width={500}
               height={500}
             />

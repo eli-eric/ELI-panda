@@ -7,16 +7,20 @@ interface Props {
   categoryList?: Array<CatalogueCategoryResponse>
 }
 
-const CatalogLayoutContainer = ({ children, catalogueItems, categoryList }: Props) => {
+/* container for responsive layout with sticky footer and sticky table header */
+
+export const CatalogLayoutContainer = ({ children, catalogueItems, categoryList }: Props) => {
   const [height, setHeight] = useState<number>(0)
 
   useEffect(() => {
     // Handler to call on window resize
     const handleResize = () => {
       const searchBar = document.getElementById('layout-search-bar')?.clientHeight || 0
-      const catalogueList = document.getElementById('catalogue-nav')?.clientHeight || 0
+      const catalogueList = document.getElementById('catalogue-list')?.clientHeight || 0
+      const catalogueBreadcrump = document.getElementById('catalogue-breadcrump')?.clientHeight || 0
+
       const cataloguePaging = document.getElementById('catalogue-paging')?.clientHeight || 0
-      const height = searchBar + catalogueList + cataloguePaging
+      const height = searchBar + catalogueList + cataloguePaging + catalogueBreadcrump
 
       setHeight(height)
     }
@@ -40,4 +44,10 @@ const CatalogLayoutContainer = ({ children, catalogueItems, categoryList }: Prop
   )
 }
 
-export default CatalogLayoutContainer
+interface TableProps {
+  children: React.ReactNode
+}
+
+export const TableLayoutComponent = ({ children }: TableProps) => {
+  return <div className="h-full overflow-auto border-t border-gray-300  ">{children}</div>
+}

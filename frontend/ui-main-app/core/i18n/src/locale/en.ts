@@ -35,7 +35,37 @@ export const messages = {
     alert: { title: 'Something went wrong!' }
   },
   dashboardPage: { head: 'Eli Panda - Dashboard' },
-  cataloguePage: { head: 'Eli Panda - Catalogue' },
+  cataloguePage: {
+    head: 'Eli Panda - Catalogue',
+    help: 'Select category or use Search bar',
+    defaultMessage: {
+      help: { text: 'Select category or use Search bar' },
+      noResults: {
+        title: 'No results found',
+        text: 'We can’t find anything with that term at the moment, try searching something else.'
+      }
+    },
+    pagination: {
+      text: 'Showing <medium>{from}</medium> to <medium>{to}</medium> of <medium>{resultsCount}</medium> results'
+    },
+    itemList: {
+      header: {
+        uid: 'UID',
+        name: 'Name',
+        description: 'Description',
+        categoryName: 'Category name',
+        manufactorer: 'Manufacturer',
+        manufacturerNumber: 'Manufacturer Number',
+        manufacturerUrl: 'Manufacturer Url'
+      }
+    },
+    itemDetail: {
+      buttons: {
+        back: 'Back',
+        edit: 'Edit'
+      }
+    }
+  },
   systemsPage: { head: 'Eli Panda - Systems' },
   reportsPage: { head: 'Eli Panda - Reports' },
   defaul: { head: 'Eli Panda' }

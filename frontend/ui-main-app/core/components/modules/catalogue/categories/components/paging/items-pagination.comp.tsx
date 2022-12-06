@@ -1,5 +1,10 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
+import { createMessageValues } from 'core/helpers/formatters'
+import { message } from 'core/i18n/src/messages'
 import { MouseEventHandler } from 'react'
+import { FormattedMessage } from 'react-intl'
+
+const text = message.cataloguePage.pagination.text
 
 interface Props {
   itemsTotalCount?: number
@@ -26,13 +31,16 @@ export default function ItemsPaginationComponent({
   const to = noResults ? 0 : pageNumbers === page ? itemsTotalCount : page * pageSize
   return (
     <nav
+      id="catalogue-paging"
       className="flex items-center justify-between border-t border-gray-200 bg-white px-5 py-3 sm:px-6"
       aria-label="Pagination"
     >
       <div className="hidden sm:block pr-2">
         <p className="text-sm text-gray-700">
-          Showing <span className="font-medium">{from}</span> to <span className="font-medium">{to}</span> of{' '}
-          <span className="font-medium">{itemsTotalCount}</span> results
+          <FormattedMessage
+            id={text}
+            values={createMessageValues({ from: from, to: to, resultsCount: itemsTotalCount })}
+          />
         </p>
       </div>
       <div className="flex flex-1 justify-between sm:justify-end">

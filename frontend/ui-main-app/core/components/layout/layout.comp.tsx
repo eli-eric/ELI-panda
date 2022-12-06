@@ -1,4 +1,5 @@
 import { Bars3BottomLeftIcon } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 
@@ -12,6 +13,7 @@ interface Props {
 
 export default function LayoutComponent({ children }: Props) {
   const { status } = useSession()
+  const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
@@ -21,7 +23,7 @@ export default function LayoutComponent({ children }: Props) {
         <SideBarStaticComponent />
 
         <div className="flex-1 md:pl-64">
-          {status === 'authenticated' && (
+          {status === 'authenticated' && !router.query.uid && (
             <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
               <button
                 type="button"

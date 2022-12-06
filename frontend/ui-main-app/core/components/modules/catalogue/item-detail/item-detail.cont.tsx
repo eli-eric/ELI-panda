@@ -1,10 +1,8 @@
-import { BASE_URL } from 'core/types/constants/common'
-import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { CatalogueItem } from 'core/types/responses'
-import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
+import { useCatalogueItemDetailPath } from '../hooks/usePath'
 import ItemDetailComponent from './item-detail.comp'
 
 const images = [
@@ -29,15 +27,17 @@ const images = [
 ]
 
 export default function Example() {
-  const router = useRouter()
+  const catalogueItemPath = useCatalogueItemDetailPath()
   const [groups, setGroups] = useState<Array<string>>([])
-  const { data: item } = useSWR<CatalogueItem>(BASE_URL + ENDPOINTS.catalogueItem + '/' + router.query.uid)
+  const { data: item } = useSWR<CatalogueItem>(catalogueItemPath)
 
   useEffect(() => {
     if (item?.details) {
       const uniqueDetailGroups = item.details
         .map(item => item.propertyGroup)
-        .filter((value, index, self) => self.indexOf(value) === index)
+        .filter((value, index, self) => {
+          return self.indexOf(value) === index
+        })
 
       setGroups(uniqueDetailGroups)
     }
