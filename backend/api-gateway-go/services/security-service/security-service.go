@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"panda/apigateway/config"
+	"panda/apigateway/helpers"
 	"panda/apigateway/ioutils"
 	"panda/apigateway/services/security-service/models"
 	"time"
@@ -54,35 +55,31 @@ func NewSecurityService(settings *config.Config) ISecurityService {
 func (svc *SecurityService) AuthenticateByUsernameAndPassword(username string, password string) (authUser models.UserAuthInfo, err error) {
 
 	// Open a new Session
-	session, _ := newNeo4jSession(svc.neo4jDriver)
+
+	session, _ := helpers.NewNeo4jSession(svc.neo4jDriver)
 
 	//the user has to be enabled
-	result, err := getNeo4jSingleRecord(session, `match(u:User{username: $userName})-[:HAS_ROLE]->(r:Role) 
-	return {uid: u.uid, 
+	authUser, err = helpers.GetNeo4jSingleRecordAndMapToStruct[models.UserAuthInfo](session, `match(u:User{username: $userName})-[:HAS_ROLE]->(r:Role) 
+	return {
 		passwordHash: u.passwordHash, 
 		lastName: u.lastName ,
 		firstName: u.firstName,
 		email: u.email, 
 		roles: collect(r.code)} as userInfo`, map[string]interface{}{"userName": username}, "userInfo")
 
+
+	fmt.Println(authUser)
 	//if there is a user in DB lets chekc the password
 	if err == nil {
-		// Check password
-		userProps := result.(map[string]interface{})
 
-		passwordHash := userProps["passwordHash"].(string)
-		// Throws unauthorized error
-		verifErr := bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(password))
-
+		verifErr := bcrypt.CompareHashAndPassword([]byte(authUser.PasswordHash), []byte(password))
+		//empty passwordHash -> omitempty json -> not sent to client
+		authUser.PasswordHash = ""
+		// Throws unauthorized error if there is verifErr
 		if verifErr == nil {
-			rolesI := userProps["roles"].([]interface{})
-			var roles = make([]string, 0)
-			if rolesI != nil && len(rolesI) > 0 {
-				// TODO
-			}
 			// Set custom claims
 			claims := &models.JwtCustomClaims{
-				Roles: roles,
+				Roles: authUser.Roles,
 				StandardClaims: jwt.StandardClaims{
 					ExpiresAt: time.Now().Add(time.Hour * 876000).Unix(),
 					Subject:   username,
@@ -95,13 +92,7 @@ func (svc *SecurityService) AuthenticateByUsernameAndPassword(username string, p
 			// Generate encoded token and send it as response.
 			token, err := newToken.SignedString([]byte(svc.jwtSecret))
 			if err == nil {
-				authUser = models.UserAuthInfo{
-					Uid:         userProps["uid"].(string),
-					Username:    username,
-					FullName:    userProps["firstName"].(string) + " " + userProps["lastName"].(string),
-					AccessToken: token,
-					Roles:       roles,
-				}
+				authUser.AccessToken = token
 			}
 
 			return authUser, err
