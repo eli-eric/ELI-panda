@@ -6,6 +6,7 @@ import { useState } from 'react'
 import SearchBarComponent from './search-bar/search-bar.comp'
 import SideBarHideoutComponent from './side-bar/side-bar-hideout.comp'
 import SideBarStaticComponent from './side-bar/side-bar-static.comp'
+import { APP_VERSION } from 'core/types/constants/common'
 
 interface Props {
   children: React.ReactNode
@@ -39,6 +40,9 @@ export default function LayoutComponent({ children }: Props) {
 
           {children}
         </div>
+      </div>
+      <div className='h-5 w-20 absolute top-0 left-[calc(100vw-5rem)] z-50 font-mono text-gray-300 text-xs pt-2'>
+        {APP_VERSION}
       </div>
     </>
   )

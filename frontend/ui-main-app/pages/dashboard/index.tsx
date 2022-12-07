@@ -3,73 +3,35 @@ import { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
+
+interface RelaseVersion {
+  id: string;
+  bugs?: RelaseNote[];
+  features?: RelaseNote[];
+}
+
+interface RelaseNote {
+  description: string;
+}
+
 const messages = message.dashboardPage
 
 const DashboardPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
 
-  const data = [
+  const releases: Array<RelaseVersion> = [
     {
-      id: 1,
-      name: 'Jirka',
-      details: [
+      id: '0.0.1',
+      features: [
         {
-          name: 'height',
-          value: 175,
-          type: 'number'
+          description: "Catalogue page: searching items via single search bar"
         },
         {
-          name: 'hobby',
-          value: 'climbing',
-          type: 'string'
+          description: "Catalogue page: search by categories"
         },
         {
-          name: 'age',
-          value: 36,
-          type: 'number'
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Sirka',
-      details: [
-        {
-          name: 'height',
-          value: 181,
-          type: 'number'
+          description: "Catalogue page: item detail"
         },
-        {
-          name: 'hobby',
-          value: 'nothing',
-          type: 'string'
-        },
-        {
-          name: 'age',
-          value: 18,
-          type: 'number'
-        }
-      ]
-    },
-    {
-      id: 3,
-      name: 'Bublinka',
-      details: [
-        {
-          name: 'height',
-          value: 190,
-          type: 'number'
-        },
-        {
-          name: 'hobby',
-          value: 'bike',
-          type: 'string'
-        },
-        {
-          name: 'age',
-          value: 25,
-          type: 'number'
-        }
       ]
     }
   ]
@@ -82,7 +44,44 @@ const DashboardPage: NextPage = (): JSX.Element => {
       </Head>
 
       <main className="flex-1">
-        <h1>Here will be system statistics</h1>
+        <h1 className='text-2xl font-semibold font-mono text-gray-600 mt-2 ml-1 sm:mt-4 sm:ml-4 uppercase'>Release History</h1>
+        <ul role="list" className="divide-y divide-gray-200 font-mono">
+          {releases.map((item, idx) => (
+            <li key={item.id} className="px-2 py-2 sm:px-4 sm:py-4 ">
+              <h3 className='text-xl font-bold text-gray-700'>Version {item.id} {idx === 0 && "- Latest version"}</h3>
+              <div className='p-2'>
+                {item.bugs && (
+                  <>
+                    <div className='text-lg'>
+                      Bugs fixed:
+                    </div>
+                    <ul className='p-1'>
+                      {item.bugs.map((bug) => (
+                        <li key={bug.description}>
+                          - {bug.description}
+                        </li>
+                      ))}
+                    </ul>
+                  </>)}
+                {item.features && (
+                  <>
+                    <div className='text-lg'>
+                      New features:
+                    </div>
+                    <ul className='p-1'>
+                      {item.features.map((feature) => (
+                        <li key={feature.description}>
+                          - {feature.description}
+                        </li>
+                      ))}
+                    </ul>
+                  </>)}
+              </div>
+
+            </li>
+          ))}
+        </ul>
+
       </main>
     </Fragment>
   )
