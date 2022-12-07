@@ -16,6 +16,7 @@ const usePath = () => {
         path += (path !== '' ? '/' : '') + slug
       })
       setCategoryPath(path)
+      console.log(path)
     }
   }, [router, setCategoryPath])
 
@@ -25,7 +26,7 @@ const usePath = () => {
 export const useCategoryPath = () => {
   const path = usePath()
 
-  return BASE_URL + ENDPOINTS.catalogueCategories + `/${path}`
+  return BASE_URL + ENDPOINTS.catalogueCategories + (path === '' ? '' : `/${path}`)
 }
 
 export const useCatalogueItemsPath = (pageSize: number, page: number) => {

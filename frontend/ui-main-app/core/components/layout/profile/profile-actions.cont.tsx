@@ -48,7 +48,7 @@ const ProfileActionsContainer = () => {
                 View profile
               </button>
             </div>
-            <button className="ml-8" onClick={signOutHandler}>
+            <button data-testid="sign-out" className="ml-8" onClick={signOutHandler}>
               <ArrowLeftOnRectangleIcon className="w-8 h-8 text-gray-700 hover:text-blue-600" />
             </button>
           </div>

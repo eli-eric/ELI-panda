@@ -2,7 +2,7 @@ interface Props {
   title: string
 }
 
-const ItemListColumnHeaderComponent = ({ title }: Props) => {
+const ItemListColumnTitleComponent = ({ title }: Props) => {
   return (
     <th
       scope="col"
@@ -13,4 +13,4 @@ const ItemListColumnHeaderComponent = ({ title }: Props) => {
   )
 }
 
-export default ItemListColumnHeaderComponent
+export default ItemListColumnTitleComponent

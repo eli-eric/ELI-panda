@@ -1,20 +1,27 @@
-import {
-  prepareGenericDataForTest,
-  SCRENARIOS,
-  setApiMocks,
-  setupServerForTest
-} from './panda.shared'
+import { SCRENARIOS, setApiMocks } from './panda.shared'
 
-before(prepareGenericDataForTest)
 beforeEach(() => {
-  setupServerForTest()
   cy.clearLocalStorage()
   cy.clearCookies()
 })
 
 describe('login', () => {
   it('Sign In', () => {
+    setApiMocks(SCRENARIOS.signIn.custonSession(false))
+    cy.visit(Cypress.env('host') + '/dashboard')
+    cy.wait(['@session'])
+    cy.contains('Sign in to ELI - PANDA')
+    cy.visit(Cypress.env('host') + '/catalogue')
+    cy.wait(['@session'])
+    cy.contains('Sign in to ELI - PANDA')
+    cy.visit(Cypress.env('host') + '/systems')
+    cy.wait(['@session'])
+    cy.contains('Sign in to ELI - PANDA')
+    cy.visit(Cypress.env('host') + '/reports')
+    cy.wait(['@session'])
+    cy.contains('Sign in to ELI - PANDA')
     cy.visit(Cypress.env('host'))
+    cy.wait(['@session'])
     cy.contains('Sign in to ELI - PANDA')
     cy.get('input[name=username]').clear().type('admin')
     cy.get('input[name=password]').clear().type('elipanda2022')
@@ -26,9 +33,13 @@ describe('login', () => {
   it('Sign Out', () => {
     setApiMocks(SCRENARIOS.signIn.custonSession(true))
     cy.visit(Cypress.env('host') + '/dashboard')
-    cy.get('[data-testid="dropdown-menu"]').click()
+    cy.wait(['@session'])
     setApiMocks(SCRENARIOS.signIn.custonSession(false))
-    cy.get('[data-testid="dropdown-menu-signout"]').click()
+    cy.get('[data-testid="sign-out"]').click()
     cy.contains('Sign in to ELI - PANDA')
   })
+})
+
+describe('Profile', () => {
+  it('Profile modal', () => {})
 })
