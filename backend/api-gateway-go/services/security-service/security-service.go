@@ -55,6 +55,7 @@ func NewSecurityService(settings *config.Config) ISecurityService {
 func (svc *SecurityService) AuthenticateByUsernameAndPassword(username string, password string) (authUser models.UserAuthInfo, err error) {
 
 	// Open a new Session
+
 	session, _ := helpers.NewNeo4jSession(svc.neo4jDriver)
 
 	//the user has to be enabled
@@ -65,6 +66,7 @@ func (svc *SecurityService) AuthenticateByUsernameAndPassword(username string, p
 		firstName: u.firstName,
 		email: u.email, 
 		roles: collect(r.code)} as userInfo`, map[string]interface{}{"userName": username}, "userInfo")
+
 
 	fmt.Println(authUser)
 	//if there is a user in DB lets chekc the password
@@ -114,4 +116,58 @@ func (svc *SecurityService) RefreshToken(claims *models.JwtCustomClaims) (string
 	}
 
 	return t, nil
+}
+
+func newNeo4jSession(driver neo4j.Driver) (neo4j.Session, error) {
+	session := driver.NewSession(neo4j.SessionConfig{})
+	var err error
+	defer func() {
+		err = ioutils.DeferredClose(session, err)
+	}()
+	return session, err
+}
+
+func getNeo4jSingleRecord(session neo4j.Session, cypher string, params map[string]interface{}, returnAlias string) (interface{}, error) {
+	result, err := session.ReadTransaction(func(tx neo4j.Transaction) (interface{}, error) {
+		result, err := tx.Run(cypher, params)
+		if err != nil {
+			return nil, err
+		}
+
+		record, err := result.Single()
+		if err != nil {
+			return nil, fmt.Errorf("record not found")
+		}
+
+		rec, _ := record.Get(returnAlias)
+		return rec, nil
+
+	})
+
+	return result, err
+}
+
+func neo4jReadArrayOfNodes(session neo4j.Session, cypher string, params map[string]interface{}, returnAlias string) (interface{}, error) {
+	// Execute a query in a new Read Transaction
+	results, err := session.ReadTransaction(func(tx neo4j.Transaction) (interface{}, error) {
+
+		result, err := tx.Run(cypher, params)
+		if err != nil {
+			return nil, err
+		}
+
+		// Get a list of Movies from the Result
+		records, err := result.Collect()
+		if err != nil {
+			return nil, err
+		}
+		var results []map[string]interface{}
+		for _, record := range records {
+			movie, _ := record.Get(returnAlias)
+			results = append(results, movie.(map[string]interface{}))
+		}
+		return results, nil
+	})
+
+	return results, err
 }

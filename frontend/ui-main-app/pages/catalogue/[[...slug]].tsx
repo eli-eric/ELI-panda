@@ -1,4 +1,4 @@
-import CatalogueContainer from 'core/components/modules/catalogue/catalogue.cont'
+import CatalogueContainer from 'core/components/modules/catalogue/categories/catalogue.cont'
 import { message } from 'core/i18n/src/messages'
 import { NextPage } from 'next'
 import Head from 'next/head'
@@ -7,7 +7,7 @@ import { useIntl } from 'react-intl'
 
 const messages = message.cataloguePage
 
-const CatalogueSubCategory: NextPage = (): JSX.Element => {
+const CatalogueCategoriesPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
 
   return (
@@ -21,4 +21,4 @@ const CatalogueSubCategory: NextPage = (): JSX.Element => {
   )
 }
 
-export default CatalogueSubCategory
+export default CatalogueCategoriesPage

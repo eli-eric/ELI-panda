@@ -16,6 +16,7 @@ const usePath = () => {
         path += (path !== '' ? '/' : '') + slug
       })
       setCategoryPath(path)
+      console.log(path)
     }
   }, [router, setCategoryPath])
 
@@ -25,7 +26,7 @@ const usePath = () => {
 export const useCategoryPath = () => {
   const path = usePath()
 
-  return BASE_URL + ENDPOINTS.catalogueCategories + `/${path}`
+  return BASE_URL + ENDPOINTS.catalogueCategories + (path === '' ? '' : `/${path}`)
 }
 
 export const useCatalogueItemsPath = (pageSize: number, page: number) => {
@@ -44,4 +45,9 @@ export const useCatalogueItemsPath = (pageSize: number, page: number) => {
   return (
     BASE_URL + ENDPOINTS.catalogueItems + `?pageSize=${pageSize}&page=${page}&categoryPath=${categoryPath}` + search
   )
+}
+
+export const useCatalogueItemDetailPath = () => {
+  const router = useRouter()
+  return BASE_URL + ENDPOINTS.catalogueItem + '/' + router.query.uid
 }

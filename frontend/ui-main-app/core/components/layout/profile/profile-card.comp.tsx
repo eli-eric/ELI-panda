@@ -12,7 +12,7 @@ const ProfileCardComponent = () => {
     return (
       <span
         key={role}
-        className="inline-flex mr-1 mb-1 items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-gray-800"
+        className="inline-flex mr-1 mb-1 items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-gray-800"
       >
         {role}
       </span>

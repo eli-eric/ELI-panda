@@ -2,6 +2,7 @@
 import fs from 'fs'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import path from 'path'
+
 import { CatalogueItems } from '../catalogue-mock-data'
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
@@ -21,7 +22,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
 
     let item = CatalogueItems.filter(f => f.uid === uid)
 
-    if (item.length > 0) return res.status(200).json(item)
+    if (item.length > 0) return res.status(200).json(item[0])
     else res.status(400).json({ message: 'Not found' })
   }
 }

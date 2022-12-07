@@ -77,6 +77,7 @@ func (h *SecurityHandlers) GetUserByJWT() echo.HandlerFunc {
 
 		authUser := models.UserAuthInfo{}
 
+
 		// if claims.Subject == "admin" {
 		// 	authUser.Username = claims.Subject
 		// 	authUser.Uid = "71864520-9e86-427c-901c-0c220f95177"

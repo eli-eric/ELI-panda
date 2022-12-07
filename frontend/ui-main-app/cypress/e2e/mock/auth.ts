@@ -17,3 +17,17 @@ export const custonSession = (signed: boolean) => {
 }
 
 export const session = {}
+
+export const providers = {
+  credentials: {
+    id: 'credentials',
+    name: 'Credentials',
+    type: 'credentials',
+    signinUrl: `${Cypress.env('host')}/api/auth/signin/credentials`,
+    callbackUrl: `${Cypress.env('host')}/api/auth/callback/credentials`
+  }
+}
+
+export const csrfToken = { csrfToken: '56a9ca59c16a3038fd49bdcad0cdd79f18c26b196e21a81e6d719f09958fbb33' }
+
+export const credentials = { url: Cypress.env('host') }
