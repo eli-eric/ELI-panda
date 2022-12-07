@@ -1,4 +1,4 @@
-import { ChartBarIcon, FolderIcon, HomeIcon, InboxIcon } from '@heroicons/react/24/outline'
+import { ChartBarIcon, FolderIcon, HomeIcon, InboxIcon, KeyIcon } from '@heroicons/react/24/outline'
 import { message } from 'core/i18n/src/messages'
 import { PATHS } from 'core/types/constants/paths'
 import { ROLES } from 'core/types/constants/roles'
@@ -48,7 +48,7 @@ const NavigationListContainer = () => {
         <NavigationLinkComponent
           name={intl.formatMessage({ id: navMessages.login })}
           href={PATHS.ROOT}
-          Icon={HomeIcon}
+          Icon={KeyIcon}
         />
       )}
     </>

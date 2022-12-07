@@ -51,9 +51,10 @@ const DisclosureComponent = ({ groups, item }: Props) => {
                             }
                             return (
                               <div key={detail.propertyName} className="sm:col-span-1">
-                                <dt className="text-sm font-medium text-gray-500">{detail.propertyName}</dt>
+                                <dt className="text-sm font-medium text-gray-400">{detail.propertyName}</dt>
                                 <dd className="mt-1 text-sm text-gray-900">
-                                  {detail.value + (detail.propertyUnit !== null ? ` ${detail.propertyUnit}` : '')}
+                                  {(detail.value === '' || detail.value === null ? 'N/A' : detail.value) +
+                                    (detail.propertyUnit !== null ? ` ${detail.propertyUnit}` : '')}
                                 </dd>
                               </div>
                             )

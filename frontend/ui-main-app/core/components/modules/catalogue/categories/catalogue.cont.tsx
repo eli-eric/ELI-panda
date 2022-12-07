@@ -47,6 +47,7 @@ const CatalogueContainer = () => {
     setPage(1)
   }, [categoryPath])
 
+  /* Use effect for calculate poage numbers and set page to query params when items are fetched */
   useEffect(() => {
     if (catalogueItems) {
       const pageCount = Math.ceil(catalogueItems?.totalCount / pageSize)

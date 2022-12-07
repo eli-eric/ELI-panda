@@ -25,7 +25,9 @@ const ItemDetailComponent = ({ item, images, groups }: Props) => {
                   <h3 className="sr-only">Description</h3>
                   <div
                     className="space-y-6 text-base text-gray-700"
-                    dangerouslySetInnerHTML={{ __html: item.description }}
+                    dangerouslySetInnerHTML={{
+                      __html: item.description === '' || item.description === null ? 'No description' : item.description
+                    }}
                   />
                 </div>
                 <ItemPropertiesComponent item={item} groups={groups} />

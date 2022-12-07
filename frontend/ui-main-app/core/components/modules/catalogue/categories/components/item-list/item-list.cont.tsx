@@ -10,7 +10,7 @@ interface Props {
 
 const ItemListContainer = ({ itemList, categoryListLength }: Props) => {
   return (
-    <div className="flex flex-col">
+    <div data-testid="item-list" className="flex flex-col">
       <div className="-my-2  sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
           <div className=" shadow ring-1 ring-black ring-opacity-5 ">

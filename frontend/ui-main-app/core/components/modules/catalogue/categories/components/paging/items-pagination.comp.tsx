@@ -31,6 +31,7 @@ export default function ItemsPaginationComponent({
   const to = noResults ? 0 : pageNumbers === page ? itemsTotalCount : page * pageSize
   return (
     <nav
+      data-testid="catalogue-paging"
       id="catalogue-paging"
       className="flex items-center justify-between border-t border-gray-200 bg-white px-5 py-3 sm:px-6"
       aria-label="Pagination"

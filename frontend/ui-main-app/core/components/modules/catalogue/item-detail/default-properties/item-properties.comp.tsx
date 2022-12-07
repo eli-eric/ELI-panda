@@ -16,7 +16,7 @@ interface ItemPropertyProps {
 const ItemProperty = ({ title, text, link }: ItemPropertyProps) => {
   return (
     <div className="sm:col-span-1">
-      <dt className="text-sm font-medium text-gray-500">
+      <dt className="text-sm font-medium text-gray-400">
         <FormattedMessage id={title} />
       </dt>
       <dd className={`mt-1 text-sm ${link ? 'text-blue-500' : 'text-gray-900'}`}>
@@ -42,7 +42,6 @@ const ItemPropertiesComponent = ({ item, groups }: Props) => {
     <section aria-labelledby="details-heading" className="mt-12">
       <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
         <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-          <ItemProperty text={item.uid} title={messages.uid} />
           <ItemProperty text={item.categoryName} title={messages.categoryName} />
           <ItemProperty text={item.manufacturer} title={messages.manufactorer} />
           <ItemProperty text={item.manufacturerNumber} title={messages.manufacturerNumber} />
