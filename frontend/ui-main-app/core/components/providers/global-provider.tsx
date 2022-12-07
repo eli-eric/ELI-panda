@@ -9,7 +9,6 @@ import { SWRConfig } from 'swr'
 
 import LayoutComponent from '../layout/layout.comp'
 import AppLoader from '../loaders/app-loader.cont'
-import ComponentLoader from '../loaders/component-loader.cont'
 
 interface Props {
   children: React.ReactNode
@@ -31,9 +30,7 @@ const GlobalProvider = ({ children }: Props) => {
           <ComponentLoadingProvider>
             <AppLoader>
               <LayoutComponent>
-                <ComponentLoader>
-                  <PageGuardWrapper>{children}</PageGuardWrapper>
-                </ComponentLoader>
+                <PageGuardWrapper>{children}</PageGuardWrapper>
               </LayoutComponent>
             </AppLoader>
           </ComponentLoadingProvider>

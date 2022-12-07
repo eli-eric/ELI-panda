@@ -23,13 +23,13 @@ const DisclosureComponent = ({ groups, item }: Props) => {
                 <>
                   <h3>
                     <Disclosure.Button className="group relative flex w-full items-center justify-between py-6 text-left">
-                      <span className={classNames(open ? 'text-indigo-600' : 'text-gray-900', 'text-sm font-medium')}>
+                      <span className={classNames(open ? 'text-primary-600' : 'text-gray-900', 'text-sm font-medium')}>
                         {group}
                       </span>
                       <span className="ml-6 flex items-center">
                         {open ? (
                           <MinusIcon
-                            className="block h-6 w-6 text-indigo-400 group-hover:text-indigo-500"
+                            className="block h-6 w-6 text-primary-400 group-hover:text-primary-500"
                             aria-hidden="true"
                           />
                         ) : (

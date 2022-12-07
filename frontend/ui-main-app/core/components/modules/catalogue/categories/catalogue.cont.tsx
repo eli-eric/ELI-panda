@@ -1,4 +1,5 @@
 import { useCatalogueItemsPath, useCategoryPath } from 'core/components/modules/catalogue/hooks/usePath'
+import ProgressBarComponent from 'core/components/ui/progress-bar.comp'
 import { message } from 'core/i18n/src/messages'
 import { CatalogueCategoryResponse, CatalogueItemsResponse } from 'core/types/responses'
 import { useRouter } from 'next/router'
@@ -61,8 +62,14 @@ const CatalogueContainer = () => {
   return (
     <CatalogLayoutContainer catalogueItems={catalogueItems} categoryList={categoryList}>
       <Fragment>
-        <BreadcrumbContainer />
-        <CategoryListComponent categoryList={categoryList} />
+        {categoryList ? (
+          <Fragment>
+            <BreadcrumbContainer />
+            <CategoryListComponent categoryList={categoryList} />
+          </Fragment>
+        ) : (
+          <ProgressBarComponent />
+        )}
 
         {catalogueItems ? (
           <TableLayoutComponent>
@@ -74,6 +81,8 @@ const CatalogueContainer = () => {
               />
             )}
           </TableLayoutComponent>
+        ) : (categoryList?.length === 0 || search) && !catalogueItems ? (
+          <ProgressBarComponent />
         ) : (
           <DefaultMessageComponent message={intl.formatMessage({ id: messages.help.text })} />
         )}

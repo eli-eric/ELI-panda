@@ -1,3 +1,4 @@
+import ProgressBarComponent from 'core/components/ui/progress-bar.comp'
 import { CatalogueItem } from 'core/types/responses'
 
 import ItemPropertiesComponent from './default-properties/item-properties.comp'
@@ -14,11 +15,12 @@ const ItemDetailComponent = ({ item, images, groups }: Props) => {
   return (
     <div className="bg-white pb-10">
       <ItemDetailHeaderComponent />
-      <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">
-        <div className="mx-auto max-w-2xl lg:max-w-none">
-          <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
-            <ImageGalleryComponent images={images} />
-            {item && (
+      {item ? (
+        <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">
+          <div className="mx-auto max-w-2xl lg:max-w-none">
+            <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
+              <ImageGalleryComponent images={images} />
+
               <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
                 <h1 className="text-3xl font-bold tracking-tight text-gray-900">{item.name}</h1>
                 <div className="mt-6">
@@ -32,10 +34,12 @@ const ItemDetailComponent = ({ item, images, groups }: Props) => {
                 </div>
                 <ItemPropertiesComponent item={item} groups={groups} />
               </div>
-            )}
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
+      ) : (
+        <ProgressBarComponent />
+      )}
     </div>
   )
 }

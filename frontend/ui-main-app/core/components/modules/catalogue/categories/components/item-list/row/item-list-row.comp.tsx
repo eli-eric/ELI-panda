@@ -21,7 +21,7 @@ const ItemListRow = ({ item, index, categoryListLength }: Props) => {
   const path = BASE_URL + `${ENDPOINTS.catalogueItem}/` + item.uid + '/image'
 
   return (
-    <tr className={(index % 2 === 0 ? undefined : 'bg-gray-100') + ' hover:bg-orange-200'}>
+    <tr className={(index % 2 === 0 ? undefined : 'bg-gray-100') + ' hover:bg-primary-200'}>
       <td className="whitespace-nowrap text-sm sm:pl-6 text-blue-500">
         <Link href={'/catalogue/item/' + item.uid}>
           <div className="flex items-center">
