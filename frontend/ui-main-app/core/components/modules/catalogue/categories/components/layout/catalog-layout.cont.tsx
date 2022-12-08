@@ -22,7 +22,8 @@ export const CatalogLayoutContainer = ({ children, catalogueItems, categoryList 
       const cataloguePaging = document.getElementById('catalogue-paging')?.clientHeight || 0
       const height = searchBar + catalogueList + cataloguePaging + catalogueBreadcrump
 
-      setHeight(height)
+      // REVIEW LAYOUT HEIGHT +1  // TODO
+      setHeight(height + 1)
     }
     // Add event listener
     window.addEventListener('resize', handleResize)
