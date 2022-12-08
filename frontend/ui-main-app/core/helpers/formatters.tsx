@@ -1,5 +1,6 @@
 import React from 'react'
 
+/* formmaters for i18n messages */
 export const messageFormatters = {
   medium: (chunks: string) => <span className="font-medium">{chunks}</span>
 }

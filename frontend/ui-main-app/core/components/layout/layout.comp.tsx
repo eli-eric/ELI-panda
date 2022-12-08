@@ -41,7 +41,7 @@ export default function LayoutComponent({ children }: Props) {
           {children}
         </div>
       </div>
-      <div className='h-5 w-20 absolute top-0 left-[calc(100vw-5rem)] z-50 font-mono text-gray-300 text-xs pt-2'>
+      <div className="h-5 w-20 fixed top-0 left-[calc(100vw-5rem)] z-50 font-mono text-gray-300 text-xs pt-2">
         {APP_VERSION}
       </div>
     </>

@@ -7,11 +7,12 @@ interface Props {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
   children: React.ReactNode
+  testid: string
 }
 
 const messages = message.common.buttons
 
-export default function ModalComponent({ open, setOpen, children }: Props) {
+export default function ModalComponent({ open, setOpen, children, testid }: Props) {
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -27,7 +28,7 @@ export default function ModalComponent({ open, setOpen, children }: Props) {
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </Transition.Child>
 
-        <div className="fixed inset-0 z-10 overflow-y-auto">
+        <div data-testid={testid + '-modal'} className="fixed inset-0 z-10 overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <Transition.Child
               as={Fragment}
@@ -41,7 +42,7 @@ export default function ModalComponent({ open, setOpen, children }: Props) {
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
                 <Fragment>
                   {children}
-                  <div className="mt-5 sm:mt-6">
+                  <div data-testid={testid + '-modal-button-close'} className="mt-5 sm:mt-6">
                     <button
                       type="button"
                       className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:text-sm"

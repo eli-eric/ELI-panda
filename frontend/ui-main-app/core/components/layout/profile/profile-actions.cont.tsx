@@ -44,7 +44,11 @@ const ProfileActionsContainer = () => {
             </button>
             <div className="ml-3">
               <p className="text-xs font-medium text-gray-700 group-hover:text-gray-900">{fullName}</p>
-              <button onClick={showModalHandler} className="text-xs font-medium text-gray-500 hover:text-blue-600">
+              <button
+                data-testid="view-profile"
+                onClick={showModalHandler}
+                className="text-xs font-medium text-gray-500 hover:text-blue-600"
+              >
                 View profile
               </button>
             </div>
@@ -54,7 +58,7 @@ const ProfileActionsContainer = () => {
           </div>
         </div>
       </div>
-      <ModalComponent open={modalOpen} setOpen={setModalOpen}>
+      <ModalComponent open={modalOpen} setOpen={setModalOpen} testid="profile">
         <ProfileCardComponent />
       </ModalComponent>
     </Fragment>

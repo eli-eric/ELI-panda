@@ -1,49 +1,50 @@
 import { BASE_URL } from 'core/types/constants/common'
 import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
+
+/* hooks for getting endpoitpaths for catalogue */
 
 const usePath = () => {
-  const [categoryPath, setCategoryPath] = useState<string>('')
   const router = useRouter()
+  const { slug } = router.query
 
-  useEffect(() => {
-    if (!router.query.slug) setCategoryPath('')
-    const { slug } = router.query
+  const categoryPath = useMemo(() => {
+    if (!slug) return ''
     if (slug && typeof slug === 'object') {
       let path = ''
       slug.forEach(slug => {
         path += (path !== '' ? '/' : '') + slug
       })
-      setCategoryPath(path)
-      console.log(path)
+      return path
     }
-  }, [router, setCategoryPath])
+  }, [slug])
 
   return categoryPath
 }
 
 export const useCategoryPath = () => {
   const path = usePath()
-
   return BASE_URL + ENDPOINTS.catalogueCategories + (path === '' ? '' : `/${path}`)
 }
 
 export const useCatalogueItemsPath = (pageSize: number, page: number) => {
   const router = useRouter()
-  const [search, setSearch] = useState<string>('')
+  const { search } = router.query
   const categoryPath = usePath()
 
-  useEffect(() => {
-    const { search } = router.query
+  const searchQuery = useMemo(() => {
     if (search && typeof search === 'string') {
-      setSearch(`&search=${search}`)
+      return `&search=${search}`
     }
-    if (!search || search === undefined) setSearch('')
-  }, [router.query])
+    if (!search || search === undefined) return ''
+  }, [search])
 
   return (
-    BASE_URL + ENDPOINTS.catalogueItems + `?pageSize=${pageSize}&page=${page}&categoryPath=${categoryPath}` + search
+    BASE_URL +
+    ENDPOINTS.catalogueItems +
+    `?pageSize=${pageSize}&page=${page}&categoryPath=${categoryPath}` +
+    searchQuery
   )
 }
 
