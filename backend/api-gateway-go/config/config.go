@@ -32,4 +32,6 @@ type Config struct {
 	Port       string `json:"PANDA_API_GATEWAY_PORT"`
 	JwtSecret  string `json:"PANDA_API_GATEWAY_JWT_SECRET"`
 	SaltRounds int    `json:"PANDA_BCRYPT_SALT_ROUNDS"`
+
+	LdapEliBeamlinesUrl string `json:"PANDA_API_LDAP_ELI_BM_URL"`
 }

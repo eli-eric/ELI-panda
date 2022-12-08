@@ -1,5 +1,5 @@
 // Create two main facilities
-MERGE (eli:Facility{ uid: '0338d3de-962a-4d06-a636-c1e744a00b38', name: 'ELI - Bemalines', code: 'elibm' })
+MERGE (eli:Facility{ uid: '0338d3de-962a-4d06-a636-c1e744a00b38', name: 'ELI - Beamlines', code: 'elibm' })
 MERGE (alps:Facility{ uid: '1bf54c11-b8bb-48b5-882d-ba433717a968', name: 'ELI - ALPS', code: 'elialps' })
 
 // Create admin user
