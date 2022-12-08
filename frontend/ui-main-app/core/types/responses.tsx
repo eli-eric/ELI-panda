@@ -8,8 +8,8 @@ export interface CatalogueCategoryResponse {
 export interface CatalogueItemDetail {
   propertyName: string
   propertyGroup: string
-  value: string
-  propertyUnit: string
+  value: string | null
+  propertyUnit: string | null
 }
 
 export interface CatalogueItem {

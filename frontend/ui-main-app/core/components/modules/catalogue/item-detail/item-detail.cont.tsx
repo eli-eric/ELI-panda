@@ -2,7 +2,7 @@ import { CatalogueItem } from 'core/types/responses'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
-import { useCatalogueItemDetailPath } from '../hooks/usePath'
+import { useCatalogueItemDetailPath } from '../shared/hooks/usePath'
 import ItemDetailComponent from './item-detail.comp'
 
 const images = [

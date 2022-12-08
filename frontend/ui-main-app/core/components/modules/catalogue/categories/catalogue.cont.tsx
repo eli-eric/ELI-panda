@@ -1,4 +1,3 @@
-import { useCatalogueItemsPath, useCategoryPath } from 'core/components/modules/catalogue/hooks/usePath'
 import ProgressBarComponent from 'core/components/ui/progress-bar.comp'
 import { message } from 'core/i18n/src/messages'
 import { CatalogueCategoryResponse, CatalogueItemsResponse } from 'core/types/responses'
@@ -7,6 +6,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
+import { useCatalogueItemsPath, useCategoryPath } from '../shared/hooks/usePath'
 import BreadcrumbContainer from './components/breadcrump/breadcrump.cont'
 import CategoryListComponent from './components/category-list/category-list.comp'
 import ItemListContainer from './components/item-list/item-list.cont'
@@ -62,14 +62,9 @@ const CatalogueContainer = () => {
   return (
     <CatalogLayoutContainer catalogueItems={catalogueItems} categoryList={categoryList}>
       <Fragment>
-        {categoryList ? (
-          <Fragment>
-            <BreadcrumbContainer />
-            <CategoryListComponent categoryList={categoryList} />
-          </Fragment>
-        ) : (
-          <ProgressBarComponent />
-        )}
+        <BreadcrumbContainer />
+
+        {categoryList ? <CategoryListComponent categoryList={categoryList} /> : <ProgressBarComponent />}
 
         {catalogueItems ? (
           <TableLayoutComponent>
