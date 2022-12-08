@@ -1,9 +1,4 @@
-import {
-  prepareGenericDataForTest,
-  SCRENARIOS,
-  setApiMocks,
-  setupServerForTest
-} from '../e2e/panda.shared'
+import { prepareGenericDataForTest, SCRENARIOS, setApiMocks, setupServerForTest } from '../e2e/shared'
 
 before(prepareGenericDataForTest)
 beforeEach(() => {

@@ -18,7 +18,6 @@ export const CatalogLayoutContainer = ({ children, catalogueItems, categoryList 
       const searchBar = document.getElementById('layout-search-bar')?.clientHeight || 0
       const catalogueList = document.getElementById('catalogue-list')?.clientHeight || 0
       const catalogueBreadcrump = document.getElementById('catalogue-breadcrump')?.clientHeight || 0
-
       const cataloguePaging = document.getElementById('catalogue-paging')?.clientHeight || 0
       const height = searchBar + catalogueList + cataloguePaging + catalogueBreadcrump
 
@@ -30,7 +29,7 @@ export const CatalogLayoutContainer = ({ children, catalogueItems, categoryList 
     handleResize()
     // Remove event listener on cleanup
     return () => window.removeEventListener('resize', handleResize)
-  }, [catalogueItems, categoryList]) // Empty array ensures that effect is only run on mount
+  }, [catalogueItems, categoryList])
 
   return (
     <div

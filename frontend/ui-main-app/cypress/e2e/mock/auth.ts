@@ -1,4 +1,4 @@
-export const custonSession = (signed: boolean) => {
+export const session = (signed: boolean) => {
   return signed
     ? {
         session: {
@@ -15,8 +15,6 @@ export const custonSession = (signed: boolean) => {
       }
     : { session: {} }
 }
-
-export const session = {}
 
 export const providers = {
   credentials: {

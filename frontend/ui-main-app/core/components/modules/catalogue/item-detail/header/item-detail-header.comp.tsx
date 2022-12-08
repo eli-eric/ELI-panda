@@ -15,6 +15,7 @@ const ItemDetailHeaderComponent = () => {
   return (
     <div className="sticky items-center top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
       <button
+        data-testid="item-detail-button-back"
         onClick={goBackHandler}
         type="button"
         className="mr-5 ml-5 inline-flex items-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
@@ -23,6 +24,7 @@ const ItemDetailHeaderComponent = () => {
         <FormattedMessage id={messages.back} />
       </button>
       <button
+        data-testid="item-detail-button-edit"
         type="button"
         disabled
         className="mr-5 inline-flex items-center rounded-md border border-transparent bg-gray-300 px-4 py-2 text-sm font-medium text-white shadow-sm "

@@ -1,5 +1,5 @@
-import { credentials, csrfToken, custonSession, providers } from './mock/auth'
-import { catalogueCategories, catalogueItems } from './mock/catalogue'
+import { credentials, csrfToken, providers, session } from './mock/auth'
+import { catalogueCategories, catalogueItem, catalogueItems } from './mock/catalogue'
 export const API_MAPPING = {
   //authorization
   providers: ['GET', Cypress.env('host') + '/api/auth/providers', providers],
@@ -8,12 +8,14 @@ export const API_MAPPING = {
   session: ['GET', Cypress.env('host') + '/api/auth/session', {}],
   //catalogue
   catalogueCategories: ['GET', '/api/mock-server/catalogue/categories*', catalogueCategories],
-  catalogueItems: ['GET', '/api/mock-server/catalogue/items*', catalogueItems(false)]
+  catalogueItems: ['GET', '/api/mock-server/catalogue/items*', {}],
+  //catalogue item
+  catalogueItem: ['GET', '/api/mock-server/catalogue/item/*', catalogueItem]
 }
 
 export const SCRENARIOS = {
-  signIn: { custonSession },
-  emptyCatalogueItems: { catalogueItems: catalogueItems(true) }
+  customSession: { session },
+  customCatalogueItems: { catalogueItems }
 }
 
 export const setApiMocks = (scenario?: Object) => {

@@ -1,4 +1,4 @@
-import { SCRENARIOS, setApiMocks } from './panda.shared'
+import { SCRENARIOS, setApiMocks } from './shared'
 
 beforeEach(() => {
   cy.clearLocalStorage()
@@ -7,7 +7,7 @@ beforeEach(() => {
 
 describe('Catalogue', () => {
   it('Catalogue', () => {
-    setApiMocks(SCRENARIOS.signIn.custonSession(true))
+    setApiMocks(SCRENARIOS.customSession.session(true))
     cy.visit(Cypress.env('host') + '/catalogue')
     cy.wait(['@session'])
     cy.url().should('include', 'catalogue')
@@ -16,16 +16,13 @@ describe('Catalogue', () => {
     cy.contains('Vacuum Technology')
     cy.contains('Beam characterization').click()
   })
-  it.only('Catalogue search', () => {
-    setApiMocks(SCRENARIOS.signIn.custonSession(true))
+  it('Catalogue search', () => {
+    setApiMocks(SCRENARIOS.customSession.session(true))
     cy.visit(Cypress.env('host') + '/catalogue')
     cy.wait(['@session'])
-    cy.url().should('include', 'catalogue')
     cy.wait(['@catalogueCategories'])
-    cy.contains('Beam characterization')
-    cy.contains('Motion')
-    cy.contains('Vacuum Technology')
     cy.get('input[name=search]').clear().type('axis')
+    setApiMocks(SCRENARIOS.customCatalogueItems.catalogueItems(7))
     cy.get('[data-testid="search"]').submit()
     cy.url().should('include', '?search=axis&page=1')
     cy.wait(['@catalogueItems'])
@@ -40,7 +37,6 @@ describe('Catalogue', () => {
     cy.contains('AXIS-PX')
     cy.contains('HiPace 300 M, DN 100, CF-F')
     cy.contains('Cameras').click()
-    cy.wait(['@catalogueItems'])
     cy.url().should('include', 'cameras')
     cy.contains('Showing 1 to 3 of 3 results')
     cy.contains('AXIS M1014')
@@ -63,7 +59,7 @@ describe('Catalogue', () => {
     cy.get('[data-testid="item-list"]').should('not.exist')
     cy.get('[data-testid="catalogue-paging"]').should('not.exist')
     cy.get('input[name=search]').clear().type('blablablabla')
-    setApiMocks(SCRENARIOS.emptyCatalogueItems)
+    setApiMocks(SCRENARIOS.customCatalogueItems.catalogueItems(0))
     cy.get('[data-testid="search"]').submit()
     cy.wait(['@catalogueItems'])
     cy.get('[data-testid="item-list"]').should('exist')
@@ -71,8 +67,23 @@ describe('Catalogue', () => {
     cy.contains('No results found')
     cy.contains('Showing 0 to 0 of 0 results')
   })
-})
-
-describe('Item', () => {
-  it('Item detail', () => {})
+  it('Item detail', () => {
+    setApiMocks(SCRENARIOS.customSession.session(true))
+    cy.visit(Cypress.env('host') + '/catalogue')
+    cy.wait(['@session'])
+    cy.wait(['@catalogueCategories'])
+    cy.get('input[name=search]').clear().type('axis')
+    setApiMocks(SCRENARIOS.customCatalogueItems.catalogueItems(1))
+    cy.get('[data-testid="search"]').submit()
+    cy.contains('ATH 1603 M, DN 200 CF-F').click()
+    cy.url().should('include', 'catalogue/item')
+    cy.wait(['@catalogueItem'])
+    cy.contains('ATH 1603 M, DN 200 CF-F')
+    cy.contains('Pumping speed for N2').should('not.exist')
+    cy.contains('TMP parameters').click()
+    cy.contains('Pumping speed for N2').should('exist')
+    cy.get('[data-testid="item-detail-button-back"]').click()
+    cy.url().should('not.include', 'catalogue/item')
+    cy.url().should('include', 'catalogue')
+  })
 })
