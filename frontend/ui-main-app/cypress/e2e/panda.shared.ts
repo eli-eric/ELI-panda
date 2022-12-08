@@ -1,33 +1,19 @@
-import { custonSession } from './mock/auth'
+import { credentials, csrfToken, custonSession, providers } from './mock/auth'
+import { catalogueCategories, catalogueItems } from './mock/catalogue'
 export const API_MAPPING = {
-  providers: [
-    'GET',
-    Cypress.env('host') + '/api/auth/providers',
-    {
-      credentials: {
-        id: 'credentials',
-        name: 'Credentials',
-        type: 'credentials',
-        signinUrl: `${Cypress.env('host')}/api/auth/signin/credentials`,
-        callbackUrl: `${Cypress.env('host')}/api/auth/callback/credentials`
-      }
-    }
-  ],
-  csrf: [
-    'GET',
-    Cypress.env('host') + '/api/auth/csrf',
-    { csrfToken: '56a9ca59c16a3038fd49bdcad0cdd79f18c26b196e21a81e6d719f09958fbb33' }
-  ],
-  credentials: [
-    'POST',
-    Cypress.env('host') + '/api/auth/callback/credentials?',
-    { url: Cypress.env('host') }
-  ],
-  session: ['GET', Cypress.env('host') + '/api/auth/session', {}]
+  //authorization
+  providers: ['GET', Cypress.env('host') + '/api/auth/providers', providers],
+  csrf: ['GET', Cypress.env('host') + '/api/auth/csrf', csrfToken],
+  credentials: ['POST', Cypress.env('host') + '/api/auth/callback/credentials?', credentials],
+  session: ['GET', Cypress.env('host') + '/api/auth/session', {}],
+  //catalogue
+  catalogueCategories: ['GET', '/api/mock-server/catalogue/categories*', catalogueCategories],
+  catalogueItems: ['GET', '/api/mock-server/catalogue/items*', catalogueItems(false)]
 }
 
 export const SCRENARIOS = {
-  signIn: { custonSession }
+  signIn: { custonSession },
+  emptyCatalogueItems: { catalogueItems: catalogueItems(true) }
 }
 
 export const setApiMocks = (scenario?: Object) => {
@@ -36,27 +22,7 @@ export const setApiMocks = (scenario?: Object) => {
     cy.intercept(method, route, responseSet[key]).as(key)
   }
   Object.keys(API_MAPPING).forEach(
-    setRoute(
-      Object.keys(API_MAPPING).reduce((prev, cur) => ({ ...prev, [cur]: API_MAPPING[cur][2] }), {})
-    )
+    setRoute(Object.keys(API_MAPPING).reduce((prev, cur) => ({ ...prev, [cur]: API_MAPPING[cur][2] }), {}))
   )
   if (scenario) Object.keys(scenario).forEach(setRoute(scenario))
-}
-
-export function setupServerForTest(): void {
-  cy.server({
-    force404: true,
-    ignore: xhr =>
-      xhr.method === 'GET' &&
-      /\.(jsx?|html|css|json)(\?.*)?$/.test(xhr.url) &&
-      !/all_[a-z]{2}\.json$/.test(xhr.url)
-  })
-}
-
-export function prepareGenericDataForTest(): void {
-  cy.on('uncaught:exception', err => {
-    if (err.message.includes('ResizeObserver loop limit exceeded')) return false
-  })
-  cy.viewport('macbook-15')
-  setupServerForTest()
 }

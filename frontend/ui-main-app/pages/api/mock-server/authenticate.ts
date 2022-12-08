@@ -6,7 +6,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     const user = {
       uid: '71864520-9e86-427c-901c-0c220f951775',
       username: 'admin',
-      fullName: 'Albert Einstein',
+      firstName: 'Albert',
+      lastName: 'Einstein',
       email: 'albert.einstein@eli-laser.eu',
       facility: 'ELI ERIC',
       roles: ['basics', 'catalogue-view', 'systems-view', 'reports-view'],
@@ -19,7 +20,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     const user = {
       uid: '71864520-9e86-427c-901c-0c220f951776',
       username: 'test1',
-      fullName: 'Darth Vader',
+      firstName: 'Darth',
+      lastName: 'Vader',
       email: 'darth.vader@eli-laser.eu',
       facility: 'Sith Lord',
       roles: ['basics'],
@@ -32,7 +34,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     const user = {
       uid: '71864520-9e86-427c-901c-0c220f951777',
       username: 'test2',
-      fullName: 'Albert Einstein',
+      firstName: 'Albert',
+      lastName: 'Einstein',
       email: 'test2@eli-laser.eu',
       facility: 'ELI ERIC',
       roles: ['basics', 'catalogue-view'],
@@ -45,7 +48,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     const user = {
       uid: '71864520-9e86-427c-901c-0c220f951776',
       username: 'test3',
-      fullName: 'Albert Einstein',
+      firstName: 'Albert',
+      lastName: 'Einstein',
       email: 'test3@eli-laser.eu',
       facility: 'ELI ERIC',
       roles: ['basics', 'catalogue-view', 'systems-view'],
@@ -58,7 +62,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     const user = {
       uid: '71864520-9e86-427c-901c-0c220f951776',
       username: 'test4',
-      fullName: 'Albert Einstein',
+      firstName: 'Albert',
+      lastName: 'Einstein',
       email: 'test4@eli-laser.eu',
       facility: 'ELI ERIC',
       roles: ['basics', 'reports-view'],

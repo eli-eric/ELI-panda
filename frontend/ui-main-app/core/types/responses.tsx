@@ -9,6 +9,7 @@ export interface CatalogueItemDetail {
   propertyName: string
   propertyGroup: string
   value: string
+  propertyUnit: string
 }
 
 export interface CatalogueItem {
@@ -23,7 +24,7 @@ export interface CatalogueItem {
   details?: CatalogueItemDetail[]
 }
 
-export interface CatalogueItemResponse {
+export interface CatalogueItemsResponse {
   totalCount: number
   data: CatalogueItem[]
 }

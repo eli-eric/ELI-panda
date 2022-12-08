@@ -1,41 +1,33 @@
 package main
 
 import (
+	"context"
 	"fmt"
+	"log"
+	"net/http"
+	"os"
+	"os/signal"
+	"panda/apigateway/config"
+	"panda/apigateway/ioutils"
 	securityService "panda/apigateway/services/security-service"
 	"panda/apigateway/services/security-service/models"
+	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/spf13/viper"
 )
 
 func main() {
 
 	// configuration settings
 	// application expects appsettings.yaml file in the root of the app
-	viper.SetConfigName("appsettings")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath(".")
-	err := viper.ReadInConfig()
-	if err != nil {
-		fmt.Println(err)
-		//if there was no config file presented in root folder we will use some defaults - its ok only for local development
-		viper.SetDefault("PANDA_API_GATEWAY_PORT", "50000")
-		viper.SetDefault("PANDA_API_GATEWAY_JWT_SECRET", "12554114ad74624b588c910f6fa2bbc0")
-		viper.SetDefault("PANDA_API_GATEWAY_SECURITY_SERVICE_NEO4J_URI", "bolt://127.0.0.1:7600")
-		viper.SetDefault("PANDA_API_GATEWAY_SECURITY_SERVICE_NEO4J_USER", "neo4j")
-		viper.SetDefault("PANDA_API_GATEWAY_SECURITY_SERVICE_NEO4J_PASSWORD", "elipanda2022")
+	settings, err := config.ReadConfig("config.json")
+	ioutils.PanicOnError(err)
 
-	}
-
-	//init settings
-	apiPort := ":" + viper.GetString("PANDA_API_GATEWAY_PORT")
-	//jwtSecret := viper.GetString("PANDA_API_GATEWAY_JWT_SECRET")
-
+	//new http Echo instance
 	e := echo.New()
 
-	// Middlewares
+	// Middlewares ************************************************************************************
 
 	//Swagger documentation served from open-api-specification
 	swaggerGroup := e.Group("")
@@ -59,7 +51,7 @@ func main() {
 	//JWT middleware - Configure middleware with the custom claims type
 	config := middleware.JWTConfig{
 		Claims:     &models.JwtCustomClaims{},
-		SigningKey: []byte("12554114ad74624b588c910f6fa2bbc0"),
+		SigningKey: []byte(settings.JwtSecret),
 		ErrorHandler: func(err error) error {
 			if err != nil {
 				fmt.Println(err)
@@ -71,10 +63,29 @@ func main() {
 	}
 	jwtMiddleware := middleware.JWTWithConfig(config)
 
+	// Middlewares END **********************************************************************************
+
 	//security services used in handlers and maped in routes...
-	securitySvc := securityService.NewSecurityService()
+	securitySvc := securityService.NewSecurityService(settings)
 	securityHandlers := securityService.NewSecurityHandlers(securitySvc)
 	securityService.MapSecurityRoutes(e, securityHandlers, jwtMiddleware)
+	log.Println("Security service initialized successfully.")
 
-	e.Logger.Fatal(e.Start(apiPort))
+	// Start server
+	go func() {
+		if err := e.Start(":" + settings.Port); err != nil && err != http.ErrServerClosed {
+			e.Logger.Fatal("Shutting down the server: ELI - PANDA - API Gateway")
+		}
+	}()
+
+	// Wait for interrupt signal to gracefully shutdown the server with a timeout of 10 seconds.
+	// Use a buffered channel to avoid missing signals as recommended for signal.Notify
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, os.Interrupt)
+	<-quit
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	if err := e.Shutdown(ctx); err != nil {
+		e.Logger.Fatal(err)
+	}
 }

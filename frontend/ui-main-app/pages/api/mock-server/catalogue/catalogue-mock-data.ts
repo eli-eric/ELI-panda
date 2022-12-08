@@ -2,35 +2,35 @@ import items_with_details from './data/items-all-props.json'
 import categories from './data/categories.json'
 
 export interface CategoryResponse {
-    uid: string;
-    name: string;
-    code: string;
-    parentPath: string;
+  uid: string
+  name: string
+  code: string
+  parentPath: string
 }
 
 export interface CatalogueItemDetail {
-    propertyName: string;
-    propertyGroup: string;
-    value: string | null;
+  propertyName: string
+  propertyGroup: string
+  value: string | null
+  propertyUnit: string | null
 }
-export interface CatalogueItemResponse {
-    uid: string;
-    name: string;
-    description: string;
-    categoryPath: string;
-    categoryName: string;
-    manufacturer: string;
-    manufacturerUrl: string;
-    manufacturerNumber: string;
-    details?: CatalogueItemDetail[];
+export interface CatalogueItemsResponse {
+  uid: string
+  name: string
+  description: string
+  categoryPath: string
+  categoryName: string
+  manufacturer: string
+  manufacturerUrl: string
+  manufacturerNumber: string
+  details?: CatalogueItemDetail[]
 }
 
 export interface CatalogueItemPagingResponse {
-    totalCount: number;
-    data: CatalogueItemResponse[]
+  totalCount: number
+  data: CatalogueItemsResponse[]
 }
 
-export const CatalogueItems: Array<CatalogueItemResponse> = items_with_details;
+export const CatalogueItems: Array<CatalogueItemsResponse> = items_with_details
 
 export const CatalogueCategories: Array<CategoryResponse> = categories
-

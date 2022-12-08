@@ -1,7 +1,9 @@
+import { BASE_URL } from 'core/types/constants/common'
+import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
-export const useCategoryPath = () => {
+const usePath = () => {
   const [categoryPath, setCategoryPath] = useState<string>('')
   const router = useRouter()
 
@@ -14,15 +16,23 @@ export const useCategoryPath = () => {
         path += (path !== '' ? '/' : '') + slug
       })
       setCategoryPath(path)
+      console.log(path)
     }
   }, [router, setCategoryPath])
 
   return categoryPath
 }
 
-export const useItemSearch = () => {
+export const useCategoryPath = () => {
+  const path = usePath()
+
+  return BASE_URL + ENDPOINTS.catalogueCategories + (path === '' ? '' : `/${path}`)
+}
+
+export const useCatalogueItemsPath = (pageSize: number, page: number) => {
   const router = useRouter()
   const [search, setSearch] = useState<string>('')
+  const categoryPath = usePath()
 
   useEffect(() => {
     const { search } = router.query
@@ -32,5 +42,12 @@ export const useItemSearch = () => {
     if (!search || search === undefined) setSearch('')
   }, [router.query])
 
-  return search
+  return (
+    BASE_URL + ENDPOINTS.catalogueItems + `?pageSize=${pageSize}&page=${page}&categoryPath=${categoryPath}` + search
+  )
+}
+
+export const useCatalogueItemDetailPath = () => {
+  const router = useRouter()
+  return BASE_URL + ENDPOINTS.catalogueItem + '/' + router.query.uid
 }
