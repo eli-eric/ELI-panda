@@ -2,7 +2,6 @@ package securityService
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"panda/apigateway/config"
 	"panda/apigateway/helpers"
@@ -67,8 +66,6 @@ func (svc *SecurityService) AuthenticateByUsernameAndPassword(username string, p
 		email: u.email, 
 		roles: collect(r.code)} as userInfo`, map[string]interface{}{"userName": username}, "userInfo")
 
-
-	fmt.Println(authUser)
 	//if there is a user in DB lets chekc the password
 	if err == nil {
 
@@ -95,6 +92,20 @@ func (svc *SecurityService) AuthenticateByUsernameAndPassword(username string, p
 				authUser.AccessToken = token
 			}
 
+			//finally get users Facility
+			facility, facilityErr := helpers.GetNeo4jSingleRecordAndMapToStruct[models.Facility](session, `match(u:User{username: $userName})-[:BELONGS_TO]->(f:Facility) 
+			return {
+				code: f.code, 
+				name: f.name} as facility`, map[string]interface{}{"userName": username}, "facility")
+
+			if facilityErr == nil {
+				authUser.Facility = facility.Name
+			} else {
+				log.Println(err)
+			}
+
+			log.Println("User authenticated ", authUser)
+
 			return authUser, err
 		}
 	}
@@ -116,58 +127,4 @@ func (svc *SecurityService) RefreshToken(claims *models.JwtCustomClaims) (string
 	}
 
 	return t, nil
-}
-
-func newNeo4jSession(driver neo4j.Driver) (neo4j.Session, error) {
-	session := driver.NewSession(neo4j.SessionConfig{})
-	var err error
-	defer func() {
-		err = ioutils.DeferredClose(session, err)
-	}()
-	return session, err
-}
-
-func getNeo4jSingleRecord(session neo4j.Session, cypher string, params map[string]interface{}, returnAlias string) (interface{}, error) {
-	result, err := session.ReadTransaction(func(tx neo4j.Transaction) (interface{}, error) {
-		result, err := tx.Run(cypher, params)
-		if err != nil {
-			return nil, err
-		}
-
-		record, err := result.Single()
-		if err != nil {
-			return nil, fmt.Errorf("record not found")
-		}
-
-		rec, _ := record.Get(returnAlias)
-		return rec, nil
-
-	})
-
-	return result, err
-}
-
-func neo4jReadArrayOfNodes(session neo4j.Session, cypher string, params map[string]interface{}, returnAlias string) (interface{}, error) {
-	// Execute a query in a new Read Transaction
-	results, err := session.ReadTransaction(func(tx neo4j.Transaction) (interface{}, error) {
-
-		result, err := tx.Run(cypher, params)
-		if err != nil {
-			return nil, err
-		}
-
-		// Get a list of Movies from the Result
-		records, err := result.Collect()
-		if err != nil {
-			return nil, err
-		}
-		var results []map[string]interface{}
-		for _, record := range records {
-			movie, _ := record.Get(returnAlias)
-			results = append(results, movie.(map[string]interface{}))
-		}
-		return results, nil
-	})
-
-	return results, err
 }

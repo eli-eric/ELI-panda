@@ -1,6 +1,7 @@
 import { message } from 'core/i18n/src/messages'
 import { NextPage } from 'next'
 import Head from 'next/head'
+import Link from 'next/link'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -12,6 +13,7 @@ interface RelaseVersion {
 
 interface RelaseNote {
   description: string
+  link?: string
 }
 
 const messages = message.dashboardPage
@@ -24,18 +26,22 @@ const DashboardPage: NextPage = (): JSX.Element => {
       id: '0.0.1',
       features: [
         {
-          description: 'Catalogue page: searching items via search bar - text box in the header of the page'
+          description: 'Catalogue page: searching items via search bar - text box in the header of the page',
+          link: '/catalogue'
         },
         {
-          description: 'Catalogue page: filter by categories - categories tiles'
+          description: 'Catalogue page: filter by categories - categories tiles',
+          link: '/catalogue'
         },
         {
-          description: 'Catalogue page: item detail page'
+          description: 'Catalogue page: item detail page',
+          link: '/catalogue'
         }
       ],
       bugs: [
         {
-          description: 'Loading indicator - show loading info if there is a slow network connection'
+          description:
+            'Loading indicator - show loading indicator during the start, if there is a slow network connection'
         }
       ]
     }
@@ -64,7 +70,9 @@ const DashboardPage: NextPage = (): JSX.Element => {
                     <div className="text-lg text-red-500">Fixed bugs:</div>
                     <ul className="p-1">
                       {item.bugs.map(bug => (
-                        <li key={bug.description}>- {bug.description}</li>
+                        <li className="list-disc ml-3 mb-2" key={bug.description}>
+                          {bug.description}
+                        </li>
                       ))}
                     </ul>
                   </>
@@ -74,7 +82,18 @@ const DashboardPage: NextPage = (): JSX.Element => {
                     <div className="text-lg text-green-600">New features:</div>
                     <ul className="p-1">
                       {item.features.map(feature => (
-                        <li key={feature.description}>- {feature.description}</li>
+                        <li className="list-disc ml-3 mb-2" key={feature.description}>
+                          {feature.description}{' '}
+                          {feature.link && (
+                            <span>
+                              [
+                              <Link className="text-sky-600" href={feature.link} target="_blank">
+                                {feature.link}
+                              </Link>
+                              ]
+                            </span>
+                          )}{' '}
+                        </li>
                       ))}
                     </ul>
                   </>

@@ -17,3 +17,9 @@ type UserAuthInfo struct {
 
 	PasswordHash string `json:"passwordHash,omitempty"`
 }
+
+type Facility struct {
+	Code string `json:"code,omitempty"`
+
+	Name string `json:"name,omitempty"`
+}

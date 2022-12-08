@@ -12,7 +12,7 @@ MERGE (pavelBakule:User{
   firstName: 'Pavel',
   lastName: 'Bakule',
   email: 'pavel.bakule@eli-beams.eu',
-  passwordHash: '$2a$12$qh1lcgwjErRBkU9hM1xfseDJ8friT6PNkOp6hAmKK1h4twC8fNxvK',
+  passwordHash: '$2a$12$gD7qBBCqjPhNqrrXMs0Gt./AVMFuBrnBipSCGWziKcca/mcukFtzu',
   isEnabled: true })
 //assign facility
   MERGE (pavelBakule)-[:BELONGS_TO]->(elibeams)
@@ -27,7 +27,7 @@ MERGE (pavelBakule:User{
     firstName: 'Balázs',
     lastName: 'Erdöhelyi',
     email: 'balazs.erdohelyi@eli-alps.hu',
-    passwordHash: '$2a$12$M70voBzjR7DMLMkazl2Re..8MfGtW6Rf5tU9kpawjdXQ0r6R1ichW',
+    passwordHash: '$2a$12$oqPyv/83rDaqwk47Hb.UTeiw1MmMBxIevXz1/JdwIiQBdYl/SyY/2',
     isEnabled: true })
 //assign facility
     MERGE (balazsErdohelyi)-[:BELONGS_TO]->(alps)

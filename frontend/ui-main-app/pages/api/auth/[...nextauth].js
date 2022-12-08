@@ -45,7 +45,7 @@ export default NextAuth({
         params.token.roles = params.user.roles
         params.token.apiAccessToken = params.user.accessToken
         params.token.facility = params.user.facility
-        params.token.fullName = params.user.fullName
+        params.token.fullName = params.user.firstName + ' ' + params.user.lastName
       }
       // return final_token
       return params.token
