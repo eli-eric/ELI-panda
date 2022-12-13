@@ -3,5 +3,7 @@ export enum PATHS {
   DASHBOARD = '/dashboard',
   CATALOGUE = '/catalogue',
   SYSTEMS = '/systems',
+  SYSTEMS_OVERVIEW = '/systems/overview',
+
   REPORTS = '/reports'
 }

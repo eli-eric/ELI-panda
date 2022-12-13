@@ -1,8 +1,8 @@
 import { CatalogueItem } from 'core/types/responses'
-import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
 import { useCatalogueItemDetailPath } from '../shared/hooks/usePath'
+import ItemDetailHeaderComponent from './header/item-detail-header.comp'
 import ItemDetailComponent from './item-detail.comp'
 
 const images = [
@@ -26,22 +26,15 @@ const images = [
   }
 ]
 
-export default function Example() {
+const ItemDetailContainer = () => {
   const catalogueItemPath = useCatalogueItemDetailPath()
-  const [groups, setGroups] = useState<Array<string>>([])
   const { data: item } = useSWR<CatalogueItem>(catalogueItemPath)
 
-  useEffect(() => {
-    if (item?.details) {
-      const uniqueDetailGroups = item.details
-        .map(item => item.propertyGroup)
-        .filter((value, index, self) => {
-          return self.indexOf(value) === index
-        })
-
-      setGroups(uniqueDetailGroups)
-    }
-  }, [item])
-
-  return <ItemDetailComponent item={item} groups={groups} images={images} />
+  return (
+    <div>
+      <ItemDetailHeaderComponent />
+      <ItemDetailComponent item={item} images={images} />
+    </div>
+  )
 }
+export default ItemDetailContainer

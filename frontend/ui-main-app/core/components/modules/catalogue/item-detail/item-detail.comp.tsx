@@ -1,22 +1,33 @@
 import ProgressBarComponent from 'core/components/ui/progress-bar.comp'
 import { CatalogueItem } from 'core/types/responses'
+import { useEffect, useState } from 'react'
 
 import ItemPropertiesComponent from './default-properties/item-properties.comp'
 import ImageGalleryComponent from './gallery/image-gallery.comp'
-import ItemDetailHeaderComponent from './header/item-detail-header.comp'
 
 interface Props {
   images: { name: string; id: number; src: string }[]
   item: CatalogueItem | undefined
-  groups: string[]
 }
 
-const ItemDetailComponent = ({ item, images, groups }: Props) => {
+const ItemDetailComponent = ({ item, images }: Props) => {
+  const [groups, setGroups] = useState<Array<string>>([])
+
+  useEffect(() => {
+    if (item?.details) {
+      const uniqueDetailGroups = item.details
+        .map(item => item.propertyGroup)
+        .filter((value, index, self) => {
+          return self.indexOf(value) === index
+        })
+
+      setGroups(uniqueDetailGroups)
+    }
+  }, [item])
   return (
     <div className="bg-white pb-10">
-      <ItemDetailHeaderComponent />
       {item ? (
-        <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8">
+        <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8 h-full overflow-auto">
           <div className="mx-auto max-w-2xl lg:max-w-none">
             <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
               <ImageGalleryComponent images={images} />
