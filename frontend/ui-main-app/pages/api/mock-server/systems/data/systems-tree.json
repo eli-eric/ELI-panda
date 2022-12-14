@@ -1,0 +1,64 @@
+[
+  {
+    "name": "system1",
+    "uid": "c8acb6e8-86a7-46e6-8e2b-bf2cc907fa97",
+    "children": [
+      {
+        "name": "system1-1",
+        "uid": "37ad5d84-5150-46d6-bbdd-a7f150283e31"
+      },
+      {
+        "name": "system1-2",
+        "uid": "164745c3-f883-481b-a009-eac2dee2f39a"
+      },
+      {
+        "name": "system1-3",
+        "uid": "5f3c1a35-e19d-474e-af60-45994f173e40",
+        "children": [
+          {
+            "name": "system1-3-1",
+            "uid": "200dbca6-d990-454a-a899-318eae8351a8"
+          },
+          {
+            "name": "system1-3-2",
+            "uid": "ed7abec6-26df-464f-99f1-245975682e29",
+            "children": [
+              {
+                "name": "system1-3-2-1",
+                "uid": "0d6ec53c-f7c4-452d-a217-c864110c0318"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "system1-3-3",
+        "uid": "9415608b-5eb8-412f-8934-420293665602"
+      }
+    ]
+  },
+  {
+    "name": "system2",
+    "uid": "bcc8896f-2cc1-4c51-b6f3-ac6ff03261c7",
+    "children": [
+      {
+        "name": "system2-1",
+        "uid": "c4af0cd5-cb58-41b9-8070-8f93fc774eb0"
+      }
+    ]
+  },
+  {
+    "name": "system3",
+    "uid": "e516f2be-f816-4369-b842-94e489ef5966",
+    "children": [
+      {
+        "name": "system3-1",
+        "uid": "b3676c85-f408-4f4c-a13a-ea3965fd8142"
+      }
+    ]
+  },
+  {
+    "name": "system4",
+    "uid": "57446f5f-a5c5-4696-8843-97ad4e956653"
+  }
+]

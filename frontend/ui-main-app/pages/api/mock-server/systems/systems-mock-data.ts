@@ -1,39 +1,13 @@
-export interface CatalogueCategoryResponse {
-  uid: string
-  name: string
-  code: string
-  parentPath: string
-}
-
-export interface CatalogueItemDetail {
-  propertyName: string
-  propertyGroup: string
-  value: string | null
-  propertyUnit: string | null
-}
-
-export interface CatalogueItem {
-  uid: string
-  name: string
-  description: string
-  categoryPath: string
-  categoryName: string
-  manufacturer: string
-  manufacturerUrl: string
-  manufacturerNumber: string
-  details?: CatalogueItemDetail[]
-}
-
-export interface CatalogueItemsResponse {
-  totalCount: number
-  data: CatalogueItem[]
-}
+import { CatalogueItemsResponse } from '../catalogue/catalogue-mock-data'
+import systemTree from './data/systems-tree.json'
 
 export interface SystemTreeItem {
   name: string
   uid: string
   children?: SystemTreeItem[]
 }
+
+export const SystemsTree: Array<SystemTreeItem> = systemTree
 
 export interface SystemInfo {
   name: string
@@ -64,5 +38,5 @@ export interface ItemInfo {
 export interface SystemDetailInfo {
   systemInfo: SystemInfo
   itemInfo?: ItemInfo
-  catalogueInfo?: CatalogueItem
+  catalogueInfo?: CatalogueItemsResponse
 }

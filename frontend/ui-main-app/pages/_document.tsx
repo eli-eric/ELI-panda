@@ -5,7 +5,6 @@ class MyDocument extends Document {
       <Html lang="en" className="h-full bg-white">
         <Head title="Eli Panda - " />
         <body className="h-full">
-          <div id="overlays" />
           <Main />
           <NextScript />
         </body>

@@ -1,36 +1,11 @@
+import ItemProperty from 'core/components/modules/shared/item-property.comp'
 import { message } from 'core/i18n/src/messages'
 import { CatalogueItem } from 'core/types/responses'
 import React from 'react'
-import { FormattedMessage } from 'react-intl'
 
 import DisclosureComponent from '../disclosure/disclosure.comp'
 
 const messages = message.cataloguePage.itemList.header
-
-interface ItemPropertyProps {
-  title: string
-  text: string
-  link?: boolean
-}
-
-const ItemProperty = ({ title, text, link }: ItemPropertyProps) => {
-  return (
-    <div className="sm:col-span-1">
-      <dt className="text-sm font-medium text-gray-400">
-        <FormattedMessage id={title} />
-      </dt>
-      <dd className={`mt-1 text-sm ${link ? 'text-blue-500' : 'text-gray-900'}`}>
-        {link ? (
-          <a href={text} target="_blank" rel="noreferrer">
-            {text}
-          </a>
-        ) : (
-          text
-        )}
-      </dd>
-    </div>
-  )
-}
 
 interface Props {
   item: CatalogueItem

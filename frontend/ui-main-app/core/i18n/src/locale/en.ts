@@ -4,9 +4,10 @@ export const messages = {
   },
   layout: {
     login: 'Log In',
-    dashboard: 'Dashboard',
+    dashboard: 'Release History',
     catalogue: 'Catalogue',
     systems: 'Systems',
+    systemsOverview: 'Overview',
     reports: 'Reports',
     button: {
       signout: 'Sign Out'
@@ -66,7 +67,33 @@ export const messages = {
       }
     }
   },
-  systemsPage: { head: 'Eli Panda - Systems' },
+  systemsPage: {
+    head: 'Eli Panda - Systems',
+    systemDetail: {
+      name: 'Name',
+      description: 'Description',
+      importance: 'Importance',
+      facilityZone: 'Facility Zone',
+      type: 'Type',
+      code: 'Code',
+      alias: 'Alias',
+      location: 'Location',
+      owner: 'Owner'
+    },
+    itemDetail: {
+      eun: 'Eun',
+      serialNumber: 'Serial Number',
+      batchNumber: 'Batch Number',
+      assetNumber: 'Asset Number',
+      itemUsageCategory: 'Item Usage Category',
+      activated: 'Activated',
+      conditionStatus: 'Condition Status',
+      estimatedLifetime: 'Estimated Lifetime',
+      obsolete: 'Obsolete',
+      createdBy: 'Created By',
+      note: 'Note'
+    }
+  },
   reportsPage: { head: 'Eli Panda - Reports' },
   defaul: { head: 'Eli Panda' }
 }

@@ -1,5 +1,5 @@
-import items_with_details from './data/items-all-props.json'
 import categories from './data/categories.json'
+import items_with_details from './data/items-all-props.json'
 
 export interface CategoryResponse {
   uid: string
