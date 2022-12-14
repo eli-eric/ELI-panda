@@ -1,8 +1,9 @@
+import SearchBarComponent from 'core/components/layout/search-bar/search-bar.comp'
 import ProgressBarComponent from 'core/components/ui/progress-bar.comp'
 import { message } from 'core/i18n/src/messages'
 import { CatalogueCategoryResponse, CatalogueItemsResponse } from 'core/types/responses'
 import { useRouter } from 'next/router'
-import { Fragment, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
@@ -61,38 +62,37 @@ const CatalogueContainer = () => {
 
   return (
     <CatalogLayoutContainer catalogueItems={catalogueItems} categoryList={categoryList}>
-      <Fragment>
-        <BreadcrumbContainer />
+      <SearchBarComponent />
+      <BreadcrumbContainer />
 
-        {categoryList ? <CategoryListComponent categoryList={categoryList} /> : <ProgressBarComponent />}
+      {categoryList ? <CategoryListComponent categoryList={categoryList} /> : <ProgressBarComponent />}
 
-        {catalogueItems ? (
-          <TableLayoutComponent>
-            <ItemListContainer itemList={catalogueItems.data} categoryListLength={categoryList?.length} />
-            {catalogueItems.data.length === 0 && (
-              <DefaultMessageComponent
-                title={intl.formatMessage({ id: messages.noResults.title })}
-                message={intl.formatMessage({ id: messages.noResults.text })}
-              />
-            )}
-          </TableLayoutComponent>
-        ) : (categoryList?.length === 0 || search) && !catalogueItems ? (
-          <ProgressBarComponent />
-        ) : (
-          <DefaultMessageComponent message={intl.formatMessage({ id: messages.help.text })} />
-        )}
+      {catalogueItems ? (
+        <TableLayoutComponent>
+          <ItemListContainer itemList={catalogueItems.data} categoryListLength={categoryList?.length} />
+          {catalogueItems.data.length === 0 && (
+            <DefaultMessageComponent
+              title={intl.formatMessage({ id: messages.noResults.title })}
+              message={intl.formatMessage({ id: messages.noResults.text })}
+            />
+          )}
+        </TableLayoutComponent>
+      ) : (categoryList?.length === 0 || search) && !catalogueItems ? (
+        <ProgressBarComponent />
+      ) : (
+        <DefaultMessageComponent message={intl.formatMessage({ id: messages.help.text })} />
+      )}
 
-        {catalogueItems && (
-          <ItemsPaginationComponent
-            itemsTotalCount={catalogueItems?.totalCount}
-            page={page}
-            pageSize={pageSize}
-            pageNumbers={pageNumbers}
-            previousPageHandler={previousPageHandler}
-            nextPageHandler={nextPageHandler}
-          />
-        )}
-      </Fragment>
+      {catalogueItems && (
+        <ItemsPaginationComponent
+          itemsTotalCount={catalogueItems?.totalCount}
+          page={page}
+          pageSize={pageSize}
+          pageNumbers={pageNumbers}
+          previousPageHandler={previousPageHandler}
+          nextPageHandler={nextPageHandler}
+        />
+      )}
     </CatalogLayoutContainer>
   )
 }

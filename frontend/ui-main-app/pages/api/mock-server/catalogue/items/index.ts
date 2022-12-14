@@ -20,25 +20,25 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
 
     if (searchParam && typeof searchParam === 'string') {
       //ther could be possibly more words - we will split them by space and will filter by all of them by AND logic
-      const searchWords = searchParam.split(" ");
+      const searchWords = searchParam.split(' ')
 
       searchWords.forEach(wordToSearch => {
         const searchString = wordToSearch.toLocaleLowerCase()
 
-        dataResult = dataResult.filter(f =>
-          f.name.toLowerCase().includes(searchString)
-          || f.description.toLowerCase().includes(searchString)
-          || f.manufacturer.toLowerCase().includes(searchString)
-          || f.manufacturerNumber.toLowerCase().includes(searchString)
-          || f.details != null && f.details?.filter(df => df.value !== null && df.value.toLowerCase().includes(searchString)).length > 0
+        dataResult = dataResult.filter(
+          f =>
+            f.name.toLowerCase().includes(searchString) ||
+            f.description.toLowerCase().includes(searchString) ||
+            f.manufacturer.toLowerCase().includes(searchString) ||
+            f.manufacturerNumber.toLowerCase().includes(searchString) ||
+            (f.details != null &&
+              f.details?.filter(df => df.value !== null && df.value.toLowerCase().includes(searchString)).length > 0)
         )
-      });
-
-
+      })
     }
 
     if (categoryPathParam && typeof categoryPathParam === 'string') {
-      dataResult = dataResult.filter(f => f.categoryPath === categoryPathParam.toLowerCase())
+      dataResult = dataResult.filter(f => f.categoryPath.startsWith(categoryPathParam.toLowerCase()))
     }
 
     const totalCount = dataResult.length

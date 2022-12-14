@@ -48,7 +48,7 @@ export const useCatalogueItemsPath = (pageSize: number, page: number) => {
   )
 }
 
-export const useCatalogueItemDetailPath = () => {
+export const useCatalogueItemDetailPath = (uid?: string | undefined) => {
   const router = useRouter()
-  return BASE_URL + ENDPOINTS.catalogueItem + '/' + router.query.uid
+  return BASE_URL + ENDPOINTS.catalogueItem + '/' + (uid ? uid : router.query.uid)
 }
