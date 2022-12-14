@@ -29,11 +29,11 @@ const NavigationListContainer = () => {
           )}
           {userRoles?.includes(ROLES.SYSTEMS_VIEW) && (
             <NavigationTitleComponent title={intl.formatMessage({ id: navMessages.systems })}>
-              <NavigationLinkComponent
+              {/* <NavigationLinkComponent
                 name={intl.formatMessage({ id: navMessages.systems })}
                 href={PATHS.SYSTEMS}
                 Icon={InboxIcon}
-              />
+              /> */}
               <NavigationLinkComponent
                 name={intl.formatMessage({ id: navMessages.systemsOverview })}
                 href={PATHS.SYSTEMS_OVERVIEW}
