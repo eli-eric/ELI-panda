@@ -12,11 +12,14 @@ import (
 	"github.com/golang-jwt/jwt"
 	"github.com/neo4j/neo4j-go-driver/v4/neo4j"
 	"golang.org/x/crypto/bcrypt"
+
+	"github.com/go-ldap/ldap/v3"
 )
 
 type SecurityService struct {
-	neo4jDriver neo4j.Driver
-	jwtSecret   string
+	neo4jDriver         neo4j.Driver
+	jwtSecret           string
+	ldapEliBemalinesUrl string
 }
 
 type ISecurityService interface {
@@ -48,7 +51,7 @@ func NewSecurityService(settings *config.Config) ISecurityService {
 
 	log.Println("Neo4j security database connection established successfully.")
 
-	return &SecurityService{neo4jDriver: driver, jwtSecret: settings.JwtSecret}
+	return &SecurityService{neo4jDriver: driver, jwtSecret: settings.JwtSecret, ldapEliBemalinesUrl: settings.LdapEliBeamlinesUrl}
 }
 
 func (svc *SecurityService) AuthenticateByUsernameAndPassword(username string, password string) (authUser models.UserAuthInfo, err error) {
@@ -58,7 +61,8 @@ func (svc *SecurityService) AuthenticateByUsernameAndPassword(username string, p
 	session, _ := helpers.NewNeo4jSession(svc.neo4jDriver)
 
 	//the user has to be enabled
-	authUser, err = helpers.GetNeo4jSingleRecordAndMapToStruct[models.UserAuthInfo](session, `match(u:User{username: $userName})-[:HAS_ROLE]->(r:Role) 
+	authUser, err = helpers.GetNeo4jSingleRecordAndMapToStruct[models.UserAuthInfo](session, `match(u:User)-[:HAS_ROLE]->(r:Role) 
+	where u.email=$userName or u.username=$userName
 	return {
 		passwordHash: u.passwordHash, 
 		lastName: u.lastName ,
@@ -69,11 +73,41 @@ func (svc *SecurityService) AuthenticateByUsernameAndPassword(username string, p
 	//if there is a user in DB lets chekc the password
 	if err == nil {
 
-		verifErr := bcrypt.CompareHashAndPassword([]byte(authUser.PasswordHash), []byte(password))
+		//get users Facility
+		facility, facilityErr := helpers.GetNeo4jSingleRecordAndMapToStruct[models.Facility](session, `match(u:User)-[:BELONGS_TO]->(f:Facility) 
+		where u.email=$userName or u.username=$userName
+		return {
+			code: f.code, 
+			name: f.name} as facility`, map[string]interface{}{"userName": username}, "facility")
+
+		// is it possible to auth via ELI -BM LDAP?
+		var authEliBmLDAP = false
+		if facilityErr == nil {
+			authUser.Facility = facility.Name
+			if facility.Code == "elibm" {
+				authEliBmLDAP = true
+			}
+		}
+
+		var authErr error
+		//if the user is from ELI - Beamlines use ELI - BM LDAP to authenticate first
+		if authEliBmLDAP {
+			authErr = svc.ldapEliBeamlinesAuthenticate(authUser.Email, password)
+			//if ldap auth failed, try app auth ?? is tha OK ??? we will discuss
+			if authErr != nil {
+				log.Println("LDAP - Eli Bemalines - Authentication failed")
+				authErr = bcrypt.CompareHashAndPassword([]byte(authUser.PasswordHash), []byte(password))
+			} else {
+				log.Println("LDAP - Eli Bemalines - Authentication OK")
+			}
+		} else {
+			authErr = bcrypt.CompareHashAndPassword([]byte(authUser.PasswordHash), []byte(password))
+		}
+
 		//empty passwordHash -> omitempty json -> not sent to client
 		authUser.PasswordHash = ""
-		// Throws unauthorized error if there is verifErr
-		if verifErr == nil {
+		// Throws unauthorized error if there is authErr
+		if authErr == nil {
 			// Set custom claims
 			claims := &models.JwtCustomClaims{
 				Roles: authUser.Roles,
@@ -92,22 +126,12 @@ func (svc *SecurityService) AuthenticateByUsernameAndPassword(username string, p
 				authUser.AccessToken = token
 			}
 
-			//finally get users Facility
-			facility, facilityErr := helpers.GetNeo4jSingleRecordAndMapToStruct[models.Facility](session, `match(u:User{username: $userName})-[:BELONGS_TO]->(f:Facility) 
-			return {
-				code: f.code, 
-				name: f.name} as facility`, map[string]interface{}{"userName": username}, "facility")
-
-			if facilityErr == nil {
-				authUser.Facility = facility.Name
-			} else {
-				log.Println(err)
-			}
-
 			log.Println("User authenticated ", authUser)
 
 			return authUser, err
 		}
+	} else {
+		log.Println(err)
 	}
 
 	return authUser, errors.New("Unauthorized")
@@ -127,4 +151,15 @@ func (svc *SecurityService) RefreshToken(claims *models.JwtCustomClaims) (string
 	}
 
 	return t, nil
+}
+
+func (svc *SecurityService) ldapEliBeamlinesAuthenticate(username string, password string) (err error) {
+	l, err := ldap.DialURL(svc.ldapEliBemalinesUrl)
+	if err == nil {
+		defer l.Close()
+
+		err = l.Bind(username, password)
+	}
+
+	return err
 }
