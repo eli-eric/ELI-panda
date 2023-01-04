@@ -36,6 +36,7 @@ const PageGuardWrapper = ({ children }: Props) => {
         }
       })
       if (!alowedPages.includes(currentRootPage || pathname)) {
+        console.log(pathname)
         router.push(PATHS.DASHBOARD)
       } // protecting not allowed pages for user
     } // protecting pages based on user Roles

@@ -17,7 +17,7 @@ const DisclosureComponent = ({ item, setSelectedSystem }: DisclosureComponentPro
   const router = useRouter()
 
   return (
-    <Disclosure as="div" key={item.name} className="space-y-">
+    <Disclosure as="div" key={item.name} className="space-y-" defaultOpen={false}>
       {({ open }) => (
         <Fragment>
           <div

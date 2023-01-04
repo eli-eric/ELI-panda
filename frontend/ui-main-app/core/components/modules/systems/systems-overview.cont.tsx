@@ -7,6 +7,7 @@ import useSWR from 'swr'
 
 import SystemDetailsContainer from './details/system-details.cont'
 import EmptySectionComponent from './empty-section/empty-section.comp'
+import { getTreePath } from './helpers/tree-path'
 import SystemTreeComponent from './systems-tree/systems-treeview.comp'
 
 const SystemsOverviewContainer = () => {
@@ -19,14 +20,25 @@ const SystemsOverviewContainer = () => {
   )
 
   const setSelectedSystemHandler = (item: SystemTreeItem) => {
-    router.push({ pathname: router.pathname, query: { uid: item.uid } })
+    const path = getTreePath(systemsList, item)
+    if (!router.query.slug) {
+      router.push({
+        pathname: router.pathname,
+        query: { uid: item.uid, slug: path }
+      })
+    }
+    if (typeof router.query.slug === 'object') {
+      router.push({
+        pathname: router.pathname,
+        query: { uid: item.uid, slug: path }
+      })
+    }
     setSelectedSystem(item)
   }
 
   return (
     <div className="flex flex-row">
       <div className="flex flex-col  min-w-[256px]">
-        {/* Sidebar component, swap this element with another sidebar if you like */}
         <div className=" overflow-y-auto h-[100vh] border-r bg-white pt-5">
           <div className="mt-5 flex flex-1 flex-col">
             <nav className="flex-1 space-y-1 px-2 pb-4">
