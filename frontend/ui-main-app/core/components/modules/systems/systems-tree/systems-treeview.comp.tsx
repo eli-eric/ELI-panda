@@ -1,8 +1,7 @@
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon, ChevronUpIcon, PuzzlePieceIcon } from '@heroicons/react/24/outline'
 import { SystemTreeItem } from 'core/types/responses'
-import { useRouter } from 'next/router'
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -10,24 +9,27 @@ function classNames(...classes) {
 
 interface DisclosureComponentProps {
   item: SystemTreeItem
-  setSelectedSystem: (item: SystemTreeItem) => void
+  setSelectedSystem: (systemName: string) => void
+  open?: boolean
+  selectedSystem?: SystemTreeItem
 }
 
-const DisclosureComponent = ({ item, setSelectedSystem }: DisclosureComponentProps) => {
-  const router = useRouter()
-
+const DisclosureComponent = ({ item, setSelectedSystem, open = false, selectedSystem }: DisclosureComponentProps) => {
+  useEffect(() => {
+    console.log(open)
+  }, [open])
   return (
-    <Disclosure as="div" key={item.name} className="space-y-" defaultOpen={false}>
+    <Disclosure as="div" key={item.name} className="space-y-" defaultOpen={open}>
       {({ open }) => (
         <Fragment>
           <div
             className={classNames(
               ' text-gray-500 hover:text-gray-900 hover:bg-gray-100 ',
               'rounded-md group w-full flex items-center pl-2 pr-1 text-left text-sm font-medium ',
-              router.query.uid === item.uid ? 'outline-none ring-2  ring-primary-500' : ''
+              selectedSystem?.uid === item.uid ? 'outline-none ring-2  ring-primary-500' : ''
             )}
             onClick={() => {
-              setSelectedSystem(item)
+              setSelectedSystem(item.name)
             }}
           >
             <span className="flex-auto cursor-pointer">{item.name}</span>
@@ -51,7 +53,12 @@ const DisclosureComponent = ({ item, setSelectedSystem }: DisclosureComponentPro
                     key={subItem.name}
                     className="list-item group w-full items-center pl-3 pr-1 pt-1 text-sm font-mediu "
                   >
-                    <DisclosureComponent item={subItem} setSelectedSystem={setSelectedSystem} />
+                    <DisclosureComponent
+                      item={subItem}
+                      setSelectedSystem={setSelectedSystem}
+                      open={open}
+                      selectedSystem={selectedSystem}
+                    />
                   </li>
                 ))}
               </ul>
@@ -65,14 +72,22 @@ const DisclosureComponent = ({ item, setSelectedSystem }: DisclosureComponentPro
 
 interface Props {
   systemsList: Array<SystemTreeItem>
-  setSelectedSystem: (item: SystemTreeItem) => void
+  setSelectedSystem: (systemName: string) => void
+  open?: boolean
+  selectedSystem?: SystemTreeItem
 }
 
-export default function SystemTreeComponent({ systemsList, setSelectedSystem }: Props) {
+export default function SystemTreeComponent({ systemsList, setSelectedSystem, open, selectedSystem }: Props) {
   return (
     <Fragment>
       {systemsList.map(item => (
-        <DisclosureComponent key={item.name} item={item} setSelectedSystem={setSelectedSystem} />
+        <DisclosureComponent
+          key={item.name}
+          item={item}
+          setSelectedSystem={setSelectedSystem}
+          open={open}
+          selectedSystem={selectedSystem}
+        />
       ))}
     </Fragment>
   )

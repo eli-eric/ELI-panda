@@ -1,39 +1,26 @@
 import { BASE_URL } from 'core/types/constants/common'
 import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { SystemDetailInfo, SystemTreeItem } from 'core/types/responses'
-import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useSWR from 'swr'
 
 import SystemDetailsContainer from './details/system-details.cont'
 import EmptySectionComponent from './empty-section/empty-section.comp'
-import { getTreePath } from './helpers/tree-path'
+import { useSelectedSystem } from './helpers/hooks/useSelectedSystem'
 import SystemTreeComponent from './systems-tree/systems-treeview.comp'
 
 const SystemsOverviewContainer = () => {
-  const router = useRouter()
-  const [selectedSystem, setSelectedSystem] = useState<SystemTreeItem>()
+  const [searchSystem, setSearchSystem] = useState<string>()
 
   const { data: systemsList } = useSWR<Array<SystemTreeItem>>(BASE_URL + '/systems/tree')
+  const { openTree, selectedSystem } = useSelectedSystem(searchSystem, systemsList)
+
   const { data: systemDetail } = useSWR<SystemDetailInfo>(
-    router.query.uid ? BASE_URL + ENDPOINTS.systemDetail + '/' + router.query.uid : null
+    selectedSystem ? BASE_URL + ENDPOINTS.systemDetail + '/' + selectedSystem.uid : null
   )
 
-  const setSelectedSystemHandler = (item: SystemTreeItem) => {
-    const path = getTreePath(systemsList, item)
-    if (!router.query.slug) {
-      router.push({
-        pathname: router.pathname,
-        query: { uid: item.uid, slug: path }
-      })
-    }
-    if (typeof router.query.slug === 'object') {
-      router.push({
-        pathname: router.pathname,
-        query: { uid: item.uid, slug: path }
-      })
-    }
-    setSelectedSystem(item)
+  const setSelectedSystemHandler = (systemName: string) => {
+    setSearchSystem(systemName)
   }
 
   return (
@@ -43,7 +30,12 @@ const SystemsOverviewContainer = () => {
           <div className="mt-5 flex flex-1 flex-col">
             <nav className="flex-1 space-y-1 px-2 pb-4">
               {systemsList && (
-                <SystemTreeComponent systemsList={systemsList} setSelectedSystem={setSelectedSystemHandler} />
+                <SystemTreeComponent
+                  systemsList={systemsList}
+                  setSelectedSystem={setSelectedSystemHandler}
+                  selectedSystem={selectedSystem}
+                  open={openTree}
+                />
               )}
             </nav>
           </div>
