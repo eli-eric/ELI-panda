@@ -1,54 +1,33 @@
-# ELI-panda
+# ELI-PANDA (ELI oPerations And maiNtenance DAtabase)
 
-ELI oPerations And maiNtenance DAtabase
+The premise that good maintenance practices are fundamental to success is beyond question. In accordance with IMPULSE Project requirements, ELI facilities had an obligation to create a joint spare parts database. The essential intention behind this requirement had several purposes, such as: to build up a relevant database in order to minimize possible downtime for user experiments, to determine which spare parts must be stocked in advance, to make cost-effective maintenance decisions.
 
 ## Backend
 
-API Gateway - the only way how to access data in PANDA database. Using [Echo](https://echo.labstack.com/) - High performance, extensible, minimalist Go web framework - for now it is one classic REST API but in one of the future versions it will have microservices architecture
+API Gateway - the only way how to access data in PANDA database.
 
-Please follow the instructions in backend's [readme.md](https://github.com/eli-eric/ELI-panda/tree/main/backend/api-gateway-go) 
+More information in backend's [readme.md](https://github.com/eli-eric/ELI-panda/tree/main/backend/api-gateway-go) 
 
 ## Frontend
 
-GUI to acces our data written in [React](https://reactjs.org/) using [TypeScript](https://reactjs.org/docs/static-type-checking.html#typescript)
+GUI to access the data. Written in [NEXT.JS](https://nextjs.org/) using [React](https://reactjs.org/), [TypeScript](https://reactjs.org/docs/static-type-checking.html#typescript), [TailwindCSS](https://tailwindcss.com/), [NextAuth](https://next-auth.js.org/)
 
-We are using React([create-react-app](https://create-react-app.dev/) and ready to go [Material UI Template](https://crema-next.herokuapp.com/dashboards/metrics) with TypeScript instead of pure Javascript.
 
-Please follow the instructions in frontend's [readme.md](https://github.com/eli-eric/ELI-panda/tree/main/frontend)
+Please follow the instructions in frontend's [readme.md](https://github.com/eli-eric/ELI-panda/tree/main/frontend/ui-main-app)
 
-## Database
+## Databases
 
-We will use microservices. So we are able to mix technologies. For some microservices we will use [PostgreSQL](https://www.postgresql.org/) and for example for the Systems microservice we will use graph database [neo4j](https://neo4j.com/)
+We are using multiple databases. For some services we will use [PostgreSQL](https://www.postgresql.org/) and for example for the Systems we will use graph database [neo4j](https://neo4j.com/)
 
-More details will be part of each backend project - now in the one API Gateway backend go project - [Backend](https://github.com/eli-eric/ELI-panda/tree/main/backend/api-gateway-go)
+## Docker, CI/CD
 
-## Docker
-
-We are using [Docker](https://www.docker.com/get-started) for the deployment.
+We are using [Docker](https://www.docker.com/get-started) for the deployment now.
 
 On the deployment server we have nginx web server wich is working like a reverse proxy and forward the requests like that:
 
 http://panda.eli-beamlines.eu -> localhost:5000(docker container) - frontend
 http://api.panda.eli-beamlines.eu -> localhost:50000(docker container) - backend
 
-We can configure GitHub actions to automate build/test/deploy - for now Jiří Švácha will do that manualy and prepare these [Actions](https://github.com/eli-eric/ELI-panda/actions).
-
-## Microservices
-
-### How to add new microservice
-
-Create new folder with the name of the new microservice inside ELI-panda/backend/microservices folder
-
-`cd $projectdestination/ELI-panda/backend/microservices`
-
-`mkdir NEW-MICROSERVICE-NAME`
-
-Init new go project
-
-`go mod init panda/microservices/NEW-MICROSERVICE-NAME`
-
-Create entrypoint file
-
-`echo > main.go`
+We are using GitHub actions to automate build/test/deploy.
 
 
