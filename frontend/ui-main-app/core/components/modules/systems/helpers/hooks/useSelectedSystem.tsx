@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 
 import { getTreePath } from '../tree-path'
 
+// useSelectedSystem hook for managing tree component a write correct url slug
 export const useSelectedSystem = (selectedSystemName?: string, systemsList?: Array<SystemTreeItem>) => {
   const [selectedSystem, setSelectedSystem] = useState<SystemTreeItem>()
   const [openTree, setOpenTree] = useState<boolean>(false)
@@ -11,14 +12,13 @@ export const useSelectedSystem = (selectedSystemName?: string, systemsList?: Arr
 
   const router = useRouter()
 
+  // use effect for set selected system with url redirect
   useEffect(() => {
     if (router.query.slug) {
       if (typeof router.query.slug === 'object') {
         const slugLength = router.query.slug.length
-        console.log(router.query.slug.length)
         if (slugLength > 0) {
           const lastSlug = router.query.slug[slugLength - 1]
-          console.log('useEffectSlug', lastSlug)
           setSearchSystemName(lastSlug)
           setOpenTree(true)
         } else {
@@ -28,11 +28,9 @@ export const useSelectedSystem = (selectedSystemName?: string, systemsList?: Arr
     }
   }, [systemsList]) //eslint-disable-line
 
+  // main useEffect for calling recursion for find correct tree element and setting correct url
   useEffect(() => {
-    console.log(systemsList, searchSystemName, selectedSystemName)
-
-    const pathItem = getTreePath(systemsList, searchSystemName || selectedSystemName)
-
+    const pathItem = getTreePath(systemsList, selectedSystemName || searchSystemName)
     if (pathItem) {
       if (!router.query.slug) {
         router.push({
@@ -49,8 +47,6 @@ export const useSelectedSystem = (selectedSystemName?: string, systemsList?: Arr
       setSelectedSystem(pathItem.systemItem)
     }
   }, [systemsList, searchSystemName, selectedSystemName]) //eslint-disable-line
-
-  useEffect(() => {}, [selectedSystemName])
 
   return {
     selectedSystem: selectedSystem,
