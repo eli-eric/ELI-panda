@@ -1,4 +1,6 @@
-# ELI-PANDA (ELI oPerations And maiNtenance DAtabase)
+# ELI-PANDA 
+
+### (ELI oPerations And maiNtenance DAtabase)
 
 The premise that good maintenance practices are fundamental to success is beyond question. In accordance with IMPULSE Project requirements, ELI facilities had an obligation to create a joint spare parts database. The essential intention behind this requirement had several purposes, such as: to build up a relevant database in order to minimize possible downtime for user experiments, to determine which spare parts must be stocked in advance, to make cost-effective maintenance decisions.
 
