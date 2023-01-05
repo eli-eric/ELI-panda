@@ -10,16 +10,16 @@ function classNames(...classes) {
 interface DisclosureComponentProps {
   item: SystemTreeItem
   setSelectedSystem: (systemName: string) => void
-  open?: boolean
+  openTree?: boolean
   selectedSystem?: SystemTreeItem
 }
 
-const DisclosureComponent = ({ item, setSelectedSystem, open = false, selectedSystem }: DisclosureComponentProps) => {
+const DisclosureComponent = ({ item, setSelectedSystem, openTree, selectedSystem }: DisclosureComponentProps) => {
   useEffect(() => {
-    console.log(open)
-  }, [open])
+    console.log('disclousure', openTree)
+  }, [openTree])
   return (
-    <Disclosure as="div" key={item.name} className="space-y-" defaultOpen={open}>
+    <Disclosure as="div" key={item.name} className="space-y-" defaultOpen={openTree}>
       {({ open }) => (
         <Fragment>
           <div
@@ -56,7 +56,7 @@ const DisclosureComponent = ({ item, setSelectedSystem, open = false, selectedSy
                     <DisclosureComponent
                       item={subItem}
                       setSelectedSystem={setSelectedSystem}
-                      open={open}
+                      openTree={openTree}
                       selectedSystem={selectedSystem}
                     />
                   </li>
@@ -73,11 +73,11 @@ const DisclosureComponent = ({ item, setSelectedSystem, open = false, selectedSy
 interface Props {
   systemsList: Array<SystemTreeItem>
   setSelectedSystem: (systemName: string) => void
-  open?: boolean
+  openTree?: boolean
   selectedSystem?: SystemTreeItem
 }
 
-export default function SystemTreeComponent({ systemsList, setSelectedSystem, open, selectedSystem }: Props) {
+export default function SystemTreeComponent({ systemsList, setSelectedSystem, openTree, selectedSystem }: Props) {
   return (
     <Fragment>
       {systemsList.map(item => (
@@ -85,7 +85,7 @@ export default function SystemTreeComponent({ systemsList, setSelectedSystem, op
           key={item.name}
           item={item}
           setSelectedSystem={setSelectedSystem}
-          open={open}
+          openTree={openTree}
           selectedSystem={selectedSystem}
         />
       ))}

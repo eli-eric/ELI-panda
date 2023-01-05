@@ -34,7 +34,7 @@ const SystemsOverviewContainer = () => {
                   systemsList={systemsList}
                   setSelectedSystem={setSelectedSystemHandler}
                   selectedSystem={selectedSystem}
-                  open={openTree}
+                  openTree={openTree}
                 />
               )}
             </nav>

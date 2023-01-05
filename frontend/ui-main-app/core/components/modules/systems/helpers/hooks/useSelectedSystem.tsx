@@ -6,7 +6,7 @@ import { getTreePath } from '../tree-path'
 
 export const useSelectedSystem = (selectedSystemName?: string, systemsList?: Array<SystemTreeItem>) => {
   const [selectedSystem, setSelectedSystem] = useState<SystemTreeItem>()
-  const [openTree, setOpenTree] = useState<boolean>()
+  const [openTree, setOpenTree] = useState<boolean>(false)
   const [searchSystemName, setSearchSystemName] = useState<string | undefined>(selectedSystemName)
 
   const router = useRouter()
