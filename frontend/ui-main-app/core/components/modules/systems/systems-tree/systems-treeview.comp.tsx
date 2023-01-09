@@ -30,17 +30,19 @@ const DisclosureComponent = ({ item, setSelectedSystem }: DisclosureComponentPro
               setSelectedSystem(item)
             }}
           >
-            <span className="flex-auto cursor-pointer">{item.name}</span>
-            <Disclosure.Button>
-              {item.children ? (
-                open ? (
-                  <ChevronUpIcon className="h-5 w-5 " />
+            <Disclosure.Button className="w-full">
+              <div className="flex justify-between">
+                <span>{item.name}</span>
+                {item.children ? (
+                  open ? (
+                    <ChevronUpIcon className="h-5 w-5 " />
+                  ) : (
+                    <ChevronDownIcon className="h-5 w-5" />
+                  )
                 ) : (
-                  <ChevronDownIcon className="h-5 w-5" />
-                )
-              ) : (
-                <PuzzlePieceIcon className="h-5 w-5" />
-              )}
+                  <PuzzlePieceIcon className="h-5 w-5" />
+                )}
+              </div>
             </Disclosure.Button>
           </div>
           {item.children && (
