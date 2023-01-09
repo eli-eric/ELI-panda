@@ -1,0 +1,38 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+
+defaults:
+  run:
+    working-directory: ./frontend/ui-main-app
+
+jobs:
+  checks:
+    uses: ./github/workflows/checks.yml
+  build-push:
+    needs: [checks]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build & Push 
+        uses: docker/build-push-action@v3.2.0
+        with:
+          context: ./frontend/ui-main-app/.
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/panda-ui-main-app:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/panda-ui-main-app:latest
+          cache-to: type=inline
