@@ -20,6 +20,7 @@ jobs:
         with:
           cache: 'yarn'
           node-version: '16'
+          working-directory: ./frontend/ui-main-app
 
       - name: Install ⚙️
         run: yarn install
@@ -38,6 +39,7 @@ jobs:
         with:
           node-version: '16'
           cache: 'yarn'
+          working-directory: ./frontend/ui-main-app
 
       - name: Install ⚙️
         run: yarn install
