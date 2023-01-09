@@ -53,6 +53,7 @@ jobs:
           working-directory: ./frontend/ui-main-app
           start: yarn start
           wait-on: 'http://localhost:5001'
+          browser: chrome
 
   build:
     runs-on: ubuntu-latest
