@@ -40,14 +40,12 @@ jobs:
       - name: Install ⚙️
         run: yarn install
 
-      - name: Build
-        run: yarn build
-
-      - name: Start app
-        run: yarn start
-
-      - name: Test with Cypress
-        run: yarn cy:run
+      - name: Cypress run
+        uses: cypress-io/github-action@v5
+        with:
+          project: ./frontend/ui-main-app
+          start: yarn dev
+          wait-on: 'http://localhost:5001'
 
   build:
     runs-on: ubuntu-latest
