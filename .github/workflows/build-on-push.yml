@@ -40,8 +40,10 @@ jobs:
       - name: Install ⚙️
         run: yarn install
 
-      - name: Test
-        uses: cypress-io/github-action@v5
+      - name: Start app
+        run: yarn start
+      - name: Test with Cypress
+        run: yarn cy:run
 
   build:
     runs-on: ubuntu-latest
