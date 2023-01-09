@@ -44,7 +44,7 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           project: ./frontend/ui-main-app
-          yarn: true
+          install-command: yarn --frozen-lockfile --silent
           start: yarn dev
           wait-on: 'http://localhost:5001'
 
