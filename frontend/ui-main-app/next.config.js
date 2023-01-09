@@ -7,7 +7,7 @@ const nextConfig = {
     domains: ['localhost', 'panda.eli-beams.eu']
   },
   env: {
-    PANDA_API_GW_URL: process.env.PANDA_API_GW_URL
+    PANDA_API_GW_URL: process.env.PANDA_API_GW_URL || 'http://localhost:5001/api/mock-server'
   }
 }
 

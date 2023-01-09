@@ -1,9 +1,7 @@
 import axios from 'axios'
+import BaseURL from 'core/types/constants/common'
 import NextAuth from 'next-auth/next'
 import CredentialsProvider from 'next-auth/providers/credentials'
-
-//const PANDA_API_GW_URL = 'http://localhost:50000/v1/'
-//const PANDA_API_GW_URL = 'http://10.32.5.39:5001/api/mock-server/'
 
 export default NextAuth({
   session: {
@@ -18,7 +16,7 @@ export default NextAuth({
             'Content-Type': 'application/json'
           },
           method: 'post',
-          url: process.env.PANDA_API_GW_URL + '/authenticate',
+          url: BaseURL + '/authenticate',
           data: { username: credentials?.username, password: credentials?.password }
         }).catch(error => {
           console.log(error)
