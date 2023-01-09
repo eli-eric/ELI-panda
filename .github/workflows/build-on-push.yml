@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+defaults:
+  run:
+    working-directory: ./frontend/ui-main-app
 jobs:
   lint:
     runs-on: ubuntu-latest
