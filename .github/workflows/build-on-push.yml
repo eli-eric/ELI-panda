@@ -44,14 +44,11 @@ jobs:
       - name: Install ⚙️
         run: yarn install
 
-      - name: Build
-        run: yarn build
-
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
           working-directory: ./frontend/ui-main-app
-          start: yarn start
+          start: yarn dev
           wait-on: 'http://localhost:5001'
           browser: chrome
 
