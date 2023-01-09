@@ -40,8 +40,12 @@ jobs:
       - name: Install ⚙️
         run: yarn install
 
+      - name: Build
+        run: yarn build
+
       - name: Start app
         run: yarn start
+
       - name: Test with Cypress
         run: yarn cy:run
 
