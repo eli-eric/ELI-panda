@@ -19,8 +19,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           cache: 'yarn'
+          cache-dependency-path: ./frontend/ui-main-app/yarn.lock
           node-version: '16'
-          working-directory: ./frontend/ui-main-app
 
       - name: Install ⚙️
         run: yarn install
@@ -39,7 +39,7 @@ jobs:
         with:
           node-version: '16'
           cache: 'yarn'
-          working-directory: ./frontend/ui-main-app
+          cache-dependency-path: ./frontend/ui-main-app/yarn.lock
 
       - name: Install ⚙️
         run: yarn install
