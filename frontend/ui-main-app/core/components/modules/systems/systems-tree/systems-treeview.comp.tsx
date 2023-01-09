@@ -1,7 +1,7 @@
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon, ChevronUpIcon, PuzzlePieceIcon } from '@heroicons/react/24/outline'
 import { SystemTreeItem } from 'core/types/responses'
-import { Fragment, useEffect } from 'react'
+import { Dispatch, Fragment, SetStateAction, useEffect } from 'react'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -9,12 +9,12 @@ function classNames(...classes) {
 
 interface DisclosureComponentProps {
   item: SystemTreeItem
-  setSelectedSystem: (systemName: string) => void
+  setSearchSystem: Dispatch<SetStateAction<string | undefined>>
   openTree?: boolean
   selectedSystem?: SystemTreeItem
 }
 
-const DisclosureComponent = ({ item, setSelectedSystem, openTree, selectedSystem }: DisclosureComponentProps) => {
+const DisclosureComponent = ({ item, setSearchSystem, openTree, selectedSystem }: DisclosureComponentProps) => {
   useEffect(() => {
     console.log('disclousure', openTree)
   }, [openTree])
@@ -29,20 +29,22 @@ const DisclosureComponent = ({ item, setSelectedSystem, openTree, selectedSystem
               selectedSystem?.uid === item.uid ? 'outline-none ring-2  ring-primary-500' : ''
             )}
             onClick={() => {
-              setSelectedSystem(item.name)
+              setSearchSystem(item.name)
             }}
           >
-            <span className="flex-auto cursor-pointer">{item.name}</span>
-            <Disclosure.Button>
-              {item.children ? (
-                open ? (
-                  <ChevronUpIcon className="h-5 w-5 " />
+            <Disclosure.Button className="w-full">
+              <div className="flex justify-between">
+                <span>{item.name}</span>
+                {item.children ? (
+                  open ? (
+                    <ChevronUpIcon className="h-5 w-5 " />
+                  ) : (
+                    <ChevronDownIcon className="h-5 w-5" />
+                  )
                 ) : (
-                  <ChevronDownIcon className="h-5 w-5" />
-                )
-              ) : (
-                <PuzzlePieceIcon className="h-5 w-5" />
-              )}
+                  <PuzzlePieceIcon className="h-5 w-5" />
+                )}
+              </div>
             </Disclosure.Button>
           </div>
           {item.children && (
@@ -55,7 +57,7 @@ const DisclosureComponent = ({ item, setSelectedSystem, openTree, selectedSystem
                   >
                     <DisclosureComponent
                       item={subItem}
-                      setSelectedSystem={setSelectedSystem}
+                      setSearchSystem={setSearchSystem}
                       openTree={openTree}
                       selectedSystem={selectedSystem}
                     />
@@ -72,23 +74,30 @@ const DisclosureComponent = ({ item, setSelectedSystem, openTree, selectedSystem
 
 interface Props {
   systemsList: Array<SystemTreeItem>
-  setSelectedSystem: (systemName: string) => void
+  setSearchSystem: Dispatch<SetStateAction<string | undefined>>
   openTree?: boolean
   selectedSystem?: SystemTreeItem
 }
 
-export default function SystemTreeComponent({ systemsList, setSelectedSystem, openTree, selectedSystem }: Props) {
+export default function SystemTreeComponent({ systemsList, setSearchSystem, openTree, selectedSystem }: Props) {
   return (
-    <Fragment>
-      {systemsList.map(item => (
-        <DisclosureComponent
-          key={item.name}
-          item={item}
-          setSelectedSystem={setSelectedSystem}
-          openTree={openTree}
-          selectedSystem={selectedSystem}
-        />
-      ))}
-    </Fragment>
+    <div className="flex flex-col  min-w-[256px]">
+      <div className=" overflow-y-auto h-[100vh] border-r bg-white pt-5">
+        <div className="mt-5 flex flex-1 flex-col">
+          <nav className="flex-1 space-y-1 px-2 pb-4">
+            {' '}
+            {systemsList.map(item => (
+              <DisclosureComponent
+                key={item.name}
+                item={item}
+                setSearchSystem={setSearchSystem}
+                openTree={openTree}
+                selectedSystem={selectedSystem}
+              />
+            ))}
+          </nav>
+        </div>
+      </div>
+    </div>
   )
 }

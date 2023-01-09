@@ -25,8 +25,11 @@ export const useSelectedSystem = (selectedSystemName?: string, systemsList?: Arr
           setOpenTree(false)
         }
       }
+    } else {
+      setSelectedSystem(undefined)
+      setOpenTree(false)
     }
-  }, [systemsList]) //eslint-disable-line
+  }, [systemsList, router]) //eslint-disable-line
 
   // main useEffect for calling recursion for find correct tree element and setting correct url
   useEffect(() => {

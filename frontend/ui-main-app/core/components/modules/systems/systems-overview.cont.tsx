@@ -19,28 +19,17 @@ const SystemsOverviewContainer = () => {
     selectedSystem ? BASE_URL + ENDPOINTS.systemDetail + '/' + selectedSystem.uid : null
   )
 
-  const setSelectedSystemHandler = (systemName: string) => {
-    setSearchSystem(systemName)
-  }
-
   return (
     <div className="flex flex-row">
-      <div className="flex flex-col  min-w-[256px]">
-        <div className=" overflow-y-auto h-[100vh] border-r bg-white pt-5">
-          <div className="mt-5 flex flex-1 flex-col">
-            <nav className="flex-1 space-y-1 px-2 pb-4">
-              {systemsList && (
-                <SystemTreeComponent
-                  systemsList={systemsList}
-                  setSelectedSystem={setSelectedSystemHandler}
-                  selectedSystem={selectedSystem}
-                  openTree={openTree}
-                />
-              )}
-            </nav>
-          </div>
-        </div>
-      </div>
+      {systemsList && (
+        <SystemTreeComponent
+          systemsList={systemsList}
+          setSearchSystem={setSearchSystem}
+          selectedSystem={selectedSystem}
+          openTree={openTree}
+        />
+      )}
+
       {selectedSystem ? (
         systemDetail && <SystemDetailsContainer selectedSystem={selectedSystem} systemDetail={systemDetail} />
       ) : (

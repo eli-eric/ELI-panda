@@ -1,6 +1,5 @@
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { SVGProps } from 'react'
+import { SVGProps, useEffect } from 'react'
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(' ')
@@ -28,10 +27,19 @@ const NavigationLinkComponent = ({ href, name, Icon }: Props) => {
     : router.asPath.startsWith(href)
     ? selectedClassName
     : nonSelectedClassName
+
+  useEffect(() => {
+    console.log(href, router)
+  }, [router, href])
   return (
-    <Link
-      href={href}
-      className={classNames(variableClassName, 'group flex items-center px-2 py-2 text-base font-medium rounded-md')}
+    <button
+      onClick={() => {
+        router.push(href)
+      }}
+      className={classNames(
+        variableClassName,
+        'group w-full flex items-center px-2 py-2 text-base font-medium rounded-md'
+      )}
     >
       <Icon
         className={classNames(
@@ -41,7 +49,7 @@ const NavigationLinkComponent = ({ href, name, Icon }: Props) => {
         aria-hidden="true"
       />
       {name}
-    </Link>
+    </button>
   )
 }
 
