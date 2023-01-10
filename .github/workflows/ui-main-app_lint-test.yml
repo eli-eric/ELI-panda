@@ -1,0 +1,57 @@
+name: ui-main-app lint & test
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+defaults:
+  run:
+    working-directory: ./frontend/ui-main-app
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🏷️ 
+        uses: actions/checkout@v3
+
+      - name: Use Node 18 🕹️
+        uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+          cache-dependency-path: ./frontend/ui-main-app/yarn.lock
+          node-version: '18'
+
+      - name: Install ⚙️
+        run: yarn install
+
+      - name: Lint 🤓
+        run: yarn lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🏷️
+        uses: actions/checkout@v3
+
+      - name: Use Node 18 🕹️
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'yarn'
+          cache-dependency-path: ./frontend/ui-main-app/yarn.lock
+
+      - name: Install ⚙️
+        run: yarn install
+
+      - name: Cypress
+        uses: cypress-io/github-action@v5
+        env:
+          PANDA_API_GW_URL: http://localhost:5001/api/mock-server
+        with:
+          working-directory: ./frontend/ui-main-app
+          start: yarn dev
+          wait-on: 'http://localhost:5001'
+          browser: chrome
