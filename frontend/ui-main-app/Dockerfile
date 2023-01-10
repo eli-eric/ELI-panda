@@ -33,7 +33,7 @@ FROM node:18-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PANDA_API_GW_URL="https://panda.eli-beams.eu/api/mock-server"
+ENV PANDA_API_GW_URL=$PANDA_API_GW_URL
 ENV NEXTAUTH_URL="https://panda.eli-beams.eu/"
 ENV NODE_TLS_REJECT_UNAUTHORIZED="0"
 
