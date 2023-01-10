@@ -27,8 +27,8 @@ We are using [Docker](https://www.docker.com/get-started) for the deployment now
 
 On the deployment server we have nginx web server wich is working like a reverse proxy and forward the requests like that:
 
-http://panda.eli-beamlines.eu -> localhost:5000(docker container) - frontend
-http://api.panda.eli-beamlines.eu -> localhost:50000(docker container) - backend
+https://panda.eli-beamlines.eu -> localhost:5000(docker container) - frontend
+https://api.panda.eli-beamlines.eu -> localhost:50000(docker container) - backend
 
 We are using GitHub actions to automate build/test/deploy.
 
