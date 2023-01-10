@@ -21,7 +21,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ENV PANDA_API_GW_URL="http://panda.eli-beams.eu/api/mock-server"
+ENV PANDA_API_GW_URL="https://panda.eli-beams.eu/api/mock-server"
 
 # This will do the trick, use the corresponding env file for each environment.
 # COPY .env.production.sample .env.production
@@ -32,8 +32,8 @@ FROM node:18-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PANDA_API_GW_URL="http://panda.eli-beams.eu/api/mock-server"
-ENV NEXTAUTH_URL="http://panda.eli-beams.eu/"
+ENV PANDA_API_GW_URL="https://panda.eli-beams.eu/api/mock-server"
+ENV NEXTAUTH_URL="https://panda.eli-beams.eu/"
 
 RUN env
 
