@@ -21,7 +21,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ENV PANDA_API_GW_URL="https://panda.eli-beams.eu/api/mock-server"
+ARG PANDA_API_GW_URL="https://panda.eli-beams.eu/api/mock-server"
+ENV PANDA_API_GW_URL=$PANDA_API_GW_URL
 
 # This will do the trick, use the corresponding env file for each environment.
 # COPY .env.production.sample .env.production
