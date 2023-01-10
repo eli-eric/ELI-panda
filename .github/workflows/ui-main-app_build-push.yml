@@ -38,5 +38,5 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/panda-ui-main-app:latest
           cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/panda-ui-main-app:latest
           cache-to: type=inline
-          build-args: |
-            PANDA_API_GW_URL=http://localhost:5001/api/mock-server
+          # build-args: |
+          #   PANDA_API_GW_URL=http://localhost:5001/api/mock-server
