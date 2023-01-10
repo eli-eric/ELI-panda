@@ -1,4 +1,5 @@
 import axios from 'axios'
+import https from 'https'
 import PageGuardWrapper from 'core/helpers/page-guard-wrapper'
 import { messages } from 'core/i18n/src'
 import { AppLoadingProvider } from 'core/store/app-loading.context'
@@ -18,6 +19,7 @@ const GlobalProvider = ({ children }: Props) => {
   const { data } = useSession()
 
   axios.defaults.headers.common['authorization'] = data?.user.apiAccessToken
+  axios.defaults.httpsAgent = new https.Agent({ rejectUnauthorized: false })
 
   return (
     <SWRConfig
