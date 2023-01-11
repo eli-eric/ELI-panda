@@ -35,7 +35,7 @@ const SearchBarComponent = () => {
   }
 
   return (
-    <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
+    <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white border-b">
       <div id="layout-search-bar" className="flex flex-1 justify-between px-4">
         <div className="flex flex-1">
           <form data-testid="search" className="flex w-full md:ml-0" action="#" method="GET" onSubmit={submitHandler}>

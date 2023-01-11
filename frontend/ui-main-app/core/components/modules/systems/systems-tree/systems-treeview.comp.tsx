@@ -1,5 +1,12 @@
 import { Disclosure } from '@headlessui/react'
-import { ChevronDownIcon, ChevronUpIcon, PuzzlePieceIcon } from '@heroicons/react/24/outline'
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  PencilSquareIcon,
+  PlusIcon,
+  PuzzlePieceIcon,
+  TrashIcon
+} from '@heroicons/react/24/outline'
 import { SystemTreeItem } from 'core/types/responses'
 import { Dispatch, Fragment, SetStateAction, useEffect } from 'react'
 
@@ -26,7 +33,7 @@ const DisclosureComponent = ({ item, setSearchSystem, openTree, selectedSystem }
             className={classNames(
               ' text-gray-500 hover:text-gray-900 hover:bg-gray-100 ',
               'rounded-md group w-full flex items-center pl-2 pr-1 text-left text-sm font-medium ',
-              selectedSystem?.uid === item.uid ? 'outline-none ring-2  ring-primary-500' : ''
+              selectedSystem?.uid === item.uid ? 'outline-none ring-2 rounded-md  ring-primary-500' : ''
             )}
             onClick={() => {
               setSearchSystem(item.name)
@@ -34,16 +41,26 @@ const DisclosureComponent = ({ item, setSearchSystem, openTree, selectedSystem }
           >
             <Disclosure.Button className="w-full">
               <div className="flex justify-between">
-                <span>{item.name}</span>
-                {item.children ? (
-                  open ? (
-                    <ChevronUpIcon className="h-5 w-5 " />
-                  ) : (
-                    <ChevronDownIcon className="h-5 w-5" />
-                  )
-                ) : (
-                  <PuzzlePieceIcon className="h-5 w-5" />
-                )}
+                <div className={classNames('flex')}>
+                  <div className="mr-2">
+                    {item.children ? (
+                      open ? (
+                        <ChevronUpIcon className="h-5 w-5" />
+                      ) : (
+                        <ChevronDownIcon className="h-5 w-5" />
+                      )
+                    ) : (
+                      <PuzzlePieceIcon className="h-5 w-5 tect" />
+                    )}
+                  </div>
+
+                  <span>{item.name}</span>
+                </div>
+                <div className="flex">
+                  <PencilSquareIcon className="h-5 w-5" />
+                  <TrashIcon className="h-5 w-5" />
+                  <PlusIcon className="h-5 w-5" />
+                </div>
               </div>
             </Disclosure.Button>
           </div>
@@ -51,10 +68,7 @@ const DisclosureComponent = ({ item, setSearchSystem, openTree, selectedSystem }
             <Disclosure.Panel className="space-y-1 ">
               <ul>
                 {item.children.map(subItem => (
-                  <li
-                    key={subItem.name}
-                    className="list-item group w-full items-center pl-3 pr-1 pt-1 text-sm font-mediu "
-                  >
+                  <li key={subItem.name} className="list-item group w-full items-center pl-3 pt-1 text-sm font-mediu ">
                     <DisclosureComponent
                       item={subItem}
                       setSearchSystem={setSearchSystem}
