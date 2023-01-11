@@ -19,7 +19,7 @@ export default NextAuth({
             'Content-Type': 'application/json'
           },
           method: 'post',
-          httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+          // httpsAgent: new https.Agent({ rejectUnauthorized: false }),
           url: process.env.PANDA_API_GW_URL + '/authenticate',
           data: { username: credentials?.username, password: credentials?.password }
         }).catch(error => {

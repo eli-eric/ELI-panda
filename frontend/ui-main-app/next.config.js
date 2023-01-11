@@ -7,8 +7,7 @@ const nextConfig = {
     domains: ['localhost', 'panda.eli-beams.eu']
   },
   env: {
-    PANDA_API_GW_URL: process.env.PANDA_API_GW_URL,
-    NODE_TLS_REJECT_UNAUTHORIZED: process.env.NODE_TLS_REJECT_UNAUTHORIZED
+    PANDA_API_GW_URL: process.env.PANDA_API_GW_URL
   }
 }
 

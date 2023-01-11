@@ -34,7 +34,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PANDA_API_GW_URL="https://panda.eli-beams.eu/api/mock-server"
 ENV NEXTAUTH_URL="https://panda.eli-beams.eu/"
-ENV NODE_TLS_REJECT_UNAUTHORIZED="0"
+# ENV NODE_TLS_REJECT_UNAUTHORIZED="0"
 
 RUN env
 
