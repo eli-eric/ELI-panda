@@ -1,5 +1,4 @@
 import axios from 'axios'
-import https from 'https'
 import NextAuth from 'next-auth/next'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
@@ -19,7 +18,6 @@ export default NextAuth({
             'Content-Type': 'application/json'
           },
           method: 'post',
-          // httpsAgent: new https.Agent({ rejectUnauthorized: false }),
           url: process.env.PANDA_API_GW_URL + '/authenticate',
           data: { username: credentials?.username, password: credentials?.password }
         }).catch(error => {

@@ -18,7 +18,6 @@ const GlobalProvider = ({ children }: Props) => {
   const { data } = useSession()
 
   axios.defaults.headers.common['authorization'] = data?.user.apiAccessToken
-  // axios.defaults.httpsAgent = new https.Agent({ rejectUnauthorized: false })
 
   return (
     <SWRConfig
