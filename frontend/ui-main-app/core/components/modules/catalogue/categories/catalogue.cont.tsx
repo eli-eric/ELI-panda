@@ -1,4 +1,3 @@
-import SearchBarComponent from 'core/components/layout/search-bar/search-bar.comp'
 import ProgressBarComponent from 'core/components/ui/progress-bar.comp'
 import { message } from 'core/i18n/src/messages'
 import { CatalogueCategoryResponse, CatalogueItemsResponse } from 'core/types/responses'
@@ -14,6 +13,7 @@ import ItemListContainer from './components/item-list/item-list.cont'
 import { CatalogLayoutContainer, TableLayoutComponent } from './components/layout/catalog-layout.cont'
 import DefaultMessageComponent from './components/message/default-message.comp'
 import ItemsPaginationComponent from './components/paging/items-pagination.comp'
+import SearchBarComponent from './components/search-bar/search-bar.comp'
 
 const messages = message.cataloguePage.defaultMessage
 

@@ -44,6 +44,29 @@ const DashboardPage: NextPage = (): JSX.Element => {
             'Loading indicator - show loading indicator during the start, if there is a slow network connection'
         }
       ]
+    },
+    {
+      id: '0.0.1',
+      features: [
+        {
+          description: 'Catalogue page: searching items via search bar - text box in the header of the page',
+          link: '/catalogue'
+        },
+        {
+          description: 'Catalogue page: filter by categories - categories tiles',
+          link: '/catalogue'
+        },
+        {
+          description: 'Catalogue page: item detail page',
+          link: '/catalogue'
+        }
+      ],
+      bugs: [
+        {
+          description:
+            'Loading indicator - show loading indicator during the start, if there is a slow network connection'
+        }
+      ]
     }
   ]
 
@@ -54,13 +77,13 @@ const DashboardPage: NextPage = (): JSX.Element => {
         <meta name="description" content="...." />
       </Head>
 
-      <main className="flex-1">
+      <main className="mx-auto max-w-7xl flex-1">
         <h1 className="text-2xl font-semibold font-mono text-gray-600 mt-2 ml-1 sm:mt-4 sm:ml-4 uppercase">
           Release History
         </h1>
-        <ul role="list" className="divide-y divide-gray-200 font-mono">
+        <ul role="list" className=" font-mono">
           {releases.map((item, idx) => (
-            <li key={item.id} className="px-2 py-2 sm:px-4 sm:py-4 ">
+            <li key={item.id} className="px-2 py-2 sm:px-4 sm:py-4 shadow-lg my-5 mx-2">
               <h3 className="text-xl font-bold text-gray-700">
                 Version {item.id} {idx === 0 && '- Latest version'}
               </h3>

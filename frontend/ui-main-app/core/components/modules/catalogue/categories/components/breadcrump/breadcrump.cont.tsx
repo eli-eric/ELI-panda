@@ -14,7 +14,7 @@ const BreadcrumbContainer = () => {
 
   const navigationList = useMemo(() => {
     if (router.query.slug) {
-      const { slug, search } = router.query
+      const { slug } = router.query
       let link = PATHS.CATALOGUE as string
       if (slug && typeof slug === 'object') {
         return slug.map((slug, i) => {

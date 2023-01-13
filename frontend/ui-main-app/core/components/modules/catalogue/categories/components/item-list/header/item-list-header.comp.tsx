@@ -13,7 +13,7 @@ interface Props {
 const ItemListHeaderComponent = ({ categoryListLength, details }: Props) => {
   const intl = useIntl()
   return (
-    <thead className="bg-gray-50 ">
+    <thead className="bg-gray-50">
       <tr>
         <ItemListColumnTitleComponent title={intl.formatMessage({ id: messages.name })} />
         <ItemListColumnTitleComponent title={intl.formatMessage({ id: messages.description })} />

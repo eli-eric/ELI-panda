@@ -7,7 +7,7 @@ export const messages = {
     dashboard: 'Release History',
     catalogue: 'Catalogue',
     systems: 'Systems',
-    systemsOverview: 'Overview',
+    systemsOverview: 'Systems',
     reports: 'Reports',
     button: {
       signout: 'Sign Out'

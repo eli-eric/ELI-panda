@@ -1,42 +1,35 @@
 import { BASE_URL } from 'core/types/constants/common'
 import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { SystemDetailInfo, SystemTreeItem } from 'core/types/responses'
-import { useRouter } from 'next/router'
 import { useState } from 'react'
 import useSWR from 'swr'
 
 import SystemDetailsContainer from './details/system-details.cont'
 import EmptySectionComponent from './empty-section/empty-section.comp'
+import { useSelectedSystem } from './helpers/hooks/useSelectedSystem'
 import SystemTreeComponent from './systems-tree/systems-treeview.comp'
 
 const SystemsOverviewContainer = () => {
-  const router = useRouter()
-  const [selectedSystem, setSelectedSystem] = useState<SystemTreeItem>()
+  const [searchSystem, setSearchSystem] = useState<string>()
 
   const { data: systemsList } = useSWR<Array<SystemTreeItem>>(BASE_URL + '/systems/tree')
-  const { data: systemDetail } = useSWR<SystemDetailInfo>(
-    router.query.uid ? BASE_URL + ENDPOINTS.systemDetail + '/' + router.query.uid : null
-  )
+  const { openTree, selectedSystem } = useSelectedSystem(searchSystem, systemsList)
 
-  const setSelectedSystemHandler = (item: SystemTreeItem) => {
-    router.push({ pathname: router.pathname, query: { uid: item.uid } })
-    setSelectedSystem(item)
-  }
+  const { data: systemDetail } = useSWR<SystemDetailInfo>(
+    selectedSystem ? BASE_URL + ENDPOINTS.systemDetail + '/' + selectedSystem.uid : null
+  )
 
   return (
     <div className="flex flex-row">
-      <div className="flex flex-col  min-w-[256px]">
-        {/* Sidebar component, swap this element with another sidebar if you like */}
-        <div className=" overflow-y-auto h-[100vh] border-r bg-white pt-5">
-          <div className="mt-5 flex flex-1 flex-col">
-            <nav className="flex-1 space-y-1 px-2 pb-4">
-              {systemsList && (
-                <SystemTreeComponent systemsList={systemsList} setSelectedSystem={setSelectedSystemHandler} />
-              )}
-            </nav>
-          </div>
-        </div>
-      </div>
+      {systemsList && (
+        <SystemTreeComponent
+          systemsList={systemsList}
+          setSearchSystem={setSearchSystem}
+          selectedSystem={selectedSystem}
+          openTree={openTree}
+        />
+      )}
+
       {selectedSystem ? (
         systemDetail && <SystemDetailsContainer selectedSystem={selectedSystem} systemDetail={systemDetail} />
       ) : (

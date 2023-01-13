@@ -16,7 +16,7 @@ export const CatalogLayoutContainer = ({ children, catalogueItems, categoryList 
     // Handler to call on window resize
     const handleResize = () => {
       const searchBar = document.getElementById('layout-search-bar')?.clientHeight || 0
-      const navHeader = document.getElementById('md-nav-header')?.clientHeight || 0
+      const navHeader = document.getElementById('nav-bar')?.clientHeight || 0
 
       const catalogueList = document.getElementById('catalogue-list')?.clientHeight || 0
       const catalogueBreadcrump = document.getElementById('catalogue-breadcrump')?.clientHeight || 0
