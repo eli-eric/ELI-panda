@@ -21,13 +21,6 @@ const NavigationListContainer = ({ open }: Props) => {
       <div className={open === false ? 'hidden sm:ml-6 sm:flex sm:space-x-8' : 'space-y-1 pt-2 pb-3'}>
         {status === 'authenticated' ? (
           <Fragment>
-            {userRoles?.includes(ROLES.CATALOGUE_VIEW) && (
-              <NavigationLinkComponent
-                name={intl.formatMessage({ id: navMessages.catalogue })}
-                href={PATHS.CATALOGUE}
-                open={open}
-              />
-            )}
             {userRoles?.includes(ROLES.SYSTEMS_VIEW) && (
               <NavigationLinkComponent
                 name={intl.formatMessage({ id: navMessages.systemsOverview })}
@@ -35,13 +28,20 @@ const NavigationListContainer = ({ open }: Props) => {
                 open={open}
               />
             )}
-            {userRoles?.includes(ROLES.REPORTS_VIEW) && (
+            {userRoles?.includes(ROLES.CATALOGUE_VIEW) && (
+              <NavigationLinkComponent
+                name={intl.formatMessage({ id: navMessages.catalogue })}
+                href={PATHS.CATALOGUE}
+                open={open}
+              />
+            )}
+            {/* {userRoles?.includes(ROLES.REPORTS_VIEW) && (
               <NavigationLinkComponent
                 name={intl.formatMessage({ id: navMessages.reports })}
                 href={PATHS.REPORTS}
                 open={open}
               />
-            )}
+            )} */}
             <NavigationLinkComponent
               name={intl.formatMessage({ id: navMessages.dashboard })}
               href={PATHS.DASHBOARD}
