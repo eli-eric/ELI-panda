@@ -72,13 +72,20 @@ export const messages = {
     systemDetail: {
       name: 'Name',
       description: 'Description',
-      importance: 'Importance',
+      importance: 'Importance Code',
       facilityZone: 'Facility Zone',
       type: 'Type',
-      code: 'Code',
-      alias: 'Alias',
-      location: 'Location',
-      owner: 'Owner'
+      zoneCode: 'Zone Code',
+      systemTypeUid: 'System Type UID',
+      systemCode: 'System Code',
+      systemAlias: 'System Alias',
+      locationCode: 'Location Code',
+      ownerUID: 'Owner UID',
+      eun: 'Eun',
+      serialNumber: 'Serial Number',
+      batchNumber: 'Batch Number',
+      itemUsageCategoryCode: 'Item Usage Category Code',
+      estimatedLifeTime: 'Estimated Life Time'
     },
     itemDetail: {
       eun: 'Eun',

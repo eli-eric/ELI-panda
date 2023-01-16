@@ -2,7 +2,7 @@ import { FormattedMessage } from 'react-intl'
 
 interface ItemPropertyProps {
   title: string
-  text: string
+  text?: string
   link?: boolean
 }
 
@@ -15,7 +15,7 @@ const ItemProperty = ({ title, text, link }: ItemPropertyProps) => {
       <dd className={`mt-1 text-sm ${link ? 'text-blue-500' : 'text-gray-900'}`}>
         {link ? (
           <a href={text} target="_blank" rel="noreferrer">
-            {text}
+            {text ? text : 'N/A'}
           </a>
         ) : (
           text

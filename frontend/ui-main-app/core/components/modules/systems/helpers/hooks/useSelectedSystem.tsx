@@ -5,10 +5,10 @@ import { useEffect, useState } from 'react'
 import { getTreePath } from '../tree-path'
 
 // useSelectedSystem hook for managing tree component a write correct url slug
-export const useSelectedSystem = (selectedSystemName?: string, systemsList?: Array<SystemTreeItem>) => {
+export const useSelectedSystem = (selectedSystemCode?: string, systemsList?: Array<SystemTreeItem>) => {
   const [selectedSystem, setSelectedSystem] = useState<SystemTreeItem>()
   const [openTree, setOpenTree] = useState<boolean>(false)
-  const [searchSystemName, setSearchSystemName] = useState<string | undefined>(selectedSystemName)
+  const [searchSystemName, setSearchSystemName] = useState<string | undefined>(selectedSystemCode)
 
   const router = useRouter()
 
@@ -36,7 +36,7 @@ export const useSelectedSystem = (selectedSystemName?: string, systemsList?: Arr
 
   // main useEffect for calling recursion for find correct tree element and setting correct url
   useEffect(() => {
-    const pathItem = getTreePath(systemsList, selectedSystemName || searchSystemName)
+    const pathItem = getTreePath(systemsList, selectedSystemCode || searchSystemName)
     if (pathItem) {
       if (!router.query.slug) {
         router.push({
@@ -52,7 +52,7 @@ export const useSelectedSystem = (selectedSystemName?: string, systemsList?: Arr
       }
       setSelectedSystem(pathItem.systemItem)
     }
-  }, [systemsList, searchSystemName, selectedSystemName]) //eslint-disable-line
+  }, [systemsList, searchSystemName, selectedSystemCode]) //eslint-disable-line
 
   return {
     selectedSystem: selectedSystem,

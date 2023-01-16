@@ -7,8 +7,12 @@ import {
   PuzzlePieceIcon,
   TrashIcon
 } from '@heroicons/react/24/outline'
+import useAxios from 'core/helpers/use-axios'
+import { BASE_URL } from 'core/types/constants/common'
+import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { SystemTreeItem } from 'core/types/responses'
-import { Dispatch, Fragment, SetStateAction, useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { Dispatch, Fragment, SetStateAction, useState } from 'react'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -16,15 +20,16 @@ function classNames(...classes) {
 
 interface DisclosureComponentProps {
   item: SystemTreeItem
-  setSearchSystem: Dispatch<SetStateAction<string | undefined>>
+  setSelectedSystemCode: Dispatch<SetStateAction<string | undefined>>
   openTree?: boolean
   selectedSystem?: SystemTreeItem
 }
 
-const DisclosureComponent = ({ item, setSearchSystem, openTree, selectedSystem }: DisclosureComponentProps) => {
-  useEffect(() => {
-    console.log('disclousure', openTree)
-  }, [openTree])
+const DisclosureComponent = ({ item, setSelectedSystemCode, openTree, selectedSystem }: DisclosureComponentProps) => {
+  const router = useRouter()
+  const [axiosUrl, setaxiosUrl] = useState<string>()
+  const url = BASE_URL + ENDPOINTS.systemDetail + '/' + item.uid
+  const { loading } = useAxios({ url: axiosUrl ? axiosUrl : null, method: 'delete' })
   return (
     <Disclosure as="div" key={item.name} className="space-y-" defaultOpen={openTree}>
       {({ open }) => (
@@ -33,10 +38,11 @@ const DisclosureComponent = ({ item, setSearchSystem, openTree, selectedSystem }
             className={classNames(
               ' text-gray-500 hover:text-gray-900 hover:bg-gray-100 ',
               'rounded-md group w-full flex items-center pl-2 pr-1 text-left text-sm font-medium ',
-              selectedSystem?.uid === item.uid ? 'outline-none ring-2 rounded-md  ring-primary-500' : ''
+              selectedSystem?.systemCode === item.systemCode ? 'outline-none ring-2 rounded-md  ring-primary-500' : ''
             )}
             onClick={() => {
-              setSearchSystem(item.name)
+              console.log(item.systemCode)
+              setSelectedSystemCode(item.systemCode)
             }}
           >
             <Disclosure.Button className="w-full">
@@ -57,8 +63,22 @@ const DisclosureComponent = ({ item, setSearchSystem, openTree, selectedSystem }
                   <span>{item.name}</span>
                 </div>
                 <div className="flex">
-                  <PencilSquareIcon className="h-5 w-5" />
-                  <TrashIcon className="h-5 w-5" />
+                  <PencilSquareIcon
+                    className="h-5 w-5"
+                    onClick={() => {
+                      router.push({
+                        pathname: router.pathname,
+                        query: { slug: router.query.slug, uid: item.uid }
+                      })
+                    }}
+                  />
+                  <TrashIcon
+                    className="h-5 w-5"
+                    onClick={() => {
+                      setaxiosUrl(url)
+                      if (loading === false) router.reload()
+                    }}
+                  />
                   <PlusIcon className="h-5 w-5" />
                 </div>
               </div>
@@ -71,7 +91,7 @@ const DisclosureComponent = ({ item, setSearchSystem, openTree, selectedSystem }
                   <li key={subItem.name} className="list-item group w-full items-center pl-3 pt-1 text-sm font-mediu ">
                     <DisclosureComponent
                       item={subItem}
-                      setSearchSystem={setSearchSystem}
+                      setSelectedSystemCode={setSelectedSystemCode}
                       openTree={openTree}
                       selectedSystem={selectedSystem}
                     />
@@ -88,12 +108,12 @@ const DisclosureComponent = ({ item, setSearchSystem, openTree, selectedSystem }
 
 interface Props {
   systemsList: Array<SystemTreeItem>
-  setSearchSystem: Dispatch<SetStateAction<string | undefined>>
+  setSelectedSystemCode: Dispatch<SetStateAction<string | undefined>>
   openTree?: boolean
   selectedSystem?: SystemTreeItem
 }
 
-export default function SystemTreeComponent({ systemsList, setSearchSystem, openTree, selectedSystem }: Props) {
+export default function SystemTreeComponent({ systemsList, setSelectedSystemCode, openTree, selectedSystem }: Props) {
   return (
     <div className="flex flex-col  min-w-[256px]">
       <div className=" overflow-y-auto h-[100vh] border-r bg-white pt-5">
@@ -104,7 +124,7 @@ export default function SystemTreeComponent({ systemsList, setSearchSystem, open
               <DisclosureComponent
                 key={item.name}
                 item={item}
-                setSearchSystem={setSearchSystem}
+                setSelectedSystemCode={setSelectedSystemCode}
                 openTree={openTree}
                 selectedSystem={selectedSystem}
               />

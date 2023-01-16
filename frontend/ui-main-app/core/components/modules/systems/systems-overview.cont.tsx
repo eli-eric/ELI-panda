@@ -10,10 +10,10 @@ import { useSelectedSystem } from './helpers/hooks/useSelectedSystem'
 import SystemTreeComponent from './systems-tree/systems-treeview.comp'
 
 const SystemsOverviewContainer = () => {
-  const [searchSystem, setSearchSystem] = useState<string>()
+  const [selectedSystemCode, setSelectedSystemCode] = useState<string>()
 
   const { data: systemsList } = useSWR<Array<SystemTreeItem>>(BASE_URL + '/systems/tree')
-  const { openTree, selectedSystem } = useSelectedSystem(searchSystem, systemsList)
+  const { openTree, selectedSystem } = useSelectedSystem(selectedSystemCode, systemsList)
 
   const { data: systemDetail } = useSWR<SystemDetailInfo>(
     selectedSystem ? BASE_URL + ENDPOINTS.systemDetail + '/' + selectedSystem.uid : null
@@ -24,7 +24,7 @@ const SystemsOverviewContainer = () => {
       {systemsList && (
         <SystemTreeComponent
           systemsList={systemsList}
-          setSearchSystem={setSearchSystem}
+          setSelectedSystemCode={setSelectedSystemCode}
           selectedSystem={selectedSystem}
           openTree={openTree}
         />
