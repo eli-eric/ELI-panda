@@ -1,1 +1,33 @@
-[{"uid":"123","systemCode":"sdf","name":"konec"}]
+[
+  {
+    "uid": "123",
+    "systemCode": "asd",
+    "name": "XXX",
+    "children": [
+      {
+        "uid": "1234",
+        "systemCode": "1234",
+        "name": "SSS"
+      }
+    ]
+  },
+  {
+    "uid": "1235",
+    "systemCode": "1235",
+    "name": "WWW",
+    "children": [
+      {
+        "uid": "12349",
+        "systemCode": "12349",
+        "name": "QQQ",
+        "children": [
+          {
+            "uid": "777",
+            "systemCode": "777",
+            "name": "CCC"
+          }
+        ]
+      }
+    ]
+  }
+]

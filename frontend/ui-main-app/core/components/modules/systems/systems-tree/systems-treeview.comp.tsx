@@ -7,12 +7,8 @@ import {
   PuzzlePieceIcon,
   TrashIcon
 } from '@heroicons/react/24/outline'
-import useAxios from 'core/helpers/use-axios'
-import { BASE_URL } from 'core/types/constants/common'
-import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { SystemTreeItem } from 'core/types/responses'
-import { useRouter } from 'next/router'
-import { Dispatch, Fragment, SetStateAction, useState } from 'react'
+import { Dispatch, Fragment, SetStateAction } from 'react'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -26,12 +22,9 @@ interface DisclosureComponentProps {
 }
 
 const DisclosureComponent = ({ item, setSelectedSystemCode, openTree, selectedSystem }: DisclosureComponentProps) => {
-  const router = useRouter()
-  const [axiosUrl, setaxiosUrl] = useState<string>()
-  const url = BASE_URL + ENDPOINTS.systemDetail + '/' + item.uid
-  const { loading } = useAxios({ url: axiosUrl ? axiosUrl : null, method: 'delete' })
+  const open = item.open || false
   return (
-    <Disclosure as="div" key={item.name} className="space-y-" defaultOpen={openTree}>
+    <Disclosure as="div" key={item.name} className="space-y-" defaultOpen={open}>
       {({ open }) => (
         <Fragment>
           <div
@@ -41,7 +34,6 @@ const DisclosureComponent = ({ item, setSelectedSystemCode, openTree, selectedSy
               selectedSystem?.systemCode === item.systemCode ? 'outline-none ring-2 rounded-md  ring-primary-500' : ''
             )}
             onClick={() => {
-              console.log(item.systemCode)
               setSelectedSystemCode(item.systemCode)
             }}
           >
@@ -63,22 +55,8 @@ const DisclosureComponent = ({ item, setSelectedSystemCode, openTree, selectedSy
                   <span>{item.name}</span>
                 </div>
                 <div className="flex">
-                  <PencilSquareIcon
-                    className="h-5 w-5"
-                    onClick={() => {
-                      router.push({
-                        pathname: router.pathname,
-                        query: { slug: router.query.slug, uid: item.uid }
-                      })
-                    }}
-                  />
-                  <TrashIcon
-                    className="h-5 w-5"
-                    onClick={() => {
-                      setaxiosUrl(url)
-                      if (loading === false) router.reload()
-                    }}
-                  />
+                  <PencilSquareIcon className="h-5 w-5" />
+                  <TrashIcon className="h-5 w-5" />
                   <PlusIcon className="h-5 w-5" />
                 </div>
               </div>

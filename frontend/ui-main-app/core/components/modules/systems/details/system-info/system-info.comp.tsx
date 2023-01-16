@@ -31,18 +31,31 @@ const SystemInfoComponent = ({ systemInfo }: Props) => {
               <section aria-labelledby="details-heading" className="mt-12">
                 <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
                   <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                    <ItemProperty text={systemInfo.importanceCode} title={messages.importance} />
-                    <ItemProperty text={systemInfo.zoneCode} title={messages.zoneCode} />
-                    <ItemProperty text={systemInfo.systemTypeUID} title={messages.systemTypeUid} />
-                    <ItemProperty text={systemInfo.systemCode} title={messages.systemCode} />
-                    <ItemProperty text={systemInfo.systemAlias} title={messages.systemAlias} />
-                    <ItemProperty text={systemInfo.locationCode} title={messages.locationCode} />
-                    <ItemProperty text={systemInfo.ownerUID} title={messages.ownerUID} />
-                    <ItemProperty text={systemInfo.eun} title={messages.eun} />
-                    <ItemProperty text={systemInfo.serialNumber} title={messages.serialNumber} />
-                    <ItemProperty text={systemInfo.batchNumber} title={messages.batchNumber} />
-                    <ItemProperty text={systemInfo.itemUsageCategoryCode} title={messages.itemUsageCategoryCode} />
-                    <ItemProperty text={systemInfo.estimatedLifeTime.toString()} title={messages.estimatedLifeTime} />
+                    <ItemProperty
+                      text={systemInfo.importanceCode}
+                      title={messages.labels.importance}
+                      edit={false}
+                      formFieldName={messages.formFieldName.importance}
+                    />
+                    <ItemProperty text={systemInfo.zoneCode} title={messages.labels.zoneCode} edit={false} />
+                    <ItemProperty text={systemInfo.systemTypeUID} title={messages.labels.systemTypeUid} edit={false} />
+                    <ItemProperty text={systemInfo.systemCode} title={messages.labels.systemCode} edit={false} />
+                    <ItemProperty text={systemInfo.systemAlias} title={messages.labels.systemAlias} edit={false} />
+                    <ItemProperty text={systemInfo.locationCode} title={messages.labels.locationCode} edit={false} />
+                    <ItemProperty text={systemInfo.ownerUID} title={messages.labels.ownerUID} edit={false} />
+                    <ItemProperty text={systemInfo.eun} title={messages.labels.eun} edit={false} />
+                    <ItemProperty text={systemInfo.serialNumber} title={messages.labels.serialNumber} edit={false} />
+                    <ItemProperty text={systemInfo.batchNumber} title={messages.labels.batchNumber} edit={false} />
+                    <ItemProperty
+                      text={systemInfo.itemUsageCategoryCode}
+                      title={messages.labels.itemUsageCategoryCode}
+                      edit={false}
+                    />
+                    <ItemProperty
+                      text={systemInfo.estimatedLifeTime.toString()}
+                      title={messages.labels.estimatedLifeTime}
+                      edit={false}
+                    />
                   </dl>
                 </div>
               </section>

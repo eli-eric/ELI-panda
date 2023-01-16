@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
 import ItemDetailComponent from '../../catalogue/item-detail/item-detail.comp'
-import SystemEditContainer from '../edit/system-edit.cont'
 import DisclosureComponent from './disclosure/disclosure.comp'
 import ItemInfoComponent from './item-info/item-info.comp'
 import SystemInfoComponent from './system-info/system-info.comp'
@@ -39,27 +38,23 @@ const SystemDetailsContainer = ({ selectedSystem, systemDetail }: Props) => {
 
   return (
     <Fragment>
-      {uid ? (
-        <SystemEditContainer />
-      ) : (
-        <div className="flex-1 flex-col">
-          {systemDetail.systemInfo && (
-            <DisclosureComponent title="System">
-              <SystemInfoComponent systemInfo={systemDetail.systemInfo} />
-            </DisclosureComponent>
-          )}
-          {systemDetail.itemInfo && (
-            <DisclosureComponent title="Item">
-              <ItemInfoComponent itemInfo={systemDetail.itemInfo} />
-            </DisclosureComponent>
-          )}
-          {systemDetail.catalogueInfo && (
-            <DisclosureComponent title="System">
-              <ItemDetailComponent item={systemDetail.catalogueInfo} images={images} />
-            </DisclosureComponent>
-          )}
-        </div>
-      )}
+      <div className="flex-1 flex-col">
+        {systemDetail.systemInfo && (
+          <DisclosureComponent title="System">
+            <SystemInfoComponent systemInfo={systemDetail.systemInfo} />
+          </DisclosureComponent>
+        )}
+        {systemDetail.itemInfo && (
+          <DisclosureComponent title="Item">
+            <ItemInfoComponent itemInfo={systemDetail.itemInfo} />
+          </DisclosureComponent>
+        )}
+        {systemDetail.catalogueInfo && (
+          <DisclosureComponent title="System">
+            <ItemDetailComponent item={systemDetail.catalogueInfo} images={images} />
+          </DisclosureComponent>
+        )}
+      </div>
     </Fragment>
   )
 }

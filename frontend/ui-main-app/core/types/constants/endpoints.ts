@@ -5,3 +5,10 @@ export const ENDPOINTS = {
   catalogueItem: '/catalogue/item',
   systemDetail: '/system'
 }
+
+export enum AXIOS_METHOD {
+  GET = 'get',
+  POST = 'post',
+  PUT = 'put',
+  DELETE = 'delete'
+}

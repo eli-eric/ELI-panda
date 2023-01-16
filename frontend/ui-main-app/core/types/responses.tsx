@@ -32,6 +32,7 @@ export interface CatalogueItemsResponse {
 export interface SystemTreeItem {
   name: string
   uid: string
+  open?: boolean
   systemCode: string
   children?: SystemTreeItem[]
 }
@@ -45,6 +46,8 @@ export interface SystemInfo {
   importanceCode?: string
   //zones: [{code: "l1", value: "L1"},{code: "other", value: "Other"}]
   zoneCode?: string
+  //SubZones: [{code: "l1a", value: "L1a", zoneCode: "l1"},{code: "l1b", value: "L1b", zoneCode: "l1"}]
+  subZoneCode?: string
   //systemTypes: [{uid: "vacuum-technology/vacuum-pumps/turbomolecular-pumps", value: "Vacuum technology -> Vacuum pumps -> Turbomolecular Pumps", code: "TMP"}, {uid: "motion/actuators/motorized-actuators", value: "Motion -> Actuators -> Motorized actuators", code: "MOTA"},{uid: "other", value: "Other", code: "OTHR"}]
   systemTypeUID?: string
   systemCode: string // READONLY!  ( in next version it will be automaticaly calculated from systemType mask - for now copy there systemType.code)

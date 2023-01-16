@@ -7,7 +7,7 @@ import { getTreePath } from '../tree-path'
 // useSelectedSystem hook for managing tree component a write correct url slug
 export const useSelectedSystem = (selectedSystemCode?: string, systemsList?: Array<SystemTreeItem>) => {
   const [selectedSystem, setSelectedSystem] = useState<SystemTreeItem>()
-  const [openTree, setOpenTree] = useState<boolean>(false)
+  const [copiedTree, setCopiedTree] = useState<Array<SystemTreeItem>>()
   const [searchSystemName, setSearchSystemName] = useState<string | undefined>(selectedSystemCode)
 
   const router = useRouter()
@@ -20,9 +20,7 @@ export const useSelectedSystem = (selectedSystemCode?: string, systemsList?: Arr
         if (slugLength > 0) {
           const lastSlug = router.query.slug[slugLength - 1]
           setSearchSystemName(lastSlug)
-          setOpenTree(true)
         } else {
-          setOpenTree(false)
         }
       }
     }
@@ -51,11 +49,12 @@ export const useSelectedSystem = (selectedSystemCode?: string, systemsList?: Arr
         })
       }
       setSelectedSystem(pathItem.systemItem)
+      setCopiedTree(pathItem.copiedTree)
     }
   }, [systemsList, searchSystemName, selectedSystemCode]) //eslint-disable-line
 
   return {
     selectedSystem: selectedSystem,
-    openTree: openTree
+    copiedTree: copiedTree
   }
 }
