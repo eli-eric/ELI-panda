@@ -1,4 +1,3 @@
-import { BASE_URL } from 'core/types/constants/common'
 import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { SystemDetailInfo, SystemTreeItem } from 'core/types/responses'
 import { useRouter } from 'next/router'
@@ -11,9 +10,9 @@ import SystemTreeComponent from './systems-tree/systems-treeview.comp'
 
 const SystemsOverviewContainer = () => {
   const router = useRouter()
-  const { data: systemsList, mutate: systemListMutate } = useSWR<Array<SystemTreeItem>>(BASE_URL + '/systems/tree')
+  const { data: systemsList, mutate: systemListMutate } = useSWR<Array<SystemTreeItem>>(ENDPOINTS.systemTree)
   const { data: systemDetail, mutate: systemDetailMutate } = useSWR<SystemDetailInfo>(
-    router.query.uid ? BASE_URL + ENDPOINTS.systemDetail + '/' + router.query.uid : null
+    router.query.uid ? ENDPOINTS.systemDetail + '/' + router.query.uid : null
   )
   const treeCopy = useTreeUpdate(systemsList)
 

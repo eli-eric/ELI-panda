@@ -1,4 +1,3 @@
-import { BASE_URL } from 'core/types/constants/common'
 import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
@@ -25,7 +24,7 @@ const usePath = () => {
 
 export const useCategoryPath = () => {
   const path = usePath()
-  return BASE_URL + ENDPOINTS.catalogueCategories + (path === '' ? '' : `/${path}`)
+  return ENDPOINTS.catalogueCategories + (path === '' ? '' : `/${path}`)
 }
 
 export const useCatalogueItemsPath = (pageSize: number, page: number) => {
@@ -40,15 +39,10 @@ export const useCatalogueItemsPath = (pageSize: number, page: number) => {
     if (!search || search === undefined) return ''
   }, [search])
 
-  return (
-    BASE_URL +
-    ENDPOINTS.catalogueItems +
-    `?pageSize=${pageSize}&page=${page}&categoryPath=${categoryPath}` +
-    searchQuery
-  )
+  return ENDPOINTS.catalogueItems + `?pageSize=${pageSize}&page=${page}&categoryPath=${categoryPath}` + searchQuery
 }
 
 export const useCatalogueItemDetailPath = (uid?: string | undefined) => {
   const router = useRouter()
-  return BASE_URL + ENDPOINTS.catalogueItem + '/' + (uid ? uid : router.query.uid)
+  return ENDPOINTS.catalogueItem + '/' + (uid ? uid : router.query.uid)
 }

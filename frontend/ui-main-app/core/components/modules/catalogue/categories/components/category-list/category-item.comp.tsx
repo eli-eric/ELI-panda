@@ -1,4 +1,3 @@
-import { BASE_URL } from 'core/types/constants/common'
 import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { PATHS } from 'core/types/constants/paths'
 import { CatalogueCategoryResponse } from 'core/types/responses'
@@ -27,7 +26,7 @@ const CategoryItemComponent = ({ category }: Props) => {
           width={200}
           height={200}
           alt={category.code}
-          src={BASE_URL + `${ENDPOINTS.catalogueCategory}/` + category.uid + '/image'}
+          src={ENDPOINTS.catalogueCategory + '/' + category.uid + '/image'}
         />
       </div>
       <div className="min-w-0 flex-1">
