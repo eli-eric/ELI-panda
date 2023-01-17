@@ -1,4 +1,4 @@
-import { SystemDetailInfo, SystemTreeItem } from 'core/types/responses'
+import { SystemDetailInfo } from 'core/types/responses'
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
@@ -29,11 +29,10 @@ const images = [
 ]
 
 interface Props {
-  selectedSystem: SystemTreeItem
   systemDetail: SystemDetailInfo
 }
 
-const SystemDetailsContainer = ({ selectedSystem, systemDetail }: Props) => {
+const SystemDetailsContainer = ({ systemDetail }: Props) => {
   const uid = useRouter().query.uid
 
   return (
