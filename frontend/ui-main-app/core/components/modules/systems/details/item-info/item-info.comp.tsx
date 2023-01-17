@@ -1,4 +1,5 @@
-import ItemProperty from 'core/components/modules/shared/item-property.comp'
+import ItemPropertyTitle from 'core/components/modules/shared/item-property/item-property-title.comp'
+import ItemPropertyValue from 'core/components/modules/shared/item-property/item-property-value.comp'
 import ProgressBarComponent from 'core/components/ui/progress-bar.comp'
 import { message } from 'core/i18n/src/messages'
 import { ItemInfo } from 'core/types/responses'
@@ -18,16 +19,36 @@ const ItemInfoComponent = ({ itemInfo }: Props) => {
               <section>
                 <div className="px-4 py-5 sm:px-6">
                   <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                    <ItemProperty text={itemInfo.eun} title={messages.eun} />
-                    <ItemProperty text={itemInfo.serialNumber} title={messages.serialNumber} />
-                    <ItemProperty text={itemInfo.batchNumber} title={messages.batchNumber} />
-                    <ItemProperty text={itemInfo.assetNumber} title={messages.assetNumber} />
-                    <ItemProperty text={itemInfo.itemUsageCategory} title={messages.itemUsageCategory} />
-                    <ItemProperty text={itemInfo.activated.toString()} title={messages.activated} />
-                    <ItemProperty text={itemInfo.estimatedLifetime} title={messages.estimatedLifetime} />
-                    <ItemProperty text={itemInfo.obsolete.toString()} title={messages.obsolete} />
-                    <ItemProperty text={itemInfo.createdBy} title={messages.createdBy} />
-                    <ItemProperty text={itemInfo.note} title={messages.note} />
+                    <ItemPropertyTitle title={messages.eun}>
+                      <ItemPropertyValue text={itemInfo.eun} />
+                    </ItemPropertyTitle>
+                    <ItemPropertyTitle title={messages.serialNumber}>
+                      <ItemPropertyValue text={itemInfo.serialNumber} />
+                    </ItemPropertyTitle>
+                    <ItemPropertyTitle title={messages.batchNumber}>
+                      <ItemPropertyValue text={itemInfo.batchNumber} />
+                    </ItemPropertyTitle>
+                    <ItemPropertyTitle title={messages.assetNumber}>
+                      <ItemPropertyValue text={itemInfo.assetNumber} />
+                    </ItemPropertyTitle>
+                    <ItemPropertyTitle title={messages.itemUsageCategory}>
+                      <ItemPropertyValue text={itemInfo.itemUsageCategory} />
+                    </ItemPropertyTitle>
+                    <ItemPropertyTitle title={messages.activated}>
+                      <ItemPropertyValue text={itemInfo.activated.toString()} />
+                    </ItemPropertyTitle>
+                    <ItemPropertyTitle title={messages.estimatedLifetime}>
+                      <ItemPropertyValue text={itemInfo.estimatedLifetime} />
+                    </ItemPropertyTitle>
+                    <ItemPropertyTitle title={messages.obsolete}>
+                      <ItemPropertyValue text={itemInfo.obsolete.toString()} />
+                    </ItemPropertyTitle>
+                    <ItemPropertyTitle title={messages.createdBy}>
+                      <ItemPropertyValue text={itemInfo.createdBy} />
+                    </ItemPropertyTitle>
+                    <ItemPropertyTitle title={messages.note}>
+                      <ItemPropertyValue text={itemInfo.note} />
+                    </ItemPropertyTitle>
                   </dl>
                 </div>
               </section>
