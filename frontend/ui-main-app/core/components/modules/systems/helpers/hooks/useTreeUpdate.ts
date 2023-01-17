@@ -1,31 +1,37 @@
 import { SystemTreeItem } from 'core/types/responses'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
-// dynamic recursion for find slug path in tree navigation
+//  recursion for set open param for tree view
 export const useTreeUpdate = (tree: Array<SystemTreeItem> | undefined): Array<SystemTreeItem> | undefined => {
+  const [copiedTree, setCopiedTree] = useState<Array<SystemTreeItem>>()
   const router = useRouter()
-  if (!tree) return
-  const copiedTree = JSON.parse(JSON.stringify(tree))
 
-  const searchTree = (treeObj: Array<SystemTreeItem> | undefined, uid: string | undefined) => {
+  const duplicateTree = (tree, uid) => {
+    const copiedTree = [...tree]
     let results
-    if (!treeObj) return undefined
-    for (let i = 0; i < treeObj.length; i++) {
-      treeObj[i].open = true
-      if (treeObj[i].uid == uid) {
+    const recAddOpen = (uid: string) => (obj: SystemTreeItem) => {
+      obj.open = true
+      if (obj.uid === uid) {
         results = true
         return results
-      } else if (treeObj[i].children) {
-        results = searchTree(treeObj[i].children, uid)
+      }
+      if (obj.children) {
+        results = obj.children.find(recAddOpen(uid))
         if (results) return results
       }
-      treeObj[i].open = false
+      obj.open = false
     }
-    return results
+    tree.find(recAddOpen(uid))
+    return copiedTree
   }
-  if (typeof router.query.uid === 'string') {
-    const systemItem = searchTree(copiedTree, router.query.uid)
-  }
+
+  useEffect(() => {
+    if (tree) {
+      const duplicatedTree = duplicateTree(tree, router.query.uid)
+      setCopiedTree(duplicatedTree)
+    }
+  }, [tree])
 
   return copiedTree
 }
