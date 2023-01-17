@@ -70,15 +70,42 @@ export const messages = {
   systemsPage: {
     head: 'Eli Panda - Systems',
     systemDetail: {
-      name: 'Name',
-      description: 'Description',
-      importance: 'Importance',
-      facilityZone: 'Facility Zone',
-      type: 'Type',
-      code: 'Code',
-      alias: 'Alias',
-      location: 'Location',
-      owner: 'Owner'
+      labels: {
+        name: 'Name',
+        description: 'Description',
+        importance: 'Importance Code',
+        facilityZone: 'Facility Zone',
+        type: 'Type',
+        zoneCode: 'Zone Code',
+        systemTypeUid: 'System Type UID',
+        systemCode: 'System Code',
+        systemAlias: 'System Alias',
+        locationCode: 'Location Code',
+        ownerUID: 'Owner UID',
+        eun: 'Eun',
+        serialNumber: 'Serial Number',
+        batchNumber: 'Batch Number',
+        itemUsageCategoryCode: 'Item Usage Category Code',
+        estimatedLifeTime: 'Estimated Life Time'
+      },
+      formFieldName: {
+        name: 'name',
+        description: 'description',
+        importance: 'importance',
+        facilityZone: 'facilityZone',
+        type: 'type',
+        zoneCode: 'zoneCode',
+        systemTypeUid: 'systemTypeUid',
+        systemCode: 'systemCode',
+        systemAlias: 'systemAlias',
+        locationCode: 'locationCode',
+        ownerUID: 'ownerUID',
+        eun: 'eun',
+        serialNumber: 'serialNumber',
+        batchNumber: 'batchNumber',
+        itemUsageCategoryCode: 'itemUsageCategoryCode',
+        estimatedLifeTime: 'estimatedLifeTime'
+      }
     },
     itemDetail: {
       eun: 'Eun',

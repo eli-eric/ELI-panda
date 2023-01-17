@@ -1,11 +1,11 @@
-import { SystemDetailInfo, SystemTreeItem } from 'core/types/responses'
-import { useEffect, useState } from 'react'
+import { SystemDetailInfo } from 'core/types/responses'
+import { useRouter } from 'next/router'
+import { Fragment } from 'react'
 
 import ItemDetailComponent from '../../catalogue/item-detail/item-detail.comp'
-import { useCatalogueItemDetailPath } from '../../catalogue/shared/hooks/usePath'
+import DisclosureComponent from './disclosure/disclosure.comp'
 import ItemInfoComponent from './item-info/item-info.comp'
 import SystemInfoComponent from './system-info/system-info.comp'
-import SystemNavigationBarComponent from './system-navigation-bar/systems-navigation-bar.comp'
 
 const images = [
   {
@@ -29,42 +29,32 @@ const images = [
 ]
 
 interface Props {
-  selectedSystem: SystemTreeItem
   systemDetail: SystemDetailInfo
 }
 
-const SystemDetailsContainer = ({ selectedSystem, systemDetail }: Props) => {
-  const catalogueItemPath = useCatalogueItemDetailPath(selectedSystem.uid)
-
-  const [selectedMenuItem, setSelectedMenuItem] = useState({
-    system: { selected: true },
-    item: { selected: false },
-    catalogue: { selected: false }
-  })
-
-  useEffect(() => {
-    if (selectedSystem.children) {
-      setSelectedMenuItem({
-        system: { selected: true },
-        item: { selected: false },
-        catalogue: { selected: false }
-      })
-    }
-  }, [selectedSystem])
+const SystemDetailsContainer = ({ systemDetail }: Props) => {
+  const uid = useRouter().query.uid
 
   return (
-    <div className="flex-1 flex-col">
-      {selectedSystem && (
-        <SystemNavigationBarComponent
-          item={selectedSystem}
-          setSelectedMenuItem={setSelectedMenuItem}
-          selectedMenuItem={selectedMenuItem}
-        />
-      )}
-      {selectedMenuItem.catalogue.selected && <ItemDetailComponent item={systemDetail.catalogueInfo} images={images} />}
-      {selectedMenuItem.system.selected && <SystemInfoComponent systemInfo={systemDetail.systemInfo} />}
-      {selectedMenuItem.item.selected && <ItemInfoComponent itemInfo={systemDetail.itemInfo} />}
-    </div>
+    <Fragment>
+      <div className="flex-1 flex-col">
+        {systemDetail.systemInfo && (
+          <DisclosureComponent title="System">
+            <SystemInfoComponent systemInfo={systemDetail.systemInfo} />
+          </DisclosureComponent>
+        )}
+        {systemDetail.itemInfo && (
+          <DisclosureComponent title="Item">
+            <ItemInfoComponent itemInfo={systemDetail.itemInfo} />
+          </DisclosureComponent>
+        )}
+        {systemDetail.catalogueInfo && (
+          <DisclosureComponent title="System">
+            <ItemDetailComponent item={systemDetail.catalogueInfo} images={images} />
+          </DisclosureComponent>
+        )}
+      </div>
+    </Fragment>
   )
 }
 

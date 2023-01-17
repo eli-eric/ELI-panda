@@ -1,0 +1,20 @@
+[
+  {
+    "name": "hovno root",
+    "description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed elit dui, pellentesque a, faucibus vel, interdum nec, diam. Quisque tincidunt scelerisque libero. Nunc auctor. Integer tempor. Maecenas aliquet accumsan leo. In sem justo, commodo ut, suscipit",
+    "importanceCode": "(0)Low",
+    "zoneCode": "string",
+    "systemTypeUID": "string",
+    "systemCode": "string",
+    "systemAlias": "string",
+    "locationCode": "string",
+    "ownerUID": "dsfsd",
+    "catalogueUID": "string",
+    "eun": "fdfd",
+    "serialNumber": "",
+    "batchNumber": "",
+    "itemUsageCategoryCode": "",
+    "estimatedLifeTime": 2666,
+    "uid": "123"
+  }
+]

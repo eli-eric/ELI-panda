@@ -1,7 +1,16 @@
+import { BASE_URL } from './common'
 export const ENDPOINTS = {
-  catalogueCategories: '/catalogue/categories',
-  catalogueCategory: '/catalogue/category',
-  catalogueItems: '/catalogue/items',
-  catalogueItem: '/catalogue/item',
-  systemDetail: '/system'
+  catalogueCategories: BASE_URL + '/catalogue/categories',
+  catalogueCategory: BASE_URL + '/catalogue/category',
+  catalogueItems: BASE_URL + '/catalogue/items',
+  catalogueItem: BASE_URL + '/catalogue/item',
+  systemDetail: BASE_URL + '/system',
+  systemTree: BASE_URL + '/systems/tree'
+}
+
+export enum AXIOS_METHOD {
+  GET = 'get',
+  POST = 'post',
+  PUT = 'put',
+  DELETE = 'delete'
 }
