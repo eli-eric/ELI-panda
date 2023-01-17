@@ -73,11 +73,11 @@ export const messages = {
       labels: {
         name: 'Name',
         description: 'Description',
-        importance: 'Importance Code',
+        importanceCode: 'Importance Code',
         facilityZone: 'Facility Zone',
         type: 'Type',
         zoneCode: 'Zone Code',
-        systemTypeUid: 'System Type UID',
+        systemTypeUID: 'System Type UID',
         systemCode: 'System Code',
         systemAlias: 'System Alias',
         locationCode: 'Location Code',
