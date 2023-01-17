@@ -1,4 +1,5 @@
-import ItemProperty from 'core/components/modules/shared/item-property.comp'
+import ItemPropertyTitle from 'core/components/modules/shared/item-property/item-property-title.comp'
+import ItemPropertyValue from 'core/components/modules/shared/item-property/item-property-value.comp'
 import { message } from 'core/i18n/src/messages'
 import { CatalogueItem } from 'core/types/responses'
 import React from 'react'
@@ -17,10 +18,18 @@ const ItemPropertiesComponent = ({ item, groups }: Props) => {
     <section aria-labelledby="details-heading" className="mt-12">
       <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
         <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-          <ItemProperty text={item.categoryName} title={messages.categoryName} />
-          <ItemProperty text={item.manufacturer} title={messages.manufactorer} />
-          <ItemProperty text={item.manufacturerNumber} title={messages.manufacturerNumber} />
-          <ItemProperty text={item.manufacturerUrl} title={messages.manufacturerUrl} link={true} />
+          <ItemPropertyTitle title={messages.categoryName}>
+            <ItemPropertyValue text={item.categoryName} />{' '}
+          </ItemPropertyTitle>
+          <ItemPropertyTitle title={messages.manufactorer}>
+            <ItemPropertyValue text={item.manufacturer} />
+          </ItemPropertyTitle>
+          <ItemPropertyTitle title={messages.manufacturerNumber}>
+            <ItemPropertyValue text={item.manufacturerNumber} />
+          </ItemPropertyTitle>
+          <ItemPropertyTitle title={messages.manufacturerUrl}>
+            <ItemPropertyValue text={item.manufacturerUrl} link={true} />
+          </ItemPropertyTitle>
         </dl>
       </div>
       <DisclosureComponent item={item} groups={groups} />

@@ -1,11 +1,10 @@
 import { SystemDetailInfo } from 'core/types/responses'
-import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
 import ItemDetailComponent from '../../catalogue/item-detail/item-detail.comp'
 import DisclosureComponent from './disclosure/disclosure.comp'
 import ItemInfoComponent from './item-info/item-info.comp'
-import SystemInfoComponent from './system-info/system-info.comp'
+import SystemInfoComponent from './system-detail/system-detail.comp'
 
 const images = [
   {
@@ -33,8 +32,6 @@ interface Props {
 }
 
 const SystemDetailsContainer = ({ systemDetail }: Props) => {
-  const uid = useRouter().query.uid
-
   return (
     <Fragment>
       <div className="flex-1 flex-col">
