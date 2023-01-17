@@ -1,37 +1,26 @@
-import { BASE_URL } from 'core/types/constants/common'
 import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { SystemDetailInfo, SystemTreeItem } from 'core/types/responses'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
 import useSWR from 'swr'
 
 import SystemDetailsContainer from './details/system-details.cont'
 import EmptySectionComponent from './empty-section/empty-section.comp'
-import { useSelectedSystem } from './helpers/hooks/useSelectedSystem'
+import { useTreeUpdate } from './helpers/hooks/useTreeUpdate'
 import SystemTreeComponent from './systems-tree/systems-treeview.comp'
 
 const SystemsOverviewContainer = () => {
-  const [searchSystem, setSearchSystem] = useState<string>()
-
-  const { data: systemsList } = useSWR<Array<SystemTreeItem>>(BASE_URL + '/systems/tree')
-  const { openTree, selectedSystem } = useSelectedSystem(searchSystem, systemsList)
-
-  const { data: systemDetail } = useSWR<SystemDetailInfo>(
-    selectedSystem ? BASE_URL + ENDPOINTS.systemDetail + '/' + selectedSystem.uid : null
+  const router = useRouter()
+  const { data: systemsList, mutate: systemListMutate } = useSWR<Array<SystemTreeItem>>(ENDPOINTS.systemTree)
+  const { data: systemDetail, mutate: systemDetailMutate } = useSWR<SystemDetailInfo>(
+    router.query.uid ? ENDPOINTS.systemDetail + '/' + router.query.uid : null
   )
+  const treeCopy = useTreeUpdate(systemsList)
 
   return (
     <div className="flex flex-row">
-      {systemsList && (
-        <SystemTreeComponent
-          systemsList={systemsList}
-          setSearchSystem={setSearchSystem}
-          selectedSystem={selectedSystem}
-          openTree={openTree}
-        />
-      )}
-
-      {selectedSystem ? (
-        systemDetail && <SystemDetailsContainer selectedSystem={selectedSystem} systemDetail={systemDetail} />
+      {treeCopy && <SystemTreeComponent systemsList={treeCopy} />}
+      {router.query.uid ? (
+        systemDetail && <SystemDetailsContainer systemDetail={systemDetail} />
       ) : (
         <EmptySectionComponent />
       )}
