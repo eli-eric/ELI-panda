@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import ItemDetailComponent from '../../catalogue/item-detail/item-detail.comp'
 import DisclosureComponent from './disclosure/disclosure.comp'
 import ItemInfoComponent from './item-info/item-info.comp'
-import SystemInfoComponent from './system-detail/system-detail.comp'
+import SystemDetailContainer from './system-detail/system-detail.cont'
 
 const images = [
   {
@@ -37,7 +37,7 @@ const SystemDetailsContainer = ({ systemDetail }: Props) => {
       <div className="flex-1 flex-col">
         {systemDetail.systemInfo && (
           <DisclosureComponent title="System">
-            <SystemInfoComponent systemInfo={systemDetail.systemInfo} />
+            <SystemDetailContainer systemInfo={systemDetail.systemInfo} />
           </DisclosureComponent>
         )}
         {systemDetail.itemInfo && (

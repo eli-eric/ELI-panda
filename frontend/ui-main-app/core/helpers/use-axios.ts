@@ -1,29 +1,28 @@
 import axios from 'axios'
-import { AXIOS_METHOD } from 'core/types/constants/endpoints'
 import { useState } from 'react'
+
+import { AxiosMethodTypes } from './../types/constants/endpoints'
 
 interface UseAxiosProps {
   url: string
-  method: AXIOS_METHOD
+  method: AxiosMethodTypes
   body?: object | null
-  headers?: object | null
 }
 
 interface UseAxiosReturn {
   response: object | null
   error: string
   loading: boolean
-
   fetchData: () => void
 }
 
-const useAxios = ({ url, method, body = null, headers = null }: UseAxiosProps): UseAxiosReturn => {
+const useAxios = ({ url, method, body = null }: UseAxiosProps) => {
   const [response, setResponse] = useState<object | null>(null)
   const [error, setError] = useState<string>('')
-  const [loading, setloading] = useState<boolean>(true)
-
+  const [loading, setloading] = useState<boolean>(false)
   const fetchData = () => {
-    axios[method](url, body ? body : undefined, headers ? { headers } : undefined)
+    setloading(true)
+    axios[method](url, body ? body : undefined)
       .then(res => {
         setResponse(res.data)
       })
@@ -34,8 +33,7 @@ const useAxios = ({ url, method, body = null, headers = null }: UseAxiosProps): 
         setloading(false)
       })
   }
-
-  return { response, error, loading, fetchData }
+  return [response, error, loading, fetchData]
 }
 
 export default useAxios
