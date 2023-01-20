@@ -1,5 +1,5 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import ModalComponent from 'core/components/ui/modal.comp'
+import ModalComponent from 'core/components/ui/modal/modal.comp'
 import LoadingAppContext from 'core/store/app-loading.context'
 import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useContext, useEffect, useState } from 'react'

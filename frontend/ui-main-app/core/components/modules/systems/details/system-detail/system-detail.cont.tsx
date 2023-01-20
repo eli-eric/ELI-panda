@@ -13,7 +13,7 @@ interface Props {
 
 const SystemDetailContainer = ({ systemInfo }: Props) => {
   return (
-    <div className="bg-white pb-10">
+    <div className="bg-white pb-10 mt-4">
       {systemInfo ? (
         <SystemDetailComponent>
           <SystemDetailHeaderComponent name={systemInfo.name} description={systemInfo.description} />

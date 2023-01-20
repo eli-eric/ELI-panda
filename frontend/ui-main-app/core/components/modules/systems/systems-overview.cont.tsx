@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import useSWR from 'swr'
 
+import { FormContextProvider } from '../../../store/form.context'
 import SystemDetailsContainer from './details/system-details.cont'
 import EmptySectionComponent from './empty-section/empty-section.comp'
 import { updateTree } from './helpers/updateTree'
@@ -11,8 +12,8 @@ import SystemTreeComponent from './systems-tree/systems-treeview.comp'
 
 const SystemsOverviewContainer = () => {
   const router = useRouter()
-  const { data: systemsList, mutate: systemListMutate } = useSWR<Array<SystemTreeItem>>(ENDPOINTS.systemTree)
-  const { data: systemDetail, mutate: systemDetailMutate } = useSWR<SystemDetailInfo>(
+  const { data: systemsList } = useSWR<Array<SystemTreeItem>>(ENDPOINTS.systemTree)
+  const { data: systemDetail } = useSWR<SystemDetailInfo>(
     router.query.slug ? ENDPOINTS.systemDetail + '/' + router.query.slug : null
   )
   const tree = useMemo(() => {
@@ -22,14 +23,16 @@ const SystemsOverviewContainer = () => {
   }, [systemsList]) //eslint-disable-line
 
   return (
-    <div className="flex flex-row">
-      {tree && <SystemTreeComponent tree={tree} />}
-      {router.query.slug ? (
-        systemDetail && <SystemDetailsContainer systemDetail={systemDetail} />
-      ) : (
-        <EmptySectionComponent />
-      )}
-    </div>
+    <FormContextProvider>
+      <div className="flex flex-row">
+        {tree && <SystemTreeComponent tree={tree} />}
+        {router.query.slug ? (
+          systemDetail && <SystemDetailsContainer systemDetail={systemDetail} />
+        ) : (
+          <EmptySectionComponent />
+        )}
+      </div>
+    </FormContextProvider>
   )
 }
 

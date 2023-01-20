@@ -3,7 +3,9 @@ import { ChevronDownIcon, ChevronUpIcon, PuzzlePieceIcon } from '@heroicons/reac
 import { PATHS } from 'core/types/constants/paths'
 import { SystemTreeItem } from 'core/types/responses'
 import { useRouter } from 'next/router'
+import { useContext } from 'react'
 
+import FormContext from '../../../../store/form.context'
 import SystemActionIconsComponent from './action-icons/system-action-icons.comp'
 
 function classNames(...classes) {
@@ -16,6 +18,7 @@ interface Props {
 }
 
 const SystemTreeItemComponent = ({ open, item }: Props) => {
+  const { edit, add } = useContext(FormContext)
   const router = useRouter()
   const selectSystemItemHandler = () => {
     router.push({ pathname: PATHS.SYSTEMS_OVERVIEW + '/' + item.uid })
@@ -31,25 +34,27 @@ const SystemTreeItemComponent = ({ open, item }: Props) => {
           : ''
       )}
     >
-      <div className="w-full">
-        <div className="flex justify-between">
-          <Disclosure.Button className="flex w-full" onClick={selectSystemItemHandler}>
-            <div className="mr-2">
-              {item.children ? (
-                open ? (
-                  <ChevronUpIcon className="h-5 w-5" />
+      <Disclosure.Button className="flex w-full" onClick={selectSystemItemHandler} disabled={edit || add}>
+        <div className="w-full">
+          <div className="flex justify-between">
+            <div className="flex">
+              <div className="mr-2">
+                {item.children ? (
+                  open ? (
+                    <ChevronUpIcon className="h-5 w-5" />
+                  ) : (
+                    <ChevronDownIcon className="h-5 w-5" />
+                  )
                 ) : (
-                  <ChevronDownIcon className="h-5 w-5" />
-                )
-              ) : (
-                <PuzzlePieceIcon className="h-5 w-5 tect" />
-              )}
+                  <PuzzlePieceIcon className="h-5 w-5" />
+                )}
+              </div>
+              <span>{item.name}</span>
             </div>
-            <span>{item.name}</span>
-          </Disclosure.Button>
-          <SystemActionIconsComponent />
+            <SystemActionIconsComponent uid={item.uid} />
+          </div>
         </div>
-      </div>
+      </Disclosure.Button>
     </div>
   )
 }
