@@ -1,30 +1,38 @@
 import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { SystemDetailInfo, SystemTreeItem } from 'core/types/responses'
 import { useRouter } from 'next/router'
+import { useMemo } from 'react'
 import useSWR from 'swr'
 
+import { FormContextProvider } from '../../../store/form.context'
 import SystemDetailsContainer from './details/system-details.cont'
 import EmptySectionComponent from './empty-section/empty-section.comp'
-import { useTreeUpdate } from './helpers/hooks/useTreeUpdate'
+import { updateTree } from './helpers/updateTree'
 import SystemTreeComponent from './systems-tree/systems-treeview.comp'
 
 const SystemsOverviewContainer = () => {
   const router = useRouter()
-  const { data: systemsList, mutate: systemListMutate } = useSWR<Array<SystemTreeItem>>(ENDPOINTS.systemTree)
-  const { data: systemDetail, mutate: systemDetailMutate } = useSWR<SystemDetailInfo>(
-    router.query.uid ? ENDPOINTS.systemDetail + '/' + router.query.uid : null
+  const { data: systemsList } = useSWR<Array<SystemTreeItem>>(ENDPOINTS.systemTree)
+  const { data: systemDetail } = useSWR<SystemDetailInfo>(
+    router.query.slug ? ENDPOINTS.systemDetail + '/' + router.query.slug : null
   )
-  const treeCopy = useTreeUpdate(systemsList)
+  const tree = useMemo(() => {
+    if (router.query.slug?.length === 0 || !router.query.slug) return systemsList
+    const tree = updateTree(systemsList, router.query.slug[0])
+    return tree
+  }, [systemsList]) //eslint-disable-line
 
   return (
-    <div className="flex flex-row">
-      {treeCopy && <SystemTreeComponent systemsList={treeCopy} />}
-      {router.query.uid ? (
-        systemDetail && <SystemDetailsContainer systemDetail={systemDetail} />
-      ) : (
-        <EmptySectionComponent />
-      )}
-    </div>
+    <FormContextProvider>
+      <div className="flex flex-row">
+        {tree && <SystemTreeComponent tree={tree} />}
+        {router.query.slug ? (
+          systemDetail && <SystemDetailsContainer systemDetail={systemDetail} />
+        ) : (
+          <EmptySectionComponent />
+        )}
+      </div>
+    </FormContextProvider>
   )
 }
 

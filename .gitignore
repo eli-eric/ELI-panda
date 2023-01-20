@@ -1,8 +1,5 @@
 node_modules
-.vscode/settings.json
 ELI-PANDA.code-workspace
 frontend/ui-main-app/.env
-backend/api-gateway-go/.env
-backend/api-gateway-go/config.json
-backend/api-gateway-go/apigateway
+
 

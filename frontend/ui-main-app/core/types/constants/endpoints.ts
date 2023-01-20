@@ -8,9 +8,11 @@ export const ENDPOINTS = {
   systemTree: BASE_URL + '/systems/tree'
 }
 
-export enum AXIOS_METHOD {
+export enum AxiosMethodType {
   GET = 'get',
   POST = 'post',
   PUT = 'put',
   DELETE = 'delete'
 }
+
+export type AxiosMethodTypes = keyof typeof AxiosMethodType

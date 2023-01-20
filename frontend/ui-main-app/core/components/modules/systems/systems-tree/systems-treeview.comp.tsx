@@ -29,16 +29,16 @@ const DisclosureComponent = ({ item }: DisclosureComponentProps) => {
 }
 
 interface Props {
-  systemsList: Array<SystemTreeItem>
+  tree: Array<SystemTreeItem>
 }
 
-export default function SystemTreeComponent({ systemsList }: Props) {
+export default function SystemTreeComponent({ tree }: Props) {
   return (
     <div className="flex flex-col  min-w-[256px]">
       <div className="overflow-y-auto h-[100vh] border-r bg-white pt-5">
         <div className="mt-5 flex flex-1 flex-col">
           <nav className="flex-1 space-y-1 px-2 pb-4">
-            {systemsList.map(item => (
+            {tree.map(item => (
               <DisclosureComponent key={item.name} item={item} />
             ))}
           </nav>
