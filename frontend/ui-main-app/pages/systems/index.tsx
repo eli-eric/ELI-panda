@@ -50,10 +50,10 @@ const SystemsPage: NextPage = (): JSX.Element => {
             </ul>
           </div>
           <div className="flex-[9] h-[calc(100vh-64px)]">
-            <iframe
-              className="w-full h-full"
-              src="https://layout.eli-beams.eu/index.html?layout=main%2FlaserHalls-0&viewBoxX=8158.04&viewBoxY=24516.3&viewBoxWidth=43008&viewBoxHeight=25441&visibleLayers=%5B%22FAC-GRP%22%2C%22FAC-Room_numbers_VIS%22%2C%22FAC-Room_description_VIS%22%2C%22FAC-Racks_and_cabinets_VIS%22%2C%22FAC-TraceTek%22%2C%22L3-GRP%22%2C%22L3-Basic_layout_VIS%22%2C%22L3-Compressor_vacuum_VIS%22%2C%22CS-GRP%22%2C%22CS-Racks_and_cabinets_VIS%22%5D"
-            ></iframe>
+            {/* <iframe */}
+            {/*   className="w-full h-full" */}
+            {/*   src="https://layout.eli-beams.eu/index.html?layout=main%2FlaserHalls-0&viewBoxX=8158.04&viewBoxY=24516.3&viewBoxWidth=43008&viewBoxHeight=25441&visibleLayers=%5B%22FAC-GRP%22%2C%22FAC-Room_numbers_VIS%22%2C%22FAC-Room_description_VIS%22%2C%22FAC-Racks_and_cabinets_VIS%22%2C%22FAC-TraceTek%22%2C%22L3-GRP%22%2C%22L3-Basic_layout_VIS%22%2C%22L3-Compressor_vacuum_VIS%22%2C%22CS-GRP%22%2C%22CS-Racks_and_cabinets_VIS%22%5D" */}
+            {/* ></iframe> */}
           </div>
         </div>
       </main>

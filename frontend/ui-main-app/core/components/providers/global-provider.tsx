@@ -1,5 +1,4 @@
 import axios from 'axios'
-import PageGuardWrapper from 'core/helpers/page-guard-wrapper'
 import { messages } from 'core/i18n/src'
 import { AppLoadingProvider } from 'core/store/app-loading.context'
 import { ComponentLoadingProvider } from 'core/store/component-loading.context'
@@ -29,9 +28,7 @@ const GlobalProvider = ({ children }: Props) => {
         <AppLoadingProvider>
           <ComponentLoadingProvider>
             <AppLoader>
-              <LayoutComponent>
-                <PageGuardWrapper>{children}</PageGuardWrapper>
-              </LayoutComponent>
+              <LayoutComponent>{children}</LayoutComponent>
             </AppLoader>
           </ComponentLoadingProvider>
         </AppLoadingProvider>

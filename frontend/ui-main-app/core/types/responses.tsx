@@ -35,6 +35,7 @@ export interface SystemTreeItem {
   open?: boolean
   systemCode: string
   children?: SystemTreeItem[]
+  path: SystemTreeItem['uid'][]
 }
 
 export interface SystemInfo {
