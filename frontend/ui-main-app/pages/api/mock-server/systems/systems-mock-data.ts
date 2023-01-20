@@ -25,14 +25,14 @@ export interface SystemInfo {
   subZoneCode?: string
   //systemTypes: [{uid: "vacuum-technology/vacuum-pumps/turbomolecular-pumps", value: "Vacuum technology -> Vacuum pumps -> Turbomolecular Pumps", code: "TMP"}, {uid: "motion/actuators/motorized-actuators", value: "Motion -> Actuators -> Motorized actuators", code: "MOTA"},{uid: "other", value: "Other", code: "OTHR"}]
   systemTypeUID?: string
-  systemCode: string // READONLY!  ( in next version it will be automaticaly calculated from systemType mask - for now copy there systemType.code)
+  systemCode?: string // READONLY!  ( in next version it will be automaticaly calculated from systemType mask - for now copy there systemType.code)
   systemAlias: string //max 12chars
   //locations: [{code : "l1", value: "L1"},{code : "l2", value: "L2"},{code : "l3", value: "L3"}]
-  locationCode: string
+  locationCode?: string
   //list of users {uid, fullName}
   ownerUID?: string
   //selection of catalogue item
-  catalogueUID: string
+  catalogueUID?: string
   //item info part
   eun: string
   serialNumber?: string
