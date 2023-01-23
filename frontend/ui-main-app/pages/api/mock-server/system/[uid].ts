@@ -32,6 +32,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     }
     if (req.method === 'PUT') {
       const newData = req.body
+      console.log(req.body)
       fs.readFile(jsonPathSystemTree, 'utf8', (err, data) => {
         if (err) {
           res.status(500).json({ message: 'Error reading JSON file' })
@@ -39,18 +40,20 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
         }
         const jsonData = JSON.parse(data)
         updateTreeObject(jsonData, uid, { name: newData.name, systemCode: newData.systemCode })
-        jsonWrite(jsonPathSystemTree, jsonData, res)
+        jsonWrite(jsonPathSystemTree, jsonData, res).finally(() => {
+          fs.readFile(jsonPathSystem, 'utf8', (err, data) => {
+            if (err) {
+              res.status(500).json({ message: 'Error reading JSON file' })
+              return
+            }
+            const jsonData = JSON.parse(data)
+            updateSystemObject(jsonData, uid, newData)
+            jsonWrite(jsonPathSystem, jsonData, res).finally(() => {
+              res.status(200).json({ message: 'JSON file updated successfully' })
+            })
+          })
+        })
       })
-      fs.readFile(jsonPathSystem, 'utf8', (err, data) => {
-        if (err) {
-          res.status(500).json({ message: 'Error reading JSON file' })
-          return
-        }
-        const jsonData = JSON.parse(data)
-        updateSystemObject(jsonData, uid, newData)
-        jsonWrite(jsonPathSystem, jsonData, res)
-      })
-      res.status(200).json({ message: 'JSON file updated successfully' })
     }
     if (req.method === 'POST') {
       const newChild = req.body

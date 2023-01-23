@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-export const jsonWrite = (path, jsonData, res) => {
+export const jsonWrite = async (path, jsonData, res) => {
   fs.writeFile(path, JSON.stringify(jsonData), error => {
     if (error) {
       res.status(500).json({ message: 'Error updating JSON file' })
@@ -65,8 +65,7 @@ export const addTreeObject = (systemTree, uid, newChild) => {
       if (!systemTree[i].children) {
         systemTree[i].children = []
       }
-
-      systemTree[i].children.push(newChild)
+      systemTree[i].children.push({ ...newChild, systemCode: 'test' })
       return
     }
     if (systemTree[i].children) {

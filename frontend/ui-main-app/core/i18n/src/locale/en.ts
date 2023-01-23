@@ -91,7 +91,7 @@ export const messages = {
       formFieldName: {
         name: 'name',
         description: 'description',
-        importance: 'importance',
+        importanceCode: 'importance',
         facilityZone: 'facilityZone',
         type: 'type',
         zoneCode: 'zoneCode',
