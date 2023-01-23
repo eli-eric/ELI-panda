@@ -37,7 +37,7 @@ const SystemFormFields = ({ register, formState }: Props) => {
         rows={3}
         {...register('description')}
       />
-      <p className="text-xs text-red-500">{errors.name?.message}</p>
+      <p className="text-xs text-red-500">{errors.description?.message}</p>
 
       <section aria-labelledby="details-heading" className="mt-12">
         <div className="border-t border-gray-200 px-4 py-5 sm:px-6">

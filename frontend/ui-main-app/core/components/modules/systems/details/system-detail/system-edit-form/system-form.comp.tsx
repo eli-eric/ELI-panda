@@ -1,13 +1,11 @@
-import { FormChildrenProps } from 'core/components/ui/form/Form.comp'
+import { FormChildrenProps } from 'core/types/form'
 import { SystemInfo } from 'core/types/responses'
 
 import DisclosureComponent from '../../disclosure/disclosure.comp'
 import SystemFormButtons from './system-form.buttons'
 import SystemFormFields from './system-form.fields'
 import SystemItemFormFields from './system-item-form.fields'
-type Props = FormChildrenProps<SystemInfo> & {
-  systemInfo?: SystemInfo
-}
+type Props = FormChildrenProps<SystemInfo>
 
 const SystemFormComponent = ({ register, formState, handleSubmit, onSubmit, onCancel }: Props) => {
   return (
