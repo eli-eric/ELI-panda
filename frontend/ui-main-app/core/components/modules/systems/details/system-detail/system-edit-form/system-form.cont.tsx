@@ -18,9 +18,8 @@ interface Props {
 const SystemFormContainer = ({ systemInfo }: Props) => {
   const { uid } = useContext(FormContext)
   const router = useRouter()
-  const routerUid = router.query.slug ? router.query.slug[0] : undefined
 
-  const endpoint = ENDPOINTS.systemDetail + (routerUid ? '/' + routerUid : '')
+  const endpoint = ENDPOINTS.systemDetail + (router.query.slug ? '/' + router.query.slug : '')
 
   const fetchMethod = uid ? 'put' : 'post'
 

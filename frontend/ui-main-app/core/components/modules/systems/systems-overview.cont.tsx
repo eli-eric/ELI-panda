@@ -1,4 +1,5 @@
 import ProgressBarComponent from 'core/components/ui/progress-bar.comp'
+import TreeViewComponent from 'core/components/ui/tree-view/tree-view.cont'
 import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { SystemDetailInfo, SystemTreeItem } from 'core/types/responses'
 import { useRouter } from 'next/router'
@@ -19,7 +20,7 @@ const SystemsOverviewContainer = () => {
     router.query.slug ? ENDPOINTS.systemDetail + '/' + router.query.slug : null
   )
   const tree = useMemo(() => {
-    if (router.query.slug?.length === 0 || !router.query.slug) return systemsList
+    if (!router.query.slug) return systemsList
     const tree = updateTree(systemsList, router.query.slug[0])
     return tree
   }, [systemsList]) //eslint-disable-line
@@ -28,15 +29,26 @@ const SystemsOverviewContainer = () => {
     <Suspense fallback={<ProgressBarComponent />}>
       <FormContextProvider>
         <div className="flex flex-row">
-          {tree && <SystemTreeComponent tree={tree} />}
-          {router.query.slug ? (
-            systemDetail ? (
-              <SystemDetailsContainer systemDetail={systemDetail} />
-            ) : (
-              <ProgressBarComponent />
-            )
-          ) : (
-            <EmptySectionComponent />
+          {systemsList && (
+            <TreeViewComponent
+              data={{
+                name: 'fake',
+                uid: 'fake',
+                systemCode: 'fake',
+                path: [['sdsd', 'fd']],
+                children: systemsList
+              }}
+            >
+              {router.query.slug ? (
+                systemDetail ? (
+                  <SystemDetailsContainer systemDetail={systemDetail} />
+                ) : (
+                  <ProgressBarComponent />
+                )
+              ) : (
+                <EmptySectionComponent />
+              )}
+            </TreeViewComponent>
           )}
         </div>
       </FormContextProvider>
