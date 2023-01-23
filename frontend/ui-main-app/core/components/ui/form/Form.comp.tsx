@@ -8,7 +8,6 @@ import { ModalButtons } from 'core/types/form'
 import { useRouter } from 'next/router'
 import React, { Fragment, JSXElementConstructor, ReactElement, useContext, useState } from 'react'
 import { FieldValues, FormState, useForm, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form'
-import { useSWRConfig } from 'swr'
 import { AnyObjectSchema } from 'yup'
 import Lazy from 'yup/lib/Lazy'
 
@@ -38,36 +37,32 @@ const FormContainer = <T extends FieldValues>({
   afterMutates
 }: Props<T>) => {
   const router = useRouter()
-  const { mutate } = useSWRConfig()
   const { register, handleSubmit, formState } = useForm({
     defaultValues: data as any,
     resolver: yupResolver(schema)
   })
-  const { add, edit, setEdit, setAdd } = useContext(FormContext)
+  const { setEdit } = useContext(FormContext)
 
   const [modalOpen, setModalOpen] = useState(false)
-  const { setNext, nextUrl } = useWarnIfUnsavedChanges(formState.isDirty, setModalOpen)
+  const { setNext, nextUrl, setNextUrl } = useWarnIfUnsavedChanges(formState.isDirty, setModalOpen)
 
   const { fetchData } = useAxios({
     url: endpoint,
-    method: fetchMethod
+    method: fetchMethod,
+    mutateUrlList: afterMutates && afterMutates
   })
 
   const onSubmit = data => {
-    fetchData({
-      body: data,
-      afterAction: afterMutates && { mutate: mutate, mutateUrlList: afterMutates }
-    })
-    if (add) setAdd(false)
-    if (edit) setEdit(false)
+    fetchData(data)
+    setEdit(false)
   }
 
   const onCancel = () => {
     if (formState.isDirty) {
       setModalOpen(true)
+      setNextUrl(undefined)
     } else {
-      if (add) setAdd(false)
-      if (edit) setEdit(false)
+      setEdit(false)
     }
   }
 
@@ -76,38 +71,32 @@ const FormContainer = <T extends FieldValues>({
     setNext(next)
     if (next && nextUrl) router.push(nextUrl)
     if (next) {
-      if (add) setAdd(false)
-      if (edit) setEdit(false)
+      setEdit(false)
     }
   }
 
   const modalButtons: ModalButtons = {
     goNext: {
       text: 'continue',
-      onClick: () => {
-        confirm(true)
-      }
+      onClick: () => confirm(true)
     },
     goBack: {
       text: 'cancel',
-      onClick: () => {
-        confirm(false)
-      }
+      onClick: () => confirm(false)
     }
   }
 
-  const object = {
+  const childrenProps = {
     register,
     onCancel,
     onSubmit,
     handleSubmit,
     formState
   }
-  //const WrappedComponent = React.cloneElement(children, object)
 
   return (
     <Fragment>
-      {children(object)}
+      {children(childrenProps)}
       <ModalComponent open={modalOpen} setOpen={setModalOpen} testid="warning-form-modal" buttons={modalButtons}>
         <ModalWarningComponent
           title="Warning"

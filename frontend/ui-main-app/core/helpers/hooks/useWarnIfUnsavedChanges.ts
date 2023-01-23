@@ -5,6 +5,7 @@ export const useWarnIfUnsavedChanges = (unsavedChanges: boolean, setModalOpen: D
   const [next, setNext] = useState<boolean>(false)
   const [nextUrl, setNextUrl] = useState<string>()
   useEffect(() => {
+    setNextUrl(undefined)
     if (!next) {
       if (unsavedChanges) {
         const routeChangeStart = url => {
@@ -22,7 +23,7 @@ export const useWarnIfUnsavedChanges = (unsavedChanges: boolean, setModalOpen: D
         }
       }
     }
-  }, [unsavedChanges, next])
+  }, [unsavedChanges, next]) //eslint-disable-line
 
-  return { setNext, nextUrl }
+  return { setNext, nextUrl, setNextUrl }
 }

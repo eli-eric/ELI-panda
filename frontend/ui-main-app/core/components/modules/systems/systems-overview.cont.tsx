@@ -1,14 +1,16 @@
+import ProgressBarComponent from 'core/components/ui/progress-bar.comp'
 import { ENDPOINTS } from 'core/types/constants/endpoints'
 import { SystemDetailInfo, SystemTreeItem } from 'core/types/responses'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { lazy, Suspense, useMemo } from 'react'
 import useSWR from 'swr'
 
 import { FormContextProvider } from '../../../store/form.context'
 import SystemDetailsContainer from './details/system-details.cont'
 import EmptySectionComponent from './empty-section/empty-section.comp'
 import { updateTree } from './helpers/updateTree'
-import SystemTreeComponent from './systems-tree/systems-treeview.comp'
+
+const SystemTreeComponent = lazy(() => import('./systems-tree/systems-treeview.comp'))
 
 const SystemsOverviewContainer = () => {
   const router = useRouter()
@@ -23,16 +25,22 @@ const SystemsOverviewContainer = () => {
   }, [systemsList]) //eslint-disable-line
 
   return (
-    <FormContextProvider>
-      <div className="flex flex-row">
-        {tree && <SystemTreeComponent tree={tree} />}
-        {router.query.slug ? (
-          systemDetail && <SystemDetailsContainer systemDetail={systemDetail} />
-        ) : (
-          <EmptySectionComponent />
-        )}
-      </div>
-    </FormContextProvider>
+    <Suspense fallback={<ProgressBarComponent />}>
+      <FormContextProvider>
+        <div className="flex flex-row">
+          {tree && <SystemTreeComponent tree={tree} />}
+          {router.query.slug ? (
+            systemDetail ? (
+              <SystemDetailsContainer systemDetail={systemDetail} />
+            ) : (
+              <ProgressBarComponent />
+            )
+          ) : (
+            <EmptySectionComponent />
+          )}
+        </div>
+      </FormContextProvider>
+    </Suspense>
   )
 }
 
