@@ -6,6 +6,7 @@ import { FormattedMessage } from 'react-intl'
 import AuthButton from './auth-button.comp'
 
 const authMessages = message.authPage
+const { title, form } = message.authPage
 
 interface Props {
   onSubmit: FormEventHandler<HTMLFormElement>
@@ -20,7 +21,7 @@ const AuthFormComponent = ({ onSubmit, usernameRef, passwordRef, loading }: Prop
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <EliLogoComponent customClass="mx-auto h-[100px] w-auto" />
         <h2>
-          <FormattedMessage id={authMessages.title} />
+          <FormattedMessage id={title} />
         </h2>
       </div>
 
@@ -29,7 +30,7 @@ const AuthFormComponent = ({ onSubmit, usernameRef, passwordRef, loading }: Prop
           <form className="space-y-6" action="#" method="POST" onSubmit={onSubmit}>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                <FormattedMessage id={authMessages.form.userName} />
+                <FormattedMessage id={form.userName} />
               </label>
               <div className="mt-1">
                 <input
@@ -46,7 +47,7 @@ const AuthFormComponent = ({ onSubmit, usernameRef, passwordRef, loading }: Prop
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                <FormattedMessage id={authMessages.form.password} />
+                <FormattedMessage id={form.password} />
               </label>
               <div className="mt-1">
                 <input

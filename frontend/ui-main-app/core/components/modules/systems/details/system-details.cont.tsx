@@ -34,11 +34,11 @@ interface Props {
 }
 
 const SystemDetailsContainer = ({ systemDetail }: Props) => {
-  const { edit, add } = useContext(FormContext)
+  const { isEdit, uid } = useContext(FormContext)
   return (
     <div className="flex-1 flex-col">
-      {edit || add ? (
-        <SystemFormContainer systemInfo={add ? undefined : systemDetail.systemInfo} />
+      {isEdit ? (
+        <SystemFormContainer systemInfo={uid ? systemDetail.systemInfo : undefined} />
       ) : (
         <Fragment>
           {systemDetail.systemInfo && (

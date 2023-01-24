@@ -1,21 +1,3 @@
-import * as yup from 'yup'
-
-export const SystemValidationSchema = yup.object().shape({
-  name: yup.string().required(),
-  description: yup.string(),
-  importanceCode: yup.string(),
-  zoneCode: yup.string().required(),
-  systemTypeUID: yup.string(),
-  systemAlias: yup.string().max(12).required(),
-  locationCode: yup.string().required(),
-  ownerUID: yup.string().required(),
-  eun: yup.string().required(),
-  serialNumber: yup.string().required(),
-  batchNumber: yup.string().required(),
-  itemUsageCategoryCode: yup.string().required(),
-  estimatedLifeTime: yup.number().required()
-})
-
 export const importances = [
   { code: 'low', value: 'Low' },
   { code: 'standard', value: 'Standard' },

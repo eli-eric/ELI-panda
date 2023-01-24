@@ -35,7 +35,10 @@ export interface SystemTreeItem {
   open?: boolean
   systemCode: string
   children?: SystemTreeItem[]
+  path: SystemUidName[]
 }
+
+type SystemUidName = [SystemTreeItem['uid'], SystemTreeItem['name']]
 
 export interface SystemInfo {
   uid: string
