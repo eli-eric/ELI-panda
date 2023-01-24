@@ -1,8 +1,0 @@
-{
-    "PostgresqlHost" : "localhost:5432",
-    "PostgresqlUsername" : "postgres",
-    "PostgresqlPassword" : "password",
-    "PostgresqlDatabase" : "panda_dev"
-}
-
-

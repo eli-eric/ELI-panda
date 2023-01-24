@@ -1,10 +1,12 @@
 import { SystemDetailInfo } from 'core/types/responses'
-import { Fragment } from 'react'
+import { Fragment, useContext } from 'react'
 
+import FormContext from '../../../../store/form.context'
 import ItemDetailComponent from '../../catalogue/item-detail/item-detail.comp'
 import DisclosureComponent from './disclosure/disclosure.comp'
 import ItemInfoComponent from './item-info/item-info.comp'
-import SystemInfoComponent from './system-detail/system-detail.comp'
+import SystemDetailContainer from './system-detail/system-detail.cont'
+import SystemFormContainer from './system-detail/system-edit-form/system-form.cont'
 
 const images = [
   {
@@ -32,26 +34,31 @@ interface Props {
 }
 
 const SystemDetailsContainer = ({ systemDetail }: Props) => {
+  const { edit, add } = useContext(FormContext)
   return (
-    <Fragment>
-      <div className="flex-1 flex-col">
-        {systemDetail.systemInfo && (
-          <DisclosureComponent title="System">
-            <SystemInfoComponent systemInfo={systemDetail.systemInfo} />
-          </DisclosureComponent>
-        )}
-        {systemDetail.itemInfo && (
-          <DisclosureComponent title="Item">
-            <ItemInfoComponent itemInfo={systemDetail.itemInfo} />
-          </DisclosureComponent>
-        )}
-        {systemDetail.catalogueInfo && (
-          <DisclosureComponent title="System">
-            <ItemDetailComponent item={systemDetail.catalogueInfo} images={images} />
-          </DisclosureComponent>
-        )}
-      </div>
-    </Fragment>
+    <div className="flex-1 flex-col">
+      {edit || add ? (
+        <SystemFormContainer systemInfo={add ? undefined : systemDetail.systemInfo} />
+      ) : (
+        <Fragment>
+          {systemDetail.systemInfo && (
+            <DisclosureComponent title="System" open={true}>
+              <SystemDetailContainer systemInfo={systemDetail.systemInfo} />
+            </DisclosureComponent>
+          )}
+          {systemDetail.itemInfo && (
+            <DisclosureComponent title="Item">
+              <ItemInfoComponent itemInfo={systemDetail.itemInfo} />
+            </DisclosureComponent>
+          )}
+          {systemDetail.catalogueInfo && (
+            <DisclosureComponent title="System">
+              <ItemDetailComponent item={systemDetail.catalogueInfo} images={images} />
+            </DisclosureComponent>
+          )}
+        </Fragment>
+      )}
+    </div>
   )
 }
 

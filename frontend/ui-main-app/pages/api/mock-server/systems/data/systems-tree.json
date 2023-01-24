@@ -1,32 +1,31 @@
 [
   {
     "uid": "123",
-    "systemCode": "asd",
-    "name": "XXX",
+    "name": "System 1",
+    "systemCode": "string",
     "children": [
       {
-        "uid": "1234",
-        "systemCode": "1234",
-        "name": "SSS"
-      }
-    ]
-  },
-  {
-    "uid": "1235",
-    "systemCode": "1235",
-    "name": "WWW",
-    "children": [
-      {
-        "uid": "12349",
-        "systemCode": "12349",
-        "name": "QQQ",
+        "name": "Konec",
+        "uid": "ld2ufne8fm87q",
+        "systemCode": "string",
         "children": [
           {
-            "uid": "777",
-            "systemCode": "777",
-            "name": "CCC"
+            "name": "Konecuhgjhg",
+            "uid": "ld2xgb8qyypee",
+            "systemCode": "string",
+            "children": [
+              { "name": "LOL", "uid": "ld30g591uwoof", "systemCode": "lol" },
+              { "name": "fcbcvb", "uid": "ld30ld30vrp86", "systemCode": "test" },
+              { "name": "gfdfdg", "uid": "ld4mjp4foy59x", "systemCode": "test" }
+            ]
           }
         ]
+      },
+      {
+        "name": "dsf",
+        "uid": "ld30guv9wuqre",
+        "systemCode": "test",
+        "children": [{ "name": "sdfsdf", "uid": "ld30hdwk1bo6j", "systemCode": "test" }]
       }
     ]
   }

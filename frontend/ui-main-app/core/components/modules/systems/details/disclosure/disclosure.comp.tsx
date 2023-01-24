@@ -7,12 +7,13 @@ function classNames(...classes) {
 interface Props {
   title: string
   children: React.ReactNode
+  open?: boolean
 }
 
-const DisclosureComponent = ({ title, children }: Props) => {
+const DisclosureComponent = ({ title, children, open }: Props) => {
   return (
     <div className="pr-10 pl-10">
-      <Disclosure as="div">
+      <Disclosure as="div" defaultOpen={open}>
         {({ open }) => (
           <>
             <h3>
