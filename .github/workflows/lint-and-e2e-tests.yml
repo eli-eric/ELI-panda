@@ -4,41 +4,41 @@ on:
   - push
 
 jobs:
-  # lint:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout 🏷️
-  #       uses: actions/checkout@v3
-
-  #     - name: Use Node 18 🕹️
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         cache: "yarn"
-  #         cache-dependency-path: ./yarn.lock
-  #         node-version: "18"
-
-  #     - name: Install ⚙️
-  #       run: yarn install
-
-  #     - name: Lint 🤓
-  #       run: yarn lint
-
-  cypress-run:
-    name: Cypress run - test
+  lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout 🏷️
         uses: actions/checkout@v3
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v5
+      - name: Use Node 18 🕹️
+        uses: actions/setup-node@v3
         with:
-          record: true
-          browser: chrome
-        env:
-          CYPRESS_host: http://localhost:5001
-          # pass the Cypress Cloud record key as an environment variable
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          # # pass GitHub token to allow accurately detecting a build vs a re-run build
-          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PANDA_API_GW_URL: http://localhost:5001/api/mock-server
+          cache: "yarn"
+          cache-dependency-path: ./yarn.lock
+          node-version: "18"
+
+      - name: Install ⚙️
+        run: yarn install
+
+      - name: Lint 🤓
+        run: yarn lint
+
+  # cypress-run:
+  #   name: Cypress run - test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+
+  #     - name: Cypress run
+  #       uses: cypress-io/github-action@v5
+  #       with:
+  #         record: true
+  #         browser: chrome
+  #       env:
+  #         CYPRESS_host: http://localhost:5001
+  #         # pass the Cypress Cloud record key as an environment variable
+  #         CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+  #         # # pass GitHub token to allow accurately detecting a build vs a re-run build
+  #         # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         PANDA_API_GW_URL: http://localhost:5001/api/mock-server
