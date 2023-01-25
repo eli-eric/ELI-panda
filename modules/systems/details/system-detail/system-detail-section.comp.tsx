@@ -1,5 +1,5 @@
-import ItemPropertyTitle from 'modules/shared/item-property/item-property-title.comp'
-import ItemPropertyValue from 'modules/shared/item-property/item-property-value.comp'
+import ItemPropertyTitle from 'components/item-property/item-property-title.comp'
+import ItemPropertyValue from 'components/item-property/item-property-value.comp'
 import { message } from 'i18n/src/messages'
 import { SystemInfo } from 'types/responses'
 

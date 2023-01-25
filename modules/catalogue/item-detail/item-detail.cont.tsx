@@ -1,7 +1,10 @@
-import { CatalogueItem } from 'types/responses'
+import ProgressBarComponent from 'components/ui/progress-bar.comp'
+import { useCatalogueItemDetailPath } from 'hooks/usePath'
+import { NextPage } from 'next'
+import { useEffect, useState } from 'react'
 import useSWR from 'swr'
+import { CatalogueItem } from 'types/responses'
 
-import { useCatalogueItemDetailPath } from '../shared/hooks/usePath'
 import ItemDetailHeaderComponent from './header/item-detail-header.comp'
 import ItemDetailComponent from './item-detail.comp'
 
@@ -26,14 +29,27 @@ const images = [
   }
 ]
 
-const ItemDetailContainer = () => {
+const ItemDetailContainer: NextPage = () => {
   const catalogueItemPath = useCatalogueItemDetailPath()
   const { data: item } = useSWR<CatalogueItem>(catalogueItemPath)
+  const [groups, setGroups] = useState<Array<string>>([])
+
+  useEffect(() => {
+    if (item?.details) {
+      const uniqueDetailGroups = item.details
+        .map(item => item.propertyGroup)
+        .filter((value, index, self) => {
+          return self.indexOf(value) === index
+        })
+
+      setGroups(uniqueDetailGroups)
+    }
+  }, [item])
 
   return (
     <div>
       <ItemDetailHeaderComponent />
-      <ItemDetailComponent item={item} images={images} />
+      {item ? <ItemDetailComponent groups={groups} item={item} images={images} /> : <ProgressBarComponent />}
     </div>
   )
 }

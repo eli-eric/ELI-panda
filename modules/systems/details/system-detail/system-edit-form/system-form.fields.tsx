@@ -1,4 +1,4 @@
-import ItemPropertyTitle from 'modules/shared/item-property/item-property-title.comp'
+import ItemPropertyTitle from 'components/item-property/item-property-title.comp'
 import { Input } from 'components/ui/form/Input'
 import { Select } from 'components/ui/form/Select'
 import { message } from 'i18n/src/messages'
