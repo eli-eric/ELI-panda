@@ -1,9 +1,8 @@
-import AuthFormContainer from 'modules/auth/auth-form.cont'
-import { PATHS } from 'types/constants/paths'
-import { ROLES_CONFIG } from 'types/constants/roles-config'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Fragment, useEffect } from 'react'
+import { PATHS } from 'types/constants/paths'
+import { ROLES_CONFIG } from 'types/constants/roles-config'
 
 interface Props {
   children: React.ReactNode
@@ -46,7 +45,7 @@ const PageGuardWrapper = ({ children }: Props) => {
   } // return children components for auth user
 
   if (status === 'unauthenticated') {
-    return <AuthFormContainer />
+    return <></>
   } // no depends on url, if unauthenticated user show login form, url doesnt change
 
   return <Fragment />

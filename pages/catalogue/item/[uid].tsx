@@ -5,7 +5,7 @@ import { useCatalogueItemDetailPath } from 'hooks/usePath'
 import { message } from 'i18n/src/messages'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 import { CatalogueItem } from 'types/responses'
@@ -37,19 +37,6 @@ const CatalogueItemDetailPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
   const catalogueItemPath = useCatalogueItemDetailPath()
   const { data: item } = useSWR<CatalogueItem>(catalogueItemPath)
-  const [groups, setGroups] = useState<Array<string>>([])
-
-  useEffect(() => {
-    if (item?.details) {
-      const uniqueDetailGroups = item.details
-        .map(item => item.propertyGroup)
-        .filter((value, index, self) => {
-          return self.indexOf(value) === index
-        })
-
-      setGroups(uniqueDetailGroups)
-    }
-  }, [item])
 
   return (
     <Fragment>
@@ -58,7 +45,7 @@ const CatalogueItemDetailPage: NextPage = (): JSX.Element => {
         <meta name="description" content="...." />
       </Head>
       <ItemDetailHeaderComponent />
-      {item ? <ItemDetailComponent groups={groups} item={item} images={images} /> : <ProgressBarComponent />}
+      {item ? <ItemDetailComponent item={item} images={images} /> : <ProgressBarComponent />}
     </Fragment>
   )
 }

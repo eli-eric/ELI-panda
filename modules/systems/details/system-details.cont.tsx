@@ -1,8 +1,8 @@
-import { SystemDetailInfo } from 'types/responses'
+import ItemDetailComponent from 'components/catalogueItem/item-detail.comp'
 import { Fragment, useContext } from 'react'
-
 import FormContext from 'store/form.context'
-import ItemDetailComponent from '../../catalogue/item-detail/item-detail.comp'
+import { SystemDetailInfo } from 'types/responses'
+
 import DisclosureComponent from './disclosure/disclosure.comp'
 import ItemInfoComponent from './item-info/item-info.comp'
 import SystemDetailContainer from './system-detail/system-detail.cont'

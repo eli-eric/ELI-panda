@@ -1,12 +1,12 @@
 import ProgressBarComponent from 'components/ui/progress-bar.comp'
 import TreeViewComponent from 'components/ui/tree-view/tree-view.cont'
-import { ENDPOINTS } from 'types/constants/endpoints'
-import { SystemDetailInfo, SystemTreeItem } from 'types/responses'
 import { useRouter } from 'next/router'
 import { lazy, Suspense, useMemo } from 'react'
-import useSWR from 'swr'
-
 import { FormContextProvider } from 'store/form.context'
+import useSWR from 'swr'
+import { ENDPOINTS } from 'types/constants/endpoints'
+import { SystemDetailInfo, SystemTreeItem } from 'types/responses'
+
 import SystemDetailsContainer from './details/system-details.cont'
 import EmptySectionComponent from './empty-section/empty-section.comp'
 import { updateTree } from './helpers/updateTree'

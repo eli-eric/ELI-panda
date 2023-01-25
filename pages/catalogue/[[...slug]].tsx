@@ -4,6 +4,7 @@ import { message } from 'i18n/src/messages'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
@@ -12,6 +13,7 @@ import { CatalogueCategoryResponse, CatalogueItemsResponse } from 'types/respons
 const { head } = message.cataloguePage
 
 const CatalogueCategoriesPage: NextPage = (): JSX.Element => {
+  const { data: session } = useSession()
   const intl = useIntl()
   const categoryPath = useCategoryPath()
   const router = useRouter()
@@ -20,7 +22,7 @@ const CatalogueCategoriesPage: NextPage = (): JSX.Element => {
   const catalogueItemsPath = useCatalogueItemsPath(pageSize, page)
   const [pageNumbers, setPageNumbers] = useState<number | undefined>()
   /* fetch category list */
-  const { data: categoryList } = useSWR<Array<CatalogueCategoryResponse>>(categoryPath)
+  const { data: categoryList } = useSWR<Array<CatalogueCategoryResponse>>(session ? categoryPath : null)
   /* conditionaly fetch catalogue Items if category list dont return categories or search is not in query */
   const { data: catalogueItems } = useSWR<CatalogueItemsResponse>(
     categoryList?.length === 0 || router.query.search ? catalogueItemsPath : null
