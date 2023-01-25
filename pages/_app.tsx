@@ -1,6 +1,6 @@
 import '../styles/globals.css'
 
-import GlobalProvider from 'core/components/providers/global-provider'
+import GlobalProvider from 'providers/global-provider'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
 
