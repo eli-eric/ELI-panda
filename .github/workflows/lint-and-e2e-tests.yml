@@ -1,4 +1,4 @@
-name: Lint and e2e tests
+name: Lint and test
 
 on:
   - push
@@ -23,27 +23,21 @@ jobs:
       - name: Lint 🤓
         run: yarn lint
 
-  test:
-    runs-on: ubuntu-latest
+  cypress-run:
+    name: Cypress run - test
+    runs-on: ubuntu-22.04
     steps:
-      - name: Checkout 🏷️
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Use Node 18 🕹️
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-          cache: "yarn"
-          cache-dependency-path: ./yarn.lock
-
-      - name: Install ⚙️
-        run: yarn install
-
-      - name: Cypress
+      - name: Cypress run
         uses: cypress-io/github-action@v5
-        env:
-          PANDA_API_GW_URL: http://localhost:5001/api/mock-server
         with:
-          start: yarn dev
-          wait-on: "http://localhost:5001"
-          browser: chrome
+          record: true
+        env:
+          CYPRESS_host: http://localhost:5001
+          # pass the Cypress Cloud record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # # pass GitHub token to allow accurately detecting a build vs a re-run build
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PANDA_API_GW_URL: http://localhost:5001/api/mock-server
