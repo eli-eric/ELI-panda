@@ -25,7 +25,6 @@ describe('login', () => {
     setApiMocks(SCRENARIOS.customSession.session(true))
     cy.contains('Sign In').click()
     cy.wait(['@providers', '@csrf', '@credentials', '@session'])
-    cy.visit(Cypress.env('host') + '/dashboard')
     cy.url().should('include', 'dashboard')
   })
   it('Sign Out', () => {

@@ -10,7 +10,10 @@ describe('Catalogue', () => {
     setApiMocks(SCRENARIOS.customSession.session(true))
     cy.visit(Cypress.env('host') + '/catalogue')
     // cy.wait(['@session'])
+    // cy.visit(Cypress.env('host') + '/catalogue')
     // cy.url().should('include', 'catalogue')
+    // cy.wait(['@session'])
+
     // cy.wait(['@catalogueCategories'])
     // cy.contains('Motion')
     // cy.contains('Vacuum Technology')
