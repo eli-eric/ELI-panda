@@ -1,5 +1,5 @@
-import ItemDetailContainer from 'core/components/modules/catalogue/item-detail/item-detail.cont'
-import { message } from 'core/i18n/src/messages'
+import ItemDetailContainer from 'modules/catalogue/item-detail/item-detail.cont'
+import { message } from 'i18n/src/messages'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'

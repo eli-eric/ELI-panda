@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import SystemDetailSectionComponent from 'core/components/modules/systems/details/system-detail/system-detail-section.comp'
+import SystemDetailSectionComponent from 'modules/systems/details/system-detail/system-detail-section.comp'
 import { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
@@ -40,10 +40,7 @@ let getFakePath = (): System['path'] => {
   return [...Array(length)].map(() => [faker.datatype.uuid(), getFakeName()])
 }
 
-let getFakeSystem = (
-  path: System['path'] = getFakePath(),
-  hasChildren: boolean = true
-): System => {
+let getFakeSystem = (path: System['path'] = getFakePath(), hasChildren: boolean = true): System => {
   let uid = faker.datatype.uuid()
   let name = getFakeName()
   let childPath: SystemUidName[] = [...path, [uid, name]]
@@ -52,13 +49,9 @@ let getFakeSystem = (
     name,
     path,
     image: 'https://source.unsplash.com/collection/71371194/500x500',
-    description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
-      5
-    )}`,
+    description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(5)}`,
     children: hasChildren
-      ? [...Array(faker.datatype.number({ max: 30 }))].map(() =>
-          getFakeSystem(childPath, false)
-        )
+      ? [...Array(faker.datatype.number({ max: 30 }))].map(() => getFakeSystem(childPath, false))
       : [],
     importanceCode: faker.datatype.string(),
     zoneCode: faker.datatype.string(),
@@ -85,9 +78,7 @@ let useFakeSystem = (slug: String | undefined): System => {
   return data
 }
 
-let Card = ({ children }) => (
-  <div className={`mb-2 lg:mb-4 py-1 lg:py-2`}>{children}</div>
-)
+let Card = ({ children }) => <div className={`mb-2 lg:mb-4 py-1 lg:py-2`}>{children}</div>
 
 let SubsystemsList = ({ data }) => (
   <Card>
@@ -140,10 +131,7 @@ let Breadcrumbs = ({ data }: SystemProps) => {
         {path.map(([uid, name]) => (
           <div className="flex gap-1 flex-nowrap" key={uid}>
             <div>/</div>
-            <Link
-              className="whitespace-nowrap hover:text-orange-700"
-              href={`/tree/${uid}`}
-            >
+            <Link className="whitespace-nowrap hover:text-orange-700" href={`/tree/${uid}`}>
               {name}
             </Link>
           </div>

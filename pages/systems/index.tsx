@@ -1,4 +1,4 @@
-import { message } from 'core/i18n/src/messages'
+import { message } from 'i18n/src/messages'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'
