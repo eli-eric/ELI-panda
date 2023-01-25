@@ -1,11 +1,7 @@
-name: Compose up frontend MAIN UI APP
+name: Compose up frontend
 
 on:
   workflow_dispatch:
-
-defaults:
-  run:
-    working-directory: frontend/ui-main-app
 
 jobs:
   use-secret:
@@ -21,6 +17,5 @@ jobs:
       - uses: actions/checkout@v3
       - run: |
           docker-compose up -d --build
-        working-directory: frontend/ui-main-app
         env:
           NEXTAUTH_SECRET: "${{ secrets.NEXTAUTH_SECRET }}"

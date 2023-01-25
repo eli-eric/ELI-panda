@@ -1,11 +1,7 @@
-name: Compose down frontend MAIN UI APP
+name: Compose down frontend
 
 on:
   workflow_dispatch:
-
-defaults:
-  run:
-    working-directory: frontend/ui-main-app
 
 jobs:
   compose-down:

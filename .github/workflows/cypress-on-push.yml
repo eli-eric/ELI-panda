@@ -3,16 +3,10 @@ name: Cypress test on push
 on:
   - push
 
-defaults:
-  run:
-    working-directory: frontend/ui-main-app
-
 jobs:
   build-run-test:
     runs-on: self-hosted
-    defaults:
-      run:
-        working-directory: frontend/ui-main-app
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v3
