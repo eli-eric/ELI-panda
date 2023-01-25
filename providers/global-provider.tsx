@@ -1,7 +1,7 @@
 import axios from 'axios'
-import LayoutComponent from 'components/layout/layout.comp'
 import AppLoader from 'components/loaders/app-loader.cont'
 import { messages } from 'i18n/src'
+import LayoutComponent from 'layout/layout.comp'
 import { useSession } from 'next-auth/react'
 import { IntlProvider } from 'react-intl'
 import { AppLoadingProvider } from 'store/app-loading.context'

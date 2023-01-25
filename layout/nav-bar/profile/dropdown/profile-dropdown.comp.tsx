@@ -1,8 +1,8 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import ModalComponent from 'components/ui/modal/modal.comp'
-import LoadingAppContext from 'store/app-loading.context'
 import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useContext, useEffect, useState } from 'react'
+import LoadingAppContext from 'store/app-loading.context'
 
 import ProfileCardComponent from '../card/profile-card.comp'
 
@@ -14,7 +14,7 @@ interface Props {
   open: boolean
 }
 
-const PropfileDropdownComponent = ({ open }: Props) => {
+const ProfileDropdownComponent = ({ open }: Props) => {
   const user = useSession().data?.user
   const fullName = user?.fullName
   const [inicials, setInicials] = useState('')
@@ -124,4 +124,4 @@ const PropfileDropdownComponent = ({ open }: Props) => {
   )
 }
 
-export default PropfileDropdownComponent
+export default ProfileDropdownComponent
