@@ -1,5 +1,5 @@
-import AuthFormContainer from 'modules/auth/auth-form.cont'
 import { message } from 'i18n/src/messages'
+import AuthFormContainer from 'modules/auth/auth-form.cont'
 import Head from 'next/head'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'

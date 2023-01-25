@@ -1,15 +1,19 @@
+import { useRouter } from 'next/router'
 import { signIn } from 'next-auth/react'
 import { FormEvent, Fragment, useRef, useState } from 'react'
+import { PATHS } from 'types/constants/paths'
 
 import AuthAlertComponent from './components/auth-alert.comp'
 import AuthFormComponent from './components/auth-form.comp'
 
 const AuthFormContainer = () => {
+  const router = useRouter()
   const [authFailed, setAuthFailed] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const userNameRef = useRef<HTMLInputElement | null>(null)
   const passwordRef = useRef<HTMLInputElement | null>(null)
+  const callbackUrl = (router.query?.callbackUrl as string) ?? PATHS.DASHBOARD
 
   const handleLoginSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -24,6 +28,8 @@ const AuthFormContainer = () => {
     })
     if (!result?.error) {
       setErrorMessage('')
+      setLoading(false)
+      router.push(callbackUrl)
     } else {
       setErrorMessage(result.error)
       setAuthFailed(true)
