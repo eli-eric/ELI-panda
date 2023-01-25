@@ -1,8 +1,10 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import ModalComponent from 'components/ui/modal/modal.comp'
+import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useContext, useEffect, useState } from 'react'
 import LoadingAppContext from 'store/app-loading.context'
+import { PATHS } from 'types/constants/paths'
 
 import ProfileCardComponent from '../card/profile-card.comp'
 
@@ -15,6 +17,7 @@ interface Props {
 }
 
 const ProfileDropdownComponent = ({ open }: Props) => {
+  const router = useRouter()
   const user = useSession().data?.user
   const fullName = user?.fullName
   const [inicials, setInicials] = useState('')
@@ -35,6 +38,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
       .then()
       .finally(() => {
         setLoadingApp(false)
+        router.push(PATHS.ROOT)
       })
   }
 
