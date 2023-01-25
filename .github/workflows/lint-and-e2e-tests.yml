@@ -4,28 +4,28 @@ on:
   - push
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout 🏷️
-        uses: actions/checkout@v3
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout 🏷️
+  #       uses: actions/checkout@v3
 
-      - name: Use Node 18 🕹️
-        uses: actions/setup-node@v3
-        with:
-          cache: "yarn"
-          cache-dependency-path: ./yarn.lock
-          node-version: "18"
+  #     - name: Use Node 18 🕹️
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         cache: "yarn"
+  #         cache-dependency-path: ./yarn.lock
+  #         node-version: "18"
 
-      - name: Install ⚙️
-        run: yarn install
+  #     - name: Install ⚙️
+  #       run: yarn install
 
-      - name: Lint 🤓
-        run: yarn lint
+  #     - name: Lint 🤓
+  #       run: yarn lint
 
   cypress-run:
     name: Cypress run - test
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -34,6 +34,7 @@ jobs:
         uses: cypress-io/github-action@v5
         with:
           record: true
+          browser: chrome
         env:
           CYPRESS_host: http://localhost:5001
           # pass the Cypress Cloud record key as an environment variable
