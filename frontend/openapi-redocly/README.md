@@ -1,1 +1,0 @@
-### Simple react application implementing redocly react component to show OpenAPI specification of the PANDA API Gateway.

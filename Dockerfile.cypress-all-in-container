@@ -1,0 +1,17 @@
+FROM cypress/browsers:node16.18.0-chrome107-ff106-edge
+
+WORKDIR /e2e
+
+COPY . .
+
+RUN chmod +x docker/cypress-all-in-container/buildruntest.sh
+
+ENV PANDA_API_GW_URL="http://localhost:5001/api/mock-server"
+ENV NEXTAUTH_URL="http://localhost:5001/"
+
+RUN yarn install
+
+RUN yarn build
+
+CMD docker/cypress-all-in-container/buildruntest.sh
+
