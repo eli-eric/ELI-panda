@@ -1,7 +1,7 @@
 import axios from 'axios'
 import AppLoader from 'components/loaders/app-loader.cont'
+import NavigationComponent from 'components/nav-bar/nav-bar.comp'
 import { messages } from 'i18n/src'
-import LayoutComponent from 'layout/layout.comp'
 import { useSession } from 'next-auth/react'
 import { IntlProvider } from 'react-intl'
 import { AppLoadingProvider } from 'store/app-loading.context'
@@ -27,7 +27,8 @@ const GlobalProvider = ({ children }: Props) => {
         <AppLoadingProvider>
           <ComponentLoadingProvider>
             <AppLoader>
-              <LayoutComponent>{children}</LayoutComponent>
+              <NavigationComponent />
+              {children}
             </AppLoader>
           </ComponentLoadingProvider>
         </AppLoadingProvider>

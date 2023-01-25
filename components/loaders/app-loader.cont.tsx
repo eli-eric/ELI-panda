@@ -1,8 +1,8 @@
 import { message } from 'i18n/src/messages'
-import AppLoadingContext from 'store/app-loading.context'
 import Head from 'next/head'
 import { Fragment, useContext } from 'react'
 import { useIntl } from 'react-intl'
+import AppLoadingContext from 'store/app-loading.context'
 
 import LoaderComponent from '../ui/loader.comp'
 const messages = message.defaul
