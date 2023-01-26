@@ -6,6 +6,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Suspense, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 type System = {
   uid: string
@@ -30,6 +31,7 @@ type System = {
 }
 
 type SystemProps = { data: System }
+type SystemEditableProps = { data: System; editMode: any }
 
 type SystemUidName = [System['uid'], System['name']]
 
@@ -110,13 +112,14 @@ let Preview = ({ data }: SystemProps) => {
   )
 }
 
-let Description = ({ data }: SystemProps) => {
+let Description = ({ data, editMode }: SystemEditableProps) => {
   let { description } = data
+  const { isEditMode, register } = editMode
   return (
     <>
       <b>Description</b>
       <Card>
-        <p>{description}</p>
+        {isEditMode ? <textarea rows="8" className="w-full" {...register('description')} /> : <p>{description}</p>}
       </Card>
     </>
   )
@@ -127,14 +130,11 @@ let Breadcrumbs = ({ data }: SystemProps) => {
   return (
     <div>
       <div className="flex gap-1 flex-wrap">
-        Systems
+        Systems /
         {path.map(([uid, name]) => (
-          <div className="flex gap-1 flex-nowrap" key={uid}>
-            <div>/</div>
-            <Link className="whitespace-nowrap hover:text-orange-700" href={`/tree/${uid}`}>
-              {name}
-            </Link>
-          </div>
+          <Link key={uid} className="whitespace-nowrap hover:text-orange-700" href={`/tree/${uid}`}>
+            {name} /
+          </Link>
         ))}
       </div>
     </div>
@@ -159,7 +159,7 @@ let Subsystems = ({ data }: SystemProps) => {
   )
 }
 
-let System = ({ data }: SystemProps) => {
+let System = ({ data, editMode }: SystemEditableProps) => {
   return (
     <div className="flex flex-wrap gap-2 lg:gap-4">
       <section className="grow lg:grow-0 shrink-0">
@@ -171,16 +171,64 @@ let System = ({ data }: SystemProps) => {
           <SystemDetailSectionComponent systemInfo={data} />
         </Card>
       </section>
-      <section>
-        <Description data={data} />
+      <section className="basis-full">
+        <Description data={data} editMode={editMode} />
       </section>
     </div>
   )
 }
 
+const useEditMode = (onSubmit: any, data: System | undefined) => {
+  const { register, handleSubmit } = useForm({ defaultValues: data })
+  const [isEditMode, setIsEditMode] = useState(true)
+
+  const EditModeContainer = ({ children }) =>
+    isEditMode ? (
+      <form
+        onSubmit={(...args) => {
+          handleSubmit(onSubmit)(...args)
+          setIsEditMode(false)
+        }}
+      >
+        {children}
+      </form>
+    ) : (
+      <>{children}</>
+    )
+
+  return { register, EditModeContainer, isEditMode, setIsEditMode }
+}
+
+const EditModeControls = ({ editMode }) => {
+  const Quit = () => <button onClick={() => setIsEditMode(false)}>Discard</button>
+  const Edit = () => <button onClick={() => setIsEditMode(true)}>Edit</button>
+  const Save = () => <input type="submit" value="Save" />
+  const { isEditMode, setIsEditMode } = editMode
+  return isEditMode ? (
+    <div className="flex">
+      <Save />
+      <Quit />
+    </div>
+  ) : (
+    <Edit />
+  )
+}
+
+const SystemTitle = ({ data, editMode }) => {
+  const { isEditMode, register } = editMode
+  return isEditMode ? <input {...register('name')} className="w-full" /> : <h1 className="">{data.name}</h1>
+}
+
 let SystemPage: NextPage = () => {
   let router = useRouter()
   let data = useFakeSystem(router.query.slug as string | undefined)
+
+  const onSubmit = data => {
+    console.log(data)
+  }
+  let editMode = useEditMode(onSubmit, data)
+  let { EditModeContainer } = editMode
+
   // let { data } = useSWR<Array<System>>(ENDPOINTS['systemTree'])
 
   return (
@@ -190,25 +238,30 @@ let SystemPage: NextPage = () => {
       </Head>
 
       <Suspense fallback={<b>Loading</b>}>
-        <div className="p-2 lg:p-4 flex flex-wrap">
-          <nav className="p-1 lg:p2 w-full">
-            <Breadcrumbs data={data} />
-          </nav>
-
-          <h1 className="text-3xl w-full">/ {data.name}</h1>
-
-          <aside className="p-1 lg:p-2 w-full lg:w-1/4">
-            <nav>
-              <Subsystems data={data} />
+        <EditModeContainer>
+          <div className="p-2 lg:p-4 flex flex-wrap">
+            <nav className="p-1 lg:p2 w-full">
+              <Breadcrumbs data={data} />
             </nav>
-          </aside>
 
-          <main className="p-1 lg:p-2 lg:w-3/4">
-            <article>
-              <System data={data} />
-            </article>
-          </main>
-        </div>
+            <div className="text-3xl w-full flex justify-between shrink-0">
+              <SystemTitle data={data} editMode={editMode} />
+              <EditModeControls editMode={editMode} />
+            </div>
+
+            <aside className="p-1 lg:p-2 w-full lg:w-1/4">
+              <nav>
+                <Subsystems data={data} />
+              </nav>
+            </aside>
+
+            <main className="p-1 lg:p-2 lg:w-3/4">
+              <article>
+                <System data={data} editMode={editMode} />
+              </article>
+            </main>
+          </div>
+        </EditModeContainer>
       </Suspense>
     </>
   )
