@@ -1,17 +1,30 @@
 import 'next-auth'
 
-import { ROLES } from 'types/constants/roles'
+import { Role } from 'types/constants/roles'
 
 declare module 'next-auth' {
+  interface User {
+    uid: string
+    username: string
+    email: string
+    fullName: string
+    facility: string
+    roles: Array<Role>
+    apiAccessToken: string
+  }
   interface Session {
-    user: {
-      uid: string
-      username: string
-      email: string
-      fullName: string
-      facility: string
-      roles: Array<ROLES>
-      apiAccessToken: string
-    }
+    user: User
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    uid: string
+    username: string
+    email: string
+    fullName: string
+    facility: string
+    roles: Array<Role>
+    apiAccessToken: string
   }
 }

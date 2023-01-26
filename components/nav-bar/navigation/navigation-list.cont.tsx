@@ -2,8 +2,8 @@ import { message } from 'i18n/src/messages'
 import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
-import { PATHS } from 'types/constants/paths'
-import { ROLES } from 'types/constants/roles'
+import { PATH } from 'types/constants/paths'
+import { Role } from 'types/constants/roles'
 
 import NavigationLinkComponent from './navigation-link.comp'
 const navMessages = message.layout
@@ -21,35 +21,35 @@ const NavigationListContainer = ({ open }: Props) => {
       <div className={open === false ? 'hidden sm:ml-6 sm:flex sm:space-x-8' : 'space-y-1 pt-2 pb-3'}>
         {status === 'authenticated' ? (
           <Fragment>
-            {userRoles?.includes(ROLES.SYSTEMS_VIEW) && (
+            {userRoles?.includes(Role.SYSTEMS_VIEW) && (
               <NavigationLinkComponent
                 name={intl.formatMessage({ id: navMessages.systemsOverview })}
-                href={PATHS.SYSTEMS_OVERVIEW}
+                href={PATH.SYSTEMS_OVERVIEW}
                 open={open}
               />
             )}
-            {userRoles?.includes(ROLES.CATALOGUE_VIEW) && (
+            {userRoles?.includes(Role.CATALOGUE_VIEW) && (
               <NavigationLinkComponent
                 name={intl.formatMessage({ id: navMessages.catalogue })}
-                href={PATHS.CATALOGUE}
+                href={PATH.CATALOGUE}
                 open={open}
               />
             )}
-            {/* {userRoles?.includes(ROLES.REPORTS_VIEW) && (
+            {/* {userRoles?.includes(Role.REPORTS_VIEW) && (
               <NavigationLinkComponent
                 name={intl.formatMessage({ id: navMessages.reports })}
-                href={PATHS.REPORTS}
+                href={PATH.REPORTS}
                 open={open}
               />
             )} */}
             <NavigationLinkComponent
               name={intl.formatMessage({ id: navMessages.dashboard })}
-              href={PATHS.DASHBOARD}
+              href={PATH.DASHBOARD}
               open={open}
             />
           </Fragment>
         ) : (
-          <NavigationLinkComponent name={intl.formatMessage({ id: navMessages.login })} href={PATHS.ROOT} open={open} />
+          <NavigationLinkComponent name={intl.formatMessage({ id: navMessages.login })} href={PATH.ROOT} open={open} />
         )}
       </div>
     </Fragment>

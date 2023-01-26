@@ -1,6 +1,6 @@
-import { PATHS } from 'types/constants/paths'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
+import { PATH } from 'types/constants/paths'
 
 import BreadcrumpItemComponent from './breadcrump-item.comp'
 import BreadcrumbListComponent from './breadcrump-list.comp'
@@ -15,7 +15,7 @@ const BreadcrumbContainer = () => {
   const navigationList = useMemo(() => {
     if (router.query.slug) {
       const { slug } = router.query
-      let link = PATHS.CATALOGUE as string
+      let link = PATH.CATALOGUE as string
       if (slug && typeof slug === 'object') {
         return slug.map((slug, i) => {
           link += `/${slug}`

@@ -1,6 +1,6 @@
 import { HomeIcon } from '@heroicons/react/20/solid'
-import { PATHS } from 'types/constants/paths'
 import { useRouter } from 'next/router'
+import { PATH } from 'types/constants/paths'
 
 interface Props {
   navigationList: JSX.Element[] | undefined
@@ -14,7 +14,7 @@ const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props)
   const { search } = router.query
 
   const onCLickHandler = () => {
-    handleClick(PATHS.CATALOGUE + (search ? `?search=${search}` : ''))
+    handleClick(PATH.CATALOGUE + (search ? `?search=${search}` : ''))
   }
 
   return (
