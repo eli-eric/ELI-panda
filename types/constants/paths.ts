@@ -1,4 +1,4 @@
-export enum PATHS {
+export enum PATH {
   ROOT = '/',
   DASHBOARD = '/dashboard',
   CATALOGUE = '/catalogue',
@@ -7,3 +7,5 @@ export enum PATHS {
 
   REPORTS = '/reports'
 }
+
+export const PROTECTED_PATHS = [PATH.DASHBOARD, PATH.CATALOGUE, PATH.SYSTEMS, PATH.SYSTEMS_OVERVIEW]

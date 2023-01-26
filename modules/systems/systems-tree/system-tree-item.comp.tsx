@@ -1,11 +1,11 @@
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon, ChevronUpIcon, PuzzlePieceIcon } from '@heroicons/react/24/outline'
-import { PATHS } from 'types/constants/paths'
-import { SystemTreeItem } from 'types/responses'
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
-
 import FormContext from 'store/form.context'
+import { PATH } from 'types/constants/paths'
+import { SystemTreeItem } from 'types/responses'
+
 import SystemActionIconsComponent from './action-icons/system-action-icons.comp'
 
 function classNames(...classes) {
@@ -21,7 +21,7 @@ const SystemTreeItemComponent = ({ open, item }: Props) => {
   const { isEdit } = useContext(FormContext)
   const router = useRouter()
   const selectSystemItemHandler = () => {
-    router.push({ pathname: PATHS.SYSTEMS_OVERVIEW + '/' + item.uid })
+    router.push({ pathname: PATH.SYSTEMS_OVERVIEW + '/' + item.uid })
   }
 
   return (

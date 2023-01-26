@@ -15,7 +15,6 @@ export const updateTreeObject = (systemTree, uid, newData) => {
   for (let i = 0; i < systemTree.length; i++) {
     if (systemTree[i].uid == uid) {
       for (let key in newData) {
-        console.log(systemTree[i][key])
         systemTree[i][key] = newData[key]
       }
       return
@@ -28,7 +27,6 @@ export const updateTreeObject = (systemTree, uid, newData) => {
 
 export const updateSystemObject = (systems, uid, newData) => {
   const systemIndex = systems.findIndex(item => item.uid === uid)
-  console.log(systemIndex)
   for (let key in newData) {
     systems[systemIndex][key] = newData[key]
   }

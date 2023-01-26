@@ -1,5 +1,5 @@
 import { ENDPOINTS } from 'types/constants/endpoints'
-import { PATHS } from 'types/constants/paths'
+import { PATH } from 'types/constants/paths'
 import { CatalogueCategoryResponse } from 'types/responses'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -12,7 +12,7 @@ interface Props {
 const CategoryItemComponent = ({ category }: Props) => {
   const router = useRouter()
   const { search } = router.query
-  const path = PATHS.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
+  const path = PATH.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
 
   return (
     <Link

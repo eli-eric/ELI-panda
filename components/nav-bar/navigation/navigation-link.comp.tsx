@@ -24,7 +24,7 @@ const NavigationLinkComponent = ({ href, name, open }: Props) => {
     ? router.asPath === href
       ? selectedClassName
       : nonSelectedClassName
-    : router.asPath.startsWith(href)
+    : router.asPATH.startsWith(href)
     ? selectedClassName
     : nonSelectedClassName
 

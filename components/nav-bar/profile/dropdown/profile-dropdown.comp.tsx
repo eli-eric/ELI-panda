@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useContext, useEffect, useState } from 'react'
 import LoadingAppContext from 'store/app-loading.context'
-import { PATHS } from 'types/constants/paths'
+import { PATH } from 'types/constants/paths'
 
 import ProfileCardComponent from '../card/profile-card.comp'
 
@@ -38,7 +38,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
       .then()
       .finally(() => {
         setLoadingApp(false)
-        router.push(PATHS.ROOT)
+        router.push(PATH.ROOT)
       })
   }
 
