@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import AuthAlertComponent from 'components/auth/auth-alert.comp'
-import AuthFormComponent from 'components/auth/auth-form.comp'
+import AuthFormComponent, { AuthForm } from 'components/auth/auth-form.comp'
 import { message } from 'i18n/src/messages'
 import { NextPage } from 'next'
 import Head from 'next/head'
@@ -14,7 +14,7 @@ import * as yup from 'yup'
 
 const messages = message.authPage
 
-const HomePage: NextPage = (): JSX.Element => {
+const LoginPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
   const router = useRouter()
   const callbackUrl = decodeURI((router.query?.callbackUrl as string) ?? PATH.DASHBOARD)
@@ -22,7 +22,7 @@ const HomePage: NextPage = (): JSX.Element => {
     password: yup.string().required(),
     username: yup.string().required()
   })
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState } = useForm<AuthForm>({
     resolver: yupResolver(authValidationSchema)
   })
   const [errorMessage, setErrorMessage] = useState<string>()
@@ -70,4 +70,4 @@ const HomePage: NextPage = (): JSX.Element => {
   )
 }
 
-export default HomePage
+export default LoginPage

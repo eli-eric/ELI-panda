@@ -1,7 +1,7 @@
 import EliLogoComponent from 'components/ui/eli-logo.comp'
 import { Input } from 'components/ui/form/Input'
 import { message } from 'i18n/src/messages'
-import { FieldValues, FormState, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form'
+import { FormState, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 
 import AuthButton from './auth-button.comp'
@@ -9,15 +9,22 @@ import AuthButton from './auth-button.comp'
 const authMessages = message.authPage
 const { title, form } = message.authPage
 
+export type AuthForm = {
+  username: string
+  password: string
+}
+
 interface Props {
   onSubmit: (data: any) => void
-  register: UseFormRegister<FieldValues>
-  formState: FormState<FieldValues>
-  handleSubmit: UseFormHandleSubmit<FieldValues>
+  register: UseFormRegister<AuthForm>
+  formState: FormState<AuthForm>
+  handleSubmit: UseFormHandleSubmit<AuthForm>
   loading: boolean
 }
 
 const AuthFormComponent = ({ onSubmit, register, formState, handleSubmit, loading }: Props) => {
+  const { errors } = formState
+
   return (
     <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -43,6 +50,7 @@ const AuthFormComponent = ({ onSubmit, register, formState, handleSubmit, loadin
                   register={register}
                   className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
                 />
+                <p className="text-xs text-red-500">{errors.username?.message}</p>
               </div>
             </div>
 
@@ -59,6 +67,7 @@ const AuthFormComponent = ({ onSubmit, register, formState, handleSubmit, loadin
                   register={register}
                   className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
                 />
+                <p className="text-xs text-red-500">{errors.password?.message}</p>
               </div>
             </div>
 
