@@ -72,7 +72,7 @@ const getFakeSystem = (path: System['path'] = getFakePath(), hasChildren: boolea
   }
 }
 
-function sleep(ms) {
+function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
@@ -81,7 +81,7 @@ const fetchFakeData = async () => {
   return getFakeSystem()
 }
 
-const Card = props => <div {...props} className={`mb-2 lg:mb-4 py-1 lg:py-2 ${props.className}`} />
+const Card = (props: any) => <div {...props} className={`mb-2 lg:mb-4 py-1 lg:py-2 ${props.className}`} />
 
 const SubsystemsList = ({ data }) => (
   <Card>
@@ -123,7 +123,7 @@ const Preview = ({ data, editMode }: SystemEditableProps) => {
             <div {...getRootProps()}>
               <input {...getInputProps()} />
               <img width="100%" src={newImage ? newImage : image} alt={name} />
-              {isDragActive ? 'Drop new image here' : 'Click here or drag and drop an image to update the Preview'}
+              {isDragActive ? 'Drop new image here' : 'Click here or drag and drop an image'}
             </div>
             <div>{newImage && <button onClick={() => setNewImage('')}>Discard</button>}</div>
           </div>
@@ -257,8 +257,36 @@ const Title = ({ data, editMode }) => {
   return isEditMode ? <input {...register('name')} className="w-full" /> : <h1 className="">{data.name}</h1>
 }
 
-const onSubmit = data => {
+const onSubmit = (data: System) => {
   console.log(data)
+}
+
+const debounce = (fn, ms = 500) => {
+  let timer
+  return (...args) => {
+    clearTimeout(timer)
+    setTimeout(() => fn(...args), ms)
+  }
+}
+
+const SearchInput = ({ initialQuery }) => {
+  const { query, push } = useRouter()
+  const ID = 'systems-search-input'
+  useEffect(() => {
+    initialQuery && document.getElementById(ID)?.focus()
+  }, [initialQuery])
+  return (
+    <form onSubmit={e => e.preventDefault()}>
+      <input
+        id={ID}
+        defaultValue={initialQuery}
+        placeholder="Type here to search this system"
+        onChange={debounce(e => {
+          push({ query: { ...query, q: e.target.value } }, undefined, { shallow: true })
+        }, 1000)}
+      />
+    </form>
+  )
 }
 
 const Page: NextPage = () => {
@@ -266,6 +294,9 @@ const Page: NextPage = () => {
   const uid = router.query.slug
   const { data } = useSWR(uid, fetchFakeData)
   const editMode = useEditMode(onSubmit, data)
+
+  const query = router.query.q
+  // const query = undefined
 
   const { EditModeContainer, EditModeControls } = editMode
 
@@ -286,6 +317,7 @@ const Page: NextPage = () => {
 
           <div className="text-3xl w-full flex justify-between shrink-0">
             <Title data={data} editMode={editMode} />
+            <SearchInput initialQuery={query} />
             <EditModeControls />
           </div>
 
