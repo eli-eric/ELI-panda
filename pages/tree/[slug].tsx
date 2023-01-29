@@ -36,17 +36,17 @@ type SystemEditableProps = { data: System; editMode: any }
 
 type SystemUidName = [System['uid'], System['name']]
 
-let getFakeName = () => faker.company.catchPhrase()
+const getFakeName = () => faker.company.catchPhrase()
 
-let getFakePath = (): System['path'] => {
-  let length = faker.datatype.number({ min: 0, max: 10 })
+const getFakePath = (): System['path'] => {
+  const length = faker.datatype.number({ min: 0, max: 10 })
   return [...Array(length)].map(() => [faker.datatype.uuid(), getFakeName()])
 }
 
-let getFakeSystem = (path: System['path'] = getFakePath(), hasChildren: boolean = true): System => {
-  let uid = faker.datatype.uuid()
-  let name = getFakeName()
-  let childPath: SystemUidName[] = [...path, [uid, name]]
+const getFakeSystem = (path: System['path'] = getFakePath(), hasChildren: boolean = true): System => {
+  const uid = faker.datatype.uuid()
+  const name = getFakeName()
+  const childPath: SystemUidName[] = [...path, [uid, name]]
   return {
     uid,
     name,
@@ -76,14 +76,14 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-let fetchFakeData = async () => {
+const fetchFakeData = async () => {
   await sleep(faker.datatype.number({ min: 200, max: 2000 }))
   return getFakeSystem()
 }
 
-let Card = props => <div {...props} className={`mb-2 lg:mb-4 py-1 lg:py-2 ${props.className}`} />
+const Card = props => <div {...props} className={`mb-2 lg:mb-4 py-1 lg:py-2 ${props.className}`} />
 
-let SubsystemsList = ({ data }) => (
+const SubsystemsList = ({ data }) => (
   <Card>
     <ul>
       {data.children.length === 0 ? (
@@ -101,12 +101,12 @@ let SubsystemsList = ({ data }) => (
   </Card>
 )
 
-let Preview = ({ data, editMode }: SystemEditableProps) => {
-  let { image, name } = data
-  let { isEditMode, setNewImage } = editMode
-  let onDrop = useCallback(
+const Preview = ({ data, editMode }: SystemEditableProps) => {
+  const { image, name } = data
+  const { isEditMode, setNewImage } = editMode
+  const onDrop = useCallback(
     files => {
-      let reader = new FileReader()
+      const reader = new FileReader()
       reader.readAsDataURL(files[0])
       reader.onload = () => setNewImage(reader.result)
     },
@@ -131,8 +131,8 @@ let Preview = ({ data, editMode }: SystemEditableProps) => {
   )
 }
 
-let Description = ({ data, editMode }: SystemEditableProps) => {
-  let { description } = data
+const Description = ({ data, editMode }: SystemEditableProps) => {
+  const { description } = data
   const { isEditMode, register } = editMode
   return (
     <>
@@ -144,8 +144,8 @@ let Description = ({ data, editMode }: SystemEditableProps) => {
   )
 }
 
-let Breadcrumbs = ({ data }: SystemProps) => {
-  let { path } = data
+const Breadcrumbs = ({ data }: SystemProps) => {
+  const { path } = data
   return (
     <div>
       <div className="flex gap-1 flex-wrap">
@@ -160,7 +160,7 @@ let Breadcrumbs = ({ data }: SystemProps) => {
   )
 }
 
-let Subsystems = ({ data }: SystemProps) => {
+const Subsystems = ({ data }: SystemProps) => {
   // Use <details> element on mobile
   return (
     <div>
@@ -178,7 +178,7 @@ let Subsystems = ({ data }: SystemProps) => {
   )
 }
 
-let System = ({ data, editMode }: SystemEditableProps) => {
+const System = ({ data, editMode }: SystemEditableProps) => {
   return (
     <div className="flex flex-wrap gap-2 lg:gap-4">
       <section className="grow lg:grow-0 shrink-0">
@@ -248,17 +248,17 @@ const Title = ({ data, editMode }) => {
   return isEditMode ? <input {...register('name')} className="w-full" /> : <h1 className="">{data.name}</h1>
 }
 
-let Page: NextPage = () => {
-  let router = useRouter()
-  let uid = router.query.slug
-  let { data } = useSWR(uid, fetchFakeData)
+const onSubmit = data => {
+  console.log(data)
+}
 
-  const onSubmit = data => {
-    console.log(data)
-  }
+const Page: NextPage = () => {
+  const router = useRouter()
+  const uid = router.query.slug
+  const { data } = useSWR(uid, fetchFakeData)
+  const editMode = useEditMode(onSubmit, data)
 
-  let editMode = useEditMode(onSubmit, data)
-  let { EditModeContainer, EditModeControls, reset } = editMode
+  const { EditModeContainer, EditModeControls, reset } = editMode
   useEffect(() => {
     reset(data)
   }, [data, reset])
