@@ -1,12 +1,12 @@
 import { faker } from '@faker-js/faker'
 import SystemDetailSectionComponent from 'modules/systems/details/system-detail/system-detail-section.comp'
 import { NextPage } from 'next'
-import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import useSWR from 'swr'
 
 type System = {
   uid: string
@@ -71,13 +71,13 @@ let getFakeSystem = (path: System['path'] = getFakePath(), hasChildren: boolean 
   }
 }
 
-let useFakeSystem = (slug: String | undefined): System => {
-  let [data, setData] = useState(getFakeSystem())
-  useEffect(() => {
-    slug && setData(getFakeSystem())
-  }, [slug])
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
 
-  return data
+let fetchData = async () => {
+  await sleep(faker.datatype.number({ min: 200, max: 2000 }))
+  return getFakeSystem()
 }
 
 let Card = ({ children }) => <div className={`mb-2 lg:mb-4 py-1 lg:py-2`}>{children}</div>
@@ -179,11 +179,11 @@ let System = ({ data, editMode }: SystemEditableProps) => {
 }
 
 const useEditMode = (onSubmit: any, data: System | undefined) => {
-  const { register, handleSubmit } = useForm({ defaultValues: data })
-  const [isEditMode, setIsEditMode] = useState(true)
+  const { register, handleSubmit, reset } = useForm({ defaultValues: data })
+  const [isEditMode, setIsEditMode] = useState(false)
 
-  const EditModeContainer = ({ children }) =>
-    isEditMode ? (
+  const EditModeContainer = ({ children }) => {
+    return isEditMode ? (
       <form
         onSubmit={(...args) => {
           handleSubmit(onSubmit)(...args)
@@ -195,78 +195,91 @@ const useEditMode = (onSubmit: any, data: System | undefined) => {
     ) : (
       <>{children}</>
     )
+  }
+  const EditModeControls = () => {
+    const Quit = () => (
+      <button
+        onClick={() => {
+          reset()
+          setIsEditMode(false)
+        }}
+      >
+        Discard
+      </button>
+    )
+    const Edit = () => <button onClick={() => setIsEditMode(true)}>Edit</button>
+    const Save = () => <input type="submit" value="Save" />
+    return isEditMode ? (
+      <div className="flex">
+        <Save />
+        <Quit />
+      </div>
+    ) : (
+      <Edit />
+    )
+  }
 
-  return { register, EditModeContainer, isEditMode, setIsEditMode }
-}
-
-const EditModeControls = ({ editMode }) => {
-  const Quit = () => <button onClick={() => setIsEditMode(false)}>Discard</button>
-  const Edit = () => <button onClick={() => setIsEditMode(true)}>Edit</button>
-  const Save = () => <input type="submit" value="Save" />
-  const { isEditMode, setIsEditMode } = editMode
-  return isEditMode ? (
-    <div className="flex">
-      <Save />
-      <Quit />
-    </div>
-  ) : (
-    <Edit />
-  )
+  return { register, isEditMode, EditModeContainer, EditModeControls, reset, setIsEditMode }
 }
 
 const SystemTitle = ({ data, editMode }) => {
   const { isEditMode, register } = editMode
+  console.log(isEditMode)
   return isEditMode ? <input {...register('name')} className="w-full" /> : <h1 className="">{data.name}</h1>
 }
 
 let SystemPage: NextPage = () => {
   let router = useRouter()
-  let data = useFakeSystem(router.query.slug as string | undefined)
+  let uid = router.query.slug
+
+  let { data } = useSWR(uid, fetchData, { suspense: true })
 
   const onSubmit = data => {
     console.log(data)
   }
+
   let editMode = useEditMode(onSubmit, data)
-  let { EditModeContainer } = editMode
+  let { EditModeContainer, EditModeControls, reset } = editMode
+  useEffect(() => {
+    reset(data)
+  }, [data, reset])
 
-  // let { data } = useSWR<Array<System>>(ENDPOINTS['systemTree'])
-
+  if (!data) return <>Loading</>
   return (
     <>
       <Head>
         <title>{data.name}</title>
       </Head>
 
-      <Suspense fallback={<b>Loading</b>}>
-        <EditModeContainer>
-          <div className="p-2 lg:p-4 flex flex-wrap">
-            <nav className="p-1 lg:p2 w-full">
-              <Breadcrumbs data={data} />
-            </nav>
+      <EditModeContainer>
+        <div className="p-2 lg:p-4 flex flex-wrap">
+          <nav className="p-1 lg:p2 w-full">
+            <Breadcrumbs data={data} />
+          </nav>
 
-            <div className="text-3xl w-full flex justify-between shrink-0">
-              <SystemTitle data={data} editMode={editMode} />
-              <EditModeControls editMode={editMode} />
-            </div>
-
-            <aside className="p-1 lg:p-2 w-full lg:w-1/4">
-              <nav>
-                <Subsystems data={data} />
-              </nav>
-            </aside>
-
-            <main className="p-1 lg:p-2 lg:w-3/4">
-              <article>
-                <System data={data} editMode={editMode} />
-              </article>
-            </main>
+          <div className="text-3xl w-full flex justify-between shrink-0">
+            <SystemTitle data={data} editMode={editMode} />
+            <EditModeControls />
           </div>
-        </EditModeContainer>
-      </Suspense>
+
+          <aside className="p-1 lg:p-2 w-full lg:w-1/4">
+            <nav>
+              <Subsystems data={data} />
+            </nav>
+          </aside>
+
+          <main className="p-1 lg:p-2 lg:w-3/4">
+            <article>
+              <System data={data} editMode={editMode} />
+            </article>
+          </main>
+        </div>
+      </EditModeContainer>
     </>
   )
 }
 
-export default dynamic(() => Promise.resolve(SystemPage), {
-  ssr: false
-})
+export default SystemPage
+// export default dynamic(() => Promise.resolve(SystemPage), {
+//   ssr: false
+// })
