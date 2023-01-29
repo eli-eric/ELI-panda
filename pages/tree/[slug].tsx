@@ -4,7 +4,7 @@ import { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useState } from 'react'
+import { Suspense, useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useForm } from 'react-hook-form'
 import useSWR from 'swr/immutable'
@@ -76,9 +76,14 @@ function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-const fetchFakeData = async () => {
+const fetchFakeSystem = async uri => {
   await sleep(faker.datatype.number({ min: 200, max: 2000 }))
-  return getFakeSystem()
+  return uri && getFakeSystem()
+}
+const fetchFakeSystems = async uri => {
+  const res = [...Array(faker.datatype.number({ min: 0, max: 100 }))]
+  await sleep(faker.datatype.number({ min: 200, max: 2000 }))
+  return uri && res.map(() => getFakeSystem())
 }
 
 const Card = (props: any) => <div {...props} className={`mb-2 lg:mb-4 py-1 lg:py-2 ${props.className}`} />
@@ -91,9 +96,7 @@ const SubsystemsList = ({ data }) => (
       ) : (
         data.children.map(({ uid, name }) => (
           <li key={uid}>
-            <Link className="hover:text-orange-700" href={`/tree/${uid}`}>
-              {name}
-            </Link>
+            <SystemLink href={`/tree/${uid}`}>{name}</SystemLink>
           </li>
         ))
       )}
@@ -117,7 +120,7 @@ const Preview = ({ data, editMode }: SystemEditableProps) => {
   return (
     <>
       <b>Preview</b>
-      <Card className="w-[500px]">
+      <Card className="w-[500px] h-[500px]">
         {isEditMode ? (
           <div>
             <div {...getRootProps()}>
@@ -147,6 +150,7 @@ const Description = ({ data, editMode }: SystemEditableProps) => {
     </>
   )
 }
+const SystemLink = props => <Link {...props} className={`whitespace-nowrap hover:text-orange-700 ${props.className}`} />
 
 const Breadcrumbs = ({ data }: SystemProps) => {
   const { path } = data
@@ -155,9 +159,9 @@ const Breadcrumbs = ({ data }: SystemProps) => {
       <div className="flex gap-1 flex-wrap">
         Systems /
         {path.map(([uid, name]) => (
-          <Link key={uid} className="whitespace-nowrap hover:text-orange-700" href={`/tree/${uid}`}>
+          <SystemLink key={uid} href={`/tree/${uid}`}>
             {name} /
-          </Link>
+          </SystemLink>
         ))}
       </div>
     </div>
@@ -280,7 +284,7 @@ const SearchInput = ({ initialQuery }) => {
       <input
         id={ID}
         defaultValue={initialQuery}
-        placeholder="Type here to search this system"
+        placeholder="search this system"
         onChange={debounce(e => {
           push({ query: { ...query, q: e.target.value } }, undefined, { shallow: true })
         }, 1000)}
@@ -289,16 +293,37 @@ const SearchInput = ({ initialQuery }) => {
   )
 }
 
+const SearchResults = ({ query }) => {
+  const { data = [] } = useSWR(query, fetchFakeSystems, { suspense: true })
+  return (
+    <div className="h-[30vh] mb-4">
+      <b>Results ({data.length})</b>
+      <Card className="h-full overflow-auto">
+        {data.length > 0 ? (
+          <ul>
+            {data.map(({ uid, name }) => (
+              <li key={uid}>
+                <SystemLink href={`/tree/${uid}`}>{name}</SystemLink>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div>No results found.</div>
+        )}
+      </Card>
+    </div>
+  )
+}
+
 const Page: NextPage = () => {
   const router = useRouter()
   const uid = router.query.slug
-  const { data } = useSWR(uid, fetchFakeData)
-  const editMode = useEditMode(onSubmit, data)
-
   const query = router.query.q
-  // const query = undefined
 
-  const { EditModeContainer, EditModeControls } = editMode
+  const { data } = useSWR(uid, fetchFakeSystem)
+
+  const editMode = useEditMode(onSubmit, data)
+  const { isEditMode, EditModeContainer, EditModeControls } = editMode
 
   //I can't seem to get <Suspense> working, using this for now.
   if (!data) return <>Loading</>
@@ -315,11 +340,25 @@ const Page: NextPage = () => {
             <Breadcrumbs data={data} />
           </nav>
 
-          <div className="text-3xl w-full flex justify-between shrink-0">
+          <div className="text-3xl w-full flex shrink-0 justify-between">
             <Title data={data} editMode={editMode} />
-            <SearchInput initialQuery={query} />
+            {isEditMode || <SearchInput initialQuery={query} />}
             <EditModeControls />
           </div>
+          {isEditMode ||
+            (query && (
+              <div className="p-1 lg:p-2 w-full">
+                <Suspense
+                  fallback={
+                    <div className="h-[30vh] mb-4">
+                      <b>Loading</b>
+                    </div>
+                  }
+                >
+                  <SearchResults query={query} />
+                </Suspense>
+              </div>
+            ))}
 
           <aside className="p-1 lg:p-2 w-full lg:w-1/4">
             <nav>
@@ -339,6 +378,3 @@ const Page: NextPage = () => {
 }
 
 export default Page
-// export default dynamic(() => Promise.resolve(Page), {
-//   ssr: false
-// })
