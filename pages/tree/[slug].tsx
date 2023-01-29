@@ -103,7 +103,7 @@ const SubsystemsList = ({ data }) => (
 
 const Preview = ({ data, editMode }: SystemEditableProps) => {
   const { image, name } = data
-  const { isEditMode, setNewImage } = editMode
+  const { newImage, isEditMode, setNewImage } = editMode
   const onDrop = useCallback(
     files => {
       const reader = new FileReader()
@@ -119,9 +119,13 @@ const Preview = ({ data, editMode }: SystemEditableProps) => {
       <b>Preview</b>
       <Card className="w-[500px]">
         {isEditMode ? (
-          <div {...getRootProps()}>
-            <input {...getInputProps()} />
-            DropHere
+          <div>
+            <div {...getRootProps()}>
+              <input {...getInputProps()} />
+              <img width="100%" src={newImage ? newImage : image} alt={name} />
+              {isDragActive ? 'Drop new image here' : 'Click here or drag and drop an image to update the Preview'}
+            </div>
+            <div>{newImage && <button onClick={() => setNewImage('')}>Discard</button>}</div>
           </div>
         ) : (
           <img width="100%" src={image} alt={name} />
@@ -202,6 +206,11 @@ const useEditMode = (onSubmit: any, data: System | undefined) => {
   const [isEditMode, setIsEditMode] = useState(false)
   const [newImage, setNewImage] = useState('')
 
+  //For some reason react-hook-form's default values get off sync unless reset like bellow. ???
+  useEffect(() => {
+    reset(data)
+  }, [data, reset])
+
   const EditModeContainer = ({ children }) => {
     return isEditMode ? (
       <form
@@ -213,7 +222,7 @@ const useEditMode = (onSubmit: any, data: System | undefined) => {
         {children}
       </form>
     ) : (
-      <>{children}</>
+      children
     )
   }
   const EditModeControls = () => {
@@ -240,7 +249,7 @@ const useEditMode = (onSubmit: any, data: System | undefined) => {
     )
   }
 
-  return { register, isEditMode, EditModeContainer, setNewImage, EditModeControls, reset, setIsEditMode }
+  return { register, isEditMode, EditModeContainer, setNewImage, newImage, EditModeControls, reset, setIsEditMode }
 }
 
 const Title = ({ data, editMode }) => {
@@ -258,12 +267,11 @@ const Page: NextPage = () => {
   const { data } = useSWR(uid, fetchFakeData)
   const editMode = useEditMode(onSubmit, data)
 
-  const { EditModeContainer, EditModeControls, reset } = editMode
-  useEffect(() => {
-    reset(data)
-  }, [data, reset])
+  const { EditModeContainer, EditModeControls } = editMode
 
+  //I can't seem to get <Suspense> working, using this for now.
   if (!data) return <>Loading</>
+
   return (
     <>
       <Head>
