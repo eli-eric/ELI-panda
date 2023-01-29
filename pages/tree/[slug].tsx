@@ -4,9 +4,10 @@ import { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { useDropzone } from 'react-dropzone'
 import { useForm } from 'react-hook-form'
-import useSWR from 'swr'
+import useSWR from 'swr/immutable'
 
 type System = {
   uid: string
@@ -75,12 +76,12 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-let fetchData = async () => {
+let fetchFakeData = async () => {
   await sleep(faker.datatype.number({ min: 200, max: 2000 }))
   return getFakeSystem()
 }
 
-let Card = ({ children }) => <div className={`mb-2 lg:mb-4 py-1 lg:py-2`}>{children}</div>
+let Card = props => <div {...props} className={`mb-2 lg:mb-4 py-1 lg:py-2 ${props.className}`} />
 
 let SubsystemsList = ({ data }) => (
   <Card>
@@ -100,13 +101,31 @@ let SubsystemsList = ({ data }) => (
   </Card>
 )
 
-let Preview = ({ data }: SystemProps) => {
+let Preview = ({ data, editMode }: SystemEditableProps) => {
   let { image, name } = data
+  let { isEditMode, setNewImage } = editMode
+  let onDrop = useCallback(
+    files => {
+      let reader = new FileReader()
+      reader.readAsDataURL(files[0])
+      reader.onload = () => setNewImage(reader.result)
+    },
+    [setNewImage]
+  )
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ maxFiles: 1, accept: { 'image/*': [] }, onDrop })
+
   return (
     <>
       <b>Preview</b>
-      <Card>
-        <img width="500px" src={image} alt={name} />
+      <Card className="w-[500px]">
+        {isEditMode ? (
+          <div {...getRootProps()}>
+            <input {...getInputProps()} />
+            DropHere
+          </div>
+        ) : (
+          <img width="100%" src={image} alt={name} />
+        )}
       </Card>
     </>
   )
@@ -163,7 +182,7 @@ let System = ({ data, editMode }: SystemEditableProps) => {
   return (
     <div className="flex flex-wrap gap-2 lg:gap-4">
       <section className="grow lg:grow-0 shrink-0">
-        <Preview data={data} />
+        <Preview data={data} editMode={editMode} />
       </section>
       <section className="grow">
         <b>Details</b>
@@ -181,14 +200,15 @@ let System = ({ data, editMode }: SystemEditableProps) => {
 const useEditMode = (onSubmit: any, data: System | undefined) => {
   const { register, handleSubmit, reset } = useForm({ defaultValues: data })
   const [isEditMode, setIsEditMode] = useState(false)
+  const [newImage, setNewImage] = useState('')
 
   const EditModeContainer = ({ children }) => {
     return isEditMode ? (
       <form
-        onSubmit={(...args) => {
-          handleSubmit(onSubmit)(...args)
+        onSubmit={handleSubmit(data => {
           setIsEditMode(false)
-        }}
+          return newImage ? onSubmit({ ...data, image: newImage }) : onSubmit(data)
+        })}
       >
         {children}
       </form>
@@ -200,6 +220,7 @@ const useEditMode = (onSubmit: any, data: System | undefined) => {
     const Quit = () => (
       <button
         onClick={() => {
+          setNewImage('')
           reset()
           setIsEditMode(false)
         }}
@@ -219,20 +240,18 @@ const useEditMode = (onSubmit: any, data: System | undefined) => {
     )
   }
 
-  return { register, isEditMode, EditModeContainer, EditModeControls, reset, setIsEditMode }
+  return { register, isEditMode, EditModeContainer, setNewImage, EditModeControls, reset, setIsEditMode }
 }
 
-const SystemTitle = ({ data, editMode }) => {
+const Title = ({ data, editMode }) => {
   const { isEditMode, register } = editMode
-  console.log(isEditMode)
   return isEditMode ? <input {...register('name')} className="w-full" /> : <h1 className="">{data.name}</h1>
 }
 
-let SystemPage: NextPage = () => {
+let Page: NextPage = () => {
   let router = useRouter()
   let uid = router.query.slug
-
-  let { data } = useSWR(uid, fetchData, { suspense: true })
+  let { data } = useSWR(uid, fetchFakeData)
 
   const onSubmit = data => {
     console.log(data)
@@ -258,7 +277,7 @@ let SystemPage: NextPage = () => {
           </nav>
 
           <div className="text-3xl w-full flex justify-between shrink-0">
-            <SystemTitle data={data} editMode={editMode} />
+            <Title data={data} editMode={editMode} />
             <EditModeControls />
           </div>
 
@@ -279,7 +298,7 @@ let SystemPage: NextPage = () => {
   )
 }
 
-export default SystemPage
-// export default dynamic(() => Promise.resolve(SystemPage), {
+export default Page
+// export default dynamic(() => Promise.resolve(Page), {
 //   ssr: false
 // })

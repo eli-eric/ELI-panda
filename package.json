@@ -27,6 +27,7 @@
     "next-auth": "^4.16.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.42.1",
     "react-intl": "^5.4.3",
     "react-tooltip": "^4.5.1",
