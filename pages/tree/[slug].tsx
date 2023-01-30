@@ -72,7 +72,7 @@ const Page: NextPage = () => {
   const { data } = useSWR(uid, fetchFakeSystem)
 
   const editMode = useEditMode(onSubmit, data)
-  const { isEditMode, EditModeContainer, EditModeControls } = editMode
+  const { isEditMode, FormErrors, EditModeContainer, EditModeControls } = editMode
 
   //I can't seem to get <Suspense> working, using this for now.
   if (!data) return <>Loading</>
@@ -88,6 +88,12 @@ const Page: NextPage = () => {
           <nav className="p-1 lg:p2 w-full">
             <Breadcrumbs data={data} />
           </nav>
+
+          {isEditMode && (
+            <div className="w-full">
+              <FormErrors />
+            </div>
+          )}
 
           <div className="text-3xl w-full flex shrink-0 justify-between">
             <Title data={data} editMode={editMode} />
