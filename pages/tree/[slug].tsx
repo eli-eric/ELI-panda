@@ -12,7 +12,7 @@ import useSWR from 'swr/immutable'
 type System = {
   uid: string
   name: string
-  children: System[]
+  children: SystemUidName[]
   path: SystemUidName[]
   description: string
   image?: string
@@ -43,19 +43,16 @@ const getFakePath = (): System['path'] => {
   return [...Array(length)].map(() => [faker.datatype.uuid(), getFakeName()])
 }
 
-const getFakeSystem = (path: System['path'] = getFakePath(), hasChildren: boolean = true): System => {
+const getFakeSystem = (): System => {
   const uid = faker.datatype.uuid()
   const name = getFakeName()
-  const childPath: SystemUidName[] = [...path, [uid, name]]
   return {
     uid,
     name,
-    path,
+    path: getFakePath(),
     image: 'https://source.unsplash.com/collection/71371194/500x500',
     description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(5)}`,
-    children: hasChildren
-      ? [...Array(faker.datatype.number({ max: 30 }))].map(() => getFakeSystem(childPath, false))
-      : [],
+    children: getFakePath(),
     importanceCode: faker.datatype.string(),
     zoneCode: faker.datatype.string(),
     subZoneCode: faker.datatype.string(),
@@ -94,7 +91,7 @@ const SubsystemsList = ({ data }) => (
       {data.children.length === 0 ? (
         <li>This node does not contain any subsystems.</li>
       ) : (
-        data.children.map(({ uid, name }) => (
+        data.children.map(([uid, name]) => (
           <li key={uid}>
             <SystemLink href={`/tree/${uid}`}>{name}</SystemLink>
           </li>
