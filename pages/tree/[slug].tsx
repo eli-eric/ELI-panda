@@ -3,10 +3,10 @@ import Breadcrumbs from 'components/systems/Breadcrumbs'
 import Card from 'components/systems/Card'
 import Description from 'components/systems/Description'
 import Preview from 'components/systems/Preview'
-import { SearchInput, SearchResults } from 'components/systems/Search'
 import Subsystems from 'components/systems/Subsystems'
 import Title from 'components/systems/Title'
 import useEditMode from 'hooks/systems/useEditMode'
+import useSearch from 'hooks/systems/useSearch'
 import SystemDetailSectionComponent from 'modules/systems/details/system-detail/system-detail-section.comp'
 import { NextPage } from 'next'
 import Head from 'next/head'
@@ -22,7 +22,7 @@ const getFakePath = (): SystemUidName => {
   return [...Array(length)].map(() => [faker.datatype.uuid(), getFakeName()])
 }
 
-const getFakeSystem = (): System => {
+export const getFakeSystem = (): System => {
   const uid = faker.datatype.uuid()
   const name = getFakeName()
   return {
@@ -50,14 +50,14 @@ const getFakeSystem = (): System => {
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-const fetchFakeSystem = async uri => {
+const fetchFakeSystem = async () => {
   await sleep(faker.datatype.number({ min: 200, max: 2000 }))
-  return uri && getFakeSystem()
+  return getFakeSystem()
 }
-export const fetchFakeSystems = async uri => {
+export const fetchFakeSystems = async () => {
   const res = [...Array(faker.datatype.number({ min: 0, max: 100 }))]
   await sleep(faker.datatype.number({ min: 200, max: 2000 }))
-  return uri && res.map(() => getFakeSystem())
+  return res.map(() => getFakeSystem())
 }
 
 const onSubmit = (data: System) => {
@@ -67,7 +67,8 @@ const onSubmit = (data: System) => {
 const Page: NextPage = () => {
   const router = useRouter()
   const uid = router.query.slug
-  const searchQuery = router.query.q
+
+  const { Prompt, Results } = useSearch('/tree/')
 
   const { data } = useSWR(uid, fetchFakeSystem)
 
@@ -97,10 +98,11 @@ const Page: NextPage = () => {
 
           <div className="text-3xl w-full flex shrink-0 justify-between">
             <Title data={data} editMode={editMode} />
-            {!isEditMode && <SearchInput router={router} />}
+            {!isEditMode && <Prompt />}
             <EditModeControls />
           </div>
-          {!isEditMode && searchQuery && (
+
+          {!isEditMode && (
             <div className="p-1 lg:p-2 w-full">
               <Suspense
                 fallback={
@@ -109,7 +111,7 @@ const Page: NextPage = () => {
                   </div>
                 }
               >
-                <SearchResults query={searchQuery} />
+                <Results />
               </Suspense>
             </div>
           )}
