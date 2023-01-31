@@ -1,5 +1,6 @@
 import axios from 'axios'
 import NavigationComponent from 'components/nav-bar/nav-bar.comp'
+import { fetcher } from 'features/fetcher'
 import { messages } from 'i18n/src'
 import { useSession } from 'next-auth/react'
 import { IntlProvider } from 'react-intl'
@@ -8,21 +9,14 @@ import { SWRConfig } from 'swr'
 interface Props {
   children: React.ReactNode
 }
-async function fetcher(url) {
-  const res = await axios.get(url).then(res => res.data)
-
-  return res
-}
 
 const GlobalProvider = ({ children }: Props) => {
   const { data } = useSession()
-
   axios.defaults.headers.common['authorization'] = data?.user.apiAccessToken
-
   return (
     <SWRConfig
       value={{
-        fetcher: fetcher,
+        fetcher,
         suspense: true,
         onError: (error, key) => {
           if (!error) {
