@@ -1,14 +1,13 @@
 import ItemDetailHeaderComponent from 'components/catalogueItem/header/item-detail-header.comp'
 import ItemDetailComponent from 'components/catalogueItem/item-detail.comp'
-import ProgressBarComponent from 'components/ui/progress-bar.comp'
-import { useCatalogueItemDetailPath } from 'hooks/usePath'
+import ErrorPage from 'components/error/ErrorPage'
+import LoaderComponent from 'components/ui/loader.comp'
 import { message } from 'i18n/src/messages'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import { Fragment } from 'react'
+import { Fragment, Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { useIntl } from 'react-intl'
-import useSWR from 'swr'
-import { CatalogueItem } from 'types/responses'
 
 const messages = message.cataloguePage
 
@@ -35,8 +34,6 @@ const images = [
 
 const CatalogueItemDetailPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
-  const catalogueItemPath = useCatalogueItemDetailPath()
-  const { data: item } = useSWR<CatalogueItem>(catalogueItemPath)
 
   return (
     <Fragment>
@@ -45,7 +42,11 @@ const CatalogueItemDetailPage: NextPage = (): JSX.Element => {
         <meta name="description" content="...." />
       </Head>
       <ItemDetailHeaderComponent />
-      {item ? <ItemDetailComponent item={item} images={images} /> : <ProgressBarComponent />}
+      <ErrorBoundary fallback={<ErrorPage />}>
+        <Suspense fallback={<LoaderComponent />}>
+          <ItemDetailComponent images={images} />
+        </Suspense>
+      </ErrorBoundary>
     </Fragment>
   )
 }

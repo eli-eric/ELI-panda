@@ -21,7 +21,7 @@ interface Props {
 const CatalogueItemsContainer = ({ categoryListLength, setCatalogueItemsList }: Props) => {
   const intl = useIntl()
   const router = useRouter()
-  const { data: session } = useSession()
+  const { status: session } = useSession()
 
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(20)
@@ -31,7 +31,7 @@ const CatalogueItemsContainer = ({ categoryListLength, setCatalogueItemsList }: 
   const [pageNumbers, setPageNumbers] = useState<number | undefined>()
   /* conditionaly fetch catalogue Items if category list dont return categories or search is not in query */
   const { data: catalogueItems } = useSWR<CatalogueItemsResponse>(
-    (session && categoryListLength === 0) || router.query.search ? catalogueItemsPath : null
+    categoryListLength === 0 || (router.query.search && session === 'authenticated') ? catalogueItemsPath : null
   )
   const previousPageHandler = () => {
     setPage(prev => prev - 1)
