@@ -17,7 +17,7 @@ import { System, SystemUidName } from 'types/system'
 
 const getFakeName = () => faker.company.catchPhrase()
 
-const getFakePath = (): SystemUidName => {
+const getFakePath = (): SystemUidName[] => {
   const length = faker.datatype.number({ min: 0, max: 10 })
   return [...Array(length)].map(() => [faker.datatype.uuid(), getFakeName()])
 }

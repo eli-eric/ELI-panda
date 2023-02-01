@@ -31,7 +31,7 @@ const useYupValidationResolver = validationSchema =>
           values,
           errors: {}
         }
-      } catch (errors) {
+      } catch (errors: any) {
         return {
           values: {},
           errors: errors.inner.reduce(
@@ -51,7 +51,7 @@ const useYupValidationResolver = validationSchema =>
   )
 
 const useEditMode = (onSubmit: any, data: System | undefined) => {
-  const { register, handleSubmit, reset, formState } = useForm({
+  const { register, handleSubmit, reset, formState } = useForm<System>({
     defaultValues: data,
     resolver: useYupValidationResolver(schema)
   })
