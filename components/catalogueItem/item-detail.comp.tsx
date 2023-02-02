@@ -1,4 +1,7 @@
+import { useCatalogueItemDetailPath } from 'hooks/usePath'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 import { CatalogueItem } from 'types/responses'
 
 import ItemPropertiesComponent from './default-properties/item-properties.comp'
@@ -6,11 +9,13 @@ import ImageGalleryComponent from './gallery/image-gallery.comp'
 
 interface Props {
   images: { name: string; id: number; src: string }[]
-  item: CatalogueItem
 }
 
-const ItemDetailComponent = ({ item, images }: Props) => {
+const ItemDetailComponent = ({ images }: Props) => {
+  const router = useRouter()
   const [groups, setGroups] = useState<Array<string>>([])
+  const catalogueItemPath = useCatalogueItemDetailPath(router.query.uid as string)
+  const { data: item } = useSWR<CatalogueItem>(catalogueItemPath)
 
   useEffect(() => {
     if (item?.details) {
@@ -31,15 +36,10 @@ const ItemDetailComponent = ({ item, images }: Props) => {
             <ImageGalleryComponent images={images} />
 
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-              <h1 className="text-3xl font-bold tracking-tight text-gray-900">{item.name}</h1>
+              <h1 className="text-3xl font-bold tracking-tight text-gray-900">{item?.name}</h1>
               <div className="mt-6">
                 <h3 className="sr-only">Description</h3>
-                <div
-                  className="space-y-6 text-base text-gray-700"
-                  dangerouslySetInnerHTML={{
-                    __html: item.description === '' || item.description === null ? 'No description' : item.description
-                  }}
-                />
+                <div className="space-y-6 text-base text-gray-700">{item?.description ?? 'No description'}</div>
               </div>
               <ItemPropertiesComponent item={item} groups={groups} />
             </div>

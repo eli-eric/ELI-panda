@@ -1,9 +1,9 @@
-import { ENDPOINTS } from 'types/constants/endpoints'
-import { PATH } from 'types/constants/paths'
-import { CatalogueCategoryResponse } from 'types/responses'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { ENDPOINTS } from 'types/constants/endpoints'
+import { PATH } from 'types/constants/paths'
+import { CatalogueCategoryResponse } from 'types/responses'
 
 interface Props {
   category: CatalogueCategoryResponse

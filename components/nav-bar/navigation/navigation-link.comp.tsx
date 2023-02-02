@@ -20,13 +20,7 @@ const NavigationLinkComponent = ({ href, name, open }: Props) => {
       ? 'text-gray-500 hover:border-gray-300 hover:text-gray-700'
       : 'text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700'
 
-  const variableClassName = !router.query.slug
-    ? router.asPath === href
-      ? selectedClassName
-      : nonSelectedClassName
-    : router.asPath.startsWith(href)
-    ? selectedClassName
-    : nonSelectedClassName
+  const variableClassName = router.asPath.startsWith(href) ? selectedClassName : nonSelectedClassName
 
   return (
     <Fragment>

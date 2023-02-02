@@ -1,16 +1,11 @@
-import { CatalogueCategoryResponse } from 'types/responses'
 import { Fragment } from 'react'
 
-import CategoryItemComponent from './category-item.comp'
+import CategoryItemComponent from './CategoryItem.comp'
 
-interface Props {
-  categoryList?: Array<CatalogueCategoryResponse>
-}
-
-const CategoryListComponent = ({ categoryList }: Props) => {
+const CategoryListComponent = ({ categoryList }) => {
   return (
     <Fragment>
-      {categoryList && categoryList.length !== 0 && (
+      {categoryList.length !== 0 && (
         <div id="catalogue-list" className="px-4 py-5 sm:p-6 bg-white">
           {/* Content goes here */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 3xl:grid-cols-8">

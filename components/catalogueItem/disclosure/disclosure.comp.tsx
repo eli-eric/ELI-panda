@@ -1,7 +1,7 @@
 import { Disclosure } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
-import { CatalogueItem } from 'types/responses'
 import { Fragment } from 'react'
+import { CatalogueItem } from 'types/responses'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -9,13 +9,13 @@ function classNames(...classes) {
 
 interface Props {
   groups: string[]
-  item: CatalogueItem
+  item?: CatalogueItem
 }
 
 const DisclosureComponent = ({ groups, item }: Props) => {
   return (
     <Fragment>
-      {item.details && (
+      {item?.details && (
         <div className="divide-y divide-gray-200 border-t">
           {groups.map(group => (
             <Disclosure as="div" key={group}>
@@ -42,10 +42,10 @@ const DisclosureComponent = ({ groups, item }: Props) => {
                     </Disclosure.Button>
                   </h3>
                   <Disclosure.Panel as="div" className="prose prose-sm pb-6">
-                    {item.details && (
+                    {item?.details && (
                       <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
                         <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                          {item.details.map(detail => {
+                          {item?.details.map(detail => {
                             if (detail.propertyGroup !== group) {
                               return
                             }

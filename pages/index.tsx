@@ -1,45 +1,48 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import AuthAlertComponent from 'components/auth/auth-alert.comp'
-import AuthFormComponent from 'components/auth/auth-form.comp'
+import AuthFormComponent, { AuthForm } from 'components/auth/auth-form.comp'
 import { message } from 'i18n/src/messages'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { signIn } from 'next-auth/react'
-import { FormEvent, Fragment, useRef, useState } from 'react'
+import { Fragment, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { PATH } from 'types/constants/paths'
+import * as yup from 'yup'
 
 const messages = message.authPage
 
-const HomePage: NextPage = (): JSX.Element => {
+const LoginPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
   const router = useRouter()
-  const [authFailed, setAuthFailed] = useState<boolean>(false)
-  const [errorMessage, setErrorMessage] = useState<string>('')
-  const [loading, setLoading] = useState<boolean>(false)
-  const userNameRef = useRef<HTMLInputElement | null>(null)
-  const passwordRef = useRef<HTMLInputElement | null>(null)
   const callbackUrl = decodeURI((router.query?.callbackUrl as string) ?? PATH.DASHBOARD)
-  const handleLoginSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    setAuthFailed(false)
+  const authValidationSchema = yup.object().shape({
+    password: yup.string().required(),
+    username: yup.string().required()
+  })
+  const { register, handleSubmit, formState } = useForm<AuthForm>({
+    resolver: yupResolver(authValidationSchema)
+  })
+  const [errorMessage, setErrorMessage] = useState<string>()
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const handleLoginSubmit = data => {
     setLoading(true)
-    const enteredUserName = userNameRef.current?.value
-    const enteredPassword = passwordRef.current?.value
-    const result = await signIn('credentials', {
+    setErrorMessage(undefined)
+    signIn('credentials', {
       redirect: false,
-      username: enteredUserName,
-      password: enteredPassword
+      ...data
     })
       .then(e => {
         if (e?.error) {
+          console.log(e.error)
           setErrorMessage(e.error)
-          setAuthFailed(true)
           setLoading(false)
         }
       })
       .finally(() => {
-        setErrorMessage('')
         setLoading(false)
         router.replace(callbackUrl, undefined, { shallow: false })
       })
@@ -53,17 +56,18 @@ const HomePage: NextPage = (): JSX.Element => {
       </Head>
       <AuthFormComponent
         onSubmit={handleLoginSubmit}
-        usernameRef={userNameRef}
-        passwordRef={passwordRef}
+        handleSubmit={handleSubmit}
+        formState={formState}
+        register={register}
         loading={loading}
       />
-      {authFailed && (
+      {errorMessage && (
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <AuthAlertComponent message={errorMessage} />{' '}
+          <AuthAlertComponent message={errorMessage} />
         </div>
       )}
     </Fragment>
   )
 }
 
-export default HomePage
+export default LoginPage

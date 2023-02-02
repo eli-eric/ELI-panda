@@ -1,10 +1,8 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import ModalComponent from 'components/ui/modal/modal.comp'
 import { useRouter } from 'next/router'
-import { signOut, useSession } from 'next-auth/react'
-import { Fragment, useContext, useEffect, useState } from 'react'
-import LoadingAppContext from 'store/app-loading.context'
-import { PATH } from 'types/constants/paths'
+import { useSession } from 'next-auth/react'
+import { Fragment, useEffect, useState } from 'react'
 
 import ProfileCardComponent from '../card/profile-card.comp'
 
@@ -22,7 +20,6 @@ const ProfileDropdownComponent = ({ open }: Props) => {
   const fullName = user?.fullName
   const [inicials, setInicials] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
-  const { setLoadingApp } = useContext(LoadingAppContext)
 
   useEffect(() => {
     if (!fullName) return
@@ -33,13 +30,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
   }, [fullName])
 
   const signOutHandler = () => {
-    setLoadingApp(true)
-    signOut({ redirect: false })
-      .then()
-      .finally(() => {
-        setLoadingApp(false)
-        router.push(PATH.ROOT)
-      })
+    router.push('/signout')
   }
 
   const showModalHandler = () => {

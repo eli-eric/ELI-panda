@@ -38,7 +38,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     }
 
     if (categoryPathParam && typeof categoryPathParam === 'string') {
-      dataResult = dataResult.filter(f => f.categoryPATH.startsWith(categoryPathParam.toLowerCase()))
+      dataResult = dataResult.filter(f => f.categoryPath.startsWith(categoryPathParam.toLowerCase()))
     }
 
     const totalCount = dataResult.length
