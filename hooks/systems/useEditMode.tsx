@@ -50,14 +50,15 @@ const useYupValidationResolver = validationSchema =>
     [validationSchema]
   )
 
-const useEditMode = (onSubmit: any, data: System | undefined) => {
+const useEditMode = (onSubmit: any, data: System | undefined, isOpen: boolean = false) => {
   const { register, handleSubmit, reset, formState } = useForm<System>({
     defaultValues: data,
     resolver: useYupValidationResolver(schema)
   })
-  const [isEditMode, setIsEditMode] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(isOpen)
   const [newImage, setNewImage] = useState('')
-  //For some reason react-hook-form's default values get off sync unless reset like bellow. ???
+
+  //Keep defaults in sync
   useEffect(() => {
     reset(data)
   }, [data, reset])
@@ -77,29 +78,10 @@ const useEditMode = (onSubmit: any, data: System | undefined) => {
     )
   }
 
-  const EditModeControls = () => {
-    const Quit = () => (
-      <button
-        onClick={() => {
-          setNewImage('')
-          reset()
-          setIsEditMode(false)
-        }}
-      >
-        Discard
-      </button>
-    )
-    const Edit = () => <button onClick={() => setIsEditMode(true)}>Edit</button>
-    const Save = () => <input type="submit" value="Save" />
-
-    return isEditMode ? (
-      <div className="flex">
-        <Save />
-        <Quit />
-      </div>
-    ) : (
-      <Edit />
-    )
+  const discard = () => {
+    setNewImage('')
+    reset()
+    setIsEditMode(false)
   }
 
   const { errors } = formState
@@ -118,9 +100,9 @@ const useEditMode = (onSubmit: any, data: System | undefined) => {
     EditModeContainer,
     setNewImage,
     newImage,
-    EditModeControls,
     reset,
-    setIsEditMode
+    setIsEditMode,
+    discard
   }
 }
 

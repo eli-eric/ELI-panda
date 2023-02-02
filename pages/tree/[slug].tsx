@@ -50,7 +50,7 @@ export const getFakeSystem = (): System => {
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-const fetchFakeSystem = async () => {
+export const fetchFakeSystem = async () => {
   await sleep(faker.datatype.number({ min: 200, max: 2000 }))
   return getFakeSystem()
 }
@@ -73,7 +73,7 @@ const Page: NextPage = () => {
   const { data } = useSWR(uid, fetchFakeSystem)
 
   const editMode = useEditMode(onSubmit, data)
-  const { isEditMode, FormErrors, EditModeContainer, EditModeControls } = editMode
+  const { isEditMode, setIsEditMode, FormErrors, EditModeContainer, discard } = editMode
 
   //I can't seem to get <Suspense> working, using this for now.
   if (!data) return <>Loading</>
@@ -98,8 +98,17 @@ const Page: NextPage = () => {
 
           <div className="text-3xl w-full flex shrink-0 justify-between">
             <Title data={data} editMode={editMode} />
-            {!isEditMode && <Prompt />}
-            <EditModeControls />
+            {isEditMode ? (
+              <div className="flex">
+                <input type="submit" value="Save" />
+                <button onClick={() => discard()}>Discard</button>
+              </div>
+            ) : (
+              <>
+                <Prompt />
+                <button onClick={() => setIsEditMode(true)}>Edit</button>
+              </>
+            )}
           </div>
 
           {!isEditMode && (
@@ -118,7 +127,18 @@ const Page: NextPage = () => {
 
           <aside className="p-1 lg:p-2 w-full lg:w-1/4">
             <nav>
-              <Subsystems data={data} />
+              <div className="hidden lg:block">
+                <b>Subsystems</b>
+                <Subsystems data={data} />
+                <button onClick={() => router.push('/tree/' + uid + '/new')}>Add new subsystem</button>
+              </div>
+              <details className="lg:hidden max-h-[50vh] overflow-auto">
+                <summary>
+                  <b>Subsystems</b>
+                </summary>
+                <Subsystems data={data} />
+                <button onClick={() => router.push('/tree/' + uid + '/new')}>Add new subsystem</button>
+              </details>
             </nav>
           </aside>
 

@@ -4,20 +4,20 @@ export type System = {
   children: SystemUidName[]
   path: SystemUidName[]
   description: string
+  systemCode: string
+  systemAlias: string
+  locationCode: string
+  catalogueUID: string
+  eun: string
+  itemUsageCategoryCode: string
+  estimatedLifeTime: number
+  ownerUID?: string
   image?: string
   importanceCode?: string
   zoneCode?: string
   subZoneCode?: string
-  systemCode: string
-  systemAlias: string
-  locationCode: string
-  ownerUID?: string
-  catalogueUID: string
-  eun: string
   serialNumber?: string
   batchNumber?: string
-  itemUsageCategoryCode: string
-  estimatedLifeTime: number
 }
 
 export type SystemUidName = [System['uid'], System['name']]
