@@ -1,6 +1,7 @@
 import { Input } from 'components/ui/form/Input'
-import { useState } from 'react'
-import { FormProvider, useForm, useFormContext } from 'react-hook-form'
+import React, { useEffect } from 'react'
+import { FormProvider, useFieldArray, useForm, useFormContext } from 'react-hook-form'
+import { useIsFirstRender } from 'usehooks-ts'
 
 const Main = () => {
   const { register } = useFormContext()
@@ -70,28 +71,30 @@ const Prop = ({ name, removeProp, index }: propertyProps) => {
 }
 
 const PropList = ({ name }) => {
+  const { control } = useFormContext()
+  const { fields, append, remove } = useFieldArray({ control, name: `${name}.props` })
+
+  const isFirstRender = useIsFirstRender()
+
+  useEffect(() => {
+    console.log('useeefect')
+    append({})
+  }, [])
+
   const removeProp = (index: number) => {
-    setRemovedIndexes(removedIndexes => [...removedIndexes, index])
+    remove(index)
   }
-  const defaultProp = <Prop removeProp={removeProp} index={0} name={`${name}.props[0]`} key={`${name}.props[0]`} />
-  const [propList, setPropList] = useState<JSX.Element[]>([defaultProp])
-  const [removedIndexes, setRemovedIndexes] = useState<number[]>([])
-  const handleAddAtribute = e => {
+
+  const handleAddProp = e => {
     e.preventDefault()
-    setPropList([
-      ...propList,
-      <Prop
-        removeProp={removeProp}
-        index={propList.length}
-        name={`${name}.props[${propList.length}]`}
-        key={`${name}.props[${propList.length}]`}
-      />
-    ])
+    append({})
   }
   return (
     <div className="flex-1">
-      <div> {propList.filter((_, index) => !removedIndexes.includes(index)).map((prop, index) => prop)}</div>
-      <button onClick={handleAddAtribute}>Add New Atribute</button>
+      {fields.map((_, index) => (
+        <Prop removeProp={removeProp} index={index} name={`${name}.props.${index}`} key={`${name}.props.${index}`} />
+      ))}
+      <button onClick={handleAddProp}>Add New Atribute</button>
     </div>
   )
 }
@@ -103,14 +106,11 @@ interface groupProps {
 }
 
 const Group = ({ name, removeGroup, index }: groupProps) => {
-  const { register, unregister, getValues } = useFormContext()
+  const { register } = useFormContext()
   const handleRemoveGroup = e => {
     e.preventDefault()
     removeGroup(index)
-    unregister(name)
-    console.log(getValues())
   }
-
   return (
     <div className="w-full flex-1 border">
       <Input register={register} name={`${name}.name`} type="text" />
@@ -121,29 +121,22 @@ const Group = ({ name, removeGroup, index }: groupProps) => {
 }
 
 const GroupList = () => {
-  const [groupList, setGroupList] = useState<JSX.Element[]>([])
-  const [removedIndexes, setRemovedIndexes] = useState<number[]>([])
+  const { control } = useFormContext()
+  const { fields, append, remove } = useFieldArray({ control, name: 'groups' })
   const removeGroup = (index: number) => {
-    setRemovedIndexes(removedIndexes => [...removedIndexes, index])
+    remove(index)
   }
-
   const handleAddGroup = e => {
     e.preventDefault()
-    setGroupList([
-      ...groupList,
-      <Group
-        removeGroup={removeGroup}
-        index={groupList.length}
-        name={`groups[${groupList.length}]`}
-        key={`groups[${groupList.length}]`}
-      />
-    ])
+    append({})
   }
 
   return (
     <div className="flex-1">
       <div className="flex-1">
-        {groupList.filter((_, index) => !removedIndexes.includes(index)).map((group, index) => group)}
+        {fields.map((_, index) => (
+          <Group removeGroup={removeGroup} index={index} name={`groups.${index}`} key={`groups.${index}`} />
+        ))}
       </div>
       <button onClick={handleAddGroup}>Add New Group</button>
     </div>
@@ -170,15 +163,7 @@ type FormType = {
 const TestEditModal = () => {
   const formMethods = useForm<FormType>()
   const onSubmit = (data: FormType) => {
-    const filteredData = data.groups
-      ? {
-          ...data,
-          groups: data.groups
-            ?.filter(group => group !== null)
-            ?.map(group => ({ ...group, props: group.props.filter(prop => prop !== null) }))
-        }
-      : { ...data }
-    console.log(filteredData)
+    console.log(data)
   }
   return (
     <FormProvider {...formMethods}>
