@@ -79,7 +79,8 @@ const PropList = ({ name }) => {
   useEffect(() => {
     console.log('useeefect')
     append({})
-  }, [])
+    return () => remove(0)
+  }, [append, remove])
 
   const removeProp = (index: number) => {
     remove(index)
