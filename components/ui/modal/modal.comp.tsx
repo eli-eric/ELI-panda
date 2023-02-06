@@ -10,7 +10,6 @@ interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>
   children: React.ReactNode
   testid: string
-
   buttons?: ModalButtons
 }
 
@@ -46,7 +45,9 @@ export default function ModalComponent({ open, setOpen, children, testid, button
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-5xl sm:p-6">
                 <Fragment>
                   {children}
-                  <ModalButtonsComponent setOpen={setOpen} testid={testid} buttons={buttons} />
+                  {buttons?.noButtons !== true && (
+                    <ModalButtonsComponent setOpen={setOpen} testid={testid} buttons={buttons} />
+                  )}
                 </Fragment>
               </Dialog.Panel>
             </Transition.Child>

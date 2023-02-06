@@ -21,7 +21,7 @@ const CategoryListContainer = ({ setCatalogueCategoryList }: Props) => {
 
   useEffect(() => {
     setCatalogueCategoryList(categoryList)
-  }, [categoryList])
+  }, [categoryList, setCatalogueCategoryList])
 
   return (
     <Fragment>
@@ -49,8 +49,8 @@ const CategoryListContainer = ({ setCatalogueCategoryList }: Props) => {
           </div>
         </div>
       )}
-      <ModalComponent open={open} setOpen={setopen} testid="catalogueEdit">
-        <TestEditModal />
+      <ModalComponent open={open} setOpen={setopen} buttons={{ noButtons: true }} testid="catalogueEdit">
+        <TestEditModal setopen={setopen} />
       </ModalComponent>
     </Fragment>
   )

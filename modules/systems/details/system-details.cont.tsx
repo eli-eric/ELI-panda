@@ -53,7 +53,7 @@ const SystemDetailsContainer = ({ systemDetail }: Props) => {
           )}
           {systemDetail.catalogueInfo && (
             <DisclosureComponent title="System">
-              <ItemDetailComponent item={systemDetail.catalogueInfo} images={images} />
+              <ItemDetailComponent images={images} />
             </DisclosureComponent>
           )}
         </Fragment>

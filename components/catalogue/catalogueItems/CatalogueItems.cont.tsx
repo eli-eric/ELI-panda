@@ -31,7 +31,7 @@ const CatalogueItemsContainer = ({ categoryListLength, setCatalogueItemsList }: 
   const [pageNumbers, setPageNumbers] = useState<number | undefined>()
   /* conditionaly fetch catalogue Items if category list dont return categories or search is not in query */
   const { data: catalogueItems } = useSWR<CatalogueItemsResponse>(
-    categoryListLength === 0 || (router.query.search && session) ? catalogueItemsPath : null
+    categoryListLength === 0 || (router.query.search && session === 'authenticated') ? catalogueItemsPath : null
   )
   const previousPageHandler = () => {
     setPage(prev => prev - 1)
