@@ -1,11 +1,13 @@
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import ModalComponent from 'components/ui/modal/modal.comp'
+import ModalWarningComponent from 'components/ui/modal/warning/modal-warning.comp'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { ENDPOINTS } from 'types/constants/endpoints'
 import { PATH } from 'types/constants/paths'
+import { ModalButtons } from 'types/form'
 import { CatalogueCategoryResponse } from 'types/responses'
 
 import TestEditModal from '../categoryEditForm/TestEdit'
@@ -17,10 +19,22 @@ interface Props {
 
 const CategoryItemComponent = ({ category }: Props) => {
   const router = useRouter()
-  const [open, setopen] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
+  const [openDelete, setOpenDelete] = useState(false)
 
   const { search } = router.query
   const path = PATH.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
+
+  const deletModalButtons: ModalButtons = {
+    goNext: {
+      text: 'continue',
+      onClick: () => setOpenDelete(false)
+    },
+    goBack: {
+      text: 'cancel',
+      onClick: () => setOpenDelete(false)
+    }
+  }
 
   return (
     <div className=" flex-row justify-between relative flex z-10 items-center space-x-3 rounded-lg border border-gray-300 bg-white shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
@@ -49,7 +63,7 @@ const CategoryItemComponent = ({ category }: Props) => {
         <button
           type="button"
           onClick={() => {
-            setopen(true)
+            setOpenEdit(true)
           }}
           className="relative inline-flex items-center  rounded-t-md border-l border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-400 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
         >
@@ -58,14 +72,20 @@ const CategoryItemComponent = ({ category }: Props) => {
         </button>
         <button
           type="button"
+          onClick={() => {
+            setOpenDelete(true)
+          }}
           className="relative inline-flex items-center  rounded-b-md border-l border-t border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-400 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
         >
           <span className="sr-only">Delete</span>
           <TrashIcon className="h-6 w-6 text-red-700" aria-hidden="true" />
         </button>
       </div>
-      <ModalComponent open={open} setOpen={setopen} buttons={{ noButtons: true }} testid="catalogueEdit">
-        <TestEditModal setopen={setopen} defaultValues={testObj} />
+      <ModalComponent open={openEdit} setOpen={setOpenEdit} buttons={{ noButtons: true }} testid="catalogueEdit">
+        <TestEditModal setopen={setOpenEdit} defaultValues={testObj} />
+      </ModalComponent>
+      <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deletModalButtons} testid="catalogueEdit">
+        <ModalWarningComponent title="Warning" message="Are you sure you want to remove this Category?" />
       </ModalComponent>
     </div>
   )
