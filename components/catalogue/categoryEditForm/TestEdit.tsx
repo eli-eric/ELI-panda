@@ -288,7 +288,7 @@ const Prop = ({ name, removeProp, index }: propertyProps) => {
             register={register}
             name={`${name}.unitUID`}
             options={[
-              { value: '', name: 'Select unit', code: '', selected: true, disabled: false },
+              { value: '', name: 'Select unit', code: 'default', selected: true, disabled: false },
               ...units.map(unit => ({ ...unit, value: unit.uid }))
             ]}
             className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
@@ -374,16 +374,16 @@ const PropList = ({ name }) => {
   }
   return (
     <div className="flex-1">
-      <ul className="py-1 px-1">
+      <ul>
         {fields.map((field, index) => (
-          <li key={field.id} className="border-b px-2 py-2 my-1">
+          <li key={field.id} className="border-b px-2 py-2">
             <Prop removeProp={removeProp} index={index} name={`${name}.props.${index}`} length={fields.length} />
           </li>
         ))}
       </ul>
       <button
         type="button"
-        className="relative mt-3 inline-flex text-sm items-center rounded-md border border-gray-300  px-4 py-2 hover:bg-gray-50"
+        className="relative mt-1 inline-flex text-sm items-center rounded-md border border-gray-300  px-4 py-2 hover:bg-gray-50"
         onClick={handleAddProp}
       >
         <PlusIcon className="h-5 w-5" aria-hidden="true" />
