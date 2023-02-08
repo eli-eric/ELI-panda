@@ -1,5 +1,5 @@
 import React from 'react'
-import { FieldValues, UseFormRegister } from 'react-hook-form'
+import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
 type Option = {
   value: string | number | readonly string[] | undefined
@@ -9,13 +9,14 @@ type Option = {
   name: string
 }
 
-interface Props extends React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> {
-  register: UseFormRegister<FieldValues>
+interface Props<T extends FieldValues>
+  extends React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> {
+  register: UseFormRegister<T>
   options: Option[]
-  name: string
+  name: Path<T>
 }
 
-export function Select({ register, options, name, ...rest }: Props) {
+export const Select = <T extends FieldValues>({ register, options, name, ...rest }: Props<T>) => {
   return (
     <select {...register(name)} {...rest}>
       {options.map((option, index) => (

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { PATH } from 'types/constants/paths'
 
-import TestEditModal from '../categoryEditForm/TestEdit'
+import CategoryEditForm from '../categoryEditForm/CategoryEditForm'
 
 interface Props {
   navigationList: JSX.Element[] | undefined
@@ -58,7 +58,7 @@ const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props)
         </ol>
       </nav>
       <ModalComponent open={open} setOpen={setopen} buttons={{ noButtons: true }} testid="catalogueEdit">
-        <TestEditModal setopen={setopen} />
+        <CategoryEditForm setopen={setopen} />
       </ModalComponent>
     </div>
   )

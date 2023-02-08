@@ -5,13 +5,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { categoryMockObject } from 'types/catalogue/constants'
 import { ENDPOINTS } from 'types/constants/endpoints'
 import { PATH } from 'types/constants/paths'
 import { ModalButtons } from 'types/form'
 import { CatalogueCategoryResponse } from 'types/responses'
 
-import TestEditModal from '../categoryEditForm/TestEdit'
-import { testObj } from '../categoryEditForm/testMock'
+import CategoryEditForm from '../categoryEditForm/CategoryEditForm'
 
 interface Props {
   category: CatalogueCategoryResponse
@@ -82,7 +82,7 @@ const CategoryItemComponent = ({ category }: Props) => {
         </button>
       </div>
       <ModalComponent open={openEdit} setOpen={setOpenEdit} buttons={{ noButtons: true }} testid="catalogueEdit">
-        <TestEditModal setopen={setOpenEdit} defaultValues={testObj} />
+        <CategoryEditForm setopen={setOpenEdit} defaultValues={categoryMockObject} />
       </ModalComponent>
       <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deletModalButtons} testid="catalogueEdit">
         <ModalWarningComponent title="Warning" message="Are you sure you want to remove this Category?" />
