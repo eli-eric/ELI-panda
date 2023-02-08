@@ -1,12 +1,10 @@
 import ItemPropertyTitle from 'components/item-property/item-property-title.comp'
 import { Input } from 'components/ui/form/Input'
-import { Select } from 'components/ui/form/Select'
 import { message } from 'i18n/src/messages'
-import { SystemInfo } from 'types/responses'
 import { FormState, UseFormRegister } from 'react-hook-form'
+import { SystemInfo } from 'types/responses'
 
 import SystemDetailComponent from '../system-detail.comp'
-import { itemUsageCategories } from './constants'
 
 interface Props {
   systemInfo?: SystemInfo
@@ -37,12 +35,6 @@ const SystemItemFormFields = ({ register, formState }: Props) => {
             <p className="text-xs text-red-500">{errors.batchNumber?.message}</p>
           </ItemPropertyTitle>
           <ItemPropertyTitle title={messages.labels.itemUsageCategoryCode}>
-            <Select
-              register={register}
-              name="itemUsageCategoryCode"
-              className={classes}
-              options={itemUsageCategories}
-            />
             <p className="text-xs text-red-500">{errors.itemUsageCategoryCode?.message}</p>
           </ItemPropertyTitle>
           <ItemPropertyTitle title={messages.labels.estimatedLifeTime}>
