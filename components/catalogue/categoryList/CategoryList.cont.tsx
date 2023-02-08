@@ -32,20 +32,22 @@ const CategoryListContainer = ({ setCatalogueCategoryList }: Props) => {
             {categoryList?.map(category => (
               <CategoryItemComponent key={category.code} category={category} />
             ))}
-            <button
+            {/* <button
               onClick={() => {
                 setopen(true)
               }}
               className="relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400"
             >
-              <div className="flex-shrink-0"></div>
+              <div className="flex-shrink-0">
+                <PlusIcon className="h-10 w-10 rounded-full" />
+              </div>
               <div className="min-w-0 flex-1">
                 <div className="focus:outline-none">
                   <span className="absolute inset-0" aria-hidden="true" />
-                  <p className="text-sm font-medium text-gray-900">New Category +</p>
+                  <p className="text-sm font-medium text-gray-900">New Category</p>
                 </div>
               </div>
-            </button>
+            </button> */}
           </div>
         </div>
       )}

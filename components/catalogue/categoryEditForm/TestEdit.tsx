@@ -168,7 +168,10 @@ const Main = () => {
   const image = watch('image')
   const groupName = watch('name')
 
-  const codeValue = groupName ? groupName.replace(/\s+/g, '-').toLowerCase() : ''
+  useEffect(() => {
+    const codeValue = groupName ? groupName.replace(/\s+/g, '-').toLowerCase() : ''
+    setValue('code', codeValue)
+  }, [groupName])
 
   return (
     <div className="flex flex-row pb-5">
@@ -223,7 +226,6 @@ const Main = () => {
           <div className="mt-1">
             <Input
               name="code"
-              value={codeValue}
               disabled
               register={register}
               className="appearance-none w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
@@ -333,7 +335,7 @@ const Prop = ({ name, removeProp, index }: propertyProps) => {
           {type === '9b56eba5-d650-442c-9235-0f6fd3cc8a91' ? (
             <Select
               register={register}
-              name={`${name}.unitUID`}
+              name={`${name}.default`}
               options={[
                 { value: '', name: 'Default value', code: 'default', selected: true, disabled: false },
                 ...listOfValues.map(value => ({ value: value.value, code: value.value, name: value.value }))
@@ -343,7 +345,7 @@ const Prop = ({ name, removeProp, index }: propertyProps) => {
           ) : type === '918766a8-a7c0-4361-b85d-21d7b75449bb' ? (
             <Select
               register={register}
-              name={`${name}.unitUID`}
+              name={`${name}.default`}
               options={[
                 { value: '', name: 'Default value', code: 'default', selected: true, disabled: false },
                 { value: 1, name: 'true', code: 'true' },
@@ -538,15 +540,17 @@ type Group = {
 type FormType = {
   name: string
   code: string
+  image: string
   groups?: Group[]
 }
 
 interface Props {
   setopen: Dispatch<SetStateAction<boolean>>
+  defaultValues?: FormType
 }
 
-const TestEditModal = ({ setopen }: Props) => {
-  const formMethods = useForm<FormType>()
+const TestEditModal = ({ setopen, defaultValues }: Props) => {
+  const formMethods = useForm<FormType>({ defaultValues: defaultValues })
   const onSubmit = (data: FormType) => {
     const formattedData =
       data.groups && data.groups.length !== 0
