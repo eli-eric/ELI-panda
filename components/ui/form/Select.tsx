@@ -3,10 +3,9 @@ import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
 type Option = {
   value: string | number | readonly string[] | undefined
-  code: string
   selected?: boolean | undefined
   disabled?: boolean | undefined
-  name: string
+  name?: string
 }
 
 interface Props<T extends FieldValues>
@@ -21,7 +20,7 @@ export const Select = <T extends FieldValues>({ register, options, name, ...rest
     <select {...register(name)} {...rest}>
       {options.map((option, index) => (
         <option key={index} value={option.value} selected={option.selected} disabled={option.disabled}>
-          {option.name}
+          {option.name ? option.name : option.value}
         </option>
       ))}
     </select>

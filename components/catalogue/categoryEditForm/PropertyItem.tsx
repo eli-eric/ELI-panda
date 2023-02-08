@@ -4,7 +4,7 @@ import { Select } from 'components/ui/form/Select'
 import { useEffect } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import { CatalogueFormType } from 'types/catalogue'
-import { propertyTypes, units } from 'types/catalogue/constants'
+import { defaultBoolOptions, PROPERTY_INPUT_TYPE, PROPERTY_TYPE, propertyTypes, units } from 'types/catalogue/constants'
 
 const Value = ({ removeValue, index, name }) => {
   const { register } = useFormContext()
@@ -44,7 +44,7 @@ const PropertyItem = ({ name, removeProp, index }: Props) => {
   const { register, watch, control, unregister } = useFormContext<CatalogueFormType>()
   const { fields, append, remove } = useFieldArray({
     control,
-    name: `${name}.listOfValues` as 'groups.0.props.0.listOfValues'
+    name: `${name}.listOfValues`
   })
 
   const handleRemoveProp = () => {
@@ -59,10 +59,14 @@ const PropertyItem = ({ name, removeProp, index }: Props) => {
     remove(index)
   }
   const type = watch(`${name}.typeUID`)
-  const listOfValues = watch(`${name}.listOfValues`)
+  const listOfValues = watch(`${name}.listOfValues`) || []
+
+  const getDefaultOption = (name, disabled = false) => {
+    return { value: '', name, selected: true, disabled }
+  }
 
   useEffect(() => {
-    if (type !== '9b56eba5-d650-442c-9235-0f6fd3cc8a91') {
+    if (type !== PROPERTY_TYPE.LIST) {
       unregister(`${name}.listOfValues`)
     }
   }, [type, unregister, name])
@@ -81,10 +85,10 @@ const PropertyItem = ({ name, removeProp, index }: Props) => {
           />
           <Select
             register={register}
-            name={`${name}.typeUID` as `groups.${number}.props.${number}.typeUID`}
+            name={`${name}.typeUID`}
             required
             options={[
-              { value: '', name: 'Select type', code: 'empty', selected: true, disabled: true },
+              getDefaultOption('Select type', true),
               ...propertyTypes.map(type => ({ ...type, value: type.uid }))
             ]}
             className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
@@ -92,44 +96,30 @@ const PropertyItem = ({ name, removeProp, index }: Props) => {
 
           <Select
             register={register}
-            name={`${name}.unitUID` as `groups.${number}.props.${number}.unitUID`}
-            options={[
-              { value: '', name: 'Select unit', code: 'default', selected: true, disabled: false },
-              ...units.map(unit => ({ ...unit, value: unit.uid }))
-            ]}
+            name={`${name}.unitUID`}
+            options={[getDefaultOption('Select Unit'), ...units.map(unit => ({ ...unit, value: unit.uid }))]}
             className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
           />
-          {type === '9b56eba5-d650-442c-9235-0f6fd3cc8a91' ? (
-            listOfValues && (
-              <Select
-                register={register}
-                name={`${name}.default`}
-                options={[
-                  { value: '', name: 'Default value', code: 'default', selected: true, disabled: false },
-                  ...listOfValues.map(value => ({ value: value.value, code: value.value, name: value.value }))
-                ]}
-                className="block w-full appearance-none rounded-l-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
-              />
-            )
-          ) : type === '918766a8-a7c0-4361-b85d-21d7b75449bb' ? (
+          {type === PROPERTY_TYPE.LIST || type === PROPERTY_TYPE.BOOLEAN ? (
             <Select
               register={register}
               name={`${name}.default`}
-              options={[
-                { value: '', name: 'Default value', code: 'default', selected: true, disabled: false },
-                { value: 1, name: 'true', code: 'true' },
-                { value: 0, name: 'false', code: 'true' }
-              ]}
+              typeof={PROPERTY_INPUT_TYPE[type]}
+              options={
+                type === PROPERTY_TYPE.LIST
+                  ? [getDefaultOption('Defaul value'), ...listOfValues.map(value => ({ value: value.value }))]
+                  : defaultBoolOptions
+              }
               className="block w-full appearance-none rounded-l-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
             />
           ) : (
             <Input
               register={register}
               name={`${name}.default`}
-              type={type === '' ? '' : type === '45f0d238-4067-4033-9e52-58f1d454b6d3' ? 'number' : 'text'}
+              type={PROPERTY_INPUT_TYPE[type]}
               placeholder="default"
               disabled={type === ''}
-              className="appearance-none w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
+              className="block w-full appearance-none rounded-l-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
             />
           )}
           <button
@@ -142,7 +132,7 @@ const PropertyItem = ({ name, removeProp, index }: Props) => {
           </button>
         </div>
 
-        {type === '9b56eba5-d650-442c-9235-0f6fd3cc8a91' && (
+        {type === PROPERTY_TYPE.LIST && (
           <div>
             <h3>List of Values: </h3>
             <div className="flex flex-wrap">

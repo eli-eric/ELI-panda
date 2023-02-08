@@ -1,4 +1,5 @@
 import { PlusIcon } from '@heroicons/react/24/outline'
+import { useEffect } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import { CatalogueFormType } from 'types/catalogue'
 
@@ -10,12 +11,15 @@ interface Props {
 
 const PropertyList = ({ name }: Props) => {
   const { control } = useFormContext<CatalogueFormType>()
-  const { fields, append, remove } = useFieldArray({ control, name: `${name}.props` as 'groups.0.props' })
+  const { fields, append, remove } = useFieldArray<CatalogueFormType>({
+    control,
+    name: `${name}.props`
+  })
 
-  // useEffect(() => {
-  //   append({ name: '', typeUID: '', unitUID: '', default: '' })
-  //   return () => remove(0)
-  // }, [append, remove])
+  useEffect(() => {
+    if (fields.length === 0) append({ name: '', typeUID: '', unitUID: '', default: '' })
+    //return () => remove(0)
+  }, [append])
 
   const removeProp = (index: number) => {
     remove(index)
