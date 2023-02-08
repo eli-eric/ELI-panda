@@ -1,7 +1,9 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/20/solid'
 import { Input } from 'components/ui/form/Input'
 import { Select } from 'components/ui/form/Select'
-import React, { Dispatch, SetStateAction, useEffect } from 'react'
+import Image from 'next/image'
+import React, { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react'
+import { useDropzone } from 'react-dropzone'
 import { FormProvider, useFieldArray, useForm, useFormContext } from 'react-hook-form'
 
 const units = [
@@ -146,30 +148,61 @@ const ImgIcon = () => (
 )
 
 const Main = () => {
-  const { register, watch } = useFormContext()
+  const { register, watch, setValue } = useFormContext()
+  const [newImage, setNewImage] = useState<string | null>()
 
+  const onDrop = useCallback(
+    files => {
+      const reader = new FileReader()
+      reader.readAsDataURL(files[0])
+      reader.onload = () => setValue('image', reader.result as string)
+    },
+    [setNewImage]
+  )
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    maxFiles: 1,
+    accept: { 'image/*': [] },
+    onDrop
+  })
+
+  const image = watch('image')
   const groupName = watch('name')
 
   const codeValue = groupName ? groupName.replace(/\s+/g, '-').toLowerCase() : ''
 
   return (
     <div className="flex flex-row pb-5">
-      <div className="mt-1 justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
-        <div className="space-y-1 text-center">
-          <ImgIcon />
-          <div className=" text-sm text-gray-600">
-            <label
-              htmlFor="file-upload"
-              className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
-            >
-              <span>Upload a file</span>
-              <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-            </label>
-            <p className="pl-1">or drag and drop</p>
+      {!image ? (
+        <div className="mt-1 justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
+          <div className="space-y-1 text-center">
+            <ImgIcon />
+            <div {...getRootProps()} className=" text-sm text-gray-600">
+              <label
+                htmlFor="file-upload"
+                className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
+              >
+                <span>Upload a file</span>
+                <input {...getInputProps()} name="image" className="sr-only" />
+              </label>
+            </div>
+            <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
           </div>
-          <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
         </div>
-      </div>
+      ) : (
+        image && (
+          <div className="mt-1 flex-col justify-center  border-gray-300 ">
+            <Image width={160} height={160} alt="" src={image} />
+            <button
+              type="button"
+              onClick={() => setValue('image', '')}
+              className="w-full flex justify-center rounded-b-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-400 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            >
+              <span className="sr-only">Delete</span>
+              <TrashIcon className="h-5 w-5" aria-hidden="true" />
+            </button>
+          </div>
+        )
+      )}
       <div className="flex flex-col flex-grow ml-10">
         <div>
           <label className="text-sm font-medium text-gray-700">Name</label>
@@ -177,6 +210,7 @@ const Main = () => {
             <Input
               id="text"
               name="name"
+              required
               type="text"
               register={register}
               className="appearance-none w-full rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
@@ -220,6 +254,7 @@ const Value = ({ removeValue, index, name }) => {
       <Input
         register={register}
         name={`${name}.value`}
+        required
         type="text"
         placeholder="value"
         className="block appearance-none rounded-l-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
@@ -270,13 +305,15 @@ const Prop = ({ name, removeProp, index }: propertyProps) => {
           <Input
             register={register}
             name={`${name}.name`}
-            type="boolean"
+            type="text"
+            required
             placeholder="prop name"
             className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
           />
           <Select
             register={register}
             name={`${name}.typeUID`}
+            required
             options={[
               { value: '', name: 'Select type', code: 'empty', selected: true, disabled: true },
               ...propertyTypes.map(type => ({ ...type, value: type.uid }))
@@ -415,6 +452,7 @@ const Group = ({ name, removeGroup, index }: groupProps) => {
               register={register}
               name={`${name}.name`}
               type="text"
+              required
               placeholder="group name"
               className="block  appearance-none rounded-l-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
             />
@@ -525,6 +563,7 @@ const TestEditModal = ({ setopen }: Props) => {
           }
         : { ...data }
     console.log(data)
+    setopen(false)
   }
 
   return (
