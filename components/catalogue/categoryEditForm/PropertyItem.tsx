@@ -65,7 +65,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
   return (
     <div className="flex">
       <div className="flex-col flex-grow">
-        <div className="flex flex-row flex-grow">
+        <div className="flex flex-row flex-grow max-md:flex-wrap">
           <InputWithError
             register={register}
             name={`${name}.name`}
@@ -96,8 +96,8 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
               isError={!errors?.typeUID?.message}
               options={
                 type === PROPERTY_TYPE.LIST
-                  ? [getDefaultOption('Defaul value'), ...listOfValues.map(value => ({ value: value.value }))]
-                  : defaultBoolOptions
+                  ? [getDefaultOption('Select default'), ...listOfValues.map(value => ({ value: value.value }))]
+                  : [getDefaultOption('Select default'), ...defaultBoolOptions]
               }
             />
           ) : (
@@ -105,7 +105,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
               register={register}
               name={`${name}.default`}
               type={PROPERTY_INPUT_TYPE[type]}
-              placeholder="default"
+              placeholder="Default value"
               disabled={type === ''}
               isError={!errors?.default?.message}
             />

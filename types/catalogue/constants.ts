@@ -147,7 +147,6 @@ export const propertyTypes = [
 ]
 
 export const defaultBoolOptions = [
-  { value: undefined, name: 'Default value', selected: true, disabled: false },
   { value: 1, name: 'true' },
   { value: 0, name: 'false' }
 ]
