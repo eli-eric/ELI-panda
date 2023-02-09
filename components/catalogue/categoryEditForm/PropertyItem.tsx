@@ -4,7 +4,7 @@ import { PlusIconButton, TrashIconButton } from 'components/ui/IconButtons'
 import { useEffect } from 'react'
 import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 import { CatalogueFormType, Prop } from 'types/catalogue/catalogueTypes'
-import { defaultBoolOptions, PROPERTY_TYPE, propertyTypes, units } from 'types/catalogue/constants'
+import { defaultBoolOptions, PROPERTY_INPUT_TYPE, PROPERTY_TYPE, propertyTypes, units } from 'types/catalogue/constants'
 
 const ValueItem = ({ removeValue, index, name, errors }) => {
   const { register, formState } = useFormContext<CatalogueFormType>()
@@ -104,6 +104,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
             <InputWithError
               register={register}
               name={`${name}.default`}
+              type={PROPERTY_INPUT_TYPE[type]}
               placeholder="default"
               disabled={type === ''}
               isError={!errors?.default?.message}

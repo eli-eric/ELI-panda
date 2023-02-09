@@ -53,16 +53,14 @@ const Main = () => {
           </div>
         </label>
       ) : (
-        image && (
-          <div className="mt-1 flex-col justify-center  border-gray-300 ">
-            <Image width={160} height={160} alt="" src={image} />
-            <TrashIconButton
-              onClickAction={() => setValue('image', '')}
-              customClass="w-full justify-center"
-              rounded="rounded-b-md"
-            />
-          </div>
-        )
+        <div className="mt-1 flex-col justify-center  border-gray-300 ">
+          <Image width={160} height={160} alt="" src={image} />
+          <TrashIconButton
+            onClickAction={() => setValue('image', '')}
+            customClass="w-full justify-center"
+            rounded="rounded-b-md"
+          />
+        </div>
       )}
       <div className="flex flex-col flex-grow ml-10">
         <div>

@@ -12,6 +12,7 @@ interface InputWithErrorProps<T extends FieldValues> {
   name: string
   isError: boolean
   placeholder?: string
+  type?: string
   disabled?: boolean
   rounded?: 'rounded-l-md' | 'rounded-t-md' | 'rounded-r-md' | 'rounded-b-md' | 'rounded-md'
 }
@@ -21,13 +22,14 @@ export const InputWithError = <T extends FieldValues>({
   isError,
   placeholder,
   disabled,
-  rounded
+  rounded,
+  type = 'text'
 }: InputWithErrorProps<T>) => (
   <div className="block z-10 relative w-full appearance-none placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm">
     <Input
       register={register}
       name={name}
-      type="text"
+      type={type}
       disabled={disabled}
       placeholder={placeholder}
       className={`block w-full appearance-none ${rounded} border ${
