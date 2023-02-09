@@ -57,7 +57,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
   const listOfValues = watch(`${name}.listOfValues`) || []
 
   const getDefaultOption = (name, disabled = false) => {
-    return { value: '', name, selected: true, disabled }
+    return { value: '', name, disabled }
   }
 
   useEffect(() => {
