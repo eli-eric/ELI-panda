@@ -1,25 +1,20 @@
-import { PlusIcon } from '@heroicons/react/24/outline'
-import { useEffect } from 'react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
-import { CatalogueFormType } from 'types/catalogue'
+import { PlusIconButton } from 'components/ui/IconButtons'
+import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
+import { CatalogueFormType, Group } from 'types/catalogue/catalogueTypes'
 
 import PropertyItem from './PropertyItem'
 
 interface Props {
   name: `groups.${number}`
+  errors: FieldErrors<Group> | undefined
 }
 
-const PropertyList = ({ name }: Props) => {
+const PropertyList = ({ name, errors }: Props) => {
   const { control } = useFormContext<CatalogueFormType>()
   const { fields, append, remove } = useFieldArray<CatalogueFormType>({
     control,
     name: `${name}.props`
   })
-
-  useEffect(() => {
-    if (fields.length === 0) append({ name: '', typeUID: '', unitUID: '', default: '' })
-    //return () => remove(0)
-  }, [append])
 
   const removeProp = (index: number) => {
     remove(index)
@@ -29,7 +24,7 @@ const PropertyList = ({ name }: Props) => {
   }
   return (
     <div className="flex-1">
-      <ul>
+      <ul className="mb-2">
         {fields.map((field, index) => (
           <li key={field.id} className="border-b px-2 py-2">
             <PropertyItem
@@ -37,17 +32,12 @@ const PropertyList = ({ name }: Props) => {
               index={index}
               name={`${name}.props.${index}`}
               length={fields.length}
+              errors={errors?.props && errors?.props[index]}
             />
           </li>
         ))}
       </ul>
-      <button
-        type="button"
-        className="relative mt-1 inline-flex text-sm items-center rounded-md border border-gray-300  px-4 py-2 hover:bg-gray-50"
-        onClick={handleAddProp}
-      >
-        <PlusIcon className="h-5 w-5" aria-hidden="true" />
-      </button>
+      <PlusIconButton onClickAction={handleAddProp} />
     </div>
   )
 }

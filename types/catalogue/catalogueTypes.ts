@@ -11,12 +11,12 @@ export type Prop = {
 }
 export type Group = {
   name: string
-  props?: Prop[]
+  props: Prop[]
 }
 
 export type CatalogueFormType = {
   name: string
   code: string
   image: string
-  groups?: Group[]
+  groups: Group[]
 }

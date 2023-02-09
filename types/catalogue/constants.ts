@@ -1,3 +1,5 @@
+import * as yup from 'yup'
+
 export const units = [
   {
     uid: '8a18b753-e0c9-4d5b-80ef-2e0de38ac2b8',
@@ -96,6 +98,28 @@ export const units = [
   }
 ]
 
+export const categoryValidationschema = yup.object().shape({
+  name: yup.string().required('Category Name is required'),
+  groups: yup.array().of(
+    yup.object().shape({
+      name: yup.string().required('Group Name is required'),
+      props: yup.array().of(
+        yup.object().shape({
+          name: yup.string().required('Prop Name is required'),
+          typeUID: yup.string().required('Prop Type is required'),
+          unitUID: yup.string(),
+          default: yup.string(),
+          listOfValues: yup.array().of(
+            yup.object({
+              value: yup.string().required('Required')
+            })
+          )
+        })
+      )
+    })
+  )
+})
+
 export const propertyTypes = [
   {
     uid: 'be2d4bd1-602b-42e6-a0ee-7e24324b75bb',
@@ -123,9 +147,9 @@ export const propertyTypes = [
 ]
 
 export const defaultBoolOptions = [
-  { value: '', name: 'Default value', code: 'default', selected: true, disabled: false },
-  { value: 1, name: 'true', code: 'true' },
-  { value: 0, name: 'false', code: 'true' }
+  { value: '', name: 'Default value', selected: true, disabled: false },
+  { value: '1', name: 'true' },
+  { value: '0', name: 'false' }
 ]
 
 export enum PROPERTY_TYPE {

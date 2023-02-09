@@ -1,6 +1,8 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import { Dispatch, SetStateAction } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { CatalogueFormType } from 'types/catalogue'
+import { CatalogueFormType } from 'types/catalogue/catalogueTypes'
+import { categoryValidationschema } from 'types/catalogue/constants'
 
 import GroupList from './GroupList'
 import Main from './Main'
@@ -11,7 +13,10 @@ interface Props {
 }
 
 const CategoryEditForm = ({ setopen, defaultValues }: Props) => {
-  const formMethods = useForm<CatalogueFormType>({ defaultValues: defaultValues })
+  const formMethods = useForm<CatalogueFormType>({
+    defaultValues: defaultValues,
+    resolver: yupResolver(categoryValidationschema)
+  })
   const onSubmit = (data: CatalogueFormType) => {
     const formattedData =
       data.groups && data.groups.length !== 0
