@@ -12,10 +12,6 @@ const ValueItem = ({ removeValue, index, name, errors }) => {
     removeValue(index)
   }
 
-  useEffect(() => {
-    console.log(formState.errors)
-  }, [formState])
-
   return (
     <div className="flex">
       <InputWithError
