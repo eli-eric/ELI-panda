@@ -19,7 +19,7 @@ const Group = ({ name, removeGroup, index, errors }: groupProps) => {
     removeGroup(index)
   }
   return (
-    <div className=" flex flex-1 flex-col justify-between sm:ml-6">
+    <div className=" flex flex-1 flex-col justify-between">
       <div className="relative">
         <div className="absolute inset-0 flex items-center" aria-hidden="true">
           <div className="w-full border-t border-gray-300" />
@@ -37,7 +37,7 @@ const Group = ({ name, removeGroup, index, errors }: groupProps) => {
           </span>
         </div>
       </div>
-      <div className="relative pr-9 pt-4">
+      <div className="relative px-3">
         <div className="w-full flex-1">
           <PropertyList name={name} errors={errors && errors} />
         </div>

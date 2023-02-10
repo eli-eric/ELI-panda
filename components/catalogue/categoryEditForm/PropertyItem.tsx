@@ -11,21 +11,19 @@ const ValueItem = ({ removeValue, index, name, errors }) => {
   const handleRemoveValue = () => {
     removeValue(index)
   }
-
   return (
     <div className="flex">
       <InputWithError
         rounded="rounded-l-md"
         register={register}
         name={`${name}.value`}
-        placeholder="value"
+        placeholder="Value"
         isError={!errors?.value?.message}
       />
       <TrashIconButton onClickAction={handleRemoveValue} />
     </div>
   )
 }
-
 interface Props {
   name: `groups.${number}.props.${number}`
   removeProp: (index: number) => void
@@ -69,7 +67,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
           <InputWithError
             register={register}
             name={`${name}.name`}
-            placeholder="prop name"
+            placeholder="Property name"
             rounded="rounded-l-md"
             isError={!errors?.name?.message}
           />
@@ -112,10 +110,9 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
           )}
           <TrashIconButton onClickAction={handleRemoveProp} />
         </div>
-
         {type === PROPERTY_TYPE.LIST && (
-          <div>
-            <h3>List of Values: </h3>
+          <div className="flex flex-col">
+            <h3 className="text-sm">List of Values:</h3>
             <div className="flex flex-wrap">
               {fields.map((field, index) => (
                 <ValueItem
