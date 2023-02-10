@@ -13,12 +13,9 @@ const PropertyList = ({ name, errors }: Props) => {
   const { control } = useFormContext<CatalogueFormType>()
   const { fields, append, remove } = useFieldArray<CatalogueFormType>({
     control,
-    name: `${name}.props`
+    name: `${name}.properties`
   })
 
-  const removeProp = (index: number) => {
-    remove(index)
-  }
   const handleAddProp = () => {
     append({ name: '', typeUID: '', unitUID: '', default: '' })
   }
@@ -28,11 +25,11 @@ const PropertyList = ({ name, errors }: Props) => {
         {fields.map((field, index) => (
           <li key={field.id} className="border-b px-2 py-2">
             <PropertyItem
-              removeProp={removeProp}
+              removeProp={remove}
               index={index}
-              name={`${name}.props.${index}`}
+              name={`${name}.properties.${index}`}
               length={fields.length}
-              errors={errors?.props && errors?.props[index]}
+              errors={errors?.properties && errors?.properties[index]}
             />
           </li>
         ))}

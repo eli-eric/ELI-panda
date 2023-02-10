@@ -7,16 +7,16 @@ import PropertyList from './PropertyList'
 
 interface groupProps {
   name: `groups.${number}`
-  removeGroup: (index: number) => void
+  remove: (index: number) => void
   index: number
 
   errors: FieldErrors<Group> | undefined
 }
 
-const Group = ({ name, removeGroup, index, errors }: groupProps) => {
+const Group = ({ name, remove, index, errors }: groupProps) => {
   const { register } = useFormContext<CatalogueFormType>()
   const handleRemoveGroup = () => {
-    removeGroup(index)
+    remove(index)
   }
   return (
     <div className=" flex flex-1 flex-col justify-between">
@@ -49,11 +49,9 @@ const Group = ({ name, removeGroup, index, errors }: groupProps) => {
 const GroupList = () => {
   const { control, formState } = useFormContext<CatalogueFormType>()
   const { fields, append, remove } = useFieldArray({ control, name: 'groups' })
-  const removeGroup = (index: number) => {
-    remove(index)
-  }
+
   const handleAddGroup = () => {
-    append({ name: '', props: [{ name: '', typeUID: '', unitUID: '', default: '' }] })
+    append({ name: '', properties: [{ name: '', typeUID: '', unitUID: '', default: '' }] })
   }
 
   return (
@@ -64,7 +62,7 @@ const GroupList = () => {
             {fields.map((field, index) => (
               <li key={field.id} className="flex py-2 ">
                 <Group
-                  removeGroup={removeGroup}
+                  remove={remove}
                   index={index}
                   errors={formState.errors.groups && formState.errors.groups[index]}
                   name={`groups.${index}`}

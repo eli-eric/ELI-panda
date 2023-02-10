@@ -3,11 +3,11 @@ import { SelectWithError } from 'components/ui/form/Select'
 import { PlusIconButton, TrashIconButton } from 'components/ui/IconButtons'
 import { useEffect } from 'react'
 import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
-import { CatalogueFormType, Prop } from 'types/catalogue/catalogueTypes'
+import { CatalogueFormType, Property } from 'types/catalogue/catalogueTypes'
 import { defaultBoolOptions, PROPERTY_INPUT_TYPE, PROPERTY_TYPE, propertyTypes, units } from 'types/catalogue/constants'
 
 const ValueItem = ({ removeValue, index, name, errors }) => {
-  const { register, formState } = useFormContext<CatalogueFormType>()
+  const { register } = useFormContext<CatalogueFormType>()
   const handleRemoveValue = () => {
     removeValue(index)
   }
@@ -25,15 +25,15 @@ const ValueItem = ({ removeValue, index, name, errors }) => {
   )
 }
 interface Props {
-  name: `groups.${number}.props.${number}`
+  name: `groups.${number}.properties.${number}`
   removeProp: (index: number) => void
   index: number
   length: number
-  errors: FieldErrors<Prop> | undefined
+  errors: FieldErrors<Property> | undefined
 }
 
 const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
-  const { register, watch, control, unregister, formState } = useFormContext<CatalogueFormType>()
+  const { register, watch, control, unregister } = useFormContext<CatalogueFormType>()
   const { fields, append, remove } = useFieldArray({
     control,
     name: `${name}.listOfValues`
@@ -43,9 +43,6 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
   }
   const handleAddValue = () => {
     append({ value: '' })
-  }
-  const removeValue = index => {
-    remove(index)
   }
   const type = watch(`${name}.typeUID`)
   const listOfValues = watch(`${name}.listOfValues`) || []
@@ -116,7 +113,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
             <div className="flex flex-wrap">
               {fields.map((field, index) => (
                 <ValueItem
-                  removeValue={removeValue}
+                  removeValue={remove}
                   key={field.id}
                   index={index}
                   errors={errors?.listOfValues && errors?.listOfValues[index]}

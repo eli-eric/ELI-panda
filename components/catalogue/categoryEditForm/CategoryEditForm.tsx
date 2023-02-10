@@ -24,7 +24,7 @@ const CategoryEditForm = ({ setopen, defaultValues }: Props) => {
             ...data,
             groups: data.groups?.map(group => ({
               ...group,
-              props: group.props?.map(prop =>
+              properties: group.properties?.map(prop =>
                 prop.listOfValues && prop.listOfValues.length !== 0
                   ? { ...prop, listOfValues: prop.listOfValues.map(value => value.value) }
                   : { ...prop }

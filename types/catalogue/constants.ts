@@ -1,5 +1,7 @@
 import * as yup from 'yup'
 
+import { CatalogueFormType } from './catalogueTypes'
+
 export const units = [
   {
     uid: '8a18b753-e0c9-4d5b-80ef-2e0de38ac2b8',
@@ -103,7 +105,7 @@ export const categoryValidationschema = yup.object().shape({
   groups: yup.array().of(
     yup.object().shape({
       name: yup.string().required('Group Name is required'),
-      props: yup.array().of(
+      properties: yup.array().of(
         yup.object().shape({
           name: yup.string().required('Prop Name is required'),
           typeUID: yup.string().required('Prop Type is required'),
@@ -165,13 +167,13 @@ export const PROPERTY_INPUT_TYPE: Record<PROPERTY_TYPE, string> = {
   [PROPERTY_TYPE.LIST]: 'text'
 }
 
-export const categoryMockObject = {
+export const categoryMockObject: CatalogueFormType = {
   name: 'Capacity Inductors',
   code: 'capacity-inductors',
   groups: [
     {
       name: 'Group 1',
-      props: [
+      properties: [
         {
           name: 'Capacity',
           typeUID: '45f0d238-4067-4033-9e52-58f1d454b6d3',
@@ -200,7 +202,7 @@ export const categoryMockObject = {
     },
     {
       name: 'Group 2',
-      props: [
+      properties: [
         {
           name: 'Chips',
           typeUID: 'be2d4bd1-602b-42e6-a0ee-7e24324b75bb',

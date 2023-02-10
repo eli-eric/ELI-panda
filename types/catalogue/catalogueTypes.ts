@@ -2,7 +2,7 @@ export type Value = {
   value: string
 }
 
-export type Prop = {
+export type Property = {
   name: string
   typeUID: string
   unitUID: string
@@ -11,7 +11,7 @@ export type Prop = {
 }
 export type Group = {
   name: string
-  props: Prop[]
+  properties: Property[]
 }
 
 export type CatalogueFormType = {
