@@ -1,7 +1,7 @@
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server'
 import { getToken } from 'next-auth/jwt'
-import { PATH } from 'types/constants/paths'
-import { Role } from 'types/constants/roles'
+import { PATH } from 'src/types/constants/paths'
+import { Role } from 'src/types/constants/roles'
 
 const PROTECTED_PATHS = [PATH.DASHBOARD, PATH.CATALOGUE, PATH.SYSTEMS, PATH.SYSTEMS_OVERVIEW]
 

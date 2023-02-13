@@ -1,4 +1,4 @@
-import { CatalogueItem } from 'types/responses'
+import { CatalogueItem } from 'src/types/responses'
 
 const itemsData: CatalogueItem[] = [
   {
