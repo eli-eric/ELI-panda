@@ -11,16 +11,21 @@ const useSearch = (path = '', param = 'q') => {
   const ref = useRef<HTMLInputElement>(null)
   const [searchQuery, setSearchQuery] = useState(query[param])
 
-  const updateParam = value => push({ query: { ...query, [param]: value } }, undefined, { shallow: true })
+  useEffect(() => {
+    query[param] && setSearchQuery(query[param])
+  }, [query, param, setSearchQuery])
+
+  const updateParam = (value: string) => push({ query: { ...query, [param]: value } }, undefined, { shallow: true })
 
   useEffect(() => {
     ref.current?.focus()
-  }, [searchQuery, query])
+  }, [query])
 
   const Prompt = () => {
     return (
       <form
         onSubmit={e => {
+          e.preventDefault()
           const value = e.target['prompt'].value
           setSearchQuery(value)
           updateParam(value)
@@ -29,38 +34,44 @@ const useSearch = (path = '', param = 'q') => {
         <input
           ref={ref}
           name="prompt"
-          onChange={e => e.target.value === '' && setSearchQuery('')}
-          defaultValue={searchQuery ?? query[param]}
-          placeholder="type here"
+          onChange={e => {
+            if (e.target.value === '') {
+              updateParam('')
+              setSearchQuery('')
+            }
+          }}
+          defaultValue={searchQuery}
+          placeholder="Search current system"
         />
       </form>
     )
   }
 
   const Results = () => {
-    const { data = [] } = useSWR(searchQuery && path + searchQuery, fetchFakeSystems, { suspense: true })
+    const { data = [] } = useSWR(searchQuery && path + searchQuery, fetchFakeSystems, {
+      suspense: true
+    })
 
     return (
-      <div className={`h-[30vh] mb-4 ${(searchQuery ?? query[param]) || 'hidden'}`}>
-        <b>Results ({data.length})</b>
-        <Card className="h-full overflow-auto">
-          {data.length > 0 ? (
-            <ul>
-              {data.map(({ uid, name }) => (
-                <li key={uid}>
-                  <Link href={`/tree/${uid}`}>{name}</Link>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <div>No results found.</div>
-          )}
-        </Card>
-      </div>
+      <Card className="w-full overflow-auto">
+        {data.length > 0 ? (
+          <ul>
+            {data.map(({ uid, name }) => (
+              <li key={uid}>
+                <Link href={`/tree/${uid}`}>{name}</Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div>No results found.</div>
+        )}
+      </Card>
     )
   }
 
-  return { Prompt, Results }
+  const hasResults = !!searchQuery
+
+  return { Prompt, Results, hasResults }
 }
 
 export default useSearch
