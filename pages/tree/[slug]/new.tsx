@@ -1,4 +1,3 @@
-import { CheckIcon, NoSymbolIcon } from '@heroicons/react/24/outline'
 import Breadcrumbs from 'components/systems/Breadcrumbs'
 import Card from 'components/systems/Card'
 import Description from 'components/systems/Description'
@@ -48,8 +47,8 @@ const Page: NextPage = () => {
     path && setData(obj => ({ ...obj, path: path }))
   }, [parentData, setData])
 
-  const editMode = useEditMode(onSubmit, undefined, true)
-  const { isEditMode, setIsEditMode, register, newImage, setNewImage, FormErrors, EditModeContainer } = editMode
+  const { isEditMode, setIsEditMode, newImage, setNewImage, FormErrors, EditModeContainer, register, discard } =
+    useEditMode(onSubmit, data)
 
   if (!data) return <>Loading</>
   return (
@@ -68,19 +67,14 @@ const Page: NextPage = () => {
             <FormErrors />
           </div>
 
-          <div className="text-3xl w-full flex shrink-0 justify-between">
-            <Title data={data} isEditMode={isEditMode} register={register} />
-            <button type="submit">
-              <CheckIcon className="h-6 hover:text-orange-600" />
-            </button>
-            <button
-              onClick={() => {
-                setIsEditMode(false)
-                router.push(`/tree/${uid}`)
-              }}
-            >
-              <NoSymbolIcon className="h-6 hover:text-orange-600" />
-            </button>
+          <div className="flex w-full justify-between">
+            <Title
+              data={data}
+              discard={discard}
+              setIsEditMode={setIsEditMode}
+              isEditMode={isEditMode}
+              register={register}
+            />
           </div>
 
           <aside className="p-1 lg:p-2 w-full lg:w-1/4">
@@ -102,7 +96,8 @@ const Page: NextPage = () => {
             <article>
               <div className="flex flex-wrap gap-2 lg:gap-4">
                 <section className="grow lg:grow-0 shrink-0">
-                  <Preview data={data} editMode={editMode} />
+                  <b>Preview</b>
+                  <Preview data={data} isEditMode={isEditMode} newImage={newImage} setNewImage={setNewImage} />
                 </section>
 
                 <section className="grow">
@@ -113,7 +108,8 @@ const Page: NextPage = () => {
                 </section>
 
                 <section className="basis-full">
-                  <Description data={data} editMode={editMode} />
+                  <b>Description</b>
+                  <Description data={data} isEditMode={isEditMode} register={register} />
                 </section>
               </div>
             </article>
