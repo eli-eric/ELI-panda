@@ -21,31 +21,31 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@components/*": [
+      "@/components/*": [
         "src/components/*"
       ],
-      "@features/*": [
+      "@/features/*": [
         "src/features/*"
       ],
-      "@helpers/*": [
+      "@/helpers/*": [
         "src/helpers/*"
       ],
-      "@hooks/*": [
+      "@/hooks/*": [
         "src/hooks/*"
       ],
-      "@i18n/*": [
+      "@/i18n/*": [
         "src/i18n/*"
       ],
-      "@providers/*": [
+      "@/providers/*": [
         "src/providers/*"
       ],
-      "@store/*": [
+      "@/store/*": [
         "src/store/*"
       ],
-      "@styles/*": [
+      "@/styles/*": [
         "src/styles/*"
       ],
-      "@src/types/*": [
+      "@/types/*": [
         "src/types/*"
       ]
     },
