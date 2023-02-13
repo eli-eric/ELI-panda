@@ -1,12 +1,8 @@
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { SystemEditModeProps } from 'types/system'
 
-import Card from './Card'
-
-const Preview = ({ data, editMode }: SystemEditModeProps) => {
+const Preview = ({ data, isEditMode, newImage, setNewImage }) => {
   const { image, name } = data
-  const { newImage, isEditMode, setNewImage } = editMode
   const onDrop = useCallback(
     files => {
       const reader = new FileReader()
@@ -18,23 +14,22 @@ const Preview = ({ data, editMode }: SystemEditModeProps) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ maxFiles: 1, accept: { 'image/*': [] }, onDrop })
 
   return (
-    <>
-      <b>Preview</b>
-      <Card className="w-[500px] h-[500px]">
-        {isEditMode ? (
-          <div>
-            <div {...getRootProps()}>
-              <input {...getInputProps()} />
-              <img width="100%" src={newImage ? newImage : image} alt={name} />
-              {isDragActive ? 'Drop new image here' : 'Click here or drag and drop an image'}
-            </div>
-            <div>{newImage && <button onClick={() => setNewImage('')}>Discard</button>}</div>
+    <div className="lg:w-[500px]">
+      {isEditMode ? (
+        <>
+          <div {...getRootProps()}>
+            <input {...getInputProps()} />
+            <img className="lg:max-w-[500px] lg:max-h-[500px]" src={newImage ? newImage : image} alt={name} />
           </div>
-        ) : (
-          <img width="100%" src={image} alt={name} />
-        )}
-      </Card>
-    </>
+          <div>
+            {isDragActive ? 'Drop new image here' : 'Click here or drag and drop an image'}
+            {newImage && <button onClick={() => setNewImage('')}>Discard</button>}
+          </div>
+        </>
+      ) : (
+        <img className="lg:max-w-[500px] lg:max-h-[500px]" src={image} alt={name} />
+      )}
+    </div>
   )
 }
 

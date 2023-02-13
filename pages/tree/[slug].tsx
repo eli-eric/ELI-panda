@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { PlusIcon } from '@heroicons/react/24/outline'
 import Breadcrumbs from 'components/systems/Breadcrumbs'
 import Card from 'components/systems/Card'
 import Description from 'components/systems/Description'
@@ -68,14 +69,13 @@ const Page: NextPage = () => {
   const router = useRouter()
   const uid = router.query.slug
 
-  const { Prompt, Results } = useSearch('/tree/')
+  const { Prompt, Results, hasResults } = useSearch('/tree/')
 
   const { data } = useSWR(uid, fetchFakeSystem)
 
-  const editMode = useEditMode(onSubmit, data)
-  const { isEditMode, setIsEditMode, FormErrors, EditModeContainer, discard } = editMode
+  const { isEditMode, setIsEditMode, newImage, setNewImage, FormErrors, EditModeContainer, register, discard } =
+    useEditMode(onSubmit, data)
 
-  //I can't seem to get <Suspense> working, using this for now.
   if (!data) return <>Loading</>
 
   return (
@@ -96,66 +96,68 @@ const Page: NextPage = () => {
             </div>
           )}
 
-          <div className="text-3xl w-full flex shrink-0 justify-between">
-            <Title data={data} editMode={editMode} />
-            {isEditMode ? (
-              <div className="flex">
-                <input type="submit" value="Save" />
-                <button onClick={() => discard()}>Discard</button>
-              </div>
-            ) : (
-              <>
-                <Prompt />
-                <button onClick={() => setIsEditMode(true)}>Edit</button>
-              </>
-            )}
+          <div className="flex w-full justify-between">
+            <Title
+              data={data}
+              discard={discard}
+              setIsEditMode={setIsEditMode}
+              isEditMode={isEditMode}
+              register={register}
+            />
+
+            {isEditMode || <Prompt />}
           </div>
 
-          {!isEditMode && (
-            <div className="p-1 lg:p-2 w-full">
-              <Suspense
-                fallback={
-                  <div className="h-[30vh] mb-4">
-                    <b>Loading</b>
-                  </div>
-                }
-              >
-                <Results />
-              </Suspense>
-            </div>
-          )}
+          {isEditMode ||
+            (hasResults && (
+              <details open className="max-h-[40vh] w-full overflow-auto">
+                <summary>
+                  <b>Results</b>
+                </summary>
+                <Suspense>
+                  <Results />
+                </Suspense>
+              </details>
+            ))}
 
           <aside className="p-1 lg:p-2 w-full lg:w-1/4">
             <nav>
               <div className="hidden lg:block">
                 <b>Subsystems</b>
                 <Subsystems data={data} />
-                <button onClick={() => router.push('/tree/' + uid + '/new')}>Add new subsystem</button>
+                <button onClick={() => router.push('/tree/' + uid + '/new')}>
+                  <PlusIcon className="h-6 hover:text-orange-600" />
+                </button>
               </div>
+
               <details className="lg:hidden max-h-[50vh] overflow-auto">
                 <summary>
                   <b>Subsystems</b>
                 </summary>
                 <Subsystems data={data} />
-                <button onClick={() => router.push('/tree/' + uid + '/new')}>Add new subsystem</button>
+                <button onClick={() => router.push('/tree/' + uid + '/new')}>
+                  <PlusIcon className="h-6 hover:text-orange-600" />
+                </button>
               </details>
             </nav>
           </aside>
 
-          <main className="p-1 lg:p-2 lg:w-3/4">
+          <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
             <article>
               <div className="flex flex-wrap gap-2 lg:gap-4">
-                <section className="grow lg:grow-0 shrink-0">
-                  <Preview data={data} editMode={editMode} />
+                <section className="">
+                  <b>Preview</b>
+                  <Preview data={data} isEditMode={isEditMode} newImage={newImage} setNewImage={setNewImage} />
                 </section>
-                <section className="grow">
+                <section>
                   <b>Details</b>
                   <Card>
                     <SystemDetailSectionComponent systemInfo={data} />
                   </Card>
                 </section>
                 <section className="basis-full">
-                  <Description data={data} editMode={editMode} />
+                  <b>Description</b>
+                  <Description data={data} isEditMode={isEditMode} register={register} />
                 </section>
               </div>
             </article>

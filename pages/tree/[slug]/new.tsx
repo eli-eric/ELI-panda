@@ -1,3 +1,4 @@
+import { CheckIcon, NoSymbolIcon } from '@heroicons/react/24/outline'
 import Breadcrumbs from 'components/systems/Breadcrumbs'
 import Card from 'components/systems/Card'
 import Description from 'components/systems/Description'
@@ -11,7 +12,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr/immutable'
-import { System } from 'types/system'
+import { System, SystemUidName } from 'types/system'
 
 import { fetchFakeSystem } from '../[slug]'
 
@@ -43,16 +44,14 @@ const Page: NextPage = () => {
   const [data, setData] = useState<System>(empty)
 
   useEffect(() => {
-    const path = [...(parentData?.path ?? []), [parentData?.uid, parentData?.name]]
-    path && setData((obj: System) => ({ ...obj, path: path }))
+    const path: SystemUidName[] = parentData ? [...parentData.path, [parentData.uid, parentData.name]] : []
+    path && setData(obj => ({ ...obj, path: path }))
   }, [parentData, setData])
 
   const editMode = useEditMode(onSubmit, undefined, true)
-  const { isEditMode, setIsEditMode, FormErrors, EditModeContainer } = editMode
+  const { isEditMode, setIsEditMode, register, newImage, setNewImage, FormErrors, EditModeContainer } = editMode
 
-  //I can't seem to get <Suspense> working, using this for now.
   if (!data) return <>Loading</>
-
   return (
     <>
       <Head>
@@ -70,15 +69,17 @@ const Page: NextPage = () => {
           </div>
 
           <div className="text-3xl w-full flex shrink-0 justify-between">
-            <Title data={data} editMode={editMode} />
-            <input type="submit" value="Save" />
+            <Title data={data} isEditMode={isEditMode} register={register} />
+            <button type="submit">
+              <CheckIcon className="h-6 hover:text-orange-600" />
+            </button>
             <button
               onClick={() => {
                 setIsEditMode(false)
                 router.push(`/tree/${uid}`)
               }}
             >
-              Discard
+              <NoSymbolIcon className="h-6 hover:text-orange-600" />
             </button>
           </div>
 
