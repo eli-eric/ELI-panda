@@ -1,4 +1,4 @@
-export enum PATHS {
+export enum PATH {
   ROOT = '/',
   DASHBOARD = '/dashboard',
   CATALOGUE = '/catalogue',

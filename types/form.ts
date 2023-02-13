@@ -1,7 +1,8 @@
 import { FieldValues, FormState, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form'
 export type ModalButtons = {
-  goBack: Button
-  goNext: Button
+  noButtons?: boolean
+  goBack?: Button
+  goNext?: Button
 }
 
 export type Button = { text: string; onClick: (data: unknown | undefined) => void }

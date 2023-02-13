@@ -21,7 +21,6 @@ export default NextAuth({
           url: process.env.PANDA_API_GW_URL + '/authenticate',
           data: { username: credentials?.username, password: credentials?.password }
         }).catch(error => {
-          console.log(error)
           //catching erros
           if (error.response) {
             if (error.request.res.statusCode === 401) {

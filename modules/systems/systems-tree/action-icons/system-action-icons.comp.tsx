@@ -1,7 +1,7 @@
 import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import ModalComponent from 'components/ui/modal/modal.comp'
 import ModalWarningComponent from 'components/ui/modal/warning/modal-warning.comp'
-import useAxios from 'hooks/use-axios'
+import useAxios from 'hooks/useAxios'
 import { ENDPOINTS } from 'types/constants/endpoints'
 import { ModalButtons } from 'types/form'
 import { useRouter } from 'next/router'

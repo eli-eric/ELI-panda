@@ -83,7 +83,7 @@ const DashboardPage: NextPage = (): JSX.Element => {
         </h1>
         <ul role="list" className=" font-mono">
           {releases.map((item, idx) => (
-            <li key={item.id} className="px-2 py-2 sm:px-4 sm:py-4 shadow-lg my-5 mx-2">
+            <li key={idx} className="px-2 py-2 sm:px-4 sm:py-4 shadow-lg my-5 mx-2">
               <h3 className="text-xl font-bold text-gray-700">
                 Version {item.id} {idx === 0 && '- Latest version'}
               </h3>

@@ -1,12 +1,10 @@
 import ItemPropertyTitle from 'components/item-property/item-property-title.comp'
 import { Input } from 'components/ui/form/Input'
-import { Select } from 'components/ui/form/Select'
 import { message } from 'i18n/src/messages'
-import { SystemInfo } from 'types/responses'
 import { FormState, UseFormRegister } from 'react-hook-form'
+import { SystemInfo } from 'types/responses'
 
 import SystemDetailComponent from '../system-detail.comp'
-import { importances, locations } from './constants'
 
 const messages = message.systemsPage.systemDetail
 
@@ -43,7 +41,6 @@ const SystemFormFields = ({ register, formState }: Props) => {
         <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
           <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
             <ItemPropertyTitle title={messages.labels.importanceCode}>
-              <Select register={register} name="importanceCode" className={classes} options={importances} />
               <p className="text-xs text-red-500">{errors.importanceCode?.message}</p>
             </ItemPropertyTitle>
             <ItemPropertyTitle title={messages.labels.zoneCode}>
@@ -60,7 +57,6 @@ const SystemFormFields = ({ register, formState }: Props) => {
               <p className="text-xs text-red-500">{errors.systemAlias?.message}</p>
             </ItemPropertyTitle>
             <ItemPropertyTitle title={messages.labels.locationCode}>
-              <Select register={register} name="locationCode" className={classes} options={locations} />
               <p className="text-xs text-red-500">{errors.locationCode?.message}</p>
             </ItemPropertyTitle>
             <ItemPropertyTitle title={messages.labels.ownerUID}>

@@ -1,6 +1,11 @@
-import { HomeIcon } from '@heroicons/react/20/solid'
-import { PATHS } from 'types/constants/paths'
+import { ChevronRightIcon, HomeIcon } from '@heroicons/react/20/solid'
+import { PlusIconButton } from 'components/ui/IconButtons'
+import ModalComponent from 'components/ui/modal/modal.comp'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { PATH } from 'types/constants/paths'
+
+import CategoryEditForm from '../categoryEditForm/CategoryEditForm'
 
 interface Props {
   navigationList: JSX.Element[] | undefined
@@ -10,11 +15,12 @@ interface Props {
 
 const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props) => {
   const router = useRouter()
+  const [open, setopen] = useState(false)
 
   const { search } = router.query
 
   const onCLickHandler = () => {
-    handleClick(PATHS.CATALOGUE + (search ? `?search=${search}` : ''))
+    handleClick(PATH.CATALOGUE + (search ? `?search=${search}` : ''))
   }
 
   return (
@@ -34,8 +40,21 @@ const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props)
             </div>
           </li>
           {navigationList}
+          <li className="flex">
+            <div className="flex items-center">
+              <ChevronRightIcon className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400" aria-hidden="true" />
+              <PlusIconButton
+                onClickAction={() => {
+                  setopen(true)
+                }}
+              />
+            </div>
+          </li>
         </ol>
       </nav>
+      <ModalComponent open={open} setOpen={setopen} buttons={{ noButtons: true }} testid="catalogueEdit">
+        <CategoryEditForm setopen={setopen} />
+      </ModalComponent>
     </div>
   )
 }

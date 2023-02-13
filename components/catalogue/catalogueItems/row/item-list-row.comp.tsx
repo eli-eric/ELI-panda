@@ -1,7 +1,7 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import TooltipComponent from 'components/ui/tooltip.comp'
 import { ENDPOINTS } from 'types/constants/endpoints'
-import { PATHS } from 'types/constants/paths'
+import { PATH } from 'types/constants/paths'
 import { CatalogueItem } from 'types/responses'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -16,7 +16,7 @@ interface Props {
 const ItemListRow = ({ item, index, categoryListLength }: Props) => {
   const router = useRouter()
   const { search } = router.query
-  const categoryPath = PATHS.CATALOGUE + '/' + item.categoryPath
+  const categoryPath = PATH.CATALOGUE + '/' + item.categoryPath
   const path = ENDPOINTS.catalogueItem + '/' + item.uid + '/image'
 
   return (

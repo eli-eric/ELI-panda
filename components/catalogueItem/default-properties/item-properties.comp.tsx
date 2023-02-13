@@ -9,7 +9,7 @@ import DisclosureComponent from '../disclosure/disclosure.comp'
 const messages = message.cataloguePage.itemList.header
 
 interface Props {
-  item: CatalogueItem
+  item?: CatalogueItem
   groups: string[]
 }
 
@@ -19,16 +19,16 @@ const ItemPropertiesComponent = ({ item, groups }: Props) => {
       <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
         <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
           <ItemPropertyTitle title={messages.categoryName}>
-            <ItemPropertyValue text={item.categoryName} />{' '}
+            <ItemPropertyValue text={item?.categoryName} />{' '}
           </ItemPropertyTitle>
           <ItemPropertyTitle title={messages.manufactorer}>
-            <ItemPropertyValue text={item.manufacturer} />
+            <ItemPropertyValue text={item?.manufacturer} />
           </ItemPropertyTitle>
           <ItemPropertyTitle title={messages.manufacturerNumber}>
-            <ItemPropertyValue text={item.manufacturerNumber} />
+            <ItemPropertyValue text={item?.manufacturerNumber} />
           </ItemPropertyTitle>
           <ItemPropertyTitle title={messages.manufacturerUrl}>
-            <ItemPropertyValue text={item.manufacturerUrl} link={true} />
+            <ItemPropertyValue text={item?.manufacturerUrl} link={true} />
           </ItemPropertyTitle>
         </dl>
       </div>

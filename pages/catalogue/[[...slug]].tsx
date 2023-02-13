@@ -1,53 +1,24 @@
-import CatalogueComponent from 'components/catalogue/Catalogue.Comp'
-import { useCatalogueItemsPath, useCategoryPath } from 'hooks/usePath'
+import BreadcrumbContainer from 'components/catalogue/breadcrump/breadcrump.cont'
+import CatalogueItemsContainer from 'components/catalogue/catalogueItems/CatalogueItems.cont'
+import CategoryListComponent from 'components/catalogue/categoryList/CategoryList.cont'
+import { CatalogLayoutContainer } from 'components/catalogue/layout/catalog-layout.cont'
+import SearchBarComponent from 'components/catalogue/search-bar/search-bar.comp'
+import ErrorPage from 'components/error/ErrorPage'
+import LoaderComponent from 'components/ui/loader.comp'
 import { message } from 'i18n/src/messages'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, Suspense, useState } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { useIntl } from 'react-intl'
-import useSWR from 'swr'
 import { CatalogueCategoryResponse, CatalogueItemsResponse } from 'types/responses'
 
 const { head } = message.cataloguePage
 
 const CatalogueCategoriesPage: NextPage = (): JSX.Element => {
-  const { data: session } = useSession()
   const intl = useIntl()
-  const categoryPath = useCategoryPath()
-  const router = useRouter()
-  const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
-  const catalogueItemsPath = useCatalogueItemsPath(pageSize, page)
-  const [pageNumbers, setPageNumbers] = useState<number | undefined>()
-  /* fetch category list */
-  const { data: categoryList } = useSWR<Array<CatalogueCategoryResponse>>(session ? categoryPath : null)
-  /* conditionaly fetch catalogue Items if category list dont return categories or search is not in query */
-  const { data: catalogueItems } = useSWR<CatalogueItemsResponse>(
-    categoryList?.length === 0 || router.query.search ? catalogueItemsPath : null
-  )
-  const previousPageHandler = () => {
-    setPage(prev => prev - 1)
-  }
-  const nextPageHandler = () => {
-    setPage(prev => prev + 1)
-  }
-  /* reason for that is overflow of paging when we redirect to another category  */
-  useEffect(() => {
-    setPage(1)
-  }, [categoryPath])
-
-  /* Use effect for calculate poage numbers and set page to query params when items are fetched */
-  useEffect(() => {
-    if (catalogueItems) {
-      const pageCount = Math.ceil(catalogueItems?.totalCount / pageSize)
-      setPageNumbers(pageCount)
-      router.push({ query: { ...router.query, page: page } }, undefined, {
-        shallow: true
-      })
-    }
-  }, [catalogueItems, pageSize, page]) // eslint-disable-line
+  const [catalogueCategoryList, setCatalogueCategoryList] = useState<CatalogueCategoryResponse[]>()
+  const [catalogueItemsList, setCatalogueItemsList] = useState<CatalogueItemsResponse>()
 
   return (
     <Fragment>
@@ -55,16 +26,23 @@ const CatalogueCategoriesPage: NextPage = (): JSX.Element => {
         <title>{intl.formatMessage({ id: head })}</title>
         <meta name="description" content="...." />
       </Head>
-      <CatalogueComponent
-        catalogueItems={catalogueItems}
-        categoryList={categoryList}
-        page={page}
-        pageSize={pageSize}
-        pageNumbers={pageNumbers}
-        search={router.query.search}
-        previousPageHandler={previousPageHandler}
-        nextPageHandler={nextPageHandler}
-      />
+      <CatalogLayoutContainer catalogueItems={catalogueItemsList} categoryList={catalogueCategoryList}>
+        <SearchBarComponent />
+        <BreadcrumbContainer />
+        <ErrorBoundary fallback={<ErrorPage />}>
+          <Suspense fallback={<LoaderComponent />}>
+            <CategoryListComponent setCatalogueCategoryList={setCatalogueCategoryList} />
+          </Suspense>
+        </ErrorBoundary>
+        <ErrorBoundary fallback={<ErrorPage />}>
+          <Suspense fallback={<LoaderComponent />}>
+            <CatalogueItemsContainer
+              categoryListLength={catalogueCategoryList?.length}
+              setCatalogueItemsList={setCatalogueItemsList}
+            />
+          </Suspense>
+        </ErrorBoundary>
+      </CatalogLayoutContainer>
     </Fragment>
   )
 }
