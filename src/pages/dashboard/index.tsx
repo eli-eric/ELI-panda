@@ -1,9 +1,9 @@
-import { message } from 'src/i18n/src/messages'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
+import { message } from 'src/i18n/src/messages'
 
 interface RelaseVersion {
   id: string

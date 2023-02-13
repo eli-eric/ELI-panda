@@ -1,9 +1,9 @@
-import { useCatalogueItemsPath, useCategoryPath } from 'src/hooks/usePath'
-import { message } from 'src/i18n/src/messages'
+import { useCatalogueItemsPath, useCategoryPath } from '@hooks/usePath'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
+import { message } from 'src/i18n/src/messages'
 import { CatalogueItemsResponse } from 'src/types/responses'
 import useSWR from 'swr'
 

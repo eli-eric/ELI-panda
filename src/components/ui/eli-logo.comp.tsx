@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import eliLogo from 'src/public/eli-logo-small.png'
+import eliLogo from 'public/eli-logo-small.png'
 
 interface Props {
   customClass: string
