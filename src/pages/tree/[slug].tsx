@@ -12,7 +12,7 @@ import Breadcrumbs from '@/components/systems/Breadcrumbs'
 import Card from '@/components/systems/Card'
 import Description from '@/components/systems/Description'
 import Preview from '@/components/systems/Preview'
-import RelationList from '@/components/systems/relations/RelationList'
+import RelationsComponent from '@/components/systems/relations/Relations.comp'
 import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
 import ViewControl from '@/components/systems/ViewControl'
@@ -175,7 +175,7 @@ const Page: NextPage = () => {
                 </article>
               </DisclosureComponent>
             )}
-            {formMethods.watch('relations') && <RelationList />}
+            {formMethods.watch('relations') && <RelationsComponent uid={data.uid} />}
           </main>
         </div>
       </EditModeContainer>

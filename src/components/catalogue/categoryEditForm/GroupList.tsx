@@ -1,6 +1,6 @@
 import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 import { InputWithError } from 'src/components/ui/form/Input'
-import { PlusIconButton, TrashIconButton } from 'src/components/ui/IconButtons'
+import { PlusIconButton, TrashIconButton } from '@/components/ui/Buttons'
 import { CatalogueFormType, Group } from '@/types/catalogue/catalogueTypes'
 
 import PropertyList from './PropertyList'
