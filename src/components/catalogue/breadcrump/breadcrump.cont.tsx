@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-import { PATH } from 'src/types/constants/paths'
+import { PATH } from '@/types/constants/paths'
 
 import BreadcrumpItemComponent from './breadcrump-item.comp'
 import BreadcrumbListComponent from './breadcrump-list.comp'

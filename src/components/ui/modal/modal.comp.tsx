@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { message } from 'src/i18n/src/messages'
 import { Dispatch, Fragment, SetStateAction } from 'react'
-import { ModalButtons } from 'src/types/form'
+import { ModalButtons } from '@/types/form'
 
 import ModalButtonsComponent from './modal.buttons'
 

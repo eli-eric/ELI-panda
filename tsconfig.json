@@ -57,9 +57,10 @@
   },
   "include": [
     "next-env.d.ts",
-    "types/**/*.ts",
+    "@/types/**/*.ts",
     "**/*.tsx",
     "**/*.ts",
+    ".next/@/types/**/*.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [

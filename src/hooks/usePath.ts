@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { useMemo } from 'react'
-import { ENDPOINTS } from 'src/types/constants/endpoints'
+import { ENDPOINTS } from '@/types/constants/endpoints'
 
 /* hooks for getting endpoitpaths for catalogue */
 

@@ -1,6 +1,6 @@
 import { Disclosure } from '@headlessui/react'
 import { Fragment } from 'react'
-import { SystemTreeItem } from 'src/types/responses'
+import { SystemTreeItem } from '@/types/responses'
 
 import SystemTreeItemComponent from './system-tree-item.comp'
 interface DisclosureComponentProps {

@@ -1,4 +1,4 @@
-import { SystemTreeItem } from 'src/types/responses'
+import { SystemTreeItem } from '@/types/responses'
 
 type UpdateFn = (arg0: SystemTreeItem) => SystemTreeItem
 

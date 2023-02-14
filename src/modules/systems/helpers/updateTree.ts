@@ -1,4 +1,4 @@
-import { SystemTreeItem } from 'src/types/responses'
+import { SystemTreeItem } from '@/types/responses'
 
 //  recursion for set open param for tree view
 export const updateTree = (tree: Array<SystemTreeItem> | undefined, uid: string): Array<SystemTreeItem> | undefined => {

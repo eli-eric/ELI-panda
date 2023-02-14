@@ -9,7 +9,7 @@ import { useIntl } from 'react-intl'
 import AuthAlertComponent from 'src/components/auth/auth-alert.comp'
 import AuthFormComponent, { AuthForm } from 'src/components/auth/auth-form.comp'
 import { message } from 'src/i18n/src/messages'
-import { PATH } from 'src/types/constants/paths'
+import { PATH } from '@/types/constants/paths'
 import * as yup from 'yup'
 
 const messages = message.authPage

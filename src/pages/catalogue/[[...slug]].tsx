@@ -11,7 +11,7 @@ import { CatalogLayoutContainer } from 'src/components/catalogue/layout/catalog-
 import SearchBarComponent from 'src/components/catalogue/search-bar/search-bar.comp'
 import ErrorPage from 'src/components/error/ErrorPage'
 import LoaderComponent from 'src/components/ui/loader.comp'
-import { CatalogueCategoryResponse, CatalogueItemsResponse } from 'src/types/responses'
+import { CatalogueCategoryResponse, CatalogueItemsResponse } from '@/types/responses'
 
 const { head } = message.cataloguePage
 

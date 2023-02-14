@@ -1,5 +1,5 @@
-import Link from '@components/systems/Link'
-import { SystemProps } from '@src/types/system'
+import Link from '@/components/systems/Link'
+import { SystemProps } from '@/types/system'
 
 const Breadcrumbs = ({ data }: SystemProps) => {
   const { path } = data

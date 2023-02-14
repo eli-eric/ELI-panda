@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import { InputWithError } from 'src/components/ui/form/Input'
 import { TrashIconButton } from 'src/components/ui/IconButtons'
 import { ImageIcon } from 'src/components/ui/SvgIcons'
-import { CatalogueFormType } from 'src/types/catalogue/catalogueTypes'
+import { CatalogueFormType } from '@/types/catalogue/catalogueTypes'
 
 const Main = () => {
   const { register, watch, setValue, formState } = useFormContext<CatalogueFormType>()

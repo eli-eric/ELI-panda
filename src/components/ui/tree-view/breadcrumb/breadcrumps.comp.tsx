@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { SystemTreeItem } from 'src/types/responses'
+import { SystemTreeItem } from '@/types/responses'
 
 interface Props {
   data: SystemTreeItem

@@ -1,6 +1,6 @@
 import ProgressBarComponent from 'src/components/ui/progress-bar.comp'
 import { message } from 'src/i18n/src/messages'
-import { SystemInfo } from 'src/types/responses'
+import { SystemInfo } from '@/types/responses'
 
 import SystemDetailComponent from './system-detail.comp'
 import SystemDetailHeaderComponent from './system-detail-header.comp'

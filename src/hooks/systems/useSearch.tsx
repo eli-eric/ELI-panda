@@ -1,5 +1,5 @@
-import Card from '@components/systems/Card'
-import Link from '@components/systems/Link'
+import Card from '@/components/systems/Card'
+import Link from '@/components/systems/Link'
 import { useRouter } from 'next/router'
 import { fetchFakeSystems } from 'src/pages/tree/[slug]'
 import { useEffect, useRef, useState } from 'react'

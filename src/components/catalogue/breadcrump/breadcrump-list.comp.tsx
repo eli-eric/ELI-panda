@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { PlusIconButton } from 'src/components/ui/IconButtons'
 import ModalComponent from 'src/components/ui/modal/modal.comp'
-import { PATH } from 'src/types/constants/paths'
+import { PATH } from '@/types/constants/paths'
 
 import CategoryEditForm from '../categoryEditForm/CategoryEditForm'
 
