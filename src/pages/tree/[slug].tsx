@@ -4,6 +4,7 @@ import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Suspense } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
 import SystemDetailSectionComponent from 'src/modules/systems/details/system-detail/system-detail-section.comp'
 import useSWR from 'swr/immutable'
 
@@ -14,6 +15,7 @@ import Preview from '@/components/systems/Preview'
 import RelationList from '@/components/systems/relations/RelationList'
 import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
+import ViewControl from '@/components/systems/ViewControl'
 import DisclosureComponent from '@/components/ui/Disclosure.comp'
 import useEditMode from '@/hooks/systems/useEditMode'
 import useSearch from '@/hooks/systems/useSearch'
@@ -71,6 +73,8 @@ const onSubmit = (data: System) => {
 const Page: NextPage = () => {
   const router = useRouter()
   const uid = router.query.slug
+
+  const formMethods = useForm({ defaultValues: { system: true, relations: true } })
 
   const { Prompt, Results, hasResults } = useSearch('/tree/')
 
@@ -146,27 +150,32 @@ const Page: NextPage = () => {
           </aside>
 
           <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
-            <DisclosureComponent title="System Detail">
-              <article>
-                <div className="flex flex-wrap gap-2 lg:gap-4">
-                  <section className="">
-                    <b>Preview</b>
-                    <Preview data={data} isEditMode={isEditMode} newImage={newImage} setNewImage={setNewImage} />
-                  </section>
-                  <section>
-                    <b>Details</b>
-                    <Card>
-                      <SystemDetailSectionComponent systemInfo={data} />
-                    </Card>
-                  </section>
-                  <section className="basis-full">
-                    <b>Description</b>
-                    <Description data={data} isEditMode={isEditMode} register={register} />
-                  </section>
-                </div>
-              </article>
-            </DisclosureComponent>
-            <RelationList />
+            <FormProvider {...formMethods}>
+              <ViewControl />
+            </FormProvider>
+            {formMethods.watch('system') && (
+              <DisclosureComponent title="System Detail">
+                <article>
+                  <div className="flex flex-wrap gap-2 lg:gap-4">
+                    <section className="">
+                      <b>Preview</b>
+                      <Preview data={data} isEditMode={isEditMode} newImage={newImage} setNewImage={setNewImage} />
+                    </section>
+                    <section>
+                      <b>Details</b>
+                      <Card>
+                        <SystemDetailSectionComponent systemInfo={data} />
+                      </Card>
+                    </section>
+                    <section className="basis-full">
+                      <b>Description</b>
+                      <Description data={data} isEditMode={isEditMode} register={register} />
+                    </section>
+                  </div>
+                </article>
+              </DisclosureComponent>
+            )}
+            {formMethods.watch('relations') && <RelationList />}
           </main>
         </div>
       </EditModeContainer>

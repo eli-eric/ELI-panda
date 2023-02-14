@@ -1,12 +1,14 @@
+import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
+
 import DisclosureComponent from '@/components/ui/Disclosure.comp'
 import { TrashIconButton } from '@/components/ui/IconButtons'
 
 const people = [
-  { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
-  { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
-  { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
-  { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
-  { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' }
+  { name: 'Blada bla', direction: 'from', relation: 'HAS_SUBSYSTEM' },
+  { name: 'Blad gbla', direction: 'to', relation: 'IS_SPARE_FOR' },
+  { name: 'Blad bla', direction: 'to', relation: 'HAS_SUBSYSTEM' },
+  { name: 'Bla fbla', direction: 'to', relation: 'IS_SPARE_FOR' },
+  { name: 'Bla gbla', direction: 'from', relation: 'IS_SPARE_FOR' }
 
   // More people...
 ]
@@ -63,14 +65,15 @@ function Table() {
                 </thead>
                 <tbody className="bg-white">
                   {people.map((person, personIdx) => (
-                    <tr key={person.email}>
+                    <tr key={person.name}>
                       <td
                         className={classNames(
                           personIdx !== people.length - 1 ? 'border-b border-gray-200' : '',
                           'whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8'
                         )}
                       >
-                        {person.name}
+                        {person.direction === 'to' && <ArrowLongLeftIcon className="w-10 h-10" />}
+                        {person.direction === 'from' && <ArrowLongRightIcon className="w-10 h-10" />}
                       </td>
                       <td
                         className={classNames(
@@ -78,7 +81,7 @@ function Table() {
                           'whitespace-nowrap px-3 py-4 text-sm text-gray-500 hidden sm:table-cell'
                         )}
                       >
-                        {person.title}
+                        {person.relation}
                       </td>
                       <td
                         className={classNames(
@@ -86,7 +89,7 @@ function Table() {
                           'whitespace-nowrap px-3 py-4 text-sm text-gray-500 hidden lg:table-cell'
                         )}
                       >
-                        {person.email}
+                        {person.name}
                       </td>
 
                       <td
@@ -111,13 +114,9 @@ function Table() {
 
 const RelationList = () => {
   return (
-    <div className="divide-y divide-gray-200 border-t">
-      <DisclosureComponent title="Relations">
-        <div className=" w-full">
-          <Table />
-        </div>
-      </DisclosureComponent>
-    </div>
+    <DisclosureComponent title="Relations">
+      <Table />
+    </DisclosureComponent>
   )
 }
 
