@@ -1,17 +1,18 @@
-import Breadcrumbs from '@components/systems/Breadcrumbs'
-import Card from '@components/systems/Card'
-import Description from '@components/systems/Description'
-import Preview from '@components/systems/Preview'
-import Subsystems from '@components/systems/Subsystems'
-import Title from '@components/systems/Title'
-import useEditMode from '@hooks/systems/useEditMode'
-import { System, SystemUidName } from '@src/types/system'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import SystemDetailSectionComponent from 'src/modules/systems/details/system-detail/system-detail-section.comp'
 import useSWR from 'swr/immutable'
+
+import Breadcrumbs from '@/components/systems/Breadcrumbs'
+import Card from '@/components/systems/Card'
+import Description from '@/components/systems/Description'
+import Preview from '@/components/systems/Preview'
+import Subsystems from '@/components/systems/Subsystems'
+import Title from '@/components/systems/Title'
+import useEditMode from '@/hooks/systems/useEditMode'
+import { System, SystemUidName } from '@/types/system'
 
 import { fetchFakeSystem } from '../[slug]'
 
@@ -42,13 +43,15 @@ const Page: NextPage = () => {
 
   const [data, setData] = useState<System>(empty)
 
+  const { newImage, setNewImage, FormErrors, EditModeContainer, register, discard } = useEditMode(onSubmit, data)
+
   useEffect(() => {
     const path: SystemUidName[] = parentData ? [...parentData.path, [parentData.uid, parentData.name]] : []
     path && setData(obj => ({ ...obj, path: path }))
   }, [parentData, setData])
 
-  const { isEditMode, setIsEditMode, newImage, setNewImage, FormErrors, EditModeContainer, register, discard } =
-    useEditMode(onSubmit, data)
+  const isEditMode = true
+  const setIsEditMode = () => {}
 
   if (!data) return <>Loading</>
   return (

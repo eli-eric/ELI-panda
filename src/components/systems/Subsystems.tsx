@@ -1,4 +1,4 @@
-import Link from '@components/systems/Link'
+import Link from '@/components/systems/Link'
 
 const Subsystems = ({ data }) => (
   <ul>
