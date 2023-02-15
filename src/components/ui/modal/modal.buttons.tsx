@@ -1,7 +1,7 @@
 import { message } from 'src/i18n/src/messages'
 import { Dispatch, Fragment, SetStateAction } from 'react'
 import { FormattedMessage } from 'react-intl'
-import { ModalButtons } from 'src/types/form'
+import { ModalButtons } from '@/types/form'
 
 const messages = message.common.buttons
 

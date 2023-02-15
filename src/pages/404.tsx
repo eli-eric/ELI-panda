@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'
 import EliLogoComponent from 'src/components/ui/eli-logo.comp'
-import { PATH } from 'src/types/constants/paths'
+import { PATH } from '@/types/constants/paths'
 
 const Custom404Page: NextPage = (): JSX.Element => {
   const { status } = useSession()

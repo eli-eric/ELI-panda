@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { CatalogueCategoryResponse, CatalogueItemsResponse } from 'src/types/responses'
+import { CatalogueCategoryResponse, CatalogueItemsResponse } from '@/types/responses'
 
 interface Props {
   children: React.ReactNode

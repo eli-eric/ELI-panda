@@ -2,15 +2,15 @@ import { useEffect } from 'react'
 import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 import { InputWithError } from 'src/components/ui/form/Input'
 import { SelectWithError } from 'src/components/ui/form/Select'
-import { PlusIconButton, TrashIconButton } from 'src/components/ui/IconButtons'
-import { CatalogueFormType, Property } from 'src/types/catalogue/catalogueTypes'
+import { PlusIconButton, TrashIconButton } from '@/components/ui/Buttons'
+import { CatalogueFormType, Property } from '@/types/catalogue/catalogueTypes'
 import {
   defaultBoolOptions,
   PROPERTY_INPUT_TYPE,
   PROPERTY_TYPE,
   propertyTypes,
   units
-} from 'src/types/catalogue/constants'
+} from '@/types/catalogue/constants'
 
 const ValueItem = ({ removeValue, index, name, errors }) => {
   const { register } = useFormContext<CatalogueFormType>()

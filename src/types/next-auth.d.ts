@@ -1,6 +1,6 @@
 import 'next-auth'
 
-import { Role } from 'src/types/constants/roles'
+import { Role } from '@/types/constants/roles'
 
 declare module 'next-auth' {
   interface User {

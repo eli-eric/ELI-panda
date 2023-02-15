@@ -1,7 +1,7 @@
 import ItemPropertyTitle from 'src/components/item-property/item-property-title.comp'
 import ItemPropertyValue from 'src/components/item-property/item-property-value.comp'
 import { message } from 'src/i18n/src/messages'
-import { SystemInfo } from 'src/types/responses'
+import { SystemInfo } from '@/types/responses'
 
 const messages = message.systemsPage.systemDetail
 interface Props {

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { System } from 'types/system'
+import { System } from '@/types/system'
 import * as yup from 'yup'
 
 const schema = yup.object({

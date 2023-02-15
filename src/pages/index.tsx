@@ -2,21 +2,23 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { signIn } from 'next-auth/react'
-import { Fragment, useState } from 'react'
+import { signIn, useSession } from 'next-auth/react'
+import { Fragment, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import AuthAlertComponent from 'src/components/auth/auth-alert.comp'
 import AuthFormComponent, { AuthForm } from 'src/components/auth/auth-form.comp'
 import { message } from 'src/i18n/src/messages'
-import { PATH } from 'src/types/constants/paths'
 import * as yup from 'yup'
+
+import { PATH } from '@/types/constants/paths'
 
 const messages = message.authPage
 
 const LoginPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
   const router = useRouter()
+  const { status } = useSession()
   const callbackUrl = decodeURI((router.query?.callbackUrl as string) ?? PATH.DASHBOARD)
   const authValidationSchema = yup.object().shape({
     password: yup.string().required(),
@@ -47,6 +49,10 @@ const LoginPage: NextPage = (): JSX.Element => {
         router.replace(callbackUrl, undefined, { shallow: false })
       })
   }
+
+  useEffect(() => {
+    if (status === 'authenticated') router.push(PATH.DASHBOARD)
+  }, [status, router])
 
   return (
     <Fragment>

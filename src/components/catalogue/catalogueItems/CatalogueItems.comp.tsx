@@ -1,4 +1,4 @@
-import { CatalogueItemsResponse } from 'src/types/responses'
+import { CatalogueItemsResponse } from '@/types/responses'
 
 import ItemListHeaderComponent from './header/item-list-header.comp'
 import ItemListRow from './row/item-list-row.comp'

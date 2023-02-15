@@ -4,8 +4,8 @@ import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
 import ModalComponent from 'src/components/ui/modal/modal.comp'
 import ModalWarningComponent from 'src/components/ui/modal/warning/modal-warning.comp'
-import { ENDPOINTS } from 'src/types/constants/endpoints'
-import { ModalButtons } from 'src/types/form'
+import { ENDPOINTS } from '@/types/constants/endpoints'
+import { ModalButtons } from '@/types/form'
 import FormContext from 'src/store/form.context'
 
 interface Props {

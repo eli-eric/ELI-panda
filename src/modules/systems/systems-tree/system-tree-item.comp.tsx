@@ -3,8 +3,8 @@ import { ChevronDownIcon, ChevronUpIcon, PuzzlePieceIcon } from '@heroicons/reac
 import { useRouter } from 'next/router'
 import { useContext } from 'react'
 import FormContext from 'src/store/form.context'
-import { PATH } from 'src/types/constants/paths'
-import { SystemTreeItem } from 'src/types/responses'
+import { PATH } from '@/types/constants/paths'
+import { SystemTreeItem } from '@/types/responses'
 
 import SystemActionIconsComponent from './action-icons/system-action-icons.comp'
 

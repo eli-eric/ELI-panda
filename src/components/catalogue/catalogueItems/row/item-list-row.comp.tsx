@@ -3,9 +3,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import TooltipComponent from 'src/components/ui/tooltip.comp'
-import { ENDPOINTS } from 'src/types/constants/endpoints'
-import { PATH } from 'src/types/constants/paths'
-import { CatalogueItem } from 'src/types/responses'
+import { ENDPOINTS } from '@/types/constants/endpoints'
+import { PATH } from '@/types/constants/paths'
+import { CatalogueItem } from '@/types/responses'
 
 interface Props {
   item: CatalogueItem

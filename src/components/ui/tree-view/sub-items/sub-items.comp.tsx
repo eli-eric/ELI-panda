@@ -1,4 +1,4 @@
-import { SystemTreeItem } from 'src/types/responses'
+import { SystemTreeItem } from '@/types/responses'
 
 import SubItemsList from './sub-items-list.comp'
 

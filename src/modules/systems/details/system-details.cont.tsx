@@ -1,6 +1,6 @@
 import { Fragment, useContext } from 'react'
 import ItemDetailComponent from 'src/components/catalogueItem/item-detail.comp'
-import { SystemDetailInfo } from 'src/types/responses'
+import { SystemDetailInfo } from '@/types/responses'
 import FormContext from 'src/store/form.context'
 
 import DisclosureComponent from './disclosure/disclosure.comp'

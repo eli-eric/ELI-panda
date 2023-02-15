@@ -3,16 +3,22 @@ import { PlusIcon } from '@heroicons/react/24/outline'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import SystemDetailSectionComponent from 'src/modules/systems/details/system-detail/system-detail-section.comp'
 import useSWR from 'swr/immutable'
 
+import ErrorPage from '@/components/error/ErrorPage'
 import Breadcrumbs from '@/components/systems/Breadcrumbs'
 import Card from '@/components/systems/Card'
 import Description from '@/components/systems/Description'
 import Preview from '@/components/systems/Preview'
+import Relations from '@/components/systems/relations/Relations'
 import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
+import ViewControl from '@/components/systems/ViewControl'
+import DisclosureComponent from '@/components/ui/Disclosure.comp'
+import ProgressBarComponent from '@/components/ui/progress-bar.comp'
 import useEditMode from '@/hooks/systems/useEditMode'
 import useSearch from '@/hooks/systems/useSearch'
 import { System, SystemUidName } from '@/types/system'
@@ -70,6 +76,7 @@ const Page: NextPage = () => {
   const router = useRouter()
   const uid = router.query.slug
 
+  const [viewControl, setViewControl] = useState({ system: true, relations: true })
   const { Prompt, Results, hasResults } = useSearch('/tree/')
 
   const { data } = useSWR(uid, fetchFakeSystem)
@@ -144,24 +151,36 @@ const Page: NextPage = () => {
           </aside>
 
           <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
-            <article>
-              <div className="flex flex-wrap gap-2 lg:gap-4">
-                <section className="">
-                  <b>Preview</b>
-                  <Preview data={data} isEditMode={isEditMode} newImage={newImage} setNewImage={setNewImage} />
-                </section>
-                <section>
-                  <b>Details</b>
-                  <Card>
-                    <SystemDetailSectionComponent systemInfo={data} />
-                  </Card>
-                </section>
-                <section className="basis-full">
-                  <b>Description</b>
-                  <Description data={data} isEditMode={isEditMode} register={register} />
-                </section>
-              </div>
-            </article>
+            <ViewControl setViewControl={setViewControl} viewControl={viewControl} />
+            {viewControl.system && (
+              <DisclosureComponent title="System Detail">
+                <article>
+                  <div className="flex flex-wrap gap-2 lg:gap-4">
+                    <section className="">
+                      <b>Preview</b>
+                      <Preview data={data} isEditMode={isEditMode} newImage={newImage} setNewImage={setNewImage} />
+                    </section>
+                    <section>
+                      <b>Details</b>
+                      <Card>
+                        <SystemDetailSectionComponent systemInfo={data} />
+                      </Card>
+                    </section>
+                    <section className="basis-full">
+                      <b>Description</b>
+                      <Description data={data} isEditMode={isEditMode} register={register} />
+                    </section>
+                  </div>
+                </article>
+              </DisclosureComponent>
+            )}
+            {viewControl.relations && (
+              <ErrorBoundary fallback={<ErrorPage />}>
+                <Suspense fallback={<ProgressBarComponent />}>
+                  <Relations uid={data.uid} />
+                </Suspense>
+              </ErrorBoundary>
+            )}
           </main>
         </div>
       </EditModeContainer>

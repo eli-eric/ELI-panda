@@ -1,13 +1,15 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { MouseEventHandler } from 'react'
 
-interface IconButtonProps {
+interface ButtonProps {
   onClickAction: MouseEventHandler<HTMLButtonElement>
   customClass?: string
   rounded?: 'rounded-l-md' | 'rounded-t-md' | 'rounded-r-md' | 'rounded-b-md' | 'rounded-md'
+
+  text?: string
 }
 
-export const TrashIconButton = ({ onClickAction, rounded = 'rounded-r-md', customClass }: IconButtonProps) => (
+export const TrashIconButton = ({ onClickAction, rounded = 'rounded-r-md', customClass }: ButtonProps) => (
   <button
     type="button"
     onClick={onClickAction}
@@ -18,13 +20,23 @@ export const TrashIconButton = ({ onClickAction, rounded = 'rounded-r-md', custo
   </button>
 )
 
-export const PlusIconButton = ({ onClickAction, rounded = 'rounded-md', customClass }: IconButtonProps) => (
+export const PlusIconButton = ({ onClickAction, rounded = 'rounded-md', customClass }: ButtonProps) => (
   <button
     type="button"
     onClick={onClickAction}
     className={`${customClass} relative z-0 inline-flex items-center ${rounded} border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-400 hover:bg-gray-50 focus:z-10 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500`}
   >
-    <span className="sr-only">Delete</span>
+    <span className="sr-only">Add</span>
     <PlusIcon className="h-5 w-5" aria-hidden="true" />
+  </button>
+)
+
+export const Button = ({ onClickAction, rounded = 'rounded-md', customClass, text }: ButtonProps) => (
+  <button
+    type="button"
+    onClick={onClickAction}
+    className={`${customClass} relative z-0 inline-flex items-center ${rounded} border border-gray-300 bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:w-auto`}
+  >
+    <span>{text}</span>
   </button>
 )

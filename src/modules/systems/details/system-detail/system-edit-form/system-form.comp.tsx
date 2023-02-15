@@ -1,5 +1,5 @@
-import { FormChildrenProps } from 'src/types/form'
-import { SystemInfo } from 'src/types/responses'
+import { FormChildrenProps } from '@/types/form'
+import { SystemInfo } from '@/types/responses'
 
 import DisclosureComponent from '../../disclosure/disclosure.comp'
 import SystemFormButtons from './system-form.buttons'

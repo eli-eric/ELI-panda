@@ -1,7 +1,7 @@
 import { useCatalogueItemDetailPath } from 'src/hooks/usePath'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { CatalogueItem } from 'src/types/responses'
+import { CatalogueItem } from '@/types/responses'
 import useSWR from 'swr'
 
 import ItemPropertiesComponent from './default-properties/item-properties.comp'

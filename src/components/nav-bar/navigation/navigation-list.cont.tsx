@@ -2,8 +2,8 @@ import { message } from 'src/i18n/src/messages'
 import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
-import { PATH } from 'src/types/constants/paths'
-import { Role } from 'src/types/constants/roles'
+import { PATH } from '@/types/constants/paths'
+import { Role } from '@/types/constants/roles'
 
 import NavigationLinkComponent from './navigation-link.comp'
 const navMessages = message.layout

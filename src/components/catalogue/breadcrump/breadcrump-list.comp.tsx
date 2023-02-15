@@ -1,9 +1,9 @@
 import { ChevronRightIcon, HomeIcon } from '@heroicons/react/20/solid'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { PlusIconButton } from 'src/components/ui/IconButtons'
+import { PlusIconButton } from '@/components/ui/Buttons'
 import ModalComponent from 'src/components/ui/modal/modal.comp'
-import { PATH } from 'src/types/constants/paths'
+import { PATH } from '@/types/constants/paths'
 
 import CategoryEditForm from '../categoryEditForm/CategoryEditForm'
 
