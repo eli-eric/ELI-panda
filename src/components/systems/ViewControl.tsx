@@ -1,7 +1,20 @@
-import { useFormContext } from 'react-hook-form'
+import { Dispatch, SetStateAction } from 'react'
 
-export default function ViewControl() {
-  const { register } = useFormContext()
+export default function ViewControl({
+  viewControl,
+  setViewControl
+}: {
+  viewControl: {
+    system: boolean
+    relations: boolean
+  }
+  setViewControl: Dispatch<
+    SetStateAction<{
+      system: boolean
+      relations: boolean
+    }>
+  >
+}) {
   return (
     <div className="mb-5 flex justify-center py-3">
       <fieldset className="space-x-5 flex flex-row">
@@ -10,10 +23,11 @@ export default function ViewControl() {
           <div className="flex h-5 items-center">
             <input
               id="system"
-              {...register('system')}
               aria-describedby="comments-description"
               name="system"
               type="checkbox"
+              checked={viewControl.system}
+              onClick={() => setViewControl(viewControl => ({ ...viewControl, system: !viewControl.system }))}
               className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
             />
           </div>
@@ -28,10 +42,11 @@ export default function ViewControl() {
           <div className="flex h-5 items-center">
             <input
               id="relations"
-              {...register('relations')}
               aria-describedby="candidates-description"
               name="relations"
               type="checkbox"
+              checked={viewControl.relations}
+              onClick={() => setViewControl(viewControl => ({ ...viewControl, relations: !viewControl.relations }))}
               className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
             />
           </div>

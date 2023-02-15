@@ -3,9 +3,8 @@ import { PlusIcon } from '@heroicons/react/24/outline'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Suspense } from 'react'
+import { Suspense, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { FormProvider, useForm } from 'react-hook-form'
 import SystemDetailSectionComponent from 'src/modules/systems/details/system-detail/system-detail-section.comp'
 import useSWR from 'swr/immutable'
 
@@ -77,8 +76,7 @@ const Page: NextPage = () => {
   const router = useRouter()
   const uid = router.query.slug
 
-  const formMethods = useForm({ defaultValues: { system: true, relations: true } })
-
+  const [viewControl, setViewControl] = useState({ system: true, relations: true })
   const { Prompt, Results, hasResults } = useSearch('/tree/')
 
   const { data } = useSWR(uid, fetchFakeSystem)
@@ -153,10 +151,8 @@ const Page: NextPage = () => {
           </aside>
 
           <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
-            <FormProvider {...formMethods}>
-              <ViewControl />
-            </FormProvider>
-            {formMethods.watch('system') && (
+            <ViewControl setViewControl={setViewControl} viewControl={viewControl} />
+            {viewControl.system && (
               <DisclosureComponent title="System Detail">
                 <article>
                   <div className="flex flex-wrap gap-2 lg:gap-4">
@@ -178,7 +174,7 @@ const Page: NextPage = () => {
                 </article>
               </DisclosureComponent>
             )}
-            {formMethods.watch('relations') && (
+            {viewControl.relations && (
               <ErrorBoundary fallback={<ErrorPage />}>
                 <Suspense fallback={<ProgressBarComponent />}>
                   <Relations uid={data.uid} />
