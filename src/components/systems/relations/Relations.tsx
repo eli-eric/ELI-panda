@@ -29,12 +29,12 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 const fetchFakeRelations = async () => {
   const res = [...Array(faker.datatype.number({ min: 1, max: 10 }))]
-  await sleep(faker.datatype.number({ min: 100, max: 500 }))
+  await sleep(faker.datatype.number({ min: 1000, max: 2000 }))
 
   return res.map(() => getFakeRelation())
 }
 
-const RelationsComponent = ({ uid }: { uid: string }) => {
+const Relations = ({ uid }: { uid: string }) => {
   const { data: relations } = useSWR(uid, fetchFakeRelations)
 
   const collums = ['Direction', 'Foreign System Name', 'Relation Type Code', 'Relation UID', 'Action']
@@ -56,10 +56,10 @@ const RelationsComponent = ({ uid }: { uid: string }) => {
     <DisclosureComponent title="Relations">
       <div className="px-4 sm:px-20 lg:px-20">
         <Button customClass="mb-2" onClickAction={() => {}} text="Add Spare" />
-        {relations && <TableComponent collumsTitle={collums} tableRows={data} />}
+        {relations && <TableComponent collumsTitle={collums} data={data} />}
       </div>
     </DisclosureComponent>
   )
 }
 
-export default RelationsComponent
+export default Relations

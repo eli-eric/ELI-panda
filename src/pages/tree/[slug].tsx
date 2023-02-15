@@ -4,19 +4,22 @@ import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { FormProvider, useForm } from 'react-hook-form'
 import SystemDetailSectionComponent from 'src/modules/systems/details/system-detail/system-detail-section.comp'
 import useSWR from 'swr/immutable'
 
+import ErrorPage from '@/components/error/ErrorPage'
 import Breadcrumbs from '@/components/systems/Breadcrumbs'
 import Card from '@/components/systems/Card'
 import Description from '@/components/systems/Description'
 import Preview from '@/components/systems/Preview'
-import RelationsComponent from '@/components/systems/relations/Relations.comp'
+import Relations from '@/components/systems/relations/Relations'
 import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
 import ViewControl from '@/components/systems/ViewControl'
 import DisclosureComponent from '@/components/ui/Disclosure.comp'
+import ProgressBarComponent from '@/components/ui/progress-bar.comp'
 import useEditMode from '@/hooks/systems/useEditMode'
 import useSearch from '@/hooks/systems/useSearch'
 import { System, SystemUidName } from '@/types/system'
@@ -175,7 +178,13 @@ const Page: NextPage = () => {
                 </article>
               </DisclosureComponent>
             )}
-            {formMethods.watch('relations') && <RelationsComponent uid={data.uid} />}
+            {formMethods.watch('relations') && (
+              <ErrorBoundary fallback={<ErrorPage />}>
+                <Suspense fallback={<ProgressBarComponent />}>
+                  <Relations uid={data.uid} />
+                </Suspense>
+              </ErrorBoundary>
+            )}
           </main>
         </div>
       </EditModeContainer>

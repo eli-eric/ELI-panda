@@ -27,16 +27,16 @@ const TableRow = ({ value }: { value: JSX.Element | string }) => (
 
 interface Props {
   collumsTitle: string[]
-  tableRows?: JSX.Element[][]
+  data?: JSX.Element[][]
 }
 
-const TableComponent = ({ collumsTitle, tableRows }: Props) => {
+const TableComponent = ({ collumsTitle, data }: Props) => {
   return (
     <div className="-my-2 sm:-mx-6 w-full lg:-mx-8 inline-block py-2 align-middle md:px-6 lg:px-8">
       <table className="w-full border border-gray-300 divide-y divide-gray-300">
         <TableHeader collumsTitle={collumsTitle} />
         <tbody className="bg-white">
-          {tableRows?.map((row, index) => (
+          {data?.map((row, index) => (
             <tr key={index} className={(index % 2 === 0 ? undefined : 'bg-gray-100') + ' hover:bg-primary-200'}>
               {row.map(item => (
                 <TableRow key={index} value={item} />
