@@ -43,13 +43,15 @@ const Page: NextPage = () => {
 
   const [data, setData] = useState<System>(empty)
 
+  const { newImage, setNewImage, FormErrors, EditModeContainer, register, discard } = useEditMode(onSubmit, data)
+
   useEffect(() => {
     const path: SystemUidName[] = parentData ? [...parentData.path, [parentData.uid, parentData.name]] : []
     path && setData(obj => ({ ...obj, path: path }))
   }, [parentData, setData])
 
-  const { isEditMode, setIsEditMode, newImage, setNewImage, FormErrors, EditModeContainer, register, discard } =
-    useEditMode(onSubmit, data)
+  const isEditMode = true
+  const setIsEditMode = () => {}
 
   if (!data) return <>Loading</>
   return (
