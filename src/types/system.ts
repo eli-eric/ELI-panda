@@ -24,3 +24,12 @@ export type SystemUidName = [System['uid'], System['name']]
 
 export type SystemProps = { data: System }
 export type SystemEditModeProps = { data: System; editMode: any }
+
+export type SystemList = Array<{ name: string; systemType: string; systemCodePath: string; uid: string }>
+
+export type SystemRelationship = {
+  direction: string
+  relationTypeCode: string
+  foreignSystemName: string
+  relationUid: string
+}

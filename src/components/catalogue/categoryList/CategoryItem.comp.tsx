@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import ModalComponent from 'src/components/ui/modal/modal.comp'
 import ModalWarningComponent from 'src/components/ui/modal/warning/modal-warning.comp'
+
 import { categoryMockObject } from '@/types/catalogue/constants'
 import { ENDPOINTS } from '@/types/constants/endpoints'
 import { PATH } from '@/types/constants/paths'

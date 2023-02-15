@@ -1,12 +1,16 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { MouseEventHandler } from 'react'
+import { FormattedMessage } from 'react-intl'
+
+import ButtonLoaderComponent from './button-loader.comp'
 
 interface ButtonProps {
   onClickAction: MouseEventHandler<HTMLButtonElement>
   customClass?: string
   rounded?: 'rounded-l-md' | 'rounded-t-md' | 'rounded-r-md' | 'rounded-b-md' | 'rounded-md'
-
+  loading?: boolean
   text?: string
+  disabled?: boolean
 }
 
 export const TrashIconButton = ({ onClickAction, rounded = 'rounded-r-md', customClass }: ButtonProps) => (
@@ -31,12 +35,23 @@ export const PlusIconButton = ({ onClickAction, rounded = 'rounded-md', customCl
   </button>
 )
 
-export const Button = ({ onClickAction, rounded = 'rounded-md', customClass, text }: ButtonProps) => (
+export const Button = ({
+  onClickAction,
+  rounded = 'rounded-md',
+  customClass,
+  text,
+  loading,
+  disabled
+}: ButtonProps) => (
   <button
     type="button"
+    disabled={loading ? true : disabled}
     onClick={onClickAction}
-    className={`${customClass} relative z-0 inline-flex items-center ${rounded} border border-gray-300 bg-primary-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:w-auto`}
+    className={`${customClass} relative z-0 inline-flex items-center ${rounded} border border-gray-300 ${
+      loading ? 'bg-primary-700' : 'bg-primary-600'
+    } px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:w-auto`}
   >
-    <span>{text}</span>
+    {loading && <ButtonLoaderComponent />}
+    <FormattedMessage id={text} />
   </button>
 )

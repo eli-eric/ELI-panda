@@ -34,7 +34,6 @@ const CategoryEditForm = ({ setopen, defaultValues }: Props) => {
           }
         : { ...data }
     console.log(formattedData)
-    setopen(false)
   }
 
   return (
