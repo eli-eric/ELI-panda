@@ -8,6 +8,7 @@ import {
   useState
 } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
 import LoaderComponent from '@/components/ui/loader.comp'
@@ -15,27 +16,14 @@ import SearchBarComponent from '@/components/ui/SearchBar.comp'
 import TableComponent from '@/components/ui/Table.comp'
 import { useSystemMapRows } from '@/hooks/systems/relations/useMapRows'
 import usePagination from '@/hooks/usePagination'
+import { message } from '@/i18n/src/messages'
 import { ENDPOINTS } from '@/types/constants/endpoints'
 import { SystemsForRelResponse } from '@/types/responses'
 import { RELATION_TYPE_CODE } from '@/types/system/constants'
 
 import EmptyResults from './EmptyResults'
 
-const SearchBar = ({
-  setSearchValue
-}: {
-  setSearchValue: Dispatch<SetStateAction<string | undefined>>
-}) => {
-  const formMethods = useForm()
-  const onSubmit = data => {
-    setSearchValue(data.search)
-  }
-  return (
-    <FormProvider {...formMethods}>
-      <SearchBarComponent onSubmit={onSubmit} />
-    </FormProvider>
-  )
-}
+const messages = message.systemsPage.relations.addRelationModal
 
 const TableWithPaging = ({
   searchValue,
@@ -46,6 +34,7 @@ const TableWithPaging = ({
 }) => {
   const [selectedSystemUid, setSelectedSystemUid] = useState<string>()
   const router = useRouter()
+  const intl = useIntl()
 
   const { pagination, setTotalCount, getPaginationComponent } = usePagination()
 
@@ -65,12 +54,13 @@ const TableWithPaging = ({
     setTotalCount(systems?.totalCount)
   }, [systems, setTotalCount])
 
+  const collumsTitle = Object.keys(messages.tableHeader).map(key =>
+    intl.formatMessage({ id: messages.tableHeader[key] })
+  )
+
   return (
     <Fragment>
-      <TableComponent
-        collumsTitle={['Name', 'System Type', 'System Code Path']}
-        data={data}
-      />
+      <TableComponent collumsTitle={collumsTitle} data={data} />
       {!systems && <EmptyResults />}
       {systems && systems.totalCount === 0 && <EmptyResults />}
       {getPaginationComponent()}
@@ -85,10 +75,16 @@ interface Props {
 
 const AddRelationForm = ({ setopen, relationTypeCode }: Props) => {
   const [searchValue, setSearchValue] = useState<string | undefined>()
+  const formMethods = useForm()
+  const onSubmit = data => {
+    setSearchValue(data.search)
+  }
 
   return (
     <div className="w-full min-h-[650px]">
-      <SearchBar setSearchValue={setSearchValue} />
+      <FormProvider {...formMethods}>
+        <SearchBarComponent onSubmit={onSubmit} />
+      </FormProvider>
       <Suspense
         fallback={
           <div className="max-h-full">

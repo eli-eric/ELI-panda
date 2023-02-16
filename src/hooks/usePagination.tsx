@@ -11,22 +11,21 @@ const usePagination = (): {
   pagination: string
   getPaginationComponent: () => JSX.Element
   setTotalCount: React.Dispatch<React.SetStateAction<number | undefined>>
+  setPageSize: React.Dispatch<React.SetStateAction<number>>
 } => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
   const [totalCount, setTotalCount] = useState<number>()
-
   const previousPageHandler = () => {
     setPage(prev => prev - 1)
   }
   const nextPageHandler = () => {
     setPage(prev => prev + 1)
   }
-
   const pagination = useMemo(() => {
     const pagination = {
-      page: page,
-      pageSize: pageSize
+      page,
+      pageSize
     }
     return JSON.stringify(pagination)
   }, [page, pageSize])
@@ -44,7 +43,8 @@ const usePagination = (): {
   return {
     pagination,
     getPaginationComponent,
-    setTotalCount
+    setTotalCount,
+    setPageSize
   }
 }
 

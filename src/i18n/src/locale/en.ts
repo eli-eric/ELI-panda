@@ -139,6 +139,17 @@ export const messages = {
         type: 'Relation Type Code',
         relationUid: 'Relation UID',
         action: 'Action'
+      },
+      addRelationModal: {
+        tableHeader: {
+          name: 'Name',
+          type: 'System Type',
+          path: 'System Code Path'
+        },
+        buttons: {
+          continue: 'Save',
+          cancel: 'Cancel'
+        }
       }
     }
   },
