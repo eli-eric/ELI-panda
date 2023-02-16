@@ -1,5 +1,6 @@
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
+import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
 import { Button, TrashIconButton } from '@/components/ui/Buttons'
@@ -7,22 +8,27 @@ import DisclosureComponent from '@/components/ui/Disclosure.comp'
 import ModalComponent from '@/components/ui/modal/modal.comp'
 import ModalWarningComponent from '@/components/ui/modal/warning/modal-warning.comp'
 import TableComponent from '@/components/ui/Table.comp'
+import { message } from '@/i18n/src/messages'
 import { ENDPOINTS } from '@/types/constants/endpoints'
 import { ModalButtons } from '@/types/form'
 import { SystemRelationship } from '@/types/system'
 
 import AddRelationForm from './AddRelationForm'
 
+const messages = message.systemsPage.relations
+
 const Relations = ({ uid }: { uid: string }) => {
   const { data: relations } = useSWR<SystemRelationship[]>(ENDPOINTS.systemDetail + '/' + uid + '/relationship')
   const [relationUid, setRelationUid] = useState<string | undefined>()
+
+  const intl = useIntl()
 
   const [openAddRelation, setOpenAddRelation] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
 
   const deleteModalButtons: ModalButtons = {
     goNext: {
-      text: 'continue',
+      text: intl.formatMessage({ id: messages.deleteModal.buttons.continue }),
       onClick: () => {
         setRelationUid(undefined)
         setOpenDelete(false)
@@ -30,7 +36,7 @@ const Relations = ({ uid }: { uid: string }) => {
       }
     },
     goBack: {
-      text: 'cancel',
+      text: intl.formatMessage({ id: messages.deleteModal.buttons.cancel }),
       onClick: () => {
         setRelationUid(undefined)
         setOpenDelete(false)
@@ -53,7 +59,7 @@ const Relations = ({ uid }: { uid: string }) => {
     }
   }
 
-  const collums = ['Direction', 'Foreign System Name', 'Relation Type Code', 'Relation UID', 'Action']
+  const collums = Object.keys(messages.tableHeader).map(key => intl.formatMessage({ id: messages.tableHeader[key] }))
   const data = relations?.map((relation, index) => {
     const rows = Object.entries(relation).map((value, index) => {
       if (value[0] === 'direction') {
@@ -80,14 +86,14 @@ const Relations = ({ uid }: { uid: string }) => {
   })
   return (
     <Fragment>
-      <DisclosureComponent title="Relations">
+      <DisclosureComponent title={intl.formatMessage({ id: messages.title })}>
         <div className="px-4 sm:px-20 lg:px-20">
           <Button
             customClass="mb-2"
             onClickAction={() => {
               setOpenAddRelation(true)
             }}
-            text="Add Spare"
+            text={intl.formatMessage({ id: messages.buttons.newRelation })}
           />
           {relations && <TableComponent collumsTitle={collums} data={data} />}
         </div>
@@ -96,7 +102,10 @@ const Relations = ({ uid }: { uid: string }) => {
         <AddRelationForm setopen={setOpenAddRelation} />
       </ModalComponent>
       <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deleteModalButtons}>
-        <ModalWarningComponent title="Warning" message="Are you sure you want to remove this Relation?" />
+        <ModalWarningComponent
+          title={intl.formatMessage({ id: messages.deleteModal.title })}
+          message={intl.formatMessage({ id: messages.deleteModal.text })}
+        />
       </ModalComponent>
     </Fragment>
   )

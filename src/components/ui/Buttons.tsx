@@ -1,6 +1,5 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { MouseEventHandler } from 'react'
-import { FormattedMessage } from 'react-intl'
 
 import ButtonLoaderComponent from './button-loader.comp'
 
@@ -52,6 +51,6 @@ export const Button = ({
     } px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:w-auto`}
   >
     {loading && <ButtonLoaderComponent />}
-    <FormattedMessage id={text} />
+    <p>{text}</p>
   </button>
 )

@@ -119,6 +119,27 @@ export const messages = {
       obsolete: 'Obsolete',
       createdBy: 'Created By',
       note: 'Note'
+    },
+    relations: {
+      title: 'Relations',
+      buttons: {
+        newRelation: 'Add Spare'
+      },
+      deleteModal: {
+        title: 'Warning',
+        text: 'Are you sure you want to remove this Relation?',
+        buttons: {
+          continue: 'Continue',
+          cancel: 'Cancel'
+        }
+      },
+      tableHeader: {
+        direction: 'Direction',
+        systemName: 'Foreign System Name',
+        type: 'Relation Type Code',
+        relationUid: 'Relation UID',
+        action: 'Action'
+      }
     }
   },
   reportsPage: { head: 'Eli Panda - Reports' },
