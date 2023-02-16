@@ -26,7 +26,7 @@ export default function ViewControl({
               aria-describedby="comments-description"
               name="system"
               type="checkbox"
-              checked={viewControl.system}
+              defaultChecked={viewControl.system}
               onClick={() => setViewControl(viewControl => ({ ...viewControl, system: !viewControl.system }))}
               className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
             />
@@ -45,7 +45,7 @@ export default function ViewControl({
               aria-describedby="candidates-description"
               name="relations"
               type="checkbox"
-              checked={viewControl.relations}
+              defaultChecked={viewControl.relations}
               onClick={() => setViewControl(viewControl => ({ ...viewControl, relations: !viewControl.relations }))}
               className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
             />
