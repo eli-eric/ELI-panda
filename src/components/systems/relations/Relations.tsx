@@ -12,6 +12,7 @@ import { message } from '@/i18n/src/messages'
 import { ENDPOINTS } from '@/types/constants/endpoints'
 import { ModalButtons } from '@/types/form'
 import { SystemRelationshipResponse } from '@/types/responses'
+import { RELATION_TYPE_CODE } from '@/types/system/constants'
 
 import AddRelationForm from './AddRelationForm'
 
@@ -25,6 +26,7 @@ const Relations = ({ uid }: { uid: string }) => {
   const intl = useIntl()
   const [openAddRelation, setOpenAddRelation] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
+  const [relationTypeCode, setRelationTypeCode] = useState<RELATION_TYPE_CODE>()
 
   const deleteModalButtons: ModalButtons = {
     goNext: {
@@ -75,9 +77,10 @@ const Relations = ({ uid }: { uid: string }) => {
           <Button
             customClass="mb-2"
             onClickAction={() => {
+              setRelationTypeCode(RELATION_TYPE_CODE.IS_SPARE_FOR)
               setOpenAddRelation(true)
             }}
-            text={intl.formatMessage({ id: messages.buttons.newRelation })}
+            text={intl.formatMessage({ id: messages.buttons.addSpare })}
           />
           {relations && (
             <TableComponent collumsTitle={collumsTitle} data={data} />
@@ -89,7 +92,10 @@ const Relations = ({ uid }: { uid: string }) => {
         setOpen={setOpenAddRelation}
         buttons={adddRelModalButtons}
       >
-        <AddRelationForm setopen={setOpenAddRelation} />
+        <AddRelationForm
+          setopen={setOpenAddRelation}
+          relationTypeCode={relationTypeCode}
+        />
       </ModalComponent>
       <ModalComponent
         open={openDelete}

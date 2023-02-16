@@ -1,4 +1,12 @@
-import { Dispatch, Fragment, SetStateAction, Suspense, useState } from 'react'
+import { useRouter } from 'next/router'
+import {
+  Dispatch,
+  Fragment,
+  SetStateAction,
+  Suspense,
+  useMemo,
+  useState
+} from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 
@@ -28,8 +36,9 @@ const SearchBar = ({
   )
 }
 
-const TableWithPaging = ({ searchValue }) => {
+const TableWithPaging = ({ searchValue, relationTypeCode }) => {
   const [selectedSystemUid, setSelectedSystemUid] = useState<string>()
+  const router = useRouter()
 
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(10)
@@ -41,10 +50,18 @@ const TableWithPaging = ({ searchValue }) => {
     setPage(prev => prev + 1)
   }
 
+  const pagination = useMemo(() => {
+    const paging = {
+      page: page,
+      pageSize: pageSize
+    }
+    return JSON.stringify(paging)
+  }, [page, pageSize])
+
   const { data: systems } = useSWR<SystemsForRelResponse>(
     searchValue &&
       ENDPOINTS.systemsForRel +
-        `?search=${searchValue}&pageSize=${pageSize}&page=${page}`
+        `?systemFromUid=${router.query.slug}&relationTypeCode${relationTypeCode}&search=${searchValue}&pagination=${pagination}`
   )
   const data = useSystemMapRows({
     systems: systems?.data,
@@ -73,7 +90,7 @@ const TableWithPaging = ({ searchValue }) => {
   )
 }
 
-const AddRelationForm = ({ setopen }) => {
+const AddRelationForm = ({ setopen, relationTypeCode }) => {
   const [searchValue, setSearchValue] = useState<string | undefined>()
 
   return (
@@ -86,7 +103,10 @@ const AddRelationForm = ({ setopen }) => {
           </div>
         }
       >
-        <TableWithPaging searchValue={searchValue} />
+        <TableWithPaging
+          searchValue={searchValue}
+          relationTypeCode={relationTypeCode}
+        />
       </Suspense>
     </div>
   )

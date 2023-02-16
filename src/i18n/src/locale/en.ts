@@ -123,7 +123,7 @@ export const messages = {
     relations: {
       title: 'Relations',
       buttons: {
-        newRelation: 'Add Spare'
+        addSpare: 'Add Spare'
       },
       deleteModal: {
         title: 'Warning',
