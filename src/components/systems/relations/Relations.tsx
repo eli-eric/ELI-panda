@@ -1,13 +1,13 @@
-import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
-import { Button, TrashIconButton } from '@/components/ui/Buttons'
+import { Button } from '@/components/ui/Buttons'
 import DisclosureComponent from '@/components/ui/Disclosure.comp'
 import ModalComponent from '@/components/ui/modal/modal.comp'
 import ModalWarningComponent from '@/components/ui/modal/warning/modal-warning.comp'
 import TableComponent from '@/components/ui/Table.comp'
+import { useRelationMapRows } from '@/hooks/systems/relations/useMapRows'
 import { message } from '@/i18n/src/messages'
 import { ENDPOINTS } from '@/types/constants/endpoints'
 import { ModalButtons } from '@/types/form'
@@ -20,9 +20,7 @@ const messages = message.systemsPage.relations
 const Relations = ({ uid }: { uid: string }) => {
   const { data: relations } = useSWR<SystemRelationship[]>(ENDPOINTS.systemDetail + '/' + uid + '/relationship')
   const [relationUid, setRelationUid] = useState<string | undefined>()
-
   const intl = useIntl()
-
   const [openAddRelation, setOpenAddRelation] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
 
@@ -58,32 +56,16 @@ const Relations = ({ uid }: { uid: string }) => {
       }
     }
   }
+  const collumsTitle = Object.keys(messages.tableHeader).map(key =>
+    intl.formatMessage({ id: messages.tableHeader[key] })
+  )
 
-  const collums = Object.keys(messages.tableHeader).map(key => intl.formatMessage({ id: messages.tableHeader[key] }))
-  const data = relations?.map((relation, index) => {
-    const rows = Object.entries(relation).map((value, index) => {
-      if (value[0] === 'direction') {
-        return (
-          <div key={index}>
-            {value[1] === 'to' && <ArrowLongLeftIcon className="w-10 h-10" />}
-            {value[1] === 'from' && <ArrowLongRightIcon className="w-10 h-10" />}
-          </div>
-        )
-      }
-      return <p key={index}>{value[1]}</p>
-    })
-    return [
-      ...rows,
-      <TrashIconButton
-        key={index + '1'}
-        onClickAction={() => {
-          setOpenDelete(true)
-          setRelationUid(relation.relationUid)
-        }}
-        rounded="rounded-md"
-      />
-    ]
-  })
+  const deleteHandler = uid => {
+    setOpenDelete(true)
+    setRelationUid(uid)
+  }
+  const data = useRelationMapRows({ relations, onDelete: deleteHandler })
+
   return (
     <Fragment>
       <DisclosureComponent title={intl.formatMessage({ id: messages.title })}>
@@ -95,7 +77,7 @@ const Relations = ({ uid }: { uid: string }) => {
             }}
             text={intl.formatMessage({ id: messages.buttons.newRelation })}
           />
-          {relations && <TableComponent collumsTitle={collums} data={data} />}
+          {relations && <TableComponent collumsTitle={collumsTitle} data={data} />}
         </div>
       </DisclosureComponent>
       <ModalComponent open={openAddRelation} setOpen={setOpenAddRelation} buttons={adddRelModalButtons}>
