@@ -47,7 +47,7 @@ const TableWithPaging = ({ searchValue }) => {
         `?search=${searchValue}&pageSize=${pageSize}&page=${page}`
   )
   const data = useSystemMapRows({
-    systems: systems?.systems,
+    systems: systems?.data,
     setSelectedSystemUid,
     selectedSystemUid
   })
@@ -61,13 +61,13 @@ const TableWithPaging = ({ searchValue }) => {
         data={data}
       />
       {!systems && <EmptyResults />}
-      {systems && systems.count === 0 && <EmptyResults />}
+      {systems && systems.totalCount === 0 && <EmptyResults />}
       <ItemsPaginationComponent
         page={page}
         pageSize={pageSize}
         previousPageHandler={previousPageHandler}
         nextPageHandler={nextPageHandler}
-        itemsTotalCount={systems?.count}
+        itemsTotalCount={systems?.totalCount}
       />
     </Fragment>
   )

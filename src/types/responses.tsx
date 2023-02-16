@@ -93,8 +93,8 @@ export interface SystemDetailInfo {
 }
 
 export type SystemsForRelResponse = {
-  systems: SystemForRel[]
-  count: number
+  data: SystemForRel[]
+  totalCount: number
 }
 
 export type SystemRelationshipResponse = {

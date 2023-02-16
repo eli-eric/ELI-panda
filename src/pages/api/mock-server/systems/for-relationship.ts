@@ -20,7 +20,7 @@ export default function handler(
       return res.map(() => getFakeSystem())
     }
     const systems = fetchFakeSystems()
-    res.status(200).json({ systems, count: systems.length })
+    res.status(200).json({ data: systems, totalCount: systems.length })
   } else {
     res.status(401).json({ message: 'Unauthorized' })
   }
