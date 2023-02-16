@@ -1,17 +1,46 @@
-import Link from '@/components/systems/Link'
+import { useRouter } from 'next/router'
+import { Suspense } from 'react'
+import { fetchFakeSystems } from 'src/pages/tree/[slug]'
+import useSWR from 'swr'
 
-const Subsystems = ({ data }) => (
-  <ul>
-    {data.children.length === 0 ? (
-      <li>This node does not contain any subsystems.</li>
-    ) : (
-      data.children.map(([uid, name]) => (
-        <li key={uid}>
-          <Link href={`/tree/${uid}`}>{name}</Link>
-        </li>
-      ))
-    )}
-  </ul>
-)
+import Card, { Heading } from '@/components/ui/card/card.comp'
+import { System } from '@/types/system'
+
+import LoaderComponent from '../ui/loader.comp'
+
+const List = ({ ids }) => {
+  const { data } = useSWR(ids, fetchFakeSystems)
+  return (
+    <>
+      {data && data.length > 0 ? (
+        data.map((system: System) => (
+          <a
+            key={system.uid}
+            href={`/tree/${system.uid}`}
+            className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md"
+          >
+            <span className="truncate">{system.name}</span>
+          </a>
+        ))
+      ) : (
+        <span className="truncate">This node has no subsystems.</span>
+      )}
+    </>
+  )
+}
+
+function Subsystems({ data: ids }) {
+  const router = useRouter()
+  return (
+    <nav aria-label="Subsystems">
+      <Card>
+        <Heading heading="Subsystems" action={{ label: 'Add Subsystem', href: router.asPath + '/new' }} />
+        <Suspense fallback={<LoaderComponent />}>
+          <List ids={ids} />
+        </Suspense>
+      </Card>
+    </nav>
+  )
+}
 
 export default Subsystems

@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker'
-import { PlusIcon } from '@heroicons/react/24/outline'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -63,7 +62,7 @@ export const fetchFakeSystem = async () => {
   return getFakeSystem()
 }
 export const fetchFakeSystems = async () => {
-  const res = [...Array(faker.datatype.number({ min: 0, max: 100 }))]
+  const res = [...Array(faker.datatype.number({ min: 0, max: 10 }))]
   await sleep(faker.datatype.number({ min: 200, max: 2000 }))
   return res.map(() => getFakeSystem())
 }
@@ -128,26 +127,8 @@ const Page: NextPage = () => {
               </details>
             ))}
 
-          <aside className="p-1 lg:p-2 w-full lg:w-1/4">
-            <nav>
-              <div className="hidden lg:block">
-                <b>Subsystems</b>
-                <Subsystems data={data} />
-                <button onClick={() => router.push('/tree/' + uid + '/new')}>
-                  <PlusIcon className="h-6 hover:text-orange-600" />
-                </button>
-              </div>
-
-              <details className="lg:hidden max-h-[50vh] overflow-auto">
-                <summary>
-                  <b>Subsystems</b>
-                </summary>
-                <Subsystems data={data} />
-                <button onClick={() => router.push('/tree/' + uid + '/new')}>
-                  <PlusIcon className="h-6 hover:text-orange-600" />
-                </button>
-              </details>
-            </nav>
+          <aside className="w-full lg:w-1/4">
+            <Subsystems data={data.children} />
           </aside>
 
           <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
