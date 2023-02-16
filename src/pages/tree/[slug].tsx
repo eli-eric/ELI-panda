@@ -13,13 +13,14 @@ import Card from '@/components/systems/Card'
 import Description from '@/components/systems/Description'
 import Preview from '@/components/systems/Preview'
 import Relations from '@/components/systems/relations/Relations'
+import { Prompt, Results } from '@/components/systems/Search'
 import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
 import ViewControl from '@/components/systems/ViewControl'
 import DisclosureComponent from '@/components/ui/Disclosure.comp'
 import ProgressBarComponent from '@/components/ui/progress-bar.comp'
 import useEditMode from '@/hooks/systems/useEditMode'
-import useSearch from '@/hooks/systems/useSearch'
+import useParam from '@/hooks/useParam'
 import { System, SystemUidName } from '@/types/system'
 
 const getFakeName = () => faker.company.catchPhrase()
@@ -74,9 +75,9 @@ const onSubmit = (data: System) => {
 const Page: NextPage = () => {
   const router = useRouter()
   const uid = router.query.slug
+  const [query, setQuery] = useParam('q')
 
   const [viewControl, setViewControl] = useState({ system: true, relations: true })
-  const { Prompt, Results, hasResults } = useSearch('/tree/')
 
   const { data } = useSWR(uid, fetchFakeSystem)
 
@@ -112,19 +113,14 @@ const Page: NextPage = () => {
               register={register}
             />
 
-            {isEditMode || <Prompt />}
+            {isEditMode || <Prompt query={query} setQuery={setQuery} />}
           </div>
 
           {isEditMode ||
-            (hasResults && (
-              <details open className="max-h-[40vh] w-full overflow-auto">
-                <summary>
-                  <b>Results</b>
-                </summary>
-                <Suspense>
-                  <Results />
-                </Suspense>
-              </details>
+            (query && (
+              <div className="w-full">
+                <Results query={query} />
+              </div>
             ))}
 
           <aside className="w-full lg:w-1/4">

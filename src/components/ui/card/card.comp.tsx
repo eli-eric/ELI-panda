@@ -9,7 +9,7 @@ const Card = ({ children }: Props) => {
 export default Card
 
 interface HeadingProps {
-  heading: string
+  text: string
   action?: {
     label: string
     href: string
@@ -17,7 +17,7 @@ interface HeadingProps {
 }
 
 export const Heading = (props: HeadingProps) => {
-  const { heading, action } = props
+  const { text: heading, action } = props
   const { label, href } = action ?? {}
   return (
     <div className="border-b border-gray-200 bg-white px-2 py-2 sm:px-3">
