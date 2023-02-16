@@ -11,6 +11,7 @@ import ErrorPage from '@/components/error/ErrorPage'
 import Breadcrumbs from '@/components/systems/Breadcrumbs'
 import Card from '@/components/systems/Card'
 import Description from '@/components/systems/Description'
+import FormButtons from '@/components/systems/FormButtons'
 import Preview from '@/components/systems/Preview'
 import Relations from '@/components/systems/relations/Relations'
 import { Prompt, Results } from '@/components/systems/Search'
@@ -94,26 +95,19 @@ const Page: NextPage = () => {
 
       <EditModeContainer>
         <div className="p-2 lg:p-4 flex flex-wrap">
-          <nav className="p-1 lg:p2 w-full">
+          <nav className="p-1 lg:p-3 w-full">
             <Breadcrumbs data={data} />
           </nav>
 
-          {isEditMode && (
-            <div className="w-full">
-              <FormErrors />
-            </div>
-          )}
+          <div className="w-full">
+            <FormErrors />
+          </div>
 
-          <div className="flex w-full justify-between">
-            <Title
-              data={data}
-              discard={discard}
-              setIsEditMode={setIsEditMode}
-              isEditMode={isEditMode}
-              register={register}
-            />
+          <div className="lg:px-3 flex flex-wrap w-full justify-between gap-4">
+            <Title data={data} isEditMode={isEditMode} register={register} />
 
             {isEditMode || <Prompt query={query} setQuery={setQuery} />}
+            <FormButtons isEditMode={isEditMode} setIsEditMode={setIsEditMode} discard={discard} />
           </div>
 
           {isEditMode ||

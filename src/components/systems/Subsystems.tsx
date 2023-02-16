@@ -1,7 +1,8 @@
+import { PlusIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { Suspense } from 'react'
 import { fetchFakeSystems } from 'src/pages/tree/[slug]'
-import useSWR from 'swr'
+import useSWR from 'swr/immutable'
 
 import Card, { Heading } from '@/components/ui/card/card.comp'
 import { System } from '@/types/system'
@@ -40,7 +41,10 @@ function Subsystems({ data: ids }) {
   return (
     <nav aria-label="Subsystems">
       <Card>
-        <Heading text="Subsystems" action={{ label: 'Add Subsystem', href: router.asPath + '/new' }} />
+        <Heading
+          text="Subsystems"
+          action={{ label: <PlusIcon className="h-5" />, href: router.asPath.split('?')[0] + '/new' }}
+        />
         <Suspense fallback={<ProgressBarComponent />}>
           <List ids={ids} />
         </Suspense>

@@ -50,6 +50,7 @@ export const Prompt = (props: { query: string; setQuery: (arg1: string) => void 
 
   return (
     <form
+      className="grow"
       onSubmit={e => {
         e.preventDefault()
         const value = e.target['prompt'].value
@@ -59,13 +60,14 @@ export const Prompt = (props: { query: string; setQuery: (arg1: string) => void 
       <input
         ref={ref}
         name="prompt"
+        className="w-full h-full px-2 rounded-md border border-gray-300 "
         onChange={e => {
           if (e.target.value === '') {
             setQuery('')
           }
         }}
         defaultValue={query}
-        placeholder="Search current system"
+        placeholder="Type here to search this system"
       />
     </form>
   )

@@ -11,7 +11,7 @@ export default Card
 interface HeadingProps {
   text: string
   action?: {
-    label: string
+    label: any
     href: string
   }
 }
@@ -29,7 +29,7 @@ export const Heading = (props: HeadingProps) => {
           <div className="ml-2 mt-1 flex-shrink-0">
             <a
               href={href}
-              className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-2 py-1 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="hover:text-orange-600 relative z-0 inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-1 text-sm font-medium text-gray-400 hover:bg-gray-50 focus:z-10 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
             >
               <span className="truncate">{label}</span>
             </a>
