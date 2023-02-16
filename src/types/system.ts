@@ -1,8 +1,8 @@
 export type System = {
   uid: string
   name: string
-  children: SystemUidName[]
-  path: SystemUidName[]
+  children: string[]
+  path: string[]
   description: string
   systemCode: string
   systemAlias: string
@@ -19,8 +19,6 @@ export type System = {
   serialNumber?: string
   batchNumber?: string
 }
-
-export type SystemUidName = [System['uid'], System['name']]
 
 export type SystemProps = { data: System }
 export type SystemEditModeProps = { data: System; editMode: any }
