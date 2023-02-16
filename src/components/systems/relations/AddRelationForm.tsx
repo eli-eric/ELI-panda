@@ -17,6 +17,7 @@ import TableComponent from '@/components/ui/Table.comp'
 import { useSystemMapRows } from '@/hooks/systems/relations/useMapRows'
 import { ENDPOINTS } from '@/types/constants/endpoints'
 import { SystemsForRelResponse } from '@/types/responses'
+import { RELATION_TYPE_CODE } from '@/types/system/constants'
 
 import EmptyResults from './EmptyResults'
 
@@ -36,7 +37,13 @@ const SearchBar = ({
   )
 }
 
-const TableWithPaging = ({ searchValue, relationTypeCode }) => {
+const TableWithPaging = ({
+  searchValue,
+  relationTypeCode
+}: {
+  searchValue?: string
+  relationTypeCode?: RELATION_TYPE_CODE
+}) => {
   const [selectedSystemUid, setSelectedSystemUid] = useState<string>()
   const router = useRouter()
 
@@ -61,7 +68,7 @@ const TableWithPaging = ({ searchValue, relationTypeCode }) => {
   const { data: systems } = useSWR<SystemsForRelResponse>(
     searchValue &&
       ENDPOINTS.systemsForRel +
-        `?systemFromUid=${router.query.slug}&relationTypeCode${relationTypeCode}&search=${searchValue}&pagination=${pagination}`
+        `?systemFromUid=${router.query.slug}&relationTypeCode=${relationTypeCode}&search=${searchValue}&pagination=${pagination}`
   )
   const data = useSystemMapRows({
     systems: systems?.data,
@@ -90,7 +97,12 @@ const TableWithPaging = ({ searchValue, relationTypeCode }) => {
   )
 }
 
-const AddRelationForm = ({ setopen, relationTypeCode }) => {
+interface Props {
+  setopen: Dispatch<SetStateAction<boolean>>
+  relationTypeCode?: RELATION_TYPE_CODE
+}
+
+const AddRelationForm = ({ setopen, relationTypeCode }: Props) => {
   const [searchValue, setSearchValue] = useState<string | undefined>()
 
   return (
