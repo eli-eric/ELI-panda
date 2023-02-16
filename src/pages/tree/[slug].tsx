@@ -22,11 +22,11 @@ import DisclosureComponent from '@/components/ui/Disclosure.comp'
 import ProgressBarComponent from '@/components/ui/progress-bar.comp'
 import useEditMode from '@/hooks/systems/useEditMode'
 import useParam from '@/hooks/useParam'
-import { System, SystemUidName } from '@/types/system'
+import { System } from '@/types/system'
 
 const getFakeName = () => faker.company.catchPhrase()
 
-const getFakePath = (): SystemUidName[] => {
+const getFakePath = (): string[] => {
   const length = faker.datatype.number({ min: 0, max: 10 })
   return [...Array(length)].map(() => [faker.datatype.uuid(), getFakeName()])
 }
@@ -64,7 +64,7 @@ export const fetchFakeSystem = async () => {
   return getFakeSystem()
 }
 export const fetchFakeSystems = async () => {
-  const res = [...Array(faker.datatype.number({ min: 0, max: 10 }))]
+  const res = [...Array(faker.datatype.number({ min: 0, max: 20 }))]
   await sleep(faker.datatype.number({ min: 200, max: 2000 }))
   return res.map(() => getFakeSystem())
 }
@@ -95,8 +95,10 @@ const Page: NextPage = () => {
 
       <EditModeContainer>
         <div className="p-2 lg:p-4 flex flex-wrap">
-          <nav className="p-1 lg:p-3 w-full">
-            <Breadcrumbs data={data} />
+          <nav className="p-1 lg:p-2 w-full">
+            <Suspense fallback={<ProgressBarComponent />}>
+              <Breadcrumbs path={data.path} />
+            </Suspense>
           </nav>
 
           <div className="w-full">
