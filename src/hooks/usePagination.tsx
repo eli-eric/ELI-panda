@@ -8,8 +8,7 @@ export type Pagination = {
 }
 
 const usePagination = (): {
-  paginationStringyfy: string
-  pagination: Pagination
+  pagination: string
   getPaginationComponent: () => JSX.Element
   setTotalCount: React.Dispatch<React.SetStateAction<number | undefined>>
 } => {
@@ -29,7 +28,7 @@ const usePagination = (): {
       page: page,
       pageSize: pageSize
     }
-    return { paginationStringyfy: JSON.stringify(pagination), pagination }
+    return JSON.stringify(pagination)
   }, [page, pageSize])
 
   const getPaginationComponent = () => (
@@ -43,8 +42,7 @@ const usePagination = (): {
   )
 
   return {
-    paginationStringyfy: pagination.paginationStringyfy,
-    pagination: pagination.pagination,
+    pagination,
     getPaginationComponent,
     setTotalCount
   }

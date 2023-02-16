@@ -47,13 +47,12 @@ const TableWithPaging = ({
   const [selectedSystemUid, setSelectedSystemUid] = useState<string>()
   const router = useRouter()
 
-  const { paginationStringyfy, setTotalCount, getPaginationComponent } =
-    usePagination()
+  const { pagination, setTotalCount, getPaginationComponent } = usePagination()
 
   const { data: systems } = useSWR<SystemsForRelResponse>(
     searchValue &&
       ENDPOINTS.systemsForRel +
-        `?systemFromUid=${router.query.slug}&relationTypeCode=${relationTypeCode}&search=${searchValue}&pagination=${paginationStringyfy}`
+        `?systemFromUid=${router.query.slug}&relationTypeCode=${relationTypeCode}&search=${searchValue}&pagination=${pagination}`
   )
 
   const data = useSystemMapRows({
