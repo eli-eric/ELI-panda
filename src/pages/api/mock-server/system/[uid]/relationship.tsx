@@ -23,7 +23,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
       }
     }
     const fetchFakeRelations = () => {
-      const res = [...Array(faker.datatype.number({ min: 1, max: 10 }))]
+      const res = [...Array(faker.datatype.number({ min: 10, max: 10 }))]
 
       return res.map(() => getFakeRelation())
     }

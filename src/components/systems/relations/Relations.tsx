@@ -92,7 +92,7 @@ const Relations = ({ uid }: { uid: string }) => {
           {relations && <TableComponent collumsTitle={collums} data={data} />}
         </div>
       </DisclosureComponent>
-      <ModalComponent open={openAddRelation} setOpen={setOpenAddRelation} buttons={{ noButtons: true }}>
+      <ModalComponent open={openAddRelation} setOpen={setOpenAddRelation} buttons={adddRelModalButtons}>
         <AddRelationForm setopen={setOpenAddRelation} />
       </ModalComponent>
       <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deleteModalButtons}>

@@ -1,13 +1,12 @@
 import Image from 'next/image'
-import { Dispatch, Fragment, SetStateAction, useMemo, useState } from 'react'
+import { Dispatch, Fragment, SetStateAction, Suspense, useMemo, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 
 import ItemsPaginationComponent from '@/components/catalogue/catalogueItems/paging/items-pagination.comp'
-import ProgressBarComponent from '@/components/ui/progress-bar.comp'
+import LoaderComponent from '@/components/ui/loader.comp'
 import SearchBarComponent from '@/components/ui/SearchBar.comp'
 import TableComponent from '@/components/ui/Table.comp'
-import { fetcher } from '@/features/fetcher'
 import { ENDPOINTS } from '@/types/constants/endpoints'
 import { SystemList } from '@/types/system'
 
@@ -23,29 +22,32 @@ const SearchBar = ({ setSearchValue }: { setSearchValue: Dispatch<SetStateAction
   )
 }
 
-const Name = ({ uid, name, selectSystemUid, selelectedSystem }) => {
-  const image = 'https://source.unsplash.com/collection/71371194/500x500'
-  return (
-    <div
-      className={`flex items-center cursor-pointer ${uid === selelectedSystem ? 'text-primary-600' : ''}`}
-      onClick={() => {
-        selectSystemUid(uid)
-      }}
+const EmptyResults = () => (
+  <div className="text-center py-40">
+    <svg
+      className="mx-auto h-12 w-12 text-gray-400"
+      stroke="currentColor"
+      fill="none"
+      viewBox="0 0 48 48"
+      aria-hidden="true"
     >
-      <div className="h-10 w-10 flex-shrink-0">
-        <Image className="h-10 w-10 rounded-full" alt={name} src={image} width={200} height={200} />
-      </div>
-      <div className="ml-4">{name}</div>
-    </div>
-  )
-}
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M8 14v20c0 4.418 7.163 8 16 8 1.381 0 2.721-.087 4-.252M8 14c0 4.418 7.163 8 16 8s16-3.582 16-8M8 14c0-4.418 7.163-8 16-8s16 3.582 16 8m0 0v14m0-4c0 4.418-7.163 8-16 8S8 28.418 8 24m32 10v6m0 0v6m0-6h6m-6 0h-6"
+      />
+    </svg>
+    <h3 className="mt-2 text-sm font-medium text-gray-900">No results</h3>
+    <p className="mt-1 text-sm text-gray-500">Get started by search Systems.</p>
+  </div>
+)
 
-const AddRelationForm = ({ setopen }) => {
-  const [searchValue, setSearchValue] = useState<string | undefined>()
+const TableWithPaging = ({ searchValue }) => {
   const [selectedSystemUid, setSelectedSystemUid] = useState<string>()
 
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(20)
+  const [pageSize, setPageSize] = useState<number>(10)
 
   const previousPageHandler = () => {
     setPage(prev => prev - 1)
@@ -53,12 +55,11 @@ const AddRelationForm = ({ setopen }) => {
   const nextPageHandler = () => {
     setPage(prev => prev + 1)
   }
-  const path = ENDPOINTS.systems + `?search=${searchValue}&pageSize=${pageSize}&page=${page}`
 
-  const { data: systems } = useSWR<SystemList>(searchValue ? path : null, fetcher, { suspense: false })
-  const isLoading = searchValue && !systems
+  const { data: systems } = useSWR<SystemList>(
+    searchValue && ENDPOINTS.systems + `?search=${searchValue}&pageSize=${pageSize}&page=${page}`
+  )
 
-  const collums = ['Name', 'System Type', 'System Code Path']
   const data = useMemo(() => {
     const data = systems?.map(system => {
       const row = Object.entries(system).filter(
@@ -85,38 +86,52 @@ const AddRelationForm = ({ setopen }) => {
   }, [systems, selectedSystemUid])
 
   return (
-    <div className="w-full">
-      <SearchBar setSearchValue={setSearchValue} />
-      {data && systems && (
-        <Fragment>
-          <TableComponent collumsTitle={collums} data={data} />
-          <ItemsPaginationComponent
-            page={1}
-            pageSize={10}
-            previousPageHandler={previousPageHandler}
-            nextPageHandler={nextPageHandler}
-            itemsTotalCount={systems.length}
-          />
-        </Fragment>
-      )}
-      {isLoading && <ProgressBarComponent />}
+    <Fragment>
+      <TableComponent collumsTitle={['Name', 'System Type', 'System Code Path']} data={data} />
+      {!systems && <EmptyResults />}
+      <ItemsPaginationComponent
+        page={page}
+        pageSize={pageSize}
+        previousPageHandler={previousPageHandler}
+        nextPageHandler={nextPageHandler}
+        itemsTotalCount={systems?.length}
+      />
+    </Fragment>
+  )
+}
 
-      <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-        <button
-          data-testid={'-modal-button-go-next'}
-          type="button"
-          className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm"
-        >
-          Save
-        </button>
-        <button
-          data-testid="modal-button-go-back"
-          type="button"
-          className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
-        >
-          Cancel
-        </button>
+const Name = ({ uid, name, selectSystemUid, selelectedSystem }) => {
+  const image = 'https://source.unsplash.com/collection/71371194/500x500'
+  return (
+    <div
+      className={`flex items-center cursor-pointer ${uid === selelectedSystem ? 'text-primary-600' : ''}`}
+      onClick={() => {
+        selectSystemUid(uid)
+      }}
+    >
+      <div className="h-10 w-10 flex-shrink-0">
+        <Image className="h-10 w-10 rounded-full" alt={name} src={image} width={200} height={200} />
       </div>
+      <div className="ml-4">{name}</div>
+    </div>
+  )
+}
+
+const AddRelationForm = ({ setopen }) => {
+  const [searchValue, setSearchValue] = useState<string | undefined>()
+
+  return (
+    <div className="w-full min-h-[800px]">
+      <SearchBar setSearchValue={setSearchValue} />
+      <Suspense
+        fallback={
+          <div className="max-h-full">
+            <LoaderComponent />
+          </div>
+        }
+      >
+        <TableWithPaging searchValue={searchValue} />
+      </Suspense>
     </div>
   )
 }
