@@ -1,3 +1,5 @@
+import { SystemForRel } from './system'
+
 export interface CatalogueCategoryResponse {
   uid: string
   name: string
@@ -88,4 +90,16 @@ export interface SystemDetailInfo {
   systemInfo: SystemInfo
   itemInfo?: ItemInfo
   catalogueInfo?: CatalogueItem
+}
+
+export type SystemsForRelResponse = {
+  systems: SystemForRel[]
+  count: number
+}
+
+export type SystemRelationshipResponse = {
+  direction: string
+  relationTypeCode: string
+  foreignSystemName: string
+  relationUid: string
 }

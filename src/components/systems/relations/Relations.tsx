@@ -11,14 +11,16 @@ import { useRelationMapRows } from '@/hooks/systems/relations/useMapRows'
 import { message } from '@/i18n/src/messages'
 import { ENDPOINTS } from '@/types/constants/endpoints'
 import { ModalButtons } from '@/types/form'
-import { SystemRelationship } from '@/types/system'
+import { SystemRelationshipResponse } from '@/types/responses'
 
 import AddRelationForm from './AddRelationForm'
 
 const messages = message.systemsPage.relations
 
 const Relations = ({ uid }: { uid: string }) => {
-  const { data: relations } = useSWR<SystemRelationship[]>(ENDPOINTS.systemDetail + '/' + uid + '/relationship')
+  const { data: relations } = useSWR<SystemRelationshipResponse[]>(
+    ENDPOINTS.systemDetail + '/' + uid + '/relationship'
+  )
   const [relationUid, setRelationUid] = useState<string | undefined>()
   const intl = useIntl()
   const [openAddRelation, setOpenAddRelation] = useState(false)
@@ -69,7 +71,7 @@ const Relations = ({ uid }: { uid: string }) => {
   return (
     <Fragment>
       <DisclosureComponent title={intl.formatMessage({ id: messages.title })}>
-        <div className="px-4 sm:px-20 lg:px-20">
+        <div className="px-4 sm:px-10 lg:px-4 py-4">
           <Button
             customClass="mb-2"
             onClickAction={() => {
@@ -77,13 +79,23 @@ const Relations = ({ uid }: { uid: string }) => {
             }}
             text={intl.formatMessage({ id: messages.buttons.newRelation })}
           />
-          {relations && <TableComponent collumsTitle={collumsTitle} data={data} />}
+          {relations && (
+            <TableComponent collumsTitle={collumsTitle} data={data} />
+          )}
         </div>
       </DisclosureComponent>
-      <ModalComponent open={openAddRelation} setOpen={setOpenAddRelation} buttons={adddRelModalButtons}>
+      <ModalComponent
+        open={openAddRelation}
+        setOpen={setOpenAddRelation}
+        buttons={adddRelModalButtons}
+      >
         <AddRelationForm setopen={setOpenAddRelation} />
       </ModalComponent>
-      <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deleteModalButtons}>
+      <ModalComponent
+        open={openDelete}
+        setOpen={setOpenDelete}
+        buttons={deleteModalButtons}
+      >
         <ModalWarningComponent
           title={intl.formatMessage({ id: messages.deleteModal.title })}
           message={intl.formatMessage({ id: messages.deleteModal.text })}

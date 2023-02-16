@@ -6,7 +6,8 @@ export const ENDPOINTS = {
   catalogueItem: BASE_URL + '/catalogue/item',
   systemDetail: BASE_URL + '/system',
   systemTree: BASE_URL + '/systems/tree',
-  systems: BASE_URL + '/systems'
+  systems: BASE_URL + '/systems',
+  systemsForRel: BASE_URL + '/systems/for-relationship'
 }
 
 export enum AxiosMethodType {

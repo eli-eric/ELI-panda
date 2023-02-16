@@ -2,7 +2,10 @@
 import { faker } from '@faker-js/faker'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+export default function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<any>
+) {
   if (req.headers.authorization) {
     const getDirection = () => {
       var textArray = ['from', 'to']
@@ -23,7 +26,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
       }
     }
     const fetchFakeRelations = () => {
-      const res = [...Array(faker.datatype.number({ min: 10, max: 10 }))]
+      const res = [...Array(faker.datatype.number({ min: 0, max: 5 }))]
 
       return res.map(() => getFakeRelation())
     }
