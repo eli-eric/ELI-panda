@@ -40,15 +40,20 @@ const SelectRelation = ({
     }),
     [router, systemName]
   )
-  const [systemToOption, setSystemToOption] = useState<Option>({ value: undefined, name: undefined })
-
-  const selectedSystemOption = useMemo(
-    () => ({
+  const selectedSystemOption = useMemo(() => {
+    if (!selectedSystem) {
+      return {
+        name: undefined,
+        value: undefined
+      }
+    }
+    return {
       name: selectedSystem?.name,
       value: selectedSystem?.uid
-    }),
-    [selectedSystem]
-  )
+    }
+  }, [selectedSystem])
+  const [systemToOption, setSystemToOption] = useState<Option>(selectedSystemOption)
+
   const watchSystemFromUid = watch('systemFromUid')
 
   useEffect(() => {
@@ -58,12 +63,15 @@ const SelectRelation = ({
     if (watchSystemFromUid === selectedSystemOption.value) {
       setSystemToOption(baseSystemOption)
     }
-  }, [watchSystemFromUid, baseSystemOption, selectedSystemOption])
+    if (!selectedSystem) {
+      setSystemToOption(selectedSystemOption)
+    }
+  }, [watchSystemFromUid, baseSystemOption, selectedSystemOption, selectedSystem])
 
   return (
     <div className="flex flex-row">
       <SelectWithError
-        options={[baseSystemOption, selectedSystemOption]}
+        options={selectedSystem ? [baseSystemOption, selectedSystemOption] : [baseSystemOption]}
         register={register}
         name={'systemFromUid'}
         isError={true}

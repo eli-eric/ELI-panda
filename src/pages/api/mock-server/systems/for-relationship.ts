@@ -2,10 +2,7 @@
 import { faker } from '@faker-js/faker'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<any>
-) {
+export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
     const getFakeSystem = () => {
       return {
@@ -20,7 +17,7 @@ export default function handler(
       return res.map(() => getFakeSystem())
     }
     const systems = fetchFakeSystems()
-    res.status(200).json({ data: systems, totalCount: systems.length })
+    res.status(200).json({ data: systems, totalCount: Math.floor(Math.random() * 200) })
   } else {
     res.status(401).json({ message: 'Unauthorized' })
   }
