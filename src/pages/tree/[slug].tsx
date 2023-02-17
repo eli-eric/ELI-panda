@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker'
+import { PlusIcon } from '@heroicons/react/20/solid'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -18,7 +19,9 @@ import { Prompt, Results } from '@/components/systems/Search'
 import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
 import ViewControl from '@/components/systems/ViewControl'
+import { Heading } from '@/components/ui/card/card.comp'
 import DisclosureComponent from '@/components/ui/Disclosure.comp'
+import LoaderComponent from '@/components/ui/loader.comp'
 import ProgressBarComponent from '@/components/ui/progress-bar.comp'
 import useEditMode from '@/hooks/systems/useEditMode'
 import useParam from '@/hooks/useParam'
@@ -65,7 +68,7 @@ export const fetchFakeSystem = async () => {
 }
 export const fetchFakeSystems = async () => {
   const res = [...Array(faker.datatype.number({ min: 0, max: 20 }))]
-  await sleep(faker.datatype.number({ min: 200, max: 2000 }))
+  await sleep(faker.datatype.number({ min: 1000, max: 10000 }))
   return res.map(() => getFakeSystem())
 }
 
@@ -85,7 +88,7 @@ const Page: NextPage = () => {
   const { isEditMode, setIsEditMode, newImage, setNewImage, FormErrors, EditModeContainer, register, discard } =
     useEditMode(onSubmit, data)
 
-  if (!data) return <>Loading</>
+  if (!data) return <LoaderComponent />
 
   return (
     <>
@@ -96,7 +99,13 @@ const Page: NextPage = () => {
       <EditModeContainer>
         <div className="p-2 lg:p-4 flex flex-wrap">
           <nav className="p-1 lg:p-2 w-full">
-            <Suspense fallback={<ProgressBarComponent />}>
+            <Suspense
+              fallback={
+                <div className="py-3">
+                  <ProgressBarComponent />
+                </div>
+              }
+            >
               <Breadcrumbs path={data.path} />
             </Suspense>
           </nav>
@@ -120,7 +129,17 @@ const Page: NextPage = () => {
             ))}
 
           <aside className="w-full lg:w-1/4">
-            <Subsystems data={data.children} />
+            <Card>
+              <Heading
+                text="Subsystems"
+                action={{ label: <PlusIcon className="h-5" />, href: router.asPath.split('?')[0] + '/new' }}
+              />
+              <Suspense fallback={<ProgressBarComponent />}>
+                <nav className="py-3" aria-label="Subsystems">
+                  <Subsystems ids={data.children} />
+                </nav>
+              </Suspense>
+            </Card>
           </aside>
 
           <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
@@ -133,12 +152,14 @@ const Page: NextPage = () => {
                       <b>Preview</b>
                       <Preview data={data} isEditMode={isEditMode} newImage={newImage} setNewImage={setNewImage} />
                     </section>
+
                     <section>
                       <b>Details</b>
                       <Card>
                         <SystemDetailSectionComponent systemInfo={data} />
                       </Card>
                     </section>
+
                     <section className="basis-full">
                       <b>Description</b>
                       <Description data={data} isEditMode={isEditMode} register={register} />
