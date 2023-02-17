@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { PlusIcon } from '@heroicons/react/24/outline'
+import { PlusIcon } from '@heroicons/react/20/solid'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -12,20 +12,24 @@ import ErrorPage from '@/components/error/ErrorPage'
 import Breadcrumbs from '@/components/systems/Breadcrumbs'
 import Card from '@/components/systems/Card'
 import Description from '@/components/systems/Description'
+import FormButtons from '@/components/systems/FormButtons'
 import Preview from '@/components/systems/Preview'
 import Relations from '@/components/systems/relations/Relations'
+import { Prompt, Results } from '@/components/systems/Search'
 import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
 import ViewControl from '@/components/systems/ViewControl'
+import { Heading } from '@/components/ui/card/card.comp'
 import DisclosureComponent from '@/components/ui/Disclosure.comp'
+import LoaderComponent from '@/components/ui/loader.comp'
 import ProgressBarComponent from '@/components/ui/progress-bar.comp'
 import useEditMode from '@/hooks/systems/useEditMode'
-import useSearch from '@/hooks/systems/useSearch'
-import { System, SystemUidName } from '@/types/system'
+import useParam from '@/hooks/useParam'
+import { System } from '@/types/system'
 
 const getFakeName = () => faker.company.catchPhrase()
 
-const getFakePath = (): SystemUidName[] => {
+const getFakePath = (): string[] => {
   const length = faker.datatype.number({ min: 0, max: 10 })
   return [...Array(length)].map(() => [faker.datatype.uuid(), getFakeName()])
 }
@@ -63,8 +67,8 @@ export const fetchFakeSystem = async () => {
   return getFakeSystem()
 }
 export const fetchFakeSystems = async () => {
-  const res = [...Array(faker.datatype.number({ min: 0, max: 100 }))]
-  await sleep(faker.datatype.number({ min: 200, max: 2000 }))
+  const res = [...Array(faker.datatype.number({ min: 0, max: 20 }))]
+  await sleep(faker.datatype.number({ min: 1000, max: 10000 }))
   return res.map(() => getFakeSystem())
 }
 
@@ -75,16 +79,16 @@ const onSubmit = (data: System) => {
 const Page: NextPage = () => {
   const router = useRouter()
   const uid = router.query.slug
+  const [query, setQuery] = useParam('q')
 
   const [viewControl, setViewControl] = useState({ system: true, relations: true })
-  const { Prompt, Results, hasResults } = useSearch('/tree/')
 
   const { data } = useSWR(uid, fetchFakeSystem)
 
   const { isEditMode, setIsEditMode, newImage, setNewImage, FormErrors, EditModeContainer, register, discard } =
     useEditMode(onSubmit, data)
 
-  if (!data) return <>Loading</>
+  if (!data) return <LoaderComponent />
 
   return (
     <>
@@ -94,60 +98,48 @@ const Page: NextPage = () => {
 
       <EditModeContainer>
         <div className="p-2 lg:p-4 flex flex-wrap">
-          <nav className="p-1 lg:p2 w-full">
-            <Breadcrumbs data={data} />
+          <nav className="p-1 lg:p-2 w-full">
+            <Suspense
+              fallback={
+                <div className="py-3">
+                  <ProgressBarComponent />
+                </div>
+              }
+            >
+              <Breadcrumbs path={data.path} />
+            </Suspense>
           </nav>
 
-          {isEditMode && (
-            <div className="w-full">
-              <FormErrors />
-            </div>
-          )}
+          <div className="w-full">
+            <FormErrors />
+          </div>
 
-          <div className="flex w-full justify-between">
-            <Title
-              data={data}
-              discard={discard}
-              setIsEditMode={setIsEditMode}
-              isEditMode={isEditMode}
-              register={register}
-            />
+          <div className="lg:px-3 flex flex-wrap w-full justify-between gap-4">
+            <Title data={data} isEditMode={isEditMode} register={register} />
 
-            {isEditMode || <Prompt />}
+            {isEditMode || <Prompt query={query} setQuery={setQuery} />}
+            <FormButtons isEditMode={isEditMode} setIsEditMode={setIsEditMode} discard={discard} />
           </div>
 
           {isEditMode ||
-            (hasResults && (
-              <details open className="max-h-[40vh] w-full overflow-auto">
-                <summary>
-                  <b>Results</b>
-                </summary>
-                <Suspense>
-                  <Results />
-                </Suspense>
-              </details>
+            (query && (
+              <div className="w-full">
+                <Results query={query} />
+              </div>
             ))}
 
-          <aside className="p-1 lg:p-2 w-full lg:w-1/4">
-            <nav>
-              <div className="hidden lg:block">
-                <b>Subsystems</b>
-                <Subsystems data={data} />
-                <button onClick={() => router.push('/tree/' + uid + '/new')}>
-                  <PlusIcon className="h-6 hover:text-orange-600" />
-                </button>
-              </div>
-
-              <details className="lg:hidden max-h-[50vh] overflow-auto">
-                <summary>
-                  <b>Subsystems</b>
-                </summary>
-                <Subsystems data={data} />
-                <button onClick={() => router.push('/tree/' + uid + '/new')}>
-                  <PlusIcon className="h-6 hover:text-orange-600" />
-                </button>
-              </details>
-            </nav>
+          <aside className="w-full lg:w-1/4">
+            <Card>
+              <Heading
+                text="Subsystems"
+                action={{ label: <PlusIcon className="h-5" />, href: router.asPath.split('?')[0] + '/new' }}
+              />
+              <Suspense fallback={<ProgressBarComponent />}>
+                <nav className="py-3" aria-label="Subsystems">
+                  <Subsystems ids={data.children} />
+                </nav>
+              </Suspense>
+            </Card>
           </aside>
 
           <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
@@ -160,12 +152,14 @@ const Page: NextPage = () => {
                       <b>Preview</b>
                       <Preview data={data} isEditMode={isEditMode} newImage={newImage} setNewImage={setNewImage} />
                     </section>
+
                     <section>
                       <b>Details</b>
                       <Card>
                         <SystemDetailSectionComponent systemInfo={data} />
                       </Card>
                     </section>
+
                     <section className="basis-full">
                       <b>Description</b>
                       <Description data={data} isEditMode={isEditMode} register={register} />
