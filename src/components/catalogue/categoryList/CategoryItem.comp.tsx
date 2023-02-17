@@ -45,7 +45,7 @@ const CategoryItemComponent = ({ category }: Props) => {
       >
         <div className="flex-shrink-0 mx-6 my-5">
           <Image
-            className="h-10 w-10 rounded-full"
+            className="h-10 w-10 rounded-full object-contain"
             width={200}
             height={200}
             alt={category.code}
