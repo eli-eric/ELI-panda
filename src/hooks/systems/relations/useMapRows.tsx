@@ -1,7 +1,4 @@
-import {
-  ArrowLongLeftIcon,
-  ArrowLongRightIcon
-} from '@heroicons/react/24/outline'
+import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 
@@ -13,21 +10,13 @@ const Name = ({ uid, name, selectSystemUid, selelectedSystem }) => {
   const image = 'https://source.unsplash.com/collection/71371194/500x500'
   return (
     <div
-      className={`flex items-center cursor-pointer ${
-        uid === selelectedSystem ? 'text-primary-600' : ''
-      }`}
+      className={`flex items-center cursor-pointer ${uid === selelectedSystem ? 'text-primary-600' : ''}`}
       onClick={() => {
-        selectSystemUid(uid)
+        selectSystemUid({ uid, name })
       }}
     >
       <div className="h-10 w-10 flex-shrink-0">
-        <Image
-          className="h-10 w-10 rounded-full"
-          alt={name}
-          src={image}
-          width={200}
-          height={200}
-        />
+        <Image className="h-10 w-10 rounded-full" alt={name} src={image} width={200} height={200} />
       </div>
       <div className="ml-4">{name}</div>
     </div>
@@ -36,20 +25,30 @@ const Name = ({ uid, name, selectSystemUid, selelectedSystem }) => {
 
 export const useSystemMapRows = ({
   systems,
-  setSelectedSystemUid,
-  selectedSystemUid
+  setSelectedSystem,
+  selectedSystem
 }: {
   systems: SystemForRel[] | undefined
-  setSelectedSystemUid: Dispatch<SetStateAction<string | undefined>>
-  selectedSystemUid: string | undefined
+  setSelectedSystem: Dispatch<
+    SetStateAction<
+      | {
+          name: string
+          uid: string
+        }
+      | undefined
+    >
+  >
+  selectedSystem:
+    | {
+        name: string
+        uid: string
+      }
+    | undefined
 }): JSX.Element[][] | undefined => {
   const data = useMemo(() => {
     const data = systems?.map(system => {
       const row = Object.entries(system).filter(
-        system =>
-          system[0].includes('name') ||
-          system[0].includes('systemCodePath') ||
-          system[0].includes('systemType')
+        system => system[0].includes('name') || system[0].includes('systemCodePath') || system[0].includes('systemType')
       )
       return row.map((value, index) => {
         if (value) {
@@ -58,9 +57,9 @@ export const useSystemMapRows = ({
               <Name
                 key={system.uid + index}
                 name={system.name}
-                selectSystemUid={setSelectedSystemUid}
+                selectSystemUid={setSelectedSystem}
                 uid={system.uid}
-                selelectedSystem={selectedSystemUid}
+                selelectedSystem={selectedSystem?.uid}
               />
             )
           }
@@ -69,7 +68,7 @@ export const useSystemMapRows = ({
       })
     })
     return data
-  }, [systems, selectedSystemUid, setSelectedSystemUid])
+  }, [systems, selectedSystem, setSelectedSystem])
 
   return data
 }
@@ -88,12 +87,8 @@ export const useRelationMapRows = ({
           if (value[0] === 'direction') {
             return (
               <div key={index}>
-                {value[1] === 'to' && (
-                  <ArrowLongLeftIcon className="w-10 h-10" />
-                )}
-                {value[1] === 'from' && (
-                  <ArrowLongRightIcon className="w-10 h-10" />
-                )}
+                {value[1] === 'to' && <ArrowLongLeftIcon className="w-10 h-10" />}
+                {value[1] === 'from' && <ArrowLongRightIcon className="w-10 h-10" />}
               </div>
             )
           }

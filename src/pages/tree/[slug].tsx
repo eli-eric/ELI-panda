@@ -38,7 +38,9 @@ export const getFakeSystem = (): System => {
     name,
     path: getFakePath(),
     image: 'https://source.unsplash.com/collection/71371194/500x500',
-    description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(5)}`,
+    description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
+      5
+    )}`,
     children: getFakePath(),
     importanceCode: faker.datatype.string(),
     zoneCode: faker.datatype.string(),
@@ -76,13 +78,24 @@ const Page: NextPage = () => {
   const router = useRouter()
   const uid = router.query.slug
 
-  const [viewControl, setViewControl] = useState({ system: true, relations: true })
+  const [viewControl, setViewControl] = useState({
+    system: true,
+    relations: true
+  })
   const { Prompt, Results, hasResults } = useSearch('/tree/')
 
   const { data } = useSWR(uid, fetchFakeSystem)
 
-  const { isEditMode, setIsEditMode, newImage, setNewImage, FormErrors, EditModeContainer, register, discard } =
-    useEditMode(onSubmit, data)
+  const {
+    isEditMode,
+    setIsEditMode,
+    newImage,
+    setNewImage,
+    FormErrors,
+    EditModeContainer,
+    register,
+    discard
+  } = useEditMode(onSubmit, data)
 
   if (!data) return <>Loading</>
 
@@ -151,14 +164,22 @@ const Page: NextPage = () => {
           </aside>
 
           <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
-            <ViewControl setViewControl={setViewControl} viewControl={viewControl} />
+            <ViewControl
+              setViewControl={setViewControl}
+              viewControl={viewControl}
+            />
             {viewControl.system && (
               <DisclosureComponent title="System Detail">
                 <article>
                   <div className="flex flex-wrap gap-2 lg:gap-4">
                     <section className="">
                       <b>Preview</b>
-                      <Preview data={data} isEditMode={isEditMode} newImage={newImage} setNewImage={setNewImage} />
+                      <Preview
+                        data={data}
+                        isEditMode={isEditMode}
+                        newImage={newImage}
+                        setNewImage={setNewImage}
+                      />
                     </section>
                     <section>
                       <b>Details</b>
@@ -168,7 +189,11 @@ const Page: NextPage = () => {
                     </section>
                     <section className="basis-full">
                       <b>Description</b>
-                      <Description data={data} isEditMode={isEditMode} register={register} />
+                      <Description
+                        data={data}
+                        isEditMode={isEditMode}
+                        register={register}
+                      />
                     </section>
                   </div>
                 </article>
@@ -177,7 +202,7 @@ const Page: NextPage = () => {
             {viewControl.relations && (
               <ErrorBoundary fallback={<ErrorPage />}>
                 <Suspense fallback={<ProgressBarComponent />}>
-                  <Relations uid={data.uid} />
+                  <Relations uid={data.uid} systemName={data.name} />
                 </Suspense>
               </ErrorBoundary>
             )}

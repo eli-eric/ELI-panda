@@ -18,7 +18,13 @@ import AddRelationForm from './AddRelationForm'
 
 const messages = message.systemsPage.relations
 
-const Relations = ({ uid }: { uid: string }) => {
+const Relations = ({
+  uid,
+  systemName
+}: {
+  uid: string
+  systemName: string
+}) => {
   const { data: relations } = useSWR<SystemRelationshipResponse[]>(
     ENDPOINTS.systemDetail + '/' + uid + '/relationship'
   )
@@ -46,20 +52,6 @@ const Relations = ({ uid }: { uid: string }) => {
     }
   }
 
-  const adddRelModalButtons: ModalButtons = {
-    goNext: {
-      text: 'continue',
-      onClick: () => {
-        setOpenAddRelation(false)
-      }
-    },
-    goBack: {
-      text: 'cancel',
-      onClick: () => {
-        setOpenAddRelation(false)
-      }
-    }
-  }
   const collumsTitle = Object.keys(messages.tableHeader).map(key =>
     intl.formatMessage({ id: messages.tableHeader[key] })
   )
@@ -90,11 +82,12 @@ const Relations = ({ uid }: { uid: string }) => {
       <ModalComponent
         open={openAddRelation}
         setOpen={setOpenAddRelation}
-        buttons={adddRelModalButtons}
+        buttons={{ noButtons: true }}
       >
         <AddRelationForm
           setopen={setOpenAddRelation}
           relationTypeCode={relationTypeCode}
+          systemName={systemName}
         />
       </ModalComponent>
       <ModalComponent
