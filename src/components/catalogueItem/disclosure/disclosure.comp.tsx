@@ -1,7 +1,8 @@
 import { Disclosure } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
-import { CatalogueItem } from '@src/types/responses'
 import { Fragment } from 'react'
+
+import { CatalogueItem } from '@/types/responses'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
