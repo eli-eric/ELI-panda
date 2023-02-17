@@ -1,9 +1,9 @@
-import { message } from 'src/i18n/src/messages'
 import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
+import { message } from 'src/i18n/src/messages'
 import { PATH } from 'src/types/constants/paths'
-import { Role } from 'src/types/constants/roles'
+import { ROLE } from 'src/types/constants/roles'
 
 import NavigationLinkComponent from './navigation-link.comp'
 const navMessages = message.layout
@@ -21,14 +21,14 @@ const NavigationListContainer = ({ open }: Props) => {
       <div className={open === false ? 'hidden sm:ml-6 sm:flex sm:space-x-8' : 'space-y-1 pt-2 pb-3'}>
         {status === 'authenticated' ? (
           <Fragment>
-            {userRoles?.includes(Role.SYSTEMS_VIEW) && (
+            {userRoles?.includes(ROLE.SYSTEMS_VIEW) && (
               <NavigationLinkComponent
                 name={intl.formatMessage({ id: navMessages.systemsOverview })}
                 href={PATH.SYSTEMS_OVERVIEW}
                 open={open}
               />
             )}
-            {userRoles?.includes(Role.CATALOGUE_VIEW) && (
+            {userRoles?.includes(ROLE.CATALOGUE_VIEW) && (
               <NavigationLinkComponent
                 name={intl.formatMessage({ id: navMessages.catalogue })}
                 href={PATH.CATALOGUE}

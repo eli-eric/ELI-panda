@@ -2,15 +2,17 @@ import { NextFetchEvent, NextRequest, NextResponse } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 
 import { PATH } from '@/types/constants/paths'
-import { Role } from '@/types/constants/roles'
+import { ROLE } from '@/types/constants/roles'
 
-const PROTECTED_PATHS = [PATH.DASHBOARD, PATH.CATALOGUE, PATH.SYSTEMS, PATH.SYSTEMS_OVERVIEW]
+const PROTECTED_PATHS = [PATH.DASHBOARD, PATH.CATALOGUE, PATH.SYSTEMS, PATH.SYSTEMS_OVERVIEW, PATH.REPORTS]
 
-const ROLES_CONFIG: Record<Role, PATH> = {
-  [Role.BASICS]: PATH.DASHBOARD,
-  [Role.CATALOGUE_VIEW]: PATH.CATALOGUE,
-  [Role.SYSTEMS_VIEW]: PATH.SYSTEMS,
-  [Role.REPORTS_VIEW]: PATH.REPORTS
+const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
+  [PATH.CATALOGUE]: [ROLE.CATALOGUE_CATEGORY_EDIT, ROLE.CATALOGUE_EDIT, ROLE.CATALOGUE_VIEW],
+  [PATH.DASHBOARD]: [ROLE.BASICS],
+  [PATH.REPORTS]: [ROLE.REPORTS_VIEW],
+  [PATH.SYSTEMS]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
+  [PATH.SYSTEMS_OVERVIEW]: [ROLE.SYSTEMS_VIEW, ROLE.SYSTEM_EDIT],
+  [PATH.ROOT]: []
 }
 
 export async function middleware(request: NextRequest, _next: NextFetchEvent) {
@@ -19,15 +21,13 @@ export async function middleware(request: NextRequest, _next: NextFetchEvent) {
   if (matchesProtectedPath) {
     const user = await getToken({ req: request })
     if (!user) {
-      const url = new URL(`/`, request.url)
+      const url = new URL(PATH.ROOT, request.url)
       url.searchParams.set('callbackUrl', encodeURI(request.url))
       return NextResponse.redirect(url)
     }
-    const alowedPages = user.roles.map(role => {
-      return ROLES_CONFIG[role].toString()
-    })
-    const matchesAllowedPages = alowedPages.some(path => pathname.startsWith(path))
-    if (!matchesAllowedPages) {
+    const currentPath = Object.keys(PATH_ROLES_CONFIG).find(key => pathname.startsWith(key)) as PATH
+    const matchRolesToPath = PATH_ROLES_CONFIG[currentPath].some(role => user.roles.includes(role))
+    if (!matchRolesToPath) {
       const url = new URL(`/404`, request.url)
       return NextResponse.redirect(url)
     }
