@@ -8,8 +8,8 @@ import ModalComponent from '@/components/ui/modal/modal.comp'
 import ModalWarningComponent from '@/components/ui/modal/warning/modal-warning.comp'
 import TableComponent from '@/components/ui/Table.comp'
 import { useRelationMapRows } from '@/hooks/systems/relations/useMapRows'
+import { useEndpoints } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
-import { ENDPOINTS } from '@/types/constants/endpoints'
 import { ModalButtons } from '@/types/form'
 import { SystemRelationshipResponse } from '@/types/responses'
 import { RELATION_TYPE_CODE } from '@/types/system/constants'
@@ -18,16 +18,9 @@ import AddRelationForm from './AddRelationForm'
 
 const messages = message.systemsPage.relations
 
-const Relations = ({
-  uid,
-  systemName
-}: {
-  uid: string
-  systemName: string
-}) => {
-  const { data: relations } = useSWR<SystemRelationshipResponse[]>(
-    ENDPOINTS.systemDetail + '/' + uid + '/relationship'
-  )
+const Relations = ({ uid, systemName }: { uid: string; systemName: string }) => {
+  const endpoints = useEndpoints({ uid })
+  const { data: relations } = useSWR<SystemRelationshipResponse[]>(endpoints.systemRelationship)
   const [relationUid, setRelationUid] = useState<string | undefined>()
   const intl = useIntl()
   const [openAddRelation, setOpenAddRelation] = useState(false)
@@ -74,27 +67,13 @@ const Relations = ({
             }}
             text={intl.formatMessage({ id: messages.buttons.addSpare })}
           />
-          {relations && (
-            <TableComponent collumsTitle={collumsTitle} data={data} />
-          )}
+          {relations && <TableComponent collumsTitle={collumsTitle} data={data} />}
         </div>
       </DisclosureComponent>
-      <ModalComponent
-        open={openAddRelation}
-        setOpen={setOpenAddRelation}
-        buttons={{ noButtons: true }}
-      >
-        <AddRelationForm
-          setopen={setOpenAddRelation}
-          relationTypeCode={relationTypeCode}
-          systemName={systemName}
-        />
+      <ModalComponent open={openAddRelation} setOpen={setOpenAddRelation} buttons={{ noButtons: true }}>
+        <AddRelationForm setopen={setOpenAddRelation} relationTypeCode={relationTypeCode} systemName={systemName} />
       </ModalComponent>
-      <ModalComponent
-        open={openDelete}
-        setOpen={setOpenDelete}
-        buttons={deleteModalButtons}
-      >
+      <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deleteModalButtons}>
         <ModalWarningComponent
           title={intl.formatMessage({ id: messages.deleteModal.title })}
           message={intl.formatMessage({ id: messages.deleteModal.text })}

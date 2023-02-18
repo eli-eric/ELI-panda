@@ -9,9 +9,9 @@ import LoaderComponent from '@/components/ui/loader.comp'
 import SearchBarComponent from '@/components/ui/SearchBar.comp'
 import TableComponent from '@/components/ui/Table.comp'
 import { useSystemMapRows } from '@/hooks/systems/relations/useMapRows'
+import { useEndpoints } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
 import { message } from '@/i18n/src/messages'
-import { ENDPOINTS } from '@/types/constants/endpoints'
 import { SystemsForRelResponse } from '@/types/responses'
 import { RELATION_TYPE_CODE } from '@/types/system/constants'
 
@@ -125,12 +125,12 @@ const TableWithPaging = ({
   const intl = useIntl()
 
   const { pagination, setTotalCount, getPaginationComponent } = usePagination(searchValue)
-
-  const { data: systems } = useSWR<SystemsForRelResponse>(
-    searchValue &&
-      ENDPOINTS.systemsForRel +
-        `?systemFromUid=${router.query.slug}&relationTypeCode=${relationTypeCode}&search=${searchValue}&pagination=${pagination}`
+  const query = useMemo(
+    () => ({ systemFromUid: router.query.slug, relationTypeCode, search: searchValue, pagination }),
+    [router, relationTypeCode, searchValue, pagination]
   )
+  const endpoints = useEndpoints({ query })
+  const { data: systems } = useSWR<SystemsForRelResponse>(searchValue && endpoints.systemsForRel)
 
   const data = useSystemMapRows({
     systems: systems?.data,
