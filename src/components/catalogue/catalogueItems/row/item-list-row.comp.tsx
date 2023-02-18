@@ -18,7 +18,7 @@ const ItemListRow = ({ item, index, categoryListLength }: Props) => {
   const router = useRouter()
   const { search } = router.query
   const categoryPath = PATH.CATALOGUE + '/' + item.categoryPath
-  const path = ENDPOINTS.catalogueItem + '/' + item.uid + '/image'
+  const path = ENDPOINTS.catalogueItemImage + '/' + item.uid + '/image'
 
   return (
     <tr className={(index % 2 === 0 ? undefined : 'bg-gray-100') + ' hover:bg-primary-200'}>

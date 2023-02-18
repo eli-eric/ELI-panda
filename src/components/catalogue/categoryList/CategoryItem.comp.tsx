@@ -50,7 +50,7 @@ const CategoryItemComponent = ({ category }: Props) => {
             width={200}
             height={200}
             alt={category.code}
-            src={ENDPOINTS.catalogueCategory + '/' + category.uid + '/image'}
+            src={ENDPOINTS.catalogueCategoryImage + '/' + category.uid + '/image'}
           />
         </div>
         <div className="min-w-0 flex-1 mx-6 my-5">

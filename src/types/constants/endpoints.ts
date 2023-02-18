@@ -1,9 +1,11 @@
 import { BASE_URL } from '@/types/constants/common'
 export const ENDPOINTS = {
   catalogueCategories: '/catalogue/categories',
-  catalogueCategory: BASE_URL + '/catalogue/category',
+  catalogueCategoryImage: BASE_URL + '/catalogue/category',
+  catalogueCategory: '/catalogue/category',
   catalogueItems: '/catalogue/items',
-  catalogueItem: BASE_URL + '/catalogue/item',
+  catalogueItemImage: BASE_URL + '/catalogue/item',
+  catalogueItem: '/catalogue/item',
   systemDetail: '/system',
   systemTree: '/systems/tree',
   systems: '/systems',
