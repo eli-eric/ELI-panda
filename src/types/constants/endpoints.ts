@@ -1,13 +1,13 @@
-import { BASE_URL } from './common'
+import { BASE_URL } from '@/types/constants/common'
 export const ENDPOINTS = {
-  catalogueCategories: BASE_URL + '/catalogue/categories',
+  catalogueCategories: '/catalogue/categories',
   catalogueCategory: BASE_URL + '/catalogue/category',
-  catalogueItems: BASE_URL + '/catalogue/items',
+  catalogueItems: '/catalogue/items',
   catalogueItem: BASE_URL + '/catalogue/item',
-  systemDetail: BASE_URL + '/system',
-  systemTree: BASE_URL + '/systems/tree',
-  systems: BASE_URL + '/systems',
-  systemsForRel: BASE_URL + '/systems/for-relationship'
+  systemDetail: '/system',
+  systemTree: '/systems/tree',
+  systems: '/systems',
+  systemsForRel: '/systems/for-relationship'
 }
 
 export enum AxiosMethodType {

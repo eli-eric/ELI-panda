@@ -1,16 +1,14 @@
-import { BASE_URL } from '@/types/constants/common'
-
 const getEndpoints = (uid?: string, path?: string, query?: string) => {
   const endpoints = {
-    catalogueCategories: BASE_URL + `/catalogue/categories${path}`,
-    catalogueCategoryImage: BASE_URL + `/catalogue/category/${uid}/image`,
-    catalogueItems: BASE_URL + `/catalogue/items${query}`,
-    catalogueItem: BASE_URL + `/catalogue/item/${uid}`,
-    systemDetail: BASE_URL + `/system/${uid}`,
-    systemTree: BASE_URL + '/systems/tree',
-    systems: BASE_URL + '/systems',
-    systemRelationship: BASE_URL + `/system/${uid}/relationship`,
-    systemsForRel: BASE_URL + `/systems/for-relationship${query}`
+    catalogueCategories: `/catalogue/categories${path}`,
+    catalogueCategoryImage: `/catalogue/category/${uid}/image`,
+    catalogueItems: `/catalogue/items${query}`,
+    catalogueItem: `/catalogue/item/${uid}`,
+    systemDetail: `/system/${uid}`,
+    systemTree: '/systems/tree',
+    systems: '/systems',
+    systemRelationship: `/system/${uid}/relationship`,
+    systemsForRel: `/systems/for-relationship${query}`
   }
   return endpoints
 }
