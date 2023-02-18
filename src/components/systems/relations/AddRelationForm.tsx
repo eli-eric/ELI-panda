@@ -1,169 +1,41 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
-import { Dispatch, Fragment, SetStateAction, Suspense, useEffect, useMemo, useState } from 'react'
-import { FormProvider, useForm, useFormContext } from 'react-hook-form'
-import { useIntl } from 'react-intl'
-import useSWR from 'swr'
+import { Dispatch, SetStateAction, Suspense, useEffect, useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import * as yup from 'yup'
 
-import { Option, SelectWithError } from '@/components/ui/form/Select'
+import ErrorPage from '@/components/error/ErrorPage'
+import { Button } from '@/components/ui/Buttons'
 import LoaderComponent from '@/components/ui/loader.comp'
 import SearchBarComponent from '@/components/ui/SearchBar.comp'
-import TableComponent from '@/components/ui/Table.comp'
-import { useSystemMapRows } from '@/hooks/systems/relations/useMapRows'
-import { useEndpoints } from '@/hooks/useEndpoint'
-import usePagination from '@/hooks/usePagination'
-import { message } from '@/i18n/src/messages'
-import { SystemsForRelResponse } from '@/types/responses'
+import { useEndpoint } from '@/hooks/useEndpoint'
+import useSubmit from '@/hooks/useSubmit'
 import { RELATION_TYPE_CODE } from '@/types/system/constants'
 
-import EmptyResults from './EmptyResults'
-
-const messages = message.systemsPage.relations.addRelationModal
-
-const SelectRelation = ({
-  relationTypeCode,
-  systemName,
-  selectedSystem
-}: {
-  relationTypeCode?: RELATION_TYPE_CODE
-  systemName: string
-  selectedSystem?: {
-    name: string
-    uid: string
-  }
-}) => {
-  const { register, watch } = useFormContext()
-  const router = useRouter()
-  const baseSystemOption = useMemo(
-    () => ({
-      name: systemName,
-      value: router.query.slug as string
-    }),
-    [router, systemName]
-  )
-  const selectedSystemOption = useMemo(() => {
-    if (!selectedSystem) {
-      return {
-        name: undefined,
-        value: undefined
-      }
-    }
-    return {
-      name: selectedSystem?.name,
-      value: selectedSystem?.uid
-    }
-  }, [selectedSystem])
-  const [systemToOption, setSystemToOption] = useState<Option>(selectedSystemOption)
-
-  const watchSystemFromUid = watch('systemFromUid')
-
-  useEffect(() => {
-    if (watchSystemFromUid === baseSystemOption.value) {
-      setSystemToOption(selectedSystemOption)
-    }
-    if (watchSystemFromUid === selectedSystemOption.value) {
-      setSystemToOption(baseSystemOption)
-    }
-    if (!selectedSystem) {
-      setSystemToOption(selectedSystemOption)
-    }
-  }, [watchSystemFromUid, baseSystemOption, selectedSystemOption, selectedSystem])
-
-  return (
-    <div className="flex flex-row">
-      <SelectWithError
-        options={selectedSystem ? [baseSystemOption, selectedSystemOption] : [baseSystemOption]}
-        register={register}
-        name={'systemFromUid'}
-        isError={true}
-        rounded="rounded-l-md"
-        label="System From"
-      />
-      <SelectWithError
-        options={[{ value: relationTypeCode }]}
-        register={register}
-        name={'relationTypeCode'}
-        isError={true}
-        disabled
-        label="Relation Type Code"
-      />
-      <SelectWithError
-        options={[systemToOption]}
-        register={register}
-        name={'systemToUid'}
-        isError={true}
-        disabled
-        rounded="rounded-r-md"
-        label="System To"
-      />
-    </div>
-  )
-}
-
-const TableWithPaging = ({
-  searchValue,
-  relationTypeCode,
-  setSelectedSystem,
-  selectedSystem
-}: {
-  searchValue?: string
-  relationTypeCode?: RELATION_TYPE_CODE
-  setSelectedSystem: Dispatch<
-    SetStateAction<
-      | {
-          name: string
-          uid: string
-        }
-      | undefined
-    >
-  >
-  selectedSystem?: {
-    name: string
-    uid: string
-  }
-}) => {
-  const router = useRouter()
-  const intl = useIntl()
-
-  const { pagination, setTotalCount, getPaginationComponent } = usePagination(searchValue)
-  const query = useMemo(
-    () => ({ systemFromUid: router.query.slug, relationTypeCode, search: searchValue, pagination }),
-    [router, relationTypeCode, searchValue, pagination]
-  )
-  const endpoints = useEndpoints({ query })
-  const { data: systems } = useSWR<SystemsForRelResponse>(searchValue && endpoints.systemsForRel)
-
-  const data = useSystemMapRows({
-    systems: systems?.data,
-    setSelectedSystem,
-    selectedSystem
-  })
-
-  useEffect(() => {
-    setTotalCount(systems?.totalCount)
-  }, [systems, setTotalCount])
-
-  const collumsTitle = Object.keys(messages.tableHeader).map(key =>
-    intl.formatMessage({ id: messages.tableHeader[key] })
-  )
-
-  return (
-    <Fragment>
-      <TableComponent collumsTitle={collumsTitle} data={data} />
-      {!systems && <EmptyResults />}
-      {systems && systems.totalCount === 0 && <EmptyResults />}
-      {getPaginationComponent()}
-    </Fragment>
-  )
-}
+import SelectRelation from './SelectRelation'
+import TableWithPaging from './TableWithPaging'
 
 interface Props {
   setopen: Dispatch<SetStateAction<boolean>>
-  relationTypeCode?: RELATION_TYPE_CODE
+  relationTypeCode: RELATION_TYPE_CODE
   systemName: string
 }
 
+export type RelationFormType = {
+  systemFromUid: string
+  relationTypeCode: string
+  systemToUid: string
+}
+
+const relationValidationSchema = yup.object().shape({
+  systemFromUid: yup.string().required(),
+  relationTypeCode: yup.string().required(),
+  systemToUid: yup.string().required()
+})
+
 const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
   const [searchValue, setSearchValue] = useState<string | undefined>()
+  const router = useRouter()
   const [selectedSystem, setSelectedSystem] = useState<{
     name: string
     uid: string
@@ -173,10 +45,20 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
     setSelectedSystem(undefined)
     setSearchValue(data.search)
   }
-  const relFormMethods = useForm()
+  const { systemRelationship, systemRelationships } = useEndpoint({ uid: router.query.slug as string })
+  const relFormMethods = useForm<RelationFormType>({ resolver: yupResolver(relationValidationSchema) })
+  const { submit, loading, error, response } = useSubmit({
+    endpoint: systemRelationship,
+    method: 'post',
+    mutateUrlList: [systemRelationships]
+  })
   const onSubmit = data => {
-    console.log(data)
+    submit(data)
   }
+
+  useEffect(() => {
+    if (response) if (!error) setopen(false)
+  }, [response, setopen, error])
 
   return (
     <div className="w-full min-h-[736px] flex flex-col justify-between">
@@ -203,25 +85,23 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
         <FormProvider {...relFormMethods}>
           <SelectRelation relationTypeCode={relationTypeCode} systemName={systemName} selectedSystem={selectedSystem} />
         </FormProvider>
-
+        {error && <ErrorPage />}
         <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-          <button
-            data-testid={'-modal-button-go-next'}
+          <Button
+            text="Save"
             type="submit"
-            className="inline-flex w-full justify-center rounded-md border border-transparent bg-primary-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm"
-          >
-            Save
-          </button>
-          <button
-            data-testid="modal-button-go-back"
-            type="button"
-            className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
-            onClick={() => {
+            loading={loading}
+            customClass="inline-flex w-full justify-center sm:col-start-2 sm:mt-0 sm:text-sm"
+          />
+          <Button
+            text="Cancel"
+            buttonType="secondary"
+            onClickAction={() => {
               setopen(false)
             }}
-          >
-            Cancel
-          </button>
+            loading={loading}
+            customClass="inline-flex w-full justify-center sm:col-start-1 sm:mt-0 sm:text-sm text-gray-700"
+          />
         </div>
       </form>
     </div>

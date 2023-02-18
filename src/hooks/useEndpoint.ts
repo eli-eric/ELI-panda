@@ -7,8 +7,9 @@ const getEndpoints = (uid?: string, path?: string, query?: string) => {
     systemDetail: `/system/${uid}`,
     systemTree: '/systems/tree',
     systems: '/systems',
-    systemRelationship: `/system/${uid}/relationship`,
-    systemsForRel: `/systems/for-relationship${query}`
+    systemRelationships: `/system/${uid}/relationships`,
+    systemRelationship: '/system/relationship',
+    systemsForRelationship: `/systems/for-relationship${query}`
   }
   return endpoints
 }
@@ -17,7 +18,7 @@ interface useEndpointsProps {
   query?: Object
   path?: string
 }
-export const useEndpoints = ({ uid, query, path }: useEndpointsProps) => {
+export const useEndpoint = ({ uid, query, path }: useEndpointsProps) => {
   const queryString = '?' + new URLSearchParams(query as Record<string, string>).toString()
   return getEndpoints(uid, path, queryString)
 }

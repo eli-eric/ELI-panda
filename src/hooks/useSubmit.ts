@@ -2,47 +2,40 @@ import axios from 'axios'
 import { useState } from 'react'
 import { useSWRConfig } from 'swr'
 
+import { BASE_URL } from '@/types/constants/common'
+
 interface UseSubmitProps {
-  url: string
-  method: 'get' | 'put' | 'delete'
+  endpoint: string
+  method: 'post' | 'put' | 'delete'
   mutateUrlList?: string[]
 }
 
 interface UseSubmitReturn {
-  response: object | null
-  error: string
+  response: any
+  error: string | undefined
   loading: boolean
   submit: (body?: object) => void
 }
 
-const useSubmit = ({ url, method, mutateUrlList }: UseSubmitProps): UseSubmitReturn => {
+const useSubmit = ({ endpoint, method, mutateUrlList }: UseSubmitProps) => {
   const { mutate } = useSWRConfig()
 
   const [response, setResponse] = useState<object | null>(null)
-  const [error, setError] = useState<string>('')
+  const [error, setError] = useState<string>()
   const [loading, setloading] = useState<boolean>(false)
-  let timer: NodeJS.Timeout
-  const submit = (body?: object) => {
+  const submit = async (body?: object) => {
     setloading(true)
-    axios[method](url, body ? body : undefined)
-      .then(res => {
-        setResponse(res.data)
-      })
-      .catch(err => {
-        setError(err)
-      })
+    axios[method](BASE_URL + endpoint, body ? body : undefined)
+      .then(res => setResponse(res.data))
+      .catch(err => setError(err))
       .finally(() => {
-        clearTimeout(timer)
-        timer = setTimeout(() => {
-          if (mutateUrlList)
-            mutateUrlList.forEach(url => {
-              mutate(url)
-            })
-        }, 200)
-        setloading(false)
+        if (mutateUrlList)
+          mutateUrlList.forEach(url => {
+            mutate(url).finally(() => setloading(false))
+          })
       })
   }
-  return { response, error, loading, submit }
+  return { response, error, loading, submit, setloading }
 }
 
 export default useSubmit

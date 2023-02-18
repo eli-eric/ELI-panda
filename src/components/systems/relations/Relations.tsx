@@ -8,7 +8,7 @@ import ModalComponent from '@/components/ui/modal/modal.comp'
 import ModalWarningComponent from '@/components/ui/modal/warning/modal-warning.comp'
 import TableComponent from '@/components/ui/Table.comp'
 import { useRelationMapRows } from '@/hooks/systems/relations/useMapRows'
-import { useEndpoints } from '@/hooks/useEndpoint'
+import { useEndpoint } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
 import { ModalButtons } from '@/types/form'
 import { SystemRelationshipResponse } from '@/types/responses'
@@ -19,13 +19,13 @@ import AddRelationForm from './AddRelationForm'
 const messages = message.systemsPage.relations
 
 const Relations = ({ uid, systemName }: { uid: string; systemName: string }) => {
-  const endpoints = useEndpoints({ uid })
-  const { data: relations } = useSWR<SystemRelationshipResponse[]>(endpoints.systemRelationship)
+  const endpoints = useEndpoint({ uid })
+  const { data: relations } = useSWR<SystemRelationshipResponse[]>(endpoints.systemRelationships)
   const [relationUid, setRelationUid] = useState<string | undefined>()
   const intl = useIntl()
   const [openAddRelation, setOpenAddRelation] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
-  const [relationTypeCode, setRelationTypeCode] = useState<RELATION_TYPE_CODE>()
+  const [relationTypeCode, setRelationTypeCode] = useState<RELATION_TYPE_CODE>(RELATION_TYPE_CODE.IS_SPARE_FOR)
 
   const deleteModalButtons: ModalButtons = {
     goNext: {
