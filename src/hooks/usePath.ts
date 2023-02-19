@@ -34,7 +34,6 @@ export const useCatalogueItemsPath = (pageSize: number, page: number) => {
   const categoryPath = useCataloguePath()
 
   const searchQuery = useMemo(() => {
-    console.log(router.query)
     if (search && typeof search === 'string') {
       return `&search=${search}`
     }

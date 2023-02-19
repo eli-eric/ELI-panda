@@ -62,19 +62,14 @@ export const useCategoryEdit = ({
             >
               <TrashIcon className="h-6 w-6 text-red-700" aria-hidden="true" />
             </IconButton>
-            <ModalComponent open={openEdit} setOpen={setOpenEdit} buttons={{ noButtons: true }} testid="catalogueEdit">
-              <CategoryEditModal setopen={setOpenEdit} uid={editUid} />
-            </ModalComponent>
-            <ModalComponent
-              open={openDelete}
-              setOpen={setOpenDelete}
-              buttons={deletModalButtons}
-              testid="catalogueEdit"
-            >
-              <ModalWarningComponent title="Warning" message="Are you sure you want to remove this Category?" />
-            </ModalComponent>
           </div>
         )}
+        <ModalComponent open={openEdit} setOpen={setOpenEdit} buttons={{ noButtons: true }} testid="catalogueEdit">
+          <CategoryEditModal setopen={setOpenEdit} uid={editUid} />
+        </ModalComponent>
+        <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deletModalButtons} testid="catalogueEdit">
+          <ModalWarningComponent title="Warning" message="Are you sure you want to remove this Category?" />
+        </ModalComponent>
       </Fragment>
     )
   }
