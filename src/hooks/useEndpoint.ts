@@ -6,6 +6,7 @@ const getEndpoints = (uid?: string, path?: string, query?: string) => {
     catalogueItems: `/catalogue/items${query}`,
     catalogueItem: `/catalogue/item/${uid}`,
     catalogueItemImage: BASE_URL + `/catalogue/item/${uid}/image`,
+    catalogueCategoryEdit: `/catalogue/category${uid ? '/' + uid : ''}`,
     systemDetail: `/system/${uid}`,
     systemTree: '/systems/tree',
     systems: '/systems',

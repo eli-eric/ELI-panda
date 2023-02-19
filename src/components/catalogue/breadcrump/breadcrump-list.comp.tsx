@@ -1,9 +1,12 @@
 import { ChevronRightIcon, HomeIcon } from '@heroicons/react/20/solid'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import { useState } from 'react'
-import { PlusIconButton } from '@/components/ui/Buttons'
 import ModalComponent from 'src/components/ui/modal/modal.comp'
+
+import { PlusIconButton } from '@/components/ui/Buttons'
 import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 
 import CategoryEditForm from '../categoryEditForm/CategoryEditForm'
 
@@ -15,6 +18,8 @@ interface Props {
 
 const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props) => {
   const router = useRouter()
+  const { data: session } = useSession()
+
   const [open, setopen] = useState(false)
 
   const { search } = router.query
@@ -40,16 +45,18 @@ const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props)
             </div>
           </li>
           {navigationList}
-          <li className="flex">
-            <div className="flex items-center">
-              <ChevronRightIcon className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400" aria-hidden="true" />
-              <PlusIconButton
-                onClickAction={() => {
-                  setopen(true)
-                }}
-              />
-            </div>
-          </li>
+          {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
+            <li className="flex">
+              <div className="flex items-center">
+                <ChevronRightIcon className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400" aria-hidden="true" />
+                <PlusIconButton
+                  onClickAction={() => {
+                    setopen(true)
+                  }}
+                />
+              </div>
+            </li>
+          )}
         </ol>
       </nav>
       <ModalComponent open={open} setOpen={setopen} buttons={{ noButtons: true }} testid="catalogueEdit">
