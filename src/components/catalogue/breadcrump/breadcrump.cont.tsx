@@ -1,11 +1,12 @@
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
+
 import { PATH } from '@/types/constants/paths'
 
 import BreadcrumpItemComponent from './breadcrump-item.comp'
 import BreadcrumbListComponent from './breadcrump-list.comp'
 
-const BreadcrumbContainer = () => {
+const BreadcrumbContainer = ({ catalogueParentUid }: { catalogueParentUid: string | undefined }) => {
   const router = useRouter()
 
   const handleClick = (path: string) => {
@@ -29,7 +30,12 @@ const BreadcrumbContainer = () => {
   }, [router])
 
   return (
-    <BreadcrumbListComponent testId="catalogue-breadcrump" navigationList={navigationList} handleClick={handleClick} />
+    <BreadcrumbListComponent
+      testId="catalogue-breadcrump"
+      navigationList={navigationList}
+      handleClick={handleClick}
+      catalogueParentUid={catalogueParentUid}
+    />
   )
 }
 export default BreadcrumbContainer

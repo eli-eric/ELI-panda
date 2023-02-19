@@ -1,50 +1,31 @@
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
-import { useState } from 'react'
-import ModalComponent from 'src/components/ui/modal/modal.comp'
-import ModalWarningComponent from 'src/components/ui/modal/warning/modal-warning.comp'
+import { Dispatch, SetStateAction } from 'react'
 
+import { useCategoryEdit } from '@/hooks/category/useCategoryEdit'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { PATH } from '@/types/constants/paths'
-import { ROLE } from '@/types/constants/roles'
-import { ModalButtons } from '@/types/form'
 import { CatalogueCategoryResponse } from '@/types/responses'
-
-import CategoryEditModal from '../categoryEditForm/CategoryEditModal'
 
 interface Props {
   category: CatalogueCategoryResponse
+  setCatalogueParentUid: Dispatch<SetStateAction<string | undefined>>
 }
 
-const CategoryItemComponent = ({ category }: Props) => {
+const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
   const router = useRouter()
-  const { data: session } = useSession()
-  const [openEdit, setOpenEdit] = useState(false)
-  const [openDelete, setOpenDelete] = useState(false)
   const { catalogueCategoryImage } = useEndpoint({ uid: category.uid })
-
+  const { getEditDeleteButtons } = useCategoryEdit({ editUid: category.uid })
   const path = PATH.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
-
-  const deletModalButtons: ModalButtons = {
-    goNext: {
-      text: 'continue',
-      onClick: () => setOpenDelete(false)
-    },
-    goBack: {
-      text: 'cancel',
-      onClick: () => setOpenDelete(false)
-    }
-  }
-
   return (
     <div className=" flex-row justify-between relative flex z-10 items-center space-x-3 rounded-lg border border-gray-300 bg-white shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
-      <Link
-        href={{ pathname: path, query: { ...router.query } }}
+      <button
         key={category.code}
         className=" flex w-full items-center "
+        onClick={() => {
+          setCatalogueParentUid(category.uid)
+          router.push({ pathname: path, query: { ...router.query } })
+        }}
       >
         <div className="flex-shrink-0 mx-6 my-5">
           <Image
@@ -61,35 +42,8 @@ const CategoryItemComponent = ({ category }: Props) => {
             <p className="text-sm font-medium text-gray-900">{category.name}</p>
           </div>
         </div>
-      </Link>
-      {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
-        <div className="relative flex flex-col justify-center z-0">
-          <button
-            type="button"
-            onClick={() => {
-              setOpenEdit(true)
-            }}
-            className="relative inline-flex items-center  rounded-t-md border-l border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-400 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-          >
-            <PencilSquareIcon className="h-6 w-6" aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setOpenDelete(true)
-            }}
-            className="relative inline-flex items-center  rounded-b-md border-l border-t border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-400 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-          >
-            <TrashIcon className="h-6 w-6 text-red-700" aria-hidden="true" />
-          </button>
-        </div>
-      )}
-      <ModalComponent open={openEdit} setOpen={setOpenEdit} buttons={{ noButtons: true }} testid="catalogueEdit">
-        <CategoryEditModal setopen={setOpenEdit} uid={category.uid} />
-      </ModalComponent>
-      <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deletModalButtons} testid="catalogueEdit">
-        <ModalWarningComponent title="Warning" message="Are you sure you want to remove this Category?" />
-      </ModalComponent>
+      </button>
+      {getEditDeleteButtons()}
     </div>
   )
 }

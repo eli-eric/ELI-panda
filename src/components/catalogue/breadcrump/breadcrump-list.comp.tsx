@@ -1,33 +1,23 @@
-import { ChevronRightIcon, HomeIcon } from '@heroicons/react/20/solid'
+import { HomeIcon } from '@heroicons/react/20/solid'
 import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
-import { useState } from 'react'
-import ModalComponent from 'src/components/ui/modal/modal.comp'
 
-import { PlusIconButton } from '@/components/ui/Buttons'
+import { useCategoryEdit } from '@/hooks/category/useCategoryEdit'
 import { PATH } from '@/types/constants/paths'
-import { ROLE } from '@/types/constants/roles'
-
-import CategoryEditForm from '../categoryEditForm/CategoryEditForm'
 
 interface Props {
   navigationList: JSX.Element[] | undefined
   handleClick: (path: string) => void
   testId: string
+  catalogueParentUid: string | undefined
 }
 
-const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props) => {
+const BreadcrumbListComponent = ({ navigationList, handleClick, testId, catalogueParentUid }: Props) => {
   const router = useRouter()
-  const { data: session } = useSession()
-
-  const [open, setopen] = useState(false)
-
+  const { getAddButton } = useCategoryEdit({ catalogueParentUid })
   const { search } = router.query
-
   const onCLickHandler = () => {
     handleClick(PATH.CATALOGUE + (search ? `?search=${search}` : ''))
   }
-
   return (
     <div data-testid={testId} id="catalogue-breadcrump" className="bg-white pt-3 pb-3 ">
       <nav className="flex" aria-label="Breadcrumb">
@@ -45,23 +35,9 @@ const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props)
             </div>
           </li>
           {navigationList}
-          {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
-            <li className="flex">
-              <div className="flex items-center">
-                <ChevronRightIcon className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400" aria-hidden="true" />
-                <PlusIconButton
-                  onClickAction={() => {
-                    setopen(true)
-                  }}
-                />
-              </div>
-            </li>
-          )}
+          {getAddButton()}
         </ol>
       </nav>
-      <ModalComponent open={open} setOpen={setopen} buttons={{ noButtons: true }} testid="catalogueEdit">
-        <CategoryEditForm setopen={setopen} />
-      </ModalComponent>
     </div>
   )
 }

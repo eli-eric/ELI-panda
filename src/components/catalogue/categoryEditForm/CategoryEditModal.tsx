@@ -27,7 +27,7 @@ const CategoryEditModal = ({ setopen, parentUID, uid }: Props) => {
       data.groups && data.groups.length !== 0
         ? {
             ...data,
-            parentUid: parentUID,
+            parentUid: data.parentUid ? data.parentUid : parentUID,
             groups: data.groups?.map(group => ({
               ...group,
               properties: group.properties?.map(prop =>
@@ -37,7 +37,7 @@ const CategoryEditModal = ({ setopen, parentUID, uid }: Props) => {
               )
             }))
           }
-        : { ...data }
+        : { ...data, parentUid: parentUID }
     submit(formattedData)
   }
   useEffect(() => {
