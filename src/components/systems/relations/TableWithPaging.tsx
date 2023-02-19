@@ -40,7 +40,7 @@ const TableWithPaging = ({
   const router = useRouter()
   const intl = useIntl()
 
-  const { pagination, setTotalCount, getPaginationComponent } = usePagination(searchValue)
+  const { pagination, setTotalCount, getPaginationComponent } = usePagination({ dependecies: [searchValue] })
   const query = useMemo(
     () => ({ systemFromUid: router.query.slug, relationTypeCode, search: searchValue, pagination }),
     [router, relationTypeCode, searchValue, pagination]

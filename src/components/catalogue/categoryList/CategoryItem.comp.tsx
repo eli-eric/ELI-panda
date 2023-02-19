@@ -6,8 +6,8 @@ import { useState } from 'react'
 import ModalComponent from 'src/components/ui/modal/modal.comp'
 import ModalWarningComponent from 'src/components/ui/modal/warning/modal-warning.comp'
 
+import { useEndpoint } from '@/hooks/useEndpoint'
 import { categoryMockObject } from '@/types/catalogue/constants'
-import { ENDPOINTS } from '@/types/constants/endpoints'
 import { PATH } from '@/types/constants/paths'
 import { ModalButtons } from '@/types/form'
 import { CatalogueCategoryResponse } from '@/types/responses'
@@ -22,8 +22,8 @@ const CategoryItemComponent = ({ category }: Props) => {
   const router = useRouter()
   const [openEdit, setOpenEdit] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
+  const { catalogueCategoryImage } = useEndpoint({ uid: category.uid })
 
-  const { search } = router.query
   const path = PATH.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
 
   const deletModalButtons: ModalButtons = {
@@ -40,7 +40,7 @@ const CategoryItemComponent = ({ category }: Props) => {
   return (
     <div className=" flex-row justify-between relative flex z-10 items-center space-x-3 rounded-lg border border-gray-300 bg-white shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
       <Link
-        href={{ pathname: path, query: search && { search: search } }}
+        href={{ pathname: path, query: { ...router.query } }}
         key={category.code}
         className=" flex w-full items-center "
       >
@@ -50,7 +50,7 @@ const CategoryItemComponent = ({ category }: Props) => {
             width={200}
             height={200}
             alt={category.code}
-            src={ENDPOINTS.catalogueCategoryImage + '/' + category.uid + '/image'}
+            src={catalogueCategoryImage}
           />
         </div>
         <div className="min-w-0 flex-1 mx-6 my-5">

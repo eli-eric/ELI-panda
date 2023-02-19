@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import TooltipComponent from '@/components/ui/tooltip.comp'
-import { ENDPOINTS } from '@/types/constants/endpoints'
+import { useEndpoint } from '@/hooks/useEndpoint'
 import { PATH } from '@/types/constants/paths'
 import { CatalogueItem } from '@/types/responses'
 
@@ -17,16 +17,22 @@ interface Props {
 const ItemListRow = ({ item, index, categoryListLength }: Props) => {
   const router = useRouter()
   const { search } = router.query
+  const { catalogueItemImage } = useEndpoint({ uid: item.uid })
   const categoryPath = PATH.CATALOGUE + '/' + item.categoryPath
-  const path = ENDPOINTS.catalogueItemImage + '/' + item.uid + '/image'
 
   return (
     <tr className={(index % 2 === 0 ? undefined : 'bg-gray-100') + ' hover:bg-primary-200'}>
       <td className="whitespace-nowrap text-sm sm:pl-6 text-blue-500">
-        <Link href={'/catalogue/item/' + item.uid}>
+        <Link href={{ pathname: '/catalogue/item/' + item.uid }}>
           <div className="flex items-center">
             <div className="h-10 w-10 flex-shrink-0">
-              <Image className="h-10 w-10 rounded-full" alt={item.name} src={path} width={200} height={200} />
+              <Image
+                className="h-10 w-10 rounded-full"
+                alt={item.name}
+                src={catalogueItemImage}
+                width={200}
+                height={200}
+              />
             </div>
             <div className="ml-4">{item.name}</div>
           </div>
@@ -48,7 +54,7 @@ const ItemListRow = ({ item, index, categoryListLength }: Props) => {
         ))}
       {categoryListLength !== 0 && (
         <td className="whitespace-nowrap text-sm  sm:pl-6 text-blue-500">
-          <Link href={{ pathname: categoryPath, query: search && { search: search } }}>{item.categoryName}</Link>
+          <Link href={{ pathname: categoryPath, query: { ...router.query } }}>{item.categoryName}</Link>
         </td>
       )}
       <td className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">{item.manufacturer}</td>
