@@ -23,25 +23,25 @@ const DashboardPage: NextPage = (): JSX.Element => {
 
   const releases: Array<RelaseVersion> = [
     {
-      id: '0.0.1',
+      id: '0.0.2',
       features: [
         {
-          description: 'Catalogue page: searching items via search bar - text box in the header of the page',
+          description:
+            'Catalogue categories: you can now edit(create, update, delete) categories, property groups and properties',
           link: '/catalogue'
         },
         {
-          description: 'Catalogue page: filter by categories - categories tiles',
-          link: '/catalogue'
+          description: 'Systems: first draft of the System overview',
+          link: '/systems'
         },
         {
-          description: 'Catalogue page: item detail page',
-          link: '/catalogue'
+          description: 'Systems - relationships: you can see all the relationships for the selected System',
+          link: '/systems'
         }
       ],
       bugs: [
         {
-          description:
-            'Loading indicator - show loading indicator during the start, if there is a slow network connection'
+          description: 'Logout - show loading indicator during the logout'
         }
       ]
     },
