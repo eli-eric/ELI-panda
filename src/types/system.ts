@@ -18,6 +18,7 @@ export type System = {
   subZoneCode?: string
   serialNumber?: string
   batchNumber?: string
+  systemTypeUID?: string
 }
 
 export type SystemProps = { data: System }

@@ -1,18 +1,22 @@
+import { CheckIcon } from '@heroicons/react/24/outline'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import SystemDetailSectionComponent from 'src/modules/systems/details/system-detail/system-detail-section.comp'
+import { Suspense, useState } from 'react'
 import useSWR from 'swr/immutable'
 
 import Breadcrumbs from '@/components/systems/Breadcrumbs'
 import Card from '@/components/systems/Card'
 import Description from '@/components/systems/Description'
+import SystemDetail from '@/components/systems/Detail'
 import Preview from '@/components/systems/Preview'
 import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
+import Button from '@/components/ui/Buttons'
+import { Heading } from '@/components/ui/card/card.comp'
+import ProgressBarComponent from '@/components/ui/progress-bar.comp'
 import useEditMode from '@/hooks/systems/useEditMode'
-import { System, SystemUidName } from '@/types/system'
+import { System } from '@/types/system'
 
 import { fetchFakeSystem } from '../[slug]'
 
@@ -34,35 +38,21 @@ const Page: NextPage = () => {
     systemAlias: '',
     locationCode: '',
     catalogueUID: '',
-    eun: '',
-    itemUsageCategoryCode: '',
-    estimatedLifeTime: 0,
+    importanceCode: '',
+    systemTypeUID: '',
+    ownerUID: '',
   }
 
   const { data: parentData } = useSWR(uid, fetchFakeSystem)
 
   const [data, setData] = useState<System>(empty)
 
-  const {
-    newImage,
-    setNewImage,
-    FormErrors,
-    EditModeContainer,
-    register,
-    discard,
-  } = useEditMode(onSubmit, data)
-
-  useEffect(() => {
-    const path: SystemUidName[] = parentData
-      ? [...parentData.path, [parentData.uid, parentData.name]]
-      : []
-    path && setData(obj => ({ ...obj, path: path }))
-  }, [parentData, setData])
+  const { newImage, setNewImage, FormErrors, EditModeContainer, register } =
+    useEditMode(onSubmit, data)
 
   const isEditMode = true
   const setIsEditMode = () => {}
 
-  if (!data) return <>Loading</>
   return (
     <>
       <Head>
@@ -72,67 +62,75 @@ const Page: NextPage = () => {
       <EditModeContainer>
         <div className="p-2 lg:p-4 flex flex-wrap">
           <nav className="p-1 lg:p2 w-full">
-            <Breadcrumbs data={data} />
+            <Suspense
+              fallback={
+                <div className="py-3">
+                  <ProgressBarComponent />
+                </div>
+              }
+            >
+              <Breadcrumbs
+                path={[...(parentData?.path ?? []), uid as string]}
+              />
+            </Suspense>
           </nav>
 
           <div className="w-full">
             <FormErrors />
           </div>
 
-          <div className="flex w-full justify-between">
-            <Title
-              data={data}
-              discard={discard}
-              setIsEditMode={setIsEditMode}
-              isEditMode={isEditMode}
-              register={register}
-            />
+          <div className="lg:px-3 flex flex-wrap w-full justify-between gap-4">
+            <Title data={data} isEditMode={isEditMode} register={register} />
+            <div className="isolate inline-flex rounded-md shadow-sm">
+              <Button type="submit">
+                <CheckIcon className="h-5" />
+              </Button>
+            </div>
           </div>
 
-          <aside className="p-1 lg:p-2 w-full lg:w-1/4">
-            <nav>
-              <div className="hidden lg:block">
-                <b>Subsystems</b>
-                <Subsystems data={data} />
-              </div>
-              <details className="lg:hidden max-h-[50vh] overflow-auto">
-                <summary>
-                  <b>Subsystems</b>
-                </summary>
-                <Subsystems data={data} />
-              </details>
-            </nav>
+          <aside className="w-full lg:w-1/4">
+            <Card>
+              <Heading text="Subsystems" />
+              <Suspense fallback={<ProgressBarComponent />}>
+                <nav aria-label="Subsystems">
+                  <Subsystems ids={data.children} />
+                </nav>
+              </Suspense>
+            </Card>
           </aside>
 
-          <main className="p-1 lg:p-2 lg:w-3/4">
+          <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
             <article>
-              <div className="flex flex-wrap gap-2 lg:gap-4">
-                <section className="grow lg:grow-0 shrink-0">
-                  <b>Preview</b>
-                  <Preview
-                    data={data}
-                    isEditMode={isEditMode}
-                    newImage={newImage}
-                    setNewImage={setNewImage}
-                  />
-                </section>
+              <Card>
+                <Heading text="Detail" />
+                <div className="flex flex-wrap lg:flex-nowrap gap-2 lg:gap-4">
+                  <section>
+                    <Preview
+                      image={data.image}
+                      alt={data.name}
+                      isEditMode={isEditMode}
+                      newImage={newImage}
+                      setNewImage={setNewImage}
+                    />
+                  </section>
 
-                <section className="grow">
-                  <b>Details</b>
-                  <Card>
-                    <SystemDetailSectionComponent systemInfo={data} />
-                  </Card>
-                </section>
-
-                <section className="basis-full">
-                  <b>Description</b>
-                  <Description
-                    data={data}
-                    isEditMode={isEditMode}
-                    register={register}
-                  />
-                </section>
-              </div>
+                  <section>
+                    <SystemDetail
+                      register={register}
+                      isEditMode={isEditMode}
+                      data={data}
+                    />
+                    <div className="text-sm font-medium text-gray-400">
+                      Description
+                    </div>
+                    <Description
+                      data={data}
+                      isEditMode={isEditMode}
+                      register={register}
+                    />
+                  </section>
+                </div>
+              </Card>
             </article>
           </main>
         </div>
