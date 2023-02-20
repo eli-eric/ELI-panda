@@ -42,11 +42,7 @@ export const getFakeSystem = (): System => {
     path: getFakePath(),
     image: 'https://source.unsplash.com/collection/71371194/500x500',
     description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
-<<<<<<< HEAD
-      5
-=======
       5,
->>>>>>> new-systems
     )}`,
     children: getFakePath(),
     importanceCode: faker.datatype.string(),
@@ -88,7 +84,7 @@ const Page: NextPage = () => {
 
   const [viewControl, setViewControl] = useState({
     system: true,
-    relations: true
+    relations: true,
   })
 
   const { data } = useSWR(uid, fetchFakeSystem)
@@ -101,7 +97,7 @@ const Page: NextPage = () => {
     FormErrors,
     EditModeContainer,
     register,
-    discard
+    discard,
   } = useEditMode(onSubmit, data)
 
   if (!data) return <LoaderComponent />
@@ -147,7 +143,6 @@ const Page: NextPage = () => {
                 <Results query={query} />
               </div>
             ))}
-
           <div className="w-full">
             <ViewControl
               setViewControl={setViewControl}
@@ -173,13 +168,6 @@ const Page: NextPage = () => {
           </aside>
 
           <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
-<<<<<<< HEAD
-            <ViewControl
-              setViewControl={setViewControl}
-              viewControl={viewControl}
-            />
-=======
->>>>>>> new-systems
             {viewControl.system && (
               <article>
                 <Card>
