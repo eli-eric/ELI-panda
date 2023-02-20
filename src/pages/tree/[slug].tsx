@@ -129,7 +129,9 @@ const Page: NextPage = () => {
           <div className="lg:px-3 flex flex-wrap w-full justify-between gap-4">
             <Title data={data} isEditMode={isEditMode} register={register} />
 
-            {isEditMode || <Prompt query={query} setQuery={setQuery} />}
+            {isEditMode || (
+              <Prompt query={query as string} setQuery={setQuery} />
+            )}
             <FormButtons
               isEditMode={isEditMode}
               setIsEditMode={setIsEditMode}
