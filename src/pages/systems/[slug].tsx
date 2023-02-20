@@ -54,11 +54,6 @@ export const getFakeSystem = (): System => {
     locationCode: faker.datatype.string(),
     ownerUID: faker.datatype.string(),
     catalogueUID: undefined,
-    eun: faker.datatype.string(),
-    serialNumber: faker.datatype.uuid(),
-    batchNumber: faker.datatype.uuid(),
-    itemUsageCategoryCode: faker.datatype.string(),
-    estimatedLifeTime: faker.datatype.number(),
   }
 }
 

@@ -8,16 +8,11 @@ export type System = {
   systemAlias: string
   locationCode: string
   catalogueUID?: string
-  eun: string
-  itemUsageCategoryCode: string
-  estimatedLifeTime: number
   ownerUID?: string
   image?: string
   importanceCode?: string
   zoneCode?: string
   subZoneCode?: string
-  serialNumber?: string
-  batchNumber?: string
   systemTypeUID?: string
 }
 
