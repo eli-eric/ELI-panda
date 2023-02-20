@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { Dispatch, Fragment, SetStateAction, useEffect, useMemo } from 'react'
+import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
@@ -19,7 +19,7 @@ const TableWithPaging = ({
   searchValue,
   relationTypeCode,
   setSelectedSystem,
-  selectedSystem
+  selectedSystem,
 }: {
   searchValue?: string
   relationTypeCode?: RELATION_TYPE_CODE
@@ -40,18 +40,26 @@ const TableWithPaging = ({
   const router = useRouter()
   const intl = useIntl()
 
-  const { pagination, setTotalCount, getPaginationComponent, page } = usePagination({ dependecies: [searchValue] })
+  const { pagination, setTotalCount, getPaginationComponent, page } =
+    usePagination({ dependecies: [searchValue] })
   const query = useMemo(
-    () => ({ systemFromUid: router.query.slug, relationTypeCode, search: searchValue, pagination }),
-    [router, relationTypeCode, searchValue, pagination]
+    () => ({
+      systemFromUid: router.query.slug,
+      relationTypeCode,
+      search: searchValue,
+      pagination,
+    }),
+    [router, relationTypeCode, searchValue, pagination],
   )
   const endpoints = useEndpoint({ query })
-  const { data: systems } = useSWR<SystemsForRelResponse>(searchValue && endpoints.systemsForRelationship)
+  const { data: systems } = useSWR<SystemsForRelResponse>(
+    searchValue && endpoints.systemsForRelationship,
+  )
 
   const data = useSystemMapRows({
     systems: systems?.data,
     setSelectedSystem,
-    selectedSystem
+    selectedSystem,
   })
 
   useEffect(() => {
@@ -63,16 +71,16 @@ const TableWithPaging = ({
   }, [systems, setTotalCount])
 
   const collumsTitle = Object.keys(messages.tableHeader).map(key =>
-    intl.formatMessage({ id: messages.tableHeader[key] })
+    intl.formatMessage({ id: messages.tableHeader[key] }),
   )
 
   return (
-    <Fragment>
+    <div className="flex flex-col min-h-[535px] justify-between">
       <TableComponent collumsTitle={collumsTitle} data={data} />
       {!systems && <EmptyResults />}
-      {systems && systems.totalCount === 0 && <EmptyResults />}
+      {systems && systems.data.length === 0 && <EmptyResults />}
       {getPaginationComponent()}
-    </Fragment>
+    </div>
   )
 }
 
