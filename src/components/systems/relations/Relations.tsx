@@ -3,7 +3,6 @@ import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
 import { Button } from '@/components/ui/Buttons'
-import DisclosureComponent from '@/components/ui/Disclosure.comp'
 import ModalComponent from '@/components/ui/modal/modal.comp'
 import ModalWarningComponent from '@/components/ui/modal/warning/modal-warning.comp'
 import TableComponent from '@/components/ui/Table.comp'
@@ -66,21 +65,19 @@ const Relations = ({
 
   return (
     <Fragment>
-      <DisclosureComponent title={intl.formatMessage({ id: messages.title })}>
-        <div className="px-4 sm:px-10 lg:px-4 py-4">
-          <Button
-            customClass="mb-2"
-            onClickAction={() => {
-              setRelationTypeCode(RELATION_TYPE_CODE.IS_SPARE_FOR)
-              setOpenAddRelation(true)
-            }}
-            text={intl.formatMessage({ id: messages.buttons.addSpare })}
-          />
-          {relations && (
-            <TableComponent collumsTitle={collumsTitle} data={data} />
-          )}
-        </div>
-      </DisclosureComponent>
+      <div className="px-4 sm:px-10 lg:px-4 py-4">
+        <Button
+          customClass="mb-2"
+          onClickAction={() => {
+            setRelationTypeCode(RELATION_TYPE_CODE.IS_SPARE_FOR)
+            setOpenAddRelation(true)
+          }}
+          text={intl.formatMessage({ id: messages.buttons.addSpare })}
+        />
+        {relations && (
+          <TableComponent collumsTitle={collumsTitle} data={data} />
+        )}
+      </div>
       <ModalComponent
         open={openAddRelation}
         setOpen={setOpenAddRelation}

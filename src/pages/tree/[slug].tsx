@@ -207,6 +207,8 @@ const Page: NextPage = () => {
             {viewControl.relations && (
               <ErrorBoundary fallback={<ErrorPage />}>
                 <Suspense fallback={<ProgressBarComponent />}>
+                  <Heading text="Relations" />
+
                   <Relations uid={data.uid} systemName={data.name} />
                 </Suspense>
               </ErrorBoundary>
