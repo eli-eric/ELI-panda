@@ -22,13 +22,17 @@ export default function ItemsPaginationComponent({
   pageSize,
   pageNumbers,
   previousPageHandler,
-  nextPageHandler
+  nextPageHandler,
 }: Props) {
   const noResults = itemsTotalCount === 0
   const nextIsDisabled = noResults || pageNumbers === page
   const previousIsDisabled = noResults || page === 1
   const from = noResults ? 0 : 1 + (page - 1) * pageSize
-  const to = noResults ? 0 : pageNumbers === page ? itemsTotalCount : page * pageSize
+  const to = noResults
+    ? 0
+    : pageNumbers === page
+    ? itemsTotalCount
+    : page * pageSize
   return (
     <nav
       data-testid="catalogue-paging"
@@ -40,7 +44,11 @@ export default function ItemsPaginationComponent({
         <p className="text-sm text-gray-700">
           <FormattedMessage
             id={text}
-            values={createMessageValues({ from: from, to: to, resultsCount: itemsTotalCount })}
+            values={createMessageValues({
+              from: from,
+              to: to,
+              resultsCount: itemsTotalCount,
+            })}
           />
         </p>
       </div>

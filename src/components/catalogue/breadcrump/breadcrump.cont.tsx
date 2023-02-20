@@ -29,7 +29,11 @@ const BreadcrumbContainer = () => {
   }, [router])
 
   return (
-    <BreadcrumbListComponent testId="catalogue-breadcrump" navigationList={navigationList} handleClick={handleClick} />
+    <BreadcrumbListComponent
+      testId="catalogue-breadcrump"
+      navigationList={navigationList}
+      handleClick={handleClick}
+    />
   )
 }
 export default BreadcrumbContainer

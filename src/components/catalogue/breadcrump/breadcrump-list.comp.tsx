@@ -13,7 +13,11 @@ interface Props {
   testId: string
 }
 
-const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props) => {
+const BreadcrumbListComponent = ({
+  navigationList,
+  handleClick,
+  testId,
+}: Props) => {
   const router = useRouter()
   const [open, setopen] = useState(false)
 
@@ -24,7 +28,11 @@ const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props)
   }
 
   return (
-    <div data-testid={testId} id="catalogue-breadcrump" className="bg-white pt-3 pb-3 ">
+    <div
+      data-testid={testId}
+      id="catalogue-breadcrump"
+      className="bg-white pt-3 pb-3 "
+    >
       <nav className="flex" aria-label="Breadcrumb">
         <ol role="list" className="flex space-x-4 bg-white px-6  ">
           <li className="flex">
@@ -34,7 +42,10 @@ const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props)
                 onClick={onCLickHandler}
                 className="text-gray-400 hover:text-gray-500"
               >
-                <HomeIcon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+                <HomeIcon
+                  className="h-5 w-5 flex-shrink-0"
+                  aria-hidden="true"
+                />
                 <span className="sr-only">Home</span>
               </button>
             </div>
@@ -42,7 +53,10 @@ const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props)
           {navigationList}
           <li className="flex">
             <div className="flex items-center">
-              <ChevronRightIcon className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400" aria-hidden="true" />
+              <ChevronRightIcon
+                className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400"
+                aria-hidden="true"
+              />
               <PlusIconButton
                 onClickAction={() => {
                   setopen(true)
@@ -52,7 +66,12 @@ const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props)
           </li>
         </ol>
       </nav>
-      <ModalComponent open={open} setOpen={setopen} buttons={{ noButtons: true }} testid="catalogueEdit">
+      <ModalComponent
+        open={open}
+        setOpen={setopen}
+        buttons={{ noButtons: true }}
+        testid="catalogueEdit"
+      >
         <CategoryEditForm setopen={setopen} />
       </ModalComponent>
     </div>

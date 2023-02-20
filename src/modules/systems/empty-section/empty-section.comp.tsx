@@ -13,8 +13,12 @@ export default function EmptySectionComponent() {
           </div>
           <div className="py-16">
             <div className="text-center">
-              <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Systems overview</h1>
-              <p className="mt-2 text-base text-gray-500">Select some system first</p>
+              <h1 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+                Systems overview
+              </h1>
+              <p className="mt-2 text-base text-gray-500">
+                Select some system first
+              </p>
             </div>
           </div>
         </main>

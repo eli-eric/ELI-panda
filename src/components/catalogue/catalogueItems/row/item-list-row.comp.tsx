@@ -20,12 +20,22 @@ const ItemListRow = ({ item, index, categoryListLength }: Props) => {
   const path = ENDPOINTS.catalogueItem + '/' + item.uid + '/image'
 
   return (
-    <tr className={(index % 2 === 0 ? undefined : 'bg-gray-100') + ' hover:bg-primary-200'}>
+    <tr
+      className={
+        (index % 2 === 0 ? undefined : 'bg-gray-100') + ' hover:bg-primary-200'
+      }
+    >
       <td className="whitespace-nowrap text-sm sm:pl-6 text-blue-500">
         <Link href={'/catalogue/item/' + item.uid}>
           <div className="flex items-center">
             <div className="h-10 w-10 flex-shrink-0">
-              <Image className="h-10 w-10 rounded-full" alt={item.name} src={path} width={200} height={200} />
+              <Image
+                className="h-10 w-10 rounded-full"
+                alt={item.name}
+                src={path}
+                width={200}
+                height={200}
+              />
             </div>
             <div className="ml-4">{item.name}</div>
           </div>
@@ -41,19 +51,37 @@ const ItemListRow = ({ item, index, categoryListLength }: Props) => {
       {categoryListLength === 0 &&
         item.details &&
         item.details.map(item => (
-          <td key={item.propertyName} className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">
+          <td
+            key={item.propertyName}
+            className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500"
+          >
             {item.value}
           </td>
         ))}
       {categoryListLength !== 0 && (
         <td className="whitespace-nowrap text-sm  sm:pl-6 text-blue-500">
-          <Link href={{ pathname: categoryPath, query: search && { search: search } }}>{item.categoryName}</Link>
+          <Link
+            href={{
+              pathname: categoryPath,
+              query: search && { search: search },
+            }}
+          >
+            {item.categoryName}
+          </Link>
         </td>
       )}
-      <td className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">{item.manufacturer}</td>
-      <td className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">{item.manufacturerNumber}</td>
+      <td className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">
+        {item.manufacturer}
+      </td>
+      <td className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">
+        {item.manufacturerNumber}
+      </td>
       <td className="whitespace-nowrap text-sm  sm:pl-6 text-blue-500">
-        <a target="_blank" href={item.manufacturerUrl} rel="noopener noreferrer">
+        <a
+          target="_blank"
+          href={item.manufacturerUrl}
+          rel="noopener noreferrer"
+        >
           {item.manufacturerUrl}
         </a>
       </td>

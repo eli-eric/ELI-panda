@@ -16,7 +16,7 @@ const schema = yup.object({
   serialNumber: yup.string().required(),
   batchNumber: yup.string().required(),
   itemUsageCategoryCode: yup.string().required(),
-  estimatedLifeTime: yup.number().required()
+  estimatedLifeTime: yup.number().required(),
 })
 
 const useYupValidationResolver = validationSchema =>
@@ -24,12 +24,12 @@ const useYupValidationResolver = validationSchema =>
     async data => {
       try {
         const values = await validationSchema.validate(data, {
-          abortEarly: false
+          abortEarly: false,
         })
 
         return {
           values,
-          errors: {}
+          errors: {},
         }
       } catch (errors: any) {
         return {
@@ -39,21 +39,25 @@ const useYupValidationResolver = validationSchema =>
               ...allErrors,
               [currentError.path]: {
                 type: currentError.type ?? 'validation',
-                message: currentError.message
-              }
+                message: currentError.message,
+              },
             }),
-            {}
-          )
+            {},
+          ),
         }
       }
     },
-    [validationSchema]
+    [validationSchema],
   )
 
-const useEditMode = (onSubmit: any, data: System | undefined, isOpen: boolean = false) => {
+const useEditMode = (
+  onSubmit: any,
+  data: System | undefined,
+  isOpen: boolean = false,
+) => {
   const { register, handleSubmit, reset, formState } = useForm<System>({
     defaultValues: data,
-    resolver: useYupValidationResolver(schema)
+    resolver: useYupValidationResolver(schema),
   })
   const [isEditMode, setIsEditMode] = useState(isOpen)
   const [newImage, setNewImage] = useState('')
@@ -68,7 +72,9 @@ const useEditMode = (onSubmit: any, data: System | undefined, isOpen: boolean = 
       <form
         onSubmit={handleSubmit(data => {
           setIsEditMode(false)
-          return newImage ? onSubmit({ ...data, image: newImage }) : onSubmit(data)
+          return newImage
+            ? onSubmit({ ...data, image: newImage })
+            : onSubmit(data)
         })}
       >
         {children}
@@ -102,7 +108,7 @@ const useEditMode = (onSubmit: any, data: System | undefined, isOpen: boolean = 
     newImage,
     reset,
     setIsEditMode,
-    discard
+    discard,
   }
 }
 

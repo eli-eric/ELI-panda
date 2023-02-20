@@ -15,7 +15,13 @@ interface Props {
 
 const messages = message.common.buttons
 
-export default function ModalComponent({ open, setOpen, children, testid, buttons }: Props) {
+export default function ModalComponent({
+  open,
+  setOpen,
+  children,
+  testid,
+  buttons,
+}: Props) {
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -31,7 +37,10 @@ export default function ModalComponent({ open, setOpen, children, testid, button
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </Transition.Child>
 
-        <div data-testid={testid + '-modal'} className="fixed inset-0 z-10 overflow-y-auto">
+        <div
+          data-testid={testid + '-modal'}
+          className="fixed inset-0 z-10 overflow-y-auto"
+        >
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <Transition.Child
               as={Fragment}
@@ -46,7 +55,11 @@ export default function ModalComponent({ open, setOpen, children, testid, button
                 <Fragment>
                   {children}
                   {buttons?.noButtons !== true && (
-                    <ModalButtonsComponent setOpen={setOpen} testid={testid} buttons={buttons} />
+                    <ModalButtonsComponent
+                      setOpen={setOpen}
+                      testid={testid}
+                      buttons={buttons}
+                    />
                   )}
                 </Fragment>
               </Dialog.Panel>

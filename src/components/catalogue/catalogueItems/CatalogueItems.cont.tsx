@@ -16,10 +16,15 @@ const messages = message.cataloguePage.defaultMessage
 
 interface Props {
   categoryListLength?: number
-  setCatalogueItemsList: Dispatch<SetStateAction<CatalogueItemsResponse | undefined>>
+  setCatalogueItemsList: Dispatch<
+    SetStateAction<CatalogueItemsResponse | undefined>
+  >
 }
 
-const CatalogueItemsContainer = ({ categoryListLength, setCatalogueItemsList }: Props) => {
+const CatalogueItemsContainer = ({
+  categoryListLength,
+  setCatalogueItemsList,
+}: Props) => {
   const intl = useIntl()
   const router = useRouter()
   const { status: session } = useSession()
@@ -32,7 +37,10 @@ const CatalogueItemsContainer = ({ categoryListLength, setCatalogueItemsList }: 
   const [pageNumbers, setPageNumbers] = useState<number | undefined>()
   /* conditionaly fetch catalogue Items if category list dont return categories or search is not in query */
   const { data: catalogueItems } = useSWR<CatalogueItemsResponse>(
-    categoryListLength === 0 || (router.query.search && session === 'authenticated') ? catalogueItemsPath : null
+    categoryListLength === 0 ||
+      (router.query.search && session === 'authenticated')
+      ? catalogueItemsPath
+      : null,
   )
   const previousPageHandler = () => {
     setPage(prev => prev - 1)
@@ -52,7 +60,7 @@ const CatalogueItemsContainer = ({ categoryListLength, setCatalogueItemsList }: 
       const pageCount = Math.ceil(catalogueItems?.totalCount / pageSize)
       setPageNumbers(pageCount)
       router.push({ query: { ...router.query, page: page } }, undefined, {
-        shallow: true
+        shallow: true,
       })
     }
   }, [catalogueItems, pageSize, page]) // eslint-disable-line
@@ -62,7 +70,10 @@ const CatalogueItemsContainer = ({ categoryListLength, setCatalogueItemsList }: 
       <div className="h-full overflow-auto border-t border-gray-300  ">
         {catalogueItems &&
           (catalogueItems.totalCount !== 0 ? (
-            <CatalogueItemsComponent catalogueItems={catalogueItems} categoryListLength={categoryListLength} />
+            <CatalogueItemsComponent
+              catalogueItems={catalogueItems}
+              categoryListLength={categoryListLength}
+            />
           ) : (
             <DefaultMessageComponent
               title={intl.formatMessage({ id: messages.noResults.title })}

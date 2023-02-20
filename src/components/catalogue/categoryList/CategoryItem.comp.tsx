@@ -23,17 +23,20 @@ const CategoryItemComponent = ({ category }: Props) => {
   const [openDelete, setOpenDelete] = useState(false)
 
   const { search } = router.query
-  const path = PATH.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
+  const path =
+    PATH.CATALOGUE +
+    (!category.parentPath ? '/' : '/' + category.parentPath + '/') +
+    category.code
 
   const deletModalButtons: ModalButtons = {
     goNext: {
       text: 'continue',
-      onClick: () => setOpenDelete(false)
+      onClick: () => setOpenDelete(false),
     },
     goBack: {
       text: 'cancel',
-      onClick: () => setOpenDelete(false)
-    }
+      onClick: () => setOpenDelete(false),
+    },
   }
 
   return (
@@ -81,11 +84,27 @@ const CategoryItemComponent = ({ category }: Props) => {
           <TrashIcon className="h-6 w-6 text-red-700" aria-hidden="true" />
         </button>
       </div>
-      <ModalComponent open={openEdit} setOpen={setOpenEdit} buttons={{ noButtons: true }} testid="catalogueEdit">
-        <CategoryEditForm setopen={setOpenEdit} defaultValues={categoryMockObject} />
+      <ModalComponent
+        open={openEdit}
+        setOpen={setOpenEdit}
+        buttons={{ noButtons: true }}
+        testid="catalogueEdit"
+      >
+        <CategoryEditForm
+          setopen={setOpenEdit}
+          defaultValues={categoryMockObject}
+        />
       </ModalComponent>
-      <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deletModalButtons} testid="catalogueEdit">
-        <ModalWarningComponent title="Warning" message="Are you sure you want to remove this Category?" />
+      <ModalComponent
+        open={openDelete}
+        setOpen={setOpenDelete}
+        buttons={deletModalButtons}
+        testid="catalogueEdit"
+      >
+        <ModalWarningComponent
+          title="Warning"
+          message="Are you sure you want to remove this Category?"
+        />
       </ModalComponent>
     </div>
   )

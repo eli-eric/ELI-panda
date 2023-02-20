@@ -35,7 +35,7 @@ const ImageGalleryComponent = ({ images }: Props) => {
                   <span
                     className={classNames(
                       selected ? 'ring-primary-500' : 'ring-transparent',
-                      'pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2'
+                      'pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2',
                     )}
                     aria-hidden="true"
                   />

@@ -1,6 +1,6 @@
 export const messages = {
   common: {
-    buttons: { close: 'Close' }
+    buttons: { close: 'Close' },
   },
   layout: {
     login: 'Log In',
@@ -10,11 +10,11 @@ export const messages = {
     systemsOverview: 'Systems',
     reports: 'Reports',
     button: {
-      signout: 'Sign Out'
+      signout: 'Sign Out',
     },
     userMenu: {
       profile: 'Profile',
-      singout: 'Sign Out'
+      singout: 'Sign Out',
     },
     profile: {
       title: 'Profile',
@@ -22,8 +22,8 @@ export const messages = {
       fullName: 'Full name',
       email: 'Email address',
       facility: 'Facility',
-      roles: 'Roles'
-    }
+      roles: 'Roles',
+    },
   },
   authPage: {
     head: 'Eli Panda - Sign In',
@@ -31,9 +31,9 @@ export const messages = {
     form: {
       userName: 'User Name',
       password: 'Password',
-      button: { default: 'Sign In', isLoading: 'Loading...' }
+      button: { default: 'Sign In', isLoading: 'Loading...' },
     },
-    alert: { title: 'Something went wrong!' }
+    alert: { title: 'Something went wrong!' },
   },
   dashboardPage: { head: 'Eli Panda - Dashboard' },
   cataloguePage: {
@@ -43,11 +43,11 @@ export const messages = {
       help: { text: 'Select category or use Search bar' },
       noResults: {
         title: 'No results found',
-        text: 'We can’t find anything with that term at the moment, try searching something else.'
-      }
+        text: 'We can’t find anything with that term at the moment, try searching something else.',
+      },
     },
     pagination: {
-      text: 'Showing <medium>{from}</medium> to <medium>{to}</medium> of <medium>{resultsCount}</medium> results'
+      text: 'Showing <medium>{from}</medium> to <medium>{to}</medium> of <medium>{resultsCount}</medium> results',
     },
     itemList: {
       header: {
@@ -57,15 +57,15 @@ export const messages = {
         categoryName: 'Category name',
         manufactorer: 'Manufacturer',
         manufacturerNumber: 'Manufacturer Number',
-        manufacturerUrl: 'Manufacturer Url'
-      }
+        manufacturerUrl: 'Manufacturer Url',
+      },
     },
     itemDetail: {
       buttons: {
         back: 'Back',
-        edit: 'Edit'
-      }
-    }
+        edit: 'Edit',
+      },
+    },
   },
   systemsPage: {
     head: 'Eli Panda - Systems',
@@ -86,7 +86,7 @@ export const messages = {
         serialNumber: 'Serial Number',
         batchNumber: 'Batch Number',
         itemUsageCategoryCode: 'Item Usage Category Code',
-        estimatedLifeTime: 'Estimated Life Time'
+        estimatedLifeTime: 'Estimated Life Time',
       },
       formFieldName: {
         name: 'name',
@@ -104,8 +104,8 @@ export const messages = {
         serialNumber: 'serialNumber',
         batchNumber: 'batchNumber',
         itemUsageCategoryCode: 'itemUsageCategoryCode',
-        estimatedLifeTime: 'estimatedLifeTime'
-      }
+        estimatedLifeTime: 'estimatedLifeTime',
+      },
     },
     itemDetail: {
       eun: 'Eun',
@@ -118,9 +118,9 @@ export const messages = {
       estimatedLifetime: 'Estimated Lifetime',
       obsolete: 'Obsolete',
       createdBy: 'Created By',
-      note: 'Note'
-    }
+      note: 'Note',
+    },
   },
   reportsPage: { head: 'Eli Panda - Reports' },
-  defaul: { head: 'Eli Panda' }
+  defaul: { head: 'Eli Panda' },
 }

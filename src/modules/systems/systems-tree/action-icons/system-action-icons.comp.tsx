@@ -1,4 +1,8 @@
-import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import {
+  PencilSquareIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline'
 import useAxios from 'src/hooks/useAxios'
 import { useRouter } from 'next/router'
 import { useContext, useState } from 'react'
@@ -16,13 +20,15 @@ const SystemActionIconsComponent = ({ uid }: Props) => {
   const { isEdit, setEdit, setUid } = useContext(FormContext)
   const router = useRouter()
   const disabled = isEdit
-  const customClass = `h-5 w-5 ${disabled ? '' : 'hover:text-primary-500 hover:cursor-pointer'}`
+  const customClass = `h-5 w-5 ${
+    disabled ? '' : 'hover:text-primary-500 hover:cursor-pointer'
+  }`
   const [modalOpen, setModalOpen] = useState(false)
 
   const { fetchData } = useAxios({
     url: ENDPOINTS.systemDetail + '/' + uid,
     method: 'delete',
-    mutateUrlList: [ENDPOINTS.systemTree]
+    mutateUrlList: [ENDPOINTS.systemTree],
   })
 
   const handleEditClick = () => {
@@ -53,12 +59,12 @@ const SystemActionIconsComponent = ({ uid }: Props) => {
   const modalButtons: ModalButtons = {
     goNext: {
       text: 'continue',
-      onClick: () => confirm()
+      onClick: () => confirm(),
     },
     goBack: {
       text: 'cancel',
-      onClick: () => setModalOpen(false)
-    }
+      onClick: () => setModalOpen(false),
+    },
   }
 
   return (
@@ -66,8 +72,16 @@ const SystemActionIconsComponent = ({ uid }: Props) => {
       <PencilSquareIcon onClick={handleEditClick} className={customClass} />
       <TrashIcon onClick={handleDeleteClick} className={customClass} />
       <PlusIcon onClick={handleAddClick} className={customClass} />
-      <ModalComponent open={modalOpen} setOpen={setModalOpen} testid="delete-warning-modal" buttons={modalButtons}>
-        <ModalWarningComponent title="Warning" message="Are you sure you want to remove this system?" />
+      <ModalComponent
+        open={modalOpen}
+        setOpen={setModalOpen}
+        testid="delete-warning-modal"
+        buttons={modalButtons}
+      >
+        <ModalWarningComponent
+          title="Warning"
+          message="Are you sure you want to remove this system?"
+        />
       </ModalComponent>
     </div>
   )

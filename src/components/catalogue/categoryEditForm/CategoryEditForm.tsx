@@ -16,7 +16,7 @@ interface Props {
 const CategoryEditForm = ({ setopen, defaultValues }: Props) => {
   const formMethods = useForm<CatalogueFormType>({
     defaultValues: defaultValues,
-    resolver: yupResolver(categoryValidationschema)
+    resolver: yupResolver(categoryValidationschema),
   })
   const onSubmit = (data: CatalogueFormType) => {
     const formattedData =
@@ -27,10 +27,13 @@ const CategoryEditForm = ({ setopen, defaultValues }: Props) => {
               ...group,
               properties: group.properties?.map(prop =>
                 prop.listOfValues && prop.listOfValues.length !== 0
-                  ? { ...prop, listOfValues: prop.listOfValues.map(value => value.value) }
-                  : { ...prop }
-              )
-            }))
+                  ? {
+                      ...prop,
+                      listOfValues: prop.listOfValues.map(value => value.value),
+                    }
+                  : { ...prop },
+              ),
+            })),
           }
         : { ...data }
     console.log(formattedData)

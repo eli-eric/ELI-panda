@@ -13,7 +13,7 @@ const PropertyList = ({ name, errors }: Props) => {
   const { control } = useFormContext<CatalogueFormType>()
   const { fields, append, remove } = useFieldArray<CatalogueFormType>({
     control,
-    name: `${name}.properties`
+    name: `${name}.properties`,
   })
 
   const handleAddProp = () => {

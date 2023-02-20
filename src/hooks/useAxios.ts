@@ -15,7 +15,11 @@ interface UseAxiosReturn {
   fetchData: (body?: object) => void
 }
 
-const useAxios = ({ url, method, mutateUrlList }: UseAxiosProps): UseAxiosReturn => {
+const useAxios = ({
+  url,
+  method,
+  mutateUrlList,
+}: UseAxiosProps): UseAxiosReturn => {
   const { mutate } = useSWRConfig()
 
   const [response, setResponse] = useState<object | null>(null)

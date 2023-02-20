@@ -16,7 +16,10 @@ const SystemDetailContainer = ({ systemInfo }: Props) => {
     <div className="bg-white pb-10 mt-4">
       {systemInfo ? (
         <SystemDetailComponent>
-          <SystemDetailHeaderComponent name={systemInfo.name} description={systemInfo.description} />
+          <SystemDetailHeaderComponent
+            name={systemInfo.name}
+            description={systemInfo.description}
+          />
           <SystemDetailSectionComponent systemInfo={systemInfo} />
         </SystemDetailComponent>
       ) : (

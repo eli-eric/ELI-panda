@@ -9,8 +9,8 @@ const messages = message.systemsPage
 const systems = [
   {
     name: 'ELI - Beamlines',
-    code: 'elibm'
-  }
+    code: 'elibm',
+  },
 ]
 
 const SystemsPage: NextPage = (): JSX.Element => {

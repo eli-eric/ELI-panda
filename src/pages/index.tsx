@@ -19,13 +19,15 @@ const LoginPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
   const router = useRouter()
   const { status } = useSession()
-  const callbackUrl = decodeURI((router.query?.callbackUrl as string) ?? PATH.DASHBOARD)
+  const callbackUrl = decodeURI(
+    (router.query?.callbackUrl as string) ?? PATH.DASHBOARD,
+  )
   const authValidationSchema = yup.object().shape({
     password: yup.string().required(),
-    username: yup.string().required()
+    username: yup.string().required(),
   })
   const { register, handleSubmit, formState } = useForm<AuthForm>({
-    resolver: yupResolver(authValidationSchema)
+    resolver: yupResolver(authValidationSchema),
   })
   const [errorMessage, setErrorMessage] = useState<string>()
   const [loading, setLoading] = useState<boolean>(false)
@@ -35,7 +37,7 @@ const LoginPage: NextPage = (): JSX.Element => {
     setErrorMessage(undefined)
     signIn('credentials', {
       redirect: false,
-      ...data
+      ...data,
     })
       .then(e => {
         if (e?.error) {

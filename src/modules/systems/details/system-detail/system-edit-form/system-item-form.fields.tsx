@@ -23,23 +23,51 @@ const SystemItemFormFields = ({ register, formState }: Props) => {
       <div className="sm:px-6">
         <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
           <ItemPropertyTitle title={messages.labels.eun}>
-            <Input className={classes} type="text" register={register} name="eun" />
+            <Input
+              className={classes}
+              type="text"
+              register={register}
+              name="eun"
+            />
             <p className="text-xs text-red-500">{errors.eun?.message}</p>
           </ItemPropertyTitle>
           <ItemPropertyTitle title={messages.labels.serialNumber}>
-            <Input className={classes} type="text" register={register} name="serialNumber" />
-            <p className="text-xs text-red-500">{errors.serialNumber?.message}</p>
+            <Input
+              className={classes}
+              type="text"
+              register={register}
+              name="serialNumber"
+            />
+            <p className="text-xs text-red-500">
+              {errors.serialNumber?.message}
+            </p>
           </ItemPropertyTitle>
           <ItemPropertyTitle title={messages.labels.batchNumber}>
-            <Input className={classes} type="text" register={register} name="batchNumber" />
-            <p className="text-xs text-red-500">{errors.batchNumber?.message}</p>
+            <Input
+              className={classes}
+              type="text"
+              register={register}
+              name="batchNumber"
+            />
+            <p className="text-xs text-red-500">
+              {errors.batchNumber?.message}
+            </p>
           </ItemPropertyTitle>
           <ItemPropertyTitle title={messages.labels.itemUsageCategoryCode}>
-            <p className="text-xs text-red-500">{errors.itemUsageCategoryCode?.message}</p>
+            <p className="text-xs text-red-500">
+              {errors.itemUsageCategoryCode?.message}
+            </p>
           </ItemPropertyTitle>
           <ItemPropertyTitle title={messages.labels.estimatedLifeTime}>
-            <Input className={classes} type="text" register={register} name="estimatedLifeTime" />
-            <p className="text-xs text-red-500">{errors.estimatedLifeTime?.message}</p>
+            <Input
+              className={classes}
+              type="text"
+              register={register}
+              name="estimatedLifeTime"
+            />
+            <p className="text-xs text-red-500">
+              {errors.estimatedLifeTime?.message}
+            </p>
           </ItemPropertyTitle>
         </dl>
       </div>

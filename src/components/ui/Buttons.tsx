@@ -4,12 +4,21 @@ import { MouseEventHandler } from 'react'
 interface ButtonProps {
   onClickAction: MouseEventHandler<HTMLButtonElement>
   customClass?: string
-  rounded?: 'rounded-l-md' | 'rounded-t-md' | 'rounded-r-md' | 'rounded-b-md' | 'rounded-md'
+  rounded?:
+    | 'rounded-l-md'
+    | 'rounded-t-md'
+    | 'rounded-r-md'
+    | 'rounded-b-md'
+    | 'rounded-md'
 
   text?: string
 }
 
-export const TrashIconButton = ({ onClickAction, rounded = 'rounded-r-md', customClass }: ButtonProps) => (
+export const TrashIconButton = ({
+  onClickAction,
+  rounded = 'rounded-r-md',
+  customClass,
+}: ButtonProps) => (
   <button
     type="button"
     onClick={onClickAction}
@@ -20,7 +29,11 @@ export const TrashIconButton = ({ onClickAction, rounded = 'rounded-r-md', custo
   </button>
 )
 
-export const PlusIconButton = ({ onClickAction, rounded = 'rounded-md', customClass }: ButtonProps) => (
+export const PlusIconButton = ({
+  onClickAction,
+  rounded = 'rounded-md',
+  customClass,
+}: ButtonProps) => (
   <button
     type="button"
     onClick={onClickAction}
@@ -31,7 +44,12 @@ export const PlusIconButton = ({ onClickAction, rounded = 'rounded-md', customCl
   </button>
 )
 
-export const Button = ({ onClickAction, rounded = 'rounded-md', customClass, text }: ButtonProps) => (
+export const Button = ({
+  onClickAction,
+  rounded = 'rounded-md',
+  customClass,
+  text,
+}: ButtonProps) => (
   <button
     type="button"
     onClick={onClickAction}

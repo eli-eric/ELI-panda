@@ -8,19 +8,20 @@ import { ImageIcon } from 'src/components/ui/SvgIcons'
 import { CatalogueFormType } from '@/types/catalogue/catalogueTypes'
 
 const Main = () => {
-  const { register, watch, setValue, formState } = useFormContext<CatalogueFormType>()
+  const { register, watch, setValue, formState } =
+    useFormContext<CatalogueFormType>()
   const onDrop = useCallback(
     files => {
       const reader = new FileReader()
       reader.readAsDataURL(files[0])
       reader.onload = () => setValue('image', reader.result as string)
     },
-    [setValue]
+    [setValue],
   )
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     maxFiles: 1,
     accept: { 'image/*': [] },
-    onDrop
+    onDrop,
   })
 
   const { errors } = formState
@@ -29,7 +30,9 @@ const Main = () => {
   const groupName = watch('name')
 
   useEffect(() => {
-    const codeValue = groupName ? groupName.replace(/\s+/g, '-').toLowerCase() : ''
+    const codeValue = groupName
+      ? groupName.replace(/\s+/g, '-').toLowerCase()
+      : ''
     setValue('code', codeValue)
   }, [groupName, setValue])
 
@@ -66,7 +69,12 @@ const Main = () => {
         <div>
           <label className="text-sm font-medium text-gray-700">Name</label>
           <div className="mt-1">
-            <InputWithError name="name" register={register} isError={!errors.name?.message} rounded="rounded-md" />
+            <InputWithError
+              name="name"
+              register={register}
+              isError={!errors.name?.message}
+              rounded="rounded-md"
+            />
           </div>
         </div>
 

@@ -7,14 +7,18 @@ import useSWR from 'swr'
 import CategoryItemComponent from './CategoryItem.comp'
 
 interface Props {
-  setCatalogueCategoryList: Dispatch<SetStateAction<CatalogueCategoryResponse[] | undefined>>
+  setCatalogueCategoryList: Dispatch<
+    SetStateAction<CatalogueCategoryResponse[] | undefined>
+  >
 }
 
 const CategoryListContainer = ({ setCatalogueCategoryList }: Props) => {
   const { data: session } = useSession()
   const categoryPath = useCategoryPath()
   /* fetch category list */
-  const { data: categoryList } = useSWR<Array<CatalogueCategoryResponse>>(session ? categoryPath : null)
+  const { data: categoryList } = useSWR<Array<CatalogueCategoryResponse>>(
+    session ? categoryPath : null,
+  )
 
   useEffect(() => {
     setCatalogueCategoryList(categoryList)

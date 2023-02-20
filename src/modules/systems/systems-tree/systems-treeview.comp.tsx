@@ -9,7 +9,12 @@ interface DisclosureComponentProps {
 
 const DisclosureComponent = ({ item }: DisclosureComponentProps) => {
   return (
-    <Disclosure as="div" key={item.name} className="space-y-" defaultOpen={item.open || false}>
+    <Disclosure
+      as="div"
+      key={item.name}
+      className="space-y-"
+      defaultOpen={item.open || false}
+    >
       {({ open }) => (
         <Fragment>
           <SystemTreeItemComponent open={open} item={item} />

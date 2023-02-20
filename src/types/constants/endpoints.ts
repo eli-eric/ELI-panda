@@ -5,14 +5,14 @@ export const ENDPOINTS = {
   catalogueItems: BASE_URL + '/catalogue/items',
   catalogueItem: BASE_URL + '/catalogue/item',
   systemDetail: BASE_URL + '/system',
-  systemTree: BASE_URL + '/systems/tree'
+  systemTree: BASE_URL + '/systems/tree',
 }
 
 export enum AxiosMethodType {
   GET = 'get',
   POST = 'post',
   PUT = 'put',
-  DELETE = 'delete'
+  DELETE = 'delete',
 }
 
 export type AxiosMethodTypes = keyof typeof AxiosMethodType

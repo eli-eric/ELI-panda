@@ -12,14 +12,19 @@ import SearchBarComponent from '@/components/catalogue/search-bar/search-bar.com
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/ui/loader.comp'
 import { message } from '@/i18n/src/messages'
-import { CatalogueCategoryResponse, CatalogueItemsResponse } from '@/types/responses'
+import {
+  CatalogueCategoryResponse,
+  CatalogueItemsResponse,
+} from '@/types/responses'
 
 const { head } = message.cataloguePage
 
 const CatalogueCategoriesPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
-  const [catalogueCategoryList, setCatalogueCategoryList] = useState<CatalogueCategoryResponse[]>()
-  const [catalogueItemsList, setCatalogueItemsList] = useState<CatalogueItemsResponse>()
+  const [catalogueCategoryList, setCatalogueCategoryList] =
+    useState<CatalogueCategoryResponse[]>()
+  const [catalogueItemsList, setCatalogueItemsList] =
+    useState<CatalogueItemsResponse>()
 
   return (
     <Fragment>
@@ -27,12 +32,17 @@ const CatalogueCategoriesPage: NextPage = (): JSX.Element => {
         <title>{intl.formatMessage({ id: head })}</title>
         <meta name="description" content="...." />
       </Head>
-      <CatalogLayoutContainer catalogueItems={catalogueItemsList} categoryList={catalogueCategoryList}>
+      <CatalogLayoutContainer
+        catalogueItems={catalogueItemsList}
+        categoryList={catalogueCategoryList}
+      >
         <SearchBarComponent />
         <BreadcrumbContainer />
         <ErrorBoundary fallback={<ErrorPage />}>
           <Suspense fallback={<LoaderComponent />}>
-            <CategoryListComponent setCatalogueCategoryList={setCatalogueCategoryList} />
+            <CategoryListComponent
+              setCatalogueCategoryList={setCatalogueCategoryList}
+            />
           </Suspense>
         </ErrorBoundary>
         <ErrorBoundary fallback={<ErrorPage />}>

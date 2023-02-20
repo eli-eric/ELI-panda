@@ -29,7 +29,9 @@ const SystemFormFields = ({ register, formState }: Props) => {
         className={`w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500`}
       />
       <p className="text-xs text-red-500">{errors.name?.message}</p>
-      <h3 className="text-xl font-bold tracking-tight text-gray-900">Description</h3>
+      <h3 className="text-xl font-bold tracking-tight text-gray-900">
+        Description
+      </h3>
       <textarea
         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring-primary-500 sm:text-sm"
         rows={3}
@@ -41,26 +43,54 @@ const SystemFormFields = ({ register, formState }: Props) => {
         <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
           <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
             <ItemPropertyTitle title={messages.labels.importanceCode}>
-              <p className="text-xs text-red-500">{errors.importanceCode?.message}</p>
+              <p className="text-xs text-red-500">
+                {errors.importanceCode?.message}
+              </p>
             </ItemPropertyTitle>
             <ItemPropertyTitle title={messages.labels.zoneCode}>
-              <Input type="text" name="zoneCode" register={register} className={classes} />
+              <Input
+                type="text"
+                name="zoneCode"
+                register={register}
+                className={classes}
+              />
               <p className="text-xs text-red-500">{errors.zoneCode?.message}</p>
             </ItemPropertyTitle>
             <ItemPropertyTitle title={messages.labels.systemTypeUID}>
-              <Input className={classes} type="text" register={register} name="systemTypeUID" />
-              <p className="text-xs text-red-500">{errors.systemTypeUID?.message}</p>
+              <Input
+                className={classes}
+                type="text"
+                register={register}
+                name="systemTypeUID"
+              />
+              <p className="text-xs text-red-500">
+                {errors.systemTypeUID?.message}
+              </p>
             </ItemPropertyTitle>
 
             <ItemPropertyTitle title={messages.labels.systemAlias}>
-              <Input className={classes} type="text" register={register} name="systemAlias" />
-              <p className="text-xs text-red-500">{errors.systemAlias?.message}</p>
+              <Input
+                className={classes}
+                type="text"
+                register={register}
+                name="systemAlias"
+              />
+              <p className="text-xs text-red-500">
+                {errors.systemAlias?.message}
+              </p>
             </ItemPropertyTitle>
             <ItemPropertyTitle title={messages.labels.locationCode}>
-              <p className="text-xs text-red-500">{errors.locationCode?.message}</p>
+              <p className="text-xs text-red-500">
+                {errors.locationCode?.message}
+              </p>
             </ItemPropertyTitle>
             <ItemPropertyTitle title={messages.labels.ownerUID}>
-              <Input className={classes} type="text" register={register} name="ownerUID" />
+              <Input
+                className={classes}
+                type="text"
+                register={register}
+                name="ownerUID"
+              />
               <p className="text-xs text-red-500">{errors.ownerUID?.message}</p>
             </ItemPropertyTitle>
           </dl>

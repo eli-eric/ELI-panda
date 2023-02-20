@@ -42,7 +42,9 @@ export const getFakeSystem = (): System => {
     name,
     path: getFakePath(),
     image: 'https://source.unsplash.com/collection/71371194/500x500',
-    description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(5)}`,
+    description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
+      5,
+    )}`,
     children: getFakePath(),
     importanceCode: faker.datatype.string(),
     zoneCode: faker.datatype.string(),
@@ -56,7 +58,7 @@ export const getFakeSystem = (): System => {
     serialNumber: faker.datatype.uuid(),
     batchNumber: faker.datatype.uuid(),
     itemUsageCategoryCode: faker.datatype.string(),
-    estimatedLifeTime: faker.datatype.number()
+    estimatedLifeTime: faker.datatype.number(),
   }
 }
 
@@ -81,12 +83,23 @@ const Page: NextPage = () => {
   const uid = router.query.slug
   const [query, setQuery] = useParam('q')
 
-  const [viewControl, setViewControl] = useState({ system: true, relations: true })
+  const [viewControl, setViewControl] = useState({
+    system: true,
+    relations: true,
+  })
 
   const { data } = useSWR(uid, fetchFakeSystem)
 
-  const { isEditMode, setIsEditMode, newImage, setNewImage, FormErrors, EditModeContainer, register, discard } =
-    useEditMode(onSubmit, data)
+  const {
+    isEditMode,
+    setIsEditMode,
+    newImage,
+    setNewImage,
+    FormErrors,
+    EditModeContainer,
+    register,
+    discard,
+  } = useEditMode(onSubmit, data)
 
   if (!data) return <LoaderComponent />
 
@@ -118,7 +131,11 @@ const Page: NextPage = () => {
             <Title data={data} isEditMode={isEditMode} register={register} />
 
             {isEditMode || <Prompt query={query} setQuery={setQuery} />}
-            <FormButtons isEditMode={isEditMode} setIsEditMode={setIsEditMode} discard={discard} />
+            <FormButtons
+              isEditMode={isEditMode}
+              setIsEditMode={setIsEditMode}
+              discard={discard}
+            />
           </div>
 
           {isEditMode ||
@@ -132,7 +149,10 @@ const Page: NextPage = () => {
             <Card>
               <Heading
                 text="Subsystems"
-                action={{ label: <PlusIcon className="h-5" />, href: router.asPath.split('?')[0] + '/new' }}
+                action={{
+                  label: <PlusIcon className="h-5" />,
+                  href: router.asPath.split('?')[0] + '/new',
+                }}
               />
               <Suspense fallback={<ProgressBarComponent />}>
                 <nav className="py-3" aria-label="Subsystems">
@@ -143,14 +163,22 @@ const Page: NextPage = () => {
           </aside>
 
           <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
-            <ViewControl setViewControl={setViewControl} viewControl={viewControl} />
+            <ViewControl
+              setViewControl={setViewControl}
+              viewControl={viewControl}
+            />
             {viewControl.system && (
               <DisclosureComponent title="System Detail">
                 <article>
                   <div className="flex flex-wrap gap-2 lg:gap-4">
                     <section className="">
                       <b>Preview</b>
-                      <Preview data={data} isEditMode={isEditMode} newImage={newImage} setNewImage={setNewImage} />
+                      <Preview
+                        data={data}
+                        isEditMode={isEditMode}
+                        newImage={newImage}
+                        setNewImage={setNewImage}
+                      />
                     </section>
 
                     <section>
@@ -162,7 +190,11 @@ const Page: NextPage = () => {
 
                     <section className="basis-full">
                       <b>Description</b>
-                      <Description data={data} isEditMode={isEditMode} register={register} />
+                      <Description
+                        data={data}
+                        isEditMode={isEditMode}
+                        register={register}
+                      />
                     </section>
                   </div>
                 </article>

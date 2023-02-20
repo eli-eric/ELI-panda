@@ -1,5 +1,8 @@
 import { faker } from '@faker-js/faker'
-import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowLongLeftIcon,
+  ArrowLongRightIcon,
+} from '@heroicons/react/24/outline'
 import useSWR from 'swr'
 
 import { Button, TrashIconButton } from '@/components/ui/Buttons'
@@ -22,7 +25,7 @@ const getFakeRelation = () => {
     direction: getDirection(),
     relationTypeCode: getRelation(),
     foreignSystemName: faker.company.catchPhrase(),
-    relationUid: faker.datatype.uuid()
+    relationUid: faker.datatype.uuid(),
   }
 }
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
@@ -37,20 +40,35 @@ const fetchFakeRelations = async () => {
 const Relations = ({ uid }: { uid: string }) => {
   const { data: relations } = useSWR(uid, fetchFakeRelations)
 
-  const collums = ['Direction', 'Foreign System Name', 'Relation Type Code', 'Relation UID', 'Action']
+  const collums = [
+    'Direction',
+    'Foreign System Name',
+    'Relation Type Code',
+    'Relation UID',
+    'Action',
+  ]
   const data = relations?.map((relation, index) => {
     const rows = Object.entries(relation).map((value, index) => {
       if (value[0] === 'direction') {
         return (
           <div key={index}>
             {value[1] === 'to' && <ArrowLongLeftIcon className="w-10 h-10" />}
-            {value[1] === 'from' && <ArrowLongRightIcon className="w-10 h-10" />}
+            {value[1] === 'from' && (
+              <ArrowLongRightIcon className="w-10 h-10" />
+            )}
           </div>
         )
       }
       return <p key={index}>{value[1]}</p>
     })
-    return [...rows, <TrashIconButton key={index + '1'} onClickAction={() => {}} rounded="rounded-md" />]
+    return [
+      ...rows,
+      <TrashIconButton
+        key={index + '1'}
+        onClickAction={() => {}}
+        rounded="rounded-md"
+      />,
+    ]
   })
   return (
     <DisclosureComponent title="Relations">

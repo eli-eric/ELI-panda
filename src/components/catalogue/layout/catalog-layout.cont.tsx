@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { CatalogueCategoryResponse, CatalogueItemsResponse } from '@/types/responses'
+import {
+  CatalogueCategoryResponse,
+  CatalogueItemsResponse,
+} from '@/types/responses'
 
 interface Props {
   children: React.ReactNode
@@ -9,19 +12,32 @@ interface Props {
 
 /* container for responsive layout with sticky footer and sticky table header */
 
-export const CatalogLayoutContainer = ({ children, catalogueItems, categoryList }: Props) => {
+export const CatalogLayoutContainer = ({
+  children,
+  catalogueItems,
+  categoryList,
+}: Props) => {
   const [height, setHeight] = useState<number>(0)
 
   useEffect(() => {
     // Handler to call on window resize
     const handleResize = () => {
-      const searchBar = document.getElementById('layout-search-bar')?.clientHeight || 0
+      const searchBar =
+        document.getElementById('layout-search-bar')?.clientHeight || 0
       const navHeader = document.getElementById('nav-bar')?.clientHeight || 0
 
-      const catalogueList = document.getElementById('catalogue-list')?.clientHeight || 0
-      const catalogueBreadcrump = document.getElementById('catalogue-breadcrump')?.clientHeight || 0
-      const cataloguePaging = document.getElementById('catalogue-paging')?.clientHeight || 0
-      const height = searchBar + catalogueList + cataloguePaging + catalogueBreadcrump + navHeader
+      const catalogueList =
+        document.getElementById('catalogue-list')?.clientHeight || 0
+      const catalogueBreadcrump =
+        document.getElementById('catalogue-breadcrump')?.clientHeight || 0
+      const cataloguePaging =
+        document.getElementById('catalogue-paging')?.clientHeight || 0
+      const height =
+        searchBar +
+        catalogueList +
+        cataloguePaging +
+        catalogueBreadcrump +
+        navHeader
 
       // REVIEW LAYOUT HEIGHT +1  // TODO
       setHeight(height + 1)
@@ -37,7 +53,7 @@ export const CatalogLayoutContainer = ({ children, catalogueItems, categoryList 
   return (
     <div
       style={{
-        height: `calc(100vh - ${height}px)`
+        height: `calc(100vh - ${height}px)`,
       }}
       className="flex-col"
     >
@@ -51,5 +67,9 @@ interface TableProps {
 }
 
 export const TableLayoutComponent = ({ children }: TableProps) => {
-  return <div className="h-full overflow-auto border-t border-gray-300  ">{children}</div>
+  return (
+    <div className="h-full overflow-auto border-t border-gray-300  ">
+      {children}
+    </div>
+  )
 }
