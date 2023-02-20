@@ -7,7 +7,7 @@ export type System = {
   systemCode: string
   systemAlias: string
   locationCode: string
-  catalogueUID: string
+  catalogueUID?: string
   eun: string
   itemUsageCategoryCode: string
   estimatedLifeTime: number

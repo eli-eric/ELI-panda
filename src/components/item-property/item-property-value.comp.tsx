@@ -13,7 +13,7 @@ const ItemPropertyValue = ({ link, text }: Props) => {
           rel="noreferrer"
           className="text-ellipsis"
         >
-          link{' '}
+          link
         </a>
       ) : text ? (
         text
