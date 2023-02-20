@@ -53,7 +53,7 @@ export const getFakeSystem = (): System => {
     systemAlias: faker.datatype.string(),
     locationCode: faker.datatype.string(),
     ownerUID: faker.datatype.string(),
-    catalogueUID: undefined,
+    catalogueUID: faker.datatype.uuid(),
   }
 }
 
