@@ -5,13 +5,13 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Suspense, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import SystemDetailSectionComponent from 'src/modules/systems/details/system-detail/system-detail-section.comp'
 import useSWR from 'swr/immutable'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import Breadcrumbs from '@/components/systems/Breadcrumbs'
 import Card from '@/components/systems/Card'
 import Description from '@/components/systems/Description'
+import SystemDetail from '@/components/systems/Detail'
 import FormButtons from '@/components/systems/FormButtons'
 import Preview from '@/components/systems/Preview'
 import Relations from '@/components/systems/relations/Relations'
@@ -147,6 +147,7 @@ const Page: NextPage = () => {
                 <Results query={query} />
               </div>
             ))}
+
           <div className="w-full">
             <ViewControl
               setViewControl={setViewControl}
@@ -188,7 +189,11 @@ const Page: NextPage = () => {
                     </section>
 
                     <section>
-                      <SystemDetailSectionComponent systemInfo={data} />
+                      <SystemDetail
+                        register={register}
+                        isEditMode={isEditMode}
+                        data={data}
+                      />
                       <div className="text-sm font-medium text-gray-400">
                         Description
                       </div>
