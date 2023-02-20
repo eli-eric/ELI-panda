@@ -20,7 +20,6 @@ import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
 import ViewControl from '@/components/systems/ViewControl'
 import { Heading } from '@/components/ui/card/card.comp'
-import DisclosureComponent from '@/components/ui/Disclosure.comp'
 import LoaderComponent from '@/components/ui/loader.comp'
 import ProgressBarComponent from '@/components/ui/progress-bar.comp'
 import useEditMode from '@/hooks/systems/useEditMode'
@@ -145,6 +144,13 @@ const Page: NextPage = () => {
               </div>
             ))}
 
+          <div className="w-full">
+            <ViewControl
+              setViewControl={setViewControl}
+              viewControl={viewControl}
+            />
+          </div>
+
           <aside className="w-full lg:w-1/4">
             <Card>
               <Heading
@@ -163,13 +169,10 @@ const Page: NextPage = () => {
           </aside>
 
           <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
-            <ViewControl
-              setViewControl={setViewControl}
-              viewControl={viewControl}
-            />
             {viewControl.system && (
-              <DisclosureComponent title="System Detail">
-                <article>
+              <article>
+                <Card>
+                  <Heading text="System Detail" />
                   <div className="flex flex-wrap gap-2 lg:gap-4">
                     <section className="">
                       <b>Preview</b>
@@ -197,8 +200,8 @@ const Page: NextPage = () => {
                       />
                     </section>
                   </div>
-                </article>
-              </DisclosureComponent>
+                </Card>
+              </article>
             )}
             {viewControl.relations && (
               <ErrorBoundary fallback={<ErrorPage />}>
