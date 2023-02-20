@@ -1,16 +1,18 @@
-import { useCategoryPath } from 'src/hooks/usePath'
 import { useSession } from 'next-auth/react'
 import { Dispatch, Fragment, SetStateAction, useEffect } from 'react'
-import { CatalogueCategoryResponse } from '@/types/responses'
+import { useCategoryPath } from 'src/hooks/usePath'
 import useSWR from 'swr'
+
+import { CatalogueCategoryResponse } from '@/types/responses'
 
 import CategoryItemComponent from './CategoryItem.comp'
 
 interface Props {
   setCatalogueCategoryList: Dispatch<SetStateAction<CatalogueCategoryResponse[] | undefined>>
+  setCatalogueParentUid: Dispatch<SetStateAction<string | undefined>>
 }
 
-const CategoryListContainer = ({ setCatalogueCategoryList }: Props) => {
+const CategoryListContainer = ({ setCatalogueCategoryList, setCatalogueParentUid }: Props) => {
   const { data: session } = useSession()
   const categoryPath = useCategoryPath()
   /* fetch category list */
@@ -27,7 +29,11 @@ const CategoryListContainer = ({ setCatalogueCategoryList }: Props) => {
           {/* Content goes here */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 3xl:grid-cols-8">
             {categoryList?.map(category => (
-              <CategoryItemComponent key={category.code} category={category} />
+              <CategoryItemComponent
+                key={category.code}
+                category={category}
+                setCatalogueParentUid={setCatalogueParentUid}
+              />
             ))}
           </div>
         </div>

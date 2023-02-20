@@ -40,7 +40,7 @@ const TableWithPaging = ({
   const router = useRouter()
   const intl = useIntl()
 
-  const { pagination, setTotalCount, getPaginationComponent } = usePagination(searchValue)
+  const { pagination, setTotalCount, getPaginationComponent, page } = usePagination({ dependecies: [searchValue] })
   const query = useMemo(
     () => ({ systemFromUid: router.query.slug, relationTypeCode, search: searchValue, pagination }),
     [router, relationTypeCode, searchValue, pagination]
@@ -53,6 +53,10 @@ const TableWithPaging = ({
     setSelectedSystem,
     selectedSystem
   })
+
+  useEffect(() => {
+    setSelectedSystem(undefined)
+  }, [page, setSelectedSystem])
 
   useEffect(() => {
     setTotalCount(systems?.totalCount)

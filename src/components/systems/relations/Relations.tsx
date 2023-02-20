@@ -33,7 +33,6 @@ const Relations = ({ uid, systemName }: { uid: string; systemName: string }) => 
       onClick: () => {
         setRelationUid(undefined)
         setOpenDelete(false)
-        console.log(relationUid)
       }
     },
     goBack: {

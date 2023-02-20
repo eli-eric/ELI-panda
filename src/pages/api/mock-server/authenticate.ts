@@ -10,7 +10,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
       lastName: 'Einstein',
       email: 'albert.einstein@eli-laser.eu',
       facility: 'ELI ERIC',
-      roles: ['basics', 'catalogue-view', 'systems-view', 'reports-view'],
+      roles: ['basics', 'catalogue-view', 'systems-view', 'reports-view', 'catalogue-category-edit'],
       accessToken:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOiIxMjM0NTY3ODk5In0.4UuocEvJTR3c1t2kB4f5lbRKfs5yKe7dW1Qtm_LITII'
     }
