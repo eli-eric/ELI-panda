@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Fragment } from 'react'
-import { fetchFakeSystems } from 'src/pages/tree/[slug]'
+import { fetchFakeSystems } from 'src/pages/systems/[slug]'
 import useSWR from 'swr'
 
 const Breadcrumbs = (props: { path: string[] }) => {

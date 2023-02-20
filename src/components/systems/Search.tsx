@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useRef } from 'react'
-import { fetchFakeSystems } from 'src/pages/tree/[slug]'
+import { fetchFakeSystems } from 'src/pages/systems/[slug]'
 import useSWR from 'swr'
 
 import Card, { Heading } from '../ui/card/card.comp'
@@ -15,7 +15,7 @@ const List = (props: { query: string }) => {
     <>
       {data && data.length > 0 ? (
         data.map(({ uid, name }) => (
-          <Item key={uid} text={name} href={'/tree/' + uid} />
+          <Item key={uid} text={name} href={'/systems/' + uid} />
         ))
       ) : (
         <div className="text-gray-600 flex items-center px-3 py-2 text-sm font-medium rounded-md">
