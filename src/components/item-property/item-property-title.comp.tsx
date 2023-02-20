@@ -7,8 +7,8 @@ interface Props {
 
 const ItemPropertyTitle = ({ title, children }: Props) => {
   return (
-    <div className="flex gap-x-4 text-sm font-medium text-gray-400">
-      <dt className="w-48">
+    <div className="sm:col-span-1">
+      <dt className="text-sm font-medium text-gray-400">
         <FormattedMessage id={title} />
       </dt>
       {children}

@@ -7,11 +7,13 @@ export default function ViewControl({
   viewControl: {
     system: boolean
     relations: boolean
+    catalogueItem: boolean
   }
   setViewControl: Dispatch<
     SetStateAction<{
       system: boolean
       relations: boolean
+      catalogueItem: boolean
     }>
   >
 }) {
@@ -63,6 +65,30 @@ export default function ViewControl({
           </div>
           <div className="ml-3 text-sm">
             <label className="font-medium text-gray-700">Relations</label>
+            <span id="candidates-description" className="text-gray-500">
+              <span className="sr-only">Relations </span>
+            </span>
+          </div>
+        </div>
+        <div className="relative flex items-start">
+          <div className="flex h-5 items-center">
+            <input
+              id="catalogueItem"
+              aria-describedby="candidates-description"
+              name="catalogueItem"
+              type="checkbox"
+              defaultChecked={viewControl.catalogueItem}
+              onClick={() =>
+                setViewControl(viewControl => ({
+                  ...viewControl,
+                  catalogueItem: !viewControl.catalogueItem,
+                }))
+              }
+              className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+            />
+          </div>
+          <div className="ml-3 text-sm">
+            <label className="font-medium text-gray-700">Catalogue Item</label>
             <span id="candidates-description" className="text-gray-500">
               <span className="sr-only">Relations </span>
             </span>

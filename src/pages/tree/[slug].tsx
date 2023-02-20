@@ -3,11 +3,12 @@ import { PlusIcon } from '@heroicons/react/20/solid'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Suspense, useState } from 'react'
+import { Fragment, Suspense, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import SystemDetailSectionComponent from 'src/modules/systems/details/system-detail/system-detail-section.comp'
 import useSWR from 'swr/immutable'
 
+import ItemDetailComponent from '@/components/catalogueItem/item-detail.comp'
 import ErrorPage from '@/components/error/ErrorPage'
 import Breadcrumbs from '@/components/systems/Breadcrumbs'
 import Card from '@/components/systems/Card'
@@ -87,6 +88,7 @@ const Page: NextPage = () => {
   const [viewControl, setViewControl] = useState({
     system: true,
     relations: true,
+    catalogueItem: true,
   })
 
   const { data } = useSWR(uid, fetchFakeSystem)
@@ -201,6 +203,16 @@ const Page: NextPage = () => {
                   </div>
                 </Card>
               </article>
+            )}
+            {viewControl.catalogueItem && (
+              <Card>
+                <Heading text="Catalogue Item" />
+                <ErrorBoundary fallback={<ErrorPage />}>
+                  <Suspense fallback={<LoaderComponent />}>
+                    <ItemDetailComponent uid={data.catalogueUID} />
+                  </Suspense>
+                </ErrorBoundary>
+              </Card>
             )}
             {viewControl.relations && (
               <Card>
