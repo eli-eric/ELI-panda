@@ -14,7 +14,7 @@ import ProgressBarComponent from '@/components/ui/progress-bar.comp'
 import useEditMode from '@/hooks/systems/useEditMode'
 import { System } from '@/types/system'
 
-import { fetchFakeSystem } from '../[slug]'
+import { fetchFakeSystem } from '.'
 
 const onSubmit = (data: System) => {
   console.log(data)
