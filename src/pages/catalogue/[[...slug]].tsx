@@ -32,7 +32,7 @@ const CatalogueCategoriesPage: NextPage = (): JSX.Element => {
       </Head>
       <CatalogLayoutContainer catalogueItems={catalogueItemsList} categoryList={catalogueCategoryList}>
         <SearchBarComponent />
-        <BreadcrumbContainer catalogueParentUid={catalogueParentUid} />
+        <BreadcrumbContainer />
         <ErrorBoundary fallback={<ErrorPage />}>
           <Suspense fallback={<LoaderComponent />}>
             <CategoryListComponent

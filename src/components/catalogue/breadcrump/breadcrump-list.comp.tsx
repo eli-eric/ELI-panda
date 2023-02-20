@@ -2,18 +2,19 @@ import { HomeIcon } from '@heroicons/react/20/solid'
 import { useRouter } from 'next/router'
 
 import { useCategoryEdit } from '@/hooks/category/useCategoryEdit'
+import { useCataloguePath } from '@/hooks/usePath'
 import { PATH } from '@/types/constants/paths'
 
 interface Props {
   navigationList: JSX.Element[] | undefined
   handleClick: (path: string) => void
   testId: string
-  catalogueParentUid: string | undefined
 }
 
-const BreadcrumbListComponent = ({ navigationList, handleClick, testId, catalogueParentUid }: Props) => {
+const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props) => {
   const router = useRouter()
-  const { getAddButton } = useCategoryEdit({ catalogueParentUid })
+  const catalogueParentPath = useCataloguePath()
+  const { getAddButton } = useCategoryEdit({ catalogueParentPath })
   const { search } = router.query
   const onCLickHandler = () => {
     handleClick(PATH.CATALOGUE + (search ? `?search=${search}` : ''))

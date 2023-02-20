@@ -12,12 +12,12 @@ import CategoryEditForm from './CategoryEditForm'
 
 interface Props {
   setopen: Dispatch<SetStateAction<boolean>>
-  parentUID?: string
+  parentPath?: string
   uid?: string
 }
 
-const CategoryEditModal = ({ setopen, parentUID, uid }: Props) => {
-  const { catalogueCategoryEdit } = useEndpoint({})
+const CategoryEditModal = ({ setopen, parentPath, uid }: Props) => {
+  const { catalogueCategoryEdit } = useEndpoint(uid ? { uid } : {})
   const { submit, loading, error, response } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: uid ? 'put' : 'post'
@@ -27,7 +27,7 @@ const CategoryEditModal = ({ setopen, parentUID, uid }: Props) => {
       data.groups && data.groups.length !== 0
         ? {
             ...data,
-            parentUid: data.parentUid ? data.parentUid : parentUID,
+            parentPath: data.parentPath ? data.parentPath : parentPath,
             groups: data.groups?.map(group => ({
               ...group,
               properties: group.properties?.map(prop =>
@@ -37,7 +37,12 @@ const CategoryEditModal = ({ setopen, parentUID, uid }: Props) => {
               )
             }))
           }
-        : { ...data, parentUid: parentUID }
+        : {
+            image: data.image,
+            name: data?.name,
+            code: data?.code,
+            parentPath: data.parentPath ? data.parentPath : parentPath
+          }
     submit(formattedData)
   }
   useEffect(() => {

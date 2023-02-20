@@ -17,7 +17,7 @@ export type Group = {
 }
 
 export type CatalogueFormType = {
-  parentUid?: string
+  parentPath?: string
   uid?: string
   name: string
   code: string

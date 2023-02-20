@@ -6,7 +6,7 @@ import { PATH } from '@/types/constants/paths'
 import BreadcrumpItemComponent from './breadcrump-item.comp'
 import BreadcrumbListComponent from './breadcrump-list.comp'
 
-const BreadcrumbContainer = ({ catalogueParentUid }: { catalogueParentUid: string | undefined }) => {
+const BreadcrumbContainer = () => {
   const router = useRouter()
 
   const handleClick = (path: string) => {
@@ -30,12 +30,7 @@ const BreadcrumbContainer = ({ catalogueParentUid }: { catalogueParentUid: strin
   }, [router])
 
   return (
-    <BreadcrumbListComponent
-      testId="catalogue-breadcrump"
-      navigationList={navigationList}
-      handleClick={handleClick}
-      catalogueParentUid={catalogueParentUid}
-    />
+    <BreadcrumbListComponent testId="catalogue-breadcrump" navigationList={navigationList} handleClick={handleClick} />
   )
 }
 export default BreadcrumbContainer

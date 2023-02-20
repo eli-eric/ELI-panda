@@ -2,7 +2,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 const categoryMockObject = {
-  parentUid: '9b56eba5-d650-442c-9235-0f6fd3cc8a91',
   uid: '9b56eba5-d650-442c-9235-0f6fd3cc8a91',
   name: 'Capacity Inductors',
   code: 'capacity-inductors',
@@ -48,7 +47,11 @@ const categoryMockObject = {
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
-    res.status(200).json(categoryMockObject)
+    if (req.method === 'GET') {
+      res.status(200).json(categoryMockObject)
+    }
+    if (req.method === 'DELETE') res.status(200).json({ message: 'OK' })
+    if (req.method === 'PUT') res.status(200).json({ message: 'OK' })
   } else {
     res.status(401).json({ message: 'Unauthorized' })
   }

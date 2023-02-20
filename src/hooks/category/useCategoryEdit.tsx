@@ -14,10 +14,10 @@ import useSubmit from '../useSubmit'
 
 export const useCategoryEdit = ({
   editUid,
-  catalogueParentUid
+  catalogueParentPath
 }: {
   editUid?: string
-  catalogueParentUid?: string | undefined
+  catalogueParentPath?: string | undefined
 }) => {
   const [openEdit, setOpenEdit] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
@@ -75,7 +75,6 @@ export const useCategoryEdit = ({
   }
 
   const getAddButton = () => {
-    console.log(catalogueParentUid)
     return (
       <Fragment>
         {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
@@ -91,7 +90,7 @@ export const useCategoryEdit = ({
           </li>
         )}
         <ModalComponent open={openNew} setOpen={setOpenNew} buttons={{ noButtons: true }} testid="catalogueEdit">
-          <CategoryEditModal setopen={setOpenNew} parentUID={catalogueParentUid} />
+          <CategoryEditModal setopen={setOpenNew} parentPath={catalogueParentPath} />
         </ModalComponent>
       </Fragment>
     )
