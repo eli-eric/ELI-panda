@@ -1,8 +1,12 @@
-import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowLongLeftIcon,
+  ArrowLongRightIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 
-import { TrashIconButton } from '@/components/ui/Buttons'
+import { Button } from '@/components/ui/Buttons'
 import { SystemRelationshipResponse } from '@/types/responses'
 import { SystemForRel } from '@/types/system'
 
@@ -10,13 +14,21 @@ const Name = ({ uid, name, selectSystemUid, selelectedSystem }) => {
   const image = 'https://source.unsplash.com/collection/71371194/500x500'
   return (
     <div
-      className={`flex items-center cursor-pointer ${uid === selelectedSystem ? 'text-primary-600' : ''}`}
+      className={`flex items-center cursor-pointer ${
+        uid === selelectedSystem ? 'text-primary-600' : ''
+      }`}
       onClick={() => {
         selectSystemUid({ uid, name })
       }}
     >
       <div className="h-10 w-10 flex-shrink-0">
-        <Image className="h-10 w-10 rounded-full" alt={name} src={image} width={200} height={200} />
+        <Image
+          className="h-10 w-10 rounded-full"
+          alt={name}
+          src={image}
+          width={200}
+          height={200}
+        />
       </div>
       <div className="ml-4">{name}</div>
     </div>
@@ -26,7 +38,7 @@ const Name = ({ uid, name, selectSystemUid, selelectedSystem }) => {
 export const useSystemMapRows = ({
   systems,
   setSelectedSystem,
-  selectedSystem
+  selectedSystem,
 }: {
   systems: SystemForRel[] | undefined
   setSelectedSystem: Dispatch<
@@ -48,7 +60,10 @@ export const useSystemMapRows = ({
   const data = useMemo(() => {
     const data = systems?.map(system => {
       const row = Object.entries(system).filter(
-        system => system[0].includes('name') || system[0].includes('systemCodePath') || system[0].includes('systemType')
+        system =>
+          system[0].includes('name') ||
+          system[0].includes('systemCodePath') ||
+          system[0].includes('systemType'),
       )
       return row.map((value, index) => {
         if (value) {
@@ -75,7 +90,7 @@ export const useSystemMapRows = ({
 
 export const useRelationMapRows = ({
   relations,
-  onDelete
+  onDelete,
 }: {
   relations: SystemRelationshipResponse[] | undefined
   onDelete: (uid: any) => void
@@ -87,8 +102,12 @@ export const useRelationMapRows = ({
           if (value[0] === 'direction') {
             return (
               <div key={index}>
-                {value[1] === 'to' && <ArrowLongLeftIcon className="w-10 h-10" />}
-                {value[1] === 'from' && <ArrowLongRightIcon className="w-10 h-10" />}
+                {value[1] === 'to' && (
+                  <ArrowLongLeftIcon className="w-10 h-10" />
+                )}
+                {value[1] === 'from' && (
+                  <ArrowLongRightIcon className="w-10 h-10" />
+                )}
               </div>
             )
           }
@@ -96,16 +115,18 @@ export const useRelationMapRows = ({
         })
         return [
           ...rows,
-          <TrashIconButton
+          <Button
             key={index + '1'}
             onClickAction={() => {
               onDelete(relation.relationUid)
             }}
             rounded="rounded-md"
-          />
+          >
+            <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+          </Button>,
         ]
       }),
-    [onDelete, relations]
+    [onDelete, relations],
   )
 
   return data

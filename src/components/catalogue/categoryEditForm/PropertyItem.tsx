@@ -1,8 +1,10 @@
+import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useEffect } from 'react'
 import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 import { InputWithError } from 'src/components/ui/form/Input'
 import { SelectWithError } from 'src/components/ui/form/Select'
-import { PlusIconButton, TrashIconButton } from '@/components/ui/Buttons'
+
+import { Button } from '@/components/ui/Buttons'
 import { CatalogueFormType, Property } from '@/types/catalogue/catalogueTypes'
 import {
   defaultBoolOptions,
@@ -26,7 +28,9 @@ const ValueItem = ({ removeValue, index, name, errors }) => {
         placeholder="Value"
         isError={!errors?.value?.message}
       />
-      <TrashIconButton onClickAction={handleRemoveValue} />
+      <Button onClickAction={handleRemoveValue}>
+        <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+      </Button>
     </div>
   )
 }
@@ -118,7 +122,9 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
               isError={!errors?.default?.message}
             />
           )}
-          <TrashIconButton onClickAction={handleRemoveProp} />
+          <Button onClickAction={handleRemoveProp}>
+            <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+          </Button>
         </div>
         {type === PROPERTY_TYPE.LIST && (
           <div className="flex flex-col">
@@ -133,7 +139,9 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
                   name={`${name}.listOfValues.${index}`}
                 />
               ))}
-              <PlusIconButton onClickAction={handleAddValue} />
+              <Button onClickAction={handleAddValue}>
+                <PlusIcon className="h-5 w-5" aria-hidden="true" />
+              </Button>
             </div>
           </div>
         )}

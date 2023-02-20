@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, Suspense, useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { FormattedMessage } from 'react-intl'
 import * as yup from 'yup'
 
 import ErrorPage from '@/components/error/ErrorPage'
@@ -10,11 +11,12 @@ import LoaderComponent from '@/components/ui/loader.comp'
 import SearchBarComponent from '@/components/ui/SearchBar.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
+import { message } from '@/i18n/src/messages'
 import { RELATION_TYPE_CODE } from '@/types/system/constants'
 
 import SelectRelation from './SelectRelation'
 import TableWithPaging from './TableWithPaging'
-
+const { buttons } = message.common
 interface Props {
   setopen: Dispatch<SetStateAction<boolean>>
   relationTypeCode: RELATION_TYPE_CODE
@@ -99,20 +101,22 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
         {error && <ErrorPage />}
         <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
           <Button
-            text="Save"
             type="submit"
+            primary
             loading={loading}
             customClass="inline-flex w-full justify-center sm:col-start-2 sm:mt-0 sm:text-sm"
-          />
+          >
+            <FormattedMessage id={buttons.continue} />
+          </Button>
           <Button
-            text="Cancel"
-            buttonType="secondary"
             onClickAction={() => {
               setopen(false)
             }}
             disabled={loading}
             customClass="inline-flex w-full justify-center sm:col-start-1 sm:mt-0 sm:text-sm text-gray-700"
-          />
+          >
+            <FormattedMessage id={buttons.cancel} />
+          </Button>
         </div>
       </form>
     </div>

@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
-import TableComponent from '@/components/ui/Table.comp'
+import TableComponent from '@/components/ui/table/Table.comp'
 import { useSystemMapRows } from '@/hooks/systems/relations/useMapRows'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'

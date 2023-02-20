@@ -1,6 +1,8 @@
+import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 import { InputWithError } from 'src/components/ui/form/Input'
-import { PlusIconButton, TrashIconButton } from '@/components/ui/Buttons'
+
+import { Button } from '@/components/ui/Buttons'
 import { CatalogueFormType, Group } from '@/types/catalogue/catalogueTypes'
 
 import PropertyList from './PropertyList'
@@ -33,7 +35,9 @@ const Group = ({ name, remove, index, errors }: groupProps) => {
               isError={!errors?.name?.message}
               rounded="rounded-l-md"
             />
-            <TrashIconButton onClickAction={handleRemoveGroup} />
+            <Button onClickAction={handleRemoveGroup}>
+              <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+            </Button>
           </span>
         </div>
       </div>
@@ -83,7 +87,9 @@ const GroupList = () => {
           <div className="w-full border-t border-gray-300" />
         </div>
         <div className="relative flex justify-center">
-          <PlusIconButton onClickAction={handleAddGroup} />
+          <Button onClickAction={handleAddGroup}>
+            <PlusIcon className="h-5 w-5" aria-hidden="true" />
+          </Button>
         </div>
       </div>
     </div>

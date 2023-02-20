@@ -1,4 +1,3 @@
-import { message } from 'src/i18n/src/messages'
 import {
   FormState,
   UseFormHandleSubmit,
@@ -7,11 +6,13 @@ import {
 import { FormattedMessage } from 'react-intl'
 import EliLogoComponent from 'src/components/ui/eli-logo.comp'
 import { Input } from 'src/components/ui/form/Input'
+import { message } from 'src/i18n/src/messages'
 
-import AuthButton from './auth-button.comp'
+import { Button } from '../ui/Buttons'
 
 const authMessages = message.authPage
 const { title, form } = message.authPage
+const authButtonMessages = message.authPage.form.button
 
 export type AuthForm = {
   username: string
@@ -96,7 +97,20 @@ const AuthFormComponent = ({
               </div>
             </div>
 
-            <AuthButton loading={loading} />
+            <Button
+              primary
+              loading={loading}
+              type="submit"
+              customClass="w-full justify-center"
+            >
+              <FormattedMessage
+                id={
+                  loading
+                    ? authButtonMessages.isLoading
+                    : authButtonMessages.default
+                }
+              />
+            </Button>
           </form>
         </div>
       </div>
