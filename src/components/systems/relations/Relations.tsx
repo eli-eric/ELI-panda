@@ -1,79 +1,105 @@
-import { faker } from '@faker-js/faker'
-import {
-  ArrowLongLeftIcon,
-  ArrowLongRightIcon,
-} from '@heroicons/react/24/outline'
+import { Fragment, useState } from 'react'
+import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
-import { Button, TrashIconButton } from '@/components/ui/Buttons'
+import { Button } from '@/components/ui/Buttons'
+import ModalComponent from '@/components/ui/modal/modal.comp'
+import ModalWarningComponent from '@/components/ui/modal/warning/modal-warning.comp'
 import TableComponent from '@/components/ui/Table.comp'
+import { useRelationMapRows } from '@/hooks/systems/relations/useMapRows'
+import { useEndpoint } from '@/hooks/useEndpoint'
+import { message } from '@/i18n/src/messages'
+import { ModalButtons } from '@/types/form'
+import { SystemRelationshipResponse } from '@/types/responses'
+import { RELATION_TYPE_CODE } from '@/types/system/constants'
 
-const getDirection = () => {
-  var textArray = ['from', 'to']
-  var randomNumber = Math.floor(Math.random() * textArray.length)
-  return textArray[randomNumber]
-}
-const getRelation = () => {
-  var textArray = ['HAS_SUBSYSTEM', 'IS_SPARE_FOR']
-  var randomNumber = Math.floor(Math.random() * textArray.length)
-  return textArray[randomNumber]
-}
+import AddRelationForm from './AddRelationForm'
 
-const getFakeRelation = () => {
-  return {
-    direction: getDirection(),
-    relationTypeCode: getRelation(),
-    foreignSystemName: faker.company.catchPhrase(),
-    relationUid: faker.datatype.uuid(),
+const messages = message.systemsPage.relations
+
+const Relations = ({
+  uid,
+  systemName,
+}: {
+  uid: string
+  systemName: string
+}) => {
+  const endpoints = useEndpoint({ uid })
+  const { data: relations } = useSWR<SystemRelationshipResponse[]>(
+    endpoints.systemRelationships,
+  )
+  const [relationUid, setRelationUid] = useState<string | undefined>()
+  const intl = useIntl()
+  const [openAddRelation, setOpenAddRelation] = useState(false)
+  const [openDelete, setOpenDelete] = useState(false)
+  const [relationTypeCode, setRelationTypeCode] = useState<RELATION_TYPE_CODE>(
+    RELATION_TYPE_CODE.IS_SPARE_FOR,
+  )
+
+  const deleteModalButtons: ModalButtons = {
+    goNext: {
+      text: intl.formatMessage({ id: messages.deleteModal.buttons.continue }),
+      onClick: () => {
+        setRelationUid(undefined)
+        setOpenDelete(false)
+      },
+    },
+    goBack: {
+      text: intl.formatMessage({ id: messages.deleteModal.buttons.cancel }),
+      onClick: () => {
+        setRelationUid(undefined)
+        setOpenDelete(false)
+      },
+    },
   }
-}
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-const fetchFakeRelations = async () => {
-  const res = [...Array(faker.datatype.number({ min: 1, max: 10 }))]
-  await sleep(faker.datatype.number({ min: 1000, max: 2000 }))
+  const collumsTitle = Object.keys(messages.tableHeader).map(key =>
+    intl.formatMessage({ id: messages.tableHeader[key] }),
+  )
 
-  return res.map(() => getFakeRelation())
-}
+  const deleteHandler = uid => {
+    setOpenDelete(true)
+    setRelationUid(uid)
+  }
+  const data = useRelationMapRows({ relations, onDelete: deleteHandler })
 
-const Relations = ({ uid }: { uid: string }) => {
-  const { data: relations } = useSWR(uid, fetchFakeRelations)
-
-  const collums = [
-    'Direction',
-    'Foreign System Name',
-    'Relation Type Code',
-    'Relation UID',
-    'Action',
-  ]
-  const data = relations?.map((relation, index) => {
-    const rows = Object.entries(relation).map((value, index) => {
-      if (value[0] === 'direction') {
-        return (
-          <div key={index}>
-            {value[1] === 'to' && <ArrowLongLeftIcon className="w-10 h-10" />}
-            {value[1] === 'from' && (
-              <ArrowLongRightIcon className="w-10 h-10" />
-            )}
-          </div>
-        )
-      }
-      return <p key={index}>{value[1]}</p>
-    })
-    return [
-      ...rows,
-      <TrashIconButton
-        key={index + '1'}
-        onClickAction={() => {}}
-        rounded="rounded-md"
-      />,
-    ]
-  })
   return (
-    <div className="px-3 py-3">
-      <Button customClass="mb-2" onClickAction={() => {}} text="Add Spare" />
-      {relations && <TableComponent collumsTitle={collums} data={data} />}
-    </div>
+    <Fragment>
+      <div className="px-4 sm:px-10 lg:px-4 py-4">
+        <Button
+          customClass="mb-2"
+          onClickAction={() => {
+            setRelationTypeCode(RELATION_TYPE_CODE.IS_SPARE_FOR)
+            setOpenAddRelation(true)
+          }}
+          text={intl.formatMessage({ id: messages.buttons.addSpare })}
+        />
+        {relations && (
+          <TableComponent collumsTitle={collumsTitle} data={data} />
+        )}
+      </div>
+      <ModalComponent
+        open={openAddRelation}
+        setOpen={setOpenAddRelation}
+        buttons={{ noButtons: true }}
+      >
+        <AddRelationForm
+          setopen={setOpenAddRelation}
+          relationTypeCode={relationTypeCode}
+          systemName={systemName}
+        />
+      </ModalComponent>
+      <ModalComponent
+        open={openDelete}
+        setOpen={setOpenDelete}
+        buttons={deleteModalButtons}
+      >
+        <ModalWarningComponent
+          title={intl.formatMessage({ id: messages.deleteModal.title })}
+          message={intl.formatMessage({ id: messages.deleteModal.text })}
+        />
+      </ModalComponent>
+    </Fragment>
   )
 }
 

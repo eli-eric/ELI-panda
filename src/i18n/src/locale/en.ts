@@ -120,7 +120,41 @@ export const messages = {
       createdBy: 'Created By',
       note: 'Note',
     },
+    relations: {
+      title: 'Relations',
+      buttons: {
+        addSpare: 'Add Spare',
+      },
+      deleteModal: {
+        title: 'Warning',
+        text: 'Are you sure you want to remove this Relation?',
+        buttons: {
+          continue: 'Continue',
+          cancel: 'Cancel',
+        },
+      },
+      tableHeader: {
+        direction: 'Direction',
+        systemName: 'Foreign System Name',
+        type: 'Relation Type Code',
+        relationUid: 'Relation UID',
+        action: 'Action',
+      },
+      addRelationModal: {
+        tableHeader: {
+          name: 'Name',
+          type: 'System Type',
+          path: 'System Code Path',
+        },
+        buttons: {
+          continue: 'Save',
+          cancel: 'Cancel',
+        },
+      },
+    },
+    note: 'Note',
   },
+
   reportsPage: { head: 'Eli Panda - Reports' },
   defaul: { head: 'Eli Panda' },
 }

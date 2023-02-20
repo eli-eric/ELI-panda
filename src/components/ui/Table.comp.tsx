@@ -32,25 +32,29 @@ interface Props {
 
 const TableComponent = ({ collumsTitle, data }: Props) => {
   return (
-    <div className="-my-2 sm:-mx-6 w-full lg:-mx-8 inline-block py-2 align-middle md:px-6 lg:px-8">
-      <table className="w-full border border-gray-300 divide-y divide-gray-300">
-        <TableHeader collumsTitle={collumsTitle} />
-        <tbody className="bg-white">
-          {data?.map((row, index) => (
-            <tr
-              key={index}
-              className={
-                (index % 2 === 0 ? undefined : 'bg-gray-100') +
-                ' hover:bg-primary-200'
-              }
-            >
-              {row.map(item => (
-                <TableRow key={index} value={item} />
+    <div className="-my-2  sm:-mx-6 lg:-mx-8">
+      <div className=" min-w-full py-2 align-middle md:px-6 lg:px-8">
+        <div className=" shadow ring-1 ring-black ring-opacity-5 ">
+          <table className="min-w-full divide-y divide-gray-300">
+            <TableHeader collumsTitle={collumsTitle} />
+            <tbody className="bg-white">
+              {data?.map((row, index) => (
+                <tr
+                  key={index}
+                  className={
+                    (index % 2 === 0 ? undefined : 'bg-gray-100') +
+                    ' hover:bg-primary-200'
+                  }
+                >
+                  {row.map(item => (
+                    <TableRow key={item.key} value={item} />
+                  ))}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   )
 }

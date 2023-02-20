@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useCatalogueItemDetailPath } from 'src/hooks/usePath'
 import useSWR from 'swr'
 
+import { useEndpoint } from '@/hooks/useEndpoint'
 import { CatalogueItem } from '@/types/responses'
 
 import ItemPropertiesComponent from './default-properties/item-properties.comp'
@@ -15,10 +15,10 @@ interface Props {
 const ItemDetailComponent = ({ images = [] }: Props) => {
   const router = useRouter()
   const [groups, setGroups] = useState<Array<string>>([])
-  const catalogueItemPath = useCatalogueItemDetailPath(
-    router.query.uid as string,
+  const { catalogueItem } = useEndpoint({ uid: router.query.uid as string })
+  const { data: item } = useSWR<CatalogueItem>(
+    router.query.uid && catalogueItem,
   )
-  const { data: item } = useSWR<CatalogueItem>(catalogueItemPath)
 
   useEffect(() => {
     if (item?.details) {

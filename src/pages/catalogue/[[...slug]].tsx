@@ -19,12 +19,15 @@ import {
 
 const { head } = message.cataloguePage
 
+// TODO: refactor [[slug]] to [uid], BreadCrump has no information about parent UID for add new category
+
 const CatalogueCategoriesPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
   const [catalogueCategoryList, setCatalogueCategoryList] =
     useState<CatalogueCategoryResponse[]>()
   const [catalogueItemsList, setCatalogueItemsList] =
     useState<CatalogueItemsResponse>()
+  const [catalogueParentUid, setCatalogueParentUid] = useState<string>()
 
   return (
     <Fragment>
@@ -42,6 +45,7 @@ const CatalogueCategoriesPage: NextPage = (): JSX.Element => {
           <Suspense fallback={<LoaderComponent />}>
             <CategoryListComponent
               setCatalogueCategoryList={setCatalogueCategoryList}
+              setCatalogueParentUid={setCatalogueParentUid}
             />
           </Suspense>
         </ErrorBoundary>

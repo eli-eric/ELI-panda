@@ -43,7 +43,7 @@ export const Results = (props: { query: string }) => {
 
 export const Prompt = (props: {
   query: string
-  setQuery: (arg1: string) => void
+  setQuery: (value: string) => void
 }) => {
   const { query, setQuery } = props
 

@@ -1,13 +1,14 @@
-import { message } from 'src/i18n/src/messages'
 import { Dispatch, Fragment, SetStateAction } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { message } from 'src/i18n/src/messages'
+
 import { ModalButtons } from '@/types/form'
 
 const messages = message.common.buttons
 
 interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>
-  testid: string
+  testid?: string
 
   buttons?: ModalButtons
 }
