@@ -49,7 +49,7 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
       <FormProvider {...formMethods}>
         <form className="flex" onSubmit={formMethods.handleSubmit(onSubmit)}>
           <div className="flex-1">
-            <Main />
+            <Main uid={uid} />
             <GroupList />
             {children}
           </div>
