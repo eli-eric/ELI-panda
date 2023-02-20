@@ -187,7 +187,7 @@ const Page: NextPage = () => {
                       />
                     </section>
 
-                    <section flex-col>
+                    <section>
                       <SystemDetailSectionComponent systemInfo={data} />
                       <div className="text-sm font-medium text-gray-400">
                         Description
