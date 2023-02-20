@@ -31,7 +31,7 @@ const NavigationListContainer = ({ open }: Props) => {
             {userRoles?.includes(ROLE.SYSTEMS_VIEW) && (
               <NavigationLinkComponent
                 name={intl.formatMessage({ id: navMessages.systemsOverview })}
-                href={PATH.SYSTEMS_OVERVIEW}
+                href={PATH.SYSTEMS}
                 open={open}
               />
             )}

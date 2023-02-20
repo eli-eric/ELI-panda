@@ -40,9 +40,7 @@ export const getFakeSystem = (): System => {
     uid,
     name,
     path: getFakePath(),
-    image: Math.round(Math.random())
-      ? 'https://source.unsplash.com/collection/71371194/500x500'
-      : '',
+    image: 'https://source.unsplash.com/collection/71371194/500x500',
     description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
       5,
     )}`,
@@ -71,7 +69,7 @@ export const fetchFakeSystem = async () => {
 }
 export const fetchFakeSystems = async () => {
   const res = [...Array(faker.datatype.number({ min: 0, max: 20 }))]
-  await sleep(faker.datatype.number({ min: 1000, max: 10000 }))
+  await sleep(faker.datatype.number({ min: 200, max: 2000 }))
   return res.map(() => getFakeSystem())
 }
 
