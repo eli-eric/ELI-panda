@@ -21,7 +21,10 @@ const SelectRelation = ({
 }) => {
   const { register, watch, setValue, formState } =
     useFormContext<RelationFormType>()
-  setValue('relationTypeCode', relationTypeCode)
+  useEffect(() => {
+    setValue('relationTypeCode', relationTypeCode)
+  })
+
   const router = useRouter()
   const baseSystemOption = useMemo(
     () => ({
@@ -43,7 +46,7 @@ const SelectRelation = ({
       name: selectedSystem?.name,
       value: selectedSystem?.uid,
     })
-  }, [selectedSystem])
+  }, [selectedSystem, setSelectedSystemOption])
 
   useEffect(() => {
     if (watchSystemFromUid === baseSystemOption.value) {
