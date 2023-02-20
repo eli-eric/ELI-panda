@@ -1,5 +1,5 @@
 import React from 'react'
-import { SystemTreeItem } from 'src/types/responses'
+import { SystemTreeItem } from '@/types/responses'
 
 import TreeBreadcrumpsComponent from './breadcrumb/breadcrumps.comp'
 import SubItems from './sub-items/sub-items.comp'

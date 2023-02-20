@@ -1,58 +1,53 @@
 import { faker } from '@faker-js/faker'
-import SystemDetailSectionComponent from 'src/modules/systems/details/system-detail/system-detail-section.comp'
+import { PlusIcon } from '@heroicons/react/20/solid'
 import { NextPage } from 'next'
-import dynamic from 'next/dynamic'
 import Head from 'next/head'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Suspense, useEffect, useState } from 'react'
+import { Fragment, Suspense, useEffect, useState } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
+import useSWR from 'swr/immutable'
 
-type System = {
-  uid: string
-  name: string
-  children: System[]
-  path: SystemUidName[]
-  description: string
-  image?: string
-  importanceCode?: string
-  zoneCode?: string
-  subZoneCode?: string
-  systemCode: string
-  systemAlias: string
-  locationCode: string
-  ownerUID?: string
-  catalogueUID: string
-  eun: string
-  serialNumber?: string
-  batchNumber?: string
-  itemUsageCategoryCode: string
-  estimatedLifeTime: number
+import ItemDetailComponent from '@/components/catalogueItem/item-detail.comp'
+import ErrorPage from '@/components/error/ErrorPage'
+import Breadcrumbs from '@/components/systems/Breadcrumbs'
+import Card from '@/components/systems/Card'
+import Description from '@/components/systems/Description'
+import SystemDetail from '@/components/systems/Detail'
+import FormButtons from '@/components/systems/FormButtons'
+import Preview from '@/components/systems/Preview'
+import Relations from '@/components/systems/relations/Relations'
+import { Prompt, Results } from '@/components/systems/Search'
+import Subsystems from '@/components/systems/Subsystems'
+import Title from '@/components/systems/Title'
+import ViewControl from '@/components/systems/ViewControl'
+import { Heading } from '@/components/ui/card/card.comp'
+import LoaderComponent from '@/components/ui/loader.comp'
+import ProgressBarComponent from '@/components/ui/progress-bar.comp'
+import useEditMode from '@/hooks/systems/useEditMode'
+import useParam from '@/hooks/useParam'
+import { System } from '@/types/system'
+
+const getFakeName = () => faker.company.catchPhrase()
+
+const getFakePath = (): string[] => {
+  const length = faker.datatype.number({ min: 0, max: 10 })
+  return [...Array(length)].map(() => faker.datatype.uuid())
 }
 
-type SystemProps = { data: System }
-
-type SystemUidName = [System['uid'], System['name']]
-
-let getFakeName = () => faker.company.catchPhrase()
-
-let getFakePath = (): System['path'] => {
-  let length = faker.datatype.number({ min: 0, max: 10 })
-  return [...Array(length)].map(() => [faker.datatype.uuid(), getFakeName()])
-}
-
-let getFakeSystem = (path: System['path'] = getFakePath(), hasChildren: boolean = true): System => {
-  let uid = faker.datatype.uuid()
-  let name = getFakeName()
-  let childPath: SystemUidName[] = [...path, [uid, name]]
+export const getFakeSystem = (): System => {
+  const uid = faker.datatype.uuid()
+  const name = getFakeName()
   return {
     uid,
     name,
-    path,
-    image: 'https://source.unsplash.com/collection/71371194/500x500',
-    description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(5)}`,
-    children: hasChildren
-      ? [...Array(faker.datatype.number({ max: 30 }))].map(() => getFakeSystem(childPath, false))
-      : [],
+    path: getFakePath(),
+    image: Math.round(Math.random())
+      ? 'https://source.unsplash.com/collection/71371194/500x500'
+      : '',
+    description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
+      5,
+    )}`,
+    children: getFakePath(),
     importanceCode: faker.datatype.string(),
     zoneCode: faker.datatype.string(),
     subZoneCode: faker.datatype.string(),
@@ -60,128 +55,67 @@ let getFakeSystem = (path: System['path'] = getFakePath(), hasChildren: boolean 
     systemAlias: faker.datatype.string(),
     locationCode: faker.datatype.string(),
     ownerUID: faker.datatype.string(),
-    catalogueUID: faker.datatype.uuid(),
+    catalogueUID: undefined,
     eun: faker.datatype.string(),
     serialNumber: faker.datatype.uuid(),
     batchNumber: faker.datatype.uuid(),
     itemUsageCategoryCode: faker.datatype.string(),
-    estimatedLifeTime: faker.datatype.number()
+    estimatedLifeTime: faker.datatype.number(),
   }
 }
 
-let useFakeSystem = (slug: String | undefined): System => {
-  let [data, setData] = useState(getFakeSystem())
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
+export const fetchFakeSystem = async () => {
+  await sleep(faker.datatype.number({ min: 200, max: 2000 }))
+  return getFakeSystem()
+}
+export const fetchFakeSystems = async () => {
+  const res = [...Array(faker.datatype.number({ min: 0, max: 20 }))]
+  await sleep(faker.datatype.number({ min: 1000, max: 10000 }))
+  return res.map(() => getFakeSystem())
+}
+
+const onSubmit = (data: System) => {
+  console.log(data)
+}
+
+const Page: NextPage = () => {
+  const router = useRouter()
+  const uid = router.query.slug
+  const [query, setQuery] = useParam('q')
+
+  const { data } = useSWR(uid, fetchFakeSystem)
+  const [viewControl, setViewControl] = useState<{
+    system: boolean
+    relations: boolean
+    catalogueItem: boolean | undefined
+  }>({
+    system: true,
+    relations: true,
+    catalogueItem: true,
+  })
+
   useEffect(() => {
-    slug && setData(getFakeSystem())
-  }, [slug])
+    if (data)
+      setViewControl(prev => ({
+        ...prev,
+        catalogueItem: data.catalogueUID ? true : undefined,
+      }))
+  }, [data])
 
-  return data
-}
+  const {
+    isEditMode,
+    setIsEditMode,
+    newImage,
+    setNewImage,
+    FormErrors,
+    EditModeContainer,
+    register,
+    discard,
+  } = useEditMode(onSubmit, data)
 
-let Card = ({ children }) => <div className={`mb-2 lg:mb-4 py-1 lg:py-2`}>{children}</div>
-
-let SubsystemsList = ({ data }) => (
-  <Card>
-    <ul>
-      {data.children.length === 0 ? (
-        <li>This node does not contain any subsystems.</li>
-      ) : (
-        data.children.map(({ uid, name }) => (
-          <li key={uid}>
-            <Link className="hover:text-orange-700" href={`/tree/${uid}`}>
-              {name}
-            </Link>
-          </li>
-        ))
-      )}
-    </ul>
-  </Card>
-)
-
-let Preview = ({ data }: SystemProps) => {
-  let { image, name } = data
-  return (
-    <>
-      <b>Preview</b>
-      <Card>
-        <img width="500px" src={image} alt={name} />
-      </Card>
-    </>
-  )
-}
-
-let Description = ({ data }: SystemProps) => {
-  let { description } = data
-  return (
-    <>
-      <b>Description</b>
-      <Card>
-        <p>{description}</p>
-      </Card>
-    </>
-  )
-}
-
-let Breadcrumbs = ({ data }: SystemProps) => {
-  let { path } = data
-  return (
-    <div>
-      <div className="flex gap-1 flex-wrap">
-        Systems
-        {path.map(([uid, name]) => (
-          <div className="flex gap-1 flex-nowrap" key={uid}>
-            <div>/</div>
-            <Link className="whitespace-nowrap hover:text-orange-700" href={`/tree/${uid}`}>
-              {name}
-            </Link>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-let Subsystems = ({ data }: SystemProps) => {
-  // Use <details> element on mobile
-  return (
-    <div>
-      <div className="hidden lg:block">
-        <b>Subsystems</b>
-        <SubsystemsList data={data} />
-      </div>
-      <details className="lg:hidden max-h-[50vh] overflow-auto">
-        <summary>
-          <b>Subsystems</b>
-        </summary>
-        <SubsystemsList data={data} />
-      </details>
-    </div>
-  )
-}
-
-let System = ({ data }: SystemProps) => {
-  return (
-    <div className="flex flex-wrap gap-2 lg:gap-4">
-      <section className="grow lg:grow-0 shrink-0">
-        <Preview data={data} />
-      </section>
-      <section className="grow">
-        <b>Details</b>
-        <Card>
-          <SystemDetailSectionComponent systemInfo={data} />
-        </Card>
-      </section>
-      <section>
-        <Description data={data} />
-      </section>
-    </div>
-  )
-}
-
-let SystemPage: NextPage = () => {
-  let router = useRouter()
-  let data = useFakeSystem(router.query.slug as string | undefined)
-  // let { data } = useSWR<Array<System>>(ENDPOINTS['systemTree'])
+  if (!data) return <LoaderComponent />
 
   return (
     <>
@@ -189,31 +123,128 @@ let SystemPage: NextPage = () => {
         <title>{data.name}</title>
       </Head>
 
-      <Suspense fallback={<b>Loading</b>}>
+      <EditModeContainer>
         <div className="p-2 lg:p-4 flex flex-wrap">
-          <nav className="p-1 lg:p2 w-full">
-            <Breadcrumbs data={data} />
+          <nav className="p-1 lg:p-2 w-full">
+            <Suspense
+              fallback={
+                <div className="py-3">
+                  <ProgressBarComponent />
+                </div>
+              }
+            >
+              <Breadcrumbs path={data.path} />
+            </Suspense>
           </nav>
 
-          <h1 className="text-3xl w-full">/ {data.name}</h1>
+          <div className="w-full">
+            <FormErrors />
+          </div>
 
-          <aside className="p-1 lg:p-2 w-full lg:w-1/4">
-            <nav>
-              <Subsystems data={data} />
-            </nav>
+          <div className="lg:px-3 flex flex-wrap w-full justify-between gap-4">
+            <Title data={data} isEditMode={isEditMode} register={register} />
+
+            {isEditMode || (
+              <Prompt query={query as string} setQuery={setQuery} />
+            )}
+            <FormButtons
+              isEditMode={isEditMode}
+              setIsEditMode={setIsEditMode}
+              discard={discard}
+            />
+          </div>
+
+          {isEditMode ||
+            (query && (
+              <div className="w-full">
+                <Results query={query} />
+              </div>
+            ))}
+
+          <div className="w-full">
+            <ViewControl
+              setViewControl={setViewControl}
+              viewControl={viewControl}
+            />
+          </div>
+
+          <aside className="w-full lg:w-1/4">
+            <Card>
+              <Heading
+                text="Subsystems"
+                action={{
+                  label: <PlusIcon className="h-5" />,
+                  href: router.asPath.split('?')[0] + '/new',
+                }}
+              />
+              <Suspense fallback={<ProgressBarComponent />}>
+                <nav aria-label="Subsystems">
+                  <Subsystems ids={data.children} />
+                </nav>
+              </Suspense>
+            </Card>
           </aside>
 
-          <main className="p-1 lg:p-2 lg:w-3/4">
-            <article>
-              <System data={data} />
-            </article>
+          <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
+            {viewControl.system && (
+              <article>
+                <Card>
+                  <Heading text="Detail" />
+                  <div className="flex flex-wrap lg:flex-nowrap gap-2 lg:gap-4">
+                    <section>
+                      <Preview
+                        image={data.image}
+                        alt={data.name}
+                        isEditMode={isEditMode}
+                        newImage={newImage}
+                        setNewImage={setNewImage}
+                      />
+                    </section>
+
+                    <section>
+                      <SystemDetail
+                        register={register}
+                        isEditMode={isEditMode}
+                        data={data}
+                      />
+                      <div className="text-sm font-medium text-gray-400">
+                        Description
+                      </div>
+                      <Description
+                        data={data}
+                        isEditMode={isEditMode}
+                        register={register}
+                      />
+                    </section>
+                  </div>
+                </Card>
+              </article>
+            )}
+            {data.catalogueUID && viewControl.catalogueItem && (
+              <Card>
+                <Heading text="Catalogue Item" />
+                <ErrorBoundary fallback={<ErrorPage />}>
+                  <Suspense fallback={<LoaderComponent />}>
+                    <ItemDetailComponent uid={data.catalogueUID} />
+                  </Suspense>
+                </ErrorBoundary>
+              </Card>
+            )}
+            {viewControl.relations && (
+              <Card>
+                <Heading text="Relations" />
+                <ErrorBoundary fallback={<ErrorPage />}>
+                  <Suspense fallback={<ProgressBarComponent />}>
+                    <Relations uid={data.uid} systemName={data.name} />
+                  </Suspense>
+                </ErrorBoundary>
+              </Card>
+            )}
           </main>
         </div>
-      </Suspense>
+      </EditModeContainer>
     </>
   )
 }
 
-export default dynamic(() => Promise.resolve(SystemPage), {
-  ssr: false
-})
+export default Page

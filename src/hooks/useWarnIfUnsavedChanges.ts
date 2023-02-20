@@ -1,7 +1,10 @@
 import Router from 'next/router'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
-export const useWarnIfUnsavedChanges = (unsavedChanges: boolean, setModalOpen: Dispatch<SetStateAction<boolean>>) => {
+export const useWarnIfUnsavedChanges = (
+  unsavedChanges: boolean,
+  setModalOpen: Dispatch<SetStateAction<boolean>>,
+) => {
   const [next, setNext] = useState<boolean>(false)
   const [nextUrl, setNextUrl] = useState<string>()
   useEffect(() => {

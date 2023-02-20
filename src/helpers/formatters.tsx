@@ -2,7 +2,7 @@ import React from 'react'
 
 /* formmaters for i18n messages */
 export const messageFormatters = {
-  medium: (chunks: string) => <span className="font-medium">{chunks}</span>
+  medium: (chunks: string) => <span className="font-medium">{chunks}</span>,
 }
 
 export const createMessageValues = (values: any = {}): Record<string, any> => ({
@@ -11,10 +11,12 @@ export const createMessageValues = (values: any = {}): Record<string, any> => ({
     (prev, [key, value]) => ({
       ...prev,
       [key]:
-        typeof value === 'number' || typeof value === 'string' || React.isValidElement(value as any)
+        typeof value === 'number' ||
+        typeof value === 'string' ||
+        React.isValidElement(value as any)
           ? value
-          : JSON.stringify(value)
+          : JSON.stringify(value),
     }),
-    {}
-  )
+    {},
+  ),
 })

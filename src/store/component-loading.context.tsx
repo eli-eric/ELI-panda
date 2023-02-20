@@ -8,7 +8,7 @@ interface ComponentLoadingContext {
 
 const ComponentLoadingContext = createContext({
   componentLoading: false, // {title, message, status}
-  setComponentLoading: _loading => {}
+  setComponentLoading: _loading => {},
 } as ComponentLoadingContext)
 
 interface Props {
@@ -36,11 +36,13 @@ export const ComponentLoadingProvider = ({ children }: Props) => {
 
   const context = {
     componentLoading: loading,
-    setComponentLoading: setLoadingHandler
+    setComponentLoading: setLoadingHandler,
   }
 
   return (
-    <ComponentLoadingContext.Provider value={context}>{children}</ComponentLoadingContext.Provider>
+    <ComponentLoadingContext.Provider value={context}>
+      {children}
+    </ComponentLoadingContext.Provider>
   )
 }
 export default ComponentLoadingContext

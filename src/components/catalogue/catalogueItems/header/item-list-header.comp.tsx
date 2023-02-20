@@ -15,18 +15,35 @@ const ItemListHeaderComponent = ({ categoryListLength, details }: Props) => {
   return (
     <thead className="bg-gray-50">
       <tr>
-        <ItemListColumnTitleComponent title={intl.formatMessage({ id: messages.name })} />
-        <ItemListColumnTitleComponent title={intl.formatMessage({ id: messages.description })} />
+        <ItemListColumnTitleComponent
+          title={intl.formatMessage({ id: messages.name })}
+        />
+        <ItemListColumnTitleComponent
+          title={intl.formatMessage({ id: messages.description })}
+        />
         {categoryListLength === 0 &&
           details &&
           details.length !== 0 &&
-          details.map(item => <ItemListColumnTitleComponent key={item.propertyName} title={item.propertyName} />)}
+          details.map(item => (
+            <ItemListColumnTitleComponent
+              key={item.propertyName}
+              title={item.propertyName}
+            />
+          ))}
         {categoryListLength !== 0 && (
-          <ItemListColumnTitleComponent title={intl.formatMessage({ id: messages.categoryName })} />
+          <ItemListColumnTitleComponent
+            title={intl.formatMessage({ id: messages.categoryName })}
+          />
         )}
-        <ItemListColumnTitleComponent title={intl.formatMessage({ id: messages.manufactorer })} />
-        <ItemListColumnTitleComponent title={intl.formatMessage({ id: messages.manufacturerNumber })} />
-        <ItemListColumnTitleComponent title={intl.formatMessage({ id: messages.manufacturerUrl })} />
+        <ItemListColumnTitleComponent
+          title={intl.formatMessage({ id: messages.manufactorer })}
+        />
+        <ItemListColumnTitleComponent
+          title={intl.formatMessage({ id: messages.manufacturerNumber })}
+        />
+        <ItemListColumnTitleComponent
+          title={intl.formatMessage({ id: messages.manufacturerUrl })}
+        />
       </tr>
     </thead>
   )

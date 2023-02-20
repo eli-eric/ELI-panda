@@ -15,9 +15,17 @@ const SearchBarComponent = () => {
 
   const setSearch = () => {
     const enteredSearch = searchValueRef.current?.value
-    router.push({ query: enteredSearch ? { ...query, search: enteredSearch } : { slug: slug } }, undefined, {
-      shallow: true
-    })
+    router.push(
+      {
+        query: enteredSearch
+          ? { ...query, search: enteredSearch }
+          : { slug: slug },
+      },
+      undefined,
+      {
+        shallow: true,
+      },
+    )
   }
 
   /* let timer: NodeJS.Timeout
@@ -38,7 +46,13 @@ const SearchBarComponent = () => {
     <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white border-b">
       <div id="layout-search-bar" className="flex flex-1 justify-between px-4">
         <div className="flex flex-1">
-          <form data-testid="search" className="flex w-full md:ml-0" action="#" method="GET" onSubmit={submitHandler}>
+          <form
+            data-testid="search"
+            className="flex w-full md:ml-0"
+            action="#"
+            method="GET"
+            onSubmit={submitHandler}
+          >
             <label htmlFor="search-field" className="sr-only">
               Search
             </label>

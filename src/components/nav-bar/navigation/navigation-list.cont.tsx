@@ -1,9 +1,10 @@
 import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
-import { message } from 'src/i18n/src/messages'
-import { PATH } from 'src/types/constants/paths'
-import { ROLE } from 'src/types/constants/roles'
+
+import { message } from '@/i18n/src/messages'
+import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 
 import NavigationLinkComponent from './navigation-link.comp'
 const navMessages = message.layout
@@ -18,7 +19,13 @@ const NavigationListContainer = ({ open }: Props) => {
   const intl = useIntl()
   return (
     <Fragment>
-      <div className={open === false ? 'hidden sm:ml-6 sm:flex sm:space-x-8' : 'space-y-1 pt-2 pb-3'}>
+      <div
+        className={
+          open === false
+            ? 'hidden sm:ml-6 sm:flex sm:space-x-8'
+            : 'space-y-1 pt-2 pb-3'
+        }
+      >
         {status === 'authenticated' ? (
           <Fragment>
             {userRoles?.includes(ROLE.SYSTEMS_VIEW) && (
@@ -49,7 +56,11 @@ const NavigationListContainer = ({ open }: Props) => {
             />
           </Fragment>
         ) : (
-          <NavigationLinkComponent name={intl.formatMessage({ id: navMessages.login })} href={PATH.ROOT} open={open} />
+          <NavigationLinkComponent
+            name={intl.formatMessage({ id: navMessages.login })}
+            href={PATH.ROOT}
+            open={open}
+          />
         )}
       </div>
     </Fragment>

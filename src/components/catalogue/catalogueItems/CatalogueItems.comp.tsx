@@ -1,4 +1,4 @@
-import { CatalogueItemsResponse } from 'src/types/responses'
+import { CatalogueItemsResponse } from '@/types/responses'
 
 import ItemListHeaderComponent from './header/item-list-header.comp'
 import ItemListRow from './row/item-list-row.comp'
@@ -8,7 +8,10 @@ interface Props {
   categoryListLength?: number
 }
 
-const CatalogueItemsComponent = ({ categoryListLength, catalogueItems }: Props) => {
+const CatalogueItemsComponent = ({
+  categoryListLength,
+  catalogueItems,
+}: Props) => {
   return (
     <div className="-my-2  sm:-mx-6 lg:-mx-8">
       <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -20,7 +23,12 @@ const CatalogueItemsComponent = ({ categoryListLength, catalogueItems }: Props) 
             />
             <tbody className="bg-white">
               {catalogueItems?.data.map((item, index) => (
-                <ItemListRow key={index} item={item} index={index} categoryListLength={categoryListLength} />
+                <ItemListRow
+                  key={index}
+                  item={item}
+                  index={index}
+                  categoryListLength={categoryListLength}
+                />
               ))}
             </tbody>
           </table>

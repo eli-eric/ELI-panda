@@ -1,7 +1,7 @@
 import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 import { InputWithError } from 'src/components/ui/form/Input'
-import { PlusIconButton, TrashIconButton } from 'src/components/ui/IconButtons'
-import { CatalogueFormType, Group } from 'src/types/catalogue/catalogueTypes'
+import { PlusIconButton, TrashIconButton } from '@/components/ui/Buttons'
+import { CatalogueFormType, Group } from '@/types/catalogue/catalogueTypes'
 
 import PropertyList from './PropertyList'
 
@@ -51,7 +51,10 @@ const GroupList = () => {
   const { fields, append, remove } = useFieldArray({ control, name: 'groups' })
 
   const handleAddGroup = () => {
-    append({ name: '', properties: [{ name: '', typeUID: '', unitUID: '', default: '' }] })
+    append({
+      name: '',
+      properties: [{ name: '', typeUID: '', unitUID: '', default: '' }],
+    })
   }
 
   return (
@@ -64,7 +67,9 @@ const GroupList = () => {
                 <Group
                   remove={remove}
                   index={index}
-                  errors={formState.errors.groups && formState.errors.groups[index]}
+                  errors={
+                    formState.errors.groups && formState.errors.groups[index]
+                  }
                   name={`groups.${index}`}
                   key={field.id}
                 />

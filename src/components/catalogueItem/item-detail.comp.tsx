@@ -1,21 +1,46 @@
-import { useCatalogueItemDetailPath } from 'src/hooks/usePath'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { CatalogueItem } from 'src/types/responses'
 import useSWR from 'swr'
+
+import { useEndpoint } from '@/hooks/useEndpoint'
+import { CatalogueItem } from '@/types/responses'
 
 import ItemPropertiesComponent from './default-properties/item-properties.comp'
 import ImageGalleryComponent from './gallery/image-gallery.comp'
 
+const images = [
+  {
+    id: 1,
+    src: 'http://localhost:5001/api/mock-server/catalogue/item/0056ed5a-e20b-4c15-b8c6-2312c23b1f4a/image',
+    alt: '',
+    name: '',
+  },
+  {
+    id: 2,
+    src: 'http://localhost:5001/api/mock-server/catalogue/item/1865aed8-f94d-49eb-8389-3b4fc5d983ab/image',
+    alt: '',
+    name: '',
+  },
+  {
+    id: 3,
+    src: 'http://localhost:5001/api/mock-server/catalogue/item/c664c559-650d-4733-90fe-74cef6c04186/image',
+    alt: '',
+    name: '',
+  },
+]
+
 interface Props {
-  images: { name: string; id: number; src: string }[]
+  uid?: string
 }
 
-const ItemDetailComponent = ({ images }: Props) => {
+const ItemDetailComponent = ({ uid }: Props) => {
   const router = useRouter()
+  const catalogueUid = (router.query.uid as string) || uid
   const [groups, setGroups] = useState<Array<string>>([])
-  const catalogueItemPath = useCatalogueItemDetailPath(router.query.uid as string)
-  const { data: item } = useSWR<CatalogueItem>(catalogueItemPath)
+  const { catalogueItem } = useEndpoint({
+    uid: catalogueUid,
+  })
+  const { data: item } = useSWR<CatalogueItem>(catalogueUid && catalogueItem)
 
   useEffect(() => {
     if (item?.details) {
@@ -36,10 +61,14 @@ const ItemDetailComponent = ({ images }: Props) => {
             <ImageGalleryComponent images={images} />
 
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-              <h1 className="text-3xl font-bold tracking-tight text-gray-900">{item?.name}</h1>
+              <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+                {item?.name}
+              </h1>
               <div className="mt-6">
                 <h3 className="sr-only">Description</h3>
-                <div className="space-y-6 text-base text-gray-700">{item?.description ?? 'No description'}</div>
+                <div className="space-y-6 text-base text-gray-700">
+                  {item?.description ?? 'No description'}
+                </div>
               </div>
               <ItemPropertiesComponent item={item} groups={groups} />
             </div>

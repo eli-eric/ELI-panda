@@ -32,7 +32,8 @@ export const updateSystemObject = (systems, uid, newData) => {
   }
 }
 
-export const generateUid = () => Date.now().toString(36) + Math.random().toString(36).substr(2, 5)
+export const generateUid = () =>
+  Date.now().toString(36) + Math.random().toString(36).substr(2, 5)
 
 export const deleteTreeObject = (systemTree, uid) => {
   if (!systemTree || !uid) {

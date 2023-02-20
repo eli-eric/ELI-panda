@@ -1,6 +1,6 @@
 import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
-import { PlusIconButton } from 'src/components/ui/IconButtons'
-import { CatalogueFormType, Group } from 'src/types/catalogue/catalogueTypes'
+import { PlusIconButton } from '@/components/ui/Buttons'
+import { CatalogueFormType, Group } from '@/types/catalogue/catalogueTypes'
 
 import PropertyItem from './PropertyItem'
 
@@ -13,7 +13,7 @@ const PropertyList = ({ name, errors }: Props) => {
   const { control } = useFormContext<CatalogueFormType>()
   const { fields, append, remove } = useFieldArray<CatalogueFormType>({
     control,
-    name: `${name}.properties`
+    name: `${name}.properties`,
   })
 
   const handleAddProp = () => {

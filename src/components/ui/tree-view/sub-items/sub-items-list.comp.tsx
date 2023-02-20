@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { SystemTreeItem } from 'src/types/responses'
+import { SystemTreeItem } from '@/types/responses'
 
 import Card from '../../card/card.comp'
 
@@ -16,7 +16,10 @@ const SubItemsList = ({ data }: Props) => {
         ) : (
           data.children.map(({ uid, name }) => (
             <li key={uid}>
-              <Link className="hover:text-orange-700" href={{ query: { slug: [data.uid] } }}>
+              <Link
+                className="hover:text-orange-700"
+                href={{ query: { slug: [data.uid] } }}
+              >
                 {name}
               </Link>
             </li>

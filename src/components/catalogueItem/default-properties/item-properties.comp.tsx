@@ -1,10 +1,10 @@
-import { message } from 'src/i18n/src/messages'
 import React from 'react'
 import ItemPropertyTitle from 'src/components/item-property/item-property-title.comp'
 import ItemPropertyValue from 'src/components/item-property/item-property-value.comp'
-import { CatalogueItem } from 'src/types/responses'
+import { message } from 'src/i18n/src/messages'
 
-import DisclosureComponent from '../disclosure/disclosure.comp'
+import DisclosureComponent from '@/components/ui/Disclosure.comp'
+import { CatalogueItem } from '@/types/responses'
 
 const messages = message.cataloguePage.itemList.header
 
@@ -32,7 +32,38 @@ const ItemPropertiesComponent = ({ item, groups }: Props) => {
           </ItemPropertyTitle>
         </dl>
       </div>
-      <DisclosureComponent item={item} groups={groups} />
+      {item?.details &&
+        groups.map(group => (
+          <DisclosureComponent key={group} title={group}>
+            <div
+              key={group}
+              className=" prose prose-sm border-t border-gray-200 px-4 py-5 sm:px-6"
+            >
+              <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+                {item.details?.map(detail => {
+                  if (detail.propertyGroup !== group) {
+                    return
+                  }
+                  return (
+                    <div key={detail.propertyName} className="sm:col-span-1">
+                      <dt className="text-sm font-medium text-gray-400">
+                        {detail.propertyName}
+                      </dt>
+                      <dd className="mt-1 text-sm text-gray-900">
+                        {(detail.value === '' || detail.value === null
+                          ? 'N/A'
+                          : detail.value) +
+                          (detail.propertyUnit !== null
+                            ? ` ${detail.propertyUnit}`
+                            : '')}
+                      </dd>
+                    </div>
+                  )
+                })}
+              </dl>
+            </div>
+          </DisclosureComponent>
+        ))}
     </section>
   )
 }

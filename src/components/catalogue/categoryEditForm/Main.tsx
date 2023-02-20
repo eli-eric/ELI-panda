@@ -1,26 +1,31 @@
 import Image from 'next/image'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
-import { InputWithError } from 'src/components/ui/form/Input'
-import { TrashIconButton } from 'src/components/ui/IconButtons'
-import { ImageIcon } from 'src/components/ui/SvgIcons'
-import { CatalogueFormType } from 'src/types/catalogue/catalogueTypes'
 
-const Main = () => {
-  const { register, watch, setValue, formState } = useFormContext<CatalogueFormType>()
+import { TrashIconButton } from '@/components/ui/Buttons'
+import { InputWithError } from '@/components/ui/form/Input'
+import { ImageIcon } from '@/components/ui/SvgIcons'
+import { useEndpoint } from '@/hooks/useEndpoint'
+import { CatalogueFormType } from '@/types/catalogue/catalogueTypes'
+
+const Main = ({ uid }: { uid?: string }) => {
+  const { catalogueCategoryImage } = useEndpoint({ uid: uid })
+  const [showImageUid, setShowImage] = useState<boolean>(!!uid)
+  const { register, watch, setValue, formState } =
+    useFormContext<CatalogueFormType>()
   const onDrop = useCallback(
     files => {
       const reader = new FileReader()
       reader.readAsDataURL(files[0])
       reader.onload = () => setValue('image', reader.result as string)
     },
-    [setValue]
+    [setValue],
   )
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     maxFiles: 1,
     accept: { 'image/*': [] },
-    onDrop
+    onDrop,
   })
 
   const { errors } = formState
@@ -29,13 +34,27 @@ const Main = () => {
   const groupName = watch('name')
 
   useEffect(() => {
-    const codeValue = groupName ? groupName.replace(/\s+/g, '-').toLowerCase() : ''
+    const codeValue = groupName
+      ? groupName.replace(/\s+/g, '-').toLowerCase()
+      : ''
     setValue('code', codeValue)
   }, [groupName, setValue])
 
   return (
     <div className="flex flex-row pb-5">
-      {!image ? (
+      {showImageUid ? (
+        <div className="mt-1 flex-col justify-center  border-gray-300 ">
+          <Image width={200} height={200} alt="" src={catalogueCategoryImage} />
+          <TrashIconButton
+            onClickAction={() => {
+              setShowImage(false)
+              setValue('image', '')
+            }}
+            customClass="w-full justify-center"
+            rounded="rounded-b-md"
+          />
+        </div>
+      ) : !image ? (
         <label
           htmlFor="file-upload"
           {...getRootProps()}
@@ -54,7 +73,7 @@ const Main = () => {
         </label>
       ) : (
         <div className="mt-1 flex-col justify-center  border-gray-300 ">
-          <Image width={160} height={160} alt="" src={image} />
+          <Image width={200} height={200} alt="" src={image} />
           <TrashIconButton
             onClickAction={() => setValue('image', '')}
             customClass="w-full justify-center"
@@ -66,7 +85,12 @@ const Main = () => {
         <div>
           <label className="text-sm font-medium text-gray-700">Name</label>
           <div className="mt-1">
-            <InputWithError name="name" register={register} isError={!errors.name?.message} rounded="rounded-md" />
+            <InputWithError
+              name="name"
+              register={register}
+              isError={!errors.name?.message}
+              rounded="rounded-md"
+            />
           </div>
         </div>
 

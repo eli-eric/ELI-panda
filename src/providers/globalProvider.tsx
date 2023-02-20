@@ -23,7 +23,7 @@ const GlobalProvider = ({ children }: Props) => {
             const err = new Error('An error occurred while fetching the data.')
             throw err
           }
-        }
+        },
       }}
     >
       <IntlProvider locale="en" messages={messages['en']}>

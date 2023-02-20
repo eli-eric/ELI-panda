@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -21,33 +17,15 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/components/*": [
-        "src/components/*"
-      ],
-      "@/features/*": [
-        "src/features/*"
-      ],
-      "@/helpers/*": [
-        "src/helpers/*"
-      ],
-      "@/hooks/*": [
-        "src/hooks/*"
-      ],
-      "@/i18n/*": [
-        "src/i18n/*"
-      ],
-      "@/providers/*": [
-        "src/providers/*"
-      ],
-      "@/store/*": [
-        "src/store/*"
-      ],
-      "@/styles/*": [
-        "src/styles/*"
-      ],
-      "@/types/*": [
-        "src/types/*"
-      ]
+      "@/components/*": ["src/components/*"],
+      "@/features/*": ["src/features/*"],
+      "@/helpers/*": ["src/helpers/*"],
+      "@/hooks/*": ["src/hooks/*"],
+      "@/i18n/*": ["src/i18n/*"],
+      "@/providers/*": ["src/providers/*"],
+      "@/store/*": ["src/store/*"],
+      "@/styles/*": ["src/styles/*"],
+      "@/types/*": ["src/types/*"]
     },
     "plugins": [
       {
@@ -57,12 +35,11 @@
   },
   "include": [
     "next-env.d.ts",
-    "types/**/*.ts",
+    "@/types/**/*.ts",
     "**/*.tsx",
     "**/*.ts",
+    ".next/@/types/**/*.ts",
     ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

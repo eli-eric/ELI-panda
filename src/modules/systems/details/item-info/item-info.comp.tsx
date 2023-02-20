@@ -2,7 +2,7 @@ import ItemPropertyTitle from 'src/components/item-property/item-property-title.
 import ItemPropertyValue from 'src/components/item-property/item-property-value.comp'
 import ProgressBarComponent from 'src/components/ui/progress-bar.comp'
 import { message } from 'src/i18n/src/messages'
-import { ItemInfo } from 'src/types/responses'
+import { ItemInfo } from '@/types/responses'
 
 const messages = message.systemsPage.itemDetail
 interface Props {

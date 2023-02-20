@@ -21,22 +21,25 @@ export const usePandaForm = <T extends FieldValues>({
   endpoint,
   fetchMethod,
   schema,
-  afterMutates
+  afterMutates,
 }: Props<T>) => {
   const router = useRouter()
   const { register, handleSubmit, formState } = useForm({
     defaultValues: data as any,
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
   })
   const { setEdit } = useContext(FormContext)
 
   const [modalOpen, setModalOpen] = useState(false)
-  const { setNext, nextUrl, setNextUrl } = useWarnIfUnsavedChanges(formState.isDirty, setModalOpen)
+  const { setNext, nextUrl, setNextUrl } = useWarnIfUnsavedChanges(
+    formState.isDirty,
+    setModalOpen,
+  )
 
   const { fetchData } = useAxios({
     url: endpoint,
     method: fetchMethod,
-    mutateUrlList: afterMutates && afterMutates
+    mutateUrlList: afterMutates && afterMutates,
   })
 
   const onSubmit = data => {
@@ -70,6 +73,6 @@ export const usePandaForm = <T extends FieldValues>({
     handleSubmit,
     formState,
     warnModalOpen: modalOpen,
-    setWarnModalOpen: setModalOpen
+    setWarnModalOpen: setModalOpen,
   }
 }

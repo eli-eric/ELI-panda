@@ -1,0 +1,111 @@
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useRouter } from 'next/router'
+import { Dispatch, SetStateAction, Suspense, useEffect, useState } from 'react'
+import { FormProvider, useForm } from 'react-hook-form'
+import * as yup from 'yup'
+
+import ErrorPage from '@/components/error/ErrorPage'
+import { Button } from '@/components/ui/Buttons'
+import LoaderComponent from '@/components/ui/loader.comp'
+import SearchBarComponent from '@/components/ui/SearchBar.comp'
+import { useEndpoint } from '@/hooks/useEndpoint'
+import useSubmit from '@/hooks/useSubmit'
+import { RELATION_TYPE_CODE } from '@/types/system/constants'
+
+import SelectRelation from './SelectRelation'
+import TableWithPaging from './TableWithPaging'
+
+interface Props {
+  setopen: Dispatch<SetStateAction<boolean>>
+  relationTypeCode: RELATION_TYPE_CODE
+  systemName: string
+}
+
+export type RelationFormType = {
+  systemFromUid: string
+  relationTypeCode: string
+  systemToUid: string
+}
+
+const relationValidationSchema = yup.object().shape({
+  systemFromUid: yup.string().required(),
+  relationTypeCode: yup.string().required(),
+  systemToUid: yup.string().required()
+})
+
+const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
+  const [searchValue, setSearchValue] = useState<string | undefined>()
+  const router = useRouter()
+  const [selectedSystem, setSelectedSystem] = useState<{
+    name: string
+    uid: string
+  }>()
+  const searchFormMethods = useForm()
+  const onSearchSubmit = data => {
+    setSelectedSystem(undefined)
+    setSearchValue(data.search)
+  }
+  const { systemRelationship, systemRelationships } = useEndpoint({ uid: router.query.slug as string })
+  const relFormMethods = useForm<RelationFormType>({ resolver: yupResolver(relationValidationSchema) })
+  const { submit, loading, error, response } = useSubmit({
+    endpoint: systemRelationship,
+    method: 'post',
+    mutateUrlList: [systemRelationships]
+  })
+  const onSubmit = data => {
+    submit(data)
+  }
+
+  useEffect(() => {
+    if (response) if (!error) setopen(false)
+  }, [response, setopen, error])
+
+  return (
+    <div className="w-full min-h-[736px] flex flex-col justify-between">
+      <div className="flex flex-col">
+        <FormProvider {...searchFormMethods}>
+          <SearchBarComponent onSubmit={onSearchSubmit} />
+        </FormProvider>
+        <Suspense
+          fallback={
+            <div className="max-h-full">
+              <LoaderComponent />
+            </div>
+          }
+        >
+          <TableWithPaging
+            searchValue={searchValue}
+            relationTypeCode={relationTypeCode}
+            selectedSystem={selectedSystem}
+            setSelectedSystem={setSelectedSystem}
+          />
+        </Suspense>
+      </div>
+      <form onSubmit={relFormMethods.handleSubmit(onSubmit)} className="flex flex-col">
+        <FormProvider {...relFormMethods}>
+          <SelectRelation relationTypeCode={relationTypeCode} systemName={systemName} selectedSystem={selectedSystem} />
+        </FormProvider>
+        {error && <ErrorPage />}
+        <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+          <Button
+            text="Save"
+            type="submit"
+            loading={loading}
+            customClass="inline-flex w-full justify-center sm:col-start-2 sm:mt-0 sm:text-sm"
+          />
+          <Button
+            text="Cancel"
+            buttonType="secondary"
+            onClickAction={() => {
+              setopen(false)
+            }}
+            disabled={loading}
+            customClass="inline-flex w-full justify-center sm:col-start-1 sm:mt-0 sm:text-sm text-gray-700"
+          />
+        </div>
+      </form>
+    </div>
+  )
+}
+
+export default AddRelationForm

@@ -1,0 +1,32 @@
+export type System = {
+  uid: string
+  name: string
+  children: string[]
+  path: string[]
+  description: string
+  systemCode: string
+  systemAlias: string
+  locationCode: string
+  catalogueUID?: string
+  eun: string
+  itemUsageCategoryCode: string
+  estimatedLifeTime: number
+  ownerUID?: string
+  image?: string
+  importanceCode?: string
+  zoneCode?: string
+  subZoneCode?: string
+  serialNumber?: string
+  batchNumber?: string
+  systemTypeUID?: string
+}
+
+export type SystemProps = { data: System }
+export type SystemEditModeProps = { data: System; editMode: any }
+
+export type SystemForRel = {
+  name: string
+  systemType: string
+  systemCodePath: string
+  uid: string
+}

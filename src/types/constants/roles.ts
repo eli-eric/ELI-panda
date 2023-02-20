@@ -5,5 +5,5 @@ export enum ROLE {
   BASICS = 'basics',
   SYSTEM_EDIT = 'systems-edit',
   CATALOGUE_CATEGORY_EDIT = 'catalogue-category-edit',
-  CATALOGUE_EDIT = 'catalogue-edit'
+  CATALOGUE_EDIT = 'catalogue-edit',
 }

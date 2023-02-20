@@ -39,13 +39,18 @@ const ProfileDropdownComponent = ({ open }: Props) => {
   return (
     <Fragment>
       {open === false ? (
-        <div data-testid="layout-profile" className="hidden sm:ml-6 sm:flex sm:items-center z-20">
+        <div
+          data-testid="layout-profile"
+          className="hidden sm:ml-6 sm:flex sm:items-center z-20"
+        >
           <Menu as="div" className="relative ml-3">
             <div>
               <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
                 <span className="sr-only">Open user menu</span>
                 <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
-                  <span className="font-medium leading-none text-white">{inicials}</span>
+                  <span className="font-medium leading-none text-white">
+                    {inicials}
+                  </span>
                 </span>
               </Menu.Button>
             </div>
@@ -65,7 +70,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                       onClick={showModalHandler}
                       className={classNames(
                         active ? 'bg-gray-100' : '',
-                        'w-full text-left block px-4 py-2 text-sm text-gray-700'
+                        'w-full text-left block px-4 py-2 text-sm text-gray-700',
                       )}
                     >
                       Your Profile
@@ -78,7 +83,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                       onClick={signOutHandler}
                       className={classNames(
                         active ? 'bg-gray-100' : '',
-                        'w-full text-left block px-4 py-2 text-sm text-gray-700'
+                        'w-full text-left block px-4 py-2 text-sm text-gray-700',
                       )}
                     >
                       Sign out
@@ -94,12 +99,18 @@ const ProfileDropdownComponent = ({ open }: Props) => {
           <div className="flex items-center px-4">
             <div className="flex-shrink-0">
               <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
-                <span className="font-medium leading-none text-white">{inicials}</span>
+                <span className="font-medium leading-none text-white">
+                  {inicials}
+                </span>
               </span>
             </div>
             <div className="ml-3">
-              <div className="text-base font-medium text-gray-800">{fullName}</div>
-              <div className="text-sm font-medium text-gray-500">{user?.email}</div>
+              <div className="text-base font-medium text-gray-800">
+                {fullName}
+              </div>
+              <div className="text-sm font-medium text-gray-500">
+                {user?.email}
+              </div>
             </div>
           </div>
           <div className="mt-3 space-y-1">
