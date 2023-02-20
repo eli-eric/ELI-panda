@@ -13,8 +13,8 @@ const ImageGalleryComponent = ({ images }: Props) => {
   return (
     <Tab.Group as="div" className="flex flex-col-reverse">
       {/* Image selector */}
-      <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
-        <Tab.List className="grid grid-cols-4 gap-6">
+      <div className="mx-auto hidden w-full max-w-2xl sm:block lg:max-w-none">
+        <Tab.List className="grid grid-cols-4 gap-6 pb-1">
           {images.map(image => (
             <Tab
               key={image.id}
@@ -51,8 +51,8 @@ const ImageGalleryComponent = ({ images }: Props) => {
           <Tab.Panel key={image.id}>
             <Image
               src={image.src}
-              alt=""
-              className="h-96 w-full object-cover object-center sm:rounded-lg"
+              alt="catalogue/item/image"
+              className="w-full object-cover object-center sm:rounded-lg"
               width={500}
               height={500}
             />

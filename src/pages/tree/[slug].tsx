@@ -3,10 +3,11 @@ import { PlusIcon } from '@heroicons/react/20/solid'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Suspense, useState } from 'react'
+import { Fragment, Suspense, useEffect, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import useSWR from 'swr/immutable'
 
+import ItemDetailComponent from '@/components/catalogueItem/item-detail.comp'
 import ErrorPage from '@/components/error/ErrorPage'
 import Breadcrumbs from '@/components/systems/Breadcrumbs'
 import Card from '@/components/systems/Card'
@@ -54,7 +55,7 @@ export const getFakeSystem = (): System => {
     systemAlias: faker.datatype.string(),
     locationCode: faker.datatype.string(),
     ownerUID: faker.datatype.string(),
-    catalogueUID: faker.datatype.uuid(),
+    catalogueUID: undefined,
     eun: faker.datatype.string(),
     serialNumber: faker.datatype.uuid(),
     batchNumber: faker.datatype.uuid(),
@@ -84,12 +85,24 @@ const Page: NextPage = () => {
   const uid = router.query.slug
   const [query, setQuery] = useParam('q')
 
-  const [viewControl, setViewControl] = useState({
+  const { data } = useSWR(uid, fetchFakeSystem)
+  const [viewControl, setViewControl] = useState<{
+    system: boolean
+    relations: boolean
+    catalogueItem: boolean | undefined
+  }>({
     system: true,
     relations: true,
+    catalogueItem: true,
   })
 
-  const { data } = useSWR(uid, fetchFakeSystem)
+  useEffect(() => {
+    if (data)
+      setViewControl(prev => ({
+        ...prev,
+        catalogueItem: data.catalogueUID ? true : undefined,
+      }))
+  }, [data])
 
   const {
     isEditMode,
@@ -206,6 +219,16 @@ const Page: NextPage = () => {
                   </div>
                 </Card>
               </article>
+            )}
+            {data.catalogueUID && viewControl.catalogueItem && (
+              <Card>
+                <Heading text="Catalogue Item" />
+                <ErrorBoundary fallback={<ErrorPage />}>
+                  <Suspense fallback={<LoaderComponent />}>
+                    <ItemDetailComponent uid={data.catalogueUID} />
+                  </Suspense>
+                </ErrorBoundary>
+              </Card>
             )}
             {viewControl.relations && (
               <Card>
