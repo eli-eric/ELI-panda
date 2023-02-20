@@ -51,16 +51,14 @@ export const SelectWithError = <T extends FieldValues>({
 }: SelectWithErrorProps<T>) => (
   <div className="block relative w-full appearance-none placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm">
     {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
-    <div className="mt-1">
-      <Select
-        register={register}
-        name={name}
-        options={options}
-        disabled={disabled}
-        className={`block w-full ${disabled ? 'bg-gray-100' : ''} appearance-none ${rounded} border ${
-          !isError ? 'border-red-500' : 'border-gray-300'
-        } px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
-      />
-    </div>
+    <Select
+      register={register}
+      name={name}
+      options={options}
+      disabled={disabled}
+      className={`block w-full ${disabled ? 'bg-gray-100' : ''} appearance-none ${rounded} border ${
+        !isError ? 'border-red-500' : 'border-gray-300'
+      } px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
+    />
   </div>
 )

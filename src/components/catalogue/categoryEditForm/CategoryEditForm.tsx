@@ -11,13 +11,12 @@ import GroupList from './GroupList'
 import Main from './Main'
 
 interface Props {
-  parentUID?: string
   uid?: string
   onSubmit: (data: CatalogueFormType) => void
   children: React.ReactNode
 }
 
-const CategoryEditForm = ({ parentUID, uid, onSubmit, children }: Props) => {
+const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
   const endpoints = useEndpoint({ uid })
 
   const { data, error } = useSWR<CatalogueFormType>(uid && endpoints.catalogueCategoryEdit)

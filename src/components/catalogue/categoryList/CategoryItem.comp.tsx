@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction } from 'react'
 
@@ -19,13 +20,10 @@ const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
   const path = PATH.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
   return (
     <div className=" flex-row justify-between relative flex z-10 items-center space-x-3 rounded-lg border border-gray-300 bg-white shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
-      <button
+      <Link
+        href={{ pathname: path, query: { ...router.query } }}
         key={category.code}
         className=" flex w-full items-center "
-        onClick={() => {
-          setCatalogueParentUid(category.uid)
-          router.push({ pathname: path, query: { ...router.query } })
-        }}
       >
         <div className="flex-shrink-0 mx-6 my-5">
           <Image
@@ -42,7 +40,7 @@ const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
             <p className="text-sm font-medium text-gray-900">{category.name}</p>
           </div>
         </div>
-      </button>
+      </Link>
       {getEditDeleteButtons()}
     </div>
   )
