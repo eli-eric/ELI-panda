@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 
@@ -22,11 +23,17 @@ const Preview = ({ image, alt, isEditMode, newImage, setNewImage }) => {
         <>
           <div {...getRootProps()}>
             <input {...getInputProps()} />
-            <img
-              className="lg:max-w-[500px] lg:max-h-[500px]"
-              src={newImage ? newImage : image}
-              alt={alt}
-            />
+            {image ? (
+              <Image
+                className="lg:max-w-[500px] lg:max-h-[500px]"
+                src={newImage ? newImage : image}
+                alt={alt}
+                width={500}
+                height={500}
+              />
+            ) : (
+              <div className="h-10" />
+            )}
           </div>
           <div>
             {isDragActive
@@ -38,10 +45,12 @@ const Preview = ({ image, alt, isEditMode, newImage, setNewImage }) => {
           </div>
         </>
       ) : (
-        <img
+        <Image
           className="lg:max-w-[500px] lg:max-h-[500px]"
           src={image}
           alt={alt}
+          width={500}
+          height={500}
         />
       )}
     </div>
