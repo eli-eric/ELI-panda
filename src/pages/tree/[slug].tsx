@@ -30,7 +30,7 @@ const getFakeName = () => faker.company.catchPhrase()
 
 const getFakePath = (): string[] => {
   const length = faker.datatype.number({ min: 0, max: 10 })
-  return [...Array(length)].map(() => [faker.datatype.uuid(), getFakeName()])
+  return [...Array(length)].map(() => faker.datatype.uuid())
 }
 
 export const getFakeSystem = (): System => {
@@ -40,7 +40,9 @@ export const getFakeSystem = (): System => {
     uid,
     name,
     path: getFakePath(),
-    image: 'https://source.unsplash.com/collection/71371194/500x500',
+    image: Math.round(Math.random())
+      ? 'https://source.unsplash.com/collection/71371194/500x500'
+      : '',
     description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
       5,
     )}`,
@@ -161,7 +163,7 @@ const Page: NextPage = () => {
                 }}
               />
               <Suspense fallback={<ProgressBarComponent />}>
-                <nav className="py-3" aria-label="Subsystems">
+                <nav aria-label="Subsystems">
                   <Subsystems ids={data.children} />
                 </nav>
               </Suspense>
@@ -172,27 +174,23 @@ const Page: NextPage = () => {
             {viewControl.system && (
               <article>
                 <Card>
-                  <Heading text="System Detail" />
-                  <div className="flex flex-wrap gap-2 lg:gap-4">
-                    <section className="">
-                      <b>Preview</b>
+                  <Heading text="Detail" />
+                  <div className="flex flex-wrap lg:flex-nowrap gap-2 lg:gap-4">
+                    <section>
                       <Preview
-                        data={data}
+                        image={data.image}
+                        alt={data.name}
                         isEditMode={isEditMode}
                         newImage={newImage}
                         setNewImage={setNewImage}
                       />
                     </section>
 
-                    <section>
-                      <b>Details</b>
-                      <Card>
-                        <SystemDetailSectionComponent systemInfo={data} />
-                      </Card>
-                    </section>
-
-                    <section className="basis-full">
-                      <b>Description</b>
+                    <section flex-col>
+                      <SystemDetailSectionComponent systemInfo={data} />
+                      <div className="text-sm font-medium text-gray-400">
+                        Description
+                      </div>
                       <Description
                         data={data}
                         isEditMode={isEditMode}
@@ -204,11 +202,14 @@ const Page: NextPage = () => {
               </article>
             )}
             {viewControl.relations && (
-              <ErrorBoundary fallback={<ErrorPage />}>
-                <Suspense fallback={<ProgressBarComponent />}>
-                  <Relations uid={data.uid} />
-                </Suspense>
-              </ErrorBoundary>
+              <Card>
+                <Heading text="Relations" />
+                <ErrorBoundary fallback={<ErrorPage />}>
+                  <Suspense fallback={<ProgressBarComponent />}>
+                    <Relations uid={data.uid} />
+                  </Suspense>
+                </ErrorBoundary>
+              </Card>
             )}
           </main>
         </div>

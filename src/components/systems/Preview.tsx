@@ -1,8 +1,7 @@
 import { useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 
-const Preview = ({ data, isEditMode, newImage, setNewImage }) => {
-  const { image, name } = data
+const Preview = ({ image, alt, isEditMode, newImage, setNewImage }) => {
   const onDrop = useCallback(
     files => {
       const reader = new FileReader()
@@ -18,7 +17,7 @@ const Preview = ({ data, isEditMode, newImage, setNewImage }) => {
   })
 
   return (
-    <div className="lg:w-[500px]">
+    <div className={`lg:w-[500px] ${isEditMode || image || 'hidden'}`}>
       {isEditMode ? (
         <>
           <div {...getRootProps()}>
@@ -26,7 +25,7 @@ const Preview = ({ data, isEditMode, newImage, setNewImage }) => {
             <img
               className="lg:max-w-[500px] lg:max-h-[500px]"
               src={newImage ? newImage : image}
-              alt={name}
+              alt={alt}
             />
           </div>
           <div>
@@ -42,7 +41,7 @@ const Preview = ({ data, isEditMode, newImage, setNewImage }) => {
         <img
           className="lg:max-w-[500px] lg:max-h-[500px]"
           src={image}
-          alt={name}
+          alt={alt}
         />
       )}
     </div>

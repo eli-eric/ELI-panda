@@ -6,7 +6,6 @@ import {
 import useSWR from 'swr'
 
 import { Button, TrashIconButton } from '@/components/ui/Buttons'
-import DisclosureComponent from '@/components/ui/Disclosure.comp'
 import TableComponent from '@/components/ui/Table.comp'
 
 const getDirection = () => {
@@ -71,12 +70,10 @@ const Relations = ({ uid }: { uid: string }) => {
     ]
   })
   return (
-    <DisclosureComponent title="Relations">
-      <div className="px-4 sm:px-20 lg:px-20">
-        <Button customClass="mb-2" onClickAction={() => {}} text="Add Spare" />
-        {relations && <TableComponent collumsTitle={collums} data={data} />}
-      </div>
-    </DisclosureComponent>
+    <div className="px-3 py-3">
+      <Button customClass="mb-2" onClickAction={() => {}} text="Add Spare" />
+      {relations && <TableComponent collumsTitle={collums} data={data} />}
+    </div>
   )
 }
 

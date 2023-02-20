@@ -1,8 +1,9 @@
-import { useCatalogueItemDetailPath } from 'src/hooks/usePath'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { CatalogueItem } from '@/types/responses'
+import { useCatalogueItemDetailPath } from 'src/hooks/usePath'
 import useSWR from 'swr'
+
+import { CatalogueItem } from '@/types/responses'
 
 import ItemPropertiesComponent from './default-properties/item-properties.comp'
 import ImageGalleryComponent from './gallery/image-gallery.comp'
@@ -11,7 +12,7 @@ interface Props {
   images: { name: string; id: number; src: string }[]
 }
 
-const ItemDetailComponent = ({ images }: Props) => {
+const ItemDetailComponent = ({ images = [] }: Props) => {
   const router = useRouter()
   const [groups, setGroups] = useState<Array<string>>([])
   const catalogueItemPath = useCatalogueItemDetailPath(
