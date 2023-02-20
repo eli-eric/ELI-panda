@@ -12,7 +12,7 @@ interface Props {
   defaultOpen?: boolean
 }
 
-const DisclosureComponent = ({ title, children, defaultOpen = true }: Props) => {
+const DisclosureComponent = ({ title, children, defaultOpen }: Props) => {
   return (
     <div className="divide-y divide-gray-200 border-t">
       <Disclosure as="div" defaultOpen={defaultOpen}>
