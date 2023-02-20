@@ -2,9 +2,10 @@ import Image from 'next/image'
 import { useCallback, useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
-import { InputWithError } from 'src/components/ui/form/Input'
+
 import { TrashIconButton } from '@/components/ui/Buttons'
-import { ImageIcon } from 'src/components/ui/SvgIcons'
+import { InputWithError } from '@/components/ui/form/Input'
+import { ImageIcon } from '@/components/ui/SvgIcons'
 import { CatalogueFormType } from '@/types/catalogue/catalogueTypes'
 
 const Main = () => {

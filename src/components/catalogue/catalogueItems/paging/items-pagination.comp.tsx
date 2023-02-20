@@ -1,8 +1,8 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
-import { createMessageValues } from 'src/helpers/formatters'
-import { message } from 'src/i18n/src/messages'
 import { MouseEventHandler } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { createMessageValues } from 'src/helpers/formatters'
+import { message } from 'src/i18n/src/messages'
 
 const text = message.cataloguePage.pagination.text
 
@@ -25,7 +25,7 @@ export default function ItemsPaginationComponent({
   nextPageHandler,
 }: Props) {
   const noResults = itemsTotalCount === 0
-  const nextIsDisabled = noResults || pageNumbers === page
+  const nextIsDisabled = noResults || pageNumbers === page || !pageNumbers
   const previousIsDisabled = noResults || page === 1
   const from = noResults ? 0 : 1 + (page - 1) * pageSize
   const to = noResults

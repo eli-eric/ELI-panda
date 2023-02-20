@@ -9,14 +9,15 @@ function classNames(...classes) {
 interface Props {
   title: string
   children: React.ReactNode
+  defaultOpen?: boolean
 }
 
-const DisclosureComponent = ({ title, children }: Props) => {
+const DisclosureComponent = ({ title, children, defaultOpen = true }: Props) => {
   return (
     <div className="divide-y divide-gray-200 border-t">
-      <Disclosure as="div">
+      <Disclosure as="div" defaultOpen={defaultOpen}>
         {({ open }) => (
-          <>
+          <Fragment>
             <h3>
               <Disclosure.Button className="group relative flex w-full items-center justify-between py-6 text-left">
                 <span
@@ -45,7 +46,7 @@ const DisclosureComponent = ({ title, children }: Props) => {
             <Disclosure.Panel as="div" className="pb-6">
               {children}
             </Disclosure.Panel>
-          </>
+          </Fragment>
         )}
       </Disclosure>
     </div>

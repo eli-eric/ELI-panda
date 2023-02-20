@@ -22,3 +22,10 @@ export type System = {
 
 export type SystemProps = { data: System }
 export type SystemEditModeProps = { data: System; editMode: any }
+
+export type SystemForRel = {
+  name: string
+  systemType: string
+  systemCodePath: string
+  uid: string
+}

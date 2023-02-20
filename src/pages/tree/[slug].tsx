@@ -143,7 +143,6 @@ const Page: NextPage = () => {
                 <Results query={query} />
               </div>
             ))}
-
           <div className="w-full">
             <ViewControl
               setViewControl={setViewControl}
@@ -206,7 +205,7 @@ const Page: NextPage = () => {
             {viewControl.relations && (
               <ErrorBoundary fallback={<ErrorPage />}>
                 <Suspense fallback={<ProgressBarComponent />}>
-                  <Relations uid={data.uid} />
+                  <Relations uid={data.uid} systemName={data.name} />
                 </Suspense>
               </ErrorBoundary>
             )}

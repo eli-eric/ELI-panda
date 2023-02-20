@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
 import { useMemo } from 'react'
+
 import { ENDPOINTS } from '@/types/constants/endpoints'
 
 /* hooks for getting endpoitpaths for catalogue */
 
-const usePath = () => {
+export const useCataloguePath = () => {
   const router = useRouter()
   const { slug } = router.query
 
@@ -24,30 +24,25 @@ const usePath = () => {
 }
 
 export const useCategoryPath = () => {
-  const path = usePath()
+  const path = useCataloguePath()
   return ENDPOINTS.catalogueCategories + (path === '' ? '' : `/${path}`)
 }
 
 export const useCatalogueItemsPath = (pageSize: number, page: number) => {
-  const { status } = useSession()
   const router = useRouter()
   const { search } = router.query
-  const categoryPath = usePath()
+  const categoryPath = useCataloguePath()
 
   const searchQuery = useMemo(() => {
     if (search && typeof search === 'string') {
       return `&search=${search}`
     }
     if (!search || search === undefined) return ''
-  }, [search])
+  }, [search, router])
 
   return (
     ENDPOINTS.catalogueItems +
     `?pageSize=${pageSize}&page=${page}&categoryPath=${categoryPath}` +
     searchQuery
   )
-}
-
-export const useCatalogueItemDetailPath = (uid: string) => {
-  return uid ? ENDPOINTS.catalogueItem + '/' + uid : null
 }

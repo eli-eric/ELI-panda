@@ -1,6 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { message } from 'src/i18n/src/messages'
 import { Dispatch, Fragment, SetStateAction } from 'react'
+import { message } from 'src/i18n/src/messages'
+
 import { ModalButtons } from '@/types/form'
 
 import ModalButtonsComponent from './modal.buttons'
@@ -9,7 +10,7 @@ interface Props {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
   children: React.ReactNode
-  testid: string
+  testid?: string
   buttons?: ModalButtons
 }
 
