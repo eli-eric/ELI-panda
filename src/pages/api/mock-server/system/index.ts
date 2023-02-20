@@ -5,7 +5,10 @@ import path from 'path'
 
 import { generateUid, jsonWrite } from './helpers/helpers'
 
-export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+export default function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<any>,
+) {
   if (req.headers.authorization) {
     const jsonPathSystemTree = path.resolve(
       process.cwd(),
@@ -14,9 +17,17 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
       'mock-server',
       'systems',
       'data',
-      'systems-tree.json'
+      'systems-tree.json',
     )
-    const jsonPathSystem = path.resolve(process.cwd(), 'pages', 'api', 'mock-server', 'systems', 'data', 'systems.json')
+    const jsonPathSystem = path.resolve(
+      process.cwd(),
+      'pages',
+      'api',
+      'mock-server',
+      'systems',
+      'data',
+      'systems.json',
+    )
 
     if (req.method === 'POST') {
       const newChild = req.body
@@ -27,7 +38,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
           return
         }
         const jsonData = JSON.parse(data)
-        jsonData.push({ name: newChild.name, uid: newChild.uid, systemCode: newChild.systemCode })
+        jsonData.push({
+          name: newChild.name,
+          uid: newChild.uid,
+          systemCode: newChild.systemCode,
+        })
         jsonWrite(jsonPathSystemTree, jsonData, res)
       })
       fs.readFile(jsonPathSystem, 'utf8', (err, data) => {

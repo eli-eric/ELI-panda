@@ -39,7 +39,13 @@ const TableComponent = ({ collumsTitle, data }: Props) => {
             <TableHeader collumsTitle={collumsTitle} />
             <tbody className="bg-white">
               {data?.map((row, index) => (
-                <tr key={index} className={(index % 2 === 0 ? undefined : 'bg-gray-100') + ' hover:bg-primary-200'}>
+                <tr
+                  key={index}
+                  className={
+                    (index % 2 === 0 ? undefined : 'bg-gray-100') +
+                    ' hover:bg-primary-200'
+                  }
+                >
                   {row.map(item => (
                     <TableRow key={item.key} value={item} />
                   ))}

@@ -9,15 +9,27 @@ export type Option = {
 }
 
 interface Props<T extends FieldValues>
-  extends React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> {
+  extends React.DetailedHTMLProps<
+    React.SelectHTMLAttributes<HTMLSelectElement>,
+    HTMLSelectElement
+  > {
   register: UseFormRegister<T>
   options?: Option[]
   name: string
 }
 
-export const Select = <T extends FieldValues>({ register, options, name, ...rest }: Props<T>) => {
+export const Select = <T extends FieldValues>({
+  register,
+  options,
+  name,
+  ...rest
+}: Props<T>) => {
   return (
-    <select {...register(name as Path<T>)} {...rest} defaultValue={options ? options[0].value : ''}>
+    <select
+      {...register(name as Path<T>)}
+      {...rest}
+      defaultValue={options ? options[0].value : ''}
+    >
       {options &&
         options.map((option, index) => (
           <option key={index} value={option.value} disabled={option.disabled}>
@@ -37,7 +49,12 @@ interface SelectWithErrorProps<T extends FieldValues> {
 
   options: Option[]
 
-  rounded?: 'rounded-l-md' | 'rounded-t-md' | 'rounded-r-md' | 'rounded-b-md' | 'rounded-md'
+  rounded?:
+    | 'rounded-l-md'
+    | 'rounded-t-md'
+    | 'rounded-r-md'
+    | 'rounded-b-md'
+    | 'rounded-md'
 }
 
 export const SelectWithError = <T extends FieldValues>({
@@ -47,16 +64,20 @@ export const SelectWithError = <T extends FieldValues>({
   options,
   rounded,
   label,
-  disabled
+  disabled,
 }: SelectWithErrorProps<T>) => (
   <div className="block relative w-full appearance-none placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm">
-    {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
+    {label && (
+      <label className="text-sm font-medium text-gray-700">{label}</label>
+    )}
     <Select
       register={register}
       name={name}
       options={options}
       disabled={disabled}
-      className={`block w-full ${disabled ? 'bg-gray-100' : ''} appearance-none ${rounded} border ${
+      className={`block w-full ${
+        disabled ? 'bg-gray-100' : ''
+      } appearance-none ${rounded} border ${
         !isError ? 'border-red-500' : 'border-gray-300'
       } px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
     />

@@ -19,7 +19,9 @@ interface Props {
 const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
   const endpoints = useEndpoint({ uid })
 
-  const { data, error } = useSWR<CatalogueFormType>(uid && endpoints.catalogueCategoryEdit)
+  const { data, error } = useSWR<CatalogueFormType>(
+    uid && endpoints.catalogueCategoryEdit,
+  )
 
   const formattedDefaultValues =
     data?.groups && data.groups.length !== 0
@@ -29,15 +31,17 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
             ...group,
             properties: group.properties.map(property => ({
               ...property,
-              listOfValues: property.listOfValues?.map(value => ({ value: value }))
-            }))
-          }))
+              listOfValues: property.listOfValues?.map(value => ({
+                value: value,
+              })),
+            })),
+          })),
         }
       : { ...data }
 
   const formMethods = useForm<CatalogueFormType>({
     defaultValues: formattedDefaultValues,
-    resolver: yupResolver(categoryValidationschema)
+    resolver: yupResolver(categoryValidationschema),
   })
 
   return (

@@ -51,7 +51,10 @@ const GroupList = () => {
   const { fields, append, remove } = useFieldArray({ control, name: 'groups' })
 
   const handleAddGroup = () => {
-    append({ name: '', properties: [{ name: '', typeUID: '', unitUID: '', default: '' }] })
+    append({
+      name: '',
+      properties: [{ name: '', typeUID: '', unitUID: '', default: '' }],
+    })
   }
 
   return (
@@ -64,7 +67,9 @@ const GroupList = () => {
                 <Group
                   remove={remove}
                   index={index}
-                  errors={formState.errors.groups && formState.errors.groups[index]}
+                  errors={
+                    formState.errors.groups && formState.errors.groups[index]
+                  }
                   name={`groups.${index}`}
                   key={field.id}
                 />

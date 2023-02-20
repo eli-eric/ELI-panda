@@ -11,13 +11,17 @@ import SystemDetailsContainer from './details/system-details.cont'
 import EmptySectionComponent from './empty-section/empty-section.comp'
 import { updateTree } from './helpers/updateTree'
 
-const SystemTreeComponent = lazy(() => import('./systems-tree/systems-treeview.comp'))
+const SystemTreeComponent = lazy(
+  () => import('./systems-tree/systems-treeview.comp'),
+)
 
 const SystemsOverviewContainer = () => {
   const router = useRouter()
-  const { data: systemsList } = useSWR<Array<SystemTreeItem>>(ENDPOINTS.systemTree)
+  const { data: systemsList } = useSWR<Array<SystemTreeItem>>(
+    ENDPOINTS.systemTree,
+  )
   const { data: systemDetail } = useSWR<SystemDetailInfo>(
-    router.query.slug ? ENDPOINTS.systemDetail + '/' + router.query.slug : null
+    router.query.slug ? ENDPOINTS.systemDetail + '/' + router.query.slug : null,
   )
   const tree = useMemo(() => {
     if (!router.query.slug) return systemsList
@@ -36,7 +40,7 @@ const SystemsOverviewContainer = () => {
                 uid: 'fake',
                 systemCode: 'fake',
                 path: [['sdsd', 'fd']],
-                children: systemsList
+                children: systemsList,
               }}
             >
               {router.query.slug ? (

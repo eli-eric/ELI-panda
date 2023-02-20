@@ -1,5 +1,9 @@
 import { message } from 'src/i18n/src/messages'
-import { FormState, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form'
+import {
+  FormState,
+  UseFormHandleSubmit,
+  UseFormRegister,
+} from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 import EliLogoComponent from 'src/components/ui/eli-logo.comp'
 import { Input } from 'src/components/ui/form/Input'
@@ -22,7 +26,13 @@ interface Props {
   loading: boolean
 }
 
-const AuthFormComponent = ({ onSubmit, register, formState, handleSubmit, loading }: Props) => {
+const AuthFormComponent = ({
+  onSubmit,
+  register,
+  formState,
+  handleSubmit,
+  loading,
+}: Props) => {
   const { errors } = formState
 
   return (
@@ -36,9 +46,17 @@ const AuthFormComponent = ({ onSubmit, register, formState, handleSubmit, loadin
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 border border-spacing-1 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="space-y-6"
+            action="#"
+            method="POST"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 <FormattedMessage id={form.userName} />
               </label>
               <div className="mt-1">
@@ -50,12 +68,17 @@ const AuthFormComponent = ({ onSubmit, register, formState, handleSubmit, loadin
                   register={register}
                   className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
                 />
-                <p className="text-xs text-red-500">{errors.username?.message}</p>
+                <p className="text-xs text-red-500">
+                  {errors.username?.message}
+                </p>
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 <FormattedMessage id={form.password} />
               </label>
               <div className="mt-1">
@@ -67,7 +90,9 @@ const AuthFormComponent = ({ onSubmit, register, formState, handleSubmit, loadin
                   register={register}
                   className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
                 />
-                <p className="text-xs text-red-500">{errors.password?.message}</p>
+                <p className="text-xs text-red-500">
+                  {errors.password?.message}
+                </p>
               </div>
             </div>
 

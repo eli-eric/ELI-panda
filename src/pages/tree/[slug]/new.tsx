@@ -36,17 +36,26 @@ const Page: NextPage = () => {
     catalogueUID: '',
     eun: '',
     itemUsageCategoryCode: '',
-    estimatedLifeTime: 0
+    estimatedLifeTime: 0,
   }
 
   const { data: parentData } = useSWR(uid, fetchFakeSystem)
 
   const [data, setData] = useState<System>(empty)
 
-  const { newImage, setNewImage, FormErrors, EditModeContainer, register, discard } = useEditMode(onSubmit, data)
+  const {
+    newImage,
+    setNewImage,
+    FormErrors,
+    EditModeContainer,
+    register,
+    discard,
+  } = useEditMode(onSubmit, data)
 
   useEffect(() => {
-    const path: SystemUidName[] = parentData ? [...parentData.path, [parentData.uid, parentData.name]] : []
+    const path: SystemUidName[] = parentData
+      ? [...parentData.path, [parentData.uid, parentData.name]]
+      : []
     path && setData(obj => ({ ...obj, path: path }))
   }, [parentData, setData])
 
@@ -100,7 +109,12 @@ const Page: NextPage = () => {
               <div className="flex flex-wrap gap-2 lg:gap-4">
                 <section className="grow lg:grow-0 shrink-0">
                   <b>Preview</b>
-                  <Preview data={data} isEditMode={isEditMode} newImage={newImage} setNewImage={setNewImage} />
+                  <Preview
+                    data={data}
+                    isEditMode={isEditMode}
+                    newImage={newImage}
+                    setNewImage={setNewImage}
+                  />
                 </section>
 
                 <section className="grow">
@@ -112,7 +126,11 @@ const Page: NextPage = () => {
 
                 <section className="basis-full">
                   <b>Description</b>
-                  <Description data={data} isEditMode={isEditMode} register={register} />
+                  <Description
+                    data={data}
+                    isEditMode={isEditMode}
+                    register={register}
+                  />
                 </section>
               </div>
             </article>

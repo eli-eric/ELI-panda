@@ -9,12 +9,14 @@ import { Item } from './Subsystems'
 const List = (props: { query: string }) => {
   const { query } = props
   const { data } = useSWR(query, fetchFakeSystems, {
-    suspense: true
+    suspense: true,
   })
   return (
     <>
       {data && data.length > 0 ? (
-        data.map(({ uid, name }) => <Item key={uid} text={name} href={'/tree/' + uid} />)
+        data.map(({ uid, name }) => (
+          <Item key={uid} text={name} href={'/tree/' + uid} />
+        ))
       ) : (
         <div className="text-gray-600 flex items-center px-3 py-2 text-sm font-medium rounded-md">
           <span className="truncate">No results found.</span>
@@ -39,7 +41,10 @@ export const Results = (props: { query: string }) => {
   )
 }
 
-export const Prompt = (props: { query: string; setQuery: (value: string) => void }) => {
+export const Prompt = (props: {
+  query: string
+  setQuery: (value: string) => void
+}) => {
   const { query, setQuery } = props
 
   const ref = useRef<HTMLInputElement>(null)

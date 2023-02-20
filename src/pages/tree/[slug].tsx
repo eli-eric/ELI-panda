@@ -20,7 +20,6 @@ import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
 import ViewControl from '@/components/systems/ViewControl'
 import { Heading } from '@/components/ui/card/card.comp'
-import DisclosureComponent from '@/components/ui/Disclosure.comp'
 import LoaderComponent from '@/components/ui/loader.comp'
 import ProgressBarComponent from '@/components/ui/progress-bar.comp'
 import useEditMode from '@/hooks/systems/useEditMode'
@@ -43,7 +42,11 @@ export const getFakeSystem = (): System => {
     path: getFakePath(),
     image: 'https://source.unsplash.com/collection/71371194/500x500',
     description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
+<<<<<<< HEAD
       5
+=======
+      5,
+>>>>>>> new-systems
     )}`,
     children: getFakePath(),
     importanceCode: faker.datatype.string(),
@@ -58,7 +61,7 @@ export const getFakeSystem = (): System => {
     serialNumber: faker.datatype.uuid(),
     batchNumber: faker.datatype.uuid(),
     itemUsageCategoryCode: faker.datatype.string(),
-    estimatedLifeTime: faker.datatype.number()
+    estimatedLifeTime: faker.datatype.number(),
   }
 }
 
@@ -131,7 +134,11 @@ const Page: NextPage = () => {
             <Title data={data} isEditMode={isEditMode} register={register} />
 
             {isEditMode || <Prompt query={query} setQuery={setQuery} />}
-            <FormButtons isEditMode={isEditMode} setIsEditMode={setIsEditMode} discard={discard} />
+            <FormButtons
+              isEditMode={isEditMode}
+              setIsEditMode={setIsEditMode}
+              discard={discard}
+            />
           </div>
 
           {isEditMode ||
@@ -141,11 +148,21 @@ const Page: NextPage = () => {
               </div>
             ))}
 
+          <div className="w-full">
+            <ViewControl
+              setViewControl={setViewControl}
+              viewControl={viewControl}
+            />
+          </div>
+
           <aside className="w-full lg:w-1/4">
             <Card>
               <Heading
                 text="Subsystems"
-                action={{ label: <PlusIcon className="h-5" />, href: router.asPath.split('?')[0] + '/new' }}
+                action={{
+                  label: <PlusIcon className="h-5" />,
+                  href: router.asPath.split('?')[0] + '/new',
+                }}
               />
               <Suspense fallback={<ProgressBarComponent />}>
                 <nav className="py-3" aria-label="Subsystems">
@@ -156,13 +173,17 @@ const Page: NextPage = () => {
           </aside>
 
           <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
+<<<<<<< HEAD
             <ViewControl
               setViewControl={setViewControl}
               viewControl={viewControl}
             />
+=======
+>>>>>>> new-systems
             {viewControl.system && (
-              <DisclosureComponent title="System Detail">
-                <article>
+              <article>
+                <Card>
+                  <Heading text="System Detail" />
                   <div className="flex flex-wrap gap-2 lg:gap-4">
                     <section className="">
                       <b>Preview</b>
@@ -190,8 +211,8 @@ const Page: NextPage = () => {
                       />
                     </section>
                   </div>
-                </article>
-              </DisclosureComponent>
+                </Card>
+              </article>
             )}
             {viewControl.relations && (
               <ErrorBoundary fallback={<ErrorPage />}>

@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 import { Fragment, useState } from 'react'
 import { useIntl } from 'react-intl'
+=======
+import { faker } from '@faker-js/faker'
+import {
+  ArrowLongLeftIcon,
+  ArrowLongRightIcon,
+} from '@heroicons/react/24/outline'
+>>>>>>> new-systems
 import useSWR from 'swr'
 
 import { Button } from '@/components/ui/Buttons'

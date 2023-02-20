@@ -8,15 +8,22 @@ import { CatalogueCategoryResponse } from '@/types/responses'
 import CategoryItemComponent from './CategoryItem.comp'
 
 interface Props {
-  setCatalogueCategoryList: Dispatch<SetStateAction<CatalogueCategoryResponse[] | undefined>>
+  setCatalogueCategoryList: Dispatch<
+    SetStateAction<CatalogueCategoryResponse[] | undefined>
+  >
   setCatalogueParentUid: Dispatch<SetStateAction<string | undefined>>
 }
 
-const CategoryListContainer = ({ setCatalogueCategoryList, setCatalogueParentUid }: Props) => {
+const CategoryListContainer = ({
+  setCatalogueCategoryList,
+  setCatalogueParentUid,
+}: Props) => {
   const { data: session } = useSession()
   const categoryPath = useCategoryPath()
   /* fetch category list */
-  const { data: categoryList } = useSWR<Array<CatalogueCategoryResponse>>(session ? categoryPath : null)
+  const { data: categoryList } = useSWR<Array<CatalogueCategoryResponse>>(
+    session ? categoryPath : null,
+  )
 
   useEffect(() => {
     setCatalogueCategoryList(categoryList)

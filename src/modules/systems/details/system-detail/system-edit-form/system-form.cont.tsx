@@ -19,7 +19,8 @@ const SystemFormContainer = ({ systemInfo }: Props) => {
   const { uid } = useContext(FormContext)
   const router = useRouter()
 
-  const endpoint = ENDPOINTS.systemDetail + (router.query.slug ? '/' + router.query.slug : '')
+  const endpoint =
+    ENDPOINTS.systemDetail + (router.query.slug ? '/' + router.query.slug : '')
 
   const fetchMethod = uid ? 'put' : 'post'
 
@@ -36,27 +37,35 @@ const SystemFormContainer = ({ systemInfo }: Props) => {
     serialNumber: yup.string().required(),
     batchNumber: yup.string().required(),
     itemUsageCategoryCode: yup.string().required(),
-    estimatedLifeTime: yup.number().required()
+    estimatedLifeTime: yup.number().required(),
   })
 
-  const { formState, confirm, handleSubmit, warnModalOpen, onCancel, onSubmit, register, setWarnModalOpen } =
-    usePandaForm({
-      data: systemInfo,
-      endpoint,
-      fetchMethod,
-      schema: SystemValidationSchema,
-      afterMutates: [endpoint, ENDPOINTS.systemTree]
-    })
+  const {
+    formState,
+    confirm,
+    handleSubmit,
+    warnModalOpen,
+    onCancel,
+    onSubmit,
+    register,
+    setWarnModalOpen,
+  } = usePandaForm({
+    data: systemInfo,
+    endpoint,
+    fetchMethod,
+    schema: SystemValidationSchema,
+    afterMutates: [endpoint, ENDPOINTS.systemTree],
+  })
 
   const modalButtons: ModalButtons = {
     goNext: {
       text: 'continue',
-      onClick: () => confirm(true)
+      onClick: () => confirm(true),
     },
     goBack: {
       text: 'cancel',
-      onClick: () => confirm(false)
-    }
+      onClick: () => confirm(false),
+    },
   }
   return (
     <Fragment>

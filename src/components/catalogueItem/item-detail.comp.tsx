@@ -16,7 +16,9 @@ const ItemDetailComponent = ({ images }: Props) => {
   const router = useRouter()
   const [groups, setGroups] = useState<Array<string>>([])
   const { catalogueItem } = useEndpoint({ uid: router.query.uid as string })
-  const { data: item } = useSWR<CatalogueItem>(router.query.uid && catalogueItem)
+  const { data: item } = useSWR<CatalogueItem>(
+    router.query.uid && catalogueItem,
+  )
 
   useEffect(() => {
     if (item?.details) {
@@ -37,10 +39,14 @@ const ItemDetailComponent = ({ images }: Props) => {
             <ImageGalleryComponent images={images} />
 
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0">
-              <h1 className="text-3xl font-bold tracking-tight text-gray-900">{item?.name}</h1>
+              <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+                {item?.name}
+              </h1>
               <div className="mt-6">
                 <h3 className="sr-only">Description</h3>
-                <div className="space-y-6 text-base text-gray-700">{item?.description ?? 'No description'}</div>
+                <div className="space-y-6 text-base text-gray-700">
+                  {item?.description ?? 'No description'}
+                </div>
               </div>
               <ItemPropertiesComponent item={item} groups={groups} />
             </div>

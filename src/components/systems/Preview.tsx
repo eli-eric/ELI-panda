@@ -9,9 +9,13 @@ const Preview = ({ data, isEditMode, newImage, setNewImage }) => {
       reader.readAsDataURL(files[0])
       reader.onload = () => setNewImage(reader.result)
     },
-    [setNewImage]
+    [setNewImage],
   )
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ maxFiles: 1, accept: { 'image/*': [] }, onDrop })
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    maxFiles: 1,
+    accept: { 'image/*': [] },
+    onDrop,
+  })
 
   return (
     <div className="lg:w-[500px]">
@@ -19,15 +23,27 @@ const Preview = ({ data, isEditMode, newImage, setNewImage }) => {
         <>
           <div {...getRootProps()}>
             <input {...getInputProps()} />
-            <img className="lg:max-w-[500px] lg:max-h-[500px]" src={newImage ? newImage : image} alt={name} />
+            <img
+              className="lg:max-w-[500px] lg:max-h-[500px]"
+              src={newImage ? newImage : image}
+              alt={name}
+            />
           </div>
           <div>
-            {isDragActive ? 'Drop new image here' : 'Click here or drag and drop an image'}
-            {newImage && <button onClick={() => setNewImage('')}>Discard</button>}
+            {isDragActive
+              ? 'Drop new image here'
+              : 'Click here or drag and drop an image'}
+            {newImage && (
+              <button onClick={() => setNewImage('')}>Discard</button>
+            )}
           </div>
         </>
       ) : (
-        <img className="lg:max-w-[500px] lg:max-h-[500px]" src={image} alt={name} />
+        <img
+          className="lg:max-w-[500px] lg:max-h-[500px]"
+          src={image}
+          alt={name}
+        />
       )}
     </div>
   )

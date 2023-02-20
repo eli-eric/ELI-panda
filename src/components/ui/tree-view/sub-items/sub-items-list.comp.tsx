@@ -16,7 +16,10 @@ const SubItemsList = ({ data }: Props) => {
         ) : (
           data.children.map(({ uid, name }) => (
             <li key={uid}>
-              <Link className="hover:text-orange-700" href={{ query: { slug: [data.uid] } }}>
+              <Link
+                className="hover:text-orange-700"
+                href={{ query: { slug: [data.uid] } }}
+              >
                 {name}
               </Link>
             </li>

@@ -7,7 +7,13 @@ import SystemFormFields from './system-form.fields'
 import SystemItemFormFields from './system-item-form.fields'
 type Props = FormChildrenProps<SystemInfo>
 
-const SystemFormComponent = ({ register, formState, handleSubmit, onSubmit, onCancel }: Props) => {
+const SystemFormComponent = ({
+  register,
+  formState,
+  handleSubmit,
+  onSubmit,
+  onCancel,
+}: Props) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <SystemFormButtons onCancel={onCancel} />

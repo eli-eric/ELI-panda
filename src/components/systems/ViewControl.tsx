@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react'
 
 export default function ViewControl({
   viewControl,
-  setViewControl
+  setViewControl,
 }: {
   viewControl: {
     system: boolean
@@ -16,7 +16,8 @@ export default function ViewControl({
   >
 }) {
   return (
-    <div className="mb-5 flex justify-center py-3">
+    <div className="flex justify-end py-3 px-3">
+      Display options:
       <fieldset className="space-x-5 flex flex-row">
         <legend className="sr-only">View</legend>
         <div className="relative flex items-start">
@@ -27,7 +28,12 @@ export default function ViewControl({
               name="system"
               type="checkbox"
               defaultChecked={viewControl.system}
-              onClick={() => setViewControl(viewControl => ({ ...viewControl, system: !viewControl.system }))}
+              onClick={() =>
+                setViewControl(viewControl => ({
+                  ...viewControl,
+                  system: !viewControl.system,
+                }))
+              }
               className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
             />
           </div>
@@ -46,7 +52,12 @@ export default function ViewControl({
               name="relations"
               type="checkbox"
               defaultChecked={viewControl.relations}
-              onClick={() => setViewControl(viewControl => ({ ...viewControl, relations: !viewControl.relations }))}
+              onClick={() =>
+                setViewControl(viewControl => ({
+                  ...viewControl,
+                  relations: !viewControl.relations,
+                }))
+              }
               className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
             />
           </div>

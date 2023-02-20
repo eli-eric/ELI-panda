@@ -22,7 +22,7 @@ export default function ItemsPaginationComponent({
   pageSize,
   pageNumbers,
   previousPageHandler,
-  nextPageHandler
+  nextPageHandler,
 }: Props) {
   const noResults = itemsTotalCount === 0
   const nextIsDisabled = noResults || pageNumbers === page || !pageNumbers
@@ -47,7 +47,7 @@ export default function ItemsPaginationComponent({
             values={createMessageValues({
               from: from,
               to: to,
-              resultsCount: itemsTotalCount
+              resultsCount: itemsTotalCount,
             })}
           />
         </p>

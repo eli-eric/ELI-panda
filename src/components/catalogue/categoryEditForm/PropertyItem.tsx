@@ -9,7 +9,7 @@ import {
   PROPERTY_INPUT_TYPE,
   PROPERTY_TYPE,
   propertyTypes,
-  units
+  units,
 } from '@/types/catalogue/constants'
 
 const ValueItem = ({ removeValue, index, name, errors }) => {
@@ -39,10 +39,11 @@ interface Props {
 }
 
 const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
-  const { register, watch, control, unregister } = useFormContext<CatalogueFormType>()
+  const { register, watch, control, unregister } =
+    useFormContext<CatalogueFormType>()
   const { fields, append, remove } = useFieldArray({
     control,
-    name: `${name}.listOfValues`
+    name: `${name}.listOfValues`,
   })
   const handleRemoveProp = () => {
     removeProp(index)
@@ -80,14 +81,17 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
             isError={!errors?.typeUID?.message}
             options={[
               getDefaultOption('Select type', true),
-              ...propertyTypes.map(type => ({ ...type, value: type.uid }))
+              ...propertyTypes.map(type => ({ ...type, value: type.uid })),
             ]}
           />
           <SelectWithError
             register={register}
             name={`${name}.unitUID`}
             isError={!errors?.unitUID?.message}
-            options={[getDefaultOption('Select Unit'), ...units.map(unit => ({ ...unit, value: unit.uid }))]}
+            options={[
+              getDefaultOption('Select Unit'),
+              ...units.map(unit => ({ ...unit, value: unit.uid })),
+            ]}
           />
 
           {type === PROPERTY_TYPE.LIST || type === PROPERTY_TYPE.BOOLEAN ? (
@@ -97,7 +101,10 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
               isError={!errors?.typeUID?.message}
               options={
                 type === PROPERTY_TYPE.LIST
-                  ? [getDefaultOption('Select default'), ...listOfValues.map(value => ({ value: value.value }))]
+                  ? [
+                      getDefaultOption('Select default'),
+                      ...listOfValues.map(value => ({ value: value.value })),
+                    ]
                   : [getDefaultOption('Select default'), ...defaultBoolOptions]
               }
             />

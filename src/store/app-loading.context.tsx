@@ -10,7 +10,7 @@ interface AppLoadingContext {
 
 const AppLoadingContext = createContext({
   appLoading: false, // {title, message, status}
-  setLoadingApp: _loading => {}
+  setLoadingApp: _loading => {},
 } as AppLoadingContext)
 
 interface Props {
@@ -26,9 +26,13 @@ export const AppLoadingProvider = ({ children }: Props) => {
 
   const context = {
     appLoading: loading,
-    setLoadingApp: setLoadingHandler
+    setLoadingApp: setLoadingHandler,
   }
 
-  return <AppLoadingContext.Provider value={context}>{children}</AppLoadingContext.Provider>
+  return (
+    <AppLoadingContext.Provider value={context}>
+      {children}
+    </AppLoadingContext.Provider>
+  )
 }
 export default AppLoadingContext

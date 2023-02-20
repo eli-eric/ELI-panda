@@ -11,7 +11,7 @@ const FormContext = createContext({
   isEdit: false,
   uid: undefined,
   setEdit: _isEdit => {},
-  setUid: _uid => {}
+  setUid: _uid => {},
 } as FormContext)
 
 interface Props {
@@ -28,7 +28,7 @@ export const FormContextProvider = ({ children }: Props) => {
         uid,
         setUid,
         isEdit,
-        setEdit
+        setEdit,
       }}
     >
       {children}

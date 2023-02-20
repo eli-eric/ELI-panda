@@ -9,14 +9,14 @@ export const ENDPOINTS = {
   systemDetail: '/system',
   systemTree: '/systems/tree',
   systems: '/systems',
-  systemsForRel: '/systems/for-relationship'
+  systemsForRel: '/systems/for-relationship',
 }
 
 export enum AxiosMethodType {
   GET = 'get',
   POST = 'post',
   PUT = 'put',
-  DELETE = 'delete'
+  DELETE = 'delete',
 }
 
 export type AxiosMethodTypes = keyof typeof AxiosMethodType

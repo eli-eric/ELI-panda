@@ -5,7 +5,9 @@ import { useIntl } from 'react-intl'
 import LoaderComponent from 'src/components/ui/loader.comp'
 import { message } from 'src/i18n/src/messages'
 
-const SystemsOverviewContainer = lazy(() => import('src/modules/systems/systems-overview.cont'))
+const SystemsOverviewContainer = lazy(
+  () => import('src/modules/systems/systems-overview.cont'),
+)
 
 const messages = message.systemsPage
 

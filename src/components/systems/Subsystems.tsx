@@ -20,7 +20,9 @@ const Subsystems = ({ ids }) => {
   return (
     <>
       {data && data.length > 0 ? (
-        data.map(({ uid, name }) => <Item key={uid} href={'/tree/' + uid} text={name} />)
+        data.map(({ uid, name }) => (
+          <Item key={uid} href={'/tree/' + uid} text={name} />
+        ))
       ) : (
         <div className="text-gray-600 flex items-center px-3 py-2 text-sm font-medium rounded-md">
           <span className="truncate">This node has no subsystems</span>

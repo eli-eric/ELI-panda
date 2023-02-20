@@ -6,7 +6,12 @@ import ButtonLoaderComponent from './button-loader.comp'
 interface ButtonProps {
   onClickAction?: MouseEventHandler<HTMLButtonElement>
   customClass?: string
-  rounded?: 'rounded-l-md' | 'rounded-t-md' | 'rounded-r-md' | 'rounded-b-md' | 'rounded-md'
+  rounded?:
+    | 'rounded-l-md'
+    | 'rounded-t-md'
+    | 'rounded-r-md'
+    | 'rounded-b-md'
+    | 'rounded-md'
   loading?: boolean
   text?: string
   disabled?: boolean
@@ -15,7 +20,11 @@ interface ButtonProps {
   children?: React.ReactNode
 }
 
-export const TrashIconButton = ({ onClickAction, rounded = 'rounded-r-md', customClass }: ButtonProps) => (
+export const TrashIconButton = ({
+  onClickAction,
+  rounded = 'rounded-r-md',
+  customClass,
+}: ButtonProps) => (
   <button
     type="button"
     onClick={onClickAction}
@@ -26,7 +35,11 @@ export const TrashIconButton = ({ onClickAction, rounded = 'rounded-r-md', custo
   </button>
 )
 
-export const PlusIconButton = ({ onClickAction, rounded = 'rounded-md', customClass }: ButtonProps) => (
+export const PlusIconButton = ({
+  onClickAction,
+  rounded = 'rounded-md',
+  customClass,
+}: ButtonProps) => (
   <button
     type="button"
     onClick={onClickAction}
@@ -45,14 +58,16 @@ export const Button = ({
   loading,
   disabled,
   buttonType = 'primary',
-  type = 'button'
+  type = 'button',
 }: ButtonProps) => (
   <button
     type={type}
     disabled={loading ? true : disabled}
     onClick={onClickAction}
     className={`${customClass} relative z-0 inline-flex items-center ${rounded} border border-gray-300 ${
-      loading ? 'bg-primary-700' : `bg-${buttonType === 'secondary' ? 'white' : 'primary-600'}`
+      loading
+        ? 'bg-primary-700'
+        : `bg-${buttonType === 'secondary' ? 'white' : 'primary-600'}`
     } px-4 py-2 text-sm font-medium text-white shadow-sm ${`${
       buttonType === 'secondary' ? 'hover:bg-gray-50' : 'hover:bg-primary-700'
     }`} focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:w-auto`}
@@ -62,7 +77,12 @@ export const Button = ({
   </button>
 )
 
-export const IconButton = ({ onClickAction, rounded = 'rounded-r-md', customClass, children }: ButtonProps) => (
+export const IconButton = ({
+  onClickAction,
+  rounded = 'rounded-r-md',
+  customClass,
+  children,
+}: ButtonProps) => (
   <button
     type="button"
     onClick={onClickAction}

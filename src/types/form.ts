@@ -1,11 +1,19 @@
-import { FieldValues, FormState, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form'
+import {
+  FieldValues,
+  FormState,
+  UseFormHandleSubmit,
+  UseFormRegister,
+} from 'react-hook-form'
 export type ModalButtons = {
   noButtons?: boolean
   goBack?: Button
   goNext?: Button
 }
 
-export type Button = { text: string; onClick: (data: unknown | undefined) => void }
+export type Button = {
+  text: string
+  onClick: (data: unknown | undefined) => void
+}
 
 export interface FormChildrenProps<T extends FieldValues = FieldValues> {
   register: UseFormRegister<T>
