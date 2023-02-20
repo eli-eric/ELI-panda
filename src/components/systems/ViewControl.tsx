@@ -16,7 +16,7 @@ export default function ViewControl({
   >
 }) {
   return (
-    <div className="mb-5 w-full flex justify-end py-3 px-3">
+    <div className="flex justify-end py-3 px-3">
       Display options:
       <fieldset className="space-x-5 flex flex-row">
         <legend className="sr-only">View</legend>
