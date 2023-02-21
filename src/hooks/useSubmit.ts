@@ -27,7 +27,10 @@ const useSubmit = ({ endpoint, method, mutateUrlList }: UseSubmitProps) => {
     setloading(true)
     axios[method](BASE_URL + endpoint, body ? body : undefined)
       .then(res => setResponse(res.data))
-      .catch(err => setError(err))
+      .catch(err => {
+        setError(err)
+        setloading(false)
+      })
       .finally(() => {
         if (mutateUrlList)
           mutateUrlList.forEach(url => {

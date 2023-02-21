@@ -44,10 +44,11 @@ const CategoryEditModal = ({ setopen, parentPath, uid }: Props) => {
             })),
           }
         : {
-            image: data.image,
+            uid: data?.uid,
+            image: data?.image,
             name: data?.name,
             code: data?.code,
-            parentPath: data.parentPath ? data.parentPath : parentPath,
+            parentPath: data.parentPath ? data?.parentPath : parentPath,
           }
     submit(formattedData)
   }
@@ -60,6 +61,7 @@ const CategoryEditModal = ({ setopen, parentPath, uid }: Props) => {
       <ErrorBoundary fallback={<ErrorPage />}>
         <Suspense fallback={<ProgressBarComponent />}>
           <CategoryEditForm onSubmit={onSubmit} uid={uid}>
+            {error && <ErrorPage />}
             <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
               <Button
                 type="submit"
