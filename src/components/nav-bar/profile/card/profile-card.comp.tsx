@@ -1,7 +1,7 @@
-import { message } from 'src/i18n/src/messages'
 import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { message } from 'src/i18n/src/messages'
 
 const messages = message.layout.profile
 

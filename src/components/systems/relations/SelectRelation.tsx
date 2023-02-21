@@ -23,8 +23,7 @@ const SelectRelation = ({
     useFormContext<RelationFormType>()
   useEffect(() => {
     setValue('relationTypeCode', relationTypeCode)
-  })
-
+  }, [setValue, relationTypeCode])
   const router = useRouter()
   const baseSystemOption = useMemo(
     () => ({

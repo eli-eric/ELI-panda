@@ -2,9 +2,9 @@ import {
   ArrowUturnLeftIcon,
   PencilSquareIcon,
 } from '@heroicons/react/24/outline'
-import { message } from 'src/i18n/src/messages'
 import { useRouter } from 'next/router'
 import { FormattedMessage } from 'react-intl'
+import { message } from 'src/i18n/src/messages'
 
 const messages = message.cataloguePage.itemDetail.buttons
 

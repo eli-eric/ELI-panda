@@ -52,7 +52,7 @@ const usePagination = ({
         },
       )
     }
-  }, [useQuery, page])
+  }, [useQuery, page]) //eslint-disable-line
 
   useEffect(() => {
     setPage(1)

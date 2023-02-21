@@ -38,7 +38,7 @@ export const useCatalogueItemsPath = (pageSize: number, page: number) => {
       return `&search=${search}`
     }
     if (!search || search === undefined) return ''
-  }, [search, router])
+  }, [search])
 
   return (
     ENDPOINTS.catalogueItems +
