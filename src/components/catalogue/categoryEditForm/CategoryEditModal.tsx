@@ -61,7 +61,6 @@ const CategoryEditModal = ({ setopen, parentPath, uid }: Props) => {
       <ErrorBoundary fallback={<ErrorPage />}>
         <Suspense fallback={<ProgressBarComponent />}>
           <CategoryEditForm onSubmit={onSubmit} uid={uid}>
-            {error && <ErrorPage />}
             <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
               <Button
                 type="submit"
@@ -81,6 +80,7 @@ const CategoryEditModal = ({ setopen, parentPath, uid }: Props) => {
                 <FormattedMessage id={buttons.cancel} />
               </Button>
             </div>
+            {error && <ErrorPage />}
           </CategoryEditForm>
         </Suspense>
       </ErrorBoundary>

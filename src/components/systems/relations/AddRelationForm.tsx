@@ -98,7 +98,6 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
             selectedSystem={selectedSystem}
           />
         </FormProvider>
-        {error && <ErrorPage />}
         <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
           <Button
             type="submit"
@@ -118,6 +117,7 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
             <FormattedMessage id={buttons.cancel} />
           </Button>
         </div>
+        {error && <ErrorPage />}
       </form>
     </div>
   )
