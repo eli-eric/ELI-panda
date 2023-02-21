@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Fragment } from 'react'
+import { Fragment, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 
@@ -19,25 +19,28 @@ interface Props {
 const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
   const endpoints = useEndpoint({ uid })
 
-  const { data, error } = useSWR<CatalogueFormType>(
+  const { data } = useSWR<CatalogueFormType>(
     uid && endpoints.catalogueCategoryEdit,
   )
 
-  const formattedDefaultValues =
-    data?.groups && data.groups.length !== 0
-      ? {
-          ...data,
-          groups: data.groups?.map(group => ({
-            ...group,
-            properties: group.properties.map(property => ({
-              ...property,
-              listOfValues: property.listOfValues?.map(value => ({
-                value: value,
+  const formattedDefaultValues = useMemo(
+    () =>
+      data?.groups && data.groups.length !== 0
+        ? {
+            ...data,
+            groups: data.groups?.map(group => ({
+              ...group,
+              properties: group.properties.map(property => ({
+                ...property,
+                listOfValues: property.listOfValues?.map(value => ({
+                  value: value,
+                })),
               })),
             })),
-          })),
-        }
-      : { ...data }
+          }
+        : { ...data },
+    [data],
+  )
 
   const formMethods = useForm<CatalogueFormType>({
     defaultValues: formattedDefaultValues,

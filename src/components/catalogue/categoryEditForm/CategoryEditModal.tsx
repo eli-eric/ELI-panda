@@ -1,10 +1,12 @@
 import { Dispatch, Fragment, SetStateAction, Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormattedMessage } from 'react-intl'
+import useSWRMutation from 'swr'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { Button } from '@/components/ui/Buttons'
 import ProgressBarComponent from '@/components/ui/progress-bar.comp'
+import { fetcher } from '@/features/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
@@ -19,8 +21,11 @@ interface Props {
   uid?: string
 }
 
-const CategoryEditModal = ({ setopen, parentPath, uid }: Props) => {
-  const { catalogueCategoryEdit } = useEndpoint(uid ? { uid } : {})
+const CategoryEditModal = ({ setopen, parentPath = '', uid }: Props) => {
+  const { catalogueCategoryEdit, catalogueCategories } = useEndpoint(
+    uid ? { uid, path: parentPath } : { path: parentPath },
+  )
+  const { data, mutate } = useSWRMutation(catalogueCategories, fetcher)
   const { submit, loading, error, response } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: uid ? 'put' : 'post',
@@ -53,8 +58,12 @@ const CategoryEditModal = ({ setopen, parentPath, uid }: Props) => {
     submit(formattedData)
   }
   useEffect(() => {
-    if (response) if (!error) setopen(false)
-  }, [response, setopen, error])
+    if (response)
+      if (!error) {
+        mutate(data)
+        setopen(false)
+      }
+  }, [response, setopen, error, mutate, data])
 
   return (
     <Fragment>

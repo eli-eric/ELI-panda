@@ -123,7 +123,7 @@ export const useCategoryEdit = ({
         >
           <CategoryEditModal
             setopen={setOpenNew}
-            parentPath={catalogueParentPath}
+            parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
           />
         </ModalComponent>
       </Fragment>
