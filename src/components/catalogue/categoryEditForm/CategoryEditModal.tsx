@@ -29,6 +29,7 @@ const CategoryEditModal = ({ setopen, parentPath = '', uid }: Props) => {
   const { submit, loading, error, response } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: uid ? 'put' : 'post',
+    mutateUrlList: [catalogueCategories],
   })
   const onSubmit = (data: CatalogueFormType) => {
     const formattedData =
@@ -60,8 +61,8 @@ const CategoryEditModal = ({ setopen, parentPath = '', uid }: Props) => {
   useEffect(() => {
     if (response)
       if (!error) {
-        mutate(data)
         setopen(false)
+        mutate(data)
       }
   }, [response, setopen, error, mutate, data])
 
