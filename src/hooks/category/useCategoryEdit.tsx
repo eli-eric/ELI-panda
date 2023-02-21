@@ -78,7 +78,11 @@ export const useCategoryEdit = ({
           buttons={{ noButtons: true }}
           testid="catalogueEdit"
         >
-          <CategoryEditModal setopen={setOpenEdit} uid={editUid} />
+          <CategoryEditModal
+            setopen={setOpenEdit}
+            uid={editUid}
+            parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
+          />
         </ModalComponent>
         <ModalComponent
           open={openDelete}
