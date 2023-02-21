@@ -7,7 +7,7 @@ import { BASE_URL } from '@/types/constants/common'
 interface UseSubmitProps {
   endpoint: string
   method: 'post' | 'put' | 'delete'
-  mutateUrlList?: string[]
+  mutateList?: string[]
 }
 
 interface UseSubmitReturn {
@@ -17,7 +17,7 @@ interface UseSubmitReturn {
   submit: (body?: object) => void
 }
 
-const useSubmit = ({ endpoint, method, mutateUrlList }: UseSubmitProps) => {
+const useSubmit = ({ endpoint, method, mutateList }: UseSubmitProps) => {
   const { mutate } = useSWRConfig()
 
   const [response, setResponse] = useState<object | null>(null)
@@ -32,9 +32,11 @@ const useSubmit = ({ endpoint, method, mutateUrlList }: UseSubmitProps) => {
         setloading(false)
       })
       .finally(() => {
-        if (mutateUrlList)
-          mutateUrlList.forEach(url => {
-            mutate(url).finally(() => setloading(false))
+        if (mutateList)
+          mutateList.forEach(url => {
+            mutate(url, undefined, { revalidate: true }).finally(() =>
+              setloading(false),
+            )
           })
       })
   }

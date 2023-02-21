@@ -56,7 +56,7 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
   const { submit, loading, error, response } = useSubmit({
     endpoint: systemRelationship,
     method: 'post',
-    mutateUrlList: [systemRelationships],
+    mutateList: [systemRelationships],
   })
   const onSubmit = data => {
     submit(data)

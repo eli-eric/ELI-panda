@@ -39,7 +39,7 @@ export const usePandaForm = <T extends FieldValues>({
   const { fetchData } = useAxios({
     url: endpoint,
     method: fetchMethod,
-    mutateUrlList: afterMutates && afterMutates,
+    mutateList: afterMutates && afterMutates,
   })
 
   const onSubmit = data => {

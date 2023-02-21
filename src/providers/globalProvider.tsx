@@ -18,7 +18,6 @@ const GlobalProvider = ({ children }: Props) => {
     <SWRConfig
       value={{
         fetcher,
-        revalidateOnMount: true,
         suspense: true,
         onError: (error, key) => {
           if (!error) {

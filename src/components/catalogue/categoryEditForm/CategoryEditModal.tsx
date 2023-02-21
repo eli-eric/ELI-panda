@@ -1,18 +1,40 @@
 import { Dispatch, Fragment, SetStateAction, Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormattedMessage } from 'react-intl'
-import useSWRMutation from 'swr'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { Button } from '@/components/ui/Buttons'
 import ProgressBarComponent from '@/components/ui/progress-bar.comp'
-import { fetcher } from '@/features/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
 import { CatalogueFormType } from '@/types/catalogue/catalogueTypes'
 
 import CategoryEditForm from './CategoryEditForm'
+const formatData = (data: CatalogueFormType, parentPath) =>
+  data.groups && data.groups.length !== 0
+    ? {
+        ...data,
+        parentPath: data.parentPath ? data.parentPath : parentPath,
+        groups: data.groups?.map(group => ({
+          ...group,
+          properties: group.properties?.map(prop =>
+            prop.listOfValues && prop.listOfValues.length !== 0
+              ? {
+                  ...prop,
+                  listOfValues: prop.listOfValues.map(value => value.value),
+                }
+              : { ...prop },
+          ),
+        })),
+      }
+    : {
+        uid: data?.uid,
+        image: data?.image,
+        name: data?.name,
+        code: data?.code,
+        parentPath: data.parentPath ? data?.parentPath : parentPath,
+      }
 
 const { buttons } = message.common
 interface Props {
@@ -25,46 +47,20 @@ const CategoryEditModal = ({ setopen, parentPath = '', uid }: Props) => {
   const { catalogueCategoryEdit, catalogueCategories } = useEndpoint(
     uid ? { uid, path: parentPath } : { path: parentPath },
   )
-  const { data, mutate } = useSWRMutation(catalogueCategories, fetcher)
   const { submit, loading, error, response } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: uid ? 'put' : 'post',
-    mutateUrlList: [catalogueCategories],
+    mutateList: [catalogueCategories, catalogueCategoryEdit],
   })
-  const onSubmit = (data: CatalogueFormType) => {
-    const formattedData =
-      data.groups && data.groups.length !== 0
-        ? {
-            ...data,
-            parentPath: data.parentPath ? data.parentPath : parentPath,
-            groups: data.groups?.map(group => ({
-              ...group,
-              properties: group.properties?.map(prop =>
-                prop.listOfValues && prop.listOfValues.length !== 0
-                  ? {
-                      ...prop,
-                      listOfValues: prop.listOfValues.map(value => value.value),
-                    }
-                  : { ...prop },
-              ),
-            })),
-          }
-        : {
-            uid: data?.uid,
-            image: data?.image,
-            name: data?.name,
-            code: data?.code,
-            parentPath: data.parentPath ? data?.parentPath : parentPath,
-          }
-    submit(formattedData)
+  const onSubmit = async (data: CatalogueFormType) => {
+    submit(formatData(data, parentPath))
   }
   useEffect(() => {
     if (response)
       if (!error) {
         setopen(false)
-        mutate(data)
       }
-  }, [response, setopen, error, mutate, data])
+  }, [response, setopen, error])
 
   return (
     <Fragment>

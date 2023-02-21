@@ -5,7 +5,7 @@ import { useSWRConfig } from 'swr'
 interface UseAxiosProps {
   url: string
   method: 'get' | 'post' | 'put' | 'delete'
-  mutateUrlList?: string[]
+  mutateList?: string[]
 }
 
 interface UseAxiosReturn {
@@ -18,7 +18,7 @@ interface UseAxiosReturn {
 const useAxios = ({
   url,
   method,
-  mutateUrlList,
+  mutateList,
 }: UseAxiosProps): UseAxiosReturn => {
   const { mutate } = useSWRConfig()
 
@@ -38,8 +38,8 @@ const useAxios = ({
       .finally(() => {
         clearTimeout(timer)
         timer = setTimeout(() => {
-          if (mutateUrlList)
-            mutateUrlList.forEach(url => {
+          if (mutateList)
+            mutateList.forEach(url => {
               mutate(url)
             })
         }, 200)
