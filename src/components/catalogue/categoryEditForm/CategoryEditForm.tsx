@@ -19,7 +19,7 @@ interface Props {
 const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
   const endpoints = useEndpoint({ uid })
 
-  const { data } = useSWR<CatalogueFormType>(
+  const { data, mutate } = useSWR<CatalogueFormType>(
     uid && endpoints.catalogueCategoryEdit,
   )
 
@@ -50,7 +50,13 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
   return (
     <Fragment>
       <FormProvider {...formMethods}>
-        <form className="flex" onSubmit={formMethods.handleSubmit(onSubmit)}>
+        <form
+          className="flex"
+          onSubmit={formMethods.handleSubmit(data => {
+            onSubmit(data)
+            mutate()
+          })}
+        >
           <div className="flex-1">
             <Main uid={uid} />
             <GroupList />
