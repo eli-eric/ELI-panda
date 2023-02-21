@@ -47,11 +47,11 @@ const Main = ({ uid }: { uid?: string }) => {
         <div className="mt-1 flex-col justify-center  border-gray-300 ">
           <Image width={200} height={200} alt="" src={catalogueCategoryImage} />
           <Button
-            onClickAction={() => {
+            onClick={() => {
               setShowImage(false)
               setValue('image', '')
             }}
-            customClass="w-full justify-center"
+            className="w-full justify-center"
             rounded="rounded-b-md"
           >
             <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
@@ -78,8 +78,8 @@ const Main = ({ uid }: { uid?: string }) => {
         <div className="mt-1 flex-col justify-center  border-gray-300 ">
           <Image width={200} height={200} alt="" src={image} />
           <Button
-            onClickAction={() => setValue('image', '')}
-            customClass="w-full justify-center"
+            onClick={() => setValue('image', '')}
+            className="w-full justify-center"
             rounded="rounded-b-md"
           >
             <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />

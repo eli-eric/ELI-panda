@@ -67,9 +67,9 @@ const Relations = ({
     <Fragment>
       <div className="px-4 sm:px-10 lg:px-4 py-4">
         <Button
-          customClass="mb-2"
+          className="mb-2"
           primary
-          onClickAction={() => {
+          onClick={() => {
             setRelationTypeCode(RELATION_TYPE_CODE.IS_SPARE_FOR)
             setOpenAddRelation(true)
           }}

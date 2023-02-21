@@ -65,16 +65,16 @@ const CategoryEditModal = ({ setopen, parentPath, uid }: Props) => {
                 type="submit"
                 primary
                 loading={loading}
-                customClass="inline-flex w-full justify-center sm:col-start-2 sm:mt-0 sm:text-sm"
+                className="inline-flex w-full justify-center sm:col-start-2 sm:mt-0 sm:text-sm"
               >
                 <FormattedMessage id={buttons.save} />
               </Button>
               <Button
-                onClickAction={() => {
+                onClick={() => {
                   setopen(false)
                 }}
                 disabled={loading}
-                customClass="inline-flex w-full justify-center sm:col-start-1 sm:mt-0 sm:text-sm text-gray-700"
+                className="inline-flex w-full justify-center sm:col-start-1 sm:mt-0 sm:text-sm text-gray-700"
               >
                 <FormattedMessage id={buttons.cancel} />
               </Button>

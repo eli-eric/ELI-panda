@@ -101,7 +101,7 @@ const AuthFormComponent = ({
               primary
               loading={loading}
               type="submit"
-              customClass="w-full justify-center"
+              className="w-full justify-center"
             >
               <FormattedMessage
                 id={

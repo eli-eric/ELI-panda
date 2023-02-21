@@ -55,17 +55,14 @@ export default function PaginationComponent({
         </p>
       </div>
       <div className="flex flex-1 justify-between sm:justify-end">
-        <Button
-          disabled={previousIsDisabled}
-          onClickAction={previousPageHandler}
-        >
+        <Button disabled={previousIsDisabled} onClick={previousPageHandler}>
           <ChevronLeftIcon className="h-6 w-6 flex-shrink-0" />
         </Button>
 
         <Button
           disabled={nextIsDisabled}
-          onClickAction={nextPageHandler}
-          customClass="ml-3"
+          onClick={nextPageHandler}
+          className="ml-3"
         >
           <ChevronRightIcon className="h-6 w-6 flex-shrink-0" />
         </Button>

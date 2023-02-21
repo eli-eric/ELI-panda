@@ -28,7 +28,7 @@ const ValueItem = ({ removeValue, index, name, errors }) => {
         placeholder="Value"
         isError={!errors?.value?.message}
       />
-      <Button onClickAction={handleRemoveValue}>
+      <Button onClick={handleRemoveValue}>
         <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
       </Button>
     </div>
@@ -122,7 +122,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
               isError={!errors?.default?.message}
             />
           )}
-          <Button onClickAction={handleRemoveProp}>
+          <Button onClick={handleRemoveProp}>
             <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
           </Button>
         </div>
@@ -139,7 +139,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
                   name={`${name}.listOfValues.${index}`}
                 />
               ))}
-              <Button onClickAction={handleAddValue}>
+              <Button onClick={handleAddValue}>
                 <PlusIcon className="h-5 w-5" aria-hidden="true" />
               </Button>
             </div>

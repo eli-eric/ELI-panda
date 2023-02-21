@@ -36,7 +36,7 @@ const PropertyList = ({ name, errors }: Props) => {
           </li>
         ))}
       </ul>
-      <Button onClickAction={handleAddProp}>
+      <Button onClick={handleAddProp}>
         <PlusIcon className="h-5 w-5" aria-hidden="true" />
       </Button>
     </div>

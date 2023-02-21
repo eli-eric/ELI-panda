@@ -117,7 +117,7 @@ export const useRelationMapRows = ({
           ...rows,
           <Button
             key={index + '1'}
-            onClickAction={() => {
+            onClick={() => {
               onDelete(relation.relationUid)
             }}
             rounded="rounded-md"

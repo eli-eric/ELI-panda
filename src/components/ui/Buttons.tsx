@@ -1,10 +1,6 @@
-import { MouseEventHandler } from 'react'
-
 import ButtonLoaderComponent from './button-loader.comp'
 
-interface ButtonProps {
-  onClickAction?: MouseEventHandler<HTMLButtonElement>
-  customClass?: string
+interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   rounded?:
     | 'rounded-l-md'
     | 'rounded-t-md'
@@ -12,27 +8,23 @@ interface ButtonProps {
     | 'rounded-b-md'
     | 'rounded-md'
   loading?: boolean
-  disabled?: boolean
   primary?: boolean
-  type?: 'submit' | 'button' | 'reset'
-  children?: React.ReactNode
+  type?: 'button' | 'submit' | 'reset'
 }
 
 export const Button = ({
-  onClickAction,
   rounded = 'rounded-md',
-  customClass,
   loading,
   disabled,
   primary = false,
-  type = 'button',
   children,
+  className,
+  ...restProps
 }: ButtonProps) => (
   <button
-    type={type}
+    {...restProps}
     disabled={loading ? true : disabled}
-    onClick={onClickAction}
-    className={`${rounded} ${customClass} ${
+    className={`${rounded} ${className} ${
       loading ? 'bg-primary-700' : `bg-${!primary ? 'white' : 'primary-600'}`
     } px-4 py-2 text-sm font-medium shadow-sm ${`${
       !primary

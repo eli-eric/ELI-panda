@@ -56,7 +56,7 @@ export const useCategoryEdit = ({
           <div className="relative flex flex-col justify-center z-0">
             <Button
               rounded="rounded-t-md"
-              onClickAction={() => {
+              onClick={() => {
                 setOpenEdit(true)
               }}
             >
@@ -64,7 +64,7 @@ export const useCategoryEdit = ({
             </Button>
             <Button
               rounded="rounded-b-md"
-              onClickAction={() => {
+              onClick={() => {
                 setOpenDelete(true)
               }}
             >
@@ -106,7 +106,7 @@ export const useCategoryEdit = ({
                 aria-hidden="true"
               />
               <Button
-                onClickAction={() => {
+                onClick={() => {
                   setOpenNew(true)
                 }}
               >

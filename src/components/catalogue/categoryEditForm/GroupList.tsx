@@ -35,7 +35,7 @@ const Group = ({ name, remove, index, errors }: groupProps) => {
               isError={!errors?.name?.message}
               rounded="rounded-l-md"
             />
-            <Button onClickAction={handleRemoveGroup}>
+            <Button onClick={handleRemoveGroup}>
               <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
             </Button>
           </span>
@@ -87,7 +87,7 @@ const GroupList = () => {
           <div className="w-full border-t border-gray-300" />
         </div>
         <div className="relative flex justify-center">
-          <Button onClickAction={handleAddGroup}>
+          <Button onClick={handleAddGroup}>
             <PlusIcon className="h-5 w-5" aria-hidden="true" />
           </Button>
         </div>
