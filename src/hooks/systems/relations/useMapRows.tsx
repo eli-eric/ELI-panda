@@ -65,9 +65,9 @@ export const useSystemMapRows = ({
           system[0].includes('systemCodePath') ||
           system[0].includes('systemType'),
       )
-      return row.map((value, index) => {
+      return row.map(([key, value], index) => {
         if (value) {
-          if (value[0] === 'name') {
+          if (key === 'name') {
             return (
               <Name
                 key={system.uid + index}
@@ -79,7 +79,7 @@ export const useSystemMapRows = ({
             )
           }
         }
-        return <p key={system.name + index}>{value[1]}</p>
+        return <p key={system.name + index}>{value}</p>
       })
     })
     return data

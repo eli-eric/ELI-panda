@@ -26,9 +26,9 @@ const ValueItem = ({ removeValue, index, name, errors }) => {
         register={register}
         name={`${name}.value`}
         placeholder="Value"
-        isError={!errors?.value?.message}
+        isError={!!errors?.value?.message}
       />
-      <Button onClick={handleRemoveValue}>
+      <Button rounded="rounded-r-md" onClick={handleRemoveValue}>
         <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
       </Button>
     </div>
@@ -77,12 +77,12 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
             name={`${name}.name`}
             placeholder="Property name"
             rounded="rounded-l-md"
-            isError={!errors?.name?.message}
+            isError={!!errors?.name?.message}
           />
           <SelectWithError
             register={register}
             name={`${name}.typeUID`}
-            isError={!errors?.typeUID?.message}
+            isError={!!errors?.typeUID?.message}
             options={[
               getDefaultOption('Select type', true),
               ...propertyTypes.map(type => ({ ...type, value: type.uid })),
@@ -91,7 +91,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
           <SelectWithError
             register={register}
             name={`${name}.unitUID`}
-            isError={!errors?.unitUID?.message}
+            isError={!!errors?.unitUID?.message}
             options={[
               getDefaultOption('Select Unit'),
               ...units.map(unit => ({ ...unit, value: unit.uid })),
@@ -102,7 +102,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
             <SelectWithError
               register={register}
               name={`${name}.defaultValue`}
-              isError={!errors?.typeUID?.message}
+              isError={!!errors?.typeUID?.message}
               options={
                 type === PROPERTY_TYPE.LIST
                   ? [
@@ -119,10 +119,10 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
               type={PROPERTY_INPUT_TYPE[type]}
               placeholder="Default value"
               disabled={type === ''}
-              isError={!errors?.defaultValue?.message}
+              isError={!!errors?.defaultValue?.message}
             />
           )}
-          <Button onClick={handleRemoveProp}>
+          <Button rounded="rounded-r-md" onClick={handleRemoveProp}>
             <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
           </Button>
         </div>

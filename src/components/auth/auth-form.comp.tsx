@@ -5,7 +5,7 @@ import {
 } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 import EliLogoComponent from 'src/components/ui/eli-logo.comp'
-import { Input } from 'src/components/ui/form/Input'
+import { InputWithError } from 'src/components/ui/form/Input'
 import { message } from 'src/i18n/src/messages'
 
 import { Button } from '../ui/Buttons'
@@ -61,13 +61,13 @@ const AuthFormComponent = ({
                 <FormattedMessage id={form.userName} />
               </label>
               <div className="mt-1">
-                <Input
+                <InputWithError
                   id="text"
                   name="username"
+                  rounded="rounded-md"
                   type="text"
                   autoComplete="text"
                   register={register}
-                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
                 />
                 <p className="text-xs text-red-500">
                   {errors.username?.message}
@@ -83,13 +83,13 @@ const AuthFormComponent = ({
                 <FormattedMessage id={form.password} />
               </label>
               <div className="mt-1">
-                <Input
+                <InputWithError
                   id="password"
+                  rounded="rounded-md"
                   name="password"
                   type="password"
                   autoComplete="current-password"
                   register={register}
-                  className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
                 />
                 <p className="text-xs text-red-500">
                   {errors.password?.message}

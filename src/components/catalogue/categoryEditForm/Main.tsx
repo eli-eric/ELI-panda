@@ -93,7 +93,7 @@ const Main = ({ uid }: { uid?: string }) => {
             <InputWithError
               name="name"
               register={register}
-              isError={!errors.name?.message}
+              isError={!!errors.name?.message}
               rounded="rounded-md"
             />
           </div>
@@ -106,7 +106,7 @@ const Main = ({ uid }: { uid?: string }) => {
               name="code"
               register={register}
               disabled={true}
-              isError={!errors.code?.message}
+              isError={!!errors.code?.message}
               rounded="rounded-md"
             />
           </div>

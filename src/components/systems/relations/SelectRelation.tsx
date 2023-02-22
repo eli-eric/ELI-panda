@@ -79,7 +79,7 @@ const SelectRelation = ({
         }
         register={register}
         name={'systemFromUid'}
-        isError={!formState.errors.systemFromUid?.message}
+        isError={!!formState.errors.systemFromUid?.message}
         rounded="rounded-l-md"
         label="System From"
       />
@@ -87,7 +87,7 @@ const SelectRelation = ({
         options={[{ value: relationTypeCode }]}
         register={register}
         name={'relationTypeCode'}
-        isError={!formState.errors.relationTypeCode?.message}
+        isError={!!formState.errors.relationTypeCode?.message}
         disabled
         label="Relation Type Code"
       />
@@ -95,7 +95,7 @@ const SelectRelation = ({
         options={[systemToOption]}
         register={register}
         name={'systemToUid'}
-        isError={!formState.errors.systemToUid?.message}
+        isError={!!formState.errors.systemToUid?.message}
         disabled
         rounded="rounded-r-md"
         label="System To"

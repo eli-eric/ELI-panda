@@ -7,10 +7,11 @@ export function Input({ register, name, ...rest }) {
   return <input {...register(name)} {...rest} />
 }
 
-interface InputWithErrorProps<T extends FieldValues> {
+interface InputWithErrorProps<T extends FieldValues>
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   register: UseFormRegister<T>
   name: string
-  isError: boolean
+  isError?: boolean
   placeholder?: string
   type?: string
   disabled?: boolean
@@ -29,20 +30,22 @@ export const InputWithError = <T extends FieldValues>({
   disabled,
   rounded,
   type = 'text',
+  ...restProps
 }: InputWithErrorProps<T>) => (
   <div className="block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm">
     <Input
+      {...restProps}
       register={register}
       name={name}
       type={type}
       disabled={disabled}
       placeholder={placeholder}
       className={`block w-full appearance-none ${rounded} border ${
-        !isError ? 'border-red-500' : 'border-gray-300'
+        isError ? 'border-red-500' : 'border-gray-300'
       } px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm ${
         disabled ? 'bg-gray-100' : ''
       }`}
     />
-    {!isError && <ValidationIcon />}
+    {isError && <ValidationIcon />}
   </div>
 )

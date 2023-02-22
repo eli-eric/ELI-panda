@@ -67,6 +67,7 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
   const formMethods = useForm<CategoryFormType>({
     defaultValues: formattedDefaultValues,
     resolver: yupResolver(categoryValidationschema),
+    mode: 'onSubmit',
   })
 
   return (

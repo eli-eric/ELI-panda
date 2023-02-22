@@ -32,10 +32,10 @@ const Group = ({ name, remove, index, errors }: groupProps) => {
               register={register}
               name={`${name}.name`}
               placeholder="group name"
-              isError={!errors?.name?.message}
+              isError={!!errors?.name?.message}
               rounded="rounded-l-md"
             />
-            <Button onClick={handleRemoveGroup}>
+            <Button rounded="rounded-r-md" onClick={handleRemoveGroup}>
               <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
             </Button>
           </span>
