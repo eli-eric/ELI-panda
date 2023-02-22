@@ -8,13 +8,13 @@ import { Button } from '@/components/ui/Buttons'
 import { InputWithError } from '@/components/ui/form/Input'
 import { ImageIcon } from '@/components/ui/SvgIcons'
 import { useEndpoint } from '@/hooks/useEndpoint'
-import { CatalogueFormType } from '@/types/catalogue/catalogueTypes'
+import { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 const Main = ({ uid }: { uid?: string }) => {
   const { catalogueCategoryImage } = useEndpoint({ uid: uid })
   const [showImageUid, setShowImage] = useState<boolean>(!!uid)
   const { register, watch, setValue, formState } =
-    useFormContext<CatalogueFormType>()
+    useFormContext<CategoryFormType>()
   const onDrop = useCallback(
     files => {
       const reader = new FileReader()

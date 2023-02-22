@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 
 import { useEndpoint } from '@/hooks/useEndpoint'
-import { CatalogueFormType } from '@/types/catalogue/catalogueTypes'
+import { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 import { categoryValidationschema } from '@/types/catalogue/constants'
 
 import GroupList from './GroupList'
@@ -12,14 +12,14 @@ import Main from './Main'
 
 interface Props {
   uid?: string
-  onSubmit: (data: CatalogueFormType) => void
+  onSubmit: (data: CategoryFormType) => void
   children: React.ReactNode
 }
 
 const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
   const endpoints = useEndpoint({ uid })
 
-  const { data } = useSWR<CatalogueFormType>(
+  const { data } = useSWR<CategoryFormType>(
     uid && endpoints.catalogueCategoryEdit,
   )
 
@@ -42,7 +42,7 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
     [data],
   )
 
-  const formMethods = useForm<CatalogueFormType>({
+  const formMethods = useForm<CategoryFormType>({
     defaultValues: formattedDefaultValues,
     resolver: yupResolver(categoryValidationschema),
   })

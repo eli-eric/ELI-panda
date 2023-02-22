@@ -2,7 +2,7 @@ import { PlusIcon } from '@heroicons/react/24/outline'
 import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/ui/Buttons'
-import { CatalogueFormType, Group } from '@/types/catalogue/catalogueTypes'
+import { CategoryFormType, Group } from '@/types/catalogue/categoryFormTypes'
 
 import PropertyItem from './PropertyItem'
 
@@ -12,14 +12,14 @@ interface Props {
 }
 
 const PropertyList = ({ name, errors }: Props) => {
-  const { control } = useFormContext<CatalogueFormType>()
-  const { fields, append, remove } = useFieldArray<CatalogueFormType>({
+  const { control } = useFormContext<CategoryFormType>()
+  const { fields, append, remove } = useFieldArray<CategoryFormType>({
     control,
     name: `${name}.properties`,
   })
 
   const handleAddProp = () => {
-    append({ name: '', typeUID: '', unitUID: '', default: '' })
+    append({ name: '', typeUID: '', unitUID: '', defaultValue: '' })
   }
   return (
     <div className="flex-1">

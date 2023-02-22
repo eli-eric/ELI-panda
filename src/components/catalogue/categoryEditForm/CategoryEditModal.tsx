@@ -8,10 +8,10 @@ import ProgressBarComponent from '@/components/ui/progress-bar.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
-import { CatalogueFormType } from '@/types/catalogue/catalogueTypes'
+import { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 import CategoryEditForm from './CategoryEditForm'
-const formatData = (data: CatalogueFormType, parentPath) =>
+const formatData = (data: CategoryFormType, parentPath) =>
   data.groups && data.groups.length !== 0
     ? {
         ...data,
@@ -52,7 +52,7 @@ const CategoryEditModal = ({ setopen, parentPath = '', uid }: Props) => {
     method: uid ? 'put' : 'post',
     mutateList: [catalogueCategories, catalogueCategoryEdit],
   })
-  const onSubmit = async (data: CatalogueFormType) => {
+  const onSubmit = async (data: CategoryFormType) => {
     submit(formatData(data, parentPath))
   }
   useEffect(() => {

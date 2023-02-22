@@ -3,7 +3,7 @@ import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 import { InputWithError } from 'src/components/ui/form/Input'
 
 import { Button } from '@/components/ui/Buttons'
-import { CatalogueFormType, Group } from '@/types/catalogue/catalogueTypes'
+import { CategoryFormType, Group } from '@/types/catalogue/categoryFormTypes'
 
 import PropertyList from './PropertyList'
 
@@ -16,7 +16,7 @@ interface groupProps {
 }
 
 const Group = ({ name, remove, index, errors }: groupProps) => {
-  const { register } = useFormContext<CatalogueFormType>()
+  const { register } = useFormContext<CategoryFormType>()
   const handleRemoveGroup = () => {
     remove(index)
   }
@@ -51,13 +51,13 @@ const Group = ({ name, remove, index, errors }: groupProps) => {
 }
 
 const GroupList = () => {
-  const { control, formState } = useFormContext<CatalogueFormType>()
+  const { control, formState } = useFormContext<CategoryFormType>()
   const { fields, append, remove } = useFieldArray({ control, name: 'groups' })
 
   const handleAddGroup = () => {
     append({
       name: '',
-      properties: [{ name: '', typeUID: '', unitUID: '', default: '' }],
+      properties: [{ name: '', typeUID: '', unitUID: '', defaultValue: '' }],
     })
   }
 

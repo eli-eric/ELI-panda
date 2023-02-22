@@ -5,7 +5,7 @@ import { InputWithError } from 'src/components/ui/form/Input'
 import { SelectWithError } from 'src/components/ui/form/Select'
 
 import { Button } from '@/components/ui/Buttons'
-import { CatalogueFormType, Property } from '@/types/catalogue/catalogueTypes'
+import { CategoryFormType, Property } from '@/types/catalogue/categoryFormTypes'
 import {
   defaultBoolOptions,
   PROPERTY_INPUT_TYPE,
@@ -15,7 +15,7 @@ import {
 } from '@/types/catalogue/constants'
 
 const ValueItem = ({ removeValue, index, name, errors }) => {
-  const { register } = useFormContext<CatalogueFormType>()
+  const { register } = useFormContext<CategoryFormType>()
   const handleRemoveValue = () => {
     removeValue(index)
   }
@@ -44,7 +44,7 @@ interface Props {
 
 const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
   const { register, watch, control, unregister } =
-    useFormContext<CatalogueFormType>()
+    useFormContext<CategoryFormType>()
   const { fields, append, remove } = useFieldArray({
     control,
     name: `${name}.listOfValues`,
@@ -119,7 +119,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
               type={PROPERTY_INPUT_TYPE[type]}
               placeholder="Default value"
               disabled={type === ''}
-              isError={!errors?.default?.message}
+              isError={!errors?.defaultValue?.message}
             />
           )}
           <Button onClick={handleRemoveProp}>
