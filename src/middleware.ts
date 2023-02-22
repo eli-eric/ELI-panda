@@ -4,6 +4,23 @@ import { getToken } from 'next-auth/jwt'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
+// This code is a middleware function that checks if the user has the correct
+// roles to access a protected path. It imports two functions from 'next/server'
+// and 'NextRequest' and 'NextResponse', as well as the getToken function
+// from 'next-auth/jwt'. It also imports two constants, PATH and ROLE, from
+// two different files.
+
+// The PROTECTED_PATHS constant is an array of strings that represent protected
+// paths. The PATH_ROLES_CONFIG constant is a record that maps each protected path to an array of roles.
+
+// The middleware function checks if the current pathname matches any of the
+// protected paths in the PROTECTED_PATHS array. If it does, it uses getToken to
+// get the user object from the request and checks if any of their roles match any
+// of the roles in the PATH_ROLES_CONFIG record for that path. If not, it redirects
+// them to a 404 page. Finally, it returns NextResponse.next() if all checks pass.
+// The config constant sets up a matcher for all paths except for api,
+// _next/static, _next/image and favicon.ico
+
 const PROTECTED_PATHS = [
   PATH.DASHBOARD,
   PATH.CATALOGUE,
@@ -45,7 +62,7 @@ export async function middleware(request: NextRequest) {
     )
     if (!matchRolesToPath) {
       const url = new URL(`/404`, request.url)
-      return NextResponse.rewrite(url)
+      return NextResponse.redirect(url)
     }
   }
   return NextResponse.next()
