@@ -2,10 +2,11 @@ import { CheckIcon } from '@heroicons/react/24/outline'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { Suspense, useState } from 'react'
-import EmptySectionComponent from 'src/modules/systems/empty-section/empty-section.comp'
-import useSWR from 'swr/immutable'
 
 import Card from '@/components/systems/Card'
+import Description from '@/components/systems/Description'
+import SystemDetail from '@/components/systems/Detail'
+import Preview from '@/components/systems/Preview'
 import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
 import Button from '@/components/ui/Buttons'
@@ -13,8 +14,6 @@ import { Heading } from '@/components/ui/card/card.comp'
 import ProgressBarComponent from '@/components/ui/progress-bar.comp'
 import useEditMode from '@/hooks/systems/useEditMode'
 import { System } from '@/types/system'
-
-import { fetchFakeSystem } from '../[slug]'
 
 const onSubmit = (data: System) => {
   console.log(data)
@@ -38,14 +37,12 @@ const Page: NextPage = () => {
     ownerUID: '',
   }
 
-  const { data: parentData } = useSWR(uid, fetchFakeSystem)
-
   const [data, setData] = useState<System>(empty)
 
   const { newImage, setNewImage, FormErrors, EditModeContainer, register } =
     useEditMode(onSubmit, data)
 
-  const isEditMode = false
+  const isEditMode = true
   const setIsEditMode = () => {}
 
   return (
@@ -70,14 +67,45 @@ const Page: NextPage = () => {
               <Heading text="Subsystems" />
               <Suspense fallback={<ProgressBarComponent />}>
                 <nav aria-label="Subsystems">
-                  <Subsystems ids={data.children} />
+                  <Subsystems ids={[]} />
                 </nav>
               </Suspense>
             </Card>
           </aside>
 
           <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
-            <EmptySectionComponent />
+            <article>
+              <Card>
+                <Heading>Detail</Heading>
+                <div className="flex flex-wrap lg:flex-nowrap gap-2 lg:gap-4">
+                  <section>
+                    <Preview
+                      image={data.image}
+                      alt={data.name}
+                      isEditMode={isEditMode}
+                      newImage={newImage}
+                      setNewImage={setNewImage}
+                    />
+                  </section>
+
+                  <section>
+                    <SystemDetail
+                      register={register}
+                      isEditMode={isEditMode}
+                      data={data}
+                    />
+                    <div className="text-sm font-medium text-gray-400">
+                      Description
+                    </div>
+                    <Description
+                      data={data}
+                      isEditMode={isEditMode}
+                      register={register}
+                    />
+                  </section>
+                </div>
+              </Card>
+            </article>
           </main>
         </div>
       </EditModeContainer>
