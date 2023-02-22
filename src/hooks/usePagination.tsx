@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useState } from 'react'
 
-import ItemsPaginationComponent from '@/components/catalogue/catalogueItems/paging/items-pagination.comp'
+import PaginationComponent from '@/components/ui/table/Pagination.comp'
 
 export type Pagination = {
   page: number
@@ -10,7 +10,7 @@ export type Pagination = {
 
 const usePagination = ({
   dependecies,
-  useQuery
+  useQuery,
 }: {
   dependecies: React.DependencyList
   useQuery?: boolean
@@ -37,18 +37,22 @@ const usePagination = ({
   const pagination = useMemo(() => {
     const pagination = {
       page,
-      pageSize
+      pageSize,
     }
     return JSON.stringify(pagination)
   }, [page, pageSize])
 
   useEffect(() => {
     if (useQuery) {
-      router.push({ pathname: router.pathname, query: { ...router.query, page: page } }, undefined, {
-        shallow: true
-      })
+      router.push(
+        { pathname: router.pathname, query: { ...router.query, page: page } },
+        undefined,
+        {
+          shallow: true,
+        },
+      )
     }
-  }, [useQuery, page])
+  }, [useQuery, page]) //eslint-disable-line
 
   useEffect(() => {
     setPage(1)
@@ -62,7 +66,7 @@ const usePagination = ({
   }, [totalCount, setPageNumbers, pageSize])
 
   const getPaginationComponent = () => (
-    <ItemsPaginationComponent
+    <PaginationComponent
       page={page}
       pageSize={pageSize}
       previousPageHandler={previousPageHandler}
@@ -78,7 +82,7 @@ const usePagination = ({
     setTotalCount,
     setPageSize,
     page,
-    pageSize
+    pageSize,
   }
 }
 

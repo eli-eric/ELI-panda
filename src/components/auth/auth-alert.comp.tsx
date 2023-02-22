@@ -1,6 +1,6 @@
 import { ExclamationTriangleIcon } from '@heroicons/react/20/solid'
-import { message } from 'src/i18n/src/messages'
 import { FormattedMessage } from 'react-intl'
+import { message } from 'src/i18n/src/messages'
 
 const title = message.authPage.alert.title
 

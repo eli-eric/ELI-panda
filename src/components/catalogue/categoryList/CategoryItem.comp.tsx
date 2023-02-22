@@ -16,7 +16,10 @@ interface Props {
 const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
   const router = useRouter()
   const { catalogueCategoryImage } = useEndpoint({ uid: category.uid })
-  const { getEditDeleteButtons } = useCategoryEdit({ editUid: category.uid })
+  const { getEditDeleteButtons } = useCategoryEdit({
+    editUid: category.uid,
+    catalogueParentPath: category.parentPath,
+  })
   const path =
     PATH.CATALOGUE +
     (!category.parentPath ? '/' : '/' + category.parentPath + '/') +

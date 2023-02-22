@@ -1,11 +1,11 @@
 import { Fragment, useState } from 'react'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import useSWR from 'swr'
 
 import { Button } from '@/components/ui/Buttons'
 import ModalComponent from '@/components/ui/modal/modal.comp'
 import ModalWarningComponent from '@/components/ui/modal/warning/modal-warning.comp'
-import TableComponent from '@/components/ui/Table.comp'
+import TableComponent from '@/components/ui/table/Table.comp'
 import { useRelationMapRows } from '@/hooks/systems/relations/useMapRows'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
@@ -67,13 +67,15 @@ const Relations = ({
     <Fragment>
       <div className="px-4 sm:px-10 lg:px-4 py-4">
         <Button
-          customClass="mb-2"
-          onClickAction={() => {
+          className="mb-2"
+          primary
+          onClick={() => {
             setRelationTypeCode(RELATION_TYPE_CODE.IS_SPARE_FOR)
             setOpenAddRelation(true)
           }}
-          text={intl.formatMessage({ id: messages.buttons.addSpare })}
-        />
+        >
+          <FormattedMessage id={messages.buttons.addSpare} />
+        </Button>
         {relations && (
           <TableComponent collumsTitle={collumsTitle} data={data} />
         )}

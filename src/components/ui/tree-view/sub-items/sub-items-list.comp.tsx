@@ -1,4 +1,5 @@
 import Link from 'next/link'
+
 import { SystemTreeItem } from '@/types/responses'
 
 import Card from '../../card/card.comp'

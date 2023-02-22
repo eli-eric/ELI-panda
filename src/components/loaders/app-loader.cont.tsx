@@ -1,7 +1,7 @@
-import { message } from 'src/i18n/src/messages'
 import Head from 'next/head'
 import { Fragment, useContext } from 'react'
 import { useIntl } from 'react-intl'
+import { message } from 'src/i18n/src/messages'
 import AppLoadingContext from 'src/store/app-loading.context'
 
 import LoaderComponent from '../ui/loader.comp'

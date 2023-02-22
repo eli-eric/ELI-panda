@@ -18,7 +18,7 @@ const Breadcrumbs = (props: { path: string[] }) => {
         <Fragment key={uid}>
           <Link
             className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center px-1 py-1 text-sm font-medium "
-            href={`/tree/${uid}`}
+            href={`/systems/${uid}`}
           >
             <span className="truncate">{name}</span>
           </Link>

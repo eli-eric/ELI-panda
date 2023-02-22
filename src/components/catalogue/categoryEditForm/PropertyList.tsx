@@ -1,5 +1,7 @@
+import { PlusIcon } from '@heroicons/react/24/outline'
 import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
-import { PlusIconButton } from '@/components/ui/Buttons'
+
+import { Button } from '@/components/ui/Buttons'
 import { CatalogueFormType, Group } from '@/types/catalogue/catalogueTypes'
 
 import PropertyItem from './PropertyItem'
@@ -34,7 +36,9 @@ const PropertyList = ({ name, errors }: Props) => {
           </li>
         ))}
       </ul>
-      <PlusIconButton onClickAction={handleAddProp} />
+      <Button onClick={handleAddProp}>
+        <PlusIcon className="h-5 w-5" aria-hidden="true" />
+      </Button>
     </div>
   )
 }

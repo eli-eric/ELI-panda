@@ -10,7 +10,7 @@ import { RelationFormType } from './AddRelationForm'
 const SelectRelation = ({
   relationTypeCode,
   systemName,
-  selectedSystem
+  selectedSystem,
 }: {
   relationTypeCode: RELATION_TYPE_CODE
   systemName: string
@@ -19,36 +19,33 @@ const SelectRelation = ({
     uid: string
   }
 }) => {
-  const { register, watch, setValue, formState } = useFormContext<RelationFormType>()
-  setValue('relationTypeCode', relationTypeCode)
+  const { register, watch, setValue, formState } =
+    useFormContext<RelationFormType>()
+  useEffect(() => {
+    setValue('relationTypeCode', relationTypeCode)
+  }, [setValue, relationTypeCode])
   const router = useRouter()
   const baseSystemOption = useMemo(
     () => ({
       name: systemName,
-      value: router.query.slug as string
+      value: router.query.slug as string,
     }),
-    [router, systemName]
+    [router, systemName],
   )
   const [selectedSystemOption, setSelectedSystemOption] = useState({
     name: selectedSystem?.name,
-    value: selectedSystem?.uid
+    value: selectedSystem?.uid,
   })
-  const [systemToOption, setSystemToOption] = useState<Option>(selectedSystemOption)
+  const [systemToOption, setSystemToOption] =
+    useState<Option>(selectedSystemOption)
   const watchSystemFromUid = watch('systemFromUid')
 
   useEffect(() => {
-    if (!selectedSystem) {
-      setSelectedSystemOption({
-        name: undefined,
-        value: undefined
-      })
-    } else {
-      setSelectedSystemOption({
-        name: selectedSystem?.name,
-        value: selectedSystem?.uid
-      })
-    }
-  }, [selectedSystem])
+    setSelectedSystemOption({
+      name: selectedSystem?.name,
+      value: selectedSystem?.uid,
+    })
+  }, [selectedSystem, setSelectedSystemOption])
 
   useEffect(() => {
     if (watchSystemFromUid === baseSystemOption.value) {
@@ -63,12 +60,23 @@ const SelectRelation = ({
     }
 
     setValue('systemToUid', systemToOption.value as string)
-  }, [watchSystemFromUid, baseSystemOption, selectedSystemOption, selectedSystem, setValue, systemToOption])
+  }, [
+    watchSystemFromUid,
+    baseSystemOption,
+    selectedSystemOption,
+    selectedSystem,
+    setValue,
+    systemToOption,
+  ])
 
   return (
     <div className="flex flex-row">
       <SelectWithError
-        options={selectedSystem ? [baseSystemOption, selectedSystemOption] : [baseSystemOption]}
+        options={
+          selectedSystem
+            ? [baseSystemOption, selectedSystemOption]
+            : [baseSystemOption]
+        }
         register={register}
         name={'systemFromUid'}
         isError={!formState.errors.systemFromUid?.message}

@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, Suspense, useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { FormattedMessage } from 'react-intl'
 import * as yup from 'yup'
 
 import ErrorPage from '@/components/error/ErrorPage'
@@ -10,11 +11,12 @@ import LoaderComponent from '@/components/ui/loader.comp'
 import SearchBarComponent from '@/components/ui/SearchBar.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
+import { message } from '@/i18n/src/messages'
 import { RELATION_TYPE_CODE } from '@/types/system/constants'
 
 import SelectRelation from './SelectRelation'
 import TableWithPaging from './TableWithPaging'
-
+const { buttons } = message.common
 interface Props {
   setopen: Dispatch<SetStateAction<boolean>>
   relationTypeCode: RELATION_TYPE_CODE
@@ -30,7 +32,7 @@ export type RelationFormType = {
 const relationValidationSchema = yup.object().shape({
   systemFromUid: yup.string().required(),
   relationTypeCode: yup.string().required(),
-  systemToUid: yup.string().required()
+  systemToUid: yup.string().required(),
 })
 
 const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
@@ -45,12 +47,16 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
     setSelectedSystem(undefined)
     setSearchValue(data.search)
   }
-  const { systemRelationship, systemRelationships } = useEndpoint({ uid: router.query.slug as string })
-  const relFormMethods = useForm<RelationFormType>({ resolver: yupResolver(relationValidationSchema) })
+  const { systemRelationship, systemRelationships } = useEndpoint({
+    uid: router.query.slug as string,
+  })
+  const relFormMethods = useForm<RelationFormType>({
+    resolver: yupResolver(relationValidationSchema),
+  })
   const { submit, loading, error, response } = useSubmit({
     endpoint: systemRelationship,
     method: 'post',
-    mutateUrlList: [systemRelationships]
+    mutateList: [systemRelationships],
   })
   const onSubmit = data => {
     submit(data)
@@ -61,8 +67,8 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
   }, [response, setopen, error])
 
   return (
-    <div className="w-full min-h-[736px] flex flex-col justify-between">
-      <div className="flex flex-col">
+    <div className="w-full min-h-[736px] justify-between flex flex-col">
+      <div className="flex flex-col justify-between">
         <FormProvider {...searchFormMethods}>
           <SearchBarComponent onSubmit={onSearchSubmit} />
         </FormProvider>
@@ -81,28 +87,37 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
           />
         </Suspense>
       </div>
-      <form onSubmit={relFormMethods.handleSubmit(onSubmit)} className="flex flex-col">
+      <form
+        onSubmit={relFormMethods.handleSubmit(onSubmit)}
+        className="flex flex-col"
+      >
         <FormProvider {...relFormMethods}>
-          <SelectRelation relationTypeCode={relationTypeCode} systemName={systemName} selectedSystem={selectedSystem} />
+          <SelectRelation
+            relationTypeCode={relationTypeCode}
+            systemName={systemName}
+            selectedSystem={selectedSystem}
+          />
         </FormProvider>
-        {error && <ErrorPage />}
         <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
           <Button
-            text="Save"
             type="submit"
+            primary
             loading={loading}
-            customClass="inline-flex w-full justify-center sm:col-start-2 sm:mt-0 sm:text-sm"
-          />
+            className="inline-flex w-full justify-center sm:col-start-2 sm:mt-0 sm:text-sm"
+          >
+            <FormattedMessage id={buttons.continue} />
+          </Button>
           <Button
-            text="Cancel"
-            buttonType="secondary"
-            onClickAction={() => {
+            onClick={() => {
               setopen(false)
             }}
             disabled={loading}
-            customClass="inline-flex w-full justify-center sm:col-start-1 sm:mt-0 sm:text-sm text-gray-700"
-          />
+            className="inline-flex w-full justify-center sm:col-start-1 sm:mt-0 sm:text-sm text-gray-700"
+          >
+            <FormattedMessage id={buttons.cancel} />
+          </Button>
         </div>
+        {error && <ErrorPage />}
       </form>
     </div>
   )

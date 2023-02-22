@@ -1,6 +1,11 @@
 export const messages = {
   common: {
-    buttons: { close: 'Close' },
+    buttons: {
+      close: 'Close',
+      continue: 'Continue',
+      cancel: 'Cancel',
+      save: 'Save',
+    },
   },
   layout: {
     login: 'Log In',
