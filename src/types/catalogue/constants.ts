@@ -1,5 +1,3 @@
-import * as yup from 'yup'
-
 export const units = [
   {
     uid: '8a18b753-e0c9-4d5b-80ef-2e0de38ac2b8',
@@ -97,28 +95,6 @@ export const units = [
     name: 'min',
   },
 ]
-
-export const categoryValidationschema = yup.object().shape({
-  name: yup.string().required('Category Name is required'),
-  groups: yup.array().of(
-    yup.object().shape({
-      name: yup.string().required('Group Name is required'),
-      properties: yup.array().of(
-        yup.object().shape({
-          name: yup.string().required('Prop Name is required'),
-          typeUID: yup.string().required('Prop Type is required'),
-          unitUID: yup.string(),
-          default: yup.string(),
-          listOfValues: yup.array().of(
-            yup.object({
-              value: yup.string().required('Required'),
-            }),
-          ),
-        }),
-      ),
-    }),
-  ),
-})
 
 export const propertyTypes = [
   {

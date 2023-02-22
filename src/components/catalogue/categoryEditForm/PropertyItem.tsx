@@ -101,7 +101,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
           {type === PROPERTY_TYPE.LIST || type === PROPERTY_TYPE.BOOLEAN ? (
             <SelectWithError
               register={register}
-              name={`${name}.default`}
+              name={`${name}.defaultValue`}
               isError={!errors?.typeUID?.message}
               options={
                 type === PROPERTY_TYPE.LIST
@@ -115,7 +115,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
           ) : (
             <InputWithError
               register={register}
-              name={`${name}.default`}
+              name={`${name}.defaultValue`}
               type={PROPERTY_INPUT_TYPE[type]}
               placeholder="Default value"
               disabled={type === ''}
