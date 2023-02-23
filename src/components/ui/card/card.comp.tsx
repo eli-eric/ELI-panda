@@ -14,7 +14,7 @@ export default Card
 
 export const Heading = props => {
   const { children, action } = props
-  const { label, href } = action ?? {}
+  const { label, href, onClick } = action ?? {}
   return (
     <div className="mb-4 border-b border-gray-200 bg-white px-2 py-2 sm:px-3">
       <div className="-ml-2 -mt-1 flex flex-wrap items-center justify-between sm:flex-nowrap">
@@ -23,11 +23,15 @@ export const Heading = props => {
             {children}
           </h3>
         </div>
-        {label && href && (
+        {label && (href || onClick) && (
           <div className="ml-2 mt-1 flex-shrink-0">
-            <Link href={href}>
-              <Button>{label}</Button>
-            </Link>
+            {href ? (
+              <Link href={href}>
+                <Button>{label}</Button>
+              </Link>
+            ) : (
+              <Button onClick={onClick}>{label}</Button>
+            )}
           </div>
         )}
       </div>

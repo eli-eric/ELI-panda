@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
 import { PlusIcon } from '@heroicons/react/20/solid'
+import { PencilSquareIcon } from '@heroicons/react/24/outline'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -12,14 +13,17 @@ import ErrorPage from '@/components/error/ErrorPage'
 import Breadcrumbs from '@/components/systems/Breadcrumbs'
 import Description from '@/components/systems/Description'
 import SystemDetail from '@/components/systems/Detail'
+import Edit from '@/components/systems/Edit'
 import Preview from '@/components/systems/Preview'
 import Relations from '@/components/systems/relations/Relations'
 import { Prompt, Results } from '@/components/systems/Search'
 import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
 import ViewControl from '@/components/systems/ViewControl'
+import Button from '@/components/ui/Buttons'
 import Card, { Heading } from '@/components/ui/card/card.comp'
 import LoaderComponent from '@/components/ui/loader.comp'
+import ModalComponent from '@/components/ui/modal/modal.comp'
 import ProgressBarComponent from '@/components/ui/progress-bar.comp'
 import useParam from '@/hooks/useParam'
 import { System } from '@/types/system'
@@ -66,8 +70,18 @@ export const fetchFakeSystems = async () => {
   return res.map(() => getFakeSystem())
 }
 
-const onSubmit = (data: System) => {
-  console.log(data)
+const empty = {
+  name: '',
+  description: '',
+  systemCode: '',
+  systemAlias: '',
+  locationCode: '',
+  catalogueUID: '',
+  importanceCode: '',
+  systemTypeUID: '',
+  ownerUID: '',
+  zoneCode: '',
+  subZoneCode: '',
 }
 
 const Page: NextPage = () => {
@@ -85,6 +99,18 @@ const Page: NextPage = () => {
     relations: true,
     catalogueItem: true,
   })
+
+  const [isEditing, setIsEditing] = useState('')
+
+  const onSubmitEdit = (data: System) => {
+    console.log(data)
+    setIsEditing('')
+  }
+
+  const onSubmitNew = (data: System) => {
+    console.log(data)
+    setIsEditing('')
+  }
 
   if (!data) return <LoaderComponent />
   return (
@@ -111,6 +137,9 @@ const Page: NextPage = () => {
           <div className="w-96">
             <Prompt query={query as string} setQuery={setQuery} />
           </div>
+          <Button onClick={() => setIsEditing('current')}>
+            <PencilSquareIcon className="h-6" />
+          </Button>
         </div>
 
         {query && (
@@ -128,7 +157,7 @@ const Page: NextPage = () => {
             <Heading
               action={{
                 label: <PlusIcon className="h-5" />,
-                href: router.asPath.split('?')[0] + '/new',
+                onClick: () => setIsEditing('new'),
               }}
             >
               Subsystems
@@ -147,6 +176,7 @@ const Page: NextPage = () => {
             <article>
               <Card>
                 <Heading>Detail</Heading>
+
                 <div className="flex flex-wrap lg:flex-nowrap gap-2 lg:gap-4">
                   <section>
                     <Preview image={data.image} alt={data.name} />
@@ -182,6 +212,18 @@ const Page: NextPage = () => {
               </ErrorBoundary>
             </Card>
           )}
+
+          <ModalComponent
+            buttons={{ noButtons: true }}
+            open={!!isEditing}
+            setOpen={() => {}}
+          >
+            <Edit
+              onSubmit={isEditing === 'current' ? onSubmitEdit : onSubmitNew}
+              data={isEditing === 'current' ? data : empty}
+              setIsEditing={setIsEditing}
+            />
+          </ModalComponent>
         </main>
       </div>
     </>
