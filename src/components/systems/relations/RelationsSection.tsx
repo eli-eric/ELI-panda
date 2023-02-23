@@ -65,7 +65,7 @@ const Relations = ({
 
   return (
     <Fragment>
-      <div className="px-4 sm:px-10 lg:px-4 py-4">
+      <div className=" py-4">
         <Button
           className="mb-2"
           primary

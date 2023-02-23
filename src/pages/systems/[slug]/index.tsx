@@ -3,19 +3,19 @@ import { PlusIcon } from '@heroicons/react/20/solid'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Fragment, Suspense, useEffect, useState } from 'react'
+import { Fragment, Suspense, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import useSWR from 'swr/immutable'
 
-import ItemDetailComponent from '@/components/catalogueItem/item-detail.comp'
 import ErrorPage from '@/components/error/ErrorPage'
 import Breadcrumbs from '@/components/systems/Breadcrumbs'
 import Card from '@/components/systems/Card'
+import CatalogueItemSection from '@/components/systems/catalogueItem/CatalogueItemSection'
 import Description from '@/components/systems/Description'
 import SystemDetail from '@/components/systems/Detail'
 import FormButtons from '@/components/systems/FormButtons'
 import Preview from '@/components/systems/Preview'
-import Relations from '@/components/systems/relations/Relations'
+import Relations from '@/components/systems/relations/RelationsSection'
 import { Prompt, Results } from '@/components/systems/Search'
 import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
@@ -53,7 +53,7 @@ export const getFakeSystem = (): System => {
     systemAlias: faker.datatype.string(),
     locationCode: faker.datatype.string(),
     ownerUID: faker.datatype.string(),
-    catalogueUID: faker.datatype.uuid(),
+    catalogueUID: undefined,
   }
 }
 
@@ -82,20 +82,12 @@ const Page: NextPage = () => {
   const [viewControl, setViewControl] = useState<{
     system: boolean
     relations: boolean
-    catalogueItem: boolean | undefined
+    catalogueItem: boolean
   }>({
     system: true,
     relations: true,
     catalogueItem: true,
   })
-
-  useEffect(() => {
-    if (data)
-      setViewControl(prev => ({
-        ...prev,
-        catalogueItem: data.catalogueUID ? true : undefined,
-      }))
-  }, [data])
 
   const {
     isEditMode,
@@ -213,12 +205,12 @@ const Page: NextPage = () => {
                 </Card>
               </article>
             )}
-            {data.catalogueUID && viewControl.catalogueItem && (
+            {viewControl.catalogueItem && (
               <Card>
                 <Heading text="Catalogue Item" />
                 <ErrorBoundary fallback={<ErrorPage />}>
                   <Suspense fallback={<LoaderComponent />}>
-                    <ItemDetailComponent uid={data.catalogueUID} />
+                    <CatalogueItemSection uid={data.catalogueUID} />
                   </Suspense>
                 </ErrorBoundary>
               </Card>

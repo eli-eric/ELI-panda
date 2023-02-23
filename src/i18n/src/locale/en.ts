@@ -164,6 +164,9 @@ export const messages = {
         },
       },
     },
+    catalogueItem: {
+      addButton: 'Find Catalogue Item',
+    },
     note: 'Note',
   },
 
