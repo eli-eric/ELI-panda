@@ -32,7 +32,7 @@ export const useCategoryEdit = ({
   const { data: session } = useSession()
   const { catalogueCategoryEdit, catalogueCategories } = useEndpoint({
     uid: editUid,
-    path: catalogueParentPath,
+    path: '/' + catalogueParentPath,
   })
   const { submit, loading, error, response } = useSubmit({
     endpoint: catalogueCategoryEdit,
@@ -42,13 +42,14 @@ export const useCategoryEdit = ({
 
   const deletModalButtons: ModalButtons = {
     goNext: {
-      text: 'continue',
+      text: 'Continue',
+      loading: loading,
       onClick: () => {
         submit()
       },
     },
     goBack: {
-      text: 'cancel',
+      text: 'Cancel',
       onClick: () => setOpenDelete(false),
     },
   }

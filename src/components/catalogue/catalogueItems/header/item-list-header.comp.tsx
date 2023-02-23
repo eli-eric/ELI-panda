@@ -24,9 +24,9 @@ const ItemListHeaderComponent = ({ categoryListLength, details }: Props) => {
         {categoryListLength === 0 &&
           details &&
           details.length !== 0 &&
-          details.map(item => (
+          details.map((item, index) => (
             <ItemListColumnTitleComponent
-              key={item.propertyName}
+              key={item.propertyName + index}
               title={item.propertyName}
             />
           ))}
