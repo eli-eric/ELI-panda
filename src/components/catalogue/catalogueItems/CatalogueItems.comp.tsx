@@ -24,7 +24,7 @@ const CatalogueItemsComponent = ({
             <tbody className="bg-white">
               {catalogueItems?.data.map((item, index) => (
                 <ItemListRow
-                  key={index}
+                  key={index + item.uid}
                   item={item}
                   index={index}
                   categoryListLength={categoryListLength}

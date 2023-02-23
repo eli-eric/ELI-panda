@@ -51,9 +51,9 @@ const ItemListRow = ({ item, index, categoryListLength }: Props) => {
       </td>
       {categoryListLength === 0 &&
         item.details &&
-        item.details.map(item => (
+        item.details.map((item, index) => (
           <td
-            key={item.propertyName}
+            key={item.propertyName + index}
             className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500"
           >
             {item.value}

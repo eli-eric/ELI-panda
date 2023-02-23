@@ -12,6 +12,7 @@ export type ModalButtons = {
 
 export type Button = {
   text: string
+  loading?: boolean
   onClick: (data: unknown | undefined) => void
 }
 

@@ -3,17 +3,36 @@ import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
+import useSWR from 'swr'
 
 import { Button } from '@/components/ui/Buttons'
+import ImagePlaceHolder from '@/components/ui/form/ImagePlaceHolder'
 import { InputWithError } from '@/components/ui/form/Input'
-import { ImageIcon } from '@/components/ui/SvgIcons'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
+const FormImage = ({ image, onDelete }) => (
+  <div className="mt-1 flex-col justify-center  border-gray-300 ">
+    <Image width={200} height={200} alt="" src={image} />
+    <Button
+      type="button"
+      onClick={onDelete}
+      className="w-full justify-center"
+      rounded="rounded-b-md"
+    >
+      <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+    </Button>
+  </div>
+)
+
 const Main = ({ uid }: { uid?: string }) => {
   const { catalogueCategoryImage } = useEndpoint({ uid: uid })
+  const { data: categoryImage } = useSWR(
+    uid ? catalogueCategoryImage : undefined,
+  )
+
   const [showImageUid, setShowImage] = useState<boolean>(!!uid)
-  const { register, watch, setValue, formState } =
+  const { register, watch, setValue, formState, unregister } =
     useFormContext<CategoryFormType>()
   const onDrop = useCallback(
     files => {
@@ -32,78 +51,51 @@ const Main = ({ uid }: { uid?: string }) => {
   const { errors } = formState
 
   const image = watch('image')
-  const groupName = watch('name')
+  const name = watch('name')
 
   useEffect(() => {
-    const codeValue = groupName
-      ? groupName.replace(/\s+/g, '-').toLowerCase()
-      : ''
+    const codeValue = name ? name.replace(/\s+/g, '-').toLowerCase() : ''
     setValue('code', codeValue)
-  }, [groupName, setValue])
+  }, [name, setValue, categoryImage, image])
 
   return (
     <div className="flex flex-row pb-5">
-      {showImageUid ? (
-        <div className="mt-1 flex-col justify-center  border-gray-300 ">
-          <Image width={200} height={200} alt="" src={catalogueCategoryImage} />
-          <Button
-            onClick={() => {
-              setShowImage(false)
-              setValue('image', '')
-            }}
-            className="w-full justify-center"
-            rounded="rounded-b-md"
-          >
-            <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
-          </Button>
-        </div>
-      ) : !image ? (
-        <label
-          htmlFor="file-upload"
-          {...getRootProps()}
-          className="mt-1 cursor-pointer justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2"
-        >
-          <div className="space-y-1 text-center">
-            <div className=" text-sm text-gray-600">
-              <ImageIcon />
-              <div className="relative  rounded-md bg-white font-medium text-primary-600">
-                <span>Upload a file</span>
-                <input {...getInputProps()} name="image" className="sr-only" />
-              </div>
-            </div>
-            <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
-          </div>
-        </label>
+      {image === 'deleted' || (!categoryImage && !image) ? (
+        <ImagePlaceHolder
+          getInputProps={getInputProps}
+          getRootProps={getRootProps}
+        />
       ) : (
-        <div className="mt-1 flex-col justify-center  border-gray-300 ">
-          <Image width={200} height={200} alt="" src={image} />
-          <Button
-            onClick={() => setValue('image', '')}
-            className="w-full justify-center"
-            rounded="rounded-b-md"
-          >
-            <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
-          </Button>
-        </div>
+        <FormImage
+          image={image ? image : categoryImage}
+          onDelete={() => {
+            console.log('caaled')
+            if (showImageUid && !!categoryImage) {
+              setShowImage(false)
+              setValue('image', 'deleted')
+            } else {
+              setValue('image', '')
+            }
+          }}
+        />
       )}
       <div className="flex flex-col flex-grow ml-10">
         <div>
-          <label className="text-sm font-medium text-gray-700">Name</label>
           <div className="mt-1">
             <InputWithError
               name="name"
+              label="Name"
               register={register}
               isError={!!errors.name?.message}
               rounded="rounded-md"
             />
           </div>
         </div>
-
         <div>
-          <label className="text-sm font-medium text-gray-700">Code</label>
           <div className="mt-1">
             <InputWithError
               name="code"
+              label="Code"
               register={register}
               disabled={true}
               isError={!!errors.code?.message}

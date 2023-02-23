@@ -44,15 +44,21 @@ const usePagination = ({
 
   useEffect(() => {
     if (useQuery) {
-      router.push(
-        { pathname: router.pathname, query: { ...router.query, page: page } },
-        undefined,
-        {
-          shallow: true,
-        },
-      )
+      router.push({
+        pathname: router.pathname,
+        query: router.query.search
+          ? {
+              ...router.query,
+              search: router.query.search,
+              page: page,
+            }
+          : {
+              ...router.query,
+              page: page,
+            },
+      })
     }
-  }, [useQuery, page]) //eslint-disable-line
+  }, [useQuery, page, ...dependecies]) //eslint-disable-line
 
   useEffect(() => {
     setPage(1)

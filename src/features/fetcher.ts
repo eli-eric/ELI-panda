@@ -6,3 +6,10 @@ export async function fetcher(url) {
   const res = await axios.get(BASE_URL + url).then(res => res.data)
   return res
 }
+
+export async function imagefetcher(url) {
+  const res = await axios
+    .get(BASE_URL + url, { responseType: 'blob' })
+    .then(res => res.data)
+  return res
+}

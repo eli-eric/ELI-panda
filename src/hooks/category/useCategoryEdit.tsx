@@ -5,9 +5,10 @@ import {
   TrashIcon,
 } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 import CategoryEditModal from '@/components/catalogue/categoryEditForm/CategoryEditModal'
+import ErrorPage from '@/components/error/ErrorPage'
 import { Button } from '@/components/ui/Buttons'
 import ModalComponent from '@/components/ui/modal/modal.comp'
 import ModalWarningComponent from '@/components/ui/modal/warning/modal-warning.comp'
@@ -29,25 +30,36 @@ export const useCategoryEdit = ({
   const [openNew, setOpenNew] = useState(false)
 
   const { data: session } = useSession()
-  const { catalogueCategoryEdit } = useEndpoint({ uid: editUid })
-  const { submit } = useSubmit({
+  const { catalogueCategoryEdit, catalogueCategories } = useEndpoint({
+    uid: editUid,
+    path: '/' + catalogueParentPath,
+  })
+  const { submit, loading, error, response } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: 'delete',
+    mutateList: [catalogueCategories],
   })
 
   const deletModalButtons: ModalButtons = {
     goNext: {
-      text: 'continue',
+      text: 'Continue',
+      loading: loading,
       onClick: () => {
         submit()
-        setOpenDelete(false)
       },
     },
     goBack: {
-      text: 'cancel',
+      text: 'Cancel',
       onClick: () => setOpenDelete(false),
     },
   }
+
+  useEffect(() => {
+    if (response)
+      if (!error) {
+        setOpenDelete(false)
+      }
+  }, [response, setOpenDelete, error])
 
   const getEditDeleteButtons = () => {
     return (
@@ -94,6 +106,7 @@ export const useCategoryEdit = ({
             title="Warning"
             message="Are you sure you want to remove this Category?"
           />
+          {error && <ErrorPage />}
         </ModalComponent>
       </Fragment>
     )

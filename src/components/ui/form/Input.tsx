@@ -21,6 +21,7 @@ interface InputWithErrorProps<T extends FieldValues>
     | 'rounded-r-md'
     | 'rounded-b-md'
     | 'rounded-md'
+  label?: string
 }
 export const InputWithError = <T extends FieldValues>({
   register,
@@ -30,9 +31,13 @@ export const InputWithError = <T extends FieldValues>({
   disabled,
   rounded,
   type = 'text',
+  label,
   ...restProps
 }: InputWithErrorProps<T>) => (
   <div className="block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm">
+    {label && (
+      <label className="text-sm font-medium text-gray-700">{label}</label>
+    )}
     <Input
       {...restProps}
       register={register}
