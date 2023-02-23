@@ -166,6 +166,13 @@ export const messages = {
     },
     catalogueItem: {
       addButton: 'Find Catalogue Item',
+      addItemModal: {
+        tableHeader: {
+          name: 'Name',
+          type: 'System Type',
+          path: 'System Code Path',
+        },
+      },
     },
     note: 'Note',
   },

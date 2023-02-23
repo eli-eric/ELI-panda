@@ -18,13 +18,11 @@ const AddCatalogueItemModal = ({ setOpen, open }: Props) => {
   const addItemModalButtons: ModalButtons = {
     goNext: {
       text: 'Save',
-      onClick: () => {
-        submit()
-      },
+      onClick: () => {},
     },
     goBack: {
       text: 'Cancel',
-      onClick: () => setOpen(false),
+      onClick: () => {},
     },
   }
   return (

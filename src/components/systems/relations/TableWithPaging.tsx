@@ -11,7 +11,7 @@ import { message } from '@/i18n/src/messages'
 import { SystemsForRelResponse } from '@/types/responses'
 import { RELATION_TYPE_CODE } from '@/types/system/constants'
 
-import EmptyResults from './EmptyResults'
+import EmptyResults from '../../ui/EmptyResults'
 
 const messages = message.systemsPage.relations.addRelationModal
 
