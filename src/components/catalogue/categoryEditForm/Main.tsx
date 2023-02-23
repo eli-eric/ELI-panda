@@ -8,13 +8,13 @@ import { Button } from '@/components/ui/Buttons'
 import { InputWithError } from '@/components/ui/form/Input'
 import { ImageIcon } from '@/components/ui/SvgIcons'
 import { useEndpoint } from '@/hooks/useEndpoint'
-import { CatalogueFormType } from '@/types/catalogue/catalogueTypes'
+import { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 const Main = ({ uid }: { uid?: string }) => {
   const { catalogueCategoryImage } = useEndpoint({ uid: uid })
   const [showImageUid, setShowImage] = useState<boolean>(!!uid)
   const { register, watch, setValue, formState } =
-    useFormContext<CatalogueFormType>()
+    useFormContext<CategoryFormType>()
   const onDrop = useCallback(
     files => {
       const reader = new FileReader()
@@ -93,7 +93,7 @@ const Main = ({ uid }: { uid?: string }) => {
             <InputWithError
               name="name"
               register={register}
-              isError={!errors.name?.message}
+              isError={!!errors.name?.message}
               rounded="rounded-md"
             />
           </div>
@@ -106,7 +106,7 @@ const Main = ({ uid }: { uid?: string }) => {
               name="code"
               register={register}
               disabled={true}
-              isError={!errors.code?.message}
+              isError={!!errors.code?.message}
               rounded="rounded-md"
             />
           </div>

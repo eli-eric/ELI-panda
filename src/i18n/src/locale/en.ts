@@ -5,6 +5,13 @@ export const messages = {
       continue: 'Continue',
       cancel: 'Cancel',
       save: 'Save',
+      home: 'Go Home',
+    },
+    custom404: {
+      title: '404',
+      notFound: 'Page not found',
+      message:
+        'Please check the URL in the address bar and try again.Probably you have no permission.',
     },
   },
   layout: {

@@ -5,7 +5,7 @@ import { InputWithError } from 'src/components/ui/form/Input'
 import { SelectWithError } from 'src/components/ui/form/Select'
 
 import { Button } from '@/components/ui/Buttons'
-import { CatalogueFormType, Property } from '@/types/catalogue/catalogueTypes'
+import { CategoryFormType, Property } from '@/types/catalogue/categoryFormTypes'
 import {
   defaultBoolOptions,
   PROPERTY_INPUT_TYPE,
@@ -15,7 +15,7 @@ import {
 } from '@/types/catalogue/constants'
 
 const ValueItem = ({ removeValue, index, name, errors }) => {
-  const { register } = useFormContext<CatalogueFormType>()
+  const { register } = useFormContext<CategoryFormType>()
   const handleRemoveValue = () => {
     removeValue(index)
   }
@@ -26,9 +26,9 @@ const ValueItem = ({ removeValue, index, name, errors }) => {
         register={register}
         name={`${name}.value`}
         placeholder="Value"
-        isError={!errors?.value?.message}
+        isError={!!errors?.value?.message}
       />
-      <Button onClick={handleRemoveValue}>
+      <Button rounded="rounded-r-md" onClick={handleRemoveValue}>
         <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
       </Button>
     </div>
@@ -44,7 +44,7 @@ interface Props {
 
 const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
   const { register, watch, control, unregister } =
-    useFormContext<CatalogueFormType>()
+    useFormContext<CategoryFormType>()
   const { fields, append, remove } = useFieldArray({
     control,
     name: `${name}.listOfValues`,
@@ -77,12 +77,12 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
             name={`${name}.name`}
             placeholder="Property name"
             rounded="rounded-l-md"
-            isError={!errors?.name?.message}
+            isError={!!errors?.name?.message}
           />
           <SelectWithError
             register={register}
             name={`${name}.typeUID`}
-            isError={!errors?.typeUID?.message}
+            isError={!!errors?.typeUID?.message}
             options={[
               getDefaultOption('Select type', true),
               ...propertyTypes.map(type => ({ ...type, value: type.uid })),
@@ -91,7 +91,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
           <SelectWithError
             register={register}
             name={`${name}.unitUID`}
-            isError={!errors?.unitUID?.message}
+            isError={!!errors?.unitUID?.message}
             options={[
               getDefaultOption('Select Unit'),
               ...units.map(unit => ({ ...unit, value: unit.uid })),
@@ -101,8 +101,8 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
           {type === PROPERTY_TYPE.LIST || type === PROPERTY_TYPE.BOOLEAN ? (
             <SelectWithError
               register={register}
-              name={`${name}.default`}
-              isError={!errors?.typeUID?.message}
+              name={`${name}.defaultValue`}
+              isError={!!errors?.typeUID?.message}
               options={
                 type === PROPERTY_TYPE.LIST
                   ? [
@@ -115,14 +115,14 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
           ) : (
             <InputWithError
               register={register}
-              name={`${name}.default`}
+              name={`${name}.defaultValue`}
               type={PROPERTY_INPUT_TYPE[type]}
               placeholder="Default value"
               disabled={type === ''}
-              isError={!errors?.default?.message}
+              isError={!!errors?.defaultValue?.message}
             />
           )}
-          <Button onClick={handleRemoveProp}>
+          <Button rounded="rounded-r-md" onClick={handleRemoveProp}>
             <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
           </Button>
         </div>
