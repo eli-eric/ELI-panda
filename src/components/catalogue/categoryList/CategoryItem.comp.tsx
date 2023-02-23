@@ -27,7 +27,10 @@ const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
   return (
     <div className=" flex-row justify-between relative flex z-10 items-center space-x-3 rounded-lg border border-gray-300 bg-white shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
       <Link
-        href={{ pathname: path, query: { ...router.query } }}
+        href={{
+          pathname: path,
+          query: router.query.search && { search: router.query.search },
+        }}
         key={category.code}
         className=" flex w-full items-center "
       >

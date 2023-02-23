@@ -11,19 +11,19 @@ import GroupList from './GroupList'
 import Main from './Main'
 
 const categoryValidationschema = yup.object().shape({
-  name: yup.string().required('Category Name is required'),
+  name: yup.string().required(),
   groups: yup.array().of(
     yup.object().shape({
-      name: yup.string().required('Group Name is required'),
+      name: yup.string().required(),
       properties: yup.array().of(
         yup.object().shape({
-          name: yup.string().required('Prop Name is required'),
-          typeUID: yup.string().required('Prop Type is required'),
+          name: yup.string().required(),
+          typeUID: yup.string().required(),
           unitUID: yup.string(),
           defaultValue: yup.string(),
           listOfValues: yup.array().of(
             yup.object({
-              value: yup.string().required('Required'),
+              value: yup.string().required(),
             }),
           ),
         }),

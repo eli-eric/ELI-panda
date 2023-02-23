@@ -54,6 +54,7 @@ const CatalogueCategoriesPage: NextPage = (): JSX.Element => {
             <CatalogueItemsContainer
               categoryListLength={catalogueCategoryList?.length}
               setCatalogueItemsList={setCatalogueItemsList}
+              catalogueItems={catalogueItemsList}
             />
           </Suspense>
         </ErrorBoundary>

@@ -7,7 +7,7 @@ import useSWR from 'swr'
 
 import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
-import { useCataloguePath, useCategoryPath } from '@/hooks/usePath'
+import { useCataloguePath } from '@/hooks/usePath'
 import { CatalogueItemsResponse } from '@/types/responses'
 
 import DefaultMessageComponent from '../message/default-message.comp'
@@ -20,22 +20,23 @@ interface Props {
   setCatalogueItemsList: Dispatch<
     SetStateAction<CatalogueItemsResponse | undefined>
   >
+  catalogueItems?: CatalogueItemsResponse
 }
 
 const CatalogueItemsContainer = ({
   categoryListLength,
   setCatalogueItemsList,
+  catalogueItems,
 }: Props) => {
   const intl = useIntl()
   const router = useRouter()
   const { status: session } = useSession()
-  const categoryPathUrl = useCategoryPath()
   const categoryPath = useCataloguePath()
 
   const { getPaginationComponent, setTotalCount, page, pageSize, setPageSize } =
     usePagination({
-      dependecies: [router.query.search, categoryPathUrl],
-      useQuery: true,
+      dependecies: [router.query.search],
+      useQuery: !!catalogueItems,
     })
   const endpoints = useEndpoint({
     query: router.query.search
@@ -46,26 +47,26 @@ const CatalogueItemsContainer = ({
     setPageSize(30)
   }, [setPageSize])
 
-  const { data: catalogueItems } = useSWR<CatalogueItemsResponse>(
+  const { data } = useSWR<CatalogueItemsResponse>(
     categoryListLength === 0 ||
       (router.query.search && session === 'authenticated')
       ? endpoints.catalogueItems
       : null,
   )
   useEffect(() => {
-    setTotalCount(catalogueItems?.totalCount)
-  }, [catalogueItems, setTotalCount])
+    setTotalCount(data?.totalCount)
+  }, [data, setTotalCount])
   useEffect(() => {
-    setCatalogueItemsList(catalogueItems)
-  }, [catalogueItems]) // eslint-disable-line
+    setCatalogueItemsList(data)
+  }, [data]) // eslint-disable-line
 
   return (
     <Fragment>
       <div className="h-full overflow-auto border-t border-gray-300  ">
-        {catalogueItems &&
-          (catalogueItems.totalCount !== 0 ? (
+        {data &&
+          (data.totalCount !== 0 ? (
             <CatalogueItemsComponent
-              catalogueItems={catalogueItems}
+              catalogueItems={data}
               categoryListLength={categoryListLength}
             />
           ) : (
@@ -75,7 +76,7 @@ const CatalogueItemsContainer = ({
             />
           ))}
       </div>
-      {catalogueItems && getPaginationComponent()}
+      {data && getPaginationComponent()}
     </Fragment>
   )
 }
