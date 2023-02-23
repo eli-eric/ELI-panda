@@ -1,9 +1,12 @@
 import { TrashIcon } from '@heroicons/react/24/outline'
+import { yupResolver } from '@hookform/resolvers/yup'
 import Image from 'next/image'
-import { useCallback, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { useForm } from 'react-hook-form'
+import { useForm, UseFormRegister } from 'react-hook-form'
 import { object, string } from 'yup'
+
+import { System } from '@/types/system'
 
 import Button from '../ui/Buttons'
 import { InputWithError, TextareaWithError } from '../ui/form/Input'
@@ -20,8 +23,15 @@ const stringFields = [
   'locationCode',
 ]
 
-const StringField = props => {
-  const { name, register, errors } = props
+const StringField = ({
+  name,
+  register,
+  errors,
+}: {
+  name: string
+  register: UseFormRegister<System>
+  errors
+}) => {
   const { message: errorMessage } = errors ?? {}
   return (
     <div>
@@ -48,49 +58,22 @@ const schema = object({
   systemTypeUID: string(),
   systemAlias: string().max(12).required(),
   locationCode: string().required(),
-  ownerUID: string().required(),
 })
 
-const useYupValidationResolver = validationSchema =>
-  useCallback(
-    async data => {
-      try {
-        const values = await validationSchema.validate(data, {
-          abortEarly: false,
-        })
+interface Props {
+  data?: System
+  onSubmit: (data: System) => void
+  setIsEditing: Dispatch<SetStateAction<string>>
+}
 
-        return {
-          values,
-          errors: {},
-        }
-      } catch (errors: any) {
-        return {
-          values: {},
-          errors: errors.inner.reduce(
-            (allErrors, currentError) => ({
-              ...allErrors,
-              [currentError.path]: {
-                type: currentError.type ?? 'validation',
-                message: currentError.message,
-              },
-            }),
-            {},
-          ),
-        }
-      }
-    },
-    [validationSchema],
-  )
+const Edit = ({ data, onSubmit, setIsEditing }: Props) => {
+  const [image, setImage] = useState(data?.image ?? '')
 
-const Edit = props => {
-  const { data, onSubmit, setIsEditing } = props
-
-  const [image, setImage] = useState(data.image)
-
-  const { reset, handleSubmit, register, formState } = useForm({
-    defaultValues: data,
-    resolver: useYupValidationResolver(schema),
-  })
+  const { reset, handleSubmit, register, formState, getValues } =
+    useForm<System>({
+      defaultValues: data,
+      resolver: yupResolver(schema),
+    })
 
   const { errors } = formState
 
@@ -98,7 +81,7 @@ const Edit = props => {
     files => {
       const reader = new FileReader()
       reader.readAsDataURL(files[0])
-      reader.onload = () => setImage(reader.result)
+      reader.onload = () => setImage(reader.result as string)
     },
     [setImage],
   )
@@ -114,7 +97,7 @@ const Edit = props => {
       value: 'Discard',
       onClick: () => {
         reset()
-        setIsEditing(false)
+        setIsEditing('')
       },
     },
     {
@@ -136,7 +119,7 @@ const Edit = props => {
               <Image width={200} height={200} alt="" src={image} />
               <Button
                 onClick={() => {
-                  setImage(null)
+                  setImage('')
                 }}
                 className="w-full justify-center"
                 rounded="rounded-b-md"
@@ -186,7 +169,7 @@ const Edit = props => {
             </label>
             <TextareaWithError
               register={register}
-              errors={errors['description']}
+              isError={!!errors['description']}
               name="description"
               rounded="rounded-md"
             />

@@ -220,7 +220,7 @@ const Page: NextPage = () => {
           >
             <Edit
               onSubmit={isEditing === 'current' ? onSubmitEdit : onSubmitNew}
-              data={isEditing === 'current' ? data : empty}
+              data={isEditing === 'current' ? data : undefined}
               setIsEditing={setIsEditing}
             />
           </ModalComponent>
