@@ -25,6 +25,6 @@ export default function handler(
     const imageBuffer = fs.readFileSync(filePath)
 
     res.setHeader('Content-Type', 'image/png')
-    res.send(image)
+    res.send(undefined)
   }
 }
