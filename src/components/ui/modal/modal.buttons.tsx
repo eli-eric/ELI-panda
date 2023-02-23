@@ -15,7 +15,7 @@ interface Props {
   buttons?: ModalButtons
 }
 
-const Button = props => {
+const GenButton = props => {
   const { type, children, onClick, testId: testid, primary } = props
   return (
     <button
@@ -34,7 +34,7 @@ const Button = props => {
 export const GenericButtons = ({ buttons }: { buttons: any[] }) => (
   <div className="mt-5 flex flex-row gap-x-5">
     {buttons.map(({ type, value, onClick, testId, primary }, idx) => (
-      <Button
+      <GenButton
         key={idx}
         testId={testId}
         type={type}
@@ -42,7 +42,7 @@ export const GenericButtons = ({ buttons }: { buttons: any[] }) => (
         primary={primary}
       >
         {value}
-      </Button>
+      </GenButton>
     ))}
   </div>
 )
