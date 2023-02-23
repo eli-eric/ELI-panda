@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
+import { useForm, UseFormRegister } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
@@ -11,6 +12,14 @@ import { CatalogueItemsResponse } from '@/types/responses'
 
 const messages = message.systemsPage.relations.addRelationModal
 
+export type Selectable = {
+  isSelectable: boolean
+  register: UseFormRegister<{
+    itemUid: string
+  }>
+  itemUid: string | undefined
+}
+
 const CatalogueItemsTable = ({
   searchValue,
   setItemUid,
@@ -20,6 +29,8 @@ const CatalogueItemsTable = ({
 }) => {
   const intl = useIntl()
 
+  const { register, watch } = useForm<{ itemUid: string }>()
+  const itemUid = watch('itemUid')
   const { setTotalCount, getPaginationComponent, page, pageSize } =
     usePagination({ dependecies: [searchValue] })
   const query = useMemo(
@@ -49,11 +60,14 @@ const CatalogueItemsTable = ({
 
   return (
     <div className="flex flex-col min-h-[535px] justify-between">
-      <div className="h-full overflow-x-auto border-t border-gray-300  ">
-        <CatalogueItemsComponent
-          catalogueItems={catalogueItems}
-          categoryListLength={catalogueItems?.data.length}
-        />
+      <div className="h-full overflow-x-auto border-t border-gray-300">
+        <fieldset>
+          <CatalogueItemsComponent
+            selectable={{ isSelectable: true, register, itemUid }}
+            catalogueItems={catalogueItems}
+            categoryListLength={catalogueItems?.data.length}
+          />
+        </fieldset>
       </div>
       {!catalogueItems && <EmptyResults />}
       {catalogueItems && catalogueItems.data.length === 0 && <EmptyResults />}

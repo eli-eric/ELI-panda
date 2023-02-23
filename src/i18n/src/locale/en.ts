@@ -65,6 +65,7 @@ export const messages = {
       header: {
         uid: 'UID',
         name: 'Name',
+        select: 'Select Item',
         description: 'Description',
         categoryName: 'Category name',
         manufactorer: 'Manufacturer',
