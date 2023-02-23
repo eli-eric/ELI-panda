@@ -44,13 +44,17 @@ interface Props {
 }
 
 const CategoryEditModal = ({ setopen, parentPath = '', uid }: Props) => {
-  const { catalogueCategoryEdit, catalogueCategories } = useEndpoint(
-    uid ? { uid, path: parentPath } : { path: parentPath },
-  )
+  const { catalogueCategoryEdit, catalogueCategories, catalogueCategoryImage } =
+    useEndpoint(uid ? { uid, path: parentPath } : { path: parentPath })
+
   const { submit, loading, error, response } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: uid ? 'put' : 'post',
-    mutateList: [catalogueCategories, catalogueCategoryEdit],
+    mutateList: [
+      catalogueCategories,
+      catalogueCategoryEdit,
+      catalogueCategoryImage,
+    ],
   })
   const onSubmit = async (data: CategoryFormType) => {
     submit(formatData(data, parentPath))

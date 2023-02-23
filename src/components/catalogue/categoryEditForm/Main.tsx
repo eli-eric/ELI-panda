@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
+import useSWR from 'swr'
 
 import { Button } from '@/components/ui/Buttons'
 import { InputWithError } from '@/components/ui/form/Input'
@@ -12,6 +13,8 @@ import { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 const Main = ({ uid }: { uid?: string }) => {
   const { catalogueCategoryImage } = useEndpoint({ uid: uid })
+  const { data: categoryImage } = useSWR(catalogueCategoryImage)
+
   const [showImageUid, setShowImage] = useState<boolean>(!!uid)
   const { register, watch, setValue, formState } =
     useFormContext<CategoryFormType>()
@@ -45,11 +48,11 @@ const Main = ({ uid }: { uid?: string }) => {
     <div className="flex flex-row pb-5">
       {showImageUid ? (
         <div className="mt-1 flex-col justify-center  border-gray-300 ">
-          <Image width={200} height={200} alt="" src={catalogueCategoryImage} />
+          <Image width={200} height={200} alt="" src={categoryImage} />
           <Button
             onClick={() => {
               setShowImage(false)
-              setValue('image', '')
+              setValue('image', 'deleted')
             }}
             className="w-full justify-center"
             rounded="rounded-b-md"
@@ -57,7 +60,7 @@ const Main = ({ uid }: { uid?: string }) => {
             <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
           </Button>
         </div>
-      ) : !image ? (
+      ) : !image || image === 'deleted' ? (
         <label
           htmlFor="file-upload"
           {...getRootProps()}
