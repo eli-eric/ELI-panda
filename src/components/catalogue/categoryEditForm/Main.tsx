@@ -27,7 +27,9 @@ const FormImage = ({ image, onDelete }) => (
 
 const Main = ({ uid }: { uid?: string }) => {
   const { catalogueCategoryImage } = useEndpoint({ uid: uid })
-  const { data: categoryImage } = useSWR(uid && catalogueCategoryImage)
+  const { data: categoryImage } = useSWR(
+    uid ? catalogueCategoryImage : undefined,
+  )
 
   const [showImageUid, setShowImage] = useState<boolean>(!!uid)
   const { register, watch, setValue, formState, unregister } =
@@ -52,7 +54,6 @@ const Main = ({ uid }: { uid?: string }) => {
   const name = watch('name')
 
   useEffect(() => {
-    console.log(image)
     const codeValue = name ? name.replace(/\s+/g, '-').toLowerCase() : ''
     setValue('code', codeValue)
   }, [name, setValue, categoryImage, image])

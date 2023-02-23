@@ -66,6 +66,8 @@ const CategoryEditModal = ({ setopen, parentPath = '', uid }: Props) => {
       }
   }, [response, setopen, error])
 
+  console.log(uid)
+
   return (
     <Fragment>
       <ErrorBoundary fallback={<ErrorPage />}>
