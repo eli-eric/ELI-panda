@@ -65,6 +65,7 @@ export const messages = {
       header: {
         uid: 'UID',
         name: 'Name',
+        select: 'Select Item',
         description: 'Description',
         categoryName: 'Category name',
         manufactorer: 'Manufacturer',
@@ -161,6 +162,16 @@ export const messages = {
         buttons: {
           continue: 'Save',
           cancel: 'Cancel',
+        },
+      },
+    },
+    catalogueItem: {
+      addButton: 'Find Catalogue Item',
+      addItemModal: {
+        tableHeader: {
+          name: 'Name',
+          type: 'System Type',
+          path: 'System Code Path',
         },
       },
     },

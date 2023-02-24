@@ -65,7 +65,7 @@ export const Prompt = (props: {
       <input
         ref={ref}
         name="prompt"
-        className="w-full h-full px-2 rounded-md border border-gray-300 "
+        className="w-full h-8 px-2 rounded-md border border-gray-300 "
         onChange={e => {
           if (e.target.value === '') {
             setQuery('')

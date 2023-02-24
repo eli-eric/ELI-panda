@@ -18,15 +18,15 @@ interface Props {
 const GenButton = props => {
   const { type, children, onClick, testId: testid, primary } = props
   return (
-    <button
+    <Button
+      className="inline-flex w-full justify-center sm:col-start-2 sm:mt-0 sm:text-sm"
       data-testid={testid + '-modal-button-go-next'}
-      className={`inline-flex w-full justify-center rounded-md border border-transparent ${
-        primary && 'bg-primary-600'
-      } px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm`}
+      onClick={onClick}
+      primary={primary}
       type={type}
     >
       {children}
-    </button>
+    </Button>
   )
 }
 
@@ -52,7 +52,7 @@ const ModalButtonsComponent = ({ setOpen, testid, buttons }: Props) => {
       {buttons && (
         <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
           <Button
-            type="submit"
+            type={buttons.goBack?.type}
             primary
             onClick={buttons.goNext?.onClick}
             loading={buttons.goNext?.loading}

@@ -8,19 +8,18 @@ import { Fragment, Suspense, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import useSWR from 'swr/immutable'
 
-import ItemDetailComponent from '@/components/catalogueItem/item-detail.comp'
 import ErrorPage from '@/components/error/ErrorPage'
 import Breadcrumbs from '@/components/systems/Breadcrumbs'
+import CatalogueItemSection from '@/components/systems/catalogueItemSection/CatalogueItemSection'
 import Description from '@/components/systems/Description'
 import SystemDetail from '@/components/systems/Detail'
 import Edit from '@/components/systems/Edit'
 import Preview from '@/components/systems/Preview'
-import Relations from '@/components/systems/relations/Relations'
+import RelationsSection from '@/components/systems/relationsSection/RelationsSection'
 import { Prompt, Results } from '@/components/systems/Search'
 import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
 import ViewControl from '@/components/systems/ViewControl'
-import Button from '@/components/ui/Buttons'
 import Card, { Heading } from '@/components/ui/card/card.comp'
 import LoaderComponent from '@/components/ui/loader.comp'
 import ModalComponent from '@/components/ui/modal/modal.comp'
@@ -54,7 +53,7 @@ export const getFakeSystem = (): System => {
     systemAlias: faker.datatype.string(),
     locationCode: faker.datatype.string(),
     ownerUID: faker.datatype.string(),
-    catalogueUID: faker.datatype.uuid(),
+    catalogueUID: undefined,
   }
 }
 
@@ -65,7 +64,7 @@ export const fetchFakeSystem = async () => {
   return getFakeSystem()
 }
 export const fetchFakeSystems = async () => {
-  const res = [...Array(faker.datatype.number({ min: 0, max: 20 }))]
+  const res = [...Array(faker.datatype.number({ min: 0, max: 5 }))]
   await sleep(faker.datatype.number({ min: 200, max: 2000 }))
   return res.map(() => getFakeSystem())
 }
@@ -93,7 +92,7 @@ const Page: NextPage = () => {
   const [view, setView] = useState<{
     system: boolean
     relations: boolean
-    catalogueItem: boolean | undefined
+    catalogueItem: boolean
   }>({
     system: true,
     relations: true,
@@ -119,7 +118,7 @@ const Page: NextPage = () => {
         <title>{data.name}</title>
       </Head>
 
-      <div className="p-2 lg:p-4 flex flex-wrap">
+      <div className="p-4 lg:p-8 flex flex-wrap">
         <nav className="p-1 lg:p-2 w-full">
           <Suspense
             fallback={
@@ -134,12 +133,12 @@ const Page: NextPage = () => {
 
         <div className="lg:px-3 flex flex-wrap w-full justify-between gap-4">
           <Title data={data} />
+          <div className="-mt-2">
+            <ViewControl setView={setView} view={view} />
+          </div>
           <div className="w-96">
             <Prompt query={query as string} setQuery={setQuery} />
           </div>
-          <Button onClick={() => setIsEditing('current')}>
-            <PencilSquareIcon className="h-6" />
-          </Button>
         </div>
 
         {query && (
@@ -147,10 +146,6 @@ const Page: NextPage = () => {
             <Results query={query} />
           </div>
         )}
-
-        <div className="w-full">
-          <ViewControl setView={setView} view={view} />
-        </div>
 
         <aside className="w-full lg:w-1/4">
           <Card>
@@ -171,32 +166,37 @@ const Page: NextPage = () => {
           </Card>
         </aside>
 
-        <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
+        <main className={`w-full lg:w-3/4`}>
           {view.system && (
-            <article>
-              <Card>
-                <Heading>Detail</Heading>
+            <Card>
+              <Heading
+                action={{
+                  label: <PencilSquareIcon className="h-6" />,
+                  onClick: () => setIsEditing('current'),
+                }}
+              >
+                Detail
+              </Heading>
 
-                <div className="flex flex-wrap lg:flex-nowrap gap-2 lg:gap-4">
-                  <section>
-                    <Preview image={data.image} alt={data.name} />
-                  </section>
+              <div className="flex flex-wrap lg:flex-nowrap gap-2 lg:gap-4">
+                <section>
+                  <Preview image={data.image} alt={data.name} />
+                </section>
 
-                  <section>
-                    <SystemDetail data={data} />
-                    <Description data={data} />
-                  </section>
-                </div>
-              </Card>
-            </article>
+                <section>
+                  <SystemDetail data={data} />
+                  <Description data={data} />
+                </section>
+              </div>
+            </Card>
           )}
 
-          {data.catalogueUID && view.catalogueItem && (
+          {view.catalogueItem && (
             <Card>
               <Heading>Cataloue Item</Heading>
               <ErrorBoundary fallback={<ErrorPage />}>
                 <Suspense fallback={<LoaderComponent />}>
-                  <ItemDetailComponent uid={data.catalogueUID} />
+                  <CatalogueItemSection uid={data.catalogueUID} />
                 </Suspense>
               </ErrorBoundary>
             </Card>
@@ -207,7 +207,7 @@ const Page: NextPage = () => {
               <Heading>Relations</Heading>
               <ErrorBoundary fallback={<ErrorPage />}>
                 <Suspense fallback={<ProgressBarComponent />}>
-                  <Relations uid={data.uid} systemName={data.name} />
+                  <RelationsSection uid={data.uid} systemName={data.name} />
                 </Suspense>
               </ErrorBoundary>
             </Card>

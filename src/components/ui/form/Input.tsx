@@ -13,7 +13,6 @@ interface InputWithErrorProps<T extends FieldValues>
   name: string
   isError?: boolean
   placeholder?: string
-  type?: string
   disabled?: boolean
   rounded?:
     | 'rounded-l-md'
@@ -84,10 +83,10 @@ export const TextareaWithError = <T extends FieldValues>({
   <div className="block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm">
     <textarea
       {...restProps}
-      rows={4}
+      rows={6}
       disabled={disabled}
       placeholder={placeholder}
-      className={`h-44 block w-full appearance-none ${rounded} border ${
+      className={`block w-full appearance-none ${rounded} border ${
         isError ? 'border-red-500' : 'border-gray-300'
       } px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm ${
         disabled ? 'bg-gray-100' : ''

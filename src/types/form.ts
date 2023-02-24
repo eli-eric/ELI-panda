@@ -13,7 +13,8 @@ export type ModalButtons = {
 export type Button = {
   text: string
   loading?: boolean
-  onClick: (data: unknown | undefined) => void
+  type?: 'button' | 'submit' | 'reset' | undefined
+  onClick?: (data: unknown | undefined) => void
 }
 
 export interface FormChildrenProps<T extends FieldValues = FieldValues> {

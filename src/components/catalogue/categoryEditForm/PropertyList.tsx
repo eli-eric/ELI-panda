@@ -31,7 +31,7 @@ const PropertyList = ({ name, errors }: Props) => {
               index={index}
               name={`${name}.properties.${index}`}
               length={fields.length}
-              errors={errors?.properties && errors?.properties[index]}
+              errors={errors?.properties && (errors?.properties[index] as any)}
             />
           </li>
         ))}

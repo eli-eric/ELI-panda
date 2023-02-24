@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "PORT=5001 next start",
     "lint": "next lint",
-    "cypress:open": "cypress open"
+    "cypress:open": "cypress open",
+    "e2e": "start-server-and-test dev http://localhost:5001 \"cypress run --e2e\""
   },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
