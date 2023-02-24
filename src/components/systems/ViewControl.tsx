@@ -19,7 +19,6 @@ export default function ViewControl({
 }) {
   return (
     <div className="flex justify-end py-3 px-3">
-      Display options:
       <fieldset className="space-x-5 flex flex-row">
         <legend className="sr-only">View</legend>
         <div className="relative flex items-start">
@@ -36,7 +35,7 @@ export default function ViewControl({
                   system: !viewControl.system,
                 }))
               }
-              className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500"
             />
           </div>
           <div className="ml-3 text-sm">
@@ -60,11 +59,11 @@ export default function ViewControl({
                   relations: !viewControl.relations,
                 }))
               }
-              className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500"
             />
           </div>
           <div className="ml-3 text-sm">
-            <label className="font-medium text-gray-700">Relations</label>
+            <label className="font-medium text-gray-600">Relations</label>
             <span id="candidates-description" className="text-gray-500">
               <span className="sr-only">Relations </span>
             </span>
@@ -85,7 +84,7 @@ export default function ViewControl({
                   catalogueItem: !viewControl.catalogueItem,
                 }))
               }
-              className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500"
             />
           </div>
           <div className="ml-3 text-sm">

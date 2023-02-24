@@ -20,7 +20,6 @@ import { Prompt, Results } from '@/components/systems/Search'
 import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
 import ViewControl from '@/components/systems/ViewControl'
-import Button from '@/components/ui/Buttons'
 import Card, { Heading } from '@/components/ui/card/card.comp'
 import LoaderComponent from '@/components/ui/loader.comp'
 import ModalComponent from '@/components/ui/modal/modal.comp'
@@ -65,7 +64,7 @@ export const fetchFakeSystem = async () => {
   return getFakeSystem()
 }
 export const fetchFakeSystems = async () => {
-  const res = [...Array(faker.datatype.number({ min: 0, max: 20 }))]
+  const res = [...Array(faker.datatype.number({ min: 0, max: 7 }))]
   await sleep(faker.datatype.number({ min: 200, max: 2000 }))
   return res.map(() => getFakeSystem())
 }
@@ -119,7 +118,7 @@ const Page: NextPage = () => {
         <title>{data.name}</title>
       </Head>
 
-      <div className="p-2 lg:p-4 flex flex-wrap">
+      <div className="p-4 lg:p-8 flex flex-wrap">
         <nav className="p-1 lg:p-2 w-full">
           <Suspense
             fallback={
@@ -134,12 +133,12 @@ const Page: NextPage = () => {
 
         <div className="lg:px-3 flex flex-wrap w-full justify-between gap-4">
           <Title data={data} />
+          <div className="-mt-2">
+            <ViewControl setView={setView} view={view} />
+          </div>
           <div className="w-96">
             <Prompt query={query as string} setQuery={setQuery} />
           </div>
-          <Button onClick={() => setIsEditing('current')}>
-            <PencilSquareIcon className="h-6" />
-          </Button>
         </div>
 
         {query && (
@@ -147,10 +146,6 @@ const Page: NextPage = () => {
             <Results query={query} />
           </div>
         )}
-
-        <div className="w-full">
-          <ViewControl setView={setView} view={view} />
-        </div>
 
         <aside className="w-full lg:w-1/4">
           <Card>
@@ -171,24 +166,29 @@ const Page: NextPage = () => {
           </Card>
         </aside>
 
-        <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
+        <main className={`w-full lg:w-3/4`}>
           {view.system && (
-            <article>
-              <Card>
-                <Heading>Detail</Heading>
+            <Card>
+              <Heading
+                action={{
+                  label: <PencilSquareIcon className="h-6" />,
+                  onClick: () => setIsEditing('current'),
+                }}
+              >
+                Detail
+              </Heading>
 
-                <div className="flex flex-wrap lg:flex-nowrap gap-2 lg:gap-4">
-                  <section>
-                    <Preview image={data.image} alt={data.name} />
-                  </section>
+              <div className="flex flex-wrap lg:flex-nowrap gap-2 lg:gap-4">
+                <section>
+                  <Preview image={data.image} alt={data.name} />
+                </section>
 
-                  <section>
-                    <SystemDetail data={data} />
-                    <Description data={data} />
-                  </section>
-                </div>
-              </Card>
-            </article>
+                <section>
+                  <SystemDetail data={data} />
+                  <Description data={data} />
+                </section>
+              </div>
+            </Card>
           )}
 
           {view.catalogueItem && (
