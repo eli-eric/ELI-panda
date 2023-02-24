@@ -1,7 +1,9 @@
+import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 import { InputWithError } from 'src/components/ui/form/Input'
-import { PlusIconButton, TrashIconButton } from '@/components/ui/Buttons'
-import { CatalogueFormType, Group } from '@/types/catalogue/catalogueTypes'
+
+import { Button } from '@/components/ui/Buttons'
+import { CategoryFormType, Group } from '@/types/catalogue/categoryFormTypes'
 
 import PropertyList from './PropertyList'
 
@@ -14,7 +16,7 @@ interface groupProps {
 }
 
 const Group = ({ name, remove, index, errors }: groupProps) => {
-  const { register } = useFormContext<CatalogueFormType>()
+  const { register } = useFormContext<CategoryFormType>()
   const handleRemoveGroup = () => {
     remove(index)
   }
@@ -30,10 +32,12 @@ const Group = ({ name, remove, index, errors }: groupProps) => {
               register={register}
               name={`${name}.name`}
               placeholder="group name"
-              isError={!errors?.name?.message}
+              isError={!!errors?.name?.message}
               rounded="rounded-l-md"
             />
-            <TrashIconButton onClickAction={handleRemoveGroup} />
+            <Button rounded="rounded-r-md" onClick={handleRemoveGroup}>
+              <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+            </Button>
           </span>
         </div>
       </div>
@@ -47,13 +51,13 @@ const Group = ({ name, remove, index, errors }: groupProps) => {
 }
 
 const GroupList = () => {
-  const { control, formState } = useFormContext<CatalogueFormType>()
+  const { control, formState } = useFormContext<CategoryFormType>()
   const { fields, append, remove } = useFieldArray({ control, name: 'groups' })
 
   const handleAddGroup = () => {
     append({
       name: '',
-      properties: [{ name: '', typeUID: '', unitUID: '', default: '' }],
+      properties: [{ name: '', typeUID: '', unitUID: '', defaultValue: '' }],
     })
   }
 
@@ -68,7 +72,8 @@ const GroupList = () => {
                   remove={remove}
                   index={index}
                   errors={
-                    formState.errors.groups && formState.errors.groups[index]
+                    formState.errors.groups &&
+                    (formState.errors.groups[index] as any)
                   }
                   name={`groups.${index}`}
                   key={field.id}
@@ -83,7 +88,9 @@ const GroupList = () => {
           <div className="w-full border-t border-gray-300" />
         </div>
         <div className="relative flex justify-center">
-          <PlusIconButton onClickAction={handleAddGroup} />
+          <Button onClick={handleAddGroup}>
+            <PlusIcon className="h-5 w-5" aria-hidden="true" />
+          </Button>
         </div>
       </div>
     </div>

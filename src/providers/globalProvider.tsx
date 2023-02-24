@@ -12,7 +12,8 @@ interface Props {
 
 const GlobalProvider = ({ children }: Props) => {
   const { data } = useSession()
-  axios.defaults.headers.common['authorization'] = 'Bearer ' + data?.user.apiAccessToken
+  axios.defaults.headers.common['authorization'] =
+    'Bearer ' + data?.user.apiAccessToken
   return (
     <SWRConfig
       value={{

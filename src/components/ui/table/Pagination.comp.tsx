@@ -4,6 +4,8 @@ import { FormattedMessage } from 'react-intl'
 import { createMessageValues } from 'src/helpers/formatters'
 import { message } from 'src/i18n/src/messages'
 
+import { Button } from '@/components/ui/Buttons'
+
 const text = message.cataloguePage.pagination.text
 
 interface Props {
@@ -16,7 +18,7 @@ interface Props {
   nextPageHandler: MouseEventHandler<HTMLButtonElement>
 }
 
-export default function ItemsPaginationComponent({
+export default function PaginationComponent({
   itemsTotalCount,
   page,
   pageSize,
@@ -53,25 +55,17 @@ export default function ItemsPaginationComponent({
         </p>
       </div>
       <div className="flex flex-1 justify-between sm:justify-end">
-        <button
-          disabled={previousIsDisabled}
-          onClick={previousPageHandler}
-          className={`relative inline-flex items-center rounded-md border border-gray-300  px-4 py-2 ${
-            previousIsDisabled ? 'bg-gray-200' : 'hover:bg-gray-50'
-          }`}
-        >
+        <Button disabled={previousIsDisabled} onClick={previousPageHandler}>
           <ChevronLeftIcon className="h-6 w-6 flex-shrink-0" />
-        </button>
+        </Button>
 
-        <button
+        <Button
           disabled={nextIsDisabled}
           onClick={nextPageHandler}
-          className={`relative ml-3 inline-flex items-center rounded-md border border-gray-300  px-4 py-2 ${
-            nextIsDisabled ? 'bg-gray-200' : 'hover:bg-gray-50'
-          }`}
+          className="ml-3"
         >
           <ChevronRightIcon className="h-6 w-6 flex-shrink-0" />
-        </button>
+        </Button>
       </div>
     </nav>
   )

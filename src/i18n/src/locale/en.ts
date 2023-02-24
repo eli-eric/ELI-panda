@@ -1,6 +1,18 @@
 export const messages = {
   common: {
-    buttons: { close: 'Close' },
+    buttons: {
+      close: 'Close',
+      continue: 'Continue',
+      cancel: 'Cancel',
+      save: 'Save',
+      home: 'Go Home',
+    },
+    custom404: {
+      title: '404',
+      notFound: 'Page not found',
+      message:
+        'Please check the URL in the address bar and try again.Probably you have no permission.',
+    },
   },
   layout: {
     login: 'Log In',
@@ -53,6 +65,7 @@ export const messages = {
       header: {
         uid: 'UID',
         name: 'Name',
+        select: 'Select Item',
         description: 'Description',
         categoryName: 'Category name',
         manufactorer: 'Manufacturer',
@@ -149,6 +162,16 @@ export const messages = {
         buttons: {
           continue: 'Save',
           cancel: 'Cancel',
+        },
+      },
+    },
+    catalogueItem: {
+      addButton: 'Find Catalogue Item',
+      addItemModal: {
+        tableHeader: {
+          name: 'Name',
+          type: 'System Type',
+          path: 'System Code Path',
         },
       },
     },

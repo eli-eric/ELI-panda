@@ -1,9 +1,15 @@
-import { ChevronRightIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import {
+  ChevronRightIcon,
+  PencilSquareIcon,
+  PlusIcon,
+  TrashIcon,
+} from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 import CategoryEditModal from '@/components/catalogue/categoryEditForm/CategoryEditModal'
-import { IconButton, PlusIconButton } from '@/components/ui/Buttons'
+import ErrorPage from '@/components/error/ErrorPage'
+import { Button } from '@/components/ui/Buttons'
 import ModalComponent from '@/components/ui/modal/modal.comp'
 import ModalWarningComponent from '@/components/ui/modal/warning/modal-warning.comp'
 import { ROLE } from '@/types/constants/roles'
@@ -14,7 +20,7 @@ import useSubmit from '../useSubmit'
 
 export const useCategoryEdit = ({
   editUid,
-  catalogueParentPath
+  catalogueParentPath,
 }: {
   editUid?: string
   catalogueParentPath?: string | undefined
@@ -24,51 +30,83 @@ export const useCategoryEdit = ({
   const [openNew, setOpenNew] = useState(false)
 
   const { data: session } = useSession()
-  const { catalogueCategoryEdit } = useEndpoint({ uid: editUid })
-  const { submit } = useSubmit({ endpoint: catalogueCategoryEdit, method: 'delete' })
+  const { catalogueCategoryEdit, catalogueCategories } = useEndpoint({
+    uid: editUid,
+    path: '/' + catalogueParentPath,
+  })
+  const { submit, loading, error, response } = useSubmit({
+    endpoint: catalogueCategoryEdit,
+    method: 'delete',
+    mutateList: [catalogueCategories],
+  })
 
   const deletModalButtons: ModalButtons = {
     goNext: {
-      text: 'continue',
+      text: 'Continue',
+      loading: loading,
       onClick: () => {
         submit()
-        setOpenDelete(false)
-      }
+      },
     },
     goBack: {
-      text: 'cancel',
-      onClick: () => setOpenDelete(false)
-    }
+      text: 'Cancel',
+      onClick: () => setOpenDelete(false),
+    },
   }
+
+  useEffect(() => {
+    if (response)
+      if (!error) {
+        setOpenDelete(false)
+      }
+  }, [response, setOpenDelete, error])
 
   const getEditDeleteButtons = () => {
     return (
       <Fragment>
         {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
           <div className="relative flex flex-col justify-center z-0">
-            <IconButton
+            <Button
               rounded="rounded-t-md"
-              onClickAction={() => {
+              onClick={() => {
                 setOpenEdit(true)
               }}
             >
               <PencilSquareIcon className="h-6 w-6" aria-hidden="true" />
-            </IconButton>
-            <IconButton
+            </Button>
+            <Button
               rounded="rounded-b-md"
-              onClickAction={() => {
+              onClick={() => {
                 setOpenDelete(true)
               }}
             >
               <TrashIcon className="h-6 w-6 text-red-700" aria-hidden="true" />
-            </IconButton>
+            </Button>
           </div>
         )}
-        <ModalComponent open={openEdit} setOpen={setOpenEdit} buttons={{ noButtons: true }} testid="catalogueEdit">
-          <CategoryEditModal setopen={setOpenEdit} uid={editUid} />
+        <ModalComponent
+          open={openEdit}
+          setOpen={setOpenEdit}
+          buttons={{ noButtons: true }}
+          testid="catalogueEdit"
+        >
+          <CategoryEditModal
+            setopen={setOpenEdit}
+            uid={editUid}
+            parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
+          />
         </ModalComponent>
-        <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deletModalButtons} testid="catalogueEdit">
-          <ModalWarningComponent title="Warning" message="Are you sure you want to remove this Category?" />
+        <ModalComponent
+          open={openDelete}
+          setOpen={setOpenDelete}
+          buttons={deletModalButtons}
+          testid="catalogueEdit"
+        >
+          <ModalWarningComponent
+            title="Warning"
+            message="Are you sure you want to remove this Category?"
+          />
+          {error && <ErrorPage />}
         </ModalComponent>
       </Fragment>
     )
@@ -80,17 +118,30 @@ export const useCategoryEdit = ({
         {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
           <li className="flex">
             <div className="flex items-center">
-              <ChevronRightIcon className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400" aria-hidden="true" />
-              <PlusIconButton
-                onClickAction={() => {
+              <ChevronRightIcon
+                className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400"
+                aria-hidden="true"
+              />
+              <Button
+                onClick={() => {
                   setOpenNew(true)
                 }}
-              />
+              >
+                <PlusIcon className="h-5 w-5" aria-hidden="true" />
+              </Button>
             </div>
           </li>
         )}
-        <ModalComponent open={openNew} setOpen={setOpenNew} buttons={{ noButtons: true }} testid="catalogueEdit">
-          <CategoryEditModal setopen={setOpenNew} parentPath={catalogueParentPath} />
+        <ModalComponent
+          open={openNew}
+          setOpen={setOpenNew}
+          buttons={{ noButtons: true }}
+          testid="catalogueEdit"
+        >
+          <CategoryEditModal
+            setopen={setOpenNew}
+            parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
+          />
         </ModalComponent>
       </Fragment>
     )

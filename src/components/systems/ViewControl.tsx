@@ -1,25 +1,24 @@
 import { Dispatch, SetStateAction } from 'react'
 
 export default function ViewControl({
-  viewControl,
-  setViewControl,
+  view: viewControl,
+  setView: setViewControl,
 }: {
-  viewControl: {
+  view: {
     system: boolean
     relations: boolean
-    catalogueItem: boolean | undefined
+    catalogueItem: boolean
   }
-  setViewControl: Dispatch<
+  setView: Dispatch<
     SetStateAction<{
       system: boolean
       relations: boolean
-      catalogueItem: boolean | undefined
+      catalogueItem: boolean
     }>
   >
 }) {
   return (
     <div className="flex justify-end py-3 px-3">
-      Display options:
       <fieldset className="space-x-5 flex flex-row">
         <legend className="sr-only">View</legend>
         <div className="relative flex items-start">
@@ -36,7 +35,7 @@ export default function ViewControl({
                   system: !viewControl.system,
                 }))
               }
-              className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500"
             />
           </div>
           <div className="ml-3 text-sm">
@@ -60,44 +59,41 @@ export default function ViewControl({
                   relations: !viewControl.relations,
                 }))
               }
-              className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500"
             />
           </div>
           <div className="ml-3 text-sm">
-            <label className="font-medium text-gray-700">Relations</label>
+            <label className="font-medium text-gray-600">Relations</label>
             <span id="candidates-description" className="text-gray-500">
               <span className="sr-only">Relations </span>
             </span>
           </div>
         </div>
-        {viewControl.catalogueItem !== undefined && (
-          <div className="relative flex items-start">
-            <div className="flex h-5 items-center">
-              <input
-                id="catalogueItem"
-                aria-describedby="candidates-description"
-                name="catalogueItem"
-                type="checkbox"
-                defaultChecked={viewControl.catalogueItem}
-                onClick={() =>
-                  setViewControl(viewControl => ({
-                    ...viewControl,
-                    catalogueItem: !viewControl.catalogueItem,
-                  }))
-                }
-                className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-              />
-            </div>
-            <div className="ml-3 text-sm">
-              <label className="font-medium text-gray-700">
-                Catalogue Item
-              </label>
-              <span id="candidates-description" className="text-gray-500">
-                <span className="sr-only">Catalogue Item</span>
-              </span>
-            </div>
+
+        <div className="relative flex items-start">
+          <div className="flex h-5 items-center">
+            <input
+              id="catalogueItem"
+              aria-describedby="candidates-description"
+              name="catalogueItem"
+              type="checkbox"
+              defaultChecked={viewControl.catalogueItem}
+              onClick={() =>
+                setViewControl(viewControl => ({
+                  ...viewControl,
+                  catalogueItem: !viewControl.catalogueItem,
+                }))
+              }
+              className="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500"
+            />
           </div>
-        )}
+          <div className="ml-3 text-sm">
+            <label className="font-medium text-gray-700">Catalogue Item</label>
+            <span id="candidates-description" className="text-gray-500">
+              <span className="sr-only">Catalogue Item</span>
+            </span>
+          </div>
+        </div>
       </fieldset>
     </div>
   )

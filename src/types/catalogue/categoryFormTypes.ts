@@ -7,7 +7,7 @@ export type Property = {
   name: string
   typeUID: string
   unitUID: string
-  default: string
+  defaultValue: string
   listOfValues?: Value[] | string[]
 }
 export type Group = {
@@ -16,19 +16,11 @@ export type Group = {
   properties: Property[]
 }
 
-export type CatalogueFormType = {
+export type CategoryFormType = {
   parentPath?: string
   uid?: string
   name: string
   code: string
   image?: string
-  groups: Group[]
-}
-
-export type CatalogueCategoryResponse = {
-  parentUid?: string
-  name: string
-  code: string
-  image: string
   groups: Group[]
 }

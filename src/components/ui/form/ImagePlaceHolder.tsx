@@ -1,0 +1,24 @@
+import { ImageIcon } from '../SvgIcons'
+
+const ImagePlaceHolder = ({ getRootProps, getInputProps }) => {
+  return (
+    <label
+      htmlFor="file-upload"
+      {...getRootProps()}
+      className="mt-1 cursor-pointer justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2"
+    >
+      <div className="space-y-1 text-center">
+        <div className=" text-sm text-gray-600">
+          <ImageIcon />
+          <div className="relative  rounded-md bg-white font-medium text-primary-600">
+            <span>Upload a file</span>
+            <input {...getInputProps()} name="image" className="sr-only" />
+          </div>
+        </div>
+        <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
+      </div>
+    </label>
+  )
+}
+
+export default ImagePlaceHolder

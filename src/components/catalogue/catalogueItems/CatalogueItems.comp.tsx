@@ -1,3 +1,4 @@
+import { Selectable } from '@/components/systems/catalogueItemSection/catalogueItemsForm/CatalogueItemsTable'
 import { CatalogueItemsResponse } from '@/types/responses'
 
 import ItemListHeaderComponent from './header/item-list-header.comp'
@@ -6,11 +7,13 @@ import ItemListRow from './row/item-list-row.comp'
 interface Props {
   catalogueItems?: CatalogueItemsResponse
   categoryListLength?: number
+  selectable?: Selectable
 }
 
 const CatalogueItemsComponent = ({
   categoryListLength,
   catalogueItems,
+  selectable,
 }: Props) => {
   return (
     <div className="-my-2  sm:-mx-6 lg:-mx-8">
@@ -19,14 +22,16 @@ const CatalogueItemsComponent = ({
           <table className="min-w-full divide-y divide-gray-300">
             <ItemListHeaderComponent
               categoryListLength={categoryListLength}
+              isSelectable={selectable?.isSelectable}
               details={catalogueItems?.data[0]?.details}
             />
             <tbody className="bg-white">
               {catalogueItems?.data.map((item, index) => (
                 <ItemListRow
-                  key={index}
+                  key={index + item.uid}
                   item={item}
                   index={index}
+                  selectable={selectable}
                   categoryListLength={categoryListLength}
                 />
               ))}

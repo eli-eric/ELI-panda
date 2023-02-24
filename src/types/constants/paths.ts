@@ -1,5 +1,5 @@
 export enum PATH {
-  ROOT = '',
+  ROOT = '/',
   DASHBOARD = '/dashboard',
   CATALOGUE = '/catalogue',
   SYSTEMS = '/systems',

@@ -8,13 +8,23 @@ const messages = message.cataloguePage.itemList.header
 interface Props {
   categoryListLength: number | undefined
   details?: CatalogueItemDetail[]
+  isSelectable?: boolean
 }
 
-const ItemListHeaderComponent = ({ categoryListLength, details }: Props) => {
+const ItemListHeaderComponent = ({
+  categoryListLength,
+  details,
+  isSelectable,
+}: Props) => {
   const intl = useIntl()
   return (
     <thead className="bg-gray-50">
       <tr>
+        {isSelectable && (
+          <ItemListColumnTitleComponent
+            title={intl.formatMessage({ id: messages.select })}
+          />
+        )}
         <ItemListColumnTitleComponent
           title={intl.formatMessage({ id: messages.name })}
         />
@@ -24,9 +34,9 @@ const ItemListHeaderComponent = ({ categoryListLength, details }: Props) => {
         {categoryListLength === 0 &&
           details &&
           details.length !== 0 &&
-          details.map(item => (
+          details.map((item, index) => (
             <ItemListColumnTitleComponent
-              key={item.propertyName}
+              key={item.propertyName + index}
               title={item.propertyName}
             />
           ))}
