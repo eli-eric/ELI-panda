@@ -1,10 +1,6 @@
-const Description = ({ data, isEditMode, register }) => {
+const Description = ({ data }) => {
   const { description } = data
-  return isEditMode ? (
-    <textarea rows="8" className="w-full" {...register('description')} />
-  ) : (
-    <p className="w-full">{description}</p>
-  )
+  return <p className="px-3 w-full">{description}</p>
 }
 
 export default Description

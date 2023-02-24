@@ -1,15 +1,15 @@
 import { Dispatch, SetStateAction } from 'react'
 
 export default function ViewControl({
-  viewControl,
-  setViewControl,
+  view: viewControl,
+  setView: setViewControl,
 }: {
-  viewControl: {
+  view: {
     system: boolean
     relations: boolean
     catalogueItem: boolean
   }
-  setViewControl: Dispatch<
+  setView: Dispatch<
     SetStateAction<{
       system: boolean
       relations: boolean
