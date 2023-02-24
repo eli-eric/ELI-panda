@@ -34,6 +34,7 @@ const SystemItemForm = ({ itemName }: { itemName?: string }) => {
           name="catalogueItemUID"
           label="Catalogue Item"
           disabled
+          padding
           rounded="rounded-md"
         />
         <SelectWithError
@@ -42,6 +43,7 @@ const SystemItemForm = ({ itemName }: { itemName?: string }) => {
           label="Item Usage UID"
           placeholder="Item Usage UID"
           rounded="rounded-md"
+          padding
           options={itemUsageUID}
         />
       </div>
@@ -52,6 +54,7 @@ const SystemItemForm = ({ itemName }: { itemName?: string }) => {
             name="eun"
             label="EUN"
             placeholder="EUN"
+            padding
             rounded="rounded-md"
           />
           <InputWithError
@@ -59,6 +62,7 @@ const SystemItemForm = ({ itemName }: { itemName?: string }) => {
             name="name"
             label="Name"
             placeholder="Name"
+            padding
             rounded="rounded-md"
           />
           <InputWithError
@@ -66,6 +70,7 @@ const SystemItemForm = ({ itemName }: { itemName?: string }) => {
             name="serialNumber"
             label="Serial Number"
             placeholder="Serial Number"
+            padding
             rounded="rounded-md"
           />
         </div>
@@ -75,6 +80,7 @@ const SystemItemForm = ({ itemName }: { itemName?: string }) => {
             name="batchNumber"
             label="Batch Number"
             placeholder="Batch Number"
+            padding
             rounded="rounded-md"
           />
           <SelectWithError
@@ -83,6 +89,7 @@ const SystemItemForm = ({ itemName }: { itemName?: string }) => {
             label="Obsolote"
             placeholder="Obsolete"
             rounded="rounded-md"
+            padding
             defaultValue={'false'}
             options={[{ value: 'false' }, { value: 'true' }]}
           />
@@ -92,6 +99,7 @@ const SystemItemForm = ({ itemName }: { itemName?: string }) => {
             label="Eestimated Life TimeMonthsUN"
             placeholder="Estimated Life TimeMonths"
             rounded="rounded-md"
+            padding
             type="number"
           />
         </div>

@@ -47,6 +47,7 @@ interface SelectWithErrorProps<T extends FieldValues>
   > {
   register: UseFormRegister<T>
   name: string
+  padding?: boolean
   isError?: boolean
   label?: string
   disabled?: boolean
@@ -66,10 +67,16 @@ export const SelectWithError = <T extends FieldValues>({
   options,
   rounded,
   label,
+  padding,
   disabled,
+  className,
   ...rest
 }: SelectWithErrorProps<T>) => (
-  <div className="block relative w-full appearance-none placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm">
+  <div
+    className={`${
+      padding && 'px-1'
+    } block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
+  >
     {label && (
       <label className="text-sm font-medium text-gray-700">{label}</label>
     )}
@@ -77,7 +84,7 @@ export const SelectWithError = <T extends FieldValues>({
       {...rest}
       options={options}
       disabled={disabled}
-      className={`block w-full ${
+      className={`${className} block w-full ${
         disabled ? 'bg-gray-100' : ''
       } appearance-none ${rounded} border ${
         isError ? 'border-red-500' : 'border-gray-300'
