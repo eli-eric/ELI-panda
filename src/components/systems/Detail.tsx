@@ -7,7 +7,7 @@ const DISPLAY = [
   'ownerUID',
 ]
 
-const SystemDetail = ({ data, isEditMode, register }) => {
+const SystemDetail = ({ data }) => {
   const rows = Object.entries(data).filter(([title]) => DISPLAY.includes(title))
 
   return (
@@ -15,16 +15,12 @@ const SystemDetail = ({ data, isEditMode, register }) => {
       {rows.map(([title, value], idx) => (
         <div
           key={title}
-          className={`flex gap-x-4 justify-between w-full ${
+          className={`flex px-3 py-1 justify-between w-full ${
             idx % 2 && 'bg-gray-100'
           }`}
         >
-          <div className="text-sm font-medium text-gray-400">{title}</div>
-          {isEditMode ? (
-            <input {...register(title)} defaultValue={value} />
-          ) : (
-            <div>{value as String}</div>
-          )}
+          <div>{title}</div>
+          <div>{value as String}</div>
         </div>
       ))}
     </div>

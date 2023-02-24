@@ -52,4 +52,4 @@ const B = props => (
   />
 )
 
-export default B
+export default Button

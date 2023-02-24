@@ -15,6 +15,37 @@ interface Props {
   buttons?: ModalButtons
 }
 
+const GenButton = props => {
+  const { type, children, onClick, testId: testid, primary } = props
+  return (
+    <button
+      data-testid={testid + '-modal-button-go-next'}
+      className={`inline-flex w-full justify-center rounded-md border border-transparent ${
+        primary && 'bg-primary-600'
+      } px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm`}
+      type={type}
+    >
+      {children}
+    </button>
+  )
+}
+
+export const GenericButtons = ({ buttons }: { buttons: any[] }) => (
+  <div className="mt-5 flex flex-row gap-x-5">
+    {buttons.map(({ type, value, onClick, testId, primary }, idx) => (
+      <GenButton
+        key={idx}
+        testId={testId}
+        type={type}
+        onClick={onClick}
+        primary={primary}
+      >
+        {value}
+      </GenButton>
+    ))}
+  </div>
+)
+
 const ModalButtonsComponent = ({ setOpen, testid, buttons }: Props) => {
   return (
     <Fragment>
