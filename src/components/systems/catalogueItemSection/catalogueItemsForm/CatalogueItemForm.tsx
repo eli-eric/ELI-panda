@@ -5,9 +5,13 @@ import LoaderComponent from '@/components/ui/loader.comp'
 import CatalogueItemsTable from './CatalogueItemsTable'
 import SearchItem from './SearchBar'
 
-const CatalogueItemsForm = () => {
+interface Props {
+  setItemUid: React.Dispatch<React.SetStateAction<string | undefined>>
+}
+
+const CatalogueItemsForm = ({ setItemUid }: Props) => {
   const [searchValue, setSearchValue] = useState<string | undefined>()
-  const [itemUid, setItemUid] = useState<string>()
+
   return (
     <Fragment>
       <SearchItem setSearchValue={setSearchValue} setItemUid={setItemUid} />

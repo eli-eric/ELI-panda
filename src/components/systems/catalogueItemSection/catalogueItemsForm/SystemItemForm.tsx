@@ -18,7 +18,7 @@ const itemUsageUID = [
   { value: 'f3fd12d8-d975-4aac-afb2-b9f244316d77', name: 'Other' },
 ]
 
-const SystemItemForm = () => {
+const SystemItemForm = ({ itemUid }: { itemUid?: string }) => {
   const { register } = useFormContext()
 
   return (
@@ -29,6 +29,7 @@ const SystemItemForm = () => {
           name="catalogueItemUID"
           label="Catalogue Item"
           disabled
+          value={itemUid}
           rounded="rounded-md"
         />
         <SelectWithError

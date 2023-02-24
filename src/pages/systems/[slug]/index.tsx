@@ -8,9 +8,9 @@ import { Fragment, Suspense, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import useSWR from 'swr/immutable'
 
-import ItemDetailComponent from '@/components/catalogueItem/item-detail.comp'
 import ErrorPage from '@/components/error/ErrorPage'
 import Breadcrumbs from '@/components/systems/Breadcrumbs'
+import CatalogueItemSection from '@/components/systems/catalogueItemSection/CatalogueItemSection'
 import Description from '@/components/systems/Description'
 import SystemDetail from '@/components/systems/Detail'
 import Edit from '@/components/systems/Edit'
@@ -76,7 +76,7 @@ const empty = {
   systemCode: '',
   systemAlias: '',
   locationCode: '',
-  catalogueUID: '',
+  catalogueUID: undefined,
   importanceCode: '',
   systemTypeUID: '',
   ownerUID: '',
@@ -196,7 +196,7 @@ const Page: NextPage = () => {
               <Heading>Cataloue Item</Heading>
               <ErrorBoundary fallback={<ErrorPage />}>
                 <Suspense fallback={<LoaderComponent />}>
-                  <ItemDetailComponent uid={data.catalogueUID} />
+                  <CatalogueItemSection uid={data.catalogueUID} />
                 </Suspense>
               </ErrorBoundary>
             </Card>

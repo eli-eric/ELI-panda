@@ -1,4 +1,4 @@
-import React, { Dispatch, Fragment, SetStateAction } from 'react'
+import React, { Dispatch, Fragment, SetStateAction, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 
@@ -18,6 +18,7 @@ interface Props {
 }
 
 const CatalogueItemModal = ({ setOpen, open }: Props) => {
+  const [itemUid, setItemUid] = useState<string>()
   const onSubmit = data => {
     console.log(data)
   }
@@ -32,7 +33,7 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
         buttons={{ noButtons: true }}
       >
         <Fragment>
-          <CatalogueItemsForm />
+          <CatalogueItemsForm setItemUid={setItemUid} />
           <FormProvider {...formMethods}>
             <form onSubmit={formMethods.handleSubmit(onSubmit)}>
               <SystemItemForm />
