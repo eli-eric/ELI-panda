@@ -56,7 +56,6 @@ const ItemListRow = ({
             <input
               id={`side-${item.uid}`}
               name="itemUid"
-              checked={selectable.selectedItem === item.uid}
               type="radio"
               onClick={() => {
                 selectable.setItem({ name: item.name, uid: item.uid })
