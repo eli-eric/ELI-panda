@@ -2,7 +2,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 
 import SearchBarComponent from '@/components/ui/SearchBar.comp'
 
-const SearchItem = ({ setItemUid, setSearchValue }) => {
+const SearchBar = ({ setItemUid, setSearchValue }) => {
   const searchFormMethods = useForm()
 
   const onSearchSubmit = data => {
@@ -16,4 +16,4 @@ const SearchItem = ({ setItemUid, setSearchValue }) => {
   )
 }
 
-export default SearchItem
+export default SearchBar

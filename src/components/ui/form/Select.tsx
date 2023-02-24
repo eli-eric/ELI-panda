@@ -47,7 +47,7 @@ interface SelectWithErrorProps<T extends FieldValues>
   > {
   register: UseFormRegister<T>
   name: string
-  isError: boolean
+  isError?: boolean
   label?: string
   disabled?: boolean
 

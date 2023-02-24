@@ -13,7 +13,6 @@ interface InputWithErrorProps<T extends FieldValues>
   name: string
   isError?: boolean
   placeholder?: string
-  type?: string
   disabled?: boolean
   rounded?:
     | 'rounded-l-md'

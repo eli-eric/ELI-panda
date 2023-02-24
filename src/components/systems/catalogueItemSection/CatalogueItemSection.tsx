@@ -5,7 +5,7 @@ import ItemDetailComponent from '@/components/catalogueItem/item-detail.comp'
 import { Button } from '@/components/ui/Buttons'
 import { message } from '@/i18n/src/messages'
 
-import AddCatalogueItemModal from './AddCatalogueItemModal'
+import CatalogueItemModal from './CatalogueItemModal'
 
 const { addButton } = message.systemsPage.catalogueItem
 
@@ -26,7 +26,7 @@ const CatalogueItemSection = ({ uid }: { uid?: string }) => {
           <FormattedMessage id={addButton} />
         </Button>
       )}
-      <AddCatalogueItemModal open={openAddItem} setOpen={setOpenAddItem} />
+      <CatalogueItemModal open={openAddItem} setOpen={setOpenAddItem} />
     </Fragment>
   )
 }

@@ -10,12 +10,12 @@ import useSWR from 'swr/immutable'
 import ErrorPage from '@/components/error/ErrorPage'
 import Breadcrumbs from '@/components/systems/Breadcrumbs'
 import Card from '@/components/systems/Card'
-import CatalogueItemSection from '@/components/systems/catalogueItem/CatalogueItemSection'
+import CatalogueItemSection from '@/components/systems/catalogueItemSection/CatalogueItemSection'
 import Description from '@/components/systems/Description'
 import SystemDetail from '@/components/systems/Detail'
 import FormButtons from '@/components/systems/FormButtons'
 import Preview from '@/components/systems/Preview'
-import Relations from '@/components/systems/relations/RelationsSection'
+import RelationsSection from '@/components/systems/relationsSection/RelationsSection'
 import { Prompt, Results } from '@/components/systems/Search'
 import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
@@ -220,7 +220,7 @@ const Page: NextPage = () => {
                 <Heading text="Relations" />
                 <ErrorBoundary fallback={<ErrorPage />}>
                   <Suspense fallback={<ProgressBarComponent />}>
-                    <Relations uid={data.uid} systemName={data.name} />
+                    <RelationsSection uid={data.uid} systemName={data.name} />
                   </Suspense>
                 </ErrorBoundary>
               </Card>

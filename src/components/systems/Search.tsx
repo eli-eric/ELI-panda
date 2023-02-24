@@ -55,7 +55,7 @@ export const Prompt = (props: {
 
   return (
     <form
-      className="grow"
+      className="min-w-96"
       onSubmit={e => {
         e.preventDefault()
         const value = e.target['prompt'].value

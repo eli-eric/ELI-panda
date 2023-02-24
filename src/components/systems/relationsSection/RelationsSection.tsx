@@ -17,7 +17,7 @@ import AddRelationForm from './AddRelationForm'
 
 const messages = message.systemsPage.relations
 
-const Relations = ({
+const RelationsSection = ({
   uid,
   systemName,
 }: {
@@ -105,4 +105,4 @@ const Relations = ({
   )
 }
 
-export default Relations
+export default RelationsSection

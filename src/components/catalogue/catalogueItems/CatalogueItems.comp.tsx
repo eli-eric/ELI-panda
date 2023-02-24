@@ -1,4 +1,4 @@
-import { Selectable } from '@/components/systems/catalogueItem/CatalogueItemsTable'
+import { Selectable } from '@/components/systems/catalogueItemSection/catalogueItemsForm/CatalogueItemsTable'
 import { CatalogueItemsResponse } from '@/types/responses'
 
 import ItemListHeaderComponent from './header/item-list-header.comp'

@@ -21,7 +21,7 @@ const ModalButtonsComponent = ({ setOpen, testid, buttons }: Props) => {
       {buttons && (
         <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
           <Button
-            type="submit"
+            type={buttons.goBack?.type}
             primary
             onClick={buttons.goNext?.onClick}
             loading={buttons.goNext?.loading}

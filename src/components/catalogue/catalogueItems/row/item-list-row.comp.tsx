@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { Selectable } from '@/components/systems/catalogueItem/CatalogueItemsTable'
+import { Selectable } from '@/components/systems/catalogueItemSection/catalogueItemsForm/CatalogueItemsTable'
 import TooltipComponent from '@/components/ui/tooltip.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { PATH } from '@/types/constants/paths'
