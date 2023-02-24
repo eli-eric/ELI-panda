@@ -110,7 +110,7 @@ const Edit = ({ data, onSubmit, setIsEditing }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col flex-grow ml-10">
+      <div className="flex flex-col flex-grow">
         {stringFields.map((name, idx) => (
           <StringField
             key={idx}
