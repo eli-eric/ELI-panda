@@ -93,7 +93,8 @@ const Edit = ({ data, onSubmit, setIsEditing }: Props) => {
 
   const buttons = [
     {
-      primary: true,
+      primary: false,
+      type: 'button',
       value: 'Discard',
       onClick: () => {
         reset()
@@ -109,61 +110,60 @@ const Edit = ({ data, onSubmit, setIsEditing }: Props) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-row">
-        <div className="flex flex-col pb-5">
-          <label className="text-sm font-medium text-gray-700 capitalize">
-            Preview Image
-          </label>
-          {image ? (
-            <div className="mt-1 flex-col justify-center rounded border-gray-300 ">
-              <Image width={200} height={200} alt="" src={image} />
-              <Button
-                onClick={() => {
-                  setImage('')
-                }}
-                className="w-full justify-center"
-                rounded="rounded-b-md"
-              >
-                <TrashIcon
-                  className="h-5 w-5 text-red-700"
-                  aria-hidden="true"
-                />
-              </Button>
-            </div>
-          ) : (
-            <label
-              htmlFor="file-upload"
-              {...getRootProps()}
-              className="mt-1 cursor-pointer justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2"
-            >
-              <div className="space-y-1 text-center">
-                <div className=" text-sm text-gray-600">
-                  <ImageIcon />
-                  <div className="relative  rounded-md bg-white font-medium text-primary-600">
-                    <span>Upload a file</span>
-                    <input
-                      {...getInputProps()}
-                      name="image"
-                      className="sr-only"
-                    />
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
-              </div>
+      <div className="flex flex-col flex-grow ml-10">
+        {stringFields.map((name, idx) => (
+          <StringField
+            key={idx}
+            name={name}
+            register={register}
+            errors={errors[name]}
+          />
+        ))}
+        <div className="flex gap-x-4 ">
+          <div className="flex flex-col pb-5">
+            <label className="text-sm font-medium text-gray-700 capitalize">
+              Preview Image
             </label>
-          )}
-          <div className="h-full" />
-        </div>
-        <div className="flex flex-col flex-grow ml-10">
-          {stringFields.map((name, idx) => (
-            <StringField
-              key={idx}
-              name={name}
-              register={register}
-              errors={errors[name]}
-            />
-          ))}
-          <div className="pt-5">
+            {image ? (
+              <div className="mt-1 flex-col justify-center rounded border-gray-300 ">
+                <Image width={200} height={200} alt="" src={image} />
+                <Button
+                  onClick={() => {
+                    setImage('')
+                  }}
+                  className="w-full justify-center"
+                  rounded="rounded-b-md"
+                >
+                  <TrashIcon
+                    className="h-5 w-5 text-red-700"
+                    aria-hidden="true"
+                  />
+                </Button>
+              </div>
+            ) : (
+              <label
+                htmlFor="file-upload"
+                {...getRootProps()}
+                className="mt-1 cursor-pointer justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2"
+              >
+                <div className="space-y-1 text-center">
+                  <div className=" text-sm text-gray-600">
+                    <ImageIcon />
+                    <div className="relative  rounded-md bg-white font-medium text-primary-600">
+                      <span>Upload a file</span>
+                      <input
+                        {...getInputProps()}
+                        name="image"
+                        className="sr-only"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>
+                </div>
+              </label>
+            )}
+          </div>
+          <div className="grow">
             <label className="text-sm font-medium text-gray-700 capitalize">
               Description
             </label>
