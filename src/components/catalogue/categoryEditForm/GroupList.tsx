@@ -72,7 +72,8 @@ const GroupList = () => {
                   remove={remove}
                   index={index}
                   errors={
-                    formState.errors.groups && formState.errors.groups[index]
+                    formState.errors.groups &&
+                    (formState.errors.groups[index] as any)
                   }
                   name={`groups.${index}`}
                   key={field.id}
