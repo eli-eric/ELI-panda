@@ -62,7 +62,10 @@ const CatalogueItemsContainer = ({
 
   return (
     <Fragment>
-      <div className="h-full overflow-auto border-t border-gray-300  ">
+      <div
+        data-testid="item-list"
+        className="h-full overflow-auto border-t border-gray-300  "
+      >
         {data &&
           (data.totalCount !== 0 ? (
             <CatalogueItemsComponent
