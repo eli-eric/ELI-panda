@@ -64,7 +64,7 @@ export const fetchFakeSystem = async () => {
   return getFakeSystem()
 }
 export const fetchFakeSystems = async () => {
-  const res = [...Array(faker.datatype.number({ min: 0, max: 7 }))]
+  const res = [...Array(faker.datatype.number({ min: 0, max: 5 }))]
   await sleep(faker.datatype.number({ min: 200, max: 2000 }))
   return res.map(() => getFakeSystem())
 }
@@ -75,7 +75,7 @@ const empty = {
   systemCode: '',
   systemAlias: '',
   locationCode: '',
-  catalogueUID: undefined,
+  catalogueUID: '',
   importanceCode: '',
   systemTypeUID: '',
   ownerUID: '',

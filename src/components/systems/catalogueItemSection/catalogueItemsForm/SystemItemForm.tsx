@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { InputWithError } from '@/components/ui/form/Input'
@@ -18,8 +19,12 @@ const itemUsageUID = [
   { value: 'f3fd12d8-d975-4aac-afb2-b9f244316d77', name: 'Other' },
 ]
 
-const SystemItemForm = ({ itemUid }: { itemUid?: string }) => {
-  const { register } = useFormContext()
+const SystemItemForm = ({ itemName }: { itemName?: string }) => {
+  const { register, setValue } = useFormContext()
+
+  useEffect(() => {
+    setValue('catalogueItemUID', itemName)
+  }, [itemName, setValue])
 
   return (
     <div>
@@ -29,7 +34,6 @@ const SystemItemForm = ({ itemUid }: { itemUid?: string }) => {
           name="catalogueItemUID"
           label="Catalogue Item"
           disabled
-          value={itemUid}
           rounded="rounded-md"
         />
         <SelectWithError
@@ -80,7 +84,7 @@ const SystemItemForm = ({ itemUid }: { itemUid?: string }) => {
             placeholder="Obsolete"
             rounded="rounded-md"
             defaultValue={'false'}
-            options={[{ value: 'true' }, { value: 'false' }]}
+            options={[{ value: 'false' }, { value: 'true' }]}
           />
           <InputWithError
             register={register}

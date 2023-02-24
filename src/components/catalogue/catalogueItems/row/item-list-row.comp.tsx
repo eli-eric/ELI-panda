@@ -46,7 +46,7 @@ const ItemListRow = ({
       className={
         (index % 2 === 0 ? undefined : 'bg-gray-100') +
         ` hover:bg-primary-200 ${
-          selectable?.itemUid === item.uid ? 'bg-primary-200' : ''
+          selectable?.selectedItem === item.uid ? 'bg-primary-200' : ''
         }`
       }
     >
@@ -54,11 +54,13 @@ const ItemListRow = ({
         <td className="text-sm  sm:pl-6 text-gray-500">
           <div className="ml-3 flex h-5 items-center">
             <input
-              {...selectable.register('itemUid')}
               id={`side-${item.uid}`}
               name="itemUid"
-              value={item.uid}
+              checked={selectable.selectedItem === item.uid}
               type="radio"
+              onClick={() => {
+                selectable.setItem({ name: item.name, uid: item.uid })
+              }}
               className="h-4 w-4 border-gray-300 text-primary-600 focus:ring-primary-500"
             />
           </div>

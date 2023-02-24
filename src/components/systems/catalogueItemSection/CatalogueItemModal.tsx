@@ -18,7 +18,10 @@ interface Props {
 }
 
 const CatalogueItemModal = ({ setOpen, open }: Props) => {
-  const [itemUid, setItemUid] = useState<string>()
+  const [item, setItem] = useState<{ name?: string; uid?: string }>({
+    name: undefined,
+    uid: undefined,
+  })
   const onSubmit = data => {
     console.log(data)
   }
@@ -32,11 +35,11 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
         setOpen={setOpen}
         buttons={{ noButtons: true }}
       >
-        <Fragment>
-          <CatalogueItemsForm setItemUid={setItemUid} />
+        <div className="min-h-[849px] flex-col justify-end">
+          <CatalogueItemsForm setItem={setItem} itemName={item.name} />
           <FormProvider {...formMethods}>
             <form onSubmit={formMethods.handleSubmit(onSubmit)}>
-              <SystemItemForm />
+              <SystemItemForm itemName={item.name} />
               <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                 <Button
                   type="submit"
@@ -59,7 +62,7 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
               {false && <ErrorPage />}
             </form>
           </FormProvider>
-        </Fragment>
+        </div>
       </ModalComponent>
     </Fragment>
   )

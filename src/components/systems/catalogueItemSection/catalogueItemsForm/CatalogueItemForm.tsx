@@ -6,21 +6,25 @@ import CatalogueItemsTable from './CatalogueItemsTable'
 import SearchItem from './SearchBar'
 
 interface Props {
-  setItemUid: React.Dispatch<React.SetStateAction<string | undefined>>
+  itemName?: string
+  setItem: React.Dispatch<React.SetStateAction<{ name?: string; uid?: string }>>
 }
 
-const CatalogueItemsForm = ({ setItemUid }: Props) => {
+const CatalogueItemsForm = ({ setItem, itemName }: Props) => {
   const [searchValue, setSearchValue] = useState<string | undefined>()
 
   return (
     <Fragment>
-      <SearchItem setSearchValue={setSearchValue} setItemUid={setItemUid} />
-      <Suspense fallback={<LoaderComponent />}>
-        <CatalogueItemsTable
-          setItemUid={setItemUid}
-          searchValue={searchValue}
-        />
-      </Suspense>
+      <SearchItem setSearchValue={setSearchValue} setItem={setItem} />
+      <div className="flex flex-col min-h-[535px] justify-between">
+        <Suspense fallback={<LoaderComponent />}>
+          <CatalogueItemsTable
+            setItem={setItem}
+            searchValue={searchValue}
+            itemName={itemName}
+          />
+        </Suspense>
+      </div>
     </Fragment>
   )
 }

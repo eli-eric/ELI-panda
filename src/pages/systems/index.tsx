@@ -14,20 +14,21 @@ const Page: NextPage = () => {
       <Head>
         <title>Systems Overview</title>
       </Head>
-      <aside className="w-full lg:w-1/4">
-        <Card>
-          <Heading text="Subsystems" />
-          <Suspense fallback={<ProgressBarComponent />}>
-            <nav aria-label="Subsystems">
-              <Subsystems ids={['fjdskfsdl']} />
-            </nav>
-          </Suspense>
-        </Card>
-      </aside>
-
-      <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
-        <EmptySectionComponent />
-      </main>
+      <div className="flex">
+        <aside className="w-full lg:w-1/4">
+          <Card>
+            <Heading text="Subsystems" />
+            <Suspense fallback={<ProgressBarComponent />}>
+              <nav aria-label="Subsystems">
+                <Subsystems ids={['fjdskfsdl']} />
+              </nav>
+            </Suspense>
+          </Card>
+        </aside>
+        <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
+          <EmptySectionComponent />
+        </main>
+      </div>
     </>
   )
 }

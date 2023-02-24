@@ -1,12 +1,17 @@
+import { Dispatch, SetStateAction } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import SearchBarComponent from '@/components/ui/SearchBar.comp'
 
-const SearchBar = ({ setItemUid, setSearchValue }) => {
+interface Props {
+  setItem: Dispatch<SetStateAction<{ name?: string; uid?: string }>>
+  setSearchValue: Dispatch<SetStateAction<string | undefined>>
+}
+const SearchBar = ({ setItem, setSearchValue }: Props) => {
   const searchFormMethods = useForm()
 
   const onSearchSubmit = data => {
-    setItemUid(undefined)
+    setItem({ name: undefined, uid: undefined })
     setSearchValue(data.search)
   }
   return (

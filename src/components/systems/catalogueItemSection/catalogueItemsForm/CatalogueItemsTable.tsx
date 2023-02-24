@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
-import { useForm, UseFormRegister } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
@@ -14,23 +13,23 @@ const messages = message.systemsPage.relations.addRelationModal
 
 export type Selectable = {
   isSelectable: boolean
-  register: UseFormRegister<{
-    itemUid: string
-  }>
-  itemUid: string | undefined
+  selectedItem?: string
+
+  setItem: Dispatch<SetStateAction<{ name?: string; uid?: string }>>
 }
 
 const CatalogueItemsTable = ({
   searchValue,
-  setItemUid,
+  setItem,
+  itemName,
 }: {
   searchValue?: string
-  setItemUid: Dispatch<SetStateAction<string | undefined>>
+  itemName?: string
+
+  setItem: Dispatch<SetStateAction<{ name?: string; uid?: string }>>
 }) => {
   const intl = useIntl()
 
-  const { register, watch } = useForm<{ itemUid: string }>()
-  const itemUid = watch('itemUid')
   const { setTotalCount, getPaginationComponent, page, pageSize } =
     usePagination({ dependecies: [searchValue] })
   const query = useMemo(
@@ -47,23 +46,15 @@ const CatalogueItemsTable = ({
   )
 
   useEffect(() => {
-    setItemUid(undefined)
-  }, [page, setItemUid])
-
-  useEffect(() => {
     setTotalCount(catalogueItems?.totalCount)
   }, [catalogueItems, setTotalCount])
-
-  const collumsTitle = Object.keys(messages.tableHeader).map(key =>
-    intl.formatMessage({ id: messages.tableHeader[key] }),
-  )
 
   return (
     <div className="flex flex-col min-h-[535px] justify-between">
       <div className="h-full overflow-x-auto border-t border-gray-300">
         <fieldset>
           <CatalogueItemsComponent
-            selectable={{ isSelectable: true, register, itemUid }}
+            selectable={{ isSelectable: true, selectedItem: itemName, setItem }}
             catalogueItems={catalogueItems}
             categoryListLength={catalogueItems?.data.length}
           />
