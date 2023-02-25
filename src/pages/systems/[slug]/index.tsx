@@ -99,16 +99,16 @@ const Page: NextPage = () => {
     catalogueItem: true,
   })
 
-  const [isEditing, setIsEditing] = useState<boolean>()
+  const [isEditing, setIsEditing] = useState('')
 
   const onSubmitEdit = (data: System) => {
     console.log(data)
-    setIsEditing(false)
+    setIsEditing('')
   }
 
   const onSubmitNew = (data: System) => {
     console.log(data)
-    setIsEditing(true)
+    setIsEditing('')
   }
 
   if (!data) return <LoaderComponent />
@@ -216,7 +216,9 @@ const Page: NextPage = () => {
           <ModalComponent
             buttons={{ noButtons: true }}
             open={!!isEditing}
-            setOpen={() => {}}
+            setOpen={() => {
+              setIsEditing('')
+            }}
           >
             <Edit
               onSubmit={isEditing === 'current' ? onSubmitEdit : onSubmitNew}
