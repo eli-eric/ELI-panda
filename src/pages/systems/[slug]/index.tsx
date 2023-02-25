@@ -99,16 +99,16 @@ const Page: NextPage = () => {
     catalogueItem: true,
   })
 
-  const [isEditing, setIsEditing] = useState('')
+  const [isEditing, setIsEditing] = useState<boolean>()
 
   const onSubmitEdit = (data: System) => {
     console.log(data)
-    setIsEditing('')
+    setIsEditing(false)
   }
 
   const onSubmitNew = (data: System) => {
     console.log(data)
-    setIsEditing('')
+    setIsEditing(true)
   }
 
   if (!data) return <LoaderComponent />

@@ -2,7 +2,7 @@ import { Disclosure } from '@headlessui/react'
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
-function classNames(...classes: any) {
+function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 

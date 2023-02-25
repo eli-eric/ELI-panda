@@ -1,16 +1,30 @@
 {
-  "extends": ["next/core-web-vitals"],
+  "extends": ["next/core-web-vitals", "plugin:@typescript-eslint/recommended"],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["unused-imports", "simple-import-sort"],
+  "plugins": ["unused-imports", "simple-import-sort", "@typescript-eslint"],
   "rules": {
-    "@typescript-eslint/no-unused-vars": "off", // or "@typescript-eslint/no-unused-vars": "off",
     "simple-import-sort/imports": 1,
     "simple-import-sort/exports": "warn",
     "unused-imports/no-unused-imports": "warn",
+    "@typescript-eslint/no-unused-vars": "off", // or "@@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
-  }
+    "react-hooks/exhaustive-deps": "warn",
+    "arrow-body-style": "warn",
+    "no-console": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["**/constants/**"],
+      "rules": {
+        "@typescript-eslint/naming-convention": [
+          "warn",
+          { "selector": "variableLike", "format": ["UPPER_CASE"] },
+          { "selector": "enum", "format": ["UPPER_CASE"] }
+        ]
+      }
+    }
+  ]
 }

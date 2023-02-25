@@ -20,7 +20,7 @@ const SystemDetail = ({ data }) => {
           }`}
         >
           <div>{title}</div>
-          <div>{value as String}</div>
+          <div>{value as string}</div>
         </div>
       ))}
     </div>

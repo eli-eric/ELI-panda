@@ -61,91 +61,87 @@ export const useCategoryEdit = ({
       }
   }, [response, setOpenDelete, error])
 
-  const getEditDeleteButtons = () => {
-    return (
-      <Fragment>
-        {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
-          <div className="relative flex flex-col justify-center z-0">
+  const getEditDeleteButtons = () => (
+    <Fragment>
+      {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
+        <div className="relative flex flex-col justify-center z-0">
+          <Button
+            rounded="rounded-t-md"
+            onClick={() => {
+              setOpenEdit(true)
+            }}
+          >
+            <PencilSquareIcon className="h-6 w-6" aria-hidden="true" />
+          </Button>
+          <Button
+            rounded="rounded-b-md"
+            onClick={() => {
+              setOpenDelete(true)
+            }}
+          >
+            <TrashIcon className="h-6 w-6 text-red-700" aria-hidden="true" />
+          </Button>
+        </div>
+      )}
+      <ModalComponent
+        open={openEdit}
+        setOpen={setOpenEdit}
+        buttons={{ noButtons: true }}
+        testid="catalogueEdit"
+      >
+        <CategoryEditModal
+          setopen={setOpenEdit}
+          uid={editUid}
+          parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
+        />
+      </ModalComponent>
+      <ModalComponent
+        open={openDelete}
+        setOpen={setOpenDelete}
+        buttons={deletModalButtons}
+        testid="catalogueEdit"
+      >
+        <ModalWarningComponent
+          title="Warning"
+          message="Are you sure you want to remove this Category?"
+        />
+        {error && <ErrorPage />}
+      </ModalComponent>
+    </Fragment>
+  )
+
+  const getAddButton = () => (
+    <Fragment>
+      {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
+        <li className="flex">
+          <div className="flex items-center">
+            <ChevronRightIcon
+              className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400"
+              aria-hidden="true"
+            />
             <Button
-              rounded="rounded-t-md"
               onClick={() => {
-                setOpenEdit(true)
+                setOpenNew(true)
               }}
             >
-              <PencilSquareIcon className="h-6 w-6" aria-hidden="true" />
-            </Button>
-            <Button
-              rounded="rounded-b-md"
-              onClick={() => {
-                setOpenDelete(true)
-              }}
-            >
-              <TrashIcon className="h-6 w-6 text-red-700" aria-hidden="true" />
+              <PlusIcon className="h-5 w-5" aria-hidden="true" />
             </Button>
           </div>
-        )}
-        <ModalComponent
-          open={openEdit}
-          setOpen={setOpenEdit}
-          buttons={{ noButtons: true }}
-          testid="catalogueEdit"
-        >
-          <CategoryEditModal
-            setopen={setOpenEdit}
-            uid={editUid}
-            parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
-          />
-        </ModalComponent>
-        <ModalComponent
-          open={openDelete}
-          setOpen={setOpenDelete}
-          buttons={deletModalButtons}
-          testid="catalogueEdit"
-        >
-          <ModalWarningComponent
-            title="Warning"
-            message="Are you sure you want to remove this Category?"
-          />
-          {error && <ErrorPage />}
-        </ModalComponent>
-      </Fragment>
-    )
-  }
-
-  const getAddButton = () => {
-    return (
-      <Fragment>
-        {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
-          <li className="flex">
-            <div className="flex items-center">
-              <ChevronRightIcon
-                className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400"
-                aria-hidden="true"
-              />
-              <Button
-                onClick={() => {
-                  setOpenNew(true)
-                }}
-              >
-                <PlusIcon className="h-5 w-5" aria-hidden="true" />
-              </Button>
-            </div>
-          </li>
-        )}
-        <ModalComponent
-          open={openNew}
-          setOpen={setOpenNew}
-          buttons={{ noButtons: true }}
-          testid="catalogueEdit"
-        >
-          <CategoryEditModal
-            setopen={setOpenNew}
-            parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
-          />
-        </ModalComponent>
-      </Fragment>
-    )
-  }
+        </li>
+      )}
+      <ModalComponent
+        open={openNew}
+        setOpen={setOpenNew}
+        buttons={{ noButtons: true }}
+        testid="catalogueEdit"
+      >
+        <CategoryEditModal
+          setopen={setOpenNew}
+          parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
+        />
+      </ModalComponent>
+    </Fragment>
+  )
 
   return { getEditDeleteButtons, getAddButton }
 }

@@ -2,7 +2,11 @@ import { PlusIcon } from '@heroicons/react/24/outline'
 import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/ui/Buttons'
-import { CategoryFormType, Group } from '@/types/catalogue/categoryFormTypes'
+import {
+  CategoryFormType,
+  Group,
+  Property,
+} from '@/types/catalogue/categoryFormTypes'
 
 import PropertyItem from './PropertyItem'
 
@@ -31,7 +35,10 @@ const PropertyList = ({ name, errors }: Props) => {
               index={index}
               name={`${name}.properties.${index}`}
               length={fields.length}
-              errors={errors?.properties && (errors?.properties[index] as any)}
+              errors={
+                errors?.properties &&
+                (errors?.properties[index] as FieldErrors<Property> | undefined)
+              }
             />
           </li>
         ))}

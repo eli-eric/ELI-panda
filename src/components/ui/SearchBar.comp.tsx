@@ -2,16 +2,19 @@ import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { useFormContext } from 'react-hook-form'
 
 interface Props {
-  onSubmit: (data: any) => void
+  onSubmit: (data: { search: string }) => void
 }
 
 const SearchBarComponent = ({ onSubmit }: Props) => {
-  const { register, handleSubmit } = useFormContext()
+  const { register, handleSubmit } = useFormContext<{ search: string }>()
   return (
     <div className="sticky top-0 z-10 flex h-16 mb-3 flex-shrink-0 bg-white border-b">
       <div className="flex flex-1 justify-between px-4">
         <div className="flex flex-1">
-          <form className="flex w-full md:ml-0" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="flex w-full md:ml-0"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <label htmlFor="search-field" className="sr-only">
               Search
             </label>
