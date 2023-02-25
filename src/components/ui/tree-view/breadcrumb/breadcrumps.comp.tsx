@@ -7,7 +7,7 @@ interface Props {
 }
 
 const TreeBreadcrumpsComponent = ({ data }: Props) => {
-  let { path } = data
+  const { path } = data
   return (
     <div>
       <div className="flex gap-1 flex-wrap">

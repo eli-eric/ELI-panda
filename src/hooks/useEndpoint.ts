@@ -18,7 +18,7 @@ const getEndpoints = (uid?: string, path?: string, query?: string) => {
 }
 interface useEndpointsProps {
   uid?: string
-  query?: Object
+  query?: unknown
   path?: string
 }
 export const useEndpoint = ({ uid, query, path }: useEndpointsProps) => {

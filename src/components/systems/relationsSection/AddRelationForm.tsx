@@ -16,17 +16,12 @@ import { RELATION_TYPE_CODE } from '@/types/system/constants'
 
 import SelectRelation from './SelectRelation'
 import TableWithPaging from './TableWithPaging'
+import { RelationFormType } from '@/types/system'
 const { buttons } = message.common
 interface Props {
   setopen: Dispatch<SetStateAction<boolean>>
   relationTypeCode: RELATION_TYPE_CODE
   systemName: string
-}
-
-export type RelationFormType = {
-  systemFromUid: string
-  relationTypeCode: string
-  systemToUid: string
 }
 
 const relationValidationSchema = yup.object().shape({

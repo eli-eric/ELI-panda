@@ -6,21 +6,19 @@ interface Props {
   data: SystemTreeItem
 }
 
-const SubItems = ({ data }: Props) => {
-  return (
-    <div>
-      <div className="hidden lg:block">
-        <b>Subsystems</b>
-        <SubItemsList data={data} />
-      </div>
-      <details className="lg:hidden max-h-[50vh] overflow-auto">
-        <summary>
-          <b>Subsystems</b>
-        </summary>
-        <SubItemsList data={data} />
-      </details>
+const SubItems = ({ data }: Props) => (
+  <div>
+    <div className="hidden lg:block">
+      <b>Subsystems</b>
+      <SubItemsList data={data} />
     </div>
-  )
-}
+    <details className="lg:hidden max-h-[50vh] overflow-auto">
+      <summary>
+        <b>Subsystems</b>
+      </summary>
+      <SubItemsList data={data} />
+    </details>
+  </div>
+)
 
 export default SubItems

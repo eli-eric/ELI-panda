@@ -10,13 +10,6 @@ interface UseSubmitProps {
   mutateList?: string[]
 }
 
-interface UseSubmitReturn {
-  response: any
-  error: string | undefined
-  loading: boolean
-  submit: (body?: object) => void
-}
-
 const useSubmit = ({ endpoint, method, mutateList }: UseSubmitProps) => {
   const { mutate } = useSWRConfig()
 

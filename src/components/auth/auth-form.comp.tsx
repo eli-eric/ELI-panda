@@ -20,7 +20,7 @@ export type AuthForm = {
 }
 
 interface Props {
-  onSubmit: (data: any) => void
+  onSubmit: (data: AuthForm) => void
   register: UseFormRegister<AuthForm>
   formState: FormState<AuthForm>
   handleSubmit: UseFormHandleSubmit<AuthForm>

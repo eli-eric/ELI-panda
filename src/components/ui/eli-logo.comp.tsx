@@ -5,17 +5,15 @@ interface Props {
   customClass: string
 }
 
-const EliLogoComponent = ({ customClass }: Props) => {
-  return (
-    <Image
-      className={customClass}
-      src={eliLogo}
-      alt="Eli Logo"
-      width={200}
-      height={200}
-      priority={true}
-    />
-  )
-}
+const EliLogoComponent = ({ customClass }: Props) => (
+  <Image
+    className={customClass}
+    src={eliLogo}
+    alt="Eli Logo"
+    width={200}
+    height={200}
+    priority={true}
+  />
+)
 
 export default EliLogoComponent

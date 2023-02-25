@@ -10,12 +10,32 @@ import { Button } from '@/components/ui/Buttons'
 import { SystemRelationshipResponse } from '@/types/responses'
 import { SystemForRel } from '@/types/system'
 
-const Name = ({ uid, name, selectSystemUid, selelectedSystem }) => {
+interface TableNameProps {
+  uid: string
+  name: string
+  selectSystemUid: Dispatch<
+    SetStateAction<
+      | {
+          name: string
+          uid: string
+        }
+      | undefined
+    >
+  >
+  selelectedSystemUid?: string
+}
+
+const Name = ({
+  uid,
+  name,
+  selectSystemUid,
+  selelectedSystemUid,
+}: TableNameProps) => {
   const image = 'https://source.unsplash.com/collection/71371194/500x500'
   return (
     <div
       className={`flex items-center cursor-pointer ${
-        uid === selelectedSystem ? 'text-primary-600' : ''
+        uid === selelectedSystemUid ? 'text-primary-600' : ''
       }`}
       onClick={() => {
         selectSystemUid({ uid, name })
@@ -63,7 +83,7 @@ export const useSystemMapRows = ({
         system =>
           system[0].includes('name') ||
           system[0].includes('systemCodePath') ||
-          system[0].includes('systemType'),
+          system[0].includes('systemType')
       )
       return row.map(([key, value], index) => {
         if (value) {
@@ -74,7 +94,7 @@ export const useSystemMapRows = ({
                 name={system.name}
                 selectSystemUid={setSelectedSystem}
                 uid={system.uid}
-                selelectedSystem={selectedSystem?.uid}
+                selelectedSystemUid={selectedSystem?.uid}
               />
             )
           }
@@ -93,36 +113,43 @@ export const useRelationMapRows = ({
   onDelete,
 }: {
   relations: SystemRelationshipResponse[] | undefined
-  onDelete: (uid: any) => void
+  onDelete: (uid: string) => void
 }): JSX.Element[][] | undefined => {
-  const data = useMemo(() => {
-    return relations?.map((relation, index) => {
-      const rows = Object.entries(relation).map(([key, value], index) => {
-        if (key === 'direction') {
-          return (
-            <div key={index}>
-              {value === 'to' && <ArrowLongLeftIcon className="w-10 h-10" />}
-              {value === 'from' && <ArrowLongRightIcon className="w-10 h-10" />}
-            </div>
-          )
-        }
+  const data = useMemo(
+    () =>
+      relations?.map((relation, index) => {
+        const rows = Object.entries(relation).map(([key, value], index) => {
+          if (key === 'direction') {
+            return (
+              <div key={index}>
+                {value === 'to' && <ArrowLongLeftIcon className="w-10 h-10" />}
+                {value === 'from' && (
+                  <ArrowLongRightIcon className="w-10 h-10" />
+                )}
+              </div>
+            )
+          }
 
-        return <p key={index}>{value}</p>
-      })
+          return <p key={index}>{value}</p>
+        })
 
-      return [
-        ...rows,
-        <Button
-          key={index + '1'}
-          onClick={() => onDelete(relation.relationUid)}
-          rounded="rounded-md"
-        >
-          {' '}
-          <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />{' '}
-        </Button>,
-      ]
-    })
-  }, [onDelete, relations])
+        return [
+          ...rows,
+          <Button
+            key={index + '1'}
+            onClick={() => onDelete(relation.relationUid)}
+            rounded="rounded-md"
+          >
+            {' '}
+            <TrashIcon
+              className="h-5 w-5 text-red-700"
+              aria-hidden="true"
+            />{' '}
+          </Button>,
+        ]
+      }),
+    [onDelete, relations]
+  )
 
   return data
 }

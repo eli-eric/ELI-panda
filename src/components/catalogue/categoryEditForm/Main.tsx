@@ -11,7 +11,12 @@ import { InputWithError } from '@/components/ui/form/Input'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
-const FormImage = ({ image, onDelete }) => (
+interface FormImageProps {
+  image: string
+  onDelete: () => void
+}
+
+const FormImage = ({ image, onDelete }: FormImageProps) => (
   <div className="mt-1 flex-col justify-center  border-gray-300 ">
     <Image width={200} height={200} alt="" src={image} />
     <Button
@@ -28,7 +33,7 @@ const FormImage = ({ image, onDelete }) => (
 const Main = ({ uid }: { uid?: string }) => {
   const { catalogueCategoryImage } = useEndpoint({ uid: uid })
   const { data: categoryImage } = useSWR(
-    uid ? catalogueCategoryImage : undefined,
+    uid ? catalogueCategoryImage : undefined
   )
 
   const [showImageUid, setShowImage] = useState<boolean>(!!uid)
@@ -40,7 +45,7 @@ const Main = ({ uid }: { uid?: string }) => {
       reader.readAsDataURL(files[0])
       reader.onload = () => setValue('image', reader.result as string)
     },
-    [setValue],
+    [setValue]
   )
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     maxFiles: 1,
@@ -69,7 +74,6 @@ const Main = ({ uid }: { uid?: string }) => {
         <FormImage
           image={image ? image : categoryImage}
           onDelete={() => {
-            console.log('caaled')
             if (showImageUid && !!categoryImage) {
               setShowImage(false)
               setValue('image', 'deleted')

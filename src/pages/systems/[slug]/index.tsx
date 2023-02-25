@@ -216,7 +216,9 @@ const Page: NextPage = () => {
           <ModalComponent
             buttons={{ noButtons: true }}
             open={!!isEditing}
-            setOpen={() => {}}
+            setOpen={() => {
+              setIsEditing('')
+            }}
           >
             <Edit
               onSubmit={isEditing === 'current' ? onSubmitEdit : onSubmitNew}

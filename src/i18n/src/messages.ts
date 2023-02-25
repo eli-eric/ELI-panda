@@ -3,6 +3,7 @@ import { get } from 'lodash'
 import { messages as en } from './locale/en'
 
 interface Payload {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [x: string]: any
 }
 // define all messages from modules HERE
@@ -43,7 +44,7 @@ export const messages = {
     ...dictionary['en'],
   },
 }
-const getMessageMap = <T extends {}>(messages: T, previousPath = ''): T =>
+const getMessageMap = <T extends object>(messages: T, previousPath = ''): T =>
   Object.keys(messages).reduce((prev, cur) => {
     const newPath = `${previousPath}${cur}`
     if (typeof messages[cur] === 'string') {

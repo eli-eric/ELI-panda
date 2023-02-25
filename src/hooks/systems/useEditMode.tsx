@@ -54,7 +54,7 @@ const useYupValidationResolver = validationSchema =>
 const useEditMode = (
   onSubmit: any,
   data: System | undefined,
-  isOpen: boolean = false,
+  isOpen = false,
 ) => {
   const { register, handleSubmit, reset, formState } = useForm<System>({
     defaultValues: data,
@@ -68,8 +68,8 @@ const useEditMode = (
     reset(data)
   }, [data, reset])
 
-  const EditModeContainer = ({ children }) => {
-    return isEditMode ? (
+  const EditModeContainer = ({ children }) =>
+    isEditMode ? (
       <form
         onSubmit={handleSubmit(data => {
           setIsEditMode(false)
@@ -83,7 +83,6 @@ const useEditMode = (
     ) : (
       children
     )
-  }
 
   const discard = () => {
     setNewImage('')
