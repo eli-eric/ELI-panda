@@ -3,9 +3,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { Option, SelectWithError } from '@/components/ui/form/Select'
+import { RelationFormType } from '@/types/system'
 import { RELATION_TYPE_CODE } from '@/types/system/constants'
-
-import { RelationFormType } from './AddRelationForm'
 
 const SelectRelation = ({
   relationTypeCode,
@@ -30,7 +29,7 @@ const SelectRelation = ({
       name: systemName,
       value: router.query.slug as string,
     }),
-    [router, systemName],
+    [router, systemName]
   )
   const [selectedSystemOption, setSelectedSystemOption] = useState({
     name: selectedSystem?.name,

@@ -11,13 +11,6 @@ import { CatalogueItemsResponse } from '@/types/responses'
 
 const messages = message.systemsPage.relations.addRelationModal
 
-export type Selectable = {
-  isSelectable: boolean
-  selectedItem?: string
-
-  setItem: Dispatch<SetStateAction<{ name?: string; uid?: string }>>
-}
-
 const CatalogueItemsTable = ({
   searchValue,
   setItem,
@@ -38,11 +31,11 @@ const CatalogueItemsTable = ({
       page,
       pageSize,
     }),
-    [searchValue, page, pageSize],
+    [searchValue, page, pageSize]
   )
   const endpoints = useEndpoint({ query })
   const { data: catalogueItems } = useSWR<CatalogueItemsResponse>(
-    searchValue ? endpoints.catalogueItems : undefined,
+    searchValue ? endpoints.catalogueItems : undefined
   )
   useEffect(() => {
     setItem({ name: undefined, uid: undefined })

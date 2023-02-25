@@ -58,9 +58,11 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
   const type = watch(`${name}.typeUID`)
   const listOfValues = watch(`${name}.listOfValues`) || []
 
-  const getDefaultOption = (name, disabled = false) => {
-    return { value: '', name, disabled }
-  }
+  const getDefaultOption = (name, disabled = false) => ({
+    value: '',
+    name,
+    disabled,
+  })
 
   useEffect(() => {
     if (type !== PROPERTY_TYPE.LIST) {

@@ -10,12 +10,32 @@ import { Button } from '@/components/ui/Buttons'
 import { SystemRelationshipResponse } from '@/types/responses'
 import { SystemForRel } from '@/types/system'
 
-const Name = ({ uid, name, selectSystemUid, selelectedSystem }) => {
+interface TableNameProps {
+  uid: string
+  name: string
+  selectSystemUid: Dispatch<
+    SetStateAction<
+      | {
+          name: string
+          uid: string
+        }
+      | undefined
+    >
+  >
+  selelectedSystemUid?: string
+}
+
+const Name = ({
+  uid,
+  name,
+  selectSystemUid,
+  selelectedSystemUid,
+}: TableNameProps) => {
   const image = 'https://source.unsplash.com/collection/71371194/500x500'
   return (
     <div
       className={`flex items-center cursor-pointer ${
-        uid === selelectedSystem ? 'text-primary-600' : ''
+        uid === selelectedSystemUid ? 'text-primary-600' : ''
       }`}
       onClick={() => {
         selectSystemUid({ uid, name })
@@ -63,7 +83,7 @@ export const useSystemMapRows = ({
         system =>
           system[0].includes('name') ||
           system[0].includes('systemCodePath') ||
-          system[0].includes('systemType'),
+          system[0].includes('systemType')
       )
       return row.map(([key, value], index) => {
         if (value) {
@@ -74,7 +94,7 @@ export const useSystemMapRows = ({
                 name={system.name}
                 selectSystemUid={setSelectedSystem}
                 uid={system.uid}
-                selelectedSystem={selectedSystem?.uid}
+                selelectedSystemUid={selectedSystem?.uid}
               />
             )
           }
@@ -128,7 +148,7 @@ export const useRelationMapRows = ({
           </Button>,
         ]
       }),
-    [onDelete, relations],
+    [onDelete, relations]
   )
 
   return data

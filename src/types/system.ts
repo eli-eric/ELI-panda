@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react'
+
 export type System = {
   uid: string
   name: string
@@ -23,4 +25,17 @@ export type SystemForRel = {
   systemType: string
   systemCodePath: string
   uid: string
+}
+
+export interface Selectable {
+  isSelectable: boolean
+  selectedItem?: string
+
+  setItem: Dispatch<SetStateAction<{ name?: string; uid?: string }>>
+}
+
+export type RelationFormType = {
+  systemFromUid: string
+  relationTypeCode: string
+  systemToUid: string
 }
