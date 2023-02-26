@@ -1,5 +1,7 @@
 import React from 'react'
-import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
+import { FieldValues, Path } from 'react-hook-form'
+
+import { FieldProps } from '@/types/form'
 
 import { ValidationIcon } from './Icons'
 
@@ -7,23 +9,9 @@ export function Input({ register, name, ...rest }) {
   return <input {...register(name)} {...rest} />
 }
 
-interface InputWithErrorProps<T extends FieldValues>
-  extends React.InputHTMLAttributes<HTMLInputElement> {
-  register: UseFormRegister<T>
-  name: string
-  isError?: boolean
-  padding?: boolean
+type InputWithErrorProps<T extends FieldValues> = FieldProps<T> &
+  React.InputHTMLAttributes<HTMLInputElement>
 
-  placeholder?: string
-  disabled?: boolean
-  rounded?:
-    | 'rounded-l-md'
-    | 'rounded-t-md'
-    | 'rounded-r-md'
-    | 'rounded-b-md'
-    | 'rounded-md'
-  label?: string
-}
 export const InputWithError = <T extends FieldValues>({
   register,
   name,
@@ -62,22 +50,8 @@ export const InputWithError = <T extends FieldValues>({
   </div>
 )
 
-interface TextAreaWithErrorProps<T extends FieldValues>
-  extends React.InputHTMLAttributes<HTMLTextAreaElement> {
-  register: UseFormRegister<T>
-  name: string
-  isError?: boolean
-  placeholder?: string
-  type?: string
-  disabled?: boolean
-  rounded?:
-    | 'rounded-l-md'
-    | 'rounded-t-md'
-    | 'rounded-r-md'
-    | 'rounded-b-md'
-    | 'rounded-md'
-  label?: string
-}
+type TextAreaWithErrorProps<T extends FieldValues> = FieldProps<T> &
+  React.InputHTMLAttributes<HTMLTextAreaElement>
 
 export const TextareaWithError = <T extends FieldValues>({
   register,

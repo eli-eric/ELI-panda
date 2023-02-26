@@ -2,9 +2,9 @@ import { Dispatch, Fragment, SetStateAction, Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormattedMessage } from 'react-intl'
 
-import ErrorPage from '@/components/error/ErrorPage'
-import { Button } from '@/components/ui/Buttons'
-import ProgressBarComponent from '@/components/ui/progress-bar.comp'
+import { Button } from '@/components/shared/Buttons'
+import ErrorPage from '@/components/shared/error/ErrorPage'
+import ProgressBarComponent from '@/components/shared/progress-bar.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
@@ -24,7 +24,7 @@ const formatData = (data: CategoryFormType, parentPath) =>
                   ...prop,
                   listOfValues: prop.listOfValues.map(value => value.value),
                 }
-              : { ...prop },
+              : { ...prop }
           ),
         })),
       }

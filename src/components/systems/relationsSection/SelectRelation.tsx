@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { Option, SelectWithError } from '@/components/ui/form/Select'
+import { Option, SelectWithError } from '@/components/shared/form/Select'
 import { RelationFormType } from '@/types/system'
 import { RELATION_TYPE_CODE } from '@/types/system/constants'
 

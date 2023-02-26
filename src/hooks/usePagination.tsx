@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useState } from 'react'
 
-import PaginationComponent from '@/components/ui/table/Pagination.comp'
+import PaginationComponent from '@/components/shared/table/Pagination.comp'
 
 export type Pagination = {
   page: number

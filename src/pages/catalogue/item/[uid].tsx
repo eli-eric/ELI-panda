@@ -6,8 +6,9 @@ import { useIntl } from 'react-intl'
 import ItemDetailHeaderComponent from 'src/components/catalogueItem/header/item-detail-header.comp'
 import ItemDetailComponent from 'src/components/catalogueItem/item-detail.comp'
 import ErrorPage from 'src/components/error/ErrorPage'
-import LoaderComponent from 'src/components/ui/loader.comp'
 import { message } from 'src/i18n/src/messages'
+
+import LoaderComponent from '@/components/shared/loader.comp'
 
 const messages = message.cataloguePage
 

@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl'
 import { createMessageValues } from 'src/helpers/formatters'
 import { message } from 'src/i18n/src/messages'
 
-import { Button } from '@/components/ui/Buttons'
+import { Button } from '@/components/shared/Buttons'
 
 const text = message.cataloguePage.pagination.text
 

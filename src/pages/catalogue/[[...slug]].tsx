@@ -9,8 +9,8 @@ import CatalogueItemsContainer from '@/components/catalogue/catalogueItems/Catal
 import CategoryListComponent from '@/components/catalogue/categoryList/CategoryList.cont'
 import { CatalogLayoutContainer } from '@/components/catalogue/layout/catalog-layout.cont'
 import SearchBarComponent from '@/components/catalogue/search-bar/search-bar.comp'
-import ErrorPage from '@/components/error/ErrorPage'
-import LoaderComponent from '@/components/ui/loader.comp'
+import ErrorPage from '@/components/shared/error/ErrorPage'
+import LoaderComponent from '@/components/shared/loader.comp'
 import { message } from '@/i18n/src/messages'
 import {
   CatalogueCategoryResponse,

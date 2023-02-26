@@ -1,4 +1,4 @@
-import EliLogoComponent from 'src/components/ui/eli-logo.comp'
+import EliLogoComponent from '@/components/shared/eli-logo.comp'
 
 export default function EmptySectionComponent() {
   return (

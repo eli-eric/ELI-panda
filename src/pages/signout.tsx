@@ -3,7 +3,8 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useEffect } from 'react'
-import LoaderComponent from 'src/components/ui/loader.comp'
+
+import LoaderComponent from '@/components/shared/loader.comp'
 
 const SignOut: NextPage = (): JSX.Element => {
   const { status } = useSession()

@@ -4,9 +4,10 @@ import {
   UseFormRegister,
 } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
-import EliLogoComponent from 'src/components/ui/eli-logo.comp'
-import { InputWithError } from 'src/components/ui/form/Input'
 import { message } from 'src/i18n/src/messages'
+
+import EliLogoComponent from '@/components/shared/eli-logo.comp'
+import { InputWithError } from '@/components/shared/form/Input'
 
 import { Button } from '../ui/Buttons'
 

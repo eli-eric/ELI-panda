@@ -6,7 +6,7 @@ import {
 import Image from 'next/image'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 
-import { Button } from '@/components/ui/Buttons'
+import { Button } from '@/components/shared/Buttons'
 import { SystemRelationshipResponse } from '@/types/responses'
 import { SystemForRel } from '@/types/system'
 

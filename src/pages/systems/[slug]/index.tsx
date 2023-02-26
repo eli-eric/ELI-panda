@@ -8,9 +8,9 @@ import { Fragment, Suspense, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import useSWR from 'swr/immutable'
 
-import ErrorPage from '@/components/error/ErrorPage'
+import ErrorPage from '@/components/shared/error/ErrorPage'
 import Breadcrumbs from '@/components/systems/Breadcrumbs'
-import CatalogueItemSection from '@/components/systems/catalogueItemSection/CatalogueItemSection'
+import CatalogueItemSection from '@/components/systems/catalogueItemSection/CatalogueItemSection.cont'
 import Description from '@/components/systems/Description'
 import SystemDetail from '@/components/systems/Detail'
 import Edit from '@/components/systems/Edit'
@@ -20,10 +20,10 @@ import { Prompt, Results } from '@/components/systems/Search'
 import Subsystems from '@/components/systems/Subsystems'
 import Title from '@/components/systems/Title'
 import ViewControl from '@/components/systems/ViewControl'
-import Card, { Heading } from '@/components/ui/card/card.comp'
-import LoaderComponent from '@/components/ui/loader.comp'
-import ModalComponent from '@/components/ui/modal/modal.comp'
-import ProgressBarComponent from '@/components/ui/progress-bar.comp'
+import Card, { Heading } from '@/components/shared/card/card.comp'
+import LoaderComponent from '@/components/shared/loader.comp'
+import ModalComponent from '@/components/shared/modal/modal.comp'
+import ProgressBarComponent from '@/components/shared/progress-bar.comp'
 import useParam from '@/hooks/useParam'
 import { System } from '@/types/system'
 
@@ -43,7 +43,7 @@ export const getFakeSystem = (): System => {
     path: getFakePath(),
     image: 'https://source.unsplash.com/collection/71371194/500x500',
     description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
-      5,
+      5
     )}`,
     children: getFakePath(),
     importanceCode: faker.datatype.string(),

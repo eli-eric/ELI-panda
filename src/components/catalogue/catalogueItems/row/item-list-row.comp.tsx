@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import TooltipComponent from '@/components/ui/tooltip.comp'
+import TooltipComponent from '@/components/shared/tooltip.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { PATH } from '@/types/constants/paths'
 import { CatalogueItem } from '@/types/responses'

@@ -5,9 +5,9 @@ import { useDropzone } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
 import useSWR from 'swr'
 
-import { Button } from '@/components/ui/Buttons'
-import ImagePlaceHolder from '@/components/ui/form/ImagePlaceHolder'
-import { InputWithError } from '@/components/ui/form/Input'
+import { Button } from '@/components/shared/Buttons'
+import ImagePlaceHolder from '@/components/shared/form/ImagePlaceHolder'
+import { InputWithError } from '@/components/shared/form/Input'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 

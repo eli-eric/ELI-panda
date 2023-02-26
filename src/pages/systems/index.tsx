@@ -1,12 +1,11 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { Suspense } from 'react'
-import Card from 'src/components/ui/card/card.comp'
-import EmptySectionComponent from 'src/modules/systems/empty-section/empty-section.comp'
 
 import Subsystems from '@/components/systems/Subsystems'
-import { Heading } from '@/components/ui/card/card.comp'
-import ProgressBarComponent from '@/components/ui/progress-bar.comp'
+import Card, { Heading } from '@/components/shared/card/card.comp'
+import ProgressBarComponent from '@/components/shared/progress-bar.comp'
+import EmptySectionComponent from '@/components/shared/empty-section/empty-section.comp'
 
 const Page: NextPage = () => (
   <>

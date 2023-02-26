@@ -2,10 +2,10 @@ import { Fragment, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import useSWR from 'swr'
 
-import { Button } from '@/components/ui/Buttons'
-import ModalComponent from '@/components/ui/modal/modal.comp'
-import ModalWarningComponent from '@/components/ui/modal/warning/modal-warning.comp'
-import TableComponent from '@/components/ui/table/Table.comp'
+import { Button } from '@/components/shared/Buttons'
+import ModalComponent from '@/components/shared/modal/modal.comp'
+import ModalWarningComponent from '@/components/shared/modal/warning/modal-warning.comp'
+import TableComponent from '@/components/shared/table/Table.comp'
 import { useRelationMapRows } from '@/hooks/systems/relations/useMapRows'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
@@ -26,14 +26,14 @@ const RelationsSection = ({
 }) => {
   const endpoints = useEndpoint({ uid })
   const { data: relations } = useSWR<SystemRelationshipResponse[]>(
-    endpoints.systemRelationships,
+    endpoints.systemRelationships
   )
   const [relationUid, setRelationUid] = useState<string | undefined>()
   const intl = useIntl()
   const [openAddRelation, setOpenAddRelation] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
   const [relationTypeCode, setRelationTypeCode] = useState<RELATION_TYPE_CODE>(
-    RELATION_TYPE_CODE.IS_SPARE_FOR,
+    RELATION_TYPE_CODE.IS_SPARE_FOR
   )
 
   const deleteModalButtons: ModalButtons = {
@@ -54,7 +54,7 @@ const RelationsSection = ({
   }
 
   const collumsTitle = Object.keys(messages.tableHeader).map(key =>
-    intl.formatMessage({ id: messages.tableHeader[key] }),
+    intl.formatMessage({ id: messages.tableHeader[key] })
   )
 
   const deleteHandler = uid => {

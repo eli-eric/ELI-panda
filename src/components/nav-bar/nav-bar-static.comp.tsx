@@ -1,7 +1,8 @@
 import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
-import EliLogoComponent from 'src/components/ui/eli-logo.comp'
+
+import EliLogoComponent from '@/components/shared/eli-logo.comp'
 
 import NavigationListContainer from './navigation/navigation-list.cont'
 import ProfileDropdownComponent from './profile/dropdown/profile-dropdown.comp'

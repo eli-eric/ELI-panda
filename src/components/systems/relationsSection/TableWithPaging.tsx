@@ -3,15 +3,14 @@ import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
-import TableComponent from '@/components/ui/table/Table.comp'
+import EmptyResults from '@/components/shared/EmptyResults'
+import TableComponent from '@/components/shared/table/Table.comp'
 import { useSystemMapRows } from '@/hooks/systems/relations/useMapRows'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
 import { message } from '@/i18n/src/messages'
 import { SystemsForRelResponse } from '@/types/responses'
 import { RELATION_TYPE_CODE } from '@/types/system/constants'
-
-import EmptyResults from '../../ui/EmptyResults'
 
 const messages = message.systemsPage.relations.addRelationModal
 
@@ -49,11 +48,11 @@ const TableWithPaging = ({
       search: searchValue,
       pagination,
     }),
-    [router, relationTypeCode, searchValue, pagination],
+    [router, relationTypeCode, searchValue, pagination]
   )
   const endpoints = useEndpoint({ query })
   const { data: systems } = useSWR<SystemsForRelResponse>(
-    searchValue && endpoints.systemsForRelationship,
+    searchValue && endpoints.systemsForRelationship
   )
 
   const data = useSystemMapRows({
@@ -71,7 +70,7 @@ const TableWithPaging = ({
   }, [systems, setTotalCount])
 
   const collumsTitle = Object.keys(messages.tableHeader).map(key =>
-    intl.formatMessage({ id: messages.tableHeader[key] }),
+    intl.formatMessage({ id: messages.tableHeader[key] })
   )
 
   return (

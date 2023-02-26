@@ -1,6 +1,8 @@
 import React from 'react'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
+import { FieldProps } from '@/types/form'
+
 export type Option = {
   value: string | number | readonly string[] | undefined
   disabled?: boolean | undefined
@@ -23,44 +25,25 @@ export const Select = <T extends FieldValues>({
   options,
   name,
   ...rest
-}: Props<T>) => {
-  return (
-    <select
-      {...register(name as Path<T>)}
-      {...rest}
-      defaultValue={options ? options[0].value : ''}
-    >
-      {options &&
-        options.map((option, index) => (
-          <option key={index} value={option.value} disabled={option.disabled}>
-            {option.name ? option.name : option.value}
-          </option>
-        ))}
-    </select>
-  )
-}
+}: Props<T>) => (
+  <select
+    {...register(name as Path<T>)}
+    {...rest}
+    defaultValue={options ? options[0].value : ''}
+  >
+    {options &&
+      options.map((option, index) => (
+        <option key={index} value={option.value} disabled={option.disabled}>
+          {option.name ? option.name : option.value}
+        </option>
+      ))}
+  </select>
+)
 
-interface SelectWithErrorProps<T extends FieldValues>
-  extends React.DetailedHTMLProps<
-    React.SelectHTMLAttributes<HTMLSelectElement>,
-    HTMLSelectElement
-  > {
-  register: UseFormRegister<T>
-  name: string
-  padding?: boolean
-  isError?: boolean
-  label?: string
-  disabled?: boolean
-
-  options: Option[]
-
-  rounded?:
-    | 'rounded-l-md'
-    | 'rounded-t-md'
-    | 'rounded-r-md'
-    | 'rounded-b-md'
-    | 'rounded-md'
-}
+type SelectWithErrorProps<T extends FieldValues> = FieldProps<T> &
+  React.SelectHTMLAttributes<HTMLSelectElement> & {
+    options?: Option[]
+  }
 
 export const SelectWithError = <T extends FieldValues>({
   isError,
