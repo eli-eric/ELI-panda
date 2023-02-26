@@ -9,7 +9,7 @@ import { message } from 'src/i18n/src/messages'
 import EliLogoComponent from '@/components/shared/eli-logo.comp'
 import { InputWithError } from '@/components/shared/form/Input'
 
-import { Button } from '../ui/Buttons'
+import Button from '../shared/Buttons'
 
 const authMessages = message.authPage
 const { title, form } = message.authPage

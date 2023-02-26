@@ -8,11 +8,11 @@ import { object, string } from 'yup'
 
 import { System } from '@/types/system'
 
-import Button from '../ui/Buttons'
-import { InputWithError, TextareaWithError } from '../ui/form/Input'
-import { SelectWithError } from '../ui/form/Select'
-import { GenericButtons } from '../ui/modal/modal.buttons'
-import { ImageIcon } from '../ui/SvgIcons'
+import Button from '../shared/Buttons'
+import { InputWithError, TextareaWithError } from '../shared/form/Input'
+import { SelectWithError } from '../shared/form/Select'
+import { GenericButtons } from '../shared/modal/modal.buttons'
+import { ImageIcon } from '../shared/SvgIcons'
 
 const stringFields = ['name', 'systemCode', 'systemAlias']
 
@@ -146,7 +146,7 @@ const Edit = ({ data, onSubmit, setIsEditing }: Props) => {
       reader.readAsDataURL(files[0])
       reader.onload = () => setImage(reader.result as string)
     },
-    [setImage],
+    [setImage]
   )
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     maxFiles: 1,

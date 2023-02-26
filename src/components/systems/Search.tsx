@@ -2,8 +2,8 @@ import { Suspense, useEffect, useRef } from 'react'
 import { fetchFakeSystems } from 'src/pages/systems/[slug]'
 import useSWR from 'swr'
 
-import Card, { Heading } from '../ui/card/card.comp'
-import ProgressBarComponent from '../ui/progress-bar.comp'
+import Card, { Heading } from '../shared/card/card.comp'
+import ProgressBarComponent from '../shared/progress-bar.comp'
 import { Item } from './Subsystems'
 
 const List = (props: { query: string }) => {
