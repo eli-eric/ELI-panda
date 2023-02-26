@@ -1,5 +1,4 @@
 import { useFormContext } from 'react-hook-form'
-import { useIntl } from 'react-intl'
 
 import { useMakeFormFields } from '@/hooks/form'
 import { message } from '@/i18n/src/messages'
@@ -26,7 +25,6 @@ const itemUsageUidValues: Option[] = [
 
 const useSystemItemFormFields = () => {
   const { register } = useFormContext<SystemItemFormType>()
-  const intl = useIntl()
 
   return useMakeFormFields({
     catalogueItemUid: {

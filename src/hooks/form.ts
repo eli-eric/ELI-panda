@@ -19,6 +19,9 @@ export const useMakeFormFields = <
         placeholder: fields[cur].placeholder
           ? intl.formatMessage({ id: fields[cur].placeholder })
           : undefined,
+        label: fields[cur].label
+          ? intl.formatMessage({ id: fields[cur].label })
+          : undefined,
       },
     }),
     {}
