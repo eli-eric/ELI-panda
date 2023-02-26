@@ -1,4 +1,5 @@
 import { Disclosure } from '@headlessui/react'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
@@ -30,17 +31,15 @@ const NavigationLinkComponent = ({ href, name, open }: Props) => {
   return (
     <Fragment>
       {open === false ? (
-        <button
-          onClick={() => {
-            router.push(href)
-          }}
+        <Link
+          href={href}
           className={classNames(
             variableClassName,
-            'inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium',
+            'inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium'
           )}
         >
           {name}
-        </button>
+        </Link>
       ) : (
         <Disclosure.Button
           onClick={() => {
@@ -48,7 +47,7 @@ const NavigationLinkComponent = ({ href, name, open }: Props) => {
           }}
           className={classNames(
             variableClassName,
-            'block w-full text-left border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium',
+            'block w-full text-left border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium'
           )}
         >
           {name}

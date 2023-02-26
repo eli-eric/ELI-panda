@@ -20,7 +20,7 @@ const LoginPage: NextPage = (): JSX.Element => {
   const router = useRouter()
   const { status } = useSession()
   const callbackUrl = decodeURI(
-    (router.query?.callbackUrl as string) ?? PATH.DASHBOARD,
+    (router.query?.callbackUrl as string) ?? PATH.DASHBOARD
   )
   const authValidationSchema = yup.object().shape({
     password: yup.string().required(),
@@ -41,7 +41,6 @@ const LoginPage: NextPage = (): JSX.Element => {
     })
       .then(e => {
         if (e?.error) {
-          console.log(e.error)
           setErrorMessage(e.error)
           setLoading(false)
         }
