@@ -13,6 +13,7 @@ const getEndpoints = (uid?: string, path?: string, query?: string) => {
     systemRelationships: `/system/${uid}/relationships`,
     systemRelationship: '/system/relationship',
     systemsForRelationship: `/systems/for-relationship${query}`,
+    systemItemAdd: `/system/${uid}/item`,
   }
   return endpoints
 }

@@ -1,10 +1,21 @@
-import React, { Dispatch, Fragment, SetStateAction, useState } from 'react'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useRouter } from 'next/router'
+import React, {
+  Dispatch,
+  Fragment,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
+import * as yup from 'yup'
 
 import { Button } from '@/components/shared/Buttons'
 import ErrorPage from '@/components/shared/error/ErrorPage'
 import ModalComponent from '@/components/shared/modal/modal.comp'
+import { useEndpoint } from '@/hooks/useEndpoint'
+import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
 
 import { SystemItemFormType } from '../types/catalogueItemSection'
@@ -12,6 +23,17 @@ import CatalogueSearchTable from './CatalogueSearchTable'
 import SystemItemForm from './form/SystemItemForm'
 
 const { buttons } = message.common
+
+const systemItemValidationSchema = yup.object().shape({
+  catalogueItemUID: yup.string().required(),
+  itemUsageUID: yup.string().required(),
+  eun: yup.string().required(),
+  name: yup.string().required(),
+  serialNumber: yup.string().required(),
+  batchNumber: yup.string().required(),
+  obsolete: yup.string().required(),
+  estimatedLifeTimeMonths: yup.string().required(),
+})
 
 interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>
@@ -23,11 +45,28 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
     name: undefined,
     uid: undefined,
   })
-  const onSubmit = data => {
-    console.log(data)
+  const router = useRouter()
+
+  const { systemDetail, systemItemAdd } = useEndpoint({
+    uid: router.query.slug as string,
+  })
+  const { submit, loading, error, response } = useSubmit({
+    endpoint: systemItemAdd,
+    method: 'post',
+    mutateList: [systemDetail],
+  })
+  const onSubmit = (data: SystemItemFormType) => {
+    submit({ ...data, catalogueItemUID: item.uid })
+    //console.log({ ...data, catalogueItemUID: item.uid } as SystemItemFormType)
   }
 
-  const formMethods = useForm<SystemItemFormType>()
+  useEffect(() => {
+    if (response) if (!error) setOpen(false)
+  }, [response, setOpen, error])
+
+  const formMethods = useForm<SystemItemFormType>({
+    resolver: yupResolver(systemItemValidationSchema),
+  })
 
   return (
     <Fragment>
@@ -45,7 +84,7 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
                 <Button
                   type="submit"
                   primary
-                  loading={false}
+                  loading={loading}
                   className="inline-flex w-full justify-center sm:col-start-2 sm:mt-0 sm:text-sm"
                 >
                   <FormattedMessage id={buttons.save} />

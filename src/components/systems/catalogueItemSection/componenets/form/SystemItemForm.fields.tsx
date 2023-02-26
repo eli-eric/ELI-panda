@@ -24,70 +24,71 @@ const itemUsageUidValues: Option[] = [
 ]
 
 const useSystemItemFormFields = () => {
-  const { register } = useFormContext<SystemItemFormType>()
+  const { register, formState } = useFormContext<SystemItemFormType>()
 
-  return useMakeFormFields({
+  return useMakeFormFields(register, {
     catalogueItemUid: {
-      register: register,
       name: 'catalogueItemUID',
       label: form.catalogueItemUID.label,
+      isError: !!formState.errors.catalogueItemUID,
       disabled: true,
       padding: true,
       rounded: 'rounded-md',
     },
     itemUsageUid: {
-      register: register,
       name: 'itemUsageUID',
       label: form.itemUsageUID.label,
+      isError: !!formState.errors.catalogueItemUID,
       rounded: 'rounded-md',
       padding: true,
       options: itemUsageUidValues,
     },
     eun: {
-      register: register,
       name: 'eun',
       label: form.eun.label,
       placeholder: form.eun.placeholder,
+      isError: !!formState.errors.catalogueItemUID,
       rounded: 'rounded-md',
       padding: true,
     },
     name: {
-      register: register,
       name: 'name',
       label: form.name.label,
       placeholder: form.name.placeholder,
+      isError: !!formState.errors.catalogueItemUID,
       rounded: 'rounded-md',
       padding: true,
     },
     serialNumber: {
-      register: register,
       name: 'serialNumber',
       label: form.serialNumber.label,
       placeholder: form.serialNumber.placeholder,
+      isError: !!formState.errors.catalogueItemUID,
       padding: true,
       options: itemUsageUidValues,
     },
     batchNumber: {
-      register: register,
       name: 'batchNumber',
       label: form.batchNumber.label,
       placeholder: form.batchNumber.placeholder,
+      isError: !!formState.errors.catalogueItemUID,
       rounded: 'rounded-md',
       padding: true,
     },
     obsolete: {
-      register: register,
       name: 'obsolete',
       label: form.obsolete.label,
       placeholder: form.obsolete.placeholder,
+      isError: !!formState.errors.catalogueItemUID,
+
       padding: true,
       options: [{ value: 'false' }, { value: 'true' }],
     },
     estimatedLifeTimeMonths: {
-      register: register,
       name: 'estimatedLifeTimeMonths',
       label: form.estimatedLifeTimeMonths.label,
       placeholder: form.estimatedLifeTimeMonths.placeholder,
+      isError: !!formState.errors.catalogueItemUID,
       rounded: 'rounded-md',
       padding: true,
       type: 'number',

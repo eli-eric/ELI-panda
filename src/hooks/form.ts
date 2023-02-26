@@ -1,13 +1,18 @@
+import { FieldValues, UseFormRegister } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
 import { FieldProps, Option } from '@/types/form'
 
 export const useMakeFormFields = <
-  Type extends object,
-  T extends Record<string, FieldProps<T> & { options?: Option[] }>
+  Type extends FieldValues,
+  T extends Record<string, FieldProps & { options?: Option[] }>
 >(
-  fields: Type
-): Record<keyof Type, FieldProps<T>> => {
+  register: UseFormRegister<Type>,
+  fields: T
+): Record<
+  keyof T,
+  FieldProps & { options?: Option[]; register: UseFormRegister<Type> }
+> => {
   const intl = useIntl()
 
   return Object.keys(fields).reduce(
@@ -22,8 +27,12 @@ export const useMakeFormFields = <
         label: fields[cur].label
           ? intl.formatMessage({ id: fields[cur].label })
           : undefined,
+        register: register,
       },
     }),
     {}
-  ) as Record<keyof Type, FieldProps<T> & { options?: Option[] }>
+  ) as Record<
+    keyof T,
+    FieldProps & { options?: Option[]; register: UseFormRegister<Type> }
+  >
 }

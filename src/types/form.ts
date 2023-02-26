@@ -1,5 +1,3 @@
-import { FieldValues, UseFormRegister } from 'react-hook-form'
-
 export type ModalButtons = {
   noButtons?: boolean
   goBack?: Button
@@ -13,8 +11,7 @@ export type Button = {
   onClick?: (data: unknown | undefined) => void
 }
 
-export interface FieldProps<T extends FieldValues> {
-  register: UseFormRegister<T>
+export interface FieldProps {
   name: string
   isError?: boolean
   padding?: boolean

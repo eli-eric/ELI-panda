@@ -1,5 +1,5 @@
 import React from 'react'
-import { FieldValues, Path } from 'react-hook-form'
+import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
 import { FieldProps } from '@/types/form'
 
@@ -9,8 +9,10 @@ export function Input({ register, name, ...rest }) {
   return <input {...register(name)} {...rest} />
 }
 
-type InputWithErrorProps<T extends FieldValues> = FieldProps<T> &
-  React.InputHTMLAttributes<HTMLInputElement>
+type InputWithErrorProps<T extends FieldValues> = FieldProps &
+  React.InputHTMLAttributes<HTMLInputElement> & {
+    register: UseFormRegister<T>
+  }
 
 export const InputWithError = <T extends FieldValues>({
   register,
@@ -50,8 +52,10 @@ export const InputWithError = <T extends FieldValues>({
   </div>
 )
 
-type TextAreaWithErrorProps<T extends FieldValues> = FieldProps<T> &
-  React.InputHTMLAttributes<HTMLTextAreaElement>
+type TextAreaWithErrorProps<T extends FieldValues> = FieldProps &
+  React.InputHTMLAttributes<HTMLTextAreaElement> & {
+    register: UseFormRegister<T>
+  }
 
 export const TextareaWithError = <T extends FieldValues>({
   register,

@@ -40,9 +40,10 @@ export const Select = <T extends FieldValues>({
   </select>
 )
 
-type SelectWithErrorProps<T extends FieldValues> = FieldProps<T> &
+type SelectWithErrorProps<T extends FieldValues> = FieldProps &
   React.SelectHTMLAttributes<HTMLSelectElement> & {
     options?: Option[]
+    register: UseFormRegister<T>
   }
 
 export const SelectWithError = <T extends FieldValues>({

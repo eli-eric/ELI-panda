@@ -1,4 +1,6 @@
-export type SystemItemFormType = {
+import { FieldValues } from 'react-hook-form'
+
+export interface SystemItemFormType extends FieldValues {
   catalogueItemUID?: string
   itemUsageUID: string
   eun: string
