@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
 import CatalogueItemsComponent from '@/components/catalogue/catalogueItems/CatalogueItems.comp'
-import EmptyResults from '@/components/ui/EmptyResults'
+import EmptyResults from '@/components/shared/EmptyResults'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
 import { message } from '@/i18n/src/messages'

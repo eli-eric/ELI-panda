@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import SearchBarComponent from '@/components/ui/SearchBar.comp'
+import SearchBarComponent from '@/components/shared/SearchBar.comp'
 
 interface Props {
   setItem: Dispatch<SetStateAction<{ name?: string; uid?: string }>>

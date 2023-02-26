@@ -2,10 +2,10 @@ import { Fragment, useState } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import ItemDetailComponent from '@/components/catalogueItem/item-detail.comp'
-import { Button } from '@/components/ui/Buttons'
+import { Button } from '@/components/shared/Buttons'
 import { message } from '@/i18n/src/messages'
 
-import CatalogueItemModal from './CatalogueItemModal'
+import CatalogueItemModal from './componenets/CatalogueItemModal'
 
 const { addButton } = message.systemsPage.catalogueItem
 

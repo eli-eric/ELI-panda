@@ -2,13 +2,14 @@ import React, { Dispatch, Fragment, SetStateAction, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 
-import ErrorPage from '@/components/error/ErrorPage'
-import { Button } from '@/components/ui/Buttons'
-import ModalComponent from '@/components/ui/modal/modal.comp'
+import { Button } from '@/components/shared/Buttons'
+import ErrorPage from '@/components/shared/error/ErrorPage'
+import ModalComponent from '@/components/shared/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
 
-import CatalogueItemsForm from './catalogueItemsForm/CatalogueItemForm'
-import SystemItemForm from './catalogueItemsForm/SystemItemForm'
+import { SystemItemFormType } from '../types/catalogueItemSection'
+import CatalogueSearchTable from './CatalogueSearchTable'
+import SystemItemForm from './form/SystemItemForm'
 
 const { buttons } = message.common
 
@@ -26,7 +27,7 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
     console.log(data)
   }
 
-  const formMethods = useForm()
+  const formMethods = useForm<SystemItemFormType>()
 
   return (
     <Fragment>
@@ -36,7 +37,7 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
         buttons={{ noButtons: true }}
       >
         <div className="min-h-[849px] flex-col justify-end">
-          <CatalogueItemsForm setItem={setItem} itemName={item.name} />
+          <CatalogueSearchTable setItem={setItem} itemName={item.name} />
           <FormProvider {...formMethods}>
             <form onSubmit={formMethods.handleSubmit(onSubmit)}>
               <SystemItemForm itemName={item.name} />

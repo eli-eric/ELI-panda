@@ -5,18 +5,18 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 import * as yup from 'yup'
 
-import ErrorPage from '@/components/error/ErrorPage'
-import { Button } from '@/components/ui/Buttons'
-import LoaderComponent from '@/components/ui/loader.comp'
-import SearchBarComponent from '@/components/ui/SearchBar.comp'
+import { Button } from '@/components/shared/Buttons'
+import ErrorPage from '@/components/shared/error/ErrorPage'
+import LoaderComponent from '@/components/shared/loader.comp'
+import SearchBarComponent from '@/components/shared/SearchBar.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
+import { RelationFormType } from '@/types/system'
 import { RELATION_TYPE_CODE } from '@/types/system/constants'
 
 import SelectRelation from './SelectRelation'
 import TableWithPaging from './TableWithPaging'
-import { RelationFormType } from '@/types/system'
 const { buttons } = message.common
 interface Props {
   setopen: Dispatch<SetStateAction<boolean>>
