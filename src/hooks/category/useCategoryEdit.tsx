@@ -7,11 +7,11 @@ import {
 import { useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 
-import CategoryEditModal from '@/components/catalogue/categoryEditForm/CategoryEditModal'
-import { Button } from '@/components/shared/Buttons'
-import ErrorPage from '@/components/shared/error/ErrorPage'
-import ModalComponent from '@/components/shared/modal/modal.comp'
-import ModalWarningComponent from '@/components/shared/modal/warning/modal-warning.comp'
+import { Button } from '@/components/Buttons'
+import ErrorPage from '@/components/error/ErrorPage'
+import ModalComponent from '@/components/modal/modal.comp'
+import ModalWarningComponent from '@/components/modal/warning/modal-warning.comp'
+import CategoryEditModal from '@/modules/catalogue/categoryEditForm/CategoryEditModal'
 import { ROLE } from '@/types/constants/roles'
 import { ModalButtons } from '@/types/form'
 

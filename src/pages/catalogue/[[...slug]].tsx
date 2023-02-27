@@ -4,14 +4,14 @@ import { Fragment, Suspense, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useIntl } from 'react-intl'
 
-import BreadcrumbContainer from '@/components/catalogue/breadcrump/breadcrump.cont'
-import CatalogueItemsContainer from '@/components/catalogue/catalogueItems/CatalogueItems.cont'
-import CategoryListComponent from '@/components/catalogue/categoryList/CategoryList.cont'
-import { CatalogLayoutContainer } from '@/components/catalogue/layout/catalog-layout.cont'
-import SearchBarComponent from '@/components/catalogue/search-bar/search-bar.comp'
-import ErrorPage from '@/components/shared/error/ErrorPage'
-import LoaderComponent from '@/components/shared/loader.comp'
+import ErrorPage from '@/components/error/ErrorPage'
+import LoaderComponent from '@/components/loader.comp'
 import { message } from '@/i18n/src/messages'
+import BreadcrumbContainer from '@/modules/catalogue/breadcrump/breadcrump.cont'
+import CatalogueItemsContainer from '@/modules/catalogue/catalogueItems/CatalogueItems.cont'
+import CategoryListComponent from '@/modules/catalogue/categoryList/CategoryList.cont'
+import { CatalogLayoutContainer } from '@/modules/catalogue/layout/catalog-layout.cont'
+import SearchBarComponent from '@/modules/catalogue/search-bar/search-bar.comp'
 import {
   CatalogueCategoryResponse,
   CatalogueItemsResponse,

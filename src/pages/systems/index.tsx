@@ -1,14 +1,14 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
-import { Suspense } from 'react'
+import { Fragment, Suspense } from 'react'
 
-import Subsystems from '@/components/systems/Subsystems'
-import Card, { Heading } from '@/components/shared/card/card.comp'
-import ProgressBarComponent from '@/components/shared/progress-bar.comp'
-import EmptySectionComponent from '@/components/shared/empty-section/empty-section.comp'
+import Card, { Heading } from '@/components/card/card.comp'
+import EmptySectionComponent from '@/components/empty-section/empty-section.comp'
+import ProgressBarComponent from '@/components/progress-bar.comp'
+import Subsystems from '@/modules/systems/Subsystems'
 
 const Page: NextPage = () => (
-  <>
+  <Fragment>
     <Head>
       <title>Systems Overview</title>
     </Head>
@@ -27,7 +27,7 @@ const Page: NextPage = () => (
         <EmptySectionComponent />
       </main>
     </div>
-  </>
+  </Fragment>
 )
 
 export default Page

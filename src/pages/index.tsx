@@ -6,11 +6,11 @@ import { signIn, useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
-import AuthAlertComponent from 'src/components/auth/auth-alert.comp'
-import AuthFormComponent, { AuthForm } from 'src/components/auth/auth-form.comp'
 import { message } from 'src/i18n/src/messages'
 import * as yup from 'yup'
 
+import AuthAlertComponent from '@/modules/auth/auth-alert.comp'
+import AuthFormComponent, { AuthForm } from '@/modules/auth/auth-form.comp'
 import { PATH } from '@/types/constants/paths'
 
 const messages = message.authPage

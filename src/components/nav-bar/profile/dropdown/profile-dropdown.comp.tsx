@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 
-import ModalComponent from '@/components/shared/modal/modal.comp'
+import ModalComponent from '@/components/modal/modal.comp'
 
 import ProfileCardComponent from '../card/profile-card.comp'
 

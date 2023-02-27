@@ -4,8 +4,8 @@ import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import { Button } from '@/components/shared/Buttons'
-import EliLogoComponent from '@/components/shared/eli-logo.comp'
+import { Button } from '@/components/Buttons'
+import EliLogoComponent from '@/components/eli-logo.comp'
 import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
 

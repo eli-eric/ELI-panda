@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useEffect } from 'react'
 
-import LoaderComponent from '@/components/shared/loader.comp'
+import LoaderComponent from '@/components/loader.comp'
 
 const SignOut: NextPage = (): JSX.Element => {
   const { status } = useSession()
