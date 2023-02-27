@@ -5,12 +5,13 @@ import useSWR from 'swr'
 
 import EmptyResults from '@/components/EmptyResults'
 import TableComponent from '@/components/table/Table.comp'
-import { useSystemMapRows } from '@/hooks/systems/relations/useMapRows'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
 import { message } from '@/i18n/src/messages'
+import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
 import { SystemsForRelResponse } from '@/types/responses'
-import { RELATION_TYPE_CODE } from '@/types/system/constants'
+
+import { useSystemMapRows } from '../hooks/relations/useMapRows'
 
 const messages = message.systemsPage.relations.addRelationModal
 

@@ -7,8 +7,8 @@ import Image from 'next/image'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 
 import { Button } from '@/components/Buttons'
+import { SystemForRel } from '@/modules/systems/types'
 import { SystemRelationshipResponse } from '@/types/responses'
-import { SystemForRel } from '@/types/system'
 
 interface TableNameProps {
   uid: string

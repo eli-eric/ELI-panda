@@ -5,7 +5,7 @@ import noImage from 'public/no-image.png'
 import { Dispatch, SetStateAction } from 'react'
 import useSWR from 'swr'
 
-import { useCategoryEdit } from '@/hooks/category/useCategoryEdit'
+import { useCategoryEdit } from '@/modules/catalogue/hooks/useCategoryEdit'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { PATH } from '@/types/constants/paths'
 import { CatalogueCategoryResponse } from '@/types/responses'

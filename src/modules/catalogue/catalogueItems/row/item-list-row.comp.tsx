@@ -7,7 +7,7 @@ import TooltipComponent from '@/components/tooltip.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { PATH } from '@/types/constants/paths'
 import { CatalogueItem } from '@/types/responses'
-import { Selectable } from '@/types/system'
+import { Selectable } from '@/modules/systems/types'
 
 interface Props {
   item: CatalogueItem

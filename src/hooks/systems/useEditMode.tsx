@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { System } from '@/types/system'
+import { System } from '@/modules/systems/types'
 
 const schema = yup.object({
   name: yup.string().min(5).required(),
@@ -43,18 +43,18 @@ const useYupValidationResolver = validationSchema =>
                 message: currentError.message,
               },
             }),
-            {},
+            {}
           ),
         }
       }
     },
-    [validationSchema],
+    [validationSchema]
   )
 
 const useEditMode = (
   onSubmit: any,
   data: System | undefined,
-  isOpen = false,
+  isOpen = false
 ) => {
   const { register, handleSubmit, reset, formState } = useForm<System>({
     defaultValues: data,

@@ -11,7 +11,7 @@ import { InputWithError, TextareaWithError } from '@/components/form/Input'
 import { SelectWithError } from '@/components/form/Select'
 import { GenericButtons } from '@/components/modal/modal.buttons'
 import { ImageIcon } from '@/components/SvgIcons'
-import { System } from '@/types/system'
+import { System } from '@/modules/systems/types'
 
 const stringFields = ['name', 'systemCode', 'systemAlias']
 
@@ -124,11 +124,10 @@ const schema = object({
 
 interface Props {
   data?: System
-  onSubmit: (data: System) => void
-  setIsEditing: Dispatch<SetStateAction<string>>
+  setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const Edit = ({ data, onSubmit, setIsEditing }: Props) => {
+const EditForm = ({ setOpen, data }: Props) => {
   const [image, setImage] = useState(data?.image ?? '')
 
   const { reset, handleSubmit, register, formState, getValues } =
@@ -136,6 +135,11 @@ const Edit = ({ data, onSubmit, setIsEditing }: Props) => {
       defaultValues: data,
       resolver: yupResolver(schema),
     })
+
+  const onSubmit = (data: System) => {
+    console.log(data)
+    setOpen(false)
+  }
 
   const { errors } = formState
 
@@ -152,7 +156,6 @@ const Edit = ({ data, onSubmit, setIsEditing }: Props) => {
     accept: { 'image/*': [] },
     onDrop,
   })
-
   const buttons = [
     {
       primary: false,
@@ -160,7 +163,7 @@ const Edit = ({ data, onSubmit, setIsEditing }: Props) => {
       value: 'Discard',
       onClick: () => {
         reset()
-        setIsEditing('')
+        setOpen(false)
       },
     },
     {
@@ -257,4 +260,4 @@ const Edit = ({ data, onSubmit, setIsEditing }: Props) => {
   )
 }
 
-export default Edit
+export default EditForm

@@ -18,7 +18,7 @@ export default function ViewControl({
   >
 }) {
   return (
-    <div className="flex justify-end py-3 px-3">
+    <div className="-mt-2 flex justify-end py-3 px-3">
       <fieldset className="space-x-5 flex flex-row">
         <legend className="sr-only">View</legend>
         <div className="relative flex items-start">

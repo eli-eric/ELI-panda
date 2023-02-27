@@ -11,12 +11,12 @@ import { Button } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
 import ModalComponent from '@/components/modal/modal.comp'
 import ModalWarningComponent from '@/components/modal/warning/modal-warning.comp'
+import { useEndpoint } from '@/hooks/useEndpoint'
 import CategoryEditModal from '@/modules/catalogue/categoryEditForm/CategoryEditModal'
 import { ROLE } from '@/types/constants/roles'
 import { ModalButtons } from '@/types/form'
 
-import { useEndpoint } from '../useEndpoint'
-import useSubmit from '../useSubmit'
+import useSubmit from '../../../hooks/useSubmit'
 
 export const useCategoryEdit = ({
   editUid,

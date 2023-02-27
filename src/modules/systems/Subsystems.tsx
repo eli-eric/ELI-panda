@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { fetchFakeSystems } from 'src/pages/systems/[slug]'
 import useSWR from 'swr/immutable'
 
-import { System } from '@/types/system'
+import { System } from '@/modules/systems/types'
 
 export const Item = (props: { href: string; text: string }) => {
   const { href, text } = props
@@ -19,7 +19,7 @@ export const Item = (props: { href: string; text: string }) => {
 const Subsystems = ({ ids }) => {
   const { data } = useSWR<System[]>(ids, fetchFakeSystems)
   return (
-    <>
+    <nav aria-label="Subsystems">
       {data && data.length > 0 ? (
         data.map(({ uid, name }) => (
           <Item key={uid} href={'/systems/' + uid} text={name} />
@@ -29,7 +29,7 @@ const Subsystems = ({ ids }) => {
           <span className="truncate">This node has no subsystems</span>
         </div>
       )}
-    </>
+    </nav>
   )
 }
 

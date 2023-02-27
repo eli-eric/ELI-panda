@@ -1,7 +1,7 @@
 import { HomeIcon } from '@heroicons/react/20/solid'
 import { useRouter } from 'next/router'
 
-import { useCategoryEdit } from '@/hooks/category/useCategoryEdit'
+import { useCategoryEdit } from '@/modules/catalogue/hooks/useCategoryEdit'
 import { useCataloguePath } from '@/hooks/usePath'
 import { PATH } from '@/types/constants/paths'
 

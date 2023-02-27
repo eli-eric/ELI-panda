@@ -6,13 +6,13 @@ import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
 import ModalWarningComponent from '@/components/modal/warning/modal-warning.comp'
 import TableComponent from '@/components/table/Table.comp'
-import { useRelationMapRows } from '@/hooks/systems/relations/useMapRows'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
+import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
 import { ModalButtons } from '@/types/form'
 import { SystemRelationshipResponse } from '@/types/responses'
-import { RELATION_TYPE_CODE } from '@/types/system/constants'
 
+import { useRelationMapRows } from '../hooks/relations/useMapRows'
 import AddRelationForm from './AddRelationForm'
 
 const messages = message.systemsPage.relations

@@ -11,11 +11,12 @@ const messages = message.cataloguePage.itemList.header
 interface Props {
   item?: CatalogueItem
   groups: string[]
+  description?: string
 }
 
 const ItemPropertiesComponent = ({ item, groups }: Props) => (
-  <section aria-labelledby="details-heading" className="mt-12">
-    <div className="border-t border-gray-200 px-4 py-5 sm:px-6">
+  <section aria-labelledby="details-heading">
+    <div className="px-4 py-5 sm:px-6">
       <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
         <ItemPropertyTitle title={messages.categoryName}>
           <ItemPropertyValue text={item?.categoryName} />{' '}
@@ -28,6 +29,9 @@ const ItemPropertiesComponent = ({ item, groups }: Props) => (
         </ItemPropertyTitle>
         <ItemPropertyTitle title={messages.manufacturerUrl}>
           <ItemPropertyValue text={item?.manufacturerUrl} link={true} />
+        </ItemPropertyTitle>
+        <ItemPropertyTitle title={messages.description} span="2">
+          <ItemPropertyValue text={item?.description} />
         </ItemPropertyTitle>
       </dl>
     </div>

@@ -1,5 +1,5 @@
 import { CatalogueItemsResponse } from '@/types/responses'
-import { Selectable } from '@/types/system'
+import { Selectable } from '@/modules/systems/types'
 
 import ItemListHeaderComponent from './header/item-list-header.comp'
 import ItemListRow from './row/item-list-row.comp'
