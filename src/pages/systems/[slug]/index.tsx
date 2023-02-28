@@ -18,7 +18,6 @@ import RelationsSection from '@/modules/systems/relationsSection/RelationsSectio
 import { Prompt, Results } from '@/modules/systems/Search'
 import Subsystems from '@/modules/systems/Subsystems'
 import SystemDetail from '@/modules/systems/systemDetailSection/Detail'
-import Title from '@/modules/systems/Title'
 import { System } from '@/modules/systems/types'
 import ViewControl from '@/modules/systems/ViewControl'
 
@@ -70,7 +69,7 @@ const SystemDetailPage: NextPage = () => {
   const [query, setQuery] = useParam('q')
 
   const { data } = useSWR(uid, fetchFakeSystem)
-  const { AddButton, EditButton } = useSystemEdit({ systemDetail: data })
+  const { EditButton } = useSystemEdit({ systemDetail: data })
   const [view, setView] = useState<{
     system: boolean
     relations: boolean
@@ -87,19 +86,20 @@ const SystemDetailPage: NextPage = () => {
       <Head>
         <title>{data.name}</title>
       </Head>
-
-      <div className="p-4 lg:p-8 flex flex-wrap">
+      <div className="flex-col">
+        <div className="flex flex-wrap w-full">
+          <div className="w-full sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white border-b">
+            <div className="flex flex-1 justify-between px-4">
+              <div className="flex flex-1">
+                <Prompt query={query as string} setQuery={setQuery} />
+              </div>
+              <ViewControl setView={setView} view={view} />
+            </div>
+          </div>
+        </div>
         <Suspense fallback={<ProgressBarComponent />}>
           <Breadcrumbs path={data.path} />
         </Suspense>
-
-        <div className="lg:px-3 flex flex-wrap w-full justify-between gap-4">
-          <Title data={data} />
-          <ViewControl setView={setView} view={view} />
-          <div className="w-96">
-            <Prompt query={query as string} setQuery={setQuery} />
-          </div>
-        </div>
 
         {query && (
           <div className="w-full">
@@ -107,49 +107,49 @@ const SystemDetailPage: NextPage = () => {
           </div>
         )}
 
-        <aside className="w-full lg:w-1/4">
-          <Card>
-            <Heading text="Subsystems">
-              <AddButton />
-            </Heading>
-            <ErrorBoundary fallback={<ErrorPage />}>
-              <Suspense fallback={<ProgressBarComponent />}>
-                <Subsystems uid={uid} />
-              </Suspense>
-            </ErrorBoundary>
-          </Card>
-        </aside>
-
-        <main className={`w-full lg:w-3/4`}>
-          {view.system && (
+        <div className="grid grid-cols-4">
+          <div className="col-span-1">
             <Card>
-              <Heading text="Detail">
-                <EditButton />
-              </Heading>
-              <SystemDetail data={data} />
-            </Card>
-          )}
-          {view.catalogueItem && (
-            <Card>
-              <Heading text="Cataloue Item" />
-              <ErrorBoundary fallback={<ErrorPage />}>
-                <Suspense fallback={<LoaderComponent />}>
-                  <CatalogueItemSection uid={data.catalogueUID} />
-                </Suspense>
-              </ErrorBoundary>
-            </Card>
-          )}
-          {view.relations && (
-            <Card>
-              <Heading text="Relations" />
+              <Heading text="Subsystems" />
               <ErrorBoundary fallback={<ErrorPage />}>
                 <Suspense fallback={<ProgressBarComponent />}>
-                  <RelationsSection uid={data.uid} systemName={data.name} />
+                  <Subsystems uid={uid} />
                 </Suspense>
               </ErrorBoundary>
             </Card>
-          )}
-        </main>
+          </div>
+
+          <div className="col-span-3">
+            {view.system && (
+              <Card>
+                <Heading text="Detail">
+                  <EditButton />
+                </Heading>
+                <SystemDetail data={data} />
+              </Card>
+            )}
+            {view.catalogueItem && (
+              <Card>
+                <Heading text="Cataloue Item" />
+                <ErrorBoundary fallback={<ErrorPage />}>
+                  <Suspense fallback={<LoaderComponent />}>
+                    <CatalogueItemSection uid={data.catalogueUID} />
+                  </Suspense>
+                </ErrorBoundary>
+              </Card>
+            )}
+            {view.relations && (
+              <Card>
+                <Heading text="Relations" />
+                <ErrorBoundary fallback={<ErrorPage />}>
+                  <Suspense fallback={<ProgressBarComponent />}>
+                    <RelationsSection uid={data.uid} systemName={data.name} />
+                  </Suspense>
+                </ErrorBoundary>
+              </Card>
+            )}
+          </div>
+        </div>
       </div>
     </Fragment>
   )

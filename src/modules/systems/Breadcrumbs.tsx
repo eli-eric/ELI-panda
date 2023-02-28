@@ -1,35 +1,24 @@
-import Link from 'next/link'
 import { Fragment } from 'react'
 import { fetchFakeSystems } from 'src/pages/systems/[slug]'
 import useSWR from 'swr'
 
-const Breadcrumbs = (props: { path: string[] }) => {
-  const { path } = props
+import BreadcrumpContainer from '@/components/Breadcrump/Breadcrump.cont'
+import BreadcrumpItem from '@/components/Breadcrump/Breadcrump.item'
+
+import { useSystemEdit } from './hooks/useSystemEdit'
+
+const Breadcrumbs = ({ path }: { path?: string[] }) => {
   const { data } = useSWR(path, fetchFakeSystems)
+  const { AddButton } = useSystemEdit({})
   return (
-    <nav className="p-1 lg:p-2 w-full">
-      <div className="flex gap-x-1 flex-wrap">
-        <div className="flex items-center px-1 py-1 text-sm font-medium ">
-          <span className="truncate">Systems</span>
-        </div>
-        <div className="text-gray-600 flex items-center py-1 text-sm font-medium ">
-          <span className="truncate">/</span>
-        </div>
+    <BreadcrumpContainer homeLink="/systems">
+      <Fragment>
         {data?.map(({ uid, name }) => (
-          <Fragment key={uid}>
-            <Link
-              className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center px-1 py-1 text-sm font-medium "
-              href={`/systems/${uid}`}
-            >
-              <span className="truncate">{name}</span>
-            </Link>
-            <div className="text-gray-600 flex items-center py-1 text-sm font-medium ">
-              <span className="truncate">/</span>
-            </div>
-          </Fragment>
+          <BreadcrumpItem key={uid} name={name} link={'/systems/' + uid} />
         ))}
-      </div>
-    </nav>
+        <AddButton />
+      </Fragment>
+    </BreadcrumpContainer>
   )
 }
 

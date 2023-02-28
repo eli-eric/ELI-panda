@@ -30,7 +30,7 @@ export const CatalogLayoutContainer = ({
       const catalogueList =
         document.getElementById('catalogue-list')?.clientHeight || 0
       const catalogueBreadcrump =
-        document.getElementById('catalogue-breadcrump')?.clientHeight || 0
+        document.getElementById('breadcrump')?.clientHeight || 0
       const cataloguePaging =
         document.getElementById('catalogue-paging')?.clientHeight || 0
       const height =
@@ -67,10 +67,8 @@ interface TableProps {
   children: React.ReactNode
 }
 
-export const TableLayoutComponent = ({ children }: TableProps) => {
-  return (
-    <div className="h-full overflow-auto border-t border-gray-300  ">
-      {children}
-    </div>
-  )
-}
+export const TableLayoutComponent = ({ children }: TableProps) => (
+  <div className="h-full overflow-auto border-t border-gray-300  ">
+    {children}
+  </div>
+)

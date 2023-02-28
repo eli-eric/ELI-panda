@@ -58,8 +58,8 @@ const RelationsSection = ({
   )
 
   const deleteHandler = uid => {
-    setOpenDelete(true)
     setRelationUid(uid)
+    setOpenDelete(true)
   }
   const data = useRelationMapRows({ relations, onDelete: deleteHandler })
 

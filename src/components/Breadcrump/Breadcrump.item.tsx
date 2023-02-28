@@ -7,10 +7,9 @@ interface Props {
   link: string
 }
 
-const BreadcrumpItemComponent = ({ name, link }: Props) => {
-  const router = useRouter()
+const BreadcrumpItem = ({ name, link }: Props) => {
+  const { query } = useRouter()
 
-  const { search } = router.query
   return (
     <li key={name} className="flex">
       <div className="flex items-center">
@@ -19,9 +18,8 @@ const BreadcrumpItemComponent = ({ name, link }: Props) => {
           aria-hidden="true"
         />
         <Link
-          href={{ pathname: link, query: search && { search: search } }}
-          className="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
-          //aria-current={page.current ? 'page' : undefined}
+          href={{ pathname: link }}
+          className="ml-1 text-sm font-medium text-gray-500 hover:text-gray-700"
         >
           {name}
         </Link>
@@ -30,4 +28,4 @@ const BreadcrumpItemComponent = ({ name, link }: Props) => {
   )
 }
 
-export default BreadcrumpItemComponent
+export default BreadcrumpItem
