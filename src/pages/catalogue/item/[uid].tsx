@@ -3,11 +3,12 @@ import Head from 'next/head'
 import { Fragment, Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useIntl } from 'react-intl'
-import ItemDetailHeaderComponent from 'src/components/catalogueItem/header/item-detail-header.comp'
-import ItemDetailComponent from 'src/components/catalogueItem/item-detail.comp'
-import ErrorPage from 'src/components/error/ErrorPage'
-import LoaderComponent from 'src/components/ui/loader.comp'
 import { message } from 'src/i18n/src/messages'
+
+import ErrorPage from '@/components/error/ErrorPage'
+import LoaderComponent from '@/components/loader.comp'
+import ItemDetailHeaderComponent from '@/modules/catalogueItem/header/item-detail-header.comp'
+import ItemDetailComponent from '@/modules/catalogueItem/item-detail.comp'
 
 const messages = message.cataloguePage
 

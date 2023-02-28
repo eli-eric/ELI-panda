@@ -1,6 +1,4 @@
 import { faker } from '@faker-js/faker'
-import { PlusIcon } from '@heroicons/react/20/solid'
-import { PencilSquareIcon } from '@heroicons/react/24/outline'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -8,24 +6,21 @@ import { Fragment, Suspense, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import useSWR from 'swr/immutable'
 
+import Card, { Heading } from '@/components/card/card.comp'
 import ErrorPage from '@/components/error/ErrorPage'
-import Breadcrumbs from '@/components/systems/Breadcrumbs'
-import CatalogueItemSection from '@/components/systems/catalogueItemSection/CatalogueItemSection'
-import Description from '@/components/systems/Description'
-import SystemDetail from '@/components/systems/Detail'
-import Edit from '@/components/systems/Edit'
-import Preview from '@/components/systems/Preview'
-import RelationsSection from '@/components/systems/relationsSection/RelationsSection'
-import { Prompt, Results } from '@/components/systems/Search'
-import Subsystems from '@/components/systems/Subsystems'
-import Title from '@/components/systems/Title'
-import ViewControl from '@/components/systems/ViewControl'
-import Card, { Heading } from '@/components/ui/card/card.comp'
-import LoaderComponent from '@/components/ui/loader.comp'
-import ModalComponent from '@/components/ui/modal/modal.comp'
-import ProgressBarComponent from '@/components/ui/progress-bar.comp'
+import LoaderComponent from '@/components/loader.comp'
+import ProgressBarComponent from '@/components/progress-bar.comp'
 import useParam from '@/hooks/useParam'
-import { System } from '@/types/system'
+import Breadcrumbs from '@/modules/systems/Breadcrumbs'
+import CatalogueItemSection from '@/modules/systems/catalogueItemSection/CatalogueItemSection.cont'
+import { useSystemEdit } from '@/modules/systems/hooks/useSystemEdit'
+import RelationsSection from '@/modules/systems/relationsSection/RelationsSection'
+import { Prompt, Results } from '@/modules/systems/Search'
+import Subsystems from '@/modules/systems/Subsystems'
+import SystemDetail from '@/modules/systems/systemDetailSection/Detail'
+import Title from '@/modules/systems/Title'
+import { System } from '@/modules/systems/types'
+import ViewControl from '@/modules/systems/ViewControl'
 
 const getFakeName = () => faker.company.catchPhrase()
 
@@ -43,7 +38,7 @@ export const getFakeSystem = (): System => {
     path: getFakePath(),
     image: 'https://source.unsplash.com/collection/71371194/500x500',
     description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
-      5,
+      2
     )}`,
     children: getFakePath(),
     importanceCode: faker.datatype.string(),
@@ -53,42 +48,29 @@ export const getFakeSystem = (): System => {
     systemAlias: faker.datatype.string(),
     locationCode: faker.datatype.string(),
     ownerUID: faker.datatype.string(),
-    catalogueUID: undefined,
+    catalogueUID: faker.datatype.uuid(),
   }
 }
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 export const fetchFakeSystem = async () => {
-  await sleep(faker.datatype.number({ min: 200, max: 2000 }))
+  await sleep(faker.datatype.number({ min: 200, max: 500 }))
   return getFakeSystem()
 }
 export const fetchFakeSystems = async () => {
   const res = [...Array(faker.datatype.number({ min: 0, max: 5 }))]
-  await sleep(faker.datatype.number({ min: 200, max: 2000 }))
+  await sleep(faker.datatype.number({ min: 200, max: 500 }))
   return res.map(() => getFakeSystem())
 }
 
-const empty = {
-  name: '',
-  description: '',
-  systemCode: '',
-  systemAlias: '',
-  locationCode: '',
-  catalogueUID: '',
-  importanceCode: '',
-  systemTypeUID: '',
-  ownerUID: '',
-  zoneCode: '',
-  subZoneCode: '',
-}
-
-const Page: NextPage = () => {
+const SystemDetailPage: NextPage = () => {
   const router = useRouter()
-  const uid = router.query.slug
+  const uid = router.query.slug as string
   const [query, setQuery] = useParam('q')
 
   const { data } = useSWR(uid, fetchFakeSystem)
+  const { AddButton, EditButton } = useSystemEdit({ systemDetail: data })
   const [view, setView] = useState<{
     system: boolean
     relations: boolean
@@ -99,43 +81,21 @@ const Page: NextPage = () => {
     catalogueItem: true,
   })
 
-  const [isEditing, setIsEditing] = useState('')
-
-  const onSubmitEdit = (data: System) => {
-    console.log(data)
-    setIsEditing('')
-  }
-
-  const onSubmitNew = (data: System) => {
-    console.log(data)
-    setIsEditing('')
-  }
-
   if (!data) return <LoaderComponent />
   return (
-    <>
+    <Fragment>
       <Head>
         <title>{data.name}</title>
       </Head>
 
       <div className="p-4 lg:p-8 flex flex-wrap">
-        <nav className="p-1 lg:p-2 w-full">
-          <Suspense
-            fallback={
-              <div className="py-3">
-                <ProgressBarComponent />
-              </div>
-            }
-          >
-            <Breadcrumbs path={data.path} />
-          </Suspense>
-        </nav>
+        <Suspense fallback={<ProgressBarComponent />}>
+          <Breadcrumbs path={data.path} />
+        </Suspense>
 
         <div className="lg:px-3 flex flex-wrap w-full justify-between gap-4">
           <Title data={data} />
-          <div className="-mt-2">
-            <ViewControl setView={setView} view={view} />
-          </div>
+          <ViewControl setView={setView} view={view} />
           <div className="w-96">
             <Prompt query={query as string} setQuery={setQuery} />
           </div>
@@ -149,51 +109,29 @@ const Page: NextPage = () => {
 
         <aside className="w-full lg:w-1/4">
           <Card>
-            <Heading
-              action={{
-                label: <PlusIcon className="h-5" />,
-                onClick: () => setIsEditing('new'),
-              }}
-            >
-              Subsystems
+            <Heading text="Subsystems">
+              <AddButton />
             </Heading>
-
-            <Suspense fallback={<ProgressBarComponent />}>
-              <nav aria-label="Subsystems">
-                <Subsystems ids={data.children} />
-              </nav>
-            </Suspense>
+            <ErrorBoundary fallback={<ErrorPage />}>
+              <Suspense fallback={<ProgressBarComponent />}>
+                <Subsystems uid={uid} />
+              </Suspense>
+            </ErrorBoundary>
           </Card>
         </aside>
 
         <main className={`w-full lg:w-3/4`}>
           {view.system && (
             <Card>
-              <Heading
-                action={{
-                  label: <PencilSquareIcon className="h-6" />,
-                  onClick: () => setIsEditing('current'),
-                }}
-              >
-                Detail
+              <Heading text="Detail">
+                <EditButton />
               </Heading>
-
-              <div className="flex flex-wrap lg:flex-nowrap gap-2 lg:gap-4">
-                <section>
-                  <Preview image={data.image} alt={data.name} />
-                </section>
-
-                <section>
-                  <SystemDetail data={data} />
-                  <Description data={data} />
-                </section>
-              </div>
+              <SystemDetail data={data} />
             </Card>
           )}
-
           {view.catalogueItem && (
             <Card>
-              <Heading>Cataloue Item</Heading>
+              <Heading text="Cataloue Item" />
               <ErrorBoundary fallback={<ErrorPage />}>
                 <Suspense fallback={<LoaderComponent />}>
                   <CatalogueItemSection uid={data.catalogueUID} />
@@ -201,10 +139,9 @@ const Page: NextPage = () => {
               </ErrorBoundary>
             </Card>
           )}
-
           {view.relations && (
             <Card>
-              <Heading>Relations</Heading>
+              <Heading text="Relations" />
               <ErrorBoundary fallback={<ErrorPage />}>
                 <Suspense fallback={<ProgressBarComponent />}>
                   <RelationsSection uid={data.uid} systemName={data.name} />
@@ -212,22 +149,10 @@ const Page: NextPage = () => {
               </ErrorBoundary>
             </Card>
           )}
-
-          <ModalComponent
-            buttons={{ noButtons: true }}
-            open={!!isEditing}
-            setOpen={() => {}}
-          >
-            <Edit
-              onSubmit={isEditing === 'current' ? onSubmitEdit : onSubmitNew}
-              data={isEditing === 'current' ? data : undefined}
-              setIsEditing={setIsEditing}
-            />
-          </ModalComponent>
         </main>
       </div>
-    </>
+    </Fragment>
   )
 }
 
-export default Page
+export default SystemDetailPage

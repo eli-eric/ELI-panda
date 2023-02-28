@@ -28,22 +28,23 @@ const DashboardPage: NextPage = (): JSX.Element => {
         {
           description:
             'Catalogue categories: you can now edit(create, update, delete) categories, property groups and properties',
-          link: '/catalogue'
+          link: '/catalogue',
         },
         {
           description: 'Systems: first draft of the System overview',
-          link: '/systems'
+          link: '/systems',
         },
         {
-          description: 'Systems - relationships: you can see all the relationships for the selected System',
-          link: '/systems'
-        }
+          description:
+            'Systems - relationships: you can see all the relationships for the selected System',
+          link: '/systems',
+        },
       ],
       bugs: [
         {
-          description: 'Logout - show loading indicator during the logout'
-        }
-      ]
+          description: 'Logout - show loading indicator during the logout',
+        },
+      ],
     },
     {
       id: '0.0.1',

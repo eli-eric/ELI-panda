@@ -11,12 +11,3 @@ export const ENDPOINTS = {
   systems: '/systems',
   systemsForRel: '/systems/for-relationship',
 }
-
-export enum AxiosMethodType {
-  GET = 'get',
-  POST = 'post',
-  PUT = 'put',
-  DELETE = 'delete',
-}
-
-export type AxiosMethodTypes = keyof typeof AxiosMethodType

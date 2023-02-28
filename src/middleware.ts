@@ -45,7 +45,7 @@ const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const matchesProtectedPath = PROTECTED_PATHS.some(path =>
-    pathname.startsWith(path),
+    pathname.startsWith(path)
   )
   if (matchesProtectedPath) {
     const user = await getToken({ req: request })
@@ -55,10 +55,10 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url, 302)
     }
     const currentPath = Object.keys(PATH_ROLES_CONFIG).find(key =>
-      pathname.startsWith(key),
+      pathname.startsWith(key)
     ) as PATH
     const matchRolesToPath = PATH_ROLES_CONFIG[currentPath].some(role =>
-      user.roles.includes(role),
+      user.roles.includes(role)
     )
     if (!matchRolesToPath) {
       const url = new URL(`/404`, request.url)
@@ -66,7 +66,4 @@ export async function middleware(request: NextRequest) {
     }
   }
   return NextResponse.next()
-}
-export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
 }

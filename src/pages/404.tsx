@@ -3,9 +3,9 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
-import EliLogoComponent from 'src/components/ui/eli-logo.comp'
 
-import { Button } from '@/components/ui/Buttons'
+import { Button } from '@/components/Buttons'
+import EliLogoComponent from '@/components/eli-logo.comp'
 import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
 

@@ -2,7 +2,8 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
-import ModalComponent from 'src/components/ui/modal/modal.comp'
+
+import ModalComponent from '@/components/modal/modal.comp'
 
 import ProfileCardComponent from '../card/profile-card.comp'
 
@@ -70,7 +71,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                       onClick={showModalHandler}
                       className={classNames(
                         active ? 'bg-gray-100' : '',
-                        'w-full text-left block px-4 py-2 text-sm text-gray-700',
+                        'w-full text-left block px-4 py-2 text-sm text-gray-700'
                       )}
                     >
                       Your Profile
@@ -83,7 +84,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                       onClick={signOutHandler}
                       className={classNames(
                         active ? 'bg-gray-100' : '',
-                        'w-full text-left block px-4 py-2 text-sm text-gray-700',
+                        'w-full text-left block px-4 py-2 text-sm text-gray-700'
                       )}
                     >
                       Sign out

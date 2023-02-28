@@ -1,4 +1,4 @@
-import { SystemForRel } from './system'
+import { SystemForRel } from '../modules/systems/types'
 
 export interface CatalogueCategoryResponse {
   uid: string

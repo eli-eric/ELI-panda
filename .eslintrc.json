@@ -1,16 +1,68 @@
 {
-  "extends": ["next/core-web-vitals"],
   "parser": "@typescript-eslint/parser",
-  "plugins": ["unused-imports", "simple-import-sort"],
+  "extends": [
+    "next/core-web-vitals",
+    "next",
+    "eslint:recommended",
+    "prettier/@typescript-eslint", // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
+    "plugin:react/recommended", // Uses the recommended rules from @eslint-plugin-react
+    "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+    "plugin:prettier/recommended" // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
+  ],
+  "plugins": [
+    "unused-imports",
+    "simple-import-sort",
+    "@typescript-eslint",
+    "sort-keys-fix",
+    "typescript-sort-keys",
+    "import"
+  ],
   "rules": {
-    "@typescript-eslint/no-unused-vars": "off", // or "@typescript-eslint/no-unused-vars": "off",
     "simple-import-sort/imports": 1,
     "simple-import-sort/exports": "warn",
     "unused-imports/no-unused-imports": "warn",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/no-empty-function": [
+      "error",
+      { "allow": ["arrowFunctions"] }
+    ],
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/ban-ts-ignore": "off",
+    "@typescript-eslint/camelcase": 0,
+    "@typescript-eslint/no-var-requires": 0,
+    "@typescript-eslint/ban-types": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/no-unused-vars": ["off", { "args": "after-used" }],
+    "@typescript-eslint/no-unused-vars-experimental": [
+      "off",
+      { "args": "after-used" }
+    ], // To show unused typescript interfaces/types
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
-  }
+    "react-hooks/exhaustive-deps": "warn",
+    "arrow-body-style": "warn",
+    "no-console": "warn",
+    "linebreak-style": ["warn", "unix"],
+    "sort-imports": "off", // Necessary keep off to enable simple-import-sort/sort rule
+    "import/order": "off", // Necessary keep off to enable simple-import-sort/sort rule
+    "react/prefer-stateless-function": [2, { "ignorePureComponents": false }],
+
+    "import/no-cycle": 1,
+    "prettier/prettier": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "warn",
+    "no-case-declarations": "off"
+  },
+  "overrides": [
+    {
+      "files": ["**/constants/**"],
+      "rules": {
+        "@typescript-eslint/naming-convention": [
+          "warn",
+          { "selector": "variableLike", "format": ["UPPER_CASE"] },
+          { "selector": "enum", "format": ["UPPER_CASE"] }
+        ]
+      }
+    }
+  ]
 }

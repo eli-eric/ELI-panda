@@ -168,10 +168,38 @@ export const messages = {
     catalogueItem: {
       addButton: 'Find Catalogue Item',
       addItemModal: {
-        tableHeader: {
-          name: 'Name',
-          type: 'System Type',
-          path: 'System Code Path',
+        form: {
+          catalogueItemUID: {
+            label: 'Catalogue Item',
+            placeholder: '0',
+          },
+          itemUsageUID: {
+            label: 'Item Usage UID',
+          },
+          eun: {
+            label: 'EUN',
+            placeholder: 'EUN',
+          },
+          name: {
+            label: 'Name',
+            placeholder: 'Name',
+          },
+          serialNumber: {
+            label: 'Serial Number',
+            placeholder: 'Serial Number',
+          },
+          batchNumber: {
+            label: 'Batch Number',
+            placeholder: 'Batch Number',
+          },
+          obsolete: {
+            label: 'Obsolote',
+            placeholder: 'Obsolote',
+          },
+          estimatedLifeTimeMonths: {
+            label: 'Estimated Life Time Months',
+            placeholder: 'Estimated Life Time Months',
+          },
         },
       },
     },

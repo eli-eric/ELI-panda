@@ -8,8 +8,8 @@ const getEndpoints = (uid?: string, path?: string, query?: string) => {
     catalogueItemImage: BASE_URL + `/catalogue/item/${uid}/image`,
     catalogueCategoryEdit: `/catalogue/category${uid ? '/' + uid : ''}`,
     systemDetail: `/system/${uid}`,
-    systemTree: '/systems/tree',
-    systems: '/systems',
+    systemItemAdd: `/system/${uid}/item`,
+    systemsDetails: `/systems${uid ? '/' + uid : ''}`,
     systemRelationships: `/system/${uid}/relationships`,
     systemRelationship: '/system/relationship',
     systemsForRelationship: `/systems/for-relationship${query}`,
@@ -18,7 +18,7 @@ const getEndpoints = (uid?: string, path?: string, query?: string) => {
 }
 interface useEndpointsProps {
   uid?: string
-  query?: Object
+  query?: unknown
   path?: string
 }
 export const useEndpoint = ({ uid, query, path }: useEndpointsProps) => {

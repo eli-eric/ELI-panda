@@ -1,9 +1,3 @@
-import {
-  FieldValues,
-  FormState,
-  UseFormHandleSubmit,
-  UseFormRegister,
-} from 'react-hook-form'
 export type ModalButtons = {
   noButtons?: boolean
   goBack?: Button
@@ -17,10 +11,27 @@ export type Button = {
   onClick?: (data: unknown | undefined) => void
 }
 
-export interface FormChildrenProps<T extends FieldValues = FieldValues> {
-  register: UseFormRegister<T>
-  formState: FormState<T>
-  handleSubmit: UseFormHandleSubmit<T>
-  onSubmit: (data: any) => void
-  onCancel: () => void
+export interface FieldProps {
+  name: string
+  isError?: boolean
+  padding?: boolean
+
+  placeholder?: string
+  disabled?: boolean
+  rounded?:
+    | 'rounded-l-md'
+    | 'rounded-t-md'
+    | 'rounded-r-md'
+    | 'rounded-b-md'
+    | 'rounded-md'
+  label?: string
+
+  type?: string
+}
+
+export type Option = {
+  value: string | number | readonly string[] | undefined
+  disabled?: boolean | undefined
+  name?: string | undefined
+  children?: JSX.Element
 }
