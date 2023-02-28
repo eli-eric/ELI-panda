@@ -1,7 +1,10 @@
 import { Fragment } from 'react'
 
-import Description from '../components/Description'
-import Preview from '../components/Preview'
+import ItemDetailComponent from '@/components/item-detail/ItemDetail.comp'
+import ItemPropertyTitle from '@/components/item-property/item-property-title.comp'
+import ItemPropertyValue from '@/components/item-property/item-property-value.comp'
+
+import { System } from '../types'
 
 const DISPLAY = [
   'importanceCode',
@@ -12,32 +15,22 @@ const DISPLAY = [
   'ownerUID',
 ]
 
-const SystemDetail = ({ data }) => {
+const SystemDetail = ({ data }: { data: System }) => {
   const rows = Object.entries(data).filter(([title]) => DISPLAY.includes(title))
 
   return (
     <Fragment>
-      <div className="flex flex-wrap lg:flex-nowrap gap-2 lg:gap-4">
-        <section>
-          <Preview image={data.image} alt={data.name} />
-        </section>
-        <section>
-          <div className="mb-4">
-            {rows.map(([title, value], idx) => (
-              <div
-                key={title}
-                className={`flex px-3 py-1 justify-between w-full ${
-                  idx % 2 && 'bg-gray-100'
-                }`}
-              >
-                <div>{title}</div>
-                <div>{value as string}</div>
-              </div>
-            ))}
-            <Description data={data} />
-          </div>
-        </section>
-      </div>
+      <ItemDetailComponent
+        title={data.name}
+        images={[data.image || '']}
+        decription={data.description}
+      >
+        {rows.map(([title, value], idx) => (
+          <ItemPropertyTitle key={idx} title={title}>
+            <ItemPropertyValue text={value as string} />
+          </ItemPropertyTitle>
+        ))}
+      </ItemDetailComponent>
     </Fragment>
   )
 }

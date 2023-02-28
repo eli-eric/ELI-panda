@@ -122,7 +122,7 @@ const SystemDetailPage: NextPage = () => {
           <div className="col-span-3">
             {view.system && (
               <Card>
-                <Heading text="Detail">
+                <Heading text="System Detail">
                   <EditButton />
                 </Heading>
                 <SystemDetail data={data} />

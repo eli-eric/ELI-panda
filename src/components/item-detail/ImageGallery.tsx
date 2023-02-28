@@ -6,7 +6,7 @@ function classNames(...classes) {
 }
 
 interface Props {
-  images: { name: string; id: number; src: string }[]
+  images: string[]
 }
 
 const ImageGalleryComponent = ({ images }: Props) => (
@@ -45,11 +45,11 @@ const ImageGalleryComponent = ({ images }: Props) => (
       </Tab.List> */}
     </div>
 
-    <Tab.Panels className="aspect-w-1 aspect-h-1 w-full">
-      {images.map(image => (
-        <Tab.Panel key={image.id}>
+    <Tab.Panels className=" w-full">
+      {images.map((image, index) => (
+        <Tab.Panel key={index}>
           <Image
-            src={image.src}
+            src={image}
             alt="catalogue/item/image"
             className="w-full object-cover object-center sm:rounded-lg"
             width={500}
