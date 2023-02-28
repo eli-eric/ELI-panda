@@ -45,15 +45,15 @@ const ImageGalleryComponent = ({ images }: Props) => (
       </Tab.List> */}
     </div>
 
-    <Tab.Panels className=" w-full">
+    <Tab.Panels className="w-full">
       {images.map((image, index) => (
         <Tab.Panel key={index}>
           <Image
             src={image}
             alt="catalogue/item/image"
-            className="w-full object-cover object-center sm:rounded-lg"
-            width={500}
-            height={500}
+            className="w-full h-72 object-cover object-center sm:rounded-lg"
+            width={400}
+            height={400}
           />
         </Tab.Panel>
       ))}
