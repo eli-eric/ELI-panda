@@ -1,33 +1,33 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment, Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 
 import Card, { Heading } from '@/components/card/card.comp'
 import EmptySectionComponent from '@/components/empty-section/empty-section.comp'
-import ProgressBarComponent from '@/components/progress-bar.comp'
+import ErrorPage from '@/components/error/ErrorPage'
+import LoaderComponent from '@/components/loader.comp'
 import Subsystems from '@/modules/systems/Subsystems'
 
-const Page: NextPage = () => (
+const RootSystemPage: NextPage = () => (
   <Fragment>
     <Head>
       <title>Systems Overview</title>
     </Head>
     <div className="flex">
-      <aside className="w-full lg:w-1/4">
+      <div className="w-full lg:w-1/4">
         <Card>
           <Heading text="Subsystems" />
-          <Suspense fallback={<ProgressBarComponent />}>
-            <nav aria-label="Subsystems">
-              <Subsystems ids={['fjdskfsdl']} />
-            </nav>
-          </Suspense>
+          <ErrorBoundary fallback={<ErrorPage />}>
+            <Suspense fallback={<LoaderComponent />}>
+              <Subsystems />
+            </Suspense>
+          </ErrorBoundary>
         </Card>
-      </aside>
-      <main className={`p-1 lg:p-2 w-full lg:w-3/4`}>
-        <EmptySectionComponent />
-      </main>
+      </div>
+      <EmptySectionComponent />
     </div>
   </Fragment>
 )
 
-export default Page
+export default RootSystemPage

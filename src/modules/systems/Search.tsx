@@ -15,9 +15,7 @@ const List = (props: { query: string }) => {
   return (
     <>
       {data && data.length > 0 ? (
-        data.map(({ uid, name }) => (
-          <Item key={uid} text={name} href={'/systems/' + uid} />
-        ))
+        data.map(({ uid, name }) => <Item key={uid} text={name} uid={uid} />)
       ) : (
         <div className="text-gray-600 flex items-center px-3 py-2 text-sm font-medium rounded-md">
           <span className="truncate">No results found.</span>

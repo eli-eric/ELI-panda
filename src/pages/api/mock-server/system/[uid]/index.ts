@@ -9,12 +9,10 @@ export default function handler(
   if (req.headers.authorization) {
     if (req.method === 'GET') {
       const getFakeName = () => faker.company.catchPhrase()
-
       const getFakePath = (): string[] => {
         const length = faker.datatype.number({ min: 0, max: 10 })
         return [...Array(length)].map(() => faker.datatype.uuid())
       }
-
       const getFakeSystem = () => {
         const uid = faker.datatype.uuid()
         const name = getFakeName()

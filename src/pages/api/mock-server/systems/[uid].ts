@@ -9,12 +9,10 @@ export default function handler(
   if (req.headers.authorization) {
     if (req.method === 'GET') {
       const getFakeName = () => faker.company.catchPhrase()
-
       const getFakePath = (): string[] => {
         const length = faker.datatype.number({ min: 0, max: 10 })
         return [...Array(length)].map(() => faker.datatype.uuid())
       }
-
       const getFakeSystem = () => {
         const uid = faker.datatype.uuid()
         const name = getFakeName()
@@ -36,13 +34,11 @@ export default function handler(
           catalogueUID: faker.datatype.uuid(),
         }
       }
-      res.status(200).json(getFakeSystem())
-    }
-    if (req.method === 'POST') {
-      res.status(200).json({ message: 'OK' })
-    }
-    if (req.method === 'PUT') {
-      res.status(200).json({ message: 'OK' })
+      const fetchFakeSystems = () => {
+        const res = [...Array(faker.datatype.number({ min: 1, max: 5 }))]
+        return res.map(() => getFakeSystem())
+      }
+      res.status(200).json(fetchFakeSystems())
     }
   } else {
     res.status(401).json({ message: 'Unauthorized' })

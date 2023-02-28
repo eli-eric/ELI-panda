@@ -48,7 +48,7 @@ export const getFakeSystem = (): System => {
     systemAlias: faker.datatype.string(),
     locationCode: faker.datatype.string(),
     ownerUID: faker.datatype.string(),
-    catalogueUID: faker.datatype.string(),
+    catalogueUID: faker.datatype.uuid(),
   }
 }
 
@@ -64,9 +64,9 @@ export const fetchFakeSystems = async () => {
   return res.map(() => getFakeSystem())
 }
 
-const Page: NextPage = () => {
+const SystemDetailPage: NextPage = () => {
   const router = useRouter()
-  const uid = router.query.slug
+  const uid = router.query.slug as string
   const [query, setQuery] = useParam('q')
 
   const { data } = useSWR(uid, fetchFakeSystem)
@@ -112,9 +112,11 @@ const Page: NextPage = () => {
             <Heading text="Subsystems">
               <AddButton />
             </Heading>
-            <Suspense fallback={<ProgressBarComponent />}>
-              <Subsystems ids={data.children} />
-            </Suspense>
+            <ErrorBoundary fallback={<ErrorPage />}>
+              <Suspense fallback={<ProgressBarComponent />}>
+                <Subsystems uid={uid} />
+              </Suspense>
+            </ErrorBoundary>
           </Card>
         </aside>
 
@@ -153,4 +155,4 @@ const Page: NextPage = () => {
   )
 }
 
-export default Page
+export default SystemDetailPage

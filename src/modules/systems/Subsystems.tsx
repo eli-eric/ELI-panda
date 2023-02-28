@@ -1,35 +1,42 @@
 import Link from 'next/link'
-import { fetchFakeSystems } from 'src/pages/systems/[slug]'
 import useSWR from 'swr/immutable'
 
+import { fetcher } from '@/features/fetcher'
+import { useEndpoint } from '@/hooks/useEndpoint'
 import { System } from '@/modules/systems/types'
+import { PATH } from '@/types/constants/paths'
 
-export const Item = (props: { href: string; text: string }) => {
-  const { href, text } = props
+export const Item = (props: { uid: string; text: string }) => {
+  const { uid, text } = props
   return (
     <Link
-      href={href}
-      className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md"
+      href={{ pathname: PATH.SYSTEMS + '/' + uid }}
+      className=" truncate text-gray-600 hover:bg-gray-50 hover:text-gray-900 flex items-center px-3 py-2 text-sm font-medium rounded-md"
     >
-      <span className="truncate">{text}</span>
+      {text}
     </Link>
   )
 }
 
-const Subsystems = ({ ids }) => {
-  const { data } = useSWR<System[]>(ids, fetchFakeSystems)
+interface Props {
+  uid?: string
+}
+
+const Subsystems = ({ uid }: Props) => {
+  const { systemsDetails } = useEndpoint({ uid })
+  const { data: systemsDetailsRes } = useSWR<System[]>(systemsDetails, fetcher)
   return (
-    <nav aria-label="Subsystems">
-      {data && data.length > 0 ? (
-        data.map(({ uid, name }) => (
-          <Item key={uid} href={'/systems/' + uid} text={name} />
+    <div aria-label="Subsystems">
+      {systemsDetailsRes && systemsDetailsRes.length > 0 ? (
+        systemsDetailsRes.map(({ uid, name }) => (
+          <Item key={uid} uid={uid} text={name} />
         ))
       ) : (
         <div className="text-gray-600 flex items-center px-3 py-2 text-sm font-medium rounded-md">
           <span className="truncate">This node has no subsystems</span>
         </div>
       )}
-    </nav>
+    </div>
   )
 }
 
