@@ -7,9 +7,9 @@ export async function fetcher(url) {
   return res
 }
 
-export async function imagefetcher(url) {
+export async function mockFetcher(url) {
   const res = await axios
-    .get(BASE_URL + url, { responseType: 'blob' })
+    .get('http://localhost:5001/api/mock-server' + url)
     .then(res => res.data)
   return res
 }
