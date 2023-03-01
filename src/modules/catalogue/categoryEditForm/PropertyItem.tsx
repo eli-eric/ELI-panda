@@ -5,14 +5,14 @@ import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 import { Button } from '@/components/Buttons'
 import { InputWithError } from '@/components/form/Input'
 import { SelectWithError } from '@/components/form/Select'
+import { useCodebookSelectValues } from '@/hooks/useCodebook'
 import { CategoryFormType, Property } from '@/types/catalogue/categoryFormTypes'
 import {
   defaultBoolOptions,
   PROPERTY_INPUT_TYPE,
-  PROPERTY_TYPE,
-  propertyTypes,
-  units,
+  PROPERTY_TYPE
 } from '@/types/catalogue/constants'
+import { CODEBOOK } from '@/types/constants/codebook'
 
 const ValueItem = ({ removeValue, index, name, errors }) => {
   const { register } = useFormContext<CategoryFormType>()
@@ -47,8 +47,13 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
     useFormContext<CategoryFormType>()
   const { fields, append, remove } = useFieldArray({
     control,
-    name: `${name}.listOfValues`,
+    name: `${name}.listOfValues`
   })
+  const units = useCodebookSelectValues(CODEBOOK.UNIT)
+  const propertyTypes = useCodebookSelectValues(
+    CODEBOOK.CATALOGUE_PROPERTY_TYPE
+  )
+
   const handleRemoveProp = () => {
     removeProp(index)
   }
@@ -61,7 +66,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
   const getDefaultOption = (name, disabled = false) => ({
     value: '',
     name,
-    disabled,
+    disabled
   })
 
   useEffect(() => {
@@ -85,19 +90,21 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
             register={register}
             name={`${name}.typeUID`}
             isError={!!errors?.typeUID?.message}
-            options={[
-              getDefaultOption('Select type', true),
-              ...propertyTypes.map(type => ({ ...type, value: type.uid })),
-            ]}
+            options={
+              propertyTypes
+                ? [getDefaultOption('Select type', true), ...propertyTypes]
+                : [getDefaultOption('Select type', true)]
+            }
           />
           <SelectWithError
             register={register}
             name={`${name}.unitUID`}
             isError={!!errors?.unitUID?.message}
-            options={[
-              getDefaultOption('Select Unit'),
-              ...units.map(unit => ({ ...unit, value: unit.uid })),
-            ]}
+            options={
+              units
+                ? [getDefaultOption('Select Unit'), ...units]
+                : [getDefaultOption('Select Unit')]
+            }
           />
 
           {type === PROPERTY_TYPE.LIST || type === PROPERTY_TYPE.BOOLEAN ? (
@@ -109,7 +116,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
                 type === PROPERTY_TYPE.LIST
                   ? [
                       getDefaultOption('Select default'),
-                      ...listOfValues.map(value => ({ value: value.value })),
+                      ...listOfValues.map(value => ({ value: value.value }))
                     ]
                   : [getDefaultOption('Select default'), ...defaultBoolOptions]
               }
