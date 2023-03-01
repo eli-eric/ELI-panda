@@ -12,14 +12,14 @@ import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
 import { ModalButtons } from '@/types/form'
 import { SystemRelationshipResponse } from '@/types/responses'
 
-import { useRelationMapRows } from '../hooks/relations/useMapRows'
+import { useRelationMapRows } from '../../hooks/relations/useMapRows'
 import AddRelationForm from './AddRelationForm'
 
 const messages = message.systemsPage.relations
 
 const RelationsSection = ({
   uid,
-  systemName,
+  systemName
 }: {
   uid: string
   systemName: string
@@ -42,15 +42,15 @@ const RelationsSection = ({
       onClick: () => {
         setRelationUid(undefined)
         setOpenDelete(false)
-      },
+      }
     },
     goBack: {
       text: intl.formatMessage({ id: messages.deleteModal.buttons.cancel }),
       onClick: () => {
         setRelationUid(undefined)
         setOpenDelete(false)
-      },
-    },
+      }
+    }
   }
 
   const collumsTitle = Object.keys(messages.tableHeader).map(key =>

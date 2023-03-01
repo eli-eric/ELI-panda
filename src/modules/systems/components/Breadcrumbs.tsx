@@ -5,7 +5,7 @@ import useSWR from 'swr'
 import BreadcrumpContainer from '@/components/Breadcrump/Breadcrump.cont'
 import BreadcrumpItem from '@/components/Breadcrump/Breadcrump.item'
 
-import { useSystemEdit } from './hooks/useSystemEdit'
+import { useSystemEdit } from '../hooks/useSystemEdit'
 
 const Breadcrumbs = ({ path }: { path?: string[] }) => {
   const { data } = useSWR(path, fetchFakeSystems)

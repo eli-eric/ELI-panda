@@ -11,7 +11,7 @@ import { message } from '@/i18n/src/messages'
 import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
 import { SystemsForRelResponse } from '@/types/responses'
 
-import { useSystemMapRows } from '../hooks/relations/useMapRows'
+import { useSystemMapRows } from '../../hooks/relations/useMapRows'
 
 const messages = message.systemsPage.relations.addRelationModal
 
@@ -19,7 +19,7 @@ const TableWithPaging = ({
   searchValue,
   relationTypeCode,
   setSelectedSystem,
-  selectedSystem,
+  selectedSystem
 }: {
   searchValue?: string
   relationTypeCode?: RELATION_TYPE_CODE
@@ -47,7 +47,7 @@ const TableWithPaging = ({
       systemFromUid: router.query.slug,
       relationTypeCode,
       search: searchValue,
-      pagination,
+      pagination
     }),
     [router, relationTypeCode, searchValue, pagination]
   )
@@ -59,7 +59,7 @@ const TableWithPaging = ({
   const data = useSystemMapRows({
     systems: systems?.data,
     setSelectedSystem,
-    selectedSystem,
+    selectedSystem
   })
 
   useEffect(() => {

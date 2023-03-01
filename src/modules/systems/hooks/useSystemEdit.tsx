@@ -1,7 +1,7 @@
 import {
   ChevronRightIcon,
   PencilSquareIcon,
-  PlusIcon,
+  PlusIcon
 } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
 import { Fragment, useState } from 'react'
@@ -10,11 +10,11 @@ import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
 import { ROLE } from '@/types/constants/roles'
 
-import EditForm from '../systemEdit/EditForm'
+import EditForm from '../components/systemEdit/EditForm'
 import { System } from '../types'
 
 export const useSystemEdit = ({
-  systemDetail,
+  systemDetail
 }: {
   systemDetail?: System | undefined
 }) => {

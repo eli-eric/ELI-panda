@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import { useRouter } from 'next/router'
-import useSWR from 'swr/immutable'
+import useSWR from 'swr'
 
 import { mockFetcher } from '@/features/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
@@ -33,7 +32,6 @@ interface Props {
 
 const Subsystems = ({ uid }: Props) => {
   const { systemsDetails } = useEndpoint({ uid })
-  const router = useRouter()
   const { data: systemsDetailsRes } = useSWR<System[]>(
     systemsDetails,
     mockFetcher

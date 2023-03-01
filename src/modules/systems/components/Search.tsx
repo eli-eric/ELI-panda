@@ -11,7 +11,7 @@ import { Item } from './Subsystems'
 const List = (props: { query: string }) => {
   const { query } = props
   const { data } = useSWR(query, fetchFakeSystems, {
-    suspense: true,
+    suspense: true
   })
   return (
     <>

@@ -4,7 +4,7 @@ import ItemDetailComponent from '@/components/item-detail/ItemDetail.comp'
 import ItemPropertyTitle from '@/components/item-property/item-property-title.comp'
 import ItemPropertyValue from '@/components/item-property/item-property-value.comp'
 
-import { System } from '../types'
+import { System } from '../../types'
 
 const DISPLAY = [
   'importanceCode',
@@ -12,10 +12,10 @@ const DISPLAY = [
   'systemTypeUID',
   'systemAlias',
   'locationCode',
-  'ownerUID',
+  'ownerUID'
 ]
 
-const SystemDetail = ({ data }: { data: System }) => {
+const SystemDetailSection = ({ data }: { data: System }) => {
   const rows = Object.entries(data).filter(([title]) => DISPLAY.includes(title))
 
   return (
@@ -35,4 +35,4 @@ const SystemDetail = ({ data }: { data: System }) => {
   )
 }
 
-export default SystemDetail
+export default SystemDetailSection

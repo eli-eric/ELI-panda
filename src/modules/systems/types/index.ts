@@ -20,6 +20,7 @@ export type System = {
 
 export type SystemProps = { data: System }
 
+//TODO: same type like System
 export type SystemForRel = {
   name: string
   systemType: string
@@ -38,4 +39,17 @@ export type RelationFormType = {
   systemFromUid: string
   relationTypeCode: string
   systemToUid: string
+}
+
+import { FieldValues } from 'react-hook-form'
+
+export interface SystemItemFormType extends FieldValues {
+  catalogueItemUID?: string
+  itemUsageUID: string
+  eun: string
+  name: string
+  serialNumber: string
+  batchNumber: string
+  obsolete: string
+  estimatedLifeTimeMonths: string
 }
