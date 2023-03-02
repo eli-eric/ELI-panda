@@ -2,9 +2,8 @@ import { useFormContext } from 'react-hook-form'
 
 import { useMakeFormFields } from '@/hooks/form'
 import { message } from '@/i18n/src/messages'
+import { SystemItemFormType } from '@/modules/systems/types/form'
 import { Option } from '@/types/form'
-
-import { SystemItemFormType } from '../../types/catalogueItemSection'
 
 const { form } = message.systemsPage.catalogueItem.addItemModal
 
@@ -13,14 +12,14 @@ const itemUsageUidValues: Option[] = [
   { value: 'd5ab8e98-2cbe-4c03-98d3-52d3a1bbdaa3', name: 'In System Part' },
   {
     value: 'b7199329-8ba4-43d2-a31d-20f8774b3a62',
-    name: 'Experimental loan pool part',
+    name: 'Experimental loan pool part'
   },
   {
     value: 'f1849b4b-947f-4c31-8c76-b5eca91d18a6',
-    name: 'Test and measurement equipment',
+    name: 'Test and measurement equipment'
   },
   { value: '00961288-4c88-4632-9003-3c9c18b80fc0', name: 'Stock item' },
-  { value: 'f3fd12d8-d975-4aac-afb2-b9f244316d77', name: 'Other' },
+  { value: 'f3fd12d8-d975-4aac-afb2-b9f244316d77', name: 'Other' }
 ]
 
 const useSystemItemFormFields = () => {
@@ -33,7 +32,7 @@ const useSystemItemFormFields = () => {
       isError: !!formState.errors.catalogueItemUID,
       disabled: true,
       padding: true,
-      rounded: 'rounded-md',
+      rounded: 'rounded-md'
     },
     itemUsageUid: {
       name: 'itemUsageUID',
@@ -41,7 +40,7 @@ const useSystemItemFormFields = () => {
       isError: !!formState.errors.catalogueItemUID,
       rounded: 'rounded-md',
       padding: true,
-      options: itemUsageUidValues,
+      options: itemUsageUidValues
     },
     eun: {
       name: 'eun',
@@ -49,7 +48,7 @@ const useSystemItemFormFields = () => {
       placeholder: form.eun.placeholder,
       isError: !!formState.errors.catalogueItemUID,
       rounded: 'rounded-md',
-      padding: true,
+      padding: true
     },
     name: {
       name: 'name',
@@ -57,7 +56,7 @@ const useSystemItemFormFields = () => {
       placeholder: form.name.placeholder,
       isError: !!formState.errors.catalogueItemUID,
       rounded: 'rounded-md',
-      padding: true,
+      padding: true
     },
     serialNumber: {
       name: 'serialNumber',
@@ -65,7 +64,7 @@ const useSystemItemFormFields = () => {
       placeholder: form.serialNumber.placeholder,
       isError: !!formState.errors.catalogueItemUID,
       padding: true,
-      options: itemUsageUidValues,
+      options: itemUsageUidValues
     },
     batchNumber: {
       name: 'batchNumber',
@@ -73,7 +72,7 @@ const useSystemItemFormFields = () => {
       placeholder: form.batchNumber.placeholder,
       isError: !!formState.errors.catalogueItemUID,
       rounded: 'rounded-md',
-      padding: true,
+      padding: true
     },
     obsolete: {
       name: 'obsolete',
@@ -82,7 +81,7 @@ const useSystemItemFormFields = () => {
       isError: !!formState.errors.catalogueItemUID,
 
       padding: true,
-      options: [{ value: 'false' }, { value: 'true' }],
+      options: [{ value: 'false' }, { value: 'true' }]
     },
     estimatedLifeTimeMonths: {
       name: 'estimatedLifeTimeMonths',
@@ -91,8 +90,8 @@ const useSystemItemFormFields = () => {
       isError: !!formState.errors.catalogueItemUID,
       rounded: 'rounded-md',
       padding: true,
-      type: 'number',
-    },
+      type: 'number'
+    }
   })
 }
 export default useSystemItemFormFields

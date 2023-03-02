@@ -12,9 +12,9 @@ import SearchBarComponent from '@/components/SearchBar.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
-import { RelationFormType } from '@/modules/systems/types'
 import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
 
+import { RelationFormType } from '../../types/form'
 import SelectRelation from './SelectRelation'
 import TableWithPaging from './TableWithPaging'
 const { buttons } = message.common
@@ -27,7 +27,7 @@ interface Props {
 const relationValidationSchema = yup.object().shape({
   systemFromUid: yup.string().required(),
   relationTypeCode: yup.string().required(),
-  systemToUid: yup.string().required(),
+  systemToUid: yup.string().required()
 })
 
 const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
@@ -43,15 +43,15 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
     setSearchValue(data.search)
   }
   const { systemRelationship, systemRelationships } = useEndpoint({
-    uid: router.query.slug as string,
+    uid: router.query.slug as string
   })
   const relFormMethods = useForm<RelationFormType>({
-    resolver: yupResolver(relationValidationSchema),
+    resolver: yupResolver(relationValidationSchema)
   })
   const { submit, loading, error, response } = useSubmit({
     endpoint: systemRelationship,
     method: 'post',
-    mutateList: [systemRelationships],
+    mutateList: [systemRelationships]
   })
   const onSubmit = data => {
     submit(data)

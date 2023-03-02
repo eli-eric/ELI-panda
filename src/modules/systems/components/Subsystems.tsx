@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import useSWR from 'swr'
 
-import { mockFetcher } from '@/features/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
-import { System } from '@/modules/systems/types'
 import { PATH } from '@/types/constants/paths'
+
+import { SubsystemsResponse } from '../types/responses'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -31,15 +31,12 @@ interface Props {
 }
 
 const Subsystems = ({ uid }: Props) => {
-  const { systemsDetails } = useEndpoint({ uid })
-  const { data: systemsDetailsRes } = useSWR<System[]>(
-    systemsDetails,
-    mockFetcher
-  )
+  const { systemSubsystems } = useEndpoint({ uid })
+  const { data: subsystems } = useSWR<SubsystemsResponse>(systemSubsystems)
   return (
     <nav aria-label="Subsystems">
-      {systemsDetailsRes && systemsDetailsRes.length > 0 ? (
-        systemsDetailsRes.map(({ uid, name }) => (
+      {subsystems && subsystems.length > 0 ? (
+        subsystems.map(({ uid, name }) => (
           <Item key={uid} uid={uid} text={name} />
         ))
       ) : (

@@ -3,8 +3,8 @@ import { useFormContext } from 'react-hook-form'
 
 import { InputWithError } from '@/components/form/Input'
 import { SelectWithError } from '@/components/form/Select'
+import { SystemItemFormType } from '@/modules/systems/types/form'
 
-import { SystemItemFormType } from '../../types/catalogueItemSection'
 import useSystemItemFormFields from './SystemItemForm.fields'
 
 const SystemItemForm = ({ itemName }: { itemName?: string }) => {

@@ -1,25 +1,26 @@
+import { useRouter } from 'next/router'
 import { Suspense, useState } from 'react'
-import { Prompt, Results } from './components/Search'
-import ViewControl from './components/ViewControl'
-import Breadcrumbs from './components/Breadcrumbs'
-import ProgressBarComponent from '@/components/progress-bar.comp'
-import Card, { Heading } from '@/components/card/card.comp'
 import { ErrorBoundary } from 'react-error-boundary'
-import Subsystems from './components/Subsystems'
+
+import Card, { Heading } from '@/components/card/card.comp'
+import EmptySectionComponent from '@/components/empty-section/empty-section.comp'
 import ErrorPage from '@/components/error/ErrorPage'
-import SystemDetailSection from './components/systemDetailSection/SystemDetailSection'
 import LoaderComponent from '@/components/loader.comp'
+import ProgressBarComponent from '@/components/progress-bar.comp'
+import useParam from '@/hooks/useParam'
+
+import Breadcrumbs from './components/Breadcrumbs'
 import CatalogueItemSection from './components/catalogueItemSection/CatalogueItemSection.cont'
 import RelationsSection from './components/relationsSection/RelationsSection'
+import { Prompt, Results } from './components/Search'
+import Subsystems from './components/Subsystems'
+import SystemDetailSection from './components/systemDetailSection/SystemDetailSection'
+import ViewControl from './components/ViewControl'
 import { useSystemEdit } from './hooks/useSystemEdit'
-import { useRouter } from 'next/router'
-import useParam from '@/hooks/useParam'
-import useSWR from 'swr'
-import { System } from './types'
-import EmptySectionComponent from '@/components/empty-section/empty-section.comp'
+import { SystemDetailResponse } from './types/responses'
 
 interface Props {
-  systemDetail?: System
+  systemDetail?: SystemDetailResponse
 }
 
 const SystemOverviewContainer = ({ systemDetail }: Props) => {
@@ -52,9 +53,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
           </div>
         </div>
       </div>
-      <Suspense fallback={<ProgressBarComponent />}>
-        <Breadcrumbs path={systemDetail?.path} />
-      </Suspense>
+      <Breadcrumbs parentPath={systemDetail?.parentPath} />
 
       {query && (
         <div className="w-full">
@@ -89,7 +88,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
                 <Heading text="Cataloue Item" />
                 <ErrorBoundary fallback={<ErrorPage />}>
                   <Suspense fallback={<LoaderComponent />}>
-                    <CatalogueItemSection uid={systemDetail.catalogueUID} />
+                    <CatalogueItemSection uid={systemDetail.itemUID} />
                   </Suspense>
                 </ErrorBoundary>
               </Card>

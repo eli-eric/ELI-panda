@@ -2,6 +2,23 @@
 import { faker } from '@faker-js/faker'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+type SystemDetail = {
+  uid: string
+  name: string
+  parentPath: { name; uid }[]
+  description: string
+  systemType: string
+  systemCode: string
+  systemAlias: string
+  location: string
+  itemUID?: string
+  owner: string
+  importance: string
+  zone: string
+  subZoneCode: string
+  criticalityClass: string
+}
+
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
@@ -9,29 +26,33 @@ export default function handler(
   if (req.headers.authorization) {
     if (req.method === 'GET') {
       const getFakeName = () => faker.company.catchPhrase()
-      const getFakePath = (): string[] => {
+      const getFakePath = (): { name: string; uid: string }[] => {
         const length = faker.datatype.number({ min: 0, max: 10 })
-        return [...Array(length)].map(() => faker.datatype.uuid())
+        return [...Array(length)].map(() => ({
+          uid: faker.datatype.uuid(),
+          name: faker.company.catchPhrase()
+        }))
       }
-      const getFakeSystem = () => {
+      const getFakeSystem = (): SystemDetail => {
         const uid = faker.datatype.uuid()
         const name = getFakeName()
         return {
           uid,
           name,
-          path: getFakePath(),
+          parentPath: getFakePath(),
           description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
             2
           )}`,
-          children: getFakePath(),
-          importanceCode: faker.datatype.string(),
-          zoneCode: faker.datatype.string(),
+          importance: faker.datatype.string(),
+          zone: faker.datatype.string(),
           subZoneCode: faker.datatype.string(),
           systemCode: faker.datatype.string(),
           systemAlias: faker.datatype.string(),
-          locationCode: faker.datatype.string(),
-          ownerUID: faker.datatype.string(),
-          catalogueUID: faker.datatype.uuid(),
+          location: faker.datatype.string(),
+          owner: faker.datatype.string(),
+          itemUID: undefined,
+          criticalityClass: faker.datatype.string(),
+          systemType: faker.datatype.string()
         }
       }
       res.status(200).json(getFakeSystem())

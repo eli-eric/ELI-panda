@@ -5,7 +5,7 @@ import React, {
   Fragment,
   SetStateAction,
   useEffect,
-  useState,
+  useState
 } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
@@ -17,8 +17,8 @@ import ModalComponent from '@/components/modal/modal.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
+import { SystemItemFormType } from '@/modules/systems/types/form'
 
-import { SystemItemFormType } from '../types/catalogueItemSection'
 import CatalogueSearchTable from './CatalogueSearchTable'
 import SystemItemForm from './form/SystemItemForm'
 
@@ -32,7 +32,7 @@ const systemItemValidationSchema = yup.object().shape({
   serialNumber: yup.string().required(),
   batchNumber: yup.string().required(),
   obsolete: yup.string().required(),
-  estimatedLifeTimeMonths: yup.string().required(),
+  estimatedLifeTimeMonths: yup.string().required()
 })
 
 interface Props {
@@ -43,17 +43,17 @@ interface Props {
 const CatalogueItemModal = ({ setOpen, open }: Props) => {
   const [item, setItem] = useState<{ name?: string; uid?: string }>({
     name: undefined,
-    uid: undefined,
+    uid: undefined
   })
   const router = useRouter()
 
-  const { systemDetail, systemItemAdd } = useEndpoint({
-    uid: router.query.slug as string,
+  const { systemDetail, catalogueCategoryEdit } = useEndpoint({
+    uid: router.query.slug as string
   })
   const { submit, loading, error, response } = useSubmit({
-    endpoint: systemItemAdd,
+    endpoint: catalogueCategoryEdit,
     method: 'post',
-    mutateList: [systemDetail],
+    mutateList: [systemDetail]
   })
   const onSubmit = (data: SystemItemFormType) => {
     submit({ ...data, catalogueItemUID: item.uid })
@@ -65,7 +65,7 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
   }, [response, setOpen, error])
 
   const formMethods = useForm<SystemItemFormType>({
-    resolver: yupResolver(systemItemValidationSchema),
+    resolver: yupResolver(systemItemValidationSchema)
   })
 
   return (

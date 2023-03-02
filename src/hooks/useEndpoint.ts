@@ -8,12 +8,13 @@ const getEndpoints = (uid?: string, path?: string, query?: string) => {
     catalogueItemImage: BASE_URL + `/catalogue/item/${uid}/image`,
     catalogueCategoryEdit: `/catalogue/category${uid ? '/' + uid : ''}`,
     systemDetail: `/system/${uid}`,
-    systemItemAdd: `/system/${uid}/item`,
-    systemsDetails: `/systems${uid ? '/' + uid : ''}`,
+    systemDetailImage: `/system/${uid}/item`,
     systemRelationships: `/system/${uid}/relationships`,
     systemRelationship: '/system/relationship',
     systemsForRelationship: `/systems/for-relationship${query}`,
-    codebook: `/codebook${path}`
+    codebook: `/codebook${path}`,
+    systemSubsystems: `/system/subsystems${uid ? '/' + uid : ''}`,
+    systemsList: `systems${query}`
   }
   return endpoints
 }

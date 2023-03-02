@@ -1,35 +1,29 @@
 import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
-import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
 import EmptyResults from '@/components/EmptyResults'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
-import { message } from '@/i18n/src/messages'
 import CatalogueItemsComponent from '@/modules/catalogue/catalogueItems/CatalogueItems.comp'
 import { CatalogueItemsResponse } from '@/types/responses'
-
-const messages = message.systemsPage.relations.addRelationModal
 
 const CatalogueItemsTable = ({
   searchValue,
   setItem,
-  itemName,
+  itemName
 }: {
   searchValue?: string
   itemName?: string
 
   setItem: Dispatch<SetStateAction<{ name?: string; uid?: string }>>
 }) => {
-  const intl = useIntl()
-
   const { setTotalCount, getPaginationComponent, page, pageSize } =
     usePagination({ dependecies: [searchValue] })
   const query = useMemo(
     () => ({
       search: searchValue,
       page,
-      pageSize,
+      pageSize
     }),
     [searchValue, page, pageSize]
   )

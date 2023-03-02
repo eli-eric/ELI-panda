@@ -1,18 +1,22 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/router'
 import { Suspense, useEffect, useRef } from 'react'
-import { fetchFakeSystems } from 'src/pages/systems/[slug]'
 import useSWR from 'swr'
 
 import Card, { Heading } from '@/components/card/card.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
+import { useEndpoint } from '@/hooks/useEndpoint'
 
 import { Item } from './Subsystems'
 
 const List = (props: { query: string }) => {
   const { query } = props
-  const { data } = useSWR(query, fetchFakeSystems, {
-    suspense: true
+  const router = useRouter()
+  const { systemsList } = useEndpoint({
+    uid: router.query.uid as string,
+    query: query
   })
+  const { data } = useSWR(systemsList)
   return (
     <>
       {data && data.length > 0 ? (

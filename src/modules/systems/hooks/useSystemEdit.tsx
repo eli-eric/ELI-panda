@@ -11,12 +11,12 @@ import ModalComponent from '@/components/modal/modal.comp'
 import { ROLE } from '@/types/constants/roles'
 
 import EditForm from '../components/systemEdit/EditForm'
-import { System } from '../types'
+import { SystemDetailResponse } from '../types/responses'
 
 export const useSystemEdit = ({
   systemDetail
 }: {
-  systemDetail?: System | undefined
+  systemDetail?: SystemDetailResponse | undefined
 }) => {
   const [openEdit, setOpenEdit] = useState(false)
   const [openNew, setOpenNew] = useState(false)

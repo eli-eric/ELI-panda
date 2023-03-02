@@ -6,15 +6,15 @@ import ItemPropertyValue from '../item-property/item-property-value.comp'
 interface Props {
   title: string
   images: string[]
-  decription: string
+  description?: string
   children: React.ReactNode
 }
 
 const ItemDetailComponent = ({
   title,
   images,
-  decription,
-  children,
+  description,
+  children
 }: Props) => (
   <div className="bg-white pb-10">
     <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8 h-full overflow-auto">
@@ -36,9 +36,11 @@ const ItemDetailComponent = ({
             </section>
           </div>
         </div>
-        <ItemPropertyTitle title="Description">
-          <ItemPropertyValue text={decription} />
-        </ItemPropertyTitle>
+        {description && (
+          <ItemPropertyTitle title="Description">
+            <ItemPropertyValue text={description} />
+          </ItemPropertyTitle>
+        )}
       </div>
     </main>
   </div>

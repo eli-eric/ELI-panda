@@ -1,6 +1,7 @@
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useForm, UseFormRegister } from 'react-hook-form'
@@ -11,7 +12,10 @@ import { InputWithError, TextareaWithError } from '@/components/form/Input'
 import { SelectWithError } from '@/components/form/Select'
 import { GenericButtons } from '@/components/modal/modal.buttons'
 import { ImageIcon } from '@/components/SvgIcons'
+import { useEndpoint } from '@/hooks/useEndpoint'
 import { System } from '@/modules/systems/types'
+
+import { SystemDetailResponse } from '../../types/responses'
 
 const stringFields = ['name', 'systemCode', 'systemAlias']
 
@@ -20,45 +24,45 @@ const systemTypeOptions = [
   { value: 'Mirror' },
   { value: 'Filter' },
   { value: 'Crystal' },
-  { value: 'Isolator' },
+  { value: 'Isolator' }
 ]
 
 const importanceCodeOptions = [
   { value: 'high' },
   { value: 'medium' },
-  { value: 'low' },
+  { value: 'low' }
 ]
 const zoneCodeOptions = [
   { value: 'Z1' },
   { value: 'Z2' },
   { value: 'Z3' },
   { value: 'Z4' },
-  { value: 'Z5' },
+  { value: 'Z5' }
 ]
 const subZoneCodeOptions = [
   { value: 'Z1-1' },
   { value: 'Z1-2' },
   { value: 'Z1-3' },
-  { value: 'Z1-4' },
+  { value: 'Z1-4' }
 ]
 const locationCodeOptions = [
   { value: 'Office Building', name: 'officeBuilding' },
   { value: 'Laser Building', name: 'laserBuilding' },
   { value: 'Experimental Building', name: 'experimentalBuilding' },
-  { value: 'other', name: 'other' },
+  { value: 'other', name: 'other' }
 ]
 const selectFields = [
   { name: 'systemType', options: systemTypeOptions },
   { name: 'importanceCode', options: importanceCodeOptions },
   { name: 'zoneCode', options: zoneCodeOptions },
   { name: 'subZoneCode', options: subZoneCodeOptions },
-  { name: 'locationCode', options: locationCodeOptions },
+  { name: 'locationCode', options: locationCodeOptions }
 ]
 
 const StringField = ({
   name,
   register,
-  errors,
+  errors
 }: {
   name: string
   register: UseFormRegister<System>
@@ -86,7 +90,7 @@ const SelectField = ({
   name,
   register,
   errors,
-  options,
+  options
 }: {
   name: string
   register: UseFormRegister<System>
@@ -119,21 +123,23 @@ const schema = object({
   zoneCode: string().required(),
   systemTypeUID: string(),
   systemAlias: string().max(12).required(),
-  locationCode: string().required(),
+  locationCode: string().required()
 })
 
 interface Props {
-  data?: System
+  data?: SystemDetailResponse
   setOpen: Dispatch<SetStateAction<boolean>>
 }
 
 const EditForm = ({ setOpen, data }: Props) => {
-  const [image, setImage] = useState(data?.image ?? '')
+  const { uid } = useRouter().query
+  const { systemDetailImage } = useEndpoint({ uid: uid as string })
+  const [image, setImage] = useState(systemDetailImage ?? '')
 
   const { reset, handleSubmit, register, formState, getValues } =
     useForm<System>({
       defaultValues: data,
-      resolver: yupResolver(schema),
+      resolver: yupResolver(schema)
     })
 
   const onSubmit = (data: System) => {
@@ -154,7 +160,7 @@ const EditForm = ({ setOpen, data }: Props) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     maxFiles: 1,
     accept: { 'image/*': [] },
-    onDrop,
+    onDrop
   })
   const buttons = [
     {
@@ -164,13 +170,13 @@ const EditForm = ({ setOpen, data }: Props) => {
       onClick: () => {
         reset()
         setOpen(false)
-      },
+      }
     },
     {
       type: 'submit',
       value: 'Submit',
-      primary: true,
-    },
+      primary: true
+    }
   ]
 
   return (
