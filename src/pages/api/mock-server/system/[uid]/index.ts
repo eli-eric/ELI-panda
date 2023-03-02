@@ -27,7 +27,7 @@ export default function handler(
     if (req.method === 'GET') {
       const getFakeName = () => faker.company.catchPhrase()
       const getFakePath = (): { name: string; uid: string }[] => {
-        const length = faker.datatype.number({ min: 0, max: 10 })
+        const length = faker.datatype.number({ min: 1, max: 5 })
         return [...Array(length)].map(() => ({
           uid: faker.datatype.uuid(),
           name: faker.company.catchPhrase()
@@ -50,7 +50,7 @@ export default function handler(
           systemAlias: faker.datatype.string(),
           location: faker.datatype.string(),
           owner: faker.datatype.string(),
-          itemUID: undefined,
+          itemUID: '4137b0f1-c8f8-4771-8487-7ce9428b22f8',
           criticalityClass: faker.datatype.string(),
           systemType: faker.datatype.string()
         }

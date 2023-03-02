@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
+import useSWR from 'swr'
 
 import ItemDetailComponent from '@/components/item-detail/ItemDetail.comp'
 import ItemPropertyTitle from '@/components/item-property/item-property-title.comp'
@@ -18,15 +19,16 @@ const DISPLAY = [
 ]
 
 const SystemDetailSection = ({ data }: { data: SystemDetailResponse }) => {
-  const { uid } = useRouter().query
-  const { systemDetailImage } = useEndpoint({ uid: uid as string })
+  const router = useRouter()
+  const { systemDetailImage } = useEndpoint({ uid: router.query.uid as string })
+  const { data: image } = useSWR(systemDetailImage)
   const rows = Object.entries(data).filter(([title]) => DISPLAY.includes(title))
 
   return (
     <Fragment>
       <ItemDetailComponent
         title={data.name}
-        images={[systemDetailImage || '']}
+        images={[image || '']}
         description={data?.description}
       >
         {rows.map(([title, value], idx) => (
