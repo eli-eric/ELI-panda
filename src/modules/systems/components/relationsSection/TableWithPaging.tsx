@@ -9,9 +9,9 @@ import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
 import { message } from '@/i18n/src/messages'
 import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
-import { SystemsForRelResponse } from '@/types/responses'
 
 import { useSystemMapRows } from '../../hooks/relations/useMapRows'
+import { SystemsForRelResponse } from '../../types/responses'
 
 const messages = message.systemsPage.relations.addRelationModal
 

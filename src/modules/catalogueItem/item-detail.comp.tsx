@@ -11,26 +11,6 @@ import { CatalogueItem } from '@/types/responses'
 import ImageGalleryComponent from '../../components/item-detail/ImageGallery'
 import ItemPropertiesComponent from './default-properties/item-properties.comp'
 
-const images = [
-  {
-    id: 1,
-    src: 'http://localhost:5001/api/mock-server/catalogue/item/0056ed5a-e20b-4c15-b8c6-2312c23b1f4a/image',
-    alt: '',
-    name: '',
-  },
-  {
-    id: 2,
-    src: 'http://localhost:5001/api/mock-server/catalogue/item/1865aed8-f94d-49eb-8389-3b4fc5d983ab/image',
-    alt: '',
-    name: '',
-  },
-  {
-    id: 3,
-    src: 'http://localhost:5001/api/mock-server/catalogue/item/c664c559-650d-4733-90fe-74cef6c04186/image',
-    alt: '',
-    name: '',
-  },
-]
 const messages = message.cataloguePage.itemList.header
 
 interface Props {
@@ -44,7 +24,7 @@ const ItemDetailComponent = ({ uid }: Props) => {
   const catalogueUid = (router.query.uid as string) || uid
   const [groups, setGroups] = useState<Array<string>>([])
   const { catalogueItem } = useEndpoint({
-    uid: catalogueUid,
+    uid: catalogueUid
   })
   const { data: item } = useSWR<CatalogueItem>(catalogueUid && catalogueItem)
 
@@ -64,7 +44,7 @@ const ItemDetailComponent = ({ uid }: Props) => {
           <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
             <ImageGalleryComponent
               images={[
-                'http://localhost:5001/api/mock-server/catalogue/item/0056ed5a-e20b-4c15-b8c6-2312c23b1f4a/image',
+                'http://localhost:5001/api/mock-server/catalogue/item/0056ed5a-e20b-4c15-b8c6-2312c23b1f4a/image'
               ]}
             />
 

@@ -1,3 +1,5 @@
+import { SystemForRel } from '.'
+
 export type SystemDetailResponse = {
   uid: string
   name: string
@@ -26,3 +28,15 @@ export type SubsystemsResponse = {
   name: string
   uid: string
 }[]
+
+export type SystemsForRelResponse = {
+  data: SystemForRel[]
+  totalCount: number
+}
+
+export type SystemRelationshipResponse = {
+  direction: string
+  relationTypeCode: string
+  foreignSystemName: string
+  relationUid: string
+}

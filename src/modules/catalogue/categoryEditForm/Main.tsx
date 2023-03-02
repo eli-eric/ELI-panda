@@ -37,7 +37,7 @@ const Main = ({ uid }: { uid?: string }) => {
   )
 
   const [showImageUid, setShowImage] = useState<boolean>(!!uid)
-  const { register, watch, setValue, formState, unregister } =
+  const { register, watch, setValue, formState } =
     useFormContext<CategoryFormType>()
   const onDrop = useCallback(
     files => {
@@ -47,10 +47,10 @@ const Main = ({ uid }: { uid?: string }) => {
     },
     [setValue]
   )
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
     accept: { 'image/*': [] },
-    onDrop,
+    onDrop
   })
 
   const { errors } = formState

@@ -10,12 +10,15 @@ import { useEndpoint } from '@/hooks/useEndpoint'
 import { SystemDetailResponse } from '../../types/responses'
 
 const DISPLAY = [
-  'importanceCode',
-  'zoneCode',
-  'systemTypeUID',
+  'systemType',
+  'systemCode',
   'systemAlias',
-  'locationCode',
-  'ownerUID'
+  'location',
+  'owner',
+  'importance',
+  'zone',
+  'subZoneCode',
+  'criticalityClass'
 ]
 
 const SystemDetailSection = ({ data }: { data: SystemDetailResponse }) => {
@@ -28,7 +31,7 @@ const SystemDetailSection = ({ data }: { data: SystemDetailResponse }) => {
     <Fragment>
       <ItemDetailComponent
         title={data.name}
-        images={[image || '']}
+        images={[image]}
         description={data?.description}
       >
         {rows.map(([title, value], idx) => (
