@@ -39,23 +39,24 @@ const ComboboxComponent = <T extends FieldValues>({
         onChange={(item: CodebookType | null) => {
           setSelectedItem(item)
         }}
-        className="z-50"
+        className={`${className} block z-20 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
       >
         {label && (
           <Combobox.Label className="block text-sm font-medium leading-6 text-gray-900">
             {label}
           </Combobox.Label>
         )}
-        <div className="relative mt-2">
+        <div className="relative">
           <Combobox.Input
             {...register(name as Path<T>)}
             autoComplete="off"
             placeholder={placeholder}
             className={classNames(
-              'w-full bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-primary-500 sm:text-sm sm:leading-6',
-              isError ? 'border-red-500' : 'border-0',
+              className,
               rounded,
-              className
+              isError ? 'border-red-500' : 'border-gray-300',
+              'px-3 py-2 border placeholder-gray-400  focus:border-primary-500 mt-2 focus:outline-none focus:ring-primary-500 sm:text-sm',
+              'block w-full appearance-none'
             )}
             onChange={event => setQuery(event.target.value)}
             displayValue={(item: CodebookType) => item?.name}
@@ -73,7 +74,7 @@ const ComboboxComponent = <T extends FieldValues>({
           </Combobox.Button>
 
           {data && data.length > 0 && (
-            <Combobox.Options className="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {data.map(item => (
                 <Combobox.Option
                   key={item.uid}

@@ -28,6 +28,7 @@ const useSystemEditFormFields = () => {
     name: {
       name: 'name',
       label: form.name.label,
+      placeholder: form.name.placeholder,
       isError: !!formState.errors.name,
       rounded: 'rounded-md'
     },
@@ -47,7 +48,7 @@ const useSystemEditFormFields = () => {
     systemCode: {
       name: 'systemCode',
       label: form.systemCode.label,
-      placeholder: form.name.placeholder,
+      placeholder: form.systemCode.placeholder,
       isError: !!formState.errors.systemCode,
       rounded: 'rounded-md'
     },

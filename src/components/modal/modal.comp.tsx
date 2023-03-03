@@ -21,7 +21,7 @@ export default function ModalComponent({
   setOpen,
   children,
   testid,
-  buttons,
+  buttons
 }: Props) {
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -61,11 +61,7 @@ export default function ModalComponent({
                 <Fragment>
                   {children}
                   {buttons?.noButtons !== true && (
-                    <ModalButtonsComponent
-                      setOpen={setOpen}
-                      testid={testid}
-                      buttons={buttons}
-                    />
+                    <ModalButtonsComponent testid={testid} buttons={buttons} />
                   )}
                 </Fragment>
               </Dialog.Panel>

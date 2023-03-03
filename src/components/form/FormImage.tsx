@@ -10,7 +10,7 @@ interface FormImageProps {
 
 const FormImage = ({ image, onDelete }: FormImageProps) => (
   <div className="mt-1 flex-col justify-center  border-gray-300 ">
-    <Image width={200} height={200} alt="" src={image} />
+    <Image width={300} height={300} alt="" src={image} />
     <Button
       type="button"
       onClick={onDelete}
