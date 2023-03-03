@@ -1,4 +1,5 @@
 import ImageGalleryComponent from '@/components/item-detail/ImageGallery'
+import { message } from '@/i18n/src/messages'
 
 import ItemPropertyTitle from '../item-property/item-property-title.comp'
 import ItemPropertyValue from '../item-property/item-property-value.comp'
@@ -9,6 +10,8 @@ interface Props {
   description?: string
   children: React.ReactNode
 }
+
+const messages = message.common.property
 
 const ItemDetailComponent = ({
   title,
@@ -37,7 +40,7 @@ const ItemDetailComponent = ({
           </div>
         </div>
         {description && (
-          <ItemPropertyTitle title="Description">
+          <ItemPropertyTitle title={messages.description}>
             <ItemPropertyValue text={description} />
           </ItemPropertyTitle>
         )}

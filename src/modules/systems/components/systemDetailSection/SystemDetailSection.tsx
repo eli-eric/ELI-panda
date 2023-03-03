@@ -7,8 +7,11 @@ import ItemPropertyTitle from '@/components/item-property/item-property-title.co
 import ItemPropertyValue from '@/components/item-property/item-property-value.comp'
 import { mockFetcher } from '@/features/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
+import { message } from '@/i18n/src/messages'
 
 import { SystemDetailResponse } from '../../types/responses'
+
+const messages = message.systemsPage.systemDetail.form
 
 const DISPLAY = [
   'systemType',
@@ -24,7 +27,9 @@ const DISPLAY = [
 
 const SystemDetailSection = ({ data }: { data: SystemDetailResponse }) => {
   const router = useRouter()
-  const { systemDetailImage } = useEndpoint({ uid: router.query.uid as string })
+  const { systemImage: systemDetailImage } = useEndpoint({
+    uid: router.query.uid as string
+  })
   const { data: image } = useSWR(systemDetailImage, mockFetcher)
   const rows = Object.entries(data).filter(([title]) => DISPLAY.includes(title))
 
@@ -35,11 +40,33 @@ const SystemDetailSection = ({ data }: { data: SystemDetailResponse }) => {
         images={[image]}
         description={data?.description}
       >
-        {rows.map(([title, value], idx) => (
-          <ItemPropertyTitle key={idx} title={title}>
-            <ItemPropertyValue text={value as string} />
-          </ItemPropertyTitle>
-        ))}
+        <ItemPropertyTitle title={messages.systemTypeUID.label}>
+          <ItemPropertyValue text={data.systemType} />
+        </ItemPropertyTitle>
+        <ItemPropertyTitle title={messages.systemCode.label}>
+          <ItemPropertyValue text={data.systemCode} />
+        </ItemPropertyTitle>
+        <ItemPropertyTitle title={messages.systemAlias.label}>
+          <ItemPropertyValue text={data.systemAlias} />
+        </ItemPropertyTitle>
+        <ItemPropertyTitle title={messages.locationUID.label}>
+          <ItemPropertyValue text={data.location} />
+        </ItemPropertyTitle>
+        <ItemPropertyTitle title={messages.ownerUID.label}>
+          <ItemPropertyValue text={data.owner} />
+        </ItemPropertyTitle>
+        <ItemPropertyTitle title={messages.importanceUID.label}>
+          <ItemPropertyValue text={data.importance} />
+        </ItemPropertyTitle>
+        <ItemPropertyTitle title={messages.zoneUID.label}>
+          <ItemPropertyValue text={data.zone} />
+        </ItemPropertyTitle>
+        <ItemPropertyTitle title={messages.subZone.label}>
+          <ItemPropertyValue text={data.subZoneCode} />
+        </ItemPropertyTitle>
+        <ItemPropertyTitle title={messages.criticalityClassUID.label}>
+          <ItemPropertyValue text={data.criticalityClass} />
+        </ItemPropertyTitle>
       </ItemDetailComponent>
     </Fragment>
   )

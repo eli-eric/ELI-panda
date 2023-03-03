@@ -47,7 +47,7 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
   })
   const router = useRouter()
 
-  const { systemDetail, catalogueCategoryEdit } = useEndpoint({
+  const { system: systemDetail, catalogueCategoryEdit } = useEndpoint({
     uid: router.query.uid as string
   })
   const { submit, loading, error, response } = useSubmit({

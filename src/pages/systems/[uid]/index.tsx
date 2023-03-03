@@ -12,8 +12,8 @@ import SystemOverviewContainer from '@/modules/systems/SystemOverview.cont'
 const SystemDetailPage: NextPage = () => {
   const router = useRouter()
   const uid = router.query.slug as string
-  const { systemDetail } = useEndpoint({ uid })
-  const { data } = useSWR(systemDetail, mockFetcher, { suspense: false })
+  const { system } = useEndpoint({ uid })
+  const { data } = useSWR(system, mockFetcher, { suspense: false })
 
   if (!data) return <LoaderComponent />
   return (

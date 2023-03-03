@@ -1,8 +1,11 @@
-import { Dispatch, SetStateAction } from 'react'
+import { useRouter } from 'next/router'
+import { Dispatch, SetStateAction, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { object, string } from 'yup'
 
 import ModalButtonsComponent from '@/components/modal/modal.buttons'
+import { useEndpoint } from '@/hooks/useEndpoint'
+import useSubmit from '@/hooks/useSubmit'
 import { ModalButtons } from '@/types/form'
 
 import { SystemEditFormType } from '../../types/form'
@@ -29,10 +32,28 @@ const Edit = ({ data, uid, setOpen }: Props) => {
   const formMethods = useForm<SystemEditFormType>({
     defaultValues: data
   })
+  const router = useRouter()
+
+  const { system } = useEndpoint({
+    uid: uid as string
+  })
+  const { systemSubsystems } = useEndpoint({
+    uid: router.query.uid as string
+  })
+  const { submit, loading, error, response } = useSubmit({
+    endpoint: system,
+    method: uid ? 'put' : 'post',
+    mutateList: [system, systemSubsystems]
+  })
+
+  useEffect(() => {
+    if (response) if (!error) setOpen(false)
+  }, [response, setOpen, error])
 
   const buttons: ModalButtons = {
     goNext: {
       type: 'submit',
+      loading: loading,
       text: 'Save'
     },
     goBack: {
@@ -46,7 +67,7 @@ const Edit = ({ data, uid, setOpen }: Props) => {
 
   const onSubmit = (data: SystemEditFormType) => {
     console.log(data)
-    setOpen(false)
+    submit({ ...data, parentUid: router.query.uid })
   }
 
   return (

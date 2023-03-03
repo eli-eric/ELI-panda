@@ -12,6 +12,9 @@ export const messages = {
       notFound: 'Page not found',
       message:
         'Please check the URL in the address bar and try again.Probably you have no permission.'
+    },
+    property: {
+      description: 'Description'
     }
   },
   layout: {
