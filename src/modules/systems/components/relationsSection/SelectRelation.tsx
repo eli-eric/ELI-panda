@@ -28,7 +28,7 @@ const SelectRelation = ({
   const baseSystemOption = useMemo(
     () => ({
       name: systemName,
-      value: router.query.slug as string
+      value: router.query.uid as string
     }),
     [router, systemName]
   )

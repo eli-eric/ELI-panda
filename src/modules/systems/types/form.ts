@@ -12,7 +12,7 @@ export interface SystemEditFormType extends FieldValues {
   ownerUID?: string // codebook of users{uid, name}  - USER
   importanceUID?: string // codebook of importance - SYSTEM_IMPORTANCE
   zoneUID?: string // codebook of zones - ZONE
-  subZoneCode?: string // codebook of subzones depend on selected zone SUB_ZONE (parentUID=ZONE.uid)
+  subZone?: string // codebook of subzones depend on selected zone SUB_ZONE (parentUID=ZONE.uid)
   criticalityClassUID?: string // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
 }
 

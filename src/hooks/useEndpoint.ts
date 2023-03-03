@@ -12,7 +12,8 @@ const getEndpoints = (uid?: string, path?: string, query?: string) => {
     systemRelationships: `/system/${uid}/relationships`,
     systemRelationship: '/system/relationship',
     systemsForRelationship: `/systems/for-relationship${query}`,
-    codebook: `/codebook${path}`,
+    codebook: `/codebook${path}${query}`,
+    codebookAutocomplete: `/codebook/autocomplete${path}${query}`,
     systemSubsystems: `/system/subsystems${uid ? '/' + uid : ''}`,
     systemsList: `systems${query}`
   }

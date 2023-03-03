@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import useSWR from 'swr'
 
+import { mockFetcher } from '@/features/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { PATH } from '@/types/constants/paths'
 
@@ -32,7 +33,10 @@ interface Props {
 
 const Subsystems = ({ uid }: Props) => {
   const { systemSubsystems } = useEndpoint({ uid })
-  const { data: subsystems } = useSWR<SubsystemsResponse>(systemSubsystems)
+  const { data: subsystems } = useSWR<SubsystemsResponse>(
+    systemSubsystems,
+    mockFetcher
+  )
   return (
     <nav aria-label="Subsystems">
       {subsystems && subsystems.length > 0 ? (

@@ -44,7 +44,7 @@ export const InputWithError = <T extends FieldValues>({
       placeholder={placeholder}
       className={`${className} block w-full appearance-none ${rounded} border ${
         isError ? 'border-red-500' : 'border-gray-300'
-      } px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm ${
+      } px-3 py-2 placeholder-gray-400  focus:border-primary-500 mt-2 focus:outline-none focus:ring-primary-500 sm:text-sm ${
         disabled ? 'bg-gray-100' : ''
       }`}
     />
@@ -64,9 +64,13 @@ export const TextareaWithError = <T extends FieldValues>({
   placeholder,
   disabled,
   rounded,
+  label,
   ...restProps
 }: TextAreaWithErrorProps<T>) => (
   <div className="block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm">
+    {label && (
+      <label className="text-sm font-medium text-gray-700">{label}</label>
+    )}
     <textarea
       {...restProps}
       rows={6}
@@ -74,7 +78,7 @@ export const TextareaWithError = <T extends FieldValues>({
       placeholder={placeholder}
       className={`block w-full appearance-none ${rounded} border ${
         isError ? 'border-red-500' : 'border-gray-300'
-      } px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm ${
+      } px-3 py-2 placeholder-gray-400 mt-2 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm ${
         disabled ? 'bg-gray-100' : ''
       }`}
       {...register(name as Path<T>)}

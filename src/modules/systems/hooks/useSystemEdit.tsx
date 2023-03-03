@@ -3,6 +3,7 @@ import {
   PencilSquareIcon,
   PlusIcon
 } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Fragment, useState } from 'react'
 
@@ -10,7 +11,7 @@ import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
 import { ROLE } from '@/types/constants/roles'
 
-import EditForm from '../components/systemEdit/EditForm'
+import Edit from '../components/systemEdit/Edit'
 import { SystemDetailResponse } from '../types/responses'
 
 export const useSystemEdit = ({
@@ -21,6 +22,7 @@ export const useSystemEdit = ({
   const [openEdit, setOpenEdit] = useState(false)
   const [openNew, setOpenNew] = useState(false)
   const { data: session } = useSession()
+  const router = useRouter()
   const EditButton = () => (
     <Fragment>
       {session?.user.roles.includes(ROLE.SYSTEM_EDIT) && (
@@ -41,7 +43,11 @@ export const useSystemEdit = ({
         buttons={{ noButtons: true }}
         testid="catalogueEdit"
       >
-        <EditForm setOpen={setOpenEdit} data={systemDetail} />
+        <Edit
+          setOpen={setOpenEdit}
+          data={systemDetail}
+          uid={router.query.uid as string}
+        />
       </ModalComponent>
     </Fragment>
   )
@@ -71,7 +77,7 @@ export const useSystemEdit = ({
         buttons={{ noButtons: true }}
         testid="catalogueEdit"
       >
-        <EditForm setOpen={setOpenEdit} />
+        <Edit setOpen={setOpenNew} />
       </ModalComponent>
     </Fragment>
   )

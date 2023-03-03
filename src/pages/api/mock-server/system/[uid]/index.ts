@@ -50,7 +50,7 @@ export default function handler(
           systemAlias: faker.datatype.string(),
           location: faker.datatype.string(),
           owner: faker.datatype.string(),
-          itemUID: '4137b0f1-c8f8-4771-8487-7ce9428b22f8',
+          itemUID: undefined,
           criticalityClass: faker.datatype.string(),
           systemType: faker.datatype.string()
         }

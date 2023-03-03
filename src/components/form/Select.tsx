@@ -72,7 +72,7 @@ export const SelectWithError = <T extends FieldValues>({
         disabled ? 'bg-gray-100' : ''
       } appearance-none ${rounded} border ${
         isError ? 'border-red-500' : 'border-gray-300'
-      } px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
+      } px-3 py-2 placeholder-gray-400 mt-2 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
     />
   </div>
 )

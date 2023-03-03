@@ -6,27 +6,36 @@ import { Option } from '@/types/form'
 
 import { useEndpoint } from './useEndpoint'
 
-type codebookType = { name: string; uid: string }[]
+export type CodebookType = { name: string; uid: string }
 export const useCodebook = (
-  codebookName: CODEBOOK,
-  parentCode?: string
-): codebookType | undefined => {
+  codebookName?: CODEBOOK,
+  query?: string,
+  autocomplete?: boolean
+): CodebookType[] | undefined => {
   const { codebook } = useEndpoint({
     path: `/${codebookName}`,
-    query: parentCode ? `?parentUID=${parentCode}` : undefined
+    query: query
   })
-  const { data } = useSWR<{ name: string; uid: string }[]>(codebook, fetcher, {
-    suspense: false
+  const { codebookAutocomplete } = useEndpoint({
+    path: `/${codebookName}`,
+    query: query
   })
+  const { data } = useSWR<{ name: string; uid: string }[]>(
+    autocomplete ? codebookAutocomplete : codebook,
+    fetcher,
+    {
+      suspense: false
+    }
+  )
 
   return data
 }
 
 export const useCodebookSelectValues = (
   codebookName: CODEBOOK,
-  parentCode?: string
+  query?: string
 ): Option[] | undefined => {
-  const codebook = useCodebook(codebookName, parentCode)
+  const codebook = useCodebook(codebookName, query)
 
   const selectOptions = codebook?.map(({ name, uid }) => ({ name, value: uid }))
 

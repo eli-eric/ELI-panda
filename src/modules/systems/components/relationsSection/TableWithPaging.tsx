@@ -44,7 +44,7 @@ const TableWithPaging = ({
     usePagination({ dependecies: [searchValue] })
   const query = useMemo(
     () => ({
-      systemFromUid: router.query.slug,
+      systemFromUid: router.query.uid,
       relationTypeCode,
       search: searchValue,
       pagination

@@ -5,6 +5,7 @@ import useSWR from 'swr'
 import ItemDetailComponent from '@/components/item-detail/ItemDetail.comp'
 import ItemPropertyTitle from '@/components/item-property/item-property-title.comp'
 import ItemPropertyValue from '@/components/item-property/item-property-value.comp'
+import { mockFetcher } from '@/features/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 
 import { SystemDetailResponse } from '../../types/responses'
@@ -24,7 +25,7 @@ const DISPLAY = [
 const SystemDetailSection = ({ data }: { data: SystemDetailResponse }) => {
   const router = useRouter()
   const { systemDetailImage } = useEndpoint({ uid: router.query.uid as string })
-  const { data: image } = useSWR(systemDetailImage)
+  const { data: image } = useSWR(systemDetailImage, mockFetcher)
   const rows = Object.entries(data).filter(([title]) => DISPLAY.includes(title))
 
   return (

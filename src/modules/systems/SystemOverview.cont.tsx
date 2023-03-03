@@ -36,7 +36,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
 
   const router = useRouter()
 
-  const uid = router.query.slug as string
+  const uid = router.query.uid as string
   const [query, setQuery] = useParam('q')
 
   const { EditButton } = useSystemEdit({ systemDetail: systemDetail })

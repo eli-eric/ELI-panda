@@ -43,7 +43,7 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
     setSearchValue(data.search)
   }
   const { systemRelationship, systemRelationships } = useEndpoint({
-    uid: router.query.slug as string
+    uid: router.query.uid as string
   })
   const relFormMethods = useForm<RelationFormType>({
     resolver: yupResolver(relationValidationSchema)
