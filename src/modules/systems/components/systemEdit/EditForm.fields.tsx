@@ -8,18 +8,19 @@ import { CODEBOOK } from '@/types/constants/codebook'
 
 const { form } = message.systemsPage.systemDetail
 
-const useSystemEditFormFields = () => {
-  const { register, formState, watch } = useFormContext<SystemEditFormType>()
+const getDefaultOption = (name, disabled = false) => ({
+  value: '',
+  name,
+  disabled
+})
 
-  const zone = watch('zoneUID')
+const useSystemEditFormFields = () => {
+  const { register, formState } = useFormContext<SystemEditFormType>()
 
   const systemTypeOption = useCodebookSelectValues(CODEBOOK.SYSTEM_TYPE)
   const importanceOption = useCodebookSelectValues(CODEBOOK.SYSTEM_IMPORTANCE)
   const zoneOption = useCodebookSelectValues(CODEBOOK.ZONE)
-  const subZoneOption = useCodebookSelectValues(
-    CODEBOOK.SUB_ZONE,
-    `?parentUID=${zone}`
-  )
+
   const criticalityOption = useCodebookSelectValues(
     CODEBOOK.SYSTEM_CRITICALITY_CLASS
   )
@@ -43,7 +44,10 @@ const useSystemEditFormFields = () => {
       label: form.systemTypeUID.label,
       isError: !!formState.errors.systemTypeUID,
       rounded: 'rounded-md',
-      options: systemTypeOption
+      options: systemTypeOption && [
+        getDefaultOption('none'),
+        ...systemTypeOption
+      ]
     },
     systemCode: {
       name: 'systemCode',
@@ -80,28 +84,27 @@ const useSystemEditFormFields = () => {
       label: form.importanceUID.label,
       isError: !!formState.errors.importanceUID,
       rounded: 'rounded-md',
-      options: importanceOption
+      options: importanceOption && [
+        getDefaultOption('none'),
+        ...importanceOption
+      ]
     },
     zoneUID: {
       name: 'zoneUID',
       label: form.zoneUID.label,
       isError: !!formState.errors.zoneUID,
       rounded: 'rounded-md',
-      options: zoneOption
-    },
-    subZoneCode: {
-      name: 'subZone',
-      label: form.subZone.label,
-      isError: !!formState.errors.subZone,
-      rounded: 'rounded-md',
-      options: subZoneOption
+      options: zoneOption && [getDefaultOption('none'), ...zoneOption]
     },
     criticalityClassUID: {
       name: 'criticalityClassUID',
       label: form.criticalityClassUID.label,
       isError: !!formState.errors.criticalityClassUID,
       rounded: 'rounded-md',
-      options: criticalityOption
+      options: criticalityOption && [
+        getDefaultOption('none'),
+        ...criticalityOption
+      ]
     }
   })
 }

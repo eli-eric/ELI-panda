@@ -36,7 +36,7 @@ const SystemFormImage = ({ uid }: { uid?: string }) => {
     onDrop
   })
   return (
-    <div className="flex flex-col pb-5">
+    <div className="flex h-full">
       {image === 'deleted' || (!systemImage && !image) ? (
         <ImagePlaceHolder
           getInputProps={getInputProps}

@@ -1,5 +1,5 @@
 import { Combobox } from '@headlessui/react'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+import { CheckIcon } from '@heroicons/react/20/solid'
 import { Fragment, useState } from 'react'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
@@ -47,29 +47,25 @@ const ComboboxComponent = <T extends FieldValues>({
           </Combobox.Label>
         )}
         <div className="relative">
-          <Combobox.Input
-            {...register(name as Path<T>)}
-            autoComplete="off"
-            placeholder={placeholder}
-            className={classNames(
-              className,
-              rounded,
-              isError ? 'border-red-500' : 'border-gray-300',
-              'px-3 py-2 border placeholder-gray-400  focus:border-primary-500 mt-2 focus:outline-none focus:ring-primary-500 sm:text-sm',
-              'block w-full appearance-none'
-            )}
-            onChange={event => setQuery(event.target.value)}
-            displayValue={(item: CodebookType) => item?.name}
-          />
-          <input
-            {...register(name as Path<T>)}
-            type="hidden"
-            defaultValue={selectedItem?.uid}
-          />
-          <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-            <ChevronUpDownIcon
-              className="h-5 w-5 text-gray-400"
-              aria-hidden="true"
+          <Combobox.Button className="w-full">
+            <Combobox.Input
+              {...register(name as Path<T>)}
+              autoComplete="off"
+              placeholder={placeholder}
+              className={classNames(
+                className,
+                rounded,
+                isError ? 'border-red-500' : 'border-gray-300',
+                'px-3 py-2 border placeholder-gray-400  focus:border-primary-500 mt-2 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                'block w-full appearance-none'
+              )}
+              onChange={event => setQuery(event.target.value)}
+              displayValue={(item: CodebookType) => item?.name}
+            />
+            <input
+              {...register(name as Path<T>)}
+              type="hidden"
+              defaultValue={selectedItem?.uid}
             />
           </Combobox.Button>
 
