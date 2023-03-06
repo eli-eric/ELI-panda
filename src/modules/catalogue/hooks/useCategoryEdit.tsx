@@ -28,6 +28,7 @@ export const useCategoryEdit = ({
 }) => {
   const [openEdit, setOpenEdit] = useState(false)
   const [openCopy, setOpenCopy] = useState(false)
+  const [openCopyEdit, setOpenCopyEdit] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
 
   const { data: session } = useSession()
@@ -50,7 +51,7 @@ export const useCategoryEdit = ({
     loading: loadingCopy,
     error: errorCopy,
     response: responseCopy
-  } = useSubmit({
+  } = useSubmit<{ uid: string }>({
     endpoint: catalogueCategoryCopy,
     method: 'post',
     mutateList: [catalogueCategories]
@@ -65,6 +66,7 @@ export const useCategoryEdit = ({
           .then()
           .finally(() => {
             setOpenDelete(false)
+            setOpenCopyEdit(true)
           })
       }
     },
@@ -201,6 +203,20 @@ export const useCategoryEdit = ({
         />
         {errorCopy && <ErrorPage />}
       </ModalComponent>
+      {responseCopy && (
+        <ModalComponent
+          open={openCopyEdit}
+          setOpen={setOpenCopyEdit}
+          buttons={copyModalButtons}
+          testid="catalogueCopy"
+        >
+          <CategoryEditModal
+            setOpen={setOpenCopyEdit}
+            parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
+            uid={responseCopy.uid}
+          />
+        </ModalComponent>
+      )}
     </Fragment>
   )
 
