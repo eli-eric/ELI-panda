@@ -3,7 +3,7 @@ import {
   DocumentDuplicateIcon,
   PencilSquareIcon,
   PlusIcon,
-  TrashIcon,
+  TrashIcon
 } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
@@ -21,7 +21,7 @@ import useSubmit from '../../../hooks/useSubmit'
 
 export const useCategoryEdit = ({
   editUid,
-  catalogueParentPath,
+  catalogueParentPath
 }: {
   editUid?: string
   catalogueParentPath?: string | undefined
@@ -36,23 +36,26 @@ export const useCategoryEdit = ({
   const { catalogueCategoryEdit, catalogueCategories, catalogueCategoryCopy } =
     useEndpoint({
       uid: editUid,
-      path: '/' + catalogueParentPath,
+      path:
+        !catalogueParentPath || catalogueParentPath === ''
+          ? ''
+          : '/' + catalogueParentPath
     })
   const { submit, loading, error, response } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: 'delete',
-    mutateList: [catalogueCategories],
+    mutateList: [catalogueCategories]
   })
 
   const {
     submit: submitCopy,
     loading: loadingCopy,
     error: errorCopy,
-    response: responseCopy,
+    response: responseCopy
   } = useSubmit({
     endpoint: catalogueCategoryCopy,
     method: 'post',
-    mutateList: [catalogueCategories],
+    mutateList: [catalogueCategories]
   })
 
   const deletModalButtons: ModalButtons = {
@@ -61,12 +64,12 @@ export const useCategoryEdit = ({
       loading: loading,
       onClick: () => {
         submit()
-      },
+      }
     },
     goBack: {
       text: 'Cancel',
-      onClick: () => setOpenDelete(false),
-    },
+      onClick: () => setOpenDelete(false)
+    }
   }
   useEffect(() => {
     if (response)
@@ -81,12 +84,12 @@ export const useCategoryEdit = ({
       loading: loadingCopy,
       onClick: () => {
         submitCopy()
-      },
+      }
     },
     goBack: {
       text: 'Cancel',
-      onClick: () => setOpenCopy(false),
-    },
+      onClick: () => setOpenCopy(false)
+    }
   }
   useEffect(() => {
     if (responseCopy)
