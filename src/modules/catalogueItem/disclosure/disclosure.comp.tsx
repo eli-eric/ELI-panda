@@ -2,11 +2,8 @@ import { Disclosure } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react'
 
+import { classNames } from '@/features'
 import { CatalogueItem } from '@/types/responses'
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 interface Props {
   groups: string[]

@@ -1,10 +1,6 @@
 import { Tab } from '@headlessui/react'
 import Image from 'next/image'
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
-
 interface Props {
   images: string[]
 }

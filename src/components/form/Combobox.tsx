@@ -3,13 +3,10 @@ import { CheckIcon } from '@heroicons/react/20/solid'
 import { Fragment, useState } from 'react'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
+import { classNames } from '@/features'
 import { CodebookType, useCodebook } from '@/hooks/useCodebook'
 import { CODEBOOK } from '@/types/constants/codebook'
 import { FieldProps } from '@/types/form'
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 type ComboboxProps<T extends FieldValues> = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
@@ -39,10 +36,10 @@ const ComboboxComponent = <T extends FieldValues>({
         onChange={(item: CodebookType | null) => {
           setSelectedItem(item)
         }}
-        className={`${className} block z-20 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
+        className={`${className} block relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
       >
         {label && (
-          <Combobox.Label className="block text-sm font-medium leading-6 text-gray-900">
+          <Combobox.Label className="block text-sm font-medium text-gray-900">
             {label}
           </Combobox.Label>
         )}
@@ -56,7 +53,7 @@ const ComboboxComponent = <T extends FieldValues>({
                 className,
                 rounded,
                 isError ? 'border-red-500' : 'border-gray-300',
-                'px-3 py-2 border placeholder-gray-400  focus:border-primary-500 mt-2 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 mt-2 focus:outline-none focus:ring-primary-500 sm:text-sm',
                 'block w-full appearance-none'
               )}
               onChange={event => setQuery(event.target.value)}
@@ -70,7 +67,7 @@ const ComboboxComponent = <T extends FieldValues>({
           </Combobox.Button>
 
           {data && data.length > 0 && (
-            <Combobox.Options className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Combobox.Options className="absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
               {data.map(item => (
                 <Combobox.Option
                   key={item.uid}

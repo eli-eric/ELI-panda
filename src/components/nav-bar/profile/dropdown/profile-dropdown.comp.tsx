@@ -4,13 +4,10 @@ import { useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 
 import ModalComponent from '@/components/modal/modal.comp'
+import { classNames } from '@/features'
 import { ModalButtons } from '@/types/form'
 
 import ProfileCardComponent from '../card/profile-card.comp'
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 interface Props {
   open: boolean

@@ -1,15 +1,12 @@
 import Link from 'next/link'
 import useSWR from 'swr'
 
+import { classNames } from '@/features'
 import { mockFetcher } from '@/features/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { PATH } from '@/types/constants/paths'
 
 import { SubsystemsResponse } from '../types/responses'
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 export const Item = (props: { uid: string; text: string }) => {
   const { uid, text } = props

@@ -21,7 +21,6 @@ export const InputWithError = <T extends FieldValues>({
   placeholder,
   disabled,
   rounded,
-  padding,
   type = 'text',
   className,
   label,
