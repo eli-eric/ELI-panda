@@ -9,6 +9,7 @@ interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
     | 'rounded-r-md'
     | 'rounded-b-md'
     | 'rounded-md'
+    | ''
   loading?: boolean
   primary?: boolean
   type?: 'button' | 'submit' | 'reset'
