@@ -1,6 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Dispatch, Fragment, SetStateAction } from 'react'
-import { message } from 'src/i18n/src/messages'
 
 import { ModalButtons } from '@/types/form'
 
@@ -13,8 +12,6 @@ interface Props {
   testid?: string
   buttons?: ModalButtons
 }
-
-const messages = message.common.buttons
 
 export default function ModalComponent({
   open,

@@ -68,6 +68,10 @@ const Edit = ({ data, uid, setOpen }: Props) => {
   const onSubmit = (data: SystemEditFormType) => {
     console.log(data)
     submit({ ...data, parentUid: router.query.uid })
+      .then()
+      .finally(() => {
+        setOpen(false)
+      })
   }
 
   return (

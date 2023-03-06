@@ -23,13 +23,13 @@ const categoryValidationschema = yup.object().shape({
           defaultValue: yup.string(),
           listOfValues: yup.array().of(
             yup.object({
-              value: yup.string().required(),
-            }),
-          ),
-        }),
-      ),
-    }),
-  ),
+              value: yup.string().required()
+            })
+          )
+        })
+      )
+    })
+  )
 })
 
 interface Props {
@@ -42,7 +42,7 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
   const endpoints = useEndpoint({ uid })
 
   const { data } = useSWR<CategoryFormType>(
-    uid && endpoints.catalogueCategoryEdit,
+    uid && endpoints.catalogueCategoryEdit
   )
 
   const formattedDefaultValues = useMemo(
@@ -55,19 +55,19 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
               properties: group.properties.map(property => ({
                 ...property,
                 listOfValues: property.listOfValues?.map(value => ({
-                  value: value,
-                })),
-              })),
-            })),
+                  value: value
+                }))
+              }))
+            }))
           }
         : { ...data },
-    [data],
+    [data]
   )
 
   const formMethods = useForm<CategoryFormType>({
     defaultValues: formattedDefaultValues,
     resolver: yupResolver(categoryValidationschema),
-    mode: 'onSubmit',
+    mode: 'onSubmit'
   })
 
   return (

@@ -6,7 +6,7 @@ import {
   TrashIcon
 } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 
 import { Button } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
@@ -28,9 +28,7 @@ export const useCategoryEdit = ({
 }) => {
   const [openEdit, setOpenEdit] = useState(false)
   const [openCopy, setOpenCopy] = useState(false)
-
   const [openDelete, setOpenDelete] = useState(false)
-  const [openNew, setOpenNew] = useState(false)
 
   const { data: session } = useSession()
   const { catalogueCategoryEdit, catalogueCategories, catalogueCategoryCopy } =
@@ -41,7 +39,7 @@ export const useCategoryEdit = ({
           ? ''
           : '/' + catalogueParentPath
     })
-  const { submit, loading, error, response } = useSubmit({
+  const { submit, loading, error } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: 'delete',
     mutateList: [catalogueCategories]
@@ -64,6 +62,10 @@ export const useCategoryEdit = ({
       loading: loading,
       onClick: () => {
         submit()
+          .then()
+          .finally(() => {
+            setOpenDelete(false)
+          })
       }
     },
     goBack: {
@@ -71,12 +73,6 @@ export const useCategoryEdit = ({
       onClick: () => setOpenDelete(false)
     }
   }
-  useEffect(() => {
-    if (response)
-      if (!error) {
-        setOpenDelete(false)
-      }
-  }, [response, setOpenDelete, error])
 
   const copyModalButtons: ModalButtons = {
     goNext: {
@@ -84,6 +80,10 @@ export const useCategoryEdit = ({
       loading: loadingCopy,
       onClick: () => {
         submitCopy()
+          .then()
+          .finally(() => {
+            setOpenCopy(false)
+          })
       }
     },
     goBack: {
@@ -91,12 +91,6 @@ export const useCategoryEdit = ({
       onClick: () => setOpenCopy(false)
     }
   }
-  useEffect(() => {
-    if (responseCopy)
-      if (!errorCopy) {
-        setOpenCopy(false)
-      }
-  }, [responseCopy, setOpenCopy, errorCopy])
 
   const EditButtons = () => (
     <Fragment>
@@ -127,7 +121,7 @@ export const useCategoryEdit = ({
         testid="catalogueEdit"
       >
         <CategoryEditModal
-          setopen={setOpenEdit}
+          setOpen={setOpenEdit}
           uid={editUid}
           parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
         />
@@ -158,7 +152,7 @@ export const useCategoryEdit = ({
             />
             <Button
               onClick={() => {
-                setOpenNew(true)
+                setOpenEdit(true)
               }}
             >
               <PlusIcon className="h-5 w-5" aria-hidden="true" />
@@ -167,13 +161,13 @@ export const useCategoryEdit = ({
         </li>
       )}
       <ModalComponent
-        open={openNew}
-        setOpen={setOpenNew}
+        open={openEdit}
+        setOpen={setOpenEdit}
         buttons={{ noButtons: true }}
         testid="catalogueEdit"
       >
         <CategoryEditModal
-          setopen={setOpenNew}
+          setOpen={setOpenEdit}
           parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
         />
       </ModalComponent>

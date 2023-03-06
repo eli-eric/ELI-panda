@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, Suspense, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, Suspense, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 import * as yup from 'yup'
@@ -48,18 +48,18 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
   const relFormMethods = useForm<RelationFormType>({
     resolver: yupResolver(relationValidationSchema)
   })
-  const { submit, loading, error, response } = useSubmit({
+  const { submit, loading, error } = useSubmit({
     endpoint: systemRelationship,
     method: 'post',
     mutateList: [systemRelationships]
   })
   const onSubmit = data => {
     submit(data)
+      .then()
+      .finally(() => {
+        setopen(false)
+      })
   }
-
-  useEffect(() => {
-    if (response) if (!error) setopen(false)
-  }, [response, setopen, error])
 
   return (
     <div className="w-full min-h-[736px] justify-between flex flex-col">

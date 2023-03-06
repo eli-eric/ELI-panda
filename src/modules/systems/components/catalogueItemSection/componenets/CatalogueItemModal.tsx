@@ -1,12 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
-import React, {
-  Dispatch,
-  Fragment,
-  SetStateAction,
-  useEffect,
-  useState
-} from 'react'
+import React, { Dispatch, Fragment, SetStateAction, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 import * as yup from 'yup'
@@ -50,19 +44,19 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
   const { system: systemDetail, catalogueCategoryEdit } = useEndpoint({
     uid: router.query.uid as string
   })
-  const { submit, loading, error, response } = useSubmit({
+  const { submit, loading, error } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: 'post',
     mutateList: [systemDetail]
   })
   const onSubmit = (data: SystemItemFormType) => {
     submit({ ...data, catalogueItemUID: item.uid })
+      .then()
+      .finally(() => {
+        setOpen(false)
+      })
     //console.log({ ...data, catalogueItemUID: item.uid } as SystemItemFormType)
   }
-
-  useEffect(() => {
-    if (response) if (!error) setOpen(false)
-  }, [response, setOpen, error])
 
   const formMethods = useForm<SystemItemFormType>({
     resolver: yupResolver(systemItemValidationSchema)
