@@ -5,8 +5,8 @@ import noImage from 'public/no-image.png'
 import { Dispatch, SetStateAction } from 'react'
 import useSWR from 'swr'
 
-import { useCategoryEdit } from '@/modules/catalogue/hooks/useCategoryEdit'
 import { useEndpoint } from '@/hooks/useEndpoint'
+import { useCategoryEdit } from '@/modules/catalogue/hooks/useCategoryEdit'
 import { PATH } from '@/types/constants/paths'
 import { CatalogueCategoryResponse } from '@/types/responses'
 
@@ -20,7 +20,7 @@ const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
   const { catalogueCategoryImage } = useEndpoint({ uid: category.uid })
   const { data: image } = useSWR(catalogueCategoryImage)
 
-  const { getEditDeleteButtons } = useCategoryEdit({
+  const { EditButtons, CopyButtton } = useCategoryEdit({
     editUid: category.uid,
     catalogueParentPath: category.parentPath,
   })
@@ -54,7 +54,10 @@ const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
           </div>
         </div>
       </Link>
-      {getEditDeleteButtons()}
+      <div className="flex flex-row">
+        <EditButtons />
+        <CopyButtton />
+      </div>
     </div>
   )
 }
