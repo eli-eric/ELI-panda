@@ -81,6 +81,7 @@ const CategoryEditModal = ({ setopen, parentPath = '', uid }: Props) => {
                 <FormattedMessage id={buttons.save} />
               </Button>
               <Button
+                type="button"
                 onClick={() => {
                   setopen(false)
                 }}
