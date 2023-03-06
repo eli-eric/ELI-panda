@@ -1,7 +1,17 @@
 import { Combobox } from '@headlessui/react'
-import { CheckIcon } from '@heroicons/react/20/solid'
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  XMarkIcon
+} from '@heroicons/react/20/solid'
 import { Fragment, useState } from 'react'
-import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
+import {
+  FieldValues,
+  Path,
+  PathValue,
+  useFormContext,
+  UseFormRegister
+} from 'react-hook-form'
 
 import { classNames } from '@/features'
 import { CodebookType, useCodebook } from '@/hooks/useCodebook'
@@ -27,6 +37,13 @@ const ComboboxComponent = <T extends FieldValues>({
   const [query, setQuery] = useState('')
   const [selectedItem, setSelectedItem] = useState<CodebookType | null>(null)
   const data = useCodebook(codebook, `?searchText=${query}&limit=10`, true)
+  const { setValue } = useFormContext<T>()
+
+  const clear = () => {
+    setQuery('')
+    setSelectedItem(null)
+    setValue(name as Path<T>, '' as PathValue<T, Path<T>>)
+  }
 
   return (
     <Fragment>
@@ -44,27 +61,51 @@ const ComboboxComponent = <T extends FieldValues>({
           </Combobox.Label>
         )}
         <div className="relative">
-          <Combobox.Button className="w-full">
-            <Combobox.Input
-              {...register(name as Path<T>)}
-              autoComplete="off"
-              placeholder={placeholder}
-              className={classNames(
-                className,
-                rounded,
-                isError ? 'border-red-500' : 'border-gray-300',
-                'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 mt-2 focus:outline-none focus:ring-primary-500 sm:text-sm',
-                'block w-full appearance-none'
-              )}
-              onChange={event => setQuery(event.target.value)}
-              displayValue={(item: CodebookType) => item?.name}
-            />
-            <input
-              {...register(name as Path<T>)}
-              type="hidden"
-              defaultValue={selectedItem?.uid}
-            />
-          </Combobox.Button>
+          <div className="w-full">
+            <Combobox.Button className="w-full">
+              <Combobox.Input
+                {...register(name as Path<T>)}
+                autoComplete="off"
+                placeholder={placeholder}
+                className={classNames(
+                  className,
+                  rounded,
+                  isError ? 'border-red-500' : 'border-gray-300',
+                  'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 mt-2 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                  'block w-full appearance-none'
+                )}
+                onChange={event => setQuery(event.target.value)}
+                displayValue={(item: CodebookType) => item?.name}
+              />
+              <input
+                {...register(name as Path<T>)}
+                type="hidden"
+                value={selectedItem?.uid}
+              />
+              <button
+                type="button"
+                className="absolute pt-2  inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
+              >
+                <ChevronDownIcon
+                  className="h-5 w-5 text-gray-600"
+                  aria-hidden="true"
+                />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  clear()
+                }}
+                className="absolute pt-2 pr-8 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
+              >
+                <XMarkIcon
+                  className="h-5 w-5 text-gray-600 border border-gray-400 rounded-full hover:bg-gray-100 hover:text-red-500"
+                  aria-hidden="true"
+                />
+              </button>
+            </Combobox.Button>
+          </div>
 
           {data && data.length > 0 && (
             <Combobox.Options className="absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
