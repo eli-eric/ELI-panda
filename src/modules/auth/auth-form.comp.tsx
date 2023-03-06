@@ -1,7 +1,7 @@
 import {
   FormState,
   UseFormHandleSubmit,
-  UseFormRegister,
+  UseFormRegister
 } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
@@ -10,7 +10,6 @@ import Button from '@/components/Buttons'
 import EliLogoComponent from '@/components/eli-logo.comp'
 import { InputWithError } from '@/components/form/Input'
 
-const authMessages = message.authPage
 const { title, form } = message.authPage
 const authButtonMessages = message.authPage.form.button
 
@@ -32,7 +31,7 @@ const AuthFormComponent = ({
   register,
   formState,
   handleSubmit,
-  loading,
+  loading
 }: Props) => {
   const { errors } = formState
 

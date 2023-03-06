@@ -43,7 +43,7 @@ describe.only('Catalogue', () => {
     cy.wait(['@catalogueItems'])
     cy.url().should('include', 'beam-characterization')
     cy.contains('Showing 1 to 3 of 3 results')
-    cy.get('[data-testid="catalogue-breadcrump-home"]').click()
+    cy.get('[data-testid="breadcrump-home"]').click()
     setApiMocks(SCRENARIOS.customCatalogueItems.catalogueItems(3))
     //cy.wait(['@catalogueItems'])
     // cy.get('input[name=search]').clear()

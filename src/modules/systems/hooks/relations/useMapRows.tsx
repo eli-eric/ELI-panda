@@ -1,14 +1,15 @@
 import {
   ArrowLongLeftIcon,
   ArrowLongRightIcon,
-  TrashIcon,
+  TrashIcon
 } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 
 import { Button } from '@/components/Buttons'
 import { SystemForRel } from '@/modules/systems/types'
-import { SystemRelationshipResponse } from '@/types/responses'
+
+import { SystemRelationshipResponse } from '../../types/responses'
 
 interface TableNameProps {
   uid: string
@@ -29,7 +30,7 @@ const Name = ({
   uid,
   name,
   selectSystemUid,
-  selelectedSystemUid,
+  selelectedSystemUid
 }: TableNameProps) => {
   const image = 'https://source.unsplash.com/collection/71371194/500x500'
   return (
@@ -58,7 +59,7 @@ const Name = ({
 export const useSystemMapRows = ({
   systems,
   setSelectedSystem,
-  selectedSystem,
+  selectedSystem
 }: {
   systems: SystemForRel[] | undefined
   setSelectedSystem: Dispatch<
@@ -110,7 +111,7 @@ export const useSystemMapRows = ({
 
 export const useRelationMapRows = ({
   relations,
-  onDelete,
+  onDelete
 }: {
   relations: SystemRelationshipResponse[] | undefined
   onDelete: (uid: string) => void
@@ -145,7 +146,7 @@ export const useRelationMapRows = ({
               className="h-5 w-5 text-red-700"
               aria-hidden="true"
             />{' '}
-          </Button>,
+          </Button>
         ]
       }),
     [onDelete, relations]

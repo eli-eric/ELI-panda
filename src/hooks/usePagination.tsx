@@ -1,7 +1,9 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import PaginationComponent from '@/components/table/Pagination.comp'
+
+import useQueryString from './useQueryString'
 
 export type Pagination = {
   page: number
@@ -10,7 +12,7 @@ export type Pagination = {
 
 const usePagination = ({
   dependecies,
-  useQuery,
+  useQuery
 }: {
   dependecies: React.DependencyList
   useQuery?: boolean
@@ -34,13 +36,10 @@ const usePagination = ({
   const nextPageHandler = () => {
     setPage(prev => prev + 1)
   }
-  const pagination = useMemo(() => {
-    const pagination = {
-      page,
-      pageSize,
-    }
-    return JSON.stringify(pagination)
-  }, [page, pageSize])
+  const pagination = useQueryString({
+    page,
+    pageSize
+  })
 
   useEffect(() => {
     if (useQuery) {
@@ -50,12 +49,12 @@ const usePagination = ({
           ? {
               ...router.query,
               search: router.query.search,
-              page: page,
+              page: page
             }
           : {
               ...router.query,
-              page: page,
-            },
+              page: page
+            }
       })
     }
   }, [useQuery, page, ...dependecies]) //eslint-disable-line
@@ -88,7 +87,7 @@ const usePagination = ({
     setTotalCount,
     setPageSize,
     page,
-    pageSize,
+    pageSize
   }
 }
 

@@ -1,8 +1,6 @@
-import ButtonLoaderComponent from './button-loader.comp'
+import { classNames } from '@/features'
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+import ButtonLoaderComponent from './button-loader.comp'
 
 interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   rounded?:

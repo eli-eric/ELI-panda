@@ -17,8 +17,8 @@ interface FormImageProps {
 }
 
 const FormImage = ({ image, onDelete }: FormImageProps) => (
-  <div className="mt-1 flex-col justify-center  border-gray-300 ">
-    <Image width={200} height={200} alt="" src={image} />
+  <div className="mt-1 flex-col w-full justify-center  border-gray-300 ">
+    <Image width={300} height={300} alt="" src={image} />
     <Button
       type="button"
       onClick={onDelete}
@@ -37,7 +37,7 @@ const Main = ({ uid }: { uid?: string }) => {
   )
 
   const [showImageUid, setShowImage] = useState<boolean>(!!uid)
-  const { register, watch, setValue, formState, unregister } =
+  const { register, watch, setValue, formState } =
     useFormContext<CategoryFormType>()
   const onDrop = useCallback(
     files => {
@@ -47,10 +47,10 @@ const Main = ({ uid }: { uid?: string }) => {
     },
     [setValue]
   )
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
     accept: { 'image/*': [] },
-    onDrop,
+    onDrop
   })
 
   const { errors } = formState
@@ -64,7 +64,7 @@ const Main = ({ uid }: { uid?: string }) => {
   }, [name, setValue, categoryImage, image])
 
   return (
-    <div className="flex flex-row pb-5">
+    <div className="grid grid-cols-4 pb-5">
       {image === 'deleted' || (!categoryImage && !image) ? (
         <ImagePlaceHolder
           getInputProps={getInputProps}
@@ -83,7 +83,7 @@ const Main = ({ uid }: { uid?: string }) => {
           }}
         />
       )}
-      <div className="flex flex-col flex-grow ml-10">
+      <div className="flex flex-col col-span-3 flex-grow ml-10">
         <div>
           <div className="mt-1">
             <InputWithError
