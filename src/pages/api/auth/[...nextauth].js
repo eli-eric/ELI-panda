@@ -7,7 +7,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 
 export default NextAuth({
   session: {
-    jwt: true,
+    jwt: true
   },
   providers: [
     CredentialsProvider({
@@ -15,30 +15,23 @@ export default NextAuth({
         const result = await axios({
           headers: {
             Accept: 'application/json',
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json'
           },
           method: 'post',
           url: process.env.PANDA_API_GW_URL + '/authenticate',
           data: {
             username: credentials?.username,
-            password: credentials?.password,
-          },
-        }).catch(error => {
-          //catching erros
-          if (error.response) {
-            if (error.request.res.statusCode === 401) {
-              throw new Error('Wrong password or user name')
-            } else {
-              throw new Error(error.response.data)
-            }
+            password: credentials?.password
           }
         })
+
+        if (!result.data) return null
         return result.data
-      },
-    }),
+      }
+    })
   ],
   pages: {
-    signIn: '/',
+    signIn: '/'
   },
   callbacks: {
     jwt(params) {
@@ -60,6 +53,6 @@ export default NextAuth({
       params.session.user.fullName = params.token.fullName
 
       return params.session
-    },
-  },
+    }
+  }
 })
