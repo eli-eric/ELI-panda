@@ -8,15 +8,21 @@ interface UseSubmitProps {
   endpoint: string
   method: 'post' | 'put' | 'delete'
   mutateList?: string[]
+  afterAction?: () => void
 }
 
-const useSubmit = <T>({ endpoint, method, mutateList }: UseSubmitProps) => {
+const useSubmit = <T>({
+  endpoint,
+  method,
+  mutateList,
+  afterAction
+}: UseSubmitProps) => {
   const { mutate } = useSWRConfig()
 
   const [response, setResponse] = useState<T | null>(null)
   const [error, setError] = useState<string>()
   const [loading, setloading] = useState<boolean>(false)
-  const submit = async (body?: object) => {
+  const submit = (body?: object) => {
     setloading(true)
     axios[method](BASE_URL + endpoint, body ? body : undefined)
       .then(res => setResponse(res.data))
@@ -31,6 +37,9 @@ const useSubmit = <T>({ endpoint, method, mutateList }: UseSubmitProps) => {
               setloading(false)
             )
           })
+        if (afterAction) {
+          afterAction()
+        }
       })
   }
   return { response, error, loading, submit, setloading }

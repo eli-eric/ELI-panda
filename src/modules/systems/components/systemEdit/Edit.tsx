@@ -48,7 +48,10 @@ const Edit = ({ data, uid, setOpen }: Props) => {
   const { submit, loading, error, response } = useSubmit({
     endpoint: system,
     method: uid ? 'put' : 'post',
-    mutateList: [system, systemSubsystems]
+    mutateList: [system, systemSubsystems],
+    afterAction: () => {
+      setOpen(false)
+    }
   })
 
   useEffect(() => {
@@ -70,10 +73,8 @@ const Edit = ({ data, uid, setOpen }: Props) => {
     }
   }
 
-  const onSubmit = async (data: SystemEditFormType) => {
-    await submit({ ...data, parentUid: router.query.uid })
-
-    setOpen(false)
+  const onSubmit = (data: SystemEditFormType) => {
+    submit({ ...data, parentUid: router.query.uid })
   }
 
   return (

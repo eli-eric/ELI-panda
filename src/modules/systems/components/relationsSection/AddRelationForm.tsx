@@ -48,14 +48,17 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
   const relFormMethods = useForm<RelationFormType>({
     resolver: yupResolver(relationValidationSchema)
   })
+
   const { submit, loading, error } = useSubmit({
     endpoint: systemRelationship,
     method: 'post',
-    mutateList: [systemRelationships]
+    mutateList: [systemRelationships],
+    afterAction: () => {
+      setopen(false)
+    }
   })
-  const onSubmit = async data => {
-    await submit(data)
-    setopen(false)
+  const onSubmit = data => {
+    submit(data)
   }
 
   return (
