@@ -40,10 +40,15 @@ export const useCategoryEdit = ({
           ? ''
           : '/' + catalogueParentPath
     })
+
   const { submit, loading, error } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: 'delete',
-    mutateList: [catalogueCategories]
+    mutateList: [catalogueCategories],
+    afterAction: () => {
+      setOpenEdit(false)
+      setOpenCopyEdit(false)
+    }
   })
 
   const {
@@ -54,16 +59,18 @@ export const useCategoryEdit = ({
   } = useSubmit<string>({
     endpoint: catalogueCategoryCopy,
     method: 'post',
-    mutateList: [catalogueCategories]
+    mutateList: [catalogueCategories],
+    afterAction: () => {
+      setOpenCopy(false)
+    }
   })
 
   const deletModalButtons: ModalButtons = {
     goNext: {
       text: 'Continue',
       loading: loading,
-      onClick: async () => {
-        await submit()
-        setOpenDelete(false)
+      onClick: () => {
+        submit()
       }
     },
     goBack: {
@@ -76,11 +83,8 @@ export const useCategoryEdit = ({
     goNext: {
       text: 'Copy',
       loading: loadingCopy,
-      onClick: async () => {
-        await submitCopy()
-        if (!errorCopy) {
-          setOpenCopy(false)
-        }
+      onClick: () => {
+        submitCopy()
       }
     },
     goBack: {
