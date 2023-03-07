@@ -10,11 +10,7 @@ interface UseSubmitProps {
   mutateList?: string[]
 }
 
-const useSubmit = <T extends object>({
-  endpoint,
-  method,
-  mutateList
-}: UseSubmitProps) => {
+const useSubmit = <T>({ endpoint, method, mutateList }: UseSubmitProps) => {
   const { mutate } = useSWRConfig()
 
   const [response, setResponse] = useState<T | null>(null)

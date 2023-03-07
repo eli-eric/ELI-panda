@@ -6,7 +6,7 @@ import {
   TrashIcon
 } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 import { Button } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
@@ -51,7 +51,7 @@ export const useCategoryEdit = ({
     loading: loadingCopy,
     error: errorCopy,
     response: responseCopy
-  } = useSubmit<{ uid: string }>({
+  } = useSubmit<string>({
     endpoint: catalogueCategoryCopy,
     method: 'post',
     mutateList: [catalogueCategories]
@@ -61,13 +61,9 @@ export const useCategoryEdit = ({
     goNext: {
       text: 'Continue',
       loading: loading,
-      onClick: () => {
-        submit()
-          .then()
-          .finally(() => {
-            setOpenDelete(false)
-            setOpenCopyEdit(true)
-          })
+      onClick: async () => {
+        await submit()
+        setOpenDelete(false)
       }
     },
     goBack: {
@@ -80,12 +76,11 @@ export const useCategoryEdit = ({
     goNext: {
       text: 'Copy',
       loading: loadingCopy,
-      onClick: () => {
-        submitCopy()
-          .then()
-          .finally(() => {
-            setOpenCopy(false)
-          })
+      onClick: async () => {
+        await submitCopy()
+        if (!errorCopy) {
+          setOpenCopy(false)
+        }
       }
     },
     goBack: {
@@ -93,6 +88,19 @@ export const useCategoryEdit = ({
       onClick: () => setOpenCopy(false)
     }
   }
+
+  //open edit modal after copy
+  useEffect(() => {
+    if (!openCopy) {
+      if (!loadingCopy) {
+        if (!errorCopy) {
+          if (responseCopy) {
+            setOpenCopyEdit(true)
+          }
+        }
+      }
+    }
+  }, [responseCopy, loadingCopy, errorCopy, openCopy])
 
   const EditButtons = () => (
     <Fragment>
@@ -170,13 +178,13 @@ export const useCategoryEdit = ({
         <ModalComponent
           open={openCopyEdit}
           setOpen={setOpenCopyEdit}
-          buttons={copyModalButtons}
+          buttons={{ noButtons: true }}
           testid="catalogueCopy"
         >
           <CategoryEditModal
             setOpen={setOpenCopyEdit}
             parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
-            uid={responseCopy.uid}
+            uid={responseCopy}
           />
         </ModalComponent>
       )}
