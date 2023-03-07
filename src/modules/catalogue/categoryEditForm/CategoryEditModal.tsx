@@ -58,10 +58,7 @@ const CategoryEditModal = ({ setOpen, parentPath = '', uid }: Props) => {
   })
   const onSubmit = async (data: CategoryFormType) => {
     await submit(formatData(data, parentPath))
-      .then()
-      .finally(() => {
-        setOpen(false)
-      })
+    setOpen(false)
   }
 
   return (

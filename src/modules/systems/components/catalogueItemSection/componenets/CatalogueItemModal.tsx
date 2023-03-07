@@ -51,10 +51,7 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
   })
   const onSubmit = async (data: SystemItemFormType) => {
     await submit({ ...data, catalogueItemUID: item.uid })
-      .then()
-      .finally(() => {
-        setOpen(false)
-      })
+    setOpen(false)
     //console.log({ ...data, catalogueItemUID: item.uid } as SystemItemFormType)
   }
 

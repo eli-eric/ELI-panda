@@ -55,10 +55,7 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
   })
   const onSubmit = async data => {
     await submit(data)
-      .then()
-      .finally(() => {
-        setopen(false)
-      })
+    setopen(false)
   }
 
   return (
