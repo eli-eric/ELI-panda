@@ -1,8 +1,4 @@
 import { ExclamationTriangleIcon } from '@heroicons/react/20/solid'
-import { FormattedMessage } from 'react-intl'
-import { message } from 'src/i18n/src/messages'
-
-const title = message.authPage.alert.title
 
 interface Props {
   message: string
@@ -18,12 +14,7 @@ const AuthAlertComponent = ({ message }: Props) => (
         />
       </div>
       <div className="ml-3">
-        <h3 className="text-sm font-medium text-yellow-800">
-          <FormattedMessage id={title} />
-        </h3>
-        <div className="mt-2 text-sm text-yellow-700">
-          <p>{message}</p>
-        </div>
+        <h3 className="text-sm font-medium text-yellow-800">{message}</h3>
       </div>
     </div>
   </div>

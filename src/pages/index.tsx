@@ -24,10 +24,10 @@ const LoginPage: NextPage = (): JSX.Element => {
   )
   const authValidationSchema = yup.object().shape({
     password: yup.string().required(),
-    username: yup.string().required(),
+    username: yup.string().required()
   })
   const { register, handleSubmit, formState } = useForm<AuthForm>({
-    resolver: yupResolver(authValidationSchema),
+    resolver: yupResolver(authValidationSchema)
   })
   const [errorMessage, setErrorMessage] = useState<string>()
   const [loading, setLoading] = useState<boolean>(false)
@@ -37,11 +37,11 @@ const LoginPage: NextPage = (): JSX.Element => {
     setErrorMessage(undefined)
     signIn('credentials', {
       redirect: false,
-      ...data,
+      ...data
     })
       .then(e => {
         if (e?.error) {
-          setErrorMessage(e.error)
+          setErrorMessage('Wrong username or password!')
           setLoading(false)
         }
       })

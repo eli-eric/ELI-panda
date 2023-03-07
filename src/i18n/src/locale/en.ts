@@ -48,7 +48,7 @@ export const messages = {
       password: 'Password',
       button: { default: 'Sign In', isLoading: 'Loading...' }
     },
-    alert: { title: 'Something went wrong!' }
+    alert: { title: 'Wrong username or password.' }
   },
   dashboardPage: { head: 'Eli Panda - Dashboard' },
   cataloguePage: {

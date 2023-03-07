@@ -10,10 +10,14 @@ interface UseSubmitProps {
   mutateList?: string[]
 }
 
-const useSubmit = ({ endpoint, method, mutateList }: UseSubmitProps) => {
+const useSubmit = <T extends object>({
+  endpoint,
+  method,
+  mutateList
+}: UseSubmitProps) => {
   const { mutate } = useSWRConfig()
 
-  const [response, setResponse] = useState<object | null>(null)
+  const [response, setResponse] = useState<T | null>(null)
   const [error, setError] = useState<string>()
   const [loading, setloading] = useState<boolean>(false)
   const submit = async (body?: object) => {
@@ -28,7 +32,7 @@ const useSubmit = ({ endpoint, method, mutateList }: UseSubmitProps) => {
         if (mutateList)
           mutateList.forEach(url => {
             mutate(url, undefined, { revalidate: true }).finally(() =>
-              setloading(false),
+              setloading(false)
             )
           })
       })
