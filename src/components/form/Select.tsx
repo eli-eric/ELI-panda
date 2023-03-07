@@ -1,6 +1,7 @@
 import React from 'react'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
+import { classNames } from '@/features'
 import { FieldProps } from '@/types/form'
 
 export type Option = {
@@ -33,7 +34,12 @@ export const Select = <T extends FieldValues>({
   >
     {options &&
       options.map((option, index) => (
-        <option key={index} value={option.value} disabled={option.disabled}>
+        <option
+          key={index}
+          value={option.value}
+          disabled={option.disabled}
+          className="relative cursor-default select-none py-2 pl-3 pr-9"
+        >
           {option.name ? option.name : option.value}
         </option>
       ))}
@@ -51,15 +57,12 @@ export const SelectWithError = <T extends FieldValues>({
   options,
   rounded,
   label,
-  padding,
   disabled,
   className,
   ...rest
 }: SelectWithErrorProps<T>) => (
   <div
-    className={`${
-      padding && 'px-1'
-    } block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
+    className={`${className} block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
   >
     {label && (
       <label className="text-sm font-medium text-gray-700">{label}</label>
@@ -68,11 +71,12 @@ export const SelectWithError = <T extends FieldValues>({
       {...rest}
       options={options}
       disabled={disabled}
-      className={`${className} block w-full ${
-        disabled ? 'bg-gray-100' : ''
-      } appearance-none ${rounded} border ${
-        isError ? 'border-red-500' : 'border-gray-300'
-      } px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
+      className={classNames(
+        disabled ? 'bg-gray-100' : '',
+        rounded,
+        isError ? 'border-red-500' : 'border-gray-300',
+        'w-full block mb-2 appearance-none borde px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm'
+      )}
     />
   </div>
 )

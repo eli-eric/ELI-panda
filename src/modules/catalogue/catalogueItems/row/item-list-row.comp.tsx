@@ -2,12 +2,15 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import noImage from 'public/no-image.png'
+import useSWR from 'swr'
 
 import TooltipComponent from '@/components/tooltip.comp'
+import { fetcher } from '@/features/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
+import { Selectable } from '@/modules/systems/types'
 import { PATH } from '@/types/constants/paths'
 import { CatalogueItem } from '@/types/responses'
-import { Selectable } from '@/modules/systems/types'
 
 interface Props {
   item: CatalogueItem
@@ -20,10 +23,13 @@ const ItemListRow = ({
   item,
   index,
   categoryListLength,
-  selectable,
+  selectable
 }: Props) => {
   const router = useRouter()
   const { catalogueItemImage } = useEndpoint({ uid: item.uid })
+  const { data: image } = useSWR(catalogueItemImage, fetcher, {
+    suspense: false
+  })
   const categoryPath = PATH.CATALOGUE + '/' + item.categoryPath
 
   const Name = () => (
@@ -32,7 +38,7 @@ const ItemListRow = ({
         <Image
           className="h-10 w-10 rounded-full"
           alt={item.name}
-          src={catalogueItemImage}
+          src={image || noImage}
           width={200}
           height={200}
         />

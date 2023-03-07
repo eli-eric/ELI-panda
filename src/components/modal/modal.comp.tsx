@@ -1,6 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Dispatch, Fragment, SetStateAction } from 'react'
-import { message } from 'src/i18n/src/messages'
 
 import { ModalButtons } from '@/types/form'
 
@@ -14,14 +13,12 @@ interface Props {
   buttons?: ModalButtons
 }
 
-const messages = message.common.buttons
-
 export default function ModalComponent({
   open,
   setOpen,
   children,
   testid,
-  buttons,
+  buttons
 }: Props) {
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -61,11 +58,7 @@ export default function ModalComponent({
                 <Fragment>
                   {children}
                   {buttons?.noButtons !== true && (
-                    <ModalButtonsComponent
-                      setOpen={setOpen}
-                      testid={testid}
-                      buttons={buttons}
-                    />
+                    <ModalButtonsComponent testid={testid} buttons={buttons} />
                   )}
                 </Fragment>
               </Dialog.Panel>

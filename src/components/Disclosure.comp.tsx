@@ -2,9 +2,7 @@ import { Disclosure } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react'
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+import { classNames } from '@/features'
 
 interface Props {
   title: string
@@ -22,7 +20,7 @@ const DisclosureComponent = ({ title, children, defaultOpen }: Props) => (
               <span
                 className={classNames(
                   open ? 'text-primary-600' : 'text-gray-900',
-                  'text-sm font-medium',
+                  'text-sm font-medium'
                 )}
               >
                 {title}

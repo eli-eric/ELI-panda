@@ -6,13 +6,13 @@ const SearchBarComponent = () => {
   const router = useRouter()
   const query = router.query
   const { slug } = router.query
-  const { register, handleSubmit, watch } = useForm<{ search: string }>({
-    defaultValues: { search: router.query.search as string },
+  const { register, handleSubmit } = useForm<{ search: string }>({
+    defaultValues: { search: router.query.search as string }
   })
 
   const onSubmit = (data: { search: string }) => {
     router.push({
-      query: data.search ? { ...query, search: data.search } : { slug: slug },
+      query: data.search ? { ...query, search: data.search } : { slug: slug }
     })
   }
 

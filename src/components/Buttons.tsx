@@ -1,8 +1,6 @@
-import ButtonLoaderComponent from './button-loader.comp'
+import { classNames } from '@/features'
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+import ButtonLoaderComponent from './button-loader.comp'
 
 interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   rounded?:
@@ -11,9 +9,16 @@ interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
     | 'rounded-r-md'
     | 'rounded-b-md'
     | 'rounded-md'
+    | 'rounded-tl-md'
+    | 'rounded-tr-md'
+    | 'rounded-br-md'
+    | 'rounded-bl-md'
+    | 'rounded-md'
+    | ''
   loading?: boolean
   primary?: boolean
   type?: 'button' | 'submit' | 'reset'
+  buttonSize?: 'small' | 'large'
 }
 
 export const Button = ({
@@ -23,6 +28,7 @@ export const Button = ({
   primary = false,
   children,
   className,
+  buttonSize,
   ...restProps
 }: ButtonProps) => (
   <button
@@ -33,23 +39,14 @@ export const Button = ({
       rounded,
       disabled ? 'bg-gray-100 text-gray-300' : '',
       loading ? 'bg-primary-700' : `bg-${!primary ? 'white' : 'primary-600'}`,
-      'px-4 py-2 text-sm font-medium shadow-sm',
+      buttonSize === 'small' ? 'px-2 py-1' : 'px-4 py-2',
       !primary
         ? !disabled && 'hover:bg-gray-100 text-gray-600'
         : !disabled && 'hover:bg-primary-700 text-white',
-      'relative z-10 inline-flex items-center border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2',
+      'relative text-sm font-medium shadow-sm z-10 inline-flex items-center border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2'
     )}
   >
     {loading && <ButtonLoaderComponent />}
     {children}
   </button>
 )
-
-const B = props => (
-  <button
-    {...props}
-    className={`hover:text-orange-600 relative z-0 inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-1 text-sm font-medium text-gray-400 hover:bg-gray-50 focus:z-10 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 ${props.className}`}
-  />
-)
-
-export default Button

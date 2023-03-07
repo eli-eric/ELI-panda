@@ -4,12 +4,10 @@ import { useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 
 import ModalComponent from '@/components/modal/modal.comp'
+import { classNames } from '@/features'
+import { ModalButtons } from '@/types/form'
 
 import ProfileCardComponent from '../card/profile-card.comp'
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
 
 interface Props {
   open: boolean
@@ -36,6 +34,14 @@ const ProfileDropdownComponent = ({ open }: Props) => {
 
   const showModalHandler = () => {
     setModalOpen(true)
+  }
+  const modalButtons: ModalButtons = {
+    goNext: {
+      text: 'Close',
+      onClick: () => {
+        setModalOpen(false)
+      }
+    }
   }
   return (
     <Fragment>
@@ -124,7 +130,12 @@ const ProfileDropdownComponent = ({ open }: Props) => {
           </div>
         </div>
       )}
-      <ModalComponent open={modalOpen} setOpen={setModalOpen} testid="profile">
+      <ModalComponent
+        open={modalOpen}
+        setOpen={setModalOpen}
+        buttons={modalButtons}
+        testid="profile"
+      >
         <ProfileCardComponent />
       </ModalComponent>
     </Fragment>

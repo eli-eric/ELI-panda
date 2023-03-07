@@ -1,4 +1,4 @@
-import { Dispatch, Fragment, SetStateAction, Suspense, useEffect } from 'react'
+import { Dispatch, Fragment, SetStateAction, Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormattedMessage } from 'react-intl'
 
@@ -22,49 +22,44 @@ const formatData = (data: CategoryFormType, parentPath) =>
             prop.listOfValues && prop.listOfValues.length !== 0
               ? {
                   ...prop,
-                  listOfValues: prop.listOfValues.map(value => value.value),
+                  listOfValues: prop.listOfValues.map(value => value.value)
                 }
               : { ...prop }
-          ),
-        })),
+          )
+        }))
       }
     : {
         uid: data?.uid,
         image: data?.image,
         name: data?.name,
         code: data?.code,
-        parentPath: data.parentPath ? data?.parentPath : parentPath,
+        parentPath: data.parentPath ? data?.parentPath : parentPath
       }
 
 const { buttons } = message.common
 interface Props {
-  setopen: Dispatch<SetStateAction<boolean>>
+  setOpen: Dispatch<SetStateAction<boolean>>
   parentPath?: string
   uid?: string
 }
 
-const CategoryEditModal = ({ setopen, parentPath = '', uid }: Props) => {
+const CategoryEditModal = ({ setOpen, parentPath = '', uid }: Props) => {
   const { catalogueCategoryEdit, catalogueCategories, catalogueCategoryImage } =
     useEndpoint(uid ? { uid, path: parentPath } : { path: parentPath })
 
-  const { submit, loading, error, response } = useSubmit({
+  const { submit, loading, error } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: uid ? 'put' : 'post',
     mutateList: [
       catalogueCategories,
       catalogueCategoryEdit,
-      catalogueCategoryImage,
-    ],
+      catalogueCategoryImage
+    ]
   })
   const onSubmit = async (data: CategoryFormType) => {
-    submit(formatData(data, parentPath))
+    await submit(formatData(data, parentPath))
+    setOpen(false)
   }
-  useEffect(() => {
-    if (response)
-      if (!error) {
-        setopen(false)
-      }
-  }, [response, setopen, error])
 
   return (
     <Fragment>
@@ -81,8 +76,9 @@ const CategoryEditModal = ({ setopen, parentPath = '', uid }: Props) => {
                 <FormattedMessage id={buttons.save} />
               </Button>
               <Button
+                type="button"
                 onClick={() => {
-                  setopen(false)
+                  setOpen(false)
                 }}
                 disabled={loading}
                 className="inline-flex w-full justify-center sm:col-start-1 sm:mt-0 sm:text-sm text-gray-700"

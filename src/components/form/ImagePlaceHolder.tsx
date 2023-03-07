@@ -11,7 +11,7 @@ const ImagePlaceHolder = ({ getRootProps, getInputProps }: Props) => (
   <label
     htmlFor="file-upload"
     {...getRootProps()}
-    className="mt-1 cursor-pointer justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2"
+    className="mt-1 w-full items-center flex cursor-pointer justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6 focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2"
   >
     <div className="space-y-1 text-center">
       <div className=" text-sm text-gray-600">

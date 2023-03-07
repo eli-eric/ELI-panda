@@ -1,8 +1,8 @@
 import { HomeIcon } from '@heroicons/react/20/solid'
 import { useRouter } from 'next/router'
 
-import { useCategoryEdit } from '@/modules/catalogue/hooks/useCategoryEdit'
 import { useCataloguePath } from '@/hooks/usePath'
+import { useCategoryEdit } from '@/modules/catalogue/hooks/useCategoryEdit'
 import { PATH } from '@/types/constants/paths'
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
   handleClick: (path: string) => void
   testId: string
 }
-
+// TODO: need refactor
 const BreadcrumbListComponent = ({
   navigationList,
   handleClick,
@@ -24,11 +24,7 @@ const BreadcrumbListComponent = ({
     handleClick(PATH.CATALOGUE + (search ? `?search=${search}` : ''))
   }
   return (
-    <div
-      data-testid={testId}
-      id="catalogue-breadcrump"
-      className="bg-white pt-3 pb-3 "
-    >
+    <div data-testid={testId} id="breadcrump" className="bg-white pt-3 pb-3 ">
       <nav className="flex" aria-label="Breadcrumb">
         <ol role="list" className="flex space-x-4 bg-white px-6  ">
           <li className="flex">

@@ -8,7 +8,7 @@ export type Button = {
   text: string
   loading?: boolean
   type?: 'button' | 'submit' | 'reset' | undefined
-  onClick?: (data: unknown | undefined) => void
+  onClick?: () => void
 }
 
 export interface FieldProps {

@@ -30,9 +30,6 @@ const ItemPropertiesComponent = ({ item, groups }: Props) => (
         <ItemPropertyTitle title={messages.manufacturerUrl}>
           <ItemPropertyValue text={item?.manufacturerUrl} link={true} />
         </ItemPropertyTitle>
-        <ItemPropertyTitle title={messages.description} span="2">
-          <ItemPropertyValue text={item?.description} />
-        </ItemPropertyTitle>
       </dl>
     </div>
     {item?.details &&

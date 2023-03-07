@@ -7,7 +7,7 @@ import { useIntl } from 'react-intl'
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
 import { message } from '@/i18n/src/messages'
-import BreadcrumbContainer from '@/modules/catalogue/breadcrump/breadcrump.cont'
+import CatalogueBreadcrumbContainer from '@/modules/catalogue/breadcrump/breadcrump.cont'
 import CatalogueItemsContainer from '@/modules/catalogue/catalogueItems/CatalogueItems.cont'
 import CategoryListComponent from '@/modules/catalogue/categoryList/CategoryList.cont'
 import { CatalogLayoutContainer } from '@/modules/catalogue/layout/catalog-layout.cont'
@@ -18,8 +18,6 @@ import {
 } from '@/types/responses'
 
 const { head } = message.cataloguePage
-
-// TODO: refactor [[slug]] to [uid], BreadCrump has no information about parent UID for add new category
 
 const CatalogueCategoriesPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
@@ -40,7 +38,7 @@ const CatalogueCategoriesPage: NextPage = (): JSX.Element => {
         categoryList={catalogueCategoryList}
       >
         <SearchBarComponent />
-        <BreadcrumbContainer />
+        <CatalogueBreadcrumbContainer />
         <ErrorBoundary fallback={<ErrorPage />}>
           <Suspense fallback={<LoaderComponent />}>
             <CategoryListComponent

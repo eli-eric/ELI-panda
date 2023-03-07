@@ -18,8 +18,7 @@ export type System = {
   systemTypeUID?: string
 }
 
-export type SystemProps = { data: System }
-
+//TODO: same type like System
 export type SystemForRel = {
   name: string
   systemType: string
@@ -32,10 +31,4 @@ export interface Selectable {
   selectedItem?: string
 
   setItem: Dispatch<SetStateAction<{ name?: string; uid?: string }>>
-}
-
-export type RelationFormType = {
-  systemFromUid: string
-  relationTypeCode: string
-  systemToUid: string
 }

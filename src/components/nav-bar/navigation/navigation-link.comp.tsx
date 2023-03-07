@@ -3,9 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
-}
+import { classNames } from '@/features'
 
 interface Props {
   href: string
