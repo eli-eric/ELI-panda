@@ -39,9 +39,12 @@ const EditForm = ({ uid }: Props) => {
           <SystemFormImage uid={uid} />
         </div>
         <div className="pl-5 col-span-9">
-          <InputWithError {...fields.name} />
-          <ComboboxComponent {...fields.ownerUID} className="col-span-9" />
-          <SelectWithError {...fields.importanceUID} className="col-span-9" />
+          <InputWithError {...fields.name} className="pb-1" />
+          <ComboboxComponent {...fields.ownerUID} className="col-span-9 pb-1" />
+          <SelectWithError
+            {...fields.importanceUID}
+            className="col-span-9 pb-1"
+          />
         </div>
         <ComboboxComponent
           {...fields.locationUID}
