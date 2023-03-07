@@ -97,9 +97,9 @@ export const useCategoryEdit = ({
   const EditButtons = () => (
     <Fragment>
       {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
-        <div className="relative flex flex-col justify-center z-0">
+        <div className="flex absolute bottom-0 right-0">
           <Button
-            rounded="rounded-tr-md"
+            rounded=""
             buttonSize="small"
             onClick={() => {
               setOpenEdit(true)

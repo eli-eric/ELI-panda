@@ -36,11 +36,11 @@ const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
           query: router.query.search && { search: router.query.search }
         }}
         key={category.code}
-        className=" flex w-full items-center "
+        className="flex w-full items-center "
       >
         <div className="flex-shrink-0 mx-6 my-4">
           <Image
-            className="h-10 w-10 rounded-full object-contain"
+            className="h-10 w-10 rounded-sm object-contain"
             width={200}
             height={200}
             alt={category.code}
@@ -54,9 +54,7 @@ const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
           </div>
         </div>
       </Link>
-      <div className="flex flex-row">
-        <EditButtons />
-      </div>
+      <EditButtons />
     </div>
   )
 }
