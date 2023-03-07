@@ -70,8 +70,8 @@ const Edit = ({ data, uid, setOpen }: Props) => {
     }
   }
 
-  const onSubmit = (data: SystemEditFormType) => {
-    submit({ ...data, parentUid: router.query.uid })
+  const onSubmit = async (data: SystemEditFormType) => {
+    await submit({ ...data, parentUid: router.query.uid })
       .then()
       .finally(() => {
         setOpen(false)

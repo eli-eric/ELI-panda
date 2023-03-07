@@ -61,12 +61,11 @@ export const useCategoryEdit = ({
     goNext: {
       text: 'Continue',
       loading: loading,
-      onClick: () => {
-        submit()
+      onClick: async () => {
+        await submit()
           .then()
           .finally(() => {
             setOpenDelete(false)
-            setOpenCopyEdit(true)
           })
       }
     },
@@ -80,11 +79,12 @@ export const useCategoryEdit = ({
     goNext: {
       text: 'Copy',
       loading: loadingCopy,
-      onClick: () => {
-        submitCopy()
+      onClick: async () => {
+        await submitCopy()
           .then()
           .finally(() => {
             setOpenCopy(false)
+            setOpenCopyEdit(true)
           })
       }
     },
