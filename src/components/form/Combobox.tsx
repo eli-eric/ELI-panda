@@ -71,7 +71,7 @@ const ComboboxComponent = <T extends FieldValues>({
                   className,
                   rounded,
                   isError ? 'border-red-500' : 'border-gray-300',
-                  'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 mt-2 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                  'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                   'block w-full appearance-none'
                 )}
                 onChange={event => setQuery(event.target.value)}
@@ -84,7 +84,7 @@ const ComboboxComponent = <T extends FieldValues>({
               />
               <button
                 type="button"
-                className="absolute pt-2  inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
+                className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
               >
                 <ChevronDownIcon
                   className="h-5 w-5 text-gray-500"
@@ -98,7 +98,7 @@ const ComboboxComponent = <T extends FieldValues>({
                   onClick={() => {
                     clear()
                   }}
-                  className="absolute pt-2 pr-8 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
+                  className="absolute pr-8 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
                 >
                   <XMarkIcon
                     className="h-5 w-5 text-gray-200  hover:text-red-500"

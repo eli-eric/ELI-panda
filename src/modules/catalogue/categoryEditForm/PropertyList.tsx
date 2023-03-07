@@ -5,7 +5,7 @@ import { Button } from '@/components/Buttons'
 import {
   CategoryFormType,
   Group,
-  Property,
+  Property
 } from '@/types/catalogue/categoryFormTypes'
 
 import PropertyItem from './PropertyItem'
@@ -19,7 +19,7 @@ const PropertyList = ({ name, errors }: Props) => {
   const { control } = useFormContext<CategoryFormType>()
   const { fields, append, remove } = useFieldArray<CategoryFormType>({
     control,
-    name: `${name}.properties`,
+    name: `${name}.properties`
   })
 
   const handleAddProp = () => {

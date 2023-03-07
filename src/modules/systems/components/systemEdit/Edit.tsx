@@ -1,3 +1,4 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { Dispatch, SetStateAction, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -19,17 +20,21 @@ interface Props {
 }
 
 const schema = object({
-  name: string().min(5).required(),
+  name: string().required(),
   description: string(),
-  importanceCode: string(),
-  zoneCode: string().required(),
   systemTypeUID: string(),
-  systemAlias: string().max(12).required(),
-  locationCode: string().required()
+  systemCode: string(),
+  systemAlias: string(),
+  locationUID: string(),
+  ownerUID: string(),
+  importanceUID: string(),
+  zoneUID: string(),
+  criticalityClassUID: string()
 })
 
 const Edit = ({ data, uid, setOpen }: Props) => {
   const formMethods = useForm<SystemEditFormType>({
+    resolver: yupResolver(schema),
     defaultValues: data
   })
   const router = useRouter()

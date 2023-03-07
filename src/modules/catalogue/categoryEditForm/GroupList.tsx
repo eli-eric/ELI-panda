@@ -27,7 +27,7 @@ const Group = ({ name, remove, index, errors }: groupProps) => {
           <div className="w-full border-t border-gray-300" />
         </div>
         <div className="relative flex justify-center">
-          <span className="isolate inline-flex -space-x-px rounded-md shadow-sm">
+          <span className="isolate inline-flex rounded-md shadow-sm">
             <InputWithError
               register={register}
               name={`${name}.name`}
@@ -57,7 +57,7 @@ const GroupList = () => {
   const handleAddGroup = () => {
     append({
       name: '',
-      properties: [{ name: '', typeUID: '', unitUID: '', defaultValue: '' }],
+      properties: [{ name: '', typeUID: '', unitUID: '', defaultValue: '' }]
     })
   }
 
