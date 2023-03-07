@@ -1,7 +1,7 @@
 import { TrashIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 
-import Button from '../Buttons'
+import { Button } from '../Buttons'
 
 interface FormImageProps {
   image: string

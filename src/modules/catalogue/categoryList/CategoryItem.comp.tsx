@@ -20,25 +20,25 @@ const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
   const { catalogueCategoryImage } = useEndpoint({ uid: category.uid })
   const { data: image } = useSWR(catalogueCategoryImage)
 
-  const { EditButtons, CopyButtton } = useCategoryEdit({
+  const { EditButtons } = useCategoryEdit({
     editUid: category.uid,
-    catalogueParentPath: category.parentPath,
+    catalogueParentPath: category.parentPath
   })
   const path =
     PATH.CATALOGUE +
     (!category.parentPath ? '/' : '/' + category.parentPath + '/') +
     category.code
   return (
-    <div className=" flex-row justify-between relative flex z-10 items-center space-x-3 rounded-lg border border-gray-300 bg-white shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
+    <div className="flex-row justify-between relative flex z-10 items-center space-x-3 rounded-lg border border-gray-300 bg-white shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
       <Link
         href={{
           pathname: path,
-          query: router.query.search && { search: router.query.search },
+          query: router.query.search && { search: router.query.search }
         }}
         key={category.code}
         className=" flex w-full items-center "
       >
-        <div className="flex-shrink-0 mx-6 my-5">
+        <div className="flex-shrink-0 mx-6 my-4">
           <Image
             className="h-10 w-10 rounded-full object-contain"
             width={200}
@@ -47,7 +47,7 @@ const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
             src={image ? image : noImage}
           />
         </div>
-        <div className="min-w-0 flex-1 mx-6 my-5">
+        <div className="min-w-0 flex-1 mx-6 my-4">
           <div className="focus:outline-none">
             <span className="absolute inset-0" aria-hidden="true" />
             <p className="text-sm font-medium text-gray-900">{category.name}</p>
@@ -56,7 +56,6 @@ const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
       </Link>
       <div className="flex flex-row">
         <EditButtons />
-        <CopyButtton />
       </div>
     </div>
   )

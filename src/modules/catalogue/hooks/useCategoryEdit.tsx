@@ -99,20 +99,34 @@ export const useCategoryEdit = ({
       {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
         <div className="relative flex flex-col justify-center z-0">
           <Button
-            rounded=""
+            rounded="rounded-tr-md"
+            buttonSize="small"
             onClick={() => {
               setOpenEdit(true)
             }}
+            className="h-full"
           >
-            <PencilSquareIcon className="h-6 w-6" aria-hidden="true" />
+            <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
           </Button>
           <Button
             rounded=""
+            buttonSize="small"
+            onClick={() => {
+              setOpenCopy(true)
+            }}
+            className="h-full"
+          >
+            <DocumentDuplicateIcon className="h-4 w-4" aria-hidden="true" />
+          </Button>
+          <Button
+            rounded="rounded-br-md"
+            buttonSize="small"
             onClick={() => {
               setOpenDelete(true)
             }}
+            className="h-full"
           >
-            <TrashIcon className="h-6 w-6 text-red-700" aria-hidden="true" />
+            <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
           </Button>
         </div>
       )}
@@ -140,6 +154,32 @@ export const useCategoryEdit = ({
         />
         {error && <ErrorPage />}
       </ModalComponent>
+      <ModalComponent
+        open={openCopy}
+        setOpen={setOpenCopy}
+        buttons={copyModalButtons}
+        testid="catalogueCopy"
+      >
+        <ModalWarningComponent
+          title="Warning"
+          message="Are you sure you want to copy this Category?"
+        />
+        {errorCopy && <ErrorPage />}
+      </ModalComponent>
+      {responseCopy && (
+        <ModalComponent
+          open={openCopyEdit}
+          setOpen={setOpenCopyEdit}
+          buttons={copyModalButtons}
+          testid="catalogueCopy"
+        >
+          <CategoryEditModal
+            setOpen={setOpenCopyEdit}
+            parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
+            uid={responseCopy.uid}
+          />
+        </ModalComponent>
+      )}
     </Fragment>
   )
 
@@ -176,49 +216,5 @@ export const useCategoryEdit = ({
     </Fragment>
   )
 
-  const CopyButtton = () => (
-    <Fragment>
-      {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
-        <div>
-          <Button
-            rounded="rounded-r-md"
-            onClick={() => {
-              setOpenCopy(true)
-            }}
-            className="h-full"
-          >
-            <DocumentDuplicateIcon className="h-6 w-6" aria-hidden="true" />
-          </Button>
-        </div>
-      )}
-      <ModalComponent
-        open={openCopy}
-        setOpen={setOpenCopy}
-        buttons={copyModalButtons}
-        testid="catalogueCopy"
-      >
-        <ModalWarningComponent
-          title="Warning"
-          message="Are you sure you want to copy this Category?"
-        />
-        {errorCopy && <ErrorPage />}
-      </ModalComponent>
-      {responseCopy && (
-        <ModalComponent
-          open={openCopyEdit}
-          setOpen={setOpenCopyEdit}
-          buttons={copyModalButtons}
-          testid="catalogueCopy"
-        >
-          <CategoryEditModal
-            setOpen={setOpenCopyEdit}
-            parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
-            uid={responseCopy.uid}
-          />
-        </ModalComponent>
-      )}
-    </Fragment>
-  )
-
-  return { EditButtons, getAddButton, CopyButtton }
+  return { EditButtons, getAddButton }
 }

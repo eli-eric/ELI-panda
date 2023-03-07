@@ -6,7 +6,7 @@ import {
 import { FormattedMessage } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import Button from '@/components/Buttons'
+import { Button } from '@/components/Buttons'
 import EliLogoComponent from '@/components/eli-logo.comp'
 import { InputWithError } from '@/components/form/Input'
 
