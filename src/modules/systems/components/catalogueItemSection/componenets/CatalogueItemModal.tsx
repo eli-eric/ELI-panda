@@ -44,14 +44,17 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
   const { system: systemDetail, catalogueCategoryEdit } = useEndpoint({
     uid: router.query.uid as string
   })
+
   const { submit, loading, error } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: 'post',
-    mutateList: [systemDetail]
+    mutateList: [systemDetail],
+    afterAction: () => {
+      setOpen(false)
+    }
   })
-  const onSubmit = async (data: SystemItemFormType) => {
-    await submit({ ...data, catalogueItemUID: item.uid })
-    setOpen(false)
+  const onSubmit = (data: SystemItemFormType) => {
+    submit({ ...data, catalogueItemUID: item.uid })
     //console.log({ ...data, catalogueItemUID: item.uid } as SystemItemFormType)
   }
 

@@ -54,11 +54,13 @@ const CategoryEditModal = ({ setOpen, parentPath = '', uid }: Props) => {
       catalogueCategories,
       catalogueCategoryEdit,
       catalogueCategoryImage
-    ]
+    ],
+    afterAction: () => {
+      setOpen(false)
+    }
   })
-  const onSubmit = async (data: CategoryFormType) => {
-    await submit(formatData(data, parentPath))
-    setOpen(false)
+  const onSubmit = (data: CategoryFormType) => {
+    submit(formatData(data, parentPath))
   }
 
   return (

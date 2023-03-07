@@ -1,9 +1,12 @@
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
+import noImage from 'public/no-image.png'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
 import ItemPropertyTitle from '@/components/item-property/item-property-title.comp'
 import ItemPropertyValue from '@/components/item-property/item-property-value.comp'
+import { fetcher } from '@/features/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
 import { CatalogueItem } from '@/types/responses'
@@ -21,12 +24,18 @@ interface Props {
 
 const ItemDetailComponent = ({ uid }: Props) => {
   const router = useRouter()
+  const { data: session } = useSession()
   const catalogueUid = (router.query.uid as string) || uid
   const [groups, setGroups] = useState<Array<string>>([])
-  const { catalogueItem } = useEndpoint({
+  const { catalogueItem, catalogueItemImage } = useEndpoint({
     uid: catalogueUid
   })
-  const { data: item } = useSWR<CatalogueItem>(catalogueUid && catalogueItem)
+  const { data: item } = useSWR<CatalogueItem>(
+    session ? catalogueUid && catalogueItem : null
+  )
+  const { data: image } = useSWR(catalogueItemImage, fetcher, {
+    suspense: false
+  })
 
   useEffect(() => {
     if (item?.details) {
@@ -42,11 +51,7 @@ const ItemDetailComponent = ({ uid }: Props) => {
       <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8 h-full overflow-auto">
         <div className="mx-auto max-w-2xl lg:max-w-none">
           <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
-            <ImageGalleryComponent
-              images={[
-                'http://localhost:5001/api/mock-server/catalogue/item/0056ed5a-e20b-4c15-b8c6-2312c23b1f4a/image'
-              ]}
-            />
+            <ImageGalleryComponent images={[image || noImage]} />
 
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 col-span-2">
               <h1 className="text-xl font-bold tracking-tight text-gray-900">
