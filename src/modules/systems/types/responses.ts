@@ -1,20 +1,20 @@
 import { SystemForRel } from '.'
 
+export type SystemCodebok = { uid: string; name: string }
+
 export type SystemDetailResponse = {
   uid: string
   name: string
-  parentPath: { name; uid }[]
+  parentPath: ParentPath
   description?: string
-  systemType?: string
+  location?: SystemCodebok
+  zone?: SystemCodebok
+  systemType?: SystemCodebok
   systemCode?: string
   systemAlias?: string
-  location?: string
+  owner?: SystemCodebok
+  importance?: SystemCodebok
   itemUID?: string
-  owner?: string
-  importance?: string
-  zone?: string
-  subZoneCode?: string
-  criticalityClass?: string
 }
 
 export type ParentPath = { name: string; uid: string }[]

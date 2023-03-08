@@ -41,7 +41,7 @@ const SystemDetailSection = ({ data }: { data: SystemDetailResponse }) => {
       >
         <ItemProperty
           title={messages.systemTypeUID.label}
-          text={data.systemType}
+          text={data.systemType?.name}
         />
         <ItemProperty
           title={messages.systemCode.label}
@@ -51,18 +51,16 @@ const SystemDetailSection = ({ data }: { data: SystemDetailResponse }) => {
           title={messages.systemAlias.label}
           text={data.systemAlias}
         />
-        <ItemProperty title={messages.locationUID.label} text={data.location} />
-        <ItemProperty title={messages.ownerUID.label} text={data.owner} />
+        <ItemProperty
+          title={messages.locationUID.label}
+          text={data.location?.name}
+        />
+        <ItemProperty title={messages.ownerUID.label} text={data.owner?.name} />
         <ItemProperty
           title={messages.importanceUID.label}
-          text={data.importance}
+          text={data.importance?.name}
         />
-        <ItemProperty title={messages.zoneUID.label} text={data.zone} />
-        <ItemProperty title={messages.subZone.label} text={data.subZoneCode} />
-        <ItemProperty
-          title={messages.criticalityClassUID.label}
-          text={data.criticalityClass}
-        />
+        <ItemProperty title={messages.zoneUID.label} text={data.zone?.name} />
       </ItemDetailComponent>
     </Fragment>
   )

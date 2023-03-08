@@ -2,23 +2,23 @@
 import { faker } from '@faker-js/faker'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-type SystemDetail = {
+type SystemCodebok = { uid: string; name: string }
+type ParentPath = { name: string; uid: string }[]
+
+type SystemDetailResponse = {
   uid: string
   name: string
-  parentPath: { name; uid }[]
-  description: string
-  systemType: string
-  systemCode: string
-  systemAlias: string
-  location: string
+  parentPath: ParentPath
+  description?: string
+  location?: SystemCodebok
+  zone?: SystemCodebok
+  systemType?: SystemCodebok
+  systemCode?: string
+  systemAlias?: string
+  owner?: SystemCodebok
+  importance?: SystemCodebok
   itemUID?: string
-  owner: string
-  importance: string
-  zone: string
-  subZoneCode: string
-  criticalityClass: string
 }
-
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
@@ -33,7 +33,12 @@ export default function handler(
           name: faker.company.catchPhrase()
         }))
       }
-      const getFakeSystem = (): SystemDetail => {
+
+      const getFakeCodebook = () => ({
+        uid: faker.datatype.uuid(),
+        name: faker.company.catchPhrase()
+      })
+      const getFakeSystem = (): SystemDetailResponse => {
         const uid = faker.datatype.uuid()
         const name = getFakeName()
         return {
@@ -43,16 +48,14 @@ export default function handler(
           description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
             2
           )}`,
-          importance: faker.datatype.string(),
-          zone: faker.datatype.string(),
-          subZoneCode: faker.datatype.string(),
+          importance: getFakeCodebook(),
+          zone: getFakeCodebook(),
           systemCode: faker.datatype.string(),
           systemAlias: faker.datatype.string(),
-          location: faker.datatype.string(),
-          owner: faker.datatype.string(),
+          location: getFakeCodebook(),
+          owner: getFakeCodebook(),
           itemUID: undefined,
-          criticalityClass: faker.datatype.string(),
-          systemType: faker.datatype.string()
+          systemType: getFakeCodebook()
         }
       }
       res.status(200).json(getFakeSystem())
