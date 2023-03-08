@@ -1,8 +1,8 @@
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
 import useSWR from 'swr'
 
 import { classNames } from '@/features'
-import { mockFetcher } from '@/features/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { PATH } from '@/types/constants/paths'
 
@@ -29,10 +29,10 @@ interface Props {
 }
 
 const Subsystems = ({ uid }: Props) => {
+  const { data: session } = useSession()
   const { systemSubsystems } = useEndpoint({ uid })
   const { data: subsystems } = useSWR<SubsystemsResponse>(
-    systemSubsystems,
-    mockFetcher
+    session && systemSubsystems
   )
   return (
     <nav aria-label="Subsystems">

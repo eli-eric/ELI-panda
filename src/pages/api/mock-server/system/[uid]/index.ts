@@ -34,9 +34,9 @@ export default function handler(
         }))
       }
 
-      const getFakeCodebook = () => ({
-        uid: faker.datatype.uuid(),
-        name: faker.company.catchPhrase()
+      const getFakeCodebook = (uid: string, name?: string) => ({
+        uid: uid,
+        name: name || faker.company.catchPhrase()
       })
       const getFakeSystem = (): SystemDetailResponse => {
         const uid = faker.datatype.uuid()
@@ -48,14 +48,20 @@ export default function handler(
           description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
             2
           )}`,
-          importance: getFakeCodebook(),
-          zone: getFakeCodebook(),
+          importance: getFakeCodebook('d6a216b0-7e25-4de7-a762-132d9c68bd63'),
+          zone: getFakeCodebook('c0873468-d49f-45d8-b9ad-beb83d9c9772'),
           systemCode: faker.datatype.string(),
           systemAlias: faker.datatype.string(),
-          location: getFakeCodebook(),
-          owner: getFakeCodebook(),
+          location: getFakeCodebook(
+            'II.01.02',
+            'II.01.02 - Reception and staircase - ELI2 building > Ground floor'
+          ),
+          owner: getFakeCodebook(
+            '71864520-9e86-427c-901c-0c220f951775',
+            'Administrator Admin'
+          ),
           itemUID: undefined,
-          systemType: getFakeCodebook()
+          systemType: getFakeCodebook('8783fa8c-cfd3-4519-830f-5bfd05166ad9')
         }
       }
       res.status(200).json(getFakeSystem())
