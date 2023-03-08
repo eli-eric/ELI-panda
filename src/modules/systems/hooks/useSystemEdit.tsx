@@ -46,7 +46,7 @@ export const useSystemEdit = ({
         <Edit
           setOpen={setOpenEdit}
           data={systemDetail}
-          uid={router.query.uid as string}
+          uid={systemDetail?.uid}
         />
       </ModalComponent>
     </Fragment>

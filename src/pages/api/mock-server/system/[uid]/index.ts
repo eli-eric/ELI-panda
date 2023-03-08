@@ -2,23 +2,23 @@
 import { faker } from '@faker-js/faker'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-type SystemDetail = {
+type SystemCodebok = { uid: string; name: string }
+type ParentPath = { name: string; uid: string }[]
+
+type SystemDetailResponse = {
   uid: string
   name: string
-  parentPath: { name; uid }[]
-  description: string
-  systemType: string
-  systemCode: string
-  systemAlias: string
-  location: string
+  parentPath: ParentPath
+  description?: string
+  location?: SystemCodebok
+  zone?: SystemCodebok
+  systemType?: SystemCodebok
+  systemCode?: string
+  systemAlias?: string
+  owner?: SystemCodebok
+  importance?: SystemCodebok
   itemUID?: string
-  owner: string
-  importance: string
-  zone: string
-  subZoneCode: string
-  criticalityClass: string
 }
-
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<any>
@@ -33,7 +33,12 @@ export default function handler(
           name: faker.company.catchPhrase()
         }))
       }
-      const getFakeSystem = (): SystemDetail => {
+
+      const getFakeCodebook = (uid: string, name?: string) => ({
+        uid: uid,
+        name: name || faker.company.catchPhrase()
+      })
+      const getFakeSystem = (): SystemDetailResponse => {
         const uid = faker.datatype.uuid()
         const name = getFakeName()
         return {
@@ -43,16 +48,20 @@ export default function handler(
           description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
             2
           )}`,
-          importance: faker.datatype.string(),
-          zone: faker.datatype.string(),
-          subZoneCode: faker.datatype.string(),
+          importance: getFakeCodebook('d6a216b0-7e25-4de7-a762-132d9c68bd63'),
+          zone: getFakeCodebook('c0873468-d49f-45d8-b9ad-beb83d9c9772'),
           systemCode: faker.datatype.string(),
           systemAlias: faker.datatype.string(),
-          location: faker.datatype.string(),
-          owner: faker.datatype.string(),
+          location: getFakeCodebook(
+            'II.01.02',
+            'II.01.02 - Reception and staircase - ELI2 building > Ground floor'
+          ),
+          owner: getFakeCodebook(
+            '71864520-9e86-427c-901c-0c220f951775',
+            'Administrator Admin'
+          ),
           itemUID: undefined,
-          criticalityClass: faker.datatype.string(),
-          systemType: faker.datatype.string()
+          systemType: getFakeCodebook('8783fa8c-cfd3-4519-830f-5bfd05166ad9')
         }
       }
       res.status(200).json(getFakeSystem())

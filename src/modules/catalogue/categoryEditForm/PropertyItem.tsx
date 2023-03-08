@@ -91,9 +91,10 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
             name={`${name}.typeUID`}
             isError={!!errors?.typeUID?.message}
             options={
-              propertyTypes
-                ? [getDefaultOption('Select type', true), ...propertyTypes]
-                : [getDefaultOption('Select type', true)]
+              propertyTypes && [
+                getDefaultOption('Select type', true),
+                ...propertyTypes
+              ]
             }
           />
           <SelectWithError
