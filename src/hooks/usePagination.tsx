@@ -43,7 +43,7 @@ const usePagination = ({
 
   useEffect(() => {
     if (useQuery) {
-      router.push({
+      router.replace({
         pathname: router.pathname,
         query: router.query.search
           ? {
