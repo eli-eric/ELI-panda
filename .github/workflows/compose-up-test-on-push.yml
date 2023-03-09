@@ -1,0 +1,23 @@
+name: Compose up TEST frontend on push
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  use-secret:
+    runs-on: self-hosted
+    steps:
+      - name: Show secret stats
+        run: |
+          echo "${{ secrets.NEXTAUTH_SECRET }}" | wc
+  compose-up:
+    runs-on: self-hosted
+    needs: use-secret
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          docker-compose -f docker-compose-test.yml up -d --build
+        env:
+          NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'

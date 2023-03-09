@@ -1,0 +1,22 @@
+version: '3.9'
+
+networks:
+  panda-net-dev:
+    driver: bridge
+    name: panda-net-dev
+
+services:
+  panda-frontend-ui-main-app-dev:
+    container_name: panda-frontend-ui-main-app-dev
+    restart: unless-stopped
+    environment:
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+    build:
+      context: ./
+      dockerfile: Dockerfile.devenv
+      labels:
+        - panda-frontend-ui-main-app-dev
+    networks:
+      - panda-net-dev
+    ports:
+      - '127.0.0.1:5200:5001'
