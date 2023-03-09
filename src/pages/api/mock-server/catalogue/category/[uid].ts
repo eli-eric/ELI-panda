@@ -15,7 +15,7 @@ const categoryMockObject = {
           name: 'Capacity',
           typeUID: '45f0d238-4067-4033-9e52-58f1d454b6d3',
           unitUID: '00f9909d-0adf-43ef-9cb2-49bc1c4bcc52',
-          defaultValue: '25',
+          defaultValue: '25'
         },
         {
           uid: '9b56eba5-d650-442c-9235-0f6fd3cc8a91',
@@ -23,9 +23,9 @@ const categoryMockObject = {
           typeUID: '9b56eba5-d650-442c-9235-0f6fd3cc8a91',
           unitUID: '',
           defaultValue: '',
-          listOfValues: ['a', 'b', 'c'],
-        },
-      ],
+          listOfValues: ['a', 'b', 'c']
+        }
+      ]
     },
     {
       uid: '9b56eba5-d650-442c-9235-0f6fd3cc8a91',
@@ -36,17 +36,14 @@ const categoryMockObject = {
           name: 'Chips',
           typeUID: 'be2d4bd1-602b-42e6-a0ee-7e24324b75bb',
           unitUID: '',
-          defaultValue: '',
-        },
-      ],
-    },
-  ],
+          defaultValue: ''
+        }
+      ]
+    }
+  ]
 }
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<any>,
-) {
+export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
     if (req.method === 'GET') {
       res.status(200).json(categoryMockObject)

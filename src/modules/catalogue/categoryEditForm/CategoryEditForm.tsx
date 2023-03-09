@@ -41,9 +41,7 @@ interface Props {
 const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
   const endpoints = useEndpoint({ uid })
 
-  const { data } = useSWR<CategoryFormType>(
-    uid && endpoints.catalogueCategoryEdit
-  )
+  const { data } = useSWR<CategoryFormType>(uid && endpoints.catalogueCategoryEdit)
 
   const formattedDefaultValues = useMemo(
     () =>

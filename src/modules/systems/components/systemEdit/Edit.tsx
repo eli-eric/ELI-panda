@@ -66,7 +66,7 @@ const Edit = ({ data, uid, setOpen }: Props) => {
     endpoint: system,
     method: uid ? 'put' : 'post',
     mutateList: [system, systemSubsystems],
-    afterAction: () => {
+    onSuccess: () => {
       setOpen(false)
     }
   })

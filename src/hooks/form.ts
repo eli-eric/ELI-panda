@@ -6,10 +6,7 @@ import { FieldProps, Option } from '@/types/form'
 
 export const useMakeFormFields = <
   Type extends FieldValues,
-  T extends Record<
-    string,
-    FieldProps & { options?: Option[]; codebook?: CODEBOOK }
-  >
+  T extends Record<string, FieldProps & { options?: Option[]; codebook?: CODEBOOK }>
 >(
   register: UseFormRegister<Type>,
   fields: T
@@ -29,12 +26,8 @@ export const useMakeFormFields = <
       [cur]: {
         ...fields[cur],
         'data-testid': fields[cur]['data-testid'] || fields[cur].name,
-        placeholder: fields[cur].placeholder
-          ? intl.formatMessage({ id: fields[cur].placeholder })
-          : undefined,
-        label: fields[cur].label
-          ? intl.formatMessage({ id: fields[cur].label })
-          : undefined,
+        placeholder: fields[cur].placeholder ? intl.formatMessage({ id: fields[cur].placeholder }) : undefined,
+        label: fields[cur].label ? intl.formatMessage({ id: fields[cur].label }) : undefined,
         register: register,
         codebook: fields[cur].codebook ? fields[cur].codebook : undefined
       }

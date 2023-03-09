@@ -53,7 +53,7 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
     endpoint: systemRelationship,
     method: 'post',
     mutateList: [systemRelationships],
-    afterAction: () => {
+    onSuccess: () => {
       setopen(false)
     }
   })
@@ -82,10 +82,7 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
           />
         </Suspense>
       </div>
-      <form
-        onSubmit={relFormMethods.handleSubmit(onSubmit)}
-        className="flex flex-col"
-      >
+      <form onSubmit={relFormMethods.handleSubmit(onSubmit)} className="flex flex-col">
         <FormProvider {...relFormMethods}>
           <SelectRelation
             relationTypeCode={relationTypeCode}
