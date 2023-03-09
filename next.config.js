@@ -15,7 +15,8 @@ const nextConfig = {
     ]
   },
   env: {
-    PANDA_API_GW_URL: process.env.PANDA_API_GW_URL
+    PANDA_API_GW_URL: process.env.PANDA_API_GW_URL,
+    PANDA_ENV: process.env.PANDA_ENV
   }
 }
 
