@@ -30,47 +30,40 @@ export const useCategoryEdit = ({
   const [openCopy, setOpenCopy] = useState(false)
   const [openCopyEdit, setOpenCopyEdit] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
+  const [copyCategoryUid, setCopyCategoporyUid] = useState<string | null>()
 
   const { data: session } = useSession()
-  const { catalogueCategoryEdit, catalogueCategories, catalogueCategoryCopy } =
-    useEndpoint({
-      uid: editUid,
-      path:
-        !catalogueParentPath || catalogueParentPath === ''
-          ? ''
-          : '/' + catalogueParentPath
-    })
+  const { catalogueCategoryEdit, catalogueCategories, catalogueCategoryCopy } = useEndpoint({
+    uid: editUid,
+    path: !catalogueParentPath || catalogueParentPath === '' ? '' : '/' + catalogueParentPath
+  })
 
-  const { submit, loading, error } = useSubmit({
+  const deleteCategory = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: 'delete',
     mutateList: [catalogueCategories],
-    afterAction: () => {
-      setOpenEdit(false)
-      setOpenCopyEdit(false)
+    onSuccess: () => {
+      setOpenDelete(false)
     }
   })
 
-  const {
-    submit: submitCopy,
-    loading: loadingCopy,
-    error: errorCopy,
-    response: responseCopy
-  } = useSubmit<string>({
+  const copyCategory = useSubmit<string>({
     endpoint: catalogueCategoryCopy,
     method: 'post',
     mutateList: [catalogueCategories],
-    afterAction: () => {
+    onSuccess: uid => {
+      console.log(uid)
       setOpenCopy(false)
+      setCopyCategoporyUid(uid)
     }
   })
 
   const deletModalButtons: ModalButtons = {
     goNext: {
       text: 'Continue',
-      loading: loading,
+      loading: deleteCategory.loading,
       onClick: () => {
-        submit()
+        deleteCategory.submit()
       }
     },
     goBack: {
@@ -82,9 +75,9 @@ export const useCategoryEdit = ({
   const copyModalButtons: ModalButtons = {
     goNext: {
       text: 'Copy',
-      loading: loadingCopy,
+      loading: copyCategory.loading,
       onClick: () => {
-        submitCopy()
+        copyCategory.submit()
       }
     },
     goBack: {
@@ -95,16 +88,17 @@ export const useCategoryEdit = ({
 
   //open edit modal after copy
   useEffect(() => {
+    //console.log(openCopy, copyCategory.loading, copyCategory.error, copyCategoryUid)
     if (!openCopy) {
-      if (!loadingCopy) {
-        if (!errorCopy) {
-          if (responseCopy) {
+      if (!copyCategory.loading) {
+        if (!copyCategory.error) {
+          if (copyCategoryUid) {
             setOpenCopyEdit(true)
           }
         }
       }
     }
-  }, [responseCopy, loadingCopy, errorCopy, openCopy])
+  }, [copyCategory.loading, copyCategory.error, copyCategoryUid, openCopy, setOpenCopyEdit])
 
   const EditButtons = () => (
     <Fragment>
@@ -164,7 +158,7 @@ export const useCategoryEdit = ({
           title="Warning"
           message="Are you sure you want to remove this Category?"
         />
-        {error && <ErrorPage />}
+        {deleteCategory.error && <ErrorPage />}
       </ModalComponent>
       <ModalComponent
         open={openCopy}
@@ -176,9 +170,10 @@ export const useCategoryEdit = ({
           title="Warning"
           message="Are you sure you want to copy this Category?"
         />
-        {errorCopy && <ErrorPage />}
+        {copyCategory.error && <ErrorPage />}
       </ModalComponent>
-      {responseCopy && (
+
+      {copyCategoryUid && (
         <ModalComponent
           open={openCopyEdit}
           setOpen={setOpenCopyEdit}
@@ -188,7 +183,7 @@ export const useCategoryEdit = ({
           <CategoryEditModal
             setOpen={setOpenCopyEdit}
             parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
-            uid={responseCopy}
+            uid={copyCategoryUid}
           />
         </ModalComponent>
       )}

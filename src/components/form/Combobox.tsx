@@ -34,10 +34,15 @@ const ComboboxComponent = <T extends FieldValues>({
   className,
   rounded = 'rounded-md'
 }: ComboboxProps<T>) => {
-  const [query, setQuery] = useState('')
+  const {
+    setValue,
+    formState: { defaultValues }
+  } = useFormContext<T>()
+  const [query, setQuery] = useState(
+    (defaultValues && defaultValues[name]) || ''
+  )
   const [selectedItem, setSelectedItem] = useState<CodebookType | null>(null)
   const data = useCodebook(codebook, `?searchText=${query}&limit=10`, true)
-  const { setValue } = useFormContext<T>()
 
   const clear = () => {
     setQuery('')
@@ -74,6 +79,7 @@ const ComboboxComponent = <T extends FieldValues>({
                   'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                   'block w-full appearance-none'
                 )}
+                value={selectedItem?.name || query}
                 onChange={event => setQuery(event.target.value)}
                 displayValue={(item: CodebookType) => item?.name}
               />
@@ -82,19 +88,15 @@ const ComboboxComponent = <T extends FieldValues>({
                 type="hidden"
                 value={selectedItem?.uid}
               />
-              <button
-                type="button"
-                className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
-              >
+              <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
                 <ChevronDownIcon
                   className="h-5 w-5 text-gray-500"
                   aria-hidden="true"
                 />
-              </button>
+              </div>
 
               {selectedItem && (
-                <button
-                  type="button"
+                <div
                   onClick={() => {
                     clear()
                   }}
@@ -104,7 +106,7 @@ const ComboboxComponent = <T extends FieldValues>({
                     className="h-5 w-5 text-gray-200  hover:text-red-500"
                     aria-hidden="true"
                   />
-                </button>
+                </div>
               )}
             </Combobox.Button>
           </div>

@@ -4,28 +4,27 @@ import { useSWRConfig } from 'swr'
 
 import { BASE_URL } from '@/types/constants/common'
 
-interface UseSubmitProps {
+interface UseSubmitProps<T> {
   endpoint: string
   method: 'post' | 'put' | 'delete'
   mutateList?: string[]
-  afterAction?: () => void
+  onSuccess?: (data?: T | null) => void
 }
 
-const useSubmit = <T>({
-  endpoint,
-  method,
-  mutateList,
-  afterAction
-}: UseSubmitProps) => {
+const useSubmit = <T>({ endpoint, method, mutateList, onSuccess }: UseSubmitProps<T>) => {
   const { mutate } = useSWRConfig()
 
   const [response, setResponse] = useState<T | null>(null)
   const [error, setError] = useState<string>()
   const [loading, setloading] = useState<boolean>(false)
+
   const submit = (body?: object) => {
     setloading(true)
-    axios[method](BASE_URL + endpoint, body ? body : undefined)
-      .then(res => setResponse(res.data))
+    axios[method](BASE_URL + endpoint, body)
+      .then(res => {
+        setResponse(res.data)
+        if (onSuccess) onSuccess(res.data)
+      })
       .catch(err => {
         setError(err)
         setloading(false)
@@ -33,16 +32,12 @@ const useSubmit = <T>({
       .finally(() => {
         if (mutateList)
           mutateList.forEach(url => {
-            mutate(url, undefined, { revalidate: true }).finally(() =>
-              setloading(false)
-            )
+            mutate(url, undefined, { revalidate: true })
           })
-        if (afterAction) {
-          afterAction()
-        }
+        setloading(false)
       })
   }
-  return { response, error, loading, submit, setloading }
+  return { response, error, loading, submit }
 }
 
 export default useSubmit

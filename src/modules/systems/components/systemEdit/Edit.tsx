@@ -13,11 +13,17 @@ import { SystemEditFormType } from '../../types/form'
 import { SystemDetailResponse } from '../../types/responses'
 import EditForm from './EditForm'
 
-interface Props {
-  data?: SystemDetailResponse
-  uid?: string
-  setOpen: Dispatch<SetStateAction<boolean>>
-}
+const formatDataForm = (data: SystemDetailResponse): SystemEditFormType => ({
+  name: data.name,
+  description: data.description,
+  systemCode: data.systemCode,
+  systemAlias: data.systemAlias,
+  systemTypeUID: data.systemType?.uid,
+  locationUID: data.location?.name,
+  ownerUID: data.owner?.name,
+  importanceUID: data.importance?.uid,
+  zoneUID: data.zone?.uid
+})
 
 const schema = object({
   name: string().required(),
@@ -28,15 +34,26 @@ const schema = object({
   locationUID: string(),
   ownerUID: string(),
   importanceUID: string(),
-  zoneUID: string(),
-  criticalityClassUID: string()
+  zoneUID: string()
 })
+interface Props {
+  data?: SystemDetailResponse
+  uid?: string
+  setOpen: Dispatch<SetStateAction<boolean>>
+}
 
 const Edit = ({ data, uid, setOpen }: Props) => {
   const formMethods = useForm<SystemEditFormType>({
     resolver: yupResolver(schema),
-    defaultValues: data
+    defaultValues: data ? formatDataForm(data) : undefined
   })
+  const { setValue } = formMethods
+  useEffect(() => {
+    if (data) {
+      setValue('ownerUID', data.owner?.uid)
+      setValue('locationUID', data.location?.uid)
+    }
+  }, [data, setValue])
   const router = useRouter()
 
   const { system } = useEndpoint({
@@ -49,7 +66,7 @@ const Edit = ({ data, uid, setOpen }: Props) => {
     endpoint: system,
     method: uid ? 'put' : 'post',
     mutateList: [system, systemSubsystems],
-    afterAction: () => {
+    onSuccess: () => {
       setOpen(false)
     }
   })
