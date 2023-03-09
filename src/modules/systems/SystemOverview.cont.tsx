@@ -7,7 +7,7 @@ import EmptySectionComponent from '@/components/empty-section/empty-section.comp
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import useParam from '@/hooks/useParam'
+import useParam from '@/modules/systems/hooks/useParam'
 
 import Breadcrumbs from './components/Breadcrumbs'
 import CatalogueItemSection from './components/catalogueItemSection/CatalogueItemSection.cont'

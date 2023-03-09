@@ -1,5 +1,4 @@
 import { Fragment } from 'react'
-import { object, string } from 'yup'
 
 import ComboboxComponent from '@/components/form/Combobox'
 import { InputWithError, TextareaWithError } from '@/components/form/Input'
@@ -8,16 +7,6 @@ import { SelectWithError } from '@/components/form/Select'
 import { SystemDetailResponse } from '../../types/responses'
 import useSystemEditFormFields from './EditForm.fields'
 import SystemFormImage from './SystemFormImage'
-
-const schema = object({
-  name: string().min(5).required(),
-  description: string(),
-  importanceCode: string(),
-  zoneCode: string().required(),
-  systemTypeUID: string(),
-  systemAlias: string().max(12).required(),
-  locationCode: string().required()
-})
 
 interface Props {
   data?: SystemDetailResponse

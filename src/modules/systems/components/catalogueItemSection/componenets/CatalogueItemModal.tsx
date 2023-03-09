@@ -49,7 +49,7 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
     endpoint: catalogueCategoryEdit,
     method: 'post',
     mutateList: [systemDetail],
-    afterAction: () => {
+    onSuccess: () => {
       setOpen(false)
     }
   })
@@ -64,11 +64,7 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
 
   return (
     <Fragment>
-      <ModalComponent
-        open={open}
-        setOpen={setOpen}
-        buttons={{ noButtons: true }}
-      >
+      <ModalComponent open={open} setOpen={setOpen} buttons={{ noButtons: true }}>
         <div className="min-h-[849px] flex-col justify-end">
           <CatalogueSearchTable setItem={setItem} itemName={item.name} />
           <FormProvider {...formMethods}>

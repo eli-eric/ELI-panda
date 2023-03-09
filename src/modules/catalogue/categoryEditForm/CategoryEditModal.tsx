@@ -44,18 +44,16 @@ interface Props {
 }
 
 const CategoryEditModal = ({ setOpen, parentPath = '', uid }: Props) => {
-  const { catalogueCategoryEdit, catalogueCategories, catalogueCategoryImage } =
-    useEndpoint(uid ? { uid, path: parentPath } : { path: parentPath })
+  const { catalogueCategoryEdit, catalogueCategories, catalogueCategoryImage } = useEndpoint({
+    path: parentPath,
+    uid
+  })
 
   const { submit, loading, error } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: uid ? 'put' : 'post',
-    mutateList: [
-      catalogueCategories,
-      catalogueCategoryEdit,
-      catalogueCategoryImage
-    ],
-    afterAction: () => {
+    mutateList: [catalogueCategories, catalogueCategoryEdit, catalogueCategoryImage],
+    onSuccess: () => {
       setOpen(false)
     }
   })
