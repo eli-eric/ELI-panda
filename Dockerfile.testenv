@@ -34,6 +34,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PANDA_API_GW_URL="https://api-test.panda.eli-beams.eu/v1"
 ENV NEXTAUTH_URL="https://test.panda.eli-beams.eu/"
+ENV PANDA_ENV="test"
 
 RUN env
 

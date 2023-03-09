@@ -17,14 +17,12 @@ const NavBarStaticComponent = ({ open }: Props) => {
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div className="flex h-16 justify-between">
         <div className="flex">
-          <div className="flex flex-shrink-0 items-center">
+          <div className="flex flex-row flex-shrink-0 items-center">
             <EliLogoComponent customClass="block h-10 w-auto" />
           </div>
           <NavigationListContainer open={false} />
         </div>
-        {status === 'authenticated' && (
-          <ProfileDropdownComponent open={false} />
-        )}
+        {status === 'authenticated' && <ProfileDropdownComponent open={false} />}
         <div className="-mr-2 flex items-center sm:hidden">
           {/* Mobile menu button */}
           <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
