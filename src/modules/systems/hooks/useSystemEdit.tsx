@@ -50,10 +50,6 @@ export const useSystemEdit = ({
         <Fragment>
           <li className="flex">
             <div className="flex items-center">
-              <ChevronRightIcon
-                className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400"
-                aria-hidden="true"
-              />
               <Button
                 onClick={() => {
                   setOpenNew(true)

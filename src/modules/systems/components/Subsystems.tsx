@@ -7,18 +7,34 @@ import { useEndpoint } from '@/hooks/useEndpoint'
 import { PATH } from '@/types/constants/paths'
 
 import { SubsystemsResponse } from '../types/responses'
+import Image from 'next/image'
+import { PhotoIcon } from '@heroicons/react/24/outline'
 
 export const Item = (props: { uid: string; text: string }) => {
   const { uid, text } = props
+
+  const { systemImage: systemDetailImage } = useEndpoint({
+    uid: uid
+  })
+  const { data: image } = useSWR(systemDetailImage)
+
   return (
     <Link
       key={uid}
       href={{ pathname: PATH.SYSTEMS + '/' + uid }}
       className={classNames(
         'text-gray-600 hover:bg-primary-100 hover:text-gray-900',
-        'flex items-center rounded-md px-3 py-2 text-sm font-medium'
+        'flex flex-row gap-2 items-center rounded-md px-3 py-2 text-sm font-medium  border-gray-100'
       )}
     >
+      {image ? (
+        <Image alt="" src={image} width={28} height={28} className="rounded-sm" />
+      ) : (
+        <div className="w-7 h-7 rounded-sm">
+          <PhotoIcon></PhotoIcon>
+        </div>
+      )}
+
       <span className="truncate">{text}</span>
     </Link>
   )

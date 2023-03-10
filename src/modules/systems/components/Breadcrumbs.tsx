@@ -14,7 +14,7 @@ const Breadcrumbs = ({ parentPath }: { parentPath?: ParentPath }) => {
         {parentPath?.map(({ uid, name }) => (
           <BreadcrumpItem key={uid} name={name} link={'/systems/' + uid} />
         ))}
-        <AddButton />
+        {/* <AddButton /> */}
       </Fragment>
     </BreadcrumpContainer>
   )

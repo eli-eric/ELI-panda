@@ -1,4 +1,5 @@
 import { Tab } from '@headlessui/react'
+import { PhotoIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 
 interface Props {
@@ -44,13 +45,19 @@ const ImageGalleryComponent = ({ images }: Props) => (
     <Tab.Panels className="w-full">
       {images.map((image, index) => (
         <Tab.Panel key={index}>
-          <Image
-            src={image}
-            alt="catalogue/item/image"
-            className="w-full h-72 object-cover object-center sm:rounded-lg"
-            width={400}
-            height={400}
-          />
+          {image ? (
+            <Image
+              src={image}
+              alt=""
+              className="w-full h-72 object-cover object-center sm:rounded-lg"
+              width={400}
+              height={400}
+            />
+          ) : (
+            <div className="w-52 h-52">
+              <PhotoIcon></PhotoIcon>
+            </div>
+          )}
         </Tab.Panel>
       ))}
     </Tab.Panels>
