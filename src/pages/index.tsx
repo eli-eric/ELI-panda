@@ -35,17 +35,16 @@ const LoginPage: NextPage = (): JSX.Element => {
     signIn('credentials', {
       redirect: false,
       ...data
-    })
-      .then(e => {
-        if (e?.error) {
-          setErrorMessage('Wrong username or password!')
-          setLoading(false)
-        }
-      })
-      .finally(() => {
+    }).then(e => {
+      if (e?.error) {
+        setErrorMessage('Wrong username or password!')
+        setLoading(false)
+      }
+      if (e?.ok) {
         setLoading(false)
         router.push(callbackUrl, undefined, { shallow: false })
-      })
+      }
+    })
   }
 
   return (
