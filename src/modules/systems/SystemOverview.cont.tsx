@@ -87,7 +87,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
           <div className="col-span-3">
             {view.system && (
               <Card>
-                <Heading text="System Detail">
+                <Heading text={'System detail - ' + systemDetail.name}>
                   <EditButton />
                 </Heading>
                 <SystemDetailSection data={systemDetail} />
