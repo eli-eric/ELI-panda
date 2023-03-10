@@ -21,11 +21,7 @@ const CatalogueSearchTable = ({ setItem, itemName }: Props) => {
       <div className="flex flex-col min-h-[535px] justify-between">
         <ErrorBoundary fallback={<ErrorPage />}>
           <Suspense fallback={<LoaderComponent />}>
-            <CatalogueItemsTable
-              setItem={setItem}
-              searchValue={searchValue}
-              itemName={itemName}
-            />
+            <CatalogueItemsTable setItem={setItem} searchValue={searchValue} itemName={itemName} />
           </Suspense>
         </ErrorBoundary>
       </div>

@@ -5,5 +5,5 @@ export enum PATH {
   SYSTEMS = '/systems',
   SYSTEMS_OVERVIEW = '/systems/overview',
 
-  REPORTS = '/reports',
+  REPORTS = '/reports'
 }

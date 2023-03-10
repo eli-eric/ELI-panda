@@ -36,9 +36,7 @@ const Custom404Page: NextPage = (): JSX.Element => {
                 </p>
               </div>
               <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
-                <Link
-                  href={status === 'authenticated' ? PATH.DASHBOARD : PATH.ROOT}
-                >
+                <Link href={status === 'authenticated' ? PATH.DASHBOARD : PATH.ROOT}>
                   <Button primary>
                     <FormattedMessage id={common.buttons.home} />
                   </Button>

@@ -35,10 +35,7 @@ const ItemPropertiesComponent = ({ item, groups }: Props) => (
     {item?.details &&
       groups.map(group => (
         <DisclosureComponent key={group} title={group}>
-          <div
-            key={group}
-            className=" prose prose-sm border-t border-gray-200 px-4 py-5 sm:px-6"
-          >
+          <div key={group} className=" prose prose-sm border-t border-gray-200 px-4 py-5 sm:px-6">
             <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
               {item.details?.map(detail => {
                 if (detail.propertyGroup !== group) {
@@ -46,16 +43,10 @@ const ItemPropertiesComponent = ({ item, groups }: Props) => (
                 }
                 return (
                   <div key={detail.propertyName} className="sm:col-span-1">
-                    <dt className="text-sm font-medium text-gray-400">
-                      {detail.propertyName}
-                    </dt>
+                    <dt className="text-sm font-medium text-gray-400">{detail.propertyName}</dt>
                     <dd className="mt-1 text-sm text-gray-900">
-                      {(detail.value === '' || detail.value === null
-                        ? 'N/A'
-                        : detail.value) +
-                        (detail.propertyUnit !== null
-                          ? ` ${detail.propertyUnit}`
-                          : '')}
+                      {(detail.value === '' || detail.value === null ? 'N/A' : detail.value) +
+                        (detail.propertyUnit !== null ? ` ${detail.propertyUnit}` : '')}
                     </dd>
                   </div>
                 )

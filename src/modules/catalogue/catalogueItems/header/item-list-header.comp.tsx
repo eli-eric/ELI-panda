@@ -11,26 +11,16 @@ interface Props {
   isSelectable?: boolean
 }
 
-const ItemListHeaderComponent = ({
-  categoryListLength,
-  details,
-  isSelectable,
-}: Props) => {
+const ItemListHeaderComponent = ({ categoryListLength, details, isSelectable }: Props) => {
   const intl = useIntl()
   return (
     <thead className="bg-gray-50">
       <tr>
         {isSelectable && (
-          <ItemListColumnTitleComponent
-            title={intl.formatMessage({ id: messages.select })}
-          />
+          <ItemListColumnTitleComponent title={intl.formatMessage({ id: messages.select })} />
         )}
-        <ItemListColumnTitleComponent
-          title={intl.formatMessage({ id: messages.name })}
-        />
-        <ItemListColumnTitleComponent
-          title={intl.formatMessage({ id: messages.description })}
-        />
+        <ItemListColumnTitleComponent title={intl.formatMessage({ id: messages.name })} />
+        <ItemListColumnTitleComponent title={intl.formatMessage({ id: messages.description })} />
         {categoryListLength === 0 &&
           details &&
           details.length !== 0 &&
@@ -41,13 +31,9 @@ const ItemListHeaderComponent = ({
             />
           ))}
         {categoryListLength !== 0 && (
-          <ItemListColumnTitleComponent
-            title={intl.formatMessage({ id: messages.categoryName })}
-          />
+          <ItemListColumnTitleComponent title={intl.formatMessage({ id: messages.categoryName })} />
         )}
-        <ItemListColumnTitleComponent
-          title={intl.formatMessage({ id: messages.manufactorer })}
-        />
+        <ItemListColumnTitleComponent title={intl.formatMessage({ id: messages.manufactorer })} />
         <ItemListColumnTitleComponent
           title={intl.formatMessage({ id: messages.manufacturerNumber })}
         />

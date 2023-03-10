@@ -30,9 +30,7 @@ const ItemDetailComponent = ({ uid }: Props) => {
   const { catalogueItem, catalogueItemImage } = useEndpoint({
     uid: catalogueUid
   })
-  const { data: item } = useSWR<CatalogueItem>(
-    session ? catalogueUid && catalogueItem : null
-  )
+  const { data: item } = useSWR<CatalogueItem>(session ? catalogueUid && catalogueItem : null)
   const { data: image } = useSWR(catalogueItemImage, fetcher, {
     suspense: false
   })
@@ -54,9 +52,7 @@ const ItemDetailComponent = ({ uid }: Props) => {
             <ImageGalleryComponent images={[image || noImage]} />
 
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 col-span-2">
-              <h1 className="text-xl font-bold tracking-tight text-gray-900">
-                {item?.name}
-              </h1>
+              <h1 className="text-xl font-bold tracking-tight text-gray-900">{item?.name}</h1>
 
               <ItemPropertiesComponent
                 item={item}

@@ -12,19 +12,14 @@ import CatalogueItemsContainer from '@/modules/catalogue/catalogueItems/Catalogu
 import CategoryListComponent from '@/modules/catalogue/categoryList/CategoryList.cont'
 import { CatalogLayoutContainer } from '@/modules/catalogue/layout/catalog-layout.cont'
 import SearchBarComponent from '@/modules/catalogue/search-bar/search-bar.comp'
-import {
-  CatalogueCategoryResponse,
-  CatalogueItemsResponse,
-} from '@/types/responses'
+import { CatalogueCategoryResponse, CatalogueItemsResponse } from '@/types/responses'
 
 const { head } = message.cataloguePage
 
 const CatalogueCategoriesPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
-  const [catalogueCategoryList, setCatalogueCategoryList] =
-    useState<CatalogueCategoryResponse[]>()
-  const [catalogueItemsList, setCatalogueItemsList] =
-    useState<CatalogueItemsResponse>()
+  const [catalogueCategoryList, setCatalogueCategoryList] = useState<CatalogueCategoryResponse[]>()
+  const [catalogueItemsList, setCatalogueItemsList] = useState<CatalogueItemsResponse>()
   const [catalogueParentUid, setCatalogueParentUid] = useState<string>()
 
   return (

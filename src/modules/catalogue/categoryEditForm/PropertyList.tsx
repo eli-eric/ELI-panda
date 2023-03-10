@@ -2,11 +2,7 @@ import { PlusIcon } from '@heroicons/react/24/outline'
 import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
-import {
-  CategoryFormType,
-  Group,
-  Property
-} from '@/types/catalogue/categoryFormTypes'
+import { CategoryFormType, Group, Property } from '@/types/catalogue/categoryFormTypes'
 
 import PropertyItem from './PropertyItem'
 

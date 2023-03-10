@@ -1,17 +1,7 @@
 import { Combobox } from '@headlessui/react'
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  XMarkIcon
-} from '@heroicons/react/20/solid'
+import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import { Fragment, useState } from 'react'
-import {
-  FieldValues,
-  Path,
-  PathValue,
-  useFormContext,
-  UseFormRegister
-} from 'react-hook-form'
+import { FieldValues, Path, PathValue, useFormContext, UseFormRegister } from 'react-hook-form'
 
 import { classNames } from '@/features'
 import { CodebookType, useCodebook } from '@/hooks/useCodebook'
@@ -38,9 +28,7 @@ const ComboboxComponent = <T extends FieldValues>({
     setValue,
     formState: { defaultValues }
   } = useFormContext<T>()
-  const [query, setQuery] = useState(
-    (defaultValues && defaultValues[name]) || ''
-  )
+  const [query, setQuery] = useState((defaultValues && defaultValues[name]) || '')
   const [selectedItem, setSelectedItem] = useState<CodebookType | null>(null)
   const data = useCodebook(codebook, `?searchText=${query}&limit=10`, true)
 
@@ -83,16 +71,9 @@ const ComboboxComponent = <T extends FieldValues>({
                 onChange={event => setQuery(event.target.value)}
                 displayValue={(item: CodebookType) => item?.name}
               />
-              <input
-                {...register(name as Path<T>)}
-                type="hidden"
-                value={selectedItem?.uid}
-              />
+              <input {...register(name as Path<T>)} type="hidden" value={selectedItem?.uid} />
               <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
-                <ChevronDownIcon
-                  className="h-5 w-5 text-gray-500"
-                  aria-hidden="true"
-                />
+                <ChevronDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
               </div>
 
               {selectedItem && (
@@ -126,12 +107,7 @@ const ComboboxComponent = <T extends FieldValues>({
                 >
                   {({ active, selected }) => (
                     <>
-                      <span
-                        className={classNames(
-                          'block truncate',
-                          selected && 'font-semibold'
-                        )}
-                      >
+                      <span className={classNames('block truncate', selected && 'font-semibold')}>
                         {item.name}
                       </span>
 

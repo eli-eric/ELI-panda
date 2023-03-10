@@ -1,7 +1,4 @@
-import {
-  ArrowUturnLeftIcon,
-  PencilSquareIcon,
-} from '@heroicons/react/24/outline'
+import { ArrowUturnLeftIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { FormattedMessage } from 'react-intl'
 import { message } from 'src/i18n/src/messages'

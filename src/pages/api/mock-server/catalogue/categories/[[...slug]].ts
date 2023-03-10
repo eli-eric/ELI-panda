@@ -3,10 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { CatalogueCategories, CategoryResponse } from '../catalogue-mock-data'
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<any>,
-) {
+export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
     ////this will be implemented later with items filtering func.
     //const searchParam = req.query["search"]
@@ -20,8 +17,8 @@ export default function handler(
       parentPath = slug.join('/').toLowerCase()
     }
 
-    result = CatalogueCategories.filter(f => f.parentPath === parentPath).sort(
-      (a, b) => (a.name > b.name ? 0 : -1),
+    result = CatalogueCategories.filter(f => f.parentPath === parentPath).sort((a, b) =>
+      a.name > b.name ? 0 : -1
     )
 
     res.status(200).json(result)

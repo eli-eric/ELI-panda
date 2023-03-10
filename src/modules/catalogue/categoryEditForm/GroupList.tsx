@@ -73,9 +73,7 @@ const GroupList = () => {
                   index={index}
                   errors={
                     formState.errors.groups &&
-                    (formState.errors.groups[index] as
-                      | FieldErrors<Group>
-                      | undefined)
+                    (formState.errors.groups[index] as FieldErrors<Group> | undefined)
                   }
                   name={`groups.${index}`}
                   key={field.id}

@@ -1,8 +1,4 @@
-import {
-  ArrowLongLeftIcon,
-  ArrowLongRightIcon,
-  TrashIcon
-} from '@heroicons/react/24/outline'
+import { ArrowLongLeftIcon, ArrowLongRightIcon, TrashIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import { Dispatch, SetStateAction, useMemo } from 'react'
 
@@ -26,12 +22,7 @@ interface TableNameProps {
   selelectedSystemUid?: string
 }
 
-const Name = ({
-  uid,
-  name,
-  selectSystemUid,
-  selelectedSystemUid
-}: TableNameProps) => {
+const Name = ({ uid, name, selectSystemUid, selelectedSystemUid }: TableNameProps) => {
   const image = 'https://source.unsplash.com/collection/71371194/500x500'
   return (
     <div
@@ -43,13 +34,7 @@ const Name = ({
       }}
     >
       <div className="h-10 w-10 flex-shrink-0">
-        <Image
-          className="h-10 w-10 rounded-full"
-          alt={name}
-          src={image}
-          width={200}
-          height={200}
-        />
+        <Image className="h-10 w-10 rounded-full" alt={name} src={image} width={200} height={200} />
       </div>
       <div className="ml-4">{name}</div>
     </div>
@@ -124,9 +109,7 @@ export const useRelationMapRows = ({
             return (
               <div key={index}>
                 {value === 'to' && <ArrowLongLeftIcon className="w-10 h-10" />}
-                {value === 'from' && (
-                  <ArrowLongRightIcon className="w-10 h-10" />
-                )}
+                {value === 'from' && <ArrowLongRightIcon className="w-10 h-10" />}
               </div>
             )
           }
@@ -142,10 +125,7 @@ export const useRelationMapRows = ({
             rounded="rounded-md"
           >
             {' '}
-            <TrashIcon
-              className="h-5 w-5 text-red-700"
-              aria-hidden="true"
-            />{' '}
+            <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />{' '}
           </Button>
         ]
       }),
