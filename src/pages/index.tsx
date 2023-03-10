@@ -33,18 +33,18 @@ const LoginPage: NextPage = (): JSX.Element => {
     setLoading(true)
     setErrorMessage(undefined)
     signIn('credentials', {
-      redirect: false,
+      callbackUrl: callbackUrl,
       ...data
-    }).then(response => {
-      if (response?.error) {
-        setErrorMessage('Wrong username or password!')
-        setLoading(false)
-      }
-      if (response?.ok === true && response?.url) {
-        setLoading(false)
-        router.push(callbackUrl, callbackUrl)
-      }
     })
+      .then(response => {
+        if (response?.error) {
+          setErrorMessage('Wrong username or password!')
+          setLoading(false)
+        }
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
   return (
@@ -60,9 +60,9 @@ const LoginPage: NextPage = (): JSX.Element => {
         register={register}
         loading={loading}
       />
-      {errorMessage && (
+      {router.query.error && (
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <AuthAlertComponent message={errorMessage} />
+          <AuthAlertComponent message={router.query.error as string} />
         </div>
       )}
     </Fragment>
