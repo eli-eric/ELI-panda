@@ -3,4 +3,4 @@ PANDA_API_GW_URL="http://localhost:5001/api/mock-server"
 # NEXTAUTH_URL="ttp://panda.eli-beams.eu/"
 NEXTAUTH_URL="http://localhost:5001/"
 NEXTAUTH_SECRET="stored in gh actions secrets"
-PANDA_ENV="dev" #could be dev, test, production, if not set it is like production
+PANDA_ENV="dev" #could be dev, test, production, if not set it is like production, localhost for local server
