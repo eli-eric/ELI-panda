@@ -2,10 +2,7 @@
 import { faker } from '@faker-js/faker'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<any>
-) {
+export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
     const getDirection = () => {
       var textArray = ['from', 'to']

@@ -9,5 +9,5 @@ export const ENDPOINTS = {
   systemDetail: '/system',
   systemTree: '/systems/tree',
   systems: '/systems',
-  systemsForRel: '/systems/for-relationship',
+  systemsForRel: '/systems/for-relationship'
 }

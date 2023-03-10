@@ -18,13 +18,7 @@ import AddRelationForm from './AddRelationForm'
 
 const messages = message.systemsPage.relations
 
-const RelationsSection = ({
-  uid,
-  systemName
-}: {
-  uid: string
-  systemName: string
-}) => {
+const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string }) => {
   const endpoints = useEndpoint({ uid })
   const { data: relations } = useSWR<SystemRelationshipResponse[]>(
     endpoints.systemRelationships,
@@ -78,9 +72,7 @@ const RelationsSection = ({
         >
           <FormattedMessage id={messages.buttons.addSpare} />
         </Button>
-        {relations && (
-          <TableComponent collumsTitle={collumsTitle} data={data} />
-        )}
+        {relations && <TableComponent collumsTitle={collumsTitle} data={data} />}
       </div>
       <ModalComponent
         open={openAddRelation}
@@ -93,11 +85,7 @@ const RelationsSection = ({
           systemName={systemName}
         />
       </ModalComponent>
-      <ModalComponent
-        open={openDelete}
-        setOpen={setOpenDelete}
-        buttons={deleteModalButtons}
-      >
+      <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deleteModalButtons}>
         <ModalWarningComponent
           title={intl.formatMessage({ id: messages.deleteModal.title })}
           message={intl.formatMessage({ id: messages.deleteModal.text })}

@@ -7,11 +7,7 @@ import { InputWithError } from '@/components/form/Input'
 import { SelectWithError } from '@/components/form/Select'
 import { useCodebookSelectValues } from '@/hooks/useCodebook'
 import { CategoryFormType, Property } from '@/types/catalogue/categoryFormTypes'
-import {
-  defaultBoolOptions,
-  PROPERTY_INPUT_TYPE,
-  PROPERTY_TYPE
-} from '@/types/catalogue/constants'
+import { defaultBoolOptions, PROPERTY_INPUT_TYPE, PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { CODEBOOK } from '@/types/constants/codebook'
 
 const ValueItem = ({ removeValue, index, name, errors }) => {
@@ -43,16 +39,13 @@ interface Props {
 }
 
 const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
-  const { register, watch, control, unregister } =
-    useFormContext<CategoryFormType>()
+  const { register, watch, control, unregister } = useFormContext<CategoryFormType>()
   const { fields, append, remove } = useFieldArray({
     control,
     name: `${name}.listOfValues`
   })
   const units = useCodebookSelectValues(CODEBOOK.UNIT)
-  const propertyTypes = useCodebookSelectValues(
-    CODEBOOK.CATALOGUE_PROPERTY_TYPE
-  )
+  const propertyTypes = useCodebookSelectValues(CODEBOOK.CATALOGUE_PROPERTY_TYPE)
 
   const handleRemoveProp = () => {
     removeProp(index)
@@ -90,12 +83,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
             register={register}
             name={`${name}.typeUID`}
             isError={!!errors?.typeUID?.message}
-            options={
-              propertyTypes && [
-                getDefaultOption('Select type', true),
-                ...propertyTypes
-              ]
-            }
+            options={propertyTypes && [getDefaultOption('Select type', true), ...propertyTypes]}
           />
           <SelectWithError
             register={register}

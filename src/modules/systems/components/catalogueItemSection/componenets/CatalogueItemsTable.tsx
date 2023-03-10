@@ -17,8 +17,9 @@ const CatalogueItemsTable = ({
 
   setItem: Dispatch<SetStateAction<{ name?: string; uid?: string }>>
 }) => {
-  const { setTotalCount, getPaginationComponent, page, pageSize } =
-    usePagination({ dependecies: [searchValue] })
+  const { setTotalCount, getPaginationComponent, page, pageSize } = usePagination({
+    dependecies: [searchValue]
+  })
   const query = useMemo(
     () => ({
       search: searchValue,

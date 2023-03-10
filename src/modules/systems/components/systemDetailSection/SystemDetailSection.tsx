@@ -34,32 +34,13 @@ const SystemDetailSection = ({ data }: { data: SystemDetailResponse }) => {
 
   return (
     <Fragment>
-      <ItemDetailComponent
-        title={data.name}
-        images={[image]}
-        description={data?.description}
-      >
-        <ItemProperty
-          title={messages.systemTypeUID.label}
-          text={data.systemType?.name}
-        />
-        <ItemProperty
-          title={messages.systemCode.label}
-          text={data.systemCode}
-        />
-        <ItemProperty
-          title={messages.systemAlias.label}
-          text={data.systemAlias}
-        />
-        <ItemProperty
-          title={messages.locationUID.label}
-          text={data.location?.name}
-        />
+      <ItemDetailComponent title={data.name} images={[image]} description={data?.description}>
+        <ItemProperty title={messages.systemTypeUID.label} text={data.systemType?.name} />
+        <ItemProperty title={messages.systemCode.label} text={data.systemCode} />
+        <ItemProperty title={messages.systemAlias.label} text={data.systemAlias} />
+        <ItemProperty title={messages.locationUID.label} text={data.location?.name} />
         <ItemProperty title={messages.ownerUID.label} text={data.owner?.name} />
-        <ItemProperty
-          title={messages.importanceUID.label}
-          text={data.importance?.name}
-        />
+        <ItemProperty title={messages.importanceUID.label} text={data.importance?.name} />
         <ItemProperty title={messages.zoneUID.label} text={data.zone?.name} />
       </ItemDetailComponent>
     </Fragment>

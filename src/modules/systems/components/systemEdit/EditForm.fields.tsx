@@ -21,9 +21,7 @@ const useSystemEditFormFields = () => {
   const importanceOption = useCodebookSelectValues(CODEBOOK.SYSTEM_IMPORTANCE)
   const zoneOption = useCodebookSelectValues(CODEBOOK.ZONE)
 
-  const criticalityOption = useCodebookSelectValues(
-    CODEBOOK.SYSTEM_CRITICALITY_CLASS
-  )
+  const criticalityOption = useCodebookSelectValues(CODEBOOK.SYSTEM_CRITICALITY_CLASS)
 
   return useMakeFormFields(register, {
     name: {
@@ -44,10 +42,7 @@ const useSystemEditFormFields = () => {
       label: form.systemTypeUID.label,
       isError: !!formState.errors.systemTypeUID,
       rounded: 'rounded-md',
-      options: systemTypeOption && [
-        getDefaultOption('none'),
-        ...systemTypeOption
-      ]
+      options: systemTypeOption && [getDefaultOption('none'), ...systemTypeOption]
     },
     systemCode: {
       name: 'systemCode',
@@ -84,10 +79,7 @@ const useSystemEditFormFields = () => {
       label: form.importanceUID.label,
       isError: !!formState.errors.importanceUID,
       rounded: 'rounded-md',
-      options: importanceOption && [
-        getDefaultOption('none'),
-        ...importanceOption
-      ]
+      options: importanceOption && [getDefaultOption('none'), ...importanceOption]
     },
     zoneUID: {
       name: 'zoneUID',
@@ -101,10 +93,7 @@ const useSystemEditFormFields = () => {
       label: form.criticalityClassUID.label,
       isError: !!formState.errors.criticalityClassUID,
       rounded: 'rounded-md',
-      options: criticalityOption && [
-        getDefaultOption('none'),
-        ...criticalityOption
-      ]
+      options: criticalityOption && [getDefaultOption('none'), ...criticalityOption]
     }
   })
 }

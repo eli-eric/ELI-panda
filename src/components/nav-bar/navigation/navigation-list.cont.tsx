@@ -20,11 +20,7 @@ const NavigationListContainer = ({ open }: Props) => {
   return (
     <Fragment>
       <div
-        className={
-          open === false
-            ? 'hidden sm:ml-6 sm:flex sm:space-x-8'
-            : 'space-y-1 pt-2 pb-3'
-        }
+        className={open === false ? 'hidden sm:ml-6 sm:flex sm:space-x-8' : 'space-y-1 pt-2 pb-3'}
       >
         {status === 'authenticated' ? (
           <Fragment>

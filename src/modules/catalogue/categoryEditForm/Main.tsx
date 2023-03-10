@@ -32,13 +32,10 @@ const FormImage = ({ image, onDelete }: FormImageProps) => (
 
 const Main = ({ uid }: { uid?: string }) => {
   const { catalogueCategoryImage } = useEndpoint({ uid: uid })
-  const { data: categoryImage } = useSWR(
-    uid ? catalogueCategoryImage : undefined
-  )
+  const { data: categoryImage } = useSWR(uid ? catalogueCategoryImage : undefined)
 
   const [showImageUid, setShowImage] = useState<boolean>(!!uid)
-  const { register, watch, setValue, formState } =
-    useFormContext<CategoryFormType>()
+  const { register, watch, setValue, formState } = useFormContext<CategoryFormType>()
   const onDrop = useCallback(
     files => {
       const reader = new FileReader()
@@ -66,10 +63,7 @@ const Main = ({ uid }: { uid?: string }) => {
   return (
     <div className="grid grid-cols-4 pb-5">
       {image === 'deleted' || (!categoryImage && !image) ? (
-        <ImagePlaceHolder
-          getInputProps={getInputProps}
-          getRootProps={getRootProps}
-        />
+        <ImagePlaceHolder getInputProps={getInputProps} getRootProps={getRootProps} />
       ) : (
         <FormImage
           image={image ? image : categoryImage}

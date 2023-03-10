@@ -17,41 +17,37 @@ const messages = message.cataloguePage.defaultMessage
 
 interface Props {
   categoryListLength?: number
-  setCatalogueItemsList: Dispatch<
-    SetStateAction<CatalogueItemsResponse | undefined>
-  >
+  setCatalogueItemsList: Dispatch<SetStateAction<CatalogueItemsResponse | undefined>>
   catalogueItems?: CatalogueItemsResponse
 }
 
 const CatalogueItemsContainer = ({
   categoryListLength,
   setCatalogueItemsList,
-  catalogueItems,
+  catalogueItems
 }: Props) => {
   const intl = useIntl()
   const router = useRouter()
   const { status: session } = useSession()
   const categoryPath = useCataloguePath()
 
-  const { getPaginationComponent, setTotalCount, page, pageSize, setPageSize } =
-    usePagination({
-      dependecies: [router.query.search],
-      useQuery: !!catalogueItems,
-    })
+  const { getPaginationComponent, setTotalCount, page, pageSize, setPageSize } = usePagination({
+    dependecies: [router.query.search],
+    useQuery: !!catalogueItems
+  })
   const endpoints = useEndpoint({
     query: router.query.search
       ? { search: router.query.search, page, pageSize, categoryPath }
-      : { page, pageSize, categoryPath },
+      : { page, pageSize, categoryPath }
   })
   useEffect(() => {
     setPageSize(30)
   }, [setPageSize])
 
   const { data } = useSWR<CatalogueItemsResponse>(
-    categoryListLength === 0 ||
-      (router.query.search && session === 'authenticated')
+    categoryListLength === 0 || (router.query.search && session === 'authenticated')
       ? endpoints.catalogueItems
-      : null,
+      : null
   )
   useEffect(() => {
     setTotalCount(data?.totalCount)
@@ -62,10 +58,7 @@ const CatalogueItemsContainer = ({
 
   return (
     <Fragment>
-      <div
-        data-testid="item-list"
-        className="h-full overflow-auto border-t border-gray-300  "
-      >
+      <div data-testid="item-list" className="h-full overflow-auto border-t border-gray-300  ">
         {data &&
           (data.totalCount !== 0 ? (
             <CatalogueItemsComponent

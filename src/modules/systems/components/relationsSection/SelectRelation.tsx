@@ -19,8 +19,7 @@ const SelectRelation = ({
     uid: string
   }
 }) => {
-  const { register, watch, setValue, formState } =
-    useFormContext<RelationFormType>()
+  const { register, watch, setValue, formState } = useFormContext<RelationFormType>()
   useEffect(() => {
     setValue('relationTypeCode', relationTypeCode)
   }, [setValue, relationTypeCode])
@@ -36,8 +35,7 @@ const SelectRelation = ({
     name: selectedSystem?.name,
     value: selectedSystem?.uid
   })
-  const [systemToOption, setSystemToOption] =
-    useState<Option>(selectedSystemOption)
+  const [systemToOption, setSystemToOption] = useState<Option>(selectedSystemOption)
   const watchSystemFromUid = watch('systemFromUid')
 
   useEffect(() => {
@@ -72,11 +70,7 @@ const SelectRelation = ({
   return (
     <div className="flex flex-row">
       <SelectWithError
-        options={
-          selectedSystem
-            ? [baseSystemOption, selectedSystemOption]
-            : [baseSystemOption]
-        }
+        options={selectedSystem ? [baseSystemOption, selectedSystemOption] : [baseSystemOption]}
         register={register}
         name={'systemFromUid'}
         isError={!!formState.errors.systemFromUid?.message}

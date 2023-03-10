@@ -30,34 +30,16 @@ const EditForm = ({ uid }: Props) => {
         <div className="pl-5 col-span-9">
           <InputWithError {...fields.name} className="pb-1" />
           <ComboboxComponent {...fields.ownerUID} className="col-span-9 pb-1" />
-          <SelectWithError
-            {...fields.importanceUID}
-            className="col-span-9 pb-1"
-          />
+          <SelectWithError {...fields.importanceUID} className="col-span-9 pb-1" />
         </div>
-        <ComboboxComponent
-          {...fields.locationUID}
-          className="col-span-6 pt-2 pr-1"
-        />
+        <ComboboxComponent {...fields.locationUID} className="col-span-6 pt-2 pr-1" />
         <SelectWithError {...fields.zoneUID} className="col-span-6 pl-1 pt-2" />
 
-        <SelectWithError
-          {...fields.systemTypeUID}
-          className="col-span-6 pr-1 pt-2"
-        />
-        <InputWithError
-          {...fields.systemCode}
-          className="pt-2 col-span-3 pl-1 pr-1"
-        />
-        <InputWithError
-          {...fields.systemAlias}
-          className="col-span-3 pl-1 pt-2"
-        />
+        <SelectWithError {...fields.systemTypeUID} className="col-span-6 pr-1 pt-2" />
+        <InputWithError {...fields.systemCode} className="pt-2 col-span-3 pl-1 pr-1" />
+        <InputWithError {...fields.systemAlias} className="col-span-3 pl-1 pt-2" />
 
-        <TextareaWithError
-          {...fields.description}
-          className="col-span-12 pt-2"
-        />
+        <TextareaWithError {...fields.description} className="col-span-12 pt-2" />
       </div>
     </Fragment>
   )

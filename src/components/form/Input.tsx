@@ -29,9 +29,7 @@ export const InputWithError = <T extends FieldValues>({
   <div
     className={`${className} block z-10 w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
   >
-    {label && (
-      <label className="text-sm font-medium text-gray-700">{label}</label>
-    )}
+    {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
     <div className="relative">
       <Input
         {...restProps}
@@ -70,9 +68,7 @@ export const TextareaWithError = <T extends FieldValues>({
   <div
     className={`${className} block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
   >
-    {label && (
-      <label className="text-sm font-medium text-gray-700">{label}</label>
-    )}
+    {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
     <textarea
       {...restProps}
       rows={3}

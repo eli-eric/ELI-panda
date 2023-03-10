@@ -106,10 +106,7 @@ const propertyTypes = [
   }
 ]
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<any>
-) {
+export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
     const { code } = req.query
     if (code === 'UNIT') {

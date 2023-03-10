@@ -12,8 +12,7 @@ interface Props {
 
 const GlobalProvider = ({ children }: Props) => {
   const { data } = useSession()
-  axios.defaults.headers.common['authorization'] =
-    'Bearer ' + data?.user.apiAccessToken
+  axios.defaults.headers.common['authorization'] = 'Bearer ' + data?.user.apiAccessToken
   return (
     <SWRConfig
       value={{
@@ -24,7 +23,7 @@ const GlobalProvider = ({ children }: Props) => {
             const err = new Error('An error occurred while fetching the data.')
             throw err
           }
-        },
+        }
       }}
     >
       <IntlProvider locale="en" messages={messages['en']}>

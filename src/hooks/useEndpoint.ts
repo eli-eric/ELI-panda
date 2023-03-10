@@ -28,7 +28,6 @@ interface useEndpointsProps {
   path?: string
 }
 export const useEndpoint = ({ uid, query, path }: useEndpointsProps) => {
-  const queryString =
-    '?' + new URLSearchParams(query as Record<string, string>).toString()
+  const queryString = '?' + new URLSearchParams(query as Record<string, string>).toString()
   return getEndpoints(uid, path, queryString)
 }

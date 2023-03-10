@@ -13,9 +13,7 @@ interface Props {
 const ModalButtonsComponent = ({ testid, buttons }: Props) => (
   <Fragment>
     {buttons && (
-      <div
-        className={`mt-5 sm:mt-6 sm:flex sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3`}
-      >
+      <div className={`mt-5 sm:mt-6 sm:flex sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3`}>
         {buttons.goBack && (
           <Button
             type={buttons.goBack?.type}

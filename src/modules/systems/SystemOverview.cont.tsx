@@ -98,10 +98,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
                 <Heading text="Relations" />
                 <ErrorBoundary fallback={<ErrorPage />}>
                   <Suspense fallback={<ProgressBarComponent />}>
-                    <RelationsSection
-                      uid={systemDetail.uid}
-                      systemName={systemDetail.name}
-                    />
+                    <RelationsSection uid={systemDetail.uid} systemName={systemDetail.name} />
                   </Suspense>
                 </ErrorBoundary>
               </Card>

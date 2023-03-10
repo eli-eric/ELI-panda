@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react'
 
 export default function ViewControl({
   view: viewControl,
-  setView: setViewControl,
+  setView: setViewControl
 }: {
   view: {
     system: boolean
@@ -32,7 +32,7 @@ export default function ViewControl({
               onClick={() =>
                 setViewControl(viewControl => ({
                   ...viewControl,
-                  system: !viewControl.system,
+                  system: !viewControl.system
                 }))
               }
               className="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500"
@@ -56,7 +56,7 @@ export default function ViewControl({
               onClick={() =>
                 setViewControl(viewControl => ({
                   ...viewControl,
-                  relations: !viewControl.relations,
+                  relations: !viewControl.relations
                 }))
               }
               className="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500"
@@ -81,7 +81,7 @@ export default function ViewControl({
               onClick={() =>
                 setViewControl(viewControl => ({
                   ...viewControl,
-                  catalogueItem: !viewControl.catalogueItem,
+                  catalogueItem: !viewControl.catalogueItem
                 }))
               }
               className="h-4 w-4 rounded border-gray-300 text-gray-600 focus:ring-gray-500"

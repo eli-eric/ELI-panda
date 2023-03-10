@@ -11,11 +11,7 @@ interface Props {
   testId: string
 }
 // TODO: need refactor
-const BreadcrumbListComponent = ({
-  navigationList,
-  handleClick,
-  testId,
-}: Props) => {
+const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props) => {
   const router = useRouter()
   const catalogueParentPath = useCataloguePath()
   const { getAddButton } = useCategoryEdit({ catalogueParentPath })
@@ -34,10 +30,7 @@ const BreadcrumbListComponent = ({
                 onClick={onCLickHandler}
                 className="text-gray-400 hover:text-gray-500"
               >
-                <HomeIcon
-                  className="h-5 w-5 flex-shrink-0"
-                  aria-hidden="true"
-                />
+                <HomeIcon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
                 <span className="sr-only">Home</span>
               </button>
             </div>

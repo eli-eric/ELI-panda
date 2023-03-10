@@ -19,10 +19,7 @@ type SystemDetailResponse = {
   importance?: SystemCodebok
   itemUID?: string
 }
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<any>
-) {
+export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
     if (req.method === 'GET') {
       const getFakeName = () => faker.company.catchPhrase()
@@ -45,9 +42,7 @@ export default function handler(
           uid,
           name,
           parentPath: getFakePath(),
-          description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
-            2
-          )}`,
+          description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(2)}`,
           importance: getFakeCodebook('d6a216b0-7e25-4de7-a762-132d9c68bd63'),
           zone: getFakeCodebook('c0873468-d49f-45d8-b9ad-beb83d9c9772'),
           systemCode: faker.datatype.string(),
@@ -56,10 +51,7 @@ export default function handler(
             'II.01.02',
             'II.01.02 - Reception and staircase - ELI2 building > Ground floor'
           ),
-          owner: getFakeCodebook(
-            '71864520-9e86-427c-901c-0c220f951775',
-            'Administrator Admin'
-          ),
+          owner: getFakeCodebook('71864520-9e86-427c-901c-0c220f951775', 'Administrator Admin'),
           itemUID: undefined,
           systemType: getFakeCodebook('8783fa8c-cfd3-4519-830f-5bfd05166ad9')
         }
