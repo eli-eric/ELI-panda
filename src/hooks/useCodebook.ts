@@ -1,4 +1,4 @@
-import { fetcher } from 'src/features/fetcher'
+import { fetcher } from '@/helpers/fetcher'
 import useSWR from 'swr/immutable'
 
 import { CODEBOOK } from '@/types/constants/codebook'

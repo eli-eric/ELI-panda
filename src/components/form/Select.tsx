@@ -1,7 +1,7 @@
 import React from 'react'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
-import { classNames } from '@/features'
+import { classNames } from '@/helpers'
 import { FieldProps } from '@/types/form'
 
 export type Option = {

@@ -6,7 +6,7 @@ import { Fragment, useEffect } from 'react'
 import useSWR from 'swr'
 
 import LoaderComponent from '@/components/loader.comp'
-import { fetcher } from '@/features/fetcher'
+import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import SystemOverviewContainer from '@/modules/systems/SystemOverview.cont'
 

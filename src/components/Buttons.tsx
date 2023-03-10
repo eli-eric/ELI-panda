@@ -1,4 +1,4 @@
-import { classNames } from '@/features'
+import { classNames } from '@/helpers'
 
 import ButtonLoaderComponent from './button-loader.comp'
 

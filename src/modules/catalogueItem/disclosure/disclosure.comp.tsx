@@ -2,7 +2,7 @@ import { Disclosure } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react'
 
-import { classNames } from '@/features'
+import { classNames } from '@/helpers'
 import { CatalogueItem } from '@/types/responses'
 
 interface Props {

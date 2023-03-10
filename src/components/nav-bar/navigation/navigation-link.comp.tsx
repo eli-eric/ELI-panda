@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
-import { classNames } from '@/features'
+import { classNames } from '@/helpers'
 
 interface Props {
   href: string

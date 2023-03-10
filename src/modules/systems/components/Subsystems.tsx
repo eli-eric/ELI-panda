@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import useSWR from 'swr'
 
-import { classNames } from '@/features'
+import { classNames } from '@/helpers'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { PATH } from '@/types/constants/paths'
 

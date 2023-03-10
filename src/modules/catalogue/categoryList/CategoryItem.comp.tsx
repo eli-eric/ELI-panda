@@ -5,7 +5,7 @@ import noImage from 'public/no-image.png'
 import { Dispatch, SetStateAction } from 'react'
 import useSWR from 'swr'
 
-import { fetcher } from '@/features/fetcher'
+import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { useCategoryEdit } from '@/modules/catalogue/hooks/useCategoryEdit'
 import { PATH } from '@/types/constants/paths'
