@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { object, string } from 'yup'
 
+import ErrorPage from '@/components/error/ErrorPage'
 import ModalButtonsComponent from '@/components/modal/modal.buttons'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
@@ -98,6 +99,7 @@ const Edit = ({ data, uid, setOpen }: Props) => {
     <form onSubmit={formMethods.handleSubmit(onSubmit)}>
       <FormProvider {...formMethods}>
         <EditForm data={data} uid={uid} />
+        {error && <ErrorPage />}
         <ModalButtonsComponent buttons={buttons} />
       </FormProvider>
     </form>

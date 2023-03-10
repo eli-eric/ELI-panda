@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { Suspense, useState } from 'react'
+import { Suspense, useMemo, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
 import Card, { Heading } from '@/components/card/card.comp'
@@ -41,6 +41,13 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
 
   const { EditButton } = useSystemEdit({ systemDetail: systemDetail })
 
+  const parentPath = useMemo(() => {
+    if (!systemDetail) return undefined
+    const basePath = { uid: systemDetail.uid, name: systemDetail.name }
+    if (!systemDetail.parentPath) return [basePath]
+    return [...systemDetail.parentPath, basePath]
+  }, [systemDetail])
+
   return (
     <div className="flex-col">
       <div className="flex flex-wrap w-full">
@@ -53,7 +60,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
           </div>
         </div>
       </div>
-      <Breadcrumbs parentPath={systemDetail?.parentPath} />
+      <Breadcrumbs parentPath={parentPath} />
 
       {query && (
         <div className="w-full">

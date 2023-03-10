@@ -4,7 +4,6 @@ import useSWR from 'swr'
 
 import ItemDetailComponent from '@/components/item-detail/ItemDetail.comp'
 import ItemProperty from '@/components/item-property/ItemProperty'
-import { mockFetcher } from '@/features/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
 
@@ -29,8 +28,7 @@ const SystemDetailSection = ({ data }: { data: SystemDetailResponse }) => {
   const { systemImage: systemDetailImage } = useEndpoint({
     uid: router.query.uid as string
   })
-  const { data: image } = useSWR(systemDetailImage, mockFetcher)
-  // const rows = Object.entries(data).filter(([title]) => DISPLAY.includes(title))
+  const { data: image } = useSWR(systemDetailImage)
 
   return (
     <Fragment>
