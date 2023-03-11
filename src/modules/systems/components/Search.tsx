@@ -1,32 +1,69 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
-import { Suspense, useEffect, useRef } from 'react'
+import { Fragment, Suspense, useEffect, useRef } from 'react'
 import useSWR from 'swr'
 
-import Card, { Heading } from '@/components/card/card.comp'
+import Card from '@/components/card/card.comp'
+import EmptyResults from '@/components/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
+import TableComponent2 from '@/components/table2/Table.comp'
+import TableRowComponent, { TableRowItem } from '@/components/table2/TableRow.comp'
+import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
+import usePagination from '@/hooks/usePagination'
+import { message } from '@/i18n/src/messages'
+import { PATH } from '@/types/constants/paths'
 
-import { Item } from './Subsystems'
+import { SystemDetailResponse, SystemsResponse } from '../types/responses'
 
-const List = (props: { query: string }) => {
-  const { query } = props
+const messages = message.cataloguePage.defaultMessage
+
+const Row = ({ index, item }: { index: number; item: SystemDetailResponse }) => {
+  const router = useRouter()
+
+  const onClickHandler = () => {
+    router.push({ pathname: PATH.SYSTEMS + '/' + item.uid, query: { q: router.query.q } })
+  }
+
+  return (
+    <TableRowComponent index={index} onClick={onClickHandler}>
+      <TableRowItem text={item.name} />
+      <TableRowItem text={item.systemCode} />
+      <TableRowItem text={item.systemType?.name} />
+      <TableRowItem text={item.owner?.name} />
+      <TableRowItem text={item.importance?.name} />
+    </TableRowComponent>
+  )
+}
+
+const List = ({ query }: { query: string }) => {
+  const { getPaginationComponent, pagination, setTotalCount } = usePagination({
+    dependecies: [query]
+  })
   const router = useRouter()
   const { systemsList } = useEndpoint({
     uid: router.query.uid as string,
-    query: query
+    query: { search: query, pagination }
   })
-  const { data } = useSWR(systemsList)
+  const { data: systems } = useSWR<SystemsResponse>(systemsList, mockFetcher, { suspense: false })
+
+  useEffect(() => {
+    setTotalCount(systems?.totalCount)
+  }, [systems, setTotalCount])
   return (
-    <>
-      {data && data.length > 0 ? (
-        data.map(({ uid, name }) => <Item key={uid} text={name} uid={uid} />)
-      ) : (
-        <div className="text-gray-600 flex items-center px-3 py-2 text-sm font-medium rounded-md">
-          <span className="truncate">No results found.</span>
-        </div>
-      )}
-    </>
+    <Fragment>
+      <TableComponent2
+        tableHeaders={['name', 'systemCode', 'systemType', 'owner', 'importance']}
+        loadingData={!!systems}
+        noData={systems?.totalCount === 0}
+      >
+        {systems?.data.map((item, index) => (
+          <Row key={item.uid} item={item} index={index} />
+        ))}
+      </TableComponent2>
+      {!systems && <EmptyResults />}
+      {systems && getPaginationComponent()}
+    </Fragment>
   )
 }
 
@@ -35,7 +72,6 @@ export const Results = (props: { query: string }) => {
 
   return (
     <Card>
-      <Heading text="Search Results" />
       <Suspense fallback={<ProgressBarComponent />}>
         <nav aria-label="Search Results">
           <List query={query} />

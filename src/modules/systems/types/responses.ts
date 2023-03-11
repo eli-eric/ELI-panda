@@ -29,6 +29,10 @@ export type SubsystemsResponse = {
   uid: string
 }[]
 
+export type SystemsResponse = {
+  data: SystemDetailResponse[]
+  totalCount: number
+}
 export type SystemsForRelResponse = {
   data: SystemForRel[]
   totalCount: number

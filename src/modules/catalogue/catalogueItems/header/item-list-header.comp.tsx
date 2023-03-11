@@ -2,7 +2,7 @@ import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 import { CatalogueItemDetail } from 'src/pages/api/mock-server/catalogue/catalogue-mock-data'
 
-import ItemListColumnTitleComponent from './item-list-column-title.comp'
+import ItemListColumnTitleComponent from '../../../../components/table2/item-list-column-title.comp'
 
 const messages = message.cataloguePage.itemList.header
 interface Props {

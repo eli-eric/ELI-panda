@@ -1,7 +1,7 @@
 import React from 'react'
 
 const EmptyResults = () => (
-  <div className="text-center py-40">
+  <div className="text-center">
     <svg
       className="mx-auto h-12 w-12 text-gray-400"
       stroke="currentColor"
