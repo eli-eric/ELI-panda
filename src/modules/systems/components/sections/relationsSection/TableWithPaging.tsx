@@ -8,10 +8,9 @@ import TableComponent from '@/components/table/Table.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
 import { message } from '@/i18n/src/messages'
+import { useSystemMapRows } from '@/modules/systems/hooks/relations/useMapRows'
 import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
-
-import { useSystemMapRows } from '../../hooks/relations/useMapRows'
-import { SystemsForRelResponse } from '../../types/responses'
+import { SystemsForRelResponse } from '@/modules/systems/types/responses'
 
 const messages = message.systemsPage.relations.addRelationModal
 

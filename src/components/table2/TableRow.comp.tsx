@@ -1,9 +1,5 @@
 import { classNames } from '@/helpers'
 
-export const TableRowItem = ({ text }: { text?: string }) => (
-  <td className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">{text || 'N/A'}</td>
-)
-
 interface Props {
   index: number
   children: React.ReactNode

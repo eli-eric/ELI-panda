@@ -13,8 +13,8 @@ import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
 import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
+import { RelationFormType } from '@/modules/systems/types/form'
 
-import { RelationFormType } from '../../types/form'
 import SelectRelation from './SelectRelation'
 import TableWithPaging from './TableWithPaging'
 const { buttons } = message.common
