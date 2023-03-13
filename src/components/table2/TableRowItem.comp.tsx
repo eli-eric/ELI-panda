@@ -32,7 +32,7 @@ export const TableRowItem = ({
         <div className="flex items-center">
           <div className="flex-shrink-0">
             <TooltipComponent text={text}>
-              <InformationCircleIcon className="h-8 w-8" />
+              <InformationCircleIcon className="h-6 w-6" />
             </TooltipComponent>
           </div>
         </div>

@@ -63,7 +63,7 @@ const Edit = ({ data, uid, setOpen }: Props) => {
   const { systemSubsystems } = useEndpoint({
     uid: router.query.uid as string
   })
-  const { submit, loading, error, response } = useSubmit({
+  const { submit, loading, error } = useSubmit({
     endpoint: system,
     method: uid ? 'put' : 'post',
     mutateList: [system, systemSubsystems],
@@ -71,10 +71,6 @@ const Edit = ({ data, uid, setOpen }: Props) => {
       setOpen(false)
     }
   })
-
-  useEffect(() => {
-    if (response) if (!error) setOpen(false)
-  }, [response, setOpen, error])
 
   const buttons: ModalButtons = {
     goNext: {

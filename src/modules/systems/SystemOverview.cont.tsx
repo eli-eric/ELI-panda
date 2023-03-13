@@ -64,13 +64,11 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
       </div>
       <Breadcrumbs parentPath={parentPath} />
 
-      <div className="w-full">
-        <ErrorBoundary fallback={<ErrorPage />}>
-          <Suspense fallback={<ProgressBarComponent />}>
-            <Results query={query} />
-          </Suspense>
-        </ErrorBoundary>
-      </div>
+      <ErrorBoundary fallback={<ErrorPage />}>
+        <Suspense fallback={<ProgressBarComponent />}>
+          <Results query={query} />
+        </Suspense>
+      </ErrorBoundary>
 
       <div className="grid grid-cols-4">
         <div className="col-span-1">

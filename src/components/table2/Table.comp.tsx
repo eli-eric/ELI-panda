@@ -10,7 +10,10 @@ interface TableProps {
 const TableComponent2 = ({ tableHeaders, noData, loadingData, children }: TableProps) => (
   <Fragment>
     {loadingData && children && (
-      <div data-testid="item-list" className="h-full overflow-auto border-t border-gray-300  ">
+      <div
+        data-testid="item-list"
+        className="h-full overflow-y-hidden border-t border-gray-300 pb-4 "
+      >
         <div className="-my-2  sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
             <div className=" shadow ring-1 ring-black ring-opacity-5 ">
