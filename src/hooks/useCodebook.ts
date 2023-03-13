@@ -1,6 +1,6 @@
-import { fetcher } from '@/helpers/fetcher'
 import useSWR from 'swr/immutable'
 
+import { fetcher } from '@/helpers/fetcher'
 import { CODEBOOK } from '@/types/constants/codebook'
 import { Option } from '@/types/form'
 

@@ -48,8 +48,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
     if (req.method === 'GET') {
       res.status(200).json(categoryMockObject)
     }
-    if (req.method === 'DELETE') res.status(200).json({ message: 'OK' })
-    if (req.method === 'PUT') res.status(200).json({ message: 'OK' })
+    if (req.method === 'DELETE') res.status(404).json({ message: 'OK' })
+    if (req.method === 'PUT') res.status(404).json({ message: 'OK' })
   } else {
     res.status(401).json({ message: 'Unauthorized' })
   }

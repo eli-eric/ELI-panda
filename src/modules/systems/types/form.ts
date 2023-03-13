@@ -23,6 +23,8 @@ export interface SystemItemFormType extends FieldValues {
   batchNumber: string
   obsolete: string
   estimatedLifeTimeMonths: string
+  desctription: string
+  conditionStatusUID: string
 }
 
 export interface RelationFormType extends FieldValues {

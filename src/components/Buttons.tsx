@@ -19,6 +19,7 @@ interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   primary?: boolean
   type?: 'button' | 'submit' | 'reset'
   buttonSize?: 'small' | 'large'
+  testid?: string
 }
 
 export const Button = ({
@@ -29,10 +30,12 @@ export const Button = ({
   children,
   className,
   buttonSize,
+  testid,
   ...restProps
 }: ButtonProps) => (
   <button
     {...restProps}
+    data-testid={testid}
     disabled={loading ? true : disabled}
     className={classNames(
       className,
@@ -40,9 +43,7 @@ export const Button = ({
       disabled ? 'bg-gray-100 text-gray-300' : '',
       loading ? 'bg-primary-700' : `bg-${!primary ? 'white' : 'primary-600'}`,
       buttonSize === 'small' ? 'px-2 py-1' : 'px-4 py-2',
-      !primary
-        ? !disabled && 'hover:bg-gray-100 text-gray-600'
-        : !disabled && 'hover:bg-primary-700 text-white',
+      !primary ? !disabled && 'hover:bg-gray-100 text-gray-600' : !disabled && 'hover:bg-primary-700 text-white',
       'relative text-sm font-medium shadow-sm z-10 inline-flex items-center border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2'
     )}
   >
