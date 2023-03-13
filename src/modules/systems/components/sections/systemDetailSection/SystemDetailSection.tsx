@@ -6,22 +6,9 @@ import ItemDetailComponent from '@/components/item-detail/ItemDetail.comp'
 import ItemProperty from '@/components/item-property/ItemProperty'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
-
-import { SystemDetailResponse } from '../../types/responses'
+import { SystemDetailResponse } from '@/modules/systems/types/responses'
 
 const messages = message.systemsPage.systemDetail.form
-
-// const DISPLAY = [
-//   'systemType',
-//   'systemCode',
-//   'systemAlias',
-//   'location',
-//   'owner',
-//   'importance',
-//   'zone',
-//   'subZoneCode',
-//   'criticalityClass'
-// ]
 
 const SystemDetailSection = ({ data }: { data: SystemDetailResponse }) => {
   const router = useRouter()

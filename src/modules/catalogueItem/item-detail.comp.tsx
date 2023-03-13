@@ -6,7 +6,7 @@ import useSWR from 'swr'
 
 import ItemPropertyTitle from '@/components/item-property/item-property-title.comp'
 import ItemPropertyValue from '@/components/item-property/item-property-value.comp'
-import { fetcher } from '@/features/fetcher'
+import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
 import { CatalogueItem } from '@/types/responses'

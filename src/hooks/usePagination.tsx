@@ -12,10 +12,12 @@ export type Pagination = {
 
 const usePagination = ({
   dependecies,
-  useQuery
+  useQuery,
+  pageSizeDefault
 }: {
   dependecies: React.DependencyList
   useQuery?: boolean
+  pageSizeDefault?: number
 }): {
   pagination: string
   getPaginationComponent: () => JSX.Element
@@ -25,7 +27,7 @@ const usePagination = ({
   pageSize: number
 } => {
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(10)
+  const [pageSize, setPageSize] = useState<number>(pageSizeDefault || 10)
   const [totalCount, setTotalCount] = useState<number>()
   const [pageNumbers, setPageNumbers] = useState<number | undefined>()
   const router = useRouter()

@@ -6,14 +6,14 @@ import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
 import ModalWarningComponent from '@/components/modal/warning/modal-warning.comp'
 import TableComponent from '@/components/table/Table.comp'
-import { mockFetcher } from '@/features/fetcher'
+import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
 import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
 import { ModalButtons } from '@/types/form'
 
-import { useRelationMapRows } from '../../hooks/relations/useMapRows'
-import { SystemRelationshipResponse } from '../../types/responses'
+import { useRelationMapRows } from '../../../hooks/relations/useMapRows'
+import { SystemRelationshipResponse } from '../../../types/responses'
 import AddRelationForm from './AddRelationForm'
 
 const messages = message.systemsPage.relations

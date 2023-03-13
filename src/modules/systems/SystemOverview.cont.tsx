@@ -10,11 +10,12 @@ import ProgressBarComponent from '@/components/progress-bar.comp'
 import useParam from '@/modules/systems/hooks/useParam'
 
 import Breadcrumbs from './components/Breadcrumbs'
-import CatalogueItemSection from './components/catalogueItemSection/CatalogueItemSection.cont'
-import RelationsSection from './components/relationsSection/RelationsSection'
-import { Prompt, Results } from './components/Search'
+import Results from './components/search/Results'
+import SearchBar from './components/search/SearchBar'
+import CatalogueItemSection from './components/sections/catalogueItemSection/CatalogueItemSection'
+import RelationsSection from './components/sections/relationsSection/RelationsSection'
+import SystemDetailSection from './components/sections/systemDetailSection/SystemDetailSection'
 import Subsystems from './components/Subsystems'
-import SystemDetailSection from './components/systemDetailSection/SystemDetailSection'
 import ViewControl from './components/ViewControl'
 import { useSystemEdit } from './hooks/useSystemEdit'
 import { SystemDetailResponse } from './types/responses'
@@ -55,7 +56,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
         <div className="w-full sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white border-b">
           <div className="flex flex-1 justify-between px-4">
             <div className="flex flex-1">
-              <Prompt query={query as string} setQuery={setQuery} />
+              <SearchBar query={query as string} setQuery={setQuery} />
             </div>
             <ViewControl setView={setView} view={view} />
           </div>
@@ -63,11 +64,11 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
       </div>
       <Breadcrumbs parentPath={parentPath} />
 
-      {query && (
-        <div className="w-full">
+      <ErrorBoundary fallback={<ErrorPage />}>
+        <Suspense fallback={<ProgressBarComponent />}>
           <Results query={query} />
-        </div>
-      )}
+        </Suspense>
+      </ErrorBoundary>
 
       <div className="grid grid-cols-4">
         <div className="col-span-1">

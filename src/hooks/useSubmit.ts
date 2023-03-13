@@ -24,16 +24,15 @@ const useSubmit = <T>({ endpoint, method, mutateList, onSuccess }: UseSubmitProp
       .then(res => {
         setResponse(res.data)
         if (onSuccess) onSuccess(res.data)
-      })
-      .catch(err => {
-        setError(err)
-        setloading(false)
-      })
-      .finally(() => {
         if (mutateList)
           mutateList.forEach(url => {
             mutate(url, undefined, { revalidate: true })
           })
+      })
+      .catch(err => {
+        setError(err)
+      })
+      .finally(() => {
         setloading(false)
       })
   }

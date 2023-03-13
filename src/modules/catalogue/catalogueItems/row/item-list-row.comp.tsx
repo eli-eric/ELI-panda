@@ -6,7 +6,7 @@ import noImage from 'public/no-image.png'
 import useSWR from 'swr'
 
 import TooltipComponent from '@/components/tooltip.comp'
-import { fetcher } from '@/features/fetcher'
+import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { Selectable } from '@/modules/systems/types'
 import { PATH } from '@/types/constants/paths'

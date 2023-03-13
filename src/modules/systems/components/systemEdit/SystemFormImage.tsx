@@ -5,7 +5,7 @@ import useSWR from 'swr'
 
 import FormImage from '@/components/form/FormImage'
 import ImagePlaceHolder from '@/components/form/ImagePlaceHolder'
-import { fetcher } from '@/features/fetcher'
+import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 
 import { SystemEditFormType } from '../../types/form'

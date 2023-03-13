@@ -52,7 +52,6 @@ export const useCategoryEdit = ({
     method: 'post',
     mutateList: [catalogueCategories],
     onSuccess: uid => {
-      console.log(uid)
       setOpenCopy(false)
       setCopyCategoporyUid(uid)
     }
@@ -88,17 +87,10 @@ export const useCategoryEdit = ({
 
   //open edit modal after copy
   useEffect(() => {
-    //console.log(openCopy, copyCategory.loading, copyCategory.error, copyCategoryUid)
-    if (!openCopy) {
-      if (!copyCategory.loading) {
-        if (!copyCategory.error) {
-          if (copyCategoryUid) {
-            setOpenCopyEdit(true)
-          }
-        }
-      }
+    if (copyCategoryUid) {
+      setOpenCopyEdit(true)
     }
-  }, [copyCategory.loading, copyCategory.error, copyCategoryUid, openCopy, setOpenCopyEdit])
+  }, [copyCategoryUid])
 
   const EditButtons = () => (
     <Fragment>

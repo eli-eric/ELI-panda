@@ -3,7 +3,7 @@ import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 
 import ModalComponent from '@/components/modal/modal.comp'
-import { classNames } from '@/features'
+import { classNames } from '@/helpers'
 import { PATH } from '@/types/constants/paths'
 import { ModalButtons } from '@/types/form'
 
@@ -37,6 +37,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
   const modalButtons: ModalButtons = {
     goNext: {
       text: 'Close',
+      testid: 'modal-button-close',
       onClick: () => {
         setModalOpen(false)
       }
@@ -118,12 +119,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
           </div>
         </div>
       )}
-      <ModalComponent
-        open={modalOpen}
-        setOpen={setModalOpen}
-        buttons={modalButtons}
-        testid="profile"
-      >
+      <ModalComponent open={modalOpen} setOpen={setModalOpen} buttons={modalButtons} testid="profile">
         <ProfileCardComponent />
       </ModalComponent>
     </Fragment>
