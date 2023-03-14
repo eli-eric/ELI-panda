@@ -179,6 +179,12 @@ export const messages = {
           estimatedLifeTimeMonths: {
             label: 'Estimated Life Time Months',
             placeholder: 'Estimated Life Time Months'
+          },
+          description: {
+            label: 'Description'
+          },
+          conditionStatusUID: {
+            label: 'Conditional Status'
           }
         }
       }

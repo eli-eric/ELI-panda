@@ -2,7 +2,7 @@ import { Fragment, Suspense, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
 import ErrorPage from '@/components/error/ErrorPage'
-import LoaderComponent from '@/components/loader.comp'
+import ProgressBarComponent from '@/components/progress-bar.comp'
 
 import CatalogueItemsTable from './CatalogueItemsTable'
 import SearchBar from './SearchBar'
@@ -18,14 +18,10 @@ const CatalogueSearchTable = ({ setItem, itemName }: Props) => {
   return (
     <Fragment>
       <SearchBar setSearchValue={setSearchValue} setItem={setItem} />
-      <div className="flex flex-col min-h-[535px] justify-between">
+      <div className="flex flex-col min-h-[324px] pb-3 justify-between">
         <ErrorBoundary fallback={<ErrorPage />}>
-          <Suspense fallback={<LoaderComponent />}>
-            <CatalogueItemsTable
-              setItem={setItem}
-              searchValue={searchValue}
-              itemName={itemName}
-            />
+          <Suspense fallback={<ProgressBarComponent />}>
+            <CatalogueItemsTable setItem={setItem} searchValue={searchValue} itemName={itemName} />
           </Suspense>
         </ErrorBoundary>
       </div>

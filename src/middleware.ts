@@ -4,6 +4,8 @@ import { getToken } from 'next-auth/jwt'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
+import { APP_BASE_URL } from './types/constants/common'
+
 // This code is a middleware function that checks if the user has the correct
 // roles to access a protected path. It imports two functions from 'next/server'
 // and 'NextRequest' and 'NextResponse', as well as the getToken function
@@ -43,7 +45,7 @@ export async function middleware(request: NextRequest) {
   if (matchesProtectedPath) {
     if (!user) {
       const url = new URL('/', request.url)
-      url.searchParams.set('callbackUrl', encodeURI(request.url))
+      url.searchParams.set('callbackUrl', encodeURI(APP_BASE_URL + pathname))
       return NextResponse.redirect(url)
     }
     const currentPath = Object.keys(PATH_ROLES_CONFIG).find(key => pathname.startsWith(key)) as PATH

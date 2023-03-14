@@ -1,7 +1,7 @@
 import React from 'react'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
-import { classNames } from '@/features'
+import { classNames } from '@/helpers'
 import { FieldProps } from '@/types/form'
 
 export type Option = {
@@ -21,17 +21,8 @@ interface Props<T extends FieldValues>
   name: string
 }
 
-export const Select = <T extends FieldValues>({
-  register,
-  options,
-  name,
-  ...rest
-}: Props<T>) => (
-  <select
-    {...register(name as Path<T>)}
-    {...rest}
-    defaultValue={options ? options[0].value : ''}
-  >
+export const Select = <T extends FieldValues>({ register, options, name, ...rest }: Props<T>) => (
+  <select {...register(name as Path<T>)} {...rest} defaultValue={options ? options[0].value : ''}>
     {options &&
       options.map((option, index) => (
         <option
@@ -64,9 +55,7 @@ export const SelectWithError = <T extends FieldValues>({
   <div
     className={`${className} block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
   >
-    {label && (
-      <label className="text-sm font-medium text-gray-700">{label}</label>
-    )}
+    {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
     <Select
       {...rest}
       options={options}

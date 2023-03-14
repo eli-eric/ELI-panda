@@ -17,8 +17,10 @@ const CatalogueItemsTable = ({
 
   setItem: Dispatch<SetStateAction<{ name?: string; uid?: string }>>
 }) => {
-  const { setTotalCount, getPaginationComponent, page, pageSize } =
-    usePagination({ dependecies: [searchValue] })
+  const { setTotalCount, getPaginationComponent, page, pageSize } = usePagination({
+    dependecies: [searchValue],
+    pageSizeDefault: 5
+  })
   const query = useMemo(
     () => ({
       search: searchValue,
@@ -40,8 +42,8 @@ const CatalogueItemsTable = ({
   }, [catalogueItems, setTotalCount])
 
   return (
-    <div className="flex flex-col min-h-[535px] justify-between">
-      <div className="h-full overflow-x-auto border-t border-gray-300">
+    <div className="flex border-b min-h-[312px] flex-col justify-between">
+      <div className="h-full overflow-y-hidden border-t border-gray-300">
         <fieldset>
           <CatalogueItemsComponent
             selectable={{ isSelectable: true, selectedItem: itemName, setItem }}

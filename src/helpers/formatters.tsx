@@ -2,7 +2,7 @@ import React from 'react'
 
 /* formmaters for i18n messages */
 export const messageFormatters = {
-  medium: (chunks: string) => <span className="font-medium">{chunks}</span>,
+  medium: (chunks: string) => <span className="font-medium">{chunks}</span>
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -17,8 +17,8 @@ export const createMessageValues = (values: any = {}): Record<string, any> => ({
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         React.isValidElement(value as any)
           ? value
-          : JSON.stringify(value),
+          : JSON.stringify(value)
     }),
-    {},
-  ),
+    {}
+  )
 })

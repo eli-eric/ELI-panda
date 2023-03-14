@@ -1,8 +1,4 @@
-import {
-  ChevronRightIcon,
-  PencilSquareIcon,
-  PlusIcon
-} from '@heroicons/react/24/outline'
+import { ChevronRightIcon, PencilSquareIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
 import { Fragment, useState } from 'react'
 
@@ -41,11 +37,7 @@ export const useSystemEdit = ({
             buttons={{ noButtons: true }}
             testid="catalogueEdit"
           >
-            <Edit
-              setOpen={setOpenEdit}
-              data={systemDetail}
-              uid={systemDetail?.uid}
-            />
+            <Edit setOpen={setOpenEdit} data={systemDetail} uid={systemDetail?.uid} />
           </ModalComponent>
         </Fragment>
       )}
@@ -58,10 +50,6 @@ export const useSystemEdit = ({
         <Fragment>
           <li className="flex">
             <div className="flex items-center">
-              <ChevronRightIcon
-                className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400"
-                aria-hidden="true"
-              />
               <Button
                 onClick={() => {
                   setOpenNew(true)

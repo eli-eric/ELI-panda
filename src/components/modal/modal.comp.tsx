@@ -13,21 +13,10 @@ interface Props {
   buttons?: ModalButtons
 }
 
-export default function ModalComponent({
-  open,
-  setOpen,
-  children,
-  testid,
-  buttons
-}: Props) {
+export default function ModalComponent({ open, setOpen, children, testid, buttons }: Props) {
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog
-        as="div"
-        className="relative z-10"
-        onClose={setOpen}
-        unmount={false}
-      >
+      <Dialog as="div" className="relative z-10" onClose={setOpen} unmount={false}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -40,10 +29,7 @@ export default function ModalComponent({
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </Transition.Child>
 
-        <div
-          data-testid={testid + '-modal'}
-          className="fixed inset-0 z-10 overflow-y-auto"
-        >
+        <div data-testid={testid + '-modal'} className="fixed inset-0 z-10 overflow-y-auto">
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <Transition.Child
               as={Fragment}

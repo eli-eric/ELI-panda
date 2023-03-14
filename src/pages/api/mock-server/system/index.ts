@@ -2,10 +2,7 @@
 import { faker } from '@faker-js/faker'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<any>
-) {
+export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
     if (req.method === 'GET') {
       const getFakeName = () => faker.company.catchPhrase()
@@ -22,9 +19,7 @@ export default function handler(
           uid,
           name,
           path: getFakePath(),
-          description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(
-            2
-          )}`,
+          description: `${faker.commerce.productDescription()} ${faker.lorem.paragraphs(2)}`,
           children: getFakePath(),
           importanceCode: faker.datatype.string(),
           zoneCode: faker.datatype.string(),
@@ -33,7 +28,7 @@ export default function handler(
           systemAlias: faker.datatype.string(),
           locationCode: faker.datatype.string(),
           ownerUID: faker.datatype.string(),
-          catalogueUID: faker.datatype.uuid(),
+          catalogueUID: faker.datatype.uuid()
         }
       }
       res.status(200).json(getFakeSystem())

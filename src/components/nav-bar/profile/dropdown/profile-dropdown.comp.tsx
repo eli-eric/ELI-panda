@@ -1,10 +1,10 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 
 import ModalComponent from '@/components/modal/modal.comp'
-import { classNames } from '@/features'
+import { classNames } from '@/helpers'
+import { PATH } from '@/types/constants/paths'
 import { ModalButtons } from '@/types/form'
 
 import ProfileCardComponent from '../card/profile-card.comp'
@@ -14,7 +14,6 @@ interface Props {
 }
 
 const ProfileDropdownComponent = ({ open }: Props) => {
-  const router = useRouter()
   const user = useSession().data?.user
   const fullName = user?.fullName
   const [inicials, setInicials] = useState('')
@@ -29,7 +28,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
   }, [fullName])
 
   const signOutHandler = () => {
-    router.push('/signout')
+    signOut({ callbackUrl: PATH.ROOT })
   }
 
   const showModalHandler = () => {
@@ -38,6 +37,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
   const modalButtons: ModalButtons = {
     goNext: {
       text: 'Close',
+      testid: 'modal-button-close',
       onClick: () => {
         setModalOpen(false)
       }
@@ -46,18 +46,13 @@ const ProfileDropdownComponent = ({ open }: Props) => {
   return (
     <Fragment>
       {open === false ? (
-        <div
-          data-testid="layout-profile"
-          className="hidden sm:ml-6 sm:flex sm:items-center z-20"
-        >
+        <div data-testid="layout-profile" className="hidden sm:ml-6 sm:flex sm:items-center z-20">
           <Menu as="div" className="relative ml-3">
             <div>
               <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
                 <span className="sr-only">Open user menu</span>
                 <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
-                  <span className="font-medium leading-none text-white">
-                    {inicials}
-                  </span>
+                  <span className="font-medium leading-none text-white">{inicials}</span>
                 </span>
               </Menu.Button>
             </div>
@@ -106,18 +101,12 @@ const ProfileDropdownComponent = ({ open }: Props) => {
           <div className="flex items-center px-4">
             <div className="flex-shrink-0">
               <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
-                <span className="font-medium leading-none text-white">
-                  {inicials}
-                </span>
+                <span className="font-medium leading-none text-white">{inicials}</span>
               </span>
             </div>
             <div className="ml-3">
-              <div className="text-base font-medium text-gray-800">
-                {fullName}
-              </div>
-              <div className="text-sm font-medium text-gray-500">
-                {user?.email}
-              </div>
+              <div className="text-base font-medium text-gray-800">{fullName}</div>
+              <div className="text-sm font-medium text-gray-500">{user?.email}</div>
             </div>
           </div>
           <div className="mt-3 space-y-1">
@@ -130,12 +119,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
           </div>
         </div>
       )}
-      <ModalComponent
-        open={modalOpen}
-        setOpen={setModalOpen}
-        buttons={modalButtons}
-        testid="profile"
-      >
+      <ModalComponent open={modalOpen} setOpen={setModalOpen} buttons={modalButtons} testid="profile">
         <ProfileCardComponent />
       </ModalComponent>
     </Fragment>

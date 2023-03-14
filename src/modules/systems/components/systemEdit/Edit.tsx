@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { object, string } from 'yup'
 
+import ErrorPage from '@/components/error/ErrorPage'
 import ModalButtonsComponent from '@/components/modal/modal.buttons'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
@@ -62,7 +63,7 @@ const Edit = ({ data, uid, setOpen }: Props) => {
   const { systemSubsystems } = useEndpoint({
     uid: router.query.uid as string
   })
-  const { submit, loading, error, response } = useSubmit({
+  const { submit, loading, error } = useSubmit({
     endpoint: system,
     method: uid ? 'put' : 'post',
     mutateList: [system, systemSubsystems],
@@ -70,10 +71,6 @@ const Edit = ({ data, uid, setOpen }: Props) => {
       setOpen(false)
     }
   })
-
-  useEffect(() => {
-    if (response) if (!error) setOpen(false)
-  }, [response, setOpen, error])
 
   const buttons: ModalButtons = {
     goNext: {
@@ -98,6 +95,7 @@ const Edit = ({ data, uid, setOpen }: Props) => {
     <form onSubmit={formMethods.handleSubmit(onSubmit)}>
       <FormProvider {...formMethods}>
         <EditForm data={data} uid={uid} />
+        {error && <ErrorPage />}
         <ModalButtonsComponent buttons={buttons} />
       </FormProvider>
     </form>

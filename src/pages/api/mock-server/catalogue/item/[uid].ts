@@ -11,32 +11,32 @@ const fakeItem = {
       value: '40',
       propertyName: 'Axial load capacity',
       propertyUnit: 'N',
-      propertyGroup: 'Actuator properties',
+      propertyGroup: 'Actuator properties'
     },
     {
       value: 'No',
       propertyName: 'Integrated encoder',
       propertyUnit: null,
-      propertyGroup: 'Actuator properties',
+      propertyGroup: 'Actuator properties'
     },
     {
       value: 'N/A',
       propertyName: 'Encoder resolution',
       propertyUnit: 'nm',
-      propertyGroup: 'Actuator properties',
+      propertyGroup: 'Actuator properties'
     },
     {
       value: '200',
       propertyName: 'Minimum incremental motion',
       propertyUnit: 'nm',
-      propertyGroup: 'Actuator properties',
+      propertyGroup: 'Actuator properties'
     },
     {
       value: 'Stepper motor',
       propertyName: 'Motor type',
       propertyUnit: null,
-      propertyGroup: 'Motion',
-    },
+      propertyGroup: 'Motion'
+    }
   ],
   description:
     'Vacuum-Compatible DC Motor Actuator, 25 mm Travel\n6 VDC Servo Actuator\nSub-micron Resolution\n2.3 mm/s Maximum Velocity\nDrop In Replacement for Most 12 mm Manual Actuators\nCompatible with Ø3/8" (Ø9.525 mm) Barrel-Fitting Stages and Mounts\nLimit Switches for Zero Datum and Actuator Protection\nRated Down To 10-6 Torr.',
@@ -44,13 +44,10 @@ const fakeItem = {
   categoryPath: 'motion/actuators/motorized-actuators',
   manufacturer: 'Thorlabs',
   manufacturerUrl: 'https://www.thorlabs.com/thorproduct.cfm?partnumber=Z825BV',
-  manufacturerNumber: 'Z825BV',
+  manufacturerNumber: 'Z825BV'
 }
 
-export default function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<any>,
-) {
+export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   const { uid } = req.query
   if (uid) {
     let item = CatalogueItems.filter(f => f.uid === uid)

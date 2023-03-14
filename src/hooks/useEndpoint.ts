@@ -6,7 +6,7 @@ const getEndpoints = (uid?: string, path?: string, query?: string) => {
     catalogueItem: `/catalogue/item/${uid}`,
     catalogueItemImage: `/catalogue/item/${uid}/image`,
     catalogueCategoryEdit: `/catalogue/category${uid ? '/' + uid : ''}`,
-    system: `/system/${uid}`,
+    system: `/system${uid ? '/' + uid : ''}`,
     systemImage: `/system/${uid}/image`,
     catalogueCategoryCopy: `/catalogue/category/${uid}/copy`,
     systemDetail: `/system/${uid}`,
@@ -18,7 +18,7 @@ const getEndpoints = (uid?: string, path?: string, query?: string) => {
     codebook: `/codebook${path}${query}`,
     codebookAutocomplete: `/codebook/autocomplete${path}${query}`,
     systemSubsystems: `/system/subsystems${uid ? '/' + uid : ''}`,
-    systemsList: `systems${query}`
+    systemsList: `/systems${query}`
   }
   return endpoints
 }
@@ -28,7 +28,6 @@ interface useEndpointsProps {
   path?: string
 }
 export const useEndpoint = ({ uid, query, path }: useEndpointsProps) => {
-  const queryString =
-    '?' + new URLSearchParams(query as Record<string, string>).toString()
+  const queryString = '?' + new URLSearchParams(query as Record<string, string>).toString()
   return getEndpoints(uid, path, queryString)
 }

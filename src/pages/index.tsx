@@ -34,17 +34,20 @@ const LoginPage: NextPage = (): JSX.Element => {
     setErrorMessage(undefined)
     signIn('credentials', {
       redirect: false,
+      callbackUrl: callbackUrl,
       ...data
     })
-      .then(e => {
-        if (e?.error) {
+      .then(response => {
+        if (response?.error) {
           setErrorMessage('Wrong username or password!')
           setLoading(false)
+        }
+        if (response?.ok) {
+          router.push(callbackUrl)
         }
       })
       .finally(() => {
         setLoading(false)
-        router.push(callbackUrl, undefined, { shallow: false })
       })
   }
 
@@ -63,7 +66,7 @@ const LoginPage: NextPage = (): JSX.Element => {
       />
       {errorMessage && (
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <AuthAlertComponent message={errorMessage} />
+          <AuthAlertComponent message={errorMessage as string} />
         </div>
       )}
     </Fragment>

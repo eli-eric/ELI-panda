@@ -5,18 +5,16 @@ import useSWR from 'swr'
 
 import FormImage from '@/components/form/FormImage'
 import ImagePlaceHolder from '@/components/form/ImagePlaceHolder'
-import { fetcher } from '@/features/fetcher'
+import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 
 import { SystemEditFormType } from '../../types/form'
 
 const SystemFormImage = ({ uid }: { uid?: string }) => {
   const { systemImage: systemDetailImage } = useEndpoint({ uid: uid as string })
-  const { data: systemImage } = useSWR<string>(
-    uid ? systemDetailImage : undefined,
-    fetcher,
-    { suspense: false }
-  )
+  const { data: systemImage } = useSWR<string>(uid ? systemDetailImage : undefined, fetcher, {
+    suspense: false
+  })
   const { setValue, watch } = useFormContext<SystemEditFormType>()
 
   const image = watch('image')
@@ -38,10 +36,7 @@ const SystemFormImage = ({ uid }: { uid?: string }) => {
   return (
     <div className="flex h-full ">
       {image === 'deleted' || (!systemImage && !image) ? (
-        <ImagePlaceHolder
-          getInputProps={getInputProps}
-          getRootProps={getRootProps}
-        />
+        <ImagePlaceHolder getInputProps={getInputProps} getRootProps={getRootProps} />
       ) : (
         <FormImage
           image={image ? image : systemImage}

@@ -9,6 +9,7 @@ export type Button = {
   loading?: boolean
   type?: 'button' | 'submit' | 'reset' | undefined
   onClick?: () => void
+  testid?: string
 }
 
 export interface FieldProps {
@@ -18,12 +19,7 @@ export interface FieldProps {
 
   placeholder?: string
   disabled?: boolean
-  rounded?:
-    | 'rounded-l-md'
-    | 'rounded-t-md'
-    | 'rounded-r-md'
-    | 'rounded-b-md'
-    | 'rounded-md'
+  rounded?: 'rounded-l-md' | 'rounded-t-md' | 'rounded-r-md' | 'rounded-b-md' | 'rounded-md'
   label?: string
 
   type?: string

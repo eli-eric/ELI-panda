@@ -1,5 +1,5 @@
-import { CatalogueItemsResponse } from '@/types/responses'
 import { Selectable } from '@/modules/systems/types'
+import { CatalogueItemsResponse } from '@/types/responses'
 
 import ItemListHeaderComponent from './header/item-list-header.comp'
 import ItemListRow from './row/item-list-row.comp'
@@ -10,11 +10,7 @@ interface Props {
   selectable?: Selectable
 }
 
-const CatalogueItemsComponent = ({
-  categoryListLength,
-  catalogueItems,
-  selectable,
-}: Props) => (
+const CatalogueItemsComponent = ({ categoryListLength, catalogueItems, selectable }: Props) => (
   <div className="-my-2  sm:-mx-6 lg:-mx-8">
     <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
       <div className=" shadow ring-1 ring-black ring-opacity-5 ">

@@ -24,22 +24,18 @@ export default function PaginationComponent({
   pageSize,
   pageNumbers,
   previousPageHandler,
-  nextPageHandler,
+  nextPageHandler
 }: Props) {
   const noResults = itemsTotalCount === 0
   const nextIsDisabled = noResults || pageNumbers === page || !pageNumbers
   const previousIsDisabled = noResults || page === 1
   const from = noResults ? 0 : 1 + (page - 1) * pageSize
-  const to = noResults
-    ? 0
-    : pageNumbers === page
-    ? itemsTotalCount
-    : page * pageSize
+  const to = noResults ? 0 : pageNumbers === page ? itemsTotalCount : page * pageSize
   return (
     <nav
       data-testid="catalogue-paging"
       id="catalogue-paging"
-      className="flex items-center justify-between border-t border-gray-200 bg-white px-5 py-3 sm:px-6"
+      className="flex items-center justify-between border-t border-gray-200 bg-white px-3 py-2 sm:px-6"
       aria-label="Pagination"
     >
       <div className="hidden sm:block pr-2">
@@ -49,13 +45,13 @@ export default function PaginationComponent({
             values={createMessageValues({
               from: from,
               to: to,
-              resultsCount: itemsTotalCount,
+              resultsCount: itemsTotalCount
             })}
           />
         </p>
       </div>
       <div className="flex flex-1 justify-between sm:justify-end">
-        <Button disabled={previousIsDisabled} onClick={previousPageHandler}>
+        <Button disabled={previousIsDisabled} onClick={previousPageHandler} buttonSize="small">
           <ChevronLeftIcon className="h-6 w-6 flex-shrink-0" />
         </Button>
 
@@ -63,6 +59,7 @@ export default function PaginationComponent({
           disabled={nextIsDisabled}
           onClick={nextPageHandler}
           className="ml-3"
+          buttonSize="small"
         >
           <ChevronRightIcon className="h-6 w-6 flex-shrink-0" />
         </Button>

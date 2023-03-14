@@ -5,7 +5,7 @@ export type SystemCodebok = { uid: string; name: string }
 export type SystemDetailResponse = {
   uid: string
   name: string
-  parentPath: ParentPath
+  parentPath?: ParentPath
   description?: string
   location?: SystemCodebok
   zone?: SystemCodebok
@@ -29,6 +29,10 @@ export type SubsystemsResponse = {
   uid: string
 }[]
 
+export type SystemsResponse = {
+  data: SystemDetailResponse[]
+  totalCount: number
+}
 export type SystemsForRelResponse = {
   data: SystemForRel[]
   totalCount: number

@@ -2,7 +2,7 @@ import { Disclosure } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react'
 
-import { classNames } from '@/features'
+import { classNames } from '@/helpers'
 import { CatalogueItem } from '@/types/responses'
 
 interface Props {
@@ -52,10 +52,7 @@ const DisclosureComponent = ({ groups, item }: Props) => (
                             return
                           }
                           return (
-                            <div
-                              key={detail.propertyName}
-                              className="sm:col-span-1"
-                            >
+                            <div key={detail.propertyName} className="sm:col-span-1">
                               <dt className="text-sm font-medium text-gray-400">
                                 {detail.propertyName}
                               </dt>
@@ -63,9 +60,7 @@ const DisclosureComponent = ({ groups, item }: Props) => (
                                 {(detail.value === '' || detail.value === null
                                   ? 'N/A'
                                   : detail.value) +
-                                  (detail.propertyUnit !== null
-                                    ? ` ${detail.propertyUnit}`
-                                    : '')}
+                                  (detail.propertyUnit !== null ? ` ${detail.propertyUnit}` : '')}
                               </dd>
                             </div>
                           )

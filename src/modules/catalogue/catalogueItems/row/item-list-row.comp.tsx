@@ -6,7 +6,7 @@ import noImage from 'public/no-image.png'
 import useSWR from 'swr'
 
 import TooltipComponent from '@/components/tooltip.comp'
-import { fetcher } from '@/features/fetcher'
+import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { Selectable } from '@/modules/systems/types'
 import { PATH } from '@/types/constants/paths'
@@ -19,12 +19,7 @@ interface Props {
   selectable?: Selectable
 }
 
-const ItemListRow = ({
-  item,
-  index,
-  categoryListLength,
-  selectable
-}: Props) => {
+const ItemListRow = ({ item, index, categoryListLength, selectable }: Props) => {
   const router = useRouter()
   const { catalogueItemImage } = useEndpoint({ uid: item.uid })
   const { data: image } = useSWR(catalogueItemImage, fetcher, {
@@ -51,9 +46,7 @@ const ItemListRow = ({
     <tr
       className={
         (index % 2 === 0 ? undefined : 'bg-gray-100') +
-        ` hover:bg-primary-200 ${
-          selectable?.selectedItem === item.uid ? 'bg-primary-200' : ''
-        }`
+        ` hover:bg-primary-200 ${selectable?.selectedItem === item.uid ? 'bg-primary-200' : ''}`
       }
     >
       {selectable && (
@@ -110,26 +103,16 @@ const ItemListRow = ({
             passHref
             legacyBehavior={selectable?.isSelectable}
           >
-            {selectable ? (
-              <a target="_blank">{item.categoryName} </a>
-            ) : (
-              item.categoryName
-            )}
+            {selectable ? <a target="_blank">{item.categoryName} </a> : item.categoryName}
           </Link>
         </td>
       )}
-      <td className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">
-        {item.manufacturer}
-      </td>
+      <td className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">{item.manufacturer}</td>
       <td className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">
         {item.manufacturerNumber}
       </td>
       <td className="whitespace-nowrap text-sm  sm:pl-6 text-blue-500">
-        <a
-          target="_blank"
-          href={item.manufacturerUrl}
-          rel="noopener noreferrer"
-        >
+        <a target="_blank" href={item.manufacturerUrl} rel="noopener noreferrer">
           {item.manufacturerUrl}
         </a>
       </td>

@@ -6,25 +6,19 @@ import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
 import ModalWarningComponent from '@/components/modal/warning/modal-warning.comp'
 import TableComponent from '@/components/table/Table.comp'
-import { mockFetcher } from '@/features/fetcher'
+import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
 import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
 import { ModalButtons } from '@/types/form'
 
-import { useRelationMapRows } from '../../hooks/relations/useMapRows'
-import { SystemRelationshipResponse } from '../../types/responses'
+import { useRelationMapRows } from '../../../hooks/relations/useMapRows'
+import { SystemRelationshipResponse } from '../../../types/responses'
 import AddRelationForm from './AddRelationForm'
 
 const messages = message.systemsPage.relations
 
-const RelationsSection = ({
-  uid,
-  systemName
-}: {
-  uid: string
-  systemName: string
-}) => {
+const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string }) => {
   const endpoints = useEndpoint({ uid })
   const { data: relations } = useSWR<SystemRelationshipResponse[]>(
     endpoints.systemRelationships,
@@ -78,9 +72,7 @@ const RelationsSection = ({
         >
           <FormattedMessage id={messages.buttons.addSpare} />
         </Button>
-        {relations && (
-          <TableComponent collumsTitle={collumsTitle} data={data} />
-        )}
+        {relations && <TableComponent collumsTitle={collumsTitle} data={data} />}
       </div>
       <ModalComponent
         open={openAddRelation}
@@ -93,11 +85,7 @@ const RelationsSection = ({
           systemName={systemName}
         />
       </ModalComponent>
-      <ModalComponent
-        open={openDelete}
-        setOpen={setOpenDelete}
-        buttons={deleteModalButtons}
-      >
+      <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deleteModalButtons}>
         <ModalWarningComponent
           title={intl.formatMessage({ id: messages.deleteModal.title })}
           message={intl.formatMessage({ id: messages.deleteModal.text })}
