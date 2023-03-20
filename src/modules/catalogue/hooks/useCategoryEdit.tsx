@@ -31,6 +31,7 @@ export const useCategoryEdit = ({
   const [openCopyEdit, setOpenCopyEdit] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
   const [copyCategoryUid, setCopyCategoporyUid] = useState<string | null>()
+  const parentPath = catalogueParentPath ? '/' + catalogueParentPath : ''
 
   const { data: session } = useSession()
   const { catalogueCategoryEdit, catalogueCategories, catalogueCategoryCopy } = useEndpoint({
@@ -92,7 +93,7 @@ export const useCategoryEdit = ({
     }
   }, [copyCategoryUid])
 
-  const EditButtons = () => (
+  const getEditButtons = () => (
     <Fragment>
       {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
         <div className="flex absolute bottom-0 right-0">
@@ -134,11 +135,7 @@ export const useCategoryEdit = ({
         buttons={{ noButtons: true }}
         testid="catalogueEdit"
       >
-        <CategoryEditModal
-          setOpen={setOpenEdit}
-          uid={editUid}
-          parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
-        />
+        <CategoryEditModal setOpen={setOpenEdit} uid={editUid} parentPath={parentPath} />
       </ModalComponent>
       <ModalComponent
         open={openDelete}
@@ -174,7 +171,7 @@ export const useCategoryEdit = ({
         >
           <CategoryEditModal
             setOpen={setOpenCopyEdit}
-            parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
+            parentPath={parentPath}
             uid={copyCategoryUid}
           />
         </ModalComponent>
@@ -207,13 +204,10 @@ export const useCategoryEdit = ({
         buttons={{ noButtons: true }}
         testid="catalogueEdit"
       >
-        <CategoryEditModal
-          setOpen={setOpenEdit}
-          parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
-        />
+        <CategoryEditModal setOpen={setOpenEdit} parentPath={parentPath} />
       </ModalComponent>
     </Fragment>
   )
 
-  return { EditButtons, getAddButton }
+  return { getEditButtons, getAddButton }
 }

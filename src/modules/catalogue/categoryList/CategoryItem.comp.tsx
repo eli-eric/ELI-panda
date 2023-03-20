@@ -16,12 +16,12 @@ interface Props {
   setCatalogueParentUid: Dispatch<SetStateAction<string | undefined>>
 }
 
-const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
+const CategoryItemComponent = ({ category }: Props) => {
   const router = useRouter()
   const { catalogueCategoryImage } = useEndpoint({ uid: category.uid })
   const { data: image } = useSWR(catalogueCategoryImage, fetcher, { suspense: false })
 
-  const { EditButtons } = useCategoryEdit({
+  const { getEditButtons } = useCategoryEdit({
     editUid: category.uid,
     catalogueParentPath: category.parentPath
   })
@@ -53,7 +53,7 @@ const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
           </div>
         </div>
       </Link>
-      <EditButtons />
+      {getEditButtons()}
     </div>
   )
 }

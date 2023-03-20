@@ -40,8 +40,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
   const uid = router.query.uid as string
   const [query, setQuery] = useParam('q')
 
-  const { EditButton } = useSystemEdit({ systemDetail: systemDetail })
-  const { AddButton } = useSystemEdit({})
+  const { getEditButton, getAddButton } = useSystemEdit({ systemDetail: systemDetail })
 
   const parentPath = useMemo(() => {
     if (!systemDetail) return undefined
@@ -73,9 +72,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
       <div className="grid grid-cols-4">
         <div className="col-span-1">
           <Card>
-            <Heading text={uid ? 'Subsystems' : 'Root systems'}>
-              <AddButton />
-            </Heading>
+            <Heading text={uid ? 'Subsystems' : 'Root systems'}>{getAddButton()}</Heading>
             <ErrorBoundary fallback={<ErrorPage />}>
               <Suspense fallback={<ProgressBarComponent />}>
                 <Subsystems uid={uid} />
@@ -88,9 +85,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
           <div className="col-span-3">
             {view.system && (
               <Card>
-                <Heading text={'System detail - ' + systemDetail.name}>
-                  <EditButton />
-                </Heading>
+                <Heading text={'System detail - ' + systemDetail.name}>{getEditButton()}</Heading>
                 <SystemDetailSection data={systemDetail} />
               </Card>
             )}

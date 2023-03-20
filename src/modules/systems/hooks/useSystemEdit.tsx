@@ -1,4 +1,4 @@
-import { ChevronRightIcon, PencilSquareIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { PencilSquareIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
 import { Fragment, useState } from 'react'
 
@@ -17,7 +17,7 @@ export const useSystemEdit = ({
   const [openEdit, setOpenEdit] = useState(false)
   const [openNew, setOpenNew] = useState(false)
   const { data: session } = useSession()
-  const EditButton = () => (
+  const getEditButton = () => (
     <Fragment>
       {session?.user.roles.includes(ROLE.SYSTEM_EDIT) && (
         <Fragment>
@@ -44,7 +44,7 @@ export const useSystemEdit = ({
     </Fragment>
   )
 
-  const AddButton = () => (
+  const getAddButton = () => (
     <Fragment>
       {session?.user.roles.includes(ROLE.SYSTEM_EDIT) && (
         <Fragment>
@@ -72,5 +72,5 @@ export const useSystemEdit = ({
     </Fragment>
   )
 
-  return { EditButton, AddButton }
+  return { getEditButton, getAddButton }
 }

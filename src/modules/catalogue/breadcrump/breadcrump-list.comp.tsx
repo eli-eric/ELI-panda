@@ -19,6 +19,7 @@ const BreadcrumbListComponent = ({ navigationList, handleClick, testId }: Props)
   const onCLickHandler = () => {
     handleClick(PATH.CATALOGUE + (search ? `?search=${search}` : ''))
   }
+
   return (
     <div data-testid={testId} id="breadcrump" className="bg-white pt-3 pb-3 ">
       <nav className="flex" aria-label="Breadcrumb">
