@@ -31,6 +31,7 @@ export const useCategoryEdit = ({
   const [openCopyEdit, setOpenCopyEdit] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
   const [copyCategoryUid, setCopyCategoporyUid] = useState<string | null>()
+  const parentPath = catalogueParentPath ? '/' + catalogueParentPath : ''
 
   const { data: session } = useSession()
   const { catalogueCategoryEdit, catalogueCategories, catalogueCategoryCopy } = useEndpoint({
@@ -92,7 +93,7 @@ export const useCategoryEdit = ({
     }
   }, [copyCategoryUid])
 
-  const EditButtons = () => (
+  const getEditButtons = () => (
     <Fragment>
       {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
         <div className="flex absolute bottom-0 right-0">
@@ -129,11 +130,7 @@ export const useCategoryEdit = ({
         </div>
       )}
       <ModalComponent open={openEdit} setOpen={setOpenEdit} buttons={{ noButtons: true }} testid="catalogueEdit">
-        <CategoryEditModal
-          setOpen={setOpenEdit}
-          uid={editUid}
-          parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
-        />
+        <CategoryEditModal setOpen={setOpenEdit} uid={editUid} parentPath={parentPath} />
       </ModalComponent>
       <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deletModalButtons} testid="catalogueEdit">
         <ModalWarningComponent title="Warning" message="Are you sure you want to remove this Category?" />
@@ -151,11 +148,7 @@ export const useCategoryEdit = ({
           buttons={{ noButtons: true }}
           testid="catalogueCopy"
         >
-          <CategoryEditModal
-            setOpen={setOpenCopyEdit}
-            parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
-            uid={copyCategoryUid}
-          />
+          <CategoryEditModal setOpen={setOpenCopyEdit} parentPath={parentPath} uid={copyCategoryUid} />
         </ModalComponent>
       )}
     </Fragment>
@@ -178,10 +171,10 @@ export const useCategoryEdit = ({
         </li>
       )}
       <ModalComponent open={openEdit} setOpen={setOpenEdit} buttons={{ noButtons: true }} testid="catalogueEdit">
-        <CategoryEditModal setOpen={setOpenEdit} parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''} />
+        <CategoryEditModal setOpen={setOpenEdit} parentPath={parentPath} />
       </ModalComponent>
     </Fragment>
   )
 
-  return { EditButtons, getAddButton }
+  return { getEditButtons, getAddButton }
 }
