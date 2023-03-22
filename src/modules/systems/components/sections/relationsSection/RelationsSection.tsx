@@ -5,32 +5,26 @@ import useSWR from 'swr'
 import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
 import ModalWarningComponent from '@/components/modal/warning/modal-warning.comp'
-import TableComponent from '@/components/table/Table.comp'
 import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
 import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
 import { ModalButtons } from '@/types/form'
 
-import { useRelationMapRows } from '../../../hooks/relations/useMapRows'
 import { SystemRelationshipResponse } from '../../../types/responses'
-import AddRelationForm from './AddRelationForm'
+import AddRelationForm from './components/modal/RelationModal'
+import RelationsTable from './components/RelationsTable'
 
 const messages = message.systemsPage.relations
 
 const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string }) => {
   const endpoints = useEndpoint({ uid })
-  const { data: relations } = useSWR<SystemRelationshipResponse[]>(
-    endpoints.systemRelationships,
-    mockFetcher
-  )
+  const { data: relations } = useSWR<SystemRelationshipResponse[]>(endpoints.systemRelationships, mockFetcher)
   const [relationUid, setRelationUid] = useState<string | undefined>()
   const intl = useIntl()
   const [openAddRelation, setOpenAddRelation] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
-  const [relationTypeCode, setRelationTypeCode] = useState<RELATION_TYPE_CODE>(
-    RELATION_TYPE_CODE.IS_SPARE_FOR
-  )
+  const [relationTypeCode, setRelationTypeCode] = useState<RELATION_TYPE_CODE>(RELATION_TYPE_CODE.IS_SPARE_FOR)
 
   const deleteModalButtons: ModalButtons = {
     goNext: {
@@ -49,15 +43,10 @@ const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string
     }
   }
 
-  const collumsTitle = Object.keys(messages.tableHeader).map(key =>
-    intl.formatMessage({ id: messages.tableHeader[key] })
-  )
-
   const deleteHandler = uid => {
     setRelationUid(uid)
     setOpenDelete(true)
   }
-  const data = useRelationMapRows({ relations, onDelete: deleteHandler })
 
   return (
     <Fragment>
@@ -72,18 +61,10 @@ const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string
         >
           <FormattedMessage id={messages.buttons.addSpare} />
         </Button>
-        {relations && <TableComponent collumsTitle={collumsTitle} data={data} />}
+        {relations && <RelationsTable relations={relations} systemName={systemName} onDelete={deleteHandler} />}
       </div>
-      <ModalComponent
-        open={openAddRelation}
-        setOpen={setOpenAddRelation}
-        buttons={{ noButtons: true }}
-      >
-        <AddRelationForm
-          setopen={setOpenAddRelation}
-          relationTypeCode={relationTypeCode}
-          systemName={systemName}
-        />
+      <ModalComponent open={openAddRelation} setOpen={setOpenAddRelation} buttons={{ noButtons: true }}>
+        <AddRelationForm setopen={setOpenAddRelation} relationTypeCode={relationTypeCode} systemName={systemName} />
       </ModalComponent>
       <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deleteModalButtons}>
         <ModalWarningComponent

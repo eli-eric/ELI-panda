@@ -20,10 +20,12 @@ const ImageWithText = ({ text, image }: { text: string; image?: string }) => (
 export const TableRowItem = ({
   text,
   image,
+  children,
   isInfoTooltip
 }: {
   text?: string
   image?: string
+  children?: React.ReactNode
   isInfoTooltip?: boolean
 }) => (
   <Fragment>
@@ -39,7 +41,7 @@ export const TableRowItem = ({
       </td>
     ) : (
       <td className="whitespace-nowrap text-sm  sm:pl-6 sm:pr-6 text-gray-500">
-        {image ? <ImageWithText text={text || 'N/A'} image={image} /> : text || 'N/A'}
+        {!children ? image ? <ImageWithText text={text || 'N/A'} image={image} /> : text || 'N/A' : children}
       </td>
     )}
   </Fragment>

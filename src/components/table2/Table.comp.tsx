@@ -1,18 +1,21 @@
 import { Fragment } from 'react'
 
+import { classNames } from '@/helpers'
+
 import ItemListColumnTitleComponent from './item-list-column-title.comp'
 interface TableProps {
   loadingData?: boolean
   noData?: boolean
   tableHeaders: string[]
   children?: React.ReactNode
+  overflow?: boolean
 }
-const TableComponent2 = ({ tableHeaders, noData, loadingData, children }: TableProps) => (
+const TableComponent2 = ({ tableHeaders, noData, loadingData, children, overflow = true }: TableProps) => (
   <Fragment>
     {loadingData && children && (
       <div
         data-testid="item-list"
-        className="h-full overflow-y-hidden border-t border-gray-300 pb-4 "
+        className={classNames('h-full border-t border-gray-300 pb-4', overflow ? 'overflow-y-hidden' : '')}
       >
         <div className="-my-2  sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
