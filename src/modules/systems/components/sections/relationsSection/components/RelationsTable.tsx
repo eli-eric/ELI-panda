@@ -2,9 +2,9 @@ import { TrashIcon } from '@heroicons/react/20/solid'
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
 
 import { Button } from '@/components/Buttons'
-import TableComponent2 from '@/components/table2/Table.comp'
-import TableRowComponent from '@/components/table2/TableRow.comp'
-import { TableRowItem } from '@/components/table2/TableRowItem.comp'
+import TableComponent from '@/components/table/Table.comp'
+import TableRowComponent from '@/components/table/TableRow.comp'
+import { TableRowItem } from '@/components/table/TableRowItem.comp'
 import { SystemRelationshipResponse } from '@/modules/systems/types/responses'
 
 interface RelationProps {
@@ -40,15 +40,11 @@ interface Props {
 }
 
 const RelationsTable = ({ relations, systemName, onDelete }: Props) => (
-  <TableComponent2
-    tableHeaders={['System name', 'Direction', 'Foreign systen name', 'Action']}
-    loadingData={!!relations}
-    overflow={false}
-  >
+  <TableComponent tableHeaders={['System name', 'Direction', 'Foreign systen name', 'Action']} overflow={false}>
     {relations?.map((item, index) => (
       <Relation key={item.relationUid + index} item={item} index={index} systemName={systemName} onDelete={onDelete} />
     ))}
-  </TableComponent2>
+  </TableComponent>
 )
 
 export default RelationsTable

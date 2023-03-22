@@ -128,40 +128,19 @@ export const useCategoryEdit = ({
           </Button>
         </div>
       )}
-      <ModalComponent
-        open={openEdit}
-        setOpen={setOpenEdit}
-        buttons={{ noButtons: true }}
-        testid="catalogueEdit"
-      >
+      <ModalComponent open={openEdit} setOpen={setOpenEdit} buttons={{ noButtons: true }} testid="catalogueEdit">
         <CategoryEditModal
           setOpen={setOpenEdit}
           uid={editUid}
           parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
         />
       </ModalComponent>
-      <ModalComponent
-        open={openDelete}
-        setOpen={setOpenDelete}
-        buttons={deletModalButtons}
-        testid="catalogueEdit"
-      >
-        <ModalWarningComponent
-          title="Warning"
-          message="Are you sure you want to remove this Category?"
-        />
+      <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deletModalButtons} testid="catalogueEdit">
+        <ModalWarningComponent title="Warning" message="Are you sure you want to remove this Category?" />
         {deleteCategory.error && <ErrorPage />}
       </ModalComponent>
-      <ModalComponent
-        open={openCopy}
-        setOpen={setOpenCopy}
-        buttons={copyModalButtons}
-        testid="catalogueCopy"
-      >
-        <ModalWarningComponent
-          title="Warning"
-          message="Are you sure you want to copy this Category?"
-        />
+      <ModalComponent open={openCopy} setOpen={setOpenCopy} buttons={copyModalButtons} testid="catalogueCopy">
+        <ModalWarningComponent title="Warning" message="Are you sure you want to copy this Category?" />
         {copyCategory.error && <ErrorPage />}
       </ModalComponent>
 
@@ -187,10 +166,7 @@ export const useCategoryEdit = ({
       {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
         <li className="flex">
           <div className="flex items-center">
-            <ChevronRightIcon
-              className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400"
-              aria-hidden="true"
-            />
+            <ChevronRightIcon className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400" aria-hidden="true" />
             <Button
               onClick={() => {
                 setOpenEdit(true)
@@ -201,16 +177,8 @@ export const useCategoryEdit = ({
           </div>
         </li>
       )}
-      <ModalComponent
-        open={openEdit}
-        setOpen={setOpenEdit}
-        buttons={{ noButtons: true }}
-        testid="catalogueEdit"
-      >
-        <CategoryEditModal
-          setOpen={setOpenEdit}
-          parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
-        />
+      <ModalComponent open={openEdit} setOpen={setOpenEdit} buttons={{ noButtons: true }} testid="catalogueEdit">
+        <CategoryEditModal setOpen={setOpenEdit} parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''} />
       </ModalComponent>
     </Fragment>
   )

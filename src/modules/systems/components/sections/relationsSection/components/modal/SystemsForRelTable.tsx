@@ -3,8 +3,7 @@ import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
-import EmptyResults from '@/components/EmptyResults'
-import TableComponent2 from '@/components/table2/Table.comp'
+import TableComponent from '@/components/table/Table.comp'
 import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
@@ -53,7 +52,7 @@ const SystemsForRel = ({ searchValue, relationTypeCode, setSelectedSystem, selec
 
   return (
     <div className="flex flex-col min-h-[337px] justify-between">
-      <TableComponent2
+      <TableComponent
         tableHeaders={[
           'Name',
           'Description',
@@ -65,7 +64,6 @@ const SystemsForRel = ({ searchValue, relationTypeCode, setSelectedSystem, selec
           'Importance',
           'Zone'
         ]}
-        loadingData={!!systems}
       >
         {systems?.data.map((item, index) => (
           <SystemForRelItem
@@ -76,9 +74,7 @@ const SystemsForRel = ({ searchValue, relationTypeCode, setSelectedSystem, selec
             selectedSystem={selectedSystem}
           />
         ))}
-      </TableComponent2>
-      {!systems && <EmptyResults />}
-      {systems && systems.data.length === 0 && <EmptyResults />}
+      </TableComponent>
       {getPaginationComponent()}
     </div>
   )

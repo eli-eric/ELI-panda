@@ -13,7 +13,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
       }
     }
     const fetchFakeSystems = () => {
-      const res = [...Array(faker.datatype.number({ min: 10, max: 10 }))]
+      const res = [...Array(faker.datatype.number({ min: 0, max: 10 }))]
       return res.map(() => getFakeSystem())
     }
     const systems = fetchFakeSystems()

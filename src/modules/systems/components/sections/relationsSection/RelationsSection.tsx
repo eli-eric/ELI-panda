@@ -20,7 +20,6 @@ const messages = message.systemsPage.relations
 const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string }) => {
   const endpoints = useEndpoint({ uid })
   const { data: relations } = useSWR<SystemRelationshipResponse[]>(endpoints.systemRelationships, mockFetcher)
-  const [relationUid, setRelationUid] = useState<string | undefined>()
   const intl = useIntl()
   const [openAddRelation, setOpenAddRelation] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
@@ -30,21 +29,19 @@ const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string
     goNext: {
       text: intl.formatMessage({ id: messages.deleteModal.buttons.continue }),
       onClick: () => {
-        setRelationUid(undefined)
         setOpenDelete(false)
       }
     },
     goBack: {
       text: intl.formatMessage({ id: messages.deleteModal.buttons.cancel }),
       onClick: () => {
-        setRelationUid(undefined)
         setOpenDelete(false)
       }
     }
   }
 
   const deleteHandler = uid => {
-    setRelationUid(uid)
+    //TODO: submit uid
     setOpenDelete(true)
   }
 

@@ -1,13 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, Suspense, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 import * as yup from 'yup'
 
 import { Button } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
-import LoaderComponent from '@/components/loader.comp'
 import SearchBarComponent from '@/components/SearchBar.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
@@ -67,20 +66,13 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
         <FormProvider {...searchFormMethods}>
           <SearchBarComponent onSubmit={onSearchSubmit} />
         </FormProvider>
-        <Suspense
-          fallback={
-            <div className="max-h-full">
-              <LoaderComponent />
-            </div>
-          }
-        >
-          <SystemsForRel
-            searchValue={searchValue}
-            relationTypeCode={relationTypeCode}
-            selectedSystem={selectedSystem}
-            setSelectedSystem={setSelectedSystem}
-          />
-        </Suspense>
+
+        <SystemsForRel
+          searchValue={searchValue}
+          relationTypeCode={relationTypeCode}
+          selectedSystem={selectedSystem}
+          setSelectedSystem={setSelectedSystem}
+        />
       </div>
       <form onSubmit={relFormMethods.handleSubmit(onSubmit)} className="flex flex-col">
         <FormProvider {...relFormMethods}>

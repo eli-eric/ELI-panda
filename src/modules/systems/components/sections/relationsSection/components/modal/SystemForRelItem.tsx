@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react'
 
-import TableRowComponent from '@/components/table2/TableRow.comp'
-import { TableRowItem } from '@/components/table2/TableRowItem.comp'
+import TableRowComponent from '@/components/table/TableRow.comp'
+import { TableRowItem } from '@/components/table/TableRowItem.comp'
 import { SystemDetailResponse } from '@/modules/systems/types/responses'
 
 import { SelectedSystemForRel } from './SelectRelation'
@@ -17,7 +17,7 @@ const SystemForRelItem = ({ item, index, setSelectedSystem, selectedSystem }: Sy
   <TableRowComponent
     key={item.uid + index}
     index={index}
-    className={selectedSystem?.uid === item.uid ? 'bg-primary-200' : ''}
+    className={selectedSystem?.uid === item.uid ? 'bg-lime-200' : ''}
     onClick={() => {
       setSelectedSystem({ name: item.name, uid: item.uid })
     }}

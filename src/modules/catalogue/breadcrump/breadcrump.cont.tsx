@@ -9,10 +9,6 @@ import BreadcrumbListComponent from './breadcrump-list.comp'
 const CatalogueBreadcrumbContainer = () => {
   const router = useRouter()
 
-  const handleClick = (path: string) => {
-    router.replace(path, undefined, { shallow: false })
-  }
-
   const navigationList = useMemo(() => {
     if (router.query.slug) {
       const { slug } = router.query
@@ -29,12 +25,6 @@ const CatalogueBreadcrumbContainer = () => {
     return undefined
   }, [router])
 
-  return (
-    <BreadcrumbListComponent
-      testId="breadcrump"
-      navigationList={navigationList}
-      handleClick={handleClick}
-    />
-  )
+  return <BreadcrumbListComponent testId="breadcrump" navigationList={navigationList} />
 }
 export default CatalogueBreadcrumbContainer
