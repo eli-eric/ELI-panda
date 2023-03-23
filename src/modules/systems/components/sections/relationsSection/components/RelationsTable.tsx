@@ -13,27 +13,24 @@ interface RelationProps {
   systemName: string
   onDelete: (uid: string) => void
 }
-
 const Relation = ({ item, index, onDelete, systemName }: RelationProps) => (
   <TableRowComponent key={item.relationUid + index} index={index}>
     <TableRowItem text={systemName} />
     <TableRowItem>
       <div key={index}>
-        {item.direction === 'to' && <ArrowLongLeftIcon className="w-10 h-10" />}
-        {item.direction === 'from' && <ArrowLongRightIcon className="w-10 h-10" />}
+        {item.direction === 'to' && <ArrowLongLeftIcon className="w-10 h-10" />}{' '}
+        {item.direction === 'from' && <ArrowLongRightIcon className="w-10 h-10" />}{' '}
       </div>
     </TableRowItem>
     <TableRowItem text={item.relationTypeCode} />
     <TableRowItem text={item.foreignSystemName} />
     <TableRowItem text="">
       <Button onClick={() => onDelete(item.relationUid)} rounded="rounded-md">
-        {' '}
         <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />{' '}
       </Button>
     </TableRowItem>
   </TableRowComponent>
 )
-
 interface Props {
   relations: SystemRelationshipResponse[]
   systemName: string

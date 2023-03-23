@@ -9,6 +9,7 @@ import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { PATH } from '@/types/constants/paths'
 
+import { useSystemEdit } from '../hooks/useSystemEdit'
 import { SubsystemsResponse } from '../types/responses'
 
 export const Item = (props: { uid: string; text: string }) => {
@@ -18,24 +19,25 @@ export const Item = (props: { uid: string; text: string }) => {
     uid: uid
   })
   const { data: image } = useSWR(systemDetailImage, fetcher, { suspense: false })
+  const { getDeleteButton } = useSystemEdit({ deleteSystemUid: uid })
 
   return (
-    <Link
-      key={uid}
-      href={{ pathname: PATH.SYSTEMS + '/' + uid }}
+    <div
       className={classNames(
         'text-gray-600 hover:bg-primary-100 hover:text-gray-900',
-        'flex flex-row gap-2 items-center rounded-md px-3 py-2 text-sm font-medium  border-gray-100'
+        'flex flex-row justify-between items-center rounded-md px-3 py-2 text-sm font-medium  border-gray-100'
       )}
     >
-      {image ? (
-        <Image alt="" src={image} width={28} height={28} className="rounded-sm" />
-      ) : (
-        <PhotoIcon className="w-7 h-7 rounded-sm" />
-      )}
-
-      <span className="truncate">{text}</span>
-    </Link>
+      <Link href={{ pathname: PATH.SYSTEMS + '/' + uid }} className="flex flex-grow gap-2">
+        {image ? (
+          <Image alt="" src={image} width={28} height={28} className="rounded-sm" />
+        ) : (
+          <PhotoIcon className="w-7 h-7 rounded-sm" />
+        )}
+        <span className="truncate">{text}</span>
+      </Link>
+      {getDeleteButton()}
+    </div>
   )
 }
 
