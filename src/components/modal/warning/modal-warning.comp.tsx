@@ -1,12 +1,18 @@
 import { Dialog } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/20/solid'
+import { Dispatch, SetStateAction } from 'react'
 
-interface Props {
+import ErrorPage from '@/components/error/ErrorPage'
+import { ModalButtons } from '@/types/form'
+
+import ModalComponent from '../modal.comp'
+
+interface ModalWarningComponentProps {
   title: string
   message: string
 }
 
-const ModalWarningComponent = ({ title, message }: Props) => (
+const ModalWarningComponent = ({ title, message }: ModalWarningComponentProps) => (
   <div className="sm:flex sm:items-start">
     <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
       <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
@@ -22,4 +28,20 @@ const ModalWarningComponent = ({ title, message }: Props) => (
   </div>
 )
 
-export default ModalWarningComponent
+interface WarningModalProps {
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
+  buttons: ModalButtons
+  error?: string
+  title: string
+  message: string
+  testid: string
+}
+const WarningModal = ({ open, error, setOpen, buttons, title, message, testid }: WarningModalProps) => (
+  <ModalComponent open={open} setOpen={setOpen} buttons={buttons} testid={testid}>
+    <ModalWarningComponent title={title} message={message} />
+    {error && <ErrorPage />}
+  </ModalComponent>
+)
+
+export default WarningModal

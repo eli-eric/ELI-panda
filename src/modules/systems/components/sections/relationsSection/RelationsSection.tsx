@@ -4,7 +4,7 @@ import useSWR from 'swr'
 
 import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
-import ModalWarningComponent from '@/components/modal/warning/modal-warning.comp'
+import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
@@ -63,12 +63,14 @@ const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string
       <ModalComponent open={openAddRelation} setOpen={setOpenAddRelation} buttons={{ noButtons: true }}>
         <AddRelationForm setopen={setOpenAddRelation} relationTypeCode={relationTypeCode} systemName={systemName} />
       </ModalComponent>
-      <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deleteModalButtons}>
-        <ModalWarningComponent
-          title={intl.formatMessage({ id: messages.deleteModal.title })}
-          message={intl.formatMessage({ id: messages.deleteModal.text })}
-        />
-      </ModalComponent>
+      <WarningModal
+        title={intl.formatMessage({ id: messages.deleteModal.title })}
+        message={intl.formatMessage({ id: messages.deleteModal.text })}
+        open={openDelete}
+        setOpen={setOpenDelete}
+        buttons={deleteModalButtons}
+        testid="RelationDeleteModal"
+      />
     </Fragment>
   )
 }

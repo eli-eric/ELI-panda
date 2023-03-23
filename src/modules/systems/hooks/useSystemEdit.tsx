@@ -1,6 +1,6 @@
 import { PencilSquareIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
-import { Fragment, useState } from 'react'
+import { Dispatch, Fragment, SetStateAction, useState } from 'react'
 
 import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
@@ -9,11 +9,20 @@ import { ROLE } from '@/types/constants/roles'
 import Edit from '../components/systemEdit/Edit'
 import { SystemDetailResponse } from '../types/responses'
 
-export const useSystemEdit = ({
-  systemDetail
-}: {
-  systemDetail?: SystemDetailResponse | undefined
-}) => {
+interface Props {
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
+  data?: SystemDetailResponse
+  uid?: string
+}
+
+const EditModal = ({ open, setOpen, data, uid }: Props) => (
+  <ModalComponent open={open} setOpen={setOpen} buttons={{ noButtons: true }} testid="catalogueEdit">
+    <Edit setOpen={setOpen} data={data} uid={uid} />
+  </ModalComponent>
+)
+
+export const useSystemEdit = ({ systemDetail }: { systemDetail?: SystemDetailResponse | undefined }) => {
   const [openEdit, setOpenEdit] = useState(false)
   const [openNew, setOpenNew] = useState(false)
   const { data: session } = useSession()
@@ -31,14 +40,7 @@ export const useSystemEdit = ({
               <PencilSquareIcon className="h-6 w-6" aria-hidden="true" />
             </Button>
           </div>
-          <ModalComponent
-            open={openEdit}
-            setOpen={setOpenEdit}
-            buttons={{ noButtons: true }}
-            testid="catalogueEdit"
-          >
-            <Edit setOpen={setOpenEdit} data={systemDetail} uid={systemDetail?.uid} />
-          </ModalComponent>
+          <EditModal open={openEdit} setOpen={setOpenEdit} uid={systemDetail?.uid} data={systemDetail} />
         </Fragment>
       )}
     </Fragment>
@@ -59,14 +61,7 @@ export const useSystemEdit = ({
               </Button>
             </div>
           </li>
-          <ModalComponent
-            open={openNew}
-            setOpen={setOpenNew}
-            buttons={{ noButtons: true }}
-            testid="catalogueEdit"
-          >
-            <Edit setOpen={setOpenNew} />
-          </ModalComponent>
+          <EditModal open={openNew} setOpen={setOpenNew} />
         </Fragment>
       )}
     </Fragment>
