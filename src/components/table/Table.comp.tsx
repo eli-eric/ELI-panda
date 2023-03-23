@@ -1,53 +1,42 @@
-const ColumnTitle = ({ title }: { title: string }) => (
-  <th
-    scope="col"
-    className="whitespace-nowrap sticky top-0 z-9 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 "
-  >
-    {title}
-  </th>
-)
+import { Fragment } from 'react'
 
-const TableHeader = ({ collumsTitle }: { collumsTitle: string[] }) => (
-  <thead className="bg-gray-50">
-    <tr>
-      {collumsTitle.map(title => (
-        <ColumnTitle key={title} title={title} />
-      ))}
-    </tr>
-  </thead>
-)
+import { classNames } from '@/helpers'
 
-const TableRow = ({ value }: { value: JSX.Element | string }) => (
-  <td className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">{value}</td>
-)
-
-interface Props {
-  collumsTitle: string[]
-  data?: JSX.Element[][]
+import EmptyResults from '../EmptyResults'
+import ProgressBarComponent from '../progress-bar.comp'
+import ItemListColumnTitleComponent from './item-list-column-title.comp'
+interface TableProps {
+  tableHeaders: string[]
+  children?: React.ReactNode
+  overflow?: boolean
+  loading?: boolean
 }
-
-const TableComponent = ({ collumsTitle, data }: Props) => (
-  <div className="-my-2  sm:-mx-6 lg:-mx-8">
-    <div className=" min-w-full py-2 align-middle md:px-6 lg:px-8">
-      <div className=" shadow ring-1 ring-black ring-opacity-5 ">
-        <table className="min-w-full divide-y divide-gray-300">
-          <TableHeader collumsTitle={collumsTitle} />
-          <tbody className="bg-white">
-            {data?.map((row, index) => (
-              <tr
-                key={index}
-                className={(index % 2 === 0 ? undefined : 'bg-gray-100') + ' hover:bg-primary-200'}
-              >
-                {row.map(item => (
-                  <TableRow key={item.key} value={item} />
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+const TableComponent = ({ tableHeaders, children, overflow = true, loading }: TableProps) => (
+  <Fragment>
+    <div
+      data-testid="item-list"
+      className={classNames('h-full border-t border-gray-300 pb-4', overflow ? 'overflow-y-hidden' : '')}
+    >
+      <div className="-my-2  sm:-mx-6 lg:-mx-8">
+        <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+          <div className=" shadow ring-1 ring-black ring-opacity-5 ">
+            <table className="min-w-full divide-y divide-gray-300">
+              <thead className="bg-gray-50">
+                <tr>
+                  {tableHeaders.map(title => (
+                    <ItemListColumnTitleComponent key={title} title={title} />
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="bg-white">{children}</tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+    {!children && !loading && <EmptyResults />}
+    {loading && <ProgressBarComponent />}
+  </Fragment>
 )
 
 export default TableComponent

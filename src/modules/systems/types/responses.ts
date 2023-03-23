@@ -1,5 +1,3 @@
-import { SystemForRel } from '.'
-
 export type SystemCodebok = { uid: string; name: string }
 
 export type SystemDetailResponse = {
@@ -34,7 +32,7 @@ export type SystemsResponse = {
   totalCount: number
 }
 export type SystemsForRelResponse = {
-  data: SystemForRel[]
+  data: SystemDetailResponse[]
   totalCount: number
 }
 

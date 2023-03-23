@@ -6,18 +6,18 @@ import { Option, SelectWithError } from '@/components/form/Select'
 import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
 import { RelationFormType } from '@/modules/systems/types/form'
 
-const SelectRelation = ({
-  relationTypeCode,
-  systemName,
-  selectedSystem
-}: {
+export type SelectedSystemForRel = {
+  name: string
+  uid: string
+}
+
+interface Props {
   relationTypeCode: RELATION_TYPE_CODE
   systemName: string
-  selectedSystem?: {
-    name: string
-    uid: string
-  }
-}) => {
+  selectedSystem?: SelectedSystemForRel
+}
+
+const SelectRelation = ({ relationTypeCode, systemName, selectedSystem }: Props) => {
   const { register, watch, setValue, formState } = useFormContext<RelationFormType>()
   useEffect(() => {
     setValue('relationTypeCode', relationTypeCode)
@@ -57,14 +57,7 @@ const SelectRelation = ({
     }
 
     setValue('systemToUid', systemToOption.value as string)
-  }, [
-    watchSystemFromUid,
-    baseSystemOption,
-    selectedSystemOption,
-    selectedSystem,
-    setValue,
-    systemToOption
-  ])
+  }, [watchSystemFromUid, baseSystemOption, selectedSystemOption, selectedSystem, setValue, systemToOption])
 
   return (
     <div className="flex flex-row">

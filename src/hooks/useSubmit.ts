@@ -13,7 +13,6 @@ interface UseSubmitProps<T> {
 
 const useSubmit = <T>({ endpoint, method, mutateList, onSuccess }: UseSubmitProps<T>) => {
   const { mutate } = useSWRConfig()
-
   const [response, setResponse] = useState<T | null>(null)
   const [error, setError] = useState<string>()
   const [loading, setloading] = useState<boolean>(false)

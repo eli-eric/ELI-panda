@@ -3,39 +3,27 @@ import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
-import EmptyResults from '@/components/EmptyResults'
 import TableComponent from '@/components/table/Table.comp'
+import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
 import { message } from '@/i18n/src/messages'
-import { useSystemMapRows } from '@/modules/systems/hooks/relations/useMapRows'
 import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
 import { SystemsForRelResponse } from '@/modules/systems/types/responses'
 
+import { SelectedSystemForRel } from './SelectRelation'
+import SystemForRelItem from './SystemForRelItem'
+
 const messages = message.systemsPage.relations.addRelationModal
 
-const TableWithPaging = ({
-  searchValue,
-  relationTypeCode,
-  setSelectedSystem,
-  selectedSystem
-}: {
+interface Props {
   searchValue?: string
   relationTypeCode?: RELATION_TYPE_CODE
-  setSelectedSystem: Dispatch<
-    SetStateAction<
-      | {
-          name: string
-          uid: string
-        }
-      | undefined
-    >
-  >
-  selectedSystem?: {
-    name: string
-    uid: string
-  }
-}) => {
+  setSelectedSystem: Dispatch<SetStateAction<SelectedSystemForRel | undefined>>
+  selectedSystem?: SelectedSystemForRel
+}
+
+const SystemsForRel = ({ searchValue, relationTypeCode, setSelectedSystem, selectedSystem }: Props) => {
   const router = useRouter()
   const intl = useIntl()
 
@@ -53,14 +41,10 @@ const TableWithPaging = ({
   )
   const endpoints = useEndpoint({ query })
   const { data: systems } = useSWR<SystemsForRelResponse>(
-    searchValue && endpoints.systemsForRelationship
+    searchValue && endpoints.systemsForRelationship,
+    mockFetcher,
+    { suspense: false }
   )
-
-  const data = useSystemMapRows({
-    systems: systems?.data,
-    setSelectedSystem,
-    selectedSystem
-  })
 
   useEffect(() => {
     setSelectedSystem(undefined)
@@ -70,18 +54,37 @@ const TableWithPaging = ({
     setTotalCount(systems?.totalCount)
   }, [systems, setTotalCount])
 
-  const collumsTitle = Object.keys(messages.tableHeader).map(key =>
-    intl.formatMessage({ id: messages.tableHeader[key] })
-  )
-
   return (
-    <div className="flex flex-col min-h-[535px] justify-between">
-      <TableComponent collumsTitle={collumsTitle} data={data} />
-      {!systems && <EmptyResults />}
-      {systems && systems.data.length === 0 && <EmptyResults />}
+    <div className="flex flex-col min-h-[337px] justify-between">
+      <TableComponent
+        tableHeaders={[
+          'Name',
+          'Description',
+          'System Code',
+          'System Type',
+          'System Alias',
+          'Location',
+          'Owner',
+          'Importance',
+          'Zone'
+        ]}
+        loading={!systems && !!searchValue}
+      >
+        {systems &&
+          systems.data.length > 0 &&
+          systems.data.map((item, index) => (
+            <SystemForRelItem
+              key={item.uid + index}
+              item={item}
+              index={index}
+              setSelectedSystem={setSelectedSystem}
+              selectedSystem={selectedSystem}
+            />
+          ))}
+      </TableComponent>
       {getPaginationComponent()}
     </div>
   )
 }
 
-export default TableWithPaging
+export default SystemsForRel

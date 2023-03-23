@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 
-import TableRowComponent from '@/components/table2/TableRow.comp'
-import { TableRowItem } from '@/components/table2/TableRowItem.comp'
+import TableRowComponent from '@/components/table/TableRow.comp'
+import { TableRowItem } from '@/components/table/TableRowItem.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { PATH } from '@/types/constants/paths'
 
@@ -21,11 +21,7 @@ const ResultItem = ({ item, index }: Props) => {
     router.push({ pathname: PATH.SYSTEMS + '/' + uid, query: { q: router.query.q } })
   }
   return (
-    <TableRowComponent
-      key={item.uid + index}
-      index={index}
-      onClick={() => onClickHandler(item.uid)}
-    >
+    <TableRowComponent key={item.uid + index} index={index} onClick={() => onClickHandler(item.uid)}>
       <TableRowItem text={item.name} image={image} />
       <TableRowItem text={item.description} isInfoTooltip={true} />
       <TableRowItem text={item.systemCode} />

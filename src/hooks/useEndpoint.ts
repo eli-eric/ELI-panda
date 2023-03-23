@@ -13,7 +13,7 @@ const getEndpoints = (uid?: string, path?: string, query?: string) => {
     systemItemAdd: `/system/${uid}/item`,
     systemsDetails: `/systems${uid ? '/' + uid : ''}`,
     systemRelationships: `/system/${uid}/relationships`,
-    systemRelationship: '/system/relationship',
+    systemRelationship: `/system/relationship${uid ? '/' + uid : ''}`,
     systemsForRelationship: `/systems/for-relationship${query}`,
     codebook: `/codebook${path}${query}`,
     codebookAutocomplete: `/codebook/autocomplete${path}${query}`,
