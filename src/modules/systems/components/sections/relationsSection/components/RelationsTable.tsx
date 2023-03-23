@@ -23,6 +23,7 @@ const Relation = ({ item, index, onDelete, systemName }: RelationProps) => (
         {item.direction === 'from' && <ArrowLongRightIcon className="w-10 h-10" />}
       </div>
     </TableRowItem>
+    <TableRowItem text={item.relationTypeCode} />
     <TableRowItem text={item.foreignSystemName} />
     <TableRowItem text="">
       <Button onClick={() => onDelete(item.relationUid)} rounded="rounded-md">
@@ -40,7 +41,10 @@ interface Props {
 }
 
 const RelationsTable = ({ relations, systemName, onDelete }: Props) => (
-  <TableComponent tableHeaders={['System name', 'Direction', 'Foreign systen name', 'Action']} overflow={false}>
+  <TableComponent
+    tableHeaders={['System name', 'Direction', 'Relation type code', 'Foreign systen name', 'Action']}
+    overflow={false}
+  >
     {relations?.map((item, index) => (
       <Relation key={item.relationUid + index} item={item} index={index} systemName={systemName} onDelete={onDelete} />
     ))}

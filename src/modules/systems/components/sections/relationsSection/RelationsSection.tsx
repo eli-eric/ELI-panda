@@ -7,6 +7,7 @@ import ModalComponent from '@/components/modal/modal.comp'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
+import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
 import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
 import { ModalButtons } from '@/types/form'
@@ -18,18 +19,29 @@ import RelationsTable from './components/RelationsTable'
 const messages = message.systemsPage.relations
 
 const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string }) => {
-  const endpoints = useEndpoint({ uid })
-  const { data: relations } = useSWR<SystemRelationshipResponse[]>(endpoints.systemRelationships, mockFetcher)
+  const { systemRelationships } = useEndpoint({ uid })
+  const { data: relations } = useSWR<SystemRelationshipResponse[]>(systemRelationships, mockFetcher)
   const intl = useIntl()
   const [openAddRelation, setOpenAddRelation] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
   const [relationTypeCode, setRelationTypeCode] = useState<RELATION_TYPE_CODE>(RELATION_TYPE_CODE.IS_SPARE_FOR)
+  const [relationUid, setRelationUid] = useState()
+  const { systemRelationship } = useEndpoint({ uid: relationUid })
+  const { submit, error, loading } = useSubmit({
+    endpoint: systemRelationship,
+    method: 'delete',
+    mutateList: [systemRelationships],
+    onSuccess: () => {
+      setOpenDelete(false)
+    }
+  })
 
   const deleteModalButtons: ModalButtons = {
     goNext: {
       text: intl.formatMessage({ id: messages.deleteModal.buttons.continue }),
+      loading: loading,
       onClick: () => {
-        setOpenDelete(false)
+        submit()
       }
     },
     goBack: {
@@ -41,8 +53,8 @@ const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string
   }
 
   const deleteHandler = uid => {
-    //TODO: submit uid
     setOpenDelete(true)
+    setRelationUid(uid)
   }
 
   return (
@@ -70,6 +82,7 @@ const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string
         setOpen={setOpenDelete}
         buttons={deleteModalButtons}
         testid="RelationDeleteModal"
+        error={error}
       />
     </Fragment>
   )

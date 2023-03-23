@@ -66,7 +66,6 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
         <FormProvider {...searchFormMethods}>
           <SearchBarComponent onSubmit={onSearchSubmit} />
         </FormProvider>
-
         <SystemsForRel
           searchValue={searchValue}
           relationTypeCode={relationTypeCode}

@@ -3,13 +3,15 @@ import { Fragment } from 'react'
 import { classNames } from '@/helpers'
 
 import EmptyResults from '../EmptyResults'
+import ProgressBarComponent from '../progress-bar.comp'
 import ItemListColumnTitleComponent from './item-list-column-title.comp'
 interface TableProps {
   tableHeaders: string[]
   children?: React.ReactNode
   overflow?: boolean
+  loading?: boolean
 }
-const TableComponent = ({ tableHeaders, children, overflow = true }: TableProps) => (
+const TableComponent = ({ tableHeaders, children, overflow = true, loading }: TableProps) => (
   <Fragment>
     <div
       data-testid="item-list"
@@ -32,7 +34,8 @@ const TableComponent = ({ tableHeaders, children, overflow = true }: TableProps)
         </div>
       </div>
     </div>
-    {!children && <EmptyResults />}
+    {!children && !loading && <EmptyResults />}
+    {loading && <ProgressBarComponent />}
   </Fragment>
 )
 

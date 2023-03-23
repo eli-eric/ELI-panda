@@ -40,7 +40,11 @@ const SystemsForRel = ({ searchValue, relationTypeCode, setSelectedSystem, selec
     [router, relationTypeCode, searchValue, pagination]
   )
   const endpoints = useEndpoint({ query })
-  const { data: systems } = useSWR<SystemsForRelResponse>(searchValue && endpoints.systemsForRelationship, mockFetcher)
+  const { data: systems } = useSWR<SystemsForRelResponse>(
+    searchValue && endpoints.systemsForRelationship,
+    mockFetcher,
+    { suspense: false }
+  )
 
   useEffect(() => {
     setSelectedSystem(undefined)
@@ -64,16 +68,19 @@ const SystemsForRel = ({ searchValue, relationTypeCode, setSelectedSystem, selec
           'Importance',
           'Zone'
         ]}
+        loading={!systems && !!searchValue}
       >
-        {systems?.data.map((item, index) => (
-          <SystemForRelItem
-            key={item.uid + index}
-            item={item}
-            index={index}
-            setSelectedSystem={setSelectedSystem}
-            selectedSystem={selectedSystem}
-          />
-        ))}
+        {systems &&
+          systems.data.length > 0 &&
+          systems.data.map((item, index) => (
+            <SystemForRelItem
+              key={item.uid + index}
+              item={item}
+              index={index}
+              setSelectedSystem={setSelectedSystem}
+              selectedSystem={selectedSystem}
+            />
+          ))}
       </TableComponent>
       {getPaginationComponent()}
     </div>
