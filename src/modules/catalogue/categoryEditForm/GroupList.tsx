@@ -1,10 +1,11 @@
-import { ArrowSmallDownIcon, ArrowSmallUpIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import { InputWithError } from '@/components/form/Input'
 import { CategoryFormType, Group } from '@/types/catalogue/categoryFormTypes'
 
+import MoveButtons from './MoveButtons'
 import PropertyList from './PropertyList'
 
 interface groupProps {
@@ -32,30 +33,7 @@ const Group = ({ name, remove, index, errors, moveDown, moveUp, lenght }: groupP
         </div>
         <div className="relative flex justify-center">
           <span className="isolate inline-flex rounded-md shadow-sm">
-            <div className="flex flex-col">
-              <Button
-                type="button"
-                disabled={index === 0}
-                rounded="rounded-tl-md"
-                onClick={() => {
-                  moveUp(index)
-                }}
-                buttonSize="small"
-              >
-                <ArrowSmallUpIcon className="h-[9px] w-[9px]" aria-hidden="true" />
-              </Button>
-              <Button
-                type="button"
-                disabled={index === lenght - 1}
-                rounded="rounded-bl-md"
-                onClick={() => {
-                  moveDown(index)
-                }}
-                buttonSize="small"
-              >
-                <ArrowSmallDownIcon className="h-[9px] w-[9px]" aria-hidden="true" />
-              </Button>
-            </div>
+            <MoveButtons moveDown={moveDown} moveUp={moveUp} lenght={lenght} index={index} />
             <InputWithError
               register={register}
               name={`${name}.name`}
