@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import { Dispatch, SetStateAction, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { object, string } from 'yup'
@@ -44,17 +45,20 @@ interface Props {
 }
 
 const Edit = ({ data, uid, setOpen }: Props) => {
+  const { data: session } = useSession()
   const formMethods = useForm<SystemEditFormType>({
     resolver: yupResolver(schema),
-    defaultValues: data ? formatDataForm(data) : undefined
+    defaultValues: data ? formatDataForm(data) : { ownerUID: session?.user.fullName }
   })
   const { setValue } = formMethods
   useEffect(() => {
     if (data) {
       setValue('ownerUID', data.owner?.uid)
       setValue('locationUID', data.location?.uid)
+    } else {
+      setValue('ownerUID', session?.user.uid)
     }
-  }, [data, setValue])
+  }, [data, setValue, session])
   const router = useRouter()
 
   const { system } = useEndpoint({
