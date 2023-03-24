@@ -12,10 +12,7 @@ export type Option = {
 }
 
 interface Props<T extends FieldValues>
-  extends React.DetailedHTMLProps<
-    React.SelectHTMLAttributes<HTMLSelectElement>,
-    HTMLSelectElement
-  > {
+  extends React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> {
   register: UseFormRegister<T>
   options?: Option[]
   name: string
@@ -64,7 +61,7 @@ export const SelectWithError = <T extends FieldValues>({
         disabled ? 'bg-gray-100' : '',
         rounded,
         isError ? 'border-red-500' : 'border-gray-300',
-        'w-full block mb-2 appearance-none borde px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm'
+        'w-full block appearance-none borde px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm'
       )}
     />
   </div>

@@ -10,6 +10,8 @@ import { CategoryFormType, Property } from '@/types/catalogue/categoryFormTypes'
 import { defaultBoolOptions, PROPERTY_INPUT_TYPE, PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { CODEBOOK } from '@/types/constants/codebook'
 
+import MoveButtons from './MoveButtons'
+
 const ValueItem = ({ removeValue, index, name, errors }) => {
   const { register } = useFormContext<CategoryFormType>()
   const handleRemoveValue = () => {
@@ -36,9 +38,13 @@ interface Props {
   index: number
   length: number
   errors: FieldErrors<Property> | undefined
+  lenght: number
+  moveDown: (index: number) => void
+
+  moveUp: (index: number) => void
 }
 
-const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
+const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lenght }: Props) => {
   const { register, watch, control, unregister } = useFormContext<CategoryFormType>()
   const { fields, append, remove } = useFieldArray({
     control,
@@ -72,11 +78,12 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
     <div className="flex">
       <div className="flex-col flex-grow">
         <div className="flex flex-row flex-grow max-md:flex-wrap">
+          <MoveButtons moveDown={moveDown} moveUp={moveUp} lenght={lenght} index={index} />
+
           <InputWithError
             register={register}
             name={`${name}.name`}
             placeholder="Property name"
-            rounded="rounded-l-md"
             isError={!!errors?.name?.message}
           />
           <SelectWithError
@@ -89,11 +96,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
             register={register}
             name={`${name}.unitUID`}
             isError={!!errors?.unitUID?.message}
-            options={
-              units
-                ? [getDefaultOption('Select Unit'), ...units]
-                : [getDefaultOption('Select Unit')]
-            }
+            options={units ? [getDefaultOption('Select Unit'), ...units] : [getDefaultOption('Select Unit')]}
           />
 
           {type === PROPERTY_TYPE.LIST || type === PROPERTY_TYPE.BOOLEAN ? (
@@ -103,10 +106,7 @@ const PropertyItem = ({ name, removeProp, index, errors }: Props) => {
               isError={!!errors?.typeUID?.message}
               options={
                 type === PROPERTY_TYPE.LIST
-                  ? [
-                      getDefaultOption('Select default'),
-                      ...listOfValues.map(value => ({ value: value.value }))
-                    ]
+                  ? [getDefaultOption('Select default'), ...listOfValues.map(value => ({ value: value.value }))]
                   : [getDefaultOption('Select default'), ...defaultBoolOptions]
               }
             />

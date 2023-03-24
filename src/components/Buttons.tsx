@@ -40,7 +40,7 @@ export const Button = ({
     className={classNames(
       className,
       rounded,
-      disabled ? 'bg-gray-100 text-gray-300' : '',
+      disabled ? 'bg-gray-200 text-gray-400' : '',
       loading ? 'bg-primary-700' : `bg-${!primary ? 'white' : 'primary-600'}`,
       buttonSize === 'small' ? 'px-2 py-1' : 'px-4 py-2',
       !primary ? !disabled && 'hover:bg-gray-100 text-gray-600' : !disabled && 'hover:bg-primary-700 text-white',
