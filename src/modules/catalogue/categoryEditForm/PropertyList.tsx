@@ -23,7 +23,7 @@ const PropertyList = ({ name, errors }: Props) => {
   }
   return (
     <div className="flex-1">
-      <ul className="mb-2">
+      <ul className="">
         {fields.map((field, index) => (
           <li key={field.id} className="border-b px-2 py-2">
             <PropertyItem
@@ -31,10 +31,7 @@ const PropertyList = ({ name, errors }: Props) => {
               index={index}
               name={`${name}.properties.${index}`}
               length={fields.length}
-              errors={
-                errors?.properties &&
-                (errors?.properties[index] as FieldErrors<Property> | undefined)
-              }
+              errors={errors?.properties && (errors?.properties[index] as FieldErrors<Property> | undefined)}
             />
           </li>
         ))}
