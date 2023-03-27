@@ -11,7 +11,7 @@ import useSubmit from '@/hooks/useSubmit'
 import { ROLE } from '@/types/constants/roles'
 import { ModalButtons } from '@/types/form'
 
-import Edit from '../components/systemEdit/Edit'
+import Edit from '../components/edit/Edit'
 import { SystemDetailResponse } from '../types/responses'
 
 interface Props {

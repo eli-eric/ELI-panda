@@ -3,10 +3,12 @@ import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Dispatch, SetStateAction, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import useSWR from 'swr'
 import { object, string } from 'yup'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import ModalButtonsComponent from '@/components/modal/modal.buttons'
+import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 import { ModalButtons } from '@/types/form'
@@ -64,9 +66,23 @@ const Edit = ({ data, uid, setOpen }: Props) => {
   const { system } = useEndpoint({
     uid: uid as string
   })
-  const { systemSubsystems } = useEndpoint({
-    uid: router.query.uid as string
+
+  const systemTypeUID = formMethods.watch('systemTypeUID')
+  const zoneUID = formMethods.watch('zoneUID')
+  const locationUID = formMethods.watch('locationUID')
+
+  const { systemSubsystems, systemCode } = useEndpoint({
+    uid: router.query.uid as string,
+    query: { systemTypeUID, zoneUID, locationUID, parentUID: router.query.uid }
   })
+  const { data: systemCodeField } = useSWR(systemTypeUID || zoneUID || locationUID ? systemCode : null, mockFetcher, {
+    suspense: false
+  })
+
+  useEffect(() => {
+    setValue('systemCode', systemCodeField)
+  }, [systemCodeField, setValue])
+
   const { submit, loading, error } = useSubmit({
     endpoint: system,
     method: uid ? 'put' : 'post',
