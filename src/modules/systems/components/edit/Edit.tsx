@@ -48,9 +48,12 @@ interface Props {
 
 const Edit = ({ data, uid, setOpen }: Props) => {
   const { data: session } = useSession()
+  const router = useRouter()
   const formMethods = useForm<SystemEditFormType>({
     resolver: yupResolver(schema),
-    defaultValues: data ? formatDataForm(data) : { ownerUID: session?.user.fullName }
+    defaultValues: data
+      ? { ...formatDataForm(data), parentUID: router.query.uid as string }
+      : { ownerUID: session?.user.fullName, parentUID: router.query.uid as string }
   })
   const { setValue } = formMethods
   useEffect(() => {
@@ -61,7 +64,6 @@ const Edit = ({ data, uid, setOpen }: Props) => {
       setValue('ownerUID', session?.user.uid)
     }
   }, [data, setValue, session])
-  const router = useRouter()
 
   const { system } = useEndpoint({
     uid: uid as string
@@ -108,7 +110,7 @@ const Edit = ({ data, uid, setOpen }: Props) => {
   }
 
   const onSubmit = (data: SystemEditFormType) => {
-    submit({ ...data, parentUid: router.query.uid })
+    submit({ ...data, parentUID: router.query.uid })
   }
 
   return (

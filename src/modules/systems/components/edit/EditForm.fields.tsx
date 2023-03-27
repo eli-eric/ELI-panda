@@ -95,6 +95,13 @@ const useSystemEditFormFields = () => {
       isError: !!formState.errors.criticalityClassUID,
       rounded: 'rounded-md',
       options: criticalityOption && [getDefaultOption('none'), ...criticalityOption]
+    },
+    //TODO: add codebook
+    parentUID: {
+      name: 'parentUID',
+      label: form.parentUID.label,
+      isError: !!formState.errors.parentUID,
+      rounded: 'rounded-md'
     }
   })
 }

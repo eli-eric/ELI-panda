@@ -10,8 +10,7 @@ export const messages = {
     custom404: {
       title: '404',
       notFound: 'Page not found',
-      message:
-        'Please check the URL in the address bar and try again.Probably you have no permission.'
+      message: 'Please check the URL in the address bar and try again.Probably you have no permission.'
     },
     property: {
       description: 'Description'
@@ -97,7 +96,8 @@ export const messages = {
         importanceUID: { label: 'Importance' }, // codebook of importance - SYSTEM_IMPORTANCE
         zoneUID: { label: 'Zone' }, // codebook of zones - ZONE
         subZone: { label: 'Sub Zone' }, // codebook of subzones depend on selected zone SUB_ZONE (parentUID=ZONE.uid)
-        criticalityClassUID: { label: 'Criticality Class' } // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
+        criticalityClassUID: { label: 'Criticality Class' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
+        parentUID: { label: 'ParentUID' } // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
       }
     },
     itemDetail: {
