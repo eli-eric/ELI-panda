@@ -1,20 +1,17 @@
 import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
-import useSWR from 'swr'
 
 import FormImage from '@/components/form/FormImage'
 import ImagePlaceHolder from '@/components/form/ImagePlaceHolder'
-import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
+import { useImage } from '@/hooks/useImage'
 
 import { SystemEditFormType } from '../../types/form'
 
 const SystemFormImage = ({ uid }: { uid?: string }) => {
   const { systemImage: systemDetailImage } = useEndpoint({ uid: uid as string })
-  const { data: systemImage } = useSWR<string>(uid ? systemDetailImage : undefined, fetcher, {
-    suspense: false
-  })
+  const systemImage = useImage(uid ? systemDetailImage : undefined, false)
   const { setValue, watch } = useFormContext<SystemEditFormType>()
 
   const image = watch('image')

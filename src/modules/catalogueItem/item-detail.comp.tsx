@@ -1,13 +1,12 @@
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import noImage from 'public/no-image.png'
 import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
 import ItemPropertyTitle from '@/components/item-property/item-property-title.comp'
 import ItemPropertyValue from '@/components/item-property/item-property-value.comp'
-import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
+import { useImage } from '@/hooks/useImage'
 import { message } from '@/i18n/src/messages'
 import { CatalogueItem } from '@/types/responses'
 
@@ -31,9 +30,7 @@ const ItemDetailComponent = ({ uid }: Props) => {
     uid: catalogueUid
   })
   const { data: item } = useSWR<CatalogueItem>(session ? catalogueUid && catalogueItem : null)
-  const { data: image } = useSWR(catalogueItemImage, fetcher, {
-    suspense: false
-  })
+  const image = useImage(catalogueItemImage)
 
   useEffect(() => {
     if (item?.details) {
@@ -49,16 +46,12 @@ const ItemDetailComponent = ({ uid }: Props) => {
       <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8 h-full overflow-auto">
         <div className="mx-auto max-w-2xl lg:max-w-none">
           <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
-            <ImageGalleryComponent images={[image || noImage]} />
+            <ImageGalleryComponent images={[image]} />
 
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 col-span-2">
               <h1 className="text-xl font-bold tracking-tight text-gray-900">{item?.name}</h1>
 
-              <ItemPropertiesComponent
-                item={item}
-                groups={groups}
-                description={item?.description}
-              />
+              <ItemPropertiesComponent item={item} groups={groups} description={item?.description} />
             </div>
           </div>
           <ItemPropertyTitle title={messages.description} span="2">

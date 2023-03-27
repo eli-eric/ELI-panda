@@ -1,3 +1,5 @@
+import { StaticImageData } from 'next/image'
+
 import ImageGalleryComponent from '@/components/item-detail/ImageGallery'
 import { message } from '@/i18n/src/messages'
 
@@ -6,7 +8,7 @@ import ItemPropertyValue from '../item-property/item-property-value.comp'
 
 interface Props {
   title: string
-  images: string[]
+  images: Array<string | StaticImageData>
   description?: string
   children: React.ReactNode
 }

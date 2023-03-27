@@ -5,8 +5,8 @@ import { useSession } from 'next-auth/react'
 import useSWR from 'swr'
 
 import { classNames } from '@/helpers'
-import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
+import { useImage } from '@/hooks/useImage'
 import { PATH } from '@/types/constants/paths'
 
 import { useSystemEdit } from '../hooks/useSystemEdit'
@@ -15,10 +15,8 @@ import { SubsystemsResponse } from '../types/responses'
 export const Item = (props: { uid: string; text: string }) => {
   const { uid, text } = props
 
-  const { systemImage: systemDetailImage } = useEndpoint({
-    uid: uid
-  })
-  const { data: image } = useSWR(systemDetailImage, fetcher, { suspense: false })
+  const { systemImage } = useEndpoint({ uid: uid })
+  const image = useImage(systemImage, false)
   const { getDeleteButton } = useSystemEdit({ deleteSystemUid: uid })
 
   return (
