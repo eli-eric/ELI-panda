@@ -15,7 +15,7 @@ const usePagination = ({
   useQuery,
   pageSizeDefault
 }: {
-  dependecies: React.DependencyList
+  dependecies?: React.DependencyList
   useQuery?: boolean
   pageSizeDefault?: number
 }): {
@@ -43,27 +43,33 @@ const usePagination = ({
     pageSize
   })
 
-  useEffect(() => {
-    if (useQuery) {
-      router.replace({
-        pathname: router.pathname,
-        query: router.query.search
-          ? {
-              ...router.query,
-              search: router.query.search,
-              page: page
-            }
-          : {
-              ...router.query,
-              page: page
-            }
-      })
-    }
-  }, [useQuery, page, ...dependecies]) //eslint-disable-line
+  useEffect(
+    () => {
+      if (useQuery) {
+        router.replace({
+          pathname: router.pathname,
+          query: router.query.search
+            ? {
+                ...router.query,
+                search: router.query.search,
+                page: page
+              }
+            : {
+                ...router.query,
+                page: page
+              }
+        })
+      }
+    },
+    dependecies ? [useQuery, page, ...dependecies] : [useQuery, page] //eslint-disable-line
+  )
 
-  useEffect(() => {
-    setPage(1)
-  }, [...dependecies]) //eslint-disable-line
+  useEffect(
+    () => {
+      setPage(1)
+    },
+    dependecies ? [...dependecies] : [] //eslint-disable-line
+  )
 
   useEffect(() => {
     if (totalCount) {

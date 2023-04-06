@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router'
-import { Fragment, useEffect } from 'react'
+import { Fragment, useCallback, useEffect } from 'react'
 import useSWR from 'swr'
 
-import TableComponent from '@/components/table/Table.comp'
 import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
+import useTable from '@/hooks/useTable'
+import { PATH } from '@/types/constants/paths'
 
-import { SystemsResponse } from '../../types/responses'
-import ResultItem from './ResultItem'
+import { SystemDetailResponse, SystemsResponse } from '../../types/responses'
 
 interface Props {
   query?: string
@@ -25,14 +25,51 @@ const Results = ({ query }: Props) => {
   })
   const { data: systems } = useSWR<SystemsResponse>(systemsList, mockFetcher)
 
+  const onClickRow = useCallback(
+    (item: SystemDetailResponse) => {
+      router.push({ pathname: PATH.SYSTEMS + '/' + item.uid, query: { q: router.query.q } })
+    },
+    [router]
+  )
+
+  const { getTable, TableRowItem } = useTable<SystemDetailResponse>({
+    collums: [
+      'Name',
+      'Description',
+      'System Code',
+      'System Type',
+      'System Alias',
+      'Location',
+      'Owner',
+      'Importance',
+      'Zone'
+    ],
+    data: systems?.data,
+    onClick: onClickRow,
+    renderRow: item => (
+      <Fragment>
+        <TableRowItem text={item.name} />
+        <TableRowItem text={item.description} isInfoTooltip={true} />
+        <TableRowItem text={item.systemCode} />
+        <TableRowItem text={item.systemType?.name} />
+        <TableRowItem text={item.systemAlias} />
+        <TableRowItem text={item.location?.name} />
+        <TableRowItem text={item.owner?.name} />
+        <TableRowItem text={item.importance?.name} />
+        <TableRowItem text={item.zone?.name} />
+      </Fragment>
+    )
+  })
+
   useEffect(() => {
     setTotalCount(systems?.totalCount)
   }, [systems, setTotalCount])
+
   return (
     <Fragment>
       {query && (
         <div className="flex flex-col min-h-[378px] justify-between border-b">
-          <TableComponent
+          {/* <TableComponent
             tableHeaders={[
               'Name',
               'Description',
@@ -48,7 +85,8 @@ const Results = ({ query }: Props) => {
             {systems?.data.map((item, index) => (
               <ResultItem key={item.uid + index} item={item} index={index} />
             ))}
-          </TableComponent>
+          </TableComponent> */}
+          {getTable()}
           {getPaginationComponent()}
         </div>
       )}
