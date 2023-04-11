@@ -1,14 +1,17 @@
+import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
-import { Fragment, useCallback, useEffect } from 'react'
+import { Fragment, useCallback, useEffect, useMemo } from 'react'
+import { Column } from 'react-table'
 import useSWR from 'swr'
 
+import TooltipComponent from '@/components/tooltip.comp'
 import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
+import useGeneralTable from '@/hooks/useGeneralTable'
 import usePagination from '@/hooks/usePagination'
-import useTable from '@/hooks/useTable'
 import { PATH } from '@/types/constants/paths'
 
-import { SystemDetailResponse, SystemsResponse } from '../../types/responses'
+import { SystemsResponse } from '../../types/responses'
 
 interface Props {
   query?: string
@@ -26,39 +29,53 @@ const Results = ({ query }: Props) => {
   const { data: systems } = useSWR<SystemsResponse>(systemsList, mockFetcher)
 
   const onClickRow = useCallback(
-    (item: SystemDetailResponse) => {
-      router.push({ pathname: PATH.SYSTEMS + '/' + item.uid, query: { q: router.query.q } })
+    (uid: string) => {
+      router.push({ pathname: PATH.SYSTEMS + '/' + uid, query: { q: router.query.q } })
     },
     [router]
   )
 
-  const { getTable, TableRowItem } = useTable<SystemDetailResponse>({
-    collums: [
-      'Name',
-      'Description',
-      'System Code',
-      'System Type',
-      'System Alias',
-      'Location',
-      'Owner',
-      'Importance',
-      'Zone'
+  const columns: Array<Column> = useMemo(
+    () => [
+      {
+        Header: 'Name',
+        accessor: 'name'
+      },
+      {
+        Header: 'Description',
+        accessor: 'description',
+        Cell: ({ value }: any) => (
+          <div className="flex items-center whitespace-normal">
+            <div className="flex-shrink-0">
+              <TooltipComponent text={value}>
+                <InformationCircleIcon className="h-6 w-6" />
+              </TooltipComponent>
+            </div>
+          </div>
+        )
+      },
+      { Header: 'System Code', accessor: 'systemCode' },
+      {
+        Header: 'System Type',
+        accessor: 'systemType',
+        Cell: ({ value }: any) => <span>{value?.name}</span>
+      },
+      { Header: 'System Alias', accessor: 'systemAlias' },
+      { Header: 'Location', accessor: 'location', Cell: ({ value }: any) => <span>{value?.name}</span> },
+      { Header: 'Owner', accessor: 'owner', Cell: ({ value }: any) => <span>{value?.name}</span> },
+      { Header: 'Importance', accessor: 'importance', Cell: ({ value }: any) => <span>{value?.name}</span> },
+      { Header: 'Zone', accessor: 'zone', Cell: ({ value }: any) => <span>{value?.name}</span> }
     ],
+    []
+  )
+
+  const { getTable } = useGeneralTable({
     data: systems?.data,
-    onClick: onClickRow,
-    renderRow: item => (
-      <Fragment>
-        <TableRowItem text={item.name} />
-        <TableRowItem text={item.description} isInfoTooltip={true} />
-        <TableRowItem text={item.systemCode} />
-        <TableRowItem text={item.systemType?.name} />
-        <TableRowItem text={item.systemAlias} />
-        <TableRowItem text={item.location?.name} />
-        <TableRowItem text={item.owner?.name} />
-        <TableRowItem text={item.importance?.name} />
-        <TableRowItem text={item.zone?.name} />
-      </Fragment>
-    )
+    columns: columns,
+    getRowProps: ({ original }) => ({
+      onClick: () => onClickRow(original['uid']),
+      className: 'cursor-pointer'
+    })
   })
 
   useEffect(() => {
@@ -69,23 +86,6 @@ const Results = ({ query }: Props) => {
     <Fragment>
       {query && (
         <div className="flex flex-col min-h-[378px] justify-between border-b">
-          {/* <TableComponent
-            tableHeaders={[
-              'Name',
-              'Description',
-              'System Code',
-              'System Type',
-              'System Alias',
-              'Location',
-              'Owner',
-              'Importance',
-              'Zone'
-            ]}
-          >
-            {systems?.data.map((item, index) => (
-              <ResultItem key={item.uid + index} item={item} index={index} />
-            ))}
-          </TableComponent> */}
           {getTable()}
           {getPaginationComponent()}
         </div>

@@ -1,9 +1,9 @@
-import { Column, Row, useTable } from 'react-table'
+import { Column, Row, useSortBy, useTable } from 'react-table'
 
 import { classNames } from '@/helpers'
 
 interface UseTableType {
-  data: {}[]
+  data?: {}[]
   columns: Array<Column>
   className?: string
   getHeaderProps?: () => {}
@@ -24,14 +24,17 @@ const useGeneralTable = ({
   getRowProps = defaultPropGetter,
   getCellProps = defaultPropGetter
 }: UseTableType) => {
-  const { headerGroups, getTableProps, getTableBodyProps, rows, prepareRow } = useTable({
-    columns,
-    data,
-    manualSortBy: true
-  })
+  const { headerGroups, getTableProps, getTableBodyProps, rows, prepareRow } = useTable(
+    {
+      columns,
+      data: data || [],
+      manualSortBy: false
+    },
+    useSortBy
+  )
 
   const getTable = () => (
-    <div data-testid="item-list" className={classNames('h-full border-t border-gray-300 pb-4', className)}>
+    <div className={classNames('h-full border-t border-gray-300 pb-4', className)}>
       <div className="-my-2  sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
           <div className=" shadow ring-1 ring-black ring-opacity-5 ">
@@ -62,13 +65,17 @@ const useGeneralTable = ({
               <tbody className="bg-white" {...getTableBodyProps()}>
                 {rows.map((row, index) => {
                   prepareRow(row)
-                  const { key, ...restRowProps } = row.getRowProps({
+                  const { key, className, ...restRowProps } = row.getRowProps({
                     ...getRowProps(row)
                   })
                   return (
                     <tr
                       key={key}
-                      className={classNames(index % 2 === 0 ? undefined : 'bg-gray-100', 'hover:bg-primary-200')}
+                      className={classNames(
+                        index % 2 === 0 ? undefined : 'bg-gray-100',
+                        'hover:bg-primary-200',
+                        className
+                      )}
                       {...restRowProps}
                     >
                       {row.cells.map(cell => {
