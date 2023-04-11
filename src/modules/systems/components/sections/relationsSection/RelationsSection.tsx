@@ -70,7 +70,9 @@ const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string
         >
           <FormattedMessage id={messages.buttons.addSpare} />
         </Button>
-        {relations && <RelationsTable relations={relations} systemName={systemName} onDelete={deleteHandler} />}
+        {relations && systemName && (
+          <RelationsTable relations={relations} systemName={systemName} onDelete={deleteHandler} />
+        )}
       </div>
       <ModalComponent open={openAddRelation} setOpen={setOpenAddRelation} buttons={{ noButtons: true }}>
         <AddRelationForm setopen={setOpenAddRelation} relationTypeCode={relationTypeCode} systemName={systemName} />

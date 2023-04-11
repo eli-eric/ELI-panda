@@ -1,4 +1,4 @@
-import { Column, useTable } from 'react-table'
+import { Column, Row, useTable } from 'react-table'
 
 import { classNames } from '@/helpers'
 
@@ -6,23 +6,43 @@ interface UseTableType {
   data: {}[]
   columns: Array<Column>
   className?: string
+  getHeaderProps?: () => {}
+  getColumnProps?: () => {}
+  getRowProps?: (row: Row<{}>) => {}
+  getCellProps?: () => {}
+  getHeaderGroupProps?: () => {}
 }
+const defaultPropGetter = () => ({})
 
-const Table2 = ({ data, columns, className }: UseTableType) => {
-  const { headerGroups, getTableProps, getTableBodyProps, rows, prepareRow } = useTable({ columns, data })
-  return (
+const useGeneralTable = ({
+  data,
+  columns,
+  className,
+  getHeaderGroupProps = defaultPropGetter,
+  getHeaderProps = defaultPropGetter,
+  getColumnProps = defaultPropGetter,
+  getRowProps = defaultPropGetter,
+  getCellProps = defaultPropGetter
+}: UseTableType) => {
+  const { headerGroups, getTableProps, getTableBodyProps, rows, prepareRow } = useTable({
+    columns,
+    data,
+    manualSortBy: true
+  })
+
+  const getTable = () => (
     <div data-testid="item-list" className={classNames('h-full border-t border-gray-300 pb-4', className)}>
       <div className="-my-2  sm:-mx-6 lg:-mx-8">
         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
           <div className=" shadow ring-1 ring-black ring-opacity-5 ">
-            <table className="min-w-full divide-y divide-gray-300" {...getTableProps()}>
+            <table className="min-w-full divide-y divide-gray-300" {...getTableProps({ ...getHeaderProps() })}>
               <thead className="bg-gray-50">
                 {headerGroups.map(headerGroup => {
-                  const { key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps()
+                  const { key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps({ ...getHeaderGroupProps() })
                   return (
                     <tr key={key} {...restHeaderGroupProps}>
                       {headerGroup.headers.map(column => {
-                        const { key, ...restHeaderProps } = column.getHeaderProps()
+                        const { key, ...restHeaderProps } = column.getHeaderProps(column.getSortByToggleProps({}))
                         return (
                           <th
                             key={key}
@@ -31,6 +51,7 @@ const Table2 = ({ data, columns, className }: UseTableType) => {
                             {...restHeaderProps}
                           >
                             {column.render('Header')}
+                            <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
                           </th>
                         )
                       })}
@@ -41,7 +62,9 @@ const Table2 = ({ data, columns, className }: UseTableType) => {
               <tbody className="bg-white" {...getTableBodyProps()}>
                 {rows.map((row, index) => {
                   prepareRow(row)
-                  const { key, ...restRowProps } = row.getRowProps()
+                  const { key, ...restRowProps } = row.getRowProps({
+                    ...getRowProps(row)
+                  })
                   return (
                     <tr
                       key={key}
@@ -49,14 +72,14 @@ const Table2 = ({ data, columns, className }: UseTableType) => {
                       {...restRowProps}
                     >
                       {row.cells.map(cell => {
-                        const { key, ...restCellProps } = cell.getCellProps()
+                        const { key, ...restCellProps } = cell.getCellProps({ ...getCellProps() })
                         return (
                           <td
                             key={key}
                             className="whitespace-nowrap text-sm  sm:pl-6 sm:pr-6 text-gray-500"
                             {...restCellProps}
                           >
-                            {cell.value ? cell.render('Cell') : 'N/A'}
+                            {cell.render('Cell')}
                           </td>
                         )
                       })}
@@ -70,6 +93,8 @@ const Table2 = ({ data, columns, className }: UseTableType) => {
       </div>
     </div>
   )
+
+  return { getTable }
 }
 
-export default Table2
+export default useGeneralTable
