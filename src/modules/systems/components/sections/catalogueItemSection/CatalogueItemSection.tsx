@@ -5,7 +5,7 @@ import { Button } from '@/components/Buttons'
 import { message } from '@/i18n/src/messages'
 import ItemDetailComponent from '@/modules/catalogueItem/item-detail.comp'
 
-import CatalogueItemModal from './componenets/CatalogueItemModal'
+import CatalogueItemModal from './components/CatalogueItemModal'
 
 const { addButton } = message.systemsPage.catalogueItem
 

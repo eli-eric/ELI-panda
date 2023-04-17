@@ -4,60 +4,58 @@ import useSWR from 'swr'
 
 import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
-import ModalWarningComponent from '@/components/modal/warning/modal-warning.comp'
-import TableComponent from '@/components/table/Table.comp'
+import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
+import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
 import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
 import { ModalButtons } from '@/types/form'
 
-import { useRelationMapRows } from '../../../hooks/relations/useMapRows'
 import { SystemRelationshipResponse } from '../../../types/responses'
-import AddRelationForm from './AddRelationForm'
+import AddRelationForm from './components/modal/RelationModal'
+import RelationsTable from './components/RelationsTable'
 
 const messages = message.systemsPage.relations
 
 const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string }) => {
-  const endpoints = useEndpoint({ uid })
-  const { data: relations } = useSWR<SystemRelationshipResponse[]>(
-    endpoints.systemRelationships,
-    mockFetcher
-  )
-  const [relationUid, setRelationUid] = useState<string | undefined>()
+  const { systemRelationships } = useEndpoint({ uid })
+  const { data: relations } = useSWR<SystemRelationshipResponse[]>(systemRelationships, mockFetcher)
   const intl = useIntl()
   const [openAddRelation, setOpenAddRelation] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
-  const [relationTypeCode, setRelationTypeCode] = useState<RELATION_TYPE_CODE>(
-    RELATION_TYPE_CODE.IS_SPARE_FOR
-  )
+  const [relationTypeCode, setRelationTypeCode] = useState<RELATION_TYPE_CODE>(RELATION_TYPE_CODE.IS_SPARE_FOR)
+  const [relationUid, setRelationUid] = useState()
+  const { systemRelationship } = useEndpoint({ uid: relationUid })
+  const { submit, error, loading } = useSubmit({
+    endpoint: systemRelationship,
+    method: 'delete',
+    mutateList: [systemRelationships],
+    onSuccess: () => {
+      setOpenDelete(false)
+    }
+  })
 
   const deleteModalButtons: ModalButtons = {
     goNext: {
       text: intl.formatMessage({ id: messages.deleteModal.buttons.continue }),
+      loading: loading,
       onClick: () => {
-        setRelationUid(undefined)
-        setOpenDelete(false)
+        submit()
       }
     },
     goBack: {
       text: intl.formatMessage({ id: messages.deleteModal.buttons.cancel }),
       onClick: () => {
-        setRelationUid(undefined)
         setOpenDelete(false)
       }
     }
   }
 
-  const collumsTitle = Object.keys(messages.tableHeader).map(key =>
-    intl.formatMessage({ id: messages.tableHeader[key] })
-  )
-
   const deleteHandler = uid => {
-    setRelationUid(uid)
     setOpenDelete(true)
+    setRelationUid(uid)
   }
-  const data = useRelationMapRows({ relations, onDelete: deleteHandler })
 
   return (
     <Fragment>
@@ -72,25 +70,20 @@ const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string
         >
           <FormattedMessage id={messages.buttons.addSpare} />
         </Button>
-        {relations && <TableComponent collumsTitle={collumsTitle} data={data} />}
+        {relations && <RelationsTable relations={relations} systemName={systemName} onDelete={deleteHandler} />}
       </div>
-      <ModalComponent
-        open={openAddRelation}
-        setOpen={setOpenAddRelation}
-        buttons={{ noButtons: true }}
-      >
-        <AddRelationForm
-          setopen={setOpenAddRelation}
-          relationTypeCode={relationTypeCode}
-          systemName={systemName}
-        />
+      <ModalComponent open={openAddRelation} setOpen={setOpenAddRelation} buttons={{ noButtons: true }}>
+        <AddRelationForm setopen={setOpenAddRelation} relationTypeCode={relationTypeCode} systemName={systemName} />
       </ModalComponent>
-      <ModalComponent open={openDelete} setOpen={setOpenDelete} buttons={deleteModalButtons}>
-        <ModalWarningComponent
-          title={intl.formatMessage({ id: messages.deleteModal.title })}
-          message={intl.formatMessage({ id: messages.deleteModal.text })}
-        />
-      </ModalComponent>
+      <WarningModal
+        title={intl.formatMessage({ id: messages.deleteModal.title })}
+        message={intl.formatMessage({ id: messages.deleteModal.text })}
+        open={openDelete}
+        setOpen={setOpenDelete}
+        buttons={deleteModalButtons}
+        testid="RelationDeleteModal"
+        error={error}
+      />
     </Fragment>
   )
 }

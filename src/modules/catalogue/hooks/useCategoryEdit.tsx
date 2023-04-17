@@ -6,18 +6,31 @@ import {
   TrashIcon
 } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
-import { Fragment, useEffect, useState } from 'react'
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react'
 
 import { Button } from '@/components/Buttons'
-import ErrorPage from '@/components/error/ErrorPage'
 import ModalComponent from '@/components/modal/modal.comp'
-import ModalWarningComponent from '@/components/modal/warning/modal-warning.comp'
+import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import CategoryEditModal from '@/modules/catalogue/categoryEditForm/CategoryEditModal'
 import { ROLE } from '@/types/constants/roles'
 import { ModalButtons } from '@/types/form'
 
 import useSubmit from '../../../hooks/useSubmit'
+
+interface EditModalProps {
+  testid: string
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
+  uid?: string
+  parentPath: string
+}
+
+const EditModal = ({ testid, open, setOpen, uid, parentPath }: EditModalProps) => (
+  <ModalComponent open={open} setOpen={setOpen} buttons={{ noButtons: true }} testid={testid}>
+    <CategoryEditModal setOpen={setOpen} parentPath={parentPath} uid={uid} />
+  </ModalComponent>
+)
 
 export const useCategoryEdit = ({
   editUid,
@@ -31,13 +44,13 @@ export const useCategoryEdit = ({
   const [openCopyEdit, setOpenCopyEdit] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
   const [copyCategoryUid, setCopyCategoporyUid] = useState<string | null>()
+  const parentPath = catalogueParentPath ? '/' + catalogueParentPath : ''
 
   const { data: session } = useSession()
   const { catalogueCategoryEdit, catalogueCategories, catalogueCategoryCopy } = useEndpoint({
     uid: editUid,
     path: !catalogueParentPath || catalogueParentPath === '' ? '' : '/' + catalogueParentPath
   })
-
   const deleteCategory = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: 'delete',
@@ -46,7 +59,6 @@ export const useCategoryEdit = ({
       setOpenDelete(false)
     }
   })
-
   const copyCategory = useSubmit<string>({
     endpoint: catalogueCategoryCopy,
     method: 'post',
@@ -56,7 +68,6 @@ export const useCategoryEdit = ({
       setCopyCategoporyUid(uid)
     }
   })
-
   const deletModalButtons: ModalButtons = {
     goNext: {
       text: 'Continue',
@@ -70,7 +81,6 @@ export const useCategoryEdit = ({
       onClick: () => setOpenDelete(false)
     }
   }
-
   const copyModalButtons: ModalButtons = {
     goNext: {
       text: 'Copy',
@@ -92,128 +102,102 @@ export const useCategoryEdit = ({
     }
   }, [copyCategoryUid])
 
-  const EditButtons = () => (
-    <Fragment>
-      {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
-        <div className="flex absolute bottom-0 right-0">
-          <Button
-            rounded=""
-            buttonSize="small"
-            onClick={() => {
-              setOpenEdit(true)
-            }}
-            className="h-full"
-          >
-            <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
-          </Button>
-          <Button
-            rounded=""
-            buttonSize="small"
-            onClick={() => {
-              setOpenCopy(true)
-            }}
-            className="h-full"
-          >
-            <DocumentDuplicateIcon className="h-4 w-4" aria-hidden="true" />
-          </Button>
-          <Button
-            rounded="rounded-br-md"
-            buttonSize="small"
-            onClick={() => {
-              setOpenDelete(true)
-            }}
-            className="h-full"
-          >
-            <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
-          </Button>
-        </div>
-      )}
-      <ModalComponent
-        open={openEdit}
-        setOpen={setOpenEdit}
-        buttons={{ noButtons: true }}
-        testid="catalogueEdit"
-      >
-        <CategoryEditModal
-          setOpen={setOpenEdit}
-          uid={editUid}
-          parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
-        />
-      </ModalComponent>
-      <ModalComponent
-        open={openDelete}
-        setOpen={setOpenDelete}
-        buttons={deletModalButtons}
-        testid="catalogueEdit"
-      >
-        <ModalWarningComponent
-          title="Warning"
-          message="Are you sure you want to remove this Category?"
-        />
-        {deleteCategory.error && <ErrorPage />}
-      </ModalComponent>
-      <ModalComponent
-        open={openCopy}
-        setOpen={setOpenCopy}
-        buttons={copyModalButtons}
-        testid="catalogueCopy"
-      >
-        <ModalWarningComponent
-          title="Warning"
-          message="Are you sure you want to copy this Category?"
-        />
-        {copyCategory.error && <ErrorPage />}
-      </ModalComponent>
-
-      {copyCategoryUid && (
-        <ModalComponent
-          open={openCopyEdit}
-          setOpen={setOpenCopyEdit}
-          buttons={{ noButtons: true }}
-          testid="catalogueCopy"
-        >
-          <CategoryEditModal
-            setOpen={setOpenCopyEdit}
-            parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
-            uid={copyCategoryUid}
-          />
-        </ModalComponent>
-      )}
-    </Fragment>
-  )
-
-  const getAddButton = () => (
-    <Fragment>
-      {session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT) && (
-        <li className="flex">
-          <div className="flex items-center">
-            <ChevronRightIcon
-              className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400"
-              aria-hidden="true"
-            />
+  const getEditButtons = () => {
+    if (session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT)) {
+      return (
+        <Fragment>
+          <div className="flex absolute bottom-0 right-0">
             <Button
+              rounded=""
+              buttonSize="small"
               onClick={() => {
                 setOpenEdit(true)
               }}
+              className="h-full"
             >
-              <PlusIcon className="h-5 w-5" aria-hidden="true" />
+              <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
+            </Button>
+            <Button
+              rounded=""
+              buttonSize="small"
+              onClick={() => {
+                setOpenCopy(true)
+              }}
+              className="h-full"
+            >
+              <DocumentDuplicateIcon className="h-4 w-4" aria-hidden="true" />
+            </Button>
+            <Button
+              rounded="rounded-br-md"
+              buttonSize="small"
+              onClick={() => {
+                setOpenDelete(true)
+              }}
+              className="h-full"
+            >
+              <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
             </Button>
           </div>
-        </li>
-      )}
-      <ModalComponent
-        open={openEdit}
-        setOpen={setOpenEdit}
-        buttons={{ noButtons: true }}
-        testid="catalogueEdit"
-      >
-        <CategoryEditModal
-          setOpen={setOpenEdit}
-          parentPath={catalogueParentPath ? '/' + catalogueParentPath : ''}
-        />
-      </ModalComponent>
-    </Fragment>
-  )
+          <EditModal
+            open={openEdit}
+            parentPath={parentPath}
+            uid={editUid}
+            setOpen={setOpenEdit}
+            testid="catalogueEdit"
+          />
+          <WarningModal
+            title="Warning"
+            message="Are you sure you want to remove this Category?"
+            open={openDelete}
+            setOpen={setOpenDelete}
+            buttons={deletModalButtons}
+            testid="catalogueEdit"
+            error={deleteCategory.error}
+          />
+          <WarningModal
+            title="Warning"
+            message="Are you sure you want to copy this Category?"
+            open={openCopy}
+            setOpen={setOpenCopy}
+            buttons={copyModalButtons}
+            testid="catalogueCopy"
+            error={copyCategory.error}
+          />
+          {copyCategoryUid && (
+            <EditModal
+              open={openCopyEdit}
+              setOpen={setOpenCopyEdit}
+              testid="catalogueCopy"
+              parentPath={parentPath}
+              uid={copyCategoryUid}
+            />
+          )}
+        </Fragment>
+      )
+    }
+  }
 
-  return { EditButtons, getAddButton }
+  const getAddButton = () => {
+    if (session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT)) {
+      return (
+        <Fragment>
+          <li className="flex">
+            <div className="flex items-center">
+              <ChevronRightIcon className="h-5 w-5 mr-2 flex-shrink-0 text-gray-400" aria-hidden="true" />
+              <Button
+                onClick={() => {
+                  setOpenEdit(true)
+                }}
+              >
+                <PlusIcon className="h-5 w-5" aria-hidden="true" />
+              </Button>
+            </div>
+          </li>
+          <EditModal open={openEdit} setOpen={setOpenEdit} parentPath={parentPath} testid="catalogueEdit" />
+        </Fragment>
+      )
+    }
+  }
+
+  return { getEditButtons, getAddButton }
 }

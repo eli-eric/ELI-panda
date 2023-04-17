@@ -49,7 +49,8 @@ const useSystemEditFormFields = () => {
       label: form.systemCode.label,
       placeholder: form.systemCode.placeholder,
       isError: !!formState.errors.systemCode,
-      rounded: 'rounded-md'
+      rounded: 'rounded-md',
+      disabled: true
     },
     systemAlias: {
       name: 'systemAlias',
@@ -94,6 +95,13 @@ const useSystemEditFormFields = () => {
       isError: !!formState.errors.criticalityClassUID,
       rounded: 'rounded-md',
       options: criticalityOption && [getDefaultOption('none'), ...criticalityOption]
+    },
+    //TODO: add codebook
+    parentUID: {
+      name: 'parentUID',
+      label: form.parentUID.label,
+      isError: !!formState.errors.parentUID,
+      rounded: 'rounded-md'
     }
   })
 }

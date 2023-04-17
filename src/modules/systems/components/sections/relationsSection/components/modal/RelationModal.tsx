@@ -1,13 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, Suspense, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 import * as yup from 'yup'
 
 import { Button } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
-import LoaderComponent from '@/components/loader.comp'
 import SearchBarComponent from '@/components/SearchBar.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
@@ -16,7 +15,7 @@ import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
 import { RelationFormType } from '@/modules/systems/types/form'
 
 import SelectRelation from './SelectRelation'
-import TableWithPaging from './TableWithPaging'
+import SystemsForRel from './SystemsForRelTable'
 const { buttons } = message.common
 interface Props {
   setopen: Dispatch<SetStateAction<boolean>>
@@ -29,7 +28,7 @@ const relationValidationSchema = yup.object().shape({
   relationTypeCode: yup.string().required(),
   systemToUid: yup.string().required()
 })
-
+//TODO refactor
 const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
   const [searchValue, setSearchValue] = useState<string | undefined>()
   const router = useRouter()
@@ -62,33 +61,21 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
   }
 
   return (
-    <div className="w-full min-h-[736px] justify-between flex flex-col">
+    <div className="w-full min-h-[541px] justify-between flex flex-col">
       <div className="flex flex-col justify-between">
         <FormProvider {...searchFormMethods}>
           <SearchBarComponent onSubmit={onSearchSubmit} />
         </FormProvider>
-        <Suspense
-          fallback={
-            <div className="max-h-full">
-              <LoaderComponent />
-            </div>
-          }
-        >
-          <TableWithPaging
-            searchValue={searchValue}
-            relationTypeCode={relationTypeCode}
-            selectedSystem={selectedSystem}
-            setSelectedSystem={setSelectedSystem}
-          />
-        </Suspense>
+        <SystemsForRel
+          searchValue={searchValue}
+          relationTypeCode={relationTypeCode}
+          selectedSystem={selectedSystem}
+          setSelectedSystem={setSelectedSystem}
+        />
       </div>
       <form onSubmit={relFormMethods.handleSubmit(onSubmit)} className="flex flex-col">
         <FormProvider {...relFormMethods}>
-          <SelectRelation
-            relationTypeCode={relationTypeCode}
-            systemName={systemName}
-            selectedSystem={selectedSystem}
-          />
+          <SelectRelation relationTypeCode={relationTypeCode} systemName={systemName} selectedSystem={selectedSystem} />
         </FormProvider>
         <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
           <Button

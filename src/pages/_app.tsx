@@ -23,6 +23,9 @@ const GlobalProvider = ({ children }: Props) => {
       value={{
         fetcher,
         suspense: true,
+        revalidateIfStale: false,
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
         onError: error => {
           if (!error) {
             const err = new Error('An error occurred while fetching the data.')

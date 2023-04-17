@@ -1,12 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import noImage from 'public/no-image.png'
 import { Dispatch, SetStateAction } from 'react'
-import useSWR from 'swr'
 
-import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
+import { useImage } from '@/hooks/useImage'
 import { useCategoryEdit } from '@/modules/catalogue/hooks/useCategoryEdit'
 import { PATH } from '@/types/constants/paths'
 import { CatalogueCategoryResponse } from '@/types/responses'
@@ -16,17 +14,16 @@ interface Props {
   setCatalogueParentUid: Dispatch<SetStateAction<string | undefined>>
 }
 
-const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
+const CategoryItemComponent = ({ category }: Props) => {
   const router = useRouter()
   const { catalogueCategoryImage } = useEndpoint({ uid: category.uid })
-  const { data: image } = useSWR(catalogueCategoryImage, fetcher, { suspense: false })
+  const image = useImage(catalogueCategoryImage)
 
-  const { EditButtons } = useCategoryEdit({
+  const { getEditButtons } = useCategoryEdit({
     editUid: category.uid,
     catalogueParentPath: category.parentPath
   })
-  const path =
-    PATH.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
+  const path = PATH.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
   return (
     <div className="flex-row justify-between relative flex z-10 items-center space-x-3 rounded-lg border border-gray-300 bg-white shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
       <Link
@@ -43,7 +40,7 @@ const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
             width={200}
             height={200}
             alt={category.code}
-            src={image ? image : noImage}
+            src={image}
           />
         </div>
         <div className="min-w-0 flex-1 mx-6 my-4">
@@ -53,7 +50,7 @@ const CategoryItemComponent = ({ category, setCatalogueParentUid }: Props) => {
           </div>
         </div>
       </Link>
-      <EditButtons />
+      {getEditButtons()}
     </div>
   )
 }

@@ -13,7 +13,7 @@ interface Props {
 
 const PropertyList = ({ name, errors }: Props) => {
   const { control } = useFormContext<CategoryFormType>()
-  const { fields, append, remove } = useFieldArray<CategoryFormType>({
+  const { fields, append, remove, move } = useFieldArray<CategoryFormType>({
     control,
     name: `${name}.properties`
   })
@@ -21,9 +21,16 @@ const PropertyList = ({ name, errors }: Props) => {
   const handleAddProp = () => {
     append({ name: '', typeUID: '', unitUID: '', defaultValue: '' })
   }
+
+  const handleMoveDown = index => {
+    if (index < fields.length - 1) move(index, index + 1)
+  }
+  const handleMoveUp = index => {
+    if (index > 0) move(index, index - 1)
+  }
   return (
     <div className="flex-1">
-      <ul className="mb-2">
+      <ul className="">
         {fields.map((field, index) => (
           <li key={field.id} className="border-b px-2 py-2">
             <PropertyItem
@@ -31,10 +38,10 @@ const PropertyList = ({ name, errors }: Props) => {
               index={index}
               name={`${name}.properties.${index}`}
               length={fields.length}
-              errors={
-                errors?.properties &&
-                (errors?.properties[index] as FieldErrors<Property> | undefined)
-              }
+              errors={errors?.properties && (errors?.properties[index] as FieldErrors<Property> | undefined)}
+              moveDown={handleMoveDown}
+              moveUp={handleMoveUp}
+              lenght={fields.length}
             />
           </li>
         ))}

@@ -30,9 +30,7 @@ const CatalogueItemsTable = ({
     [searchValue, page, pageSize]
   )
   const endpoints = useEndpoint({ query })
-  const { data: catalogueItems } = useSWR<CatalogueItemsResponse>(
-    searchValue ? endpoints.catalogueItems : undefined
-  )
+  const { data: catalogueItems } = useSWR<CatalogueItemsResponse>(searchValue ? endpoints.catalogueItems : undefined)
   useEffect(() => {
     setItem({ name: undefined, uid: undefined })
   }, [page, setItem])

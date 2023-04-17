@@ -2,12 +2,10 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import noImage from 'public/no-image.png'
-import useSWR from 'swr'
 
 import TooltipComponent from '@/components/tooltip.comp'
-import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
+import { useImage } from '@/hooks/useImage'
 import { Selectable } from '@/modules/systems/types'
 import { PATH } from '@/types/constants/paths'
 import { CatalogueItem } from '@/types/responses'
@@ -22,21 +20,13 @@ interface Props {
 const ItemListRow = ({ item, index, categoryListLength, selectable }: Props) => {
   const router = useRouter()
   const { catalogueItemImage } = useEndpoint({ uid: item.uid })
-  const { data: image } = useSWR(catalogueItemImage, fetcher, {
-    suspense: false
-  })
+  const image = useImage(catalogueItemImage)
   const categoryPath = PATH.CATALOGUE + '/' + item.categoryPath
 
   const Name = () => (
     <div className="flex items-center">
       <div className="h-10 w-10 flex-shrink-0">
-        <Image
-          className="h-10 w-10 rounded-full"
-          alt={item.name}
-          src={image || noImage}
-          width={200}
-          height={200}
-        />
+        <Image className="h-10 w-10 rounded-full" alt={item.name} src={image} width={200} height={200} />
       </div>
       <div className="ml-4">{item.name}</div>
     </div>
@@ -65,11 +55,7 @@ const ItemListRow = ({ item, index, categoryListLength, selectable }: Props) => 
         </td>
       )}
       <td className="whitespace-nowrap text-sm sm:pl-6 text-blue-500">
-        <Link
-          href={{ pathname: '/catalogue/item/' + item.uid }}
-          passHref
-          legacyBehavior={selectable?.isSelectable}
-        >
+        <Link href={{ pathname: '/catalogue/item/' + item.uid }} passHref legacyBehavior={selectable?.isSelectable}>
           {selectable ? (
             <a target="_blank">
               <Name />
@@ -89,10 +75,7 @@ const ItemListRow = ({ item, index, categoryListLength, selectable }: Props) => 
       {categoryListLength === 0 &&
         item.details &&
         item.details.map((item, index) => (
-          <td
-            key={item.propertyName + index}
-            className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500"
-          >
+          <td key={item.propertyName + index} className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">
             {item.value}
           </td>
         ))}
@@ -108,9 +91,7 @@ const ItemListRow = ({ item, index, categoryListLength, selectable }: Props) => 
         </td>
       )}
       <td className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">{item.manufacturer}</td>
-      <td className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">
-        {item.manufacturerNumber}
-      </td>
+      <td className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">{item.manufacturerNumber}</td>
       <td className="whitespace-nowrap text-sm  sm:pl-6 text-blue-500">
         <a target="_blank" href={item.manufacturerUrl} rel="noopener noreferrer">
           {item.manufacturerUrl}

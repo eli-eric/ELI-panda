@@ -48,11 +48,7 @@ const ComboboxComponent = <T extends FieldValues>({
         }}
         className={`${className} block relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
       >
-        {label && (
-          <Combobox.Label className="block text-sm font-medium text-gray-900">
-            {label}
-          </Combobox.Label>
-        )}
+        {label && <Combobox.Label className="block text-sm font-medium text-gray-900">{label}</Combobox.Label>}
         <div className="relative">
           <div className="w-full">
             <Combobox.Button className="w-full">
@@ -83,10 +79,7 @@ const ComboboxComponent = <T extends FieldValues>({
                   }}
                   className="absolute pr-8 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
                 >
-                  <XMarkIcon
-                    className="h-5 w-5 text-gray-200  hover:text-red-500"
-                    aria-hidden="true"
-                  />
+                  <XMarkIcon className="h-5 w-5 text-gray-200  hover:text-red-500" aria-hidden="true" />
                 </div>
               )}
             </Combobox.Button>
@@ -107,9 +100,7 @@ const ComboboxComponent = <T extends FieldValues>({
                 >
                   {({ active, selected }) => (
                     <>
-                      <span className={classNames('block truncate', selected && 'font-semibold')}>
-                        {item.name}
-                      </span>
+                      <span className={classNames('block truncate', selected && 'font-semibold')}>{item.name}</span>
 
                       {selected && (
                         <span

@@ -1,9 +1,9 @@
 import { Tab } from '@headlessui/react'
 import { PhotoIcon } from '@heroicons/react/24/outline'
-import Image from 'next/image'
+import Image, { StaticImageData } from 'next/image'
 
 interface Props {
-  images: string[]
+  images: Array<string | StaticImageData>
 }
 
 const ImageGalleryComponent = ({ images }: Props) => (
