@@ -18,6 +18,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          docker-compose -f docker-compose-dev.yml up -d --build
+          docker compose -f docker-compose-dev.yml up -d --build
         env:
           NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
