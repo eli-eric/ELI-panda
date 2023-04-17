@@ -53,12 +53,15 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
         }
       }
       const fetchFakeSystems = () => {
-        const res = [...Array(faker.datatype.number({ min: 10, max: 10 }))]
+        const res = [...Array(faker.datatype.number({ min: 0, max: 10 }))]
         return res.map(() => getFakeSystem())
       }
 
       const systems = fetchFakeSystems()
-      res.status(200).json({ data: systems, totalCount: systems.length === 0 ? 0 : 45 })
+      const timeout = faker.datatype.number({ min: 100, max: 1000 })
+      const timer = setTimeout(() => {
+        res.status(200).json({ data: systems, totalCount: systems.length === 0 ? 0 : 45 })
+      }, timeout)
     }
   } else {
     res.status(401).json({ message: 'Unauthorized' })

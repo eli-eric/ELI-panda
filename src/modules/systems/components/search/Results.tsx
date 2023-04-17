@@ -26,7 +26,7 @@ const Results = ({ query }: Props) => {
     uid: router.query.uid as string,
     query: { search: query, pagination }
   })
-  const { data: systems } = useSWR<SystemsResponse>(systemsList, mockFetcher)
+  const { data: systems } = useSWR<SystemsResponse>(systemsList, mockFetcher, { suspense: true })
 
   const onClickRow = useCallback(
     (uid: string) => {
@@ -72,10 +72,12 @@ const Results = ({ query }: Props) => {
   const { getTable } = useGeneralTable({
     data: systems?.data,
     columns: columns,
+    loading: !systems,
     getRowProps: ({ original }) => ({
       onClick: () => onClickRow(original['uid']),
       className: 'cursor-pointer'
-    })
+    }),
+    className: 'overflow-y-auto'
   })
 
   useEffect(() => {
