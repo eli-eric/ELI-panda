@@ -1,6 +1,6 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
-import { Fragment, useCallback, useEffect, useMemo } from 'react'
+import { Fragment, useEffect, useMemo } from 'react'
 import { Column } from 'react-table'
 import useSWR from 'swr'
 
@@ -9,6 +9,8 @@ import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useGeneralTable from '@/hooks/useGeneralTable'
 import usePagination from '@/hooks/usePagination'
+import useQueryString from '@/hooks/useQueryString'
+import useSortingStore from '@/store/sortingStore'
 import { PATH } from '@/types/constants/paths'
 
 import { SystemsResponse } from '../../types/responses'
@@ -22,18 +24,15 @@ const Results = ({ query }: Props) => {
   const { getPaginationComponent, pagination, setTotalCount } = usePagination({
     dependecies: [query]
   })
+
+  const { instances } = useSortingStore()
+  const sortConfigQuery = useQueryString(instances['systems'])
+
   const { systemsList } = useEndpoint({
     uid: router.query.uid as string,
-    query: { search: query, pagination }
+    query: { search: query, pagination, sortConfig: sortConfigQuery }
   })
-  const { data: systems } = useSWR<SystemsResponse>(systemsList, mockFetcher, { suspense: true })
-
-  const onClickRow = useCallback(
-    (uid: string) => {
-      router.push({ pathname: PATH.SYSTEMS + '/' + uid, query: { q: router.query.q } })
-    },
-    [router]
-  )
+  const { data: systems } = useSWR<SystemsResponse>(systemsList, mockFetcher, { suspense: false })
 
   const columns: Array<Column> = useMemo(
     () => [
@@ -70,11 +69,15 @@ const Results = ({ query }: Props) => {
   )
 
   const { getTable } = useGeneralTable({
+    tableId: 'systems',
     data: systems?.data,
     columns: columns,
     loading: !systems,
+    isSortable: true,
     getRowProps: ({ original }) => ({
-      onClick: () => onClickRow(original['uid']),
+      onClick: () => {
+        router.push({ pathname: PATH.SYSTEMS + '/' + original['uid'], query: { q: router.query.q } })
+      },
       className: 'cursor-pointer'
     }),
     className: 'overflow-y-auto'

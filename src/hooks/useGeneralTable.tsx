@@ -1,16 +1,20 @@
-import { Fragment } from 'react'
-import { Column, Row, useSortBy, useTable } from 'react-table'
+import { Fragment, useEffect } from 'react'
+import { Column, Row, useTable } from 'react-table'
 
 import EmptyResults from '@/components/EmptyResults'
-import LoaderComponent from '@/components/loader.comp'
+import ProgressBarComponent from '@/components/progress-bar.comp'
 import { classNames } from '@/helpers'
+import useSortingStore from '@/store/sortingStore'
+
+type SortDirectionType = 'asc' | 'desc' | null
 
 interface UseTableType {
   data?: {}[]
+  tableId: string
   columns: Array<Column>
   loading?: boolean
   className?: string
-  getHeaderProps?: () => {}
+  isSortable?: boolean
   getColumnProps?: () => {}
   getRowProps?: (row: Row<{}>) => {}
   getCellProps?: () => {}
@@ -21,21 +25,43 @@ const defaultPropGetter = () => ({})
 const useGeneralTable = ({
   data,
   columns,
-  loading,
+  loading = false,
   className,
   getHeaderGroupProps = defaultPropGetter,
-  getHeaderProps = defaultPropGetter,
   getColumnProps = defaultPropGetter,
   getRowProps = defaultPropGetter,
-  getCellProps = defaultPropGetter
+  getCellProps = defaultPropGetter,
+  isSortable = false,
+  tableId
 }: UseTableType) => {
-  const { headerGroups, getTableProps, getTableBodyProps, rows, prepareRow } = useTable(
-    {
-      columns,
-      data: data || [],
-      manualSortBy: false
-    },
-    useSortBy
+  const { headerGroups, getTableProps, getTableBodyProps, rows, prepareRow } = useTable({
+    columns,
+    data: data || []
+  })
+
+  const { instances, setSortConfig, resetSortConfig } = useSortingStore()
+  const sortConfig = instances[tableId]?.sortConfig || { key: null, direction: null }
+
+  const handleSort = columnKey => {
+    let newDirection: SortDirectionType = 'asc'
+    if (sortConfig.key === columnKey) {
+      if (sortConfig.direction === 'asc') {
+        newDirection = 'desc'
+      } else if (sortConfig.direction === 'desc') {
+        newDirection = null
+        columnKey = null
+      }
+    }
+    setSortConfig(tableId, { key: columnKey, direction: newDirection })
+  }
+
+  useEffect(
+    () =>
+      // Return a cleanup function to be called when the component unmounts
+      () => {
+        resetSortConfig(tableId)
+      },
+    [resetSortConfig, tableId]
   )
 
   const getTable = () => (
@@ -44,7 +70,7 @@ const useGeneralTable = ({
         <div className="-my-2  sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
             <div className=" shadow ring-1 ring-black ring-opacity-5 ">
-              <table className="min-w-full divide-y divide-gray-300" {...getTableProps({ ...getHeaderProps() })}>
+              <table className="min-w-full divide-y divide-gray-300" {...getTableProps()}>
                 <thead className="bg-gray-50">
                   {headerGroups.map(headerGroup => {
                     const { key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps({
@@ -53,16 +79,28 @@ const useGeneralTable = ({
                     return (
                       <tr key={key} {...restHeaderGroupProps}>
                         {headerGroup.headers.map(column => {
-                          const { key, ...restHeaderProps } = column.getHeaderProps(column.getSortByToggleProps({}))
+                          const { key, ...restHeaderProps } = column.getHeaderProps()
                           return (
                             <th
                               key={key}
                               scope="col"
-                              className="whitespace-nowrap sticky top-0 z-9 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 "
+                              onClick={isSortable ? () => handleSort(column.id) : undefined}
+                              className={classNames(
+                                'whitespace-nowrap sticky top-0 z-9 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
+                                isSortable ? 'cursor-pointer' : ''
+                              )}
                               {...restHeaderProps}
                             >
                               {column.render('Header')}
-                              <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
+                              <span>
+                                {sortConfig.key === column.id
+                                  ? sortConfig.direction === 'asc'
+                                    ? ' 🔼'
+                                    : sortConfig.direction === 'desc'
+                                    ? ' 🔽'
+                                    : ''
+                                  : ''}
+                              </span>
                             </th>
                           )
                         })}
@@ -107,8 +145,8 @@ const useGeneralTable = ({
               </table>
             </div>
           </div>
+          {loading && <ProgressBarComponent />}
         </div>
-        {loading && <LoaderComponent />}
       </div>
       {data?.length === 0 && <EmptyResults />}
     </Fragment>

@@ -48,7 +48,7 @@ const RelationsTable = ({ relations, systemName, onDelete }: Props) => {
     [onDelete, systemName]
   )
 
-  const { getTable } = useGeneralTable({ data: relations, columns: columns })
+  const { getTable } = useGeneralTable({ data: relations, columns: columns, tableId: 'relations' })
 
   return getTable()
 }
