@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import PaginationComponent from '@/components/table/Pagination.comp'
 
@@ -15,7 +15,7 @@ const usePagination = ({
   useQuery,
   pageSizeDefault
 }: {
-  dependecies: React.DependencyList
+  dependecies?: React.DependencyList
   useQuery?: boolean
   pageSizeDefault?: number
 }): {
@@ -30,47 +30,56 @@ const usePagination = ({
   const [pageSize, setPageSize] = useState<number>(pageSizeDefault || 10)
   const [totalCount, setTotalCount] = useState<number>()
   const [pageNumbers, setPageNumbers] = useState<number | undefined>()
+
   const router = useRouter()
 
-  const previousPageHandler = () => {
+  const previousPageHandler = useCallback(() => {
     setPage(prev => prev - 1)
-  }
-  const nextPageHandler = () => {
+  }, [])
+
+  const nextPageHandler = useCallback(() => {
     setPage(prev => prev + 1)
-  }
+  }, [])
+
   const pagination = useQueryString({
     page,
     pageSize
   })
 
-  useEffect(() => {
-    if (useQuery) {
-      router.replace({
-        pathname: router.pathname,
-        query: router.query.search
-          ? {
-              ...router.query,
-              search: router.query.search,
-              page: page
-            }
-          : {
-              ...router.query,
-              page: page
-            }
-      })
-    }
-  }, [useQuery, page, ...dependecies]) //eslint-disable-line
+  useEffect(
+    () => {
+      if (useQuery) {
+        router.replace({
+          pathname: router.pathname,
+          query: router.query.search
+            ? {
+                ...router.query,
+                search: router.query.search,
+                page: page
+              }
+            : {
+                ...router.query,
+                page: page
+              }
+        })
+      }
+    },
+    dependecies ? [useQuery, page, ...dependecies] : [useQuery, page] //eslint-disable-line
+  )
 
-  useEffect(() => {
-    setPage(1)
-  }, [...dependecies]) //eslint-disable-line
+  useEffect(
+    () => {
+      setPage(1)
+    },
+    dependecies ? [...dependecies] : [] //eslint-disable-line
+  )
 
   useEffect(() => {
     if (totalCount) {
       const pageCount = Math.ceil(totalCount / pageSize)
       setPageNumbers(pageCount)
     }
-  }, [totalCount, setPageNumbers, pageSize])
+  }, [totalCount, pageSize])
 
   const getPaginationComponent = () => (
     <PaginationComponent

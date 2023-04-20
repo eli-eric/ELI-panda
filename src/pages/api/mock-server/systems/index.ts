@@ -35,7 +35,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
         name: name || faker.company.catchPhrase()
       })
       const getFakeSystem = (): SystemDetailResponse => {
-        const uid = 'f5fcf985-ec36-45c6-afcf-4fb56bd6920f'
+        const uid = faker.datatype.uuid()
         const name = getFakeName()
         return {
           uid,
@@ -46,22 +46,22 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
           zone: getFakeCodebook('c0873468-d49f-45d8-b9ad-beb83d9c9772'),
           systemCode: faker.datatype.string(),
           systemAlias: faker.datatype.string(),
-          location: getFakeCodebook(
-            'II.01.02',
-            'II.01.02 - Reception and staircase - ELI2 building > Ground floor'
-          ),
+          location: getFakeCodebook('II.01.02', 'II.01.02 - Reception and staircase - ELI2 building > Ground floor'),
           owner: getFakeCodebook('71864520-9e86-427c-901c-0c220f951775', 'Administrator Admin'),
           itemUID: undefined,
           systemType: getFakeCodebook('8783fa8c-cfd3-4519-830f-5bfd05166ad9')
         }
       }
       const fetchFakeSystems = () => {
-        const res = [...Array(faker.datatype.number({ min: 10, max: 10 }))]
+        const res = [...Array(faker.datatype.number({ min: 0, max: 10 }))]
         return res.map(() => getFakeSystem())
       }
 
       const systems = fetchFakeSystems()
-      res.status(200).json({ data: systems, totalCount: systems.length === 0 ? 0 : 45 })
+      const timeout = faker.datatype.number({ min: 50, max: 200 })
+      const timer = setTimeout(() => {
+        res.status(200).json({ data: systems, totalCount: systems.length === 0 ? 0 : 45 })
+      }, timeout)
     }
   } else {
     res.status(401).json({ message: 'Unauthorized' })
