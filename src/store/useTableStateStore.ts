@@ -3,15 +3,15 @@ import { create } from 'zustand'
 
 type SortingInstance = {
   sortBy: SortingRule<{}>[]
-  currentPage: number
-  pageSize: number
+  sortByQueryString: string
+  pagination: string
 }
 
 type SortingState = {
   instances: Record<string, SortingInstance>
   setSortBy: (tableId: string, sortBy: SortingInstance['sortBy']) => void
-  setCurrentPage: (tableId: string, currentPage: number) => void
-  setPageSize: (tableId: string, pageSize: number) => void
+  setSortByQueryString: (tableId: string, sortByQueryString: SortingInstance['sortByQueryString']) => void
+  setPagination: (tableId: string, pagination: SortingInstance['pagination']) => void
   resetSortBy: (tableId: string) => void
 }
 
@@ -22,14 +22,14 @@ const useTableStateStore = create<SortingState>(set => ({
       const newInstance = { ...state.instances[tableId], sortBy }
       return { instances: { ...state.instances, [tableId]: newInstance } }
     }),
-  setCurrentPage: (tableId, currentPage) =>
+  setPagination: (tableId, pagination) =>
     set(state => {
-      const newInstance = { ...state.instances[tableId], currentPage }
+      const newInstance = { ...state.instances[tableId], pagination }
       return { instances: { ...state.instances, [tableId]: newInstance } }
     }),
-  setPageSize: (tableId, pageSize) =>
+  setSortByQueryString: (tableId, sortByQueryString) =>
     set(state => {
-      const newInstance = { ...state.instances[tableId], pageSize }
+      const newInstance = { ...state.instances[tableId], sortByQueryString }
       return { instances: { ...state.instances, [tableId]: newInstance } }
     }),
   resetSortBy: tableId =>

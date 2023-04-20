@@ -9,7 +9,6 @@ import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useGeneralTable from '@/hooks/useGeneralTable'
 import usePagination from '@/hooks/usePagination'
-import useQueryString from '@/hooks/useQueryString'
 import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
 
@@ -26,11 +25,10 @@ const Results = ({ query }: Props) => {
   })
 
   const { instances } = useTableStateStore()
-  const sortConfigQuery = useQueryString(instances['systems'])
 
   const { systemsList } = useEndpoint({
     uid: router.query.uid as string,
-    query: { search: query, pagination, sortBy: sortConfigQuery }
+    query: { search: query, pagination, sortBy: instances['systems']?.sortByQueryString }
   })
   const { data: systems } = useSWR<SystemsResponse>(systemsList, mockFetcher, { suspense: false })
 

@@ -6,6 +6,8 @@ import ProgressBarComponent from '@/components/progress-bar.comp'
 import { classNames } from '@/helpers'
 import useTableStateStore from '@/store/useTableStateStore'
 
+import useQueryString from './useQueryString'
+
 interface UseTableType {
   data?: {}[]
   tableId: string
@@ -32,7 +34,7 @@ const useGeneralTable = ({
   isSortable = false,
   tableId
 }: UseTableType) => {
-  const { instances, setSortBy } = useTableStateStore()
+  const { instances, setSortBy, setSortByQueryString } = useTableStateStore()
 
   const {
     headerGroups,
@@ -52,10 +54,12 @@ const useGeneralTable = ({
     },
     useSortBy
   )
+  const sortConfigQuery = useQueryString(sortBy)
 
   useEffect(() => {
     setSortBy(tableId, sortBy)
-  }, [setSortBy, tableId, sortBy])
+    setSortByQueryString(tableId, sortConfigQuery)
+  }, [setSortBy, setSortByQueryString, tableId, sortBy, sortConfigQuery])
 
   const getTable = () => (
     <Fragment>
@@ -79,8 +83,7 @@ const useGeneralTable = ({
                               key={key}
                               scope="col"
                               className={classNames(
-                                'whitespace-nowrap sticky top-0 z-9 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
-                                isSortable ? 'cursor-pointer' : ''
+                                'whitespace-nowrap sticky top-0 z-9 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6'
                               )}
                               {...restHeaderProps}
                             >

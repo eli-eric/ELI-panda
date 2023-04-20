@@ -5,7 +5,7 @@ import { FieldProps } from '@/types/form'
 
 import { ValidationIcon } from './Icons'
 
-export function Input({ register, name, ...rest }) {
+function Input({ register, name, ...rest }) {
   return <input {...register(name)} {...rest} />
 }
 
