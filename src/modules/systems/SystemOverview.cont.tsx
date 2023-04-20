@@ -9,6 +9,7 @@ import LoaderComponent from '@/components/loader.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import useParam from '@/modules/systems/hooks/useParam'
 
+import FileManager from '../fileManager/FileManager'
 import Breadcrumbs from './components/Breadcrumbs'
 import Results from './components/search/Results'
 import SearchBar from './components/search/SearchBar'
@@ -109,6 +110,10 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
                 </ErrorBoundary>
               </Card>
             )}
+            <Card>
+              <Heading text="Files" />
+              <FileManager />
+            </Card>
           </div>
         ) : (
           <div className="col-span-3">
