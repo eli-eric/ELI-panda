@@ -1,23 +1,20 @@
+import { SortingRule } from 'react-table'
 import { create } from 'zustand'
 
 type SortingInstance = {
-  sortConfig: {
-    key: string | null
-    direction: 'asc' | 'desc' | null
-  }
+  sortBy: SortingRule<{}>[]
 }
 
 type SortingState = {
   instances: Record<string, SortingInstance>
-  setSortConfig: (tableId: string, sortConfig: SortingInstance['sortConfig']) => void
-  resetSortConfig: (tableId: string) => void
+  setSortBy: (tableId: string, sortBy: SortingInstance['sortBy']) => void
+  resetSortBy: (tableId: string) => void
 }
 
 const useSortingStore = create<SortingState>(set => ({
   instances: {},
-  setSortConfig: (tableId, sortConfig) =>
-    set(state => ({ instances: { ...state.instances, [tableId]: { sortConfig } } })),
-  resetSortConfig: tableId =>
+  setSortBy: (tableId, sortBy) => set(state => ({ instances: { ...state.instances, [tableId]: { sortBy } } })),
+  resetSortBy: tableId =>
     set(state => {
       const newInstances = { ...state.instances }
       delete newInstances[tableId]

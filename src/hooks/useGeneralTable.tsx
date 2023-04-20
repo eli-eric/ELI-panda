@@ -1,12 +1,10 @@
 import { Fragment, useEffect } from 'react'
-import { Column, Row, useTable } from 'react-table'
+import { Column, Row, useSortBy, useTable } from 'react-table'
 
 import EmptyResults from '@/components/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { classNames } from '@/helpers'
 import useSortingStore from '@/store/sortingStore'
-
-type SortDirectionType = 'asc' | 'desc' | null
 
 interface UseTableType {
   data?: {}[]
@@ -34,35 +32,30 @@ const useGeneralTable = ({
   isSortable = false,
   tableId
 }: UseTableType) => {
-  const { headerGroups, getTableProps, getTableBodyProps, rows, prepareRow } = useTable({
-    columns,
-    data: data || []
-  })
+  const { instances, setSortBy } = useSortingStore()
 
-  const { instances, setSortConfig, resetSortConfig } = useSortingStore()
-  const sortConfig = instances[tableId]?.sortConfig || { key: null, direction: null }
-
-  const handleSort = columnKey => {
-    let newDirection: SortDirectionType = 'asc'
-    if (sortConfig.key === columnKey) {
-      if (sortConfig.direction === 'asc') {
-        newDirection = 'desc'
-      } else if (sortConfig.direction === 'desc') {
-        newDirection = null
-        columnKey = null
-      }
-    }
-    setSortConfig(tableId, { key: columnKey, direction: newDirection })
-  }
-
-  useEffect(
-    () =>
-      // Return a cleanup function to be called when the component unmounts
-      () => {
-        resetSortConfig(tableId)
-      },
-    [resetSortConfig, tableId]
+  const {
+    headerGroups,
+    getTableProps,
+    getTableBodyProps,
+    rows,
+    prepareRow,
+    state: { sortBy }
+  } = useTable(
+    {
+      columns,
+      data: data || [],
+      manualSortBy: true,
+      autoResetPage: false,
+      autoResetSortBy: false,
+      initialState: { sortBy: instances[tableId]?.sortBy || [] }
+    },
+    useSortBy
   )
+
+  useEffect(() => {
+    setSortBy(tableId, sortBy)
+  }, [setSortBy, tableId, sortBy])
 
   const getTable = () => (
     <Fragment>
@@ -79,12 +72,11 @@ const useGeneralTable = ({
                     return (
                       <tr key={key} {...restHeaderGroupProps}>
                         {headerGroup.headers.map(column => {
-                          const { key, ...restHeaderProps } = column.getHeaderProps()
+                          const { key, ...restHeaderProps } = column.getHeaderProps(column.getSortByToggleProps())
                           return (
                             <th
                               key={key}
                               scope="col"
-                              onClick={isSortable ? () => handleSort(column.id) : undefined}
                               className={classNames(
                                 'whitespace-nowrap sticky top-0 z-9 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
                                 isSortable ? 'cursor-pointer' : ''
@@ -92,15 +84,7 @@ const useGeneralTable = ({
                               {...restHeaderProps}
                             >
                               {column.render('Header')}
-                              <span>
-                                {sortConfig.key === column.id
-                                  ? sortConfig.direction === 'asc'
-                                    ? ' 🔼'
-                                    : sortConfig.direction === 'desc'
-                                    ? ' 🔽'
-                                    : ''
-                                  : ''}
-                              </span>
+                              <span>{column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}</span>
                             </th>
                           )
                         })}

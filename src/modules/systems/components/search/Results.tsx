@@ -28,9 +28,13 @@ const Results = ({ query }: Props) => {
   const { instances } = useSortingStore()
   const sortConfigQuery = useQueryString(instances['systems'])
 
+  useEffect(() => {
+    console.log('sortConfigQuery', sortConfigQuery)
+  }, [sortConfigQuery])
+
   const { systemsList } = useEndpoint({
     uid: router.query.uid as string,
-    query: { search: query, pagination, sortConfig: sortConfigQuery }
+    query: { search: query, pagination, sortBy: sortConfigQuery }
   })
   const { data: systems } = useSWR<SystemsResponse>(systemsList, mockFetcher, { suspense: false })
 
