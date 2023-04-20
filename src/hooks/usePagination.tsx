@@ -30,6 +30,7 @@ const usePagination = ({
   const [pageSize, setPageSize] = useState<number>(pageSizeDefault || 10)
   const [totalCount, setTotalCount] = useState<number>()
   const [pageNumbers, setPageNumbers] = useState<number | undefined>()
+
   const router = useRouter()
 
   const previousPageHandler = () => {

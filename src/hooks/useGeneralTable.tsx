@@ -4,7 +4,7 @@ import { Column, Row, useSortBy, useTable } from 'react-table'
 import EmptyResults from '@/components/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { classNames } from '@/helpers'
-import useSortingStore from '@/store/sortingStore'
+import useTableStateStore from '@/store/useTableStateStore'
 
 interface UseTableType {
   data?: {}[]
@@ -32,7 +32,7 @@ const useGeneralTable = ({
   isSortable = false,
   tableId
 }: UseTableType) => {
-  const { instances, setSortBy } = useSortingStore()
+  const { instances, setSortBy } = useTableStateStore()
 
   const {
     headerGroups,
@@ -72,7 +72,8 @@ const useGeneralTable = ({
                     return (
                       <tr key={key} {...restHeaderGroupProps}>
                         {headerGroup.headers.map(column => {
-                          const { key, ...restHeaderProps } = column.getHeaderProps(column.getSortByToggleProps())
+                          const sortProps = isSortable ? column.getSortByToggleProps() : {}
+                          const { key, ...restHeaderProps } = column.getHeaderProps(sortProps)
                           return (
                             <th
                               key={key}
@@ -110,11 +111,14 @@ const useGeneralTable = ({
                           {...restRowProps}
                         >
                           {row.cells.map(cell => {
-                            const { key, ...restCellProps } = cell.getCellProps({ ...getCellProps() })
+                            const { key, className, ...restCellProps } = cell.getCellProps({ ...getCellProps() })
                             return (
                               <td
                                 key={key}
-                                className="whitespace-nowrap text-sm  sm:pl-6 sm:pr-6 text-gray-500"
+                                className={classNames(
+                                  className,
+                                  'whitespace-nowrap text-sm  sm:pl-6 sm:pr-6 text-gray-500'
+                                )}
                                 {...restCellProps}
                               >
                                 {cell.render('Cell')}

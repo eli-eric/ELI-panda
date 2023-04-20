@@ -10,7 +10,7 @@ import { useEndpoint } from '@/hooks/useEndpoint'
 import useGeneralTable from '@/hooks/useGeneralTable'
 import usePagination from '@/hooks/usePagination'
 import useQueryString from '@/hooks/useQueryString'
-import useSortingStore from '@/store/sortingStore'
+import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
 
 import { SystemsResponse } from '../../types/responses'
@@ -25,12 +25,8 @@ const Results = ({ query }: Props) => {
     dependecies: [query]
   })
 
-  const { instances } = useSortingStore()
+  const { instances } = useTableStateStore()
   const sortConfigQuery = useQueryString(instances['systems'])
-
-  useEffect(() => {
-    console.log('sortConfigQuery', sortConfigQuery)
-  }, [sortConfigQuery])
 
   const { systemsList } = useEndpoint({
     uid: router.query.uid as string,
