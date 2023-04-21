@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 
 type RequestOptions = {
   method?: string
@@ -16,6 +16,10 @@ type RequestOptions = {
   window?: any
 }
 
+const defaults: RequestOptions = {
+  mode: 'no-cors'
+}
+
 const useHttp = () => {
   const initialState = {
     isLoading: false,
@@ -25,35 +29,23 @@ const useHttp = () => {
 
   const [state, setState] = useState(initialState)
 
-  const executeRequest = useCallback(
-    (defaultOptions: RequestOptions) =>
-      async (url: string, options: RequestOptions = {}) => {
-        const requestOptions = { ...options, ...defaultOptions }
-        const request = new Request(url, requestOptions)
+  const executeRequest = async (url: string, options: RequestOptions = {}) => {
+    const requestOptions = { ...defaults, ...options }
+    const request = new Request(url, requestOptions)
 
-        setState(prevState => ({ ...prevState, isLoading: true }))
+    setState(prevState => ({ ...prevState, isLoading: true }))
 
-        try {
-          const response = await fetch(request)
-          const jsonData = await response.json()
-          setState(prevState => ({ ...prevState, isLoading: false, data: jsonData }))
-        } catch (err) {
-          const errorMessage = (err as Error).toString()
-          setState({ error: errorMessage, data: null, isLoading: false })
-        }
-      },
-    []
-  )
-
-  const httpMethods = {
-    get: executeRequest({ method: 'get' }),
-    post: executeRequest({ method: 'post' }),
-    put: executeRequest({ method: 'put' }),
-    patch: executeRequest({ method: 'patch' }),
-    delete: executeRequest({ method: 'delete' })
+    try {
+      const response = await fetch(request)
+      const jsonData = await response.json()
+      setState(prevState => ({ ...prevState, isLoading: false, data: jsonData }))
+    } catch (err) {
+      const errorMessage = (err as Error).toString()
+      setState({ error: errorMessage, data: null, isLoading: false })
+    }
   }
 
-  return { ...state, fetch: httpMethods }
+  return { ...state, fetch: executeRequest }
 }
 
 export default useHttp
