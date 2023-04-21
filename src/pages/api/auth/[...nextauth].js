@@ -22,6 +22,7 @@ export default NextAuth({
           }
         }).catch(error => {
           //catching erros
+          console.log(error)
           if (error.response) {
             if (error.request.res.statusCode === 401) {
               throw new Error('Wrong password or user name')

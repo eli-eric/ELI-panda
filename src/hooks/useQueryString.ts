@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 
 const useQueryString = (queryObject: object) => {
-  const query = useMemo(() => JSON.stringify(queryObject), [queryObject])
-  return query
+  const queryString = useMemo(() => JSON.stringify(queryObject), [queryObject])
+  return queryString
 }
 
 export default useQueryString

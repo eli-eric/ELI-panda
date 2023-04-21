@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import PaginationComponent from '@/components/table/Pagination.comp'
 
@@ -30,14 +30,17 @@ const usePagination = ({
   const [pageSize, setPageSize] = useState<number>(pageSizeDefault || 10)
   const [totalCount, setTotalCount] = useState<number>()
   const [pageNumbers, setPageNumbers] = useState<number | undefined>()
+
   const router = useRouter()
 
-  const previousPageHandler = () => {
+  const previousPageHandler = useCallback(() => {
     setPage(prev => prev - 1)
-  }
-  const nextPageHandler = () => {
+  }, [])
+
+  const nextPageHandler = useCallback(() => {
     setPage(prev => prev + 1)
-  }
+  }, [])
+
   const pagination = useQueryString({
     page,
     pageSize
@@ -76,7 +79,7 @@ const usePagination = ({
       const pageCount = Math.ceil(totalCount / pageSize)
       setPageNumbers(pageCount)
     }
-  }, [totalCount, setPageNumbers, pageSize])
+  }, [totalCount, pageSize])
 
   const getPaginationComponent = () => (
     <PaginationComponent

@@ -58,7 +58,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
       }
 
       const systems = fetchFakeSystems()
-      const timeout = faker.datatype.number({ min: 100, max: 1000 })
+      const timeout = faker.datatype.number({ min: 50, max: 200 })
       const timer = setTimeout(() => {
         res.status(200).json({ data: systems, totalCount: systems.length === 0 ? 0 : 45 })
       }, timeout)
