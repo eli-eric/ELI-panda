@@ -17,7 +17,7 @@ type RequestOptions = {
 }
 
 const defaultOptions: RequestOptions = {
-  mode: 'no-cors'
+  //mode: 'no-cors'
 }
 
 const useHttp = () => {
