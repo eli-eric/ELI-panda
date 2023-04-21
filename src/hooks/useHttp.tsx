@@ -45,7 +45,7 @@ const useHttp = () => {
     }
   }
 
-  return { ...state, fetch: executeRequest }
+  return { ...state, executeRequest }
 }
 
 export default useHttp
