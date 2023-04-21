@@ -26,9 +26,9 @@ const useHttp = () => {
   const [state, setState] = useState(initialState)
 
   const executeRequest = useCallback(
-    (methodOptions: RequestOptions) =>
+    (defaultOptions: RequestOptions) =>
       async (url: string, options: RequestOptions = {}) => {
-        const requestOptions = { ...options, ...methodOptions }
+        const requestOptions = { ...options, ...defaultOptions }
         const request = new Request(url, requestOptions)
 
         setState(prevState => ({ ...prevState, isLoading: true }))
