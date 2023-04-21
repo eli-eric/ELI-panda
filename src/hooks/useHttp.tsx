@@ -38,7 +38,7 @@ const useHttp = () => {
     try {
       const response = await fetch(request)
       const jsonData = await response.json()
-      setState(prevState => ({ ...prevState, isLoading: false, data: jsonData }))
+      setState({ error: '', isLoading: false, data: jsonData })
     } catch (err) {
       const errorMessage = (err as Error).toString()
       setState({ error: errorMessage, data: null, isLoading: false })
