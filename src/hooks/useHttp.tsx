@@ -16,7 +16,7 @@ type RequestOptions = {
   window?: any
 }
 
-const defaults: RequestOptions = {
+const defaultOptions: RequestOptions = {
   mode: 'no-cors'
 }
 
@@ -30,7 +30,7 @@ const useHttp = () => {
   const [state, setState] = useState(initialState)
 
   const executeRequest = async (url: string, options: RequestOptions = {}) => {
-    const requestOptions = { ...defaults, ...options }
+    const requestOptions = { ...defaultOptions, ...options }
     const request = new Request(url, requestOptions)
 
     setState(prevState => ({ ...prevState, isLoading: true }))
