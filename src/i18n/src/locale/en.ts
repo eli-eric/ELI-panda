@@ -23,6 +23,7 @@ export const messages = {
     systems: 'Systems',
     systemsOverview: 'Systems',
     reports: 'Reports',
+    orders: 'Orders',
     button: {
       signout: 'Sign Out'
     },
@@ -193,5 +194,7 @@ export const messages = {
   },
 
   reportsPage: { head: 'Eli Panda - Reports' },
+  ordersPage: { head: 'Eli Panda - Orders' },
+  orderItem: { head: 'Eli Panda - Order Item' },
   defaul: { head: 'Eli Panda' }
 }

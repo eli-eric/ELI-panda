@@ -7,11 +7,10 @@ import EmptySectionComponent from '@/components/empty-section/empty-section.comp
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import useParam from '@/modules/systems/hooks/useParam'
+import { useSearch } from '@/hooks/useSearch'
 
 import Breadcrumbs from './components/Breadcrumbs'
 import Results from './components/search/Results'
-import SearchBar from './components/search/SearchBar'
 import CatalogueItemSection from './components/sections/catalogueItemSection/CatalogueItemSection'
 import RelationsSection from './components/sections/relationsSection/RelationsSection'
 import SystemDetailSection from './components/sections/systemDetailSection/SystemDetailSection'
@@ -38,7 +37,9 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
   const router = useRouter()
 
   const uid = router.query.uid as string
-  const [query, setQuery] = useParam('q')
+  const { renderSearchBar } = useSearch({
+    renderEnd: () => <ViewControl setView={setView} view={view} />
+  })
 
   const { getEditButton, getAddButton } = useSystemEdit({ systemDetail: systemDetail })
 
@@ -51,19 +52,11 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
 
   return (
     <div className="flex-col">
-      <div className="flex flex-wrap w-full">
-        <div className="w-full sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white border-b">
-          <div className="flex flex-1 justify-between px-4">
-            <div className="flex flex-1">
-              <SearchBar query={query as string} setQuery={setQuery} />
-            </div>
-            <ViewControl setView={setView} view={view} />
-          </div>
-        </div>
-      </div>
+      {renderSearchBar()}
+
       <Breadcrumbs parentPath={parentPath} />
 
-      <Results query={query} />
+      <Results />
 
       <div className="grid grid-cols-4">
         <div className="col-span-1">

@@ -1,32 +1,40 @@
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-const SearchBarComponent = () => {
+interface Props {
+  useQuery?: boolean
+  onSuccess?: (search: string) => void
+
+  renderEnd?: () => JSX.Element
+  renderBegin?: () => JSX.Element
+}
+
+export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin }: Props) => {
   const router = useRouter()
   const query = router.query
-  const { slug } = router.query
-  const { register, handleSubmit } = useForm<{ search: string }>({
-    defaultValues: { search: router.query.search as string }
+  const [searchValue, setSearchValue] = useState<string | undefined>(
+    useQuery ? (router.query.search as string) : undefined
+  )
+
+  const { handleSubmit, register } = useForm<{ search: string }>({
+    defaultValues: { search: searchValue }
   })
 
   const onSubmit = (data: { search: string }) => {
-    router.push({
-      query: data.search ? { ...query, search: data.search } : { slug: slug }
-    })
+    if (useQuery) {
+      router.replace({
+        query: data.search ? { ...query, search: data.search } : {}
+      })
+    }
+    setSearchValue(data.search)
+    onSuccess && onSuccess(data.search)
   }
 
-  /* let timer: NodeJS.Timeout
-  searchValueRef.current?.addEventListener('keyup', ev => {
-    ev.preventDefault()
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      setSearch()
-    }, 400)
-  }) */
-
-  return (
+  const renderSearchBar = () => (
     <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white border-b">
+      {renderBegin && renderBegin()}
       <div id="layout-search-bar" className="flex flex-1 justify-between px-4">
         <div className="flex flex-1">
           <form
@@ -54,8 +62,9 @@ const SearchBarComponent = () => {
           </form>
         </div>
       </div>
+      {renderEnd && renderEnd()}
     </div>
   )
-}
 
-export default SearchBarComponent
+  return { renderSearchBar, searchValue }
+}

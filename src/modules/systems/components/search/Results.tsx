@@ -14,21 +14,17 @@ import { PATH } from '@/types/constants/paths'
 
 import { SystemsResponse } from '../../types/responses'
 
-interface Props {
-  query?: string
-}
-
-const Results = ({ query }: Props) => {
+const Results = () => {
   const router = useRouter()
   const { getPaginationComponent, pagination, setTotalCount } = usePagination({
-    dependecies: [query]
+    dependecies: [router.query.search]
   })
 
   const { instances } = useTableStateStore()
 
   const { systemsList } = useEndpoint({
     uid: router.query.uid as string,
-    query: { search: query, pagination, sortBy: instances['systems']?.sortByQueryString }
+    query: { search: router.query.search, pagination, sortBy: instances['systems']?.sortByQueryString }
   })
   const { data: systems } = useSWR<SystemsResponse>(systemsList, mockFetcher, { suspense: false })
 
@@ -87,7 +83,7 @@ const Results = ({ query }: Props) => {
 
   return (
     <Fragment>
-      {query && (
+      {router.query.search && (
         <div className="flex flex-col min-h-[378px] justify-between border-b">
           {getTable()}
           {getPaginationComponent()}
