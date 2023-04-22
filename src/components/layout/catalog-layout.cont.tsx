@@ -16,7 +16,7 @@ export const TableLayoutContainer = ({ children, catalogueItems, categoryList }:
   useEffect(() => {
     // Handler to call on window resize
     const handleResize = () => {
-      const searchBar = document.getElementById('layout-search-bar')?.clientHeight || 0
+      const searchBar = document.getElementById('search-bar')?.clientHeight || 0
       const navHeader = document.getElementById('nav-bar')?.clientHeight || 0
       const emptyResults = document.getElementById('empty-results')?.clientHeight || 0
 

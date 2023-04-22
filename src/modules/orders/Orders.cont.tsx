@@ -35,7 +35,7 @@ const OrdersContainer = () => {
     () => [
       {
         Header: 'Actions',
-        Cell: ({ value, row }: CellProps<{}, any>) => (
+        Cell: ({ row }: CellProps<{}, any>) => (
           <div {...row.getRowProps}>
             <Button className="mr-1" buttonSize="small" onClick={() => {}} rounded="rounded-md">
               <PencilSquareIcon className="h-5 w-5" aria-hidden="true" />
