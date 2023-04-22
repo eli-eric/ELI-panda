@@ -1,7 +1,7 @@
 import { Fragment, useEffect } from 'react'
 import { Column, Row, useSortBy, useTable } from 'react-table'
 
-import EmptyResults from '@/components/EmptyResults'
+import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { classNames } from '@/helpers'
 import useTableStateStore from '@/store/useTableStateStore'
@@ -63,10 +63,10 @@ const useGeneralTable = ({
 
   const getTable = () => (
     <Fragment>
-      <div className={classNames('h-full border-t border-gray-300 pb-4', className)}>
+      <div className={classNames('h-full flex flex-col border-t border-gray-300 pb-4', className)}>
         <div className="-my-2  sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-            <div className=" shadow ring-1 ring-black ring-opacity-5 ">
+            <div className="shadow ring-1 ring-black ring-opacity-5 ">
               <table className="min-w-full divide-y divide-gray-300" {...getTableProps()}>
                 <thead className="bg-gray-50">
                   {headerGroups.map(headerGroup => {
@@ -83,7 +83,7 @@ const useGeneralTable = ({
                               key={key}
                               scope="col"
                               className={classNames(
-                                'whitespace-nowrap sticky top-0 z-9 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6'
+                                'whitespace-nowrap sticky top-0 z-20 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6'
                               )}
                               {...restHeaderProps}
                             >
@@ -138,8 +138,12 @@ const useGeneralTable = ({
           </div>
           {loading && <ProgressBarComponent />}
         </div>
+        {data?.length === 0 && (
+          <div className="flex align-middle justify-center mt-10">
+            <EmptyResults />
+          </div>
+        )}
       </div>
-      {data?.length === 0 && <EmptyResults />}
     </Fragment>
   )
 

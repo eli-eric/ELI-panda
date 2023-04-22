@@ -4,14 +4,12 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import { useSearch } from '@/hooks/useSearch'
-import { CatalogLayoutContainer } from '@/modules/catalogue/layout/catalog-layout.cont'
+import OrdersContainer from '@/modules/orders/Orders.cont'
 
 const messages = message.ordersPage
 
 const OrdersPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
-  const { renderSearchBar } = useSearch({})
 
   return (
     <Fragment>
@@ -19,7 +17,7 @@ const OrdersPage: NextPage = (): JSX.Element => {
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-      <CatalogLayoutContainer>{renderSearchBar()}</CatalogLayoutContainer>
+      <OrdersContainer />
     </Fragment>
   )
 }

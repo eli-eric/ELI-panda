@@ -10,7 +10,7 @@ interface Props {
 
 /* container for responsive layout with sticky footer and sticky table header */
 
-export const CatalogLayoutContainer = ({ children, catalogueItems, categoryList }: Props) => {
+export const TableLayoutContainer = ({ children, catalogueItems, categoryList }: Props) => {
   const [height, setHeight] = useState<number>(0)
 
   useEffect(() => {
@@ -18,11 +18,12 @@ export const CatalogLayoutContainer = ({ children, catalogueItems, categoryList 
     const handleResize = () => {
       const searchBar = document.getElementById('layout-search-bar')?.clientHeight || 0
       const navHeader = document.getElementById('nav-bar')?.clientHeight || 0
+      const emptyResults = document.getElementById('empty-results')?.clientHeight || 0
 
-      const catalogueList = document.getElementById('catalogue-list')?.clientHeight || 0
+      const categoryList = document.getElementById('category-list')?.clientHeight || 0
       const catalogueBreadcrump = document.getElementById('breadcrump')?.clientHeight || 0
-      const cataloguePaging = document.getElementById('catalogue-paging')?.clientHeight || 0
-      const height = searchBar + catalogueList + cataloguePaging + catalogueBreadcrump + navHeader
+      const cataloguePaging = document.getElementById('paging')?.clientHeight || 0
+      const height = searchBar + categoryList + cataloguePaging + catalogueBreadcrump + navHeader - emptyResults
 
       // REVIEW LAYOUT HEIGHT +1  // TODO
       setHeight(height + 1)
@@ -46,11 +47,3 @@ export const CatalogLayoutContainer = ({ children, catalogueItems, categoryList 
     </div>
   )
 }
-
-interface TableProps {
-  children: React.ReactNode
-}
-
-export const TableLayoutComponent = ({ children }: TableProps) => (
-  <div className="h-full overflow-auto border-t border-gray-300  ">{children}</div>
-)

@@ -17,11 +17,6 @@ export type SystemDetailResponse = {
 
 export type ParentPath = { name: string; uid: string }[]
 
-export type SystemListResponse = {
-  totalCount: number
-  data: SystemDetailResponse[]
-}
-
 export type SubsystemsResponse = {
   name: string
   uid: string

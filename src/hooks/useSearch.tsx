@@ -33,9 +33,8 @@ export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin }
   }
 
   const renderSearchBar = () => (
-    <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white border-b">
-      {renderBegin && renderBegin()}
-      <div id="layout-search-bar" className="flex flex-1 justify-between px-4">
+    <div id="layout-search-bar" className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white border-b">
+      <div className="flex flex-1 justify-between px-4">
         <div className="flex flex-1">
           <form
             data-testid="search"
@@ -62,7 +61,6 @@ export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin }
           </form>
         </div>
       </div>
-      {renderEnd && renderEnd()}
     </div>
   )
 
