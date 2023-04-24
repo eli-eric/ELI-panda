@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { Column, Row, useSortBy, useTable } from 'react-table'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
@@ -14,6 +14,7 @@ interface UseTableType {
   columns: Array<Column>
   loading?: boolean
   className?: string
+  pinnedColumns?: string[]
   isSortable?: boolean
   getColumnProps?: () => {}
   getRowProps?: (row: Row<{}>) => {}
@@ -27,6 +28,7 @@ const useGeneralTable = ({
   columns,
   loading = false,
   className,
+  pinnedColumns,
   getHeaderGroupProps = defaultPropGetter,
   getColumnProps = defaultPropGetter,
   getRowProps = defaultPropGetter,
@@ -35,6 +37,9 @@ const useGeneralTable = ({
   tableId
 }: UseTableType) => {
   const { instances, setSortBy, setSortByQueryString } = useTableStateStore()
+
+  const [pinnedColumnWidths, setPinnedColumnWidths] = useState<number[]>([])
+  const headerRefs = useRef<(HTMLTableCellElement | null)[]>([])
 
   const {
     headerGroups,
@@ -81,9 +86,32 @@ const useGeneralTable = ({
                           return (
                             <th
                               key={key}
+                              ref={el => {
+                                if (el && pinnedColumns?.includes(column.Header as string)) {
+                                  const index = pinnedColumns.indexOf(column.Header as string)
+                                  if (!headerRefs.current[index]) {
+                                    headerRefs.current[index] = el
+                                    setPinnedColumnWidths(prevWidths => {
+                                      const newWidths = [...prevWidths]
+                                      newWidths[index] = el.getBoundingClientRect().width
+                                      return newWidths
+                                    })
+                                  }
+                                }
+                              }}
+                              style={{
+                                left: pinnedColumns?.includes(column.Header as string)
+                                  ? pinnedColumnWidths
+                                      .slice(0, pinnedColumns.indexOf(column.Header as string))
+                                      .reduce((a, b) => a + b, 0)
+                                  : ''
+                              }}
                               scope="col"
                               className={classNames(
-                                'whitespace-nowrap sticky top-0 z-20 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6'
+                                'whitespace-nowrap sticky top-0 z-20 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
+                                pinnedColumns?.includes(column.Header as string)
+                                  ? 'sticky top-0 z-10 bg-white left-[128px]'
+                                  : undefined
                               )}
                               {...restHeaderProps}
                             >
@@ -118,9 +146,23 @@ const useGeneralTable = ({
                             return (
                               <td
                                 key={key}
+                                style={{
+                                  ...(pinnedColumns?.includes(cell.column.Header as string)
+                                    ? {
+                                        position: 'sticky',
+                                        left: pinnedColumnWidths
+                                          .slice(0, pinnedColumns.indexOf(cell.column.Header as string))
+                                          .reduce((a, b) => a + b, 0),
+                                        zIndex: 10
+                                      }
+                                    : {})
+                                }}
                                 className={classNames(
                                   className,
-                                  'whitespace-nowrap text-sm  sm:pl-6 sm:pr-6 text-gray-500'
+                                  'whitespace-nowrap text-sm sm:pl-6 sm:pr-6 text-gray-500',
+                                  pinnedColumns?.includes(cell.column.Header as string)
+                                    ? 'sticky top-0 z-10 bg-white bg-opacity-75 backdrop-blur backdrop-filter'
+                                    : undefined
                                 )}
                                 {...restCellProps}
                               >

@@ -62,8 +62,9 @@ const OrdersContainer = () => {
     tableId: 'orders',
     data: orderList?.data,
     loading: !orderList,
-    className: 'overflow-y-auto',
-    isSortable: true
+    isSortable: true,
+    className: 'relative overflow-x-auto',
+    pinnedColumns: ['Actions', 'Name']
   })
 
   useEffect(() => {
