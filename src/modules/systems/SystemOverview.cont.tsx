@@ -37,7 +37,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
   const router = useRouter()
 
   const uid = router.query.uid as string
-  const { renderSearchBar } = useSearch({
+  const { renderSearchBar, searchValue } = useSearch({
     renderEnd: () => <ViewControl setView={setView} view={view} />
   })
 
@@ -56,7 +56,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
 
       <Breadcrumbs parentPath={parentPath} />
 
-      <Results />
+      <Results searchValue={searchValue} />
 
       <div className="grid grid-cols-4">
         <div className="col-span-1">

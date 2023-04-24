@@ -1,4 +1,4 @@
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo } from 'react'
 import { CellProps, Column } from 'react-table'
@@ -14,10 +14,18 @@ import usePagination from '@/hooks/usePagination'
 import { useSearch } from '@/hooks/useSearch'
 import useTableStateStore from '@/store/useTableStateStore'
 
-import { OrderListResponse } from './types'
+import { Order, OrderListResponse } from './types'
 
 const OrdersContainer = () => {
-  const { renderSearchBar } = useSearch({})
+  const { renderSearchBar } = useSearch({
+    renderBegin: () => (
+      <div>
+        <Button className="mr-1" onClick={() => {}} rounded="rounded-md">
+          <PlusIcon className="h-5 w-5" aria-hidden="true" />
+        </Button>
+      </div>
+    )
+  })
 
   const router = useRouter()
 
@@ -32,11 +40,11 @@ const OrdersContainer = () => {
   })
   const { data: orderList, error } = useSWR<OrderListResponse>(orders, mockFetcher, { suspense: false })
 
-  const columns: Array<Column> = useMemo(
-    () => [
+  const columns = useMemo(
+    (): Array<Column<Order>> => [
       {
         Header: 'Actions',
-        Cell: ({ row }: CellProps<{}, any>) => (
+        Cell: ({ row }: CellProps<Order, any>) => (
           <div {...row.getRowProps}>
             <Button className="mr-1" buttonSize="small" onClick={() => {}} rounded="rounded-md">
               <PencilSquareIcon className="h-5 w-5" aria-hidden="true" />
@@ -59,12 +67,13 @@ const OrdersContainer = () => {
     []
   )
 
-  const { getTable } = useGeneralTable({
+  const { getTable } = useGeneralTable<Order>({
     columns,
     tableId: 'orders',
     data: orderList?.data,
     loading: !orderList,
     isSortable: true,
+    uriSortBy: true,
     className: 'relative overflow-x-auto',
     getCellProps: ({ column }) => ({
       className: classNames(

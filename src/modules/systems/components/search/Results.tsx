@@ -12,24 +12,28 @@ import usePagination from '@/hooks/usePagination'
 import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
 
-import { SystemsResponse } from '../../types/responses'
+import { SystemDetailResponse, SystemsResponse } from '../../types/responses'
 
-const Results = () => {
+interface ResultsProps {
+  searchValue?: string
+}
+
+const Results = ({ searchValue }: ResultsProps) => {
   const router = useRouter()
   const { getPaginationComponent, pagination, setTotalCount } = usePagination({
-    dependecies: [router.query.search]
+    dependecies: [searchValue]
   })
 
   const { instances } = useTableStateStore()
 
   const { systemsList } = useEndpoint({
     uid: router.query.uid as string,
-    query: { search: router.query.search, pagination, sortBy: instances['systems']?.sortByQueryString }
+    query: { search: searchValue, pagination, sortBy: instances['systems']?.sortByQueryString }
   })
   const { data: systems } = useSWR<SystemsResponse>(systemsList, mockFetcher, { suspense: false })
 
-  const columns: Array<Column> = useMemo(
-    () => [
+  const columns = useMemo(
+    (): Array<Column<SystemDetailResponse>> => [
       {
         Header: 'Name',
         accessor: 'name'
@@ -62,15 +66,16 @@ const Results = () => {
     []
   )
 
-  const { getTable } = useGeneralTable({
+  const { getTable } = useGeneralTable<SystemDetailResponse>({
     tableId: 'systems',
     data: systems?.data,
     columns: columns,
     loading: !systems,
     isSortable: true,
+    uriSortBy: true,
     getRowProps: ({ original }) => ({
       onClick: () => {
-        router.push({ pathname: PATH.SYSTEMS + '/' + original['uid'], query: { q: router.query.q } })
+        router.push({ pathname: PATH.SYSTEMS + '/' + original.uid, query: { ...router.query } })
       },
       className: 'cursor-pointer'
     }),
@@ -83,7 +88,7 @@ const Results = () => {
 
   return (
     <Fragment>
-      {router.query.search && (
+      {searchValue && (
         <div className="flex flex-col min-h-[378px] justify-between border-b">
           {getTable()}
           {getPaginationComponent()}

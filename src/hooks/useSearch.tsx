@@ -35,6 +35,7 @@ export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin }
   const renderSearchBar = () => (
     <div id="search-bar" className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white border-b">
       <div className="flex flex-1 justify-between px-4">
+        <div className="flex items-center mr-2">{renderBegin && renderBegin()}</div>
         <div className="flex flex-1">
           <form className="flex w-full md:ml-0" onSubmit={handleSubmit(onSubmit)}>
             <label htmlFor="search-field" className="sr-only">
@@ -55,6 +56,7 @@ export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin }
             </div>
           </form>
         </div>
+        {renderEnd && renderEnd()}
       </div>
     </div>
   )

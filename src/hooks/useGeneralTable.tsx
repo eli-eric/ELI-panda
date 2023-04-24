@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { Fragment, useEffect } from 'react'
 import { Cell, Column, HeaderGroup, Row, useSortBy, useTable } from 'react-table'
 
@@ -8,24 +9,26 @@ import useTableStateStore from '@/store/useTableStateStore'
 
 import useQueryString from './useQueryString'
 
-interface UseTableType {
-  data?: {}[]
+interface UseTableType<T extends object> {
+  data?: T[]
   tableId: string
-  columns: Array<Column>
+  columns: Array<Column<T>>
   loading?: boolean
   className?: string
   isSortable?: boolean
-  getRowProps?: (row: Row<{}>) => {}
-  getCellProps?: (cell: Cell<{}, any>) => {}
-  getColumnProps?: (column: HeaderGroup<{}>) => {}
+  uriSortBy?: boolean
+  getRowProps?: (row: Row<T>) => {}
+  getCellProps?: (cell: Cell<T, any>) => {}
+  getColumnProps?: (column: HeaderGroup<T>) => {}
   getHeaderGroupProps?: () => {}
 }
 const defaultPropGetter = () => ({})
 
-const useGeneralTable = ({
+const useGeneralTable = <T extends object>({
   data,
   columns,
   loading = false,
+  uriSortBy = false,
   className,
   getHeaderGroupProps = defaultPropGetter,
   getColumnProps = defaultPropGetter,
@@ -33,8 +36,10 @@ const useGeneralTable = ({
   getCellProps = defaultPropGetter,
   isSortable = false,
   tableId
-}: UseTableType) => {
+}: UseTableType<T>) => {
   const { instances, setSortBy, setSortByQueryString } = useTableStateStore()
+  const router = useRouter()
+  const sortByQueryString = router.query.sortBy as string
 
   const {
     headerGroups,
@@ -42,8 +47,9 @@ const useGeneralTable = ({
     getTableBodyProps,
     rows,
     prepareRow,
-    state: { sortBy }
-  } = useTable(
+    state: { sortBy },
+    setSortBy: setSortByTable
+  } = useTable<T>(
     {
       columns,
       data: data || [],
@@ -54,18 +60,29 @@ const useGeneralTable = ({
     },
     useSortBy
   )
+  useEffect(() => {
+    if (uriSortBy) {
+      if (sortByQueryString) {
+        const sortByParsed = JSON.parse(sortByQueryString)
+        setSortBy(tableId, sortByParsed)
+        setSortByTable(sortByParsed)
+      }
+    }
+  }, [sortByQueryString, tableId, setSortBy, setSortByTable, uriSortBy])
+
   const sortConfigQuery = useQueryString(sortBy)
 
   useEffect(() => {
     setSortBy(tableId, sortBy)
     setSortByQueryString(tableId, sortConfigQuery)
-  }, [setSortBy, setSortByQueryString, tableId, sortBy, sortConfigQuery])
+    if (uriSortBy) router.replace(router.pathname, { query: { ...router.query, sortBy: sortConfigQuery } })
+  }, [setSortBy, setSortByQueryString, tableId, sortBy, sortConfigQuery]) //eslint-disable-line
 
   const getTable = () => (
     <Fragment>
       <div className={classNames('h-full flex flex-col border-t border-gray-300 pb-4', className)}>
         <div className="-my-2  sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
+          <div className="inline-block min-w-full py-2 align-middle pl-8">
             <div className="shadow ring-1 ring-black ring-opacity-5 ">
               <table className="min-w-full divide-y divide-gray-300" {...getTableProps()}>
                 <thead className="bg-gray-50 border-b">
