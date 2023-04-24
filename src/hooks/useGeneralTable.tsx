@@ -1,5 +1,5 @@
-import { Fragment, useEffect, useRef, useState } from 'react'
-import { Column, Row, useSortBy, useTable } from 'react-table'
+import { Fragment, useEffect } from 'react'
+import { Cell, Column, HeaderGroup, Row, useSortBy, useTable } from 'react-table'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
@@ -14,11 +14,10 @@ interface UseTableType {
   columns: Array<Column>
   loading?: boolean
   className?: string
-  pinnedColumns?: string[]
   isSortable?: boolean
-  getColumnProps?: () => {}
   getRowProps?: (row: Row<{}>) => {}
-  getCellProps?: () => {}
+  getCellProps?: (cell: Cell<{}, any>) => {}
+  getColumnProps?: (column: HeaderGroup<{}>) => {}
   getHeaderGroupProps?: () => {}
 }
 const defaultPropGetter = () => ({})
@@ -28,7 +27,6 @@ const useGeneralTable = ({
   columns,
   loading = false,
   className,
-  pinnedColumns,
   getHeaderGroupProps = defaultPropGetter,
   getColumnProps = defaultPropGetter,
   getRowProps = defaultPropGetter,
@@ -37,9 +35,6 @@ const useGeneralTable = ({
   tableId
 }: UseTableType) => {
   const { instances, setSortBy, setSortByQueryString } = useTableStateStore()
-
-  const [pinnedColumnWidths, setPinnedColumnWidths] = useState<number[]>([])
-  const headerRefs = useRef<(HTMLTableCellElement | null)[]>([])
 
   const {
     headerGroups,
@@ -73,7 +68,7 @@ const useGeneralTable = ({
           <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
             <div className="shadow ring-1 ring-black ring-opacity-5 ">
               <table className="min-w-full divide-y divide-gray-300" {...getTableProps()}>
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-50 border-b">
                   {headerGroups.map(headerGroup => {
                     const { key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps({
                       ...getHeaderGroupProps()
@@ -82,36 +77,15 @@ const useGeneralTable = ({
                       <tr key={key} {...restHeaderGroupProps}>
                         {headerGroup.headers.map(column => {
                           const sortProps = isSortable ? column.getSortByToggleProps() : {}
-                          const { key, ...restHeaderProps } = column.getHeaderProps(sortProps)
+                          const props = { ...sortProps, ...getColumnProps(column) }
+                          const { key, className, ...restHeaderProps } = column.getHeaderProps(props)
                           return (
                             <th
                               key={key}
-                              ref={el => {
-                                if (el && pinnedColumns?.includes(column.Header as string)) {
-                                  const index = pinnedColumns.indexOf(column.Header as string)
-                                  if (!headerRefs.current[index]) {
-                                    headerRefs.current[index] = el
-                                    setPinnedColumnWidths(prevWidths => {
-                                      const newWidths = [...prevWidths]
-                                      newWidths[index] = el.getBoundingClientRect().width
-                                      return newWidths
-                                    })
-                                  }
-                                }
-                              }}
-                              style={{
-                                left: pinnedColumns?.includes(column.Header as string)
-                                  ? pinnedColumnWidths
-                                      .slice(0, pinnedColumns.indexOf(column.Header as string))
-                                      .reduce((a, b) => a + b, 0)
-                                  : ''
-                              }}
                               scope="col"
                               className={classNames(
-                                'whitespace-nowrap sticky top-0 z-20 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
-                                pinnedColumns?.includes(column.Header as string)
-                                  ? 'sticky top-0 z-10 bg-white left-[128px]'
-                                  : undefined
+                                'whitespace-nowrap sticky top-0 z-10 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
+                                className
                               )}
                               {...restHeaderProps}
                             >
@@ -136,33 +110,20 @@ const useGeneralTable = ({
                           key={key}
                           className={classNames(
                             index % 2 === 0 ? undefined : 'bg-gray-100',
-                            'hover:bg-primary-200',
+                            'hover:bg-primary-200 z-0',
                             className
                           )}
                           {...restRowProps}
                         >
                           {row.cells.map(cell => {
-                            const { key, className, ...restCellProps } = cell.getCellProps({ ...getCellProps() })
+                            const { key, className, ...restCellProps } = cell.getCellProps({ ...getCellProps(cell) })
+
                             return (
                               <td
                                 key={key}
-                                style={{
-                                  ...(pinnedColumns?.includes(cell.column.Header as string)
-                                    ? {
-                                        position: 'sticky',
-                                        left: pinnedColumnWidths
-                                          .slice(0, pinnedColumns.indexOf(cell.column.Header as string))
-                                          .reduce((a, b) => a + b, 0),
-                                        zIndex: 10
-                                      }
-                                    : {})
-                                }}
                                 className={classNames(
                                   className,
-                                  'whitespace-nowrap text-sm sm:pl-6 sm:pr-6 text-gray-500',
-                                  pinnedColumns?.includes(cell.column.Header as string)
-                                    ? 'sticky top-0 z-10 bg-white bg-opacity-75 backdrop-blur backdrop-filter'
-                                    : undefined
+                                  'whitespace-nowrap text-sm z-0 sm:pl-6 sm:pr-6 text-gray-500'
                                 )}
                                 {...restCellProps}
                               >

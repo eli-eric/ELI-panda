@@ -6,6 +6,7 @@ import useSWR from 'swr'
 
 import { Button } from '@/components/Buttons'
 import { TableLayoutContainer } from '@/components/layout/catalog-layout.cont'
+import { classNames } from '@/helpers'
 import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useGeneralTable from '@/hooks/useGeneralTable'
@@ -44,9 +45,10 @@ const OrdersContainer = () => {
               <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
             </Button>
           </div>
-        )
+        ),
+        id: 'actions'
       },
-      { Header: 'Name', accessor: 'name' },
+      { Header: 'Name', accessor: 'name', id: 'name' },
       { Header: 'Order number', accessor: 'orderNumber' },
       { Header: 'Request number', accessor: 'requestNumber' },
       { Header: 'Contract number', accessor: 'contractNumber' },
@@ -64,7 +66,15 @@ const OrdersContainer = () => {
     loading: !orderList,
     isSortable: true,
     className: 'relative overflow-x-auto',
-    pinnedColumns: ['Actions', 'Name']
+    getCellProps: ({ column }) => ({
+      className: classNames(
+        column.id === 'actions' ? 'sticky left-0 z-20 bg-opacity-75 backdrop-blur backdrop-filter' : '',
+        column.id === 'name' ? 'sticky left-32 z-20 bg-opacity-75 backdrop-blur backdrop-filter' : ''
+      )
+    }),
+    getColumnProps: ({ id }) => ({
+      className: classNames(id === 'actions' ? 'left-0 z-30' : '', id === 'name' ? 'left-32 z-30' : '')
+    })
   })
 
   useEffect(() => {
