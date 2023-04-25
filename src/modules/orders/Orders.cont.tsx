@@ -1,10 +1,9 @@
-import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo } from 'react'
 import { CellProps, Column } from 'react-table'
 import useSWR from 'swr'
 
-import { Button } from '@/components/Buttons'
+import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/catalog-layout.cont'
 import { classNames } from '@/helpers'
 import { mockFetcher } from '@/helpers/fetcher'
@@ -14,20 +13,17 @@ import usePagination from '@/hooks/usePagination'
 import { useSearch } from '@/hooks/useSearch'
 import useTableStateStore from '@/store/useTableStateStore'
 
+import useOrderActions from './hooks/useOrderActions'
 import { Order, OrderListResponse } from './types'
 
 const OrdersContainer = () => {
-  const { renderSearchBar } = useSearch({
-    renderBegin: () => (
-      <div>
-        <Button className="mr-1" onClick={() => {}} rounded="rounded-md">
-          <PlusIcon className="h-5 w-5" aria-hidden="true" />
-        </Button>
-      </div>
-    )
-  })
-
   const router = useRouter()
+
+  const { getTableActions, getNewOrderButton } = useOrderActions()
+
+  const { renderSearchBar } = useSearch({
+    renderBegin: () => getNewOrderButton()
+  })
 
   const { getPaginationComponent, pagination, setTotalCount } = usePagination({
     dependecies: [router.query.search]
@@ -41,19 +37,10 @@ const OrdersContainer = () => {
   const { data: orderList, error } = useSWR<OrderListResponse>(orders, mockFetcher, { suspense: false })
 
   const columns = useMemo(
-    (): Array<Column<Order>> => [
+    (): Column<Order>[] => [
       {
         Header: 'Actions',
-        Cell: ({ row }: CellProps<Order, any>) => (
-          <div {...row.getRowProps}>
-            <Button className="mr-1" buttonSize="small" onClick={() => {}} rounded="rounded-md">
-              <PencilSquareIcon className="h-5 w-5" aria-hidden="true" />
-            </Button>
-            <Button buttonSize="small" onClick={() => {}} rounded="rounded-md">
-              <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
-            </Button>
-          </div>
-        ),
+        Cell: ({ row }: CellProps<Order>) => getTableActions(row.original.uid),
         id: 'actions'
       },
       { Header: 'Name', accessor: 'name', id: 'name' },
@@ -95,7 +82,7 @@ const OrdersContainer = () => {
       {renderSearchBar()}
       {!error && getTable()}
       {!error && getPaginationComponent()}
-      {error && <div>Something went wrong</div>}
+      {error && <ErrorPage />}
     </TableLayoutContainer>
   )
 }

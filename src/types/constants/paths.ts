@@ -7,5 +7,5 @@ export enum PATH {
 
   REPORTS = '/reports',
   ORDERS = '/orders',
-  ORDER_ITEM = '/order/[uid]'
+  ORDER_ITEM = '/order'
 }
