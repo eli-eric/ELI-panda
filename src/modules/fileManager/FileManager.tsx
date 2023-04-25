@@ -1,9 +1,11 @@
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { toast } from 'react-hot-toast'
 import useGeneralTable from 'src/hooks/useGeneralTable' // Assuming the hook is in the same folder
-import useSubmit from 'src/hooks/useSubmit' // Assuming the hook is in the same folder
 
+// Assuming the hook is in the same folder
 import { Button } from '@/components/Buttons'
+import executeRequest from '@/helpers/executeRequest'
 
 type FileItem = {
   id: string
@@ -15,11 +17,6 @@ type FileItem = {
 type FileManagerProps = {
   type: 'catalogue' | 'systems'
   id: string
-}
-
-type ActionButtonProps = {
-  id: string
-  endpoint: string
 }
 
 const error = null
@@ -56,55 +53,48 @@ const files: FileItem[] = [
   }
 ]
 
-const EditButton = ({ id, endpoint }: ActionButtonProps) => {
-  const fileEndpoint = `${endpoint}/${id}`
-
-  const renameSubmit = useSubmit<FileItem>({
-    endpoint: fileEndpoint,
-    method: 'put',
-    mutateList: [fileEndpoint]
-  })
-
-  return (
-    <Button onClick={() => {}}>
-      <PencilSquareIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
-    </Button>
-  )
-}
-
-const DeleteButton = ({ id, endpoint }: ActionButtonProps) => {
-  const fileEndpoint = `${endpoint}/${id}`
-  const deleteSubmit = useSubmit<{ success: boolean }>({
-    endpoint: fileEndpoint,
-    method: 'delete',
-    mutateList: [fileEndpoint]
-  })
-
-  return (
-    <Button onClick={() => deleteSubmit.submit()}>
-      <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
-    </Button>
-  )
-}
-
 const FileManager = ({ type, id }: FileManagerProps) => {
   const endpoint = `/api/${type}/${id}/files`
   // const { data: files, error } = useSWR<Array<FileItem>>(FILE_ENDPOINT)
-  const uploadSubmit = useSubmit<FileItem>({
-    endpoint,
-    method: 'post',
-    mutateList: [endpoint]
-  })
+
+  const [newFile, setNewFile] = useState('')
 
   const handleUpload = async e => {
     const file = e.target.files[0]
-    if (file) {
-      const formData = new FormData()
-      formData.append('file', file)
-      uploadSubmit.submit(formData)
-      e.target.value = null
-    }
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => setNewFile(String(reader.result))
   }
+
+  const openForm = (id: string) => {}
+
+  const handlePost = (name: string, payload: string) => {
+    const body = JSON.stringify({ name, payload })
+    executeRequest<FileItem>(
+      endpoint,
+      { method: 'post', body },
+      res => toast.success(`Succesfully uploaded ${res.name}!`),
+      () => toast.error('oops')
+    )
+  }
+
+  const handlePatch = (id: string, newName: string) => {
+    const body = JSON.stringify({ name: newName })
+    executeRequest(
+      `${endpoint}/${id}`,
+      { method: 'patch', body },
+      () => toast.success(`You have renamed a file, wow`),
+      () => toast.error('oops')
+    )
+  }
+
+  const handleDelete = (id: string) =>
+    executeRequest(
+      `${endpoint}/${id}`,
+      { method: 'delete' },
+      () => toast.success('Deleted.'),
+      () => toast.error('oops')
+    )
 
   // Define columns for useGeneralTable
   const columns = useMemo(
@@ -131,8 +121,12 @@ const FileManager = ({ type, id }: FileManagerProps) => {
         accessor: 'id',
         Cell: ({ value }) => (
           <div className="flex-row">
-            <EditButton id={value} endpoint={endpoint} />
-            <DeleteButton id={value} endpoint={endpoint} />
+            <Button onClick={() => openForm(value)}>
+              <PencilSquareIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+            </Button>
+            <Button onClick={() => handleDelete(value)}>
+              <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+            </Button>
           </div>
         )
       }
