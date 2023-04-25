@@ -2,9 +2,9 @@ import { Disclosure } from '@headlessui/react'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 
+import TooltipComponent from '@/components/tooltip.comp'
 import { ENV, PROCESS_ENV } from '@/types/constants/common'
 
-import TooltipComponent from '../tooltip.comp'
 import NavBarHideoutComponent from './nav-bar-hideout.comp'
 import NavBarStaticComponent from './nav-bar-static.comp'
 

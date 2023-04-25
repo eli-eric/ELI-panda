@@ -19,7 +19,8 @@ const getEndpoints = (uid?: string, path?: string, query?: string) => {
     codebookAutocomplete: `/codebook/autocomplete${path}${query}`,
     systemSubsystems: `/system/subsystems${uid ? '/' + uid : ''}`,
     systemsList: `/systems${query}`,
-    systemCode: `/system/systemCode${query}`
+    systemCode: `/system/systemCode${query}`,
+    orders: `/orders${query}`
   }
   return endpoints
 }

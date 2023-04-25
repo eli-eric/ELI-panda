@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 
-import EmptyResults from '@/components/EmptyResults'
+import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import TableComponent from '@/components/table/Table.comp'
 import TableRowComponent from '@/components/table/TableRow.comp'

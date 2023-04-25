@@ -7,8 +7,8 @@ import * as yup from 'yup'
 
 import { Button } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
-import SearchBarComponent from '@/components/SearchBar.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
+import { useSearch } from '@/hooks/useSearch'
 import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
 import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
@@ -36,11 +36,13 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
     name: string
     uid: string
   }>()
-  const searchFormMethods = useForm()
-  const onSearchSubmit = data => {
+  const onSearchSubmit = search => {
     setSelectedSystem(undefined)
-    setSearchValue(data.search)
+    setSearchValue(search)
   }
+
+  const { renderSearchBar } = useSearch({ useQuery: false, onSuccess: onSearchSubmit })
+
   const { systemRelationship, systemRelationships } = useEndpoint({
     uid: router.query.uid as string
   })
@@ -63,9 +65,7 @@ const AddRelationForm = ({ setopen, relationTypeCode, systemName }: Props) => {
   return (
     <div className="w-full min-h-[541px] justify-between flex flex-col">
       <div className="flex flex-col justify-between">
-        <FormProvider {...searchFormMethods}>
-          <SearchBarComponent onSubmit={onSearchSubmit} />
-        </FormProvider>
+        {renderSearchBar()}
         <SystemsForRel
           searchValue={searchValue}
           relationTypeCode={relationTypeCode}

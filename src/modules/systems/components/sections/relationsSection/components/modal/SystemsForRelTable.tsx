@@ -45,6 +45,7 @@ const SystemsForRel = ({ searchValue, relationTypeCode, setSelectedSystem, selec
     { suspense: false }
   )
 
+  //TODO refactor with useGeneralTable
   const { getTable, TableRowItem } = useTable<SystemDetailResponse>({
     collums: [
       'Name',

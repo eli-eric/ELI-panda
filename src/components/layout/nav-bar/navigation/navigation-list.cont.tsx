@@ -19,9 +19,7 @@ const NavigationListContainer = ({ open }: Props) => {
   const intl = useIntl()
   return (
     <Fragment>
-      <div
-        className={open === false ? 'hidden sm:ml-6 sm:flex sm:space-x-8' : 'space-y-1 pt-2 pb-3'}
-      >
+      <div className={open === false ? 'hidden sm:ml-6 sm:flex sm:space-x-8' : 'space-y-1 pt-2 pb-3'}>
         {status === 'authenticated' ? (
           <Fragment>
             {userRoles?.includes(ROLE.SYSTEMS_VIEW) && (
@@ -50,13 +48,17 @@ const NavigationListContainer = ({ open }: Props) => {
               href={PATH.DASHBOARD}
               open={open}
             />
+            {/* here will ber role order view */}
+            {userRoles?.includes(ROLE.ORDERS_VIEW) && (
+              <NavigationLinkComponent
+                name={intl.formatMessage({ id: navMessages.orders })}
+                href={PATH.ORDERS}
+                open={open}
+              />
+            )}
           </Fragment>
         ) : (
-          <NavigationLinkComponent
-            name={intl.formatMessage({ id: navMessages.login })}
-            href={PATH.ROOT}
-            open={open}
-          />
+          <NavigationLinkComponent name={intl.formatMessage({ id: navMessages.login })} href={PATH.ROOT} open={open} />
         )}
       </div>
     </Fragment>

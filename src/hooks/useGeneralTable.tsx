@@ -1,31 +1,34 @@
+import { useRouter } from 'next/router'
 import { Fragment, useEffect } from 'react'
-import { Column, Row, useSortBy, useTable } from 'react-table'
+import { Cell, Column, HeaderGroup, Row, useSortBy, useTable } from 'react-table'
 
-import EmptyResults from '@/components/EmptyResults'
+import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { classNames } from '@/helpers'
 import useTableStateStore from '@/store/useTableStateStore'
 
 import useQueryString from './useQueryString'
 
-interface UseTableType {
-  data?: {}[]
+interface UseTableType<T extends object> {
+  data?: T[]
   tableId: string
-  columns: Array<Column>
+  columns: Array<Column<T>>
   loading?: boolean
   className?: string
   isSortable?: boolean
-  getColumnProps?: () => {}
-  getRowProps?: (row: Row<{}>) => {}
-  getCellProps?: () => {}
+  uriSortBy?: boolean
+  getRowProps?: (row: Row<T>) => {}
+  getCellProps?: (cell: Cell<T, any>) => {}
+  getColumnProps?: (column: HeaderGroup<T>) => {}
   getHeaderGroupProps?: () => {}
 }
 const defaultPropGetter = () => ({})
 
-const useGeneralTable = ({
+const useGeneralTable = <T extends object>({
   data,
   columns,
   loading = false,
+  uriSortBy = false,
   className,
   getHeaderGroupProps = defaultPropGetter,
   getColumnProps = defaultPropGetter,
@@ -33,8 +36,10 @@ const useGeneralTable = ({
   getCellProps = defaultPropGetter,
   isSortable = false,
   tableId
-}: UseTableType) => {
+}: UseTableType<T>) => {
   const { instances, setSortBy, setSortByQueryString } = useTableStateStore()
+  const router = useRouter()
+  const sortByQueryString = router.query.sortBy as string
 
   const {
     headerGroups,
@@ -42,8 +47,9 @@ const useGeneralTable = ({
     getTableBodyProps,
     rows,
     prepareRow,
-    state: { sortBy }
-  } = useTable(
+    state: { sortBy },
+    setSortBy: setSortByTable
+  } = useTable<T>(
     {
       columns,
       data: data || [],
@@ -54,21 +60,32 @@ const useGeneralTable = ({
     },
     useSortBy
   )
+  useEffect(() => {
+    if (uriSortBy) {
+      if (sortByQueryString) {
+        const sortByParsed = JSON.parse(sortByQueryString)
+        setSortBy(tableId, sortByParsed)
+        setSortByTable(sortByParsed)
+      }
+    }
+  }, [sortByQueryString, tableId, setSortBy, setSortByTable, uriSortBy])
+
   const sortConfigQuery = useQueryString(sortBy)
 
   useEffect(() => {
     setSortBy(tableId, sortBy)
     setSortByQueryString(tableId, sortConfigQuery)
-  }, [setSortBy, setSortByQueryString, tableId, sortBy, sortConfigQuery])
+    if (uriSortBy) router.replace(router.pathname, { query: { ...router.query, sortBy: sortConfigQuery } })
+  }, [setSortBy, setSortByQueryString, tableId, sortBy, sortConfigQuery]) //eslint-disable-line
 
   const getTable = () => (
     <Fragment>
-      <div className={classNames('h-full border-t border-gray-300 pb-4', className)}>
+      <div className={classNames('h-full flex flex-col border-t border-gray-300 pb-4', className)}>
         <div className="-my-2  sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-            <div className=" shadow ring-1 ring-black ring-opacity-5 ">
+          <div className="inline-block min-w-full py-2 align-middle pl-8">
+            <div className="shadow ring-1 ring-black ring-opacity-5 ">
               <table className="min-w-full divide-y divide-gray-300" {...getTableProps()}>
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-50 border-b">
                   {headerGroups.map(headerGroup => {
                     const { key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps({
                       ...getHeaderGroupProps()
@@ -77,13 +94,15 @@ const useGeneralTable = ({
                       <tr key={key} {...restHeaderGroupProps}>
                         {headerGroup.headers.map(column => {
                           const sortProps = isSortable ? column.getSortByToggleProps() : {}
-                          const { key, ...restHeaderProps } = column.getHeaderProps(sortProps)
+                          const props = { ...sortProps, ...getColumnProps(column) }
+                          const { key, className, ...restHeaderProps } = column.getHeaderProps(props)
                           return (
                             <th
                               key={key}
                               scope="col"
                               className={classNames(
-                                'whitespace-nowrap sticky top-0 z-9 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6'
+                                'whitespace-nowrap sticky top-0 z-10 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
+                                className
                               )}
                               {...restHeaderProps}
                             >
@@ -108,19 +127,20 @@ const useGeneralTable = ({
                           key={key}
                           className={classNames(
                             index % 2 === 0 ? undefined : 'bg-gray-100',
-                            'hover:bg-primary-200',
+                            'hover:bg-primary-200 z-0',
                             className
                           )}
                           {...restRowProps}
                         >
                           {row.cells.map(cell => {
-                            const { key, className, ...restCellProps } = cell.getCellProps({ ...getCellProps() })
+                            const { key, className, ...restCellProps } = cell.getCellProps({ ...getCellProps(cell) })
+
                             return (
                               <td
                                 key={key}
                                 className={classNames(
                                   className,
-                                  'whitespace-nowrap text-sm  sm:pl-6 sm:pr-6 text-gray-500'
+                                  'whitespace-nowrap text-sm z-0 sm:pl-6 sm:pr-6 text-gray-500'
                                 )}
                                 {...restCellProps}
                               >
@@ -138,8 +158,12 @@ const useGeneralTable = ({
           </div>
           {loading && <ProgressBarComponent />}
         </div>
+        {data?.length === 0 && (
+          <div className="flex align-middle justify-center mt-10">
+            <EmptyResults />
+          </div>
+        )}
       </div>
-      {data?.length === 0 && <EmptyResults />}
     </Fragment>
   )
 
