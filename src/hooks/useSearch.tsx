@@ -24,9 +24,7 @@ export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin }
 
   const onSubmit = (data: { search: string }) => {
     if (useQuery) {
-      router.replace({
-        query: data.search ? { ...query, search: data.search } : {}
-      })
+      router.replace({ query: { ...query, search: data.search } })
     }
     setSearchValue(data.search)
     onSuccess && onSuccess(data.search)
