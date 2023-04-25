@@ -1,8 +1,10 @@
+import { PlusIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo } from 'react'
 import { CellProps, Column } from 'react-table'
 import useSWR from 'swr'
 
+import { Button } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/catalog-layout.cont'
 import { classNames } from '@/helpers'
@@ -12,17 +14,26 @@ import useGeneralTable from '@/hooks/useGeneralTable'
 import usePagination from '@/hooks/usePagination'
 import { useSearch } from '@/hooks/useSearch'
 import useTableStateStore from '@/store/useTableStateStore'
+import { PATH } from '@/types/constants/paths'
 
-import useOrderActions from './hooks/useOrderActions'
+import TableActions from './components/TableActions'
 import { Order, OrderListResponse } from './types'
 
 const OrdersContainer = () => {
   const router = useRouter()
 
-  const { getTableActions, getNewOrderButton } = useOrderActions()
-
   const { renderSearchBar } = useSearch({
-    renderBegin: () => getNewOrderButton()
+    renderBegin: () => (
+      <Button
+        className="mr-1"
+        onClick={() => {
+          router.push(PATH.ORDER_NEW)
+        }}
+        rounded="rounded-md"
+      >
+        <PlusIcon className="h-5 w-5" aria-hidden="true" />
+      </Button>
+    )
   })
 
   const { getPaginationComponent, pagination, setTotalCount } = usePagination({
@@ -40,7 +51,7 @@ const OrdersContainer = () => {
     (): Column<Order>[] => [
       {
         Header: 'Actions',
-        Cell: ({ row }: CellProps<Order>) => getTableActions(row.original.uid),
+        Cell: ({ row }: CellProps<Order>) => <TableActions uid={row.original.uid} mutate={orders} />,
         id: 'actions'
       },
       { Header: 'Name', accessor: 'name', id: 'name' },
@@ -51,7 +62,7 @@ const OrdersContainer = () => {
       { Header: 'Order status', accessor: 'orderStatus' },
       { Header: 'Notes', accessor: 'notes' }
     ],
-    []
+    [orders]
   )
 
   const { getTable } = useGeneralTable<Order>({
