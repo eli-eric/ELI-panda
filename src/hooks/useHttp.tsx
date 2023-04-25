@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 type RequestOptions = {
   method?: string
   headers?: HeadersInit
@@ -16,36 +14,33 @@ type RequestOptions = {
   window?: any
 }
 
+type RequestCallback = (res: Response | Error, req: Request) => any
+
 const defaultOptions: RequestOptions = {
-  //mode: 'no-cors'
+  // mode: 'no-cors'
 }
 
-const useHttp = () => {
-  const initialState = {
-    isLoading: false,
-    data: null,
-    error: ''
-  }
-
-  const [state, setState] = useState(initialState)
-
-  const executeRequest = async (url: string, options: RequestOptions = {}) => {
-    const requestOptions = { ...defaultOptions, ...options }
-    const request = new Request(url, requestOptions)
-
-    setState(prevState => ({ ...prevState, isLoading: true }))
-
-    try {
-      const response = await fetch(request)
-      const jsonData = await response.json()
-      setState({ error: '', isLoading: false, data: jsonData })
-    } catch (err) {
-      const errorMessage = (err as Error).toString()
-      setState({ error: errorMessage, data: null, isLoading: false })
+const executeRequest = async (
+  url: string,
+  options: RequestOptions,
+  onSuccess: RequestCallback,
+  onError: RequestCallback
+) => {
+  const requestOptions = { ...defaultOptions, ...options }
+  const request = new Request(url, requestOptions)
+  try {
+    const response = await fetch(request)
+    const jsonData = await response.json()
+    onSuccess(jsonData, request)
+  } catch (err) {
+    if (err instanceof Error) {
+      onError(err, request)
+    } else {
+      onError(new Error(String(err)), request)
     }
   }
-
-  return { ...state, executeRequest }
 }
+
+const useHttp = () => executeRequest
 
 export default useHttp
