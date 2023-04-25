@@ -6,7 +6,7 @@ const defaultOptions: RequestInit = {
 
 async function executeRequest<T>(
   url: string,
-  options: RequestInit,
+  options: RequestInit = {},
   onSuccess: RequestCallback<T> = () => {},
   onError: RequestCallback<Error> = () => {}
 ): Promise<void> {
