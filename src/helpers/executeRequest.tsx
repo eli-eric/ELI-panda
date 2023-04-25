@@ -1,4 +1,5 @@
-type RequestCallback<T> = (result: T | Error) => void
+type SuccessCallback<T> = (result: T) => void
+type ErrorCallback = (err: Error) => void
 
 const defaultOptions: RequestInit = {
   // mode: 'no-cors'
@@ -7,8 +8,8 @@ const defaultOptions: RequestInit = {
 async function executeRequest<T>(
   url: string,
   options: RequestInit = {},
-  onSuccess: RequestCallback<T> = () => {},
-  onError: RequestCallback<Error> = () => {}
+  onSuccess: SuccessCallback<T> = () => {},
+  onError: ErrorCallback = () => {}
 ): Promise<void> {
   const requestOptions = { ...defaultOptions, ...options }
   const request = new Request(url, requestOptions)
