@@ -14,7 +14,7 @@ type RequestOptions = {
   window?: any
 }
 
-type RequestCallback = (res: Response | Error, req: Request) => any
+type RequestCallback = (result: object | Error) => void
 
 const defaultOptions: RequestOptions = {
   // mode: 'no-cors'
@@ -31,12 +31,12 @@ const executeRequest = async (
   try {
     const response = await fetch(request)
     const jsonData = await response.json()
-    onSuccess(jsonData, request)
+    onSuccess(jsonData)
   } catch (err) {
     if (err instanceof Error) {
-      onError(err, request)
+      onError(err)
     } else {
-      onError(new Error(String(err)), request)
+      onError(new Error(String(err)))
     }
   }
 }
