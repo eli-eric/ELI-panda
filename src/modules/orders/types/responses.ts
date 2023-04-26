@@ -7,6 +7,7 @@ export type Order = {
   supplier: string
   orderStatus: string
   notes: string
+  orderDate: string
 }
 
 export type OrderListResponse = {

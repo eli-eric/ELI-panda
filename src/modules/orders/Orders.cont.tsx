@@ -1,6 +1,7 @@
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo } from 'react'
+import { FormattedDate } from 'react-intl'
 import { CellProps, Column } from 'react-table'
 import useSWR from 'swr'
 
@@ -55,11 +56,20 @@ const OrdersContainer = () => {
         id: 'actions'
       },
       { Header: 'Name', accessor: 'name', id: 'name' },
-      { Header: 'Order number', accessor: 'orderNumber' },
-      { Header: 'Request number', accessor: 'requestNumber' },
-      { Header: 'Contract number', accessor: 'contractNumber' },
+      {
+        Header: 'Order Date',
+        accessor: 'orderDate',
+        Cell: ({ value }: CellProps<Order>) => (
+          <span>
+            <FormattedDate value={value} day="2-digit" month="long" year="numeric" />
+          </span>
+        )
+      },
+      { Header: 'Order Number', accessor: 'orderNumber' },
+      { Header: 'Request Number', accessor: 'requestNumber' },
+      { Header: 'Contract Number', accessor: 'contractNumber' },
       { Header: 'Supplier', accessor: 'supplier' },
-      { Header: 'Order status', accessor: 'orderStatus' },
+      { Header: 'Order tatus', accessor: 'orderStatus' },
       { Header: 'Notes', accessor: 'notes' }
     ],
     [orders]
@@ -76,11 +86,11 @@ const OrdersContainer = () => {
     getCellProps: ({ column }) => ({
       className: classNames(
         column.id === 'actions' ? 'sticky left-0 z-20 bg-opacity-75 backdrop-blur backdrop-filter' : '',
-        column.id === 'name' ? 'sticky left-32 z-20 bg-opacity-75 backdrop-blur backdrop-filter' : ''
+        column.id === 'name' ? 'sticky left-[170px] z-20 bg-opacity-75 backdrop-blur backdrop-filter' : ''
       )
     }),
     getColumnProps: ({ id }) => ({
-      className: classNames(id === 'actions' ? 'left-0 z-30' : '', id === 'name' ? 'left-32 z-30' : '')
+      className: classNames(id === 'actions' ? 'left-0 z-30' : '', id === 'name' ? 'left-[170px] z-30' : '')
     })
   })
 
