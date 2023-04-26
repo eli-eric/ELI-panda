@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { Client } from 'minio'
-import { FileItem } from '@/modules/fileManager/FileManager'
+import { FileItem } from '@/components/fileManager/FileManager'
 import { nanoid } from 'nanoid'
 import winston from 'winston'
 
