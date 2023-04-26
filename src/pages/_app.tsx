@@ -5,10 +5,10 @@ import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
 import { IntlProvider } from 'react-intl'
-import NavigationComponent from 'src/components/nav-bar/nav-bar.comp'
 import { messages } from 'src/i18n/src'
 import { SWRConfig } from 'swr'
 
+import NavigationComponent from '@/components/layout/nav-bar/nav-bar.comp'
 import { fetcher } from '@/helpers/fetcher'
 
 interface Props {
