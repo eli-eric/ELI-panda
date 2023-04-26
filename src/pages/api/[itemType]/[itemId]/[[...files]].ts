@@ -10,10 +10,7 @@ const logger = winston.createLogger({
   format: winston.format.json(),
   transports: [
     new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.simple()
-      )
+      format: winston.format.combine(winston.format.colorize(), winston.format.simple())
     })
   ]
 })
@@ -28,6 +25,9 @@ const useSSL = process.env.MINIO_USE_SSL?.toLowerCase() === 'true'
 logger.info(
   `S3 Config - Bucket: ${bucket} | AccessKey: ${accessKey} | SecretKey: ${secretKey} | Port: ${port} | UseSSL: ${useSSL} | EndPoint: ${endPoint}`
 )
+
+//Resource not ready
+let ready = false
 
 const s3Client = new Client({
   endPoint,
@@ -63,18 +63,20 @@ s3Client.bucketExists(bucket, function (err, exists) {
       }
       logger.info('Bucket created successfully')
       // Apply bucket policy
-      s3Client.setBucketPolicy(bucket, JSON.stringify(bucketPolicy), err =>
-        err
-          ? logger.error('Error setting bucker policy', err)
-          : logger.info('Successfully applied bucket policy')
-      )
+      s3Client.setBucketPolicy(bucket, JSON.stringify(bucketPolicy), err => {
+        if (err) return logger.error('Error setting bucker policy', err)
+        ready = true
+        return logger.info('Successfully applied bucket policy. FileManager is ready')
+      })
     })
   } else {
-    logger.info('Bucket already exists')
+    logger.info('Bucket already exists. FileManager is ready')
+    ready = true
   }
 })
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  if (!ready) return res.status(503).end()
   try {
     if (!req.url) return res.status(400).end()
 
@@ -88,10 +90,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     switch (req.method) {
       case 'GET':
-        const stream = s3Client.extensions.listObjectsV2WithMetadata(
-          bucket,
-          prefix + '/'
-        )
+        const stream = s3Client.extensions.listObjectsV2WithMetadata(bucket, prefix + '/')
 
         let objects: FileItem[] = []
 
@@ -134,25 +133,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             name
           }
 
-          s3Client.putObject(
-            bucket,
-            `${prefix}/${id}`,
-            buffer,
-            buffer.length,
-            metaData,
-            err => {
-              if (err) {
-                logger.error('Error saving file', err)
-                return res.status(500).end()
-              }
-              return res.status(201).json({
-                id,
-                name,
-                type: mimeType,
-                url: `http://${endPoint}:${port}/${bucket}/${prefix}/${id}`
-              })
+          s3Client.putObject(bucket, `${prefix}/${id}`, buffer, buffer.length, metaData, err => {
+            if (err) {
+              logger.error('Error saving file', err)
+              return res.status(500).end()
             }
-          )
+            return res.status(201).json({
+              id,
+              name,
+              type: mimeType,
+              url: `http://${endPoint}:${port}/${bucket}/${prefix}/${id}`
+            })
+          })
         }
         return res.status(400).end()
 
