@@ -64,6 +64,7 @@ const useGeneralTable = <T extends object>({
 
   const sortConfigQuery = useQueryString(sortBy)
 
+  // intialize sortBy from router
   useEffect(() => {
     if (uriSortBy) {
       if (sortBy.length === 0) {
@@ -77,6 +78,7 @@ const useGeneralTable = <T extends object>({
     }
   }, [routerSortBy]) // eslint-disable-line
 
+  // set sortBy to store and router.query.sortBy
   useEffect(() => {
     setSortBy(tableId, sortBy)
     setSortByQueryString(tableId, JSON.stringify(sortBy))

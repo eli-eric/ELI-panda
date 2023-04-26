@@ -1,0 +1,13 @@
+import { FieldValues } from 'react-hook-form'
+
+export interface OrderFormType extends FieldValues {
+  uid: string
+  name: string
+  orderNumber: number
+  requestNumber: number
+  contractNumber: number
+  supplier: string
+  orderStatus: string
+  orderDate: string
+  notes: string
+}

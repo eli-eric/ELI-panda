@@ -194,7 +194,21 @@ export const messages = {
   },
 
   reportsPage: { head: 'Eli Panda - Reports' },
-  ordersPage: { head: 'Eli Panda - Orders' },
+  ordersPage: {
+    head: 'Eli Panda - Orders',
+    orderDetail: {
+      form: {
+        name: { label: 'Name', placeholder: 'Name' },
+        orderNumber: { label: 'Order Number' },
+        requestNumber: { label: 'Request Number' },
+        contractNumber: { label: 'Contract Number' },
+        supplier: { label: 'Supplier', placeholder: '...type here' },
+        orderStatus: { label: 'Owner' },
+        notes: { label: 'Notes' },
+        orderDate: { label: 'Date' }
+      }
+    }
+  },
   orderItem: { head: 'Eli Panda - Order Item' },
   defaul: { head: 'Eli Panda' }
 }
