@@ -24,11 +24,7 @@ const FileManager = () => {
   const { uid: itemId } = router.query
 
   const endpoint = `http://localhost:5001/api/${itemType}/${itemId}/files`
-  const {
-    data: files,
-    error,
-    mutate
-  } = useSWR<Array<FileItem>>(endpoint, uniFetcher)
+  const { data: files, error, mutate } = useSWR<Array<FileItem>>(endpoint, uniFetcher)
 
   const [newFile, setNewFile] = useState({ name: '', payload: '' })
 
@@ -36,8 +32,7 @@ const FileManager = () => {
     const file = files[0]
     const reader = new FileReader()
     reader.readAsDataURL(file)
-    reader.onload = () =>
-      setNewFile({ name: file.name, payload: String(reader.result) })
+    reader.onload = () => setNewFile({ name: file.name, payload: String(reader.result) })
   }, [])
 
   const handlePost = useCallback(
@@ -115,9 +110,7 @@ const FileManager = () => {
       {/* Your file upload UI here */}
       <div {...getRootProps()}>
         <input {...getInputProps()} />
-        <p className={isDragActive ? 'bg-orange-600' : ''}>
-          Drag new file here
-        </p>
+        <p className={isDragActive ? 'bg-orange-600' : ''}>Drag new file here</p>
       </div>
       {getTable()}
     </div>
