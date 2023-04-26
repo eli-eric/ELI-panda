@@ -1,5 +1,4 @@
 import { TrashIcon } from '@heroicons/react/24/outline'
-import { nanoid } from 'nanoid'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
@@ -97,9 +96,8 @@ const FileManager = () => {
   })
 
   // Use useGeneralTable hook
-  const tableId = nanoid()
   const { getTable } = useGeneralTable({
-    tableId,
+    tableId: 'filemanager',
     data: files,
     columns,
     loading: !error && !files
