@@ -39,7 +39,8 @@ const useGeneralTable = <T extends object>({
 }: UseTableType<T>) => {
   const { instances, setSortBy, setSortByQueryString } = useTableStateStore()
   const router = useRouter()
-  const sortByQueryString = router.query.sortBy as string
+  const routerSortBy = router.query.sortBy as string
+  const sortByInstance = instances[tableId]?.sortBy
 
   const {
     headerGroups,
@@ -56,29 +57,33 @@ const useGeneralTable = <T extends object>({
       manualSortBy: true,
       autoResetPage: false,
       autoResetSortBy: false,
-      initialState: { sortBy: instances[tableId]?.sortBy || [] }
+      initialState: { sortBy: sortByInstance || [] }
     },
     useSortBy
   )
-  useEffect(() => {
-    if (uriSortBy) {
-      if (sortByQueryString) {
-        const sortByParsed = JSON.parse(sortByQueryString)
-        setSortBy(tableId, sortByParsed)
-        setSortByTable(sortByParsed)
-      }
-    }
-  }, [sortByQueryString, tableId, setSortBy, setSortByTable, uriSortBy])
 
   const sortConfigQuery = useQueryString(sortBy)
 
   useEffect(() => {
-    setSortBy(tableId, sortBy)
-    setSortByQueryString(tableId, sortConfigQuery)
     if (uriSortBy) {
-      router.replace({ query: { ...router.query, sortBy: sortConfigQuery } })
+      if (sortBy.length === 0) {
+        if (routerSortBy) {
+          const sortByParsed = JSON.parse(routerSortBy)
+          setSortBy(tableId, sortByParsed)
+          setSortByQueryString(tableId, routerSortBy)
+          setSortByTable(sortByParsed)
+        }
+      }
     }
-  }, [setSortBy, setSortByQueryString, tableId, sortBy, sortConfigQuery]) //eslint-disable-line
+  }, [routerSortBy]) // eslint-disable-line
+
+  useEffect(() => {
+    setSortBy(tableId, sortBy)
+    setSortByQueryString(tableId, JSON.stringify(sortBy))
+    if (uriSortBy) {
+      router.replace({ query: { ...router.query, sortBy: sortBy.length === 0 ? '[]' : JSON.stringify(sortBy) } })
+    }
+  }, [tableId, sortBy, sortConfigQuery, uriSortBy]) // eslint-disable-line
 
   const getTable = () => (
     <Fragment>

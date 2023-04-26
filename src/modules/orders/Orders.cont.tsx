@@ -23,7 +23,7 @@ import { Order, OrderListResponse } from './types'
 const OrdersContainer = () => {
   const router = useRouter()
 
-  const { renderSearchBar } = useSearch({
+  const { renderSearchBar, searchValue } = useSearch({
     renderBegin: () => (
       <Button
         className="mr-1"
@@ -38,13 +38,21 @@ const OrdersContainer = () => {
   })
 
   const { getPaginationComponent, pagination, setTotalCount } = usePagination({
-    dependecies: [router.query.search]
+    dependecies: [searchValue]
   })
 
   const { instances } = useTableStateStore()
+  const sorting = instances['orders']?.sortByQueryString
 
+  // TODO: vyřešit query string nějak obecně
   const { orders } = useEndpoint({
-    query: { search: router.query.search, pagination, sortBy: instances['orders']?.sortByQueryString }
+    query: searchValue
+      ? sorting
+        ? { search: searchValue, pagination, sorting }
+        : { search: searchValue, pagination }
+      : sorting
+      ? { pagination, sorting }
+      : { pagination }
   })
   const { data: orderList, error } = useSWR<OrderListResponse>(orders, mockFetcher, { suspense: false })
 
