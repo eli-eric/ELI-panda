@@ -76,7 +76,10 @@ s3Client.bucketExists(bucket, function (err, exists) {
 })
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  if (!ready) return res.status(503).end()
+  if (!ready) {
+    logger.warn("Couldn't process request, resource not ready")
+    return res.status(503).end()
+  }
   try {
     if (!req.url) return res.status(400).end()
 
