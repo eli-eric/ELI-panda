@@ -13,10 +13,10 @@ const useWarningModal = (message: string) => {
   useEffect(() => {
     const { fn, args } = execData
     if (fn && args && isConfirmed) {
-      setIsOpen(false)
-      setIsConfirmed(false)
       try {
         fn(...args)
+        setIsOpen(false)
+        setIsConfirmed(false)
       } catch (err) {
         setError(String(err))
       }
