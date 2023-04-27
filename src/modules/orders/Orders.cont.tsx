@@ -1,7 +1,7 @@
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import { Fragment, useEffect, useMemo } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { FormattedDate } from 'react-intl'
 import { CellProps, Column } from 'react-table'
 import useSWR from 'swr'
@@ -48,15 +48,21 @@ const OrdersContainer = () => {
   const sorting = instances['orders']?.sortByQueryString
 
   // TODO: vyřešit query string nějak obecně
-  const { orders } = useEndpoint({
-    query: router.query.search
-      ? sorting
-        ? { search: router.query.search, pagination, sorting }
-        : { search: router.query.search, pagination }
-      : sorting
-      ? { pagination, sorting }
-      : { pagination }
-  })
+  const [query, setQuery] = useState({ pagination })
+  const { orders } = useEndpoint({ query })
+  useEffect(() => {
+    const newQuery: { search?: string; pagination: string; sorting?: string } = { pagination }
+    if (router.query.search) {
+      newQuery.search = router.query.search as string
+      if (sorting) {
+        newQuery.sorting = sorting
+      }
+    } else if (sorting) {
+      newQuery.sorting = sorting
+    }
+    setQuery(newQuery)
+  }, [router.query.search, sorting, pagination])
+
   const { data: orderList, error } = useSWR<OrderListResponse>(session?.user && orders, fetcher, { suspense: false })
 
   const columns = useMemo(
@@ -102,7 +108,7 @@ const OrdersContainer = () => {
       className: classNames(
         column.id === 'actions' ? 'sticky left-0 z-20 bg-opacity-75 backdrop-blur backdrop-filter' : '',
         column.id === 'name'
-          ? 'sticky left-[170px] text-ellipsis max-w-[600px] z-20 bg-opacity-75 backdrop-blur backdrop-filter'
+          ? 'sticky left-[170px] text-ellipsis min-w-[600px] z-20 bg-opacity-75 backdrop-blur backdrop-filter'
           : '',
         'min-w-[180px]'
       )
