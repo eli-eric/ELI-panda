@@ -1,6 +1,7 @@
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo } from 'react'
+import { useSession } from 'next-auth/react'
+import { Fragment, useEffect, useMemo } from 'react'
 import { FormattedDate } from 'react-intl'
 import { CellProps, Column } from 'react-table'
 import useSWR from 'swr'
@@ -9,7 +10,7 @@ import { Button } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/catalog-layout.cont'
 import { classNames } from '@/helpers'
-import { mockFetcher } from '@/helpers/fetcher'
+import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useGeneralTable from '@/hooks/useGeneralTable'
 import usePagination from '@/hooks/usePagination'
@@ -22,6 +23,7 @@ import { Order, OrderListResponse } from './types'
 
 const OrdersContainer = () => {
   const router = useRouter()
+  const { data: session } = useSession()
 
   const { renderSearchBar, searchValue } = useSearch({
     renderBegin: () => (
@@ -38,7 +40,8 @@ const OrdersContainer = () => {
   })
 
   const { getPaginationComponent, pagination, setTotalCount } = usePagination({
-    dependecies: [searchValue]
+    dependecies: [searchValue],
+    pageSizeDefault: 50
   })
 
   const { instances } = useTableStateStore()
@@ -46,15 +49,15 @@ const OrdersContainer = () => {
 
   // TODO: vyřešit query string nějak obecně
   const { orders } = useEndpoint({
-    query: searchValue
+    query: router.query.search
       ? sorting
-        ? { search: searchValue, pagination, sorting }
-        : { search: searchValue, pagination }
+        ? { search: router.query.search, pagination, sorting }
+        : { search: router.query.search, pagination }
       : sorting
       ? { pagination, sorting }
       : { pagination }
   })
-  const { data: orderList, error } = useSWR<OrderListResponse>(orders, mockFetcher, { suspense: false })
+  const { data: orderList, error } = useSWR<OrderListResponse>(session?.user && orders, fetcher, { suspense: false })
 
   const columns = useMemo(
     (): Column<Order>[] => [
@@ -63,7 +66,11 @@ const OrdersContainer = () => {
         Cell: ({ row }: CellProps<Order>) => <TableActions uid={row.original.uid} mutate={orders} />,
         id: 'actions'
       },
-      { Header: 'Name', accessor: 'name', id: 'name' },
+      {
+        Header: 'Name',
+        accessor: 'name',
+        id: 'name'
+      },
       {
         Header: 'Order Date',
         accessor: 'orderDate',
@@ -94,7 +101,10 @@ const OrdersContainer = () => {
     getCellProps: ({ column }) => ({
       className: classNames(
         column.id === 'actions' ? 'sticky left-0 z-20 bg-opacity-75 backdrop-blur backdrop-filter' : '',
-        column.id === 'name' ? 'sticky left-[170px] z-20 bg-opacity-75 backdrop-blur backdrop-filter' : ''
+        column.id === 'name'
+          ? 'sticky left-[170px] text-ellipsis max-w-[600px] z-20 bg-opacity-75 backdrop-blur backdrop-filter'
+          : '',
+        'min-w-[180px]'
       )
     }),
     getColumnProps: ({ id }) => ({
@@ -107,12 +117,14 @@ const OrdersContainer = () => {
   }, [orderList, setTotalCount])
 
   return (
-    <TableLayoutContainer>
-      {renderSearchBar()}
-      {!error && getTable()}
-      {!error && getPaginationComponent()}
-      {error && <ErrorPage />}
-    </TableLayoutContainer>
+    <Fragment>
+      <TableLayoutContainer>
+        {renderSearchBar()}
+        {!error && getTable()}
+        {!error && getPaginationComponent()}
+        {error && <ErrorPage />}
+      </TableLayoutContainer>
+    </Fragment>
   )
 }
 
