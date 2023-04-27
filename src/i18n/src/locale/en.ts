@@ -199,11 +199,11 @@ export const messages = {
     orderDetail: {
       form: {
         name: { label: 'Name', placeholder: 'Name' },
-        orderNumber: { label: 'Order Number' },
-        requestNumber: { label: 'Request Number' },
-        contractNumber: { label: 'Contract Number' },
+        orderNumber: { label: 'Order Number', placeholder: 'Order Number' },
+        requestNumber: { label: 'Request Number', placeholder: 'Request Number' },
+        contractNumber: { label: 'Contract Number', placeholder: 'Contract Number' },
         supplier: { label: 'Supplier', placeholder: '...type here' },
-        orderStatus: { label: 'Owner' },
+        orderStatus: { label: 'Order Status' },
         notes: { label: 'Notes' },
         orderDate: { label: 'Date' }
       }

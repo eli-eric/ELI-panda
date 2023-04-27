@@ -10,28 +10,15 @@ import useSubmit from '@/hooks/useSubmit'
 import { OrderFormType } from '../../types'
 import OrderFormComponent from './OrderForm.comp'
 
-// uprabit formater na order
-const formatDataForm = data => ({
-  name: data.name,
-  description: data.description,
-  systemCode: data.systemCode,
-  systemAlias: data.systemAlias,
-  systemTypeUID: data.systemType?.uid,
-  locationUID: data.location?.name,
-  ownerUID: data.owner?.name,
-  importanceUID: data.importance?.uid,
-  zoneUID: data.zone?.uid
-})
-
 // změnit schema na order
 const schema = object({
   name: string().required(),
-  description: string(),
-  systemTypeUID: string(),
-  systemCode: string(),
-  systemAlias: string(),
-  locationUID: string(),
-  ownerUID: string(),
+  supplier: string(),
+  orderStatus: string(),
+  orderNumber: string(),
+  requestNumber: string(),
+  contractNumber: string(),
+  notes: string(),
   importanceUID: string(),
   zoneUID: string()
 })

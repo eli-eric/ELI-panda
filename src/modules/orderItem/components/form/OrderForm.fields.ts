@@ -1,20 +1,30 @@
 import { useFormContext } from 'react-hook-form'
 
 import { useMakeFormFields } from '@/hooks/form'
+import { useCodebookSelectValues } from '@/hooks/useCodebook'
 import { message } from '@/i18n/src/messages'
+import { CODEBOOK } from '@/types/constants/codebook'
 
 import { OrderFormType } from '../../types'
 
 // messages
 const { form } = message.ordersPage.orderDetail
 
+const getDefaultOption = (name, disabled = false) => ({
+  value: '',
+  name,
+  disabled
+})
+
 const useOrderFormFields = (disabled?: boolean) => {
   const { register, formState } = useFormContext<OrderFormType>()
+  const orderStatus = useCodebookSelectValues(CODEBOOK.ORDER_STATUS)
 
   return useMakeFormFields(register, {
     name: {
       name: 'name',
       label: form.name.label,
+      placeholder: form.name.placeholder,
       disabled: disabled,
       isError: !!formState.errors.name,
       rounded: 'rounded-md'
@@ -22,6 +32,7 @@ const useOrderFormFields = (disabled?: boolean) => {
     orderNumber: {
       name: 'orderNumber',
       label: form.orderNumber.label,
+      placeholder: form.orderNumber.placeholder,
       disabled: disabled,
       isError: !!formState.errors.orderNumber,
       rounded: 'rounded-md'
@@ -29,6 +40,7 @@ const useOrderFormFields = (disabled?: boolean) => {
     requestNumber: {
       name: 'requestNumber',
       label: form.requestNumber.label,
+      placeholder: form.requestNumber.placeholder,
       disabled: disabled,
       isError: !!formState.errors.requestNumber,
       rounded: 'rounded-md'
@@ -36,6 +48,7 @@ const useOrderFormFields = (disabled?: boolean) => {
     contractNumber: {
       name: 'contractNumber',
       label: form.contractNumber.label,
+      placeholder: form.contractNumber.placeholder,
       disabled: disabled,
       isError: !!formState.errors.contractNumber,
       rounded: 'rounded-md'
@@ -45,14 +58,16 @@ const useOrderFormFields = (disabled?: boolean) => {
       label: form.supplier.label,
       disabled: disabled,
       isError: !!formState.errors.supplier,
-      rounded: 'rounded-md'
+      rounded: 'rounded-md',
+      codebook: CODEBOOK.SUPPLIER
     },
     orderStatus: {
       name: 'orderStatus',
       label: form.orderStatus.label,
       disabled: disabled,
       isError: !!formState.errors.orderStatus,
-      rounded: 'rounded-md'
+      rounded: 'rounded-md',
+      options: orderStatus && [getDefaultOption('none'), ...orderStatus]
     },
     notes: {
       name: 'notes',
@@ -63,7 +78,8 @@ const useOrderFormFields = (disabled?: boolean) => {
     },
     orderDate: {
       name: 'orderDate',
-      label: form.orderDate.label,
+      defaultValue: new Date().toLocaleDateString('sv-SE'),
+      type: 'date',
       disabled: disabled,
       isError: !!formState.errors.orderDate,
       rounded: 'rounded-md'
