@@ -14,28 +14,14 @@ export const config = {
 const { bucket, accessKey, secretKey, port, useSSL, endPoint } = config
 
 logger.info(
-  `S3 Config - Bucket: ${bucket} | AccessKey: ${accessKey ? '*****' : 'undefined'} | SecretKey: ${
-    secretKey ? '*****' : 'undefined'
+  `S3 Config - Bucket: ${bucket} | AccessKey: ${accessKey && '*****'} | SecretKey: ${
+    secretKey && '*****'
   } | Port: ${port} | UseSSL: ${useSSL} | EndPoint: ${endPoint}`
 )
 
 const s3Client = new Client(config)
 
-//Bucket Policy allows public read-only access
-const bucketPolicy = {
-  Version: '2012-10-17',
-  Statement: [
-    {
-      Action: ['s3:GetObject'],
-      Effect: 'Allow',
-      Principal: { AWS: ['*'] },
-      Resource: [`arn:aws:s3:::${bucket}/*`],
-      Sid: 'PublicRead'
-    }
-  ]
-}
-
-// Create the bucket only if it doesn't exist
+//Make sure we have a bucket
 s3Client.bucketExists(bucket, function (err, exists) {
   if (err) {
     return logger.error('Error checking if bucket exists', err)
@@ -46,11 +32,6 @@ s3Client.bucketExists(bucket, function (err, exists) {
         return logger.error('Error creating bucket', err)
       }
       logger.info('Bucket created successfully')
-      // Apply bucket policy
-      s3Client.setBucketPolicy(bucket, JSON.stringify(bucketPolicy), err => {
-        if (err) return logger.error('Error setting bucker policy', err)
-        return logger.info('Successfully applied bucket policy')
-      })
     })
   } else {
     logger.info('Bucket already exists')
