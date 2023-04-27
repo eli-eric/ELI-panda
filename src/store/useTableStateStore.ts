@@ -2,9 +2,9 @@ import { SortingRule } from 'react-table'
 import { create } from 'zustand'
 
 type SortingInstance = {
-  sortBy: SortingRule<{}>[]
-  sortByQueryString: string
-  pagination: string
+  sortBy?: SortingRule<{}>[]
+  sortByQueryString?: string
+  pagination?: string
 }
 
 type SortingState = {

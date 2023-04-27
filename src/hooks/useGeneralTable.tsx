@@ -81,7 +81,7 @@ const useGeneralTable = <T extends object>({
   // set sortBy to store and router.query.sortBy
   useEffect(() => {
     setSortBy(tableId, sortBy)
-    setSortByQueryString(tableId, JSON.stringify(sortBy))
+    setSortByQueryString(tableId, sortBy.length === 0 ? undefined : sortConfigQuery)
     if (uriSortBy) {
       const newQuery = { ...router.query }
       if (sortBy.length !== 0) {
