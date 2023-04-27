@@ -4,15 +4,13 @@ import { FormProvider, useForm } from 'react-hook-form'
 import toast, { Toaster } from 'react-hot-toast'
 import { object, string } from 'yup'
 
-import FormError from '@/components/Notifications/FormError'
-
 import OrderFormContainer from './components/form/OrderForm.cont'
 import HeaderComponent from './components/Header.comp'
 import { OrderFormType } from './types'
 
 const schema = object({
   name: string().required(),
-  supplier: string(),
+  supplier: string().required(),
   orderStatus: string(),
   orderNumber: string(),
   requestNumber: string(),
@@ -28,11 +26,20 @@ const OrderItemContainer = () => {
     resolver: yupResolver(schema)
   })
 
+  const { formState } = formMethods
+
   useEffect(() => {
-    formMethods.formState.isSubmitting &&
-      formMethods.formState.isDirty &&
-      toast.custom(t => <FormError dismiss={toast.dismiss} t={t} />)
-  }, [formMethods.formState])
+    console.log(formState)
+    const ErrorArray = Object.keys(formState?.errors || {})
+    formState?.isSubmitSuccessful &&
+      ErrorArray.length > 0 &&
+      ErrorArray.forEach(error => {
+        const fieldError = formState?.errors[error]
+        if (fieldError && 'message' in fieldError) {
+          toast.error(fieldError.message as string)
+        }
+      })
+  }, [formState])
 
   const onSubmit = data => {
     console.log(data)
