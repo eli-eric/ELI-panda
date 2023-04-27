@@ -1,3 +1,4 @@
+import { BucketItemStat, BucketItemWithMetadata } from 'minio'
 import { nanoid } from 'nanoid'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
@@ -13,93 +14,117 @@ const makeExternalURL = (restPath: string) =>
     process.env.PRODUCTION?.toLowerCase() === 'true' ? 'https://' : 'http://'
   }${endPoint}:${port}/${bucket}/${restPath}`
 
+const makeBucketItem = (obj: BucketItemStat, name: string, prefix: string): BucketItemWithMetadata => ({
+  ...obj,
+  name,
+  prefix,
+  metadata: obj.metaData
+})
+
+const makeFileItem = (s3Object: BucketItemWithMetadata): FileItem => {
+  const { name: path, metadata } = s3Object
+  const [id] = path.split('/').reverse()
+  return {
+    id,
+    name: metadata['X-Amz-Meta-Name'],
+    type: metadata['content-type'],
+    url: makeExternalURL(path)
+  }
+}
+
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    if (!req.url) return res.status(400).end()
+    if (!req.url) {
+      res.status(400).end()
+    } else {
+      const [, , itemType, itemId, , fileId] = req.url.split('/')
 
-    const [, , itemType, itemId, , fileId] = req.url.split('/')
+      const prefix = `${itemType}/${itemId}`
 
-    const prefix = `${itemType}/${itemId}`
+      logger.info(
+        `Request - URL: ${req.url} | Method: ${req.method} | Item Type: ${itemType} | Item ID: ${itemId} | FileID: ${fileId}`
+      )
 
-    logger.debug(
-      `Request - URL: ${req.url} | Method: ${req.method} | Item Type: ${itemType} | Item ID: ${itemId} | FileID: ${fileId}`
-    )
+      switch (req.method) {
+        case 'GET':
+          const stream = s3Client.extensions.listObjectsV2WithMetadata(bucket, prefix + '/')
 
-    switch (req.method) {
-      case 'GET':
-        const stream = s3Client.extensions.listObjectsV2WithMetadata(bucket, prefix + '/')
+          const objects: FileItem[] = []
 
-        const objects: FileItem[] = []
-
-        stream.on('data', obj => {
-          const { name: path, metadata } = obj
-          const [id] = path.split('/').reverse()
-
-          if (!path) return res.status(500).end()
-
-          objects.push({
-            id,
-            name: metadata['X-Amz-Meta-Name'],
-            type: metadata['content-type'],
-            url: makeExternalURL(path)
+          stream.on('data', obj => {
+            objects.push(makeFileItem(obj))
           })
-        })
 
-        stream.on('error', err => {
-          logger.error('Error listing bucket', err)
-          return res.status(500).end()
-        })
+          stream.on('error', err => {
+            logger.error('Error listing bucket', err)
+            res.status(500).end()
+          })
 
-        stream.on('end', () => res.status(200).json(objects))
+          stream.on('end', () => res.status(200).json(objects))
 
-        break
+          break
 
-      case 'POST':
-        const { name, payload } = req.body
-        const id = nanoid()
+        case 'POST':
+          const { name, payload } = req.body
+          const id = nanoid()
 
-        const regex = /^data:(.*?);base64,(.*)$/
-        const match = payload.match(regex)
+          const regex = /^data:(.*?);base64,(.*)$/
+          const match = payload.match(regex)
 
-        if (match) {
-          const mimeType = match[1]
-          const buffer = Buffer.from(match[2], 'base64')
+          if (match) {
+            const mimeType = match[1]
+            const buffer = Buffer.from(match[2], 'base64')
 
-          const metaData = {
-            'Content-Type': mimeType,
-            name
+            const metaData = {
+              'Content-Type': mimeType,
+              name
+            }
+
+            s3Client.putObject(bucket, `${prefix}/${id}`, buffer, buffer.length, metaData, err => {
+              if (err) {
+                logger.error('Error saving file', err)
+                res.status(500).end()
+              } else {
+                s3Client.statObject(bucket, `${prefix}/${id}`, (err, obj) => {
+                  if (err) return res.status(500).end()
+                  res.status(201).json(makeFileItem(makeBucketItem(obj, id, prefix)))
+                })
+              }
+            })
+          } else {
+            res.status(400).end()
           }
 
-          s3Client.putObject(bucket, `${prefix}/${id}`, buffer, buffer.length, metaData, err => {
-            if (err) {
-              logger.error('Error saving file', err)
-              return res.status(500).end()
-            }
-            return res.status(201).json({
-              id,
-              name,
-              type: mimeType,
-              url: makeExternalURL(`${prefix}/${id}`)
+          break
+
+        case 'DELETE':
+          if (fileId) {
+            const fullPath = `${prefix}/${fileId}`
+            s3Client.statObject(bucket, fullPath, (err, result) => {
+              if (err) {
+                logger.error('Error finding object to delete', err)
+                return res.status(500).end()
+              } else {
+                s3Client.removeObject(bucket, fullPath, err => {
+                  if (err) {
+                    logger.error('Error deleting file', err)
+                    return res.status(500).end()
+                  } else {
+                    res.status(200).json(makeBucketItem(result, fileId, prefix))
+                  }
+                })
+              }
             })
-          })
-        }
-        return res.status(400).end()
+          } else {
+            res.status(400).end()
+          }
 
-      case 'DELETE':
-        if (fileId) {
-          s3Client.removeObject(bucket, `${prefix}/${fileId}`, err => {
-            if (err) {
-              logger.error('Error deleting file', err)
-              return res.status(500).end()
-            }
-            return res.status(204).end()
-          })
-        }
-        return res.status(400).end()
+          break
 
-      default:
-        res.setHeader('Allow', ['GET', 'POST', 'DELETE'])
-        res.status(405).end(`Method ${req.method} Not Allowed`)
+        default:
+          res.setHeader('Allow', ['GET', 'POST', 'DELETE'])
+          res.status(405).end(`Method ${req.method} Not Allowed`)
+      }
     }
   } catch (error) {
     res.status(500).end()
