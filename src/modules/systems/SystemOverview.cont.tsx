@@ -103,7 +103,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
               <Heading text="Files" />
               <ErrorBoundary fallback={<ErrorPage />}>
                 <Suspense fallback={<ProgressBarComponent />}>
-                  <FileManager />
+                  <FileManager itemType="systems" itemId={uid} />
                 </Suspense>
               </ErrorBoundary>
             </Card>

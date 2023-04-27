@@ -1,13 +1,14 @@
-import { TrashIcon } from '@heroicons/react/24/outline'
-import { useRouter } from 'next/router'
+import { CloudArrowUpIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { CellProps, Column } from 'react-table'
 import useGeneralTable from 'src/hooks/useGeneralTable'
 import useSWR from 'swr'
 
 import { Button } from '@/components/Buttons'
 import executeRequest from '@/helpers/executeRequest'
 import { uniFetcher } from '@/helpers/fetcher'
+import useWarningModal from '@/hooks/useWarningModal'
 
 export type FileItem = {
   id: string
@@ -16,14 +17,15 @@ export type FileItem = {
   url: string
 }
 
-const FileManager = () => {
-  const router = useRouter()
+type FileManagerProps = {
+  itemType: string
+  itemId: string
+}
+
+const FileManager = ({ itemType, itemId }: FileManagerProps) => {
   const hasEditRole = true //replace me
 
-  const [, itemType] = router.pathname.split('/')
-  const { uid: itemId } = router.query
-
-  const endpoint = `http://localhost:5001/api/${itemType}/${itemId}/files`
+  const endpoint = `/api/${itemType}/${itemId}/files`
   const { data: files, error, mutate } = useSWR<Array<FileItem>>(endpoint, uniFetcher)
 
   const [newFile, setNewFile] = useState({ name: '', payload: '' })
@@ -54,17 +56,19 @@ const FileManager = () => {
     [endpoint, files, mutate]
   )
 
+  const { withWarningModal, WarningModal } = useWarningModal('Are you sure you want to delete this file?')
+
   useEffect(() => {
     newFile.name && newFile.payload && handlePost(newFile.name, newFile.payload)
   }, [newFile, handlePost])
 
   // Define columns for useGeneralTable
   const columns = useMemo(() => {
-    const cols = [
+    const cols: Column<FileItem>[] = [
       {
         Header: 'Name',
         accessor: 'name',
-        Cell: ({ row }) => {
+        Cell: ({ row }: CellProps<FileItem>) => {
           const {
             original: { name, url }
           } = row
@@ -76,14 +80,10 @@ const FileManager = () => {
         }
       },
       {
-        Header: 'Actions',
+        Header: 'Action',
         accessor: 'id',
-        Cell: ({ value }) => (
-          <Button
-            onClick={() => {
-              handleDelete(value)
-            }}
-          >
+        Cell: ({ value }: CellProps<FileItem>) => (
+          <Button onClick={() => withWarningModal(handleDelete)(value)}>
             <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
           </Button>
         )
@@ -91,7 +91,7 @@ const FileManager = () => {
     ]
     const [justLink] = cols
     return hasEditRole ? cols : [justLink]
-  }, [hasEditRole, handleDelete])
+  }, [hasEditRole, handleDelete, withWarningModal])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop
@@ -110,10 +110,13 @@ const FileManager = () => {
       {hasEditRole && (
         <div {...getRootProps()}>
           <input {...getInputProps()} />
-          <p className={isDragActive ? 'bg-orange-600' : ''}>Drag new file here</p>
+          <Button className="mb-2" primary={!isDragActive}>
+            <CloudArrowUpIcon className="h-5 w-5" aria-hidden="true" />
+          </Button>
         </div>
       )}
       {getTable()}
+      <WarningModal />
     </div>
   )
 }
