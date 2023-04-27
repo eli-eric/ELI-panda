@@ -30,7 +30,7 @@ const FileManager = ({ itemType, itemId }: FileManagerProps) => {
 
   const [newFile, setNewFile] = useState({ name: '', payload: '' })
 
-  const onDrop = useCallback(async files => {
+  const onDrop = useCallback(async (files: File[]) => {
     const file = files[0]
     const reader = new FileReader()
     reader.readAsDataURL(file)
