@@ -6,15 +6,15 @@ const useWarningModal = (message: string) => {
   const [isConfirmed, setIsConfirmed] = useState(false)
   const [error, setError] = useState('')
   const [execData, setExecData] = useState({
-    fn: undefined as Function | undefined,
-    args: undefined as any[] | undefined
+    callback: undefined as Function | undefined,
+    callbackArgs: undefined as any[] | undefined
   })
 
   useEffect(() => {
-    const { fn, args } = execData
-    if (fn && args && isConfirmed) {
+    const { callback, callbackArgs } = execData
+    if (callback && callbackArgs && isConfirmed) {
       try {
-        fn(...args)
+        callback(...callbackArgs)
         setIsOpen(false)
         setIsConfirmed(false)
       } catch (err) {
@@ -38,10 +38,10 @@ const useWarningModal = (message: string) => {
   }
 
   const withWarningModal = useCallback(
-    <T extends any[], R>(callback: (...args: T) => R) =>
-      (...args: T) => {
+    <T extends any[], R>(callback: (...callbackArgs: T) => R) =>
+      (...callbackArgs: T) => {
         setIsOpen(true)
-        setExecData({ fn: callback, args })
+        setExecData({ callback, callbackArgs })
       },
     []
   )
