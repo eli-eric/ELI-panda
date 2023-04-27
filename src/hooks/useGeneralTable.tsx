@@ -83,7 +83,13 @@ const useGeneralTable = <T extends object>({
     setSortBy(tableId, sortBy)
     setSortByQueryString(tableId, JSON.stringify(sortBy))
     if (uriSortBy) {
-      router.replace({ query: { ...router.query, sortBy: sortBy.length === 0 ? '[]' : JSON.stringify(sortBy) } })
+      const newQuery = { ...router.query }
+      if (sortBy.length !== 0) {
+        newQuery.sortBy = JSON.stringify(sortBy)
+      } else {
+        delete newQuery.sortBy
+      }
+      router.replace({ query: newQuery })
     }
   }, [tableId, sortBy, sortConfigQuery, uriSortBy]) // eslint-disable-line
 
