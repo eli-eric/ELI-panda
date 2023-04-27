@@ -17,13 +17,8 @@ async function executeRequest<T>(
   const request = new Request(url, requestOptions)
   try {
     const response = await fetch(request)
-    try {
-      const jsonData = await response.json()
-      onSuccess(jsonData)
-    } catch (e) {
-      //handle cases where response is OK but doesn't contain a JSON payload
-      onSuccess({} as T)
-    }
+    const jsonData = await response.json()
+    onSuccess(jsonData)
   } catch (err) {
     if (err instanceof Error) {
       onError(err)
