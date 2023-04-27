@@ -1,4 +1,4 @@
-import { CloudArrowUpIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { TrashIcon } from '@heroicons/react/24/outline'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { CellProps, Column } from 'react-table'
@@ -111,7 +111,8 @@ const FileManager = ({ itemType, itemId }: FileManagerProps) => {
         <div {...getRootProps()}>
           <input {...getInputProps()} />
           <Button className="mb-2" primary={!isDragActive}>
-            <CloudArrowUpIcon className="h-5 w-5" aria-hidden="true" />
+            {/* <CloudArrowUpIcon className="h-5 w-5" aria-hidden="true" /> */}
+            Upload File
           </Button>
         </div>
       )}
