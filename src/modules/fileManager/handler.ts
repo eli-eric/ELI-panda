@@ -98,9 +98,10 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
                   if (err) {
                     logger.debug(composeDebugMessage(req, 'Failed to get file info after saving'))
                     return res.status(500).end()
+                  } else {
+                    logger.debug(composeDebugMessage(req, 'Successfully saved file'))
+                    res.status(201).json(makeFileItem(makeBucketItem(obj, id, prefix)))
                   }
-                  logger.debug(composeDebugMessage(req, 'Successfully saved file'))
-                  res.status(201).json(makeFileItem(makeBucketItem(obj, id, prefix)))
                 })
               }
             })
