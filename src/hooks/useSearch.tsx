@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 interface Props {
@@ -14,17 +14,27 @@ interface Props {
 export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin }: Props) => {
   const router = useRouter()
   const query = router.query
-  const [searchValue, setSearchValue] = useState<string | undefined>(
-    useQuery ? (router.query.search as string) : undefined
-  )
+  const [searchValue, setSearchValue] = useState<string | undefined>()
 
   const { register, handleSubmit } = useForm<{ search: string }>({
-    defaultValues: { search: searchValue }
+    defaultValues: { search: query.search as string }
   })
+
+  useEffect(() => {
+    if (query.search) {
+      setSearchValue(query.search as string)
+    }
+  }, [query.search])
 
   const onSubmit = (data: { search: string }) => {
     if (useQuery) {
-      router.replace({ query: { ...query, search: data.search } })
+      const newQuery = { ...query }
+      if (data.search) {
+        newQuery.search = data.search
+      } else {
+        delete newQuery.search
+      }
+      router.replace({ query: newQuery })
     }
     setSearchValue(data.search)
     onSuccess && onSuccess(data.search)
@@ -44,8 +54,8 @@ export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin }
                 <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
               </div>
               <input
-                id="search-field"
                 {...register('search')}
+                defaultValue={searchValue ?? ''}
                 className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm"
                 placeholder="Search..."
                 type="search"

@@ -15,7 +15,7 @@ import { ModalButtons } from '@/types/form'
 
 import { SystemEditFormType } from '../../types/form'
 import { SystemDetailResponse } from '../../types/responses'
-import EditForm from './EditForm'
+import EditForm from './EditForm.comp'
 
 const formatDataForm = (data: SystemDetailResponse): SystemEditFormType => ({
   name: data.name,

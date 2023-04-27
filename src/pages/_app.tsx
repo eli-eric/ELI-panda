@@ -10,6 +10,7 @@ import { SWRConfig } from 'swr'
 
 import NavigationComponent from '@/components/layout/nav-bar/nav-bar.comp'
 import { fetcher } from '@/helpers/fetcher'
+import useLocale from '@/hooks/useLocale'
 
 interface Props {
   children: React.ReactNode
@@ -18,6 +19,8 @@ interface Props {
 const GlobalProvider = ({ children }: Props) => {
   const { data } = useSession()
   axios.defaults.headers.common['authorization'] = 'Bearer ' + data?.user.apiAccessToken
+  const locale = useLocale()
+
   return (
     <SWRConfig
       value={{
@@ -34,7 +37,7 @@ const GlobalProvider = ({ children }: Props) => {
         }
       }}
     >
-      <IntlProvider locale="en" messages={messages['en']}>
+      <IntlProvider locale={locale} messages={messages['en']}>
         <NavigationComponent />
         {children}
       </IntlProvider>

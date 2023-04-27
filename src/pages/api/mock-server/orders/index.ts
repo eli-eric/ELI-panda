@@ -13,6 +13,7 @@ type Order = {
   supplier: string
   orderStatus: string
   notes: string
+  orderDate: string
 }
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
@@ -29,7 +30,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
           contractNumber: faker.datatype.number({ min: 99944, max: 1234567 }),
           supplier: faker.company.catchPhrase(),
           notes: faker.datatype.string(),
-          orderStatus: faker.word.adjective()
+          orderStatus: faker.word.adjective(),
+          orderDate: '2023-04-26T10:45:28.363976432+02:00'
         }
       }
       const fetchFakeOrders = () => {

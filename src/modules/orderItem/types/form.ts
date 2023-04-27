@@ -1,4 +1,6 @@
-export type Order = {
+import { FieldValues } from 'react-hook-form'
+
+export interface OrderFormType extends FieldValues {
   uid: string
   name: string
   orderNumber: number
@@ -6,11 +8,6 @@ export type Order = {
   contractNumber: number
   supplier: string
   orderStatus: string
-  notes: string
   orderDate: string
-}
-
-export type OrderListResponse = {
-  data: Order[]
-  totalCount: number
+  notes: string
 }

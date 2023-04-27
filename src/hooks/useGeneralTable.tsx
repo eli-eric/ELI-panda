@@ -39,7 +39,8 @@ const useGeneralTable = <T extends object>({
 }: UseTableType<T>) => {
   const { instances, setSortBy, setSortByQueryString } = useTableStateStore()
   const router = useRouter()
-  const sortByQueryString = router.query.sortBy as string
+  const routerSortBy = router.query.sortBy as string
+  const sortByInstance = instances[tableId]?.sortBy
 
   const {
     headerGroups,
@@ -56,29 +57,41 @@ const useGeneralTable = <T extends object>({
       manualSortBy: true,
       autoResetPage: false,
       autoResetSortBy: false,
-      initialState: { sortBy: instances[tableId]?.sortBy || [] }
+      initialState: { sortBy: sortByInstance || [] }
     },
     useSortBy
   )
-  useEffect(() => {
-    if (uriSortBy) {
-      if (sortByQueryString) {
-        const sortByParsed = JSON.parse(sortByQueryString)
-        setSortBy(tableId, sortByParsed)
-        setSortByTable(sortByParsed)
-      }
-    }
-  }, [sortByQueryString, tableId, setSortBy, setSortByTable, uriSortBy])
 
   const sortConfigQuery = useQueryString(sortBy)
 
+  // intialize sortBy from router
+  useEffect(() => {
+    if (uriSortBy) {
+      if (sortBy.length === 0) {
+        if (routerSortBy) {
+          const sortByParsed = JSON.parse(routerSortBy)
+          setSortBy(tableId, sortByParsed)
+          setSortByQueryString(tableId, routerSortBy)
+          setSortByTable(sortByParsed)
+        }
+      }
+    }
+  }, [routerSortBy]) // eslint-disable-line
+
+  // set sortBy to store and router.query.sortBy
   useEffect(() => {
     setSortBy(tableId, sortBy)
-    setSortByQueryString(tableId, sortConfigQuery)
+    setSortByQueryString(tableId, sortBy.length === 0 ? undefined : sortConfigQuery)
     if (uriSortBy) {
-      router.replace({ query: { ...router.query, sortBy: sortConfigQuery } })
+      const newQuery = { ...router.query }
+      if (sortBy.length !== 0) {
+        newQuery.sortBy = JSON.stringify(sortBy)
+      } else {
+        delete newQuery.sortBy
+      }
+      router.replace({ query: newQuery })
     }
-  }, [setSortBy, setSortByQueryString, tableId, sortBy, sortConfigQuery]) //eslint-disable-line
+  }, [tableId, sortBy, sortConfigQuery, uriSortBy]) // eslint-disable-line
 
   const getTable = () => (
     <Fragment>
@@ -140,10 +153,7 @@ const useGeneralTable = <T extends object>({
                             return (
                               <td
                                 key={key}
-                                className={classNames(
-                                  className,
-                                  'whitespace-nowrap text-sm z-0 sm:pl-6 sm:pr-6 text-gray-500'
-                                )}
+                                className={classNames(className, 'text-sm z-0 sm:pl-6 sm:pr-6 text-gray-500')}
                                 {...restCellProps}
                               >
                                 {cell.render('Cell')}

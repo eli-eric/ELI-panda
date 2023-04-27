@@ -8,6 +8,7 @@ import { CODEBOOK } from '@/types/constants/codebook'
 
 const { form } = message.systemsPage.systemDetail
 
+//TODO: move to utils
 const getDefaultOption = (name, disabled = false) => ({
   value: '',
   name,
