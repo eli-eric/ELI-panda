@@ -3,20 +3,25 @@ import Modal from 'src/components/modal/warning/modal-warning.comp'
 
 const useWarningModal = (message: string) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [execParams, setExecParms] = useState({
+  const [isConfirmed, setIsConfirmed] = useState(false)
+  const [error, setError] = useState('')
+  const [execData, setExecData] = useState({
     fn: undefined as Function | undefined,
     args: undefined as any[] | undefined
   })
-  const [isConfirmed, setIsConfirmed] = useState(false)
 
   useEffect(() => {
-    const { fn, args } = execParams
+    const { fn, args } = execData
     if (fn && args && isConfirmed) {
       setIsOpen(false)
       setIsConfirmed(false)
-      fn(...args)
+      try {
+        fn(...args)
+      } catch (err) {
+        setError(String(err))
+      }
     }
-  }, [isConfirmed, execParams])
+  }, [isConfirmed, execData])
 
   const deleteButtons = {
     goNext: {
@@ -31,11 +36,12 @@ const useWarningModal = (message: string) => {
       }
     }
   }
+
   const withWarningModal = useCallback(
     (fn: Function) =>
       (...args: any[]) => {
         setIsOpen(true)
-        setExecParms({ fn, args })
+        setExecData({ fn, args })
       },
     []
   )
@@ -47,7 +53,7 @@ const useWarningModal = (message: string) => {
       setOpen={setIsOpen}
       title="Warning"
       message={message}
-      error={''}
+      error={error}
       testid={message}
     />
   )
