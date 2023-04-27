@@ -14,9 +14,9 @@ const makeExternalURL = (restPath: string) =>
     process.env.PRODUCTION?.toLowerCase() === 'true' ? 'https://' : 'http://'
   }${endPoint}:${port}/${bucket}/${restPath}`
 
-const makeBucketItem = (obj: BucketItemStat, name: string, prefix: string): BucketItemWithMetadata => ({
+const makeBucketItem = (obj: BucketItemStat, id: string, prefix: string): BucketItemWithMetadata => ({
   ...obj,
-  name,
+  name: `${prefix}/${id}`,
   prefix,
   metadata: obj.metaData
 })
