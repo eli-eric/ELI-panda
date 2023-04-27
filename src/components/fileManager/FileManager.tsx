@@ -18,6 +18,7 @@ export type FileItem = {
 
 const FileManager = () => {
   const router = useRouter()
+  const hasEditRole = true //replace me
 
   const [, itemType] = router.pathname.split('/')
   const { uid: itemId } = router.query
@@ -58,8 +59,8 @@ const FileManager = () => {
   }, [newFile, handlePost])
 
   // Define columns for useGeneralTable
-  const columns = useMemo(
-    () => [
+  const columns = useMemo(() => {
+    const cols = [
       {
         Header: 'Name',
         accessor: 'name',
@@ -87,9 +88,10 @@ const FileManager = () => {
           </Button>
         )
       }
-    ],
-    [handleDelete]
-  )
+    ]
+    const [justLink] = cols
+    return hasEditRole ? cols : [justLink]
+  }, [hasEditRole, handleDelete])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop
@@ -105,11 +107,12 @@ const FileManager = () => {
 
   return (
     <div>
-      {/* Your file upload UI here */}
-      <div {...getRootProps()}>
-        <input {...getInputProps()} />
-        <p className={isDragActive ? 'bg-orange-600' : ''}>Drag new file here</p>
-      </div>
+      {hasEditRole && (
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          <p className={isDragActive ? 'bg-orange-600' : ''}>Drag new file here</p>
+        </div>
+      )}
       {getTable()}
     </div>
   )
