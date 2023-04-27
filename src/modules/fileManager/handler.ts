@@ -8,6 +8,11 @@ import s3Client, { config } from './s3client'
 
 const { bucket, endPoint, port } = config
 
+const makeExternalURL = (restPath: string) =>
+  `${
+    process.env.PRODUCTION?.toLowerCase() === 'true' ? 'https://' : 'http://'
+  }${endPoint}:${port}/${bucket}/${restPath}`
+
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   try {
     if (!req.url) return res.status(400).end()
@@ -36,7 +41,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
             id,
             name: metadata['X-Amz-Meta-Name'],
             type: metadata['content-type'],
-            url: `http://${endPoint}:${port}/${bucket}/${path}`
+            url: makeExternalURL(path)
           })
         })
 
@@ -74,7 +79,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
               id,
               name,
               type: mimeType,
-              url: `http://${endPoint}:${port}/${bucket}/${prefix}/${id}`
+              url: makeExternalURL(`${prefix}/${id}`)
             })
           })
         }
