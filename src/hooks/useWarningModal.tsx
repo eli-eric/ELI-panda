@@ -38,8 +38,8 @@ const useWarningModal = (message: string) => {
   }
 
   const withWarningModal = useCallback(
-    (callback: Function) =>
-      (...args: any[]) => {
+    <T extends any[], R>(callback: (...args: T) => R) =>
+      (...args: T) => {
         setIsOpen(true)
         setExecData({ fn: callback, args })
       },
