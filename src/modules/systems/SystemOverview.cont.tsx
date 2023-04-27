@@ -1,9 +1,7 @@
-import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { Suspense, useMemo, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
-import { Button } from '@/components/Buttons'
 import Card, { Heading } from '@/components/card/card.comp'
 import EmptySectionComponent from '@/components/empty-section/empty-section.comp'
 import ErrorPage from '@/components/error/ErrorPage'
@@ -103,16 +101,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
             )}
             <Card>
               <Heading text="Files" />
-              <ErrorBoundary
-                fallbackRender={({ resetErrorBoundary }) => (
-                  <div className="flex-col">
-                    <ErrorPage />
-                    <Button onClick={() => resetErrorBoundary()}>
-                      <ArrowPathIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
-                    </Button>
-                  </div>
-                )}
-              >
+              <ErrorBoundary fallback={<ErrorPage />}>
                 <Suspense fallback={<ProgressBarComponent />}>
                   <FileManager />
                 </Suspense>
