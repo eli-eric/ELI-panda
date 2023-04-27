@@ -58,7 +58,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
           const fileStream = await s3Client.getObject(bucket, fullName)
           fileStream.pipe(res).on('error', err => {
-            throw err
+            logger.error(err)
+            res.status(500).end()
+          })
+
+          fileStream.once('error', err => {
+            logger.error(err)
+            res.status(500).end()
+          })
+
+          res.once('error', err => {
+            logger.error(err)
+            fileStream.destroy()
           })
         } else {
           const stream = s3Client.extensions.listObjectsV2WithMetadata(bucket, prefix + '/')
@@ -70,7 +81,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           })
 
           stream.once('error', err => {
-            throw err
+            logger.error(err)
+            res.status(500).end()
           })
 
           stream.once('end', () => {
