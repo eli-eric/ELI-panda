@@ -1,6 +1,7 @@
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { toast } from 'react-hot-toast'
 import { CellProps, Column } from 'react-table'
 import useGeneralTable from 'src/hooks/useGeneralTable'
 import useSWR from 'swr'
@@ -40,19 +41,33 @@ const FileManager = ({ itemType, itemId }: FileManagerProps) => {
   const handlePost = useCallback(
     (name: string, payload: string) => {
       const body = JSON.stringify({ name, payload })
-      executeRequest<FileItem>(endpoint, { method: 'post', body }, res => {
-        mutate([...(files ?? []), res])
-        setNewFile({ name: '', payload: '' })
-      })
+      executeRequest<FileItem>(
+        endpoint,
+        { method: 'post', body },
+        res => {
+          mutate([...(files ?? []), res])
+          setNewFile({ name: '', payload: '' })
+          toast.success(`Uploaded ${name}`)
+        },
+        () => toast.error(`Failed to upload ${name}`)
+      )
     },
     [endpoint, mutate, files, setNewFile]
   )
 
   const handleDelete = useCallback(
-    (id: string) =>
-      executeRequest(`${endpoint}/${id}`, { method: 'delete' }, () => {
-        mutate((files ?? []).filter(obj => obj.id !== id))
-      }),
+    (id: string) => {
+      const name = (files ?? []).find(obj => obj.id === id)?.name
+      executeRequest(
+        `${endpoint}/${id}`,
+        { method: 'delete' },
+        () => {
+          toast.success(`Deleted ${name}`)
+          mutate((files ?? []).filter(obj => obj.id !== id))
+        },
+        () => toast.error(`Failed to delete ${name}`)
+      )
+    },
     [endpoint, files, mutate]
   )
 

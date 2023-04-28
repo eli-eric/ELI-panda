@@ -4,11 +4,13 @@ import axios from 'axios'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
+import { Toaster } from 'react-hot-toast'
 import { IntlProvider } from 'react-intl'
 import { messages } from 'src/i18n/src'
 import { SWRConfig } from 'swr'
 
 import NavigationComponent from '@/components/layout/nav-bar/nav-bar.comp'
+import Notification from '@/components/Notification'
 import { fetcher } from '@/helpers/fetcher'
 
 interface Props {
@@ -45,6 +47,7 @@ const GlobalProvider = ({ children }: Props) => {
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <SessionProvider session={session}>
     <GlobalProvider>
+      <Toaster toastOptions={{ duration: 3000 }}>{t => <Notification toast={t} />}</Toaster>
       <Component {...pageProps} />
     </GlobalProvider>
   </SessionProvider>
