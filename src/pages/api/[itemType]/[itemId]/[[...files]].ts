@@ -47,6 +47,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     switch (req.method) {
       case 'GET':
         if (fileId) {
+          // "Download" endpoint if fileId is specified.
           const objectInfo = await s3Client.statObject(bucket, fullName)
 
           res.setHeader('Content-Type', objectInfo.metaData['content-type'] || 'application/octet-stream')
@@ -72,6 +73,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             fileStream.destroy()
           })
         } else {
+          // File listing if no fileId provided.
           const stream = s3Client.extensions.listObjectsV2WithMetadata(bucket, prefix + '/')
 
           const objects: FileItem[] = []
