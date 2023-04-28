@@ -4,8 +4,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { FileItem } from '@/components/fileManager/FileManager'
 
-import logger from 'src/utils/logger'
-import s3Client, { config } from 'src/utils/s3client'
+import logger from 'src/server/logger'
+import s3Client, { config } from 'src/server/s3client'
 
 const { bucket } = config
 

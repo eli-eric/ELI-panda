@@ -81,6 +81,15 @@ const FileManager = ({ itemType, itemId }: FileManagerProps) => {
   const columns = useMemo(() => {
     const cols: Column<FileItem>[] = [
       {
+        Header: 'Action',
+        accessor: 'id',
+        Cell: ({ value }: CellProps<FileItem>) => (
+          <Button onClick={() => withWarningModal(handleDelete)(value)}>
+            <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+          </Button>
+        )
+      },
+      {
         Header: 'Name',
         accessor: 'name',
         Cell: ({ row }: CellProps<FileItem>) => {
@@ -93,18 +102,9 @@ const FileManager = ({ itemType, itemId }: FileManagerProps) => {
             </a>
           )
         }
-      },
-      {
-        Header: 'Action',
-        accessor: 'id',
-        Cell: ({ value }: CellProps<FileItem>) => (
-          <Button onClick={() => withWarningModal(handleDelete)(value)}>
-            <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
-          </Button>
-        )
       }
     ]
-    const [justLink] = cols
+    const [, justLink] = cols
     return hasEditRole ? cols : [justLink]
   }, [hasEditRole, handleDelete, withWarningModal])
 
