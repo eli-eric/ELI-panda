@@ -8,6 +8,8 @@ export type Order = {
   orderStatus: string
   notes: string
   orderDate: string
+  lastUpdateTime: string
+  lastUpdateBy: string
 }
 
 export type OrderListResponse = {

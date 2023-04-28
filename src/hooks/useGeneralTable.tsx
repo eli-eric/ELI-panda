@@ -130,41 +130,40 @@ const useGeneralTable = <T extends object>({
                     )
                   })}
                 </thead>
-                {data && (
-                  <tbody className="bg-white" {...getTableBodyProps()}>
-                    {rows.map((row, index) => {
-                      prepareRow(row)
-                      const { key, className, ...restRowProps } = row.getRowProps({
-                        ...getRowProps(row)
-                      })
-                      return (
-                        <tr
-                          key={key}
-                          className={classNames(
-                            index % 2 === 0 ? undefined : 'bg-gray-100',
-                            'hover:bg-primary-200 z-0',
-                            className
-                          )}
-                          {...restRowProps}
-                        >
-                          {row.cells.map(cell => {
-                            const { key, className, ...restCellProps } = cell.getCellProps({ ...getCellProps(cell) })
 
-                            return (
-                              <td
-                                key={key}
-                                className={classNames(className, 'text-sm z-0 sm:pl-6 sm:pr-6 text-gray-500')}
-                                {...restCellProps}
-                              >
-                                {cell.render('Cell')}
-                              </td>
-                            )
-                          })}
-                        </tr>
-                      )
-                    })}
-                  </tbody>
-                )}
+                <tbody className="bg-white" {...getTableBodyProps()}>
+                  {rows.map((row, index) => {
+                    prepareRow(row)
+                    const { key, className, ...restRowProps } = row.getRowProps({
+                      ...getRowProps(row)
+                    })
+                    return (
+                      <tr
+                        key={key}
+                        className={classNames(
+                          index % 2 === 0 ? undefined : 'bg-gray-100',
+                          'hover:bg-primary-200 z-0',
+                          className
+                        )}
+                        {...restRowProps}
+                      >
+                        {row.cells.map(cell => {
+                          const { key, className, ...restCellProps } = cell.getCellProps({ ...getCellProps(cell) })
+
+                          return (
+                            <td
+                              key={key}
+                              className={classNames(className, 'text-sm sm:pl-6 sm:pr-6 text-gray-500')}
+                              {...restCellProps}
+                            >
+                              {cell.render('Cell')}
+                            </td>
+                          )
+                        })}
+                      </tr>
+                    )
+                  })}
+                </tbody>
               </table>
             </div>
           </div>

@@ -29,9 +29,8 @@ const OrderItemContainer = () => {
   const { formState } = formMethods
 
   useEffect(() => {
-    console.log(formState)
     const ErrorArray = Object.keys(formState?.errors || {})
-    formState?.isSubmitSuccessful &&
+    formState?.isSubmitting &&
       ErrorArray.length > 0 &&
       ErrorArray.forEach(error => {
         const fieldError = formState?.errors[error]
@@ -48,6 +47,7 @@ const OrderItemContainer = () => {
 
   return (
     <Fragment>
+      <Toaster position="top-right" reverseOrder={true} />
       <form onSubmit={formMethods.handleSubmit(onSubmit)}>
         <FormProvider {...formMethods}>
           <HeaderComponent />
@@ -56,7 +56,6 @@ const OrderItemContainer = () => {
           </div>
         </FormProvider>
       </form>
-      <Toaster position="top-right" reverseOrder={true} />
     </Fragment>
   )
 }
