@@ -81,14 +81,15 @@ const OrdersContainer = () => {
         Header: 'Order Date',
         accessor: 'orderDate',
         Cell: ({ value }: CellProps<Order>) => (
-          <span>
+          <span className="text-right">
             <FormattedDate value={value} day="2-digit" month="long" year="numeric" />
           </span>
-        )
+        ),
+        id: 'orderDate'
       },
-      { Header: 'Order Number', accessor: 'orderNumber' },
-      { Header: 'Request Number', accessor: 'requestNumber' },
-      { Header: 'Contract Number', accessor: 'contractNumber' },
+      { Header: 'Order Number', accessor: 'orderNumber', id: 'orderNumber' },
+      { Header: 'Request Number', accessor: 'requestNumber', id: 'requestNumber' },
+      { Header: 'Contract Number', accessor: 'contractNumber', id: 'contractNumber' },
       { Header: 'Supplier', accessor: 'supplier' },
       { Header: 'Order tatus', accessor: 'orderStatus' },
       { Header: 'Notes', accessor: 'notes' }
@@ -108,13 +109,17 @@ const OrdersContainer = () => {
       className: classNames(
         column.id === 'actions' ? 'sticky left-0 z-20 bg-opacity-75 backdrop-blur backdrop-filter' : '',
         column.id === 'name'
-          ? 'sticky left-[170px] text-ellipsis min-w-[600px] z-20 bg-opacity-75 backdrop-blur backdrop-filter'
+          ? 'sticky left-[180px] text-ellipsis min-w-[600px] z-20 bg-opacity-75 backdrop-blur backdrop-filter'
           : '',
-        'min-w-[180px]'
+        'min-w-[180px]',
+        column.id === 'orderDate' ? 'text-right' : '',
+        column.id === 'orderNumber' ? 'text-right' : '',
+        column.id === 'requestNumber' ? 'text-right' : '',
+        column.id === 'contractNumber' ? 'text-right' : ''
       )
     }),
     getColumnProps: ({ id }) => ({
-      className: classNames(id === 'actions' ? 'left-0 z-30' : '', id === 'name' ? 'left-[170px] z-30' : '')
+      className: classNames(id === 'actions' ? 'left-0 z-30' : '', id === 'name' ? 'left-[180px] z-30' : '')
     })
   })
 

@@ -116,7 +116,7 @@ const useGeneralTable = <T extends object>({
                               key={key}
                               scope="col"
                               className={classNames(
-                                'whitespace-nowrap sticky top-0 z-10 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
+                                'whitespace-nowrap border-l sticky top-0 z-10 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
                                 className
                               )}
                               {...restHeaderProps}
@@ -153,7 +153,7 @@ const useGeneralTable = <T extends object>({
                             return (
                               <td
                                 key={key}
-                                className={classNames(className, 'text-sm z-0 sm:pl-6 sm:pr-6 text-gray-500')}
+                                className={classNames(className, 'text-sm border-l sm:pl-6 sm:pr-6 text-gray-500')}
                                 {...restCellProps}
                               >
                                 {cell.render('Cell')}
