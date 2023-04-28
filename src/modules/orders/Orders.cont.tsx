@@ -107,11 +107,11 @@ const OrdersContainer = () => {
     className: 'relative overflow-x-auto',
     getCellProps: ({ column }) => ({
       className: classNames(
-        column.id === 'actions' ? 'sticky left-0 z-20 bg-opacity-75 backdrop-blur backdrop-filter' : '',
+        column.id === 'actions' ? 'sticky left-0 z-20 bg-opacity-100 backdrop-blur backdrop-filter' : '',
         column.id === 'name'
-          ? 'sticky left-[180px] text-ellipsis min-w-[600px] z-20 bg-opacity-75 backdrop-blur backdrop-filter'
-          : '',
-        'min-w-[180px]',
+          ? 'sticky left-[180px] text-ellipsis min-w-[600px] max-w-[600px] z-20 bg-opacity-100 backdrop-blur backdrop-filter'
+          : 'border-l',
+        'min-w-[180px] max-w-[180px]',
         column.id === 'orderDate' ? 'text-right' : '',
         column.id === 'orderNumber' ? 'text-right' : '',
         column.id === 'requestNumber' ? 'text-right' : '',
@@ -119,7 +119,11 @@ const OrdersContainer = () => {
       )
     }),
     getColumnProps: ({ id }) => ({
-      className: classNames(id === 'actions' ? 'left-0 z-30' : '', id === 'name' ? 'left-[180px] z-30' : '')
+      className: classNames(
+        id === 'actions' ? 'left-0 z-30 max-w-[180px] min-w-[180px]' : '',
+        id === 'name' ? 'left-[180px] z-30 min-w-[600px] max-w-[600px]' : 'border-l',
+        'min-w-[180px] max-w-[180px]'
+      )
     })
   })
 
