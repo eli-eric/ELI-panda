@@ -1,6 +1,6 @@
 import { Combobox } from '@headlessui/react'
 import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { FieldValues, Path, PathValue, useFormContext, UseFormRegister } from 'react-hook-form'
 
 import { classNames } from '@/helpers'
@@ -28,9 +28,15 @@ const ComboboxComponent = <T extends FieldValues>({
     setValue,
     formState: { defaultValues }
   } = useFormContext<T>()
-  const [query, setQuery] = useState((defaultValues && defaultValues[name]) || '')
+  const [query, setQuery] = useState(defaultValues?.[name] || '')
   const [selectedItem, setSelectedItem] = useState<CodebookType | null>(null)
   const data = useCodebook(codebook, `?searchText=${query}&limit=10`, true)
+
+  useEffect(() => {
+    if (defaultValues && defaultValues[name]) {
+      setQuery(defaultValues[name] as string)
+    }
+  }, [defaultValues, name])
 
   const clear = () => {
     setQuery('')
@@ -67,7 +73,7 @@ const ComboboxComponent = <T extends FieldValues>({
                 onChange={event => setQuery(event.target.value)}
                 displayValue={(item: CodebookType) => item?.name}
               />
-              <input {...register(name as Path<T>)} type="hidden" value={selectedItem?.uid} />
+              <input {...register(name as Path<T>)} type="hidden" value={selectedItem?.uid || ''} />
               <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
                 <ChevronDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
               </div>

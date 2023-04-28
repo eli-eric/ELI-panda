@@ -1,12 +1,17 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Fragment, useEffect } from 'react'
+import { Fragment, useEffect, useMemo } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import toast, { Toaster } from 'react-hot-toast'
+import { CellProps, Column } from 'react-table'
 import { object, string } from 'yup'
 
-import OrderFormContainer from './components/form/OrderForm.cont'
+import { Button } from '@/components/Buttons'
+import useFormModal from '@/hooks/useFormModal'
+import useGeneralTable from '@/hooks/useGeneralTable'
+
+import OrderFormComponent from './components/form/OrderForm.comp'
 import HeaderComponent from './components/Header.comp'
-import { OrderFormType } from './types'
+import { OrderFormType, OrderLine } from './types'
 
 const schema = object({
   name: string().required(),
@@ -26,7 +31,9 @@ const OrderItemContainer = () => {
     resolver: yupResolver(schema)
   })
 
-  const { formState } = formMethods
+  const { formState, getValues } = formMethods
+
+  const orderLines = getValues('orderLines')
 
   useEffect(() => {
     const ErrorArray = Object.keys(formState?.errors || {})
@@ -45,6 +52,45 @@ const OrderItemContainer = () => {
     toast('Here is your toast.')
   }
 
+  const columns = useMemo(
+    (): Column<OrderLine>[] => [
+      {
+        Header: 'Actions',
+        Cell: () => <div>Buttons</div>
+      },
+      {
+        Header: 'Name',
+        accessor: 'name'
+      },
+      {
+        Header: 'Catalogue Number',
+        accessor: 'catalogueNumber'
+      },
+      {
+        Header: 'System',
+        accessor: 'system',
+        Cell: ({ value }: CellProps<OrderLine>) => <span>{value.name}</span>
+      },
+      {
+        Header: 'Price',
+        accessor: 'price'
+      }
+    ],
+    []
+  )
+
+  const { getTable } = useGeneralTable({ columns, data: orderLines, tableId: 'orderLines', className: 'col-span-6' })
+
+  const modalSubmit = (data: OrderFormType) => {
+    console.log(data)
+  }
+
+  const { setOpen, FormModal } = useFormModal<OrderFormType>({
+    renderForm: () => <OrderFormComponent />,
+    onSubmit: modalSubmit,
+    schema: schema
+  })
+
   return (
     <Fragment>
       <Toaster position="top-right" reverseOrder={true} />
@@ -52,10 +98,25 @@ const OrderItemContainer = () => {
         <FormProvider {...formMethods}>
           <HeaderComponent />
           <div className="py-6">
-            <OrderFormContainer />
+            <OrderFormComponent />
           </div>
         </FormProvider>
       </form>
+
+      <div className="flex flex-col mx-auto max-w-7xl px-4 sm:px-6 md:px-8 flex-1 justify-between">
+        <div className="flex items-center mr-2">
+          <Button
+            primary
+            onClick={() => {
+              setOpen(true)
+            }}
+          >
+            Add Order line
+          </Button>
+        </div>
+        <div className="grid grid-cols-12">{getTable()}</div>
+        <FormModal />
+      </div>
     </Fragment>
   )
 }

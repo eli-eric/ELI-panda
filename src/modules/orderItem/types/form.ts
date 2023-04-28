@@ -10,4 +10,16 @@ export interface OrderFormType extends FieldValues {
   orderStatus: string
   orderDate: string
   notes: string
+  orderLines: OrderLine[]
+}
+
+export type OrderLine = {
+  uid: string
+  name: string
+  catalogueNumber: number
+  system: {
+    uid: string
+    name: string
+  }
+  price: number
 }
