@@ -9,6 +9,7 @@ import { ModalButtons } from '@/types/form'
 
 interface useFormModalProps<T> {
   renderForm: () => JSX.Element
+  renderOutsideForm?: () => JSX.Element
   onSubmit: (data: T) => void
 
   defaultValues?: DeepPartial<T>
@@ -19,6 +20,7 @@ interface useFormModalProps<T> {
 
 const useFormModal = <T extends FieldValues>({
   renderForm,
+  renderOutsideForm,
   onSubmit,
   error = false,
   defaultValues,
@@ -55,6 +57,7 @@ const useFormModal = <T extends FieldValues>({
 
   const FormModal = () => (
     <ModalComponent open={open} setOpen={setOpen}>
+      {renderOutsideForm && renderOutsideForm()}
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormProvider {...formMethods}>
           {renderForm()}

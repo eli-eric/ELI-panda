@@ -14,6 +14,7 @@ export interface OrderFormType extends FieldValues {
 }
 
 export type OrderLine = {
+  id: string
   uid: string
   name: string
   catalogueNumber: number
@@ -22,4 +23,5 @@ export type OrderLine = {
     name: string
   }
   price: number
+  quantity: number
 }

@@ -1,0 +1,52 @@
+import { useFormContext } from 'react-hook-form'
+
+import { useMakeFormFields } from '@/hooks/form'
+import { message } from '@/i18n/src/messages'
+import { OrderLine } from '@/modules/orderItem/types'
+import { CODEBOOK } from '@/types/constants/codebook'
+
+const { form } = message.ordersPage.orderLines
+
+const useOrderLinesFormFields = () => {
+  const { register, formState } = useFormContext<OrderLine>()
+
+  return useMakeFormFields(register, {
+    name: {
+      name: 'name',
+      label: form.name.label,
+      placeholder: form.name.placeholder,
+      isError: !!formState.errors.name,
+      rounded: 'rounded-md'
+    },
+    catalogueNumber: {
+      name: 'catalogueNumber',
+      label: form.catalogueNumber.label,
+      placeholder: form.catalogueNumber.placeholder,
+      isError: !!formState.errors.catalogueNumber,
+      rounded: 'rounded-md'
+    },
+    system: {
+      name: 'system',
+      label: form.systemName.label,
+      placeholder: form.systemName.placeholder,
+      isError: !!formState.errors.system,
+      rounded: 'rounded-md',
+      codebook: CODEBOOK.SUPPLIER
+    },
+    price: {
+      name: 'price',
+      label: form.name.label,
+      placeholder: form.name.placeholder,
+      isError: !!formState.errors.price,
+      rounded: 'rounded-md'
+    },
+    quantity: {
+      name: 'quantity',
+      label: form.quantity.label,
+      placeholder: form.quantity.placeholder,
+      isError: !!formState.errors.quantity,
+      rounded: 'rounded-md'
+    }
+  })
+}
+export default useOrderLinesFormFields
