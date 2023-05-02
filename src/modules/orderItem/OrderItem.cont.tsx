@@ -7,7 +7,7 @@ import { object, string } from 'yup'
 import OrderFormComponent from './components/form/OrderForm.comp'
 import HeaderComponent from './components/Header.comp'
 import OrderLinesTable from './components/orderLines/OrderLines.table'
-import { OrderFormType } from './types'
+import { OrderDetailFormType } from './types'
 
 const schema = object({
   name: string().required(),
@@ -21,7 +21,7 @@ const schema = object({
 })
 
 const OrderItemContainer = () => {
-  const formMethods = useForm<OrderFormType>({
+  const formMethods = useForm<OrderDetailFormType>({
     resolver: yupResolver(schema)
   })
 
@@ -43,7 +43,6 @@ const OrderItemContainer = () => {
 
   const onSubmit = data => {
     console.log(data)
-    toast('Here is your toast.')
   }
 
   return (

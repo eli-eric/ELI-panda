@@ -55,7 +55,7 @@ const useFormModal = <T extends FieldValues>({
     }
   }
 
-  const FormModal = () => (
+  const getFormModal = () => (
     <ModalComponent open={open} setOpen={setOpen}>
       {renderOutsideForm && renderOutsideForm()}
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -67,7 +67,7 @@ const useFormModal = <T extends FieldValues>({
       </form>
     </ModalComponent>
   )
-  return { FormModal, setOpen }
+  return { getFormModal, setOpen }
 }
 
 export default useFormModal

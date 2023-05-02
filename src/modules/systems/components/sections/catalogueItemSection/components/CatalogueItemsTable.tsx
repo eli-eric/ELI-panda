@@ -5,7 +5,7 @@ import EmptyResults from '@/components/empty-section/EmptyResults'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
 import CatalogueItemsComponent from '@/modules/catalogue/catalogueItems/CatalogueItems.comp'
-import { CatalogueItemsResponse } from '@/types/responses'
+import { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
 
 const CatalogueItemsTable = ({
   searchValue,
@@ -15,7 +15,7 @@ const CatalogueItemsTable = ({
   searchValue?: string
   itemName?: string
 
-  setItem: Dispatch<SetStateAction<{ name?: string; uid?: string }>>
+  setItem: Dispatch<SetStateAction<CatalogueItem | undefined>>
 }) => {
   const { setTotalCount, getPaginationComponent, page, pageSize } = usePagination({
     dependecies: [searchValue],
@@ -32,7 +32,7 @@ const CatalogueItemsTable = ({
   const endpoints = useEndpoint({ query })
   const { data: catalogueItems } = useSWR<CatalogueItemsResponse>(searchValue ? endpoints.catalogueItems : undefined)
   useEffect(() => {
-    setItem({ name: undefined, uid: undefined })
+    setItem(undefined)
   }, [page, setItem])
 
   useEffect(() => {

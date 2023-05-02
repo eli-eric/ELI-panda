@@ -5,7 +5,7 @@ import { useCodebookSelectValues } from '@/hooks/useCodebook'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 
-import { OrderFormType } from '../../types'
+import { OrderDetailFormType } from '../../types'
 
 // messages
 const { form } = message.ordersPage.orderDetail
@@ -17,7 +17,7 @@ const getDefaultOption = (name, disabled = false) => ({
 })
 
 const useOrderFormFields = (disabled?: boolean) => {
-  const { register, formState } = useFormContext<OrderFormType>()
+  const { register, formState } = useFormContext<OrderDetailFormType>()
   const orderStatus = useCodebookSelectValues(CODEBOOK.ORDER_STATUS)
 
   return useMakeFormFields(register, {

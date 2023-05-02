@@ -1,10 +1,22 @@
+import { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
+
 import ComboboxComponent from '@/components/form/Combobox'
 import { InputWithError } from '@/components/form/Input'
+import { OrderLineFormType } from '@/modules/orderItem/types'
+import { CatalogueItem } from '@/types/responses'
 
 import useOrderLinesFormFields from './OrderLine.fields'
 
-const OrderLineItemForm = ({ catalogueItem }: { catalogueItem?: string }) => {
+const OrderLineForm = ({ catalogueItem }: { catalogueItem?: CatalogueItem }) => {
   const formFields = useOrderLinesFormFields()
+  const { setValue, watch } = useFormContext<OrderLineFormType>()
+
+  const system = watch('system')
+  useEffect(() => {
+    setValue('name', catalogueItem?.name || '')
+    setValue('catalogueNumber', catalogueItem?.catalogueNumber || '')
+  }, [catalogueItem, setValue, system])
 
   return (
     <div>
@@ -18,11 +30,11 @@ const OrderLineItemForm = ({ catalogueItem }: { catalogueItem?: string }) => {
           <InputWithError {...formFields.quantity} className="pl-1" />
         </div>
         <div className="flex">
-          <ComboboxComponent {...formFields.system} className="pr-1" />
+          <ComboboxComponent {...formFields.system} className="pr-1 z-50" isObject={true} />
         </div>
       </div>
     </div>
   )
 }
 
-export default OrderLineItemForm
+export default OrderLineForm

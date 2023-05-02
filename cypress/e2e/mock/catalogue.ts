@@ -19,7 +19,8 @@ const itemsData: CatalogueItem[] = [
     categoryPath: 'vacuum-technology/vacuum-pumps/turbomolecular-pumps',
     manufacturer: 'PFEIFFER VACUUM AUSTRIA GmbH',
     manufacturerUrl: 'https://webportal.pfeiffer-vacuum.com/en/shop/search?text=YC52215A',
-    manufacturerNumber: 'YC52215A'
+    manufacturerNumber: 'YC52215A',
+    catalogueNumber: 'YC52215A'
   },
   {
     uid: 'a56014ab-f3e2-4884-a600-38be506bdf5b',
@@ -39,7 +40,8 @@ const itemsData: CatalogueItem[] = [
     categoryPath: 'vacuum-technology/vacuum-pumps/turbomolecular-pumps',
     manufacturer: 'PFEIFFER VACUUM AUSTRIA GmbH',
     manufacturerUrl: 'https://webportal.pfeiffer-vacuum.com/en/shop/product/YE66215A',
-    manufacturerNumber: 'YE66215A'
+    manufacturerNumber: 'YE66215A',
+    catalogueNumber: 'YE66215A'
   },
   {
     uid: 'a6ad8401-a29f-41eb-b4f6-824bfd74aa5c',
@@ -60,7 +62,8 @@ const itemsData: CatalogueItem[] = [
     manufacturer: 'PFEIFFER VACUUM AUSTRIA GmbH',
     manufacturerUrl:
       'http://www.pfeiffer-vacuum.com/products/turbopumps/magnetically-levitated/ath-2300-m/onlinecatalog.action?detailPdoId=12686',
-    manufacturerNumber: 'TMBBA662405A'
+    manufacturerNumber: 'TMBBA662405A',
+    catalogueNumber: 'TMBBA662405A'
   },
   {
     uid: '4137b0f1-c8f8-4771-8487-7ce9428b22f8',
@@ -82,7 +85,8 @@ const itemsData: CatalogueItem[] = [
     categoryPath: 'beam-characterization/cameras',
     manufacturer: 'AXIS',
     manufacturerUrl: 'https://www.axis.com/products/axis-m1014/support',
-    manufacturerNumber: 'AXIS M1014'
+    manufacturerNumber: 'AXIS M1014',
+    catalogueNumber: 'AXIS M1014'
   },
   {
     uid: '0b3c8477-57c7-4237-8961-88f5a833ca71',
@@ -104,7 +108,8 @@ const itemsData: CatalogueItem[] = [
     categoryPath: 'beam-characterization/cameras',
     manufacturer: 'AXIS',
     manufacturerUrl: 'https://www.axis.com/products/axis-m1045-lw',
-    manufacturerNumber: 'AXIS M1045-LW'
+    manufacturerNumber: 'AXIS M1045-LW',
+    catalogueNumber: 'AXIS M1045-LW'
   },
   {
     uid: '3dce9967-4850-4eab-9d8a-469273e3f516',
@@ -127,7 +132,8 @@ const itemsData: CatalogueItem[] = [
     categoryPath: 'beam-characterization/cameras',
     manufacturer: 'AXIS',
     manufacturerUrl: 'https://www.axis-photon.com/streak-camera/axis-px-subpicosecond-x-ray-streak-camera/',
-    manufacturerNumber: 'AXIS-PX'
+    manufacturerNumber: 'AXIS-PX',
+    catalogueNumber: 'AXIS-PX'
   },
   {
     uid: '10755657-2050-4125-95c1-a4ec5e772fb3',
@@ -148,7 +154,8 @@ const itemsData: CatalogueItem[] = [
     manufacturer: 'PFEIFFER VACUUM AUSTRIA GmbH',
     manufacturerUrl:
       'http://www.pfeiffer-vacuum.com/products/turbopumps/magnetically-levitated/hipace-300-m/onlinecatalog.action?detailPdoId=12158#product-downloads',
-    manufacturerNumber: 'PM P03 952'
+    manufacturerNumber: 'PM P03 952',
+    catalogueNumber: 'PM P03 952'
   }
 ]
 

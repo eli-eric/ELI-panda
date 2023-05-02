@@ -12,12 +12,14 @@ type ComboboxProps<T extends FieldValues> = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
     register: UseFormRegister<T>
     codebook?: CODEBOOK
+    isObject?: boolean
   }
 
 const ComboboxComponent = <T extends FieldValues>({
   codebook,
   register,
   label,
+  isObject = false,
   isError,
   placeholder,
   name,
@@ -35,14 +37,17 @@ const ComboboxComponent = <T extends FieldValues>({
   useEffect(() => {
     if (defaultValues && defaultValues[name]) {
       setQuery(defaultValues[name] as string)
+      setSelectedItem(defaultValues[name] as CodebookType)
     }
   }, [defaultValues, name])
 
   const clear = () => {
     setQuery('')
     setSelectedItem(null)
-    setValue(name as Path<T>, '' as PathValue<T, Path<T>>)
+    setValue(name as Path<T>, isObject ? ({} as PathValue<T, Path<T>>) : ('' as PathValue<T, Path<T>>))
   }
+
+  const restProps = isObject ? {} : { ...register(name as Path<T>) }
 
   return (
     <Fragment>
@@ -51,6 +56,9 @@ const ComboboxComponent = <T extends FieldValues>({
         value={selectedItem}
         onChange={(item: CodebookType | null) => {
           setSelectedItem(item)
+          if (isObject) {
+            setValue(name as Path<T>, item as PathValue<T, Path<T>>)
+          }
         }}
         className={`${className} block relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
       >
@@ -59,7 +67,7 @@ const ComboboxComponent = <T extends FieldValues>({
           <div className="w-full">
             <Combobox.Button className="w-full">
               <Combobox.Input
-                {...register(name as Path<T>)}
+                {...restProps}
                 autoComplete="off"
                 placeholder={placeholder}
                 className={classNames(
@@ -73,7 +81,7 @@ const ComboboxComponent = <T extends FieldValues>({
                 onChange={event => setQuery(event.target.value)}
                 displayValue={(item: CodebookType) => item?.name}
               />
-              <input {...register(name as Path<T>)} type="hidden" value={selectedItem?.uid || ''} />
+              {!isObject && <input {...register(name as Path<T>)} type="hidden" value={selectedItem?.uid || ''} />}
               <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
                 <ChevronDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
               </div>

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { CellProps, Column } from 'react-table'
 import { object, string } from 'yup'
 
@@ -6,26 +6,28 @@ import { Button } from '@/components/Buttons'
 import useFormModal from '@/hooks/useFormModal'
 import useGeneralTable from '@/hooks/useGeneralTable'
 import CatalogueSearchTable from '@/modules/systems/components/sections/catalogueItemSection/components/CatalogueSearchTable'
+import { CatalogueItem } from '@/types/responses'
 
-import { OrderLine } from '../../types'
+import { OrderLineFormType } from '../../types'
 import OrderLineItemForm from './form/OrderLine.form'
 
 interface OrderLinesTableProps {
-  orderLines?: OrderLine[]
+  orderLines?: OrderLineFormType[]
 }
 
 const orderLineFormSchema = object({
   name: string().required(),
   catalogueNumber: string().required(),
-  system: string(),
   orderNumber: string(),
   price: string(),
   quantity: string()
 })
 
 const OrderLinesTable = ({ orderLines }: OrderLinesTableProps) => {
+  const [catalogueItem, setCatalogueItem] = useState<CatalogueItem | undefined>(undefined)
+
   const columns = useMemo(
-    (): Column<OrderLine>[] => [
+    (): Column<OrderLineFormType>[] => [
       {
         Header: 'Actions',
         Cell: () => <div>Buttons</div>
@@ -41,7 +43,7 @@ const OrderLinesTable = ({ orderLines }: OrderLinesTableProps) => {
       {
         Header: 'System',
         accessor: 'system',
-        Cell: ({ value }: CellProps<OrderLine>) => <span>{value.name}</span>
+        Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value.name}</span>
       },
       {
         Header: 'Price',
@@ -53,16 +55,19 @@ const OrderLinesTable = ({ orderLines }: OrderLinesTableProps) => {
 
   const { getTable } = useGeneralTable({ columns, data: orderLines, tableId: 'orderLines', className: 'col-span-6' })
 
-  const modalSubmit = (data: OrderLine) => {
+  const modalSubmit = (data: OrderLineFormType) => {
     // set data to order form of parent component
     console.log(data)
   }
 
-  const { setOpen, FormModal } = useFormModal<OrderLine>({
-    renderForm: () => <OrderLineItemForm />,
-    renderOutsideForm: () => <CatalogueSearchTable setItem={() => {}} />,
+  const { setOpen, getFormModal } = useFormModal<OrderLineFormType>({
+    renderForm: () => <OrderLineItemForm catalogueItem={catalogueItem} />,
+    renderOutsideForm: () => <CatalogueSearchTable setItem={setCatalogueItem} itemName={catalogueItem?.name} />,
     onSubmit: modalSubmit,
-    schema: orderLineFormSchema
+    schema: orderLineFormSchema,
+    defaultValues: {
+      system: { name: 'CS built-in - Technological units', uid: '229d1a7d-7b9a-4df9-bc7e-685638b23c80' }
+    }
   })
   return (
     <div className="flex flex-col mx-auto max-w-7xl px-4 sm:px-6 md:px-8 flex-1 justify-between">
@@ -77,7 +82,7 @@ const OrderLinesTable = ({ orderLines }: OrderLinesTableProps) => {
         </Button>
       </div>
       <div className="grid grid-cols-12">{getTable()}</div>
-      <FormModal />
+      {getFormModal()}
     </div>
   )
 }

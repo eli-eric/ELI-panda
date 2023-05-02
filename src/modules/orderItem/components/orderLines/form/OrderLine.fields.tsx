@@ -2,13 +2,13 @@ import { useFormContext } from 'react-hook-form'
 
 import { useMakeFormFields } from '@/hooks/form'
 import { message } from '@/i18n/src/messages'
-import { OrderLine } from '@/modules/orderItem/types'
+import { OrderLineFormType } from '@/modules/orderItem/types'
 import { CODEBOOK } from '@/types/constants/codebook'
 
 const { form } = message.ordersPage.orderLines
 
 const useOrderLinesFormFields = () => {
-  const { register, formState } = useFormContext<OrderLine>()
+  const { register, formState } = useFormContext<OrderLineFormType>()
 
   return useMakeFormFields(register, {
     name: {
@@ -31,7 +31,7 @@ const useOrderLinesFormFields = () => {
       placeholder: form.systemName.placeholder,
       isError: !!formState.errors.system,
       rounded: 'rounded-md',
-      codebook: CODEBOOK.SUPPLIER
+      codebook: CODEBOOK.SYSTEM
     },
     price: {
       name: 'price',
