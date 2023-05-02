@@ -1,13 +1,27 @@
 import { FieldValues } from 'react-hook-form'
 
-export interface OrderFormType extends FieldValues {
+import { CodebookType } from '@/hooks/useCodebook'
+
+export interface OrderDetailFormType extends FieldValues {
   uid: string
   name: string
   orderNumber: number
   requestNumber: number
   contractNumber: number
-  supplier: string
-  orderStatus: string
-  orderDate: string
   notes: string
+  supplier: CodebookType
+  orderStatusUid: string
+  orderDate: string
+  orderLines: OrderLineFormType[]
+}
+
+export type OrderLineFormType = {
+  id: string
+  uid: string
+  name: string
+  catalogueUid: string
+  catalogueNumber: string
+  system: CodebookType
+  price: number
+  quantity: number
 }

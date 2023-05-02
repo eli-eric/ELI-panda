@@ -207,6 +207,15 @@ export const messages = {
         notes: { label: 'Notes' },
         orderDate: { label: 'Date' }
       }
+    },
+    orderLines: {
+      form: {
+        name: { label: 'Name', placeholder: 'Name' },
+        catalogueNumber: { label: 'Catalogue Number', placeholder: 'Catalogue Number' },
+        systemName: { label: 'System Name', placeholder: 'System Name' },
+        price: { label: 'Price', placeholder: 'Price' },
+        quantity: { label: 'Quantity', placeholder: 'Quantity' }
+      }
     }
   },
   orderItem: { head: 'Eli Panda - Order Item' },

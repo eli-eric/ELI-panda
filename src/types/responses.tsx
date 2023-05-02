@@ -21,6 +21,7 @@ export interface CatalogueItem {
   manufacturer: string
   manufacturerUrl: string
   manufacturerNumber: string
+  catalogueNumber: string
   details?: CatalogueItemDetail[]
 }
 

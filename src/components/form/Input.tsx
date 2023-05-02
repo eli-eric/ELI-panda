@@ -23,17 +23,24 @@ export const InputWithError = <T extends FieldValues>({
   rounded,
   type = 'text',
   className,
+  hidden,
   label,
   ...restProps
 }: InputWithErrorProps<T>) => (
   <div
+    hidden={hidden}
     className={`${className} block z-10 w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
   >
-    {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
-    <div className="relative">
+    {label && (
+      <label hidden={hidden} className="text-sm font-medium text-gray-700">
+        {label}
+      </label>
+    )}
+    <div hidden={hidden} className="relative">
       <Input
         {...restProps}
         register={register}
+        hidden={hidden}
         name={name}
         type={type}
         disabled={disabled}

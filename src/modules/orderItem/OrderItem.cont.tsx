@@ -4,9 +4,10 @@ import { FormProvider, useForm } from 'react-hook-form'
 import toast, { Toaster } from 'react-hot-toast'
 import { object, string } from 'yup'
 
-import OrderFormContainer from './components/form/OrderForm.cont'
+import OrderFormComponent from './components/form/OrderForm.comp'
 import HeaderComponent from './components/Header.comp'
-import { OrderFormType } from './types'
+import OrderLinesTable from './components/orderLines/OrderLines.table'
+import { OrderDetailFormType } from './types'
 
 const schema = object({
   name: string().required(),
@@ -20,13 +21,13 @@ const schema = object({
 })
 
 const OrderItemContainer = () => {
-  const i = 8
-
-  const formMethods = useForm<OrderFormType>({
+  const formMethods = useForm<OrderDetailFormType>({
     resolver: yupResolver(schema)
   })
 
-  const { formState } = formMethods
+  const { formState, watch } = formMethods
+
+  const orderLines = watch('orderLines')
 
   useEffect(() => {
     const ErrorArray = Object.keys(formState?.errors || {})
@@ -42,7 +43,6 @@ const OrderItemContainer = () => {
 
   const onSubmit = data => {
     console.log(data)
-    toast('Here is your toast.')
   }
 
   return (
@@ -52,10 +52,11 @@ const OrderItemContainer = () => {
         <FormProvider {...formMethods}>
           <HeaderComponent />
           <div className="py-6">
-            <OrderFormContainer />
+            <OrderFormComponent />
           </div>
         </FormProvider>
       </form>
+      <OrderLinesTable orderLines={orderLines} />
     </Fragment>
   )
 }

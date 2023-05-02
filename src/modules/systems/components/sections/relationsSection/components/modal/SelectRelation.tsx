@@ -16,7 +16,7 @@ interface Props {
   systemName: string
   selectedSystem?: SelectedSystemForRel
 }
-
+//TODO: refactor form fields
 const SelectRelation = ({ relationTypeCode, systemName, selectedSystem }: Props) => {
   const { register, watch, setValue, formState } = useFormContext<RelationFormType>()
   useEffect(() => {

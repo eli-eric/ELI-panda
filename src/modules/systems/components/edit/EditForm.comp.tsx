@@ -36,7 +36,7 @@ const EditForm = ({ uid }: Props) => {
           <SelectWithError {...fields.importanceUID} className="pb-1" />
         </div>
 
-        <ComboboxComponent {...fields.locationUID} className="col-span-6 pt-2 pr-1" />
+        <ComboboxComponent {...fields.locationUID} className="col-span-6 pt-2 pr-1 z-50" />
         <SelectWithError {...fields.zoneUID} className="col-span-6 pl-1 pt-2" />
 
         <SelectWithError {...fields.systemTypeUID} className="col-span-6 pr-1 pt-2" />

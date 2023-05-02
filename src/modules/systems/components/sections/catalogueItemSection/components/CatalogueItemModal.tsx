@@ -13,6 +13,7 @@ import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
 import { SystemItemFormType } from '@/modules/systems/types/form'
 import { ModalButtons } from '@/types/form'
+import { CatalogueItem } from '@/types/responses'
 
 import CatalogueSearchTable from './CatalogueSearchTable'
 import SystemItemForm from './form/SystemItemForm'
@@ -38,10 +39,7 @@ interface Props {
 
 const CatalogueItemModal = ({ setOpen, open }: Props) => {
   const intl = useIntl()
-  const [item, setItem] = useState<{ name?: string; uid?: string }>({
-    name: undefined,
-    uid: undefined
-  })
+  const [item, setItem] = useState<CatalogueItem | undefined>(undefined)
   const router = useRouter()
 
   const formMethods = useForm<SystemItemFormType>({
@@ -61,7 +59,7 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
   const onSubmit = (data: SystemItemFormType) => {
     submit({
       ...data,
-      catalogueItemUID: item.uid,
+      catalogueItemUID: item?.uid,
       obsolete: data.obsolete === 'true' ? true : false
     })
   }
@@ -85,10 +83,10 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
     <Fragment>
       <ModalComponent open={open} setOpen={setOpen} buttons={{ noButtons: true }}>
         <div className="min-h-[738px] flex-col justify-end">
-          <CatalogueSearchTable setItem={setItem} itemName={item.name} />
+          <CatalogueSearchTable setItem={setItem} itemName={item?.name} />
           <FormProvider {...formMethods}>
             <form onSubmit={formMethods.handleSubmit(onSubmit)}>
-              <SystemItemForm itemName={item.name} />
+              <SystemItemForm itemName={item?.name} />
               <ModalButtonsComponent buttons={modalButtons} />
               {error && <ErrorPage />}
             </form>

@@ -47,7 +47,7 @@ const ItemListRow = ({ item, index, categoryListLength, selectable }: Props) => 
               name="itemUid"
               type="radio"
               onClick={() => {
-                selectable.setItem({ name: item.name, uid: item.uid })
+                selectable.setItem(item)
               }}
               className="h-4 w-4 border-gray-300 text-primary-600 focus:ring-primary-500"
             />

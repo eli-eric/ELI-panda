@@ -16,7 +16,7 @@ interface Props {
 export default function ModalComponent({ open, setOpen, children, testid, buttons }: Props) {
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={setOpen} unmount={false}>
+      <Dialog as="div" className="relative z-40" onClose={setOpen} unmount={false}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"

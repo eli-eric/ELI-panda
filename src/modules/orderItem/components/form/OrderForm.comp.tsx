@@ -7,7 +7,7 @@ import Devider from '@/components/layout/Devider'
 
 import useOrderFormFields from './OrderForm.fields'
 
-const EditForm = () => {
+const OrderFormComponent = () => {
   const fields = useOrderFormFields(false)
 
   return (
@@ -36,4 +36,4 @@ const EditForm = () => {
   )
 }
 
-export default EditForm
+export default OrderFormComponent
