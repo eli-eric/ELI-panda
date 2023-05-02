@@ -55,7 +55,7 @@ export const useSystemEdit = ({
 
   const deleteButtons: ModalButtons = {
     goNext: {
-      text: 'Cancel',
+      text: 'Continue',
       loading: deleteSubmit.loading,
       onClick: () => {
         deleteSubmit.submit()
