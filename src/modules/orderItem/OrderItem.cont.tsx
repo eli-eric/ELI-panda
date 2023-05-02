@@ -1,17 +1,22 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import moment from 'moment'
 import { Fragment, useEffect } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import toast, { Toaster } from 'react-hot-toast'
+import uuid from 'react-uuid'
 import { object, string } from 'yup'
 
 import OrderFormComponent from './components/form/OrderForm.comp'
 import HeaderComponent from './components/Header.comp'
 import OrderLinesTable from './components/orderLines/OrderLines.table'
-import { OrderDetailFormType } from './types'
+import { OrderDetailFormType, OrderLineFormType } from './types'
 
 const schema = object({
   name: string().required(),
-  supplier: string().required(),
+  supplier: object().shape({
+    name: string().required(),
+    uid: string().required()
+  }),
   orderStatus: string(),
   orderNumber: string(),
   requestNumber: string(),
@@ -20,14 +25,29 @@ const schema = object({
   orderDate: string()
 })
 
-const OrderItemContainer = () => {
+interface Props {
+  OrderDetail?: OrderDetailFormType
+}
+
+const OrderItemContainer = ({ OrderDetail }: Props) => {
   const formMethods = useForm<OrderDetailFormType>({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
+    defaultValues: {
+      orderLines:
+        OrderDetail?.orderLines &&
+        OrderDetail?.orderLines.map(orderLine => ({ ...orderLine, id: orderLine.uid || uuid() })),
+      orderDate: moment(OrderDetail?.orderDate).utc().format('YYYY-MM-DD'),
+      ...OrderDetail
+    }
   })
+  const { formState, control, setValue } = formMethods
+  const { insert, update, fields, remove } = useFieldArray<OrderDetailFormType>({ control, name: 'orderLines' })
 
-  const { formState, watch } = formMethods
-
-  const orderLines = watch('orderLines')
+  useEffect(() => {
+    if (OrderDetail) {
+      setValue('orderDate', moment(OrderDetail.orderDate).utc().format('YYYY-MM-DD'))
+    }
+  }, [OrderDetail, setValue])
 
   useEffect(() => {
     const ErrorArray = Object.keys(formState?.errors || {})
@@ -45,6 +65,22 @@ const OrderItemContainer = () => {
     console.log(data)
   }
 
+  const setOrderLine = (orderLine: OrderLineFormType) => {
+    const dataToSave = { ...orderLine }
+    if (orderLine.id) {
+      const index = fields.findIndex(item => item.id === orderLine.id)
+      update(index, dataToSave)
+    } else {
+      dataToSave.id = uuid()
+      insert(fields.length, dataToSave)
+    }
+  }
+
+  const deleteOrderLine = (orderLine: OrderLineFormType) => {
+    const index = fields.findIndex(item => item.id === orderLine.id)
+    remove(index)
+  }
+
   return (
     <Fragment>
       <Toaster position="top-right" reverseOrder={true} />
@@ -56,7 +92,11 @@ const OrderItemContainer = () => {
           </div>
         </FormProvider>
       </form>
-      <OrderLinesTable orderLines={orderLines} />
+      <OrderLinesTable
+        orderLines={fields as OrderLineFormType[]}
+        setOrderLine={setOrderLine}
+        deleteOrderLine={deleteOrderLine}
+      />
     </Fragment>
   )
 }

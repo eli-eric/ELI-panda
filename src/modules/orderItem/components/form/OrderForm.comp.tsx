@@ -19,7 +19,7 @@ const OrderFormComponent = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
         <div className="pt-4 grid grid-cols-12">
           <InputWithError {...fields.name} className="pb-1 col-span-4 pr-1" />
-          <ComboboxComponent {...fields.supplier} className="pb-1 col-span-4 pr-1" />
+          <ComboboxComponent {...fields.supplier} className="pb-1 col-span-4 pr-1" isObject={true} />
           <SelectWithError {...fields.orderStatus} className="pb-1 col-span-4 pr-1" />
         </div>
         <div className="pt-4 grid grid-cols-12 ">

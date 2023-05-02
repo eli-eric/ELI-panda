@@ -1,10 +1,10 @@
-import { PlusIcon } from '@heroicons/react/24/outline'
+import { ArrowPathIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import { FormattedDate } from 'react-intl'
 import { CellProps, Column } from 'react-table'
-import useSWR from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 
 import { Button } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
@@ -24,18 +24,31 @@ import { Order, OrderListResponse } from './types'
 const OrdersContainer = () => {
   const router = useRouter()
   const { data: session } = useSession()
+  const { mutate } = useSWRConfig()
+  const [url, setUrl] = useState<string>('')
 
   const { renderSearchBar, searchValue } = useSearch({
     renderBegin: () => (
-      <Button
-        className="mr-1"
-        onClick={() => {
-          router.push(PATH.ORDER_NEW)
-        }}
-        rounded="rounded-md"
-      >
-        <PlusIcon className="h-5 w-5" aria-hidden="true" />
-      </Button>
+      <div>
+        <Button
+          className="mr-1"
+          onClick={() => {
+            mutate(url, undefined, { revalidate: true })
+          }}
+          rounded="rounded-md"
+        >
+          <ArrowPathIcon className="h-4 w-4" aria-hidden="true" />
+        </Button>
+        <Button
+          className="mr-1"
+          onClick={() => {
+            router.push(PATH.ORDER_NEW)
+          }}
+          rounded="rounded-md"
+        >
+          <PlusIcon className="h-4 w-4" aria-hidden="true" />
+        </Button>
+      </div>
     )
   })
 
@@ -49,7 +62,13 @@ const OrdersContainer = () => {
 
   // TODO: vyřešit query string nějak obecně
   const [query, setQuery] = useState({ pagination })
+
   const { orders } = useEndpoint({ query })
+
+  useEffect(() => {
+    setUrl(orders)
+  }, [orders])
+
   useEffect(() => {
     const newQuery: { search?: string; pagination: string; sorting?: string } = { pagination }
     if (router.query.search) {
@@ -91,7 +110,7 @@ const OrdersContainer = () => {
       { Header: 'Request Number', accessor: 'requestNumber', id: 'requestNumber' },
       { Header: 'Contract Number', accessor: 'contractNumber', id: 'contractNumber' },
       { Header: 'Supplier', accessor: 'supplier' },
-      { Header: 'Order tatus', accessor: 'orderStatus' },
+      { Header: 'Order Status', accessor: 'orderStatus' },
       { Header: 'Notes', accessor: 'notes' },
       {
         Header: 'Last Update Time',

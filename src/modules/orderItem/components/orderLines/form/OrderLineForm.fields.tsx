@@ -7,7 +7,7 @@ import { CODEBOOK } from '@/types/constants/codebook'
 
 const { form } = message.ordersPage.orderLines
 
-const useOrderLinesFormFields = () => {
+const useOrderLineFormFields = (enabled: boolean) => {
   const { register, formState } = useFormContext<OrderLineFormType>()
 
   return useMakeFormFields(register, {
@@ -16,6 +16,7 @@ const useOrderLinesFormFields = () => {
       label: form.name.label,
       placeholder: form.name.placeholder,
       isError: !!formState.errors.name,
+      disabled: !enabled,
       rounded: 'rounded-md'
     },
     catalogueNumber: {
@@ -23,6 +24,7 @@ const useOrderLinesFormFields = () => {
       label: form.catalogueNumber.label,
       placeholder: form.catalogueNumber.placeholder,
       isError: !!formState.errors.catalogueNumber,
+      disabled: !enabled,
       rounded: 'rounded-md'
     },
     system: {
@@ -35,18 +37,20 @@ const useOrderLinesFormFields = () => {
     },
     price: {
       name: 'price',
-      label: form.name.label,
-      placeholder: form.name.placeholder,
-      isError: !!formState.errors.price,
-      rounded: 'rounded-md'
+      label: form.price.label,
+      placeholder: form.price.placeholder,
+      isError: !!formState.errors.priceEur,
+      rounded: 'rounded-md',
+      type: 'number'
     },
     quantity: {
       name: 'quantity',
       label: form.quantity.label,
       placeholder: form.quantity.placeholder,
       isError: !!formState.errors.quantity,
-      rounded: 'rounded-md'
+      rounded: 'rounded-md',
+      type: 'number'
     }
   })
 }
-export default useOrderLinesFormFields
+export default useOrderLineFormFields

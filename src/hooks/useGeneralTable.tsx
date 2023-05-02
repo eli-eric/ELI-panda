@@ -130,7 +130,6 @@ const useGeneralTable = <T extends object>({
                     )
                   })}
                 </thead>
-
                 <tbody className="bg-white" {...getTableBodyProps()}>
                   {rows.map((row, index) => {
                     prepareRow(row)

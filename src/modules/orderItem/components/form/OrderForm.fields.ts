@@ -67,7 +67,7 @@ const useOrderFormFields = (disabled?: boolean) => {
       disabled: disabled,
       isError: !!formState.errors.orderStatus,
       rounded: 'rounded-md',
-      options: orderStatus && [getDefaultOption('none'), ...orderStatus]
+      options: orderStatus
     },
     notes: {
       name: 'notes',
@@ -78,7 +78,6 @@ const useOrderFormFields = (disabled?: boolean) => {
     },
     orderDate: {
       name: 'orderDate',
-      defaultValue: new Date().toLocaleDateString('sv-SE'),
       type: 'date',
       disabled: disabled,
       isError: !!formState.errors.orderDate,

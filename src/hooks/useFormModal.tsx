@@ -8,7 +8,7 @@ import ModalComponent from '@/components/modal/modal.comp'
 import { ModalButtons } from '@/types/form'
 
 interface useFormModalProps<T> {
-  renderForm: () => JSX.Element
+  renderForm: (data: T) => JSX.Element
   renderOutsideForm?: () => JSX.Element
   onSubmit: (data: T) => void
 
@@ -60,14 +60,14 @@ const useFormModal = <T extends FieldValues>({
       {renderOutsideForm && renderOutsideForm()}
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormProvider {...formMethods}>
-          {renderForm()}
+          {renderForm(defaultValues as T)}
           {error && <ErrorPage />}
         </FormProvider>
         <ModalButtonsComponent buttons={modalButtons} />
       </form>
     </ModalComponent>
   )
-  return { getFormModal, setOpen }
+  return { getFormModal, setOpen, formMethods }
 }
 
 export default useFormModal
