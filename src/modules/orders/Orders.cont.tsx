@@ -33,20 +33,20 @@ const OrdersContainer = () => {
         <Button
           className="mr-1"
           onClick={() => {
-            router.push(PATH.ORDER_NEW)
-          }}
-          rounded="rounded-md"
-        >
-          <PlusIcon className="h-4 w-4" aria-hidden="true" />
-        </Button>
-        <Button
-          className="mr-1"
-          onClick={() => {
             mutate(url, undefined, { revalidate: true })
           }}
           rounded="rounded-md"
         >
           <ArrowPathIcon className="h-4 w-4" aria-hidden="true" />
+        </Button>
+        <Button
+          className="mr-1"
+          onClick={() => {
+            router.push(PATH.ORDER_NEW)
+          }}
+          rounded="rounded-md"
+        >
+          <PlusIcon className="h-4 w-4" aria-hidden="true" />
         </Button>
       </div>
     )

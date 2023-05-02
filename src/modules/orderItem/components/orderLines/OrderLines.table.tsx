@@ -52,7 +52,7 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine }: OrderLin
     [setOrderLine, deleteOrderLine]
   )
 
-  const { getTable } = useGeneralTable({ columns, data: orderLines, tableId: 'orderLines', className: 'col-span-6' })
+  const { getTable } = useGeneralTable({ columns, data: orderLines, tableId: 'orderLines', className: 'col-span-12' })
 
   return (
     <div className="flex flex-col mx-auto max-w-7xl px-4 sm:px-6 md:px-8 flex-1 justify-between">

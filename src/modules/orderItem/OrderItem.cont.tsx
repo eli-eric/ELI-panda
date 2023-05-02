@@ -33,7 +33,9 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
   const formMethods = useForm<OrderDetailFormType>({
     resolver: yupResolver(schema),
     defaultValues: {
-      orderLines: OrderDetail?.orderLines.map(orderLine => ({ ...orderLine, id: orderLine.uid || uuid() })),
+      orderLines:
+        OrderDetail?.orderLines &&
+        OrderDetail?.orderLines.map(orderLine => ({ ...orderLine, id: orderLine.uid || uuid() })),
       orderDate: moment(OrderDetail?.orderDate).utc().format('YYYY-MM-DD'),
       ...OrderDetail
     }
