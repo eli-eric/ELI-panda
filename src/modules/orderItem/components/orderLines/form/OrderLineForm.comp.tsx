@@ -39,6 +39,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
   return (
     <div>
       <div className="flex">
+        {/* TODO: make gereal component for witch */}
         <Switch
           checked={enabled}
           onChange={setEnabled}
