@@ -37,7 +37,7 @@ const useOrderLineFormFields = () => {
       name: 'price',
       label: form.price.label,
       placeholder: form.price.placeholder,
-      isError: !!formState.errors.price,
+      isError: !!formState.errors.priceEur,
       rounded: 'rounded-md',
       type: 'number'
     },

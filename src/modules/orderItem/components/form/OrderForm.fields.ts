@@ -67,7 +67,7 @@ const useOrderFormFields = (disabled?: boolean) => {
       disabled: disabled,
       isError: !!formState.errors.orderStatus,
       rounded: 'rounded-md',
-      options: orderStatus && [getDefaultOption('none'), ...orderStatus]
+      options: orderStatus
     },
     notes: {
       name: 'notes',

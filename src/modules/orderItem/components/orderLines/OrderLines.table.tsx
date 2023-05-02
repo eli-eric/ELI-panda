@@ -44,7 +44,9 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine }: OrderLin
       },
       {
         Header: 'Price',
-        accessor: 'price'
+        accessor: 'priceEur',
+        //TODO: format price
+        Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value} €</span>
       }
     ],
     [setOrderLine, deleteOrderLine]
