@@ -1,10 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import moment from 'moment'
+import { useRouter } from 'next/router'
 import { Fragment, useEffect } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import toast, { Toaster } from 'react-hot-toast'
 import uuid from 'react-uuid'
-import { object, string } from 'yup'
+import { array, object, string } from 'yup'
+
+import { useEndpoint } from '@/hooks/useEndpoint'
+import useSubmit from '@/hooks/useSubmit'
 
 import OrderFormComponent from './components/form/OrderForm.comp'
 import HeaderComponent from './components/Header.comp'
@@ -22,7 +26,22 @@ const schema = object({
   requestNumber: string(),
   contractNumber: string(),
   notes: string(),
-  orderDate: string()
+  orderDate: string(),
+  orderLines: array()
+    .of(
+      object({
+        name: string().required(),
+        catalogueNumber: string().required(),
+        system: object()
+          .shape({
+            name: string().required(),
+            uid: string().required()
+          })
+          .required(),
+        price: string()
+      })
+    )
+    .required()
 })
 
 interface Props {
@@ -30,13 +49,15 @@ interface Props {
 }
 
 const OrderItemContainer = ({ OrderDetail }: Props) => {
+  const uid = useRouter().query.uid as string
+
   const formMethods = useForm<OrderDetailFormType>({
     resolver: yupResolver(schema),
     defaultValues: {
       orderLines:
         OrderDetail?.orderLines &&
         OrderDetail?.orderLines.map(orderLine => ({ ...orderLine, id: orderLine.uid || uuid() })),
-      orderDate: moment(OrderDetail?.orderDate).utc().format('YYYY-MM-DD'),
+      orderDate: moment().utc().format('YYYY-MM-DD'),
       ...OrderDetail
     }
   })
@@ -61,8 +82,17 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
       })
   }, [formState])
 
+  const { order } = useEndpoint({ uid })
+  const { submit, loading } = useSubmit({
+    endpoint: order,
+    method: uid ? 'put' : 'post',
+    onSuccess: () => toast.success('Order saved successfully'),
+    onError: e => toast.error(e.message)
+  })
+
   const onSubmit = data => {
-    console.log(data)
+    console.log(formState.errors)
+    submit(data)
   }
 
   const setOrderLine = (orderLine: OrderLineFormType) => {

@@ -21,7 +21,7 @@ const getEndpoints = (uid?: string, path?: string, query?: string) => {
     systemsList: `/systems${query}`,
     systemCode: `/system/systemCode${query}`,
     orders: `/orders${query}`,
-    order: `/order/${uid}`
+    order: `/order${uid ? '/' + uid : ''}`
   }
   return endpoints
 }
