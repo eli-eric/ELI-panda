@@ -7,7 +7,7 @@ import { CODEBOOK } from '@/types/constants/codebook'
 
 const { form } = message.ordersPage.orderLines
 
-const useOrderLinesFormFields = () => {
+const useOrderLineFormFields = () => {
   const { register, formState } = useFormContext<OrderLineFormType>()
 
   return useMakeFormFields(register, {
@@ -35,18 +35,20 @@ const useOrderLinesFormFields = () => {
     },
     price: {
       name: 'price',
-      label: form.name.label,
-      placeholder: form.name.placeholder,
+      label: form.price.label,
+      placeholder: form.price.placeholder,
       isError: !!formState.errors.price,
-      rounded: 'rounded-md'
+      rounded: 'rounded-md',
+      type: 'number'
     },
     quantity: {
       name: 'quantity',
       label: form.quantity.label,
       placeholder: form.quantity.placeholder,
       isError: !!formState.errors.quantity,
-      rounded: 'rounded-md'
+      rounded: 'rounded-md',
+      type: 'number'
     }
   })
 }
-export default useOrderLinesFormFields
+export default useOrderLineFormFields

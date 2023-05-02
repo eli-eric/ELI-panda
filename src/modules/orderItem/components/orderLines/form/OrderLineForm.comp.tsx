@@ -6,17 +6,22 @@ import { InputWithError } from '@/components/form/Input'
 import { OrderLineFormType } from '@/modules/orderItem/types'
 import { CatalogueItem } from '@/types/responses'
 
-import useOrderLinesFormFields from './OrderLine.fields'
+import useOrderLineFormFields from './OrderLineForm.fields'
 
-const OrderLineForm = ({ catalogueItem }: { catalogueItem?: CatalogueItem }) => {
-  const formFields = useOrderLinesFormFields()
-  const { setValue, watch } = useFormContext<OrderLineFormType>()
+interface Props {
+  orderLine?: OrderLineFormType
+  catalogueItem?: CatalogueItem
+}
 
-  const system = watch('system')
+const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
+  const formFields = useOrderLineFormFields()
+  const { setValue } = useFormContext<OrderLineFormType>()
+
   useEffect(() => {
-    setValue('name', catalogueItem?.name || '')
-    setValue('catalogueNumber', catalogueItem?.catalogueNumber || '')
-  }, [catalogueItem, setValue, system])
+    setValue('name', catalogueItem?.name || orderLine?.name || '')
+    setValue('catalogueNumber', catalogueItem?.catalogueNumber || orderLine?.catalogueNumber || '')
+    setValue('catalogueUid', catalogueItem?.uid || orderLine?.catalogueUid || '')
+  }, [catalogueItem, setValue, orderLine])
 
   return (
     <div>
@@ -27,7 +32,7 @@ const OrderLineForm = ({ catalogueItem }: { catalogueItem?: CatalogueItem }) => 
         <div className="flex">
           <InputWithError {...formFields.catalogueNumber} className="pr-1" />
           <InputWithError {...formFields.price} className="pr-1 pl-1" />
-          <InputWithError {...formFields.quantity} className="pl-1" />
+          {!orderLine && <InputWithError {...formFields.quantity} className="pl-1" defaultValue={1} />}
         </div>
         <div className="flex">
           <ComboboxComponent {...formFields.system} className="pr-1 z-50" isObject={true} />
@@ -37,4 +42,4 @@ const OrderLineForm = ({ catalogueItem }: { catalogueItem?: CatalogueItem }) => 
   )
 }
 
-export default OrderLineForm
+export default OrderLineFormComponent

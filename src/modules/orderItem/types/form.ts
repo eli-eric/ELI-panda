@@ -16,12 +16,12 @@ export interface OrderDetailFormType extends FieldValues {
 }
 
 export type OrderLineFormType = {
-  id: string
+  id?: string
   uid: string
   name: string
-  catalogueUid: string
+  catalogueUid?: string
   catalogueNumber: string
-  system: CodebookType
+  system?: CodebookType
   price: number
-  quantity: number
+  quantity?: number
 }
