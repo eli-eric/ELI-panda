@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import moment from 'moment'
 import { Fragment, useEffect } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import toast, { Toaster } from 'react-hot-toast'
@@ -33,12 +34,18 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
     resolver: yupResolver(schema),
     defaultValues: {
       orderLines: OrderDetail?.orderLines.map(orderLine => ({ ...orderLine, id: orderLine.uid || uuid() })),
-      orderDate: new Date(OrderDetail ? OrderDetail?.orderDate : '').toLocaleDateString('sv-SE'),
+      orderDate: moment(OrderDetail?.orderDate).utc().format('YYYY-MM-DD'),
       ...OrderDetail
     }
   })
-  const { formState, control } = formMethods
+  const { formState, control, setValue } = formMethods
   const { insert, update, fields, remove } = useFieldArray<OrderDetailFormType>({ control, name: 'orderLines' })
+
+  useEffect(() => {
+    if (OrderDetail) {
+      setValue('orderDate', moment(OrderDetail.orderDate).utc().format('YYYY-MM-DD'))
+    }
+  }, [OrderDetail, setValue])
 
   useEffect(() => {
     const ErrorArray = Object.keys(formState?.errors || {})

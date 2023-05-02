@@ -78,7 +78,6 @@ const useOrderFormFields = (disabled?: boolean) => {
     },
     orderDate: {
       name: 'orderDate',
-      defaultValue: new Date().toLocaleDateString('sv-SE'),
       type: 'date',
       disabled: disabled,
       isError: !!formState.errors.orderDate,
