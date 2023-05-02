@@ -91,7 +91,7 @@ const OrdersContainer = () => {
       { Header: 'Request Number', accessor: 'requestNumber', id: 'requestNumber' },
       { Header: 'Contract Number', accessor: 'contractNumber', id: 'contractNumber' },
       { Header: 'Supplier', accessor: 'supplier' },
-      { Header: 'Order tatus', accessor: 'orderStatus' },
+      { Header: 'Order Status', accessor: 'orderStatus' },
       { Header: 'Notes', accessor: 'notes' },
       {
         Header: 'Last Update Time',
