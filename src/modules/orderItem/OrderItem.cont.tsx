@@ -83,7 +83,7 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
   }, [formState])
 
   const { order } = useEndpoint({ uid })
-  const { submit, loading } = useSubmit({
+  const { submit, loading } = useSubmit<OrderLineFormType>({
     endpoint: order,
     method: uid ? 'put' : 'post',
     onSuccess: () => toast.success('Order saved successfully'),
@@ -91,8 +91,8 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
   })
 
   const onSubmit = data => {
-    console.log(formState.errors)
-    submit(data)
+    const orderDate = moment(data.orderDate).format()
+    submit({ ...data, orderDate })
   }
 
   const setOrderLine = (orderLine: OrderLineFormType) => {
