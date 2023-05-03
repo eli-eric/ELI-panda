@@ -91,7 +91,7 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
   })
 
   const onSubmit = data => {
-    const orderDate = moment(data.orderDate).format()
+    const orderDate = moment(data.orderDate).startOf('day').utcOffset('+02:00').format()
     submit({ ...data, orderDate, orderStatus: null })
   }
 
