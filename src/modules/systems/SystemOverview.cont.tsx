@@ -9,6 +9,7 @@ import FileManager from '@/components/fileManager/FileManager'
 import LoaderComponent from '@/components/loader.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useSearch } from '@/hooks/useSearch'
+import { FILE_TYPE } from '@/types/constants/files'
 
 import Breadcrumbs from './components/Breadcrumbs'
 import Results from './components/search/Results'
@@ -103,7 +104,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
               <Heading text="Files" />
               <ErrorBoundary fallback={<ErrorPage />}>
                 <Suspense fallback={<ProgressBarComponent />}>
-                  <FileManager itemType="systems" itemId={uid} />
+                  <FileManager itemType={FILE_TYPE.SYSTEM} uid={uid} />
                 </Suspense>
               </ErrorBoundary>
             </Card>

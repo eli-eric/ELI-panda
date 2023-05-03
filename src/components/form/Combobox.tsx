@@ -25,6 +25,7 @@ const ComboboxComponent = <T extends FieldValues>({
   placeholder,
   name,
   className,
+  disabled,
   position = 'bottom',
   rounded = 'rounded-md'
 }: ComboboxProps<T>) => {
@@ -62,6 +63,7 @@ const ComboboxComponent = <T extends FieldValues>({
             setValue(name as Path<T>, item as PathValue<T, Path<T>>)
           }
         }}
+        disabled={disabled}
         className={`${className} block relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
       >
         {label && <Combobox.Label className="block text-sm font-medium text-gray-900">{label}</Combobox.Label>}
@@ -77,7 +79,8 @@ const ComboboxComponent = <T extends FieldValues>({
                   rounded,
                   isError ? 'border-red-500' : 'border-gray-300',
                   'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
-                  'block w-full appearance-none'
+                  'block w-full appearance-none',
+                  disabled ? 'opacity-50 pointer-events-none' : ''
                 )}
                 value={selectedItem?.name || query}
                 onChange={event => setQuery(event.target.value)}

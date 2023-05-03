@@ -7,8 +7,12 @@ import Devider from '@/components/layout/Devider'
 
 import useOrderFormFields from './OrderForm.fields'
 
-const OrderFormComponent = () => {
-  const fields = useOrderFormFields(false)
+interface Props {
+  disabledEdit?: boolean
+}
+
+const OrderFormComponent = ({ disabledEdit }: Props) => {
+  const fields = useOrderFormFields(disabledEdit)
 
   return (
     <Fragment>

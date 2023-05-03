@@ -1,5 +1,6 @@
-import { TrashIcon } from '@heroicons/react/24/outline'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { ArrowDownTrayIcon, TrashIcon } from '@heroicons/react/24/outline'
+import Link from 'next/link'
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'react-hot-toast'
 import { CellProps, Column } from 'react-table'
@@ -10,6 +11,7 @@ import { Button } from '@/components/Buttons'
 import executeRequest from '@/helpers/executeRequest'
 import { uniFetcher } from '@/helpers/fetcher'
 import useWarningModal from '@/hooks/useWarningModal'
+import { FILE_TYPE } from '@/types/constants/files'
 
 export type FileItem = {
   id: string
@@ -19,14 +21,13 @@ export type FileItem = {
 }
 
 type FileManagerProps = {
-  itemType: string
-  itemId: string
+  itemType: FILE_TYPE
+  uid: string
+  hasEditRole?: boolean
 }
 
-const FileManager = ({ itemType, itemId }: FileManagerProps) => {
-  const hasEditRole = true //replace me
-
-  const endpoint = `/api/${itemType}/${itemId}/files`
+const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
+  const endpoint = `/api/${itemType}/${uid}/files`
   const { data: files, error, mutate } = useSWR<Array<FileItem>>(endpoint, uniFetcher)
 
   const [newFile, setNewFile] = useState({ name: '', payload: '' })
@@ -83,29 +84,35 @@ const FileManager = ({ itemType, itemId }: FileManagerProps) => {
       {
         Header: 'Action',
         accessor: 'id',
-        Cell: ({ value }: CellProps<FileItem>) => (
-          <Button onClick={() => withWarningModal(handleDelete)(value)}>
-            <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
-          </Button>
+        Cell: ({
+          value,
+          row: {
+            original: { url }
+          }
+        }: CellProps<FileItem>) => (
+          <Fragment>
+            {hasEditRole && (
+              <Button buttonSize="small" className="mr-1" onClick={() => withWarningModal(handleDelete)(value)}>
+                <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+              </Button>
+            )}
+            <Link href={url} passHref legacyBehavior={true}>
+              <a target="_blank">
+                <Button buttonSize="small">
+                  <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
+                </Button>
+              </a>
+            </Link>
+          </Fragment>
         )
       },
       {
-        Header: 'Name',
-        accessor: 'name',
-        Cell: ({ row }: CellProps<FileItem>) => {
-          const {
-            original: { name, url }
-          } = row
-          return (
-            <a href={url} target="_blank" rel="noreferrer">
-              {name}
-            </a>
-          )
-        }
+        Header: 'File Name',
+        accessor: 'name'
       }
     ]
-    const [, justLink] = cols
-    return hasEditRole ? cols : [justLink]
+
+    return cols
   }, [hasEditRole, handleDelete, withWarningModal])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

@@ -19,6 +19,7 @@ const ListBox = <T extends FieldValues>({
   codebook,
   label,
   isError,
+  disabled,
   placeholder,
   name,
   className,
@@ -57,6 +58,7 @@ const ListBox = <T extends FieldValues>({
         as={'div'}
         value={selectedOption}
         onChange={onChangeHandler}
+        disabled={disabled}
         className={`${className} block relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
       >
         {({ open }) => (
@@ -72,7 +74,8 @@ const ListBox = <T extends FieldValues>({
                       isError ? 'border-red-500' : 'border-gray-300',
                       'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                       'block w-full h-[38px] appearance-none',
-                      'text-left'
+                      'text-left',
+                      disabled ? 'opacity-50 pointer-events-none' : ''
                     )}
                   >
                     {selectedOption?.name || placeholder}
