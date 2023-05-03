@@ -18,7 +18,7 @@ const HeaderComponent = ({ loading, disabledEdit }: Props) => {
             className="mr-1"
             type="button"
             onClick={() => {
-              disabledEdit ? router.back() : router.push(PATH.ORDERS)
+              router.back()
             }}
           >
             {disabledEdit ? 'Back' : 'Cancel'}

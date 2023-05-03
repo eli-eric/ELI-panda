@@ -75,7 +75,7 @@ const ListBox = <T extends FieldValues>({
                       'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                       'block w-full h-[38px] appearance-none',
                       'text-left',
-                      disabled ? 'opacity-50 pointer-events-none' : ''
+                      disabled ? 'bg-gray-100' : ''
                     )}
                   >
                     {selectedOption?.name || placeholder}

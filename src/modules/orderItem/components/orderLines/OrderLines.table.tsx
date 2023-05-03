@@ -24,7 +24,7 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
         Header: 'Actions',
         Cell: (props: CellProps<OrderLineFormType>) => (
           <Fragment>
-            {disabledEdit && (
+            {!disabledEdit && (
               <OrderLineActionButtons
                 orderLine={props.row.original}
                 setOrderLine={setOrderLine}
