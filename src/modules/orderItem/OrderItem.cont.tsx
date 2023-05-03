@@ -10,6 +10,7 @@ import { array, object, string } from 'yup'
 import { convertDate } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
+import { PATH } from '@/types/constants/paths'
 
 import OrderFormComponent from './components/form/OrderForm.comp'
 import HeaderComponent from './components/Header.comp'
@@ -53,7 +54,23 @@ interface Props {
 }
 
 const OrderItemContainer = ({ OrderDetail }: Props) => {
-  const uid = useRouter().query.uid as string
+  const router = useRouter()
+  const uid = router.query.uid as string
+  const { order } = useEndpoint({ uid })
+
+  const { submit, loading } = useSubmit<string>({
+    endpoint: order,
+    method: uid ? 'put' : 'post',
+    onSuccess: uid => {
+      toast.success(`Order ${uid} saved successfully`)
+      router.push(PATH.ORDER_DETAIL + '/' + uid)
+    },
+    onError: e => toast.error(e.message)
+  })
+
+  const onSubmit = data => {
+    submit({ ...data, orderDate: convertDate(data.orderDate) })
+  }
 
   const formMethods = useForm<OrderDetailFormType>({
     resolver: yupResolver(schema),
@@ -86,18 +103,6 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
       })
   }, [formState])
 
-  const { order } = useEndpoint({ uid })
-  const { submit, loading } = useSubmit<string>({
-    endpoint: order,
-    method: uid ? 'put' : 'post',
-    onSuccess: uid => toast.success(`Order ${uid} saved successfully`),
-    onError: e => toast.error(e.message)
-  })
-
-  const onSubmit = data => {
-    submit({ ...data, orderDate: convertDate(data.orderDate) })
-  }
-
   const setOrderLine = (orderLine: OrderLineFormType) => {
     const dataToSave = { ...orderLine }
     if (orderLine.id) {
@@ -119,7 +124,7 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
       <Toaster position="top-right" reverseOrder={true} />
       <form onSubmit={formMethods.handleSubmit(onSubmit)}>
         <FormProvider {...formMethods}>
-          <HeaderComponent />
+          <HeaderComponent loading={loading} />
           <div className="py-6">
             <OrderFormComponent />
           </div>

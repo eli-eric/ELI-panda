@@ -28,16 +28,17 @@ const ListBox = <T extends FieldValues>({
     setValue,
     formState: { defaultValues }
   } = useFormContext<T>()
-
   const codebookOption = useCodebook(codebook)
-
   const [selectedOption, setSelectedOption] = useState<CodebookType | null>(
     (codebookOption && codebookOption[0]) || null
   )
 
   useEffect(() => {
-    codebookOption && setSelectedOption(codebookOption[0])
-  }, [codebookOption])
+    if (codebookOption) {
+      setSelectedOption(codebookOption[0])
+      setValue(name as Path<T>, codebookOption[0] as PathValue<T, Path<T>>)
+    }
+  }, [codebookOption, name]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const onChangeHandler = (item: CodebookType | null) => {
     setSelectedOption(item)

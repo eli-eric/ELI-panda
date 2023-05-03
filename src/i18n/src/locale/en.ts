@@ -213,7 +213,7 @@ export const messages = {
         name: { label: 'Name', placeholder: 'Name' },
         catalogueNumber: { label: 'Catalogue Number', placeholder: 'Catalogue Number' },
         systemName: { label: 'System Name', placeholder: 'System Name' },
-        price: { label: 'Price', placeholder: 'Price' },
+        price: { label: 'Price', placeholder: '0.00' },
         quantity: { label: 'Quantity', placeholder: 'Quantity' }
       }
     }

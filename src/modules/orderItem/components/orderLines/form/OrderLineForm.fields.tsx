@@ -41,7 +41,8 @@ const useOrderLineFormFields = (enabled: boolean) => {
       placeholder: form.price.placeholder,
       isError: !!formState.errors.priceEur,
       rounded: 'rounded-md',
-      type: 'number'
+      type: 'number',
+      isAmount: true
     },
     quantity: {
       name: 'quantity',

@@ -1,6 +1,7 @@
 import React from 'react'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
+import { classNames } from '@/helpers'
 import { FieldProps } from '@/types/form'
 
 import { ValidationIcon } from './Icons'
@@ -18,6 +19,7 @@ export const InputWithError = <T extends FieldValues>({
   register,
   name,
   isError,
+  isAmount,
   placeholder,
   disabled,
   rounded,
@@ -45,12 +47,20 @@ export const InputWithError = <T extends FieldValues>({
         type={type}
         disabled={disabled}
         placeholder={placeholder}
-        className={`block w-full appearance-none ${rounded} border ${
-          isError ? 'border-red-500' : 'border-gray-300'
-        } px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm ${
-          disabled ? 'bg-gray-100' : ''
-        }`}
+        className={classNames(
+          'block w-full appearance-none border',
+          rounded,
+          isError ? 'border-red-500' : 'border-gray-300',
+          'px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+          disabled ? 'bg-gray-100' : '',
+          isAmount ? 'pl-12' : ''
+        )}
       />
+      {isAmount && (
+        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+          <span className="text-gray-500 sm:text-sm">EUR</span>
+        </div>
+      )}
       {isError && <ValidationIcon />}
     </div>
   </div>
