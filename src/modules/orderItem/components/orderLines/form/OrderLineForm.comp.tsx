@@ -66,7 +66,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
           {!orderLine && <InputWithError {...formFields.quantity} className="pl-1" defaultValue={1} />}
         </div>
         <div className="flex">
-          <ComboboxComponent {...formFields.system} className="pr-1 z-50" isObject={true} />
+          <ComboboxComponent {...formFields.system} className="pr-1 z-50" isObject={true} position="top" />
         </div>
       </div>
     </div>

@@ -9,15 +9,17 @@ interface UseSubmitProps<T> {
   method: 'post' | 'put' | 'delete'
   mutateList?: string[]
   onSuccess?: (data?: T | null) => void
+  onError?: (error: any) => void
 }
 
-const useSubmit = <T>({ endpoint, method, mutateList, onSuccess }: UseSubmitProps<T>) => {
+const useSubmit = <T>({ endpoint, method, mutateList, onSuccess, onError }: UseSubmitProps<T>) => {
   const { mutate } = useSWRConfig()
   const [response, setResponse] = useState<T | null>(null)
   const [error, setError] = useState<string>()
   const [loading, setloading] = useState<boolean>(false)
 
   const submit = (body?: any) => {
+    console.log('submit', body)
     setloading(true)
     axios[method](BASE_URL + endpoint, body)
       .then(res => {
@@ -29,6 +31,7 @@ const useSubmit = <T>({ endpoint, method, mutateList, onSuccess }: UseSubmitProp
           })
       })
       .catch(err => {
+        if (onError) onError(err)
         setError(err)
       })
       .finally(() => {

@@ -40,6 +40,7 @@ type SelectWithErrorProps<T extends FieldValues> = FieldProps &
     register: UseFormRegister<T>
   }
 
+//TODO: refactor all usage with ListBox
 export const SelectWithError = <T extends FieldValues>({
   isError,
   options,

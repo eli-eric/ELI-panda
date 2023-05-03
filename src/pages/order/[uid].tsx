@@ -34,7 +34,7 @@ const OrderItemPage: NextPage = (): JSX.Element => {
           <title>{intl.formatMessage({ id: messages.head })}</title>
           <meta name="description" content="...." />
         </Head>
-        {data ? <OrderItemContainer OrderDetail={data} /> : <LoaderComponent />}
+        {data ? <OrderItemContainer OrderDetail={data} disabledEdit={true} /> : <LoaderComponent />}
       </Fragment>
     </Fragment>
   )

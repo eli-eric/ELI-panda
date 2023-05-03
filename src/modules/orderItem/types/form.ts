@@ -10,7 +10,7 @@ export interface OrderDetailFormType extends FieldValues {
   contractNumber: number
   notes: string
   supplier: CodebookType
-  orderStatusUid: string
+  orderStatus: CodebookType
   orderDate: string
   orderLines: OrderLineFormType[]
 }
@@ -22,6 +22,6 @@ export type OrderLineFormType = {
   catalogueUid?: string
   catalogueNumber: string
   system?: CodebookType
-  priceEur: number
+  priceEur?: number
   quantity?: number
 }

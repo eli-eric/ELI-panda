@@ -1,10 +1,20 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import moment from 'moment'
+import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import { Fragment, useEffect } from 'react'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import toast, { Toaster } from 'react-hot-toast'
 import uuid from 'react-uuid'
-import { object, string } from 'yup'
+import { array, object, string } from 'yup'
+
+import FileManager from '@/components/fileManager/FileManager'
+import { convertDate } from '@/helpers/formatters'
+import { useEndpoint } from '@/hooks/useEndpoint'
+import useSubmit from '@/hooks/useSubmit'
+import { FILE_TYPE } from '@/types/constants/files'
+import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 
 import OrderFormComponent from './components/form/OrderForm.comp'
 import HeaderComponent from './components/Header.comp'
@@ -17,26 +27,64 @@ const schema = object({
     name: string().required(),
     uid: string().required()
   }),
-  orderStatus: string(),
+  orderStatus: object().shape({
+    name: string().required(),
+    uid: string().required()
+  }),
   orderNumber: string(),
   requestNumber: string(),
   contractNumber: string(),
   notes: string(),
-  orderDate: string()
+  orderDate: string(),
+  orderLines: array()
+    .of(
+      object({
+        name: string().required(),
+        catalogueNumber: string().required(),
+        system: object()
+          .shape({
+            name: string().required(),
+            uid: string().required()
+          })
+          .required(),
+        price: string()
+      })
+    )
+    .required()
 })
 
 interface Props {
   OrderDetail?: OrderDetailFormType
+  disabledEdit?: boolean
 }
 
-const OrderItemContainer = ({ OrderDetail }: Props) => {
+const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
+  const router = useRouter()
+  const { data: session } = useSession()
+  const uid = router.query.uid as string
+  const { order } = useEndpoint({ uid })
+
+  const { submit, loading } = useSubmit<string>({
+    endpoint: order,
+    method: uid ? 'put' : 'post',
+    onSuccess: uid => {
+      toast.success(`Order ${uid} saved successfully`)
+      router.push(PATH.ORDER_DETAIL + '/' + uid)
+    },
+    onError: e => toast.error(e.message)
+  })
+
+  const onSubmit = data => {
+    submit({ ...data, orderDate: convertDate(data.orderDate) })
+  }
+
   const formMethods = useForm<OrderDetailFormType>({
     resolver: yupResolver(schema),
     defaultValues: {
       orderLines:
         OrderDetail?.orderLines &&
         OrderDetail?.orderLines.map(orderLine => ({ ...orderLine, id: orderLine.uid || uuid() })),
-      orderDate: moment(OrderDetail?.orderDate).utc().format('YYYY-MM-DD'),
+      orderDate: moment().utc().format('YYYY-MM-DD'),
       ...OrderDetail
     }
   })
@@ -61,10 +109,6 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
       })
   }, [formState])
 
-  const onSubmit = data => {
-    console.log(data)
-  }
-
   const setOrderLine = (orderLine: OrderLineFormType) => {
     const dataToSave = { ...orderLine }
     if (orderLine.id) {
@@ -86,9 +130,9 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
       <Toaster position="top-right" reverseOrder={true} />
       <form onSubmit={formMethods.handleSubmit(onSubmit)}>
         <FormProvider {...formMethods}>
-          <HeaderComponent />
+          <HeaderComponent loading={loading} disabledEdit={disabledEdit} />
           <div className="py-6">
-            <OrderFormComponent />
+            <OrderFormComponent disabledEdit={disabledEdit} />
           </div>
         </FormProvider>
       </form>
@@ -96,7 +140,17 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
         orderLines={fields as OrderLineFormType[]}
         setOrderLine={setOrderLine}
         deleteOrderLine={deleteOrderLine}
+        disabledEdit={disabledEdit}
       />
+      {uid && (
+        <div className="flex flex-col mx-auto max-w-7xl px-4 sm:px-6 md:px-8 flex-1 justify-between">
+          <FileManager
+            itemType={FILE_TYPE.ORDER}
+            uid={uid}
+            hasEditRole={!disabledEdit && session?.user.roles.includes(ROLE.ORDERS_EDIT)}
+          />
+        </div>
+      )}
     </Fragment>
   )
 }

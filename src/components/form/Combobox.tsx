@@ -13,6 +13,7 @@ type ComboboxProps<T extends FieldValues> = FieldProps &
     register: UseFormRegister<T>
     codebook?: CODEBOOK
     isObject?: boolean
+    position?: 'top' | 'bottom'
   }
 
 const ComboboxComponent = <T extends FieldValues>({
@@ -24,6 +25,8 @@ const ComboboxComponent = <T extends FieldValues>({
   placeholder,
   name,
   className,
+  disabled,
+  position = 'bottom',
   rounded = 'rounded-md'
 }: ComboboxProps<T>) => {
   const {
@@ -60,6 +63,7 @@ const ComboboxComponent = <T extends FieldValues>({
             setValue(name as Path<T>, item as PathValue<T, Path<T>>)
           }
         }}
+        disabled={disabled}
         className={`${className} block relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
       >
         {label && <Combobox.Label className="block text-sm font-medium text-gray-900">{label}</Combobox.Label>}
@@ -75,7 +79,8 @@ const ComboboxComponent = <T extends FieldValues>({
                   rounded,
                   isError ? 'border-red-500' : 'border-gray-300',
                   'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
-                  'block w-full appearance-none'
+                  'block w-full appearance-none',
+                  disabled ? 'opacity-50 pointer-events-none' : ''
                 )}
                 value={selectedItem?.name || query}
                 onChange={event => setQuery(event.target.value)}
@@ -100,7 +105,13 @@ const ComboboxComponent = <T extends FieldValues>({
           </div>
 
           {data && data.length > 0 && (
-            <Combobox.Options className="absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+            <Combobox.Options
+              className={classNames(
+                'absolute',
+                position === 'top' ? 'bottom-full' : 'top-full', // určení pozice výběrového seznamu
+                'z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
+              )}
+            >
               {data.map(item => (
                 <Combobox.Option
                   key={item.uid}
