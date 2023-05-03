@@ -7,6 +7,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import uuid from 'react-uuid'
 import { array, object, string } from 'yup'
 
+import { convertDate } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 
@@ -21,7 +22,10 @@ const schema = object({
     name: string().required(),
     uid: string().required()
   }),
-  orderStatus: string(),
+  orderStatus: object().shape({
+    name: string().required(),
+    uid: string().required()
+  }),
   orderNumber: string(),
   requestNumber: string(),
   contractNumber: string(),
@@ -83,16 +87,15 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
   }, [formState])
 
   const { order } = useEndpoint({ uid })
-  const { submit, loading } = useSubmit<OrderLineFormType>({
+  const { submit, loading } = useSubmit<string>({
     endpoint: order,
     method: uid ? 'put' : 'post',
-    onSuccess: () => toast.success('Order saved successfully'),
+    onSuccess: uid => toast.success(`Order ${uid} saved successfully`),
     onError: e => toast.error(e.message)
   })
 
   const onSubmit = data => {
-    const orderDate = moment(data.orderDate).startOf('day').utcOffset('+02:00').format()
-    submit({ ...data, orderDate, orderStatus: null })
+    submit({ ...data, orderDate: convertDate(data.orderDate) })
   }
 
   const setOrderLine = (orderLine: OrderLineFormType) => {

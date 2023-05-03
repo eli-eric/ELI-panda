@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form'
 
 import { useMakeFormFields } from '@/hooks/form'
-import { useCodebookSelectValues } from '@/hooks/useCodebook'
+import { useCodebook } from '@/hooks/useCodebook'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 
@@ -18,7 +18,8 @@ const getDefaultOption = (name, disabled = false) => ({
 
 const useOrderFormFields = (disabled?: boolean) => {
   const { register, formState } = useFormContext<OrderDetailFormType>()
-  const orderStatus = useCodebookSelectValues(CODEBOOK.ORDER_STATUS)
+  const orderStatus = useCodebook(CODEBOOK.ORDER_STATUS)
+  console.log('orderStatus', orderStatus)
 
   return useMakeFormFields(register, {
     name: {
@@ -67,7 +68,7 @@ const useOrderFormFields = (disabled?: boolean) => {
       disabled: disabled,
       isError: !!formState.errors.orderStatus,
       rounded: 'rounded-md',
-      options: orderStatus
+      codebook: CODEBOOK.ORDER_STATUS
     },
     notes: {
       name: 'notes',
