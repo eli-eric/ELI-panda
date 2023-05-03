@@ -19,6 +19,7 @@ const useSubmit = <T>({ endpoint, method, mutateList, onSuccess, onError }: UseS
   const [loading, setloading] = useState<boolean>(false)
 
   const submit = (body?: any) => {
+    console.log('submit', body)
     setloading(true)
     axios[method](BASE_URL + endpoint, body)
       .then(res => {

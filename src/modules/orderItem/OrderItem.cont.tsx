@@ -92,7 +92,7 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
 
   const onSubmit = data => {
     const orderDate = moment(data.orderDate).format()
-    submit({ ...data, orderDate })
+    submit({ ...data, orderDate, orderStatus: null })
   }
 
   const setOrderLine = (orderLine: OrderLineFormType) => {
