@@ -5,6 +5,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 import Card, { Heading } from '@/components/card/card.comp'
 import EmptySectionComponent from '@/components/empty-section/empty-section.comp'
 import ErrorPage from '@/components/error/ErrorPage'
+import FileManager from '@/components/fileManager/FileManager'
 import LoaderComponent from '@/components/loader.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useSearch } from '@/hooks/useSearch'
@@ -98,6 +99,14 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
                 </ErrorBoundary>
               </Card>
             )}
+            <Card>
+              <Heading text="Files" />
+              <ErrorBoundary fallback={<ErrorPage />}>
+                <Suspense fallback={<ProgressBarComponent />}>
+                  <FileManager itemType="systems" itemId={uid} />
+                </Suspense>
+              </ErrorBoundary>
+            </Card>
           </div>
         ) : (
           <div className="col-span-3">
