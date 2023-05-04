@@ -1,4 +1,5 @@
-import { useFormContext } from 'react-hook-form'
+import { useEffect, useState } from 'react'
+import { useFormContext, useFormState } from 'react-hook-form'
 
 import { useMakeFormFields } from '@/hooks/form'
 import { message } from '@/i18n/src/messages'
@@ -10,7 +11,17 @@ import { OrderDetailFormType } from '../../types'
 const { form } = message.ordersPage.orderDetail
 
 const useOrderFormFields = (disabled?: boolean) => {
-  const { register, formState } = useFormContext<OrderDetailFormType>()
+  const { register, formState, control, getFieldState } = useFormContext<OrderDetailFormType>()
+  const [atLeastOneFilled, setAtLeastOneFilled] = useState(false)
+  const { errors, dirtyFields } = useFormState<OrderDetailFormType>({ control })
+  const { error } = getFieldState('atLeastOneFilled')
+
+  useEffect(() => {
+    console.log(error)
+    if (errors.atLeastOneFilled) {
+      setAtLeastOneFilled(true)
+    } else setAtLeastOneFilled(false)
+  }, [errors, setAtLeastOneFilled, error])
 
   return useMakeFormFields(register, {
     name: {
@@ -26,7 +37,7 @@ const useOrderFormFields = (disabled?: boolean) => {
       label: form.orderNumber.label,
       placeholder: form.orderNumber.placeholder,
       disabled: disabled,
-      isError: !!formState.errors.orderNumber,
+      isError: !!error,
       rounded: 'rounded-md'
     },
     requestNumber: {
@@ -34,7 +45,7 @@ const useOrderFormFields = (disabled?: boolean) => {
       label: form.requestNumber.label,
       placeholder: form.requestNumber.placeholder,
       disabled: disabled,
-      isError: !!formState.errors.requestNumber,
+      isError: atLeastOneFilled,
       rounded: 'rounded-md'
     },
     contractNumber: {
@@ -42,7 +53,7 @@ const useOrderFormFields = (disabled?: boolean) => {
       label: form.contractNumber.label,
       placeholder: form.contractNumber.placeholder,
       disabled: disabled,
-      isError: !!formState.errors.contractNumber,
+      isError: atLeastOneFilled,
       rounded: 'rounded-md'
     },
     supplier: {

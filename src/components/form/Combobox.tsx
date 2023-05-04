@@ -14,6 +14,7 @@ type ComboboxProps<T extends FieldValues> = FieldProps &
     codebook?: CODEBOOK
     isObject?: boolean
     position?: 'top' | 'bottom'
+    limit?: number
   }
 
 const ComboboxComponent = <T extends FieldValues>({
@@ -26,6 +27,7 @@ const ComboboxComponent = <T extends FieldValues>({
   name,
   className,
   disabled,
+  limit = 10,
   position = 'bottom',
   rounded = 'rounded-md'
 }: ComboboxProps<T>) => {
@@ -35,7 +37,7 @@ const ComboboxComponent = <T extends FieldValues>({
   } = useFormContext<T>()
   const [query, setQuery] = useState(defaultValues?.[name] || '')
   const [selectedItem, setSelectedItem] = useState<CodebookType | null>(null)
-  const data = useCodebook(codebook, `?searchText=${query}&limit=10`, true)
+  const data = useCodebook(codebook, `?searchText=${query}&limit=${limit}`, true)
 
   useEffect(() => {
     if (defaultValues && defaultValues[name]) {

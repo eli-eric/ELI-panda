@@ -43,12 +43,6 @@ const NavigationListContainer = ({ open }: Props) => {
                 open={open}
               />
             )} */}
-            <NavigationLinkComponent
-              name={intl.formatMessage({ id: navMessages.dashboard })}
-              href={PATH.DASHBOARD}
-              open={open}
-            />
-            {/* here will ber role order view */}
             {userRoles?.includes(ROLE.ORDERS_VIEW) && (
               <NavigationLinkComponent
                 name={intl.formatMessage({ id: navMessages.orders })}
@@ -56,6 +50,12 @@ const NavigationListContainer = ({ open }: Props) => {
                 open={open}
               />
             )}
+            <NavigationLinkComponent
+              name={intl.formatMessage({ id: navMessages.dashboard })}
+              href={PATH.DASHBOARD}
+              open={open}
+            />
+            {/* here will ber role order view */}
           </Fragment>
         ) : (
           <NavigationLinkComponent name={intl.formatMessage({ id: navMessages.login })} href={PATH.ROOT} open={open} />

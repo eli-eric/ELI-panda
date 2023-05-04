@@ -28,7 +28,6 @@ const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
   const [catalogueItem, setCatalogueItem] = useState<CatalogueItem | undefined>(undefined)
 
   const modalSubmit = (data: OrderLineFormType) => {
-    console.log(data)
     const dataToSend = { ...data }
     delete dataToSend.quantity
     if (data.quantity) {

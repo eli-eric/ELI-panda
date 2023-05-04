@@ -12,3 +12,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(500).end()
   }
 }
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '50mb'
+    }
+  }
+}

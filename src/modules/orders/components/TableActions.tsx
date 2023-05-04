@@ -55,7 +55,7 @@ export const TableActions = ({ uid, mutate }: { uid: string; mutate: string }) =
             }}
             rounded="rounded-md"
           >
-            <PencilSquareIcon className="h-5 w-5" aria-hidden="true" />
+            <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
           </Button>
           <Button
             className="mr-1"
@@ -65,7 +65,7 @@ export const TableActions = ({ uid, mutate }: { uid: string; mutate: string }) =
             }}
             rounded="rounded-md"
           >
-            <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+            <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
           </Button>
         </Fragment>
       )}
@@ -76,7 +76,7 @@ export const TableActions = ({ uid, mutate }: { uid: string; mutate: string }) =
         }}
         rounded="rounded-md"
       >
-        <FolderIcon className="h-5 w-5" aria-hidden="true" />
+        <FolderIcon className="h-4 w-4" aria-hidden="true" />
       </Button>
       <WarningModal
         buttons={deleteButtons}

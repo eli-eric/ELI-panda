@@ -1,4 +1,4 @@
-import { ArrowPathIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { ArrowPathIcon, InformationCircleIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Fragment, useEffect, useMemo, useState } from 'react'
@@ -9,6 +9,7 @@ import useSWR, { useSWRConfig } from 'swr'
 import { Button } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/catalog-layout.cont'
+import TooltipComponent from '@/components/tooltip.comp'
 import { classNames } from '@/helpers'
 import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
@@ -40,6 +41,7 @@ const OrdersContainer = () => {
           <ArrowPathIcon className="h-4 w-4" aria-hidden="true" />
         </Button>
         <Button
+          primary
           className="mr-1"
           onClick={() => {
             router.push(PATH.ORDER_NEW)
@@ -111,7 +113,20 @@ const OrdersContainer = () => {
       { Header: 'Contract Number', accessor: 'contractNumber', id: 'contractNumber' },
       { Header: 'Supplier', accessor: 'supplier' },
       { Header: 'Order Status', accessor: 'orderStatus' },
-      { Header: 'Notes', accessor: 'notes' },
+      {
+        Header: 'Notes',
+        accessor: 'notes',
+        Cell: ({ value }: CellProps<Order>) => (
+          <Fragment>
+            {value && (
+              <TooltipComponent text={value}>
+                <InformationCircleIcon className="h-6 w-6 flex-shrink-0" />
+              </TooltipComponent>
+            )}
+          </Fragment>
+        ),
+        id: 'notes'
+      },
       {
         Header: 'Last Update Time',
         accessor: 'lastUpdateTime',
@@ -143,7 +158,7 @@ const OrdersContainer = () => {
         'min-w-[180px] max-w-[180px]',
         column.id === 'actions' ? 'sticky left-0 z-20 bg-opacity-100 backdrop-blur backdrop-filter' : '',
         column.id === 'name'
-          ? 'sticky left-[180px] text-ellipsis min-w-[600px] max-w-[600px] z-20 bg-opacity-100 backdrop-blur backdrop-filter'
+          ? 'sticky left-[180px] text-ellipsis z-20 bg-opacity-100 backdrop-blur backdrop-filter'
           : 'border-l',
         column.id === 'orderDate' ? 'text-right' : '',
         column.id === 'orderNumber' ? 'text-right' : '',
@@ -156,7 +171,7 @@ const OrdersContainer = () => {
       className: classNames(
         id === 'actions' ? 'left-0 z-30' : '',
         id === 'name' ? 'left-[180px] z-30 min-w-[600px] max-w-[600px]' : 'border-l',
-        'min-w-[180px] max-w-[180px]'
+        id === 'notes' ? 'min-w-[90px] max-w-[90px]' : 'min-w-[180px] max-w-[180px]'
       )
     })
   })

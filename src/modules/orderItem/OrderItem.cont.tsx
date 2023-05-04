@@ -3,12 +3,13 @@ import moment from 'moment'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Fragment, useEffect } from 'react'
-import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
-import toast, { Toaster } from 'react-hot-toast'
+import { FormProvider, useFieldArray, useForm, useFormState } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import uuid from 'react-uuid'
 import { array, object, string } from 'yup'
 
 import FileManager from '@/components/fileManager/FileManager'
+import FormError from '@/components/Notifications/FormError'
 import { convertDate } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
@@ -23,34 +24,22 @@ import { OrderDetailFormType, OrderLineFormType } from './types'
 
 const schema = object({
   name: string().required(),
-  supplier: object().shape({
-    name: string().required(),
-    uid: string().required()
-  }),
-  orderStatus: object().shape({
-    name: string().required(),
-    uid: string().required()
-  }),
+  supplier: object(),
+  orderStatus: object(),
   orderNumber: string(),
   requestNumber: string(),
   contractNumber: string(),
   notes: string(),
   orderDate: string(),
-  orderLines: array()
-    .of(
-      object({
-        name: string().required(),
-        catalogueNumber: string().required(),
-        system: object()
-          .shape({
-            name: string().required(),
-            uid: string().required()
-          })
-          .required(),
-        price: string()
-      })
-    )
-    .required()
+  orderLines: array().length(1, 'Order must have at least one order line'),
+  atLeastOneFilled: string().test(
+    'at-least-one-filled',
+    'At least one of Order Number, Request Number or Contract Number must be filled',
+    function () {
+      const { orderNumber, requestNumber, contractNumber } = this.parent
+      return Boolean(orderNumber || requestNumber || contractNumber)
+    }
+  )
 })
 
 interface Props {
@@ -69,12 +58,13 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
     method: uid ? 'put' : 'post',
     onSuccess: uid => {
       toast.success(`Order ${uid} saved successfully`)
-      router.push(PATH.ORDER_DETAIL + '/' + uid)
+      router.push(PATH.ORDER_EDIT + '/' + uid)
     },
-    onError: e => toast.error(e.message)
+    onError: e => toast.error(e.message, { style: { textAlign: 'left' } })
   })
 
   const onSubmit = data => {
+    console.log(data)
     submit({ ...data, orderDate: convertDate(data.orderDate) })
   }
 
@@ -88,8 +78,9 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
       ...OrderDetail
     }
   })
-  const { formState, control, setValue } = formMethods
+  const { control, setValue } = formMethods
   const { insert, update, fields, remove } = useFieldArray<OrderDetailFormType>({ control, name: 'orderLines' })
+  const { errors, isSubmitted } = useFormState<OrderDetailFormType>({ control })
 
   useEffect(() => {
     if (OrderDetail) {
@@ -98,16 +89,17 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
   }, [OrderDetail, setValue])
 
   useEffect(() => {
-    const ErrorArray = Object.keys(formState?.errors || {})
-    formState?.isSubmitting &&
+    const ErrorArray = Object.keys(errors || {})
+    if (isSubmitted) {
       ErrorArray.length > 0 &&
-      ErrorArray.forEach(error => {
-        const fieldError = formState?.errors[error]
-        if (fieldError && 'message' in fieldError) {
-          toast.error(fieldError.message as string)
-        }
-      })
-  }, [formState])
+        ErrorArray.forEach(error => {
+          const fieldError = errors[error]
+          if (fieldError && 'message' in fieldError) {
+            toast.custom(t => <FormError t={t} dismiss={toast.dismiss} message={fieldError.message} />)
+          }
+        })
+    }
+  }, [isSubmitted, errors])
 
   const setOrderLine = (orderLine: OrderLineFormType) => {
     const dataToSave = { ...orderLine }
@@ -127,7 +119,6 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
 
   return (
     <Fragment>
-      <Toaster position="top-right" reverseOrder={true} />
       <form onSubmit={formMethods.handleSubmit(onSubmit)}>
         <FormProvider {...formMethods}>
           <HeaderComponent loading={loading} disabledEdit={disabledEdit} />
