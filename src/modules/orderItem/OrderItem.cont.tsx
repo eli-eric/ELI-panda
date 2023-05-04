@@ -22,24 +22,26 @@ import HeaderComponent from './components/Header.comp'
 import OrderLinesTable from './components/orderLines/OrderLines.table'
 import { OrderDetailFormType, OrderLineFormType } from './types'
 
-const schema = object({
-  name: string().required(),
-  supplier: object(),
-  orderStatus: object(),
-  orderNumber: string(),
-  requestNumber: string(),
-  contractNumber: string(),
-  notes: string(),
-  orderDate: string(),
-  orderLines: array().length(1, 'Order must have at least one order line'),
+const numberSchema = {
   atLeastOneFilled: string().test(
-    'at-least-one-filled',
     'At least one of Order Number, Request Number or Contract Number must be filled',
     function () {
       const { orderNumber, requestNumber, contractNumber } = this.parent
       return Boolean(orderNumber || requestNumber || contractNumber)
     }
   )
+}
+
+const schema = object({
+  name: string().required("Order's name is required"),
+  supplier: object(),
+  orderStatus: object(),
+  orderNumber: numberSchema.atLeastOneFilled,
+  requestNumber: numberSchema.atLeastOneFilled,
+  contractNumber: numberSchema.atLeastOneFilled,
+  notes: string(),
+  orderDate: string(),
+  orderLines: array().min(1, 'Order must have at least one Order Line')
 })
 
 interface Props {
@@ -53,6 +55,7 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
   const uid = router.query.uid as string
   const { order } = useEndpoint({ uid })
 
+  // setting the endpoint and the method for the submit hook
   const { submit, loading } = useSubmit<string>({
     endpoint: order,
     method: uid ? 'put' : 'post',
@@ -63,8 +66,8 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
     onError: e => toast.error(e.message, { style: { textAlign: 'left' } })
   })
 
+  //  submit the form
   const onSubmit = data => {
-    console.log(data)
     submit({ ...data, orderDate: convertDate(data.orderDate) })
   }
 
@@ -78,16 +81,20 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
       ...OrderDetail
     }
   })
+
+  //  set the form methods to be used in the order lines
   const { control, setValue } = formMethods
   const { insert, update, fields, remove } = useFieldArray<OrderDetailFormType>({ control, name: 'orderLines' })
   const { errors, isSubmitted } = useFormState<OrderDetailFormType>({ control })
 
+  // set the order date to the current date if it is a new order
   useEffect(() => {
     if (OrderDetail) {
       setValue('orderDate', moment(OrderDetail.orderDate).utc().format('YYYY-MM-DD'))
     }
   }, [OrderDetail, setValue])
 
+  //  check if there is any error in the form and show it
   useEffect(() => {
     const ErrorArray = Object.keys(errors || {})
     if (isSubmitted) {
@@ -95,12 +102,13 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
         ErrorArray.forEach(error => {
           const fieldError = errors[error]
           if (fieldError && 'message' in fieldError) {
-            toast.custom(t => <FormError t={t} dismiss={toast.dismiss} message={fieldError.message} />)
+            toast.custom(t => <FormError t={t} dismiss={toast.dismiss} message={fieldError?.message as string} />)
           }
         })
     }
   }, [isSubmitted, errors])
 
+  //  set the order lines to the form
   const setOrderLine = (orderLine: OrderLineFormType) => {
     const dataToSave = { ...orderLine }
     if (orderLine.id) {
@@ -111,7 +119,7 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
       insert(fields.length, dataToSave)
     }
   }
-
+  //  delete the order line from the form
   const deleteOrderLine = (orderLine: OrderLineFormType) => {
     const index = fields.findIndex(item => item.id === orderLine.id)
     remove(index)

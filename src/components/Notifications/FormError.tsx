@@ -1,14 +1,22 @@
 import { Transition } from '@headlessui/react'
-import { CheckCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
+import { Toast } from 'react-hot-toast'
 
-export default function FormError({ dismiss, t, message }) {
+interface Props {
+  dismiss: (id: string) => void
+  t: Toast
+
+  message?: string
+}
+
+export default function FormError({ dismiss, t, message }: Props) {
   const [show, setShow] = useState(true)
   return (
     <div
       className={`${
         t.visible ? 'animate-enter' : 'animate-leave'
-      } max-w-md w-full bg-white rounded-lg pointer-events-auto flex ring-1 ring-primary ring-opacity-5`}
+      } max-w-md w-full bg-white rounded-lg pointer-events-auto flex`}
     >
       <div className="flex w-full flex-col items-center space-y-4 sm:items-end">
         {/* Notification panel, dynamically insert this into the live region when it needs to be displayed */}
@@ -22,15 +30,15 @@ export default function FormError({ dismiss, t, message }) {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+          <div className="pointer-events-auto w-full overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
             <div className="p-4">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />
+                  <ExclamationTriangleIcon className="h-6 w-6 text-primary-400" aria-hidden="true" />
                 </div>
                 <div className="ml-3 w-0 flex-1 pt-0.5">
-                  <p className="text-sm font-medium text-gray-900">Warning!</p>
-                  <p className="mt-1 text-sm text-gray-500">{message}</p>
+                  <p className="text-sm font-medium text-gray-900">{message}</p>
+                  <p className="mt-1 text-sm text-gray-500"></p>
                 </div>
                 <div className="ml-4 flex flex-shrink-0">
                   <button

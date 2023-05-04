@@ -49,7 +49,7 @@ const GlobalProvider = ({ children }: Props) => {
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <SessionProvider session={session}>
     <GlobalProvider>
-      <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 2000 }} />
+      <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 3000 }} />
       <Component {...pageProps} />
     </GlobalProvider>
   </SessionProvider>
