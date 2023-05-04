@@ -51,7 +51,11 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
         Header: 'Price',
         accessor: 'price',
         //TODO: format price
-        Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value} €</span>
+        Cell: ({ value, row: { original } }: CellProps<OrderLineFormType>) => (
+          <span>
+            {value} <span className="font-medium">{original.currency}</span>
+          </span>
+        )
       }
     ],
     [setOrderLine, deleteOrderLine, disabledEdit]

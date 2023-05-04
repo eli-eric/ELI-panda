@@ -3,15 +3,15 @@ import moment from 'moment'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Fragment, useEffect } from 'react'
-import { FormProvider, useFieldArray, useForm, useFormState } from 'react-hook-form'
+import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import uuid from 'react-uuid'
 import { array, object, string } from 'yup'
 
 import FileManager from '@/components/fileManager/FileManager'
-import FormError from '@/components/Notifications/FormError'
 import { convertDate } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/useEndpoint'
+import useFormStateNotification from '@/hooks/useFormStateNotification'
 import useSubmit from '@/hooks/useSubmit'
 import { FILE_TYPE } from '@/types/constants/files'
 import { PATH } from '@/types/constants/paths'
@@ -22,26 +22,24 @@ import HeaderComponent from './components/Header.comp'
 import OrderLinesTable from './components/orderLines/OrderLines.table'
 import { OrderDetailFormType, OrderLineFormType } from './types'
 
-const numberSchema = {
+const schema = object({
+  name: string().required("Order's name is required"),
+  supplier: object(),
+  orderStatus: object(),
+  orderNumber: string(),
+  requestNumber: string(),
+  contractNumber: string(),
+  notes: string(),
+  orderDate: string(),
+  orderLines: array().min(1, 'Order must have at least one Order Line'),
   atLeastOneFilled: string().test(
+    'at-least-one-filled',
     'At least one of Order Number, Request Number or Contract Number must be filled',
     function () {
       const { orderNumber, requestNumber, contractNumber } = this.parent
       return Boolean(orderNumber || requestNumber || contractNumber)
     }
   )
-}
-
-const schema = object({
-  name: string().required("Order's name is required"),
-  supplier: object(),
-  orderStatus: object(),
-  orderNumber: numberSchema.atLeastOneFilled,
-  requestNumber: numberSchema.atLeastOneFilled,
-  contractNumber: numberSchema.atLeastOneFilled,
-  notes: string(),
-  orderDate: string(),
-  orderLines: array().min(1, 'Order must have at least one Order Line')
 })
 
 interface Props {
@@ -70,7 +68,6 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
   const onSubmit = data => {
     submit({ ...data, orderDate: convertDate(data.orderDate) })
   }
-
   const formMethods = useForm<OrderDetailFormType>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -85,7 +82,7 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
   //  set the form methods to be used in the order lines
   const { control, setValue } = formMethods
   const { insert, update, fields, remove } = useFieldArray<OrderDetailFormType>({ control, name: 'orderLines' })
-  const { errors, isSubmitted } = useFormState<OrderDetailFormType>({ control })
+  useFormStateNotification<OrderDetailFormType>({ control })
 
   // set the order date to the current date if it is a new order
   useEffect(() => {
@@ -93,20 +90,6 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
       setValue('orderDate', moment(OrderDetail.orderDate).utc().format('YYYY-MM-DD'))
     }
   }, [OrderDetail, setValue])
-
-  //  check if there is any error in the form and show it
-  useEffect(() => {
-    const ErrorArray = Object.keys(errors || {})
-    if (isSubmitted) {
-      ErrorArray.length > 0 &&
-        ErrorArray.forEach(error => {
-          const fieldError = errors[error]
-          if (fieldError && 'message' in fieldError) {
-            toast.custom(t => <FormError t={t} dismiss={toast.dismiss} message={fieldError?.message as string} />)
-          }
-        })
-    }
-  }, [isSubmitted, errors])
 
   //  set the order lines to the form
   const setOrderLine = (orderLine: OrderLineFormType) => {

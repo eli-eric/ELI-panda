@@ -1,6 +1,6 @@
 import { useFormContext } from 'react-hook-form'
 
-import { useMakeFormFields } from '@/hooks/form'
+import { useMakeFormFields } from '@/hooks/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 
@@ -26,7 +26,7 @@ const useOrderFormFields = (disabled?: boolean) => {
       label: form.orderNumber.label,
       placeholder: form.orderNumber.placeholder,
       disabled: disabled,
-      isError: !!formState.errors.orderNumber,
+      isError: !!formState.errors.atLeastOneFilled,
       rounded: 'rounded-md'
     },
     requestNumber: {
@@ -34,7 +34,7 @@ const useOrderFormFields = (disabled?: boolean) => {
       label: form.requestNumber.label,
       placeholder: form.requestNumber.placeholder,
       disabled: disabled,
-      isError: !!formState.errors.requestNumber,
+      isError: !!formState.errors.atLeastOneFilled,
       rounded: 'rounded-md'
     },
     contractNumber: {
@@ -42,7 +42,7 @@ const useOrderFormFields = (disabled?: boolean) => {
       label: form.contractNumber.label,
       placeholder: form.contractNumber.placeholder,
       disabled: disabled,
-      isError: !!formState.errors.contractNumber,
+      isError: !!formState.errors.atLeastOneFilled,
       rounded: 'rounded-md'
     },
     supplier: {

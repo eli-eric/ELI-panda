@@ -1,6 +1,6 @@
 import { useFormContext } from 'react-hook-form'
 
-import { useMakeFormFields } from '@/hooks/form'
+import { useMakeFormFields } from '@/hooks/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import { OrderLineFormType } from '@/modules/orderItem/types'
 import { CODEBOOK } from '@/types/constants/codebook'
@@ -42,7 +42,9 @@ const useOrderLineFormFields = (enabled: boolean) => {
       isError: !!formState.errors.price,
       rounded: 'rounded-md',
       type: 'number',
-      isAmount: true
+      inputMode: 'numeric',
+      pattern: 'd*',
+      defaultValue: undefined
     },
     quantity: {
       name: 'quantity',

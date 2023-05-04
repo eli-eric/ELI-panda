@@ -1,7 +1,7 @@
 import { useFormContext } from 'react-hook-form'
 
-import { useMakeFormFields } from '@/hooks/form'
 import { useCodebookSelectValues } from '@/hooks/useCodebook'
+import { useMakeFormFields } from '@/hooks/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import { SystemEditFormType } from '@/modules/systems/types/form'
 import { CODEBOOK } from '@/types/constants/codebook'

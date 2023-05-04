@@ -66,12 +66,12 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
 
   const modalButtons: ModalButtons = {
     goNext: {
-      text: intl.formatMessage({ id: buttons.continue }),
+      text: buttons.continue,
       type: 'submit',
       loading: loading
     },
     goBack: {
-      text: intl.formatMessage({ id: buttons.cancel }),
+      text: buttons.cancel,
       type: 'button',
       onClick: () => {
         setOpen(false)

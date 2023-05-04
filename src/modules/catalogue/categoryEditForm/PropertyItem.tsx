@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
-import { InputWithError } from '@/components/form/Input'
+import { Input } from '@/components/form/Input'
 import { SelectWithError } from '@/components/form/Select'
 import { useCodebookSelectValues } from '@/hooks/useCodebook'
 import { CategoryFormType, Property } from '@/types/catalogue/categoryFormTypes'
@@ -19,7 +19,7 @@ const ValueItem = ({ removeValue, index, name, errors }) => {
   }
   return (
     <div className="flex">
-      <InputWithError
+      <Input
         rounded="rounded-l-md"
         register={register}
         name={`${name}.value`}
@@ -80,7 +80,7 @@ const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lengh
         <div className="flex flex-row flex-grow max-md:flex-wrap">
           <MoveButtons moveDown={moveDown} moveUp={moveUp} lenght={lenght} index={index} />
 
-          <InputWithError
+          <Input
             register={register}
             name={`${name}.name`}
             placeholder="Property name"
@@ -111,7 +111,7 @@ const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lengh
               }
             />
           ) : (
-            <InputWithError
+            <Input
               register={register}
               name={`${name}.defaultValue`}
               type={PROPERTY_INPUT_TYPE[type]}

@@ -4,7 +4,7 @@ import { message } from 'src/i18n/src/messages'
 
 import { Button } from '@/components/Buttons'
 import EliLogoComponent from '@/components/eli-logo.comp'
-import { InputWithError } from '@/components/form/Input'
+import { Input } from '@/components/form/Input'
 
 const { title, form } = message.authPage
 const authButtonMessages = message.authPage.form.button
@@ -42,7 +42,7 @@ const AuthFormComponent = ({ onSubmit, register, formState, handleSubmit, loadin
                 <FormattedMessage id={form.userName} />
               </label>
               <div className="mt-1">
-                <InputWithError
+                <Input
                   id="text"
                   name="username"
                   rounded="rounded-md"
@@ -59,7 +59,7 @@ const AuthFormComponent = ({ onSubmit, register, formState, handleSubmit, loadin
                 <FormattedMessage id={form.password} />
               </label>
               <div className="mt-1">
-                <InputWithError
+                <Input
                   id="password"
                   rounded="rounded-md"
                   name="password"
@@ -72,9 +72,7 @@ const AuthFormComponent = ({ onSubmit, register, formState, handleSubmit, loadin
             </div>
 
             <Button primary loading={loading} type="submit" className="w-full justify-center">
-              <FormattedMessage
-                id={loading ? authButtonMessages.isLoading : authButtonMessages.default}
-              />
+              <FormattedMessage id={loading ? authButtonMessages.isLoading : authButtonMessages.default} />
             </Button>
           </form>
         </div>

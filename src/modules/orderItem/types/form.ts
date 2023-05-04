@@ -23,5 +23,6 @@ export type OrderLineFormType = {
   catalogueNumber: string
   system?: CodebookType
   price?: number
+  currency?: string
   quantity?: number
 }
