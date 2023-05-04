@@ -16,7 +16,7 @@ export default function FormError({ dismiss, t, message }: Props) {
     <div
       className={`${
         t.visible ? 'animate-enter' : 'animate-leave'
-      } max-w-md w-full bg-white rounded-lg pointer-events-auto flex`}
+      }  w-[800px] bg-white rounded-lg pointer-events-auto flex`}
     >
       <div className="flex w-full flex-col items-center space-y-4 sm:items-end">
         {/* Notification panel, dynamically insert this into the live region when it needs to be displayed */}
@@ -38,7 +38,6 @@ export default function FormError({ dismiss, t, message }: Props) {
                 </div>
                 <div className="ml-3 w-0 flex-1 pt-0.5">
                   <p className="text-sm font-medium text-gray-900">{message}</p>
-                  <p className="mt-1 text-sm text-gray-500"></p>
                 </div>
                 <div className="ml-4 flex flex-shrink-0">
                   <button
