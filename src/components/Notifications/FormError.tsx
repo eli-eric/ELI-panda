@@ -6,7 +6,6 @@ import { Toast } from 'react-hot-toast'
 interface Props {
   dismiss: (id: string) => void
   t: Toast
-
   message?: string
 }
 

@@ -208,6 +208,7 @@ export const messages = {
         orderDate: { label: 'Date' }
       }
     },
+    deleteModal: { title: 'Warning', message: 'Are you sure you want to delete this order?' },
     orderLines: {
       form: {
         name: { label: 'Name', placeholder: 'Name' },

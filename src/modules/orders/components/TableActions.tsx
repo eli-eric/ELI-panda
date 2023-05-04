@@ -7,9 +7,13 @@ import { Button } from '@/components/Buttons'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
+import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import { ModalButtons } from '@/types/form'
+
+const buttonsMessage = message.common.buttons
+const modalMessage = message.ordersPage.deleteModal
 
 export const TableActions = ({ uid, mutate }: { uid: string; mutate: string }) => {
   const { data: session } = useSession()
@@ -29,14 +33,14 @@ export const TableActions = ({ uid, mutate }: { uid: string; mutate: string }) =
 
   const deleteButtons: ModalButtons = {
     goNext: {
-      text: 'Cancel',
+      text: buttonsMessage.continue,
       loading: deleteSubmit.loading,
       onClick: () => {
         deleteSubmit.submit()
       }
     },
     goBack: {
-      text: 'Cancel',
+      text: buttonsMessage.cancel,
       onClick: () => {
         setOpenDeleteWarn(false)
       }
@@ -82,9 +86,9 @@ export const TableActions = ({ uid, mutate }: { uid: string; mutate: string }) =
         buttons={deleteButtons}
         open={openDeleteWarn}
         setOpen={setOpenDeleteWarn}
-        title="Warning"
-        message="Are sure you want delete this system?"
-        testid="SystemDelete"
+        title={modalMessage.title}
+        message={modalMessage.message}
+        testid="OrderDeleteModal"
         error={deleteSubmit.error}
       />
     </div>
