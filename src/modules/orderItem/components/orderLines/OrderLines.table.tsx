@@ -49,7 +49,7 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
       },
       {
         Header: 'Price',
-        accessor: 'priceEur',
+        accessor: 'price',
         //TODO: format price
         Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value} €</span>
       }
