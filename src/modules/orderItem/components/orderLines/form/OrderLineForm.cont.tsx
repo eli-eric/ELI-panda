@@ -20,7 +20,7 @@ const orderLineFormSchema = object({
     name: string().required(),
     uid: string().required()
   }),
-  price: string(),
+  price: number(),
   quantity: number().min(1).max(100)
 })
 
@@ -28,6 +28,7 @@ const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
   const [catalogueItem, setCatalogueItem] = useState<CatalogueItem | undefined>(undefined)
 
   const modalSubmit = (data: OrderLineFormType) => {
+    console.log(data)
     const dataToSend = { ...data }
     delete dataToSend.quantity
     if (data.quantity) {
