@@ -36,10 +36,10 @@ const useOrderLineFormFields = (enabled: boolean) => {
       codebook: CODEBOOK.SYSTEM
     },
     price: {
-      name: 'priceEur',
+      name: 'price',
       label: form.price.label,
       placeholder: form.price.placeholder,
-      isError: !!formState.errors.priceEur,
+      isError: !!formState.errors.price,
       rounded: 'rounded-md',
       type: 'number',
       isAmount: true
