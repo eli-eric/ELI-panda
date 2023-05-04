@@ -8,7 +8,7 @@ import ModalComponent from '@/components/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
 import { ModalButtons } from '@/types/form'
 
-import useFormStateNotification from './useFormStateNotification'
+import useFormNotification from './useFormNotification'
 
 const messages = message.common.buttons
 
@@ -33,21 +33,21 @@ const useFormModal = <T extends FieldValues>({
 }: useFormModalProps<T>) => {
   const [open, setOpen] = useState(false)
   const formMethods = useForm<T>({ defaultValues: defaultValues, resolver: yupResolver(schema) })
-  const { handleSubmit, reset, control } = formMethods
-  const { isSubmitting, isSubmitSuccessful } = useFormStateNotification<T>({ control })
+  const { handleSubmit, reset, control, formState } = formMethods
+  useFormNotification<T>({ control })
   useEffect(() => {
-    if (isSubmitSuccessful) {
+    if (formState.isSubmitSuccessful) {
       if (!error) {
         reset()
         setOpen(false)
       }
     }
-  }, [isSubmitSuccessful, error, reset])
+  }, [formState, error, reset])
 
   const modalButtons: ModalButtons = {
     goNext: {
       text: messages.save,
-      loading: isSubmitting,
+      loading: formState.isSubmitting,
       type: 'submit'
     },
     goBack: {

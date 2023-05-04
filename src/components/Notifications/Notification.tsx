@@ -1,15 +1,13 @@
 import { Transition } from '@headlessui/react'
-import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { CheckCircleIcon, ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
-import { Toast } from 'react-hot-toast'
+import { resolveValue, Toast, toast } from 'react-hot-toast'
 
 interface Props {
-  dismiss: (id: string) => void
   t: Toast
-  message?: string
 }
 
-export default function FormError({ dismiss, t, message }: Props) {
+const Notification = ({ t }: Props) => {
   const [show, setShow] = useState(true)
   return (
     <div
@@ -33,10 +31,13 @@ export default function FormError({ dismiss, t, message }: Props) {
             <div className="p-4">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <ExclamationTriangleIcon className="h-6 w-6 text-primary-400" aria-hidden="true" />
+                  {t.type === 'error' && (
+                    <ExclamationTriangleIcon className="h-6 w-6 text-red-400" aria-hidden="true" />
+                  )}
+                  {t.type === 'success' && <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />}
                 </div>
                 <div className="ml-3 w-0 flex-1 pt-0.5">
-                  <p className="text-sm font-medium text-gray-900">{message}</p>
+                  <p className="text-sm font-medium text-gray-900">{resolveValue(t.message, t)}</p>
                 </div>
                 <div className="ml-4 flex flex-shrink-0">
                   <button
@@ -44,7 +45,7 @@ export default function FormError({ dismiss, t, message }: Props) {
                     className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     onClick={() => {
                       setShow(false)
-                      dismiss(t.id)
+                      toast.dismiss(t.id)
                     }}
                   >
                     <span className="sr-only">Close</span>
@@ -59,3 +60,5 @@ export default function FormError({ dismiss, t, message }: Props) {
     </div>
   )
 }
+
+export default Notification

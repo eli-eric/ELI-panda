@@ -11,7 +11,7 @@ import { array, object, string } from 'yup'
 import FileManager from '@/components/fileManager/FileManager'
 import { convertDate } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/useEndpoint'
-import useFormStateNotification from '@/hooks/useFormStateNotification'
+import useFormNotification from '@/hooks/useFormNotification'
 import useSubmit from '@/hooks/useSubmit'
 import { FILE_TYPE } from '@/types/constants/files'
 import { PATH } from '@/types/constants/paths'
@@ -24,7 +24,7 @@ import { OrderDetailFormType, OrderLineFormType } from './types'
 
 const schema = object({
   name: string().required("Order's name is required"),
-  supplier: object(),
+  supplier: object().nullable(),
   orderStatus: object(),
   orderNumber: string(),
   requestNumber: string(),
@@ -61,7 +61,7 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
       toast.success(`Order ${uid} saved successfully`)
       router.push(PATH.ORDER_EDIT + '/' + uid)
     },
-    onError: e => toast.error(e.message, { style: { textAlign: 'left' } })
+    onError: e => toast.error(e.message)
   })
 
   //  submit the form
@@ -82,7 +82,7 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
   //  set the form methods to be used in the order lines
   const { control, setValue } = formMethods
   const { insert, update, fields, remove } = useFieldArray<OrderDetailFormType>({ control, name: 'orderLines' })
-  useFormStateNotification<OrderDetailFormType>({ control })
+  useFormNotification<OrderDetailFormType>({ control })
 
   // set the order date to the current date if it is a new order
   useEffect(() => {

@@ -33,8 +33,6 @@ const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
       delete dataToSend.price
     }
     delete dataToSend.quantity
-
-    console.log(dataToSend)
     if (data.quantity) {
       delete dataToSend.id
       for (let i = 0; i < data.quantity; i++) {
