@@ -54,7 +54,7 @@ export const Button = ({
       className,
       rounded,
       disabled ? 'bg-gray-200 text-gray-400' : '',
-      loading ? 'bg-primary-700' : `bg-${!primary ? 'white' : 'primary-600'}`,
+      loading ? 'bg-primary-700' : `bg-${!primary ? 'white' : 'primary-500'}`,
       buttonSize === 'small' ? 'px-1 py-1' : 'px-2 py-2',
       !primary ? !disabled && 'hover:bg-gray-100 text-gray-600' : !disabled && 'hover:bg-primary-700 text-white',
       'relative text-sm font-medium shadow-sm z-10 inline-flex items-center border border-gray-300 focus:outline-none focus:ring-0 focus:ring-primary-500'

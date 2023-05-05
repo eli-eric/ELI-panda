@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 
 import { BackButton, Button } from '@/components/Buttons'
 import { message } from '@/i18n/src/messages'
+import { PATH } from '@/types/constants/paths'
 
 interface Props {
   loading?: boolean
@@ -20,10 +21,9 @@ const HeaderComponent = ({ loading, disabledEdit }: Props) => {
             type="button"
             buttonSize="large"
             onClick={() => {
-              router.back()
+              router.push(PATH.ORDERS)
             }}
           />
-
           {!disabledEdit && <Button primary buttonSize="large" loading={loading} type="submit" text={messages.save} />}
         </div>
       </div>
