@@ -1,13 +1,9 @@
 import { Fragment, useState } from 'react'
-import { FormattedMessage } from 'react-intl'
 
-import { Button } from '@/components/Buttons'
-import { message } from '@/i18n/src/messages'
+import { PlusButton } from '@/components/Buttons'
 import ItemDetailComponent from '@/modules/catalogueItem/item-detail.comp'
 
 import CatalogueItemModal from './components/CatalogueItemModal'
-
-const { addButton } = message.systemsPage.catalogueItem
 
 const CatalogueItemSection = ({ uid }: { uid?: string }) => {
   const [openAddItem, setOpenAddItem] = useState(false)
@@ -17,14 +13,13 @@ const CatalogueItemSection = ({ uid }: { uid?: string }) => {
       {uid ? (
         <ItemDetailComponent uid={uid} />
       ) : (
-        <Button
+        <PlusButton
           primary
+          buttonSize="large"
           onClick={() => {
             setOpenAddItem(true)
           }}
-        >
-          <FormattedMessage id={addButton} />
-        </Button>
+        />
       )}
       <CatalogueItemModal open={openAddItem} setOpen={setOpenAddItem} />
     </Fragment>
