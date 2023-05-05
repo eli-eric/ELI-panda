@@ -1,6 +1,6 @@
 import { ArrowDownTrayIcon, TrashIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
-import { Fragment, useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'react-hot-toast'
 import { CellProps, Column } from 'react-table'
@@ -82,33 +82,32 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   const columns = useMemo(() => {
     const cols: Column<FileItem>[] = [
       {
-        Header: 'Action',
-        accessor: 'id',
+        Header: 'Files',
+        accessor: 'name',
         Cell: ({
           value,
           row: {
             original: { url }
           }
         }: CellProps<FileItem>) => (
-          <Fragment>
-            {hasEditRole && (
-              <Button buttonSize="small" className="mr-1" onClick={() => withWarningModal(handleDelete)(value)}>
-                <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
-              </Button>
-            )}
-            <Link href={url} passHref legacyBehavior={true}>
-              <a target="_blank">
-                <Button buttonSize="small">
-                  <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
+          <div className="flex items-center">
+            <div className="py-1">
+              <Link href={url} passHref legacyBehavior={true}>
+                <a target="_blank">
+                  <Button buttonSize="small" className="mr-1">
+                    <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
+                  </Button>
+                </a>
+              </Link>
+              {hasEditRole && (
+                <Button buttonSize="small" onClick={() => withWarningModal(handleDelete)(value)}>
+                  <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
                 </Button>
-              </a>
-            </Link>
-          </Fragment>
+              )}
+            </div>
+            <span className="pl-4">{value}</span>
+          </div>
         )
-      },
-      {
-        Header: 'File Name',
-        accessor: 'name'
       }
     ]
 

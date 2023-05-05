@@ -8,6 +8,7 @@ import toast from 'react-hot-toast'
 import uuid from 'react-uuid'
 import { array, object, string } from 'yup'
 
+import { Heading } from '@/components/card/card.comp'
 import FileManager from '@/components/fileManager/FileManager'
 import { convertDate } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/useEndpoint'
@@ -118,21 +119,26 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
           </div>
         </FormProvider>
       </form>
-      <OrderLinesTable
-        orderLines={fields as OrderLineFormType[]}
-        setOrderLine={setOrderLine}
-        deleteOrderLine={deleteOrderLine}
-        disabledEdit={disabledEdit}
-      />
-      {uid && (
-        <div className="flex flex-col mx-auto max-w-7xl px-4 sm:px-6 md:px-8 flex-1 justify-between">
-          <FileManager
-            itemType={FILE_TYPE.ORDER}
-            uid={uid}
-            hasEditRole={!disabledEdit && session?.user.roles.includes(ROLE.ORDERS_EDIT)}
-          />
-        </div>
-      )}
+      <div className="flex flex-col mx-auto max-w-7xl px-4 sm:px-6 md:px-8 flex-1 justify-between">
+        <Heading text="Order Lines" />
+        <OrderLinesTable
+          orderLines={fields as OrderLineFormType[]}
+          setOrderLine={setOrderLine}
+          deleteOrderLine={deleteOrderLine}
+          disabledEdit={disabledEdit}
+        />
+
+        {uid && (
+          <Fragment>
+            <Heading text="Files" />
+            <FileManager
+              itemType={FILE_TYPE.ORDER}
+              uid={uid}
+              hasEditRole={!disabledEdit && session?.user.roles.includes(ROLE.ORDERS_EDIT)}
+            />
+          </Fragment>
+        )}
+      </div>
     </Fragment>
   )
 }

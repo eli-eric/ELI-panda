@@ -3,7 +3,6 @@ import { Fragment } from 'react'
 import ComboboxComponent from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/Input'
 import ListBox from '@/components/form/Listbox'
-import Devider from '@/components/layout/Devider'
 
 import useOrderFormFields from './OrderForm.fields'
 
@@ -34,7 +33,6 @@ const OrderFormComponent = ({ disabledEdit }: Props) => {
         <div className="pt-4 grid grid-cols-12 ">
           <TextArea {...fields.notes} className="pb-1 col-span-12 pr-1" />
         </div>
-        <Devider />
       </div>
     </Fragment>
   )
