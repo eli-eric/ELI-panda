@@ -216,7 +216,8 @@ export const messages = {
         systemName: { label: 'System Name', placeholder: 'System Name' },
         price: { label: 'Price', placeholder: '0.00' },
         quantity: { label: 'Quantity', placeholder: 'Quantity' }
-      }
+      },
+      deleteModal: { title: 'Warning', message: 'Are you sure you want to delete this order line?' }
     }
   },
   orderItem: { head: 'Eli Panda - Order Item' },

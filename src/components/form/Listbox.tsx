@@ -47,10 +47,13 @@ const ListBox = <T extends FieldValues>({
   }
 
   useEffect(() => {
-    if (defaultValues && defaultValues[name]) {
-      setSelectedOption(defaultValues[name] as CodebookType)
+    if (codebookOption && codebookOption.length > 0) {
+      if (defaultValues && defaultValues[name]) {
+        setSelectedOption(defaultValues[name] as CodebookType)
+        setValue(name as Path<T>, defaultValues[name] as PathValue<T, Path<T>>)
+      }
     }
-  }, [defaultValues, name])
+  }, [defaultValues, name, setValue, codebookOption])
 
   return (
     <Fragment>

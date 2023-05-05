@@ -76,6 +76,7 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
         OrderDetail?.orderLines &&
         OrderDetail?.orderLines.map(orderLine => ({ ...orderLine, id: orderLine.uid || uuid() })),
       orderDate: moment().utc().format('YYYY-MM-DD'),
+      orderStatus: OrderDetail?.orderStatus || { uid: 'c5ef9d00-ac38-44c1-b48a-fde0d7095c54', name: 'Requested' },
       ...OrderDetail
     }
   })
