@@ -89,14 +89,15 @@ const OrdersContainer = () => {
   const columns = useMemo(
     (): Column<Order>[] => [
       {
-        Header: 'Actions',
-        Cell: ({ row }: CellProps<Order>) => <TableActions uid={row.original.uid} mutate={orders} />,
-        id: 'actions'
-      },
-      {
         Header: 'Name',
         accessor: 'name',
-        id: 'name'
+        id: 'name',
+        Cell: ({ value, row }: CellProps<Order>) => (
+          <div className="flex items-center">
+            <TableActions uid={row.original.uid} mutate={orders} />
+            <span>{value}</span>
+          </div>
+        )
       },
       {
         Header: 'Order Date',
@@ -117,13 +118,9 @@ const OrdersContainer = () => {
         Header: 'Notes',
         accessor: 'notes',
         Cell: ({ value }: CellProps<Order>) => (
-          <Fragment>
-            {value && (
-              <TooltipComponent text={value}>
-                <InformationCircleIcon className="h-6 w-6 flex-shrink-0" />
-              </TooltipComponent>
-            )}
-          </Fragment>
+          <TooltipComponent text={value}>
+            <InformationCircleIcon className="h-6 w-6 flex-shrink-0" />
+          </TooltipComponent>
         ),
         id: 'notes'
       },
@@ -156,21 +153,20 @@ const OrdersContainer = () => {
     getCellProps: ({ column }) => ({
       className: classNames(
         'min-w-[180px] max-w-[180px]',
-        column.id === 'actions' ? 'sticky left-0 z-20 bg-opacity-100 backdrop-blur backdrop-filter' : '',
         column.id === 'name'
-          ? 'sticky left-[180px] text-ellipsis z-20 bg-opacity-100 backdrop-blur backdrop-filter'
+          ? 'sticky left-0 text-ellipsis z-20 bg-opacity-100 backdrop-blur backdrop-filter'
           : 'border-l',
         column.id === 'orderDate' ? 'text-right' : '',
         column.id === 'orderNumber' ? 'text-right' : '',
         column.id === 'requestNumber' ? 'text-right' : '',
         column.id === 'contractNumber' ? 'text-right' : '',
-        column.id === 'lastUpdateTime' ? 'text-right' : ''
+        column.id === 'lastUpdateTime' ? 'text-right' : '',
+        column.id === 'notes' ? 'min-w-[90px] max-w-[90px]' : 'min-w-[180px] max-w-[180px]'
       )
     }),
     getColumnProps: ({ id }) => ({
       className: classNames(
-        id === 'actions' ? 'left-0 z-30' : '',
-        id === 'name' ? 'left-[180px] z-30 min-w-[600px] max-w-[600px]' : 'border-l',
+        id === 'name' ? 'left-0 z-30 min-w-[600px] max-w-[600px]' : 'border-l',
         id === 'notes' ? 'min-w-[90px] max-w-[90px]' : 'min-w-[180px] max-w-[180px]'
       )
     })

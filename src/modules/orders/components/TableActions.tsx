@@ -48,7 +48,7 @@ export const TableActions = ({ uid, mutate }: { uid: string; mutate: string }) =
   }
 
   return (
-    <div className="flex">
+    <div className="flex mr-4">
       {session?.user.roles.includes(ROLE.ORDERS_EDIT) && (
         <Fragment>
           <Button
