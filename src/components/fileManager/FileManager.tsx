@@ -1,4 +1,3 @@
-import { ArrowDownTrayIcon, TrashIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
@@ -7,7 +6,7 @@ import { CellProps, Column } from 'react-table'
 import useGeneralTable from 'src/hooks/useGeneralTable'
 import useSWR from 'swr'
 
-import { Button } from '@/components/Buttons'
+import { DeleteButton, DownloadButton, PlusButton } from '@/components/Buttons'
 import executeRequest from '@/helpers/executeRequest'
 import { uniFetcher } from '@/helpers/fetcher'
 import useWarningModal from '@/hooks/useWarningModal'
@@ -94,16 +93,10 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
             <div className="py-1">
               <Link href={url} passHref legacyBehavior={true}>
                 <a target="_blank">
-                  <Button buttonSize="small" className="mr-1">
-                    <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
-                  </Button>
+                  <DownloadButton className="mr-1" />
                 </a>
               </Link>
-              {hasEditRole && (
-                <Button buttonSize="small" onClick={() => withWarningModal(handleDelete)(value)}>
-                  <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
-                </Button>
-              )}
+              {hasEditRole && <DeleteButton onClick={() => withWarningModal(handleDelete)(value)} />}
             </div>
             <span className="pl-4">{value}</span>
           </div>
@@ -131,10 +124,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
       {hasEditRole && (
         <div {...getRootProps()}>
           <input {...getInputProps()} />
-          <Button className="mb-2" primary={!isDragActive}>
-            {/* <CloudArrowUpIcon className="h-5 w-5" aria-hidden="true" /> */}
-            Upload File
-          </Button>
+          <PlusButton className="mb-2" buttonSize="large" primary={!isDragActive} />
         </div>
       )}
       {getTable()}

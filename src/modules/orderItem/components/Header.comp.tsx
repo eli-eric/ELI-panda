@@ -1,12 +1,13 @@
 import { useRouter } from 'next/router'
 
-import { Button } from '@/components/Buttons'
-import { PATH } from '@/types/constants/paths'
+import { BackButton, Button } from '@/components/Buttons'
+import { message } from '@/i18n/src/messages'
 
 interface Props {
   loading?: boolean
   disabledEdit?: boolean
 }
+const messages = message.common.buttons
 
 const HeaderComponent = ({ loading, disabledEdit }: Props) => {
   const router = useRouter()
@@ -14,31 +15,16 @@ const HeaderComponent = ({ loading, disabledEdit }: Props) => {
     <div className="sticky  top-0 z-10 flex h-16 flex-shrink-0 bg-white border-b">
       <div className="flex mx-auto max-w-7xl px-4 sm:px-6 md:px-8 flex-1 justify-between">
         <div className="flex items-center mr-2">
-          <Button
+          <BackButton
             className="mr-1"
             type="button"
+            buttonSize="large"
             onClick={() => {
               router.back()
             }}
-          >
-            {disabledEdit ? 'Back' : 'Cancel'}
-          </Button>
-          {!disabledEdit ? (
-            <Button primary loading={loading}>
-              Save
-            </Button>
-          ) : (
-            <Button
-              primary
-              loading={loading}
-              type="button"
-              onClick={() => {
-                router.push(PATH.ORDER_EDIT + '/' + router.query.uid)
-              }}
-            >
-              Edit
-            </Button>
-          )}
+          />
+
+          {!disabledEdit && <Button primary buttonSize="large" loading={loading} type="submit" text={messages.save} />}
         </div>
       </div>
     </div>

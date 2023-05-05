@@ -1,7 +1,6 @@
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 
-import { Button } from '@/components/Buttons'
+import { DeleteButton, EditButton } from '@/components/Buttons'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { OrderLineFormType } from '@/modules/orderItem/types'
 import { ModalButtons } from '@/types/form'
@@ -44,26 +43,18 @@ export const OrderLineActionButtons = ({
   return (
     <div className="flex">
       <Fragment>
-        <Button
+        <EditButton
           className="mr-1"
-          buttonSize="small"
           onClick={() => {
             setOpen(true)
           }}
-          rounded="rounded-md"
-        >
-          <PencilSquareIcon className="h-5 w-5" aria-hidden="true" />
-        </Button>
-        <Button
+        />
+        <DeleteButton
           className="mr-1"
-          buttonSize="small"
           onClick={() => {
             setOpenDeleteWarn(true)
           }}
-          rounded="rounded-md"
-        >
-          <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
-        </Button>
+        />
       </Fragment>
       {getFormModal()}
       <WarningModal

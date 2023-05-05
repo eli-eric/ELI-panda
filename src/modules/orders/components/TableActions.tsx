@@ -1,9 +1,8 @@
-import { FolderIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Fragment, useState } from 'react'
 
-import { Button } from '@/components/Buttons'
+import { DeleteButton, DetailButton, EditButton } from '@/components/Buttons'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
@@ -49,39 +48,29 @@ export const TableActions = ({ uid, mutate }: { uid: string; mutate: string }) =
 
   return (
     <div className="flex mr-4">
-      {session?.user.roles.includes(ROLE.ORDERS_EDIT) && (
+      {session?.user.roles.includes(ROLE.ORDERS_EDIT) ? (
         <Fragment>
-          <Button
+          <EditButton
             className="mr-1"
-            buttonSize="small"
             onClick={() => {
-              router.push(PATH.ORDER_EDIT + '/' + uid)
+              router.push(PATH.ORDER + '/' + uid)
             }}
-            rounded="rounded-md"
-          >
-            <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
-          </Button>
-          <Button
+          />
+          <DeleteButton
             className="mr-1"
-            buttonSize="small"
             onClick={() => {
               setOpenDeleteWarn(true)
             }}
-            rounded="rounded-md"
-          >
-            <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
-          </Button>
+          />
         </Fragment>
+      ) : (
+        <DetailButton
+          onClick={() => {
+            router.push(PATH.ORDER + '/' + uid)
+          }}
+        />
       )}
-      <Button
-        buttonSize="small"
-        onClick={() => {
-          router.push(PATH.ORDER_DETAIL + '/' + uid)
-        }}
-        rounded="rounded-md"
-      >
-        <FolderIcon className="h-4 w-4" aria-hidden="true" />
-      </Button>
+
       <WarningModal
         buttons={deleteButtons}
         open={openDeleteWarn}

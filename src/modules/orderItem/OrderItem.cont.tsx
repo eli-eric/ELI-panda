@@ -45,12 +45,12 @@ const schema = object({
 
 interface Props {
   OrderDetail?: OrderDetailFormType
-  disabledEdit?: boolean
 }
 
-const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
+const OrderItemContainer = ({ OrderDetail }: Props) => {
   const router = useRouter()
   const { data: session } = useSession()
+  const disabledEdit = !session?.user.roles.includes(ROLE.ORDERS_EDIT)
   const uid = router.query.uid as string
   const { order } = useEndpoint({ uid })
 
@@ -60,7 +60,7 @@ const OrderItemContainer = ({ OrderDetail, disabledEdit }: Props) => {
     method: uid ? 'put' : 'post',
     onSuccess: uid => {
       toast.success(`Order ${uid} saved successfully`)
-      router.push(PATH.ORDER_EDIT + '/' + uid)
+      router.push(PATH.ORDER + '/' + uid)
     },
     onError: e => toast.error(e.message)
   })

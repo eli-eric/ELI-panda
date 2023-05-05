@@ -1,4 +1,4 @@
-import { ArrowPathIcon, InformationCircleIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { ArrowPathIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Fragment, useEffect, useMemo, useState } from 'react'
@@ -6,7 +6,7 @@ import { FormattedDate } from 'react-intl'
 import { CellProps, Column } from 'react-table'
 import useSWR, { useSWRConfig } from 'swr'
 
-import { Button } from '@/components/Buttons'
+import { Button, PlusButton } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/catalog-layout.cont'
 import TooltipComponent from '@/components/tooltip.comp'
@@ -36,20 +36,17 @@ const OrdersContainer = () => {
           onClick={() => {
             mutate(url, undefined, { revalidate: true })
           }}
-          rounded="rounded-md"
         >
-          <ArrowPathIcon className="h-4 w-4" aria-hidden="true" />
+          <ArrowPathIcon className="h-5 w-5" aria-hidden="true" />
         </Button>
-        <Button
+        <PlusButton
           primary
           className="mr-1"
+          buttonSize="large"
           onClick={() => {
-            router.push(PATH.ORDER_NEW)
+            router.push(PATH.ORDER)
           }}
-          rounded="rounded-md"
-        >
-          <PlusIcon className="h-4 w-4" aria-hidden="true" />
-        </Button>
+        />
       </div>
     )
   })
@@ -93,7 +90,7 @@ const OrdersContainer = () => {
         accessor: 'name',
         id: 'name',
         Cell: ({ value, row }: CellProps<Order>) => (
-          <div className="flex items-center">
+          <div className="flex items-center my-1">
             <TableActions uid={row.original.uid} mutate={orders} />
             <span>{value}</span>
           </div>
@@ -128,9 +125,7 @@ const OrdersContainer = () => {
         Header: 'Last Update Time',
         accessor: 'lastUpdateTime',
         Cell: ({ value }: CellProps<Order>) => (
-          <span className="text-right">
-            <FormattedDate value={value} day="2-digit" month="long" year="numeric" />
-          </span>
+          <FormattedDate value={value} day="2-digit" month="long" year="numeric" />
         ),
         id: 'lastUpdateTime'
       },

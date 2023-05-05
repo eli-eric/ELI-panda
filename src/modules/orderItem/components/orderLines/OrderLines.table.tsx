@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { CellProps, Column } from 'react-table'
 
-import { Button } from '@/components/Buttons'
+import { PlusButton } from '@/components/Buttons'
 import useGeneralTable from '@/hooks/useGeneralTable'
 
 import { OrderLineFormType } from '../../types'
@@ -21,20 +21,18 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
   const columns = useMemo((): Column<OrderLineFormType>[] => {
     const cols: Column<OrderLineFormType>[] = [
       {
-        Header: 'Actions',
-        Cell: (props: CellProps<OrderLineFormType>) => (
-          <div className="py-1">
+        Header: 'Name',
+        accessor: 'name',
+        Cell: ({ value, row: { original } }: CellProps<OrderLineFormType>) => (
+          <div className="flex items-center my-1">
             <OrderLineActionButtons
-              orderLine={props.row.original}
+              orderLine={original}
               setOrderLine={setOrderLine}
               deleteOrderLine={deleteOrderLine}
             />
+            <span>{value}</span>
           </div>
         )
-      },
-      {
-        Header: 'Name',
-        accessor: 'name'
       },
       {
         Header: 'Catalogue Number',
@@ -67,15 +65,14 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
     <div className="flex flex-col">
       {!disabledEdit && (
         <div className="flex items-center mr-2">
-          <Button
+          <PlusButton
             primary
+            buttonSize="large"
             onClick={() => {
               setOpen(true)
             }}
             className="mb-2"
-          >
-            Add Order line
-          </Button>
+          />
         </div>
       )}
       <div className="grid grid-cols-12">{getTable()}</div>
