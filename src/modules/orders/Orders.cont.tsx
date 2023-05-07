@@ -1,4 +1,4 @@
-import { ArrowPathIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { ArrowPathIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Fragment, useEffect, useMemo, useState } from 'react'
@@ -6,9 +6,10 @@ import { FormattedDate } from 'react-intl'
 import { CellProps, Column } from 'react-table'
 import useSWR, { useSWRConfig } from 'swr'
 
-import { Button } from '@/components/Buttons'
+import { Button, PlusButton } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/catalog-layout.cont'
+import TooltipComponent from '@/components/tooltip.comp'
 import { classNames } from '@/helpers'
 import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
@@ -35,19 +36,17 @@ const OrdersContainer = () => {
           onClick={() => {
             mutate(url, undefined, { revalidate: true })
           }}
-          rounded="rounded-md"
         >
-          <ArrowPathIcon className="h-4 w-4" aria-hidden="true" />
+          <ArrowPathIcon className="h-5 w-5" aria-hidden="true" />
         </Button>
-        <Button
+        <PlusButton
+          primary
           className="mr-1"
+          buttonSize="large"
           onClick={() => {
-            router.push(PATH.ORDER_NEW)
+            router.push(PATH.ORDER)
           }}
-          rounded="rounded-md"
-        >
-          <PlusIcon className="h-4 w-4" aria-hidden="true" />
-        </Button>
+        />
       </div>
     )
   })
@@ -87,14 +86,15 @@ const OrdersContainer = () => {
   const columns = useMemo(
     (): Column<Order>[] => [
       {
-        Header: 'Actions',
-        Cell: ({ row }: CellProps<Order>) => <TableActions uid={row.original.uid} mutate={orders} />,
-        id: 'actions'
-      },
-      {
         Header: 'Name',
         accessor: 'name',
-        id: 'name'
+        id: 'name',
+        Cell: ({ value, row }: CellProps<Order>) => (
+          <div className="flex items-center my-1">
+            <TableActions uid={row.original.uid} mutate={orders} />
+            <span>{value}</span>
+          </div>
+        )
       },
       {
         Header: 'Order Date',
@@ -111,14 +111,21 @@ const OrdersContainer = () => {
       { Header: 'Contract Number', accessor: 'contractNumber', id: 'contractNumber' },
       { Header: 'Supplier', accessor: 'supplier' },
       { Header: 'Order Status', accessor: 'orderStatus' },
-      { Header: 'Notes', accessor: 'notes' },
+      {
+        Header: 'Notes',
+        accessor: 'notes',
+        Cell: ({ value }: CellProps<Order>) => (
+          <TooltipComponent text={value}>
+            <InformationCircleIcon className="h-6 w-6 flex-shrink-0" />
+          </TooltipComponent>
+        ),
+        id: 'notes'
+      },
       {
         Header: 'Last Update Time',
         accessor: 'lastUpdateTime',
         Cell: ({ value }: CellProps<Order>) => (
-          <span className="text-right">
-            <FormattedDate value={value} day="2-digit" month="long" year="numeric" />
-          </span>
+          <FormattedDate value={value} day="2-digit" month="long" year="numeric" />
         ),
         id: 'lastUpdateTime'
       },
@@ -141,22 +148,21 @@ const OrdersContainer = () => {
     getCellProps: ({ column }) => ({
       className: classNames(
         'min-w-[180px] max-w-[180px]',
-        column.id === 'actions' ? 'sticky left-0 z-20 bg-opacity-100 backdrop-blur backdrop-filter' : '',
         column.id === 'name'
-          ? 'sticky left-[180px] text-ellipsis min-w-[600px] max-w-[600px] z-20 bg-opacity-100 backdrop-blur backdrop-filter'
+          ? 'sticky left-0 text-ellipsis z-20 bg-opacity-100 backdrop-blur backdrop-filter'
           : 'border-l',
         column.id === 'orderDate' ? 'text-right' : '',
         column.id === 'orderNumber' ? 'text-right' : '',
         column.id === 'requestNumber' ? 'text-right' : '',
         column.id === 'contractNumber' ? 'text-right' : '',
-        column.id === 'lastUpdateTime' ? 'text-right' : ''
+        column.id === 'lastUpdateTime' ? 'text-right' : '',
+        column.id === 'notes' ? 'min-w-[90px] max-w-[90px]' : 'min-w-[180px] max-w-[180px]'
       )
     }),
     getColumnProps: ({ id }) => ({
       className: classNames(
-        id === 'actions' ? 'left-0 z-30' : '',
-        id === 'name' ? 'left-[180px] z-30 min-w-[600px] max-w-[600px]' : 'border-l',
-        'min-w-[180px] max-w-[180px]'
+        id === 'name' ? 'left-0 z-30 min-w-[600px] max-w-[600px]' : 'border-l',
+        id === 'notes' ? 'min-w-[90px] max-w-[90px]' : 'min-w-[180px] max-w-[180px]'
       )
     })
   })

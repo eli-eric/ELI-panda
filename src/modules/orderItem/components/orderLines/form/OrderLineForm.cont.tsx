@@ -16,11 +16,10 @@ interface Props {
 const orderLineFormSchema = object({
   name: string().required(),
   catalogueNumber: string().required(),
-  system: object().shape({
-    name: string().required(),
-    uid: string().required()
-  }),
-  price: string(),
+  system: object().required(),
+  price: number()
+    .transform(value => (Number.isNaN(value) ? null : value))
+    .nullable(),
   quantity: number().min(1).max(100)
 })
 
@@ -29,6 +28,10 @@ const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
 
   const modalSubmit = (data: OrderLineFormType) => {
     const dataToSend = { ...data }
+    if (!dataToSend.price) {
+      delete dataToSend.currency
+      delete dataToSend.price
+    }
     delete dataToSend.quantity
     if (data.quantity) {
       delete dataToSend.id

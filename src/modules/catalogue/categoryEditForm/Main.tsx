@@ -7,7 +7,7 @@ import useSWR from 'swr'
 
 import { Button } from '@/components/Buttons'
 import ImagePlaceHolder from '@/components/form/ImagePlaceHolder'
-import { InputWithError } from '@/components/form/Input'
+import { Input } from '@/components/form/Input'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
@@ -19,12 +19,7 @@ interface FormImageProps {
 const FormImage = ({ image, onDelete }: FormImageProps) => (
   <div className="mt-1 flex-col w-full justify-center  border-gray-300 ">
     <Image width={300} height={300} alt="" src={image} />
-    <Button
-      type="button"
-      onClick={onDelete}
-      className="w-full justify-center"
-      rounded="rounded-b-md"
-    >
+    <Button type="button" onClick={onDelete} className="w-full justify-center" rounded="rounded-b-md">
       <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
     </Button>
   </div>
@@ -80,18 +75,12 @@ const Main = ({ uid }: { uid?: string }) => {
       <div className="flex flex-col col-span-3 flex-grow ml-10">
         <div>
           <div className="mt-1">
-            <InputWithError
-              name="name"
-              label="Name"
-              register={register}
-              isError={!!errors.name?.message}
-              rounded="rounded-md"
-            />
+            <Input name="name" label="Name" register={register} isError={!!errors.name?.message} rounded="rounded-md" />
           </div>
         </div>
         <div>
           <div className="mt-1">
-            <InputWithError
+            <Input
               name="code"
               label="Code"
               register={register}

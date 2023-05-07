@@ -1,12 +1,16 @@
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 
-import { Button } from '@/components/Buttons'
+import { DeleteButton, EditButton } from '@/components/Buttons'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
+import { message } from '@/i18n/src/messages'
 import { OrderLineFormType } from '@/modules/orderItem/types'
 import { ModalButtons } from '@/types/form'
 
 import useOrderLineForm from '../form/OrderLineForm.cont'
+
+const messages = message.common.buttons
+
+const modalMessage = message.ordersPage.orderLines.deleteModal
 
 export const OrderLineActionButtons = ({
   orderLine,
@@ -23,7 +27,7 @@ export const OrderLineActionButtons = ({
 
   const deleteButtons: ModalButtons = {
     goNext: {
-      text: 'Cancel',
+      text: messages.continue,
       loading: deleteLoading,
       onClick: () => {
         setDeleteLoading(true)
@@ -34,7 +38,7 @@ export const OrderLineActionButtons = ({
       }
     },
     goBack: {
-      text: 'Cancel',
+      text: messages.cancel,
       onClick: () => {
         setOpenDeleteWarn(false)
       }
@@ -44,35 +48,27 @@ export const OrderLineActionButtons = ({
   return (
     <div className="flex">
       <Fragment>
-        <Button
+        <EditButton
           className="mr-1"
-          buttonSize="small"
           onClick={() => {
             setOpen(true)
           }}
-          rounded="rounded-md"
-        >
-          <PencilSquareIcon className="h-5 w-5" aria-hidden="true" />
-        </Button>
-        <Button
+        />
+        <DeleteButton
           className="mr-1"
-          buttonSize="small"
           onClick={() => {
             setOpenDeleteWarn(true)
           }}
-          rounded="rounded-md"
-        >
-          <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
-        </Button>
+        />
       </Fragment>
       {getFormModal()}
       <WarningModal
         buttons={deleteButtons}
         open={openDeleteWarn}
         setOpen={setOpenDeleteWarn}
-        title="Warning"
-        message="Are sure you want delete this system?"
-        testid="SystemDelete"
+        title={modalMessage.title}
+        message={modalMessage.message}
+        testid="OrderLineDelete"
       />
     </div>
   )

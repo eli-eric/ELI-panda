@@ -49,7 +49,7 @@ const ItemListRow = ({ item, index, categoryListLength, selectable }: Props) => 
               onClick={() => {
                 selectable.setItem(item)
               }}
-              className="h-4 w-4 border-gray-300 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 border-gray-300 text-primary-500 focus:ring-primary-500"
             />
           </div>
         </td>

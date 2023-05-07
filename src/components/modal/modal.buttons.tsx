@@ -1,4 +1,5 @@
 import { Fragment } from 'react'
+import { FormattedMessage } from 'react-intl'
 
 import { ModalButtons } from '@/types/form'
 
@@ -21,7 +22,7 @@ const ModalButtonsComponent = ({ testid, buttons }: Props) => (
             onClick={buttons.goBack?.onClick}
             className="inline-flex w-full justify-center sm:mt-0 sm:text-sm text-gray-700"
           >
-            {buttons.goBack?.text}
+            <FormattedMessage id={buttons.goBack?.text} />
           </Button>
         )}
         <Button
@@ -32,7 +33,7 @@ const ModalButtonsComponent = ({ testid, buttons }: Props) => (
           loading={buttons.goNext?.loading}
           className="inline-flex w-full justify-center sm:mt-0 sm:text-sm"
         >
-          {buttons.goNext?.text}
+          <FormattedMessage id={buttons.goNext?.text} />
         </Button>
       </div>
     )}

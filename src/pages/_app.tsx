@@ -10,7 +10,7 @@ import { messages } from 'src/i18n/src'
 import { SWRConfig } from 'swr'
 
 import NavigationComponent from '@/components/layout/nav-bar/nav-bar.comp'
-import Notification from '@/components/Notification'
+import Notification from '@/components/Notifications/Notification'
 import { fetcher } from '@/helpers/fetcher'
 import useLocale from '@/hooks/useLocale'
 
@@ -50,7 +50,9 @@ const GlobalProvider = ({ children }: Props) => {
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <SessionProvider session={session}>
     <GlobalProvider>
-      <Toaster toastOptions={{ duration: 3000 }}>{t => <Notification toast={t} />}</Toaster>
+      <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 3000 }}>
+        {t => <Notification t={t} />}
+      </Toaster>
       <Component {...pageProps} />
     </GlobalProvider>
   </SessionProvider>

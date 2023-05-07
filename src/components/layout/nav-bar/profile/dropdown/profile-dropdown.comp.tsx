@@ -4,10 +4,13 @@ import { Fragment, useEffect, useState } from 'react'
 
 import ModalComponent from '@/components/modal/modal.comp'
 import { classNames } from '@/helpers'
+import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
 import { ModalButtons } from '@/types/form'
 
 import ProfileCardComponent from '../card/profile-card.comp'
+
+const messages = message.common.buttons
 
 interface Props {
   open: boolean
@@ -36,7 +39,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
   }
   const modalButtons: ModalButtons = {
     goNext: {
-      text: 'Close',
+      text: messages.close,
       testid: 'modal-button-close',
       onClick: () => {
         setModalOpen(false)

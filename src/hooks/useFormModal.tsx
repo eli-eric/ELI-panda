@@ -5,7 +5,12 @@ import { DeepPartial, FieldValues, FormProvider, useForm } from 'react-hook-form
 import ErrorPage from '@/components/error/ErrorPage'
 import ModalButtonsComponent from '@/components/modal/modal.buttons'
 import ModalComponent from '@/components/modal/modal.comp'
+import { message } from '@/i18n/src/messages'
 import { ModalButtons } from '@/types/form'
+
+import useFormNotification from './useFormNotification'
+
+const messages = message.common.buttons
 
 interface useFormModalProps<T> {
   renderForm: (data: T) => JSX.Element
@@ -28,8 +33,8 @@ const useFormModal = <T extends FieldValues>({
 }: useFormModalProps<T>) => {
   const [open, setOpen] = useState(false)
   const formMethods = useForm<T>({ defaultValues: defaultValues, resolver: yupResolver(schema) })
-  const { handleSubmit, formState, reset } = formMethods
-
+  const { handleSubmit, reset, control, formState } = formMethods
+  useFormNotification<T>({ control })
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
       if (!error) {
@@ -41,12 +46,12 @@ const useFormModal = <T extends FieldValues>({
 
   const modalButtons: ModalButtons = {
     goNext: {
-      text: 'Save',
+      text: messages.save,
       loading: formState.isSubmitting,
       type: 'submit'
     },
     goBack: {
-      text: 'Cancel',
+      text: messages.close,
       type: 'button',
       onClick: () => {
         reset()

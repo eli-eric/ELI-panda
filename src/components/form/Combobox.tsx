@@ -14,6 +14,7 @@ type ComboboxProps<T extends FieldValues> = FieldProps &
     codebook?: CODEBOOK
     isObject?: boolean
     position?: 'top' | 'bottom'
+    limit?: number
   }
 
 const ComboboxComponent = <T extends FieldValues>({
@@ -26,6 +27,7 @@ const ComboboxComponent = <T extends FieldValues>({
   name,
   className,
   disabled,
+  limit = 10,
   position = 'bottom',
   rounded = 'rounded-md'
 }: ComboboxProps<T>) => {
@@ -35,7 +37,7 @@ const ComboboxComponent = <T extends FieldValues>({
   } = useFormContext<T>()
   const [query, setQuery] = useState(defaultValues?.[name] || '')
   const [selectedItem, setSelectedItem] = useState<CodebookType | null>(null)
-  const data = useCodebook(codebook, `?searchText=${query}&limit=10`, true)
+  const data = useCodebook(codebook, `?searchText=${query}&limit=${limit}`, true)
 
   useEffect(() => {
     if (defaultValues && defaultValues[name]) {
@@ -80,7 +82,7 @@ const ComboboxComponent = <T extends FieldValues>({
                   isError ? 'border-red-500' : 'border-gray-300',
                   'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                   'block w-full appearance-none',
-                  disabled ? 'opacity-50 pointer-events-none' : ''
+                  disabled ? 'bg-gray-100' : ''
                 )}
                 value={selectedItem?.name || query}
                 onChange={event => setQuery(event.target.value)}
@@ -91,7 +93,7 @@ const ComboboxComponent = <T extends FieldValues>({
                 <ChevronDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
               </div>
 
-              {selectedItem && (
+              {selectedItem && !disabled && (
                 <div
                   onClick={() => {
                     clear()

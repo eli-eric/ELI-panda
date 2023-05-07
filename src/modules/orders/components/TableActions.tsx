@@ -1,15 +1,18 @@
-import { FolderIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Fragment, useState } from 'react'
 
-import { Button } from '@/components/Buttons'
+import { DeleteButton, DetailButton, EditButton } from '@/components/Buttons'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
+import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import { ModalButtons } from '@/types/form'
+
+const buttonsMessage = message.common.buttons
+const modalMessage = message.ordersPage.deleteModal
 
 export const TableActions = ({ uid, mutate }: { uid: string; mutate: string }) => {
   const { data: session } = useSession()
@@ -29,14 +32,14 @@ export const TableActions = ({ uid, mutate }: { uid: string; mutate: string }) =
 
   const deleteButtons: ModalButtons = {
     goNext: {
-      text: 'Cancel',
+      text: buttonsMessage.continue,
       loading: deleteSubmit.loading,
       onClick: () => {
         deleteSubmit.submit()
       }
     },
     goBack: {
-      text: 'Cancel',
+      text: buttonsMessage.cancel,
       onClick: () => {
         setOpenDeleteWarn(false)
       }
@@ -44,47 +47,37 @@ export const TableActions = ({ uid, mutate }: { uid: string; mutate: string }) =
   }
 
   return (
-    <div className="flex">
-      {session?.user.roles.includes(ROLE.ORDERS_EDIT) && (
+    <div className="flex mr-4">
+      {session?.user.roles.includes(ROLE.ORDERS_EDIT) ? (
         <Fragment>
-          <Button
+          <EditButton
             className="mr-1"
-            buttonSize="small"
             onClick={() => {
-              router.push(PATH.ORDER_EDIT + '/' + uid)
+              router.push(PATH.ORDER + '/' + uid)
             }}
-            rounded="rounded-md"
-          >
-            <PencilSquareIcon className="h-5 w-5" aria-hidden="true" />
-          </Button>
-          <Button
+          />
+          <DeleteButton
             className="mr-1"
-            buttonSize="small"
             onClick={() => {
               setOpenDeleteWarn(true)
             }}
-            rounded="rounded-md"
-          >
-            <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
-          </Button>
+          />
         </Fragment>
+      ) : (
+        <DetailButton
+          onClick={() => {
+            router.push(PATH.ORDER + '/' + uid)
+          }}
+        />
       )}
-      <Button
-        buttonSize="small"
-        onClick={() => {
-          router.push(PATH.ORDER_DETAIL + '/' + uid)
-        }}
-        rounded="rounded-md"
-      >
-        <FolderIcon className="h-5 w-5" aria-hidden="true" />
-      </Button>
+
       <WarningModal
         buttons={deleteButtons}
         open={openDeleteWarn}
         setOpen={setOpenDeleteWarn}
-        title="Warning"
-        message="Are sure you want delete this system?"
-        testid="SystemDelete"
+        title={modalMessage.title}
+        message={modalMessage.message}
+        testid="OrderDeleteModal"
         error={deleteSubmit.error}
       />
     </div>
