@@ -14,6 +14,7 @@ import { convertDate } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useFormNotification from '@/hooks/useFormNotification'
 import useSubmit from '@/hooks/useSubmit'
+import useMutateListStore from '@/store/useMutateListStore'
 import { FILE_TYPE } from '@/types/constants/files'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
@@ -53,14 +54,16 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
   const disabledEdit = !session?.user.roles.includes(ROLE.ORDERS_EDIT)
   const uid = router.query.uid as string
   const { order } = useEndpoint({ uid })
+  const { instances } = useMutateListStore()
 
   // setting the endpoint and the method for the submit hook
   const { submit, loading } = useSubmit<string>({
     endpoint: order,
     method: uid ? 'put' : 'post',
+    mutateList: instances['orders']?.mutateUrl ? [...instances['orders'].mutateUrl, order] : [order],
     onSuccess: uid => {
       toast.success(`Order ${uid} saved successfully`)
-      router.push(PATH.ORDER + '/' + uid)
+      router.push(uid ? PATH.ORDER + '/' + uid : PATH.ORDERS)
     },
     onError: e => toast.error(e.message)
   })
