@@ -16,6 +16,7 @@ import { useEndpoint } from '@/hooks/useEndpoint'
 import useGeneralTable from '@/hooks/useGeneralTable'
 import usePagination from '@/hooks/usePagination'
 import { useSearch } from '@/hooks/useSearch'
+import useMutateListStore from '@/store/useMutateListStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
 
@@ -27,6 +28,7 @@ const OrdersContainer = () => {
   const { data: session } = useSession()
   const { mutate } = useSWRConfig()
   const [url, setUrl] = useState<string>('')
+  const { setMutate } = useMutateListStore()
 
   const { renderSearchBar, searchValue } = useSearch({
     renderBegin: () => (
@@ -66,7 +68,8 @@ const OrdersContainer = () => {
 
   useEffect(() => {
     setUrl(orders)
-  }, [orders])
+    setMutate('orders', orders)
+  }, [orders, setMutate])
 
   useEffect(() => {
     const newQuery: { search?: string; pagination: string; sorting?: string } = { pagination }
