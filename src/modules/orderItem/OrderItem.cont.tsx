@@ -2,14 +2,17 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import { Fragment, useEffect } from 'react'
+import { Fragment, Suspense, useEffect } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import uuid from 'react-uuid'
 import { array, object, string } from 'yup'
 
 import { Heading } from '@/components/card/card.comp'
+import ErrorPage from '@/components/error/ErrorPage'
 import FileManager from '@/components/fileManager/FileManager'
+import LoaderComponent from '@/components/loader.comp'
 import { convertDate } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useFormNotification from '@/hooks/useFormNotification'
@@ -135,11 +138,15 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
         {uid && (
           <Fragment>
             <Heading text="Files" />
-            <FileManager
-              itemType={FILE_TYPE.ORDER}
-              uid={uid}
-              hasEditRole={!disabledEdit && session?.user.roles.includes(ROLE.ORDERS_EDIT)}
-            />
+            <ErrorBoundary fallback={<ErrorPage />}>
+              <Suspense fallback={<LoaderComponent />}>
+                <FileManager
+                  itemType={FILE_TYPE.ORDER}
+                  uid={uid}
+                  hasEditRole={!disabledEdit && session?.user.roles.includes(ROLE.ORDERS_EDIT)}
+                />
+              </Suspense>
+            </ErrorBoundary>
           </Fragment>
         )}
       </div>
