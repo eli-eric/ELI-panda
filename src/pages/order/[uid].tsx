@@ -7,10 +7,12 @@ import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 import useSWR from 'swr'
 
+import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
 import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import OrderItemContainer from '@/modules/orderItem/OrderItem.cont'
+import { OrderDetailFormType } from '@/modules/orderItem/types'
 
 const messages = message.orderItem
 
@@ -21,7 +23,10 @@ const OrderItemPage: NextPage = (): JSX.Element => {
   const uid = router.query.uid as string
   const { order } = useEndpoint({ uid })
 
-  const { data } = useSWR(session && order, fetcher, { suspense: false })
+  const { data, error } = useSWR<OrderDetailFormType>(session && order, fetcher, {
+    suspense: false,
+    revalidateOnMount: true
+  })
 
   return (
     <Fragment>
@@ -34,7 +39,9 @@ const OrderItemPage: NextPage = (): JSX.Element => {
           <title>{intl.formatMessage({ id: messages.head })}</title>
           <meta name="description" content="...." />
         </Head>
-        {data ? <OrderItemContainer OrderDetail={data} /> : <LoaderComponent />}
+        {data && !error && <OrderItemContainer OrderDetail={data} />}
+        {!data && !error && <LoaderComponent />}
+        {error && <ErrorPage />}
       </Fragment>
     </Fragment>
   )

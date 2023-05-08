@@ -95,7 +95,7 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
   // set the order date to the current date if it is a new order
   useEffect(() => {
     if (OrderDetail) {
-      setValue('orderDate', moment(OrderDetail.orderDate).utc().format('YYYY-MM-DD'))
+      setValue('orderDate', moment(OrderDetail.orderDate).utcOffset('+02:00').format('YYYY-MM-DD'))
     }
   }, [OrderDetail, setValue])
 
