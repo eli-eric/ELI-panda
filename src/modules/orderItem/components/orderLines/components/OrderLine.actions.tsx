@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react'
 
 import { DeleteButton, EditButton } from '@/components/Buttons'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
+import { useEndpoint } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
 import { OrderLineFormType } from '@/modules/orderItem/types'
 import { ModalButtons } from '@/types/form'
@@ -74,4 +75,35 @@ export const OrderLineActionButtons = ({
   )
 }
 
-export default OrderLineActionButtons
+export const OrderDeliveredAction = ({
+  orderLine,
+  checked,
+  setOrderLine
+}: {
+  orderLine: OrderLineFormType
+  checked?: boolean
+  setOrderLine: (orderLines: OrderLineFormType) => void
+}) => {
+  const { order } = useEndpoint({ uid: orderLine.uid })
+  //TODO: add endpoint to update orderLine + mutation
+  const handleCheck = () => {
+    setOrderLine({
+      ...orderLine,
+      delivered: !checked,
+      eun: !checked ? '12345' : ''
+    })
+  }
+
+  return (
+    <div className="flex h-5 items-center">
+      <input
+        id="system"
+        name="system"
+        type="checkbox"
+        defaultChecked={checked}
+        onClick={() => handleCheck()}
+        className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+      />
+    </div>
+  )
+}

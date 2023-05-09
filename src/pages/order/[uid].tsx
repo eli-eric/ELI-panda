@@ -2,12 +2,11 @@ import { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 import useSWR from 'swr'
 
-import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
 import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
@@ -28,6 +27,12 @@ const OrderItemPage: NextPage = (): JSX.Element => {
     revalidateOnMount: true
   })
 
+  useEffect(() => {
+    if (error) {
+      router.push('/404')
+    }
+  }, [error, router])
+
   return (
     <Fragment>
       <Head>
@@ -41,7 +46,6 @@ const OrderItemPage: NextPage = (): JSX.Element => {
         </Head>
         {data && !error && <OrderItemContainer OrderDetail={data} />}
         {!data && !error && <LoaderComponent />}
-        {error && <ErrorPage />}
       </Fragment>
     </Fragment>
   )

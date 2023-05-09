@@ -16,7 +16,6 @@ interface Props {
 const orderLineFormSchema = object({
   name: string().required(),
   catalogueNumber: string().required(),
-  system: object().required(),
   price: number()
     .transform(value => (Number.isNaN(value) ? null : value))
     .nullable(),
@@ -27,6 +26,7 @@ const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
   const [catalogueItem, setCatalogueItem] = useState<CatalogueItem | undefined>(undefined)
 
   const modalSubmit = (data: OrderLineFormType) => {
+    console.log('modalSubmit', data)
     const dataToSend = { ...data }
     if (!dataToSend.price) {
       delete dataToSend.currency
@@ -46,7 +46,7 @@ const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
     renderOutsideForm: () => <CatalogueSearchTable setItem={setCatalogueItem} itemName={catalogueItem?.name} />,
     onSubmit: modalSubmit,
     schema: orderLineFormSchema,
-    defaultValues: orderLine
+    defaultValues: orderLine || { itemUsage: { uid: 'a2aae89a-5cbe-4042-a726-44012b158226', name: 'In System Part' } }
   })
 
   return { setOpen, getFormModal }

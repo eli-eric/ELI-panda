@@ -41,7 +41,7 @@ const ComboboxComponent = <T extends FieldValues>({
 
   useEffect(() => {
     if (defaultValues && defaultValues[name]) {
-      setQuery(defaultValues[name] as string)
+      setQuery(defaultValues[name].name as string)
       setSelectedItem(defaultValues[name] as CodebookType)
     }
   }, [defaultValues, name])
@@ -61,6 +61,7 @@ const ComboboxComponent = <T extends FieldValues>({
         value={selectedItem}
         onChange={(item: CodebookType | null) => {
           setSelectedItem(item)
+          setQuery(item?.name || '')
           if (isObject) {
             setValue(name as Path<T>, item as PathValue<T, Path<T>>)
           }
@@ -84,7 +85,7 @@ const ComboboxComponent = <T extends FieldValues>({
                   'block w-full appearance-none',
                   disabled ? 'bg-gray-100' : ''
                 )}
-                value={selectedItem?.name || query}
+                value={query}
                 onChange={event => setQuery(event.target.value)}
                 displayValue={(item: CodebookType) => item?.name}
               />

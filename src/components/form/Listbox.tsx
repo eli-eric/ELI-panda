@@ -13,6 +13,7 @@ type ListBoxProps<T extends FieldValues> = FieldProps &
     register: UseFormRegister<T>
     codebook?: CODEBOOK
     isObject?: boolean
+    position?: 'top' | 'bottom'
   }
 
 const ListBox = <T extends FieldValues>({
@@ -21,6 +22,7 @@ const ListBox = <T extends FieldValues>({
   isError,
   disabled,
   placeholder,
+  position = 'bottom',
   name,
   className,
   rounded = 'rounded-md'
@@ -89,7 +91,12 @@ const ListBox = <T extends FieldValues>({
                 </Listbox.Button>
               </div>
               {codebookOption && codebookOption.length > 0 && (
-                <Listbox.Options className="absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                <Listbox.Options
+                  className={classNames(
+                    'absolute z-30 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
+                    position === 'top' ? 'bottom-full' : 'top-full' // určení pozice výběrového seznamu
+                  )}
+                >
                   {codebookOption.map(item => (
                     <Listbox.Option
                       key={item.uid}

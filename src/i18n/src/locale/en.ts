@@ -205,7 +205,9 @@ export const messages = {
         supplier: { label: 'Supplier', placeholder: '...type here' },
         orderStatus: { label: 'Order Status' },
         notes: { label: 'Notes' },
-        orderDate: { label: 'Date' }
+        orderDate: { label: 'Date' },
+        procurementer: { label: 'Procurementer', placeholder: '...type here' },
+        requester: { label: 'Requester', placeholder: '...type here' }
       }
     },
     deleteModal: { title: 'Warning', message: 'Are you sure you want to delete this order?' },
@@ -215,7 +217,9 @@ export const messages = {
         catalogueNumber: { label: 'Catalogue Number', placeholder: 'Catalogue Number' },
         systemName: { label: 'System Name', placeholder: 'System Name' },
         price: { label: 'Price', placeholder: '0.00' },
-        quantity: { label: 'Quantity', placeholder: 'Quantity' }
+        quantity: { label: 'Quantity', placeholder: 'Quantity' },
+        location: { label: 'Location', placeholder: 'Location' },
+        itemUsage: { label: 'Item Usage UID' }
       },
       deleteModal: { title: 'Warning', message: 'Are you sure you want to delete this order line?' }
     }

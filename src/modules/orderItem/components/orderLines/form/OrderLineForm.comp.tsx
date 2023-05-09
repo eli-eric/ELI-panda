@@ -4,6 +4,7 @@ import { useFormContext } from 'react-hook-form'
 
 import ComboboxComponent from '@/components/form/Combobox'
 import { Input, InputAmount } from '@/components/form/Input'
+import ListBox from '@/components/form/Listbox'
 import { classNames } from '@/helpers'
 import { OrderLineFormType } from '@/modules/orderItem/types'
 import { CatalogueItem } from '@/types/responses'
@@ -59,6 +60,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
         </Switch>
         <Input {...formFields.name} className="pr-1" />
       </div>
+
       <div className="flex-1">
         <div className="flex">
           <Input {...formFields.catalogueNumber} className="pr-1" />
@@ -66,7 +68,11 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
           {!orderLine && <Input {...formFields.quantity} className="pl-1" defaultValue={1} />}
         </div>
         <div className="flex">
-          <ComboboxComponent {...formFields.system} className="pr-1 z-50" isObject={true} limit={50} position="top" />
+          <ComboboxComponent {...formFields.location} isObject position="top" limit={50} className="pr-1" />
+          <ListBox {...formFields.itemUsage} className="pl-1" position="top" />
+        </div>
+        <div className="flex">
+          <ComboboxComponent {...formFields.system} className="pr-1" isObject={true} limit={50} position="top" />
         </div>
       </div>
     </div>

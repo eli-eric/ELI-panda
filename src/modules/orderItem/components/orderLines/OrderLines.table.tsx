@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { CellProps, Column } from 'react-table'
 
@@ -5,7 +6,7 @@ import { PlusButton } from '@/components/Buttons'
 import useGeneralTable from '@/hooks/useGeneralTable'
 
 import { OrderLineFormType } from '../../types'
-import OrderLineActionButtons from './components/OrderLine.actions'
+import { OrderDeliveredAction, OrderLineActionButtons } from './components/OrderLine.actions'
 import useOrderLineForm from './form/OrderLineForm.cont'
 
 interface OrderLinesTableProps {
@@ -16,6 +17,7 @@ interface OrderLinesTableProps {
 }
 
 const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEdit }: OrderLinesTableProps) => {
+  const uid = useRouter().query.uid as string
   const { setOpen, getFormModal } = useOrderLineForm({ setOrderLine })
 
   const columns = useMemo((): Column<OrderLineFormType>[] => {
@@ -25,11 +27,13 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
         accessor: 'name',
         Cell: ({ value, row: { original } }: CellProps<OrderLineFormType>) => (
           <div className="flex items-center my-1">
-            <OrderLineActionButtons
-              orderLine={original}
-              setOrderLine={setOrderLine}
-              deleteOrderLine={deleteOrderLine}
-            />
+            {!disabledEdit && (
+              <OrderLineActionButtons
+                orderLine={original}
+                setOrderLine={setOrderLine}
+                deleteOrderLine={deleteOrderLine}
+              />
+            )}
             <span>{value}</span>
           </div>
         )
@@ -39,25 +43,45 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
         accessor: 'catalogueNumber'
       },
       {
+        Header: 'Item Usage',
+        accessor: 'itemUsage',
+        Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value?.name}</span>
+      },
+      {
         Header: 'System',
         accessor: 'system',
         Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value?.name}</span>
       },
       {
+        Header: 'Location',
+        accessor: 'location',
+        Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value?.name}</span>
+      },
+      {
         Header: 'Price',
         accessor: 'price',
-        //TODO: format price
         Cell: ({ value, row: { original } }: CellProps<OrderLineFormType>) => (
           <span>
             {value} <span className="font-medium">{original.currency}</span>
           </span>
         )
+      },
+      {
+        Header: 'EUN',
+        accessor: 'eun'
+      },
+      {
+        Header: 'Delivered',
+        accessor: 'delivered',
+        Cell: ({ value, row: { original } }: CellProps<OrderLineFormType>) => (
+          <OrderDeliveredAction orderLine={original} setOrderLine={setOrderLine} checked={value} />
+        )
       }
     ]
-    disabledEdit && cols.shift()
+    !uid && cols.pop()
 
     return cols
-  }, [setOrderLine, deleteOrderLine, disabledEdit])
+  }, [setOrderLine, deleteOrderLine, disabledEdit, uid])
 
   const { getTable } = useGeneralTable({ columns, data: orderLines, tableId: 'orderLines', className: 'col-span-12' })
 
