@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'react-hot-toast'
@@ -6,18 +5,13 @@ import { CellProps, Column } from 'react-table'
 import useGeneralTable from 'src/hooks/useGeneralTable'
 import useSWR from 'swr'
 
-import { DeleteButton, DownloadButton, PlusButton } from '@/components/Buttons'
+import { PlusButton } from '@/components/Buttons'
 import executeRequest from '@/helpers/executeRequest'
 import { uniFetcher } from '@/helpers/fetcher'
-import useWarningModal from '@/hooks/useWarningModal'
 import { FILE_TYPE } from '@/types/constants/files'
 
-export type FileItem = {
-  id: string
-  name: string
-  type: string
-  url: string
-}
+import FileActions from './FileActions'
+import { FileItem } from './types'
 
 type FileManagerProps = {
   itemType: FILE_TYPE
@@ -55,24 +49,6 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
     [endpoint, mutate, files, setNewFile]
   )
 
-  const handleDelete = useCallback(
-    (id: string) => {
-      const name = (files ?? []).find(obj => obj.id === id)?.name
-      executeRequest(
-        `${endpoint}/${id}`,
-        { method: 'delete' },
-        () => {
-          toast.success(`Deleted ${name}`)
-          mutate((files ?? []).filter(obj => obj.id !== id))
-        },
-        () => toast.error(`Failed to delete ${name}`)
-      )
-    },
-    [endpoint, files, mutate]
-  )
-
-  const { withWarningModal, WarningModal } = useWarningModal('Are you sure you want to delete this file?')
-
   useEffect(() => {
     newFile.name && newFile.payload && handlePost(newFile.name, newFile.payload)
   }, [newFile, handlePost])
@@ -85,14 +61,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
         accessor: 'name',
         Cell: ({ value, row: { original } }: CellProps<FileItem>) => (
           <div className="flex items-center">
-            <div className="py-1">
-              <Link href={original.url} passHref legacyBehavior={true}>
-                <a target="_blank">
-                  <DownloadButton className="mr-1" />
-                </a>
-              </Link>
-              {hasEditRole && <DeleteButton onClick={() => withWarningModal(handleDelete)(original.id)} />}
-            </div>
+            <FileActions file={original} mutate={mutate} endpoint={endpoint} files={files} hasEditRole={hasEditRole} />
             <span className="pl-4">{value}</span>
           </div>
         )
@@ -100,7 +69,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
     ]
 
     return cols
-  }, [hasEditRole, handleDelete, withWarningModal])
+  }, [hasEditRole, files, endpoint, mutate])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop
@@ -123,7 +92,6 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
         </div>
       )}
       {getTable()}
-      <WarningModal />
     </div>
   )
 }

@@ -14,7 +14,9 @@ export const messages = {
     },
     property: {
       description: 'Description'
-    }
+    },
+    warning: 'Warning',
+    fileManager: { deleteModal: { title: 'Warning', text: 'Are you sure you want to remove {fileName}?' } }
   },
   layout: {
     login: 'Log In',
@@ -80,6 +82,14 @@ export const messages = {
       buttons: {
         back: 'Back',
         edit: 'Edit'
+      }
+    },
+    edit: {
+      deleteModal: {
+        message: 'Are you sure you want to delete this category?'
+      },
+      copyModal: {
+        message: 'Are you sure you want to copy this category?'
       }
     }
   },
