@@ -55,7 +55,8 @@ const OrdersContainer = () => {
 
   const { getPaginationComponent, pagination, setTotalCount } = usePagination({
     dependecies: [searchValue],
-    pageSizeDefault: 50
+    pageSizeDefault: 50,
+    useQuery: true
   })
 
   const { instances } = useTableStateStore()
@@ -118,9 +119,13 @@ const OrdersContainer = () => {
         Header: 'Notes',
         accessor: 'notes',
         Cell: ({ value }: CellProps<Order>) => (
-          <TooltipComponent text={value}>
-            <InformationCircleIcon className="h-6 w-6 flex-shrink-0" />
-          </TooltipComponent>
+          <Fragment>
+            {value && (
+              <TooltipComponent text={value}>
+                <InformationCircleIcon className="h-6 w-6 flex-shrink-0" />
+              </TooltipComponent>
+            )}
+          </Fragment>
         ),
         id: 'notes'
       },

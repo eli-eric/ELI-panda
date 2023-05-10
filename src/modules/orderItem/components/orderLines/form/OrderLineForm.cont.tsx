@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { number, object, string } from 'yup'
 
 import useFormModal from '@/hooks/useFormModal'
@@ -16,7 +16,6 @@ interface Props {
 const orderLineFormSchema = object({
   name: string().required(),
   catalogueNumber: string().required(),
-  system: object().required(),
   price: number()
     .transform(value => (Number.isNaN(value) ? null : value))
     .nullable(),
@@ -25,6 +24,10 @@ const orderLineFormSchema = object({
 
 const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
   const [catalogueItem, setCatalogueItem] = useState<CatalogueItem | undefined>(undefined)
+
+  useEffect(() => {
+    console.log('orderLine', orderLine)
+  }, [orderLine])
 
   const modalSubmit = (data: OrderLineFormType) => {
     const dataToSend = { ...data }
@@ -46,7 +49,7 @@ const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
     renderOutsideForm: () => <CatalogueSearchTable setItem={setCatalogueItem} itemName={catalogueItem?.name} />,
     onSubmit: modalSubmit,
     schema: orderLineFormSchema,
-    defaultValues: orderLine
+    defaultValues: orderLine || { itemUsage: { uid: 'a2aae89a-5cbe-4042-a726-44012b158226', name: 'In System Part' } }
   })
 
   return { setOpen, getFormModal }

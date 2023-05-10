@@ -7,5 +7,6 @@ export enum ROLE {
   CATALOGUE_CATEGORY_EDIT = 'catalogue-category-edit',
   CATALOGUE_EDIT = 'catalogue-edit',
   ORDERS_VIEW = 'orders-view',
-  ORDERS_EDIT = 'orders-edit'
+  ORDERS_EDIT = 'orders-edit',
+  ORDERS_DELIVERY_EDIT = 'orders-delivery-edit'
 }

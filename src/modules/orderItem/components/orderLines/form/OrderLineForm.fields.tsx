@@ -53,6 +53,21 @@ const useOrderLineFormFields = (enabled: boolean) => {
       isError: !!formState.errors.quantity,
       rounded: 'rounded-md',
       type: 'number'
+    },
+    location: {
+      name: 'location',
+      label: form.location.label,
+      placeholder: form.location.placeholder,
+      isError: !!formState.errors.location,
+      rounded: 'rounded-md',
+      codebook: CODEBOOK.LOCATION
+    },
+    itemUsage: {
+      name: 'itemUsage',
+      label: form.itemUsage.label,
+      isError: !!formState.errors.itemUsage,
+      rounded: 'rounded-md',
+      codebook: CODEBOOK.ITEM_USAGE
     }
   })
 }
