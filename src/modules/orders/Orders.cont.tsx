@@ -170,7 +170,7 @@ const OrdersContainer = () => {
     getColumnProps: ({ id }) => ({
       className: classNames(
         id === 'name' ? 'left-0 z-30 min-w-[600px] max-w-[600px]' : 'border-l',
-        id === 'notes' ? 'min-w-[90px] max-w-[90px]' : 'min-w-[180px] max-w-[180px]'
+        id === 'notes' ? 'min-w-[90px] max-w-[90px]' : ''
       )
     })
   })

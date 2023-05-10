@@ -3,6 +3,7 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 
 import TooltipComponent from '@/components/tooltip.comp'
+import { classNames } from '@/helpers'
 import { ENV, PROCESS_ENV } from '@/types/constants/common'
 
 import NavBarHideoutComponent from './nav-bar-hideout.comp'
@@ -46,7 +47,7 @@ export default function NavigationComponent() {
   )
 
   return (
-    <Disclosure id="nav-bar" as="nav" className={getBackgroundByPandaEnv() + ' border-b'}>
+    <Disclosure id="nav-bar" as="nav" className={classNames('border-b', getBackgroundByPandaEnv())}>
       {({ open }) => (
         <Fragment>
           {PROCESS_ENV && PROCESS_ENV === ENV.TEST && <EnvInfoTest />}

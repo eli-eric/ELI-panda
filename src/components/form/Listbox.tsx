@@ -78,7 +78,7 @@ const ListBox = <T extends FieldValues>({
         value={selectedOption}
         onChange={onChangeHandler}
         disabled={disabled}
-        className={`${className} block relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
+        className={classNames('block relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm', className)}
       >
         {({ open }) => (
           <>
@@ -88,12 +88,10 @@ const ListBox = <T extends FieldValues>({
                 <Listbox.Button className={classNames('w-full')}>
                   <span
                     className={classNames(
-                      className,
+                      'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full h-[38px] appearance-none text-left',
                       rounded,
+                      className,
                       isError ? 'border-red-500' : 'border-gray-300',
-                      'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
-                      'block w-full h-[38px] appearance-none',
-                      'text-left',
                       disabled ? 'bg-gray-100' : ''
                     )}
                   >

@@ -152,7 +152,7 @@ const useGeneralTable = <T extends object>({
                           <td
                             {...restCellProps}
                             key={key}
-                            className={classNames(className, 'text-sm sm:pl-6 sm:pr-6 text-gray-500')}
+                            className={classNames('text-sm sm:pl-6 sm:pr-6 text-gray-500', className)}
                           >
                             {cell.render('Cell')}
                           </td>

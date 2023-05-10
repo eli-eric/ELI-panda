@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import TooltipComponent from '@/components/tooltip.comp'
+import { classNames } from '@/helpers'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { useImage } from '@/hooks/useImage'
 import { Selectable } from '@/modules/systems/types'
@@ -34,10 +35,11 @@ const ItemListRow = ({ item, index, categoryListLength, selectable }: Props) => 
 
   return (
     <tr
-      className={
-        (index % 2 === 0 ? undefined : 'bg-gray-100') +
-        ` hover:bg-primary-200 ${selectable?.selectedItem === item.uid ? 'bg-primary-200' : ''}`
-      }
+      className={classNames(
+        'hover:bg-primary-200',
+        index % 2 === 0 ? undefined : 'bg-gray-100',
+        selectable?.selectedItem === item.uid ? 'bg-primary-200' : '',
+      )}
     >
       {selectable && (
         <td className="text-sm  sm:pl-6 text-gray-500">

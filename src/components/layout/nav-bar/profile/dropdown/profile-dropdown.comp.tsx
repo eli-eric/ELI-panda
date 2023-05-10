@@ -74,8 +74,8 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                     <button
                       onClick={showModalHandler}
                       className={classNames(
-                        active ? 'bg-gray-100' : '',
-                        'w-full text-left block px-4 py-2 text-sm text-gray-700'
+                        'w-full text-left block px-4 py-2 text-sm text-gray-700',
+                        active ? 'bg-gray-100' : ''
                       )}
                     >
                       Your Profile
@@ -87,8 +87,8 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                     <button
                       onClick={signOutHandler}
                       className={classNames(
-                        active ? 'bg-gray-100' : '',
-                        'w-full text-left block px-4 py-2 text-sm text-gray-700'
+                        'w-full text-left block px-4 py-2 text-sm text-gray-700',
+                        active ? 'bg-gray-100' : ''
                       )}
                     >
                       Sign out
