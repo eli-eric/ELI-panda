@@ -43,10 +43,9 @@ export const Input = <T extends FieldValues>({
         disabled={disabled}
         placeholder={placeholder}
         className={classNames(
-          'block w-full appearance-none border',
+          'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
           rounded,
           isError ? 'border-red-500' : 'border-gray-300',
-          'px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
           disabled ? 'bg-gray-100' : ''
         )}
       />
