@@ -25,5 +25,5 @@ export const createMessageValues = (values: any = {}): Record<string, any> => ({
 })
 
 export function convertDate(date) {
-  return moment(date).startOf('day').utcOffset('+02:00').format()
+  return moment(date).startOf('day').utcOffset(new Date().getTimezoneOffset()).format()
 }
