@@ -31,5 +31,5 @@ export type OrderLineFormType = {
   currency?: string
   quantity?: number
   eun?: string
-  delivered?: boolean
+  isDelivered?: boolean
 }

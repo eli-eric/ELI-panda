@@ -219,7 +219,7 @@ export const messages = {
         price: { label: 'Price', placeholder: '0.00' },
         quantity: { label: 'Quantity', placeholder: 'Quantity' },
         location: { label: 'Location', placeholder: 'Location' },
-        itemUsage: { label: 'Item Usage UID' }
+        itemUsage: { label: 'Item Usage' }
       },
       deleteModal: { title: 'Warning', message: 'Are you sure you want to delete this order line?' }
     }

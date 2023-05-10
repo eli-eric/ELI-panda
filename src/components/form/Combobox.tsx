@@ -49,8 +49,15 @@ const ComboboxComponent = <T extends FieldValues>({
   const clear = () => {
     setQuery('')
     setSelectedItem(null)
-    setValue(name as Path<T>, isObject ? ({} as PathValue<T, Path<T>>) : ('' as PathValue<T, Path<T>>))
+    setValue(name as Path<T>, isObject ? (undefined as PathValue<T, Path<T>>) : ('' as PathValue<T, Path<T>>))
   }
+
+  /*   useEffect(() => {
+    if (isObject && selectedItem) {
+      setSelectedItem(null)
+      setValue(name as Path<T>, undefined as PathValue<T, Path<T>>)
+    }
+  }, [query]) */
 
   const restProps = isObject ? {} : { ...register(name as Path<T>) }
 

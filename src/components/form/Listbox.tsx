@@ -1,6 +1,6 @@
 import { Listbox } from '@headlessui/react'
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { FieldValues, Path, PathValue, useFormContext, UseFormRegister } from 'react-hook-form'
 
 import { classNames } from '@/helpers'
@@ -14,6 +14,7 @@ type ListBoxProps<T extends FieldValues> = FieldProps &
     codebook?: CODEBOOK
     isObject?: boolean
     position?: 'top' | 'bottom'
+    emptyOption?: boolean
   }
 
 const ListBox = <T extends FieldValues>({
@@ -22,6 +23,7 @@ const ListBox = <T extends FieldValues>({
   isError,
   disabled,
   placeholder,
+  emptyOption = false,
   position = 'bottom',
   name,
   className,
@@ -31,13 +33,21 @@ const ListBox = <T extends FieldValues>({
     setValue,
     formState: { defaultValues }
   } = useFormContext<T>()
-  const codebookOption = useCodebook(codebook)
-  const [selectedOption, setSelectedOption] = useState<CodebookType | null>(
-    (codebookOption && codebookOption[0]) || null
-  )
+  const codebookOptions = useCodebook(codebook)
+  const [selectedOption, setSelectedOption] = useState<CodebookType | null>(null)
+
+  const codebookOption = useMemo(() => {
+    if (emptyOption && codebookOptions) {
+      const emptyOption: CodebookType = { uid: '', name: 'none' }
+      setSelectedOption(emptyOption)
+      setValue(name as Path<T>, null as PathValue<T, Path<T>>)
+      return [emptyOption, ...codebookOptions]
+    }
+    return codebookOptions
+  }, [emptyOption, codebookOptions, name, setValue])
 
   useEffect(() => {
-    if (codebookOption) {
+    if (codebookOption && !emptyOption) {
       setSelectedOption(codebookOption[0])
       setValue(name as Path<T>, codebookOption[0] as PathValue<T, Path<T>>)
     }
@@ -45,7 +55,11 @@ const ListBox = <T extends FieldValues>({
 
   const onChangeHandler = (item: CodebookType | null) => {
     setSelectedOption(item)
-    setValue(name as Path<T>, item as PathValue<T, Path<T>>)
+    if (item?.uid === '') {
+      setValue(name as Path<T>, null as PathValue<T, Path<T>>)
+    } else {
+      setValue(name as Path<T>, item as PathValue<T, Path<T>>)
+    }
   }
 
   useEffect(() => {

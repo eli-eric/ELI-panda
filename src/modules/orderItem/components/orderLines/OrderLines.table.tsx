@@ -6,7 +6,7 @@ import { PlusButton } from '@/components/Buttons'
 import useGeneralTable from '@/hooks/useGeneralTable'
 
 import { OrderLineFormType } from '../../types'
-import { OrderDeliveredAction, OrderLineActionButtons } from './components/OrderLine.actions'
+import { OrderisDeliveredAction, OrderLineActionButtons } from './components/OrderLine.actions'
 import useOrderLineForm from './form/OrderLineForm.cont'
 
 interface OrderLinesTableProps {
@@ -71,10 +71,10 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
         accessor: 'eun'
       },
       {
-        Header: 'Delivered',
-        accessor: 'delivered',
+        Header: 'isDelivered',
+        accessor: 'isDelivered',
         Cell: ({ value, row: { original } }: CellProps<OrderLineFormType>) => (
-          <OrderDeliveredAction orderLine={original} setOrderLine={setOrderLine} checked={value} />
+          <OrderisDeliveredAction orderLine={original} setOrderLine={setOrderLine} checked={value} />
         )
       }
     ]

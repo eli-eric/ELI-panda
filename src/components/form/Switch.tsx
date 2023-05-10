@@ -5,7 +5,7 @@ import { classNames } from '@/helpers'
 
 interface Props {
   enabled: boolean
-  onChange: (enabled: boolean) => void
+  onChange?: (enabled: boolean) => void
   className?: string
 }
 

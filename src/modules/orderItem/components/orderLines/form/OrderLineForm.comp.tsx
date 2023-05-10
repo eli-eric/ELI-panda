@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ComboboxComponent from '@/components/form/Combobox'
@@ -18,8 +18,10 @@ interface Props {
 const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
   //const [enabled, setEnabled] = useState(false)
   const { enabled, toggle, Toggle } = useToggle(false)
+  const [locationEnable, setLocationEnable] = useState(false)
   const formFields = useOrderLineFormFields(enabled)
-  const { setValue } = useFormContext<OrderLineFormType>()
+  const { setValue, watch } = useFormContext<OrderLineFormType>()
+  const system = watch('system')
 
   useEffect(() => {
     if (!enabled) {
@@ -37,27 +39,38 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
     }
   }, [enabled, setValue])
 
+  useEffect(() => {
+    if (system) {
+      setLocationEnable(false)
+      setValue('location', undefined)
+    } else {
+      setLocationEnable(true)
+    }
+  }, [system, setValue])
+
   return (
     <div>
-      <div className="flex">
-        {/* TODO: make gereal component for witch */}
-        <Toggle enabled={enabled} onChange={toggle} className="mr-3 mt-6" />
-        <Input {...formFields.name} className="pr-1" />
+      <div className="grid grid-cols-12">
+        <Toggle enabled={enabled} onChange={toggle} className="mt-6 col-span-1" />
+        <Input {...formFields.name} className="pr-1 col-span-5" />
+        <Input {...formFields.catalogueNumber} className="col-span-6" />
       </div>
 
       <div className="flex-1">
         <div className="flex">
-          <Input {...formFields.catalogueNumber} className="pr-1" />
-          <InputAmount {...formFields.price} className="pr-1 pl-1" />
-          {!orderLine && <Input {...formFields.quantity} className="pl-1" defaultValue={1} />}
+          <InputAmount {...formFields.price} className="pr-1" />
+          <ListBox {...formFields.itemUsage} position="top" />
         </div>
-        <div className="flex">
-          <ComboboxComponent {...formFields.location} isObject position="top" limit={50} className="pr-1" />
-          <ListBox {...formFields.itemUsage} className="pl-1" position="top" />
-        </div>
+        <div className="flex"></div>
         <div className="flex">
           <ComboboxComponent {...formFields.system} className="pr-1" isObject={true} limit={50} position="top" />
+          <ComboboxComponent {...formFields.location} isObject position="top" limit={50} disabled={locationEnable} />
         </div>
+        {!orderLine?.id && (
+          <div className="grid grid-cols-2">
+            <Input {...formFields.quantity} className="pr-1" defaultValue={1} />
+          </div>
+        )}
       </div>
     </div>
   )

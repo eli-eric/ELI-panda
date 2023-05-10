@@ -29,7 +29,7 @@ const OrderFormComponent = ({ disabledEdit }: Props) => {
           <ComboboxComponent {...fields.supplier} className="pb-1 col-span-6 pr-1" isObject={true} limit={50} />
         </div>
         <div className="pt-4 grid grid-cols-12">
-          <ComboboxComponent {...fields.procurementer} className="pb-1 col-span-6 pr-1" isObject={true} limit={50} />
+          <ListBox {...fields.procurementer} className="pb-1 col-span-6 pr-1" isObject={true} />
           <ComboboxComponent {...fields.requester} className="pb-1 col-span-6 pr-1" isObject={true} limit={50} />
         </div>
         <div className="pt-4 grid grid-cols-12 ">

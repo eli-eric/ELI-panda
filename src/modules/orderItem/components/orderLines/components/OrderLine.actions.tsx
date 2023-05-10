@@ -1,10 +1,16 @@
+import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 import { DeleteButton, EditButton } from '@/components/Buttons'
 import { useToggle } from '@/components/form/Switch'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
+import { useEndpoint } from '@/hooks/useEndpoint'
+import useRolePermission from '@/hooks/useRole'
+import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
 import { OrderLineFormType } from '@/modules/orderItem/types'
+import { ROLE } from '@/types/constants/roles'
 import { ModalButtons } from '@/types/form'
 
 import useOrderLineForm from '../form/OrderLineForm.cont'
@@ -75,7 +81,7 @@ export const OrderLineActionButtons = ({
   )
 }
 
-export const OrderDeliveredAction = ({
+export const OrderisDeliveredAction = ({
   orderLine,
   checked,
   setOrderLine
@@ -85,16 +91,37 @@ export const OrderDeliveredAction = ({
   setOrderLine: (orderLines: OrderLineFormType) => void
 }) => {
   const { enabled, toggle, Toggle } = useToggle(checked)
-  //const { order } = useEndpoint({ uid: orderLine.uid })
-  //TODO: add endpoint to update orderLine + mutation
-  const handleCheck = (enabled: boolean) => {
-    toggle()
-    setOrderLine({
-      ...orderLine,
-      delivered: !checked,
-      eun: !checked ? '12345' : ''
-    })
+  const uid = useRouter().query.uid as string
+  const { orderLineDelivery } = useEndpoint({ uid: uid, itemUid: orderLine.uid })
+  const hasRole = useRolePermission([ROLE.ORDERS_DELIVERY_EDIT])
+
+  const { submit } = useSubmit<OrderLineFormType>({
+    endpoint: orderLineDelivery,
+    method: 'put',
+    onSuccess: data => {
+      toggle()
+      setOrderLine({
+        ...orderLine,
+        isDelivered: orderLine.isDelivered,
+        eun: data?.eun
+      })
+    },
+    onError: err => {
+      toast.error(err.message)
+    }
+  })
+
+  const handleCheck = () => {
+    submit({ isDelivered: !enabled })
   }
 
-  return <Toggle onChange={handleCheck} enabled={enabled} />
+  return (
+    <Fragment>
+      {orderLine.uid && (
+        <Fragment>
+          {hasRole ? <Toggle onChange={handleCheck} enabled={enabled} /> : <Toggle enabled={enabled} />}
+        </Fragment>
+      )}
+    </Fragment>
+  )
 }
