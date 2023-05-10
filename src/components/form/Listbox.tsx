@@ -62,7 +62,7 @@ const ListBox = <T extends FieldValues>({
         value={selectedOption}
         onChange={onChangeHandler}
         disabled={disabled}
-        className={`${className} block relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
+        className={classNames('block relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm', className)}
       >
         {({ open }) => (
           <>

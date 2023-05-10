@@ -66,7 +66,7 @@ const ComboboxComponent = <T extends FieldValues>({
           }
         }}
         disabled={disabled}
-        className={`${className} block relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
+        className={classNames('block relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm', className)}
       >
         {label && <Combobox.Label className="block text-sm font-medium text-gray-900">{label}</Combobox.Label>}
         <div className="relative">
@@ -109,9 +109,8 @@ const ComboboxComponent = <T extends FieldValues>({
           {data && data.length > 0 && (
             <Combobox.Options
               className={classNames(
-                'absolute',
+                'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
                 position === 'top' ? 'bottom-full' : 'top-full', // určení pozice výběrového seznamu
-                'z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'
               )}
             >
               {data.map(item => (

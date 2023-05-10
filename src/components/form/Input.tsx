@@ -26,7 +26,7 @@ export const Input = <T extends FieldValues>({
 }: InputProps<T>) => (
   <div
     hidden={hidden}
-    className={`${className} block z-10 w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
+    className={classNames('block z-10 w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm', className)}
   >
     {label && (
       <label hidden={hidden} className="text-sm font-medium text-gray-700">
@@ -72,7 +72,7 @@ export const TextArea = <T extends FieldValues>({
   ...restProps
 }: TextAreaWithErrorProps<T>) => (
   <div
-    className={`${className} block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
+    className={classNames('block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm', className)}
   >
     {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
     <textarea
@@ -80,11 +80,12 @@ export const TextArea = <T extends FieldValues>({
       rows={3}
       disabled={disabled}
       placeholder={placeholder}
-      className={`block w-full appearance-none ${rounded} border ${
-        isError ? 'border-red-500' : 'border-gray-300'
-      } px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm ${
-        disabled ? 'bg-gray-100' : ''
-      }`}
+      className={classNames(
+        "block w-full appearance-none px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm border",
+        rounded,
+        isError ? 'border-red-500' : 'border-gray-300',
+        disabled ? 'bg-gray-100' : '',
+      )}
       {...register(name as Path<T>)}
     />
     {isError && <ValidationIcon />}
@@ -109,7 +110,7 @@ export const InputAmount = <T extends FieldValues>({
   return (
     <div
       hidden={hidden}
-      className={`${className} block z-10 w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
+      className={classNames('block z-10 w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm', className)}
     >
       {label && (
         <label hidden={hidden} className="text-sm font-medium text-gray-700">
@@ -126,10 +127,9 @@ export const InputAmount = <T extends FieldValues>({
           disabled={disabled}
           placeholder={placeholder}
           className={classNames(
-            'block w-full appearance-none border',
+            'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
             rounded,
             isError ? 'border-red-500' : 'border-gray-300',
-            'px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
             disabled ? 'bg-gray-100' : ''
           )}
         />

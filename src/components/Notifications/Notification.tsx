@@ -3,6 +3,8 @@ import { CheckCircleIcon, ExclamationTriangleIcon, XMarkIcon } from '@heroicons/
 import { Fragment, useState } from 'react'
 import { resolveValue, Toast, toast } from 'react-hot-toast'
 
+import { classNames } from '@/helpers'
+
 interface Props {
   t: Toast
 }
@@ -11,9 +13,10 @@ const Notification = ({ t }: Props) => {
   const [show, setShow] = useState(true)
   return (
     <div
-      className={`${
+      className={classNames(
+        'w-[800px] bg-white rounded-lg pointer-events-auto flex',
         t.visible ? 'animate-enter' : 'animate-leave'
-      }  w-[800px] bg-white rounded-lg pointer-events-auto flex`}
+      )}
     >
       <div className="flex w-full flex-col items-center space-y-4 sm:items-end">
         {/* Notification panel, dynamically insert this into the live region when it needs to be displayed */}

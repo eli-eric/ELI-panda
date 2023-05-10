@@ -1,10 +1,12 @@
+import { classNames } from '@/helpers'
+
 interface Props {
   link?: boolean
   text?: string
 }
 
 const ItemPropertyValue = ({ link, text }: Props) => (
-  <dd className={`text-sm ${link ? 'text-blue-500' : 'text-gray-900'}`}>
+  <dd className={classNames('text-sm', link ? 'text-blue-500' : 'text-gray-900')}>
     {link ? (
       <a href={text} target="_blank" rel="noreferrer" className="text-ellipsis">
         link
