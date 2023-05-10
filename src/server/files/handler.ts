@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { composeDebugMessage } from 'src/server/logger'
 
-import type { FileItem } from '@/components/fileManager/FileManager'
+import type { FileItem } from '@/components/fileManager/types'
 
 import logger from '../logger'
 import s3Client, { config } from '../s3client'

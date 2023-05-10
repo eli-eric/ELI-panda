@@ -23,9 +23,7 @@ const ModalWarningComponent = ({ title, message }: ModalWarningComponentProps) =
         <FormattedMessage id={title} />
       </Dialog.Title>
       <div className="mt-2">
-        <p className="text-sm text-gray-500">
-          <FormattedMessage id={message} />
-        </p>
+        <p className="text-sm text-gray-500">{message}</p>
       </div>
     </div>
   </div>
