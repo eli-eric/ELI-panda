@@ -61,7 +61,7 @@ const useOrderFormFields = (disabled?: boolean) => {
       disabled: disabled,
       isError: !!formState.errors.procurementer,
       rounded: 'rounded-md',
-      codebook: CODEBOOK.USERS
+      codebook: CODEBOOK.EMPLOYEE
     },
     requester: {
       name: 'requester',
@@ -70,7 +70,7 @@ const useOrderFormFields = (disabled?: boolean) => {
       disabled: disabled,
       isError: !!formState.errors.requester,
       rounded: 'rounded-md',
-      codebook: CODEBOOK.USERS
+      codebook: CODEBOOK.EMPLOYEE
     },
     orderStatus: {
       name: 'orderStatus',

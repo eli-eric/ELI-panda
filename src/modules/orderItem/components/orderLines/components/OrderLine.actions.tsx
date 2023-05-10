@@ -1,8 +1,8 @@
 import { Fragment, useState } from 'react'
 
 import { DeleteButton, EditButton } from '@/components/Buttons'
+import { useToggle } from '@/components/form/Switch'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
-import { useEndpoint } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
 import { OrderLineFormType } from '@/modules/orderItem/types'
 import { ModalButtons } from '@/types/form'
@@ -84,9 +84,11 @@ export const OrderDeliveredAction = ({
   checked?: boolean
   setOrderLine: (orderLines: OrderLineFormType) => void
 }) => {
-  const { order } = useEndpoint({ uid: orderLine.uid })
+  const { enabled, toggle, Toggle } = useToggle(checked)
+  //const { order } = useEndpoint({ uid: orderLine.uid })
   //TODO: add endpoint to update orderLine + mutation
-  const handleCheck = () => {
+  const handleCheck = (enabled: boolean) => {
+    toggle()
     setOrderLine({
       ...orderLine,
       delivered: !checked,
@@ -94,16 +96,5 @@ export const OrderDeliveredAction = ({
     })
   }
 
-  return (
-    <div className="flex h-5 items-center">
-      <input
-        id="system"
-        name="system"
-        type="checkbox"
-        defaultChecked={checked}
-        onClick={() => handleCheck()}
-        className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-      />
-    </div>
-  )
+  return <Toggle onChange={handleCheck} enabled={enabled} />
 }
