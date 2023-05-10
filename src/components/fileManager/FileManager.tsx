@@ -83,20 +83,15 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
       {
         Header: 'Files',
         accessor: 'name',
-        Cell: ({
-          value,
-          row: {
-            original: { url }
-          }
-        }: CellProps<FileItem>) => (
+        Cell: ({ value, row: { original } }: CellProps<FileItem>) => (
           <div className="flex items-center">
             <div className="py-1">
-              <Link href={url} passHref legacyBehavior={true}>
+              <Link href={original.url} passHref legacyBehavior={true}>
                 <a target="_blank">
                   <DownloadButton className="mr-1" />
                 </a>
               </Link>
-              {hasEditRole && <DeleteButton onClick={() => withWarningModal(handleDelete)(value)} />}
+              {hasEditRole && <DeleteButton onClick={() => withWarningModal(handleDelete)(original.id)} />}
             </div>
             <span className="pl-4">{value}</span>
           </div>
