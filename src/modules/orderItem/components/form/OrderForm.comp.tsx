@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
 import ComboboxComponent from '@/components/form/Combobox'
+import { FormGrid } from '@/components/form/FormGrid'
 import { Input, TextArea } from '@/components/form/Input'
 import ListBox from '@/components/form/Listbox'
 
@@ -18,30 +19,22 @@ const OrderFormComponent = ({ disabledEdit }: Props) => {
   return (
     <Fragment>
       <div className=" mx-auto grid grid-cols-12 max-w-7xl px-4 sm:px-6 md:px-8">
-        <h1 className="text-2xl  col-span-2 justify-center font-semibold text-gray-900">
+        <h1 className="text-2xl col-span-2 justify-center font-semibold text-gray-900">
           {uid ? 'EDIT ORDER' : 'NEW ORDER'}
         </h1>
         <Input {...fields.orderDate} className="pb-1 col-span-3 pr-1" />
       </div>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-        <div className="pt-4 grid grid-cols-12">
-          <Input {...fields.name} className="pb-1 col-span-6 pr-1" />
-          <ComboboxComponent {...fields.supplier} className="pb-1 col-span-6 pr-1" isObject={true} limit={50} />
-        </div>
-        <div className="pt-4 grid grid-cols-12">
-          <ListBox {...fields.procurementer} className="pb-1 col-span-6 pr-1" isObject={true} />
-          <ComboboxComponent {...fields.requester} className="pb-1 col-span-6 pr-1" isObject={true} limit={50} />
-        </div>
-        <div className="pt-4 grid grid-cols-12 ">
-          <ListBox {...fields.orderStatus} className="pb-1 col-span-3 pr-1" />
-          <Input {...fields.orderNumber} className="pb-1 col-span-3 pr-1" />
-          <Input {...fields.requestNumber} className="pb-1 col-span-3 pr-1" />
-          <Input {...fields.contractNumber} className="pb-1 col-span-3 pr-1" />
-        </div>
-        <div className="pt-4 grid grid-cols-12 ">
-          <TextArea {...fields.notes} className="pb-1 col-span-12 pr-1" />
-        </div>
-      </div>
+      <FormGrid className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+        <Input {...fields.name} className="col-span-3 lg:col-span-6" />
+        <ComboboxComponent {...fields.supplier} className="col-span-3 lg:col-span-6" isObject={true} limit={50} />
+        <ListBox {...fields.procurementer} className="col-span-3 lg:col-span-6" isObject={true} />
+        <ComboboxComponent {...fields.requester} className="col-span-3 lg:col-span-6" isObject={true} limit={50} />
+        <ListBox {...fields.orderStatus} className="col-span-3" />
+        <Input {...fields.orderNumber} className="col-span-3" />
+        <Input {...fields.requestNumber} className="col-span-3" />
+        <Input {...fields.contractNumber} className="col-span-3" />
+        <TextArea {...fields.notes} className="col-span-full" />
+      </FormGrid>
     </Fragment>
   )
 }
