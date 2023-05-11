@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'react-hot-toast'
 import { CellProps, Column } from 'react-table'
@@ -23,34 +23,43 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   const endpoint = `/api/${itemType}/${uid}/files`
   const { data: files, error, mutate } = useSWR<Array<FileItem>>(endpoint, uniFetcher)
 
-  const [newFile, setNewFile] = useState({ name: '', payload: '' })
-
+  const [newFile, setNewFile] = useState<Array<{ name: string; payload: string }>>([])
   const onDrop = useCallback(async (files: File[]) => {
-    const file = files[0]
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => setNewFile({ name: file.name, payload: String(reader.result) })
+    const updatedFiles = await Promise.all(
+      files.map(
+        file =>
+          new Promise<{ name: string; payload: string }>((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = () => {
+              resolve({ name: file.name, payload: reader.result as string })
+            }
+            reader.onerror = reject
+            reader.readAsDataURL(file)
+          })
+      )
+    )
+    setNewFile(updatedFiles)
   }, [])
 
-  const handlePost = useCallback(
-    (name: string, payload: string) => {
+  const handlePost = useCallback(() => {
+    newFile.forEach(file => {
+      const { name, payload } = file
       const body = JSON.stringify({ name, payload })
       executeRequest<FileItem>(
         endpoint,
         { method: 'post', body },
         res => {
           mutate([...(files ?? []), res])
-          setNewFile({ name: '', payload: '' })
           toast.success(`Uploaded ${name}`)
         },
         () => toast.error(`Failed to upload ${name}`)
       )
-    },
-    [endpoint, mutate, files, setNewFile]
-  )
+    })
+    setNewFile([])
+  }, [endpoint, mutate, files, newFile])
 
   useEffect(() => {
-    newFile.name && newFile.payload && handlePost(newFile.name, newFile.payload)
+    newFile.length > 0 && handlePost()
   }, [newFile, handlePost])
 
   // Define columns for useGeneralTable
@@ -71,9 +80,13 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
     return cols
   }, [hasEditRole, files, endpoint, mutate])
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop
   })
+  const handleButtonClick = () => {
+    fileInputRef.current?.click() // Safely access the current property
+  }
 
   // Use useGeneralTable hook
   const { getTable } = useGeneralTable({
@@ -86,9 +99,11 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   return (
     <div>
       {hasEditRole && (
-        <div {...getRootProps()}>
-          <input {...getInputProps()} />
-          <PlusButton className="mb-2" buttonSize="large" primary={!isDragActive} />
+        <div>
+          <div {...getRootProps()}>
+            <input {...getInputProps()} ref={fileInputRef} style={{ display: 'none' }} />
+            <PlusButton className="mb-2" buttonSize="large" primary={!isDragActive} onClick={handleButtonClick} />
+          </div>
         </div>
       )}
       {getTable()}

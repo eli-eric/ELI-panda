@@ -13,7 +13,7 @@ const messages = message.common.buttons
 const HeaderComponent = ({ loading, disabledEdit }: Props) => {
   const router = useRouter()
   return (
-    <div className="sticky  top-0 z-30 flex h-16 flex-shrink-0 bg-white border-b">
+    <div className="sticky  top-0 z-20 flex h-16 flex-shrink-0 bg-white border-b">
       <div className="flex mx-auto max-w-7xl px-4 sm:px-6 md:px-8 flex-1 justify-between">
         <div className="flex items-center mr-2">
           <BackButton
