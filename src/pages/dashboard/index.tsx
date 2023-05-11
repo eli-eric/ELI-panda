@@ -35,8 +35,7 @@ const DashboardPage: NextPage = (): JSX.Element => {
           link: '/systems'
         },
         {
-          description:
-            'Systems - relationships: you can see all the relationships for the selected System',
+          description: 'Systems - relationships: you can see all the relationships for the selected System',
           link: '/systems'
         }
       ],
@@ -50,8 +49,7 @@ const DashboardPage: NextPage = (): JSX.Element => {
       id: '0.0.1',
       features: [
         {
-          description:
-            'Catalogue page: searching items via search bar - text box in the header of the page',
+          description: 'Catalogue page: searching items via search bar - text box in the header of the page',
           link: '/catalogue'
         },
         {

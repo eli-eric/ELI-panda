@@ -1,7 +1,6 @@
 type SuccessCallback<T> = (result: T) => void
 type ErrorCallback = (err: Error) => void
 
-
 const defaultHeaders = new Headers({ 'Content-Type': 'application/json' })
 const defaultOptions: RequestInit = {
   // mode: 'no-cors'
