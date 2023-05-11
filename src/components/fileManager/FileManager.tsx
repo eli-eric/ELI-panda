@@ -44,8 +44,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   }, [])
 
   const handlePost = useCallback(() => {
-    const fileLoading = newFile.map(() => true)
-    setLoading(fileLoading)
+    setLoading(true)
     newFile.forEach((file, index) => {
       const { name, payload } = file
       const body = JSON.stringify({ name, payload })
