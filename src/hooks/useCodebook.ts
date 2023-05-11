@@ -2,8 +2,8 @@ import { useSession } from 'next-auth/react'
 import useSWR from 'swr/immutable'
 
 import { fetcher } from '@/helpers/fetcher'
-import { CODEBOOK } from '@/types/constants/codebook'
-import { Option } from '@/types/form'
+import type { CODEBOOK } from '@/types/constants/codebook'
+import type { Option } from '@/types/form'
 
 import { useEndpoint } from './useEndpoint'
 

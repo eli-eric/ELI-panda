@@ -1,12 +1,12 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useEffect } from 'react'
-import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
+import { type FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/Input'
 import { SelectWithError } from '@/components/form/Select'
 import { useCodebookSelectValues } from '@/hooks/useCodebook'
-import { CategoryFormType, Property } from '@/types/catalogue/categoryFormTypes'
+import type { CategoryFormType, Property } from '@/types/catalogue/categoryFormTypes'
 import { defaultBoolOptions, PROPERTY_INPUT_TYPE, PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { CODEBOOK } from '@/types/constants/codebook'
 

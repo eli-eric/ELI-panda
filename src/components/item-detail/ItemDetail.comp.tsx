@@ -1,4 +1,4 @@
-import { StaticImageData } from 'next/image'
+import type { StaticImageData } from 'next/image'
 
 import ImageGalleryComponent from '@/components/item-detail/ImageGallery'
 import { message } from '@/i18n/src/messages'

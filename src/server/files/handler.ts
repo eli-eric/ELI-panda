@@ -1,9 +1,9 @@
-import { BucketItemStat, BucketItemWithMetadata } from 'minio'
+import type { BucketItemStat, BucketItemWithMetadata } from 'minio'
 import { nanoid } from 'nanoid'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { composeDebugMessage } from 'src/server/logger'
 
-import { FileItem } from '@/components/fileManager/FileManager'
+import type { FileItem } from '@/components/fileManager/FileManager'
 
 import logger from '../logger'
 import s3Client, { config } from '../s3client'

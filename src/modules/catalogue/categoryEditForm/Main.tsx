@@ -9,7 +9,7 @@ import { Button } from '@/components/Buttons'
 import ImagePlaceHolder from '@/components/form/ImagePlaceHolder'
 import { Input } from '@/components/form/Input'
 import { useEndpoint } from '@/hooks/useEndpoint'
-import { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
+import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 interface FormImageProps {
   image: string

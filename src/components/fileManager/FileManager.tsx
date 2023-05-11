@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'react-hot-toast'
-import { CellProps, Column } from 'react-table'
+import type { CellProps, Column } from 'react-table'
 import useGeneralTable from 'src/hooks/useGeneralTable'
 import useSWR from 'swr'
 
@@ -10,7 +10,7 @@ import { DeleteButton, DownloadButton, PlusButton } from '@/components/Buttons'
 import executeRequest from '@/helpers/executeRequest'
 import { uniFetcher } from '@/helpers/fetcher'
 import useWarningModal from '@/hooks/useWarningModal'
-import { FILE_TYPE } from '@/types/constants/files'
+import type { FILE_TYPE } from '@/types/constants/files'
 
 export type FileItem = {
   id: string

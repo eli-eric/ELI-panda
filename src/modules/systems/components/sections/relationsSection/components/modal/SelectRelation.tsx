@@ -2,9 +2,9 @@ import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { Option, SelectWithError } from '@/components/form/Select'
-import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
-import { RelationFormType } from '@/modules/systems/types/form'
+import { type Option, SelectWithError } from '@/components/form/Select'
+import type { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
+import type { RelationFormType } from '@/modules/systems/types/form'
 
 export type SelectedSystemForRel = {
   name: string

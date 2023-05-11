@@ -1,4 +1,4 @@
-import { SortingRule } from 'react-table'
+import type { SortingRule } from 'react-table'
 import { create } from 'zustand'
 
 type SortingInstance = {

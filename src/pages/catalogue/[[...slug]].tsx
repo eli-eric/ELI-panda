@@ -1,4 +1,4 @@
-import { NextPage } from 'next'
+import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment, Suspense, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -12,7 +12,7 @@ import { message } from '@/i18n/src/messages'
 import CatalogueBreadcrumbContainer from '@/modules/catalogue/breadcrump/breadcrump.cont'
 import CatalogueItemsContainer from '@/modules/catalogue/catalogueItems/CatalogueItems.cont'
 import CategoryListComponent from '@/modules/catalogue/categoryList/CategoryList.cont'
-import { CatalogueCategoryResponse, CatalogueItemsResponse } from '@/types/responses'
+import type { CatalogueCategoryResponse, CatalogueItemsResponse } from '@/types/responses'
 
 const { head } = message.cataloguePage
 

@@ -5,8 +5,8 @@ import ComboboxComponent from '@/components/form/Combobox'
 import { Input, InputAmount } from '@/components/form/Input'
 import ListBox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
-import { OrderLineFormType } from '@/modules/orderItem/types'
-import { CatalogueItem } from '@/types/responses'
+import type { OrderLineFormType } from '@/modules/orderItem/types'
+import type { CatalogueItem } from '@/types/responses'
 
 import useOrderLineFormFields from './OrderLineForm.fields'
 

@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-import { CellProps, Column } from 'react-table'
+import type { CellProps, Column } from 'react-table'
 
 import { PlusButton } from '@/components/Buttons'
 import useGeneralTable from '@/hooks/useGeneralTable'
 
-import { OrderLineFormType } from '../../types'
+import type { OrderLineFormType } from '../../types'
 import { OrderisDeliveredAction, OrderLineActionButtons } from './components/OrderLine.actions'
 import useOrderLineForm from './form/OrderLineForm.cont'
 

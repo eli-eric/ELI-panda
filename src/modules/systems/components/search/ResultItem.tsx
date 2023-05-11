@@ -6,7 +6,7 @@ import { TableRowItem } from '@/components/table/TableRowItem.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { PATH } from '@/types/constants/paths'
 
-import { SystemDetailResponse } from '../../types/responses'
+import type { SystemDetailResponse } from '../../types/responses'
 
 interface Props {
   item: SystemDetailResponse

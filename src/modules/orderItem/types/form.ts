@@ -1,6 +1,6 @@
-import { FieldValues } from 'react-hook-form'
+import type { FieldValues } from 'react-hook-form'
 
-import { CodebookType } from '@/hooks/useCodebook'
+import type { CodebookType } from '@/hooks/useCodebook'
 
 export interface OrderDetailFormType extends FieldValues {
   uid: string

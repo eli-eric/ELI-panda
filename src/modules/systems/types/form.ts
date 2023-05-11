@@ -1,4 +1,4 @@
-import { FieldValues } from 'react-hook-form'
+import type { FieldValues } from 'react-hook-form'
 
 export interface SystemEditFormType extends FieldValues {
   name: string

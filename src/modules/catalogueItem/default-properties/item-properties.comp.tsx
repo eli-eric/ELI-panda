@@ -4,7 +4,7 @@ import ItemPropertyValue from 'src/components/item-property/item-property-value.
 import { message } from 'src/i18n/src/messages'
 
 import DisclosureComponent from '@/components/Disclosure.comp'
-import { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses'
 
 const messages = message.cataloguePage.itemList.header
 

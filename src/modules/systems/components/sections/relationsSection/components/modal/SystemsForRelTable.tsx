@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { Dispatch, Fragment, SetStateAction, useEffect, useMemo } from 'react'
+import { type Dispatch, Fragment, type SetStateAction, useEffect, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
@@ -8,10 +8,10 @@ import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
 import useTable from '@/hooks/useTable'
 import { message } from '@/i18n/src/messages'
-import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
-import { SystemDetailResponse, SystemsForRelResponse } from '@/modules/systems/types/responses'
+import type { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
+import type { SystemDetailResponse, SystemsForRelResponse } from '@/modules/systems/types/responses'
 
-import { SelectedSystemForRel } from './SelectRelation'
+import type { SelectedSystemForRel } from './SelectRelation'
 
 const messages = message.systemsPage.relations.addRelationModal
 

@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form'
 
 import { useMakeFormFields } from '@/hooks/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
-import { OrderLineFormType } from '@/modules/orderItem/types'
+import type { OrderLineFormType } from '@/modules/orderItem/types'
 import { CODEBOOK } from '@/types/constants/codebook'
 
 const { form } = message.ordersPage.orderLines

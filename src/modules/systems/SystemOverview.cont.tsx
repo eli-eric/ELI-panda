@@ -19,7 +19,7 @@ import SystemDetailSection from './components/sections/systemDetailSection/Syste
 import Subsystems from './components/Subsystems'
 import ViewControl from './components/ViewControl'
 import { useSystemEdit } from './hooks/useSystemEdit'
-import { SystemDetailResponse } from './types/responses'
+import type { SystemDetailResponse } from './types/responses'
 
 interface Props {
   systemDetail?: SystemDetailResponse

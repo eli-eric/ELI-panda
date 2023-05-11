@@ -1,4 +1,4 @@
-import { Dispatch, Fragment, SetStateAction, Suspense } from 'react'
+import { type Dispatch, Fragment, type SetStateAction, Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormattedMessage } from 'react-intl'
 
@@ -8,7 +8,7 @@ import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
-import { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
+import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 import CategoryEditForm from './CategoryEditForm'
 const formatData = (data: CategoryFormType, parentPath) =>

@@ -1,13 +1,13 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { useImage } from '@/hooks/useImage'
 import { useCategoryEdit } from '@/modules/catalogue/hooks/useCategoryEdit'
 import { PATH } from '@/types/constants/paths'
-import { CatalogueCategoryResponse } from '@/types/responses'
+import type { CatalogueCategoryResponse } from '@/types/responses'
 
 interface Props {
   category: CatalogueCategoryResponse

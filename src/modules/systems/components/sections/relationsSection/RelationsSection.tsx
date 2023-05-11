@@ -10,9 +10,9 @@ import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
 import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
 
-import { SystemRelationshipResponse } from '../../../types/responses'
+import type { SystemRelationshipResponse } from '../../../types/responses'
 import AddRelationForm from './components/modal/RelationModal'
 import RelationsTable from './components/RelationsTable'
 

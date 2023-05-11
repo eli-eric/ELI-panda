@@ -1,9 +1,9 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
+import { type FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/Input'
-import { CategoryFormType, Group } from '@/types/catalogue/categoryFormTypes'
+import { type CategoryFormType, Group } from '@/types/catalogue/categoryFormTypes'
 
 import MoveButtons from './MoveButtons'
 import PropertyList from './PropertyList'

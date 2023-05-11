@@ -1,6 +1,6 @@
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
-import { CatalogueItemDetail } from 'src/pages/api/mock-server/catalogue/catalogue-mock-data'
+import type { CatalogueItemDetail } from 'src/pages/api/mock-server/catalogue/catalogue-mock-data'
 
 import ItemListColumnTitleComponent from '../../../../components/table/item-list-column-title.comp'
 

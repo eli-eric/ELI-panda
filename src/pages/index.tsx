@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { NextPage } from 'next'
+import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { signIn } from 'next-auth/react'
@@ -10,7 +10,7 @@ import { message } from 'src/i18n/src/messages'
 import * as yup from 'yup'
 
 import AuthAlertComponent from '@/modules/auth/auth-alert.comp'
-import AuthFormComponent, { AuthForm } from '@/modules/auth/auth-form.comp'
+import AuthFormComponent, { type AuthForm } from '@/modules/auth/auth-form.comp'
 import { PATH } from '@/types/constants/paths'
 
 const messages = message.authPage

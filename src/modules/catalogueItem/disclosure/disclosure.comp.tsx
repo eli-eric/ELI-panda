@@ -3,7 +3,7 @@ import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react'
 
 import { classNames } from '@/helpers'
-import { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses'
 
 interface Props {
   groups: string[]

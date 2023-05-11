@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
 
 import { Button } from '../Buttons'
 

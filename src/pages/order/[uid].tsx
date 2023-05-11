@@ -1,4 +1,4 @@
-import { NextPage } from 'next'
+import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
@@ -11,7 +11,7 @@ import LoaderComponent from '@/components/loader.comp'
 import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import OrderItemContainer from '@/modules/orderItem/OrderItem.cont'
-import { OrderDetailFormType } from '@/modules/orderItem/types'
+import type { OrderDetailFormType } from '@/modules/orderItem/types'
 
 const messages = message.orderItem
 

@@ -1,12 +1,12 @@
 import { Combobox } from '@headlessui/react'
 import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import { Fragment, useEffect, useState } from 'react'
-import { FieldValues, Path, PathValue, useFormContext, UseFormRegister } from 'react-hook-form'
+import { type FieldValues, type Path, type PathValue, useFormContext, type UseFormRegister } from 'react-hook-form'
 
 import { classNames } from '@/helpers'
-import { CodebookType, useCodebook } from '@/hooks/useCodebook'
-import { CODEBOOK } from '@/types/constants/codebook'
-import { FieldProps } from '@/types/form'
+import { type CodebookType, useCodebook } from '@/hooks/useCodebook'
+import type { CODEBOOK } from '@/types/constants/codebook'
+import type { FieldProps } from '@/types/form'
 
 type ComboboxProps<T extends FieldValues> = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {

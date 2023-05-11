@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { number, object, string } from 'yup'
 
 import useFormModal from '@/hooks/useFormModal'
-import { OrderLineFormType } from '@/modules/orderItem/types'
+import type { OrderLineFormType } from '@/modules/orderItem/types'
 import CatalogueSearchTable from '@/modules/systems/components/sections/catalogueItemSection/components/CatalogueSearchTable'
-import { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses'
 
 import OrderLineFormComponent from './OrderLineForm.comp'
 interface Props {

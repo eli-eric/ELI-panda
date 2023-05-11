@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { Fragment, useEffect } from 'react'
-import { Cell, Column, HeaderGroup, Row, useSortBy, useTable } from 'react-table'
+import { type Cell, type Column, type HeaderGroup, type Row, useSortBy, useTable } from 'react-table'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'

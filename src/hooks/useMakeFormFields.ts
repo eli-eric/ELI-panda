@@ -1,8 +1,8 @@
-import { FieldValues, UseFormRegister } from 'react-hook-form'
+import type { FieldValues, UseFormRegister } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
-import { CODEBOOK } from '@/types/constants/codebook'
-import { FieldProps, Option } from '@/types/form'
+import type { CODEBOOK } from '@/types/constants/codebook'
+import type { FieldProps, Option } from '@/types/form'
 
 export const useMakeFormFields = <
   Type extends FieldValues,
