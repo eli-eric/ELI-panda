@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ComboboxComponent from '@/components/form/Combobox'
+import { FormGrid } from '@/components/form/FormGrid'
 import { Input, InputAmount } from '@/components/form/Input'
 import ListBox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
@@ -49,30 +50,29 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
   }, [system, setValue])
 
   return (
-    <div>
-      <div className="grid grid-cols-12">
-        <Toggle enabled={enabled} onChange={toggle} className="mt-6 col-span-1" />
-        <Input {...formFields.name} className="pr-1 col-span-5" />
-        <Input {...formFields.catalogueNumber} className="col-span-6" />
-      </div>
-
-      <div className="flex-1">
-        <div className="flex">
-          <InputAmount {...formFields.price} className="pr-1" />
-          <ListBox {...formFields.itemUsage} position="top" />
-        </div>
-        <div className="flex"></div>
-        <div className="flex">
-          <ComboboxComponent {...formFields.system} className="pr-1" isObject={true} limit={50} position="top" />
-          <ComboboxComponent {...formFields.location} isObject position="top" limit={50} disabled={locationEnable} />
-        </div>
-        {!orderLine?.id && (
-          <div className="grid grid-cols-2">
-            <Input {...formFields.quantity} className="pr-1" defaultValue={1} />
-          </div>
-        )}
-      </div>
-    </div>
+    <FormGrid>
+      <Toggle enabled={enabled} onChange={toggle} className="mt-6 col-span-3 lg:col-span-1" />
+      <Input {...formFields.name} className="col-span-3 md:col-span-6 lg:col-span-5" />
+      <Input {...formFields.catalogueNumber} className="col-span-3 md:col-span-6" />
+      <InputAmount {...formFields.price} className="col-span-3 md:col-span-6" />
+      <ListBox {...formFields.itemUsage} position="top" className="col-span-3 md:col-span-6" />
+      <ComboboxComponent
+        {...formFields.system}
+        isObject={true}
+        limit={50}
+        position="top"
+        className="col-span-3 md:col-span-6"
+      />
+      <ComboboxComponent
+        {...formFields.location}
+        isObject
+        position="top"
+        limit={50}
+        disabled={locationEnable}
+        className="col-span-3 md:col-span-6"
+      />
+      {!orderLine?.id && <Input {...formFields.quantity} className="col-span-3 md:col-span-6" defaultValue={1} />}
+    </FormGrid>
   )
 }
 

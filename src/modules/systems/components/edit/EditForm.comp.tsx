@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 
 import ComboboxComponent from '@/components/form/Combobox'
+import { FormGrid } from '@/components/form/FormGrid'
 import { Input, TextArea } from '@/components/form/Input'
 import { SelectWithError } from '@/components/form/Select'
 
@@ -23,28 +24,23 @@ const EditForm = ({ uid }: Props) => {
           System Edit
         </h3>
       </div> */}
-      <div className="pt-4 grid grid-cols-12 ">
-        <div className="col-span-3">
+      <FormGrid className="pt-4">
+        <div className="col-span-3 md:col-span-2 lg:col-span-4 md:pr-4">
           <SystemFormImage uid={uid} />
         </div>
-        <div className="pl-5 col-span-9">
-          <Input {...fields.name} className="pb-1" />
-          <div className="grid grid-cols-12">
-            <ComboboxComponent {...fields.ownerUID} className="col-span-6 pb-1 pr-1" />
-            <ComboboxComponent {...fields.parentUID} className="col-span-6 pb-1" />
-          </div>
-          <SelectWithError {...fields.importanceUID} className="pb-1" />
+        <div className="col-span-3 md:col-span-4 lg:col-span-8 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-x-2 gap-y-4 mb-auto">
+          <Input {...fields.name} className="col-span-3 md:col-span-4 lg:col-span-8" />
+          <ComboboxComponent {...fields.ownerUID} className="col-span-3 md:col-span-4 lg:col-span-4" />
+          <ComboboxComponent {...fields.parentUID} className="col-span-3 md:col-span-4  lg:col-span-4" />
+          <SelectWithError {...fields.importanceUID} className="col-span-3 md:col-span-4 lg:col-span-8" />
         </div>
-
-        <ComboboxComponent {...fields.locationUID} className="col-span-6 pt-2 pr-1 z-50" />
-        <SelectWithError {...fields.zoneUID} className="col-span-6 pl-1 pt-2" />
-
-        <SelectWithError {...fields.systemTypeUID} className="col-span-6 pr-1 pt-2" />
-        <Input {...fields.systemCode} className="pt-2 col-span-3 pl-1 pr-1" />
-        <Input {...fields.systemAlias} className="col-span-3 pl-1 pt-2" />
-
-        <TextArea {...fields.description} className="col-span-12 pt-2" />
-      </div>
+        <ComboboxComponent {...fields.locationUID} className="col-span-3 md:col-span-6 z-50" />
+        <SelectWithError {...fields.zoneUID} className="col-span-3 md:col-span-6 " />
+        <SelectWithError {...fields.systemTypeUID} className="col-span-3 md:col-span-6" />
+        <Input {...fields.systemCode} className="col-span-3" />
+        <Input {...fields.systemAlias} className="col-span-3" />
+        <TextArea {...fields.description} className="col-span-full" />
+      </FormGrid>
     </Fragment>
   )
 }
