@@ -21,11 +21,7 @@ interface Props {
   catalogueItems?: CatalogueItemsResponse
 }
 
-const CatalogueItemsContainer = ({
-  categoryListLength,
-  setCatalogueItemsList,
-  catalogueItems
-}: Props) => {
+const CatalogueItemsContainer = ({ categoryListLength, setCatalogueItemsList, catalogueItems }: Props) => {
   const intl = useIntl()
   const router = useRouter()
   const { status: session } = useSession()
@@ -45,9 +41,7 @@ const CatalogueItemsContainer = ({
   }, [setPageSize])
 
   const { data } = useSWR<CatalogueItemsResponse>(
-    categoryListLength === 0 || (router.query.search && session === 'authenticated')
-      ? endpoints.catalogueItems
-      : null
+    categoryListLength === 0 || (router.query.search && session === 'authenticated') ? endpoints.catalogueItems : null
   )
   useEffect(() => {
     setTotalCount(data?.totalCount)
@@ -61,10 +55,7 @@ const CatalogueItemsContainer = ({
       <div data-testid="item-list" className="h-full overflow-auto border-t border-gray-300  ">
         {data &&
           (data.totalCount !== 0 ? (
-            <CatalogueItemsComponent
-              catalogueItems={data}
-              categoryListLength={categoryListLength}
-            />
+            <CatalogueItemsComponent catalogueItems={data} categoryListLength={categoryListLength} />
           ) : (
             <DefaultMessageComponent
               title={intl.formatMessage({ id: messages.noResults.title })}

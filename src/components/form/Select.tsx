@@ -51,7 +51,10 @@ export const SelectWithError = <T extends FieldValues>({
   ...rest
 }: SelectWithErrorProps<T>) => (
   <div
-    className={classNames('block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm', className)}
+    className={classNames(
+      'block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+      className
+    )}
   >
     {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
     <Select

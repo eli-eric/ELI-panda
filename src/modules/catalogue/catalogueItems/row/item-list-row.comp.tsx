@@ -38,7 +38,7 @@ const ItemListRow = ({ item, index, categoryListLength, selectable }: Props) => 
       className={classNames(
         'hover:bg-primary-200',
         index % 2 === 0 ? undefined : 'bg-gray-100',
-        selectable?.selectedItem === item.uid ? 'bg-primary-200' : '',
+        selectable?.selectedItem === item.uid ? 'bg-primary-200' : ''
       )}
     >
       {selectable && (

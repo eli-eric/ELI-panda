@@ -17,9 +17,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
       parentPath = slug.join('/').toLowerCase()
     }
 
-    result = CatalogueCategories.filter(f => f.parentPath === parentPath).sort((a, b) =>
-      a.name > b.name ? 0 : -1
-    )
+    result = CatalogueCategories.filter(f => f.parentPath === parentPath).sort((a, b) => (a.name > b.name ? 0 : -1))
 
     res.status(200).json(result)
   } else {

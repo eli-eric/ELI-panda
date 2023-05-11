@@ -9,6 +9,7 @@ ELI-PANDA.code-workspace
 node_modules
 /.pnp
 .pnp.js
+package-lock.json
 
 # testing
 /coverage
