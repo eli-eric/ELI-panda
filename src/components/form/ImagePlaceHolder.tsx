@@ -1,4 +1,4 @@
-import { DropzoneInputProps, DropzoneRootProps } from 'react-dropzone'
+import type { DropzoneInputProps, DropzoneRootProps } from 'react-dropzone'
 
 import { ImageIcon } from '../SvgIcons'
 

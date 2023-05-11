@@ -6,7 +6,7 @@ import ModalComponent from '@/components/modal/modal.comp'
 import { classNames } from '@/helpers'
 import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
 
 import ProfileCardComponent from '../card/profile-card.comp'
 

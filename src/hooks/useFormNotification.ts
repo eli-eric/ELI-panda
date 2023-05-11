@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Control, FieldValues, useFormState } from 'react-hook-form'
+import { type Control, type FieldValues, useFormState } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
 interface Props<T extends FieldValues> {

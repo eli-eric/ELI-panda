@@ -1,7 +1,7 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { Fragment, useEffect, useMemo } from 'react'
-import { Column } from 'react-table'
+import type { Column } from 'react-table'
 import useSWR from 'swr'
 
 import TooltipComponent from '@/components/tooltip.comp'
@@ -12,7 +12,7 @@ import usePagination from '@/hooks/usePagination'
 import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
 
-import { SystemDetailResponse, SystemsResponse } from '../../types/responses'
+import type { SystemDetailResponse, SystemsResponse } from '../../types/responses'
 
 interface ResultsProps {
   searchValue?: string

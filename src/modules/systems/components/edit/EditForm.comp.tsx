@@ -4,7 +4,7 @@ import ComboboxComponent from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/Input'
 import { SelectWithError } from '@/components/form/Select'
 
-import { SystemDetailResponse } from '../../types/responses'
+import type { SystemDetailResponse } from '../../types/responses'
 import useSystemEditFormFields from './EditForm.fields'
 import SystemFormImage from './SystemFormImage'
 

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import { FormattedDate } from 'react-intl'
-import { CellProps, Column } from 'react-table'
+import type { CellProps, Column } from 'react-table'
 import useSWR, { useSWRConfig } from 'swr'
 
 import { Button, PlusButton } from '@/components/Buttons'
@@ -21,7 +21,7 @@ import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
 
 import TableActions from './components/TableActions'
-import { Order, OrderListResponse } from './types'
+import type { Order, OrderListResponse } from './types'
 
 const OrdersContainer = () => {
   const router = useRouter()

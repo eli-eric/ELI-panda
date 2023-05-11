@@ -6,7 +6,7 @@ import ItemDetailComponent from '@/components/item-detail/ItemDetail.comp'
 import ItemProperty from '@/components/item-property/ItemProperty'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { message } from '@/i18n/src/messages'
-import { SystemDetailResponse } from '@/modules/systems/types/responses'
+import type { SystemDetailResponse } from '@/modules/systems/types/responses'
 
 const messages = message.systemsPage.systemDetail.form
 

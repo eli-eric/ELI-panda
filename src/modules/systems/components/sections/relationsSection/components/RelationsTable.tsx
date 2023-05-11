@@ -1,10 +1,10 @@
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
 import { useMemo } from 'react'
-import { CellProps, Column } from 'react-table'
+import type { CellProps, Column } from 'react-table'
 
 import { DeleteButton } from '@/components/Buttons'
 import useGeneralTable from '@/hooks/useGeneralTable'
-import { SystemRelationshipResponse } from '@/modules/systems/types/responses'
+import type { SystemRelationshipResponse } from '@/modules/systems/types/responses'
 
 interface Props {
   relations: SystemRelationshipResponse[]

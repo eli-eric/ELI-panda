@@ -1,6 +1,6 @@
-import { Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
-import { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses'
 
 export interface Selectable {
   isSelectable: boolean

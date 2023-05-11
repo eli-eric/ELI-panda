@@ -6,7 +6,7 @@ import {
   TrashIcon
 } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
-import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react'
+import { type Dispatch, Fragment, type SetStateAction, useEffect, useState } from 'react'
 
 import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
@@ -14,7 +14,7 @@ import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import CategoryEditModal from '@/modules/catalogue/categoryEditForm/CategoryEditModal'
 import { ROLE } from '@/types/constants/roles'
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
 
 import useSubmit from '../../../hooks/useSubmit'
 

@@ -1,8 +1,8 @@
 import React from 'react'
-import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
+import type { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
 import { classNames } from '@/helpers'
-import { FieldProps } from '@/types/form'
+import type { FieldProps } from '@/types/form'
 
 import { ValidationIcon } from './Icons'
 

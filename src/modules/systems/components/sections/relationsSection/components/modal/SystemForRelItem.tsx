@@ -1,10 +1,10 @@
-import { Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
 import TableRowComponent from '@/components/table/TableRow.comp'
 import { TableRowItem } from '@/components/table/TableRowItem.comp'
-import { SystemDetailResponse } from '@/modules/systems/types/responses'
+import type { SystemDetailResponse } from '@/modules/systems/types/responses'
 
-import { SelectedSystemForRel } from './SelectRelation'
+import type { SelectedSystemForRel } from './SelectRelation'
 
 interface SystemForRelProps {
   item: SystemDetailResponse

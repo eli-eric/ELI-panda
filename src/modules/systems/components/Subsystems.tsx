@@ -10,7 +10,7 @@ import { useImage } from '@/hooks/useImage'
 import { PATH } from '@/types/constants/paths'
 
 import { useSystemEdit } from '../hooks/useSystemEdit'
-import { SubsystemsResponse } from '../types/responses'
+import type { SubsystemsResponse } from '../types/responses'
 
 export const Item = (props: { uid: string; text: string }) => {
   const { uid, text } = props

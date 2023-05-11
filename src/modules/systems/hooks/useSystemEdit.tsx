@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import { Dispatch, Fragment, SetStateAction, useState } from 'react'
+import { type Dispatch, Fragment, type SetStateAction, useState } from 'react'
 
 import { DeleteButton, EditButton, PlusButton } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
@@ -8,10 +8,10 @@ import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 import { ROLE } from '@/types/constants/roles'
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
 
 import Edit from '../components/edit/EditForm.cont'
-import { SystemDetailResponse } from '../types/responses'
+import type { SystemDetailResponse } from '../types/responses'
 
 interface Props {
   open: boolean

@@ -1,9 +1,9 @@
 import { useSession } from 'next-auth/react'
-import { Dispatch, Fragment, SetStateAction, useEffect } from 'react'
+import { type Dispatch, Fragment, type SetStateAction, useEffect } from 'react'
 import { useCategoryPath } from 'src/hooks/usePath'
 import useSWR from 'swr'
 
-import { CatalogueCategoryResponse } from '@/types/responses'
+import type { CatalogueCategoryResponse } from '@/types/responses'
 
 import CategoryItemComponent from './CategoryItem.comp'
 

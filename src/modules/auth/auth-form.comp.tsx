@@ -1,4 +1,4 @@
-import { FormState, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form'
+import type { FormState, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 

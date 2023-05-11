@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Dispatch, Fragment, SetStateAction } from 'react'
+import { type Dispatch, Fragment, type SetStateAction } from 'react'
 
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
 
 import ModalButtonsComponent from './modal.buttons'
 

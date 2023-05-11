@@ -4,7 +4,7 @@ import { useMakeFormFields } from '@/hooks/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 
-import { OrderDetailFormType } from '../../types'
+import type { OrderDetailFormType } from '../../types'
 
 // messages
 const { form } = message.ordersPage.orderDetail

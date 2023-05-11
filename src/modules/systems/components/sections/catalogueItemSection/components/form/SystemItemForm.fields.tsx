@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import { useCodebookSelectValues } from '@/hooks/useCodebook'
 import { useMakeFormFields } from '@/hooks/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
-import { SystemItemFormType } from '@/modules/systems/types/form'
+import type { SystemItemFormType } from '@/modules/systems/types/form'
 import { CODEBOOK } from '@/types/constants/codebook'
 
 const { form } = message.systemsPage.catalogueItem.addItemModal

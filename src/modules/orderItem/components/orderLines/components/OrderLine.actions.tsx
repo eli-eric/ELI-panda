@@ -9,9 +9,9 @@ import { useEndpoint } from '@/hooks/useEndpoint'
 import useRolePermission from '@/hooks/useRole'
 import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
-import { OrderLineFormType } from '@/modules/orderItem/types'
+import type { OrderLineFormType } from '@/modules/orderItem/types'
 import { ROLE } from '@/types/constants/roles'
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
 
 import useOrderLineForm from '../form/OrderLineForm.cont'
 

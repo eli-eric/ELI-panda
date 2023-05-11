@@ -1,12 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect, useState } from 'react'
-import { DeepPartial, FieldValues, FormProvider, useForm } from 'react-hook-form'
+import { type DeepPartial, type FieldValues, FormProvider, useForm } from 'react-hook-form'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import ModalButtonsComponent from '@/components/modal/modal.buttons'
 import ModalComponent from '@/components/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
 
 import useFormNotification from './useFormNotification'
 

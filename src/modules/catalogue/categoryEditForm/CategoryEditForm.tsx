@@ -5,7 +5,7 @@ import useSWR from 'swr'
 import * as yup from 'yup'
 
 import { useEndpoint } from '@/hooks/useEndpoint'
-import { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
+import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 import GroupList from './GroupList'
 import Main from './Main'

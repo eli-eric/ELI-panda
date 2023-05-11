@@ -1,4 +1,4 @@
-import ReactTooltip, { Offset } from 'react-tooltip'
+import ReactTooltip, { type Offset } from 'react-tooltip'
 
 interface TooltipComponentProps {
   children: any

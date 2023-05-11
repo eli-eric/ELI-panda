@@ -1,11 +1,11 @@
-import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
+import { type Dispatch, type SetStateAction, useEffect, useMemo } from 'react'
 import useSWR from 'swr'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
 import CatalogueItemsComponent from '@/modules/catalogue/catalogueItems/CatalogueItems.comp'
-import { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
+import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
 
 const CatalogueItemsTable = ({
   searchValue,

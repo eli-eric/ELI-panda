@@ -1,4 +1,4 @@
-import { NextPage } from 'next'
+import type { NextPage } from 'next'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'

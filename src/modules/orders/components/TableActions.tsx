@@ -9,7 +9,7 @@ import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
 
 const buttonsMessage = message.common.buttons
 const modalMessage = message.ordersPage.deleteModal

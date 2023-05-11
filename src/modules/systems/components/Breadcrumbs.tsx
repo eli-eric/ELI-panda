@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import BreadcrumpContainer from '@/components/Breadcrump/Breadcrump.cont'
 import BreadcrumpItem from '@/components/Breadcrump/Breadcrump.item'
 
-import { ParentPath } from '../types/responses'
+import type { ParentPath } from '../types/responses'
 
 const Breadcrumbs = ({ parentPath }: { parentPath?: ParentPath }) => (
   <BreadcrumpContainer homeLink="/systems">

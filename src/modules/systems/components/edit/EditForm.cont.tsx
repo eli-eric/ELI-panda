@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import { Dispatch, SetStateAction, useEffect } from 'react'
+import { type Dispatch, type SetStateAction, useEffect } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import { object, string } from 'yup'
@@ -11,10 +11,10 @@ import ModalButtonsComponent from '@/components/modal/modal.buttons'
 import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
 
-import { SystemEditFormType } from '../../types/form'
-import { SystemDetailResponse } from '../../types/responses'
+import type { SystemEditFormType } from '../../types/form'
+import type { SystemDetailResponse } from '../../types/responses'
 import EditForm from './EditForm.comp'
 
 const formatDataForm = (data: SystemDetailResponse): SystemEditFormType => ({

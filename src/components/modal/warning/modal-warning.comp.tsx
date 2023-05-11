@@ -1,10 +1,10 @@
 import { Dialog } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/20/solid'
-import { Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import ErrorPage from '@/components/error/ErrorPage'
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
 
 import ModalComponent from '../modal.comp'
 

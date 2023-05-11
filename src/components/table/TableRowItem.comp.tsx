@@ -1,5 +1,5 @@
 import { InformationCircleIcon, PhotoIcon } from '@heroicons/react/24/outline'
-import Image, { StaticImageData } from 'next/image'
+import Image, { type StaticImageData } from 'next/image'
 import { Fragment } from 'react'
 
 import TooltipComponent from '../tooltip.comp'

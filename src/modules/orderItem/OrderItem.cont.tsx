@@ -25,7 +25,7 @@ import { ROLE } from '@/types/constants/roles'
 import OrderFormComponent from './components/form/OrderForm.comp'
 import HeaderComponent from './components/Header.comp'
 import OrderLinesTable from './components/orderLines/OrderLines.table'
-import { OrderDetailFormType, OrderLineFormType } from './types'
+import type { OrderDetailFormType, OrderLineFormType } from './types'
 
 const schema = object({
   name: string().required("Order's name is required"),
