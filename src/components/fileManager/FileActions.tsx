@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { useCallback } from 'react'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
-import { KeyedMutator } from 'swr'
+import type { KeyedMutator } from 'swr'
 
 import executeRequest from '@/helpers/executeRequest'
 import { createMessageValues } from '@/helpers/formatters'
