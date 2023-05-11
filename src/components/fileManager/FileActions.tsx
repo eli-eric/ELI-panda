@@ -10,7 +10,7 @@ import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 
 import { DeleteButton, DownloadButton } from '../Buttons'
-import { FileItem } from './types'
+import type { FileItem } from './types'
 
 const messages = message.common.fileManager
 

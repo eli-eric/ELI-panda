@@ -23,7 +23,7 @@ type FileManagerProps = {
 const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   const endpoint = `/api/${itemType}/${uid}/files`
   const { data: files, mutate } = useSWR<Array<FileItem>>(endpoint, uniFetcher)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<Array<boolean>>([])
 
   const [newFile, setNewFile] = useState<Array<{ name: string; payload: string }>>([])
   const onDrop = useCallback(async (files: File[]) => {
@@ -44,21 +44,30 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   }, [])
 
   const handlePost = useCallback(() => {
-    newFile.forEach(file => {
-      setLoading(true)
+    const fileLoading = newFile.map(() => true)
+    setLoading(fileLoading)
+    newFile.forEach((file, index) => {
       const { name, payload } = file
       const body = JSON.stringify({ name, payload })
       executeRequest<FileItem>(
         endpoint,
         { method: 'post', body },
         res => {
+          setLoading(prevLoading => {
+            const updatedLoading = [...prevLoading]
+            updatedLoading[index] = false
+            return updatedLoading
+          })
           mutate([...(files ?? []), res])
           toast.success(`Uploaded ${name}`)
-          setLoading(false)
         },
         () => {
+          setLoading(prevLoading => {
+            const updatedLoading = [...prevLoading]
+            updatedLoading[index] = false
+            return updatedLoading
+          })
           toast.error(`Failed to upload ${name}`)
-          setLoading(false)
         }
       )
     })
@@ -112,7 +121,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
           </div>
         </div>
       )}
-      {loading && <ProgressBarComponent />}
+      {loading.some(value => value) && <ProgressBarComponent />}
       {getTable()}
     </div>
   )
