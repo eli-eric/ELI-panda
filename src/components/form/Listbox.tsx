@@ -83,7 +83,9 @@ const ListBox = <T extends FieldValues>({
           className
         )}
       >
-        {({ open }) => (
+        {(
+          { open } // eslint-disable-line
+        ) => (
           <>
             {label && <Listbox.Label className="block text-sm font-medium text-gray-900">{label}</Listbox.Label>}
             <div className="relative">

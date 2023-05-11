@@ -1,23 +1,18 @@
-import Link from 'next/link'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'react-hot-toast'
 import type { CellProps, Column } from 'react-table'
 import useGeneralTable from 'src/hooks/useGeneralTable'
 import useSWR from 'swr'
 
-import { DeleteButton, DownloadButton, PlusButton } from '@/components/Buttons'
+import { PlusButton } from '@/components/Buttons'
 import executeRequest from '@/helpers/executeRequest'
 import { uniFetcher } from '@/helpers/fetcher'
-import useWarningModal from '@/hooks/useWarningModal'
 import type { FILE_TYPE } from '@/types/constants/files'
 
-export type FileItem = {
-  id: string
-  name: string
-  type: string
-  url: string
-}
+import ProgressBarComponent from '../progress-bar.comp'
+import FileActions from './FileActions'
+import type { FileItem } from './types'
 
 type FileManagerProps = {
   itemType: FILE_TYPE
@@ -27,54 +22,60 @@ type FileManagerProps = {
 
 const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   const endpoint = `/api/${itemType}/${uid}/files`
-  const { data: files, error, mutate } = useSWR<Array<FileItem>>(endpoint, uniFetcher)
+  const { data: files, mutate } = useSWR<Array<FileItem>>(endpoint, uniFetcher)
+  const [loading, setLoading] = useState<Array<boolean>>([])
 
-  const [newFile, setNewFile] = useState({ name: '', payload: '' })
-
+  const [newFile, setNewFile] = useState<Array<{ name: string; payload: string }>>([])
   const onDrop = useCallback(async (files: File[]) => {
-    const file = files[0]
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => setNewFile({ name: file.name, payload: String(reader.result) })
+    const updatedFiles = await Promise.all(
+      files.map(
+        file =>
+          new Promise<{ name: string; payload: string }>((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = () => {
+              resolve({ name: file.name, payload: reader.result as string })
+            }
+            reader.onerror = reject
+            reader.readAsDataURL(file)
+          })
+      )
+    )
+    setNewFile(updatedFiles)
   }, [])
 
-  const handlePost = useCallback(
-    (name: string, payload: string) => {
+  const handlePost = useCallback(() => {
+    const fileLoading = newFile.map(() => true)
+    setLoading(fileLoading)
+    newFile.forEach((file, index) => {
+      const { name, payload } = file
       const body = JSON.stringify({ name, payload })
       executeRequest<FileItem>(
         endpoint,
         { method: 'post', body },
         res => {
+          setLoading(prevLoading => {
+            const updatedLoading = [...prevLoading]
+            updatedLoading[index] = false
+            return updatedLoading
+          })
           mutate([...(files ?? []), res])
-          setNewFile({ name: '', payload: '' })
           toast.success(`Uploaded ${name}`)
         },
-        () => toast.error(`Failed to upload ${name}`)
-      )
-    },
-    [endpoint, mutate, files, setNewFile]
-  )
-
-  const handleDelete = useCallback(
-    (id: string) => {
-      const name = (files ?? []).find(obj => obj.id === id)?.name
-      executeRequest(
-        `${endpoint}/${id}`,
-        { method: 'delete' },
         () => {
-          toast.success(`Deleted ${name}`)
-          mutate((files ?? []).filter(obj => obj.id !== id))
-        },
-        () => toast.error(`Failed to delete ${name}`)
+          setLoading(prevLoading => {
+            const updatedLoading = [...prevLoading]
+            updatedLoading[index] = false
+            return updatedLoading
+          })
+          toast.error(`Failed to upload ${name}`)
+        }
       )
-    },
-    [endpoint, files, mutate]
-  )
-
-  const { withWarningModal, WarningModal } = useWarningModal('Are you sure you want to delete this file?')
+    })
+    setNewFile([])
+  }, [endpoint, mutate, files, newFile])
 
   useEffect(() => {
-    newFile.name && newFile.payload && handlePost(newFile.name, newFile.payload)
+    newFile.length > 0 && handlePost()
   }, [newFile, handlePost])
 
   // Define columns for useGeneralTable
@@ -85,14 +86,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
         accessor: 'name',
         Cell: ({ value, row: { original } }: CellProps<FileItem>) => (
           <div className="flex items-center">
-            <div className="py-1">
-              <Link href={original.url} passHref legacyBehavior={true}>
-                <a target="_blank">
-                  <DownloadButton className="mr-1" />
-                </a>
-              </Link>
-              {hasEditRole && <DeleteButton onClick={() => withWarningModal(handleDelete)(original.id)} />}
-            </div>
+            <FileActions file={original} mutate={mutate} endpoint={endpoint} files={files} hasEditRole={hasEditRole} />
             <span className="pl-4">{value}</span>
           </div>
         )
@@ -100,30 +94,35 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
     ]
 
     return cols
-  }, [hasEditRole, handleDelete, withWarningModal])
+  }, [hasEditRole, files, endpoint, mutate])
 
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop
   })
+  const handleButtonClick = () => {
+    fileInputRef.current?.click() // Safely access the current property
+  }
 
   // Use useGeneralTable hook
   const { getTable } = useGeneralTable({
     tableId: 'filemanager',
     data: files,
-    columns,
-    loading: !error && !files
+    columns
   })
 
   return (
     <div>
       {hasEditRole && (
-        <div {...getRootProps()}>
-          <input {...getInputProps()} />
-          <PlusButton className="mb-2" buttonSize="large" primary={!isDragActive} />
+        <div>
+          <div {...getRootProps()}>
+            <input {...getInputProps()} ref={fileInputRef} style={{ display: 'none' }} />
+            <PlusButton className="mb-2" buttonSize="large" primary={!isDragActive} onClick={handleButtonClick} />
+          </div>
         </div>
       )}
+      {loading.some(value => value) && <ProgressBarComponent />}
       {getTable()}
-      <WarningModal />
     </div>
   )
 }

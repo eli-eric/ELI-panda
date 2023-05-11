@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import Modal from 'src/components/modal/warning/modal-warning.comp'
 
+import { message } from '@/i18n/src/messages'
+
+const messages = message.common
+
 const useWarningModal = (message: string) => {
   const [isOpen, setIsOpen] = useState(false)
   const [isConfirmed, setIsConfirmed] = useState(false)
@@ -25,12 +29,12 @@ const useWarningModal = (message: string) => {
 
   const deleteButtons = {
     goNext: {
-      text: 'Delete',
+      text: messages.buttons.continue,
       loading: false,
       onClick: () => setIsConfirmed(true)
     },
     goBack: {
-      text: 'Cancel',
+      text: messages.buttons.cancel,
       onClick: () => {
         setIsOpen(false)
       }
@@ -51,7 +55,7 @@ const useWarningModal = (message: string) => {
       buttons={deleteButtons}
       open={isOpen}
       setOpen={setIsOpen}
-      title="Warning"
+      title={messages.warning}
       message={message}
       error={error}
       testid={message}
