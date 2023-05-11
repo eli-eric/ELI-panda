@@ -6,14 +6,7 @@ interface Props {
 }
 
 const EliLogoComponent = ({ customClass }: Props) => (
-  <Image
-    className={customClass}
-    src={eliLogo}
-    alt="Eli Logo"
-    width={200}
-    height={200}
-    priority={true}
-  />
+  <Image className={customClass} src={eliLogo} alt="Eli Logo" width={200} height={200} priority={true} />
 )
 
 export default EliLogoComponent

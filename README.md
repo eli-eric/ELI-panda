@@ -1,4 +1,4 @@
-# ELI-PANDA 
+# ELI-PANDA
 
 ### (ELI oPerations And maiNtenance DAtabase)
 
@@ -22,7 +22,4 @@ Open [http://localhost:5001](http://localhost:5001) with your browser to see the
 
 The only way how to access data in PANDA database is ELI PANDA REST API.
 
-More information in API repository's [readme.md](https://github.com/eli-eric/eli-panda-api/tree/main) 
-
-
-
+More information in API repository's [readme.md](https://github.com/eli-eric/eli-panda-api/tree/main)

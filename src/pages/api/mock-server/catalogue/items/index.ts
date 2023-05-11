@@ -32,17 +32,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
             f.manufacturer.toLowerCase().includes(searchString) ||
             f.manufacturerNumber.toLowerCase().includes(searchString) ||
             (f.details != null &&
-              f.details?.filter(
-                df => df.value !== null && df.value.toLowerCase().includes(searchString)
-              ).length > 0)
+              f.details?.filter(df => df.value !== null && df.value.toLowerCase().includes(searchString)).length > 0)
         )
       })
     }
 
     if (categoryPathParam && typeof categoryPathParam === 'string') {
-      dataResult = dataResult.filter(f =>
-        f.categoryPath.startsWith(categoryPathParam.toLowerCase())
-      )
+      dataResult = dataResult.filter(f => f.categoryPath.startsWith(categoryPathParam.toLowerCase()))
     }
 
     const totalCount = dataResult.length
