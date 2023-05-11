@@ -44,7 +44,7 @@ const ListBox = <T extends FieldValues>({
       return [emptyOption, ...codebookOptions]
     }
     return codebookOptions
-  }, [emptyOption, codebookOptions, name, setValue])
+  }, [emptyOption, codebookOptions, name, setValue, setSelectedOption])
 
   useEffect(() => {
     if (codebookOption && !emptyOption) {

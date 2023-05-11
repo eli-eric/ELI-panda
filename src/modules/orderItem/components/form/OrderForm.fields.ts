@@ -90,6 +90,7 @@ const useOrderFormFields = (disabled?: boolean) => {
     },
     orderDate: {
       name: 'orderDate',
+      label: form.orderDate.label,
       type: 'date',
       disabled: disabled,
       isError: !!formState.errors.orderDate,

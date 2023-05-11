@@ -205,7 +205,7 @@ export const messages = {
         supplier: { label: 'Supplier', placeholder: '...type here' },
         orderStatus: { label: 'Order Status' },
         notes: { label: 'Notes' },
-        orderDate: { label: 'Date' },
+        orderDate: { label: 'Order Date' },
         procurementer: { label: 'Procurementer', placeholder: '...type here' },
         requester: { label: 'Requester', placeholder: '...type here' }
       }

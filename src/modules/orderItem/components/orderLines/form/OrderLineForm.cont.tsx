@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { number, object, string } from 'yup'
 
 import useFormModal from '@/hooks/useFormModal'
@@ -24,10 +24,6 @@ const orderLineFormSchema = object({
 
 const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
   const [catalogueItem, setCatalogueItem] = useState<CatalogueItem | undefined>(undefined)
-
-  useEffect(() => {
-    console.log('orderLine', orderLine)
-  }, [orderLine])
 
   const modalSubmit = (data: OrderLineFormType) => {
     const dataToSend = { ...data }
