@@ -12,7 +12,7 @@ import { array, object, string } from 'yup'
 import { Heading } from '@/components/card/card.comp'
 import ErrorPage from '@/components/error/ErrorPage'
 import FileManager from '@/components/fileManager/FileManager'
-import LoaderComponent from '@/components/loader.comp'
+import ProgressBarComponent from '@/components/progress-bar.comp'
 import { convertDate } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useFormNotification from '@/hooks/useFormNotification'
@@ -139,7 +139,7 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
           <Fragment>
             <Heading text="Files" />
             <ErrorBoundary fallback={<ErrorPage />}>
-              <Suspense fallback={<LoaderComponent />}>
+              <Suspense fallback={<ProgressBarComponent />}>
                 <FileManager
                   itemType={FILE_TYPE.ORDER}
                   uid={uid}

@@ -10,6 +10,7 @@ import executeRequest from '@/helpers/executeRequest'
 import { uniFetcher } from '@/helpers/fetcher'
 import type { FILE_TYPE } from '@/types/constants/files'
 
+import ProgressBarComponent from '../progress-bar.comp'
 import FileActions from './FileActions'
 import type { FileItem } from './types'
 
@@ -21,7 +22,8 @@ type FileManagerProps = {
 
 const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   const endpoint = `/api/${itemType}/${uid}/files`
-  const { data: files, error, mutate } = useSWR<Array<FileItem>>(endpoint, uniFetcher)
+  const { data: files, mutate } = useSWR<Array<FileItem>>(endpoint, uniFetcher)
+  const [loading, setLoading] = useState(false)
 
   const [newFile, setNewFile] = useState<Array<{ name: string; payload: string }>>([])
   const onDrop = useCallback(async (files: File[]) => {
@@ -43,6 +45,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
 
   const handlePost = useCallback(() => {
     newFile.forEach(file => {
+      setLoading(true)
       const { name, payload } = file
       const body = JSON.stringify({ name, payload })
       executeRequest<FileItem>(
@@ -51,8 +54,12 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
         res => {
           mutate([...(files ?? []), res])
           toast.success(`Uploaded ${name}`)
+          setLoading(false)
         },
-        () => toast.error(`Failed to upload ${name}`)
+        () => {
+          toast.error(`Failed to upload ${name}`)
+          setLoading(false)
+        }
       )
     })
     setNewFile([])
@@ -92,8 +99,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   const { getTable } = useGeneralTable({
     tableId: 'filemanager',
     data: files,
-    columns,
-    loading: !error && !files
+    columns
   })
 
   return (
@@ -106,6 +112,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
           </div>
         </div>
       )}
+      {loading && <ProgressBarComponent />}
       {getTable()}
     </div>
   )
