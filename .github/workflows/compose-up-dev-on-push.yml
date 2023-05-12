@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Show secret stats
         run: |
-          echo "${{ secrets.NEXTAUTH_SECRET }}" | wc
+          echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_DEV }}" | "${{ secrets.MINIO_SECRET_KEY_DEV }}" | wc
   compose-up:
     runs-on: self-hosted
     needs: use-secret
@@ -21,3 +21,5 @@ jobs:
           docker compose -f docker-compose-dev.yml up -d --build
         env:
           NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
+          MINIO_ACCESS_KEY_PROD: '${{ secrets.MINIO_ACCESS_KEY_DEV }}'
+          MINIO_SECRET_KEY_PROD: '${{ secrets.MINIO_SECRET_KEY_DEV }}'
