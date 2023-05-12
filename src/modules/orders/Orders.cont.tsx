@@ -1,15 +1,12 @@
-import { ArrowPathIcon, InformationCircleIcon } from '@heroicons/react/24/outline'
+import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import { Fragment, useEffect, useMemo, useState } from 'react'
-import { FormattedDate } from 'react-intl'
-import type { CellProps, Column } from 'react-table'
+import { Fragment, useEffect, useState } from 'react'
 import useSWR, { useSWRConfig } from 'swr'
 
 import { Button, PlusButton } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/catalog-layout.cont'
-import TooltipComponent from '@/components/tooltip.comp'
 import { classNames } from '@/helpers'
 import { fetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
@@ -20,7 +17,7 @@ import useMutateListStore from '@/store/useMutateListStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
 
-import TableActions from './components/TableActions'
+import useOrderColumns from './components/OrderColumns'
 import type { Order, OrderListResponse } from './types'
 
 const OrdersContainer = () => {
@@ -87,63 +84,7 @@ const OrdersContainer = () => {
 
   const { data: orderList, error } = useSWR<OrderListResponse>(session?.user && orders, fetcher, { suspense: false })
 
-  const columns = useMemo(
-    (): Column<Order>[] => [
-      {
-        Header: 'Name',
-        accessor: 'name',
-        id: 'name',
-        Cell: ({ value, row }: CellProps<Order>) => (
-          <div className="flex items-center my-1">
-            <TableActions uid={row.original.uid} mutate={orders} />
-            <span>{value}</span>
-          </div>
-        )
-      },
-      {
-        Header: 'Order Date',
-        accessor: 'orderDate',
-        Cell: ({ value }: CellProps<Order>) => (
-          <span className="text-right">
-            <FormattedDate value={value} day="2-digit" month="long" year="numeric" />
-          </span>
-        ),
-        id: 'orderDate'
-      },
-      { Header: 'Order Number', accessor: 'orderNumber', id: 'orderNumber' },
-      { Header: 'Request Number', accessor: 'requestNumber', id: 'requestNumber' },
-      { Header: 'Contract Number', accessor: 'contractNumber', id: 'contractNumber' },
-      { Header: 'Supplier', accessor: 'supplier' },
-      { Header: 'Order Status', accessor: 'orderStatus' },
-      {
-        Header: 'Notes',
-        accessor: 'notes',
-        Cell: ({ value }: CellProps<Order>) => (
-          <Fragment>
-            {value && (
-              <TooltipComponent text={value}>
-                <InformationCircleIcon className="h-6 w-6 flex-shrink-0" />
-              </TooltipComponent>
-            )}
-          </Fragment>
-        ),
-        id: 'notes'
-      },
-      {
-        Header: 'Last Update Time',
-        accessor: 'lastUpdateTime',
-        Cell: ({ value }: CellProps<Order>) => (
-          <FormattedDate value={value} day="2-digit" month="long" year="numeric" />
-        ),
-        id: 'lastUpdateTime'
-      },
-      {
-        Header: 'Last Update by',
-        accessor: 'lastUpdateBy'
-      }
-    ],
-    [orders]
-  )
+  const columns = useOrderColumns({ ordersEnpoint: orders })
 
   const { getTable } = useGeneralTable<Order>({
     columns,

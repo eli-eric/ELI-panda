@@ -23,8 +23,8 @@ const OrderFormComponent = ({ disabledEdit }: Props) => {
       <Input {...fields.orderDate} className="pb-1 col-span-3 lg:col-span-6 pl-1" />
       <Input {...fields.name} className="col-span-3 lg:col-span-6" />
       <ComboboxComponent {...fields.supplier} className="col-span-3 lg:col-span-6" isObject={true} limit={50} />
-      <ListBox {...fields.procurementer} className="col-span-3 lg:col-span-6" isObject={true} />
-      <ComboboxComponent {...fields.requester} className="col-span-3 lg:col-span-6" isObject={true} limit={50} />
+      <ListBox {...fields.procurementResponsible} className="col-span-3 lg:col-span-6" isObject={true} />
+      <ComboboxComponent {...fields.requestor} className="col-span-3 lg:col-span-6" isObject={true} limit={50} />
       <ListBox {...fields.orderStatus} className="col-span-3" />
       <Input {...fields.orderNumber} className="col-span-3" />
       <Input {...fields.requestNumber} className="col-span-3" />

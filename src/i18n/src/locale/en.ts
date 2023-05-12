@@ -206,6 +206,22 @@ export const messages = {
   reportsPage: { head: 'Eli Panda - Reports' },
   ordersPage: {
     head: 'Eli Panda - Orders',
+    ordersTable: {
+      header: {
+        name: 'Name',
+        orderNumber: 'Order Number',
+        requestNumber: 'Request Number',
+        contractNumber: 'Contract Number',
+        supplier: 'Supplier',
+        requestor: 'Requestor',
+        procurementResponsible: 'Procurement Responsible',
+        orderStatus: 'Order Status',
+        notes: 'Notes',
+        orderDate: 'Order Date',
+        lastUpdateTime: 'Last Update Time',
+        lastUpdateBy: 'Last Update By'
+      }
+    },
     orderDetail: {
       form: {
         name: { label: 'Name', placeholder: 'Name' },
@@ -216,8 +232,8 @@ export const messages = {
         orderStatus: { label: 'Order Status' },
         notes: { label: 'Notes' },
         orderDate: { label: 'Order Date' },
-        procurementer: { label: 'Procurementer', placeholder: '...type here' },
-        requester: { label: 'Requester', placeholder: '...type here' }
+        procurementResponsible: { label: 'Procurement Responsible', placeholder: '...type here' },
+        requestor: { label: 'Requestor', placeholder: '...type here' }
       }
     },
     deleteModal: { title: 'Warning', message: 'Are you sure you want to delete this order?' },

@@ -5,6 +5,8 @@ export type Order = {
   requestNumber: number
   contractNumber: number
   supplier: string
+  requestor: string
+  procurementResponsible: string
   orderStatus: string
   notes: string
   orderDate: string

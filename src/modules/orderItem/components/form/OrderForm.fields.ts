@@ -54,22 +54,22 @@ const useOrderFormFields = (disabled?: boolean) => {
       rounded: 'rounded-md',
       codebook: CODEBOOK.SUPPLIER
     },
-    procurementer: {
-      name: 'procurementer',
-      label: form.procurementer.label,
-      placeholder: form.procurementer.placeholder,
+    procurementResponsible: {
+      name: 'procurementResponsible',
+      label: form.procurementResponsible.label,
+      placeholder: form.procurementResponsible.placeholder,
       disabled: disabled,
-      isError: !!formState.errors.procurementer,
+      isError: !!formState.errors.procurementResponsible,
       rounded: 'rounded-md',
       emptyOption: true,
       codebook: CODEBOOK.PROCUREMENTER
     },
-    requester: {
-      name: 'requester',
-      label: form.requester.label,
-      placeholder: form.requester.placeholder,
+    requestor: {
+      name: 'requestor',
+      label: form.requestor.label,
+      placeholder: form.requestor.placeholder,
       disabled: disabled,
-      isError: !!formState.errors.requester,
+      isError: !!formState.errors.requestor,
       rounded: 'rounded-md',
       codebook: CODEBOOK.EMPLOYEE
     },
