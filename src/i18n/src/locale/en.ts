@@ -247,6 +247,18 @@ export const messages = {
         location: { label: 'Location', placeholder: 'Location' },
         itemUsage: { label: 'Item Usage' }
       },
+      orderLinesTable: {
+        header: {
+          name: 'Name',
+          catalogueNumber: 'Catalogue Number',
+          system: 'System',
+          price: 'Price',
+          location: 'Location',
+          itemUsage: 'Item Usage',
+          eun: 'EUN',
+          isDelivered: 'Delivered'
+        }
+      },
       deleteModal: { title: 'Warning', message: 'Are you sure you want to delete this order line?' }
     }
   },
