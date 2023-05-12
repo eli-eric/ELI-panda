@@ -21,7 +21,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ENV PANDA_API_GW_URL="https://api.panda.eli-beams.eu/v1"
+ENV PANDA_API_GW_URL="https://panda-api.eli-laser.eu/v1"
+ENV MINIO_ENDPOINT="minio-main"
+ENV MINIO_BUCKET_NAME="panda-production"
 
 # This will do the trick, use the corresponding env file for each environment.
 # COPY .env.production.sample .env.production
@@ -32,8 +34,10 @@ FROM node:18-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PANDA_API_GW_URL="https://api.panda.eli-beams.eu/v1"
+ENV PANDA_API_GW_URL="https://panda-api.eli-laser.eu/v1"
 ENV NEXTAUTH_URL="https://panda.eli-beams.eu/"
+ENV MINIO_ENDPOINT="minio-main"
+ENV MINIO_BUCKET_NAME="panda-production"
 
 RUN env
 
