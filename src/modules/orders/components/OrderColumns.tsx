@@ -2,20 +2,22 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { Fragment, useMemo } from 'react'
 import { FormattedDate, useIntl } from 'react-intl'
 import { type CellProps, type Column } from 'react-table'
+import type { KeyedMutator } from 'swr'
 
 import TooltipComponent from '@/components/tooltip.comp'
 import { message } from '@/i18n/src/messages'
 
-import type { Order } from '../types'
+import type { Order, OrderListResponse } from '../types'
 import TableActions from './TableActions'
 
 const messages = message.ordersPage.ordersTable.header
 
 interface Props {
-  ordersEnpoint: string
+  mutateOrder: KeyedMutator<OrderListResponse>
+  orderList?: OrderListResponse
 }
 
-const useOrderColumns = ({ ordersEnpoint }: Props) => {
+const useOrderColumns = ({ mutateOrder, orderList }: Props) => {
   const intl = useIntl()
 
   const columns = useMemo(
@@ -26,7 +28,7 @@ const useOrderColumns = ({ ordersEnpoint }: Props) => {
         id: 'name',
         Cell: ({ value, row }: CellProps<Order>) => (
           <div className="flex items-center my-1">
-            <TableActions uid={row.original.uid} mutate={ordersEnpoint} />
+            <TableActions order={row.original} mutateOrder={mutateOrder} orderList={orderList} />
             <span>{value}</span>
           </div>
         )
@@ -75,7 +77,7 @@ const useOrderColumns = ({ ordersEnpoint }: Props) => {
         accessor: 'lastUpdateBy'
       }
     ],
-    [ordersEnpoint, intl]
+    [mutateOrder, orderList, intl]
   )
 
   return columns

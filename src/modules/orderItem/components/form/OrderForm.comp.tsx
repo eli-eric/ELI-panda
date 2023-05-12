@@ -26,8 +26,8 @@ const OrderFormComponent = ({ disabledEdit }: Props) => {
       <ListBox {...fields.procurementResponsible} className="col-span-3 lg:col-span-6" isObject={true} />
       <ComboboxComponent {...fields.requestor} className="col-span-3 lg:col-span-6" isObject={true} limit={50} />
       <ListBox {...fields.orderStatus} className="col-span-3" />
-      <Input {...fields.orderNumber} className="col-span-3" />
       <Input {...fields.requestNumber} className="col-span-3" />
+      <Input {...fields.orderNumber} className="col-span-3" />
       <Input {...fields.contractNumber} className="col-span-3" />
       <TextArea {...fields.notes} className="col-span-full" />
     </FormGrid>

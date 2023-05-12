@@ -82,9 +82,13 @@ const OrdersContainer = () => {
     setQuery(newQuery)
   }, [router.query.search, sorting, pagination])
 
-  const { data: orderList, error } = useSWR<OrderListResponse>(session?.user && orders, fetcher, { suspense: false })
+  const {
+    data: orderList,
+    error,
+    mutate: mutateOrder
+  } = useSWR<OrderListResponse>(session?.user && orders, fetcher, { suspense: false })
 
-  const columns = useOrderColumns({ ordersEnpoint: orders })
+  const columns = useOrderColumns({ mutateOrder, orderList })
 
   const { getTable } = useGeneralTable<Order>({
     columns,

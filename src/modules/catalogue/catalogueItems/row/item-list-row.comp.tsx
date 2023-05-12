@@ -88,7 +88,7 @@ const ItemListRow = ({ item, index, categoryListLength, selectable }: Props) => 
             passHref
             legacyBehavior={selectable?.isSelectable}
           >
-            {selectable ? <a target="_blank">{item.categoryName} </a> : item.categoryName}
+            {selectable?.isSelectable ? <a target="_blank">{item.categoryName} </a> : item.categoryName}
           </Link>
         </td>
       )}

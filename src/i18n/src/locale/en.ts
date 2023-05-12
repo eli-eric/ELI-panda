@@ -236,7 +236,7 @@ export const messages = {
         requestor: { label: 'Requestor', placeholder: '...type here' }
       }
     },
-    deleteModal: { title: 'Warning', message: 'Are you sure you want to delete this order?' },
+    deleteModal: { title: 'Warning', message: 'Are you sure you want to delete {orderName}?' },
     orderLines: {
       form: {
         name: { label: 'Name', placeholder: 'Name' },
