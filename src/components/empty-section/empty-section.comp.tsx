@@ -1,7 +1,5 @@
 import { Fragment } from 'react'
 
-import EliLogoComponent from '@/components/eli-logo.comp'
-
 const EmptySectionComponent = () => (
   <Fragment>
     <div className="flex flex-1 min-h-full flex-col bg-white">

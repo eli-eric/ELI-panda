@@ -2,7 +2,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import React, { type Dispatch, Fragment, type SetStateAction, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { useIntl } from 'react-intl'
 import * as yup from 'yup'
 
 import ErrorPage from '@/components/error/ErrorPage'
@@ -38,7 +37,6 @@ interface Props {
 }
 
 const CatalogueItemModal = ({ setOpen, open }: Props) => {
-  const intl = useIntl()
   const [item, setItem] = useState<CatalogueItem | undefined>(undefined)
   const router = useRouter()
 

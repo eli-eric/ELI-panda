@@ -8,16 +8,14 @@ const messages = message.layout.profile
 const ProfileCardComponent = () => {
   const user = useSession().data?.user
 
-  const useRolesBadges = user?.roles.map(role => {
-    return (
-      <span
-        key={role}
-        className="inline-flex mr-1 mb-1 items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-gray-800"
-      >
-        {role}
-      </span>
-    )
-  })
+  const useRolesBadges = user?.roles.map(role => (
+    <span
+      key={role}
+      className="inline-flex mr-1 mb-1 items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-gray-800"
+    >
+      {role}
+    </span>
+  ))
 
   return (
     <Fragment>

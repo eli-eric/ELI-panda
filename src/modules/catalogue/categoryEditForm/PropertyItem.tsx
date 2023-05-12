@@ -1,6 +1,7 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useEffect } from 'react'
-import { type FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
+import type { FieldErrors } from 'react-hook-form'
+import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/Input'
@@ -12,11 +13,15 @@ import { CODEBOOK } from '@/types/constants/codebook'
 
 import MoveButtons from './MoveButtons'
 
+//TODO: fix bugs
+
+//eslint-disable-next-line
 const ValueItem = ({ removeValue, index, name, errors }) => {
   const { register } = useFormContext<CategoryFormType>()
   const handleRemoveValue = () => {
     removeValue(index)
   }
+
   return (
     <div className="flex">
       <Input
@@ -24,7 +29,7 @@ const ValueItem = ({ removeValue, index, name, errors }) => {
         register={register}
         name={`${name}.value`}
         placeholder="Value"
-        isError={!!errors?.value?.message}
+        isError={!!errors?.value?.message} //eslint-disable-line
       />
       <Button rounded="rounded-r-md" onClick={handleRemoveValue}>
         <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />

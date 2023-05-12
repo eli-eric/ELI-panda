@@ -108,7 +108,7 @@ declare module 'react-table' {
       UseResizeColumnsColumnProps<D>,
       UseSortByColumnProps<D> {}
 
-  export interface Cell<D extends Record<string, unknown> = Record<string, unknown>, V = any>
+  export interface Cell<D extends Record<string, unknown> = Record<string, unknown>, V = any> // eslint-disable-line
     extends UseGroupByCellProps<D>,
       UseRowStateCellProps<D> {}
 

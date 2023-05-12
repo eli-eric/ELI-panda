@@ -20,7 +20,7 @@ const CatalogueCategoriesPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
   const [catalogueCategoryList, setCatalogueCategoryList] = useState<CatalogueCategoryResponse[]>()
   const [catalogueItemsList, setCatalogueItemsList] = useState<CatalogueItemsResponse>()
-  const [catalogueParentUid, setCatalogueParentUid] = useState<string>()
+  const [catalogueParentUid, setCatalogueParentUid] = useState<string>() //eslint-disable-line
   const { renderSearchBar } = useSearch({})
 
   return (

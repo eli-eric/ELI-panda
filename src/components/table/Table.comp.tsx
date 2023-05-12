@@ -8,7 +8,7 @@ interface TableProps {
   loading?: boolean
   noData?: boolean
 }
-const TableComponent = ({ tableHeaders, children, overflow = true, loading }: TableProps) => (
+const TableComponent = ({ tableHeaders, children, overflow = true }: TableProps) => (
   <div
     data-testid="item-list"
     className={classNames('h-full border-t border-gray-300 pb-4', overflow ? 'overflow-y-hidden' : '')}

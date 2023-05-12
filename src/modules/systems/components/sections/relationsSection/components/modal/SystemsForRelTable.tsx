@@ -1,19 +1,15 @@
 import { useRouter } from 'next/router'
 import { type Dispatch, Fragment, type SetStateAction, useEffect, useMemo } from 'react'
-import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
 import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
 import useTable from '@/hooks/useTable'
-import { message } from '@/i18n/src/messages'
 import type { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
 import type { SystemDetailResponse, SystemsForRelResponse } from '@/modules/systems/types/responses'
 
 import type { SelectedSystemForRel } from './SelectRelation'
-
-const messages = message.systemsPage.relations.addRelationModal
 
 interface Props {
   searchValue?: string
@@ -24,7 +20,6 @@ interface Props {
 
 const SystemsForRel = ({ searchValue, relationTypeCode, setSelectedSystem, selectedSystem }: Props) => {
   const router = useRouter()
-  const intl = useIntl()
 
   const { pagination, setTotalCount, getPaginationComponent, page } = usePagination({
     dependecies: [searchValue]
