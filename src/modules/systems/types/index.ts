@@ -1,34 +1,10 @@
-import { Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
 
-export type System = {
-  uid: string
-  name: string
-  children: string[]
-  path: string[]
-  description: string
-  systemCode: string
-  systemAlias: string
-  locationCode: string
-  catalogueUID?: string
-  ownerUID?: string
-  image?: string
-  importanceCode?: string
-  zoneCode?: string
-  subZoneCode?: string
-  systemTypeUID?: string
-}
-
-//TODO: same type like System
-export type SystemForRel = {
-  name: string
-  systemType: string
-  systemCodePath: string
-  uid: string
-}
+import type { CatalogueItem } from '@/types/responses'
 
 export interface Selectable {
   isSelectable: boolean
   selectedItem?: string
 
-  setItem: Dispatch<SetStateAction<{ name?: string; uid?: string }>>
+  setItem: Dispatch<SetStateAction<CatalogueItem | undefined>>
 }

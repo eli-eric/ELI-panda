@@ -1,30 +1,35 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useEffect } from 'react'
-import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
+import type { FieldErrors } from 'react-hook-form'
+import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
-import { InputWithError } from '@/components/form/Input'
+import { Input } from '@/components/form/Input'
 import { SelectWithError } from '@/components/form/Select'
 import { useCodebookSelectValues } from '@/hooks/useCodebook'
-import { CategoryFormType, Property } from '@/types/catalogue/categoryFormTypes'
+import type { CategoryFormType, Property } from '@/types/catalogue/categoryFormTypes'
 import { defaultBoolOptions, PROPERTY_INPUT_TYPE, PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { CODEBOOK } from '@/types/constants/codebook'
 
 import MoveButtons from './MoveButtons'
 
+//TODO: fix bugs
+
+//eslint-disable-next-line
 const ValueItem = ({ removeValue, index, name, errors }) => {
   const { register } = useFormContext<CategoryFormType>()
   const handleRemoveValue = () => {
     removeValue(index)
   }
+
   return (
     <div className="flex">
-      <InputWithError
+      <Input
         rounded="rounded-l-md"
         register={register}
         name={`${name}.value`}
         placeholder="Value"
-        isError={!!errors?.value?.message}
+        isError={!!errors?.value?.message} //eslint-disable-line
       />
       <Button rounded="rounded-r-md" onClick={handleRemoveValue}>
         <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
@@ -80,7 +85,7 @@ const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lengh
         <div className="flex flex-row flex-grow max-md:flex-wrap">
           <MoveButtons moveDown={moveDown} moveUp={moveUp} lenght={lenght} index={index} />
 
-          <InputWithError
+          <Input
             register={register}
             name={`${name}.name`}
             placeholder="Property name"
@@ -111,7 +116,7 @@ const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lengh
               }
             />
           ) : (
-            <InputWithError
+            <Input
               register={register}
               name={`${name}.defaultValue`}
               type={PROPERTY_INPUT_TYPE[type]}

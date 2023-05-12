@@ -1,9 +1,9 @@
 import { useSession } from 'next-auth/react'
-import { Dispatch, Fragment, SetStateAction, useEffect } from 'react'
+import { type Dispatch, Fragment, type SetStateAction, useEffect } from 'react'
 import { useCategoryPath } from 'src/hooks/usePath'
 import useSWR from 'swr'
 
-import { CatalogueCategoryResponse } from '@/types/responses'
+import type { CatalogueCategoryResponse } from '@/types/responses'
 
 import CategoryItemComponent from './CategoryItem.comp'
 
@@ -16,9 +16,7 @@ const CategoryListContainer = ({ setCatalogueCategoryList, setCatalogueParentUid
   const { data: session } = useSession()
   const categoryPath = useCategoryPath()
   /* fetch category list */
-  const { data: categoryList } = useSWR<Array<CatalogueCategoryResponse>>(
-    session ? categoryPath : null
-  )
+  const { data: categoryList } = useSWR<Array<CatalogueCategoryResponse>>(session ? categoryPath : null)
 
   useEffect(() => {
     setCatalogueCategoryList(categoryList)
@@ -27,7 +25,7 @@ const CategoryListContainer = ({ setCatalogueCategoryList, setCatalogueParentUid
   return (
     <Fragment>
       {categoryList?.length !== 0 && (
-        <div id="catalogue-list" className="px-4 py-5 sm:p-6 bg-white">
+        <div id="category-list" className="px-4 py-5 sm:p-6 bg-white">
           {/* Content goes here */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 3xl:grid-cols-8">
             {categoryList?.map((category, index) => (

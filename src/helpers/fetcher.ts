@@ -11,3 +11,5 @@ export async function mockFetcher(url) {
   const res = await axios.get('http://localhost:5001/api/mock-server' + url).then(res => res.data)
   return res
 }
+
+export const uniFetcher = async url => await axios.get(url).then(res => res.data)

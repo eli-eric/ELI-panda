@@ -1,4 +1,4 @@
-import { DropzoneInputProps, DropzoneRootProps } from 'react-dropzone'
+import type { DropzoneInputProps, DropzoneRootProps } from 'react-dropzone'
 
 import { ImageIcon } from '../SvgIcons'
 
@@ -16,7 +16,7 @@ const ImagePlaceHolder = ({ getRootProps, getInputProps }: Props) => (
     <div className="space-y-1 text-center">
       <div className=" text-sm text-gray-600">
         <ImageIcon />
-        <div className="relative  rounded-md bg-white font-medium text-primary-600">
+        <div className="relative  rounded-md bg-white font-medium text-primary-500">
           <span>Upload a file</span>
           <input {...getInputProps()} name="image" className="sr-only" />
         </div>

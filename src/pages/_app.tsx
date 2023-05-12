@@ -4,12 +4,15 @@ import axios from 'axios'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
 import { useSession } from 'next-auth/react'
+import { Toaster } from 'react-hot-toast'
 import { IntlProvider } from 'react-intl'
-import NavigationComponent from 'src/components/nav-bar/nav-bar.comp'
 import { messages } from 'src/i18n/src'
 import { SWRConfig } from 'swr'
 
+import NavigationComponent from '@/components/layout/nav-bar/nav-bar.comp'
+import Notification from '@/components/Notifications/Notification'
 import { fetcher } from '@/helpers/fetcher'
+import useLocale from '@/hooks/useLocale'
 
 interface Props {
   children: React.ReactNode
@@ -18,6 +21,8 @@ interface Props {
 const GlobalProvider = ({ children }: Props) => {
   const { data } = useSession()
   axios.defaults.headers.common['authorization'] = 'Bearer ' + data?.user.apiAccessToken
+  const locale = useLocale()
+
   return (
     <SWRConfig
       value={{
@@ -34,7 +39,7 @@ const GlobalProvider = ({ children }: Props) => {
         }
       }}
     >
-      <IntlProvider locale="en" messages={messages['en']}>
+      <IntlProvider locale={locale} messages={messages['en']}>
         <NavigationComponent />
         {children}
       </IntlProvider>
@@ -45,6 +50,9 @@ const GlobalProvider = ({ children }: Props) => {
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <SessionProvider session={session}>
     <GlobalProvider>
+      <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 3000 }}>
+        {t => <Notification t={t} />}
+      </Toaster>
       <Component {...pageProps} />
     </GlobalProvider>
   </SessionProvider>

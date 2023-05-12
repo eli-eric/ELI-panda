@@ -27,22 +27,3 @@ export const useCategoryPath = () => {
   const path = useCataloguePath()
   return ENDPOINTS.catalogueCategories + (path === '' ? '' : `/${path}`)
 }
-
-export const useCatalogueItemsPath = (pageSize: number, page: number) => {
-  const router = useRouter()
-  const { search } = router.query
-  const categoryPath = useCataloguePath()
-
-  const searchQuery = useMemo(() => {
-    if (search && typeof search === 'string') {
-      return `&search=${search}`
-    }
-    if (!search || search === undefined) return ''
-  }, [search])
-
-  return (
-    ENDPOINTS.catalogueItems +
-    `?pageSize=${pageSize}&page=${page}&categoryPath=${categoryPath}` +
-    searchQuery
-  )
-}

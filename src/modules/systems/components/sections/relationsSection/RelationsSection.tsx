@@ -1,8 +1,8 @@
 import { Fragment, useState } from 'react'
-import { FormattedMessage, useIntl } from 'react-intl'
+import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
-import { Button } from '@/components/Buttons'
+import { PlusButton } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { mockFetcher } from '@/helpers/fetcher'
@@ -10,9 +10,9 @@ import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
 import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
 
-import { SystemRelationshipResponse } from '../../../types/responses'
+import type { SystemRelationshipResponse } from '../../../types/responses'
 import AddRelationForm from './components/modal/RelationModal'
 import RelationsTable from './components/RelationsTable'
 
@@ -59,19 +59,18 @@ const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string
 
   return (
     <Fragment>
-      <div className=" py-4">
-        <Button
-          className="mb-2"
-          primary
-          onClick={() => {
-            setRelationTypeCode(RELATION_TYPE_CODE.IS_SPARE_FOR)
-            setOpenAddRelation(true)
-          }}
-        >
-          <FormattedMessage id={messages.buttons.addSpare} />
-        </Button>
-        {relations && <RelationsTable relations={relations} systemName={systemName} onDelete={deleteHandler} />}
-      </div>
+      <PlusButton
+        className="mb-2"
+        primary
+        buttonSize="large"
+        onClick={() => {
+          setRelationTypeCode(RELATION_TYPE_CODE.IS_SPARE_FOR)
+          setOpenAddRelation(true)
+        }}
+      />
+      {relations && systemName && (
+        <RelationsTable relations={relations} systemName={systemName} onDelete={deleteHandler} />
+      )}
       <ModalComponent open={openAddRelation} setOpen={setOpenAddRelation} buttons={{ noButtons: true }}>
         <AddRelationForm setopen={setOpenAddRelation} relationTypeCode={relationTypeCode} systemName={systemName} />
       </ModalComponent>

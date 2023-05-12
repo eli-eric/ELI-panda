@@ -14,7 +14,9 @@ export const messages = {
     },
     property: {
       description: 'Description'
-    }
+    },
+    warning: 'Warning',
+    fileManager: { deleteModal: { title: 'Warning', text: 'Are you sure you want to remove {fileName}?' } }
   },
   layout: {
     login: 'Log In',
@@ -23,6 +25,7 @@ export const messages = {
     systems: 'Systems',
     systemsOverview: 'Systems',
     reports: 'Reports',
+    orders: 'Orders',
     button: {
       signout: 'Sign Out'
     },
@@ -79,6 +82,14 @@ export const messages = {
       buttons: {
         back: 'Back',
         edit: 'Edit'
+      }
+    },
+    edit: {
+      deleteModal: {
+        message: 'Are you sure you want to delete this category?'
+      },
+      copyModal: {
+        message: 'Are you sure you want to copy this category?'
       }
     }
   },
@@ -193,5 +204,64 @@ export const messages = {
   },
 
   reportsPage: { head: 'Eli Panda - Reports' },
+  ordersPage: {
+    head: 'Eli Panda - Orders',
+    ordersTable: {
+      header: {
+        name: 'Name',
+        orderNumber: 'Order Number',
+        requestNumber: 'Request Number',
+        contractNumber: 'Contract Number',
+        supplier: 'Supplier',
+        requestor: 'Requestor',
+        procurementResponsible: 'Procurement Responsible',
+        orderStatus: 'Order Status',
+        notes: 'Notes',
+        orderDate: 'Order Date',
+        lastUpdateTime: 'Last Update Time',
+        lastUpdateBy: 'Last Update By'
+      }
+    },
+    orderDetail: {
+      form: {
+        name: { label: 'Name', placeholder: 'Name' },
+        orderNumber: { label: 'Order Number', placeholder: 'Order Number' },
+        requestNumber: { label: 'Request Number', placeholder: 'Request Number' },
+        contractNumber: { label: 'Contract Number', placeholder: 'Contract Number' },
+        supplier: { label: 'Supplier', placeholder: '...type here' },
+        orderStatus: { label: 'Order Status' },
+        notes: { label: 'Notes' },
+        orderDate: { label: 'Order Date' },
+        procurementResponsible: { label: 'Procurement Responsible', placeholder: '...type here' },
+        requestor: { label: 'Requestor', placeholder: '...type here' }
+      }
+    },
+    deleteModal: { title: 'Warning', message: 'Are you sure you want to delete {orderName}?' },
+    orderLines: {
+      form: {
+        name: { label: 'Name', placeholder: 'Name' },
+        catalogueNumber: { label: 'Catalogue Number', placeholder: 'Catalogue Number' },
+        systemName: { label: 'System Name', placeholder: 'System Name' },
+        price: { label: 'Price', placeholder: '0.00' },
+        quantity: { label: 'Quantity', placeholder: 'Quantity' },
+        location: { label: 'Location', placeholder: 'Location' },
+        itemUsage: { label: 'Item Usage' }
+      },
+      orderLinesTable: {
+        header: {
+          name: 'Name',
+          catalogueNumber: 'Catalogue Number',
+          system: 'System',
+          price: 'Price',
+          location: 'Location',
+          itemUsage: 'Item Usage',
+          eun: 'EUN',
+          isDelivered: 'Delivered'
+        }
+      },
+      deleteModal: { title: 'Warning', message: 'Are you sure you want to delete this order line?' }
+    }
+  },
+  orderItem: { head: 'Eli Panda - Order Item' },
   defaul: { head: 'Eli Panda' }
 }

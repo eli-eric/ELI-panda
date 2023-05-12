@@ -1,9 +1,9 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
+import { type FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
-import { InputWithError } from '@/components/form/Input'
-import { CategoryFormType, Group } from '@/types/catalogue/categoryFormTypes'
+import { Input } from '@/components/form/Input'
+import { type CategoryFormType, Group } from '@/types/catalogue/categoryFormTypes'
 
 import MoveButtons from './MoveButtons'
 import PropertyList from './PropertyList'
@@ -34,7 +34,7 @@ const Group = ({ name, remove, index, errors, moveDown, moveUp, lenght }: groupP
         <div className="relative flex justify-center">
           <span className="isolate inline-flex rounded-md shadow-sm">
             <MoveButtons moveDown={moveDown} moveUp={moveUp} lenght={lenght} index={index} />
-            <InputWithError
+            <Input
               register={register}
               name={`${name}.name`}
               placeholder="group name"

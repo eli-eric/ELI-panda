@@ -8,7 +8,7 @@ import ItemPropertyValue from '@/components/item-property/item-property-value.co
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { useImage } from '@/hooks/useImage'
 import { message } from '@/i18n/src/messages'
-import { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses'
 
 import ImageGalleryComponent from '../../components/item-detail/ImageGallery'
 import ItemPropertiesComponent from './default-properties/item-properties.comp'

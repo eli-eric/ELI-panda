@@ -10,8 +10,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
   const { uid } = req.query
   if (uid) {
     let filePath = path.resolve('.', 'mock-data/images/catalogue/category/' + uid + '/image.png')
-    if (!fs.existsSync(filePath))
-      filePath = path.resolve('.', 'mock-data/images/catalogue/category/no-image.png')
+    if (!fs.existsSync(filePath)) filePath = path.resolve('.', 'mock-data/images/catalogue/category/no-image.png')
 
     const imageBuffer = fs.readFileSync(filePath)
 

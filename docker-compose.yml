@@ -6,7 +6,6 @@ networks:
     name: panda-net
 
 services:
-
   panda-frontend-ui-main-app:
     container_name: panda-frontend-ui-main-app
     restart: unless-stopped

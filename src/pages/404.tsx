@@ -1,4 +1,4 @@
-import { NextPage } from 'next'
+import type { NextPage } from 'next'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'
@@ -23,7 +23,7 @@ const Custom404Page: NextPage = (): JSX.Element => {
             </div>
           </div>
           <main className="sm:flex">
-            <p className="text-4xl font-bold tracking-tight text-primary-600 sm:text-5xl">
+            <p className="text-4xl font-bold tracking-tight text-primary-500 sm:text-5xl">
               <FormattedMessage id={common.custom404.title} />
             </p>
             <div className="sm:ml-6">

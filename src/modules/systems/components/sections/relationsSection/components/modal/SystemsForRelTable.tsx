@@ -1,20 +1,15 @@
 import { useRouter } from 'next/router'
-import { Dispatch, SetStateAction, useEffect, useMemo } from 'react'
-import { useIntl } from 'react-intl'
+import { type Dispatch, Fragment, type SetStateAction, useEffect, useMemo } from 'react'
 import useSWR from 'swr'
 
-import TableComponent from '@/components/table/Table.comp'
 import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
-import { message } from '@/i18n/src/messages'
-import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
-import { SystemsForRelResponse } from '@/modules/systems/types/responses'
+import useTable from '@/hooks/useTable'
+import type { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
+import type { SystemDetailResponse, SystemsForRelResponse } from '@/modules/systems/types/responses'
 
-import { SelectedSystemForRel } from './SelectRelation'
-import SystemForRelItem from './SystemForRelItem'
-
-const messages = message.systemsPage.relations.addRelationModal
+import type { SelectedSystemForRel } from './SelectRelation'
 
 interface Props {
   searchValue?: string
@@ -25,7 +20,6 @@ interface Props {
 
 const SystemsForRel = ({ searchValue, relationTypeCode, setSelectedSystem, selectedSystem }: Props) => {
   const router = useRouter()
-  const intl = useIntl()
 
   const { pagination, setTotalCount, getPaginationComponent, page } = usePagination({
     dependecies: [searchValue]
@@ -46,6 +40,40 @@ const SystemsForRel = ({ searchValue, relationTypeCode, setSelectedSystem, selec
     { suspense: false }
   )
 
+  //TODO refactor with useGeneralTable
+  const { getTable, TableRowItem } = useTable<SystemDetailResponse>({
+    collums: [
+      'Name',
+      'Description',
+      'System Code',
+      'System Type',
+      'System Alias',
+      'Location',
+      'Owner',
+      'Importance',
+      'Zone'
+    ],
+    data: systems?.data,
+    renderRow: item => (
+      <Fragment>
+        <TableRowItem text={item.name} />
+        <TableRowItem text={item.description} isInfoTooltip={true} />
+        <TableRowItem text={item.systemCode} />
+        <TableRowItem text={item.systemType?.name} />
+        <TableRowItem text={item.systemAlias} />
+        <TableRowItem text={item.location?.name} />
+        <TableRowItem text={item.owner?.name} />
+        <TableRowItem text={item.importance?.name} />
+        <TableRowItem text={item.zone?.name} />
+      </Fragment>
+    ),
+    onClick: item => {
+      setSelectedSystem({ name: item.name, uid: item.uid })
+    },
+    loading: !systems?.data && !!searchValue,
+    isSelected: item => selectedSystem?.uid === item.uid
+  })
+
   useEffect(() => {
     setSelectedSystem(undefined)
   }, [page, setSelectedSystem])
@@ -56,32 +84,7 @@ const SystemsForRel = ({ searchValue, relationTypeCode, setSelectedSystem, selec
 
   return (
     <div className="flex flex-col min-h-[337px] justify-between">
-      <TableComponent
-        tableHeaders={[
-          'Name',
-          'Description',
-          'System Code',
-          'System Type',
-          'System Alias',
-          'Location',
-          'Owner',
-          'Importance',
-          'Zone'
-        ]}
-        loading={!systems && !!searchValue}
-      >
-        {systems &&
-          systems.data.length > 0 &&
-          systems.data.map((item, index) => (
-            <SystemForRelItem
-              key={item.uid + index}
-              item={item}
-              index={index}
-              setSelectedSystem={setSelectedSystem}
-              selectedSystem={selectedSystem}
-            />
-          ))}
-      </TableComponent>
+      {getTable()}
       {getPaginationComponent()}
     </div>
   )

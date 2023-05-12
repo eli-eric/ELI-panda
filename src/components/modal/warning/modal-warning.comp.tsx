@@ -1,9 +1,10 @@
 import { Dialog } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/20/solid'
-import { Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react'
+import { FormattedMessage } from 'react-intl'
 
 import ErrorPage from '@/components/error/ErrorPage'
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
 
 import ModalComponent from '../modal.comp'
 
@@ -19,7 +20,7 @@ const ModalWarningComponent = ({ title, message }: ModalWarningComponentProps) =
     </div>
     <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
       <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-        {title}
+        <FormattedMessage id={title} />
       </Dialog.Title>
       <div className="mt-2">
         <p className="text-sm text-gray-500">{message}</p>

@@ -1,8 +1,8 @@
 import React from 'react'
-import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
+import type { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
 import { classNames } from '@/helpers'
-import { FieldProps } from '@/types/form'
+import type { FieldProps } from '@/types/form'
 
 export type Option = {
   value: string | number | readonly string[] | undefined
@@ -40,6 +40,7 @@ type SelectWithErrorProps<T extends FieldValues> = FieldProps &
     register: UseFormRegister<T>
   }
 
+//TODO: refactor all usage with ListBox
 export const SelectWithError = <T extends FieldValues>({
   isError,
   options,
@@ -50,7 +51,10 @@ export const SelectWithError = <T extends FieldValues>({
   ...rest
 }: SelectWithErrorProps<T>) => (
   <div
-    className={`${className} block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm`}
+    className={classNames(
+      'block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+      className
+    )}
   >
     {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
     <Select
@@ -58,10 +62,10 @@ export const SelectWithError = <T extends FieldValues>({
       options={options}
       disabled={disabled}
       className={classNames(
-        disabled ? 'bg-gray-100' : '',
+        'w-full block appearance-none borde px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
         rounded,
-        isError ? 'border-red-500' : 'border-gray-300',
-        'w-full block appearance-none borde px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm'
+        disabled ? 'bg-gray-100' : '',
+        isError ? 'border-red-500' : 'border-gray-300'
       )}
     />
   </div>

@@ -1,8 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
-import React, { Dispatch, Fragment, SetStateAction, useState } from 'react'
+import React, { type Dispatch, Fragment, type SetStateAction, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { useIntl } from 'react-intl'
 import * as yup from 'yup'
 
 import ErrorPage from '@/components/error/ErrorPage'
@@ -11,8 +10,9 @@ import ModalComponent from '@/components/modal/modal.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
-import { SystemItemFormType } from '@/modules/systems/types/form'
-import { ModalButtons } from '@/types/form'
+import type { SystemItemFormType } from '@/modules/systems/types/form'
+import type { ModalButtons } from '@/types/form'
+import type { CatalogueItem } from '@/types/responses'
 
 import CatalogueSearchTable from './CatalogueSearchTable'
 import SystemItemForm from './form/SystemItemForm'
@@ -37,11 +37,7 @@ interface Props {
 }
 
 const CatalogueItemModal = ({ setOpen, open }: Props) => {
-  const intl = useIntl()
-  const [item, setItem] = useState<{ name?: string; uid?: string }>({
-    name: undefined,
-    uid: undefined
-  })
+  const [item, setItem] = useState<CatalogueItem | undefined>(undefined)
   const router = useRouter()
 
   const formMethods = useForm<SystemItemFormType>({
@@ -61,19 +57,19 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
   const onSubmit = (data: SystemItemFormType) => {
     submit({
       ...data,
-      catalogueItemUID: item.uid,
+      catalogueItemUID: item?.uid,
       obsolete: data.obsolete === 'true' ? true : false
     })
   }
 
   const modalButtons: ModalButtons = {
     goNext: {
-      text: intl.formatMessage({ id: buttons.continue }),
+      text: buttons.continue,
       type: 'submit',
       loading: loading
     },
     goBack: {
-      text: intl.formatMessage({ id: buttons.cancel }),
+      text: buttons.cancel,
       type: 'button',
       onClick: () => {
         setOpen(false)
@@ -85,10 +81,10 @@ const CatalogueItemModal = ({ setOpen, open }: Props) => {
     <Fragment>
       <ModalComponent open={open} setOpen={setOpen} buttons={{ noButtons: true }}>
         <div className="min-h-[738px] flex-col justify-end">
-          <CatalogueSearchTable setItem={setItem} itemName={item.name} />
+          <CatalogueSearchTable setItem={setItem} itemName={item?.name} />
           <FormProvider {...formMethods}>
             <form onSubmit={formMethods.handleSubmit(onSubmit)}>
-              <SystemItemForm itemName={item.name} />
+              <SystemItemForm itemName={item?.name} />
               <ModalButtonsComponent buttons={modalButtons} />
               {error && <ErrorPage />}
             </form>

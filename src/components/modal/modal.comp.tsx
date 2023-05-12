@@ -1,7 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Dispatch, Fragment, SetStateAction } from 'react'
+import { type Dispatch, Fragment, type SetStateAction } from 'react'
 
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
 
 import ModalButtonsComponent from './modal.buttons'
 
@@ -16,7 +16,7 @@ interface Props {
 export default function ModalComponent({ open, setOpen, children, testid, buttons }: Props) {
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setOpen} unmount={false}>
+      <Dialog as="div" className="relative z-40" onClose={setOpen} unmount={false}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -43,9 +43,7 @@ export default function ModalComponent({ open, setOpen, children, testid, button
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-5xl sm:p-6">
                 <Fragment>
                   {children}
-                  {buttons?.noButtons !== true && (
-                    <ModalButtonsComponent testid={testid} buttons={buttons} />
-                  )}
+                  {buttons?.noButtons !== true && <ModalButtonsComponent testid={testid} buttons={buttons} />}
                 </Fragment>
               </Dialog.Panel>
             </Transition.Child>

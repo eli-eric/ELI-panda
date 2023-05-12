@@ -4,11 +4,12 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import TooltipComponent from '@/components/tooltip.comp'
+import { classNames } from '@/helpers'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { useImage } from '@/hooks/useImage'
-import { Selectable } from '@/modules/systems/types'
+import type { Selectable } from '@/modules/systems/types'
 import { PATH } from '@/types/constants/paths'
-import { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses'
 
 interface Props {
   item: CatalogueItem
@@ -34,10 +35,11 @@ const ItemListRow = ({ item, index, categoryListLength, selectable }: Props) => 
 
   return (
     <tr
-      className={
-        (index % 2 === 0 ? undefined : 'bg-gray-100') +
-        ` hover:bg-primary-200 ${selectable?.selectedItem === item.uid ? 'bg-primary-200' : ''}`
-      }
+      className={classNames(
+        'hover:bg-primary-200',
+        index % 2 === 0 ? undefined : 'bg-gray-100',
+        selectable?.selectedItem === item.uid ? 'bg-primary-200' : ''
+      )}
     >
       {selectable && (
         <td className="text-sm  sm:pl-6 text-gray-500">
@@ -47,9 +49,9 @@ const ItemListRow = ({ item, index, categoryListLength, selectable }: Props) => 
               name="itemUid"
               type="radio"
               onClick={() => {
-                selectable.setItem({ name: item.name, uid: item.uid })
+                selectable.setItem(item)
               }}
-              className="h-4 w-4 border-gray-300 text-primary-600 focus:ring-primary-500"
+              className="h-4 w-4 border-gray-300 text-primary-500 focus:ring-primary-500"
             />
           </div>
         </td>
@@ -86,7 +88,7 @@ const ItemListRow = ({ item, index, categoryListLength, selectable }: Props) => 
             passHref
             legacyBehavior={selectable?.isSelectable}
           >
-            {selectable ? <a target="_blank">{item.categoryName} </a> : item.categoryName}
+            {selectable?.isSelectable ? <a target="_blank">{item.categoryName} </a> : item.categoryName}
           </Link>
         </td>
       )}

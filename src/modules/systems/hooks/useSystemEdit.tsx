@@ -1,18 +1,17 @@
-import { PencilSquareIcon, PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import { Dispatch, Fragment, SetStateAction, useState } from 'react'
+import { type Dispatch, Fragment, type SetStateAction, useState } from 'react'
 
-import { Button } from '@/components/Buttons'
+import { DeleteButton, EditButton, PlusButton } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useSubmit from '@/hooks/useSubmit'
 import { ROLE } from '@/types/constants/roles'
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
 
-import Edit from '../components/edit/Edit'
-import { SystemDetailResponse } from '../types/responses'
+import Edit from '../components/edit/EditForm.cont'
+import type { SystemDetailResponse } from '../types/responses'
 
 interface Props {
   open: boolean
@@ -55,7 +54,7 @@ export const useSystemEdit = ({
 
   const deleteButtons: ModalButtons = {
     goNext: {
-      text: 'Cancel',
+      text: 'Continue',
       loading: deleteSubmit.loading,
       onClick: () => {
         deleteSubmit.submit()
@@ -74,14 +73,13 @@ export const useSystemEdit = ({
       {session?.user.roles.includes(ROLE.SYSTEM_EDIT) && (
         <Fragment>
           <div className="relative flex flex-col justify-center z-0">
-            <Button
+            <EditButton
+              buttonSize="large"
               rounded="rounded-md"
               onClick={() => {
                 setOpenEdit(true)
               }}
-            >
-              <PencilSquareIcon className="h-6 w-6" aria-hidden="true" />
-            </Button>
+            />
           </div>
           <EditModal open={openEdit} setOpen={setOpenEdit} uid={systemDetail?.uid} data={systemDetail} />
         </Fragment>
@@ -94,13 +92,12 @@ export const useSystemEdit = ({
       {session?.user.roles.includes(ROLE.SYSTEM_EDIT) && (
         <Fragment>
           <div className="flex items-center">
-            <Button
+            <PlusButton
+              buttonSize="large"
               onClick={() => {
                 setOpenNew(true)
               }}
-            >
-              <PlusIcon className="h-5 w-5" aria-hidden="true" />
-            </Button>
+            />
           </div>
           <EditModal open={openNew} setOpen={setOpenNew} />
         </Fragment>
@@ -113,14 +110,11 @@ export const useSystemEdit = ({
       return (
         <Fragment>
           <div className="flex">
-            <Button
+            <DeleteButton
               onClick={() => {
                 setOpenDeleteWarn(true)
               }}
-              buttonSize="small"
-            >
-              <TrashIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
-            </Button>
+            />
           </div>
 
           <WarningModal

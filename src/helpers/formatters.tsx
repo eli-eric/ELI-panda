@@ -1,3 +1,4 @@
+import moment from 'moment'
 import React from 'react'
 
 /* formmaters for i18n messages */
@@ -22,3 +23,7 @@ export const createMessageValues = (values: any = {}): Record<string, any> => ({
     {}
   )
 })
+
+export function convertDate(date) {
+  return moment(date).startOf('day').utcOffset(new Date().getTimezoneOffset()).format()
+}

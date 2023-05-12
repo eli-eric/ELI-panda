@@ -3,7 +3,7 @@ import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react'
 
 import { classNames } from '@/helpers'
-import { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses'
 
 interface Props {
   groups: string[]
@@ -20,12 +20,7 @@ const DisclosureComponent = ({ groups, item }: Props) => (
               <>
                 <h3>
                   <Disclosure.Button className="group relative flex w-full items-center justify-between py-6 text-left">
-                    <span
-                      className={classNames(
-                        open ? 'text-primary-600' : 'text-gray-900',
-                        'text-sm font-medium'
-                      )}
-                    >
+                    <span className={classNames('text-sm font-medium', open ? 'text-primary-500' : 'text-gray-900')}>
                       {group}
                     </span>
                     <span className="ml-6 flex items-center">
@@ -53,13 +48,9 @@ const DisclosureComponent = ({ groups, item }: Props) => (
                           }
                           return (
                             <div key={detail.propertyName} className="sm:col-span-1">
-                              <dt className="text-sm font-medium text-gray-400">
-                                {detail.propertyName}
-                              </dt>
+                              <dt className="text-sm font-medium text-gray-400">{detail.propertyName}</dt>
                               <dd className="mt-1 text-sm text-gray-900">
-                                {(detail.value === '' || detail.value === null
-                                  ? 'N/A'
-                                  : detail.value) +
+                                {(detail.value === '' || detail.value === null ? 'N/A' : detail.value) +
                                   (detail.propertyUnit !== null ? ` ${detail.propertyUnit}` : '')}
                               </dd>
                             </div>

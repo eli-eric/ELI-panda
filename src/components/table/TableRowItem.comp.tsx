@@ -1,10 +1,10 @@
 import { InformationCircleIcon, PhotoIcon } from '@heroicons/react/24/outline'
-import Image, { StaticImageData } from 'next/image'
+import Image, { type StaticImageData } from 'next/image'
 import { Fragment } from 'react'
 
 import TooltipComponent from '../tooltip.comp'
 
-const ImageWithText = ({ text, image }: { text: string; image?: string | StaticImageData }) => (
+export const ImageWithText = ({ text, image }: { text: string; image?: string | StaticImageData }) => (
   <div className="flex items-center">
     <div className="flex-shrink-0">
       {image ? (
@@ -39,7 +39,7 @@ export const TableRowItem = ({
         </div>
       </td>
     ) : (
-      <td className="whitespace-nowrap text-sm  sm:pl-6 sm:pr-6 text-gray-500">
+      <td className="whitespace-nowrap text-sm sm:pl-6 sm:pr-6 text-gray-500">
         {!children ? image ? <ImageWithText text={text || 'N/A'} image={image} /> : text || 'N/A' : children}
       </td>
     )}

@@ -7,7 +7,7 @@ import ImagePlaceHolder from '@/components/form/ImagePlaceHolder'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import { useImage } from '@/hooks/useImage'
 
-import { SystemEditFormType } from '../../types/form'
+import type { SystemEditFormType } from '../../types/form'
 
 const SystemFormImage = ({ uid }: { uid?: string }) => {
   const { systemImage: systemDetailImage } = useEndpoint({ uid: uid as string })

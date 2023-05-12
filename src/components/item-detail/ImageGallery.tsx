@@ -1,6 +1,6 @@
 import { Tab } from '@headlessui/react'
 import { PhotoIcon } from '@heroicons/react/24/outline'
-import Image, { StaticImageData } from 'next/image'
+import Image, { type StaticImageData } from 'next/image'
 
 interface Props {
   images: Array<string | StaticImageData>
@@ -30,8 +30,8 @@ const ImageGalleryComponent = ({ images }: Props) => (
                 </span>
                 <span
                   className={classNames(
-                    selected ? 'ring-primary-500' : 'ring-transparent',
-                    'pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2'
+                    'pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2',
+                    selected ? 'ring-primary-500' : 'ring-transparent'
                   )}
                   aria-hidden="true"
                 />

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import { Dispatch, Fragment, SetStateAction, useEffect } from 'react'
+import { type Dispatch, Fragment, type SetStateAction, useEffect } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 import useSWR from 'swr'
@@ -8,7 +8,7 @@ import useSWR from 'swr'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import usePagination from '@/hooks/usePagination'
 import { useCataloguePath } from '@/hooks/usePath'
-import { CatalogueItemsResponse } from '@/types/responses'
+import type { CatalogueItemsResponse } from '@/types/responses'
 
 import DefaultMessageComponent from '../message/default-message.comp'
 import CatalogueItemsComponent from './CatalogueItems.comp'
@@ -21,11 +21,7 @@ interface Props {
   catalogueItems?: CatalogueItemsResponse
 }
 
-const CatalogueItemsContainer = ({
-  categoryListLength,
-  setCatalogueItemsList,
-  catalogueItems
-}: Props) => {
+const CatalogueItemsContainer = ({ categoryListLength, setCatalogueItemsList, catalogueItems }: Props) => {
   const intl = useIntl()
   const router = useRouter()
   const { status: session } = useSession()
@@ -45,9 +41,7 @@ const CatalogueItemsContainer = ({
   }, [setPageSize])
 
   const { data } = useSWR<CatalogueItemsResponse>(
-    categoryListLength === 0 || (router.query.search && session === 'authenticated')
-      ? endpoints.catalogueItems
-      : null
+    categoryListLength === 0 || (router.query.search && session === 'authenticated') ? endpoints.catalogueItems : null
   )
   useEffect(() => {
     setTotalCount(data?.totalCount)
@@ -61,10 +55,7 @@ const CatalogueItemsContainer = ({
       <div data-testid="item-list" className="h-full overflow-auto border-t border-gray-300  ">
         {data &&
           (data.totalCount !== 0 ? (
-            <CatalogueItemsComponent
-              catalogueItems={data}
-              categoryListLength={categoryListLength}
-            />
+            <CatalogueItemsComponent catalogueItems={data} categoryListLength={categoryListLength} />
           ) : (
             <DefaultMessageComponent
               title={intl.formatMessage({ id: messages.noResults.title })}

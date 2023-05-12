@@ -1,5 +1,5 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
-import { MouseEventHandler } from 'react'
+import type { MouseEventHandler } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { createMessageValues } from 'src/helpers/formatters'
 import { message } from 'src/i18n/src/messages'
@@ -33,8 +33,8 @@ export default function PaginationComponent({
   const to = noResults ? 0 : pageNumbers === page ? itemsTotalCount : page * pageSize
   return (
     <nav
-      data-testid="catalogue-paging"
-      id="catalogue-paging"
+      data-testid="paging"
+      id="paging"
       className="flex items-center justify-between border-t border-gray-200 bg-white px-3 py-2 sm:px-6"
       aria-label="Pagination"
     >

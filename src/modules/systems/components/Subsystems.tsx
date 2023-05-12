@@ -10,7 +10,7 @@ import { useImage } from '@/hooks/useImage'
 import { PATH } from '@/types/constants/paths'
 
 import { useSystemEdit } from '../hooks/useSystemEdit'
-import { SubsystemsResponse } from '../types/responses'
+import type { SubsystemsResponse } from '../types/responses'
 
 export const Item = (props: { uid: string; text: string }) => {
   const { uid, text } = props
@@ -22,8 +22,7 @@ export const Item = (props: { uid: string; text: string }) => {
   return (
     <div
       className={classNames(
-        'text-gray-600 hover:bg-primary-100 hover:text-gray-900',
-        'flex flex-row justify-between items-center rounded-md px-3 py-2 text-sm font-medium  border-gray-100'
+        'text-gray-600 hover:bg-primary-100 hover:text-gray-900 flex flex-row justify-between items-center rounded-md px-3 py-2 text-sm font-medium  border-gray-100'
       )}
     >
       <Link href={{ pathname: PATH.SYSTEMS + '/' + uid }} className="flex flex-grow gap-2">

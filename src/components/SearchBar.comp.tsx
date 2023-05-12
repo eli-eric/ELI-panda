@@ -8,7 +8,7 @@ interface Props {
 const SearchBarComponent = ({ onSubmit }: Props) => {
   const { register, handleSubmit } = useFormContext<{ search: string }>()
   return (
-    <div className="sticky top-0 z-10 flex h-16 mb-3 flex-shrink-0 bg-white border-b">
+    <div id="search-bar" className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white border-b">
       <div className="flex flex-1 justify-between px-4">
         <div className="flex flex-1">
           <form className="flex w-full md:ml-0" onSubmit={handleSubmit(onSubmit)}>
