@@ -6,6 +6,7 @@ import { FormGrid } from '@/components/form/FormGrid'
 import { Input, InputAmount } from '@/components/form/Input'
 import ListBox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
+import { classNames } from '@/helpers'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
 import type { CatalogueItem } from '@/types/responses'
 
@@ -51,8 +52,11 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
 
   return (
     <FormGrid>
-      <Toggle enabled={enabled} onChange={toggle} className="mt-6 col-span-3 lg:col-span-1" />
-      <Input {...formFields.name} className="col-span-3 md:col-span-6 lg:col-span-5" />
+      {!orderLine?.uid && <Toggle enabled={enabled} onChange={toggle} className="mt-6 col-span-3 lg:col-span-1" />}
+      <Input
+        {...formFields.name}
+        className={classNames('col-span-3 md:col-span-6', !orderLine?.uid ? 'lg:col-span-5' : 'lg:col-span-6')}
+      />
       <Input {...formFields.catalogueNumber} className="col-span-3 md:col-span-6" />
       <InputAmount {...formFields.price} className="col-span-3 md:col-span-6" />
       <ListBox {...formFields.itemUsage} position="top" className="col-span-3 md:col-span-6" />
@@ -71,6 +75,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
         disabled={locationEnable}
         className="col-span-3 md:col-span-6"
       />
+      {orderLine?.uid && <Input {...formFields.serialNumber} className="col-span-3 md:col-span-6" />}
       {!orderLine?.id && <Input {...formFields.quantity} className="col-span-3 md:col-span-6" defaultValue={1} />}
     </FormGrid>
   )

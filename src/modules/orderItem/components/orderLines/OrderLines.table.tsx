@@ -48,6 +48,10 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
         accessor: 'catalogueNumber'
       },
       {
+        Header: formatMessage({ id: messages.serialNumber }),
+        accessor: 'serialNumber'
+      },
+      {
         Header: formatMessage({ id: messages.itemUsage }),
         accessor: 'itemUsage',
         Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value?.name}</span>
@@ -86,7 +90,7 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
     !uid && cols.pop()
 
     return cols
-  }, [setOrderLine, deleteOrderLine, disabledEdit, uid])
+  }, [setOrderLine, deleteOrderLine, disabledEdit, uid, formatMessage])
 
   const { getTable } = useGeneralTable({ columns, data: orderLines, tableId: 'orderLines', className: 'col-span-12' })
 

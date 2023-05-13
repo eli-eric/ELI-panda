@@ -33,4 +33,5 @@ export type OrderLineFormType = {
   quantity?: number
   eun?: string
   isDelivered?: boolean
+  serialNumber?: string
 }

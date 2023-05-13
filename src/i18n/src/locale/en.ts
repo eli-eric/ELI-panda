@@ -245,7 +245,8 @@ export const messages = {
         price: { label: 'Price', placeholder: '0.00' },
         quantity: { label: 'Quantity', placeholder: 'Quantity' },
         location: { label: 'Location', placeholder: 'Location' },
-        itemUsage: { label: 'Item Usage' }
+        itemUsage: { label: 'Item Usage' },
+        serialNumber: { label: 'Serial Number', placeholder: 'Serial Number' }
       },
       orderLinesTable: {
         header: {
@@ -256,10 +257,12 @@ export const messages = {
           location: 'Location',
           itemUsage: 'Item Usage',
           eun: 'EUN',
-          isDelivered: 'Delivered'
+          isDelivered: 'Delivered',
+          serialNumber: 'Serial Number'
         }
       },
-      deleteModal: { title: 'Warning', message: 'Are you sure you want to delete this order line?' }
+      deleteModal: { title: 'Warning', message: 'Are you sure you want to delete this order line?' },
+      missingSerialNumber: { title: 'Warning', message: 'Serial number is missing, please fill it.' }
     }
   },
   orderItem: { head: 'Eli Panda - Order Item' },

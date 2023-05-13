@@ -14,7 +14,7 @@ const messages = message.common.buttons
 
 interface useFormModalProps<T> {
   renderForm: (data: T) => JSX.Element
-  renderOutsideForm?: () => JSX.Element
+  renderOutsideForm?: (data: T) => JSX.Element
   onSubmit: (data: T) => void
 
   defaultValues?: DeepPartial<T>
@@ -62,7 +62,7 @@ const useFormModal = <T extends FieldValues>({
 
   const getFormModal = () => (
     <ModalComponent open={open} setOpen={setOpen}>
-      {renderOutsideForm && renderOutsideForm()}
+      {renderOutsideForm && renderOutsideForm(defaultValues as T)}
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormProvider {...formMethods}>
           {renderForm(defaultValues as T)}
