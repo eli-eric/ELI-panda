@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ComboboxComponent from '@/components/form/Combobox'
@@ -20,10 +20,10 @@ interface Props {
 const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
   //const [enabled, setEnabled] = useState(false)
   const { enabled, toggle, Toggle } = useToggle(false)
-  const [locationEnable, setLocationEnable] = useState(false)
+  //const [locationEnable, setLocationEnable] = useState(false)
   const formFields = useOrderLineFormFields(enabled)
-  const { setValue, watch } = useFormContext<OrderLineFormType>()
-  const system = watch('system')
+  const { setValue } = useFormContext<OrderLineFormType>()
+  //const system = watch('system')
 
   useEffect(() => {
     if (!enabled) {
@@ -41,14 +41,14 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
     }
   }, [enabled, setValue])
 
-  useEffect(() => {
+  /* useEffect(() => {
     if (system) {
       setLocationEnable(false)
       setValue('location', undefined)
     } else {
       setLocationEnable(true)
     }
-  }, [system, setValue])
+  }, [system, setValue]) */
 
   return (
     <FormGrid>
@@ -67,14 +67,14 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
         position="top"
         className="col-span-3 md:col-span-6"
       />
-      <ComboboxComponent
+      {/* <ComboboxComponent
         {...formFields.location}
         isObject
         position="top"
         limit={50}
         disabled={locationEnable}
         className="col-span-3 md:col-span-6"
-      />
+      /> */}
       {orderLine?.uid && <Input {...formFields.serialNumber} className="col-span-3 md:col-span-6" />}
       {!orderLine?.id && <Input {...formFields.quantity} className="col-span-3 md:col-span-6" defaultValue={1} />}
     </FormGrid>

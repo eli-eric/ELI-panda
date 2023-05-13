@@ -61,11 +61,11 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
         accessor: 'system',
         Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value?.name.split('-')[0]}</span>
       },
-      {
+      /* {
         Header: formatMessage({ id: messages.location }),
         accessor: 'location',
         Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value?.name.split('-')[0]}</span>
-      },
+      }, */
       {
         Header: formatMessage({ id: messages.price }),
         accessor: 'price',

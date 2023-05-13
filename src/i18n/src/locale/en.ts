@@ -241,7 +241,7 @@ export const messages = {
       form: {
         name: { label: 'Name', placeholder: 'Name' },
         catalogueNumber: { label: 'Catalogue Number', placeholder: 'Catalogue Number' },
-        systemName: { label: 'System Name', placeholder: 'System Name' },
+        systemName: { label: 'Parent System', placeholder: 'Parent System' },
         price: { label: 'Price', placeholder: '0.00' },
         quantity: { label: 'Quantity', placeholder: 'Quantity' },
         location: { label: 'Location', placeholder: 'Location' },
@@ -252,7 +252,7 @@ export const messages = {
         header: {
           name: 'Name',
           catalogueNumber: 'Catalogue Number',
-          system: 'System',
+          system: 'Parent System',
           price: 'Price',
           location: 'Location',
           itemUsage: 'Item Usage',
