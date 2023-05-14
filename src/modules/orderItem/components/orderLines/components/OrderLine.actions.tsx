@@ -9,6 +9,7 @@ import { Heading } from '@/components/card/card.comp'
 import { Input } from '@/components/form/Input'
 import { useToggle } from '@/components/form/Switch'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
+import { createMessageValues } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useFormModal from '@/hooks/useFormModal'
 import useRolePermission from '@/hooks/useRole'
@@ -36,6 +37,7 @@ export const OrderLineActionButtons = ({
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
   const [deleteLoading, setDeleteLoading] = useState(false)
   const { setOpen, getFormModal } = useOrderLineForm({ setOrderLine, orderLine })
+  const { formatMessage } = useIntl()
 
   const deleteButtons: ModalButtons = {
     goNext: {
@@ -79,7 +81,7 @@ export const OrderLineActionButtons = ({
         open={openDeleteWarn}
         setOpen={setOpenDeleteWarn}
         title={orderLines.deleteModal.title}
-        message={orderLines.deleteModal.message}
+        message={formatMessage({ id: orderLines.deleteModal.message }, createMessageValues({ name: orderLine.name }))}
         testid="OrderLineDelete"
       />
     </div>

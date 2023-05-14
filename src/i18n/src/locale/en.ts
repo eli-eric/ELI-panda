@@ -261,7 +261,7 @@ export const messages = {
           serialNumber: 'Serial Number'
         }
       },
-      deleteModal: { title: 'Warning', message: 'Are you sure you want to delete this order line?' },
+      deleteModal: { title: 'Warning', message: 'Are you sure you want to delete <medium>{name}</medium>?' },
       missingSerialNumber: { title: 'Warning', message: 'Serial number is missing, please fill it.' }
     }
   },
