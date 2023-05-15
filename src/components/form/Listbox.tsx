@@ -1,5 +1,5 @@
 import { Listbox } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
+import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { Controller, type FieldValues, type Path, type UseFormRegister } from 'react-hook-form'

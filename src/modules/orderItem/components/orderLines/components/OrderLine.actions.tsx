@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
-import { object, string } from 'yup'
 
 import { DeleteButton, EditButton } from '@/components/Buttons'
 import { Heading } from '@/components/card/card.comp'
@@ -118,7 +117,7 @@ export const OrderisDeliveredAction = ({
       toast.error(err.message)
     }
   })
-  const { getFormModal, setOpen, formMethods } = useFormModal<{ serianNumber: string }>({
+  const { getFormModal, setOpen, formMethods } = useFormModal<{ serialNumber: string }>({
     renderForm: () => (
       <Input
         register={formMethods.register}
@@ -130,11 +129,8 @@ export const OrderisDeliveredAction = ({
     ),
     renderOutsideForm: () => <Heading text="Fill missing Serial Number" />,
     onSubmit: data => {
-      submit({ serialNumber: data.serianNumber, isDelivered: !enabled })
-    },
-    schema: object().shape({
-      serialNumber: string().required()
-    })
+      submit({ serialNumber: data.serialNumber, isDelivered: !enabled })
+    }
   })
 
   const handleCheck = () => {

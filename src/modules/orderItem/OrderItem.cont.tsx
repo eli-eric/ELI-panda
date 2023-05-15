@@ -13,7 +13,6 @@ import { Heading } from '@/components/card/card.comp'
 import ErrorPage from '@/components/error/ErrorPage'
 import FileManager from '@/components/fileManager/FileManager'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import { convertDate } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useFormNotification from '@/hooks/useFormNotification'
 import useSubmit from '@/hooks/useSubmit'
@@ -71,10 +70,6 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
     onError: e => toast.error(e.message)
   })
 
-  //  submit the form
-  const onSubmit = data => {
-    submit({ ...data, orderDate: convertDate(data.orderDate) })
-  }
   const formMethods = useForm<OrderDetailFormType>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -118,7 +113,7 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
 
   return (
     <Fragment>
-      <form onSubmit={formMethods.handleSubmit(onSubmit)}>
+      <form onSubmit={formMethods.handleSubmit(submit)}>
         <FormProvider {...formMethods}>
           <HeaderComponent loading={loading} disabledEdit={disabledEdit} />
           <div className="py-6">

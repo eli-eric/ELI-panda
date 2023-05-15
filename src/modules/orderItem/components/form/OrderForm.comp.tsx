@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 
 import ComboboxComponent from '@/components/form/Combobox'
+import DateInput from '@/components/form/DatePicker'
 import { FormGrid } from '@/components/form/FormGrid'
 import { Input, TextArea } from '@/components/form/Input'
 import ListBox from '@/components/form/Listbox'
@@ -20,7 +21,8 @@ const OrderFormComponent = ({ disabledEdit }: Props) => {
       <h1 className="text-2xl col-span-3 lg:col-span-6 justify-center font-semibold text-gray-900">
         {uid ? 'EDIT ORDER' : 'NEW ORDER'}
       </h1>
-      <Input {...fields.orderDate} className="pb-1 col-span-3 lg:col-span-6 pl-1" />
+      {/*<Input {...fields.orderDate} className="pb-1 col-span-3 lg:col-span-6 pl-1" />*/}
+      <DateInput {...fields.orderDate} className="pb-1 col-span-3 lg:col-span-6 pl-1" />
       <Input {...fields.name} className="col-span-3 lg:col-span-6" />
       <ComboboxComponent {...fields.supplier} className="col-span-3 lg:col-span-6" isObject={true} limit={50} />
       <ListBox {...fields.procurementResponsible} className="col-span-3 lg:col-span-6" isObject={true} />
