@@ -16,7 +16,6 @@ type ListBoxProps<T extends FieldValues> = FieldProps &
     isObject?: boolean
     position?: 'top' | 'bottom'
     emptyOption?: boolean
-    name: Path<T>
   }
 
 const ListBox = <T extends FieldValues>({
@@ -63,7 +62,7 @@ const ListBox = <T extends FieldValues>({
   return (
     <Fragment>
       <Controller
-        name={name}
+        name={name as Path<T>}
         control={control}
         render={({ field: { onChange } }) => (
           <Listbox

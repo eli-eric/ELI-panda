@@ -22,12 +22,10 @@ type ComboboxProps<T extends FieldValues> = FieldProps &
     isObject?: boolean
     position?: 'top' | 'bottom'
     limit?: number
-    name: Path<T>
   }
 
 const ComboboxComponent = <T extends FieldValues>({
   codebook,
-  register,
   label,
   isObject = false,
   isError,
@@ -66,7 +64,7 @@ const ComboboxComponent = <T extends FieldValues>({
   return (
     <Fragment>
       <Controller
-        name={name}
+        name={name as Path<T>}
         control={control}
         render={({ field: { onChange } }) => (
           <Combobox
