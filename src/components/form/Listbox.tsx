@@ -51,7 +51,7 @@ const ListBox = <T extends FieldValues>({
 
   // set default value
   useEffect(() => {
-    if (defaultValues) {
+    if (defaultValues && defaultValues[name]) {
       if (codebookOption) {
         const defaultOption = codebookOption.find(option => option.uid === defaultValues[name].uid)
         setSelectedOption(defaultOption)
