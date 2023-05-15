@@ -2,10 +2,10 @@ import { useRouter } from 'next/router'
 
 import ComboboxComponent from '@/components/form/Combobox'
 import DateInput from '@/components/form/DatePicker'
-import { Col, FormGrid } from '@/components/form/FormGrid'
 import { Input, TextArea } from '@/components/form/Input'
 import ListBox from '@/components/form/Listbox'
 import Card from '@/components/layout/Card'
+import { Col, Grid } from '@/components/layout/grid/Grid'
 
 import useOrderFormFields from './OrderForm.fields'
 
@@ -19,7 +19,7 @@ const OrderFormComponent = ({ disabledEdit }: Props) => {
 
   return (
     <Card>
-      <FormGrid>
+      <Grid>
         <Col lg={6}>
           <h1 className="text-2xl justify-center font-semibold text-gray-900">{uid ? 'EDIT ORDER' : 'NEW ORDER'}</h1>
         </Col>
@@ -54,7 +54,7 @@ const OrderFormComponent = ({ disabledEdit }: Props) => {
         <Col col="full">
           <TextArea {...fields.notes} />
         </Col>
-      </FormGrid>
+      </Grid>
     </Card>
   )
 }

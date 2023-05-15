@@ -1,9 +1,9 @@
 import { Fragment } from 'react'
 
 import ComboboxComponent from '@/components/form/Combobox'
-import { FormGrid } from '@/components/form/FormGrid'
 import { Input, TextArea } from '@/components/form/Input'
 import { SelectWithError } from '@/components/form/Select'
+import { Grid } from '@/components/layout/grid/Grid'
 
 import type { SystemDetailResponse } from '../../types/responses'
 import useSystemEditFormFields from './EditForm.fields'
@@ -24,7 +24,7 @@ const EditForm = ({ uid }: Props) => {
           System Edit
         </h3>
       </div> */}
-      <FormGrid className="pt-4">
+      <Grid className="pt-4">
         <div className="col-span-3 md:col-span-2 lg:col-span-4 md:pr-4">
           <SystemFormImage uid={uid} />
         </div>
@@ -40,7 +40,7 @@ const EditForm = ({ uid }: Props) => {
         <Input {...fields.systemCode} className="col-span-3" />
         <Input {...fields.systemAlias} className="col-span-3" />
         <TextArea {...fields.description} className="col-span-full" />
-      </FormGrid>
+      </Grid>
     </Fragment>
   )
 }

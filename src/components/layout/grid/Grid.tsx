@@ -1,25 +1,42 @@
-import cx from 'classnames'
 import React from 'react'
 
 import { classNames } from '@/helpers'
 
-interface FormGridPropsT extends React.HTMLAttributes<HTMLDivElement> {
+type ColSizeProp = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 'full'
+interface GridPropsT extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
   className?: string
+  col?: ColSizeProp
+  sm?: ColSizeProp
+  md?: ColSizeProp
+  lg?: ColSizeProp
+  xl?: ColSizeProp
+  xxl?: ColSizeProp
   horizontalSpacing?: number
   verticalSpacing?: number
 }
 
-export const FormGrid = ({
+export const Grid = ({
   children,
   className,
+  col = 3,
+  sm,
+  md = 6,
+  lg = 12,
+  xl,
+  xxl,
   verticalSpacing = 4,
   horizontalSpacing = 2,
   ...restProps
-}: FormGridPropsT): JSX.Element => (
+}: GridPropsT): JSX.Element => (
   <div
     className={classNames(
-      'grid grid-cols-3 md:grid-cols-6 lg:grid-cols-12',
+      `grid grid-cols-${col}`,
+      sm && `sm:grid-cols-${sm}`,
+      md && `md:grid-cols-${md}`,
+      lg && `lg:grid-cols-${lg}`,
+      xl && `xl:grid-cols-${xl}`,
+      xxl && `2xl:grid-cols-${xxl}`,
       `gap-y-${verticalSpacing}`,
       `gap-x-${horizontalSpacing}`,
       className
@@ -29,7 +46,6 @@ export const FormGrid = ({
     {children}
   </div>
 )
-type ColSizeProp = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 'full'
 
 interface ColType extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
@@ -41,17 +57,18 @@ interface ColType extends React.HTMLAttributes<HTMLDivElement> {
   xxl?: ColSizeProp
 }
 
-export const Col = ({ children, col = 3, sm, md, lg, xl, xxl, ...rest }: ColType): JSX.Element => (
+export const Col = ({ children, className, col = 3, sm, md, lg, xl, xxl, ...restProps }: ColType): JSX.Element => (
   <div
-    className={cx(
+    className={classNames(
       `col-span-${col}`,
       sm && `sm:col-span-${sm}`,
       md && `md:col-span-${md}`,
       lg && `lg:col-span-${lg}`,
       xl && `xl:col-span-${xl}`,
-      xxl && `xxl:col-span-${xxl}`,
-      { ...rest }
+      xxl && `2xl:col-span-${xxl}`,
+      className
     )}
+    {...restProps}
   >
     {children}
   </div>
