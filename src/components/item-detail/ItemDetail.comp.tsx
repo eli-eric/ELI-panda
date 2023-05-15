@@ -1,11 +1,11 @@
 import type { StaticImageData } from 'next/image'
 
-import { FormGrid } from '@/components/form/FormGrid'
 import ImageGalleryComponent from '@/components/item-detail/ImageGallery'
 import { message } from '@/i18n/src/messages'
 
 import ItemPropertyTitle from '../item-property/item-property-title.comp'
 import ItemPropertyValue from '../item-property/item-property-value.comp'
+import { Grid } from '../layout/grid/Grid'
 
 interface Props {
   title: string
@@ -17,7 +17,7 @@ interface Props {
 const messages = message.common.property
 
 const ItemDetailComponent = ({ title, images, description, children }: Props) => (
-  <FormGrid className="pb-10">
+  <Grid className="pb-10">
     <div className="col-span-3 md:col-span-2 lg:col-span-4 mr-auto pr-4">
       <ImageGalleryComponent images={images} />
     </div>
@@ -32,7 +32,7 @@ const ItemDetailComponent = ({ title, images, description, children }: Props) =>
         </ItemPropertyTitle>
       </div>
     )}
-  </FormGrid>
+  </Grid>
 )
 
 export default ItemDetailComponent
