@@ -1,7 +1,9 @@
+import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 import { Suspense, useMemo, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
+import { Button } from '@/components/Buttons'
 import Card, { Heading } from '@/components/card/card.comp'
 import EmptySectionComponent from '@/components/empty-section/empty-section.comp'
 import ErrorPage from '@/components/error/ErrorPage'
@@ -35,6 +37,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
     relations: true,
     catalogueItem: true
   })
+  const [subsystemsExpanded, setSubsystemsExpanded] = useState(true)
 
   const router = useRouter()
 
@@ -54,63 +57,69 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
 
   return (
     <div className="flex-col">
-      {renderSearchBar()}
-
       <Breadcrumbs parentPath={parentPath} />
 
       <Results searchValue={searchValue} />
 
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4">
         <div className="col-span-1">
           <Card>
-            <Heading text={uid ? 'Subsystems' : 'Root systems'}>{getAddButton()}</Heading>
+            <Heading text={uid ? 'Subsystems' : 'Root systems'}>
+              <div className="flex">
+                {getAddButton()}
+                <Button className="flex lg:hidden ml-2" onClick={() => setSubsystemsExpanded(!subsystemsExpanded)}>
+                  <ChevronDownIcon className={`h-5 w-5 ${subsystemsExpanded ? 'rotate-180' : ''}`} />
+                </Button>
+              </div>
+            </Heading>
             <ErrorBoundary fallback={<ErrorPage />}>
               <Suspense fallback={<ProgressBarComponent />}>
-                <Subsystems uid={uid} />
+                <div className={`${subsystemsExpanded ? 'block' : 'hidden'} lg:flex`}>
+                  <Subsystems uid={uid} />
+                </div>
               </Suspense>
             </ErrorBoundary>
           </Card>
         </div>
-
-        {systemDetail ? (
-          <div className="col-span-3">
-            {view.system && (
+        <div className="col-span-1 lg:col-span-2 xl:col-span-3">
+          {systemDetail ? (
+            <>
+              {view.system && (
+                <Card>
+                  <Heading text={'System detail - ' + systemDetail.name}>{getEditButton()}</Heading>
+                  <SystemDetailSection data={systemDetail} />
+                </Card>
+              )}
+              {view.catalogueItem && (
+                <Card>
+                  <Heading text="Cataloue Item" />
+                  <ErrorBoundary fallback={<ErrorPage />}>
+                    <Suspense fallback={<LoaderComponent />}>
+                      <CatalogueItemSection uid={systemDetail.itemUID} />
+                    </Suspense>
+                  </ErrorBoundary>
+                </Card>
+              )}
+              {view.relations && (
+                <Card>
+                  <Heading text="Relations" />
+                  <ErrorBoundary fallback={<ErrorPage />}>
+                    <Suspense fallback={<ProgressBarComponent />}>
+                      <RelationsSection uid={systemDetail.uid} systemName={systemDetail.name} />
+                    </Suspense>
+                  </ErrorBoundary>
+                </Card>
+              )}
               <Card>
-                <Heading text={'System detail - ' + systemDetail.name}>{getEditButton()}</Heading>
-                <SystemDetailSection data={systemDetail} />
-              </Card>
-            )}
-            {view.catalogueItem && (
-              <Card>
-                <Heading text="Cataloue Item" />
-                <ErrorBoundary fallback={<ErrorPage />}>
-                  <Suspense fallback={<LoaderComponent />}>
-                    <CatalogueItemSection uid={systemDetail.itemUID} />
-                  </Suspense>
-                </ErrorBoundary>
-              </Card>
-            )}
-            {view.relations && (
-              <Card>
-                <Heading text="Relations" />
+                <Heading text="Files" />
                 <ErrorBoundary fallback={<ErrorPage />}>
                   <Suspense fallback={<ProgressBarComponent />}>
-                    <RelationsSection uid={systemDetail.uid} systemName={systemDetail.name} />
+                    <FileManager itemType={FILE_TYPE.SYSTEM} uid={uid} />
                   </Suspense>
                 </ErrorBoundary>
               </Card>
-            )}
-            <Card>
-              <Heading text="Files" />
-              <ErrorBoundary fallback={<ErrorPage />}>
-                <Suspense fallback={<ProgressBarComponent />}>
-                  <FileManager itemType={FILE_TYPE.SYSTEM} uid={uid} />
-                </Suspense>
-              </ErrorBoundary>
-            </Card>
-          </div>
-        ) : (
-          <div className="col-span-3">
+            </>
+          ) : (
             <Card>
               <Heading text="No system selected" />
               <ErrorBoundary fallback={<ErrorPage />}>
@@ -119,8 +128,8 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
                 </Suspense>
               </ErrorBoundary>
             </Card>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   )
