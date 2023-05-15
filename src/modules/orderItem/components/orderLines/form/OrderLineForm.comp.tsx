@@ -7,10 +7,13 @@ import ListBox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
 import Divider from '@/components/layout/Divider'
 import { Col, Grid } from '@/components/layout/grid/Grid'
+import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
 import type { CatalogueItem } from '@/types/responses'
 
 import useOrderLineFormFields from './OrderLineForm.fields'
+
+const messages = message.ordersPage.orderLines.formHeadings
 
 interface Props {
   orderLine?: OrderLineFormType
@@ -53,10 +56,10 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
   return (
     <Grid>
       <Col sm="full">
-        <Divider text="Item Info" />
+        <Divider text={messages.itemInfo} />
       </Col>
       {!orderLine?.uid && (
-        <Col sm={1} md={1} lg={1}>
+        <Col sm={1}>
           <Toggle enabled={enabled} onChange={toggle} />
         </Col>
       )}
@@ -83,7 +86,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
         </Col>
       )}
       <Col sm="full">
-        <Divider text="System Info" />
+        <Divider text={messages.systemInfo} />
       </Col>
       <Col md={6} lg={12}>
         <ComboboxComponent {...formFields.system} isObject={true} limit={50} position="top" />

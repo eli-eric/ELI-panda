@@ -12,10 +12,12 @@ import { array, object, string } from 'yup'
 import { Heading } from '@/components/card/card.comp'
 import ErrorPage from '@/components/error/ErrorPage'
 import FileManager from '@/components/fileManager/FileManager'
+import Card from '@/components/layout/Card'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useEndpoint } from '@/hooks/useEndpoint'
 import useFormNotification from '@/hooks/useFormNotification'
 import useSubmit from '@/hooks/useSubmit'
+import { message } from '@/i18n/src/messages'
 import useMutateListStore from '@/store/useMutateListStore'
 import { FILE_TYPE } from '@/types/constants/files'
 import { PATH } from '@/types/constants/paths'
@@ -25,6 +27,8 @@ import OrderFormComponent from './components/form/OrderForm.comp'
 import HeaderComponent from './components/Header.comp'
 import OrderLinesTable from './components/orderLines/OrderLines.table'
 import type { OrderDetailFormType, OrderLineFormType } from './types'
+
+const messages = message.ordersPage.orderDetail.sectionHeadings
 
 const schema = object({
   name: string().required("Order's name is required"),
@@ -70,6 +74,7 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
     onError: e => toast.error(e.message)
   })
 
+  //  set the form methods to be used in the order lines
   const formMethods = useForm<OrderDetailFormType>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -121,18 +126,17 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
           </div>
         </FormProvider>
       </form>
-      <div className="flex flex-col mx-auto max-w-7xl px-4 sm:px-6 md:px-8 flex-1 justify-between">
-        <Heading text="Order Lines" />
+      <Card className="flex flex-col justify-between">
+        <Heading text={messages.orderLines} />
         <OrderLinesTable
           orderLines={fields as OrderLineFormType[]}
           setOrderLine={setOrderLine}
           deleteOrderLine={deleteOrderLine}
           disabledEdit={disabledEdit}
         />
-
         {uid && (
           <Fragment>
-            <Heading text="Files" />
+            <Heading text={messages.files} />
             <ErrorBoundary fallback={<ErrorPage />}>
               <Suspense fallback={<ProgressBarComponent />}>
                 <FileManager
@@ -144,7 +148,7 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
             </ErrorBoundary>
           </Fragment>
         )}
-      </div>
+      </Card>
     </Fragment>
   )
 }

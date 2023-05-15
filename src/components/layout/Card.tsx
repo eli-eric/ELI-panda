@@ -1,7 +1,11 @@
-interface CardProps {
+import { classNames } from '@/helpers'
+
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
 }
 
-const Card = ({ children }: CardProps) => <div className="co mx-auto max-w-7xl px-4 sm:px-6 md:px-8">{children}</div>
+const Card = ({ children, className }: CardProps) => (
+  <div className={classNames('mx-auto max-w-7xl px-4 sm:px-6 md:px-8', className)}>{children}</div>
+)
 
 export default Card
