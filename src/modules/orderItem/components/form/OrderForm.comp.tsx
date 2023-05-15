@@ -51,7 +51,7 @@ const OrderFormComponent = ({ disabledEdit }: Props) => {
         <Col>
           <Input {...fields.contractNumber} />
         </Col>
-        <Col col="full">
+        <Col sm="full">
           <TextArea {...fields.notes} />
         </Col>
       </Grid>

@@ -52,18 +52,18 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
 
   return (
     <Grid>
-      <Col lg={12} md={6}>
+      <Col sm="full">
         <Divider text="Item Info" />
       </Col>
       {!orderLine?.uid && (
-        <Col lg={1} col={3}>
+        <Col sm={1} md={1} lg={1}>
           <Toggle enabled={enabled} onChange={toggle} />
         </Col>
       )}
-      <Col lg={!orderLine?.uid ? 5 : 6} md={6}>
+      <Col md={5} lg={!orderLine?.uid ? 5 : 6}>
         <Input {...formFields.name} />
       </Col>
-      <Col md={6}>
+      <Col md={6} lg={6}>
         <Input {...formFields.catalogueNumber} />
       </Col>
       <Col lg={!orderLine?.id || orderLine?.uid ? 4 : 6} md={6}>
@@ -82,7 +82,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
           <Input {...formFields.serialNumber} />
         </Col>
       )}
-      <Col lg={12} md={6}>
+      <Col sm="full">
         <Divider text="System Info" />
       </Col>
       <Col md={6} lg={12}>
