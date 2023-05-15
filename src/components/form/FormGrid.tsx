@@ -31,7 +31,7 @@ export const FormGrid = ({
 )
 type ColSizeProp = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 'full'
 
-interface ColType {
+interface ColType extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
   col?: ColSizeProp
   sm?: ColSizeProp
@@ -41,11 +41,16 @@ interface ColType {
   xxl?: ColSizeProp
 }
 
-export const Col = ({ children, col = 3, ...rest }: ColType): JSX.Element => (
+export const Col = ({ children, col = 3, sm, md, lg, xl, xxl, ...rest }: ColType): JSX.Element => (
   <div
     className={cx(
       `col-span-${col}`,
-      Object.entries(rest).map(([breakpoint, value]) => value && `${breakpoint}:col-span-${value}`)
+      sm && `sm:col-span-${sm}`,
+      md && `md:col-span-${md}`,
+      lg && `lg:col-span-${lg}`,
+      xl && `xl:col-span-${xl}`,
+      xxl && `xxl:col-span-${xxl}`,
+      { ...rest }
     )}
   >
     {children}
