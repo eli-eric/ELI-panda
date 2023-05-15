@@ -57,6 +57,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
 
   return (
     <div className="flex-col">
+      {renderSearchBar()}
       <Breadcrumbs parentPath={parentPath} />
 
       <Results searchValue={searchValue} />
