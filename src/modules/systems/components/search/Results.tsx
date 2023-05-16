@@ -6,9 +6,9 @@ import useSWR from 'swr'
 
 import TooltipComponent from '@/components/tooltip.comp'
 import { mockFetcher } from '@/helpers/fetcher'
-import { useEndpoint } from '@/hooks/useEndpoint'
-import useGeneralTable from '@/hooks/useGeneralTable'
-import usePagination from '@/hooks/usePagination'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
+import useGeneralTable from '@/hooks/table/useGeneralTable'
+import usePagination from '@/hooks/table/usePagination'
 import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
 

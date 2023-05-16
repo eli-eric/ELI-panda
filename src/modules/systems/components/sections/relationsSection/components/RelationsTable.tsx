@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import type { CellProps, Column } from 'react-table'
 
 import { DeleteButton } from '@/components/Buttons'
-import useGeneralTable from '@/hooks/useGeneralTable'
+import useGeneralTable from '@/hooks/table/useGeneralTable'
 import type { SystemRelationshipResponse } from '@/modules/systems/types/responses'
 
 interface Props {

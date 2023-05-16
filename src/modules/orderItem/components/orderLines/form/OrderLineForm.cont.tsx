@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react'
 import { number, object, string } from 'yup'
 
 import { Heading } from '@/components/card/card.comp'
-import useFormModal from '@/hooks/useFormModal'
+import useFormModal from '@/hooks/form/useFormModal'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
 import CatalogueSearchTable from '@/modules/systems/components/sections/catalogueItemSection/components/CatalogueSearchTable'
 import type { CatalogueItem } from '@/types/responses'

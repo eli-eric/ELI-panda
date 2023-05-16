@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react'
 import useSWR from 'swr'
 
 import { classNames } from '@/helpers'
-import { useEndpoint } from '@/hooks/useEndpoint'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useImage } from '@/hooks/useImage'
 import { PATH } from '@/types/constants/paths'
 

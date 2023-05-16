@@ -8,7 +8,7 @@ import useSWR from 'swr'
 import { Button } from '@/components/Buttons'
 import ImagePlaceHolder from '@/components/form/ImagePlaceHolder'
 import { Input } from '@/components/form/Input'
-import { useEndpoint } from '@/hooks/useEndpoint'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 interface FormImageProps {

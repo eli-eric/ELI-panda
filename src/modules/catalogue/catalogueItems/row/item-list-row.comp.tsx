@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 
 import TooltipComponent from '@/components/tooltip.comp'
 import { classNames } from '@/helpers'
-import { useEndpoint } from '@/hooks/useEndpoint'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useImage } from '@/hooks/useImage'
 import type { Selectable } from '@/modules/systems/types'
 import { PATH } from '@/types/constants/paths'

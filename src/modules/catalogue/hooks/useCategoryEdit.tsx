@@ -11,12 +11,12 @@ import { type Dispatch, Fragment, type SetStateAction, useEffect, useState } fro
 import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
-import { useEndpoint } from '@/hooks/useEndpoint'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import CategoryEditModal from '@/modules/catalogue/categoryEditForm/CategoryEditModal'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
-import useSubmit from '../../../hooks/useSubmit'
+import useSubmit from '../../../hooks/fetch/useSubmit'
 
 interface EditModalProps {
   testid: string

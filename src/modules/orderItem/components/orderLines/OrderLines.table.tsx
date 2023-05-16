@@ -1,5 +1,5 @@
 import { PlusButton } from '@/components/Buttons'
-import useGeneralTable from '@/hooks/useGeneralTable'
+import useGeneralTable from '@/hooks/table/useGeneralTable'
 
 import type { OrderLineFormType } from '../../types'
 import useOrderLinesColumns from './components/OrderLines.columns'

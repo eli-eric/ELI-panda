@@ -5,8 +5,8 @@ import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 import useSWR from 'swr'
 
-import { useEndpoint } from '@/hooks/useEndpoint'
-import usePagination from '@/hooks/usePagination'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
+import usePagination from '@/hooks/table/usePagination'
 import { useCataloguePath } from '@/hooks/usePath'
 import type { CatalogueItemsResponse } from '@/types/responses'
 

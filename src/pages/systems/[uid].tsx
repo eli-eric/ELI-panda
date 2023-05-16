@@ -7,7 +7,7 @@ import useSWR from 'swr'
 
 import LoaderComponent from '@/components/loader.comp'
 import { fetcher } from '@/helpers/fetcher'
-import { useEndpoint } from '@/hooks/useEndpoint'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import SystemOverviewContainer from '@/modules/systems/SystemOverview.cont'
 
 const SystemDetailPage: NextPage = () => {

@@ -2,8 +2,8 @@ import { type Dispatch, type SetStateAction, useEffect, useMemo } from 'react'
 import useSWR from 'swr'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
-import { useEndpoint } from '@/hooks/useEndpoint'
-import usePagination from '@/hooks/usePagination'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
+import usePagination from '@/hooks/table/usePagination'
 import CatalogueItemsComponent from '@/modules/catalogue/catalogueItems/CatalogueItems.comp'
 import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
 

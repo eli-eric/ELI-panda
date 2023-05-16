@@ -1,11 +1,11 @@
 import type { StaticImageData } from 'next/image'
 
+import { Grid } from '@/components/grid/Grid'
 import ImageGalleryComponent from '@/components/item-detail/ImageGallery'
 import { message } from '@/i18n/src/messages'
 
 import ItemPropertyTitle from '../item-property/item-property-title.comp'
 import ItemPropertyValue from '../item-property/item-property-value.comp'
-import { Grid } from '../layout/grid/Grid'
 
 interface Props {
   title: string
