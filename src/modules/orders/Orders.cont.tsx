@@ -19,6 +19,7 @@ import { PATH } from '@/types/constants/paths'
 
 import useOrderColumns from './components/OrderColumns'
 import type { Order, OrderListResponse } from './types'
+import { getAggregatedStatus } from './utils/getAggregatedStatus'
 
 const OrdersContainer = () => {
   const router = useRouter()
@@ -98,12 +99,16 @@ const OrdersContainer = () => {
     isSortable: true,
     uriSortBy: true,
     className: 'relative overflow-x-auto',
-    getCellProps: ({ column }) => ({
+    getCellProps: ({
+      column,
+      row: {
+        original: { orderStatus, deliveryStatus }
+      }
+    }) => ({
       className: classNames(
         'min-w-[180px] max-w-[180px]',
-        column.id === 'name'
-          ? 'sticky left-0 text-ellipsis z-20 bg-opacity-100 backdrop-blur backdrop-filter'
-          : 'border-l',
+        'border border-gray-200 text-sm text-gray-500 px-2 py-1 text-ellipsis',
+        column.id === 'name' ? 'sticky left-0 text-ellipsis z-20 bg-opacity-100 backdrop-blur backdrop-filter' : '',
         column.id === 'orderDate' ? 'text-right' : '',
         column.id === 'orderNumber' ? 'text-right' : '',
         column.id === 'requestNumber' ? 'text-right' : '',
@@ -117,7 +122,13 @@ const OrdersContainer = () => {
         id === 'name' ? 'left-0 z-30 min-w-[600px] max-w-[600px]' : 'border-l',
         id === 'notes' ? 'min-w-[90px] max-w-[90px]' : ''
       )
-    })
+    }),
+    getRowProps: ({ original: { deliveryStatus, orderStatus } }) => {
+      console.log('getAggregatedStatus(orderStatus,deliveryStatus)', getAggregatedStatus(orderStatus, deliveryStatus))
+      return {
+        className: classNames(getAggregatedStatus(orderStatus, deliveryStatus) === 'completed' ? 'bg-green-200' : '')
+      }
+    }
   })
 
   useEffect(() => {
@@ -126,6 +137,7 @@ const OrdersContainer = () => {
 
   return (
     <Fragment>
+      <div className="backdrop:invisible"></div>
       <TableLayoutContainer>
         {renderSearchBar()}
         {!error && getTable()}

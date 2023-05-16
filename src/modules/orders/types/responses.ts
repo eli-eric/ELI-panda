@@ -1,3 +1,5 @@
+import type { DELIVERY_STATUS, ORDER_STATUS } from './types'
+
 export type Order = {
   uid: string
   name: string
@@ -7,11 +9,12 @@ export type Order = {
   supplier: string
   requestor: string
   procurementResponsible: string
-  orderStatus: string
+  orderStatus: ORDER_STATUS
   notes: string
   orderDate: string
   lastUpdateTime: string
   lastUpdateBy: string
+  deliveryStatus: DELIVERY_STATUS
 }
 
 export type OrderListResponse = {
