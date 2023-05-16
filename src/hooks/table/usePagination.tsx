@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 
 import PaginationComponent from '@/components/table/Pagination.comp'
 
-import useQueryString from './useQueryString'
+import useQueryString from '../useQueryString'
 
 export type Pagination = {
   page: number

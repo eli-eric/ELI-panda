@@ -15,6 +15,7 @@ interface UseTableType<T> {
   isSelected?: (item: T) => boolean
 }
 
+// DEPRECATED
 const useTable = <T extends object>({ data, collums, renderRow, onClick, loading, isSelected }: UseTableType<T>) => {
   const noResults = data && data?.length === 0
   const noData = !data && !loading

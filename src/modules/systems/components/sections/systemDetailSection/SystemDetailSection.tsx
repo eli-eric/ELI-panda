@@ -4,7 +4,7 @@ import useSWR from 'swr'
 
 import ItemDetailComponent from '@/components/item-detail/ItemDetail.comp'
 import ItemProperty from '@/components/item-property/ItemProperty'
-import { useEndpoint } from '@/hooks/useEndpoint'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { message } from '@/i18n/src/messages'
 import type { SystemDetailResponse } from '@/modules/systems/types/responses'
 

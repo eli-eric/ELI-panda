@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import { Controller, type FieldValues, type Path, type UseFormRegister } from 'react-hook-form'
 
 import { classNames } from '@/helpers'
-import { type CodebookType, useCodebook } from '@/hooks/useCodebook'
+import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 
