@@ -32,7 +32,7 @@ const useFormModal = <T extends FieldValues>({
   schema
 }: useFormModalProps<T>) => {
   const [open, setOpen] = useState(false)
-  const formMethods = useForm<T>({ defaultValues: defaultValues, resolver: yupResolver(schema) })
+  const formMethods = useForm<T>({ defaultValues: defaultValues, resolver: schema ? yupResolver(schema) : undefined })
   const { handleSubmit, reset, control, formState } = formMethods
   useFormNotification<T>({ control })
   useEffect(() => {

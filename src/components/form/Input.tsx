@@ -27,7 +27,7 @@ export const Input = <T extends FieldValues>({
   <div
     hidden={hidden}
     className={classNames(
-      'block z-10 w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+      'block w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
       className
     )}
   >
@@ -76,7 +76,7 @@ export const TextArea = <T extends FieldValues>({
 }: TextAreaWithErrorProps<T>) => (
   <div
     className={classNames(
-      'block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+      'block relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
       className
     )}
   >

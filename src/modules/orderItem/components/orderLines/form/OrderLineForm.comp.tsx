@@ -2,15 +2,18 @@ import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ComboboxComponent from '@/components/form/Combobox'
-import { FormGrid } from '@/components/form/FormGrid'
 import { Input, InputAmount } from '@/components/form/Input'
 import ListBox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
-import { classNames } from '@/helpers'
+import Divider from '@/components/layout/Divider'
+import { Col, Grid } from '@/components/layout/grid/Grid'
+import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
 import type { CatalogueItem } from '@/types/responses'
 
 import useOrderLineFormFields from './OrderLineForm.fields'
+
+const messages = message.ordersPage.orderLines.formHeadings
 
 interface Props {
   orderLine?: OrderLineFormType
@@ -51,22 +54,43 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
   }, [system, setValue]) */
 
   return (
-    <FormGrid>
-      {!orderLine?.uid && <Toggle enabled={enabled} onChange={toggle} className="mt-6 col-span-3 lg:col-span-1" />}
-      <Input
-        {...formFields.name}
-        className={classNames('col-span-3 md:col-span-6', !orderLine?.uid ? 'lg:col-span-5' : 'lg:col-span-6')}
-      />
-      <Input {...formFields.catalogueNumber} className="col-span-3 md:col-span-6" />
-      <InputAmount {...formFields.price} className="col-span-3 md:col-span-6" />
-      <ListBox {...formFields.itemUsage} position="top" className="col-span-3 md:col-span-6" />
-      <ComboboxComponent
-        {...formFields.system}
-        isObject={true}
-        limit={50}
-        position="top"
-        className="col-span-3 md:col-span-6"
-      />
+    <Grid>
+      <Col sm="full">
+        <Divider text={messages.itemInfo} />
+      </Col>
+      {!orderLine?.uid && (
+        <Col sm={1}>
+          <Toggle enabled={enabled} onChange={toggle} />
+        </Col>
+      )}
+      <Col md={5} lg={!orderLine?.uid ? 5 : 6}>
+        <Input {...formFields.name} />
+      </Col>
+      <Col md={6} lg={6}>
+        <Input {...formFields.catalogueNumber} />
+      </Col>
+      <Col lg={!orderLine?.id || orderLine?.uid ? 4 : 6} md={6}>
+        <InputAmount {...formFields.price} />
+      </Col>
+      <Col lg={!orderLine?.id || orderLine?.uid ? 4 : 6} md={6}>
+        <ListBox {...formFields.itemUsage} position="top" />
+      </Col>
+      {!orderLine?.id && (
+        <Col md={6} lg={4}>
+          <Input {...formFields.quantity} defaultValue={1} />
+        </Col>
+      )}
+      {orderLine?.uid && (
+        <Col md={6} lg={4}>
+          <Input {...formFields.serialNumber} />
+        </Col>
+      )}
+      <Col sm="full">
+        <Divider text={messages.systemInfo} />
+      </Col>
+      <Col sm="full">
+        <ComboboxComponent {...formFields.system} isObject={true} limit={50} position="top" />
+      </Col>
       {/* <ComboboxComponent
         {...formFields.location}
         isObject
@@ -75,9 +99,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
         disabled={locationEnable}
         className="col-span-3 md:col-span-6"
       /> */}
-      {orderLine?.uid && <Input {...formFields.serialNumber} className="col-span-3 md:col-span-6" />}
-      {!orderLine?.id && <Input {...formFields.quantity} className="col-span-3 md:col-span-6" defaultValue={1} />}
-    </FormGrid>
+    </Grid>
   )
 }
 

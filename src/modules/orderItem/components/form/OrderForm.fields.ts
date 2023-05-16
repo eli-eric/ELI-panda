@@ -57,7 +57,6 @@ const useOrderFormFields = (disabled?: boolean) => {
     procurementResponsible: {
       name: 'procurementResponsible',
       label: form.procurementResponsible.label,
-      placeholder: form.procurementResponsible.placeholder,
       disabled: disabled,
       isError: !!formState.errors.procurementResponsible,
       rounded: 'rounded-md',

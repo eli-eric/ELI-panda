@@ -42,9 +42,7 @@ const useOrderLineFormFields = (enabled: boolean) => {
       isError: !!formState.errors.price,
       rounded: 'rounded-md',
       type: 'number',
-      inputMode: 'numeric',
-      pattern: 'd*',
-      defaultValue: undefined
+      inputMode: 'numeric'
     },
     quantity: {
       name: 'quantity',

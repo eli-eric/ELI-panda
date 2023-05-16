@@ -223,6 +223,10 @@ export const messages = {
       }
     },
     orderDetail: {
+      sectionHeadings: {
+        orderLines: 'Order Lines',
+        files: 'Files'
+      },
       form: {
         name: { label: 'Name', placeholder: 'Name' },
         orderNumber: { label: 'Order Number', placeholder: 'Order Number' },
@@ -238,6 +242,10 @@ export const messages = {
     },
     deleteModal: { title: 'Warning', message: 'Are you sure you want to delete {orderName}?' },
     orderLines: {
+      formHeadings: {
+        itemInfo: 'Item Info',
+        systemInfo: 'System Info'
+      },
       form: {
         name: { label: 'Name', placeholder: 'Name' },
         catalogueNumber: { label: 'Catalogue Number', placeholder: 'Catalogue Number' },
@@ -261,7 +269,7 @@ export const messages = {
           serialNumber: 'Serial Number'
         }
       },
-      deleteModal: { title: 'Warning', message: 'Are you sure you want to delete this order line?' },
+      deleteModal: { title: 'Warning', message: 'Are you sure you want to delete <medium>{name}</medium>?' },
       missingSerialNumber: { title: 'Warning', message: 'Serial number is missing, please fill it.' }
     }
   },
