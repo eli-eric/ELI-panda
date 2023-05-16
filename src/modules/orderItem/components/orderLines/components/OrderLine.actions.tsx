@@ -109,7 +109,9 @@ export const OrderisDeliveredAction = ({
       toggle()
       setOrderLine({
         ...orderLine,
-        isDelivered: orderLine.isDelivered,
+        id: orderLine.id,
+        isDelivered: data?.isDelivered,
+        serialNumber: data?.serialNumber,
         eun: data?.eun
       })
     },
@@ -134,7 +136,7 @@ export const OrderisDeliveredAction = ({
   })
 
   const handleCheck = () => {
-    !orderLine.serialNumber ? setOpen(true) : submit({ isDelivered: !enabled })
+    !orderLine.serialNumber && !orderLine.isDelivered ? setOpen(true) : submit({ isDelivered: !enabled })
   }
 
   return (
