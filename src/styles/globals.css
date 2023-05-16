@@ -4,6 +4,7 @@
 
 @import 'eli-busy.css';
 @import 'loader.css';
+@import 'react-datepicker/dist/react-datepicker.css';
 
 @layer base {
   h2 {

@@ -2,12 +2,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'react-hot-toast'
 import type { CellProps, Column } from 'react-table'
-import useGeneralTable from 'src/hooks/useGeneralTable'
 import useSWR from 'swr'
 
 import { PlusButton } from '@/components/Buttons'
 import executeRequest from '@/helpers/executeRequest'
 import { uniFetcher } from '@/helpers/fetcher'
+import useGeneralTable from '@/hooks/table/useGeneralTable'
 import type { FILE_TYPE } from '@/types/constants/files'
 
 import ProgressBarComponent from '../progress-bar.comp'

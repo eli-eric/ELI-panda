@@ -1,6 +1,6 @@
 import { useFormContext } from 'react-hook-form'
 
-import { useMakeFormFields } from '@/hooks/useMakeFormFields'
+import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 
@@ -57,7 +57,6 @@ const useOrderFormFields = (disabled?: boolean) => {
     procurementResponsible: {
       name: 'procurementResponsible',
       label: form.procurementResponsible.label,
-      placeholder: form.procurementResponsible.placeholder,
       disabled: disabled,
       isError: !!formState.errors.procurementResponsible,
       rounded: 'rounded-md',

@@ -1,6 +1,6 @@
 import { useFormContext } from 'react-hook-form'
 
-import { useMakeFormFields } from '@/hooks/useMakeFormFields'
+import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
 import { CODEBOOK } from '@/types/constants/codebook'
@@ -42,9 +42,7 @@ const useOrderLineFormFields = (enabled: boolean) => {
       isError: !!formState.errors.price,
       rounded: 'rounded-md',
       type: 'number',
-      inputMode: 'numeric',
-      pattern: 'd*',
-      defaultValue: undefined
+      inputMode: 'numeric'
     },
     quantity: {
       name: 'quantity',
@@ -68,6 +66,13 @@ const useOrderLineFormFields = (enabled: boolean) => {
       isError: !!formState.errors.itemUsage,
       rounded: 'rounded-md',
       codebook: CODEBOOK.ITEM_USAGE
+    },
+    serialNumber: {
+      name: 'serialNumber',
+      label: form.serialNumber.label,
+      placeholder: form.serialNumber.placeholder,
+      isError: !!formState.errors.serialNumber,
+      rounded: 'rounded-md'
     }
   })
 }

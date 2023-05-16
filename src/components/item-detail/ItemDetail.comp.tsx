@@ -1,5 +1,6 @@
 import type { StaticImageData } from 'next/image'
 
+import { Grid } from '@/components/grid/Grid'
 import ImageGalleryComponent from '@/components/item-detail/ImageGallery'
 import { message } from '@/i18n/src/messages'
 
@@ -16,30 +17,22 @@ interface Props {
 const messages = message.common.property
 
 const ItemDetailComponent = ({ title, images, description, children }: Props) => (
-  <div className="bg-white pb-10">
-    <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8 h-full overflow-auto">
-      <div className="mx-auto max-w-2xl lg:max-w-none">
-        <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
-          <ImageGalleryComponent images={images} />
-
-          <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 col-span-2">
-            <h1 className="text-xl font-bold tracking-tight text-gray-900">{title}</h1>
-
-            <section aria-labelledby="details-heading">
-              <div className="px-4 py-5 sm:px-6">
-                <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">{children}</dl>
-              </div>
-            </section>
-          </div>
-        </div>
-        {description && (
-          <ItemPropertyTitle title={messages.description}>
-            <ItemPropertyValue text={description} />
-          </ItemPropertyTitle>
-        )}
+  <Grid className="pb-10">
+    <div className="col-span-3 md:col-span-2 lg:col-span-4 mr-auto pr-4">
+      <ImageGalleryComponent images={images} />
+    </div>
+    <div className="col-span-3 md:col-span-4 lg:col-span-8">
+      <h1 className="text-xl font-bold tracking-tight text-gray-900 mb-4 mt-4 md:mt-0">{title}</h1>
+      <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">{children}</dl>
+    </div>
+    {description && (
+      <div className="col-span-full mt-4">
+        <ItemPropertyTitle title={messages.description}>
+          <ItemPropertyValue text={description} />
+        </ItemPropertyTitle>
       </div>
-    </main>
-  </div>
+    )}
+  </Grid>
 )
 
 export default ItemDetailComponent

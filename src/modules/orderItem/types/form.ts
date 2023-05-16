@@ -1,6 +1,6 @@
 import type { FieldValues } from 'react-hook-form'
 
-import type { CodebookType } from '@/hooks/useCodebook'
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
 
 export interface OrderDetailFormType extends FieldValues {
   uid: string
@@ -33,4 +33,5 @@ export type OrderLineFormType = {
   quantity?: number
   eun?: string
   isDelivered?: boolean
+  serialNumber?: string
 }

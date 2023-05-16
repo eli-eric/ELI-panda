@@ -223,6 +223,10 @@ export const messages = {
       }
     },
     orderDetail: {
+      sectionHeadings: {
+        orderLines: 'Order Lines',
+        files: 'Files'
+      },
       form: {
         name: { label: 'Name', placeholder: 'Name' },
         orderNumber: { label: 'Order Number', placeholder: 'Order Number' },
@@ -238,28 +242,35 @@ export const messages = {
     },
     deleteModal: { title: 'Warning', message: 'Are you sure you want to delete {orderName}?' },
     orderLines: {
+      formHeadings: {
+        itemInfo: 'Item Info',
+        systemInfo: 'System Info'
+      },
       form: {
         name: { label: 'Name', placeholder: 'Name' },
         catalogueNumber: { label: 'Catalogue Number', placeholder: 'Catalogue Number' },
-        systemName: { label: 'System Name', placeholder: 'System Name' },
+        systemName: { label: 'Parent System', placeholder: 'Parent System' },
         price: { label: 'Price', placeholder: '0.00' },
         quantity: { label: 'Quantity', placeholder: 'Quantity' },
         location: { label: 'Location', placeholder: 'Location' },
-        itemUsage: { label: 'Item Usage' }
+        itemUsage: { label: 'Item Usage' },
+        serialNumber: { label: 'Serial Number', placeholder: 'Serial Number' }
       },
       orderLinesTable: {
         header: {
           name: 'Name',
           catalogueNumber: 'Catalogue Number',
-          system: 'System',
+          system: 'Parent System',
           price: 'Price',
           location: 'Location',
           itemUsage: 'Item Usage',
           eun: 'EUN',
-          isDelivered: 'Delivered'
+          isDelivered: 'Delivered',
+          serialNumber: 'Serial Number'
         }
       },
-      deleteModal: { title: 'Warning', message: 'Are you sure you want to delete this order line?' }
+      deleteModal: { title: 'Warning', message: 'Are you sure you want to delete <medium>{name}</medium>?' },
+      missingSerialNumber: { title: 'Warning', message: 'Serial number is missing, please fill it.' }
     }
   },
   orderItem: { head: 'Eli Panda - Order Item' },

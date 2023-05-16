@@ -1,0 +1,86 @@
+import moment from 'moment'
+import { useEffect, useState } from 'react'
+import DatePicker from 'react-datepicker'
+import type { FieldValues, Path, UseFormRegister } from 'react-hook-form'
+import { Controller } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
+
+import { classNames } from '@/helpers'
+import { convertDate } from '@/helpers/formatters'
+import type { FieldProps } from '@/types/form'
+
+import { ValidationIcon } from './Icons'
+
+type InputProps<T extends FieldValues> = FieldProps &
+  React.InputHTMLAttributes<HTMLInputElement> & {
+    register: UseFormRegister<T>
+  }
+
+const DateInput = <T extends FieldValues>({
+  name,
+  isError,
+  disabled,
+  rounded = 'rounded-md',
+  className,
+  hidden,
+  label,
+  ...restProps
+}: InputProps<T>) => {
+  const {
+    control,
+    formState: { defaultValues }
+  } = useFormContext<T>()
+  const [startDate, setStartDate] = useState(new Date())
+  // set default value
+  useEffect(() => {
+    if (defaultValues && defaultValues[name]) {
+      const defaultOption = moment(defaultValues[name]).toDate()
+      setStartDate(defaultOption)
+    }
+  }, [defaultValues, name])
+
+  return (
+    <Controller
+      control={control}
+      name={name as Path<T>}
+      render={({ field: { onChange } }) => (
+        <div
+          hidden={hidden}
+          className={classNames(
+            'block z-10 w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+            className
+          )}
+        >
+          {label && (
+            <label hidden={hidden} className="text-sm font-medium text-gray-700">
+              {label}
+            </label>
+          )}
+          <div hidden={hidden} className="relative">
+            <DatePicker
+              {...restProps}
+              hidden={hidden}
+              name={name}
+              type="date"
+              disabled={disabled}
+              className={classNames(
+                'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                rounded,
+                isError ? 'border-red-500' : 'border-gray-300',
+                disabled ? 'bg-gray-100' : ''
+              )}
+              selected={startDate}
+              onChange={(date: Date) => {
+                setStartDate(date)
+                onChange(convertDate(date))
+              }}
+            />
+            {isError && <ValidationIcon />}
+          </div>
+        </div>
+      )}
+    />
+  )
+}
+
+export default DateInput

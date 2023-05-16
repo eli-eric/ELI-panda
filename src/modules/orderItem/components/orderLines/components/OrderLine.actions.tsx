@@ -1,13 +1,18 @@
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
 import { toast } from 'react-hot-toast'
+import { useIntl } from 'react-intl'
 
 import { DeleteButton, EditButton } from '@/components/Buttons'
+import { Heading } from '@/components/card/card.comp'
+import { Input } from '@/components/form/Input'
 import { useToggle } from '@/components/form/Switch'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
-import { useEndpoint } from '@/hooks/useEndpoint'
+import { createMessageValues } from '@/helpers/formatters'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
+import useSubmit from '@/hooks/fetch/useSubmit'
+import useFormModal from '@/hooks/form/useFormModal'
 import useRolePermission from '@/hooks/useRole'
-import useSubmit from '@/hooks/useSubmit'
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
 import { ROLE } from '@/types/constants/roles'
@@ -17,7 +22,7 @@ import useOrderLineForm from '../form/OrderLineForm.cont'
 
 const messages = message.common.buttons
 
-const modalMessage = message.ordersPage.orderLines.deleteModal
+const orderLines = message.ordersPage.orderLines
 
 export const OrderLineActionButtons = ({
   orderLine,
@@ -31,6 +36,7 @@ export const OrderLineActionButtons = ({
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
   const [deleteLoading, setDeleteLoading] = useState(false)
   const { setOpen, getFormModal } = useOrderLineForm({ setOrderLine, orderLine })
+  const { formatMessage } = useIntl()
 
   const deleteButtons: ModalButtons = {
     goNext: {
@@ -73,8 +79,8 @@ export const OrderLineActionButtons = ({
         buttons={deleteButtons}
         open={openDeleteWarn}
         setOpen={setOpenDeleteWarn}
-        title={modalMessage.title}
-        message={modalMessage.message}
+        title={orderLines.deleteModal.title}
+        message={formatMessage({ id: orderLines.deleteModal.message }, createMessageValues({ name: orderLine.name }))}
         testid="OrderLineDelete"
       />
     </div>
@@ -94,6 +100,7 @@ export const OrderisDeliveredAction = ({
   const uid = useRouter().query.uid as string
   const { orderLineDelivery } = useEndpoint({ uid: uid, itemUid: orderLine.uid })
   const hasRole = useRolePermission([ROLE.ORDERS_DELIVERY_EDIT])
+  const { formatMessage } = useIntl()
 
   const { submit } = useSubmit<OrderLineFormType>({
     endpoint: orderLineDelivery,
@@ -110,9 +117,24 @@ export const OrderisDeliveredAction = ({
       toast.error(err.message)
     }
   })
+  const { getFormModal, setOpen, formMethods } = useFormModal<{ serialNumber: string }>({
+    renderForm: () => (
+      <Input
+        register={formMethods.register}
+        name="serialNumber"
+        label={formatMessage({ id: orderLines.form.serialNumber.label })}
+        placeholder={formatMessage({ id: orderLines.form.serialNumber.placeholder })}
+        rounded="rounded-md"
+      />
+    ),
+    renderOutsideForm: () => <Heading text="Fill missing Serial Number" />,
+    onSubmit: data => {
+      submit({ serialNumber: data.serialNumber, isDelivered: !enabled })
+    }
+  })
 
   const handleCheck = () => {
-    submit({ isDelivered: !enabled })
+    !orderLine.serialNumber ? setOpen(true) : submit({ isDelivered: !enabled })
   }
 
   return (
@@ -122,6 +144,7 @@ export const OrderisDeliveredAction = ({
           {hasRole ? <Toggle onChange={handleCheck} enabled={enabled} /> : <Toggle enabled={enabled} />}
         </Fragment>
       )}
+      {getFormModal()}
     </Fragment>
   )
 }

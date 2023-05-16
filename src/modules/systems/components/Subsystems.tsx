@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react'
 import useSWR from 'swr'
 
 import { classNames } from '@/helpers'
-import { useEndpoint } from '@/hooks/useEndpoint'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useImage } from '@/hooks/useImage'
 import { PATH } from '@/types/constants/paths'
 
@@ -46,16 +46,16 @@ const Subsystems = ({ uid }: Props) => {
   const { data: session } = useSession()
   const { systemSubsystems } = useEndpoint({ uid })
   const { data: subsystems } = useSWR<SubsystemsResponse>(session && systemSubsystems)
+
   return (
-    <nav aria-label="Subsystems">
-      {subsystems &&
-        (subsystems.length > 0 ? (
-          subsystems.map(({ uid, name }) => <Item key={uid} uid={uid} text={name} />)
-        ) : (
-          <div className="text-gray-600 flex items-center px-3 py-2 text-sm font-medium rounded-md">
-            <span className="truncate">This node has no subsystems</span>
-          </div>
-        ))}
+    <nav aria-label="Subsystems" className="w-full">
+      {subsystems && subsystems.length > 0 ? (
+        subsystems.map(({ uid, name }) => <Item key={uid} uid={uid} text={name} />)
+      ) : (
+        <div className="text-gray-600 flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <span className="truncate">This node has no subsystems</span>
+        </div>
+      )}
     </nav>
   )
 }

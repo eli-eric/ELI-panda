@@ -7,7 +7,7 @@ import ProgressBarComponent from '@/components/progress-bar.comp'
 import { classNames } from '@/helpers'
 import useTableStateStore from '@/store/useTableStateStore'
 
-import useQueryString from './useQueryString'
+import useQueryString from '../useQueryString'
 
 interface UseTableType<T extends object> {
   data?: T[]

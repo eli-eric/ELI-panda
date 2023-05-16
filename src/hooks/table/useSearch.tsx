@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 interface Props {
@@ -14,17 +14,16 @@ interface Props {
 export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin }: Props) => {
   const router = useRouter()
   const query = router.query
-  const [searchValue, setSearchValue] = useState<string | undefined>()
-
-  const { register, handleSubmit } = useForm<{ search: string }>({
+  const { register, handleSubmit, setValue, watch } = useForm<{ search: string }>({
     defaultValues: { search: query.search as string }
   })
+  const searchValue = watch('search')
 
   useEffect(() => {
     if (query.search) {
-      setSearchValue(query.search as string)
+      setValue('search', query.search as string)
     }
-  }, [query.search])
+  }, [query.search, setValue])
 
   const onSubmit = (data: { search: string }) => {
     if (useQuery) {
@@ -36,7 +35,6 @@ export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin }
       }
       router.replace({ query: newQuery })
     }
-    setSearchValue(data.search)
     onSuccess && onSuccess(data.search)
   }
 

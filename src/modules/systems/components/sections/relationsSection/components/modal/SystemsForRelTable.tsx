@@ -3,8 +3,8 @@ import { type Dispatch, Fragment, type SetStateAction, useEffect, useMemo } from
 import useSWR from 'swr'
 
 import { mockFetcher } from '@/helpers/fetcher'
-import { useEndpoint } from '@/hooks/useEndpoint'
-import usePagination from '@/hooks/usePagination'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
+import usePagination from '@/hooks/table/usePagination'
 import useTable from '@/hooks/useTable'
 import type { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
 import type { SystemDetailResponse, SystemsForRelResponse } from '@/modules/systems/types/responses'

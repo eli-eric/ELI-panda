@@ -3,7 +3,7 @@ import useSWR from 'swr'
 
 import TableRowComponent from '@/components/table/TableRow.comp'
 import { TableRowItem } from '@/components/table/TableRowItem.comp'
-import { useEndpoint } from '@/hooks/useEndpoint'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { PATH } from '@/types/constants/paths'
 
 import type { SystemDetailResponse } from '../../types/responses'

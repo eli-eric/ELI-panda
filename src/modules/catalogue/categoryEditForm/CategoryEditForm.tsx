@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import * as yup from 'yup'
 
-import { useEndpoint } from '@/hooks/useEndpoint'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 import GroupList from './GroupList'
