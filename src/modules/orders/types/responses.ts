@@ -1,4 +1,6 @@
-import type { DELIVERY_STATUS, ORDER_STATUS } from './types'
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
+
+import type { DELIVERY_STATUS } from './types'
 
 export type Order = {
   uid: string
@@ -9,12 +11,13 @@ export type Order = {
   supplier: string
   requestor: string
   procurementResponsible: string
-  orderStatus: ORDER_STATUS
+  orderStatus: string
   notes: string
   orderDate: string
   lastUpdateTime: string
   lastUpdateBy: string
   deliveryStatus: DELIVERY_STATUS
+  orderStatusObj: CodebookType
 }
 
 export type OrderListResponse = {

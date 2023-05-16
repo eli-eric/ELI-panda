@@ -1,0 +1,53 @@
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
+
+import { DELIVERY_STATUS } from '../types'
+import { ORDER_STATUS } from '../types'
+
+export const getColorClassStatus = (orderStatus: CodebookType, deliveryStatus: DELIVERY_STATUS) => {
+  const statusMappingColor = [
+    {
+      statuses: [ORDER_STATUS.ORDER_COMPLETED, DELIVERY_STATUS.COMPLETE],
+      colorClass: 'bg-green-300'
+    },
+    {
+      statuses: [
+        ORDER_STATUS.CANCELLED,
+        ORDER_STATUS.NONE,
+        ORDER_STATUS.PLANNED,
+        ORDER_STATUS.REQUESTED,
+        ORDER_STATUS.ORDERED,
+        DELIVERY_STATUS.COMPLETE
+      ],
+      colorClass: 'bg-green-200'
+    },
+    {
+      statuses: [
+        ORDER_STATUS.CANCELLED,
+        ORDER_STATUS.NONE,
+        ORDER_STATUS.PLANNED,
+        ORDER_STATUS.REQUESTED,
+        ORDER_STATUS.ORDERED,
+        DELIVERY_STATUS.PARTIAL
+      ],
+      colorClass: 'bg-orange-300'
+    },
+    {
+      statuses: [ORDER_STATUS.ORDERED, DELIVERY_STATUS.NONE],
+      colorClass: 'bg-yellow-200'
+    },
+    {
+      statuses: [ORDER_STATUS.PLANNED, DELIVERY_STATUS.NONE],
+      colorClass: 'bg-blue-100'
+    }
+    // Add more mappings as needed
+  ]
+
+  // Find the matching color class based on orderStatus and deliveryStatus
+  for (const mapping of statusMappingColor) {
+    if (mapping.statuses.includes(orderStatus.uid) && mapping.statuses.includes(deliveryStatus)) {
+      return mapping.colorClass
+    }
+  }
+
+  return ''
+}

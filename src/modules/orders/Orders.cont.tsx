@@ -13,13 +13,15 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useGeneralTable from '@/hooks/table/useGeneralTable'
 import usePagination from '@/hooks/table/usePagination'
 import { useSearch } from '@/hooks/table/useSearch'
+import useRolePermission from '@/hooks/useRole'
 import useMutateListStore from '@/store/useMutateListStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 
 import useOrderColumns from './components/OrderColumns'
 import type { Order, OrderListResponse } from './types'
-import { getAggregatedStatus } from './utils/getAggregatedStatus'
+import { getColorClassStatus } from './utils/getColorClassStatus'
 
 const OrdersContainer = () => {
   const router = useRouter()
@@ -27,6 +29,7 @@ const OrdersContainer = () => {
   const { mutate } = useSWRConfig()
   const [url, setUrl] = useState<string>('')
   const { setMutate } = useMutateListStore()
+  const canEdit = useRolePermission([ROLE.ORDERS_EDIT])
 
   const { renderSearchBar, searchValue } = useSearch({
     renderBegin: () => (
@@ -39,14 +42,16 @@ const OrdersContainer = () => {
         >
           <ArrowPathIcon className="h-5 w-5" aria-hidden="true" />
         </Button>
-        <PlusButton
-          primary
-          className="mr-1"
-          buttonSize="large"
-          onClick={() => {
-            router.push(PATH.ORDER)
-          }}
-        />
+        {canEdit && (
+          <PlusButton
+            primary
+            className="mr-1"
+            buttonSize="large"
+            onClick={() => {
+              router.push(PATH.ORDER)
+            }}
+          />
+        )}
       </div>
     )
   })
@@ -91,6 +96,7 @@ const OrdersContainer = () => {
 
   const columns = useOrderColumns({ mutateOrder, orderList })
 
+  //TODO: vyřesit překriv a bordery
   const { getTable } = useGeneralTable<Order>({
     columns,
     tableId: 'orders',
@@ -99,15 +105,10 @@ const OrdersContainer = () => {
     isSortable: true,
     uriSortBy: true,
     className: 'relative overflow-x-auto',
-    getCellProps: ({
-      column,
-      row: {
-        original: { orderStatus, deliveryStatus }
-      }
-    }) => ({
+    getCellProps: ({ column }) => ({
       className: classNames(
         'min-w-[180px] max-w-[180px]',
-        'border border-gray-200 text-sm text-gray-500 px-2 py-1 text-ellipsis',
+        'border border-gray-300 text-sm text-gray-500 px-2 py-1 text-ellipsis',
         column.id === 'name' ? 'sticky left-0 text-ellipsis z-20 bg-opacity-100 backdrop-blur backdrop-filter' : '',
         column.id === 'orderDate' ? 'text-right' : '',
         column.id === 'orderNumber' ? 'text-right' : '',
@@ -123,12 +124,9 @@ const OrdersContainer = () => {
         id === 'notes' ? 'min-w-[90px] max-w-[90px]' : ''
       )
     }),
-    getRowProps: ({ original: { deliveryStatus, orderStatus } }) => {
-      console.log('getAggregatedStatus(orderStatus,deliveryStatus)', getAggregatedStatus(orderStatus, deliveryStatus))
-      return {
-        className: classNames(getAggregatedStatus(orderStatus, deliveryStatus) === 'completed' ? 'bg-green-200' : '')
-      }
-    }
+    getRowProps: ({ original: { deliveryStatus, orderStatusObj } }) => ({
+      className: classNames(orderStatusObj && getColorClassStatus(orderStatusObj, deliveryStatus))
+    })
   })
 
   useEffect(() => {
@@ -137,7 +135,6 @@ const OrdersContainer = () => {
 
   return (
     <Fragment>
-      <div className="backdrop:invisible"></div>
       <TableLayoutContainer>
         {renderSearchBar()}
         {!error && getTable()}
