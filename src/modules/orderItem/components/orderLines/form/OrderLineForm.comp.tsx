@@ -56,14 +56,16 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
   return (
     <Grid>
       <Col sm="full">
-        <Divider text={messages.itemInfo} />
+        <Divider text={messages.itemInfo}>
+          {!orderLine?.uid && (
+            <Col sm={1}>
+              <Toggle enabled={enabled} onChange={toggle} />
+            </Col>
+          )}
+        </Divider>
       </Col>
-      {!orderLine?.uid && (
-        <Col sm={1}>
-          <Toggle enabled={enabled} onChange={toggle} />
-        </Col>
-      )}
-      <Col md={5} lg={!orderLine?.uid ? 5 : 6}>
+
+      <Col md={6} lg={6}>
         <Input {...formFields.name} />
       </Col>
       <Col md={6} lg={6}>
