@@ -2,6 +2,9 @@ import React from 'react'
 
 import { classNames } from '@/helpers'
 
+import type { ColSizeProp } from './ColSizes'
+import { colSizes, lgColSizes, mdColSizes } from './ColSizes'
+
 interface GridPropsT extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode
   className?: string
@@ -30,43 +33,16 @@ export const Grid = ({
   </div>
 )
 
-type ColSizeProp = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 'full'
-
-const colSizes: Record<ColSizeProp, string> = {
-  1: 'col-span-1',
-  2: 'col-span-2',
-  3: 'col-span-3',
-  4: 'col-span-4',
-  5: 'col-span-5',
-  6: 'col-span-6',
-  7: 'col-span-7',
-  8: 'col-span-8',
-  9: 'col-span-9',
-  10: 'col-span-10',
-  11: 'col-span-11',
-  12: 'col-span-12',
-  full: 'col-span-full'
-}
-
 interface ColType extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
   sm?: ColSizeProp
   md?: ColSizeProp
   lg?: ColSizeProp
-  xl?: ColSizeProp
-  xxl?: ColSizeProp
 }
 
-export const Col = ({ children, className, sm: col = 3, md, lg, xl, xxl, ...restProps }: ColType): JSX.Element => (
+export const Col = ({ children, className, sm: col = 3, md, lg, ...restProps }: ColType): JSX.Element => (
   <div
-    className={classNames(
-      colSizes[col],
-      md && `md:${colSizes[md]}`,
-      lg && `lg:${colSizes[lg]}`,
-      xl && `xl:${colSizes[xl]}`,
-      xxl && `xxl:${colSizes[xxl]}`,
-      className
-    )}
+    className={classNames(col && colSizes[col], md && mdColSizes[md], lg && lgColSizes[lg], className)}
     {...restProps}
   >
     {children}

@@ -88,7 +88,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
       <Col sm="full">
         <Divider text={messages.systemInfo} />
       </Col>
-      <Col md={6} lg={12}>
+      <Col sm="full">
         <ComboboxComponent {...formFields.system} isObject={true} limit={50} position="top" />
       </Col>
       {/* <ComboboxComponent
