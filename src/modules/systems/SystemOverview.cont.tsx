@@ -10,7 +10,7 @@ import ErrorPage from '@/components/error/ErrorPage'
 import FileManager from '@/components/fileManager/FileManager'
 import LoaderComponent from '@/components/loader.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import { useSearch } from '@/hooks/useSearch'
+import { useSearch } from '@/hooks/table/useSearch'
 import { FILE_TYPE } from '@/types/constants/files'
 
 import Breadcrumbs from './components/Breadcrumbs'
