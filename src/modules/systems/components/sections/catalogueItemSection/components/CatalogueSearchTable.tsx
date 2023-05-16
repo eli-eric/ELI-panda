@@ -3,7 +3,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import { useSearch } from '@/hooks/table/useSearch'
+import { useSearch } from '@/hooks/useSearch'
 import type { CatalogueItem } from '@/types/responses'
 
 import CatalogueItemsTable from './CatalogueItemsTable'
