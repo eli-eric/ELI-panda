@@ -15,7 +15,13 @@ interface OrderLinesTableProps {
 const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEdit }: OrderLinesTableProps) => {
   const { setOpen, getFormModal } = useOrderLineForm({ setOrderLine })
   const columns = useOrderLinesColumns({ setOrderLine, deleteOrderLine, disabledEdit })
-  const { getTable } = useGeneralTable({ columns, data: orderLines, tableId: 'orderLines', className: 'col-span-12' })
+  const { getTable } = useGeneralTable<OrderLineFormType>({
+    columns,
+    data: orderLines,
+    tableId: 'orderLines',
+    className: 'col-span-12',
+    getRowProps: ({ original: { isDelivered } }) => ({ className: isDelivered ? 'bg-green-100 border-b' : '' })
+  })
 
   return (
     <div className="flex flex-col">
