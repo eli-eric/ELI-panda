@@ -19,7 +19,7 @@ import { PATH } from '@/types/constants/paths'
 
 import useOrderColumns from './components/OrderColumns'
 import type { Order, OrderListResponse } from './types'
-import { getAggregatedStatus } from './utils/getAggregatedStatus'
+import { getColorClassStatus } from './utils/getColorClassStatus'
 
 const OrdersContainer = () => {
   const router = useRouter()
@@ -91,6 +91,7 @@ const OrdersContainer = () => {
 
   const columns = useOrderColumns({ mutateOrder, orderList })
 
+  //TODO: vyřesit překriv a bordery
   const { getTable } = useGeneralTable<Order>({
     columns,
     tableId: 'orders',
@@ -99,15 +100,10 @@ const OrdersContainer = () => {
     isSortable: true,
     uriSortBy: true,
     className: 'relative overflow-x-auto',
-    getCellProps: ({
-      column,
-      row: {
-        original: { orderStatus, deliveryStatus }
-      }
-    }) => ({
+    getCellProps: ({ column }) => ({
       className: classNames(
         'min-w-[180px] max-w-[180px]',
-        'border border-gray-200 text-sm text-gray-500 px-2 py-1 text-ellipsis',
+        'border border-gray-300 text-sm text-gray-500 px-2 py-1 text-ellipsis',
         column.id === 'name' ? 'sticky left-0 text-ellipsis z-20 bg-opacity-100 backdrop-blur backdrop-filter' : '',
         column.id === 'orderDate' ? 'text-right' : '',
         column.id === 'orderNumber' ? 'text-right' : '',
@@ -123,12 +119,9 @@ const OrdersContainer = () => {
         id === 'notes' ? 'min-w-[90px] max-w-[90px]' : ''
       )
     }),
-    getRowProps: ({ original: { deliveryStatus, orderStatus } }) => {
-      console.log('getAggregatedStatus(orderStatus,deliveryStatus)', getAggregatedStatus(orderStatus, deliveryStatus))
-      return {
-        className: classNames(getAggregatedStatus(orderStatus, deliveryStatus) === 'completed' ? 'bg-green-200' : '')
-      }
-    }
+    getRowProps: ({ original: { deliveryStatus, orderStatusObj } }) => ({
+      className: classNames(orderStatusObj && getColorClassStatus(orderStatusObj, deliveryStatus))
+    })
   })
 
   useEffect(() => {
