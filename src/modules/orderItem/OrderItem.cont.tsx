@@ -14,6 +14,7 @@ import FileManager from '@/components/fileManager/FileManager'
 import Card from '@/components/layout/Card'
 import Heading from '@/components/layout/Heading'
 import ProgressBarComponent from '@/components/progress-bar.comp'
+import { convertDate } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useSubmit from '@/hooks/fetch/useSubmit'
 import useFormNotification from '@/hooks/form/useFormNotification'
@@ -116,9 +117,13 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
     remove(index)
   }
 
+  const onSubmit = (data: OrderDetailFormType) => {
+    submit({ ...data, orderDate: convertDate(data.orderDate) })
+  }
+
   return (
     <Fragment>
-      <form onSubmit={formMethods.handleSubmit(submit)}>
+      <form onSubmit={formMethods.handleSubmit(onSubmit)}>
         <FormProvider {...formMethods}>
           <HeaderComponent loading={loading} disabledEdit={disabledEdit} />
           <div className="py-6">

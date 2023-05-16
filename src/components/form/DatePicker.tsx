@@ -21,7 +21,6 @@ const DateInput = <T extends FieldValues>({
   isError,
   disabled,
   rounded = 'rounded-md',
-  type = 'text',
   className,
   hidden,
   label,
@@ -62,7 +61,7 @@ const DateInput = <T extends FieldValues>({
               {...restProps}
               hidden={hidden}
               name={name}
-              type={type}
+              type="date"
               disabled={disabled}
               className={classNames(
                 'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
@@ -76,7 +75,6 @@ const DateInput = <T extends FieldValues>({
                 onChange(convertDate(date))
               }}
             />
-
             {isError && <ValidationIcon />}
           </div>
         </div>
