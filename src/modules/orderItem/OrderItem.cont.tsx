@@ -17,6 +17,7 @@ import ProgressBarComponent from '@/components/progress-bar.comp'
 import { convertDate } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useSubmit from '@/hooks/fetch/useSubmit'
+// import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
 import useFormNotification from '@/hooks/form/useFormNotification'
 import { message } from '@/i18n/src/messages'
 import useMutateListStore from '@/store/useMutateListStore'
@@ -88,10 +89,17 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
     }
   })
 
+  //formMethods.setFocus('name', { shouldSelect: true })
+
   //  set the form methods to be used in the order lines
-  const { control, setValue } = formMethods
+  const {
+    control,
+    setValue,
+    formState: { isDirty }
+  } = formMethods
   const { insert, update, fields, remove } = useFieldArray<OrderDetailFormType>({ control, name: 'orderLines' })
   useFormNotification<OrderDetailFormType>({ control })
+  //const FormWarningModal = useFormLeaveWarning({ isDirty })
 
   // set the order date to the current date if it is a new order
   useEffect(() => {
@@ -154,6 +162,7 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
           </Fragment>
         )}
       </Card>
+      {/* <FormWarningModal /> */}
     </Fragment>
   )
 }

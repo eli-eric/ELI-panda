@@ -33,21 +33,11 @@ const useOrderColumns = ({ mutateOrder, orderList }: Props) => {
           </div>
         )
       },
-      {
-        Header: intl.formatMessage({ id: messages.orderDate }),
-        accessor: 'orderDate',
-        Cell: ({ value }: CellProps<Order>) => (
-          <span className="text-right">
-            <FormattedDate value={value} day="2-digit" month="long" year="numeric" />
-          </span>
-        ),
-        id: 'orderDate'
-      },
       { Header: intl.formatMessage({ id: messages.orderNumber }), accessor: 'orderNumber', id: 'orderNumber' },
       { Header: intl.formatMessage({ id: messages.requestNumber }), accessor: 'requestNumber', id: 'requestNumber' },
       { Header: intl.formatMessage({ id: messages.contractNumber }), accessor: 'contractNumber', id: 'contractNumber' },
-      { Header: intl.formatMessage({ id: messages.supplier }), accessor: 'supplier', id: 'supplier' },
       { Header: intl.formatMessage({ id: messages.orderStatus }), accessor: 'orderStatus' },
+      { Header: intl.formatMessage({ id: messages.supplier }), accessor: 'supplier', id: 'supplier' },
       { Header: intl.formatMessage({ id: messages.procurementResponsible }), accessor: 'procurementResponsible' },
       { Header: intl.formatMessage({ id: messages.requestor }), accessor: 'requestor' },
       {
@@ -75,6 +65,16 @@ const useOrderColumns = ({ mutateOrder, orderList }: Props) => {
       {
         Header: intl.formatMessage({ id: messages.lastUpdateBy }),
         accessor: 'lastUpdateBy'
+      },
+      {
+        Header: intl.formatMessage({ id: messages.orderDate }),
+        accessor: 'orderDate',
+        Cell: ({ value }: CellProps<Order>) => (
+          <span className="text-right">
+            <FormattedDate value={value} day="2-digit" month="long" year="numeric" />
+          </span>
+        ),
+        id: 'orderDate'
       }
     ],
     [mutateOrder, orderList, intl]
