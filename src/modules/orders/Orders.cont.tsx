@@ -96,7 +96,6 @@ const OrdersContainer = () => {
 
   const columns = useOrderColumns({ mutateOrder, orderList })
 
-  //TODO: vyřesit překriv a bordery
   const { getTable } = useGeneralTable<Order>({
     columns,
     tableId: 'orders',
@@ -105,36 +104,30 @@ const OrdersContainer = () => {
     isSortable: true,
     uriSortBy: true,
     className: 'relative overflow-x-auto',
-    getCellProps: ({
-      column,
-      row: {
-        original: { deliveryStatus, orderStatusObj },
-        index
-      }
-    }) => ({
+    getCellProps: ({ column }) => ({
       className: classNames(
         'min-w-[180px] max-w-[180px]',
-        'text-sm text-gray-500 px-2 py-1 text-ellipsis',
-        column.id === 'name' ? 'sticky left-0 text-ellipsis z-20' : '',
+        column.id === 'name' ? 'sticky left-0 text-ellipsis z-20 backdrop-blur-2xl backdrop-filter border-r' : '',
         column.id === 'orderDate' ? 'text-right' : '',
         column.id === 'orderNumber' ? 'text-right' : '',
         column.id === 'requestNumber' ? 'text-right' : '',
         column.id === 'contractNumber' ? 'text-right' : '',
         column.id === 'lastUpdateTime' ? 'text-right' : '',
+        column.id === 'supplier' ? 'min-w-[300px] max-w-[300px]' : '',
         column.id === 'notes' ? 'min-w-[90px] max-w-[90px]' : 'min-w-[180px] max-w-[180px]',
-        index % 2 === 0 ? 'bg-white' : 'bg-gray-100',
-        orderStatusObj && getColorClassStatus(orderStatusObj, deliveryStatus),
-        'border border-gray-400'
+        'border-b border-gray-400'
       )
     }),
     getColumnProps: ({ id }) => ({
       className: classNames(
-        id === 'name' ? 'left-0 z-30 min-w-[600px] max-w-[600px]' : 'border-l',
-        id === 'notes' ? 'min-w-[90px] max-w-[90px]' : ''
+        id === 'name' ? 'left-0 z-30 min-w-[600px] max-w-[600px] border-r' : '',
+        id === 'notes' ? 'min-w-[90px] max-w-[90px]' : '',
+        id === 'supplier' ? 'min-w-[300px] max-w-[300px]' : '',
+        'border-b border-gray-400'
       )
     }),
-    getRowProps: ({ original: { deliveryStatus, orderStatusObj } }) => ({
-      className: classNames('border border-gray-400')
+    getRowProps: ({ original: { orderStatusObj, deliveryStatus } }) => ({
+      className: classNames('bg-white', orderStatusObj && getColorClassStatus(orderStatusObj, deliveryStatus))
     })
   })
 
@@ -144,7 +137,6 @@ const OrdersContainer = () => {
 
   return (
     <Fragment>
-      <div></div>
       <TableLayoutContainer>
         {renderSearchBar()}
         {!error && getTable()}
