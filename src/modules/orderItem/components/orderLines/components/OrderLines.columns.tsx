@@ -64,18 +64,20 @@ const useOrderLinesColumns = ({ setOrderLine, deleteOrderLine, disabledEdit }: P
         Header: formatMessage({ id: messages.price }),
         accessor: 'price',
         Cell: ({ value, row: { original } }: CellProps<OrderLineFormType>) => (
-          <span>
+          <span className="whitespace-nowrap">
             {value} <span className="font-medium">{original.currency}</span>
           </span>
         ),
         Footer: ({ rows }: FooterProps<OrderLineFormType>) => {
           const total = rows.reduce((sum, { original: { price } }) => sum + (price || 0), 0)
+          const totalCurrencyRows = rows.filter(({ original: { currency } }) => currency != undefined)
+          const totalCurrency = totalCurrencyRows.length > 0 ? totalCurrencyRows[0].original.currency : ''
           return (
             <Fragment>
               {rows.length > 0 && (
-                <div className="flex flex-col">
+                <div className="flex flex-col whitespace-nowrap">
                   <span className="font-medium">{'Total:'}</span>
-                  <span className="font-medium">{`${total} ${rows[0].original.currency}`}</span>
+                  <span className="font-medium">{`${total} ${totalCurrency}`}</span>
                 </div>
               )}
             </Fragment>

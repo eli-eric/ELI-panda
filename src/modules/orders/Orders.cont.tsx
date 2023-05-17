@@ -123,6 +123,9 @@ const OrdersContainer = () => {
       className: classNames(
         id === 'name' ? 'left-0 z-30 min-w-[600px] max-w-[600px] border-r' : '',
         id === 'notes' ? 'min-w-[90px] max-w-[90px]' : '',
+        id === 'orderNumber' ? 'text-center' : '',
+        id === 'requestNumber' ? 'text-center' : '',
+        id === 'contractNumber' ? 'text-center' : '',
         id === 'supplier' ? 'min-w-[300px] max-w-[300px]' : '',
         'border-b border-gray-400'
       )
