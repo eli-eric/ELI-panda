@@ -105,17 +105,26 @@ const OrdersContainer = () => {
     isSortable: true,
     uriSortBy: true,
     className: 'relative overflow-x-auto',
-    getCellProps: ({ column }) => ({
+    getCellProps: ({
+      column,
+      row: {
+        original: { deliveryStatus, orderStatusObj },
+        index
+      }
+    }) => ({
       className: classNames(
         'min-w-[180px] max-w-[180px]',
-        'border border-gray-300 text-sm text-gray-500 px-2 py-1 text-ellipsis',
-        column.id === 'name' ? 'sticky left-0 text-ellipsis z-20 bg-opacity-100 backdrop-blur backdrop-filter' : '',
+        'text-sm text-gray-500 px-2 py-1 text-ellipsis',
+        column.id === 'name' ? 'sticky left-0 text-ellipsis z-20' : '',
         column.id === 'orderDate' ? 'text-right' : '',
         column.id === 'orderNumber' ? 'text-right' : '',
         column.id === 'requestNumber' ? 'text-right' : '',
         column.id === 'contractNumber' ? 'text-right' : '',
         column.id === 'lastUpdateTime' ? 'text-right' : '',
-        column.id === 'notes' ? 'min-w-[90px] max-w-[90px]' : 'min-w-[180px] max-w-[180px]'
+        column.id === 'notes' ? 'min-w-[90px] max-w-[90px]' : 'min-w-[180px] max-w-[180px]',
+        index % 2 === 0 ? 'bg-white' : 'bg-gray-100',
+        orderStatusObj && getColorClassStatus(orderStatusObj, deliveryStatus),
+        'border border-gray-400'
       )
     }),
     getColumnProps: ({ id }) => ({
@@ -125,7 +134,7 @@ const OrdersContainer = () => {
       )
     }),
     getRowProps: ({ original: { deliveryStatus, orderStatusObj } }) => ({
-      className: classNames(orderStatusObj && getColorClassStatus(orderStatusObj, deliveryStatus))
+      className: classNames('border border-gray-400')
     })
   })
 
@@ -135,6 +144,7 @@ const OrdersContainer = () => {
 
   return (
     <Fragment>
+      <div></div>
       <TableLayoutContainer>
         {renderSearchBar()}
         {!error && getTable()}

@@ -98,7 +98,10 @@ const useGeneralTable = <T extends object>({
       <div className={classNames('h-full flex flex-col border-t border-gray-300 pb-4', className)}>
         <div className="inline-block min-w-full align-middle">
           <div className="shadow ring-1 ring-black ring-opacity-5 ">
-            <table className="min-w-full divide-y divide-gray-300" {...getTableProps()}>
+            <table
+              className="min-w-full divide-y divide-gray-300 border-separate border-spacing-0"
+              {...getTableProps()}
+            >
               <thead className="bg-gray-50 border-b">
                 {headerGroups.map(headerGroup => {
                   const { key, ...restHeaderGroupProps } = headerGroup.getHeaderGroupProps({
