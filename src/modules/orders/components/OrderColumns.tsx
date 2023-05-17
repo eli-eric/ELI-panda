@@ -46,7 +46,7 @@ const useOrderColumns = ({ mutateOrder, orderList }: Props) => {
       { Header: intl.formatMessage({ id: messages.orderNumber }), accessor: 'orderNumber', id: 'orderNumber' },
       { Header: intl.formatMessage({ id: messages.requestNumber }), accessor: 'requestNumber', id: 'requestNumber' },
       { Header: intl.formatMessage({ id: messages.contractNumber }), accessor: 'contractNumber', id: 'contractNumber' },
-      { Header: intl.formatMessage({ id: messages.supplier }), accessor: 'supplier' },
+      { Header: intl.formatMessage({ id: messages.supplier }), accessor: 'supplier', id: 'supplier' },
       { Header: intl.formatMessage({ id: messages.orderStatus }), accessor: 'orderStatus' },
       { Header: intl.formatMessage({ id: messages.procurementResponsible }), accessor: 'procurementResponsible' },
       { Header: intl.formatMessage({ id: messages.requestor }), accessor: 'requestor' },

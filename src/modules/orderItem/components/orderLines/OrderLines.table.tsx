@@ -1,4 +1,5 @@
 import { PlusButton } from '@/components/Buttons'
+import { classNames } from '@/helpers'
 import useGeneralTable from '@/hooks/table/useGeneralTable'
 
 import type { OrderLineFormType } from '../../types'
@@ -15,7 +16,18 @@ interface OrderLinesTableProps {
 const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEdit }: OrderLinesTableProps) => {
   const { setOpen, getFormModal } = useOrderLineForm({ setOrderLine })
   const columns = useOrderLinesColumns({ setOrderLine, deleteOrderLine, disabledEdit })
-  const { getTable } = useGeneralTable({ columns, data: orderLines, tableId: 'orderLines', className: 'col-span-12' })
+  const { getTable } = useGeneralTable<OrderLineFormType>({
+    columns,
+    data: orderLines,
+    tableId: 'orderLines',
+    className: 'col-span-12',
+    getRowProps: ({ original: { isDelivered } }) => ({
+      className: classNames(isDelivered ? 'bg-green-100' : 'bg-white')
+    }),
+    getCellProps: () => ({
+      className: classNames('border-b  border-gray-300')
+    })
+  })
 
   return (
     <div className="flex flex-col">
