@@ -7,55 +7,66 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
+import useRolePermission from '@/hooks/useRole'
 import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 
-const Links = [
-  {
+//TODO: refactor this page
+const Links = {
+  catalogue: {
     name: 'Catalogue',
     link: PATH.CATALOGUE,
     Icon: () => <IdentificationIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
   },
-  {
+  orders: {
     name: 'Orders',
     link: PATH.ORDERS,
     Icon: () => <ShoppingCartIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
   },
-  {
+  systems: {
     name: 'Systems',
     link: PATH.SYSTEMS,
     Icon: () => <RectangleGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
   }
-  // More Links...
-]
+}
+
+const Card = ({ name, link, Icon }) => {
+  const router = useRouter()
+  return (
+    <li
+      key={name}
+      className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
+      onClick={() => {
+        router.push(link)
+      }}
+    >
+      <div className="flex flex-1 flex-col p-8">
+        <Icon />
+        <h2 className="mt-6 text-xl font-medium text-gray-900">{name}</h2>
+        <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
+      </div>
+      <div>
+        <div className="-mt-px flex divide-x divide-gray-200">
+          <div className="flex w-0 flex-1"></div>
+          <div className="-ml-px flex w-0 flex-1"></div>
+        </div>
+      </div>
+    </li>
+  )
+}
 
 function DashboardCard() {
-  const router = useRouter()
+  const hasCatalogueRole = useRolePermission([ROLE.CATALOGUE_VIEW])
+  const hasOrdersRole = useRolePermission([ROLE.ORDERS_VIEW])
+  const hasSystemsRole = useRolePermission([ROLE.SYSTEMS_VIEW])
   return (
     <ul
       role="list"
       className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2 py-2 sm:px-4 sm:py-4 my-5 mx-2"
     >
-      {Links.map(({ name, link, Icon }) => (
-        <li
-          key={name}
-          className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
-          onClick={() => {
-            router.push(link)
-          }}
-        >
-          <div className="flex flex-1 flex-col p-8">
-            <Icon />
-            <h2 className="mt-6 text-xl font-medium text-gray-900">{name}</h2>
-            <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
-          </div>
-          <div>
-            <div className="-mt-px flex divide-x divide-gray-200">
-              <div className="flex w-0 flex-1"></div>
-              <div className="-ml-px flex w-0 flex-1"></div>
-            </div>
-          </div>
-        </li>
-      ))}
+      {hasCatalogueRole && <Card name="Catalogue" link={PATH.CATALOGUE} Icon={Links.catalogue.Icon} />}
+      {hasOrdersRole && <Card name="Orders" link={PATH.ORDERS} Icon={Links.orders.Icon} />}
+      {hasSystemsRole && <Card name="Systems" link={PATH.SYSTEMS} Icon={Links.systems.Icon} />}
     </ul>
   )
 }
