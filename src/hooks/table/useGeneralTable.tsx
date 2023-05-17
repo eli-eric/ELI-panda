@@ -16,6 +16,7 @@ interface UseTableType<T extends object> {
   loading?: boolean
   className?: string
   isSortable?: boolean
+  withFooter?: boolean
   uriSortBy?: boolean
   getRowProps?: (row: Row<T>) => {}
   getCellProps?: (cell: Cell<T, any>) => {}
@@ -28,6 +29,7 @@ const useGeneralTable = <T extends object>({
   data,
   columns,
   loading = false,
+  withFooter = false,
   uriSortBy = false,
   className,
   getHeaderGroupProps = defaultPropGetter,
@@ -46,6 +48,7 @@ const useGeneralTable = <T extends object>({
     headerGroups,
     getTableProps,
     getTableBodyProps,
+    footerGroups,
     rows,
     prepareRow,
     state: { sortBy },
@@ -129,39 +132,66 @@ const useGeneralTable = <T extends object>({
                   )
                 })}
               </thead>
-              <tbody className="bg-white" {...getTableBodyProps()}>
-                {rows.map((row, index) => {
-                  prepareRow(row)
-                  const { key, className, ...restRowProps } = row.getRowProps({
-                    ...getRowProps(row)
-                  })
-                  return (
-                    <tr
-                      {...restRowProps}
-                      key={key}
-                      className={classNames(
-                        index % 2 === 0 ? undefined : 'bg-gray-100',
-                        'hover:bg-primary-200 z-0',
-                        className
-                      )}
-                    >
-                      {row.cells.map(cell => {
-                        const { key, className, ...restCellProps } = cell.getCellProps({ ...getCellProps(cell) })
+              {data && (
+                <Fragment>
+                  <tbody className="bg-white" {...getTableBodyProps()}>
+                    {rows.map((row, index) => {
+                      prepareRow(row)
+                      const { key, className, ...restRowProps } = row.getRowProps({
+                        ...getRowProps(row)
+                      })
+                      return (
+                        <tr
+                          {...restRowProps}
+                          key={key}
+                          className={classNames(
+                            index % 2 === 0 ? undefined : 'bg-gray-100',
+                            'hover:bg-primary-200 z-0',
+                            className
+                          )}
+                        >
+                          {row.cells.map(cell => {
+                            const { key, className, ...restCellProps } = cell.getCellProps({ ...getCellProps(cell) })
 
+                            return (
+                              <td
+                                {...restCellProps}
+                                key={key}
+                                className={classNames('text-sm sm:pl-6 sm:pr-6 text-gray-500', className)}
+                              >
+                                {cell.render('Cell')}
+                              </td>
+                            )
+                          })}
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                  {withFooter && (
+                    <tfoot>
+                      {footerGroups.map(group => {
+                        const { key, ...restFooterGroupProps } = group.getFooterGroupProps()
                         return (
-                          <td
-                            {...restCellProps}
-                            key={key}
-                            className={classNames('text-sm sm:pl-6 sm:pr-6 text-gray-500', className)}
-                          >
-                            {cell.render('Cell')}
-                          </td>
+                          <tr key={key} {...restFooterGroupProps} className={classNames('bg-gray-50')}>
+                            {group.headers.map(column => {
+                              const { key, ...restFooterProps } = column.getFooterProps()
+                              return (
+                                <td
+                                  key={key}
+                                  {...restFooterProps}
+                                  className={classNames('text-sm sm:pl-6 sm:pr-6 text-gray-500', className)}
+                                >
+                                  {column.render('Footer')}
+                                </td>
+                              )
+                            })}
+                          </tr>
                         )
                       })}
-                    </tr>
-                  )
-                })}
-              </tbody>
+                    </tfoot>
+                  )}
+                </Fragment>
+              )}
             </table>
           </div>
           {loading && <ProgressBarComponent />}

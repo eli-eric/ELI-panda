@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 import { useIntl } from 'react-intl'
-import type { CellProps, Column } from 'react-table'
+import type { CellProps, Column, FooterProps } from 'react-table'
 
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
@@ -67,7 +67,20 @@ const useOrderLinesColumns = ({ setOrderLine, deleteOrderLine, disabledEdit }: P
           <span>
             {value} <span className="font-medium">{original.currency}</span>
           </span>
-        )
+        ),
+        Footer: ({ rows }: FooterProps<OrderLineFormType>) => {
+          const total = rows.reduce((sum, { original: { price } }) => sum + (price || 0), 0)
+          return (
+            <Fragment>
+              {rows.length > 0 && (
+                <div className="flex flex-col">
+                  <span className="font-medium">{'Total:'}</span>
+                  <span className="font-medium">{`${total} ${rows[0].original.currency}`}</span>
+                </div>
+              )}
+            </Fragment>
+          )
+        }
       },
       {
         Header: formatMessage({ id: messages.eun }),

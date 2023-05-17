@@ -16,7 +16,8 @@ export const messages = {
       description: 'Description'
     },
     warning: 'Warning',
-    fileManager: { deleteModal: { title: 'Warning', text: 'Are you sure you want to remove {fileName}?' } }
+    fileManager: { deleteModal: { title: 'Warning', text: 'Are you sure you want to remove {fileName}?' } },
+    form: { leaveWarning: { title: 'Warning', text: 'You have unsaved changes. Are you sure you want to leave?' } }
   },
   layout: {
     login: 'Log In',

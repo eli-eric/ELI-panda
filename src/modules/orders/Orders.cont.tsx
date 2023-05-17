@@ -96,6 +96,7 @@ const OrdersContainer = () => {
 
   const columns = useOrderColumns({ mutateOrder, orderList })
 
+  //TODO: vyřesit překriv a bordery
   const { getTable } = useGeneralTable<Order>({
     columns,
     tableId: 'orders',
