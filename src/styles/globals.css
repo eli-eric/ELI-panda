@@ -20,3 +20,9 @@
     -moz-appearance: textfield !important;
   }
 }
+
+@layer base {
+  table {
+    @apply border-separate border-spacing-0;
+  }
+}
