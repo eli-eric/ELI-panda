@@ -19,6 +19,7 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
   const { getTable } = useGeneralTable<OrderLineFormType>({
     columns,
     data: orderLines,
+    withFooter: true,
     tableId: 'orderLines',
     className: 'col-span-12',
     getRowProps: ({ original: { isDelivered } }) => ({
