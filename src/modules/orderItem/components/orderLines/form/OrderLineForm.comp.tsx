@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ComboboxComponent from '@/components/form/Combobox'
@@ -21,12 +21,12 @@ interface Props {
 }
 
 const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
-  //const [enabled, setEnabled] = useState(false)
+  // const [enabled, setEnabled] = useState(false)
   const { enabled, toggle, Toggle } = useToggle(false)
-  //const [locationEnable, setLocationEnable] = useState(false)
+  const [locationEnable, setLocationEnable] = useState(false)
   const formFields = useOrderLineFormFields(enabled)
-  const { setValue } = useFormContext<OrderLineFormType>()
-  //const system = watch('system')
+  const { setValue, watch } = useFormContext<OrderLineFormType>()
+  const system = watch('system')
 
   useEffect(() => {
     if (!enabled) {
@@ -44,14 +44,14 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
     }
   }, [enabled, setValue])
 
-  /* useEffect(() => {
+  useEffect(() => {
     if (system) {
       setLocationEnable(false)
       setValue('location', undefined)
     } else {
       setLocationEnable(true)
     }
-  }, [system, setValue]) */
+  }, [system, setValue])
 
   return (
     <Grid>
@@ -90,17 +90,21 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
       <Col sm="full">
         <Divider text={messages.systemInfo} />
       </Col>
-      <Col sm="full">
+      <Col md={orderLine?.uid ? 6 : 12} lg={orderLine?.uid ? 6 : 12}>
         <ComboboxComponent {...formFields.system} isObject={true} limit={50} position="top" />
       </Col>
-      {/* <ComboboxComponent
-        {...formFields.location}
-        isObject
-        position="top"
-        limit={50}
-        disabled={locationEnable}
-        className="col-span-3 md:col-span-6"
-      /> */}
+      {orderLine?.uid && (
+        <Col md={6} lg={6}>
+          <ComboboxComponent
+            {...formFields.location}
+            isObject
+            position="top"
+            limit={50}
+            disabled={locationEnable}
+            className="col-span-3 md:col-span-6"
+          />
+        </Col>
+      )}
     </Grid>
   )
 }

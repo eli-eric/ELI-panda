@@ -1,4 +1,5 @@
 import { PlusButton } from '@/components/Buttons'
+import { classNames } from '@/helpers'
 import useGeneralTable from '@/hooks/table/useGeneralTable'
 
 import type { OrderLineFormType } from '../../types'
@@ -20,7 +21,12 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
     data: orderLines,
     tableId: 'orderLines',
     className: 'col-span-12',
-    getRowProps: ({ original: { isDelivered } }) => ({ className: isDelivered ? 'bg-green-100 border-b' : '' })
+    getRowProps: ({ original: { isDelivered } }) => ({
+      className: classNames(isDelivered ? 'bg-green-100' : 'bg-white')
+    }),
+    getCellProps: () => ({
+      className: classNames('border-b  border-gray-300')
+    })
   })
 
   return (

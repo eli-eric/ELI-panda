@@ -13,9 +13,11 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useGeneralTable from '@/hooks/table/useGeneralTable'
 import usePagination from '@/hooks/table/usePagination'
 import { useSearch } from '@/hooks/table/useSearch'
+import useRolePermission from '@/hooks/useRole'
 import useMutateListStore from '@/store/useMutateListStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 
 import useOrderColumns from './components/OrderColumns'
 import type { Order, OrderListResponse } from './types'
@@ -27,6 +29,7 @@ const OrdersContainer = () => {
   const { mutate } = useSWRConfig()
   const [url, setUrl] = useState<string>('')
   const { setMutate } = useMutateListStore()
+  const canEdit = useRolePermission([ROLE.ORDERS_EDIT])
 
   const { renderSearchBar, searchValue } = useSearch({
     renderBegin: () => (
@@ -39,14 +42,16 @@ const OrdersContainer = () => {
         >
           <ArrowPathIcon className="h-5 w-5" aria-hidden="true" />
         </Button>
-        <PlusButton
-          primary
-          className="mr-1"
-          buttonSize="large"
-          onClick={() => {
-            router.push(PATH.ORDER)
-          }}
-        />
+        {canEdit && (
+          <PlusButton
+            primary
+            className="mr-1"
+            buttonSize="large"
+            onClick={() => {
+              router.push(PATH.ORDER)
+            }}
+          />
+        )}
       </div>
     )
   })
@@ -103,24 +108,27 @@ const OrdersContainer = () => {
     getCellProps: ({ column }) => ({
       className: classNames(
         'min-w-[180px] max-w-[180px]',
-        'border border-gray-300 text-sm text-gray-500 px-2 py-1 text-ellipsis',
-        column.id === 'name' ? 'sticky left-0 text-ellipsis z-20 bg-opacity-100 backdrop-blur backdrop-filter' : '',
+        column.id === 'name' ? 'sticky left-0 text-ellipsis z-20 backdrop-blur-2xl backdrop-filter border-r' : '',
         column.id === 'orderDate' ? 'text-right' : '',
         column.id === 'orderNumber' ? 'text-right' : '',
         column.id === 'requestNumber' ? 'text-right' : '',
         column.id === 'contractNumber' ? 'text-right' : '',
         column.id === 'lastUpdateTime' ? 'text-right' : '',
-        column.id === 'notes' ? 'min-w-[90px] max-w-[90px]' : 'min-w-[180px] max-w-[180px]'
+        column.id === 'supplier' ? 'min-w-[300px] max-w-[300px]' : '',
+        column.id === 'notes' ? 'min-w-[90px] max-w-[90px]' : 'min-w-[180px] max-w-[180px]',
+        'border-b border-gray-400'
       )
     }),
     getColumnProps: ({ id }) => ({
       className: classNames(
-        id === 'name' ? 'left-0 z-30 min-w-[600px] max-w-[600px]' : 'border-l',
-        id === 'notes' ? 'min-w-[90px] max-w-[90px]' : ''
+        id === 'name' ? 'left-0 z-30 min-w-[600px] max-w-[600px] border-r' : '',
+        id === 'notes' ? 'min-w-[90px] max-w-[90px]' : '',
+        id === 'supplier' ? 'min-w-[300px] max-w-[300px]' : '',
+        'border-b border-gray-400'
       )
     }),
-    getRowProps: ({ original: { deliveryStatus, orderStatusObj } }) => ({
-      className: classNames(orderStatusObj && getColorClassStatus(orderStatusObj, deliveryStatus))
+    getRowProps: ({ original: { orderStatusObj, deliveryStatus } }) => ({
+      className: classNames('bg-white', orderStatusObj && getColorClassStatus(orderStatusObj, deliveryStatus))
     })
   })
 
@@ -130,7 +138,6 @@ const OrdersContainer = () => {
 
   return (
     <Fragment>
-      <div className="backdrop:invisible"></div>
       <TableLayoutContainer>
         {renderSearchBar()}
         {!error && getTable()}

@@ -99,7 +99,7 @@ export const OrderisDeliveredAction = ({
   const { enabled, toggle, Toggle } = useToggle(checked)
   const uid = useRouter().query.uid as string
   const { orderLineDelivery } = useEndpoint({ uid: uid, itemUid: orderLine.uid })
-  const hasRole = useRolePermission([ROLE.ORDERS_DELIVERY_EDIT])
+  const hasRole = useRolePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
   const { formatMessage } = useIntl()
 
   const { submit } = useSubmit<OrderLineFormType>({

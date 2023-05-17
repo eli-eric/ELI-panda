@@ -88,6 +88,8 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
     }
   })
 
+  formMethods.setFocus('name', { shouldSelect: true })
+
   //  set the form methods to be used in the order lines
   const { control, setValue } = formMethods
   const { insert, update, fields, remove } = useFieldArray<OrderDetailFormType>({ control, name: 'orderLines' })
