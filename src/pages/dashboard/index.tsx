@@ -1,9 +1,64 @@
+import { IdentificationIcon, RectangleGroupIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
+
+import { PATH } from '@/types/constants/paths'
+
+const Links = [
+  {
+    name: 'Catalogue',
+    link: PATH.CATALOGUE,
+    Icon: () => <IdentificationIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+  },
+  {
+    name: 'Orders',
+    link: PATH.ORDERS,
+    Icon: () => <ShoppingCartIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+  },
+  {
+    name: 'Systems',
+    link: PATH.SYSTEMS,
+    Icon: () => <RectangleGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+  }
+  // More Links...
+]
+
+function DashboardCard() {
+  const router = useRouter()
+  return (
+    <ul
+      role="list"
+      className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2 py-2 sm:px-4 sm:py-4 my-5 mx-2"
+    >
+      {Links.map(({ name, link, Icon }) => (
+        <li
+          key={name}
+          className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
+          onClick={() => {
+            router.push(link)
+          }}
+        >
+          <div className="flex flex-1 flex-col p-8">
+            <Icon />
+            <h2 className="mt-6 text-xl font-medium text-gray-900">{name}</h2>
+            <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
+          </div>
+          <div>
+            <div className="-mt-px flex divide-x divide-gray-200">
+              <div className="flex w-0 flex-1"></div>
+              <div className="-ml-px flex w-0 flex-1"></div>
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  )
+}
 
 interface RelaseVersion {
   id: string
@@ -22,7 +77,7 @@ const DashboardPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
 
   const releases: Array<RelaseVersion> = [
-    {
+    /* {
       id: '0.0.2',
       features: [
         {
@@ -67,7 +122,7 @@ const DashboardPage: NextPage = (): JSX.Element => {
             'Loading indicator - show loading indicator during the start, if there is a slow network connection'
         }
       ]
-    }
+    } */
   ]
 
   return (
@@ -78,9 +133,11 @@ const DashboardPage: NextPage = (): JSX.Element => {
       </Head>
 
       <main className="mx-auto max-w-7xl flex-1">
-        <h1 className="text-2xl font-semibold font-mono text-gray-600 mt-2 ml-1 sm:mt-4 sm:ml-4 uppercase">
-          Release History
-        </h1>
+        {/* <h1 className="text-2xl font-semibold font-mono text-gray-600 mt-2 ml-1 sm:mt-4 sm:ml-4 uppercase">
+          Dashboard
+        </h1> */}
+        <DashboardCard />
+
         <ul role="list" className=" font-mono">
           {releases.map((item, idx) => (
             <li key={idx} className="px-2 py-2 sm:px-4 sm:py-4 shadow-lg my-5 mx-2">

@@ -20,7 +20,7 @@ export const messages = {
   },
   layout: {
     login: 'Log In',
-    dashboard: 'Release History',
+    dashboard: 'Dashboard',
     catalogue: 'Catalogue',
     systems: 'Systems',
     systemsOverview: 'Systems',
