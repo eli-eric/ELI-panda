@@ -1,4 +1,4 @@
-import { IdentificationIcon, RectangleGroupIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
+import { IdentificationIcon, LifebuoyIcon, RectangleGroupIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -27,6 +27,11 @@ const Links = {
     name: 'Systems',
     link: PATH.SYSTEMS,
     Icon: () => <RectangleGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+  },
+  support: {
+    name: 'Support/Feedback',
+    link: 'mailto:jiri.svacha@eli-beams.eu',
+    Icon: () => <LifebuoyIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
   }
 }
 
@@ -67,6 +72,7 @@ function DashboardCard() {
       {hasCatalogueRole && <Card name="Catalogue" link={PATH.CATALOGUE} Icon={Links.catalogue.Icon} />}
       {hasOrdersRole && <Card name="Orders" link={PATH.ORDERS} Icon={Links.orders.Icon} />}
       {hasSystemsRole && <Card name="Systems" link={PATH.SYSTEMS} Icon={Links.systems.Icon} />}
+      <Card name="Support/Feedback" link="mailto:jiri.svacha@eli-beams.eu" Icon={Links.support.Icon} />
     </ul>
   )
 }
