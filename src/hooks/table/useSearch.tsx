@@ -62,7 +62,7 @@ export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin }
             </div>
           </form>
         </div>
-        {renderEnd && renderEnd()}
+        {renderEnd && <div className="hidden md:hidde lg:flex items-center mr-2">{renderEnd()}</div>}
       </div>
     </div>
   )

@@ -16,6 +16,7 @@ type ListBoxProps<T extends FieldValues> = FieldProps &
     isObject?: boolean
     position?: 'top' | 'bottom'
     emptyOption?: boolean
+    emptyOptionName?: string
   }
 
 const ListBox = <T extends FieldValues>({
@@ -24,6 +25,7 @@ const ListBox = <T extends FieldValues>({
   isError,
   disabled,
   placeholder,
+  emptyOptionName = 'none',
   emptyOption = false,
   position = 'bottom',
   name,
@@ -31,7 +33,7 @@ const ListBox = <T extends FieldValues>({
   rounded = 'rounded-md'
 }: ListBoxProps<T>) => {
   const codebookOptions = useCodebook(codebook)
-  const [selectedOption, setSelectedOption] = useState<CodebookType | undefined>({ uid: '', name: 'none' })
+  const [selectedOption, setSelectedOption] = useState<CodebookType | undefined>({ uid: '', name: emptyOptionName })
 
   // get form context
   const {
@@ -42,12 +44,12 @@ const ListBox = <T extends FieldValues>({
   // add empty option if needed
   const codebookOption = useMemo(() => {
     if (emptyOption && codebookOptions) {
-      const emptyOption = { uid: '', name: 'none' }
+      const emptyOption = { uid: '', name: emptyOptionName }
       setSelectedOption(emptyOption)
       return [emptyOption, ...codebookOptions]
     }
     return codebookOptions
-  }, [emptyOption, codebookOptions, setSelectedOption])
+  }, [emptyOption, codebookOptions, setSelectedOption, emptyOptionName])
 
   // set default value
   useEffect(() => {

@@ -23,6 +23,6 @@
 
 @layer base {
   table {
-    @apply border-separate border-spacing-0;
+    @apply border-separate border-spacing-0 relative z-0;
   }
 }

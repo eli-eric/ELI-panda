@@ -20,6 +20,7 @@ import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
 import useOrderColumns from './components/OrderColumns'
+import useOrdersFilter from './components/OrdersFilter'
 import type { Order, OrderListResponse } from './types'
 import { getColorClassStatus } from './utils/getColorClassStatus'
 
@@ -30,6 +31,7 @@ const OrdersContainer = () => {
   const [url, setUrl] = useState<string>('')
   const { setMutate } = useMutateListStore()
   const canEdit = useRolePermission([ROLE.ORDERS_EDIT])
+  const { getOrdersFilter, queryFilter } = useOrdersFilter()
 
   const { renderSearchBar, searchValue } = useSearch({
     renderBegin: () => (
@@ -53,7 +55,8 @@ const OrdersContainer = () => {
           />
         )}
       </div>
-    )
+    ),
+    renderEnd: () => getOrdersFilter()
   })
 
   const { getPaginationComponent, pagination, setTotalCount } = usePagination({
@@ -76,7 +79,15 @@ const OrdersContainer = () => {
   }, [orders, setMutate])
 
   useEffect(() => {
-    const newQuery: { search?: string; pagination: string; sorting?: string } = { pagination }
+    const newQuery: {
+      search?: string
+      pagination: string
+      sorting?: string
+      supplierUID?: string
+      orderStatusUID?: string
+      procurementResponsibleUID?: string
+      requestorUID?: string
+    } = { pagination, ...queryFilter }
     if (router.query.search) {
       newQuery.search = router.query.search as string
       if (sorting) {
@@ -86,7 +97,7 @@ const OrdersContainer = () => {
       newQuery.sorting = sorting
     }
     setQuery(newQuery)
-  }, [router.query.search, sorting, pagination])
+  }, [router.query.search, sorting, pagination, queryFilter])
 
   const {
     data: orderList,
