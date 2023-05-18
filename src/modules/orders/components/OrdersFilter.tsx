@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
+import { useDebounce } from 'usehooks-ts'
 
 import ComboboxComponent from '@/components/form/Combobox'
 import ListBox from '@/components/form/Listbox'
@@ -24,62 +25,82 @@ type QueryFilter = {
 const useOrdersFilter = () => {
   const router = useRouter()
   const { query } = router
-  const form = useForm<OrdersFilter>()
+  const { supplier: s, orderStatus: oS, procurementResponsible: pR, requestor: r } = query
+  const form = useForm<OrdersFilter>({
+    defaultValues: {
+      supplier: s ? JSON.parse(s as string) : null,
+      orderStatus: oS ? JSON.parse(oS as string) : null,
+      procurementResponsible: pR ? JSON.parse(pR as string) : null,
+      requestor: r ? JSON.parse(r as string) : null
+    }
+  })
   const { watch } = form
-  const [queryFilter, setQuery] = useState<QueryFilter>()
+  const [queryFilter, setQuery] = useState<QueryFilter>({} as QueryFilter)
 
-  const supplier = watch('supplier')
-  const orderStatus = watch('orderStatus')
-  const procurementResponsible = watch('procurementResponsible')
-  const requestor = watch('requestor')
+  const supplier = useDebounce(watch('supplier'), 200)
+  const orderStatus = useDebounce(watch('orderStatus'), 200)
+  const procurementResponsible = useDebounce(watch('procurementResponsible'), 200)
+  const requestor = useDebounce(watch('requestor'), 200)
 
   useEffect(() => {
-    const queryFilter: QueryFilter = {
-      supplierUID: supplier?.uid,
-      orderStatusUID: orderStatus?.uid,
-      procurementResponsibleUID: procurementResponsible?.uid,
-      requestorUID: requestor?.uid
-    }
-    const newQuery = { ...query }
-    if (supplier?.uid) {
-      newQuery.supplierUID = supplier?.uid
+    if (supplier) {
+      router.replace({ query: { ...query, supplier: JSON.stringify(supplier) } })
+      setQuery(prevQuery => ({ ...prevQuery, supplierUID: supplier.uid }))
     } else {
-      delete newQuery.supplierUID
-      delete queryFilter.supplierUID
+      const { supplier, ...rest } = query // eslint-disable-line
+      router.replace({ query: rest })
+      setQuery(prevQuery => {
+        const { supplierUID, ...rest } = prevQuery // eslint-disable-line
+        return rest
+      })
     }
-    if (orderStatus?.uid) {
-      newQuery.orderStatusUID = orderStatus?.uid
-    } else {
-      delete newQuery.orderStatusUID
-      delete queryFilter.orderStatusUID
-    }
-    if (procurementResponsible?.uid) {
-      newQuery.procurementResponsibleUID = procurementResponsible?.uid
-    } else {
-      delete newQuery.procurementResponsibleUID
-      delete queryFilter.procurementResponsibleUID
-    }
-    if (requestor?.uid) {
-      newQuery.requestorUID = requestor?.uid
-    } else {
-      delete newQuery.requestorUID
-      delete queryFilter.requestorUID
-    }
-    router.replace({ query: newQuery })
+  }, [supplier]) // eslint-disable-line
 
-    setQuery(queryFilter)
-  }, [supplier, orderStatus, procurementResponsible, requestor]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (orderStatus) {
+      router.replace({ query: { ...query, orderStatus: JSON.stringify(orderStatus) } })
+      setQuery(prevQuery => ({ ...prevQuery, orderStatusUID: orderStatus.uid }))
+    } else {
+      const { orderStatus, ...rest } = query // eslint-disable-line
+      router.replace({ query: rest })
+      setQuery(prevQuery => {
+        const { orderStatusUID, ...rest } = prevQuery // eslint-disable-line
+        return rest
+      })
+    }
+  }, [orderStatus]) // eslint-disable-line
+
+  useEffect(() => {
+    if (procurementResponsible) {
+      router.replace({ query: { ...query, procurementResponsible: JSON.stringify(procurementResponsible) } })
+      setQuery(prevQuery => ({ ...prevQuery, procurementResponsibleUID: procurementResponsible.uid }))
+    } else {
+      const { procurementResponsible, ...rest } = query // eslint-disable-line
+      router.replace({ query: rest })
+      setQuery(prevQuery => {
+        const { procurementResponsibleUID, ...rest } = prevQuery // eslint-disable-line
+        return rest
+      })
+    }
+  }, [procurementResponsible]) // eslint-disable-line
+
+  useEffect(() => {
+    if (requestor) {
+      router.replace({ query: { ...query, requestor: JSON.stringify(requestor) } })
+      setQuery(prevQuery => ({ ...prevQuery, requestorUID: requestor.uid }))
+    } else {
+      const { requestor, ...rest } = query // eslint-disable-line
+      router.replace({ query: rest })
+      setQuery(prevQuery => {
+        const { requestorUID, ...rest } = prevQuery // eslint-disable-line
+        return rest
+      })
+    }
+  }, [requestor]) // eslint-disable-line
 
   const getOrdersFilter = () => (
-    <div className="w-[800] lg:w-[1200px] flex gap-x-2">
-      <FormProvider {...form}>
-        <ComboboxComponent
-          register={form.register}
-          name="supplier"
-          placeholder="Supplier"
-          codebook={CODEBOOK.SUPPLIER}
-          isObject={true}
-        />
+    <FormProvider {...form}>
+      <form className="max-[1250px]:hidden w-[1000px] flex gap-x-2">
         <ListBox
           register={form.register}
           name="orderStatus"
@@ -87,6 +108,13 @@ const useOrdersFilter = () => {
           codebook={CODEBOOK.ORDER_STATUS}
           emptyOption={true}
           emptyOptionName="All Order statuses"
+        />
+        <ComboboxComponent
+          register={form.register}
+          name="supplier"
+          placeholder="Supplier"
+          codebook={CODEBOOK.SUPPLIER}
+          isObject={true}
         />
         <ListBox
           register={form.register}
@@ -101,11 +129,11 @@ const useOrdersFilter = () => {
           register={form.register}
           name="requestor"
           placeholder="Requestor"
-          codebook={CODEBOOK.USER}
+          codebook={CODEBOOK.EMPLOYEE}
           isObject={true}
         />
-      </FormProvider>
-    </div>
+      </form>
+    </FormProvider>
   )
 
   return { getOrdersFilter, queryFilter }

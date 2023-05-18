@@ -69,7 +69,7 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
   const { submit, loading } = useSubmit<string>({
     endpoint: order,
     method: uid ? 'put' : 'post',
-    mutateList: instances['orders']?.mutateUrl ? [...instances['orders'].mutateUrl, order] : [order],
+    mutateList: instances['orders']?.mutateUrl ? [instances['orders'].mutateUrl, order] : [order],
     onSuccess: uid => {
       toast.success(`Order ${uid} saved successfully`)
       router.push(uid ? PATH.ORDER + '/' + uid : PATH.ORDERS)

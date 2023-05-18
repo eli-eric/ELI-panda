@@ -29,3 +29,13 @@ export const DeliveryStatusMapping: Record<DELIVERY_STATUS, string> = {
   [DELIVERY_STATUS.PARTIAL]: 'Partially Delivered',
   [DELIVERY_STATUS.COMPLETE]: 'Delivered'
 }
+
+export type OrdersQuery = {
+  search?: string
+  pagination: string
+  sorting?: string
+  supplierUID?: string
+  orderStatusUID?: string
+  procurementResponsibleUID?: string
+  requestorUID?: string
+}
