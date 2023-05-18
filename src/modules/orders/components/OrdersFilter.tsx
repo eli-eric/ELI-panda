@@ -86,6 +86,7 @@ const useOrdersFilter = () => {
           placeholder="Order Status"
           codebook={CODEBOOK.ORDER_STATUS}
           emptyOption={true}
+          emptyOptionName="All Order statuses"
         />
         <ListBox
           register={form.register}
@@ -94,6 +95,7 @@ const useOrdersFilter = () => {
           placeholder="Procurement Responsible"
           codebook={CODEBOOK.PROCUREMENTER}
           emptyOption={true}
+          emptyOptionName="All Procurement Responsibles"
         />
         <ComboboxComponent
           register={form.register}
