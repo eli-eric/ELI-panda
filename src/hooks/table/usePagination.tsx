@@ -2,10 +2,23 @@ import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useState } from 'react'
 
 import PaginationComponent from '@/components/table/Pagination.comp'
+import useTableStateStore from '@/store/useTableStateStore'
 
 import useQueryString from '../useQueryString'
 
-export type Pagination = {
+interface PaginationProps {
+  dependecies?: React.DependencyList
+  useQuery?: boolean
+  pageSizeDefault?: number
+  tableId?: string
+  total?: number
+}
+
+type PaginationResponse = {
+  pagination: string
+  getPaginationComponent: () => JSX.Element
+  setTotalCount: React.Dispatch<React.SetStateAction<number | undefined>>
+  setPageSize: React.Dispatch<React.SetStateAction<number>>
   page: number
   pageSize: number
 }
@@ -13,23 +26,15 @@ export type Pagination = {
 const usePagination = ({
   dependecies,
   useQuery,
-  pageSizeDefault
-}: {
-  dependecies?: React.DependencyList
-  useQuery?: boolean
-  pageSizeDefault?: number
-}): {
-  pagination: string
-  getPaginationComponent: () => JSX.Element
-  setTotalCount: React.Dispatch<React.SetStateAction<number | undefined>>
-  setPageSize: React.Dispatch<React.SetStateAction<number>>
-  page: number
-  pageSize: number
-} => {
+  pageSizeDefault,
+  tableId,
+  total
+}: PaginationProps): PaginationResponse => {
   const [page, setPage] = useState<number>(1)
   const [pageSize, setPageSize] = useState<number>(pageSizeDefault || 10)
-  const [totalCount, setTotalCount] = useState<number>()
+  const [totalCount, setTotalCount] = useState<number | undefined>(total)
   const [pageNumbers, setPageNumbers] = useState<number | undefined>()
+  const { setPagination } = useTableStateStore()
 
   const router = useRouter()
 
@@ -45,6 +50,10 @@ const usePagination = ({
     page,
     pageSize
   })
+
+  useEffect(() => {
+    tableId && setPagination(tableId, pagination)
+  }, [pagination, setPagination, tableId])
 
   useEffect(
     () => {
@@ -75,11 +84,12 @@ const usePagination = ({
   )
 
   useEffect(() => {
-    if (totalCount) {
-      const pageCount = Math.ceil(totalCount / pageSize)
+    const itemsTotalCount = total || totalCount
+    if (itemsTotalCount) {
+      const pageCount = Math.ceil(itemsTotalCount / pageSize)
       setPageNumbers(pageCount)
     }
-  }, [totalCount, pageSize])
+  }, [totalCount, pageSize, total])
 
   const getPaginationComponent = () => (
     <PaginationComponent
@@ -87,7 +97,7 @@ const usePagination = ({
       pageSize={pageSize}
       previousPageHandler={previousPageHandler}
       nextPageHandler={nextPageHandler}
-      itemsTotalCount={totalCount}
+      itemsTotalCount={totalCount || total}
       pageNumbers={pageNumbers}
     />
   )

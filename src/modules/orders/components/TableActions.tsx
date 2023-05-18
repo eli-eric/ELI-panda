@@ -61,30 +61,31 @@ export const TableActions = ({ order, mutateOrder, orderList }: Props) => {
   }
 
   return (
-    <div className="flex mr-4">
-      {session?.user.roles.includes(ROLE.ORDERS_EDIT) ? (
-        <Fragment>
-          <EditButton
-            className="mr-1"
+    <Fragment>
+      <div className="flex mr-4">
+        {session?.user.roles.includes(ROLE.ORDERS_EDIT) ? (
+          <Fragment>
+            <EditButton
+              className="mr-1"
+              onClick={() => {
+                router.push(PATH.ORDER + '/' + uid)
+              }}
+            />
+            <DeleteButton
+              className="mr-1"
+              onClick={() => {
+                setOpenDeleteWarn(true)
+              }}
+            />
+          </Fragment>
+        ) : (
+          <DetailButton
             onClick={() => {
               router.push(PATH.ORDER + '/' + uid)
             }}
           />
-          <DeleteButton
-            className="mr-1"
-            onClick={() => {
-              setOpenDeleteWarn(true)
-            }}
-          />
-        </Fragment>
-      ) : (
-        <DetailButton
-          onClick={() => {
-            router.push(PATH.ORDER + '/' + uid)
-          }}
-        />
-      )}
-
+        )}
+      </div>
       <WarningModal
         buttons={deleteButtons}
         open={openDeleteWarn}
@@ -94,7 +95,7 @@ export const TableActions = ({ order, mutateOrder, orderList }: Props) => {
         testid="OrderDeleteModal"
         error={deleteSubmit.error}
       />
-    </div>
+    </Fragment>
   )
 }
 
