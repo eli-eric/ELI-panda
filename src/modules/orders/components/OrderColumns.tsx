@@ -8,6 +8,7 @@ import TooltipComponent from '@/components/tooltip.comp'
 import { message } from '@/i18n/src/messages'
 
 import type { Order, OrderListResponse } from '../types'
+import { DeliveryStatusMapping } from '../types'
 import TableActions from './TableActions'
 
 const messages = message.ordersPage.ordersTable.header
@@ -37,6 +38,11 @@ const useOrderColumns = ({ mutateOrder, orderList }: Props) => {
       { Header: intl.formatMessage({ id: messages.requestNumber }), accessor: 'requestNumber', id: 'requestNumber' },
       { Header: intl.formatMessage({ id: messages.contractNumber }), accessor: 'contractNumber', id: 'contractNumber' },
       { Header: intl.formatMessage({ id: messages.orderStatus }), accessor: 'orderStatus' },
+      {
+        Header: intl.formatMessage({ id: messages.deliveryStatus }),
+        accessor: 'deliveryStatus',
+        Cell: ({ value }: CellProps<Order>) => <span>{DeliveryStatusMapping[value]}</span>
+      },
       { Header: intl.formatMessage({ id: messages.supplier }), accessor: 'supplier', id: 'supplier' },
       { Header: intl.formatMessage({ id: messages.procurementResponsible }), accessor: 'procurementResponsible' },
       { Header: intl.formatMessage({ id: messages.requestor }), accessor: 'requestor' },

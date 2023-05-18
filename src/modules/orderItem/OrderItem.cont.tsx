@@ -17,6 +17,7 @@ import ProgressBarComponent from '@/components/progress-bar.comp'
 import { convertDate } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useSubmit from '@/hooks/fetch/useSubmit'
+import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
 // import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
 import useFormNotification from '@/hooks/form/useFormNotification'
 import { message } from '@/i18n/src/messages'
@@ -68,7 +69,7 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
   const { submit, loading } = useSubmit<string>({
     endpoint: order,
     method: uid ? 'put' : 'post',
-    mutateList: instances['orders']?.mutateUrl ? [...instances['orders'].mutateUrl, order] : [order],
+    mutateList: instances['orders']?.mutateUrl ? [instances['orders'].mutateUrl, order] : [order],
     onSuccess: uid => {
       toast.success(`Order ${uid} saved successfully`)
       router.push(uid ? PATH.ORDER + '/' + uid : PATH.ORDERS)
@@ -89,17 +90,11 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
     }
   })
 
-  //formMethods.setFocus('name', { shouldSelect: true })
-
   //  set the form methods to be used in the order lines
-  const {
-    control,
-    setValue,
-    formState: { isDirty }
-  } = formMethods
+  const { control, setValue, formState } = formMethods
   const { insert, update, fields, remove } = useFieldArray<OrderDetailFormType>({ control, name: 'orderLines' })
   useFormNotification<OrderDetailFormType>({ control })
-  //const FormWarningModal = useFormLeaveWarning({ isDirty })
+  const FormWarningModal = useFormLeaveWarning({ formState })
 
   // set the order date to the current date if it is a new order
   useEffect(() => {
@@ -162,7 +157,7 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
           </Fragment>
         )}
       </Card>
-      {/* <FormWarningModal /> */}
+      <FormWarningModal />
     </Fragment>
   )
 }

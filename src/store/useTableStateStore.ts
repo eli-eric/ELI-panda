@@ -1,10 +1,16 @@
 import type { SortingRule } from 'react-table'
 import { create } from 'zustand'
 
+type Filter = {
+  id: string
+  value: string
+}
+
 type SortingInstance = {
   sortBy?: SortingRule<{}>[]
   sortByQueryString?: string
   pagination?: string
+  filter?: Filter[]
 }
 
 type SortingState = {
@@ -13,6 +19,7 @@ type SortingState = {
   setSortByQueryString: (tableId: string, sortByQueryString: SortingInstance['sortByQueryString']) => void
   setPagination: (tableId: string, pagination: SortingInstance['pagination']) => void
   resetSortBy: (tableId: string) => void
+  setFilter: (tableId: string, filter: SortingInstance['filter']) => void
 }
 
 const useTableStateStore = create<SortingState>(set => ({
@@ -37,6 +44,11 @@ const useTableStateStore = create<SortingState>(set => ({
       const newInstances = { ...state.instances }
       delete newInstances[tableId]
       return { instances: newInstances }
+    }),
+  setFilter: (tableId, filter) =>
+    set(state => {
+      const newInstance = { ...state.instances[tableId], filter }
+      return { instances: { ...state.instances, [tableId]: newInstance } }
     })
 }))
 

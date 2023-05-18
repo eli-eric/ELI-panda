@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import type { FieldValues, FormState } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
@@ -8,21 +9,22 @@ import type { ModalButtons } from '@/types/form'
 
 const messages = message.common
 
-interface Props {
-  isDirty: boolean
+interface Props<T extends FieldValues> {
+  formState: FormState<T>
 }
 
-export const useFormLeaveWarning = ({ isDirty }: Props) => {
+export const useFormLeaveWarning = <T extends FieldValues>({ formState }: Props<T>) => {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [nextUrl, setNextUrl] = useState<string>('')
   const { formatMessage } = useIntl()
   const { events } = router
+  const { isDirty, isSubmitSuccessful } = formState
 
   // handle route change events
   useEffect(() => {
     const handleRouteChange = (url: string) => {
-      if (isDirty && !isOpen) {
+      if (isDirty && !isOpen && !isSubmitSuccessful) {
         events.emit('routeChangeError')
         setNextUrl(url)
         setIsOpen(true)
@@ -41,7 +43,7 @@ export const useFormLeaveWarning = ({ isDirty }: Props) => {
       events.off('routeChangeStart', handleRouteChange)
       window.removeEventListener('beforeunload', handleBeforeUnload)
     }
-  }, [isDirty, events, router, isOpen])
+  }, [isDirty, events, router, isOpen, isSubmitSuccessful])
 
   const modalButtons: ModalButtons = {
     goNext: {

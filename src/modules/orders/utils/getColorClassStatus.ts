@@ -7,7 +7,7 @@ export const getColorClassStatus = (orderStatus: CodebookType, deliveryStatus: D
   const statusMappingColor = [
     {
       statuses: [ORDER_STATUS.ORDER_COMPLETED, DELIVERY_STATUS.COMPLETE],
-      colorClass: 'bg-green-300'
+      colorClass: 'bg-lime-400'
     },
     {
       statuses: [
@@ -18,7 +18,7 @@ export const getColorClassStatus = (orderStatus: CodebookType, deliveryStatus: D
         ORDER_STATUS.ORDERED,
         DELIVERY_STATUS.COMPLETE
       ],
-      colorClass: 'bg-green-200'
+      colorClass: 'bg-lime-200'
     },
     {
       statuses: [
@@ -29,7 +29,7 @@ export const getColorClassStatus = (orderStatus: CodebookType, deliveryStatus: D
         ORDER_STATUS.ORDERED,
         DELIVERY_STATUS.PARTIAL
       ],
-      colorClass: 'bg-orange-300'
+      colorClass: 'bg-amber-400'
     },
     {
       statuses: [ORDER_STATUS.ORDERED, DELIVERY_STATUS.NONE],
