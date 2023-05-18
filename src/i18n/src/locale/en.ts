@@ -217,6 +217,7 @@ export const messages = {
         requestor: 'Requestor',
         procurementResponsible: 'Procurement Responsible',
         orderStatus: 'Order Status',
+        deliveryStatus: 'Delivery Status',
         notes: 'Notes',
         orderDate: 'Order Date',
         lastUpdateTime: 'Last Update Time',
