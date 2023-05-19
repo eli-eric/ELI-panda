@@ -37,7 +37,6 @@ export const TableActions = ({ order }: Props) => {
   const deleteSubmit = useSubmit({
     endpoint: orderEndpoint,
     method: 'delete',
-    mutateList: [],
     onSuccess: () => {
       setOpenDeleteWarn(false)
       orderList && mutate({ ...orderList, data: orderList?.data.filter(item => item.uid !== order.uid) })
