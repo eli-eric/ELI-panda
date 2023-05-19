@@ -1,16 +1,13 @@
 import type { SortingRule } from 'react-table'
 import { create } from 'zustand'
 
-type Filter = {
-  id: string
-  value: string
-}
+import type { QueryFilter } from '@/modules/orders/types'
 
 type SortingInstance = {
   sortBy?: SortingRule<{}>[]
   sortByQueryString?: string
   pagination?: string
-  filter?: Filter[]
+  filter?: QueryFilter
 }
 
 type SortingState = {

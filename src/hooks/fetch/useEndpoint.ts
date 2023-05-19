@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+
 const getEndpoints = (uid?: string, path?: string, itemUid?: string, query?: string) => {
   const endpoints = {
     catalogueCategories: `/catalogue/categories${path}`,
@@ -34,5 +36,5 @@ interface useEndpointsProps {
 }
 export const useEndpoint = ({ uid, query, path, itemUid }: useEndpointsProps) => {
   const queryString = '?' + new URLSearchParams(query as Record<string, string>).toString()
-  return getEndpoints(uid, path, itemUid, queryString)
+  return useMemo(() => getEndpoints(uid, path, itemUid, queryString), [uid, path, itemUid, queryString])
 }

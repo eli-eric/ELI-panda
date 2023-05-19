@@ -6,20 +6,16 @@ import { useDebounce } from 'usehooks-ts'
 import ComboboxComponent from '@/components/form/Combobox'
 import ListBox from '@/components/form/Listbox'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import useTableStateStore from '@/store/useTableStateStore'
 import { CODEBOOK } from '@/types/constants/codebook'
+
+import type { QueryFilter } from '../types'
 
 type OrdersFilter = {
   supplier: CodebookType
   orderStatus: CodebookType
   procurementResponsible: CodebookType
   requestor: CodebookType
-}
-
-type QueryFilter = {
-  supplierUID?: string
-  orderStatusUID?: string
-  procurementResponsibleUID?: string
-  requestorUID?: string
 }
 
 const useOrdersFilter = () => {
@@ -41,6 +37,12 @@ const useOrdersFilter = () => {
   const orderStatus = useDebounce(watch('orderStatus'), 200)
   const procurementResponsible = useDebounce(watch('procurementResponsible'), 200)
   const requestor = useDebounce(watch('requestor'), 200)
+
+  const { setFilter } = useTableStateStore()
+
+  useEffect(() => {
+    setFilter('orders', queryFilter)
+  }, [queryFilter, setFilter])
 
   useEffect(() => {
     if (supplier) {
@@ -136,7 +138,7 @@ const useOrdersFilter = () => {
     </FormProvider>
   )
 
-  return { getOrdersFilter, queryFilter }
+  return { getOrdersFilter }
 }
 
 export default useOrdersFilter

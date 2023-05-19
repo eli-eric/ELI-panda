@@ -21,11 +21,11 @@ import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
 // import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
 import useFormNotification from '@/hooks/form/useFormNotification'
 import { message } from '@/i18n/src/messages'
-import useMutateListStore from '@/store/useMutateListStore'
 import { FILE_TYPE } from '@/types/constants/files'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
+import useOrders from '../orders/hooks/useOrders'
 import OrderFormComponent from './components/form/OrderForm.comp'
 import HeaderComponent from './components/Header.comp'
 import OrderLinesTable from './components/orderLines/OrderLines.table'
@@ -63,16 +63,16 @@ const OrderItemContainer = ({ OrderDetail }: Props) => {
   const disabledEdit = !session?.user.roles.includes(ROLE.ORDERS_EDIT)
   const uid = router.query.uid as string
   const { order } = useEndpoint({ uid })
-  const { instances } = useMutateListStore()
+  const { mutate } = useOrders()
 
   // setting the endpoint and the method for the submit hook
   const { submit, loading } = useSubmit<string>({
     endpoint: order,
     method: uid ? 'put' : 'post',
-    mutateList: instances['orders']?.mutateUrl ? [instances['orders'].mutateUrl, order] : [order],
     onSuccess: uid => {
       toast.success(`Order ${uid} saved successfully`)
       router.push(uid ? PATH.ORDER + '/' + uid : PATH.ORDERS)
+      mutate()
     },
     onError: e => toast.error(e.message)
   })
