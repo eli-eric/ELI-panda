@@ -1,5 +1,5 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import type { FieldErrors } from 'react-hook-form'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
@@ -65,7 +65,7 @@ const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lengh
     append({ value: '' })
   }
   const type = watch(`${name}.typeUID`)
-  const listOfValues = watch(`${name}.listOfValues`) || []
+  const listOfValues = useMemo(() => watch(`${name}.listOfValues`) || [], [watch, name])
 
   const getDefaultOption = (name, disabled = false) => ({
     value: '',
@@ -74,10 +74,10 @@ const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lengh
   })
 
   useEffect(() => {
-    if (type !== PROPERTY_TYPE.LIST) {
+    if (type !== PROPERTY_TYPE.LIST && listOfValues.length !== 0) {
       unregister(`${name}.listOfValues`)
     }
-  }, [type, unregister, name])
+  }, [type, unregister, name, listOfValues])
 
   return (
     <div className="flex">
