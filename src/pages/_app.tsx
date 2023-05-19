@@ -1,9 +1,7 @@
 import '../styles/globals.css'
 
-import axios from 'axios'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
-import { useSession } from 'next-auth/react'
 import { Toaster } from 'react-hot-toast'
 import { IntlProvider } from 'react-intl'
 import { messages } from 'src/i18n/src'
@@ -19,8 +17,6 @@ interface Props {
 }
 
 const GlobalProvider = ({ children }: Props) => {
-  const { data } = useSession()
-  axios.defaults.headers.common['authorization'] = 'Bearer ' + data?.user.apiAccessToken
   const locale = useLocale()
 
   return (

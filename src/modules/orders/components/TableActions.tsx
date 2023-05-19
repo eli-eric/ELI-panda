@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { Fragment, useState } from 'react'
 import { useIntl } from 'react-intl'
-import type { KeyedMutator } from 'swr'
 
 import { DeleteButton, DetailButton, EditButton } from '@/components/Buttons'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
@@ -14,18 +13,17 @@ import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
-import type { Order, OrderListResponse } from '../types'
+import useOrders from '../hooks/useOrders'
+import type { Order } from '../types'
 
 const buttonsMessage = message.common.buttons
 const modalMessage = message.ordersPage.deleteModal
 
 interface Props {
-  mutateOrder: KeyedMutator<OrderListResponse>
   order: Order
-  orderList?: OrderListResponse
 }
 
-export const TableActions = ({ order, mutateOrder, orderList }: Props) => {
+export const TableActions = ({ order }: Props) => {
   const { data: session } = useSession()
   const router = useRouter()
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
@@ -34,13 +32,15 @@ export const TableActions = ({ order, mutateOrder, orderList }: Props) => {
 
   const { order: orderEndpoint } = useEndpoint({ uid: order.uid })
 
+  const { mutate, orderList } = useOrders()
+
   const deleteSubmit = useSubmit({
     endpoint: orderEndpoint,
     method: 'delete',
     mutateList: [],
     onSuccess: () => {
       setOpenDeleteWarn(false)
-      orderList && mutateOrder({ ...orderList, data: orderList?.data.filter(item => item.uid !== order.uid) })
+      orderList && mutate({ ...orderList, data: orderList?.data.filter(item => item.uid !== order.uid) })
     }
   })
 

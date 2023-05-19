@@ -1,7 +1,7 @@
-import axios from 'axios'
 import { useState } from 'react'
 import { useSWRConfig } from 'swr'
 
+import axiosInstance from '@/core/axios/axiosInstance'
 import { BASE_URL } from '@/types/constants/common'
 
 interface UseSubmitProps<T> {
@@ -13,20 +13,20 @@ interface UseSubmitProps<T> {
 }
 
 const useSubmit = <T>({ endpoint, method, mutateList, onSuccess, onError }: UseSubmitProps<T>) => {
-  const { mutate } = useSWRConfig()
+  const { cache, mutate } = useSWRConfig()
   const [response, setResponse] = useState<T | null>(null)
   const [error, setError] = useState<string>()
   const [loading, setloading] = useState<boolean>(false)
 
   const submit = (body?: any) => {
     setloading(true)
-    axios[method](BASE_URL + endpoint, body)
+    axiosInstance[method](BASE_URL + endpoint, body)
       .then(res => {
         setResponse(res.data)
         if (onSuccess) onSuccess(res.data)
         if (mutateList)
           mutateList.forEach(url => {
-            mutate(url, undefined, { revalidate: true })
+            mutate(url, cache.get(url), { revalidate: true })
           })
       })
       .catch(err => {
