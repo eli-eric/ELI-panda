@@ -12,7 +12,7 @@ interface UseFetchProps<ResponseType = Response> {
   useMockFetcher?: boolean
   config?: Partial<PublicConfiguration<ResponseType, any, BareFetcher<ResponseType>>>
 
-  format?: (data: any) => ResponseType
+  format?: (data?: ResponseType) => any
 
   onSuccess?: (data: ResponseType) => void
 

@@ -1,10 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Fragment, useMemo } from 'react'
+import { Fragment } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import useSWR from 'swr'
 import * as yup from 'yup'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
+import useFetch from '@/hooks/fetch/useFetch'
 import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 import GroupList from './GroupList'
@@ -41,10 +41,9 @@ interface Props {
 const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
   const endpoints = useEndpoint({ uid })
 
-  const { data } = useSWR<CategoryFormType>(uid && endpoints.catalogueCategoryEdit)
-
-  const formattedDefaultValues = useMemo(
-    () =>
+  const { response } = useFetch<CategoryFormType>({
+    url: uid && endpoints.catalogueCategoryEdit,
+    format: data =>
       data?.groups && data.groups.length !== 0
         ? {
             ...data,
@@ -58,14 +57,12 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
               }))
             }))
           }
-        : { ...data },
-    [data]
-  )
+        : { ...data }
+  })
 
   const formMethods = useForm<CategoryFormType>({
-    defaultValues: formattedDefaultValues,
-    resolver: yupResolver(categoryValidationschema),
-    mode: 'onSubmit'
+    defaultValues: response,
+    resolver: yupResolver(categoryValidationschema)
   })
 
   return (

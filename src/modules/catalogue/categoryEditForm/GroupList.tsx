@@ -37,7 +37,7 @@ const Group = ({ name, remove, index, errors, moveDown, moveUp, lenght }: groupP
             <Input
               register={register}
               name={`${name}.name`}
-              placeholder="group name"
+              placeholder="Group Name"
               isError={!!errors?.name?.message}
             />
             <Button rounded="rounded-r-md" onClick={handleRemoveGroup}>
