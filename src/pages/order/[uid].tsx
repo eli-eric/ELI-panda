@@ -19,7 +19,7 @@ const OrderContainer = (): JSX.Element => {
   const router = useRouter()
   const { uid } = router.query as { uid: string }
   const { order } = useEndpoint({ uid })
-  const { response } = useFetch<OrderDetailFormType>({ url: uid && order })
+  const { response } = useFetch<OrderDetailFormType>({ url: order })
   return <Fragment>{response && <OrderItemContainer OrderDetail={response} />}</Fragment>
 }
 
@@ -31,17 +31,11 @@ const OrderItemPage: NextPage = (): JSX.Element => {
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-      <Fragment>
-        <Head>
-          <title>{intl.formatMessage({ id: messages.head })}</title>
-          <meta name="description" content="...." />
-        </Head>
-        <ErrorBoundary fallback={<ErrorPage />}>
-          <Suspense fallback={<LoaderComponent />}>
-            <OrderContainer />
-          </Suspense>
-        </ErrorBoundary>
-      </Fragment>
+      <ErrorBoundary fallback={<ErrorPage />}>
+        <Suspense fallback={<LoaderComponent />}>
+          <OrderContainer />
+        </Suspense>
+      </ErrorBoundary>
     </Fragment>
   )
 }

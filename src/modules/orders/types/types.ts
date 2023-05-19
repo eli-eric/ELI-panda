@@ -39,3 +39,10 @@ export type OrdersQuery = {
   procurementResponsibleUID?: string
   requestorUID?: string
 }
+
+export type QueryFilter = {
+  supplierUID?: string
+  orderStatusUID?: string
+  procurementResponsibleUID?: string
+  requestorUID?: string
+}

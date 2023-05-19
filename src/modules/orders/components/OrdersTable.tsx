@@ -1,29 +1,17 @@
 import classNames from 'classnames'
 import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
-import useSWR from 'swr'
 
-import { fetcher } from '@/helpers/fetcher'
 import useGeneralTable from '@/hooks/table/useGeneralTable'
 import usePagination from '@/hooks/table/usePagination'
 
-import type { Order, OrderListResponse } from '../types'
+import useOrders from '../hooks/useOrders'
+import type { Order } from '../types'
 import { getColorClassStatus } from '../utils/getColorClassStatus'
 import useOrderColumns from './OrderColumns'
 
-interface OrdersTableProps {
-  ordersEndpoint: string
-}
-
-const useOrdersTable = ({ ordersEndpoint }: OrdersTableProps) => {
-  const { data: session } = useSession()
+const useOrdersTable = () => {
   const searchValue = useRouter().query.search as string
-  const {
-    data: orderList,
-    isValidating: loading,
-    error,
-    mutate: mutateOrder
-  } = useSWR<OrderListResponse>(session?.user && ordersEndpoint, fetcher, { suspense: false })
+  const { orderList, loading, error } = useOrders()
 
   const { getPaginationComponent } = usePagination({
     dependecies: [searchValue],
@@ -33,7 +21,7 @@ const useOrdersTable = ({ ordersEndpoint }: OrdersTableProps) => {
     tableId: 'orders'
   })
 
-  const columns = useOrderColumns({ mutateOrder, orderList })
+  const columns = useOrderColumns()
 
   const { getTable } = useGeneralTable<Order>({
     columns,
