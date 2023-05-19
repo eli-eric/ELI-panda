@@ -10,7 +10,7 @@ export default function useQueryManager() {
   const { instances } = useTableStateStore()
   //TODO: filters
   const sorting = instances['orders']?.sortByQueryString
-  const pagination = instances['orders']?.pagination || ''
+  const pagination = instances['orders']?.pagination || '{"page":1,"pageSize":50}'
 
   const filter = useCallback(() => instances['orders']?.filter || {}, [instances])
 

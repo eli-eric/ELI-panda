@@ -5,14 +5,17 @@ import Card from '@/components/layout/Card'
 import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
 
+import useOrderDetail from '../hooks/useOrderDetail'
+
 interface Props {
   loading?: boolean
-  disabledEdit?: boolean
 }
 const messages = message.common.buttons
 
-const HeaderComponent = ({ loading, disabledEdit }: Props) => {
+const HeaderComponent = ({ loading }: Props) => {
   const router = useRouter()
+  const { disabledEdit } = useOrderDetail()
+
   return (
     <div className="sticky  top-0 z-20 flex h-16 flex-shrink-0 bg-white border-b">
       <Card className="flex flex-1 justify-between">

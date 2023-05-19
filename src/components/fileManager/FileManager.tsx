@@ -8,11 +8,15 @@ import { PlusButton } from '@/components/Buttons'
 import executeRequest from '@/helpers/executeRequest'
 import { uniFetcher } from '@/helpers/fetcher'
 import useGeneralTable from '@/hooks/table/useGeneralTable'
+import { message } from '@/i18n/src/messages'
 import type { FILE_TYPE } from '@/types/constants/files'
 
+import Heading from '../layout/Heading'
 import ProgressBarComponent from '../progress-bar.comp'
 import FileActions from './FileActions'
 import type { FileItem } from './types'
+
+const messages = message.common.files
 
 type FileManagerProps = {
   itemType: FILE_TYPE
@@ -113,6 +117,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
 
   return (
     <div>
+      <Heading text={messages.title} />
       {hasEditRole && (
         <div>
           <div {...getRootProps()}>
