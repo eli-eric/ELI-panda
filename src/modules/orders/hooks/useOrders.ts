@@ -8,7 +8,7 @@ const useOrders = () => {
   const query = useQueryManager()
   const { orders } = useEndpoint({ ...query })
   const { response, loading, error, mutate } = useFetch<OrderListResponse>({
-    config: { suspense: false, refreshInterval: 3000 },
+    config: { suspense: false, refreshInterval: 30000 },
     url: orders
   })
   return { orderList: response, loading, error, mutate }
