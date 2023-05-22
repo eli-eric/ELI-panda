@@ -13,8 +13,7 @@ const useOrders = () => {
   const { response, loading, error, mutate } = useFetch<OrderListResponse>({
     config: {
       suspense: false,
-      refreshInterval: 10000,
-      revalidateOnFocus: true,
+      revalidateOnFocus: false,
       revalidateOnReconnect: true,
       revalidateOnMount: true
     },
