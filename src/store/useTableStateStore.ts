@@ -8,6 +8,7 @@ type SortingInstance = {
   sortByQueryString?: string
   pagination?: string
   filter?: QueryFilter
+  search?: string
 }
 
 type SortingState = {
@@ -17,6 +18,7 @@ type SortingState = {
   setPagination: (tableId: string, pagination: SortingInstance['pagination']) => void
   resetSortBy: (tableId: string) => void
   setFilter: (tableId: string, filter: SortingInstance['filter']) => void
+  setSearch: (tableId: string, search: SortingInstance['search']) => void
 }
 
 const useTableStateStore = create<SortingState>(set => ({
@@ -45,6 +47,11 @@ const useTableStateStore = create<SortingState>(set => ({
   setFilter: (tableId, filter) =>
     set(state => {
       const newInstance = { ...state.instances[tableId], filter }
+      return { instances: { ...state.instances, [tableId]: newInstance } }
+    }),
+  setSearch: (tableId, search) =>
+    set(state => {
+      const newInstance = { ...state.instances[tableId], search }
       return { instances: { ...state.instances, [tableId]: newInstance } }
     })
 }))

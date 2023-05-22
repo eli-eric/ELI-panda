@@ -1,6 +1,5 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useQueryState } from 'next-usequerystate'
 import { useForm } from 'react-hook-form'
 
 interface Props {
@@ -9,32 +8,24 @@ interface Props {
 
   renderEnd?: () => JSX.Element
   renderBegin?: () => JSX.Element
+  tableId?: string
 }
 
-export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin }: Props) => {
-  const router = useRouter()
-  const query = router.query
-  const { register, handleSubmit, setValue, watch } = useForm<{ search: string }>({
-    defaultValues: { search: query.search as string }
+export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin, tableId }: Props) => {
+  const [querySearch, setQuerySearch] = useQueryState('search')
+  //const { instances, setSearch } = useTableStateStore()
+  const { register, handleSubmit, watch } = useForm<{ search: string }>({
+    defaultValues: { search: querySearch || '' }
   })
   const searchValue = watch('search')
 
-  useEffect(() => {
-    if (query.search) {
-      setValue('search', query.search as string)
-    }
-  }, [query.search, setValue])
-
   const onSubmit = (data: { search: string }) => {
     if (useQuery) {
-      const newQuery = { ...query }
-      if (data.search) {
-        newQuery.search = data.search
-      } else {
-        delete newQuery.search
-      }
-      router.replace({ query: newQuery })
+      setQuerySearch(data.search ? data.search : null, { shallow: true })
     }
+    /*  if (tableId) {
+      setSearch(tableId, data.search)
+    } */
     onSuccess && onSuccess(data.search)
   }
 
@@ -53,7 +44,6 @@ export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin }
               </div>
               <input
                 {...register('search')}
-                defaultValue={searchValue ?? ''}
                 className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm"
                 placeholder="Search..."
                 type="search"
