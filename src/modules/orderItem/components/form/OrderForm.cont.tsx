@@ -41,7 +41,7 @@ const schema = object({
 
 const useOrderForm = () => {
   const router = useRouter()
-  const { orderDetail, orderEndpoint, uid } = useOrderDetail()
+  const { orderDetail, orderEndpoint, uid, mutate: mutateDetail } = useOrderDetail()
 
   // useOrders hook to refresh the orders list after saving
   const { mutate } = useOrders()
@@ -54,6 +54,7 @@ const useOrderForm = () => {
       toast.success(`Order ${uid} saved successfully`)
       router.push(uid ? PATH.ORDER + '/' + uid : PATH.ORDERS)
       mutate()
+      mutateDetail()
     },
     onError: e => toast.error(e.message)
   })
