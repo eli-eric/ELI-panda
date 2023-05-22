@@ -9,12 +9,8 @@ import Card from '@/components/layout/Card'
 
 import useOrderFormFields from './OrderForm.fields'
 
-interface Props {
-  disabledEdit?: boolean
-}
-
-const OrderFormComponent = ({ disabledEdit }: Props) => {
-  const fields = useOrderFormFields(disabledEdit)
+const OrderFormComponent = () => {
+  const fields = useOrderFormFields()
   const uid = useRouter().query.uid as string
 
   return (

@@ -4,13 +4,15 @@ import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 
+import useOrderDetail from '../../hooks/useOrderDetail'
 import type { OrderDetailFormType } from '../../types'
 
 // messages
 const { form } = message.ordersPage.orderDetail
 
-const useOrderFormFields = (disabled?: boolean) => {
+const useOrderFormFields = () => {
   const { register, formState } = useFormContext<OrderDetailFormType>()
+  const { disabledEdit: disabled } = useOrderDetail()
 
   return useMakeFormFields(register, {
     name: {

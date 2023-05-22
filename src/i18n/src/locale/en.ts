@@ -17,7 +17,8 @@ export const messages = {
     },
     warning: 'Warning',
     fileManager: { deleteModal: { title: 'Warning', text: 'Are you sure you want to remove {fileName}?' } },
-    form: { leaveWarning: { title: 'Warning', text: 'You have unsaved changes. Are you sure you want to leave?' } }
+    form: { leaveWarning: { title: 'Warning', text: 'You have unsaved changes. Are you sure you want to leave?' } },
+    files: { title: 'Files' }
   },
   layout: {
     login: 'Log In',
@@ -203,7 +204,6 @@ export const messages = {
     },
     note: 'Note'
   },
-
   reportsPage: { head: 'Eli Panda - Reports' },
   ordersPage: {
     head: 'Eli Panda - Orders',
@@ -226,8 +226,7 @@ export const messages = {
     },
     orderDetail: {
       sectionHeadings: {
-        orderLines: 'Order Lines',
-        files: 'Files'
+        orderLines: 'Order Lines'
       },
       form: {
         name: { label: 'Name', placeholder: 'Name' },

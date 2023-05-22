@@ -146,7 +146,7 @@ const useGeneralTable = <T extends object>({
                           key={key}
                           className={classNames(
                             index % 2 === 0 ? undefined : 'bg-gray-100',
-                            'hover:bg-primary-200 z-0',
+                            'hover:bg-gray-200 z-0',
                             className
                           )}
                         >

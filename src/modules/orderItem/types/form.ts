@@ -19,7 +19,7 @@ export interface OrderDetailFormType extends FieldValues {
   orderLines: OrderLineFormType[]
 }
 
-export type OrderLineFormType = {
+export interface OrderLineFormType extends FieldValues {
   id?: string
   uid: string
   name: string

@@ -1,10 +1,16 @@
+import { Fragment } from 'react'
+
 import { PlusButton } from '@/components/Buttons'
+import Heading from '@/components/layout/Heading'
 import { classNames } from '@/helpers'
 import useGeneralTable from '@/hooks/table/useGeneralTable'
+import { message } from '@/i18n/src/messages'
 
 import type { OrderLineFormType } from '../../types'
 import useOrderLinesColumns from './components/OrderLines.columns'
 import useOrderLineForm from './form/OrderLineForm.cont'
+
+const messages = message.ordersPage.orderDetail.sectionHeadings
 
 interface OrderLinesTableProps {
   orderLines?: OrderLineFormType[]
@@ -31,22 +37,25 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
   })
 
   return (
-    <div className="flex flex-col">
-      {!disabledEdit && (
-        <div className="flex items-center mr-2">
-          <PlusButton
-            primary
-            buttonSize="large"
-            onClick={() => {
-              setOpen(true)
-            }}
-            className="mb-2"
-          />
-        </div>
-      )}
-      <div className="grid grid-cols-12">{getTable()}</div>
-      {getFormModal()}
-    </div>
+    <Fragment>
+      <Heading text={messages.orderLines} />
+      <div className="flex flex-col">
+        {!disabledEdit && (
+          <div className="flex items-center mr-2">
+            <PlusButton
+              primary
+              buttonSize="large"
+              onClick={() => {
+                setOpen(true)
+              }}
+              className="mb-2"
+            />
+          </div>
+        )}
+        <div className="grid grid-cols-12">{getTable()}</div>
+        {getFormModal()}
+      </div>
+    </Fragment>
   )
 }
 

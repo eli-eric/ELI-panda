@@ -9,7 +9,7 @@ import { message } from 'src/i18n/src/messages'
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useFetch from '@/hooks/useFetch'
+import useFetch from '@/hooks/fetch/useFetch'
 import OrderItemContainer from '@/modules/orderItem/OrderItem.cont'
 import type { OrderDetailFormType } from '@/modules/orderItem/types'
 
@@ -19,8 +19,8 @@ const OrderContainer = (): JSX.Element => {
   const router = useRouter()
   const { uid } = router.query as { uid: string }
   const { order } = useEndpoint({ uid })
-  const { response } = useFetch<OrderDetailFormType>({ url: order })
-  return <Fragment>{response && <OrderItemContainer OrderDetail={response} />}</Fragment>
+  const { response } = useFetch<OrderDetailFormType>({ url: uid && order })
+  return <Fragment>{response && <OrderItemContainer />}</Fragment>
 }
 
 const OrderItemPage: NextPage = (): JSX.Element => {

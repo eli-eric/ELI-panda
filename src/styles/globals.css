@@ -7,11 +7,6 @@
 @import 'react-datepicker/dist/react-datepicker.css';
 
 @layer base {
-  h2 {
-    @apply mt-6 text-center text-3xl font-bold tracking-tight text-gray-900;
-  }
-}
-@layer base {
   input[type='number']::-webkit-outer-spin-button,
   input[type='number']::-webkit-inner-spin-button,
   input[type='number'] {
@@ -19,10 +14,10 @@
     margin: 0;
     -moz-appearance: textfield !important;
   }
-}
-
-@layer base {
   table {
     @apply border-separate border-spacing-0 relative z-0;
+  }
+  h2 {
+    @apply mt-6 text-center text-3xl font-bold tracking-tight text-gray-900;
   }
 }

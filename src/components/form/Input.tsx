@@ -133,6 +133,7 @@ export const InputAmount = <T extends FieldValues>({
           hidden={hidden}
           name={name}
           type={type}
+          step="0.001"
           disabled={disabled}
           placeholder={placeholder}
           className={classNames(
