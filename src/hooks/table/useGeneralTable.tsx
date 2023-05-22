@@ -75,6 +75,7 @@ const useGeneralTable = <T extends object>({
     }
   }, [sortByQuery]) // eslint-disable-line
 
+  //TODO: need to handle seeting sortBy to router empty [] in some cases it disapears from URL
   // set sortBy to store and router.query.sortBy
   useEffect(() => {
     const sortConfigQuery = JSON.stringify(sortBy)
