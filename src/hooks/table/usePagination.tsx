@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import { useQueryState } from 'next-usequerystate'
 import React, { useCallback, useEffect, useState } from 'react'
 
 import PaginationComponent from '@/components/table/Pagination.comp'
@@ -35,8 +35,7 @@ const usePagination = ({
   const [totalCount, setTotalCount] = useState<number | undefined>(total)
   const [pageNumbers, setPageNumbers] = useState<number | undefined>()
   const { setPagination } = useTableStateStore()
-
-  const router = useRouter()
+  const [queryPage, setQueryPage] = useQueryState('page')
 
   const previousPageHandler = useCallback(() => {
     setPage(prev => prev - 1)
@@ -58,19 +57,7 @@ const usePagination = ({
   useEffect(
     () => {
       if (useQuery) {
-        router.replace({
-          pathname: router.pathname,
-          query: router.query.search
-            ? {
-                ...router.query,
-                search: router.query.search,
-                page: page
-              }
-            : {
-                ...router.query,
-                page: page
-              }
-        })
+        setQueryPage(page ? page.toString() : null)
       }
     },
     dependecies ? [useQuery, page, ...dependecies] : [useQuery, page] //eslint-disable-line

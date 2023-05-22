@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import { useQueryState } from 'next-usequerystate'
 import { Fragment, useEffect } from 'react'
 import { type Cell, type Column, type HeaderGroup, type Row, useSortBy, useTable } from 'react-table'
 
@@ -6,8 +6,6 @@ import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { classNames } from '@/helpers'
 import useTableStateStore from '@/store/useTableStateStore'
-
-import useQueryString from '../useQueryString'
 
 interface UseTableType<T extends object> {
   data?: T[]
@@ -40,9 +38,8 @@ const useGeneralTable = <T extends object>({
   tableId
 }: UseTableType<T>) => {
   const { instances, setSortBy, setSortByQueryString } = useTableStateStore()
-  const router = useRouter()
-  const routerSortBy = router.query.sortBy as string
   const sortByInstance = instances[tableId]?.sortBy
+  const [sortByQuery, setSortByQuery] = useQueryState('sortBy', { history: 'replace' })
 
   const {
     headerGroups,
@@ -59,42 +56,38 @@ const useGeneralTable = <T extends object>({
       data: data || [],
       manualSortBy: true,
       autoResetPage: false,
-      autoResetSortBy: false,
-      initialState: { sortBy: sortByInstance || [] }
+      autoResetSortBy: false
     },
     useSortBy
   )
-
-  const sortConfigQuery = useQueryString(sortBy)
 
   // intialize sortBy from router
   useEffect(() => {
     if (uriSortBy) {
       if (sortBy.length === 0) {
-        if (routerSortBy) {
-          const sortByParsed = JSON.parse(routerSortBy)
+        if (sortByQuery) {
+          const sortByParsed = JSON.parse(sortByQuery)
           setSortBy(tableId, sortByParsed)
-          setSortByQueryString(tableId, routerSortBy)
+          setSortByQueryString(tableId, sortByQuery)
           setSortByTable(sortByParsed)
         }
       }
     }
-  }, [routerSortBy]) // eslint-disable-line
+  }, [sortByQuery]) // eslint-disable-line
 
   // set sortBy to store and router.query.sortBy
   useEffect(() => {
+    const sortConfigQuery = JSON.stringify(sortBy)
     setSortBy(tableId, sortBy)
     setSortByQueryString(tableId, sortBy.length === 0 ? undefined : sortConfigQuery)
     if (uriSortBy) {
-      const newQuery = { ...router.query }
       if (sortBy.length !== 0) {
-        newQuery.sortBy = JSON.stringify(sortBy)
+        setSortByQuery(sortConfigQuery)
       } else {
-        delete newQuery.sortBy
+        setSortByQuery(null)
       }
-      router.replace({ query: newQuery })
     }
-  }, [tableId, sortBy, sortConfigQuery, uriSortBy]) // eslint-disable-line
+  }, [tableId, sortBy, uriSortBy]) // eslint-disable-line
 
   const getTable = () => (
     <Fragment>

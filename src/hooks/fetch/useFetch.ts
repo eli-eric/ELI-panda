@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo } from 'react'
 import useSWR from 'swr'
-import type { BareFetcher, PublicConfiguration } from 'swr/dist/types'
+import type { BareFetcher, PublicConfiguration } from 'swr/_internal'
 
 import { fetcher, mockFetcher } from '@/helpers/fetcher'
 
 type Response = Record<string, any>
 
 interface UseFetchProps<ResponseType = Response> {
-  url?: string
+  url?: string | null
   useMockFetcher?: boolean
   config?: Partial<PublicConfiguration<ResponseType, any, BareFetcher<ResponseType>>>
 
@@ -32,10 +32,10 @@ const useFetch = <ResponseType>({
 
   const {
     data: response,
-    isValidating,
+    isLoading,
     mutate,
     error
-  } = useSWR<ResponseType>(isReady && url, useMockFetcher ? mockFetcher : fetcher, config)
+  } = useSWR<ResponseType, Error>(isReady && url, useMockFetcher ? mockFetcher : fetcher, config)
 
   // handle success callback
   const handleSuccess = useCallback(
@@ -71,7 +71,7 @@ const useFetch = <ResponseType>({
 
   const formattedResponse = useMemo(() => (format ? format(response) : response), [response, format])
 
-  return { response: formattedResponse, mutate, error, loading: isValidating }
+  return { response: formattedResponse, mutate, error, loading: isLoading }
 }
 
 export default useFetch
