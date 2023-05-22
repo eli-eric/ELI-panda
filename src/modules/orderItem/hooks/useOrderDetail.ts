@@ -11,7 +11,14 @@ const useOrderDetail = () => {
   const router = useRouter()
   const uid = router.query.uid as string
   const { order: orderEndpoint } = useEndpoint({ uid })
-  const { response, loading, error, mutate } = useFetch<OrderDetailFormType>({ url: uid && orderEndpoint })
+  const { response, loading, error, mutate } = useFetch<OrderDetailFormType>({
+    url: uid && orderEndpoint,
+    config: {
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+      revalidateOnMount: true
+    }
+  })
   const { data: session } = useSession()
   const disabledEdit = !session?.user.roles.includes(ROLE.ORDERS_EDIT)
 
