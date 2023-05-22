@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router'
+import { useQueryState } from 'next-usequerystate'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDebounce } from 'usehooks-ts'
@@ -18,16 +18,20 @@ type OrdersFilter = {
   requestor: CodebookType
 }
 
+//TODO: 1. Create a new file in src/hooks/table/useOrdersFilter.tsx
+//TODO: 2. Refactor the code to use the new useQueryState hook
+
 const useOrdersFilter = () => {
-  const router = useRouter()
-  const { query } = router
-  const { supplier: s, orderStatus: oS, procurementResponsible: pR, requestor: r } = query
+  const [querySupplier, setQuerySupplier] = useQueryState('supplier')
+  const [queryOrderStatus, setQueryOrderStatus] = useQueryState('orderStatus')
+  const [queryProcurementResponsible, setQueryProcurementResponsible] = useQueryState('procurementResponsible')
+  const [queryRequestor, setQueryRequestor] = useQueryState('requestor')
   const form = useForm<OrdersFilter>({
     defaultValues: {
-      supplier: s ? JSON.parse(s as string) : null,
-      orderStatus: oS ? JSON.parse(oS as string) : null,
-      procurementResponsible: pR ? JSON.parse(pR as string) : null,
-      requestor: r ? JSON.parse(r as string) : null
+      supplier: querySupplier ? JSON.parse(querySupplier) : null,
+      orderStatus: queryOrderStatus ? JSON.parse(queryOrderStatus) : null,
+      procurementResponsible: queryProcurementResponsible ? JSON.parse(queryProcurementResponsible) : null,
+      requestor: queryRequestor ? JSON.parse(queryRequestor) : null
     }
   })
   const { watch } = form
@@ -46,11 +50,10 @@ const useOrdersFilter = () => {
 
   useEffect(() => {
     if (supplier) {
-      router.replace({ query: { ...query, supplier: JSON.stringify(supplier) } })
+      setQuerySupplier(JSON.stringify(supplier))
       setQuery(prevQuery => ({ ...prevQuery, supplierUID: supplier.uid }))
     } else {
-      const { supplier, ...rest } = query // eslint-disable-line
-      router.replace({ query: rest })
+      setQuerySupplier(null)
       setQuery(prevQuery => {
         const { supplierUID, ...rest } = prevQuery // eslint-disable-line
         return rest
@@ -60,11 +63,10 @@ const useOrdersFilter = () => {
 
   useEffect(() => {
     if (orderStatus) {
-      router.replace({ query: { ...query, orderStatus: JSON.stringify(orderStatus) } })
+      setQueryOrderStatus(JSON.stringify(orderStatus))
       setQuery(prevQuery => ({ ...prevQuery, orderStatusUID: orderStatus.uid }))
     } else {
-      const { orderStatus, ...rest } = query // eslint-disable-line
-      router.replace({ query: rest })
+      setQueryOrderStatus(null)
       setQuery(prevQuery => {
         const { orderStatusUID, ...rest } = prevQuery // eslint-disable-line
         return rest
@@ -74,11 +76,10 @@ const useOrdersFilter = () => {
 
   useEffect(() => {
     if (procurementResponsible) {
-      router.replace({ query: { ...query, procurementResponsible: JSON.stringify(procurementResponsible) } })
+      setQueryProcurementResponsible(JSON.stringify(procurementResponsible))
       setQuery(prevQuery => ({ ...prevQuery, procurementResponsibleUID: procurementResponsible.uid }))
     } else {
-      const { procurementResponsible, ...rest } = query // eslint-disable-line
-      router.replace({ query: rest })
+      setQueryProcurementResponsible(null)
       setQuery(prevQuery => {
         const { procurementResponsibleUID, ...rest } = prevQuery // eslint-disable-line
         return rest
@@ -88,11 +89,10 @@ const useOrdersFilter = () => {
 
   useEffect(() => {
     if (requestor) {
-      router.replace({ query: { ...query, requestor: JSON.stringify(requestor) } })
+      setQueryRequestor(JSON.stringify(requestor))
       setQuery(prevQuery => ({ ...prevQuery, requestorUID: requestor.uid }))
     } else {
-      const { requestor, ...rest } = query // eslint-disable-line
-      router.replace({ query: rest })
+      setQueryRequestor(null)
       setQuery(prevQuery => {
         const { requestorUID, ...rest } = prevQuery // eslint-disable-line
         return rest
