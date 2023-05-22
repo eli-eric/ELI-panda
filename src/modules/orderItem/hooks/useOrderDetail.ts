@@ -14,7 +14,7 @@ const useOrderDetail = () => {
   const { response, loading, error, mutate } = useFetch<OrderDetailFormType>({
     url: uid && orderEndpoint,
     config: {
-      revalidateOnFocus: true,
+      revalidateOnFocus: false,
       revalidateOnReconnect: true,
       revalidateOnMount: true
     }
