@@ -50,6 +50,7 @@ const ComboboxComponent = <T extends FieldValues>({
   const [query, setQuery] = useState<string>('')
   const [selectedItem, setSelectedItem] = useState<CodebookType | null>(null)
   const data = useCodebook(codebook, `?searchText=${query}&limit=${limit}`)
+  const [showButton, setShowButton] = useState<boolean>(false)
   const { data: session } = useSession()
 
   // set default value
@@ -68,7 +69,13 @@ const ComboboxComponent = <T extends FieldValues>({
   }
 
   const { getFormModal, setOpen } = useAddCodebookValue(data?.metadata)
-  const showButton = session?.user.roles.includes(data?.metadata?.roleEdit)
+
+  useEffect(() => {
+    if (data?.metadata?.roleEdit && session?.user?.roles) {
+      const showButton = session.user.roles.includes(data.metadata.roleEdit)
+      setShowButton(showButton)
+    }
+  }, [data, session])
 
   return (
     <Fragment>
@@ -132,7 +139,7 @@ const ComboboxComponent = <T extends FieldValues>({
                     </Combobox.Button>
                   </div>
 
-                  {data && data.data.length > 0 && (
+                  {data?.data && data.data.length > 0 && (
                     <Combobox.Options
                       className={classNames(
                         'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',

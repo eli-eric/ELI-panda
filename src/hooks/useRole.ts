@@ -5,7 +5,6 @@ import type { ROLE } from '@/types/constants/roles'
 
 const useRolePermission = (roles?: ROLE[]) => {
   const { data } = useSession()
-  console.log(data?.user?.roles, roles)
   return useMemo(() => data?.user?.roles?.some(role => roles?.includes(role)), [data, roles])
 }
 
