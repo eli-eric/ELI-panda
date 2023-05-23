@@ -5,6 +5,7 @@ import { useDebounce } from 'usehooks-ts'
 
 import ComboboxComponent from '@/components/form/Combobox'
 import ListBox from '@/components/form/Listbox'
+import { Col, Grid } from '@/components/grid/Grid'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import useTableStateStore from '@/store/useTableStateStore'
 import { CODEBOOK } from '@/types/constants/codebook'
@@ -103,37 +104,47 @@ const useOrdersFilter = () => {
   const getOrdersFilter = () => (
     <FormProvider {...form}>
       <form className="max-[1250px]:hidden w-[1000px] flex gap-x-2">
-        <ListBox
-          register={form.register}
-          name="orderStatus"
-          placeholder="Order Status"
-          codebook={CODEBOOK.ORDER_STATUS}
-          emptyOption={true}
-          emptyOptionName="All Order statuses"
-        />
-        <ComboboxComponent
-          register={form.register}
-          name="supplier"
-          placeholder="Supplier"
-          codebook={CODEBOOK.SUPPLIER}
-          isObject={true}
-        />
-        <ListBox
-          register={form.register}
-          name="procurementResponsible"
-          className="min-w-100"
-          placeholder="Procurement Responsible"
-          codebook={CODEBOOK.PROCUREMENTER}
-          emptyOption={true}
-          emptyOptionName="All Procurement Responsibles"
-        />
-        <ComboboxComponent
-          register={form.register}
-          name="requestor"
-          placeholder="Requestor"
-          codebook={CODEBOOK.EMPLOYEE}
-          isObject={true}
-        />
+        <Grid>
+          <Col>
+            <ListBox
+              register={form.register}
+              name="orderStatus"
+              placeholder="Order Status"
+              codebook={CODEBOOK.ORDER_STATUS}
+              emptyOption={true}
+              emptyOptionName="All Order statuses"
+            />
+          </Col>
+          <Col>
+            <ComboboxComponent
+              register={form.register}
+              name="supplier"
+              placeholder="Supplier"
+              codebook={CODEBOOK.SUPPLIER}
+              isObject={true}
+            />
+          </Col>
+          <Col>
+            <ListBox
+              register={form.register}
+              name="procurementResponsible"
+              className="min-w-100"
+              placeholder="Procurement Responsible"
+              codebook={CODEBOOK.PROCUREMENTER}
+              emptyOption={true}
+              emptyOptionName="All Procurement Responsibles"
+            />
+          </Col>
+          <Col>
+            <ComboboxComponent
+              register={form.register}
+              name="requestor"
+              placeholder="Requestor"
+              codebook={CODEBOOK.EMPLOYEE}
+              isObject={true}
+            />
+          </Col>
+        </Grid>
       </form>
     </FormProvider>
   )
