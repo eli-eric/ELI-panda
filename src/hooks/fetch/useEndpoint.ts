@@ -24,7 +24,8 @@ const getEndpoints = (uid?: string, path?: string, itemUid?: string, query?: str
     systemCode: `/system/systemCode${query}`,
     orders: `/orders${query}`,
     order: `/order${uid ? '/' + uid : ''}`,
-    orderLineDelivery: `/order/${uid}/orderline/${itemUid}/delivery`
+    orderLineDelivery: `/order/${uid}/orderline/${itemUid}/delivery`,
+    eunforPrint: `/orders/eun-for-print/${uid}${query}`
   }
   return endpoints
 }

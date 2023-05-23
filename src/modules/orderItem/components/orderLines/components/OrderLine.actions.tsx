@@ -19,6 +19,7 @@ import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
 import useOrderLineForm from '../form/OrderLineForm.cont'
+import { Row } from 'react-table'
 
 const messages = message.common.buttons
 
@@ -147,6 +148,48 @@ export const OrderisDeliveredAction = ({
         </Fragment>
       )}
       {getFormModal()}
+    </Fragment>
+  )
+}
+
+export const PrintEunButton = ({ orderLine }: { orderLine: OrderLineFormType }) => {
+  const { eunforPrint } = useEndpoint({ uid: orderLine.eun, query: { printEUN: true } })
+  const { submit } = useSubmit({
+    endpoint: eunforPrint,
+    method: 'put',
+    onSuccess: () => {
+      toast.success(`EUN ${orderLine.eun} printed successfully`)
+    },
+    onError: err => {
+      toast.error(err.message)
+    }
+  })
+
+  return (
+    <button
+      className="hover:underline"
+      type="button"
+      onClick={() => {
+        submit()
+      }}
+    >
+      <span>{orderLine.eun}</span>
+    </button>
+  )
+}
+
+export const PriceFooter = ({ rows }: { rows: Row<OrderLineFormType>[] }) => {
+  const total = rows.reduce((sum, { original: { price } }) => sum + (price || 0), 0)
+  const totalCurrencyRows = rows.filter(({ original: { currency } }) => currency != undefined)
+  const totalCurrency = totalCurrencyRows.length > 0 ? totalCurrencyRows[0].original.currency : ''
+  return (
+    <Fragment>
+      {rows.length > 0 && (
+        <div className="flex flex-col whitespace-nowrap">
+          <span className="font-medium">{'Total:'}</span>
+          <span className="font-medium">{`${total} ${totalCurrency}`}</span>
+        </div>
+      )}
     </Fragment>
   )
 }
