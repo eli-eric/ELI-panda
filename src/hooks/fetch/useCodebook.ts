@@ -1,32 +1,35 @@
-import { useSession } from 'next-auth/react'
 import useSWR from 'swr/immutable'
 
 import { fetcher } from '@/helpers/fetcher'
 import type { CODEBOOK } from '@/types/constants/codebook'
+import type { ROLE } from '@/types/constants/roles'
 import type { Option } from '@/types/form'
 
 import { useEndpoint } from './useEndpoint'
+
+export type CodeBookMetaData = {
+  code: string
+  type: string
+  nodeLabel?: string
+  roleEdit?: ROLE
+}
+
+export type CodebookTypeResponse = {
+  metadata: CodeBookMetaData
+  data: CodebookType[]
+}
 
 export type CodebookType = { name: string; uid: string; additionalData?: string }
 export const useCodebook = (
   codebookName?: CODEBOOK,
   query?: string,
   autocomplete?: boolean
-): CodebookType[] | undefined => {
-  const { data: session } = useSession()
-
+): CodebookTypeResponse | undefined => {
   const { codebook } = useEndpoint({
-    path: `/${codebookName}`,
+    path: codebookName,
     query: query
   })
-  const { codebookAutocomplete } = useEndpoint({
-    path: `/${codebookName}`,
-    query: query
-  })
-
-  const codebookEndpoint = autocomplete ? codebookAutocomplete : codebook
-
-  const { data } = useSWR<{ name: string; uid: string }[]>(session?.user && codebookEndpoint, fetcher, {
+  const { data } = useSWR<CodebookTypeResponse>(codebook, fetcher, {
     suspense: false
   })
 
@@ -36,7 +39,7 @@ export const useCodebook = (
 export const useCodebookSelectValues = (codebookName: CODEBOOK, query?: string): Option[] | undefined => {
   const codebook = useCodebook(codebookName, query)
 
-  const selectOptions = codebook?.map(({ name, uid }) => ({ name, value: uid }))
+  const selectOptions = codebook?.data?.map(({ name, uid }) => ({ name, value: uid }))
 
   return selectOptions
 }
