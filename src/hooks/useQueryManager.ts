@@ -3,16 +3,16 @@ import { useCallback, useEffect, useState } from 'react'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
-import type { OrdersQuery } from '../types'
+import type { OrdersQuery } from '../modules/orders/types'
 
-export default function useQueryManager() {
+export default function useQueryManager(tableId: string) {
   const router = useRouter()
   const { instances } = useTableStateStore()
   //TODO: filters
-  const sorting = instances['orders']?.sortByQueryString
-  const pagination = instances['orders']?.pagination || '{"page":1,"pageSize":50}'
+  const sorting = instances[tableId]?.sortByQueryString
+  const pagination = instances[tableId]?.pagination || '{"page":1,"pageSize":50}'
 
-  const filter = useCallback(() => instances['orders']?.filter || {}, [instances])
+  const filter = useCallback(() => instances[tableId]?.filter || {}, [instances, tableId])
 
   const [query, setQuery] = useState<OrdersQuery>({ pagination })
 

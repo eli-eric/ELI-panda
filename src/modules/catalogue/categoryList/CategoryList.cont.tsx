@@ -6,21 +6,10 @@ import useSWR from 'swr'
 import type { CatalogueCategoryResponse } from '@/types/responses'
 
 import CategoryItemComponent from './CategoryItem.comp'
+import useCategoryList from '../hooks/useCategoryList'
 
-interface Props {
-  setCatalogueCategoryList: Dispatch<SetStateAction<CatalogueCategoryResponse[] | undefined>>
-  setCatalogueParentUid: Dispatch<SetStateAction<string | undefined>>
-}
-
-const CategoryListContainer = ({ setCatalogueCategoryList, setCatalogueParentUid }: Props) => {
-  const { data: session } = useSession()
-  const categoryPath = useCategoryPath()
-  /* fetch category list */
-  const { data: categoryList } = useSWR<Array<CatalogueCategoryResponse>>(session ? categoryPath : null)
-
-  useEffect(() => {
-    setCatalogueCategoryList(categoryList)
-  }, [categoryList, setCatalogueCategoryList])
+const CategoryListContainer = () => {
+  const { categoryList } = useCategoryList()
 
   return (
     <Fragment>
@@ -29,11 +18,7 @@ const CategoryListContainer = ({ setCatalogueCategoryList, setCatalogueParentUid
           {/* Content goes here */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 3xl:grid-cols-8">
             {categoryList?.map((category, index) => (
-              <CategoryItemComponent
-                key={category.code + index}
-                category={category}
-                setCatalogueParentUid={setCatalogueParentUid}
-              />
+              <CategoryItemComponent key={category.code + index} category={category} />
             ))}
           </div>
         </div>

@@ -11,7 +11,6 @@ import type { CatalogueCategoryResponse } from '@/types/responses'
 
 interface Props {
   category: CatalogueCategoryResponse
-  setCatalogueParentUid: Dispatch<SetStateAction<string | undefined>>
 }
 
 const CategoryItemComponent = ({ category }: Props) => {

@@ -10,15 +10,16 @@ import { useImage } from '@/hooks/useImage'
 import type { Selectable } from '@/modules/systems/types'
 import { PATH } from '@/types/constants/paths'
 import type { CatalogueItem } from '@/types/responses'
+import useCategoryList from '../../hooks/useCategoryList'
 
 interface Props {
   item: CatalogueItem
   index: number
-  categoryListLength: number | undefined
   selectable?: Selectable
 }
 
-const ItemListRow = ({ item, index, categoryListLength, selectable }: Props) => {
+const ItemListRow = ({ item, index, selectable }: Props) => {
+  const { categoryList } = useCategoryList()
   const router = useRouter()
   const { catalogueItemImage } = useEndpoint({ uid: item.uid })
   const image = useImage(catalogueItemImage)
@@ -74,14 +75,14 @@ const ItemListRow = ({ item, index, categoryListLength, selectable }: Props) => 
           </TooltipComponent>
         )}
       </td>
-      {categoryListLength === 0 &&
+      {categoryList.length === 0 &&
         item.details &&
         item.details.map((item, index) => (
           <td key={item.propertyName + index} className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">
             {item.value}
           </td>
         ))}
-      {categoryListLength !== 0 && (
+      {categoryList.length !== 0 && (
         <td className="whitespace-nowrap text-sm  sm:pl-6 text-blue-500">
           <Link
             href={{ pathname: categoryPath, query: { ...router.query } }}

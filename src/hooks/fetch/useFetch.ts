@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo } from 'react'
 import useSWR from 'swr'
-import type { BareFetcher, PublicConfiguration } from 'swr/_internal'
+import type { BareFetcher, KeyedMutator, PublicConfiguration } from 'swr/_internal'
 
 import { fetcher, mockFetcher } from '@/helpers/fetcher'
 
@@ -26,7 +26,12 @@ const useFetch = <ResponseType>({
   onSuccess,
   onError,
   format
-}: UseFetchProps<ResponseType>) => {
+}: UseFetchProps<ResponseType>): {
+  response: ResponseType
+  loading: boolean
+  error: any
+  mutate: KeyedMutator<ResponseType>
+} => {
   const router = useRouter()
   const { isReady } = router
 

@@ -34,7 +34,7 @@ export const TableLayoutContainer = ({ children, catalogueItems, categoryList }:
     handleResize()
     // Remove event listener on cleanup
     return () => window.removeEventListener('resize', handleResize)
-  }, [catalogueItems, categoryList])
+  }, [])
 
   return (
     <div

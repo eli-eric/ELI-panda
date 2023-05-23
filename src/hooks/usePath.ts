@@ -7,19 +7,8 @@ import { ENDPOINTS } from '@/types/constants/endpoints'
 
 export const useCataloguePath = () => {
   const router = useRouter()
-  const { slug } = router.query
-
-  const categoryPath = useMemo(() => {
-    if (!slug) return ''
-    if (slug && typeof slug === 'object') {
-      let path = ''
-      slug.forEach(slug => {
-        path += (path !== '' ? '/' : '') + slug
-      })
-      return path
-    }
-  }, [slug])
-
+  const { slug } = router.query as { slug: string[] }
+  const categoryPath = useMemo(() => (slug ? slug.join('/') : ''), [slug])
   return categoryPath
 }
 
