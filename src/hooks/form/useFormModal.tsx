@@ -48,7 +48,8 @@ const useFormModal = <T extends FieldValues>({
     goNext: {
       text: messages.save,
       loading: formState.isSubmitting,
-      type: 'submit'
+      type: 'button',
+      onClick: handleSubmit(onSubmit)
     },
     goBack: {
       text: messages.close,
@@ -63,7 +64,7 @@ const useFormModal = <T extends FieldValues>({
   const getFormModal = () => (
     <ModalComponent open={open} setOpen={setOpen}>
       {renderOutsideForm && renderOutsideForm(defaultValues as T)}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form>
         <FormProvider {...formMethods}>
           {renderForm(defaultValues as T)}
           {error && <ErrorPage />}
