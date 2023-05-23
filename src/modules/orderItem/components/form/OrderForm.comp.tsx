@@ -27,7 +27,7 @@ const OrderFormComponent = () => {
           <Input {...fields.name} />
         </Col>
         <Col lg={6}>
-          <ComboboxComponent {...fields.supplier} isObject={true} limit={50} />
+          <ComboboxComponent {...fields.supplier} isObject={true} limit={50} showAddButton={true} />
         </Col>
         <Col lg={6}>
           <ListBox {...fields.procurementResponsible} isObject={true} />

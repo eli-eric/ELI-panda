@@ -27,6 +27,7 @@ type ComboboxProps<T extends FieldValues> = FieldProps &
     isObject?: boolean
     position?: 'top' | 'bottom'
     limit?: number
+    showAddButton?: boolean
   }
 
 const ComboboxComponent = <T extends FieldValues>({
@@ -40,7 +41,8 @@ const ComboboxComponent = <T extends FieldValues>({
   disabled,
   limit = 10,
   position = 'bottom',
-  rounded = 'rounded-md'
+  rounded = 'rounded-md',
+  showAddButton = false
 }: ComboboxProps<T>) => {
   const {
     setValue,
@@ -71,7 +73,7 @@ const ComboboxComponent = <T extends FieldValues>({
   const { getFormModal, setOpen } = useAddCodebookValue(data?.metadata)
 
   useEffect(() => {
-    if (data?.metadata?.roleEdit && session?.user?.roles) {
+    if (showAddButton && data?.metadata?.roleEdit && session?.user?.roles) {
       const showButton = session.user.roles.includes(data.metadata.roleEdit)
       setShowButton(showButton)
     }
