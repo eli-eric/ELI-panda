@@ -55,11 +55,12 @@ const ListBox = <T extends FieldValues>({
   useEffect(() => {
     if (defaultValues && defaultValues[name]) {
       if (codebookOption) {
-        const defaultOption = codebookOption.find(option => option.uid === defaultValues[name].uid)
-        setSelectedOption(defaultOption)
+        setSelectedOption(defaultValues[name])
       }
     }
-  }, [defaultValues, name, codebookOption, setSelectedOption])
+  }, [codebookOption]) // eslint-disable-line
+
+  useEffect(() => {}, [selectedOption])
 
   return (
     <Fragment>

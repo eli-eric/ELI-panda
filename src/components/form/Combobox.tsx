@@ -43,7 +43,7 @@ const ComboboxComponent = <T extends FieldValues>({
     control,
     formState: { defaultValues }
   } = useFormContext<T>()
-  const [query, setQuery] = useState(defaultValues?.[name] || '')
+  const [query, setQuery] = useState<string>('')
   const [selectedItem, setSelectedItem] = useState<CodebookType | null>(null)
   const data = useCodebook(codebook, `?searchText=${query}&limit=${limit}`, true)
 
@@ -53,7 +53,7 @@ const ComboboxComponent = <T extends FieldValues>({
       setQuery(defaultValues[name].name as string)
       setSelectedItem(defaultValues[name] as CodebookType)
     }
-  }, [defaultValues, name])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // clear value
   const clear = () => {
