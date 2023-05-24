@@ -1,3 +1,4 @@
+import type { AxiosError } from 'axios'
 import { useState } from 'react'
 import { useSWRConfig } from 'swr'
 
@@ -9,7 +10,7 @@ interface UseSubmitProps<T> {
   method: 'post' | 'put' | 'delete'
   mutateList?: string[]
   onSuccess?: (data?: T | null) => void
-  onError?: (error: any) => void
+  onError?: (error: AxiosError) => void
 }
 
 const useSubmit = <T>({ endpoint, method, mutateList, onSuccess, onError }: UseSubmitProps<T>) => {

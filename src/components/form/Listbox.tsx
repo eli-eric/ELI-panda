@@ -46,20 +46,19 @@ const ListBox = <T extends FieldValues>({
     if (emptyOption && codebookOptions) {
       const emptyOption = { uid: '', name: emptyOptionName }
       setSelectedOption(emptyOption)
-      return [emptyOption, ...codebookOptions]
+      return [emptyOption, ...codebookOptions.data]
     }
-    return codebookOptions
+    return codebookOptions?.data
   }, [emptyOption, codebookOptions, setSelectedOption, emptyOptionName])
 
   // set default value
   useEffect(() => {
     if (defaultValues && defaultValues[name]) {
       if (codebookOption) {
-        const defaultOption = codebookOption.find(option => option.uid === defaultValues[name].uid)
-        setSelectedOption(defaultOption)
+        setSelectedOption(defaultValues[name])
       }
     }
-  }, [defaultValues, name, codebookOption, setSelectedOption])
+  }, [codebookOption]) // eslint-disable-line
 
   return (
     <Fragment>

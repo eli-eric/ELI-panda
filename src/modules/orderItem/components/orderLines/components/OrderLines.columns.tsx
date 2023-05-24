@@ -6,7 +6,7 @@ import type { CellProps, Column, FooterProps } from 'react-table'
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
 
-import { OrderisDeliveredAction, OrderLineActionButtons } from './OrderLine.actions'
+import { OrderisDeliveredAction, OrderLineActionButtons, PriceFooter, PrintEunButton } from './OrderLine.actions'
 
 const messages = message.ordersPage.orderLines.orderLinesTable.header
 
@@ -55,11 +55,11 @@ const useOrderLinesColumns = ({ setOrderLine, deleteOrderLine, disabledEdit }: P
         accessor: 'system',
         Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value?.name.split('-')[0]}</span>
       },
-      /* {
+      {
         Header: formatMessage({ id: messages.location }),
         accessor: 'location',
         Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value?.name.split('-')[0]}</span>
-      }, */
+      },
       {
         Header: formatMessage({ id: messages.price }),
         accessor: 'price',
@@ -68,25 +68,12 @@ const useOrderLinesColumns = ({ setOrderLine, deleteOrderLine, disabledEdit }: P
             {value} <span className="font-medium">{original.currency}</span>
           </span>
         ),
-        Footer: ({ rows }: FooterProps<OrderLineFormType>) => {
-          const total = rows.reduce((sum, { original: { price } }) => sum + (price || 0), 0)
-          const totalCurrencyRows = rows.filter(({ original: { currency } }) => currency != undefined)
-          const totalCurrency = totalCurrencyRows.length > 0 ? totalCurrencyRows[0].original.currency : ''
-          return (
-            <Fragment>
-              {rows.length > 0 && (
-                <div className="flex flex-col whitespace-nowrap">
-                  <span className="font-medium">{'Total:'}</span>
-                  <span className="font-medium">{`${total} ${totalCurrency}`}</span>
-                </div>
-              )}
-            </Fragment>
-          )
-        }
+        Footer: ({ rows }: FooterProps<OrderLineFormType>) => <PriceFooter rows={rows} />
       },
       {
         Header: formatMessage({ id: messages.eun }),
-        accessor: 'eun'
+        accessor: 'eun',
+        Cell: ({ row: { original } }: CellProps<OrderLineFormType>) => <PrintEunButton orderLine={original} />
       },
       {
         Header: formatMessage({ id: messages.isDelivered }),
