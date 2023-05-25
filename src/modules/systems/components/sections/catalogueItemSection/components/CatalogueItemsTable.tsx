@@ -46,7 +46,6 @@ const CatalogueItemsTable = ({
           <CatalogueItemsComponent
             selectable={{ isSelectable: true, selectedItem: itemName, setItem }}
             catalogueItems={catalogueItems}
-            categoryListLength={catalogueItems?.data.length}
           />
         </fieldset>
       </div>

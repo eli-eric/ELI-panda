@@ -113,7 +113,7 @@ export const useCategoryEdit = ({
               onClick={() => {
                 setOpenEdit(true)
               }}
-              className="h-full"
+              className="h-full z-0"
             >
               <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
             </Button>
@@ -123,7 +123,7 @@ export const useCategoryEdit = ({
               onClick={() => {
                 setOpenCopy(true)
               }}
-              className="h-full"
+              className="h-full z-0"
             >
               <DocumentDuplicateIcon className="h-4 w-4" aria-hidden="true" />
             </Button>
@@ -133,7 +133,7 @@ export const useCategoryEdit = ({
               onClick={() => {
                 setOpenDelete(true)
               }}
-              className="h-full"
+              className="h-full z-0"
             >
               <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
             </Button>

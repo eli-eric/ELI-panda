@@ -75,7 +75,7 @@ export const messages = {
         select: 'Select Item',
         description: 'Description',
         categoryName: 'Category name',
-        manufactorer: 'Manufacturer',
+        manufacturer: 'Manufacturer',
         manufacturerNumber: 'Manufacturer Number',
         manufacturerUrl: 'Manufacturer Url'
       }

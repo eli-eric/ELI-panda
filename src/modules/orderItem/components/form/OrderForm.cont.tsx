@@ -51,10 +51,10 @@ const useOrderForm = () => {
     endpoint: orderEndpoint,
     method: uid ? 'put' : 'post',
     onSuccess: uid => {
+      mutateDetail()
+      mutate()
       toast.success(`Order ${uid} saved successfully`)
       router.push(uid ? PATH.ORDER + '/' + uid : PATH.ORDERS)
-      mutate()
-      mutateDetail()
     },
     onError: e => toast.error(e.message)
   })
@@ -63,12 +63,12 @@ const useOrderForm = () => {
   const formMethods = useForm<OrderDetailFormType>({
     resolver: yupResolver(schema),
     defaultValues: {
+      ...orderDetail,
       orderLines:
         orderDetail?.orderLines &&
         orderDetail?.orderLines.map(orderLine => ({ ...orderLine, id: orderLine.uid || uuid() })),
       orderDate: moment().utc().format('YYYY-MM-DD'),
-      orderStatus: orderDetail?.orderStatus || { uid: 'c5ef9d00-ac38-44c1-b48a-fde0d7095c54', name: 'Requested' },
-      ...orderDetail
+      orderStatus: orderDetail?.orderStatus || { uid: 'c5ef9d00-ac38-44c1-b48a-fde0d7095c54', name: 'Requested' }
     }
   })
   const { control, setValue, formState, handleSubmit } = formMethods

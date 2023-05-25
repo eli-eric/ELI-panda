@@ -1,3 +1,4 @@
+import type { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo } from 'react'
 import useSWR from 'swr'
@@ -40,7 +41,7 @@ const useFetch = <ResponseType>({
     isLoading,
     mutate,
     error
-  } = useSWR<ResponseType, Error>(isReady && url, useMockFetcher ? mockFetcher : fetcher, config)
+  } = useSWR<ResponseType, AxiosError>(isReady && url, useMockFetcher ? mockFetcher : fetcher, config)
 
   // handle success callback
   const handleSuccess = useCallback(

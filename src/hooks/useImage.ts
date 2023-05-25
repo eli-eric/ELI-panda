@@ -1,9 +1,8 @@
 import type { StaticImageData } from 'next/image'
 import noImage from 'public/no-image.png'
-import useSWR from 'swr'
 
-import { fetcher } from '@/helpers/fetcher'
+import useFetch from './fetch/useFetch'
 export const useImage = (endpoint?: string, useNoImage = true): string | StaticImageData => {
-  const { data: image } = useSWR(endpoint, fetcher, { suspense: false })
+  const { response: image } = useFetch<string>({ url: endpoint, config: { suspense: false } })
   return useNoImage ? image || noImage : image
 }

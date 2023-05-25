@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { useRouter } from 'next/router'
+import { useQueryState } from 'next-usequerystate'
 
 import useGeneralTable from '@/hooks/table/useGeneralTable'
 import usePagination from '@/hooks/table/usePagination'
@@ -10,11 +10,10 @@ import { getColorClassStatus } from '../utils/getColorClassStatus'
 import useOrderColumns from './OrderColumns'
 
 const useOrdersTable = () => {
-  const searchValue = useRouter().query.search as string
+  const searchValue = useQueryState('search')
   const { orderList, loading, error } = useOrders()
 
   const { getPaginationComponent } = usePagination({
-    dependecies: [searchValue],
     pageSizeDefault: 50,
     useQuery: true,
     total: orderList?.totalCount,

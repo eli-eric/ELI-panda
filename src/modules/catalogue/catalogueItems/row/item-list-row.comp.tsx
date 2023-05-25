@@ -10,7 +10,6 @@ import { useImage } from '@/hooks/useImage'
 import type { Selectable } from '@/modules/systems/types'
 import { PATH } from '@/types/constants/paths'
 import type { CatalogueItem } from '@/types/responses'
-import useCategoryList from '../../hooks/useCategoryList'
 
 interface Props {
   item: CatalogueItem
@@ -19,7 +18,6 @@ interface Props {
 }
 
 const ItemListRow = ({ item, index, selectable }: Props) => {
-  const { categoryList } = useCategoryList()
   const router = useRouter()
   const { catalogueItemImage } = useEndpoint({ uid: item.uid })
   const image = useImage(catalogueItemImage)
@@ -75,24 +73,15 @@ const ItemListRow = ({ item, index, selectable }: Props) => {
           </TooltipComponent>
         )}
       </td>
-      {categoryList.length === 0 &&
-        item.details &&
-        item.details.map((item, index) => (
-          <td key={item.propertyName + index} className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">
-            {item.value}
-          </td>
-        ))}
-      {categoryList.length !== 0 && (
-        <td className="whitespace-nowrap text-sm  sm:pl-6 text-blue-500">
-          <Link
-            href={{ pathname: categoryPath, query: { ...router.query } }}
-            passHref
-            legacyBehavior={selectable?.isSelectable}
-          >
-            {selectable?.isSelectable ? <a target="_blank">{item.categoryName} </a> : item.categoryName}
-          </Link>
-        </td>
-      )}
+      <td className="whitespace-nowrap text-sm  sm:pl-6 text-blue-500">
+        <Link
+          href={{ pathname: categoryPath, query: { ...router.query } }}
+          passHref
+          legacyBehavior={selectable?.isSelectable}
+        >
+          {selectable?.isSelectable ? <a target="_blank">{item.categoryName} </a> : item.categoryName}
+        </Link>
+      </td>
       <td className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">{item.manufacturer}</td>
       <td className="whitespace-nowrap text-sm  sm:pl-6 text-gray-500">{item.manufacturerNumber}</td>
       <td className="whitespace-nowrap text-sm  sm:pl-6 text-blue-500">

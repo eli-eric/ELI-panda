@@ -2,6 +2,8 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useQueryState } from 'next-usequerystate'
 import { useForm } from 'react-hook-form'
 
+import useTableStateStore from '@/store/useTableStateStore'
+
 interface Props {
   useQuery?: boolean
   onSuccess?: (search: string) => void
@@ -13,19 +15,18 @@ interface Props {
 
 export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin, tableId }: Props) => {
   const [querySearch, setQuerySearch] = useQueryState('search')
-  //const { instances, setSearch } = useTableStateStore()
+  const { setSearch } = useTableStateStore()
   const { register, handleSubmit, watch } = useForm<{ search: string }>({
     defaultValues: { search: querySearch || '' }
   })
   const searchValue = watch('search')
-
   const onSubmit = (data: { search: string }) => {
     if (useQuery) {
       setQuerySearch(data.search ? data.search : null, { shallow: true })
     }
-    /*  if (tableId) {
+    if (tableId) {
       setSearch(tableId, data.search)
-    } */
+    }
     onSuccess && onSuccess(data.search)
   }
 
