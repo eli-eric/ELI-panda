@@ -1,12 +1,11 @@
 import { Combobox as HUICombobox } from '@headlessui/react'
 import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import { useSession } from 'next-auth/react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
 import { classNames } from '@/helpers'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import { useCodebook } from '@/hooks/fetch/useCodebook'
+import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 
@@ -27,7 +26,6 @@ const Combobox = ({
   name,
   placeholder,
   label,
-  isObject = false,
   disabled,
   isError,
   className,
@@ -56,6 +54,14 @@ const Combobox = ({
     setValue(name, null)
   }
 
+  const isFirstRender = useRef(true)
+  useEffect(() => {
+    isFirstRender.current = false
+  }, [])
+  if (isFirstRender.current) {
+    return null
+  }
+
   return (
     <>
       <Controller
@@ -67,13 +73,6 @@ const Combobox = ({
               <HUICombobox
                 as="div"
                 {...field}
-                // onChange={(item: CodebookType | null) => {
-                //   if (isObject) {
-                //     field.onChange(item)
-                //   } else {
-                //     field.onChange(item?.uid)
-                //   }
-                // }}
                 disabled={disabled}
                 className={classNames(
                   'relative block w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
@@ -85,9 +84,9 @@ const Combobox = ({
                 )}
                 <div className="relative">
                   <HUICombobox.Input
-                    placeholder={placeholder}
+                    onChange={e => setQuery(e.target.value)}
                     displayValue={(item: CodebookType) => item?.name}
-                    onChange={event => setQuery(event.target.value)}
+                    placeholder={placeholder}
                     autoComplete="off"
                     className={classNames(
                       'px-3 py-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full appearance-none text-left truncate',
