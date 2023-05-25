@@ -49,57 +49,44 @@ const useOrdersFilter = () => {
     setFilter('orders', queryFilter)
   }, [queryFilter, setFilter])
 
-  useEffect(() => {
-    if (supplier) {
-      setQuerySupplier(JSON.stringify(supplier))
-      setQuery(prevQuery => ({ ...prevQuery, supplierUID: supplier.uid }))
+  const handleFieldUpdate = (
+    fieldName: string,
+    fieldCodebook: CodebookType,
+    setFieldQuery: (fieldQuery: string | null) => void
+  ) => {
+    const fieldUIDKey = `${fieldName}UID`
+    if (fieldCodebook) {
+      setFieldQuery(JSON.stringify(fieldCodebook))
+      setQuery(prevQuery => ({ ...prevQuery, [fieldUIDKey]: fieldCodebook.uid }))
     } else {
-      setQuerySupplier(null)
+      setFieldQuery(null)
       setQuery(prevQuery => {
-        const { supplierUID, ...rest } = prevQuery // eslint-disable-line
+        const rest = {}
+        for (const key in prevQuery) {
+          if (key !== fieldUIDKey) {
+            rest[key] = prevQuery[key]
+          }
+        }
         return rest
       })
     }
-  }, [supplier]) // eslint-disable-line
+  }
 
   useEffect(() => {
-    if (orderStatus) {
-      setQueryOrderStatus(JSON.stringify(orderStatus))
-      setQuery(prevQuery => ({ ...prevQuery, orderStatusUID: orderStatus.uid }))
-    } else {
-      setQueryOrderStatus(null)
-      setQuery(prevQuery => {
-        const { orderStatusUID, ...rest } = prevQuery // eslint-disable-line
-        return rest
-      })
-    }
-  }, [orderStatus]) // eslint-disable-line
+    handleFieldUpdate('supplier', supplier, setQuerySupplier)
+  }, [supplier, setQuerySupplier])
 
   useEffect(() => {
-    if (procurementResponsible) {
-      setQueryProcurementResponsible(JSON.stringify(procurementResponsible))
-      setQuery(prevQuery => ({ ...prevQuery, procurementResponsibleUID: procurementResponsible.uid }))
-    } else {
-      setQueryProcurementResponsible(null)
-      setQuery(prevQuery => {
-        const { procurementResponsibleUID, ...rest } = prevQuery // eslint-disable-line
-        return rest
-      })
-    }
-  }, [procurementResponsible]) // eslint-disable-line
+    handleFieldUpdate('orderStatus', orderStatus, setQueryOrderStatus)
+  }, [orderStatus, setQueryOrderStatus])
 
   useEffect(() => {
-    if (requestor) {
-      setQueryRequestor(JSON.stringify(requestor))
-      setQuery(prevQuery => ({ ...prevQuery, requestorUID: requestor.uid }))
-    } else {
-      setQueryRequestor(null)
-      setQuery(prevQuery => {
-        const { requestorUID, ...rest } = prevQuery // eslint-disable-line
-        return rest
-      })
-    }
-  }, [requestor]) // eslint-disable-line
+    handleFieldUpdate('procurementResponsible', procurementResponsible, setQueryProcurementResponsible)
+  }, [procurementResponsible, setQueryProcurementResponsible])
+
+  useEffect(() => {
+    handleFieldUpdate('requestor', requestor, setQueryRequestor)
+  }, [requestor, setQueryRequestor])
 
   const getOrdersFilter = () => (
     <FormProvider {...form}>
