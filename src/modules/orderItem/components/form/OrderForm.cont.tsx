@@ -23,11 +23,12 @@ const useOrderForm = () => {
       orderLines:
         orderDetail?.orderLines &&
         orderDetail?.orderLines.map(orderLine => ({ ...orderLine, id: orderLine.uid || uuid() })),
-      orderDate: orderDetail.orderDate,
+      orderDate: orderDetail?.orderDate,
       orderStatus: orderDetail?.orderStatus || { uid: 'c5ef9d00-ac38-44c1-b48a-fde0d7095c54', name: 'Requested' }
     }
   })
-  const { control, setValue, formState, handleSubmit } = formMethods
+
+  const { control, formState, handleSubmit } = formMethods
 
   // form notifications
   useFormNotification<OrderDetailFormType>({ control })
