@@ -1,21 +1,22 @@
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
-import useSWR from 'swr'
 
 import ItemDetailComponent from '@/components/item-detail/ItemDetail.comp'
 import ItemProperty from '@/components/item-property/ItemProperty'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
+import useFetch from '@/hooks/fetch/useFetch'
 import { message } from '@/i18n/src/messages'
 import type { SystemDetailResponse } from '@/modules/systems/types/responses'
+import { useImage } from '@/hooks/useImage'
 
 const messages = message.systemsPage.systemDetail.form
 
 const SystemDetailSection = ({ data }: { data: SystemDetailResponse }) => {
   const router = useRouter()
-  const { systemImage: systemDetailImage } = useEndpoint({
+  const { systemImage } = useEndpoint({
     uid: router.query.uid as string
   })
-  const { data: image } = useSWR(systemDetailImage)
+  const image = useImage(systemImage)
 
   return (
     <Fragment>
