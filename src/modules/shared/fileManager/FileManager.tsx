@@ -5,14 +5,14 @@ import type { CellProps, Column } from 'react-table'
 import useSWR from 'swr'
 
 import { PlusButton } from '@/components/Buttons'
+import Heading from '@/components/layout/Heading'
+import ProgressBarComponent from '@/components/progress-bar.comp'
 import executeRequest from '@/helpers/executeRequest'
 import { uniFetcher } from '@/helpers/fetcher'
 import useGeneralTable from '@/hooks/table/useGeneralTable'
 import { message } from '@/i18n/src/messages'
 import type { FILE_TYPE } from '@/types/constants/files'
 
-import Heading from '../layout/Heading'
-import ProgressBarComponent from '../progress-bar.comp'
 import FileActions from './FileActions'
 import type { FileItem } from './types'
 

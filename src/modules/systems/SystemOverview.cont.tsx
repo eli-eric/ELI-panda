@@ -7,7 +7,6 @@ import { Button } from '@/components/Buttons'
 import Card, { Heading } from '@/components/card/card.comp'
 import EmptySectionComponent from '@/components/empty-section/empty-section.comp'
 import ErrorPage from '@/components/error/ErrorPage'
-import FileManager from '@/components/fileManager/FileManager'
 import LoaderComponent from '@/components/loader.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useSearch } from '@/hooks/table/useSearch'
@@ -22,6 +21,7 @@ import Subsystems from './components/Subsystems'
 import ViewControl from './components/ViewControl'
 import { useSystemEdit } from './hooks/useSystemEdit'
 import type { SystemDetailResponse } from './types/responses'
+import FileManager from '@/modules/shared/fileManager/FileManager'
 
 interface Props {
   systemDetail?: SystemDetailResponse
