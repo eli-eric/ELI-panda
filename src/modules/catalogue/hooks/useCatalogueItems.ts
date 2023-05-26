@@ -1,7 +1,7 @@
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
-import { useCataloguePath } from '@/modules/catalogue/hooks/usePath'
 import useQueryManager from '@/hooks/useQueryManager'
+import { useCataloguePath } from '@/modules/catalogue/hooks/usePath'
 import type { CatalogueItemsResponse } from '@/types/responses'
 
 const useCatalogueItems = () => {

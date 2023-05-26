@@ -35,7 +35,13 @@ const Links = {
   }
 }
 
-const Card = ({ name, link, Icon }) => {
+interface CardProps {
+  name: string
+  link: string
+  Icon: () => JSX.Element
+}
+
+const Card = ({ name, link, Icon }: CardProps) => {
   const router = useRouter()
   return (
     <li

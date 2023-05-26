@@ -2,11 +2,13 @@ import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
+import type { Row } from 'react-table'
 
 import { DeleteButton, EditButton } from '@/components/Buttons'
 import { Heading } from '@/components/card/card.comp'
 import { Input } from '@/components/form/Input'
 import { useToggle } from '@/components/form/Switch'
+import { Col, Grid } from '@/components/grid/Grid'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { createMessageValues } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
@@ -19,8 +21,6 @@ import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
 import useOrderLineForm from '../form/OrderLineForm.cont'
-import { Row } from 'react-table'
-import { Col, Grid } from '@/components/grid/Grid'
 
 const messages = message.common.buttons
 

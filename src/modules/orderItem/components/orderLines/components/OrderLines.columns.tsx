@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { Fragment, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import type { CellProps, Column, FooterProps } from 'react-table'
 

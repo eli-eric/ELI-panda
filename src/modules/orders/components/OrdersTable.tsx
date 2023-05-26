@@ -1,5 +1,4 @@
 import classNames from 'classnames'
-import { useQueryState } from 'next-usequerystate'
 
 import useGeneralTable from '@/hooks/table/useGeneralTable'
 import usePagination from '@/hooks/table/usePagination'
@@ -10,18 +9,14 @@ import { getColorClassStatus } from '../utils/getColorClassStatus'
 import useOrderColumns from './OrderColumns'
 
 const useOrdersTable = () => {
-  const searchValue = useQueryState('search')
   const { orderList, loading, error } = useOrders()
-
   const { getPaginationComponent } = usePagination({
     pageSizeDefault: 50,
     useQuery: true,
     total: orderList?.totalCount,
     tableId: 'orders'
   })
-
   const columns = useOrderColumns()
-
   const { getTable } = useGeneralTable<Order>({
     columns,
     tableId: 'orders',

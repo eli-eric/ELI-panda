@@ -6,10 +6,10 @@ import Card from '@/components/layout/Card'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { FILE_TYPE } from '@/types/constants/files'
 
+import FileManager from '../shared/fileManager/FileManager'
 import useOrderForm from './components/form/OrderForm.cont'
 import OrderLinesTable from './components/orderLines/OrderLines.table'
 import useOrderDetail from './hooks/useOrderDetail'
-import FileManager from '../shared/fileManager/FileManager'
 
 const OrderItemContainer = () => {
   const { disabledEdit, uid } = useOrderDetail()

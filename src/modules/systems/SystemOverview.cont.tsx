@@ -10,6 +10,7 @@ import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useSearch } from '@/hooks/table/useSearch'
+import FileManager from '@/modules/shared/fileManager/FileManager'
 import { FILE_TYPE } from '@/types/constants/files'
 
 import Breadcrumbs from './components/Breadcrumbs'
@@ -21,7 +22,6 @@ import Subsystems from './components/Subsystems'
 import ViewControl from './components/ViewControl'
 import { useSystemEdit } from './hooks/useSystemEdit'
 import type { SystemDetailResponse } from './types/responses'
-import FileManager from '@/modules/shared/fileManager/FileManager'
 
 interface Props {
   systemDetail?: SystemDetailResponse
