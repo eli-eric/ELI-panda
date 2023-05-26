@@ -32,10 +32,10 @@ export type CodebookQuery = {
   limit?: number
 }
 export const useCodebook = (codebookName?: CODEBOOK, query?: CodebookQuery): CodebookTypeResponse | undefined => {
-  const queryString = '?' + new URLSearchParams(query as Record<string, string>).toString()
+  const filterString = JSON.stringify(query?.filter)
   const { codebook } = useEndpoint({
     path: codebookName,
-    query: queryString
+    query: { ...query, filter: filterString }
   })
   const { data } = useSWR<CodebookTypeResponse>(codebook, fetcher, {
     suspense: false
