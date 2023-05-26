@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 
 import ComboboxComponent from '@/components/form/Combobox'
 import { Input, InputAmount } from '@/components/form/Input'
@@ -7,6 +8,7 @@ import ListBox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
 import { Col, Grid } from '@/components/grid/Grid'
 import Divider from '@/components/layout/Divider'
+import type { CodebookFilter } from '@/hooks/fetch/useCodebook'
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
 import type { CatalogueItem } from '@/types/responses'
@@ -21,13 +23,24 @@ interface Props {
 }
 
 const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
-  // const [enabled, setEnabled] = useState(false)
   const { enabled, toggle, Toggle } = useToggle(false)
   const [locationEnable, setLocationEnable] = useState(false)
   const formFields = useOrderLineFormFields(enabled)
   const { setValue, watch } = useFormContext<OrderLineFormType>()
   const system = watch('system')
+  const technologicalUnitToogle = useToggle(true)
+  const { Toggle: TechUnitToogle, toggle: techUnitToogle, enabled: techUnitEnabled } = technologicalUnitToogle
+  const [techUnitFilter, setTechUnitFilter] = useState<CodebookFilter[] | undefined>(undefined)
 
+  // set tech unit filter
+  useEffect(() => {
+    if (orderLine?.uid) {
+      setTechUnitFilter([{ key: 'technologicalUnits', value: techUnitEnabled }])
+      toast.success('Technological unit filter is' + ' ' + techUnitEnabled)
+    }
+  }, [techUnitEnabled, orderLine?.uid])
+
+  // set default value
   useEffect(() => {
     if (!enabled) {
       setValue('name', catalogueItem?.name || orderLine?.name || '')
@@ -36,6 +49,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
     }
   }, [catalogueItem, setValue, orderLine, enabled])
 
+  // clear values on toggle
   useEffect(() => {
     if (enabled) {
       setValue('name', '')
@@ -91,7 +105,24 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
         <Divider text={messages.systemInfo} />
       </Col>
       <Col md={orderLine?.uid ? 6 : 12} lg={orderLine?.uid ? 6 : 12}>
-        <ComboboxComponent {...formFields.system} isObject={true} limit={50} position="top" />
+        {orderLine?.uid ? (
+          <Grid>
+            <Col sm={1} md={1} lg={2} className="self-end mb-1 pr-2">
+              <TechUnitToogle onChange={techUnitToogle} enabled={techUnitEnabled} />
+            </Col>
+            <Col sm={2} md={5} lg={10}>
+              <ComboboxComponent
+                {...formFields.system}
+                isObject={true}
+                limit={50}
+                position="top"
+                filter={techUnitFilter}
+              />
+            </Col>
+          </Grid>
+        ) : (
+          <ComboboxComponent {...formFields.system} isObject={true} limit={50} position="top" />
+        )}
       </Col>
       {orderLine?.uid && (
         <Col md={6} lg={6}>
