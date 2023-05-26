@@ -12,11 +12,11 @@ import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import CategoryEditModal from '@/modules/catalogue/categoryEditForm/CategoryEditModal'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
 import useSubmit from '../../../hooks/fetch/useSubmit'
+import CategoryEditModal from '../components/categoryEditForm/CategoryEditModal'
 
 interface EditModalProps {
   testid: string

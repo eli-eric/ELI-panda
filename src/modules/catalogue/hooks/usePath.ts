@@ -7,7 +7,7 @@ import { ENDPOINTS } from '@/types/constants/endpoints'
 
 export const useCataloguePath = () => {
   const router = useRouter()
-  const { slug } = router.query as { slug: string[] }
+  const { slug } = router.query as { slug?: string[] }
   const categoryPath = useMemo(() => (slug ? slug.join('/') : ''), [slug])
   return categoryPath
 }

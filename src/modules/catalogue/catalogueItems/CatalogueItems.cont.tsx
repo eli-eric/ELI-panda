@@ -6,8 +6,8 @@ import { message } from 'src/i18n/src/messages'
 import usePagination from '@/hooks/table/usePagination'
 
 import useCatalogueItems from '../hooks/useCatalogueItems'
-import DefaultMessageComponent from '../message/default-message.comp'
 import CatalogueItemsComponent from './CatalogueItems.comp'
+import DefaultMessageComponent from './message/default-message.comp'
 
 const messages = message.cataloguePage.defaultMessage
 

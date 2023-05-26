@@ -1,6 +1,6 @@
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
-import { useCataloguePath } from '@/hooks/usePath'
+import { useCataloguePath } from '@/modules/catalogue/hooks/usePath'
 import useQueryManager from '@/hooks/useQueryManager'
 import type { CatalogueItemsResponse } from '@/types/responses'
 

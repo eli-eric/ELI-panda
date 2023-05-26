@@ -7,7 +7,7 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
 import { message } from '@/i18n/src/messages'
 import type { SystemDetailResponse } from '@/modules/systems/types/responses'
-import { useImage } from '@/hooks/useImage'
+import { useImage } from '@/hooks/fetch/useImage'
 
 const messages = message.systemsPage.systemDetail.form
 

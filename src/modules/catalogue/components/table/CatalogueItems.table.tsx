@@ -4,8 +4,8 @@ import useGeneralTable from '@/hooks/table/useGeneralTable'
 import usePagination from '@/hooks/table/usePagination'
 import type { CatalogueItem } from '@/types/responses'
 
-import useCatalogueItems from '../hooks/useCatalogueItems'
-import useCategoryList from '../hooks/useCategoryList'
+import useCatalogueItems from '../../hooks/useCatalogueItems'
+import useCategoryList from '../../hooks/useCategoryList'
 import useCatalogueItemsColumns from './CatalogueItems.columns'
 
 const useCatalogueItemsTable = () => {

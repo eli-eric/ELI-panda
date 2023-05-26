@@ -9,13 +9,13 @@ import { type Column } from 'react-table'
 
 import TooltipComponent from '@/components/tooltip.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useImage } from '@/hooks/useImage'
+import { useImage } from '@/hooks/fetch/useImage'
 import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
 import type { CatalogueItem } from '@/types/responses'
 
-import useCatalogueItems from '../hooks/useCatalogueItems'
-import useCategoryList from '../hooks/useCategoryList'
+import useCatalogueItems from '../../hooks/useCatalogueItems'
+import useCategoryList from '../../hooks/useCategoryList'
 
 const messages = message.cataloguePage.itemList.header
 

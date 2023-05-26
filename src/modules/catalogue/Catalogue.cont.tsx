@@ -4,9 +4,9 @@ import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { useSearch } from '@/hooks/table/useSearch'
 
-import CatalogueBreadcrumbContainer from './breadcrump/breadcrump.cont'
 import CategoryListContainer from './categoryList/CategoryList.cont'
-import useCatalogueItemsTable from './components/CatalogueItems.table'
+import CatalogueBreadcrumbs from './components/breadcrump/CatalogueBreadcrumbs'
+import useCatalogueItemsTable from './components/table/CatalogueItems.table'
 import useCatalogueItems from './hooks/useCatalogueItems'
 import useCategoryList from './hooks/useCategoryList'
 
@@ -19,7 +19,7 @@ const CatalogueContainer = () => {
   return (
     <TableLayoutContainer catalogueItems={catalogueItems} categoryList={categoryList}>
       {renderSearchBar()}
-      <CatalogueBreadcrumbContainer />
+      <CatalogueBreadcrumbs />
       <CategoryListContainer />
       <Fragment>
         {!error && getTable()}

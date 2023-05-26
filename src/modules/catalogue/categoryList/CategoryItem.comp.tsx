@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useImage } from '@/hooks/useImage'
+import { useImage } from '@/hooks/fetch/useImage'
 import { useCategoryEdit } from '@/modules/catalogue/hooks/useCategoryEdit'
 import { PATH } from '@/types/constants/paths'
 import type { CatalogueCategoryResponse } from '@/types/responses'

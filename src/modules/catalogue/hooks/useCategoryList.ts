@@ -1,5 +1,5 @@
 import useFetch from '@/hooks/fetch/useFetch'
-import { useCategoryPath } from '@/hooks/usePath'
+import { useCategoryPath } from '@/modules/catalogue/hooks/usePath'
 import type { CatalogueCategoryResponse } from '@/types/responses'
 
 const useCategoryList = () => {
