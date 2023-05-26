@@ -3,6 +3,7 @@ import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid
 import { useSession } from 'next-auth/react'
 import React, { useEffect, useRef, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { classNames } from '@/helpers'
 import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
@@ -19,6 +20,7 @@ type ComboboxPropsT = FieldProps &
     position?: 'top' | 'bottom'
     limit?: number
     showAddButton?: boolean
+    usesIntl?: boolean
   }
 
 const Combobox = ({
@@ -35,6 +37,7 @@ const Combobox = ({
   showAddButton = false
 }: ComboboxPropsT) => {
   const { control, setValue } = useFormContext()
+  const intl = useIntl()
 
   const [query, setQuery] = useState<string>('')
   const options = useCodebook(codebook, `?searchText=${query}&limit=${limit}`)
@@ -75,24 +78,25 @@ const Combobox = ({
                 {...field}
                 disabled={disabled}
                 className={classNames(
-                  'relative block w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                  'relative flex w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                   className
                 )}
               >
                 {label && (
-                  <HUICombobox.Label className="block text-sm font-medium text-gray-900">{label}</HUICombobox.Label>
+                  <HUICombobox.Label className="block text-sm font-medium text-gray-900">
+                    {intl.formatMessage({ id: label })}
+                  </HUICombobox.Label>
                 )}
                 <div className="relative">
                   <HUICombobox.Input
                     onChange={e => setQuery(e.target.value)}
                     displayValue={(item: CodebookType) => item?.name}
-                    placeholder={placeholder}
+                    placeholder={(placeholder && intl.formatMessage({ id: placeholder })) || ''}
                     autoComplete="off"
                     className={classNames(
                       'px-3 py-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full appearance-none text-left truncate',
                       field.value && !disabled ? 'pr-14' : 'pr-9',
                       rounded,
-                      className,
                       isError ? 'border-red-500' : 'border-gray-300',
                       disabled ? 'bg-gray-100' : ''
                     )}
