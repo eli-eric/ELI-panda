@@ -33,7 +33,7 @@ const useCatalogueItemsTable = () => {
 
   useEffect(() => {
     if (categoryList) {
-      if (categoryList.length === 0) {
+      if (!categoryList || categoryList.length === 0) {
         toggleHideColumn('categoryName', true)
       } else {
         toggleHideColumn('categoryName', false)
