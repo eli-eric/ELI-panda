@@ -20,6 +20,7 @@ import type { ModalButtons } from '@/types/form'
 
 import useOrderLineForm from '../form/OrderLineForm.cont'
 import { Row } from 'react-table'
+import { Col, Grid } from '@/components/grid/Grid'
 
 const messages = message.common.buttons
 
@@ -120,24 +121,40 @@ export const OrderisDeliveredAction = ({
       toast.error(err.message)
     }
   })
-  const { getFormModal, setOpen, formMethods } = useFormModal<{ serialNumber: string }>({
+  const { getFormModal, setOpen, formMethods } = useFormModal<{ serialNumber?: string; eun?: string }>({
     renderForm: () => (
-      <Input
-        register={formMethods.register}
-        name="serialNumber"
-        label={formatMessage({ id: orderLines.form.serialNumber.label })}
-        placeholder={formatMessage({ id: orderLines.form.serialNumber.placeholder })}
-        rounded="rounded-md"
-      />
+      <Grid>
+        {!orderLine.serialNumber && (
+          <Col md={6}>
+            <Input
+              register={formMethods.register}
+              name="serialNumber"
+              label={formatMessage({ id: orderLines.form.serialNumber.label })}
+              placeholder={formatMessage({ id: orderLines.form.serialNumber.placeholder })}
+              rounded="rounded-md"
+              defaultValue={undefined}
+            />
+          </Col>
+        )}
+        <Col md={orderLine.serialNumber ? 12 : 6}>
+          <Input
+            register={formMethods.register}
+            name="eun"
+            label={formatMessage({ id: orderLines.form.eun.label })}
+            placeholder={formatMessage({ id: orderLines.form.eun.placeholder })}
+            rounded="rounded-md"
+          />
+        </Col>
+      </Grid>
     ),
     renderOutsideForm: () => <Heading text="Fill missing Serial Number" />,
     onSubmit: data => {
-      submit({ serialNumber: data.serialNumber, isDelivered: !enabled })
+      submit({ serialNumber: data?.serialNumber, isDelivered: !enabled, eun: data?.eun || undefined })
     }
   })
 
   const handleCheck = () => {
-    !orderLine.serialNumber && !orderLine.isDelivered ? setOpen(true) : submit({ isDelivered: !enabled })
+    !orderLine.isDelivered ? setOpen(true) : submit({ isDelivered: !enabled })
   }
 
   return (
