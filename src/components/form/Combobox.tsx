@@ -71,93 +71,88 @@ const Combobox = ({
         name={name}
         control={control}
         render={({ field }) => (
-          <div className="flex items-start">
-            <div className="flex-grow">
-              <HUICombobox
-                as="div"
-                {...field}
-                disabled={disabled}
-                className={classNames(
-                  'relative flex w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
-                  className
-                )}
-              >
-                {label && (
-                  <HUICombobox.Label className="block text-sm font-medium text-gray-900">
-                    {intl.formatMessage({ id: label })}
-                  </HUICombobox.Label>
-                )}
-                <div className="relative">
-                  <HUICombobox.Input
-                    onChange={e => setQuery(e.target.value)}
-                    displayValue={(item: CodebookType) => item?.name}
-                    placeholder={(placeholder && intl.formatMessage({ id: placeholder })) || ''}
-                    autoComplete="off"
-                    className={classNames(
-                      'px-3 py-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full appearance-none text-left truncate',
-                      field.value && !disabled ? 'pr-14' : 'pr-9',
-                      rounded,
-                      isError ? 'border-red-500' : 'border-gray-300',
-                      disabled ? 'bg-gray-100' : ''
-                    )}
-                  />
-                  {field.value && !disabled && (
-                    <div
-                      onClick={handleClear}
-                      className="absolute mr-7 inset-y-0 right-0 flex items-center rounded-r-md px-1 focus:outline-none cursor-pointer text-gray-200  hover:text-red-500"
-                    >
-                      <XMarkIcon className="h-5 w-5 " aria-hidden="true" />
-                    </div>
+          <>
+            <HUICombobox
+              as="div"
+              {...field}
+              disabled={disabled}
+              className={classNames('relative flex flex-col w-full mt-auto', className)}
+            >
+              {label && (
+                <HUICombobox.Label className="block text-sm font-medium text-gray-900">
+                  {intl.formatMessage({ id: label })}
+                </HUICombobox.Label>
+              )}
+              <div className="relative">
+                <HUICombobox.Input
+                  onChange={e => setQuery(e.target.value)}
+                  displayValue={(item: CodebookType) => item?.name}
+                  placeholder={(placeholder && intl.formatMessage({ id: placeholder })) || ''}
+                  autoComplete="off"
+                  className={classNames(
+                    'px-3 py-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full appearance-none text-left truncate',
+                    field.value && !disabled ? 'pr-14' : 'pr-9',
+                    rounded,
+                    isError ? 'border-red-500' : 'border-gray-300',
+                    disabled ? 'bg-gray-100' : ''
                   )}
-                  <HUICombobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-                    <ChevronDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
-                  </HUICombobox.Button>
-                </div>
-
-                {options?.data && options.data.length > 0 && (
-                  <HUICombobox.Options
-                    className={classNames(
-                      'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
-                      position === 'top' ? 'bottom-full' : 'top-full'
-                    )}
+                />
+                {field.value && !disabled && (
+                  <div
+                    onClick={handleClear}
+                    className="absolute mr-7 inset-y-0 right-0 flex items-center rounded-r-md px-1 focus:outline-none cursor-pointer text-gray-200  hover:text-red-500"
                   >
-                    {options.data.map(item => (
-                      <HUICombobox.Option
-                        key={item.uid}
-                        value={item}
-                        className={({ active }) =>
-                          classNames(
-                            'relative cursor-default select-none py-2 pl-3 pr-9',
-                            active ? 'bg-primary-500 text-white' : 'text-gray-900'
-                          )
-                        }
-                      >
-                        {({ active }) => {
-                          const selected = field.value?.uid === item.uid
-                          return (
-                            <>
-                              <span className={classNames('block truncate', selected && 'font-semibold')}>
-                                {item.name}
-                              </span>
-                              {selected && (
-                                <span
-                                  className={classNames(
-                                    'absolute inset-y-0 right-0 flex items-center pr-4',
-                                    active ? 'text-white' : 'text-primary-500'
-                                  )}
-                                >
-                                  <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                </span>
-                              )}
-                            </>
-                          )
-                        }}
-                      </HUICombobox.Option>
-                    ))}
-                  </HUICombobox.Options>
+                    <XMarkIcon className="h-5 w-5 " aria-hidden="true" />
+                  </div>
                 )}
-              </HUICombobox>
-            </div>
+                <HUICombobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+                  <ChevronDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
+                </HUICombobox.Button>
+              </div>
+
+              {options?.data && options.data.length > 0 && (
+                <HUICombobox.Options
+                  className={classNames(
+                    'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
+                    position === 'top' ? 'bottom-full' : 'top-full'
+                  )}
+                >
+                  {options.data.map(item => (
+                    <HUICombobox.Option
+                      key={item.uid}
+                      value={item}
+                      className={({ active }) =>
+                        classNames(
+                          'relative cursor-default select-none py-2 pl-3 pr-9',
+                          active ? 'bg-primary-500 text-white' : 'text-gray-900'
+                        )
+                      }
+                    >
+                      {({ active }) => {
+                        const selected = field.value?.uid === item.uid
+                        return (
+                          <>
+                            <span className={classNames('block truncate', selected && 'font-semibold')}>
+                              {item.name}
+                            </span>
+                            {selected && (
+                              <span
+                                className={classNames(
+                                  'absolute inset-y-0 right-0 flex items-center pr-4',
+                                  active ? 'text-white' : 'text-primary-500'
+                                )}
+                              >
+                                <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                              </span>
+                            )}
+                          </>
+                        )
+                      }}
+                    </HUICombobox.Option>
+                  ))}
+                </HUICombobox.Options>
+              )}
+            </HUICombobox>
             {hasAddPermission && (
               <PlusButton
                 primary
@@ -167,7 +162,7 @@ const Combobox = ({
                 onClick={() => setOpen(true)}
               />
             )}
-          </div>
+          </>
         )}
       />
       {getFormModal()}
