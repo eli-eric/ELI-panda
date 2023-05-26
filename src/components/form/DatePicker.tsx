@@ -37,7 +37,7 @@ const DateInput = <T extends FieldValues>({
       const defaultOption = moment(defaultValues[name]).toDate()
       setStartDate(defaultOption)
     }
-  }, [defaultValues, name])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Controller
