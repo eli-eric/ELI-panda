@@ -13,6 +13,7 @@ import {
 } from 'react-hook-form'
 
 import { classNames } from '@/helpers'
+import type { CodebookFilter } from '@/hooks/fetch/useCodebook'
 import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
@@ -28,6 +29,7 @@ type ComboboxProps<T extends FieldValues> = FieldProps &
     position?: 'top' | 'bottom'
     limit?: number
     showAddButton?: boolean
+    filter?: CodebookFilter[]
   }
 
 const ComboboxComponent = <T extends FieldValues>({
@@ -42,7 +44,8 @@ const ComboboxComponent = <T extends FieldValues>({
   limit = 10,
   position = 'bottom',
   rounded = 'rounded-md',
-  showAddButton = false
+  showAddButton = false,
+  filter
 }: ComboboxProps<T>) => {
   const {
     setValue,
@@ -51,7 +54,7 @@ const ComboboxComponent = <T extends FieldValues>({
   } = useFormContext<T>()
   const [query, setQuery] = useState<string>('')
   const [selectedItem, setSelectedItem] = useState<CodebookType | null>(null)
-  const data = useCodebook(codebook, `?searchText=${query}&limit=${limit}`)
+  const data = useCodebook(codebook, { limit, filter, searchText: query })
   const [showButton, setShowButton] = useState<boolean>(false)
   const { data: session } = useSession()
 
@@ -77,7 +80,7 @@ const ComboboxComponent = <T extends FieldValues>({
       const showButton = session.user.roles.includes(data.metadata.roleEdit)
       setShowButton(showButton)
     }
-  }, [data, session])
+  }, [data, session]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Fragment>
