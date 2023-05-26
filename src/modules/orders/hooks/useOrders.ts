@@ -1,5 +1,3 @@
-import { useRouter } from 'next/router'
-
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
 
@@ -7,7 +5,6 @@ import type { OrderListResponse } from '../types'
 import useQueryManager from './useQueryManager'
 
 const useOrders = () => {
-  const router = useRouter()
   const query = useQueryManager()
   const { orders } = useEndpoint({ ...query })
   const { response, loading, error, mutate } = useFetch<OrderListResponse>({
