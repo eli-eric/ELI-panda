@@ -43,7 +43,8 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
 
   const uid = router.query.uid as string
   const { renderSearchBar, searchValue } = useSearch({
-    renderEnd: () => <ViewControl setView={setView} view={view} />
+    renderEnd: () => <ViewControl setView={setView} view={view} />,
+    tableId: 'systems'
   })
 
   const { getEditButton, getAddButton } = useSystemEdit({ systemDetail: systemDetail })

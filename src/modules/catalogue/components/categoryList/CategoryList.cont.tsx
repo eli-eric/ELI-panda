@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import ErrorPage from '@/components/error/ErrorPage'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 
-import useCategoryList from '../hooks/useCategoryList'
+import useCategoryList from '../../hooks/useCategoryList'
 import CategoryItemComponent from './CategoryItem.comp'
 
 const CategoryListContainer = () => {

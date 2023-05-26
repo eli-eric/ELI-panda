@@ -9,8 +9,9 @@ export default function useQueryManager(tableId: string) {
   const router = useRouter()
   const { instances } = useTableStateStore()
   //TODO: filters
-  const sorting = instances[tableId]?.sortByQueryString
+  const sorting = instances[tableId]?.sortByQueryString || ''
   const pagination = instances[tableId]?.pagination || '{"page":1,"pageSize":50}'
+  const search = instances[tableId]?.search || ''
 
   const filter = useCallback(() => instances[tableId]?.filter || {}, [instances, tableId])
 
@@ -19,8 +20,8 @@ export default function useQueryManager(tableId: string) {
   useEffect(() => {
     if (router.isReady) {
       const newQuery: OrdersQuery = { pagination, ...filter() }
-      if (router.query.search) {
-        newQuery.search = router.query.search as string
+      if (router.query.search || search) {
+        newQuery.search = (router.query.search as string) || search
         if (sorting) {
           newQuery.sorting = sorting
         }
@@ -30,7 +31,7 @@ export default function useQueryManager(tableId: string) {
 
       setQuery(newQuery)
     }
-  }, [router.query.search, sorting, pagination, filter, router.isReady])
+  }, [router.query.search, sorting, pagination, filter, router.isReady, search])
 
   return { query }
 }

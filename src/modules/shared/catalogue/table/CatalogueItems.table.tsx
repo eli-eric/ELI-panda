@@ -1,25 +1,30 @@
 import { useEffect } from 'react'
+import type { Column } from 'react-table'
 
 import useGeneralTable from '@/hooks/table/useGeneralTable'
 import usePagination from '@/hooks/table/usePagination'
+import useCatalogueItems from '@/modules/catalogue/hooks/useCatalogueItems'
+import useCategoryList from '@/modules/catalogue/hooks/useCategoryList'
 import type { CatalogueItem } from '@/types/responses'
 
-import useCatalogueItems from '../../hooks/useCatalogueItems'
-import useCategoryList from '../../hooks/useCategoryList'
 import useCatalogueItemsColumns from './CatalogueItems.columns'
 
-const useCatalogueItemsTable = () => {
+const useCatalogueTable = (pageSizeDefault?: number, additionalColumn?: Column<CatalogueItem>, useQuery?: boolean) => {
   const { catalogueItems, loading } = useCatalogueItems()
   const { categoryList } = useCategoryList()
 
   const { getPaginationComponent } = usePagination({
-    useQuery: true,
+    useQuery: useQuery ?? true,
     tableId: 'catalogueItems',
     total: catalogueItems?.totalCount,
-    pageSizeDefault: 50
+    pageSizeDefault: pageSizeDefault || 50
   })
 
   const columns = useCatalogueItemsColumns()
+
+  if (additionalColumn) {
+    columns.splice(0, 0, additionalColumn)
+  }
 
   const { getTable, toggleHideColumn } = useGeneralTable<CatalogueItem>({
     tableId: 'catalogueItems',
@@ -44,4 +49,4 @@ const useCatalogueItemsTable = () => {
   return { getTable, getPaginationComponent }
 }
 
-export default useCatalogueItemsTable
+export default useCatalogueTable
