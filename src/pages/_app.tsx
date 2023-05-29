@@ -44,7 +44,7 @@ const GlobalProvider = ({ children }: Props) => {
 }
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
-  <SessionProvider session={session}>
+  <SessionProvider session={session} refetchOnWindowFocus={false}>
     <GlobalProvider>
       <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 3000 }}>
         {t => <Notification t={t} />}
