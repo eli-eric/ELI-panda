@@ -49,7 +49,7 @@ const ComboboxDeprecated = <T extends FieldValues>({
     control,
     formState: { defaultValues }
   } = useFormContext<T>()
-  const [query, setQuery] = useState<string>('')
+  const [query, setQuery] = useState<string>(defaultValues?.[name] || '')
   const [selectedItem, setSelectedItem] = useState<CodebookType | null>(null)
   const data = useCodebook(codebook, `?searchText=${query}&limit=${limit}`)
   const [showButton, setShowButton] = useState<boolean>(false)
