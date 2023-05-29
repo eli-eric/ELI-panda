@@ -37,13 +37,7 @@ const useCatalogueTable = (pageSizeDefault?: number, additionalColumn?: Column<C
   })
 
   useEffect(() => {
-    if (categoryList) {
-      if (!categoryList || categoryList.length === 0) {
-        toggleHideColumn('categoryName', true)
-      } else {
-        toggleHideColumn('categoryName', false)
-      }
-    }
+    toggleHideColumn('categoryName', !categoryList || categoryList.length === 0)
   }, [categoryList]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return { getTable, getPaginationComponent }
