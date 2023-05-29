@@ -3,24 +3,25 @@ import { useCallback, useEffect, useState } from 'react'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
-import type { OrdersQuery } from '../types'
+import type { OrdersQuery } from '../modules/orders/types'
 
-export default function useQueryManager() {
+export default function useQueryManager(tableId: string) {
   const router = useRouter()
   const { instances } = useTableStateStore()
   //TODO: filters
-  const sorting = instances['orders']?.sortByQueryString
-  const pagination = instances['orders']?.pagination || '{"page":1,"pageSize":50}'
+  const sorting = instances[tableId]?.sortByQueryString || ''
+  const pagination = instances[tableId]?.pagination || '{"page":1,"pageSize":50}'
+  const search = instances[tableId]?.search || ''
 
-  const filter = useCallback(() => instances['orders']?.filter || {}, [instances])
+  const filter = useCallback(() => instances[tableId]?.filter || {}, [instances, tableId])
 
   const [query, setQuery] = useState<OrdersQuery>({ pagination })
 
   useEffect(() => {
     if (router.isReady) {
       const newQuery: OrdersQuery = { pagination, ...filter() }
-      if (router.query.search) {
-        newQuery.search = router.query.search as string
+      if (router.query.search || search) {
+        newQuery.search = (router.query.search as string) || search
         if (sorting) {
           newQuery.sorting = sorting
         }
@@ -30,7 +31,7 @@ export default function useQueryManager() {
 
       setQuery(newQuery)
     }
-  }, [router.query.search, sorting, pagination, filter, router.isReady])
+  }, [router.query.search, sorting, pagination, filter, router.isReady, search])
 
   return { query }
 }

@@ -37,14 +37,15 @@ const useGeneralTable = <T extends object>({
   isSortable = false,
   tableId
 }: UseTableType<T>) => {
-  const { instances, setSortBy, setSortByQueryString } = useTableStateStore()
-  const sortByInstance = instances[tableId]?.sortBy
+  const { setSortBy, setSortByQueryString } = useTableStateStore()
+  //const sortByInstance = instances[tableId]?.sortBy
   const [sortByQuery, setSortByQuery] = useQueryState('sortBy', { history: 'replace' })
 
   const {
     headerGroups,
     getTableProps,
     getTableBodyProps,
+    toggleHideColumn,
     footerGroups,
     rows,
     prepareRow,
@@ -189,17 +190,17 @@ const useGeneralTable = <T extends object>({
             </table>
           </div>
           {loading && <ProgressBarComponent />}
+          {data?.length === 0 && (
+            <div className="flex align-middle justify-center mt-10">
+              <EmptyResults />
+            </div>
+          )}
         </div>
-        {data?.length === 0 && (
-          <div className="flex align-middle justify-center mt-10">
-            <EmptyResults />
-          </div>
-        )}
       </div>
     </Fragment>
   )
 
-  return { getTable }
+  return { getTable, toggleHideColumn }
 }
 
 export default useGeneralTable

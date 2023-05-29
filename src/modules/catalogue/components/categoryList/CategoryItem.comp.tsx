@@ -1,17 +1,15 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import type { Dispatch, SetStateAction } from 'react'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useImage } from '@/hooks/useImage'
+import { useImage } from '@/hooks/fetch/useImage'
 import { useCategoryEdit } from '@/modules/catalogue/hooks/useCategoryEdit'
 import { PATH } from '@/types/constants/paths'
 import type { CatalogueCategoryResponse } from '@/types/responses'
 
 interface Props {
   category: CatalogueCategoryResponse
-  setCatalogueParentUid: Dispatch<SetStateAction<string | undefined>>
 }
 
 const CategoryItemComponent = ({ category }: Props) => {
@@ -25,7 +23,7 @@ const CategoryItemComponent = ({ category }: Props) => {
   })
   const path = PATH.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
   return (
-    <div className="flex-row justify-between relative flex z-10 items-center space-x-3 rounded-lg border border-gray-300 bg-white shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
+    <div className="flex-row justify-between relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
       <Link
         href={{
           pathname: path,

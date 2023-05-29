@@ -4,10 +4,9 @@ import { Fragment } from 'react'
 import ItemDetailComponent from '@/components/item-detail/ItemDetail.comp'
 import ItemProperty from '@/components/item-property/ItemProperty'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useFetch from '@/hooks/fetch/useFetch'
+import { useImage } from '@/hooks/fetch/useImage'
 import { message } from '@/i18n/src/messages'
 import type { SystemDetailResponse } from '@/modules/systems/types/responses'
-import { useImage } from '@/hooks/useImage'
 
 const messages = message.systemsPage.systemDetail.form
 

@@ -1,5 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import moment from 'moment'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
 import uuid from 'react-uuid'
 
@@ -24,12 +23,11 @@ const useOrderForm = () => {
       orderLines:
         orderDetail?.orderLines &&
         orderDetail?.orderLines.map(orderLine => ({ ...orderLine, id: orderLine.uid || uuid() })),
-      orderDate: orderDetail?.orderDate
-        ? moment(orderDetail.orderDate).utcOffset('+02:00').format('YYYY-MM-DD')
-        : moment().format('YYYY-MM-DD'),
+      orderDate: orderDetail?.orderDate,
       orderStatus: orderDetail?.orderStatus || { uid: 'c5ef9d00-ac38-44c1-b48a-fde0d7095c54', name: 'Requested' }
     }
   })
+
   const { control, formState, handleSubmit } = formMethods
 
   // form notifications

@@ -23,6 +23,7 @@ type PaginationResponse = {
   pageSize: number
 }
 
+//TODO: clean up this mess
 const usePagination = ({
   dependecies,
   useQuery,
@@ -35,7 +36,7 @@ const usePagination = ({
   const [totalCount, setTotalCount] = useState<number | undefined>(total)
   const [pageNumbers, setPageNumbers] = useState<number | undefined>()
   const { setPagination } = useTableStateStore()
-  const [queryPage, setQueryPage] = useQueryState('page')
+  const [queryPage, setQueryPage] = useQueryState('page') //eslint-disable-line
 
   const previousPageHandler = useCallback(() => {
     setPage(prev => prev - 1)

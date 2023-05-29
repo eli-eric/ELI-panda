@@ -18,7 +18,7 @@ interface useFormModalProps<T> {
   onSubmit: (data: T) => void
 
   defaultValues?: DeepPartial<T>
-
+  loading?: boolean
   schema?: any
   error?: boolean
 }
@@ -28,6 +28,7 @@ const useFormModal = <T extends FieldValues>({
   renderOutsideForm,
   onSubmit,
   error = false,
+  loading = false,
   defaultValues,
   schema
 }: useFormModalProps<T>) => {
@@ -47,7 +48,7 @@ const useFormModal = <T extends FieldValues>({
   const modalButtons: ModalButtons = {
     goNext: {
       text: messages.save,
-      loading: formState.isSubmitting,
+      loading: formState.isSubmitting || loading,
       type: 'button',
       onClick: handleSubmit(onSubmit)
     },

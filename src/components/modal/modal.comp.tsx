@@ -13,7 +13,7 @@ interface Props {
   buttons?: ModalButtons
 }
 
-export default function ModalComponent({ open, setOpen, children, testid, buttons }: Props) {
+export default function ModalComponent({ open, children, testid, buttons }: Props) {
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-40" onClose={() => {}} unmount={false}>

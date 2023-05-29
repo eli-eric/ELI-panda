@@ -15,7 +15,7 @@ import { createMessageValues } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useSubmit from '@/hooks/fetch/useSubmit'
 import useFormModal from '@/hooks/form/useFormModal'
-import useRolePermission from '@/hooks/useRole'
+import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
 import { ROLE } from '@/types/constants/roles'
@@ -102,7 +102,7 @@ export const OrderisDeliveredAction = ({
   const { enabled, toggle, Toggle } = useToggle(checked)
   const uid = useRouter().query.uid as string
   const { orderLineDelivery } = useEndpoint({ uid: uid, itemUid: orderLine.uid })
-  const hasRole = useRolePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
+  const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
   const { formatMessage } = useIntl()
 
   const { submit } = useSubmit<OrderLineFormType>({
