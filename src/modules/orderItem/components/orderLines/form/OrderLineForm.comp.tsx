@@ -8,7 +8,6 @@ import ListBox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
 import { Col, Grid } from '@/components/grid/Grid'
 import Divider from '@/components/layout/Divider'
-import { Tooltip } from '@/components/tooltip.comp'
 import type { CodebookFilter } from '@/hooks/fetch/useCodebook'
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
@@ -108,10 +107,12 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
       <Col md={orderLine?.uid ? 6 : 12} lg={orderLine?.uid ? 6 : 12}>
         {orderLine?.uid ? (
           <div className="flex flex-row">
-            <div className="self-end mr-2 mb-1 flex-none">
-              <Tooltip content="Show only technological units">
-                <TechUnitToogle onChange={techUnitToogle} enabled={techUnitEnabled} />
-              </Tooltip>
+            <div
+              className="self-end mr-2 mb-1 flex-none"
+              data-tooltip-id="tooltip"
+              data-tooltip-content="Show only technological units"
+            >
+              <TechUnitToogle onChange={techUnitToogle} enabled={techUnitEnabled} />
             </div>
             <div className="flex-1 w-full">
               <ComboboxComponent
