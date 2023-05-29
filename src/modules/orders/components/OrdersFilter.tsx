@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDebounce } from 'usehooks-ts'
 
-import ComboboxComponent from '@/components/form/Combobox'
+import Combobox from '@/components/form/Combobox'
 import ListBox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import { message } from '@/i18n/src/messages'
 import useTableStateStore from '@/store/useTableStateStore'
 import { CODEBOOK } from '@/types/constants/codebook'
 
@@ -21,6 +22,8 @@ type OrdersFilter = {
 
 //TODO: 1. Create a new file in src/hooks/table/useOrdersFilter.tsx
 //TODO: 2. Refactor the code to use the new useQueryState hook
+
+const ordersFilterMessages = message.ordersPage.orderDetail.form
 
 const useOrdersFilter = () => {
   const [querySupplier, setQuerySupplier] = useQueryState('supplier')
@@ -103,13 +106,7 @@ const useOrdersFilter = () => {
             />
           </Col>
           <Col>
-            <ComboboxComponent
-              register={form.register}
-              name="supplier"
-              placeholder="Supplier"
-              codebook={CODEBOOK.SUPPLIER}
-              isObject={true}
-            />
+            <Combobox name="supplier" placeholder={ordersFilterMessages.supplier.label} codebook={CODEBOOK.SUPPLIER} />
           </Col>
           <Col>
             <ListBox
@@ -123,12 +120,10 @@ const useOrdersFilter = () => {
             />
           </Col>
           <Col>
-            <ComboboxComponent
-              register={form.register}
+            <Combobox
               name="requestor"
-              placeholder="Requestor"
+              placeholder={ordersFilterMessages.requestor.label}
               codebook={CODEBOOK.EMPLOYEE}
-              isObject={true}
             />
           </Col>
         </Grid>

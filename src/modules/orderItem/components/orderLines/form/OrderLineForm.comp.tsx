@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import ComboboxComponent from '@/components/form/Combobox'
+import Combobox from '@/components/form/Combobox'
 import { Input, InputAmount } from '@/components/form/Input'
 import ListBox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
@@ -9,11 +9,12 @@ import { Col, Grid } from '@/components/grid/Grid'
 import Divider from '@/components/layout/Divider'
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
+import { CODEBOOK } from '@/types/constants/codebook'
 import type { CatalogueItem } from '@/types/responses'
 
 import useOrderLineFormFields from './OrderLineForm.fields'
 
-const messages = message.ordersPage.orderLines.formHeadings
+const messages = message.ordersPage.orderLines
 
 interface Props {
   orderLine?: OrderLineFormType
@@ -56,7 +57,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
   return (
     <Grid>
       <Col sm="full">
-        <Divider text={messages.itemInfo}>
+        <Divider text={messages.formHeadings.itemInfo}>
           {!orderLine?.uid && (
             <Col sm={1}>
               <Toggle enabled={enabled} onChange={toggle} />
@@ -88,20 +89,28 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
         </Col>
       )}
       <Col sm="full">
-        <Divider text={messages.systemInfo} />
+        <Divider text={messages.formHeadings.systemInfo} />
       </Col>
       <Col md={orderLine?.uid ? 6 : 12} lg={orderLine?.uid ? 6 : 12}>
-        <ComboboxComponent {...formFields.system} isObject={true} limit={50} position="top" />
+        <Combobox
+          name="system"
+          label={messages.form.systemName.label}
+          placeholder={messages.form.systemName.placeholder}
+          position="top"
+          codebook={CODEBOOK.SYSTEM}
+          limit={50}
+        />
       </Col>
       {orderLine?.uid && (
         <Col md={6} lg={6}>
-          <ComboboxComponent
-            {...formFields.location}
-            isObject
+          <Combobox
+            name="location"
+            label={messages.form.location.label}
+            placeholder={messages.form.location.placeholder}
+            codebook={CODEBOOK.LOCATION}
             position="top"
             limit={50}
             disabled={locationEnable}
-            className="col-span-3 md:col-span-6"
           />
         </Col>
       )}
