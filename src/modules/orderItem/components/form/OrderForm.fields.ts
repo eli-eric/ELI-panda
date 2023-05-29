@@ -2,7 +2,6 @@ import { useFormContext } from 'react-hook-form'
 
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
-import { CODEBOOK } from '@/types/constants/codebook'
 
 import useOrderDetail from '../../hooks/useOrderDetail'
 import type { OrderDetailFormType } from '../../types'
@@ -47,41 +46,41 @@ const useOrderFormFields = () => {
       isError: !!formState.errors.atLeastOneFilled,
       rounded: 'rounded-md'
     },
-    supplier: {
-      name: 'supplier',
-      label: form.supplier.label,
-      placeholder: form.supplier.placeholder,
-      disabled: disabled,
-      isError: !!formState.errors.supplier,
-      rounded: 'rounded-md',
-      codebook: CODEBOOK.SUPPLIER
-    },
-    procurementResponsible: {
-      name: 'procurementResponsible',
-      label: form.procurementResponsible.label,
-      disabled: disabled,
-      isError: !!formState.errors.procurementResponsible,
-      rounded: 'rounded-md',
-      emptyOption: true,
-      codebook: CODEBOOK.PROCUREMENTER
-    },
-    requestor: {
-      name: 'requestor',
-      label: form.requestor.label,
-      placeholder: form.requestor.placeholder,
-      disabled: disabled,
-      isError: !!formState.errors.requestor,
-      rounded: 'rounded-md',
-      codebook: CODEBOOK.EMPLOYEE
-    },
-    orderStatus: {
-      name: 'orderStatus',
-      label: form.orderStatus.label,
-      disabled: disabled,
-      isError: !!formState.errors.orderStatus,
-      rounded: 'rounded-md',
-      codebook: CODEBOOK.ORDER_STATUS
-    },
+    // supplier: {
+    //   name: 'supplier',
+    //   label: form.supplier.label,
+    //   placeholder: form.supplier.placeholder,
+    //   disabled: disabled,
+    //   isError: !!formState.errors.supplier,
+    //   rounded: 'rounded-md',
+    //   codebook: CODEBOOK.SUPPLIER
+    // },
+    // procurementResponsible: {
+    //   name: 'procurementResponsible',
+    //   label: form.procurementResponsible.label,
+    //   disabled: disabled,
+    //   isError: !!formState.errors.procurementResponsible,
+    //   rounded: 'rounded-md',
+    //   emptyOption: true,
+    //   codebook: CODEBOOK.PROCUREMENTER
+    // },
+    // requestor: {
+    //   name: 'requestor',
+    //   label: form.requestor.label,
+    //   placeholder: form.requestor.placeholder,
+    //   disabled: disabled,
+    //   isError: !!formState.errors.requestor,
+    //   rounded: 'rounded-md',
+    //   codebook: CODEBOOK.EMPLOYEE
+    // },
+    // orderStatus: {
+    //   name: 'orderStatus',
+    //   label: form.orderStatus.label,
+    //   disabled: disabled,
+    //   isError: !!formState.errors.orderStatus,
+    //   rounded: 'rounded-md',
+    //   codebook: CODEBOOK.ORDER_STATUS
+    // },
     notes: {
       name: 'notes',
       label: form.notes.label,

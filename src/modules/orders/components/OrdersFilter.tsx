@@ -4,7 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { useDebounce } from 'usehooks-ts'
 
 import Combobox from '@/components/form/Combobox'
-import ListBox from '@/components/form/Listbox'
+import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { message } from '@/i18n/src/messages'
@@ -96,27 +96,24 @@ const useOrdersFilter = () => {
       <form className="max-[1250px]:hidden w-[1000px] flex gap-x-2">
         <Grid>
           <Col>
-            <ListBox
-              register={form.register}
+            <Listbox
               name="orderStatus"
-              placeholder="Order Status"
+              placeholder={ordersFilterMessages.orderStatus.label}
               codebook={CODEBOOK.ORDER_STATUS}
-              emptyOption={true}
-              emptyOptionName="All Order statuses"
+              allowEmptyOption={true}
+              emptyOption="All Order statuses"
             />
           </Col>
           <Col>
             <Combobox name="supplier" placeholder={ordersFilterMessages.supplier.label} codebook={CODEBOOK.SUPPLIER} />
           </Col>
           <Col>
-            <ListBox
-              register={form.register}
+            <Listbox
               name="procurementResponsible"
-              className="min-w-100"
-              placeholder="Procurement Responsible"
+              placeholder={ordersFilterMessages.procurementResponsible.label}
               codebook={CODEBOOK.PROCUREMENTER}
-              emptyOption={true}
-              emptyOptionName="All Procurement Responsibles"
+              allowEmptyOption={true}
+              emptyOption="All Procurement Responsibles"
             />
           </Col>
           <Col>

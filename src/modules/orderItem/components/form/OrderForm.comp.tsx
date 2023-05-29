@@ -3,12 +3,13 @@ import { useRouter } from 'next/router'
 import Combobox from '@/components/form/Combobox'
 import DateInput from '@/components/form/DatePicker'
 import { Input, TextArea } from '@/components/form/Input'
-import ListBox from '@/components/form/Listbox'
+import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 
+import useOrderDetail from '../../hooks/useOrderDetail'
 import useOrderFormFields from './OrderForm.fields'
 
 const orderFormMessages = message.ordersPage.orderDetail.form
@@ -16,6 +17,7 @@ const orderFormMessages = message.ordersPage.orderDetail.form
 const OrderFormComponent = () => {
   const fields = useOrderFormFields()
   const uid = useRouter().query.uid as string
+  const { disabledEdit } = useOrderDetail()
 
   return (
     <Card>
@@ -37,10 +39,17 @@ const OrderFormComponent = () => {
             codebook={CODEBOOK.SUPPLIER}
             limit={50}
             showAddButton={true}
+            disabled={disabledEdit}
           />
         </Col>
         <Col lg={6}>
-          <ListBox {...fields.procurementResponsible} isObject={true} />
+          <Listbox
+            name="procurementResponsible"
+            label={orderFormMessages.procurementResponsible.label}
+            codebook={CODEBOOK.EMPLOYEE}
+            allowEmptyOption={true}
+            disabled={disabledEdit}
+          />
         </Col>
         <Col lg={6}>
           <Combobox
@@ -48,10 +57,16 @@ const OrderFormComponent = () => {
             label={orderFormMessages.requestor.label}
             codebook={CODEBOOK.EMPLOYEE}
             limit={50}
+            disabled={disabledEdit}
           />
         </Col>
         <Col>
-          <ListBox {...fields.orderStatus} />
+          <Listbox
+            name="orderStatus"
+            label={orderFormMessages.orderStatus.label}
+            codebook={CODEBOOK.ORDER_STATUS}
+            disabled={disabledEdit}
+          />
         </Col>
         <Col>
           <Input {...fields.requestNumber} />

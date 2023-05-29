@@ -29,7 +29,6 @@ const Combobox = ({
   placeholder,
   label,
   disabled,
-  isError,
   className,
   limit = 10,
   position = 'bottom',
@@ -70,7 +69,7 @@ const Combobox = ({
       <Controller
         name={name}
         control={control}
-        render={({ field }) => (
+        render={({ field, formState }) => (
           <>
             <HUICombobox
               as="div"
@@ -93,7 +92,7 @@ const Combobox = ({
                     'px-3 py-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full appearance-none text-left truncate',
                     field.value && !disabled ? 'pr-14' : 'pr-9',
                     rounded,
-                    isError ? 'border-red-500' : 'border-gray-300',
+                    formState.errors?.[name] ? 'border-red-500' : 'border-gray-300',
                     disabled ? 'bg-gray-100' : ''
                   )}
                 />

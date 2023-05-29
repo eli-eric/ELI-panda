@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form'
 
 import Combobox from '@/components/form/Combobox'
 import { Input, InputAmount } from '@/components/form/Input'
-import ListBox from '@/components/form/Listbox'
+import Listbox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
 import { Col, Grid } from '@/components/grid/Grid'
 import Divider from '@/components/layout/Divider'
@@ -76,7 +76,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
         <InputAmount {...formFields.price} />
       </Col>
       <Col lg={!orderLine?.id || orderLine?.uid ? 4 : 6} md={6}>
-        <ListBox {...formFields.itemUsage} position="top" />
+        <Listbox name="itemUsage" label={messages.form.itemUsage.label} codebook={CODEBOOK.ITEM_USAGE} position="top" />
       </Col>
       {!orderLine?.id && (
         <Col md={6} lg={4}>
