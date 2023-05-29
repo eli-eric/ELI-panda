@@ -2,11 +2,14 @@ import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
+import type { Row } from 'react-table'
 
 import { DeleteButton, EditButton } from '@/components/Buttons'
 import { Heading } from '@/components/card/card.comp'
+import CheckBox from '@/components/form/CheckBox'
 import { Input } from '@/components/form/Input'
 import { useToggle } from '@/components/form/Switch'
+import { Col, Grid } from '@/components/grid/Grid'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { createMessageValues } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
@@ -19,8 +22,6 @@ import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
 import useOrderLineForm from '../form/OrderLineForm.cont'
-import { Row } from 'react-table'
-import { Col, Grid } from '@/components/grid/Grid'
 
 const messages = message.common.buttons
 
@@ -121,11 +122,16 @@ export const OrderisDeliveredAction = ({
       toast.error(err.message)
     }
   })
-  const { getFormModal, setOpen, formMethods } = useFormModal<{ serialNumber?: string; eun?: string }>({
-    renderForm: () => (
-      <Grid>
-        {!orderLine.serialNumber && (
-          <Col md={6}>
+  const { getFormModal, setOpen, formMethods } = useFormModal<{
+    serialNumber?: string
+    eun?: string
+    manualEun: boolean
+  }>({
+    renderForm: () => {
+      const manualEun = formMethods.watch('manualEun')
+      return (
+        <Grid>
+          <Col md={12}>
             <Input
               register={formMethods.register}
               name="serialNumber"
@@ -135,18 +141,29 @@ export const OrderisDeliveredAction = ({
               defaultValue={undefined}
             />
           </Col>
-        )}
-        <Col md={orderLine.serialNumber ? 12 : 6}>
-          <Input
-            register={formMethods.register}
-            name="eun"
-            label={formatMessage({ id: orderLines.form.eun.label })}
-            placeholder={formatMessage({ id: orderLines.form.eun.placeholder })}
-            rounded="rounded-md"
-          />
-        </Col>
-      </Grid>
-    ),
+
+          <Col md={12}>
+            <CheckBox
+              register={formMethods.register}
+              name="manualEun"
+              label={formatMessage({ id: orderLines.form.manualEun.label })}
+              rounded="rounded-md"
+            />
+          </Col>
+          {manualEun && (
+            <Col md={12}>
+              <Input
+                register={formMethods.register}
+                name="eun"
+                label={formatMessage({ id: orderLines.form.eun.label })}
+                placeholder={formatMessage({ id: orderLines.form.eun.placeholder })}
+                rounded="rounded-md"
+              />
+            </Col>
+          )}
+        </Grid>
+      )
+    },
     renderOutsideForm: () => <Heading text="Fill missing Serial Number" />,
     onSubmit: data => {
       submit({ serialNumber: data?.serialNumber, isDelivered: !enabled, eun: data?.eun || undefined })
@@ -154,7 +171,7 @@ export const OrderisDeliveredAction = ({
   })
 
   const handleCheck = () => {
-    !orderLine.isDelivered ? setOpen(true) : submit({ isDelivered: !enabled })
+    !orderLine.isDelivered && !orderLine.serialNumber ? setOpen(true) : submit({ isDelivered: !enabled })
   }
 
   return (
