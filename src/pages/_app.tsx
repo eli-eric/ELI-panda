@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
 import { Toaster } from 'react-hot-toast'
 import { IntlProvider } from 'react-intl'
+import { Tooltip } from 'react-tooltip'
 import { messages } from 'src/i18n/src'
 import { SWRConfig } from 'swr'
 
@@ -38,6 +39,13 @@ const GlobalProvider = ({ children }: Props) => {
       <IntlProvider locale={locale} messages={messages['en']}>
         <NavigationComponent />
         {children}
+        <Tooltip
+          id="tooltip"
+          style={{
+            maxWidth: 200,
+            zIndex: 9999
+          }}
+        />
       </IntlProvider>
     </SWRConfig>
   )

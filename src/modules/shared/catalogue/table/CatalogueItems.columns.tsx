@@ -7,7 +7,6 @@ import { useIntl } from 'react-intl'
 import type { CellProps } from 'react-table'
 import { type Column } from 'react-table'
 
-import TooltipComponent from '@/components/tooltip.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useImage } from '@/hooks/fetch/useImage'
 import { message } from '@/i18n/src/messages'
@@ -42,9 +41,7 @@ const Name = ({
 const Description = ({ value }: CellProps<CatalogueItem>) => (
   <Fragment>
     {value && (
-      <TooltipComponent text={value}>
-        <InformationCircleIcon className="h-8 w-8 flex-shrink-0" />
-      </TooltipComponent>
+      <InformationCircleIcon className="h-8 w-8 flex-shrink-0" data-tooltip-id="tooltip" data-tooltip-content={value} />
     )}
   </Fragment>
 )
