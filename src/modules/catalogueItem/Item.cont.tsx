@@ -1,36 +1,18 @@
-import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
-import useSWR from 'swr'
 
 import ItemPropertyTitle from '@/components/item-property/item-property-title.comp'
 import ItemPropertyValue from '@/components/item-property/item-property-value.comp'
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useImage } from '@/hooks/fetch/useImage'
 import { message } from '@/i18n/src/messages'
-import type { CatalogueItem } from '@/types/responses'
 
 import ImageGalleryComponent from '../../components/item-detail/ImageGallery'
 import ItemPropertiesComponent from './default-properties/item-properties.comp'
+import useItem from './hooks/useItem'
 
 const messages = message.cataloguePage.itemList.header
 
-interface Props {
-  uid?: string
-}
-
-//TODO: Refactor with general component
-
-const ItemDetailComponent = ({ uid }: Props) => {
-  const router = useRouter()
-  const { data: session } = useSession()
-  const catalogueUid = (router.query.uid as string) || uid
+const ItemContainer = () => {
   const [groups, setGroups] = useState<Array<string>>([])
-  const { catalogueItem, catalogueItemImage } = useEndpoint({
-    uid: catalogueUid
-  })
-  const { data: item } = useSWR<CatalogueItem>(session ? catalogueUid && catalogueItem : null)
-  const image = useImage(catalogueItemImage)
+  const { item, image } = useItem()
 
   useEffect(() => {
     if (item?.details) {
@@ -41,16 +23,15 @@ const ItemDetailComponent = ({ uid }: Props) => {
       setGroups(uniqueDetailGroups)
     }
   }, [item])
+
   return (
     <div className="bg-white pb-10">
       <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8 h-full overflow-auto">
         <div className="mx-auto max-w-2xl lg:max-w-none">
           <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
             <ImageGalleryComponent images={[image]} />
-
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 col-span-2">
               <h1 className="text-xl font-bold tracking-tight text-gray-900">{item?.name}</h1>
-
               <ItemPropertiesComponent item={item} groups={groups} description={item?.description} />
             </div>
           </div>
@@ -63,4 +44,4 @@ const ItemDetailComponent = ({ uid }: Props) => {
   )
 }
 
-export default ItemDetailComponent
+export default ItemContainer

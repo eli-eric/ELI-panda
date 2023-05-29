@@ -1,0 +1,27 @@
+import { useRouter } from 'next/router'
+
+import { BackButton, Button } from '@/components/Buttons'
+import Card from '@/components/layout/Card'
+import { message } from '@/i18n/src/messages'
+const messages = message.common.buttons
+
+const ItemDetailHeaderComponent = () => {
+  const router = useRouter()
+
+  const goBackHandler = () => {
+    router.back()
+  }
+
+  return (
+    <div className="sticky  top-0 z-20 flex h-16 flex-shrink-0 bg-white border-b">
+      <Card className="flex flex-1 justify-between">
+        <div className="flex items-center mr-2">
+          <BackButton className="mr-1" type="button" buttonSize="large" onClick={goBackHandler} />
+          <Button primary buttonSize="large" type="submit" text={messages.save} />
+        </div>
+      </Card>
+    </div>
+  )
+}
+
+export default ItemDetailHeaderComponent

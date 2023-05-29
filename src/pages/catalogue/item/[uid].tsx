@@ -7,8 +7,8 @@ import { message } from 'src/i18n/src/messages'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
-import ItemDetailHeaderComponent from '@/modules/catalogueItem/header/item-detail-header.comp'
-import ItemDetailComponent from '@/modules/catalogueItem/item-detail.comp'
+import ItemDetailHeaderComponent from '@/modules/catalogueItem/header/Header.comp'
+import ItemDetailComponent from '@/modules/catalogueItem/Item.cont'
 
 const messages = message.cataloguePage
 

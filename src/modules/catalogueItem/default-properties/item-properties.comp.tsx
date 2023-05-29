@@ -18,6 +18,7 @@ const ItemPropertiesComponent = ({ item, groups }: Props) => (
   <section aria-labelledby="details-heading">
     <div className="px-4 py-5 sm:px-6">
       <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+        {/* //TODO: Form of default params */}
         <ItemPropertyTitle title={messages.categoryName}>
           <ItemPropertyValue text={item?.categoryName} />{' '}
         </ItemPropertyTitle>
@@ -35,8 +36,9 @@ const ItemPropertiesComponent = ({ item, groups }: Props) => (
     {item?.details &&
       groups.map(group => (
         <DisclosureComponent key={group} title={group}>
-          <div key={group} className=" prose prose-sm border-t border-gray-200 px-4 py-5 sm:px-6">
-            <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+          {/* //TODO: Groups form  */}
+          <div className="px-4 py-5 sm:px-6">
+            <dl key={group} className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
               {item.details?.map(detail => {
                 if (detail.propertyGroup !== group) {
                   return
