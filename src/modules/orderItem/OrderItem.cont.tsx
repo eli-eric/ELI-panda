@@ -1,5 +1,6 @@
 import { Fragment, Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
+import ReactTooltip from 'react-tooltip'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import Card from '@/components/layout/Card'
@@ -35,6 +36,7 @@ const OrderItemContainer = () => {
           </Fragment>
         )}
       </Card>
+      <ReactTooltip id={'unit'} place="top" type="dark" effect="solid" />
     </Fragment>
   )
 }

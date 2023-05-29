@@ -48,7 +48,7 @@ const CatalogueItemSection = ({ uid }: { uid?: string }) => {
     submit({
       ...data,
       catalogueItemUID: catalogueItem?.uid,
-      obsolete: data.obsolete === 'true' ? true : false
+      obsolete: data.obsolete === 'true'
     })
   }
   const { getFormModal, setOpen } = useFormModal<SystemItemFormType>({

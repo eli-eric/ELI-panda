@@ -256,7 +256,8 @@ export const messages = {
         location: { label: 'Location', placeholder: 'Location' },
         itemUsage: { label: 'Item Usage' },
         serialNumber: { label: 'Serial Number', placeholder: 'Serial Number' },
-        eun: { label: 'EUN', placeholder: 'EUN' }
+        eun: { label: 'EUN', placeholder: 'EUN' },
+        manualEun: { label: 'Set EUN manually' }
       },
       orderLinesTable: {
         header: {
