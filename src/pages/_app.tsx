@@ -39,13 +39,6 @@ const GlobalProvider = ({ children }: Props) => {
       <IntlProvider locale={locale} messages={messages['en']}>
         <NavigationComponent />
         {children}
-        <Tooltip
-          id="tooltip"
-          style={{
-            maxWidth: 200,
-            zIndex: 9999
-          }}
-        />
       </IntlProvider>
     </SWRConfig>
   )
@@ -54,6 +47,13 @@ const GlobalProvider = ({ children }: Props) => {
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <SessionProvider session={session} refetchOnWindowFocus={false}>
     <GlobalProvider>
+      <Tooltip
+        id="tooltip"
+        style={{
+          maxWidth: 200,
+          zIndex: 9999
+        }}
+      />
       <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 3000 }}>
         {t => <Notification t={t} />}
       </Toaster>
