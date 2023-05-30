@@ -3,10 +3,11 @@ import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { useDebounce } from 'usehooks-ts'
 
-import ComboboxComponent from '@/components/form/Combobox'
-import ListBox from '@/components/form/Listbox'
+import Combobox from '@/components/form/Combobox'
+import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import { message } from '@/i18n/src/messages'
 import useTableStateStore from '@/store/useTableStateStore'
 import { CODEBOOK } from '@/types/constants/codebook'
 
@@ -21,6 +22,8 @@ type OrdersFilter = {
 
 //TODO: 1. Create a new file in src/hooks/table/useOrdersFilter.tsx
 //TODO: 2. Refactor the code to use the new useQueryState hook
+
+const ordersFilterMessages = message.ordersPage.orderDetail.form
 
 const useOrdersFilter = () => {
   const [querySupplier, setQuerySupplier] = useQueryState('supplier')
@@ -49,99 +52,75 @@ const useOrdersFilter = () => {
     setFilter('orders', queryFilter)
   }, [queryFilter, setFilter])
 
-  useEffect(() => {
-    if (supplier) {
-      setQuerySupplier(JSON.stringify(supplier))
-      setQuery(prevQuery => ({ ...prevQuery, supplierUID: supplier.uid }))
+  const handleFieldUpdate = (
+    fieldName: string,
+    fieldCodebook: CodebookType,
+    setFieldQuery: (fieldQuery: string | null) => void
+  ) => {
+    const fieldUIDKey = `${fieldName}UID`
+    if (fieldCodebook) {
+      setFieldQuery(JSON.stringify(fieldCodebook))
+      setQuery(prevQuery => ({ ...prevQuery, [fieldUIDKey]: fieldCodebook.uid }))
     } else {
-      setQuerySupplier(null)
+      setFieldQuery(null)
       setQuery(prevQuery => {
-        const { supplierUID, ...rest } = prevQuery // eslint-disable-line
+        const rest = {}
+        for (const key in prevQuery) {
+          if (key !== fieldUIDKey) {
+            rest[key] = prevQuery[key]
+          }
+        }
         return rest
       })
     }
-  }, [supplier]) // eslint-disable-line
+  }
 
   useEffect(() => {
-    if (orderStatus) {
-      setQueryOrderStatus(JSON.stringify(orderStatus))
-      setQuery(prevQuery => ({ ...prevQuery, orderStatusUID: orderStatus.uid }))
-    } else {
-      setQueryOrderStatus(null)
-      setQuery(prevQuery => {
-        const { orderStatusUID, ...rest } = prevQuery // eslint-disable-line
-        return rest
-      })
-    }
-  }, [orderStatus]) // eslint-disable-line
+    handleFieldUpdate('supplier', supplier, setQuerySupplier)
+  }, [supplier, setQuerySupplier])
 
   useEffect(() => {
-    if (procurementResponsible) {
-      setQueryProcurementResponsible(JSON.stringify(procurementResponsible))
-      setQuery(prevQuery => ({ ...prevQuery, procurementResponsibleUID: procurementResponsible.uid }))
-    } else {
-      setQueryProcurementResponsible(null)
-      setQuery(prevQuery => {
-        const { procurementResponsibleUID, ...rest } = prevQuery // eslint-disable-line
-        return rest
-      })
-    }
-  }, [procurementResponsible]) // eslint-disable-line
+    handleFieldUpdate('orderStatus', orderStatus, setQueryOrderStatus)
+  }, [orderStatus, setQueryOrderStatus])
 
   useEffect(() => {
-    if (requestor) {
-      setQueryRequestor(JSON.stringify(requestor))
-      setQuery(prevQuery => ({ ...prevQuery, requestorUID: requestor.uid }))
-    } else {
-      setQueryRequestor(null)
-      setQuery(prevQuery => {
-        const { requestorUID, ...rest } = prevQuery // eslint-disable-line
-        return rest
-      })
-    }
-  }, [requestor]) // eslint-disable-line
+    handleFieldUpdate('procurementResponsible', procurementResponsible, setQueryProcurementResponsible)
+  }, [procurementResponsible, setQueryProcurementResponsible])
+
+  useEffect(() => {
+    handleFieldUpdate('requestor', requestor, setQueryRequestor)
+  }, [requestor, setQueryRequestor])
 
   const getOrdersFilter = () => (
     <FormProvider {...form}>
       <form className="max-[1250px]:hidden w-[1000px] flex gap-x-2">
         <Grid>
           <Col>
-            <ListBox
-              register={form.register}
+            <Listbox
               name="orderStatus"
-              placeholder="Order Status"
+              placeholder={ordersFilterMessages.orderStatus.label}
               codebook={CODEBOOK.ORDER_STATUS}
-              emptyOption={true}
-              emptyOptionName="All Order statuses"
+              allowEmptyOption={true}
+              emptyOption="All Order statuses"
             />
           </Col>
           <Col>
-            <ComboboxComponent
-              register={form.register}
-              name="supplier"
-              placeholder="Supplier"
-              codebook={CODEBOOK.SUPPLIER}
-              isObject={true}
-            />
+            <Combobox name="supplier" placeholder={ordersFilterMessages.supplier.label} codebook={CODEBOOK.SUPPLIER} />
           </Col>
           <Col>
-            <ListBox
-              register={form.register}
+            <Listbox
               name="procurementResponsible"
-              className="min-w-100"
-              placeholder="Procurement Responsible"
+              placeholder={ordersFilterMessages.procurementResponsible.label}
               codebook={CODEBOOK.PROCUREMENTER}
-              emptyOption={true}
-              emptyOptionName="All Procurement Responsibles"
+              allowEmptyOption={true}
+              emptyOption="All Procurement Responsibles"
             />
           </Col>
           <Col>
-            <ComboboxComponent
-              register={form.register}
+            <Combobox
               name="requestor"
-              placeholder="Requestor"
+              placeholder={ordersFilterMessages.requestor.label}
               codebook={CODEBOOK.EMPLOYEE}
-              isObject={true}
             />
           </Col>
         </Grid>
