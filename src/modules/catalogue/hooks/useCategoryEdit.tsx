@@ -12,11 +12,11 @@ import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import CategoryEditModal from '@/modules/catalogue/categoryEditForm/CategoryEditModal'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
 import useSubmit from '../../../hooks/fetch/useSubmit'
+import CategoryEditModal from '../components/categoryEditForm/CategoryEditModal'
 
 interface EditModalProps {
   testid: string
@@ -113,7 +113,7 @@ export const useCategoryEdit = ({
               onClick={() => {
                 setOpenEdit(true)
               }}
-              className="h-full"
+              className="h-full z-0"
             >
               <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
             </Button>
@@ -123,7 +123,7 @@ export const useCategoryEdit = ({
               onClick={() => {
                 setOpenCopy(true)
               }}
-              className="h-full"
+              className="h-full z-0"
             >
               <DocumentDuplicateIcon className="h-4 w-4" aria-hidden="true" />
             </Button>
@@ -133,7 +133,7 @@ export const useCategoryEdit = ({
               onClick={() => {
                 setOpenDelete(true)
               }}
-              className="h-full"
+              className="h-full z-0"
             >
               <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
             </Button>

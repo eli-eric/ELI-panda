@@ -4,7 +4,6 @@ import { Fragment, useEffect, useMemo } from 'react'
 import type { Column } from 'react-table'
 import useSWR from 'swr'
 
-import TooltipComponent from '@/components/tooltip.comp'
 import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useGeneralTable from '@/hooks/table/useGeneralTable'
@@ -44,9 +43,7 @@ const Results = ({ searchValue }: ResultsProps) => {
         Cell: ({ value }: any) => (
           <div className="flex items-center whitespace-normal">
             <div className="flex-shrink-0">
-              <TooltipComponent text={value}>
-                <InformationCircleIcon className="h-6 w-6" />
-              </TooltipComponent>
+              <InformationCircleIcon className="h-6 w-6" data-tooltip-id="tooltip" data-tooltip-content={value} />
             </div>
           </div>
         )

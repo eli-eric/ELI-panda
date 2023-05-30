@@ -7,7 +7,8 @@ import { useIntl } from 'react-intl'
 import { useIsFirstRender } from 'usehooks-ts'
 
 import { classNames } from '@/helpers'
-import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
+import type { CodebookFilter } from '@/hooks/fetch/useCodebook'
+import { type CodebookFilter, type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 
@@ -21,7 +22,7 @@ type ComboboxPropsT = FieldProps &
     position?: 'top' | 'bottom'
     limit?: number
     showAddButton?: boolean
-    usesIntl?: boolean
+    filter?: CodebookFilter[]
   }
 
 const Combobox = ({
@@ -32,6 +33,7 @@ const Combobox = ({
   disabled,
   className,
   limit = 10,
+  filter,
   position = 'bottom',
   rounded = 'rounded-md',
   showAddButton = false
@@ -40,8 +42,7 @@ const Combobox = ({
   const intl = useIntl()
 
   const [query, setQuery] = useState<string>('')
-  const options = useCodebook(codebook, `?searchText=${query}&limit=${limit}`)
-
+  const options = useCodebook(codebook, { limit, filter, searchText: query })
   const { getFormModal, setOpen } = useAddCodebookValue(options?.metadata)
   const [hasAddPermission, setHasAddPermission] = useState(false)
   const { data: session } = useSession()
