@@ -31,12 +31,16 @@ const SystemFormImage = ({ uid }: { uid?: string }) => {
     onDrop
   })
   return (
-    <div className="flex h-full ">
+    <div className="flex h-full h-0 min-h-full">
       {image === 'deleted' || (!systemImage && !image) ? (
         <ImagePlaceHolder getInputProps={getInputProps} getRootProps={getRootProps} />
       ) : (
         <FormImage
           image={image ? image : systemImage}
+          imageStyle={{
+            objectFit: 'contain',
+            height: '100%'
+          }}
           onDelete={() => {
             if (showImageUid && !!systemImage) {
               setShowImage(false)
