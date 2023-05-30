@@ -7,7 +7,6 @@ import { useIntl } from 'react-intl'
 import { useIsFirstRender } from 'usehooks-ts'
 
 import { classNames } from '@/helpers'
-import type { CodebookFilter } from '@/hooks/fetch/useCodebook'
 import { type CodebookFilter, type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
