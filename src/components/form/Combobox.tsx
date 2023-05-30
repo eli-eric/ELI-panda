@@ -1,9 +1,10 @@
 import { Combobox as HUICombobox } from '@headlessui/react'
 import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import { useSession } from 'next-auth/react'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
+import { useIsFirstRender } from 'usehooks-ts'
 
 import { classNames } from '@/helpers'
 import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
@@ -56,13 +57,8 @@ const Combobox = ({
     setValue(name, null)
   }
 
-  const isFirstRender = useRef(true)
-  useEffect(() => {
-    isFirstRender.current = false
-  }, [])
-  if (isFirstRender.current) {
-    return null
-  }
+  const isFirstRender = useIsFirstRender()
+  if (isFirstRender) return null
 
   return (
     <>

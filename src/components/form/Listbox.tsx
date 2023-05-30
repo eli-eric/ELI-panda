@@ -1,8 +1,9 @@
 import { Listbox as HUIListbox } from '@headlessui/react'
 import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useMemo } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
+import { useIsFirstRender } from 'usehooks-ts'
 
 import { classNames } from '@/helpers'
 import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
@@ -51,13 +52,8 @@ const Listbox = ({
     setValue(name, null)
   }
 
-  const isFirstRender = useRef(true)
-  useEffect(() => {
-    isFirstRender.current = false
-  }, [])
-  if (isFirstRender.current) {
-    return null
-  }
+  const isFirstRender = useIsFirstRender()
+  if (isFirstRender) return null
 
   return (
     <Controller
