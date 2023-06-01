@@ -1,4 +1,4 @@
-import ComboboxComponent from '@/components/form/Combobox'
+import ComboboxDeprecated from '@/components/form/ComboboxDeprecated'
 import { Input, TextArea } from '@/components/form/Input'
 import { SelectWithError } from '@/components/form/Select'
 import { Grid } from '@/components/grid/Grid'
@@ -22,11 +22,11 @@ const EditForm = ({ uid }: Props) => {
       </div>
       <div className="col-span-3 md:col-span-4 lg:col-span-8 grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-x-2 gap-y-4 mb-auto">
         <Input {...fields.name} className="col-span-3 md:col-span-4 lg:col-span-8" />
-        <ComboboxComponent {...fields.ownerUID} className="col-span-3 md:col-span-4 lg:col-span-4" />
-        <ComboboxComponent {...fields.parentUID} className="col-span-3 md:col-span-4  lg:col-span-4" />
+        <ComboboxDeprecated {...fields.ownerUID} className="col-span-3 md:col-span-4 lg:col-span-4" />
+        <ComboboxDeprecated {...fields.parentUID} className="col-span-3 md:col-span-4  lg:col-span-4" />
         <SelectWithError {...fields.importanceUID} className="col-span-3 md:col-span-4 lg:col-span-8" />
       </div>
-      <ComboboxComponent {...fields.locationUID} className="col-span-3 md:col-span-6 z-50" />
+      <ComboboxDeprecated {...fields.locationUID} className="col-span-3 md:col-span-6 z-50" />
       <SelectWithError {...fields.zoneUID} className="col-span-3 md:col-span-6 " />
       <SelectWithError {...fields.systemTypeUID} className="col-span-3 md:col-span-6" />
       <Input {...fields.systemCode} className="col-span-3" />

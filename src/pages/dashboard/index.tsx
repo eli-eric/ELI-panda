@@ -7,7 +7,7 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import useRolePermission from '@/hooks/useRole'
+import usePermission from '@/hooks/usePermission'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
@@ -35,7 +35,13 @@ const Links = {
   }
 }
 
-const Card = ({ name, link, Icon }) => {
+interface CardProps {
+  name: string
+  link: string
+  Icon: () => JSX.Element
+}
+
+const Card = ({ name, link, Icon }: CardProps) => {
   const router = useRouter()
   return (
     <li
@@ -61,9 +67,9 @@ const Card = ({ name, link, Icon }) => {
 }
 
 function DashboardCard() {
-  const hasCatalogueRole = useRolePermission([ROLE.CATALOGUE_VIEW])
-  const hasOrdersRole = useRolePermission([ROLE.ORDERS_VIEW])
-  const hasSystemsRole = useRolePermission([ROLE.SYSTEMS_VIEW])
+  const hasCatalogueRole = usePermission([ROLE.CATALOGUE_VIEW])
+  const hasOrdersRole = usePermission([ROLE.ORDERS_VIEW])
+  const hasSystemsRole = usePermission([ROLE.SYSTEMS_VIEW])
   return (
     <ul
       role="list"

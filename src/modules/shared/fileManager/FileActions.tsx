@@ -4,12 +4,12 @@ import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 import type { KeyedMutator } from 'swr'
 
+import { DeleteButton, DownloadButton } from '@/components/Buttons'
 import executeRequest from '@/helpers/executeRequest'
 import { createMessageValues } from '@/helpers/formatters'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 
-import { DeleteButton, DownloadButton } from '../Buttons'
 import type { FileItem } from './types'
 
 const messages = message.common.fileManager

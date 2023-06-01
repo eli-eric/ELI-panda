@@ -12,11 +12,12 @@ import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import CategoryEditModal from '@/modules/catalogue/categoryEditForm/CategoryEditModal'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
 import useSubmit from '../../../hooks/fetch/useSubmit'
+import CategoryEditModal from '../components/categoryEditForm/CategoryEditModal'
+import useCategoryList from './useCategoryList'
 
 interface EditModalProps {
   testid: string
@@ -45,26 +46,27 @@ export const useCategoryEdit = ({
   const [openDelete, setOpenDelete] = useState(false)
   const [copyCategoryUid, setCopyCategoporyUid] = useState<string | null>()
   const parentPath = catalogueParentPath ? '/' + catalogueParentPath : ''
+  const { mutate } = useCategoryList()
 
   const { data: session } = useSession()
-  const { catalogueCategoryEdit, catalogueCategories, catalogueCategoryCopy } = useEndpoint({
+  const { catalogueCategoryEdit, catalogueCategoryCopy } = useEndpoint({
     uid: editUid,
     path: !catalogueParentPath || catalogueParentPath === '' ? '' : '/' + catalogueParentPath
   })
   const deleteCategory = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: 'delete',
-    mutateList: [catalogueCategories],
     onSuccess: () => {
       setOpenDelete(false)
+      mutate()
     }
   })
   const copyCategory = useSubmit<string>({
     endpoint: catalogueCategoryCopy,
     method: 'post',
-    mutateList: [catalogueCategories],
     onSuccess: uid => {
       setOpenCopy(false)
+      mutate()
       setCopyCategoporyUid(uid)
     }
   })
@@ -113,7 +115,7 @@ export const useCategoryEdit = ({
               onClick={() => {
                 setOpenEdit(true)
               }}
-              className="h-full"
+              className="h-full z-0"
             >
               <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
             </Button>
@@ -123,7 +125,7 @@ export const useCategoryEdit = ({
               onClick={() => {
                 setOpenCopy(true)
               }}
-              className="h-full"
+              className="h-full z-0"
             >
               <DocumentDuplicateIcon className="h-4 w-4" aria-hidden="true" />
             </Button>
@@ -133,7 +135,7 @@ export const useCategoryEdit = ({
               onClick={() => {
                 setOpenDelete(true)
               }}
-              className="h-full"
+              className="h-full z-0"
             >
               <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
             </Button>

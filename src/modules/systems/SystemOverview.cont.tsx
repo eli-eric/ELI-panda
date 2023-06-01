@@ -7,10 +7,10 @@ import { Button } from '@/components/Buttons'
 import Card, { Heading } from '@/components/card/card.comp'
 import EmptySectionComponent from '@/components/empty-section/empty-section.comp'
 import ErrorPage from '@/components/error/ErrorPage'
-import FileManager from '@/components/fileManager/FileManager'
 import LoaderComponent from '@/components/loader.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useSearch } from '@/hooks/table/useSearch'
+import FileManager from '@/modules/shared/fileManager/FileManager'
 import { FILE_TYPE } from '@/types/constants/files'
 
 import Breadcrumbs from './components/Breadcrumbs'
@@ -43,7 +43,8 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
 
   const uid = router.query.uid as string
   const { renderSearchBar, searchValue } = useSearch({
-    renderEnd: () => <ViewControl setView={setView} view={view} />
+    renderEnd: () => <ViewControl setView={setView} view={view} />,
+    tableId: 'systems'
   })
 
   const { getEditButton, getAddButton } = useSystemEdit({ systemDetail: systemDetail })

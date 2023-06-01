@@ -20,14 +20,22 @@ export type CodebookTypeResponse = {
 }
 
 export type CodebookType = { name: string; uid: string; additionalData?: string }
-export const useCodebook = (
-  codebookName?: CODEBOOK,
-  query?: string,
-  autocomplete?: boolean
-): CodebookTypeResponse | undefined => {
+
+export type CodebookFilter = {
+  key: string
+  value: any
+}
+
+export type CodebookQuery = {
+  filter?: CodebookFilter[]
+  searchText?: string
+  limit?: number
+}
+export const useCodebook = (codebookName?: CODEBOOK, query?: CodebookQuery): CodebookTypeResponse | undefined => {
+  const filterString = JSON.stringify(query?.filter)
   const { codebook } = useEndpoint({
     path: codebookName,
-    query: query
+    query: { ...query, filter: filterString }
   })
   const { data } = useSWR<CodebookTypeResponse>(codebook, fetcher, {
     suspense: false
@@ -36,7 +44,7 @@ export const useCodebook = (
   return data
 }
 
-export const useCodebookSelectValues = (codebookName: CODEBOOK, query?: string): Option[] | undefined => {
+export const useCodebookSelectValues = (codebookName: CODEBOOK, query?: CodebookQuery): Option[] | undefined => {
   const codebook = useCodebook(codebookName, query)
 
   const selectOptions = codebook?.data?.map(({ name, uid }) => ({ name, value: uid }))

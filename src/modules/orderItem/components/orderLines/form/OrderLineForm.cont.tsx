@@ -4,7 +4,7 @@ import { number, object, string } from 'yup'
 import { Heading } from '@/components/card/card.comp'
 import useFormModal from '@/hooks/form/useFormModal'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
-import CatalogueSearchTable from '@/modules/systems/components/sections/catalogueItemSection/components/CatalogueSearchTable'
+import CatalogueTableSelect from '@/modules/shared/catalogue/table/CatalogueTableSelect'
 import type { CatalogueItem } from '@/types/responses'
 
 import OrderLineFormComponent from './OrderLineForm.comp'
@@ -25,7 +25,6 @@ const orderLineFormSchema = object({
 
 const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
   const [catalogueItem, setCatalogueItem] = useState<CatalogueItem | undefined>(undefined)
-
   const modalSubmit = (data: OrderLineFormType) => {
     const dataToSend = { ...data }
     if (!dataToSend.price) {
@@ -46,7 +45,7 @@ const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
     renderOutsideForm: orderLine => (
       <Fragment>
         {!orderLine.uid ? (
-          <CatalogueSearchTable setItem={setCatalogueItem} itemName={catalogueItem?.name} />
+          <CatalogueTableSelect setItem={setCatalogueItem} />
         ) : (
           <Heading text={orderLine.name + ' - ' + orderLine.catalogueNumber} />
         )}

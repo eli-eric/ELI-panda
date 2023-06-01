@@ -2,7 +2,6 @@ import { Disclosure } from '@headlessui/react'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 
-import TooltipComponent from '@/components/tooltip.comp'
 import { classNames } from '@/helpers'
 import { ENV, PROCESS_ENV } from '@/types/constants/common'
 
@@ -25,24 +24,28 @@ export default function NavigationComponent() {
   const EnvInfoTest = () => (
     <div className="flex flex-col justify-center items-center text-lg absolute left-2 top-2 font-mono">
       <span>TEST</span>
-      <TooltipComponent
-        offset={{ left: 10, top: -100 }}
-        text="You are in the TEST environment. This version is identical to the production version, but it uses a test database. Data are not persistent because of the override from the production database. (mostly on daily basis)"
-      >
-        <InformationCircleIcon className="h-8 w-8 flex-shrink-0 -mt-2" />
-      </TooltipComponent>{' '}
+
+      <InformationCircleIcon
+        className="h-8 w-8 flex-shrink-0 -mt-2"
+        data-tooltip-id="tooltip"
+        data-tooltip-content={
+          'You are in the TEST environment. This version is identical to the production version, but it uses a test database. Data are not persistent because of the override from the production database. (mostly on daily basis)'
+        }
+      />
     </div>
   )
 
   const EnvInfoDev = () => (
     <div className="flex flex-col justify-center items-center text-lg absolute left-2 top-2 font-mono">
       <span>DEV</span>
-      <TooltipComponent
-        offset={{ left: 10, top: -100 }}
-        text="You are in the DEV environment. This version is based on the dev branch in git. It uses a dev database. Data are not persistent."
-      >
-        <InformationCircleIcon className="h-8 w-8 flex-shrink-0 -mt-2" />
-      </TooltipComponent>{' '}
+
+      <InformationCircleIcon
+        className="h-8 w-8 flex-shrink-0 -mt-2"
+        data-tooltip-id="tooltip"
+        data-tooltip-content={
+          'You are in the DEV environment. This version is based on the dev branch in git. It uses a dev database. Data are not persistent.'
+        }
+      />
     </div>
   )
 

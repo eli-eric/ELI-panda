@@ -1,7 +1,8 @@
+import type { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo } from 'react'
 import useSWR from 'swr'
-import type { BareFetcher, PublicConfiguration } from 'swr/_internal'
+import type { BareFetcher, KeyedMutator, PublicConfiguration } from 'swr/_internal'
 
 import { fetcher, mockFetcher } from '@/helpers/fetcher'
 
@@ -26,7 +27,12 @@ const useFetch = <ResponseType>({
   onSuccess,
   onError,
   format
-}: UseFetchProps<ResponseType>) => {
+}: UseFetchProps<ResponseType>): {
+  response: ResponseType
+  loading: boolean
+  error: any
+  mutate: KeyedMutator<ResponseType>
+} => {
   const router = useRouter()
   const { isReady } = router
 
@@ -35,7 +41,7 @@ const useFetch = <ResponseType>({
     isLoading,
     mutate,
     error
-  } = useSWR<ResponseType, Error>(isReady && url, useMockFetcher ? mockFetcher : fetcher, config)
+  } = useSWR<ResponseType, AxiosError>(isReady && url, useMockFetcher ? mockFetcher : fetcher, config)
 
   // handle success callback
   const handleSuccess = useCallback(

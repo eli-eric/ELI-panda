@@ -6,7 +6,7 @@ import useSWR from 'swr'
 
 import { classNames } from '@/helpers'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useImage } from '@/hooks/useImage'
+import { useImage } from '@/hooks/fetch/useImage'
 import { PATH } from '@/types/constants/paths'
 
 import { useSystemEdit } from '../hooks/useSystemEdit'

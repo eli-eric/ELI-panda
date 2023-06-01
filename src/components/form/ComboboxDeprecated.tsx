@@ -1,0 +1,202 @@
+import { Combobox } from '@headlessui/react'
+import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
+import { useSession } from 'next-auth/react'
+import React from 'react'
+import { Fragment, useEffect, useState } from 'react'
+import {
+  Controller,
+  type FieldValues,
+  type Path,
+  type PathValue,
+  useFormContext,
+  type UseFormRegister
+} from 'react-hook-form'
+
+import { classNames } from '@/helpers'
+import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
+import type { CODEBOOK } from '@/types/constants/codebook'
+import type { FieldProps } from '@/types/form'
+
+import { PlusButton } from '../Buttons'
+import useAddCodebookValue from './shared/useAddCodebookValue'
+
+type ComboboxProps<T extends FieldValues> = FieldProps &
+  React.InputHTMLAttributes<HTMLInputElement> & {
+    register: UseFormRegister<T>
+    codebook?: CODEBOOK
+    isObject?: boolean
+    position?: 'top' | 'bottom'
+    limit?: number
+    showAddButton?: boolean
+  }
+
+const ComboboxDeprecated = <T extends FieldValues>({
+  codebook,
+  label,
+  isObject = false,
+  isError,
+  placeholder,
+  name,
+  className,
+  disabled,
+  limit = 10,
+  position = 'bottom',
+  rounded = 'rounded-md',
+  showAddButton = false
+}: ComboboxProps<T>) => {
+  const {
+    setValue,
+    control,
+    formState: { defaultValues }
+  } = useFormContext<T>()
+  const [query, setQuery] = useState<string>(defaultValues?.[name] || '')
+  const [selectedItem, setSelectedItem] = useState<CodebookType | null>(null)
+  const data = useCodebook(codebook, { limit, searchText: query })
+  const [showButton, setShowButton] = useState<boolean>(false)
+  const { data: session } = useSession()
+
+  // set default value
+  useEffect(() => {
+    if (defaultValues && defaultValues[name]) {
+      setQuery(defaultValues[name].name as string)
+      setSelectedItem(defaultValues[name] as CodebookType)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // clear value
+  const clear = () => {
+    setQuery('')
+    setSelectedItem(null)
+    setValue(name as Path<T>, isObject ? (undefined as PathValue<T, Path<T>>) : ('' as PathValue<T, Path<T>>))
+  }
+
+  const { getFormModal, setOpen } = useAddCodebookValue(data?.metadata)
+
+  useEffect(() => {
+    if (showAddButton && data?.metadata?.roleEdit && session?.user?.roles) {
+      const showButton = session.user.roles.includes(data.metadata.roleEdit)
+      setShowButton(showButton)
+    }
+  }, [data, session, showAddButton])
+
+  return (
+    <Fragment>
+      <Controller
+        name={name as Path<T>}
+        control={control}
+        render={({ field: { onChange } }) => (
+          <div className={classNames('flex items-start', className)}>
+            <div className="flex-grow">
+              <Combobox
+                as="div"
+                value={selectedItem}
+                onChange={(item: CodebookType | null) => {
+                  setSelectedItem(item)
+                  setQuery(item?.name || '')
+                  if (isObject) {
+                    onChange(item)
+                  } else {
+                    onChange(item?.uid)
+                  }
+                }}
+                disabled={disabled}
+                className="block relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
+              >
+                {label && <Combobox.Label className="block text-sm font-medium text-gray-900">{label}</Combobox.Label>}
+                <div className="relative">
+                  <div className="relative">
+                    <Combobox.Button className="w-full">
+                      <Combobox.Input
+                        autoComplete="off"
+                        placeholder={placeholder}
+                        className={classNames(
+                          'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                          'block w-full appearance-none',
+                          rounded,
+                          isError ? 'border-red-500' : 'border-gray-300',
+                          disabled ? 'bg-gray-100' : ''
+                        )}
+                        value={query}
+                        onChange={event => setQuery(event.target.value)}
+                        displayValue={(item: CodebookType) => item?.name}
+                      />
+                      <div className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
+                        <ChevronDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
+                      </div>
+
+                      {selectedItem && !disabled && (
+                        <div
+                          onClick={() => {
+                            clear()
+                          }}
+                          className="absolute pr-8 inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
+                        >
+                          <XMarkIcon className="h-5 w-5 text-gray-200  hover:text-red-500" aria-hidden="true" />
+                        </div>
+                      )}
+                    </Combobox.Button>
+                  </div>
+
+                  {data?.data && data.data.length > 0 && (
+                    <Combobox.Options
+                      className={classNames(
+                        'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
+                        position === 'top' ? 'bottom-full' : 'top-full' // určení pozice výběrového seznamu
+                      )}
+                    >
+                      {data.data.map(item => (
+                        <Combobox.Option
+                          key={item.uid}
+                          value={item}
+                          className={({ active }) =>
+                            classNames(
+                              'relative cursor-default select-none py-2 pl-3 pr-9',
+                              active ? 'bg-primary-500 text-white' : 'text-gray-900'
+                            )
+                          }
+                        >
+                          {({ active, selected }) => (
+                            <>
+                              <span className={classNames('block truncate', selected && 'font-semibold')}>
+                                {item.name}
+                              </span>
+
+                              {selected && (
+                                <span
+                                  className={classNames(
+                                    'absolute inset-y-0 right-0 flex items-center pr-4',
+                                    active ? 'text-white' : 'text-primary-500'
+                                  )}
+                                >
+                                  <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                </span>
+                              )}
+                            </>
+                          )}
+                        </Combobox.Option>
+                      ))}
+                    </Combobox.Options>
+                  )}
+                </div>
+              </Combobox>
+            </div>
+            {showButton && (
+              <PlusButton
+                primary
+                buttonSize="large"
+                className=" ml-1 self-end"
+                type="button"
+                onClick={() => {
+                  setOpen(true)
+                }}
+              />
+            )}
+          </div>
+        )}
+      />
+      {getFormModal()}
+    </Fragment>
+  )
+}
+
+export default ComboboxDeprecated

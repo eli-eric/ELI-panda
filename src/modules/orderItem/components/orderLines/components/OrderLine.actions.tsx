@@ -2,24 +2,26 @@ import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
+import type { Row } from 'react-table'
 
 import { DeleteButton, EditButton } from '@/components/Buttons'
 import { Heading } from '@/components/card/card.comp'
+import CheckBox from '@/components/form/CheckBox'
 import { Input } from '@/components/form/Input'
 import { useToggle } from '@/components/form/Switch'
+import { Col, Grid } from '@/components/grid/Grid'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { createMessageValues } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useSubmit from '@/hooks/fetch/useSubmit'
 import useFormModal from '@/hooks/form/useFormModal'
-import useRolePermission from '@/hooks/useRole'
+import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
 import useOrderLineForm from '../form/OrderLineForm.cont'
-import { Row } from 'react-table'
 
 const messages = message.common.buttons
 
@@ -100,7 +102,7 @@ export const OrderisDeliveredAction = ({
   const { enabled, toggle, Toggle } = useToggle(checked)
   const uid = useRouter().query.uid as string
   const { orderLineDelivery } = useEndpoint({ uid: uid, itemUid: orderLine.uid })
-  const hasRole = useRolePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
+  const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
   const { formatMessage } = useIntl()
 
   const { submit } = useSubmit<OrderLineFormType>({
@@ -120,24 +122,56 @@ export const OrderisDeliveredAction = ({
       toast.error(err.message)
     }
   })
-  const { getFormModal, setOpen, formMethods } = useFormModal<{ serialNumber: string }>({
-    renderForm: () => (
-      <Input
-        register={formMethods.register}
-        name="serialNumber"
-        label={formatMessage({ id: orderLines.form.serialNumber.label })}
-        placeholder={formatMessage({ id: orderLines.form.serialNumber.placeholder })}
-        rounded="rounded-md"
-      />
-    ),
+  const { getFormModal, setOpen, formMethods } = useFormModal<{
+    serialNumber?: string
+    eun?: string
+    manualEun: boolean
+  }>({
+    renderForm: () => {
+      const manualEun = formMethods.watch('manualEun')
+      return (
+        <Grid>
+          <Col md={12}>
+            <Input
+              register={formMethods.register}
+              name="serialNumber"
+              label={formatMessage({ id: orderLines.form.serialNumber.label })}
+              placeholder={formatMessage({ id: orderLines.form.serialNumber.placeholder })}
+              rounded="rounded-md"
+              defaultValue={undefined}
+            />
+          </Col>
+
+          <Col md={12}>
+            <CheckBox
+              register={formMethods.register}
+              name="manualEun"
+              label={formatMessage({ id: orderLines.form.manualEun.label })}
+              rounded="rounded-md"
+            />
+          </Col>
+          {manualEun && (
+            <Col md={12}>
+              <Input
+                register={formMethods.register}
+                name="eun"
+                label={formatMessage({ id: orderLines.form.eun.label })}
+                placeholder={formatMessage({ id: orderLines.form.eun.placeholder })}
+                rounded="rounded-md"
+              />
+            </Col>
+          )}
+        </Grid>
+      )
+    },
     renderOutsideForm: () => <Heading text="Fill missing Serial Number" />,
     onSubmit: data => {
-      submit({ serialNumber: data.serialNumber, isDelivered: !enabled })
+      submit({ serialNumber: data?.serialNumber, isDelivered: !enabled, eun: data?.eun || undefined })
     }
   })
 
   const handleCheck = () => {
-    !orderLine.serialNumber && !orderLine.isDelivered ? setOpen(true) : submit({ isDelivered: !enabled })
+    !orderLine.isDelivered && !orderLine.serialNumber ? setOpen(true) : submit({ isDelivered: !enabled })
   }
 
   return (

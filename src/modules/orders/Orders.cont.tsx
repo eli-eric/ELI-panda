@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
-import { TableLayoutContainer } from '@/components/layout/catalog-layout.cont'
+import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { useSearch } from '@/hooks/table/useSearch'
 
 import HeaderButtons from './components/HeaderButtons'

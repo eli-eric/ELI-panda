@@ -5,7 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import FormImage from '@/components/form/FormImage'
 import ImagePlaceHolder from '@/components/form/ImagePlaceHolder'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useImage } from '@/hooks/useImage'
+import { useImage } from '@/hooks/fetch/useImage'
 
 import type { SystemEditFormType } from '../../types/form'
 

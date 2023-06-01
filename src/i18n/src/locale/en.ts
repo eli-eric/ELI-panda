@@ -75,7 +75,7 @@ export const messages = {
         select: 'Select Item',
         description: 'Description',
         categoryName: 'Category name',
-        manufactorer: 'Manufacturer',
+        manufacturer: 'Manufacturer',
         manufacturerNumber: 'Manufacturer Number',
         manufacturerUrl: 'Manufacturer Url'
       }
@@ -255,7 +255,9 @@ export const messages = {
         quantity: { label: 'Quantity', placeholder: 'Quantity' },
         location: { label: 'Location', placeholder: 'Location' },
         itemUsage: { label: 'Item Usage' },
-        serialNumber: { label: 'Serial Number', placeholder: 'Serial Number' }
+        serialNumber: { label: 'Serial Number', placeholder: 'Serial Number' },
+        eun: { label: 'EUN', placeholder: 'EUN' },
+        manualEun: { label: 'Set EUN manually' }
       },
       orderLinesTable: {
         header: {

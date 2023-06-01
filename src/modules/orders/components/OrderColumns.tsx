@@ -3,7 +3,6 @@ import { Fragment, useMemo } from 'react'
 import { FormattedDate, useIntl } from 'react-intl'
 import { type CellProps, type Column } from 'react-table'
 
-import TooltipComponent from '@/components/tooltip.comp'
 import { message } from '@/i18n/src/messages'
 
 import type { Order } from '../types'
@@ -46,9 +45,11 @@ const useOrderColumns = () => {
         Cell: ({ value }: CellProps<Order>) => (
           <Fragment>
             {value && (
-              <TooltipComponent text={value}>
-                <InformationCircleIcon className="h-6 w-6 flex-shrink-0" />
-              </TooltipComponent>
+              <InformationCircleIcon
+                className="h-6 w-6 flex-shrink-0"
+                data-tooltip-id="tooltip"
+                data-tooltip-content={value}
+              />
             )}
           </Fragment>
         ),

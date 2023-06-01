@@ -21,7 +21,7 @@ const ItemPropertiesComponent = ({ item, groups }: Props) => (
         <ItemPropertyTitle title={messages.categoryName}>
           <ItemPropertyValue text={item?.categoryName} />{' '}
         </ItemPropertyTitle>
-        <ItemPropertyTitle title={messages.manufactorer}>
+        <ItemPropertyTitle title={messages.manufacturer}>
           <ItemPropertyValue text={item?.manufacturer} />
         </ItemPropertyTitle>
         <ItemPropertyTitle title={messages.manufacturerNumber}>

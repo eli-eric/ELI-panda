@@ -10,6 +10,7 @@ import useSubmit from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
 import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
+import useCategoryList from '../../hooks/useCategoryList'
 import CategoryEditForm from './CategoryEditForm'
 const formatData = (data: CategoryFormType, parentPath) =>
   data.groups && data.groups.length !== 0
@@ -44,16 +45,19 @@ interface Props {
 }
 
 const CategoryEditModal = ({ setOpen, parentPath = '', uid }: Props) => {
-  const { catalogueCategoryEdit, catalogueCategories, catalogueCategoryImage } = useEndpoint({
+  const { catalogueCategoryEdit, catalogueCategoryImage } = useEndpoint({
     path: parentPath,
     uid
   })
 
+  const { mutate } = useCategoryList()
+
   const { submit, loading, error } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: uid ? 'put' : 'post',
-    mutateList: [catalogueCategories, catalogueCategoryEdit, catalogueCategoryImage],
+    mutateList: [catalogueCategoryEdit, catalogueCategoryImage],
     onSuccess: () => {
+      mutate()
       setOpen(false)
     }
   })
