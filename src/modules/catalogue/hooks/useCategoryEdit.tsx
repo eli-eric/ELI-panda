@@ -17,6 +17,7 @@ import type { ModalButtons } from '@/types/form'
 
 import useSubmit from '../../../hooks/fetch/useSubmit'
 import CategoryEditModal from '../components/categoryEditForm/CategoryEditModal'
+import useCategoryList from './useCategoryList'
 
 interface EditModalProps {
   testid: string
@@ -45,26 +46,27 @@ export const useCategoryEdit = ({
   const [openDelete, setOpenDelete] = useState(false)
   const [copyCategoryUid, setCopyCategoporyUid] = useState<string | null>()
   const parentPath = catalogueParentPath ? '/' + catalogueParentPath : ''
+  const { mutate } = useCategoryList()
 
   const { data: session } = useSession()
-  const { catalogueCategoryEdit, catalogueCategories, catalogueCategoryCopy } = useEndpoint({
+  const { catalogueCategoryEdit, catalogueCategoryCopy } = useEndpoint({
     uid: editUid,
     path: !catalogueParentPath || catalogueParentPath === '' ? '' : '/' + catalogueParentPath
   })
   const deleteCategory = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: 'delete',
-    mutateList: [catalogueCategories],
     onSuccess: () => {
       setOpenDelete(false)
+      mutate()
     }
   })
   const copyCategory = useSubmit<string>({
     endpoint: catalogueCategoryCopy,
     method: 'post',
-    mutateList: [catalogueCategories],
     onSuccess: uid => {
       setOpenCopy(false)
+      mutate()
       setCopyCategoporyUid(uid)
     }
   })
