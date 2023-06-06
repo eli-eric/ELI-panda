@@ -6,9 +6,9 @@ import type { FieldProps } from '@/types/form'
 
 import { ValidationIcon } from './Icons'
 
-type InputProps<T extends FieldValues> = FieldProps &
+export type InputProps<T extends FieldValues> = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
-    register: UseFormRegister<T>
+    register?: UseFormRegister<T>
   }
 
 export const Input = <T extends FieldValues>({
@@ -37,22 +37,38 @@ export const Input = <T extends FieldValues>({
       </label>
     )}
     <div hidden={hidden} className="relative">
-      <input
-        {...register(name as Path<T>)}
-        {...restProps}
-        hidden={hidden}
-        name={name}
-        type={type}
-        disabled={disabled}
-        placeholder={placeholder}
-        className={classNames(
-          'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
-          rounded,
-          isError ? 'border-red-500' : 'border-gray-300',
-          disabled ? 'bg-gray-100' : ''
-        )}
-      />
-
+      {register ? (
+        <input
+          {...register(name as Path<T>)}
+          {...restProps}
+          hidden={hidden}
+          name={name}
+          type={type}
+          disabled={disabled}
+          placeholder={placeholder}
+          className={classNames(
+            'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+            rounded,
+            isError ? 'border-red-500' : 'border-gray-300',
+            disabled ? 'bg-gray-100' : ''
+          )}
+        />
+      ) : (
+        <input
+          {...restProps}
+          hidden={hidden}
+          name={name}
+          type={type}
+          disabled={disabled}
+          placeholder={placeholder}
+          className={classNames(
+            'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+            rounded,
+            isError ? 'border-red-500' : 'border-gray-300',
+            disabled ? 'bg-gray-100' : ''
+          )}
+        />
+      )}
       {isError && <ValidationIcon />}
     </div>
   </div>
@@ -98,6 +114,11 @@ export const TextArea = <T extends FieldValues>({
   </div>
 )
 
+type InputAmountProps<T extends FieldValues> = FieldProps &
+  React.InputHTMLAttributes<HTMLInputElement> & {
+    register: UseFormRegister<T>
+  }
+
 export const InputAmount = <T extends FieldValues>({
   register,
   name,
@@ -110,7 +131,7 @@ export const InputAmount = <T extends FieldValues>({
   hidden,
   label,
   ...restProps
-}: InputProps<T>) => {
+}: InputAmountProps<T>) => {
   const currencyOptions = ['EUR', 'USD', 'CZK', 'HUF', 'RON', 'GBP']
 
   return (

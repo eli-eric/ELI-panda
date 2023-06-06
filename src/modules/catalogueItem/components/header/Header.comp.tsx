@@ -3,13 +3,14 @@ import { useRouter } from 'next/router'
 import { BackButton, Button } from '@/components/Buttons'
 import Card from '@/components/layout/Card'
 import { message } from '@/i18n/src/messages'
+import { PATH } from '@/types/constants/paths'
 const messages = message.common.buttons
 
-const ItemDetailHeaderComponent = () => {
+const ItemHeader = ({ disabledEdit, loading }: { disabledEdit: boolean; loading: boolean }) => {
   const router = useRouter()
 
   const goBackHandler = () => {
-    router.back()
+    router.push(PATH.CATALOGUE)
   }
 
   return (
@@ -17,11 +18,11 @@ const ItemDetailHeaderComponent = () => {
       <Card className="flex flex-1 justify-between">
         <div className="flex items-center mr-2">
           <BackButton className="mr-1" type="button" buttonSize="large" onClick={goBackHandler} />
-          <Button primary buttonSize="large" type="submit" text={messages.save} />
+          {!disabledEdit && <Button primary buttonSize="large" loading={loading} type="submit" text={messages.save} />}
         </div>
       </Card>
     </div>
   )
 }
 
-export default ItemDetailHeaderComponent
+export default ItemHeader

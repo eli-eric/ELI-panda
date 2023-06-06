@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { Fragment, Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
@@ -13,13 +12,12 @@ import OrderLinesTable from './components/orderLines/OrderLines.table'
 import useOrderDetail from './hooks/useOrderDetail'
 
 const OrderItemContainer = () => {
-  const router = useRouter()
   const { disabledEdit, uid } = useOrderDetail()
   const { renderForm, setOrderLine, deleteOrderLine, orderLines } = useOrderForm()
 
   return (
     <Fragment>
-      {router.query.uid && renderForm()}
+      {renderForm()}
       <Card className="flex flex-col justify-between">
         <OrderLinesTable
           orderLines={orderLines}

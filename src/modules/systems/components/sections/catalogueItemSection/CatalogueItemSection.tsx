@@ -66,7 +66,7 @@ const CatalogueItemSection = ({ uid }: { uid?: string }) => {
   return (
     <Fragment>
       {uid ? (
-        <ItemDetailComponent uid={uid} />
+        <ItemDetailComponent />
       ) : (
         <PlusButton
           primary

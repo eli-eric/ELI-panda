@@ -1,14 +1,15 @@
+import { DevTool } from '@hookform/devtools'
 import { FormProvider } from 'react-hook-form'
 
-import { Input, TextArea } from '@/components/form/Input'
-import { message } from '@/i18n/src/messages'
+import DisclosureComponent from '@/components/Disclosure.comp'
+import { TextArea } from '@/components/form/Input'
+import Card from '@/components/layout/Card'
 
 import ImageGalleryComponent from '../../components/item-detail/ImageGallery'
+import DefaultItemForm from './components/form/DefaultItemForm'
+import GroupProperty from './components/form/GroupProperty'
 import useItemForm from './components/form/ItemForm.cont'
-import ItemPropertiesComponent from './default-properties/item-properties.comp'
-import ItemDetailHeaderComponent from './header/Header.comp'
-
-const messages = message.cataloguePage.itemList.header
+import ItemHeader from './components/header/Header.comp'
 
 const ItemContainer = () => {
   const {
@@ -17,24 +18,45 @@ const ItemContainer = () => {
     ...formMethods
   } = useItemForm()
 
+  const onSubmit = (data: any) => {
+    console.log(data)
+  }
+
   return (
     <FormProvider {...formMethods}>
-      <ItemDetailHeaderComponent />
-      <div className="bg-white pb-10">
-        <main className="mx-auto max-w-7xl sm:px-6 sm:pt-16 lg:px-8 h-full overflow-auto">
-          <div className="mx-auto max-w-2xl lg:max-w-none">
-            <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
-              <ImageGalleryComponent images={[image]} />
-              <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 col-span-2">
-                <Input name="name" register={formMethods.register} label={'Name'} rounded={'rounded-md'} />
-                <ItemPropertiesComponent item={item} groups={groups} />
-              </div>
+      <form onSubmit={formMethods.handleSubmit(onSubmit)}>
+        <ItemHeader disabledEdit={false} loading={false} />
+        <Card className="flex flex-col justify-between">
+          <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
+            <ImageGalleryComponent images={[image]} />
+            <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 col-span-2">
+              <DefaultItemForm />
             </div>
-            <TextArea name="description" register={formMethods.register} label={'Description'} rounded={'rounded-md'} />
           </div>
-        </main>
-      </div>
-      <FormWarningModal />
+          <TextArea name="description" register={formMethods.register} label={'Description'} rounded={'rounded-md'} />
+          {item?.details &&
+            groups?.map(group => (
+              <DisclosureComponent key={group} title={group} defaultOpen={true}>
+                <div className="px-4 sm:px-6">
+                  <dl key={group} className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+                    {item.details?.map(
+                      (detail, index) =>
+                        detail.propertyGroup === group && (
+                          <GroupProperty
+                            key={detail.property.uid + index + detail.property.name}
+                            detail={detail}
+                            index={index}
+                          />
+                        )
+                    )}
+                  </dl>
+                </div>
+              </DisclosureComponent>
+            ))}
+          <FormWarningModal />
+        </Card>
+      </form>
+      <DevTool control={formMethods.control} />
     </FormProvider>
   )
 }

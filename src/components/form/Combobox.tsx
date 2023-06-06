@@ -74,9 +74,7 @@ const Combobox = ({
               className={classNames('relative flex flex-col w-full mt-auto', className)}
             >
               {label && (
-                <HUICombobox.Label className="block text-sm font-medium text-gray-900">
-                  {intl.formatMessage({ id: label })}
-                </HUICombobox.Label>
+                <HUICombobox.Label className="block text-sm font-medium text-gray-900">{label}</HUICombobox.Label>
               )}
               <div className="relative">
                 <HUICombobox.Input

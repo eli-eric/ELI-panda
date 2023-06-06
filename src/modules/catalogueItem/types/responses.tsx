@@ -5,8 +5,8 @@ export interface CatalogueItem {
   name: string
   description: string
   categoryPath: string
-  categoryName: string
-  manufacturer: string
+  categoryName: CodebookType
+  manufacturer: CodebookType
   manufacturerUrl: string
   manufacturerNumber: string
   catalogueNumber: string
@@ -15,7 +15,7 @@ export interface CatalogueItem {
 
 export interface CatalogueItemDetail {
   propertyGroup: string
-  value: string | null
+  value?: string
   property: CatalogueCategoryProperty
 }
 

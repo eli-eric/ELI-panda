@@ -36,7 +36,7 @@ export const useCodebook = (codebookName?: CODEBOOK, query?: CodebookQuery): Cod
     path: codebookName,
     query: { ...query, filter: filterString }
   })
-  const { data } = useSWR<CodebookTypeResponse>(codebook, fetcher, {
+  const { data } = useSWR<CodebookTypeResponse>(codebookName && codebook, fetcher, {
     suspense: false
   })
 

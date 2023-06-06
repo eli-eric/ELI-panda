@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import type { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
 import { classNames } from '@/helpers'
@@ -13,31 +13,49 @@ export type Option = {
 
 interface Props<T extends FieldValues>
   extends React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> {
-  register: UseFormRegister<T>
+  register?: UseFormRegister<T>
   options?: Option[]
   name: string
 }
 
 export const Select = <T extends FieldValues>({ register, options, name, ...rest }: Props<T>) => (
-  <select {...register(name as Path<T>)} {...rest} defaultValue={options ? options[0].value : ''}>
-    {options &&
-      options.map((option, index) => (
-        <option
-          key={index}
-          value={option.value}
-          disabled={option.disabled}
-          className="relative cursor-default select-none py-2 pl-3 pr-9"
-        >
-          {option.name ? option.name : option.value}
-        </option>
-      ))}
-  </select>
+  <Fragment>
+    {register ? (
+      <select {...register(name as Path<T>)} {...rest} defaultValue={options ? options[0].value : ''}>
+        {options &&
+          options.map((option, index) => (
+            <option
+              key={index}
+              value={option.value}
+              disabled={option.disabled}
+              className="relative cursor-default select-none py-2 pl-3 pr-9"
+            >
+              {option.name ? option.name : option.value}
+            </option>
+          ))}
+      </select>
+    ) : (
+      <select {...rest}>
+        {options &&
+          options.map((option, index) => (
+            <option
+              key={index}
+              value={option.value}
+              disabled={option.disabled}
+              className="relative cursor-default select-none py-2 pl-3 pr-9"
+            >
+              {option.name ? option.name : option.value}
+            </option>
+          ))}
+      </select>
+    )}
+  </Fragment>
 )
 
-type SelectWithErrorProps<T extends FieldValues> = FieldProps &
+export type SelectWithErrorProps<T extends FieldValues> = FieldProps &
   React.SelectHTMLAttributes<HTMLSelectElement> & {
     options?: Option[]
-    register: UseFormRegister<T>
+    register?: UseFormRegister<T>
   }
 
 //TODO: refactor all usage with ListBox

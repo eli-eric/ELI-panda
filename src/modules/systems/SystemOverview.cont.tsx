@@ -15,8 +15,6 @@ import { FILE_TYPE } from '@/types/constants/files'
 
 import Breadcrumbs from './components/Breadcrumbs'
 import Results from './components/search/Results'
-import CatalogueItemSection from './components/sections/catalogueItemSection/CatalogueItemSection'
-import RelationsSection from './components/sections/relationsSection/RelationsSection'
 import SystemDetailSection from './components/sections/systemDetailSection/SystemDetailSection'
 import Subsystems from './components/Subsystems'
 import ViewControl from './components/ViewControl'
@@ -92,7 +90,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
                   <SystemDetailSection data={systemDetail} />
                 </Card>
               )}
-              {view.catalogueItem && (
+              {/*   {view.catalogueItem && (
                 <Card>
                   <Heading text="Cataloue Item" />
                   <ErrorBoundary fallback={<ErrorPage />}>
@@ -101,8 +99,8 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
                     </Suspense>
                   </ErrorBoundary>
                 </Card>
-              )}
-              {view.relations && (
+              )} */}
+              {/*  {view.relations && (
                 <Card>
                   <Heading text="Relations" />
                   <ErrorBoundary fallback={<ErrorPage />}>
@@ -111,7 +109,7 @@ const SystemOverviewContainer = ({ systemDetail }: Props) => {
                     </Suspense>
                   </ErrorBoundary>
                 </Card>
-              )}
+              )} */}
               <Card>
                 <Heading text="Files" />
                 <ErrorBoundary fallback={<ErrorPage />}>

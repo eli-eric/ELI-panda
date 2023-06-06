@@ -1,0 +1,51 @@
+import React from 'react'
+import { useFormContext } from 'react-hook-form'
+import { useIntl } from 'react-intl'
+import { message } from 'src/i18n/src/messages'
+
+import Combobox from '@/components/form/Combobox'
+import { Input } from '@/components/form/Input'
+import { CODEBOOK } from '@/types/constants/codebook'
+
+import type { CatalogueItem } from '../../types/responses'
+
+const messages = message.cataloguePage.itemList.header
+
+const DefaultItemForm = () => {
+  const { register } = useFormContext<CatalogueItem>()
+  const { formatMessage: fm } = useIntl()
+
+  return (
+    <div className="px-4 py-5 sm:px-6">
+      <div className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+        <Input name="name" register={register} label={'Name'} rounded={'rounded-md'} className={'col-span-2'} />
+        <Combobox
+          name="categoryName"
+          label={fm({ id: messages.categoryName })}
+          rounded={'rounded-md'}
+          codebook={CODEBOOK.CATALOGUE_CATEGORY}
+        />
+        <Combobox
+          name="manufacturer"
+          label={fm({ id: messages.manufacturer })}
+          rounded={'rounded-md'}
+          codebook={CODEBOOK.MANUFACTURER}
+        />
+        <Input
+          name="manufacturerNumber"
+          register={register}
+          label={fm({ id: messages.manufacturerNumber })}
+          rounded={'rounded-md'}
+        />
+        <Input
+          name="manufacturerUrl"
+          register={register}
+          label={fm({ id: messages.manufacturerUrl })}
+          rounded={'rounded-md'}
+        />
+      </div>
+    </div>
+  )
+}
+
+export default DefaultItemForm
