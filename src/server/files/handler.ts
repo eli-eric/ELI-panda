@@ -12,7 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
     switch (req.method) {
       case 'GET':
-        const { id } = getPathInfo(req)
+        const { id } = getPathInfo(req, res)
         return id ? await downloadFile(req, res) : listFiles(req, res)
       case 'POST':
         return await uploadFile(req, res)
@@ -21,7 +21,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       default:
     }
   } catch (err) {
-    logger.error(composeDebugMessage(req, 'handler boundary'))
     logger.error(err)
     res.status(500).end()
   }
