@@ -19,7 +19,7 @@ interface Props<T extends FieldValues>
 }
 
 export const Select = <T extends FieldValues>({ register, options, name, ...rest }: Props<T>) => (
-  <select {...register(name as Path<T>)} {...rest} defaultValue={options ? options[0].value : ''}>
+  <select {...register(name as Path<T>)} {...rest}>
     {options &&
       options.map((option, index) => (
         <option
