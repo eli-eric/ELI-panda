@@ -22,7 +22,7 @@ export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin, 
     defaultValues: { search: querySearch || (tableId && instances[tableId]?.search) || '' }
   })
 
-  const searchValue = useDebounce(useWatch({ control, name: 'search' }), 300)
+  const searchValue = useDebounce(useWatch({ control, name: 'search' }), 500)
 
   useEffect(() => {
     if (useQuery) {
