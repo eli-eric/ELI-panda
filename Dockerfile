@@ -40,7 +40,6 @@ ENV NEXTAUTH_URL="https://panda.eli-laser.eu/"
 ENV MINIO_ENDPOINT="minio-main"
 ENV MINIO_BUCKET_NAME="panda-production"
 
-
 RUN env
 
 
