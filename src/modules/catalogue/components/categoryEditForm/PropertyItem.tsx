@@ -1,6 +1,7 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useEffect, useMemo } from 'react'
 import type { FieldErrors } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
@@ -55,6 +56,8 @@ const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lengh
     control,
     name: `${name}.listOfValues`
   })
+  const type = useWatch({ control, name: `${name}.typeUID` })
+  const unit = useWatch({ control, name: `${name}.unitUID` })
   const units = useCodebookSelectValues(CODEBOOK.UNIT)
   const propertyTypes = useCodebookSelectValues(CODEBOOK.CATALOGUE_PROPERTY_TYPE)
 
@@ -64,7 +67,7 @@ const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lengh
   const handleAddValue = () => {
     append({ value: '' })
   }
-  const type = watch(`${name}.typeUID`)
+
   const listOfValues = useMemo(() => watch(`${name}.listOfValues`) || [], [watch, name])
 
   const getDefaultOption = (name, disabled = false) => ({
@@ -94,12 +97,14 @@ const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lengh
           <SelectWithError
             register={register}
             name={`${name}.typeUID`}
+            value={type}
             isError={!!errors?.typeUID?.message}
             options={propertyTypes && [getDefaultOption('Select type', true), ...propertyTypes]}
           />
           <SelectWithError
             register={register}
             name={`${name}.unitUID`}
+            value={unit}
             isError={!!errors?.unitUID?.message}
             options={units ? [getDefaultOption('Select Unit'), ...units] : [getDefaultOption('Select Unit')]}
           />

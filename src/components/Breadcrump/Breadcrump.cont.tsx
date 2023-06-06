@@ -19,7 +19,7 @@ const BreadcrumpContainer = ({ testId, homeLink, children }: Props) => (
     // @TODO: Check scrollbar visuals on Windows
   >
     <nav className="flex" aria-label="Breadcrumb">
-      <ol role="list" className="flex space-x-1 bg-white px-6 py-3 overflow-x-scroll">
+      <ol role="list" className="flex space-x-1 bg-white px-6 py-3 overflow-x-auto">
         <li className="flex">
           <div className="flex items-center">
             <Link
