@@ -1,3 +1,5 @@
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
+
 export type DeliveryStatus = 0 | 1 | 2
 
 /* export enum ORDER_STATUS {
@@ -41,8 +43,8 @@ export type OrdersQuery = {
 }
 
 export type QueryFilter = {
-  supplierUID?: string
-  orderStatusUID?: string
-  procurementResponsibleUID?: string
-  requestorUID?: string
+  supplier?: CodebookType
+  orderStatus?: CodebookType
+  procurementResponsible?: CodebookType
+  requestor?: CodebookType
 }

@@ -1,6 +1,8 @@
+import type { TransitionOptions } from 'next-usequerystate'
+import { queryTypes } from 'next-usequerystate'
 import { useQueryState } from 'next-usequerystate'
 import { useEffect, useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { useDebounce } from 'usehooks-ts'
 
 import Combobox from '@/components/form/Combobox'
@@ -26,27 +28,45 @@ type OrdersFilter = {
 const ordersFilterMessages = message.ordersPage.orderDetail.form
 
 const useOrdersFilter = () => {
-  const [querySupplier, setQuerySupplier] = useQueryState('supplier')
-  const [queryOrderStatus, setQueryOrderStatus] = useQueryState('orderStatus')
-  const [queryProcurementResponsible, setQueryProcurementResponsible] = useQueryState('procurementResponsible')
-  const [queryRequestor, setQueryRequestor] = useQueryState('requestor')
+  const { setFilter, instances } = useTableStateStore()
+  const filter = instances.orders?.filter
+
+  const [querySupplier, setQuerySupplier] = useQueryState(
+    'supplier',
+    queryTypes.string.withDefault(JSON.stringify(filter?.supplier))
+  )
+  const [queryOrderStatus, setQueryOrderStatus] = useQueryState(
+    'orderStatus',
+    queryTypes.string.withDefault(JSON.stringify(filter?.orderStatus))
+  )
+  const [queryProcurementResponsible, setQueryProcurementResponsible] = useQueryState(
+    'procurementResponsible',
+    queryTypes.string.withDefault(JSON.stringify(filter?.procurementResponsible))
+  )
+  const [queryRequestor, setQueryRequestor] = useQueryState(
+    'requestor',
+    queryTypes.string.withDefault(JSON.stringify(filter?.requestor))
+  )
   const form = useForm<OrdersFilter>({
     defaultValues: {
-      supplier: querySupplier ? JSON.parse(querySupplier) : null,
-      orderStatus: queryOrderStatus ? JSON.parse(queryOrderStatus) : null,
-      procurementResponsible: queryProcurementResponsible ? JSON.parse(queryProcurementResponsible) : null,
-      requestor: queryRequestor ? JSON.parse(queryRequestor) : null
+      supplier: querySupplier ? JSON.parse(querySupplier) : filter?.supplier ? filter.supplier : null,
+      orderStatus: queryOrderStatus ? JSON.parse(queryOrderStatus) : filter?.orderStatus ? filter.orderStatus : null,
+      procurementResponsible: queryProcurementResponsible
+        ? JSON.parse(queryProcurementResponsible)
+        : filter?.procurementResponsible
+        ? filter.procurementResponsible
+        : null,
+      requestor: queryRequestor ? JSON.parse(queryRequestor) : filter?.requestor ? filter.supplier : null
     }
   })
-  const { watch } = form
   const [queryFilter, setQuery] = useState<QueryFilter>({} as QueryFilter)
 
-  const supplier = useDebounce(watch('supplier'), 200)
-  const orderStatus = useDebounce(watch('orderStatus'), 200)
-  const procurementResponsible = useDebounce(watch('procurementResponsible'), 200)
-  const requestor = useDebounce(watch('requestor'), 200)
+  const { control } = form
 
-  const { setFilter } = useTableStateStore()
+  const supplier = useDebounce(useWatch({ control, name: 'supplier' }), 300)
+  const orderStatus = useDebounce(useWatch({ control, name: 'orderStatus' }), 300)
+  const procurementResponsible = useDebounce(useWatch({ control, name: 'procurementResponsible' }), 300)
+  const requestor = useDebounce(useWatch({ control, name: 'requestor' }), 300)
 
   useEffect(() => {
     setFilter('orders', queryFilter)
@@ -55,14 +75,17 @@ const useOrdersFilter = () => {
   const handleFieldUpdate = (
     fieldName: string,
     fieldCodebook: CodebookType,
-    setFieldQuery: (fieldQuery: string | null) => void
+    setFieldQuery: (
+      value: string | ((old: string | null) => string | null) | null,
+      transitionOptions?: TransitionOptions | undefined
+    ) => Promise<boolean>
   ) => {
-    const fieldUIDKey = `${fieldName}UID`
+    const fieldUIDKey = fieldName
     if (fieldCodebook) {
-      setFieldQuery(JSON.stringify(fieldCodebook))
-      setQuery(prevQuery => ({ ...prevQuery, [fieldUIDKey]: fieldCodebook.uid }))
+      setFieldQuery(() => JSON.stringify(fieldCodebook), { shallow: false })
+      setQuery(prevQuery => ({ ...prevQuery, [fieldUIDKey]: fieldCodebook }))
     } else {
-      setFieldQuery(null)
+      setFieldQuery(() => null)
       setQuery(prevQuery => {
         const rest = {}
         for (const key in prevQuery) {
