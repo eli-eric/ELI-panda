@@ -32,15 +32,10 @@ export async function downloadFile(req: NextApiRequest, res: NextApiResponse) {
   res.setHeader('Content-Disposition', `filename=${objectInfo.metaData['name']}`)
 
   const fileStream = await s3Client.getObject(bucket, fullPath)
-  fileStream.pipe(res).on('error', err => {
-    logger.error(err)
-    res.status(500).end()
-  })
-
-  res.once('error', err => {
-    logger.error(err)
-    fileStream.destroy()
-    res.status(500).end()
+  await new Promise((resolve, reject) => {
+    fileStream.pipe(res).on('error', reject)
+    res.once('error', reject)
+    res.once('end', resolve)
   })
 }
 

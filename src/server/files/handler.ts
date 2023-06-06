@@ -4,7 +4,7 @@ import { composeDebugMessage } from 'src/server/logger'
 import logger from '../logger'
 import { downloadFile, getPathInfo, listFiles, removeFile, uploadFile } from './methods'
 
-const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = (req: NextApiRequest, res: NextApiResponse) => {
   try {
     if (!req.url) {
       logger.error(composeDebugMessage(req, 'Request URL is missing'))
@@ -13,11 +13,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     switch (req.method) {
       case 'GET':
         const { id } = getPathInfo(req, res)
-        return id ? await downloadFile(req, res) : listFiles(req, res)
+        return id ? downloadFile(req, res) : listFiles(req, res)
       case 'POST':
-        return await uploadFile(req, res)
+        return uploadFile(req, res)
       case 'DELETE':
-        return await removeFile(req, res)
+        return removeFile(req, res)
       default:
     }
   } catch (err) {

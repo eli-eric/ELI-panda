@@ -13,7 +13,7 @@ export const config = {
 
 const { bucket, accessKey, secretKey, port, useSSL, endPoint } = config
 
-logger.info(
+logger.debug(
   `S3 Config - Credentials: ${!!(
     accessKey && secretKey
   )} | Bucket: ${bucket} | Endpoint: ${endPoint} | Port: ${port} | UseSSL: ${useSSL}`
