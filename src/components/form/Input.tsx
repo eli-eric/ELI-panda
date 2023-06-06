@@ -42,6 +42,7 @@ export const Input = <T extends FieldValues>({
         {...restProps}
         hidden={hidden}
         name={name}
+        step="0.001"
         type={type}
         disabled={disabled}
         placeholder={placeholder}
