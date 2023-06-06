@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
@@ -12,14 +12,33 @@ export default function useQueryManager(tableId: string) {
   const sorting = instances[tableId]?.sortByQueryString || ''
   const pagination = instances[tableId]?.pagination || '{"page":1,"pageSize":50}'
   const search = instances[tableId]?.search || ''
+  const supplierUID = instances[tableId]?.filter?.supplier?.uid || ''
+  const orderStatusUID = instances[tableId]?.filter?.orderStatus?.uid || ''
+  const procurementResponsibleUID = instances[tableId]?.filter?.procurementResponsible?.uid || ''
+  const requestorUID = instances[tableId]?.filter?.requestor?.uid || ''
 
-  const filter = useCallback(() => instances[tableId]?.filter || {}, [instances, tableId])
+  const filter = useMemo(() => {
+    const filter: any = {}
+    if (supplierUID) {
+      filter.supplierUID = supplierUID
+    }
+    if (orderStatusUID) {
+      filter.orderStatusUID = orderStatusUID
+    }
+    if (procurementResponsibleUID) {
+      filter.procurementResponsibleUID = procurementResponsibleUID
+    }
+    if (requestorUID) {
+      filter.requestorUID = requestorUID
+    }
+    return filter
+  }, [supplierUID, orderStatusUID, procurementResponsibleUID, requestorUID])
 
   const [query, setQuery] = useState<OrdersQuery>({ pagination })
 
   useEffect(() => {
     if (router.isReady) {
-      const newQuery: OrdersQuery = { pagination, ...filter() }
+      const newQuery: OrdersQuery = { pagination, ...filter }
       if (router.query.search || search) {
         newQuery.search = (router.query.search as string) || search
         if (sorting) {
