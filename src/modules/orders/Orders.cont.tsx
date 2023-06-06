@@ -11,6 +11,7 @@ import useOrdersTable from './components/OrdersTable'
 const OrdersContainer = () => {
   const { getOrdersFilter } = useOrdersFilter()
   const { renderSearchBar } = useSearch({
+    tableId: 'orders',
     renderBegin: () => <HeaderButtons />,
     renderEnd: () => getOrdersFilter()
   })
