@@ -106,7 +106,8 @@ function ImageManager(props: ImageManagerProps) {
       'image/*': []
     },
     onDrop,
-    noClick: true
+    noClick: true,
+    disabled: dueUpload.length > 0
   })
 
   const fallbackImage = {
@@ -124,7 +125,11 @@ function ImageManager(props: ImageManagerProps) {
         <Tab.List className={`w-full rounded-t-md border border-gray-300 flex gap-1 justify-between`}>
           <div>
             {hasEditRole && (
-              <PlusButton onClick={open} className="h-full flex border-0 border-r rounded-none rounded-tl-md" />
+              <PlusButton
+                disabled={dueUpload.length > 0}
+                onClick={open}
+                className="h-full flex border-0 border-r rounded-none rounded-tl-md"
+              />
             )}
           </div>
 
