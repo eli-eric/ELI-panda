@@ -1,67 +1,59 @@
 import { useCallback, useEffect, useState } from 'react'
-import Modal from 'src/components/modal/warning/modal-warning.comp'
+import { shallow } from 'zustand/shallow'
 
-import { message } from '@/i18n/src/messages'
+import useWarningModalStore from '@/store/useWarningModalStore'
 
-const messages = message.common
-
-const useWarningModal = (message: string) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isConfirmed, setIsConfirmed] = useState(false)
-  const [error, setError] = useState('')
+const useWarningModal = (message?: string) => {
   const [execData, setExecData] = useState({
     callback: undefined as Function | undefined,
     callbackArgs: undefined as any[] | undefined
   })
 
+  const [params, patchParams, resetParams] = useWarningModalStore(
+    state => [state.params, state.patchParams, state.resetParams],
+    shallow
+  )
+
+  const { isOpen, isConfirmed } = params
+
+  const { callback, callbackArgs } = execData
+
   useEffect(() => {
-    const { callback, callbackArgs } = execData
     if (callback && callbackArgs && isConfirmed) {
       try {
         callback(...callbackArgs)
-        setIsOpen(false)
-        setIsConfirmed(false)
+        resetParams()
       } catch (err) {
-        setError(String(err))
+        patchParams({ error: String(err) })
       }
     }
-  }, [isConfirmed, execData])
+  }, [isConfirmed, callback, callbackArgs, resetParams, patchParams])
 
-  const deleteButtons = {
-    goNext: {
-      text: messages.buttons.continue,
-      loading: false,
-      onClick: () => setIsConfirmed(true)
-    },
-    goBack: {
-      text: messages.buttons.cancel,
-      onClick: () => {
-        setIsOpen(false)
-      }
+  useEffect(() => {
+    if (!isOpen && (callback || callbackArgs)) {
+      setExecData({
+        callback: undefined,
+        callbackArgs: undefined
+      })
     }
-  }
+  }, [callback, callbackArgs, isOpen])
 
   const withWarningModal = useCallback(
-    <T extends any[], R>(callback: (...callbackArgs: T) => R) =>
+    <T extends any[], R>(callback: (...callbackArgs: T) => R, currentMessage?: string) =>
       (...callbackArgs: T) => {
-        setIsOpen(true)
+        const newParams = {
+          isOpen: true,
+          isConfirmed: false,
+          error: '',
+          message: currentMessage ?? message ?? 'Are you sure?'
+        }
+        patchParams(newParams)
         setExecData({ callback, callbackArgs })
       },
-    []
+    [message, patchParams]
   )
 
-  const WarningModal = () => (
-    <Modal
-      buttons={deleteButtons}
-      open={isOpen}
-      setOpen={setIsOpen}
-      title={messages.warning}
-      message={message}
-      error={error}
-      testid={message}
-    />
-  )
-  return { WarningModal, withWarningModal }
+  return withWarningModal
 }
 
 export default useWarningModal
