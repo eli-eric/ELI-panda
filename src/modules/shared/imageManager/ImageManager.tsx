@@ -46,7 +46,6 @@ function ImageManager(props: ImageManagerProps) {
       try {
         await axios.post(endpoint, file)
         toast.success(`Uploaded ${name}`)
-        setInProgress(prev => prev.filter(str => str !== name))
       } catch (err) {
         toast.error(`Failed to upload ${name}`)
       } finally {
