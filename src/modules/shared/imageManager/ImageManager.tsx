@@ -109,6 +109,12 @@ function ImageManager(props: ImageManagerProps) {
     noClick: true
   })
 
+  const fallbackImage = {
+    id: 'fallback',
+    name: 'fallback image',
+    url: '/no-image.png'
+  }
+
   return (
     <div
       {...getRootProps()}
@@ -144,7 +150,7 @@ function ImageManager(props: ImageManagerProps) {
         </Tab.List>
 
         <Tab.Panels className="w-full relative rounded-b-md border border-t-0 border-gray-300">
-          {data?.map(obj => (
+          {(data && data.length > 0 ? data : [fallbackImage]).map(obj => (
             <Tab.Panel key={obj.id} className="w-full">
               <Image
                 width={width}
@@ -154,7 +160,7 @@ function ImageManager(props: ImageManagerProps) {
                 alt={obj.name}
                 unoptimized
               />
-              {hasEditRole && (
+              {obj.id !== 'fallback' && hasEditRole && (
                 <DeleteButton
                   onClick={() => withWarningModal(handleDelete, `Are you sure you want to delete ${obj.name}?`)(obj)}
                   className="absolute bottom-0 left-0 border-0 border-t border-r rounded-none rounded-bl-md rounded-tr-md"
