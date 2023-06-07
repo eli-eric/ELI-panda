@@ -34,7 +34,7 @@ function WarningModal() {
       title={messages.warning}
       message={message}
       error={error}
-      testid="~~~waring-modal~~~"
+      testid="~~~warning-modal~~~"
     />
   )
 }
