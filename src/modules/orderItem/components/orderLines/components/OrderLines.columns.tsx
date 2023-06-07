@@ -58,7 +58,7 @@ const useOrderLinesColumns = ({ setOrderLine, deleteOrderLine, disabledEdit }: P
       {
         Header: formatMessage({ id: messages.location }),
         accessor: 'location',
-        Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value?.name.split('-')[0]}</span>
+        Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value?.name.split(' - ')[0]}</span>
       },
       {
         Header: formatMessage({ id: messages.price }),

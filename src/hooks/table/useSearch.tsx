@@ -1,6 +1,8 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useQueryState } from 'next-usequerystate'
-import { useForm } from 'react-hook-form'
+import { useEffect } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
+import { useDebounce } from 'usehooks-ts'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
@@ -15,11 +17,29 @@ interface Props {
 
 export const useSearch = ({ useQuery = true, onSuccess, renderEnd, renderBegin, tableId }: Props) => {
   const [querySearch, setQuerySearch] = useQueryState('search')
-  const { setSearch } = useTableStateStore()
-  const { register, handleSubmit, watch } = useForm<{ search: string }>({
-    defaultValues: { search: querySearch || '' }
+  const { setSearch, instances } = useTableStateStore()
+  const { register, handleSubmit, control } = useForm<{ search: string }>({
+    defaultValues: { search: querySearch || (tableId && instances[tableId]?.search) || '' }
   })
-  const searchValue = watch('search')
+
+  const searchValue = useDebounce(useWatch({ control, name: 'search' }), 500)
+
+  useEffect(() => {
+    if (useQuery) {
+      if (!searchValue) {
+        setQuerySearch(null, { shallow: true })
+      } else {
+        setQuerySearch(searchValue)
+      }
+    }
+    if (tableId) {
+      if (searchValue === '') {
+        setSearch(tableId, undefined)
+      }
+      setSearch(tableId, searchValue || '')
+    }
+  }, [searchValue, setQuerySearch, useQuery, tableId, setSearch])
+
   const onSubmit = (data: { search: string }) => {
     if (useQuery) {
       setQuerySearch(data.search ? data.search : null, { shallow: true })

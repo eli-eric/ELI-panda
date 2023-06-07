@@ -13,12 +13,12 @@ const CatalogueBreadcrumbs = () => {
   const { slug } = router.query as { slug?: string[] }
   const catalogueParentPath = useCataloguePath()
   const { getAddButton } = useCategoryEdit({ catalogueParentPath })
-
+  let link = PATH.CATALOGUE as string
   return (
     <BreadcrumpContainer homeLink={PATH.CATALOGUE}>
       <Fragment>
         {slug?.map((slug, i) => {
-          const link = PATH.CATALOGUE + '/' + slug
+          link = link + '/' + slug
           return <BreadcrumpItem key={i} name={slug} link={link} />
         })}
         {getAddButton()}

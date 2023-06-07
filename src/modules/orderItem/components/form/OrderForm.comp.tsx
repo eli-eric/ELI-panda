@@ -46,7 +46,7 @@ const OrderFormComponent = () => {
           <Listbox
             name="procurementResponsible"
             label={orderFormMessages.procurementResponsible.label}
-            codebook={CODEBOOK.EMPLOYEE}
+            codebook={CODEBOOK.PROCUREMENTER}
             allowEmptyOption={true}
             disabled={disabledEdit}
           />

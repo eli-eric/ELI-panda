@@ -42,6 +42,7 @@ export const Input = <T extends FieldValues>({
           {...register(name as Path<T>)}
           {...restProps}
           hidden={hidden}
+          step="0.001"
           name={name}
           type={type}
           disabled={disabled}
@@ -57,6 +58,7 @@ export const Input = <T extends FieldValues>({
         <input
           {...restProps}
           hidden={hidden}
+          step="0.001"
           name={name}
           type={type}
           disabled={disabled}

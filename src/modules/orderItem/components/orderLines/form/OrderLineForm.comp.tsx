@@ -107,7 +107,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
       </Col>
       <Col md={orderLine?.uid ? 6 : 12} lg={orderLine?.uid ? 6 : 12}>
         {orderLine?.uid ? (
-          <div className="flex flex-row">
+          <div className="flex flex-row w-full">
             <div
               className="self-end mr-2 mb-1 flex-none"
               data-tooltip-id="tooltip"

@@ -13,28 +13,26 @@ export const config = {
 
 const { bucket, accessKey, secretKey, port, useSSL, endPoint } = config
 
-logger.info(
-  `S3 Config - Bucket: ${bucket} | AccessKey: ${accessKey && '*****'} | SecretKey: ${
-    secretKey && '*****'
-  } | Port: ${port} | UseSSL: ${useSSL} | EndPoint: ${endPoint}`
+logger.debug(
+  `S3 Config - Credentials: ${!!(
+    accessKey && secretKey
+  )} | Bucket: ${bucket} | Endpoint: ${endPoint} | Port: ${port} | UseSSL: ${useSSL}`
 )
 
 const s3Client = new Client(config)
 
-//Make sure we have a bucket
+//Make sure we have buckets
 s3Client.bucketExists(bucket, function (err, exists) {
   if (err) {
-    return logger.error('Error checking if bucket exists', err)
+    return logger.error(`Error checking if ${bucket} exists`, err)
   }
   if (!exists) {
     s3Client.makeBucket(bucket, function (err) {
       if (err) {
-        return logger.error('Error creating bucket', err)
+        return logger.error(`Error creating ${bucket}`, err)
       }
-      logger.info('Bucket created successfully')
+      logger.info(`${bucket} created successfully`)
     })
-  } else {
-    logger.info('Bucket already exists')
   }
 })
 
