@@ -27,8 +27,8 @@ const ItemDetailComponent = ({ title, images, description, children }: Props) =>
         <Suspense fallback={<div>loading</div>}>
           <ImageManager
             config={{
-              width: 300,
-              height: 300,
+              width: 600,
+              height: 600,
               itemCategory: FILE_TYPE.SYSTEM,
               itemId: String(router.query.uid),
               hasEditRole: true

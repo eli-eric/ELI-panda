@@ -1,5 +1,6 @@
 import { Tab } from '@headlessui/react'
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline'
+import axios from 'axios'
 import Image from 'next/image'
 import { useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
@@ -9,7 +10,6 @@ import type { FILE_TYPE } from 'src/types/constants/files'
 import useSWR from 'swr'
 
 import { DeleteButton, PlusButton } from '@/components/Buttons'
-import executeRequest from '@/helpers/executeRequest'
 import { uniFetcher } from '@/helpers/fetcher'
 
 import type { FileItem } from '../fileManager/types'
@@ -32,57 +32,49 @@ type ProcessedFile = {
 }
 
 function ImageManager(props: ImageManagerProps) {
-  const { width = 400, height = 400, itemId, itemCategory, hasEditRole = false } = props.config
+  const { width = 400, height = 400, itemId, itemCategory, hasEditRole } = props.config
   const endpoint = `/api/${itemCategory}/${itemId}/${FILE_CATEGORY}`
   const { data, mutate } = useSWR<FileItem[]>(endpoint, uniFetcher)
   const [dueUpload, setDueUpload] = useState<ProcessedFile[]>([])
   const [inProgress, setInProgress] = useState<string[]>([])
 
+  const withWarningModal = useWarningModal()
+
   const handleUpload = useCallback(
-    (items: ProcessedFile[]) => {
-      items.forEach(obj => {
-        const body = JSON.stringify(obj)
+    async (items: ProcessedFile[]) => {
+      for await (const obj of items) {
         const { name } = obj
-
-        return executeRequest(
-          endpoint,
-          { method: 'post', body },
-          () => {
-            toast.success(`Uploaded ${name}`)
-            setInProgress(prev => prev.filter(str => str !== name))
-            mutate()
-          },
-          () => {
-            setInProgress(prev => prev.filter(str => str !== name))
-            toast.error(`Failed to upload ${name}`)
-          }
-        )
-      })
-
-      return setDueUpload([])
+        try {
+          await axios.post(endpoint, obj)
+          toast.success(`Uploaded ${name}`)
+          setInProgress(prev => prev.filter(str => str !== name))
+        } catch (err) {
+          toast.error(`Failed to upload ${name}`)
+        } finally {
+          setInProgress(prev => prev.filter(str => str !== name))
+        }
+      }
+      setDueUpload([])
+      mutate()
     },
     [endpoint, mutate]
   )
 
   const handleDelete = useCallback(
-    (id: string) => {
-      const name = (data ?? []).find(obj => obj.id === id)?.name
-      setInProgress(prev => (name ? [...prev, name] : prev))
-      executeRequest(
-        `${endpoint}/${id}`,
-        { method: 'delete' },
-        () => {
-          toast.success(`Deleted ${name}`)
-          mutate((data ?? []).filter(obj => obj.id !== id))
-          setInProgress(prev => prev.filter(str => str !== name))
-        },
-        () => {
-          setInProgress(prev => prev.filter(str => str !== name))
-          toast.error(`Failed to delete ${name}`)
-        }
-      )
+    async (item: { id: string; name: string }) => {
+      const { id, name } = item
+      setInProgress(prev => [...prev, id])
+      try {
+        await axios.delete(`${endpoint}/${id}`)
+        toast.success(`Deleted ${name}`)
+      } catch (err) {
+        toast.error(`Failed to delete ${name}`)
+      } finally {
+        setInProgress(prev => prev.filter(str => str !== id))
+        mutate()
+      }
     },
-    [endpoint, data, mutate]
+    [endpoint, mutate]
   )
 
   const onDrop = useCallback(async (files: File[]) => {
@@ -109,55 +101,63 @@ function ImageManager(props: ImageManagerProps) {
     dueUpload.length > 0 && handleUpload(dueUpload)
   }, [dueUpload, handleUpload])
 
-  const withWarningModal = useWarningModal()
-
-  const { open, getRootProps, isDragActive } = useDropzone({ onDrop, noClick: true })
-
-  const ProgressIndicator = () => (
-    <div>
-      {inProgress.length > 0 && (
-        <div className={`flex flex-nowrap border-gray-300 border-l gap-1 py-1 px-2`}>
-          <CloudArrowUpIcon className="h-5 w-5 animate-pulse" />
-          <span className="text-sm">{inProgress.length}</span>
-        </div>
-      )}
-    </div>
-  )
+  const { open, getRootProps, isDragActive } = useDropzone({
+    accept: {
+      'image/*': []
+    },
+    onDrop,
+    noClick: true
+  })
 
   return (
     <div
       {...getRootProps()}
-      className={`w-full flex flex-col rounded-lg ${isDragActive ? 'border-2 border-orange-600' : ''}`}
+      className={`w-full flex flex-col rounded-md ${isDragActive ? 'border-2 border-orange-600' : ''}`}
     >
       <Tab.Group>
-        <Tab.List className={`w-full rounded-t-md border border-gray-300 flex justify-between`}>
-          {hasEditRole && <PlusButton onClick={open} className="border-0 rounded-none rounded-l-lg border-r" />}
+        <Tab.List className={`w-full rounded-t-md border border-gray-300 flex gap-1 justify-between`}>
+          <div>
+            {hasEditRole && (
+              <PlusButton onClick={open} className="h-full flex border-0 border-r rounded-none rounded-tl-md" />
+            )}
+          </div>
 
           <div className="flex flex-wrap justify-center">
             {data?.map(obj => (
               <Tab key={obj.id}>
-                {({ selected }) => <span className={`m-1 px-1 ${selected ? 'text-orange-600' : ''}`}>&bull;</span>}
+                {({ selected }) => <span className={`px-1 ${selected ? 'text-orange-600' : ''} text-sm`}>&bull;</span>}
               </Tab>
             ))}
           </div>
-          <ProgressIndicator />
+          <div>
+            <div
+              className={`h-full flex flex-col justify-center content-center ${
+                inProgress.length || 'text-transparent'
+              }`}
+            >
+              <div className={`flex flex-nowrap animate-pulse pr-2`}>
+                <CloudArrowUpIcon className="h-4 w-4" />
+                <span className="text-xs">{inProgress.length}</span>
+              </div>
+            </div>
+          </div>
         </Tab.List>
 
-        <Tab.Panels className="relative">
+        <Tab.Panels className="w-full relative rounded-b-md border border-t-0 border-gray-300">
           {data?.map(obj => (
-            <Tab.Panel key={obj.id}>
+            <Tab.Panel key={obj.id} className="w-full">
               <Image
                 width={width}
                 height={height}
-                className="w-full object-cover object-center rounded-b-md"
+                className="min-w-full h-auto rounded-b-md"
                 src={obj.url}
                 alt={obj.name}
                 unoptimized
               />
               {hasEditRole && (
                 <DeleteButton
-                  onClick={() => withWarningModal(handleDelete, `Are you sure you want to delete ${obj.name}?`)(obj.id)}
-                  className="absolute bottom-0 left-0 rounded-none rounded-bl-md rounded-tr-md"
+                  onClick={() => withWarningModal(handleDelete, `Are you sure you want to delete ${obj.name}?`)(obj)}
+                  className="absolute bottom-0 left-0 border-0 border-t border-r rounded-none rounded-bl-md rounded-tr-md"
                 />
               )}
             </Tab.Panel>
