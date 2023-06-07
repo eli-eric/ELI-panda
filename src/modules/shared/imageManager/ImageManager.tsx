@@ -41,21 +41,18 @@ function ImageManager(props: ImageManagerProps) {
   const withWarningModal = useWarningModal()
 
   const handleUpload = useCallback(
-    async (items: ProcessedFile[]) => {
-      for await (const obj of items) {
-        const { name } = obj
-        try {
-          await axios.post(endpoint, obj)
-          toast.success(`Uploaded ${name}`)
-          setInProgress(prev => prev.filter(str => str !== name))
-        } catch (err) {
-          toast.error(`Failed to upload ${name}`)
-        } finally {
-          setInProgress(prev => prev.filter(str => str !== name))
-          mutate()
-        }
+    async (file: ProcessedFile) => {
+      const { name } = file
+      try {
+        await axios.post(endpoint, file)
+        toast.success(`Uploaded ${name}`)
+        setInProgress(prev => prev.filter(str => str !== name))
+      } catch (err) {
+        toast.error(`Failed to upload ${name}`)
+      } finally {
+        setInProgress(prev => prev.filter(str => str !== name))
+        mutate()
       }
-      setDueUpload([])
     },
     [endpoint, mutate]
   )
@@ -98,7 +95,12 @@ function ImageManager(props: ImageManagerProps) {
   }, [])
 
   useEffect(() => {
-    dueUpload.length > 0 && handleUpload(dueUpload)
+    const uploadFile = async () => {
+      const [file, ...restFiles] = dueUpload
+      await handleUpload(file)
+      setDueUpload(restFiles)
+    }
+    if (dueUpload.length > 0) uploadFile()
   }, [dueUpload, handleUpload])
 
   const { open, getRootProps, isDragActive } = useDropzone({
@@ -106,8 +108,7 @@ function ImageManager(props: ImageManagerProps) {
       'image/*': []
     },
     onDrop,
-    noClick: true,
-    disabled: dueUpload.length > 0
+    noClick: true
   })
 
   const fallbackImage = {
@@ -125,11 +126,7 @@ function ImageManager(props: ImageManagerProps) {
         <Tab.List className={`w-full rounded-t-md border border-gray-300 flex gap-1 justify-between`}>
           <div>
             {hasEditRole && (
-              <PlusButton
-                disabled={dueUpload.length > 0}
-                onClick={open}
-                className="h-full flex border-0 border-r rounded-none rounded-tl-md"
-              />
+              <PlusButton onClick={open} className="h-full flex border-0 border-r rounded-none rounded-tl-md" />
             )}
           </div>
 
