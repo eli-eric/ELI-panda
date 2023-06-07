@@ -106,6 +106,8 @@ export async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
 
 export async function removeFile(req: NextApiRequest, res: NextApiResponse) {
   const { fullPath } = getPathInfo(req, res)
+  const obj = await s3Client.statObject(bucket, fullPath)
+  if (!obj) return res.status(404).json({})
   await s3Client.removeObject(bucket, fullPath)
   logger.debug(composeDebugMessage(req, 'Successfully deleted file'))
   res.status(200).json({})
