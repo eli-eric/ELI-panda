@@ -19,7 +19,12 @@ const PropertyList = ({ name, errors }: Props) => {
   })
 
   const handleAddProp = () => {
-    append({ name: '', typeUID: '', unitUID: '', defaultValue: '' })
+    append({
+      name: '',
+      type: { uid: '', name: 'Select Type' },
+      unit: { uid: '', name: 'Select Unit' },
+      defaultValue: ''
+    })
   }
 
   const handleMoveDown = index => {

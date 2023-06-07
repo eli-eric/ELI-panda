@@ -16,10 +16,12 @@ type ListboxPropsT = FieldProps &
     position?: 'top' | 'bottom'
     allowEmptyOption?: boolean
     emptyOption?: string
+    optionsSize?: 'sm' | 'md' | 'lg'
   }
 
 const Listbox = ({
   codebook,
+  optionsSize = 'md',
   name,
   label,
   disabled,
@@ -99,8 +101,9 @@ const Listbox = ({
           {options?.length > 0 && (
             <HUIListbox.Options
               className={classNames(
-                'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
-                position === 'top' ? 'bottom-full' : 'top-full'
+                'absolute z-20 mt-1 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
+                position === 'top' ? 'bottom-full' : 'top-full',
+                optionsSize === 'sm' ? 'max-h-40' : optionsSize === 'lg' ? 'max-h-64' : 'max-h-60'
               )}
             >
               {options.map(item => (

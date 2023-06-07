@@ -24,9 +24,11 @@ const DefaultItemForm = () => {
           label={fm({ id: messages.categoryName })}
           rounded={'rounded-md'}
           codebook={CODEBOOK.CATALOGUE_CATEGORY}
+          useFirstRender={false}
         />
         <Combobox
           name="manufacturer"
+          useFirstRender={false}
           label={fm({ id: messages.manufacturer })}
           rounded={'rounded-md'}
           codebook={CODEBOOK.MANUFACTURER}

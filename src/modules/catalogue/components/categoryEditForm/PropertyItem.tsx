@@ -1,13 +1,12 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useEffect, useMemo } from 'react'
 import type { FieldErrors } from 'react-hook-form'
-import { useWatch } from 'react-hook-form'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/Input'
+import Listbox from '@/components/form/Listbox'
 import { SelectWithError } from '@/components/form/Select'
-import { useCodebookSelectValues } from '@/hooks/fetch/useCodebook'
 import type { CategoryFormType, Property } from '@/types/catalogue/categoryFormTypes'
 import { defaultBoolOptions, PROPERTY_INPUT_TYPE, PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { CODEBOOK } from '@/types/constants/codebook'
@@ -56,10 +55,6 @@ const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lengh
     control,
     name: `${name}.listOfValues`
   })
-  const type = useWatch({ control, name: `${name}.typeUID` })
-  const unit = useWatch({ control, name: `${name}.unitUID` })
-  const units = useCodebookSelectValues(CODEBOOK.UNIT)
-  const propertyTypes = useCodebookSelectValues(CODEBOOK.CATALOGUE_PROPERTY_TYPE)
 
   const handleRemoveProp = () => {
     removeProp(index)
@@ -67,7 +62,7 @@ const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lengh
   const handleAddValue = () => {
     append({ value: '' })
   }
-
+  const type = watch(`${name}.type`)
   const listOfValues = useMemo(() => watch(`${name}.listOfValues`) || [], [watch, name])
 
   const getDefaultOption = (name, disabled = false) => ({
@@ -77,7 +72,7 @@ const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lengh
   })
 
   useEffect(() => {
-    if (type !== PROPERTY_TYPE.LIST && listOfValues.length !== 0) {
+    if (type?.uid !== PROPERTY_TYPE.LIST && listOfValues.length !== 0) {
       unregister(`${name}.listOfValues`)
     }
   }, [type, unregister, name, listOfValues])
@@ -93,29 +88,33 @@ const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lengh
             name={`${name}.name`}
             placeholder="Property name"
             isError={!!errors?.name?.message}
+            rounded="rounded-r-md"
           />
-          <SelectWithError
-            register={register}
-            name={`${name}.typeUID`}
-            value={type}
-            isError={!!errors?.typeUID?.message}
-            options={propertyTypes && [getDefaultOption('Select type', true), ...propertyTypes]}
+          <Listbox
+            name={`${name}.type`}
+            optionsSize={'sm'}
+            emptyOption="Select type"
+            allowEmptyOption={true}
+            isError={!!errors?.type?.message}
+            codebook={CODEBOOK.CATALOGUE_PROPERTY_TYPE}
           />
-          <SelectWithError
-            register={register}
-            name={`${name}.unitUID`}
-            value={unit}
-            isError={!!errors?.unitUID?.message}
-            options={units ? [getDefaultOption('Select Unit'), ...units] : [getDefaultOption('Select Unit')]}
+          <Listbox
+            name={`${name}.unit`}
+            optionsSize={'sm'}
+            emptyOption="Select unit"
+            allowEmptyOption={true}
+            isError={!!errors?.unit?.message}
+            codebook={CODEBOOK.UNIT}
           />
 
-          {type === PROPERTY_TYPE.LIST || type === PROPERTY_TYPE.BOOLEAN ? (
+          {type?.uid === PROPERTY_TYPE.LIST || type?.uid === PROPERTY_TYPE.BOOLEAN ? (
             <SelectWithError
               register={register}
+              rounded="rounded-l-md"
               name={`${name}.defaultValue`}
-              isError={!!errors?.typeUID?.message}
+              isError={!!errors?.type?.message}
               options={
-                type === PROPERTY_TYPE.LIST
+                type.uid === PROPERTY_TYPE.LIST
                   ? [getDefaultOption('Select default'), ...listOfValues.map(value => ({ value: value.value }))]
                   : [getDefaultOption('Select default'), ...defaultBoolOptions]
               }
@@ -123,10 +122,11 @@ const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lengh
           ) : (
             <Input
               register={register}
+              rounded="rounded-l-md"
               name={`${name}.defaultValue`}
-              type={PROPERTY_INPUT_TYPE[type]}
+              type={PROPERTY_INPUT_TYPE[type?.uid]}
               placeholder="Default value"
-              disabled={type === ''}
+              disabled={type?.uid === ''}
               isError={!!errors?.defaultValue?.message}
             />
           )}
@@ -134,7 +134,7 @@ const PropertyItem = ({ name, removeProp, index, errors, moveDown, moveUp, lengh
             <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
           </Button>
         </div>
-        {type === PROPERTY_TYPE.LIST && (
+        {type?.uid === PROPERTY_TYPE.LIST && (
           <div className="flex flex-col">
             <h3 className="text-sm">List of Values:</h3>
             <div className="flex flex-wrap">

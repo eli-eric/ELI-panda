@@ -1,3 +1,5 @@
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
+
 export type Value = {
   value: string
 }
@@ -5,8 +7,8 @@ export type Value = {
 export type Property = {
   uid?: string
   name: string
-  typeUID: string
-  unitUID: string
+  type: CodebookType
+  unit: CodebookType
   defaultValue: string
   listOfValues?: Value[] | string[]
 }
