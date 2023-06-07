@@ -52,10 +52,10 @@ function ImageManager(props: ImageManagerProps) {
           toast.error(`Failed to upload ${name}`)
         } finally {
           setInProgress(prev => prev.filter(str => str !== name))
+          mutate()
         }
       }
       setDueUpload([])
-      mutate()
     },
     [endpoint, mutate]
   )
