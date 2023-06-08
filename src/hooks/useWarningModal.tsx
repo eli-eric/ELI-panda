@@ -3,7 +3,7 @@ import { shallow } from 'zustand/shallow'
 
 import useWarningModalStore from '@/store/useWarningModalStore'
 
-const useWarningModal = (message?: string) => {
+const useWarningModal = (globalMessage?: string) => {
   const [execData, setExecData] = useState({
     callback: undefined as Function | undefined,
     callbackArgs: undefined as any[] | undefined
@@ -40,18 +40,18 @@ const useWarningModal = (message?: string) => {
   }, [callback, callbackArgs, isOpen])
 
   const withWarningModal = useCallback(
-    <T extends any[], R>(callback: (...callbackArgs: T) => R, currentMessage?: string) =>
+    <T extends any[], R>(callback: (...callbackArgs: T) => R, message?: string) =>
       (...callbackArgs: T) => {
         const newParams = {
           isOpen: true,
           isConfirmed: false,
           error: '',
-          message: currentMessage ?? message ?? 'Are you sure?'
+          message: message ?? globalMessage ?? 'Are you sure?'
         }
         patchParams(newParams)
         setExecData({ callback, callbackArgs })
       },
-    [message, patchParams]
+    [globalMessage, patchParams]
   )
 
   return withWarningModal
