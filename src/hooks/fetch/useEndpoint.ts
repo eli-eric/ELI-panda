@@ -8,6 +8,7 @@ const getEndpoints = (uid?: string, path?: string, itemUid?: string, query?: str
     catalogueItem: `/catalogue/item${uid ? '/' + uid : ''}`,
     catalogueItemImage: `/catalogue/item/${uid}/image`,
     catalogueCategoryEdit: `/catalogue/category${uid ? '/' + uid : ''}`,
+    catalogueCategoryProperties: `/catalogue/category/${uid}/properties`,
     system: `/system${uid ? '/' + uid : ''}`,
     systemImage: `/system/${uid}/image`,
     catalogueCategoryCopy: `/catalogue/category/${uid}/copy`,

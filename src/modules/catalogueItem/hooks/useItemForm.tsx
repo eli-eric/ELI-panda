@@ -22,7 +22,7 @@ const useItemForm = () => {
   return {
     ...formMethods,
     FormWarningModal,
-    item
+    item: { ...item }
   }
 }
 

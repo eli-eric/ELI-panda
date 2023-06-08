@@ -1,24 +1,24 @@
 import { DevTool } from '@hookform/devtools'
+import { Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { FormProvider } from 'react-hook-form'
 
-import DisclosureComponent from '@/components/Disclosure.comp'
+import ErrorPage from '@/components/error/ErrorPage'
 import { TextArea } from '@/components/form/Input'
 import Card from '@/components/layout/Card'
+import ProgressBarComponent from '@/components/progress-bar.comp'
 
 import ImageGalleryComponent from '../../components/item-detail/ImageGallery'
 import DefaultItemForm from './components/form/DefaultItemForm'
-import GroupProperty from './components/form/GroupProperty'
+import Groups from './components/form/Groups'
 import ItemHeader from './components/header/Header.comp'
+import useItem from './hooks/useItem'
 import useItemForm from './hooks/useItemForm'
 import useItemSubmit from './hooks/useItemSubmit'
 
 const ItemContainer = () => {
-  const {
-    FormWarningModal,
-    item: { item, image, groups },
-    ...formMethods
-  } = useItemForm()
-
+  const { FormWarningModal, ...formMethods } = useItemForm()
+  const { image } = useItem()
   const { submit } = useItemSubmit()
 
   const onSubmit = (data: any) => {
@@ -44,25 +44,11 @@ const ItemContainer = () => {
             rounded={'rounded-md'}
             className={'px-4 py-5 sm:px-6'}
           />
-          {item?.details &&
-            groups?.map(group => (
-              <DisclosureComponent key={group} title={group} defaultOpen={true}>
-                <div className="px-4 sm:px-6">
-                  <dl key={group} className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                    {item.details?.map(
-                      (detail, index) =>
-                        detail.propertyGroup === group && (
-                          <GroupProperty
-                            key={detail.property.uid + index + detail.property.name}
-                            detail={detail}
-                            index={index}
-                          />
-                        )
-                    )}
-                  </dl>
-                </div>
-              </DisclosureComponent>
-            ))}
+          <ErrorBoundary fallback={<ErrorPage />}>
+            <Suspense fallback={<ProgressBarComponent />}>
+              <Groups />
+            </Suspense>
+          </ErrorBoundary>
           <FormWarningModal />
         </Card>
       </form>
