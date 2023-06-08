@@ -21,7 +21,7 @@ const DefaultItemForm = () => {
         <Input name="name" register={register} label={'Name'} rounded={'rounded-md'} className={'col-span-2'} />
         <Combobox
           name="categoryName"
-          label={fm({ id: messages.categoryName })}
+          customLabel={fm({ id: messages.categoryName })}
           rounded={'rounded-md'}
           codebook={CODEBOOK.CATALOGUE_CATEGORY}
           useFirstRender={false}
@@ -29,7 +29,7 @@ const DefaultItemForm = () => {
         <Combobox
           name="manufacturer"
           useFirstRender={false}
-          label={fm({ id: messages.manufacturer })}
+          customLabel={fm({ id: messages.manufacturer })}
           rounded={'rounded-md'}
           codebook={CODEBOOK.MANUFACTURER}
         />

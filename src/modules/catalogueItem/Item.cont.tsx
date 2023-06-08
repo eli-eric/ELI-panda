@@ -10,6 +10,7 @@ import DefaultItemForm from './components/form/DefaultItemForm'
 import GroupProperty from './components/form/GroupProperty'
 import useItemForm from './components/form/ItemForm.cont'
 import ItemHeader from './components/header/Header.comp'
+import useItemSubmit from './hooks/useItemSubmit'
 
 const ItemContainer = () => {
   const {
@@ -18,8 +19,11 @@ const ItemContainer = () => {
     ...formMethods
   } = useItemForm()
 
+  const { submit } = useItemSubmit()
+
   const onSubmit = (data: any) => {
     console.log(data)
+    submit(data)
   }
 
   return (

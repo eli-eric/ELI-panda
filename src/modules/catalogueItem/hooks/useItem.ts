@@ -20,7 +20,7 @@ const useItem = () => {
     isLoading,
     error,
     mutate
-  } = useSWR<CatalogueItem>(() => catalogueItem, mockFetcher, { suspense: false })
+  } = useSWR<CatalogueItem>(() => (catalogueUid ? catalogueItem : null), mockFetcher, { suspense: false })
 
   const image = useImage(catalogueItemImage)
 
