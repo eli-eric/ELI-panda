@@ -29,8 +29,9 @@ const useWarningModal = (message?: string) => {
     }
   }, [isConfirmed, callback, callbackArgs, resetParams, patchParams])
 
+  //Cancel execution on close
   useEffect(() => {
-    if (!isOpen && (callback || callbackArgs)) {
+    if (!isOpen && callbackArgs) {
       setExecData({
         callback: undefined,
         callbackArgs: undefined
