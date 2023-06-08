@@ -2,6 +2,7 @@ import type { CodebookType } from '@/hooks/fetch/useCodebook'
 
 export interface CatalogueItem {
   uid: string
+  catalogueNumber: string
   name: string
   description: string
   categoryPath: string
@@ -9,7 +10,6 @@ export interface CatalogueItem {
   manufacturer: CodebookType
   manufacturerUrl: string
   manufacturerNumber: string
-  catalogueNumber: string
   details?: CatalogueItemDetail[]
 }
 

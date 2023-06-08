@@ -8,8 +8,8 @@ import Card from '@/components/layout/Card'
 import ImageGalleryComponent from '../../components/item-detail/ImageGallery'
 import DefaultItemForm from './components/form/DefaultItemForm'
 import GroupProperty from './components/form/GroupProperty'
-import useItemForm from './components/form/ItemForm.cont'
 import ItemHeader from './components/header/Header.comp'
+import useItemForm from './hooks/useItemForm'
 import useItemSubmit from './hooks/useItemSubmit'
 
 const ItemContainer = () => {
@@ -37,7 +37,13 @@ const ItemContainer = () => {
               <DefaultItemForm />
             </div>
           </div>
-          <TextArea name="description" register={formMethods.register} label={'Description'} rounded={'rounded-md'} />
+          <TextArea
+            name="description"
+            register={formMethods.register}
+            label={'Description'}
+            rounded={'rounded-md'}
+            className={'px-4 py-5 sm:px-6'}
+          />
           {item?.details &&
             groups?.map(group => (
               <DisclosureComponent key={group} title={group} defaultOpen={true}>

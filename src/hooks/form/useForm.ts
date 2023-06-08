@@ -8,7 +8,7 @@ import { useFormLeaveWarning } from './useFormLeaveWarning'
 import useFormNotification from './useFormNotification'
 
 interface UseFormPropsWithSchema<T extends FieldValues> extends UseFormProps<DeepPartial<T>> {
-  schema?: yup.SchemaOf<DeepPartial<T>>
+  schema?: yup.SchemaOf<DeepPartial<T>, never>
 }
 const useForm = <T extends FieldValues>({ schema, ...restprops }: UseFormPropsWithSchema<T> = {}) => {
   const formMethods = useHookForm<DeepPartial<T>>({

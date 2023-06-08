@@ -14,11 +14,12 @@ const messages = message.cataloguePage.itemList.header
 const DefaultItemForm = () => {
   const { register } = useFormContext<CatalogueItem>()
   const { formatMessage: fm } = useIntl()
-
   return (
     <div className="px-4 py-5 sm:px-6">
       <div className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-        <Input name="name" register={register} label={'Name'} rounded={'rounded-md'} className={'col-span-2'} />
+        <Input name="name" register={register} label={'Name'} rounded={'rounded-md'} />
+        <Input name="catalogueNumber" register={register} label={'Catalogue Number'} rounded={'rounded-md'} />
+
         <Combobox
           name="categoryName"
           customLabel={fm({ id: messages.categoryName })}

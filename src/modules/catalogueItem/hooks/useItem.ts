@@ -2,10 +2,9 @@
 
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-import useSWR from 'swr'
 
-import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
+import useFetch from '@/hooks/fetch/useFetch'
 import { useImage } from '@/hooks/fetch/useImage'
 
 import type { CatalogueItem } from '../types/responses'
@@ -16,11 +15,15 @@ const useItem = () => {
   const { catalogueItem, catalogueItemImage } = useEndpoint({ uid: catalogueUid })
 
   const {
-    data: item,
-    isLoading,
+    response: item,
+    loading: isLoading,
     error,
     mutate
-  } = useSWR<CatalogueItem>(() => (catalogueUid ? catalogueItem : null), mockFetcher, { suspense: false })
+  } = useFetch<CatalogueItem>({
+    url: () => (catalogueUid ? catalogueItem : null),
+    config: { suspense: false },
+    useMockFetcher: true
+  })
 
   const image = useImage(catalogueItemImage)
 

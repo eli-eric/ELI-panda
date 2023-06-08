@@ -3,14 +3,14 @@ import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { useCallback, useEffect, useMemo } from 'react'
 import useSWR from 'swr'
-import type { BareFetcher, KeyedMutator, PublicConfiguration } from 'swr/_internal'
+import type { BareFetcher, Key, KeyedMutator, PublicConfiguration } from 'swr/_internal'
 
 import { fetcher, mockFetcher } from '@/helpers/fetcher'
 
 type Response = Record<string, any>
 
 interface UseFetchProps<ResponseType = Response> {
-  url?: string | null
+  url?: Key
   useMockFetcher?: boolean
   config?: Partial<PublicConfiguration<ResponseType, any, BareFetcher<ResponseType>>>
 
