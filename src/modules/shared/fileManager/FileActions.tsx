@@ -42,7 +42,7 @@ const FileActions = ({ file, endpoint, files, mutate, hasEditRole }: FileActions
     [endpoint, files, mutate]
   )
 
-  const { withWarningModal, WarningModal } = useWarningModal(
+  const withWarningModal = useWarningModal(
     intl.formatMessage({ id: messages.deleteModal.text }, createMessageValues({ fileName: file.name }))
   )
 
@@ -54,7 +54,6 @@ const FileActions = ({ file, endpoint, files, mutate, hasEditRole }: FileActions
         </a>
       </Link>
       {hasEditRole && <DeleteButton onClick={() => withWarningModal(handleDelete)(file.id)} />}
-      <WarningModal />
     </div>
   )
 }
