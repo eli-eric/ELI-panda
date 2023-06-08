@@ -121,7 +121,7 @@ function ImageManager(props: ImageManagerProps) {
       {...getRootProps()}
       className={`w-full flex flex-col rounded-md ${isDragActive ? 'border-2 border-orange-600' : ''}`}
     >
-      <Tab.Group>
+      <Tab.Group key={JSON.stringify(data)}>
         <Tab.List className={`w-full rounded-t-md border border-gray-300 flex gap-1 justify-between`}>
           <div>
             {hasEditRole && (
