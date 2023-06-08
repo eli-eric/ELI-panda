@@ -79,7 +79,7 @@ function ImageManager(props: ImageManagerProps) {
     const updatedFiles = await Promise.all(
       files.map(
         file =>
-          new Promise<{ name: string; payload: string }>((resolve, reject) => {
+          new Promise<ProcessedFile>((resolve, reject) => {
             const reader = new FileReader()
             reader.onload = () => {
               resolve({ name: file.name, payload: reader.result as string })
