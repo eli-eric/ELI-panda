@@ -19,7 +19,7 @@ import useItemSubmit from './hooks/useItemSubmit'
 const ItemContainer = () => {
   const { FormWarningModal, ...formMethods } = useItemForm()
   const { image } = useItem()
-  const { submit } = useItemSubmit()
+  const { submit, loading } = useItemSubmit()
 
   const onSubmit = (data: any) => {
     console.log(data)
@@ -29,7 +29,7 @@ const ItemContainer = () => {
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={formMethods.handleSubmit(onSubmit)}>
-        <ItemHeader disabledEdit={false} loading={false} />
+        <ItemHeader disabledEdit={false} loading={loading} />
         <Card className="flex flex-col justify-between">
           <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
             <ImageGalleryComponent images={[image]} />

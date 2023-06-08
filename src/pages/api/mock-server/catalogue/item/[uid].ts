@@ -25,7 +25,7 @@ const fakeItem = {
     {
       property: {
         name: 'Inlet flange type',
-        unit: '',
+        unit: { name: 'dd' },
         type: {
           uid: PROPERTY_TYPE.NUMBER,
           name: '100MEGA DISTRIBUTION s.r.o.'
@@ -38,7 +38,7 @@ const fakeItem = {
     {
       property: {
         name: 'Inlet flange size ',
-        unit: '',
+        unit: { name: 'dd' },
         type: {
           uid: PROPERTY_TYPE.NUMBER
         }
@@ -49,7 +49,7 @@ const fakeItem = {
     {
       property: {
         name: 'Outlet flange type',
-        unit: '',
+        unit: { name: 'dd' },
         type: {
           uid: PROPERTY_TYPE.LIST
         },
@@ -57,12 +57,12 @@ const fakeItem = {
         defaultValue: 'c'
       },
       propertyGroup: 'Flanges',
-      value: 'ISO-KF'
+      value: 'a'
     },
     {
       property: {
         name: 'Outlet flange size',
-        unit: '',
+        unit: { name: 'dd' },
         type: {
           uid: PROPERTY_TYPE.TEXT
         }
@@ -73,7 +73,7 @@ const fakeItem = {
     {
       property: {
         name: 'Coolling',
-        unit: '',
+        unit: { name: 'dd' },
         type: {
           uid: PROPERTY_TYPE.TEXT
         }
@@ -84,7 +84,7 @@ const fakeItem = {
     {
       property: {
         name: 'Power consumption',
-        unit: 'W',
+        unit: { name: 'dd' },
         type: {
           uid: PROPERTY_TYPE.NUMBER
         }
@@ -95,7 +95,7 @@ const fakeItem = {
     {
       property: {
         name: 'Peak pumping speed',
-        unit: 'm3/hod',
+        unit: { name: 'dd' },
         type: {
           uid: PROPERTY_TYPE.NUMBER
         }
@@ -106,7 +106,7 @@ const fakeItem = {
     {
       property: {
         name: 'Ultimate vacuum ',
-        unit: 'mbar',
+        unit: { name: 'dd' },
         type: {
           uid: PROPERTY_TYPE.NUMBER
         }

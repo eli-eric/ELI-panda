@@ -9,6 +9,7 @@ import { ValidationIcon } from './Icons'
 export type InputProps<T extends FieldValues> = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
     register?: UseFormRegister<T>
+    unit?: string
   }
 
 export const Input = <T extends FieldValues>({
@@ -22,6 +23,7 @@ export const Input = <T extends FieldValues>({
   className,
   hidden,
   label,
+  unit,
   ...restProps
 }: InputProps<T>) => (
   <div
@@ -71,7 +73,12 @@ export const Input = <T extends FieldValues>({
           )}
         />
       )}
-      {isError && <ValidationIcon />}
+      {unit && (
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+          <span className="text-gray-400 sm:text-sm">{unit}</span>
+        </div>
+      )}
+      {/* {isError && <ValidationIcon />} */}
     </div>
   </div>
 )

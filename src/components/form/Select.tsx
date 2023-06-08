@@ -56,6 +56,7 @@ export type SelectWithErrorProps<T extends FieldValues> = FieldProps &
   React.SelectHTMLAttributes<HTMLSelectElement> & {
     options?: Option[]
     register?: UseFormRegister<T>
+    unit?: string
   }
 
 //TODO: refactor all usage with ListBox
@@ -66,6 +67,7 @@ export const SelectWithError = <T extends FieldValues>({
   label,
   disabled,
   className,
+  unit,
   ...rest
 }: SelectWithErrorProps<T>) => (
   <div
@@ -86,5 +88,10 @@ export const SelectWithError = <T extends FieldValues>({
         isError ? 'border-red-500' : 'border-gray-300'
       )}
     />
+    {unit && (
+      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+        <span className="text-gray-500 sm:text-sm">{unit}</span>
+      </div>
+    )}
   </div>
 )
