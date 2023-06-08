@@ -15,7 +15,7 @@ export const getPathInfo = (req: NextApiRequest, res: NextApiResponse) => {
     res.status(400).end()
   }
 
-  const prefix = `/${fileCategory}/${itemCategory}/${itemId}/`
+  const prefix = `/${itemCategory}/${itemId}/${fileCategory}/`
   const id = fileId
   const fullPath = prefix + id
   return { prefix, id, fullPath }
