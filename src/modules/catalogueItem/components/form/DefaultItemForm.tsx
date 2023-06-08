@@ -32,7 +32,7 @@ const DefaultItemForm = () => {
 
         <Combobox
           disabled={disabled}
-          name="categoryName"
+          name="category"
           customLabel={fm({ id: messages.categoryName })}
           rounded={'rounded-md'}
           codebook={CODEBOOK.CATALOGUE_CATEGORY}
