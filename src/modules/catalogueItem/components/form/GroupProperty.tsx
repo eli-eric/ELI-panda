@@ -6,7 +6,9 @@ import type { InputProps } from '@/components/form/Input'
 import { Input } from '@/components/form/Input'
 import type { SelectWithErrorProps } from '@/components/form/Select'
 import { SelectWithError } from '@/components/form/Select'
+import usePermission from '@/hooks/usePermission'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
+import { ROLE } from '@/types/constants/roles'
 
 import type { CatalogueItem, CatalogueItemDetail } from '../../types/responses'
 
@@ -28,6 +30,7 @@ SelectWithErrorWithRef.displayName = 'SelectWithErrorWithRef'
 
 const GroupProperty = ({ detail, index }: Props) => {
   const { control } = useFormContext<CatalogueItem>()
+  const disabled = !usePermission([ROLE.CATALOGUE_EDIT])
 
   return (
     <Controller
@@ -35,15 +38,24 @@ const GroupProperty = ({ detail, index }: Props) => {
       control={control}
       render={({ field }) => {
         if (PROPERTY_TYPE.TEXT === detail.property.type.uid) {
-          return <InputWithRef {...field} label={detail.property.name} rounded={'rounded-md'} />
+          return <InputWithRef {...field} label={detail.property.name} disabled={disabled} rounded={'rounded-md'} />
         }
         if (PROPERTY_TYPE.NUMBER === detail.property.type.uid) {
-          return <InputWithRef {...field} label={detail.property.name} rounded={'rounded-md'} type={'number'} />
+          return (
+            <InputWithRef
+              {...field}
+              label={detail.property.name}
+              disabled={disabled}
+              rounded={'rounded-md'}
+              type={'number'}
+            />
+          )
         }
         if (PROPERTY_TYPE.BOOLEAN === detail.property.type.uid) {
           return (
             <SelectWithErrorWithRef
               {...field}
+              disabled={disabled}
               label={detail.property.name}
               rounded={'rounded-md'}
               options={[
@@ -57,6 +69,7 @@ const GroupProperty = ({ detail, index }: Props) => {
           return (
             <SelectWithErrorWithRef
               {...field}
+              disabled={disabled}
               label={detail.property.name}
               rounded={'rounded-md'}
               options={detail.property.listOfValues.map(value => ({
@@ -66,7 +79,7 @@ const GroupProperty = ({ detail, index }: Props) => {
             />
           )
         }
-        return <InputWithRef {...field} label={detail.property.name} rounded={'rounded-md'} />
+        return <InputWithRef {...field} disabled={disabled} label={detail.property.name} rounded={'rounded-md'} />
       }}
     />
   )

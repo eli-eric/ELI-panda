@@ -25,7 +25,7 @@ const useItem = () => {
     useMockFetcher: true
   })
 
-  const image = useImage(catalogueItemImage)
+  const image = useImage(catalogueUid ? catalogueItemImage : null)
 
   const groups = useMemo(
     () => item?.details?.map(item => item.propertyGroup).filter((value, index, self) => self.indexOf(value) === index),

@@ -1,27 +1,32 @@
-import { useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import DisclosureComponent from '@/components/Disclosure.comp'
 
 import useGroupDetails from '../../hooks/useGroupDetails'
 import useItem from '../../hooks/useItem'
-import type { CatalogueItem } from '../../types/responses'
+import type { CatalogueItem, CatalogueItemDetail } from '../../types/responses'
 import GroupProperty from './GroupProperty'
 
 const Groups = () => {
   const { control, unregister } = useFormContext<CatalogueItem>()
+  const [details, setDetails] = useState<{ groups?: string[]; details?: CatalogueItemDetail[] }>()
 
   const categoryName = useWatch({ control, name: 'categoryName' })
 
   const { item, groups: groupsItem } = useItem()
   const { groups: groupsDetail, groupDetails } = useGroupDetails(categoryName?.uid)
 
-  const details = useMemo(() => {
+  useEffect(() => {
     if (categoryName?.uid === item?.categoryName?.uid) {
-      return { groups: groupsItem, details: item?.details }
+      setDetails({ groups: groupsItem, details: item?.details })
     } else {
       unregister('details')
-      return { groups: groupsDetail, details: groupDetails }
+      setDetails({ groups: groupsDetail, details: groupDetails })
+    }
+    return () => {
+      unregister('details')
+      setDetails(undefined)
     }
   }, [groupsItem, groupsDetail])
 
