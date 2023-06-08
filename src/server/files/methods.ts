@@ -59,19 +59,23 @@ export async function listFiles(req: NextApiRequest, res: NextApiResponse) {
     })
   })
 
-  const result = list.map(obj => {
-    const { name: objFullPath, metadata } = obj
-    const [id] = objFullPath.split('/').reverse()
-    const name = decodeURIComponent(metadata['X-Amz-Meta-Name'])
-    const type = metadata['content-type']
-    const url = `${req.url}/${id}`
-    return {
-      id,
-      name,
-      type,
-      url
-    }
-  })
+  const result = list
+    .map(obj => {
+      const { lastModified, name: objFullPath, metadata } = obj
+      const ts = new Date(lastModified).getTime()
+      const [id] = objFullPath.split('/').reverse()
+      const name = decodeURIComponent(metadata['X-Amz-Meta-Name'])
+      const type = metadata['content-type']
+      const url = `${req.url}/${id}`
+      return {
+        id,
+        name,
+        type,
+        url,
+        ts
+      }
+    })
+    .sort((a, b) => b.ts - a.ts)
 
   return res.status(200).json(result)
 }
