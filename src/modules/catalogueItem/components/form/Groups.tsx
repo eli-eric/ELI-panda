@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import DisclosureComponent from '@/components/Disclosure.comp'
@@ -31,8 +31,9 @@ const Groups = () => {
   }, [groupsItem, groupsDetail, groupDetails, category, item, unregister])
 
   return (
-    <div>
+    <Fragment>
       {details &&
+        details?.details?.length !== 0 &&
         details.groups?.map(group => (
           <DisclosureComponent key={group} title={group} defaultOpen={true}>
             <div className="px-4 sm:px-6">
@@ -51,7 +52,7 @@ const Groups = () => {
             </div>
           </DisclosureComponent>
         ))}
-    </div>
+    </Fragment>
   )
 }
 
