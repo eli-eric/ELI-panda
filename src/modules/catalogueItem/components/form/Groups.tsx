@@ -12,13 +12,13 @@ const Groups = () => {
   const { control, unregister } = useFormContext<CatalogueItem>()
   const [details, setDetails] = useState<{ groups?: string[]; details?: CatalogueItemDetail[] }>()
 
-  const categoryName = useWatch({ control, name: 'categoryName' })
+  const categoryName = useWatch({ control, name: 'category' })
 
   const { item, groups: groupsItem } = useItem()
   const { groups: groupsDetail, groupDetails } = useGroupDetails(categoryName?.uid)
 
   useEffect(() => {
-    if (categoryName?.uid === item?.categoryName?.uid) {
+    if (categoryName?.uid === item?.category?.uid) {
       setDetails({ groups: groupsItem, details: item?.details })
     } else {
       unregister('details')
