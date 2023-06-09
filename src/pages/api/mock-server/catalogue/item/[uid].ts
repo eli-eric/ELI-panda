@@ -21,7 +21,100 @@ const fakeItem = {
   manufacturerNumber: 'CKF00040',
   manufacturerUrl:
     'https://www.pfeiffer-vacuum.com/en/products/vacuum-generation/multi-stage-roots-pumps/light-duty-applications/air-cooled/low-noise-acp-kits/32098/low-noise-kit-acp-15',
-  details: []
+  details: [
+    {
+      property: {
+        name: 'Inlet flange type',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.NUMBER,
+          name: '100MEGA DISTRIBUTION s.r.o.'
+        },
+        defaultValue: '0'
+      },
+      propertyGroup: 'Flanges',
+      value: 'ISO-KF'
+    },
+    {
+      property: {
+        name: 'Inlet flange size ',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.NUMBER
+        }
+      },
+      propertyGroup: 'Flanges',
+      value: '1123'
+    },
+    {
+      property: {
+        name: 'Outlet flange type',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.LIST
+        },
+        listOfValues: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'],
+        defaultValue: 'c'
+      },
+      propertyGroup: 'Flanges',
+      value: 'a'
+    },
+    {
+      property: {
+        name: 'Outlet flange size',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.TEXT
+        }
+      },
+      propertyGroup: 'Flanges',
+      value: 'DN 16'
+    },
+    {
+      property: {
+        name: 'Coolling',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.TEXT
+        }
+      },
+      propertyGroup: 'Other',
+      value: 'Air'
+    },
+    {
+      property: {
+        name: 'Power consumption',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.NUMBER
+        }
+      },
+      propertyGroup: 'Other',
+      value: '450.0'
+    },
+    {
+      property: {
+        name: 'Peak pumping speed',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.NUMBER
+        }
+      },
+      propertyGroup: 'Pump parameters',
+      value: '14.0'
+    },
+    {
+      property: {
+        name: 'Ultimate vacuum ',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.NUMBER
+        }
+      },
+      propertyGroup: 'Pump parameters',
+      value: '0.05'
+    }
+  ]
 }
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {

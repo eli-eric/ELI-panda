@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import DisclosureComponent from '@/components/Disclosure.comp'
+import Heading from '@/components/layout/Heading'
 
 import useGroupDetails from '../../hooks/useGroupDetails'
 import useItem from '../../hooks/useItem'
@@ -35,9 +35,10 @@ const Groups = () => {
       {details &&
         details?.details?.length !== 0 &&
         details.groups?.map(group => (
-          <DisclosureComponent key={group} title={group} defaultOpen={true}>
+          <Fragment key={group}>
+            <Heading text={group} />
             <div className="px-4 sm:px-6">
-              <dl key={group} className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+              <dl key={group} className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
                 {details.details?.map(
                   (detail, index) =>
                     detail.propertyGroup === group && (
@@ -50,7 +51,7 @@ const Groups = () => {
                 )}
               </dl>
             </div>
-          </DisclosureComponent>
+          </Fragment>
         ))}
     </Fragment>
   )
