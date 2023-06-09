@@ -1,16 +1,12 @@
-import { useFormContext } from 'react-hook-form'
-
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 
 import useOrderDetail from '../../hooks/useOrderDetail'
-import type { OrderDetailFormType } from '../../types'
 
 // messages
 const { form } = message.ordersPage.orderDetail
 
 const useOrderFormFields = () => {
-  const { formState } = useFormContext<OrderDetailFormType>()
   const { disabledEdit: disabled } = useOrderDetail()
 
   return useMakeFormFields({

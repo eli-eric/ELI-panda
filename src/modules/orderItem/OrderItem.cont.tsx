@@ -1,3 +1,4 @@
+import { DevTool } from '@hookform/devtools'
 import { Fragment, Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
@@ -13,7 +14,7 @@ import useOrderDetail from './hooks/useOrderDetail'
 
 const OrderItemContainer = () => {
   const { disabledEdit, uid } = useOrderDetail()
-  const { renderForm, setOrderLine, deleteOrderLine, orderLines } = useOrderForm()
+  const { renderForm, setOrderLine, deleteOrderLine, orderLines, control } = useOrderForm()
 
   return (
     <Fragment>
@@ -33,6 +34,7 @@ const OrderItemContainer = () => {
           </ErrorBoundary>
         )}
       </Card>
+      <DevTool control={control} />
     </Fragment>
   )
 }

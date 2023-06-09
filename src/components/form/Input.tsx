@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import type { FieldValues, Path } from 'react-hook-form'
 import { Controller } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
@@ -8,11 +8,32 @@ import type { FieldProps } from '@/types/form'
 
 import { ValidationIcon } from './Icons'
 
+const InputWrapper = ({
+  hidden,
+  className,
+  children
+}: {
+  hidden?: boolean
+  className?: string
+  children: React.ReactNode
+}) => (
+  <div
+    hidden={hidden}
+    className={classNames(
+      'block w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+      className
+    )}
+  >
+    {children}
+  </div>
+)
+const Label = ({ label }: { label?: string }) =>
+  label ? <label className="text-sm font-medium text-gray-700">{label}</label> : null
+
 export type InputProps = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
     unit?: string
   }
-
 export const Input = ({
   name,
   placeholder,
@@ -22,8 +43,7 @@ export const Input = ({
   className,
   hidden,
   label,
-  unit,
-  ...restProps
+  unit
 }: InputProps) => {
   const { control } = useFormContext()
 
@@ -33,22 +53,11 @@ export const Input = ({
       control={control}
       defaultValue={''}
       render={({ field, formState }) => (
-        <div
-          hidden={hidden}
-          className={classNames(
-            'block w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
-            className
-          )}
-        >
-          {label && (
-            <label hidden={hidden} className="text-sm font-medium text-gray-700">
-              {label}
-            </label>
-          )}
+        <InputWrapper hidden={hidden} className={className}>
+          <Label label={label} />
           <div hidden={hidden} className="relative">
             <input
               {...field}
-              {...restProps}
               hidden={hidden}
               step="0.001"
               type={type}
@@ -69,7 +78,7 @@ export const Input = ({
             )}
             {/* {isError && <ValidationIcon />} */}
           </div>
-        </div>
+        </InputWrapper>
       )}
     />
   )
@@ -77,15 +86,7 @@ export const Input = ({
 
 type TextAreaWithErrorProps = FieldProps & React.InputHTMLAttributes<HTMLTextAreaElement>
 
-export const TextArea = ({
-  name,
-  placeholder,
-  disabled,
-  rounded,
-  label,
-  className,
-  ...restProps
-}: TextAreaWithErrorProps) => {
+export const TextArea = ({ name, placeholder, disabled, rounded, label, className }: TextAreaWithErrorProps) => {
   const { control } = useFormContext()
 
   return (
@@ -94,28 +95,24 @@ export const TextArea = ({
       control={control}
       defaultValue={''}
       render={({ field, formState }) => (
-        <div
-          className={classNames(
-            'block relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
-            className
-          )}
-        >
-          {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
-          <textarea
-            {...field}
-            {...restProps}
-            rows={3}
-            disabled={disabled}
-            placeholder={placeholder}
-            className={classNames(
-              'block w-full appearance-none px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm border',
-              rounded,
-              formState.errors?.[name] ? 'border-red-500' : 'border-gray-300',
-              disabled ? 'bg-gray-100' : ''
-            )}
-          />
-          {formState.errors?.[name] && <ValidationIcon />}
-        </div>
+        <InputWrapper className={className}>
+          <Fragment>
+            <Label label={label} />
+            <textarea
+              {...field}
+              rows={3}
+              disabled={disabled}
+              placeholder={placeholder}
+              className={classNames(
+                'block w-full appearance-none px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm border',
+                rounded,
+                formState.errors?.[name] ? 'border-red-500' : 'border-gray-300',
+                disabled ? 'bg-gray-100' : ''
+              )}
+            />
+            {formState.errors?.[name] && <ValidationIcon />}
+          </Fragment>
+        </InputWrapper>
       )}
     />
   )
@@ -128,11 +125,9 @@ export const InputAmount = <T extends FieldValues>({
   placeholder,
   disabled,
   rounded,
-  type = 'number',
   className,
   hidden,
-  label,
-  ...restProps
+  label
 }: InputAmountProps) => {
   const currencyOptions = ['EUR', 'USD', 'CZK', 'HUF', 'RON', 'GBP']
   const { control, register } = useFormContext()
@@ -143,25 +138,13 @@ export const InputAmount = <T extends FieldValues>({
       control={control}
       defaultValue={''}
       render={({ field, formState }) => (
-        <div
-          hidden={hidden}
-          className={classNames(
-            'block z-10 w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
-            className
-          )}
-        >
-          {label && (
-            <label hidden={hidden} className="text-sm font-medium text-gray-700">
-              {label}
-            </label>
-          )}
+        <InputWrapper hidden={hidden} className={className}>
+          <Label label={label} />
           <div hidden={hidden} className="relative">
             <input
               {...field}
-              {...restProps}
               hidden={hidden}
-              name={name}
-              type={type}
+              type={'number'}
               step="0.001"
               disabled={disabled}
               placeholder={placeholder}
@@ -188,7 +171,7 @@ export const InputAmount = <T extends FieldValues>({
               </select>
             </div>
           </div>
-        </div>
+        </InputWrapper>
       )}
     />
   )

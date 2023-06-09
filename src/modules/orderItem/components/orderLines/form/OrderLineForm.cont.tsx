@@ -55,7 +55,7 @@ const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
     schema: orderLineFormSchema,
     defaultValues: orderLine
       ? { ...orderLine, currency: orderLine.currency || 'EUR' }
-      : { itemUsage: { uid: 'a2aae89a-5cbe-4042-a726-44012b158226', name: 'In System Part' } }
+      : { itemUsage: { uid: 'a2aae89a-5cbe-4042-a726-44012b158226', name: 'In System Part' }, quantity: 1 }
   })
 
   return { setOpen, getFormModal }

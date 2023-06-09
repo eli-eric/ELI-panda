@@ -48,7 +48,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
       setValue('catalogueNumber', catalogueItem?.catalogueNumber || orderLine?.catalogueNumber || '')
       setValue('catalogueUid', catalogueItem?.uid || orderLine?.catalogueUid || '')
     }
-  }, [catalogueItem, orderLine, enabled])
+  }, [catalogueItem, orderLine, enabled, setValue])
 
   // clear values on toggle
   useEffect(() => {
@@ -57,16 +57,17 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
       setValue('catalogueNumber', '')
       setValue('catalogueUid', '')
     }
-  }, [enabled])
+  }, [enabled, setValue])
 
+  // set location enable on system change
   useEffect(() => {
     if (system) {
       setLocationEnable(false)
-      setValue('location', undefined)
+      setValue('location', { name: '', uid: '' })
     } else {
       setLocationEnable(true)
     }
-  }, [system])
+  }, [system, setValue])
 
   return (
     <Grid>
@@ -94,7 +95,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
       </Col>
       {!orderLine?.id && (
         <Col md={6} lg={4}>
-          <Input {...formFields.quantity} defaultValue={1} />
+          <Input {...formFields.quantity} />
         </Col>
       )}
       {orderLine?.uid && (

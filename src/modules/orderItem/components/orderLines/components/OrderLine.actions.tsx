@@ -127,6 +127,7 @@ export const OrderisDeliveredAction = ({
     eun?: string
     manualEun: boolean
   }>({
+    defaultValues: { serialNumber: '' },
     renderForm: () => {
       const manualEun = formMethods.watch('manualEun')
       return (
@@ -137,7 +138,6 @@ export const OrderisDeliveredAction = ({
               label={formatMessage({ id: orderLines.form.serialNumber.label })}
               placeholder={formatMessage({ id: orderLines.form.serialNumber.placeholder })}
               rounded="rounded-md"
-              defaultValue={undefined}
             />
           </Col>
 
