@@ -10,6 +10,7 @@ import { SWRConfig } from 'swr'
 
 import NavigationComponent from '@/components/layout/nav-bar/nav-bar.comp'
 import Notification from '@/components/Notifications/Notification'
+import WarningModal from '@/components/WarningModal'
 import { fetcher } from '@/helpers/fetcher'
 import useLocale from '@/hooks/useLocale'
 
@@ -58,6 +59,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
         {t => <Notification t={t} />}
       </Toaster>
       <Component {...pageProps} />
+      <WarningModal />
     </GlobalProvider>
   </SessionProvider>
 )

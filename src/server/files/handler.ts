@@ -19,6 +19,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
       case 'DELETE':
         return removeFile(req, res)
       default:
+        throw new Error('Method not supported')
     }
   } catch (err) {
     logger.error(err)

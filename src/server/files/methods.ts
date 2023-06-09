@@ -15,7 +15,7 @@ export const getPathInfo = (req: NextApiRequest, res: NextApiResponse) => {
     res.status(400).end()
   }
 
-  const prefix = `/${fileCategory}/${itemCategory}/${itemId}/`
+  const prefix = `/${itemCategory}/${itemId}/${fileCategory}/`
   const id = fileId
   const fullPath = prefix + id
   return { prefix, id, fullPath }
@@ -59,19 +59,23 @@ export async function listFiles(req: NextApiRequest, res: NextApiResponse) {
     })
   })
 
-  const result = list.map(obj => {
-    const { name: objFullPath, metadata } = obj
-    const [id] = objFullPath.split('/').reverse()
-    const name = decodeURIComponent(metadata['X-Amz-Meta-Name'])
-    const type = metadata['content-type']
-    const url = `${req.url}/${id}`
-    return {
-      id,
-      name,
-      type,
-      url
-    }
-  })
+  const result = list
+    .map(obj => {
+      const { lastModified, name: objFullPath, metadata } = obj
+      const ts = new Date(lastModified).getTime()
+      const [id] = objFullPath.split('/').reverse()
+      const name = decodeURIComponent(metadata['X-Amz-Meta-Name'])
+      const type = metadata['content-type']
+      const url = `${req.url}/${id}`
+      return {
+        id,
+        name,
+        type,
+        url,
+        ts
+      }
+    })
+    .sort((a, b) => b.ts - a.ts)
 
   return res.status(200).json(result)
 }
@@ -106,6 +110,8 @@ export async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
 
 export async function removeFile(req: NextApiRequest, res: NextApiResponse) {
   const { fullPath } = getPathInfo(req, res)
+  const obj = await s3Client.statObject(bucket, fullPath)
+  if (!obj) return res.status(404).json({})
   await s3Client.removeObject(bucket, fullPath)
   logger.debug(composeDebugMessage(req, 'Successfully deleted file'))
   res.status(200).json({})
