@@ -49,6 +49,7 @@ const Combobox = ({
   const { getFormModal, setOpen } = useAddCodebookValue(options?.metadata)
   const [hasAddPermission, setHasAddPermission] = useState(false)
   const { data: session } = useSession()
+
   useEffect(() => {
     if (showAddButton && options?.metadata?.roleEdit && session?.user?.roles) {
       const hasTargetPermission = session.user.roles.includes(options.metadata.roleEdit)
@@ -71,6 +72,7 @@ const Combobox = ({
       <Controller
         name={name}
         control={control}
+        defaultValue={null}
         render={({ field, formState }) => (
           <>
             <HUICombobox
@@ -122,6 +124,7 @@ const Combobox = ({
                     <HUICombobox.Option
                       key={item.uid}
                       value={item}
+                      defaultValue={''}
                       className={({ active }) =>
                         classNames(
                           'relative cursor-default select-none py-2 pl-3 pr-9',

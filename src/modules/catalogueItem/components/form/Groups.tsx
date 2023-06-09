@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useFormContext, useWatch } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
 import DisclosureComponent from '@/components/Disclosure.comp'
 
@@ -9,16 +9,16 @@ import type { CatalogueItem, CatalogueItemDetail } from '../../types/responses'
 import GroupProperty from './GroupProperty'
 
 const Groups = () => {
-  const { control, unregister } = useFormContext<CatalogueItem>()
+  const { unregister, watch } = useFormContext<CatalogueItem>()
   const [details, setDetails] = useState<{ groups?: string[]; details?: CatalogueItemDetail[] }>()
 
-  const categoryName = useWatch({ control, name: 'category' })
+  const category = watch('category')
 
   const { item, groups: groupsItem } = useItem()
-  const { groups: groupsDetail, groupDetails } = useGroupDetails(categoryName?.uid)
+  const { groups: groupsDetail, groupDetails } = useGroupDetails(category?.uid)
 
   useEffect(() => {
-    if (categoryName?.uid === item?.category?.uid) {
+    if (category?.uid === item?.category?.uid) {
       setDetails({ groups: groupsItem, details: item?.details })
     } else {
       unregister('details')
@@ -28,7 +28,7 @@ const Groups = () => {
       unregister('details')
       setDetails(undefined)
     }
-  }, [groupsItem, groupsDetail])
+  }, [groupsItem, groupsDetail, groupDetails, category, item, unregister])
 
   return (
     <div>

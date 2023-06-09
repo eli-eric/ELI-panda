@@ -10,16 +10,15 @@ import type { OrderDetailFormType } from '../../types'
 const { form } = message.ordersPage.orderDetail
 
 const useOrderFormFields = () => {
-  const { register, formState } = useFormContext<OrderDetailFormType>()
+  const { formState } = useFormContext<OrderDetailFormType>()
   const { disabledEdit: disabled } = useOrderDetail()
 
-  return useMakeFormFields(register, {
+  return useMakeFormFields({
     name: {
       name: 'name',
       label: form.name.label,
       placeholder: form.name.placeholder,
       disabled: disabled,
-      isError: !!formState.errors.name,
       rounded: 'rounded-md'
     },
     orderNumber: {
@@ -27,7 +26,6 @@ const useOrderFormFields = () => {
       label: form.orderNumber.label,
       placeholder: form.orderNumber.placeholder,
       disabled: disabled,
-      isError: !!formState.errors.atLeastOneFilled,
       rounded: 'rounded-md'
     },
     requestNumber: {
@@ -35,7 +33,6 @@ const useOrderFormFields = () => {
       label: form.requestNumber.label,
       placeholder: form.requestNumber.placeholder,
       disabled: disabled,
-      isError: !!formState.errors.atLeastOneFilled,
       rounded: 'rounded-md'
     },
     contractNumber: {
@@ -43,7 +40,6 @@ const useOrderFormFields = () => {
       label: form.contractNumber.label,
       placeholder: form.contractNumber.placeholder,
       disabled: disabled,
-      isError: !!formState.errors.atLeastOneFilled,
       rounded: 'rounded-md'
     },
     // supplier: {
@@ -85,7 +81,6 @@ const useOrderFormFields = () => {
       name: 'notes',
       label: form.notes.label,
       disabled: disabled,
-      isError: !!formState.errors.notes,
       rounded: 'rounded-md'
     },
     orderDate: {
@@ -93,7 +88,6 @@ const useOrderFormFields = () => {
       label: form.orderDate.label,
       type: 'date',
       disabled: disabled,
-      isError: !!formState.errors.orderDate,
       rounded: 'rounded-md'
     }
   })

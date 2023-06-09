@@ -133,7 +133,6 @@ export const OrderisDeliveredAction = ({
         <Grid>
           <Col md={12}>
             <Input
-              register={formMethods.register}
               name="serialNumber"
               label={formatMessage({ id: orderLines.form.serialNumber.label })}
               placeholder={formatMessage({ id: orderLines.form.serialNumber.placeholder })}
@@ -144,7 +143,6 @@ export const OrderisDeliveredAction = ({
 
           <Col md={12}>
             <CheckBox
-              register={formMethods.register}
               name="manualEun"
               label={formatMessage({ id: orderLines.form.manualEun.label })}
               rounded="rounded-md"
@@ -153,7 +151,6 @@ export const OrderisDeliveredAction = ({
           {manualEun && (
             <Col md={12}>
               <Input
-                register={formMethods.register}
                 name="eun"
                 label={formatMessage({ id: orderLines.form.eun.label })}
                 placeholder={formatMessage({ id: orderLines.form.eun.placeholder })}

@@ -36,7 +36,7 @@ const Listbox = ({
   rounded = 'rounded-md',
   unit,
   customOptions,
-  useFirstRender = true,
+  useFirstRender = false,
   customLabel
 }: ListboxPropsT) => {
   const { control, setValue } = useFormContext()
@@ -54,7 +54,7 @@ const Listbox = ({
       targetOptions.push(...codebookOptions.data)
     }
     return targetOptions
-  }, [allowEmptyOption, emptyOption, codebookOptions])
+  }, [allowEmptyOption, emptyOption, codebookOptions, customOptions])
 
   const handleChange = (value: any) => (value?.uid === '' ? null : value)
 
@@ -72,6 +72,7 @@ const Listbox = ({
     <Controller
       name={name}
       control={control}
+      defaultValue={null}
       render={({ field, formState }) => (
         <HUIListbox
           as="div"

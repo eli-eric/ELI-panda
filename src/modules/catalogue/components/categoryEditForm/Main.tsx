@@ -30,7 +30,7 @@ const Main = ({ uid }: { uid?: string }) => {
   const { data: categoryImage } = useSWR(uid ? catalogueCategoryImage : undefined)
 
   const [showImageUid, setShowImage] = useState<boolean>(!!uid)
-  const { register, watch, setValue, formState } = useFormContext<CategoryFormType>()
+  const { watch, setValue } = useFormContext<CategoryFormType>()
   const onDrop = useCallback(
     files => {
       const reader = new FileReader()
@@ -44,8 +44,6 @@ const Main = ({ uid }: { uid?: string }) => {
     accept: { 'image/*': [] },
     onDrop
   })
-
-  const { errors } = formState
 
   const image = watch('image')
   const name = watch('name')
@@ -75,19 +73,12 @@ const Main = ({ uid }: { uid?: string }) => {
       <div className="flex flex-col col-span-3 flex-grow ml-10">
         <div>
           <div className="mt-1">
-            <Input name="name" label="Name" register={register} isError={!!errors.name?.message} rounded="rounded-md" />
+            <Input name="name" label="Name" rounded="rounded-md" />
           </div>
         </div>
         <div>
           <div className="mt-1">
-            <Input
-              name="code"
-              label="Code"
-              register={register}
-              disabled={true}
-              isError={!!errors.code?.message}
-              rounded="rounded-md"
-            />
+            <Input name="code" label="Code" disabled={true} rounded="rounded-md" />
           </div>
         </div>
       </div>

@@ -33,7 +33,7 @@
     "@typescript-eslint/explicit-module-boundary-types": 0,
     "@typescript-eslint/no-unused-vars": ["warn", { "args": "after-used" }],
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "off",
+    "react-hooks/exhaustive-deps": "warn",
     "arrow-body-style": "warn",
     "no-console": "warn",
     "linebreak-style": ["warn", "unix"],

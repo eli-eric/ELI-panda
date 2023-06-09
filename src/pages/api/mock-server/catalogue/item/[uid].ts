@@ -10,9 +10,9 @@ const fakeItem = {
   catalogueNumber: 'CKF00040',
   description:
     'Dry multi-stage Roots technology, SD versions, ACP pumps with a pumping speed of max. 15 m3/h, No particle contamination, thanks to frictionless design: no wearing parts in the pumped gases path, No hydrocarbon vapors backstreaming: ACP series pumps are free of lubricant inside the pumping module, Constant performances (Pumping speed, max. and ultimate pressure), High reliability: thanks to our expertise of dry multi-stage Roots pumps since 1988, Low maintenance costs: no annual field service, complete overhaul only every 20000 hours for ACP 15, Condensable vapor ability: with gas ballast ports and drainable silencer',
-  categoryName: {
-    uid: '36a552bd-027d-49d6-b606-9b9ed112358b',
-    name: 'B copyaaa - test'
+  category: {
+    uid: '5888ff86-9a12-4a82-9fa7-9efbf858657b',
+    name: 'Cryopumps - Vacuum Technology > Vacuum pumps'
   },
   manufacturer: {
     uid: '497af5c8-b5de-4e7f-ae53-9a17861c99ad',

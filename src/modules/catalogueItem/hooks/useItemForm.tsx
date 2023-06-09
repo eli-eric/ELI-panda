@@ -13,7 +13,7 @@ const useItemForm = () => {
 
   const formMethods = useForm<CatalogueItem>({
     resolver: yupResolver(schema),
-    defaultValues: item.item
+    defaultValues: item?.item
   })
   const { control, formState } = formMethods
   useFormNotification<CatalogueItem>({ control })
@@ -21,8 +21,7 @@ const useItemForm = () => {
 
   return {
     ...formMethods,
-    FormWarningModal,
-    item: { ...item }
+    FormWarningModal
   }
 }
 

@@ -37,13 +37,7 @@ const ItemContainer = () => {
               <DefaultItemForm />
             </div>
           </div>
-          <TextArea
-            name="description"
-            register={formMethods.register}
-            label={'Description'}
-            rounded={'rounded-md'}
-            className={'px-4 py-5 sm:px-6'}
-          />
+          <TextArea name="description" label={'Description'} rounded={'rounded-md'} className={'px-4 py-5 sm:px-6'} />
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense fallback={<ProgressBarComponent />}>
               <Groups />

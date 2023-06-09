@@ -14,9 +14,6 @@ export type Button = {
 
 export interface FieldProps {
   name: string
-  isError?: boolean
-  isAmount?: boolean
-  padding?: boolean
 
   placeholder?: string
   disabled?: boolean

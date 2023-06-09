@@ -1,9 +1,9 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { type FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
+import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/Input'
-import { type CategoryFormType, Group } from '@/types/catalogue/categoryFormTypes'
+import { type CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 import MoveButtons from './MoveButtons'
 import PropertyList from './PropertyList'
@@ -14,14 +14,11 @@ interface groupProps {
   index: number
   lenght: number
 
-  errors: FieldErrors<Group> | undefined
-
   moveUp: (index: number) => void
   moveDown: (index: number) => void
 }
 
-const Group = ({ name, remove, index, errors, moveDown, moveUp, lenght }: groupProps) => {
-  const { register } = useFormContext<CategoryFormType>()
+const Group = ({ name, remove, index, moveDown, moveUp, lenght }: groupProps) => {
   const handleRemoveGroup = () => {
     remove(index)
   }
@@ -34,12 +31,7 @@ const Group = ({ name, remove, index, errors, moveDown, moveUp, lenght }: groupP
         <div className="relative flex justify-center">
           <span className="isolate inline-flex rounded-md shadow-sm">
             <MoveButtons moveDown={moveDown} moveUp={moveUp} lenght={lenght} index={index} />
-            <Input
-              register={register}
-              name={`${name}.name`}
-              placeholder="Group Name"
-              isError={!!errors?.name?.message}
-            />
+            <Input name={`${name}.name`} placeholder="Group Name" />
             <Button rounded="rounded-r-md" onClick={handleRemoveGroup}>
               <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
             </Button>
@@ -48,7 +40,7 @@ const Group = ({ name, remove, index, errors, moveDown, moveUp, lenght }: groupP
       </div>
       <div className="relative px-3">
         <div className="w-full flex-1">
-          <PropertyList name={name} errors={errors && errors} />
+          <PropertyList name={name} />
         </div>
       </div>
     </div>
@@ -56,7 +48,7 @@ const Group = ({ name, remove, index, errors, moveDown, moveUp, lenght }: groupP
 }
 
 const GroupList = () => {
-  const { control, formState } = useFormContext<CategoryFormType>()
+  const { control } = useFormContext<CategoryFormType>()
   const { fields, append, remove, move } = useFieldArray({ control, name: 'groups' })
 
   const handleAddGroup = () => {
@@ -85,7 +77,6 @@ const GroupList = () => {
                 <Group
                   remove={remove}
                   index={index}
-                  errors={formState.errors.groups && (formState.errors.groups[index] as FieldErrors<Group> | undefined)}
                   name={`groups.${index}`}
                   key={field.id}
                   moveUp={handleMoveUp}

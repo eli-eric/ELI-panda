@@ -18,7 +18,7 @@ interface Props {
 }
 //TODO: refactor form fields
 const SelectRelation = ({ relationTypeCode, systemName, selectedSystem }: Props) => {
-  const { register, watch, setValue, formState } = useFormContext<RelationFormType>()
+  const { watch, setValue } = useFormContext<RelationFormType>()
   useEffect(() => {
     setValue('relationTypeCode', relationTypeCode)
   }, [setValue, relationTypeCode])
@@ -63,25 +63,19 @@ const SelectRelation = ({ relationTypeCode, systemName, selectedSystem }: Props)
     <div className="flex flex-row">
       <SelectWithError
         options={selectedSystem ? [baseSystemOption, selectedSystemOption] : [baseSystemOption]}
-        register={register}
         name={'systemFromUid'}
-        isError={!!formState.errors.systemFromUid?.message}
         rounded="rounded-l-md"
         label="System From"
       />
       <SelectWithError
         options={[{ value: relationTypeCode }]}
-        register={register}
         name={'relationTypeCode'}
-        isError={!!formState.errors.relationTypeCode?.message}
         disabled
         label="Relation Type Code"
       />
       <SelectWithError
         options={[systemToOption]}
-        register={register}
         name={'systemToUid'}
-        isError={!!formState.errors.systemToUid?.message}
         disabled
         rounded="rounded-r-md"
         label="System To"
