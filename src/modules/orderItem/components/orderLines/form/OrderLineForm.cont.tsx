@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { number, object, string } from 'yup'
 
 import { Heading } from '@/components/card/card.comp'
@@ -41,15 +41,15 @@ const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
   }
 
   const { setOpen, getFormModal } = useFormModal<OrderLineFormType>({
-    renderForm: orderLine => <OrderLineFormComponent catalogueItem={catalogueItem} orderLine={orderLine} />,
-    renderOutsideForm: orderLine => (
-      <Fragment>
-        {!orderLine.uid ? (
-          <CatalogueTableSelect setItem={setCatalogueItem} />
-        ) : (
+    renderForm: () => <OrderLineFormComponent catalogueItem={catalogueItem} orderLine={orderLine} />,
+    renderOutsideForm: () => (
+      <div>
+        {orderLine?.id ? (
           <Heading text={orderLine.name + ' - ' + orderLine.catalogueNumber} />
+        ) : (
+          <CatalogueTableSelect setItem={setCatalogueItem} />
         )}
-      </Fragment>
+      </div>
     ),
     onSubmit: modalSubmit,
     schema: orderLineFormSchema,
