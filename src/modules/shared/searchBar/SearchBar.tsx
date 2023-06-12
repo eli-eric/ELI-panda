@@ -12,11 +12,11 @@ interface Props {
 
   left?: JSX.Element
   right?: JSX.Element
-  tableId?: string
+  tableId: string
 }
 
 const SearchBar = ({ useQuery = true, onSuccess, left, right, tableId }: Props) => {
-  const [querySearch, setQuerySearch] = useQueryState('search')
+  const [querySearch, setQuerySearch] = useQueryState('search', { history: 'replace' })
   const { setSearch, instances } = useTableStateStore()
   const { register, handleSubmit, control } = useForm<{ search: string }>({
     defaultValues: { search: querySearch || (tableId && instances[tableId]?.search) || '' }
@@ -26,27 +26,16 @@ const SearchBar = ({ useQuery = true, onSuccess, left, right, tableId }: Props) 
 
   useEffect(() => {
     if (useQuery) {
-      if (!searchValue) {
-        setQuerySearch(null, { shallow: true })
-      } else {
-        setQuerySearch(searchValue)
-      }
+      setQuerySearch(searchValue ? searchValue : null, { shallow: true })
     }
-    if (tableId) {
-      if (searchValue === '') {
-        setSearch(tableId, undefined)
-      }
-      setSearch(tableId, searchValue || '')
-    }
+    setSearch(tableId, searchValue)
   }, [searchValue, setQuerySearch, useQuery, tableId, setSearch])
 
   const onSubmit = (data: { search: string }) => {
     if (useQuery) {
       setQuerySearch(data.search ? data.search : null, { shallow: true })
     }
-    if (tableId) {
-      setSearch(tableId, data.search)
-    }
+    setSearch(tableId, data.search)
     onSuccess && onSuccess(data.search)
   }
 
