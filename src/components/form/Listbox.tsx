@@ -10,16 +10,22 @@ import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 
-type ListboxPropsT = FieldProps &
+export type ListboxPropsT = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
     codebook?: CODEBOOK
     position?: 'top' | 'bottom'
     allowEmptyOption?: boolean
     emptyOption?: string
+    optionsSize?: 'sm' | 'md' | 'lg'
+    customOptions?: CodebookType[]
+    unit?: string
+    customLabel?: string
+    useFirstRender?: boolean
   }
 
 const Listbox = ({
   codebook,
+  optionsSize = 'md',
   name,
   label,
   disabled,
@@ -27,7 +33,11 @@ const Listbox = ({
   emptyOption = 'None',
   position = 'bottom',
   className,
-  rounded = 'rounded-md'
+  rounded = 'rounded-md',
+  unit,
+  customOptions,
+  useFirstRender = false,
+  customLabel
 }: ListboxPropsT) => {
   const { control, setValue } = useFormContext()
   const intl = useIntl()
@@ -35,6 +45,7 @@ const Listbox = ({
   const codebookOptions = useCodebook(codebook)
 
   const options = useMemo(() => {
+    if (customOptions) return customOptions
     const targetOptions: CodebookType[] = []
     if (allowEmptyOption) {
       targetOptions.push({ uid: '', name: emptyOption })
@@ -43,7 +54,7 @@ const Listbox = ({
       targetOptions.push(...codebookOptions.data)
     }
     return targetOptions
-  }, [allowEmptyOption, emptyOption, codebookOptions])
+  }, [allowEmptyOption, emptyOption, codebookOptions, customOptions])
 
   const handleChange = (value: any) => (value?.uid === '' ? null : value)
 
@@ -53,12 +64,15 @@ const Listbox = ({
   }
 
   const isFirstRender = useIsFirstRender()
-  if (isFirstRender) return null
+  if (useFirstRender) {
+    if (isFirstRender) return null
+  }
 
   return (
     <Controller
       name={name}
       control={control}
+      defaultValue={null}
       render={({ field, formState }) => (
         <HUIListbox
           as="div"
@@ -67,9 +81,9 @@ const Listbox = ({
           disabled={disabled}
           className={classNames('relative flex flex-col w-full mt-auto', className)}
         >
-          {label && (
+          {(customLabel || label) && (
             <HUIListbox.Label className="block text-sm font-medium text-gray-900">
-              {intl.formatMessage({ id: label })}
+              {customLabel ? customLabel : intl.formatMessage({ id: label })}
             </HUIListbox.Label>
           )}
           <div className="relative">
@@ -82,7 +96,7 @@ const Listbox = ({
                 disabled ? 'bg-gray-100' : ''
               )}
             >
-              <span className="block truncate">{field?.value?.name || emptyOption}</span>
+              <span className="block truncate">{customOptions ? field.value : field?.value?.name || emptyOption}</span>
               {field.value?.uid?.length > 0 && !disabled && allowEmptyOption && (
                 <div
                   onClick={handleClear}
@@ -92,6 +106,7 @@ const Listbox = ({
                 </div>
               )}
               <div className="absolute inset-y-0 right-0 flex items-center pr-2">
+                {unit && <span className="text-gray-400 sm:text-sm">{unit}</span>}
                 <ChevronDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
               </div>
             </HUIListbox.Button>
@@ -99,14 +114,15 @@ const Listbox = ({
           {options?.length > 0 && (
             <HUIListbox.Options
               className={classNames(
-                'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
-                position === 'top' ? 'bottom-full' : 'top-full'
+                'absolute z-20 mt-1 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
+                position === 'top' ? 'bottom-full' : 'top-full',
+                optionsSize === 'sm' ? 'max-h-40' : optionsSize === 'lg' ? 'max-h-64' : 'max-h-60'
               )}
             >
               {options.map(item => (
                 <HUIListbox.Option
                   key={item.uid}
-                  value={item}
+                  value={customOptions ? item.uid : item}
                   className={({ active }) =>
                     classNames(
                       'relative cursor-default select-none py-2 pl-3 pr-9',
@@ -119,6 +135,7 @@ const Listbox = ({
                     return (
                       <>
                         <span className={classNames('block truncate', selected && 'font-semibold')}>{item.name}</span>
+
                         {selected && (
                           <span
                             className={classNames(

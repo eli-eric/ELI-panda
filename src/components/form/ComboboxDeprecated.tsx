@@ -3,14 +3,7 @@ import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid
 import { useSession } from 'next-auth/react'
 import React from 'react'
 import { Fragment, useEffect, useState } from 'react'
-import {
-  Controller,
-  type FieldValues,
-  type Path,
-  type PathValue,
-  useFormContext,
-  type UseFormRegister
-} from 'react-hook-form'
+import { Controller, type FieldValues, type Path, type PathValue, useFormContext } from 'react-hook-form'
 
 import { classNames } from '@/helpers'
 import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
@@ -20,9 +13,8 @@ import type { FieldProps } from '@/types/form'
 import { PlusButton } from '../Buttons'
 import useAddCodebookValue from './shared/useAddCodebookValue'
 
-type ComboboxProps<T extends FieldValues> = FieldProps &
+type ComboboxProps = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
-    register: UseFormRegister<T>
     codebook?: CODEBOOK
     isObject?: boolean
     position?: 'top' | 'bottom'
@@ -34,7 +26,6 @@ const ComboboxDeprecated = <T extends FieldValues>({
   codebook,
   label,
   isObject = false,
-  isError,
   placeholder,
   name,
   className,
@@ -43,7 +34,7 @@ const ComboboxDeprecated = <T extends FieldValues>({
   position = 'bottom',
   rounded = 'rounded-md',
   showAddButton = false
-}: ComboboxProps<T>) => {
+}: ComboboxProps) => {
   const {
     setValue,
     control,
@@ -84,7 +75,7 @@ const ComboboxDeprecated = <T extends FieldValues>({
       <Controller
         name={name as Path<T>}
         control={control}
-        render={({ field: { onChange } }) => (
+        render={({ field: { onChange }, formState }) => (
           <div className={classNames('flex items-start', className)}>
             <div className="flex-grow">
               <Combobox
@@ -113,7 +104,7 @@ const ComboboxDeprecated = <T extends FieldValues>({
                           'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                           'block w-full appearance-none',
                           rounded,
-                          isError ? 'border-red-500' : 'border-gray-300',
+                          formState.errors?.[name] ? 'border-red-500' : 'border-gray-300',
                           disabled ? 'bg-gray-100' : ''
                         )}
                         value={query}

@@ -2,23 +2,24 @@ import { Fragment } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import { useSearch } from '@/hooks/table/useSearch'
 
 import useCatalogueTable from '../shared/catalogue/table/CatalogueItems.table'
+import SearchBar from '../shared/searchBar/SearchBar'
 import CatalogueBreadcrumbs from './components/breadcrump/CatalogueBreadcrumbs'
 import CategoryListContainer from './components/categoryList/CategoryList.cont'
+import SearchBarButtons from './components/SearchBarButtons'
 import useCatalogueItems from './hooks/useCatalogueItems'
 import useCategoryList from './hooks/useCategoryList'
 
 const CatalogueContainer = () => {
-  const { renderSearchBar } = useSearch({ tableId: 'catalogueItems' })
   const { catalogueItems, error } = useCatalogueItems()
   const { categoryList } = useCategoryList()
+  //TODO: refactor without hooks pagination and table
   const { getPaginationComponent, getTable } = useCatalogueTable()
 
   return (
     <TableLayoutContainer catalogueItems={catalogueItems} categoryList={categoryList}>
-      {renderSearchBar()}
+      <SearchBar left={<SearchBarButtons />} tableId={'catalogueItems'} />
       <CatalogueBreadcrumbs />
       <CategoryListContainer />
       <Fragment>

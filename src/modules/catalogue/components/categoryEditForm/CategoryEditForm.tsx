@@ -1,3 +1,4 @@
+import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Fragment } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
@@ -18,8 +19,8 @@ const categoryValidationschema = yup.object().shape({
       properties: yup.array().of(
         yup.object().shape({
           name: yup.string().required(),
-          typeUID: yup.string().required(),
-          unitUID: yup.string(),
+          type: yup.object().required(),
+          unit: yup.object(),
           defaultValue: yup.string(),
           listOfValues: yup.array().of(
             yup.object({
@@ -76,6 +77,7 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
           </div>
         </form>
       </FormProvider>
+      <DevTool control={formMethods.control} />
     </Fragment>
   )
 }

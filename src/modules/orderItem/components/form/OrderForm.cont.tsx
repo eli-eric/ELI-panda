@@ -70,7 +70,7 @@ const useOrderForm = () => {
     </form>
   )
 
-  return { renderForm, setOrderLine, deleteOrderLine, orderLines: fields }
+  return { renderForm, setOrderLine, deleteOrderLine, orderLines: fields, control }
 }
 
 export default useOrderForm

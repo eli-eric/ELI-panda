@@ -20,7 +20,7 @@ const useAddCodebookValue = (codebook?: CodeBookMetaData) => {
     }
   })
   const { formMethods, getFormModal, setOpen } = useFormModal<{ name: string }>({
-    renderForm: () => <Input name="name" register={formMethods.register} label="Codebook Value" rounded="rounded-md" />,
+    renderForm: () => <Input name="name" label="Codebook Value" rounded="rounded-md" />,
     onSubmit: data => {
       submit({ name: data.name })
     }

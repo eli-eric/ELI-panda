@@ -16,18 +16,22 @@ import useAddCodebookValue from './shared/useAddCodebookValue'
 
 type ComboboxPropsT = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
-    codebook?: CODEBOOK
+    codebook: CODEBOOK
     isObject?: boolean
     position?: 'top' | 'bottom'
     limit?: number
     showAddButton?: boolean
     filter?: CodebookFilter[]
+    customLabel?: string
+    useFirstRender?: boolean
   }
 
 const Combobox = ({
   codebook,
+  useFirstRender = true,
   name,
   placeholder,
+  customLabel,
   label,
   disabled,
   className,
@@ -38,13 +42,14 @@ const Combobox = ({
   showAddButton = false
 }: ComboboxPropsT) => {
   const { control, setValue } = useFormContext()
-  const intl = useIntl()
+  const { formatMessage: fm } = useIntl()
 
   const [query, setQuery] = useState<string>('')
   const options = useCodebook(codebook, { limit, filter, searchText: query })
   const { getFormModal, setOpen } = useAddCodebookValue(options?.metadata)
   const [hasAddPermission, setHasAddPermission] = useState(false)
   const { data: session } = useSession()
+
   useEffect(() => {
     if (showAddButton && options?.metadata?.roleEdit && session?.user?.roles) {
       const hasTargetPermission = session.user.roles.includes(options.metadata.roleEdit)
@@ -58,13 +63,16 @@ const Combobox = ({
   }
 
   const isFirstRender = useIsFirstRender()
-  if (isFirstRender) return null
+  if (useFirstRender) {
+    if (isFirstRender) return null
+  }
 
   return (
     <>
       <Controller
         name={name}
         control={control}
+        defaultValue={null}
         render={({ field, formState }) => (
           <>
             <HUICombobox
@@ -73,16 +81,16 @@ const Combobox = ({
               disabled={disabled}
               className={classNames('relative flex flex-col w-full mt-auto', className)}
             >
-              {label && (
+              {(label || customLabel) && (
                 <HUICombobox.Label className="block text-sm font-medium text-gray-900">
-                  {intl.formatMessage({ id: label })}
+                  {customLabel ? customLabel : fm({ id: label })}
                 </HUICombobox.Label>
               )}
               <div className="relative">
                 <HUICombobox.Input
                   onChange={e => setQuery(e.target.value)}
                   displayValue={(item: CodebookType) => item?.name}
-                  placeholder={(placeholder && intl.formatMessage({ id: placeholder })) || ''}
+                  placeholder={(placeholder && fm({ id: placeholder })) || ''}
                   autoComplete="off"
                   className={classNames(
                     'px-3 py-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full appearance-none text-left truncate',
@@ -116,6 +124,7 @@ const Combobox = ({
                     <HUICombobox.Option
                       key={item.uid}
                       value={item}
+                      defaultValue={''}
                       className={({ active }) =>
                         classNames(
                           'relative cursor-default select-none py-2 pl-3 pr-9',

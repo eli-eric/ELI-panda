@@ -1,58 +1,122 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { CatalogueItems } from '../catalogue-mock-data'
 
 const fakeItem = {
-  uid: 'c8acb6e8-86a7-46e6-8e2b-bf2cc907fa97',
-  name: 'Z825BV - Vacuum-Compatible 25 mm Motorized Actuator with Ø3/8" Barrel Fitting',
+  uid: '18473f51-515e-44b3-b1a9-0c9dbab0be49',
+  name: ' ACP 15',
+  catalogueNumber: 'CKF00040',
+  description:
+    'Dry multi-stage Roots technology, SD versions, ACP pumps with a pumping speed of max. 15 m3/h, No particle contamination, thanks to frictionless design: no wearing parts in the pumped gases path, No hydrocarbon vapors backstreaming: ACP series pumps are free of lubricant inside the pumping module, Constant performances (Pumping speed, max. and ultimate pressure), High reliability: thanks to our expertise of dry multi-stage Roots pumps since 1988, Low maintenance costs: no annual field service, complete overhaul only every 20000 hours for ACP 15, Condensable vapor ability: with gas ballast ports and drainable silencer',
+  category: {
+    uid: '5888ff86-9a12-4a82-9fa7-9efbf858657b',
+    name: 'Cryopumps - Vacuum Technology > Vacuum pumps'
+  },
+  manufacturer: {
+    uid: '497af5c8-b5de-4e7f-ae53-9a17861c99ad',
+    name: '100MEGA DISTRIBUTION s.r.o.'
+  },
+  manufacturerNumber: 'CKF00040',
+  manufacturerUrl:
+    'https://www.pfeiffer-vacuum.com/en/products/vacuum-generation/multi-stage-roots-pumps/light-duty-applications/air-cooled/low-noise-acp-kits/32098/low-noise-kit-acp-15',
   details: [
     {
-      value: '40',
-      propertyName: 'Axial load capacity',
-      propertyUnit: 'N',
-      propertyGroup: 'Actuator properties'
+      property: {
+        name: 'Inlet flange type',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.NUMBER,
+          name: '100MEGA DISTRIBUTION s.r.o.'
+        },
+        defaultValue: '0'
+      },
+      propertyGroup: 'Flanges',
+      value: 'ISO-KF'
     },
     {
-      value: 'No',
-      propertyName: 'Integrated encoder',
-      propertyUnit: null,
-      propertyGroup: 'Actuator properties'
+      property: {
+        name: 'Inlet flange size ',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.NUMBER
+        }
+      },
+      propertyGroup: 'Flanges',
+      value: '1123'
     },
     {
-      value: 'N/A',
-      propertyName: 'Encoder resolution',
-      propertyUnit: 'nm',
-      propertyGroup: 'Actuator properties'
+      property: {
+        name: 'Outlet flange type',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.LIST
+        },
+        listOfValues: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'],
+        defaultValue: 'c'
+      },
+      propertyGroup: 'Flanges',
+      value: 'a'
     },
     {
-      value: '200',
-      propertyName: 'Minimum incremental motion',
-      propertyUnit: 'nm',
-      propertyGroup: 'Actuator properties'
+      property: {
+        name: 'Outlet flange size',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.TEXT
+        }
+      },
+      propertyGroup: 'Flanges',
+      value: 'DN 16'
     },
     {
-      value: 'Stepper motor',
-      propertyName: 'Motor type',
-      propertyUnit: null,
-      propertyGroup: 'Motion'
+      property: {
+        name: 'Coolling',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.TEXT
+        }
+      },
+      propertyGroup: 'Other',
+      value: 'Air'
+    },
+    {
+      property: {
+        name: 'Power consumption',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.NUMBER
+        }
+      },
+      propertyGroup: 'Other',
+      value: '450.0'
+    },
+    {
+      property: {
+        name: 'Peak pumping speed',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.NUMBER
+        }
+      },
+      propertyGroup: 'Pump parameters',
+      value: '14.0'
+    },
+    {
+      property: {
+        name: 'Ultimate vacuum ',
+        unit: { name: 'dd' },
+        type: {
+          uid: PROPERTY_TYPE.NUMBER
+        }
+      },
+      propertyGroup: 'Pump parameters',
+      value: '0.05'
     }
-  ],
-  description:
-    'Vacuum-Compatible DC Motor Actuator, 25 mm Travel\n6 VDC Servo Actuator\nSub-micron Resolution\n2.3 mm/s Maximum Velocity\nDrop In Replacement for Most 12 mm Manual Actuators\nCompatible with Ø3/8" (Ø9.525 mm) Barrel-Fitting Stages and Mounts\nLimit Switches for Zero Datum and Actuator Protection\nRated Down To 10-6 Torr.',
-  categoryName: 'Motorized actuators',
-  categoryPath: 'motion/actuators/motorized-actuators',
-  manufacturer: 'Thorlabs',
-  manufacturerUrl: 'https://www.thorlabs.com/thorproduct.cfm?partnumber=Z825BV',
-  manufacturerNumber: 'Z825BV'
+  ]
 }
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
-  const { uid } = req.query
-  if (uid) {
-    let item = CatalogueItems.filter(f => f.uid === uid)
-
-    if (item.length > 0) return res.status(200).json(item[0])
-    else res.status(200).json(fakeItem)
-  }
+  res.status(200).json(fakeItem)
 }

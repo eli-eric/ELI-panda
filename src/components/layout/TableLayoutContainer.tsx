@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 
 import type { CatalogueCategoryResponse, CatalogueItemsResponse } from '@/types/responses'
 
@@ -8,12 +8,12 @@ interface Props {
   categoryList?: Array<CatalogueCategoryResponse>
 }
 
-/* container for responsive layout with sticky footer and sticky table header */
-
+// useLayoutEffect is used to avoid flickering
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 export const TableLayoutContainer = ({ children, catalogueItems, categoryList }: Props) => {
   const [height, setHeight] = useState<number>(0)
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     // Handler to call on window resize
     const handleResize = () => {
       const searchBar = document.getElementById('search-bar')?.clientHeight || 0

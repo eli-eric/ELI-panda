@@ -127,24 +127,22 @@ export const OrderisDeliveredAction = ({
     eun?: string
     manualEun: boolean
   }>({
+    defaultValues: { serialNumber: '' },
     renderForm: () => {
       const manualEun = formMethods.watch('manualEun')
       return (
         <Grid>
           <Col md={12}>
             <Input
-              register={formMethods.register}
               name="serialNumber"
               label={formatMessage({ id: orderLines.form.serialNumber.label })}
               placeholder={formatMessage({ id: orderLines.form.serialNumber.placeholder })}
               rounded="rounded-md"
-              defaultValue={undefined}
             />
           </Col>
 
           <Col md={12}>
             <CheckBox
-              register={formMethods.register}
               name="manualEun"
               label={formatMessage({ id: orderLines.form.manualEun.label })}
               rounded="rounded-md"
@@ -153,7 +151,6 @@ export const OrderisDeliveredAction = ({
           {manualEun && (
             <Col md={12}>
               <Input
-                register={formMethods.register}
                 name="eun"
                 label={formatMessage({ id: orderLines.form.eun.label })}
                 placeholder={formatMessage({ id: orderLines.form.eun.placeholder })}
@@ -221,7 +218,7 @@ export const PriceFooter = ({ rows }: { rows: Row<OrderLineFormType>[] }) => {
       {rows.length > 0 && (
         <div className="flex flex-col whitespace-nowrap">
           <span className="font-medium">{'Total:'}</span>
-          <span className="font-medium">{`${total} ${totalCurrency}`}</span>
+          <span className="font-medium">{`${parseFloat(total.toFixed(2))} ${totalCurrency}`}</span>
         </div>
       )}
     </Fragment>

@@ -5,9 +5,10 @@ const getEndpoints = (uid?: string, path?: string, itemUid?: string, query?: str
     catalogueCategories: `/catalogue/categories${path}`,
     catalogueCategoryImage: `/catalogue/category/${uid}/image`,
     catalogueItems: `/catalogue/items${query}`,
-    catalogueItem: `/catalogue/item/${uid}`,
+    catalogueItem: `/catalogue/item${uid ? '/' + uid : ''}`,
     catalogueItemImage: `/catalogue/item/${uid}/image`,
     catalogueCategoryEdit: `/catalogue/category${uid ? '/' + uid : ''}`,
+    catalogueCategoryProperties: `/catalogue/category/${uid}/properties`,
     system: `/system${uid ? '/' + uid : ''}`,
     systemImage: `/system/${uid}/image`,
     catalogueCategoryCopy: `/catalogue/category/${uid}/copy`,
@@ -34,7 +35,7 @@ interface useEndpointsProps {
   query?: unknown
   path?: string
 }
-export const useEndpoint = ({ uid, query, path, itemUid }: useEndpointsProps) => {
+export const useEndpoint = ({ uid, query, path, itemUid }: useEndpointsProps = {}) => {
   const queryString = '?' + new URLSearchParams(query as Record<string, string>).toString()
   return useMemo(() => getEndpoints(uid, path, itemUid, queryString), [uid, path, itemUid, queryString])
 }
