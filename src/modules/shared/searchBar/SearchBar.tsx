@@ -8,14 +8,13 @@ import useTableStateStore from '@/store/useTableStateStore'
 
 interface Props {
   useQuery?: boolean
-  onSuccess?: (search: string) => void
 
   left?: JSX.Element
   right?: JSX.Element
   tableId: string
 }
 
-const SearchBar = ({ useQuery = true, onSuccess, left, right, tableId }: Props) => {
+const SearchBar = ({ useQuery = true, left, right, tableId }: Props) => {
   const [querySearch, setQuerySearch] = useQueryState('search', { history: 'replace' })
   const { setSearch, instances } = useTableStateStore()
   const { register, handleSubmit, control } = useForm<{ search: string }>({
@@ -36,7 +35,6 @@ const SearchBar = ({ useQuery = true, onSuccess, left, right, tableId }: Props) 
       setQuerySearch(data.search ? data.search : null, { shallow: true })
     }
     setSearch(tableId, data.search)
-    onSuccess && onSuccess(data.search)
   }
 
   return (

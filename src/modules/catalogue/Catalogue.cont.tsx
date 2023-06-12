@@ -14,6 +14,7 @@ import useCategoryList from './hooks/useCategoryList'
 const CatalogueContainer = () => {
   const { catalogueItems, error } = useCatalogueItems()
   const { categoryList } = useCategoryList()
+  //TODO: refactor without hooks pagination and table
   const { getPaginationComponent, getTable } = useCatalogueTable()
 
   return (
