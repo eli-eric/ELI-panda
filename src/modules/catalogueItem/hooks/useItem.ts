@@ -22,7 +22,7 @@ const useItem = () => {
   } = useFetch<CatalogueItem>({
     url: () => (catalogueUid ? catalogueItem : null),
     config: { suspense: false },
-    useMockFetcher: true
+    useMockFetcher: false
   })
 
   const image = useImage(catalogueUid ? catalogueItemImage : null)
