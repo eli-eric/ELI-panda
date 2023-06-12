@@ -84,6 +84,15 @@ export const messages = {
       buttons: {
         back: 'Back',
         edit: 'Edit'
+      },
+      form: {
+        name: { label: 'Name', placeholder: 'Name' },
+        description: { label: 'Description', placeholder: 'Description' },
+        catalogueNumber: { label: 'Catalogue Number', placeholder: 'Catalogue Number' },
+        category: { label: 'Category', placeholder: 'Type here...' }, // codebook of categories - CATEGORY
+        manufacturer: { label: 'Manufacturer', placeholder: 'Type here...' }, // codebook of manufacturers - MANUFACTURER
+        manufacturerNumber: { label: 'Manufacturer Number', placeholder: 'Manufacturer Number' },
+        manuFacturerUrl: { label: 'Manufacturer Url', placeholder: 'Manufacturer Url' }
       }
     },
     edit: {

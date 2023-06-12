@@ -1,17 +1,16 @@
 import { PlusIcon } from '@heroicons/react/24/outline'
-import { type FieldErrors, useFieldArray, useFormContext } from 'react-hook-form'
+import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
-import type { CategoryFormType, Group, Property } from '@/types/catalogue/categoryFormTypes'
+import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 import PropertyItem from './PropertyItem'
 
 interface Props {
   name: `groups.${number}`
-  errors: FieldErrors<Group> | undefined
 }
 
-const PropertyList = ({ name, errors }: Props) => {
+const PropertyList = ({ name }: Props) => {
   const { control } = useFormContext<CategoryFormType>()
   const { fields, append, remove, move } = useFieldArray<CategoryFormType>({
     control,
@@ -19,7 +18,12 @@ const PropertyList = ({ name, errors }: Props) => {
   })
 
   const handleAddProp = () => {
-    append({ name: '', typeUID: '', unitUID: '', defaultValue: '' })
+    append({
+      name: '',
+      type: { uid: '', name: 'Select Type' },
+      unit: { uid: '', name: 'Select Unit' },
+      defaultValue: ''
+    })
   }
 
   const handleMoveDown = index => {
@@ -38,7 +42,6 @@ const PropertyList = ({ name, errors }: Props) => {
               index={index}
               name={`${name}.properties.${index}`}
               length={fields.length}
-              errors={errors?.properties && (errors?.properties[index] as FieldErrors<Property> | undefined)}
               moveDown={handleMoveDown}
               moveUp={handleMoveUp}
               lenght={fields.length}

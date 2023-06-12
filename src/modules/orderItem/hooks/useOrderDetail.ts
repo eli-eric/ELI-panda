@@ -13,10 +13,9 @@ import type { OrderDetailFormType } from '../types'
 
 const useOrderDetail = () => {
   const router = useRouter()
-  const uid = router.query.uid as string
+  const uid = router.query.uid as string | undefined
   const { order: orderEndpoint } = useEndpoint({ uid })
   const { mutate } = useOrders()
-
   const {
     response,
     loading,
@@ -28,7 +27,8 @@ const useOrderDetail = () => {
       revalidateOnFocus: true,
       revalidateOnReconnect: true,
       revalidateOnMount: true,
-      revalidateIfStale: true
+      revalidateIfStale: true,
+      suspense: false
     }
   })
   const { data: session } = useSession()

@@ -1,6 +1,8 @@
-import type { FormState, UseFormHandleSubmit, UseFormRegister } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
+import * as yup from 'yup'
 
 import { Button } from '@/components/Buttons'
 import EliLogoComponent from '@/components/eli-logo.comp'
@@ -16,13 +18,19 @@ export type AuthForm = {
 
 interface Props {
   onSubmit: (data: AuthForm) => void
-  register: UseFormRegister<AuthForm>
-  formState: FormState<AuthForm>
-  handleSubmit: UseFormHandleSubmit<AuthForm>
   loading: boolean
 }
 
-const AuthFormComponent = ({ onSubmit, register, formState, handleSubmit, loading }: Props) => {
+const AuthFormComponent = ({ onSubmit, loading }: Props) => {
+  const authValidationSchema = yup.object().shape({
+    password: yup.string().required(),
+    username: yup.string().required()
+  })
+
+  const formMethods = useForm<AuthForm>({
+    resolver: yupResolver(authValidationSchema)
+  })
+  const { handleSubmit, formState } = formMethods
   const { errors } = formState
 
   return (
@@ -33,50 +41,43 @@ const AuthFormComponent = ({ onSubmit, register, formState, handleSubmit, loadin
           <FormattedMessage id={title} />
         </h2>
       </div>
-
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 border border-spacing-1 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                <FormattedMessage id={form.userName} />
-              </label>
-              <div className="mt-1">
-                <Input
-                  id="text"
-                  name="username"
-                  rounded="rounded-md"
-                  type="text"
-                  autoComplete="text"
-                  register={register}
-                />
-                <p className="text-xs text-red-500">{errors.username?.message}</p>
+      <FormProvider {...formMethods}>
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+          <div className="bg-white py-8 px-4 border border-spacing-1 shadow sm:rounded-lg sm:px-10">
+            <form className="space-y-6" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  <FormattedMessage id={form.userName} />
+                </label>
+                <div className="mt-1">
+                  <Input id="text" name="username" rounded="rounded-md" type="text" autoComplete="text" />
+                  <p className="text-xs text-red-500">{errors.username?.message}</p>
+                </div>
               </div>
-            </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                <FormattedMessage id={form.password} />
-              </label>
-              <div className="mt-1">
-                <Input
-                  id="password"
-                  rounded="rounded-md"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  register={register}
-                />
-                <p className="text-xs text-red-500">{errors.password?.message}</p>
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  <FormattedMessage id={form.password} />
+                </label>
+                <div className="mt-1">
+                  <Input
+                    id="password"
+                    rounded="rounded-md"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                  />
+                  <p className="text-xs text-red-500">{errors.password?.message}</p>
+                </div>
               </div>
-            </div>
 
-            <Button primary loading={loading} type="submit" className="w-full justify-center">
-              <FormattedMessage id={loading ? authButtonMessages.isLoading : authButtonMessages.default} />
-            </Button>
-          </form>
+              <Button primary loading={loading} type="submit" className="w-full justify-center">
+                <FormattedMessage id={loading ? authButtonMessages.isLoading : authButtonMessages.default} />
+              </Button>
+            </form>
+          </div>
         </div>
-      </div>
+      </FormProvider>
     </div>
   )
 }

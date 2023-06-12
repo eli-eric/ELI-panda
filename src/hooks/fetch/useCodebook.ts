@@ -2,7 +2,6 @@ import useSWR from 'swr/immutable'
 
 import { fetcher } from '@/helpers/fetcher'
 import type { CODEBOOK } from '@/types/constants/codebook'
-import type { ROLE } from '@/types/constants/roles'
 import type { Option } from '@/types/form'
 
 import { useEndpoint } from './useEndpoint'
@@ -11,7 +10,7 @@ export type CodeBookMetaData = {
   code: string
   type: string
   nodeLabel?: string
-  roleEdit?: ROLE
+  roleEdit?: string
 }
 
 export type CodebookTypeResponse = {
@@ -37,7 +36,7 @@ export const useCodebook = (codebookName?: CODEBOOK, query?: CodebookQuery): Cod
     path: codebookName,
     query: { ...query, filter: filterString }
   })
-  const { data } = useSWR<CodebookTypeResponse>(codebook, fetcher, {
+  const { data } = useSWR<CodebookTypeResponse>(codebookName && codebook, fetcher, {
     suspense: false
   })
 
