@@ -17,6 +17,7 @@ const useSystemsColumns = () => {
         header: intl.formatMessage({ id: messages.name }),
         accessorKey: 'name',
         id: 'name',
+        size: 1000,
         cell: ({ getValue }: CellContext<Order, string>) => <span>{getValue()}</span>
       },
       { header: intl.formatMessage({ id: messages.orderNumber }), accessorKey: 'orderNumber', id: 'orderNumber' },

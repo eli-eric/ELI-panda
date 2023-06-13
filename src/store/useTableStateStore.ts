@@ -25,7 +25,6 @@ const useTableStateStore = create<TableState>(set => ({
   instances: {},
   setSortBy: (tableId, sortBy) =>
     set(state => {
-      console.log('setSortBy', tableId, sortBy)
       const newInstance = { ...state.instances[tableId], sortBy }
       return { instances: { ...state.instances, [tableId]: newInstance } }
     }),

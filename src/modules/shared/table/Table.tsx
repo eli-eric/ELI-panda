@@ -1,7 +1,8 @@
 import type { ColumnDef, SortingState } from '@tanstack/react-table'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useQueryState } from 'next-usequerystate'
-import { Fragment, useEffect, useLayoutEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
+import { useIsFirstRender } from 'usehooks-ts'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
@@ -16,7 +17,7 @@ interface Props<T extends object> {
   className?: string
   enableSorting?: boolean
   withFooter?: boolean
-  uriSortBy?: boolean
+  enableQueryURL?: boolean
 }
 
 const Table = <T extends object>({
@@ -24,46 +25,70 @@ const Table = <T extends object>({
   columns,
   loading = false,
   withFooter = false,
-  uriSortBy = true,
+  enableQueryURL = true,
   className,
   enableSorting = true,
   tableId
 }: Props<T>) => {
+  // zustand table instance store
   const { setSortBy, setSortByQueryString, instances } = useTableStateStore()
-
   const sortByInstance = instances[tableId]?.sortBy || []
-
+  const sortByStringInstance = instances[tableId]?.sortByQueryString || null
+  // query state
   const [sortByQuery, setSortByQuery] = useQueryState('sortBy', { history: 'replace' })
-
+  // table state
   const [sorting, setSorting] = useState<SortingState>(sortByInstance)
-
+  // react-table
   const table = useReactTable<T>({
     columns: columns,
     getCoreRowModel: getCoreRowModel(),
     data: data || [],
     enableSorting,
     manualSorting: true,
-    state: { sorting: JSON.parse(sortByQuery || '[]') },
+    state: { sorting: sorting },
     enableSortingRemoval: true,
     onSortingChange: setSorting
   })
+  const isFirstRender = useIsFirstRender()
 
-  // update external sorting state and query string
+  // initialize update table state and query state and instance on first render
   useEffect(() => {
-    setSortBy(tableId, sorting)
-    setSortByQueryString(tableId, sorting.length === 0 ? undefined : JSON.stringify(sorting))
-    if (uriSortBy) {
-      setSortByQuery(sorting.length === 0 ? null : JSON.stringify(sorting))
+    if (isFirstRender) {
+      if (enableQueryURL) {
+        // check if sortByQuery is set
+        if (sortByQuery) {
+          const parsed = JSON.parse(sortByQuery)
+          setSorting(parsed)
+          setSortBy(tableId, parsed)
+          setSortByQueryString(tableId, parsed.length === 0 ? undefined : sortByQuery)
+          // check if sortByStringInstance is set
+        } else if (sortByStringInstance) {
+          setSortByQuery(sortByStringInstance)
+        }
+      }
     }
-  }, [sorting, tableId, setSortBy, setSortByQueryString, uriSortBy, setSortByQuery])
-
-  // update internal sorting state by query string
-  useLayoutEffect(() => {
-    if (uriSortBy && sortByQuery) {
-      const parsed = JSON.parse(sortByQuery)
-      setSorting(parsed)
+  }, [
+    isFirstRender,
+    tableId,
+    sortByQuery,
+    sortByStringInstance,
+    enableQueryURL,
+    setSortBy,
+    setSortByQueryString,
+    setSortByQuery
+  ])
+  // update
+  useEffect(() => {
+    if (!isFirstRender) {
+      setSortBy(tableId, sorting)
+      setSortByQueryString(tableId, sorting.length === 0 ? undefined : JSON.stringify(sorting))
+      if (enableQueryURL) {
+        setSortByQuery(sorting.length === 0 ? null : JSON.stringify(sorting))
+      }
     }
-  }, [uriSortBy])
+    // reason for disabling eslint: isFirstRender is a dependency but it should not trigger a re-render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tableId, sorting, enableQueryURL, setSortByQuery, setSortBy, setSortByQueryString])
 
   return (
     <Fragment>
@@ -77,7 +102,11 @@ const Table = <T extends object>({
                     {headerGroup.headers.map(header => (
                       <th
                         key={header.id}
-                        scope="col"
+                        //scope="col"
+                        colSpan={header.colSpan}
+                        style={{
+                          width: header.getSize()
+                        }}
                         className={classNames(
                           'whitespace-nowrap sticky top-0 z-10 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
                           className
