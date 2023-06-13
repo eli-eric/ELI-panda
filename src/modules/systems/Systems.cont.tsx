@@ -14,7 +14,13 @@ const SystemsContainer = () => {
   return (
     <Fragment>
       <TableLayoutContainer>
-        <Table columns={columns} data={orderList?.data} loading={loading} tableId={'orders'} />
+        <Table
+          columns={columns}
+          data={orderList?.data}
+          loading={loading}
+          tableId={'orders'}
+          className={'relative overflow-x-auto'}
+        />
         {error && <ErrorPage />}
       </TableLayoutContainer>
     </Fragment>

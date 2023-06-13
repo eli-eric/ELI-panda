@@ -108,14 +108,20 @@ const Table = <T extends object>({
                           width: header.getSize()
                         }}
                         className={classNames(
-                          'whitespace-nowrap sticky top-0 z-10 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
-                          className
+                          'whitespace-nowrap  bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
+                          className,
+                          header.column.columnDef.meta?.sticky
+                            ? 'sticky left-0 top-0 text-ellipsis z-20 backdrop-blur-2xl backdrop-filter border-r'
+                            : 'sticky top-0 z-10'
                         )}
                       >
                         <div
                           {...{
                             className: header.column.getCanSort() ? 'cursor-pointer select-none' : '',
-                            onClick: header.column.getToggleSortingHandler()
+                            onClick: header.column.getToggleSortingHandler(),
+                            style: {
+                              width: header.getSize()
+                            }
                           }}
                         >
                           {flexRender(header.column.columnDef.header, header.getContext())}
@@ -141,8 +147,17 @@ const Table = <T extends object>({
                           className
                         )}
                       >
-                        {row.getAllCells().map(cell => (
-                          <td key={cell.id} className={classNames('text-sm sm:pl-6 sm:pr-6 text-gray-500', className)}>
+                        {row.getVisibleCells().map(cell => (
+                          <td
+                            key={cell.id}
+                            className={classNames(
+                              'text-sm sm:pl-6 sm:pr-6 text-gray-500',
+                              className,
+                              cell.column.columnDef.meta?.sticky
+                                ? 'sticky left-0 z-30 backdrop-blur-2xl backdrop-filter border-r'
+                                : ''
+                            )}
+                          >
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </td>
                         ))}
