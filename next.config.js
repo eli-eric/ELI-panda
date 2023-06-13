@@ -3,7 +3,7 @@ const nextConfig = {
   experimental: {
     appDir: false
   },
-  swcMinify: false,
+  swcMinify: true,
   output: 'standalone',
   images: {
     domains: [

@@ -22,7 +22,6 @@ const ItemContainer = () => {
   const { submit, loading } = useItemSubmit()
 
   const onSubmit = (data: any) => {
-    console.log(data)
     submit(data)
   }
 

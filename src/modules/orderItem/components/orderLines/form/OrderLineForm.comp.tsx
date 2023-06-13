@@ -30,16 +30,14 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
   const { setValue, watch } = useFormContext<OrderLineFormType>()
   const system = watch('system')
   const technologicalUnitToogle = useToggle(true)
-  const { Toggle: TechUnitToogle, toggle: techUnitToogle, enabled: techUnitEnabled } = technologicalUnitToogle
+  const { Toggle: TechUnitToogle, enabled: techUnitEnabled } = technologicalUnitToogle
   const [techUnitFilter, setTechUnitFilter] = useState<CodebookFilter[] | undefined>(undefined)
 
-  // set tech unit filter
-  useEffect(() => {
-    if (orderLine?.uid) {
-      setTechUnitFilter([{ key: 'technologicalUnits', value: techUnitEnabled }])
-      toast.success('Technological unit filter is' + ' ' + techUnitEnabled)
-    }
-  }, [techUnitEnabled, orderLine?.uid])
+  const techUnitToogle = enable => {
+    technologicalUnitToogle.toggle()
+    setTechUnitFilter([{ key: 'technologicalUnits', value: enable }])
+    toast.success('Technological unit filter is' + ' ' + enable)
+  }
 
   // set default value
   useEffect(() => {
