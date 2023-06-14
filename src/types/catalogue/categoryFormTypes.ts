@@ -7,8 +7,8 @@ export type Value = {
 export type Property = {
   uid?: string
   name: string
-  type: CodebookType
-  unit: CodebookType
+  type?: CodebookType | null
+  unit?: CodebookType | null
   defaultValue: string
   listOfValues?: Value[] | string[]
 }
@@ -24,5 +24,5 @@ export type CategoryFormType = {
   name: string
   code: string
   image?: string
-  groups: Group[]
+  groups?: Group[]
 }
