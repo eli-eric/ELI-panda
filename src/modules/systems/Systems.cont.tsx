@@ -29,7 +29,7 @@ const SystemsContainer = () => {
           tableId={tableId}
           getSubRows={row => row.subSystems}
           settings={{
-            enableSorting: true,
+            enableSorting: false,
             enableQueryURL: true
           }}
           className={'relative overflow-x-auto'}
