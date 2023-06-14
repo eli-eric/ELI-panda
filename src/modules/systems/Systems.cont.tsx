@@ -1,31 +1,33 @@
+import type { Table } from '@tanstack/react-table'
 import { Fragment, useRef } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 
-import useOrders from '../orders/hooks/useOrders'
+import type { Order } from '../orders/types'
 import SearchBar from '../shared/searchBar/SearchBar'
-import type { TableRef } from '../shared/table/Table'
-import Table from '../shared/table/Table'
+import PandaTable from '../shared/table/Table'
 import useSystemsColumns from './components/columns'
+import { useSystems } from './hooks/useSystems'
 
 const SystemsContainer = () => {
   const columns = useSystemsColumns()
-  const tableId = 'orders'
-  const { orderList, error, loading } = useOrders()
+  const tableId = 'systems'
+  const { systems, error, loading } = useSystems()
 
-  const tableRef = useRef<TableRef>()
+  const tableRef = useRef<Table<Order>>()
 
   return (
     <Fragment>
       <TableLayoutContainer>
         <SearchBar tableId={tableId} />
-        <Table
+        <PandaTable
           ref={tableRef}
           columns={columns}
-          data={orderList?.data}
+          data={systems?.data}
           loading={loading}
           tableId={tableId}
+          getSubRows={row => row.subSystems}
           settings={{
             enableSorting: true,
             enableQueryURL: true

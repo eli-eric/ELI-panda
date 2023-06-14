@@ -1,4 +1,5 @@
-import type { ColumnDef, SortingState, Updater, VisibilityState } from '@tanstack/react-table'
+import type { ColumnDef, ExpandedState, SortingState, Table as ReactTable } from '@tanstack/react-table'
+import { getExpandedRowModel } from '@tanstack/react-table'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useQueryState } from 'next-usequerystate'
 import type { Ref } from 'react'
@@ -16,6 +17,7 @@ interface Props<T extends object> {
   columns: ColumnDef<T, string>[]
   loading?: boolean
   className?: string
+  getSubRows?: (row: T) => T[]
   settings?: {
     enableSorting?: boolean
     withFooter?: boolean
@@ -23,14 +25,10 @@ interface Props<T extends object> {
   }
 }
 
-export interface TableRef {
-  setColumnVisibility: (updater: Updater<VisibilityState>) => void
-}
-
 //TODO: I was not able to type this comp without using any
-const Table = forwardRef<TableRef | undefined, Props<any>>(function Table<T extends object>(
-  { data, columns, loading = false, settings, className, tableId }: Props<T>,
-  ref?: Ref<TableRef | undefined>
+const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function Table<T extends object>(
+  { data, columns, loading = false, settings, className, tableId, getSubRows }: Props<T>,
+  ref?: Ref<ReactTable<T> | undefined>
 ) {
   const { enableSorting = false, withFooter = false, enableQueryURL = false } = settings || {}
   // zustand table instance store
@@ -41,20 +39,26 @@ const Table = forwardRef<TableRef | undefined, Props<any>>(function Table<T exte
   const [sortByQuery, setSortByQuery] = useQueryState('sortBy', { history: 'replace' })
   // table state
   const [sorting, setSorting] = useState<SortingState>(sortByInstance)
+  const [expanded, setExpanded] = useState<ExpandedState>({})
+
   // react-table
   const table = useReactTable<T>({
     columns: columns,
     getCoreRowModel: getCoreRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+
+    onExpandedChange: setExpanded,
     data: data || [],
     enableSorting: enableSorting,
     manualSorting: true,
-    state: { sorting: sorting },
+    getSubRows,
+    state: { sorting, expanded },
     enableSortingRemoval: true,
     onSortingChange: setSorting
   })
 
   useImperativeHandle(ref, () => ({
-    setColumnVisibility: table.setColumnVisibility
+    ...table
   }))
 
   const isFirstRender = useIsFirstRender()
@@ -205,4 +209,4 @@ const Table = forwardRef<TableRef | undefined, Props<any>>(function Table<T exte
   )
 })
 
-export default Table
+export default PandaTable
