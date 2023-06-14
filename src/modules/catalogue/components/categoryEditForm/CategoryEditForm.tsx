@@ -19,7 +19,7 @@ const categoryValidationschema = yup.object().shape({
       properties: yup.array().of(
         yup.object().shape({
           name: yup.string().required("Property Name can't be empty"),
-          type: yup.object().required('Property Type is required'),
+          type: yup.object().nullable().required('Property Type is required'),
           unit: yup.object().nullable(),
           defaultValue: yup.string(),
           listOfValues: yup.array().of(
