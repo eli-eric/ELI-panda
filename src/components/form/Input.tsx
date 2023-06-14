@@ -52,7 +52,7 @@ export const Input = ({
       name={name}
       control={control}
       defaultValue={''}
-      render={({ field, formState }) => (
+      render={({ field, fieldState: { error } }) => (
         <InputWrapper hidden={hidden} className={className}>
           <Label label={label} />
           <div hidden={hidden} className="relative">
@@ -66,7 +66,7 @@ export const Input = ({
               className={classNames(
                 'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                 rounded,
-                formState.errors?.[name] ? 'border-red-500' : 'border-gray-300',
+                error ? 'border-red-500' : 'border-gray-300',
                 disabled ? 'bg-gray-100' : ''
               )}
             />
@@ -94,7 +94,7 @@ export const TextArea = ({ name, placeholder, disabled, rounded, label, classNam
       name={name}
       control={control}
       defaultValue={''}
-      render={({ field, formState }) => (
+      render={({ field, fieldState: { error } }) => (
         <InputWrapper className={className}>
           <Fragment>
             <Label label={label} />
@@ -106,11 +106,11 @@ export const TextArea = ({ name, placeholder, disabled, rounded, label, classNam
               className={classNames(
                 'block w-full appearance-none px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm border',
                 rounded,
-                formState.errors?.[name] ? 'border-red-500' : 'border-gray-300',
+                error ? 'border-red-500' : 'border-gray-300',
                 disabled ? 'bg-gray-100' : ''
               )}
             />
-            {formState.errors?.[name] && <ValidationIcon />}
+            {error && <ValidationIcon />}
           </Fragment>
         </InputWrapper>
       )}
@@ -137,7 +137,7 @@ export const InputAmount = <T extends FieldValues>({
       name={name}
       control={control}
       defaultValue={''}
-      render={({ field, formState }) => (
+      render={({ field, fieldState: { error } }) => (
         <InputWrapper hidden={hidden} className={className}>
           <Label label={label} />
           <div hidden={hidden} className="relative">
@@ -151,7 +151,7 @@ export const InputAmount = <T extends FieldValues>({
               className={classNames(
                 'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                 rounded,
-                formState.errors?.[name] ? 'border-red-500' : 'border-gray-300',
+                error ? 'border-red-500' : 'border-gray-300',
                 disabled ? 'bg-gray-100' : ''
               )}
             />
