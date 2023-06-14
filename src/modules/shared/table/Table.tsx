@@ -1,7 +1,8 @@
-import type { ColumnDef, SortingState } from '@tanstack/react-table'
+import type { ColumnDef, SortingState, Updater, VisibilityState } from '@tanstack/react-table'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useQueryState } from 'next-usequerystate'
-import { Fragment, useEffect, useState } from 'react'
+import type { Ref } from 'react'
+import { forwardRef, Fragment, useEffect, useImperativeHandle, useState } from 'react'
 import { useIsFirstRender } from 'usehooks-ts'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
@@ -15,21 +16,23 @@ interface Props<T extends object> {
   columns: ColumnDef<T, string>[]
   loading?: boolean
   className?: string
-  enableSorting?: boolean
-  withFooter?: boolean
-  enableQueryURL?: boolean
+  settings?: {
+    enableSorting?: boolean
+    withFooter?: boolean
+    enableQueryURL?: boolean
+  }
 }
 
-const Table = <T extends object>({
-  data,
-  columns,
-  loading = false,
-  withFooter = false,
-  enableQueryURL = true,
-  className,
-  enableSorting = true,
-  tableId
-}: Props<T>) => {
+export interface TableRef {
+  setColumnVisibility: (updater: Updater<VisibilityState>) => void
+}
+
+//TODO: I was not able to type this comp without using any
+const Table = forwardRef<TableRef | undefined, Props<any>>(function Table<T extends object>(
+  { data, columns, loading = false, settings, className, tableId }: Props<T>,
+  ref?: Ref<TableRef | undefined>
+) {
+  const { enableSorting = false, withFooter = false, enableQueryURL = false } = settings || {}
   // zustand table instance store
   const { setSortBy, setSortByQueryString, instances } = useTableStateStore()
   const sortByInstance = instances[tableId]?.sortBy || []
@@ -43,14 +46,18 @@ const Table = <T extends object>({
     columns: columns,
     getCoreRowModel: getCoreRowModel(),
     data: data || [],
-    enableSorting,
+    enableSorting: enableSorting,
     manualSorting: true,
     state: { sorting: sorting },
     enableSortingRemoval: true,
     onSortingChange: setSorting
   })
-  const isFirstRender = useIsFirstRender()
 
+  useImperativeHandle(ref, () => ({
+    setColumnVisibility: table.setColumnVisibility
+  }))
+
+  const isFirstRender = useIsFirstRender()
   // initialize update table state and query state and instance on first render
   useEffect(() => {
     if (isFirstRender) {
@@ -196,6 +203,6 @@ const Table = <T extends object>({
       </div>
     </Fragment>
   )
-}
+})
 
 export default Table
