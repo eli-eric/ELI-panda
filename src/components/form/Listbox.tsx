@@ -36,7 +36,7 @@ const Listbox = ({
   rounded = 'rounded-md',
   unit,
   customOptions,
-  useFirstRender = false,
+  useFirstRender = true,
   customLabel
 }: ListboxPropsT) => {
   const { control, setValue } = useFormContext()
@@ -119,10 +119,10 @@ const Listbox = ({
                 optionsSize === 'sm' ? 'max-h-40' : optionsSize === 'lg' ? 'max-h-64' : 'max-h-60'
               )}
             >
-              {options.map(item => (
+              {options.map((item, index) => (
                 <HUIListbox.Option
-                  key={item.uid}
-                  value={customOptions ? item.uid : item}
+                  key={item.uid + index}
+                  value={customOptions ? item.uid : item.uid === '' ? null : item}
                   className={({ active }) =>
                     classNames(
                       'relative cursor-default select-none py-2 pl-3 pr-9',
