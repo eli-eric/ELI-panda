@@ -27,7 +27,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
   const { enabled, toggle, Toggle } = useToggle(false)
   const [locationEnable, setLocationEnable] = useState(false)
   const formFields = useOrderLineFormFields(enabled)
-  const { setValue, watch } = useFormContext<OrderLineFormType>()
+  const { setValue, watch, unregister } = useFormContext<OrderLineFormType>()
   const system = watch('system')
   const technologicalUnitToogle = useToggle(true)
   const { Toggle: TechUnitToogle, enabled: techUnitEnabled } = technologicalUnitToogle
@@ -61,11 +61,11 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
   useEffect(() => {
     if (system) {
       setLocationEnable(false)
-      setValue('location', { name: '', uid: '' })
+      unregister('location')
     } else {
       setLocationEnable(true)
     }
-  }, [system, setValue])
+  }, [system, unregister])
 
   return (
     <Grid>
