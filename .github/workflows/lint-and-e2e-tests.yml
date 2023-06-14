@@ -1,7 +1,10 @@
 name: Lint and test
 
 on:
-  - push
+  push:
+    branches:
+      - '!main'
+      - '!dev'
 
 jobs:
   lint:
