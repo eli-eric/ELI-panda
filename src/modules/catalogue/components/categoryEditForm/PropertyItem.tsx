@@ -1,6 +1,6 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useEffect, useMemo } from 'react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/Input'
@@ -53,7 +53,8 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
   const handleAddValue = () => {
     append({ value: '' })
   }
-  const type = watch(`${name}.type`)
+  const type = useWatch({ control, name: `${name}.type` })
+
   const listOfValues = useMemo(() => watch(`${name}.listOfValues`) || [], [watch, name])
 
   const getDefaultOption = (name, disabled = false) => ({
@@ -79,13 +80,15 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
             name={`${name}.type`}
             optionsSize={'sm'}
             emptyOption="Select type"
-            allowEmptyOption={true}
+            useFirstRender={false}
+            allowEmptyOption={false}
             codebook={CODEBOOK.CATALOGUE_PROPERTY_TYPE}
           />
           <Listbox
             name={`${name}.unit`}
             optionsSize={'sm'}
             emptyOption="Select unit"
+            useFirstRender={false}
             allowEmptyOption={true}
             codebook={CODEBOOK.UNIT}
           />
@@ -104,9 +107,9 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
             <Input
               rounded="rounded-l-md"
               name={`${name}.defaultValue`}
-              type={PROPERTY_INPUT_TYPE[type?.uid]}
+              type={type && PROPERTY_INPUT_TYPE[type?.uid]}
               placeholder="Default value"
-              disabled={type?.uid === ''}
+              disabled={!type}
             />
           )}
           <Button rounded="rounded-r-md" onClick={handleRemoveProp}>

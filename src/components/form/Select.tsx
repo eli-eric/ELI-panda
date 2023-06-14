@@ -35,7 +35,7 @@ export const SelectWithError = ({
     <Controller
       name={name}
       control={control}
-      render={({ field, formState }) => (
+      render={({ field, fieldState: { error } }) => (
         <div
           className={classNames(
             'block z-10 relative w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
@@ -51,7 +51,7 @@ export const SelectWithError = ({
               'w-full block appearance-none borde px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
               rounded,
               disabled ? 'bg-gray-100' : '',
-              formState.errors?.[name] ? 'border-red-500' : 'border-gray-300'
+              error ? 'border-red-500' : 'border-gray-300'
             )}
           >
             {options &&

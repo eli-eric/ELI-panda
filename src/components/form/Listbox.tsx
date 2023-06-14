@@ -21,6 +21,7 @@ export type ListboxPropsT = FieldProps &
     unit?: string
     customLabel?: string
     useFirstRender?: boolean
+    //name: Path<any>
   }
 
 const Listbox = ({
@@ -36,7 +37,7 @@ const Listbox = ({
   rounded = 'rounded-md',
   unit,
   customOptions,
-  useFirstRender = false,
+  useFirstRender = true,
   customLabel
 }: ListboxPropsT) => {
   const { control, setValue } = useFormContext()
@@ -73,7 +74,7 @@ const Listbox = ({
       name={name}
       control={control}
       defaultValue={null}
-      render={({ field, formState }) => (
+      render={({ field, fieldState: { error } }) => (
         <HUIListbox
           as="div"
           {...field}
@@ -92,7 +93,7 @@ const Listbox = ({
                 'px-3 py-2 pb-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full h-[38px] appearance-none text-left',
                 field.value && !disabled ? 'pr-14' : 'pr-9',
                 rounded,
-                formState.errors?.[name] ? 'border-red-500' : 'border-gray-300',
+                error ? 'border-red-500' : 'border-gray-300',
                 disabled ? 'bg-gray-100' : ''
               )}
             >
@@ -119,10 +120,10 @@ const Listbox = ({
                 optionsSize === 'sm' ? 'max-h-40' : optionsSize === 'lg' ? 'max-h-64' : 'max-h-60'
               )}
             >
-              {options.map(item => (
+              {options.map((item, index) => (
                 <HUIListbox.Option
-                  key={item.uid}
-                  value={customOptions ? item.uid : item}
+                  key={item.uid + index}
+                  value={customOptions ? item.uid : item.uid === '' ? null : item}
                   className={({ active }) =>
                     classNames(
                       'relative cursor-default select-none py-2 pl-3 pr-9',

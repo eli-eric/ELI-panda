@@ -2,10 +2,17 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import logger from 'src/server/logger'
 import handler from 'src/server/files/handler'
 import { composeDebugMessage } from 'src/server/logger'
+import { getToken } from 'next-auth/jwt'
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  logger.debug(composeDebugMessage(req, 'Incoming request'))
-  return await handler(req, res)
+  const user = await getToken({ req })
+  if (user) {
+    logger.debug(composeDebugMessage(req, 'Incoming request'))
+    return await handler(req, res)
+  } else {
+    logger.error(composeDebugMessage(req, 'Unauthorized request'))
+    return res.status(401).end()
+  }
 }
 
 export const config = {
