@@ -1,6 +1,6 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useEffect, useMemo } from 'react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/Input'
@@ -53,7 +53,7 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
   const handleAddValue = () => {
     append({ value: '' })
   }
-  const type = watch(`${name}.type`)
+  const type = useWatch({ control, name: `${name}.type` })
 
   const listOfValues = useMemo(() => watch(`${name}.listOfValues`) || [], [watch, name])
 
