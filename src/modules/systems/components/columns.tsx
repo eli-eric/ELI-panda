@@ -1,11 +1,14 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 
-import type { Order } from '@/modules/orders/types'
+import axiosInstance from '@/core/axios/axiosInstance'
 
-const useSystemsColumns = () => {
+import type { SystemDetail } from '../types/responses'
+
+//TODO: fix typing
+const useSystemsColumns = setData => {
   const columns = useMemo(
-    (): ColumnDef<Order, string>[] => [
+    (): ColumnDef<SystemDetail, any>[] => [
       {
         header: 'Name',
         accessorKey: 'name',
@@ -13,18 +16,35 @@ const useSystemsColumns = () => {
         cell: ({ row, getValue }) => (
           <div
             style={{
-              // Since rows are flattened by default,
-              // we can use the row.depth property
-              // and paddingLeft to visually indicate the depth
-              // of the row
               paddingLeft: `${row.depth * 2}rem`
             }}
           >
             <>
-              {row.getCanExpand() ? (
+              {row.original.hasSubsystems ? (
                 <button
                   {...{
-                    onClick: row.getToggleExpandedHandler(),
+                    onClick: () => {
+                      if (!row.getIsExpanded()) {
+                        axiosInstance.get(`api/mock-server/systems/${row.original.uid}/subsystems`).then(res => {
+                          setData(prev => {
+                            //recursion
+                            const newData = [...prev]
+                            const findAndReplace = (data, uid, newData) => {
+                              data.forEach((item, index) => {
+                                if (item.uid === uid) {
+                                  newData[index].subSystems = res.data
+                                } else if (item.subSystems) {
+                                  findAndReplace(item.subSystems, uid, newData[index].subSystems)
+                                }
+                              })
+                            }
+                            findAndReplace(prev, row.original.uid, newData)
+                            return newData
+                          })
+                        })
+                      }
+                      row.toggleExpanded()
+                    },
                     style: { cursor: 'pointer' }
                   }}
                 >
@@ -39,7 +59,16 @@ const useSystemsColumns = () => {
         )
       },
       { header: 'systemCode', accessorKey: 'systemCode', id: 'systemCode' },
-      { header: 'systemAlias', accessorKey: 'systemAlias', id: 'systemAlias' }
+      { header: 'systemAlias', accessorKey: 'systemAlias', id: 'systemAlias' },
+      {
+        header: 'systemType',
+        accessorKey: 'systemType',
+        id: 'systemType',
+        cell: ({ getValue }) => getValue().name
+      },
+      { header: 'zone', accessorKey: 'zone', id: 'zone', cell: ({ getValue }) => getValue().name },
+      { header: 'location', accessorKey: 'location', id: 'location', cell: ({ getValue }) => getValue().name },
+      { header: 'owner', accessorKey: 'owner', id: 'owner', cell: ({ getValue }) => getValue().name }
     ],
     []
   )

@@ -16,7 +16,7 @@ import useTableStateStore from '@/store/useTableStateStore'
 interface Props<T extends object> {
   data?: T[]
   tableId: string
-  columns: ColumnDef<T, string>[]
+  columns: ColumnDef<T, any>[]
   loading?: boolean
   className?: string
   getSubRows?: (row: T) => T[]
@@ -42,6 +42,7 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
   // table state
   const [sorting, setSorting] = useState<SortingState>(sortByInstance)
   const [expanded, setExpanded] = useState<ExpandedState>({})
+  console.log(data)
 
   // react-table
   const table = useReactTable<T>({
@@ -142,11 +143,11 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
                             desc: ' 🔽'
                           }[header.column.getIsSorted() as string] ?? null}
                         </div>
-                        {header.column.getCanFilter() ? (
+                        {/* {header.column.getCanFilter() ? (
                           <div>
                             <Filter column={header.column} table={table} />
                           </div>
-                        ) : null}
+                        ) : null} */}
                       </th>
                     ))}
                   </tr>

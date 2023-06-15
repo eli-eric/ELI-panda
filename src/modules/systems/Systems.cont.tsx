@@ -1,5 +1,5 @@
 import type { Table } from '@tanstack/react-table'
-import { Fragment, useRef } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
@@ -9,12 +9,19 @@ import SearchBar from '../shared/searchBar/SearchBar'
 import PandaTable from '../shared/table/Table'
 import useSystemsColumns from './components/columns'
 import { useSystems } from './hooks/useSystems'
+import type { SystemDetail } from './types/responses'
 
 const SystemsContainer = () => {
-  const columns = useSystemsColumns()
   const tableId = 'systems'
-  const { systems, error, loading } = useSystems()
 
+  const { systems, error, loading } = useSystems()
+  const [data, setData] = useState<SystemDetail[]>(systems?.data)
+
+  useEffect(() => {
+    setData(systems?.data)
+  }, [systems])
+
+  const columns = useSystemsColumns(setData)
   const tableRef = useRef<Table<Order>>()
 
   return (
@@ -24,7 +31,7 @@ const SystemsContainer = () => {
         <PandaTable
           ref={tableRef}
           columns={columns}
-          data={systems?.data}
+          data={data}
           loading={loading}
           tableId={tableId}
           getSubRows={row => row.subSystems}

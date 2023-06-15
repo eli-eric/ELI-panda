@@ -4,11 +4,6 @@ import { SystemDetail } from '@/modules/systems/types/responses'
 import { faker } from '@faker-js/faker'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-type SystemsResponse = {
-  data: SystemDetail[]
-  totalCount: number
-}
-
 const range = (len: number) => {
   const arr = []
   for (let i = 0; i < len; i++) {
@@ -62,15 +57,11 @@ function makeData(...lens: number[]) {
 }
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
-  if (req.headers.authorization) {
-    if (req.method === 'GET') {
-      const systems = makeData(30)
-      const timeout = faker.datatype.number({ min: 50, max: 200 })
-      const timer = setTimeout(() => {
-        res.status(200).json({ data: systems, totalCount: systems.length })
-      }, timeout)
-    }
-  } else {
-    res.status(401).json({ message: 'Unauthorized' })
+  if (req.method === 'GET') {
+    const systems = makeData(5)
+    const timeout = faker.datatype.number({ min: 50, max: 200 })
+    const timer = setTimeout(() => {
+      res.status(200).json(systems)
+    }, timeout)
   }
 }
