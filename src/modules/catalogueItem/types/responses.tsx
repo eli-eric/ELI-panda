@@ -25,5 +25,5 @@ export type CatalogueCategoryProperty = {
   listOfValues: string[]
   defaultValue: string
   type: CodebookType
-  unit: CodebookType
+  unit?: CodebookType
 }

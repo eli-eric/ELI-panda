@@ -20,7 +20,7 @@ const GroupProperty = ({ detail, index }: Props) => {
     return (
       <Input
         name={`details.${index}.value`}
-        unit={detail.property.unit.name}
+        unit={detail.property.unit?.name}
         label={detail.property.name}
         disabled={disabled}
         rounded={'rounded-md'}
@@ -31,7 +31,7 @@ const GroupProperty = ({ detail, index }: Props) => {
     return (
       <Input
         name={`details.${index}.value`}
-        unit={detail.property.unit.name}
+        unit={detail.property.unit?.name}
         label={detail.property.name}
         disabled={disabled}
         rounded={'rounded-md'}
@@ -47,7 +47,7 @@ const GroupProperty = ({ detail, index }: Props) => {
         emptyOption={'None'}
         allowEmptyOption={true}
         disabled={disabled}
-        unit={detail.property.unit.name}
+        unit={detail.property.unit?.name}
         customLabel={detail.property.name}
         rounded={'rounded-md'}
         customOptions={[
@@ -64,7 +64,7 @@ const GroupProperty = ({ detail, index }: Props) => {
         useFirstRender={false}
         emptyOption={'None'}
         allowEmptyOption={true}
-        unit={detail.property.unit.name}
+        unit={detail.property.unit?.name}
         disabled={disabled}
         customLabel={detail.property.name}
         rounded={'rounded-md'}

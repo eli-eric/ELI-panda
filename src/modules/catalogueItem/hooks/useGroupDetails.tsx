@@ -14,7 +14,7 @@ const useGroupDetails = (uid?: string) => {
     onError: () => {
       toast.error('Failed to load group details')
     },
-    useMockFetcher: true
+    useMockFetcher: false
   })
 
   const groups = useMemo(
