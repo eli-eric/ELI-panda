@@ -4,6 +4,7 @@ import { getExpandedRowModel } from '@tanstack/react-table'
 import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useQueryState } from 'next-usequerystate'
 import type { Ref } from 'react'
+import { useTransition } from 'react'
 import { forwardRef, Fragment, useEffect, useImperativeHandle, useState } from 'react'
 import { useIsFirstRender } from 'usehooks-ts'
 
@@ -44,18 +45,17 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
 
   // react-table
   const table = useReactTable<T>({
-    columns: columns,
     getCoreRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getSubRows,
     onExpandedChange: setExpanded,
+    onSortingChange: setSorting,
+    columns: columns,
     data: data || [],
     enableSorting: enableSorting,
     manualSorting: true,
-    getSubRows,
-    state: { sorting, expanded },
-    enableSortingRemoval: true,
-    onSortingChange: setSorting
+    state: { sorting, expanded }
   })
 
   useImperativeHandle(ref, () => ({
@@ -137,16 +137,16 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
                           }}
                         >
                           {flexRender(header.column.columnDef.header, header.getContext())}
-                          {/*  {{
+                          {{
                             asc: ' 🔼',
                             desc: ' 🔽'
-                          }[header.column.getIsSorted() as string] ?? null} */}
-                          {header.column.getCanFilter() ? (
-                            <div>
-                              <Filter column={header.column} table={table} />
-                            </div>
-                          ) : null}
+                          }[header.column.getIsSorted() as string] ?? null}
                         </div>
+                        {header.column.getCanFilter() ? (
+                          <div>
+                            <Filter column={header.column} table={table} />
+                          </div>
+                        ) : null}
                       </th>
                     ))}
                   </tr>
@@ -218,34 +218,22 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
 export default PandaTable
 
 function Filter({ column, table }: { column: Column<any, any>; table: Table<any> }) {
-  const firstValue = table.getPreFilteredRowModel().flatRows[0]?.getValue(column.id)
+  const [filterValue, setFilterValue] = useState(column.getFilterValue())
+  const [pending, startTransition] = useTransition()
 
   const columnFilterValue = column.getFilterValue()
 
-  return typeof firstValue === 'number' ? (
-    <div className="flex space-x-2">
-      <input
-        type="number"
-        value={(columnFilterValue as [number, number])?.[0] ?? ''}
-        onChange={e => column.setFilterValue((old: [number, number]) => [e.target.value, old?.[1]])}
-        placeholder={`Min`}
-        className="w-24 border shadow rounded"
-      />
-      <input
-        type="number"
-        value={(columnFilterValue as [number, number])?.[1] ?? ''}
-        onChange={e => column.setFilterValue((old: [number, number]) => [old?.[0], e.target.value])}
-        placeholder={`Max`}
-        className="w-24 border shadow rounded"
-      />
-    </div>
-  ) : (
+  useEffect(() => {
+    column.setFilterValue(filterValue)
+  }, [column, filterValue])
+
+  return (
     <input
       type="text"
       value={(columnFilterValue ?? '') as string}
-      onChange={e => column.setFilterValue(e.target.value)}
+      onChange={e => startTransition(() => setFilterValue(e.target.value))}
       placeholder={`Search...`}
-      className="w-36 border shadow rounded"
+      className="w-full h-6 border shadow rounded"
     />
   )
 }
