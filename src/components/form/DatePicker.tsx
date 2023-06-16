@@ -30,7 +30,7 @@ const DateInput = ({ name, disabled, rounded = 'rounded-md', className, hidden, 
     <Controller
       control={control}
       name={name}
-      render={({ field: { onChange }, formState }) => (
+      render={({ field: { onChange }, fieldState: { error } }) => (
         <div
           hidden={hidden}
           className={classNames(
@@ -53,7 +53,7 @@ const DateInput = ({ name, disabled, rounded = 'rounded-md', className, hidden, 
               className={classNames(
                 'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                 rounded,
-                formState.errors?.[name] ? 'border-red-500' : 'border-gray-300',
+                error ? 'border-red-500' : 'border-gray-300',
                 disabled ? 'bg-gray-100' : ''
               )}
               selected={startDate}
@@ -62,7 +62,7 @@ const DateInput = ({ name, disabled, rounded = 'rounded-md', className, hidden, 
                 onChange(convertDate(date))
               }}
             />
-            {formState.errors?.[name] && <ValidationIcon />}
+            {error && <ValidationIcon />}
           </div>
         </div>
       )}

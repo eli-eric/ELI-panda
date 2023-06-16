@@ -20,8 +20,8 @@ const PropertyList = ({ name }: Props) => {
   const handleAddProp = () => {
     append({
       name: '',
-      type: { uid: '', name: 'Select Type' },
-      unit: { uid: '', name: 'Select Unit' },
+      type: undefined,
+      unit: undefined,
       defaultValue: ''
     })
   }

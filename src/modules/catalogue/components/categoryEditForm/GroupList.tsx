@@ -54,9 +54,7 @@ const GroupList = () => {
   const handleAddGroup = () => {
     append({
       name: '',
-      properties: [
-        { name: '', type: { uid: '', name: 'Select Type' }, unit: { uid: '', name: 'Select Unit' }, defaultValue: '' }
-      ]
+      properties: [{ name: '', type: null, unit: null, defaultValue: '' }]
     })
   }
 

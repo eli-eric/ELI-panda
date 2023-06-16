@@ -12,15 +12,15 @@ import GroupList from './GroupList'
 import Main from './Main'
 
 const categoryValidationschema = yup.object().shape({
-  name: yup.string().required(),
+  name: yup.string().required("Name can't be empty"),
   groups: yup.array().of(
     yup.object().shape({
-      name: yup.string().required(),
+      name: yup.string().required("Group Name can't be empty"),
       properties: yup.array().of(
         yup.object().shape({
-          name: yup.string().required(),
-          type: yup.object().required(),
-          unit: yup.object(),
+          name: yup.string().required("Property Name can't be empty"),
+          type: yup.object().nullable().required('Property Type is required'),
+          unit: yup.object().nullable(),
           defaultValue: yup.string(),
           listOfValues: yup.array().of(
             yup.object({
@@ -65,6 +65,8 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
     defaultValues: response,
     resolver: yupResolver(categoryValidationschema)
   })
+
+  //useFormNotification<CategoryFormType>({ control: formMethods.control })
 
   return (
     <Fragment>

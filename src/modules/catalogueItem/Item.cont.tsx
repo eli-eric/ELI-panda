@@ -29,7 +29,7 @@ const ItemContainer = () => {
     <FormProvider {...formMethods}>
       <form onSubmit={formMethods.handleSubmit(onSubmit)}>
         <ItemHeader disabledEdit={false} loading={loading} />
-        <Card className="flex flex-col justify-between">
+        <Card className="flex flex-col justify-between pb-5">
           <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
             {/* //TODO: image upload will replace ImageGalleryComponent */}
             <ImageGalleryComponent images={[image]} />
