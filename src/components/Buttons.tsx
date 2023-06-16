@@ -3,10 +3,10 @@ import {
   ArrowUturnLeftIcon,
   FolderOpenIcon,
   FolderPlusIcon,
+  NoSymbolIcon,
   PencilSquareIcon,
   PlusIcon,
-  TrashIcon
-} from '@heroicons/react/24/outline'
+  TrashIcon} from '@heroicons/react/24/outline'
 import { FormattedMessage } from 'react-intl'
 
 import { classNames } from '@/helpers'
@@ -105,5 +105,11 @@ export const BackButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) 
 export const SaveButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <FolderPlusIcon className="h-5 w-5" aria-hidden="true" />
+  </Button>
+)
+
+export const CancelButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+  <Button {...restProps} buttonSize={buttonSize}>
+    <NoSymbolIcon className="h-5 w-5" aria-hidden="true" />
   </Button>
 )
