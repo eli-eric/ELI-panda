@@ -37,3 +37,8 @@ export type SystemRelationshipResponse = {
   foreignSystemName: string
   relationUid: string
 }
+
+export type SystemListResponse = {
+  data: SystemDetailResponse[]
+  totalCount: number
+}
