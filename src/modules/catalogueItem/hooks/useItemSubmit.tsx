@@ -8,7 +8,7 @@ const useItemSubmit = () => {
   const uid = useRouter().query.uid as string | undefined
   const { catalogueItem } = useEndpoint({ uid: uid })
 
-  const { submit, loading } = useSubmit({
+  const { response, submit, loading } = useSubmit({
     endpoint: catalogueItem,
     method: uid ? 'put' : 'post',
     mutateList: [catalogueItem],
@@ -20,7 +20,7 @@ const useItemSubmit = () => {
     }
   })
 
-  return { submit, loading }
+  return { response, submit, loading }
 }
 
 export default useItemSubmit

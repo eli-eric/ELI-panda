@@ -16,9 +16,11 @@ type ImageManagerConfig = {
   suspense?: boolean
 }
 
+const getEndpoint = (itemCategory, itemId, fileCategory) => `/api/${itemCategory}/${itemId}/${fileCategory}`
 function useImageManager(config: ImageManagerConfig) {
   const { itemId, itemCategory, fileCategory = 'images', suspense } = config
-  const endpoint = `/api/${itemCategory}/${itemId}/${fileCategory}`
+
+  const endpoint = getEndpoint(itemCategory, itemId, fileCategory)
 
   const { data, mutate } = useSWR<FileItem[]>(endpoint, uniFetcher, { suspense })
 
@@ -77,27 +79,31 @@ function useImageManager(config: ImageManagerConfig) {
     mutate()
   }, [mutate, setDueUpload, setDueDelete])
 
-  const save = useCallback(async () => {
-    for await (const file of dueDelete) {
-      try {
-        await axios.delete(`${endpoint}/${file.id}`)
-        toast.success(`Deleted ${file.name}.`)
-      } catch {
-        toast.error(`Failed to delete ${file.name}.`)
+  const save = useCallback(
+    async (itemId?: string) => {
+      for await (const file of dueDelete) {
+        try {
+          await axios.delete(`${endpoint}/${file.id}`)
+          toast.success(`Deleted ${file.name}.`)
+        } catch {
+          toast.error(`Failed to delete ${file.name}.`)
+        }
       }
-    }
 
-    for await (const file of dueUpload) {
-      try {
-        await axios.post(endpoint, file)
-        toast.success(`Uploaded ${file.name}.`)
-      } catch {
-        toast.error(`Failed to upload ${file.name}.`)
+      const ep = itemId ? getEndpoint(itemCategory, itemId, fileCategory) : endpoint
+      for await (const file of dueUpload) {
+        try {
+          await axios.post(ep, file)
+          toast.success(`Uploaded ${file.name}.`)
+        } catch {
+          toast.error(`Failed to upload ${file.name}.`)
+        }
       }
-    }
 
-    discard()
-  }, [endpoint, discard, dueUpload, dueDelete])
+      discard()
+    },
+    [fileCategory, itemCategory, endpoint, discard, dueUpload, dueDelete]
+  )
 
   const hasChanges = dueUpload.length + dueDelete.length > 0
 

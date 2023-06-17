@@ -1,6 +1,6 @@
 import { DevTool } from '@hookform/devtools'
 import { useRouter } from 'next/router'
-import { Suspense } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormProvider } from 'react-hook-form'
 
@@ -19,17 +19,31 @@ import useItemSubmit from './hooks/useItemSubmit'
 
 const ItemContainer = () => {
   const { FormWarningModal, ...formMethods } = useItemForm()
-  const { submit, loading } = useItemSubmit()
-  const { query } = useRouter()
+  const { query, push, pathname } = useRouter()
   const { save: saveImages, Gallery: ImageGallery } = useImageManager({
     itemCategory: FILE_TYPE.CATALOGUE,
     itemId: String(query.uid)
   })
+  const [imagesSaved, setImagesSaved] = useState(false)
+
+  const { submit, loading, response } = useItemSubmit()
 
   const onSubmit = (data: any) => {
     submit(data)
-    saveImages()
+    if (query.uid) {
+      setImagesSaved(true)
+      saveImages()
+    }
   }
+
+  useEffect(() => {
+    if (!imagesSaved && !query.uid && response) {
+      const newUid = String(response)
+      setImagesSaved(true)
+      saveImages(newUid)
+      push(`${pathname}/${newUid}`)
+    }
+  }, [imagesSaved, query.uid, response, pathname, push, saveImages])
 
   return (
     <FormProvider {...formMethods}>
