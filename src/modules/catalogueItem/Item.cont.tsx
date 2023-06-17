@@ -21,7 +21,7 @@ import useItemSubmit from './hooks/useItemSubmit'
 const ItemContainer = () => {
   const { FormWarningModal, ...formMethods } = useItemForm()
   const { query, push, pathname } = useRouter()
-  const { save: saveImages, Gallery: ImageGallery } = useImageManager({
+  const { submit: saveImages, Gallery: ImageGallery } = useImageManager({
     itemCategory: FILE_TYPE.CATALOGUE,
     itemId: String(query.uid)
   })

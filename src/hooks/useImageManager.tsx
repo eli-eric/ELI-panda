@@ -86,7 +86,7 @@ function useImageManager(config: ImageManagerConfig) {
     failedDeletions: string[]
   }
 
-  const save = useCallback(
+  const submit = useCallback(
     async (itemId?: string) => {
       let status: Status = {
         successfulUploads: [],
@@ -132,7 +132,7 @@ function useImageManager(config: ImageManagerConfig) {
     />
   )
 
-  return { data, onDelete, onDrop, discard, save, hasChanges, Gallery }
+  return { data, onDelete, onDrop, discard, submit, hasChanges, Gallery }
 }
 
 export default useImageManager
