@@ -4,7 +4,12 @@ import { toast } from 'react-hot-toast'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useSubmit from '@/hooks/fetch/useSubmit'
 
-const useItemSubmit = () => {
+type ItemSubmitConfig = {
+  onSuccess?: Function
+  onError?: Function
+}
+
+const useItemSubmit = (config: ItemSubmitConfig) => {
   const uid = useRouter().query.uid as string | undefined
   const { catalogueItem } = useEndpoint({ uid: uid })
 
@@ -12,11 +17,13 @@ const useItemSubmit = () => {
     endpoint: catalogueItem,
     method: uid ? 'put' : 'post',
     mutateList: [catalogueItem],
-    onSuccess: () => {
+    onSuccess: response => {
       toast.success('Item saved')
+      config.onSuccess && config.onSuccess(response)
     },
-    onError: () => {
+    onError: response => {
       toast.error('Error saving item')
+      config.onError && config.onError(response)
     }
   })
 

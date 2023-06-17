@@ -1,6 +1,6 @@
 import { DevTool } from '@hookform/devtools'
 import { useRouter } from 'next/router'
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormProvider } from 'react-hook-form'
 
@@ -24,26 +24,17 @@ const ItemContainer = () => {
     itemCategory: FILE_TYPE.CATALOGUE,
     itemId: String(query.uid)
   })
-  const [imagesSaved, setImagesSaved] = useState(false)
 
-  const { submit, loading, response } = useItemSubmit()
+  const saveImageAndRedirect = async (uid: string) => {
+    await saveImages(uid)
+    push(`${pathname}/${uid}`)
+  }
+
+  const { submit, loading } = useItemSubmit({ onSuccess: (uid: string) => saveImageAndRedirect(uid) })
 
   const onSubmit = (data: any) => {
     submit(data)
-    if (query.uid) {
-      setImagesSaved(true)
-      saveImages()
-    }
   }
-
-  useEffect(() => {
-    if (!imagesSaved && !query.uid && response) {
-      const newUid = String(response)
-      setImagesSaved(true)
-      saveImages(newUid)
-      push(`${pathname}/${newUid}`)
-    }
-  }, [imagesSaved, query.uid, response, pathname, push, saveImages])
 
   return (
     <FormProvider {...formMethods}>
