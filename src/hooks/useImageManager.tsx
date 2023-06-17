@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { nanoid } from 'nanoid'
 import { useCallback, useState } from 'react'
-import { toast } from 'react-hot-toast'
 import type { FileItem, ProcessedFile } from 'src/modules/shared/fileManager/types'
 import type { FILE_TYPE } from 'src/types/constants/files'
 import useSWR from 'swr'
@@ -16,7 +15,8 @@ type ImageManagerConfig = {
   suspense?: boolean
 }
 
-const getEndpoint = (itemCategory, itemId, fileCategory) => `/api/${itemCategory}/${itemId}/${fileCategory}`
+const getEndpoint = (itemCategory: string, itemId: string, fileCategory: string) =>
+  `/api/${itemCategory}/${itemId}/${fileCategory}`
 function useImageManager(config: ImageManagerConfig) {
   const { itemId, itemCategory, fileCategory = 'images', suspense } = config
 
@@ -79,19 +79,27 @@ function useImageManager(config: ImageManagerConfig) {
     mutate()
   }, [mutate, setDueUpload, setDueDelete])
 
+  type Status = {
+    successfulUploads: string[]
+    failedUploads: string[]
+    successfulDeletions: string[]
+    failedDeletions: string[]
+  }
+
   const save = useCallback(
     async (itemId?: string) => {
-      let succeededDeletions = 0
-      let failedDeletions = 0
-      let succeededUploads = 0
-      let failedUploads = 0
-
+      let status: Status = {
+        successfulUploads: [],
+        failedUploads: [],
+        successfulDeletions: [],
+        failedDeletions: []
+      }
       for await (const file of dueDelete) {
         try {
           await axios.delete(`${endpoint}/${file.id}`)
-          succeededDeletions += 1
+          status = { ...status, successfulDeletions: [...status.successfulDeletions, file.name] }
         } catch {
-          failedDeletions += 0
+          status = { ...status, failedDeletions: [...status.failedDeletions, file.name] }
         }
       }
 
@@ -99,22 +107,14 @@ function useImageManager(config: ImageManagerConfig) {
       for await (const file of dueUpload) {
         try {
           await axios.post(ep, file)
-          succeededUploads += 1
+          status = { ...status, successfulUploads: [...status.successfulUploads, file.name] }
         } catch {
-          failedUploads += 1
+          status = { ...status, failedUploads: [...status.failedUploads, file.name] }
         }
       }
 
-      if (succeededDeletions > 0)
-        toast.success(`Deleted ${succeededDeletions} ${succeededDeletions === 1 ? 'image' : 'images'}.`)
-      if (failedDeletions > 0)
-        toast.error(`Failed to delete ${failedDeletions} ${failedDeletions === 1 ? 'image' : 'images'}.`)
-      if (succeededUploads > 0)
-        toast.success(`Uploaded ${succeededUploads} ${succeededUploads === 1 ? 'image' : 'images'}.`)
-      if (failedUploads > 0)
-        toast.error(`Failed to upload ${failedUploads} ${failedUploads === 1 ? 'image' : 'images'}.`)
-
       discard()
+      return status
     },
     [fileCategory, itemCategory, endpoint, discard, dueUpload, dueDelete]
   )

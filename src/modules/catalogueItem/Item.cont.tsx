@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormProvider } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TextArea } from '@/components/form/Input'
@@ -26,7 +27,13 @@ const ItemContainer = () => {
   })
 
   const saveImageAndRedirect = async (uid: string) => {
-    await saveImages(uid)
+    const status = await saveImages(uid)
+
+    const { failedUploads, failedDeletions } = status
+    const totalFailures = failedUploads.length + failedDeletions.length
+    if (totalFailures > 0)
+      toast.error(`Failed to process ${totalFailures} ${totalFailures === 1 ? 'image' : 'images'}.`)
+
     push(`${pathname}/${uid}`)
   }
 
