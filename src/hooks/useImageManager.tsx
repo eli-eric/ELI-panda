@@ -108,11 +108,11 @@ function useImageManager(config: ImageManagerConfig) {
       if (succeededDeletions > 0)
         toast.success(`Deleted ${succeededDeletions} ${succeededDeletions === 1 ? 'image' : 'images'}.`)
       if (failedDeletions > 0)
-        toast.error(`Failed to delete ${succeededDeletions} ${succeededDeletions === 1 ? 'image' : 'images'}.`)
+        toast.error(`Failed to delete ${failedDeletions} ${failedDeletions === 1 ? 'image' : 'images'}.`)
       if (succeededUploads > 0)
         toast.success(`Uploaded ${succeededUploads} ${succeededUploads === 1 ? 'image' : 'images'}.`)
       if (failedUploads > 0)
-        toast.error(`Failed to upload ${succeededUploads} ${succeededUploads === 1 ? 'image' : 'images'}.`)
+        toast.error(`Failed to upload ${failedUploads} ${failedUploads === 1 ? 'image' : 'images'}.`)
 
       discard()
     },
