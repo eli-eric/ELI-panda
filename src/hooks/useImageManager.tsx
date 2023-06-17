@@ -81,12 +81,17 @@ function useImageManager(config: ImageManagerConfig) {
 
   const save = useCallback(
     async (itemId?: string) => {
+      let succeededDeletions = 0
+      let failedDeletions = 0
+      let succeededUploads = 0
+      let failedUploads = 0
+
       for await (const file of dueDelete) {
         try {
           await axios.delete(`${endpoint}/${file.id}`)
-          toast.success(`Deleted ${file.name}.`)
+          succeededDeletions += 1
         } catch {
-          toast.error(`Failed to delete ${file.name}.`)
+          failedDeletions += 0
         }
       }
 
@@ -94,11 +99,20 @@ function useImageManager(config: ImageManagerConfig) {
       for await (const file of dueUpload) {
         try {
           await axios.post(ep, file)
-          toast.success(`Uploaded ${file.name}.`)
+          succeededUploads += 1
         } catch {
-          toast.error(`Failed to upload ${file.name}.`)
+          failedUploads += 1
         }
       }
+
+      if (succeededDeletions > 0)
+        toast.success(`Deleted ${succeededDeletions} ${succeededDeletions === 1 ? 'image' : 'images'}.`)
+      if (failedDeletions > 0)
+        toast.error(`Failed to delete ${succeededDeletions} ${succeededDeletions === 1 ? 'image' : 'images'}.`)
+      if (succeededUploads > 0)
+        toast.success(`Uploaded ${succeededUploads} ${succeededUploads === 1 ? 'image' : 'images'}.`)
+      if (failedUploads > 0)
+        toast.error(`Failed to upload ${succeededUploads} ${succeededUploads === 1 ? 'image' : 'images'}.`)
 
       discard()
     },
