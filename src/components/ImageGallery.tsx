@@ -50,7 +50,11 @@ const ImageGallery = (props: GalleryProps) => {
         <Tab.List className={`w-full rounded-t-md border border-gray-300 flex gap-1 justify-between`}>
           <div>
             {canEdit && (
-              <PlusButton onClick={open} className="h-full flex border-0 border-r rounded-none rounded-tl-md" />
+              <PlusButton
+                type="button"
+                onClick={open}
+                className="h-full flex border-0 border-r rounded-none rounded-tl-md"
+              />
             )}
           </div>
 
@@ -65,6 +69,7 @@ const ImageGallery = (props: GalleryProps) => {
           <div>
             {canEdit && (
               <CancelButton
+                type="button"
                 onClick={() => withWarningModal(discard, 'Are you sure to discard your changes?')()}
                 className="h-full flex border-0 border-l rounded-none rounded-tr-md"
                 disabled={!hasChanges}
@@ -86,6 +91,7 @@ const ImageGallery = (props: GalleryProps) => {
               />
               {obj.id !== 'fallback' && canEdit && (
                 <DeleteButton
+                  type="button"
                   onClick={() => onDelete(obj)}
                   className="absolute top-0 left-0 border-0 border-b border-r rounded-none rounded-br-md"
                 />
