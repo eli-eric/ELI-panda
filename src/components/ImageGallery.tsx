@@ -1,6 +1,5 @@
 import { Tab } from '@headlessui/react'
 import Image from 'next/image'
-import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import useWarningModal from 'src/hooks/useWarningModal'
 import type { FileItem } from 'src/modules/shared/fileManager/types'
@@ -43,36 +42,18 @@ const ImageGallery = (props: GalleryProps) => {
     noClick: true
   })
 
-  const [selectedIndex, setSelectedIndex] = useState(0)
-
   return (
     <div
       {...getRootProps()}
       className={classNames('flex flex-col rounded-md', isDragActive && 'border-2 border-orange-600', props.className)}
     >
-      <Tab.Group
-        key={JSON.stringify(data)}
-        onChange={index => {
-          setSelectedIndex(index)
-        }}
-      >
+      <Tab.Group key={JSON.stringify(data)}>
         <Tab.List className={`rounded-t-md border border-gray-300 flex gap-1 justify-between`}>
           {canEdit && (
-            <div className="flex">
+            <div>
               <PlusButton
                 type="button"
                 onClick={open}
-                className="h-full flex border-0 border-r rounded-none rounded-tl-md"
-              />
-              <DeleteButton
-                type="button"
-                onClick={() => {
-                  console.log('delete')
-                  const obj = data[selectedIndex]
-                  if (obj && obj.id !== 'fallback') {
-                    withWarningModal(handleDelete, 'Are you sure to delete this image?')(obj)
-                  }
-                }}
                 className="h-full flex border-0 border-r rounded-none rounded-tl-md"
               />
             </div>
@@ -113,6 +94,13 @@ const ImageGallery = (props: GalleryProps) => {
                 alt={obj.name}
                 unoptimized
               />
+              {obj.id !== 'fallback' && canEdit && (
+                <DeleteButton
+                  type="button"
+                  onClick={() => handleDelete(obj)}
+                  className="absolute top-0 left-0 border-0 border-b border-r rounded-none rounded-br-md"
+                />
+              )}
             </Tab.Panel>
           ))}
         </Tab.Panels>
