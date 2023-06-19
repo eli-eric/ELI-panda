@@ -3,12 +3,16 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useIntl } from 'react-intl'
+import { message } from 'src/i18n/src/messages'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
 import SystemItemContainer from '@/modules/systemItem/SystemItem.cont'
+
+const messages = message.systemItem
 
 const SystemContainer = (): React.ReactElement => {
   const router = useRouter()
@@ -19,17 +23,22 @@ const SystemContainer = (): React.ReactElement => {
   return <>{response && <SystemItemContainer />}</>
 }
 
-const SystemDetailPage: NextPage = () => (
-  <>
-    <Head>
-      <title>@TODO</title>
-    </Head>
-    <ErrorBoundary fallback={<ErrorPage />}>
-      <Suspense fallback={<LoaderComponent />}>
-        <SystemContainer />
-      </Suspense>
-    </ErrorBoundary>
-  </>
-)
+const SystemDetailPage: NextPage = () => {
+  const intl = useIntl()
+
+  return (
+    <>
+      <Head>
+        <title>{intl.formatMessage({ id: messages.head })}</title>
+        <meta name="description" content="...." />
+      </Head>
+      <ErrorBoundary fallback={<ErrorPage />}>
+        <Suspense fallback={<LoaderComponent />}>
+          <SystemContainer />
+        </Suspense>
+      </ErrorBoundary>
+    </>
+  )
+}
 
 export default SystemDetailPage

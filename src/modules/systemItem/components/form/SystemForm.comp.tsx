@@ -77,6 +77,7 @@ const SystemFormComponent = () => {
           />
         </Col>
         <Col sm={3}>
+          {/* @TODO: system code should be disabled? */}
           <Input {...fields.systemCode} disabled={disabledEdit} />
         </Col>
         <Col sm={3}>
