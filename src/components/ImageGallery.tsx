@@ -15,21 +15,21 @@ const fallbackImage = {
 
 type GalleryProps = {
   data: FileItem[] | undefined
-  onDelete?: (arg0: FileItem) => void
+  handleDelete?: Function
   onDrop?: (arg0: File[]) => void
   hasEditRole?: boolean
   width?: number
   height?: number
-  discard?: () => void
+  discard?: Function
   hasChanges?: boolean
 }
 
 const ImageGallery = (props: GalleryProps) => {
-  const { onDelete, onDrop, discard, hasEditRole, hasChanges = false, data = [], width = 400, height = 400 } = props
+  const { handleDelete, onDrop, discard, hasEditRole, hasChanges = false, data = [], width = 400, height = 400 } = props
 
   const withWarningModal = useWarningModal()
 
-  const canEdit = hasEditRole && onDelete && onDrop && discard
+  const canEdit = hasEditRole && handleDelete && onDrop && discard
 
   const { open, getRootProps, isDragActive } = useDropzone({
     accept: {
@@ -89,7 +89,7 @@ const ImageGallery = (props: GalleryProps) => {
               {obj.id !== 'fallback' && canEdit && (
                 <DeleteButton
                   type="button"
-                  onClick={() => onDelete(obj)}
+                  onClick={() => handleDelete(obj)}
                   className="absolute top-0 left-0 border-0 border-b border-r rounded-none rounded-br-md"
                 />
               )}

@@ -9,7 +9,7 @@ import ErrorPage from '@/components/error/ErrorPage'
 import { TextArea } from '@/components/form/Input'
 import Card from '@/components/layout/Card'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import useImageManager from '@/hooks/useImageManager'
+import useImageGallery from '@/hooks/useImageGallery'
 import { FILE_TYPE } from '@/types/constants/files'
 
 import DefaultItemForm from './components/form/DefaultItemForm'
@@ -21,7 +21,7 @@ import useItemSubmit from './hooks/useItemSubmit'
 const ItemContainer = () => {
   const { FormWarningModal, ...formMethods } = useItemForm()
   const { query, push, pathname } = useRouter()
-  const { submit: saveImages, Gallery: ImageGallery } = useImageManager({
+  const { submit: saveImages, Gallery: ImageGallery } = useImageGallery({
     itemCategory: FILE_TYPE.CATALOGUE,
     itemId: String(query.uid)
   })
@@ -49,7 +49,7 @@ const ItemContainer = () => {
         <ItemHeader disabledEdit={false} loading={loading} />
         <Card className="flex flex-col justify-between pb-5">
           <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
-            <div className="pt-6 pl-6">
+            <div className="h-48 pt-6 pl-6">
               <ImageGallery hasEditRole={true} />
             </div>
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 col-span-2">

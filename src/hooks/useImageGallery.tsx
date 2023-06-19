@@ -8,7 +8,7 @@ import useSWR from 'swr'
 import ImageGallery from '@/components/ImageGallery'
 import { uniFetcher } from '@/helpers/fetcher'
 
-type ImageManagerConfig = {
+type Config = {
   itemCategory: FILE_TYPE
   itemId: string
   fileCategory?: string
@@ -17,7 +17,8 @@ type ImageManagerConfig = {
 
 const getEndpoint = (itemCategory: string, itemId: string, fileCategory: string) =>
   `/api/${itemCategory}/${itemId}/${fileCategory}`
-function useImageManager(config: ImageManagerConfig) {
+
+function useImageGallery(config: Config) {
   const { itemId, itemCategory, fileCategory = 'images', suspense } = config
 
   const endpoint = getEndpoint(itemCategory, itemId, fileCategory)
@@ -27,7 +28,7 @@ function useImageManager(config: ImageManagerConfig) {
   const [dueUpload, setDueUpload] = useState<ProcessedFile[]>([])
   const [dueDelete, setDueDelete] = useState<FileItem[]>([])
 
-  const onDelete = useCallback(
+  const handleDelete = useCallback(
     (obj: FileItem) => {
       if (obj.id.startsWith('temp')) {
         setDueUpload(state => state.filter(file => file.name !== obj.name))
@@ -126,13 +127,13 @@ function useImageManager(config: ImageManagerConfig) {
       data={data}
       discard={discard}
       onDrop={onDrop}
-      onDelete={onDelete}
+      handleDelete={handleDelete}
       hasChanges={hasChanges}
       {...props}
     />
   )
 
-  return { data, onDelete, onDrop, discard, submit, hasChanges, Gallery }
+  return { data, handleDelete, onDrop, discard, submit, hasChanges, Gallery }
 }
 
-export default useImageManager
+export default useImageGallery
