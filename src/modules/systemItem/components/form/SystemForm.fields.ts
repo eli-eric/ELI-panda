@@ -1,9 +1,6 @@
-import { useFormContext } from 'react-hook-form'
-
 import { useCodebookSelectValues } from '@/hooks/fetch/useCodebook'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
-import type { SystemEditFormType } from '@/modules/systems/types/form'
 import { CODEBOOK } from '@/types/constants/codebook'
 
 const { form } = message.systemsPage.systemDetail
@@ -16,26 +13,22 @@ const getDefaultOption = (name, disabled = false) => ({
 })
 
 const useSystemEditFormFields = () => {
-  const { register, formState } = useFormContext<SystemEditFormType>()
-
   const criticalityOption = useCodebookSelectValues(CODEBOOK.SYSTEM_CRITICALITY_CLASS)
 
   // @TODO: Parent field
   // const parentPath = formState.defaultValues?.parentPath?.length ? formState.defaultValues?.parentPath : []
   // const parentUID = parentPath.length ? parentPath[parentPath.length - 1].uid : ''
 
-  return useMakeFormFields(register, {
+  return useMakeFormFields({
     name: {
       name: 'name',
       label: form.name.label,
       placeholder: form.name.placeholder,
-      isError: !!formState.errors.name,
       rounded: 'rounded-md'
     },
     description: {
       name: 'description',
       label: form.description.label,
-      isError: !!formState.errors.description,
       rounded: 'rounded-md'
     },
     // systemTypeUID: {
@@ -49,7 +42,6 @@ const useSystemEditFormFields = () => {
       name: 'systemCode',
       label: form.systemCode.label,
       placeholder: form.systemCode.placeholder,
-      isError: !!formState.errors.systemCode,
       rounded: 'rounded-md',
       disabled: true
     },
@@ -57,7 +49,6 @@ const useSystemEditFormFields = () => {
       name: 'systemAlias',
       label: form.systemAlias.label,
       placeholder: form.systemAlias.placeholder,
-      isError: !!formState.errors.systemAlias,
       rounded: 'rounded-md'
     },
     // locationUID: {
@@ -93,7 +84,6 @@ const useSystemEditFormFields = () => {
     criticalityClassUID: {
       name: 'criticalityClassUID',
       label: form.criticalityClassUID.label,
-      isError: !!formState.errors.criticalityClassUID,
       rounded: 'rounded-md',
       options: criticalityOption && [getDefaultOption('none'), ...criticalityOption]
     }

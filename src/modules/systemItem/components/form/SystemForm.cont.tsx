@@ -5,13 +5,15 @@ import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
 import useFormNotification from '@/hooks/form/useFormNotification'
 
 import useSystemDetail from '../../hooks/useSystemDetail'
+import { useSystemSubmit } from '../../hooks/useSystemSubmit'
 import type { SystemDetailFormType } from '../../types/form'
 import HeaderComponent from '../Header.comp'
 import SystemFormComponent from './SystemForm.comp'
 import { schema } from './SystemForm.schema'
 
 const useSystemForm = () => {
-  const { systemDetail, submit, loading } = useSystemDetail()
+  const { submit, loadingSubmit } = useSystemSubmit()
+  const { systemDetail } = useSystemDetail()
 
   const formMethods = useForm<SystemDetailFormType>({
     resolver: yupResolver(schema),
@@ -25,14 +27,10 @@ const useSystemForm = () => {
   useFormNotification<SystemDetailFormType>({ control })
   const FormWarningModal = useFormLeaveWarning({ formState })
 
-  const onSubmit = (data: SystemDetailFormType) => {
-    submit({ ...data })
-  }
-
   const renderForm = () => (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(submit)}>
       <FormProvider {...formMethods}>
-        <HeaderComponent loading={loading} />
+        <HeaderComponent loading={loadingSubmit} />
         <div className="py-6">
           <SystemFormComponent />
         </div>

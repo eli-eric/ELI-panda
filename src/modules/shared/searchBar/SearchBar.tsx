@@ -1,8 +1,8 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useQueryState } from 'next-usequerystate'
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useIsFirstRender } from 'usehooks-ts'
+import { useForm, useWatch } from 'react-hook-form'
+import { useDebounce, useIsFirstRender } from 'usehooks-ts'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
@@ -23,14 +23,20 @@ const SearchBar = ({ useQuery = true, left, right, tableId }: Props) => {
     defaultValues: { search: search }
   })
 
-  //const searchValue = useDebounce(useWatch({ control, name: 'search' }), 500)
+  const searchValue = useDebounce(useWatch({ control, name: 'search' }), 500)
+
+  useEffect(() => {
+    if (useQuery) {
+      setQuerySearch(searchValue ? searchValue : null, { shallow: true })
+    }
+    setSearch(tableId, searchValue)
+  }, [searchValue, tableId, useQuery, setQuerySearch, setSearch])
 
   const isFirstRender = useIsFirstRender()
 
   // initialize update table state and query state and instance on first render
   useEffect(() => {
     if (isFirstRender) {
-      console.log('init', { searchInstance, querySearch, search })
       if (useQuery) {
         // check if sortByQuery is set
         if (querySearch) {
@@ -49,7 +55,6 @@ const SearchBar = ({ useQuery = true, left, right, tableId }: Props) => {
   // update
   useEffect(() => {
     if (!isFirstRender) {
-      console.log('update', { searchInstance, querySearch, search })
       setSearch(tableId, search)
       if (useQuery) {
         setQuerySearch(search || null, { shallow: true })

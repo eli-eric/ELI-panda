@@ -69,7 +69,7 @@ const useSystemsColumns = setData => {
               ) : (
                 '🔵'
               )}{' '}
-              <Link href={PATH.SYSTEM_ITEM + '/' + row.original.uid} className={'cursor-pointer hover:text-blue-500'}>
+              <Link href={PATH.SYSTEM + '/' + row.original.uid} className={'cursor-pointer hover:text-blue-500'}>
                 {getValue()}
               </Link>
             </>

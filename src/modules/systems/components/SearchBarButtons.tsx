@@ -27,7 +27,7 @@ const SearchBarButtons = () => {
           className="mr-1"
           buttonSize="large"
           onClick={() => {
-            router.push(PATH.SYSTEM_ITEM)
+            router.push(PATH.SYSTEM)
           }}
         />
       )}
