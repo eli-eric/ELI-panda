@@ -11,6 +11,7 @@ export interface CatalogueItem {
   manufacturerUrl: string
   manufacturerNumber: string
   details?: CatalogueItemDetail[]
+  hasImageGalleryChanges?: boolean
 }
 
 export interface CatalogueItemDetail {

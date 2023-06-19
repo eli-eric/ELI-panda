@@ -1,6 +1,10 @@
 export type FileItem = {
   id: string
   name: string
-  type: string
   url: string
+}
+
+export type ProcessedFile = {
+  name: string
+  payload: string
 }
