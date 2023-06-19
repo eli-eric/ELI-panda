@@ -42,12 +42,9 @@ const ImageGallery = (props: GalleryProps) => {
   })
 
   return (
-    <div
-      {...getRootProps()}
-      className={`w-full flex flex-col rounded-md ${isDragActive && 'border-2 border-orange-600'}`}
-    >
+    <div {...getRootProps()} className={`flex flex-col rounded-md ${isDragActive && 'border-2 border-orange-600'}`}>
       <Tab.Group key={JSON.stringify(data)}>
-        <Tab.List className={`w-full rounded-t-md border border-gray-300 flex gap-1 justify-between`}>
+        <Tab.List className={`rounded-t-md border border-gray-300 flex gap-1 justify-between`}>
           <div>
             {canEdit && (
               <PlusButton
@@ -71,20 +68,20 @@ const ImageGallery = (props: GalleryProps) => {
               <CancelButton
                 type="button"
                 onClick={() => withWarningModal(discard, 'Are you sure to discard your changes?')()}
-                className="h-full flex border-0 border-l rounded-none rounded-tr-md"
+                className="flex border-0 border-l rounded-none rounded-tr-md"
                 disabled={!hasChanges}
               />
             )}
           </div>
         </Tab.List>
 
-        <Tab.Panels {...getRootProps()} className="w-full relative rounded-b-md border border-t-0 border-gray-300">
+        <Tab.Panels {...getRootProps()} className="rounded-b-md border border-t-0 border-gray-300">
           {(data && data.length > 0 ? data : [fallbackImage]).map(obj => (
-            <Tab.Panel key={obj.id} className="w-full">
+            <Tab.Panel key={obj.id} className="relative">
               <Image
                 width={width}
                 height={height}
-                className="min-w-full h-auto rounded-b-md"
+                className="object-contain rounded-b-md"
                 src={obj.url}
                 alt={obj.name}
                 unoptimized

@@ -37,7 +37,7 @@ const ItemContainer = () => {
     push(`${pathname}/${uid}`)
   }
 
-  const { submit, loading } = useItemSubmit({ onSuccess: (uid: string) => saveImageAndRedirect(uid) })
+  const { submit, loading } = useItemSubmit({ onSuccess: saveImageAndRedirect })
 
   const onSubmit = (data: any) => {
     submit(data)
