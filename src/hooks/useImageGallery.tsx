@@ -3,10 +3,9 @@ import { nanoid } from 'nanoid'
 import { useState } from 'react'
 import type { FileItem, ProcessedFile } from 'src/modules/shared/fileManager/types'
 import type { FILE_TYPE } from 'src/types/constants/files'
-import useSWR from 'swr'
+import { mutate } from 'swr'
 
 import ImageGallery from '@/components/ImageGallery'
-import { uniFetcher } from '@/helpers/fetcher'
 
 type Config = {
   itemCategory: FILE_TYPE
@@ -22,11 +21,9 @@ const getEndpoint = (
 ) => `/api/${itemCategory}/${itemId}/${fileCategory}`
 
 function useImageGallery(config: Config) {
-  const { itemId, itemCategory, fileCategory = 'images', suspense } = config
+  const { itemId, itemCategory, fileCategory = 'images' } = config
 
   const endpoint = getEndpoint(itemCategory, itemId, fileCategory)
-
-  const { data, mutate } = useSWR<FileItem[]>(endpoint, uniFetcher, { suspense })
 
   const [dueUpload, setDueUpload] = useState<ProcessedFile[]>([])
   const [dueDelete, setDueDelete] = useState<FileItem[]>([])
@@ -37,7 +34,7 @@ function useImageGallery(config: Config) {
     } else {
       setDueDelete(state => [...state, obj])
     }
-    mutate(data => data?.filter(file => file.id !== obj.id), { revalidate: false })
+    mutate<FileItem[]>(endpoint, data => data?.filter(file => file.id !== obj.id), { revalidate: false })
   }
 
   const onDrop = async (files: File[]) => {
@@ -66,13 +63,13 @@ function useImageGallery(config: Config) {
     })
 
     setDueUpload(state => [...state, ...processedFiles])
-    mutate(data => [...tempFiles, ...(data ?? [])], { revalidate: false })
+    mutate(endpoint, data => [...tempFiles, ...(data ?? [])], { revalidate: false })
   }
 
   const discard = () => {
     setDueUpload([])
     setDueDelete([])
-    mutate()
+    mutate(endpoint)
   }
 
   type Status = {
@@ -118,7 +115,7 @@ function useImageGallery(config: Config) {
 
   const Gallery = (props: { hasEditRole?: boolean; width?: number; height?: number; className?: string }) => (
     <ImageGallery
-      data={data}
+      endpoint={endpoint}
       discard={discard}
       onDrop={onDrop}
       handleDelete={handleDelete}
@@ -127,7 +124,7 @@ function useImageGallery(config: Config) {
     />
   )
 
-  return { data, handleDelete, onDrop, discard, submit, hasChanges, Gallery }
+  return { endpoint, handleDelete, onDrop, discard, submit, hasChanges, Gallery }
 }
 
 export default useImageGallery

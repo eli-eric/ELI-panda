@@ -8,16 +8,20 @@ import { schema } from '../components/form/ItemForm.schema'
 import type { CatalogueItem } from '../types/responses'
 import useItem from './useItem'
 
+type CatalogueItemWithGalleryWatch = CatalogueItem & {
+  hasImageGalleryChanges: boolean
+}
+
 const useItemForm = () => {
   const item = useItem()
 
-  const formMethods = useForm<CatalogueItem>({
+  const formMethods = useForm<CatalogueItemWithGalleryWatch>({
     resolver: yupResolver(schema),
     defaultValues: { ...item?.item, hasImageGalleryChanges: false }
   })
   const { control, formState } = formMethods
-  useFormNotification<CatalogueItem>({ control })
-  const FormWarningModal = useFormLeaveWarning<CatalogueItem>({ formState })
+  useFormNotification<CatalogueItemWithGalleryWatch>({ control })
+  const FormWarningModal = useFormLeaveWarning<CatalogueItemWithGalleryWatch>({ formState })
 
   return {
     ...formMethods,
