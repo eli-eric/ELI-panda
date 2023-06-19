@@ -15,7 +15,7 @@ const fallbackImage = {
 
 type GalleryProps = {
   data: FileItem[] | undefined
-  handleDelete?: Function
+  handleDelete?: (arg0: FileItem) => void
   onDrop?: (arg0: File[]) => void
   hasEditRole?: boolean
   width?: number
