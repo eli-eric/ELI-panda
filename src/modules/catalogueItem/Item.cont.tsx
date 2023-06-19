@@ -20,9 +20,9 @@ import useItemForm from './hooks/useItemForm'
 import useItemSubmit from './hooks/useItemSubmit'
 
 const ItemContainer = () => {
-  const { FormWarningModal, ...formMethods } = useItemForm()
   const { query, push, pathname } = useRouter()
   const {
+    discard,
     hasChanges,
     submit: saveImages,
     Gallery: ImageGallery
@@ -30,6 +30,7 @@ const ItemContainer = () => {
     itemCategory: FILE_TYPE.CATALOGUE,
     itemId: String(query.uid)
   })
+  const { FormWarningModal, ...formMethods } = useItemForm({ onWarnConfirm: discard })
 
   const saveImageAndRedirect = async (uid: string) => {
     const status = await saveImages(uid)
@@ -41,6 +42,7 @@ const ItemContainer = () => {
 
     push(`${pathname}/${uid}`)
   }
+
   const { setValue } = formMethods
   useEffect(() => {
     setValue('hasImageGalleryChanges', hasChanges, { shouldDirty: hasChanges })
