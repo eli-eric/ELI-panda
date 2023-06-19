@@ -1,5 +1,6 @@
 import { DevTool } from '@hookform/devtools'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormProvider } from 'react-hook-form'
@@ -21,7 +22,11 @@ import useItemSubmit from './hooks/useItemSubmit'
 const ItemContainer = () => {
   const { FormWarningModal, ...formMethods } = useItemForm()
   const { query, push, pathname } = useRouter()
-  const { submit: saveImages, Gallery: ImageGallery } = useImageGallery({
+  const {
+    hasChanges,
+    submit: saveImages,
+    Gallery: ImageGallery
+  } = useImageGallery({
     itemCategory: FILE_TYPE.CATALOGUE,
     itemId: String(query.uid)
   })
@@ -36,6 +41,11 @@ const ItemContainer = () => {
 
     push(`${pathname}/${uid}`)
   }
+  const { register, setValue } = formMethods
+  register('hasImageGalleryChanges', { value: false })
+  useEffect(() => {
+    setValue('hasImageGalleryChanges', hasChanges)
+  }, [hasChanges, setValue])
 
   const { submit, loading } = useItemSubmit({ onSuccess: saveImageAndRedirect })
 
