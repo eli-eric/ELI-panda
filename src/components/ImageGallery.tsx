@@ -5,6 +5,7 @@ import type { FileItem } from 'src/modules/shared/fileManager/types'
 
 import { DeleteButton, PlusButton } from '@/components/Buttons'
 import { classNames } from '@/helpers'
+import useWarningModal from '@/hooks/useWarningModal'
 
 const fallbackImage = {
   id: 'fallback',
@@ -26,6 +27,8 @@ type GalleryProps = {
 
 const ImageGallery = (props: GalleryProps) => {
   const { handleDelete, onDrop, hasEditRole, data = [], width = 400, height = 400 } = props
+
+  const withWarnModal = useWarningModal()
 
   const canEdit = hasEditRole && handleDelete && onDrop
 
@@ -70,7 +73,12 @@ const ImageGallery = (props: GalleryProps) => {
                 <div>
                   <DeleteButton
                     type="button"
-                    onClick={() => handleDelete(data[selectedIndex])}
+                    onClick={() =>
+                      withWarnModal(
+                        handleDelete,
+                        'Are you sure you want to delete ${data[selectedIndex].name}?'
+                      )(data[selectedIndex])
+                    }
                     className="flex border-0 border-l rounded-none rounded-tr-md"
                     disabled={!data || data.length === 0}
                   />
