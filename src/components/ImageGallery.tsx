@@ -2,19 +2,21 @@ import { Tab } from '@headlessui/react'
 import Image from 'next/image'
 import { useDropzone } from 'react-dropzone'
 import type { FileItem } from 'src/modules/shared/fileManager/types'
+import useSWR from 'swr'
 
 import { DeleteButton, PlusButton } from '@/components/Buttons'
 import { classNames } from '@/helpers'
+import { uniFetcher } from '@/helpers/fetcher'
 import useWarningModal from '@/hooks/useWarningModal'
 
-const fallbackImage = {
+const fallbackImage: FileItem = {
   id: 'fallback',
   name: 'fallback image',
   url: '/no-image.png'
 }
 
 type GalleryProps = {
-  data: FileItem[] | undefined
+  endpoint: string
   handleDelete?: (arg0: FileItem) => void
   onDrop?: (arg0: File[]) => void
   hasEditRole?: boolean
@@ -23,10 +25,13 @@ type GalleryProps = {
   discard?: () => void
   hasChanges?: boolean
   className?: string
+  suspense?: boolean
 }
 
 const ImageGallery = (props: GalleryProps) => {
-  const { handleDelete, onDrop, hasEditRole, data = [], width = 400, height = 400 } = props
+  const { suspense, handleDelete, onDrop, hasEditRole, endpoint, width = 400, height = 400 } = props
+
+  const { data } = useSWR<FileItem[]>(endpoint, uniFetcher, { suspense })
 
   const withWarnModal = useWarningModal()
 
@@ -76,8 +81,8 @@ const ImageGallery = (props: GalleryProps) => {
                     onClick={() =>
                       withWarnModal(
                         handleDelete,
-                        'Are you sure you want to delete ${data[selectedIndex].name}?'
-                      )(data[selectedIndex])
+                        `Are you sure you want to delete ${(data ?? [])[selectedIndex]?.name}?`
+                      )((data ?? [])[selectedIndex])
                     }
                     className="flex border-0 border-l rounded-none rounded-tr-md"
                     disabled={!data || data.length === 0}
