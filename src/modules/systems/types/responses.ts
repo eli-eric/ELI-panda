@@ -19,3 +19,8 @@ export type SystemDetail = {
   hasSubsystems: boolean
   subSystems?: SystemDetail[]
 }
+
+export type SystemListResponse = {
+  data: SystemDetailResponse[]
+  totalCount: number
+}

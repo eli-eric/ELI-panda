@@ -4,8 +4,7 @@ export enum PATH {
   CATALOGUE = '/catalogue',
   CATALOGUE_ITEM = '/catalogue/item',
   SYSTEMS = '/systems',
-
-  SYSTEM_ITEM = '/systems/item',
+  SYSTEM = '/system',
   SYSTEMS_OVERVIEW = '/systems/overview',
 
   REPORTS = '/reports',
