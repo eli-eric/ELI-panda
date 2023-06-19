@@ -1,9 +1,11 @@
 import type { ColumnDef } from '@tanstack/react-table'
+import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 
 import useFetch from '@/hooks/fetch/useFetch'
+import { PATH } from '@/types/constants/paths'
 
-import type { SystemDetail } from '../types/responses'
+import type { SystemDetail } from '../../types/responses'
 
 //TODO: fix typing
 const useSystemsColumns = setData => {
@@ -18,7 +20,6 @@ const useSystemsColumns = setData => {
   })
 
   useEffect(() => {
-    console.log('response', response)
     if (response) {
       setData(prev => {
         const newData = [...prev]
@@ -68,7 +69,9 @@ const useSystemsColumns = setData => {
               ) : (
                 '🔵'
               )}{' '}
-              {getValue()}
+              <Link href={PATH.SYSTEM_ITEM + '/' + row.original.uid} className={'cursor-pointer hover:text-blue-500'}>
+                {getValue()}
+              </Link>
             </>
           </div>
         )
@@ -85,7 +88,7 @@ const useSystemsColumns = setData => {
       { header: 'location', accessorKey: 'location', id: 'location', cell: ({ getValue }) => getValue().name },
       { header: 'owner', accessorKey: 'owner', id: 'owner', cell: ({ getValue }) => getValue().name }
     ],
-    [setData]
+    []
   )
 
   return { columns, pending }

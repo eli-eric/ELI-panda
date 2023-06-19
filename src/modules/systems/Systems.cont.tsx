@@ -7,7 +7,8 @@ import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import type { Order } from '../orders/types'
 import SearchBar from '../shared/searchBar/SearchBar'
 import PandaTable from '../shared/table/Table'
-import useSystemsColumns from './components/columns'
+import SearchBarButtons from './components/SearchBarButtons'
+import useSystemsColumns from './components/table/columns'
 import { useSystems } from './hooks/useSystems'
 import type { SystemDetail } from './types/responses'
 
@@ -26,7 +27,7 @@ const SystemsContainer = () => {
   return (
     <Fragment>
       <TableLayoutContainer>
-        <SearchBar tableId={tableId} />
+        <SearchBar tableId={tableId} left={<SearchBarButtons />} />
         <PandaTable
           ref={tableRef}
           columns={columns}
