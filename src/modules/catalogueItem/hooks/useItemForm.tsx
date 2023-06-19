@@ -13,7 +13,7 @@ const useItemForm = () => {
 
   const formMethods = useForm<CatalogueItem>({
     resolver: yupResolver(schema),
-    defaultValues: item?.item
+    defaultValues: { ...item?.item, hasImageGalleryChanges: false }
   })
   const { control, formState } = formMethods
   useFormNotification<CatalogueItem>({ control })

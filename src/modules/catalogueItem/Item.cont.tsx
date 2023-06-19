@@ -41,10 +41,9 @@ const ItemContainer = () => {
 
     push(`${pathname}/${uid}`)
   }
-  const { register, setValue } = formMethods
-  register('hasImageGalleryChanges', { value: false })
+  const { setValue } = formMethods
   useEffect(() => {
-    setValue('hasImageGalleryChanges', hasChanges)
+    setValue('hasImageGalleryChanges', hasChanges, { shouldDirty: true })
   }, [hasChanges, setValue])
 
   const { submit, loading } = useItemSubmit({ onSuccess: saveImageAndRedirect })
