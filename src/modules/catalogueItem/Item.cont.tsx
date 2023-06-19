@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormProvider } from 'react-hook-form'
-import { toast } from 'react-hot-toast'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TextArea } from '@/components/form/Input'
@@ -20,9 +19,9 @@ import useItemForm from './hooks/useItemForm'
 import useItemSubmit from './hooks/useItemSubmit'
 
 const ItemContainer = () => {
-  const { FormWarningModal, ...formMethods } = useItemForm()
   const { query, push, pathname } = useRouter()
   const {
+    discard,
     hasChanges,
     submit: saveImages,
     Gallery: ImageGallery
@@ -30,23 +29,19 @@ const ItemContainer = () => {
     itemCategory: FILE_TYPE.CATALOGUE,
     itemId: String(query.uid)
   })
+  const { FormWarningModal, ...formMethods } = useItemForm({ onWarnConfirm: discard })
 
   const saveImageAndRedirect = async (uid: string) => {
-    const status = await saveImages(uid)
-
-    const { failedUploads, failedDeletions } = status
-    const totalFailures = failedUploads.length + failedDeletions.length
-    if (totalFailures > 0)
-      toast.error(`Failed to process ${totalFailures} ${totalFailures === 1 ? 'image' : 'images'}.`)
-
+    await saveImages(uid)
     push(`${pathname}/${uid}`)
   }
+
   const { setValue } = formMethods
   useEffect(() => {
     setValue('hasImageGalleryChanges', hasChanges, { shouldDirty: hasChanges })
   }, [hasChanges, setValue])
 
-  const { submit, loading } = useItemSubmit({ onSuccess: saveImageAndRedirect })
+  const { submit, loading } = useItemSubmit({ onError: discard, onSuccess: saveImageAndRedirect })
 
   const onSubmit = (data: any) => {
     submit(data)

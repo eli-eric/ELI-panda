@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { nanoid } from 'nanoid'
 import { useState } from 'react'
+import { toast } from 'react-hot-toast'
 import type { FileItem, ProcessedFile } from 'src/modules/shared/fileManager/types'
 import type { FILE_TYPE } from 'src/types/constants/files'
 import { mutate } from 'swr'
@@ -93,6 +94,7 @@ function useImageGallery(config: Config) {
         status.successfulDeletions = [...status.successfulDeletions, file.name]
       } catch {
         status.failedDeletions = [...status.failedDeletions, file.name]
+        toast.error(`Failed to delete ${file.name}`)
       }
     }
 
@@ -103,6 +105,7 @@ function useImageGallery(config: Config) {
         status.successfulUploads = [...status.successfulUploads, file.name]
       } catch {
         status.failedUploads = [...status.failedUploads, file.name]
+        toast.error(`Failed to upload ${file.name}`)
       }
     }
 

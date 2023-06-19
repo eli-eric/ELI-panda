@@ -12,7 +12,11 @@ type CatalogueItemWithGalleryWatch = CatalogueItem & {
   hasImageGalleryChanges: boolean
 }
 
-const useItemForm = () => {
+type Extras = {
+  onWarnConfirm?: Function
+}
+
+const useItemForm = (extras?: Extras) => {
   const item = useItem()
 
   const formMethods = useForm<CatalogueItemWithGalleryWatch>({
@@ -21,7 +25,13 @@ const useItemForm = () => {
   })
   const { control, formState } = formMethods
   useFormNotification<CatalogueItemWithGalleryWatch>({ control })
-  const FormWarningModal = useFormLeaveWarning<CatalogueItemWithGalleryWatch>({ formState })
+  const { onWarnConfirm } = extras ?? {}
+  const FormWarningModal = useFormLeaveWarning<CatalogueItemWithGalleryWatch>({
+    formState,
+    config: {
+      onContinue: onWarnConfirm
+    }
+  })
 
   return {
     ...formMethods,
