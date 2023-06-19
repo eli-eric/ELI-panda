@@ -27,7 +27,7 @@ type GalleryProps = {
 const ImageGallery = (props: GalleryProps) => {
   const { handleDelete, onDrop, discard, hasEditRole, data = [], width = 400, height = 400 } = props
 
-  const canEdit = hasEditRole && handleDelete && onDrop && discard
+  const canEdit = hasEditRole && handleDelete && onDrop
 
   const { open, getRootProps, isDragActive } = useDropzone({
     accept: {
