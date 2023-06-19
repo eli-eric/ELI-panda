@@ -9,8 +9,7 @@ import { classNames } from '@/helpers'
 const fallbackImage = {
   id: 'fallback',
   name: 'fallback image',
-  url: '/no-image.png',
-  type: 'fallback'
+  url: '/no-image.png'
 }
 
 type GalleryProps = {
