@@ -116,7 +116,7 @@ function useImageGallery(config: Config) {
 
   const hasChanges = dueUpload.length + dueDelete.length > 0
 
-  const Gallery = (props: { hasEditRole?: boolean; width?: number; height?: number }) => (
+  const Gallery = (props: { hasEditRole?: boolean; width?: number; height?: number; className?: string }) => (
     <ImageGallery
       data={data}
       discard={discard}

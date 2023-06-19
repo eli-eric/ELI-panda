@@ -5,6 +5,7 @@ import useWarningModal from 'src/hooks/useWarningModal'
 import type { FileItem } from 'src/modules/shared/fileManager/types'
 
 import { CancelButton, DeleteButton, PlusButton } from '@/components/Buttons'
+import { classNames } from '@/helpers'
 
 const fallbackImage = {
   id: 'fallback',
@@ -22,6 +23,7 @@ type GalleryProps = {
   height?: number
   discard?: () => void
   hasChanges?: boolean
+  className?: string
 }
 
 const ImageGallery = (props: GalleryProps) => {
@@ -41,7 +43,10 @@ const ImageGallery = (props: GalleryProps) => {
   })
 
   return (
-    <div {...getRootProps()} className={`flex flex-col rounded-md ${isDragActive && 'border-2 border-orange-600'}`}>
+    <div
+      {...getRootProps()}
+      className={classNames('flex flex-col rounded-md', isDragActive && 'border-2 border-orange-600', props.className)}
+    >
       <Tab.Group key={JSON.stringify(data)}>
         <Tab.List className={`rounded-t-md border border-gray-300 flex gap-1 justify-between`}>
           {canEdit && (
@@ -74,9 +79,13 @@ const ImageGallery = (props: GalleryProps) => {
           )}
         </Tab.List>
 
-        <Tab.Panels {...getRootProps()} className="rounded-b-md border border-t-0 border-gray-300">
+        <Tab.Panels
+          {...getRootProps()}
+          className="flex rounded-b-md border border-t-0 border-gray-300"
+          style={{ height: 'calc(100% - 30px)' }}
+        >
           {(data && data.length > 0 ? data : [fallbackImage]).map(obj => (
-            <Tab.Panel key={obj.id} className="relative">
+            <Tab.Panel key={obj.id} className="relative flex">
               <Image
                 width={width}
                 height={height}
