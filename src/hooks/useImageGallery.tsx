@@ -15,8 +15,11 @@ type Config = {
   suspense?: boolean
 }
 
-const getEndpoint = (itemCategory: string, itemId: string, fileCategory: string) =>
-  `/api/${itemCategory}/${itemId}/${fileCategory}`
+const getEndpoint = (
+  itemCategory: Config['itemCategory'],
+  itemId: Config['itemId'],
+  fileCategory: Config['fileCategory']
+) => `/api/${itemCategory}/${itemId}/${fileCategory}`
 
 function useImageGallery(config: Config) {
   const { itemId, itemCategory, fileCategory = 'images', suspense } = config
