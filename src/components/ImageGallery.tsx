@@ -36,7 +36,6 @@ const ImageGallery = (props: GalleryProps) => {
       'image/*': []
     },
     disabled: !canEdit,
-    useFsAccessApi: true,
     onDrop,
     noClick: true
   })
