@@ -41,7 +41,7 @@ const ItemContainer = () => {
     setValue('hasImageGalleryChanges', hasChanges, { shouldDirty: hasChanges })
   }, [hasChanges, setValue])
 
-  const { submit, loading } = useItemSubmit({ onSuccess: saveImageAndRedirect })
+  const { submit, loading } = useItemSubmit({ onError: discard, onSuccess: saveImageAndRedirect })
 
   const onSubmit = (data: any) => {
     submit(data)
