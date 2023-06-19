@@ -85,7 +85,7 @@ function useImageGallery(config: Config) {
   }
 
   const submit = async (itemId?: string) => {
-    let status: Status = {
+    const status: Status = {
       successfulUploads: [],
       failedUploads: [],
       successfulDeletions: [],
@@ -95,9 +95,9 @@ function useImageGallery(config: Config) {
     for await (const file of dueDelete) {
       try {
         await axios.delete(`${endpoint}/${file.id}`)
-        status = { ...status, successfulDeletions: [...status.successfulDeletions, file.name] }
+        status.successfulDeletions = [...status.successfulDeletions, file.name]
       } catch {
-        status = { ...status, failedDeletions: [...status.failedDeletions, file.name] }
+        status.failedDeletions = [...status.failedDeletions, file.name]
       }
     }
 
@@ -105,9 +105,9 @@ function useImageGallery(config: Config) {
     for await (const file of dueUpload) {
       try {
         await axios.post(ep, file)
-        status = { ...status, successfulUploads: [...status.successfulUploads, file.name] }
+        status.successfulUploads = [...status.successfulUploads, file.name]
       } catch {
-        status = { ...status, failedUploads: [...status.failedUploads, file.name] }
+        status.failedUploads = [...status.failedUploads, file.name]
       }
     }
 
