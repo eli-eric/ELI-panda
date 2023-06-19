@@ -13,16 +13,15 @@ import type { SystemDetail } from './types/responses'
 
 const SystemsContainer = () => {
   const tableId = 'systems'
-
   const { systems, error, loading } = useSystems()
   const [data, setData] = useState<SystemDetail[]>(systems?.data)
+  const tableRef = useRef<Table<Order>>()
+  const { columns, pending } = useSystemsColumns(setData)
 
   useEffect(() => {
     setData(systems?.data)
+    tableRef.current?.resetExpanded()
   }, [systems])
-
-  const columns = useSystemsColumns(setData)
-  const tableRef = useRef<Table<Order>>()
 
   return (
     <Fragment>
@@ -32,11 +31,11 @@ const SystemsContainer = () => {
           ref={tableRef}
           columns={columns}
           data={data}
-          loading={loading}
+          loading={loading || pending}
           tableId={tableId}
           getSubRows={row => row.subSystems}
           settings={{
-            enableSorting: false,
+            enableSorting: true,
             enableQueryURL: true
           }}
           className={'relative overflow-x-auto'}

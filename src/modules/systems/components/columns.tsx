@@ -1,18 +1,49 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-import axiosInstance from '@/core/axios/axiosInstance'
+import useFetch from '@/hooks/fetch/useFetch'
 
 import type { SystemDetail } from '../types/responses'
 
 //TODO: fix typing
 const useSystemsColumns = setData => {
+  const [uid, setUid] = useState<string | null>(null)
+
+  const { response, loading: pending } = useFetch<SystemDetail[]>({
+    url: uid ? `/systems/${uid}/subsystems` : null,
+    useMockFetcher: true,
+    config: {
+      suspense: false
+    }
+  })
+
+  useEffect(() => {
+    console.log('response', response)
+    if (response) {
+      setData(prev => {
+        const newData = [...prev]
+        const findAndReplace = (data, uid, newData) => {
+          data.forEach((item, index) => {
+            if (item.uid === uid) {
+              newData[index].subSystems = response
+            } else if (item.subSystems) {
+              findAndReplace(item.subSystems, uid, newData[index].subSystems)
+            }
+          })
+        }
+        findAndReplace(prev, uid, newData)
+        return newData
+      })
+    }
+  }, [response, setData, uid])
+
   const columns = useMemo(
     (): ColumnDef<SystemDetail, any>[] => [
       {
         header: 'Name',
         accessorKey: 'name',
         id: 'name',
+        size: 300,
         cell: ({ row, getValue }) => (
           <div
             style={{
@@ -25,23 +56,7 @@ const useSystemsColumns = setData => {
                   {...{
                     onClick: () => {
                       if (!row.getIsExpanded()) {
-                        axiosInstance.get(`api/mock-server/systems/${row.original.uid}/subsystems`).then(res => {
-                          setData(prev => {
-                            //recursion
-                            const newData = [...prev]
-                            const findAndReplace = (data, uid, newData) => {
-                              data.forEach((item, index) => {
-                                if (item.uid === uid) {
-                                  newData[index].subSystems = res.data
-                                } else if (item.subSystems) {
-                                  findAndReplace(item.subSystems, uid, newData[index].subSystems)
-                                }
-                              })
-                            }
-                            findAndReplace(prev, row.original.uid, newData)
-                            return newData
-                          })
-                        })
+                        setUid(row.original.uid)
                       }
                       row.toggleExpanded()
                     },
@@ -58,7 +73,7 @@ const useSystemsColumns = setData => {
           </div>
         )
       },
-      { header: 'systemCode', accessorKey: 'systemCode', id: 'systemCode' },
+      { header: 'systemCode', accessorKey: 'systemCode', id: 'systemCode', size: 150 },
       { header: 'systemAlias', accessorKey: 'systemAlias', id: 'systemAlias' },
       {
         header: 'systemType',
@@ -70,10 +85,10 @@ const useSystemsColumns = setData => {
       { header: 'location', accessorKey: 'location', id: 'location', cell: ({ getValue }) => getValue().name },
       { header: 'owner', accessorKey: 'owner', id: 'owner', cell: ({ getValue }) => getValue().name }
     ],
-    []
+    [setData]
   )
 
-  return columns
+  return { columns, pending }
 }
 
 export default useSystemsColumns
