@@ -25,11 +25,11 @@ type GalleryProps = {
 }
 
 const ImageGallery = (props: GalleryProps) => {
-  const { handleDelete, onDrop, discard, hasEditRole, data = [], width = 400, height = 400 } = props
+  const { handleDelete, onDrop, hasEditRole, data = [], width = 400, height = 400 } = props
 
   const canEdit = hasEditRole && handleDelete && onDrop
 
-  const { open, getRootProps, isDragActive } = useDropzone({
+  const { open, getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
       'image/*': []
     },
@@ -49,6 +49,7 @@ const ImageGallery = (props: GalleryProps) => {
             <Tab.List className={`rounded-t-md border border-gray-300 flex gap-1 justify-between`}>
               {canEdit && (
                 <div>
+                  <input {...getInputProps()} />
                   <PlusButton
                     type="button"
                     onClick={open}
