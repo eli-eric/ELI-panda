@@ -57,12 +57,10 @@ function useImageGallery(config: Config) {
 
     const tempFiles = processedFiles.map(file => {
       const id = `temp-${nanoid()}`
-      const type = 'temp'
       const url = file.payload
       return {
         ...file,
         id,
-        type,
         url
       }
     })
