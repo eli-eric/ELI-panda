@@ -20,7 +20,7 @@ type GalleryProps = {
   hasEditRole?: boolean
   width?: number
   height?: number
-  discard?: Function
+  discard?: () => void
   hasChanges?: boolean
 }
 
