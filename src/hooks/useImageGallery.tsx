@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { nanoid } from 'nanoid'
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import type { FileItem, ProcessedFile } from 'src/modules/shared/fileManager/types'
 import type { FILE_TYPE } from 'src/types/constants/files'
 import useSWR from 'swr'
@@ -31,57 +31,51 @@ function useImageGallery(config: Config) {
   const [dueUpload, setDueUpload] = useState<ProcessedFile[]>([])
   const [dueDelete, setDueDelete] = useState<FileItem[]>([])
 
-  const handleDelete = useCallback(
-    (obj: FileItem) => {
-      if (obj.id.startsWith('temp')) {
-        setDueUpload(state => state.filter(file => file.name !== obj.name))
-      } else {
-        setDueDelete(state => [...state, obj])
-      }
-      mutate(data => data?.filter(file => file.id !== obj.id), { revalidate: false })
-    },
-    [mutate]
-  )
+  const handleDelete = (obj: FileItem) => {
+    if (obj.id.startsWith('temp')) {
+      setDueUpload(state => state.filter(file => file.name !== obj.name))
+    } else {
+      setDueDelete(state => [...state, obj])
+    }
+    mutate(data => data?.filter(file => file.id !== obj.id), { revalidate: false })
+  }
 
-  const onDrop = useCallback(
-    async (files: File[]) => {
-      const processedFiles = await Promise.all(
-        files.map(
-          file =>
-            new Promise<ProcessedFile>((resolve, reject) => {
-              const reader = new FileReader()
-              reader.onload = () => {
-                resolve({ name: file.name, payload: String(reader.result) })
-              }
-              reader.onerror = reject
-              reader.readAsDataURL(file)
-            })
-        )
+  const onDrop = async (files: File[]) => {
+    const processedFiles = await Promise.all(
+      files.map(
+        file =>
+          new Promise<ProcessedFile>((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = () => {
+              resolve({ name: file.name, payload: String(reader.result) })
+            }
+            reader.onerror = reject
+            reader.readAsDataURL(file)
+          })
       )
+    )
 
-      const tempFiles = processedFiles.map(file => {
-        const id = `temp-${nanoid()}`
-        const type = 'temp'
-        const url = file.payload
-        return {
-          ...file,
-          id,
-          type,
-          url
-        }
-      })
+    const tempFiles = processedFiles.map(file => {
+      const id = `temp-${nanoid()}`
+      const type = 'temp'
+      const url = file.payload
+      return {
+        ...file,
+        id,
+        type,
+        url
+      }
+    })
 
-      setDueUpload(state => [...state, ...processedFiles])
-      mutate(data => [...tempFiles, ...(data ?? [])], { revalidate: false })
-    },
-    [mutate]
-  )
+    setDueUpload(state => [...state, ...processedFiles])
+    mutate(data => [...tempFiles, ...(data ?? [])], { revalidate: false })
+  }
 
-  const discard = useCallback(() => {
+  const discard = () => {
     setDueUpload([])
     setDueDelete([])
     mutate()
-  }, [mutate, setDueUpload, setDueDelete])
+  }
 
   type Status = {
     successfulUploads: string[]
@@ -90,38 +84,37 @@ function useImageGallery(config: Config) {
     failedDeletions: string[]
   }
 
-  const submit = useCallback(
-    async (itemId?: string) => {
-      let status: Status = {
-        successfulUploads: [],
-        failedUploads: [],
-        successfulDeletions: [],
-        failedDeletions: []
-      }
-      for await (const file of dueDelete) {
-        try {
-          await axios.delete(`${endpoint}/${file.id}`)
-          status = { ...status, successfulDeletions: [...status.successfulDeletions, file.name] }
-        } catch {
-          status = { ...status, failedDeletions: [...status.failedDeletions, file.name] }
-        }
-      }
+  const submit = async (itemId?: string) => {
+    let status: Status = {
+      successfulUploads: [],
+      failedUploads: [],
+      successfulDeletions: [],
+      failedDeletions: []
+    }
 
-      const ep = itemId ? getEndpoint(itemCategory, itemId, fileCategory) : endpoint
-      for await (const file of dueUpload) {
-        try {
-          await axios.post(ep, file)
-          status = { ...status, successfulUploads: [...status.successfulUploads, file.name] }
-        } catch {
-          status = { ...status, failedUploads: [...status.failedUploads, file.name] }
-        }
+    for await (const file of dueDelete) {
+      try {
+        await axios.delete(`${endpoint}/${file.id}`)
+        status = { ...status, successfulDeletions: [...status.successfulDeletions, file.name] }
+      } catch {
+        status = { ...status, failedDeletions: [...status.failedDeletions, file.name] }
       }
+    }
 
-      discard()
-      return status
-    },
-    [fileCategory, itemCategory, endpoint, discard, dueUpload, dueDelete]
-  )
+    const ep = itemId ? getEndpoint(itemCategory, itemId, fileCategory) : endpoint
+    for await (const file of dueUpload) {
+      try {
+        await axios.post(ep, file)
+        status = { ...status, successfulUploads: [...status.successfulUploads, file.name] }
+      } catch {
+        status = { ...status, failedUploads: [...status.failedUploads, file.name] }
+      }
+    }
+
+    discard()
+
+    return status
+  }
 
   const hasChanges = dueUpload.length + dueDelete.length > 0
 
