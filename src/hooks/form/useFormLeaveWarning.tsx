@@ -9,17 +9,23 @@ import type { ModalButtons } from '@/types/form'
 
 const messages = message.common
 
+type Config = {
+  onContinue?: Function
+  onCancel?: Function
+}
 interface Props<T extends FieldValues> {
   formState: FormState<T>
+  config?: Config
 }
 
-export const useFormLeaveWarning = <T extends FieldValues>({ formState }: Props<T>) => {
+export const useFormLeaveWarning = <T extends FieldValues>({ formState, config }: Props<T>) => {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [nextUrl, setNextUrl] = useState<string>('')
   const { formatMessage } = useIntl()
   const { events } = router
   const { isDirty, isSubmitSuccessful } = formState
+  const { onContinue, onCancel } = config ?? {}
 
   // handle route change events
   useEffect(() => {
@@ -51,12 +57,14 @@ export const useFormLeaveWarning = <T extends FieldValues>({ formState }: Props<
       loading: false,
       onClick: () => {
         router.push(nextUrl)
+        onContinue && onContinue()
       }
     },
     goBack: {
       text: messages.buttons.cancel,
       onClick: () => {
         setIsOpen(false)
+        onCancel && onCancel()
       }
     }
   }
