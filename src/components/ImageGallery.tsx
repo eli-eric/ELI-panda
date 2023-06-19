@@ -78,11 +78,7 @@ const ImageGallery = (props: GalleryProps) => {
               )}
             </Tab.List>
 
-            <Tab.Panels
-              {...getRootProps()}
-              className="flex rounded-b-md border border-t-0 border-gray-300"
-              style={{ height: 'calc(100% - 30px)' }}
-            >
+            <Tab.Panels {...getRootProps()} className="h-full flex rounded-b-md border border-t-0 border-gray-300">
               {(data && data.length > 0 ? data : [fallbackImage]).map(obj => (
                 <Tab.Panel key={obj.id} className="flex">
                   <Image
