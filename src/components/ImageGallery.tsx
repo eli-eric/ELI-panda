@@ -1,10 +1,9 @@
 import { Tab } from '@headlessui/react'
 import Image from 'next/image'
 import { useDropzone } from 'react-dropzone'
-import useWarningModal from 'src/hooks/useWarningModal'
 import type { FileItem } from 'src/modules/shared/fileManager/types'
 
-import { CancelButton, DeleteButton, PlusButton } from '@/components/Buttons'
+import { DeleteButton, PlusButton } from '@/components/Buttons'
 import { classNames } from '@/helpers'
 
 const fallbackImage = {
@@ -27,9 +26,7 @@ type GalleryProps = {
 }
 
 const ImageGallery = (props: GalleryProps) => {
-  const { handleDelete, onDrop, discard, hasEditRole, hasChanges = false, data = [], width = 400, height = 400 } = props
-
-  const withWarningModal = useWarningModal()
+  const { handleDelete, onDrop, discard, hasEditRole, data = [], width = 400, height = 400 } = props
 
   const canEdit = hasEditRole && handleDelete && onDrop && discard
 
@@ -48,62 +45,59 @@ const ImageGallery = (props: GalleryProps) => {
       className={classNames('flex flex-col rounded-md', isDragActive && 'border-2 border-orange-600', props.className)}
     >
       <Tab.Group key={JSON.stringify(data)}>
-        <Tab.List className={`rounded-t-md border border-gray-300 flex gap-1 justify-between`}>
-          {canEdit && (
-            <div>
-              <PlusButton
-                type="button"
-                onClick={open}
-                className="h-full flex border-0 border-r rounded-none rounded-tl-md"
-              />
-            </div>
-          )}
-
-          <div className="flex flex-wrap w-full justify-center">
-            {data?.map(obj => (
-              <Tab key={obj.id}>
-                {({ selected }) => <span className={`px-1 ${selected && 'text-orange-600'} text-sm`}>&bull;</span>}
-              </Tab>
-            ))}
-          </div>
-
-          {canEdit && (
-            <div>
-              <CancelButton
-                type="button"
-                onClick={() => withWarningModal(discard, 'Are you sure to discard your changes?')()}
-                className="flex border-0 border-l rounded-none rounded-tr-md"
-                disabled={!hasChanges}
-              />
-            </div>
-          )}
-        </Tab.List>
-
-        <Tab.Panels
-          {...getRootProps()}
-          className="flex rounded-b-md border border-t-0 border-gray-300"
-          style={{ height: 'calc(100% - 30px)' }}
-        >
-          {(data && data.length > 0 ? data : [fallbackImage]).map(obj => (
-            <Tab.Panel key={obj.id} className="relative flex">
-              <Image
-                width={width}
-                height={height}
-                className="object-contain rounded-b-md"
-                src={obj.url}
-                alt={obj.name}
-                unoptimized
-              />
-              {obj.id !== 'fallback' && canEdit && (
-                <DeleteButton
-                  type="button"
-                  onClick={() => handleDelete(obj)}
-                  className="absolute top-0 left-0 border-0 border-b border-r rounded-none rounded-br-md"
-                />
+        {({ selectedIndex }) => (
+          <>
+            <Tab.List className={`rounded-t-md border border-gray-300 flex gap-1 justify-between`}>
+              {canEdit && (
+                <div>
+                  <PlusButton
+                    type="button"
+                    onClick={open}
+                    className="h-full flex border-0 border-r rounded-none rounded-tl-md"
+                  />
+                </div>
               )}
-            </Tab.Panel>
-          ))}
-        </Tab.Panels>
+
+              <div className="flex flex-wrap w-full justify-center">
+                {data?.map(obj => (
+                  <Tab key={obj.id}>
+                    {({ selected }) => <span className={`px-1 ${selected && 'text-orange-600'} text-sm`}>&bull;</span>}
+                  </Tab>
+                ))}
+              </div>
+
+              {canEdit && (
+                <div>
+                  <DeleteButton
+                    type="button"
+                    onClick={() => handleDelete(data[selectedIndex])}
+                    className="flex border-0 border-l rounded-none rounded-tr-md"
+                    disabled={!data || data.length === 0}
+                  />
+                </div>
+              )}
+            </Tab.List>
+
+            <Tab.Panels
+              {...getRootProps()}
+              className="flex rounded-b-md border border-t-0 border-gray-300"
+              style={{ height: 'calc(100% - 30px)' }}
+            >
+              {(data && data.length > 0 ? data : [fallbackImage]).map(obj => (
+                <Tab.Panel key={obj.id} className="flex">
+                  <Image
+                    width={width}
+                    height={height}
+                    className="object-contain rounded-b-md"
+                    src={obj.url}
+                    alt={obj.name}
+                    unoptimized
+                  />
+                </Tab.Panel>
+              ))}
+            </Tab.Panels>
+          </>
+        )}
       </Tab.Group>
     </div>
   )
