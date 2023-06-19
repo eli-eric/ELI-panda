@@ -43,7 +43,7 @@ const ItemContainer = () => {
   }
   const { setValue } = formMethods
   useEffect(() => {
-    setValue('hasImageGalleryChanges', hasChanges, { shouldDirty: true })
+    setValue('hasImageGalleryChanges', hasChanges, { shouldDirty: hasChanges })
   }, [hasChanges, setValue])
 
   const { submit, loading } = useItemSubmit({ onSuccess: saveImageAndRedirect })
