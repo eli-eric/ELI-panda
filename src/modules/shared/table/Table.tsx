@@ -58,7 +58,7 @@ const PandaTable = memo(
       columns: columns,
       data: data || [],
       enableSorting: enableSorting,
-      manualSorting: false,
+      manualSorting: true,
       state: { sorting, expanded }
     })
 

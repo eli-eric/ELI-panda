@@ -9,7 +9,7 @@ import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useSubmit from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
-import { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
+import { RELATION_TYPE_CODE } from '@/modules/systems-deprecated/types/constants'
 import type { ModalButtons } from '@/types/form'
 
 import type { SystemRelationshipResponse } from '../../../types/responses'

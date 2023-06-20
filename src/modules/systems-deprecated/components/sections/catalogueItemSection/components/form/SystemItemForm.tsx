@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form'
 
 import { Input, TextArea } from '@/components/form/Input'
 import { SelectWithError } from '@/components/form/Select'
-import type { SystemItemFormType } from '@/modules/systems/types/form'
+import type { SystemItemFormType } from '@/modules/systems-deprecated/types/form'
 
 import useSystemItemFormFields from './SystemItemForm.fields'
 

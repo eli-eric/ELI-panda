@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useQueryState } from 'next-usequerystate'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useDebounce, useIsFirstRender } from 'usehooks-ts'
 
@@ -12,9 +12,10 @@ interface Props {
   left?: JSX.Element
   right?: JSX.Element
   tableId: string
+  onChange?: (value: string) => void
 }
 
-const SearchBar = ({ useQuery = true, left, right, tableId }: Props) => {
+const SearchBar = ({ useQuery = true, left, right, tableId, onChange }: Props) => {
   const [querySearch, setQuerySearch] = useQueryState('search', { history: 'replace' })
   const { setSearch, instances } = useTableStateStore()
   const searchInstance = instances[tableId]?.search
@@ -23,6 +24,11 @@ const SearchBar = ({ useQuery = true, left, right, tableId }: Props) => {
     defaultValues: { search: search }
   })
 
+  const onChangeRef = useRef(onChange)
+  useEffect(() => {
+    onChangeRef.current = onChange
+  }, [onChange])
+
   const searchValue = useDebounce(useWatch({ control, name: 'search' }), 500)
 
   useEffect(() => {
@@ -30,6 +36,9 @@ const SearchBar = ({ useQuery = true, left, right, tableId }: Props) => {
       setQuerySearch(searchValue ? searchValue : null, { shallow: true })
     }
     setSearch(tableId, searchValue)
+    if (onChangeRef.current) {
+      onChangeRef.current(searchValue)
+    }
   }, [searchValue, tableId, useQuery, setQuerySearch, setSearch])
 
   const isFirstRender = useIsFirstRender()
@@ -69,6 +78,7 @@ const SearchBar = ({ useQuery = true, left, right, tableId }: Props) => {
       setQuerySearch(data.search ? data.search : null, { shallow: true })
     }
     setSearch(tableId, data.search)
+    onChange && onChange(data.search)
   }
 
   return (

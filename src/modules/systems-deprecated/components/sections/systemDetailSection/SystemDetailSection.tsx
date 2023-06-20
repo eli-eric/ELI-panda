@@ -6,7 +6,7 @@ import ItemProperty from '@/components/item-property/ItemProperty'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useImage } from '@/hooks/fetch/useImage'
 import { message } from '@/i18n/src/messages'
-import type { SystemDetailResponse } from '@/modules/systems/types/responses'
+import type { SystemDetailResponse } from '@/modules/systems-deprecated/types/responses'
 
 const messages = message.systemsPage.systemDetail.form
 

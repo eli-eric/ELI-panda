@@ -9,7 +9,7 @@ import useSubmit from '@/hooks/fetch/useSubmit'
 import useFormModal from '@/hooks/form/useFormModal'
 import ItemDetailComponent from '@/modules/catalogueItem/Item.cont'
 import CatalogueTableSelect from '@/modules/shared/catalogue/table/CatalogueTableSelect'
-import type { SystemItemFormType } from '@/modules/systems/types/form'
+import type { SystemItemFormType } from '@/modules/systems-deprecated/types/form'
 import type { CatalogueItem } from '@/types/responses'
 
 import SystemItemForm from './components/form/SystemItemForm'

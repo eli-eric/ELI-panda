@@ -12,7 +12,6 @@ export const useSystems = () => {
       suspense: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: true,
-      revalidateOnMount: true,
       keepPreviousData: true
     },
     url: systemsList,

@@ -12,7 +12,7 @@ type SystemsResponse = {
 const range = (len: number) => {
   const arr = []
   for (let i = 0; i < len; i++) {
-    arr.push(i)
+    arr.push(i as never)
   }
   return arr
 }
@@ -64,10 +64,10 @@ function makeData(...lens: number[]) {
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
     if (req.method === 'GET') {
-      const systems = makeData(30)
+      const systems = makeData(50)
       const timeout = faker.datatype.number({ min: 50, max: 200 })
       const timer = setTimeout(() => {
-        res.status(200).json({ data: systems, totalCount: systems.length })
+        res.status(200).json({ data: systems, totalCount: 1000 })
       }, timeout)
     }
   } else {

@@ -1,11 +1,11 @@
 import type { Table } from '@tanstack/react-table'
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useCallback, useRef } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 
-import type { Order } from '../orders/types'
-import SearchBar from '../shared/searchBar/SearchBar'
+import { Pagination } from '../shared/table/Pagination'
+import SearchBar from '../shared/table/SearchBar'
 import PandaTable from '../shared/table/Table'
 import SearchBarButtons from './components/SearchBarButtons'
 import useSystemsColumns from './components/table/columns'
@@ -15,23 +15,21 @@ import type { SystemDetail } from './types/responses'
 const SystemsContainer = () => {
   const tableId = 'systems'
   const { systems, error, loading } = useSystems()
-  const [data, setData] = useState<SystemDetail[]>(systems?.data)
-  const tableRef = useRef<Table<Order>>()
-  const { columns, pending } = useSystemsColumns(setData)
+  const tableRef = useRef<Table<SystemDetail>>()
+  const { columns, pending } = useSystemsColumns()
 
-  useEffect(() => {
-    setData(systems?.data)
+  const onChangeSearch = useCallback(() => {
     tableRef.current?.resetExpanded()
-  }, [systems])
+  }, [tableRef])
 
   return (
     <Fragment>
       <TableLayoutContainer>
-        <SearchBar tableId={tableId} left={<SearchBarButtons />} />
+        <SearchBar tableId={tableId} left={<SearchBarButtons />} onChange={onChangeSearch} />
         <PandaTable
           ref={tableRef}
           columns={columns}
-          data={data}
+          data={systems?.data}
           loading={loading || pending}
           tableId={tableId}
           getSubRows={row => row.subSystems}
@@ -42,6 +40,14 @@ const SystemsContainer = () => {
           className={'relative overflow-x-auto'}
         />
         {error && <ErrorPage />}
+        <Pagination
+          tableId={tableId}
+          settings={{
+            enableQueryURL: true,
+            pageSizeDefault: 50,
+            total: systems?.totalCount
+          }}
+        />
       </TableLayoutContainer>
     </Fragment>
   )
