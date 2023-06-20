@@ -122,7 +122,13 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
         <div>
           <div {...getRootProps()}>
             <input {...getInputProps()} ref={fileInputRef} style={{ display: 'none' }} />
-            <PlusButton className="mb-2" buttonSize="large" primary={!isDragActive} onClick={handleButtonClick} />
+            <PlusButton
+              className="mb-2"
+              buttonSize="large"
+              primary={!isDragActive}
+              type={'button'}
+              onClick={handleButtonClick}
+            />
           </div>
         </div>
       )}
