@@ -10,9 +10,12 @@ import { TextArea } from '@/components/form/Input'
 import Card from '@/components/layout/Card'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import useImageGallery from '@/hooks/useImageGallery'
+import usePermission from '@/hooks/usePermission'
 import { FILE_TYPE } from '@/types/constants/files'
 import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 
+import FileManager from '../shared/fileManager/FileManager'
 import DefaultItemForm from './components/form/DefaultItemForm'
 import Groups from './components/form/Groups'
 import ItemHeader from './components/header/Header.comp'
@@ -22,6 +25,9 @@ import type { CatalogueItem } from './types/responses'
 
 const ItemContainer = () => {
   const { query, push } = useRouter()
+  const queryUID = query.uid as string | undefined
+  const disabledEdit = !usePermission([ROLE.CATALOGUE_EDIT])
+
   const {
     discard,
     hasChanges,
@@ -29,13 +35,13 @@ const ItemContainer = () => {
     Gallery: ImageGallery
   } = useImageGallery({
     itemCategory: FILE_TYPE.CATALOGUE,
-    itemId: String(query.uid)
+    itemId: String(queryUID)
   })
   const { FormWarningModal, ...formMethods } = useItemForm({ onWarnConfirm: discard })
 
   const saveImageAndRedirect = async (uid: string) => {
     await saveImages(uid)
-    if (query.uid) {
+    if (queryUID) {
       push(PATH.CATALOGUE)
     } else {
       push(PATH.CATALOGUE_ITEM + '/' + uid)
@@ -76,6 +82,13 @@ const ItemContainer = () => {
             </Suspense>
           </ErrorBoundary>
           <FormWarningModal />
+          {queryUID && (
+            <ErrorBoundary fallback={<ErrorPage />}>
+              <Suspense fallback={<ProgressBarComponent />}>
+                <FileManager itemType={FILE_TYPE.CATALOGUE} uid={queryUID} hasEditRole={!disabledEdit} />
+              </Suspense>
+            </ErrorBoundary>
+          )}
         </Card>
       </form>
       <DevTool control={formMethods.control} />
