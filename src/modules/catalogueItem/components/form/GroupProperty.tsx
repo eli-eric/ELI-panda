@@ -1,4 +1,5 @@
 import React from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
@@ -15,6 +16,13 @@ interface Props {
 
 const GroupProperty = ({ detail, index }: Props) => {
   const disabled = !usePermission([ROLE.CATALOGUE_EDIT])
+  const { setValue } = useFormContext()
+
+  React.useEffect(() => {
+    Object.keys(detail).forEach(key => {
+      setValue(`details.${index}.${key}`, detail[key])
+    })
+  }, [detail, index, setValue])
 
   if (PROPERTY_TYPE.TEXT === detail.property.type.uid) {
     return (
