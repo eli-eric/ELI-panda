@@ -52,9 +52,9 @@ export const Pagination = ({ tableId, settings }: PaginationProps) => {
           setPage(parseInt(queryPage))
           setPagination(tableId, `page=${queryPage}&pageSize=${pageSize}`)
         } else {
-          setPage(JSON.parse(paginationInstance).page)
-          setPagination(tableId, `page=${JSON.parse(paginationInstance).page}&pageSize=${pageSize}`)
-          setQueryPage(JSON.parse(paginationInstance).page.toString())
+          setPage(1)
+          setPagination(tableId, `page=${1}&pageSize=${pageSize}`)
+          setQueryPage('1')
         }
       }
     }
