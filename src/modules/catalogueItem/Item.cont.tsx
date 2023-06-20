@@ -24,7 +24,7 @@ import useItemSubmit from './hooks/useItemSubmit'
 import type { CatalogueItem } from './types/responses'
 
 const ItemContainer = () => {
-  const { query, push } = useRouter()
+  const { query, replace, back } = useRouter()
   const queryUID = query.uid as string | undefined
   const disabledEdit = !usePermission([ROLE.CATALOGUE_EDIT])
 
@@ -42,9 +42,9 @@ const ItemContainer = () => {
   const saveImageAndRedirect = async (uid: string) => {
     await saveImages(uid)
     if (queryUID) {
-      push(PATH.CATALOGUE)
+      back()
     } else {
-      push(PATH.CATALOGUE_ITEM + '/' + uid)
+      replace(PATH.CATALOGUE_ITEM + '/' + uid)
     }
   }
 

@@ -3,14 +3,13 @@ import { useRouter } from 'next/router'
 import { BackButton, Button } from '@/components/Buttons'
 import Card from '@/components/layout/Card'
 import { message } from '@/i18n/src/messages'
-import { PATH } from '@/types/constants/paths'
 const messages = message.common.buttons
 
 const ItemHeader = ({ disabledEdit, loading }: { disabledEdit: boolean; loading: boolean }) => {
   const router = useRouter()
 
   const goBackHandler = () => {
-    router.push(PATH.CATALOGUE)
+    router.back()
   }
 
   return (
