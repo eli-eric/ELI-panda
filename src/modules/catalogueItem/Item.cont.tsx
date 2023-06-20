@@ -11,15 +11,17 @@ import Card from '@/components/layout/Card'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import useImageGallery from '@/hooks/useImageGallery'
 import { FILE_TYPE } from '@/types/constants/files'
+import { PATH } from '@/types/constants/paths'
 
 import DefaultItemForm from './components/form/DefaultItemForm'
 import Groups from './components/form/Groups'
 import ItemHeader from './components/header/Header.comp'
 import useItemForm from './hooks/useItemForm'
 import useItemSubmit from './hooks/useItemSubmit'
+import type { CatalogueItem } from './types/responses'
 
 const ItemContainer = () => {
-  const { query, push, pathname } = useRouter()
+  const { query, push } = useRouter()
   const {
     discard,
     hasChanges,
@@ -33,7 +35,11 @@ const ItemContainer = () => {
 
   const saveImageAndRedirect = async (uid: string) => {
     await saveImages(uid)
-    push(`${pathname}/${uid}`)
+    if (query.uid) {
+      push(PATH.CATALOGUE)
+    } else {
+      push(PATH.CATALOGUE_ITEM + '/' + uid)
+    }
   }
 
   const { setValue } = formMethods
@@ -44,7 +50,10 @@ const ItemContainer = () => {
   const { submit, loading } = useItemSubmit({ onError: discard, onSuccess: saveImageAndRedirect })
 
   const onSubmit = (data: any) => {
-    submit(data)
+    // extract from data hasImageGalleryChanges
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { hasImageGalleryChanges, ...rest } = data
+    submit(rest as CatalogueItem)
   }
 
   return (
