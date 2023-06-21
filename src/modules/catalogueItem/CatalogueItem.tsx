@@ -36,6 +36,7 @@ type CatalogueItemWithGalleryWatch = CatalogueItem & {
 }
 
 const ItemContainer = () => {
+  console.log('why is there a loop here?')
   const router = useRouter()
   const { query, push } = router
   const queryUID = query.uid as string | undefined
@@ -111,9 +112,6 @@ const ItemContainer = () => {
     },
     useMockFetcher: false
   })
-  console.log(queryUID)
-  console.log(item)
-  console.log(itemDetail)
 
   return (
     <FormProvider {...formMethods}>
