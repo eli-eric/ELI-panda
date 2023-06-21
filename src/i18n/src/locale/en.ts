@@ -270,7 +270,8 @@ export const messages = {
         itemUsage: { label: 'Item Usage' },
         serialNumber: { label: 'Serial Number', placeholder: 'Serial Number' },
         eun: { label: 'EUN', placeholder: 'EUN' },
-        manualEun: { label: 'Set EUN manually' }
+        manualEun: { label: 'Set EUN manually' },
+        notes: { label: 'Notes', placeholder: 'Notes' }
       },
       orderLinesTable: {
         header: {
@@ -282,7 +283,8 @@ export const messages = {
           itemUsage: 'Item Usage',
           eun: 'EUN',
           isDelivered: 'Delivered',
-          serialNumber: 'Serial Number'
+          serialNumber: 'Serial Number',
+          notes: 'Notes'
         }
       },
       deleteModal: { title: 'Warning', message: 'Are you sure you want to delete <medium>{name}</medium>?' },

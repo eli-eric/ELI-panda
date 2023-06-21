@@ -1,5 +1,6 @@
+import { InformationCircleIcon } from '@heroicons/react/20/solid'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import type { CellProps, Column, FooterProps } from 'react-table'
 
@@ -36,6 +37,22 @@ const useOrderLinesColumns = ({ setOrderLine, deleteOrderLine, disabledEdit }: P
             <span>{value}</span>
           </div>
         )
+      },
+      {
+        Header: formatMessage({ id: messages.notes }),
+        accessor: 'notes',
+        Cell: ({ value }: CellProps<OrderLineFormType>) => (
+          <Fragment>
+            {value && (
+              <InformationCircleIcon
+                className="h-6 w-6 flex-shrink-0"
+                data-tooltip-id="tooltip"
+                data-tooltip-content={value}
+              />
+            )}
+          </Fragment>
+        ),
+        id: 'notes'
       },
       {
         Header: formatMessage({ id: messages.catalogueNumber }),
