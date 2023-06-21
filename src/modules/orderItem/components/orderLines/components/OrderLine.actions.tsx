@@ -127,7 +127,7 @@ export const OrderisDeliveredAction = ({
     eun?: string
     manualEun: boolean
   }>({
-    defaultValues: { serialNumber: '' },
+    defaultValues: { serialNumber: orderLine.serialNumber },
     renderForm: () => {
       const manualEun = formMethods.watch('manualEun')
       return (
@@ -168,7 +168,7 @@ export const OrderisDeliveredAction = ({
   })
 
   const handleCheck = () => {
-    !orderLine.isDelivered && !orderLine.serialNumber ? setOpen(true) : submit({ isDelivered: !enabled })
+    !orderLine.isDelivered ? setOpen(true) : submit({ isDelivered: !enabled })
   }
 
   return (
