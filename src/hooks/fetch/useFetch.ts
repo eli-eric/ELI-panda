@@ -1,7 +1,7 @@
 import type { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import useSWR from 'swr'
 import type { BareFetcher, Key, KeyedMutator, PublicConfiguration } from 'swr/_internal'
 
@@ -25,8 +25,6 @@ const useFetch = <ResponseType>({
   url,
   useMockFetcher,
   config,
-  onSuccess,
-  onError,
   format
 }: UseFetchProps<ResponseType>): {
   response: ResponseType
@@ -44,38 +42,6 @@ const useFetch = <ResponseType>({
     mutate,
     error
   } = useSWR<ResponseType, AxiosError>(isReady && session && url, useMockFetcher ? mockFetcher : fetcher, config)
-
-  // handle success callback
-  const handleSuccess = useCallback(
-    (data: ResponseType) => {
-      if (onSuccess) {
-        onSuccess(data)
-      }
-    },
-    [onSuccess]
-  )
-  // handle success useEffect
-  useEffect(() => {
-    if (response) {
-      handleSuccess(response)
-    }
-  }, [response, handleSuccess])
-
-  // handle error callback
-  const handleError = useCallback(
-    (error: any) => {
-      if (onError) {
-        onError(error)
-      }
-    },
-    [onError]
-  )
-  // handle error useEffect
-  useEffect(() => {
-    if (error) {
-      handleError(error)
-    }
-  }, [error, handleError])
 
   const formattedResponse = useMemo(() => (format ? format(response) : response), [response, format])
 
