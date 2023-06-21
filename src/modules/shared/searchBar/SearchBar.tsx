@@ -1,8 +1,8 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useQueryState } from 'next-usequerystate'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
-import { useDebounce } from 'usehooks-ts'
+import { useDebounce, useIsFirstRender } from 'usehooks-ts'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
@@ -17,8 +17,10 @@ interface Props {
 const SearchBar = ({ useQuery = true, left, right, tableId }: Props) => {
   const [querySearch, setQuerySearch] = useQueryState('search', { history: 'replace' })
   const { setSearch, instances } = useTableStateStore()
-  const { register, handleSubmit, control } = useForm<{ search: string }>({
-    defaultValues: { search: querySearch || (tableId && instances[tableId]?.search) || '' }
+  const searchInstance = instances[tableId]?.search
+  const [search, setSearchState] = useState<string | undefined>(searchInstance)
+  const { register, handleSubmit, control, setValue } = useForm<{ search: string }>({
+    defaultValues: { search: search }
   })
 
   const searchValue = useDebounce(useWatch({ control, name: 'search' }), 500)
@@ -28,7 +30,39 @@ const SearchBar = ({ useQuery = true, left, right, tableId }: Props) => {
       setQuerySearch(searchValue ? searchValue : null, { shallow: true })
     }
     setSearch(tableId, searchValue)
-  }, [searchValue, setQuerySearch, useQuery, tableId, setSearch])
+  }, [searchValue, tableId, useQuery, setQuerySearch, setSearch])
+
+  const isFirstRender = useIsFirstRender()
+
+  // initialize update table state and query state and instance on first render
+  useEffect(() => {
+    if (isFirstRender) {
+      if (useQuery) {
+        // check if sortByQuery is set
+        if (querySearch) {
+          setSearch(tableId, querySearch)
+          setValue('search', querySearch)
+          setSearchState(querySearch)
+          // check if sortByStringInstance is set
+        } else if (searchInstance) {
+          setQuerySearch(searchInstance)
+          setValue('search', searchInstance)
+          setSearchState(searchInstance)
+        }
+      }
+    }
+  }, [isFirstRender, tableId, useQuery, querySearch, searchInstance, setSearch, setQuerySearch, setValue])
+  // update
+  useEffect(() => {
+    if (!isFirstRender) {
+      setSearch(tableId, search)
+      if (useQuery) {
+        setQuerySearch(search || null, { shallow: true })
+      }
+    }
+    // reason for disabling eslint: isFirstRender is a dependency but it should not trigger a re-render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tableId, useQuery, search, setSearch, setQuerySearch])
 
   const onSubmit = (data: { search: string }) => {
     if (useQuery) {

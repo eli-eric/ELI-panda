@@ -9,7 +9,7 @@ export default function useQueryManager(tableId: string) {
   const router = useRouter()
   const { instances } = useTableStateStore()
   //TODO: filters
-  const sorting = instances[tableId]?.sortByQueryString || ''
+  const sorting = ''
   const pagination = instances[tableId]?.pagination || '{"page":1,"pageSize":50}'
   const search = instances[tableId]?.search || ''
   const supplierUID = instances[tableId]?.filter?.supplier?.uid || ''

@@ -45,7 +45,7 @@ export const messages = {
     }
   },
   authPage: {
-    head: 'Eli Panda - Sign In',
+    head: 'ELI Panda - Sign In',
     title: 'Sign in to ELI - PANDA',
     form: {
       userName: 'User Name',
@@ -54,9 +54,9 @@ export const messages = {
     },
     alert: { title: 'Wrong username or password.' }
   },
-  dashboardPage: { head: 'Eli Panda - Dashboard' },
+  dashboardPage: { head: 'ELI Panda - Dashboard' },
   cataloguePage: {
-    head: 'Eli Panda - Catalogue',
+    head: 'ELI Panda - Catalogue',
     help: 'Select category or use Search bar',
     defaultMessage: {
       help: { text: 'Select category or use Search bar' },
@@ -105,7 +105,7 @@ export const messages = {
     }
   },
   systemsPage: {
-    head: 'Eli Panda - Systems',
+    head: 'ELI Panda - Systems',
     systemDetail: {
       form: {
         name: { label: 'Name', placeholder: 'Name' },
@@ -213,9 +213,9 @@ export const messages = {
     },
     note: 'Note'
   },
-  reportsPage: { head: 'Eli Panda - Reports' },
+  reportsPage: { head: 'ELI Panda - Reports' },
   ordersPage: {
-    head: 'Eli Panda - Orders',
+    head: 'ELI Panda - Orders',
     ordersTable: {
       header: {
         name: 'Name',
@@ -285,6 +285,7 @@ export const messages = {
       missingSerialNumber: { title: 'Warning', message: 'Serial number is missing, please fill it.' }
     }
   },
-  orderItem: { head: 'Eli Panda - Order Item' },
-  defaul: { head: 'Eli Panda' }
+  orderItem: { head: 'ELI Panda - Order Item' },
+  systemItem: { head: 'ELI Panda - System Item' },
+  defaul: { head: 'ELI Panda' }
 }

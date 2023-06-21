@@ -1,3 +1,4 @@
+import type { SortingState } from '@tanstack/react-table'
 import { useQueryState } from 'next-usequerystate'
 import { Fragment, useEffect } from 'react'
 import { type Cell, type Column, type HeaderGroup, type Row, useSortBy, useTable } from 'react-table'
@@ -80,7 +81,7 @@ const useGeneralTable = <T extends object>({
   // set sortBy to store and router.query.sortBy
   useEffect(() => {
     const sortConfigQuery = JSON.stringify(sortBy)
-    setSortBy(tableId, sortBy)
+    setSortBy(tableId, sortBy as SortingState)
     setSortByQueryString(tableId, sortBy.length === 0 ? undefined : sortConfigQuery)
     if (uriSortBy) {
       if (sortBy.length !== 0) {
