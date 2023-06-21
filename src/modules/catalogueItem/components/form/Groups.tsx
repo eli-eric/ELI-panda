@@ -3,19 +3,28 @@ import { useFormContext } from 'react-hook-form'
 
 import Heading from '@/components/layout/Heading'
 
-import useGroupDetails from '../../hooks/useGroupDetails'
-import useItem from '../../hooks/useItem'
 import type { CatalogueItem, CatalogueItemDetail } from '../../types/responses'
 import GroupProperty from './GroupProperty'
 
-const Groups = () => {
+type Props = {
+  item: CatalogueItem
+  itemDetail: CatalogueItemDetail[]
+}
+const Groups = (props: Props) => {
+  const { item, itemDetail } = props
   const { unregister, watch } = useFormContext<CatalogueItem>()
   const [details, setDetails] = useState<{ groups?: string[]; details?: CatalogueItemDetail[] }>()
 
   const category = watch('category')
 
-  const { item, groups: groupsItem } = useItem()
-  const { groups: groupsDetail, groupDetails } = useGroupDetails(category?.uid)
+  const groupDetails = itemDetail
+  const groupsDetail = itemDetail
+    ?.map(item => item.propertyGroup)
+    .filter((value, index, self) => self.indexOf(value) === index)
+
+  const groupsItem = item?.details
+    ?.map(item => item.propertyGroup)
+    .filter((value, index, self) => self.indexOf(value) === index)
 
   useEffect(() => {
     if (category?.uid === item?.category?.uid) {

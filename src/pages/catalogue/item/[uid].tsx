@@ -1,21 +1,15 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Fragment } from 'react'
+import { Fragment, Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
-import useItem from '@/modules/catalogueItem/hooks/useItem'
-import ItemDetailComponent from '@/modules/catalogueItem/Item.cont'
+import ItemDetailComponent from '@/modules/catalogueItem/CatalogueItem'
 
 const messages = message.cataloguePage
-
-const ItemContainer = () => {
-  const { item } = useItem()
-  return <Fragment>{item ? <ItemDetailComponent /> : <LoaderComponent />}</Fragment>
-}
 
 const CatalogueItemDetailPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
@@ -26,7 +20,9 @@ const CatalogueItemDetailPage: NextPage = (): JSX.Element => {
         <meta name="description" content="...." />
       </Head>
       <ErrorBoundary fallback={<ErrorPage />}>
-        <ItemContainer />
+        <Suspense fallback={<LoaderComponent />}>
+          <ItemDetailComponent />
+        </Suspense>
       </ErrorBoundary>
     </Fragment>
   )

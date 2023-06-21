@@ -1,14 +1,22 @@
 import { DevTool } from '@hookform/devtools'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormProvider } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TextArea } from '@/components/form/Input'
 import Card from '@/components/layout/Card'
 import ProgressBarComponent from '@/components/progress-bar.comp'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
+import useFetch from '@/hooks/fetch/useFetch'
+import useSubmit from '@/hooks/fetch/useSubmit'
+import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
+import useFormNotification from '@/hooks/form/useFormNotification'
 import useImageGallery from '@/hooks/useImageGallery'
 import usePermission from '@/hooks/usePermission'
 import { FILE_TYPE } from '@/types/constants/files'
@@ -18,15 +26,42 @@ import { ROLE } from '@/types/constants/roles'
 import FileManager from '../shared/fileManager/FileManager'
 import DefaultItemForm from './components/form/DefaultItemForm'
 import Groups from './components/form/Groups'
+import { schema } from './components/form/ItemForm.schema'
 import ItemHeader from './components/header/Header.comp'
-import useItemForm from './hooks/useItemForm'
-import useItemSubmit from './hooks/useItemSubmit'
+import type { CatalogueItemDetail } from './types/responses'
 import type { CatalogueItem } from './types/responses'
 
+type CatalogueItemWithGalleryWatch = CatalogueItem & {
+  hasImageGalleryChanges: boolean
+}
+
 const ItemContainer = () => {
-  const { query, replace, back } = useRouter()
+  const router = useRouter()
+  const { query, push } = router
   const queryUID = query.uid as string | undefined
+
   const disabledEdit = !usePermission([ROLE.CATALOGUE_EDIT])
+
+  const { catalogueItem } = useEndpoint({ uid: queryUID })
+
+  const { response: item } = useFetch<CatalogueItem>({
+    url: () => (queryUID ? catalogueItem : null),
+    config: { suspense: false },
+    useMockFetcher: false
+  })
+
+  const formMethods = useForm<CatalogueItemWithGalleryWatch>({
+    resolver: yupResolver(schema),
+    defaultValues: item
+  })
+
+  const { reset, setValue, control, formState } = formMethods
+
+  useEffect(() => {
+    item && reset(item)
+  }, [item, reset])
+
+  useFormNotification<CatalogueItemWithGalleryWatch>({ control })
 
   const {
     discard,
@@ -37,30 +72,48 @@ const ItemContainer = () => {
     itemCategory: FILE_TYPE.CATALOGUE,
     itemId: String(queryUID)
   })
-  const { FormWarningModal, ...formMethods } = useItemForm({ onWarnConfirm: discard })
 
-  const saveImageAndRedirect = async (uid: string) => {
-    await saveImages(uid)
-    if (queryUID) {
-      back()
-    } else {
-      replace(PATH.CATALOGUE_ITEM + '/' + uid)
-    }
-  }
+  const FormWarningModal = useFormLeaveWarning<CatalogueItemWithGalleryWatch>({
+    formState
+  })
 
-  const { setValue } = formMethods
   useEffect(() => {
     setValue('hasImageGalleryChanges', hasChanges, { shouldDirty: hasChanges })
   }, [hasChanges, setValue])
 
-  const { submit, loading } = useItemSubmit({ onError: discard, onSuccess: saveImageAndRedirect })
+  const { submit, loading } = useSubmit({
+    endpoint: catalogueItem,
+    method: queryUID ? 'put' : 'post',
+    mutateList: [catalogueItem],
+    onSuccess: async uid => {
+      await saveImages(String(uid))
+      toast.success('Item saved')
+      if (!queryUID) push(PATH.CATALOGUE_ITEM + '/' + uid)
+    },
+    onError: () => {
+      toast.error('Error saving item')
+      discard()
+    }
+  })
 
   const onSubmit = (data: any) => {
-    // extract from data hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { hasImageGalleryChanges, ...rest } = data
-    submit(rest as CatalogueItem)
+    const { hasImageGalleryChanges, ...cleanData } = data
+    submit(cleanData)
   }
+
+  const { catalogueCategoryProperties } = useEndpoint({ uid: queryUID ?? '' })
+
+  const { response: itemDetail } = useFetch<CatalogueItemDetail[]>({
+    url: queryUID && catalogueCategoryProperties,
+    onError: () => {
+      toast.error('Failed to load group details')
+    },
+    useMockFetcher: false
+  })
+  console.log(queryUID)
+  console.log(item)
+  console.log(itemDetail)
 
   return (
     <FormProvider {...formMethods}>
@@ -78,7 +131,7 @@ const ItemContainer = () => {
           <TextArea name="description" label={'Description'} rounded={'rounded-md'} className={'px-4 py-5 sm:px-6'} />
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense fallback={<ProgressBarComponent />}>
-              <Groups />
+              <Groups item={item} itemDetail={itemDetail} />
             </Suspense>
           </ErrorBoundary>
           <FormWarningModal />
