@@ -6,7 +6,7 @@ import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
 import ErrorPage from '@/components/error/ErrorPage'
-import ItemDetailComponent from '@/modules/catalogueItem/Item.cont'
+import ItemDetailComponent from '@/modules/catalogueItem/CatalogueItem.cont'
 
 const messages = message.cataloguePage
 

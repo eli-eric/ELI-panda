@@ -24,11 +24,6 @@ const SearchBar = ({ useQuery = true, left, right, tableId, onChange }: Props) =
     defaultValues: { search: search }
   })
 
-  const onChangeRef = useRef(onChange)
-  useEffect(() => {
-    onChangeRef.current = onChange
-  }, [onChange])
-
   const searchValue = useDebounce(useWatch({ control, name: 'search' }), 500)
 
   const onChangeRef = useRef(onChange)

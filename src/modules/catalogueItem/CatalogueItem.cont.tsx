@@ -23,7 +23,7 @@ import useItemForm from './hooks/useItemForm'
 import useItemSubmit from './hooks/useItemSubmit'
 import type { CatalogueItem } from './types/responses'
 
-const ItemContainer = () => {
+const CatalogueItemContainer = () => {
   const { query, replace, back } = useRouter()
   const queryUID = query.uid as string | undefined
   const disabledEdit = !usePermission([ROLE.CATALOGUE_EDIT])
@@ -96,4 +96,4 @@ const ItemContainer = () => {
   )
 }
 
-export default ItemContainer
+export default CatalogueItemContainer
