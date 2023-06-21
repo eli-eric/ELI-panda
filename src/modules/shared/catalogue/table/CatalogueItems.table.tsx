@@ -20,7 +20,7 @@ const useCatalogueTable = (pageSizeDefault?: number, additionalColumn?: Column<C
     pageSizeDefault: pageSizeDefault || 50
   })
 
-  const columns = useCatalogueItemsColumns()
+  const columns = useCatalogueItemsColumns(!additionalColumn)
 
   if (additionalColumn) {
     columns.splice(0, 0, additionalColumn)

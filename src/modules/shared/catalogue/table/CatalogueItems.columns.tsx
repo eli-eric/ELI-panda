@@ -2,39 +2,92 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Fragment, useMemo } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 import type { CellProps } from 'react-table'
 import { type Column } from 'react-table'
 
+import { DeleteButton } from '@/components/Buttons'
+import WarningModal from '@/components/modal/warning/modal-warning.comp'
+import { createMessageValues } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useImage } from '@/hooks/fetch/useImage'
+import useSubmit from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
 import useCatalogueItems from '@/modules/catalogue/hooks/useCatalogueItems'
 import useCategoryList from '@/modules/catalogue/hooks/useCategoryList'
 import { PATH } from '@/types/constants/paths'
+import type { ModalButtons } from '@/types/form'
 import type { CatalogueItem } from '@/types/responses'
 
 const messages = message.cataloguePage.itemList.header
+const buttonsMessage = message.common.buttons
+const modalMessage = message.ordersPage.deleteModal
 
 const Name = ({
   value,
   row: {
     original: { uid }
-  }
+  },
+  toDelete
 }: CellProps<CatalogueItem>) => {
-  const { catalogueItemImage } = useEndpoint({ uid })
+  const { catalogueItemImage, catalogueItem } = useEndpoint({ uid })
   const image = useImage(catalogueItemImage)
+  const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
+  const { formatMessage } = useIntl()
+  const { mutate, catalogueItems } = useCatalogueItems()
+
+  const deleteSubmit = useSubmit({
+    endpoint: catalogueItem,
+    method: 'delete',
+    onSuccess: () => {
+      setOpenDeleteWarn(false)
+      catalogueItems && mutate({ ...catalogueItems, data: catalogueItems?.data.filter(item => item.uid !== uid) })
+    }
+  })
+
+  const deleteButtons: ModalButtons = {
+    goNext: {
+      text: buttonsMessage.continue,
+      loading: deleteSubmit.loading,
+      onClick: () => {
+        deleteSubmit.submit()
+      }
+    },
+    goBack: {
+      text: buttonsMessage.cancel,
+      onClick: () => {
+        setOpenDeleteWarn(false)
+      }
+    }
+  }
 
   return (
-    <Link href={{ pathname: '/catalogue/item/' + uid }} className="text-blue-500 hover:underline">
-      <div className="flex items-center">
+    <div className="flex items-center">
+      {toDelete && (
+        <DeleteButton
+          className="mr-1 z-0"
+          onClick={() => {
+            setOpenDeleteWarn(true)
+          }}
+        />
+      )}
+      <Link href={{ pathname: '/catalogue/item/' + uid }} className="flex items-center text-blue-500 hover:underline">
         <div className="h-10 w-10 flex-shrink-0">
           <Image className="h-10 w-10 rounded-full" alt={value} src={image} width={200} height={200} />
         </div>
         <div className="ml-4 ">{value}</div>
-      </div>
-    </Link>
+      </Link>
+      <WarningModal
+        buttons={deleteButtons}
+        open={openDeleteWarn}
+        setOpen={setOpenDeleteWarn}
+        title={modalMessage.title}
+        message={formatMessage({ id: modalMessage.message }, createMessageValues({ orderName: name }))}
+        testid="OrderDeleteModal"
+        error={deleteSubmit.error}
+      />
+    </div>
   )
 }
 
@@ -75,7 +128,7 @@ const ManufacturerUrl = ({ value }: CellProps<CatalogueItem>) => (
   </Fragment>
 )
 
-const useCatalogueItemsColumns = () => {
+const useCatalogueItemsColumns = (toDelete: boolean) => {
   const intl = useIntl()
 
   const { catalogueItems } = useCatalogueItems()
@@ -87,7 +140,7 @@ const useCatalogueItemsColumns = () => {
         Header: intl.formatMessage({ id: messages.name }),
         accessor: 'name',
         id: 'name',
-        Cell: Name
+        Cell: props => <Name {...props} toDelete={toDelete} />
       },
       {
         Header: intl.formatMessage({ id: messages.description }),
