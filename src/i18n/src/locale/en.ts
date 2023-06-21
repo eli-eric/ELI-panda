@@ -251,6 +251,10 @@ export const messages = {
       }
     },
     deleteModal: { title: 'Warning', message: 'Are you sure you want to delete {orderName}?' },
+    ordelineMissingModal: {
+      title: 'Warning',
+      message: 'Order lines is missing are you sure you want to continue?'
+    },
     orderLines: {
       formHeadings: {
         itemInfo: 'Item Info',

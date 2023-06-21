@@ -1,4 +1,4 @@
-import { array, object, string } from 'yup'
+import { object, string } from 'yup'
 
 export const schema = object({
   name: string().required("Order's name is required"),
@@ -9,7 +9,6 @@ export const schema = object({
   contractNumber: string(),
   notes: string(),
   orderDate: string(),
-  orderLines: array().min(1, 'Order must have at least one Order Line'),
   atLeastOneFilled: string().test(
     'at-least-one-filled',
     'At least one of Order Number, Request Number or Contract Number must be filled',
