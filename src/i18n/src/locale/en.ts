@@ -250,7 +250,7 @@ export const messages = {
         requestor: { label: 'Requestor', placeholder: '...type here' }
       }
     },
-    deleteModal: { title: 'Warning', message: 'Are you sure you want to delete {orderName}?' },
+    deleteModal: { title: 'Warning', message: 'Are you sure you want to delete {name}?' },
     ordelineMissingModal: {
       title: 'Warning',
       message: 'Order lines is missing are you sure you want to continue?'

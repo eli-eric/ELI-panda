@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Fragment, useMemo, useState } from 'react'
+import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 import type { CellProps } from 'react-table'
 import { type Column } from 'react-table'
@@ -43,6 +44,13 @@ const Name = ({
     onSuccess: () => {
       setOpenDeleteWarn(false)
       catalogueItems && mutate({ ...catalogueItems, data: catalogueItems?.data.filter(item => item.uid !== uid) })
+    },
+    onError: e => {
+      if (e?.response?.status === 409) {
+        toast.error(`Can't delete ${value}, it is binded in another items.`)
+      } else {
+        toast.error(`Error deleting ${value}.`)
+      }
     }
   })
 
@@ -83,8 +91,8 @@ const Name = ({
         open={openDeleteWarn}
         setOpen={setOpenDeleteWarn}
         title={modalMessage.title}
-        message={formatMessage({ id: modalMessage.message }, createMessageValues({ orderName: name }))}
-        testid="OrderDeleteModal"
+        message={formatMessage({ id: modalMessage.message }, createMessageValues({ name: value }))}
+        testid="CatalogueDeleteModal"
         error={deleteSubmit.error}
       />
     </div>
