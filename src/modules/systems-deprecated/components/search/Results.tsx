@@ -6,8 +6,8 @@ import useSWR from 'swr'
 
 import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useGeneralTable from '@/hooks/table/useGeneralTable'
-import usePagination from '@/hooks/table/usePagination'
+import useGeneralTable from '@/hooks/table/useGeneralTable-deprecated'
+import usePagination from '@/hooks/table/usePagination-deprecated'
 import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
 

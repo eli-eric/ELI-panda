@@ -21,6 +21,6 @@ export type SystemDetail = {
 }
 
 export type SystemListResponse = {
-  data: SystemDetailResponse[]
+  data: SystemDetail[]
   totalCount: number
 }

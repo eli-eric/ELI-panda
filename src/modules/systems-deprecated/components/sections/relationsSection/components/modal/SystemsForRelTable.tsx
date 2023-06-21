@@ -4,10 +4,10 @@ import useSWR from 'swr'
 
 import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import usePagination from '@/hooks/table/usePagination'
+import usePagination from '@/hooks/table/usePagination-deprecated'
 import useTable from '@/hooks/useTable'
-import type { RELATION_TYPE_CODE } from '@/modules/systems/types/constants'
-import type { SystemDetailResponse, SystemsForRelResponse } from '@/modules/systems/types/responses'
+import type { RELATION_TYPE_CODE } from '@/modules/systems-deprecated/types/constants'
+import type { SystemDetailResponse, SystemsForRelResponse } from '@/modules/systems-deprecated/types/responses'
 
 import type { SelectedSystemForRel } from './SelectRelation'
 

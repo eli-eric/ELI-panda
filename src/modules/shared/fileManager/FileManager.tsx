@@ -9,7 +9,7 @@ import Heading from '@/components/layout/Heading'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import executeRequest from '@/helpers/executeRequest'
 import { uniFetcher } from '@/helpers/fetcher'
-import useGeneralTable from '@/hooks/table/useGeneralTable'
+import useGeneralTable from '@/hooks/table/useGeneralTable-deprecated'
 import { message } from '@/i18n/src/messages'
 import type { FILE_TYPE } from '@/types/constants/files'
 

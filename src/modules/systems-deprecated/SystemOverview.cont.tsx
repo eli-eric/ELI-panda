@@ -9,7 +9,7 @@ import EmptySectionComponent from '@/components/empty-section/empty-section.comp
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import { useSearch } from '@/hooks/table/useSearch'
+import { useSearch } from '@/hooks/table/useSearch-deprecated'
 import FileManager from '@/modules/shared/fileManager/FileManager'
 import { FILE_TYPE } from '@/types/constants/files'
 

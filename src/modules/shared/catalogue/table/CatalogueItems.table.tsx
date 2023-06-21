@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import type { Column } from 'react-table'
 
-import useGeneralTable from '@/hooks/table/useGeneralTable'
-import usePagination from '@/hooks/table/usePagination'
+import useGeneralTable from '@/hooks/table/useGeneralTable-deprecated'
+import usePagination from '@/hooks/table/usePagination-deprecated'
 import useCatalogueItems from '@/modules/catalogue/hooks/useCatalogueItems'
 import useCategoryList from '@/modules/catalogue/hooks/useCategoryList'
 import type { CatalogueItem } from '@/types/responses'

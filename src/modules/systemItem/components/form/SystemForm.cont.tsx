@@ -11,7 +11,7 @@ import HeaderComponent from '../Header.comp'
 import SystemFormComponent from './SystemForm.comp'
 import { schema } from './SystemForm.schema'
 
-const useSystemForm = () => {
+const SystemForm = () => {
   const { submit, loadingSubmit } = useSystemSubmit()
   const { systemDetail } = useSystemDetail()
 
@@ -27,7 +27,7 @@ const useSystemForm = () => {
   useFormNotification<SystemDetailFormType>({ control })
   const FormWarningModal = useFormLeaveWarning({ formState })
 
-  const renderForm = () => (
+  return (
     <form onSubmit={handleSubmit(submit)}>
       <FormProvider {...formMethods}>
         <HeaderComponent loading={loadingSubmit} />
@@ -38,8 +38,6 @@ const useSystemForm = () => {
       <FormWarningModal />
     </form>
   )
-
-  return { renderForm }
 }
 
-export default useSystemForm
+export default SystemForm

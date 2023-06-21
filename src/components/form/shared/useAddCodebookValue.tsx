@@ -19,7 +19,7 @@ const useAddCodebookValue = (codebook?: CodeBookMetaData) => {
       toast.error(err.response?.status ? 'Codebook value already exists' : err.message)
     }
   })
-  const { formMethods, getFormModal, setOpen } = useFormModal<{ name: string }>({
+  const { getFormModal, setOpen } = useFormModal<{ name: string }>({
     renderForm: () => <Input name="name" label="Codebook Value" rounded="rounded-md" />,
     onSubmit: data => {
       submit({ name: data.name })

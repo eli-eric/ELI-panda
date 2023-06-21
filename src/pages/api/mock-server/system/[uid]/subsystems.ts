@@ -7,7 +7,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 const range = (len: number) => {
   const arr = []
   for (let i = 0; i < len; i++) {
-    arr.push(i)
+    arr.push(i as never)
   }
   return arr
 }
@@ -58,8 +58,8 @@ function makeData(...lens: number[]) {
 
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.method === 'GET') {
-    const systems = makeData(5)
-    const timeout = faker.datatype.number({ min: 50, max: 200 })
+    const systems = makeData(30)
+    const timeout = faker.datatype.number({ min: 0, max: 0 })
     const timer = setTimeout(() => {
       res.status(200).json(systems)
     }, timeout)

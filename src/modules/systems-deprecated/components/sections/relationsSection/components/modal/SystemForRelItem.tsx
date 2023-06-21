@@ -2,7 +2,7 @@ import type { Dispatch, SetStateAction } from 'react'
 
 import TableRowComponent from '@/components/table/TableRow.comp'
 import { TableRowItem } from '@/components/table/TableRowItem.comp'
-import type { SystemDetailResponse } from '@/modules/systems/types/responses'
+import type { SystemDetailResponse } from '@/modules/systems-deprecated/types'
 
 import type { SelectedSystemForRel } from './SelectRelation'
 

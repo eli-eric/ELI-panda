@@ -3,8 +3,8 @@ import { useMemo } from 'react'
 import type { CellProps, Column } from 'react-table'
 
 import { DeleteButton } from '@/components/Buttons'
-import useGeneralTable from '@/hooks/table/useGeneralTable'
-import type { SystemRelationshipResponse } from '@/modules/systems/types/responses'
+import useGeneralTable from '@/hooks/table/useGeneralTable-deprecated'
+import type { SystemRelationshipResponse } from '@/modules/systems-deprecated/types/responses'
 
 interface Props {
   relations: SystemRelationshipResponse[]
