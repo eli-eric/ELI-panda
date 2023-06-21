@@ -6,8 +6,11 @@ import usePermission from '@/hooks/usePermission'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
+import useCatalogueItems from '../hooks/useCatalogueItems'
+
 const SearchBarButtons = () => {
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
+  const { mutate } = useCatalogueItems()
 
   const router = useRouter()
 
@@ -16,7 +19,7 @@ const SearchBarButtons = () => {
       <Button
         className="mr-1"
         onClick={() => {
-          //mutateCatlogueItems()
+          mutate()
         }}
       >
         <ArrowPathIcon className="h-5 w-5" aria-hidden="true" />
