@@ -6,10 +6,13 @@ import type { FileItem, ProcessedFile } from 'src/modules/shared/fileManager/typ
 import type { FILE_TYPE } from 'src/types/constants/files'
 import { mutate } from 'swr'
 
-export type Config = {
+import ImageGallery from '@/components/ImageGallery'
+
+type Config = {
   itemCategory: FILE_TYPE
-  itemId?: string
+  itemId: string
   fileCategory?: string
+  suspense?: boolean
 }
 
 const getEndpoint = (
@@ -113,7 +116,18 @@ function useImageGallery(config: Config) {
 
   const hasChanges = dueUpload.length + dueDelete.length > 0
 
-  return { endpoint, handleDelete, onDrop, discard, submit, hasChanges }
+  const Gallery = (props: { hasEditRole?: boolean; width?: number; height?: number; className?: string }) => (
+    <ImageGallery
+      endpoint={endpoint}
+      discard={discard}
+      onDrop={onDrop}
+      handleDelete={handleDelete}
+      hasChanges={hasChanges}
+      {...props}
+    />
+  )
+
+  return { endpoint, handleDelete, onDrop, discard, submit, hasChanges, Gallery }
 }
 
 export default useImageGallery
