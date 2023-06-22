@@ -83,7 +83,7 @@ const useSystemEditFormFields = () => {
     // },
     criticalityClassUID: {
       name: 'criticalityClassUID',
-      label: form.criticalityClassUID.label,
+      label: form.criticalityClass.label,
       rounded: 'rounded-md',
       options: criticalityOption && [getDefaultOption('none'), ...criticalityOption]
     }

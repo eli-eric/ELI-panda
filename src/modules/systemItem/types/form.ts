@@ -4,7 +4,9 @@ import type { CodebookType } from '@/hooks/fetch/useCodebook'
 
 export interface SystemDetailFormType extends FieldValues {
   name: string
-  parentUID?: string // @TODO
+  parent?: string // @TODO
+  parentPath?: CodebookType[]
+
   description?: string
   systemType?: CodebookType
   systemCode?: string

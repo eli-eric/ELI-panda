@@ -33,7 +33,7 @@ const useSystemEditFormFields = () => {
     },
     systemTypeUID: {
       name: 'systemTypeUID',
-      label: form.systemTypeUID.label,
+      label: form.systemType.label,
       rounded: 'rounded-md',
       options: systemTypeOption && [getDefaultOption('none'), ...systemTypeOption]
     },
@@ -52,33 +52,33 @@ const useSystemEditFormFields = () => {
     },
     locationUID: {
       name: 'locationUID',
-      label: form.locationUID.label,
-      placeholder: form.locationUID.placeholder,
+      label: form.location.label,
+      placeholder: form.location.placeholder,
       rounded: 'rounded-md',
       codebook: CODEBOOK.LOCATION
     },
     ownerUID: {
       name: 'ownerUID',
-      label: form.ownerUID.label,
-      placeholder: form.ownerUID.placeholder,
+      label: form.owner.label,
+      placeholder: form.owner.placeholder,
       rounded: 'rounded-md',
       codebook: CODEBOOK.USER
     },
     importanceUID: {
       name: 'importanceUID',
-      label: form.importanceUID.label,
+      label: form.importance.label,
       rounded: 'rounded-md',
       options: importanceOption && [getDefaultOption('none'), ...importanceOption]
     },
     zoneUID: {
       name: 'zoneUID',
-      label: form.zoneUID.label,
+      label: form.zone.label,
       rounded: 'rounded-md',
       options: zoneOption && [getDefaultOption('none'), ...zoneOption]
     },
     criticalityClassUID: {
       name: 'criticalityClassUID',
-      label: form.criticalityClassUID.label,
+      label: form.criticalityClass.label,
       rounded: 'rounded-md',
       options: criticalityOption && [getDefaultOption('none'), ...criticalityOption]
     },

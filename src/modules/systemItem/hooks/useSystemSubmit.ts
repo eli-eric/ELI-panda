@@ -8,7 +8,12 @@ import { PATH } from '@/types/constants/paths'
 
 import useSystemDetail from './useSystemDetail'
 
-export const useSystemSubmit = () => {
+type ItemSubmitConfig = {
+  onSuccess?: Function
+  onError?: Function
+}
+
+export const useSystemSubmit = (config: ItemSubmitConfig) => {
   const router = useRouter()
   const uid = router.query.uid as string
   const { system: systemEndpoint } = useEndpoint({ uid })
@@ -21,6 +26,7 @@ export const useSystemSubmit = () => {
     onSuccess: uid => {
       toast.success(`System ${uid} saved successfully`)
       router.push(uid ? PATH.SYSTEM + '/' + uid : PATH.SYSTEMS)
+      config.onSuccess && config.onSuccess(uid)
       mutate()
       mutateDetail()
     },

@@ -32,7 +32,7 @@ const CatalogueItemContainer = () => {
     discard,
     hasChanges,
     submit: saveImages,
-    Gallery: ImageGallery
+    renderGallery
   } = useImageGallery({
     itemCategory: FILE_TYPE.CATALOGUE,
     itemId: String(queryUID)
@@ -69,7 +69,7 @@ const CatalogueItemContainer = () => {
         <Card className="flex flex-col justify-between pb-5">
           <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
             <div className="relative h-full">
-              <ImageGallery className="lg:absolute lg:inset-0 pt-6 pl-6" hasEditRole={true} />
+              {renderGallery({ className: 'lg:absolute lg:inset-0 pt-6 pl-6', hasEditRole: true })}
             </div>
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 col-span-2">
               <DefaultItemForm />

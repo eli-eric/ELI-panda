@@ -15,10 +15,9 @@ const useSystemDetail = () => {
   const { response, loading, error, mutate } = useFetch<SystemDetailFormType>({
     url: uid && systemEndpoint,
     config: {
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
-      revalidateOnMount: true,
-      revalidateIfStale: true
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      revalidateOnMount: true
     },
     useMockFetcher: true
   })

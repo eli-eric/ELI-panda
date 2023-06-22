@@ -116,7 +116,7 @@ function useImageGallery(config: Config) {
 
   const hasChanges = dueUpload.length + dueDelete.length > 0
 
-  const Gallery = (props: { hasEditRole?: boolean; width?: number; height?: number; className?: string }) => (
+  const renderGallery = (props: { hasEditRole?: boolean; width?: number; height?: number; className?: string }) => (
     <ImageGallery
       endpoint={endpoint}
       discard={discard}
@@ -127,7 +127,7 @@ function useImageGallery(config: Config) {
     />
   )
 
-  return { endpoint, handleDelete, onDrop, discard, submit, hasChanges, Gallery }
+  return { endpoint, handleDelete, onDrop, discard, submit, hasChanges, renderGallery }
 }
 
 export default useImageGallery

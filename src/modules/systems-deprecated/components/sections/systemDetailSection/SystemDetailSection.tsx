@@ -20,13 +20,13 @@ const SystemDetailSection = ({ data }: { data: SystemDetailResponse }) => {
   return (
     <Fragment>
       <ItemDetailComponent title={data.name} images={[image]} description={data?.description}>
-        <ItemProperty title={messages.systemTypeUID.label} text={data.systemType?.name} />
+        <ItemProperty title={messages.systemType.label} text={data.systemType?.name} />
         <ItemProperty title={messages.systemCode.label} text={data.systemCode} />
         <ItemProperty title={messages.systemAlias.label} text={data.systemAlias} />
-        <ItemProperty title={messages.locationUID.label} text={data.location?.name} />
-        <ItemProperty title={messages.ownerUID.label} text={data.owner?.name} />
-        <ItemProperty title={messages.importanceUID.label} text={data.importance?.name} />
-        <ItemProperty title={messages.zoneUID.label} text={data.zone?.name} />
+        <ItemProperty title={messages.location.label} text={data.location?.name} />
+        <ItemProperty title={messages.owner.label} text={data.owner?.name} />
+        <ItemProperty title={messages.importance.label} text={data.importance?.name} />
+        <ItemProperty title={messages.zone.label} text={data.zone?.name} />
       </ItemDetailComponent>
     </Fragment>
   )

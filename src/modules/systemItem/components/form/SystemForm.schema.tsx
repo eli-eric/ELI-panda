@@ -6,6 +6,7 @@ export const schema = object({
   systemType: object().nullable(),
   systemCode: string().nullable(),
   systemAlias: string().nullable(),
+  responsiblePerson: object().nullable(),
   location: object().nullable(),
   owner: object().nullable(),
   importance: object().nullable(),

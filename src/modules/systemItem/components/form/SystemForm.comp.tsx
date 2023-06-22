@@ -13,7 +13,16 @@ import useSystemFormFields from './SystemForm.fields'
 
 const systemFormMessages = message.systemsPage.systemDetail.form
 
-const SystemFormComponent = () => {
+interface SystemFormComponentProps {
+  renderGallery: (props: {
+    hasEditRole?: boolean | undefined
+    width?: number | undefined
+    height?: number | undefined
+    className?: string | undefined
+  }) => JSX.Element
+}
+
+const SystemFormComponent = ({ renderGallery }: SystemFormComponentProps) => {
   const fields = useSystemFormFields()
   const uid = useRouter().query.uid as string
   const { disabledEdit } = useSystemDetail()
@@ -25,7 +34,7 @@ const SystemFormComponent = () => {
           <h1 className="text-2xl justify-center font-semibold text-gray-900">{uid ? 'EDIT SYSTEM' : 'NEW SYSTEM'}</h1>
         </Col>
         <Col sm={3} md={2} lg={4} className="md:pr-4">
-          <p className="w-full bg-red-500">@TODO: New image component</p>
+          {renderGallery({ className: 'w-full', hasEditRole: true })}
         </Col>
         <Col sm={3} md={4} lg={8} className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-x-2 gap-y-4 mb-auto">
           <Col sm={3} md={4} lg={8}>
@@ -34,18 +43,24 @@ const SystemFormComponent = () => {
           <Col sm={3} md={4}>
             <Combobox
               name="owner"
-              label={systemFormMessages.ownerUID.label}
-              codebook={CODEBOOK.USER}
+              label={systemFormMessages.owner.label}
+              codebook={CODEBOOK.EMPLOYEE}
               disabled={disabledEdit}
             />
           </Col>
           <Col sm={3} md={4}>
-            <p className="w-full h-full bg-red-500">@TODO: Parent(UID)</p>
+            <Combobox
+              name="responsiblePerson"
+              label={systemFormMessages.responsiblePerson.label}
+              codebook={CODEBOOK.EMPLOYEE}
+              disabled={disabledEdit}
+            />
           </Col>
+
           <Col sm={3} md={4} lg={8}>
             <Listbox
               name="importance"
-              label={systemFormMessages.importanceUID.label}
+              label={systemFormMessages.importance.label}
               codebook={CODEBOOK.SYSTEM_IMPORTANCE}
               className="col-span-3 md:col-span-4 lg:col-span-8"
               disabled={disabledEdit}
@@ -55,23 +70,18 @@ const SystemFormComponent = () => {
         <Col sm={3} md={6}>
           <Combobox
             name="location"
-            label={systemFormMessages.locationUID.label}
+            label={systemFormMessages.location.label}
             codebook={CODEBOOK.LOCATION}
             disabled={disabledEdit}
           />
         </Col>
         <Col sm={3} md={6}>
-          <Listbox
-            name="zone"
-            label={systemFormMessages.zoneUID.label}
-            codebook={CODEBOOK.ZONE}
-            disabled={disabledEdit}
-          />
+          <Listbox name="zone" label={systemFormMessages.zone.label} codebook={CODEBOOK.ZONE} disabled={disabledEdit} />
         </Col>
         <Col sm={3} md={6}>
           <Listbox
             name="systemType"
-            label={systemFormMessages.systemTypeUID.label}
+            label={systemFormMessages.systemType.label}
             codebook={CODEBOOK.SYSTEM_TYPE}
             disabled={disabledEdit}
           />

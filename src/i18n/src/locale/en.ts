@@ -110,15 +110,16 @@ export const messages = {
       form: {
         name: { label: 'Name', placeholder: 'Name' },
         description: { label: 'Description', placeholder: 'Description' },
-        systemTypeUID: { label: 'System Type' }, // system types codebook - SYSTEM_TYPE
+        systemType: { label: 'System Type' }, // system types codebook - SYSTEM_TYPE
         systemCode: { label: 'System Code', placeholder: 'System Code' },
         systemAlias: { label: 'System Alias', placeholder: 'System Alias' },
-        locationUID: { label: 'Location', placeholder: 'Type here...' }, // locations codebook - LOCATION
-        ownerUID: { label: 'Owner', placeholder: 'Type here...' }, // codebook of users{uid, name},  - USER
-        importanceUID: { label: 'Importance' }, // codebook of importance - SYSTEM_IMPORTANCE
-        zoneUID: { label: 'Zone' }, // codebook of zones - ZONE
+        location: { label: 'Location', placeholder: 'Type here...' }, // locations codebook - LOCATION
+        owner: { label: 'Owner', placeholder: 'Type here...' }, // codebook of users{uid, name},  - USER
+        responsiblePerson: { label: 'Responsible Person', placeholder: 'Responsible Person' },
+        importance: { label: 'Importance' }, // codebook of importance - SYSTEM_IMPORTANCE
+        zone: { label: 'Zone' }, // codebook of zones - ZONE
         subZone: { label: 'Sub Zone' }, // codebook of subzones depend on selected zone SUB_ZONE (parentUID=ZONE.uid)
-        criticalityClassUID: { label: 'Criticality Class' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
+        criticalityClass: { label: 'Criticality Class' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
         parentUID: { label: 'ParentUID' } // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
       }
     },
