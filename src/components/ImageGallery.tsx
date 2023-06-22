@@ -1,6 +1,6 @@
 import { Tab } from '@headlessui/react'
 import Image from 'next/image'
-import { Fragment } from 'react'
+import { forwardRef, Fragment, useImperativeHandle } from 'react'
 import { useDropzone } from 'react-dropzone'
 import type { FileItem } from 'src/modules/shared/fileManager/types'
 import useSWR from 'swr'
@@ -8,6 +8,8 @@ import useSWR from 'swr'
 import { DeleteButton, PlusButton } from '@/components/Buttons'
 import { classNames } from '@/helpers'
 import { uniFetcher } from '@/helpers/fetcher'
+import type { Config } from '@/hooks/useImageGallery'
+import useImageGallery from '@/hooks/useImageGallery'
 import useWarningModal from '@/hooks/useWarningModal'
 
 const fallbackImage: FileItem = {
@@ -16,27 +18,32 @@ const fallbackImage: FileItem = {
   url: '/no-image.png'
 }
 
-type GalleryProps = {
-  endpoint: string
-  handleDelete?: (arg0: FileItem) => void
-  onDrop?: (arg0: File[]) => void
-  hasEditRole?: boolean
-  width?: number
-  height?: number
-  discard?: () => void
-  hasChanges?: boolean
-  className?: string
-  suspense?: boolean
+export type ImageGalleryRef = {
+  discard: () => void
+  submit: (id: string) => void
+  hasChanges: boolean
 }
 
-const ImageGallery = (props: GalleryProps) => {
-  const { suspense, handleDelete, onDrop, hasEditRole, endpoint, width = 400, height = 400 } = props
+type GalleryProps = {
+  hasEditRole?: boolean
+  className?: string
+  config: Config
+}
 
-  const { data, isLoading } = useSWR<FileItem[]>(endpoint, uniFetcher, { suspense })
+export const ImageGallery = forwardRef(({ hasEditRole, className, config }: GalleryProps, ref) => {
+  const { handleDelete, onDrop, endpoint, discard, submit, hasChanges } = useImageGallery(config)
+
+  useImperativeHandle(ref, () => ({
+    discard,
+    submit,
+    hasChanges
+  }))
+
+  const { data, isLoading } = useSWR<FileItem[]>(endpoint, uniFetcher, { suspense: false })
 
   const withWarnModal = useWarningModal()
 
-  const canEdit = hasEditRole && handleDelete && onDrop
+  const canEdit = hasEditRole
 
   const { open, getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -51,7 +58,7 @@ const ImageGallery = (props: GalleryProps) => {
     <Fragment>
       {isLoading ? (
         /* pulsing placeholder */
-        <div className={classNames('flex flex-col rounded-md', props.className)}>
+        <div className={classNames('flex flex-col rounded-md', className)}>
           <div className="flex rounded-md border border-t-0 border-gray-200">
             <div className="w-full h-[270px] bg-gray-100 animate-pulse" />
           </div>
@@ -59,11 +66,7 @@ const ImageGallery = (props: GalleryProps) => {
       ) : (
         <div
           {...getRootProps()}
-          className={classNames(
-            'flex flex-col rounded-md',
-            isDragActive && 'border-2 border-orange-600',
-            props.className
-          )}
+          className={classNames('flex flex-col rounded-md', isDragActive && 'border-2 border-orange-600', className)}
         >
           <Tab.Group key={JSON.stringify(data)}>
             {({ selectedIndex }) => (
@@ -111,8 +114,8 @@ const ImageGallery = (props: GalleryProps) => {
                   {(data && data.length > 0 ? data : [fallbackImage]).map(obj => (
                     <Tab.Panel key={obj.id} className="flex">
                       <Image
-                        width={width}
-                        height={height}
+                        width={400}
+                        height={400}
                         className="object-contain rounded-b-md"
                         src={obj.url}
                         alt={obj.name}
@@ -128,6 +131,6 @@ const ImageGallery = (props: GalleryProps) => {
       )}
     </Fragment>
   )
-}
+})
 
-export default ImageGallery
+ImageGallery.displayName = 'ImageGallery'

@@ -1,14 +1,15 @@
 import { DevTool } from '@hookform/devtools'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormProvider } from 'react-hook-form'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TextArea } from '@/components/form/Input'
+import type { ImageGalleryRef } from '@/components/ImageGallery'
+import { ImageGallery } from '@/components/ImageGallery'
 import Card from '@/components/layout/Card'
-import useImageGallery from '@/hooks/useImageGallery'
 import usePermission from '@/hooks/usePermission'
 import { FILE_TYPE } from '@/types/constants/files'
 import { PATH } from '@/types/constants/paths'
@@ -27,19 +28,13 @@ const CatalogueItemContainer = () => {
   const queryUID = query.uid as string | undefined
   const disabledEdit = !usePermission([ROLE.CATALOGUE_EDIT])
 
-  const {
-    discard,
-    hasChanges,
-    submit: saveImages,
-    Gallery: ImageGallery
-  } = useImageGallery({
-    itemCategory: FILE_TYPE.CATALOGUE,
-    itemId: String(queryUID)
-  })
-  const { FormWarningModal, ...formMethods } = useItemForm({ onWarnConfirm: discard })
+  const imageGalleryRef = useRef<ImageGalleryRef>()
+  const { current: gallery } = imageGalleryRef
+
+  const { FormWarningModal, ...formMethods } = useItemForm({ onWarnConfirm: gallery?.discard })
 
   const saveImageAndRedirect = async (uid: string) => {
-    await saveImages(uid)
+    await gallery?.submit(uid)
     if (queryUID) {
       back()
     } else {
@@ -49,10 +44,10 @@ const CatalogueItemContainer = () => {
 
   const { setValue } = formMethods
   useEffect(() => {
-    setValue('hasImageGalleryChanges', hasChanges, { shouldDirty: hasChanges })
-  }, [hasChanges, setValue])
+    setValue('hasImageGalleryChanges', gallery?.hasChanges || false, { shouldDirty: gallery?.hasChanges })
+  }, [gallery, setValue])
 
-  const { submit, loading } = useItemSubmit({ onError: discard, onSuccess: saveImageAndRedirect })
+  const { submit, loading } = useItemSubmit({ onError: gallery?.discard, onSuccess: saveImageAndRedirect })
 
   const onSubmit = (data: any) => {
     // extract from data hasImageGalleryChanges
@@ -68,7 +63,15 @@ const CatalogueItemContainer = () => {
         <Card className="flex flex-col justify-between pb-5">
           <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
             <div className="relative h-full">
-              <ImageGallery className="lg:absolute lg:inset-0 pt-6 pl-6" hasEditRole={true} />
+              <ImageGallery
+                ref={imageGalleryRef}
+                className="lg:absolute lg:inset-0 pt-6 pl-6"
+                hasEditRole={true}
+                config={{
+                  itemCategory: FILE_TYPE.CATALOGUE,
+                  itemId: String(queryUID)
+                }}
+              />
             </div>
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 col-span-2">
               <DefaultItemForm />
