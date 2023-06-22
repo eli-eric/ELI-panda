@@ -5,6 +5,7 @@ import type { FileItem } from 'src/modules/shared/fileManager/types'
 import useSWR from 'swr'
 
 import { DeleteButton, PlusButton } from '@/components/Buttons'
+import ProgressBarComponent from '@/components/progress-bar.comp'
 import { classNames } from '@/helpers'
 import { uniFetcher } from '@/helpers/fetcher'
 import useWarningModal from '@/hooks/useWarningModal'
@@ -31,7 +32,7 @@ type GalleryProps = {
 const ImageGallery = (props: GalleryProps) => {
   const { suspense, handleDelete, onDrop, hasEditRole, endpoint, width = 400, height = 400 } = props
 
-  const { data } = useSWR<FileItem[]>(endpoint, uniFetcher, { suspense })
+  const { data, isLoading } = useSWR<FileItem[]>(endpoint, uniFetcher, { suspense })
 
   const withWarnModal = useWarningModal()
 
@@ -90,21 +91,24 @@ const ImageGallery = (props: GalleryProps) => {
                 </div>
               )}
             </Tab.List>
-
-            <Tab.Panels {...getRootProps()} className="h-full flex rounded-b-md border border-t-0 border-gray-300">
-              {(data && data.length > 0 ? data : [fallbackImage]).map(obj => (
-                <Tab.Panel key={obj.id} className="flex">
-                  <Image
-                    width={width}
-                    height={height}
-                    className="object-contain rounded-b-md"
-                    src={obj.url}
-                    alt={obj.name}
-                    unoptimized
-                  />
-                </Tab.Panel>
-              ))}
-            </Tab.Panels>
+            {isLoading ? (
+              <ProgressBarComponent />
+            ) : (
+              <Tab.Panels {...getRootProps()} className="h-full flex rounded-b-md border border-t-0 border-gray-300">
+                {(data && data.length > 0 ? data : [fallbackImage]).map(obj => (
+                  <Tab.Panel key={obj.id} className="flex">
+                    <Image
+                      width={width}
+                      height={height}
+                      className="object-contain rounded-b-md"
+                      src={obj.url}
+                      alt={obj.name}
+                      unoptimized
+                    />
+                  </Tab.Panel>
+                ))}
+              </Tab.Panels>
+            )}
           </>
         )}
       </Tab.Group>
