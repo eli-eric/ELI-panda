@@ -8,7 +8,7 @@ import { mutate } from 'swr'
 
 export type Config = {
   itemCategory: FILE_TYPE
-  itemId: string
+  itemId?: string
   fileCategory?: string
 }
 

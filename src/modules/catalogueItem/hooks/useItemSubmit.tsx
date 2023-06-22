@@ -1,29 +1,31 @@
 import { useRouter } from 'next/router'
 import { toast } from 'react-hot-toast'
 
+import type { ImageGalleryRef } from '@/components/ImageGallery'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useSubmit from '@/hooks/fetch/useSubmit'
+import { PATH } from '@/types/constants/paths'
 
-type ItemSubmitConfig = {
-  onSuccess?: Function
-  onError?: Function
-}
-
-const useItemSubmit = (config: ItemSubmitConfig) => {
-  const uid = useRouter().query.uid as string | undefined
+const useItemSubmit = (gallery?: ImageGalleryRef) => {
+  const { back, replace, query } = useRouter()
+  const uid = query.uid as string | undefined
   const { catalogueItem } = useEndpoint({ uid: uid })
 
-  const { response, submit, loading } = useSubmit({
+  const { response, submit, loading } = useSubmit<string>({
     endpoint: catalogueItem,
     method: uid ? 'put' : 'post',
     mutateList: [catalogueItem],
-    onSuccess: response => {
+    onSuccess: async response => {
       toast.success('Item saved')
-      config.onSuccess && config.onSuccess(response)
+      await gallery?.submit(uid || response)
+      if (uid) {
+        back()
+      } else {
+        replace(PATH.CATALOGUE_ITEM + '/' + uid)
+      }
     },
     onError: response => {
       toast.error('Error saving item')
-      config.onError && config.onError(response)
     }
   })
 

@@ -1,6 +1,6 @@
 import { DevTool } from '@hookform/devtools'
 import { useRouter } from 'next/router'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormProvider } from 'react-hook-form'
@@ -12,7 +12,6 @@ import { ImageGallery } from '@/components/ImageGallery'
 import Card from '@/components/layout/Card'
 import usePermission from '@/hooks/usePermission'
 import { FILE_TYPE } from '@/types/constants/files'
-import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
 import FileManager from '../shared/fileManager/FileManager'
@@ -24,30 +23,16 @@ import useItemSubmit from './hooks/useItemSubmit'
 import type { CatalogueItem } from './types/responses'
 
 const CatalogueItemContainer = () => {
-  const { query, replace, back } = useRouter()
+  const { query } = useRouter()
   const queryUID = query.uid as string | undefined
   const disabledEdit = !usePermission([ROLE.CATALOGUE_EDIT])
 
   const imageGalleryRef = useRef<ImageGalleryRef>()
   const { current: gallery } = imageGalleryRef
 
-  const { FormWarningModal, ...formMethods } = useItemForm({ onWarnConfirm: gallery?.discard })
+  const { FormWarningModal, ...formMethods } = useItemForm(gallery)
 
-  const saveImageAndRedirect = async (uid: string) => {
-    await gallery?.submit(uid)
-    if (queryUID) {
-      back()
-    } else {
-      replace(PATH.CATALOGUE_ITEM + '/' + uid)
-    }
-  }
-
-  const { setValue } = formMethods
-  useEffect(() => {
-    setValue('hasImageGalleryChanges', gallery?.hasChanges || false, { shouldDirty: gallery?.hasChanges })
-  }, [gallery, setValue])
-
-  const { submit, loading } = useItemSubmit({ onError: gallery?.discard, onSuccess: saveImageAndRedirect })
+  const { submit, loading } = useItemSubmit(gallery)
 
   const onSubmit = (data: any) => {
     // extract from data hasImageGalleryChanges
@@ -69,7 +54,7 @@ const CatalogueItemContainer = () => {
                 hasEditRole={true}
                 config={{
                   itemCategory: FILE_TYPE.CATALOGUE,
-                  itemId: String(queryUID)
+                  itemId: queryUID
                 }}
               />
             </div>
