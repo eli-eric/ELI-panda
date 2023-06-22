@@ -1,11 +1,11 @@
 import { Tab } from '@headlessui/react'
 import Image from 'next/image'
+import { Fragment } from 'react'
 import { useDropzone } from 'react-dropzone'
 import type { FileItem } from 'src/modules/shared/fileManager/types'
 import useSWR from 'swr'
 
 import { DeleteButton, PlusButton } from '@/components/Buttons'
-import ProgressBarComponent from '@/components/progress-bar.comp'
 import { classNames } from '@/helpers'
 import { uniFetcher } from '@/helpers/fetcher'
 import useWarningModal from '@/hooks/useWarningModal'
@@ -48,71 +48,85 @@ const ImageGallery = (props: GalleryProps) => {
   })
 
   return (
-    <div
-      {...getRootProps()}
-      className={classNames('flex flex-col rounded-md', isDragActive && 'border-2 border-orange-600', props.className)}
-    >
-      <Tab.Group key={JSON.stringify(data)}>
-        {({ selectedIndex }) => (
-          <>
-            <Tab.List className={`rounded-t-md border border-gray-300 flex gap-1 justify-between`}>
-              {canEdit && (
-                <div>
-                  <input {...getInputProps()} />
-                  <PlusButton
-                    type="button"
-                    onClick={open}
-                    className="h-full flex border-0 border-r rounded-none rounded-tl-md"
-                  />
-                </div>
-              )}
+    <Fragment>
+      {isLoading ? (
+        /* pulsing placeholder */
+        <div className={classNames('flex flex-col rounded-md', props.className)}>
+          <div className="flex rounded-md border border-t-0 border-gray-200">
+            <div className="w-full h-[270px] bg-gray-100 animate-pulse" />
+          </div>
+        </div>
+      ) : (
+        <div
+          {...getRootProps()}
+          className={classNames(
+            'flex flex-col rounded-md',
+            isDragActive && 'border-2 border-orange-600',
+            props.className
+          )}
+        >
+          <Tab.Group key={JSON.stringify(data)}>
+            {({ selectedIndex }) => (
+              <>
+                <Tab.List className={`rounded-t-md border border-gray-300 flex gap-1 justify-between`}>
+                  {canEdit && (
+                    <div>
+                      <input {...getInputProps()} />
+                      <PlusButton
+                        type="button"
+                        onClick={open}
+                        className="h-full flex border-0 border-r rounded-none rounded-tl-md"
+                      />
+                    </div>
+                  )}
 
-              <div className="flex flex-wrap w-full justify-center">
-                {data?.map(obj => (
-                  <Tab key={obj.id}>
-                    {({ selected }) => <span className={`px-1 ${selected && 'text-orange-600'} text-sm`}>&bull;</span>}
-                  </Tab>
-                ))}
-              </div>
+                  <div className="flex flex-wrap w-full justify-center">
+                    {data?.map(obj => (
+                      <Tab key={obj.id}>
+                        {({ selected }) => (
+                          <span className={`px-1 ${selected && 'text-orange-600'} text-sm`}>&bull;</span>
+                        )}
+                      </Tab>
+                    ))}
+                  </div>
 
-              {canEdit && (
-                <div>
-                  <DeleteButton
-                    type="button"
-                    onClick={() =>
-                      withWarnModal(
-                        handleDelete,
-                        `Are you sure you want to delete ${(data ?? [])[selectedIndex]?.name}?`
-                      )((data ?? [])[selectedIndex])
-                    }
-                    className="flex border-0 border-l rounded-none rounded-tr-md"
-                    disabled={!data || data.length === 0}
-                  />
-                </div>
-              )}
-            </Tab.List>
-            {isLoading ? (
-              <ProgressBarComponent />
-            ) : (
-              <Tab.Panels {...getRootProps()} className="h-full flex rounded-b-md border border-t-0 border-gray-300">
-                {(data && data.length > 0 ? data : [fallbackImage]).map(obj => (
-                  <Tab.Panel key={obj.id} className="flex">
-                    <Image
-                      width={width}
-                      height={height}
-                      className="object-contain rounded-b-md"
-                      src={obj.url}
-                      alt={obj.name}
-                      unoptimized
-                    />
-                  </Tab.Panel>
-                ))}
-              </Tab.Panels>
+                  {canEdit && (
+                    <div>
+                      <DeleteButton
+                        type="button"
+                        onClick={() =>
+                          withWarnModal(
+                            handleDelete,
+                            `Are you sure you want to delete ${(data ?? [])[selectedIndex]?.name}?`
+                          )((data ?? [])[selectedIndex])
+                        }
+                        className="flex border-0 border-l rounded-none rounded-tr-md"
+                        disabled={!data || data.length === 0}
+                      />
+                    </div>
+                  )}
+                </Tab.List>
+
+                <Tab.Panels {...getRootProps()} className="h-full flex rounded-b-md border border-t-0 border-gray-300">
+                  {(data && data.length > 0 ? data : [fallbackImage]).map(obj => (
+                    <Tab.Panel key={obj.id} className="flex">
+                      <Image
+                        width={width}
+                        height={height}
+                        className="object-contain rounded-b-md"
+                        src={obj.url}
+                        alt={obj.name}
+                        unoptimized
+                      />
+                    </Tab.Panel>
+                  ))}
+                </Tab.Panels>
+              </>
             )}
-          </>
-        )}
-      </Tab.Group>
-    </div>
+          </Tab.Group>
+        </div>
+      )}
+    </Fragment>
   )
 }
 

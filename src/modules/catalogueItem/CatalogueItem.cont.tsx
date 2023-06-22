@@ -8,7 +8,6 @@ import { FormProvider } from 'react-hook-form'
 import ErrorPage from '@/components/error/ErrorPage'
 import { TextArea } from '@/components/form/Input'
 import Card from '@/components/layout/Card'
-import ProgressBarComponent from '@/components/progress-bar.comp'
 import useImageGallery from '@/hooks/useImageGallery'
 import usePermission from '@/hooks/usePermission'
 import { FILE_TYPE } from '@/types/constants/files'
@@ -77,14 +76,14 @@ const CatalogueItemContainer = () => {
           </div>
           <TextArea name="description" label={'Description'} rounded={'rounded-md'} className={'px-4 py-5 sm:px-6'} />
           <ErrorBoundary fallback={<ErrorPage />}>
-            <Suspense fallback={<ProgressBarComponent />}>
+            <Suspense>
               <Groups />
             </Suspense>
           </ErrorBoundary>
           <FormWarningModal />
           {queryUID && (
             <ErrorBoundary fallback={<ErrorPage />}>
-              <Suspense fallback={<ProgressBarComponent />}>
+              <Suspense>
                 <FileManager itemType={FILE_TYPE.CATALOGUE} uid={queryUID} hasEditRole={!disabledEdit} />
               </Suspense>
             </ErrorBoundary>
