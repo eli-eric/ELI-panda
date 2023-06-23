@@ -19,10 +19,16 @@ const Groups = () => {
 
   useEffect(() => {
     if (category?.uid === item?.category?.uid) {
-      setDetails({ groups: groupsItem, details: item?.details })
+      setDetails({
+        groups: groupsItem,
+        details: item?.details?.sort((a, b) => a.property.name.localeCompare(b.property.name))
+      })
     } else {
       unregister('details')
-      setDetails({ groups: groupsDetail, details: groupDetails })
+      setDetails({
+        groups: groupsDetail,
+        details: groupDetails.sort((a, b) => a.property.name.localeCompare(b.property.name))
+      })
     }
     return () => {
       unregister('details')

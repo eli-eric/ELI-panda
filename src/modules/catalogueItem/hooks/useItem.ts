@@ -27,10 +27,14 @@ const useItem = () => {
 
   const image = useImage(catalogueUid ? catalogueItemImage : null)
 
-  const groups = useMemo(
-    () => item?.details?.map(item => item.propertyGroup).filter((value, index, self) => self.indexOf(value) === index),
-    [item]
-  )
+  const groups = useMemo(() => {
+    const groupsUnsorted = item?.details
+      ?.map(item => item.propertyGroup)
+      .filter((value, index, self) => self.indexOf(value) === index)
+    // order groups by name
+    const groups = groupsUnsorted?.sort((a, b) => a.localeCompare(b))
+    return groups
+  }, [item])
 
   return { item, loading: isLoading, error, mutate, image, groups }
 }
