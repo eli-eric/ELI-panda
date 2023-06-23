@@ -6,7 +6,7 @@ import type { FileItem, ProcessedFile } from 'src/modules/shared/fileManager/typ
 import type { FILE_TYPE } from 'src/types/constants/files'
 import { mutate } from 'swr'
 
-import ImageGallery from '@/components/ImageGallery'
+import ImageGallery from '@/components/ImageGallery-deprecated'
 
 type Config = {
   itemCategory: FILE_TYPE
