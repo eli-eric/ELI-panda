@@ -52,7 +52,7 @@ export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
   }
 
   const submit = useCallback(
-    (itemId: string, onSuccess: (status: Status) => void, onError: (status: Status) => void) => {
+    (itemId: string, onSuccess?: (status: Status) => void, onError?: (status: Status) => void) => {
       const status: Status = {}
       const deletePromise = Promise.all(
         dueDeleteRef.current.map(file => axiosInstance.delete(`${endpoint}/${file.id}`))
@@ -76,10 +76,10 @@ export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
 
       Promise.allSettled([deletePromise, uploadPromise])
         .then(() => {
-          onSuccess(status)
+          onSuccess && onSuccess(status)
         })
         .catch(() => {
-          onError(status)
+          onError && onError(status)
         })
     },
     [endpoint, itemCategory, fileCategory]

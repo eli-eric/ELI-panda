@@ -8,7 +8,7 @@ export type Status = {
 }
 
 export type ImageGalleryRef = {
-  submit: (itemId: string, onSuccess: (status: Status) => void, onError: (status: Status) => void) => void
+  submit: (itemId: string, onSuccess?: (status: Status) => void, onError?: (status: Status) => void) => void
   hasChanges: boolean
 }
 
