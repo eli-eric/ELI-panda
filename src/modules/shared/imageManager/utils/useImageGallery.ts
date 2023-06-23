@@ -1,5 +1,5 @@
 import { nanoid } from 'nanoid'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef } from 'react'
 import { toast } from 'react-hot-toast'
 import { mutate } from 'swr'
 
@@ -12,24 +12,14 @@ import { getEndpoint } from '.'
 export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
   const endpoint = getEndpoint(itemCategory, itemId, fileCategory)
 
-  const [dueUpload, setDueUpload] = useState<ProcessedFile[]>([])
-  const [dueDelete, setDueDelete] = useState<FileItem[]>([])
-  const dueUploadRef = useRef(dueUpload)
-  const dueDeleteRef = useRef(dueDelete)
-
-  useEffect(() => {
-    dueUploadRef.current = dueUpload
-  }, [dueUpload])
-
-  useEffect(() => {
-    dueDeleteRef.current = dueDelete
-  }, [dueDelete])
+  const dueUploadRef = useRef<ProcessedFile[]>([])
+  const dueDeleteRef = useRef<FileItem[]>([])
 
   const handleDelete = (obj: FileItem) => {
     if (obj.id.startsWith('temp')) {
-      setDueUpload(state => state.filter(file => file.name !== obj.name))
+      dueUploadRef.current = dueUploadRef.current.filter(file => file.name !== obj.name)
     } else {
-      setDueDelete(state => [...state, obj])
+      dueDeleteRef.current = [...dueDeleteRef.current, obj]
     }
     mutate(endpoint, data => data?.filter(file => file.id !== obj.id), { revalidate: false })
   }
@@ -48,7 +38,7 @@ export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
           })
       )
     ).then(files => {
-      setDueUpload(state => [...state, ...files])
+      dueUploadRef.current = [...dueUploadRef.current, ...files]
       const tempFiles = files.map(file => {
         const id = `temp-${nanoid()}`
         const url = file.payload
@@ -98,6 +88,6 @@ export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
     onDrop,
     handleDelete,
     submit,
-    hasChanges: dueUpload.length > 0 || dueDelete.length > 0
+    hasChanges: dueUploadRef.current.length > 0 || dueDeleteRef.current.length > 0
   }
 }
