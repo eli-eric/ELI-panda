@@ -47,7 +47,7 @@ const CatalogueItemContainer = () => {
             <ImageGallery
               ref={imageRef}
               config={{ itemCategory: FILE_TYPE.CATALOGUE, itemId: String(queryUID) }}
-              className="relative h-full max-h-48 mt-6 pl-6"
+              className="relative h-full max-h-56 mt-6 pl-6 "
               hasEditRole={!disabledEdit}
             />
             <div className="mt-10 px-4 sm:mt-16 sm:px-0 lg:mt-0 col-span-2">

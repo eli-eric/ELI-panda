@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { toast } from 'react-hot-toast'
 
@@ -7,7 +8,9 @@ import useFetch from '@/hooks/fetch/useFetch'
 import type { CatalogueItemDetail } from '../types/responses'
 
 const useGroupDetails = (uid?: string) => {
-  const { catalogueCategoryProperties } = useEndpoint({ uid })
+  const router = useRouter()
+  const itemUid = router.query.uid as string | undefined
+  const { catalogueCategoryProperties } = useEndpoint(itemUid ? { uid, query: { itemUid } } : { uid })
 
   const { response } = useFetch<CatalogueItemDetail[]>({
     url: uid && catalogueCategoryProperties,
