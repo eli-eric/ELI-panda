@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Fragment, useMemo, useState } from 'react'
+import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 import type { CellProps } from 'react-table'
 import { type Column } from 'react-table'
@@ -11,7 +12,7 @@ import { DeleteButton } from '@/components/Buttons'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { createMessageValues } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useImage } from '@/hooks/fetch/useImage'
+import { useCatalogueImage } from '@/hooks/fetch/useImage'
 import useSubmit from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
 import useCatalogueItems from '@/modules/catalogue/hooks/useCatalogueItems'
@@ -20,9 +21,17 @@ import { PATH } from '@/types/constants/paths'
 import type { ModalButtons } from '@/types/form'
 import type { CatalogueItem } from '@/types/responses'
 
+import type { FileItem } from '../../fileManager/types'
+
 const messages = message.cataloguePage.itemList.header
 const buttonsMessage = message.common.buttons
 const modalMessage = message.ordersPage.deleteModal
+
+const fallbackImage: FileItem = {
+  id: 'fallback',
+  name: 'fallback image',
+  url: '/no-image.png'
+}
 
 const Name = ({
   value,
@@ -31,8 +40,8 @@ const Name = ({
   },
   toDelete
 }: CellProps<CatalogueItem>) => {
-  const { catalogueItemImage, catalogueItem } = useEndpoint({ uid })
-  const image = useImage(catalogueItemImage)
+  const { catalogueItem } = useEndpoint({ uid })
+  const image = useCatalogueImage(uid)
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
   const { formatMessage } = useIntl()
   const { mutate, catalogueItems } = useCatalogueItems()
@@ -43,6 +52,13 @@ const Name = ({
     onSuccess: () => {
       setOpenDeleteWarn(false)
       catalogueItems && mutate({ ...catalogueItems, data: catalogueItems?.data.filter(item => item.uid !== uid) })
+    },
+    onError: e => {
+      if (e?.response?.status === 409) {
+        toast.error(`Can't delete ${value}, it is binded in another items.`)
+      } else {
+        toast.error(`Error deleting ${value}.`)
+      }
     }
   })
 
@@ -74,7 +90,15 @@ const Name = ({
       )}
       <Link href={{ pathname: '/catalogue/item/' + uid }} className="flex items-center text-blue-500 hover:underline">
         <div className="h-10 w-10 flex-shrink-0">
-          <Image className="h-10 w-10 rounded-full" alt={value} src={image} width={200} height={200} />
+          <Image
+            id={(image && image?.length > 0 && image[0].id) || fallbackImage.id}
+            className="h-10 w-10 rounded-full"
+            alt={(image && image?.length > 0 && image[0].name) || fallbackImage.name}
+            src={(image && image?.length > 0 && image[0].url) || fallbackImage.url}
+            width={100}
+            height={100}
+            unoptimized
+          />
         </div>
         <div className="ml-4 ">{value}</div>
       </Link>
@@ -83,8 +107,8 @@ const Name = ({
         open={openDeleteWarn}
         setOpen={setOpenDeleteWarn}
         title={modalMessage.title}
-        message={formatMessage({ id: modalMessage.message }, createMessageValues({ orderName: name }))}
-        testid="OrderDeleteModal"
+        message={formatMessage({ id: modalMessage.message }, createMessageValues({ name: value }))}
+        testid="CatalogueDeleteModal"
         error={deleteSubmit.error}
       />
     </div>
@@ -195,7 +219,7 @@ const useCatalogueItemsColumns = (toDelete: boolean) => {
     }
 
     return columns
-  }, [intl, catalogueItems, categoryList])
+  }, [intl, catalogueItems, categoryList, toDelete])
 
   return columns
 }

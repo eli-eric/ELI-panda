@@ -9,7 +9,7 @@ interface UseSubmitProps<T> {
   endpoint: string
   method: 'post' | 'put' | 'delete'
   mutateList?: string[]
-  onSuccess?: (data?: T | null) => void
+  onSuccess?: (data: T) => void
   onError?: (error: AxiosError) => void
 }
 

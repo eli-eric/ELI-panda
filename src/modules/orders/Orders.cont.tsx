@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import { useSearch } from '@/hooks/table/useSearch'
+import { useSearch } from '@/hooks/table/useSearch-deprecated'
 
 import HeaderButtons from './components/HeaderButtons'
 import useOrdersFilter from './components/OrdersFilter'

@@ -11,7 +11,12 @@ const useCatalogueItems = () => {
   const { catalogueItems } = useEndpoint({ query: { categoryPath, ...pagination, ...query } })
   const { response, loading, error, mutate } = useFetch<CatalogueItemsResponse>({
     url: catalogueItems,
-    config: { suspense: false }
+    config: {
+      suspense: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: true,
+      revalidateOnMount: true
+    }
   })
   return { catalogueItems: response, loading, error, mutate }
 }

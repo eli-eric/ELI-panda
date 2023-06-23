@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
 import Combobox from '@/components/form/Combobox'
-import { Input, InputAmount } from '@/components/form/Input'
+import { Input, InputAmount, TextArea } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
 import { Col, Grid } from '@/components/grid/Grid'
@@ -148,6 +148,11 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
             limit={50}
             disabled={locationEnable}
           />
+        </Col>
+      )}
+      {orderLine?.uid && (
+        <Col md={6} lg={12}>
+          <TextArea {...formFields.notes} />
         </Col>
       )}
     </Grid>

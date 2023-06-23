@@ -1,10 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import uuid from 'react-uuid'
 
 import { convertDate } from '@/helpers/formatters'
 import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
 import useFormNotification from '@/hooks/form/useFormNotification'
+import useWarningModal from '@/hooks/useWarningModal'
+import { message } from '@/i18n/src/messages'
 
 import useOrderDetail from '../../hooks/useOrderDetail'
 import type { OrderDetailFormType, OrderLineFormType } from '../../types'
@@ -12,8 +15,11 @@ import HeaderComponent from '../Header.comp'
 import OrderFormComponent from './OrderForm.comp'
 import { schema } from './OrderForm.schema'
 
+const messages = message.ordersPage
+
 const useOrderForm = () => {
   const { orderDetail, submit, loading } = useOrderDetail()
+  const { formatMessage: fm } = useIntl()
 
   // initialize the form
   const formMethods = useForm<OrderDetailFormType>({
@@ -28,6 +34,8 @@ const useOrderForm = () => {
     }
   })
 
+  const withWarningModal = useWarningModal(fm({ id: messages.ordelineMissingModal.message }))
+
   const { control, formState, handleSubmit } = formMethods
 
   // form notifications
@@ -37,7 +45,11 @@ const useOrderForm = () => {
 
   //submit the form
   const onSubmit = (data: OrderDetailFormType) => {
-    submit({ ...data, orderDate: convertDate(data.orderDate) })
+    if (data.orderLines.length === 0 || !data.orderLines) {
+      withWarningModal(submit)({ ...data, orderDate: convertDate(data.orderDate) })
+    } else {
+      submit({ ...data, orderDate: convertDate(data.orderDate) })
+    }
   }
   const { insert, update, fields, remove } = useFieldArray({ control, name: 'orderLines' })
 

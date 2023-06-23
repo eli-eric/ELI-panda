@@ -7,14 +7,14 @@ import { message } from 'src/i18n/src/messages'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
+import CatalogueItemContainer from '@/modules/catalogueItem/CatalogueItem.cont'
 import useItem from '@/modules/catalogueItem/hooks/useItem'
-import ItemDetailComponent from '@/modules/catalogueItem/Item.cont'
 
 const messages = message.cataloguePage
 
 const ItemContainer = () => {
   const { item } = useItem()
-  return <Fragment>{item ? <ItemDetailComponent /> : <LoaderComponent />}</Fragment>
+  return <Fragment>{item ? <CatalogueItemContainer /> : <LoaderComponent />}</Fragment>
 }
 
 const CatalogueItemDetailPage: NextPage = (): JSX.Element => {
