@@ -8,7 +8,7 @@ const getEndpoints = (uid?: string, path?: string, itemUid?: string, query?: str
     catalogueItem: `/catalogue/item${uid ? '/' + uid : ''}`,
     catalogueItemImage: `/catalogue/item/${uid}/image`,
     catalogueCategoryEdit: `/catalogue/category${uid ? '/' + uid : ''}`,
-    catalogueCategoryProperties: `/catalogue/category/${uid}/properties`,
+    catalogueCategoryProperties: `/catalogue/category/${uid}/properties${query}`,
     system: `/system${uid ? '/' + uid : ''}`,
     systemImage: `/system/${uid}/image`,
     catalogueCategoryCopy: `/catalogue/category/${uid}/copy`,
@@ -19,7 +19,7 @@ const getEndpoints = (uid?: string, path?: string, itemUid?: string, query?: str
     systemRelationship: `/system/relationship${uid ? '/' + uid : ''}`,
     systemsForRelationship: `/systems/for-relationship${query}`,
     codebook: `/codebook/${path}${query}`,
-    systemSubsystems: `/system/subsystems${uid ? '/' + uid : ''}`,
+    systemSubsystems: `/system/${uid}/subsystems`,
     systemsList: `/systems${query}`,
     systemCode: `/system/systemCode${query}`,
     orders: `/orders${query}`,
@@ -36,6 +36,6 @@ interface useEndpointsProps {
   path?: string
 }
 export const useEndpoint = ({ uid, query, path, itemUid }: useEndpointsProps = {}) => {
-  const queryString = '?' + new URLSearchParams(query as Record<string, string>).toString()
+  const queryString = query ? '?' + new URLSearchParams(query as Record<string, string>).toString() : ''
   return useMemo(() => getEndpoints(uid, path, itemUid, queryString), [uid, path, itemUid, queryString])
 }

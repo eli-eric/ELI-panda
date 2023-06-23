@@ -41,7 +41,7 @@ const Combobox = ({
   rounded = 'rounded-md',
   showAddButton = false
 }: ComboboxPropsT) => {
-  const { control, setValue, formState } = useFormContext()
+  const { control, setValue } = useFormContext()
   const { formatMessage: fm } = useIntl()
 
   const [query, setQuery] = useState<string>('')

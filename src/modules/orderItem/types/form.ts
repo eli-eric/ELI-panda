@@ -32,6 +32,7 @@ export interface OrderLineFormType extends FieldValues {
   currency?: string
   quantity?: number
   eun?: string
+  notes?: string
   isDelivered?: boolean
   serialNumber?: string
 }

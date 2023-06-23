@@ -4,7 +4,7 @@ import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 
 import useCatalogueTable from '../shared/catalogue/table/CatalogueItems.table'
-import SearchBar from '../shared/searchBar/SearchBar'
+import SearchBar from '../shared/table/SearchBar'
 import CatalogueBreadcrumbs from './components/breadcrump/CatalogueBreadcrumbs'
 import CategoryListContainer from './components/categoryList/CategoryList.cont'
 import SearchBarButtons from './components/SearchBarButtons'

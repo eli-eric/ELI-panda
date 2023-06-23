@@ -16,7 +16,6 @@ const BreadcrumpContainer = ({ testId, homeLink, children }: Props) => (
       before:absolute before:top-0 before:bottom-0 before:left-0 before:w-6 before:bg-gradient-to-r from-white before:z-10
       after:absolute after:top-0 after:bottom-0 after:right-0 after:w-6 after:bg-gradient-to-l from-white after:z-10
     "
-    // @TODO: Check scrollbar visuals on Windows
   >
     <nav className="flex" aria-label="Breadcrumb">
       <ol role="list" className="flex space-x-1 bg-white px-6 py-3 overflow-x-auto">

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
@@ -15,12 +16,19 @@ interface Props {
 
 const GroupProperty = ({ detail, index }: Props) => {
   const disabled = !usePermission([ROLE.CATALOGUE_EDIT])
+  const { setValue } = useFormContext()
+
+  React.useEffect(() => {
+    Object.keys(detail).forEach(key => {
+      setValue(`details.${index}.${key}`, detail[key])
+    })
+  }, [detail, index, setValue])
 
   if (PROPERTY_TYPE.TEXT === detail.property.type.uid) {
     return (
       <Input
         name={`details.${index}.value`}
-        unit={detail.property.unit.name}
+        unit={detail.property.unit?.name}
         label={detail.property.name}
         disabled={disabled}
         rounded={'rounded-md'}
@@ -31,7 +39,7 @@ const GroupProperty = ({ detail, index }: Props) => {
     return (
       <Input
         name={`details.${index}.value`}
-        unit={detail.property.unit.name}
+        unit={detail.property.unit?.name}
         label={detail.property.name}
         disabled={disabled}
         rounded={'rounded-md'}
@@ -47,7 +55,7 @@ const GroupProperty = ({ detail, index }: Props) => {
         emptyOption={'None'}
         allowEmptyOption={true}
         disabled={disabled}
-        unit={detail.property.unit.name}
+        unit={detail.property.unit?.name}
         customLabel={detail.property.name}
         rounded={'rounded-md'}
         customOptions={[
@@ -64,7 +72,7 @@ const GroupProperty = ({ detail, index }: Props) => {
         useFirstRender={false}
         emptyOption={'None'}
         allowEmptyOption={true}
-        unit={detail.property.unit.name}
+        unit={detail.property.unit?.name}
         disabled={disabled}
         customLabel={detail.property.name}
         rounded={'rounded-md'}

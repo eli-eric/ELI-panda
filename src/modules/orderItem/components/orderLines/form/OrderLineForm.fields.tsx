@@ -49,6 +49,12 @@ const useOrderLineFormFields = (enabled: boolean) =>
       rounded: 'rounded-md',
       codebook: CODEBOOK.LOCATION
     },
+    notes: {
+      name: 'notes',
+      label: form.notes.label,
+      placeholder: form.notes.placeholder,
+      rounded: 'rounded-md'
+    },
     // itemUsage: {
     //   name: 'itemUsage',
     //   label: form.itemUsage.label,

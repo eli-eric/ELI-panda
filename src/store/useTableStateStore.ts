@@ -1,17 +1,17 @@
-import type { SortingRule } from 'react-table'
+import type { SortingState } from '@tanstack/react-table'
 import { create } from 'zustand'
 
 import type { QueryFilter } from '@/modules/orders/types'
 
 type SortingInstance = {
-  sortBy?: SortingRule<{}>[]
+  sortBy?: SortingState
   sortByQueryString?: string
   pagination?: string
   filter?: QueryFilter
   search?: string
 }
 
-type SortingState = {
+type TableState = {
   instances: Record<string, SortingInstance>
   setSortBy: (tableId: string, sortBy: SortingInstance['sortBy']) => void
   setSortByQueryString: (tableId: string, sortByQueryString: SortingInstance['sortByQueryString']) => void
@@ -21,7 +21,7 @@ type SortingState = {
   setSearch: (tableId: string, search: SortingInstance['search']) => void
 }
 
-const useTableStateStore = create<SortingState>(set => ({
+const useTableStateStore = create<TableState>(set => ({
   instances: {},
   setSortBy: (tableId, sortBy) =>
     set(state => {
@@ -46,13 +46,31 @@ const useTableStateStore = create<SortingState>(set => ({
     }),
   setFilter: (tableId, filter) =>
     set(state => {
-      const newInstance = { ...state.instances[tableId], filter }
-      return { instances: { ...state.instances, [tableId]: newInstance } }
+      if (!state.instances?.[tableId]) {
+        const newInstance = { ...state.instances[tableId], filter }
+        return { instances: { ...state.instances, [tableId]: newInstance } }
+      } else {
+        if (filter && Object.keys(filter).length === 0) {
+          delete state.instances[tableId].filter
+        } else {
+          state.instances[tableId].filter = filter
+        }
+        return { instances: { ...state.instances } }
+      }
     }),
   setSearch: (tableId, search) =>
     set(state => {
-      const newInstance = { ...state.instances[tableId], search }
-      return { instances: { ...state.instances, [tableId]: newInstance } }
+      if (!state.instances?.[tableId]) {
+        const newInstance = { ...state.instances[tableId], search }
+        return { instances: { ...state.instances, [tableId]: newInstance } }
+      } else {
+        if (search === '') {
+          delete state.instances[tableId].search
+        } else {
+          state.instances[tableId].search = search
+        }
+        return { instances: { ...state.instances } }
+      }
     })
 }))
 

@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 
-import useGeneralTable from '@/hooks/table/useGeneralTable'
-import usePagination from '@/hooks/table/usePagination'
+import useGeneralTable from '@/hooks/table/useGeneralTable-deprecated'
+import usePagination from '@/hooks/table/usePagination-deprecated'
 
 import useOrders from '../hooks/useOrders'
 import type { Order } from '../types'

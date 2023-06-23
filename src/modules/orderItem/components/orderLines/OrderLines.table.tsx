@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 import { PlusButton } from '@/components/Buttons'
 import Heading from '@/components/layout/Heading'
 import { classNames } from '@/helpers'
-import useGeneralTable from '@/hooks/table/useGeneralTable'
+import useGeneralTable from '@/hooks/table/useGeneralTable-deprecated'
 import { message } from '@/i18n/src/messages'
 
 import type { OrderLineFormType } from '../../types'

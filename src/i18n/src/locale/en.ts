@@ -45,7 +45,7 @@ export const messages = {
     }
   },
   authPage: {
-    head: 'Eli Panda - Sign In',
+    head: 'ELI Panda - Sign In',
     title: 'Sign in to ELI - PANDA',
     form: {
       userName: 'User Name',
@@ -54,9 +54,9 @@ export const messages = {
     },
     alert: { title: 'Wrong username or password.' }
   },
-  dashboardPage: { head: 'Eli Panda - Dashboard' },
+  dashboardPage: { head: 'ELI Panda - Dashboard' },
   cataloguePage: {
-    head: 'Eli Panda - Catalogue',
+    head: 'ELI Panda - Catalogue',
     help: 'Select category or use Search bar',
     defaultMessage: {
       help: { text: 'Select category or use Search bar' },
@@ -105,20 +105,21 @@ export const messages = {
     }
   },
   systemsPage: {
-    head: 'Eli Panda - Systems',
+    head: 'ELI Panda - Systems',
     systemDetail: {
       form: {
         name: { label: 'Name', placeholder: 'Name' },
         description: { label: 'Description', placeholder: 'Description' },
-        systemTypeUID: { label: 'System Type' }, // system types codebook - SYSTEM_TYPE
+        systemType: { label: 'System Type' }, // system types codebook - SYSTEM_TYPE
         systemCode: { label: 'System Code', placeholder: 'System Code' },
         systemAlias: { label: 'System Alias', placeholder: 'System Alias' },
-        locationUID: { label: 'Location', placeholder: 'Type here...' }, // locations codebook - LOCATION
-        ownerUID: { label: 'Owner', placeholder: 'Type here...' }, // codebook of users{uid, name},  - USER
-        importanceUID: { label: 'Importance' }, // codebook of importance - SYSTEM_IMPORTANCE
-        zoneUID: { label: 'Zone' }, // codebook of zones - ZONE
+        location: { label: 'Location', placeholder: 'Type here...' }, // locations codebook - LOCATION
+        owner: { label: 'Owner', placeholder: 'Type here...' }, // codebook of users{uid, name},  - USER
+        responsiblePerson: { label: 'Responsible Person', placeholder: 'Responsible Person' },
+        importance: { label: 'Importance' }, // codebook of importance - SYSTEM_IMPORTANCE
+        zone: { label: 'Zone' }, // codebook of zones - ZONE
         subZone: { label: 'Sub Zone' }, // codebook of subzones depend on selected zone SUB_ZONE (parentUID=ZONE.uid)
-        criticalityClassUID: { label: 'Criticality Class' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
+        criticalityClass: { label: 'Criticality Class' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
         parentUID: { label: 'ParentUID' } // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
       }
     },
@@ -213,9 +214,9 @@ export const messages = {
     },
     note: 'Note'
   },
-  reportsPage: { head: 'Eli Panda - Reports' },
+  reportsPage: { head: 'ELI Panda - Reports' },
   ordersPage: {
-    head: 'Eli Panda - Orders',
+    head: 'ELI Panda - Orders',
     ordersTable: {
       header: {
         name: 'Name',
@@ -250,7 +251,11 @@ export const messages = {
         requestor: { label: 'Requestor', placeholder: '...type here' }
       }
     },
-    deleteModal: { title: 'Warning', message: 'Are you sure you want to delete {orderName}?' },
+    deleteModal: { title: 'Warning', message: 'Are you sure you want to delete {name}?' },
+    ordelineMissingModal: {
+      title: 'Warning',
+      message: 'Order lines is missing are you sure you want to continue?'
+    },
     orderLines: {
       formHeadings: {
         itemInfo: 'Item Info',
@@ -266,7 +271,8 @@ export const messages = {
         itemUsage: { label: 'Item Usage' },
         serialNumber: { label: 'Serial Number', placeholder: 'Serial Number' },
         eun: { label: 'EUN', placeholder: 'EUN' },
-        manualEun: { label: 'Set EUN manually' }
+        manualEun: { label: 'Set EUN manually' },
+        notes: { label: 'Notes', placeholder: 'Notes' }
       },
       orderLinesTable: {
         header: {
@@ -278,13 +284,15 @@ export const messages = {
           itemUsage: 'Item Usage',
           eun: 'EUN',
           isDelivered: 'Delivered',
-          serialNumber: 'Serial Number'
+          serialNumber: 'Serial Number',
+          notes: 'Notes'
         }
       },
       deleteModal: { title: 'Warning', message: 'Are you sure you want to delete <medium>{name}</medium>?' },
       missingSerialNumber: { title: 'Warning', message: 'Serial number is missing, please fill it.' }
     }
   },
-  orderItem: { head: 'Eli Panda - Order Item' },
-  defaul: { head: 'Eli Panda' }
+  orderItem: { head: 'ELI Panda - Order Item' },
+  systemItem: { head: 'ELI Panda - System Item' },
+  defaul: { head: 'ELI Panda' }
 }

@@ -50,10 +50,10 @@ const FileActions = ({ file, endpoint, files, mutate, hasEditRole }: FileActions
     <div className="py-1">
       <Link href={file.url} passHref legacyBehavior={true}>
         <a target="_blank">
-          <DownloadButton className="mr-1" />
+          <DownloadButton type={'button'} className="mr-1" />
         </a>
       </Link>
-      {hasEditRole && <DeleteButton onClick={() => withWarningModal(handleDelete)(file.id)} />}
+      {hasEditRole && <DeleteButton type={'button'} onClick={() => withWarningModal(handleDelete)(file.id)} />}
     </div>
   )
 }

@@ -33,6 +33,7 @@ const Label = ({ label }: { label?: string }) =>
 export type InputProps = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
     unit?: string
+    onChange?: (value: string) => void
   }
 export const Input = ({
   name,
@@ -43,6 +44,7 @@ export const Input = ({
   className,
   hidden,
   label,
+  onChange,
   unit
 }: InputProps) => {
   const { control } = useFormContext()
@@ -62,6 +64,13 @@ export const Input = ({
               step="0.001"
               type={type}
               disabled={disabled}
+              onChange={e => {
+                if (onChange) {
+                  field.onChange(onChange(e.target.value))
+                } else {
+                  field.onChange(e.target.value)
+                }
+              }}
               placeholder={placeholder}
               className={classNames(
                 'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
