@@ -59,7 +59,11 @@ export const ImageGallery = forwardRef(
         ) : (
           <div
             {...getRootProps()}
-            className={classNames('flex flex-col rounded-md', isDragActive && 'border-2 border-orange-600', className)}
+            className={classNames(
+              'flex flex-col rounded-md',
+              isDragActive && 'border-2 border-orange-600 sm:max-h-14',
+              className
+            )}
           >
             <Tab.Group key={JSON.stringify(data)}>
               {({ selectedIndex }) => (
