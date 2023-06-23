@@ -23,6 +23,5 @@ export const useCatalogueImage = uid => {
     revalidateOnFocus: false,
     revalidateOnReconnect: true
   })
-  console.log('data', data)
   return data
 }

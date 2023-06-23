@@ -27,7 +27,7 @@ const Groups = () => {
       unregister('details')
       setDetails({
         groups: groupsDetail,
-        details: groupDetails.sort((a, b) => a.property.name.localeCompare(b.property.name))
+        details: groupDetails?.sort((a, b) => a.property.name.localeCompare(b.property.name))
       })
     }
     return () => {
