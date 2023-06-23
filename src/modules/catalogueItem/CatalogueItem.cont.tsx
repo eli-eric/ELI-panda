@@ -1,6 +1,6 @@
 import { DevTool } from '@hookform/devtools'
 import { useRouter } from 'next/router'
-import { useRef } from 'react'
+import { memo, useRef } from 'react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormProvider } from 'react-hook-form'
@@ -21,6 +21,9 @@ import ItemHeader from './components/header/Header.comp'
 import useItemForm from './hooks/useItemForm'
 import useItemSubmit from './hooks/useItemSubmit'
 import type { CatalogueItem } from './types/responses'
+
+const MemoizedGallery = memo(ImageGallery)
+const MemoizedGroups = memo(Groups)
 
 const CatalogueItemContainer = () => {
   const { query } = useRouter()
@@ -44,7 +47,7 @@ const CatalogueItemContainer = () => {
         <ItemHeader disabledEdit={disabledEdit} loading={loading} />
         <Card className="flex flex-col justify-between pb-5">
           <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
-            <ImageGallery
+            <MemoizedGallery
               ref={imageRef}
               config={{ itemCategory: FILE_TYPE.CATALOGUE, itemId: String(queryUID) }}
               className="relative h-full max-h-56 mt-6 pl-6 "
@@ -57,7 +60,7 @@ const CatalogueItemContainer = () => {
           <TextArea name="description" label={'Description'} rounded={'rounded-md'} className={'px-4 py-5 sm:px-6'} />
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense>
-              <Groups />
+              <MemoizedGroups />
             </Suspense>
           </ErrorBoundary>
           <FormWarningModal />

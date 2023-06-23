@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useEffect, useRef } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
@@ -16,6 +16,8 @@ import HeaderComponent from '../Header.comp'
 import SystemFormComponent from './SystemForm.comp'
 import { schema } from './SystemForm.schema'
 
+const MemoizedGallery = memo(ImageGallery)
+
 const SystemForm = () => {
   const { systemDetail, uid, disabledEdit } = useSystemDetail()
 
@@ -28,21 +30,18 @@ const SystemForm = () => {
       ...systemDetail
     }
   })
-
   const { setValue } = formMethods
   useEffect(() => {
     setValue('hasImageGalleryChanges', imageRef?.current?.hasChanges, { shouldDirty: imageRef?.current?.hasChanges })
   }, [imageRef, setValue])
 
   const { control, formState, handleSubmit } = formMethods
-
   const onSubmit = (data: any) => {
     // extract from data hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = data
     submit(rest)
   }
-
   useFormNotification<SystemDetailFormType>({ control })
   const FormWarningModal = useFormLeaveWarning({ formState })
 
@@ -53,7 +52,7 @@ const SystemForm = () => {
         <Breadcrumbs parentPath={systemDetail?.parentPath} />
         <div className="py-6">
           <SystemFormComponent>
-            <ImageGallery
+            <MemoizedGallery
               ref={imageRef}
               config={{ itemCategory: FILE_TYPE.CATALOGUE, itemId: String(uid) }}
               className="w-full"
