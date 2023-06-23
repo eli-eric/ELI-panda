@@ -64,7 +64,6 @@ export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
 
   const submit = useCallback(
     (itemId: string, onSuccess: (status: Status) => void) => {
-      console.log('submit')
       const status: Status = {}
       const deletePromise = Promise.all(
         dueDeleteRef.current.map(file => axiosInstance.delete(`${endpoint}/${file.id}`))
