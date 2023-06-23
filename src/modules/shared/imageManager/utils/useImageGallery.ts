@@ -1,6 +1,5 @@
 import { nanoid } from 'nanoid'
 import { useCallback, useRef } from 'react'
-import { toast } from 'react-hot-toast'
 import { mutate } from 'swr'
 
 import axiosInstance from '@/core/axios/axiosInstance'
@@ -53,7 +52,7 @@ export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
   }
 
   const submit = useCallback(
-    (itemId: string, onSuccess: (status: Status) => void) => {
+    (itemId: string, onSuccess: (status: Status) => void, onError: (status: Status) => void) => {
       const status: Status = {}
       const deletePromise = Promise.all(
         dueDeleteRef.current.map(file => axiosInstance.delete(`${endpoint}/${file.id}`))
@@ -63,7 +62,6 @@ export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
         })
         .catch(() => {
           status.failedDeletions = dueDeleteRef.current.map(file => file.name)
-          toast.error(`Failed to delete`)
         })
 
       const ep = itemId ? getEndpoint(itemCategory, itemId, fileCategory) : endpoint
@@ -74,12 +72,15 @@ export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
         })
         .catch(() => {
           status.failedUploads = dueUploadRef.current.map(file => file.name)
-          toast.error(`Failed to upload`)
         })
 
-      Promise.allSettled([deletePromise, uploadPromise]).then(() => {
-        onSuccess(status)
-      })
+      Promise.allSettled([deletePromise, uploadPromise])
+        .then(() => {
+          onSuccess(status)
+        })
+        .catch(() => {
+          onError(status)
+        })
     },
     [endpoint, itemCategory, fileCategory]
   )
