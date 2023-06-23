@@ -14,15 +14,10 @@ import useSystemFormFields from './SystemForm.fields'
 const systemFormMessages = message.systemsPage.systemDetail.form
 
 interface SystemFormComponentProps {
-  renderGallery: (props: {
-    hasEditRole?: boolean | undefined
-    width?: number | undefined
-    height?: number | undefined
-    className?: string | undefined
-  }) => JSX.Element
+  children?: React.ReactNode
 }
 
-const SystemFormComponent = ({ renderGallery }: SystemFormComponentProps) => {
+const SystemFormComponent = ({ children }: SystemFormComponentProps) => {
   const fields = useSystemFormFields()
   const uid = useRouter().query.uid as string
   const { disabledEdit } = useSystemDetail()
@@ -34,7 +29,7 @@ const SystemFormComponent = ({ renderGallery }: SystemFormComponentProps) => {
           <h1 className="text-2xl justify-center font-semibold text-gray-900">{uid ? 'EDIT SYSTEM' : 'NEW SYSTEM'}</h1>
         </Col>
         <Col sm={3} md={2} lg={4} className="md:pr-4">
-          {renderGallery({ className: 'w-full', hasEditRole: true })}
+          {children}
         </Col>
         <Col sm={3} md={4} lg={8} className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-x-2 gap-y-4 mb-auto">
           <Col sm={3} md={4} lg={8}>
@@ -46,6 +41,7 @@ const SystemFormComponent = ({ renderGallery }: SystemFormComponentProps) => {
               label={systemFormMessages.owner.label}
               codebook={CODEBOOK.EMPLOYEE}
               disabled={disabledEdit}
+              useFirstRender={false}
             />
           </Col>
           <Col sm={3} md={4}>
@@ -54,6 +50,7 @@ const SystemFormComponent = ({ renderGallery }: SystemFormComponentProps) => {
               label={systemFormMessages.responsiblePerson.label}
               codebook={CODEBOOK.EMPLOYEE}
               disabled={disabledEdit}
+              useFirstRender={false}
             />
           </Col>
 
@@ -64,6 +61,7 @@ const SystemFormComponent = ({ renderGallery }: SystemFormComponentProps) => {
               codebook={CODEBOOK.SYSTEM_IMPORTANCE}
               className="col-span-3 md:col-span-4 lg:col-span-8"
               disabled={disabledEdit}
+              useFirstRender={false}
             />
           </Col>
         </Col>
@@ -73,10 +71,17 @@ const SystemFormComponent = ({ renderGallery }: SystemFormComponentProps) => {
             label={systemFormMessages.location.label}
             codebook={CODEBOOK.LOCATION}
             disabled={disabledEdit}
+            useFirstRender={false}
           />
         </Col>
         <Col sm={3} md={6}>
-          <Listbox name="zone" label={systemFormMessages.zone.label} codebook={CODEBOOK.ZONE} disabled={disabledEdit} />
+          <Listbox
+            name="zone"
+            label={systemFormMessages.zone.label}
+            codebook={CODEBOOK.ZONE}
+            disabled={disabledEdit}
+            useFirstRender={false}
+          />
         </Col>
         <Col sm={3} md={6}>
           <Listbox
@@ -84,6 +89,7 @@ const SystemFormComponent = ({ renderGallery }: SystemFormComponentProps) => {
             label={systemFormMessages.systemType.label}
             codebook={CODEBOOK.SYSTEM_TYPE}
             disabled={disabledEdit}
+            useFirstRender={false}
           />
         </Col>
         <Col sm={3}>

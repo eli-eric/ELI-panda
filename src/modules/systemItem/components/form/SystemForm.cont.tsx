@@ -1,13 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
 import useFormNotification from '@/hooks/form/useFormNotification'
-import useImageGallery from '@/hooks/useImageGallery'
+import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
+import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { FILE_TYPE } from '@/types/constants/files'
-import { PATH } from '@/types/constants/paths'
 
 import useSystemDetail from '../../hooks/useSystemDetail'
 import { useSystemSubmit } from '../../hooks/useSystemSubmit'
@@ -18,25 +17,11 @@ import SystemFormComponent from './SystemForm.comp'
 import { schema } from './SystemForm.schema'
 
 const SystemForm = () => {
-  const { systemDetail, uid } = useSystemDetail()
-  const router = useRouter()
+  const { systemDetail, uid, disabledEdit } = useSystemDetail()
 
-  const {
-    discard,
-    hasChanges,
-    submit: saveImages,
-    renderGallery
-  } = useImageGallery({
-    itemCategory: FILE_TYPE.CATALOGUE,
-    itemId: String(uid)
-  })
+  const imageRef = useRef<ImageGalleryRef>()
 
-  const saveImageAndRedirect = async (uid: string) => {
-    await saveImages(uid)
-    router.push(uid ? PATH.SYSTEM + '/' + uid : PATH.SYSTEMS)
-  }
-
-  const { submit, loadingSubmit } = useSystemSubmit({ onError: discard, onSuccess: saveImageAndRedirect })
+  const { submit, loadingSubmit } = useSystemSubmit(imageRef)
   const formMethods = useForm<SystemDetailFormType>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -46,8 +31,8 @@ const SystemForm = () => {
 
   const { setValue } = formMethods
   useEffect(() => {
-    setValue('hasImageGalleryChanges', hasChanges, { shouldDirty: hasChanges })
-  }, [hasChanges, setValue])
+    setValue('hasImageGalleryChanges', imageRef?.current?.hasChanges, { shouldDirty: imageRef?.current?.hasChanges })
+  }, [imageRef, setValue])
 
   const { control, formState, handleSubmit } = formMethods
 
@@ -66,9 +51,15 @@ const SystemForm = () => {
       <FormProvider {...formMethods}>
         <HeaderComponent loading={loadingSubmit} />
         <Breadcrumbs parentPath={systemDetail?.parentPath} />
-
         <div className="py-6">
-          <SystemFormComponent renderGallery={renderGallery} />
+          <SystemFormComponent>
+            <ImageGallery
+              ref={imageRef}
+              config={{ itemCategory: FILE_TYPE.CATALOGUE, itemId: String(uid) }}
+              className="w-full"
+              hasEditRole={!disabledEdit}
+            />
+          </SystemFormComponent>
         </div>
       </FormProvider>
       <FormWarningModal />
