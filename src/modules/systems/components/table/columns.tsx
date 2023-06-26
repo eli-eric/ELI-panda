@@ -1,46 +1,15 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
-import { useMemo, useState } from 'react'
-import { toast } from 'react-hot-toast'
+import { useMemo } from 'react'
 
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useFetch from '@/hooks/fetch/useFetch'
 import { PATH } from '@/types/constants/paths'
 
-import { useSystems } from '../../hooks/useSystems'
-import type { SystemDetail, SystemsResponse } from '../../types/responses'
+import { useSubsystems } from '../../hooks/useSubsystems'
+import type { SystemDetail } from '../../types/responses'
 
 //TODO: fix typing
 const useSystemsColumns = () => {
-  const [uid, setUid] = useState<string | null>(null)
-  const { mutate } = useSystems()
-
-  const makeSubsystems = (uid: string | null, prev: SystemsResponse, subsystems: SystemDetail[]): SystemsResponse => {
-    const newData = [...prev.data]
-    const findAndReplace = (data, uid, newData) => {
-      data.forEach((item, index) => {
-        if (item.uid === uid) {
-          newData[index].subSystems = subsystems
-        } else if (item.subSystems) {
-          findAndReplace(item.subSystems, uid, newData[index].subSystems)
-        }
-      })
-    }
-    findAndReplace(prev.data, uid, newData)
-    return { ...prev, data: newData }
-  }
-
-  const { systemSubsystems } = useEndpoint({ uid: uid || '' })
-
-  const { loading: pending } = useFetch<SystemDetail[]>({
-    url: uid ? systemSubsystems : null,
-    useMockFetcher: true,
-    config: {
-      suspense: false,
-      onSuccess: subsystems => mutate(prev => prev && makeSubsystems(uid, prev, subsystems), { revalidate: false }),
-      onError: () => toast.error('Error fetching subsystems')
-    }
-  })
+  const { setUid, pending } = useSubsystems()
 
   const columns = useMemo(
     (): ColumnDef<SystemDetail, any>[] => [
@@ -58,15 +27,13 @@ const useSystemsColumns = () => {
             <>
               {row.original.hasSubsystems ? (
                 <button
-                  {...{
-                    onClick: () => {
-                      if (!row.getIsExpanded()) {
-                        setUid(row.original.uid)
-                      }
-                      row.toggleExpanded()
-                    },
-                    style: { cursor: 'pointer' }
+                  onClick={() => {
+                    if (!row.getIsExpanded()) {
+                      setUid(row.original.uid)
+                    }
+                    row.toggleExpanded()
                   }}
+                  style={{ cursor: 'pointer' }}
                 >
                   {row.getIsExpanded() ? '👇' : '👉'}
                 </button>
@@ -99,7 +66,7 @@ const useSystemsColumns = () => {
       },
       { header: 'owner', accessorKey: 'owner', id: 'owner', size: 150, cell: ({ getValue }) => getValue().name }
     ],
-    []
+    [setUid]
   )
 
   return { columns, pending }
