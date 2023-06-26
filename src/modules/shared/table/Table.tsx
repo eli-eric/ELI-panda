@@ -24,6 +24,7 @@ interface Props<T extends object> {
     enableSorting?: boolean
     withFooter?: boolean
     enableQueryURL?: boolean
+    enableRowSelection?: boolean
   }
 }
 
@@ -32,7 +33,13 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
   { data, columns, loading = false, settings, className, tableId, getSubRows }: Props<T>,
   ref?: Ref<ReactTable<T> | undefined>
 ) {
-  const { enableSorting = false, withFooter = false, enableQueryURL = false } = settings || {}
+  const {
+    enableSorting = false,
+    withFooter = false,
+    enableQueryURL = false,
+    enableRowSelection = false
+  } = settings || {}
+
   // zustand table instance store
   const { setSortBy, setSortByQueryString, instances } = useTableStateStore()
   const sortByInstance = instances[tableId]?.sortBy || []
@@ -56,6 +63,9 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
     data: data || [],
     enableSorting: enableSorting,
     manualSorting: true,
+    enableRowSelection: enableRowSelection,
+    enableMultiRowSelection: false,
+    enableSubRowSelection: true,
     state: { sorting, expanded }
   })
 
@@ -161,7 +171,8 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
                         key={row.id}
                         className={classNames(
                           index % 2 === 0 ? undefined : 'bg-gray-100',
-                          'hover:bg-gray-200 z-0',
+                          enableRowSelection ? 'hover:bg-primary-200' : 'hover:bg-gray-200 z-0',
+                          row.getIsSelected() ? 'bg-primary-300' : '',
                           className
                         )}
                       >

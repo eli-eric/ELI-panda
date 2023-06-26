@@ -21,17 +21,9 @@ import { PATH } from '@/types/constants/paths'
 import type { ModalButtons } from '@/types/form'
 import type { CatalogueItem } from '@/types/responses'
 
-import type { FileItem } from '../../fileManager/types'
-
 const messages = message.cataloguePage.itemList.header
 const buttonsMessage = message.common.buttons
 const modalMessage = message.ordersPage.deleteModal
-
-const fallbackImage: FileItem = {
-  id: 'fallback',
-  name: 'fallback image',
-  url: '/no-image.png'
-}
 
 const Name = ({
   value,
@@ -91,10 +83,11 @@ const Name = ({
       <Link href={{ pathname: '/catalogue/item/' + uid }} className="flex items-center text-blue-500 hover:underline">
         <div className="h-10 w-10 flex-shrink-0">
           <Image
-            id={(image && image?.length > 0 && image[0].id) || fallbackImage.id}
+            id={image.id}
+            priority={false}
             className="h-10 w-10 rounded-full"
-            alt={(image && image?.length > 0 && image[0].name) || fallbackImage.name}
-            src={(image && image?.length > 0 && image[0].url) || fallbackImage.url}
+            alt={image.name}
+            src={image.url}
             width={100}
             height={100}
             unoptimized
