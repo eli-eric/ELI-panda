@@ -1,7 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { memo, useEffect, useRef } from 'react'
+import { memo, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
+import { DeleteButton } from '@/components/Buttons'
+import Card from '@/components/layout/Card'
+import Heading from '@/components/layout/Heading'
 import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
 import useFormNotification from '@/hooks/form/useFormNotification'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
@@ -21,20 +24,15 @@ const MemoizedGallery = memo(ImageGallery)
 const SystemForm = () => {
   const { systemDetail, uid, disabledEdit } = useSystemDetail()
 
-  const imageRef = useRef<ImageGalleryRef>()
+  const systemImageRef = useRef<ImageGalleryRef>()
 
-  const { submit, loadingSubmit } = useSystemSubmit(imageRef)
+  const { submit, loadingSubmit } = useSystemSubmit(systemImageRef)
+
   const formMethods = useForm<SystemDetailFormType>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      ...systemDetail
-    }
+    defaultValues: systemDetail
   })
-  const { setValue } = formMethods
-  useEffect(() => {
-    setValue('hasImageGalleryChanges', imageRef?.current?.hasChanges, { shouldDirty: imageRef?.current?.hasChanges })
-  }, [imageRef, setValue])
-
+  formMethods.setValue
   const { control, formState, handleSubmit } = formMethods
   const onSubmit = (data: any) => {
     // extract from data hasImageGalleryChanges
@@ -50,16 +48,22 @@ const SystemForm = () => {
       <FormProvider {...formMethods}>
         <HeaderComponent loading={loadingSubmit} />
         <Breadcrumbs parentPath={systemDetail?.parentPath} />
-        <div className="py-6">
+        <Card>
+          <Heading customText="System" />
           <SystemFormComponent>
             <MemoizedGallery
-              ref={imageRef}
+              ref={systemImageRef}
+              setValue={formMethods.setValue}
               config={{ itemCategory: FILE_TYPE.CATALOGUE, itemId: String(uid) }}
               className="w-full"
               hasEditRole={!disabledEdit}
             />
           </SystemFormComponent>
-        </div>
+          <Heading customText="Physical Item">
+            <DeleteButton />
+          </Heading>
+          {/* Item form with modal tree grid */}
+        </Card>
       </FormProvider>
       <FormWarningModal />
     </form>

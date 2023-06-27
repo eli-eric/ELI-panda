@@ -45,12 +45,14 @@ export const Button = ({
   className,
   buttonSize,
   testid,
+  type = 'button',
   ...restProps
 }: ButtonProps) => (
   <button
     {...restProps}
     data-testid={testid}
     disabled={loading ? true : disabled}
+    type={type}
     className={classNames(
       'relative text-sm font-medium shadow-sm z-10 inline-flex items-center border border-gray-300 focus:outline-none focus:ring-0 focus:ring-primary-500',
       rounded,

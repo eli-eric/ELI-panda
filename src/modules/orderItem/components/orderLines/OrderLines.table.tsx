@@ -27,7 +27,7 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
     data: orderLines,
     withFooter: true,
     tableId: 'orderLines',
-    className: 'col-span-12',
+    className: 'col-span-12 relative overflow-x-auto',
     getRowProps: ({ original: { isDelivered } }) => ({
       className: classNames(isDelivered ? 'bg-green-100' : 'bg-white')
     }),
