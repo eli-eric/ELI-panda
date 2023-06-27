@@ -10,7 +10,7 @@ import useSubmit from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
 import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
-import useCategoryList from '../../hooks/useCategoryList'
+import { useCategoryList } from '../../hooks/useCategoryList'
 import CategoryEditForm from './CategoryEditForm'
 const formatData = (data: CategoryFormType, parentPath) =>
   data.groups && data.groups.length !== 0

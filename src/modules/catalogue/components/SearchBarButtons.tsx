@@ -6,9 +6,9 @@ import usePermission from '@/hooks/usePermission'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
-import useCatalogueItems from '../hooks/useCatalogueItems'
+import { useCatalogueItems } from '../hooks/useCatalogueItems'
 
-const SearchBarButtons = () => {
+export const SearchBarButtons = () => {
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
   const { mutate } = useCatalogueItems()
 
@@ -37,5 +37,3 @@ const SearchBarButtons = () => {
     </div>
   )
 }
-
-export default SearchBarButtons

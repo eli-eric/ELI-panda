@@ -3,8 +3,8 @@ import type { Column } from 'react-table'
 
 import useGeneralTable from '@/hooks/table/useGeneralTable-deprecated'
 import usePagination from '@/hooks/table/usePagination-deprecated'
-import useCatalogueItems from '@/modules/catalogue/hooks/useCatalogueItems'
-import useCategoryList from '@/modules/catalogue/hooks/useCategoryList'
+import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
+import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
 import type { CatalogueItem } from '@/types/responses'
 
 import useCatalogueItemsColumns from './CatalogueItems.columns'
@@ -38,7 +38,7 @@ const useCatalogueTable = (pageSizeDefault?: number, additionalColumn?: Column<C
 
   useEffect(() => {
     toggleHideColumn('categoryName', !categoryList || categoryList.length === 0)
-  }, [categoryList]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [categoryList, toggleHideColumn])
 
   return { getTable, getPaginationComponent }
 }

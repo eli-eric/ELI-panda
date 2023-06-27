@@ -5,7 +5,7 @@ import type { CellProps, Column } from 'react-table'
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import { useSearch } from '@/hooks/table/useSearch-deprecated'
 import { message } from '@/i18n/src/messages'
-import useCatalogueItems from '@/modules/catalogue/hooks/useCatalogueItems'
+import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { CatalogueItem } from '@/types/responses'
 

@@ -12,7 +12,7 @@ interface Props {
   category: CatalogueCategoryResponse
 }
 
-const CategoryItemComponent = ({ category }: Props) => {
+export const CategoryItemComponent = ({ category }: Props) => {
   const router = useRouter()
   const { catalogueCategoryImage } = useEndpoint({ uid: category.uid })
   const image = useImage(catalogueCategoryImage)
@@ -32,7 +32,7 @@ const CategoryItemComponent = ({ category }: Props) => {
         key={category.code}
         className="flex w-full items-center "
       >
-        <div className="flex-shrink-0 mx-6 my-4">
+        <div className="flex-shrink-0 mx-2 my-1">
           <Image
             className="h-10 w-10 rounded-sm object-contain"
             width={200}
@@ -52,5 +52,3 @@ const CategoryItemComponent = ({ category }: Props) => {
     </div>
   )
 }
-
-export default CategoryItemComponent
