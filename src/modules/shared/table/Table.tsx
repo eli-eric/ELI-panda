@@ -1,4 +1,4 @@
-import type { ColumnDef, ExpandedState, SortingState, Table as ReactTable } from '@tanstack/react-table'
+import type { ColumnDef, ExpandedState, Row, SortingState, Table as ReactTable } from '@tanstack/react-table'
 import { getSortedRowModel } from '@tanstack/react-table'
 import { getFilteredRowModel } from '@tanstack/react-table'
 import { getExpandedRowModel } from '@tanstack/react-table'
@@ -19,7 +19,8 @@ interface Props<T extends object> {
   columns: ColumnDef<T, any>[]
   loading?: boolean
   className?: string
-  getSubRows?: (row: T) => T[]
+  getSubRows?: (row: T, index: number) => T[]
+  getRowProps?: (row: Row<T>) => React.HTMLAttributes<HTMLTableRowElement>
   settings?: {
     enableSorting?: boolean
     withFooter?: boolean
@@ -28,9 +29,20 @@ interface Props<T extends object> {
   }
 }
 
+const defaultPropGetter = () => ({})
+
 //TODO: I was not able to type this comp without using any
 const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function Table<T extends object>(
-  { data, columns, loading = false, settings, className, tableId, getSubRows }: Props<T>,
+  {
+    data,
+    columns,
+    loading = false,
+    settings,
+    className,
+    tableId,
+    getSubRows,
+    getRowProps = defaultPropGetter
+  }: Props<T>,
   ref?: Ref<ReactTable<T> | undefined>
 ) {
   const {
@@ -169,11 +181,12 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
                     {table.getRowModel().rows.map((row, index) => (
                       <tr
                         key={row.id}
+                        {...getRowProps(row)}
                         className={classNames(
                           index % 2 === 0 ? undefined : 'bg-gray-100',
                           enableRowSelection ? 'hover:bg-primary-200' : 'hover:bg-gray-200 z-0',
                           row.getIsSelected() ? 'bg-primary-300' : '',
-                          className
+                          getRowProps(row)?.className
                         )}
                       >
                         {row.getVisibleCells().map(cell => (
@@ -181,7 +194,6 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
                             key={cell.id}
                             className={classNames(
                               'text-sm sm:pl-6 sm:pr-6 text-gray-500',
-                              className,
                               row.getIsSelected() ? 'text-white' : '',
                               cell.column.columnDef.meta?.sticky
                                 ? 'sticky left-0 z-30 backdrop-blur-2xl backdrop-filter border-r'

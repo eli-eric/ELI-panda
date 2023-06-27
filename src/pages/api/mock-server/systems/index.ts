@@ -64,7 +64,7 @@ function makeData(...lens: number[]) {
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
     if (req.method === 'GET') {
-      const systems = makeData(50)
+      const systems = makeData(40)
       const timeout = faker.datatype.number({ min: 50, max: 200 })
       const timer = setTimeout(() => {
         res.status(200).json({ data: systems, totalCount: 1000 })

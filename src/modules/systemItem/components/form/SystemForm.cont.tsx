@@ -19,7 +19,7 @@ import HeaderComponent from '../Header.comp'
 import SystemFormComponent from './SystemForm.comp'
 import { schema } from './SystemForm.schema'
 
-const MemoizedGallery = memo(ImageGallery)
+const MemoizedSystemGallery = memo(ImageGallery)
 
 const SystemForm = () => {
   const { systemDetail, uid, disabledEdit } = useSystemDetail()
@@ -32,8 +32,9 @@ const SystemForm = () => {
     resolver: yupResolver(schema),
     defaultValues: systemDetail
   })
-  formMethods.setValue
+
   const { control, formState, handleSubmit } = formMethods
+
   const onSubmit = (data: any) => {
     // extract from data hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -51,7 +52,7 @@ const SystemForm = () => {
         <Card>
           <Heading customText="System" />
           <SystemFormComponent>
-            <MemoizedGallery
+            <MemoizedSystemGallery
               ref={systemImageRef}
               setValue={formMethods.setValue}
               config={{ itemCategory: FILE_TYPE.CATALOGUE, itemId: String(uid) }}

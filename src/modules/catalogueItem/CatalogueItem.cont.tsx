@@ -31,7 +31,7 @@ const CatalogueItemContainer = () => {
   const disabledEdit = !usePermission([ROLE.CATALOGUE_EDIT])
 
   const imageRef = useRef<ImageGalleryRef>()
-  const { FormWarningModal, ...formMethods } = useItemForm(imageRef)
+  const { FormWarningModal, ...formMethods } = useItemForm()
   const { submit, loading } = useItemSubmit(imageRef)
 
   const onSubmit = (data: any) => {

@@ -6,9 +6,10 @@ import type { SystemDetail } from '@/modules/systems/types/responses'
 
 interface SystemNameCellProps extends CellContext<SystemDetail, any> {
   setUid: (uid: string) => void
+  canEdit?: boolean
 }
 
-export const SystemNameCell = ({ row, getValue, setUid }: SystemNameCellProps) => (
+export const SystemNameCell = ({ row, getValue, setUid, canEdit = true }: SystemNameCellProps) => (
   <div
     style={{
       paddingLeft: `${row.depth * 2}rem`
@@ -32,8 +33,8 @@ export const SystemNameCell = ({ row, getValue, setUid }: SystemNameCellProps) =
       ) : (
         <span className="pl-4">{getValue()}</span>
       )}
-      <EditButton className="ml-auto" />
-      <DeleteButton className="ml-2" />
+      {canEdit && <EditButton className="ml-auto" />}
+      {canEdit && <DeleteButton className="ml-2" />}
     </div>
   </div>
 )

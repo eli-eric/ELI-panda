@@ -20,15 +20,15 @@ const SystemItemContainer = () => {
       <SystemForm />
       {uid && (
         <Card className="flex flex-col justify-between">
-          <ErrorBoundary fallback={<ErrorPage />}>
-            <Suspense fallback={<ProgressBarComponent />}>
-              <FileManager itemType={FILE_TYPE.SYSTEM} uid={uid} hasEditRole={!disabledEdit} />
-            </Suspense>
-          </ErrorBoundary>
           <Heading text="Relations" />
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense fallback={<ProgressBarComponent />}>
               <RelationsSection uid={systemDetail.uid} systemName={systemDetail.name} />
+            </Suspense>
+          </ErrorBoundary>
+          <ErrorBoundary fallback={<ErrorPage />}>
+            <Suspense fallback={<ProgressBarComponent />}>
+              <FileManager itemType={FILE_TYPE.SYSTEM} uid={uid} hasEditRole={!disabledEdit} />
             </Suspense>
           </ErrorBoundary>
         </Card>

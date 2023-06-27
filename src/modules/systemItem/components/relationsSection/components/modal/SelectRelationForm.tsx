@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { type Option, SelectWithError } from '@/components/form/Select'
-import type { RELATION_TYPE_CODE } from '@/modules/systems-deprecated/types/constants'
+import { RELATION_TYPE_CODE } from '@/modules/systems-deprecated/types/constants'
 import type { RelationFormType } from '@/modules/systems-deprecated/types/form'
 
 export type SelectedSystemForRel = {
@@ -12,16 +12,12 @@ export type SelectedSystemForRel = {
 }
 
 interface Props {
-  relationTypeCode: RELATION_TYPE_CODE
   systemName: string
   selectedSystem?: SelectedSystemForRel
 }
-//TODO: refactor form fields
-const SelectRelation = ({ relationTypeCode, systemName, selectedSystem }: Props) => {
+const SelectRelation = ({ systemName, selectedSystem }: Props) => {
   const { watch, setValue } = useFormContext<RelationFormType>()
-  useEffect(() => {
-    setValue('relationTypeCode', relationTypeCode)
-  }, [setValue, relationTypeCode])
+
   const router = useRouter()
   const baseSystemOption = useMemo(
     () => ({
@@ -68,7 +64,7 @@ const SelectRelation = ({ relationTypeCode, systemName, selectedSystem }: Props)
         label="System From"
       />
       <SelectWithError
-        options={[{ value: relationTypeCode }]}
+        options={[{ value: RELATION_TYPE_CODE.IS_SPARE_FOR }]}
         name={'relationTypeCode'}
         disabled
         label="Relation Type Code"
