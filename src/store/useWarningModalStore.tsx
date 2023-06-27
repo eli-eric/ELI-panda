@@ -20,7 +20,7 @@ type WarningModalStore = {
   resetParams: () => void
 }
 
-const useWarningModalStore = create<WarningModalStore>(set => ({
+export const useWarningModalStore = create<WarningModalStore>(set => ({
   params: initialParams,
   patchParams: (newParams: object) =>
     set(state => ({
@@ -28,5 +28,3 @@ const useWarningModalStore = create<WarningModalStore>(set => ({
     })),
   resetParams: () => set({ params: initialParams })
 }))
-
-export default useWarningModalStore

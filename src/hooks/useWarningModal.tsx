@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { shallow } from 'zustand/shallow'
 
-import useWarningModalStore from '@/store/useWarningModalStore'
+import { useWarningModalStore } from '@/store/useWarningModalStore'
 
 const useWarningModal = (globalMessage?: string) => {
   const [execData, setExecData] = useState({
