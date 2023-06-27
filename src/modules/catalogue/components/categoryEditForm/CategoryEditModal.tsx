@@ -6,7 +6,7 @@ import { Button } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useSubmit from '@/hooks/fetch/useSubmit'
+import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
 import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 

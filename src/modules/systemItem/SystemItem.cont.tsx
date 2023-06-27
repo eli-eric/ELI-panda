@@ -10,9 +10,9 @@ import { FILE_TYPE } from '@/types/constants/files'
 import FileManager from '../shared/fileManager/FileManager'
 import SystemForm from './components/form/SystemForm.cont'
 import RelationsSection from './components/relationsSection/RelationsSection'
-import useSystemDetail from './hooks/useSystemDetail'
+import { useSystemDetail } from './hooks/useSystemDetail'
 
-const SystemItemContainer = () => {
+export const SystemItemContainer = () => {
   const { disabledEdit, uid, systemDetail } = useSystemDetail()
 
   return (
@@ -36,5 +36,3 @@ const SystemItemContainer = () => {
     </Fragment>
   )
 }
-
-export default SystemItemContainer

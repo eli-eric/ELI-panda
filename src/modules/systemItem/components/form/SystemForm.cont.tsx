@@ -11,7 +11,7 @@ import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { FILE_TYPE } from '@/types/constants/files'
 
-import useSystemDetail from '../../hooks/useSystemDetail'
+import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { useSystemSubmit } from '../../hooks/useSystemSubmit'
 import type { SystemDetailFormType } from '../../types/form'
 import Breadcrumbs from '../Breadcrumps'

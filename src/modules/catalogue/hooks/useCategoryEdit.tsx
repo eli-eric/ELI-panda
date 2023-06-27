@@ -15,7 +15,7 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
-import useSubmit from '../../../hooks/fetch/useSubmit'
+import { useSubmit } from '../../../hooks/fetch/useSubmit'
 import CategoryEditModal from '../components/categoryEditForm/CategoryEditModal'
 import { useCategoryList } from './useCategoryList'
 

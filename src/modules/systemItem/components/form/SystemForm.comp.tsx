@@ -7,7 +7,7 @@ import { Col, Grid } from '@/components/grid/Grid'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 
-import useSystemDetail from '../../hooks/useSystemDetail'
+import { useSystemDetail } from '../../hooks/useSystemDetail'
 import useSystemFormFields from './SystemForm.fields'
 
 const systemFormMessages = message.systemsPage.systemDetail.form
