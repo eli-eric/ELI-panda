@@ -6,7 +6,8 @@ import {
   NoSymbolIcon,
   PencilSquareIcon,
   PlusIcon,
-  TrashIcon} from '@heroicons/react/24/outline'
+  TrashIcon
+} from '@heroicons/react/24/outline'
 import { FormattedMessage } from 'react-intl'
 
 import { classNames } from '@/helpers'
@@ -54,10 +55,10 @@ export const Button = ({
       'relative text-sm font-medium shadow-sm z-10 inline-flex items-center border border-gray-300 focus:outline-none focus:ring-0 focus:ring-primary-500',
       rounded,
       className,
-      disabled ? 'bg-gray-200 text-gray-400' : '',
       loading ? 'bg-primary-700' : `bg-${!primary ? 'white' : 'primary-500'}`,
       buttonSize === 'small' ? 'px-1 py-1' : 'px-2 py-2',
-      !primary ? !disabled && 'hover:bg-gray-100 text-gray-600' : !disabled && 'hover:bg-primary-700 text-white'
+      !primary ? !disabled && 'hover:bg-gray-100 text-gray-600' : !disabled && 'hover:bg-primary-700 text-white',
+      disabled ? 'bg-gray-200 text-gray-400' : ''
     )}
   >
     {loading && <ButtonLoaderComponent />}

@@ -182,6 +182,7 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
                             className={classNames(
                               'text-sm sm:pl-6 sm:pr-6 text-gray-500',
                               className,
+                              row.getIsSelected() ? 'text-white' : '',
                               cell.column.columnDef.meta?.sticky
                                 ? 'sticky left-0 z-30 backdrop-blur-2xl backdrop-filter border-r'
                                 : '',

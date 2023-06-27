@@ -31,11 +31,13 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
 
   const { setValue } = useFormContext()
 
+  console.log('item', item)
+
   useEffect(
     () => () => {
       setItem(undefined)
     },
-    [setItem]
+    []
   )
 
   const { response } = useFetch<Codebooktree[]>({
@@ -94,6 +96,7 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
       onClick: () => {
         setValue(name, item)
         setOpen(false)
+        setItem(undefined)
       }
     },
     goBack: {

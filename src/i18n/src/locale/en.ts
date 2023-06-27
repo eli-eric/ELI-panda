@@ -92,7 +92,7 @@ export const messages = {
         category: { label: 'Category', placeholder: 'Type here...' }, // codebook of categories - CATEGORY
         manufacturer: { label: 'Supplier/Manufacturer', placeholder: 'Type here...' }, // codebook of manufacturers - MANUFACTURER
         manufacturerNumber: { label: 'Manufacturer Number', placeholder: 'Manufacturer Number' },
-        manuFacturerUrl: { label: 'Manufacturer Url', placeholder: 'Manufacturer Url' }
+        manuFacturerUrl: { label: 'Supplier/Manufacturer Url', placeholder: 'Supplier/Manufacturer Url' }
       }
     },
     edit: {
