@@ -10,9 +10,10 @@ import { PATH } from '@/types/constants/paths'
 interface SystemNameCellProps extends CellContext<SystemDetail, any> {
   setUid: (uid: string) => void
   canEdit?: boolean
+  hideButtons?: boolean
 }
 
-export const SystemNameCell = ({ row, getValue, setUid, canEdit = true }: SystemNameCellProps) => (
+export const SystemNameCell = ({ row, getValue, setUid, canEdit = true, hideButtons = false }: SystemNameCellProps) => (
   <div
     style={{
       paddingLeft: `${row.depth * 2}rem`
@@ -36,14 +37,18 @@ export const SystemNameCell = ({ row, getValue, setUid, canEdit = true }: System
       ) : (
         <span className="pl-5">{getValue()}</span>
       )}
-      <Link href={PATH.SYSTEM + '/' + row.original.uid} className="ml-auto">
-        <Fragment>{canEdit ? <EditButton /> : <DetailButton />}</Fragment>
-      </Link>
-      {canEdit && <DeleteButton className="ml-2" />}
-      {canEdit && (
-        <Link href={{ pathname: PATH.SYSTEM, query: { parentUid: row.original.uid } }} className="ml-2">
-          <PlusButton />
-        </Link>
+      {!hideButtons && (
+        <Fragment>
+          <Link href={PATH.SYSTEM + '/' + row.original.uid} className="ml-auto">
+            <Fragment>{canEdit ? <EditButton /> : <DetailButton />}</Fragment>
+          </Link>
+          {canEdit && <DeleteButton className="ml-2" />}
+          {canEdit && (
+            <Link href={{ pathname: PATH.SYSTEM, query: { parentUid: row.original.uid } }} className="ml-2">
+              <PlusButton />
+            </Link>
+          )}
+        </Fragment>
       )}
     </div>
   </div>
