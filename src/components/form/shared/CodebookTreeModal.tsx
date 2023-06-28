@@ -31,8 +31,6 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
 
   const { setValue } = useFormContext()
 
-  console.log('item', item)
-
   useEffect(
     () => () => {
       setItem(undefined)

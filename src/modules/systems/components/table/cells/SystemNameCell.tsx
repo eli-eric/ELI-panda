@@ -1,8 +1,10 @@
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import type { CellContext } from '@tanstack/react-table'
+import Link from 'next/link'
 
 import { DeleteButton, EditButton } from '@/components/Buttons'
 import type { SystemDetail } from '@/modules/systems/types/responses'
+import { PATH } from '@/types/constants/paths'
 
 interface SystemNameCellProps extends CellContext<SystemDetail, any> {
   setUid: (uid: string) => void
@@ -33,7 +35,11 @@ export const SystemNameCell = ({ row, getValue, setUid, canEdit = true }: System
       ) : (
         <span className="pl-5">{getValue()}</span>
       )}
-      {canEdit && <EditButton className="ml-auto" />}
+      {canEdit && (
+        <Link href={PATH.SYSTEM + '/' + row.original.uid} className="ml-auto">
+          <EditButton />
+        </Link>
+      )}
       {canEdit && <DeleteButton className="ml-2" />}
     </div>
   </div>

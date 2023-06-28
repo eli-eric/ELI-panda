@@ -119,7 +119,10 @@ export const messages = {
         zone: { label: 'Zone' }, // codebook of zones - ZONE
         subZone: { label: 'Sub Zone' }, // codebook of subzones depend on selected zone SUB_ZONE (parentUID=ZONE.uid)
         criticalityClass: { label: 'Criticality Class' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
-        parentUID: { label: 'ParentUID' } // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
+        parentUID: { label: 'ParentUID' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
+        physicalItem: {
+          itemUsage: { label: 'Item Usage' } // codebook of item usage - ITEM_USAGE
+        }
       }
     },
     itemDetail: {

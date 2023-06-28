@@ -1,6 +1,9 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 
+import usePermission from '@/hooks/usePermission'
+import { ROLE } from '@/types/constants/roles'
+
 import { useSubsystems } from '../../hooks/useSubsystems'
 import type { SystemDetail } from '../../types/responses'
 import { SystemNameCell } from './cells/SystemNameCell'
@@ -8,6 +11,7 @@ import { SystemNameCell } from './cells/SystemNameCell'
 //TODO: fix typing
 const useSystemsColumns = () => {
   const { setUid, pending } = useSubsystems()
+  const canEdit = usePermission([ROLE.SYSTEM_EDIT])
 
   const columns = useMemo(
     (): ColumnDef<SystemDetail, any>[] => [
@@ -16,7 +20,7 @@ const useSystemsColumns = () => {
         accessorKey: 'name',
         id: 'name',
         size: 300,
-        cell: props => <SystemNameCell {...props} setUid={setUid} />
+        cell: props => <SystemNameCell {...props} setUid={setUid} canEdit={canEdit} />
       },
       { header: 'systemCode', accessorKey: 'systemCode', id: 'systemCode', size: 150 },
       { header: 'systemAlias', accessorKey: 'systemAlias', id: 'systemAlias', size: 150 },
@@ -37,7 +41,7 @@ const useSystemsColumns = () => {
       },
       { header: 'owner', accessorKey: 'owner', id: 'owner', size: 150, cell: ({ getValue }) => getValue().name }
     ],
-    [setUid]
+    [setUid, canEdit]
   )
 
   return { columns, pending }

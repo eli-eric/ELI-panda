@@ -1,8 +1,8 @@
+import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { memo, useRef } from 'react'
+import { Fragment, memo, useRef } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { DeleteButton } from '@/components/Buttons'
 import Card from '@/components/layout/Card'
 import Heading from '@/components/layout/Heading'
 import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
@@ -16,6 +16,7 @@ import { useSystemSubmit } from '../../hooks/useSystemSubmit'
 import type { SystemDetailFormType } from '../../types/form'
 import Breadcrumbs from '../Breadcrumps'
 import HeaderComponent from '../Header.comp'
+import { PhysicalItemForm } from './PhysicalItemForm.comp'
 import SystemFormComponent from './SystemForm.comp'
 import { schema } from './SystemForm.schema'
 
@@ -60,13 +61,25 @@ const SystemForm = () => {
               hasEditRole={!disabledEdit}
             />
           </SystemFormComponent>
-          <Heading customText="Physical Item">
-            <DeleteButton />
-          </Heading>
+          {
+            <Fragment>
+              <Heading customText="Physical Item" />
+              <PhysicalItemForm>
+                <MemoizedSystemGallery
+                  ref={systemImageRef}
+                  setValue={formMethods.setValue}
+                  config={{ itemCategory: FILE_TYPE.CATALOGUE, itemId: String(uid) }}
+                  className="w-full"
+                  hasEditRole={false}
+                />
+              </PhysicalItemForm>
+            </Fragment>
+          }
           {/* Item form with modal tree grid */}
         </Card>
       </FormProvider>
       <FormWarningModal />
+      <DevTool control={control} />
     </form>
   )
 }
