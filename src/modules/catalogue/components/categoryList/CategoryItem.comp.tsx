@@ -32,7 +32,7 @@ export const CategoryItemComponent = ({ category }: Props) => {
         key={category.code}
         className="flex w-full items-center "
       >
-        <div className="flex-shrink-0 mx-2 my-1">
+        <div className="flex-shrink-0 mx-6 my-4">
           <Image
             className="h-10 w-10 rounded-sm object-contain"
             width={200}
