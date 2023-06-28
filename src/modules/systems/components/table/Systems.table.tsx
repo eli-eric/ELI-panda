@@ -51,6 +51,7 @@ export const SystemsTable = ({
         getRowProps={getRowProps}
         settings={{
           enableSorting: true,
+          enableColumnHiding: true,
           enableQueryURL: enableQueryURL
         }}
         className={className}

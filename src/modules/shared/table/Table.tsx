@@ -1,4 +1,15 @@
-import type { ColumnDef, ExpandedState, Row, SortingState, Table as ReactTable } from '@tanstack/react-table'
+import { Disclosure } from '@headlessui/react'
+import { ArrowsRightLeftIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import type {
+  ColumnDef,
+  ColumnOrderState,
+  ExpandedState,
+  Header,
+  Row,
+  SortingState,
+  Table as ReactTable,
+  Table
+} from '@tanstack/react-table'
 import { getSortedRowModel } from '@tanstack/react-table'
 import { getFilteredRowModel } from '@tanstack/react-table'
 import { getExpandedRowModel } from '@tanstack/react-table'
@@ -6,6 +17,7 @@ import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-tabl
 import { useQueryState } from 'next-usequerystate'
 import type { Ref } from 'react'
 import { forwardRef, Fragment, useEffect, useImperativeHandle, useState } from 'react'
+import { useDrag, useDrop } from 'react-dnd'
 import { useIsFirstRender } from 'usehooks-ts'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
@@ -26,6 +38,8 @@ interface Props<T extends object> {
     withFooter?: boolean
     enableQueryURL?: boolean
     enableRowSelection?: boolean
+    enableColumnHiding?: boolean
+    enableColumnReordering?: boolean
   }
 }
 
@@ -49,7 +63,8 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
     enableSorting = false,
     withFooter = false,
     enableQueryURL = false,
-    enableRowSelection = false
+    enableRowSelection = false,
+    enableColumnHiding = false
   } = settings || {}
 
   // zustand table instance store
@@ -61,6 +76,9 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
   // table state
   const [sorting, setSorting] = useState<SortingState>(sortByInstance)
   const [expanded, setExpanded] = useState<ExpandedState>({})
+  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
+    columns.map(column => column.id as string) //must start out with populated columnOrder so we can splice
+  )
 
   // react-table
   const table = useReactTable<T>({
@@ -71,6 +89,7 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
     getSubRows,
     onExpandedChange: setExpanded,
     onSortingChange: setSorting,
+    onColumnOrderChange: setColumnOrder,
     columns: columns,
     data: data || [],
     enableSorting: enableSorting,
@@ -78,7 +97,7 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
     enableRowSelection: enableRowSelection,
     enableMultiRowSelection: false,
     enableSubRowSelection: true,
-    state: { sorting, expanded }
+    state: { sorting, expanded, columnOrder }
   })
 
   useImperativeHandle(ref, () => ({
@@ -127,6 +146,56 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
 
   return (
     <Fragment>
+      {enableColumnHiding && (
+        <Disclosure>
+          {({ open }) => (
+            <div id="column-hiding">
+              <Disclosure.Button className="border w-full justify-between p-2 rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
+                {open ? (
+                  <XMarkIcon className="block h-4 w-4" aria-hidden="true" />
+                ) : (
+                  <ChevronDownIcon className="block h-4 min-w-full" aria-hidden="true" />
+                )}
+              </Disclosure.Button>
+
+              <Disclosure.Panel>
+                <div className="inline-block border border-black shadow rounded">
+                  <div className="px-1 border-b border-black">
+                    <label>
+                      <input
+                        {...{
+                          type: 'checkbox',
+                          checked: table.getIsAllColumnsVisible(),
+                          onChange: table.getToggleAllColumnsVisibilityHandler()
+                        }}
+                      />{' '}
+                      Toggle All
+                    </label>
+                  </div>
+                  <div className="">
+                    {table.getAllLeafColumns().map(column => (
+                      <div key={column.id} className=" px-1">
+                        <label className="flex items-center">
+                          <input
+                            {...{
+                              type: 'checkbox',
+                              checked: column.getIsVisible(),
+                              onChange: column.getToggleVisibilityHandler(),
+                              className: 'mr-1'
+                            }}
+                          />{' '}
+                          {column.id}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </Disclosure.Panel>
+            </div>
+          )}
+        </Disclosure>
+      )}
+
       <div className={classNames('h-full flex flex-col border-t border-gray-300 pb-4', className)}>
         <div className="inline-block min-w-full align-middle">
           <div className="shadow ring-1 ring-black ring-opacity-5 ">
@@ -135,41 +204,7 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
                 {table.getHeaderGroups().map(headerGroup => (
                   <tr key={headerGroup.id}>
                     {headerGroup.headers.map(header => (
-                      <th
-                        key={header.id}
-                        //scope="col"
-                        colSpan={header.colSpan}
-                        style={{
-                          width: header.getSize()
-                        }}
-                        className={classNames(
-                          'whitespace-nowrap  bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
-                          header.column.columnDef.meta?.sticky
-                            ? 'sticky left-0 top-0 text-ellipsis z-20 backdrop-blur-2xl backdrop-filter border-r'
-                            : 'sticky top-0 z-10'
-                        )}
-                      >
-                        <div
-                          {...{
-                            className: header.column.getCanSort() ? 'cursor-pointer select-none' : '',
-                            onClick: header.column.getToggleSortingHandler(),
-                            style: {
-                              width: header.getSize()
-                            }
-                          }}
-                        >
-                          {flexRender(header.column.columnDef.header, header.getContext())}
-                          {{
-                            asc: ' 🔼',
-                            desc: ' 🔽'
-                          }[header.column.getIsSorted() as string] ?? null}
-                        </div>
-                        {/* {header.column.getCanFilter() ? (
-                          <div>
-                            <Filter column={header.column} table={table} />
-                          </div>
-                        ) : null} */}
-                      </th>
+                      <DraggableColumnHeader key={header.id} table={table} header={header} />
                     ))}
                   </tr>
                 ))}
@@ -258,3 +293,74 @@ export default PandaTable
     />
   )
 } */
+
+const reorderColumn = (draggedColumnId: string, targetColumnId: string, columnOrder: string[]): ColumnOrderState => {
+  columnOrder.splice(
+    columnOrder.indexOf(targetColumnId),
+    0,
+    columnOrder.splice(columnOrder.indexOf(draggedColumnId), 1)[0] as string
+  )
+  return [...columnOrder]
+}
+
+interface DraggableColumnHeaderProps {
+  header: Header<any, any>
+  table: Table<any>
+}
+
+const DraggableColumnHeader = ({ header, table }: DraggableColumnHeaderProps) => {
+  const { getState, setColumnOrder } = table
+  const { columnOrder } = getState()
+  const { column } = header
+
+  const [, dropRef] = useDrop<Header<any, any>>({
+    accept: 'column',
+    drop: draggedColumn => {
+      // eslint-disable-next-line
+      const newColumnOrder = reorderColumn(draggedColumn.id, column.id, columnOrder)
+      setColumnOrder(newColumnOrder)
+    }
+  })
+
+  const [{ isDragging }, dragRef, previewRef] = useDrag({
+    collect: monitor => ({
+      isDragging: monitor.isDragging()
+    }),
+    item: () => column,
+    type: 'column'
+  })
+
+  return (
+    <th
+      ref={dropRef}
+      colSpan={header.colSpan}
+      style={{ opacity: isDragging ? 0.5 : 1, width: header.getSize() }}
+      className={classNames(
+        'whitespace-nowrap  bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
+        header.column.columnDef.meta?.sticky
+          ? 'sticky left-0 top-0 text-ellipsis z-20 backdrop-blur-2xl backdrop-filter border-r'
+          : 'sticky top-0 z-10'
+      )}
+    >
+      <div
+        ref={previewRef}
+        {...{
+          className: classNames(header.column.getCanSort() ? 'cursor-pointer select-none' : '', 'flex items-center '),
+          onClick: header.column.getToggleSortingHandler(),
+          style: {
+            width: header.getSize()
+          }
+        }}
+      >
+        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+        {{
+          asc: ' 🔼',
+          desc: ' 🔽'
+        }[header.column.getIsSorted() as string] ?? null}
+        <button ref={dragRef}>
+          <ArrowsRightLeftIcon className="w-6 h-6" />
+        </button>
+      </div>
+    </th>
+  )
+}

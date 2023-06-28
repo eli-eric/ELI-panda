@@ -20,6 +20,7 @@ export const useSystemsColumns = (hideButtons?: boolean) => {
         accessorKey: 'name',
         id: 'name',
         size: 300,
+        enablePinning: false,
         cell: props => <SystemNameCell {...props} setUid={setUid} canEdit={canEdit} hideButtons={hideButtons} />
       },
       { header: 'System Code', accessorKey: 'systemCode', id: 'systemCode', size: 150 },
