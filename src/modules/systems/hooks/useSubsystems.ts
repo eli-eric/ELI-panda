@@ -16,7 +16,7 @@ export const useSubsystems = () => {
 
   const { loading: pending } = useFetch<SystemDetail[]>({
     url: uid ? systemSubsystems : null,
-    useMockFetcher: true,
+    useMockFetcher: false,
     config: {
       suspense: false,
       onSuccess: subsystems => mutate(prev => prev && makeSubsystems(uid, prev, subsystems), { revalidate: false }),

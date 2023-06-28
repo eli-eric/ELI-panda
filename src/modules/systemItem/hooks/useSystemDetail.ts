@@ -19,7 +19,7 @@ export const useSystemDetail = () => {
       revalidateOnReconnect: false,
       revalidateOnMount: true
     },
-    useMockFetcher: true
+    useMockFetcher: false
   })
   const { data: session } = useSession()
   const disabledEdit = !session?.user.roles.includes(ROLE.SYSTEM_EDIT)

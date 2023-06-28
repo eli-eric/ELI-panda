@@ -15,7 +15,7 @@ export const useSystems = () => {
       keepPreviousData: true
     },
     url: systemsList,
-    useMockFetcher: true
+    useMockFetcher: false
   })
   return { systems: response, loading, error, mutate }
 }
