@@ -2,7 +2,7 @@ import { toast } from 'react-hot-toast'
 
 import type { CodeBookMetaData } from '@/hooks/fetch/useCodebook'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useSubmit from '@/hooks/fetch/useSubmit'
+import { useSubmit } from '@/hooks/fetch/useSubmit'
 import useFormModal from '@/hooks/form/useFormModal'
 
 import { Input } from '../Input'

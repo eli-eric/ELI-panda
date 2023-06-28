@@ -1,4 +1,5 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import classNames from 'classnames'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -13,25 +14,17 @@ import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { createMessageValues } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useCatalogueImage } from '@/hooks/fetch/useImage'
-import useSubmit from '@/hooks/fetch/useSubmit'
+import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
-import useCatalogueItems from '@/modules/catalogue/hooks/useCatalogueItems'
-import useCategoryList from '@/modules/catalogue/hooks/useCategoryList'
+import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
+import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
 import { PATH } from '@/types/constants/paths'
 import type { ModalButtons } from '@/types/form'
 import type { CatalogueItem } from '@/types/responses'
 
-import type { FileItem } from '../../fileManager/types'
-
 const messages = message.cataloguePage.itemList.header
 const buttonsMessage = message.common.buttons
 const modalMessage = message.ordersPage.deleteModal
-
-const fallbackImage: FileItem = {
-  id: 'fallback',
-  name: 'fallback image',
-  url: '/no-image.png'
-}
 
 const Name = ({
   value,
@@ -45,6 +38,8 @@ const Name = ({
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
   const { formatMessage } = useIntl()
   const { mutate, catalogueItems } = useCatalogueItems()
+
+  const [loading, setLoading] = useState(true)
 
   const deleteSubmit = useSubmit({
     endpoint: catalogueItem,
@@ -89,17 +84,19 @@ const Name = ({
         />
       )}
       <Link href={{ pathname: '/catalogue/item/' + uid }} className="flex items-center text-blue-500 hover:underline">
-        <div className="h-10 w-10 flex-shrink-0">
-          <Image
-            id={(image && image?.length > 0 && image[0].id) || fallbackImage.id}
-            className="h-10 w-10 rounded-full"
-            alt={(image && image?.length > 0 && image[0].name) || fallbackImage.name}
-            src={(image && image?.length > 0 && image[0].url) || fallbackImage.url}
-            width={100}
-            height={100}
-            unoptimized
-          />
-        </div>
+        <Image
+          id={image.id}
+          priority={false}
+          className={classNames('h-10 w-10 flex-shrink-0 rounded-full bg-gray-300', loading ? 'animate-pulse' : '')}
+          onLoadingComplete={() => {
+            setLoading(false)
+          }}
+          alt={image.name}
+          src={image.url}
+          width={100}
+          height={100}
+          unoptimized
+        />
         <div className="ml-4 ">{value}</div>
       </Link>
       <WarningModal
@@ -179,17 +176,13 @@ const useCatalogueItemsColumns = (toDelete: boolean) => {
         Cell: CategoryName
       },
       {
-        Header: intl.formatMessage({ id: messages.manufacturer }),
-        accessor: 'manufacturer',
-        id: 'manufacturer'
+        Header: intl.formatMessage({ id: messages.supplier }),
+        accessor: 'supplier',
+        id: 'supplier',
+        Cell: ({ value }: CellProps<CatalogueItem>) => <span>{value?.name}</span>
       },
       {
-        Header: intl.formatMessage({ id: messages.manufacturerNumber }),
-        accessor: 'manufacturerNumber',
-        id: 'manufacturerNumber'
-      },
-      {
-        Header: intl.formatMessage({ id: messages.manufacturerUrl }),
+        Header: intl.formatMessage({ id: messages.supplierUrl }),
         accessor: 'manufacturerUrl',
         id: 'manufacturerUrl',
         Cell: ManufacturerUrl

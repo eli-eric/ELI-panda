@@ -75,9 +75,8 @@ export const messages = {
         select: 'Select Item',
         description: 'Description',
         categoryName: 'Category name',
-        manufacturer: 'Manufacturer',
-        manufacturerNumber: 'Manufacturer Number',
-        manufacturerUrl: 'Manufacturer Url'
+        supplier: 'Supplier',
+        supplierUrl: 'Manufacturer/Supplier Url'
       }
     },
     itemDetail: {
@@ -88,11 +87,11 @@ export const messages = {
       form: {
         name: { label: 'Name', placeholder: 'Name' },
         description: { label: 'Description', placeholder: 'Description' },
-        catalogueNumber: { label: 'Catalogue Number', placeholder: 'Catalogue Number' },
+        catalogueNumber: { label: 'Part Number', placeholder: 'Part Number' },
         category: { label: 'Category', placeholder: 'Type here...' }, // codebook of categories - CATEGORY
-        manufacturer: { label: 'Manufacturer', placeholder: 'Type here...' }, // codebook of manufacturers - MANUFACTURER
+        manufacturer: { label: 'Supplier/Manufacturer', placeholder: 'Type here...' }, // codebook of manufacturers - MANUFACTURER
         manufacturerNumber: { label: 'Manufacturer Number', placeholder: 'Manufacturer Number' },
-        manuFacturerUrl: { label: 'Manufacturer Url', placeholder: 'Manufacturer Url' }
+        manuFacturerUrl: { label: 'Supplier/Manufacturer Url', placeholder: 'Supplier/Manufacturer Url' }
       }
     },
     edit: {
@@ -263,7 +262,7 @@ export const messages = {
       },
       form: {
         name: { label: 'Name', placeholder: 'Name' },
-        catalogueNumber: { label: 'Catalogue Number', placeholder: 'Catalogue Number' },
+        catalogueNumber: { label: 'Part Number', placeholder: 'Part Number' },
         systemName: { label: 'Parent System', placeholder: 'Parent System' },
         price: { label: 'Price', placeholder: '0.00' },
         quantity: { label: 'Quantity', placeholder: 'Quantity' },
@@ -277,7 +276,7 @@ export const messages = {
       orderLinesTable: {
         header: {
           name: 'Name',
-          catalogueNumber: 'Catalogue Number',
+          catalogueNumber: 'Part Number',
           system: 'Parent System',
           price: 'Price',
           location: 'Location',

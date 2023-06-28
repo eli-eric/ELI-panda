@@ -13,7 +13,7 @@ interface UseSubmitProps<T> {
   onError?: (error: AxiosError) => void
 }
 
-const useSubmit = <T>({ endpoint, method, mutateList, onSuccess, onError }: UseSubmitProps<T>) => {
+export const useSubmit = <T>({ endpoint, method, mutateList, onSuccess, onError }: UseSubmitProps<T>) => {
   const { cache, mutate } = useSWRConfig()
   const [response, setResponse] = useState<T | null>(null)
   const [error, setError] = useState<string>()
@@ -40,5 +40,3 @@ const useSubmit = <T>({ endpoint, method, mutateList, onSuccess, onError }: UseS
   }
   return { response, error, loading, submit }
 }
-
-export default useSubmit

@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import SystemItemContainer from '@/modules/systemItem/SystemItem.cont'
+import { SystemItemContainer } from '@/modules/systemItem/SystemItem.cont'
 
 const messages = message.systemItem
 

@@ -4,7 +4,7 @@ import { toast } from 'react-hot-toast'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
-import useSubmit from '@/hooks/fetch/useSubmit'
+import { useSubmit } from '@/hooks/fetch/useSubmit'
 import useOrders from '@/modules/orders/hooks/useOrders'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'

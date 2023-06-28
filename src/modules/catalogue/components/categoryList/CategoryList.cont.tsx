@@ -1,28 +1,36 @@
-import { Fragment } from 'react'
+import { Disclosure } from '@headlessui/react'
+import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
-import ErrorPage from '@/components/error/ErrorPage'
-import ProgressBarComponent from '@/components/progress-bar.comp'
+import { CategoryList } from './CategoryList.comp'
 
-import useCategoryList from '../../hooks/useCategoryList'
-import CategoryItemComponent from './CategoryItem.comp'
-
-const CategoryListContainer = () => {
-  const { categoryList, error, loading } = useCategoryList()
-  return (
-    <Fragment>
-      {categoryList?.length !== 0 && (
-        <div id="category-list" className="px-4 py-5 sm:p-6 bg-white">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 3xl:grid-cols-8">
-            {categoryList?.map((category, index) => (
-              <CategoryItemComponent key={category.code + index} category={category} />
-            ))}
-          </div>
-        </div>
-      )}
-      {error && <ErrorPage />}
-      {loading && <ProgressBarComponent />}
-    </Fragment>
-  )
+interface Props {
+  onChange: (open: boolean) => void
 }
 
-export default CategoryListContainer
+export const CategoryListContainer = ({ onChange }: Props) => (
+  <Disclosure>
+    {({ open }) => (
+      <div id="category-list" className="flex flex-col">
+        <Disclosure.Button
+          className="lg:hidden border flex justify-between rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
+          onClick={() => {
+            onChange(!open)
+          }}
+        >
+          <span className="text-xs">{open ? 'Hide' : 'Show'} Categories</span>
+          {open ? (
+            <XMarkIcon className="block h-4 w-4" aria-hidden="true" />
+          ) : (
+            <ChevronDownIcon className="block h-4 w-4" aria-hidden="true" />
+          )}
+        </Disclosure.Button>
+        <div className="lg:grid hidden">
+          <CategoryList />
+        </div>
+        <Disclosure.Panel className={'lg:hidden grid'}>
+          <CategoryList />
+        </Disclosure.Panel>
+      </div>
+    )}
+  </Disclosure>
+)

@@ -1,19 +1,20 @@
-import type { FieldValues } from 'react-hook-form'
-
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { PhysicalItem, SystemDetail } from '@/modules/systems/types/responses'
 
-export interface SystemDetailFormType extends FieldValues {
-  name: string
-  parent?: string // @TODO
+export type SystemDetailFormType = {
+  uid: string // from router
+  name: string // input
+  description?: string // textarea
   parentPath?: CodebookType[]
-
-  description?: string
-  systemType?: CodebookType
-  systemCode?: string
-  systemAlias?: string
-  location?: CodebookType
-  itemUID?: string // @TODO
-  owner?: CodebookType
-  importance?: CodebookType
-  zone?: CodebookType
+  location?: CodebookType // combobox - CODEBOOK.LOCATION
+  zone?: CodebookType // combobox
+  systemType?: CodebookType // ListBox
+  systemCode?: string // automaticky generovaný viz system edit - api dodá J.Š.
+  systemAlias?: string // input
+  owner?: CodebookType // combobox - CODEBOOK.EMPLOYEE
+  responsible?: CodebookType // combobox - CODEBOOK.EMPLOYEE
+  importance?: CodebookType // listbox - CODEBOOK.SYSTEM_IMPORTANCE
+  hasSubsystems: boolean
+  subSystems?: SystemDetail[]
+  physicalItem?: PhysicalItem
 }

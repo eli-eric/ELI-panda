@@ -8,11 +8,11 @@ import { Tooltip } from 'react-tooltip'
 import { messages } from 'src/i18n/src'
 import { SWRConfig } from 'swr'
 
-import NavigationComponent from '@/components/layout/nav-bar/nav-bar.comp'
-import Notification from '@/components/Notifications/Notification'
-import WarningModal from '@/components/WarningModal'
+import { NavigationComponent } from '@/components/layout/nav-bar/nav-bar.comp'
+import { Notification } from '@/components/Notifications/Notification'
+import { WarningModal } from '@/components/WarningModal'
 import { fetcher } from '@/helpers/fetcher'
-import useLocale from '@/hooks/useLocale'
+import { useLocale } from '@/hooks/useLocale'
 
 interface Props {
   children: React.ReactNode

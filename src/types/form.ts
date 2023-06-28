@@ -7,6 +7,7 @@ export type ModalButtons = {
 export type Button = {
   text: string
   loading?: boolean
+  disabled?: boolean
   type?: 'button' | 'submit' | 'reset' | undefined
   onClick?: () => void
   testid?: string

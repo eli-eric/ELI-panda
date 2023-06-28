@@ -1,5 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { CodebookType } from '@/hooks/fetch/useCodebook'
 import { SystemDetail } from '@/modules/systems/types/responses'
 import { faker } from '@faker-js/faker'
 import type { NextApiRequest, NextApiResponse } from 'next'

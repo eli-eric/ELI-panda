@@ -5,7 +5,7 @@ import * as yup from 'yup'
 
 import { PlusButton } from '@/components/Buttons'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useSubmit from '@/hooks/fetch/useSubmit'
+import { useSubmit } from '@/hooks/fetch/useSubmit'
 import useFormModal from '@/hooks/form/useFormModal'
 import ItemDetailComponent from '@/modules/catalogueItem/CatalogueItem.cont'
 import CatalogueTableSelect from '@/modules/shared/catalogue/table/CatalogueTableSelect'

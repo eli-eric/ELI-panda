@@ -5,7 +5,7 @@ import Card from '@/components/layout/Card'
 import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
 
-import useSystemDetail from '../hooks/useSystemDetail'
+import { useSystemDetail } from '../hooks/useSystemDetail'
 
 interface Props {
   loading?: boolean

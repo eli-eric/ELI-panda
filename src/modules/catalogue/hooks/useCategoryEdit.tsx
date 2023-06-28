@@ -15,9 +15,9 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
-import useSubmit from '../../../hooks/fetch/useSubmit'
+import { useSubmit } from '../../../hooks/fetch/useSubmit'
 import CategoryEditModal from '../components/categoryEditForm/CategoryEditModal'
-import useCategoryList from './useCategoryList'
+import { useCategoryList } from './useCategoryList'
 
 interface EditModalProps {
   testid: string
@@ -33,6 +33,7 @@ const EditModal = ({ testid, open, setOpen, uid, parentPath }: EditModalProps) =
   </ModalComponent>
 )
 
+// TODO: clean up
 export const useCategoryEdit = ({
   editUid,
   catalogueParentPath

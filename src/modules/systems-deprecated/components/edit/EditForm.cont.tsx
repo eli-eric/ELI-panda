@@ -10,7 +10,7 @@ import ErrorPage from '@/components/error/ErrorPage'
 import ModalButtonsComponent from '@/components/modal/modal.buttons'
 import { mockFetcher } from '@/helpers/fetcher'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useSubmit from '@/hooks/fetch/useSubmit'
+import { useSubmit } from '@/hooks/fetch/useSubmit'
 import type { ModalButtons } from '@/types/form'
 
 import type { SystemEditFormType } from '../../types/form'
