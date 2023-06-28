@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { Fragment, memo, useRef } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 
-import { PlusButton } from '@/components/Buttons'
 import Card from '@/components/layout/Card'
 import Heading from '@/components/layout/Heading'
 import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
@@ -19,6 +18,7 @@ import { useSystemSubmit } from '../../hooks/useSystemSubmit'
 import type { SystemDetailFormType } from '../../types/form'
 import Breadcrumbs from '../Breadcrumps'
 import HeaderComponent from '../Header.comp'
+import { SystemItemSearchButton } from '../SystemItemSearchButton'
 import { PhysicalItemForm } from './PhysicalItemForm.comp'
 import SystemFormComponent from './SystemForm.comp'
 import { schema } from './SystemForm.schema'
@@ -57,7 +57,7 @@ const SystemForm = () => {
         <Breadcrumbs parentPath={systemDetail?.parentPath} />
         <Card>
           <Heading customText="System">
-            <PlusButton primary buttonSize="large" />
+            <SystemItemSearchButton />
           </Heading>
           <SystemFormComponent>
             <MemoizedSystemGallery
@@ -68,7 +68,7 @@ const SystemForm = () => {
               hasEditRole={!disabledEdit}
             />
           </SystemFormComponent>
-          {
+          {physicalItem && (
             <Fragment>
               <Heading customText="Physical Item">
                 <Link href={PATH.CATALOGUE_ITEM + '/' + '18473f51-515e-44b3-b1a9-0c9dbab0be49'} target={'_blank'}>
@@ -88,7 +88,7 @@ const SystemForm = () => {
                 />
               </PhysicalItemForm>
             </Fragment>
-          }
+          )}
         </Card>
       </FormProvider>
       <FormWarningModal />

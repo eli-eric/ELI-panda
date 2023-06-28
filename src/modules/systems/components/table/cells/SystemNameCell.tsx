@@ -1,8 +1,9 @@
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import type { CellContext } from '@tanstack/react-table'
 import Link from 'next/link'
+import { Fragment } from 'react'
 
-import { DeleteButton, EditButton } from '@/components/Buttons'
+import { DeleteButton, DetailButton, EditButton, PlusButton } from '@/components/Buttons'
 import type { SystemDetail } from '@/modules/systems/types/responses'
 import { PATH } from '@/types/constants/paths'
 
@@ -35,12 +36,15 @@ export const SystemNameCell = ({ row, getValue, setUid, canEdit = true }: System
       ) : (
         <span className="pl-5">{getValue()}</span>
       )}
+      <Link href={PATH.SYSTEM + '/' + row.original.uid} className="ml-auto">
+        <Fragment>{canEdit ? <EditButton /> : <DetailButton />}</Fragment>
+      </Link>
+      {canEdit && <DeleteButton className="ml-2" />}
       {canEdit && (
-        <Link href={PATH.SYSTEM + '/' + row.original.uid} className="ml-auto">
-          <EditButton />
+        <Link href={{ pathname: PATH.SYSTEM, query: { parentUid: row.original.uid } }} className="ml-2">
+          <PlusButton />
         </Link>
       )}
-      {canEdit && <DeleteButton className="ml-2" />}
     </div>
   </div>
 )
