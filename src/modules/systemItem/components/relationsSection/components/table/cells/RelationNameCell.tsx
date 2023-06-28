@@ -27,6 +27,7 @@ export const RelationNameCell = ({
   const { systemRelationships } = useEndpoint({ uid })
   const intl = useIntl()
   const [openDelete, setOpenDelete] = useState(false)
+
   const { systemRelationship } = useEndpoint({ uid: relationUid })
   const { submit, error, loading } = useSubmit({
     endpoint: systemRelationship,

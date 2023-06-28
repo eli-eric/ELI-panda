@@ -69,7 +69,6 @@ export const SystemsForRelTable = ({ setSelectedSystem, selectedSystem, tableId 
 
   const columns = useSystemsForRelColumns()
   useEffect(() => {
-    console.log('reset', pagination)
     setSelectedSystem(undefined)
   }, [pagination, setSelectedSystem, tableId, reset])
 

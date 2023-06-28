@@ -176,17 +176,13 @@ const useCatalogueItemsColumns = (toDelete: boolean) => {
         Cell: CategoryName
       },
       {
-        Header: intl.formatMessage({ id: messages.manufacturer }),
-        accessor: 'manufacturer',
-        id: 'manufacturer'
+        Header: intl.formatMessage({ id: messages.supplier }),
+        accessor: 'supplier',
+        id: 'supplier',
+        Cell: ({ value }: CellProps<CatalogueItem>) => <span>{value?.name}</span>
       },
       {
-        Header: intl.formatMessage({ id: messages.manufacturerNumber }),
-        accessor: 'manufacturerNumber',
-        id: 'manufacturerNumber'
-      },
-      {
-        Header: intl.formatMessage({ id: messages.manufacturerUrl }),
+        Header: intl.formatMessage({ id: messages.supplierUrl }),
         accessor: 'manufacturerUrl',
         id: 'manufacturerUrl',
         Cell: ManufacturerUrl

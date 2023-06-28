@@ -15,7 +15,7 @@ export const SystemNameCell = ({ row, getValue, setUid, canEdit = true }: System
       paddingLeft: `${row.depth * 2}rem`
     }}
   >
-    <div className="flex">
+    <div className="flex items-center">
       {row.original.hasSubsystems ? (
         <button
           onClick={() => {
@@ -28,10 +28,10 @@ export const SystemNameCell = ({ row, getValue, setUid, canEdit = true }: System
           className="flex items-center hover:text-gray-400"
         >
           {row.getIsExpanded() ? <ChevronDownIcon className="w-4 h-4" /> : <ChevronRightIcon className="w-4 h-4" />}
-          <span>{getValue()}</span>
+          <span className="pl-1">{getValue()}</span>
         </button>
       ) : (
-        <span className="pl-4">{getValue()}</span>
+        <span className="pl-5">{getValue()}</span>
       )}
       {canEdit && <EditButton className="ml-auto" />}
       {canEdit && <DeleteButton className="ml-2" />}

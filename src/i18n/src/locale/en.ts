@@ -75,9 +75,8 @@ export const messages = {
         select: 'Select Item',
         description: 'Description',
         categoryName: 'Category name',
-        manufacturer: 'Manufacturer',
-        manufacturerNumber: 'Manufacturer Number',
-        manufacturerUrl: 'Manufacturer Url'
+        supplier: 'Supplier',
+        supplierUrl: 'Manufacturer/Supplier Url'
       }
     },
     itemDetail: {

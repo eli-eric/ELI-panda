@@ -184,8 +184,7 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
                         {...getRowProps(row)}
                         className={classNames(
                           index % 2 === 0 ? undefined : 'bg-gray-100',
-                          enableRowSelection ? 'hover:bg-primary-200' : 'hover:bg-gray-200 z-0',
-                          row.getIsSelected() ? 'bg-primary-300' : '',
+                          'hover:bg-gray-200 z-0',
                           getRowProps(row)?.className
                         )}
                       >

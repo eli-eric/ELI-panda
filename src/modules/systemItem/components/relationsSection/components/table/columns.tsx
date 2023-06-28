@@ -1,5 +1,6 @@
 import { ArrowLongLeftIcon, ArrowLongRightIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
+import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
 import type { SystemRelationshipResponse } from '@/modules/systems-deprecated/types/responses'
@@ -8,10 +9,10 @@ import { RelationNameCell } from './cells/RelationNameCell'
 
 interface Props {
   systemName: string
-  uid: string
 }
 
-export const useRelationsColumns = ({ systemName, uid }: Props) => {
+export const useRelationsColumns = ({ systemName }: Props) => {
+  const uid = useRouter().query.uid as string
   const columns = useMemo(
     (): ColumnDef<SystemRelationshipResponse, string>[] => [
       {

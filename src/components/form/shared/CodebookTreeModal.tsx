@@ -1,7 +1,7 @@
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
 import classNames from 'classnames'
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ModalComponent from '@/components/modal/modal.comp'
@@ -49,7 +49,7 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
   const columns = useMemo(
     (): ColumnDef<Codebooktree, string>[] => [
       {
-        header: 'Category',
+        header: 'Categories',
         accessorKey: 'name',
         id: 'name',
         size: 300,
@@ -58,14 +58,12 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
             style={{
               paddingLeft: `${row.depth * 2}rem`
             }}
-            className={classNames('cursor-pointer')}
+            className={classNames('cursor-pointer my-1 flex items-center')}
             onClick={() => {
-              !row.getCanExpand() && setItem({ uid: row.original.uid, name: row.original.name })
               row.getToggleExpandedHandler()()
-              !row.getCanExpand() && row.toggleSelected()
             }}
           >
-            <>
+            <div className={classNames(!row.original?.children && 'font-bold', 'flex items-center')}>
               {row.getCanExpand() && (
                 <button
                   {...{
@@ -73,14 +71,15 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
                   }}
                 >
                   {row.getIsExpanded() ? (
-                    <ChevronDownIcon className="w-3 h-3" />
+                    <ChevronDownIcon className="w-4 h-4" />
                   ) : (
-                    <ChevronRightIcon className="w-3 h-3" />
+                    <ChevronRightIcon className="w-4 h-4" />
                   )}
                 </button>
-              )}{' '}
-              {getValue()}
-            </>
+              )}
+              {'  '}
+              <span className="ml-2">{getValue()}</span>
+            </div>
           </div>
         )
       }
@@ -119,6 +118,15 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
           enableRowSelection: true
         }}
         className={'relative overflow-x-auto'}
+        getRowProps={row => ({
+          onClick: () => {
+            !row.original?.children && setItem({ uid: row.original.uid, name: row.original.name })
+          },
+          className: classNames(
+            item?.uid === row.original.uid ? 'bg-primary-200 hover:bg-primary-200' : '',
+            'cursor-pointer'
+          )
+        })}
       />
     </ModalComponent>
   )

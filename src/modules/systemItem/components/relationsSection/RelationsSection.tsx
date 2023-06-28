@@ -1,22 +1,21 @@
 import { memo, useState } from 'react'
-import useSWR from 'swr'
 
 import { PlusButton } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
-import { mockFetcher } from '@/helpers/fetcher'
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import PandaTable from '@/modules/shared/table/Table'
 
-import type { SystemRelationshipResponse } from '../../types/responses'
+import { useRelations } from '../../hooks/useRelations'
 import { AddRelationForm } from './components/modal/RelationModal'
 import { useRelationsColumns } from './components/table/columns'
+
 const MemoizedTable = memo(PandaTable)
 
-const RelationsSection = ({ uid, systemName }: { uid: string; systemName: string }) => {
-  const { systemRelationships } = useEndpoint({ uid })
-  const { data: relations } = useSWR<SystemRelationshipResponse[]>(systemRelationships, mockFetcher)
+const RelationsSection = ({ systemName }: { systemName: string }) => {
+  const { response: relations } = useRelations()
   const [openAddRelation, setOpenAddRelation] = useState(false)
-  const columns = useRelationsColumns({ systemName, uid })
+
+  const columns = useRelationsColumns({ systemName })
+
   return (
     <div>
       <PlusButton
