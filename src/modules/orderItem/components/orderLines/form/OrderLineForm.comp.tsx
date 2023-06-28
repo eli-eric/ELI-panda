@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
 import Combobox from '@/components/form/Combobox'
-import { Input, InputAmount, TextArea } from '@/components/form/Input'
+import { Input, InputAmount, InputCurrency, TextArea } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
 import { Col, Grid } from '@/components/grid/Grid'
@@ -86,7 +86,9 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
         <Input {...formFields.catalogueNumber} />
       </Col>
       <Col lg={!orderLine?.id || orderLine?.uid ? 4 : 6} md={6}>
-        <InputAmount {...formFields.price} />
+        <InputAmount {...formFields.price}>
+          <InputCurrency {...formFields.currency} />
+        </InputAmount>
       </Col>
       <Col lg={!orderLine?.id || orderLine?.uid ? 4 : 6} md={6}>
         <Listbox name="itemUsage" label={messages.form.itemUsage.label} codebook={CODEBOOK.ITEM_USAGE} position="top" />

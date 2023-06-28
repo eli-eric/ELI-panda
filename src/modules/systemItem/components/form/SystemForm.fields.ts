@@ -5,9 +5,11 @@ import { CODEBOOK } from '@/types/constants/codebook'
 import { ROLE } from '@/types/constants/roles'
 
 const { form } = message.systemsPage.systemDetail
+const { form: catalogueForm } = message.cataloguePage.itemDetail
 
 const useSystemEditFormFields = () => {
   const disabledEdit = !usePermission([ROLE.SYSTEM_EDIT])
+  const catalogueEdit = !usePermission([ROLE.CATALOGUE_EDIT])
   return useMakeFormFields({
     name: {
       name: 'name',
@@ -80,49 +82,55 @@ const useSystemEditFormFields = () => {
     },
     price: {
       name: 'physicalItem.price',
-      label: form.physicalItem.itemUsage.label,
+      label: form.physicalItem.price.label,
+      rounded: 'rounded-md',
       disabled: disabledEdit
     },
     currency: {
       name: 'physicalItem.currency',
-      label: form.physicalItem.itemUsage.label,
       disabled: disabledEdit
     },
     eun: {
       name: 'physicalItem.eun',
-      label: form.physicalItem.itemUsage.label,
-      disabled: disabledEdit
+      label: form.physicalItem.eun.label,
+      rounded: 'rounded-md',
+      disabled: true
     },
     serialNumber: {
       name: 'physicalItem.serialNumber',
-      label: form.physicalItem.itemUsage.label,
+      label: form.physicalItem.serialNumber.label,
+      rounded: 'rounded-md',
       disabled: disabledEdit
     },
-    catalogueNumber: {
+    partNumber: {
       name: 'physicalItem.catalogueItem.catalogueNumber',
-      disabled: disabledEdit
+      label: catalogueForm.catalogueNumber.label,
+      rounded: 'rounded-md',
+      disabled: catalogueEdit
     },
     catalogueName: {
       name: 'physicalItem.catalogueItem.name',
-      disabled: disabledEdit
+      label: catalogueForm.name.label,
+      rounded: 'rounded-md',
+      disabled: catalogueEdit
     },
     catalogueDescription: {
       name: 'physicalItem.catalogueItem.description',
-      disabled: disabledEdit
+      rounded: 'rounded-md',
+      label: catalogueForm.description.label,
+      disabled: catalogueEdit
     },
     catalogueCategory: {
       name: 'physicalItem.catalogueItem.category',
-      disabled: disabledEdit,
+      label: catalogueForm.category.label,
+      disabled: catalogueEdit,
       codebook: CODEBOOK.CATALOGUE_CATEGORY
     },
     catalogueSupplier: {
       name: 'physicalItem.catalogueItem.supplier',
-      disabled: disabledEdit,
+      label: catalogueForm.manufacturer.label,
+      disabled: catalogueEdit,
       codebook: CODEBOOK.SUPPLIER
-    },
-    supplierUrl: {
-      name: 'physicalItem.catalogueItem.manufacturerUrl',
-      disabled: disabledEdit
     }
   })
 }

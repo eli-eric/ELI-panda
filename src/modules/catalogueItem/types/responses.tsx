@@ -7,9 +7,8 @@ export interface CatalogueItem {
   description: string
   categoryPath: string
   category: CodebookType
-  manufacturer: CodebookType
+  supplier: CodebookType
   manufacturerUrl: string
-  manufacturerNumber: string
   details?: CatalogueItemDetail[]
 }
 

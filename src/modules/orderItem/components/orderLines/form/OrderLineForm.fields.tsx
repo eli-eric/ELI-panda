@@ -55,6 +55,9 @@ const useOrderLineFormFields = (enabled: boolean) =>
       placeholder: form.notes.placeholder,
       rounded: 'rounded-md'
     },
+    currency: {
+      name: 'currency'
+    },
     // itemUsage: {
     //   name: 'itemUsage',
     //   label: form.itemUsage.label,

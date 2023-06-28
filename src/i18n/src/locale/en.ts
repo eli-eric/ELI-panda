@@ -121,7 +121,10 @@ export const messages = {
         criticalityClass: { label: 'Criticality Class' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
         parentUID: { label: 'ParentUID' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
         physicalItem: {
-          itemUsage: { label: 'Item Usage' } // codebook of item usage - ITEM_USAGE
+          itemUsage: { label: 'Item Usage' }, // codebook of item usage - ITEM_USAGE
+          serialNumber: { label: 'Serial Number', placeholder: 'Serial Number' },
+          eun: { label: 'Eun', placeholder: 'Eun' },
+          price: { label: 'Price', placeholder: 'Price' }
         }
       }
     },
