@@ -144,7 +144,6 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
                         }}
                         className={classNames(
                           'whitespace-nowrap  bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
-                          className,
                           header.column.columnDef.meta?.sticky
                             ? 'sticky left-0 top-0 text-ellipsis z-20 backdrop-blur-2xl backdrop-filter border-r'
                             : 'sticky top-0 z-10'
@@ -211,10 +210,7 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
                       {table.getFooterGroups().map(footerGroup => (
                         <tr key={footerGroup.id} className={classNames('bg-gray-50')}>
                           {footerGroup.headers.map(header => (
-                            <td
-                              key={header.id}
-                              className={classNames('text-sm sm:pl-6 sm:pr-6 text-gray-500', className)}
-                            >
+                            <td key={header.id} className={classNames('text-sm sm:pl-6 sm:pr-6 text-gray-500')}>
                               {header.isPlaceholder
                                 ? null
                                 : flexRender(header.column.columnDef.footer, header.getContext())}

@@ -1,4 +1,4 @@
-import type { Table } from '@tanstack/react-table'
+import type { Row, Table } from '@tanstack/react-table'
 import { Fragment, memo, useCallback, useRef } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
@@ -19,9 +19,17 @@ interface Props {
   pageSizeDefault?: number
   className?: string
   hideButtons?: boolean
+  getRowProps?: (row: Row<SystemDetail>) => any
 }
 
-export const SystemsTable = ({ tableId, enableQueryURL, pageSizeDefault, className, hideButtons = false }: Props) => {
+export const SystemsTable = ({
+  tableId,
+  enableQueryURL,
+  pageSizeDefault,
+  className,
+  hideButtons = false,
+  getRowProps
+}: Props) => {
   const { systems, error, loading } = useSystems()
   const tableRef = useRef<Table<SystemDetail>>()
   const { columns, pending } = useSystemsColumns(hideButtons)
@@ -40,6 +48,7 @@ export const SystemsTable = ({ tableId, enableQueryURL, pageSizeDefault, classNa
         loading={loading || pending}
         tableId={tableId}
         getSubRows={row => row.subSystems}
+        getRowProps={getRowProps}
         settings={{
           enableSorting: true,
           enableQueryURL: enableQueryURL

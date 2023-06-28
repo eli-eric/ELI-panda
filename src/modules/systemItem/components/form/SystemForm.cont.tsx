@@ -1,6 +1,7 @@
 import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { Fragment, memo, useRef } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 
@@ -28,6 +29,9 @@ const MemoizedSystemGallery = memo(ImageGallery)
 const SystemForm = () => {
   const { systemDetail, uid, disabledEdit } = useSystemDetail()
   //const cataloguePermission = usePermission([ROLE.CATALOGUE_EDIT])
+  const { query } = useRouter()
+
+  const parentUid = query.parentUid as string | undefined
 
   const systemImageRef = useRef<ImageGalleryRef>()
 
@@ -45,7 +49,7 @@ const SystemForm = () => {
     // extract from data hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = data
-    submit(rest)
+    submit({ ...rest, parentUid })
   }
   useFormNotification<SystemDetailFormType>({ control })
   const FormWarningModal = useFormLeaveWarning({ formState })
@@ -71,7 +75,7 @@ const SystemForm = () => {
           {physicalItem && (
             <Fragment>
               <Heading customText="Physical Item">
-                <Link href={PATH.CATALOGUE_ITEM + '/' + '18473f51-515e-44b3-b1a9-0c9dbab0be49'} target={'_blank'}>
+                <Link href={PATH.CATALOGUE_ITEM + '/' + physicalItem.catalogueItem.uid} target={'_blank'}>
                   View
                 </Link>
               </Heading>
@@ -81,7 +85,7 @@ const SystemForm = () => {
                   setValue={formMethods.setValue}
                   config={{
                     itemCategory: FILE_TYPE.CATALOGUE,
-                    itemId: physicalItem?.catalogueItem?.uid || '18473f51-515e-44b3-b1a9-0c9dbab0be49'
+                    itemId: physicalItem?.catalogueItem?.uid
                   }}
                   className="w-full"
                   hasEditRole={false}

@@ -32,10 +32,10 @@ export const SystemNameCell = ({ row, getValue, setUid, canEdit = true, hideButt
           className="flex items-center hover:text-gray-400"
         >
           {row.getIsExpanded() ? <ChevronDownIcon className="w-4 h-4" /> : <ChevronRightIcon className="w-4 h-4" />}
-          <span className="pl-1">{getValue()}</span>
+          <span className="pl-1 my-1">{getValue()}</span>
         </button>
       ) : (
-        <span className="pl-5">{getValue()}</span>
+        <span className="pl-5 my-1">{getValue()}</span>
       )}
       {!hideButtons && (
         <Fragment>

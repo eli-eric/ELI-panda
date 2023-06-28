@@ -24,8 +24,8 @@ export const TableLayoutContainer = ({ children, deps }: Props) => {
         const cataloguePaging = document.getElementById('paging')?.clientHeight || 0
         const height = searchBar + categoryList + cataloguePaging + catalogueBreadcrump + navHeader - emptyResults
 
-        // REVIEW LAYOUT HEIGHT +1  // TODO
-        setHeight(height + 1)
+        // REVIEW LAYOUT HEIGHT + 3  // TODO
+        setHeight(height + 3)
       }
       // Add event listener
       window.addEventListener('resize', handleResize)
