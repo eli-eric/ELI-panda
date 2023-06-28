@@ -9,7 +9,7 @@ export async function fetcher(url) {
 }
 
 export async function mockFetcher(url) {
-  const res = await axiosInstance.get('http://localhost:5001/api/mock-server' + url).then(res => res.data)
+  const res = await axiosInstance.get('/api/mock-server' + url).then(res => res.data)
   return res
 }
 
