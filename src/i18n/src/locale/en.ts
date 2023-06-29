@@ -126,6 +126,9 @@ export const messages = {
           eun: { label: 'Eun', placeholder: 'Eun' },
           price: { label: 'Price', placeholder: 'Price' }
         }
+      },
+      deleteModal: {
+        message: 'Are you sure you want to delete this {name}?'
       }
     },
     itemDetail: {
