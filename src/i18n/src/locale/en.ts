@@ -128,7 +128,7 @@ export const messages = {
         }
       },
       deleteModal: {
-        message: 'Are you sure you want to delete this {name}?'
+        message: 'Are you sure you want to delete this {name} and all sub-systems?'
       }
     },
     itemDetail: {

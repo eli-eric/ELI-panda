@@ -11,7 +11,9 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
+import { useSystems } from '@/modules/systems/hooks/useSystems'
 import type { SystemDetail } from '@/modules/systems/types/responses'
+import { filterSubsystem } from '@/modules/systems/utils'
 import { PATH } from '@/types/constants/paths'
 
 const messages = message.systemsPage.systemDetail.deleteModal
@@ -24,19 +26,20 @@ interface SystemNameCellProps extends CellContext<SystemDetail, any> {
 
 export const SystemNameCell = ({ row, getValue, setUid, canEdit = true, hideButtons = false }: SystemNameCellProps) => {
   const { system } = useEndpoint({ uid: row.original.uid })
+  // last in parentPath array is the parent uid
+  const { mutate } = useSystems()
   const { formatMessage: fm } = useIntl()
-
   const { submit } = useSubmit<string>({
     endpoint: system,
     method: 'delete',
     onSuccess: () => {
       toast.success(`System ${row.original.name} deleted`)
+      mutate(prev => prev && filterSubsystem(row.original.uid, prev), { revalidate: false })
     },
     onError: () => {
       toast.error(`Error deleting system ${row.original.name}`)
     }
   })
-
   const withWarningModal = useWarningModal(
     fm({ id: messages.message }, createMessageValues({ name: row.original.name }))
   )

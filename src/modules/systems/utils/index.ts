@@ -18,3 +18,18 @@ export const makeSubsystems = (
   findAndReplace(prev.data, uid, newData)
   return { ...prev, data: newData }
 }
+
+export const filterSubsystem = (uid: string | null, prev: SystemsResponse): SystemsResponse => {
+  const newData = [...prev.data]
+  const findAndReplace = (data, uid, newData) => {
+    data.forEach((item, index) => {
+      if (item.uid === uid) {
+        newData.splice(index, 1)
+      } else if (item.subSystems) {
+        findAndReplace(item.subSystems, uid, newData[index].subSystems)
+      }
+    })
+  }
+  findAndReplace(prev.data, uid, newData)
+  return { ...prev, data: newData }
+}
