@@ -1,4 +1,4 @@
-import type { SortingState } from '@tanstack/react-table'
+import type { ColumnOrderState, ExpandedState, SortingState, VisibilityState } from '@tanstack/react-table'
 import { create } from 'zustand'
 
 import type { QueryFilter } from '@/modules/orders/types'
@@ -10,6 +10,9 @@ type SortingInstance = {
   filter?: QueryFilter
   search?: string
   custom?: Record<string, any>
+  columnVisibility?: VisibilityState
+  expanded?: ExpandedState
+  columnOrder?: ColumnOrderState
 }
 
 type TableState = {
@@ -21,6 +24,9 @@ type TableState = {
   setFilter: (tableId: string, filter: SortingInstance['filter']) => void
   setSearch: (tableId: string, search: SortingInstance['search']) => void
   setCustom: (tableId: string, custom: SortingInstance['custom']) => void
+  setVisibility: (tableId: string, columnVisibility: SortingInstance['columnVisibility']) => void
+  setExpand: (tableId: string, expanded: SortingInstance['expanded']) => void
+  setOrder: (tableId: string, columnOrder: SortingInstance['columnOrder']) => void
 }
 
 const useTableStateStore = create<TableState>(set => ({
@@ -90,6 +96,48 @@ const useTableStateStore = create<TableState>(set => ({
           delete state.instances[tableId].custom
         } else {
           state.instances[tableId].custom = custom
+        }
+        return { instances: { ...state.instances } }
+      }
+    }),
+  setVisibility: (tableId, columnVisibility) =>
+    set(state => {
+      if (!state.instances?.[tableId]) {
+        const newInstance = { ...state.instances[tableId], columnVisibility }
+        return { instances: { ...state.instances, [tableId]: newInstance } }
+      } else {
+        if (columnVisibility && Object.keys(columnVisibility).length === 0) {
+          delete state.instances[tableId].columnVisibility
+        } else {
+          state.instances[tableId].columnVisibility = columnVisibility
+        }
+        return { instances: { ...state.instances } }
+      }
+    }),
+  setExpand: (tableId, expanded) =>
+    set(state => {
+      if (!state.instances?.[tableId]) {
+        const newInstance = { ...state.instances[tableId], expanded }
+        return { instances: { ...state.instances, [tableId]: newInstance } }
+      } else {
+        if (expanded && Object.keys(expanded).length === 0) {
+          delete state.instances[tableId].expanded
+        } else {
+          state.instances[tableId].expanded = expanded
+        }
+        return { instances: { ...state.instances } }
+      }
+    }),
+  setOrder: (tableId, columnOrder) =>
+    set(state => {
+      if (!state.instances?.[tableId]) {
+        const newInstance = { ...state.instances[tableId], columnOrder }
+        return { instances: { ...state.instances, [tableId]: newInstance } }
+      } else {
+        if (columnOrder && Object.keys(columnOrder).length === 0) {
+          delete state.instances[tableId].columnOrder
+        } else {
+          state.instances[tableId].columnOrder = columnOrder
         }
         return { instances: { ...state.instances } }
       }

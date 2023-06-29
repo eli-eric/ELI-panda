@@ -3,8 +3,8 @@ import classNames from 'classnames'
 import { type Dispatch, memo, type SetStateAction, useEffect, useMemo } from 'react'
 
 import { Pagination } from '@/modules/shared/table/Pagination'
+import PandaTable from '@/modules/shared/table/pandaTable/PandaTable'
 import SearchBar from '@/modules/shared/table/SearchBar'
-import PandaTable from '@/modules/shared/table/Table'
 import { useSubsystemsForRel } from '@/modules/systemItem/hooks/useSubSystemsForRel'
 import { useSystemsForRel } from '@/modules/systemItem/hooks/useSystemsForRel'
 import { SystemNameCell } from '@/modules/systems/components/table/cells/SystemNameCell'
@@ -16,7 +16,7 @@ import type { SelectedSystemForRel } from './SelectRelationForm'
 
 const MemoizedTable = memo(PandaTable)
 
-const useSystemsForRelColumns = () => {
+const useSystemsForRelColumns = (tableId: string) => {
   const { setUid, pending } = useSubsystemsForRel()
 
   const columns = useMemo(
@@ -26,7 +26,7 @@ const useSystemsForRelColumns = () => {
         accessorKey: 'name',
         id: 'name',
         size: 150,
-        cell: props => <SystemNameCell {...props} setUid={setUid} canEdit={false} />
+        cell: props => <SystemNameCell {...props} setUid={setUid} canEdit={false} tableId={tableId} />
       },
       { header: 'systemCode', accessorKey: 'systemCode', id: 'systemCode', size: 200 },
       { header: 'systemAlias', accessorKey: 'systemAlias', id: 'systemAlias', size: 200 },
@@ -47,7 +47,7 @@ const useSystemsForRelColumns = () => {
       },
       { header: 'owner', accessorKey: 'owner', id: 'owner', size: 150, cell: ({ getValue }) => getValue().name }
     ],
-    [setUid]
+    [setUid, tableId]
   )
 
   return { columns, pending }
@@ -67,7 +67,7 @@ export const SystemsForRelTable = ({ setSelectedSystem, selectedSystem, tableId 
 
   const { systems, loading } = useSystemsForRel()
 
-  const columns = useSystemsForRelColumns()
+  const columns = useSystemsForRelColumns(tableId)
   useEffect(() => {
     setSelectedSystem(undefined)
   }, [pagination, setSelectedSystem, tableId, reset])

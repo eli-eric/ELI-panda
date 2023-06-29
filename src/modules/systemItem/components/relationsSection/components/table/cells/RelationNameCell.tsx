@@ -14,7 +14,7 @@ const messages = message.systemsPage.relations
 
 interface RelationNameCellProps extends CellContext<SystemRelationshipResponse, string> {
   uid: string
-  systemName: string
+  systemName?: string
 }
 
 export const RelationNameCell = ({

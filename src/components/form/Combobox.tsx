@@ -16,7 +16,7 @@ import useAddCodebookValue from './shared/useAddCodebookValue'
 
 type ComboboxPropsT = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
-    codebook: CODEBOOK
+    codebook?: CODEBOOK
     isObject?: boolean
     position?: 'top' | 'bottom'
     limit?: number

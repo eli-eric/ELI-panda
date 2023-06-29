@@ -2,7 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'
 
-import SystemsContainer from '@/modules/systems/Systems.cont'
+import { SystemsContainer } from '@/modules/systems/Systems.cont'
 
 const RootSystemPage: NextPage = () => (
   <Fragment>

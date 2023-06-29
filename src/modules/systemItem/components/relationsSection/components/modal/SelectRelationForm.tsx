@@ -12,7 +12,7 @@ export type SelectedSystemForRel = {
 }
 
 interface Props {
-  systemName: string
+  systemName?: string
   selectedSystem?: SelectedSystemForRel
 }
 const SelectRelation = ({ systemName, selectedSystem }: Props) => {

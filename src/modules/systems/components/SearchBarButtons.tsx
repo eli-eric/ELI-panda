@@ -6,7 +6,7 @@ import usePermission from '@/hooks/usePermission'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
-const SearchBarButtons = () => {
+export const SearchBarButtons = () => {
   const canEdit = usePermission([ROLE.SYSTEM_EDIT])
 
   const router = useRouter()
@@ -34,5 +34,3 @@ const SearchBarButtons = () => {
     </div>
   )
 }
-
-export default SearchBarButtons

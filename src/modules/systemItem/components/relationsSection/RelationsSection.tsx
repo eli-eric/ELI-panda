@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
-import PandaTable from '@/modules/shared/table/Table'
+import PandaTable from '@/modules/shared/table/pandaTable/PandaTable'
 
 import { useRelations } from '../../hooks/useRelations'
 import { AddRelationForm } from './components/modal/RelationModal'
@@ -10,7 +10,7 @@ import { useRelationsColumns } from './components/table/columns'
 
 const MemoizedTable = memo(PandaTable)
 
-const RelationsSection = ({ systemName }: { systemName: string }) => {
+const RelationsSection = ({ systemName }: { systemName?: string }) => {
   const { response: relations } = useRelations()
   const [openAddRelation, setOpenAddRelation] = useState(false)
 

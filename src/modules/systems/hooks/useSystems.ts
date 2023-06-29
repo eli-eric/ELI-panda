@@ -4,8 +4,8 @@ import useFetch from '@/hooks/fetch/useFetch'
 import useQueryManager from '../../../hooks/useQueryManager'
 import type { SystemsResponse } from '../types/responses'
 
-export const useSystems = () => {
-  const query = useQueryManager('systems')
+export const useSystems = tableId => {
+  const query = useQueryManager(tableId)
   const { systemsList } = useEndpoint({ ...query })
   const { response, loading, error, mutate } = useFetch<SystemsResponse>({
     config: {
@@ -15,7 +15,7 @@ export const useSystems = () => {
       keepPreviousData: true
     },
     url: systemsList,
-    useMockFetcher: true
+    useMockFetcher: false
   })
   return { systems: response, loading, error, mutate }
 }

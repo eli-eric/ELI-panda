@@ -8,15 +8,15 @@ import type { SystemDetail } from '../types/responses'
 import { makeSubsystems } from '../utils'
 import { useSystems } from './useSystems'
 
-export const useSubsystems = () => {
+export const useSubsystems = tableId => {
   const [uid, setUid] = useState<string | null>(null)
-  const { mutate } = useSystems()
+  const { mutate } = useSystems(tableId)
 
   const { systemSubsystems } = useEndpoint({ uid: uid || '' })
 
   const { loading: pending } = useFetch<SystemDetail[]>({
     url: uid ? systemSubsystems : null,
-    useMockFetcher: true,
+    useMockFetcher: false,
     config: {
       suspense: false,
       onSuccess: subsystems => mutate(prev => prev && makeSubsystems(uid, prev, subsystems), { revalidate: false }),

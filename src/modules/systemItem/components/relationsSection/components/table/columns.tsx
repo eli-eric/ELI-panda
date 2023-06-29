@@ -8,7 +8,7 @@ import type { SystemRelationshipResponse } from '@/modules/systems-deprecated/ty
 import { RelationNameCell } from './cells/RelationNameCell'
 
 interface Props {
-  systemName: string
+  systemName?: string
 }
 
 export const useRelationsColumns = ({ systemName }: Props) => {

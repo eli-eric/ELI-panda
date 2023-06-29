@@ -8,7 +8,7 @@ import ModalComponent from '@/components/modal/modal.comp'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import useFetch from '@/hooks/fetch/useFetch'
 import { message } from '@/i18n/src/messages'
-import PandaTable from '@/modules/shared/table/Table'
+import PandaTable from '@/modules/shared/table/pandaTable/PandaTable'
 import type { ModalButtons } from '@/types/form'
 
 const messages = message.common.buttons
@@ -30,8 +30,6 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
   const [item, setItem] = useState<CodebookType | undefined>(undefined)
 
   const { setValue } = useFormContext()
-
-  console.log('item', item)
 
   useEffect(
     () => () => {
