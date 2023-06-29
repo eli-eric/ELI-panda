@@ -4,8 +4,8 @@ import { getFilteredRowModel } from '@tanstack/react-table'
 import { getExpandedRowModel } from '@tanstack/react-table'
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { useQueryState } from 'next-usequerystate'
-import { useEffect, useState } from 'react'
-import { useIsFirstRender } from 'usehooks-ts'
+import { useEffect, useMemo, useState } from 'react'
+import { useIsFirstRender, useLocalStorage } from 'usehooks-ts'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
@@ -33,26 +33,62 @@ export const usePandaTable = <T extends object>({ tableId, columns, getSubRows, 
   const { setSortBy, setSortByQueryString, instances, setOrder, setExpand, setVisibility } = useTableStateStore()
   const sortByInstance = instances[tableId]?.sortBy || []
   const sortByStringInstance = instances[tableId]?.sortByQueryString || null
-  const columnVisibilityInstance = instances[tableId]?.columnVisibility || {}
-  const columnOrderInstance = instances[tableId]?.columnOrder || columns.map(column => column.id as string)
+  const columnVisibilityInstance = useMemo(() => instances[tableId]?.columnVisibility, [instances, tableId])
+  const columnOrderInstance = instances[tableId]?.columnOrder
   const expandedInstance = instances[tableId]?.expanded || {}
   // query state
   const [sortByQuery, setSortByQuery] = useQueryState('sortBy', { history: 'replace' })
   // table state
   const [sorting, setSorting] = useState<SortingState>(sortByInstance)
 
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(columnVisibilityInstance)
+  const isFirstRender = useIsFirstRender()
+
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [storedVisibility, setStoredVisibility] = useLocalStorage<VisibilityState>(
+    'columnVisibility',
+    columnVisibilityInstance || {}
+  )
+
+  // set column visibility on first render
   useEffect(() => {
-    setVisibility(tableId, columnVisibility)
-  }, [columnVisibility, setVisibility, tableId])
+    if (isFirstRender) {
+      columnVisibilityInstance ? setColumnVisibility(columnVisibilityInstance) : setColumnVisibility(storedVisibility)
+    }
+  }, [isFirstRender, columnVisibilityInstance, storedVisibility])
+
+  // update column visibility
+  useEffect(() => {
+    if (!isFirstRender) {
+      setVisibility(tableId, columnVisibility)
+      setStoredVisibility(columnVisibility)
+    }
+  }, [columnVisibility, setVisibility, tableId, setStoredVisibility, isFirstRender])
+
+  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([])
+  const [storedOrder, setStoredOrder] = useLocalStorage<ColumnOrderState>(
+    'columnOrder',
+    columns.map(column => column.id as string)
+  )
+
+  // set column order on first render
+  useEffect(() => {
+    if (isFirstRender) {
+      columnOrderInstance ? setColumnOrder(columnOrderInstance) : setColumnOrder(storedOrder)
+    }
+  }, [isFirstRender, columnOrderInstance, storedOrder])
+
+  // update column order
+  useEffect(() => {
+    if (!isFirstRender) {
+      setOrder(tableId, columnOrder)
+      setStoredOrder(columnOrder)
+    }
+  }, [columnOrder, setOrder, tableId, setStoredOrder, isFirstRender])
+
   const [expanded, setExpanded] = useState<ExpandedState>(expandedInstance)
   useEffect(() => {
     setExpand(tableId, expanded)
   }, [expanded, setExpand, tableId])
-  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(columnOrderInstance)
-  useEffect(() => {
-    setOrder(tableId, columnOrder)
-  }, [columnOrder, setOrder, tableId])
 
   // react-table
   const table = useReactTable<T>({
@@ -74,8 +110,6 @@ export const usePandaTable = <T extends object>({ tableId, columns, getSubRows, 
     enableSubRowSelection: true,
     state: { sorting, expanded, columnOrder, columnVisibility }
   })
-
-  const isFirstRender = useIsFirstRender()
 
   // initialize update table state and query state and instance on first render
   useEffect(() => {
@@ -101,7 +135,9 @@ export const usePandaTable = <T extends object>({ tableId, columns, getSubRows, 
     enableQueryURL,
     setSortBy,
     setSortByQueryString,
-    setSortByQuery
+    setSortByQuery,
+    setColumnVisibility,
+    setColumnOrder
   ])
 
   // update effect
