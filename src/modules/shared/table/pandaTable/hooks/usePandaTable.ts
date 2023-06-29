@@ -1,4 +1,4 @@
-import type { ColumnDef, ColumnOrderState, ExpandedState, SortingState } from '@tanstack/react-table'
+import type { ColumnDef, ColumnOrderState, ExpandedState, SortingState, VisibilityState } from '@tanstack/react-table'
 import { getSortedRowModel } from '@tanstack/react-table'
 import { getFilteredRowModel } from '@tanstack/react-table'
 import { getExpandedRowModel } from '@tanstack/react-table'
@@ -37,6 +37,7 @@ export const usePandaTable = <T extends object>({ tableId, columns, getSubRows, 
   const [sortByQuery, setSortByQuery] = useQueryState('sortBy', { history: 'replace' })
   // table state
   const [sorting, setSorting] = useState<SortingState>(sortByInstance)
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [expanded, setExpanded] = useState<ExpandedState>({})
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
     columns.map(column => column.id as string) //must start out with populated columnOrder so we can splice
@@ -52,6 +53,7 @@ export const usePandaTable = <T extends object>({ tableId, columns, getSubRows, 
     onExpandedChange: setExpanded,
     onSortingChange: setSorting,
     onColumnOrderChange: setColumnOrder,
+    onColumnVisibilityChange: setColumnVisibility,
     columns: columns,
     data: data || [],
     enableSorting: enableSorting,
@@ -59,7 +61,7 @@ export const usePandaTable = <T extends object>({ tableId, columns, getSubRows, 
     enableRowSelection: enableRowSelection,
     enableMultiRowSelection: false,
     enableSubRowSelection: true,
-    state: { sorting, expanded, columnOrder }
+    state: { sorting, expanded, columnOrder, columnVisibility }
   })
 
   const isFirstRender = useIsFirstRender()

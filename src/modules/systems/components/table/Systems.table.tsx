@@ -32,7 +32,7 @@ export const SystemsTable = ({
   getRowProps,
   settings
 }: Props) => {
-  const { systems, error, loading } = useSystems()
+  const { systems, error, loading } = useSystems(tableId)
   const tableRef = useRef<Table<SystemDetail>>()
   const { columns, pending } = useSystemsColumns(hideButtons)
 
@@ -42,7 +42,12 @@ export const SystemsTable = ({
 
   return (
     <Fragment>
-      <SearchBar tableId={tableId} left={!hideButtons ? <SearchBarButtons /> : undefined} onChange={onChangeSearch} />
+      <SearchBar
+        tableId={tableId}
+        useQuery={settings?.enableQueryURL}
+        left={!hideButtons ? <SearchBarButtons /> : undefined}
+        onChange={onChangeSearch}
+      />
       <MemoizedTable
         ref={tableRef}
         columns={columns}
