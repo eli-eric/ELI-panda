@@ -1,5 +1,6 @@
+import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 
 import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
@@ -17,40 +18,56 @@ export const useSystemsColumns = (hideButtons?: boolean) => {
     (): ColumnDef<SystemDetail, any>[] => [
       {
         header: 'Name',
-        accessorKey: 'name',
+        accessorFn: row => row.name,
         id: 'name',
-        size: 300,
-        enablePinning: false,
+        size: 400,
         cell: props => <SystemNameCell {...props} setUid={setUid} canEdit={canEdit} hideButtons={hideButtons} />
       },
-      { header: 'System Code', accessorKey: 'systemCode', id: 'systemCode', size: 150 },
-      { header: 'System Alias', accessorKey: 'systemAlias', id: 'systemAlias', size: 150 },
+      { header: 'System Code', accessorFn: row => row.systemCode, id: 'systemCode', size: 150 },
+      { header: 'System Alias', accessorFn: row => row.systemAlias, id: 'systemAlias', size: 150 },
       {
         header: 'System Type',
-        accessorKey: 'systemType.name',
+        accessorFn: row => row.systemType?.name,
         id: 'systemType',
         size: 150
       },
-      { header: 'Zone', accessorKey: 'zone.name', id: 'zone', size: 150 },
+      { header: 'Zone', accessorFn: row => row.zone?.name, id: 'zone', size: 150 },
       {
         header: 'Location',
-        accessorKey: 'location.name',
+        accessorFn: row => row.location?.name,
         id: 'location',
         size: 150
       },
-      { header: 'Owner', accessorKey: 'owner.name', id: 'owner', size: 150 },
-      { header: 'Description', accessorKey: 'description', id: 'description', size: 150 },
-      { header: 'Responsible', accessorKey: 'responsible', id: 'responsible', size: 150 },
-      { header: 'Importance', accessorKey: 'importance', id: 'importance', size: 150 },
+      { header: 'Owner', accessorFn: row => row.owner?.name, id: 'owner', size: 150 },
+      {
+        header: 'Description',
+        accessorFn: row => row.description,
+        id: 'description',
+        size: 150,
+        cell: ({ getValue }) => (
+          <Fragment>
+            {getValue() && (
+              <InformationCircleIcon
+                className="h-6 w-6 flex-shrink-0"
+                data-tooltip-id="tooltip"
+                data-tooltip-content={getValue()}
+              />
+            )}
+          </Fragment>
+        )
+      },
+      { header: 'Responsible', accessorFn: row => row.responsible, id: 'responsible', size: 150 },
+      { header: 'Importance', accessorFn: row => row.importance, id: 'importance', size: 150 },
+
       {
         header: 'Item Usage',
-        accessorKey: 'physicalItem.itemUsage.name',
+        accessorFn: row => row.physicalItem?.itemUsage?.name,
         id: 'itemUsage',
         size: 150
       },
       {
         header: 'Price',
-        accessorKey: 'physicalItem.price',
+        accessorFn: row => row.physicalItem?.price,
         id: 'price',
         size: 150,
         cell: ({ getValue, row: { original } }) => (
@@ -61,43 +78,54 @@ export const useSystemsColumns = (hideButtons?: boolean) => {
       },
       {
         header: 'Eun',
-        accessorKey: 'physicalItem.eun',
+        accessorFn: row => row.physicalItem?.eun,
         id: 'eun',
         size: 150
       },
       {
         header: 'Serial Number',
-        accessorKey: 'physicalItem.serialNumber',
+        accessorFn: row => row.physicalItem?.serialNumber,
         id: 'serialNumber',
         size: 150
       },
       {
         header: 'Catalogue Name',
-        accessorKey: 'physicalItem.catalogueItem.name',
+        accessorFn: row => row.physicalItem?.catalogueItem?.name,
         id: 'catalogueName',
         size: 150
       },
       {
         header: 'Part Number',
-        accessorKey: 'physicalItem.catalogueItem.catalogueNumber',
+        accessorFn: row => row.physicalItem?.catalogueItem?.catalogueNumber,
         id: 'partNumber',
         size: 150
       },
       {
         header: 'Catalogue Description',
-        accessorKey: 'physicalItem.catalogueItem.description',
+        accessorFn: row => row.physicalItem?.catalogueItem?.description,
         id: 'catalogueDescription',
-        size: 150
+        size: 200,
+        cell: ({ getValue }) => (
+          <Fragment>
+            {getValue() && (
+              <InformationCircleIcon
+                className="h-6 w-6 flex-shrink-0"
+                data-tooltip-id="tooltip"
+                data-tooltip-content={getValue()}
+              />
+            )}
+          </Fragment>
+        )
       },
       {
         header: 'Catalogue Category',
-        accessorKey: 'physicalItem.catalogueItem.category.name',
+        accessorFn: row => row.physicalItem?.catalogueItem?.category?.name,
         id: 'catalogueCategory',
-        size: 150
+        size: 170
       },
       {
         header: 'Supplier',
-        accessorKey: 'physicalItem.catalogueItem.supplier.name',
+        accessorFn: row => row.physicalItem?.catalogueItem?.supplier,
         id: 'supplier',
         size: 150
       }

@@ -7,7 +7,17 @@ import { SystemsTable } from './components/table/Systems.table'
 export const SystemsContainer = () => (
   <Fragment>
     <TableLayoutContainer>
-      <SystemsTable tableId={'systems'} enableQueryURL pageSizeDefault={50} className={'relative overflow-x-auto'} />
+      <SystemsTable
+        tableId={'systems'}
+        pageSizeDefault={50}
+        className={'relative overflow-x-auto'}
+        settings={{
+          enableSorting: true,
+          enableColumnHiding: true,
+          enableQueryURL: true,
+          enableColumnReordering: true
+        }}
+      />
     </TableLayoutContainer>
   </Fragment>
 )

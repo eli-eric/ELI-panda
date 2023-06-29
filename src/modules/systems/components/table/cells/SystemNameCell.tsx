@@ -39,12 +39,12 @@ export const SystemNameCell = ({ row, getValue, setUid, canEdit = true, hideButt
       )}
       {!hideButtons && (
         <Fragment>
-          <Link href={PATH.SYSTEM + '/' + row.original.uid} className="ml-auto">
+          <Link href={PATH.SYSTEM + '/' + row.original.uid} className="ml-auto z-0">
             <Fragment>{canEdit ? <EditButton /> : <DetailButton />}</Fragment>
           </Link>
-          {canEdit && <DeleteButton className="ml-2" />}
+          {canEdit && <DeleteButton className="ml-2 z-0" />}
           {canEdit && (
-            <Link href={{ pathname: PATH.SYSTEM, query: { parentUid: row.original.uid } }} className="ml-2">
+            <Link href={{ pathname: PATH.SYSTEM, query: { parentUid: row.original.uid } }} className="ml-2 z-0">
               <PlusButton />
             </Link>
           )}

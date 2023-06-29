@@ -20,7 +20,7 @@ export const SystemItemContainer = () => {
       <SystemForm />
       {uid && (
         <Card className="flex flex-col justify-between">
-          <Heading text="Relations" />
+          <Heading customText="Relations" />
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense fallback={<ProgressBarComponent />}>
               <RelationsSection systemName={systemDetail.name} />

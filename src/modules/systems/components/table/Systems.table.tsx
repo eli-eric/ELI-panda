@@ -3,8 +3,9 @@ import { Fragment, memo, useCallback, useRef } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { Pagination } from '@/modules/shared/table/Pagination'
+import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
+import PandaTable from '@/modules/shared/table/pandaTable/PandaTable'
 import SearchBar from '@/modules/shared/table/SearchBar'
-import PandaTable from '@/modules/shared/table/Table'
 
 import { useSystems } from '../../hooks/useSystems'
 import type { SystemDetail } from '../../types/responses'
@@ -15,20 +16,21 @@ const MemoizedTable = memo(PandaTable)
 
 interface Props {
   tableId: string
-  enableQueryURL?: boolean
   pageSizeDefault?: number
   className?: string
   hideButtons?: boolean
   getRowProps?: (row: Row<SystemDetail>) => any
+  settings?: PandaTableSettings
 }
 
 export const SystemsTable = ({
   tableId,
-  enableQueryURL,
+
   pageSizeDefault,
   className,
   hideButtons = false,
-  getRowProps
+  getRowProps,
+  settings
 }: Props) => {
   const { systems, error, loading } = useSystems()
   const tableRef = useRef<Table<SystemDetail>>()
@@ -49,18 +51,14 @@ export const SystemsTable = ({
         tableId={tableId}
         getSubRows={row => row.subSystems}
         getRowProps={getRowProps}
-        settings={{
-          enableSorting: true,
-          enableColumnHiding: true,
-          enableQueryURL: enableQueryURL
-        }}
+        settings={settings}
         className={className}
       />
       {error && <ErrorPage />}
       <Pagination
         tableId={tableId}
         settings={{
-          enableQueryURL: enableQueryURL,
+          enableQueryURL: settings?.enableQueryURL,
           pageSizeDefault: pageSizeDefault,
           total: systems?.totalCount
         }}

@@ -50,7 +50,7 @@ export const SystemItemSearchButton = () => {
       <ModalComponent open={openModal} setOpen={setOpenModal} buttons={modalButtons}>
         <SystemsTable
           tableId={'systemsItem'}
-          enableQueryURL={false}
+          settings={{ enableQueryURL: false }}
           pageSizeDefault={10}
           className={'overflow-y-auto relative h-[423px]'}
           getRowProps={row => ({
