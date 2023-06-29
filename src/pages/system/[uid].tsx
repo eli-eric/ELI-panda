@@ -14,7 +14,6 @@ const messages = message.systemItem
 
 const SystemContainer = (): React.ReactElement => {
   const { systemDetail } = useSystemDetail()
-
   return <Fragment>{systemDetail && <SystemItemContainer />}</Fragment>
 }
 
@@ -35,5 +34,9 @@ const SystemDetailPage: NextPage = () => {
     </Fragment>
   )
 }
+
+SystemDetailPage.getInitialProps = ({ query }) => ({
+  key: query.uid
+})
 
 export default SystemDetailPage
