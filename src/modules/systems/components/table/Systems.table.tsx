@@ -37,8 +37,7 @@ export const SystemsTable = ({
   const { columns, pending } = useSystemsColumns(hideButtons)
 
   const onChangeSearch = useCallback(() => {
-    console.log('onChangeSearch')
-    //tableRef.current?.resetExpanded()
+    tableRef.current?.resetExpanded()
   }, [tableRef])
 
   return (
