@@ -33,7 +33,8 @@ export const useSystemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | un
         }
         uid
           ? mutate(prev => prev && updateSystem(uid, body, prev), { revalidate: false })
-          : parentUid && mutate(prev => prev && addSubsystem(parentUid, body, prev), { revalidate: false })
+          : parentUid &&
+            mutate(prev => prev && addSubsystem(parentUid, { ...body, uid: responseUid }, prev), { revalidate: false })
 
         mutateDetail()
       })
