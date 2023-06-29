@@ -27,7 +27,7 @@ const useFetch = <ResponseType>({
   config,
   format
 }: UseFetchProps<ResponseType>): {
-  response: ResponseType
+  response: ResponseType | undefined
   loading: boolean
   error: any
   mutate: KeyedMutator<ResponseType>

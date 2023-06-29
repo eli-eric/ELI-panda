@@ -10,7 +10,7 @@ import { useRelationsColumns } from './components/table/columns'
 
 const MemoizedTable = memo(PandaTable)
 
-const RelationsSection = ({ systemName }: { systemName: string }) => {
+const RelationsSection = ({ systemName }: { systemName?: string }) => {
   const { response: relations } = useRelations()
   const [openAddRelation, setOpenAddRelation] = useState(false)
 

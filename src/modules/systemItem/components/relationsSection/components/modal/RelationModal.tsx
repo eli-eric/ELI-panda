@@ -20,7 +20,7 @@ import { SystemsForRelTable } from './SystemsForRelTable'
 const { buttons } = message.common
 interface Props {
   setopen: Dispatch<SetStateAction<boolean>>
-  systemName: string
+  systemName?: string
 }
 
 const relationValidationSchema = yup.object().shape({

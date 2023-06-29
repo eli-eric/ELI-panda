@@ -23,7 +23,7 @@ export const SystemItemContainer = () => {
           <Heading customText="Relations" />
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense fallback={<ProgressBarComponent />}>
-              <RelationsSection systemName={systemDetail.name} />
+              <RelationsSection systemName={systemDetail?.name} />
             </Suspense>
           </ErrorBoundary>
           <ErrorBoundary fallback={<ErrorPage />}>

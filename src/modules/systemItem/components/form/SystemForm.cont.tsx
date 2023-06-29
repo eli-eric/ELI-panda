@@ -1,7 +1,6 @@
 import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { Fragment, memo, useRef } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 
@@ -14,6 +13,7 @@ import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { FILE_TYPE } from '@/types/constants/files'
 import { PATH } from '@/types/constants/paths'
 
+import { useParentSystemDetail } from '../../hooks/useParentSystemDetail'
 import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { useSystemSubmit } from '../../hooks/useSystemSubmit'
 import type { SystemDetailFormType } from '../../types/form'
@@ -29,9 +29,8 @@ const MemoizedSystemGallery = memo(ImageGallery)
 const SystemForm = () => {
   const { systemDetail, uid, disabledEdit } = useSystemDetail()
   //const cataloguePermission = usePermission([ROLE.CATALOGUE_EDIT])
-  const { query } = useRouter()
 
-  const parentUid = query.parentUid as string | undefined
+  const { parentUid, parentPath } = useParentSystemDetail()
 
   const systemImageRef = useRef<ImageGalleryRef>()
 
@@ -58,7 +57,7 @@ const SystemForm = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormProvider {...formMethods}>
         <HeaderComponent loading={loadingSubmit} />
-        <Breadcrumbs parentPath={systemDetail?.parentPath} />
+        <Breadcrumbs parentPath={parentPath || systemDetail?.parentPath} />
         <Card>
           <Heading customText="System">
             <SystemItemSearchButton />
