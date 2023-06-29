@@ -30,18 +30,29 @@ export const usePandaTable = <T extends object>({ tableId, columns, getSubRows, 
   const { enableSorting = false, enableQueryURL = false, enableRowSelection = false } = settings || {}
 
   // zustand table instance store
-  const { setSortBy, setSortByQueryString, instances } = useTableStateStore()
+  const { setSortBy, setSortByQueryString, instances, setOrder, setExpand, setVisibility } = useTableStateStore()
   const sortByInstance = instances[tableId]?.sortBy || []
   const sortByStringInstance = instances[tableId]?.sortByQueryString || null
+  const columnVisibilityInstance = instances[tableId]?.columnVisibility || {}
+  const columnOrderInstance = instances[tableId]?.columnOrder || columns.map(column => column.id as string)
+  const expandedInstance = instances[tableId]?.expanded || {}
   // query state
   const [sortByQuery, setSortByQuery] = useQueryState('sortBy', { history: 'replace' })
   // table state
   const [sorting, setSorting] = useState<SortingState>(sortByInstance)
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  const [expanded, setExpanded] = useState<ExpandedState>({})
-  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(
-    columns.map(column => column.id as string) //must start out with populated columnOrder so we can splice
-  )
+
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(columnVisibilityInstance)
+  useEffect(() => {
+    setVisibility(tableId, columnVisibility)
+  }, [columnVisibility, setVisibility, tableId])
+  const [expanded, setExpanded] = useState<ExpandedState>(expandedInstance)
+  useEffect(() => {
+    setExpand(tableId, expanded)
+  }, [expanded, setExpand, tableId])
+  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(columnOrderInstance)
+  useEffect(() => {
+    setOrder(tableId, columnOrder)
+  }, [columnOrder, setOrder, tableId])
 
   // react-table
   const table = useReactTable<T>({

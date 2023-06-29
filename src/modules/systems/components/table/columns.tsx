@@ -56,8 +56,20 @@ export const useSystemsColumns = (hideButtons?: boolean) => {
           </Fragment>
         )
       },
-      { header: 'Responsible', accessorFn: row => row.responsible, id: 'responsible', size: 150 },
-      { header: 'Importance', accessorFn: row => row.importance, id: 'importance', size: 150 },
+      { header: 'Responsible', accessorFn: row => row.responsible?.name, id: 'responsible', size: 150 },
+      { header: 'Importance', accessorFn: row => row.importance?.name, id: 'importance', size: 150 },
+      {
+        header: 'Sub Systems Count',
+        accessorFn: row => row.statistics?.subsystemsCount,
+        id: 'subsystemsCount',
+        size: 200
+      },
+      {
+        header: 'Spare Parts Count',
+        accessorFn: row => row.statistics?.sparePartsCount,
+        id: 'sparePartsCount',
+        size: 200
+      },
 
       {
         header: 'Item Usage',

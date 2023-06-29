@@ -28,21 +28,18 @@ const SearchBar = ({ useQuery = true, left, right, tableId, onChange }: Props) =
 
   const onChangeRef = useRef(onChange)
 
-  useEffect(() => {
-    onChangeRef.current = onChange
-  }, [onChange])
-
+  const isFirstRender = useIsFirstRender()
   useEffect(() => {
     if (useQuery) {
       setQuerySearch(searchValue ? searchValue : null, { shallow: true })
     }
     setSearch(tableId, searchValue)
-    if (onChangeRef.current) {
-      onChangeRef.current(searchValue)
+    if (!isFirstRender) {
+      if (onChangeRef.current) {
+        onChangeRef.current(searchValue)
+      }
     }
-  }, [searchValue, tableId, useQuery, setQuerySearch, setSearch])
-
-  const isFirstRender = useIsFirstRender()
+  }, [searchValue, tableId, useQuery, setQuerySearch, setSearch, isFirstRender])
 
   // initialize update table state and query state and instance on first render
   useEffect(() => {

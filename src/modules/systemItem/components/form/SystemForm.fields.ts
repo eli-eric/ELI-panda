@@ -25,7 +25,7 @@ const useSystemEditFormFields = () => {
       disabled: disabledEdit
     },
     responsible: {
-      name: 'responsiblePerson',
+      name: 'responsible',
       label: form.responsiblePerson.label,
       codebook: CODEBOOK.EMPLOYEE,
       disabled: disabledEdit

@@ -6,6 +6,11 @@ export type SystemsResponse = {
   totalCount: number
 }
 
+type SystemStatistics = {
+  subsystemsCount?: number
+  sparePartsCount?: number
+}
+
 export type SystemDetail = {
   uid: string // from router
   name: string // input
@@ -22,6 +27,7 @@ export type SystemDetail = {
   parentPath?: CodebookType[]
   hasSubsystems: boolean
   subSystems?: SystemDetail[]
+  statistics?: SystemStatistics
 }
 
 export type SystemListResponse = {
