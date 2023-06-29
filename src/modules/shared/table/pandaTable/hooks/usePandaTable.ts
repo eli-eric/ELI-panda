@@ -31,19 +31,19 @@ export const usePandaTable = <T extends object>({ tableId, columns, getSubRows, 
 
   // zustand table instance store
   const { setSortBy, setSortByQueryString, instances, setOrder, setExpand, setVisibility } = useTableStateStore()
-  const sortByInstance = instances[tableId]?.sortBy || []
-  const sortByStringInstance = instances[tableId]?.sortByQueryString || null
+  const sortByInstance = instances[tableId]?.sortBy
+  const sortByStringInstance = instances[tableId]?.sortByQueryString
   const columnVisibilityInstance = useMemo(() => instances[tableId]?.columnVisibility, [instances, tableId])
   const columnOrderInstance = instances[tableId]?.columnOrder
-  const expandedInstance = instances[tableId]?.expanded || {}
+  const expandedInstance = instances[tableId]?.expanded
   // query state
   const [sortByQuery, setSortByQuery] = useQueryState('sortBy', { history: 'replace' })
   // table state
-  const [sorting, setSorting] = useState<SortingState>(sortByInstance)
+  const [sorting, setSorting] = useState<SortingState>(sortByInstance || [])
 
   const isFirstRender = useIsFirstRender()
 
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(columnVisibilityInstance || {})
   const [storedVisibility, setStoredVisibility] = useLocalStorage<VisibilityState>(
     'columnVisibility',
     columnVisibilityInstance || {}
@@ -52,7 +52,7 @@ export const usePandaTable = <T extends object>({ tableId, columns, getSubRows, 
   // set column visibility on first render
   useEffect(() => {
     if (isFirstRender) {
-      columnVisibilityInstance ? setColumnVisibility(columnVisibilityInstance) : setColumnVisibility(storedVisibility)
+      !columnVisibilityInstance && setColumnVisibility(storedVisibility)
     }
   }, [isFirstRender, columnVisibilityInstance, storedVisibility])
 
@@ -64,7 +64,7 @@ export const usePandaTable = <T extends object>({ tableId, columns, getSubRows, 
     }
   }, [columnVisibility, setVisibility, tableId, setStoredVisibility, isFirstRender])
 
-  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>([])
+  const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(columnOrderInstance || [])
   const [storedOrder, setStoredOrder] = useLocalStorage<ColumnOrderState>(
     'columnOrder',
     columns.map(column => column.id as string)
@@ -73,7 +73,7 @@ export const usePandaTable = <T extends object>({ tableId, columns, getSubRows, 
   // set column order on first render
   useEffect(() => {
     if (isFirstRender) {
-      columnOrderInstance ? setColumnOrder(columnOrderInstance) : setColumnOrder(storedOrder)
+      !columnOrderInstance && setColumnOrder(storedOrder)
     }
   }, [isFirstRender, columnOrderInstance, storedOrder])
 
@@ -85,7 +85,7 @@ export const usePandaTable = <T extends object>({ tableId, columns, getSubRows, 
     }
   }, [columnOrder, setOrder, tableId, setStoredOrder, isFirstRender])
 
-  const [expanded, setExpanded] = useState<ExpandedState>(expandedInstance)
+  const [expanded, setExpanded] = useState<ExpandedState>(expandedInstance || {})
   useEffect(() => {
     setExpand(tableId, expanded)
   }, [expanded, setExpand, tableId])
