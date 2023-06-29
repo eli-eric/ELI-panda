@@ -1,5 +1,4 @@
 import type { StaticImageData } from 'next/image'
-import noImage from 'public/no-image.png'
 import useSWR from 'swr'
 
 import { uniFetcher } from '@/helpers/fetcher'
@@ -18,7 +17,7 @@ const fallbackImage: FileItem = {
 }
 export const useImage = (endpoint?: string | null, useNoImage = true): string | StaticImageData => {
   const { response: image } = useFetch<string>({ url: endpoint, config: { suspense: false } })
-  return useNoImage ? image || noImage : image
+  return image ? image : useNoImage ? fallbackImage.url : ''
 }
 
 export const useCatalogueImage = uid => {

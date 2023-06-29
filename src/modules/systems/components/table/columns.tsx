@@ -10,8 +10,8 @@ import type { SystemDetail } from '../../types/responses'
 import { SystemNameCell } from './cells/SystemNameCell'
 
 //TODO: fix typing
-export const useSystemsColumns = (hideButtons?: boolean) => {
-  const { setUid, pending } = useSubsystems()
+export const useSystemsColumns = ({ tableId, hideButtons }: { tableId: string; hideButtons?: boolean }) => {
+  const { setUid, pending } = useSubsystems(tableId)
   const canEdit = usePermission([ROLE.SYSTEM_EDIT])
 
   const columns = useMemo(
@@ -21,7 +21,9 @@ export const useSystemsColumns = (hideButtons?: boolean) => {
         accessorFn: row => row.name,
         id: 'name',
         size: 400,
-        cell: props => <SystemNameCell {...props} setUid={setUid} canEdit={canEdit} hideButtons={hideButtons} />
+        cell: props => (
+          <SystemNameCell {...props} setUid={setUid} canEdit={canEdit} hideButtons={hideButtons} tableId={tableId} />
+        )
       },
       { header: 'System Code', accessorFn: row => row.systemCode, id: 'systemCode', size: 150 },
       { header: 'System Alias', accessorFn: row => row.systemAlias, id: 'systemAlias', size: 150 },

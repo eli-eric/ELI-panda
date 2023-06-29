@@ -6,21 +6,24 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
+import { addSubsystem, updateSystem } from '@/modules/systems/utils'
 import { PATH } from '@/types/constants/paths'
 
+import { useParentSystemDetail } from './useParentSystemDetail'
 import { useSystemDetail } from './useSystemDetail'
 
 export const useSystemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>) => {
   const router = useRouter()
   const uid = router.query.uid as string
   const { system: systemEndpoint } = useEndpoint({ uid })
-  const { mutate } = useSystems()
+  const { mutate } = useSystems('systems')
   const { mutate: mutateDetail } = useSystemDetail()
+  const { parentUid } = useParentSystemDetail()
 
   const { submit, loading: loadingSubmit } = useSubmit<string>({
     endpoint: systemEndpoint,
     method: uid ? 'put' : 'post',
-    onSuccess: responseUid => {
+    onSuccess: (responseUid, body) => {
       imageRef?.current?.submit(responseUid, () => {
         toast.success(`System ${responseUid} saved successfully`)
         if (uid) {
@@ -28,7 +31,10 @@ export const useSystemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | un
         } else {
           router.replace(PATH.SYSTEM + '/' + responseUid)
         }
-        mutate()
+        uid
+          ? mutate(prev => prev && updateSystem(uid, body, prev), { revalidate: false })
+          : parentUid && mutate(prev => prev && addSubsystem(parentUid, body, prev), { revalidate: false })
+
         mutateDetail()
       })
     },

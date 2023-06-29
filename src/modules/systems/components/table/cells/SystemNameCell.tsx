@@ -22,12 +22,20 @@ interface SystemNameCellProps extends CellContext<SystemDetail, any> {
   setUid: (uid: string) => void
   canEdit?: boolean
   hideButtons?: boolean
+  tableId: string
 }
 
-export const SystemNameCell = ({ row, getValue, setUid, canEdit = true, hideButtons = false }: SystemNameCellProps) => {
+export const SystemNameCell = ({
+  row,
+  getValue,
+  setUid,
+  canEdit = true,
+  hideButtons = false,
+  tableId
+}: SystemNameCellProps) => {
   const { system } = useEndpoint({ uid: row.original.uid })
   // last in parentPath array is the parent uid
-  const { mutate } = useSystems()
+  const { mutate } = useSystems(tableId)
   const { formatMessage: fm } = useIntl()
   const { submit } = useSubmit<string>({
     endpoint: system,

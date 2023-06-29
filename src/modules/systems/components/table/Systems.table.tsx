@@ -34,7 +34,7 @@ export const SystemsTable = ({
 }: Props) => {
   const { systems, error, loading } = useSystems(tableId)
   const tableRef = useRef<Table<SystemDetail>>()
-  const { columns, pending } = useSystemsColumns(hideButtons)
+  const { columns, pending } = useSystemsColumns({ tableId, hideButtons })
 
   const onChangeSearch = useCallback(() => {
     tableRef.current?.resetExpanded()
