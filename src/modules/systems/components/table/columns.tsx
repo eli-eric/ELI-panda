@@ -21,6 +21,8 @@ export const useSystemsColumns = ({ tableId, hideButtons }: { tableId: string; h
         accessorFn: row => row.name,
         id: 'name',
         size: 400,
+        meta: { sticky: true },
+        enableHiding: false,
         cell: props => (
           <SystemNameCell {...props} setUid={setUid} canEdit={canEdit} hideButtons={hideButtons} tableId={tableId} />
         )

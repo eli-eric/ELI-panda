@@ -49,7 +49,7 @@ export const DraggableColumnHeader = ({ header, table }: DraggableColumnHeaderPr
       className={classNames(
         'whitespace-nowrap border-r border-b bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
         header.column.columnDef.meta?.sticky
-          ? 'sticky left-0 top-0 text-ellipsis z-20 backdrop-blur-2xl backdrop-filter border-r'
+          ? 'sticky left-0 top-0 text-ellipsis z-40 backdrop-blur-2xl backdrop-filter border-r'
           : 'sticky top-0 z-10'
       )}
     >

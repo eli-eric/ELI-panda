@@ -6,45 +6,57 @@ export const ColumnHidingDisclosure = ({ table }: { table: Table<any> }) => (
   <Disclosure>
     {({ open }) => (
       <div id="column-hiding">
-        <Disclosure.Button className="border w-full justify-between p-2 rounded-md text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
+        <Disclosure.Button className="flex items-center justify-between w-full py-2 px-4 border border-gray-300 shadow-sm rounded-md text-gray-500 bg-white hover:bg-gray-50 ">
+          <span>{open ? 'Hide options' : 'Show options'}</span>
           {open ? (
-            <XMarkIcon className="block h-4 w-4" aria-hidden="true" />
+            <XMarkIcon className="h-5 w-5" aria-hidden="true" />
           ) : (
-            <ChevronDownIcon className="block h-4 min-w-full" aria-hidden="true" />
+            <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
           )}
         </Disclosure.Button>
 
-        <Disclosure.Panel>
-          <div className="inline-block border border-black shadow rounded">
-            <div className="px-1 border-b border-black">
-              <label>
-                <input
-                  {...{
-                    type: 'checkbox',
-                    checked: table.getIsAllColumnsVisible(),
-                    onChange: table.getToggleAllColumnsVisibilityHandler()
-                  }}
-                />{' '}
-                Toggle All
-              </label>
-            </div>
-            <div className="">
-              {table.getAllLeafColumns().map(column => (
-                <div key={column.id} className=" px-1">
-                  <label className="flex items-center">
+        <Disclosure.Panel className="mt-2">
+          <div className="bg-white shadow overflow-hidden sm:rounded-md">
+            <ul className="divide-y divide-gray-200">
+              <li>
+                <div className="px-4 py-4 sm:px-6">
+                  <div className="flex items-center">
                     <input
                       {...{
                         type: 'checkbox',
-                        checked: column.getIsVisible(),
-                        onChange: column.getToggleVisibilityHandler(),
-                        className: 'mr-1'
+                        id: 'toggle-all',
+                        checked: table.getIsAllColumnsVisible(),
+                        onChange: table.getToggleAllColumnsVisibilityHandler(),
+                        className: 'focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 rounded'
                       }}
-                    />{' '}
-                    {column.id}
-                  </label>
+                    />
+                    <label htmlFor="toggle-all" className="ml-2 font-medium text-gray-700">
+                      Toggle All
+                    </label>
+                  </div>
                 </div>
-              ))}
-            </div>
+              </li>
+              <li>
+                <div className="px-4 py-4 sm:px-6 flex flex-wrap">
+                  {table.getAllLeafColumns().map(column => (
+                    <div key={column.id} className="flex items-center space-x-2 mr-4">
+                      <input
+                        {...{
+                          type: 'checkbox',
+                          id: `checkbox-${column.id}`,
+                          checked: column.getIsVisible(),
+                          onChange: column.getToggleVisibilityHandler(),
+                          className: 'focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 rounded'
+                        }}
+                      />
+                      <label htmlFor={`checkbox-${column.id}`} className="font-medium text-gray-700">
+                        {column.id}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </li>
+            </ul>
           </div>
         </Disclosure.Panel>
       </div>
