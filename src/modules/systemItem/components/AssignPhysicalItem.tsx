@@ -1,7 +1,6 @@
 import classNames from 'classnames'
 import { Fragment, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { useIntl } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
@@ -12,24 +11,27 @@ import type { ModalButtons } from '@/types/form'
 
 const messages = message.common.buttons
 
-export const SystemItemSearchButton = () => {
+export const AssignPhysicalItem = () => {
   const [openModal, setOpenModal] = useState(false)
   const [selectedSystem, setSelectedSystem] = useState<SystemDetail>()
   const { setValue, watch } = useFormContext()
-  const intl = useIntl()
   const physicalItem = watch('physicalItem')
 
   const modalButtons: ModalButtons = {
     goNext: {
-      text: intl.formatMessage({ id: messages.continue }),
+      text: messages.continue,
       onClick: () => {
-        setValue('physicalItem', selectedSystem?.physicalItem)
-        setValue('name', selectedSystem?.name)
+        if (selectedSystem?.physicalItem) {
+          setValue('physicalItem', selectedSystem?.physicalItem, { shouldDirty: true })
+          setValue('name', selectedSystem?.name, { shouldDirty: true })
+        } else {
+          setValue('physicalItem', { catalogueItem: {} }, { shouldDirty: true })
+        }
         setOpenModal(false)
       }
     },
     goBack: {
-      text: intl.formatMessage({ id: messages.cancel }),
+      text: messages.cancel,
       onClick: () => {
         setOpenModal(false)
       }

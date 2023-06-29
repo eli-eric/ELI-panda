@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Fragment, memo, useRef } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
 
+import { Button } from '@/components/Buttons'
 import Card from '@/components/layout/Card'
 import Heading from '@/components/layout/Heading'
 import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
@@ -17,9 +18,9 @@ import { useParentSystemDetail } from '../../hooks/useParentSystemDetail'
 import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { useSystemSubmit } from '../../hooks/useSystemSubmit'
 import type { SystemDetailFormType } from '../../types/form'
+import { AssignPhysicalItem } from '../AssignPhysicalItem'
 import Breadcrumbs from '../Breadcrumps'
 import HeaderComponent from '../Header.comp'
-import { SystemItemSearchButton } from '../SystemItemSearchButton'
 import { PhysicalItemForm } from './PhysicalItemForm.comp'
 import SystemFormComponent from './SystemForm.comp'
 import { schema } from './SystemForm.schema'
@@ -60,7 +61,7 @@ const SystemForm = () => {
         <Breadcrumbs parentPath={parentPath || systemDetail?.parentPath} />
         <Card>
           <Heading customText="System">
-            <SystemItemSearchButton />
+            <AssignPhysicalItem />
           </Heading>
           <SystemFormComponent>
             <MemoizedSystemGallery
@@ -74,9 +75,13 @@ const SystemForm = () => {
           {physicalItem && (
             <Fragment>
               <Heading customText="Physical Item">
-                <Link href={PATH.CATALOGUE_ITEM + '/' + physicalItem.catalogueItem.uid} target={'_blank'}>
-                  View
-                </Link>
+                {physicalItem.catalogueItem.uid && (
+                  <Link href={PATH.CATALOGUE_ITEM + '/' + physicalItem.catalogueItem.uid} target={'_blank'}>
+                    <Button primary>
+                      <span>View Catalogue Item</span>
+                    </Button>
+                  </Link>
+                )}
               </Heading>
               <PhysicalItemForm>
                 <MemoizedSystemGallery
@@ -84,7 +89,7 @@ const SystemForm = () => {
                   setValue={formMethods.setValue}
                   config={{
                     itemCategory: FILE_TYPE.CATALOGUE,
-                    itemId: physicalItem?.catalogueItem?.uid
+                    itemId: physicalItem?.catalogueItem?.uid as string
                   }}
                   className="w-full"
                   hasEditRole={false}
