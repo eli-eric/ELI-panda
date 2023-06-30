@@ -45,7 +45,7 @@ export const usePandaTable = <T extends object>({ tableId, columns, getSubRows, 
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(columnVisibilityInstance || {})
   const [storedVisibility, setStoredVisibility] = useLocalStorage<VisibilityState>(
-    'columnVisibility',
+    'columnVisibility' + '-' + tableId,
     columnVisibilityInstance || {}
   )
 
@@ -66,7 +66,7 @@ export const usePandaTable = <T extends object>({ tableId, columns, getSubRows, 
 
   const [columnOrder, setColumnOrder] = useState<ColumnOrderState>(columnOrderInstance || [])
   const [storedOrder, setStoredOrder] = useLocalStorage<ColumnOrderState>(
-    'columnOrder',
+    'columnOrder' + '-' + tableId,
     columns.map(column => column.id as string)
   )
 

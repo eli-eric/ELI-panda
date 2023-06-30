@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 import { Fragment, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 
 import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
@@ -24,10 +25,10 @@ export const AssignPhysicalItem = () => {
         if (selectedSystem?.physicalItem) {
           setValue('physicalItem', selectedSystem?.physicalItem, { shouldDirty: true })
           setValue('name', selectedSystem?.name, { shouldDirty: true })
+          setOpenModal(false)
         } else {
-          setValue('physicalItem', { catalogueItem: {} }, { shouldDirty: true })
+          toast.error('This system does not have a physical item')
         }
-        setOpenModal(false)
       }
     },
     goBack: {
@@ -52,7 +53,7 @@ export const AssignPhysicalItem = () => {
       <ModalComponent open={openModal} setOpen={setOpenModal} buttons={modalButtons}>
         <SystemsTable
           tableId={'systemsItem'}
-          settings={{ enableQueryURL: false }}
+          settings={{ enableQueryURL: false, enableColumnHiding: true }}
           pageSizeDefault={10}
           className={'overflow-y-auto relative h-[423px]'}
           getRowProps={row => ({
