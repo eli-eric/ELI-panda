@@ -11,7 +11,7 @@ export const useRelations = () => {
 
   // const { data: relations } = useSWR<SystemRelationshipResponse[]>(systemRelationships, mockFetcher)
 
-  const relations = useFetch<SystemRelationshipResponse[]>({ url: systemRelationships, useMockFetcher: true })
+  const relations = useFetch<SystemRelationshipResponse[]>({ url: systemRelationships, useMockFetcher: false })
 
   return { ...relations }
 }

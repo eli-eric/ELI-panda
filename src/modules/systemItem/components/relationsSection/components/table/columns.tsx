@@ -16,21 +16,22 @@ export const useRelationsColumns = ({ systemName }: Props) => {
   const columns = useMemo(
     (): ColumnDef<SystemRelationshipResponse, string>[] => [
       {
-        header: 'System name',
+        header: 'This System',
         cell: props => <RelationNameCell {...props} uid={uid} systemName={systemName} />
       },
       {
         header: 'Direction',
+        size: 40,
         accessorKey: 'direction',
         cell: ({ getValue }) => (
-          <div>
+          <div className="flex justify-center">
             {getValue() === 'to' && <ArrowLongLeftIcon className="w-10 h-10" />}
             {getValue() === 'from' && <ArrowLongRightIcon className="w-10 h-10" />}
           </div>
         )
       },
-      { header: 'Relation type code', accessorKey: 'relationTypeCode' },
-      { header: 'Foreign systen name', accessorKey: 'foreignSystemName' }
+      { header: 'Relationship Type', accessorKey: 'relationTypeCode', size: 30 },
+      { header: 'Foreign System', accessorKey: 'foreignSystemName' }
     ],
     [systemName, uid]
   )
