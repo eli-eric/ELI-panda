@@ -1,5 +1,8 @@
 import type { ColumnDef, Row, Table as ReactTable } from '@tanstack/react-table'
-import { flexRender } from '@tanstack/react-table'
+import { getSortedRowModel } from '@tanstack/react-table'
+import { getFilteredRowModel } from '@tanstack/react-table'
+import { getExpandedRowModel } from '@tanstack/react-table'
+import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import type { Ref } from 'react'
 import { forwardRef, Fragment, useImperativeHandle } from 'react'
 
@@ -10,8 +13,21 @@ import { classNames } from '@/helpers'
 import { ColumnHeader } from './components/ColumnHeader'
 import { ColumnHidingDisclosure } from './components/ColumnHidingDisclosure'
 import { DraggableColumnHeader } from './components/DraggableColumnHeader'
-import type { PandaTableSettings } from './hooks/usePandaTable'
-import { usePandaTable } from './hooks/usePandaTable'
+import { TableBody } from './components/TableBody'
+import { TableFoot } from './components/TableFoot'
+import { useColumnOrder } from './hooks/useColumnOrder'
+import { useColumnVisibility } from './hooks/useColumnVisibility'
+import { useExpanding } from './hooks/useExpanding'
+import { useSorting } from './hooks/useSorting'
+
+type PandaTableSettings = {
+  enableSorting?: boolean
+  withFooter?: boolean
+  enableQueryURL?: boolean
+  enableRowSelection?: boolean
+  enableColumnHiding?: boolean
+  enableColumnReordering?: boolean
+}
 
 interface Props<T extends object> {
   data?: T[]
@@ -40,8 +56,41 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
   }: Props<T>,
   ref?: Ref<ReactTable<T> | undefined>
 ) {
-  const { withFooter = false, enableColumnHiding = false, enableColumnReordering = false } = settings || {}
-  const table = usePandaTable<T>({ tableId, columns, data, getSubRows, settings })
+  const {
+    withFooter = false,
+    enableColumnHiding = false,
+    enableColumnReordering = false,
+    enableSorting = false,
+    enableQueryURL = false,
+    enableRowSelection = false
+  } = settings || {}
+
+  const [columnVisibility, setColumnVisibility] = useColumnVisibility(tableId)
+  const [columnOrder, setColumnOrder] = useColumnOrder(tableId, columns)
+  const [sorting, setSorting] = useSorting(tableId, enableQueryURL)
+  const [expanded, setExpanded] = useExpanding(tableId)
+
+  // react-table
+  const table = useReactTable<T>({
+    getCoreRowModel: getCoreRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getSubRows,
+    onExpandedChange: setExpanded,
+    onSortingChange: setSorting,
+    onColumnOrderChange: setColumnOrder,
+    onColumnVisibilityChange: setColumnVisibility,
+    columns: columns,
+    data: data || [],
+    enableSorting: enableSorting,
+    manualSorting: true,
+    enableRowSelection: enableRowSelection,
+    enableMultiRowSelection: false,
+    enableSubRowSelection: true,
+    state: { sorting, expanded, columnOrder, columnVisibility }
+  })
+
   useImperativeHandle(ref, () => ({
     ...table
   }))
@@ -70,50 +119,8 @@ const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function 
               </thead>
               {data && (
                 <Fragment>
-                  <tbody className="bg-white">
-                    {table.getRowModel().rows.map((row, index) => (
-                      <tr
-                        key={row.id}
-                        {...getRowProps(row)}
-                        className={classNames(
-                          index % 2 === 0 ? undefined : 'bg-gray-100',
-                          'hover:bg-gray-200 z-0',
-                          getRowProps(row)?.className
-                        )}
-                      >
-                        {row.getVisibleCells().map(cell => (
-                          <td
-                            key={cell.id}
-                            className={classNames(
-                              'text-sm sm:pl-6 sm:pr-6 text-gray-500 border-r border-b',
-                              row.getIsSelected() ? 'text-white' : '',
-                              cell.column.columnDef.meta?.sticky
-                                ? 'sticky left-0 z-30 backdrop-blur-2xl backdrop-filter border-r'
-                                : '',
-                              loading ? 'opacity-50' : ''
-                            )}
-                          >
-                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                  {withFooter && (
-                    <tfoot>
-                      {table.getFooterGroups().map(footerGroup => (
-                        <tr key={footerGroup.id} className={classNames('bg-gray-50')}>
-                          {footerGroup.headers.map(header => (
-                            <td key={header.id} className={classNames('text-sm sm:pl-6 sm:pr-6 text-gray-500')}>
-                              {header.isPlaceholder
-                                ? null
-                                : flexRender(header.column.columnDef.footer, header.getContext())}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tfoot>
-                  )}
+                  <TableBody getRowModel={table.getRowModel} getRowProps={getRowProps} loading={loading} />
+                  {withFooter && <TableFoot getFooterGroups={table.getFooterGroups} />}
                 </Fragment>
               )}
             </table>
