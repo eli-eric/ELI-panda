@@ -5,7 +5,7 @@ import { useIsFirstRender, useLocalStorage } from 'usehooks-ts'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
-export const useColumnOrder = (tableId, columns): [ColumnOrderState, Dispatch<SetStateAction<ColumnOrderState>>] => {
+export const useOrdering = (tableId, columns): [ColumnOrderState, Dispatch<SetStateAction<ColumnOrderState>>] => {
   const { instances, setOrder } = useTableStateStore()
   const columnOrderInstance = instances[tableId]?.columnOrder
 

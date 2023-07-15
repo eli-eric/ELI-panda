@@ -1,14 +1,15 @@
 import type { Row } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
+import type { FC } from 'react'
 
 import { classNames } from '@/helpers'
 
-interface Props<T extends object> {
+interface Props {
   getRowModel()
   loading?: boolean
-  getRowProps: (row: Row<T>) => React.HTMLAttributes<HTMLTableRowElement>
+  getRowProps: (row: Row<any>) => React.HTMLAttributes<HTMLTableRowElement>
 }
-export const TableBody = <T extends object>({ getRowModel, loading, getRowProps }: Props<T>) => (
+export const TableBody: FC<Props> = ({ getRowModel, loading, getRowProps }) => (
   <tbody className="bg-white">
     {getRowModel().rows.map((row, index) => (
       <tr

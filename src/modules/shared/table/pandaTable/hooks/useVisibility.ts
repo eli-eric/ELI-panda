@@ -5,13 +5,14 @@ import { useIsFirstRender, useLocalStorage } from 'usehooks-ts'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
-export const useColumnVisibility = (tableId): [VisibilityState, Dispatch<SetStateAction<VisibilityState>>] => {
+export const useVisibility = (tableId): [VisibilityState, Dispatch<SetStateAction<VisibilityState>>] => {
   const { instances, setVisibility } = useTableStateStore()
   const columnVisibilityInstance = useMemo(() => instances[tableId]?.columnVisibility, [instances, tableId])
 
   const isFirstRender = useIsFirstRender()
 
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(columnVisibilityInstance || {})
+
   const [storedVisibility, setStoredVisibility] = useLocalStorage<VisibilityState>(
     'columnVisibility' + '-' + tableId,
     columnVisibilityInstance || {}

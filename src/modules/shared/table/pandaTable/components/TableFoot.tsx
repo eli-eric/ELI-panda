@@ -1,13 +1,14 @@
 import type { HeaderGroup } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
+import type { FC } from 'react'
 
 import { classNames } from '@/helpers'
 
-interface Props<T extends object> {
-  getFooterGroups: () => HeaderGroup<T>[]
+interface Props {
+  getFooterGroups: () => HeaderGroup<any>[]
 }
 
-export const TableFoot = <T extends object>({ getFooterGroups }: Props<T>) => (
+export const TableFoot: FC<Props> = ({ getFooterGroups }) => (
   <tfoot>
     {getFooterGroups().map(footerGroup => (
       <tr key={footerGroup.id} className={classNames('bg-gray-50')}>

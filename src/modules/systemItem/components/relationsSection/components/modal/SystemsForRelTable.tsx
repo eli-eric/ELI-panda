@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { type Dispatch, memo, type SetStateAction, useEffect, useMemo } from 'react'
 
 import { Pagination } from '@/modules/shared/table/Pagination'
-import PandaTable from '@/modules/shared/table/pandaTable/PandaTable'
+import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import SearchBar from '@/modules/shared/table/SearchBar'
 import { useSubsystemsForRel } from '@/modules/systemItem/hooks/useSubSystemsForRel'
 import { useSystemsForRel } from '@/modules/systemItem/hooks/useSystemsForRel'
