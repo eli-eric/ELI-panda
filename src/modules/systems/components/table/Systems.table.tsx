@@ -25,7 +25,6 @@ interface Props {
 
 export const SystemsTable = ({
   tableId,
-
   pageSizeDefault,
   className,
   hideButtons = false,
