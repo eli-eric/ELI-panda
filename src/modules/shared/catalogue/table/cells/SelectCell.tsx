@@ -5,14 +5,16 @@ import type { CatalogueItem } from '@/types/responses'
 
 interface Props extends CellContext<CatalogueItem, any> {
   setItem: Dispatch<SetStateAction<CatalogueItem | undefined>>
+  selectedItem?: CatalogueItem
 }
 
-export const SelectCell = ({ row: { original }, setItem }: Props) => (
+export const SelectCell = ({ row: { original }, setItem, selectedItem }: Props) => (
   <div className="ml-3 flex h-5 items-center">
     <input
       id={`side-${original.uid}`}
       name="itemUid"
       type="radio"
+      checked={selectedItem?.uid === original.uid}
       onClick={() => {
         setItem(original)
       }}

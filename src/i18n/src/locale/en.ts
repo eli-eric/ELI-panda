@@ -76,7 +76,7 @@ export const messages = {
         description: 'Description',
         categoryName: 'Category name',
         supplier: 'Supplier',
-        supplierUrl: 'Manufacturer/Supplier Url'
+        supplierUrl: 'Supplier Url'
       }
     },
     itemDetail: {

@@ -62,16 +62,13 @@ export const useCatalogueItemsColumns = (tableId?: string, additionalColumn?: Co
       catalogueItems.data[0]?.details[0]?.property?.type?.name
     ) {
       const detailsColumns: ColumnDef<CatalogueItem, any>[] = catalogueItems?.data[0]?.details?.map(detail => ({
-        header: () => detail.property.type.name,
-        id: detail.property.type.name,
+        header: detail.property.name,
+        id: detail.property.name,
         accessorFn: row =>
-          row.details?.find(originDetail => originDetail?.property.type.name === detail?.property.type.name)?.value,
+          row.details?.find(originDetail => originDetail?.property.name === detail?.property.name)?.value,
         cell: ({ row: { original } }: CellContext<CatalogueItem, any>) => (
           <span>
-            {
-              original.details?.find(originDetail => originDetail?.property.type.name === detail?.property.type.name)
-                ?.value
-            }
+            {original.details?.find(originDetail => originDetail?.property.name === detail?.property.name)?.value}
           </span>
         )
       }))

@@ -6,6 +6,7 @@ export interface CatalogueItem {
   name: string
   description: string
   categoryPath: string
+  categoryName: string
   category: CodebookType
   supplier: CodebookType
   manufacturerUrl: string
@@ -19,8 +20,10 @@ export interface CatalogueItemDetail {
 }
 
 export type CatalogueCategoryProperty = {
-  listOfValues: string[]
-  defaultValue: string
+  uid: string
+  name: string
+  listOfValues?: string[]
+  defaultValue?: string
   type: CodebookType
   unit?: CodebookType
 }

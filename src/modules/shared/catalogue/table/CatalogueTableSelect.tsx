@@ -15,7 +15,12 @@ import { SelectCell } from './cells/SelectCell'
 
 const messages = message.cataloguePage.itemList.header
 
-const CatalogueTableSelect = ({ setItem }: { setItem: Dispatch<SetStateAction<CatalogueItem | undefined>> }) => {
+interface Props {
+  setItem: Dispatch<SetStateAction<CatalogueItem | undefined>>
+  selectedItem?: CatalogueItem
+}
+
+const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
   const intl = useIntl()
   const tableId = 'catalogueItemsModal'
 
@@ -26,9 +31,9 @@ const CatalogueTableSelect = ({ setItem }: { setItem: Dispatch<SetStateAction<Ca
     () => ({
       header: intl.formatMessage({ id: messages.select }),
       id: 'select',
-      cell: props => <SelectCell {...props} setItem={setItem} />
+      cell: props => <SelectCell {...props} setItem={setItem} selectedItem={selectedItem} />
     }),
-    [intl, setItem]
+    [intl, setItem, selectedItem]
   )
   const { instances } = useTableStateStore()
 
@@ -36,9 +41,7 @@ const CatalogueTableSelect = ({ setItem }: { setItem: Dispatch<SetStateAction<Ca
   const search = instances[tableId]?.search
 
   useEffect(() => {
-    if (search) {
-      setItem(undefined)
-    }
+    setItem(undefined)
   }, [search, pagination, setItem])
 
   return (

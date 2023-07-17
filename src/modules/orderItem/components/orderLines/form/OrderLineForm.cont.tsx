@@ -47,7 +47,7 @@ const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
         {orderLine?.id ? (
           <Heading text={orderLine.name + ' - ' + orderLine.catalogueNumber} />
         ) : (
-          <CatalogueTableSelect setItem={setCatalogueItem} />
+          <CatalogueTableSelect setItem={setCatalogueItem} selectedItem={catalogueItem} />
         )}
       </div>
     ),
