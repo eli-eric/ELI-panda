@@ -1,220 +1,90 @@
-import { InformationCircleIcon } from '@heroicons/react/24/outline'
-import classNames from 'classnames'
-import Image from 'next/image'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { Fragment, useMemo, useState } from 'react'
-import { toast } from 'react-hot-toast'
+import type { CellContext, ColumnDef } from '@tanstack/react-table'
+import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
-import type { CellProps } from 'react-table'
-import { type Column } from 'react-table'
 
-import { DeleteButton } from '@/components/Buttons'
-import WarningModal from '@/components/modal/warning/modal-warning.comp'
-import { createMessageValues } from '@/helpers/formatters'
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useCatalogueImage } from '@/hooks/fetch/useImage'
-import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
-import { PATH } from '@/types/constants/paths'
-import type { ModalButtons } from '@/types/form'
 import type { CatalogueItem } from '@/types/responses'
 
+import { CategoryName } from './cells/CategoryNameCell'
+import { DescriptionCell } from './cells/DescriptionCell'
+import { ManufacturerUrl } from './cells/ManufacturerUrlCell'
+import { NameCell } from './cells/NameCell'
+
 const messages = message.cataloguePage.itemList.header
-const buttonsMessage = message.common.buttons
-const modalMessage = message.ordersPage.deleteModal
 
-const Name = ({
-  value,
-  row: {
-    original: { uid }
-  },
-  toDelete
-}: CellProps<CatalogueItem>) => {
-  const { catalogueItem } = useEndpoint({ uid })
-  const image = useCatalogueImage(uid)
-  const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
-  const { formatMessage } = useIntl()
-  const { mutate, catalogueItems } = useCatalogueItems()
-
-  const [loading, setLoading] = useState(true)
-
-  const deleteSubmit = useSubmit({
-    endpoint: catalogueItem,
-    method: 'delete',
-    onSuccess: () => {
-      setOpenDeleteWarn(false)
-      catalogueItems && mutate({ ...catalogueItems, data: catalogueItems?.data.filter(item => item.uid !== uid) })
-    },
-    onError: e => {
-      if (e?.response?.status === 409) {
-        toast.error(`Can't delete ${value}, it is binded in another items.`)
-      } else {
-        toast.error(`Error deleting ${value}.`)
-      }
-    }
-  })
-
-  const deleteButtons: ModalButtons = {
-    goNext: {
-      text: buttonsMessage.continue,
-      loading: deleteSubmit.loading,
-      onClick: () => {
-        deleteSubmit.submit()
-      }
-    },
-    goBack: {
-      text: buttonsMessage.cancel,
-      onClick: () => {
-        setOpenDeleteWarn(false)
-      }
-    }
-  }
-
-  return (
-    <div className="flex items-center">
-      {toDelete && (
-        <DeleteButton
-          className="mr-1 z-0"
-          onClick={() => {
-            setOpenDeleteWarn(true)
-          }}
-        />
-      )}
-      <Link href={{ pathname: '/catalogue/item/' + uid }} className="flex items-center text-blue-500 hover:underline">
-        <Image
-          id={image.id}
-          priority={false}
-          className={classNames('h-10 w-10 flex-shrink-0 rounded-full bg-gray-300', loading ? 'animate-pulse' : '')}
-          onLoadingComplete={() => {
-            setLoading(false)
-          }}
-          alt={image.name}
-          src={image.url}
-          width={100}
-          height={100}
-          unoptimized
-        />
-        <div className="ml-4 ">{value}</div>
-      </Link>
-      <WarningModal
-        buttons={deleteButtons}
-        open={openDeleteWarn}
-        setOpen={setOpenDeleteWarn}
-        title={modalMessage.title}
-        message={formatMessage({ id: modalMessage.message }, createMessageValues({ name: value }))}
-        testid="CatalogueDeleteModal"
-        error={deleteSubmit.error}
-      />
-    </div>
-  )
-}
-
-const Description = ({ value }: CellProps<CatalogueItem>) => (
-  <Fragment>
-    {value && (
-      <InformationCircleIcon className="h-8 w-8 flex-shrink-0" data-tooltip-id="tooltip" data-tooltip-content={value} />
-    )}
-  </Fragment>
-)
-
-const CategoryName = ({
-  value,
-  row: {
-    original: { categoryPath }
-  }
-}: CellProps<CatalogueItem>) => {
-  const router = useRouter()
-  const link = PATH.CATALOGUE + '/' + categoryPath
-  return (
-    <Fragment>
-      <Link href={{ pathname: link, query: { ...router.query } }} className="text-blue-500 hover:underline">
-        {value}
-      </Link>
-    </Fragment>
-  )
-}
-
-const ManufacturerUrl = ({ value }: CellProps<CatalogueItem>) => (
-  <Fragment>
-    {value && (
-      <Link href={value} passHref legacyBehavior>
-        <a target="_blank" className="text-blue-500 hover:underline">
-          link
-        </a>
-      </Link>
-    )}
-  </Fragment>
-)
-
-const useCatalogueItemsColumns = (toDelete: boolean) => {
+export const useCatalogueItemsColumns = (tableId?: string, additionalColumn?: ColumnDef<CatalogueItem, any>) => {
   const intl = useIntl()
 
-  const { catalogueItems } = useCatalogueItems()
+  const { catalogueItems } = useCatalogueItems(tableId)
   const { categoryList } = useCategoryList()
 
-  const columns = useMemo((): Column<CatalogueItem>[] => {
-    const columns: Column<CatalogueItem>[] = [
+  const columns: ColumnDef<CatalogueItem, any>[] = useMemo(() => {
+    const columns: ColumnDef<CatalogueItem, any>[] = [
       {
-        Header: intl.formatMessage({ id: messages.name }),
-        accessor: 'name',
+        header: intl.formatMessage({ id: messages.name }),
+        accessorFn: row => row.name,
         id: 'name',
-        Cell: props => <Name {...props} toDelete={toDelete} />
+        cell: props => <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} />,
+        size: 300
       },
       {
-        Header: intl.formatMessage({ id: messages.description }),
-        accessor: 'description',
+        header: intl.formatMessage({ id: messages.description }),
+        accessorFn: row => row.description,
         id: 'description',
-        Cell: Description
+        cell: DescriptionCell
       },
       {
-        Header: intl.formatMessage({ id: messages.categoryName }),
-        accessor: 'categoryName',
+        header: intl.formatMessage({ id: messages.categoryName }),
+        accessorFn: row => row.categoryName,
         id: 'categoryName',
-        Cell: CategoryName
+        cell: CategoryName
       },
       {
-        Header: intl.formatMessage({ id: messages.supplier }),
-        accessor: 'supplier',
+        header: intl.formatMessage({ id: messages.supplier }),
+        accessorFn: row => row.supplier?.name,
         id: 'supplier',
-        Cell: ({ value }: CellProps<CatalogueItem>) => <span>{value?.name}</span>
+        cell: ({ getValue }: CellContext<CatalogueItem, any>) => <span>{getValue()?.name}</span>
       },
       {
-        Header: intl.formatMessage({ id: messages.supplierUrl }),
-        accessor: 'manufacturerUrl',
+        header: intl.formatMessage({ id: messages.supplierUrl }),
+        accessorFn: row => row.manufacturerUrl,
         id: 'manufacturerUrl',
-        Cell: ManufacturerUrl
+        cell: ManufacturerUrl
       }
     ]
 
     if (
       categoryList?.length === 0 &&
       catalogueItems?.data[0]?.details &&
-      catalogueItems?.data[0]?.details[0]?.propertyName
+      catalogueItems?.data[0]?.details?.length > 0 &&
+      catalogueItems.data[0]?.details[0]?.property?.type?.name
     ) {
-      const detailsColumns = catalogueItems?.data[0]?.details?.map(detail => ({
-        Header: detail.propertyName,
-        id: detail.propertyName,
-        accessor: ({ details }: CatalogueItem) =>
-          details?.find(originDetail => originDetail?.propertyName === detail?.propertyName)?.value,
-        Cell: ({ row: { original } }: CellProps<CatalogueItem>) => (
+      const detailsColumns: ColumnDef<CatalogueItem, any>[] = catalogueItems?.data[0]?.details?.map(detail => ({
+        header: () => detail.property.type.name,
+        id: detail.property.type.name,
+        accessorFn: row =>
+          row.details?.find(originDetail => originDetail?.property.type.name === detail?.property.type.name)?.value,
+        cell: ({ row: { original } }: CellContext<CatalogueItem, any>) => (
           <span>
-            {original.details?.find(originDetail => originDetail?.propertyName === detail?.propertyName)?.value}
+            {
+              original.details?.find(originDetail => originDetail?.property.type.name === detail?.property.type.name)
+                ?.value
+            }
           </span>
         )
       }))
       if (detailsColumns) {
-        const categoryNameIndex = columns.findIndex(column => column.accessor === 'categoryName')
+        const categoryNameIndex = columns.findIndex(column => column.id === 'categoryName')
         columns.splice(categoryNameIndex, 0, ...detailsColumns)
       }
     }
-
+    if (additionalColumn) {
+      columns.push(additionalColumn)
+    }
     return columns
-  }, [intl, catalogueItems, categoryList, toDelete])
+  }, [intl, catalogueItems, categoryList, additionalColumn, tableId])
 
   return columns
 }
-
-export default useCatalogueItemsColumns

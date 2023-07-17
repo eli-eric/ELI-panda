@@ -10,7 +10,7 @@ import SearchBar from '@/modules/shared/table/SearchBar'
 import { useSystems } from '../../hooks/useSystems'
 import type { SystemDetail } from '../../types/responses'
 import { SearchBarButtons } from '../SearchBarButtons'
-import { useSystemsColumns } from './columns'
+import { useSystemsColumns } from './useSystemsColumns'
 
 const MemoizedTable = memo(PandaTable)
 

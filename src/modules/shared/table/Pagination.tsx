@@ -15,9 +15,9 @@ interface PaginationProps {
 }
 
 export const Pagination = ({ tableId, settings }: PaginationProps) => {
-  const { enableQueryURL, total, pageSizeDefault } = settings || {}
+  const { enableQueryURL, total, pageSizeDefault = 10 } = settings || {}
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(pageSizeDefault || 10)
+  const [pageSize, setPageSize] = useState<number>(pageSizeDefault)
   const [totalCount, setTotalCount] = useState<number | undefined>(total)
   const [pageNumbers, setPageNumbers] = useState<number | undefined>()
   const { setPagination, instances } = useTableStateStore()
@@ -52,10 +52,14 @@ export const Pagination = ({ tableId, settings }: PaginationProps) => {
           setPage(parseInt(queryPage))
           setPagination(tableId, `{"page":${queryPage},"pageSize":${pageSize}}`)
         } else {
+          setQueryPage('1')
           setPage(1)
           setPagination(tableId, `{"page":${1},"pageSize":${pageSize}}`)
-          setQueryPage('1')
         }
+      } else {
+        setQueryPage('1')
+        setPage(1)
+        setPagination(tableId, `{"page":${1},"pageSize":${pageSize}}`)
       }
     }
   }, [isFirstRender, queryPage, enableQueryURL, pageSize, setPagination, tableId, setQueryPage, paginationInstance])
@@ -66,7 +70,7 @@ export const Pagination = ({ tableId, settings }: PaginationProps) => {
       if (enableQueryURL) {
         setQueryPage(page.toString())
       }
-      setPagination(tableId, `page=${page}&pageSize=${pageSize}`)
+      setPagination(tableId, `{"page":${page},"pageSize":${pageSize}}`)
     }
     // reason for disabling eslint: isFirstRender is a dependency but it should not trigger a re-render
     // eslint-disable-next-line react-hooks/exhaustive-deps

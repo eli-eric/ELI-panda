@@ -8,7 +8,7 @@ export default function useQueryManager(tableId: string) {
   const { instances } = useTableStateStore()
   //TODO: filters
   const sorting = instances[tableId]?.sortByQueryString || ''
-  const pagination = instances[tableId]?.pagination || '{"page":1,"pageSize":50}'
+  const pagination = instances[tableId]?.pagination || ''
   const search = instances[tableId]?.search || ''
   const supplierUID = instances[tableId]?.filter?.supplier?.uid || ''
   const orderStatusUID = instances[tableId]?.filter?.orderStatus?.uid || ''

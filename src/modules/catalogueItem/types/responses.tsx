@@ -19,8 +19,6 @@ export interface CatalogueItemDetail {
 }
 
 export type CatalogueCategoryProperty = {
-  uid: string
-  name: string
   listOfValues: string[]
   defaultValue: string
   type: CodebookType

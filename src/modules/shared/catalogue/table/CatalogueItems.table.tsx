@@ -1,46 +1,54 @@
-import { useEffect } from 'react'
-import type { Column } from 'react-table'
+import type { ColumnDef, Table } from '@tanstack/react-table'
+import { useEffect, useRef } from 'react'
 
-import useGeneralTable from '@/hooks/table/useGeneralTable-deprecated'
-import usePagination from '@/hooks/table/usePagination-deprecated'
-import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
-import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
-import type { CatalogueItem } from '@/types/responses'
+import type { CatalogueCategoryResponse, CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
 
-import useCatalogueItemsColumns from './CatalogueItems.columns'
+import { PandaTable } from '../../table/pandaTable/PandaTable'
+import { useCatalogueItemsColumns } from './CatalogueItems.columns'
 
-const useCatalogueTable = (pageSizeDefault?: number, additionalColumn?: Column<CatalogueItem>, useQuery?: boolean) => {
-  const { catalogueItems, loading } = useCatalogueItems()
-  const { categoryList } = useCategoryList()
-
-  const { getPaginationComponent } = usePagination({
-    useQuery: useQuery ?? true,
-    tableId: 'catalogueItems',
-    total: catalogueItems?.totalCount,
-    pageSizeDefault: pageSizeDefault || 50
-  })
-
-  const columns = useCatalogueItemsColumns(!additionalColumn)
-
-  if (additionalColumn) {
-    columns.splice(0, 0, additionalColumn)
-  }
-
-  const { getTable, toggleHideColumn } = useGeneralTable<CatalogueItem>({
-    tableId: 'catalogueItems',
-    data: catalogueItems?.data,
-    loading,
-    columns,
-    className: 'relative overflow-x-auto',
-    getCellProps: ({ column }) => ({ className: column.id === 'description' ? '' : 'whitespace-nowrap' }),
-    getRowProps: () => ({ className: 'hover:bg-primary-200' })
-  })
-
-  useEffect(() => {
-    toggleHideColumn('categoryName', !categoryList || categoryList.length === 0)
-  }, [categoryList, toggleHideColumn])
-
-  return { getTable, getPaginationComponent }
+interface CatalogueTableProps {
+  additionalColumn?: ColumnDef<CatalogueItem, any>
+  enableQueryURL?: boolean
+  tableId?: string
+  catalogueItems?: CatalogueItemsResponse
+  categoryList?: CatalogueCategoryResponse[]
+  loading?: boolean
 }
 
-export default useCatalogueTable
+export const CatalogueTable = ({
+  additionalColumn,
+  enableQueryURL = true,
+  tableId = 'catalogueItems',
+  catalogueItems,
+  categoryList,
+  loading
+}: CatalogueTableProps) => {
+  const columns = useCatalogueItemsColumns(tableId, additionalColumn)
+  const catalogueTableRef = useRef<Table<CatalogueItem>>()
+
+  useEffect(() => {
+    if (catalogueTableRef.current) {
+      catalogueTableRef.current.setColumnVisibility({ categoryName: categoryList?.length !== 0 })
+    }
+  }, [categoryList])
+
+  useEffect(() => {
+    if (catalogueTableRef.current) {
+      if (additionalColumn) {
+        catalogueTableRef.current.setColumnOrder(['select'])
+      }
+    }
+  }, [additionalColumn])
+
+  return (
+    <PandaTable
+      ref={catalogueTableRef}
+      columns={columns}
+      loading={loading}
+      tableId={tableId}
+      data={catalogueItems?.data}
+      className={'relative overflow-x-auto'}
+      settings={{ enableQueryURL: enableQueryURL }}
+    />
+  )
+}
