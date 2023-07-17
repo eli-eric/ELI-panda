@@ -15,7 +15,7 @@ export const useSystemsForRel = () => {
       keepPreviousData: true
     },
     url: systemsForRelationship,
-    useMockFetcher: true
+    useMockFetcher: false
   })
   return { systems: response, loading, error, mutate }
 }
