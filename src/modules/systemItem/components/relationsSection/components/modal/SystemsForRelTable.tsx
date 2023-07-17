@@ -26,7 +26,7 @@ const useSystemsForRelColumns = (tableId: string) => {
         accessorKey: 'name',
         id: 'name',
         size: 150,
-        cell: props => <SystemNameCell {...props} setUid={setUid} canEdit={false} tableId={tableId} />
+        cell: props => <SystemNameCell {...props} setUid={setUid} hideButtons={true} tableId={tableId} />
       },
       { header: 'systemCode', accessorKey: 'systemCode', id: 'systemCode', size: 200 },
       { header: 'systemAlias', accessorKey: 'systemAlias', id: 'systemAlias', size: 200 },
@@ -35,17 +35,17 @@ const useSystemsForRelColumns = (tableId: string) => {
         accessorKey: 'systemType',
         id: 'systemType',
         size: 150,
-        cell: ({ getValue }) => getValue().name
+        cell: ({ getValue }) => getValue()?.name
       },
-      { header: 'zone', accessorKey: 'zone', id: 'zone', size: 150, cell: ({ getValue }) => getValue().name },
+      { header: 'zone', accessorKey: 'zone', id: 'zone', size: 150, cell: ({ getValue }) => getValue()?.name },
       {
         header: 'location',
         accessorKey: 'location',
         id: 'location',
         size: 150,
-        cell: ({ getValue }) => getValue().name
+        cell: ({ getValue }) => getValue()?.name
       },
-      { header: 'owner', accessorKey: 'owner', id: 'owner', size: 150, cell: ({ getValue }) => getValue().name }
+      { header: 'owner', accessorKey: 'owner', id: 'owner', size: 150, cell: ({ getValue }) => getValue()?.name }
     ],
     [setUid, tableId]
   )
