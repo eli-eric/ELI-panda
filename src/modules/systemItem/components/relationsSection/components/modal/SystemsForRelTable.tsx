@@ -1,6 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import classNames from 'classnames'
-import { type Dispatch, memo, type SetStateAction, useEffect, useMemo } from 'react'
+import { type Dispatch, Fragment, memo, type SetStateAction, useEffect, useMemo } from 'react'
 
 import { Pagination } from '@/modules/shared/table/Pagination'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
@@ -25,7 +25,7 @@ const useSystemsForRelColumns = (tableId: string) => {
         header: 'Name',
         accessorKey: 'name',
         id: 'name',
-        size: 150,
+        size: 200,
         cell: props => <SystemNameCell {...props} setUid={setUid} hideButtons={true} tableId={tableId} />
       },
       { header: 'systemCode', accessorKey: 'systemCode', id: 'systemCode', size: 200 },
@@ -73,7 +73,7 @@ export const SystemsForRelTable = ({ setSelectedSystem, selectedSystem, tableId 
   }, [pagination, setSelectedSystem, tableId, reset])
 
   return (
-    <div className="flex flex-col min-h-[337px] justify-between">
+    <Fragment>
       <SearchBar
         tableId={tableId}
         useQuery={false}
@@ -87,6 +87,7 @@ export const SystemsForRelTable = ({ setSelectedSystem, selectedSystem, tableId 
         loading={loading}
         getSubRows={row => row.subSystems}
         tableId={tableId}
+        className={'overflow-y-auto relative h-[423px]'}
         settings={{
           enableRowSelection: true
         }}
@@ -96,9 +97,8 @@ export const SystemsForRelTable = ({ setSelectedSystem, selectedSystem, tableId 
           },
           className: classNames(selectedSystem?.uid === row.original.uid ? 'bg-primary-200' : '', 'cursor-pointer')
         })}
-        className={'overflow-x-auto'}
       />
       <Pagination tableId={tableId} settings={{ total: systems?.totalCount, pageSizeDefault: 10 }} />
-    </div>
+    </Fragment>
   )
 }
