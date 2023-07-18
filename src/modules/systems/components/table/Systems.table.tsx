@@ -3,14 +3,14 @@ import { Fragment, memo, useCallback, useRef } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { Pagination } from '@/modules/shared/table/Pagination'
-import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
-import PandaTable from '@/modules/shared/table/pandaTable/PandaTable'
+import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
+import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import SearchBar from '@/modules/shared/table/SearchBar'
 
 import { useSystems } from '../../hooks/useSystems'
 import type { SystemDetail } from '../../types/responses'
 import { SearchBarButtons } from '../SearchBarButtons'
-import { useSystemsColumns } from './columns'
+import { useSystemsColumns } from './useSystemsColumns'
 
 const MemoizedTable = memo(PandaTable)
 
@@ -25,7 +25,6 @@ interface Props {
 
 export const SystemsTable = ({
   tableId,
-
   pageSizeDefault,
   className,
   hideButtons = false,

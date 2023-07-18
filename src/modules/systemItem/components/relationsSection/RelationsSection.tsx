@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
-import PandaTable from '@/modules/shared/table/pandaTable/PandaTable'
+import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 
 import { useRelations } from '../../hooks/useRelations'
 import { AddRelationForm } from './components/modal/RelationModal'

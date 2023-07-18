@@ -3,15 +3,15 @@ import classNames from 'classnames'
 import { type Dispatch, Fragment, memo, type SetStateAction, useEffect, useMemo } from 'react'
 
 import { Pagination } from '@/modules/shared/table/Pagination'
-import PandaTable from '@/modules/shared/table/pandaTable/PandaTable'
+import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import SearchBar from '@/modules/shared/table/SearchBar'
 import { useSubsystemsForRel } from '@/modules/systemItem/hooks/useSubSystemsForRel'
 import { useSystemsForRel } from '@/modules/systemItem/hooks/useSystemsForRel'
 import { SystemNameCell } from '@/modules/systems/components/table/cells/SystemNameCell'
 import type { SystemDetail } from '@/modules/systems/types/responses'
-import type { RELATION_TYPE_CODE } from '@/modules/systems-deprecated/types/constants'
 import useTableStateStore from '@/store/useTableStateStore'
 
+import type { RELATION_TYPE_CODE } from '../../types/constants'
 import type { SelectedSystemForRel } from './SelectRelationForm'
 
 const MemoizedTable = memo(PandaTable)

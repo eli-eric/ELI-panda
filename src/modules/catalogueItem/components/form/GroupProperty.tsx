@@ -76,7 +76,7 @@ const GroupProperty = ({ detail, index }: Props) => {
         disabled={disabled}
         customLabel={detail.property.name}
         rounded={'rounded-md'}
-        customOptions={detail.property.listOfValues.map(value => ({
+        customOptions={detail.property.listOfValues?.map(value => ({
           uid: value,
           name: value
         }))}

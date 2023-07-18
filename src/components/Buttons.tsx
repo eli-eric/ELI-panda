@@ -1,5 +1,6 @@
 import {
   ArrowDownTrayIcon,
+  ArrowPathIcon,
   ArrowUturnLeftIcon,
   FolderOpenIcon,
   FolderPlusIcon,
@@ -114,5 +115,11 @@ export const SaveButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) 
 export const CancelButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <NoSymbolIcon className="h-5 w-5" aria-hidden="true" />
+  </Button>
+)
+
+export const RefreshButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+  <Button {...restProps} buttonSize={buttonSize}>
+    <ArrowPathIcon className="h-5 w-5" aria-hidden="true" />
   </Button>
 )

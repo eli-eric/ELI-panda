@@ -1,8 +1,13 @@
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import type { Table } from '@tanstack/react-table'
+import type { FC } from 'react'
 
-export const ColumnHidingDisclosure = ({ table }: { table: Table<any> }) => (
+interface Props {
+  table: Table<any>
+}
+
+export const TableSettings: FC<Props> = ({ table }) => (
   <Disclosure>
     {({ open }) => (
       <div id="column-hiding">

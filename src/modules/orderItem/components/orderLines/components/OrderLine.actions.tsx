@@ -1,8 +1,8 @@
+import type { Row } from '@tanstack/react-table'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
-import type { Row } from 'react-table'
 
 import { DeleteButton, EditButton } from '@/components/Buttons'
 import { Heading } from '@/components/card/card.comp'

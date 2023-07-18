@@ -146,7 +146,7 @@ export const useSystemsColumns = ({ tableId, hideButtons }: { tableId: string; h
         size: 150
       }
     ],
-    [setUid, canEdit, hideButtons]
+    [setUid, canEdit, hideButtons, tableId]
   )
 
   const columnsForAssign = useMemo(
