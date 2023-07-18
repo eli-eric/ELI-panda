@@ -3,8 +3,8 @@ import { Fragment } from 'react'
 import { PlusButton } from '@/components/Buttons'
 import Heading from '@/components/layout/Heading'
 import { classNames } from '@/helpers'
-import useGeneralTable from '@/hooks/table/useGeneralTable-deprecated'
 import { message } from '@/i18n/src/messages'
+import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 
 import type { OrderLineFormType } from '../../types'
 import useOrderLinesColumns from './components/OrderLines.columns'
@@ -22,19 +22,6 @@ interface OrderLinesTableProps {
 const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEdit }: OrderLinesTableProps) => {
   const { setOpen, getFormModal } = useOrderLineForm({ setOrderLine })
   const columns = useOrderLinesColumns({ setOrderLine, deleteOrderLine, disabledEdit })
-  const { getTable } = useGeneralTable<OrderLineFormType>({
-    columns,
-    data: orderLines,
-    withFooter: true,
-    tableId: 'orderLines',
-    className: 'col-span-12 relative overflow-x-auto',
-    getRowProps: ({ original: { isDelivered } }) => ({
-      className: classNames(isDelivered ? 'bg-green-100' : 'bg-white')
-    }),
-    getCellProps: () => ({
-      className: classNames('border-b  border-gray-300')
-    })
-  })
 
   return (
     <Fragment>
@@ -52,7 +39,21 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
             />
           </div>
         )}
-        <div className="grid grid-cols-12">{getTable()}</div>
+        <div className="grid grid-cols-12">
+          <PandaTable
+            columns={columns}
+            data={orderLines}
+            tableId={'orderLines'}
+            className={'col-span-12 relative overflow-x-auto'}
+            getRowProps={({ original: { isDelivered } }) => ({
+              className: classNames(isDelivered ? 'bg-green-100' : 'bg-white')
+            })}
+            settings={{
+              enableFooter: true,
+              enableQueryURL: false
+            }}
+          />
+        </div>
         {getFormModal()}
       </div>
     </Fragment>

@@ -21,7 +21,7 @@ import { useVisibility } from './hooks/useVisibility'
 
 export type PandaTableSettings = {
   enableSorting?: boolean
-  enablewithFooter?: boolean
+  enableFooter?: boolean
   enableQueryURL?: boolean
   enableRowSelection?: boolean
   enableColumnHiding?: boolean
@@ -56,7 +56,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(fu
   ref?: Ref<ReactTable<T> | undefined>
 ) {
   const {
-    enablewithFooter = false,
+    enableFooter = false,
     enableColumnHiding = false,
     enableColumnReordering = false,
     enableSorting = false,
@@ -105,7 +105,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(fu
               {data && (
                 <Fragment>
                   <TableBody getRowModel={table.getRowModel} getRowProps={getRowProps} loading={loading} />
-                  {enablewithFooter && <TableFoot getFooterGroups={table.getFooterGroups} />}
+                  {enableFooter && <TableFoot getFooterGroups={table.getFooterGroups} />}
                 </Fragment>
               )}
             </table>

@@ -57,7 +57,6 @@ export const Pagination = ({ tableId, settings }: PaginationProps) => {
           setPagination(tableId, `{"page":${1},"pageSize":${pageSize}}`)
         }
       } else {
-        setQueryPage('1')
         setPage(1)
         setPagination(tableId, `{"page":${1},"pageSize":${pageSize}}`)
       }

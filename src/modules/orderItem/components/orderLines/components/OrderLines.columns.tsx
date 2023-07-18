@@ -1,8 +1,8 @@
 import { InformationCircleIcon } from '@heroicons/react/20/solid'
+import type { ColumnDef } from '@tanstack/react-table'
 import { useRouter } from 'next/router'
 import { Fragment, useMemo } from 'react'
 import { useIntl } from 'react-intl'
-import type { CellProps, Column, FooterProps } from 'react-table'
 
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
@@ -20,12 +20,12 @@ interface Props {
 const useOrderLinesColumns = ({ setOrderLine, deleteOrderLine, disabledEdit }: Props) => {
   const uid = useRouter().query.uid as string
   const { formatMessage } = useIntl()
-  const columns = useMemo((): Column<OrderLineFormType>[] => {
-    const cols: Column<OrderLineFormType>[] = [
+  const columns = useMemo((): ColumnDef<OrderLineFormType, any>[] => {
+    const cols: ColumnDef<OrderLineFormType, any>[] = [
       {
-        Header: formatMessage({ id: messages.name }),
-        accessor: 'name',
-        Cell: ({ value, row: { original } }: CellProps<OrderLineFormType>) => (
+        header: formatMessage({ id: messages.name }),
+        accessorKey: 'name',
+        cell: ({ getValue, row: { original } }) => (
           <div className="flex items-center my-1">
             {!disabledEdit && (
               <OrderLineActionButtons
@@ -34,20 +34,20 @@ const useOrderLinesColumns = ({ setOrderLine, deleteOrderLine, disabledEdit }: P
                 deleteOrderLine={deleteOrderLine}
               />
             )}
-            <span>{value}</span>
+            <span>{getValue()}</span>
           </div>
         )
       },
       {
-        Header: formatMessage({ id: messages.notes }),
-        accessor: 'notes',
-        Cell: ({ value }: CellProps<OrderLineFormType>) => (
+        header: formatMessage({ id: messages.notes }),
+        accessorKey: 'notes',
+        cell: ({ getValue }) => (
           <Fragment>
-            {value && (
+            {getValue() && (
               <InformationCircleIcon
                 className="h-6 w-6 flex-shrink-0"
                 data-tooltip-id="tooltip"
-                data-tooltip-content={value}
+                data-tooltip-content={getValue()}
               />
             )}
           </Fragment>
@@ -55,48 +55,48 @@ const useOrderLinesColumns = ({ setOrderLine, deleteOrderLine, disabledEdit }: P
         id: 'notes'
       },
       {
-        Header: formatMessage({ id: messages.catalogueNumber }),
-        accessor: 'catalogueNumber'
+        header: formatMessage({ id: messages.catalogueNumber }),
+        accessorKey: 'catalogueNumber'
       },
       {
-        Header: formatMessage({ id: messages.serialNumber }),
-        accessor: 'serialNumber'
+        header: formatMessage({ id: messages.serialNumber }),
+        accessorKey: 'serialNumber'
       },
       {
-        Header: formatMessage({ id: messages.itemUsage }),
-        accessor: 'itemUsage',
-        Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value?.name}</span>
+        header: formatMessage({ id: messages.itemUsage }),
+        accessorKey: 'itemUsage',
+        cell: ({ getValue }) => <span>{getValue()?.name}</span>
       },
       {
-        Header: formatMessage({ id: messages.system }),
-        accessor: 'system',
-        Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value?.name.split('-')[0]}</span>
+        header: formatMessage({ id: messages.system }),
+        accessorKey: 'system',
+        cell: ({ getValue }) => <span>{getValue()?.name.split('-')[0]}</span>
       },
       {
-        Header: formatMessage({ id: messages.location }),
-        accessor: 'location',
-        Cell: ({ value }: CellProps<OrderLineFormType>) => <span>{value?.name.split(' - ')[0]}</span>
+        header: formatMessage({ id: messages.location }),
+        accessorKey: 'location',
+        cell: ({ getValue }) => <span>{getValue()?.name.split(' - ')[0]}</span>
       },
       {
-        Header: formatMessage({ id: messages.price }),
-        accessor: 'price',
-        Cell: ({ value, row: { original } }: CellProps<OrderLineFormType>) => (
+        header: formatMessage({ id: messages.price }),
+        accessorKey: 'price',
+        cell: ({ getValue, row: { original } }) => (
           <span className="whitespace-nowrap">
-            {value} <span className="font-medium">{original.currency}</span>
+            {getValue()} <span className="font-medium">{original.currency}</span>
           </span>
         ),
-        Footer: ({ rows }: FooterProps<OrderLineFormType>) => <PriceFooter rows={rows} />
+        footer: props => <PriceFooter rows={props.table.getRowModel().rows} />
       },
       {
-        Header: formatMessage({ id: messages.eun }),
-        accessor: 'eun',
-        Cell: ({ row: { original } }: CellProps<OrderLineFormType>) => <PrintEunButton orderLine={original} />
+        header: formatMessage({ id: messages.eun }),
+        accessorKey: 'eun',
+        cell: ({ row: { original } }) => <PrintEunButton orderLine={original} />
       },
       {
-        Header: formatMessage({ id: messages.isDelivered }),
-        accessor: 'isDelivered',
-        Cell: ({ value, row: { original } }: CellProps<OrderLineFormType>) => (
-          <OrderisDeliveredAction orderLine={original} setOrderLine={setOrderLine} checked={value} />
+        header: formatMessage({ id: messages.isDelivered }),
+        accessorKey: 'isDelivered',
+        cell: ({ getValue, row: { original } }) => (
+          <OrderisDeliveredAction orderLine={original} setOrderLine={setOrderLine} checked={getValue()} />
         )
       }
     ]
