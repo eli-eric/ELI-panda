@@ -16,7 +16,7 @@ export const useSubsystemsForRel = () => {
 
   const { loading: pending } = useFetch<SystemDetail[]>({
     url: uid ? systemSubsystemsForRelationship : null,
-    useMockFetcher: true,
+    useMockFetcher: false,
     config: {
       suspense: false,
       onSuccess: subsystems =>
