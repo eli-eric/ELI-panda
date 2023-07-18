@@ -9,9 +9,9 @@ import { useSubsystemsForRel } from '@/modules/systemItem/hooks/useSubSystemsFor
 import { useSystemsForRel } from '@/modules/systemItem/hooks/useSystemsForRel'
 import { SystemNameCell } from '@/modules/systems/components/table/cells/SystemNameCell'
 import type { SystemDetail } from '@/modules/systems/types/responses'
-import type { RELATION_TYPE_CODE } from '@/modules/systems-deprecated/types/constants'
 import useTableStateStore from '@/store/useTableStateStore'
 
+import type { RELATION_TYPE_CODE } from '../../types/constants'
 import type { SelectedSystemForRel } from './SelectRelationForm'
 
 const MemoizedTable = memo(PandaTable)

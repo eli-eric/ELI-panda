@@ -3,8 +3,9 @@ import { useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { type Option, SelectWithError } from '@/components/form/Select'
-import { RELATION_TYPE_CODE } from '@/modules/systems-deprecated/types/constants'
-import type { RelationFormType } from '@/modules/systems-deprecated/types/form'
+
+import { RELATION_TYPE_CODE } from '../../types/constants'
+import type { RelationFormType } from '../../types/form'
 
 export type SelectedSystemForRel = {
   name: string

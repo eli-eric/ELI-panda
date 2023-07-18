@@ -1,7 +1,7 @@
+import type { ColumnDef } from '@tanstack/react-table'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'react-hot-toast'
-import type { CellProps, Column } from 'react-table'
 import useSWR from 'swr'
 
 import { PlusButton } from '@/components/Buttons'
@@ -9,10 +9,10 @@ import Heading from '@/components/layout/Heading'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import executeRequest from '@/helpers/executeRequest'
 import { uniFetcher } from '@/helpers/fetcher'
-import useGeneralTable from '@/hooks/table/useGeneralTable-deprecated'
 import { message } from '@/i18n/src/messages'
 import type { FILE_TYPE } from '@/types/constants/files'
 
+import { PandaTable } from '../table/pandaTable/PandaTable'
 import FileActions from './FileActions'
 import type { FileItem } from './types'
 
@@ -84,14 +84,14 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
 
   // Define columns for useGeneralTable
   const columns = useMemo(() => {
-    const cols: Column<FileItem>[] = [
+    const cols: ColumnDef<FileItem, any>[] = [
       {
-        Header: 'Files',
-        accessor: 'name',
-        Cell: ({ value, row: { original } }: CellProps<FileItem>) => (
+        header: 'Files',
+        accessorKey: 'name',
+        cell: ({ getValue, row: { original } }) => (
           <div className="flex items-center">
             <FileActions file={original} mutate={mutate} endpoint={endpoint} files={files} hasEditRole={hasEditRole} />
-            <span className="pl-4">{value}</span>
+            <span className="pl-4">{getValue()}</span>
           </div>
         )
       }
@@ -107,13 +107,6 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   const handleButtonClick = () => {
     fileInputRef.current?.click() // Safely access the current property
   }
-
-  // Use useGeneralTable hook
-  const { getTable } = useGeneralTable({
-    tableId: 'filemanager',
-    data: files,
-    columns
-  })
 
   return (
     <div>
@@ -133,7 +126,13 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
         </div>
       )}
       {loading.some(value => value) && <ProgressBarComponent />}
-      {getTable()}
+      <PandaTable
+        {...{
+          tableId: 'filemanager',
+          data: files,
+          columns
+        }}
+      />
     </div>
   )
 }

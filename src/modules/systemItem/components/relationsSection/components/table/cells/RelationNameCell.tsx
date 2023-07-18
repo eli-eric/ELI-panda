@@ -7,7 +7,7 @@ import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
-import type { SystemRelationshipResponse } from '@/modules/systems-deprecated/types/responses'
+import type { SystemRelationshipResponse } from '@/modules/systemItem/types/responses'
 import type { ModalButtons } from '@/types/form'
 
 const messages = message.systemsPage.relations

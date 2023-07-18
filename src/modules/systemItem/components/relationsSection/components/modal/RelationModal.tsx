@@ -10,10 +10,10 @@ import ErrorPage from '@/components/error/ErrorPage'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
-import { RELATION_TYPE_CODE } from '@/modules/systems-deprecated/types/constants'
-import type { RelationFormType } from '@/modules/systems-deprecated/types/form'
 import useTableStateStore from '@/store/useTableStateStore'
 
+import { RELATION_TYPE_CODE } from '../../types/constants'
+import type { RelationFormType } from '../../types/form'
 import SelectRelation from './SelectRelationForm'
 import { SystemsForRelTable } from './SystemsForRelTable'
 

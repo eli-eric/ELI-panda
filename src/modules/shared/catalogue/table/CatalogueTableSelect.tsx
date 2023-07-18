@@ -31,7 +31,8 @@ const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
     () => ({
       header: intl.formatMessage({ id: messages.select }),
       id: 'select',
-      cell: props => <SelectCell {...props} setItem={setItem} selectedItem={selectedItem} />
+      cell: props => <SelectCell {...props} setItem={setItem} selectedItem={selectedItem} />,
+      size: 70
     }),
     [intl, setItem, selectedItem]
   )

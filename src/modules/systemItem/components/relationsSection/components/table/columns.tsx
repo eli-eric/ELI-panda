@@ -3,7 +3,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
-import type { SystemRelationshipResponse } from '@/modules/systems-deprecated/types/responses'
+import type { SystemRelationshipResponse } from '@/modules/systemItem/types/responses'
 
 import { RelationNameCell } from './cells/RelationNameCell'
 

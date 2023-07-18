@@ -1,7 +1,7 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
+import type { ColumnDef } from '@tanstack/react-table'
 import { Fragment, useMemo } from 'react'
 import { FormattedDate, useIntl } from 'react-intl'
-import { type CellProps, type Column } from 'react-table'
 
 import { message } from '@/i18n/src/messages'
 
@@ -15,67 +15,85 @@ const useOrderColumns = () => {
   const intl = useIntl()
 
   const columns = useMemo(
-    (): Column<Order>[] => [
+    (): ColumnDef<Order, any>[] => [
       {
-        Header: intl.formatMessage({ id: messages.name }),
-        accessor: 'name',
+        header: intl.formatMessage({ id: messages.name }),
+        accessorKey: 'name',
         id: 'name',
-        Cell: ({ value, row }: CellProps<Order>) => (
+        cell: ({ getValue, row }) => (
           <div className="flex items-center my-1">
             <TableActions order={row.original} />
-            <span>{value}</span>
+            <span>{getValue()}</span>
           </div>
-        )
+        ),
+        size: 300,
+        meta: { sticky: true }
       },
-      { Header: intl.formatMessage({ id: messages.orderNumber }), accessor: 'orderNumber', id: 'orderNumber' },
-      { Header: intl.formatMessage({ id: messages.requestNumber }), accessor: 'requestNumber', id: 'requestNumber' },
-      { Header: intl.formatMessage({ id: messages.contractNumber }), accessor: 'contractNumber', id: 'contractNumber' },
-      { Header: intl.formatMessage({ id: messages.orderStatus }), accessor: 'orderStatus' },
       {
-        Header: intl.formatMessage({ id: messages.deliveryStatus }),
-        accessor: 'deliveryStatus',
-        Cell: ({ value }: CellProps<Order>) => <span>{DeliveryStatusMapping[value]}</span>
+        header: intl.formatMessage({ id: messages.orderNumber }),
+        accessorKey: 'orderNumber',
+        id: 'orderNumber',
+        meta: { className: 'text-right' }
       },
-      { Header: intl.formatMessage({ id: messages.supplier }), accessor: 'supplier', id: 'supplier' },
-      { Header: intl.formatMessage({ id: messages.procurementResponsible }), accessor: 'procurementResponsible' },
-      { Header: intl.formatMessage({ id: messages.requestor }), accessor: 'requestor' },
       {
-        Header: intl.formatMessage({ id: messages.notes }),
-        accessor: 'notes',
-        Cell: ({ value }: CellProps<Order>) => (
+        header: intl.formatMessage({ id: messages.requestNumber }),
+        accessorKey: 'requestNumber',
+        id: 'requestNumber',
+        meta: { className: 'text-right' }
+      },
+      {
+        header: intl.formatMessage({ id: messages.contractNumber }),
+        accessorKey: 'contractNumber',
+        id: 'contractNumber',
+        meta: { className: 'text-right' }
+      },
+      { header: intl.formatMessage({ id: messages.orderStatus }), accessorKey: 'orderStatus' },
+      {
+        header: intl.formatMessage({ id: messages.deliveryStatus }),
+        accessorKey: 'deliveryStatus',
+        cell: ({ getValue }) => <span>{DeliveryStatusMapping[getValue()]}</span>
+      },
+      { header: intl.formatMessage({ id: messages.supplier }), accessorKey: 'supplier', id: 'supplier', size: 300 },
+      { header: intl.formatMessage({ id: messages.procurementResponsible }), accessorKey: 'procurementResponsible' },
+      { header: intl.formatMessage({ id: messages.requestor }), accessorKey: 'requestor' },
+      {
+        header: intl.formatMessage({ id: messages.notes }),
+        accessorKey: 'notes',
+        cell: ({ getValue }) => (
           <Fragment>
-            {value && (
+            {getValue() && (
               <InformationCircleIcon
                 className="h-6 w-6 flex-shrink-0"
                 data-tooltip-id="tooltip"
-                data-tooltip-content={value}
+                data-tooltip-content={getValue()}
               />
             )}
           </Fragment>
         ),
-        id: 'notes'
+        id: 'notes',
+        size: 90
       },
       {
-        Header: intl.formatMessage({ id: messages.lastUpdateTime }),
-        accessor: 'lastUpdateTime',
-        Cell: ({ value }: CellProps<Order>) => (
-          <FormattedDate value={value} day="2-digit" month="long" year="numeric" />
-        ),
-        id: 'lastUpdateTime'
+        header: intl.formatMessage({ id: messages.lastUpdateTime }),
+        accessorKey: 'lastUpdateTime',
+        cell: ({ getValue }) => <FormattedDate value={getValue()} day="2-digit" month="long" year="numeric" />,
+        id: 'lastUpdateTime',
+        meta: { className: 'text-right' }
       },
       {
-        Header: intl.formatMessage({ id: messages.lastUpdateBy }),
-        accessor: 'lastUpdateBy'
+        header: intl.formatMessage({ id: messages.lastUpdateBy }),
+        accessorKey: 'lastUpdateBy'
       },
       {
-        Header: intl.formatMessage({ id: messages.orderDate }),
-        accessor: 'orderDate',
-        Cell: ({ value }: CellProps<Order>) => (
+        header: intl.formatMessage({ id: messages.orderDate }),
+        accessorKey: 'orderDate',
+        cell: ({ getValue }) => (
           <span className="text-right">
-            <FormattedDate value={value} day="2-digit" month="long" year="numeric" />
+            <FormattedDate value={getValue()} day="2-digit" month="long" year="numeric" />
           </span>
         ),
-        id: 'orderDate'
+        id: 'orderDate',
+        meta: { className: 'text-right' }
       }
     ],
     [intl]
