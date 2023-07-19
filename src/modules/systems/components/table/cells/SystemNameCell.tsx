@@ -71,7 +71,6 @@ export const SystemNameCell = ({
           <button
             onClick={() => {
               if (!row.getIsExpanded()) {
-                console.log('row.original.uid', row.original.uid)
                 setUid(row.original.uid)
               } else {
                 setUid(null)
