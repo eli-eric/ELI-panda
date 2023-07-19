@@ -12,7 +12,8 @@ const useOrders = () => {
       suspense: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: true,
-      revalidateOnMount: true
+      revalidateOnMount: true,
+      keepPreviousData: true
     },
     url: orders
   })

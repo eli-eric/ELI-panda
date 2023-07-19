@@ -15,7 +15,7 @@ import { CODEBOOK } from '@/types/constants/codebook'
 
 import type { QueryFilter } from '../types'
 
-type OrdersFilter = {
+type OrdersFilterForm = {
   supplier: CodebookType
   orderStatus: CodebookType
   procurementResponsible: CodebookType
@@ -27,7 +27,7 @@ type OrdersFilter = {
 
 const ordersFilterMessages = message.ordersPage.orderDetail.form
 
-const useOrdersFilter = () => {
+export const OrdersFilter = () => {
   const { setFilter, instances } = useTableStateStore()
   const filter = instances.orders?.filter
 
@@ -47,7 +47,7 @@ const useOrdersFilter = () => {
     'requestor',
     queryTypes.string.withDefault(JSON.stringify(filter?.requestor))
   )
-  const form = useForm<OrdersFilter>({
+  const form = useForm<OrdersFilterForm>({
     defaultValues: {
       supplier: querySupplier ? JSON.parse(querySupplier) : filter?.supplier ? filter.supplier : null,
       orderStatus: queryOrderStatus ? JSON.parse(queryOrderStatus) : filter?.orderStatus ? filter.orderStatus : null,
@@ -114,7 +114,7 @@ const useOrdersFilter = () => {
     handleFieldUpdate('requestor', requestor, setQueryRequestor)
   }, [requestor, setQueryRequestor])
 
-  const getOrdersFilter = () => (
+  return (
     <FormProvider {...form}>
       <form className="max-[1250px]:hidden w-[1000px] flex gap-x-2">
         <Grid>
@@ -150,8 +150,4 @@ const useOrdersFilter = () => {
       </form>
     </FormProvider>
   )
-
-  return { getOrdersFilter }
 }
-
-export default useOrdersFilter

@@ -5,7 +5,7 @@ import ErrorPage from '@/components/error/ErrorPage'
 import { Pagination } from '@/modules/shared/table/Pagination'
 import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
-import SearchBar from '@/modules/shared/table/SearchBar'
+import { SearchBar } from '@/modules/shared/table/SearchBar'
 
 import { useSystems } from '../../hooks/useSystems'
 import type { SystemDetail } from '../../types/responses'

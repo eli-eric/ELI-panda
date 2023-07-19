@@ -6,22 +6,21 @@ import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 
 import { Pagination } from '../shared/table/Pagination'
 import { PandaTable } from '../shared/table/pandaTable/PandaTable'
-import SearchBar from '../shared/table/SearchBar'
+import { SearchBar } from '../shared/table/SearchBar'
 import HeaderButtons from './components/HeaderButtons'
 import useOrderColumns from './components/OrderColumns'
-import useOrdersFilter from './components/OrdersFilter'
+import { OrdersFilter } from './components/OrdersFilter'
 import useOrders from './hooks/useOrders'
 import { getColorClassStatus } from './utils/getColorClassStatus'
 
 const OrdersContainer = () => {
-  const { getOrdersFilter } = useOrdersFilter()
   const { orderList, loading, error } = useOrders()
   const columns = useOrderColumns()
 
   return (
     <Fragment>
       <TableLayoutContainer>
-        <SearchBar tableId="orders" left={<HeaderButtons />} right={getOrdersFilter()} />
+        <SearchBar tableId="orders" left={<HeaderButtons />} right={<OrdersFilter />} />
         {!error && (
           <PandaTable
             settings={{
