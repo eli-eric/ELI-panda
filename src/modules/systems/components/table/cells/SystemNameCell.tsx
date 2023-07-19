@@ -85,16 +85,16 @@ export const SystemNameCell = ({
           <span className="pl-5 my-1">{getValue()}</span>
         )}
         {!hideButtons && isHoveringId === row.id && (
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center">
             <Link href={PATH.SYSTEM + '/' + row.original.uid}>
               <Fragment>
                 {canEdit ? (
-                  <button className="ml-2 hover:text-primary-500">
-                    <PencilSquareIcon className="h-5 w-5" aria-hidden="true" />
+                  <button className="ml-2 pt-1 hover:text-primary-500">
+                    <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
                   </button>
                 ) : (
-                  <button className="ml-2 hover:text-primary-500">
-                    <FolderOpenIcon className="h-5 w-5" aria-hidden="true" />
+                  <button className="ml-2 pt-1 hover:text-primary-500">
+                    <FolderOpenIcon className="h-4 w-4" aria-hidden="true" />
                   </button>
                 )}
               </Fragment>
@@ -106,13 +106,13 @@ export const SystemNameCell = ({
                   withWarningModal(submit)()
                 }}
               >
-                <TrashIcon className="h-5 w-5" aria-hidden="true" />
+                <TrashIcon className="h-4 w-4" aria-hidden="true" />
               </button>
             )}
             {canEdit && (
               <Link href={{ pathname: PATH.SYSTEM, query: { parentUid: row.original.uid } }}>
-                <button className="ml-2 hover:text-primary-500">
-                  <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                <button className="ml-2 pt-1 hover:text-primary-500">
+                  <PlusIcon className="h-4 w-4" aria-hidden="true" />
                 </button>
               </Link>
             )}

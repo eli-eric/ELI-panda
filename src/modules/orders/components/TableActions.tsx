@@ -13,7 +13,7 @@ import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
-import useOrders from '../hooks/useOrders'
+import { useOrders } from '../hooks/useOrders'
 import type { Order } from '../types'
 
 const buttonsMessage = message.common.buttons

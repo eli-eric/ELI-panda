@@ -8,9 +8,9 @@ import { Pagination } from '../shared/table/Pagination'
 import { PandaTable } from '../shared/table/pandaTable/PandaTable'
 import { SearchBar } from '../shared/table/SearchBar'
 import HeaderButtons from './components/HeaderButtons'
-import useOrderColumns from './components/OrderColumns'
+import { useOrderColumns } from './components/OrderColumns'
 import { OrdersFilter } from './components/OrdersFilter'
-import useOrders from './hooks/useOrders'
+import { useOrders } from './hooks/useOrders'
 import { getColorClassStatus } from './utils/getColorClassStatus'
 
 const OrdersContainer = () => {

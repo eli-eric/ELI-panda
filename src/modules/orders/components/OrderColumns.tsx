@@ -11,7 +11,7 @@ import TableActions from './TableActions'
 
 const messages = message.ordersPage.ordersTable.header
 
-const useOrderColumns = () => {
+export const useOrderColumns = () => {
   const intl = useIntl()
 
   const columns = useMemo(
@@ -54,7 +54,11 @@ const useOrderColumns = () => {
         cell: ({ getValue }) => <span>{DeliveryStatusMapping[getValue()]}</span>
       },
       { header: intl.formatMessage({ id: messages.supplier }), accessorKey: 'supplier', id: 'supplier', size: 300 },
-      { header: intl.formatMessage({ id: messages.procurementResponsible }), accessorKey: 'procurementResponsible' },
+      {
+        header: intl.formatMessage({ id: messages.procurementResponsible }),
+        accessorKey: 'procurementResponsible',
+        size: 200
+      },
       { header: intl.formatMessage({ id: messages.requestor }), accessorKey: 'requestor' },
       {
         header: intl.formatMessage({ id: messages.notes }),
@@ -101,5 +105,3 @@ const useOrderColumns = () => {
 
   return columns
 }
-
-export default useOrderColumns
