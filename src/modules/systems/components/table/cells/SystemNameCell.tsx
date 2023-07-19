@@ -1,11 +1,17 @@
-import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  FolderOpenIcon,
+  PencilSquareIcon,
+  PlusIcon,
+  TrashIcon
+} from '@heroicons/react/24/outline'
 import type { CellContext } from '@tanstack/react-table'
 import Link from 'next/link'
 import { Fragment } from 'react'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
-import { DeleteButton, DetailButton, EditButton, PlusButton } from '@/components/Buttons'
 import { createMessageValues } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
@@ -19,10 +25,11 @@ import { PATH } from '@/types/constants/paths'
 const messages = message.systemsPage.systemDetail.deleteModal
 
 interface SystemNameCellProps extends CellContext<SystemDetail, any> {
-  setUid: (uid: string) => void
+  setUid: (uid: string | null) => void
   canEdit?: boolean
   hideButtons?: boolean
   tableId: string
+  isHoveringId?: number | undefined | string
 }
 
 export const SystemNameCell = ({
@@ -31,7 +38,8 @@ export const SystemNameCell = ({
   setUid,
   canEdit = true,
   hideButtons = false,
-  tableId
+  tableId,
+  isHoveringId
 }: SystemNameCellProps) => {
   const { system } = useEndpoint({ uid: row.original.uid })
   // last in parentPath array is the parent uid
@@ -64,6 +72,8 @@ export const SystemNameCell = ({
             onClick={() => {
               if (!row.getIsExpanded()) {
                 setUid(row.original.uid)
+              } else {
+                setUid(null)
               }
               row.toggleExpanded()
             }}
@@ -76,25 +86,39 @@ export const SystemNameCell = ({
         ) : (
           <span className="pl-5 my-1">{getValue()}</span>
         )}
-        {!hideButtons && (
-          <Fragment>
-            <Link href={PATH.SYSTEM + '/' + row.original.uid} className="ml-auto z-0">
-              <Fragment>{canEdit ? <EditButton /> : <DetailButton />}</Fragment>
+        {!hideButtons && isHoveringId === row.id && (
+          <div className="ml-auto flex items-center">
+            <Link href={PATH.SYSTEM + '/' + row.original.uid}>
+              <Fragment>
+                {canEdit ? (
+                  <button className="ml-2 pt-1 hover:text-primary-500">
+                    <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                ) : (
+                  <button className="ml-2 pt-1 hover:text-primary-500">
+                    <FolderOpenIcon className="h-4 w-4" aria-hidden="true" />
+                  </button>
+                )}
+              </Fragment>
             </Link>
             {canEdit && (
-              <DeleteButton
-                className="ml-2 z-0"
+              <button
+                className="ml-2 hover:text-primary-500 text-red-700"
                 onClick={() => {
                   withWarningModal(submit)()
                 }}
-              />
+              >
+                <TrashIcon className="h-4 w-4" aria-hidden="true" />
+              </button>
             )}
             {canEdit && (
-              <Link href={{ pathname: PATH.SYSTEM, query: { parentUid: row.original.uid } }} className="ml-2 z-0">
-                <PlusButton />
+              <Link href={{ pathname: PATH.SYSTEM, query: { parentUid: row.original.uid } }}>
+                <button className="ml-2 pt-1 hover:text-primary-500">
+                  <PlusIcon className="h-4 w-4" aria-hidden="true" />
+                </button>
               </Link>
             )}
-          </Fragment>
+          </div>
         )}
       </div>
     </div>

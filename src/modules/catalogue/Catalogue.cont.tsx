@@ -5,7 +5,7 @@ import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 
 import { CatalogueTable } from '../shared/catalogue/table/CatalogueItems.table'
 import { Pagination } from '../shared/table/Pagination'
-import SearchBar from '../shared/table/SearchBar'
+import { SearchBar } from '../shared/table/SearchBar'
 import { CatalogueBreadcrumbs } from './components/breadcrump/CatalogueBreadcrumbs'
 import { CategoryListContainer } from './components/categoryList/CategoryList.cont'
 import { SearchBarButtons } from './components/SearchBarButtons'

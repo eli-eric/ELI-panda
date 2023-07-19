@@ -4,7 +4,7 @@ import useFetch from '@/hooks/fetch/useFetch'
 import useQueryManager from '../../../hooks/useQueryManager'
 import type { OrderListResponse } from '../types'
 
-const useOrders = () => {
+export const useOrders = () => {
   const query = useQueryManager('orders')
   const { orders } = useEndpoint({ ...query })
   const { response, loading, error, mutate } = useFetch<OrderListResponse>({
@@ -12,11 +12,10 @@ const useOrders = () => {
       suspense: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: true,
-      revalidateOnMount: true
+      revalidateOnMount: true,
+      keepPreviousData: true
     },
     url: orders
   })
   return { orderList: response, loading, error, mutate }
 }
-
-export default useOrders

@@ -4,7 +4,7 @@ import { type Dispatch, Fragment, memo, type SetStateAction, useEffect, useMemo 
 
 import { Pagination } from '@/modules/shared/table/Pagination'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
-import SearchBar from '@/modules/shared/table/SearchBar'
+import { SearchBar } from '@/modules/shared/table/SearchBar'
 import { useSubsystemsForRel } from '@/modules/systemItem/hooks/useSubSystemsForRel'
 import { useSystemsForRel } from '@/modules/systemItem/hooks/useSystemsForRel'
 import { SystemNameCell } from '@/modules/systems/components/table/cells/SystemNameCell'

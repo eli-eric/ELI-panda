@@ -15,7 +15,7 @@ interface Props {
   onChange?: (value: string) => void
 }
 
-const SearchBar = ({ useQuery = true, left, right, tableId, onChange }: Props) => {
+export const SearchBar = ({ useQuery = true, left, right, tableId, onChange }: Props) => {
   const [querySearch, setQuerySearch] = useQueryState('search', { history: 'replace' })
   const { setSearch, instances } = useTableStateStore()
   const searchInstance = instances[tableId]?.search
@@ -99,5 +99,3 @@ const SearchBar = ({ useQuery = true, left, right, tableId, onChange }: Props) =
     </div>
   )
 }
-
-export default SearchBar

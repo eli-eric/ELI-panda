@@ -26,6 +26,7 @@ export type PandaTableSettings = {
   enableRowSelection?: boolean
   enableColumnHiding?: boolean
   enableColumnReordering?: boolean
+  manualSorting?: boolean
 }
 
 interface Props<T extends object> {
@@ -61,7 +62,8 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(fu
     enableColumnReordering = false,
     enableSorting = false,
     enableQueryURL = false,
-    enableRowSelection = false
+    enableRowSelection = false,
+    manualSorting = true
   } = settings || {}
 
   const [columnVisibility, setColumnVisibility] = useVisibility(tableId)
@@ -83,7 +85,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(fu
     columns: columns,
     data: data || [],
     enableSorting: enableSorting,
-    manualSorting: true,
+    manualSorting: manualSorting,
     enableRowSelection: enableRowSelection,
     enableMultiRowSelection: false,
     enableSubRowSelection: true,

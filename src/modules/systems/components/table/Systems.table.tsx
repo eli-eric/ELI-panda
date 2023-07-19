@@ -1,11 +1,11 @@
 import type { Row, Table } from '@tanstack/react-table'
-import { Fragment, memo, useCallback, useRef } from 'react'
+import { Fragment, memo, useCallback, useRef, useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { Pagination } from '@/modules/shared/table/Pagination'
 import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
-import SearchBar from '@/modules/shared/table/SearchBar'
+import { SearchBar } from '@/modules/shared/table/SearchBar'
 
 import { useSystems } from '../../hooks/useSystems'
 import type { SystemDetail } from '../../types/responses'
@@ -33,7 +33,8 @@ export const SystemsTable = ({
 }: Props) => {
   const { systems, error, loading } = useSystems(tableId)
   const tableRef = useRef<Table<SystemDetail>>()
-  const { columns, pending } = useSystemsColumns({ tableId, hideButtons })
+  const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
+  const { columns, pending } = useSystemsColumns({ tableId, hideButtons, isHoveringId })
 
   const onChangeSearch = useCallback(() => {
     tableRef.current?.resetExpanded()
@@ -54,7 +55,18 @@ export const SystemsTable = ({
         loading={loading || pending}
         tableId={tableId}
         getSubRows={row => row.subSystems}
-        getRowProps={getRowProps}
+        getRowProps={
+          getRowProps
+            ? getRowProps
+            : ({ id }) => ({
+                onMouseEnter: () => {
+                  setIsHoveringId(id)
+                },
+                onMouseLeave: () => {
+                  setIsHoveringId(undefined)
+                }
+              })
+        }
         settings={settings}
         className={className}
       />

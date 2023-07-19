@@ -9,7 +9,7 @@ import useTableStateStore from '@/store/useTableStateStore'
 import type { CatalogueItem } from '@/types/responses'
 
 import { Pagination } from '../../table/Pagination'
-import SearchBar from '../../table/SearchBar'
+import { SearchBar } from '../../table/SearchBar'
 import { CatalogueTable } from './CatalogueItems.table'
 import { SelectCell } from './cells/SelectCell'
 

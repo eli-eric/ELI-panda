@@ -50,7 +50,9 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
             })}
             settings={{
               enableFooter: true,
-              enableQueryURL: false
+              enableQueryURL: false,
+              enableSorting: true,
+              manualSorting: false
             }}
           />
         </div>
