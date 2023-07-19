@@ -10,7 +10,15 @@ import type { SystemDetail } from '../../types/responses'
 import { SystemNameCell } from './cells/SystemNameCell'
 
 //TODO: fix typing
-export const useSystemsColumns = ({ tableId, hideButtons }: { tableId: string; hideButtons?: boolean }) => {
+export const useSystemsColumns = ({
+  tableId,
+  hideButtons,
+  isHoveringId
+}: {
+  tableId: string
+  hideButtons?: boolean
+  isHoveringId: number | undefined | string
+}) => {
   const { setUid, pending } = useSubsystems(tableId)
   const canEdit = usePermission([ROLE.SYSTEM_EDIT])
 
@@ -24,7 +32,14 @@ export const useSystemsColumns = ({ tableId, hideButtons }: { tableId: string; h
         meta: { sticky: true },
         enableHiding: false,
         cell: props => (
-          <SystemNameCell {...props} setUid={setUid} canEdit={canEdit} hideButtons={hideButtons} tableId={tableId} />
+          <SystemNameCell
+            {...props}
+            setUid={setUid}
+            canEdit={canEdit}
+            hideButtons={hideButtons}
+            tableId={tableId}
+            isHoveringId={isHoveringId}
+          />
         )
       },
       { header: 'System Code', accessorFn: row => row.systemCode, id: 'systemCode', size: 150 },
@@ -146,7 +161,7 @@ export const useSystemsColumns = ({ tableId, hideButtons }: { tableId: string; h
         size: 150
       }
     ],
-    [setUid, canEdit, hideButtons, tableId]
+    [setUid, canEdit, hideButtons, tableId, isHoveringId]
   )
 
   const columnsForAssign = useMemo(
