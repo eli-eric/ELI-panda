@@ -25,7 +25,7 @@ import { PATH } from '@/types/constants/paths'
 const messages = message.systemsPage.systemDetail.deleteModal
 
 interface SystemNameCellProps extends CellContext<SystemDetail, any> {
-  setUid: (uid: string) => void
+  setUid: (uid: string | null) => void
   canEdit?: boolean
   hideButtons?: boolean
   tableId: string
@@ -71,7 +71,10 @@ export const SystemNameCell = ({
           <button
             onClick={() => {
               if (!row.getIsExpanded()) {
+                console.log('row.original.uid', row.original.uid)
                 setUid(row.original.uid)
+              } else {
+                setUid(null)
               }
               row.toggleExpanded()
             }}
