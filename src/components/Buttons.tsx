@@ -9,7 +9,10 @@ import {
   PlusIcon,
   TrashIcon
 } from '@heroicons/react/24/outline'
+import Link from 'next/link'
+import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
+import type { UrlObject } from 'url'
 
 import { classNames } from '@/helpers'
 
@@ -122,4 +125,47 @@ export const RefreshButton = ({ buttonSize = 'small', ...restProps }: ButtonProp
   <Button {...restProps} buttonSize={buttonSize}>
     <ArrowPathIcon className="h-5 w-5" aria-hidden="true" />
   </Button>
+)
+
+interface TableActionsButtonsProps {
+  onDeleteClick?: () => void
+  canEdit?: boolean
+  detailLink?: UrlObject | string
+  addLink?: UrlObject | string
+  isShown?: boolean
+}
+export const TableActionsButtons = ({ onDeleteClick, canEdit, detailLink, addLink }: TableActionsButtonsProps) => (
+  <div className="ml-auto flex items-center">
+    {detailLink && (
+      <Link href={detailLink}>
+        <Fragment>
+          {canEdit ? (
+            <button className="ml-2 pt-1 hover:text-primary-500">
+              <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
+            </button>
+          ) : (
+            <button className="ml-2 pt-1 hover:text-primary-500">
+              <FolderOpenIcon className="h-4 w-4" aria-hidden="true" />
+            </button>
+          )}
+        </Fragment>
+      </Link>
+    )}
+    {canEdit && (
+      <Fragment>
+        {onDeleteClick && (
+          <button className="ml-2 hover:text-primary-500 text-red-700" onClick={onDeleteClick}>
+            <TrashIcon className="h-4 w-4" aria-hidden="true" />
+          </button>
+        )}
+        {addLink && (
+          <Link href={addLink}>
+            <button className="ml-2 pt-1 hover:text-primary-500">
+              <PlusIcon className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </Link>
+        )}
+      </Fragment>
+    )}
+  </div>
 )

@@ -90,7 +90,7 @@ export const TableActions = ({ order }: Props) => {
         open={openDeleteWarn}
         setOpen={setOpenDeleteWarn}
         title={modalMessage.title}
-        message={formatMessage({ id: modalMessage.message }, createMessageValues({ orderName: name }))}
+        message={formatMessage({ id: modalMessage.message }, createMessageValues({ name }))}
         testid="OrderDeleteModal"
         error={deleteSubmit.error}
       />

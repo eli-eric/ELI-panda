@@ -1,4 +1,5 @@
-import { Fragment } from 'react'
+import type { Table } from '@tanstack/react-table'
+import { Fragment, useEffect, useRef } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
 import Heading from '@/components/layout/Heading'
@@ -23,6 +24,14 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
   const { setOpen, getFormModal } = useOrderLineForm({ setOrderLine })
   const columns = useOrderLinesColumns({ setOrderLine, deleteOrderLine, disabledEdit })
 
+  const tableRef = useRef<Table<OrderLineFormType>>()
+
+  useEffect(() => {
+    if (tableRef.current) {
+      tableRef.current.setColumnOrder(['name', 'partNumber', 'serialNumber', 'eun', 'isDelivered'])
+    }
+  }, [tableRef])
+
   return (
     <Fragment>
       <Heading text={messages.orderLines} />
@@ -41,6 +50,7 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
         )}
         <div className="grid grid-cols-12">
           <PandaTable
+            ref={tableRef}
             columns={columns}
             data={orderLines}
             tableId={'orderLines'}
@@ -52,7 +62,8 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
               enableFooter: true,
               enableQueryURL: false,
               enableSorting: true,
-              manualSorting: false
+              manualSorting: false,
+              enableColumnReordering: true
             }}
           />
         </div>

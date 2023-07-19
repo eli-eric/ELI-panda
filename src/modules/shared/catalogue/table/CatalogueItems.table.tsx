@@ -1,5 +1,5 @@
 import type { ColumnDef, Table } from '@tanstack/react-table'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import type { CatalogueItem } from '@/types/responses'
 import type { CatalogueCategoryResponse, CatalogueItemsResponse } from '@/types/responses'
@@ -24,7 +24,9 @@ export const CatalogueTable = ({
   categoryList,
   loading
 }: CatalogueTableProps) => {
-  const columns = useCatalogueItemsColumns(tableId, additionalColumn)
+  const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
+
+  const columns = useCatalogueItemsColumns(tableId, additionalColumn, isHoveringId)
   const catalogueTableRef = useRef<Table<CatalogueItem>>()
 
   useEffect(() => {
@@ -48,6 +50,14 @@ export const CatalogueTable = ({
       loading={loading}
       tableId={tableId}
       data={catalogueItems?.data}
+      getRowProps={({ id }) => ({
+        onMouseEnter: () => {
+          setIsHoveringId(id)
+        },
+        onMouseLeave: () => {
+          setIsHoveringId(undefined)
+        }
+      })}
       className={'relative overflow-x-auto'}
       settings={{ enableQueryURL: enableQueryURL }}
     />
