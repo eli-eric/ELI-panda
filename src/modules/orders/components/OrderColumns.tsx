@@ -21,7 +21,7 @@ export const useOrderColumns = (isHoveringId?: number | undefined | string) => {
         accessorKey: 'name',
         id: 'name',
         cell: ({ getValue, row: { original, id } }) => (
-          <div className="flex items-center">
+          <div className="flex items-center pt-1 pb-1">
             <span>{getValue()}</span>
             <TableActions order={original} isHovering={id === isHoveringId} />
           </div>
@@ -86,7 +86,8 @@ export const useOrderColumns = (isHoveringId?: number | undefined | string) => {
       },
       {
         header: intl.formatMessage({ id: messages.lastUpdateBy }),
-        accessorKey: 'lastUpdateBy'
+        accessorKey: 'lastUpdateBy',
+        size: 200
       },
       {
         header: intl.formatMessage({ id: messages.orderDate }),

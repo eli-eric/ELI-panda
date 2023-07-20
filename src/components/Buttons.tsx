@@ -150,6 +150,11 @@ export const TablePlusButton = (props: ButtonProps) => (
     <PlusIcon className="h-4 w-4" aria-hidden="true" />
   </button>
 )
+export const TableDownloadButton = (props: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" {...props}>
+    <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
 
 export const TableButtonsWrapper = ({ children }: { children: React.ReactNode }) => (
   <div className="ml-auto flex items-center">{children}</div>
