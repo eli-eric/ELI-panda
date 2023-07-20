@@ -1,6 +1,7 @@
+import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
@@ -25,7 +26,8 @@ const useOrderLinesColumns = ({ setOrderLine, deleteOrderLine, disabledEdit }: P
         header: formatMessage({ id: messages.name }),
         accessorKey: 'name',
         cell: ({ getValue, row: { original } }) => (
-          <div className="flex items-center my-1">
+          <div className="flex items-center">
+            <span>{getValue()}</span>
             {!disabledEdit && (
               <OrderLineActionButtons
                 orderLine={original}
@@ -33,9 +35,10 @@ const useOrderLinesColumns = ({ setOrderLine, deleteOrderLine, disabledEdit }: P
                 deleteOrderLine={deleteOrderLine}
               />
             )}
-            <span>{getValue()}</span>
           </div>
-        )
+        ),
+        meta: { sticky: true },
+        size: 200
       },
       {
         header: formatMessage({ id: messages.catalogueNumber }),
@@ -56,6 +59,23 @@ const useOrderLinesColumns = ({ setOrderLine, deleteOrderLine, disabledEdit }: P
         cell: ({ getValue, row: { original } }) => (
           <OrderisDeliveredAction orderLine={original} setOrderLine={setOrderLine} checked={getValue()} />
         )
+      },
+      {
+        header: formatMessage({ id: messages.notes }),
+        accessorKey: 'notes',
+        cell: ({ getValue }) => (
+          <Fragment>
+            {getValue() && (
+              <InformationCircleIcon
+                className="h-6 w-6 flex-shrink-0"
+                data-tooltip-id="tooltip"
+                data-tooltip-content={getValue()}
+              />
+            )}
+          </Fragment>
+        ),
+        id: 'notes',
+        size: 90
       },
       {
         header: formatMessage({ id: messages.price }),

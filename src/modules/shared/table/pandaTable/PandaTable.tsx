@@ -101,17 +101,15 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(fu
       {enableColumnHiding && <TableSettings table={table} />}
       <div className={classNames('h-full flex flex-col border-t border-gray-300 pb-4', className)}>
         <div className="inline-block min-w-full align-middle">
-          <div className="shadow ring-1 ring-black ring-opacity-5 ">
-            <table className="min-w-full divide-y divide-gray-300">
-              <TableHead table={table} enableColumnReordering={enableColumnReordering} />
-              {data && (
-                <Fragment>
-                  <TableBody getRowModel={table.getRowModel} getRowProps={getRowProps} loading={loading} />
-                  {enableFooter && <TableFoot getFooterGroups={table.getFooterGroups} />}
-                </Fragment>
-              )}
-            </table>
-          </div>
+          <table className="min-w-full divide-y divide-gray-300">
+            <TableHead table={table} enableColumnReordering={enableColumnReordering} />
+            {data && (
+              <Fragment>
+                <TableBody getRowModel={table.getRowModel} getRowProps={getRowProps} loading={loading} />
+                {enableFooter && <TableFoot getFooterGroups={table.getFooterGroups} />}
+              </Fragment>
+            )}
+          </table>
           {loading && !data && <ProgressBarComponent />}
           {data?.length === 0 && <EmptyResults />}
         </div>

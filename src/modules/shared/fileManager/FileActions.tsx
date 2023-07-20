@@ -4,7 +4,7 @@ import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 import type { KeyedMutator } from 'swr'
 
-import { DeleteButton, DownloadButton } from '@/components/Buttons'
+import { TableDeleteButton, TableDownloadButton } from '@/components/Buttons'
 import executeRequest from '@/helpers/executeRequest'
 import { createMessageValues } from '@/helpers/formatters'
 import useWarningModal from '@/hooks/useWarningModal'
@@ -47,13 +47,13 @@ const FileActions = ({ file, endpoint, files, mutate, hasEditRole }: FileActions
   )
 
   return (
-    <div className="py-1">
+    <div className="flex items-center">
       <Link href={file.url} passHref legacyBehavior={true}>
-        <a target="_blank">
-          <DownloadButton type={'button'} className="mr-1" />
+        <a target="_blank" className="hover:text-primary-500 flex items-center">
+          <TableDownloadButton className="mr-1" />
         </a>
       </Link>
-      {hasEditRole && <DeleteButton type={'button'} onClick={() => withWarningModal(handleDelete)(file.id)} />}
+      {hasEditRole && <TableDeleteButton onClick={() => withWarningModal(handleDelete)(file.id)} />}
     </div>
   )
 }

@@ -9,7 +9,10 @@ import {
   PlusIcon,
   TrashIcon
 } from '@heroicons/react/24/outline'
+import Link from 'next/link'
+import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
+import type { UrlObject } from 'url'
 
 import { classNames } from '@/helpers'
 
@@ -122,4 +125,64 @@ export const RefreshButton = ({ buttonSize = 'small', ...restProps }: ButtonProp
   <Button {...restProps} buttonSize={buttonSize}>
     <ArrowPathIcon className="h-5 w-5" aria-hidden="true" />
   </Button>
+)
+
+export const TableEditButton = (props: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" {...props}>
+    <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+
+export const TableOpenButton = (props: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" {...props}>
+    <FolderOpenIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+
+export const TableDeleteButton = (props: ButtonProps) => (
+  <button className="ml-2 hover:text-primary-500 text-red-700" {...props}>
+    <TrashIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+
+export const TablePlusButton = (props: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" {...props}>
+    <PlusIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+export const TableDownloadButton = (props: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" {...props}>
+    <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+
+export const TableButtonsWrapper = ({ children }: { children: React.ReactNode }) => (
+  <div className="ml-auto flex items-center">{children}</div>
+)
+
+interface TableActionsButtonsProps {
+  onDeleteClick?: () => void
+  canEdit?: boolean
+  detailLink?: UrlObject | string
+  addLink?: UrlObject | string
+  isShown?: boolean
+}
+export const TableActionsButtons = ({ onDeleteClick, canEdit, detailLink, addLink }: TableActionsButtonsProps) => (
+  <TableButtonsWrapper>
+    {detailLink && (
+      <Link href={detailLink} className={'flex items-center'}>
+        <Fragment>{canEdit ? <TableEditButton /> : <TableOpenButton />}</Fragment>
+      </Link>
+    )}
+    {canEdit && (
+      <Fragment>
+        {onDeleteClick && <TableDeleteButton onClick={onDeleteClick} />}
+        {addLink && (
+          <Link href={addLink} className={'flex items-center'}>
+            <TablePlusButton />
+          </Link>
+        )}
+      </Fragment>
+    )}
+  </TableButtonsWrapper>
 )

@@ -27,7 +27,9 @@ export const TableBody: FC<Props> = ({ getRowModel, loading, getRowProps }) => (
             className={classNames(
               'text-xs sm:pl-6 sm:pr-6 text-gray-500 border-r border-b  border-gray-400',
               row.getIsSelected() ? 'text-white' : '',
-              cell.column.columnDef.meta?.sticky ? 'sticky left-0 z-30 backdrop-blur-2xl backdrop-filter border-r' : '',
+              cell.column.columnDef.meta?.sticky
+                ? 'sticky sm:left-0 z-30 backdrop-blur-2xl backdrop-filter border-r'
+                : '',
               loading ? 'opacity-50' : '',
               cell.column.columnDef.meta?.className
             )}

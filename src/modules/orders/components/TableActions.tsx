@@ -1,13 +1,12 @@
-import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
 import { Fragment, useState } from 'react'
 import { useIntl } from 'react-intl'
 
-import { DeleteButton, DetailButton, EditButton } from '@/components/Buttons'
+import { TableActionsButtons } from '@/components/Buttons'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { createMessageValues } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
+import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
@@ -21,14 +20,14 @@ const modalMessage = message.ordersPage.deleteModal
 
 interface Props {
   order: Order
+  isHovering?: boolean
 }
 
-export const TableActions = ({ order }: Props) => {
-  const { data: session } = useSession()
-  const router = useRouter()
+export const TableActions = ({ order, isHovering }: Props) => {
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
   const { formatMessage } = useIntl()
   const { uid, name } = order
+  const canEdit = usePermission([ROLE.ORDERS_EDIT])
 
   const { order: orderEndpoint } = useEndpoint({ uid: order.uid })
 
@@ -61,36 +60,21 @@ export const TableActions = ({ order }: Props) => {
 
   return (
     <Fragment>
-      <div className="flex mr-4">
-        {session?.user.roles.includes(ROLE.ORDERS_EDIT) ? (
-          <Fragment>
-            <EditButton
-              className="mr-1"
-              onClick={() => {
-                router.push(PATH.ORDER + '/' + uid)
-              }}
-            />
-            <DeleteButton
-              className="mr-1"
-              onClick={() => {
-                setOpenDeleteWarn(true)
-              }}
-            />
-          </Fragment>
-        ) : (
-          <DetailButton
-            onClick={() => {
-              router.push(PATH.ORDER + '/' + uid)
-            }}
-          />
-        )}
-      </div>
+      {isHovering && (
+        <TableActionsButtons
+          detailLink={PATH.ORDER + '/' + uid}
+          onDeleteClick={() => {
+            setOpenDeleteWarn(true)
+          }}
+          canEdit={canEdit}
+        />
+      )}
       <WarningModal
         buttons={deleteButtons}
         open={openDeleteWarn}
         setOpen={setOpenDeleteWarn}
         title={modalMessage.title}
-        message={formatMessage({ id: modalMessage.message }, createMessageValues({ orderName: name }))}
+        message={formatMessage({ id: modalMessage.message }, createMessageValues({ name }))}
         testid="OrderDeleteModal"
         error={deleteSubmit.error}
       />
