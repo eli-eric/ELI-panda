@@ -11,7 +11,7 @@ import TableActions from './TableActions'
 
 const messages = message.ordersPage.ordersTable.header
 
-export const useOrderColumns = () => {
+export const useOrderColumns = (isHoveringId?: number | undefined | string) => {
   const intl = useIntl()
 
   const columns = useMemo(
@@ -20,10 +20,10 @@ export const useOrderColumns = () => {
         header: intl.formatMessage({ id: messages.name }),
         accessorKey: 'name',
         id: 'name',
-        cell: ({ getValue, row }) => (
-          <div className="flex items-center my-1">
-            <TableActions order={row.original} />
+        cell: ({ getValue, row: { original, id } }) => (
+          <div className="flex items-center">
             <span>{getValue()}</span>
+            <TableActions order={original} isHovering={id === isHoveringId} />
           </div>
         ),
         size: 300,
@@ -100,7 +100,7 @@ export const useOrderColumns = () => {
         meta: { className: 'text-right' }
       }
     ],
-    [intl]
+    [intl, isHoveringId]
   )
 
   return columns

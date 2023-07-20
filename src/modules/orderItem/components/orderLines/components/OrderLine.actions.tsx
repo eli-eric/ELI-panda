@@ -4,7 +4,7 @@ import { Fragment, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
-import { DeleteButton, EditButton } from '@/components/Buttons'
+import { TableButtonsWrapper, TableDeleteButton, TableEditButton } from '@/components/Buttons'
 import { Heading } from '@/components/card/card.comp'
 import CheckBox from '@/components/form/CheckBox'
 import { Input } from '@/components/form/Input'
@@ -62,21 +62,19 @@ export const OrderLineActionButtons = ({
   }
 
   return (
-    <div className="flex">
-      <Fragment>
-        <EditButton
-          className="mr-1"
+    <Fragment>
+      <TableButtonsWrapper>
+        <TableEditButton
           onClick={() => {
             setOpen(true)
           }}
         />
-        <DeleteButton
-          className="mr-1"
+        <TableDeleteButton
           onClick={() => {
             setOpenDeleteWarn(true)
           }}
         />
-      </Fragment>
+      </TableButtonsWrapper>
       {getFormModal()}
       <WarningModal
         buttons={deleteButtons}
@@ -86,7 +84,7 @@ export const OrderLineActionButtons = ({
         message={formatMessage({ id: orderLines.deleteModal.message }, createMessageValues({ name: orderLine.name }))}
         testid="OrderLineDelete"
       />
-    </div>
+    </Fragment>
   )
 }
 

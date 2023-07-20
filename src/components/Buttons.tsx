@@ -127,6 +127,34 @@ export const RefreshButton = ({ buttonSize = 'small', ...restProps }: ButtonProp
   </Button>
 )
 
+export const TableEditButton = (props: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" {...props}>
+    <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+
+export const TableOpenButton = (props: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" {...props}>
+    <FolderOpenIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+
+export const TableDeleteButton = (props: ButtonProps) => (
+  <button className="ml-2 hover:text-primary-500 text-red-700" {...props}>
+    <TrashIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+
+export const TablePlusButton = (props: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" {...props}>
+    <PlusIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+
+export const TableButtonsWrapper = ({ children }: { children: React.ReactNode }) => (
+  <div className="ml-auto flex items-center">{children}</div>
+)
+
 interface TableActionsButtonsProps {
   onDeleteClick?: () => void
   canEdit?: boolean
@@ -135,37 +163,21 @@ interface TableActionsButtonsProps {
   isShown?: boolean
 }
 export const TableActionsButtons = ({ onDeleteClick, canEdit, detailLink, addLink }: TableActionsButtonsProps) => (
-  <div className="ml-auto flex items-center">
+  <TableButtonsWrapper>
     {detailLink && (
-      <Link href={detailLink}>
-        <Fragment>
-          {canEdit ? (
-            <button className="ml-2 pt-1 hover:text-primary-500">
-              <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
-            </button>
-          ) : (
-            <button className="ml-2 pt-1 hover:text-primary-500">
-              <FolderOpenIcon className="h-4 w-4" aria-hidden="true" />
-            </button>
-          )}
-        </Fragment>
+      <Link href={detailLink} className={'flex items-center'}>
+        <Fragment>{canEdit ? <TableEditButton /> : <TableOpenButton />}</Fragment>
       </Link>
     )}
     {canEdit && (
       <Fragment>
-        {onDeleteClick && (
-          <button className="ml-2 hover:text-primary-500 text-red-700" onClick={onDeleteClick}>
-            <TrashIcon className="h-4 w-4" aria-hidden="true" />
-          </button>
-        )}
+        {onDeleteClick && <TableDeleteButton onClick={onDeleteClick} />}
         {addLink && (
-          <Link href={addLink}>
-            <button className="ml-2 pt-1 hover:text-primary-500">
-              <PlusIcon className="h-4 w-4" aria-hidden="true" />
-            </button>
+          <Link href={addLink} className={'flex items-center'}>
+            <TablePlusButton />
           </Link>
         )}
       </Fragment>
     )}
-  </div>
+  </TableButtonsWrapper>
 )

@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
@@ -15,7 +15,9 @@ import { getColorClassStatus } from './utils/getColorClassStatus'
 
 const OrdersContainer = () => {
   const { orderList, loading, error } = useOrders()
-  const columns = useOrderColumns()
+  const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
+
+  const columns = useOrderColumns(isHoveringId)
 
   return (
     <Fragment>
@@ -30,8 +32,17 @@ const OrdersContainer = () => {
               enableColumnHiding: true
             }}
             {...{
-              getRowProps: ({ original: { orderStatusObj, deliveryStatus } }) => ({
-                className: classNames('bg-white', orderStatusObj && getColorClassStatus(orderStatusObj, deliveryStatus))
+              getRowProps: ({ original: { orderStatusObj, deliveryStatus }, id }) => ({
+                className: classNames(
+                  'bg-white',
+                  orderStatusObj && getColorClassStatus(orderStatusObj, deliveryStatus)
+                ),
+                onMouseEnter: () => {
+                  setIsHoveringId(id)
+                },
+                onMouseLeave: () => {
+                  setIsHoveringId(undefined)
+                }
               }),
               columns,
               tableId: 'orders',

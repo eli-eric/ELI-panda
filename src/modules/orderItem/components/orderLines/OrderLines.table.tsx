@@ -48,27 +48,25 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
             />
           </div>
         )}
-        <div className="grid grid-cols-12">
-          <PandaTable
-            ref={tableRef}
-            columns={columns}
-            data={orderLines}
-            tableId={'orderLines'}
-            className={'col-span-12 relative overflow-x-auto'}
-            getRowProps={({ original: { isDelivered } }) => ({
-              className: classNames(isDelivered ? 'bg-green-100' : 'bg-white')
-            })}
-            settings={{
-              enableFooter: true,
-              enableQueryURL: false,
-              enableSorting: true,
-              manualSorting: false,
-              enableColumnReordering: true
-            }}
-          />
-        </div>
-        {getFormModal()}
+        <PandaTable
+          ref={tableRef}
+          columns={columns}
+          data={orderLines}
+          tableId={'orderLines'}
+          className={'relative overflow-x-auto'}
+          getRowProps={({ original: { isDelivered } }) => ({
+            className: classNames(isDelivered ? 'bg-green-100' : 'bg-white')
+          })}
+          settings={{
+            enableFooter: true,
+            enableQueryURL: false,
+            enableSorting: true,
+            manualSorting: false,
+            enableColumnReordering: true
+          }}
+        />
       </div>
+      {getFormModal()}
     </Fragment>
   )
 }

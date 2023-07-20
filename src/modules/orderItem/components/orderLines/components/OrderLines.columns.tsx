@@ -26,7 +26,8 @@ const useOrderLinesColumns = ({ setOrderLine, deleteOrderLine, disabledEdit }: P
         header: formatMessage({ id: messages.name }),
         accessorKey: 'name',
         cell: ({ getValue, row: { original } }) => (
-          <div className="flex items-center my-1">
+          <div className="flex items-center">
+            <span>{getValue()}</span>
             {!disabledEdit && (
               <OrderLineActionButtons
                 orderLine={original}
@@ -34,7 +35,6 @@ const useOrderLinesColumns = ({ setOrderLine, deleteOrderLine, disabledEdit }: P
                 deleteOrderLine={deleteOrderLine}
               />
             )}
-            <span>{getValue()}</span>
           </div>
         ),
         meta: { sticky: true },
