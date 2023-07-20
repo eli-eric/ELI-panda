@@ -2,7 +2,7 @@ import type { Table } from '@tanstack/react-table'
 import { Fragment, useEffect, useRef } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
-import Heading from '@/components/layout/Heading'
+import { Heading } from '@/components/layout/Heading'
 import { classNames } from '@/helpers'
 import { message } from '@/i18n/src/messages'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
@@ -61,8 +61,7 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
             enableFooter: true,
             enableQueryURL: false,
             enableSorting: true,
-            manualSorting: false,
-            enableColumnReordering: true
+            manualSorting: false
           }}
         />
       </div>

@@ -1,5 +1,5 @@
 import type { Row, Table } from '@tanstack/react-table'
-import { Fragment, memo, useCallback, useRef, useState } from 'react'
+import { Fragment, memo, useCallback, useRef } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { Pagination } from '@/modules/shared/table/Pagination'
@@ -33,8 +33,7 @@ export const SystemsTable = ({
 }: Props) => {
   const { systems, error, loading } = useSystems(tableId)
   const tableRef = useRef<Table<SystemDetail>>()
-  const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
-  const { columns, pending } = useSystemsColumns({ tableId, hideButtons, isHoveringId })
+  const { columns, pending } = useSystemsColumns({ tableId, hideButtons })
 
   const onChangeSearch = useCallback(() => {
     tableRef.current?.resetExpanded()
@@ -55,18 +54,7 @@ export const SystemsTable = ({
         loading={loading || pending}
         tableId={tableId}
         getSubRows={row => row.subSystems}
-        getRowProps={
-          getRowProps
-            ? getRowProps
-            : ({ id }) => ({
-                onMouseEnter: () => {
-                  setIsHoveringId(id)
-                },
-                onMouseLeave: () => {
-                  setIsHoveringId(undefined)
-                }
-              })
-        }
+        getRowProps={getRowProps}
         settings={settings}
         className={className}
       />

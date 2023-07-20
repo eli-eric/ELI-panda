@@ -1,9 +1,11 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
+import Link from 'next/link'
 import { Fragment, useMemo } from 'react'
 import { FormattedDate, useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
+import { PATH } from '@/types/constants/paths'
 
 import type { Order } from '../types'
 import { DeliveryStatusMapping } from '../types'
@@ -22,12 +24,15 @@ export const useOrderColumns = (isHoveringId?: number | undefined | string) => {
         id: 'name',
         cell: ({ getValue, row: { original, id } }) => (
           <div className="flex items-center pt-1 pb-1">
-            <span>{getValue()}</span>
+            <Link href={PATH.ORDER + '/' + original.uid} className={'text-blue-500 cursor-pointer hover:underline'}>
+              <span>{getValue()}</span>
+            </Link>
             <TableActions order={original} isHovering={id === isHoveringId} />
           </div>
         ),
         size: 300,
-        meta: { sticky: true }
+        meta: { sticky: true },
+        enableHiding: false
       },
       {
         header: intl.formatMessage({ id: messages.orderNumber }),

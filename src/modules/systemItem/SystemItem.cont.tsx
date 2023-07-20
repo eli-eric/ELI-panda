@@ -3,7 +3,8 @@ import { ErrorBoundary } from 'react-error-boundary'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import Card from '@/components/layout/Card'
-import Heading from '@/components/layout/Heading'
+import { Heading } from '@/components/layout/Heading'
+
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { FILE_TYPE } from '@/types/constants/files'
 

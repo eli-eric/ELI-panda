@@ -6,7 +6,8 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import Card from '@/components/layout/Card'
-import Heading from '@/components/layout/Heading'
+import { Heading } from '@/components/layout/Heading'
+
 import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
 import useFormNotification from '@/hooks/form/useFormNotification'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'

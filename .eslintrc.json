@@ -40,7 +40,6 @@
     "sort-imports": "off", // Necessary keep off to enable simple-import-sort/sort rule
     "import/order": "off", // Necessary keep off to enable simple-import-sort/sort rule
     "react/prefer-stateless-function": [2, { "ignorePureComponents": false }],
-    "import/no-cycle": 1,
     "prettier/prettier": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "warn",
