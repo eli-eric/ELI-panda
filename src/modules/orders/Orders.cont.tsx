@@ -24,13 +24,13 @@ const OrdersContainer = () => {
       <SearchBar tableId="orders" left={<HeaderButtons />} right={<OrdersFilter />} />
       {!error && (
         <PandaTable
-          settings={{
-            enableQueryURL: true,
-            enableSorting: true,
-            enableColumnReordering: true,
-            enableColumnHiding: true
-          }}
           {...{
+            settings: {
+              enableQueryURL: true,
+              enableSorting: true,
+              enableColumnReordering: true,
+              enableColumnHiding: true
+            },
             getRowProps: ({ original: { orderStatusObj, deliveryStatus }, id }) => ({
               className: classNames('bg-white', orderStatusObj && getColorClassStatus(orderStatusObj, deliveryStatus)),
               onMouseEnter: () => {

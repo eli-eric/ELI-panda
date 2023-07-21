@@ -43,77 +43,81 @@ interface Props<T extends object> {
 const defaultPropGetter = () => ({})
 
 //TODO: I was not able to type this comp without using any
-export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(function Table<T extends object>(
-  {
-    data,
-    columns,
-    loading = false,
-    settings,
-    className,
-    tableId,
-    getSubRows,
-    getRowProps = defaultPropGetter
-  }: Props<T>,
-  ref?: Ref<ReactTable<T> | undefined>
-) {
-  const {
-    enableFooter = false,
-    enableColumnHiding = false,
-    enableColumnReordering = false,
-    enableSorting = false,
-    enableQueryURL = false,
-    enableRowSelection = false,
-    manualSorting = true
-  } = settings || {}
+export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
+  <T extends object>(
+    {
+      data,
+      columns,
+      loading = false,
+      settings,
+      className,
+      tableId,
+      getSubRows,
+      getRowProps = defaultPropGetter
+    }: Props<T>,
+    ref?: Ref<ReactTable<T> | undefined>
+  ) => {
+    const {
+      enableFooter = false,
+      enableColumnHiding = false,
+      enableColumnReordering = false,
+      enableSorting = false,
+      enableQueryURL = false,
+      enableRowSelection = false,
+      manualSorting = true
+    } = settings || {}
 
-  const [columnVisibility, setColumnVisibility] = useVisibility(tableId)
-  const [columnOrder, setColumnOrder] = useOrdering(tableId, columns)
-  const [sorting, setSorting] = useSorting(tableId, enableQueryURL)
-  const [expanded, setExpanded] = useExpanding(tableId)
+    const [columnVisibility, setColumnVisibility] = useVisibility(tableId)
+    const [columnOrder, setColumnOrder] = useOrdering(tableId, columns)
+    const [sorting, setSorting] = useSorting(tableId, enableQueryURL)
+    const [expanded, setExpanded] = useExpanding(tableId)
 
-  // react-table
-  const table = useReactTable<T>({
-    getCoreRowModel: getCoreRowModel(),
-    getExpandedRowModel: getExpandedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getSubRows,
-    onExpandedChange: setExpanded,
-    onSortingChange: setSorting,
-    onColumnOrderChange: setColumnOrder,
-    onColumnVisibilityChange: setColumnVisibility,
-    columns: columns,
-    data: data || [],
-    enableSorting: enableSorting,
-    manualSorting: manualSorting,
-    enableRowSelection: enableRowSelection,
-    enableMultiRowSelection: false,
-    enableSubRowSelection: true,
-    state: { sorting, expanded, columnOrder, columnVisibility }
-  })
+    // react-table
+    const table = useReactTable<T>({
+      getCoreRowModel: getCoreRowModel(),
+      getExpandedRowModel: getExpandedRowModel(),
+      getFilteredRowModel: getFilteredRowModel(),
+      getSortedRowModel: getSortedRowModel(),
+      getSubRows,
+      onExpandedChange: setExpanded,
+      onSortingChange: setSorting,
+      onColumnOrderChange: setColumnOrder,
+      onColumnVisibilityChange: setColumnVisibility,
+      columns: columns,
+      data: data || [],
+      enableSorting: enableSorting,
+      manualSorting: manualSorting,
+      enableRowSelection: enableRowSelection,
+      enableMultiRowSelection: false,
+      enableSubRowSelection: true,
+      state: { sorting, expanded, columnOrder, columnVisibility }
+    })
 
-  useImperativeHandle(ref, () => ({
-    ...table
-  }))
+    useImperativeHandle(ref, () => ({
+      ...table
+    }))
 
-  return (
-    <Fragment>
-      {enableColumnHiding && <TableSettings table={table} />}
-      <div className={classNames('h-full flex flex-col border-t border-gray-300 pb-4', className)}>
-        <div className="inline-block min-w-full align-middle">
-          <table className="min-w-full divide-y divide-gray-300">
-            <TableHead table={table} enableColumnReordering={enableColumnReordering} />
-            {data && (
-              <Fragment>
-                <TableBody getRowModel={table.getRowModel} getRowProps={getRowProps} loading={loading} />
-                {enableFooter && <TableFoot getFooterGroups={table.getFooterGroups} />}
-              </Fragment>
-            )}
-          </table>
-          {loading && !data && <ProgressBarComponent />}
-          {data?.length === 0 && <EmptyResults />}
+    return (
+      <Fragment>
+        {enableColumnHiding && <TableSettings table={table} />}
+        <div className={classNames('h-full flex flex-col border-t border-gray-300 pb-4', className)}>
+          <div className="inline-block min-w-full align-middle">
+            <table className="min-w-full divide-y divide-gray-300">
+              <TableHead table={table} enableColumnReordering={enableColumnReordering} />
+              {data && (
+                <Fragment>
+                  <TableBody getRowModel={table.getRowModel} getRowProps={getRowProps} loading={loading} />
+                  {enableFooter && <TableFoot getFooterGroups={table.getFooterGroups} />}
+                </Fragment>
+              )}
+            </table>
+            {loading && !data && <ProgressBarComponent />}
+            {data?.length === 0 && <EmptyResults />}
+          </div>
         </div>
-      </div>
-    </Fragment>
-  )
-})
+      </Fragment>
+    )
+  }
+)
+
+PandaTable.displayName = 'PandaTable'
