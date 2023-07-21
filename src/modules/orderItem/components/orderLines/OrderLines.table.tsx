@@ -1,5 +1,5 @@
 import type { Table } from '@tanstack/react-table'
-import { Fragment, useEffect, useRef } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
@@ -9,7 +9,7 @@ import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 
 import type { OrderLineFormType } from '../../types'
 import useOrderLinesColumns from './components/OrderLines.columns'
-import useOrderLineForm from './form/OrderLineForm.cont'
+import { OrderLineForm } from './form/OrderLineForm.cont'
 
 const messages = message.ordersPage.orderDetail.sectionHeadings
 
@@ -21,8 +21,8 @@ interface OrderLinesTableProps {
 }
 
 const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEdit }: OrderLinesTableProps) => {
-  const { setOpen, getFormModal } = useOrderLineForm({ setOrderLine })
   const columns = useOrderLinesColumns({ setOrderLine, deleteOrderLine, disabledEdit })
+  const [openOrderLineForm, setOpenOrderLineForm] = useState(false)
 
   const tableRef = useRef<Table<OrderLineFormType>>()
 
@@ -42,7 +42,7 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
               primary
               buttonSize="large"
               onClick={() => {
-                setOpen(true)
+                setOpenOrderLineForm(true)
               }}
               className="mb-2"
             />
@@ -65,7 +65,7 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
           }}
         />
       </div>
-      {getFormModal()}
+      <OrderLineForm setOrderLine={setOrderLine} open={openOrderLineForm} setOpen={setOpenOrderLineForm} />
     </Fragment>
   )
 }

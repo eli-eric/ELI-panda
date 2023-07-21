@@ -1,8 +1,10 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import React from 'react'
 import { useEffect, useState } from 'react'
 import { type DeepPartial, type FieldValues, FormProvider, useForm } from 'react-hook-form'
 
 import ErrorPage from '@/components/error/ErrorPage'
+import { Form } from '@/components/form/Form'
 import ModalButtonsComponent from '@/components/modal/modal.buttons'
 import ModalComponent from '@/components/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
@@ -78,3 +80,68 @@ const useFormModal = <T extends FieldValues>({
 }
 
 export default useFormModal
+
+interface Props<T extends FieldValues> {
+  renderOutsideForm?: JSX.Element
+  onSubmit: (data: T) => void
+  defaultValues?: any
+  loading?: boolean
+  schema?: any
+  error?: boolean
+  children?: React.ReactNode
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+export const FormModal = <T extends FieldValues>({
+  children,
+  onSubmit,
+  error,
+  defaultValues,
+  schema,
+  renderOutsideForm,
+  loading,
+  open = false,
+  setOpen
+}: Props<T>) => {
+  const formMethods = useForm<T>({
+    defaultValues: defaultValues,
+    resolver: schema ? yupResolver(schema) : undefined
+  })
+  const { handleSubmit, reset, formState } = formMethods
+  useEffect(() => {
+    if (formState.isSubmitSuccessful) {
+      if (!error) {
+        reset()
+        setOpen(false)
+      }
+    }
+  }, [formState, error, reset, setOpen])
+
+  const modalButtons: ModalButtons = {
+    goNext: {
+      text: messages.save,
+      loading: formState.isSubmitting || loading,
+      type: 'button',
+      onClick: handleSubmit(onSubmit)
+    },
+    goBack: {
+      text: messages.close,
+      type: 'button',
+      onClick: () => {
+        reset()
+        setOpen(false)
+      }
+    }
+  }
+
+  return (
+    <ModalComponent open={open} setOpen={setOpen}>
+      {renderOutsideForm}
+      <Form formMethods={formMethods} enableLeaveWarning={false}>
+        {children}
+        {error && <ErrorPage />}
+        <ModalButtonsComponent buttons={modalButtons} />
+      </Form>
+    </ModalComponent>
+  )
+}

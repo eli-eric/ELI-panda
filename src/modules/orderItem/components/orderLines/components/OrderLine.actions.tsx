@@ -21,7 +21,7 @@ import type { OrderLineFormType } from '@/modules/orderItem/types'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
-import useOrderLineForm from '../form/OrderLineForm.cont'
+import { OrderLineForm } from '../form/OrderLineForm.cont'
 
 const messages = message.common.buttons
 
@@ -38,7 +38,7 @@ export const OrderLineActionButtons = ({
 }) => {
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
   const [deleteLoading, setDeleteLoading] = useState(false)
-  const { setOpen, getFormModal } = useOrderLineForm({ setOrderLine, orderLine })
+  const [openOrderLineForm, setOpenOrderLineForm] = useState(false)
   const { formatMessage } = useIntl()
 
   const deleteButtons: ModalButtons = {
@@ -66,7 +66,7 @@ export const OrderLineActionButtons = ({
       <TableButtonsWrapper>
         <TableEditButton
           onClick={() => {
-            setOpen(true)
+            setOpenOrderLineForm(true)
           }}
         />
         <TableDeleteButton
@@ -75,7 +75,12 @@ export const OrderLineActionButtons = ({
           }}
         />
       </TableButtonsWrapper>
-      {getFormModal()}
+      <OrderLineForm
+        setOrderLine={setOrderLine}
+        orderLine={orderLine}
+        open={openOrderLineForm}
+        setOpen={setOpenOrderLineForm}
+      />
       <WarningModal
         buttons={deleteButtons}
         open={openDeleteWarn}
