@@ -15,12 +15,17 @@ const messages = message.ordersPage.orderDetail.sectionHeadings
 
 interface OrderLinesTableProps {
   orderLines?: OrderLineFormType[]
-  setOrderLine: (orderLines: OrderLineFormType) => void
-  deleteOrderLine: (orderLine: OrderLineFormType) => void
+  setOrderLine?: (orderLines: OrderLineFormType) => void
+  deleteOrderLine?: (orderLine: OrderLineFormType) => void
   disabledEdit?: boolean
 }
 
-const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEdit }: OrderLinesTableProps) => {
+const OrderLinesTable = ({
+  orderLines,
+  setOrderLine = () => {},
+  deleteOrderLine = () => {},
+  disabledEdit
+}: OrderLinesTableProps) => {
   const columns = useOrderLinesColumns({ setOrderLine, deleteOrderLine, disabledEdit })
   const [openOrderLineForm, setOpenOrderLineForm] = useState(false)
 

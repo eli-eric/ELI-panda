@@ -1,5 +1,4 @@
-import { DevTool } from '@hookform/devtools'
-import { Fragment, Suspense } from 'react'
+import { Fragment, Suspense, useRef } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
 import ErrorPage from '@/components/error/ErrorPage'
@@ -8,22 +7,23 @@ import ProgressBarComponent from '@/components/progress-bar.comp'
 import { FILE_TYPE } from '@/types/constants/files'
 
 import FileManager from '../shared/fileManager/FileManager'
-import useOrderForm from './components/form/OrderForm.cont'
+import type { OrderFormContainerRef } from './components/form/OrderForm.cont'
+import { OrderFormContainer } from './components/form/OrderForm.cont'
 import OrderLinesTable from './components/orderLines/OrderLines.table'
 import useOrderDetail from './hooks/useOrderDetail'
 
 const OrderItemContainer = () => {
   const { disabledEdit, uid } = useOrderDetail()
-  const { renderForm, setOrderLine, deleteOrderLine, orderLines, control } = useOrderForm()
+  const OrderFormRef = useRef<OrderFormContainerRef>()
 
   return (
     <Fragment>
-      {renderForm()}
+      <OrderFormContainer ref={OrderFormRef} />
       <Card className="flex flex-col justify-between">
         <OrderLinesTable
-          orderLines={orderLines}
-          setOrderLine={setOrderLine}
-          deleteOrderLine={deleteOrderLine}
+          orderLines={OrderFormRef.current?.orderLines}
+          setOrderLine={OrderFormRef.current?.setOrderLine}
+          deleteOrderLine={OrderFormRef.current?.deleteOrderLine}
           disabledEdit={disabledEdit}
         />
         {uid && (
@@ -34,7 +34,6 @@ const OrderItemContainer = () => {
           </ErrorBoundary>
         )}
       </Card>
-      <DevTool control={control} />
     </Fragment>
   )
 }

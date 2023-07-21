@@ -1,11 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { FormProvider, useFieldArray, useForm } from 'react-hook-form'
+import { forwardRef, useImperativeHandle } from 'react'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import uuid from 'react-uuid'
 
+import { Form } from '@/components/form/Form'
 import { convertDate } from '@/helpers/formatters'
-import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
-import useFormNotification from '@/hooks/form/useFormNotification'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 
@@ -17,7 +17,13 @@ import { schema } from './OrderForm.schema'
 
 const messages = message.ordersPage
 
-const useOrderForm = () => {
+export type OrderFormContainerRef = {
+  setOrderLine: (orderLine: OrderLineFormType) => void
+  deleteOrderLine: (orderLine: OrderLineFormType) => void
+  orderLines: OrderLineFormType[]
+}
+
+export const OrderFormContainer = forwardRef<OrderFormContainerRef | undefined, any>((_p, ref) => {
   const { orderDetail, submit, loading } = useOrderDetail()
   const { formatMessage: fm } = useIntl()
 
@@ -35,14 +41,6 @@ const useOrderForm = () => {
   })
 
   const withWarningModal = useWarningModal(fm({ id: messages.ordelineMissingModal.message }))
-
-  const { control, formState, handleSubmit } = formMethods
-
-  // form notifications
-  useFormNotification<OrderDetailFormType>({ control })
-  // form leave warning
-  const FormWarningModal = useFormLeaveWarning({ formState })
-
   //submit the form
   const onSubmit = (data: OrderDetailFormType) => {
     if (data.orderLines.length === 0 || !data.orderLines) {
@@ -51,7 +49,7 @@ const useOrderForm = () => {
       submit({ ...data, orderDate: convertDate(data.orderDate) })
     }
   }
-  const { insert, update, fields, remove } = useFieldArray({ control, name: 'orderLines' })
+  const { insert, update, fields, remove } = useFieldArray({ control: formMethods.control, name: 'orderLines' })
 
   //  set the order lines to the form
   const setOrderLine = (orderLine: OrderLineFormType) => {
@@ -70,19 +68,20 @@ const useOrderForm = () => {
     remove(index)
   }
 
-  const renderForm = () => (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <FormProvider {...formMethods}>
-        <HeaderComponent loading={loading} />
-        <div className="py-6">
-          <OrderFormComponent />
-        </div>
-      </FormProvider>
-      <FormWarningModal />
-    </form>
+  useImperativeHandle(ref, () => ({
+    setOrderLine,
+    deleteOrderLine,
+    orderLines: fields
+  }))
+
+  return (
+    <Form formMethods={formMethods} onSubmit={onSubmit} enableLeaveWarning={true}>
+      <HeaderComponent loading={loading} />
+      <div className="py-6">
+        <OrderFormComponent />
+      </div>
+    </Form>
   )
+})
 
-  return { renderForm, setOrderLine, deleteOrderLine, orderLines: fields, control }
-}
-
-export default useOrderForm
+OrderFormContainer.displayName = 'OrderFormContainer'
