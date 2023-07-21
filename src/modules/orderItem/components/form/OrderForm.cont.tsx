@@ -10,6 +10,7 @@ import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 
 import useOrderDetail from '../../hooks/useOrderDetail'
+import { useOrderSubmit } from '../../hooks/useOrderSubmit'
 import type { OrderDetailFormType, OrderLineFormType } from '../../types'
 import HeaderComponent from '../Header.comp'
 import OrderFormComponent from './OrderForm.comp'
@@ -24,7 +25,8 @@ export type OrderFormContainerRef = {
 }
 
 export const OrderFormContainer = forwardRef<OrderFormContainerRef | undefined, any>((_p, ref) => {
-  const { orderDetail, submit, loading } = useOrderDetail()
+  const { orderDetail } = useOrderDetail()
+  const { submit, loading } = useOrderSubmit()
   const { formatMessage: fm } = useIntl()
 
   // initialize the form
