@@ -1,5 +1,6 @@
 import type { Table } from '@tanstack/react-table'
 import { Fragment, useEffect, useRef, useState } from 'react'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
@@ -14,20 +15,14 @@ import { OrderLineForm } from './form/OrderLineForm.cont'
 const messages = message.ordersPage.orderDetail.sectionHeadings
 
 interface OrderLinesTableProps {
-  orderLines?: OrderLineFormType[]
-  setOrderLine?: (orderLines: OrderLineFormType) => void
-  deleteOrderLine?: (orderLine: OrderLineFormType) => void
   disabledEdit?: boolean
 }
 
-const OrderLinesTable = ({
-  orderLines,
-  setOrderLine = () => {},
-  deleteOrderLine = () => {},
-  disabledEdit
-}: OrderLinesTableProps) => {
-  const columns = useOrderLinesColumns({ setOrderLine, deleteOrderLine, disabledEdit })
+const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
+  const columns = useOrderLinesColumns()
   const [openOrderLineForm, setOpenOrderLineForm] = useState(false)
+  const { control } = useFormContext()
+  const orderLines = useWatch({ control, name: 'orderLines' })
 
   const tableRef = useRef<Table<OrderLineFormType>>()
 
@@ -70,7 +65,7 @@ const OrderLinesTable = ({
           }}
         />
       </div>
-      <OrderLineForm setOrderLine={setOrderLine} open={openOrderLineForm} setOpen={setOpenOrderLineForm} />
+      <OrderLineForm open={openOrderLineForm} setOpen={setOpenOrderLineForm} />
     </Fragment>
   )
 }

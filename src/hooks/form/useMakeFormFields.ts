@@ -20,7 +20,6 @@ export const useMakeFormFields = <T extends Record<string, FieldProps & { option
       [cur]: {
         ...fields[cur],
         'data-testid': fields[cur]['data-testid'] || fields[cur].name,
-        placeholder: fields[cur].placeholder ? intl.formatMessage({ id: fields[cur].placeholder }) : undefined,
         label: fields[cur].label ? intl.formatMessage({ id: fields[cur].label }) : undefined,
         customLabel: fields[cur].label ? intl.formatMessage({ id: fields[cur].label }) : undefined,
         codebook: fields[cur].codebook ? fields[cur].codebook : undefined

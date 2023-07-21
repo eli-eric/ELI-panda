@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import OrderItemContainer from '@/modules/orderItem/OrderItem.cont'
+import { OrderItemContainer } from '@/modules/orderItem/OrderItem.cont'
 
 const messages = message.orderItem
 

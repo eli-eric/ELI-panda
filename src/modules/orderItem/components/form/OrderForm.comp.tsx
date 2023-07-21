@@ -14,7 +14,7 @@ const OrderFormComponent = () => {
   const uid = useRouter().query.uid as string
 
   return (
-    <Card>
+    <Card className="py-6">
       <Grid>
         <Col lg={6}>
           <h1 className="text-2xl justify-center font-semibold text-gray-900">{uid ? 'EDIT ORDER' : 'NEW ORDER'}</h1>

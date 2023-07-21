@@ -6,51 +6,37 @@ import { useIntl } from 'react-intl'
 
 import { TableButtonsWrapper, TableDeleteButton, TableEditButton } from '@/components/Buttons'
 import { Heading } from '@/components/card/card.comp'
-import CheckBox from '@/components/form/CheckBox'
-import { Input } from '@/components/form/Input'
 import { useToggle } from '@/components/form/Switch'
-import { Col, Grid } from '@/components/grid/Grid'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { createMessageValues } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
-import useFormModal from '@/hooks/form/useFormModal'
+import { FormModal } from '@/hooks/form/useFormModal'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
+import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
 import { OrderLineForm } from '../form/OrderLineForm.cont'
+import { OrderIsDeliveryForm } from './OrderIsDeliveryForm'
 
 const messages = message.common.buttons
 
 const orderLines = message.ordersPage.orderLines
 
-export const OrderLineActionButtons = ({
-  orderLine,
-  setOrderLine,
-  deleteOrderLine
-}: {
-  orderLine: OrderLineFormType
-  setOrderLine: (orderLines: OrderLineFormType) => void
-  deleteOrderLine: (orderLine: OrderLineFormType) => void
-}) => {
+export const OrderLineActionButtons = ({ orderLine }: { orderLine: OrderLineFormType }) => {
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
-  const [deleteLoading, setDeleteLoading] = useState(false)
   const [openOrderLineForm, setOpenOrderLineForm] = useState(false)
-  const { formatMessage } = useIntl()
+  const { formatMessage: fm } = useIntl()
+  const { deleteOrderLine } = useOrderLine()
 
   const deleteButtons: ModalButtons = {
     goNext: {
       text: messages.continue,
-      loading: deleteLoading,
       onClick: () => {
-        setDeleteLoading(true)
-        setTimeout(() => {
-          deleteOrderLine(orderLine)
-        }, 100)
-        setOpenDeleteWarn(false)
+        deleteOrderLine(orderLine)
       }
     },
     goBack: {
@@ -75,38 +61,25 @@ export const OrderLineActionButtons = ({
           }}
         />
       </TableButtonsWrapper>
-      <OrderLineForm
-        setOrderLine={setOrderLine}
-        orderLine={orderLine}
-        open={openOrderLineForm}
-        setOpen={setOpenOrderLineForm}
-      />
+      <OrderLineForm orderLine={orderLine} open={openOrderLineForm} setOpen={setOpenOrderLineForm} />
       <WarningModal
         buttons={deleteButtons}
         open={openDeleteWarn}
         setOpen={setOpenDeleteWarn}
         title={orderLines.deleteModal.title}
-        message={formatMessage({ id: orderLines.deleteModal.message }, createMessageValues({ name: orderLine.name }))}
+        message={fm({ id: orderLines.deleteModal.message }, createMessageValues({ name: orderLine.name }))}
         testid="OrderLineDelete"
       />
     </Fragment>
   )
 }
 
-export const OrderisDeliveredAction = ({
-  orderLine,
-  checked,
-  setOrderLine
-}: {
-  orderLine: OrderLineFormType
-  checked?: boolean
-  setOrderLine: (orderLines: OrderLineFormType) => void
-}) => {
+export const OrderisDeliveredAction = ({ orderLine, checked }: { orderLine: OrderLineFormType; checked?: boolean }) => {
   const { enabled, toggle, Toggle } = useToggle(checked)
   const uid = useRouter().query.uid as string
   const { orderLineDelivery } = useEndpoint({ uid: uid, itemUid: orderLine.uid })
   const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
-  const { formatMessage } = useIntl()
+  const { setOrderLine } = useOrderLine()
 
   const { submit } = useSubmit<OrderLineFormType>({
     endpoint: orderLineDelivery,
@@ -125,50 +98,8 @@ export const OrderisDeliveredAction = ({
       toast.error(err.message)
     }
   })
-  const { getFormModal, setOpen, formMethods } = useFormModal<{
-    serialNumber?: string
-    eun?: string
-    manualEun: boolean
-  }>({
-    defaultValues: { serialNumber: orderLine.serialNumber },
-    renderForm: () => {
-      const manualEun = formMethods.watch('manualEun')
-      return (
-        <Grid>
-          <Col md={12}>
-            <Input
-              name="serialNumber"
-              label={formatMessage({ id: orderLines.form.serialNumber.label })}
-              placeholder={formatMessage({ id: orderLines.form.serialNumber.placeholder })}
-              rounded="rounded-md"
-            />
-          </Col>
 
-          <Col md={12}>
-            <CheckBox
-              name="manualEun"
-              label={formatMessage({ id: orderLines.form.manualEun.label })}
-              rounded="rounded-md"
-            />
-          </Col>
-          {manualEun && (
-            <Col md={12}>
-              <Input
-                name="eun"
-                label={formatMessage({ id: orderLines.form.eun.label })}
-                placeholder={formatMessage({ id: orderLines.form.eun.placeholder })}
-                rounded="rounded-md"
-              />
-            </Col>
-          )}
-        </Grid>
-      )
-    },
-    renderOutsideForm: () => <Heading text="Fill missing Serial Number" />,
-    onSubmit: data => {
-      submit({ serialNumber: data?.serialNumber, isDelivered: !enabled, eun: data?.eun || undefined })
-    }
-  })
+  const [open, setOpen] = useState(false)
 
   const handleCheck = () => {
     !orderLine.isDelivered ? setOpen(true) : submit({ isDelivered: !enabled })
@@ -181,7 +112,17 @@ export const OrderisDeliveredAction = ({
           {hasRole ? <Toggle onChange={handleCheck} enabled={enabled} /> : <Toggle enabled={enabled} />}
         </Fragment>
       )}
-      {getFormModal()}
+      <FormModal
+        open={open}
+        setOpen={setOpen}
+        renderOutsideForm={<Heading text="Fill missing Serial Number" />}
+        onSubmit={data => {
+          submit({ serialNumber: data?.serialNumber, isDelivered: !enabled, eun: data?.eun || undefined })
+        }}
+        defaultValues={{ serialNumber: orderLine.serialNumber }}
+      >
+        <OrderIsDeliveryForm />
+      </FormModal>
     </Fragment>
   )
 }

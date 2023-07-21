@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import { Controller } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { classNames } from '@/helpers'
 import type { FieldProps } from '@/types/form'
@@ -47,6 +48,7 @@ export const Input = ({
   unit
 }: InputProps) => {
   const { control } = useFormContext()
+  const { formatMessage: fm } = useIntl()
 
   return (
     <Controller
@@ -70,7 +72,7 @@ export const Input = ({
                   field.onChange(e.target.value)
                 }
               }}
-              placeholder={placeholder}
+              placeholder={(placeholder && fm({ id: placeholder })) || ''}
               className={classNames(
                 'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                 rounded,
@@ -96,6 +98,7 @@ type TextAreaWithErrorProps = FieldProps & React.InputHTMLAttributes<HTMLTextAre
 
 export const TextArea = ({ name, placeholder, disabled, rounded, label, className }: TextAreaWithErrorProps) => {
   const { control } = useFormContext()
+  const { formatMessage: fm } = useIntl()
 
   return (
     <Controller
@@ -110,7 +113,7 @@ export const TextArea = ({ name, placeholder, disabled, rounded, label, classNam
               {...field}
               rows={3}
               disabled={disabled}
-              placeholder={placeholder}
+              placeholder={placeholder && fm({ id: placeholder })}
               className={classNames(
                 'block w-full appearance-none px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm border',
                 rounded,
@@ -139,6 +142,7 @@ export const InputAmount = ({
   children
 }: InputAmountProps) => {
   const { control } = useFormContext()
+  const { formatMessage: fm } = useIntl()
 
   return (
     <Controller
@@ -155,7 +159,7 @@ export const InputAmount = ({
               type={'number'}
               step="0.001"
               disabled={disabled}
-              placeholder={placeholder}
+              placeholder={placeholder && fm({ id: placeholder })}
               className={classNames(
                 'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                 rounded,

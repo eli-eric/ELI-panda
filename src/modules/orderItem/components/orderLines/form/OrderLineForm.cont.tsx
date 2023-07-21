@@ -3,6 +3,7 @@ import { number, object, string } from 'yup'
 
 import { Heading } from '@/components/card/card.comp'
 import { FormModal } from '@/hooks/form/useFormModal'
+import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
 import CatalogueTableSelect from '@/modules/shared/catalogue/table/CatalogueTableSelect'
 import type { CatalogueItem } from '@/types/responses'
@@ -19,14 +20,14 @@ const orderLineFormSchema = object({
 })
 
 interface OrderLienFormProps {
-  setOrderLine: (orderLines: OrderLineFormType) => void
   orderLine?: OrderLineFormType
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const OrderLineForm = ({ setOrderLine, orderLine, open, setOpen }: OrderLienFormProps) => {
+export const OrderLineForm = ({ orderLine, open, setOpen }: OrderLienFormProps) => {
   const [catalogueItem, setCatalogueItem] = useState<CatalogueItem | undefined>(undefined)
+  const { setOrderLine } = useOrderLine()
   const modalSubmit = (data: OrderLineFormType) => {
     const dataToSend = { ...data }
     if (!dataToSend.price) {
