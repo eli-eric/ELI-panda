@@ -17,11 +17,13 @@ interface PaginationProps {
 export const Pagination = ({ tableId, settings }: PaginationProps) => {
   const { enableQueryURL, total, pageSizeDefault = 10 } = settings || {}
   const [page, setPage] = useState<number>(1)
-  const [pageSize, setPageSize] = useState<number>(pageSizeDefault)
-  const [totalCount, setTotalCount] = useState<number | undefined>(total)
+  const [pageSize] = useState<number>(pageSizeDefault)
+  const [totalCount] = useState<number | undefined>(total)
   const [pageNumbers, setPageNumbers] = useState<number | undefined>()
   const { setPagination, instances } = useTableStateStore()
-  const paginationInstance = instances[tableId]?.pagination || ''
+  const search = instances[tableId]?.search || ''
+  const filter = instances[tableId]?.filter || ''
+  const sortBy = instances[tableId]?.sortBy || ''
 
   const [queryPage, setQueryPage] = useQueryState('page')
 
@@ -34,6 +36,10 @@ export const Pagination = ({ tableId, settings }: PaginationProps) => {
   }, [])
 
   const isFirstRender = useIsFirstRender()
+
+  useEffect(() => {
+    setPage(1)
+  }, [search, filter, sortBy])
 
   //calculate page numbers
   useEffect(() => {
@@ -61,7 +67,7 @@ export const Pagination = ({ tableId, settings }: PaginationProps) => {
         setPagination(tableId, `{"page":${1},"pageSize":${pageSize}}`)
       }
     }
-  }, [isFirstRender, queryPage, enableQueryURL, pageSize, setPagination, tableId, setQueryPage, paginationInstance])
+  }, [isFirstRender, queryPage, enableQueryURL, pageSize, setPagination, tableId, setQueryPage])
 
   //page change
   useEffect(() => {

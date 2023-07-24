@@ -3,6 +3,7 @@ import { queryTypes } from 'next-usequerystate'
 import { useQueryState } from 'next-usequerystate'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import { useDebounce } from 'usehooks-ts'
 
 import Combobox from '@/components/form/Combobox'
@@ -30,6 +31,7 @@ const ordersFilterMessages = message.ordersPage.orderDetail.form
 export const OrdersFilter = () => {
   const { setFilter, instances } = useTableStateStore()
   const filter = instances.orders?.filter
+  const { formatMessage: fm } = useIntl()
 
   const [querySupplier, setQuerySupplier] = useQueryState(
     'supplier',
@@ -121,19 +123,23 @@ export const OrdersFilter = () => {
           <Col>
             <Listbox
               name="orderStatus"
-              placeholder={ordersFilterMessages.orderStatus.label}
+              placeholder={fm({ id: ordersFilterMessages.orderStatus.label })}
               codebook={CODEBOOK.ORDER_STATUS}
               allowEmptyOption={true}
               emptyOption="All Order statuses"
             />
           </Col>
           <Col>
-            <Combobox name="supplier" placeholder={ordersFilterMessages.supplier.label} codebook={CODEBOOK.SUPPLIER} />
+            <Combobox
+              name="supplier"
+              placeholder={fm({ id: ordersFilterMessages.supplier.label })}
+              codebook={CODEBOOK.SUPPLIER}
+            />
           </Col>
           <Col>
             <Listbox
               name="procurementResponsible"
-              placeholder={ordersFilterMessages.procurementResponsible.label}
+              placeholder={fm({ id: ordersFilterMessages.procurementResponsible.label })}
               codebook={CODEBOOK.PROCUREMENTER}
               allowEmptyOption={true}
               emptyOption="All Procurement Responsibles"
@@ -142,7 +148,7 @@ export const OrdersFilter = () => {
           <Col>
             <Combobox
               name="requestor"
-              placeholder={ordersFilterMessages.requestor.label}
+              placeholder={fm({ id: ordersFilterMessages.requestor.label })}
               codebook={CODEBOOK.EMPLOYEE}
             />
           </Col>
