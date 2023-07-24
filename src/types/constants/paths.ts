@@ -9,6 +9,7 @@ export enum PATH {
 
   REPORTS = '/reports',
   ORDERS = '/orders',
-  ORDER = '/order',
-  SUPPORT = 'https://eli-eric.atlassian.net/servicedesk/customer/portal/20'
+  ORDER = '/order'
 }
+
+export const SUPPORT = 'https://eli-eric.atlassian.net/servicedesk/customer/portal/20'

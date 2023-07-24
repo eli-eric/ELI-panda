@@ -5,7 +5,7 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
-import { PATH } from '@/types/constants/paths'
+import { PATH, SUPPORT } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
 import NavigationLinkComponent from './navigation-link.comp'
@@ -52,7 +52,7 @@ const NavigationListContainer = ({ open }: Props) => {
               open={open}
             />
             {open && (
-              <Link href={PATH.SUPPORT} legacyBehavior>
+              <Link href={SUPPORT} legacyBehavior>
                 <a
                   target="_blank"
                   className={classNames(

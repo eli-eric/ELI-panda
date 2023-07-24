@@ -6,7 +6,7 @@ import { Fragment, useEffect, useState } from 'react'
 import ModalComponent from '@/components/modal/modal.comp'
 import { classNames } from '@/helpers'
 import { message } from '@/i18n/src/messages'
-import { PATH } from '@/types/constants/paths'
+import { PATH, SUPPORT } from '@/types/constants/paths'
 import type { ModalButtons } from '@/types/form'
 
 import ProfileCardComponent from '../card/profile-card.comp'
@@ -55,7 +55,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
         <div data-testid="layout-profile" className="hidden z-30 sm:ml-6 sm:flex sm:items-center z-20">
           <Menu as="div" className="relative ml-3">
             <div className="flex">
-              <Link href={PATH.SUPPORT} legacyBehavior>
+              <Link href={SUPPORT} legacyBehavior>
                 <a target={'_blank'} rel="noreferrer">
                   <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500 mr-2">
                     <span className="font-medium leading-none text-white">?</span>
