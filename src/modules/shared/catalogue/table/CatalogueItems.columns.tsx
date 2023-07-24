@@ -33,13 +33,16 @@ export const useCatalogueItemsColumns = (
         cell: props => (
           <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} isHoveringId={isHoveringId} />
         ),
-        size: 300
+        size: 300,
+        meta: { sticky: true }
       },
       {
         header: intl.formatMessage({ id: messages.description }),
         accessorFn: row => row.description,
         id: 'description',
-        cell: DescriptionCell
+        cell: DescriptionCell,
+        maxSize: 80,
+        size: 80
       },
       {
         header: intl.formatMessage({ id: messages.categoryName }),
@@ -51,7 +54,7 @@ export const useCatalogueItemsColumns = (
         header: intl.formatMessage({ id: messages.supplier }),
         accessorFn: row => row.supplier?.name,
         id: 'supplier',
-        cell: ({ getValue }: CellContext<CatalogueItem, any>) => <span>{getValue()?.name}</span>
+        cell: ({ getValue }: CellContext<CatalogueItem, any>) => <span>{getValue()}</span>
       },
       {
         header: intl.formatMessage({ id: messages.supplierUrl }),

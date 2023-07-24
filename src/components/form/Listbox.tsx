@@ -3,7 +3,6 @@ import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid
 import React, { useMemo } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
-import { useIsFirstRender } from 'usehooks-ts'
 
 import { classNames } from '@/helpers'
 import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
@@ -37,7 +36,6 @@ const Listbox = ({
   rounded = 'rounded-md',
   unit,
   customOptions,
-  useFirstRender = true,
   customLabel
 }: ListboxPropsT) => {
   const { control, setValue } = useFormContext()
@@ -62,11 +60,6 @@ const Listbox = ({
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation()
     setValue(name, null)
-  }
-
-  const isFirstRender = useIsFirstRender()
-  if (useFirstRender) {
-    if (isFirstRender) return null
   }
 
   return (

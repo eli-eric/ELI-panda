@@ -18,7 +18,7 @@ interface Props<T extends FieldValues> {
   config?: Config
 }
 
-export const useFormLeaveWarning = <T extends FieldValues>({ formState, config }: Props<T>) => {
+export const FormLeaveWarning = <T extends FieldValues>({ formState, config }: Props<T>) => {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [nextUrl, setNextUrl] = useState<string>('')
@@ -69,7 +69,7 @@ export const useFormLeaveWarning = <T extends FieldValues>({ formState, config }
     }
   }
 
-  const Modal = () => (
+  return (
     <WarningModal
       buttons={modalButtons}
       open={isOpen}
@@ -79,6 +79,4 @@ export const useFormLeaveWarning = <T extends FieldValues>({ formState, config }
       testid="leave-warning-modal"
     />
   )
-
-  return Modal
 }

@@ -41,12 +41,15 @@ const useOrderLinesColumns = () => {
       {
         header: formatMessage({ id: messages.eun }),
         accessorKey: 'eun',
-        cell: ({ row: { original } }) => <PrintEunButton orderLine={original} />
+        cell: ({ row: { original } }) => <PrintEunButton orderLine={original} />,
+        size: 60
       },
       {
         header: formatMessage({ id: messages.isDelivered }),
         accessorKey: 'isDelivered',
-        cell: ({ getValue, row: { original } }) => <OrderisDeliveredAction orderLine={original} checked={getValue()} />
+        cell: ({ getValue, row: { original } }) =>
+          uid ? <OrderisDeliveredAction orderLine={original} checked={getValue()} /> : null,
+        size: 90
       },
       {
         header: formatMessage({ id: messages.notes }),
@@ -91,7 +94,6 @@ const useOrderLinesColumns = () => {
         cell: ({ getValue }) => <span>{getValue()?.name.split(' - ')[0]}</span>
       }
     ]
-    !uid && cols.pop()
     return cols
   }, [disabledEdit, uid, formatMessage])
 

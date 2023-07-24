@@ -1,12 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { type Dispatch, type SetStateAction, useEffect, useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 import * as yup from 'yup'
 
 import { Button } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
+import { Form } from '@/components/form/Form'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
@@ -68,10 +69,8 @@ export const AddRelationForm = ({ setopen, systemName }: Props) => {
       <div className="flex flex-col justify-between">
         <SystemsForRelTable tableId={tableId} selectedSystem={selectedSystem} setSelectedSystem={setSelectedSystem} />
       </div>
-      <form onSubmit={relFormMethods.handleSubmit(onSubmit)} className="flex flex-col">
-        <FormProvider {...relFormMethods}>
-          <SelectRelation systemName={systemName} selectedSystem={selectedSystem} />
-        </FormProvider>
+      <Form onSubmit={onSubmit} formMethods={relFormMethods} className="flex flex-col">
+        <SelectRelation systemName={systemName} selectedSystem={selectedSystem} />
         <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
           <Button
             type="submit"
@@ -92,7 +91,7 @@ export const AddRelationForm = ({ setopen, systemName }: Props) => {
           </Button>
         </div>
         {error && <ErrorPage />}
-      </form>
+      </Form>
     </div>
   )
 }

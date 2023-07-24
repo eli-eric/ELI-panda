@@ -58,13 +58,12 @@ const useOrderLineFormFields = (enabled: boolean) =>
     currency: {
       name: 'currency'
     },
-    // itemUsage: {
-    //   name: 'itemUsage',
-    //   label: form.itemUsage.label,
-    //   isError: !!formState.errors.itemUsage,
-    //   rounded: 'rounded-md',
-    //   codebook: CODEBOOK.ITEM_USAGE
-    // },
+    itemUsage: {
+      name: 'itemUsage',
+      label: form.itemUsage.label,
+      rounded: 'rounded-md',
+      codebook: CODEBOOK.ITEM_USAGE
+    },
     serialNumber: {
       name: 'serialNumber',
       label: form.serialNumber.label,

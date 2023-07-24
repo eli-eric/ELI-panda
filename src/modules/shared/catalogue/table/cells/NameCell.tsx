@@ -1,6 +1,4 @@
 import type { CellContext } from '@tanstack/react-table'
-import classNames from 'classnames'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
 import { isMobile } from 'react-device-detect'
@@ -11,7 +9,6 @@ import { TableActionsButtons } from '@/components/Buttons'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { createMessageValues } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useCatalogueImage } from '@/hooks/fetch/useImage'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
@@ -41,13 +38,13 @@ export const NameCell = ({
   isHoveringId
 }: NameProps) => {
   const { catalogueItem } = useEndpoint({ uid })
-  const image = useCatalogueImage(uid)
+  //const image = useCatalogueImage(uid)
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
   const { formatMessage } = useIntl()
   const { mutate, catalogueItems } = useCatalogueItems(tableId)
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
 
-  const [loading, setLoading] = useState(true)
+  //const [loading, setLoading] = useState(true)
 
   const deleteSubmit = useSubmit({
     endpoint: catalogueItem,
@@ -84,7 +81,7 @@ export const NameCell = ({
   return (
     <div className="flex items-center">
       <Link href={{ pathname: '/catalogue/item/' + uid }} className="flex items-center text-blue-500 hover:underline">
-        <Image
+        {/* <Image
           id={image.id}
           priority={false}
           className={classNames('h-10 w-10 flex-shrink-0 rounded-full bg-gray-300', loading ? 'animate-pulse' : '')}
@@ -96,8 +93,8 @@ export const NameCell = ({
           width={100}
           height={100}
           unoptimized
-        />
-        <div className="ml-4 ">{getValue()}</div>
+        /> */}
+        <div className="pt-1 pb-1">{getValue()}</div>
       </Link>
       {toDelete && (isHoveringId === id || isMobile) && (
         <TableActionsButtons

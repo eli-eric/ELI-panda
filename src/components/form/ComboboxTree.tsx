@@ -3,7 +3,6 @@ import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid
 import React, { Fragment, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
-import { useIsFirstRender } from 'usehooks-ts'
 
 import { classNames } from '@/helpers'
 import { type CodebookFilter, type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
@@ -14,7 +13,7 @@ import { CodebookTreeModal } from './shared/CodebookTreeModal'
 
 type ComboboxPropsT = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
-    codebook: CODEBOOK
+    codebook?: CODEBOOK
     isObject?: boolean
     position?: 'top' | 'bottom'
     limit?: number
@@ -26,7 +25,6 @@ type ComboboxPropsT = FieldProps &
 
 export const ComboboxTree = ({
   codebook,
-  useFirstRender = true,
   name,
   placeholder,
   customLabel,
@@ -51,11 +49,6 @@ export const ComboboxTree = ({
     setValue(name, null)
   }
 
-  const isFirstRender = useIsFirstRender()
-  if (useFirstRender) {
-    if (isFirstRender) return null
-  }
-
   return (
     <Fragment>
       <Controller
@@ -78,7 +71,7 @@ export const ComboboxTree = ({
               <HUICombobox.Input
                 onChange={e => setQuery(e.target.value)}
                 displayValue={(item: CodebookType) => item?.name}
-                placeholder={(placeholder && fm({ id: placeholder })) || ''}
+                placeholder={placeholder}
                 autoComplete="off"
                 className={classNames(
                   'px-3 py-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full appearance-none text-left truncate',

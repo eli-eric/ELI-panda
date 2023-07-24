@@ -1,9 +1,9 @@
-import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Fragment } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
+import { Form } from '@/components/form/Form'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
 import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
@@ -70,16 +70,13 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
 
   return (
     <Fragment>
-      <FormProvider {...formMethods}>
-        <form className="flex" onSubmit={formMethods.handleSubmit(onSubmit)}>
-          <div className="flex-1">
-            <Main uid={uid} />
-            <GroupList />
-            {children}
-          </div>
-        </form>
-      </FormProvider>
-      <DevTool control={formMethods.control} />
+      <Form formMethods={formMethods} onSubmit={onSubmit}>
+        <div className="flex-1">
+          <Main uid={uid} />
+          <GroupList />
+          {children}
+        </div>
+      </Form>
     </Fragment>
   )
 }

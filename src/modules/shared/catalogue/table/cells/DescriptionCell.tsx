@@ -8,7 +8,7 @@ export const DescriptionCell = ({ getValue }: CellContext<CatalogueItem, any>) =
   <Fragment>
     {getValue() && (
       <InformationCircleIcon
-        className="h-8 w-8 flex-shrink-0"
+        className="h-6 w-6 flex-shrink-0"
         data-tooltip-id="tooltip"
         data-tooltip-content={getValue()}
       />
