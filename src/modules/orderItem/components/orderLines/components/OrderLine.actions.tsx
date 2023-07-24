@@ -109,7 +109,11 @@ export const OrderisDeliveredAction = ({ orderLine, checked }: { orderLine: Orde
     <Fragment>
       {orderLine.uid && (
         <Fragment>
-          {hasRole ? <Toggle onChange={handleCheck} enabled={enabled} /> : <Toggle enabled={enabled} />}
+          {hasRole ? (
+            <Toggle onChange={handleCheck} enabled={enabled} />
+          ) : (
+            <Toggle enabled={enabled} onChange={() => {}} />
+          )}
         </Fragment>
       )}
       <FormModal
@@ -119,7 +123,7 @@ export const OrderisDeliveredAction = ({ orderLine, checked }: { orderLine: Orde
         onSubmit={data => {
           submit({ serialNumber: data?.serialNumber, isDelivered: !enabled, eun: data?.eun || undefined })
         }}
-        defaultValues={{ serialNumber: orderLine.serialNumber }}
+        defaultValues={{ serialNumber: orderLine?.serialNumber || '' }}
       >
         <OrderIsDeliveryForm />
       </FormModal>

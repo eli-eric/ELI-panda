@@ -15,7 +15,7 @@ export const SelectCell = ({ row: { original }, setItem, selectedItem }: Props) 
       name="itemUid"
       type="radio"
       checked={selectedItem?.uid === original.uid}
-      onClick={() => {
+      onChange={() => {
         setItem(original)
       }}
       className="h-4 w-4 border-gray-300 text-primary-500 focus:ring-primary-500"

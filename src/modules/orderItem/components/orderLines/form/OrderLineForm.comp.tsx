@@ -11,7 +11,6 @@ import Divider from '@/components/layout/Divider'
 import type { CodebookFilter } from '@/hooks/fetch/useCodebook'
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
-import { CODEBOOK } from '@/types/constants/codebook'
 import type { CatalogueItem } from '@/types/responses'
 
 import useOrderLineFormFields from './OrderLineForm.fields'
@@ -91,7 +90,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
         </InputAmount>
       </Col>
       <Col lg={!orderLine?.id || orderLine?.uid ? 4 : 6} md={6}>
-        <Listbox name="itemUsage" label={messages.form.itemUsage.label} codebook={CODEBOOK.ITEM_USAGE} position="top" />
+        <Listbox {...formFields.itemUsage} position="top" />
       </Col>
       {!orderLine?.id && (
         <Col md={6} lg={4}>
@@ -117,39 +116,16 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
               <TechUnitToogle onChange={techUnitToogle} enabled={techUnitEnabled} />
             </div>
             <div className="flex-1 w-full">
-              <Combobox
-                name="system"
-                label={messages.form.systemName.label}
-                placeholder={messages.form.systemName.placeholder}
-                position="top"
-                codebook={CODEBOOK.SYSTEM}
-                limit={50}
-                filter={techUnitFilter}
-              />
+              <Combobox {...formFields.system} position="top" limit={50} filter={techUnitFilter} />
             </div>
           </div>
         ) : (
-          <Combobox
-            name="system"
-            label={messages.form.systemName.label}
-            placeholder={messages.form.systemName.placeholder}
-            position="top"
-            codebook={CODEBOOK.SYSTEM}
-            limit={50}
-          />
+          <Combobox {...formFields.system} position="top" limit={50} />
         )}
       </Col>
       {orderLine?.uid && (
         <Col md={6} lg={6}>
-          <Combobox
-            name="location"
-            label={messages.form.location.label}
-            placeholder={messages.form.location.placeholder}
-            codebook={CODEBOOK.LOCATION}
-            position="top"
-            limit={50}
-            disabled={locationEnable}
-          />
+          <Combobox {...formFields.location} position="top" limit={50} disabled={locationEnable} />
         </Col>
       )}
       {orderLine?.uid && (

@@ -40,14 +40,13 @@ const CatalogueItemContainer = () => {
   const fields = useCatalogueFormFields()
 
   const imageRef = useRef<ImageGalleryRef>()
-
   const formMethods = useForm<CatalogueForm>({ resolver: yupResolver(schema), defaultValues: { ...item } })
   const { submit, loading } = useItemSubmit(imageRef)
 
-  const onSubmit = (data: CatalogueForm) => {
-    // extract from data hasImageGalleryChanges
+  const onSubmit = (catalogueItem: CatalogueForm) => {
+    // extract from catalogueItem hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { hasImageGalleryChanges, ...rest } = data
+    const { hasImageGalleryChanges, ...rest } = catalogueItem
     submit(rest as CatalogueItem)
   }
 

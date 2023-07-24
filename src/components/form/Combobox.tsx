@@ -83,7 +83,7 @@ const Combobox = ({
                 <HUICombobox.Input
                   onChange={e => setQuery(e.target.value)}
                   displayValue={(item: CodebookType) => item?.name}
-                  placeholder={(placeholder && fm({ id: placeholder })) || ''}
+                  placeholder={placeholder}
                   autoComplete="off"
                   className={classNames(
                     'px-3 py-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full appearance-none text-left truncate',
