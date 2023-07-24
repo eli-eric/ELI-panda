@@ -2,7 +2,6 @@ import { IdentificationIcon, LifebuoyIcon, RectangleGroupIcon, ShoppingCartIcon 
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
@@ -39,32 +38,52 @@ interface CardProps {
   name: string
   link: string
   Icon: () => JSX.Element
+  legacyBehavior?: boolean
 }
 
-const Card = ({ name, link, Icon }: CardProps) => {
-  const router = useRouter()
-  return (
-    <li
-      key={name}
-      className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
-      onClick={() => {
-        router.push(link)
-      }}
-    >
-      <div className="flex flex-1 flex-col p-8">
-        <Icon />
-        <h2 className="mt-6 text-xl font-medium text-gray-900">{name}</h2>
-        <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
-      </div>
-      <div>
-        <div className="-mt-px flex divide-x divide-gray-200">
-          <div className="flex w-0 flex-1"></div>
-          <div className="-ml-px flex w-0 flex-1"></div>
+//TODO: clean up this page
+
+const Card = ({ name, link, Icon, legacyBehavior }: CardProps) => (
+  <Link href={link} legacyBehavior={legacyBehavior}>
+    {legacyBehavior ? (
+      <a target={'_blank'}>
+        <li
+          key={name}
+          className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
+        >
+          <div className="flex flex-1 flex-col p-8">
+            <Icon />
+            <h2 className="mt-6 text-xl font-medium text-gray-900">{name}</h2>
+            <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
+          </div>
+          <div>
+            <div className="-mt-px flex divide-x divide-gray-200">
+              <div className="flex w-0 flex-1"></div>
+              <div className="-ml-px flex w-0 flex-1"></div>
+            </div>
+          </div>
+        </li>
+      </a>
+    ) : (
+      <li
+        key={name}
+        className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
+      >
+        <div className="flex flex-1 flex-col p-8">
+          <Icon />
+          <h2 className="mt-6 text-xl font-medium text-gray-900">{name}</h2>
+          <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
         </div>
-      </div>
-    </li>
-  )
-}
+        <div>
+          <div className="-mt-px flex divide-x divide-gray-200">
+            <div className="flex w-0 flex-1"></div>
+            <div className="-ml-px flex w-0 flex-1"></div>
+          </div>
+        </div>
+      </li>
+    )}
+  </Link>
+)
 
 function DashboardCard() {
   const hasCatalogueRole = usePermission([ROLE.CATALOGUE_VIEW])
@@ -78,7 +97,12 @@ function DashboardCard() {
       {hasCatalogueRole && <Card name="Catalogue" link={PATH.CATALOGUE} Icon={Links.catalogue.Icon} />}
       {hasOrdersRole && <Card name="Orders" link={PATH.ORDERS} Icon={Links.orders.Icon} />}
       {hasSystemsRole && <Card name="Systems" link={PATH.SYSTEMS} Icon={Links.systems.Icon} />}
-      <Card name="Support/Feedback" link="mailto:jiri.svacha@eli-beams.eu" Icon={Links.support.Icon} />
+      <Card
+        name="Support/Feedback"
+        link="https://eli-eric.atlassian.net/servicedesk/customer/portal/20"
+        Icon={Links.support.Icon}
+        legacyBehavior
+      />
     </ul>
   )
 }
