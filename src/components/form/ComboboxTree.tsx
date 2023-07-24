@@ -3,7 +3,6 @@ import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid
 import React, { Fragment, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
-import { useIsFirstRender } from 'usehooks-ts'
 
 import { classNames } from '@/helpers'
 import { type CodebookFilter, type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
@@ -14,7 +13,7 @@ import { CodebookTreeModal } from './shared/CodebookTreeModal'
 
 type ComboboxPropsT = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
-    codebook: CODEBOOK
+    codebook?: CODEBOOK
     isObject?: boolean
     position?: 'top' | 'bottom'
     limit?: number
@@ -26,7 +25,6 @@ type ComboboxPropsT = FieldProps &
 
 export const ComboboxTree = ({
   codebook,
-  useFirstRender = true,
   name,
   placeholder,
   customLabel,
@@ -49,11 +47,6 @@ export const ComboboxTree = ({
   const handleClear = () => {
     setQuery('')
     setValue(name, null)
-  }
-
-  const isFirstRender = useIsFirstRender()
-  if (useFirstRender) {
-    if (isFirstRender) return null
   }
 
   return (

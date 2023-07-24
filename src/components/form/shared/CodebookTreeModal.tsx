@@ -22,7 +22,7 @@ type Codebooktree = {
 interface CodebookTreeModalProps {
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
-  codebook: string
+  codebook?: string
   name: string
 }
 

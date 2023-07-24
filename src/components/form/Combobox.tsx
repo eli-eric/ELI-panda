@@ -4,7 +4,6 @@ import { useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
-import { useIsFirstRender } from 'usehooks-ts'
 
 import { classNames } from '@/helpers'
 import { type CodebookFilter, type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
@@ -28,7 +27,6 @@ type ComboboxPropsT = FieldProps &
 
 const Combobox = ({
   codebook,
-  useFirstRender = true,
   name,
   placeholder,
   customLabel,
@@ -60,11 +58,6 @@ const Combobox = ({
   const handleClear = () => {
     setQuery('')
     setValue(name, null)
-  }
-
-  const isFirstRender = useIsFirstRender()
-  if (useFirstRender) {
-    if (isFirstRender) return null
   }
 
   return (
