@@ -23,6 +23,7 @@ export const messages = {
   layout: {
     login: 'Log In',
     dashboard: 'Dashboard',
+    support: 'Support',
     catalogue: 'Catalogue',
     systems: 'Systems',
     systemsOverview: 'Systems',

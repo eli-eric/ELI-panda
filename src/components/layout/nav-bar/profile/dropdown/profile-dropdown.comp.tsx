@@ -1,4 +1,5 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react'
+import Link from 'next/link'
 import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 
@@ -15,6 +16,8 @@ const messages = message.common.buttons
 interface Props {
   open: boolean
 }
+
+//TODO: clean up this component
 
 const ProfileDropdownComponent = ({ open }: Props) => {
   const user = useSession().data?.user
@@ -51,7 +54,14 @@ const ProfileDropdownComponent = ({ open }: Props) => {
       {open === false ? (
         <div data-testid="layout-profile" className="hidden z-30 sm:ml-6 sm:flex sm:items-center z-20">
           <Menu as="div" className="relative ml-3">
-            <div>
+            <div className="flex">
+              <Link href={PATH.SUPPORT} legacyBehavior>
+                <a target={'_blank'} rel="noreferrer">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500 mr-2">
+                    <span className="font-medium leading-none text-white">?</span>
+                  </span>
+                </a>
+              </Link>
               <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
                 <span className="sr-only">Open user menu</span>
                 <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
@@ -107,12 +117,13 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                 <span className="font-medium leading-none text-white">{inicials}</span>
               </span>
             </div>
+
             <div className="ml-3">
               <div className="text-base font-medium text-gray-800">{fullName}</div>
               <div className="text-sm font-medium text-gray-500">{user?.email}</div>
             </div>
           </div>
-          <div className="mt-3 space-y-1">
+          <div className="flex mt-3 space-y-1">
             <Disclosure.Button
               onClick={signOutHandler}
               className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"

@@ -97,12 +97,7 @@ function DashboardCard() {
       {hasCatalogueRole && <Card name="Catalogue" link={PATH.CATALOGUE} Icon={Links.catalogue.Icon} />}
       {hasOrdersRole && <Card name="Orders" link={PATH.ORDERS} Icon={Links.orders.Icon} />}
       {hasSystemsRole && <Card name="Systems" link={PATH.SYSTEMS} Icon={Links.systems.Icon} />}
-      <Card
-        name="Support/Feedback"
-        link="https://eli-eric.atlassian.net/servicedesk/customer/portal/20"
-        Icon={Links.support.Icon}
-        legacyBehavior
-      />
+      <Card name="Support/Feedback" link={PATH.SUPPORT} Icon={Links.support.Icon} legacyBehavior />
     </ul>
   )
 }

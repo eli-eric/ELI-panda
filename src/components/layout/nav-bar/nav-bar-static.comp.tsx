@@ -1,8 +1,10 @@
 import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 
 import EliLogoComponent from '@/components/eli-logo.comp'
+import { PATH } from '@/types/constants/paths'
 
 import NavigationListContainer from './navigation/navigation-list.cont'
 import ProfileDropdownComponent from './profile/dropdown/profile-dropdown.comp'
@@ -18,7 +20,9 @@ const NavBarStaticComponent = ({ open }: Props) => {
       <div className="flex h-16 justify-between">
         <div className="flex">
           <div className="flex flex-row flex-shrink-0 items-center">
-            <EliLogoComponent customClass="block h-10 w-auto" />
+            <Link href={PATH.DASHBOARD}>
+              <EliLogoComponent customClass="block h-10 w-auto" />
+            </Link>
           </div>
           <NavigationListContainer open={false} />
         </div>

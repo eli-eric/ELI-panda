@@ -1,3 +1,5 @@
+import classNames from 'classnames'
+import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
@@ -36,13 +38,7 @@ const NavigationListContainer = ({ open }: Props) => {
                 open={open}
               />
             )}
-            {/* {userRoles?.includes(Role.REPORTS_VIEW) && (
-              <NavigationLinkComponent
-                name={intl.formatMessage({ id: navMessages.reports })}
-                href={PATH.REPORTS}
-                open={open}
-              />
-            )} */}
+
             {userRoles?.includes(ROLE.ORDERS_VIEW) && (
               <NavigationLinkComponent
                 name={intl.formatMessage({ id: navMessages.orders })}
@@ -55,7 +51,20 @@ const NavigationListContainer = ({ open }: Props) => {
               href={PATH.DASHBOARD}
               open={open}
             />
-            {/* here will ber role order view */}
+            {open && (
+              <Link href={PATH.SUPPORT} legacyBehavior>
+                <a
+                  target="_blank"
+                  className={classNames(
+                    'block w-full text-left border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium',
+                    'text-gray-900 border-primary-500',
+                    'text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700'
+                  )}
+                >
+                  {intl.formatMessage({ id: navMessages.support })}
+                </a>
+              </Link>
+            )}
           </Fragment>
         ) : (
           <NavigationLinkComponent name={intl.formatMessage({ id: navMessages.login })} href={PATH.ROOT} open={open} />
