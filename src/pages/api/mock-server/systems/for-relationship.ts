@@ -1,23 +1,73 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import { SystemDetail } from '@/modules/systems/types/responses'
 import { faker } from '@faker-js/faker'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+type SystemsResponse = {
+  data: SystemDetail[]
+  totalCount: number
+}
+
+const range = (len: number) => {
+  const arr = []
+  for (let i = 0; i < len; i++) {
+    arr.push(i as never)
+  }
+  return arr
+}
+
+const newSystem = (): SystemDetail => {
+  return {
+    uid: faker.datatype.uuid(),
+    name: faker.name.lastName(),
+    systemCode: faker.commerce.productName(),
+    systemAlias: faker.commerce.productName(),
+    description: faker.commerce.productName(),
+    location: {
+      uid: faker.datatype.uuid(),
+      name: faker.name.lastName()
+    },
+    zone: {
+      uid: faker.datatype.uuid(),
+      name: faker.name.lastName()
+    },
+    systemType: {
+      uid: faker.datatype.uuid(),
+      name: faker.name.lastName()
+    },
+    owner: {
+      uid: faker.datatype.uuid(),
+      name: faker.name.lastName()
+    },
+    importance: {
+      uid: faker.datatype.uuid(),
+      name: faker.name.lastName()
+    },
+    hasSubsystems: faker.datatype.boolean()
+  }
+}
+
+function makeData(...lens: number[]) {
+  const makeDataLevel = (depth = 0): SystemDetail[] => {
+    const len = lens[depth]!
+    return range(len).map((d): SystemDetail => {
+      return {
+        ...newSystem()
+        //subSystems: lens[depth + 1] ? makeDataLevel(depth + 1) : undefined
+      }
+    })
+  }
+  return makeDataLevel()
+}
+
 export default function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   if (req.headers.authorization) {
-    const getFakeSystem = () => {
-      return {
-        name: faker.company.catchPhrase(),
-        systemType: faker.datatype.string(),
-        systemCodePath: faker.datatype.string(),
-        uid: faker.datatype.uuid()
-      }
+    if (req.method === 'GET') {
+      const systems = makeData(10)
+      const timeout = faker.datatype.number({ min: 50, max: 200 })
+      const timer = setTimeout(() => {
+        res.status(200).json({ data: systems, totalCount: 1000 })
+      }, timeout)
     }
-    const fetchFakeSystems = () => {
-      const res = [...Array(faker.datatype.number({ min: 0, max: 10 }))]
-      return res.map(() => getFakeSystem())
-    }
-    const systems = fetchFakeSystems()
-    res.status(200).json({ data: systems, totalCount: Math.floor(Math.random() * 200) })
   } else {
     res.status(401).json({ message: 'Unauthorized' })
   }

@@ -1,40 +1,30 @@
-import { Fragment } from 'react'
+import type { Table } from '@tanstack/react-table'
+import { Fragment, useRef, useState } from 'react'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
-import Heading from '@/components/layout/Heading'
+import { Heading } from '@/components/layout/Heading'
 import { classNames } from '@/helpers'
-import useGeneralTable from '@/hooks/table/useGeneralTable-deprecated'
 import { message } from '@/i18n/src/messages'
+import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 
 import type { OrderLineFormType } from '../../types'
 import useOrderLinesColumns from './components/OrderLines.columns'
-import useOrderLineForm from './form/OrderLineForm.cont'
+import { OrderLineForm } from './form/OrderLineForm.cont'
 
 const messages = message.ordersPage.orderDetail.sectionHeadings
 
 interface OrderLinesTableProps {
-  orderLines?: OrderLineFormType[]
-  setOrderLine: (orderLines: OrderLineFormType) => void
-  deleteOrderLine: (orderLine: OrderLineFormType) => void
   disabledEdit?: boolean
 }
 
-const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEdit }: OrderLinesTableProps) => {
-  const { setOpen, getFormModal } = useOrderLineForm({ setOrderLine })
-  const columns = useOrderLinesColumns({ setOrderLine, deleteOrderLine, disabledEdit })
-  const { getTable } = useGeneralTable<OrderLineFormType>({
-    columns,
-    data: orderLines,
-    withFooter: true,
-    tableId: 'orderLines',
-    className: 'col-span-12',
-    getRowProps: ({ original: { isDelivered } }) => ({
-      className: classNames(isDelivered ? 'bg-green-100' : 'bg-white')
-    }),
-    getCellProps: () => ({
-      className: classNames('border-b  border-gray-300')
-    })
-  })
+const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
+  const columns = useOrderLinesColumns()
+  const [openOrderLineForm, setOpenOrderLineForm] = useState(false)
+  const { control } = useFormContext()
+  const orderLines = useWatch({ control, name: 'orderLines' })
+
+  const tableRef = useRef<Table<OrderLineFormType>>()
 
   return (
     <Fragment>
@@ -46,15 +36,30 @@ const OrderLinesTable = ({ orderLines, setOrderLine, deleteOrderLine, disabledEd
               primary
               buttonSize="large"
               onClick={() => {
-                setOpen(true)
+                setOpenOrderLineForm(true)
               }}
               className="mb-2"
             />
           </div>
         )}
-        <div className="grid grid-cols-12">{getTable()}</div>
-        {getFormModal()}
+        <PandaTable
+          ref={tableRef}
+          columns={columns}
+          data={orderLines}
+          tableId={'orderLines'}
+          className={'relative overflow-x-auto'}
+          getRowProps={({ original: { isDelivered } }) => ({
+            className: classNames(isDelivered ? 'bg-green-100' : 'bg-white')
+          })}
+          settings={{
+            enableFooter: true,
+            enableQueryURL: false,
+            enableSorting: true,
+            manualSorting: false
+          }}
+        />
       </div>
+      <OrderLineForm open={openOrderLineForm} setOpen={setOpenOrderLineForm} />
     </Fragment>
   )
 }

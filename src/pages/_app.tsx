@@ -2,17 +2,19 @@ import '../styles/globals.css'
 
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import { Toaster } from 'react-hot-toast'
 import { IntlProvider } from 'react-intl'
 import { Tooltip } from 'react-tooltip'
 import { messages } from 'src/i18n/src'
 import { SWRConfig } from 'swr'
 
-import NavigationComponent from '@/components/layout/nav-bar/nav-bar.comp'
-import Notification from '@/components/Notifications/Notification'
-import WarningModal from '@/components/WarningModal'
+import { NavigationComponent } from '@/components/layout/nav-bar/nav-bar.comp'
+import { Notification } from '@/components/Notifications/Notification'
+import { WarningModal } from '@/components/WarningModal'
 import { fetcher } from '@/helpers/fetcher'
-import useLocale from '@/hooks/useLocale'
+import { useLocale } from '@/hooks/useLocale'
 
 interface Props {
   children: React.ReactNode
@@ -58,7 +60,9 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
       <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 3000 }}>
         {t => <Notification t={t} />}
       </Toaster>
-      <Component {...pageProps} />
+      <DndProvider backend={HTML5Backend}>
+        <Component {...pageProps} />
+      </DndProvider>
       <WarningModal />
     </GlobalProvider>
   </SessionProvider>

@@ -6,7 +6,7 @@ import usePermission from '@/hooks/usePermission'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
-import useOrders from '../hooks/useOrders'
+import { useOrders } from '../hooks/useOrders'
 
 const HeaderButtons = () => {
   const canEdit = usePermission([ROLE.ORDERS_EDIT])

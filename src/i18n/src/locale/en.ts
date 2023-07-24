@@ -23,6 +23,7 @@ export const messages = {
   layout: {
     login: 'Log In',
     dashboard: 'Dashboard',
+    support: 'Support',
     catalogue: 'Catalogue',
     systems: 'Systems',
     systemsOverview: 'Systems',
@@ -75,9 +76,8 @@ export const messages = {
         select: 'Select Item',
         description: 'Description',
         categoryName: 'Category name',
-        manufacturer: 'Manufacturer',
-        manufacturerNumber: 'Manufacturer Number',
-        manufacturerUrl: 'Manufacturer Url'
+        supplier: 'Supplier',
+        supplierUrl: 'Supplier Url'
       }
     },
     itemDetail: {
@@ -88,11 +88,11 @@ export const messages = {
       form: {
         name: { label: 'Name', placeholder: 'Name' },
         description: { label: 'Description', placeholder: 'Description' },
-        catalogueNumber: { label: 'Catalogue Number', placeholder: 'Catalogue Number' },
+        catalogueNumber: { label: 'Part Number', placeholder: 'Part Number' },
         category: { label: 'Category', placeholder: 'Type here...' }, // codebook of categories - CATEGORY
-        manufacturer: { label: 'Manufacturer', placeholder: 'Type here...' }, // codebook of manufacturers - MANUFACTURER
+        manufacturer: { label: 'Supplier/Manufacturer', placeholder: 'Type here...' }, // codebook of manufacturers - MANUFACTURER
         manufacturerNumber: { label: 'Manufacturer Number', placeholder: 'Manufacturer Number' },
-        manuFacturerUrl: { label: 'Manufacturer Url', placeholder: 'Manufacturer Url' }
+        manuFacturerUrl: { label: 'Supplier/Manufacturer Url', placeholder: 'Supplier/Manufacturer Url' }
       }
     },
     edit: {
@@ -120,7 +120,16 @@ export const messages = {
         zone: { label: 'Zone' }, // codebook of zones - ZONE
         subZone: { label: 'Sub Zone' }, // codebook of subzones depend on selected zone SUB_ZONE (parentUID=ZONE.uid)
         criticalityClass: { label: 'Criticality Class' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
-        parentUID: { label: 'ParentUID' } // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
+        parentUID: { label: 'ParentUID' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
+        physicalItem: {
+          itemUsage: { label: 'Item Usage' }, // codebook of item usage - ITEM_USAGE
+          serialNumber: { label: 'Serial Number', placeholder: 'Serial Number' },
+          eun: { label: 'Eun', placeholder: 'Eun' },
+          price: { label: 'Price', placeholder: 'Price' }
+        }
+      },
+      deleteModal: {
+        message: 'Are you sure you want to delete this {name} and all sub-systems?'
       }
     },
     itemDetail: {
@@ -263,7 +272,7 @@ export const messages = {
       },
       form: {
         name: { label: 'Name', placeholder: 'Name' },
-        catalogueNumber: { label: 'Catalogue Number', placeholder: 'Catalogue Number' },
+        catalogueNumber: { label: 'Part Number', placeholder: 'Part Number' },
         systemName: { label: 'Parent System', placeholder: 'Parent System' },
         price: { label: 'Price', placeholder: '0.00' },
         quantity: { label: 'Quantity', placeholder: 'Quantity' },
@@ -277,7 +286,7 @@ export const messages = {
       orderLinesTable: {
         header: {
           name: 'Name',
-          catalogueNumber: 'Catalogue Number',
+          catalogueNumber: 'Part Number',
           system: 'Parent System',
           price: 'Price',
           location: 'Location',

@@ -9,11 +9,11 @@ interface UseSubmitProps<T> {
   endpoint: string
   method: 'post' | 'put' | 'delete'
   mutateList?: string[]
-  onSuccess?: (data: T) => void
+  onSuccess?: (data: T, body: any) => void
   onError?: (error: AxiosError) => void
 }
 
-const useSubmit = <T>({ endpoint, method, mutateList, onSuccess, onError }: UseSubmitProps<T>) => {
+export const useSubmit = <T>({ endpoint, method, mutateList, onSuccess, onError }: UseSubmitProps<T>) => {
   const { cache, mutate } = useSWRConfig()
   const [response, setResponse] = useState<T | null>(null)
   const [error, setError] = useState<string>()
@@ -24,7 +24,7 @@ const useSubmit = <T>({ endpoint, method, mutateList, onSuccess, onError }: UseS
     axiosInstance[method](BASE_URL + endpoint, body)
       .then(res => {
         setResponse(res.data)
-        if (onSuccess) onSuccess(res.data)
+        if (onSuccess) onSuccess(res.data, body)
         if (mutateList)
           mutateList.forEach(url => {
             mutate(url, cache.get(url), { revalidate: true })
@@ -40,5 +40,3 @@ const useSubmit = <T>({ endpoint, method, mutateList, onSuccess, onError }: UseS
   }
   return { response, error, loading, submit }
 }
-
-export default useSubmit

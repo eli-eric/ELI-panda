@@ -7,7 +7,7 @@ import { ROLE } from '@/types/constants/roles'
 
 import type { SystemDetailFormType } from '../types/form'
 
-const useSystemDetail = () => {
+export const useSystemDetail = () => {
   const router = useRouter()
   const uid = router.query.uid as string
   const { system: systemEndpoint } = useEndpoint({ uid })
@@ -19,7 +19,7 @@ const useSystemDetail = () => {
       revalidateOnReconnect: false,
       revalidateOnMount: true
     },
-    useMockFetcher: true
+    useMockFetcher: false
   })
   const { data: session } = useSession()
   const disabledEdit = !session?.user.roles.includes(ROLE.SYSTEM_EDIT)
@@ -34,5 +34,3 @@ const useSystemDetail = () => {
     systemEndpoint
   }
 }
-
-export default useSystemDetail

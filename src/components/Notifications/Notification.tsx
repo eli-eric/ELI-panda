@@ -9,7 +9,7 @@ interface Props {
   t: Toast
 }
 
-const Notification = ({ t }: Props) => {
+export const Notification = ({ t }: Props) => {
   const [show, setShow] = useState(true)
   return (
     <div
@@ -63,5 +63,3 @@ const Notification = ({ t }: Props) => {
     </div>
   )
 }
-
-export default Notification

@@ -1,58 +1,41 @@
-import type { Table } from '@tanstack/react-table'
-import { Fragment, memo, useCallback, useRef } from 'react'
+import { createContext, useState } from 'react'
 
-import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 
-import { Pagination } from '../shared/table/Pagination'
-import SearchBar from '../shared/table/SearchBar'
-import PandaTable from '../shared/table/Table'
-import SearchBarButtons from './components/SearchBarButtons'
-import useSystemsColumns from './components/table/columns'
-import { useSystems } from './hooks/useSystems'
-import type { SystemDetail } from './types/responses'
+import { SystemsTable } from './components/table/Systems.table'
 
-const MemoizedTable = memo(PandaTable)
+interface SystemsContextType {
+  isHoveringId: number | undefined | string
+}
 
-const SystemsContainer = () => {
-  const tableId = 'systems'
-  const { systems, error, loading } = useSystems()
-  const tableRef = useRef<Table<SystemDetail>>()
-  const { columns, pending } = useSystemsColumns()
+export const SystemsContext = createContext<SystemsContextType>({ isHoveringId: undefined })
 
-  const onChangeSearch = useCallback(() => {
-    tableRef.current?.resetExpanded()
-  }, [tableRef])
+export const SystemsContainer = () => {
+  const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
 
   return (
-    <Fragment>
+    <SystemsContext.Provider value={{ isHoveringId: isHoveringId }}>
       <TableLayoutContainer>
-        <SearchBar tableId={tableId} left={<SearchBarButtons />} onChange={onChangeSearch} />
-        <MemoizedTable
-          ref={tableRef}
-          columns={columns}
-          data={systems?.data}
-          loading={loading || pending}
-          tableId={tableId}
-          getSubRows={row => row.subSystems}
+        <SystemsTable
+          tableId={'systems'}
+          pageSizeDefault={50}
+          className={'relative overflow-x-auto'}
+          getRowProps={({ id }) => ({
+            onMouseEnter: () => {
+              setIsHoveringId(id)
+            },
+            onMouseLeave: () => {
+              setIsHoveringId(undefined)
+            }
+          })}
           settings={{
             enableSorting: true,
-            enableQueryURL: true
-          }}
-          className={'relative overflow-x-auto'}
-        />
-        {error && <ErrorPage />}
-        <Pagination
-          tableId={tableId}
-          settings={{
+            enableColumnHiding: true,
             enableQueryURL: true,
-            pageSizeDefault: 50,
-            total: systems?.totalCount
+            enableColumnReordering: true
           }}
         />
       </TableLayoutContainer>
-    </Fragment>
+    </SystemsContext.Provider>
   )
 }
-
-export default SystemsContainer

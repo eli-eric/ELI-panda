@@ -1,6 +1,7 @@
 import { Tab } from '@headlessui/react'
-import { forwardRef, Fragment, useImperativeHandle } from 'react'
+import { forwardRef, Fragment, useEffect, useImperativeHandle } from 'react'
 import { useDropzone } from 'react-dropzone'
+import type { UseFormSetValue } from 'react-hook-form'
 import type { FileItem } from 'src/modules/shared/fileManager/types'
 import useSWR from 'swr'
 
@@ -19,10 +20,14 @@ type GalleryProps = {
   config: Config
   hasEditRole?: boolean
   className?: string
+  setValue?: UseFormSetValue<any>
 }
 
 export const ImageGallery = forwardRef(
-  ({ hasEditRole, className, config: { itemCategory, itemId, fileCategory = 'image' } }: GalleryProps, ref) => {
+  (
+    { hasEditRole, className, setValue, config: { itemCategory, itemId, fileCategory = 'image' } }: GalleryProps,
+    ref
+  ) => {
     const endpoint = getEndpoint(itemCategory, itemId, fileCategory)
 
     const { data, isLoading } = useSWR<FileItem[]>(endpoint, uniFetcher, {
@@ -51,6 +56,13 @@ export const ImageGallery = forwardRef(
       onDrop,
       noClick: true
     })
+
+    useEffect(() => {
+      setValue &&
+        setValue('hasImageGalleryChanges', hasChanges, {
+          shouldDirty: hasChanges
+        })
+    }, [hasChanges, setValue])
 
     return (
       <Fragment>

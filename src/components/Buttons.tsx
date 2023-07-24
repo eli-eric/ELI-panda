@@ -1,13 +1,18 @@
 import {
   ArrowDownTrayIcon,
+  ArrowPathIcon,
   ArrowUturnLeftIcon,
   FolderOpenIcon,
   FolderPlusIcon,
   NoSymbolIcon,
   PencilSquareIcon,
   PlusIcon,
-  TrashIcon} from '@heroicons/react/24/outline'
+  TrashIcon
+} from '@heroicons/react/24/outline'
+import Link from 'next/link'
+import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
+import type { UrlObject } from 'url'
 
 import { classNames } from '@/helpers'
 
@@ -44,20 +49,22 @@ export const Button = ({
   className,
   buttonSize,
   testid,
+  type = 'button',
   ...restProps
 }: ButtonProps) => (
   <button
     {...restProps}
     data-testid={testid}
     disabled={loading ? true : disabled}
+    type={type}
     className={classNames(
       'relative text-sm font-medium shadow-sm z-10 inline-flex items-center border border-gray-300 focus:outline-none focus:ring-0 focus:ring-primary-500',
       rounded,
       className,
-      disabled ? 'bg-gray-200 text-gray-400' : '',
       loading ? 'bg-primary-700' : `bg-${!primary ? 'white' : 'primary-500'}`,
       buttonSize === 'small' ? 'px-1 py-1' : 'px-2 py-2',
-      !primary ? !disabled && 'hover:bg-gray-100 text-gray-600' : !disabled && 'hover:bg-primary-700 text-white'
+      !primary ? !disabled && 'hover:bg-gray-100 text-gray-600' : !disabled && 'hover:bg-primary-700 text-white',
+      disabled ? 'bg-gray-200 text-gray-400' : ''
     )}
   >
     {loading && <ButtonLoaderComponent />}
@@ -112,4 +119,70 @@ export const CancelButton = ({ buttonSize = 'small', ...restProps }: ButtonProps
   <Button {...restProps} buttonSize={buttonSize}>
     <NoSymbolIcon className="h-5 w-5" aria-hidden="true" />
   </Button>
+)
+
+export const RefreshButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+  <Button {...restProps} buttonSize={buttonSize}>
+    <ArrowPathIcon className="h-5 w-5" aria-hidden="true" />
+  </Button>
+)
+
+export const TableEditButton = ({ type = 'button', ...props }: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
+    <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+
+export const TableOpenButton = ({ type = 'button', ...props }: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
+    <FolderOpenIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+
+export const TableDeleteButton = ({ type = 'button', ...props }: ButtonProps) => (
+  <button className="ml-2 hover:text-primary-500 text-red-700" type={type} {...props}>
+    <TrashIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+
+export const TablePlusButton = ({ type = 'button', ...props }: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
+    <PlusIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+export const TableDownloadButton = ({ type = 'button', ...props }: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
+    <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+
+export const TableButtonsWrapper = ({ children }: { children: React.ReactNode }) => (
+  <div className="ml-auto flex items-center">{children}</div>
+)
+
+interface TableActionsButtonsProps {
+  onDeleteClick?: () => void
+  canEdit?: boolean
+  detailLink?: UrlObject | string
+  addLink?: UrlObject | string
+  isShown?: boolean
+}
+export const TableActionsButtons = ({ onDeleteClick, canEdit, detailLink, addLink }: TableActionsButtonsProps) => (
+  <TableButtonsWrapper>
+    {detailLink && (
+      <Link href={detailLink} className={'flex items-center'}>
+        <Fragment>{canEdit ? <TableEditButton /> : <TableOpenButton />}</Fragment>
+      </Link>
+    )}
+    {canEdit && (
+      <Fragment>
+        {onDeleteClick && <TableDeleteButton onClick={onDeleteClick} />}
+        {addLink && (
+          <Link href={addLink} className={'flex items-center'}>
+            <TablePlusButton />
+          </Link>
+        )}
+      </Fragment>
+    )}
+  </TableButtonsWrapper>
 )

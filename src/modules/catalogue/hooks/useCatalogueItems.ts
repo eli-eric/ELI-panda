@@ -4,9 +4,9 @@ import useQueryManager from '@/hooks/useQueryManager'
 import { useCataloguePath } from '@/modules/catalogue/hooks/usePath'
 import type { CatalogueItemsResponse } from '@/types/responses'
 
-const useCatalogueItems = () => {
-  const { query } = useQueryManager('catalogueItems')
-  const pagination = JSON.parse(query.pagination)
+export const useCatalogueItems = (tableId = 'catalogueItems') => {
+  const { query } = useQueryManager(tableId)
+  const pagination = JSON.parse(query.pagination || '{}')
   const categoryPath = useCataloguePath()
   const { catalogueItems } = useEndpoint({ query: { categoryPath, ...pagination, ...query } })
   const { response, loading, error, mutate } = useFetch<CatalogueItemsResponse>({
@@ -15,10 +15,9 @@ const useCatalogueItems = () => {
       suspense: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: true,
-      revalidateOnMount: true
+      revalidateOnMount: true,
+      keepPreviousData: true
     }
   })
   return { catalogueItems: response, loading, error, mutate }
 }
-
-export default useCatalogueItems

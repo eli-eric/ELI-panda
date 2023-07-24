@@ -1,11 +1,3 @@
-interface Props {
-  children: React.ReactNode
-}
-
-const Card = ({ children }: Props) => <div className={`mb-2 lg:mb-4 py-1 lg:py-2 mx-4`}>{children}</div>
-
-export default Card
-
 interface HeadingProps {
   children?: React.ReactNode
   text: string

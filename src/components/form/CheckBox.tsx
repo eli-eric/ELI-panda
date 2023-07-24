@@ -1,4 +1,3 @@
-import type { FieldValues, Path } from 'react-hook-form'
 import { Controller } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 
@@ -7,20 +6,12 @@ import type { FieldProps } from '@/types/form'
 
 type InputProps = FieldProps & React.InputHTMLAttributes<HTMLInputElement>
 
-const CheckBox = <T extends FieldValues>({
-  name,
-  placeholder,
-  disabled,
-  className,
-  hidden,
-  label,
-  ...restProps
-}: InputProps) => {
+const CheckBox = ({ name, placeholder, disabled, className, hidden, label, ...restProps }: InputProps) => {
   const { control } = useFormContext()
 
   return (
     <Controller
-      name={name as Path<T>}
+      name={name}
       control={control}
       render={({ field }) => (
         <div className={classNames('relative flex items-start', className)}>
@@ -28,6 +19,7 @@ const CheckBox = <T extends FieldValues>({
             <input
               {...field}
               {...restProps}
+              defaultValue={undefined}
               hidden={hidden}
               type="checkbox"
               disabled={disabled}

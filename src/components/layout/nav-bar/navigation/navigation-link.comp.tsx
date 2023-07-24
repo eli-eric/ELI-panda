@@ -4,16 +4,17 @@ import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
 import { classNames } from '@/helpers'
+import type { PATH } from '@/types/constants/paths'
 
 interface Props {
-  href: string
+  href: string | PATH
   name: string
   open: boolean
 }
 
 const NavigationLinkComponent = ({ href, name, open }: Props) => {
   const router = useRouter()
-  const selectedClassName = open === false ? 'text-gray-900 border-primary-500' : 'text-indigo-700 border-indigo-500'
+  const selectedClassName = 'text-gray-900 border-primary-500'
   const nonSelectedClassName =
     open === false
       ? 'text-gray-500 hover:border-gray-300 hover:text-gray-700'

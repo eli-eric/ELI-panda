@@ -1,15 +1,11 @@
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
+
 export interface CatalogueCategoryResponse {
   uid: string
   name: string
   code: string
   parentPath: string
-}
-
-export interface CatalogueItemDetail {
-  propertyName: string
-  propertyGroup: string
-  value: string | null
-  propertyUnit: string | null
 }
 
 export interface CatalogueItem {
@@ -18,9 +14,8 @@ export interface CatalogueItem {
   description: string
   categoryPath: string
   categoryName: string
-  manufacturer: string
+  supplier?: CodebookType
   manufacturerUrl: string
-  manufacturerNumber: string
   catalogueNumber: string
   details?: CatalogueItemDetail[]
 }

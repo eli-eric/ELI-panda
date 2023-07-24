@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import Heading from '@/components/layout/Heading'
+import { Heading } from '@/components/layout/Heading'
 
 import useGroupDetails from '../../hooks/useGroupDetails'
 import useItem from '../../hooks/useItem'

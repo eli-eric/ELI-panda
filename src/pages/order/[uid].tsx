@@ -8,7 +8,7 @@ import { message } from 'src/i18n/src/messages'
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
 import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
-import OrderItemContainer from '@/modules/orderItem/OrderItem.cont'
+import { OrderItemContainer } from '@/modules/orderItem/OrderItem.cont'
 
 const messages = message.orderItem
 

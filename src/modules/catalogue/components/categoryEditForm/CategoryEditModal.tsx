@@ -6,11 +6,11 @@ import { Button } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useSubmit from '@/hooks/fetch/useSubmit'
+import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
 import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
-import useCategoryList from '../../hooks/useCategoryList'
+import { useCategoryList } from '../../hooks/useCategoryList'
 import CategoryEditForm from './CategoryEditForm'
 const formatData = (data: CategoryFormType, parentPath) =>
   data.groups && data.groups.length !== 0

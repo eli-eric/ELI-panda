@@ -4,6 +4,7 @@ const nextConfig = {
     appDir: false
   },
   swcMinify: false,
+  reactStrictMode: false,
   output: 'standalone',
   images: {
     domains: [

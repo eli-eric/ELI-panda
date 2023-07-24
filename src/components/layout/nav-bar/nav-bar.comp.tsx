@@ -8,53 +8,38 @@ import { ENV, PROCESS_ENV } from '@/types/constants/common'
 import NavBarHideoutComponent from './nav-bar-hideout.comp'
 import NavBarStaticComponent from './nav-bar-static.comp'
 
-export default function NavigationComponent() {
-  const getBackgroundByPandaEnv = (): string => {
-    let result = 'bg-white'
-    if (PROCESS_ENV) {
-      if (PROCESS_ENV === ENV.DEV) {
-        result = 'bg-teal-100'
-      } else if (PROCESS_ENV === ENV.TEST) {
-        result = 'bg-pink-50'
-      }
-    }
-    return result
-  }
+export const NavigationComponent = () => {
+  const infoText =
+    PROCESS_ENV && PROCESS_ENV === ENV.TEST
+      ? 'You are in the TEST environment. This version is identical to the production version, but it uses a test database. Data are not persistent because of the override from the production database. (mostly on daily basis)'
+      : PROCESS_ENV && PROCESS_ENV === ENV.DEV
+      ? 'You are in the DEV environment. This version is based on the dev branch in git. It uses a dev database. Data are not persistent.'
+      : undefined
 
-  const EnvInfoTest = () => (
+  const EnvInfo = ({ infoText, env }: { infoText: string; env?: string }) => (
     <div className="flex flex-col justify-center items-center text-lg absolute left-2 top-2 font-mono">
-      <span>TEST</span>
-
+      <span>{env?.toUpperCase()}</span>
       <InformationCircleIcon
         className="h-8 w-8 flex-shrink-0 -mt-2"
         data-tooltip-id="tooltip"
-        data-tooltip-content={
-          'You are in the TEST environment. This version is identical to the production version, but it uses a test database. Data are not persistent because of the override from the production database. (mostly on daily basis)'
-        }
-      />
-    </div>
-  )
-
-  const EnvInfoDev = () => (
-    <div className="flex flex-col justify-center items-center text-lg absolute left-2 top-2 font-mono">
-      <span>DEV</span>
-
-      <InformationCircleIcon
-        className="h-8 w-8 flex-shrink-0 -mt-2"
-        data-tooltip-id="tooltip"
-        data-tooltip-content={
-          'You are in the DEV environment. This version is based on the dev branch in git. It uses a dev database. Data are not persistent.'
-        }
+        data-tooltip-content={infoText}
       />
     </div>
   )
 
   return (
-    <Disclosure id="nav-bar" as="nav" className={classNames('border-b', getBackgroundByPandaEnv())}>
+    <Disclosure
+      id="nav-bar"
+      as="nav"
+      className={classNames(
+        'border-b bg-white',
+        PROCESS_ENV && PROCESS_ENV === ENV.DEV && 'bg-teal-100',
+        PROCESS_ENV && PROCESS_ENV === ENV.TEST && 'bg-pink-50'
+      )}
+    >
       {({ open }) => (
         <Fragment>
-          {PROCESS_ENV && PROCESS_ENV === ENV.TEST && <EnvInfoTest />}
-          {PROCESS_ENV && PROCESS_ENV === ENV.DEV && <EnvInfoDev />}
+          {infoText && <EnvInfo infoText={infoText} env={PROCESS_ENV} />}
           <NavBarStaticComponent open={open} />
           <NavBarHideoutComponent open={open} />
         </Fragment>

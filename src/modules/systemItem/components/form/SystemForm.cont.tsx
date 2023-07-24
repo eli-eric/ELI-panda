@@ -1,68 +1,99 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { memo, useEffect, useRef } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import Link from 'next/link'
+import { Fragment, memo, useRef } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 
-import { useFormLeaveWarning } from '@/hooks/form/useFormLeaveWarning'
-import useFormNotification from '@/hooks/form/useFormNotification'
+import { Button } from '@/components/Buttons'
+import { Form } from '@/components/form/Form'
+import Card from '@/components/layout/Card'
+import { Heading } from '@/components/layout/Heading'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { FILE_TYPE } from '@/types/constants/files'
+import { PATH } from '@/types/constants/paths'
 
-import useSystemDetail from '../../hooks/useSystemDetail'
+import { useParentSystemDetail } from '../../hooks/useParentSystemDetail'
+import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { useSystemSubmit } from '../../hooks/useSystemSubmit'
 import type { SystemDetailFormType } from '../../types/form'
+import { AssignPhysicalItem } from '../AssignPhysicalItem'
 import Breadcrumbs from '../Breadcrumps'
 import HeaderComponent from '../Header.comp'
+import { PhysicalItemForm } from './PhysicalItemForm.comp'
 import SystemFormComponent from './SystemForm.comp'
 import { schema } from './SystemForm.schema'
 
-const MemoizedGallery = memo(ImageGallery)
+const MemoizedSystemGallery = memo(ImageGallery)
 
 const SystemForm = () => {
   const { systemDetail, uid, disabledEdit } = useSystemDetail()
+  //const cataloguePermission = usePermission([ROLE.CATALOGUE_EDIT])
 
-  const imageRef = useRef<ImageGalleryRef>()
+  const { parentUid, parentPath } = useParentSystemDetail()
 
-  const { submit, loadingSubmit } = useSystemSubmit(imageRef)
+  const systemImageRef = useRef<ImageGalleryRef>()
+
+  const { submit, loadingSubmit } = useSystemSubmit(systemImageRef)
+
   const formMethods = useForm<SystemDetailFormType>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      ...systemDetail
-    }
+    defaultValues: systemDetail
   })
-  const { setValue } = formMethods
-  useEffect(() => {
-    setValue('hasImageGalleryChanges', imageRef?.current?.hasChanges, { shouldDirty: imageRef?.current?.hasChanges })
-  }, [imageRef, setValue])
 
-  const { control, formState, handleSubmit } = formMethods
+  const { control } = formMethods
+  const physicalItem = useWatch({ control, name: 'physicalItem' })
+
   const onSubmit = (data: any) => {
     // extract from data hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = data
-    submit(rest)
+    submit({ ...rest, parentUid })
   }
-  useFormNotification<SystemDetailFormType>({ control })
-  const FormWarningModal = useFormLeaveWarning({ formState })
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <FormProvider {...formMethods}>
-        <HeaderComponent loading={loadingSubmit} />
-        <Breadcrumbs parentPath={systemDetail?.parentPath} />
-        <div className="py-6">
-          <SystemFormComponent>
-            <MemoizedGallery
-              ref={imageRef}
-              config={{ itemCategory: FILE_TYPE.CATALOGUE, itemId: String(uid) }}
-              className="w-full"
-              hasEditRole={!disabledEdit}
-            />
-          </SystemFormComponent>
-        </div>
-      </FormProvider>
-      <FormWarningModal />
-    </form>
+    <Form formMethods={formMethods} onSubmit={onSubmit} enableLeaveWarning={true}>
+      <HeaderComponent loading={loadingSubmit} />
+      <Breadcrumbs parentPath={parentPath || systemDetail?.parentPath} />
+      <Card>
+        <Heading customText="System">
+          <AssignPhysicalItem />
+        </Heading>
+        <SystemFormComponent>
+          <MemoizedSystemGallery
+            ref={systemImageRef}
+            setValue={formMethods.setValue}
+            config={{ itemCategory: FILE_TYPE.SYSTEM, itemId: String(uid) }}
+            className="w-full"
+            hasEditRole={!disabledEdit}
+          />
+        </SystemFormComponent>
+        {physicalItem && (
+          <Fragment>
+            <Heading customText="Physical Item">
+              {physicalItem.catalogueItem.uid && (
+                <Link href={PATH.CATALOGUE_ITEM + '/' + physicalItem.catalogueItem.uid} target={'_blank'}>
+                  <Button primary>
+                    <span>View Catalogue Item</span>
+                  </Button>
+                </Link>
+              )}
+            </Heading>
+            <PhysicalItemForm>
+              <MemoizedSystemGallery
+                ref={systemImageRef}
+                setValue={formMethods.setValue}
+                config={{
+                  itemCategory: FILE_TYPE.CATALOGUE,
+                  itemId: physicalItem?.catalogueItem?.uid as string
+                }}
+                className="w-full"
+                hasEditRole={false}
+              />
+            </PhysicalItemForm>
+          </Fragment>
+        )}
+      </Card>
+    </Form>
   )
 }
 

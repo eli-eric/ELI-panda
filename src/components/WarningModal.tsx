@@ -1,11 +1,11 @@
 import Modal from 'src/components/modal/warning/modal-warning.comp'
-import useStore from 'src/store/useWarningModalStore'
+import { useWarningModalStore } from 'src/store/useWarningModalStore'
 import { shallow } from 'zustand/shallow'
 
 import { message as intlMessage } from '@/i18n/src/messages'
 
-function WarningModal() {
-  const [params, patchParams, resetParams] = useStore(
+export const WarningModal = () => {
+  const [params, patchParams, resetParams] = useWarningModalStore(
     state => [state.params, state.patchParams, state.resetParams],
     shallow
   )
@@ -38,5 +38,3 @@ function WarningModal() {
     />
   )
 }
-
-export default WarningModal

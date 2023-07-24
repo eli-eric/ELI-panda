@@ -55,13 +55,15 @@ const useOrderLineFormFields = (enabled: boolean) =>
       placeholder: form.notes.placeholder,
       rounded: 'rounded-md'
     },
-    // itemUsage: {
-    //   name: 'itemUsage',
-    //   label: form.itemUsage.label,
-    //   isError: !!formState.errors.itemUsage,
-    //   rounded: 'rounded-md',
-    //   codebook: CODEBOOK.ITEM_USAGE
-    // },
+    currency: {
+      name: 'currency'
+    },
+    itemUsage: {
+      name: 'itemUsage',
+      label: form.itemUsage.label,
+      rounded: 'rounded-md',
+      codebook: CODEBOOK.ITEM_USAGE
+    },
     serialNumber: {
       name: 'serialNumber',
       label: form.serialNumber.label,

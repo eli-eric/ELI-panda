@@ -8,7 +8,7 @@ import { PATH } from '@/types/constants/paths'
 import { useCategoryEdit } from '../../hooks/useCategoryEdit'
 import { useCataloguePath } from '../../hooks/usePath'
 
-const CatalogueBreadcrumbs = () => {
+export const CatalogueBreadcrumbs = () => {
   const router = useRouter()
   const { slug } = router.query as { slug?: string[] }
   const catalogueParentPath = useCataloguePath()
@@ -26,4 +26,3 @@ const CatalogueBreadcrumbs = () => {
     </BreadcrumpContainer>
   )
 }
-export default CatalogueBreadcrumbs
