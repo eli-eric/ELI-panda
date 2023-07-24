@@ -2,17 +2,13 @@ import { useState } from 'react'
 import { number, object, string } from 'yup'
 
 import { Heading } from '@/components/card/card.comp'
-import useFormModal from '@/hooks/form/useFormModal'
+import { FormModal } from '@/hooks/form/useFormModal'
+import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import type { OrderLineFormType } from '@/modules/orderItem/types'
 import CatalogueTableSelect from '@/modules/shared/catalogue/table/CatalogueTableSelect'
 import type { CatalogueItem } from '@/types/responses'
 
 import OrderLineFormComponent from './OrderLineForm.comp'
-interface Props {
-  setOrderLine: (orderLines: OrderLineFormType) => void
-  orderLine?: OrderLineFormType
-  index?: number
-}
 
 const orderLineFormSchema = object({
   name: string().required(),
@@ -23,8 +19,15 @@ const orderLineFormSchema = object({
   quantity: number().min(1).max(100)
 })
 
-const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
+interface OrderLienFormProps {
+  orderLine?: OrderLineFormType
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export const OrderLineForm = ({ orderLine, open, setOpen }: OrderLienFormProps) => {
   const [catalogueItem, setCatalogueItem] = useState<CatalogueItem | undefined>(undefined)
+  const { setOrderLine } = useOrderLine()
   const modalSubmit = (data: OrderLineFormType) => {
     const dataToSend = { ...data }
     if (!dataToSend.price) {
@@ -40,25 +43,28 @@ const useOrderLineForm = ({ setOrderLine, orderLine }: Props) => {
     } else setOrderLine(dataToSend)
   }
 
-  const { setOpen, getFormModal } = useFormModal<OrderLineFormType>({
-    renderForm: () => <OrderLineFormComponent catalogueItem={catalogueItem} orderLine={orderLine} />,
-    renderOutsideForm: () => (
-      <div>
-        {orderLine?.id ? (
-          <Heading text={orderLine.name + ' - ' + orderLine.catalogueNumber} />
-        ) : (
-          <CatalogueTableSelect setItem={setCatalogueItem} selectedItem={catalogueItem} />
-        )}
-      </div>
-    ),
-    onSubmit: modalSubmit,
-    schema: orderLineFormSchema,
-    defaultValues: orderLine
-      ? { ...orderLine, currency: orderLine.currency || 'EUR' }
-      : { itemUsage: { uid: 'a2aae89a-5cbe-4042-a726-44012b158226', name: 'In System Part' }, quantity: 1 }
-  })
-
-  return { setOpen, getFormModal }
+  return (
+    <FormModal
+      onSubmit={modalSubmit}
+      schema={orderLineFormSchema}
+      setOpen={setOpen}
+      open={open}
+      defaultValues={
+        orderLine
+          ? { ...orderLine, currency: orderLine.currency || 'EUR' }
+          : { itemUsage: { uid: 'a2aae89a-5cbe-4042-a726-44012b158226', name: 'In System Part' }, quantity: 1 }
+      }
+      renderOutsideForm={
+        <div>
+          {orderLine?.id ? (
+            <Heading text={orderLine.name + ' - ' + orderLine.catalogueNumber} />
+          ) : (
+            <CatalogueTableSelect setItem={setCatalogueItem} selectedItem={catalogueItem} />
+          )}
+        </div>
+      }
+    >
+      <OrderLineFormComponent catalogueItem={catalogueItem} orderLine={orderLine} />
+    </FormModal>
+  )
 }
-
-export default useOrderLineForm

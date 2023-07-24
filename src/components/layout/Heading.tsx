@@ -6,7 +6,7 @@ interface HeadingProps {
   customText?: string
 }
 
-const Heading = ({ text, children, customText }: HeadingProps) => (
+export const Heading = ({ text, children, customText }: HeadingProps) => (
   <div className="mb-4 border-b border-gray-200 bg-white px-2 py-2 sm:px-3">
     <div className="-ml-2 -mt-1 flex flex-wrap h-12 items-center justify-between sm:flex-nowrap">
       <div className="ml-2 mt-1">
@@ -18,5 +18,3 @@ const Heading = ({ text, children, customText }: HeadingProps) => (
     </div>
   </div>
 )
-
-export default Heading

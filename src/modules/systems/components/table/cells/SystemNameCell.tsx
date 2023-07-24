@@ -1,5 +1,6 @@
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import type { CellContext } from '@tanstack/react-table'
+import { useContext } from 'react'
 import { isMobile } from 'react-device-detect'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
@@ -11,6 +12,8 @@ import { useSubmit } from '@/hooks/fetch/useSubmit'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
+// eslint-disable-next-line
+import { SystemsContext } from '@/modules/systems/Systems.cont'
 import type { SystemDetail } from '@/modules/systems/types/responses'
 import { filterSubsystem } from '@/modules/systems/utils'
 import { PATH } from '@/types/constants/paths'
@@ -31,13 +34,13 @@ export const SystemNameCell = ({
   setUid,
   canEdit = true,
   hideButtons = false,
-  tableId,
-  isHoveringId
+  tableId
 }: SystemNameCellProps) => {
   const { system } = useEndpoint({ uid: row.original.uid })
-  // last in parentPath array is the parent uid
+  const { isHoveringId } = useContext(SystemsContext)
   const { mutate } = useSystems(tableId)
   const { formatMessage: fm } = useIntl()
+
   const { submit } = useSubmit<string>({
     endpoint: system,
     method: 'delete',
@@ -49,6 +52,7 @@ export const SystemNameCell = ({
       toast.error(`Error deleting system ${row.original.name}`)
     }
   })
+
   const withWarningModal = useWarningModal(
     fm({ id: messages.message }, createMessageValues({ name: row.original.name }))
   )

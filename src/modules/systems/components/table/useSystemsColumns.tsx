@@ -7,18 +7,11 @@ import { ROLE } from '@/types/constants/roles'
 
 import { useSubsystems } from '../../hooks/useSubsystems'
 import type { SystemDetail } from '../../types/responses'
+// eslint-disable-next-line
 import { SystemNameCell } from './cells/SystemNameCell'
 
 //TODO: fix typing
-export const useSystemsColumns = ({
-  tableId,
-  hideButtons,
-  isHoveringId
-}: {
-  tableId: string
-  hideButtons?: boolean
-  isHoveringId: number | undefined | string
-}) => {
+export const useSystemsColumns = ({ tableId, hideButtons }: { tableId: string; hideButtons?: boolean }) => {
   const { setUid, pending } = useSubsystems(tableId)
   const canEdit = usePermission([ROLE.SYSTEM_EDIT])
 
@@ -32,14 +25,7 @@ export const useSystemsColumns = ({
         meta: { sticky: true },
         enableHiding: false,
         cell: props => (
-          <SystemNameCell
-            {...props}
-            setUid={setUid}
-            canEdit={canEdit}
-            hideButtons={hideButtons}
-            tableId={tableId}
-            isHoveringId={isHoveringId}
-          />
+          <SystemNameCell {...props} setUid={setUid} canEdit={canEdit} hideButtons={hideButtons} tableId={tableId} />
         )
       },
       { header: 'System Code', accessorFn: row => row.systemCode, id: 'systemCode', size: 150 },
@@ -161,7 +147,7 @@ export const useSystemsColumns = ({
         size: 150
       }
     ],
-    [setUid, canEdit, hideButtons, tableId, isHoveringId]
+    [setUid, canEdit, hideButtons, tableId]
   )
 
   const columnsForAssign = useMemo(

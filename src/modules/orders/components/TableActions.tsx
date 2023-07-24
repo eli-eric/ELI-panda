@@ -8,7 +8,6 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
-import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
@@ -62,7 +61,6 @@ export const TableActions = ({ order, isHovering }: Props) => {
     <Fragment>
       {isHovering && (
         <TableActionsButtons
-          detailLink={PATH.ORDER + '/' + uid}
           onDeleteClick={() => {
             setOpenDeleteWarn(true)
           }}

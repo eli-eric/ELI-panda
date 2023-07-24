@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
@@ -20,49 +20,44 @@ const OrdersContainer = () => {
   const columns = useOrderColumns(isHoveringId)
 
   return (
-    <Fragment>
-      <TableLayoutContainer>
-        <SearchBar tableId="orders" left={<HeaderButtons />} right={<OrdersFilter />} />
-        {!error && (
-          <PandaTable
-            settings={{
+    <TableLayoutContainer>
+      <SearchBar tableId="orders" left={<HeaderButtons />} right={<OrdersFilter />} />
+      {!error && (
+        <PandaTable
+          {...{
+            settings: {
               enableQueryURL: true,
               enableSorting: true,
               enableColumnReordering: true,
               enableColumnHiding: true
-            }}
-            {...{
-              getRowProps: ({ original: { orderStatusObj, deliveryStatus }, id }) => ({
-                className: classNames(
-                  'bg-white',
-                  orderStatusObj && getColorClassStatus(orderStatusObj, deliveryStatus)
-                ),
-                onMouseEnter: () => {
-                  setIsHoveringId(id)
-                },
-                onMouseLeave: () => {
-                  setIsHoveringId(undefined)
-                }
-              }),
-              columns,
-              tableId: 'orders',
-              data: orderList?.data,
-              loading: loading,
-              className: 'relative overflow-x-auto'
-            }}
-          />
-        )}
-        {!error && (
-          <Pagination
-            {...{
-              settings: { enableQueryURL: true, pageSizeDefault: 50, total: orderList?.totalCount },
-              tableId: 'orders'
-            }}
-          />
-        )}
-        {error && <ErrorPage />}
-      </TableLayoutContainer>
-    </Fragment>
+            },
+            getRowProps: ({ original: { orderStatusObj, deliveryStatus }, id }) => ({
+              className: classNames('bg-white', orderStatusObj && getColorClassStatus(orderStatusObj, deliveryStatus)),
+              onMouseEnter: () => {
+                setIsHoveringId(id)
+              },
+              onMouseLeave: () => {
+                setIsHoveringId(undefined)
+              }
+            }),
+            columns,
+            tableId: 'orders',
+            data: orderList?.data,
+            loading: loading,
+            className: 'relative overflow-x-auto'
+          }}
+        />
+      )}
+      {!error && (
+        <Pagination
+          {...{
+            settings: { enableQueryURL: true, pageSizeDefault: 50, total: orderList?.totalCount },
+            tableId: 'orders'
+          }}
+        />
+      )}
+      {error && <ErrorPage />}
+    </TableLayoutContainer>
   )
 }
 
