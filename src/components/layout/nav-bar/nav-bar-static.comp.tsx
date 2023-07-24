@@ -20,7 +20,7 @@ const NavBarStaticComponent = ({ open }: Props) => {
       <div className="flex h-16 justify-between">
         <div className="flex">
           <div className="flex flex-row flex-shrink-0 items-center">
-            <Link href={PATH.DASHBOARD}>
+            <Link href={status === 'authenticated' ? PATH.DASHBOARD : PATH.ROOT}>
               <EliLogoComponent customClass="block h-10 w-auto" />
             </Link>
           </div>

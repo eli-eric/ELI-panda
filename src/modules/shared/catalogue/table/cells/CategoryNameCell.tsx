@@ -16,7 +16,7 @@ export const CategoryName = ({
   const link = PATH.CATALOGUE + '/' + categoryPath
   return (
     <Fragment>
-      <Link href={{ pathname: link, query: { ...router.query } }} className="text-blue-500 hover:underline">
+      <Link href={{ pathname: link, query: { search: router.query.search } }} className="text-blue-500 hover:underline">
         {getValue()}
       </Link>
     </Fragment>

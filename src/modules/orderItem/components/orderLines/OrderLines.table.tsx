@@ -1,5 +1,5 @@
 import type { Table } from '@tanstack/react-table'
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
@@ -25,6 +25,12 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
   const orderLines = useWatch({ control, name: 'orderLines' })
 
   const tableRef = useRef<Table<OrderLineFormType>>()
+
+  useEffect(() => {
+    if (tableRef.current) {
+      tableRef.current.setColumnOrder(['name', 'partNumber', 'serialNumber', 'eun', 'isDelivered'])
+    }
+  }, [tableRef])
 
   return (
     <Fragment>
