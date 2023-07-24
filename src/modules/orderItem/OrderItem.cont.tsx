@@ -21,7 +21,7 @@ import HeaderComponent from './components/Header.comp'
 import OrderLinesTable from './components/orderLines/OrderLines.table'
 import useOrderDetail from './hooks/useOrderDetail'
 import { useOrderSubmit } from './hooks/useOrderSubmit'
-import type { OrderDetailFormType } from './types'
+import type { OrderDetailFormType } from './types/form'
 
 const messages = message.ordersPage
 

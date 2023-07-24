@@ -6,7 +6,7 @@ import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
 import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
-import type { OrderLineFormType } from '@/modules/orderItem/types'
+import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 
 import { OrderisDeliveredAction, OrderLineActionButtons, PriceFooter, PrintEunButton } from './OrderLine.actions'
 

@@ -1,7 +1,7 @@
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import uuid from 'react-uuid'
 
-import type { OrderLineFormType } from '../types'
+import type { OrderLineFormType } from '../types/form'
 
 export const useOrderLine = () => {
   const { control } = useFormContext()

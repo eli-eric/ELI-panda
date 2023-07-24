@@ -25,7 +25,7 @@ interface Props {
 export const TableActions = ({ order, isHovering }: Props) => {
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
   const { formatMessage } = useIntl()
-  const { uid, name } = order
+  const { name } = order
   const canEdit = usePermission([ROLE.ORDERS_EDIT])
 
   const { order: orderEndpoint } = useEndpoint({ uid: order.uid })
