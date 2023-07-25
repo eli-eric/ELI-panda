@@ -56,7 +56,7 @@ export const OrderItemContainer = () => {
       <HeaderComponent loading={loading} />
       <OrderFormComponent />
       <Card className="flex flex-col justify-between">
-        <OrderLinesTable />
+        <OrderLinesTable disabledEdit={disabledEdit} />
         {uid && (
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense fallback={<ProgressBarComponent />}>
