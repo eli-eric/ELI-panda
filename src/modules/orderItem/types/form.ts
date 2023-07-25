@@ -20,7 +20,7 @@ export interface OrderDetailFormType extends FieldValues {
 }
 
 export interface OrderLineFormType extends FieldValues {
-  id?: string
+  uuid?: string
   uid: string
   name: string
   catalogueUid?: string

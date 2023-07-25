@@ -15,7 +15,7 @@ import { FormModal } from '@/hooks/form/useFormModal'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
-import type { OrderLineFormType } from '@/modules/orderItem/types'
+import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 

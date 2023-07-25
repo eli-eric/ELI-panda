@@ -8,7 +8,7 @@ import { classNames } from '@/helpers'
 import { message } from '@/i18n/src/messages'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 
-import type { OrderLineFormType } from '../../types'
+import type { OrderLineFormType } from '../../types/form'
 import useOrderLinesColumns from './components/OrderLines.columns'
 import { OrderLineForm } from './form/OrderLineForm.cont'
 

@@ -3,7 +3,6 @@ import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
-import uuid from 'react-uuid'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { Form } from '@/components/form/Form'
@@ -21,7 +20,7 @@ import HeaderComponent from './components/Header.comp'
 import OrderLinesTable from './components/orderLines/OrderLines.table'
 import useOrderDetail from './hooks/useOrderDetail'
 import { useOrderSubmit } from './hooks/useOrderSubmit'
-import type { OrderDetailFormType } from './types'
+import type { OrderDetailFormType } from './types/form'
 
 const messages = message.ordersPage
 
@@ -33,8 +32,7 @@ export const OrderItemContainer = () => {
     defaultValues: {
       ...orderDetail,
       orderLines:
-        orderDetail?.orderLines &&
-        orderDetail?.orderLines.map(orderLine => ({ ...orderLine, id: orderLine.uid || uuid() })),
+        orderDetail?.orderLines && orderDetail?.orderLines.map(orderLine => ({ ...orderLine, uuid: orderLine.uid })),
       orderDate: orderDetail?.orderDate,
       orderStatus: orderDetail?.orderStatus || { uid: 'c5ef9d00-ac38-44c1-b48a-fde0d7095c54', name: 'Requested' }
     }

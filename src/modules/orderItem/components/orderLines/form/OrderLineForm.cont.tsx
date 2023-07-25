@@ -4,7 +4,7 @@ import { number, object, string } from 'yup'
 import { Heading } from '@/components/card/card.comp'
 import { FormModal } from '@/hooks/form/useFormModal'
 import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
-import type { OrderLineFormType } from '@/modules/orderItem/types'
+import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import CatalogueTableSelect from '@/modules/shared/catalogue/table/CatalogueTableSelect'
 import type { CatalogueItem } from '@/types/responses'
 

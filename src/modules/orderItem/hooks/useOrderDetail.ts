@@ -5,7 +5,7 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
 import { ROLE } from '@/types/constants/roles'
 
-import type { OrderDetailFormType } from '../types'
+import type { OrderDetailFormType } from '../types/form'
 
 const useOrderDetail = () => {
   const router = useRouter()
