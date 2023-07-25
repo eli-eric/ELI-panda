@@ -26,6 +26,9 @@ const messages = message.ordersPage
 
 export const OrderItemContainer = () => {
   const { disabledEdit, uid, orderDetail } = useOrderDetail()
+  const { submit, loading } = useOrderSubmit()
+  const { formatMessage: fm } = useIntl()
+  const withWarningModal = useWarningModal(fm({ id: messages.ordelineMissingModal.message }))
 
   const formMethods = useForm<OrderDetailFormType>({
     resolver: yupResolver(schema),
@@ -38,16 +41,17 @@ export const OrderItemContainer = () => {
     }
   })
 
-  const { submit, loading } = useOrderSubmit()
-  const { formatMessage: fm } = useIntl()
-
-  const withWarningModal = useWarningModal(fm({ id: messages.ordelineMissingModal.message }))
-  //submit the form
   const onSubmit = (data: OrderDetailFormType) => {
+    const orderLines = data.orderLines.map(orderLine => {
+      // extract uuid from orderLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { uuid, ...rest } = orderLine
+      return rest
+    })
     if (data.orderLines.length === 0 || !data.orderLines) {
-      withWarningModal(submit)({ ...data, orderDate: convertDate(data.orderDate) })
+      withWarningModal(submit)({ ...data, orderLines: orderLines, orderDate: convertDate(data.orderDate) })
     } else {
-      submit({ ...data, orderDate: convertDate(data.orderDate) })
+      submit({ ...data, orderLines: orderLines, orderDate: convertDate(data.orderDate) })
     }
   }
 
