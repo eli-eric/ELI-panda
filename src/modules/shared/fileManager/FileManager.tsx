@@ -6,7 +6,6 @@ import useSWR from 'swr'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
-
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import executeRequest from '@/helpers/executeRequest'
 import { uniFetcher } from '@/helpers/fetcher'

@@ -2,7 +2,7 @@ import type { CellContext } from '@tanstack/react-table'
 import { useState } from 'react'
 import { useIntl } from 'react-intl'
 
-import { DeleteButton } from '@/components/Buttons'
+import { TableButtonsWrapper, TableDeleteButton } from '@/components/Buttons'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
@@ -55,9 +55,11 @@ export const RelationNameCell = ({
   }
 
   return (
-    <div className="flex items-center my-1">
-      <DeleteButton onClick={() => setOpenDelete(true)} className="mr-4" />
+    <div className="flex relative items-center my-1">
       <span>{systemName}</span>
+      <TableButtonsWrapper>
+        <TableDeleteButton onClick={() => setOpenDelete(true)} />
+      </TableButtonsWrapper>
       <WarningModal
         title={intl.formatMessage({ id: messages.deleteModal.title })}
         message={intl.formatMessage({ id: messages.deleteModal.text })}
