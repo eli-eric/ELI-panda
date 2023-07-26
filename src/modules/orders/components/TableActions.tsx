@@ -27,7 +27,6 @@ export const TableActions = ({ order, isHovering }: Props) => {
   const { formatMessage } = useIntl()
   const { name } = order
   const canEdit = usePermission([ROLE.ORDERS_EDIT])
-
   const { order: orderEndpoint } = useEndpoint({ uid: order.uid })
 
   const { mutate, orderList } = useOrders()

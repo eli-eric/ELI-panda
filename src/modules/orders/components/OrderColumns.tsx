@@ -1,19 +1,16 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
-import type { ColumnDef } from '@tanstack/react-table'
-import Link from 'next/link'
+import type { CellContext, ColumnDef } from '@tanstack/react-table'
 import { Fragment, useMemo } from 'react'
 import { FormattedDate, useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
-import { PATH } from '@/types/constants/paths'
 
 import type { Order } from '../types'
 import { DeliveryStatusMapping } from '../types'
-import TableActions from './TableActions'
 
 const messages = message.ordersPage.ordersTable.header
 
-export const useOrderColumns = (isHoveringId?: number | undefined | string) => {
+export const useOrderColumns = ({ NameCell }: { NameCell: (props: CellContext<Order, any>) => JSX.Element }) => {
   const intl = useIntl()
 
   const columns = useMemo(
@@ -22,14 +19,7 @@ export const useOrderColumns = (isHoveringId?: number | undefined | string) => {
         header: intl.formatMessage({ id: messages.name }),
         accessorKey: 'name',
         id: 'name',
-        cell: ({ getValue, row: { original, id } }) => (
-          <div className="flex items-center pt-1 pb-1">
-            <Link href={PATH.ORDER + '/' + original.uid} className={'text-blue-500 cursor-pointer hover:underline'}>
-              <span>{getValue()}</span>
-            </Link>
-            <TableActions order={original} isHovering={id === isHoveringId} />
-          </div>
-        ),
+        cell: props => <NameCell {...props} />,
         size: 300,
         meta: { sticky: true, className: 'sm:pr-8' },
         enableHiding: false
@@ -110,7 +100,7 @@ export const useOrderColumns = (isHoveringId?: number | undefined | string) => {
         meta: { className: 'text-right' }
       }
     ],
-    [intl, isHoveringId]
+    [intl, NameCell]
   )
 
   return columns
