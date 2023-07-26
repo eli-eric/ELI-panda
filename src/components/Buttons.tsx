@@ -157,7 +157,7 @@ export const TableDownloadButton = ({ type = 'button', ...props }: ButtonProps) 
 )
 
 export const TableButtonsWrapper = ({ children }: { children: React.ReactNode }) => (
-  <div className="ml-auto flex items-center">{children}</div>
+  <div className="absolute flex items-center right-0 bg-inherit pr-1">{children}</div>
 )
 
 interface TableActionsButtonsProps {

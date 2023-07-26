@@ -10,7 +10,6 @@ import type { SystemDetail } from '../../types/responses'
 // eslint-disable-next-line
 import { SystemNameCell } from './cells/SystemNameCell'
 
-//TODO: fix typing
 export const useSystemsColumns = ({ tableId, hideButtons }: { tableId: string; hideButtons?: boolean }) => {
   const { setUid, pending } = useSubsystems(tableId)
   const canEdit = usePermission([ROLE.SYSTEM_EDIT])
@@ -21,8 +20,8 @@ export const useSystemsColumns = ({ tableId, hideButtons }: { tableId: string; h
         header: 'Name',
         accessorFn: row => row.name,
         id: 'name',
-        size: 400,
-        meta: { sticky: true },
+        size: 440,
+        meta: { sticky: true, className: 'sm:pr-[70px]' },
         enableHiding: false,
         cell: props => (
           <SystemNameCell {...props} setUid={setUid} canEdit={canEdit} hideButtons={hideButtons} tableId={tableId} />
@@ -53,7 +52,7 @@ export const useSystemsColumns = ({ tableId, hideButtons }: { tableId: string; h
           <Fragment>
             {getValue() && (
               <InformationCircleIcon
-                className="h-6 w-6 flex-shrink-0"
+                className="h-6 w-6 pr- flex-shrink-0"
                 data-tooltip-id="tooltip"
                 data-tooltip-content={getValue()}
               />

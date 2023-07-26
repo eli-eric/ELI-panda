@@ -27,8 +27,8 @@ const useOrderLinesColumns = () => {
             {!disabledEdit && <OrderLineActionButtons orderLine={original} />}
           </div>
         ),
-        meta: { sticky: true },
-        size: 200
+        meta: { sticky: true, className: 'sm:pr-12' },
+        size: 240
       },
       {
         header: formatMessage({ id: messages.catalogueNumber }),
@@ -73,7 +73,7 @@ const useOrderLinesColumns = () => {
         accessorKey: 'price',
         cell: ({ getValue, row: { original } }) => (
           <span className="whitespace-nowrap">
-            {getValue()} <span className="font-medium">{original.currency}</span>
+            {getValue()} <span className="font-medium ">{original.currency}</span>
           </span>
         ),
         footer: props => <PriceFooter rows={props.table.getRowModel().rows} />

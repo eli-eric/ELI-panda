@@ -31,7 +31,7 @@ export const useOrderColumns = (isHoveringId?: number | undefined | string) => {
           </div>
         ),
         size: 300,
-        meta: { sticky: true },
+        meta: { sticky: true, className: 'sm:pr-8' },
         enableHiding: false
       },
       {

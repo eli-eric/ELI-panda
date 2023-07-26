@@ -17,7 +17,7 @@ export const TableBody: FC<Props> = ({ getRowModel, loading, getRowProps }) => (
         {...getRowProps(row)}
         className={classNames(
           index % 2 === 0 ? undefined : 'bg-gray-100',
-          'hover:bg-gray-200 z-0',
+          'hover:bg-gray-200 text-gray-500 z-0',
           getRowProps(row)?.className
         )}
       >
@@ -25,7 +25,7 @@ export const TableBody: FC<Props> = ({ getRowModel, loading, getRowProps }) => (
           <td
             key={cell.id}
             className={classNames(
-              'text-xs sm:pl-6 sm:pr-6 text-gray-500 border-r border-b  border-gray-400',
+              'text-xs sm:pl-6 sm:pr-6 border-r border-b  border-gray-400',
               row.getIsSelected() ? 'text-white' : '',
               cell.column.columnDef.meta?.sticky
                 ? 'sticky sm:left-0 z-30 backdrop-blur-2xl backdrop-filter border-r'
