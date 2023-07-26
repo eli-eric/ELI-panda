@@ -6,6 +6,7 @@ import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
 import { TableActionsButtons } from '@/components/Buttons'
+import { LinkDecorator } from '@/components/decorators'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { createMessageValues } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
@@ -80,21 +81,10 @@ export const NameCell = ({
 
   return (
     <div className="flex items-center">
-      <Link href={{ pathname: '/catalogue/item/' + uid }} className="flex items-center text-blue-500 hover:underline">
-        {/* <Image
-          id={image.id}
-          priority={false}
-          className={classNames('h-10 w-10 flex-shrink-0 rounded-full bg-gray-300', loading ? 'animate-pulse' : '')}
-          onLoadingComplete={() => {
-            setLoading(false)
-          }}
-          alt={image.name}
-          src={image.url}
-          width={100}
-          height={100}
-          unoptimized
-        /> */}
-        <div className="pt-1 pb-1">{getValue()}</div>
+      <Link href={{ pathname: '/catalogue/item/' + uid }} className="flex items-center">
+        <LinkDecorator>
+          <span>{getValue()}</span>
+        </LinkDecorator>
       </Link>
       {toDelete && (isHoveringId === id || isMobile) && (
         <TableActionsButtons
