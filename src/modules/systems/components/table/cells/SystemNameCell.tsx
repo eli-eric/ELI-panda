@@ -76,11 +76,11 @@ export const SystemNameCell = ({
             className="flex items-center hover:text-gray-400 cursor-pointer"
           >
             {row.getIsExpanded() ? <ChevronDownIcon className="w-4 h-4" /> : <ChevronRightIcon className="w-4 h-4" />}
-            <span className="pl-1 my-1">{getValue()}</span>
+            <span className="pl-1">{getValue()}</span>
           </button>
         ) : (
           <div className="flex items-center">
-            <span className="pl-5 my-1">{getValue()}</span>
+            <span className="pl-5">{getValue()}</span>
           </div>
         )}
         {!hideButtons && (isHoveringId === id || isMobile) && (

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
+import { LinkDecorator } from '@/components/decorators'
 import { Heading } from '@/components/layout/Heading'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
@@ -15,10 +16,12 @@ export const CatalogueOrders = () => {
   const tableId = 'catalogueOrders'
 
   const NameCell = ({ getValue, row: { original } }: CellContext<Order, any>) => (
-    <div className="flex items-center pt-1 pb-1">
+    <div className="flex items-center">
       <Link href={PATH.ORDER + '/' + original.uid} legacyBehavior>
-        <a target={'_blank'} rel="noreferrer" className={'text-blue-500 cursor-pointer hover:underline'}>
-          <span>{getValue()}</span>
+        <a target={'_blank'} rel="noreferrer">
+          <LinkDecorator>
+            <span>{getValue()}</span>
+          </LinkDecorator>
         </a>
       </Link>
     </div>

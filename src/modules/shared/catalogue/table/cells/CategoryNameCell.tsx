@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
+import { LinkDecorator } from '@/components/decorators'
 import { PATH } from '@/types/constants/paths'
 import type { CatalogueItem } from '@/types/responses'
 
@@ -16,8 +17,8 @@ export const CategoryName = ({
   const link = PATH.CATALOGUE + '/' + categoryPath
   return (
     <Fragment>
-      <Link href={{ pathname: link, query: { search: router.query.search } }} className="text-blue-500 hover:underline">
-        {getValue()}
+      <Link href={{ pathname: link, query: { search: router.query.search } }}>
+        <LinkDecorator>{getValue()}</LinkDecorator>
       </Link>
     </Fragment>
   )

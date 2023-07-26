@@ -52,7 +52,7 @@ export const useSystemsColumns = ({ tableId, hideButtons }: { tableId: string; h
           <Fragment>
             {getValue() && (
               <InformationCircleIcon
-                className="h-6 w-6 pr- flex-shrink-0"
+                className="h-5 w-5 pr- flex-shrink-0"
                 data-tooltip-id="tooltip"
                 data-tooltip-content={getValue()}
               />
