@@ -11,13 +11,12 @@ export type Order = {
   supplier: string
   requestor: string
   procurementResponsible: string
-  orderStatus: string
+  orderStatus: CodebookType
   notes: string
   orderDate: string
   lastUpdateTime: string
   lastUpdateBy: string
   deliveryStatus: DELIVERY_STATUS
-  orderStatusObj: CodebookType
 }
 
 export type OrderListResponse = {
