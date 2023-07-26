@@ -27,7 +27,7 @@ export const SystemsContainer = () => {
             onMouseLeave: () => {
               setIsHoveringId(undefined)
             },
-            className: original?.physicalItem ? 'font-bold' : ''
+            className: original?.physicalItem && 'font-bold text-gray-700'
           })}
           settings={{
             enableSorting: true,

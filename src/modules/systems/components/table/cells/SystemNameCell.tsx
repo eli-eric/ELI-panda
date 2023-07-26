@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronRightIcon, PaperClipIcon } from '@heroicons/react/24/outline'
+import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import type { CellContext } from '@tanstack/react-table'
 import { useContext } from 'react'
 import { isMobile } from 'react-device-detect'
@@ -80,7 +80,6 @@ export const SystemNameCell = ({
           </button>
         ) : (
           <div className="flex items-center">
-            {original.physicalItem && <PaperClipIcon className="w-4 h-4" />}
             <span className="pl-5 my-1">{getValue()}</span>
           </div>
         )}

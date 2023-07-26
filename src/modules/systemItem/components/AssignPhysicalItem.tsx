@@ -63,7 +63,7 @@ export const AssignPhysicalItem = () => {
             className: classNames(
               selectedSystem?.uid === original.uid ? 'bg-primary-200 hover:bg-primary-200' : '',
               'cursor-pointer',
-              original?.physicalItem ? 'font-bold' : ''
+              original?.physicalItem && 'font-bold text-gray-700'
             )
           })}
           hideButtons
