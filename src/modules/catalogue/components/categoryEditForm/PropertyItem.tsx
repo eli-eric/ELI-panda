@@ -24,7 +24,12 @@ const ValueItem = ({ removeValue, index, name }) => {
     <div className="flex">
       <Input rounded="rounded-l-md" name={`${name}.value`} placeholder="Value" />
       <Button rounded="rounded-r-md" onClick={handleRemoveValue}>
-        <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+        <TrashIcon
+          className="h-4 w-4
+
+ text-red-700"
+          aria-hidden="true"
+        />
       </Button>
     </div>
   )
@@ -113,7 +118,12 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
             />
           )}
           <Button rounded="rounded-r-md" onClick={handleRemoveProp}>
-            <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+            <TrashIcon
+              className="h-4 w-4
+
+ text-red-700"
+              aria-hidden="true"
+            />
           </Button>
         </div>
         {type?.uid === PROPERTY_TYPE.LIST && (
@@ -124,7 +134,12 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
                 <ValueItem removeValue={remove} key={field.id} index={index} name={`${name}.listOfValues.${index}`} />
               ))}
               <Button onClick={handleAddValue}>
-                <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                <PlusIcon
+                  className="h-4 w-4
+
+"
+                  aria-hidden="true"
+                />
               </Button>
             </div>
           </div>

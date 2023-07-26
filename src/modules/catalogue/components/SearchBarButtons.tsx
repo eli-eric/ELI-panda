@@ -22,7 +22,12 @@ export const SearchBarButtons = () => {
           mutate()
         }}
       >
-        <ArrowPathIcon className="h-5 w-5" aria-hidden="true" />
+        <ArrowPathIcon
+          className="h-4 w-4
+
+"
+          aria-hidden="true"
+        />
       </Button>
       {canEdit && (
         <PlusButton

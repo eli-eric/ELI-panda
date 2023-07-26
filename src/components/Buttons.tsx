@@ -58,7 +58,7 @@ export const Button = ({
     disabled={loading ? true : disabled}
     type={type}
     className={classNames(
-      'relative text-sm font-medium shadow-sm z-10 inline-flex items-center border border-gray-300 focus:outline-none focus:ring-0 focus:ring-primary-500',
+      'relative text-xs font-medium shadow-sm z-10 inline-flex items-center border border-gray-300 focus:outline-none focus:ring-0 focus:ring-primary-500',
       rounded,
       className,
       loading ? 'bg-primary-700' : `bg-${!primary ? 'white' : 'primary-500'}`,
@@ -75,55 +75,55 @@ export const Button = ({
 
 export const DeleteButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
-    <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+    <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
   </Button>
 )
 
 export const EditButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
-    <PencilSquareIcon className="h-5 w-5" aria-hidden="true" />
+    <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
 export const DetailButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
-    <FolderOpenIcon className="h-5 w-5" aria-hidden="true" />
+    <FolderOpenIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
 export const DownloadButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
-    <ArrowDownTrayIcon className="h-5 w-5" aria-hidden="true" />
+    <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
 export const PlusButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
-    <PlusIcon className="h-5 w-5" aria-hidden="true" />
+    <PlusIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
 export const BackButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
-    <ArrowUturnLeftIcon className="h-5 w-5" aria-hidden="true" />
+    <ArrowUturnLeftIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
 export const SaveButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
-    <FolderPlusIcon className="h-5 w-5" aria-hidden="true" />
+    <FolderPlusIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
 export const CancelButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
-    <NoSymbolIcon className="h-5 w-5" aria-hidden="true" />
+    <NoSymbolIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
 export const RefreshButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
-    <ArrowPathIcon className="h-5 w-5" aria-hidden="true" />
+    <ArrowPathIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 

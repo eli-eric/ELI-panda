@@ -12,7 +12,7 @@ const BreadcrumpContainer = ({ testId, homeLink, children }: Props) => (
     data-testid={testId}
     id="breadcrump"
     className="
-      relative bg-white 
+      relative bg-white
       before:absolute before:top-0 before:bottom-0 before:left-0 before:w-6 before:bg-gradient-to-r from-white before:z-10
       after:absolute after:top-0 after:bottom-0 after:right-0 after:w-6 after:bg-gradient-to-l from-white after:z-10
     "
@@ -26,7 +26,12 @@ const BreadcrumpContainer = ({ testId, homeLink, children }: Props) => (
               href={{ pathname: homeLink }}
               className="text-gray-400 hover:text-gray-500"
             >
-              <HomeIcon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+              <HomeIcon
+                className="h-4 w-4
+
+ flex-shrink-0"
+                aria-hidden="true"
+              />
               <span className="sr-only">Home</span>
             </Link>
           </div>
