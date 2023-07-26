@@ -52,7 +52,11 @@ export const useOrderColumns = (isHoveringId?: number | undefined | string) => {
         id: 'contractNumber',
         meta: { className: 'text-right' }
       },
-      { header: intl.formatMessage({ id: messages.orderStatus }), accessorKey: 'orderStatus' },
+      {
+        header: intl.formatMessage({ id: messages.orderStatus }),
+        accessorFn: row => row.orderStatus.name,
+        id: 'orderStatus'
+      },
       {
         header: intl.formatMessage({ id: messages.deliveryStatus }),
         accessorKey: 'deliveryStatus',
