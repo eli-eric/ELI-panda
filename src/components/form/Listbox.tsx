@@ -96,12 +96,22 @@ const Listbox = ({
                   onClick={handleClear}
                   className="absolute mr-7 inset-y-0 right-0 flex items-center rounded-r-md px-1 focus:outline-none cursor-pointer text-gray-200  hover:text-red-500"
                 >
-                  <XMarkIcon className="h-5 w-5 " aria-hidden="true" />
+                  <XMarkIcon
+                    className="h-4 w-4
+
+ "
+                    aria-hidden="true"
+                  />
                 </div>
               )}
               <div className="absolute inset-y-0 right-0 flex items-center pr-2">
                 {unit && <span className="text-gray-400 sm:text-sm">{unit}</span>}
-                <ChevronDownIcon className="h-5 w-5 text-gray-500" aria-hidden="true" />
+                <ChevronDownIcon
+                  className="h-4 w-4
+
+ text-gray-500"
+                  aria-hidden="true"
+                />
               </div>
             </HUIListbox.Button>
           </div>
@@ -137,7 +147,12 @@ const Listbox = ({
                               active ? 'text-white' : 'text-primary-500'
                             )}
                           >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                            <CheckIcon
+                              className="h-4 w-4
+
+"
+                              aria-hidden="true"
+                            />
                           </span>
                         )}
                       </>

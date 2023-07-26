@@ -14,7 +14,12 @@ const FormImage = ({ image, imageStyle, onDelete }: FormImageProps) => (
   <div className="flex flex-col justify-center border-gray-300">
     <Image width={300} height={300} style={imageStyle} alt="" src={image} />
     <Button type="button" onClick={onDelete} className="w-full justify-center" rounded="rounded-b-md">
-      <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+      <TrashIcon
+        className="h-4 w-4
+
+ text-red-700"
+        aria-hidden="true"
+      />
     </Button>
   </div>
 )

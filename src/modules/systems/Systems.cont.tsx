@@ -20,13 +20,14 @@ export const SystemsContainer = () => {
           tableId={'systems'}
           pageSizeDefault={50}
           className={'relative overflow-x-auto'}
-          getRowProps={({ id }) => ({
+          getRowProps={({ id, original }) => ({
             onMouseEnter: () => {
               setIsHoveringId(id)
             },
             onMouseLeave: () => {
               setIsHoveringId(undefined)
-            }
+            },
+            className: original?.physicalItem && 'font-bold text-gray-700'
           })}
           settings={{
             enableSorting: true,

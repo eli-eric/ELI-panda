@@ -21,6 +21,7 @@ import DefaultItemForm from './components/form/DefaultItemForm'
 import Groups from './components/form/Groups'
 import { schema } from './components/form/ItemForm.schema'
 import ItemHeader from './components/header/Header.comp'
+import { CatalogueOrders } from './components/orders/CatalogueOrders'
 import useItem from './hooks/useItem'
 import useItemSubmit from './hooks/useItemSubmit'
 import type { CatalogueItem } from './types/responses'
@@ -71,6 +72,7 @@ const CatalogueItemContainer = () => {
             <MemoizedGroups />
           </Suspense>
         </ErrorBoundary>
+        <CatalogueOrders />
         {queryUID && (
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense>

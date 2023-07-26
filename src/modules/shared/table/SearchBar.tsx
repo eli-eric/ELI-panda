@@ -82,7 +82,12 @@ export const SearchBar = ({ useQuery = true, left, right, tableId, onChange }: P
             </label>
             <div className="relative w-full text-gray-400 focus-within:text-gray-600">
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center">
-                <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
+                <MagnifyingGlassIcon
+                  className="h-4 w-4
+
+"
+                  aria-hidden="true"
+                />
               </div>
               <input
                 {...register('search')}

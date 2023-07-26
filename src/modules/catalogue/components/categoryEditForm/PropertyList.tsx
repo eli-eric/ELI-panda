@@ -50,7 +50,12 @@ const PropertyList = ({ name }: Props) => {
         ))}
       </ul>
       <Button onClick={handleAddProp}>
-        <PlusIcon className="h-5 w-5" aria-hidden="true" />
+        <PlusIcon
+          className="h-4 w-4
+
+"
+          aria-hidden="true"
+        />
       </Button>
     </div>
   )

@@ -86,17 +86,17 @@ const Card = ({ name, link, Icon, legacyBehavior }: CardProps) => (
 )
 
 function DashboardCard() {
+  const hasSystemsRole = usePermission([ROLE.SYSTEMS_VIEW])
   const hasCatalogueRole = usePermission([ROLE.CATALOGUE_VIEW])
   const hasOrdersRole = usePermission([ROLE.ORDERS_VIEW])
-  const hasSystemsRole = usePermission([ROLE.SYSTEMS_VIEW])
   return (
     <ul
       role="list"
       className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2 py-2 sm:px-4 sm:py-4 my-5 mx-2"
     >
+      {hasSystemsRole && <Card name="Systems" link={PATH.SYSTEMS} Icon={Links.systems.Icon} />}
       {hasCatalogueRole && <Card name="Catalogue" link={PATH.CATALOGUE} Icon={Links.catalogue.Icon} />}
       {hasOrdersRole && <Card name="Orders" link={PATH.ORDERS} Icon={Links.orders.Icon} />}
-      {hasSystemsRole && <Card name="Systems" link={PATH.SYSTEMS} Icon={Links.systems.Icon} />}
       <Card name="Support/Feedback" link={SUPPORT} Icon={Links.support.Icon} legacyBehavior />
     </ul>
   )

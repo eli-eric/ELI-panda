@@ -52,7 +52,12 @@ export const Notification = ({ t }: Props) => {
                     }}
                   >
                     <span className="sr-only">Close</span>
-                    <XMarkIcon className="h-5 w-5" aria-hidden="true" />
+                    <XMarkIcon
+                      className="h-4 w-4
+
+"
+                      aria-hidden="true"
+                    />
                   </button>
                 </div>
               </div>

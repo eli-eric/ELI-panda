@@ -7,6 +7,7 @@ import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { Pagination } from '../shared/table/Pagination'
 import { PandaTable } from '../shared/table/pandaTable/PandaTable'
 import { SearchBar } from '../shared/table/SearchBar'
+import { NameCell } from './components/cells/NameCell'
 import HeaderButtons from './components/HeaderButtons'
 import { useOrderColumns } from './components/OrderColumns'
 import { OrdersFilter } from './components/OrdersFilter'
@@ -16,8 +17,8 @@ import { getColorClassStatus } from './utils/getColorClassStatus'
 const OrdersContainer = () => {
   const { orderList, loading, error } = useOrders()
   const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
-
-  const columns = useOrderColumns(isHoveringId)
+  const Name = props => <NameCell {...props} isHoveringId={isHoveringId} />
+  const columns = useOrderColumns({ NameCell: Name })
 
   return (
     <TableLayoutContainer>
@@ -31,8 +32,8 @@ const OrdersContainer = () => {
               enableColumnReordering: true,
               enableColumnHiding: true
             },
-            getRowProps: ({ original: { orderStatusObj, deliveryStatus }, id }) => ({
-              className: classNames('bg-white', orderStatusObj && getColorClassStatus(orderStatusObj, deliveryStatus)),
+            getRowProps: ({ original: { orderStatus, deliveryStatus }, id }) => ({
+              className: classNames('bg-white', orderStatus && getColorClassStatus(orderStatus, deliveryStatus)),
               onMouseEnter: () => {
                 setIsHoveringId(id)
               },

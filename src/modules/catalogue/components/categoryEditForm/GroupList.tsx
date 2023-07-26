@@ -33,7 +33,12 @@ const Group = ({ name, remove, index, moveDown, moveUp, lenght }: groupProps) =>
             <MoveButtons moveDown={moveDown} moveUp={moveUp} lenght={lenght} index={index} />
             <Input name={`${name}.name`} placeholder="Group Name" />
             <Button rounded="rounded-r-md" onClick={handleRemoveGroup}>
-              <TrashIcon className="h-5 w-5 text-red-700" aria-hidden="true" />
+              <TrashIcon
+                className="h-4 w-4
+
+ text-red-700"
+                aria-hidden="true"
+              />
             </Button>
           </span>
         </div>
@@ -92,7 +97,12 @@ const GroupList = () => {
         </div>
         <div className="relative flex justify-center">
           <Button onClick={handleAddGroup}>
-            <PlusIcon className="h-5 w-5" aria-hidden="true" />
+            <PlusIcon
+              className="h-4 w-4
+
+"
+              aria-hidden="true"
+            />
           </Button>
         </div>
       </div>

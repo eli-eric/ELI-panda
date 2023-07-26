@@ -36,7 +36,8 @@ export const SystemNameCell = ({
   hideButtons = false,
   tableId
 }: SystemNameCellProps) => {
-  const { system } = useEndpoint({ uid: row.original.uid })
+  const { original, id } = row
+  const { system } = useEndpoint({ uid: original.uid })
   const { isHoveringId } = useContext(SystemsContext)
   const { mutate } = useSystems(tableId)
   const { formatMessage: fm } = useIntl()
@@ -45,17 +46,15 @@ export const SystemNameCell = ({
     endpoint: system,
     method: 'delete',
     onSuccess: () => {
-      toast.success(`System ${row.original.name} deleted`)
-      mutate(prev => prev && filterSubsystem(row.original.uid, prev), { revalidate: false })
+      toast.success(`System ${original.name} deleted`)
+      mutate(prev => prev && filterSubsystem(original.uid, prev), { revalidate: false })
     },
     onError: () => {
-      toast.error(`Error deleting system ${row.original.name}`)
+      toast.error(`Error deleting system ${original.name}`)
     }
   })
 
-  const withWarningModal = useWarningModal(
-    fm({ id: messages.message }, createMessageValues({ name: row.original.name }))
-  )
+  const withWarningModal = useWarningModal(fm({ id: messages.message }, createMessageValues({ name: original.name })))
 
   return (
     <div
@@ -64,32 +63,33 @@ export const SystemNameCell = ({
       }}
     >
       <div className="flex items-center">
-        {row.original.hasSubsystems ? (
+        {original.hasSubsystems ? (
           <button
             onClick={() => {
               if (!row.getIsExpanded()) {
-                setUid(row.original.uid)
+                setUid(original.uid)
               } else {
                 setUid(null)
               }
               row.toggleExpanded()
             }}
-            style={{ cursor: 'pointer' }}
-            className="flex items-center hover:text-gray-400"
+            className="flex items-center hover:text-gray-400 cursor-pointer"
           >
             {row.getIsExpanded() ? <ChevronDownIcon className="w-4 h-4" /> : <ChevronRightIcon className="w-4 h-4" />}
             <span className="pl-1 my-1">{getValue()}</span>
           </button>
         ) : (
-          <span className="pl-5 my-1">{getValue()}</span>
+          <div className="flex items-center">
+            <span className="pl-5 my-1">{getValue()}</span>
+          </div>
         )}
-        {!hideButtons && (isHoveringId === row.id || isMobile) && (
+        {!hideButtons && (isHoveringId === id || isMobile) && (
           <TableActionsButtons
             onDeleteClick={() => {
               withWarningModal(submit)()
             }}
-            addLink={{ pathname: PATH.SYSTEM, query: { parentUid: row.original.uid } }}
-            detailLink={PATH.SYSTEM + '/' + row.original.uid}
+            addLink={{ pathname: PATH.SYSTEM, query: { parentUid: original.uid } }}
+            detailLink={PATH.SYSTEM + '/' + original.uid}
             canEdit={canEdit}
           />
         )}

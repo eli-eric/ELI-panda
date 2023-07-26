@@ -26,7 +26,14 @@ const RelationsSection = ({ systemName }: { systemName?: string }) => {
           setOpenAddRelation(true)
         }}
       />
-      {relations && systemName && <MemoizedTable data={relations} columns={columns} tableId={'relations'} />}
+      {relations && systemName && (
+        <MemoizedTable
+          data={relations}
+          columns={columns}
+          tableId={'relations'}
+          className={'relative overflow-x-auto'}
+        />
+      )}
       <ModalComponent open={openAddRelation} setOpen={setOpenAddRelation} buttons={{ noButtons: true }}>
         <AddRelationForm setopen={setOpenAddRelation} systemName={systemName} />
       </ModalComponent>
