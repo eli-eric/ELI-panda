@@ -56,13 +56,14 @@ export const AssignPhysicalItem = () => {
           settings={{ enableQueryURL: false, enableColumnHiding: true }}
           pageSizeDefault={10}
           className={'overflow-y-auto relative h-[423px]'}
-          getRowProps={row => ({
+          getRowProps={({ original }) => ({
             onClick: () => {
-              setSelectedSystem(row.original)
+              setSelectedSystem(original)
             },
             className: classNames(
-              selectedSystem?.uid === row.original.uid ? 'bg-primary-200 hover:bg-primary-200' : '',
-              'cursor-pointer'
+              selectedSystem?.uid === original.uid ? 'bg-primary-200 hover:bg-primary-200' : '',
+              'cursor-pointer',
+              original?.physicalItem ? 'font-bold' : ''
             )
           })}
           hideButtons
