@@ -54,7 +54,7 @@ export const useOrderColumns = (isHoveringId?: number | undefined | string) => {
       },
       {
         header: intl.formatMessage({ id: messages.orderStatus }),
-        accessorFn: row => row.orderStatus.name,
+        accessorFn: row => row?.orderStatus?.name,
         id: 'orderStatus'
       },
       {
