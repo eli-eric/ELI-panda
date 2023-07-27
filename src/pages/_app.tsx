@@ -6,7 +6,6 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { Toaster } from 'react-hot-toast'
 import { IntlProvider } from 'react-intl'
-import { Tooltip } from 'react-tooltip'
 import { messages } from 'src/i18n/src'
 import { SWRConfig } from 'swr'
 
@@ -50,13 +49,6 @@ const GlobalProvider = ({ children }: Props) => {
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => (
   <SessionProvider session={session} refetchOnWindowFocus={false}>
     <GlobalProvider>
-      <Tooltip
-        id="tooltip"
-        style={{
-          maxWidth: 200,
-          zIndex: 9999
-        }}
-      />
       <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 3000 }}>
         {t => <Notification t={t} />}
       </Toaster>

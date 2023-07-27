@@ -5,6 +5,7 @@
 @import 'eli-busy.css';
 @import 'loader.css';
 @import 'react-datepicker/dist/react-datepicker.css';
+@import 'tippy.js/dist/tippy.css';
 
 @layer base {
   input[type='number']::-webkit-outer-spin-button,

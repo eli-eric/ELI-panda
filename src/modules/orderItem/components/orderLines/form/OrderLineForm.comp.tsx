@@ -1,3 +1,4 @@
+import Tippy from '@tippyjs/react'
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
@@ -108,13 +109,11 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
       <Col md={orderLine?.uid ? 6 : 12} lg={orderLine?.uid ? 6 : 12}>
         {orderLine?.uid ? (
           <div className="flex flex-row w-full">
-            <div
-              className="self-end mr-2 mb-1 flex-none"
-              data-tooltip-id="tooltip"
-              data-tooltip-content="Show only technological units"
-            >
-              <TechUnitToogle onChange={techUnitToogle} enabled={techUnitEnabled} />
-            </div>
+            <Tippy content="Show only technological units">
+              <div className="self-end mr-2 mb-1 flex-none">
+                <TechUnitToogle onChange={techUnitToogle} enabled={techUnitEnabled} />
+              </div>
+            </Tippy>
             <div className="flex-1 w-full">
               <Combobox {...formFields.system} position="top" limit={50} filter={techUnitFilter} />
             </div>

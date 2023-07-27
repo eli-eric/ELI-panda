@@ -1,5 +1,6 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
+import Tippy from '@tippyjs/react'
 import { Fragment, useMemo } from 'react'
 
 import usePermission from '@/hooks/usePermission'
@@ -51,11 +52,9 @@ export const useSystemsColumns = ({ tableId, hideButtons }: { tableId: string; h
         cell: ({ getValue }) => (
           <Fragment>
             {getValue() && (
-              <InformationCircleIcon
-                className="h-5 w-5 pr- flex-shrink-0"
-                data-tooltip-id="tooltip"
-                data-tooltip-content={getValue()}
-              />
+              <Tippy content={getValue()}>
+                <InformationCircleIcon className="h-5 w-5 pr- flex-shrink-0" />
+              </Tippy>
             )}
           </Fragment>
         )
@@ -124,11 +123,9 @@ export const useSystemsColumns = ({ tableId, hideButtons }: { tableId: string; h
         cell: ({ getValue }) => (
           <Fragment>
             {getValue() && (
-              <InformationCircleIcon
-                className="h-6 w-6 flex-shrink-0"
-                data-tooltip-id="tooltip"
-                data-tooltip-content={getValue()}
-              />
+              <Tippy content={getValue()}>
+                <InformationCircleIcon className="h-6 w-6 flex-shrink-0" />
+              </Tippy>
             )}
           </Fragment>
         )
@@ -221,11 +218,9 @@ export const useSystemsColumns = ({ tableId, hideButtons }: { tableId: string; h
         cell: ({ getValue }) => (
           <Fragment>
             {getValue() && (
-              <InformationCircleIcon
-                className="h-6 w-6 flex-shrink-0"
-                data-tooltip-id="tooltip"
-                data-tooltip-content={getValue()}
-              />
+              <Tippy content={getValue()}>
+                <InformationCircleIcon className="h-6 w-6 flex-shrink-0" />
+              </Tippy>
             )}
           </Fragment>
         )
@@ -254,11 +249,9 @@ export const useSystemsColumns = ({ tableId, hideButtons }: { tableId: string; h
         cell: ({ getValue }) => (
           <Fragment>
             {getValue() && (
-              <InformationCircleIcon
-                className="h-6 w-6 flex-shrink-0"
-                data-tooltip-id="tooltip"
-                data-tooltip-content={getValue()}
-              />
+              <Tippy content={getValue()}>
+                <InformationCircleIcon className="h-6 w-6 flex-shrink-0" />
+              </Tippy>
             )}
           </Fragment>
         )
