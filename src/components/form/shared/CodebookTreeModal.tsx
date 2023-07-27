@@ -56,28 +56,32 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
             style={{
               paddingLeft: `${row.depth * 2}rem`
             }}
-            className={classNames('cursor-pointer my-1 flex items-center')}
+            className={classNames('my-1 flex items-center')}
             onClick={() => {
               row.getToggleExpandedHandler()()
             }}
           >
-            <div className={classNames(!row.original?.children && 'font-bold', 'flex items-center')}>
-              {row.getCanExpand() && (
-                <button
-                  {...{
-                    style: { cursor: 'pointer' }
-                  }}
-                >
+            {row.getCanExpand() ? (
+              <div
+                className={classNames(
+                  !row.original?.children && 'font-bold',
+                  'flex items-center',
+                  'cursot-pointer hover:text-gray-400'
+                )}
+              >
+                <button>
                   {row.getIsExpanded() ? (
                     <ChevronDownIcon className="w-4 h-4" />
                   ) : (
                     <ChevronRightIcon className="w-4 h-4" />
                   )}
                 </button>
-              )}
-              {'  '}
+
+                <span className="ml-2">{getValue()}</span>
+              </div>
+            ) : (
               <span className="ml-2">{getValue()}</span>
-            </div>
+            )}
           </div>
         )
       }
@@ -107,25 +111,27 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
 
   return (
     <ModalComponent open={open} setOpen={setOpen} buttons={modalButtons}>
-      <PandaTable
-        tableId="codebook"
-        columns={columns}
-        data={response}
-        getSubRows={row => row.children}
-        settings={{
-          enableRowSelection: true
-        }}
-        className={'relative overflow-x-auto'}
-        getRowProps={row => ({
-          onClick: () => {
-            !row.original?.children && setItem({ uid: row.original.uid, name: row.original.name })
-          },
-          className: classNames(
-            item?.uid === row.original.uid ? 'bg-primary-200 hover:bg-primary-200' : '',
-            'cursor-pointer'
-          )
-        })}
-      />
+      <div className="max-h-[300px]">
+        <PandaTable
+          tableId="codebook"
+          columns={columns}
+          data={response}
+          getSubRows={row => row.children}
+          settings={{
+            enableRowSelection: true
+          }}
+          className={'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'}
+          getRowProps={row => ({
+            onClick: () => {
+              !row.original?.children && setItem({ uid: row.original.uid, name: row.original.name })
+            },
+            className: classNames(
+              item?.uid === row.original.uid ? 'bg-primary-200 hover:bg-primary-200' : '',
+              'cursor-pointer'
+            )
+          })}
+        />
+      </div>
     </ModalComponent>
   )
 }
