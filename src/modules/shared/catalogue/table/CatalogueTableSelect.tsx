@@ -54,21 +54,17 @@ const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
           setItem(undefined)
         }}
       />
-      <div className="flex flex-col min-h-[324px] pb-3 justify-between">
-        <div className="flex border-b min-h-[312px] flex-col justify-between">
-          <div className="h-full overflow-y-hidden border-t border-gray-300">
-            <fieldset>
-              <CatalogueTable
-                tableId={tableId}
-                additionalColumn={selectColumn}
-                enableQueryURL={false}
-                loading={loading}
-                categoryList={categoryList}
-                catalogueItems={catalogueItems}
-              />
-            </fieldset>
-          </div>
-        </div>
+      <div className="h-full overflow-y-hidden min-h-[245px] border-t border-gray-300">
+        <fieldset>
+          <CatalogueTable
+            tableId={tableId}
+            additionalColumn={selectColumn}
+            enableQueryURL={false}
+            loading={loading}
+            categoryList={categoryList}
+            catalogueItems={catalogueItems}
+          />
+        </fieldset>
       </div>
       <Pagination
         tableId={tableId}
