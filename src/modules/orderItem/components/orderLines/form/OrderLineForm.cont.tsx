@@ -56,7 +56,7 @@ export const OrderLineForm = ({ orderLine, open, setOpen }: OrderLienFormProps) 
       }
       renderOutsideForm={
         <div>
-          {orderLine?.id ? (
+          {orderLine?.uuid ? (
             <Heading text={orderLine.name + ' - ' + orderLine.catalogueNumber} />
           ) : (
             <CatalogueTableSelect setItem={setCatalogueItem} selectedItem={catalogueItem} />

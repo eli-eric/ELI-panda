@@ -85,15 +85,15 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
       <Col md={6} lg={6}>
         <Input {...formFields.catalogueNumber} />
       </Col>
-      <Col lg={!orderLine?.id || orderLine?.uid ? 4 : 6} md={6}>
+      <Col lg={!orderLine?.uuid || orderLine?.uid ? 4 : 6} md={6}>
         <InputAmount {...formFields.price}>
           <InputCurrency {...formFields.currency} />
         </InputAmount>
       </Col>
-      <Col lg={!orderLine?.id || orderLine?.uid ? 4 : 6} md={6}>
+      <Col lg={!orderLine?.uuid || orderLine?.uid ? 4 : 6} md={6}>
         <Listbox {...formFields.itemUsage} position="top" />
       </Col>
-      {!orderLine?.id && (
+      {!orderLine?.uuid && (
         <Col md={6} lg={4}>
           <Input {...formFields.quantity} />
         </Col>
