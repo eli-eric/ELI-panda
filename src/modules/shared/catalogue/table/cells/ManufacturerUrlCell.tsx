@@ -9,9 +9,9 @@ export const ManufacturerUrl = ({ getValue }: CellContext<CatalogueItem, any>) =
   <Fragment>
     {getValue() && (
       <Link href={getValue()} passHref legacyBehavior>
-        <LinkDecorator>
-          <a target="_blank">link</a>
-        </LinkDecorator>
+        <a target="_blank">
+          <LinkDecorator>{getValue().substring(0, 25) + '...'}</LinkDecorator>
+        </a>
       </Link>
     )}
   </Fragment>

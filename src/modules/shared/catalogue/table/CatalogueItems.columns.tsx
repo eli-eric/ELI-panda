@@ -41,8 +41,13 @@ export const useCatalogueItemsColumns = (
         accessorFn: row => row.description,
         id: 'description',
         cell: DescriptionCell,
-        maxSize: 80,
-        size: 80
+        maxSize: 100,
+        size: 100
+      },
+      {
+        header: intl.formatMessage({ id: messages.partNumber }),
+        accessorFn: row => row.catalogueNumber,
+        id: 'partNumber'
       },
       {
         header: intl.formatMessage({ id: messages.categoryName }),
@@ -53,8 +58,7 @@ export const useCatalogueItemsColumns = (
       {
         header: intl.formatMessage({ id: messages.supplier }),
         accessorFn: row => row.supplier?.name,
-        id: 'supplier',
-        cell: ({ getValue }: CellContext<CatalogueItem, any>) => <span>{getValue()}</span>
+        id: 'supplier'
       },
       {
         header: intl.formatMessage({ id: messages.supplierUrl }),
@@ -72,7 +76,7 @@ export const useCatalogueItemsColumns = (
     ) {
       const detailsColumns: ColumnDef<CatalogueItem, any>[] = catalogueItems?.data[0]?.details?.map(detail => ({
         header: detail.property.name,
-        id: detail.property.name,
+        id: detail.property.name.replace(/\s/g, ''),
         accessorFn: row =>
           row.details?.find(originDetail => originDetail?.property.name === detail?.property.name)?.value,
         cell: ({ row: { original } }: CellContext<CatalogueItem, any>) => (

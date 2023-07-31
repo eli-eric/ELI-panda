@@ -4,13 +4,15 @@ import { toast } from 'react-hot-toast'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
+import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { PATH } from '@/types/constants/paths'
 
 const useItemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>) => {
-  const { query, replace, back } = useRouter()
+  const { query, back, push } = useRouter()
   const uid = query.uid as string | undefined
   const { catalogueItem } = useEndpoint({ uid: uid })
+  const { mutate } = useCatalogueItems()
 
   const { response, submit, loading } = useSubmit<string>({
     endpoint: catalogueItem,
@@ -22,9 +24,10 @@ const useItemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>)
         if (uid) {
           back()
         } else {
-          replace(PATH.CATALOGUE_ITEM + '/' + responseUid)
+          push(PATH.CATALOGUE_ITEM + '/' + responseUid)
         }
       })
+      mutate(undefined, true)
     },
     onError: () => {
       toast.error('Error saving item')

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
@@ -21,7 +21,7 @@ const CatalogueContainer = () => {
   //TODO: refactor without hooks pagination and table
 
   return (
-    <TableLayoutContainer deps={[open, catalogueItems, categoryList]}>
+    <Fragment>
       <SearchBar left={<SearchBarButtons />} tableId={tableId} />
       <CatalogueBreadcrumbs />
       <CategoryListContainer
@@ -29,17 +29,19 @@ const CatalogueContainer = () => {
           setOpen(open)
         }}
       />
-      <CatalogueTable tableId={tableId} catalogueItems={catalogueItems} loading={loading} />
-      <Pagination
-        tableId={tableId}
-        settings={{
-          enableQueryURL: true,
-          total: catalogueItems?.totalCount,
-          pageSizeDefault: 50
-        }}
-      />
-      {error && <ErrorPage />}
-    </TableLayoutContainer>
+      <TableLayoutContainer deps={[open, catalogueItems, categoryList]} className={'border-t border-gray-300'}>
+        <CatalogueTable tableId={tableId} catalogueItems={catalogueItems} loading={loading} />
+        <Pagination
+          tableId={tableId}
+          settings={{
+            enableQueryURL: true,
+            total: catalogueItems?.totalCount,
+            pageSizeDefault: 50
+          }}
+        />
+        {error && <ErrorPage />}
+      </TableLayoutContainer>
+    </Fragment>
   )
 }
 

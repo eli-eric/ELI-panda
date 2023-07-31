@@ -37,16 +37,7 @@ export default function useQueryManager(tableId: string) {
 
   useEffect(() => {
     if (router.isReady) {
-      const newQuery = { pagination, ...filter, ...custom }
-      if (router.query.search || search) {
-        newQuery.search = (router.query.search as string) || search
-        if (sorting) {
-          newQuery.sorting = sorting
-        }
-      } else if (sorting) {
-        newQuery.sorting = sorting
-      }
-
+      const newQuery = { pagination, search, sorting, ...filter, ...custom }
       setQuery(newQuery)
     }
   }, [router.query.search, sorting, pagination, filter, router.isReady, search, custom])

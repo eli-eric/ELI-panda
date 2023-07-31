@@ -32,8 +32,9 @@ export const CatalogueTable = ({
   useEffect(() => {
     if (catalogueTableRef.current) {
       catalogueTableRef.current.setColumnVisibility({ categoryName: categoryList?.length !== 0 })
+      catalogueTableRef.current.setColumnOrder(catalogueTableRef.current.getAllLeafColumns().map(column => column.id))
     }
-  }, [categoryList])
+  }, [categoryList, columns])
 
   useEffect(() => {
     if (catalogueTableRef.current) {
@@ -59,7 +60,11 @@ export const CatalogueTable = ({
         }
       })}
       className={'relative overflow-x-auto'}
-      settings={{ enableQueryURL: enableQueryURL }}
+      settings={{
+        enableQueryURL,
+        enableColumnHiding: tableId === 'catalogueItems',
+        enableColumnReordering: tableId === 'catalogueItems'
+      }}
     />
   )
 }
