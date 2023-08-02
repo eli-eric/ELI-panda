@@ -1,15 +1,12 @@
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
-import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
-import { ROLE } from '@/types/constants/roles'
 
 // messages
 const { form } = message.cataloguePage.itemDetail
 
 const useCatalogueFormFields = () => {
-  const disabled = !usePermission([ROLE.CATALOGUE_EDIT])
-
+  const disabled = true
   return useMakeFormFields({
     name: {
       name: 'name',

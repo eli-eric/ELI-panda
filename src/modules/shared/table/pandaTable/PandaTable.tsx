@@ -29,6 +29,10 @@ export type PandaTableSettings = {
   manualSorting?: boolean
 }
 
+export interface GetRowPropsReturnType extends React.HTMLAttributes<HTMLTableRowElement> {
+  dropSettings?: { accept: string; onDropHandler: (item: any, original: any) => void }
+}
+
 interface Props<T extends object> {
   data?: T[]
   tableId: string
@@ -36,7 +40,8 @@ interface Props<T extends object> {
   loading?: boolean
   className?: string
   getSubRows?: (original: T, index: number) => T[]
-  getRowProps?: (row: Row<T>) => React.HTMLAttributes<HTMLTableRowElement>
+  getRowProps?: (row: Row<any>) => GetRowPropsReturnType
+
   settings?: PandaTableSettings
 }
 

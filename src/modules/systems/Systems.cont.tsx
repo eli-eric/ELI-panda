@@ -1,3 +1,5 @@
+import classNames from 'classnames'
+import type { FC } from 'react'
 import { createContext, useState } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
@@ -10,16 +12,17 @@ interface SystemsContextType {
 
 export const SystemsContext = createContext<SystemsContextType>({ isHoveringId: undefined })
 
-export const SystemsContainer = () => {
+export const SystemsContainer: FC = () => {
   const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
 
   return (
     <SystemsContext.Provider value={{ isHoveringId: isHoveringId }}>
-      <TableLayoutContainer>
+      <TableLayoutContainer className="border">
         <SystemsTable
+          hideButtons={false}
           tableId={'systems'}
           pageSizeDefault={50}
-          className={'relative overflow-x-auto'}
+          className={'relative overflow-scroll'}
           getRowProps={({ id, original }) => ({
             onMouseEnter: () => {
               setIsHoveringId(id)
@@ -27,7 +30,7 @@ export const SystemsContainer = () => {
             onMouseLeave: () => {
               setIsHoveringId(undefined)
             },
-            className: original?.physicalItem && 'font-bold text-gray-700'
+            className: classNames(original?.physicalItem && 'font-bold text-gray-700')
           })}
           settings={{
             enableSorting: true,

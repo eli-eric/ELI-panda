@@ -25,14 +25,7 @@ const NavigationListContainer = ({ open }: Props) => {
           <Fragment>
             {NAV_BAR_CONFIG.map((navBarSetting, index) => {
               if (userRoles?.includes(navBarSetting.role)) {
-                return (
-                  <NavBarLink
-                    key={index}
-                    name={intl.formatMessage({ id: navBarSetting.name })}
-                    links={navBarSetting.links}
-                    open={open}
-                  />
-                )
+                return <NavBarLink key={index} name={navBarSetting.name} links={navBarSetting.links} open={open} />
               }
             })}
             {open && (

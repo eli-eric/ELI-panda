@@ -1,7 +1,9 @@
-import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import { ArrowsRightLeftIcon, ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import type { CellContext } from '@tanstack/react-table'
+import classNames from 'classnames'
 import { useContext } from 'react'
 import { isMobile } from 'react-device-detect'
+import { useDrag } from 'react-dnd'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
@@ -26,6 +28,8 @@ interface SystemNameCellProps extends CellContext<SystemDetail, any> {
   hideButtons?: boolean
   tableId: string
   isHoveringId?: number | undefined | string
+
+  enableDragAndDrop?: boolean
 }
 
 export const SystemNameCell = ({
@@ -34,7 +38,8 @@ export const SystemNameCell = ({
   setUid,
   canEdit = true,
   hideButtons = false,
-  tableId
+  tableId,
+  enableDragAndDrop = false
 }: SystemNameCellProps) => {
   const { original, id } = row
   const { system } = useEndpoint({ uid: original.uid })
@@ -56,13 +61,27 @@ export const SystemNameCell = ({
 
   const withWarningModal = useWarningModal(fm({ id: messages.message }, createMessageValues({ name: original.name })))
 
+  const [{ isDragging }, dragRef, previewRef] = useDrag({
+    collect: monitor => ({
+      isDragging: monitor.isDragging()
+    }),
+    item: () => original,
+    type: 'system'
+  })
+
   return (
     <div
       style={{
         paddingLeft: `${row.depth * 2}rem`
       }}
+      className={classNames(isDragging && 'text-primary-500')}
     >
-      <div className="flex items-center">
+      <div className="flex items-center" ref={previewRef}>
+        {enableDragAndDrop && (
+          <button ref={dragRef} className="mr-2">
+            <ArrowsRightLeftIcon className="w-5 h-5" />
+          </button>
+        )}
         {original.hasSubsystems ? (
           <button
             onClick={() => {
