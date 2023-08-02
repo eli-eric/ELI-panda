@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { useState } from 'react'
+import { memo, useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
@@ -14,6 +14,8 @@ import { OrdersFilter } from './components/OrdersFilter'
 import { useOrders } from './hooks/useOrders'
 import { getColorClassStatus } from './utils/getColorClassStatus'
 
+const MemoizedTable = memo(PandaTable)
+
 const OrdersContainer = () => {
   const { orderList, loading, error } = useOrders()
   const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
@@ -24,7 +26,7 @@ const OrdersContainer = () => {
     <TableLayoutContainer>
       <SearchBar tableId="orders" left={<HeaderButtons />} right={<OrdersFilter />} />
       {!error && (
-        <PandaTable
+        <MemoizedTable
           {...{
             settings: {
               enableQueryURL: true,
@@ -33,7 +35,7 @@ const OrdersContainer = () => {
               enableColumnHiding: true
             },
             getRowProps: ({ original: { orderStatus, deliveryStatus }, id }) => ({
-              className: classNames('bg-white', orderStatus && getColorClassStatus(orderStatus, deliveryStatus)),
+              className: classNames(getColorClassStatus(orderStatus, deliveryStatus) || 'bg-white'),
               onMouseEnter: () => {
                 setIsHoveringId(id)
               },

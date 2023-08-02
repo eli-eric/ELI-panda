@@ -18,6 +18,7 @@ interface Props {
 export const TableRow = ({ getRowProps, loading, row, index }: Props) => {
   const [isHoveringDrop, setIsHoveringDrop] = useState(false)
   const { dropSettings, className, ...rest } = getRowProps(row)
+  console.log('getRowProps', className)
 
   const [, dropRef] = useDrop<SystemDetail>({
     accept: dropSettings?.accept || 'table-row',
