@@ -1,8 +1,8 @@
-import classNames from 'classnames'
 import { memo, useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
+import { classNames } from '@/helpers'
 
 import { Pagination } from '../shared/table/Pagination'
 import { PandaTable } from '../shared/table/pandaTable/PandaTable'
@@ -35,7 +35,7 @@ const OrdersContainer = () => {
               enableColumnHiding: true
             },
             getRowProps: ({ original: { orderStatus, deliveryStatus }, id }) => ({
-              className: classNames(getColorClassStatus(orderStatus, deliveryStatus) || 'bg-white'),
+              className: classNames('bg-white', getColorClassStatus(orderStatus, deliveryStatus)),
               onMouseEnter: () => {
                 setIsHoveringId(id)
               },

@@ -30,7 +30,7 @@ export type PandaTableSettings = {
 }
 
 export interface GetRowPropsReturnType extends React.HTMLAttributes<HTMLTableRowElement> {
-  dropSettings?: { accept: string; onDropHandler: (item: any, original: any) => void }
+  dropSettings?: { accept: string; onDropHandler: (from: any, to: any) => void }
 }
 
 interface Props<T extends object> {

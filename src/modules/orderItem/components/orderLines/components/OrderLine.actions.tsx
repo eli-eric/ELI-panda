@@ -1,6 +1,7 @@
 import type { Row } from '@tanstack/react-table'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
@@ -81,6 +82,8 @@ export const OrderisDeliveredAction = ({ orderLine, checked }: { orderLine: Orde
   const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
   const { setOrderLine } = useOrderLine()
 
+  const formMethods = useForm<OrderLineFormType>({ defaultValues: { serialNumber: orderLine?.serialNumber || '' } })
+
   const { submit } = useSubmit<OrderLineFormType>({
     endpoint: orderLineDelivery,
     method: 'put',
@@ -123,7 +126,7 @@ export const OrderisDeliveredAction = ({ orderLine, checked }: { orderLine: Orde
         onSubmit={data => {
           submit({ serialNumber: data?.serialNumber, isDelivered: !enabled, eun: data?.eun || undefined })
         }}
-        defaultValues={{ serialNumber: orderLine?.serialNumber || '' }}
+        formMethods={formMethods}
       >
         <OrderIsDeliveryForm />
       </FormModal>

@@ -1,9 +1,9 @@
 import type { Row } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
-import classNames from 'classnames'
 import { useState } from 'react'
 import { useDrop } from 'react-dnd'
 
+import { classNames } from '@/helpers'
 import type { SystemDetail } from '@/modules/systems/types/responses'
 
 import type { GetRowPropsReturnType } from '../PandaTable'
@@ -18,7 +18,6 @@ interface Props {
 export const TableRow = ({ getRowProps, loading, row, index }: Props) => {
   const [isHoveringDrop, setIsHoveringDrop] = useState(false)
   const { dropSettings, className, ...rest } = getRowProps(row)
-  console.log('getRowProps', className)
 
   const [, dropRef] = useDrop<SystemDetail>({
     accept: dropSettings?.accept || 'table-row',

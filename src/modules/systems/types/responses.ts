@@ -25,7 +25,7 @@ export type SystemDetail = {
   importance?: CodebookType // listbox - CODEBOOK.SYSTEM_IMPORTANCE
   physicalItem?: PhysicalItem
   parentPath?: CodebookType[]
-  hasSubsystems: boolean
+  hasSubsystems?: boolean
   subSystems?: SystemDetail[]
   statistics?: SystemStatistics
 }

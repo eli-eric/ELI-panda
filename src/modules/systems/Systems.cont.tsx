@@ -17,7 +17,7 @@ export const SystemsContainer: FC = () => {
 
   return (
     <SystemsContext.Provider value={{ isHoveringId: isHoveringId }}>
-      <TableLayoutContainer className="border">
+      <TableLayoutContainer>
         <SystemsTable
           hideButtons={false}
           tableId={'systems'}
