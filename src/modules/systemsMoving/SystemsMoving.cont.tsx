@@ -1,3 +1,4 @@
+import { DevTool } from '@hookform/devtools'
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -17,11 +18,16 @@ export const SystemsMovingContainer = () => {
   const [system, setSystem] = useState<SystemDetail>()
   const [systemUid, setSystemUid] = useState<string | undefined>()
 
+  const [parentSystem, setParentSystem] = useState<SystemDetail | undefined>()
+
   const formMethods = useForm<SystemDetail>({ defaultValues: system })
   const { setValue, reset } = formMethods
 
   const onDropHandler = (from: SystemDetail, to: SystemDetail) => {
     const { hasSubsystems, physicalItem, subSystems, statistics, parentPath, ...restFrom } = from
+    console.log('to', to)
+    console.log('from', from)
+    setParentSystem(to)
     setSystem({ ...restFrom, parentUid: to.uid, parentPath: to.parentPath })
     setSystemUid(from.uid)
     setOpen(true)
@@ -38,9 +44,11 @@ export const SystemsMovingContainer = () => {
   })
 
   useEffect(() => {
+    console.log('system', system)
     reset()
     if (system) {
       for (const field in system) {
+        console.log('field', field as keyof SystemDetail, system[field])
         setValue(field as keyof SystemDetail, system[field])
       }
       setSystem(undefined)
@@ -89,9 +97,9 @@ export const SystemsMovingContainer = () => {
       </TableLayoutContainer>
       <FormModal
         formMethods={formMethods}
-        onSubmit={data => {
-          console.log('Submit', data)
-          submit(data)
+        onSubmit={(data: SystemDetail) => {
+          console.log('Submit', { ...data, parentUid: parentSystem?.uid })
+          submit({ ...data, uid: systemUid, parentUid: parentSystem?.uid })
           //call EP
           //on success mutate systems object with new children
         }}
@@ -99,6 +107,7 @@ export const SystemsMovingContainer = () => {
         setOpen={setOpen}
       >
         <SystemMovingForm />
+        <DevTool control={formMethods.control} />
       </FormModal>
     </div>
   )

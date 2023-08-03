@@ -1,28 +1,15 @@
-import { useFormContext } from 'react-hook-form'
-
 import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
-import type { SystemDetail } from '@/modules/systems/types/responses'
 
 import { useSystemMovingFormFields } from './SystemMoving.fields'
 
 export const SystemMovingForm = () => {
   const fields = useSystemMovingFormFields()
-  const { watch } = useFormContext<SystemDetail>()
-
-  const parentPath = watch('parentPath')
 
   return (
     <Grid>
-      {/* <Col sm={12} md={12} lg={12}>
-        <BreadcrumpContainer>
-          {parentPath?.map((item, index) => (
-            <BreadcrumpItem key={index} name={item.name} />
-          ))}
-        </BreadcrumpContainer>
-      </Col> */}
       <Col sm={3} md={4} lg={8}>
         <Input {...fields.name} />
       </Col>
