@@ -12,15 +12,32 @@ interface SystemsContextType {
 
 export const SystemsContext = createContext<SystemsContextType>({ isHoveringId: undefined })
 
-export const SystemsContainer: FC = () => {
+interface Props {
+  enableQueryURL?: boolean
+  enableDragAndDrop?: boolean
+  tableId?: string
+  dropSettings?: any
+  className?: string
+  hideButtons?: boolean
+}
+
+export const SystemsContainer: FC<Props> = ({
+  enableQueryURL = true,
+  enableDragAndDrop,
+  tableId = 'systems',
+  dropSettings,
+  className,
+  hideButtons = false
+}: Props) => {
   const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
 
   return (
     <SystemsContext.Provider value={{ isHoveringId: isHoveringId }}>
-      <TableLayoutContainer>
+      <TableLayoutContainer className={className}>
         <SystemsTable
-          hideButtons={false}
-          tableId={'systems'}
+          hideButtons={hideButtons}
+          enableDragAndDrop={enableDragAndDrop}
+          tableId={tableId}
           pageSizeDefault={50}
           className={'relative overflow-scroll'}
           getRowProps={({ id, original }) => ({
@@ -30,12 +47,13 @@ export const SystemsContainer: FC = () => {
             onMouseLeave: () => {
               setIsHoveringId(undefined)
             },
-            className: classNames(original?.physicalItem && 'font-bold text-gray-700')
+            className: classNames(original?.physicalItem && 'font-bold text-gray-700'),
+            dropSettings
           })}
           settings={{
             enableSorting: true,
             enableColumnHiding: true,
-            enableQueryURL: true,
+            enableQueryURL: enableQueryURL,
             enableColumnReordering: true
           }}
         />

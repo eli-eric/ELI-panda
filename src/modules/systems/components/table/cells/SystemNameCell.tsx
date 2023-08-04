@@ -1,13 +1,21 @@
 import { ArrowsRightLeftIcon, ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import type { CellContext } from '@tanstack/react-table'
 import classNames from 'classnames'
-import { useContext } from 'react'
+import Link from 'next/link'
+import { Fragment, useContext } from 'react'
 import { isMobile } from 'react-device-detect'
 import { useDrag } from 'react-dnd'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
-import { TableActionsButtons } from '@/components/Buttons'
+import {
+  TableActionsButtons,
+  TableButtonsWrapper,
+  TableDeleteButton,
+  TableEditButton,
+  TableOpenButton,
+  TablePlusButton
+} from '@/components/Buttons'
 import { createMessageValues } from '@/helpers/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
@@ -103,14 +111,36 @@ export const SystemNameCell = ({
           </div>
         )}
         {!hideButtons && (isHoveringId === id || isMobile) && (
-          <TableActionsButtons
-            onDeleteClick={() => {
-              withWarningModal(submit)()
-            }}
-            addLink={{ pathname: PATH.SYSTEM, query: { parentUid: original.uid } }}
-            detailLink={PATH.SYSTEM + '/' + original.uid}
-            canEdit={canEdit}
-          />
+          <Fragment>
+            {enableDragAndDrop ? (
+              <TableButtonsWrapper>
+                <Link href={PATH.SYSTEM + '/' + original.uid} legacyBehavior>
+                  <a target={'_blank'} rel="noreferrer" className="flex items-center">
+                    <Fragment>{canEdit ? <TableEditButton /> : <TableOpenButton />}</Fragment>
+                  </a>
+                </Link>
+                <TableDeleteButton
+                  onClick={() => {
+                    withWarningModal(submit)()
+                  }}
+                />
+                <Link href={{ pathname: PATH.SYSTEM, query: { parentUid: original.uid } }} legacyBehavior>
+                  <a target={'_blank'} rel="noreferrer" className="flex items-center">
+                    <TablePlusButton />
+                  </a>
+                </Link>
+              </TableButtonsWrapper>
+            ) : (
+              <TableActionsButtons
+                onDeleteClick={() => {
+                  withWarningModal(submit)()
+                }}
+                addLink={{ pathname: PATH.SYSTEM, query: { parentUid: original.uid } }}
+                detailLink={PATH.SYSTEM + '/' + original.uid}
+                canEdit={canEdit}
+              />
+            )}
+          </Fragment>
         )}
       </div>
     </div>

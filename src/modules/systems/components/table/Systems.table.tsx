@@ -46,7 +46,7 @@ export const SystemsTable = ({
       <SearchBar
         tableId={tableId}
         useQuery={settings?.enableQueryURL}
-        left={!hideButtons ? <SearchBarButtons /> : undefined}
+        left={!hideButtons && !enableDragAndDrop ? <SearchBarButtons /> : undefined}
         onChange={onChangeSearch}
       />
       <MemoizedTable
