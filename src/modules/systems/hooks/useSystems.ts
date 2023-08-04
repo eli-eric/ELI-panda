@@ -15,5 +15,5 @@ export const useSystems = tableId => {
     url: systemsList,
     useMockFetcher: false
   })
-  return { systems: response, loading, error, mutate }
+  return { systems: response, loading, error, mutate, query }
 }

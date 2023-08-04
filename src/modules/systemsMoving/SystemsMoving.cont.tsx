@@ -1,15 +1,13 @@
-import classNames from 'classnames'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
-import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { FormModal } from '@/hooks/form/useFormModal'
 
-import { SystemsTable } from '../systems/components/table/Systems.table'
 import { useSystems } from '../systems/hooks/useSystems'
+import { SystemsContainer } from '../systems/Systems.cont'
 import type { SystemDetail } from '../systems/types/responses'
 import { addSubsystem, filterSubsystem } from '../systems/utils'
 import { SystemMovingForm } from './form/SystemMoving.form'
@@ -30,7 +28,7 @@ export const SystemsMovingContainer = () => {
   const { setValue, reset } = formMethods
 
   const onDropHandler = (from: SystemsMovingType, to: SystemsMovingType) => {
-    const isNotAllowedToMove = to.parentPath?.some(parent => parent.uid === from.uid) || false
+    const isNotAllowedToMove = to.parentPath?.some(parent => parent.uid === from.uid) || from.uid === to.uid || false
     if (isNotAllowedToMove) {
       toast.error('System cannot be moved under itself or its sub-systems')
       return
@@ -48,7 +46,9 @@ export const SystemsMovingContainer = () => {
     onSuccess: () => {
       if (parentSystem?.tableId === childSystem?.tableId && childSystem) {
         if (parentSystem?.tableId === tableIdLeft) {
-          systemsLeft.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
+          if (!systemsLeft.query.query.search) {
+            systemsLeft.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
+          }
           if (parentSystem.subSystems && parentSystem.subSystems?.length > 0) {
             systemsLeft.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), {
               revalidate: false
@@ -56,29 +56,38 @@ export const SystemsMovingContainer = () => {
           }
         }
         if (parentSystem?.tableId === tableIdRight) {
-          systemsRight.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
+          if (!systemsRight.query.query.search) {
+            systemsRight.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
+          }
           if (parentSystem.subSystems && parentSystem.subSystems?.length > 0) {
             systemsRight.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), {
               revalidate: false
             })
           }
         }
+        return
       }
       if (parentSystem?.tableId === tableIdLeft && childSystem) {
-        systemsRight.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
+        if (!systemsRight.query.query.search) {
+          systemsRight.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
+        }
         if (parentSystem.subSystems && parentSystem.subSystems?.length > 0) {
           systemsLeft.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), {
             revalidate: false
           })
         }
+        return
       }
       if (parentSystem?.tableId === tableIdRight && childSystem) {
-        systemsLeft.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
+        if (!systemsLeft.query.query.search) {
+          systemsLeft.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
+        }
         if (parentSystem.subSystems && parentSystem.subSystems?.length > 0) {
           systemsRight.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), {
             revalidate: false
           })
         }
+        return
       }
       toast.success('System moved')
     }
@@ -95,44 +104,21 @@ export const SystemsMovingContainer = () => {
 
   return (
     <div className="grid grid-cols-2">
-      <TableLayoutContainer className="border-r-4">
-        <SystemsTable
-          hideButtons={true}
-          enableDragAndDrop={true}
-          tableId={tableIdLeft}
-          pageSizeDefault={50}
-          className={'relative overflow-scroll'}
-          getRowProps={({ original }) => ({
-            className: classNames(original?.physicalItem && 'font-bold text-gray-700'),
-            dropSettings: { onDropHandler: onDropHandler, accept: 'system' }
-          })}
-          settings={{
-            enableSorting: true,
-            enableColumnHiding: true,
-            enableQueryURL: false,
-            enableColumnReordering: true
-          }}
-        />
-      </TableLayoutContainer>
-      <TableLayoutContainer>
-        <SystemsTable
-          hideButtons={true}
-          enableDragAndDrop={true}
-          tableId={tableIdRight}
-          pageSizeDefault={50}
-          className={'relative overflow-scroll'}
-          getRowProps={({ original }) => ({
-            className: classNames(original?.physicalItem && 'font-bold text-gray-700'),
-            dropSettings: { onDropHandler: onDropHandler, accept: 'system' }
-          })}
-          settings={{
-            enableSorting: true,
-            enableColumnHiding: true,
-            enableQueryURL: false,
-            enableColumnReordering: true
-          }}
-        />
-      </TableLayoutContainer>
+      <SystemsContainer
+        tableId={tableIdLeft}
+        hideButtons={false}
+        enableDragAndDrop={true}
+        className="border-r-4 border-gray-400"
+        dropSettings={{ onDropHandler: onDropHandler, accept: 'system' }}
+        enableQueryURL={false}
+      />
+      <SystemsContainer
+        tableId={tableIdRight}
+        hideButtons={false}
+        enableDragAndDrop={true}
+        dropSettings={{ onDropHandler: onDropHandler, accept: 'system' }}
+        enableQueryURL={false}
+      />
       <FormModal
         formMethods={formMethods}
         onSubmit={(data: SystemDetail) => {
