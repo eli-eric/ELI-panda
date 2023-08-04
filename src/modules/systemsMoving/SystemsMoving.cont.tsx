@@ -1,4 +1,3 @@
-import { DevTool } from '@hookform/devtools'
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -10,58 +9,97 @@ import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { FormModal } from '@/hooks/form/useFormModal'
 
 import { SystemsTable } from '../systems/components/table/Systems.table'
+import { useSystems } from '../systems/hooks/useSystems'
 import type { SystemDetail } from '../systems/types/responses'
+import { addSubsystem, filterSubsystem } from '../systems/utils'
 import { SystemMovingForm } from './form/SystemMoving.form'
+import type { SystemsMovingType } from './types/systemMoving'
 
 export const SystemsMovingContainer = () => {
   const [open, setOpen] = useState(false)
-  const [system, setSystem] = useState<SystemDetail>()
-  const [systemUid, setSystemUid] = useState<string | undefined>()
+  const tableIdLeft = 'systems-left'
+  const tableIdRight = 'systems-right'
 
-  const [parentSystem, setParentSystem] = useState<SystemDetail | undefined>()
+  const [childSystem, setChildSystem] = useState<SystemsMovingType>()
+  const systemsLeft = useSystems(tableIdLeft)
+  const systemsRight = useSystems(tableIdRight)
 
-  const formMethods = useForm<SystemDetail>({ defaultValues: system })
+  const [parentSystem, setParentSystem] = useState<SystemsMovingType | undefined>()
+
+  const formMethods = useForm<SystemsMovingType>({ defaultValues: childSystem })
   const { setValue, reset } = formMethods
 
-  const onDropHandler = (from: SystemDetail, to: SystemDetail) => {
-    const { hasSubsystems, physicalItem, subSystems, statistics, parentPath, ...restFrom } = from
-    console.log('to', to)
-    console.log('from', from)
+  const onDropHandler = (from: SystemsMovingType, to: SystemsMovingType) => {
+    const isNotAllowedToMove = to.parentPath?.some(parent => parent.uid === from.uid) || false
+    if (isNotAllowedToMove) {
+      toast.error('System cannot be moved under itself or its sub-systems')
+      return
+    }
     setParentSystem(to)
-    setSystem({ ...restFrom, parentUid: to.uid, parentPath: to.parentPath })
-    setSystemUid(from.uid)
+    setChildSystem(from)
     setOpen(true)
   }
 
-  const { system: systemEndpoint } = useEndpoint({ uid: systemUid })
+  const { system: systemEndpoint } = useEndpoint({ uid: childSystem?.uid })
 
   const { submit } = useSubmit({
     endpoint: systemEndpoint,
     method: 'put',
     onSuccess: () => {
+      if (parentSystem?.tableId === childSystem?.tableId && childSystem) {
+        if (parentSystem?.tableId === tableIdLeft) {
+          systemsLeft.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
+          if (parentSystem.subSystems && parentSystem.subSystems?.length > 0) {
+            systemsLeft.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), {
+              revalidate: false
+            })
+          }
+        }
+        if (parentSystem?.tableId === tableIdRight) {
+          systemsRight.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
+          if (parentSystem.subSystems && parentSystem.subSystems?.length > 0) {
+            systemsRight.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), {
+              revalidate: false
+            })
+          }
+        }
+      }
+      if (parentSystem?.tableId === tableIdLeft && childSystem) {
+        systemsRight.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
+        if (parentSystem.subSystems && parentSystem.subSystems?.length > 0) {
+          systemsLeft.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), {
+            revalidate: false
+          })
+        }
+      }
+      if (parentSystem?.tableId === tableIdRight && childSystem) {
+        systemsLeft.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
+        if (parentSystem.subSystems && parentSystem.subSystems?.length > 0) {
+          systemsRight.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), {
+            revalidate: false
+          })
+        }
+      }
       toast.success('System moved')
     }
   })
 
   useEffect(() => {
-    console.log('system', system)
     reset()
-    if (system) {
-      for (const field in system) {
-        console.log('field', field as keyof SystemDetail, system[field])
-        setValue(field as keyof SystemDetail, system[field])
+    if (childSystem) {
+      for (const field in childSystem) {
+        setValue(field as keyof SystemsMovingType, childSystem[field])
       }
-      setSystem(undefined)
     }
-  }, [system, setValue, reset])
+  }, [childSystem, setValue, reset])
 
   return (
     <div className="grid grid-cols-2">
-      <TableLayoutContainer className="border-r">
+      <TableLayoutContainer className="border-r-4">
         <SystemsTable
           hideButtons={true}
           enableDragAndDrop={true}
-          tableId={'systems-from'}
+          tableId={tableIdLeft}
           pageSizeDefault={50}
           className={'relative overflow-scroll'}
           getRowProps={({ original }) => ({
@@ -80,7 +118,7 @@ export const SystemsMovingContainer = () => {
         <SystemsTable
           hideButtons={true}
           enableDragAndDrop={true}
-          tableId={'systems-to'}
+          tableId={tableIdRight}
           pageSizeDefault={50}
           className={'relative overflow-scroll'}
           getRowProps={({ original }) => ({
@@ -98,16 +136,12 @@ export const SystemsMovingContainer = () => {
       <FormModal
         formMethods={formMethods}
         onSubmit={(data: SystemDetail) => {
-          console.log('Submit', { ...data, parentUid: parentSystem?.uid })
-          submit({ ...data, uid: systemUid, parentUid: parentSystem?.uid })
-          //call EP
-          //on success mutate systems object with new children
+          submit({ ...data, uid: childSystem?.uid, parentUid: parentSystem?.uid })
         }}
         open={open}
         setOpen={setOpen}
       >
-        <SystemMovingForm />
-        <DevTool control={formMethods.control} />
+        <SystemMovingForm parentPath={parentSystem?.parentPath} />
       </FormModal>
     </div>
   )

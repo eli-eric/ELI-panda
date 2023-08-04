@@ -65,7 +65,7 @@ export const SystemNameCell = ({
     collect: monitor => ({
       isDragging: monitor.isDragging()
     }),
-    item: () => original,
+    item: () => ({ ...original, tableId }),
     type: 'system'
   })
 

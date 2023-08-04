@@ -8,11 +8,12 @@ interface Props {
   getRowModel()
   loading?: boolean
   getRowProps: (row: Row<any>) => GetRowPropsReturnType
+  tableId: string
 }
-export const TableBody: FC<Props> = ({ getRowModel, loading, getRowProps }) => (
+export const TableBody: FC<Props> = ({ getRowModel, loading, getRowProps, tableId }) => (
   <tbody className="bg-white">
     {getRowModel().rows.map((row, index) => (
-      <TableRow key={row.id} loading={loading} row={row} index={index} getRowProps={getRowProps} />
+      <TableRow key={row.id} tableId={tableId} loading={loading} row={row} index={index} getRowProps={getRowProps} />
     ))}
   </tbody>
 )

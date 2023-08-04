@@ -111,7 +111,12 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
               <TableHead table={table} enableColumnReordering={enableColumnReordering} />
               {data && (
                 <Fragment>
-                  <TableBody getRowModel={table.getRowModel} getRowProps={getRowProps} loading={loading} />
+                  <TableBody
+                    getRowModel={table.getRowModel}
+                    getRowProps={getRowProps}
+                    loading={loading}
+                    tableId={tableId}
+                  />
                   {enableFooter && <TableFoot getFooterGroups={table.getFooterGroups} />}
                 </Fragment>
               )}

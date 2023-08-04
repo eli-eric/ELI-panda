@@ -13,9 +13,10 @@ interface Props {
   loading?: boolean
   row: any
   index: number
+  tableId: string
 }
 
-export const TableRow = ({ getRowProps, loading, row, index }: Props) => {
+export const TableRow = ({ getRowProps, loading, row, index, tableId }: Props) => {
   const [isHoveringDrop, setIsHoveringDrop] = useState(false)
   const { dropSettings, className, ...rest } = getRowProps(row)
 
@@ -32,7 +33,7 @@ export const TableRow = ({ getRowProps, loading, row, index }: Props) => {
       }, 50)
     },
     drop: item => {
-      dropSettings && dropSettings.onDropHandler(item, row.original)
+      dropSettings && dropSettings.onDropHandler(item, { tableId, ...row.original })
     }
   })
 
