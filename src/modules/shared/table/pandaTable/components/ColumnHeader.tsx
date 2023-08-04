@@ -12,7 +12,7 @@ const reorderColumn = (draggedColumnId: string, targetColumnId: string, columnOr
     0,
     columnOrder.splice(columnOrder.indexOf(draggedColumnId), 1)[0] as string
   )
-  console.log('columnOrder', columnOrder)
+  console
   return [...columnOrder]
 }
 
@@ -30,8 +30,6 @@ export const ColumnHeader: FC<ColumnHeader> = ({ header, table, enableColumnReor
   const [, dropRef] = useDrop<Header<any, any>>({
     accept: 'column',
     drop: draggedColumn => {
-      // eslint-disable-next-line
-      console.log('draggedColumn', draggedColumn)
       const newColumnOrder = reorderColumn(draggedColumn.id, column.id, columnOrder)
       setColumnOrder(newColumnOrder)
     }

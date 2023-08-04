@@ -1,4 +1,6 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { number, object, string } from 'yup'
 
 import { Heading } from '@/components/card/card.comp'
@@ -43,17 +45,19 @@ export const OrderLineForm = ({ orderLine, open, setOpen }: OrderLienFormProps) 
     } else setOrderLine(dataToSend)
   }
 
+  const formMethods = useForm<OrderLineFormType>({
+    defaultValues: orderLine
+      ? { ...orderLine, currency: orderLine.currency || 'EUR' }
+      : { itemUsage: { uid: 'a2aae89a-5cbe-4042-a726-44012b158226', name: 'In System Part' }, quantity: 1 },
+    resolver: yupResolver(orderLineFormSchema)
+  })
+
   return (
     <FormModal
+      formMethods={formMethods}
       onSubmit={modalSubmit}
-      schema={orderLineFormSchema}
       setOpen={setOpen}
       open={open}
-      defaultValues={
-        orderLine
-          ? { ...orderLine, currency: orderLine.currency || 'EUR' }
-          : { itemUsage: { uid: 'a2aae89a-5cbe-4042-a726-44012b158226', name: 'In System Part' }, quantity: 1 }
-      }
       renderOutsideForm={
         <div>
           {orderLine?.uuid ? (
