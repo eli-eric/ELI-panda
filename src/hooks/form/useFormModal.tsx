@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import React from 'react'
 import { useEffect, useState } from 'react'
+import type { UseFormReturn } from 'react-hook-form'
 import { type DeepPartial, type FieldValues, FormProvider, useForm } from 'react-hook-form'
 
 import ErrorPage from '@/components/error/ErrorPage'
@@ -84,29 +85,23 @@ export default useFormModal
 interface Props<T extends FieldValues> {
   renderOutsideForm?: JSX.Element
   onSubmit: (data: T) => void
-  defaultValues?: any
+  formMethods: UseFormReturn<T, any>
   loading?: boolean
-  schema?: any
   error?: boolean
   children?: React.ReactNode
   open: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 export const FormModal = <T extends FieldValues>({
+  formMethods,
   children,
   onSubmit,
   error,
-  defaultValues,
-  schema,
   renderOutsideForm,
   loading,
   open = false,
   setOpen
 }: Props<T>) => {
-  const formMethods = useForm<T>({
-    defaultValues: defaultValues,
-    resolver: schema ? yupResolver(schema) : undefined
-  })
   const { handleSubmit, reset, formState } = formMethods
   useEffect(() => {
     if (formState.isSubmitSuccessful) {

@@ -45,7 +45,7 @@ export const getColorClassStatus = (orderStatus: CodebookType, deliveryStatus: D
   // Find the matching color class based on orderStatus and deliveryStatus
   for (const mapping of statusMappingColor) {
     if (mapping.statuses.includes(orderStatus.uid) && mapping.statuses.includes(deliveryStatus)) {
-      return mapping.colorClass
+      return mapping.colorClass || 'bg-white'
     }
   }
 

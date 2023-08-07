@@ -3,7 +3,7 @@ import { Fragment, memo, useCallback, useRef } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { Pagination } from '@/modules/shared/table/Pagination'
-import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
+import type { GetRowPropsReturnType, PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 
@@ -19,7 +19,8 @@ interface Props {
   pageSizeDefault?: number
   className?: string
   hideButtons?: boolean
-  getRowProps?: (row: Row<SystemDetail>) => any
+  enableDragAndDrop?: boolean
+  getRowProps?: (row: Row<SystemDetail>) => GetRowPropsReturnType
   settings?: PandaTableSettings
 }
 
@@ -29,11 +30,12 @@ export const SystemsTable = ({
   className,
   hideButtons = false,
   getRowProps,
-  settings
+  settings,
+  enableDragAndDrop
 }: Props) => {
   const { systems, error, loading } = useSystems(tableId)
   const tableRef = useRef<Table<SystemDetail>>()
-  const { columns, pending } = useSystemsColumns({ tableId, hideButtons })
+  const { columns, pending } = useSystemsColumns({ tableId, hideButtons, enableDragAndDrop: enableDragAndDrop })
 
   const onChangeSearch = useCallback(() => {
     tableRef.current?.resetExpanded()
@@ -44,7 +46,7 @@ export const SystemsTable = ({
       <SearchBar
         tableId={tableId}
         useQuery={settings?.enableQueryURL}
-        left={!hideButtons ? <SearchBarButtons /> : undefined}
+        left={!hideButtons && !enableDragAndDrop ? <SearchBarButtons /> : undefined}
         onChange={onChangeSearch}
       />
       <MemoizedTable

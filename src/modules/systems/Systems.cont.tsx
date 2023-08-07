@@ -1,3 +1,5 @@
+import classNames from 'classnames'
+import type { FC } from 'react'
 import { createContext, useState } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
@@ -10,16 +12,34 @@ interface SystemsContextType {
 
 export const SystemsContext = createContext<SystemsContextType>({ isHoveringId: undefined })
 
-export const SystemsContainer = () => {
+interface Props {
+  enableQueryURL?: boolean
+  enableDragAndDrop?: boolean
+  tableId?: string
+  dropSettings?: any
+  className?: string
+  hideButtons?: boolean
+}
+
+export const SystemsContainer: FC<Props> = ({
+  enableQueryURL = true,
+  enableDragAndDrop,
+  tableId = 'systems',
+  dropSettings,
+  className,
+  hideButtons = false
+}: Props) => {
   const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
 
   return (
     <SystemsContext.Provider value={{ isHoveringId: isHoveringId }}>
-      <TableLayoutContainer>
+      <TableLayoutContainer className={className}>
         <SystemsTable
-          tableId={'systems'}
+          hideButtons={hideButtons}
+          enableDragAndDrop={enableDragAndDrop}
+          tableId={tableId}
           pageSizeDefault={50}
-          className={'relative overflow-x-auto'}
+          className={'relative overflow-scroll'}
           getRowProps={({ id, original }) => ({
             onMouseEnter: () => {
               setIsHoveringId(id)
@@ -27,12 +47,13 @@ export const SystemsContainer = () => {
             onMouseLeave: () => {
               setIsHoveringId(undefined)
             },
-            className: original?.physicalItem && 'font-bold text-gray-700'
+            className: classNames(original?.physicalItem && 'font-bold text-gray-700'),
+            dropSettings
           })}
           settings={{
             enableSorting: true,
             enableColumnHiding: true,
-            enableQueryURL: true,
+            enableQueryURL: enableQueryURL,
             enableColumnReordering: true
           }}
         />

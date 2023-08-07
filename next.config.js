@@ -3,7 +3,7 @@ const nextConfig = {
   experimental: {
     appDir: false
   },
-  swcMinify: true,
+  swcMinify: false,
   reactStrictMode: false,
   output: 'standalone',
   images: {

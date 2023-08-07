@@ -10,9 +10,6 @@ export const useOrders = () => {
   const { response, loading, error, mutate } = useFetch<OrderListResponse>({
     config: {
       suspense: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: true,
-      revalidateOnMount: true,
       keepPreviousData: true
     },
     url: orders

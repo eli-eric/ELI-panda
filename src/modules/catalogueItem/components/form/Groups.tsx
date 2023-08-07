@@ -1,3 +1,4 @@
+import { sortBy } from 'lodash'
 import { Fragment, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
@@ -19,20 +20,18 @@ const Groups = () => {
 
   useEffect(() => {
     if (category?.uid === item?.category?.uid) {
+      const itemDetails = sortBy(item.details, ['propertyGroup', 'property.name'])
       setDetails({
         groups: groupsItem,
-        details: item?.details?.sort((a, b) => a.property.name.localeCompare(b.property.name))
+        details: itemDetails
       })
     } else {
+      const itemDetails = sortBy(groupDetails, ['propertyGroup', 'property.name'])
       unregister('details')
       setDetails({
         groups: groupsDetail,
-        details: groupDetails?.sort((a, b) => a.property.name.localeCompare(b.property.name))
+        details: itemDetails
       })
-    }
-    return () => {
-      unregister('details')
-      setDetails(undefined)
     }
   }, [groupsItem, groupsDetail, groupDetails, category, item, unregister])
 

@@ -1,14 +1,16 @@
+import classNames from 'classnames'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 
 interface Props {
   children: React.ReactNode
 
   deps?: any[]
+  className?: string
 }
 
 // useLayoutEffect is used to avoid flickering
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
-export const TableLayoutContainer = ({ children, deps }: Props) => {
+export const TableLayoutContainer = ({ children, deps, className }: Props) => {
   const [height, setHeight] = useState<number>(0)
 
   useIsomorphicLayoutEffect(
@@ -43,7 +45,7 @@ export const TableLayoutContainer = ({ children, deps }: Props) => {
       style={{
         height: `calc(100vh - ${height}px)`
       }}
-      className="flex-col"
+      className={classNames('flex-col', className)}
     >
       {children}
     </div>

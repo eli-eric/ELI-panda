@@ -13,7 +13,7 @@ interface NameProps extends CellContext<Order, any> {
 export const NameCell = ({ getValue, row: { original, id }, isHoveringId }: NameProps) => (
   <div className="flex items-center">
     <Link href={PATH.ORDER + '/' + original.uid} className={'text-blue-700 cursor-pointer hover:underline'}>
-      <span>{getValue()}</span>
+      <span>{getValue() || 'N/A'}</span>
     </Link>
     <TableActions order={original} isHovering={id === isHoveringId} />
   </div>

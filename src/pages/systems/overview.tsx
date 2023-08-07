@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 
 import { SystemsContainer } from '@/modules/systems/Systems.cont'
 
-const RootSystemPage: NextPage = () => (
+const SystemsPage: NextPage = () => (
   <Fragment>
     <Head>
       <title>Systems Overview</title>
@@ -13,4 +13,4 @@ const RootSystemPage: NextPage = () => (
   </Fragment>
 )
 
-export default RootSystemPage
+export default SystemsPage

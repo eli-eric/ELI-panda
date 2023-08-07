@@ -3,6 +3,17 @@ import { useEffect, useMemo, useState } from 'react'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
+interface Query {
+  pagination?: string
+  search?: string
+  sorting?: string
+  supplierUID?: string
+  orderStatusUID?: string
+  procurementResponsibleUID?: string
+  requestorUID?: string
+  [key: string]: any
+}
+
 export default function useQueryManager(tableId: string) {
   const router = useRouter()
   const { instances } = useTableStateStore()
@@ -33,20 +44,11 @@ export default function useQueryManager(tableId: string) {
     return filter
   }, [supplierUID, orderStatusUID, procurementResponsibleUID, requestorUID])
 
-  const [query, setQuery] = useState({ pagination, ...custom })
+  const [query, setQuery] = useState<Query>({ pagination, ...custom })
 
   useEffect(() => {
     if (router.isReady) {
-      const newQuery = { pagination, ...filter, ...custom }
-      if (router.query.search || search) {
-        newQuery.search = (router.query.search as string) || search
-        if (sorting) {
-          newQuery.sorting = sorting
-        }
-      } else if (sorting) {
-        newQuery.sorting = sorting
-      }
-
+      const newQuery = { pagination, search, sorting, ...filter, ...custom }
       setQuery(newQuery)
     }
   }, [router.query.search, sorting, pagination, filter, router.isReady, search, custom])

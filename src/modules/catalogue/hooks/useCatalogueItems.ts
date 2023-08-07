@@ -13,9 +13,6 @@ export const useCatalogueItems = (tableId = 'catalogueItems') => {
     url: catalogueItems,
     config: {
       suspense: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: true,
-      revalidateOnMount: true,
       keepPreviousData: true
     }
   })
