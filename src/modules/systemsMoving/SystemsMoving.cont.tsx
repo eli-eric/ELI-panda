@@ -40,57 +40,47 @@ export const SystemsMovingContainer = () => {
 
   const { system: systemEndpoint } = useEndpoint({ uid: childSystem?.uid })
 
+  const onSuccess = () => {
+    const systemActions = {
+      [tableIdLeft]: {
+        systems: systemsLeft,
+        oppositeSystems: systemsRight
+      },
+      [tableIdRight]: {
+        systems: systemsRight,
+        oppositeSystems: systemsLeft
+      }
+    }
+
+    const currentAction = systemActions[parentSystem?.tableId as keyof typeof systemActions]
+    const isSameTable = parentSystem?.tableId === childSystem?.tableId
+
+    if (!currentAction || !childSystem) {
+      return
+    }
+
+    const mutateSubsystem = (system, method) => {
+      if (!system.query.query.search) {
+        system.mutate(prev => prev && method(childSystem.uid, prev), { revalidate: false })
+      }
+      if (parentSystem?.subSystems) {
+        system.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), { revalidate: false })
+      }
+    }
+
+    if (isSameTable) {
+      mutateSubsystem(currentAction.systems, filterSubsystem)
+    } else {
+      mutateSubsystem(currentAction.oppositeSystems, filterSubsystem)
+    }
+
+    toast.success(`System ${childSystem.name} was moved under ${parentSystem?.name}`)
+  }
+
   const { submit } = useSubmit({
     endpoint: systemEndpoint,
     method: 'put',
-    onSuccess: () => {
-      if (parentSystem?.tableId === childSystem?.tableId && childSystem) {
-        if (parentSystem?.tableId === tableIdLeft) {
-          if (!systemsLeft.query.query.search) {
-            systemsLeft.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
-          }
-          if (parentSystem.subSystems && parentSystem.subSystems?.length > 0) {
-            systemsLeft.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), {
-              revalidate: false
-            })
-          }
-        }
-        if (parentSystem?.tableId === tableIdRight) {
-          if (!systemsRight.query.query.search) {
-            systemsRight.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
-          }
-          if (parentSystem.subSystems && parentSystem.subSystems?.length > 0) {
-            systemsRight.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), {
-              revalidate: false
-            })
-          }
-        }
-        return
-      }
-      if (parentSystem?.tableId === tableIdLeft && childSystem) {
-        if (!systemsRight.query.query.search) {
-          systemsRight.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
-        }
-        if (parentSystem.subSystems && parentSystem.subSystems?.length > 0) {
-          systemsLeft.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), {
-            revalidate: false
-          })
-        }
-        return
-      }
-      if (parentSystem?.tableId === tableIdRight && childSystem) {
-        if (!systemsLeft.query.query.search) {
-          systemsLeft.mutate(prev => prev && filterSubsystem(childSystem.uid, prev), { revalidate: false })
-        }
-        if (parentSystem.subSystems && parentSystem.subSystems?.length > 0) {
-          systemsRight.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), {
-            revalidate: false
-          })
-        }
-        return
-      }
-      toast.success('System moved')
-    }
+    onSuccess: onSuccess
   })
 
   useEffect(() => {
