@@ -1,4 +1,5 @@
 import type { Row } from '@tanstack/react-table'
+import Tippy from '@tippyjs/react'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -148,15 +149,17 @@ export const PrintEunButton = ({ orderLine }: { orderLine: OrderLineFormType }) 
   })
 
   return (
-    <button
-      className="hover:underline"
-      type="button"
-      onClick={() => {
-        submit()
-      }}
-    >
-      <span>{orderLine.eun}</span>
-    </button>
+    <Tippy content={'Print eun'}>
+      <button
+        className="hover:underline"
+        type="button"
+        onClick={() => {
+          submit()
+        }}
+      >
+        <span>{orderLine.eun}</span>
+      </button>
+    </Tippy>
   )
 }
 

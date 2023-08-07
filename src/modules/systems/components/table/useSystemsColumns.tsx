@@ -3,7 +3,9 @@ import type { ColumnDef } from '@tanstack/react-table'
 import Tippy from '@tippyjs/react'
 import { Fragment, useMemo } from 'react'
 
+import { NewTabLink } from '@/components/decorators'
 import usePermission from '@/hooks/usePermission'
+import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
 import { useSubsystems } from '../../hooks/useSubsystems'
@@ -120,7 +122,10 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
         header: 'Catalogue Name',
         accessorFn: row => row.physicalItem?.catalogueItem?.name,
         id: 'catalogueName',
-        size: 150
+        size: 150,
+        cell: ({ getValue, row: { original } }) => (
+          <NewTabLink href={PATH.CATALOGUE_ITEM + '/' + original.physicalItem?.catalogueItem.uid} value={getValue()} />
+        )
       },
       {
         header: 'Part Number',
