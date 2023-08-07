@@ -24,7 +24,7 @@ export const NavBarMultiLink = ({ name, links, open }: Props) => {
     <Menu>
       <Menu.Button>
         <NavBarLinkWrapper
-          href={links[0].path}
+          links={links}
           open={open}
           className={classNames(
             open

@@ -21,7 +21,7 @@ export const NavBarLink = ({ name, links, open }: Props) => (
       </div>
     ) : (
       <Link href={links[0].path} className="flex items-center h-full">
-        <NavBarLinkWrapper href={links[0].path} open={open}>
+        <NavBarLinkWrapper links={links} open={open}>
           {open === false ? (
             <span>{name}</span>
           ) : (
