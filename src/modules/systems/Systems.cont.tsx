@@ -39,7 +39,7 @@ export const SystemsContainer: FC<Props> = ({
           enableDragAndDrop={enableDragAndDrop}
           tableId={tableId}
           pageSizeDefault={50}
-          className={'relative overflow-scroll'}
+          className={'relative overflow-scroll scrollbar-style'}
           getRowProps={({ id, original }) => ({
             onMouseEnter: () => {
               setIsHoveringId(id)
