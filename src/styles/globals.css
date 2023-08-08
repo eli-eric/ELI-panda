@@ -39,11 +39,11 @@ body::-webkit-scrollbar-track {
 }
 
 body::-webkit-scrollbar-thumb {
-  background-color: #818cf8; /* Indigo-600 */
-  border-radius: 4px; /* Optional: Adds rounded corners to the thumb */
-  &:hover {
-    background-color: #6366f1; /* Slightly darker Indigo-500 when hovered */
-  }
+  background-color: #818cf8;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background-color: #6366f1;
 }
 
 .scrollbar-style::-webkit-scrollbar {
@@ -59,9 +59,10 @@ body::-webkit-scrollbar-thumb {
 .scrollbar-style::-webkit-scrollbar-thumb {
   background-color: #a8aaad; /* Cool Gray-300 for a subtle look */
   border-radius: 4px;
-  &:hover {
-    background-color: #d1d5db; /* Cool Gray-400 on hover */
-  }
+}
+.scrollbar-style::-webkit-scrollbar-thumb:hover {
+  background-color: #d1d5db; /* Cool Gray-400 on hover */
+  border-radius: 4px;
 }
 
 /* For Firefox */
