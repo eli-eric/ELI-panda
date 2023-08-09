@@ -20,7 +20,7 @@ export const useOrderLine = () => {
   }
   //  delete the order line from the form
   const deleteOrderLine = (orderLine: OrderLineFormType) => {
-    const index = fields.findIndex(item => item.id === orderLine.id)
+    const index = fields.findIndex(item => item.uuid === orderLine.uuid)
     remove(index)
   }
 
