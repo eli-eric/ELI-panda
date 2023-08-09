@@ -39,6 +39,7 @@ export const OrderLineActionButtons = ({ orderLine }: { orderLine: OrderLineForm
       text: messages.continue,
       onClick: () => {
         deleteOrderLine(orderLine)
+        setOpenDeleteWarn(false)
       }
     },
     goBack: {
