@@ -117,7 +117,12 @@ export const SystemsMovingContainer = () => {
         open={open}
         setOpen={setOpen}
       >
-        <SystemMovingForm parentPath={parentSystem?.parentPath} />
+        <SystemMovingForm
+          parentPath={[
+            ...(parentSystem?.parentPath || []),
+            { name: parentSystem?.name || '', uid: parentSystem?.uid || '' }
+          ]}
+        />
       </FormModal>
     </div>
   )

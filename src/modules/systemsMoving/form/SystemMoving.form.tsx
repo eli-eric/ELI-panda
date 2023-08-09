@@ -15,6 +15,8 @@ interface SystemMovingFormProps {
 export const SystemMovingForm = ({ parentPath }: SystemMovingFormProps) => {
   const fields = useSystemMovingFormFields()
 
+  console.log('parentPath', parentPath)
+
   return (
     <Grid>
       <Col lg={12}>
