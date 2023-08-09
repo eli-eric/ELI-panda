@@ -50,7 +50,7 @@ const OrdersContainer = () => {
             tableId: 'orders',
             data: orderList?.data,
             loading: loading,
-            className: 'relative overflow-x-auto'
+            className: 'relative overflow-x-auto scrollbar-style'
           }}
         />
       )}

@@ -5,9 +5,11 @@ import { useRouter } from 'next/router'
 import { Fragment, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
+import { NewTabLink } from '@/components/decorators'
 import { message } from '@/i18n/src/messages'
 import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
+import { PATH } from '@/types/constants/paths'
 
 import { OrderisDeliveredAction, OrderLineActionButtons, PriceFooter, PrintEunButton } from './OrderLine.actions'
 
@@ -33,7 +35,10 @@ const useOrderLinesColumns = () => {
       },
       {
         header: formatMessage({ id: messages.catalogueNumber }),
-        accessorKey: 'catalogueNumber'
+        accessorKey: 'catalogueNumber',
+        cell: ({ getValue, row: { original } }) => (
+          <NewTabLink href={PATH.CATALOGUE_ITEM + '/' + original.catalogueUid} value={getValue()} />
+        )
       },
       {
         header: formatMessage({ id: messages.serialNumber }),

@@ -20,7 +20,7 @@ const Groups = () => {
 
   useEffect(() => {
     if (category?.uid === item?.category?.uid) {
-      const itemDetails = sortBy(item.details, ['propertyGroup', 'property.name'])
+      const itemDetails = sortBy(item?.details, ['propertyGroup', 'property.name'])
       setDetails({
         groups: groupsItem,
         details: itemDetails

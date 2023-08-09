@@ -59,7 +59,7 @@ export const CatalogueTable = ({
           setIsHoveringId(undefined)
         }
       })}
-      className={'relative overflow-x-auto'}
+      className={'relative overflow-y-scroll scrollbar-style'}
       settings={{
         enableQueryURL,
         enableColumnHiding: tableId === 'catalogueItems',

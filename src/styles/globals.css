@@ -22,3 +22,51 @@
     @apply mt-6 text-center text-3xl font-bold tracking-tight text-gray-900;
   }
 }
+/* styles/globals.css */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #818cf8 #f3f4f6; /* Using Indigo-600 and Cool Gray-200 from Tailwind's palette */
+}
+
+body::-webkit-scrollbar {
+  width: 10px; /* Vertical scrollbar width */
+  height: 10px; /* Horizontal scrollbar height */
+}
+
+body::-webkit-scrollbar-track {
+  background: #f3f4f6; /* Cool Gray-200 */
+  border-radius: 4px; /* Optional: Adds rounded corners to the track */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: #818cf8;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+  background-color: #6366f1;
+}
+
+.scrollbar-style::-webkit-scrollbar {
+  width: 10px; /* Vertical scrollbar width */
+  height: 10px; /* Horizontal scrollbar height */
+}
+
+.scrollbar-style::-webkit-scrollbar-track {
+  background: #f8f9fa; /* Cool Gray-200 */
+  border-radius: 4px;
+}
+
+.scrollbar-style::-webkit-scrollbar-thumb {
+  background-color: #a8aaad; /* Cool Gray-300 for a subtle look */
+  border-radius: 4px;
+}
+.scrollbar-style::-webkit-scrollbar-thumb:hover {
+  background-color: #d1d5db; /* Cool Gray-400 on hover */
+  border-radius: 4px;
+}
+
+/* For Firefox */
+.scrollbar-style {
+  scrollbar-width: thin;
+  scrollbar-color: #e5e7eb #f3f4f6; /* Thumb and Track colors */
+}
