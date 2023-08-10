@@ -1,5 +1,5 @@
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
-import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 import { Button, PlusButton } from '@/components/Buttons'
 import usePermission from '@/hooks/usePermission'
@@ -12,8 +12,6 @@ export const SearchBarButtons = () => {
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
   const { mutate } = useCatalogueItems()
 
-  const router = useRouter()
-
   return (
     <div className="flex">
       <Button
@@ -22,22 +20,12 @@ export const SearchBarButtons = () => {
           mutate()
         }}
       >
-        <ArrowPathIcon
-          className="h-4 w-4
-
-"
-          aria-hidden="true"
-        />
+        <ArrowPathIcon className="h-4 w-4" aria-hidden="true" />
       </Button>
       {canEdit && (
-        <PlusButton
-          primary
-          className="mr-1"
-          buttonSize="large"
-          onClick={() => {
-            router.push(PATH.CATALOGUE_ITEM)
-          }}
-        />
+        <Link href={PATH.CATALOGUE_ITEM}>
+          <PlusButton primary className="mr-1" buttonSize="large" />
+        </Link>
       )}
     </div>
   )

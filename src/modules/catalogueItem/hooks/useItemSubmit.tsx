@@ -27,7 +27,7 @@ const useItemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>)
           push(PATH.CATALOGUE_ITEM + '/' + responseUid)
         }
       })
-      mutate(undefined, true)
+      mutate()
     },
     onError: () => {
       toast.error('Error saving item')

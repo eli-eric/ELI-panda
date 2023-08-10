@@ -1,7 +1,8 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
+import useTableStateStore from '@/store/useTableStateStore'
 
 import { CatalogueTable } from '../shared/catalogue/table/CatalogueItems.table'
 import { Pagination } from '../shared/table/Pagination'
@@ -11,12 +12,19 @@ import { CategoryListContainer } from './components/categoryList/CategoryList.co
 import { SearchBarButtons } from './components/SearchBarButtons'
 import { useCatalogueItems } from './hooks/useCatalogueItems'
 import { useCategoryList } from './hooks/useCategoryList'
+import { useCataloguePath } from './hooks/usePath'
 
 const CatalogueContainer = () => {
   const tableId = 'catalogueItems'
   const { catalogueItems, error, loading } = useCatalogueItems(tableId)
   const { categoryList } = useCategoryList()
   const [open, setOpen] = useState(false)
+  const categoryPath = useCataloguePath()
+  const { setCustom } = useTableStateStore()
+
+  useEffect(() => {
+    setCustom(tableId, { categoryPath })
+  }, [categoryPath, setCustom, tableId])
 
   //TODO: refactor without hooks pagination and table
 
