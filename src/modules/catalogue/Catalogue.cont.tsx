@@ -18,8 +18,6 @@ const CatalogueContainer = () => {
   const { categoryList } = useCategoryList()
   const [open, setOpen] = useState(false)
 
-  //TODO: refactor without hooks pagination and table
-
   return (
     <Fragment>
       <SearchBar left={<SearchBarButtons />} tableId={tableId} />
