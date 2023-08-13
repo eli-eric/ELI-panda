@@ -1,10 +1,11 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import type { FC } from 'react'
+import { memo } from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { useMemo } from 'react'
 import { Fragment } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
 import Combobox from '@/components/form/Combobox'
@@ -23,12 +24,14 @@ import { FormCell } from './components/cells/FormCell'
 
 const { form } = message.cataloguePage.itemDetail
 
+const MemoizedTable = memo(PandaTable)
+
 export const CodebooksContainer: FC = () => {
   const formMethods = useForm()
 
-  const { watch } = formMethods
-
   const [codebooksResponse, setCodebooksResponse] = useState<CodebookType[]>([])
+  const [codebookValues, setCodebookValues] = useState<CodebookType[]>()
+
   const { codebooks } = useEndpoint()
   const { response } = useFetch<{ code: string; type: string }[]>({ url: codebooks })
 
@@ -46,9 +49,13 @@ export const CodebooksContainer: FC = () => {
     }
   })
 
-  const watchCodebook = watch('codebook')
+  const watchCodebook = useWatch({ name: fields.codebook.name, control: formMethods.control })
 
-  const codeBook = useCodebook(watchCodebook?.uid)
+  const { data: codebook, mutate, isLoading } = useCodebook(watchCodebook?.uid)
+
+  useEffect(() => {
+    setCodebookValues(codebook?.data || [])
+  }, [codebook])
 
   const columns = useMemo(
     (): ColumnDef<CodebookType, any>[] => [
@@ -66,19 +73,33 @@ export const CodebooksContainer: FC = () => {
   return (
     <Fragment>
       <PageHead>
-        <PlusButton buttonSize="large" />
+        <PlusButton
+          buttonSize="large"
+          onClick={() => {
+            mutate(
+              prev => {
+                if (prev) {
+                  const newData = prev?.data || []
+                  newData.push({ name: '', uid: '' })
+                  return { ...prev, data: newData }
+                }
+              },
+              { revalidate: false }
+            )
+          }}
+        />
         <Form {...{ formMethods }}>
           <Combobox {...fields.codebook} codebookResponse={codebooksResponse} />
         </Form>
       </PageHead>
       <Card>
-        <PandaTable
+        <MemoizedTable
           {...{
             tableId: 'codebooks',
             className: 'relative',
             columns,
-            data: codeBook?.data || [],
-            isLoading: false
+            data: codebookValues,
+            loading: isLoading
           }}
         />
       </Card>

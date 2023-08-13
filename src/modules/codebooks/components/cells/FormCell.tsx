@@ -1,13 +1,18 @@
 import type { CellContext } from '@tanstack/react-table'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 
 export const FormCell = ({ column: { id }, getValue }: CellContext<CodebookType, any>) => {
   const { register, handleSubmit, formState, reset } = useForm({ defaultValues: { [id]: getValue() } })
-
-  const { isDirty, isSubmitSuccessful } = formState
+  useEffect(() => {
+    reset({ [id]: getValue() })
+  }, [getValue, id, reset])
+  const { isDirty } = formState
   const onSubmit = data => {
+    // submit will be here post when uid does not exist otherwise put
+    // maybe mutation of codebook?
     console.log(data)
     reset(data)
   }

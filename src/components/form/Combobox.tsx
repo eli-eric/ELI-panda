@@ -47,7 +47,9 @@ const Combobox = ({
   const [query, setQuery] = useState<string>('')
   const codebookResponseData = useMemo(() => ({ data: codebookResponse, metadata: undefined }), [codebookResponse])
 
-  const options = useCodebook(codebook, { limit, filter, searchText: query }) || codebookResponseData
+  const { data } = useCodebook(codebook, { limit, filter, searchText: query })
+
+  const options = useMemo(() => (data ? data : codebookResponseData), [data, codebookResponseData])
   const { getFormModal, setOpen } = useAddCodebookValue(options?.metadata)
   const [hasAddPermission, setHasAddPermission] = useState(false)
   const { data: session } = useSession()

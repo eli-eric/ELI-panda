@@ -2,7 +2,6 @@ import useSWR from 'swr/immutable'
 
 import { fetcher } from '@/helpers/fetcher'
 import type { CODEBOOK } from '@/types/constants/codebook'
-import type { Option } from '@/types/form'
 
 import { useEndpoint } from './useEndpoint'
 
@@ -30,23 +29,16 @@ export type CodebookQuery = {
   searchText?: string
   limit?: number
 }
-export const useCodebook = (codebookName?: CODEBOOK, query?: CodebookQuery): CodebookTypeResponse | undefined => {
+export const useCodebook = (codebookName?: CODEBOOK, query?: CodebookQuery) => {
   const filterString = JSON.stringify(query?.filter)
   const { codebook } = useEndpoint({
     path: codebookName,
     query: { ...query, filter: filterString }
   })
-  const { data } = useSWR<CodebookTypeResponse>(codebookName && codebook, fetcher, {
-    suspense: false
+  const { data, mutate, isLoading } = useSWR<CodebookTypeResponse>(codebookName && codebook, fetcher, {
+    suspense: false,
+    keepPreviousData: true
   })
 
-  return data
-}
-
-export const useCodebookSelectValues = (codebookName: CODEBOOK, query?: CodebookQuery): Option[] | undefined => {
-  const codebook = useCodebook(codebookName, query)
-
-  const selectOptions = codebook?.data?.map(({ name, uid }) => ({ name, value: uid }))
-
-  return selectOptions
+  return { data, mutate, isLoading }
 }
