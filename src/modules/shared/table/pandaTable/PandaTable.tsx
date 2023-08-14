@@ -4,7 +4,6 @@ import { getFilteredRowModel } from '@tanstack/react-table'
 import { getExpandedRowModel } from '@tanstack/react-table'
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import type { Ref } from 'react'
-import { useEffect } from 'react'
 import { forwardRef, Fragment, useImperativeHandle } from 'react'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
@@ -78,11 +77,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
     const [sorting, setSorting] = useSorting(tableId, enableQueryURL)
     const [expanded, setExpanded] = useExpanding(tableId)
 
-    useEffect(() => {
-      console.log('data changed', data)
-    }, [data])
-
-    // react-table
+    // react-table hook
     const table = useReactTable<T>({
       getCoreRowModel: getCoreRowModel(),
       getExpandedRowModel: getExpandedRowModel(),
