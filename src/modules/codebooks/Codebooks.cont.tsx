@@ -1,8 +1,7 @@
-import type { ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef, Table } from '@tanstack/react-table'
 import type { FC } from 'react'
+import { useRef } from 'react'
 import { memo } from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
 import { useMemo } from 'react'
 import { Fragment } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
@@ -29,17 +28,8 @@ const MemoizedTable = memo(PandaTable)
 export const CodebooksContainer: FC = () => {
   const formMethods = useForm()
 
-  const [codebooksResponse, setCodebooksResponse] = useState<CodebookType[]>([])
-  const [codebookValues, setCodebookValues] = useState<CodebookType[]>()
-
   const { codebooks } = useEndpoint()
   const { response } = useFetch<{ code: string; type: string }[]>({ url: codebooks })
-
-  useEffect(() => {
-    if (response) {
-      setCodebooksResponse(response.map(code => ({ name: code.code, uid: code.code })))
-    }
-  }, [response])
 
   const fields = useMakeFormFields({
     codebook: {
@@ -52,10 +42,6 @@ export const CodebooksContainer: FC = () => {
   const watchCodebook = useWatch({ name: fields.codebook.name, control: formMethods.control })
 
   const { data: codebook, mutate, isLoading } = useCodebook(watchCodebook?.uid)
-
-  useEffect(() => {
-    setCodebookValues(codebook?.data || [])
-  }, [codebook])
 
   const columns = useMemo(
     (): ColumnDef<CodebookType, any>[] => [
@@ -70,6 +56,8 @@ export const CodebooksContainer: FC = () => {
     []
   )
 
+  const tableRef = useRef<Table<CodebookType>>()
+
   return (
     <Fragment>
       <PageHead>
@@ -79,26 +67,28 @@ export const CodebooksContainer: FC = () => {
             mutate(
               prev => {
                 if (prev) {
-                  const newData = prev?.data || []
-                  newData.push({ name: '', uid: '' })
-                  return { ...prev, data: newData }
+                  return { data: [{ name: '', uid: '' }, ...prev.data], metadata: prev.metadata }
                 }
               },
               { revalidate: false }
             )
+            tableRef.current?.reset()
           }}
         />
         <Form {...{ formMethods }}>
-          <Combobox {...fields.codebook} codebookResponse={codebooksResponse} />
+          <Combobox
+            {...fields.codebook}
+            codebookResponse={response?.map(code => ({ name: code.code, uid: code.code }))}
+          />
         </Form>
       </PageHead>
       <Card>
         <MemoizedTable
+          ref={tableRef}
           {...{
             tableId: 'codebooks',
-            className: 'relative',
             columns,
-            data: codebookValues,
+            data: codebook?.data,
             loading: isLoading
           }}
         />
