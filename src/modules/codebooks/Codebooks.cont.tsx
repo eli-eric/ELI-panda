@@ -1,10 +1,11 @@
-import type { ColumnDef, Table } from '@tanstack/react-table'
+import type { ColumnDef } from '@tanstack/react-table'
 import type { FC } from 'react'
-import { useRef } from 'react'
+import { Fragment } from 'react'
+import { useState } from 'react'
 import { memo } from 'react'
 import { useMemo } from 'react'
-import { Fragment } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
+import uuid from 'react-uuid'
 
 import { PlusButton } from '@/components/Buttons'
 import Combobox from '@/components/form/Combobox'
@@ -21,20 +22,21 @@ import { message } from '@/i18n/src/messages'
 import { PandaTable } from '../shared/table/pandaTable/PandaTable'
 import { FormCell } from './components/cells/FormCell'
 
-const { form } = message.cataloguePage.itemDetail
+const { selectCodebookForm } = message.codebooksPage
 
 const MemoizedTable = memo(PandaTable)
 
 export const CodebooksContainer: FC = () => {
-  const formMethods = useForm()
+  const [lastAddedUUID, setLastAddedUUID] = useState<string>()
 
+  const formMethods = useForm()
   const { codebooks } = useEndpoint()
   const { response } = useFetch<{ code: string; type: string }[]>({ url: codebooks })
 
   const fields = useMakeFormFields({
     codebook: {
       name: 'codebook',
-      placeholder: form.name.placeholder,
+      placeholder: selectCodebookForm.codebook.placeholder,
       rounded: 'rounded-md'
     }
   })
@@ -50,31 +52,29 @@ export const CodebooksContainer: FC = () => {
         id: 'name',
         size: 400,
         accessorKey: 'name',
-        cell: FormCell
+        cell: props => <FormCell {...props} lastAddedUUID={lastAddedUUID} />
       }
     ],
-    []
+    [lastAddedUUID]
   )
 
-  const tableRef = useRef<Table<CodebookType>>()
+  const handleAddNewCodebookValue = () => {
+    const id = uuid()
+    mutate(
+      prev => {
+        if (prev) {
+          return { data: [{ name: '', uid: '', uuid: id }, ...prev.data], metadata: prev.metadata }
+        }
+      },
+      { revalidate: false }
+    )
+    setLastAddedUUID(id)
+  }
 
   return (
     <Fragment>
       <PageHead>
-        <PlusButton
-          buttonSize="large"
-          onClick={() => {
-            mutate(
-              prev => {
-                if (prev) {
-                  return { data: [{ name: '', uid: '' }, ...prev.data], metadata: prev.metadata }
-                }
-              },
-              { revalidate: false }
-            )
-            tableRef.current?.reset()
-          }}
-        />
+        <PlusButton buttonSize="large" onClick={handleAddNewCodebookValue} />
         <Form {...{ formMethods }}>
           <Combobox
             {...fields.codebook}
@@ -84,7 +84,6 @@ export const CodebooksContainer: FC = () => {
       </PageHead>
       <Card>
         <MemoizedTable
-          ref={tableRef}
           {...{
             tableId: 'codebooks',
             columns,

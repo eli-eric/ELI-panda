@@ -303,6 +303,13 @@ export const messages = {
       missingSerialNumber: { title: 'Warning', message: 'Serial number is missing, please fill it.' }
     }
   },
+  codebooksPage: {
+    selectCodebookForm: {
+      codebook: {
+        placeholder: 'select codebook'
+      }
+    }
+  },
   orderItem: { head: 'ELI Panda - Order Item' },
   systemItem: { head: 'ELI Panda - System Item' },
   defaul: { head: 'ELI Panda' }
