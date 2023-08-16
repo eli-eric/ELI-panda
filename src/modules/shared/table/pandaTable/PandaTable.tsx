@@ -29,6 +29,7 @@ export type PandaTableSettings = {
   enableColumnHiding?: boolean
   enableColumnReordering?: boolean
   manualSorting?: boolean
+  enableFiltering?: boolean
 }
 
 export interface GetRowPropsReturnType extends React.HTMLAttributes<HTMLTableRowElement> {
@@ -71,7 +72,8 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
       enableSorting = false,
       enableQueryURL = false,
       enableRowSelection = false,
-      manualSorting = true
+      manualSorting = true,
+      enableFiltering = false
     } = settings || {}
 
     const [columnVisibility, setColumnVisibility] = useVisibility(tableId)
@@ -116,7 +118,12 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
         <div className={classNames('h-full flex flex-col border-t border-gray-300 pb-4', className)}>
           <div className="inline-block min-w-full align-middle">
             <table className="min-w-full divide-y divide-gray-300">
-              <TableHead table={table} enableColumnReordering={enableColumnReordering} data={data} />
+              <TableHead
+                table={table}
+                enableColumnReordering={enableColumnReordering}
+                data={data}
+                enableFiltering={enableFiltering}
+              />
               {data && (
                 <Fragment>
                   <TableBody

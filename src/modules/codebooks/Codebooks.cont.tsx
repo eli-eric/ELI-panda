@@ -89,7 +89,10 @@ export const CodebooksContainer: FC = () => {
             tableId: 'codebooks',
             columns,
             data: codebook?.data,
-            loading: isLoading
+            loading: isLoading,
+            settings: {
+              enableFiltering: true
+            }
           }}
         />
       </Card>

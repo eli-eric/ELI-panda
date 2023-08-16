@@ -22,10 +22,11 @@ interface ColumnHeader {
   header: Header<any, any>
   table: Table<any>
   enableColumnReordering: boolean
+  enableFiltering: boolean
   data?: any
 }
 
-export const ColumnHeader: FC<ColumnHeader> = ({ header, table, enableColumnReordering, data }) => {
+export const ColumnHeader: FC<ColumnHeader> = ({ header, table, enableColumnReordering, data, enableFiltering }) => {
   const { getState, setColumnOrder } = table
   const { columnOrder } = getState()
   const { column } = header
@@ -83,7 +84,9 @@ export const ColumnHeader: FC<ColumnHeader> = ({ header, table, enableColumnReor
           </button>
         )}
       </div>
-      {header.column.getCanFilter() ? <Filter column={header.column} table={table} data={data} /> : null}
+      {enableFiltering && header.column.getCanFilter() ? (
+        <Filter column={header.column} table={table} data={data} />
+      ) : null}
     </th>
   )
 }
