@@ -9,7 +9,6 @@ export const Filter = ({ column, data }: { column: Column<any, unknown>; table: 
   const columnFilterValue = data ? column.getFilterValue() : ''
 
   const facetedUniqueValues = useMemo(() => (data ? column.getFacetedUniqueValues() : []), [data, column])
-
   const sortedUniqueValues = useMemo(() => Array.from(facetedUniqueValues?.keys()).sort(), [facetedUniqueValues])
 
   return (
@@ -21,7 +20,7 @@ export const Filter = ({ column, data }: { column: Column<any, unknown>; table: 
       </datalist>
       <DebouncedInput
         type="text"
-        value={(columnFilterValue ?? '') as string}
+        value={columnFilterValue as string}
         onChange={value => (data ? column.setFilterValue(value) : {})}
         placeholder={`Search... (${data ? column.getFacetedUniqueValues().size : 0})`}
         className={classNames(

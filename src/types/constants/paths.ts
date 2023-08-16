@@ -56,6 +56,6 @@ export const NAV_BAR_CONFIG: NavigationType = [
   {
     name: 'Codebooks',
     links: [{ path: PATH.CODEBOOKS }],
-    role: ROLE.BASICS
+    role: ROLE.CODEBOOKS_ADMIN
   }
 ]
