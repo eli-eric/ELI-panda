@@ -41,7 +41,7 @@ const Listbox = ({
   const { control, setValue } = useFormContext()
   const intl = useIntl()
 
-  const codebookOptions = useCodebook(codebook)
+  const { data: codebookOptions } = useCodebook(codebook)
 
   const options = useMemo(() => {
     if (customOptions) return customOptions
