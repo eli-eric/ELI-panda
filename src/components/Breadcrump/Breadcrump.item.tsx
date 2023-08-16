@@ -2,7 +2,7 @@ import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
 
 interface Props {
-  name: string
+  name?: string
   link?: string
 }
 

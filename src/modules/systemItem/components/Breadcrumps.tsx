@@ -14,7 +14,7 @@ const Breadcrumbs = ({ parentPath }: BreadcrumbsProps) => (
     <Fragment>
       {parentPath?.map((codebook, i) => {
         const link = PATH.SYSTEM + '/' + codebook.uid
-        return <BreadcrumpItem key={i} name={codebook.name} link={link} />
+        return <BreadcrumpItem key={i} name={codebook?.name} link={link} />
       })}
     </Fragment>
   </BreadcrumpContainer>
