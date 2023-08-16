@@ -124,7 +124,7 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
         id: 'catalogueName',
         size: 150,
         cell: ({ getValue, row: { original } }) => (
-          <NewTabLink href={PATH.CATALOGUE_ITEM + '/' + original.physicalItem?.catalogueItem.uid} value={getValue()} />
+          <NewTabLink href={PATH.CATALOGUE_ITEM + '/' + original.physicalItem?.catalogueItem?.uid} value={getValue()} />
         )
       },
       {

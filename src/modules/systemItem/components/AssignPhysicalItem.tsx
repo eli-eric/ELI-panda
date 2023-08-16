@@ -10,12 +10,14 @@ import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
 import type { SystemDetail } from '@/modules/systems/types/responses'
 import type { ModalButtons } from '@/types/form'
 
+import type { SystemDetailFormType } from '../types/form'
+
 const messages = message.common.buttons
 
 export const AssignPhysicalItem = () => {
   const [openModal, setOpenModal] = useState(false)
   const [selectedSystem, setSelectedSystem] = useState<SystemDetail>()
-  const { setValue, watch } = useFormContext()
+  const { setValue, watch, reset, getValues } = useFormContext<SystemDetailFormType>()
   const physicalItem = watch('physicalItem')
 
   const modalButtons: ModalButtons = {
@@ -34,6 +36,36 @@ export const AssignPhysicalItem = () => {
     goBack: {
       text: messages.cancel,
       onClick: () => {
+        setOpenModal(false)
+      }
+    },
+    alternative: {
+      text: messages.addNew,
+      onClick: () => {
+        reset({
+          ...getValues(),
+          physicalItem: {
+            uid: null,
+            currency: '',
+            eun: '',
+            itemUsage: null,
+            price: null,
+            serialNumber: '',
+            catalogueItem: {
+              name: '',
+              category: null,
+              uid: null,
+              supplier: null,
+              catalogueNumber: '',
+              description: '',
+              details: null,
+              categoryName: '',
+              categoryPath: '',
+              manufacturerUrl: ''
+            }
+          }
+        })
+
         setOpenModal(false)
       }
     }
