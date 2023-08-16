@@ -1,9 +1,11 @@
-import type { ColumnDef, Row, Table as ReactTable } from '@tanstack/react-table'
+import type { ColumnDef, ColumnFiltersState, Row, Table as ReactTable } from '@tanstack/react-table'
+import { getFacetedMinMaxValues, getFacetedRowModel, getFacetedUniqueValues } from '@tanstack/react-table'
 import { getSortedRowModel } from '@tanstack/react-table'
 import { getFilteredRowModel } from '@tanstack/react-table'
 import { getExpandedRowModel } from '@tanstack/react-table'
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import type { Ref } from 'react'
+import { useState } from 'react'
 import { forwardRef, Fragment, useImperativeHandle } from 'react'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
@@ -77,17 +79,23 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
     const [sorting, setSorting] = useSorting(tableId, enableQueryURL)
     const [expanded, setExpanded] = useExpanding(tableId)
 
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+
     // react-table hook
     const table = useReactTable<T>({
       getCoreRowModel: getCoreRowModel(),
       getExpandedRowModel: getExpandedRowModel(),
       getFilteredRowModel: getFilteredRowModel(),
       getSortedRowModel: getSortedRowModel(),
+      getFacetedRowModel: getFacetedRowModel(),
+      getFacetedUniqueValues: getFacetedUniqueValues(),
+      getFacetedMinMaxValues: getFacetedMinMaxValues(),
       getSubRows,
       onExpandedChange: setExpanded,
       onSortingChange: setSorting,
       onColumnOrderChange: setColumnOrder,
       onColumnVisibilityChange: setColumnVisibility,
+      onColumnFiltersChange: setColumnFilters,
       columns: columns,
       data: data || [],
       enableSorting: enableSorting,
@@ -95,7 +103,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
       enableRowSelection: enableRowSelection,
       enableMultiRowSelection: false,
       enableSubRowSelection: true,
-      state: { sorting, expanded, columnOrder, columnVisibility }
+      state: { sorting, expanded, columnOrder, columnVisibility, columnFilters }
     })
 
     useImperativeHandle(ref, () => ({
@@ -108,7 +116,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
         <div className={classNames('h-full flex flex-col border-t border-gray-300 pb-4', className)}>
           <div className="inline-block min-w-full align-middle">
             <table className="min-w-full divide-y divide-gray-300">
-              <TableHead table={table} enableColumnReordering={enableColumnReordering} />
+              <TableHead table={table} enableColumnReordering={enableColumnReordering} data={data} />
               {data && (
                 <Fragment>
                   <TableBody

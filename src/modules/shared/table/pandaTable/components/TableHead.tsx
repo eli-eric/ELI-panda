@@ -6,14 +6,21 @@ import { ColumnHeader } from './ColumnHeader'
 interface Props {
   enableColumnReordering: boolean
   table: Table<any>
+  data?: any
 }
 
-export const TableHead: FC<Props> = ({ enableColumnReordering, table }) => (
+export const TableHead: FC<Props> = ({ enableColumnReordering, table, data }) => (
   <thead className="bg-gray-50 border-b">
     {table.getHeaderGroups().map(headerGroup => (
       <tr key={headerGroup.id}>
         {headerGroup.headers.map(header => (
-          <ColumnHeader key={header.id} enableColumnReordering={enableColumnReordering} table={table} header={header} />
+          <ColumnHeader
+            key={header.id}
+            enableColumnReordering={enableColumnReordering}
+            table={table}
+            header={header}
+            data={data}
+          />
         ))}
       </tr>
     ))}

@@ -31,7 +31,8 @@ export const FormCell = ({
   }
 
   useEffect(() => {
-    if (uuid === lastAddedUUID) {
+    console.log({ uuid, lastAddedUUID })
+    if (!!lastAddedUUID && uuid === lastAddedUUID) {
       setFocus(id)
     }
   }, [uuid, lastAddedUUID, id, setFocus])
@@ -42,7 +43,7 @@ export const FormCell = ({
 
   return (
     <form className="flex py-1" onSubmit={handleSubmit(onSubmit)}>
-      <input className="w-full bg-inherit" {...register(id)} onBlur={handleSubmit(onSubmit)} />
+      <input className="w-full bg-inherit" {...register(id)} />
       {isDirty && (
         <button className="ml-2 text-primary-500 hover:text-gray-500" type="submit">
           Save
