@@ -43,7 +43,7 @@ export const CodebooksContainer: FC = () => {
 
   const watchCodebook = useWatch({ name: fields.codebook.name, control: formMethods.control })
 
-  const { data: codebook, mutate, isLoading } = useCodebook(watchCodebook?.uid)
+  const { data: codebook, mutate, isLoading } = useCodebook(watchCodebook?.uid, { limit: 10000 })
 
   const columns = useMemo(
     (): ColumnDef<CodebookType, any>[] => [
@@ -52,6 +52,7 @@ export const CodebooksContainer: FC = () => {
         id: 'name',
         size: 400,
         accessorKey: 'name',
+        enableColumnFilter: true,
         cell: props => <FormCell {...props} lastAddedUUID={lastAddedUUID} />
       }
     ],
