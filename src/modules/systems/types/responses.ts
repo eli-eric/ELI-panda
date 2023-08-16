@@ -37,11 +37,11 @@ export type SystemListResponse = {
 }
 
 export type PhysicalItem = {
-  uid: string
-  itemUsage?: CodebookType // combobox - CODEBOOK.ITEM_USAGE
-  price?: number // input
+  uid?: string | null
+  itemUsage?: CodebookType | null // combobox - CODEBOOK.ITEM_USAGE
+  price?: number | null // input
   currency?: string
   eun?: string // input
   serialNumber?: string // input
-  catalogueItem: CatalogueItem
+  catalogueItem?: CatalogueItem
 }

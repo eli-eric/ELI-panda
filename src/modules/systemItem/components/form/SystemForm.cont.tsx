@@ -1,3 +1,4 @@
+import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Link from 'next/link'
 import { Fragment, memo, useRef } from 'react'
@@ -70,7 +71,7 @@ const SystemForm = () => {
         {physicalItem && (
           <Fragment>
             <Heading customText="Physical Item">
-              {physicalItem.catalogueItem.uid && (
+              {physicalItem?.catalogueItem?.uid && (
                 <Link href={PATH.CATALOGUE_ITEM + '/' + physicalItem.catalogueItem.uid} target={'_blank'}>
                   <Button primary>
                     <span>View Catalogue Item</span>
@@ -93,6 +94,7 @@ const SystemForm = () => {
           </Fragment>
         )}
       </Card>
+      <DevTool control={formMethods.control} />
     </Form>
   )
 }
