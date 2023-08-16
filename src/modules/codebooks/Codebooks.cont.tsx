@@ -50,7 +50,6 @@ export const CodebooksContainer: FC = () => {
       {
         header: 'Name',
         id: 'name',
-        size: 400,
         accessorKey: 'name',
         enableColumnFilter: true,
         cell: props => <FormCell {...props} lastAddedUUID={lastAddedUUID} />
@@ -91,7 +90,9 @@ export const CodebooksContainer: FC = () => {
             data: codebook?.data,
             loading: isLoading,
             settings: {
-              enableFiltering: true
+              enableFiltering: true,
+              enableSorting: true,
+              manualSorting: false
             }
           }}
         />
