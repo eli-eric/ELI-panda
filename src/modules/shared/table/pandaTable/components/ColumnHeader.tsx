@@ -73,11 +73,11 @@ export const ColumnHeader: FC<ColumnHeader> = ({ header, table, enableColumnReor
           onClick={header.column.getToggleSortingHandler()}
         >
           {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+          {{
+            asc: ' 🔼',
+            desc: ' 🔽'
+          }[header.column.getIsSorted() as string] ?? null}
         </div>
-        {{
-          asc: ' 🔼',
-          desc: ' 🔽'
-        }[header.column.getIsSorted() as string] ?? null}
         {enableColumnReordering && (
           <button ref={dragRef} className="ml-2">
             <ArrowsRightLeftIcon className="w-6 h-6" />
