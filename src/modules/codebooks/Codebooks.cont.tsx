@@ -78,6 +78,7 @@ export const CodebooksContainer: FC = () => {
         <Form {...{ formMethods }}>
           <Combobox
             {...fields.codebook}
+            className={'w-72'}
             codebookResponse={response?.map(code => ({ name: code.code, uid: code.code }))}
           />
         </Form>

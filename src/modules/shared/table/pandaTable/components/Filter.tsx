@@ -24,8 +24,7 @@ export const Filter = ({ column, data }: { column: Column<any, unknown>; table: 
         onChange={value => (data ? column.setFilterValue(value) : {})}
         placeholder={`Search... (${data ? column.getFacetedUniqueValues().size : 0})`}
         className={classNames(
-          'block w-full appearance-none border px-3 py-2 placeholder-gray-400 rounded-md focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs',
-          'border-gray-300'
+          'w-full placeholder:text-xs placeholder:font-normal rounded-md border-gray-300 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs'
         )}
         list={column.id + 'list'}
       />
