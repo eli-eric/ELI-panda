@@ -13,7 +13,8 @@ import { SystemItemContainer } from '@/modules/systemItem/SystemItem.cont'
 const messages = message.systemItem
 
 const SystemContainer = (): React.ReactElement => {
-  const { systemDetail } = useSystemDetail()
+  const { systemDetail, error } = useSystemDetail()
+  if (error) return <ErrorPage />
   return <Fragment>{systemDetail && <SystemItemContainer />}</Fragment>
 }
 
