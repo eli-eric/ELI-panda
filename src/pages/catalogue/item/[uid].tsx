@@ -1,7 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
@@ -13,7 +12,8 @@ import useItem from '@/modules/catalogueItem/hooks/useItem'
 const messages = message.cataloguePage
 
 const ItemContainer = () => {
-  const { item } = useItem()
+  const { item, error } = useItem()
+  if (error) return <ErrorPage />
   return <Fragment>{item ? <CatalogueItemContainer /> : <LoaderComponent />}</Fragment>
 }
 
@@ -25,11 +25,13 @@ const CatalogueItemDetailPage: NextPage = (): JSX.Element => {
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-      <ErrorBoundary fallback={<ErrorPage />}>
-        <ItemContainer />
-      </ErrorBoundary>
+      <ItemContainer />
     </Fragment>
   )
 }
+
+CatalogueItemDetailPage.getInitialProps = ({ query }) => ({
+  key: query.uid
+})
 
 export default CatalogueItemDetailPage
