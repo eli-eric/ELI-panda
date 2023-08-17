@@ -18,7 +18,7 @@ const useOrderDetail = () => {
       revalidateOnReconnect: true,
       revalidateOnMount: true,
       revalidateIfStale: true,
-      suspense: false
+      suspense: true
     }
   })
   const { data: session } = useSession()

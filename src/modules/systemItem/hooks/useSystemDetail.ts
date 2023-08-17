@@ -15,6 +15,7 @@ export const useSystemDetail = () => {
   const { response, loading, error, mutate } = useFetch<SystemDetailFormType>({
     url: uid && systemEndpoint,
     config: {
+      suspense: true,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
       revalidateOnMount: true

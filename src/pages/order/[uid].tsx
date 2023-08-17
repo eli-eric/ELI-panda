@@ -1,21 +1,15 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Fragment } from 'react'
+import { Fragment, Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
-import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
 import { OrderItemContainer } from '@/modules/orderItem/OrderItem.cont'
 
 const messages = message.orderItem
-
-const OrderContainer = (): JSX.Element => {
-  const { orderDetail } = useOrderDetail()
-  return <Fragment>{orderDetail ? <OrderItemContainer /> : <LoaderComponent />}</Fragment>
-}
 
 const OrderItemPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
@@ -26,7 +20,9 @@ const OrderItemPage: NextPage = (): JSX.Element => {
         <meta name="description" content="...." />
       </Head>
       <ErrorBoundary fallback={<ErrorPage />}>
-        <OrderContainer />
+        <Suspense fallback={<LoaderComponent />}>
+          <OrderItemContainer />
+        </Suspense>
       </ErrorBoundary>
     </Fragment>
   )

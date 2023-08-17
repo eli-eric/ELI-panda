@@ -7,15 +7,9 @@ import { message } from 'src/i18n/src/messages'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
-import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { SystemItemContainer } from '@/modules/systemItem/SystemItem.cont'
 
 const messages = message.systemItem
-
-const SystemContainer = (): React.ReactElement => {
-  const { systemDetail } = useSystemDetail()
-  return <Fragment>{systemDetail && <SystemItemContainer />}</Fragment>
-}
 
 const SystemDetailPage: NextPage = () => {
   const intl = useIntl()
@@ -28,7 +22,7 @@ const SystemDetailPage: NextPage = () => {
       </Head>
       <ErrorBoundary fallback={<ErrorPage />}>
         <Suspense fallback={<LoaderComponent />}>
-          <SystemContainer />
+          <SystemItemContainer />
         </Suspense>
       </ErrorBoundary>
     </Fragment>

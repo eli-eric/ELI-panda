@@ -21,7 +21,7 @@ const useItem = () => {
     mutate
   } = useFetch<CatalogueItem>({
     url: () => (catalogueUid ? catalogueItem : null),
-    config: { suspense: false, revalidateOnMount: true },
+    config: { suspense: true, revalidateOnMount: true },
     useMockFetcher: false
   })
 
