@@ -1,20 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
 
 export const DebouncedInput = ({
   value: initialValue,
   onChange,
   debounce = 500,
+  className,
   ...props
 }: {
   value: string | number
   onChange: (value: string | number) => void
   debounce?: number
+  className?: string
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) => {
-  const [value, setValue] = useState(initialValue)
+  const { register, watch } = useForm({ defaultValues: { filter: initialValue } })
 
-  useEffect(() => {
-    setValue(initialValue)
-  }, [initialValue])
+  const value = watch('filter')
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -22,7 +23,7 @@ export const DebouncedInput = ({
     }, debounce)
 
     return () => clearTimeout(timeout)
-  }, [value, debounce, onChange])
+  }, [debounce, value, onChange])
 
-  return <input {...props} value={value} onChange={e => setValue(e.target.value)} />
+  return <input {...props} {...register('filter')} className={className} />
 }
