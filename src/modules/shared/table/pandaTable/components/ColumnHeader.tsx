@@ -2,11 +2,14 @@ import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
 import type { ColumnOrderState, Header, Table } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
 import type { FC } from 'react'
+import { memo } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
 import { classNames } from '@/helpers'
 
 import { Filter } from './Filter'
+
+const MemoizedFilter = memo(Filter)
 
 const reorderColumn = (draggedColumnId: string, targetColumnId: string, columnOrder: string[]): ColumnOrderState => {
   columnOrder.splice(
@@ -85,7 +88,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({ header, table, enableColumnReor
         )}
       </div>
       {enableFiltering && header.column.getCanFilter() ? (
-        <Filter column={header.column} table={table} data={data} />
+        <MemoizedFilter column={header.column} table={table} data={data} />
       ) : null}
     </th>
   )
