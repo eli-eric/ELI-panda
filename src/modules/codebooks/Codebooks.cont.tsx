@@ -28,9 +28,10 @@ const MemoizedTable = memo(PandaTable)
 
 export const CodebooksContainer: FC = () => {
   const [lastAddedUUID, setLastAddedUUID] = useState<string>()
-
   const formMethods = useForm()
-  const { codebooks } = useEndpoint()
+  const watchCodebook = useWatch({ name: 'codebook', control: formMethods.control })
+
+  const { codebooks } = useEndpoint({ query: { editable: true } })
   const { response } = useFetch<{ code: string; type: string }[]>({ url: codebooks })
 
   const fields = useMakeFormFields({
@@ -41,8 +42,6 @@ export const CodebooksContainer: FC = () => {
     }
   })
 
-  const watchCodebook = useWatch({ name: fields.codebook.name, control: formMethods.control })
-
   const { data: codebook, mutate, isLoading } = useCodebook(watchCodebook?.uid, { limit: 10000 })
 
   const columns = useMemo(
@@ -52,10 +51,12 @@ export const CodebooksContainer: FC = () => {
         id: 'name',
         accessorKey: 'name',
         enableColumnFilter: true,
-        cell: props => <FormCell {...props} lastAddedUUID={lastAddedUUID} />
+        cell: props => (
+          <FormCell {...props} lastAddedUUID={lastAddedUUID} mutate={mutate} codebookType={watchCodebook?.name} />
+        )
       }
     ],
-    [lastAddedUUID]
+    [lastAddedUUID, mutate, watchCodebook]
   )
 
   const handleAddNewCodebookValue = () => {

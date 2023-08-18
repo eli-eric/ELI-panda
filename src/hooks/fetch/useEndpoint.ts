@@ -21,14 +21,14 @@ const getEndpoints = (uid?: string, path?: string, itemUid?: string, query?: str
     systemsForRelationship: `/systems/for-relationship${query}`,
     systemSubsystemsForRelationship: `/system/${uid}/subsystems/for-relationship`,
     systemSubsystems: `/system/${uid}/subsystems`,
-    codebook: `/codebook/${path}${query}`,
     systemsList: `/systems${query}`,
     systemCode: `/system/systemCode${query}`,
     orders: `/orders${query}`,
     order: `/order${uid ? '/' + uid : ''}`,
     orderLineDelivery: `/order/${uid}/orderline/${itemUid}/delivery`,
     eunforPrint: `/orders/eun-for-print/${uid}${query}`,
-    codebooks: '/codebooks'
+    codebook: `/codebook/${path}${query}`,
+    codebooks: `/codebooks${query}`
   }
   return endpoints
 }
