@@ -1,7 +1,7 @@
 import { Combobox as HUICombobox } from '@headlessui/react'
 import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import { useSession } from 'next-auth/react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
@@ -16,6 +16,7 @@ import useAddCodebookValue from './shared/useAddCodebookValue'
 type ComboboxPropsT = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
     codebook?: CODEBOOK
+    codebookResponse?: CodebookType[]
     isObject?: boolean
     position?: 'top' | 'bottom'
     limit?: number
@@ -37,13 +38,18 @@ const Combobox = ({
   filter,
   position = 'bottom',
   rounded = 'rounded-md',
+  codebookResponse,
   showAddButton = false
 }: ComboboxPropsT) => {
   const { control, setValue } = useFormContext()
   const { formatMessage: fm } = useIntl()
 
   const [query, setQuery] = useState<string>('')
-  const options = useCodebook(codebook, { limit, filter, searchText: query })
+  const codebookResponseData = useMemo(() => ({ data: codebookResponse, metadata: undefined }), [codebookResponse])
+
+  const { data } = useCodebook(codebook, { limit, filter, searchText: query })
+
+  const options = useMemo(() => (data ? data : codebookResponseData), [data, codebookResponseData])
   const { getFormModal, setOpen } = useAddCodebookValue(options?.metadata)
   const [hasAddPermission, setHasAddPermission] = useState(false)
   const { data: session } = useSession()
