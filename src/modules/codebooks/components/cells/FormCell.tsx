@@ -9,6 +9,7 @@ import type { CodebookType, CodebookTypeResponse } from '@/hooks/fetch/useCodebo
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import useWarningModal from '@/hooks/useWarningModal'
+import type { CODEBOOK } from '@/types/constants/codebook'
 
 interface ExtendedCodebookType extends CodebookType {
   uuid?: string
@@ -17,7 +18,7 @@ interface ExtendedCodebookType extends CodebookType {
 interface FormCellProps extends CellContext<ExtendedCodebookType, any> {
   lastAddedUUID?: string
   mutate: KeyedMutator<CodebookTypeResponse>
-  codebookType: string
+  codebookType?: CODEBOOK
 }
 
 export const FormCell = ({
