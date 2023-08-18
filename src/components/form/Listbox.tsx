@@ -9,19 +9,21 @@ import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 
-export type ListboxPropsT = FieldProps &
-  React.InputHTMLAttributes<HTMLInputElement> & {
-    codebook?: CODEBOOK
-    position?: 'top' | 'bottom'
-    allowEmptyOption?: boolean
-    emptyOption?: string
-    optionsSize?: 'sm' | 'md' | 'lg'
-    customOptions?: CodebookType[]
-    unit?: string
-    customLabel?: string
-    useFirstRender?: boolean
-    //name: Path<any>
-  }
+export type ListboxPropsT = FieldProps & {
+  codebook?: CODEBOOK
+  position?: 'top' | 'bottom'
+  allowEmptyOption?: boolean
+  emptyOption?: string
+  optionsSize?: 'sm' | 'md' | 'lg'
+  customOptions?: CodebookType[]
+  unit?: string
+  customLabel?: string
+  useFirstRender?: boolean
+  codebookResponse?: CodebookType[]
+  onChange?: (value: any) => void
+  className?: string
+  //name: Path<any>
+}
 
 const Listbox = ({
   codebook,
@@ -36,7 +38,9 @@ const Listbox = ({
   rounded = 'rounded-md',
   unit,
   customOptions,
-  customLabel
+  customLabel,
+  codebookResponse,
+  onChange
 }: ListboxPropsT) => {
   const { control, setValue } = useFormContext()
   const intl = useIntl()
@@ -52,8 +56,11 @@ const Listbox = ({
     if (codebookOptions?.data) {
       targetOptions.push(...codebookOptions.data)
     }
+    if (codebookResponse) {
+      targetOptions.push(...codebookResponse)
+    }
     return targetOptions
-  }, [allowEmptyOption, emptyOption, codebookOptions, customOptions])
+  }, [allowEmptyOption, emptyOption, codebookOptions, customOptions, codebookResponse])
 
   const handleChange = (value: any) => (value?.uid === '' ? null : value)
 
@@ -71,7 +78,10 @@ const Listbox = ({
         <HUIListbox
           as="div"
           {...field}
-          onChange={v => field.onChange(handleChange(v))}
+          onChange={v => {
+            field.onChange(handleChange(v))
+            onChange && onChange(v)
+          }}
           disabled={disabled}
           className={classNames('relative flex flex-col w-full mt-auto', className)}
         >
@@ -106,12 +116,7 @@ const Listbox = ({
               )}
               <div className="absolute inset-y-0 right-0 flex items-center pr-2">
                 {unit && <span className="text-gray-400 sm:text-sm">{unit}</span>}
-                <ChevronDownIcon
-                  className="h-4 w-4
-
- text-gray-500"
-                  aria-hidden="true"
-                />
+                <ChevronDownIcon className="h-4 w-4 text-gray-500" aria-hidden="true" />
               </div>
             </HUIListbox.Button>
           </div>

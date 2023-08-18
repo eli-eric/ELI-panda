@@ -39,7 +39,8 @@ const Combobox = ({
   position = 'bottom',
   rounded = 'rounded-md',
   codebookResponse,
-  showAddButton = false
+  showAddButton = false,
+  onChange
 }: ComboboxPropsT) => {
   const { control, setValue } = useFormContext()
   const { formatMessage: fm } = useIntl()
@@ -87,7 +88,10 @@ const Combobox = ({
               )}
               <div className="relative">
                 <HUICombobox.Input
-                  onChange={e => setQuery(e.target.value)}
+                  onChange={e => {
+                    setQuery(e.target.value)
+                    onChange && onChange(e)
+                  }}
                   displayValue={(item: CodebookType) => item?.name}
                   placeholder={placeholder}
                   autoComplete="off"
