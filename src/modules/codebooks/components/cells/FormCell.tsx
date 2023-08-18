@@ -1,6 +1,6 @@
 import type { CellContext } from '@tanstack/react-table'
 import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import type { KeyedMutator } from 'swr'
 
@@ -31,7 +31,11 @@ export const FormCell = ({
   mutate,
   codebookType
 }: FormCellProps) => {
-  const { register, handleSubmit, formState, reset, setFocus } = useForm({ defaultValues: { [id]: getValue() } })
+  const { register, handleSubmit, formState, reset, setFocus, control } = useForm({
+    defaultValues: { [id]: getValue() }
+  })
+
+  const name = useWatch({ name: id, control })
 
   const method = uid ? 'put' : 'post'
 
@@ -47,7 +51,7 @@ export const FormCell = ({
           prev && {
             metadata: prev?.metadata,
             data: prev.data.map((value: ExtendedCodebookType) =>
-              uuid ? (value.uuid === uuid ? data : value) : value.uid === uid ? data : value
+              uuid ? (value.uuid === uuid ? data : value) : value.uid === uid ? { name, uid } : value
             )
           },
         {
@@ -104,12 +108,20 @@ export const FormCell = ({
 
   return (
     <form className="flex py-1" onSubmit={handleSubmit(onSubmit)}>
-      <input className="w-full bg-inherit" {...register(id)} />
-      {isDirty && (
+      <input
+        className="w-full bg-inherit"
+        {...register(id)}
+        onBlur={() => {
+          if (isDirty) {
+            handleSubmit(onSubmit)()
+          }
+        }}
+      />
+      {/* {isDirty && (
         <button className="ml-2 text-primary-500 hover:text-gray-500" type="submit">
           Save
         </button>
-      )}
+      )} */}
       {uid && (
         <div className="flex">
           <TableDeleteButton onClick={onDeleteClick} />
