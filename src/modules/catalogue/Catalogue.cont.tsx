@@ -26,8 +26,6 @@ const CatalogueContainer = () => {
     setCustom(tableId, { categoryPath })
   }, [categoryPath, setCustom, tableId])
 
-  //TODO: refactor without hooks pagination and table
-
   return (
     <Fragment>
       <SearchBar left={<SearchBarButtons />} tableId={tableId} />

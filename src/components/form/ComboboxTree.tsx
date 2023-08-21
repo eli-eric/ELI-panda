@@ -42,7 +42,7 @@ export const ComboboxTree = ({
   const [open, setOpen] = useState(false)
 
   const [query, setQuery] = useState<string>('')
-  const options = useCodebook(codebook, { limit, filter, searchText: query })
+  const { data: options } = useCodebook(codebook, { limit, filter, searchText: query })
 
   const handleClear = () => {
     setQuery('')

@@ -5,7 +5,8 @@ export const messages = {
       continue: 'Continue',
       cancel: 'Cancel',
       save: 'Save',
-      home: 'Go Home'
+      home: 'Go Home',
+      addNew: 'Add new item'
     },
     custom404: {
       title: '404',
@@ -300,6 +301,13 @@ export const messages = {
       },
       deleteModal: { title: 'Warning', message: 'Are you sure you want to delete <medium>{name}</medium>?' },
       missingSerialNumber: { title: 'Warning', message: 'Serial number is missing, please fill it.' }
+    }
+  },
+  codebooksPage: {
+    selectCodebookForm: {
+      codebook: {
+        placeholder: 'select codebook'
+      }
     }
   },
   orderItem: { head: 'ELI Panda - Order Item' },

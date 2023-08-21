@@ -13,7 +13,8 @@ import { OrderItemContainer } from '@/modules/orderItem/OrderItem.cont'
 const messages = message.orderItem
 
 const OrderContainer = (): JSX.Element => {
-  const { orderDetail } = useOrderDetail()
+  const { orderDetail, error } = useOrderDetail()
+  if (error) return <ErrorPage />
   return <Fragment>{orderDetail ? <OrderItemContainer /> : <LoaderComponent />}</Fragment>
 }
 
@@ -31,5 +32,9 @@ const OrderItemPage: NextPage = (): JSX.Element => {
     </Fragment>
   )
 }
+
+OrderItemPage.getInitialProps = ({ query }) => ({
+  key: query.uid
+})
 
 export default OrderItemPage

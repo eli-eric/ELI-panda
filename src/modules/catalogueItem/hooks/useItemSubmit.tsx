@@ -9,7 +9,7 @@ import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { PATH } from '@/types/constants/paths'
 
 const useItemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>) => {
-  const { query, back, push } = useRouter()
+  const { query, back, replace } = useRouter()
   const uid = query.uid as string | undefined
   const { catalogueItem } = useEndpoint({ uid: uid })
   const { mutate } = useCatalogueItems()
@@ -24,7 +24,7 @@ const useItemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>)
         if (uid) {
           back()
         } else {
-          push(PATH.CATALOGUE_ITEM + '/' + responseUid)
+          replace(PATH.CATALOGUE_ITEM + '/' + responseUid)
         }
       })
       mutate()

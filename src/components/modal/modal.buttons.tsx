@@ -21,6 +21,14 @@ const ModalButtonsComponent = ({ testid, buttons }: Props) => (
             className="inline-flex w-full justify-center sm:mt-0 sm:text-sm text-gray-700"
           />
         )}
+        {buttons.alternative && (
+          <Button
+            {...buttons.alternative}
+            testid={`${testid}-${buttons.alternative?.testid}`}
+            primary
+            className="inline-flex w-full justify-center sm:mt-0 sm:text-sm"
+          />
+        )}
         <Button
           {...buttons.goNext}
           testid={`${testid}-${buttons.goNext?.testid}`}

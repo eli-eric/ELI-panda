@@ -2,6 +2,7 @@ export type ModalButtons = {
   noButtons?: boolean
   goBack?: Button
   goNext?: Button
+  alternative?: Button
 }
 
 export type Button = {

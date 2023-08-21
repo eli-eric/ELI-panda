@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
 
@@ -21,12 +22,12 @@ export const useParentSystemDetail = () => {
     useMockFetcher: false
   })
 
-  const parentPath = useMemo(
+  const parentPath: CodebookType[] | undefined = useMemo(
     () =>
       response
         ? response?.parentPath
-          ? [...response.parentPath, { uid: response?.uid, name: response?.name }]
-          : [{ uid: response?.uid, name: response?.name }]
+          ? [...response.parentPath, { uid: response?.uid || '', name: response?.name || '' }]
+          : [{ uid: response?.uid || '', name: response?.name || '' }]
         : undefined,
     [response]
   )
