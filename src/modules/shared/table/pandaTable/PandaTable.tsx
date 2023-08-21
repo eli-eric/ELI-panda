@@ -5,6 +5,7 @@ import { getFilteredRowModel } from '@tanstack/react-table'
 import { getExpandedRowModel } from '@tanstack/react-table'
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import type { Ref } from 'react'
+import { useDeferredValue } from 'react'
 import { useState } from 'react'
 import { forwardRef, Fragment, useImperativeHandle } from 'react'
 
@@ -83,6 +84,8 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
 
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
 
+    const defferedData = useDeferredValue(data)
+
     // react-table hook
     const table = useReactTable<T>({
       getCoreRowModel: getCoreRowModel(),
@@ -99,7 +102,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
       onColumnVisibilityChange: setColumnVisibility,
       onColumnFiltersChange: setColumnFilters,
       columns: columns,
-      data: data || [],
+      data: defferedData || [],
       enableSorting: enableSorting,
       manualSorting: manualSorting,
       enableRowSelection: enableRowSelection,
@@ -121,10 +124,10 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
               <TableHead
                 table={table}
                 enableColumnReordering={enableColumnReordering}
-                data={data}
+                data={defferedData}
                 enableFiltering={enableFiltering}
               />
-              {data && (
+              {defferedData && (
                 <Fragment>
                   <TableBody
                     getRowModel={table.getRowModel}
@@ -136,8 +139,8 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
                 </Fragment>
               )}
             </table>
-            {loading && !data && <ProgressBarComponent />}
-            {data?.length === 0 && <EmptyResults />}
+            {loading && !defferedData && <ProgressBarComponent />}
+            {defferedData?.length === 0 && <EmptyResults />}
           </div>
         </div>
       </Fragment>

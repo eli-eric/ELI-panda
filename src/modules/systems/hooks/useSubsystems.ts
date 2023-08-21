@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
@@ -14,22 +14,18 @@ export const useSubsystems = tableId => {
 
   const { systemSubsystems } = useEndpoint({ uid: uid || '' })
 
-  const { loading: pending, response } = useFetch<SystemDetail[]>({
+  const { loading: pending } = useFetch<SystemDetail[]>({
     url: uid ? systemSubsystems : null,
     config: {
       suspense: false,
       keepPreviousData: true,
-      onError: () => toast.error('Error fetching subsystems')
+      onError: () => toast.error('Error fetching subsystems'),
+      onSuccess: response => {
+        mutate(prev => prev && makeSubsystems(uid, prev, response), { revalidate: false })
+        setUid(null)
+      }
     }
   })
-
-  useEffect(() => {
-    if (response) {
-      mutate(prev => prev && makeSubsystems(uid, prev, response), { revalidate: false })
-      setUid(null)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [response])
 
   return { setUid, pending }
 }
