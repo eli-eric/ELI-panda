@@ -3,7 +3,7 @@ import type { CellContext } from '@tanstack/react-table'
 import Tippy from '@tippyjs/react'
 import { Fragment } from 'react'
 
-import type { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 
 export const DescriptionCell = ({ getValue }: CellContext<CatalogueItem, any>) => (
   <Fragment>

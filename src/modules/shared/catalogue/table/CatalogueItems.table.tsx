@@ -1,11 +1,11 @@
 import type { ColumnDef, Table } from '@tanstack/react-table'
 import { useEffect, useRef, useState } from 'react'
 
-import type { CatalogueItem } from '@/types/responses'
-import type { CatalogueCategoryResponse, CatalogueItemsResponse } from '@/types/responses'
+import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 
 import { PandaTable } from '../../table/pandaTable/PandaTable'
 import { useCatalogueItemsColumns } from './CatalogueItems.columns'
+import type { CatalogueCategoryResponse, CatalogueItemsResponse } from './types/responses'
 
 interface CatalogueTableProps {
   additionalColumn?: ColumnDef<CatalogueItem, any>

@@ -1,4 +1,5 @@
 import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
+import type { TableResponse } from '@/modules/shared/table/pandaTable/types/responses'
 
 export interface CatalogueCategoryResponse {
   uid: string
@@ -7,7 +8,4 @@ export interface CatalogueCategoryResponse {
   parentPath: string
 }
 
-export interface CatalogueItemsResponse {
-  totalCount: number
-  data: CatalogueItem[]
-}
+export type CatalogueItemsResponse = TableResponse<CatalogueItem> | undefined

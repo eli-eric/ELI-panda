@@ -1,7 +1,7 @@
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
 import useQueryManager from '@/hooks/useQueryManager'
-import type { CatalogueItemsResponse } from '@/types/responses'
+import type { CatalogueItemsResponse } from '@/modules/shared/catalogue/table/types/responses'
 
 export const useCatalogueItems = (tableId = 'catalogueItems') => {
   const { query } = useQueryManager(tableId)

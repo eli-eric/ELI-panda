@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Suspense } from 'react'
+import { Fragment, Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
@@ -56,19 +56,21 @@ export const OrderItemContainer = () => {
   }
 
   return (
-    <Form formMethods={formMethods} onSubmit={onSubmit} enableLeaveWarning={true}>
-      <HeaderComponent loading={loading} />
-      <OrderFormComponent />
-      <Card className="flex flex-col justify-between">
-        <OrderLinesTable disabledEdit={disabledEdit} />
-        {uid && (
-          <ErrorBoundary fallback={<ErrorPage />}>
-            <Suspense fallback={<ProgressBarComponent />}>
-              <FileManager itemType={FILE_TYPE.ORDER} uid={uid} hasEditRole={!disabledEdit} />
-            </Suspense>
-          </ErrorBoundary>
-        )}
-      </Card>
-    </Form>
+    <Fragment>
+      <Form formMethods={formMethods} onSubmit={onSubmit} enableLeaveWarning={true}>
+        <HeaderComponent loading={loading} />
+        <OrderFormComponent />
+        <Card className="flex flex-col justify-between">
+          <OrderLinesTable disabledEdit={disabledEdit} />
+          {uid && (
+            <ErrorBoundary fallback={<ErrorPage />}>
+              <Suspense fallback={<ProgressBarComponent />}>
+                <FileManager itemType={FILE_TYPE.ORDER} uid={uid} hasEditRole={!disabledEdit} />
+              </Suspense>
+            </ErrorBoundary>
+          )}
+        </Card>
+      </Form>
+    </Fragment>
   )
 }

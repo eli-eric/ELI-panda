@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Fragment } from 'react'
 
 import { LinkDecorator } from '@/components/decorators'
-import type { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 
 export const ManufacturerUrl = ({ getValue }: CellContext<CatalogueItem, any>) => (
   <Fragment>

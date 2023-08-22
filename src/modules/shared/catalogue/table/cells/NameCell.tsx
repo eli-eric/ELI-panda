@@ -14,9 +14,9 @@ import { useSubmit } from '@/hooks/fetch/useSubmit'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
+import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
-import type { CatalogueItem } from '@/types/responses'
 
 const buttonsMessage = message.common.buttons
 const modalMessage = message.ordersPage.deleteModal
@@ -38,7 +38,7 @@ export const NameCell = ({
   tableId,
   isHoveringId
 }: NameProps) => {
-  const { catalogueItem } = useEndpoint({ uid })
+  const { catalogueItem } = useEndpoint({ uid: uid ?? undefined })
   //const image = useCatalogueImage(uid)
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
   const { formatMessage } = useIntl()
@@ -52,7 +52,7 @@ export const NameCell = ({
     method: 'delete',
     onSuccess: () => {
       setOpenDeleteWarn(false)
-      catalogueItems && mutate({ ...catalogueItems, data: catalogueItems?.data.filter(item => item.uid !== uid) })
+      catalogueItems && mutate({ ...catalogueItems, data: catalogueItems?.data?.filter(item => item.uid !== uid) })
     },
     onError: e => {
       if (e?.response?.status === 409) {

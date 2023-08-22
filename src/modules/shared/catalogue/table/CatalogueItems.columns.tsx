@@ -5,7 +5,7 @@ import { useIntl } from 'react-intl'
 import { message } from '@/i18n/src/messages'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
-import type { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 
 import { CategoryName } from './cells/CategoryNameCell'
 import { DescriptionCell } from './cells/DescriptionCell'
@@ -70,6 +70,7 @@ export const useCatalogueItemsColumns = (
 
     if (
       categoryList?.length === 0 &&
+      catalogueItems?.data &&
       catalogueItems?.data[0]?.details &&
       catalogueItems?.data[0]?.details?.length > 0 &&
       catalogueItems.data[0]?.details[0]?.property?.type?.name

@@ -1,4 +1,10 @@
-import type { ColumnOrderState, ExpandedState, SortingState, VisibilityState } from '@tanstack/react-table'
+import type {
+  ColumnFilter,
+  ColumnOrderState,
+  ExpandedState,
+  SortingState,
+  VisibilityState
+} from '@tanstack/react-table'
 import { create } from 'zustand'
 
 import type { QueryFilter } from '@/modules/orders/types'
@@ -8,6 +14,7 @@ type SortingInstance = {
   sortByQueryString?: string
   pagination?: string
   filter?: QueryFilter
+  columnFilter?: ColumnFilter[]
   search?: string
   custom?: Record<string, any>
   columnVisibility?: VisibilityState
@@ -22,6 +29,7 @@ type TableState = {
   setPagination: (tableId: string, pagination: SortingInstance['pagination']) => void
   reset: (tableId: string) => void
   setFilter: (tableId: string, filter: SortingInstance['filter']) => void
+  setColumFilter: (tableId: string, columnFilter: SortingInstance['columnFilter']) => void
   setSearch: (tableId: string, search: SortingInstance['search']) => void
   setCustom: (tableId: string, custom: SortingInstance['custom']) => void
   setVisibility: (tableId: string, columnVisibility: SortingInstance['columnVisibility']) => void
@@ -138,6 +146,20 @@ const useTableStateStore = create<TableState>(set => ({
           delete state.instances[tableId].columnOrder
         } else {
           state.instances[tableId].columnOrder = columnOrder
+        }
+        return { instances: { ...state.instances } }
+      }
+    }),
+  setColumFilter: (tableId, columnFilter) =>
+    set(state => {
+      if (!state.instances?.[tableId]) {
+        const newInstance = { ...state.instances[tableId], columnFilter }
+        return { instances: { ...state.instances, [tableId]: newInstance } }
+      } else {
+        if (columnFilter && Object.keys(columnFilter).length === 0) {
+          delete state.instances[tableId].columnFilter
+        } else {
+          state.instances[tableId].columnFilter = columnFilter
         }
         return { instances: { ...state.instances } }
       }
