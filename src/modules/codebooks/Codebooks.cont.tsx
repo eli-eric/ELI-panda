@@ -67,7 +67,14 @@ export const CodebooksContainer: FC = () => {
         enableColumnFilter: true,
         cell: props => (
           <FormCell {...props} lastAddedUUID={lastAddedUUID} mutate={mutate} codebookType={watchCodebook?.name} />
-        )
+        ),
+        meta: {
+          filter: {
+            type: 'number',
+            codebookCode: watchCodebook?.name,
+            enableColumnFilter: true
+          }
+        }
       }
     ],
     [lastAddedUUID, mutate, watchCodebook]
@@ -120,6 +127,7 @@ export const CodebooksContainer: FC = () => {
             loading: isLoading,
             settings: {
               enableFiltering: true,
+              manualFiltering: true,
               enableSorting: true,
               manualSorting: false
             }

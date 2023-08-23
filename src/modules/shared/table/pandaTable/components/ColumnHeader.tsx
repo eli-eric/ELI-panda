@@ -26,10 +26,18 @@ interface ColumnHeader {
   table: Table<any>
   enableColumnReordering: boolean
   enableFiltering: boolean
+  manualFiltering: boolean
   data?: any
 }
 
-export const ColumnHeader: FC<ColumnHeader> = ({ header, table, enableColumnReordering, data, enableFiltering }) => {
+export const ColumnHeader: FC<ColumnHeader> = ({
+  header,
+  table,
+  enableColumnReordering,
+  data,
+  enableFiltering,
+  manualFiltering
+}) => {
   const { getState, setColumnOrder } = table
   const { columnOrder } = getState()
   const { column } = header
@@ -88,7 +96,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({ header, table, enableColumnReor
         )}
       </div>
       {enableFiltering && header.column.getCanFilter() ? (
-        <MemoizedFilter column={header.column} table={table} data={data} />
+        <MemoizedFilter manualFiltering={manualFiltering} column={header.column} table={table} data={data} />
       ) : null}
     </th>
   )

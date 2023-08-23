@@ -78,7 +78,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
       enableRowSelection = false,
       manualSorting = true,
       enableFiltering = false,
-      manualFiltering = false
+      manualFiltering = true
     } = settings || {}
 
     const [columnVisibility, setColumnVisibility] = useVisibility(tableId)
@@ -131,6 +131,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
                 enableColumnReordering={enableColumnReordering}
                 data={defferedData}
                 enableFiltering={enableFiltering}
+                manualFiltering={manualFiltering}
               />
               {defferedData && (
                 <Fragment>
