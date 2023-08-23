@@ -57,7 +57,7 @@ export const SystemsTable = ({
         tableId={tableId}
         getSubRows={row => row.subSystems}
         getRowProps={getRowProps}
-        settings={settings}
+        settings={{ ...settings, enableSorting: false }}
         className={className}
       />
       {error && <ErrorPage />}
