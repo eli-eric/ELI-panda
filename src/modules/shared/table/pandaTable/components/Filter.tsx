@@ -3,6 +3,7 @@ import type { Column, Table } from '@tanstack/react-table'
 import { classNames } from '@/helpers'
 import type { CODEBOOK } from '@/types/constants/codebook'
 
+import { DefferefCombobox } from './defferedComponents/DefferedCombobox'
 import { DefferedInput } from './defferedComponents/DefferedInput'
 import { DefferedListbox } from './defferedComponents/DefferedListbox'
 
@@ -61,6 +62,9 @@ export const Filter = ({
                 />
               </div>
             )
+          }
+          case 'autoComplete': {
+            return <DefferefCombobox codebook={codebook} onChange={onChange} />
           }
           case 'string': {
             return (

@@ -14,6 +14,7 @@ interface CatalogueTableProps {
   catalogueItems?: CatalogueItemsResponse
   categoryList?: CatalogueCategoryResponse[]
   loading?: boolean
+  enableFiltering?: boolean
 }
 
 export const CatalogueTable = ({
@@ -22,7 +23,8 @@ export const CatalogueTable = ({
   tableId = 'catalogueItems',
   catalogueItems,
   categoryList,
-  loading
+  loading,
+  enableFiltering = false
 }: CatalogueTableProps) => {
   const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
 
@@ -63,7 +65,9 @@ export const CatalogueTable = ({
       settings={{
         enableQueryURL,
         enableColumnHiding: tableId === 'catalogueItems',
-        enableColumnReordering: tableId === 'catalogueItems'
+        enableColumnReordering: tableId === 'catalogueItems',
+        enableFiltering,
+        manualFiltering: true
       }}
     />
   )

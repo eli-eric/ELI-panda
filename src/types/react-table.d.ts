@@ -5,9 +5,9 @@ declare module '@tanstack/table-core' {
     sticky?: boolean
     className?: string
     filter?: {
-      type: 'string' | 'date' | 'boolean' | 'number' | 'listOfValues'
+      type: 'string' | 'date' | 'boolean' | 'number' | 'listOfValues' | 'autoComplete'
       enableColumnFilter: boolean
-      codebookCode: CODEBOOK
+      codebookCode?: CODEBOOK
     }
   }
 }

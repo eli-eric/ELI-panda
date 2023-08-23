@@ -6,6 +6,7 @@ import { message } from '@/i18n/src/messages'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
 import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
+import { CODEBOOK } from '@/types/constants/codebook'
 
 import { CategoryName } from './cells/CategoryNameCell'
 import { DescriptionCell } from './cells/DescriptionCell'
@@ -34,7 +35,7 @@ export const useCatalogueItemsColumns = (
           <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} isHoveringId={isHoveringId} />
         ),
         size: 300,
-        meta: { sticky: true }
+        meta: { sticky: true, filter: { type: 'string', enableColumnFilter: true } }
       },
       {
         header: intl.formatMessage({ id: messages.description }),
@@ -42,29 +43,34 @@ export const useCatalogueItemsColumns = (
         id: 'description',
         cell: DescriptionCell,
         maxSize: 100,
-        size: 100
+        size: 100,
+        meta: { filter: { type: 'string', enableColumnFilter: true } }
       },
       {
         header: intl.formatMessage({ id: messages.partNumber }),
         accessorFn: row => row.catalogueNumber,
-        id: 'partNumber'
+        id: 'partNumber',
+        meta: { filter: { type: 'string', enableColumnFilter: true } }
       },
       {
         header: intl.formatMessage({ id: messages.categoryName }),
         accessorFn: row => row.categoryName,
         id: 'categoryName',
-        cell: CategoryName
+        cell: CategoryName,
+        meta: { filter: { type: 'string', enableColumnFilter: true } }
       },
       {
         header: intl.formatMessage({ id: messages.supplier }),
         accessorFn: row => row.supplier?.name,
-        id: 'supplier'
+        id: 'supplier',
+        meta: { filter: { type: 'autoComplete', enableColumnFilter: true, codebookCode: CODEBOOK.SUPPLIER } }
       },
       {
         header: intl.formatMessage({ id: messages.supplierUrl }),
         accessorFn: row => row.manufacturerUrl,
         id: 'manufacturerUrl',
-        cell: ManufacturerUrl
+        cell: ManufacturerUrl,
+        meta: { filter: { type: 'string', enableColumnFilter: true } }
       }
     ]
 

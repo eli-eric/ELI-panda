@@ -36,7 +36,7 @@ const CatalogueContainer = () => {
         }}
       />
       <TableLayoutContainer deps={[open, catalogueItems, categoryList]} className={'border-t border-gray-300'}>
-        <CatalogueTable tableId={tableId} catalogueItems={catalogueItems} loading={loading} />
+        <CatalogueTable tableId={tableId} catalogueItems={catalogueItems} loading={loading} enableFiltering={true} />
         <Pagination
           tableId={tableId}
           settings={{
