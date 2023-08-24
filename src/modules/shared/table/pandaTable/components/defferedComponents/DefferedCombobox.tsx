@@ -37,6 +37,10 @@ export const DefferedCombobox = ({
     setValue(undefined)
     setQuery('')
   }
+  useEffect(() => {
+    setValue(initialValue)
+    setQuery(initialValue?.name || '')
+  }, [initialValue])
 
   useEffect(() => {
     if (defferedValue === value) onChange(value)

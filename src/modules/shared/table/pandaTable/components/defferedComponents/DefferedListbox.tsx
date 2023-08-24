@@ -44,6 +44,10 @@ export const DefferedListbox = ({
   }
 
   useEffect(() => {
+    setValue(initialValue)
+  }, [initialValue])
+
+  useEffect(() => {
     if (defferedValue === value) onChange(value)
   }, [defferedValue, value, onChange])
 

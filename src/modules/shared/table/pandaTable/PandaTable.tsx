@@ -86,7 +86,6 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
     const [columnOrder, setColumnOrder] = useOrdering(tableId, columns)
     const [sorting, setSorting] = useSorting(tableId, enableQueryURL)
     const [expanded, setExpanded] = useExpanding(tableId)
-
     const [columnFilters, setColumnFilters] = useFilters(tableId, enableQueryURL)
 
     const defferedData = useDeferredValue(data)

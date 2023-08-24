@@ -16,8 +16,7 @@ export const useFilters = (
 
   const [filterQuery, setFilterQuery] = useQueryState('filter', { history: 'replace' })
 
-  // table state
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(filterInstance || [])
+  const [columnFiltering, setFiltering] = useState<ColumnFiltersState>(filterInstance || [])
 
   const isFirstRender = useIsFirstRender()
 
@@ -26,10 +25,12 @@ export const useFilters = (
     if (isFirstRender) {
       if (enableQueryURL) {
         if (filterQuery) {
-          setColumnFilters(JSON.parse(filterQuery))
+          setFiltering(JSON.parse(filterQuery))
           setColumnFilter(tableId, JSON.parse(filterQuery))
-        } else if (filterInstance) {
+        }
+        if (filterInstance) {
           setFilterQuery(JSON.stringify(filterInstance))
+          setFiltering(filterInstance)
         }
       }
     }
@@ -38,12 +39,12 @@ export const useFilters = (
   // update effect
   useEffect(() => {
     if (!isFirstRender) {
-      setColumnFilter(tableId, columnFilters)
-      if (enableQueryURL) setFilterQuery(JSON.stringify(columnFilters))
+      setColumnFilter(tableId, columnFiltering)
+      if (enableQueryURL) setFilterQuery(JSON.stringify(columnFiltering))
     }
     // reason for disabling eslint: isFirstRender is a dependency but it should not trigger a re-render
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tableId, columnFilters, enableQueryURL, setFilterQuery, setColumnFilter])
+  }, [tableId, columnFiltering, enableQueryURL, setFilterQuery, setColumnFilter])
 
-  return [columnFilters, setColumnFilters]
+  return [columnFiltering, setFiltering]
 }

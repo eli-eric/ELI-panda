@@ -1,6 +1,7 @@
 import type { Column, Table } from '@tanstack/react-table'
 
 import { classNames } from '@/helpers'
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 
 import { DefferedCombobox } from './defferedComponents/DefferedCombobox'
@@ -20,8 +21,6 @@ export const Filter = ({
   const filterType = column.columnDef.meta?.filter?.type
   const codebook = column.columnDef.meta?.filter?.codebookCode as CODEBOOK
 
-  const columnFilterValue = data ? column.getFilterValue() : ''
-
   const onChange = (value: string | number) => {
     if (data) {
       column.setFilterValue(value)
@@ -33,18 +32,23 @@ export const Filter = ({
       {
         switch (filterType) {
           case 'listOfValues': {
-            return <DefferedListbox codebook={codebook} onChange={onChange} />
+            return (
+              <DefferedListbox
+                value={column.getFilterValue() as CodebookType}
+                codebook={codebook}
+                onChange={onChange}
+              />
+            )
           }
           case 'number': {
             return (
               <div className="flex space-x-2">
                 <DefferedInput
                   type="number"
-                  pattern="[0-9]*"
-                  min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
-                  max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
-                  value={(columnFilterValue as [number, number])?.[0] ?? ''}
-                  onChange={value => column.setFilterValue((old: [number, number]) => [value, old?.[1]])}
+                  value={(column.getFilterValue() as [number, number])?.[0] ?? ''}
+                  onChange={value =>
+                    data && column.setFilterValue((old: [number, number]) => (value ? [value, old?.[1]] : old))
+                  }
                   placeholder={'from'}
                   className={classNames(
                     'w-full placeholder:text-xs placeholder:font-normal rounded-md border-gray-300 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs'
@@ -52,11 +56,10 @@ export const Filter = ({
                 />
                 <DefferedInput
                   type="number"
-                  pattern="[0-9]*"
-                  min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
-                  max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
-                  value={(columnFilterValue as [number, number])?.[1] ?? ''}
-                  onChange={value => column.setFilterValue((old: [number, number]) => [old?.[0], value])}
+                  value={(column.getFilterValue() as [number, number])?.[1] ?? ''}
+                  onChange={value =>
+                    data && column.setFilterValue((old: [number, number]) => (value ? [old?.[0], value] : old))
+                  }
                   placeholder={'to'}
                   className={classNames(
                     'w-full placeholder:text-xs placeholder:font-normal rounded-md border-gray-300 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs'
@@ -66,13 +69,19 @@ export const Filter = ({
             )
           }
           case 'autoComplete': {
-            return <DefferedCombobox codebook={codebook} onChange={onChange} />
+            return (
+              <DefferedCombobox
+                value={column.getFilterValue() as CodebookType}
+                codebook={codebook}
+                onChange={onChange}
+              />
+            )
           }
           case 'string': {
             return (
               <DefferedInput
                 type="text"
-                value={columnFilterValue as string}
+                value={column.getFilterValue() as string}
                 onChange={onChange}
                 className={classNames(
                   'w-full placeholder:text-xs placeholder:font-normal rounded-md border-gray-300 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs'
@@ -88,7 +97,7 @@ export const Filter = ({
       return (
         <DefferedInput
           type="text"
-          value={columnFilterValue as string}
+          value={column.getFilterValue() as string}
           onChange={onChange}
           placeholder={`Search... (${data ? column.getFacetedUniqueValues().size : 0})`}
           className={classNames(
