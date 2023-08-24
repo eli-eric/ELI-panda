@@ -9,7 +9,7 @@ export type TableResponse<T> = {
 
 export type ColumnDef<T> = {
   accessorKey: keyof T
-  type: 'string' | 'date' | 'boolean' | 'number'
+  type: 'string' | 'date' | 'boolean' | 'number' | 'autoComplete'
   enableColumnFilter: boolean
   enableSorting: boolean
 } & {

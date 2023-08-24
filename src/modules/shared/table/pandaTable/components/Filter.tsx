@@ -40,6 +40,7 @@ export const Filter = ({
               <div className="flex space-x-2">
                 <DefferedInput
                   type="number"
+                  pattern="[0-9]*"
                   min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
                   max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
                   value={(columnFilterValue as [number, number])?.[0] ?? ''}
@@ -51,6 +52,7 @@ export const Filter = ({
                 />
                 <DefferedInput
                   type="number"
+                  pattern="[0-9]*"
                   min={Number(column.getFacetedMinMaxValues()?.[0] ?? '')}
                   max={Number(column.getFacetedMinMaxValues()?.[1] ?? '')}
                   value={(columnFilterValue as [number, number])?.[1] ?? ''}

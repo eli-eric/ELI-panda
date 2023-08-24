@@ -28,9 +28,7 @@ export const DefferedInput = ({
     <input
       {...props}
       value={query}
-      onChange={e => {
-        setQuery(e.target.value)
-      }}
+      onChange={e => setQuery(v => (e.target.validity.valid ? e.target.value : v))}
       name={'filter'}
       className={className}
     />
