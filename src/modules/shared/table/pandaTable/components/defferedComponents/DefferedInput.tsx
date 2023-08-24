@@ -14,7 +14,14 @@ export const DefferedInput = ({
   const deferredQuery = useDeferredValue(query)
 
   useEffect(() => {
-    if (query === deferredQuery) onChange(deferredQuery)
+    if (query === deferredQuery) {
+      const timer = setTimeout(() => {
+        onChange(deferredQuery)
+      }, 500)
+      return () => {
+        clearTimeout(timer)
+      }
+    }
   }, [deferredQuery, query, onChange])
 
   return (

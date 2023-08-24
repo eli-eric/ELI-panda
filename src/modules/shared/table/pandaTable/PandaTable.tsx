@@ -1,4 +1,4 @@
-import type { ColumnDef, ColumnFiltersState, Row, Table as ReactTable } from '@tanstack/react-table'
+import type { ColumnDef, Row, Table as ReactTable } from '@tanstack/react-table'
 import {
   getCoreRowModel,
   getExpandedRowModel,
@@ -10,7 +10,7 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 import type { Ref } from 'react'
-import { forwardRef, Fragment, useDeferredValue, useImperativeHandle, useState } from 'react'
+import { forwardRef, Fragment, useDeferredValue, useImperativeHandle } from 'react'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
@@ -21,6 +21,7 @@ import { TableFoot } from './components/TableFoot'
 import { TableHead } from './components/TableHead'
 import { TableSettings } from './components/TableSettings'
 import { useExpanding } from './hooks/useExpanding'
+import { useFilters } from './hooks/useFilters'
 import { useOrdering } from './hooks/useOrdering'
 import { useSorting } from './hooks/useSorting'
 import { useVisibility } from './hooks/useVisibility'
@@ -86,7 +87,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
     const [sorting, setSorting] = useSorting(tableId, enableQueryURL)
     const [expanded, setExpanded] = useExpanding(tableId)
 
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [columnFilters, setColumnFilters] = useFilters(tableId, enableQueryURL)
 
     const defferedData = useDeferredValue(data)
 

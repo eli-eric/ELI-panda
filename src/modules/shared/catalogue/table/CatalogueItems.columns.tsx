@@ -57,7 +57,7 @@ export const useCatalogueItemsColumns = (
         accessorFn: row => row.categoryName,
         id: 'categoryName',
         cell: CategoryName,
-        meta: { filter: { type: 'string', enableColumnFilter: true } }
+        meta: { filter: { type: 'autoComplete', enableColumnFilter: true, codebookCode: CODEBOOK.CATALOGUE_CATEGORY } }
       },
       {
         header: intl.formatMessage({ id: messages.supplier }),

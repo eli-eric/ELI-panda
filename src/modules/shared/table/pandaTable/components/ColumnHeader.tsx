@@ -64,7 +64,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
       colSpan={header.colSpan}
       style={{ opacity: isDragging ? 0.5 : 1, width: header.getSize() }}
       className={classNames(
-        'whitespace-nowrap border-r border-b border-gray-400 bg-opacity-75 py-2 pl-3 pr-3 text-left text-xs font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6',
+        'whitespace-nowrap border-r border-b border-gray-400 bg-opacity-75 py-2 pl-3 pr-3 text-left text-xs font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 sm:pr-5',
         header.column.columnDef.meta?.sticky
           ? 'sticky sm:left-0 top-0 text-ellipsis z-40 backdrop-blur-2xl backdrop-filter border-r'
           : 'sticky top-0 z-10'

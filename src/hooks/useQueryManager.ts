@@ -25,6 +25,7 @@ export default function useQueryManager(tableId: string) {
   const orderStatusUID = instances[tableId]?.filter?.orderStatus?.uid || ''
   const procurementResponsibleUID = instances[tableId]?.filter?.procurementResponsible?.uid || ''
   const requestorUID = instances[tableId]?.filter?.requestor?.uid || ''
+  const columnFilter = useMemo(() => instances[tableId]?.columnFilter || [], [instances, tableId])
   const custom = useMemo(() => instances[tableId]?.custom || {}, [instances, tableId])
 
   const filter = useMemo(() => {
@@ -48,10 +49,11 @@ export default function useQueryManager(tableId: string) {
 
   useEffect(() => {
     if (router.isReady) {
-      const newQuery = { pagination, search, sorting, ...filter, ...custom }
+      const columnFilterString = JSON.stringify(columnFilter)
+      const newQuery = { pagination, search, sorting, columnFilter: columnFilterString, ...filter, ...custom }
       setQuery(newQuery)
     }
-  }, [router.query.search, sorting, pagination, filter, router.isReady, search, custom])
+  }, [router.query.search, sorting, pagination, filter, router.isReady, search, custom, columnFilter])
 
   return { query }
 }

@@ -29,7 +29,7 @@ type TableState = {
   setPagination: (tableId: string, pagination: SortingInstance['pagination']) => void
   reset: (tableId: string) => void
   setFilter: (tableId: string, filter: SortingInstance['filter']) => void
-  setColumFilter: (tableId: string, columnFilter: SortingInstance['columnFilter']) => void
+  setColumnFilter: (tableId: string, columnFilter: SortingInstance['columnFilter']) => void
   setSearch: (tableId: string, search: SortingInstance['search']) => void
   setCustom: (tableId: string, custom: SortingInstance['custom']) => void
   setVisibility: (tableId: string, columnVisibility: SortingInstance['columnVisibility']) => void
@@ -150,7 +150,7 @@ const useTableStateStore = create<TableState>(set => ({
         return { instances: { ...state.instances } }
       }
     }),
-  setColumFilter: (tableId, columnFilter) =>
+  setColumnFilter: (tableId, columnFilter) =>
     set(state => {
       if (!state.instances?.[tableId]) {
         const newInstance = { ...state.instances[tableId], columnFilter }

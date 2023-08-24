@@ -14,10 +14,9 @@ type ComboboxPropsT = {
   onChange: (value: any) => void
   className?: string
   value?: CodebookType
-  //name: Path<any>
 }
 
-export const DefferefCombobox = ({
+export const DefferedCombobox = ({
   codebook,
   value: initialValue,
   placeholder,
@@ -25,7 +24,7 @@ export const DefferefCombobox = ({
   className,
   onChange
 }: ComboboxPropsT) => {
-  const [query, setQuery] = useState<string>('')
+  const [query, setQuery] = useState<string>(initialValue?.name || '')
   const defferedQuery = useDeferredValue(query)
   const { data } = useCodebook(codebook, { searchText: defferedQuery, limit: 20 })
 
