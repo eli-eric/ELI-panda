@@ -1,5 +1,4 @@
 import { useDeferredValue, useEffect, useState } from 'react'
-import { useIsFirstRender } from 'usehooks-ts'
 
 export const DefferedInput = ({
   value: initialValue,
@@ -14,11 +13,9 @@ export const DefferedInput = ({
   const [query, setQuery] = useState(initialValue)
   const deferredQuery = useDeferredValue(query)
 
-  const isFirstRender = useIsFirstRender()
-
   useEffect(() => {
     setQuery(initialValue)
-  }, [isFirstRender, initialValue])
+  }, [initialValue])
 
   useEffect(() => {
     if (query === deferredQuery) {

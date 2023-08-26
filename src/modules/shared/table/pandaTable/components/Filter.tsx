@@ -41,14 +41,29 @@ export const Filter = ({
             )
           }
           case 'number': {
+            const handleChangeFrom = (value: string | number) => {
+              column.setFilterValue((old: [number, number]) => {
+                if ((!value || value === '') && !old?.[1]) {
+                  return undefined
+                }
+
+                return [value, old?.[1]]
+              })
+            }
+            const handleChangeTo = (value: string | number) => {
+              column.setFilterValue((old: [number, number]) => {
+                if ((!value || value === '') && !old?.[0]) {
+                  return undefined
+                }
+                return [old?.[0], value]
+              })
+            }
             return (
               <div className="flex space-x-2">
                 <DefferedInput
                   type="number"
                   value={(column.getFilterValue() as [number, number])?.[0] ?? ''}
-                  onChange={value =>
-                    data && column.setFilterValue((old: [number, number]) => (value ? [value, old?.[1]] : old))
-                  }
+                  onChange={handleChangeFrom}
                   placeholder={'from'}
                   className={classNames(
                     'w-full placeholder:text-xs placeholder:font-normal rounded-md border-gray-300 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs'
@@ -57,9 +72,7 @@ export const Filter = ({
                 <DefferedInput
                   type="number"
                   value={(column.getFilterValue() as [number, number])?.[1] ?? ''}
-                  onChange={value =>
-                    data && column.setFilterValue((old: [number, number]) => (value ? [old?.[0], value] : old))
-                  }
+                  onChange={handleChangeTo}
                   placeholder={'to'}
                   className={classNames(
                     'w-full placeholder:text-xs placeholder:font-normal rounded-md border-gray-300 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs'

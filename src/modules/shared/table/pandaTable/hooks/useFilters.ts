@@ -40,7 +40,7 @@ export const useFilters = (
   useEffect(() => {
     if (!isFirstRender) {
       setColumnFilter(tableId, columnFiltering)
-      if (enableQueryURL) setFilterQuery(JSON.stringify(columnFiltering))
+      if (enableQueryURL) setFilterQuery(columnFiltering.length === 0 ? null : JSON.stringify(columnFiltering))
     }
     // reason for disabling eslint: isFirstRender is a dependency but it should not trigger a re-render
     // eslint-disable-next-line react-hooks/exhaustive-deps
