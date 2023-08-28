@@ -9,13 +9,6 @@ export type TableResponse<T> = {
 
 export type ColumnDef<T> = {
   accessorKey: keyof T
-  type: 'string' | 'date' | 'boolean' | 'number' | 'autoComplete'
-  enableColumnFilter: boolean
-  enableSorting: boolean
-} & {
-  accessorKey: keyof T
-  type: 'listOfValues'
-  enableColumnFilter: boolean
-  enableSorting: boolean
+  type: 'string' | 'date' | 'boolean' | 'number' | 'autoComplete' | 'listOfValues'
   codebookCode: CODEBOOK
 }

@@ -1,6 +1,5 @@
 import type { Column, Table } from '@tanstack/react-table'
 
-import { classNames } from '@/helpers'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 
@@ -65,18 +64,12 @@ export const Filter = ({
                   value={(column.getFilterValue() as [number, number])?.[0] ?? ''}
                   onChange={handleChangeFrom}
                   placeholder={'from'}
-                  className={classNames(
-                    'w-full placeholder:text-xs placeholder:font-normal rounded-md border-gray-300 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs'
-                  )}
                 />
                 <DefferedInput
                   type="number"
                   value={(column.getFilterValue() as [number, number])?.[1] ?? ''}
                   onChange={handleChangeTo}
                   placeholder={'to'}
-                  className={classNames(
-                    'w-full placeholder:text-xs placeholder:font-normal rounded-md border-gray-300 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs'
-                  )}
                 />
               </div>
             )
@@ -96,9 +89,6 @@ export const Filter = ({
                 type="text"
                 value={column.getFilterValue() as string}
                 onChange={onChange}
-                className={classNames(
-                  'w-full placeholder:text-xs placeholder:font-normal rounded-md border-gray-300 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs'
-                )}
                 list={column.id + 'list'}
               />
             )
@@ -113,9 +103,6 @@ export const Filter = ({
           value={column.getFilterValue() as string}
           onChange={onChange}
           placeholder={`Search... (${data ? column.getFacetedUniqueValues().size : 0})`}
-          className={classNames(
-            'w-full placeholder:text-xs placeholder:font-normal rounded-md border-gray-300 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs'
-          )}
           list={column.id + 'list'}
         />
       )

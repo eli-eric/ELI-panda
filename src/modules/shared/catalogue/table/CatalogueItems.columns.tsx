@@ -74,34 +74,26 @@ export const useCatalogueItemsColumns = (
       }
     ]
 
-    if (
-      categoryList?.length === 0 &&
-      catalogueItems?.data &&
-      catalogueItems?.data[0]?.details &&
-      catalogueItems?.data[0]?.details?.length > 0 &&
-      catalogueItems.data[0]?.details[0]?.property?.type?.name
-    ) {
-      const detailsColumns: ColumnDef<CatalogueItem, any>[] = catalogueItems?.data[0]?.details?.map(detail => ({
-        header: detail.property.name,
-        id: detail.property.name.replace(/\s/g, ''),
-        accessorFn: row =>
-          row.details?.find(originDetail => originDetail?.property.name === detail?.property.name)?.value,
+    let detailsColumns: ColumnDef<CatalogueItem, any>[] = []
+    if (catalogueItems?.columnDef && catalogueItems?.columnDef?.length > 0) {
+      detailsColumns = catalogueItems.columnDef?.map(def => ({
+        header: def.accessorKey,
+        id: def.accessorKey.replace(/\s/g, ''),
+        accessorFn: row => row.details?.find(originDetail => originDetail?.property.name === def.accessorKey)?.value,
         cell: ({ row: { original } }: CellContext<CatalogueItem, any>) => (
-          <span>
-            {original.details?.find(originDetail => originDetail?.property.name === detail?.property.name)?.value}
-          </span>
+          <span>{original.details?.find(originDetail => originDetail?.property.name === def.accessorKey)?.value}</span>
         )
       }))
-      if (detailsColumns) {
-        const categoryNameIndex = columns.findIndex(column => column.id === 'categoryName')
-        columns.splice(categoryNameIndex, 0, ...detailsColumns)
-      }
+    }
+    if (categoryList && categoryList.length === 0) {
+      const categoryNameIndex = columns.findIndex(column => column.id === 'categoryName')
+      columns.splice(categoryNameIndex, 1)
     }
     if (additionalColumn) {
       columns.push(additionalColumn)
     }
-    return columns
-  }, [intl, catalogueItems, categoryList, additionalColumn, tableId, isHoveringId])
+    return [...columns, ...detailsColumns]
+  }, [intl, catalogueItems, additionalColumn, tableId, isHoveringId, categoryList])
 
   return columns
 }
