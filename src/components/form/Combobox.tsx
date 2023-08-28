@@ -179,7 +179,7 @@ const Combobox = ({
               <PlusButton
                 primary
                 buttonSize="large"
-                className=" ml-1 self-end"
+                className="ml-1 self-end"
                 type="button"
                 onClick={() => setOpen(true)}
               />
