@@ -30,6 +30,13 @@ interface OrderLienFormProps {
 export const OrderLineForm = ({ orderLine, open, setOpen }: OrderLienFormProps) => {
   const [catalogueItem, setCatalogueItem] = useState<CatalogueItem | undefined>(undefined)
   const { setOrderLine } = useOrderLine()
+
+  const formMethods = useForm<OrderLineFormType>({
+    defaultValues: orderLine
+      ? { ...orderLine, currency: orderLine.currency || 'EUR' }
+      : { itemUsage: { uid: 'a2aae89a-5cbe-4042-a726-44012b158226', name: 'In System Part' } },
+    resolver: yupResolver(orderLineFormSchema)
+  })
   const modalSubmit = (data: OrderLineFormType) => {
     const dataToSend = { ...data }
     if (!dataToSend.price) {
@@ -38,19 +45,12 @@ export const OrderLineForm = ({ orderLine, open, setOpen }: OrderLienFormProps) 
     }
     delete dataToSend.quantity
     if (data.quantity) {
-      delete dataToSend.id
       for (let i = 0; i < data.quantity; i++) {
         setOrderLine(dataToSend)
       }
     } else setOrderLine(dataToSend)
+    formMethods.reset(dataToSend)
   }
-
-  const formMethods = useForm<OrderLineFormType>({
-    defaultValues: orderLine
-      ? { ...orderLine, currency: orderLine.currency || 'EUR' }
-      : { itemUsage: { uid: 'a2aae89a-5cbe-4042-a726-44012b158226', name: 'In System Part' }, quantity: 1 },
-    resolver: yupResolver(orderLineFormSchema)
-  })
 
   return (
     <FormModal

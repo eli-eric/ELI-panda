@@ -144,7 +144,6 @@ export const InputAmount = ({
     <Controller
       name={name}
       control={control}
-      defaultValue={''}
       render={({ field, fieldState: { error } }) => (
         <InputWrapper hidden={hidden} className={className}>
           <Label label={label} />
