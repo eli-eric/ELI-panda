@@ -10,5 +10,5 @@ export type TableResponse<T> = {
 export type ColumnDef<T> = {
   accessorKey: keyof T
   type: 'string' | 'date' | 'boolean' | 'number' | 'autoComplete' | 'listOfValues'
-  codebookCode: CODEBOOK
+  codebookCode?: CODEBOOK
 }

@@ -50,7 +50,7 @@ export const useCatalogueItemsColumns = (
         header: intl.formatMessage({ id: messages.partNumber }),
         accessorFn: row => row.catalogueNumber,
         id: 'partNumber',
-        meta: { filter: { type: 'number', enableColumnFilter: true } }
+        meta: { filter: { type: 'string', enableColumnFilter: true } }
       },
       {
         header: intl.formatMessage({ id: messages.categoryName }),
