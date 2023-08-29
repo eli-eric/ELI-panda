@@ -1,5 +1,5 @@
 import type { ColumnDef, Table } from '@tanstack/react-table'
-import { useEffect, useRef, useState } from 'react'
+import { createContext, useEffect, useRef, useState } from 'react'
 
 import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 
@@ -17,6 +17,10 @@ interface CatalogueTableProps {
   enableFiltering?: boolean
 }
 
+export const CatalogueTableContext = createContext<{ isHoveringId: number | undefined | string }>({
+  isHoveringId: undefined
+})
+
 export const CatalogueTable = ({
   additionalColumn,
   enableQueryURL = true,
@@ -28,7 +32,7 @@ export const CatalogueTable = ({
 }: CatalogueTableProps) => {
   const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
 
-  const columns = useCatalogueItemsColumns(tableId, additionalColumn, isHoveringId)
+  const columns = useCatalogueItemsColumns(tableId, additionalColumn)
   const catalogueTableRef = useRef<Table<CatalogueItem>>()
 
   useEffect(() => {
@@ -47,28 +51,30 @@ export const CatalogueTable = ({
   }, [additionalColumn])
 
   return (
-    <PandaTable
-      ref={catalogueTableRef}
-      columns={columns}
-      loading={loading}
-      tableId={tableId}
-      data={catalogueItems?.data}
-      getRowProps={({ id }) => ({
-        onMouseEnter: () => {
-          setIsHoveringId(id)
-        },
-        onMouseLeave: () => {
-          setIsHoveringId(undefined)
-        }
-      })}
-      className={'relative overflow-y-scroll scrollbar-style'}
-      settings={{
-        enableQueryURL,
-        enableColumnHiding: tableId === 'catalogueItems',
-        enableColumnReordering: tableId === 'catalogueItems',
-        enableFiltering,
-        manualFiltering: true
-      }}
-    />
+    <CatalogueTableContext.Provider value={{ isHoveringId: isHoveringId }}>
+      <PandaTable
+        ref={catalogueTableRef}
+        columns={columns}
+        loading={loading}
+        tableId={tableId}
+        data={catalogueItems?.data}
+        getRowProps={({ id }) => ({
+          onMouseEnter: () => {
+            setIsHoveringId(id)
+          },
+          onMouseLeave: () => {
+            setIsHoveringId(undefined)
+          }
+        })}
+        className={'relative overflow-y-scroll scrollbar-style'}
+        settings={{
+          enableQueryURL,
+          enableColumnHiding: tableId === 'catalogueItems',
+          enableColumnReordering: tableId === 'catalogueItems',
+          enableFiltering,
+          manualFiltering: true
+        }}
+      />
+    </CatalogueTableContext.Provider>
   )
 }

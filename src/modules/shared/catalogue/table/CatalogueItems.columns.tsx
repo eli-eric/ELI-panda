@@ -15,11 +15,7 @@ import { NameCell } from './cells/NameCell'
 
 const messages = message.cataloguePage.itemList.header
 
-export const useCatalogueItemsColumns = (
-  tableId?: string,
-  additionalColumn?: ColumnDef<CatalogueItem, any>,
-  isHoveringId?: number | string
-) => {
+export const useCatalogueItemsColumns = (tableId?: string, additionalColumn?: ColumnDef<CatalogueItem, any>) => {
   const intl = useIntl()
 
   const { catalogueItems } = useCatalogueItems(tableId)
@@ -31,9 +27,7 @@ export const useCatalogueItemsColumns = (
         header: intl.formatMessage({ id: messages.name }),
         accessorFn: row => row.name,
         id: 'name',
-        cell: props => (
-          <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} isHoveringId={isHoveringId} />
-        ),
+        cell: props => <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} />,
         size: 300,
         meta: { sticky: true, filter: { type: 'string', enableColumnFilter: true } }
       },
@@ -93,7 +87,7 @@ export const useCatalogueItemsColumns = (
       columns.push(additionalColumn)
     }
     return [...columns, ...detailsColumns]
-  }, [intl, catalogueItems, additionalColumn, tableId, isHoveringId, categoryList])
+  }, [intl, catalogueItems, additionalColumn, tableId, categoryList])
 
   return columns
 }

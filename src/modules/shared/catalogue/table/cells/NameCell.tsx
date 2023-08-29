@@ -1,6 +1,6 @@
 import type { CellContext } from '@tanstack/react-table'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
@@ -18,13 +18,14 @@ import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
+import { CatalogueTableContext } from '../CatalogueItems.table'
+
 const buttonsMessage = message.common.buttons
 const modalMessage = message.ordersPage.deleteModal
 
 interface NameProps extends CellContext<CatalogueItem, any> {
   toDelete?: boolean
   tableId?: string
-  isHoveringId?: number | string
 }
 
 //TODO: permissions
@@ -35,8 +36,7 @@ export const NameCell = ({
     id
   },
   toDelete,
-  tableId,
-  isHoveringId
+  tableId
 }: NameProps) => {
   const { catalogueItem } = useEndpoint({ uid: uid ?? undefined })
   //const image = useCatalogueImage(uid)
@@ -45,7 +45,7 @@ export const NameCell = ({
   const { mutate, catalogueItems } = useCatalogueItems(tableId)
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
 
-  //const [loading, setLoading] = useState(true)
+  const { isHoveringId } = useContext(CatalogueTableContext)
 
   const deleteSubmit = useSubmit({
     endpoint: catalogueItem,
