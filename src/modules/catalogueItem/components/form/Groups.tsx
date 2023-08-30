@@ -21,6 +21,7 @@ const Groups = () => {
   useEffect(() => {
     if (category?.uid === item?.category?.uid) {
       const itemDetails = sortBy(item?.details, ['propertyGroup', 'property.name'])
+      unregister('details')
       setDetails({
         groups: groupsItem,
         details: itemDetails
@@ -37,9 +38,8 @@ const Groups = () => {
 
   return (
     <Fragment>
-      {details &&
-        details?.details?.length !== 0 &&
-        details.groups?.map(group => (
+      {details?.details?.length !== 0 &&
+        details?.groups?.map(group => (
           <Fragment key={group}>
             <Heading customText={group} />
             <div className="px-4 sm:px-6">
