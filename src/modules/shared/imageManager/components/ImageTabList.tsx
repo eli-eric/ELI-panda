@@ -31,7 +31,6 @@ export const ImageTabList = ({
         <PlusButton type="button" onClick={open} className="h-full flex border-0 border-r rounded-none rounded-tl-md" />
       </div>
     )}
-
     <div className="flex flex-wrap w-full justify-center">
       {data?.map(obj => (
         <Tab key={obj.id}>
@@ -39,7 +38,6 @@ export const ImageTabList = ({
         </Tab>
       ))}
     </div>
-
     {canEdit && (
       <div>
         <DeleteButton
