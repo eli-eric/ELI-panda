@@ -13,26 +13,18 @@ export const SearchBarButtons = () => {
 
   const router = useRouter()
 
+  const handleRefresh = () => {
+    mutate()
+  }
+
+  const handleAdd = () => {
+    router.push(PATH.SYSTEM)
+  }
+
   return (
     <div className="flex">
-      <RefreshButton
-        className="mr-1"
-        buttonSize="large"
-        onClick={() => {
-          mutate()
-        }}
-      />
-
-      {canEdit && (
-        <PlusButton
-          primary
-          className="mr-1"
-          buttonSize="large"
-          onClick={() => {
-            router.push(PATH.SYSTEM)
-          }}
-        />
-      )}
+      <RefreshButton className="mr-1" buttonSize="large" onClick={handleRefresh} />
+      {canEdit && <PlusButton primary className="mr-1" buttonSize="large" onClick={handleAdd} />}
     </div>
   )
 }
