@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { number, object, string } from 'yup'
 
-import { Heading } from '@/components/card/card.comp'
 import { FormModal } from '@/hooks/form/useFormModal'
 import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
@@ -60,11 +59,7 @@ export const OrderLineForm = ({ orderLine, open, setOpen }: OrderLienFormProps) 
       open={open}
       renderOutsideForm={
         <div>
-          {orderLine?.uuid ? (
-            <Heading text={orderLine.name + ' - ' + orderLine.catalogueNumber} />
-          ) : (
-            <CatalogueTableSelect setItem={setCatalogueItem} selectedItem={catalogueItem} />
-          )}
+          <CatalogueTableSelect setItem={setCatalogueItem} selectedItem={catalogueItem} />
         </div>
       }
     >
