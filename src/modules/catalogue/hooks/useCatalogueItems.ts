@@ -12,7 +12,8 @@ export const useCatalogueItems = (tableId = 'catalogueItems') => {
     url: catalogueItems,
     config: {
       suspense: false,
-      keepPreviousData: true
+      keepPreviousData: true,
+      refreshInterval: 10000
     }
   })
   return { catalogueItems: response, loading, error, mutate }

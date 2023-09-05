@@ -1,6 +1,5 @@
 import type { AxiosError } from 'axios'
 import { useState } from 'react'
-import { useSWRConfig } from 'swr'
 
 import axiosInstance from '@/core/axios/axiosInstance'
 import { BASE_URL } from '@/types/constants/common'
@@ -13,8 +12,7 @@ interface UseSubmitProps<T> {
   onError?: (error: AxiosError) => void
 }
 
-export const useSubmit = <T>({ endpoint, method, mutateList, onSuccess, onError }: UseSubmitProps<T>) => {
-  const { cache, mutate } = useSWRConfig()
+export const useSubmit = <T>({ endpoint, method, onSuccess, onError }: UseSubmitProps<T>) => {
   const [response, setResponse] = useState<T | null>(null)
   const [error, setError] = useState<string>()
   const [loading, setloading] = useState<boolean>(false)
@@ -25,10 +23,6 @@ export const useSubmit = <T>({ endpoint, method, mutateList, onSuccess, onError 
       .then(res => {
         setResponse(res.data)
         if (onSuccess) onSuccess(res.data, body)
-        if (mutateList)
-          mutateList.forEach(url => {
-            mutate(url, cache.get(url), { revalidate: true })
-          })
       })
       .catch(err => {
         if (onError) onError(err)

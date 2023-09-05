@@ -19,6 +19,7 @@ export const useSubsystems = tableId => {
     config: {
       suspense: false,
       keepPreviousData: true,
+      refreshInterval: 10000,
       onError: () => toast.error('Error fetching subsystems'),
       onSuccess: response => {
         mutate(prev => prev && makeSubsystems(uid, prev, response), { revalidate: false })
