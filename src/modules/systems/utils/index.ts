@@ -47,7 +47,7 @@ export const updateSystem = (uid: string, newSystem: SystemDetail, prev: Systems
     for (let i = 0; i < data.length; i++) {
       let newItem = { ...data[i] }
       if (newItem.uid === uid) {
-        newItem = { ...newSystem }
+        newItem = { ...newSystem, hasSubsystems: data[i].hasSubsystems, subSystems: data[i].subSystems }
       } else if (newItem.subSystems) {
         newItem.subSystems = updateData(newItem.subSystems)
       }
