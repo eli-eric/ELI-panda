@@ -4,7 +4,10 @@ import { useEffect, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useDebounce, useIsFirstRender } from 'usehooks-ts'
 
+import { PlusButton, RefreshButton } from '@/components/Buttons'
+import usePermission from '@/hooks/usePermission'
 import useTableStateStore from '@/store/useTableStateStore'
+import type { ROLE } from '@/types/constants/roles'
 
 interface Props {
   useQuery?: boolean
@@ -101,6 +104,22 @@ export const SearchBar = ({ useQuery = true, left, right, tableId, onChange }: P
         </div>
         {right && <div className="hidden md:hidde lg:flex items-center mr-2">{right}</div>}
       </div>
+    </div>
+  )
+}
+
+interface SearchBarButtonsProps {
+  handleRefresh: () => void
+  handleAdd: () => void
+  editRole: ROLE
+}
+
+export const SearchBarButtonsComponent = ({ editRole, handleRefresh, handleAdd }: SearchBarButtonsProps) => {
+  const canEdit = usePermission([editRole])
+  return (
+    <div className="flex">
+      <RefreshButton className="mr-1" buttonSize="large" onClick={handleRefresh} />
+      {canEdit && <PlusButton primary className="mr-1" buttonSize="large" onClick={handleAdd} />}
     </div>
   )
 }
