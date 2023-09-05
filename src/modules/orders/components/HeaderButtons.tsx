@@ -1,45 +1,20 @@
-import { ArrowPathIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/router'
 
-import { Button, PlusButton } from '@/components/Buttons'
-import usePermission from '@/hooks/usePermission'
+import { SearchBarButtonsComponent } from '@/modules/shared/table/SearchBar'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
 import { useOrders } from '../hooks/useOrders'
 
-const HeaderButtons = () => {
-  const canEdit = usePermission([ROLE.ORDERS_EDIT])
+export const HeaderButtons = () => {
   const { mutate } = useOrders()
   const router = useRouter()
+  const handleRefresh = () => {
+    mutate()
+  }
+  const handleAdd = () => {
+    router.push(PATH.ORDER)
+  }
 
-  return (
-    <div className="flex">
-      <Button
-        className="mr-1"
-        onClick={() => {
-          mutate()
-        }}
-      >
-        <ArrowPathIcon
-          className="h-4 w-4
-
-"
-          aria-hidden="true"
-        />
-      </Button>
-      {canEdit && (
-        <PlusButton
-          primary
-          className="mr-1"
-          buttonSize="large"
-          onClick={() => {
-            router.push(PATH.ORDER)
-          }}
-        />
-      )}
-    </div>
-  )
+  return <SearchBarButtonsComponent handleAdd={handleAdd} handleRefresh={handleRefresh} editRole={ROLE.ORDERS_EDIT} />
 }
-
-export default HeaderButtons
