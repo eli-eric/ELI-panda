@@ -4,6 +4,7 @@ import {
   ArrowUturnLeftIcon,
   FolderOpenIcon,
   FolderPlusIcon,
+  MinusIcon,
   NoSymbolIcon,
   PencilSquareIcon,
   PlusIcon,
@@ -100,6 +101,12 @@ export const DownloadButton = ({ buttonSize = 'small', ...restProps }: ButtonPro
 export const PlusButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <PlusIcon className="h-4 w-4" aria-hidden="true" />
+  </Button>
+)
+
+export const MinusButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+  <Button {...restProps} buttonSize={buttonSize}>
+    <MinusIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 

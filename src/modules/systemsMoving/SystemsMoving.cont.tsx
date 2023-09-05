@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
+import { MinusButton, PlusButton } from '@/components/Buttons'
+import { classNames } from '@/helpers'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { FormModal } from '@/hooks/form/useFormModal'
@@ -92,23 +94,42 @@ export const SystemsMovingContainer = () => {
     }
   }, [childSystem, setValue, reset])
 
+  const [showLeft, setShowLeft] = useState(true)
+  const toggleLeft = useCallback(() => setShowLeft(!showLeft), [showLeft])
+
+  const [showRight, setShowRight] = useState(true)
+  const toggleRight = useCallback(() => setShowRight(!showRight), [showRight])
+
   return (
-    <div className="grid grid-cols-2">
-      <SystemsContainer
-        tableId={tableIdLeft}
-        hideButtons={false}
-        enableDragAndDrop={true}
-        className="border-r-4 border-gray-400"
-        dropSettings={{ onDropHandler: onDropHandler, accept: 'system' }}
-        enableQueryURL={false}
-      />
-      <SystemsContainer
-        tableId={tableIdRight}
-        hideButtons={false}
-        enableDragAndDrop={true}
-        dropSettings={{ onDropHandler: onDropHandler, accept: 'system' }}
-        enableQueryURL={false}
-      />
+    <Fragment>
+      <div className={classNames('grid', showLeft && showRight ? 'grid-cols-2' : 'grid-cols-1')}>
+        {showLeft && (
+          <SystemsContainer
+            tableId={tableIdLeft}
+            hideButtons={false}
+            enableDragAndDrop={true}
+            className="border-r-4 border-gray-400"
+            dropSettings={{ onDropHandler: onDropHandler, accept: 'system' }}
+            enableQueryURL={false}
+            RightSearchBarElement={() =>
+              showRight ? <MinusButton onClick={toggleLeft} /> : <PlusButton onClick={toggleRight} />
+            }
+          />
+        )}
+        {showRight && (
+          <SystemsContainer
+            tableId={tableIdRight}
+            hideButtons={false}
+            enableDragAndDrop={true}
+            dropSettings={{ onDropHandler: onDropHandler, accept: 'system' }}
+            enableQueryURL={false}
+            RightSearchBarElement={() =>
+              showLeft ? <MinusButton onClick={toggleRight} /> : <PlusButton onClick={toggleLeft} />
+            }
+          />
+        )}
+      </div>
+
       <FormModal
         formMethods={formMethods}
         onSubmit={(data: SystemDetail) => {
@@ -124,6 +145,6 @@ export const SystemsMovingContainer = () => {
           ]}
         />
       </FormModal>
-    </div>
+    </Fragment>
   )
 }
