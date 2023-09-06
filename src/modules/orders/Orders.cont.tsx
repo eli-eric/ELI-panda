@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 
 import { Pagination } from '../shared/table/Pagination'
 import { PandaTable } from '../shared/table/pandaTable/PandaTable'

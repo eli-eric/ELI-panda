@@ -1,9 +1,9 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
-import Tippy from '@tippyjs/react'
 import { Fragment, useMemo } from 'react'
 
 import { NewTabLink } from '@/components/decorators'
+import { Tooltip } from '@/components/Tooltip'
 import usePermission from '@/hooks/usePermission'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
@@ -67,9 +67,9 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
         cell: ({ getValue }) => (
           <Fragment>
             {getValue() && (
-              <Tippy content={getValue()}>
+              <Tooltip content={getValue()}>
                 <InformationCircleIcon className="h-5 w-5 pr- flex-shrink-0" />
-              </Tippy>
+              </Tooltip>
             )}
           </Fragment>
         )
@@ -141,9 +141,9 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
         cell: ({ getValue }) => (
           <Fragment>
             {getValue() && (
-              <Tippy content={getValue()}>
+              <Tooltip content={getValue()}>
                 <InformationCircleIcon className="h-6 w-6 flex-shrink-0" />
-              </Tippy>
+              </Tooltip>
             )}
           </Fragment>
         )

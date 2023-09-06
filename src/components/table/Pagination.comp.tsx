@@ -1,10 +1,10 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 import type { MouseEventHandler } from 'react'
 import { FormattedMessage } from 'react-intl'
-import { createMessageValues } from 'src/helpers/formatters'
 import { message } from 'src/i18n/src/messages'
 
 import { Button } from '@/components/Buttons'
+import { createMessageValues } from '@/utils/formatters'
 
 const text = message.cataloguePage.pagination.text
 

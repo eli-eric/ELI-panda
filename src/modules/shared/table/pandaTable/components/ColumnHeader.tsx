@@ -5,7 +5,7 @@ import type { FC } from 'react'
 import { memo } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 
 import { Filter } from './Filter'
 

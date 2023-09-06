@@ -5,10 +5,10 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
-import { classNames } from '@/helpers'
 import { type CodebookFilter, type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
+import { classNames } from '@/utils'
 
 import { PlusButton } from '../Buttons'
 import useAddCodebookValue from './shared/useAddCodebookValue'

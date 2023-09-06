@@ -1,10 +1,10 @@
 import { Disclosure } from '@headlessui/react'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
-import Tippy from '@tippyjs/react'
 import { Fragment } from 'react'
 
-import { classNames } from '@/helpers'
+import { Tooltip } from '@/components/Tooltip'
 import { ENV, PROCESS_ENV } from '@/types/constants/common'
+import { classNames } from '@/utils'
 
 import NavBarHideoutComponent from './nav-bar-hideout.comp'
 import NavBarStaticComponent from './nav-bar-static.comp'
@@ -20,9 +20,9 @@ export const NavigationComponent = () => {
   const EnvInfo = ({ infoText, env }: { infoText: string; env?: string }) => (
     <div className="flex flex-col justify-center items-center text-lg absolute left-2 top-2 font-mono">
       <span>{env?.toUpperCase()}</span>
-      <Tippy content={infoText}>
+      <Tooltip content={infoText}>
         <InformationCircleIcon className="h-8 w-8 flex-shrink-0 -mt-2" />
-      </Tippy>
+      </Tooltip>
     </div>
   )
 

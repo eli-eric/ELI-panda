@@ -11,7 +11,7 @@ import { forwardRef, Fragment, useImperativeHandle } from 'react'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 
 import { TableBody } from './components/TableBody'
 import { TableFoot } from './components/TableFoot'
