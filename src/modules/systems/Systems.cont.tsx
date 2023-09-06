@@ -19,6 +19,7 @@ interface Props {
   dropSettings?: any
   className?: string
   hideButtons?: boolean
+  RightSearchBarElement?: () => JSX.Element
 }
 
 export const SystemsContainer: FC<Props> = ({
@@ -27,7 +28,8 @@ export const SystemsContainer: FC<Props> = ({
   tableId = 'systems',
   dropSettings,
   className,
-  hideButtons = false
+  hideButtons = false,
+  RightSearchBarElement
 }: Props) => {
   const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
 
@@ -38,6 +40,7 @@ export const SystemsContainer: FC<Props> = ({
           hideButtons={hideButtons}
           enableDragAndDrop={enableDragAndDrop}
           tableId={tableId}
+          RightSearchBarElement={RightSearchBarElement}
           pageSizeDefault={50}
           className={'relative overflow-scroll scrollbar-style'}
           getRowProps={({ id, original }) => ({

@@ -1,5 +1,5 @@
 import type { Row } from '@tanstack/react-table'
-import Tippy from '@tippyjs/react'
+import { Tooltip } from '@/components/Tooltip'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -150,7 +150,7 @@ export const PrintEunButton = ({ orderLine }: { orderLine: OrderLineFormType }) 
   })
 
   return (
-    <Tippy content={'Print eun'}>
+    <Tooltip content={'Print eun'}>
       <button
         className="hover:underline"
         type="button"
@@ -160,7 +160,7 @@ export const PrintEunButton = ({ orderLine }: { orderLine: OrderLineFormType }) 
       >
         <span>{orderLine.eun}</span>
       </button>
-    </Tippy>
+    </Tooltip>
   )
 }
 
