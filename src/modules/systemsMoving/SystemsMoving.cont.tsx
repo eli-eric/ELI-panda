@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
 import { MinusButton, PlusButton } from '@/components/Buttons'
+import { Tooltip } from '@/components/Tooltip'
 import { classNames } from '@/helpers'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
@@ -112,7 +113,19 @@ export const SystemsMovingContainer = () => {
             dropSettings={{ onDropHandler: onDropHandler, accept: 'system' }}
             enableQueryURL={false}
             RightSearchBarElement={() =>
-              showRight ? <MinusButton onClick={toggleLeft} /> : <PlusButton onClick={toggleRight} />
+              showRight ? (
+                <Tooltip content="Hide systems window">
+                  <div>
+                    <MinusButton onClick={toggleLeft} />
+                  </div>
+                </Tooltip>
+              ) : (
+                <Tooltip content="Show systems window">
+                  <div>
+                    <PlusButton onClick={toggleRight} />
+                  </div>
+                </Tooltip>
+              )
             }
           />
         )}
@@ -124,7 +137,19 @@ export const SystemsMovingContainer = () => {
             dropSettings={{ onDropHandler: onDropHandler, accept: 'system' }}
             enableQueryURL={false}
             RightSearchBarElement={() =>
-              showLeft ? <MinusButton onClick={toggleRight} /> : <PlusButton onClick={toggleLeft} />
+              showLeft ? (
+                <Tooltip content="Hide systems window">
+                  <div>
+                    <MinusButton onClick={toggleRight} />
+                  </div>
+                </Tooltip>
+              ) : (
+                <Tooltip content="Show systems window">
+                  <div>
+                    <PlusButton onClick={toggleLeft} />
+                  </div>
+                </Tooltip>
+              )
             }
           />
         )}

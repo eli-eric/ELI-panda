@@ -130,7 +130,12 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
         {...{
           tableId: 'filemanager',
           data: files,
-          columns
+          columns,
+          settings: {
+            enableSorting: true,
+            manualSorting: false,
+            enableFiltering: true
+          }
         }}
       />
     </div>

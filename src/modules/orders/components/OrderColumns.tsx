@@ -1,9 +1,9 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
-import Tippy from '@tippyjs/react'
 import { Fragment, useMemo } from 'react'
 import { FormattedDate, useIntl } from 'react-intl'
 
+import { Tooltip } from '@/components/Tooltip'
 import { message } from '@/i18n/src/messages'
 
 import type { Order } from '../types'
@@ -66,9 +66,9 @@ export const useOrderColumns = ({ NameCell }: { NameCell: (props: CellContext<Or
         cell: ({ getValue }) => (
           <Fragment>
             {getValue() && (
-              <Tippy content={getValue()}>
+              <Tooltip content={getValue()}>
                 <InformationCircleIcon className="h-5 w-5 pr- flex-shrink-0" />
-              </Tippy>
+              </Tooltip>
             )}
           </Fragment>
         ),
