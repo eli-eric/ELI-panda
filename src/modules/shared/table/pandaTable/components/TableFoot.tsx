@@ -2,7 +2,7 @@ import type { HeaderGroup } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
 import type { FC } from 'react'
 
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 
 interface Props {
   getFooterGroups: () => HeaderGroup<any>[]

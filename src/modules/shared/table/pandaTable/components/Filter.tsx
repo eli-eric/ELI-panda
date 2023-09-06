@@ -1,7 +1,7 @@
 import type { Column, Table } from '@tanstack/react-table'
 import { Fragment, useMemo } from 'react'
 
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 
 import { DebouncedInput } from './DebouncedInput'
 

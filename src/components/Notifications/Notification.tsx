@@ -3,7 +3,7 @@ import { CheckCircleIcon, ExclamationTriangleIcon, XMarkIcon } from '@heroicons/
 import { Fragment, useState } from 'react'
 import { resolveValue, type Toast, toast } from 'react-hot-toast'
 
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 
 interface Props {
   t: Toast

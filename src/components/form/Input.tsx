@@ -2,8 +2,8 @@ import React, { Fragment } from 'react'
 import { Controller } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 
-import { classNames } from '@/helpers'
 import type { FieldProps } from '@/types/form'
+import { classNames } from '@/utils'
 
 import { ValidationIcon } from './Icons'
 

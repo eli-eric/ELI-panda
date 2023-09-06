@@ -1,7 +1,7 @@
 import useSWR from 'swr/immutable'
 
-import { fetcher } from '@/helpers/fetcher'
 import type { CODEBOOK } from '@/types/constants/codebook'
+import { fetcher } from '@/utils/fetcher'
 
 import { useEndpoint } from './useEndpoint'
 

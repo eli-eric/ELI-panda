@@ -5,8 +5,8 @@ import { useIntl } from 'react-intl'
 import type { KeyedMutator } from 'swr'
 
 import { TableDeleteButton, TableDownloadButton } from '@/components/Buttons'
-import executeRequest from '@/helpers/executeRequest'
-import { createMessageValues } from '@/helpers/formatters'
+import executeRequest from '@/utils/executeRequest'
+import { createMessageValues } from '@/utils/formatters'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 

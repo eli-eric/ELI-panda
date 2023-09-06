@@ -4,3 +4,6 @@ PANDA_API_GW_URL="http://localhost:5001/api/mock-server"
 NEXTAUTH_URL="http://localhost:5001/"
 NEXTAUTH_SECRET="stored in gh actions secrets"
 PANDA_ENV="dev" #could be dev, test, production, if not set it is like production, localhost for local server
+NEO4J_URI="217.198.121.181:7682"
+NEO4J_USER="neo4j"
+NEO4J_PASSWORD="Pohoda.Jazz.Neo4j!65"
