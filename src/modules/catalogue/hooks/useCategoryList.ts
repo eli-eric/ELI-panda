@@ -16,6 +16,7 @@ const GET_CATEGORIES = gql`
 const GET_SUBCATEGORIES = gql`
   query GetCategories($uid: String!) {
     catalogueCategories(where: { uid: $uid }) {
+      parentPath
       subCategories {
         uid
         name
