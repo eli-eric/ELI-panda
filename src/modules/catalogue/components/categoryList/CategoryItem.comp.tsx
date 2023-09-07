@@ -21,7 +21,7 @@ export const CategoryItemComponent = ({ category }: Props) => {
     editUid: category.uid,
     catalogueParentPath: category.parentPath
   })
-  const path = PATH.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
+  const path = PATH.CATALOGUE + '/' + category.uid
   return (
     <div className="flex-row justify-between relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
       <Link
