@@ -1,9 +1,9 @@
 import type { StaticImageData } from 'next/image'
 import useSWR from 'swr'
 
-import { uniFetcher } from '@/utils/fetcher'
 import type { FileItem } from '@/modules/shared/fileManager/types'
 import { FILE_TYPE } from '@/types/constants/files'
+import { uniFetcher } from '@/utils/fetcher'
 
 import { getEndpoint } from './../../modules/shared/imageManager/utils/index'
 import useFetch from './useFetch'
