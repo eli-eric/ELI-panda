@@ -59,7 +59,7 @@ export const useCategoryEdit = ({
     method: 'delete',
     onSuccess: () => {
       setOpenDelete(false)
-      mutate()
+      //mutate()
     }
   })
   const copyCategory = useSubmit<string>({
@@ -67,7 +67,7 @@ export const useCategoryEdit = ({
     method: 'post',
     onSuccess: uid => {
       setOpenCopy(false)
-      mutate()
+      //mutate()
       setCopyCategoporyUid(uid)
     }
   })

@@ -8,5 +8,10 @@ const driver = getDriver()
 
 export const neoSchema = new Neo4jGraphQL({
   typeDefs,
-  driver
+  driver,
+  features: {
+    authorization: {
+      key: process.env.NEXTAUTH_SECRET!
+    }
+  }
 })

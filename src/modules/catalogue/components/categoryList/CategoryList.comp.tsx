@@ -7,7 +7,9 @@ import { useCategoryList } from '../../hooks/useCategoryList'
 import { CategoryItemComponent } from './CategoryItem.comp'
 
 export const CategoryList = () => {
-  const { categoryList, error, loading } = useCategoryList()
+  const { categoryList: cg, error, loading, uid } = useCategoryList()
+
+  const categoryList = uid ? cg && cg[0].subCategories : cg
 
   return (
     <Fragment>

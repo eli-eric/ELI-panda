@@ -57,7 +57,7 @@ const CategoryEditModal = ({ setOpen, parentPath = '', uid }: Props) => {
     method: uid ? 'put' : 'post',
     mutateList: [catalogueCategoryEdit, catalogueCategoryImage],
     onSuccess: () => {
-      mutate()
+      //mutate()
       setOpen(false)
     }
   })

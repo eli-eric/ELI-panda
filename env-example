@@ -7,3 +7,5 @@ PANDA_ENV="dev" #could be dev, test, production, if not set it is like productio
 NEO4J_URI="bolt://xxx.xxx.xxx.xxx:xxxx"
 NEO4J_USER="neo4j"
 NEO4J_PASSWORD="heslo"
+NEO4J_SECRET="stored in gh actions secrets"
+
