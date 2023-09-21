@@ -17,10 +17,10 @@ const server = async (): Promise<ApolloServer> => {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions as NextAuthOptions)
-  if (!session?.user) {
+  /* if (!session?.user) {
     res.status(403).send('Authentication required.')
     return
-  }
+  } */
   return startServerAndCreateNextHandler(await server(), {
     context: async (req, res) => {
       const token = await getToken({ req })

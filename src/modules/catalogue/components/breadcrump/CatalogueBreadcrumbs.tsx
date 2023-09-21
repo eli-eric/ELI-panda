@@ -4,23 +4,24 @@ import BreadcrumpContainer from '@/components/Breadcrump/Breadcrump.cont'
 import BreadcrumpItem from '@/components/Breadcrump/Breadcrump.item'
 import { PATH } from '@/types/constants/paths'
 
+import { useCategory } from '../../hooks/useCategory'
 import { useCategoryEdit } from '../../hooks/useCategoryEdit'
-import { useCategoryList } from '../../hooks/useCategoryList'
 
 export const CatalogueBreadcrumbs = () => {
   //TODO: clean up
   const { getAddButton } = useCategoryEdit({ catalogueParentPath: '' })
-
-  const { categoryList } = useCategoryList()
+  const { catalogueCategory } = useCategory()
 
   return (
     <BreadcrumpContainer homeLink={PATH.CATALOGUE}>
       <Fragment>
-        {categoryList &&
-          categoryList[0].parentPath?.map((path, i) => (
-            <BreadcrumpItem key={i} name={path.name} link={PATH.CATALOGUE + '/' + path.uid} />
+        {catalogueCategory?.parentPath[0]?.uid &&
+          catalogueCategory?.parentPath?.map((path, i) => (
+            <BreadcrumpItem key={i} name={path?.name as string} link={PATH.CATALOGUE + '/' + path?.uid} />
           ))}
-
+        {catalogueCategory && (
+          <BreadcrumpItem name={catalogueCategory?.name} link={PATH.CATALOGUE + '/' + catalogueCategory?.uid} />
+        )}
         {getAddButton()}
       </Fragment>
     </BreadcrumpContainer>

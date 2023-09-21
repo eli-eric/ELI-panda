@@ -5,8 +5,7 @@ import { useRouter } from 'next/router'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useImage } from '@/hooks/fetch/useImage'
 import { PATH } from '@/types/constants/paths'
-
-import type { CatalogueCategory } from '../../types/responses'
+import type { CatalogueCategory } from '@/types/gql/graphql'
 
 interface Props {
   category: CatalogueCategory
@@ -16,9 +15,8 @@ export const CategoryItemComponent = ({ category }: Props) => {
   const router = useRouter()
   const { catalogueCategoryImage } = useEndpoint({ uid: category.uid })
   const image = useImage(catalogueCategoryImage)
-
   //TODO: clean up
-  /*  const { getEditButtons } = useCategoryEdit({
+  /*   const { getEditButtons } = useCategoryEdit({
     editUid: category.uid
     catalogueParentPath: category.parentPath
   }) */
@@ -38,7 +36,7 @@ export const CategoryItemComponent = ({ category }: Props) => {
             className="h-10 w-10 rounded-sm object-contain"
             width={200}
             height={200}
-            alt={category.code}
+            alt={category.name}
             src={image}
           />
         </div>

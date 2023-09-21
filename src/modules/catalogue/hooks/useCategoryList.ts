@@ -1,40 +1,34 @@
 import { gql, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 
-import type { CatalogueCategoryResponse } from '../types/responses'
+import type { Query } from '@/types/gql/graphql'
 
 const GET_CATEGORIES = gql`
-  query GetCategories {
-    catalogueCategories(where: { parentCategory: null }) {
+  query GetCategories($parentCategory: CatalogueCategoryWhere = null) {
+    catalogueCategories(where: { parentCategory: $parentCategory }) {
       uid
       name
     }
   }
 `
-const GET_SUBCATEGORIES = gql`
-  query GetCategories($uid: String!) {
-    catalogueCategories(where: { uid: $uid }) {
-      parentPath {
-        uid
-        name
-      }
-      subCategories {
-        uid
-        name
-      }
-    }
-  }
-`
+
 export const useCategoryList = () => {
   const router = useRouter()
+  const uid = router.query.uid || null
   const {
     data,
     loading,
     error,
     client: { mutate }
-  } = useQuery<CatalogueCategoryResponse>(router.query.uid ? GET_SUBCATEGORIES : GET_CATEGORIES, {
-    variables: { uid: router.query.uid }
+  } = useQuery<Query>(GET_CATEGORIES, {
+    variables: { parentCategory: uid ? { uid } : null }
   })
 
-  return { categoryList: data?.catalogueCategories, loading, error, mutate, uid: router.query.uid }
+  return {
+    catalogueCategories: data?.catalogueCategories,
+    loading: loading,
+    error: error,
+    mutate,
+    uid: router.query.uid
+  }
 }
