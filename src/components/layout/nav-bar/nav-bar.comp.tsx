@@ -3,8 +3,8 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 
 import { Tooltip } from '@/components/Tooltip'
-import { classNames } from '@/helpers'
 import { ENV, PROCESS_ENV } from '@/types/constants/common'
+import { classNames } from '@/utils'
 
 import NavBarHideoutComponent from './nav-bar-hideout.comp'
 import NavBarStaticComponent from './nav-bar-static.comp'

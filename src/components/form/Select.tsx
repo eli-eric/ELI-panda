@@ -2,8 +2,8 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { Controller } from 'react-hook-form'
 
-import { classNames } from '@/helpers'
 import type { FieldProps } from '@/types/form'
+import { classNames } from '@/utils'
 
 export type Option = {
   value: string | number | readonly string[] | undefined

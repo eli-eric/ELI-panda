@@ -10,7 +10,7 @@ import { TableButtonsWrapper, TableDeleteButton, TableEditButton } from '@/compo
 import { Heading } from '@/components/card/card.comp'
 import { useToggle } from '@/components/form/Switch'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
-import { createMessageValues } from '@/helpers/formatters'
+import { createMessageValues } from '@/utils/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { FormModal } from '@/hooks/form/useFormModal'

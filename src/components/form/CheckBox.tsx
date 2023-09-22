@@ -1,8 +1,8 @@
 import { Controller } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 
-import { classNames } from '@/helpers'
 import type { FieldProps } from '@/types/form'
+import { classNames } from '@/utils'
 
 type InputProps = FieldProps & React.InputHTMLAttributes<HTMLInputElement>
 

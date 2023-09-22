@@ -15,7 +15,7 @@ import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
 import type { UrlObject } from 'url'
 
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 
 import ButtonLoaderComponent from './button-loader.comp'
 

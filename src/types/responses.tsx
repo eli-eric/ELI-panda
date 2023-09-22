@@ -3,6 +3,7 @@ import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/response
 
 export interface CatalogueCategoryResponse {
   uid: string
+  image?: string
   name: string
   code: string
   parentPath: string
