@@ -1,6 +1,7 @@
 import { type Dispatch, Fragment, type SetStateAction, Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormattedMessage } from 'react-intl'
+import { mutate } from 'swr'
 
 import { Button } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
@@ -50,14 +51,15 @@ const CategoryEditModal = ({ setOpen, parentPath = '', uid }: Props) => {
     uid
   })
 
-  const { mutate } = useCategoryList()
+  const { mutate: mutateCategories } = useCategoryList()
 
   const { submit, loading, error } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: uid ? 'put' : 'post',
-    mutateList: [catalogueCategoryEdit, catalogueCategoryImage],
     onSuccess: () => {
-      //mutate()
+      mutateCategories()
+      mutate(catalogueCategoryEdit)
+      mutate(catalogueCategoryImage)
       setOpen(false)
     }
   })

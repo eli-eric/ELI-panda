@@ -20,7 +20,8 @@ export const useCategory = () => {
   const router = useRouter()
   const uid = router.query.uid || null
   const { data, loading, error } = useQuery<Query>(GET_CATEGORIES, {
-    variables: { uid }
+    variables: { uid },
+    returnPartialData: true
   })
 
   return {

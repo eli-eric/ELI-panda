@@ -17,7 +17,7 @@ import { useCataloguePath } from './hooks/usePath'
 const CatalogueContainer = () => {
   const tableId = 'catalogueItems'
   const { catalogueItems, error, loading } = useCatalogueItems(tableId)
-  const { catalogueCategories } = useCategoryList()
+  const { categoryList } = useCategoryList()
   const [open, setOpen] = useState(false)
   const categoryPath = useCataloguePath()
   const { setCustom } = useTableStateStore()
@@ -35,7 +35,7 @@ const CatalogueContainer = () => {
           setOpen(open)
         }}
       />
-      <TableLayoutContainer deps={[open, catalogueItems, catalogueCategories]} className={'border-t border-gray-300'}>
+      <TableLayoutContainer deps={[open, catalogueItems, categoryList]} className={'border-t border-gray-300'}>
         <CatalogueTable tableId={tableId} catalogueItems={catalogueItems} loading={loading} />
         <Pagination
           tableId={tableId}

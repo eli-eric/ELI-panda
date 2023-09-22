@@ -1,12 +1,10 @@
-import { gql } from '@apollo/client'
 import { Neo4jGraphQL } from '@neo4j/graphql'
-import { readFileSync } from 'fs'
 
 import getDriver from '@/utils/neo4j'
 
-const driver = getDriver()
+import { typeDefs } from './typeDefs'
 
-const typeDefs = gql(readFileSync('src/server/apollo/schema.graphql', { encoding: 'utf-8' }))
+const driver = getDriver()
 
 export const neoSchema = new Neo4jGraphQL({
   typeDefs,

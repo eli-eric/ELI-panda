@@ -1,9 +1,12 @@
-import { neoSchema } from '@/server/apollo/schema'
 import { ApolloServer } from '@apollo/server'
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
-import { NextApiRequest, NextApiResponse } from 'next'
-import { getServerSession, NextAuthOptions } from 'next-auth'
+import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextAuthOptions } from 'next-auth'
+import { getServerSession } from 'next-auth'
 import { getToken } from 'next-auth/jwt'
+
+import { neoSchema } from '@/server/apollo/schema'
+
 import { authOptions } from './auth/[...nextauth]'
 
 const server = async (): Promise<ApolloServer> => {
@@ -17,10 +20,12 @@ const server = async (): Promise<ApolloServer> => {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions as NextAuthOptions)
-  /* if (!session?.user) {
+
+  if (!session?.user && process.env.PANDA_ENV !== 'localhost') {
     res.status(403).send('Authentication required.')
     return
-  } */
+  }
+
   return startServerAndCreateNextHandler(await server(), {
     context: async (req, res) => {
       const token = await getToken({ req })

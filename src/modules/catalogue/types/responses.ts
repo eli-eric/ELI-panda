@@ -7,7 +7,6 @@ export interface CatalogueCategory {
   uid: string
   name: string
   code: string
-  image?: string
   subCategories?: CatalogueCategoryResponse[]
   parentPath: CategoryParentPath[]
 }
