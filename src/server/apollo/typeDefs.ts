@@ -13,8 +13,7 @@ export const typeDefs = gql`
     name: String
   }
 
-  type CatalogueCategory
-    @authorization(filter: [{ operations: [READ], where: { jwt: { roles_INCLUDES: "catalogue-view" } } }]) {
+  type CatalogueCategory {
     uid: String!
     code: String!
     name: String!

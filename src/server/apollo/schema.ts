@@ -11,7 +11,7 @@ export const neoSchema = new Neo4jGraphQL({
   driver,
   features: {
     authorization: {
-      key: process.env.NEXTAUTH_SECRET!
+      key: process.env.NEXTAUTH_SECRET ?? ''
     }
   }
 })
