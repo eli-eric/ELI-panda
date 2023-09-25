@@ -13,6 +13,7 @@ services:
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - MINIO_ACCESS_KEY_PROD=${MINIO_ACCESS_KEY_PROD}
       - MINIO_SECRET_KEY_PROD=${MINIO_SECRET_KEY_PROD}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
     build:
       context: ./
       dockerfile: Dockerfile.devenv
