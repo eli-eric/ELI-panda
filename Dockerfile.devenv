@@ -27,6 +27,9 @@ ENV MINIO_ENDPOINT="minio-main"
 ENV MINIO_BUCKET_NAME="panda-dev"
 ENV NEO4J_USER="neo4j"
 ENV NEO4J_URI="panda-neo4j-dev:7687"
+ENV TEST="OK"
+
+RUN env
 
 # This will do the trick, use the corresponding env file for each environment.
 # COPY .env.production.sample .env.production
