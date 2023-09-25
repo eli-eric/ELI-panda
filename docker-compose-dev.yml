@@ -19,6 +19,8 @@ services:
       dockerfile: Dockerfile.devenv
       labels:
         - panda-frontend-ui-main-app-dev
+      args:
+        - NEO4J_PASSWORD=${NEO4J_PASSWORD}
     networks:
       - panda-net-dev
     ports:
