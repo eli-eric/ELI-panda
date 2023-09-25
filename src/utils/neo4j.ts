@@ -13,7 +13,7 @@ export default function getDriver() {
   const { uri, username, password } = defaultOptions
 
   if (!uri || !username || !password) {
-    throw new Error(`Neo4j connection details are missing or incorrect: ${JSON.stringify(defaultOptions)}`)
+    throw new Error(`Neo4j connection details are missing or incorrect: password length ${password.length}`)
   }
 
   try {
