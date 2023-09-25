@@ -186,23 +186,13 @@ export const useCategoryEdit = ({
         <Fragment>
           <li className="flex">
             <div className="flex items-center">
-              <ChevronRightIcon
-                className="h-4 w-4
-
- mr-2 flex-shrink-0 text-gray-400"
-                aria-hidden="true"
-              />
+              <ChevronRightIcon className="h-4 w-4 mr-2 flex-shrink-0 text-gray-400" aria-hidden="true" />
               <Button
                 onClick={() => {
                   setOpenEdit(true)
                 }}
               >
-                <PlusIcon
-                  className="h-4 w-4
-
-"
-                  aria-hidden="true"
-                />
+                <PlusIcon className="h-4 w-4" aria-hidden="true" />
               </Button>
             </div>
           </li>

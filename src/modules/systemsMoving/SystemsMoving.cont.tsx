@@ -4,7 +4,7 @@ import { toast } from 'react-hot-toast'
 
 import { MinusButton, PlusButton } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { FormModal } from '@/hooks/form/useFormModal'

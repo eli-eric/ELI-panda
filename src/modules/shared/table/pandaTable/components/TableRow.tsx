@@ -2,7 +2,7 @@ import type { Row } from '@tanstack/react-table'
 import { memo, useId, useState } from 'react'
 import { useDrop } from 'react-dnd'
 
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 import type { SystemDetail } from '@/modules/systems/types/responses'
 
 import type { GetRowPropsReturnType } from '../PandaTable'

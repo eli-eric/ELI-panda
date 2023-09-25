@@ -1,6 +1,6 @@
 import { FormattedMessage } from 'react-intl'
 
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 
 interface DividerProps {
   text?: string

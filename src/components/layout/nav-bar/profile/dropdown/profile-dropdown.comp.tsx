@@ -4,10 +4,10 @@ import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 
 import ModalComponent from '@/components/modal/modal.comp'
-import { classNames } from '@/helpers'
 import { message } from '@/i18n/src/messages'
 import { PATH, SUPPORT } from '@/types/constants/paths'
 import type { ModalButtons } from '@/types/form'
+import { classNames } from '@/utils'
 
 import ProfileCardComponent from '../card/profile-card.comp'
 
