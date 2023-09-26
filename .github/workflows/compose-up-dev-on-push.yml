@@ -20,11 +20,6 @@ jobs:
   compose-up:
     runs-on: self-hosted
     needs: use-secret
-    env:
-      NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
-      MINIO_ACCESS_KEY_PROD: '${{ secrets.MINIO_ACCESS_KEY_DEV }}'
-      MINIO_SECRET_KEY_PROD: '${{ secrets.MINIO_SECRET_KEY_DEV }}'
-      NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}'
     steps:
       - uses: actions/checkout@v3
       - run: |
