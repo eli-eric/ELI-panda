@@ -28,4 +28,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
-          NEO4J_PASSWORD=${NEO4J_PASSWORD} docker compose -f docker-compose-dev.yml up -d --build
+          docker compose -f docker-compose-dev.yml up -d --build
+        env:
+          NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
+          MINIO_ACCESS_KEY_PROD: '${{ secrets.MINIO_ACCESS_KEY_DEV }}'
+          MINIO_SECRET_KEY_PROD: '${{ secrets.MINIO_SECRET_KEY_DEV }}'
+          NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}'
