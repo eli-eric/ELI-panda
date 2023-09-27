@@ -13,7 +13,9 @@ export enum PATH {
   REPORTS = '/reports',
   ORDERS = '/orders',
   ORDER = '/order',
-  CODEBOOKS = '/codebooks'
+  CODEBOOKS = '/codebooks',
+  ROOM_CARDS = '/room-cards',
+  ROOM_CARD = '/room-card'
 }
 
 export const SUPPORT = 'https://eli-eric.atlassian.net/servicedesk/customer/portal/20'
@@ -57,5 +59,10 @@ export const NAV_BAR_CONFIG: NavigationType = [
     name: 'Codebooks',
     links: [{ path: PATH.CODEBOOKS }],
     role: ROLE.CODEBOOKS_ADMIN
+  },
+  {
+    name: 'Room Cards',
+    links: [{ path: PATH.ROOM_CARDS }],
+    role: ROLE.BASICS
   }
 ]

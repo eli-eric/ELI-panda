@@ -310,6 +310,9 @@ export const messages = {
       }
     }
   },
+  roomCardsPage: {
+    head: 'ELI Panda - Room Cards'
+  },
   orderItem: { head: 'ELI Panda - Order Item' },
   systemItem: { head: 'ELI Panda - System Item' },
   defaul: { head: 'ELI Panda' }

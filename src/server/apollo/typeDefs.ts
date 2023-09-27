@@ -6,6 +6,7 @@ export const typeDefs = gql`
   }
   type Query {
     locations: [Location!]!
+    roomCards: [RoomCard!]!
   }
 
   type Location {
@@ -49,7 +50,7 @@ export const typeDefs = gql`
   type Team {
     uid: String!
     name: String!
-    employees: [Employee!]! @relationship(type: "BELONGS_TO_TEAM", direction: IN)
+    teamMembers: [Employee!]! @relationship(type: "BELONGS_TO_TEAM", direction: IN)
   }
 
   type Employee {
