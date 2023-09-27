@@ -5,7 +5,61 @@ export const typeDefs = gql`
     roles: [String!]!
   }
   type Query {
-    catalogueCategories: [CatalogueCategory]!
+    locations: [Location!]!
+  }
+
+  type Location {
+    belongsToFacilityFacilities: [Facility!]! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    code: String
+    facilitiesHasLocation: [Facility!]! @relationship(type: "HAS_LOCATION", direction: IN)
+    facility: String!
+    hasSublocationLocations: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: OUT)
+    locationsHasSublocation: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: IN)
+    name: String!
+    roomCard: RoomCard @relationship(type: "HAS_ROOM_CARD", direction: OUT)
+  }
+
+  enum RoomCardStatus {
+    DIRTY_MODE
+    CLEAN_MODE
+    IN_PREPARATION_MODE
+  }
+
+  type RoomCard {
+    uid: ID! @id
+    status: RoomCardStatus!
+    contactPersons: [Employee!]! @relationship(type: "HAS_CONTACT_PERSON", direction: OUT)
+    location: Location! @relationship(type: "HAS_ROOM_CARD", direction: IN)
+    team: [Team!]! @relationship(type: "HAS_TEAM", direction: OUT)
+    purityClass: String
+    prescribedClothing: String
+    entryToHvacTent: String
+    cleaningShedule: String
+    additionalRequirements: String
+    coolingWater: String
+    indoorEnvironmentQueality: String
+    copressedAirDistribution: String
+    nitrogenCentralDistribution: String
+    maxPressureInColdDistribution: String
+    pressureInCoolingSystem: String
+    roomTemperature: String
+    humidity: String
+  }
+
+  type Team {
+    uid: String!
+    name: String!
+    employees: [Employee!]! @relationship(type: "BELONGS_TO_TEAM", direction: IN)
+  }
+
+  type Employee {
+    uid: String!
+    team: Team @relationship(type: "BELONGS_TO_TEAM", direction: OUT)
+    firstName: String!
+    lastName: String!
+    phoneNumber: String
+    email: String
+    role: String
   }
 
   type ParentPathItem {
@@ -98,16 +152,6 @@ export const typeDefs = gql`
     code: String!
     name: String!
     uid: String!
-  }
-
-  type Location {
-    belongsToFacilityFacilities: [Facility!]! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
-    code: String
-    facilitiesHasLocation: [Facility!]! @relationship(type: "HAS_LOCATION", direction: IN)
-    facility: String!
-    hasSublocationLocations: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: OUT)
-    locationsHasSublocation: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: IN)
-    name: String!
   }
 
   type Manufacturer {
