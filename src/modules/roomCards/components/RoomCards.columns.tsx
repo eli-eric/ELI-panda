@@ -14,6 +14,12 @@ export const useRoomCardsColumns = () => {
         meta: { sticky: true }
       },
       {
+        header: 'Code',
+        accessorFn: row => row?.location.code,
+        id: 'code',
+        size: 100
+      },
+      {
         header: 'Status',
         accessorFn: row => row?.status,
         id: 'status'
@@ -51,7 +57,8 @@ export const useRoomCardsColumns = () => {
       {
         header: 'Indoor environment queality',
         accessorFn: row => row?.indoorEnvironmentQueality,
-        id: 'indoorEnvironmentQueality'
+        id: 'indoorEnvironmentQueality',
+        size: 250
       },
       {
         header: 'Copressed air distribution',
@@ -61,12 +68,14 @@ export const useRoomCardsColumns = () => {
       {
         header: 'Nitrogen central distribution',
         accessorFn: row => row?.nitrogenCentralDistribution,
-        id: 'nitrogenCentralDistribution'
+        id: 'nitrogenCentralDistribution',
+        size: 250
       },
       {
         header: 'Max pressure in cold distribution',
         accessorFn: row => row?.maxPressureInColdDistribution,
-        id: 'maxPressureInColdDistribution'
+        id: 'maxPressureInColdDistribution',
+        size: 250
       },
       {
         header: 'Pressure in cooling system',

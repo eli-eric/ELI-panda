@@ -1,78 +1,61 @@
-import { gql, useQuery } from '@apollo/client'
-import { useQueryState } from 'next-usequerystate'
+import { useRouter } from 'next/router'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import type { Query } from '@/types/gql/graphql'
+import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 import { classNames } from '@/utils'
 
 import { PandaTable } from '../shared/table/pandaTable/PandaTable'
-import { SearchBar } from '../shared/table/SearchBar'
+import { SearchBar, SearchBarButtonsComponent } from '../shared/table/SearchBar'
 import { useRoomCardsColumns } from './components/RoomCards.columns'
-
-const ROOM_CARDS = gql`
-  query RoomCards($where: RoomCardWhere) {
-    roomCards(where: $where) {
-      uid
-      purityClass
-      prescribedClothing
-      entryToHvacTent
-      cleaningShedule
-      additionalRequirements
-      coolingWater
-      indoorEnvironmentQueality
-      copressedAirDistribution
-      nitrogenCentralDistribution
-      maxPressureInColdDistribution
-      pressureInCoolingSystem
-      roomTemperature
-      humidity
-      status
-      location {
-        code
-        name
-      }
-    }
-  }
-`
+import { useRoomCards } from './hooks/useRoomCards'
 
 export const RoomCardsContainer = () => {
   const tableId = 'roomCards'
-  const [search] = useQueryState('search')
-  const { data, loading, error } = useQuery<Query>(ROOM_CARDS, {
-    variables: {
-      where: {
-        AND: [
-          {
-            location: {
-              name_CONTAINS: search || ''
-            }
-          }
-        ]
-      }
-    }
-  })
+  const router = useRouter()
+  const { roomCards, loading, error, refetch } = useRoomCards()
   const columns = useRoomCardsColumns()
 
   return (
     <TableLayoutContainer>
       <SearchBar
         {...{
+          left: (
+            <SearchBarButtonsComponent
+              handleAdd={() => {
+                router.push(PATH.ROOM_CARD)
+              }}
+              handleRefresh={() => {
+                refetch()
+              }}
+              editRole={ROLE.BASICS}
+            />
+          ),
           tableId
         }}
       />
       <PandaTable
         {...{
           tableId,
-          getRowProps: ({ original: { status } }) => ({
+          getRowProps: ({ original: { status, uid } }) => ({
             className: classNames(
-              status === 'DIRTY_MODE' && 'bg-red-100',
-              status === 'CLEAN_MODE' && 'bg-green-100',
-              status === 'IN_PREPARATION_MODE' && 'bg-yellow-100'
-            )
+              status === 'DIRTY_MODE' && 'bg-red-200',
+              status === 'CLEAN_MODE' && 'bg-lime-200',
+              status === 'IN_PREPARATION_MODE' && 'bg-orange-200',
+              'cursor-pointer',
+              'hover:text-blue-500'
+            ),
+            onClick: () => {
+              router.push(`${PATH.ROOM_CARD}/${uid}`)
+            }
           }),
           loading,
           error,
-          data: data?.roomCards,
+          data: roomCards,
+          settings: {
+            enableSorting: true,
+            manualSorting: false
+          },
           columns,
           className: 'relative overflow-x-auto scrollbar-style'
         }}
