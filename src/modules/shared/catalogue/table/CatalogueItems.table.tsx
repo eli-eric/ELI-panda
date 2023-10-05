@@ -1,8 +1,9 @@
 import type { ColumnDef, Table } from '@tanstack/react-table'
 import { useEffect, useRef, useState } from 'react'
 
+import type { CatalogueCategory } from '@/types/gql/graphql'
 import type { CatalogueItem } from '@/types/responses'
-import type { CatalogueCategoryResponse, CatalogueItemsResponse } from '@/types/responses'
+import type { CatalogueItemsResponse } from '@/types/responses'
 
 import { PandaTable } from '../../table/pandaTable/PandaTable'
 import { useCatalogueItemsColumns } from './CatalogueItems.columns'
@@ -12,7 +13,7 @@ interface CatalogueTableProps {
   enableQueryURL?: boolean
   tableId?: string
   catalogueItems?: CatalogueItemsResponse
-  categoryList?: CatalogueCategoryResponse[]
+  categoryList?: CatalogueCategory[]
   loading?: boolean
 }
 

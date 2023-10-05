@@ -24,7 +24,7 @@ const CatalogueContainer = () => {
   const { setCustom } = useTableStateStore()
 
   useEffect(() => {
-    setCustom(tableId, { categoryUID })
+    setCustom(tableId, { categoryUID: categoryUID ?? '' })
   }, [categoryUID, setCustom, tableId])
 
   return (

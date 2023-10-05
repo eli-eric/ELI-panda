@@ -13,7 +13,7 @@ export interface CatalogueItem {
   uid: string
   name: string
   description: string
-  categoryPath: string
+  categoryUID: string
   categoryName: string
   supplier?: CodebookType
   manufacturerUrl: string

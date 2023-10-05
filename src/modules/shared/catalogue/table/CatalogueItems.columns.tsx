@@ -22,7 +22,7 @@ export const useCatalogueItemsColumns = (
   const intl = useIntl()
 
   const { catalogueItems } = useCatalogueItems(tableId)
-  const { categoryList } = useCategoryList()
+  const { catalogueCategories } = useCategoryList()
 
   const columns: ColumnDef<CatalogueItem, any>[] = useMemo(() => {
     const columns: ColumnDef<CatalogueItem, any>[] = [
@@ -69,7 +69,7 @@ export const useCatalogueItemsColumns = (
     ]
 
     if (
-      categoryList?.length === 0 &&
+      catalogueCategories?.length === 0 &&
       catalogueItems?.data[0]?.details &&
       catalogueItems?.data[0]?.details?.length > 0 &&
       catalogueItems.data[0]?.details[0]?.property?.type?.name
@@ -94,7 +94,7 @@ export const useCatalogueItemsColumns = (
       columns.push(additionalColumn)
     }
     return columns
-  }, [intl, catalogueItems, categoryList, additionalColumn, tableId, isHoveringId])
+  }, [intl, catalogueItems, catalogueCategories, additionalColumn, tableId, isHoveringId])
 
   return columns
 }
