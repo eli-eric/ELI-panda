@@ -17,15 +17,15 @@ import { useCategoryList } from './hooks/useCategoryList'
 const CatalogueContainer = () => {
   const tableId = 'catalogueItems'
   const router = useRouter()
-  const { uid } = router.query as { uid?: string }
+  const { uid: catagoryUID } = router.query as { uid?: string }
   const { catalogueItems, error, loading } = useCatalogueItems(tableId)
   const { catalogueCategories } = useCategoryList()
   const [open, setOpen] = useState(false)
   const { setCustom } = useTableStateStore()
 
   useEffect(() => {
-    setCustom(tableId, { uid })
-  }, [uid, setCustom, tableId])
+    setCustom(tableId, { catagoryUID })
+  }, [catagoryUID, setCustom, tableId])
 
   return (
     <Fragment>
