@@ -1,5 +1,5 @@
 import { Listbox as HUIListbox } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
+import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
 import React, { useMemo } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
@@ -8,6 +8,8 @@ import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
+
+import { FormXMarkIcon } from './components/FormXMarkIcon'
 
 export type ListboxPropsT = FieldProps & {
   codebook?: CODEBOOK
@@ -64,8 +66,7 @@ const Listbox = ({
 
   const handleChange = (value: any) => (value?.uid === '' ? null : value)
 
-  const handleClear = (e: React.MouseEvent) => {
-    e.stopPropagation()
+  const handleClear = () => {
     setValue(name, null)
   }
 
@@ -101,19 +102,7 @@ const Listbox = ({
               )}
             >
               <span className="block truncate">{customOptions ? field.value : field?.value?.name || emptyOption}</span>
-              {field.value?.uid?.length > 0 && !disabled && allowEmptyOption && (
-                <div
-                  onClick={handleClear}
-                  className="absolute mr-7 inset-y-0 right-0 flex items-center rounded-r-md px-1 focus:outline-none cursor-pointer text-gray-200  hover:text-red-500"
-                >
-                  <XMarkIcon
-                    className="h-4 w-4
-
- "
-                    aria-hidden="true"
-                  />
-                </div>
-              )}
+              {field.value?.uid?.length > 0 && !disabled && allowEmptyOption && <FormXMarkIcon onClick={handleClear} />}
               <div className="absolute inset-y-0 right-0 flex items-center pr-2">
                 {unit && <span className="text-gray-400 sm:text-sm">{unit}</span>}
                 <ChevronDownIcon className="h-4 w-4 text-gray-500" aria-hidden="true" />

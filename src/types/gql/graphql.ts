@@ -3917,6 +3917,11 @@ export type FacilityConnectInput = {
   systemTypeGroupsBelongsToFacility?: InputMaybe<Array<FacilitySystemTypeGroupsBelongsToFacilityConnectFieldInput>>;
 };
 
+export type FacilityConnectOrCreateInput = {
+  hasLocationLocations?: InputMaybe<Array<FacilityHasLocationLocationsConnectOrCreateFieldInput>>;
+  locationsBelongsToFacility?: InputMaybe<Array<FacilityLocationsBelongsToFacilityConnectOrCreateFieldInput>>;
+};
+
 export type FacilityConnectWhere = {
   node: FacilityWhere;
 };
@@ -3970,6 +3975,15 @@ export type FacilityHasLocationLocationsConnectFieldInput = {
   where?: InputMaybe<LocationConnectWhere>;
 };
 
+export type FacilityHasLocationLocationsConnectOrCreateFieldInput = {
+  onCreate: FacilityHasLocationLocationsConnectOrCreateFieldInputOnCreate;
+  where: LocationConnectOrCreateWhere;
+};
+
+export type FacilityHasLocationLocationsConnectOrCreateFieldInputOnCreate = {
+  node: LocationOnCreateInput;
+};
+
 export type FacilityHasLocationLocationsConnection = {
   __typename?: 'FacilityHasLocationLocationsConnection';
   edges: Array<FacilityHasLocationLocationsRelationship>;
@@ -4004,6 +4018,7 @@ export type FacilityHasLocationLocationsDisconnectFieldInput = {
 
 export type FacilityHasLocationLocationsFieldInput = {
   connect?: InputMaybe<Array<FacilityHasLocationLocationsConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<FacilityHasLocationLocationsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<FacilityHasLocationLocationsCreateFieldInput>>;
 };
 
@@ -4070,6 +4085,7 @@ export type FacilityHasLocationLocationsUpdateConnectionInput = {
 
 export type FacilityHasLocationLocationsUpdateFieldInput = {
   connect?: InputMaybe<Array<FacilityHasLocationLocationsConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<FacilityHasLocationLocationsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<FacilityHasLocationLocationsCreateFieldInput>>;
   delete?: InputMaybe<Array<FacilityHasLocationLocationsDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<FacilityHasLocationLocationsDisconnectFieldInput>>;
@@ -4214,6 +4230,7 @@ export type FacilityLocationHasLocationLocationsNodeAggregateSelection = {
   code: StringAggregateSelectionNullable;
   facility: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
 };
 
 export type FacilityLocationLocationsBelongsToFacilityAggregationSelection = {
@@ -4227,6 +4244,7 @@ export type FacilityLocationLocationsBelongsToFacilityNodeAggregateSelection = {
   code: StringAggregateSelectionNullable;
   facility: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
 };
 
 export type FacilityLocationsBelongsToFacilityAggregateInput = {
@@ -4246,6 +4264,15 @@ export type FacilityLocationsBelongsToFacilityConnectFieldInput = {
   /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<LocationConnectWhere>;
+};
+
+export type FacilityLocationsBelongsToFacilityConnectOrCreateFieldInput = {
+  onCreate: FacilityLocationsBelongsToFacilityConnectOrCreateFieldInputOnCreate;
+  where: LocationConnectOrCreateWhere;
+};
+
+export type FacilityLocationsBelongsToFacilityConnectOrCreateFieldInputOnCreate = {
+  node: LocationOnCreateInput;
 };
 
 export type FacilityLocationsBelongsToFacilityConnection = {
@@ -4282,6 +4309,7 @@ export type FacilityLocationsBelongsToFacilityDisconnectFieldInput = {
 
 export type FacilityLocationsBelongsToFacilityFieldInput = {
   connect?: InputMaybe<Array<FacilityLocationsBelongsToFacilityConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<FacilityLocationsBelongsToFacilityConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<FacilityLocationsBelongsToFacilityCreateFieldInput>>;
 };
 
@@ -4348,6 +4376,7 @@ export type FacilityLocationsBelongsToFacilityUpdateConnectionInput = {
 
 export type FacilityLocationsBelongsToFacilityUpdateFieldInput = {
   connect?: InputMaybe<Array<FacilityLocationsBelongsToFacilityConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<FacilityLocationsBelongsToFacilityConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<FacilityLocationsBelongsToFacilityCreateFieldInput>>;
   delete?: InputMaybe<Array<FacilityLocationsBelongsToFacilityDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<FacilityLocationsBelongsToFacilityDisconnectFieldInput>>;
@@ -4777,16 +4806,17 @@ export type Location = {
   facilitiesHasLocationAggregate?: Maybe<LocationFacilityFacilitiesHasLocationAggregationSelection>;
   facilitiesHasLocationConnection: LocationFacilitiesHasLocationConnection;
   facility: Scalars['String']['output'];
-  hasSublocationLocations: Array<Location>;
-  hasSublocationLocationsAggregate?: Maybe<LocationLocationHasSublocationLocationsAggregationSelection>;
-  hasSublocationLocationsConnection: LocationHasSublocationLocationsConnection;
-  locationsHasSublocation: Array<Location>;
-  locationsHasSublocationAggregate?: Maybe<LocationLocationLocationsHasSublocationAggregationSelection>;
-  locationsHasSublocationConnection: LocationLocationsHasSublocationConnection;
   name: Scalars['String']['output'];
+  parentLocation?: Maybe<Location>;
+  parentLocationAggregate?: Maybe<LocationLocationParentLocationAggregationSelection>;
+  parentLocationConnection: LocationParentLocationConnection;
   roomCard?: Maybe<RoomCard>;
   roomCardAggregate?: Maybe<LocationRoomCardRoomCardAggregationSelection>;
   roomCardConnection: LocationRoomCardConnection;
+  subLocations: Array<Location>;
+  subLocationsAggregate?: Maybe<LocationLocationSubLocationsAggregationSelection>;
+  subLocationsConnection: LocationSubLocationsConnection;
+  uid: Scalars['ID']['output'];
 };
 
 
@@ -4834,47 +4864,25 @@ export type LocationFacilitiesHasLocationConnectionArgs = {
 };
 
 
-export type LocationHasSublocationLocationsArgs = {
+export type LocationParentLocationArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   options?: InputMaybe<LocationOptions>;
   where?: InputMaybe<LocationWhere>;
 };
 
 
-export type LocationHasSublocationLocationsAggregateArgs = {
+export type LocationParentLocationAggregateArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   where?: InputMaybe<LocationWhere>;
 };
 
 
-export type LocationHasSublocationLocationsConnectionArgs = {
+export type LocationParentLocationConnectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<LocationHasSublocationLocationsConnectionSort>>;
-  where?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-};
-
-
-export type LocationLocationsHasSublocationArgs = {
-  directed?: InputMaybe<Scalars['Boolean']['input']>;
-  options?: InputMaybe<LocationOptions>;
-  where?: InputMaybe<LocationWhere>;
-};
-
-
-export type LocationLocationsHasSublocationAggregateArgs = {
-  directed?: InputMaybe<Scalars['Boolean']['input']>;
-  where?: InputMaybe<LocationWhere>;
-};
-
-
-export type LocationLocationsHasSublocationConnectionArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  directed?: InputMaybe<Scalars['Boolean']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<LocationLocationsHasSublocationConnectionSort>>;
-  where?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
+  sort?: InputMaybe<Array<LocationParentLocationConnectionSort>>;
+  where?: InputMaybe<LocationParentLocationConnectionWhere>;
 };
 
 
@@ -4899,12 +4907,35 @@ export type LocationRoomCardConnectionArgs = {
   where?: InputMaybe<LocationRoomCardConnectionWhere>;
 };
 
+
+export type LocationSubLocationsArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<LocationOptions>;
+  where?: InputMaybe<LocationWhere>;
+};
+
+
+export type LocationSubLocationsAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<LocationWhere>;
+};
+
+
+export type LocationSubLocationsConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<LocationSubLocationsConnectionSort>>;
+  where?: InputMaybe<LocationSubLocationsConnectionWhere>;
+};
+
 export type LocationAggregateSelection = {
   __typename?: 'LocationAggregateSelection';
   code: StringAggregateSelectionNullable;
   count: Scalars['Int']['output'];
   facility: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
 };
 
 export type LocationBelongsToFacilityFacilitiesAggregateInput = {
@@ -5036,13 +5067,19 @@ export type LocationBelongsToFacilityFacilitiesUpdateFieldInput = {
 export type LocationConnectInput = {
   belongsToFacilityFacilities?: InputMaybe<Array<LocationBelongsToFacilityFacilitiesConnectFieldInput>>;
   facilitiesHasLocation?: InputMaybe<Array<LocationFacilitiesHasLocationConnectFieldInput>>;
-  hasSublocationLocations?: InputMaybe<Array<LocationHasSublocationLocationsConnectFieldInput>>;
-  locationsHasSublocation?: InputMaybe<Array<LocationLocationsHasSublocationConnectFieldInput>>;
+  parentLocation?: InputMaybe<LocationParentLocationConnectFieldInput>;
   roomCard?: InputMaybe<LocationRoomCardConnectFieldInput>;
+  subLocations?: InputMaybe<Array<LocationSubLocationsConnectFieldInput>>;
 };
 
 export type LocationConnectOrCreateInput = {
+  parentLocation?: InputMaybe<LocationParentLocationConnectOrCreateFieldInput>;
   roomCard?: InputMaybe<LocationRoomCardConnectOrCreateFieldInput>;
+  subLocations?: InputMaybe<Array<LocationSubLocationsConnectOrCreateFieldInput>>;
+};
+
+export type LocationConnectOrCreateWhere = {
+  node: LocationUniqueWhere;
 };
 
 export type LocationConnectWhere = {
@@ -5054,26 +5091,26 @@ export type LocationCreateInput = {
   code?: InputMaybe<Scalars['String']['input']>;
   facilitiesHasLocation?: InputMaybe<LocationFacilitiesHasLocationFieldInput>;
   facility: Scalars['String']['input'];
-  hasSublocationLocations?: InputMaybe<LocationHasSublocationLocationsFieldInput>;
-  locationsHasSublocation?: InputMaybe<LocationLocationsHasSublocationFieldInput>;
   name: Scalars['String']['input'];
+  parentLocation?: InputMaybe<LocationParentLocationFieldInput>;
   roomCard?: InputMaybe<LocationRoomCardFieldInput>;
+  subLocations?: InputMaybe<LocationSubLocationsFieldInput>;
 };
 
 export type LocationDeleteInput = {
   belongsToFacilityFacilities?: InputMaybe<Array<LocationBelongsToFacilityFacilitiesDeleteFieldInput>>;
   facilitiesHasLocation?: InputMaybe<Array<LocationFacilitiesHasLocationDeleteFieldInput>>;
-  hasSublocationLocations?: InputMaybe<Array<LocationHasSublocationLocationsDeleteFieldInput>>;
-  locationsHasSublocation?: InputMaybe<Array<LocationLocationsHasSublocationDeleteFieldInput>>;
+  parentLocation?: InputMaybe<LocationParentLocationDeleteFieldInput>;
   roomCard?: InputMaybe<LocationRoomCardDeleteFieldInput>;
+  subLocations?: InputMaybe<Array<LocationSubLocationsDeleteFieldInput>>;
 };
 
 export type LocationDisconnectInput = {
   belongsToFacilityFacilities?: InputMaybe<Array<LocationBelongsToFacilityFacilitiesDisconnectFieldInput>>;
   facilitiesHasLocation?: InputMaybe<Array<LocationFacilitiesHasLocationDisconnectFieldInput>>;
-  hasSublocationLocations?: InputMaybe<Array<LocationHasSublocationLocationsDisconnectFieldInput>>;
-  locationsHasSublocation?: InputMaybe<Array<LocationLocationsHasSublocationDisconnectFieldInput>>;
+  parentLocation?: InputMaybe<LocationParentLocationDisconnectFieldInput>;
   roomCard?: InputMaybe<LocationRoomCardDisconnectFieldInput>;
+  subLocations?: InputMaybe<Array<LocationSubLocationsDisconnectFieldInput>>;
 };
 
 export type LocationEdge = {
@@ -5234,282 +5271,38 @@ export type LocationFacilityFacilitiesHasLocationNodeAggregateSelection = {
   uid: StringAggregateSelectionNonNullable;
 };
 
-export type LocationHasSublocationLocationsAggregateInput = {
-  AND?: InputMaybe<Array<LocationHasSublocationLocationsAggregateInput>>;
-  NOT?: InputMaybe<LocationHasSublocationLocationsAggregateInput>;
-  OR?: InputMaybe<Array<LocationHasSublocationLocationsAggregateInput>>;
-  count?: InputMaybe<Scalars['Int']['input']>;
-  count_GT?: InputMaybe<Scalars['Int']['input']>;
-  count_GTE?: InputMaybe<Scalars['Int']['input']>;
-  count_LT?: InputMaybe<Scalars['Int']['input']>;
-  count_LTE?: InputMaybe<Scalars['Int']['input']>;
-  node?: InputMaybe<LocationHasSublocationLocationsNodeAggregationWhereInput>;
-};
-
-export type LocationHasSublocationLocationsConnectFieldInput = {
-  connect?: InputMaybe<Array<LocationConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
-  overwrite?: Scalars['Boolean']['input'];
-  where?: InputMaybe<LocationConnectWhere>;
-};
-
-export type LocationHasSublocationLocationsConnection = {
-  __typename?: 'LocationHasSublocationLocationsConnection';
-  edges: Array<LocationHasSublocationLocationsRelationship>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int']['output'];
-};
-
-export type LocationHasSublocationLocationsConnectionSort = {
-  node?: InputMaybe<LocationSort>;
-};
-
-export type LocationHasSublocationLocationsConnectionWhere = {
-  AND?: InputMaybe<Array<LocationHasSublocationLocationsConnectionWhere>>;
-  NOT?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-  OR?: InputMaybe<Array<LocationHasSublocationLocationsConnectionWhere>>;
-  node?: InputMaybe<LocationWhere>;
-};
-
-export type LocationHasSublocationLocationsCreateFieldInput = {
-  node: LocationCreateInput;
-};
-
-export type LocationHasSublocationLocationsDeleteFieldInput = {
-  delete?: InputMaybe<LocationDeleteInput>;
-  where?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-};
-
-export type LocationHasSublocationLocationsDisconnectFieldInput = {
-  disconnect?: InputMaybe<LocationDisconnectInput>;
-  where?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-};
-
-export type LocationHasSublocationLocationsFieldInput = {
-  connect?: InputMaybe<Array<LocationHasSublocationLocationsConnectFieldInput>>;
-  create?: InputMaybe<Array<LocationHasSublocationLocationsCreateFieldInput>>;
-};
-
-export type LocationHasSublocationLocationsNodeAggregationWhereInput = {
-  AND?: InputMaybe<Array<LocationHasSublocationLocationsNodeAggregationWhereInput>>;
-  NOT?: InputMaybe<LocationHasSublocationLocationsNodeAggregationWhereInput>;
-  OR?: InputMaybe<Array<LocationHasSublocationLocationsNodeAggregationWhereInput>>;
-  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  facility_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type LocationHasSublocationLocationsRelationship = {
-  __typename?: 'LocationHasSublocationLocationsRelationship';
-  cursor: Scalars['String']['output'];
-  node: Location;
-};
-
-export type LocationHasSublocationLocationsUpdateConnectionInput = {
-  node?: InputMaybe<LocationUpdateInput>;
-};
-
-export type LocationHasSublocationLocationsUpdateFieldInput = {
-  connect?: InputMaybe<Array<LocationHasSublocationLocationsConnectFieldInput>>;
-  create?: InputMaybe<Array<LocationHasSublocationLocationsCreateFieldInput>>;
-  delete?: InputMaybe<Array<LocationHasSublocationLocationsDeleteFieldInput>>;
-  disconnect?: InputMaybe<Array<LocationHasSublocationLocationsDisconnectFieldInput>>;
-  update?: InputMaybe<LocationHasSublocationLocationsUpdateConnectionInput>;
-  where?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-};
-
-export type LocationLocationHasSublocationLocationsAggregationSelection = {
-  __typename?: 'LocationLocationHasSublocationLocationsAggregationSelection';
+export type LocationLocationParentLocationAggregationSelection = {
+  __typename?: 'LocationLocationParentLocationAggregationSelection';
   count: Scalars['Int']['output'];
-  node?: Maybe<LocationLocationHasSublocationLocationsNodeAggregateSelection>;
+  node?: Maybe<LocationLocationParentLocationNodeAggregateSelection>;
 };
 
-export type LocationLocationHasSublocationLocationsNodeAggregateSelection = {
-  __typename?: 'LocationLocationHasSublocationLocationsNodeAggregateSelection';
+export type LocationLocationParentLocationNodeAggregateSelection = {
+  __typename?: 'LocationLocationParentLocationNodeAggregateSelection';
   code: StringAggregateSelectionNullable;
   facility: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
 };
 
-export type LocationLocationLocationsHasSublocationAggregationSelection = {
-  __typename?: 'LocationLocationLocationsHasSublocationAggregationSelection';
+export type LocationLocationSubLocationsAggregationSelection = {
+  __typename?: 'LocationLocationSubLocationsAggregationSelection';
   count: Scalars['Int']['output'];
-  node?: Maybe<LocationLocationLocationsHasSublocationNodeAggregateSelection>;
+  node?: Maybe<LocationLocationSubLocationsNodeAggregateSelection>;
 };
 
-export type LocationLocationLocationsHasSublocationNodeAggregateSelection = {
-  __typename?: 'LocationLocationLocationsHasSublocationNodeAggregateSelection';
+export type LocationLocationSubLocationsNodeAggregateSelection = {
+  __typename?: 'LocationLocationSubLocationsNodeAggregateSelection';
   code: StringAggregateSelectionNullable;
   facility: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
 };
 
-export type LocationLocationsHasSublocationAggregateInput = {
-  AND?: InputMaybe<Array<LocationLocationsHasSublocationAggregateInput>>;
-  NOT?: InputMaybe<LocationLocationsHasSublocationAggregateInput>;
-  OR?: InputMaybe<Array<LocationLocationsHasSublocationAggregateInput>>;
-  count?: InputMaybe<Scalars['Int']['input']>;
-  count_GT?: InputMaybe<Scalars['Int']['input']>;
-  count_GTE?: InputMaybe<Scalars['Int']['input']>;
-  count_LT?: InputMaybe<Scalars['Int']['input']>;
-  count_LTE?: InputMaybe<Scalars['Int']['input']>;
-  node?: InputMaybe<LocationLocationsHasSublocationNodeAggregationWhereInput>;
-};
-
-export type LocationLocationsHasSublocationConnectFieldInput = {
-  connect?: InputMaybe<Array<LocationConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
-  overwrite?: Scalars['Boolean']['input'];
-  where?: InputMaybe<LocationConnectWhere>;
-};
-
-export type LocationLocationsHasSublocationConnection = {
-  __typename?: 'LocationLocationsHasSublocationConnection';
-  edges: Array<LocationLocationsHasSublocationRelationship>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int']['output'];
-};
-
-export type LocationLocationsHasSublocationConnectionSort = {
-  node?: InputMaybe<LocationSort>;
-};
-
-export type LocationLocationsHasSublocationConnectionWhere = {
-  AND?: InputMaybe<Array<LocationLocationsHasSublocationConnectionWhere>>;
-  NOT?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
-  OR?: InputMaybe<Array<LocationLocationsHasSublocationConnectionWhere>>;
-  node?: InputMaybe<LocationWhere>;
-};
-
-export type LocationLocationsHasSublocationCreateFieldInput = {
-  node: LocationCreateInput;
-};
-
-export type LocationLocationsHasSublocationDeleteFieldInput = {
-  delete?: InputMaybe<LocationDeleteInput>;
-  where?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
-};
-
-export type LocationLocationsHasSublocationDisconnectFieldInput = {
-  disconnect?: InputMaybe<LocationDisconnectInput>;
-  where?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
-};
-
-export type LocationLocationsHasSublocationFieldInput = {
-  connect?: InputMaybe<Array<LocationLocationsHasSublocationConnectFieldInput>>;
-  create?: InputMaybe<Array<LocationLocationsHasSublocationCreateFieldInput>>;
-};
-
-export type LocationLocationsHasSublocationNodeAggregationWhereInput = {
-  AND?: InputMaybe<Array<LocationLocationsHasSublocationNodeAggregationWhereInput>>;
-  NOT?: InputMaybe<LocationLocationsHasSublocationNodeAggregationWhereInput>;
-  OR?: InputMaybe<Array<LocationLocationsHasSublocationNodeAggregationWhereInput>>;
-  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  facility_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type LocationLocationsHasSublocationRelationship = {
-  __typename?: 'LocationLocationsHasSublocationRelationship';
-  cursor: Scalars['String']['output'];
-  node: Location;
-};
-
-export type LocationLocationsHasSublocationUpdateConnectionInput = {
-  node?: InputMaybe<LocationUpdateInput>;
-};
-
-export type LocationLocationsHasSublocationUpdateFieldInput = {
-  connect?: InputMaybe<Array<LocationLocationsHasSublocationConnectFieldInput>>;
-  create?: InputMaybe<Array<LocationLocationsHasSublocationCreateFieldInput>>;
-  delete?: InputMaybe<Array<LocationLocationsHasSublocationDeleteFieldInput>>;
-  disconnect?: InputMaybe<Array<LocationLocationsHasSublocationDisconnectFieldInput>>;
-  update?: InputMaybe<LocationLocationsHasSublocationUpdateConnectionInput>;
-  where?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
+export type LocationOnCreateInput = {
+  code?: InputMaybe<Scalars['String']['input']>;
+  facility: Scalars['String']['input'];
+  name: Scalars['String']['input'];
 };
 
 export type LocationOptions = {
@@ -5519,12 +5312,149 @@ export type LocationOptions = {
   sort?: InputMaybe<Array<LocationSort>>;
 };
 
+export type LocationParentLocationAggregateInput = {
+  AND?: InputMaybe<Array<LocationParentLocationAggregateInput>>;
+  NOT?: InputMaybe<LocationParentLocationAggregateInput>;
+  OR?: InputMaybe<Array<LocationParentLocationAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<LocationParentLocationNodeAggregationWhereInput>;
+};
+
+export type LocationParentLocationConnectFieldInput = {
+  connect?: InputMaybe<LocationConnectInput>;
+  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<LocationConnectWhere>;
+};
+
+export type LocationParentLocationConnectOrCreateFieldInput = {
+  onCreate: LocationParentLocationConnectOrCreateFieldInputOnCreate;
+  where: LocationConnectOrCreateWhere;
+};
+
+export type LocationParentLocationConnectOrCreateFieldInputOnCreate = {
+  node: LocationOnCreateInput;
+};
+
+export type LocationParentLocationConnection = {
+  __typename?: 'LocationParentLocationConnection';
+  edges: Array<LocationParentLocationRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type LocationParentLocationConnectionSort = {
+  node?: InputMaybe<LocationSort>;
+};
+
+export type LocationParentLocationConnectionWhere = {
+  AND?: InputMaybe<Array<LocationParentLocationConnectionWhere>>;
+  NOT?: InputMaybe<LocationParentLocationConnectionWhere>;
+  OR?: InputMaybe<Array<LocationParentLocationConnectionWhere>>;
+  node?: InputMaybe<LocationWhere>;
+};
+
+export type LocationParentLocationCreateFieldInput = {
+  node: LocationCreateInput;
+};
+
+export type LocationParentLocationDeleteFieldInput = {
+  delete?: InputMaybe<LocationDeleteInput>;
+  where?: InputMaybe<LocationParentLocationConnectionWhere>;
+};
+
+export type LocationParentLocationDisconnectFieldInput = {
+  disconnect?: InputMaybe<LocationDisconnectInput>;
+  where?: InputMaybe<LocationParentLocationConnectionWhere>;
+};
+
+export type LocationParentLocationFieldInput = {
+  connect?: InputMaybe<LocationParentLocationConnectFieldInput>;
+  connectOrCreate?: InputMaybe<LocationParentLocationConnectOrCreateFieldInput>;
+  create?: InputMaybe<LocationParentLocationCreateFieldInput>;
+};
+
+export type LocationParentLocationNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<LocationParentLocationNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<LocationParentLocationNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<LocationParentLocationNodeAggregationWhereInput>>;
+  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  facility_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type LocationParentLocationRelationship = {
+  __typename?: 'LocationParentLocationRelationship';
+  cursor: Scalars['String']['output'];
+  node: Location;
+};
+
+export type LocationParentLocationUpdateConnectionInput = {
+  node?: InputMaybe<LocationUpdateInput>;
+};
+
+export type LocationParentLocationUpdateFieldInput = {
+  connect?: InputMaybe<LocationParentLocationConnectFieldInput>;
+  connectOrCreate?: InputMaybe<LocationParentLocationConnectOrCreateFieldInput>;
+  create?: InputMaybe<LocationParentLocationCreateFieldInput>;
+  delete?: InputMaybe<LocationParentLocationDeleteFieldInput>;
+  disconnect?: InputMaybe<LocationParentLocationDisconnectFieldInput>;
+  update?: InputMaybe<LocationParentLocationUpdateConnectionInput>;
+  where?: InputMaybe<LocationParentLocationConnectionWhere>;
+};
+
 export type LocationRelationInput = {
   belongsToFacilityFacilities?: InputMaybe<Array<LocationBelongsToFacilityFacilitiesCreateFieldInput>>;
   facilitiesHasLocation?: InputMaybe<Array<LocationFacilitiesHasLocationCreateFieldInput>>;
-  hasSublocationLocations?: InputMaybe<Array<LocationHasSublocationLocationsCreateFieldInput>>;
-  locationsHasSublocation?: InputMaybe<Array<LocationLocationsHasSublocationCreateFieldInput>>;
+  parentLocation?: InputMaybe<LocationParentLocationCreateFieldInput>;
   roomCard?: InputMaybe<LocationRoomCardCreateFieldInput>;
+  subLocations?: InputMaybe<Array<LocationSubLocationsCreateFieldInput>>;
 };
 
 export type LocationRoomCardAggregateInput = {
@@ -5843,6 +5773,148 @@ export type LocationSort = {
   code?: InputMaybe<SortDirection>;
   facility?: InputMaybe<SortDirection>;
   name?: InputMaybe<SortDirection>;
+  uid?: InputMaybe<SortDirection>;
+};
+
+export type LocationSubLocationsAggregateInput = {
+  AND?: InputMaybe<Array<LocationSubLocationsAggregateInput>>;
+  NOT?: InputMaybe<LocationSubLocationsAggregateInput>;
+  OR?: InputMaybe<Array<LocationSubLocationsAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<LocationSubLocationsNodeAggregationWhereInput>;
+};
+
+export type LocationSubLocationsConnectFieldInput = {
+  connect?: InputMaybe<Array<LocationConnectInput>>;
+  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<LocationConnectWhere>;
+};
+
+export type LocationSubLocationsConnectOrCreateFieldInput = {
+  onCreate: LocationSubLocationsConnectOrCreateFieldInputOnCreate;
+  where: LocationConnectOrCreateWhere;
+};
+
+export type LocationSubLocationsConnectOrCreateFieldInputOnCreate = {
+  node: LocationOnCreateInput;
+};
+
+export type LocationSubLocationsConnection = {
+  __typename?: 'LocationSubLocationsConnection';
+  edges: Array<LocationSubLocationsRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type LocationSubLocationsConnectionSort = {
+  node?: InputMaybe<LocationSort>;
+};
+
+export type LocationSubLocationsConnectionWhere = {
+  AND?: InputMaybe<Array<LocationSubLocationsConnectionWhere>>;
+  NOT?: InputMaybe<LocationSubLocationsConnectionWhere>;
+  OR?: InputMaybe<Array<LocationSubLocationsConnectionWhere>>;
+  node?: InputMaybe<LocationWhere>;
+};
+
+export type LocationSubLocationsCreateFieldInput = {
+  node: LocationCreateInput;
+};
+
+export type LocationSubLocationsDeleteFieldInput = {
+  delete?: InputMaybe<LocationDeleteInput>;
+  where?: InputMaybe<LocationSubLocationsConnectionWhere>;
+};
+
+export type LocationSubLocationsDisconnectFieldInput = {
+  disconnect?: InputMaybe<LocationDisconnectInput>;
+  where?: InputMaybe<LocationSubLocationsConnectionWhere>;
+};
+
+export type LocationSubLocationsFieldInput = {
+  connect?: InputMaybe<Array<LocationSubLocationsConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<LocationSubLocationsConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<LocationSubLocationsCreateFieldInput>>;
+};
+
+export type LocationSubLocationsNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<LocationSubLocationsNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<LocationSubLocationsNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<LocationSubLocationsNodeAggregationWhereInput>>;
+  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  facility_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type LocationSubLocationsRelationship = {
+  __typename?: 'LocationSubLocationsRelationship';
+  cursor: Scalars['String']['output'];
+  node: Location;
+};
+
+export type LocationSubLocationsUpdateConnectionInput = {
+  node?: InputMaybe<LocationUpdateInput>;
+};
+
+export type LocationSubLocationsUpdateFieldInput = {
+  connect?: InputMaybe<Array<LocationSubLocationsConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<LocationSubLocationsConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<LocationSubLocationsCreateFieldInput>>;
+  delete?: InputMaybe<Array<LocationSubLocationsDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<LocationSubLocationsDisconnectFieldInput>>;
+  update?: InputMaybe<LocationSubLocationsUpdateConnectionInput>;
+  where?: InputMaybe<LocationSubLocationsConnectionWhere>;
+};
+
+export type LocationUniqueWhere = {
+  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type LocationUpdateInput = {
@@ -5850,10 +5922,10 @@ export type LocationUpdateInput = {
   code?: InputMaybe<Scalars['String']['input']>;
   facilitiesHasLocation?: InputMaybe<Array<LocationFacilitiesHasLocationUpdateFieldInput>>;
   facility?: InputMaybe<Scalars['String']['input']>;
-  hasSublocationLocations?: InputMaybe<Array<LocationHasSublocationLocationsUpdateFieldInput>>;
-  locationsHasSublocation?: InputMaybe<Array<LocationLocationsHasSublocationUpdateFieldInput>>;
   name?: InputMaybe<Scalars['String']['input']>;
+  parentLocation?: InputMaybe<LocationParentLocationUpdateFieldInput>;
   roomCard?: InputMaybe<LocationRoomCardUpdateFieldInput>;
+  subLocations?: InputMaybe<Array<LocationSubLocationsUpdateFieldInput>>;
 };
 
 export type LocationWhere = {
@@ -5904,50 +5976,43 @@ export type LocationWhere = {
   facility_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   facility_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   facility_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
-  hasSublocationLocationsAggregate?: InputMaybe<LocationHasSublocationLocationsAggregateInput>;
-  /** Return Locations where all of the related LocationHasSublocationLocationsConnections match this filter */
-  hasSublocationLocationsConnection_ALL?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-  /** Return Locations where none of the related LocationHasSublocationLocationsConnections match this filter */
-  hasSublocationLocationsConnection_NONE?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-  /** Return Locations where one of the related LocationHasSublocationLocationsConnections match this filter */
-  hasSublocationLocationsConnection_SINGLE?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-  /** Return Locations where some of the related LocationHasSublocationLocationsConnections match this filter */
-  hasSublocationLocationsConnection_SOME?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-  /** Return Locations where all of the related Locations match this filter */
-  hasSublocationLocations_ALL?: InputMaybe<LocationWhere>;
-  /** Return Locations where none of the related Locations match this filter */
-  hasSublocationLocations_NONE?: InputMaybe<LocationWhere>;
-  /** Return Locations where one of the related Locations match this filter */
-  hasSublocationLocations_SINGLE?: InputMaybe<LocationWhere>;
-  /** Return Locations where some of the related Locations match this filter */
-  hasSublocationLocations_SOME?: InputMaybe<LocationWhere>;
-  locationsHasSublocationAggregate?: InputMaybe<LocationLocationsHasSublocationAggregateInput>;
-  /** Return Locations where all of the related LocationLocationsHasSublocationConnections match this filter */
-  locationsHasSublocationConnection_ALL?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
-  /** Return Locations where none of the related LocationLocationsHasSublocationConnections match this filter */
-  locationsHasSublocationConnection_NONE?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
-  /** Return Locations where one of the related LocationLocationsHasSublocationConnections match this filter */
-  locationsHasSublocationConnection_SINGLE?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
-  /** Return Locations where some of the related LocationLocationsHasSublocationConnections match this filter */
-  locationsHasSublocationConnection_SOME?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
-  /** Return Locations where all of the related Locations match this filter */
-  locationsHasSublocation_ALL?: InputMaybe<LocationWhere>;
-  /** Return Locations where none of the related Locations match this filter */
-  locationsHasSublocation_NONE?: InputMaybe<LocationWhere>;
-  /** Return Locations where one of the related Locations match this filter */
-  locationsHasSublocation_SINGLE?: InputMaybe<LocationWhere>;
-  /** Return Locations where some of the related Locations match this filter */
-  locationsHasSublocation_SOME?: InputMaybe<LocationWhere>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   name_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   name_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  parentLocation?: InputMaybe<LocationWhere>;
+  parentLocationAggregate?: InputMaybe<LocationParentLocationAggregateInput>;
+  parentLocationConnection?: InputMaybe<LocationParentLocationConnectionWhere>;
+  parentLocationConnection_NOT?: InputMaybe<LocationParentLocationConnectionWhere>;
+  parentLocation_NOT?: InputMaybe<LocationWhere>;
   roomCard?: InputMaybe<RoomCardWhere>;
   roomCardAggregate?: InputMaybe<LocationRoomCardAggregateInput>;
   roomCardConnection?: InputMaybe<LocationRoomCardConnectionWhere>;
   roomCardConnection_NOT?: InputMaybe<LocationRoomCardConnectionWhere>;
   roomCard_NOT?: InputMaybe<RoomCardWhere>;
+  subLocationsAggregate?: InputMaybe<LocationSubLocationsAggregateInput>;
+  /** Return Locations where all of the related LocationSubLocationsConnections match this filter */
+  subLocationsConnection_ALL?: InputMaybe<LocationSubLocationsConnectionWhere>;
+  /** Return Locations where none of the related LocationSubLocationsConnections match this filter */
+  subLocationsConnection_NONE?: InputMaybe<LocationSubLocationsConnectionWhere>;
+  /** Return Locations where one of the related LocationSubLocationsConnections match this filter */
+  subLocationsConnection_SINGLE?: InputMaybe<LocationSubLocationsConnectionWhere>;
+  /** Return Locations where some of the related LocationSubLocationsConnections match this filter */
+  subLocationsConnection_SOME?: InputMaybe<LocationSubLocationsConnectionWhere>;
+  /** Return Locations where all of the related Locations match this filter */
+  subLocations_ALL?: InputMaybe<LocationWhere>;
+  /** Return Locations where none of the related Locations match this filter */
+  subLocations_NONE?: InputMaybe<LocationWhere>;
+  /** Return Locations where one of the related Locations match this filter */
+  subLocations_SINGLE?: InputMaybe<LocationWhere>;
+  /** Return Locations where some of the related Locations match this filter */
+  subLocations_SOME?: InputMaybe<LocationWhere>;
+  uid?: InputMaybe<Scalars['ID']['input']>;
+  uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
+  uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
+  uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type LocationsConnection = {
@@ -6644,6 +6709,7 @@ export type MutationUpdateEmployeesArgs = {
 
 export type MutationUpdateFacilitiesArgs = {
   connect?: InputMaybe<FacilityConnectInput>;
+  connectOrCreate?: InputMaybe<FacilityConnectOrCreateInput>;
   create?: InputMaybe<FacilityRelationInput>;
   delete?: InputMaybe<FacilityDeleteInput>;
   disconnect?: InputMaybe<FacilityDisconnectInput>;
@@ -6703,6 +6769,7 @@ export type MutationUpdateRolesArgs = {
 
 export type MutationUpdateRoomCardsArgs = {
   connect?: InputMaybe<RoomCardConnectInput>;
+  connectOrCreate?: InputMaybe<RoomCardConnectOrCreateInput>;
   create?: InputMaybe<RoomCardRelationInput>;
   delete?: InputMaybe<RoomCardDeleteInput>;
   disconnect?: InputMaybe<RoomCardDisconnectInput>;
@@ -7849,6 +7916,10 @@ export type RoomCardConnectInput = {
   team?: InputMaybe<Array<RoomCardTeamConnectFieldInput>>;
 };
 
+export type RoomCardConnectOrCreateInput = {
+  location?: InputMaybe<RoomCardLocationConnectOrCreateFieldInput>;
+};
+
 export type RoomCardConnectOrCreateWhere = {
   node: RoomCardUniqueWhere;
 };
@@ -8101,6 +8172,15 @@ export type RoomCardLocationConnectFieldInput = {
   where?: InputMaybe<LocationConnectWhere>;
 };
 
+export type RoomCardLocationConnectOrCreateFieldInput = {
+  onCreate: RoomCardLocationConnectOrCreateFieldInputOnCreate;
+  where: LocationConnectOrCreateWhere;
+};
+
+export type RoomCardLocationConnectOrCreateFieldInputOnCreate = {
+  node: LocationOnCreateInput;
+};
+
 export type RoomCardLocationConnection = {
   __typename?: 'RoomCardLocationConnection';
   edges: Array<RoomCardLocationRelationship>;
@@ -8135,6 +8215,7 @@ export type RoomCardLocationDisconnectFieldInput = {
 
 export type RoomCardLocationFieldInput = {
   connect?: InputMaybe<RoomCardLocationConnectFieldInput>;
+  connectOrCreate?: InputMaybe<RoomCardLocationConnectOrCreateFieldInput>;
   create?: InputMaybe<RoomCardLocationCreateFieldInput>;
 };
 
@@ -8149,6 +8230,7 @@ export type RoomCardLocationLocationNodeAggregateSelection = {
   code: StringAggregateSelectionNullable;
   facility: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
 };
 
 export type RoomCardLocationNodeAggregationWhereInput = {
@@ -8214,6 +8296,7 @@ export type RoomCardLocationUpdateConnectionInput = {
 
 export type RoomCardLocationUpdateFieldInput = {
   connect?: InputMaybe<RoomCardLocationConnectFieldInput>;
+  connectOrCreate?: InputMaybe<RoomCardLocationConnectOrCreateFieldInput>;
   create?: InputMaybe<RoomCardLocationCreateFieldInput>;
   delete?: InputMaybe<RoomCardLocationDeleteFieldInput>;
   disconnect?: InputMaybe<RoomCardLocationDisconnectFieldInput>;

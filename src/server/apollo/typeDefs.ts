@@ -10,12 +10,13 @@ export const typeDefs = gql`
   }
 
   type Location {
+    uid: ID! @id
     belongsToFacilityFacilities: [Facility!]! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
     code: String
     facilitiesHasLocation: [Facility!]! @relationship(type: "HAS_LOCATION", direction: IN)
     facility: String!
-    hasSublocationLocations: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: OUT)
-    locationsHasSublocation: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: IN)
+    subLocations: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: OUT)
+    parentLocation: Location @relationship(type: "HAS_SUBLOCATION", direction: IN)
     name: String!
     roomCard: RoomCard @relationship(type: "HAS_ROOM_CARD", direction: OUT)
   }

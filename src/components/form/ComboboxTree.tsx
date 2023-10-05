@@ -96,9 +96,7 @@ export const ComboboxTree = ({
               )}
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer">
                 <ChevronDownIcon
-                  className="h-4 w-4
-
- text-gray-500"
+                  className="h-4 w-4 text-gray-500"
                   aria-hidden="true"
                   onClick={() => {
                     setOpen(true)
@@ -136,12 +134,7 @@ export const ComboboxTree = ({
                               active ? 'text-white' : 'text-primary-500'
                             )}
                           >
-                            <CheckIcon
-                              className="h-4 w-4
-
-"
-                              aria-hidden="true"
-                            />
+                            <CheckIcon className="h-4 w-4" aria-hidden="true" />
                           </span>
                         )}
                       </Fragment>
