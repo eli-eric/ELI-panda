@@ -1,13 +1,30 @@
-import useFetch from '@/hooks/fetch/useFetch'
-import { useCategoryPath } from '@/modules/catalogue/hooks/usePath'
-import type { CatalogueCategoryResponse } from '@/types/responses'
+import { gql, useQuery } from '@apollo/client'
+import { useRouter } from 'next/router'
+
+import type { Query } from '@/types/gql/graphql'
+
+const GET_CATEGORIES = gql`
+  query GetCategories($parentCategory: CatalogueCategoryWhere = null) {
+    catalogueCategories(where: { parentCategory: $parentCategory }) {
+      uid
+      name
+    }
+  }
+`
 
 export const useCategoryList = () => {
-  const categoryPath = useCategoryPath()
-  /* fetch category list */
-  const { response, loading, error, mutate } = useFetch<Array<CatalogueCategoryResponse>>({
-    url: categoryPath,
-    config: { suspense: false }
+  const router = useRouter()
+  const { uid } = router.query as { uid?: string }
+  const { data, loading, error, refetch } = useQuery<Query>(GET_CATEGORIES, {
+    variables: { parentCategory: uid ? { uid } : null },
+    returnPartialData: true
   })
-  return { categoryList: response, loading, error, mutate }
+
+  return {
+    catalogueCategories: data?.catalogueCategories,
+    loading: loading,
+    error: error,
+    refetch,
+    uid: router.query.uid
+  }
 }

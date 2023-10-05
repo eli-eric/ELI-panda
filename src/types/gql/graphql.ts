@@ -49,7 +49,6 @@ export type CatalogueCategory = {
   hasSubcategoryCatalogueCategories: Array<CatalogueCategory>;
   hasSubcategoryCatalogueCategoriesAggregate?: Maybe<CatalogueCategoryCatalogueCategoryHasSubcategoryCatalogueCategoriesAggregationSelection>;
   hasSubcategoryCatalogueCategoriesConnection: CatalogueCategoryHasSubcategoryCatalogueCategoriesConnection;
-  image?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   parentCategory?: Maybe<CatalogueCategory>;
   parentCategoryAggregate?: Maybe<CatalogueCategoryCatalogueCategoryParentCategoryAggregationSelection>;
@@ -172,7 +171,6 @@ export type CatalogueCategoryAggregateSelection = {
   __typename?: 'CatalogueCategoryAggregateSelection';
   code: StringAggregateSelectionNonNullable;
   count: Scalars['Int']['output'];
-  image: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: StringAggregateSelectionNonNullable;
 };
@@ -252,21 +250,6 @@ export type CatalogueCategoryCatalogueCategoriesHasSubcategoryNodeAggregationWhe
   code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  image_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  image_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -327,7 +310,6 @@ export type CatalogueCategoryCatalogueCategoryCatalogueCategoriesHasSubcategoryA
 export type CatalogueCategoryCatalogueCategoryCatalogueCategoriesHasSubcategoryNodeAggregateSelection = {
   __typename?: 'CatalogueCategoryCatalogueCategoryCatalogueCategoriesHasSubcategoryNodeAggregateSelection';
   code: StringAggregateSelectionNonNullable;
-  image: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: StringAggregateSelectionNonNullable;
 };
@@ -341,7 +323,6 @@ export type CatalogueCategoryCatalogueCategoryHasSubcategoryCatalogueCategoriesA
 export type CatalogueCategoryCatalogueCategoryHasSubcategoryCatalogueCategoriesNodeAggregateSelection = {
   __typename?: 'CatalogueCategoryCatalogueCategoryHasSubcategoryCatalogueCategoriesNodeAggregateSelection';
   code: StringAggregateSelectionNonNullable;
-  image: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: StringAggregateSelectionNonNullable;
 };
@@ -355,7 +336,6 @@ export type CatalogueCategoryCatalogueCategoryParentCategoryAggregationSelection
 export type CatalogueCategoryCatalogueCategoryParentCategoryNodeAggregateSelection = {
   __typename?: 'CatalogueCategoryCatalogueCategoryParentCategoryNodeAggregateSelection';
   code: StringAggregateSelectionNonNullable;
-  image: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: StringAggregateSelectionNonNullable;
 };
@@ -561,7 +541,6 @@ export type CatalogueCategoryCreateInput = {
   code: Scalars['String']['input'];
   hasGroupCatalogueCategoryPropertyGroups?: InputMaybe<CatalogueCategoryHasGroupCatalogueCategoryPropertyGroupsFieldInput>;
   hasSubcategoryCatalogueCategories?: InputMaybe<CatalogueCategoryHasSubcategoryCatalogueCategoriesFieldInput>;
-  image?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   parentCategory?: InputMaybe<CatalogueCategoryParentCategoryFieldInput>;
   uid: Scalars['String']['input'];
@@ -775,21 +754,6 @@ export type CatalogueCategoryHasSubcategoryCatalogueCategoriesNodeAggregationWhe
   code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  image_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  image_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -923,21 +887,6 @@ export type CatalogueCategoryParentCategoryNodeAggregationWhereInput = {
   code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  image_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  image_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -1600,21 +1549,6 @@ export type CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupNodeAggrega
   code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  image_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  image_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -1675,7 +1609,6 @@ export type CatalogueCategoryPropertyGroupCatalogueCategoryCatalogueCategoriesHa
 export type CatalogueCategoryPropertyGroupCatalogueCategoryCatalogueCategoriesHasGroupNodeAggregateSelection = {
   __typename?: 'CatalogueCategoryPropertyGroupCatalogueCategoryCatalogueCategoriesHasGroupNodeAggregateSelection';
   code: StringAggregateSelectionNonNullable;
-  image: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: StringAggregateSelectionNonNullable;
 };
@@ -2646,7 +2579,6 @@ export type CatalogueCategoryRelationInput = {
 /** Fields to sort CatalogueCategories by. The order in which sorts are applied is not guaranteed when specifying many fields in one CatalogueCategorySort object. */
 export type CatalogueCategorySort = {
   code?: InputMaybe<SortDirection>;
-  image?: InputMaybe<SortDirection>;
   name?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
 };
@@ -2657,7 +2589,6 @@ export type CatalogueCategoryUpdateInput = {
   code?: InputMaybe<Scalars['String']['input']>;
   hasGroupCatalogueCategoryPropertyGroups?: InputMaybe<Array<CatalogueCategoryHasGroupCatalogueCategoryPropertyGroupsUpdateFieldInput>>;
   hasSubcategoryCatalogueCategories?: InputMaybe<Array<CatalogueCategoryHasSubcategoryCatalogueCategoriesUpdateFieldInput>>;
-  image?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   parentCategory?: InputMaybe<CatalogueCategoryParentCategoryUpdateFieldInput>;
   uid?: InputMaybe<Scalars['String']['input']>;
@@ -2740,11 +2671,6 @@ export type CatalogueCategoryWhere = {
   hasSubcategoryCatalogueCategories_SINGLE?: InputMaybe<CatalogueCategoryWhere>;
   /** Return CatalogueCategories where some of the related CatalogueCategories match this filter */
   hasSubcategoryCatalogueCategories_SOME?: InputMaybe<CatalogueCategoryWhere>;
-  image?: InputMaybe<Scalars['String']['input']>;
-  image_CONTAINS?: InputMaybe<Scalars['String']['input']>;
-  image_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  image_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  image_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
@@ -2931,21 +2857,6 @@ export type CatalogueItemBelongsToCategoryCatalogueCategoriesNodeAggregationWher
   code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  image_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  image_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  image_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  image_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  image_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -3006,7 +2917,6 @@ export type CatalogueItemCatalogueCategoryBelongsToCategoryCatalogueCategoriesAg
 export type CatalogueItemCatalogueCategoryBelongsToCategoryCatalogueCategoriesNodeAggregateSelection = {
   __typename?: 'CatalogueItemCatalogueCategoryBelongsToCategoryCatalogueCategoriesNodeAggregateSelection';
   code: StringAggregateSelectionNonNullable;
-  image: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: StringAggregateSelectionNonNullable;
 };
@@ -6239,7 +6149,6 @@ export type Query = {
   catalogueCategories: Array<CatalogueCategory>;
   catalogueCategoriesAggregate: CatalogueCategoryAggregateSelection;
   catalogueCategoriesConnection: CatalogueCategoriesConnection;
-  catalogueCategoryByUid: Array<Maybe<CatalogueCategory>>;
   catalogueCategoryProperties: Array<CatalogueCategoryProperty>;
   catalogueCategoryPropertiesAggregate: CatalogueCategoryPropertyAggregateSelection;
   catalogueCategoryPropertiesConnection: CatalogueCategoryPropertiesConnection;

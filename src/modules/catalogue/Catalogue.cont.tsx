@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import { Fragment, useEffect, useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
@@ -12,19 +13,19 @@ import { CategoryListContainer } from './components/categoryList/CategoryList.co
 import { SearchBarButtons } from './components/SearchBarButtons'
 import { useCatalogueItems } from './hooks/useCatalogueItems'
 import { useCategoryList } from './hooks/useCategoryList'
-import { useCataloguePath } from './hooks/usePath'
 
 const CatalogueContainer = () => {
   const tableId = 'catalogueItems'
+  const router = useRouter()
+  const { uid } = router.query as { uid?: string }
   const { catalogueItems, error, loading } = useCatalogueItems(tableId)
-  const { categoryList } = useCategoryList()
+  const { catalogueCategories } = useCategoryList()
   const [open, setOpen] = useState(false)
-  const categoryPath = useCataloguePath()
   const { setCustom } = useTableStateStore()
 
   useEffect(() => {
-    setCustom(tableId, { categoryPath })
-  }, [categoryPath, setCustom, tableId])
+    setCustom(tableId, { uid })
+  }, [uid, setCustom, tableId])
 
   return (
     <Fragment>
@@ -35,7 +36,7 @@ const CatalogueContainer = () => {
           setOpen(open)
         }}
       />
-      <TableLayoutContainer deps={[open, catalogueItems, categoryList]} className={'border-t border-gray-300'}>
+      <TableLayoutContainer deps={[open, catalogueItems, catalogueCategories]} className={'border-t border-gray-300'}>
         <CatalogueTable tableId={tableId} catalogueItems={catalogueItems} loading={loading} />
         <Pagination
           tableId={tableId}

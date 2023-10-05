@@ -1,26 +1,26 @@
-import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
 import BreadcrumpContainer from '@/components/Breadcrump/Breadcrump.cont'
 import BreadcrumpItem from '@/components/Breadcrump/Breadcrump.item'
 import { PATH } from '@/types/constants/paths'
 
+import { useCategory } from '../../hooks/useCategory'
 import { useCategoryEdit } from '../../hooks/useCategoryEdit'
-import { useCataloguePath } from '../../hooks/usePath'
 
 export const CatalogueBreadcrumbs = () => {
-  const router = useRouter()
-  const { slug } = router.query as { slug?: string[] }
-  const catalogueParentPath = useCataloguePath()
-  const { getAddButton } = useCategoryEdit({ catalogueParentPath })
-  let link: string = PATH.CATALOGUE
+  const { getAddButton } = useCategoryEdit({})
+  const { catalogueCategory } = useCategory()
+
   return (
     <BreadcrumpContainer homeLink={PATH.CATALOGUE}>
       <Fragment>
-        {slug?.map((slug, i) => {
-          link = link + '/' + slug
-          return <BreadcrumpItem key={i} name={slug} link={link} />
-        })}
+        {catalogueCategory?.parentPath[0]?.uid &&
+          catalogueCategory?.parentPath?.map((path, i) => (
+            <BreadcrumpItem key={i} name={path?.name as string} link={PATH.CATALOGUE + '/' + path?.uid} />
+          ))}
+        {catalogueCategory && (
+          <BreadcrumpItem name={catalogueCategory?.name} link={PATH.CATALOGUE + '/' + catalogueCategory?.uid} />
+        )}
         {getAddButton()}
       </Fragment>
     </BreadcrumpContainer>

@@ -1,8 +1,10 @@
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
 
+import type { Maybe } from '@/types/gql/graphql'
+
 interface Props {
-  name?: string
+  name?: Maybe<string>
   link?: string
 }
 
