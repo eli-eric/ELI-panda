@@ -27,6 +27,10 @@ const CatalogueContainer = () => {
     setCustom(tableId, { categoryUID: categoryUID ?? '' })
   }, [categoryUID, setCustom, tableId])
 
+  useEffect(() => {
+    console.log('count', catalogueItems?.totalCount)
+  }, [catalogueItems])
+
   return (
     <Fragment>
       <SearchBar left={<SearchBarButtons />} tableId={tableId} />

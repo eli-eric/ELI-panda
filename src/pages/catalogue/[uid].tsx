@@ -1,12 +1,14 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Fragment } from 'react'
+import { Fragment, memo } from 'react'
 import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
 import CatalogueContainer from '@/modules/catalogue/Catalogue.cont'
 
 const { head } = message.cataloguePage
+
+const MemoizedCatalogueContainer = memo(CatalogueContainer)
 
 const CatalogueCategoryPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
@@ -18,7 +20,7 @@ const CatalogueCategoryPage: NextPage = (): JSX.Element => {
         <meta name="description" content="...." />
       </Head>
 
-      <CatalogueContainer />
+      <MemoizedCatalogueContainer />
     </Fragment>
   )
 }
