@@ -15,13 +15,13 @@ const GET_CATEGORIES = gql`
 export const useCategoryList = () => {
   const router = useRouter()
   const { uid } = router.query as { uid?: string }
-  const { data, loading, error, refetch } = useQuery<Query>(GET_CATEGORIES, {
+  const { data, loading, error, refetch, previousData } = useQuery<Query>(GET_CATEGORIES, {
     variables: { parentCategory: uid ? { uid } : null },
     returnPartialData: true
   })
 
   return {
-    catalogueCategories: data?.catalogueCategories,
+    catalogueCategories: data?.catalogueCategories || previousData?.catalogueCategories,
     loading: loading,
     error: error,
     refetch,

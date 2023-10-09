@@ -1,5 +1,4 @@
 import { gql, useQuery } from '@apollo/client'
-import { useRouter } from 'next/router'
 
 import type { Query } from '@/types/gql/graphql'
 
@@ -15,9 +14,7 @@ const GET_CATEGORIES = gql`
     }
   }
 `
-export const useCategory = () => {
-  const router = useRouter()
-  const uid = router.query.uid || null
+export const useCategory = uid => {
   const { data, loading, error, previousData } = useQuery<Query>(GET_CATEGORIES, {
     variables: { uid },
     returnPartialData: true

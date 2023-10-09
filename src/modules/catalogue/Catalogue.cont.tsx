@@ -1,9 +1,7 @@
-import { useRouter } from 'next/router'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import useTableStateStore from '@/store/useTableStateStore'
 
 import { CatalogueTable } from '../shared/catalogue/table/CatalogueItems.table'
 import { Pagination } from '../shared/table/Pagination'
@@ -14,27 +12,20 @@ import { SearchBarButtons } from './components/SearchBarButtons'
 import { useCatalogueItems } from './hooks/useCatalogueItems'
 import { useCategoryList } from './hooks/useCategoryList'
 
-const CatalogueContainer = () => {
+interface Props {
+  uid?: string
+}
+
+const CatalogueContainer = ({ uid: categoryUID }: Props) => {
   const tableId = 'catalogueItems'
-  const router = useRouter()
-  const { uid: categoryUID } = router.query as { uid?: string }
-  const { catalogueItems, error, loading } = useCatalogueItems(tableId)
+  const { catalogueItems, error, loading } = useCatalogueItems(tableId, categoryUID)
   const { catalogueCategories } = useCategoryList()
   const [open, setOpen] = useState(false)
-  const { setCustom } = useTableStateStore()
-
-  useEffect(() => {
-    setCustom(tableId, { categoryUID: categoryUID ?? '' })
-  }, [categoryUID, setCustom, tableId])
-
-  useEffect(() => {
-    console.log('count', catalogueItems?.totalCount)
-  }, [catalogueItems])
 
   return (
     <Fragment>
       <SearchBar left={<SearchBarButtons />} tableId={tableId} />
-      <CatalogueBreadcrumbs />
+      <CatalogueBreadcrumbs categoryUID={categoryUID} />
       <CategoryListContainer
         onChange={open => {
           setOpen(open)
