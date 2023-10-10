@@ -40,7 +40,6 @@ export const CodebooksContainer: FC = () => {
   const isFirstRender = useIsFirstRender()
 
   const watchCodebook = useWatch({ name: 'codebook', control: formMethods.control })
-  // set column order on first render
 
   const { codebooks } = useEndpoint({ query: { editable: true } })
   const { response } = useFetch<{ code: string; type: string }[]>({ url: codebooks })

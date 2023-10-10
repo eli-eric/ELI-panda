@@ -8,7 +8,6 @@ import { useIntl } from 'react-intl'
 import { TableActionsButtons } from '@/components/Buttons'
 import { LinkDecorator } from '@/components/decorators'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
-import { createMessageValues } from '@/utils/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import usePermission from '@/hooks/usePermission'
@@ -17,6 +16,7 @@ import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 import type { CatalogueItem } from '@/types/responses'
+import { createMessageValues } from '@/utils/formatters'
 
 const buttonsMessage = message.common.buttons
 const modalMessage = message.ordersPage.deleteModal
@@ -25,6 +25,7 @@ interface NameProps extends CellContext<CatalogueItem, any> {
   toDelete?: boolean
   tableId?: string
   isHoveringId?: number | string
+  categoryUID?: string
 }
 
 //TODO: permissions
@@ -36,16 +37,14 @@ export const NameCell = ({
   },
   toDelete,
   tableId,
-  isHoveringId
+  isHoveringId,
+  categoryUID
 }: NameProps) => {
   const { catalogueItem } = useEndpoint({ uid })
-  //const image = useCatalogueImage(uid)
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
   const { formatMessage } = useIntl()
-  const { mutate, catalogueItems } = useCatalogueItems(tableId)
+  const { mutate, catalogueItems } = useCatalogueItems(tableId, categoryUID)
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
-
-  //const [loading, setLoading] = useState(true)
 
   const deleteSubmit = useSubmit({
     endpoint: catalogueItem,

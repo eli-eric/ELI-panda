@@ -3,9 +3,8 @@ import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
-import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
-import type { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
 
 import { CategoryName } from './cells/CategoryNameCell'
 import { DescriptionCell } from './cells/DescriptionCell'
@@ -14,15 +13,24 @@ import { NameCell } from './cells/NameCell'
 
 const messages = message.cataloguePage.itemList.header
 
-export const useCatalogueItemsColumns = (
-  tableId?: string,
-  additionalColumn?: ColumnDef<CatalogueItem, any>,
+type Props = {
+  tableId?: string
+  additionalColumn?: ColumnDef<CatalogueItem, any>
   isHoveringId?: number | string
-) => {
+  categoryUID?: string
+  catalogueItems?: CatalogueItemsResponse
+}
+
+export const useCatalogueItemsColumns = ({
+  tableId,
+  additionalColumn,
+  isHoveringId,
+  categoryUID,
+  catalogueItems
+}: Props) => {
   const intl = useIntl()
 
-  const { catalogueItems } = useCatalogueItems(tableId)
-  const { categoryList } = useCategoryList()
+  const { catalogueCategories } = useCategoryList()
 
   const columns: ColumnDef<CatalogueItem, any>[] = useMemo(() => {
     const columns: ColumnDef<CatalogueItem, any>[] = [
@@ -31,7 +39,13 @@ export const useCatalogueItemsColumns = (
         accessorFn: row => row.name,
         id: 'name',
         cell: props => (
-          <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} isHoveringId={isHoveringId} />
+          <NameCell
+            {...props}
+            toDelete={!additionalColumn}
+            tableId={tableId}
+            isHoveringId={isHoveringId}
+            categoryUID={categoryUID}
+          />
         ),
         size: 300,
         meta: { sticky: true }
@@ -69,10 +83,9 @@ export const useCatalogueItemsColumns = (
     ]
 
     if (
-      categoryList?.length === 0 &&
+      catalogueCategories?.length === 0 &&
       catalogueItems?.data[0]?.details &&
-      catalogueItems?.data[0]?.details?.length > 0 &&
-      catalogueItems.data[0]?.details[0]?.property?.type?.name
+      catalogueItems?.data[0]?.details?.length > 0
     ) {
       const detailsColumns: ColumnDef<CatalogueItem, any>[] = catalogueItems?.data[0]?.details?.map(detail => ({
         header: detail.property.name,
@@ -94,7 +107,7 @@ export const useCatalogueItemsColumns = (
       columns.push(additionalColumn)
     }
     return columns
-  }, [intl, catalogueItems, categoryList, additionalColumn, tableId, isHoveringId])
+  }, [intl, catalogueItems, catalogueCategories, additionalColumn, tableId, isHoveringId, categoryUID])
 
   return columns
 }

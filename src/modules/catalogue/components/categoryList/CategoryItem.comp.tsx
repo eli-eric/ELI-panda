@@ -4,24 +4,23 @@ import { useRouter } from 'next/router'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useImage } from '@/hooks/fetch/useImage'
-import { useCategoryEdit } from '@/modules/catalogue/hooks/useCategoryEdit'
 import { PATH } from '@/types/constants/paths'
-import type { CatalogueCategoryResponse } from '@/types/responses'
+import type { CatalogueCategory } from '@/types/gql/graphql'
+
+import { useCategoryEdit } from '../../hooks/useCategoryEdit'
 
 interface Props {
-  category: CatalogueCategoryResponse
+  category: CatalogueCategory
 }
 
 export const CategoryItemComponent = ({ category }: Props) => {
   const router = useRouter()
   const { catalogueCategoryImage } = useEndpoint({ uid: category.uid })
   const image = useImage(catalogueCategoryImage)
-
   const { getEditButtons } = useCategoryEdit({
-    editUid: category.uid,
-    catalogueParentPath: category.parentPath
+    editUid: category.uid
   })
-  const path = PATH.CATALOGUE + (!category.parentPath ? '/' : '/' + category.parentPath + '/') + category.code
+  const path = PATH.CATALOGUE + '/' + category.uid
   return (
     <div className="flex-row justify-between relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
       <Link
@@ -37,7 +36,7 @@ export const CategoryItemComponent = ({ category }: Props) => {
             className="h-10 w-10 rounded-sm object-contain"
             width={200}
             height={200}
-            alt={category.code}
+            alt={category.name}
             src={image}
           />
         </div>

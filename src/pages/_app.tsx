@@ -17,52 +17,39 @@ import { useLocale } from '@/hooks/useLocale'
 import { useApollo } from '@/server/apollo/client'
 import { fetcher } from '@/utils/fetcher'
 
-interface Props {
-  children: React.ReactNode
-}
-
-const GlobalProvider = ({ children }: Props) => {
-  const locale = useLocale()
-
-  return (
-    <SWRConfig
-      value={{
-        fetcher,
-        suspense: true,
-        revalidateIfStale: false,
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
-        onError: error => {
-          if (!error) {
-            const err = new Error('An error occurred while fetching the data.')
-            throw err
-          }
-        }
-      }}
-    >
-      <IntlProvider locale={locale} messages={messages['en']}>
-        <NavigationComponent />
-        {children}
-      </IntlProvider>
-    </SWRConfig>
-  )
-}
-
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
   const apolloClient = useApollo(pageProps.initialApolloState)
+  const locale = useLocale()
 
   return (
     <SessionProvider session={session} refetchOnWindowFocus={false}>
       <ApolloProvider client={apolloClient}>
-        <GlobalProvider>
-          <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 3000 }}>
-            {t => <Notification t={t} />}
-          </Toaster>
-          <DndProvider backend={HTML5Backend}>
-            <Component {...pageProps} />
-          </DndProvider>
-          <WarningModal />
-        </GlobalProvider>
+        <SWRConfig
+          value={{
+            fetcher,
+            suspense: true,
+            revalidateIfStale: false,
+            revalidateOnFocus: false,
+            revalidateOnReconnect: false,
+            onError: error => {
+              if (!error) {
+                const err = new Error('An error occurred while fetching the data.')
+                throw err
+              }
+            }
+          }}
+        >
+          <IntlProvider locale={locale} messages={messages['en']}>
+            <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 3000 }}>
+              {t => <Notification t={t} />}
+            </Toaster>
+            <DndProvider backend={HTML5Backend}>
+              <NavigationComponent />
+              <Component {...pageProps} />
+            </DndProvider>
+            <WarningModal />
+          </IntlProvider>
+        </SWRConfig>
       </ApolloProvider>
     </SessionProvider>
   )
