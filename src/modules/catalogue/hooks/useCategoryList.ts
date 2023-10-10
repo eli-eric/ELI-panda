@@ -1,5 +1,7 @@
 import { gql, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { toast } from 'react-hot-toast'
 
 import type { Query } from '@/types/gql/graphql'
 
@@ -16,9 +18,12 @@ export const useCategoryList = () => {
   const router = useRouter()
   const { uid } = router.query as { uid?: string }
   const { data, loading, error, refetch, previousData } = useQuery<Query>(GET_CATEGORIES, {
-    variables: { parentCategory: uid ? { uid } : null },
-    returnPartialData: true
+    variables: { parentCategory: uid ? { uid } : null }
   })
+
+  useEffect(() => {
+    if (error) toast.error('Error loading categories')
+  }, [error])
 
   return {
     catalogueCategories: data?.catalogueCategories || previousData?.catalogueCategories,

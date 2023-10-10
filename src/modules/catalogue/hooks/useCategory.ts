@@ -1,4 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
+import { useEffect } from 'react'
+import { toast } from 'react-hot-toast'
 
 import type { Query } from '@/types/gql/graphql'
 
@@ -19,6 +21,10 @@ export const useCategory = uid => {
     variables: { uid },
     returnPartialData: true
   })
+
+  useEffect(() => {
+    if (error) toast.error('Error loading category')
+  }, [error])
 
   return {
     catalogueCategory: data?.catalogueCategories[0] || previousData?.catalogueCategories[0],

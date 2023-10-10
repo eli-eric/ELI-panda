@@ -24,9 +24,4 @@ const CatalogueCategoryHomePage: NextPage = (): JSX.Element => {
   )
 }
 
-CatalogueCategoryHomePage.getInitialProps = ({ query }) => ({
-  key: query.uid,
-  uid: query.uid
-})
-
 export default CatalogueCategoryHomePage

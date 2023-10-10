@@ -15,6 +15,7 @@ interface CatalogueTableProps {
   catalogueItems?: CatalogueItemsResponse
   categoryList?: CatalogueCategory[]
   loading?: boolean
+  categoryUID?: string
 }
 
 export const CatalogueTable = ({
@@ -23,11 +24,12 @@ export const CatalogueTable = ({
   tableId = 'catalogueItems',
   catalogueItems,
   categoryList,
-  loading
+  loading,
+  categoryUID
 }: CatalogueTableProps) => {
   const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
 
-  const columns = useCatalogueItemsColumns(tableId, additionalColumn, isHoveringId)
+  const columns = useCatalogueItemsColumns({ tableId, additionalColumn, isHoveringId, categoryUID, catalogueItems })
   const catalogueTableRef = useRef<Table<CatalogueItem>>()
 
   useEffect(() => {
