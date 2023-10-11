@@ -2,6 +2,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 
+import { PlusButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import Card from '@/components/layout/Card'
 import { Heading } from '@/components/layout/Heading'
@@ -122,6 +123,7 @@ export const RoomCardNewContainer = () => {
     (): ColumnDef<any, any>[] => [
       {
         header: 'Contact - Hall',
+        meta: { headerElement: <PlusButton primary /> },
         columns: [
           {
             accessorKey: 'role',
@@ -146,6 +148,8 @@ export const RoomCardNewContainer = () => {
     (): ColumnDef<any, any>[] => [
       {
         header: 'Contact - Dept. 99',
+        meta: { headerElement: <PlusButton primary /> },
+
         columns: [
           {
             accessorKey: 'fullName',
@@ -165,6 +169,7 @@ export const RoomCardNewContainer = () => {
     (): ColumnDef<any, any>[] => [
       {
         header: 'Team',
+        meta: { headerElement: <PlusButton primary /> },
         accessorKey: 'teamName'
       }
     ],
@@ -233,7 +238,7 @@ export const RoomCardNewContainer = () => {
         <h1 className="text-2xl font-semibold">New room card</h1>
         <SelectLocationTree locationField={fields.location} />
       </PageHead>
-      <Card>
+      <Card className="pt-4">
         <div className="lg:flex justify-between">
           <PandaTable
             {...{

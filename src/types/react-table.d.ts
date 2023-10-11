@@ -5,5 +5,6 @@ declare module '@tanstack/table-core' {
     sticky?: boolean
     className?: string
     noHeader?: boolean
+    headerElement?: React.ReactNode
   }
 }
