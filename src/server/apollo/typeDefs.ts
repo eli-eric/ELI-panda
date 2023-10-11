@@ -30,7 +30,8 @@ export const typeDefs = gql`
   type RoomCard {
     uid: ID! @id
     status: RoomCardStatus!
-    contactPersons: [Employee!]! @relationship(type: "HAS_CONTACT_PERSON", direction: OUT)
+    contactPersonsHall: [Employee!]! @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: OUT)
+    contactPersonsDept: [Employee!]! @relationship(type: "HAS_CONTACT_PERSON_DEPT", direction: OUT)
     location: Location! @relationship(type: "HAS_ROOM_CARD", direction: IN)
     team: [Team!]! @relationship(type: "HAS_TEAM", direction: OUT)
     purityClass: String
@@ -56,12 +57,11 @@ export const typeDefs = gql`
 
   type Employee {
     uid: String!
-    team: Team @relationship(type: "BELONGS_TO_TEAM", direction: OUT)
+    teams: [Team!]! @relationship(type: "BELONGS_TO_TEAM", direction: OUT)
     firstName: String!
     lastName: String!
     phoneNumber: String
     email: String
-    role: String
   }
 
   type ParentPathItem {

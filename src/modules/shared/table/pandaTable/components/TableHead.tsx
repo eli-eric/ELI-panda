@@ -14,16 +14,22 @@ export const TableHead: FC<Props> = ({ enableColumnReordering, table, data, enab
   <thead className="bg-gray-50 border-b">
     {table.getHeaderGroups().map(headerGroup => (
       <tr key={headerGroup.id}>
-        {headerGroup.headers.map(header => (
-          <ColumnHeader
-            key={header.id}
-            enableColumnReordering={enableColumnReordering}
-            enableFiltering={enableFiltering}
-            table={table}
-            header={header}
-            data={data}
-          />
-        ))}
+        {headerGroup.headers.map(header => {
+          const noHeader = header.column.columnDef.meta?.noHeader
+          if (noHeader) {
+            return null
+          }
+          return (
+            <ColumnHeader
+              key={header.id}
+              enableColumnReordering={enableColumnReordering}
+              enableFiltering={enableFiltering}
+              table={table}
+              header={header}
+              data={data}
+            />
+          )
+        })}
       </tr>
     ))}
   </thead>
