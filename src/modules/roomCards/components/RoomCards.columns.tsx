@@ -40,8 +40,8 @@ export const useRoomCardsColumns = () => {
         id: 'entryToHvacTent'
       },
       {
-        header: 'Cleaning shedule',
-        accessorFn: row => row?.cleaningShedule,
+        header: 'Cleaning schedule',
+        accessorFn: row => row?.cleaningSchedule,
         id: 'cleaningShedule'
       },
       {

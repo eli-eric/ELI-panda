@@ -315,6 +315,10 @@ export const messages = {
     form: {
       status: { label: 'Status' },
       location: { label: 'Location' }
+    },
+    nestedForm: {
+      role: { label: 'Select role' },
+      employee: { label: 'Select employee' }
     }
   },
   orderItem: { head: 'ELI Panda - Order Item' },

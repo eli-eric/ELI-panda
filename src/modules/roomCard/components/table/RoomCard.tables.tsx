@@ -4,23 +4,81 @@ import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 
 import { useRoomCardsColumns } from './RoomCard.columns'
 
+const cleanRooms = [
+  {
+    name: 'PURITY CLASS',
+    code: 'purityClass'
+  },
+  {
+    name: 'PRESCRIBED CLOTHING',
+    code: 'prescribedClothing'
+  },
+  {
+    name: 'ENTRY TO HVAC TENT',
+    code: 'entryToHvacTent'
+  },
+  {
+    name: 'CLEANING SCHEDULE',
+    code: 'cleaningSchedule'
+  },
+  {
+    name: 'ADDITIONAL REQUIREMENTS',
+    code: 'additionalRequirements'
+  }
+]
+
+const possibleParameters = [
+  {
+    name: 'COOLING WATER',
+    code: 'coolingWater',
+    value: 'DEMI water - centrally 16°C'
+  },
+  {
+    name: 'INDOOR ENVIRONMENT QUALITY',
+    code: 'indoorEnvironmentQuality',
+    value: 'temperature 20°C +/- 1°C; humidity 50% +/- 5%'
+  },
+  {
+    name: 'COMPRESSED AIR DISTRIBUTION',
+    code: 'compressedAirDistribution',
+    value: '7bar - 8bar'
+  },
+  {
+    name: 'NITROGEN CENTRAL DISTRIBUTION',
+    code: 'nitrogenCentralDistribution',
+    value: '1,9bar - 2,5bar depending on the outdoor temperature'
+  },
+  {
+    name: 'MAX. PRESSURE IN COLD DISTRIBUTION',
+    code: 'maxPressureInColdDistribution',
+    value: '6bar'
+  }
+]
+const clientRequirements = [
+  {
+    name: 'PRESSURE IN COOLING SYSTEM',
+    code: 'pressureInCoolingSystem',
+    value: '6bar'
+  },
+  {
+    name: 'ROOM TEMPERATURE',
+    code: 'roomTemperature',
+    value: '20°C +/- 1°C'
+  },
+  {
+    name: 'HUMIDITY',
+    code: 'humidity',
+    value: '50% +/- 5%'
+  }
+]
+
 interface Props {
-  contactPersonHall?: any[]
-  contactPersonDept?: any[]
+  contactPersonsHall?: any[]
+  contactPersonsDept?: any[]
   team?: any[]
-  cleanRooms?: any[]
-  possibleParameters?: any[]
-  clientRequirements?: any[]
 }
 
-export const RoomCardTables = ({
-  cleanRooms,
-  clientRequirements,
-  contactPersonDept,
-  contactPersonHall,
-  team,
-  possibleParameters
-}: Props) => {
+export const RoomCardTables = ({ contactPersonsDept, contactPersonsHall, team }: Props) => {
   const {
     columnsContactHall,
     columnsContactDept,
@@ -37,7 +95,7 @@ export const RoomCardTables = ({
           {...{
             tableId: 'roomCard-Contact',
             columns: columnsContactHall,
-            data: contactPersonHall,
+            data: contactPersonsHall?.length === 0 ? undefined : contactPersonsHall,
             className: 'border-l pb-0 sm:mb-4'
           }}
         />
@@ -45,7 +103,7 @@ export const RoomCardTables = ({
           {...{
             tableId: 'roomCard-Contact-dept',
             columns: columnsContactDept,
-            data: contactPersonDept,
+            data: contactPersonsDept?.length === 0 ? undefined : contactPersonsDept,
             className: 'border-l pb-0 sm:mb-4'
           }}
         />
@@ -53,7 +111,7 @@ export const RoomCardTables = ({
           {...{
             tableId: 'roomCard-team',
             columns: columnsTeam,
-            data: team,
+            data: team?.length === 0 ? undefined : team,
             className: 'border-l pb-0 sm:mb-4'
           }}
         />

@@ -1,12 +1,10 @@
 import { gql, useQuery } from '@apollo/client'
-import { useQueryState } from 'next-usequerystate'
 
 import type { Query } from '@/types/gql/graphql'
 
-const ROOM_CARDS = gql`
+const GET_ROOMCARD = gql`
   query RoomCards($where: RoomCardWhere) {
     roomCards(where: $where) {
-      uid
       purityClass
       prescribedClothing
       entryToHvacTent
@@ -21,29 +19,37 @@ const ROOM_CARDS = gql`
       roomTemperature
       humidity
       status
+      contactPersonsHall {
+        role {
+          uid
+          name
+        }
+        employee {
+          uid
+          fullName
+          phoneNumber
+        }
+      }
+      contactPersonsDept {
+        uid
+        fullName
+        phoneNumber
+      }
       location {
         code
+        uid
+        name
+      }
+      team {
         name
       }
     }
   }
 `
 
-export const useRoomCards = () => {
-  const [search] = useQueryState('search')
-  const { data, loading, error, refetch } = useQuery<Query>(ROOM_CARDS, {
-    variables: {
-      where: {
-        AND: [
-          {
-            location: {
-              name_CONTAINS: search || ''
-            }
-          }
-        ]
-      }
-    }
+export const useRoomCard = (roomCardUid?: string) => {
+  const { data, error } = useQuery<Query>(GET_ROOMCARD, {
+    variables: { where: { uid: roomCardUid } }
   })
-
-  return { roomCards: data?.roomCards, loading, error, refetch }
+  return { roomCard: data?.roomCards[0], error }
 }

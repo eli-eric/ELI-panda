@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { PATH } from '@/types/constants/paths'
@@ -15,6 +16,12 @@ export const RoomCardsContainer = () => {
   const router = useRouter()
   const { roomCards, loading, error, refetch } = useRoomCards()
   const columns = useRoomCardsColumns()
+
+  useEffect(() => {
+    roomCards?.forEach(roomCard => {
+      router.prefetch(`${PATH.ROOM_CARD}/${roomCard.uid}`)
+    })
+  }, [roomCards, router])
 
   return (
     <TableLayoutContainer>

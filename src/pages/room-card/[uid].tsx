@@ -8,7 +8,12 @@ import { RoomCardDetailContainer } from '@/modules/roomCard/RoomCardDetail.cont'
 
 const messages = message.roomCardsPage
 
-const RoomCardDetail: NextPage = (): JSX.Element => {
+interface Props {
+  key?: string
+  roomCardUid?: string
+}
+
+const RoomCardDetail: NextPage = ({ roomCardUid }: Props) => {
   const intl = useIntl()
 
   return (
@@ -17,9 +22,15 @@ const RoomCardDetail: NextPage = (): JSX.Element => {
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-      <RoomCardDetailContainer />
+
+      <RoomCardDetailContainer roomCardUid={roomCardUid} />
     </Fragment>
   )
 }
+
+RoomCardDetail.getInitialProps = ({ query }) => ({
+  key: query.uid,
+  roomCardUid: query.uid
+})
 
 export default RoomCardDetail

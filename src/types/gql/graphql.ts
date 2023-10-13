@@ -3603,6 +3603,7 @@ export type Employee = {
   __typename?: 'Employee';
   email?: Maybe<Scalars['String']['output']>;
   firstName: Scalars['String']['output'];
+  fullName: Scalars['String']['output'];
   lastName: Scalars['String']['output'];
   phoneNumber?: Maybe<Scalars['String']['output']>;
   teams: Array<Team>;
@@ -3689,6 +3690,7 @@ export type EmployeeRelationInput = {
 export type EmployeeSort = {
   email?: InputMaybe<SortDirection>;
   firstName?: InputMaybe<SortDirection>;
+  fullName?: InputMaybe<SortDirection>;
   lastName?: InputMaybe<SortDirection>;
   phoneNumber?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
@@ -6053,21 +6055,21 @@ export type LocationRoomCardNodeAggregationWhereInput = {
   additionalRequirements_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   additionalRequirements_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   additionalRequirements_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  cleaningShedule_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  cleaningShedule_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  cleaningShedule_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  cleaningShedule_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  cleaningShedule_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  cleaningShedule_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  cleaningShedule_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  cleaningShedule_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  cleaningShedule_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  cleaningShedule_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  cleaningShedule_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  cleaningShedule_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  cleaningShedule_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  cleaningShedule_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  cleaningShedule_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  cleaningSchedule_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  cleaningSchedule_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  cleaningSchedule_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  cleaningSchedule_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  cleaningSchedule_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   coolingWater_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   coolingWater_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   coolingWater_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -6250,7 +6252,7 @@ export type LocationRoomCardRoomCardAggregationSelection = {
 export type LocationRoomCardRoomCardNodeAggregateSelection = {
   __typename?: 'LocationRoomCardRoomCardNodeAggregateSelection';
   additionalRequirements: StringAggregateSelectionNullable;
-  cleaningShedule: StringAggregateSelectionNullable;
+  cleaningSchedule: StringAggregateSelectionNullable;
   coolingWater: StringAggregateSelectionNullable;
   copressedAirDistribution: StringAggregateSelectionNullable;
   entryToHvacTent: StringAggregateSelectionNullable;
@@ -8398,7 +8400,7 @@ export type RolesConnection = {
 export type RoomCard = {
   __typename?: 'RoomCard';
   additionalRequirements?: Maybe<Scalars['String']['output']>;
-  cleaningShedule?: Maybe<Scalars['String']['output']>;
+  cleaningSchedule?: Maybe<Scalars['String']['output']>;
   contactPersonsDept: Array<Employee>;
   contactPersonsDeptAggregate?: Maybe<RoomCardEmployeeContactPersonsDeptAggregationSelection>;
   contactPersonsDeptConnection: RoomCardContactPersonsDeptConnection;
@@ -8516,7 +8518,7 @@ export type RoomCardTeamConnectionArgs = {
 export type RoomCardAggregateSelection = {
   __typename?: 'RoomCardAggregateSelection';
   additionalRequirements: StringAggregateSelectionNullable;
-  cleaningShedule: StringAggregateSelectionNullable;
+  cleaningSchedule: StringAggregateSelectionNullable;
   coolingWater: StringAggregateSelectionNullable;
   copressedAirDistribution: StringAggregateSelectionNullable;
   count: Scalars['Int']['output'];
@@ -8779,7 +8781,7 @@ export type RoomCardContactPersonsHallUpdateFieldInput = {
 
 export type RoomCardCreateInput = {
   additionalRequirements?: InputMaybe<Scalars['String']['input']>;
-  cleaningShedule?: InputMaybe<Scalars['String']['input']>;
+  cleaningSchedule?: InputMaybe<Scalars['String']['input']>;
   contactPersonsDept?: InputMaybe<RoomCardContactPersonsDeptFieldInput>;
   contactPersonsHall?: InputMaybe<RoomCardContactPersonsHallFieldInput>;
   coolingWater?: InputMaybe<Scalars['String']['input']>;
@@ -8991,7 +8993,7 @@ export type RoomCardLocationUpdateFieldInput = {
 
 export type RoomCardOnCreateInput = {
   additionalRequirements?: InputMaybe<Scalars['String']['input']>;
-  cleaningShedule?: InputMaybe<Scalars['String']['input']>;
+  cleaningSchedule?: InputMaybe<Scalars['String']['input']>;
   coolingWater?: InputMaybe<Scalars['String']['input']>;
   copressedAirDistribution?: InputMaybe<Scalars['String']['input']>;
   entryToHvacTent?: InputMaybe<Scalars['String']['input']>;
@@ -9023,7 +9025,7 @@ export type RoomCardRelationInput = {
 /** Fields to sort RoomCards by. The order in which sorts are applied is not guaranteed when specifying many fields in one RoomCardSort object. */
 export type RoomCardSort = {
   additionalRequirements?: InputMaybe<SortDirection>;
-  cleaningShedule?: InputMaybe<SortDirection>;
+  cleaningSchedule?: InputMaybe<SortDirection>;
   coolingWater?: InputMaybe<SortDirection>;
   copressedAirDistribution?: InputMaybe<SortDirection>;
   entryToHvacTent?: InputMaybe<SortDirection>;
@@ -9174,7 +9176,7 @@ export type RoomCardUniqueWhere = {
 
 export type RoomCardUpdateInput = {
   additionalRequirements?: InputMaybe<Scalars['String']['input']>;
-  cleaningShedule?: InputMaybe<Scalars['String']['input']>;
+  cleaningSchedule?: InputMaybe<Scalars['String']['input']>;
   contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptUpdateFieldInput>>;
   contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallUpdateFieldInput>>;
   coolingWater?: InputMaybe<Scalars['String']['input']>;
@@ -9202,11 +9204,11 @@ export type RoomCardWhere = {
   additionalRequirements_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   additionalRequirements_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   additionalRequirements_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
-  cleaningShedule?: InputMaybe<Scalars['String']['input']>;
-  cleaningShedule_CONTAINS?: InputMaybe<Scalars['String']['input']>;
-  cleaningShedule_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  cleaningShedule_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  cleaningShedule_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  cleaningSchedule?: InputMaybe<Scalars['String']['input']>;
+  cleaningSchedule_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  cleaningSchedule_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  cleaningSchedule_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  cleaningSchedule_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
   contactPersonsDeptAggregate?: InputMaybe<RoomCardContactPersonsDeptAggregateInput>;
   /** Return RoomCards where all of the related RoomCardContactPersonsDeptConnections match this filter */
   contactPersonsDeptConnection_ALL?: InputMaybe<RoomCardContactPersonsDeptConnectionWhere>;

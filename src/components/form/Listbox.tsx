@@ -17,7 +17,7 @@ export type ListboxPropsT = FieldProps & {
   allowEmptyOption?: boolean
   emptyOption?: string
   optionsSize?: 'sm' | 'md' | 'lg'
-  customOptions?: CodebookType[]
+  customOptions?: string[]
   unit?: string
   customLabel?: string
   useFirstRender?: boolean
@@ -119,8 +119,8 @@ const Listbox = ({
             >
               {options.map((item, index) => (
                 <HUIListbox.Option
-                  key={item.uid + index}
-                  value={customOptions ? item.uid : item.uid === '' ? null : item}
+                  key={item.uid || item + index}
+                  value={customOptions ? item : item.uid === '' ? null : item}
                   className={({ active }) =>
                     classNames(
                       'relative cursor-default select-none py-2 pl-3 pr-9',
@@ -129,10 +129,14 @@ const Listbox = ({
                   }
                 >
                   {({ active }) => {
-                    const selected = field.value?.uid === item.uid || (!field.value?.uid && item.uid === '')
+                    const selected = customOptions
+                      ? item === field.value
+                      : field.value?.uid === item.uid || (!field.value?.uid && item.uid === '')
                     return (
                       <>
-                        <span className={classNames('block truncate', selected && 'font-semibold')}>{item.name}</span>
+                        <span className={classNames('block truncate', selected && 'font-semibold')}>
+                          {item.name || item}
+                        </span>
 
                         {selected && (
                           <span
@@ -141,12 +145,7 @@ const Listbox = ({
                               active ? 'text-white' : 'text-primary-500'
                             )}
                           >
-                            <CheckIcon
-                              className="h-4 w-4
-
-"
-                              aria-hidden="true"
-                            />
+                            <CheckIcon className="h-4 w-4" aria-hidden="true" />
                           </span>
                         )}
                       </>

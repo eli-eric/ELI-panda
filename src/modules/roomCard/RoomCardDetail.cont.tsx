@@ -1,118 +1,48 @@
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
+import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
+import Listbox from '@/components/form/Listbox'
 import { PageHead } from '@/components/layout/PageHead'
+import { Tooltip } from '@/components/Tooltip'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { CODEBOOK } from '@/types/constants/codebook'
 import type { RoomCard } from '@/types/gql/graphql'
+import { RoomCardStatus } from '@/types/gql/graphql'
+import { classNames } from '@/utils'
 
 import { RoomCardTables } from './components/table/RoomCard.tables'
+import { useRoomCard } from './hooks/useRoomCard'
 
-const contactPerson = [
-  {
-    fullName: 'John Doe',
-    phone: '123456789',
-    role: 'Responsible'
-  },
-  {
-    fullName: 'Jane Doe',
-    phone: '987654321',
-    role: 'Deputy for Technology'
-  },
-  {
-    fullName: 'Jiří Doe',
-    phone: '123456789',
-    role: 'Engineer'
-  }
-]
+interface Props {
+  roomCardUid?: string
+}
 
-const team = [
-  {
-    teamName: 'Building Maintenance'
-  },
-  {
-    teamName: 'Clean Rooms'
-  },
-  {
-    teamName: 'Facility Management'
-  }
-]
+export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
+  const { roomCard } = useRoomCard(roomCardUid)
+  const formMethods = useForm<RoomCard>({ defaultValues: roomCard })
+  const { reset, watch } = formMethods
 
-const cleanRooms = [
-  {
-    name: 'PURITY CLASS ',
-    code: 'purityClass',
-    value: 'ISO 7'
-  },
-  {
-    name: 'PRESCRIBED CLOTHING',
-    code: 'prescribedClothing',
-    value: 'Cap'
-  },
-  {
-    name: 'ENTRY TO HVAC TENT',
-    code: 'entryToHvacTent',
-    value: ''
-  },
-  {
-    name: 'CLEANING SCHEDULE',
-    code: 'cleaningSchedule',
-    value: '1x/week'
-  },
-  {
-    name: 'ADDITIONAL REQUIREMENTS',
-    code: 'additionalRequirements',
-    value: 'Clean room is not in use'
-  }
-]
+  const statuses = Object.values(RoomCardStatus).map(value => value)
 
-const possibleParameters = [
-  {
-    name: 'COOLING WATER',
-    code: 'coolingWater',
-    value: 'DEMI water - centrally 16°C'
-  },
-  {
-    name: 'INDOOR ENVIRONMENT QUALITY',
-    code: 'indoorEnvironmentQuality',
-    value: 'temperature 20°C +/- 1°C; humidity 50% +/- 5%'
-  },
-  {
-    name: 'COMPRESSED AIR DISTRIBUTION',
-    code: 'compressedAirDistribution',
-    value: '7bar - 8bar'
-  },
-  {
-    name: 'NITROGEN CENTRAL DISTRIBUTION',
-    code: 'nitrogenCentralDistribution',
-    value: '1,9bar - 2,5bar depending on the outdoor temperature'
-  },
-  {
-    name: 'MAX. PRESSURE IN COLD DISTRIBUTION',
-    code: 'maxPressureInColdDistribution',
-    value: '6bar'
-  }
-]
-const clientRequirements = [
-  {
-    name: 'PRESSURE IN COOLING SYSTEM',
-    code: 'pressureInCoolingSystem',
-    value: '6bar'
-  },
-  {
-    name: 'ROOM TEMPERATURE',
-    code: 'roomTemperature',
-    value: '20°C +/- 1°C'
-  },
-  {
-    name: 'HUMIDITY',
-    code: 'humidity',
-    value: '50% +/- 5%'
-  }
-]
+  const status = watch('status')
+  const contactPersonsHall = watch('contactPersonsHall')?.map(personHall => ({
+    fullName: personHall.employee.fullName,
+    phone: personHall?.employee.phoneNumber,
+    role: personHall?.role?.name
+  }))
+  const contactPersonsDept = watch('contactPersonsDept')?.map(personDept => ({
+    fullName: personDept.fullName,
+    phone: personDept.phoneNumber
+  }))
+  const team = watch('team')
 
-export const RoomCardDetailContainer = () => {
-  const formMethods = useForm<RoomCard>()
+  useEffect(() => {
+    if (roomCard) {
+      reset(roomCard)
+    }
+  }, [roomCard, reset])
 
   const fields = useMakeFormFields({
     location: {
@@ -120,8 +50,9 @@ export const RoomCardDetailContainer = () => {
       disabled: false,
       codebook: CODEBOOK.LOCATION
     },
-    contactPerson: {
-      name: 'contactPerson',
+    status: {
+      name: 'status',
+      //label: messages.form.status.label,
       disabled: false
     }
   })
@@ -129,16 +60,34 @@ export const RoomCardDetailContainer = () => {
   return (
     <Form {...{ formMethods }}>
       <PageHead>
-        <h1 className="text-2xl font-semibold">Location will be here</h1>
+        <div className="flex items-center space-x-4">
+          <Tooltip content={`Room status: ${status}`}>
+            <div
+              className={classNames(
+                'w-10 h-10 rounded-full',
+                status === 'DIRTY_MODE' && 'bg-red-200',
+                status === 'CLEAN_MODE' && 'bg-lime-200',
+                status === 'IN_PREPARATION_MODE' && 'bg-primary-300'
+              )}
+            />
+          </Tooltip>
+          <h1 className="text-2xl font-semibold">{roomCard?.location.name}</h1>
+          <h1 className="text-2xl font-semibold">{' - '}</h1>
+          <h1 className="text-2xl font-semibold">{roomCard?.location.code}</h1>
+          <Listbox {...fields.status} className="w-72" customOptions={statuses} />
+        </div>
+        <div className="space-x-2">
+          <Button type="button" primary>
+            Save
+          </Button>
+          <Button>Cancel</Button>
+        </div>
         {/* <SelectLocationTree locationField={fields.location} /> */}
       </PageHead>
       <RoomCardTables
         {...{
-          cleanRooms,
-          clientRequirements,
-          possibleParameters,
-          contactPersonHall: contactPerson,
-          contactPersonDept: contactPerson,
+          contactPersonsHall,
+          contactPersonsDept,
           team
         }}
       />

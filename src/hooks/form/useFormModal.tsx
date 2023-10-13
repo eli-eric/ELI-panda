@@ -84,6 +84,7 @@ export default useFormModal
 
 interface Props<T extends FieldValues> {
   renderOutsideForm?: JSX.Element
+  className?: string
   onSubmit: (data: T) => void
   formMethods: UseFormReturn<T, any>
   loading?: boolean
@@ -100,7 +101,8 @@ export const FormModal = <T extends FieldValues>({
   renderOutsideForm,
   loading,
   open = false,
-  setOpen
+  setOpen,
+  className
 }: Props<T>) => {
   const { handleSubmit, reset, formState } = formMethods
   useEffect(() => {
@@ -132,7 +134,7 @@ export const FormModal = <T extends FieldValues>({
   return (
     <ModalComponent open={open} setOpen={setOpen}>
       {renderOutsideForm}
-      <Form formMethods={formMethods} enableLeaveWarning={false}>
+      <Form formMethods={formMethods} enableLeaveWarning={false} className={className}>
         {children}
         {error && <ErrorPage />}
         <ModalButtonsComponent buttons={modalButtons} />

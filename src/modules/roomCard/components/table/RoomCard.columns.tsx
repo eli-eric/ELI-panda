@@ -4,6 +4,8 @@ import { useFormContext } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
 
+import { PersonHallButton } from './PersonHallButton'
+
 type RoomCardProperties = {
   name: string
   value?: string
@@ -25,7 +27,7 @@ export const useRoomCardsColumns = () => {
     (): ColumnDef<any, any>[] => [
       {
         header: 'Contact - Hall',
-        meta: { headerElement: <PlusButton primary /> },
+        meta: { headerElement: <PersonHallButton /> },
         columns: [
           {
             accessorKey: 'role',

@@ -47,7 +47,7 @@ export const typeDefs = gql`
     purityClass: String
     prescribedClothing: String
     entryToHvacTent: String
-    cleaningShedule: String
+    cleaningSchedule: String
     additionalRequirements: String
     coolingWater: String
     indoorEnvironmentQueality: String
@@ -69,6 +69,7 @@ export const typeDefs = gql`
     uid: String!
     teams: [Team!]! @relationship(type: "BELONGS_TO_TEAM", direction: OUT)
     firstName: String!
+    fullName: String!
     lastName: String!
     phoneNumber: String
     email: String
