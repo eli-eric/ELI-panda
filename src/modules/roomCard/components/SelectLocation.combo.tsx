@@ -54,7 +54,7 @@ export const SelectLocationTree = ({
     <Fragment>
       <Combobox
         {...locationField}
-        className="w-72 items-center"
+        className="w-72"
         onClickIcon={() => {
           setOpen(true)
         }}

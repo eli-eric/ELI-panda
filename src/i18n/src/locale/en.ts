@@ -311,7 +311,11 @@ export const messages = {
     }
   },
   roomCardsPage: {
-    head: 'ELI Panda - Room Cards'
+    head: 'ELI Panda - Room Cards',
+    form: {
+      status: { label: 'Status' },
+      location: { label: 'Location' }
+    }
   },
   orderItem: { head: 'ELI Panda - Order Item' },
   systemItem: { head: 'ELI Panda - System Item' },

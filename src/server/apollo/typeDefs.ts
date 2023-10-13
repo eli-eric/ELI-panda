@@ -27,10 +27,20 @@ export const typeDefs = gql`
     IN_PREPARATION_MODE
   }
 
+  type ContactPersonRole {
+    uid: ID! @id
+    name: String!
+  }
+
+  type HallContactPerson {
+    employee: Employee! @relationship(type: "HAS_CONTACT_PERSON", direction: OUT)
+    role: ContactPersonRole @relationship(type: "HAS_ROOM_CARD_ROLE", direction: OUT)
+  }
+
   type RoomCard {
     uid: ID! @id
     status: RoomCardStatus!
-    contactPersonsHall: [Employee!]! @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: OUT)
+    contactPersonsHall: [HallContactPerson!]! @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: OUT)
     contactPersonsDept: [Employee!]! @relationship(type: "HAS_CONTACT_PERSON_DEPT", direction: OUT)
     location: Location! @relationship(type: "HAS_ROOM_CARD", direction: IN)
     team: [Team!]! @relationship(type: "HAS_TEAM", direction: OUT)

@@ -1,7 +1,24 @@
-import type { ColumnDef } from '@tanstack/react-table'
+import type { CellContext, ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
+
+type RoomCardProperties = {
+  name: string
+  value?: string
+  code: string
+}
+
+const CellInput = ({
+  row: {
+    original: { code }
+  }
+}: CellContext<RoomCardProperties, any>) => {
+  const { register } = useFormContext()
+
+  return <input className="w-full bg-inherit" {...register(code)} name={code} />
+}
 
 export const useRoomCardsColumns = () => {
   const columnsContactHall = useMemo(
@@ -62,7 +79,7 @@ export const useRoomCardsColumns = () => {
   )
 
   const columnsCleanRooms = useMemo(
-    (): ColumnDef<any, any>[] => [
+    (): ColumnDef<RoomCardProperties, any>[] => [
       {
         header: "Clean Room's parameters",
         columns: [
@@ -72,7 +89,8 @@ export const useRoomCardsColumns = () => {
           },
           {
             accessorKey: 'value',
-            meta: { noHeader: true }
+            meta: { noHeader: true },
+            cell: CellInput
           }
         ]
       }
@@ -80,7 +98,7 @@ export const useRoomCardsColumns = () => {
     []
   )
   const columnsPossibleParameters = useMemo(
-    (): ColumnDef<any, any>[] => [
+    (): ColumnDef<RoomCardProperties, any>[] => [
       {
         header: 'Possible Parameters',
         columns: [
@@ -90,7 +108,8 @@ export const useRoomCardsColumns = () => {
           },
           {
             accessorKey: 'value',
-            meta: { noHeader: true }
+            meta: { noHeader: true },
+            cell: CellInput
           }
         ]
       }
@@ -99,7 +118,7 @@ export const useRoomCardsColumns = () => {
   )
 
   const columnsClientRequirements = useMemo(
-    (): ColumnDef<any, any>[] => [
+    (): ColumnDef<RoomCardProperties, any>[] => [
       {
         header: 'Client Requirements',
         columns: [
@@ -109,7 +128,8 @@ export const useRoomCardsColumns = () => {
           },
           {
             accessorKey: 'value',
-            meta: { noHeader: true }
+            meta: { noHeader: true },
+            cell: CellInput
           }
         ]
       }

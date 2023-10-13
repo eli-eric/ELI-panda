@@ -76,7 +76,6 @@ export const RoomCardTables = ({
           data: possibleParameters
         }}
       />
-
       <PandaTable
         {...{
           tableId: 'roomCard-clientRequirementsHead',

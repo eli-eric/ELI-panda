@@ -41,22 +41,27 @@ const team = [
 const cleanRooms = [
   {
     name: 'PURITY CLASS ',
+    code: 'purityClass',
     value: 'ISO 7'
   },
   {
     name: 'PRESCRIBED CLOTHING',
+    code: 'prescribedClothing',
     value: 'Cap'
   },
   {
     name: 'ENTRY TO HVAC TENT',
+    code: 'entryToHvacTent',
     value: ''
   },
   {
     name: 'CLEANING SCHEDULE',
+    code: 'cleaningSchedule',
     value: '1x/week'
   },
   {
     name: 'ADDITIONAL REQUIREMENTS',
+    code: 'additionalRequirements',
     value: 'Clean room is not in use'
   }
 ]
@@ -64,36 +69,44 @@ const cleanRooms = [
 const possibleParameters = [
   {
     name: 'COOLING WATER',
+    code: 'coolingWater',
     value: 'DEMI water - centrally 16°C'
   },
   {
     name: 'INDOOR ENVIRONMENT QUALITY',
+    code: 'indoorEnvironmentQuality',
     value: 'temperature 20°C +/- 1°C; humidity 50% +/- 5%'
   },
   {
     name: 'COMPRESSED AIR DISTRIBUTION',
+    code: 'compressedAirDistribution',
     value: '7bar - 8bar'
   },
   {
     name: 'NITROGEN CENTRAL DISTRIBUTION',
+    code: 'nitrogenCentralDistribution',
     value: '1,9bar - 2,5bar depending on the outdoor temperature'
   },
   {
     name: 'MAX. PRESSURE IN COLD DISTRIBUTION',
+    code: 'maxPressureInColdDistribution',
     value: '6bar'
   }
 ]
 const clientRequirements = [
   {
     name: 'PRESSURE IN COOLING SYSTEM',
+    code: 'pressureInCoolingSystem',
     value: '6bar'
   },
   {
     name: 'ROOM TEMPERATURE',
+    code: 'roomTemperature',
     value: '20°C +/- 1°C'
   },
   {
     name: 'HUMIDITY',
+    code: 'humidity',
     value: '50% +/- 5%'
   }
 ]
