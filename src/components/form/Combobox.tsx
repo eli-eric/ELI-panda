@@ -26,6 +26,7 @@ type ComboboxPropsT = FieldProps &
     filter?: CodebookFilter[]
     customLabel?: string
     onClickIcon?: () => void
+    onSelect?: (item: CodebookType) => void
   }
 
 const Combobox = ({
@@ -43,7 +44,8 @@ const Combobox = ({
   codebookResponse,
   showAddButton = false,
   onClickIcon,
-  onChange
+  onChange,
+  onSelect
 }: ComboboxPropsT) => {
   const { control, setValue } = useFormContext()
   const { formatMessage: fm } = useIntl()
@@ -86,6 +88,10 @@ const Combobox = ({
             <HUICombobox
               as="div"
               {...field}
+              onChange={value => {
+                field.onChange(value)
+                onSelect && onSelect(value)
+              }}
               disabled={disabled}
               className={classNames('relative flex flex-col w-full', className)}
             >

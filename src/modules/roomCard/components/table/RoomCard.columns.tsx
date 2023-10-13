@@ -1,25 +1,16 @@
-import type { CellContext, ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { useFormContext } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
 
-import { PersonHallButton } from './PersonHallButton'
+import { CellInput } from './CellInput'
+import { ContactDeptButton } from './ContactDeptButton'
+import { ContactHallButton } from './ContactHallButton'
 
-type RoomCardProperties = {
+export type RoomCardProperties = {
   name: string
   value?: string
   code: string
-}
-
-const CellInput = ({
-  row: {
-    original: { code }
-  }
-}: CellContext<RoomCardProperties, any>) => {
-  const { register } = useFormContext()
-
-  return <input className="w-full bg-inherit" {...register(code)} name={code} />
 }
 
 export const useRoomCardsColumns = () => {
@@ -27,7 +18,7 @@ export const useRoomCardsColumns = () => {
     (): ColumnDef<any, any>[] => [
       {
         header: 'Contact - Hall',
-        meta: { headerElement: <PersonHallButton /> },
+        meta: { headerElement: <ContactHallButton /> },
         columns: [
           {
             accessorKey: 'role',
@@ -52,7 +43,7 @@ export const useRoomCardsColumns = () => {
     (): ColumnDef<any, any>[] => [
       {
         header: 'Contact - Dept. 99',
-        meta: { headerElement: <PlusButton primary /> },
+        meta: { headerElement: <ContactDeptButton /> },
 
         columns: [
           {

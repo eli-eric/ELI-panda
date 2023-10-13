@@ -1,15 +1,17 @@
-import { gql, useLazyQuery, useQuery } from '@apollo/client'
-import { Fragment, useEffect, useState } from 'react'
+import { gql, useQuery } from '@apollo/client'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useState } from 'react'
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
+import { object } from 'yup'
 
-import { PlusButton } from '@/components/Buttons'
 import Combobox from '@/components/form/Combobox'
 import Listbox from '@/components/form/Listbox'
-import { FormModal } from '@/hooks/form/useFormModal'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
-import type { Query } from '@/types/gql/graphql'
+
+import { useLazyEmployee } from '../../hooks/useLazyEmployee'
+import { HeaderButtonModalComponent } from './HeaderButtonModal.comp'
 
 const nestedForm = message.roomCardsPage.nestedForm
 
@@ -21,20 +23,16 @@ const GET_CONTACT_PERSON_ROLES = gql`
     }
   }
 `
-const GET_EMPLOYEE = gql`
-  query GetEmployee($uid: String!) {
-    employees(where: { uid: $uid }) {
-      uid
-      fullName
-      phoneNumber
-    }
-  }
-`
 
-export const PersonHallButton = () => {
+const schema = object().shape({
+  role: object().nullable().required('Role is required'),
+  employee: object().nullable().required('Employee is required')
+})
+
+export const ContactHallButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const formMethods = useForm()
+  const formMethods = useForm({ resolver: yupResolver(schema) })
   const { watch } = formMethods
   const employee = watch('employee')
 
@@ -43,21 +41,11 @@ export const PersonHallButton = () => {
   const { control } = useFormContext()
   const { insert, fields: arrayFields } = useFieldArray({ control, name: 'contactPersonsHall' })
 
-  const [getEployee, { data: employeeQuery }] = useLazyQuery<Query>(GET_EMPLOYEE, {
-    variables: {
-      uid: employee?.uid
-    }
-  })
-
-  useEffect(() => {
-    if (employee) {
-      getEployee()
-    }
-  }, [employee, getEployee])
+  const [getEployee, employeeQuery] = useLazyEmployee(employee?.uid)
 
   const onSubmit = data => {
     insert(arrayFields.length, {
-      employee: employeeQuery?.employees[0],
+      employee: employeeQuery,
       role: data.role
     })
   }
@@ -77,19 +65,19 @@ export const PersonHallButton = () => {
   })
 
   return (
-    <Fragment>
-      <PlusButton
-        primary
-        onClick={() => {
-          setIsModalOpen(true)
+    <HeaderButtonModalComponent
+      formMethods={formMethods}
+      isModalOpen={isModalOpen}
+      onSubmit={onSubmit}
+      setIsModalOpen={setIsModalOpen}
+    >
+      <Listbox {...fields.role} codebookResponse={data?.contactPersonRoles} />
+      <Combobox
+        {...fields.employee}
+        onSelect={() => {
+          getEployee()
         }}
       />
-      <FormModal formMethods={formMethods} open={isModalOpen} setOpen={setIsModalOpen} onSubmit={onSubmit}>
-        <div className="flex space-x-3">
-          <Listbox {...fields.role} codebookResponse={data?.contactPersonRoles} />
-          <Combobox {...fields.employee} />
-        </div>
-      </FormModal>
-    </Fragment>
+    </HeaderButtonModalComponent>
   )
 }
