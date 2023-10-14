@@ -27,6 +27,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   const statuses = Object.values(RoomCardStatus).map(value => value)
 
   const status = watch('status')
+  const teams = watch('teams')
   const contactPersonsHall = watch('contactPersonsHall')?.map(personHall => ({
     fullName: personHall.employee.fullName,
     phone: personHall?.employee.phoneNumber,
@@ -36,7 +37,6 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
     fullName: personDept.fullName,
     phone: personDept.phoneNumber
   }))
-  const team = watch('team')
 
   useEffect(() => {
     if (roomCard) {
@@ -88,7 +88,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
         {...{
           contactPersonsHall,
           contactPersonsDept,
-          team
+          teams
         }}
       />
     </Form>

@@ -14,13 +14,8 @@ const GET_EMPLOYEE = gql`
   }
 `
 
-export const useLazyEmployee = (
-  uid?: string
-): [LazyQueryExecFunction<Query, OperationVariables>, Employee | undefined] => {
+export const useLazyEmployee = (): [LazyQueryExecFunction<Query, OperationVariables>, Employee | undefined] => {
   const [getEployee, { data }] = useLazyQuery<Query>(GET_EMPLOYEE, {
-    variables: {
-      uid: uid
-    },
     onError: () => {
       toast.error(`Something went wrong with fetch employee!`)
     }

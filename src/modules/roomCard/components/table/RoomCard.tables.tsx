@@ -75,10 +75,10 @@ const clientRequirements = [
 interface Props {
   contactPersonsHall?: any[]
   contactPersonsDept?: any[]
-  team?: any[]
+  teams?: any[]
 }
 
-export const RoomCardTables = ({ contactPersonsDept, contactPersonsHall, team }: Props) => {
+export const RoomCardTables = ({ contactPersonsDept, contactPersonsHall, teams }: Props) => {
   const {
     columnsContactHall,
     columnsContactDept,
@@ -111,7 +111,7 @@ export const RoomCardTables = ({ contactPersonsDept, contactPersonsHall, team }:
           {...{
             tableId: 'roomCard-team',
             columns: columnsTeam,
-            data: team?.length === 0 ? undefined : team,
+            data: teams?.length === 0 ? undefined : teams,
             className: 'border-l pb-0 sm:mb-4'
           }}
         />

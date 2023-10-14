@@ -40,8 +40,9 @@ const GET_ROOMCARD = gql`
         uid
         name
       }
-      team {
+      teams {
         name
+        uid
       }
     }
   }

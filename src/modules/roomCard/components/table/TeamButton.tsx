@@ -3,42 +3,38 @@ import { useState } from 'react'
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
 import { object } from 'yup'
 
-import Combobox from '@/components/form/Combobox'
+import Listbox from '@/components/form/Listbox'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
-import { CODEBOOK } from '@/types/constants/codebook'
 
-import { useLazyEmployee } from '../../hooks/useLazyEmployee'
+import { useTeams } from '../../hooks/useTeams'
 import { HeaderButtonModalComponent } from './HeaderButtonModal.comp'
 
 const nestedForm = message.roomCardsPage.nestedForm
 
 const schema = object().shape({
-  employee: object().nullable().required('Employee is required')
+  team: object().nullable().required('Team is required')
 })
 
-export const ContactDeptButton = () => {
+export const TeamButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const formMethods = useForm({ resolver: yupResolver(schema) })
 
+  const { teams } = useTeams()
+
   const { control } = useFormContext()
-  const { insert, fields: arrayFields } = useFieldArray({ control, name: 'contactPersonsDept' })
+  const { insert, fields: arrayFields } = useFieldArray({ control, name: 'teams' })
 
-  const [getEployee, employeeQuery] = useLazyEmployee()
-
-  const onSubmit = () => {
-    insert(arrayFields.length, {
-      ...employeeQuery
-    })
+  const onSubmit = data => {
+    insert(arrayFields.length, data.team)
   }
 
   const fields = useMakeFormFields({
-    employee: {
-      name: 'employee',
+    team: {
+      name: 'team',
       disabled: false,
-      label: nestedForm.employee.label,
-      codebook: CODEBOOK.EMPLOYEE
+      label: nestedForm.team.label
     }
   })
 
@@ -49,12 +45,7 @@ export const ContactDeptButton = () => {
       onSubmit={onSubmit}
       setIsModalOpen={setIsModalOpen}
     >
-      <Combobox
-        {...fields.employee}
-        onSelect={value => {
-          if (value.uid) getEployee({ variables: { uid: value.uid } })
-        }}
-      />
+      <Listbox {...fields.team} codebookResponse={teams} />
     </HeaderButtonModalComponent>
   )
 }

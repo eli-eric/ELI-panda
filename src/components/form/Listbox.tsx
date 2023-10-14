@@ -42,6 +42,7 @@ const Listbox = ({
   customOptions,
   customLabel,
   codebookResponse,
+  placeholder,
   onChange
 }: ListboxPropsT) => {
   const { control, setValue } = useFormContext()
@@ -100,6 +101,7 @@ const Listbox = ({
                 error ? 'border-red-500' : 'border-gray-300',
                 disabled ? 'bg-gray-100' : ''
               )}
+              placeholder={placeholder}
             >
               <span className="block truncate">{customOptions ? field.value : field?.value?.name || emptyOption}</span>
               {field.value?.uid?.length > 0 && !disabled && allowEmptyOption && <FormXMarkIcon onClick={handleClear} />}

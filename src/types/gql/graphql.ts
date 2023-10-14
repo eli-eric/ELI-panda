@@ -3639,6 +3639,7 @@ export type EmployeeAggregateSelection = {
   count: Scalars['Int']['output'];
   email: StringAggregateSelectionNullable;
   firstName: StringAggregateSelectionNonNullable;
+  fullName: StringAggregateSelectionNonNullable;
   lastName: StringAggregateSelectionNonNullable;
   phoneNumber: StringAggregateSelectionNullable;
   uid: StringAggregateSelectionNonNullable;
@@ -3648,6 +3649,10 @@ export type EmployeeConnectInput = {
   teams?: InputMaybe<Array<EmployeeTeamsConnectFieldInput>>;
 };
 
+export type EmployeeConnectOrCreateInput = {
+  teams?: InputMaybe<Array<EmployeeTeamsConnectOrCreateFieldInput>>;
+};
+
 export type EmployeeConnectWhere = {
   node: EmployeeWhere;
 };
@@ -3655,6 +3660,7 @@ export type EmployeeConnectWhere = {
 export type EmployeeCreateInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   firstName: Scalars['String']['input'];
+  fullName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
   teams?: InputMaybe<EmployeeTeamsFieldInput>;
@@ -3705,7 +3711,7 @@ export type EmployeeTeamTeamsAggregationSelection = {
 export type EmployeeTeamTeamsNodeAggregateSelection = {
   __typename?: 'EmployeeTeamTeamsNodeAggregateSelection';
   name: StringAggregateSelectionNonNullable;
-  uid: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
 };
 
 export type EmployeeTeamsAggregateInput = {
@@ -3725,6 +3731,15 @@ export type EmployeeTeamsConnectFieldInput = {
   /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<TeamConnectWhere>;
+};
+
+export type EmployeeTeamsConnectOrCreateFieldInput = {
+  onCreate: EmployeeTeamsConnectOrCreateFieldInputOnCreate;
+  where: TeamConnectOrCreateWhere;
+};
+
+export type EmployeeTeamsConnectOrCreateFieldInputOnCreate = {
+  node: TeamOnCreateInput;
 };
 
 export type EmployeeTeamsConnection = {
@@ -3761,6 +3776,7 @@ export type EmployeeTeamsDisconnectFieldInput = {
 
 export type EmployeeTeamsFieldInput = {
   connect?: InputMaybe<Array<EmployeeTeamsConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<EmployeeTeamsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<EmployeeTeamsCreateFieldInput>>;
 };
 
@@ -3783,21 +3799,6 @@ export type EmployeeTeamsNodeAggregationWhereInput = {
   name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  uid_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  uid_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  uid_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  uid_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  uid_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  uid_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  uid_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  uid_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  uid_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  uid_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  uid_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  uid_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  uid_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  uid_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  uid_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type EmployeeTeamsRelationship = {
@@ -3812,6 +3813,7 @@ export type EmployeeTeamsUpdateConnectionInput = {
 
 export type EmployeeTeamsUpdateFieldInput = {
   connect?: InputMaybe<Array<EmployeeTeamsConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<EmployeeTeamsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<EmployeeTeamsCreateFieldInput>>;
   delete?: InputMaybe<Array<EmployeeTeamsDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<EmployeeTeamsDisconnectFieldInput>>;
@@ -3822,6 +3824,7 @@ export type EmployeeTeamsUpdateFieldInput = {
 export type EmployeeUpdateInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   firstName?: InputMaybe<Scalars['String']['input']>;
+  fullName?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
   teams?: InputMaybe<Array<EmployeeTeamsUpdateFieldInput>>;
@@ -3842,6 +3845,11 @@ export type EmployeeWhere = {
   firstName_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   firstName_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   firstName_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  fullName?: InputMaybe<Scalars['String']['input']>;
+  fullName_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  fullName_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  fullName_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  fullName_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   lastName_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   lastName_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
@@ -4908,6 +4916,7 @@ export type HallContactPersonEmployeeEmployeeNodeAggregateSelection = {
   __typename?: 'HallContactPersonEmployeeEmployeeNodeAggregateSelection';
   email: StringAggregateSelectionNullable;
   firstName: StringAggregateSelectionNonNullable;
+  fullName: StringAggregateSelectionNonNullable;
   lastName: StringAggregateSelectionNonNullable;
   phoneNumber: StringAggregateSelectionNullable;
   uid: StringAggregateSelectionNonNullable;
@@ -4952,6 +4961,21 @@ export type HallContactPersonEmployeeNodeAggregationWhereInput = {
   firstName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   firstName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   firstName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  fullName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   lastName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   lastName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   lastName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -7245,6 +7269,7 @@ export type MutationUpdateContactPersonRolesArgs = {
 
 export type MutationUpdateEmployeesArgs = {
   connect?: InputMaybe<EmployeeConnectInput>;
+  connectOrCreate?: InputMaybe<EmployeeConnectOrCreateInput>;
   create?: InputMaybe<EmployeeRelationInput>;
   delete?: InputMaybe<EmployeeDeleteInput>;
   disconnect?: InputMaybe<EmployeeDisconnectInput>;
@@ -8422,9 +8447,9 @@ export type RoomCard = {
   purityClass?: Maybe<Scalars['String']['output']>;
   roomTemperature?: Maybe<Scalars['String']['output']>;
   status: RoomCardStatus;
-  team: Array<Team>;
-  teamAggregate?: Maybe<RoomCardTeamTeamAggregationSelection>;
-  teamConnection: RoomCardTeamConnection;
+  teams: Array<Team>;
+  teamsAggregate?: Maybe<RoomCardTeamTeamsAggregationSelection>;
+  teamsConnection: RoomCardTeamsConnection;
   uid: Scalars['ID']['output'];
 };
 
@@ -8494,25 +8519,25 @@ export type RoomCardLocationConnectionArgs = {
 };
 
 
-export type RoomCardTeamArgs = {
+export type RoomCardTeamsArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   options?: InputMaybe<TeamOptions>;
   where?: InputMaybe<TeamWhere>;
 };
 
 
-export type RoomCardTeamAggregateArgs = {
+export type RoomCardTeamsAggregateArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   where?: InputMaybe<TeamWhere>;
 };
 
 
-export type RoomCardTeamConnectionArgs = {
+export type RoomCardTeamsConnectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<RoomCardTeamConnectionSort>>;
-  where?: InputMaybe<RoomCardTeamConnectionWhere>;
+  sort?: InputMaybe<Array<RoomCardTeamsConnectionSort>>;
+  where?: InputMaybe<RoomCardTeamsConnectionWhere>;
 };
 
 export type RoomCardAggregateSelection = {
@@ -8538,11 +8563,12 @@ export type RoomCardConnectInput = {
   contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptConnectFieldInput>>;
   contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallConnectFieldInput>>;
   location?: InputMaybe<RoomCardLocationConnectFieldInput>;
-  team?: InputMaybe<Array<RoomCardTeamConnectFieldInput>>;
+  teams?: InputMaybe<Array<RoomCardTeamsConnectFieldInput>>;
 };
 
 export type RoomCardConnectOrCreateInput = {
   location?: InputMaybe<RoomCardLocationConnectOrCreateFieldInput>;
+  teams?: InputMaybe<Array<RoomCardTeamsConnectOrCreateFieldInput>>;
 };
 
 export type RoomCardConnectOrCreateWhere = {
@@ -8643,6 +8669,21 @@ export type RoomCardContactPersonsDeptNodeAggregationWhereInput = {
   firstName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   firstName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   firstName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  fullName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   lastName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   lastName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   lastName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -8797,21 +8838,21 @@ export type RoomCardCreateInput = {
   purityClass?: InputMaybe<Scalars['String']['input']>;
   roomTemperature?: InputMaybe<Scalars['String']['input']>;
   status: RoomCardStatus;
-  team?: InputMaybe<RoomCardTeamFieldInput>;
+  teams?: InputMaybe<RoomCardTeamsFieldInput>;
 };
 
 export type RoomCardDeleteInput = {
   contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptDeleteFieldInput>>;
   contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallDeleteFieldInput>>;
   location?: InputMaybe<RoomCardLocationDeleteFieldInput>;
-  team?: InputMaybe<Array<RoomCardTeamDeleteFieldInput>>;
+  teams?: InputMaybe<Array<RoomCardTeamsDeleteFieldInput>>;
 };
 
 export type RoomCardDisconnectInput = {
   contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptDisconnectFieldInput>>;
   contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallDisconnectFieldInput>>;
   location?: InputMaybe<RoomCardLocationDisconnectFieldInput>;
-  team?: InputMaybe<Array<RoomCardTeamDisconnectFieldInput>>;
+  teams?: InputMaybe<Array<RoomCardTeamsDisconnectFieldInput>>;
 };
 
 export type RoomCardEdge = {
@@ -8830,6 +8871,7 @@ export type RoomCardEmployeeContactPersonsDeptNodeAggregateSelection = {
   __typename?: 'RoomCardEmployeeContactPersonsDeptNodeAggregateSelection';
   email: StringAggregateSelectionNullable;
   firstName: StringAggregateSelectionNonNullable;
+  fullName: StringAggregateSelectionNonNullable;
   lastName: StringAggregateSelectionNonNullable;
   phoneNumber: StringAggregateSelectionNullable;
   uid: StringAggregateSelectionNonNullable;
@@ -9019,7 +9061,7 @@ export type RoomCardRelationInput = {
   contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptCreateFieldInput>>;
   contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallCreateFieldInput>>;
   location?: InputMaybe<RoomCardLocationCreateFieldInput>;
-  team?: InputMaybe<Array<RoomCardTeamCreateFieldInput>>;
+  teams?: InputMaybe<Array<RoomCardTeamsCreateFieldInput>>;
 };
 
 /** Fields to sort RoomCards by. The order in which sorts are applied is not guaranteed when specifying many fields in one RoomCardSort object. */
@@ -9047,66 +9089,88 @@ export enum RoomCardStatus {
   InPreparationMode = 'IN_PREPARATION_MODE'
 }
 
-export type RoomCardTeamAggregateInput = {
-  AND?: InputMaybe<Array<RoomCardTeamAggregateInput>>;
-  NOT?: InputMaybe<RoomCardTeamAggregateInput>;
-  OR?: InputMaybe<Array<RoomCardTeamAggregateInput>>;
+export type RoomCardTeamTeamsAggregationSelection = {
+  __typename?: 'RoomCardTeamTeamsAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<RoomCardTeamTeamsNodeAggregateSelection>;
+};
+
+export type RoomCardTeamTeamsNodeAggregateSelection = {
+  __typename?: 'RoomCardTeamTeamsNodeAggregateSelection';
+  name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type RoomCardTeamsAggregateInput = {
+  AND?: InputMaybe<Array<RoomCardTeamsAggregateInput>>;
+  NOT?: InputMaybe<RoomCardTeamsAggregateInput>;
+  OR?: InputMaybe<Array<RoomCardTeamsAggregateInput>>;
   count?: InputMaybe<Scalars['Int']['input']>;
   count_GT?: InputMaybe<Scalars['Int']['input']>;
   count_GTE?: InputMaybe<Scalars['Int']['input']>;
   count_LT?: InputMaybe<Scalars['Int']['input']>;
   count_LTE?: InputMaybe<Scalars['Int']['input']>;
-  node?: InputMaybe<RoomCardTeamNodeAggregationWhereInput>;
+  node?: InputMaybe<RoomCardTeamsNodeAggregationWhereInput>;
 };
 
-export type RoomCardTeamConnectFieldInput = {
+export type RoomCardTeamsConnectFieldInput = {
   connect?: InputMaybe<Array<TeamConnectInput>>;
   /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<TeamConnectWhere>;
 };
 
-export type RoomCardTeamConnection = {
-  __typename?: 'RoomCardTeamConnection';
-  edges: Array<RoomCardTeamRelationship>;
+export type RoomCardTeamsConnectOrCreateFieldInput = {
+  onCreate: RoomCardTeamsConnectOrCreateFieldInputOnCreate;
+  where: TeamConnectOrCreateWhere;
+};
+
+export type RoomCardTeamsConnectOrCreateFieldInputOnCreate = {
+  node: TeamOnCreateInput;
+};
+
+export type RoomCardTeamsConnection = {
+  __typename?: 'RoomCardTeamsConnection';
+  edges: Array<RoomCardTeamsRelationship>;
   pageInfo: PageInfo;
   totalCount: Scalars['Int']['output'];
 };
 
-export type RoomCardTeamConnectionSort = {
+export type RoomCardTeamsConnectionSort = {
   node?: InputMaybe<TeamSort>;
 };
 
-export type RoomCardTeamConnectionWhere = {
-  AND?: InputMaybe<Array<RoomCardTeamConnectionWhere>>;
-  NOT?: InputMaybe<RoomCardTeamConnectionWhere>;
-  OR?: InputMaybe<Array<RoomCardTeamConnectionWhere>>;
+export type RoomCardTeamsConnectionWhere = {
+  AND?: InputMaybe<Array<RoomCardTeamsConnectionWhere>>;
+  NOT?: InputMaybe<RoomCardTeamsConnectionWhere>;
+  OR?: InputMaybe<Array<RoomCardTeamsConnectionWhere>>;
   node?: InputMaybe<TeamWhere>;
 };
 
-export type RoomCardTeamCreateFieldInput = {
+export type RoomCardTeamsCreateFieldInput = {
   node: TeamCreateInput;
 };
 
-export type RoomCardTeamDeleteFieldInput = {
+export type RoomCardTeamsDeleteFieldInput = {
   delete?: InputMaybe<TeamDeleteInput>;
-  where?: InputMaybe<RoomCardTeamConnectionWhere>;
+  where?: InputMaybe<RoomCardTeamsConnectionWhere>;
 };
 
-export type RoomCardTeamDisconnectFieldInput = {
+export type RoomCardTeamsDisconnectFieldInput = {
   disconnect?: InputMaybe<TeamDisconnectInput>;
-  where?: InputMaybe<RoomCardTeamConnectionWhere>;
+  where?: InputMaybe<RoomCardTeamsConnectionWhere>;
 };
 
-export type RoomCardTeamFieldInput = {
-  connect?: InputMaybe<Array<RoomCardTeamConnectFieldInput>>;
-  create?: InputMaybe<Array<RoomCardTeamCreateFieldInput>>;
+export type RoomCardTeamsFieldInput = {
+  connect?: InputMaybe<Array<RoomCardTeamsConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<RoomCardTeamsConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<RoomCardTeamsCreateFieldInput>>;
 };
 
-export type RoomCardTeamNodeAggregationWhereInput = {
-  AND?: InputMaybe<Array<RoomCardTeamNodeAggregationWhereInput>>;
-  NOT?: InputMaybe<RoomCardTeamNodeAggregationWhereInput>;
-  OR?: InputMaybe<Array<RoomCardTeamNodeAggregationWhereInput>>;
+export type RoomCardTeamsNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<RoomCardTeamsNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<RoomCardTeamsNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<RoomCardTeamsNodeAggregationWhereInput>>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -9122,52 +9186,26 @@ export type RoomCardTeamNodeAggregationWhereInput = {
   name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  uid_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  uid_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  uid_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  uid_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  uid_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  uid_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  uid_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  uid_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  uid_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  uid_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  uid_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  uid_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  uid_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  uid_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  uid_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type RoomCardTeamRelationship = {
-  __typename?: 'RoomCardTeamRelationship';
+export type RoomCardTeamsRelationship = {
+  __typename?: 'RoomCardTeamsRelationship';
   cursor: Scalars['String']['output'];
   node: Team;
 };
 
-export type RoomCardTeamTeamAggregationSelection = {
-  __typename?: 'RoomCardTeamTeamAggregationSelection';
-  count: Scalars['Int']['output'];
-  node?: Maybe<RoomCardTeamTeamNodeAggregateSelection>;
-};
-
-export type RoomCardTeamTeamNodeAggregateSelection = {
-  __typename?: 'RoomCardTeamTeamNodeAggregateSelection';
-  name: StringAggregateSelectionNonNullable;
-  uid: StringAggregateSelectionNonNullable;
-};
-
-export type RoomCardTeamUpdateConnectionInput = {
+export type RoomCardTeamsUpdateConnectionInput = {
   node?: InputMaybe<TeamUpdateInput>;
 };
 
-export type RoomCardTeamUpdateFieldInput = {
-  connect?: InputMaybe<Array<RoomCardTeamConnectFieldInput>>;
-  create?: InputMaybe<Array<RoomCardTeamCreateFieldInput>>;
-  delete?: InputMaybe<Array<RoomCardTeamDeleteFieldInput>>;
-  disconnect?: InputMaybe<Array<RoomCardTeamDisconnectFieldInput>>;
-  update?: InputMaybe<RoomCardTeamUpdateConnectionInput>;
-  where?: InputMaybe<RoomCardTeamConnectionWhere>;
+export type RoomCardTeamsUpdateFieldInput = {
+  connect?: InputMaybe<Array<RoomCardTeamsConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<RoomCardTeamsConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<RoomCardTeamsCreateFieldInput>>;
+  delete?: InputMaybe<Array<RoomCardTeamsDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<RoomCardTeamsDisconnectFieldInput>>;
+  update?: InputMaybe<RoomCardTeamsUpdateConnectionInput>;
+  where?: InputMaybe<RoomCardTeamsConnectionWhere>;
 };
 
 export type RoomCardUniqueWhere = {
@@ -9192,7 +9230,7 @@ export type RoomCardUpdateInput = {
   purityClass?: InputMaybe<Scalars['String']['input']>;
   roomTemperature?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<RoomCardStatus>;
-  team?: InputMaybe<Array<RoomCardTeamUpdateFieldInput>>;
+  teams?: InputMaybe<Array<RoomCardTeamsUpdateFieldInput>>;
 };
 
 export type RoomCardWhere = {
@@ -9305,23 +9343,23 @@ export type RoomCardWhere = {
   roomTemperature_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<RoomCardStatus>;
   status_IN?: InputMaybe<Array<RoomCardStatus>>;
-  teamAggregate?: InputMaybe<RoomCardTeamAggregateInput>;
-  /** Return RoomCards where all of the related RoomCardTeamConnections match this filter */
-  teamConnection_ALL?: InputMaybe<RoomCardTeamConnectionWhere>;
-  /** Return RoomCards where none of the related RoomCardTeamConnections match this filter */
-  teamConnection_NONE?: InputMaybe<RoomCardTeamConnectionWhere>;
-  /** Return RoomCards where one of the related RoomCardTeamConnections match this filter */
-  teamConnection_SINGLE?: InputMaybe<RoomCardTeamConnectionWhere>;
-  /** Return RoomCards where some of the related RoomCardTeamConnections match this filter */
-  teamConnection_SOME?: InputMaybe<RoomCardTeamConnectionWhere>;
+  teamsAggregate?: InputMaybe<RoomCardTeamsAggregateInput>;
+  /** Return RoomCards where all of the related RoomCardTeamsConnections match this filter */
+  teamsConnection_ALL?: InputMaybe<RoomCardTeamsConnectionWhere>;
+  /** Return RoomCards where none of the related RoomCardTeamsConnections match this filter */
+  teamsConnection_NONE?: InputMaybe<RoomCardTeamsConnectionWhere>;
+  /** Return RoomCards where one of the related RoomCardTeamsConnections match this filter */
+  teamsConnection_SINGLE?: InputMaybe<RoomCardTeamsConnectionWhere>;
+  /** Return RoomCards where some of the related RoomCardTeamsConnections match this filter */
+  teamsConnection_SOME?: InputMaybe<RoomCardTeamsConnectionWhere>;
   /** Return RoomCards where all of the related Teams match this filter */
-  team_ALL?: InputMaybe<TeamWhere>;
+  teams_ALL?: InputMaybe<TeamWhere>;
   /** Return RoomCards where none of the related Teams match this filter */
-  team_NONE?: InputMaybe<TeamWhere>;
+  teams_NONE?: InputMaybe<TeamWhere>;
   /** Return RoomCards where one of the related Teams match this filter */
-  team_SINGLE?: InputMaybe<TeamWhere>;
+  teams_SINGLE?: InputMaybe<TeamWhere>;
   /** Return RoomCards where some of the related Teams match this filter */
-  team_SOME?: InputMaybe<TeamWhere>;
+  teams_SOME?: InputMaybe<TeamWhere>;
   uid?: InputMaybe<Scalars['ID']['input']>;
   uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
   uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
@@ -10919,7 +10957,7 @@ export type Team = {
   teamMembers: Array<Employee>;
   teamMembersAggregate?: Maybe<TeamEmployeeTeamMembersAggregationSelection>;
   teamMembersConnection: TeamTeamMembersConnection;
-  uid: Scalars['String']['output'];
+  uid: Scalars['ID']['output'];
 };
 
 
@@ -10948,11 +10986,15 @@ export type TeamAggregateSelection = {
   __typename?: 'TeamAggregateSelection';
   count: Scalars['Int']['output'];
   name: StringAggregateSelectionNonNullable;
-  uid: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
 };
 
 export type TeamConnectInput = {
   teamMembers?: InputMaybe<Array<TeamTeamMembersConnectFieldInput>>;
+};
+
+export type TeamConnectOrCreateWhere = {
+  node: TeamUniqueWhere;
 };
 
 export type TeamConnectWhere = {
@@ -10962,7 +11004,6 @@ export type TeamConnectWhere = {
 export type TeamCreateInput = {
   name: Scalars['String']['input'];
   teamMembers?: InputMaybe<TeamTeamMembersFieldInput>;
-  uid: Scalars['String']['input'];
 };
 
 export type TeamDeleteInput = {
@@ -10989,9 +11030,14 @@ export type TeamEmployeeTeamMembersNodeAggregateSelection = {
   __typename?: 'TeamEmployeeTeamMembersNodeAggregateSelection';
   email: StringAggregateSelectionNullable;
   firstName: StringAggregateSelectionNonNullable;
+  fullName: StringAggregateSelectionNonNullable;
   lastName: StringAggregateSelectionNonNullable;
   phoneNumber: StringAggregateSelectionNullable;
   uid: StringAggregateSelectionNonNullable;
+};
+
+export type TeamOnCreateInput = {
+  name: Scalars['String']['input'];
 };
 
 export type TeamOptions = {
@@ -11101,6 +11147,21 @@ export type TeamTeamMembersNodeAggregationWhereInput = {
   firstName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   firstName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   firstName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  fullName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   lastName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   lastName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   lastName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -11167,10 +11228,13 @@ export type TeamTeamMembersUpdateFieldInput = {
   where?: InputMaybe<TeamTeamMembersConnectionWhere>;
 };
 
+export type TeamUniqueWhere = {
+  uid?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type TeamUpdateInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   teamMembers?: InputMaybe<Array<TeamTeamMembersUpdateFieldInput>>;
-  uid?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type TeamWhere = {
@@ -11199,11 +11263,11 @@ export type TeamWhere = {
   teamMembers_SINGLE?: InputMaybe<EmployeeWhere>;
   /** Return Teams where some of the related Employees match this filter */
   teamMembers_SOME?: InputMaybe<EmployeeWhere>;
-  uid?: InputMaybe<Scalars['String']['input']>;
-  uid_CONTAINS?: InputMaybe<Scalars['String']['input']>;
-  uid_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  uid_IN?: InputMaybe<Array<Scalars['String']['input']>>;
-  uid_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  uid?: InputMaybe<Scalars['ID']['input']>;
+  uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
+  uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
+  uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type TeamsConnection = {

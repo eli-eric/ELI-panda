@@ -33,15 +33,13 @@ export const ContactHallButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const formMethods = useForm({ resolver: yupResolver(schema) })
-  const { watch } = formMethods
-  const employee = watch('employee')
 
   const { data } = useQuery(GET_CONTACT_PERSON_ROLES)
 
   const { control } = useFormContext()
   const { insert, fields: arrayFields } = useFieldArray({ control, name: 'contactPersonsHall' })
 
-  const [getEployee, employeeQuery] = useLazyEmployee(employee?.uid)
+  const [getEployee, employeeQuery] = useLazyEmployee()
 
   const onSubmit = data => {
     insert(arrayFields.length, {
@@ -74,8 +72,8 @@ export const ContactHallButton = () => {
       <Listbox {...fields.role} codebookResponse={data?.contactPersonRoles} />
       <Combobox
         {...fields.employee}
-        onSelect={() => {
-          getEployee()
+        onSelect={value => {
+          if (value.uid) getEployee({ variables: { uid: value.uid } })
         }}
       />
     </HeaderButtonModalComponent>

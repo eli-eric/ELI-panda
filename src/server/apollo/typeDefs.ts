@@ -43,7 +43,7 @@ export const typeDefs = gql`
     contactPersonsHall: [HallContactPerson!]! @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: OUT)
     contactPersonsDept: [Employee!]! @relationship(type: "HAS_CONTACT_PERSON_DEPT", direction: OUT)
     location: Location! @relationship(type: "HAS_ROOM_CARD", direction: IN)
-    team: [Team!]! @relationship(type: "HAS_TEAM", direction: OUT)
+    teams: [Team!]! @relationship(type: "HAS_TEAM", direction: OUT)
     purityClass: String
     prescribedClothing: String
     entryToHvacTent: String
@@ -60,7 +60,7 @@ export const typeDefs = gql`
   }
 
   type Team {
-    uid: String!
+    uid: ID! @id
     name: String!
     teamMembers: [Employee!]! @relationship(type: "BELONGS_TO_TEAM", direction: IN)
   }

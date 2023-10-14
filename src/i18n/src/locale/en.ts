@@ -313,12 +313,13 @@ export const messages = {
   roomCardsPage: {
     head: 'ELI Panda - Room Cards',
     form: {
-      status: { label: 'Status' },
-      location: { label: 'Location' }
+      status: { label: 'Status', placeholder: 'Select Status' },
+      location: { label: 'Location', placeholder: 'Select Location' }
     },
     nestedForm: {
       role: { label: 'Select role' },
-      employee: { label: 'Select employee' }
+      employee: { label: 'Select employee' },
+      team: { label: 'Select team' }
     }
   },
   orderItem: { head: 'ELI Panda - Order Item' },

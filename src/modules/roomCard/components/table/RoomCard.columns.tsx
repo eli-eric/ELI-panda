@@ -1,11 +1,12 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 
-import { PlusButton } from '@/components/Buttons'
+import type { Team } from '@/types/gql/graphql'
 
 import { CellInput } from './CellInput'
 import { ContactDeptButton } from './ContactDeptButton'
 import { ContactHallButton } from './ContactHallButton'
+import { TeamButton } from './TeamButton'
 
 export type RoomCardProperties = {
   name: string
@@ -61,11 +62,11 @@ export const useRoomCardsColumns = () => {
   )
 
   const columnsTeam = useMemo(
-    (): ColumnDef<any, any>[] => [
+    (): ColumnDef<Team, any>[] => [
       {
         header: 'Team',
-        meta: { headerElement: <PlusButton primary /> },
-        accessorKey: 'teamName'
+        meta: { headerElement: <TeamButton /> },
+        accessorKey: 'name'
       }
     ],
     []
