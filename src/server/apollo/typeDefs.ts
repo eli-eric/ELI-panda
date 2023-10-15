@@ -69,7 +69,7 @@ export const typeDefs = gql`
     uid: String!
     teams: [Team!]! @relationship(type: "BELONGS_TO_TEAM", direction: OUT)
     firstName: String!
-    fullName: String!
+    fullName: String
     lastName: String!
     phoneNumber: String
     email: String

@@ -13,14 +13,10 @@ import { HeaderButtonModalComponent } from './HeaderButtonModal.comp'
 
 const nestedForm = message.roomCardsPage.nestedForm
 
-const schema = object().shape({
-  employee: object().nullable().required('Employee is required')
-})
-
 export const ContactDeptButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const formMethods = useForm({ resolver: yupResolver(schema) })
+  const formMethods = useForm({ resolver: yupResolver(makeSchema()) })
 
   const { control } = useFormContext()
   const { insert, fields: arrayFields } = useFieldArray({ control, name: 'contactPersonsDept' })
@@ -30,6 +26,19 @@ export const ContactDeptButton = () => {
   const onSubmit = () => {
     insert(arrayFields.length, {
       ...employeeQuery
+    })
+  }
+
+  function makeSchema() {
+    return object().shape({
+      employee: object()
+        .nullable()
+        .required('Employee is required')
+        .test(
+          'is-unique',
+          'Cannot select the same employee twice',
+          value => !arrayFields.some((field: any) => field?.uid === value?.uid)
+        )
     })
   }
 

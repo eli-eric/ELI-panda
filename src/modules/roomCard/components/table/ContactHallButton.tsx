@@ -9,6 +9,7 @@ import Listbox from '@/components/form/Listbox'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
+import type { ContactPersonRole, Query } from '@/types/gql/graphql'
 
 import { useLazyEmployee } from '../../hooks/useLazyEmployee'
 import { HeaderButtonModalComponent } from './HeaderButtonModal.comp'
@@ -24,28 +25,25 @@ const GET_CONTACT_PERSON_ROLES = gql`
   }
 `
 
-const schema = object().shape({
-  role: object().nullable().required('Role is required'),
-  employee: object().nullable().required('Employee is required')
-})
-
 export const ContactHallButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const formMethods = useForm({ resolver: yupResolver(schema) })
+  const formMethods = useForm({ resolver: yupResolver(makeSchema()) })
 
-  const { data } = useQuery(GET_CONTACT_PERSON_ROLES)
+  const { data } = useQuery<Query>(GET_CONTACT_PERSON_ROLES)
 
   const { control } = useFormContext()
   const { insert, fields: arrayFields } = useFieldArray({ control, name: 'contactPersonsHall' })
 
-  const [getEployee, employeeQuery] = useLazyEmployee()
+  const [getEployee, employee] = useLazyEmployee()
 
-  const onSubmit = data => {
-    insert(arrayFields.length, {
-      employee: employeeQuery,
-      role: data.role
-    })
+  const onSubmit = (data: { role: ContactPersonRole }) => {
+    if (employee) {
+      insert(arrayFields.length, {
+        employee: employee,
+        role: data?.role
+      })
+    }
   }
 
   const fields = useMakeFormFields({
@@ -61,6 +59,20 @@ export const ContactHallButton = () => {
       disabled: false
     }
   })
+
+  function makeSchema() {
+    return object().shape({
+      role: object().nullable().required('Role is required'),
+      employee: object()
+        .nullable()
+        .required('Employee is required')
+        .test(
+          'is-unique',
+          'Cannot select the same employee twice',
+          value => !arrayFields.some((field: any) => field?.employee.uid === value?.uid)
+        )
+    })
+  }
 
   return (
     <HeaderButtonModalComponent

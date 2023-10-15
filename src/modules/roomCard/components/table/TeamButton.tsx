@@ -6,24 +6,21 @@ import { object } from 'yup'
 import Listbox from '@/components/form/Listbox'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
+import type { RoomCard } from '@/types/gql/graphql'
 
 import { useTeams } from '../../hooks/useTeams'
 import { HeaderButtonModalComponent } from './HeaderButtonModal.comp'
 
 const nestedForm = message.roomCardsPage.nestedForm
 
-const schema = object().shape({
-  team: object().nullable().required('Team is required')
-})
-
 export const TeamButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const formMethods = useForm({ resolver: yupResolver(schema) })
+  const formMethods = useForm({ resolver: yupResolver(makeSchema()) })
 
   const { teams } = useTeams()
 
-  const { control } = useFormContext()
+  const { control } = useFormContext<RoomCard>()
   const { insert, fields: arrayFields } = useFieldArray({ control, name: 'teams' })
 
   const onSubmit = data => {
@@ -37,6 +34,19 @@ export const TeamButton = () => {
       label: nestedForm.team.label
     }
   })
+
+  function makeSchema() {
+    return object().shape({
+      team: object()
+        .nullable()
+        .required('Team is required')
+        .test(
+          'is-unique',
+          'Team already selected',
+          value => !arrayFields.some(field => field.uid === value?.uid) // assuming each team has an 'id' property
+        )
+    })
+  }
 
   return (
     <HeaderButtonModalComponent
