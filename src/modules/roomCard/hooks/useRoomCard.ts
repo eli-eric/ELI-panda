@@ -11,8 +11,8 @@ const GET_ROOMCARD = gql`
       cleaningSchedule
       additionalRequirements
       coolingWater
-      indoorEnvironmentQueality
-      copressedAirDistribution
+      indoorEnvironmentQuality
+      compressedAirDistribution
       nitrogenCentralDistribution
       maxPressureInColdDistribution
       pressureInCoolingSystem

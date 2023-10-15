@@ -57,13 +57,13 @@ export const useRoomCardsColumns = () => {
       {
         header: 'Indoor environment queality',
         accessorFn: row => row?.indoorEnvironmentQueality,
-        id: 'indoorEnvironmentQueality',
+        id: 'indoorEnvironmentQuality',
         size: 250
       },
       {
         header: 'Copressed air distribution',
         accessorFn: row => row?.copressedAirDistribution,
-        id: 'copressedAirDistribution'
+        id: 'compressedAirDistribution'
       },
       {
         header: 'Nitrogen central distribution',

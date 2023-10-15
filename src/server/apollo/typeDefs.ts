@@ -50,8 +50,8 @@ export const typeDefs = gql`
     cleaningSchedule: String
     additionalRequirements: String
     coolingWater: String
-    indoorEnvironmentQueality: String
-    copressedAirDistribution: String
+    indoorEnvironmentQuality: String
+    compressedAirDistribution: String
     nitrogenCentralDistribution: String
     maxPressureInColdDistribution: String
     pressureInCoolingSystem: String
