@@ -3,12 +3,15 @@ import { useMemo } from 'react'
 
 import type { RoomCard } from '@/types/gql/graphql'
 
+import { LocationCell } from './LocationCell'
+
 export const useRoomCardsColumns = () => {
   const columns = useMemo(
     (): ColumnDef<RoomCard, any>[] => [
       {
         header: 'Location',
         accessorFn: row => row?.location.name,
+        cell: props => <LocationCell {...props} />,
         id: 'location',
         size: 300,
         meta: { sticky: true }
