@@ -3,6 +3,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import classNames from 'classnames'
 import { useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 
 import ModalComponent from '@/components/modal/modal.comp'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
@@ -68,7 +69,7 @@ export const CodebookTreeModalGraphql = ({
             {row.original.isExpandable ? (
               <div className={classNames('flex items-center', 'cursot-pointer hover:text-gray-400')}>
                 <button>
-                  {row.getIsExpanded() ? (
+                  {row.getIsExpanded() && row.original.children?.length !== 0 ? (
                     <ChevronDownIcon className="w-4 h-4" />
                   ) : (
                     <ChevronRightIcon className="w-4 h-4" />
@@ -121,7 +122,12 @@ export const CodebookTreeModalGraphql = ({
           className={'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'}
           getRowProps={row => ({
             onClick: () => {
-              setItem({ uid: row.original.uid, name: row.original.name })
+              if (!row.original.roomCard) {
+                setItem({ uid: row.original.uid, name: row.original.name })
+              }
+              if (row.original.roomCard) {
+                toast.error('You can not select location with room card')
+              }
             },
             className: classNames(
               item?.uid === row.original.uid ? 'bg-primary-200 hover:bg-primary-200' : '',

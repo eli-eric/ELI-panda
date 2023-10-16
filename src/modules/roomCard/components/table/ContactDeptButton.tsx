@@ -24,6 +24,7 @@ export const ContactDeptButton = () => {
   const [getEployee, employeeQuery] = useLazyEmployee()
 
   const onSubmit = () => {
+    if (!employeeQuery) return
     insert(arrayFields.length, {
       ...employeeQuery
     })

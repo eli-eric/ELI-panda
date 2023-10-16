@@ -10,6 +10,9 @@ const GET_LOCATIONS = gql`
       subLocations {
         uid
       }
+      roomCard {
+        uid
+      }
     }
   }
 `
@@ -22,6 +25,9 @@ const GET_SUBLOCATIONS = gql`
         subLocations {
           uid
         }
+        roomCard {
+          uid
+        }
       }
     }
   }
@@ -29,7 +35,7 @@ const GET_SUBLOCATIONS = gql`
 
 export const useLocation = () => {
   const { data, loading, error } = useQuery<Query>(GET_LOCATIONS, {
-    variables: { where: { parentLocation: null, roomCard: null } }
+    variables: { where: { parentLocation: null } }
   })
   return { locations: data?.locations, loading, error }
 }

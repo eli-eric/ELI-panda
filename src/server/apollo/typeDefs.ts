@@ -33,6 +33,7 @@ export const typeDefs = gql`
   }
 
   type HallContactPerson {
+    uid: ID! @id
     employee: Employee! @relationship(type: "HAS_CONTACT_PERSON", direction: OUT)
     role: ContactPersonRole @relationship(type: "HAS_ROOM_CARD_ROLE", direction: OUT)
   }

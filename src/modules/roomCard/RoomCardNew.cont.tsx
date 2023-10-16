@@ -14,7 +14,7 @@ import { classNames } from '@/utils'
 
 import { SelectLocationTree } from './components/SelectLocation.combo'
 import { RoomCardTables } from './components/table/RoomCard.tables'
-import { formatRoomCardData, useRoomCardCreate } from './hooks/useRoomCardCreate'
+import { makeRoomCardsCreateData, useRoomCardCreate } from './hooks/useRoomCardCreate'
 
 const messages = message.roomCardsPage.form
 
@@ -52,7 +52,7 @@ export const RoomCardNewContainer = () => {
   })
 
   const onSubmit = handleSubmit(data => {
-    createRoomCard({ variables: formatRoomCardData(data) })
+    createRoomCard({ variables: makeRoomCardsCreateData(data) })
   })
 
   return (

@@ -31,6 +31,7 @@ export const SelectLocationTree = ({
         locations.map(location => ({
           name: location.name,
           uid: location.uid,
+          roomCard: location.roomCard,
           isExpandable: location.subLocations.length > 0
         }))
       )
@@ -46,7 +47,7 @@ export const SelectLocationTree = ({
   const fetchChildren = (uid: string) => {
     setUid(uid)
     getSubLocations({
-      variables: { where: { uid, roomCard: null } }
+      variables: { where: { uid } }
     })
   }
 
