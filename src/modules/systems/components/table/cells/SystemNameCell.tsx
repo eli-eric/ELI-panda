@@ -2,7 +2,7 @@ import { ArrowsRightLeftIcon, ChevronDownIcon, ChevronRightIcon } from '@heroico
 import type { CellContext } from '@tanstack/react-table'
 import classNames from 'classnames'
 import Link from 'next/link'
-import { Fragment, useContext } from 'react'
+import { Fragment } from 'react'
 import { isMobile } from 'react-device-detect'
 import { useDrag } from 'react-dnd'
 import { toast } from 'react-hot-toast'
@@ -25,6 +25,7 @@ import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { SystemsContext } from '@/modules/systems/Systems.cont'
 import type { SystemDetail } from '@/modules/systems/types/responses'
 import { filterSubsystem } from '@/modules/systems/utils'
+import { useHoveringId } from '@/store/useHoveringId'
 import { PATH } from '@/types/constants/paths'
 import { createMessageValues } from '@/utils/formatters'
 
@@ -51,7 +52,7 @@ export const SystemNameCell = ({
 }: SystemNameCellProps) => {
   const { original, id } = row
   const { system } = useEndpoint({ uid: original.uid })
-  const { isHoveringId } = useContext(SystemsContext)
+  const { hoveringId } = useHoveringId()
   const { mutate } = useSystems(tableId)
   const { formatMessage: fm } = useIntl()
 
@@ -110,7 +111,7 @@ export const SystemNameCell = ({
             <span className="pl-5">{getValue()}</span>
           </div>
         )}
-        {!hideButtons && (isHoveringId === id || isMobile) && (
+        {!hideButtons && (hoveringId === id || isMobile) && (
           <Fragment>
             {enableDragAndDrop ? (
               <TableButtonsWrapper>

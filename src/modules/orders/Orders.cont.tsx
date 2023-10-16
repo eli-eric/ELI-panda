@@ -1,7 +1,8 @@
-import { memo, useState } from 'react'
+import { memo } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
+import { useHoveringId } from '@/store/useHoveringId'
 import { classNames } from '@/utils'
 
 import { Pagination } from '../shared/table/Pagination'
@@ -18,8 +19,8 @@ const MemoizedTable = memo(PandaTable)
 
 const OrdersContainer = () => {
   const { orderList, loading, error } = useOrders()
-  const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
-  const Name = props => <NameCell {...props} isHoveringId={isHoveringId} />
+  const { setHoveringId } = useHoveringId()
+  const Name = props => <NameCell {...props} />
   const columns = useOrderColumns({ NameCell: Name })
 
   return (
@@ -37,10 +38,10 @@ const OrdersContainer = () => {
             getRowProps: ({ original: { orderStatus, deliveryStatus }, id }) => ({
               className: classNames('bg-white', getColorClassStatus(orderStatus, deliveryStatus)),
               onMouseEnter: () => {
-                setIsHoveringId(id)
+                setHoveringId(id)
               },
               onMouseLeave: () => {
-                setIsHoveringId(undefined)
+                setHoveringId(undefined)
               }
             }),
             columns,

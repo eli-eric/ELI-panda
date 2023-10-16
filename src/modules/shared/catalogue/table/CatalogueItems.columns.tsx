@@ -16,18 +16,11 @@ const messages = message.cataloguePage.itemList.header
 type Props = {
   tableId?: string
   additionalColumn?: ColumnDef<CatalogueItem, any>
-  isHoveringId?: number | string
   categoryUID?: string
   catalogueItems?: CatalogueItemsResponse
 }
 
-export const useCatalogueItemsColumns = ({
-  tableId,
-  additionalColumn,
-  isHoveringId,
-  categoryUID,
-  catalogueItems
-}: Props) => {
+export const useCatalogueItemsColumns = ({ tableId, additionalColumn, categoryUID, catalogueItems }: Props) => {
   const intl = useIntl()
 
   const { catalogueCategories } = useCategoryList()
@@ -38,15 +31,7 @@ export const useCatalogueItemsColumns = ({
         header: intl.formatMessage({ id: messages.name }),
         accessorFn: row => row.name,
         id: 'name',
-        cell: props => (
-          <NameCell
-            {...props}
-            toDelete={!additionalColumn}
-            tableId={tableId}
-            isHoveringId={isHoveringId}
-            categoryUID={categoryUID}
-          />
-        ),
+        cell: props => <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} categoryUID={categoryUID} />,
         size: 300,
         meta: { sticky: true }
       },
@@ -107,7 +92,7 @@ export const useCatalogueItemsColumns = ({
       columns.push(additionalColumn)
     }
     return columns
-  }, [intl, catalogueItems, catalogueCategories, additionalColumn, tableId, isHoveringId, categoryUID])
+  }, [intl, catalogueItems, catalogueCategories, additionalColumn, tableId, categoryUID])
 
   return columns
 }

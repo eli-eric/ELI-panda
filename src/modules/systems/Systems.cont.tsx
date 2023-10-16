@@ -1,8 +1,9 @@
 import classNames from 'classnames'
 import type { FC } from 'react'
-import { createContext, useState } from 'react'
+import { createContext } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
+import { useHoveringId } from '@/store/useHoveringId'
 
 import { SystemsTable } from './components/table/Systems.table'
 
@@ -31,36 +32,34 @@ export const SystemsContainer: FC<Props> = ({
   hideButtons = false,
   RightSearchBarElement
 }: Props) => {
-  const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
+  const { setHoveringId } = useHoveringId()
 
   return (
-    <SystemsContext.Provider value={{ isHoveringId: isHoveringId }}>
-      <TableLayoutContainer className={className}>
-        <SystemsTable
-          hideButtons={hideButtons}
-          enableDragAndDrop={enableDragAndDrop}
-          tableId={tableId}
-          RightSearchBarElement={RightSearchBarElement}
-          pageSizeDefault={50}
-          className={'relative overflow-scroll scrollbar-style'}
-          getRowProps={({ id, original }) => ({
-            onMouseEnter: () => {
-              setIsHoveringId(id)
-            },
-            onMouseLeave: () => {
-              setIsHoveringId(undefined)
-            },
-            className: classNames(original?.physicalItem && 'font-bold text-gray-700'),
-            dropSettings
-          })}
-          settings={{
-            enableSorting: true,
-            enableColumnHiding: true,
-            enableQueryURL: enableQueryURL,
-            enableColumnReordering: true
-          }}
-        />
-      </TableLayoutContainer>
-    </SystemsContext.Provider>
+    <TableLayoutContainer className={className}>
+      <SystemsTable
+        hideButtons={hideButtons}
+        enableDragAndDrop={enableDragAndDrop}
+        tableId={tableId}
+        RightSearchBarElement={RightSearchBarElement}
+        pageSizeDefault={50}
+        className={'relative overflow-scroll scrollbar-style'}
+        getRowProps={({ id, original }) => ({
+          onMouseEnter: () => {
+            setHoveringId(id)
+          },
+          onMouseLeave: () => {
+            setHoveringId(undefined)
+          },
+          className: classNames(original?.physicalItem && 'font-bold text-gray-700'),
+          dropSettings
+        })}
+        settings={{
+          enableSorting: true,
+          enableColumnHiding: true,
+          enableQueryURL: enableQueryURL,
+          enableColumnReordering: true
+        }}
+      />
+    </TableLayoutContainer>
   )
 }

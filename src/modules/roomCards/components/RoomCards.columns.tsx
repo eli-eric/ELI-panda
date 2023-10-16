@@ -11,7 +11,7 @@ export const useRoomCardsColumns = () => {
       {
         header: 'Location',
         accessorFn: row => row?.location.name,
-        cell: props => <LocationCell {...props} />,
+        cell: LocationCell,
         id: 'location',
         size: 300,
         meta: { sticky: true }
