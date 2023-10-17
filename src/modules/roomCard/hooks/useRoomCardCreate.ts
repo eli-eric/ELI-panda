@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast'
 
 import { PATH } from '@/types/constants/paths'
 import type { Mutation, RoomCard } from '@/types/gql/graphql'
+import { connectN } from '@/utils/graphql/mutations'
 
 const CREATE_ROOM_CARD = gql`
   mutation CreateRoomCards($input: [RoomCardCreateInput!]!) {
@@ -19,53 +20,22 @@ export const makeRoomCardsCreateData = (formData?: RoomCard) => ({
   input: [
     {
       ...formData,
-      location: {
-        connect: {
-          where: {
-            node: {
-              uid: formData?.location.uid
-            }
-          }
-        }
-      },
+      location: connectN(formData?.location.uid),
       contactPersonsHall: {
         create: formData?.contactPersonsHall.map(contactPerson => ({
           node: {
             employee: {
-              connect: {
-                overwrite: true,
-                where: {
-                  node: {
-                    uid: contactPerson.employee.uid
-                  }
-                }
-              }
+              connect: connectN(contactPerson.employee?.uid)
             },
-            role: {
-              connect: {
-                where: { node: { uid: contactPerson.role?.uid } }
-              }
-            }
+            role: connectN(contactPerson.role?.uid)
           }
         }))
       },
       contactPersonsDept: {
-        connect: formData?.contactPersonsDept.map(contactPerson => ({
-          where: {
-            node: {
-              uid: contactPerson.uid
-            }
-          }
-        }))
+        connect: formData?.contactPersonsDept.map(contactPerson => connectN(contactPerson.uid))
       },
       teams: {
-        connect: formData?.teams.map(team => ({
-          where: {
-            node: {
-              uid: team.uid
-            }
-          }
-        }))
+        connect: formData?.teams.map(team => connectN(team.uid))
       }
     }
   ]

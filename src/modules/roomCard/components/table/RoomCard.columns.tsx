@@ -1,9 +1,10 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 
-import type { Team } from '@/types/gql/graphql'
+import type { HallContactPerson, Team } from '@/types/gql/graphql'
 
 import { CellInput } from './CellInput'
+import { CellWithDelete } from './CellWithDelete'
 import { ContactDeptButton } from './ContactDeptButton'
 import { ContactHallButton } from './ContactHallButton'
 import { TeamButton } from './TeamButton'
@@ -16,22 +17,26 @@ export type RoomCardProperties = {
 
 export const useRoomCardsColumns = () => {
   const columnsContactHall = useMemo(
-    (): ColumnDef<any, any>[] => [
+    (): ColumnDef<HallContactPerson, any>[] => [
       {
         header: 'Contact - Hall',
         meta: { headerElement: <ContactHallButton /> },
         columns: [
           {
-            accessorKey: 'role',
+            accessorFn: ({ role }) => role?.name,
+            id: 'role',
             meta: { noHeader: true },
             size: 200
           },
           {
-            accessorKey: 'fullName',
+            accessorFn: ({ employee: { fullName } }) => fullName,
+            id: 'fullName',
             meta: { noHeader: true }
           },
           {
-            accessorKey: 'phone',
+            accessorFn: ({ employee: { phoneNumber } }) => phoneNumber,
+            id: 'phone',
+            cell: props => <CellWithDelete {...props} formName="contactPersonsHall" />,
             meta: { noHeader: true }
           }
         ]
@@ -53,6 +58,7 @@ export const useRoomCardsColumns = () => {
           },
           {
             accessorKey: 'phone',
+            cell: props => <CellWithDelete {...props} formName="contactPersonsDept" />,
             meta: { noHeader: true }
           }
         ]
@@ -66,7 +72,8 @@ export const useRoomCardsColumns = () => {
       {
         header: 'Team',
         meta: { headerElement: <TeamButton /> },
-        accessorKey: 'name'
+        accessorKey: 'name',
+        cell: props => <CellWithDelete {...props} formName="teams" />
       }
     ],
     []

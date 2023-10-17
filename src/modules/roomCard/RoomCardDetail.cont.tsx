@@ -28,15 +28,8 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
 
   const status = watch('status')
   const teams = watch('teams')
-  const contactPersonsHall = watch('contactPersonsHall')?.map(personHall => ({
-    fullName: personHall.employee.fullName,
-    phone: personHall?.employee.phoneNumber,
-    role: personHall?.role?.name
-  }))
-  const contactPersonsDept = watch('contactPersonsDept')?.map(personDept => ({
-    fullName: personDept.fullName,
-    phone: personDept.phoneNumber
-  }))
+  const contactPersonsHall = watch('contactPersonsHall')
+  const contactPersonsDept = watch('contactPersonsDept')
 
   useEffect(() => {
     if (roomCard) {
@@ -52,7 +45,6 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
     },
     status: {
       name: 'status',
-      //label: messages.form.status.label,
       disabled: false
     }
   })
