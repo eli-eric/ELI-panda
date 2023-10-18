@@ -1,14 +1,12 @@
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 
-import { DELIVERY_STATUS } from '../types'
-import { ORDER_STATUS } from '../types'
+import { DELIVERY_STATUS, ORDER_STATUS } from '../types'
 
 export const getColorClassStatus = (orderStatus: CodebookType, deliveryStatus: DELIVERY_STATUS) => {
+  if (!orderStatus ?? !deliveryStatus) {
+    return 'bg-white'
+  }
   const statusMappingColor = [
-    {
-      statuses: [ORDER_STATUS.ORDER_COMPLETED, DELIVERY_STATUS.COMPLETE],
-      colorClass: 'bg-lime-400'
-    },
     {
       statuses: [
         ORDER_STATUS.CANCELLED,
@@ -38,6 +36,10 @@ export const getColorClassStatus = (orderStatus: CodebookType, deliveryStatus: D
     {
       statuses: [ORDER_STATUS.PLANNED, DELIVERY_STATUS.NONE],
       colorClass: 'bg-blue-100'
+    },
+    {
+      statuses: [ORDER_STATUS.ORDER_COMPLETED, DELIVERY_STATUS.COMPLETE],
+      colorClass: 'bg-lime-400'
     }
     // Add more mappings as needed
   ]
