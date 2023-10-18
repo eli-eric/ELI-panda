@@ -4,10 +4,7 @@ export const typeDefs = gql`
   type JWT @jwt {
     roles: [String!]!
   }
-  type Query {
-    locations: [Location!]!
-    roomCards: [RoomCard!]!
-  }
+ 
 
   type Location {
     uid: ID! @id
@@ -36,7 +33,6 @@ export const typeDefs = gql`
     uid: ID! @id
     employee: Employee! @relationship(type: "HAS_CONTACT_PERSON", direction: OUT)
     role: ContactPersonRole @relationship(type: "HAS_ROOM_CARD_ROLE", direction: OUT)
-    roomCard: RoomCard! @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: IN)
   }
 
   type RoomCard {
@@ -64,12 +60,10 @@ export const typeDefs = gql`
   type Team {
     uid: ID! @id
     name: String!
-    teamMembers: [Employee!]! @relationship(type: "BELONGS_TO_TEAM", direction: IN)
   }
 
   type Employee {
     uid: String!
-    teams: [Team!]! @relationship(type: "BELONGS_TO_TEAM", direction: OUT)
     firstName: String!
     fullName: String
     lastName: String!
