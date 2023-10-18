@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 
 import type { HallContactPerson, Team } from '@/types/gql/graphql'
 
+import { useRoomCardStore } from '../../store/useRoomCardStore'
 import { CellInput } from './CellInput'
 import { CellWithDelete } from './CellWithDelete'
 import { ContactDeptButton } from './ContactDeptButton'
@@ -16,6 +17,8 @@ export type RoomCardProperties = {
 }
 
 export const useRoomCardsColumns = () => {
+  const { setDeleteHallContact, setDisconnectDeptContact, setDisconnectTeam } = useRoomCardStore()
+
   const columnsContactHall = useMemo(
     (): ColumnDef<HallContactPerson, any>[] => [
       {
@@ -36,13 +39,15 @@ export const useRoomCardsColumns = () => {
           {
             accessorFn: ({ employee: { phoneNumber } }) => phoneNumber,
             id: 'phone',
-            cell: props => <CellWithDelete {...props} formName="contactPersonsHall" />,
+            cell: props => (
+              <CellWithDelete {...props} formName="contactPersonsHall" setDeleteItem={setDeleteHallContact} />
+            ),
             meta: { noHeader: true }
           }
         ]
       }
     ],
-    []
+    [setDeleteHallContact]
   )
 
   const columnsContactDept = useMemo(
@@ -58,13 +63,15 @@ export const useRoomCardsColumns = () => {
           },
           {
             accessorKey: 'phone',
-            cell: props => <CellWithDelete {...props} formName="contactPersonsDept" />,
+            cell: props => (
+              <CellWithDelete {...props} formName="contactPersonsDept" setDeleteItem={setDisconnectDeptContact} />
+            ),
             meta: { noHeader: true }
           }
         ]
       }
     ],
-    []
+    [setDisconnectDeptContact]
   )
 
   const columnsTeam = useMemo(
@@ -73,10 +80,10 @@ export const useRoomCardsColumns = () => {
         header: 'Team',
         meta: { headerElement: <TeamButton /> },
         accessorKey: 'name',
-        cell: props => <CellWithDelete {...props} formName="teams" />
+        cell: props => <CellWithDelete {...props} formName="teams" setDeleteItem={setDisconnectTeam} />
       }
     ],
-    []
+    [setDisconnectTeam]
   )
 
   const columnsCleanRooms = useMemo(
