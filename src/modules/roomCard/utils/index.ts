@@ -71,11 +71,7 @@ export const updateRoomCardVariables = ({
     ],
     contactPersonsHall: [
       {
-        delete: deleteHallContacts.map(hallContact => {
-          console.log('hallContact', hallContact)
-
-          return whereN(hallContact?.uid)
-        }),
+        delete: deleteHallContacts.map(hallContact => whereN(hallContact?.uid)),
         create: newHallContacts.map(hallContact => ({
           node: {
             employee: {

@@ -1,4 +1,5 @@
-import { useForm } from 'react-hook-form'
+import { useEffect } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
@@ -15,6 +16,7 @@ import { classNames } from '@/utils'
 import { SelectLocationTree } from './components/SelectLocation.combo'
 import { RoomCardTables } from './components/table/RoomCard.tables'
 import { makeRoomCardsCreateData, useRoomCardCreate } from './hooks/useRoomCardCreate'
+import { useRoomCardStore } from './store/useRoomCardStore'
 
 const messages = message.roomCardsPage.form
 
@@ -22,12 +24,16 @@ export const RoomCardNewContainer = () => {
   const formMethods = useForm<RoomCard>()
   const { watch, handleSubmit } = formMethods
   const { createRoomCard } = useRoomCardCreate()
+  const contactPersonsHall = useWatch({ control: formMethods.control, name: 'contactPersonsHall' })
+
+  const { clear } = useRoomCardStore()
 
   const statuses = Object.values(RoomCardStatus).map(value => value)
 
+  useEffect(() => () => clear(), [clear])
+
   const status = watch('status')
   const teams = watch('teams')
-  const contactPersonsHall = watch('contactPersonsHall')
   const contactPersonsDept = watch('contactPersonsDept')
 
   const fields = useMakeFormFields({
@@ -75,7 +81,7 @@ export const RoomCardNewContainer = () => {
       </PageHead>
       <RoomCardTables
         {...{
-          contactPersonsHall,
+          contactPersonsHall: contactPersonsHall,
           contactPersonsDept,
           teams
         }}

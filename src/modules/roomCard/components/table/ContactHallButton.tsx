@@ -2,6 +2,7 @@ import { gql, useQuery } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
+import uuid from 'react-uuid'
 import { object } from 'yup'
 
 import Combobox from '@/components/form/Combobox'
@@ -44,7 +45,8 @@ export const ContactHallButton = () => {
     if (employee) {
       insert(arrayFields.length, {
         employee: employee,
-        role: data?.role
+        role: data?.role,
+        uuid: uuid()
       })
       setNewHallContact({ employee: employee, role: data?.role })
     }

@@ -27,8 +27,15 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   const formMethods = useForm<RoomCard>({ defaultValues: roomCard })
   const { reset, watch } = formMethods
   const [updateRoomCard] = useRoomCardUpdate()
-  const { deleteHallContacts, disconnectDeptContacts, disconnectTeams, newDeptContacts, newHallContacts, newTeams } =
-    useRoomCardStore()
+  const {
+    clear,
+    deleteHallContacts,
+    disconnectDeptContacts,
+    disconnectTeams,
+    newDeptContacts,
+    newHallContacts,
+    newTeams
+  } = useRoomCardStore()
 
   const statuses = Object.values(RoomCardStatus).map(value => value)
 
@@ -37,9 +44,14 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   const contactPersonsHall = watch('contactPersonsHall')
   const contactPersonsDept = watch('contactPersonsDept')
 
+  useEffect(() => () => clear(), [clear])
+
   useEffect(() => {
     if (roomCard) {
-      reset(roomCard)
+      reset({
+        ...roomCard,
+        contactPersonsHall: roomCard.contactPersonsHall?.map(contact => ({ ...contact, uuid: contact.uid }))
+      })
     }
   }, [roomCard, reset])
 
