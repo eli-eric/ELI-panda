@@ -1,25 +1,19 @@
-export const connectN = (uid?: string) => ({
-  connect: {
-    where: {
-      node: {
-        uid
-      }
+export const whereN = (uid?: string) => ({
+  where: {
+    node: {
+      uid
     }
   }
+})
+
+export const connectN = (uid?: string) => ({
+  connect: whereN(uid)
 })
 
 export const disconnectN = (uid?: string) => ({
-  disconnect: {
-    where: {
-      node: {
-        uid
-      }
-    }
-  }
+  disconnect: whereN(uid)
 })
 
 export const deleteN = (uid?: string) => ({
-  delete: {
-    uid
-  }
+  delete: whereN(uid)
 })

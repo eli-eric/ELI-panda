@@ -1,5 +1,4 @@
-import { Fragment } from 'react'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 
 import Combobox from '@/components/form/Combobox'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
@@ -19,7 +18,6 @@ export const SelectLocationTree = ({
   }
 }) => {
   const [open, setOpen] = useState(false)
-
   const [codebooktree, setCodebooktree] = useState<Codebooktree[]>([])
   const { locations } = useLocation()
   const { getSubLocations, subLocations, loading } = useSubLocations()

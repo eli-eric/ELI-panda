@@ -14,6 +14,9 @@ import { classNames } from '@/utils'
 
 import { RoomCardTables } from './components/table/RoomCard.tables'
 import { useRoomCard } from './hooks/useRoomCard'
+import { useRoomCardUpdate } from './hooks/useRoomCardUpdate'
+import { useRoomCardStore } from './store/useRoomCardStore'
+import { updateRoomCardVariables } from './utils'
 
 interface Props {
   roomCardUid?: string
@@ -23,6 +26,9 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   const { roomCard } = useRoomCard(roomCardUid)
   const formMethods = useForm<RoomCard>({ defaultValues: roomCard })
   const { reset, watch } = formMethods
+  const [updateRoomCard] = useRoomCardUpdate()
+  const { deleteHallContacts, disconnectDeptContacts, disconnectTeams, newDeptContacts, newHallContacts, newTeams } =
+    useRoomCardStore()
 
   const statuses = Object.values(RoomCardStatus).map(value => value)
 
@@ -37,6 +43,20 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
     }
   }, [roomCard, reset])
 
+  const onSubmit = (roomCard: RoomCard) => {
+    updateRoomCard({
+      variables: updateRoomCardVariables({
+        roomCard,
+        deleteHallContacts,
+        disconnectDeptContacts,
+        disconnectTeams,
+        newDeptContacts,
+        newHallContacts,
+        newTeams
+      })
+    })
+  }
+
   const fields = useMakeFormFields({
     location: {
       name: 'location',
@@ -50,7 +70,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   })
 
   return (
-    <Form {...{ formMethods }}>
+    <Form {...{ formMethods }} onSubmit={onSubmit}>
       <PageHead>
         <div className="flex items-center space-x-4">
           <Tooltip content={`Room status: ${status}`}>
@@ -69,7 +89,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
           <Listbox {...fields.status} className="w-72" customOptions={statuses} />
         </div>
         <div className="space-x-2">
-          <Button type="button" primary>
+          <Button type="submit" primary>
             Save
           </Button>
           <Button>Cancel</Button>

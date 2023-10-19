@@ -1,6 +1,12 @@
 import { create } from 'zustand'
 
-import type { Employee, HallContactPerson, Team } from '@/types/gql/graphql'
+import type { ContactPersonRole, Employee, Team } from '@/types/gql/graphql'
+
+export type HallContactPerson = {
+  employee: Employee
+  role: ContactPersonRole
+  uid?: string
+}
 
 type RoomCardStore = {
   newHallContacts: HallContactPerson[]

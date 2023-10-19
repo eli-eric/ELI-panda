@@ -12,6 +12,7 @@ import { CODEBOOK } from '@/types/constants/codebook'
 import type { ContactPersonRole, Query } from '@/types/gql/graphql'
 
 import { useLazyEmployee } from '../../hooks/useLazyEmployee'
+import { useRoomCardStore } from '../../store/useRoomCardStore'
 import { HeaderButtonModalComponent } from './HeaderButtonModal.comp'
 
 const nestedForm = message.roomCardsPage.nestedForm
@@ -30,6 +31,8 @@ export const ContactHallButton = () => {
 
   const formMethods = useForm({ resolver: yupResolver(makeSchema()) })
 
+  const { setNewHallContact } = useRoomCardStore()
+
   const { data } = useQuery<Query>(GET_CONTACT_PERSON_ROLES)
 
   const { control } = useFormContext()
@@ -43,6 +46,7 @@ export const ContactHallButton = () => {
         employee: employee,
         role: data?.role
       })
+      setNewHallContact({ employee: employee, role: data?.role })
     }
   }
 

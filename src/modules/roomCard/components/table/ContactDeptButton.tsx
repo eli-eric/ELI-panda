@@ -9,12 +9,14 @@ import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 
 import { useLazyEmployee } from '../../hooks/useLazyEmployee'
+import { useRoomCardStore } from '../../store/useRoomCardStore'
 import { HeaderButtonModalComponent } from './HeaderButtonModal.comp'
 
 const nestedForm = message.roomCardsPage.nestedForm
 
 export const ContactDeptButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { setNewDeptContact } = useRoomCardStore()
 
   const formMethods = useForm({ resolver: yupResolver(makeSchema()) })
 
@@ -28,6 +30,7 @@ export const ContactDeptButton = () => {
     insert(arrayFields.length, {
       ...employeeQuery
     })
+    setNewDeptContact(employeeQuery)
   }
 
   function makeSchema() {
