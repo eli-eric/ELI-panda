@@ -33,8 +33,10 @@ type RoomCardUpdateType = {
   disconnectTeams: Team[]
   newDeptContacts: Employee[]
   disconnectDeptContacts: Employee[]
+  uid?: string
 }
 export const updateRoomCardVariables = ({
+  uid,
   roomCard,
   newDeptContacts,
   disconnectDeptContacts,
@@ -44,7 +46,7 @@ export const updateRoomCardVariables = ({
   disconnectTeams
 }: RoomCardUpdateType): { where: RoomCardWhere; update: RoomCardUpdateInput } => ({
   where: {
-    uid: roomCard.uid
+    uid: uid
   },
   update: {
     additionalRequirements: roomCard.additionalRequirements,
@@ -69,7 +71,11 @@ export const updateRoomCardVariables = ({
     ],
     contactPersonsHall: [
       {
-        delete: deleteHallContacts.map(hallContact => whereN(hallContact?.uid)),
+        delete: deleteHallContacts.map(hallContact => {
+          console.log('hallContact', hallContact)
+
+          return whereN(hallContact?.uid)
+        }),
         create: newHallContacts.map(hallContact => ({
           node: {
             employee: {

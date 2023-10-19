@@ -19,11 +19,12 @@ export const CellWithDelete = ({
   const { control } = useFormContext()
   const { remove, fields } = useFieldArray({ control, name: formName })
   // any type because of react-table and component is for more contexts
-  const index = fields.findIndex((field: any) => field?.uid === uid || field?.employee.uid === employee?.uid)
-  const item = fields.find((field: any) => field?.uid === uid || field?.employee.uid === employee?.uid)
+  const index = fields.findIndex((field: any) => field?.uid === uid)
+  const item = fields.find((field: any) => field?.uid === uid)
 
   const onDeleteClick = () => {
     remove(index)
+    console.log('item', item)
     setDeleteItem(item)
   }
   return (

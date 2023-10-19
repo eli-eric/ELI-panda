@@ -46,6 +46,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   const onSubmit = (roomCard: RoomCard) => {
     updateRoomCard({
       variables: updateRoomCardVariables({
+        uid: roomCardUid,
         roomCard,
         deleteHallContacts,
         disconnectDeptContacts,

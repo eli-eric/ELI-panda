@@ -20,6 +20,7 @@ const GET_ROOMCARD = gql`
       humidity
       status
       contactPersonsHall {
+        uid
         role {
           uid
           name
