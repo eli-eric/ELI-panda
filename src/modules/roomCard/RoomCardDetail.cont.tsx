@@ -1,13 +1,17 @@
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 
-import { Button } from '@/components/Buttons'
+import { BackButton, Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import Listbox from '@/components/form/Listbox'
 import { PageHead } from '@/components/layout/PageHead'
 import { Tooltip } from '@/components/Tooltip'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { CODEBOOK } from '@/types/constants/codebook'
+import { PATH } from '@/types/constants/paths'
 import type { RoomCard } from '@/types/gql/graphql'
 import { RoomCardStatus } from '@/types/gql/graphql'
 import { classNames } from '@/utils'
@@ -23,6 +27,7 @@ interface Props {
 }
 
 export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
+  const router = useRouter()
   const { roomCard } = useRoomCard(roomCardUid)
   const formMethods = useForm<RoomCard>({ defaultValues: roomCard })
   const { reset, watch } = formMethods
@@ -36,7 +41,6 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
     newHallContacts,
     newTeams
   } = useRoomCardStore()
-
   const statuses = Object.values(RoomCardStatus).map(value => value)
 
   const status = watch('status')
@@ -56,18 +60,48 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   }, [roomCard, reset])
 
   const onSubmit = (roomCard: RoomCard) => {
-    updateRoomCard({
-      variables: updateRoomCardVariables({
-        uid: roomCardUid,
-        roomCard,
-        deleteHallContacts,
-        disconnectDeptContacts,
-        disconnectTeams,
-        newDeptContacts,
-        newHallContacts,
-        newTeams
-      })
-    })
+    toast.promise(
+      updateRoomCard({
+        variables: updateRoomCardVariables({
+          uid: roomCardUid,
+          roomCard,
+          deleteHallContacts,
+          disconnectDeptContacts,
+          disconnectTeams,
+          newDeptContacts,
+          newHallContacts,
+          newTeams
+        })
+      }),
+      {
+        loading: 'Saving room card...',
+        success: 'Room card was successfully updated',
+        error: 'Error while saving room card'
+      }
+    )
+  }
+
+  const onSubmitAndExit = (roomCard: RoomCard) => {
+    toast.promise(
+      updateRoomCard({
+        variables: updateRoomCardVariables({
+          uid: roomCardUid,
+          roomCard,
+          deleteHallContacts,
+          disconnectDeptContacts,
+          disconnectTeams,
+          newDeptContacts,
+          newHallContacts,
+          newTeams
+        }),
+        onCompleted: () => router.push(PATH.ROOM_CARDS)
+      }),
+      {
+        loading: 'Saving room card...',
+        success: 'Room card was successfully updated',
+        error: 'Error while saving room card'
+      }
+    )
   }
 
   const fields = useMakeFormFields({
@@ -83,7 +117,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   })
 
   return (
-    <Form {...{ formMethods }} onSubmit={onSubmit}>
+    <Form {...{ formMethods }} onSubmit={onSubmit} enableLeaveWarning={true}>
       <PageHead>
         <div className="flex items-center space-x-4">
           <Tooltip content={`Room status: ${status}`}>
@@ -101,11 +135,16 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
           <h1 className="text-2xl font-semibold">{roomCard?.location.code}</h1>
           <Listbox {...fields.status} className="w-72" customOptions={statuses} />
         </div>
-        <div className="space-x-2">
+        <div className="flex space-x-2">
           <Button type="submit" primary>
             Save
           </Button>
-          <Button>Cancel</Button>
+          <Button type="submit" primary onClick={formMethods.handleSubmit(onSubmitAndExit)}>
+            Save and exit
+          </Button>
+          <Link href={PATH.ROOM_CARDS}>
+            <BackButton buttonSize="large" />
+          </Link>
         </div>
         {/* <SelectLocationTree locationField={fields.location} /> */}
       </PageHead>

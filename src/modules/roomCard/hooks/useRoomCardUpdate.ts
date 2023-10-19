@@ -2,7 +2,6 @@ import type { ApolloCache, DefaultContext, MutationTuple, OperationVariables } f
 import { gql, useMutation } from '@apollo/client'
 
 import type { Mutation } from '../../../types/gql/graphql'
-import { useRoomCardStore } from '../store/useRoomCardStore'
 
 const UPDATE_ROOM_CARD = gql`
   mutation Mutation($where: RoomCardWhere, $update: RoomCardUpdateInput) {
@@ -53,9 +52,7 @@ const UPDATE_ROOM_CARD = gql`
 `
 
 export const useRoomCardUpdate = (): MutationTuple<Mutation, OperationVariables, DefaultContext, ApolloCache<any>> => {
-  const { clear } = useRoomCardStore()
   const mutate = useMutation<Mutation>(UPDATE_ROOM_CARD, {
-    onCompleted: clear,
     refetchQueries: ['RoomCards', 'RoomCard']
   })
 
