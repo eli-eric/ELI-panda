@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client'
 import { useQueryState } from 'next-usequerystate'
+import { toast } from 'react-hot-toast'
 
 import type { Query } from '@/types/gql/graphql'
 
@@ -42,6 +43,9 @@ export const useRoomCards = () => {
           }
         ]
       }
+    },
+    onError: () => {
+      toast.error('Error loading room cards')
     }
   })
 

@@ -1,4 +1,5 @@
 import { gql, useQuery } from '@apollo/client'
+import { toast } from 'react-hot-toast'
 
 import type { Query } from '@/types/gql/graphql'
 
@@ -50,8 +51,11 @@ const GET_ROOMCARD = gql`
 `
 
 export const useRoomCard = (roomCardUid?: string) => {
-  const { data, error } = useQuery<Query>(GET_ROOMCARD, {
-    variables: { where: { uid: roomCardUid } }
+  const { data, error, loading } = useQuery<Query>(GET_ROOMCARD, {
+    variables: { where: { uid: roomCardUid } },
+    onError: () => {
+      toast.error('Something went wrong during loading room card')
+    }
   })
-  return { roomCard: data?.roomCards[0], error }
+  return { roomCard: data?.roomCards[0], error, loading }
 }

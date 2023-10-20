@@ -63,6 +63,6 @@ export const NAV_BAR_CONFIG: NavigationType = [
   {
     name: 'Room Cards',
     links: [{ path: PATH.ROOM_CARDS }],
-    role: ROLE.BASICS
+    role: ROLE.ROOM_CARD_VIEW
   }
 ]

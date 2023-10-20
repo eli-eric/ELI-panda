@@ -11,6 +11,6 @@ export enum ROLE {
   ORDERS_DELIVERY_EDIT = 'orders-delivery-edit',
   SUPPLIER_EDIT = 'supplier-edit',
   CODEBOOKS_ADMIN = 'codebooks-admin',
-  ROOM_CARD_VIEW = 'room-card-view',
-  ROOM_CARD_EDIT = 'room-card-edit'
+  ROOM_CARD_VIEW = 'room-cards-view',
+  ROOM_CARD_EDIT = 'room-cards-edit'
 }

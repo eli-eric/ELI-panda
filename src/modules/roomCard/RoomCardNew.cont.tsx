@@ -1,11 +1,9 @@
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
-import { Form } from '@/components/form/Form'
 import Listbox from '@/components/form/Listbox'
-import { PageHead } from '@/components/layout/PageHead'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
@@ -13,11 +11,9 @@ import { PATH } from '@/types/constants/paths'
 import type { RoomCard } from '@/types/gql/graphql'
 import { RoomCardStatus } from '@/types/gql/graphql'
 
-import { HeaderButtons } from './components/HeaderButtons'
-import { RoomCardStatusIcon } from './components/RoomCardStatusIcon'
 import { SelectLocationTree } from './components/SelectLocation.combo'
-import { RoomCardTables } from './components/table/RoomCard.tables'
 import { makeRoomCardsCreateData, useRoomCardCreate } from './hooks/useRoomCardCreate'
+import { RoomCardComponent } from './RoomCard.comp'
 import { useRoomCardStore } from './store/useRoomCardStore'
 
 const messages = message.roomCardsPage.form
@@ -79,24 +75,23 @@ export const RoomCardNewContainer = () => {
   })
 
   return (
-    <Form {...{ formMethods }}>
-      <PageHead>
-        <div className="flex items-center space-x-4">
-          <RoomCardStatusIcon status={status} />
-
-          <h1 className="text-2xl font-semibold">New room card</h1>
-          <SelectLocationTree locationField={fields.location} />
-          <Listbox {...fields.status} className="w-72" customOptions={statuses} />
-        </div>
-        <HeaderButtons {...{ onSubmitAndExit, onSubmit, editPersmission: true }} />
-      </PageHead>
-      <RoomCardTables
-        {...{
-          contactPersonsHall: contactPersonsHall,
-          contactPersonsDept,
-          teams
-        }}
-      />
-    </Form>
+    <RoomCardComponent
+      {...{
+        formMethods,
+        status,
+        onSubmitAndExit,
+        onSubmit,
+        contactPersonsHall,
+        contactPersonsDept,
+        teams,
+        fields
+      }}
+    >
+      <Fragment>
+        <h1 className="text-2xl font-semibold">New room card</h1>
+        <SelectLocationTree locationField={fields.location} />
+        <Listbox {...fields.status} className="w-72" customOptions={statuses} />
+      </Fragment>
+    </RoomCardComponent>
   )
 }
