@@ -81,11 +81,21 @@ export const NameCell = ({
 
   return (
     <div className="flex items-center">
-      <Link href={{ pathname: '/catalogue/item/' + uid }} className="flex items-center">
-        <LinkDecorator>
-          <span>{getValue()}</span>
-        </LinkDecorator>
-      </Link>
+      {tableId === 'catalogueItemsModal' ? (
+        <Link href={{ pathname: '/catalogue/item/' + uid }} legacyBehavior className="flex items-center">
+          <a target="_blank" rel="noopener noreferrer">
+            <LinkDecorator>
+              <span>{getValue()}</span>
+            </LinkDecorator>
+          </a>
+        </Link>
+      ) : (
+        <Link href={{ pathname: '/catalogue/item/' + uid }} className="flex items-center">
+          <LinkDecorator>
+            <span>{getValue()}</span>
+          </LinkDecorator>
+        </Link>
+      )}
       {toDelete && (isHoveringId === id || isMobile) && (
         <TableActionsButtons
           onDeleteClick={() => {
