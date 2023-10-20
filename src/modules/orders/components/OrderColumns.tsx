@@ -20,7 +20,7 @@ export const useOrderColumns = ({ NameCell }: { NameCell: (props: CellContext<Or
         header: intl.formatMessage({ id: messages.name }),
         accessorKey: 'name',
         id: 'name',
-        cell: props => <NameCell {...props} />,
+        cell: NameCell,
         size: 300,
         meta: { sticky: true, className: 'sm:pr-8' },
         enableHiding: false

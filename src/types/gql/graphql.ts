@@ -3344,6 +3344,85 @@ export type CatalogueItemsConnection = {
   totalCount: Scalars['Int']['output'];
 };
 
+export type ContactPersonRole = {
+  __typename?: 'ContactPersonRole';
+  name: Scalars['String']['output'];
+  uid: Scalars['ID']['output'];
+};
+
+export type ContactPersonRoleAggregateSelection = {
+  __typename?: 'ContactPersonRoleAggregateSelection';
+  count: Scalars['Int']['output'];
+  name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type ContactPersonRoleConnectOrCreateWhere = {
+  node: ContactPersonRoleUniqueWhere;
+};
+
+export type ContactPersonRoleConnectWhere = {
+  node: ContactPersonRoleWhere;
+};
+
+export type ContactPersonRoleCreateInput = {
+  name: Scalars['String']['input'];
+};
+
+export type ContactPersonRoleEdge = {
+  __typename?: 'ContactPersonRoleEdge';
+  cursor: Scalars['String']['output'];
+  node: ContactPersonRole;
+};
+
+export type ContactPersonRoleOnCreateInput = {
+  name: Scalars['String']['input'];
+};
+
+export type ContactPersonRoleOptions = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /** Specify one or more ContactPersonRoleSort objects to sort ContactPersonRoles by. The sorts will be applied in the order in which they are arranged in the array. */
+  sort?: InputMaybe<Array<ContactPersonRoleSort>>;
+};
+
+/** Fields to sort ContactPersonRoles by. The order in which sorts are applied is not guaranteed when specifying many fields in one ContactPersonRoleSort object. */
+export type ContactPersonRoleSort = {
+  name?: InputMaybe<SortDirection>;
+  uid?: InputMaybe<SortDirection>;
+};
+
+export type ContactPersonRoleUniqueWhere = {
+  uid?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type ContactPersonRoleUpdateInput = {
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ContactPersonRoleWhere = {
+  AND?: InputMaybe<Array<ContactPersonRoleWhere>>;
+  NOT?: InputMaybe<ContactPersonRoleWhere>;
+  OR?: InputMaybe<Array<ContactPersonRoleWhere>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  name_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  uid?: InputMaybe<Scalars['ID']['input']>;
+  uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
+  uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
+  uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type ContactPersonRolesConnection = {
+  __typename?: 'ContactPersonRolesConnection';
+  edges: Array<ContactPersonRoleEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
 export type CreateCatalogueCategoriesMutationResponse = {
   __typename?: 'CreateCatalogueCategoriesMutationResponse';
   catalogueCategories: Array<CatalogueCategory>;
@@ -3374,9 +3453,27 @@ export type CreateCatalogueItemsMutationResponse = {
   info: CreateInfo;
 };
 
+export type CreateContactPersonRolesMutationResponse = {
+  __typename?: 'CreateContactPersonRolesMutationResponse';
+  contactPersonRoles: Array<ContactPersonRole>;
+  info: CreateInfo;
+};
+
+export type CreateEmployeesMutationResponse = {
+  __typename?: 'CreateEmployeesMutationResponse';
+  employees: Array<Employee>;
+  info: CreateInfo;
+};
+
 export type CreateFacilitiesMutationResponse = {
   __typename?: 'CreateFacilitiesMutationResponse';
   facilities: Array<Facility>;
+  info: CreateInfo;
+};
+
+export type CreateHallContactPeopleMutationResponse = {
+  __typename?: 'CreateHallContactPeopleMutationResponse';
+  hallContactPeople: Array<HallContactPerson>;
   info: CreateInfo;
 };
 
@@ -3423,6 +3520,12 @@ export type CreateRolesMutationResponse = {
   roles: Array<Role>;
 };
 
+export type CreateRoomCardsMutationResponse = {
+  __typename?: 'CreateRoomCardsMutationResponse';
+  info: CreateInfo;
+  roomCards: Array<RoomCard>;
+};
+
 export type CreateSchemaMigrationsMutationResponse = {
   __typename?: 'CreateSchemaMigrationsMutationResponse';
   info: CreateInfo;
@@ -3459,6 +3562,12 @@ export type CreateSystemsMutationResponse = {
   systems: Array<System>;
 };
 
+export type CreateTeamsMutationResponse = {
+  __typename?: 'CreateTeamsMutationResponse';
+  info: CreateInfo;
+  teams: Array<Team>;
+};
+
 export type CreateUnitsMutationResponse = {
   __typename?: 'CreateUnitsMutationResponse';
   info: CreateInfo;
@@ -3488,6 +3597,115 @@ export type DeleteInfo = {
   bookmark?: Maybe<Scalars['String']['output']>;
   nodesDeleted: Scalars['Int']['output'];
   relationshipsDeleted: Scalars['Int']['output'];
+};
+
+export type Employee = {
+  __typename?: 'Employee';
+  email?: Maybe<Scalars['String']['output']>;
+  firstName: Scalars['String']['output'];
+  fullName?: Maybe<Scalars['String']['output']>;
+  lastName: Scalars['String']['output'];
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+  uid: Scalars['String']['output'];
+};
+
+export type EmployeeAggregateSelection = {
+  __typename?: 'EmployeeAggregateSelection';
+  count: Scalars['Int']['output'];
+  email: StringAggregateSelectionNullable;
+  firstName: StringAggregateSelectionNonNullable;
+  fullName: StringAggregateSelectionNullable;
+  lastName: StringAggregateSelectionNonNullable;
+  phoneNumber: StringAggregateSelectionNullable;
+  uid: StringAggregateSelectionNonNullable;
+};
+
+export type EmployeeConnectWhere = {
+  node: EmployeeWhere;
+};
+
+export type EmployeeCreateInput = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  firstName: Scalars['String']['input'];
+  fullName?: InputMaybe<Scalars['String']['input']>;
+  lastName: Scalars['String']['input'];
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  uid: Scalars['String']['input'];
+};
+
+export type EmployeeEdge = {
+  __typename?: 'EmployeeEdge';
+  cursor: Scalars['String']['output'];
+  node: Employee;
+};
+
+export type EmployeeOptions = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /** Specify one or more EmployeeSort objects to sort Employees by. The sorts will be applied in the order in which they are arranged in the array. */
+  sort?: InputMaybe<Array<EmployeeSort>>;
+};
+
+/** Fields to sort Employees by. The order in which sorts are applied is not guaranteed when specifying many fields in one EmployeeSort object. */
+export type EmployeeSort = {
+  email?: InputMaybe<SortDirection>;
+  firstName?: InputMaybe<SortDirection>;
+  fullName?: InputMaybe<SortDirection>;
+  lastName?: InputMaybe<SortDirection>;
+  phoneNumber?: InputMaybe<SortDirection>;
+  uid?: InputMaybe<SortDirection>;
+};
+
+export type EmployeeUpdateInput = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  fullName?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  uid?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type EmployeeWhere = {
+  AND?: InputMaybe<Array<EmployeeWhere>>;
+  NOT?: InputMaybe<EmployeeWhere>;
+  OR?: InputMaybe<Array<EmployeeWhere>>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  email_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  email_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  email_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  email_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  firstName_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  firstName_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  firstName_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  firstName_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  fullName?: InputMaybe<Scalars['String']['input']>;
+  fullName_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  fullName_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  fullName_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  fullName_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  lastName_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  lastName_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  lastName_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  lastName_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  phoneNumber_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  phoneNumber_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  phoneNumber_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  phoneNumber_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  uid?: InputMaybe<Scalars['String']['input']>;
+  uid_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  uid_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  uid_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  uid_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type EmployeesConnection = {
+  __typename?: 'EmployeesConnection';
+  edges: Array<EmployeeEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
 };
 
 export type FacilitiesConnection = {
@@ -3619,6 +3837,11 @@ export type FacilityConnectInput = {
   systemTypeGroupsBelongsToFacility?: InputMaybe<Array<FacilitySystemTypeGroupsBelongsToFacilityConnectFieldInput>>;
 };
 
+export type FacilityConnectOrCreateInput = {
+  hasLocationLocations?: InputMaybe<Array<FacilityHasLocationLocationsConnectOrCreateFieldInput>>;
+  locationsBelongsToFacility?: InputMaybe<Array<FacilityLocationsBelongsToFacilityConnectOrCreateFieldInput>>;
+};
+
 export type FacilityConnectWhere = {
   node: FacilityWhere;
 };
@@ -3672,6 +3895,15 @@ export type FacilityHasLocationLocationsConnectFieldInput = {
   where?: InputMaybe<LocationConnectWhere>;
 };
 
+export type FacilityHasLocationLocationsConnectOrCreateFieldInput = {
+  onCreate: FacilityHasLocationLocationsConnectOrCreateFieldInputOnCreate;
+  where: LocationConnectOrCreateWhere;
+};
+
+export type FacilityHasLocationLocationsConnectOrCreateFieldInputOnCreate = {
+  node: LocationOnCreateInput;
+};
+
 export type FacilityHasLocationLocationsConnection = {
   __typename?: 'FacilityHasLocationLocationsConnection';
   edges: Array<FacilityHasLocationLocationsRelationship>;
@@ -3706,6 +3938,7 @@ export type FacilityHasLocationLocationsDisconnectFieldInput = {
 
 export type FacilityHasLocationLocationsFieldInput = {
   connect?: InputMaybe<Array<FacilityHasLocationLocationsConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<FacilityHasLocationLocationsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<FacilityHasLocationLocationsCreateFieldInput>>;
 };
 
@@ -3772,6 +4005,7 @@ export type FacilityHasLocationLocationsUpdateConnectionInput = {
 
 export type FacilityHasLocationLocationsUpdateFieldInput = {
   connect?: InputMaybe<Array<FacilityHasLocationLocationsConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<FacilityHasLocationLocationsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<FacilityHasLocationLocationsCreateFieldInput>>;
   delete?: InputMaybe<Array<FacilityHasLocationLocationsDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<FacilityHasLocationLocationsDisconnectFieldInput>>;
@@ -3916,6 +4150,7 @@ export type FacilityLocationHasLocationLocationsNodeAggregateSelection = {
   code: StringAggregateSelectionNullable;
   facility: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
 };
 
 export type FacilityLocationLocationsBelongsToFacilityAggregationSelection = {
@@ -3929,6 +4164,7 @@ export type FacilityLocationLocationsBelongsToFacilityNodeAggregateSelection = {
   code: StringAggregateSelectionNullable;
   facility: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
 };
 
 export type FacilityLocationsBelongsToFacilityAggregateInput = {
@@ -3948,6 +4184,15 @@ export type FacilityLocationsBelongsToFacilityConnectFieldInput = {
   /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<LocationConnectWhere>;
+};
+
+export type FacilityLocationsBelongsToFacilityConnectOrCreateFieldInput = {
+  onCreate: FacilityLocationsBelongsToFacilityConnectOrCreateFieldInputOnCreate;
+  where: LocationConnectOrCreateWhere;
+};
+
+export type FacilityLocationsBelongsToFacilityConnectOrCreateFieldInputOnCreate = {
+  node: LocationOnCreateInput;
 };
 
 export type FacilityLocationsBelongsToFacilityConnection = {
@@ -3984,6 +4229,7 @@ export type FacilityLocationsBelongsToFacilityDisconnectFieldInput = {
 
 export type FacilityLocationsBelongsToFacilityFieldInput = {
   connect?: InputMaybe<Array<FacilityLocationsBelongsToFacilityConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<FacilityLocationsBelongsToFacilityConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<FacilityLocationsBelongsToFacilityCreateFieldInput>>;
 };
 
@@ -4050,6 +4296,7 @@ export type FacilityLocationsBelongsToFacilityUpdateConnectionInput = {
 
 export type FacilityLocationsBelongsToFacilityUpdateFieldInput = {
   connect?: InputMaybe<Array<FacilityLocationsBelongsToFacilityConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<FacilityLocationsBelongsToFacilityConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<FacilityLocationsBelongsToFacilityCreateFieldInput>>;
   delete?: InputMaybe<Array<FacilityLocationsBelongsToFacilityDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<FacilityLocationsBelongsToFacilityDisconnectFieldInput>>;
@@ -4313,6 +4560,470 @@ export type FacilityZoneHasZoneZonesNodeAggregateSelection = {
   uid: StringAggregateSelectionNonNullable;
 };
 
+export type HallContactPeopleConnection = {
+  __typename?: 'HallContactPeopleConnection';
+  edges: Array<HallContactPersonEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type HallContactPerson = {
+  __typename?: 'HallContactPerson';
+  employee: Employee;
+  employeeAggregate?: Maybe<HallContactPersonEmployeeEmployeeAggregationSelection>;
+  employeeConnection: HallContactPersonEmployeeConnection;
+  role?: Maybe<ContactPersonRole>;
+  roleAggregate?: Maybe<HallContactPersonContactPersonRoleRoleAggregationSelection>;
+  roleConnection: HallContactPersonRoleConnection;
+  uid: Scalars['ID']['output'];
+};
+
+
+export type HallContactPersonEmployeeArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<EmployeeOptions>;
+  where?: InputMaybe<EmployeeWhere>;
+};
+
+
+export type HallContactPersonEmployeeAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<EmployeeWhere>;
+};
+
+
+export type HallContactPersonEmployeeConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<HallContactPersonEmployeeConnectionSort>>;
+  where?: InputMaybe<HallContactPersonEmployeeConnectionWhere>;
+};
+
+
+export type HallContactPersonRoleArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<ContactPersonRoleOptions>;
+  where?: InputMaybe<ContactPersonRoleWhere>;
+};
+
+
+export type HallContactPersonRoleAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<ContactPersonRoleWhere>;
+};
+
+
+export type HallContactPersonRoleConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<HallContactPersonRoleConnectionSort>>;
+  where?: InputMaybe<HallContactPersonRoleConnectionWhere>;
+};
+
+export type HallContactPersonAggregateSelection = {
+  __typename?: 'HallContactPersonAggregateSelection';
+  count: Scalars['Int']['output'];
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type HallContactPersonConnectInput = {
+  employee?: InputMaybe<HallContactPersonEmployeeConnectFieldInput>;
+  role?: InputMaybe<HallContactPersonRoleConnectFieldInput>;
+};
+
+export type HallContactPersonConnectOrCreateInput = {
+  role?: InputMaybe<HallContactPersonRoleConnectOrCreateFieldInput>;
+};
+
+export type HallContactPersonConnectOrCreateWhere = {
+  node: HallContactPersonUniqueWhere;
+};
+
+export type HallContactPersonConnectWhere = {
+  node: HallContactPersonWhere;
+};
+
+export type HallContactPersonContactPersonRoleRoleAggregationSelection = {
+  __typename?: 'HallContactPersonContactPersonRoleRoleAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<HallContactPersonContactPersonRoleRoleNodeAggregateSelection>;
+};
+
+export type HallContactPersonContactPersonRoleRoleNodeAggregateSelection = {
+  __typename?: 'HallContactPersonContactPersonRoleRoleNodeAggregateSelection';
+  name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type HallContactPersonCreateInput = {
+  employee?: InputMaybe<HallContactPersonEmployeeFieldInput>;
+  role?: InputMaybe<HallContactPersonRoleFieldInput>;
+};
+
+export type HallContactPersonDeleteInput = {
+  employee?: InputMaybe<HallContactPersonEmployeeDeleteFieldInput>;
+  role?: InputMaybe<HallContactPersonRoleDeleteFieldInput>;
+};
+
+export type HallContactPersonDisconnectInput = {
+  employee?: InputMaybe<HallContactPersonEmployeeDisconnectFieldInput>;
+  role?: InputMaybe<HallContactPersonRoleDisconnectFieldInput>;
+};
+
+export type HallContactPersonEdge = {
+  __typename?: 'HallContactPersonEdge';
+  cursor: Scalars['String']['output'];
+  node: HallContactPerson;
+};
+
+export type HallContactPersonEmployeeAggregateInput = {
+  AND?: InputMaybe<Array<HallContactPersonEmployeeAggregateInput>>;
+  NOT?: InputMaybe<HallContactPersonEmployeeAggregateInput>;
+  OR?: InputMaybe<Array<HallContactPersonEmployeeAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<HallContactPersonEmployeeNodeAggregationWhereInput>;
+};
+
+export type HallContactPersonEmployeeConnectFieldInput = {
+  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<EmployeeConnectWhere>;
+};
+
+export type HallContactPersonEmployeeConnection = {
+  __typename?: 'HallContactPersonEmployeeConnection';
+  edges: Array<HallContactPersonEmployeeRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type HallContactPersonEmployeeConnectionSort = {
+  node?: InputMaybe<EmployeeSort>;
+};
+
+export type HallContactPersonEmployeeConnectionWhere = {
+  AND?: InputMaybe<Array<HallContactPersonEmployeeConnectionWhere>>;
+  NOT?: InputMaybe<HallContactPersonEmployeeConnectionWhere>;
+  OR?: InputMaybe<Array<HallContactPersonEmployeeConnectionWhere>>;
+  node?: InputMaybe<EmployeeWhere>;
+};
+
+export type HallContactPersonEmployeeCreateFieldInput = {
+  node: EmployeeCreateInput;
+};
+
+export type HallContactPersonEmployeeDeleteFieldInput = {
+  where?: InputMaybe<HallContactPersonEmployeeConnectionWhere>;
+};
+
+export type HallContactPersonEmployeeDisconnectFieldInput = {
+  where?: InputMaybe<HallContactPersonEmployeeConnectionWhere>;
+};
+
+export type HallContactPersonEmployeeEmployeeAggregationSelection = {
+  __typename?: 'HallContactPersonEmployeeEmployeeAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<HallContactPersonEmployeeEmployeeNodeAggregateSelection>;
+};
+
+export type HallContactPersonEmployeeEmployeeNodeAggregateSelection = {
+  __typename?: 'HallContactPersonEmployeeEmployeeNodeAggregateSelection';
+  email: StringAggregateSelectionNullable;
+  firstName: StringAggregateSelectionNonNullable;
+  fullName: StringAggregateSelectionNullable;
+  lastName: StringAggregateSelectionNonNullable;
+  phoneNumber: StringAggregateSelectionNullable;
+  uid: StringAggregateSelectionNonNullable;
+};
+
+export type HallContactPersonEmployeeFieldInput = {
+  connect?: InputMaybe<HallContactPersonEmployeeConnectFieldInput>;
+  create?: InputMaybe<HallContactPersonEmployeeCreateFieldInput>;
+};
+
+export type HallContactPersonEmployeeNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<HallContactPersonEmployeeNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<HallContactPersonEmployeeNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<HallContactPersonEmployeeNodeAggregationWhereInput>>;
+  email_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  email_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  fullName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  phoneNumber_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  phoneNumber_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  phoneNumber_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  phoneNumber_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  phoneNumber_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  uid_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type HallContactPersonEmployeeRelationship = {
+  __typename?: 'HallContactPersonEmployeeRelationship';
+  cursor: Scalars['String']['output'];
+  node: Employee;
+};
+
+export type HallContactPersonEmployeeUpdateConnectionInput = {
+  node?: InputMaybe<EmployeeUpdateInput>;
+};
+
+export type HallContactPersonEmployeeUpdateFieldInput = {
+  connect?: InputMaybe<HallContactPersonEmployeeConnectFieldInput>;
+  create?: InputMaybe<HallContactPersonEmployeeCreateFieldInput>;
+  delete?: InputMaybe<HallContactPersonEmployeeDeleteFieldInput>;
+  disconnect?: InputMaybe<HallContactPersonEmployeeDisconnectFieldInput>;
+  update?: InputMaybe<HallContactPersonEmployeeUpdateConnectionInput>;
+  where?: InputMaybe<HallContactPersonEmployeeConnectionWhere>;
+};
+
+export type HallContactPersonOnCreateInput = {
+  /** Appears because this input type would be empty otherwise because this type is composed of just generated and/or relationship properties. See https://neo4j.com/docs/graphql-manual/current/troubleshooting/faqs/ */
+  _emptyInput?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type HallContactPersonOptions = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /** Specify one or more HallContactPersonSort objects to sort HallContactPeople by. The sorts will be applied in the order in which they are arranged in the array. */
+  sort?: InputMaybe<Array<HallContactPersonSort>>;
+};
+
+export type HallContactPersonRelationInput = {
+  employee?: InputMaybe<HallContactPersonEmployeeCreateFieldInput>;
+  role?: InputMaybe<HallContactPersonRoleCreateFieldInput>;
+};
+
+export type HallContactPersonRoleAggregateInput = {
+  AND?: InputMaybe<Array<HallContactPersonRoleAggregateInput>>;
+  NOT?: InputMaybe<HallContactPersonRoleAggregateInput>;
+  OR?: InputMaybe<Array<HallContactPersonRoleAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<HallContactPersonRoleNodeAggregationWhereInput>;
+};
+
+export type HallContactPersonRoleConnectFieldInput = {
+  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<ContactPersonRoleConnectWhere>;
+};
+
+export type HallContactPersonRoleConnectOrCreateFieldInput = {
+  onCreate: HallContactPersonRoleConnectOrCreateFieldInputOnCreate;
+  where: ContactPersonRoleConnectOrCreateWhere;
+};
+
+export type HallContactPersonRoleConnectOrCreateFieldInputOnCreate = {
+  node: ContactPersonRoleOnCreateInput;
+};
+
+export type HallContactPersonRoleConnection = {
+  __typename?: 'HallContactPersonRoleConnection';
+  edges: Array<HallContactPersonRoleRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type HallContactPersonRoleConnectionSort = {
+  node?: InputMaybe<ContactPersonRoleSort>;
+};
+
+export type HallContactPersonRoleConnectionWhere = {
+  AND?: InputMaybe<Array<HallContactPersonRoleConnectionWhere>>;
+  NOT?: InputMaybe<HallContactPersonRoleConnectionWhere>;
+  OR?: InputMaybe<Array<HallContactPersonRoleConnectionWhere>>;
+  node?: InputMaybe<ContactPersonRoleWhere>;
+};
+
+export type HallContactPersonRoleCreateFieldInput = {
+  node: ContactPersonRoleCreateInput;
+};
+
+export type HallContactPersonRoleDeleteFieldInput = {
+  where?: InputMaybe<HallContactPersonRoleConnectionWhere>;
+};
+
+export type HallContactPersonRoleDisconnectFieldInput = {
+  where?: InputMaybe<HallContactPersonRoleConnectionWhere>;
+};
+
+export type HallContactPersonRoleFieldInput = {
+  connect?: InputMaybe<HallContactPersonRoleConnectFieldInput>;
+  connectOrCreate?: InputMaybe<HallContactPersonRoleConnectOrCreateFieldInput>;
+  create?: InputMaybe<HallContactPersonRoleCreateFieldInput>;
+};
+
+export type HallContactPersonRoleNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<HallContactPersonRoleNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<HallContactPersonRoleNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<HallContactPersonRoleNodeAggregationWhereInput>>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type HallContactPersonRoleRelationship = {
+  __typename?: 'HallContactPersonRoleRelationship';
+  cursor: Scalars['String']['output'];
+  node: ContactPersonRole;
+};
+
+export type HallContactPersonRoleUpdateConnectionInput = {
+  node?: InputMaybe<ContactPersonRoleUpdateInput>;
+};
+
+export type HallContactPersonRoleUpdateFieldInput = {
+  connect?: InputMaybe<HallContactPersonRoleConnectFieldInput>;
+  connectOrCreate?: InputMaybe<HallContactPersonRoleConnectOrCreateFieldInput>;
+  create?: InputMaybe<HallContactPersonRoleCreateFieldInput>;
+  delete?: InputMaybe<HallContactPersonRoleDeleteFieldInput>;
+  disconnect?: InputMaybe<HallContactPersonRoleDisconnectFieldInput>;
+  update?: InputMaybe<HallContactPersonRoleUpdateConnectionInput>;
+  where?: InputMaybe<HallContactPersonRoleConnectionWhere>;
+};
+
+/** Fields to sort HallContactPeople by. The order in which sorts are applied is not guaranteed when specifying many fields in one HallContactPersonSort object. */
+export type HallContactPersonSort = {
+  uid?: InputMaybe<SortDirection>;
+};
+
+export type HallContactPersonUniqueWhere = {
+  uid?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type HallContactPersonUpdateInput = {
+  employee?: InputMaybe<HallContactPersonEmployeeUpdateFieldInput>;
+  role?: InputMaybe<HallContactPersonRoleUpdateFieldInput>;
+};
+
+export type HallContactPersonWhere = {
+  AND?: InputMaybe<Array<HallContactPersonWhere>>;
+  NOT?: InputMaybe<HallContactPersonWhere>;
+  OR?: InputMaybe<Array<HallContactPersonWhere>>;
+  employee?: InputMaybe<EmployeeWhere>;
+  employeeAggregate?: InputMaybe<HallContactPersonEmployeeAggregateInput>;
+  employeeConnection?: InputMaybe<HallContactPersonEmployeeConnectionWhere>;
+  employeeConnection_NOT?: InputMaybe<HallContactPersonEmployeeConnectionWhere>;
+  employee_NOT?: InputMaybe<EmployeeWhere>;
+  role?: InputMaybe<ContactPersonRoleWhere>;
+  roleAggregate?: InputMaybe<HallContactPersonRoleAggregateInput>;
+  roleConnection?: InputMaybe<HallContactPersonRoleConnectionWhere>;
+  roleConnection_NOT?: InputMaybe<HallContactPersonRoleConnectionWhere>;
+  role_NOT?: InputMaybe<ContactPersonRoleWhere>;
+  uid?: InputMaybe<Scalars['ID']['input']>;
+  uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
+  uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
+  uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type IdAggregateSelectionNonNullable = {
+  __typename?: 'IDAggregateSelectionNonNullable';
+  longest: Scalars['ID']['output'];
+  shortest: Scalars['ID']['output'];
+};
+
 export type ItemCondition = {
   __typename?: 'ItemCondition';
   code: Scalars['String']['output'];
@@ -4473,13 +5184,17 @@ export type Location = {
   facilitiesHasLocationAggregate?: Maybe<LocationFacilityFacilitiesHasLocationAggregationSelection>;
   facilitiesHasLocationConnection: LocationFacilitiesHasLocationConnection;
   facility: Scalars['String']['output'];
-  hasSublocationLocations: Array<Location>;
-  hasSublocationLocationsAggregate?: Maybe<LocationLocationHasSublocationLocationsAggregationSelection>;
-  hasSublocationLocationsConnection: LocationHasSublocationLocationsConnection;
-  locationsHasSublocation: Array<Location>;
-  locationsHasSublocationAggregate?: Maybe<LocationLocationLocationsHasSublocationAggregationSelection>;
-  locationsHasSublocationConnection: LocationLocationsHasSublocationConnection;
   name: Scalars['String']['output'];
+  parentLocation?: Maybe<Location>;
+  parentLocationAggregate?: Maybe<LocationLocationParentLocationAggregationSelection>;
+  parentLocationConnection: LocationParentLocationConnection;
+  roomCard?: Maybe<RoomCard>;
+  roomCardAggregate?: Maybe<LocationRoomCardRoomCardAggregationSelection>;
+  roomCardConnection: LocationRoomCardConnection;
+  subLocations: Array<Location>;
+  subLocationsAggregate?: Maybe<LocationLocationSubLocationsAggregationSelection>;
+  subLocationsConnection: LocationSubLocationsConnection;
+  uid: Scalars['ID']['output'];
 };
 
 
@@ -4527,47 +5242,69 @@ export type LocationFacilitiesHasLocationConnectionArgs = {
 };
 
 
-export type LocationHasSublocationLocationsArgs = {
+export type LocationParentLocationArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   options?: InputMaybe<LocationOptions>;
   where?: InputMaybe<LocationWhere>;
 };
 
 
-export type LocationHasSublocationLocationsAggregateArgs = {
+export type LocationParentLocationAggregateArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   where?: InputMaybe<LocationWhere>;
 };
 
 
-export type LocationHasSublocationLocationsConnectionArgs = {
+export type LocationParentLocationConnectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<LocationHasSublocationLocationsConnectionSort>>;
-  where?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
+  sort?: InputMaybe<Array<LocationParentLocationConnectionSort>>;
+  where?: InputMaybe<LocationParentLocationConnectionWhere>;
 };
 
 
-export type LocationLocationsHasSublocationArgs = {
+export type LocationRoomCardArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<RoomCardOptions>;
+  where?: InputMaybe<RoomCardWhere>;
+};
+
+
+export type LocationRoomCardAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<RoomCardWhere>;
+};
+
+
+export type LocationRoomCardConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<LocationRoomCardConnectionSort>>;
+  where?: InputMaybe<LocationRoomCardConnectionWhere>;
+};
+
+
+export type LocationSubLocationsArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   options?: InputMaybe<LocationOptions>;
   where?: InputMaybe<LocationWhere>;
 };
 
 
-export type LocationLocationsHasSublocationAggregateArgs = {
+export type LocationSubLocationsAggregateArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   where?: InputMaybe<LocationWhere>;
 };
 
 
-export type LocationLocationsHasSublocationConnectionArgs = {
+export type LocationSubLocationsConnectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<LocationLocationsHasSublocationConnectionSort>>;
-  where?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
+  sort?: InputMaybe<Array<LocationSubLocationsConnectionSort>>;
+  where?: InputMaybe<LocationSubLocationsConnectionWhere>;
 };
 
 export type LocationAggregateSelection = {
@@ -4576,6 +5313,7 @@ export type LocationAggregateSelection = {
   count: Scalars['Int']['output'];
   facility: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
 };
 
 export type LocationBelongsToFacilityFacilitiesAggregateInput = {
@@ -4707,8 +5445,19 @@ export type LocationBelongsToFacilityFacilitiesUpdateFieldInput = {
 export type LocationConnectInput = {
   belongsToFacilityFacilities?: InputMaybe<Array<LocationBelongsToFacilityFacilitiesConnectFieldInput>>;
   facilitiesHasLocation?: InputMaybe<Array<LocationFacilitiesHasLocationConnectFieldInput>>;
-  hasSublocationLocations?: InputMaybe<Array<LocationHasSublocationLocationsConnectFieldInput>>;
-  locationsHasSublocation?: InputMaybe<Array<LocationLocationsHasSublocationConnectFieldInput>>;
+  parentLocation?: InputMaybe<LocationParentLocationConnectFieldInput>;
+  roomCard?: InputMaybe<LocationRoomCardConnectFieldInput>;
+  subLocations?: InputMaybe<Array<LocationSubLocationsConnectFieldInput>>;
+};
+
+export type LocationConnectOrCreateInput = {
+  parentLocation?: InputMaybe<LocationParentLocationConnectOrCreateFieldInput>;
+  roomCard?: InputMaybe<LocationRoomCardConnectOrCreateFieldInput>;
+  subLocations?: InputMaybe<Array<LocationSubLocationsConnectOrCreateFieldInput>>;
+};
+
+export type LocationConnectOrCreateWhere = {
+  node: LocationUniqueWhere;
 };
 
 export type LocationConnectWhere = {
@@ -4720,23 +5469,26 @@ export type LocationCreateInput = {
   code?: InputMaybe<Scalars['String']['input']>;
   facilitiesHasLocation?: InputMaybe<LocationFacilitiesHasLocationFieldInput>;
   facility: Scalars['String']['input'];
-  hasSublocationLocations?: InputMaybe<LocationHasSublocationLocationsFieldInput>;
-  locationsHasSublocation?: InputMaybe<LocationLocationsHasSublocationFieldInput>;
   name: Scalars['String']['input'];
+  parentLocation?: InputMaybe<LocationParentLocationFieldInput>;
+  roomCard?: InputMaybe<LocationRoomCardFieldInput>;
+  subLocations?: InputMaybe<LocationSubLocationsFieldInput>;
 };
 
 export type LocationDeleteInput = {
   belongsToFacilityFacilities?: InputMaybe<Array<LocationBelongsToFacilityFacilitiesDeleteFieldInput>>;
   facilitiesHasLocation?: InputMaybe<Array<LocationFacilitiesHasLocationDeleteFieldInput>>;
-  hasSublocationLocations?: InputMaybe<Array<LocationHasSublocationLocationsDeleteFieldInput>>;
-  locationsHasSublocation?: InputMaybe<Array<LocationLocationsHasSublocationDeleteFieldInput>>;
+  parentLocation?: InputMaybe<LocationParentLocationDeleteFieldInput>;
+  roomCard?: InputMaybe<LocationRoomCardDeleteFieldInput>;
+  subLocations?: InputMaybe<Array<LocationSubLocationsDeleteFieldInput>>;
 };
 
 export type LocationDisconnectInput = {
   belongsToFacilityFacilities?: InputMaybe<Array<LocationBelongsToFacilityFacilitiesDisconnectFieldInput>>;
   facilitiesHasLocation?: InputMaybe<Array<LocationFacilitiesHasLocationDisconnectFieldInput>>;
-  hasSublocationLocations?: InputMaybe<Array<LocationHasSublocationLocationsDisconnectFieldInput>>;
-  locationsHasSublocation?: InputMaybe<Array<LocationLocationsHasSublocationDisconnectFieldInput>>;
+  parentLocation?: InputMaybe<LocationParentLocationDisconnectFieldInput>;
+  roomCard?: InputMaybe<LocationRoomCardDisconnectFieldInput>;
+  subLocations?: InputMaybe<Array<LocationSubLocationsDisconnectFieldInput>>;
 };
 
 export type LocationEdge = {
@@ -4897,282 +5649,38 @@ export type LocationFacilityFacilitiesHasLocationNodeAggregateSelection = {
   uid: StringAggregateSelectionNonNullable;
 };
 
-export type LocationHasSublocationLocationsAggregateInput = {
-  AND?: InputMaybe<Array<LocationHasSublocationLocationsAggregateInput>>;
-  NOT?: InputMaybe<LocationHasSublocationLocationsAggregateInput>;
-  OR?: InputMaybe<Array<LocationHasSublocationLocationsAggregateInput>>;
-  count?: InputMaybe<Scalars['Int']['input']>;
-  count_GT?: InputMaybe<Scalars['Int']['input']>;
-  count_GTE?: InputMaybe<Scalars['Int']['input']>;
-  count_LT?: InputMaybe<Scalars['Int']['input']>;
-  count_LTE?: InputMaybe<Scalars['Int']['input']>;
-  node?: InputMaybe<LocationHasSublocationLocationsNodeAggregationWhereInput>;
-};
-
-export type LocationHasSublocationLocationsConnectFieldInput = {
-  connect?: InputMaybe<Array<LocationConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
-  overwrite?: Scalars['Boolean']['input'];
-  where?: InputMaybe<LocationConnectWhere>;
-};
-
-export type LocationHasSublocationLocationsConnection = {
-  __typename?: 'LocationHasSublocationLocationsConnection';
-  edges: Array<LocationHasSublocationLocationsRelationship>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int']['output'];
-};
-
-export type LocationHasSublocationLocationsConnectionSort = {
-  node?: InputMaybe<LocationSort>;
-};
-
-export type LocationHasSublocationLocationsConnectionWhere = {
-  AND?: InputMaybe<Array<LocationHasSublocationLocationsConnectionWhere>>;
-  NOT?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-  OR?: InputMaybe<Array<LocationHasSublocationLocationsConnectionWhere>>;
-  node?: InputMaybe<LocationWhere>;
-};
-
-export type LocationHasSublocationLocationsCreateFieldInput = {
-  node: LocationCreateInput;
-};
-
-export type LocationHasSublocationLocationsDeleteFieldInput = {
-  delete?: InputMaybe<LocationDeleteInput>;
-  where?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-};
-
-export type LocationHasSublocationLocationsDisconnectFieldInput = {
-  disconnect?: InputMaybe<LocationDisconnectInput>;
-  where?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-};
-
-export type LocationHasSublocationLocationsFieldInput = {
-  connect?: InputMaybe<Array<LocationHasSublocationLocationsConnectFieldInput>>;
-  create?: InputMaybe<Array<LocationHasSublocationLocationsCreateFieldInput>>;
-};
-
-export type LocationHasSublocationLocationsNodeAggregationWhereInput = {
-  AND?: InputMaybe<Array<LocationHasSublocationLocationsNodeAggregationWhereInput>>;
-  NOT?: InputMaybe<LocationHasSublocationLocationsNodeAggregationWhereInput>;
-  OR?: InputMaybe<Array<LocationHasSublocationLocationsNodeAggregationWhereInput>>;
-  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  facility_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type LocationHasSublocationLocationsRelationship = {
-  __typename?: 'LocationHasSublocationLocationsRelationship';
-  cursor: Scalars['String']['output'];
-  node: Location;
-};
-
-export type LocationHasSublocationLocationsUpdateConnectionInput = {
-  node?: InputMaybe<LocationUpdateInput>;
-};
-
-export type LocationHasSublocationLocationsUpdateFieldInput = {
-  connect?: InputMaybe<Array<LocationHasSublocationLocationsConnectFieldInput>>;
-  create?: InputMaybe<Array<LocationHasSublocationLocationsCreateFieldInput>>;
-  delete?: InputMaybe<Array<LocationHasSublocationLocationsDeleteFieldInput>>;
-  disconnect?: InputMaybe<Array<LocationHasSublocationLocationsDisconnectFieldInput>>;
-  update?: InputMaybe<LocationHasSublocationLocationsUpdateConnectionInput>;
-  where?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-};
-
-export type LocationLocationHasSublocationLocationsAggregationSelection = {
-  __typename?: 'LocationLocationHasSublocationLocationsAggregationSelection';
+export type LocationLocationParentLocationAggregationSelection = {
+  __typename?: 'LocationLocationParentLocationAggregationSelection';
   count: Scalars['Int']['output'];
-  node?: Maybe<LocationLocationHasSublocationLocationsNodeAggregateSelection>;
+  node?: Maybe<LocationLocationParentLocationNodeAggregateSelection>;
 };
 
-export type LocationLocationHasSublocationLocationsNodeAggregateSelection = {
-  __typename?: 'LocationLocationHasSublocationLocationsNodeAggregateSelection';
+export type LocationLocationParentLocationNodeAggregateSelection = {
+  __typename?: 'LocationLocationParentLocationNodeAggregateSelection';
   code: StringAggregateSelectionNullable;
   facility: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
 };
 
-export type LocationLocationLocationsHasSublocationAggregationSelection = {
-  __typename?: 'LocationLocationLocationsHasSublocationAggregationSelection';
+export type LocationLocationSubLocationsAggregationSelection = {
+  __typename?: 'LocationLocationSubLocationsAggregationSelection';
   count: Scalars['Int']['output'];
-  node?: Maybe<LocationLocationLocationsHasSublocationNodeAggregateSelection>;
+  node?: Maybe<LocationLocationSubLocationsNodeAggregateSelection>;
 };
 
-export type LocationLocationLocationsHasSublocationNodeAggregateSelection = {
-  __typename?: 'LocationLocationLocationsHasSublocationNodeAggregateSelection';
+export type LocationLocationSubLocationsNodeAggregateSelection = {
+  __typename?: 'LocationLocationSubLocationsNodeAggregateSelection';
   code: StringAggregateSelectionNullable;
   facility: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
 };
 
-export type LocationLocationsHasSublocationAggregateInput = {
-  AND?: InputMaybe<Array<LocationLocationsHasSublocationAggregateInput>>;
-  NOT?: InputMaybe<LocationLocationsHasSublocationAggregateInput>;
-  OR?: InputMaybe<Array<LocationLocationsHasSublocationAggregateInput>>;
-  count?: InputMaybe<Scalars['Int']['input']>;
-  count_GT?: InputMaybe<Scalars['Int']['input']>;
-  count_GTE?: InputMaybe<Scalars['Int']['input']>;
-  count_LT?: InputMaybe<Scalars['Int']['input']>;
-  count_LTE?: InputMaybe<Scalars['Int']['input']>;
-  node?: InputMaybe<LocationLocationsHasSublocationNodeAggregationWhereInput>;
-};
-
-export type LocationLocationsHasSublocationConnectFieldInput = {
-  connect?: InputMaybe<Array<LocationConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
-  overwrite?: Scalars['Boolean']['input'];
-  where?: InputMaybe<LocationConnectWhere>;
-};
-
-export type LocationLocationsHasSublocationConnection = {
-  __typename?: 'LocationLocationsHasSublocationConnection';
-  edges: Array<LocationLocationsHasSublocationRelationship>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int']['output'];
-};
-
-export type LocationLocationsHasSublocationConnectionSort = {
-  node?: InputMaybe<LocationSort>;
-};
-
-export type LocationLocationsHasSublocationConnectionWhere = {
-  AND?: InputMaybe<Array<LocationLocationsHasSublocationConnectionWhere>>;
-  NOT?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
-  OR?: InputMaybe<Array<LocationLocationsHasSublocationConnectionWhere>>;
-  node?: InputMaybe<LocationWhere>;
-};
-
-export type LocationLocationsHasSublocationCreateFieldInput = {
-  node: LocationCreateInput;
-};
-
-export type LocationLocationsHasSublocationDeleteFieldInput = {
-  delete?: InputMaybe<LocationDeleteInput>;
-  where?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
-};
-
-export type LocationLocationsHasSublocationDisconnectFieldInput = {
-  disconnect?: InputMaybe<LocationDisconnectInput>;
-  where?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
-};
-
-export type LocationLocationsHasSublocationFieldInput = {
-  connect?: InputMaybe<Array<LocationLocationsHasSublocationConnectFieldInput>>;
-  create?: InputMaybe<Array<LocationLocationsHasSublocationCreateFieldInput>>;
-};
-
-export type LocationLocationsHasSublocationNodeAggregationWhereInput = {
-  AND?: InputMaybe<Array<LocationLocationsHasSublocationNodeAggregationWhereInput>>;
-  NOT?: InputMaybe<LocationLocationsHasSublocationNodeAggregationWhereInput>;
-  OR?: InputMaybe<Array<LocationLocationsHasSublocationNodeAggregationWhereInput>>;
-  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  facility_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  facility_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  facility_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  facility_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type LocationLocationsHasSublocationRelationship = {
-  __typename?: 'LocationLocationsHasSublocationRelationship';
-  cursor: Scalars['String']['output'];
-  node: Location;
-};
-
-export type LocationLocationsHasSublocationUpdateConnectionInput = {
-  node?: InputMaybe<LocationUpdateInput>;
-};
-
-export type LocationLocationsHasSublocationUpdateFieldInput = {
-  connect?: InputMaybe<Array<LocationLocationsHasSublocationConnectFieldInput>>;
-  create?: InputMaybe<Array<LocationLocationsHasSublocationCreateFieldInput>>;
-  delete?: InputMaybe<Array<LocationLocationsHasSublocationDeleteFieldInput>>;
-  disconnect?: InputMaybe<Array<LocationLocationsHasSublocationDisconnectFieldInput>>;
-  update?: InputMaybe<LocationLocationsHasSublocationUpdateConnectionInput>;
-  where?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
+export type LocationOnCreateInput = {
+  code?: InputMaybe<Scalars['String']['input']>;
+  facility: Scalars['String']['input'];
+  name: Scalars['String']['input'];
 };
 
 export type LocationOptions = {
@@ -5182,11 +5690,460 @@ export type LocationOptions = {
   sort?: InputMaybe<Array<LocationSort>>;
 };
 
+export type LocationParentLocationAggregateInput = {
+  AND?: InputMaybe<Array<LocationParentLocationAggregateInput>>;
+  NOT?: InputMaybe<LocationParentLocationAggregateInput>;
+  OR?: InputMaybe<Array<LocationParentLocationAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<LocationParentLocationNodeAggregationWhereInput>;
+};
+
+export type LocationParentLocationConnectFieldInput = {
+  connect?: InputMaybe<LocationConnectInput>;
+  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<LocationConnectWhere>;
+};
+
+export type LocationParentLocationConnectOrCreateFieldInput = {
+  onCreate: LocationParentLocationConnectOrCreateFieldInputOnCreate;
+  where: LocationConnectOrCreateWhere;
+};
+
+export type LocationParentLocationConnectOrCreateFieldInputOnCreate = {
+  node: LocationOnCreateInput;
+};
+
+export type LocationParentLocationConnection = {
+  __typename?: 'LocationParentLocationConnection';
+  edges: Array<LocationParentLocationRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type LocationParentLocationConnectionSort = {
+  node?: InputMaybe<LocationSort>;
+};
+
+export type LocationParentLocationConnectionWhere = {
+  AND?: InputMaybe<Array<LocationParentLocationConnectionWhere>>;
+  NOT?: InputMaybe<LocationParentLocationConnectionWhere>;
+  OR?: InputMaybe<Array<LocationParentLocationConnectionWhere>>;
+  node?: InputMaybe<LocationWhere>;
+};
+
+export type LocationParentLocationCreateFieldInput = {
+  node: LocationCreateInput;
+};
+
+export type LocationParentLocationDeleteFieldInput = {
+  delete?: InputMaybe<LocationDeleteInput>;
+  where?: InputMaybe<LocationParentLocationConnectionWhere>;
+};
+
+export type LocationParentLocationDisconnectFieldInput = {
+  disconnect?: InputMaybe<LocationDisconnectInput>;
+  where?: InputMaybe<LocationParentLocationConnectionWhere>;
+};
+
+export type LocationParentLocationFieldInput = {
+  connect?: InputMaybe<LocationParentLocationConnectFieldInput>;
+  connectOrCreate?: InputMaybe<LocationParentLocationConnectOrCreateFieldInput>;
+  create?: InputMaybe<LocationParentLocationCreateFieldInput>;
+};
+
+export type LocationParentLocationNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<LocationParentLocationNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<LocationParentLocationNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<LocationParentLocationNodeAggregationWhereInput>>;
+  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  facility_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type LocationParentLocationRelationship = {
+  __typename?: 'LocationParentLocationRelationship';
+  cursor: Scalars['String']['output'];
+  node: Location;
+};
+
+export type LocationParentLocationUpdateConnectionInput = {
+  node?: InputMaybe<LocationUpdateInput>;
+};
+
+export type LocationParentLocationUpdateFieldInput = {
+  connect?: InputMaybe<LocationParentLocationConnectFieldInput>;
+  connectOrCreate?: InputMaybe<LocationParentLocationConnectOrCreateFieldInput>;
+  create?: InputMaybe<LocationParentLocationCreateFieldInput>;
+  delete?: InputMaybe<LocationParentLocationDeleteFieldInput>;
+  disconnect?: InputMaybe<LocationParentLocationDisconnectFieldInput>;
+  update?: InputMaybe<LocationParentLocationUpdateConnectionInput>;
+  where?: InputMaybe<LocationParentLocationConnectionWhere>;
+};
+
 export type LocationRelationInput = {
   belongsToFacilityFacilities?: InputMaybe<Array<LocationBelongsToFacilityFacilitiesCreateFieldInput>>;
   facilitiesHasLocation?: InputMaybe<Array<LocationFacilitiesHasLocationCreateFieldInput>>;
-  hasSublocationLocations?: InputMaybe<Array<LocationHasSublocationLocationsCreateFieldInput>>;
-  locationsHasSublocation?: InputMaybe<Array<LocationLocationsHasSublocationCreateFieldInput>>;
+  parentLocation?: InputMaybe<LocationParentLocationCreateFieldInput>;
+  roomCard?: InputMaybe<LocationRoomCardCreateFieldInput>;
+  subLocations?: InputMaybe<Array<LocationSubLocationsCreateFieldInput>>;
+};
+
+export type LocationRoomCardAggregateInput = {
+  AND?: InputMaybe<Array<LocationRoomCardAggregateInput>>;
+  NOT?: InputMaybe<LocationRoomCardAggregateInput>;
+  OR?: InputMaybe<Array<LocationRoomCardAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<LocationRoomCardNodeAggregationWhereInput>;
+};
+
+export type LocationRoomCardConnectFieldInput = {
+  connect?: InputMaybe<RoomCardConnectInput>;
+  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<RoomCardConnectWhere>;
+};
+
+export type LocationRoomCardConnectOrCreateFieldInput = {
+  onCreate: LocationRoomCardConnectOrCreateFieldInputOnCreate;
+  where: RoomCardConnectOrCreateWhere;
+};
+
+export type LocationRoomCardConnectOrCreateFieldInputOnCreate = {
+  node: RoomCardOnCreateInput;
+};
+
+export type LocationRoomCardConnection = {
+  __typename?: 'LocationRoomCardConnection';
+  edges: Array<LocationRoomCardRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type LocationRoomCardConnectionSort = {
+  node?: InputMaybe<RoomCardSort>;
+};
+
+export type LocationRoomCardConnectionWhere = {
+  AND?: InputMaybe<Array<LocationRoomCardConnectionWhere>>;
+  NOT?: InputMaybe<LocationRoomCardConnectionWhere>;
+  OR?: InputMaybe<Array<LocationRoomCardConnectionWhere>>;
+  node?: InputMaybe<RoomCardWhere>;
+};
+
+export type LocationRoomCardCreateFieldInput = {
+  node: RoomCardCreateInput;
+};
+
+export type LocationRoomCardDeleteFieldInput = {
+  delete?: InputMaybe<RoomCardDeleteInput>;
+  where?: InputMaybe<LocationRoomCardConnectionWhere>;
+};
+
+export type LocationRoomCardDisconnectFieldInput = {
+  disconnect?: InputMaybe<RoomCardDisconnectInput>;
+  where?: InputMaybe<LocationRoomCardConnectionWhere>;
+};
+
+export type LocationRoomCardFieldInput = {
+  connect?: InputMaybe<LocationRoomCardConnectFieldInput>;
+  connectOrCreate?: InputMaybe<LocationRoomCardConnectOrCreateFieldInput>;
+  create?: InputMaybe<LocationRoomCardCreateFieldInput>;
+};
+
+export type LocationRoomCardNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<LocationRoomCardNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<LocationRoomCardNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<LocationRoomCardNodeAggregationWhereInput>>;
+  additionalRequirements_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  additionalRequirements_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  additionalRequirements_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  additionalRequirements_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  additionalRequirements_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  additionalRequirements_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  additionalRequirements_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  additionalRequirements_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  additionalRequirements_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  additionalRequirements_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  additionalRequirements_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  additionalRequirements_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  additionalRequirements_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  additionalRequirements_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  additionalRequirements_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  cleaningSchedule_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  cleaningSchedule_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  cleaningSchedule_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  cleaningSchedule_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  cleaningSchedule_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  cleaningSchedule_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  compressedAirDistribution_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  compressedAirDistribution_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  compressedAirDistribution_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  compressedAirDistribution_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  compressedAirDistribution_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  compressedAirDistribution_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  compressedAirDistribution_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  compressedAirDistribution_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  compressedAirDistribution_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  compressedAirDistribution_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  compressedAirDistribution_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  compressedAirDistribution_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  compressedAirDistribution_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  compressedAirDistribution_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  compressedAirDistribution_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  coolingWater_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  coolingWater_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  coolingWater_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  coolingWater_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  coolingWater_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  coolingWater_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  coolingWater_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  coolingWater_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  coolingWater_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  coolingWater_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  coolingWater_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  coolingWater_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  coolingWater_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  coolingWater_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  coolingWater_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  entryToHvacTent_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  entryToHvacTent_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  entryToHvacTent_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  entryToHvacTent_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  entryToHvacTent_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  entryToHvacTent_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  entryToHvacTent_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  entryToHvacTent_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  entryToHvacTent_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  entryToHvacTent_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  entryToHvacTent_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  entryToHvacTent_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  entryToHvacTent_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  entryToHvacTent_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  entryToHvacTent_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  humidity_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  humidity_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  humidity_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  humidity_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  humidity_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  humidity_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  humidity_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  humidity_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  humidity_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  humidity_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  humidity_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  humidity_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  humidity_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  humidity_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  humidity_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  indoorEnvironmentQuality_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  indoorEnvironmentQuality_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  indoorEnvironmentQuality_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  indoorEnvironmentQuality_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  indoorEnvironmentQuality_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  indoorEnvironmentQuality_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  indoorEnvironmentQuality_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  indoorEnvironmentQuality_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  indoorEnvironmentQuality_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  indoorEnvironmentQuality_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  indoorEnvironmentQuality_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  indoorEnvironmentQuality_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  indoorEnvironmentQuality_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  indoorEnvironmentQuality_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  indoorEnvironmentQuality_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  maxPressureInColdDistribution_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  maxPressureInColdDistribution_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  maxPressureInColdDistribution_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  maxPressureInColdDistribution_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  maxPressureInColdDistribution_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  maxPressureInColdDistribution_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  maxPressureInColdDistribution_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  maxPressureInColdDistribution_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  maxPressureInColdDistribution_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  maxPressureInColdDistribution_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  maxPressureInColdDistribution_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  maxPressureInColdDistribution_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  maxPressureInColdDistribution_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  maxPressureInColdDistribution_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  maxPressureInColdDistribution_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  nitrogenCentralDistribution_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  nitrogenCentralDistribution_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  nitrogenCentralDistribution_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  nitrogenCentralDistribution_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  nitrogenCentralDistribution_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  nitrogenCentralDistribution_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  nitrogenCentralDistribution_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  nitrogenCentralDistribution_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  nitrogenCentralDistribution_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  nitrogenCentralDistribution_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  nitrogenCentralDistribution_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  nitrogenCentralDistribution_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  nitrogenCentralDistribution_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  nitrogenCentralDistribution_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  nitrogenCentralDistribution_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  prescribedClothing_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  prescribedClothing_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  prescribedClothing_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  prescribedClothing_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  prescribedClothing_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  prescribedClothing_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  prescribedClothing_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  prescribedClothing_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  prescribedClothing_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  prescribedClothing_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  prescribedClothing_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  prescribedClothing_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  prescribedClothing_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  prescribedClothing_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  prescribedClothing_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  pressureInCoolingSystem_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  pressureInCoolingSystem_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  pressureInCoolingSystem_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  pressureInCoolingSystem_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  pressureInCoolingSystem_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  pressureInCoolingSystem_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  pressureInCoolingSystem_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  pressureInCoolingSystem_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  pressureInCoolingSystem_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  pressureInCoolingSystem_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  pressureInCoolingSystem_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  pressureInCoolingSystem_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  pressureInCoolingSystem_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  pressureInCoolingSystem_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  pressureInCoolingSystem_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  purityClass_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  purityClass_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  purityClass_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  purityClass_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  purityClass_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  purityClass_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  purityClass_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  purityClass_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  purityClass_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  purityClass_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  purityClass_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  purityClass_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  purityClass_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  purityClass_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  purityClass_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  roomTemperature_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  roomTemperature_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  roomTemperature_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  roomTemperature_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  roomTemperature_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  roomTemperature_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  roomTemperature_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  roomTemperature_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  roomTemperature_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  roomTemperature_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  roomTemperature_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  roomTemperature_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  roomTemperature_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  roomTemperature_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  roomTemperature_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type LocationRoomCardRelationship = {
+  __typename?: 'LocationRoomCardRelationship';
+  cursor: Scalars['String']['output'];
+  node: RoomCard;
+};
+
+export type LocationRoomCardRoomCardAggregationSelection = {
+  __typename?: 'LocationRoomCardRoomCardAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<LocationRoomCardRoomCardNodeAggregateSelection>;
+};
+
+export type LocationRoomCardRoomCardNodeAggregateSelection = {
+  __typename?: 'LocationRoomCardRoomCardNodeAggregateSelection';
+  additionalRequirements: StringAggregateSelectionNullable;
+  cleaningSchedule: StringAggregateSelectionNullable;
+  compressedAirDistribution: StringAggregateSelectionNullable;
+  coolingWater: StringAggregateSelectionNullable;
+  entryToHvacTent: StringAggregateSelectionNullable;
+  humidity: StringAggregateSelectionNullable;
+  indoorEnvironmentQuality: StringAggregateSelectionNullable;
+  maxPressureInColdDistribution: StringAggregateSelectionNullable;
+  nitrogenCentralDistribution: StringAggregateSelectionNullable;
+  prescribedClothing: StringAggregateSelectionNullable;
+  pressureInCoolingSystem: StringAggregateSelectionNullable;
+  purityClass: StringAggregateSelectionNullable;
+  roomTemperature: StringAggregateSelectionNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type LocationRoomCardUpdateConnectionInput = {
+  node?: InputMaybe<RoomCardUpdateInput>;
+};
+
+export type LocationRoomCardUpdateFieldInput = {
+  connect?: InputMaybe<LocationRoomCardConnectFieldInput>;
+  connectOrCreate?: InputMaybe<LocationRoomCardConnectOrCreateFieldInput>;
+  create?: InputMaybe<LocationRoomCardCreateFieldInput>;
+  delete?: InputMaybe<LocationRoomCardDeleteFieldInput>;
+  disconnect?: InputMaybe<LocationRoomCardDisconnectFieldInput>;
+  update?: InputMaybe<LocationRoomCardUpdateConnectionInput>;
+  where?: InputMaybe<LocationRoomCardConnectionWhere>;
 };
 
 /** Fields to sort Locations by. The order in which sorts are applied is not guaranteed when specifying many fields in one LocationSort object. */
@@ -5194,6 +6151,148 @@ export type LocationSort = {
   code?: InputMaybe<SortDirection>;
   facility?: InputMaybe<SortDirection>;
   name?: InputMaybe<SortDirection>;
+  uid?: InputMaybe<SortDirection>;
+};
+
+export type LocationSubLocationsAggregateInput = {
+  AND?: InputMaybe<Array<LocationSubLocationsAggregateInput>>;
+  NOT?: InputMaybe<LocationSubLocationsAggregateInput>;
+  OR?: InputMaybe<Array<LocationSubLocationsAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<LocationSubLocationsNodeAggregationWhereInput>;
+};
+
+export type LocationSubLocationsConnectFieldInput = {
+  connect?: InputMaybe<Array<LocationConnectInput>>;
+  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<LocationConnectWhere>;
+};
+
+export type LocationSubLocationsConnectOrCreateFieldInput = {
+  onCreate: LocationSubLocationsConnectOrCreateFieldInputOnCreate;
+  where: LocationConnectOrCreateWhere;
+};
+
+export type LocationSubLocationsConnectOrCreateFieldInputOnCreate = {
+  node: LocationOnCreateInput;
+};
+
+export type LocationSubLocationsConnection = {
+  __typename?: 'LocationSubLocationsConnection';
+  edges: Array<LocationSubLocationsRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type LocationSubLocationsConnectionSort = {
+  node?: InputMaybe<LocationSort>;
+};
+
+export type LocationSubLocationsConnectionWhere = {
+  AND?: InputMaybe<Array<LocationSubLocationsConnectionWhere>>;
+  NOT?: InputMaybe<LocationSubLocationsConnectionWhere>;
+  OR?: InputMaybe<Array<LocationSubLocationsConnectionWhere>>;
+  node?: InputMaybe<LocationWhere>;
+};
+
+export type LocationSubLocationsCreateFieldInput = {
+  node: LocationCreateInput;
+};
+
+export type LocationSubLocationsDeleteFieldInput = {
+  delete?: InputMaybe<LocationDeleteInput>;
+  where?: InputMaybe<LocationSubLocationsConnectionWhere>;
+};
+
+export type LocationSubLocationsDisconnectFieldInput = {
+  disconnect?: InputMaybe<LocationDisconnectInput>;
+  where?: InputMaybe<LocationSubLocationsConnectionWhere>;
+};
+
+export type LocationSubLocationsFieldInput = {
+  connect?: InputMaybe<Array<LocationSubLocationsConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<LocationSubLocationsConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<LocationSubLocationsCreateFieldInput>>;
+};
+
+export type LocationSubLocationsNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<LocationSubLocationsNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<LocationSubLocationsNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<LocationSubLocationsNodeAggregationWhereInput>>;
+  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  facility_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type LocationSubLocationsRelationship = {
+  __typename?: 'LocationSubLocationsRelationship';
+  cursor: Scalars['String']['output'];
+  node: Location;
+};
+
+export type LocationSubLocationsUpdateConnectionInput = {
+  node?: InputMaybe<LocationUpdateInput>;
+};
+
+export type LocationSubLocationsUpdateFieldInput = {
+  connect?: InputMaybe<Array<LocationSubLocationsConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<LocationSubLocationsConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<LocationSubLocationsCreateFieldInput>>;
+  delete?: InputMaybe<Array<LocationSubLocationsDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<LocationSubLocationsDisconnectFieldInput>>;
+  update?: InputMaybe<LocationSubLocationsUpdateConnectionInput>;
+  where?: InputMaybe<LocationSubLocationsConnectionWhere>;
+};
+
+export type LocationUniqueWhere = {
+  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type LocationUpdateInput = {
@@ -5201,9 +6300,10 @@ export type LocationUpdateInput = {
   code?: InputMaybe<Scalars['String']['input']>;
   facilitiesHasLocation?: InputMaybe<Array<LocationFacilitiesHasLocationUpdateFieldInput>>;
   facility?: InputMaybe<Scalars['String']['input']>;
-  hasSublocationLocations?: InputMaybe<Array<LocationHasSublocationLocationsUpdateFieldInput>>;
-  locationsHasSublocation?: InputMaybe<Array<LocationLocationsHasSublocationUpdateFieldInput>>;
   name?: InputMaybe<Scalars['String']['input']>;
+  parentLocation?: InputMaybe<LocationParentLocationUpdateFieldInput>;
+  roomCard?: InputMaybe<LocationRoomCardUpdateFieldInput>;
+  subLocations?: InputMaybe<Array<LocationSubLocationsUpdateFieldInput>>;
 };
 
 export type LocationWhere = {
@@ -5254,45 +6354,43 @@ export type LocationWhere = {
   facility_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   facility_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   facility_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
-  hasSublocationLocationsAggregate?: InputMaybe<LocationHasSublocationLocationsAggregateInput>;
-  /** Return Locations where all of the related LocationHasSublocationLocationsConnections match this filter */
-  hasSublocationLocationsConnection_ALL?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-  /** Return Locations where none of the related LocationHasSublocationLocationsConnections match this filter */
-  hasSublocationLocationsConnection_NONE?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-  /** Return Locations where one of the related LocationHasSublocationLocationsConnections match this filter */
-  hasSublocationLocationsConnection_SINGLE?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-  /** Return Locations where some of the related LocationHasSublocationLocationsConnections match this filter */
-  hasSublocationLocationsConnection_SOME?: InputMaybe<LocationHasSublocationLocationsConnectionWhere>;
-  /** Return Locations where all of the related Locations match this filter */
-  hasSublocationLocations_ALL?: InputMaybe<LocationWhere>;
-  /** Return Locations where none of the related Locations match this filter */
-  hasSublocationLocations_NONE?: InputMaybe<LocationWhere>;
-  /** Return Locations where one of the related Locations match this filter */
-  hasSublocationLocations_SINGLE?: InputMaybe<LocationWhere>;
-  /** Return Locations where some of the related Locations match this filter */
-  hasSublocationLocations_SOME?: InputMaybe<LocationWhere>;
-  locationsHasSublocationAggregate?: InputMaybe<LocationLocationsHasSublocationAggregateInput>;
-  /** Return Locations where all of the related LocationLocationsHasSublocationConnections match this filter */
-  locationsHasSublocationConnection_ALL?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
-  /** Return Locations where none of the related LocationLocationsHasSublocationConnections match this filter */
-  locationsHasSublocationConnection_NONE?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
-  /** Return Locations where one of the related LocationLocationsHasSublocationConnections match this filter */
-  locationsHasSublocationConnection_SINGLE?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
-  /** Return Locations where some of the related LocationLocationsHasSublocationConnections match this filter */
-  locationsHasSublocationConnection_SOME?: InputMaybe<LocationLocationsHasSublocationConnectionWhere>;
-  /** Return Locations where all of the related Locations match this filter */
-  locationsHasSublocation_ALL?: InputMaybe<LocationWhere>;
-  /** Return Locations where none of the related Locations match this filter */
-  locationsHasSublocation_NONE?: InputMaybe<LocationWhere>;
-  /** Return Locations where one of the related Locations match this filter */
-  locationsHasSublocation_SINGLE?: InputMaybe<LocationWhere>;
-  /** Return Locations where some of the related Locations match this filter */
-  locationsHasSublocation_SOME?: InputMaybe<LocationWhere>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   name_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   name_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  parentLocation?: InputMaybe<LocationWhere>;
+  parentLocationAggregate?: InputMaybe<LocationParentLocationAggregateInput>;
+  parentLocationConnection?: InputMaybe<LocationParentLocationConnectionWhere>;
+  parentLocationConnection_NOT?: InputMaybe<LocationParentLocationConnectionWhere>;
+  parentLocation_NOT?: InputMaybe<LocationWhere>;
+  roomCard?: InputMaybe<RoomCardWhere>;
+  roomCardAggregate?: InputMaybe<LocationRoomCardAggregateInput>;
+  roomCardConnection?: InputMaybe<LocationRoomCardConnectionWhere>;
+  roomCardConnection_NOT?: InputMaybe<LocationRoomCardConnectionWhere>;
+  roomCard_NOT?: InputMaybe<RoomCardWhere>;
+  subLocationsAggregate?: InputMaybe<LocationSubLocationsAggregateInput>;
+  /** Return Locations where all of the related LocationSubLocationsConnections match this filter */
+  subLocationsConnection_ALL?: InputMaybe<LocationSubLocationsConnectionWhere>;
+  /** Return Locations where none of the related LocationSubLocationsConnections match this filter */
+  subLocationsConnection_NONE?: InputMaybe<LocationSubLocationsConnectionWhere>;
+  /** Return Locations where one of the related LocationSubLocationsConnections match this filter */
+  subLocationsConnection_SINGLE?: InputMaybe<LocationSubLocationsConnectionWhere>;
+  /** Return Locations where some of the related LocationSubLocationsConnections match this filter */
+  subLocationsConnection_SOME?: InputMaybe<LocationSubLocationsConnectionWhere>;
+  /** Return Locations where all of the related Locations match this filter */
+  subLocations_ALL?: InputMaybe<LocationWhere>;
+  /** Return Locations where none of the related Locations match this filter */
+  subLocations_NONE?: InputMaybe<LocationWhere>;
+  /** Return Locations where one of the related Locations match this filter */
+  subLocations_SINGLE?: InputMaybe<LocationWhere>;
+  /** Return Locations where some of the related Locations match this filter */
+  subLocations_SOME?: InputMaybe<LocationWhere>;
+  uid?: InputMaybe<Scalars['ID']['input']>;
+  uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
+  uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
+  uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type LocationsConnection = {
@@ -5599,19 +6697,24 @@ export type Mutation = {
   createCatalogueCategoryPropertyGroups: CreateCatalogueCategoryPropertyGroupsMutationResponse;
   createCatalogueCategoryPropertyTypes: CreateCatalogueCategoryPropertyTypesMutationResponse;
   createCatalogueItems: CreateCatalogueItemsMutationResponse;
+  createContactPersonRoles: CreateContactPersonRolesMutationResponse;
+  createEmployees: CreateEmployeesMutationResponse;
   createFacilities: CreateFacilitiesMutationResponse;
+  createHallContactPeople: CreateHallContactPeopleMutationResponse;
   createItemConditions: CreateItemConditionsMutationResponse;
   createItemUsages: CreateItemUsagesMutationResponse;
   createLocations: CreateLocationsMutationResponse;
   createManufacturers: CreateManufacturersMutationResponse;
   createParentPathItems: CreateParentPathItemsMutationResponse;
   createRoles: CreateRolesMutationResponse;
+  createRoomCards: CreateRoomCardsMutationResponse;
   createSchemaMigrations: CreateSchemaMigrationsMutationResponse;
   createSystemCriticalities: CreateSystemCriticalitiesMutationResponse;
   createSystemImportances: CreateSystemImportancesMutationResponse;
   createSystemTypeGroups: CreateSystemTypeGroupsMutationResponse;
   createSystemTypes: CreateSystemTypesMutationResponse;
   createSystems: CreateSystemsMutationResponse;
+  createTeams: CreateTeamsMutationResponse;
   createUnits: CreateUnitsMutationResponse;
   createUsers: CreateUsersMutationResponse;
   createZones: CreateZonesMutationResponse;
@@ -5620,19 +6723,24 @@ export type Mutation = {
   deleteCatalogueCategoryPropertyGroups: DeleteInfo;
   deleteCatalogueCategoryPropertyTypes: DeleteInfo;
   deleteCatalogueItems: DeleteInfo;
+  deleteContactPersonRoles: DeleteInfo;
+  deleteEmployees: DeleteInfo;
   deleteFacilities: DeleteInfo;
+  deleteHallContactPeople: DeleteInfo;
   deleteItemConditions: DeleteInfo;
   deleteItemUsages: DeleteInfo;
   deleteLocations: DeleteInfo;
   deleteManufacturers: DeleteInfo;
   deleteParentPathItems: DeleteInfo;
   deleteRoles: DeleteInfo;
+  deleteRoomCards: DeleteInfo;
   deleteSchemaMigrations: DeleteInfo;
   deleteSystemCriticalities: DeleteInfo;
   deleteSystemImportances: DeleteInfo;
   deleteSystemTypeGroups: DeleteInfo;
   deleteSystemTypes: DeleteInfo;
   deleteSystems: DeleteInfo;
+  deleteTeams: DeleteInfo;
   deleteUnits: DeleteInfo;
   deleteUsers: DeleteInfo;
   deleteZones: DeleteInfo;
@@ -5641,19 +6749,24 @@ export type Mutation = {
   updateCatalogueCategoryPropertyGroups: UpdateCatalogueCategoryPropertyGroupsMutationResponse;
   updateCatalogueCategoryPropertyTypes: UpdateCatalogueCategoryPropertyTypesMutationResponse;
   updateCatalogueItems: UpdateCatalogueItemsMutationResponse;
+  updateContactPersonRoles: UpdateContactPersonRolesMutationResponse;
+  updateEmployees: UpdateEmployeesMutationResponse;
   updateFacilities: UpdateFacilitiesMutationResponse;
+  updateHallContactPeople: UpdateHallContactPeopleMutationResponse;
   updateItemConditions: UpdateItemConditionsMutationResponse;
   updateItemUsages: UpdateItemUsagesMutationResponse;
   updateLocations: UpdateLocationsMutationResponse;
   updateManufacturers: UpdateManufacturersMutationResponse;
   updateParentPathItems: UpdateParentPathItemsMutationResponse;
   updateRoles: UpdateRolesMutationResponse;
+  updateRoomCards: UpdateRoomCardsMutationResponse;
   updateSchemaMigrations: UpdateSchemaMigrationsMutationResponse;
   updateSystemCriticalities: UpdateSystemCriticalitiesMutationResponse;
   updateSystemImportances: UpdateSystemImportancesMutationResponse;
   updateSystemTypeGroups: UpdateSystemTypeGroupsMutationResponse;
   updateSystemTypes: UpdateSystemTypesMutationResponse;
   updateSystems: UpdateSystemsMutationResponse;
+  updateTeams: UpdateTeamsMutationResponse;
   updateUnits: UpdateUnitsMutationResponse;
   updateUsers: UpdateUsersMutationResponse;
   updateZones: UpdateZonesMutationResponse;
@@ -5685,8 +6798,23 @@ export type MutationCreateCatalogueItemsArgs = {
 };
 
 
+export type MutationCreateContactPersonRolesArgs = {
+  input: Array<ContactPersonRoleCreateInput>;
+};
+
+
+export type MutationCreateEmployeesArgs = {
+  input: Array<EmployeeCreateInput>;
+};
+
+
 export type MutationCreateFacilitiesArgs = {
   input: Array<FacilityCreateInput>;
+};
+
+
+export type MutationCreateHallContactPeopleArgs = {
+  input: Array<HallContactPersonCreateInput>;
 };
 
 
@@ -5720,6 +6848,11 @@ export type MutationCreateRolesArgs = {
 };
 
 
+export type MutationCreateRoomCardsArgs = {
+  input: Array<RoomCardCreateInput>;
+};
+
+
 export type MutationCreateSchemaMigrationsArgs = {
   input: Array<SchemaMigrationCreateInput>;
 };
@@ -5747,6 +6880,11 @@ export type MutationCreateSystemTypesArgs = {
 
 export type MutationCreateSystemsArgs = {
   input: Array<SystemCreateInput>;
+};
+
+
+export type MutationCreateTeamsArgs = {
+  input: Array<TeamCreateInput>;
 };
 
 
@@ -5795,9 +6933,25 @@ export type MutationDeleteCatalogueItemsArgs = {
 };
 
 
+export type MutationDeleteContactPersonRolesArgs = {
+  where?: InputMaybe<ContactPersonRoleWhere>;
+};
+
+
+export type MutationDeleteEmployeesArgs = {
+  where?: InputMaybe<EmployeeWhere>;
+};
+
+
 export type MutationDeleteFacilitiesArgs = {
   delete?: InputMaybe<FacilityDeleteInput>;
   where?: InputMaybe<FacilityWhere>;
+};
+
+
+export type MutationDeleteHallContactPeopleArgs = {
+  delete?: InputMaybe<HallContactPersonDeleteInput>;
+  where?: InputMaybe<HallContactPersonWhere>;
 };
 
 
@@ -5834,6 +6988,12 @@ export type MutationDeleteRolesArgs = {
 };
 
 
+export type MutationDeleteRoomCardsArgs = {
+  delete?: InputMaybe<RoomCardDeleteInput>;
+  where?: InputMaybe<RoomCardWhere>;
+};
+
+
 export type MutationDeleteSchemaMigrationsArgs = {
   where?: InputMaybe<SchemaMigrationWhere>;
 };
@@ -5864,6 +7024,11 @@ export type MutationDeleteSystemTypesArgs = {
 export type MutationDeleteSystemsArgs = {
   delete?: InputMaybe<SystemDeleteInput>;
   where?: InputMaybe<SystemWhere>;
+};
+
+
+export type MutationDeleteTeamsArgs = {
+  where?: InputMaybe<TeamWhere>;
 };
 
 
@@ -5935,13 +7100,37 @@ export type MutationUpdateCatalogueItemsArgs = {
 };
 
 
+export type MutationUpdateContactPersonRolesArgs = {
+  update?: InputMaybe<ContactPersonRoleUpdateInput>;
+  where?: InputMaybe<ContactPersonRoleWhere>;
+};
+
+
+export type MutationUpdateEmployeesArgs = {
+  update?: InputMaybe<EmployeeUpdateInput>;
+  where?: InputMaybe<EmployeeWhere>;
+};
+
+
 export type MutationUpdateFacilitiesArgs = {
   connect?: InputMaybe<FacilityConnectInput>;
+  connectOrCreate?: InputMaybe<FacilityConnectOrCreateInput>;
   create?: InputMaybe<FacilityRelationInput>;
   delete?: InputMaybe<FacilityDeleteInput>;
   disconnect?: InputMaybe<FacilityDisconnectInput>;
   update?: InputMaybe<FacilityUpdateInput>;
   where?: InputMaybe<FacilityWhere>;
+};
+
+
+export type MutationUpdateHallContactPeopleArgs = {
+  connect?: InputMaybe<HallContactPersonConnectInput>;
+  connectOrCreate?: InputMaybe<HallContactPersonConnectOrCreateInput>;
+  create?: InputMaybe<HallContactPersonRelationInput>;
+  delete?: InputMaybe<HallContactPersonDeleteInput>;
+  disconnect?: InputMaybe<HallContactPersonDisconnectInput>;
+  update?: InputMaybe<HallContactPersonUpdateInput>;
+  where?: InputMaybe<HallContactPersonWhere>;
 };
 
 
@@ -5959,6 +7148,7 @@ export type MutationUpdateItemUsagesArgs = {
 
 export type MutationUpdateLocationsArgs = {
   connect?: InputMaybe<LocationConnectInput>;
+  connectOrCreate?: InputMaybe<LocationConnectOrCreateInput>;
   create?: InputMaybe<LocationRelationInput>;
   delete?: InputMaybe<LocationDeleteInput>;
   disconnect?: InputMaybe<LocationDisconnectInput>;
@@ -5990,6 +7180,17 @@ export type MutationUpdateRolesArgs = {
   disconnect?: InputMaybe<RoleDisconnectInput>;
   update?: InputMaybe<RoleUpdateInput>;
   where?: InputMaybe<RoleWhere>;
+};
+
+
+export type MutationUpdateRoomCardsArgs = {
+  connect?: InputMaybe<RoomCardConnectInput>;
+  connectOrCreate?: InputMaybe<RoomCardConnectOrCreateInput>;
+  create?: InputMaybe<RoomCardRelationInput>;
+  delete?: InputMaybe<RoomCardDeleteInput>;
+  disconnect?: InputMaybe<RoomCardDisconnectInput>;
+  update?: InputMaybe<RoomCardUpdateInput>;
+  where?: InputMaybe<RoomCardWhere>;
 };
 
 
@@ -6038,6 +7239,12 @@ export type MutationUpdateSystemsArgs = {
   disconnect?: InputMaybe<SystemDisconnectInput>;
   update?: InputMaybe<SystemUpdateInput>;
   where?: InputMaybe<SystemWhere>;
+};
+
+
+export type MutationUpdateTeamsArgs = {
+  update?: InputMaybe<TeamUpdateInput>;
+  where?: InputMaybe<TeamWhere>;
 };
 
 
@@ -6161,9 +7368,18 @@ export type Query = {
   catalogueItems: Array<CatalogueItem>;
   catalogueItemsAggregate: CatalogueItemAggregateSelection;
   catalogueItemsConnection: CatalogueItemsConnection;
+  contactPersonRoles: Array<ContactPersonRole>;
+  contactPersonRolesAggregate: ContactPersonRoleAggregateSelection;
+  contactPersonRolesConnection: ContactPersonRolesConnection;
+  employees: Array<Employee>;
+  employeesAggregate: EmployeeAggregateSelection;
+  employeesConnection: EmployeesConnection;
   facilities: Array<Facility>;
   facilitiesAggregate: FacilityAggregateSelection;
   facilitiesConnection: FacilitiesConnection;
+  hallContactPeople: Array<HallContactPerson>;
+  hallContactPeopleAggregate: HallContactPersonAggregateSelection;
+  hallContactPeopleConnection: HallContactPeopleConnection;
   itemConditions: Array<ItemCondition>;
   itemConditionsAggregate: ItemConditionAggregateSelection;
   itemConditionsConnection: ItemConditionsConnection;
@@ -6182,6 +7398,9 @@ export type Query = {
   roles: Array<Role>;
   rolesAggregate: RoleAggregateSelection;
   rolesConnection: RolesConnection;
+  roomCards: Array<RoomCard>;
+  roomCardsAggregate: RoomCardAggregateSelection;
+  roomCardsConnection: RoomCardsConnection;
   schemaMigrations: Array<SchemaMigration>;
   schemaMigrationsAggregate: SchemaMigrationAggregateSelection;
   schemaMigrationsConnection: SchemaMigrationsConnection;
@@ -6200,6 +7419,9 @@ export type Query = {
   systems: Array<System>;
   systemsAggregate: SystemAggregateSelection;
   systemsConnection: SystemsConnection;
+  teams: Array<Team>;
+  teamsAggregate: TeamAggregateSelection;
+  teamsConnection: TeamsConnection;
   units: Array<Unit>;
   unitsAggregate: UnitAggregateSelection;
   unitsConnection: UnitsConnection;
@@ -6307,6 +7529,44 @@ export type QueryCatalogueItemsConnectionArgs = {
 };
 
 
+export type QueryContactPersonRolesArgs = {
+  options?: InputMaybe<ContactPersonRoleOptions>;
+  where?: InputMaybe<ContactPersonRoleWhere>;
+};
+
+
+export type QueryContactPersonRolesAggregateArgs = {
+  where?: InputMaybe<ContactPersonRoleWhere>;
+};
+
+
+export type QueryContactPersonRolesConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<ContactPersonRoleSort>>>;
+  where?: InputMaybe<ContactPersonRoleWhere>;
+};
+
+
+export type QueryEmployeesArgs = {
+  options?: InputMaybe<EmployeeOptions>;
+  where?: InputMaybe<EmployeeWhere>;
+};
+
+
+export type QueryEmployeesAggregateArgs = {
+  where?: InputMaybe<EmployeeWhere>;
+};
+
+
+export type QueryEmployeesConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<EmployeeSort>>>;
+  where?: InputMaybe<EmployeeWhere>;
+};
+
+
 export type QueryFacilitiesArgs = {
   options?: InputMaybe<FacilityOptions>;
   where?: InputMaybe<FacilityWhere>;
@@ -6323,6 +7583,25 @@ export type QueryFacilitiesConnectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<InputMaybe<FacilitySort>>>;
   where?: InputMaybe<FacilityWhere>;
+};
+
+
+export type QueryHallContactPeopleArgs = {
+  options?: InputMaybe<HallContactPersonOptions>;
+  where?: InputMaybe<HallContactPersonWhere>;
+};
+
+
+export type QueryHallContactPeopleAggregateArgs = {
+  where?: InputMaybe<HallContactPersonWhere>;
+};
+
+
+export type QueryHallContactPeopleConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<HallContactPersonSort>>>;
+  where?: InputMaybe<HallContactPersonWhere>;
 };
 
 
@@ -6440,6 +7719,25 @@ export type QueryRolesConnectionArgs = {
 };
 
 
+export type QueryRoomCardsArgs = {
+  options?: InputMaybe<RoomCardOptions>;
+  where?: InputMaybe<RoomCardWhere>;
+};
+
+
+export type QueryRoomCardsAggregateArgs = {
+  where?: InputMaybe<RoomCardWhere>;
+};
+
+
+export type QueryRoomCardsConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<RoomCardSort>>>;
+  where?: InputMaybe<RoomCardWhere>;
+};
+
+
 export type QuerySchemaMigrationsArgs = {
   options?: InputMaybe<SchemaMigrationOptions>;
   where?: InputMaybe<SchemaMigrationWhere>;
@@ -6551,6 +7849,25 @@ export type QuerySystemsConnectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<InputMaybe<SystemSort>>>;
   where?: InputMaybe<SystemWhere>;
+};
+
+
+export type QueryTeamsArgs = {
+  options?: InputMaybe<TeamOptions>;
+  where?: InputMaybe<TeamWhere>;
+};
+
+
+export type QueryTeamsAggregateArgs = {
+  where?: InputMaybe<TeamWhere>;
+};
+
+
+export type QueryTeamsConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<TeamSort>>>;
+  where?: InputMaybe<TeamWhere>;
 };
 
 
@@ -6932,6 +8249,982 @@ export type RoleWhere = {
 export type RolesConnection = {
   __typename?: 'RolesConnection';
   edges: Array<RoleEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type RoomCard = {
+  __typename?: 'RoomCard';
+  additionalRequirements?: Maybe<Scalars['String']['output']>;
+  cleaningSchedule?: Maybe<Scalars['String']['output']>;
+  compressedAirDistribution?: Maybe<Scalars['String']['output']>;
+  contactPersonsDept: Array<Employee>;
+  contactPersonsDeptAggregate?: Maybe<RoomCardEmployeeContactPersonsDeptAggregationSelection>;
+  contactPersonsDeptConnection: RoomCardContactPersonsDeptConnection;
+  contactPersonsHall: Array<HallContactPerson>;
+  contactPersonsHallAggregate?: Maybe<RoomCardHallContactPersonContactPersonsHallAggregationSelection>;
+  contactPersonsHallConnection: RoomCardContactPersonsHallConnection;
+  coolingWater?: Maybe<Scalars['String']['output']>;
+  entryToHvacTent?: Maybe<Scalars['String']['output']>;
+  humidity?: Maybe<Scalars['String']['output']>;
+  indoorEnvironmentQuality?: Maybe<Scalars['String']['output']>;
+  location: Location;
+  locationAggregate?: Maybe<RoomCardLocationLocationAggregationSelection>;
+  locationConnection: RoomCardLocationConnection;
+  maxPressureInColdDistribution?: Maybe<Scalars['String']['output']>;
+  nitrogenCentralDistribution?: Maybe<Scalars['String']['output']>;
+  prescribedClothing?: Maybe<Scalars['String']['output']>;
+  pressureInCoolingSystem?: Maybe<Scalars['String']['output']>;
+  purityClass?: Maybe<Scalars['String']['output']>;
+  roomTemperature?: Maybe<Scalars['String']['output']>;
+  status: RoomCardStatus;
+  teams: Array<Team>;
+  teamsAggregate?: Maybe<RoomCardTeamTeamsAggregationSelection>;
+  teamsConnection: RoomCardTeamsConnection;
+  uid: Scalars['ID']['output'];
+};
+
+
+export type RoomCardContactPersonsDeptArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<EmployeeOptions>;
+  where?: InputMaybe<EmployeeWhere>;
+};
+
+
+export type RoomCardContactPersonsDeptAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<EmployeeWhere>;
+};
+
+
+export type RoomCardContactPersonsDeptConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<RoomCardContactPersonsDeptConnectionSort>>;
+  where?: InputMaybe<RoomCardContactPersonsDeptConnectionWhere>;
+};
+
+
+export type RoomCardContactPersonsHallArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<HallContactPersonOptions>;
+  where?: InputMaybe<HallContactPersonWhere>;
+};
+
+
+export type RoomCardContactPersonsHallAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<HallContactPersonWhere>;
+};
+
+
+export type RoomCardContactPersonsHallConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<RoomCardContactPersonsHallConnectionSort>>;
+  where?: InputMaybe<RoomCardContactPersonsHallConnectionWhere>;
+};
+
+
+export type RoomCardLocationArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<LocationOptions>;
+  where?: InputMaybe<LocationWhere>;
+};
+
+
+export type RoomCardLocationAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<LocationWhere>;
+};
+
+
+export type RoomCardLocationConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<RoomCardLocationConnectionSort>>;
+  where?: InputMaybe<RoomCardLocationConnectionWhere>;
+};
+
+
+export type RoomCardTeamsArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<TeamOptions>;
+  where?: InputMaybe<TeamWhere>;
+};
+
+
+export type RoomCardTeamsAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<TeamWhere>;
+};
+
+
+export type RoomCardTeamsConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<RoomCardTeamsConnectionSort>>;
+  where?: InputMaybe<RoomCardTeamsConnectionWhere>;
+};
+
+export type RoomCardAggregateSelection = {
+  __typename?: 'RoomCardAggregateSelection';
+  additionalRequirements: StringAggregateSelectionNullable;
+  cleaningSchedule: StringAggregateSelectionNullable;
+  compressedAirDistribution: StringAggregateSelectionNullable;
+  coolingWater: StringAggregateSelectionNullable;
+  count: Scalars['Int']['output'];
+  entryToHvacTent: StringAggregateSelectionNullable;
+  humidity: StringAggregateSelectionNullable;
+  indoorEnvironmentQuality: StringAggregateSelectionNullable;
+  maxPressureInColdDistribution: StringAggregateSelectionNullable;
+  nitrogenCentralDistribution: StringAggregateSelectionNullable;
+  prescribedClothing: StringAggregateSelectionNullable;
+  pressureInCoolingSystem: StringAggregateSelectionNullable;
+  purityClass: StringAggregateSelectionNullable;
+  roomTemperature: StringAggregateSelectionNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type RoomCardConnectInput = {
+  contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptConnectFieldInput>>;
+  contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallConnectFieldInput>>;
+  location?: InputMaybe<RoomCardLocationConnectFieldInput>;
+  teams?: InputMaybe<Array<RoomCardTeamsConnectFieldInput>>;
+};
+
+export type RoomCardConnectOrCreateInput = {
+  contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallConnectOrCreateFieldInput>>;
+  location?: InputMaybe<RoomCardLocationConnectOrCreateFieldInput>;
+  teams?: InputMaybe<Array<RoomCardTeamsConnectOrCreateFieldInput>>;
+};
+
+export type RoomCardConnectOrCreateWhere = {
+  node: RoomCardUniqueWhere;
+};
+
+export type RoomCardConnectWhere = {
+  node: RoomCardWhere;
+};
+
+export type RoomCardContactPersonsDeptAggregateInput = {
+  AND?: InputMaybe<Array<RoomCardContactPersonsDeptAggregateInput>>;
+  NOT?: InputMaybe<RoomCardContactPersonsDeptAggregateInput>;
+  OR?: InputMaybe<Array<RoomCardContactPersonsDeptAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<RoomCardContactPersonsDeptNodeAggregationWhereInput>;
+};
+
+export type RoomCardContactPersonsDeptConnectFieldInput = {
+  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<EmployeeConnectWhere>;
+};
+
+export type RoomCardContactPersonsDeptConnection = {
+  __typename?: 'RoomCardContactPersonsDeptConnection';
+  edges: Array<RoomCardContactPersonsDeptRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type RoomCardContactPersonsDeptConnectionSort = {
+  node?: InputMaybe<EmployeeSort>;
+};
+
+export type RoomCardContactPersonsDeptConnectionWhere = {
+  AND?: InputMaybe<Array<RoomCardContactPersonsDeptConnectionWhere>>;
+  NOT?: InputMaybe<RoomCardContactPersonsDeptConnectionWhere>;
+  OR?: InputMaybe<Array<RoomCardContactPersonsDeptConnectionWhere>>;
+  node?: InputMaybe<EmployeeWhere>;
+};
+
+export type RoomCardContactPersonsDeptCreateFieldInput = {
+  node: EmployeeCreateInput;
+};
+
+export type RoomCardContactPersonsDeptDeleteFieldInput = {
+  where?: InputMaybe<RoomCardContactPersonsDeptConnectionWhere>;
+};
+
+export type RoomCardContactPersonsDeptDisconnectFieldInput = {
+  where?: InputMaybe<RoomCardContactPersonsDeptConnectionWhere>;
+};
+
+export type RoomCardContactPersonsDeptFieldInput = {
+  connect?: InputMaybe<Array<RoomCardContactPersonsDeptConnectFieldInput>>;
+  create?: InputMaybe<Array<RoomCardContactPersonsDeptCreateFieldInput>>;
+};
+
+export type RoomCardContactPersonsDeptNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<RoomCardContactPersonsDeptNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<RoomCardContactPersonsDeptNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<RoomCardContactPersonsDeptNodeAggregationWhereInput>>;
+  email_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  email_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  fullName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  phoneNumber_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  phoneNumber_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  phoneNumber_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  phoneNumber_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  phoneNumber_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  uid_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type RoomCardContactPersonsDeptRelationship = {
+  __typename?: 'RoomCardContactPersonsDeptRelationship';
+  cursor: Scalars['String']['output'];
+  node: Employee;
+};
+
+export type RoomCardContactPersonsDeptUpdateConnectionInput = {
+  node?: InputMaybe<EmployeeUpdateInput>;
+};
+
+export type RoomCardContactPersonsDeptUpdateFieldInput = {
+  connect?: InputMaybe<Array<RoomCardContactPersonsDeptConnectFieldInput>>;
+  create?: InputMaybe<Array<RoomCardContactPersonsDeptCreateFieldInput>>;
+  delete?: InputMaybe<Array<RoomCardContactPersonsDeptDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<RoomCardContactPersonsDeptDisconnectFieldInput>>;
+  update?: InputMaybe<RoomCardContactPersonsDeptUpdateConnectionInput>;
+  where?: InputMaybe<RoomCardContactPersonsDeptConnectionWhere>;
+};
+
+export type RoomCardContactPersonsHallAggregateInput = {
+  AND?: InputMaybe<Array<RoomCardContactPersonsHallAggregateInput>>;
+  NOT?: InputMaybe<RoomCardContactPersonsHallAggregateInput>;
+  OR?: InputMaybe<Array<RoomCardContactPersonsHallAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<RoomCardContactPersonsHallNodeAggregationWhereInput>;
+};
+
+export type RoomCardContactPersonsHallConnectFieldInput = {
+  connect?: InputMaybe<Array<HallContactPersonConnectInput>>;
+  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<HallContactPersonConnectWhere>;
+};
+
+export type RoomCardContactPersonsHallConnectOrCreateFieldInput = {
+  onCreate: RoomCardContactPersonsHallConnectOrCreateFieldInputOnCreate;
+  where: HallContactPersonConnectOrCreateWhere;
+};
+
+export type RoomCardContactPersonsHallConnectOrCreateFieldInputOnCreate = {
+  node: HallContactPersonOnCreateInput;
+};
+
+export type RoomCardContactPersonsHallConnection = {
+  __typename?: 'RoomCardContactPersonsHallConnection';
+  edges: Array<RoomCardContactPersonsHallRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type RoomCardContactPersonsHallConnectionSort = {
+  node?: InputMaybe<HallContactPersonSort>;
+};
+
+export type RoomCardContactPersonsHallConnectionWhere = {
+  AND?: InputMaybe<Array<RoomCardContactPersonsHallConnectionWhere>>;
+  NOT?: InputMaybe<RoomCardContactPersonsHallConnectionWhere>;
+  OR?: InputMaybe<Array<RoomCardContactPersonsHallConnectionWhere>>;
+  node?: InputMaybe<HallContactPersonWhere>;
+};
+
+export type RoomCardContactPersonsHallCreateFieldInput = {
+  node: HallContactPersonCreateInput;
+};
+
+export type RoomCardContactPersonsHallDeleteFieldInput = {
+  delete?: InputMaybe<HallContactPersonDeleteInput>;
+  where?: InputMaybe<RoomCardContactPersonsHallConnectionWhere>;
+};
+
+export type RoomCardContactPersonsHallDisconnectFieldInput = {
+  disconnect?: InputMaybe<HallContactPersonDisconnectInput>;
+  where?: InputMaybe<RoomCardContactPersonsHallConnectionWhere>;
+};
+
+export type RoomCardContactPersonsHallFieldInput = {
+  connect?: InputMaybe<Array<RoomCardContactPersonsHallConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<RoomCardContactPersonsHallConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<RoomCardContactPersonsHallCreateFieldInput>>;
+};
+
+export type RoomCardContactPersonsHallNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<RoomCardContactPersonsHallNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<RoomCardContactPersonsHallNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<RoomCardContactPersonsHallNodeAggregationWhereInput>>;
+};
+
+export type RoomCardContactPersonsHallRelationship = {
+  __typename?: 'RoomCardContactPersonsHallRelationship';
+  cursor: Scalars['String']['output'];
+  node: HallContactPerson;
+};
+
+export type RoomCardContactPersonsHallUpdateConnectionInput = {
+  node?: InputMaybe<HallContactPersonUpdateInput>;
+};
+
+export type RoomCardContactPersonsHallUpdateFieldInput = {
+  connect?: InputMaybe<Array<RoomCardContactPersonsHallConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<RoomCardContactPersonsHallConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<RoomCardContactPersonsHallCreateFieldInput>>;
+  delete?: InputMaybe<Array<RoomCardContactPersonsHallDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<RoomCardContactPersonsHallDisconnectFieldInput>>;
+  update?: InputMaybe<RoomCardContactPersonsHallUpdateConnectionInput>;
+  where?: InputMaybe<RoomCardContactPersonsHallConnectionWhere>;
+};
+
+export type RoomCardCreateInput = {
+  additionalRequirements?: InputMaybe<Scalars['String']['input']>;
+  cleaningSchedule?: InputMaybe<Scalars['String']['input']>;
+  compressedAirDistribution?: InputMaybe<Scalars['String']['input']>;
+  contactPersonsDept?: InputMaybe<RoomCardContactPersonsDeptFieldInput>;
+  contactPersonsHall?: InputMaybe<RoomCardContactPersonsHallFieldInput>;
+  coolingWater?: InputMaybe<Scalars['String']['input']>;
+  entryToHvacTent?: InputMaybe<Scalars['String']['input']>;
+  humidity?: InputMaybe<Scalars['String']['input']>;
+  indoorEnvironmentQuality?: InputMaybe<Scalars['String']['input']>;
+  location?: InputMaybe<RoomCardLocationFieldInput>;
+  maxPressureInColdDistribution?: InputMaybe<Scalars['String']['input']>;
+  nitrogenCentralDistribution?: InputMaybe<Scalars['String']['input']>;
+  prescribedClothing?: InputMaybe<Scalars['String']['input']>;
+  pressureInCoolingSystem?: InputMaybe<Scalars['String']['input']>;
+  purityClass?: InputMaybe<Scalars['String']['input']>;
+  roomTemperature?: InputMaybe<Scalars['String']['input']>;
+  status: RoomCardStatus;
+  teams?: InputMaybe<RoomCardTeamsFieldInput>;
+};
+
+export type RoomCardDeleteInput = {
+  contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptDeleteFieldInput>>;
+  contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallDeleteFieldInput>>;
+  location?: InputMaybe<RoomCardLocationDeleteFieldInput>;
+  teams?: InputMaybe<Array<RoomCardTeamsDeleteFieldInput>>;
+};
+
+export type RoomCardDisconnectInput = {
+  contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptDisconnectFieldInput>>;
+  contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallDisconnectFieldInput>>;
+  location?: InputMaybe<RoomCardLocationDisconnectFieldInput>;
+  teams?: InputMaybe<Array<RoomCardTeamsDisconnectFieldInput>>;
+};
+
+export type RoomCardEdge = {
+  __typename?: 'RoomCardEdge';
+  cursor: Scalars['String']['output'];
+  node: RoomCard;
+};
+
+export type RoomCardEmployeeContactPersonsDeptAggregationSelection = {
+  __typename?: 'RoomCardEmployeeContactPersonsDeptAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<RoomCardEmployeeContactPersonsDeptNodeAggregateSelection>;
+};
+
+export type RoomCardEmployeeContactPersonsDeptNodeAggregateSelection = {
+  __typename?: 'RoomCardEmployeeContactPersonsDeptNodeAggregateSelection';
+  email: StringAggregateSelectionNullable;
+  firstName: StringAggregateSelectionNonNullable;
+  fullName: StringAggregateSelectionNullable;
+  lastName: StringAggregateSelectionNonNullable;
+  phoneNumber: StringAggregateSelectionNullable;
+  uid: StringAggregateSelectionNonNullable;
+};
+
+export type RoomCardHallContactPersonContactPersonsHallAggregationSelection = {
+  __typename?: 'RoomCardHallContactPersonContactPersonsHallAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<RoomCardHallContactPersonContactPersonsHallNodeAggregateSelection>;
+};
+
+export type RoomCardHallContactPersonContactPersonsHallNodeAggregateSelection = {
+  __typename?: 'RoomCardHallContactPersonContactPersonsHallNodeAggregateSelection';
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type RoomCardLocationAggregateInput = {
+  AND?: InputMaybe<Array<RoomCardLocationAggregateInput>>;
+  NOT?: InputMaybe<RoomCardLocationAggregateInput>;
+  OR?: InputMaybe<Array<RoomCardLocationAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<RoomCardLocationNodeAggregationWhereInput>;
+};
+
+export type RoomCardLocationConnectFieldInput = {
+  connect?: InputMaybe<LocationConnectInput>;
+  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<LocationConnectWhere>;
+};
+
+export type RoomCardLocationConnectOrCreateFieldInput = {
+  onCreate: RoomCardLocationConnectOrCreateFieldInputOnCreate;
+  where: LocationConnectOrCreateWhere;
+};
+
+export type RoomCardLocationConnectOrCreateFieldInputOnCreate = {
+  node: LocationOnCreateInput;
+};
+
+export type RoomCardLocationConnection = {
+  __typename?: 'RoomCardLocationConnection';
+  edges: Array<RoomCardLocationRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type RoomCardLocationConnectionSort = {
+  node?: InputMaybe<LocationSort>;
+};
+
+export type RoomCardLocationConnectionWhere = {
+  AND?: InputMaybe<Array<RoomCardLocationConnectionWhere>>;
+  NOT?: InputMaybe<RoomCardLocationConnectionWhere>;
+  OR?: InputMaybe<Array<RoomCardLocationConnectionWhere>>;
+  node?: InputMaybe<LocationWhere>;
+};
+
+export type RoomCardLocationCreateFieldInput = {
+  node: LocationCreateInput;
+};
+
+export type RoomCardLocationDeleteFieldInput = {
+  delete?: InputMaybe<LocationDeleteInput>;
+  where?: InputMaybe<RoomCardLocationConnectionWhere>;
+};
+
+export type RoomCardLocationDisconnectFieldInput = {
+  disconnect?: InputMaybe<LocationDisconnectInput>;
+  where?: InputMaybe<RoomCardLocationConnectionWhere>;
+};
+
+export type RoomCardLocationFieldInput = {
+  connect?: InputMaybe<RoomCardLocationConnectFieldInput>;
+  connectOrCreate?: InputMaybe<RoomCardLocationConnectOrCreateFieldInput>;
+  create?: InputMaybe<RoomCardLocationCreateFieldInput>;
+};
+
+export type RoomCardLocationLocationAggregationSelection = {
+  __typename?: 'RoomCardLocationLocationAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<RoomCardLocationLocationNodeAggregateSelection>;
+};
+
+export type RoomCardLocationLocationNodeAggregateSelection = {
+  __typename?: 'RoomCardLocationLocationNodeAggregateSelection';
+  code: StringAggregateSelectionNullable;
+  facility: StringAggregateSelectionNonNullable;
+  name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type RoomCardLocationNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<RoomCardLocationNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<RoomCardLocationNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<RoomCardLocationNodeAggregationWhereInput>>;
+  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  facility_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  facility_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  facility_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  facility_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type RoomCardLocationRelationship = {
+  __typename?: 'RoomCardLocationRelationship';
+  cursor: Scalars['String']['output'];
+  node: Location;
+};
+
+export type RoomCardLocationUpdateConnectionInput = {
+  node?: InputMaybe<LocationUpdateInput>;
+};
+
+export type RoomCardLocationUpdateFieldInput = {
+  connect?: InputMaybe<RoomCardLocationConnectFieldInput>;
+  connectOrCreate?: InputMaybe<RoomCardLocationConnectOrCreateFieldInput>;
+  create?: InputMaybe<RoomCardLocationCreateFieldInput>;
+  delete?: InputMaybe<RoomCardLocationDeleteFieldInput>;
+  disconnect?: InputMaybe<RoomCardLocationDisconnectFieldInput>;
+  update?: InputMaybe<RoomCardLocationUpdateConnectionInput>;
+  where?: InputMaybe<RoomCardLocationConnectionWhere>;
+};
+
+export type RoomCardOnCreateInput = {
+  additionalRequirements?: InputMaybe<Scalars['String']['input']>;
+  cleaningSchedule?: InputMaybe<Scalars['String']['input']>;
+  compressedAirDistribution?: InputMaybe<Scalars['String']['input']>;
+  coolingWater?: InputMaybe<Scalars['String']['input']>;
+  entryToHvacTent?: InputMaybe<Scalars['String']['input']>;
+  humidity?: InputMaybe<Scalars['String']['input']>;
+  indoorEnvironmentQuality?: InputMaybe<Scalars['String']['input']>;
+  maxPressureInColdDistribution?: InputMaybe<Scalars['String']['input']>;
+  nitrogenCentralDistribution?: InputMaybe<Scalars['String']['input']>;
+  prescribedClothing?: InputMaybe<Scalars['String']['input']>;
+  pressureInCoolingSystem?: InputMaybe<Scalars['String']['input']>;
+  purityClass?: InputMaybe<Scalars['String']['input']>;
+  roomTemperature?: InputMaybe<Scalars['String']['input']>;
+  status: RoomCardStatus;
+};
+
+export type RoomCardOptions = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /** Specify one or more RoomCardSort objects to sort RoomCards by. The sorts will be applied in the order in which they are arranged in the array. */
+  sort?: InputMaybe<Array<RoomCardSort>>;
+};
+
+export type RoomCardRelationInput = {
+  contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptCreateFieldInput>>;
+  contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallCreateFieldInput>>;
+  location?: InputMaybe<RoomCardLocationCreateFieldInput>;
+  teams?: InputMaybe<Array<RoomCardTeamsCreateFieldInput>>;
+};
+
+/** Fields to sort RoomCards by. The order in which sorts are applied is not guaranteed when specifying many fields in one RoomCardSort object. */
+export type RoomCardSort = {
+  additionalRequirements?: InputMaybe<SortDirection>;
+  cleaningSchedule?: InputMaybe<SortDirection>;
+  compressedAirDistribution?: InputMaybe<SortDirection>;
+  coolingWater?: InputMaybe<SortDirection>;
+  entryToHvacTent?: InputMaybe<SortDirection>;
+  humidity?: InputMaybe<SortDirection>;
+  indoorEnvironmentQuality?: InputMaybe<SortDirection>;
+  maxPressureInColdDistribution?: InputMaybe<SortDirection>;
+  nitrogenCentralDistribution?: InputMaybe<SortDirection>;
+  prescribedClothing?: InputMaybe<SortDirection>;
+  pressureInCoolingSystem?: InputMaybe<SortDirection>;
+  purityClass?: InputMaybe<SortDirection>;
+  roomTemperature?: InputMaybe<SortDirection>;
+  status?: InputMaybe<SortDirection>;
+  uid?: InputMaybe<SortDirection>;
+};
+
+export enum RoomCardStatus {
+  CleanMode = 'CLEAN_MODE',
+  DirtyMode = 'DIRTY_MODE',
+  InPreparationMode = 'IN_PREPARATION_MODE'
+}
+
+export type RoomCardTeamTeamsAggregationSelection = {
+  __typename?: 'RoomCardTeamTeamsAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<RoomCardTeamTeamsNodeAggregateSelection>;
+};
+
+export type RoomCardTeamTeamsNodeAggregateSelection = {
+  __typename?: 'RoomCardTeamTeamsNodeAggregateSelection';
+  name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type RoomCardTeamsAggregateInput = {
+  AND?: InputMaybe<Array<RoomCardTeamsAggregateInput>>;
+  NOT?: InputMaybe<RoomCardTeamsAggregateInput>;
+  OR?: InputMaybe<Array<RoomCardTeamsAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<RoomCardTeamsNodeAggregationWhereInput>;
+};
+
+export type RoomCardTeamsConnectFieldInput = {
+  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<TeamConnectWhere>;
+};
+
+export type RoomCardTeamsConnectOrCreateFieldInput = {
+  onCreate: RoomCardTeamsConnectOrCreateFieldInputOnCreate;
+  where: TeamConnectOrCreateWhere;
+};
+
+export type RoomCardTeamsConnectOrCreateFieldInputOnCreate = {
+  node: TeamOnCreateInput;
+};
+
+export type RoomCardTeamsConnection = {
+  __typename?: 'RoomCardTeamsConnection';
+  edges: Array<RoomCardTeamsRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type RoomCardTeamsConnectionSort = {
+  node?: InputMaybe<TeamSort>;
+};
+
+export type RoomCardTeamsConnectionWhere = {
+  AND?: InputMaybe<Array<RoomCardTeamsConnectionWhere>>;
+  NOT?: InputMaybe<RoomCardTeamsConnectionWhere>;
+  OR?: InputMaybe<Array<RoomCardTeamsConnectionWhere>>;
+  node?: InputMaybe<TeamWhere>;
+};
+
+export type RoomCardTeamsCreateFieldInput = {
+  node: TeamCreateInput;
+};
+
+export type RoomCardTeamsDeleteFieldInput = {
+  where?: InputMaybe<RoomCardTeamsConnectionWhere>;
+};
+
+export type RoomCardTeamsDisconnectFieldInput = {
+  where?: InputMaybe<RoomCardTeamsConnectionWhere>;
+};
+
+export type RoomCardTeamsFieldInput = {
+  connect?: InputMaybe<Array<RoomCardTeamsConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<RoomCardTeamsConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<RoomCardTeamsCreateFieldInput>>;
+};
+
+export type RoomCardTeamsNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<RoomCardTeamsNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<RoomCardTeamsNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<RoomCardTeamsNodeAggregationWhereInput>>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type RoomCardTeamsRelationship = {
+  __typename?: 'RoomCardTeamsRelationship';
+  cursor: Scalars['String']['output'];
+  node: Team;
+};
+
+export type RoomCardTeamsUpdateConnectionInput = {
+  node?: InputMaybe<TeamUpdateInput>;
+};
+
+export type RoomCardTeamsUpdateFieldInput = {
+  connect?: InputMaybe<Array<RoomCardTeamsConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<RoomCardTeamsConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<RoomCardTeamsCreateFieldInput>>;
+  delete?: InputMaybe<Array<RoomCardTeamsDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<RoomCardTeamsDisconnectFieldInput>>;
+  update?: InputMaybe<RoomCardTeamsUpdateConnectionInput>;
+  where?: InputMaybe<RoomCardTeamsConnectionWhere>;
+};
+
+export type RoomCardUniqueWhere = {
+  uid?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type RoomCardUpdateInput = {
+  additionalRequirements?: InputMaybe<Scalars['String']['input']>;
+  cleaningSchedule?: InputMaybe<Scalars['String']['input']>;
+  compressedAirDistribution?: InputMaybe<Scalars['String']['input']>;
+  contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptUpdateFieldInput>>;
+  contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallUpdateFieldInput>>;
+  coolingWater?: InputMaybe<Scalars['String']['input']>;
+  entryToHvacTent?: InputMaybe<Scalars['String']['input']>;
+  humidity?: InputMaybe<Scalars['String']['input']>;
+  indoorEnvironmentQuality?: InputMaybe<Scalars['String']['input']>;
+  location?: InputMaybe<RoomCardLocationUpdateFieldInput>;
+  maxPressureInColdDistribution?: InputMaybe<Scalars['String']['input']>;
+  nitrogenCentralDistribution?: InputMaybe<Scalars['String']['input']>;
+  prescribedClothing?: InputMaybe<Scalars['String']['input']>;
+  pressureInCoolingSystem?: InputMaybe<Scalars['String']['input']>;
+  purityClass?: InputMaybe<Scalars['String']['input']>;
+  roomTemperature?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<RoomCardStatus>;
+  teams?: InputMaybe<Array<RoomCardTeamsUpdateFieldInput>>;
+};
+
+export type RoomCardWhere = {
+  AND?: InputMaybe<Array<RoomCardWhere>>;
+  NOT?: InputMaybe<RoomCardWhere>;
+  OR?: InputMaybe<Array<RoomCardWhere>>;
+  additionalRequirements?: InputMaybe<Scalars['String']['input']>;
+  additionalRequirements_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  additionalRequirements_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  additionalRequirements_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  additionalRequirements_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  cleaningSchedule?: InputMaybe<Scalars['String']['input']>;
+  cleaningSchedule_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  cleaningSchedule_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  cleaningSchedule_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  cleaningSchedule_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  compressedAirDistribution?: InputMaybe<Scalars['String']['input']>;
+  compressedAirDistribution_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  compressedAirDistribution_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  compressedAirDistribution_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  compressedAirDistribution_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  contactPersonsDeptAggregate?: InputMaybe<RoomCardContactPersonsDeptAggregateInput>;
+  /** Return RoomCards where all of the related RoomCardContactPersonsDeptConnections match this filter */
+  contactPersonsDeptConnection_ALL?: InputMaybe<RoomCardContactPersonsDeptConnectionWhere>;
+  /** Return RoomCards where none of the related RoomCardContactPersonsDeptConnections match this filter */
+  contactPersonsDeptConnection_NONE?: InputMaybe<RoomCardContactPersonsDeptConnectionWhere>;
+  /** Return RoomCards where one of the related RoomCardContactPersonsDeptConnections match this filter */
+  contactPersonsDeptConnection_SINGLE?: InputMaybe<RoomCardContactPersonsDeptConnectionWhere>;
+  /** Return RoomCards where some of the related RoomCardContactPersonsDeptConnections match this filter */
+  contactPersonsDeptConnection_SOME?: InputMaybe<RoomCardContactPersonsDeptConnectionWhere>;
+  /** Return RoomCards where all of the related Employees match this filter */
+  contactPersonsDept_ALL?: InputMaybe<EmployeeWhere>;
+  /** Return RoomCards where none of the related Employees match this filter */
+  contactPersonsDept_NONE?: InputMaybe<EmployeeWhere>;
+  /** Return RoomCards where one of the related Employees match this filter */
+  contactPersonsDept_SINGLE?: InputMaybe<EmployeeWhere>;
+  /** Return RoomCards where some of the related Employees match this filter */
+  contactPersonsDept_SOME?: InputMaybe<EmployeeWhere>;
+  contactPersonsHallAggregate?: InputMaybe<RoomCardContactPersonsHallAggregateInput>;
+  /** Return RoomCards where all of the related RoomCardContactPersonsHallConnections match this filter */
+  contactPersonsHallConnection_ALL?: InputMaybe<RoomCardContactPersonsHallConnectionWhere>;
+  /** Return RoomCards where none of the related RoomCardContactPersonsHallConnections match this filter */
+  contactPersonsHallConnection_NONE?: InputMaybe<RoomCardContactPersonsHallConnectionWhere>;
+  /** Return RoomCards where one of the related RoomCardContactPersonsHallConnections match this filter */
+  contactPersonsHallConnection_SINGLE?: InputMaybe<RoomCardContactPersonsHallConnectionWhere>;
+  /** Return RoomCards where some of the related RoomCardContactPersonsHallConnections match this filter */
+  contactPersonsHallConnection_SOME?: InputMaybe<RoomCardContactPersonsHallConnectionWhere>;
+  /** Return RoomCards where all of the related HallContactPeople match this filter */
+  contactPersonsHall_ALL?: InputMaybe<HallContactPersonWhere>;
+  /** Return RoomCards where none of the related HallContactPeople match this filter */
+  contactPersonsHall_NONE?: InputMaybe<HallContactPersonWhere>;
+  /** Return RoomCards where one of the related HallContactPeople match this filter */
+  contactPersonsHall_SINGLE?: InputMaybe<HallContactPersonWhere>;
+  /** Return RoomCards where some of the related HallContactPeople match this filter */
+  contactPersonsHall_SOME?: InputMaybe<HallContactPersonWhere>;
+  coolingWater?: InputMaybe<Scalars['String']['input']>;
+  coolingWater_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  coolingWater_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  coolingWater_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  coolingWater_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  entryToHvacTent?: InputMaybe<Scalars['String']['input']>;
+  entryToHvacTent_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  entryToHvacTent_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  entryToHvacTent_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  entryToHvacTent_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  humidity?: InputMaybe<Scalars['String']['input']>;
+  humidity_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  humidity_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  humidity_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  humidity_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  indoorEnvironmentQuality?: InputMaybe<Scalars['String']['input']>;
+  indoorEnvironmentQuality_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  indoorEnvironmentQuality_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  indoorEnvironmentQuality_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  indoorEnvironmentQuality_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  location?: InputMaybe<LocationWhere>;
+  locationAggregate?: InputMaybe<RoomCardLocationAggregateInput>;
+  locationConnection?: InputMaybe<RoomCardLocationConnectionWhere>;
+  locationConnection_NOT?: InputMaybe<RoomCardLocationConnectionWhere>;
+  location_NOT?: InputMaybe<LocationWhere>;
+  maxPressureInColdDistribution?: InputMaybe<Scalars['String']['input']>;
+  maxPressureInColdDistribution_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  maxPressureInColdDistribution_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  maxPressureInColdDistribution_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  maxPressureInColdDistribution_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  nitrogenCentralDistribution?: InputMaybe<Scalars['String']['input']>;
+  nitrogenCentralDistribution_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  nitrogenCentralDistribution_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  nitrogenCentralDistribution_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  nitrogenCentralDistribution_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  prescribedClothing?: InputMaybe<Scalars['String']['input']>;
+  prescribedClothing_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  prescribedClothing_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  prescribedClothing_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  prescribedClothing_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  pressureInCoolingSystem?: InputMaybe<Scalars['String']['input']>;
+  pressureInCoolingSystem_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  pressureInCoolingSystem_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  pressureInCoolingSystem_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  pressureInCoolingSystem_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  purityClass?: InputMaybe<Scalars['String']['input']>;
+  purityClass_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  purityClass_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  purityClass_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  purityClass_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  roomTemperature?: InputMaybe<Scalars['String']['input']>;
+  roomTemperature_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  roomTemperature_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  roomTemperature_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  roomTemperature_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<RoomCardStatus>;
+  status_IN?: InputMaybe<Array<RoomCardStatus>>;
+  teamsAggregate?: InputMaybe<RoomCardTeamsAggregateInput>;
+  /** Return RoomCards where all of the related RoomCardTeamsConnections match this filter */
+  teamsConnection_ALL?: InputMaybe<RoomCardTeamsConnectionWhere>;
+  /** Return RoomCards where none of the related RoomCardTeamsConnections match this filter */
+  teamsConnection_NONE?: InputMaybe<RoomCardTeamsConnectionWhere>;
+  /** Return RoomCards where one of the related RoomCardTeamsConnections match this filter */
+  teamsConnection_SINGLE?: InputMaybe<RoomCardTeamsConnectionWhere>;
+  /** Return RoomCards where some of the related RoomCardTeamsConnections match this filter */
+  teamsConnection_SOME?: InputMaybe<RoomCardTeamsConnectionWhere>;
+  /** Return RoomCards where all of the related Teams match this filter */
+  teams_ALL?: InputMaybe<TeamWhere>;
+  /** Return RoomCards where none of the related Teams match this filter */
+  teams_NONE?: InputMaybe<TeamWhere>;
+  /** Return RoomCards where one of the related Teams match this filter */
+  teams_SINGLE?: InputMaybe<TeamWhere>;
+  /** Return RoomCards where some of the related Teams match this filter */
+  teams_SOME?: InputMaybe<TeamWhere>;
+  uid?: InputMaybe<Scalars['ID']['input']>;
+  uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
+  uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
+  uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type RoomCardsConnection = {
+  __typename?: 'RoomCardsConnection';
+  edges: Array<RoomCardEdge>;
   pageInfo: PageInfo;
   totalCount: Scalars['Int']['output'];
 };
@@ -8513,6 +10806,85 @@ export type SystemsConnection = {
   totalCount: Scalars['Int']['output'];
 };
 
+export type Team = {
+  __typename?: 'Team';
+  name: Scalars['String']['output'];
+  uid: Scalars['ID']['output'];
+};
+
+export type TeamAggregateSelection = {
+  __typename?: 'TeamAggregateSelection';
+  count: Scalars['Int']['output'];
+  name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type TeamConnectOrCreateWhere = {
+  node: TeamUniqueWhere;
+};
+
+export type TeamConnectWhere = {
+  node: TeamWhere;
+};
+
+export type TeamCreateInput = {
+  name: Scalars['String']['input'];
+};
+
+export type TeamEdge = {
+  __typename?: 'TeamEdge';
+  cursor: Scalars['String']['output'];
+  node: Team;
+};
+
+export type TeamOnCreateInput = {
+  name: Scalars['String']['input'];
+};
+
+export type TeamOptions = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /** Specify one or more TeamSort objects to sort Teams by. The sorts will be applied in the order in which they are arranged in the array. */
+  sort?: InputMaybe<Array<TeamSort>>;
+};
+
+/** Fields to sort Teams by. The order in which sorts are applied is not guaranteed when specifying many fields in one TeamSort object. */
+export type TeamSort = {
+  name?: InputMaybe<SortDirection>;
+  uid?: InputMaybe<SortDirection>;
+};
+
+export type TeamUniqueWhere = {
+  uid?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type TeamUpdateInput = {
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type TeamWhere = {
+  AND?: InputMaybe<Array<TeamWhere>>;
+  NOT?: InputMaybe<TeamWhere>;
+  OR?: InputMaybe<Array<TeamWhere>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  name_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  uid?: InputMaybe<Scalars['ID']['input']>;
+  uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
+  uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
+  uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type TeamsConnection = {
+  __typename?: 'TeamsConnection';
+  edges: Array<TeamEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
 export type Unit = {
   __typename?: 'Unit';
   catalogueCategoryPropertiesHasUnit: Array<CatalogueCategoryProperty>;
@@ -8837,9 +11209,27 @@ export type UpdateCatalogueItemsMutationResponse = {
   info: UpdateInfo;
 };
 
+export type UpdateContactPersonRolesMutationResponse = {
+  __typename?: 'UpdateContactPersonRolesMutationResponse';
+  contactPersonRoles: Array<ContactPersonRole>;
+  info: UpdateInfo;
+};
+
+export type UpdateEmployeesMutationResponse = {
+  __typename?: 'UpdateEmployeesMutationResponse';
+  employees: Array<Employee>;
+  info: UpdateInfo;
+};
+
 export type UpdateFacilitiesMutationResponse = {
   __typename?: 'UpdateFacilitiesMutationResponse';
   facilities: Array<Facility>;
+  info: UpdateInfo;
+};
+
+export type UpdateHallContactPeopleMutationResponse = {
+  __typename?: 'UpdateHallContactPeopleMutationResponse';
+  hallContactPeople: Array<HallContactPerson>;
   info: UpdateInfo;
 };
 
@@ -8888,6 +11278,12 @@ export type UpdateRolesMutationResponse = {
   roles: Array<Role>;
 };
 
+export type UpdateRoomCardsMutationResponse = {
+  __typename?: 'UpdateRoomCardsMutationResponse';
+  info: UpdateInfo;
+  roomCards: Array<RoomCard>;
+};
+
 export type UpdateSchemaMigrationsMutationResponse = {
   __typename?: 'UpdateSchemaMigrationsMutationResponse';
   info: UpdateInfo;
@@ -8922,6 +11318,12 @@ export type UpdateSystemsMutationResponse = {
   __typename?: 'UpdateSystemsMutationResponse';
   info: UpdateInfo;
   systems: Array<System>;
+};
+
+export type UpdateTeamsMutationResponse = {
+  __typename?: 'UpdateTeamsMutationResponse';
+  info: UpdateInfo;
+  teams: Array<Team>;
 };
 
 export type UpdateUnitsMutationResponse = {

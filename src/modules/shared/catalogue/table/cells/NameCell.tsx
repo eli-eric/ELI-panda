@@ -13,6 +13,7 @@ import { useSubmit } from '@/hooks/fetch/useSubmit'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
+import { useHoveringId } from '@/store/useHoveringId'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 import type { CatalogueItem } from '@/types/responses'
@@ -24,7 +25,6 @@ const modalMessage = message.ordersPage.deleteModal
 interface NameProps extends CellContext<CatalogueItem, any> {
   toDelete?: boolean
   tableId?: string
-  isHoveringId?: number | string
   categoryUID?: string
 }
 
@@ -37,10 +37,10 @@ export const NameCell = ({
   },
   toDelete,
   tableId,
-  isHoveringId,
   categoryUID
 }: NameProps) => {
   const { catalogueItem } = useEndpoint({ uid })
+  const { hoveringId } = useHoveringId()
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
   const { formatMessage } = useIntl()
   const { mutate, catalogueItems } = useCatalogueItems(tableId, categoryUID)
@@ -85,7 +85,7 @@ export const NameCell = ({
           <span>{getValue()}</span>
         </LinkDecorator>
       </Link>
-      {toDelete && (isHoveringId === id || isMobile) && (
+      {toDelete && (hoveringId === id || isMobile) && (
         <TableActionsButtons
           onDeleteClick={() => {
             setOpenDeleteWarn(true)

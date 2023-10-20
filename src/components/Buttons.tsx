@@ -11,6 +11,7 @@ import {
   TrashIcon
 } from '@heroicons/react/24/outline'
 import Link from 'next/link'
+import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
 import type { UrlObject } from 'url'
@@ -163,9 +164,13 @@ export const TableDownloadButton = ({ type = 'button', ...props }: ButtonProps) 
   </button>
 )
 
-export const TableButtonsWrapper = ({ children }: { children: React.ReactNode }) => (
-  <div className="absolute flex items-center right-0 bg-inherit pr-1">{children}</div>
-)
+type TableButtonWrapperProps = {
+  position?: 'left-0' | 'right-0'
+}
+export const TableButtonsWrapper: FC<PropsWithChildren<TableButtonWrapperProps>> = ({
+  children,
+  position = 'right-0'
+}) => <div className={classNames('absolute flex items-center bg-inherit pr-1', position)}>{children}</div>
 
 interface TableActionsButtonsProps {
   onDeleteClick?: () => void
@@ -173,9 +178,16 @@ interface TableActionsButtonsProps {
   detailLink?: UrlObject | string
   addLink?: UrlObject | string
   isShown?: boolean
+  position?: 'left-0' | 'right-0'
 }
-export const TableActionsButtons = ({ onDeleteClick, canEdit, detailLink, addLink }: TableActionsButtonsProps) => (
-  <TableButtonsWrapper>
+export const TableActionsButtons: FC<TableActionsButtonsProps> = ({
+  onDeleteClick,
+  canEdit,
+  detailLink,
+  addLink,
+  position
+}) => (
+  <TableButtonsWrapper position={position}>
     {detailLink && (
       <Link href={detailLink} className={'flex items-center'}>
         <Fragment>{canEdit ? <TableEditButton /> : <TableOpenButton />}</Fragment>

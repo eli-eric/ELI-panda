@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: false
-  },
   swcMinify: false,
   reactStrictMode: true,
   output: 'standalone',

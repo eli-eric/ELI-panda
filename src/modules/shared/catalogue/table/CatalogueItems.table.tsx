@@ -1,9 +1,9 @@
 import type { ColumnDef, Table } from '@tanstack/react-table'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
+import { useHoveringId } from '@/store/useHoveringId'
 import type { CatalogueCategory } from '@/types/gql/graphql'
-import type { CatalogueItem } from '@/types/responses'
-import type { CatalogueItemsResponse } from '@/types/responses'
+import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
 
 import { PandaTable } from '../../table/pandaTable/PandaTable'
 import { useCatalogueItemsColumns } from './CatalogueItems.columns'
@@ -27,9 +27,8 @@ export const CatalogueTable = ({
   loading,
   categoryUID
 }: CatalogueTableProps) => {
-  const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
-
-  const columns = useCatalogueItemsColumns({ tableId, additionalColumn, isHoveringId, categoryUID, catalogueItems })
+  const columns = useCatalogueItemsColumns({ tableId, additionalColumn, categoryUID, catalogueItems })
+  const { setHoveringId } = useHoveringId()
   const catalogueTableRef = useRef<Table<CatalogueItem>>()
 
   useEffect(() => {
@@ -56,10 +55,10 @@ export const CatalogueTable = ({
       data={catalogueItems?.data}
       getRowProps={({ id }) => ({
         onMouseEnter: () => {
-          setIsHoveringId(id)
+          setHoveringId(id)
         },
         onMouseLeave: () => {
-          setIsHoveringId(undefined)
+          setHoveringId(undefined)
         }
       })}
       className={'relative overflow-y-scroll scrollbar-style'}

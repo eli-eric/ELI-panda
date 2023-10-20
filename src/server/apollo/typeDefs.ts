@@ -4,8 +4,71 @@ export const typeDefs = gql`
   type JWT @jwt {
     roles: [String!]!
   }
-  type Query {
-    catalogueCategories: [CatalogueCategory]!
+ 
+
+  type Location {
+    uid: ID! @id
+    belongsToFacilityFacilities: [Facility!]! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    code: String
+    facilitiesHasLocation: [Facility!]! @relationship(type: "HAS_LOCATION", direction: IN)
+    facility: String!
+    subLocations: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: OUT)
+    parentLocation: Location @relationship(type: "HAS_SUBLOCATION", direction: IN)
+    name: String!
+    roomCard: RoomCard @relationship(type: "HAS_ROOM_CARD", direction: OUT)
+  }
+
+  enum RoomCardStatus {
+    DIRTY_MODE
+    CLEAN_MODE
+    IN_PREPARATION_MODE
+  }
+
+  type ContactPersonRole {
+    uid: ID! @id
+    name: String!
+  }
+
+  type HallContactPerson {
+    uid: ID! @id
+    employee: Employee! @relationship(type: "HAS_CONTACT_PERSON", direction: OUT)
+    role: ContactPersonRole @relationship(type: "HAS_ROOM_CARD_ROLE", direction: OUT)
+  }
+
+  type RoomCard {
+    uid: ID! @id
+    status: RoomCardStatus!
+    contactPersonsHall: [HallContactPerson!]! @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: OUT)
+    contactPersonsDept: [Employee!]! @relationship(type: "HAS_CONTACT_PERSON_DEPT", direction: OUT)
+    location: Location! @relationship(type: "HAS_ROOM_CARD", direction: IN)
+    teams: [Team!]! @relationship(type: "HAS_TEAM", direction: OUT)
+    purityClass: String
+    prescribedClothing: String
+    entryToHvacTent: String
+    cleaningSchedule: String
+    additionalRequirements: String
+    coolingWater: String
+    indoorEnvironmentQuality: String
+    compressedAirDistribution: String
+    nitrogenCentralDistribution: String
+    maxPressureInColdDistribution: String
+    pressureInCoolingSystem: String
+    roomTemperature: String
+    humidity: String
+  }
+
+  type Team {
+    uid: ID! @id
+    name: String!
+  }
+
+  type Employee {
+    uid: String!
+    firstName: String!
+    fullName: String
+    lastName: String!
+    phoneNumber: String
+    email: String
   }
 
   type ParentPathItem {
@@ -98,16 +161,6 @@ export const typeDefs = gql`
     code: String!
     name: String!
     uid: String!
-  }
-
-  type Location {
-    belongsToFacilityFacilities: [Facility!]! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
-    code: String
-    facilitiesHasLocation: [Facility!]! @relationship(type: "HAS_LOCATION", direction: IN)
-    facility: String!
-    hasSublocationLocations: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: OUT)
-    locationsHasSublocation: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: IN)
-    name: String!
   }
 
   type Manufacturer {

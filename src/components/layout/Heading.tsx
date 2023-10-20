@@ -1,16 +1,21 @@
 import { FormattedMessage } from 'react-intl'
 
+import { classNames } from '@/utils'
+
 interface HeadingProps {
   children?: React.ReactNode
   text?: string
   customText?: string
+  className?: string
+
+  textColor?: string
 }
 
-export const Heading = ({ text, children, customText }: HeadingProps) => (
-  <div className="mb-4 border-b border-gray-200 bg-white px-2 py-2 sm:px-3">
+export const Heading = ({ text, children, customText, className, textColor = 'text-gray-900' }: HeadingProps) => (
+  <div className={classNames('mb-4 border-b border-gray-200 bg-white px-2 py-2 sm:px-3', className)}>
     <div className="-ml-2 -mt-1 flex flex-wrap h-12 items-center justify-between sm:flex-nowrap">
       <div className="ml-2 mt-1">
-        <h3 className="text-lg font-medium text-gray-900">
+        <h3 className={classNames('text-lg font-medium', textColor)}>
           {customText ? customText : <FormattedMessage id={text} />}
         </h3>
       </div>

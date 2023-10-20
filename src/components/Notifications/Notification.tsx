@@ -1,9 +1,11 @@
 import { Transition } from '@headlessui/react'
 import { CheckCircleIcon, ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
-import { resolveValue, type Toast, toast } from 'react-hot-toast'
+import { resolveValue, toast, type Toast } from 'react-hot-toast'
 
 import { classNames } from '@/utils'
+
+import ButtonLoaderComponent from '../button-loader.comp'
 
 interface Props {
   t: Toast
@@ -38,6 +40,7 @@ export const Notification = ({ t }: Props) => {
                     <ExclamationTriangleIcon className="h-6 w-6 text-red-400" aria-hidden="true" />
                   )}
                   {t.type === 'success' && <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />}
+                  {t.type === 'loading' && <ButtonLoaderComponent />}
                 </div>
                 <div className="ml-3 w-0 flex-1 pt-0.5">
                   <p className="text-sm font-medium text-gray-900">{resolveValue(t.message, t)}</p>
