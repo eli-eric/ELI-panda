@@ -1,6 +1,8 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import { Fragment, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
+import { array, object, string } from 'yup'
 
 import Listbox from '@/components/form/Listbox'
 import LoaderComponent from '@/components/loader.comp'
@@ -19,11 +21,22 @@ interface Props {
   roomCardUid?: string
 }
 
+const schema = object().shape({
+  status: string().required('Status is required'),
+  teams: array().of(object().required('Team is required')).min(1, 'At least one team is required'),
+  contactPersonsHall: array()
+    .of(object().nullable().required('Team is required'))
+    .min(1, 'At least one Hall contact is required'),
+  contactPersonsDept: array()
+    .of(object().nullable().required('Team is required'))
+    .min(1, 'At least one department contact is required')
+})
+
 export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
 
   const { roomCard, loading } = useRoomCard(roomCardUid)
-  const formMethods = useForm<RoomCard>({ defaultValues: roomCard })
+  const formMethods = useForm<RoomCard>({ defaultValues: roomCard, resolver: yupResolver(schema) })
   const { reset, watch, handleSubmit } = formMethods
   const { updateRoomCard } = useRoomCardUpdate(roomCardUid)
   const { clear } = useRoomCardStore()

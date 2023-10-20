@@ -1,7 +1,9 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { Fragment, useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
+import { array, object, string } from 'yup'
 
 import Listbox from '@/components/form/Listbox'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
@@ -18,8 +20,18 @@ import { useRoomCardStore } from './store/useRoomCardStore'
 
 const messages = message.roomCardsPage.form
 
+const schema = object().shape({
+  status: string().required('Status is required'),
+  location: object().nullable().required('Location is required'),
+  teams: array().of(object().nullable().required('Team is required')).min(1, 'At least one team is required'),
+  contactPersonsHall: array().of(object().required('Team is required')).min(1, 'At least one Hall contact is required'),
+  contactPersonsDept: array()
+    .of(object().nullable().required('Team is required'))
+    .min(1, 'At least one department contact is required')
+})
+
 export const RoomCardNewContainer = () => {
-  const formMethods = useForm<RoomCard>()
+  const formMethods = useForm<RoomCard>({ resolver: yupResolver(schema) })
   const router = useRouter()
   const { watch, handleSubmit } = formMethods
   const { createRoomCard } = useRoomCardCreate()
