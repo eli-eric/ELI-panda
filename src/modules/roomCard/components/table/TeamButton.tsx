@@ -9,6 +9,7 @@ import { message } from '@/i18n/src/messages'
 import type { RoomCard } from '@/types/gql/graphql'
 
 import { useTeams } from '../../hooks/useTeams'
+import { useRoomCardStore } from '../../store/useRoomCardStore'
 import { HeaderButtonModalComponent } from './HeaderButtonModal.comp'
 
 const nestedForm = message.roomCardsPage.nestedForm
@@ -17,6 +18,7 @@ export const TeamButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const formMethods = useForm({ resolver: yupResolver(makeSchema()) })
+  const { setNewTeam } = useRoomCardStore()
 
   const { teams } = useTeams()
 
@@ -25,6 +27,7 @@ export const TeamButton = () => {
 
   const onSubmit = data => {
     insert(arrayFields.length, data.team)
+    setNewTeam(data.team)
   }
 
   const fields = useMakeFormFields({
