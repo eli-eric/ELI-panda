@@ -1,6 +1,8 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 
+import usePermission from '@/hooks/usePermission'
+import { ROLE } from '@/types/constants/roles'
 import type { HallContactPerson, Team } from '@/types/gql/graphql'
 
 import { useRoomCardStore } from '../../store/useRoomCardStore'
@@ -18,12 +20,13 @@ export type RoomCardProperties = {
 
 export const useRoomCardsColumns = () => {
   const { setDeleteHallContact, setDisconnectDeptContact, setDisconnectTeam } = useRoomCardStore()
+  const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
 
   const columnsContactHall = useMemo(
     (): ColumnDef<HallContactPerson, any>[] => [
       {
         header: 'Contact - Hall',
-        meta: { headerElement: <ContactHallButton /> },
+        meta: { headerElement: editPersmission ? <ContactHallButton /> : null },
         columns: [
           {
             accessorFn: ({ role }) => role?.name,
@@ -47,14 +50,14 @@ export const useRoomCardsColumns = () => {
         ]
       }
     ],
-    [setDeleteHallContact]
+    [setDeleteHallContact, editPersmission]
   )
 
   const columnsContactDept = useMemo(
     (): ColumnDef<any, any>[] => [
       {
         header: 'Contact - Dept. 99',
-        meta: { headerElement: <ContactDeptButton /> },
+        meta: { headerElement: editPersmission ? <ContactDeptButton /> : null },
 
         columns: [
           {
@@ -71,19 +74,19 @@ export const useRoomCardsColumns = () => {
         ]
       }
     ],
-    [setDisconnectDeptContact]
+    [setDisconnectDeptContact, editPersmission]
   )
 
   const columnsTeam = useMemo(
     (): ColumnDef<Team, any>[] => [
       {
         header: 'Team',
-        meta: { headerElement: <TeamButton /> },
+        meta: { headerElement: editPersmission ? <TeamButton /> : null },
         accessorKey: 'name',
         cell: props => <CellWithDelete {...props} formName="teams" setDeleteItem={setDisconnectTeam} />
       }
     ],
-    [setDisconnectTeam]
+    [setDisconnectTeam, editPersmission]
   )
 
   const columnsCleanRooms = useMemo(

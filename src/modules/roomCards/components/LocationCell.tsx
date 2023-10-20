@@ -2,9 +2,11 @@ import type { CellContext } from '@tanstack/react-table'
 import Link from 'next/link'
 
 import { TableActionsButtons } from '@/components/Buttons'
+import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { useHoveringId } from '@/store/useHoveringId'
 import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 import type { RoomCard } from '@/types/gql/graphql'
 
 import { useRoomCardDelete } from '../hooks/useRoomCardDelete'
@@ -14,6 +16,8 @@ interface LocationCellProps extends CellContext<RoomCard, any> {
 }
 
 export const LocationCell = ({ getValue, row: { original, id } }: LocationCellProps) => {
+  const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
+
   const { hoveringId } = useHoveringId()
   const { deleteRoomCard } = useRoomCardDelete(original.uid, original.location.name)
   const withWarningModal = useWarningModal(`Are you sure you want to delete room card for "${original.location.name}"?`)
@@ -27,7 +31,7 @@ export const LocationCell = ({ getValue, row: { original, id } }: LocationCellPr
       <Link href={PATH.ROOM_CARD + '/' + original.uid} className={'text-blue-700 cursor-pointer hover:underline'}>
         <span>{getValue()}</span>
       </Link>
-      {hoveringId === id && <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />}
+      {hoveringId === id && editPersmission && <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />}
     </div>
   )
 }

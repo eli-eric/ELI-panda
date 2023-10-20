@@ -1,21 +1,20 @@
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
-import { BackButton, Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import Listbox from '@/components/form/Listbox'
 import { PageHead } from '@/components/layout/PageHead'
-import { Tooltip } from '@/components/Tooltip'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
-import { CODEBOOK } from '@/types/constants/codebook'
+import usePermission from '@/hooks/usePermission'
 import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 import type { RoomCard } from '@/types/gql/graphql'
 import { RoomCardStatus } from '@/types/gql/graphql'
-import { classNames } from '@/utils'
 
+import { HeaderButtons } from './components/HeaderButtons'
+import { RoomCardStatusIcon } from './components/RoomCardStatusIcon'
 import { RoomCardTables } from './components/table/RoomCard.tables'
 import { useRoomCard } from './hooks/useRoomCard'
 import { useRoomCardUpdate } from './hooks/useRoomCardUpdate'
@@ -28,9 +27,11 @@ interface Props {
 
 export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   const router = useRouter()
+  const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
+
   const { roomCard } = useRoomCard(roomCardUid)
   const formMethods = useForm<RoomCard>({ defaultValues: roomCard })
-  const { reset, watch } = formMethods
+  const { reset, watch, handleSubmit } = formMethods
   const [updateRoomCard] = useRoomCardUpdate()
   const {
     clear,
@@ -59,7 +60,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
     }
   }, [roomCard, reset])
 
-  const onSubmit = (roomCard: RoomCard) => {
+  const onSubmit = handleSubmit((roomCard: RoomCard) => {
     toast.promise(
       updateRoomCard({
         variables: updateRoomCardVariables({
@@ -79,9 +80,9 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
         error: 'Error while saving room card'
       }
     )
-  }
+  })
 
-  const onSubmitAndExit = (roomCard: RoomCard) => {
+  const onSubmitAndExit = handleSubmit((roomCard: RoomCard) => {
     toast.promise(
       updateRoomCard({
         variables: updateRoomCardVariables({
@@ -97,55 +98,31 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
         onCompleted: () => router.push(PATH.ROOM_CARDS)
       }),
       {
-        loading: 'Saving room card...',
+        loading: 'Saving room card....',
         success: 'Room card was successfully updated',
         error: 'Error while saving room card'
       }
     )
-  }
+  })
 
   const fields = useMakeFormFields({
-    location: {
-      name: 'location',
-      disabled: false,
-      codebook: CODEBOOK.LOCATION
-    },
     status: {
       name: 'status',
-      disabled: false
+      disabled: !editPersmission
     }
   })
 
   return (
-    <Form {...{ formMethods }} onSubmit={onSubmit} enableLeaveWarning={true}>
+    <Form {...{ formMethods }} enableLeaveWarning={true}>
       <PageHead>
         <div className="flex items-center space-x-4">
-          <Tooltip content={`Room status: ${status}`}>
-            <div
-              className={classNames(
-                'w-10 h-10 rounded-full',
-                status === 'DIRTY_MODE' && 'bg-red-200',
-                status === 'CLEAN_MODE' && 'bg-lime-200',
-                status === 'IN_PREPARATION_MODE' && 'bg-primary-300'
-              )}
-            />
-          </Tooltip>
+          <RoomCardStatusIcon status={status} />
           <h1 className="text-2xl font-semibold">{roomCard?.location.name}</h1>
           <h1 className="text-2xl font-semibold">{' - '}</h1>
           <h1 className="text-2xl font-semibold">{roomCard?.location.code}</h1>
           <Listbox {...fields.status} className="w-72" customOptions={statuses} />
         </div>
-        <div className="flex space-x-2">
-          <Button type="submit" primary>
-            Save
-          </Button>
-          <Button type="submit" primary onClick={formMethods.handleSubmit(onSubmitAndExit)}>
-            Save and exit
-          </Button>
-          <Link href={PATH.ROOM_CARDS}>
-            <BackButton buttonSize="large" />
-          </Link>
-        </div>
+        <HeaderButtons {...{ onSubmitAndExit, onSubmit, editPersmission: true }} />
         {/* <SelectLocationTree locationField={fields.location} /> */}
       </PageHead>
       <RoomCardTables

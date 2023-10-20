@@ -1,8 +1,5 @@
 import { gql, useMutation } from '@apollo/client'
-import { useRouter } from 'next/router'
-import { toast } from 'react-hot-toast'
 
-import { PATH } from '@/types/constants/paths'
 import type { Mutation, RoomCard } from '@/types/gql/graphql'
 import { connectN } from '@/utils/graphql/mutations'
 
@@ -42,13 +39,9 @@ export const makeRoomCardsCreateData = (formData?: RoomCard) => ({
 })
 
 export const useRoomCardCreate = (formData?: RoomCard) => {
-  const router = useRouter()
   const [createRoomCard] = useMutation<Mutation>(CREATE_ROOM_CARD, {
     variables: makeRoomCardsCreateData(formData),
-    onCompleted: data => {
-      toast.success('Room card created')
-      router.push(PATH.ROOM_CARD + '/' + data?.createRoomCards?.roomCards[0].uid)
-    }
+    refetchQueries: ['RoomCards', 'RoomCard']
   })
 
   return { createRoomCard }

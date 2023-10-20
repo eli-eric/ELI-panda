@@ -1,3 +1,5 @@
+import type { RoomCardStatus } from '@/types/gql/graphql'
+
 export const cleanRooms = [
   {
     name: 'PURITY CLASS',
@@ -56,4 +58,10 @@ export const clientRequirements = [
     name: 'HUMIDITY',
     code: 'humidity'
   }
+]
+
+export const statusColorMapping = (status: RoomCardStatus) => [
+  status === 'DIRTY_MODE' && 'bg-red-200',
+  status === 'CLEAN_MODE' && 'bg-lime-200',
+  status === 'IN_PREPARATION_MODE' && 'bg-primary-300'
 ]

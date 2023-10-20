@@ -1,18 +1,20 @@
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 
-import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import Listbox from '@/components/form/Listbox'
 import { PageHead } from '@/components/layout/PageHead'
-import { Tooltip } from '@/components/Tooltip'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
+import { PATH } from '@/types/constants/paths'
 import type { RoomCard } from '@/types/gql/graphql'
 import { RoomCardStatus } from '@/types/gql/graphql'
-import { classNames } from '@/utils'
 
+import { HeaderButtons } from './components/HeaderButtons'
+import { RoomCardStatusIcon } from './components/RoomCardStatusIcon'
 import { SelectLocationTree } from './components/SelectLocation.combo'
 import { RoomCardTables } from './components/table/RoomCard.tables'
 import { makeRoomCardsCreateData, useRoomCardCreate } from './hooks/useRoomCardCreate'
@@ -22,19 +24,17 @@ const messages = message.roomCardsPage.form
 
 export const RoomCardNewContainer = () => {
   const formMethods = useForm<RoomCard>()
+  const router = useRouter()
   const { watch, handleSubmit } = formMethods
   const { createRoomCard } = useRoomCardCreate()
   const contactPersonsHall = useWatch({ control: formMethods.control, name: 'contactPersonsHall' })
-
-  const { clear } = useRoomCardStore()
-
-  const statuses = Object.values(RoomCardStatus).map(value => value)
-
-  useEffect(() => () => clear(), [clear])
-
   const status = watch('status')
   const teams = watch('teams')
   const contactPersonsDept = watch('contactPersonsDept')
+  const statuses = Object.values(RoomCardStatus).map(value => value)
+
+  const { clear } = useRoomCardStore()
+  useEffect(() => () => clear(), [clear])
 
   const fields = useMakeFormFields({
     location: {
@@ -51,33 +51,44 @@ export const RoomCardNewContainer = () => {
   })
 
   const onSubmit = handleSubmit(data => {
-    createRoomCard({ variables: makeRoomCardsCreateData(data) })
+    toast.promise(
+      createRoomCard({
+        variables: makeRoomCardsCreateData(data),
+        onCompleted: data => router.push(PATH.ROOM_CARD + '/' + data?.createRoomCards?.roomCards[0].uid)
+      }),
+      {
+        loading: 'Saving room card...',
+        success: 'Room card was successfully updated',
+        error: 'Error while saving room card'
+      }
+    )
+  })
+
+  const onSubmitAndExit = handleSubmit(data => {
+    toast.promise(
+      createRoomCard({
+        variables: makeRoomCardsCreateData(data),
+        onCompleted: () => router.push(PATH.ROOM_CARDS)
+      }),
+      {
+        loading: 'Saving room card...',
+        success: 'Room card was successfully updated',
+        error: 'Error while saving room card'
+      }
+    )
   })
 
   return (
     <Form {...{ formMethods }}>
       <PageHead>
         <div className="flex items-center space-x-4">
-          <Tooltip content={`Room status: ${status}`}>
-            <div
-              className={classNames(
-                'w-10 h-10 rounded-full',
-                status === 'DIRTY_MODE' && 'bg-red-200',
-                status === 'CLEAN_MODE' && 'bg-lime-200',
-                status === 'IN_PREPARATION_MODE' && 'bg-primary-300'
-              )}
-            />
-          </Tooltip>
+          <RoomCardStatusIcon status={status} />
+
           <h1 className="text-2xl font-semibold">New room card</h1>
           <SelectLocationTree locationField={fields.location} />
           <Listbox {...fields.status} className="w-72" customOptions={statuses} />
         </div>
-        <div className="space-x-2">
-          <Button type="button" primary onClick={onSubmit}>
-            Save
-          </Button>
-          <Button>Cancel</Button>
-        </div>
+        <HeaderButtons {...{ onSubmitAndExit, onSubmit, editPersmission: true }} />
       </PageHead>
       <RoomCardTables
         {...{

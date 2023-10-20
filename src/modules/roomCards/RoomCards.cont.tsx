@@ -7,6 +7,7 @@ import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import { classNames } from '@/utils'
 
+import { statusColorMapping } from '../roomCard/utils/constants'
 import { PandaTable } from '../shared/table/pandaTable/PandaTable'
 import { SearchBar, SearchBarButtonsComponent } from '../shared/table/SearchBar'
 import { useRoomCardsColumns } from './components/RoomCards.columns'
@@ -38,7 +39,7 @@ export const RoomCardsContainer = () => {
               handleRefresh={() => {
                 refetch()
               }}
-              editRole={ROLE.BASICS}
+              editRole={ROLE.ROOM_CARD_EDIT}
             />
           ),
           tableId
@@ -48,12 +49,7 @@ export const RoomCardsContainer = () => {
         {...{
           tableId,
           getRowProps: ({ original: { status }, id }) => ({
-            className: classNames(
-              status === 'DIRTY_MODE' && 'bg-red-200',
-              status === 'CLEAN_MODE' && 'bg-lime-200',
-              status === 'IN_PREPARATION_MODE' && 'bg-orange-200',
-              'cursor-pointer'
-            ),
+            className: classNames(...statusColorMapping(status)),
             onMouseEnter: () => {
               setHoveringId(id)
             },
