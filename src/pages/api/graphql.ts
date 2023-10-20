@@ -22,12 +22,13 @@ const server = async (): Promise<ApolloServer> => {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions as NextAuthOptions)
 
-  /* if (!session?.user && process.env.PANDA_ENV !== 'localhost') {
-    res.status(403).send('Authentication required.')
+  if (!session?.user && process.env.PANDA_ENV !== 'localhost') {
+    res.status(403).json('Authentication required.')
     return
-  } */
+  }
+  const appoloServer = await server()
 
-  return startServerAndCreateNextHandler(await server(), {
+  return startServerAndCreateNextHandler(appoloServer, {
     context: async (req, res) => {
       const token = await getToken({ req })
       return { req, res, token: token?.apiAccessToken }
