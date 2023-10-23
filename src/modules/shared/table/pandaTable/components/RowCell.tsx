@@ -1,11 +1,12 @@
+import type { Cell, Row } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
 import classNames from 'classnames'
 import type { FC } from 'react'
 import { useId } from 'react'
 
 interface Props {
-  row: any
-  cell: any
+  row: Row<any>
+  cell: Cell<any, unknown>
   loading?: boolean
 }
 
@@ -16,6 +17,7 @@ export const RowCell: FC<Props> = ({ row, cell, loading }) => {
     <td
       key={cell.id}
       id={id}
+      style={{ width: cell.column.getSize() }}
       className={classNames(
         'text-xs sm:pl-6 sm:pr-6 border-r border-b  border-gray-400',
         row.getIsSelected() ? 'text-white' : '',

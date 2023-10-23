@@ -1,8 +1,7 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, memo, useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import useTableStateStore from '@/store/useTableStateStore'
 
 import { CatalogueTable } from '../shared/catalogue/table/CatalogueItems.table'
 import { Pagination } from '../shared/table/Pagination'
@@ -12,31 +11,35 @@ import { CategoryListContainer } from './components/categoryList/CategoryList.co
 import { SearchBarButtons } from './components/SearchBarButtons'
 import { useCatalogueItems } from './hooks/useCatalogueItems'
 import { useCategoryList } from './hooks/useCategoryList'
-import { useCataloguePath } from './hooks/usePath'
+const MeoizedCatalogueTable = memo(CatalogueTable)
 
-const CatalogueContainer = () => {
+interface Props {
+  uid?: string
+}
+
+const CatalogueContainer = ({ uid: categoryUID }: Props) => {
   const tableId = 'catalogueItems'
-  const { catalogueItems, error, loading } = useCatalogueItems(tableId)
-  const { categoryList } = useCategoryList()
+  const { catalogueItems, error, loading } = useCatalogueItems(tableId, categoryUID)
+  const { catalogueCategories } = useCategoryList()
   const [open, setOpen] = useState(false)
-  const categoryPath = useCataloguePath()
-  const { setCustom } = useTableStateStore()
-
-  useEffect(() => {
-    setCustom(tableId, { categoryPath })
-  }, [categoryPath, setCustom, tableId])
 
   return (
     <Fragment>
       <SearchBar left={<SearchBarButtons />} tableId={tableId} />
-      <CatalogueBreadcrumbs />
+      <CatalogueBreadcrumbs categoryUID={categoryUID} />
       <CategoryListContainer
         onChange={open => {
           setOpen(open)
         }}
       />
-      <TableLayoutContainer deps={[open, catalogueItems, categoryList]} className={'border-t border-gray-300'}>
-        <CatalogueTable tableId={tableId} catalogueItems={catalogueItems} loading={loading} />
+      <TableLayoutContainer deps={[open, catalogueItems, catalogueCategories]} className={'border-t border-gray-300'}>
+        <MeoizedCatalogueTable
+          tableId={tableId}
+          catalogueItems={catalogueItems}
+          loading={loading}
+          categoryList={catalogueCategories}
+          categoryUID={categoryUID}
+        />
         <Pagination
           tableId={tableId}
           settings={{

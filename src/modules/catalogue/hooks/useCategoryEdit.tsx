@@ -5,6 +5,7 @@ import {
   PlusIcon,
   TrashIcon
 } from '@heroicons/react/24/outline'
+import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { type Dispatch, Fragment, type SetStateAction, useEffect, useState } from 'react'
 
@@ -24,42 +25,36 @@ interface EditModalProps {
   open: boolean
   setOpen: Dispatch<SetStateAction<boolean>>
   uid?: string
-  parentPath: string
+  parentUID?: string
 }
 
-const EditModal = ({ testid, open, setOpen, uid, parentPath }: EditModalProps) => (
+const EditModal = ({ testid, open, setOpen, uid, parentUID }: EditModalProps) => (
   <ModalComponent open={open} setOpen={setOpen} buttons={{ noButtons: true }} testid={testid}>
-    <CategoryEditModal setOpen={setOpen} parentPath={parentPath} uid={uid} />
+    <CategoryEditModal setOpen={setOpen} parentUID={parentUID} uid={uid} />
   </ModalComponent>
 )
 
 // TODO: clean up
-export const useCategoryEdit = ({
-  editUid,
-  catalogueParentPath
-}: {
-  editUid?: string
-  catalogueParentPath?: string | undefined
-}) => {
+export const useCategoryEdit = ({ editUid }: { editUid?: string }) => {
   const [openEdit, setOpenEdit] = useState(false)
   const [openCopy, setOpenCopy] = useState(false)
   const [openCopyEdit, setOpenCopyEdit] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
   const [copyCategoryUid, setCopyCategoporyUid] = useState<string | null>()
-  const parentPath = catalogueParentPath ? '/' + catalogueParentPath : ''
-  const { mutate } = useCategoryList()
+  const router = useRouter()
+  const { uid: parentUID } = router.query as { uid?: string }
+  const { refetch } = useCategoryList()
 
   const { data: session } = useSession()
   const { catalogueCategoryEdit, catalogueCategoryCopy } = useEndpoint({
-    uid: editUid,
-    path: !catalogueParentPath || catalogueParentPath === '' ? '' : '/' + catalogueParentPath
+    uid: editUid
   })
   const deleteCategory = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: 'delete',
     onSuccess: () => {
       setOpenDelete(false)
-      mutate()
+      refetch()
     }
   })
   const copyCategory = useSubmit<string>({
@@ -67,7 +62,7 @@ export const useCategoryEdit = ({
     method: 'post',
     onSuccess: uid => {
       setOpenCopy(false)
-      mutate()
+      refetch()
       setCopyCategoporyUid(uid)
     }
   })
@@ -141,13 +136,7 @@ export const useCategoryEdit = ({
               <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
             </Button>
           </div>
-          <EditModal
-            open={openEdit}
-            parentPath={parentPath}
-            uid={editUid}
-            setOpen={setOpenEdit}
-            testid="catalogueEdit"
-          />
+          <EditModal open={openEdit} parentUID={parentUID} uid={editUid} setOpen={setOpenEdit} testid="catalogueEdit" />
           <WarningModal
             title="Warning"
             message="Are you sure you want to remove this Category?"
@@ -171,7 +160,7 @@ export const useCategoryEdit = ({
               open={openCopyEdit}
               setOpen={setOpenCopyEdit}
               testid="catalogueCopy"
-              parentPath={parentPath}
+              parentUID={parentUID}
               uid={copyCategoryUid}
             />
           )}
@@ -186,27 +175,17 @@ export const useCategoryEdit = ({
         <Fragment>
           <li className="flex">
             <div className="flex items-center">
-              <ChevronRightIcon
-                className="h-4 w-4
-
- mr-2 flex-shrink-0 text-gray-400"
-                aria-hidden="true"
-              />
+              <ChevronRightIcon className="h-4 w-4 mr-2 flex-shrink-0 text-gray-400" aria-hidden="true" />
               <Button
                 onClick={() => {
                   setOpenEdit(true)
                 }}
               >
-                <PlusIcon
-                  className="h-4 w-4
-
-"
-                  aria-hidden="true"
-                />
+                <PlusIcon className="h-4 w-4" aria-hidden="true" />
               </Button>
             </div>
           </li>
-          <EditModal open={openEdit} setOpen={setOpenEdit} parentPath={parentPath} testid="catalogueEdit" />
+          <EditModal open={openEdit} setOpen={setOpenEdit} parentUID={parentUID} testid="catalogueEdit" />
         </Fragment>
       )
     }

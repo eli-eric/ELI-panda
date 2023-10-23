@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import useSWR from 'swr'
 import type { BareFetcher, Key, KeyedMutator, PublicConfiguration } from 'swr/_internal'
 
-import { fetcher, mockFetcher } from '@/helpers/fetcher'
+import { fetcher, mockFetcher } from '@/utils/fetcher'
 
 type Response = Record<string, any>
 

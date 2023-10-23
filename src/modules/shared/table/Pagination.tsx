@@ -18,7 +18,6 @@ export const Pagination = ({ tableId, settings }: PaginationProps) => {
   const { enableQueryURL, total, pageSizeDefault = 10 } = settings || {}
   const [page, setPage] = useState<number>(1)
   const [pageSize] = useState<number>(pageSizeDefault)
-  const [totalCount] = useState<number | undefined>(total)
   const [pageNumbers, setPageNumbers] = useState<number | undefined>()
   const { setPagination, instances } = useTableStateStore()
   const search = instances[tableId]?.search || ''
@@ -43,12 +42,12 @@ export const Pagination = ({ tableId, settings }: PaginationProps) => {
 
   //calculate page numbers
   useEffect(() => {
-    const itemsTotalCount = total || totalCount
+    const itemsTotalCount = total
     if (itemsTotalCount) {
       const pageCount = Math.ceil(itemsTotalCount / pageSize)
       setPageNumbers(pageCount)
     }
-  }, [totalCount, pageSize, total])
+  }, [pageSize, total])
 
   //initial page load
   useEffect(() => {
@@ -58,16 +57,16 @@ export const Pagination = ({ tableId, settings }: PaginationProps) => {
           setPage(parseInt(queryPage))
           setPagination(tableId, `{"page":${queryPage},"pageSize":${pageSize}}`)
         } else {
-          setQueryPage('1')
+          setQueryPage(page.toString())
           setPage(1)
-          setPagination(tableId, `{"page":${1},"pageSize":${pageSize}}`)
+          setPagination(tableId, `{"page":${page},"pageSize":${pageSize}}`)
         }
       } else {
         setPage(1)
-        setPagination(tableId, `{"page":${1},"pageSize":${pageSize}}`)
+        setPagination(tableId, `{"page":${page},"pageSize":${pageSize}}`)
       }
     }
-  }, [isFirstRender, queryPage, enableQueryURL, pageSize, setPagination, tableId, setQueryPage])
+  }, [isFirstRender, page, queryPage, enableQueryURL, pageSize, setPagination, tableId, setQueryPage])
 
   //page change
   useEffect(() => {
@@ -87,7 +86,7 @@ export const Pagination = ({ tableId, settings }: PaginationProps) => {
       pageSize={pageSize}
       previousPageHandler={previousPageHandler}
       nextPageHandler={nextPageHandler}
-      itemsTotalCount={totalCount || total}
+      itemsTotalCount={total}
       pageNumbers={pageNumbers}
     />
   )

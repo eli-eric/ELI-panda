@@ -1,13 +1,15 @@
 import { Listbox as HUIListbox } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
+import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
 import React, { useMemo } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
-import { classNames } from '@/helpers'
 import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
+import { classNames } from '@/utils'
+
+import { FormXMarkIcon } from './components/FormXMarkIcon'
 
 export type ListboxPropsT = FieldProps & {
   codebook?: CODEBOOK
@@ -15,7 +17,7 @@ export type ListboxPropsT = FieldProps & {
   allowEmptyOption?: boolean
   emptyOption?: string
   optionsSize?: 'sm' | 'md' | 'lg'
-  customOptions?: CodebookType[]
+  customOptions?: string[]
   unit?: string
   customLabel?: string
   useFirstRender?: boolean
@@ -40,6 +42,7 @@ const Listbox = ({
   customOptions,
   customLabel,
   codebookResponse,
+  placeholder,
   onChange
 }: ListboxPropsT) => {
   const { control, setValue } = useFormContext()
@@ -64,8 +67,7 @@ const Listbox = ({
 
   const handleChange = (value: any) => (value?.uid === '' ? null : value)
 
-  const handleClear = (e: React.MouseEvent) => {
-    e.stopPropagation()
+  const handleClear = () => {
     setValue(name, null)
   }
 
@@ -83,7 +85,7 @@ const Listbox = ({
             onChange && onChange(v)
           }}
           disabled={disabled}
-          className={classNames('relative flex flex-col w-full mt-auto', className)}
+          className={classNames('relative flex flex-col w-full', className)}
         >
           {(customLabel || label) && (
             <HUIListbox.Label className="block text-sm font-medium text-gray-900">
@@ -99,21 +101,10 @@ const Listbox = ({
                 error ? 'border-red-500' : 'border-gray-300',
                 disabled ? 'bg-gray-100' : ''
               )}
+              placeholder={placeholder}
             >
               <span className="block truncate">{customOptions ? field.value : field?.value?.name || emptyOption}</span>
-              {field.value?.uid?.length > 0 && !disabled && allowEmptyOption && (
-                <div
-                  onClick={handleClear}
-                  className="absolute mr-7 inset-y-0 right-0 flex items-center rounded-r-md px-1 focus:outline-none cursor-pointer text-gray-200  hover:text-red-500"
-                >
-                  <XMarkIcon
-                    className="h-4 w-4
-
- "
-                    aria-hidden="true"
-                  />
-                </div>
-              )}
+              {field.value?.uid?.length > 0 && !disabled && allowEmptyOption && <FormXMarkIcon onClick={handleClear} />}
               <div className="absolute inset-y-0 right-0 flex items-center pr-2">
                 {unit && <span className="text-gray-400 sm:text-sm">{unit}</span>}
                 <ChevronDownIcon className="h-4 w-4 text-gray-500" aria-hidden="true" />
@@ -130,8 +121,8 @@ const Listbox = ({
             >
               {options.map((item, index) => (
                 <HUIListbox.Option
-                  key={item.uid + index}
-                  value={customOptions ? item.uid : item.uid === '' ? null : item}
+                  key={item.uid || item + index}
+                  value={customOptions ? item : item.uid === '' ? null : item}
                   className={({ active }) =>
                     classNames(
                       'relative cursor-default select-none py-2 pl-3 pr-9',
@@ -140,10 +131,14 @@ const Listbox = ({
                   }
                 >
                   {({ active }) => {
-                    const selected = field.value?.uid === item.uid || (!field.value?.uid && item.uid === '')
+                    const selected = customOptions
+                      ? item === field.value
+                      : field.value?.uid === item.uid || (!field.value?.uid && item.uid === '')
                     return (
                       <>
-                        <span className={classNames('block truncate', selected && 'font-semibold')}>{item.name}</span>
+                        <span className={classNames('block truncate', selected && 'font-semibold')}>
+                          {item.name || item}
+                        </span>
 
                         {selected && (
                           <span
@@ -152,12 +147,7 @@ const Listbox = ({
                               active ? 'text-white' : 'text-primary-500'
                             )}
                           >
-                            <CheckIcon
-                              className="h-4 w-4
-
-"
-                              aria-hidden="true"
-                            />
+                            <CheckIcon className="h-4 w-4" aria-hidden="true" />
                           </span>
                         )}
                       </>

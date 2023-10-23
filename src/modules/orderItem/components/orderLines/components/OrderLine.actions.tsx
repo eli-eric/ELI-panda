@@ -1,5 +1,5 @@
 import type { Row } from '@tanstack/react-table'
-import Tippy from '@tippyjs/react'
+import { Tooltip } from '@/components/Tooltip'
 import { useRouter } from 'next/router'
 import { Fragment, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -10,7 +10,7 @@ import { TableButtonsWrapper, TableDeleteButton, TableEditButton } from '@/compo
 import { Heading } from '@/components/card/card.comp'
 import { useToggle } from '@/components/form/Switch'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
-import { createMessageValues } from '@/helpers/formatters'
+import { createMessageValues } from '@/utils/formatters'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { FormModal } from '@/hooks/form/useFormModal'
@@ -150,7 +150,7 @@ export const PrintEunButton = ({ orderLine }: { orderLine: OrderLineFormType }) 
   })
 
   return (
-    <Tippy content={'Print eun'}>
+    <Tooltip content={'Print eun'}>
       <button
         className="hover:underline"
         type="button"
@@ -160,7 +160,7 @@ export const PrintEunButton = ({ orderLine }: { orderLine: OrderLineFormType }) 
       >
         <span>{orderLine.eun}</span>
       </button>
-    </Tippy>
+    </Tooltip>
   )
 }
 

@@ -3,6 +3,7 @@ import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/response
 
 export interface CatalogueCategoryResponse {
   uid: string
+  image?: string
   name: string
   code: string
   parentPath: string
@@ -12,7 +13,7 @@ export interface CatalogueItem {
   uid: string
   name: string
   description: string
-  categoryPath: string
+  categoryUID: string
   categoryName: string
   supplier?: CodebookType
   manufacturerUrl: string

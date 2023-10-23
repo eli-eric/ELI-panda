@@ -1,5 +1,4 @@
-import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
@@ -14,8 +13,7 @@ interface Query {
   [key: string]: any
 }
 
-export default function useQueryManager(tableId: string) {
-  const router = useRouter()
+export default function useQueryManager(tableId: string): { query: Query } {
   const { instances } = useTableStateStore()
   //TODO: filters
   const sorting = instances[tableId]?.sortByQueryString || ''
@@ -44,14 +42,5 @@ export default function useQueryManager(tableId: string) {
     return filter
   }, [supplierUID, orderStatusUID, procurementResponsibleUID, requestorUID])
 
-  const [query, setQuery] = useState<Query>({ pagination, ...custom })
-
-  useEffect(() => {
-    if (router.isReady) {
-      const newQuery = { pagination, search, sorting, ...filter, ...custom }
-      setQuery(newQuery)
-    }
-  }, [router.query.search, sorting, pagination, filter, router.isReady, search, custom])
-
-  return { query }
+  return { query: { pagination, search, sorting, ...filter, ...custom } }
 }

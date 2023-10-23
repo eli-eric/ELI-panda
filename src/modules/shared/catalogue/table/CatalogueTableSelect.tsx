@@ -25,7 +25,7 @@ const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
   const tableId = 'catalogueItemsModal'
 
   const { catalogueItems, loading } = useCatalogueItems(tableId)
-  const { categoryList } = useCategoryList()
+  const { catalogueCategories } = useCategoryList()
 
   const selectColumn: ColumnDef<CatalogueItem, any> = useMemo(
     () => ({
@@ -61,7 +61,7 @@ const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
             additionalColumn={selectColumn}
             enableQueryURL={false}
             loading={loading}
-            categoryList={categoryList}
+            categoryList={catalogueCategories}
             catalogueItems={catalogueItems}
           />
         </fieldset>

@@ -1,4 +1,4 @@
-import type { Row } from '@tanstack/react-table'
+import type { Row, RowModel } from '@tanstack/react-table'
 import type { FC } from 'react'
 import { memo } from 'react'
 
@@ -8,7 +8,7 @@ import { TableRow } from './TableRow'
 const MemoizedTableRow = memo(TableRow)
 
 interface Props {
-  getRowModel()
+  getRowModel: () => RowModel<any>
   loading?: boolean
   getRowProps: (row: Row<any>) => GetRowPropsReturnType
   tableId: string

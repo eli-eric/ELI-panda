@@ -19,7 +19,7 @@ export type Group = {
 }
 
 export type CategoryFormType = {
-  parentPath?: string
+  parentUID?: string
   uid?: string
   name: string
   code: string
