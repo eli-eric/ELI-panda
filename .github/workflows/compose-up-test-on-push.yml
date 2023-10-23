@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Show secret stats
         run: |
-          echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_TEST }}" | "${{ secrets.MINIO_SECRET_KEY_TEST }}" | wc
+          echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_TEST }}" | "${{ secrets.MINIO_SECRET_KEY_TEST }}" | "${{ secrets.NEO4J_PASSWORD }}" | wc
   compose-up:
     runs-on: self-hosted
     needs: use-secret
@@ -23,3 +23,4 @@ jobs:
           NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
           MINIO_ACCESS_KEY_TEST: '${{ secrets.MINIO_ACCESS_KEY_TEST }}'
           MINIO_SECRET_KEY_TEST: '${{ secrets.MINIO_SECRET_KEY_TEST }}'
+          NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}
