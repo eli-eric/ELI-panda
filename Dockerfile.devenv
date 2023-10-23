@@ -30,7 +30,6 @@ ENV MINIO_BUCKET_NAME="panda-dev"
 ENV NEO4J_USER="neo4j"
 ENV NEO4J_URI="bolt://panda-neo4j-dev:7687"
 ENV NEO4J_PASSWORD="${NEO4J_PASSWORD}"
-ENV TEST="OK"
 
 RUN env
 

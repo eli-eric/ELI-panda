@@ -13,11 +13,14 @@ services:
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - MINIO_ACCESS_KEY_TEST=${MINIO_ACCESS_KEY_TEST}
       - MINIO_SECRET_KEY_TEST=${MINIO_SECRET_KEY_TEST}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
     build:
       context: ./
       dockerfile: Dockerfile.testenv
       labels:
         - panda-frontend-ui-main-app-test
+      args:
+        - NEO4J_PASSWORD=${NEO4J_PASSWORD}  
     networks:
       - panda-net-test
     ports:
