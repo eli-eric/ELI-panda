@@ -3,7 +3,7 @@ import { Fragment, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
-import { Button } from '@/components/Buttons'
+import { LinkDecorator } from '@/components/decorators'
 import ModalComponent from '@/components/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
 import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
@@ -56,15 +56,14 @@ export const AssignPhysicalItem = () => {
 
   return (
     <Fragment>
-      <Button
-        primary
-        buttonSize="large"
+      <button
+        type="button"
         onClick={() => {
           setOpenModal(true)
         }}
       >
-        {physicalItem ? 'Change Physical Item' : 'Assign Physical Item'}
-      </Button>
+        <LinkDecorator>{physicalItem ? 'Change Physical Item' : 'Assign Physical Item'}</LinkDecorator>
+      </button>
       <ModalComponent open={openModal} setOpen={setOpenModal} buttons={modalButtons}>
         <SystemsTable
           tableId={'systemsItem'}

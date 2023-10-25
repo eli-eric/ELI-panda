@@ -4,7 +4,6 @@ export const typeDefs = gql`
   type JWT @jwt {
     roles: [String!]!
   }
- 
 
   type Location {
     uid: ID! @id
@@ -151,18 +150,6 @@ export const typeDefs = gql`
     uid: String!
   }
 
-  type ItemCondition {
-    code: String!
-    name: String!
-    uid: String!
-  }
-
-  type ItemUsage {
-    code: String!
-    name: String!
-    uid: String!
-  }
-
   type Manufacturer {
     catalogueItemsHasManufacturer: [CatalogueItem!]! @relationship(type: "HAS_MANUFACTURER", direction: IN)
     name: String!
@@ -182,17 +169,56 @@ export const typeDefs = gql`
   }
 
   type System {
+    uid: ID! @id
     description: String!
-    hasSubsystemSystems: [System!]! @relationship(type: "HAS_SUBSYSTEM", direction: OUT)
-    image: String
     name: String!
-    systemAlias: String!
-    systemCode: String!
-    systemsHasSubsystem: [System!]! @relationship(type: "HAS_SUBSYSTEM", direction: IN)
+    systemAlias: String
+    systemCode: String
+    subSystems: [System!]! @relationship(type: "HAS_SUBSYSTEM", direction: OUT)
+    parentSystem: System @relationship(type: "HAS_SUBSYSTEM", direction: IN)
+    location: Location @relationship(type: "HAS_LOCATION", direction: OUT)
+    facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    item: Item @relationship(type: "CONTAINS_ITEM", direction: OUT)
+    zone: Zone @relationship(type: "HAS_ZONE", direction: OUT)
+    systemType: SystemType @relationship(type: "HAS_SYSTEM_TYPE", direction: OUT)
+    responsible: Employee @relationship(type: "HAS_RESPONSIBLE", direction: OUT)
+    operators: [Employee!]! @relationship(type: "HAS_OPERATOR", direction: OUT)
+    maintenedBy: [Employee!]! @relationship(type: "IS_MAINTENED_BY", direction: OUT)
+    systemLevel: SystemLevel @relationship(type: "HAS_SYSTEM_LEVEL", direction: OUT)
+  }
+
+  type Item {
+    uid: ID! @id
+    eun: String!
+    name: String!
+    serialNumber: String!
+    system: [System]! @relationship(type: "CONTAINS_ITEM", direction: IN)
+    catalogueItem: CatalogueItem! @relationship(type: "IS_BASED_ON", direction: OUT)
+    order: Order @relationship(type: "HAS_ORDER_LINE", direction: IN)
+    itemUsage: ItemUsage @relationship(type: "HAS_ITEM_USAGE", direction: OUT)
+    conditionStatus: ItemCondition @relationship(type: "HAS_CONDITION_STATUS", direction: OUT)
+    notes: String
+  }
+
+  type SystemLevel {
+    code: String!
+    name: String!
     uid: String!
   }
 
   type SystemCriticality {
+    code: String!
+    name: String!
+    uid: String!
+  }
+
+  type ItemCondition {
+    code: String!
+    name: String!
+    uid: String!
+  }
+
+  type ItemUsage {
     code: String!
     name: String!
     uid: String!
@@ -210,6 +236,15 @@ export const typeDefs = gql`
     name: String!
     systemTypeGroupsContainsSystemType: [SystemTypeGroup!]! @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: IN)
     uid: String!
+  }
+
+  type Zone {
+    code: String!
+    facilitiesHasZone: [Facility!]! @relationship(type: "HAS_ZONE", direction: IN)
+    hasSubzoneZones: [Zone!]! @relationship(type: "HAS_SUBZONE", direction: OUT)
+    name: String!
+    uid: String!
+    zonesHasSubzone: [Zone!]! @relationship(type: "HAS_SUBZONE", direction: IN)
   }
 
   type SystemTypeGroup {
@@ -235,14 +270,5 @@ export const typeDefs = gql`
     passwordHash: String!
     uid: String!
     username: String!
-  }
-
-  type Zone {
-    code: String!
-    facilitiesHasZone: [Facility!]! @relationship(type: "HAS_ZONE", direction: IN)
-    hasSubzoneZones: [Zone!]! @relationship(type: "HAS_SUBZONE", direction: OUT)
-    name: String!
-    uid: String!
-    zonesHasSubzone: [Zone!]! @relationship(type: "HAS_SUBZONE", direction: IN)
   }
 `
