@@ -8,7 +8,7 @@ import ProgressBarComponent from '@/components/progress-bar.comp'
 import { FILE_TYPE } from '@/types/constants/files'
 
 import FileManager from '../shared/fileManager/FileManager'
-import SystemForm from './components/form/SystemForm.cont'
+import { SystemForm } from './components/form/SystemForm.cont'
 import RelationsSection from './components/relationsSection/RelationsSection'
 import { useSystemDetail } from './hooks/useSystemDetail'
 

@@ -18,14 +18,14 @@ export const AssignPhysicalItem = () => {
   const [openModal, setOpenModal] = useState(false)
   const [selectedSystem, setSelectedSystem] = useState<SystemDetail>()
   const { setValue, watch, reset, getValues } = useFormContext<SystemDetailFormType>()
-  const physicalItem = watch('physicalItem')
+  const physicalItem = watch('item')
 
   const modalButtons: ModalButtons = {
     goNext: {
       text: messages.continue,
       onClick: () => {
         if (selectedSystem?.physicalItem) {
-          setValue('physicalItem', selectedSystem?.physicalItem, { shouldDirty: true })
+          setValue('item', selectedSystem?.physicalItem, { shouldDirty: true })
           setValue('name', selectedSystem?.name, { shouldDirty: true })
           setOpenModal(false)
         } else {
@@ -44,7 +44,7 @@ export const AssignPhysicalItem = () => {
       onClick: () => {
         reset({
           ...getValues(),
-          physicalItem: {
+          item: {
             uid: null
           }
         })

@@ -131,7 +131,8 @@ export const messages = {
           eun: { label: 'Eun', placeholder: 'Eun' },
           price: { label: 'Price', placeholder: 'Price' },
           procurementStatus: { label: 'Procurement Status', placeholder: 'Procurement Status' }, // codebook of procurement status - PROCUREMENT_STATUS
-          conditionStatus: { label: 'Condition Status', placeholder: 'Condition Status' } // codebook of condition status - ITEM_CONDITION_STATUS
+          conditionStatus: { label: 'Condition Status', placeholder: 'Condition Status' }, // codebook of condition status - ITEM_CONDITION_STATUS
+          notes: { label: 'Item notes' }
         }
       },
       deleteModal: {

@@ -16,5 +16,5 @@ export type SystemDetailFormType = {
   importance?: CodebookType // listbox - CODEBOOK.SYSTEM_IMPORTANCE
   hasSubsystems: boolean
   subSystems?: SystemDetail[]
-  physicalItem?: PhysicalItem
+  item?: PhysicalItem
 }

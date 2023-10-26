@@ -84,69 +84,75 @@ const useSystemEditFormFields = () => {
       name: 'parentSystem',
       label: form.parentSystem.label,
       rounded: 'rounded-md',
-      disabled: false
+      disabled: true
     },
     itemUsage: {
-      name: 'physicalItem.itemUsage',
+      name: 'item.itemUsage',
       label: form.physicalItem.itemUsage.label,
       codebook: CODEBOOK.ITEM_USAGE,
       disabled: disabledEdit
     },
     // TODO: add itemConditionStatus
     itemConditionStatus: {
-      name: 'physicalItem.conditionStatus',
+      name: 'item.conditionStatus',
       label: form.physicalItem.conditionStatus.label,
       codebook: CODEBOOK.ITEM_CONDITION_STATUS,
       disabled: disabledEdit
     },
     procurementStatus: {
-      name: 'physicalItem.procurementStatus',
+      name: 'item.procurementStatus',
       label: form.physicalItem.procurementStatus.label,
       disabled: true
     },
     price: {
-      name: 'physicalItem.price',
+      name: 'item.price',
       label: form.physicalItem.price.label,
       rounded: 'rounded-md',
       disabled: disabledEdit
     },
     currency: {
-      name: 'physicalItem.currency',
+      name: 'item.currency',
       disabled: disabledEdit
     },
     eun: {
-      name: 'physicalItem.eun',
+      name: 'item.eun',
       label: form.physicalItem.eun.label,
       rounded: 'rounded-md',
       disabled: true
     },
+    itemNotes: {
+      name: 'item.notes',
+      label: form.physicalItem.notes.label,
+      rounded: 'rounded-md',
+      disabled: disabledEdit
+    },
     serialNumber: {
-      name: 'physicalItem.serialNumber',
+      name: 'item.serialNumber',
       label: form.physicalItem.serialNumber.label,
       rounded: 'rounded-md',
       disabled: disabledEdit
     },
     partNumber: {
-      name: 'physicalItem.catalogueItem.catalogueNumber',
+      name: 'item.catalogueItem.catalogueNumber',
       label: catalogueForm.catalogueNumber.label,
       rounded: 'rounded-md',
       disabled: true
     },
     catalogueName: {
-      name: 'physicalItem.catalogueItem.name',
+      name: 'item.catalogueItem.name',
       label: catalogueForm.name.label,
       rounded: 'rounded-md',
       disabled: catalogueEdit
     },
     catalogueDescription: {
-      name: 'physicalItem.catalogueItem.description',
+      name: 'item.catalogueItem.description',
       rounded: 'rounded-md',
       label: catalogueForm.description.label,
       disabled: catalogueEdit
     },
 
     catalogueSupplier: {
-      name: 'physicalItem.catalogueItem.supplier',
+      name: 'item.catalogueItem.supplier',
       label: catalogueForm.manufacturer.label,
       disabled: true,
       codebook: CODEBOOK.SUPPLIER
