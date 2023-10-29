@@ -361,7 +361,7 @@ export type CatalogueCategoryCatalogueItemCatalogueItemsBelongsToCategoryAggrega
 export type CatalogueCategoryCatalogueItemCatalogueItemsBelongsToCategoryNodeAggregateSelection = {
   __typename?: 'CatalogueCategoryCatalogueItemCatalogueItemsBelongsToCategoryNodeAggregateSelection';
   catalogueNumber: StringAggregateSelectionNonNullable;
-  description: StringAggregateSelectionNonNullable;
+  description: StringAggregateSelectionNullable;
   manufacturerUrl: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
   uid: StringAggregateSelectionNonNullable;
@@ -2505,7 +2505,7 @@ export type CatalogueItem = {
   belongsToCategoryCatalogueCategoriesAggregate?: Maybe<CatalogueItemCatalogueCategoryBelongsToCategoryCatalogueCategoriesAggregationSelection>;
   belongsToCategoryCatalogueCategoriesConnection: CatalogueItemBelongsToCategoryCatalogueCategoriesConnection;
   catalogueNumber: Scalars['String']['output'];
-  description: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
   manufacturerUrl: Scalars['String']['output'];
   name: Scalars['String']['output'];
   properties: Array<CatalogueCategoryProperty>;
@@ -2587,7 +2587,7 @@ export type CatalogueItemAggregateSelection = {
   __typename?: 'CatalogueItemAggregateSelection';
   catalogueNumber: StringAggregateSelectionNonNullable;
   count: Scalars['Int']['output'];
-  description: StringAggregateSelectionNonNullable;
+  description: StringAggregateSelectionNullable;
   manufacturerUrl: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
   uid: StringAggregateSelectionNonNullable;
@@ -2770,7 +2770,7 @@ export type CatalogueItemConnectWhere = {
 export type CatalogueItemCreateInput = {
   belongsToCategoryCatalogueCategories?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesFieldInput>;
   catalogueNumber: Scalars['String']['input'];
-  description: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
   manufacturerUrl: Scalars['String']['input'];
   name: Scalars['String']['input'];
   properties?: InputMaybe<CatalogueItemPropertiesFieldInput>;
@@ -3158,7 +3158,7 @@ export type CatalogueItemWhere = {
   description?: InputMaybe<Scalars['String']['input']>;
   description_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   description_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  description_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   description_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
   manufacturerUrl?: InputMaybe<Scalars['String']['input']>;
   manufacturerUrl_CONTAINS?: InputMaybe<Scalars['String']['input']>;
@@ -4912,7 +4912,7 @@ export type Item = {
   conditionStatus?: Maybe<ItemCondition>;
   conditionStatusAggregate?: Maybe<ItemItemConditionConditionStatusAggregationSelection>;
   conditionStatusConnection: ItemConditionStatusConnection;
-  eun: Scalars['String']['output'];
+  eun?: Maybe<Scalars['String']['output']>;
   itemUsage?: Maybe<ItemUsage>;
   itemUsageAggregate?: Maybe<ItemItemUsageItemUsageAggregationSelection>;
   itemUsageConnection: ItemItemUsageConnection;
@@ -4921,7 +4921,7 @@ export type Item = {
   order?: Maybe<Order>;
   orderAggregate?: Maybe<ItemOrderOrderAggregationSelection>;
   orderConnection: ItemOrderConnection;
-  serialNumber: Scalars['String']['output'];
+  serialNumber?: Maybe<Scalars['String']['output']>;
   system: Array<System>;
   systemAggregate?: Maybe<ItemSystemSystemAggregationSelection>;
   systemConnection: ItemSystemConnection;
@@ -5041,10 +5041,10 @@ export type ItemSystemConnectionArgs = {
 export type ItemAggregateSelection = {
   __typename?: 'ItemAggregateSelection';
   count: Scalars['Int']['output'];
-  eun: StringAggregateSelectionNonNullable;
+  eun: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   notes: StringAggregateSelectionNullable;
-  serialNumber: StringAggregateSelectionNonNullable;
+  serialNumber: StringAggregateSelectionNullable;
   uid: IdAggregateSelectionNonNullable;
 };
 
@@ -5069,7 +5069,7 @@ export type ItemCatalogueItemCatalogueItemAggregationSelection = {
 export type ItemCatalogueItemCatalogueItemNodeAggregateSelection = {
   __typename?: 'ItemCatalogueItemCatalogueItemNodeAggregateSelection';
   catalogueNumber: StringAggregateSelectionNonNullable;
-  description: StringAggregateSelectionNonNullable;
+  description: StringAggregateSelectionNullable;
   manufacturerUrl: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
   uid: StringAggregateSelectionNonNullable;
@@ -5445,12 +5445,12 @@ export type ItemConnectWhere = {
 export type ItemCreateInput = {
   catalogueItem?: InputMaybe<ItemCatalogueItemFieldInput>;
   conditionStatus?: InputMaybe<ItemConditionStatusFieldInput>;
-  eun: Scalars['String']['input'];
+  eun?: InputMaybe<Scalars['String']['input']>;
   itemUsage?: InputMaybe<ItemItemUsageFieldInput>;
   name: Scalars['String']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
   order?: InputMaybe<ItemOrderFieldInput>;
-  serialNumber: Scalars['String']['input'];
+  serialNumber?: InputMaybe<Scalars['String']['input']>;
   system?: InputMaybe<ItemSystemFieldInput>;
 };
 
@@ -5626,10 +5626,10 @@ export type ItemItemUsageUpdateFieldInput = {
 };
 
 export type ItemOnCreateInput = {
-  eun: Scalars['String']['input'];
+  eun?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
-  serialNumber: Scalars['String']['input'];
+  serialNumber?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ItemOptions = {
@@ -5918,7 +5918,7 @@ export type ItemSystemSystemAggregationSelection = {
 
 export type ItemSystemSystemNodeAggregateSelection = {
   __typename?: 'ItemSystemSystemNodeAggregateSelection';
-  description: StringAggregateSelectionNonNullable;
+  description: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   systemAlias: StringAggregateSelectionNullable;
   systemCode: StringAggregateSelectionNullable;
@@ -6051,7 +6051,7 @@ export type ItemWhere = {
   eun?: InputMaybe<Scalars['String']['input']>;
   eun_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   eun_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  eun_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  eun_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   eun_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
   itemUsage?: InputMaybe<ItemUsageWhere>;
   itemUsageAggregate?: InputMaybe<ItemItemUsageAggregateInput>;
@@ -6076,7 +6076,7 @@ export type ItemWhere = {
   serialNumber?: InputMaybe<Scalars['String']['input']>;
   serialNumber_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   serialNumber_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  serialNumber_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  serialNumber_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   serialNumber_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
   systemAggregate?: InputMaybe<ItemSystemAggregateInput>;
   /** Return Items where all of the related ItemSystemConnections match this filter */
@@ -10253,7 +10253,7 @@ export type SuppliersConnection = {
 
 export type System = {
   __typename?: 'System';
-  description: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
   facility: Facility;
   facilityAggregate?: Maybe<SystemFacilityFacilityAggregationSelection>;
   facilityConnection: SystemFacilityConnection;
@@ -10539,7 +10539,7 @@ export type SystemZoneConnectionArgs = {
 export type SystemAggregateSelection = {
   __typename?: 'SystemAggregateSelection';
   count: Scalars['Int']['output'];
-  description: StringAggregateSelectionNonNullable;
+  description: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   systemAlias: StringAggregateSelectionNullable;
   systemCode: StringAggregateSelectionNullable;
@@ -10576,7 +10576,7 @@ export type SystemConnectWhere = {
 };
 
 export type SystemCreateInput = {
-  description: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
   facility?: InputMaybe<SystemFacilityFieldInput>;
   item?: InputMaybe<SystemItemFieldInput>;
   location?: InputMaybe<SystemLocationFieldInput>;
@@ -11038,10 +11038,10 @@ export type SystemItemItemAggregationSelection = {
 
 export type SystemItemItemNodeAggregateSelection = {
   __typename?: 'SystemItemItemNodeAggregateSelection';
-  eun: StringAggregateSelectionNonNullable;
+  eun: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   notes: StringAggregateSelectionNullable;
-  serialNumber: StringAggregateSelectionNonNullable;
+  serialNumber: StringAggregateSelectionNullable;
   uid: IdAggregateSelectionNonNullable;
 };
 
@@ -11530,7 +11530,7 @@ export type SystemMaintenedByUpdateFieldInput = {
 };
 
 export type SystemOnCreateInput = {
-  description: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   systemAlias?: InputMaybe<Scalars['String']['input']>;
   systemCode?: InputMaybe<Scalars['String']['input']>;
@@ -12350,7 +12350,7 @@ export type SystemSystemParentSystemAggregationSelection = {
 
 export type SystemSystemParentSystemNodeAggregateSelection = {
   __typename?: 'SystemSystemParentSystemNodeAggregateSelection';
-  description: StringAggregateSelectionNonNullable;
+  description: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   systemAlias: StringAggregateSelectionNullable;
   systemCode: StringAggregateSelectionNullable;
@@ -12365,7 +12365,7 @@ export type SystemSystemSubSystemsAggregationSelection = {
 
 export type SystemSystemSubSystemsNodeAggregateSelection = {
   __typename?: 'SystemSystemSubSystemsNodeAggregateSelection';
-  description: StringAggregateSelectionNonNullable;
+  description: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   systemAlias: StringAggregateSelectionNullable;
   systemCode: StringAggregateSelectionNullable;
@@ -13299,7 +13299,7 @@ export type SystemWhere = {
   description?: InputMaybe<Scalars['String']['input']>;
   description_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   description_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  description_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   description_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
   facility?: InputMaybe<FacilityWhere>;
   facilityAggregate?: InputMaybe<SystemFacilityAggregateInput>;

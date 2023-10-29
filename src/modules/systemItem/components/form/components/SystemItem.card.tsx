@@ -10,7 +10,7 @@ import { PATH } from '@/types/constants/paths'
 import { AssignPhysicalItem } from '../../AssignPhysicalItem'
 import { PhysicalItemForm } from './PhysicalItem.form'
 
-export const SystemItemFormCard = () => {
+export const SystemItemCard = () => {
   const { control } = useFormContext()
   const item = useWatch({ control, name: 'item' })
 

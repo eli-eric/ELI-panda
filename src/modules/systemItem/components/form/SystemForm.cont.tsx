@@ -22,7 +22,7 @@ import Card from '@/components/layout/Card'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { classNames } from '@/utils'
 
-import { SystemItemFormCard } from './components/SystemItemForm.card'
+import { SystemItemCard } from './components/SystemItem.card'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
@@ -71,7 +71,7 @@ export const SystemForm = () => {
             hasEditRole={!disabledEdit}
           />
         </SystemMainForm>
-        <SystemItemFormCard />
+        <SystemItemCard />
       </FormCard>
       <DevTool control={formMethods.control} />
     </Form>

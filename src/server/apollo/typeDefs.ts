@@ -131,7 +131,7 @@ export const typeDefs = gql`
     belongsToCategoryCatalogueCategories: [CatalogueCategory!]!
       @relationship(type: "BELONGS_TO_CATEGORY", direction: OUT)
     catalogueNumber: String!
-    description: String!
+    description: String
     properties: [CatalogueCategoryProperty!]!
       @relationship(type: "HAS_CATALOGUE_PROPERTY", direction: OUT, properties: "hasCatalogueProperty")
     supplier: Supplier @relationship(type: "HAS_SUPPLIER", direction: OUT)
@@ -174,7 +174,7 @@ export const typeDefs = gql`
 
   type System {
     uid: ID! @id
-    description: String!
+    description: String
     name: String!
     systemAlias: String
     systemCode: String
@@ -204,9 +204,9 @@ export const typeDefs = gql`
 
   type Item {
     uid: ID! @id
-    eun: String!
+    eun: String
     name: String!
-    serialNumber: String!
+    serialNumber: String
     system: [System!]! @relationship(type: "CONTAINS_ITEM", direction: IN)
     catalogueItem: CatalogueItem! @relationship(type: "IS_BASED_ON", direction: OUT)
     order: Order @relationship(type: "HAS_ORDER_LINE", direction: IN)

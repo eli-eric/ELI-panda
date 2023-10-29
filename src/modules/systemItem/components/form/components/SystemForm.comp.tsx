@@ -5,7 +5,7 @@ import { Input, TextArea } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 
-import useSystemFormFields from './SystemForm.fields'
+import useSystemFormFields from '../SystemForm.fields'
 
 interface SystemFormComponentProps {
   children?: React.ReactNode
