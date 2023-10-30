@@ -16,7 +16,6 @@ const useItemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>)
   const { response, submit, loading } = useSubmit<string>({
     endpoint: catalogueItem,
     method: uid ? 'put' : 'post',
-    mutateList: [catalogueItem, '/catalogue/items'],
     onSuccess: responseUid => {
       imageRef?.current?.submit(responseUid, () => {
         toast.success('Item saved')
@@ -27,6 +26,7 @@ const useItemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>)
         }
       })
       mutate(key => typeof key === 'string' && key.startsWith('/catalogue/items'), undefined, { revalidate: true })
+      mutate(catalogueItem, undefined, { revalidate: true })
     },
     onError: () => {
       toast.error('Error saving item')
