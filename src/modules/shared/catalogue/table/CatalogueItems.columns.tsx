@@ -50,7 +50,7 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, categoryUI
       },
       {
         header: intl.formatMessage({ id: messages.categoryName }),
-        accessorFn: row => row.categoryName,
+        accessorFn: row => row.category,
         id: 'categoryName',
         cell: CategoryName
       },

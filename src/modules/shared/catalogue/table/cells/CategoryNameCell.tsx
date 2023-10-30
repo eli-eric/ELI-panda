@@ -7,18 +7,13 @@ import { LinkDecorator } from '@/components/decorators'
 import { PATH } from '@/types/constants/paths'
 import type { CatalogueItem } from '@/types/responses'
 
-export const CategoryName = ({
-  getValue,
-  row: {
-    original: { categoryUID }
-  }
-}: CellContext<CatalogueItem, any>) => {
+export const CategoryName = ({ getValue }: CellContext<CatalogueItem, any>) => {
   const router = useRouter()
-  const link = PATH.CATALOGUE + '/' + categoryUID
+  const link = PATH.CATALOGUE + '/' + getValue()?.uid
   return (
     <Fragment>
       <Link href={{ pathname: link, query: { search: router.query.search } }}>
-        <LinkDecorator>{getValue()}</LinkDecorator>
+        <LinkDecorator>{getValue()?.name}</LinkDecorator>
       </Link>
     </Fragment>
   )
