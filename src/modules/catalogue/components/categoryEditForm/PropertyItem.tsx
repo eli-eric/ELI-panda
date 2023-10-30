@@ -5,7 +5,6 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
-import { SelectWithError } from '@/components/form/Select'
 import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 import { defaultBoolOptions, PROPERTY_INPUT_TYPE, PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { CODEBOOK } from '@/types/constants/codebook'
@@ -99,13 +98,13 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
           />
 
           {type?.uid === PROPERTY_TYPE.LIST || type?.uid === PROPERTY_TYPE.BOOLEAN ? (
-            <SelectWithError
+            <Listbox
               rounded="rounded-l-md"
               name={`${name}.defaultValue`}
-              options={
-                type.uid === PROPERTY_TYPE.LIST
-                  ? [getDefaultOption('Select default'), ...listOfValues.map(value => ({ value: value.value }))]
-                  : [getDefaultOption('Select default'), ...defaultBoolOptions]
+              allowEmptyOption={true}
+              emptyOption="Select default"
+              customOptions={
+                type.uid === PROPERTY_TYPE.LIST ? [...listOfValues.map(value => value.value)] : [...defaultBoolOptions]
               }
             />
           ) : (

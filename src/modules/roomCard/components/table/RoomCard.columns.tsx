@@ -65,7 +65,7 @@ export const useRoomCardsColumns = () => {
             meta: { noHeader: true }
           },
           {
-            accessorKey: 'phone',
+            accessorKey: 'phoneNumber',
             cell: props => (
               <CellWithDelete {...props} formName="contactPersonsDept" setDeleteItem={setDisconnectDeptContact} />
             ),
