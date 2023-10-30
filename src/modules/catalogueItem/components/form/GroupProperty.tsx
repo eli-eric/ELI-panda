@@ -51,17 +51,11 @@ const GroupProperty = ({ detail, index }: Props) => {
     return (
       <Listbox
         name={`details.${index}.value`}
-        useFirstRender={false}
-        emptyOption={'None'}
-        allowEmptyOption={true}
         disabled={disabled}
         unit={detail.property.unit?.name}
         customLabel={detail.property.name}
         rounded={'rounded-md'}
-        codebookResponse={[
-          { uid: 'true', name: 'true' },
-          { uid: 'false', name: 'false' }
-        ]}
+        customOptions={['true', 'false']}
       />
     )
   }
@@ -69,17 +63,13 @@ const GroupProperty = ({ detail, index }: Props) => {
     return (
       <Listbox
         name={`details.${index}.value`}
-        useFirstRender={false}
-        emptyOption={'None'}
         allowEmptyOption={true}
         unit={detail.property.unit?.name}
         disabled={disabled}
         customLabel={detail.property.name}
         rounded={'rounded-md'}
-        codebookResponse={detail.property.listOfValues?.map(value => ({
-          uid: value,
-          name: value
-        }))}
+        customOptions={detail.property.listOfValues}
+        defaultValue={detail.property.defaultValue}
       />
     )
   }
