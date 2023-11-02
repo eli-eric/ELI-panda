@@ -46,6 +46,7 @@ export const authOptions = {
         params.token.roles = params.user.roles
         params.token.apiAccessToken = params.user.accessToken
         params.token.facility = params.user.facility
+        params.token.facilityCode = params.user.facilityCode
         params.token.uid = params.user.uid
         params.token.fullName = params.user.firstName + ' ' + params.user.lastName
       }
@@ -55,6 +56,7 @@ export const authOptions = {
     async session(params) {
       params.session.user.roles = params.token.roles
       params.session.user.apiAccessToken = params.token.apiAccessToken
+      params.session.user.facilityCode = params.token.facilityCode
       params.session.user.facility = params.token.facility
       params.session.user.uid = params.token.uid
       params.session.user.fullName = params.token.fullName

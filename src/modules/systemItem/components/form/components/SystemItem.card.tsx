@@ -12,7 +12,7 @@ import { PhysicalItemForm } from './PhysicalItem.form'
 
 export const SystemItemCard = () => {
   const { control } = useFormContext()
-  const item = useWatch({ control, name: 'item' })
+  const item = useWatch({ control, name: 'physicalItem' })
 
   return (
     <Card>

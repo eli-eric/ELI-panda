@@ -134,7 +134,10 @@ export const messages = {
           conditionStatus: { label: 'Condition Status', placeholder: 'Condition Status' }, // codebook of condition status - ITEM_CONDITION_STATUS
           notes: { label: 'Item notes' },
           general: {
-            properties: { property: '<strong>{name}</strong>: {value} {unit}', title: '<strong>Properties</strong>' }
+            properties: {
+              property: '<p><strong><small>{name}</small></strong>: <small>{value} {unit}</small></p>',
+              title: '<label>{title}:</label>'
+            }
           }
         }
       },

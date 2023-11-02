@@ -3,7 +3,7 @@ import type { PhysicalItem, SystemDetail } from '@/modules/systems/types/respons
 
 export type SystemDetailFormType = {
   uid?: string // from router
-  name?: string // input
+  name: string // input
   description?: string // textarea
   parentPath?: CodebookType[]
   location?: CodebookType // combobox - CODEBOOK.LOCATION
@@ -16,5 +16,6 @@ export type SystemDetailFormType = {
   importance?: CodebookType // listbox - CODEBOOK.SYSTEM_IMPORTANCE
   hasSubsystems: boolean
   subSystems?: SystemDetail[]
-  item?: PhysicalItem
+  systemLevel?: CodebookType
+  physicalItem?: PhysicalItem
 }

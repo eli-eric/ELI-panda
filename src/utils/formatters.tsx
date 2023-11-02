@@ -4,7 +4,11 @@ import React from 'react'
 /* formmaters for i18n messages */
 export const messageFormatters = {
   medium: (chunks: string) => <span className="font-medium">{chunks}</span>,
-  strong: (chunks: string) => <span className="font-bold">{chunks}</span>
+  small: (chunks: string) => <span className="text-xs">{chunks}</span>,
+  strong: (chunks: string) => <span className="font-bold">{chunks}</span>,
+  underline: (chunks: string) => <span className="underline">{chunks}</span>,
+  label: (chunks: string) => <span className="text-sm font-medium text-gray-700">{chunks}</span>,
+  p: (chunks: string) => <p className="text-gray-500">{chunks}</p>
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,10 +1,10 @@
-import { useFormContext, useWatch } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 
 import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
+import { Paragraph } from '@/components/layout/Paragraph'
 import { message } from '@/i18n/src/messages'
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 
@@ -15,35 +15,33 @@ const propertyMessage = message.systemsPage.systemDetail.form.physicalItem.gener
 
 export const PhysicalItemForm = () => {
   const fields = useSystemFormFields()
-  const { control } = useFormContext<any>()
-
-  const description = useWatch({ control, name: 'item.catalogueItem.description' })
-
   const { systemDetail } = useSystemDetail()
-  const properties = systemDetail?.item?.catalogueItem.propertiesConnection.edges
+  const properties = systemDetail?.physicalItem?.catalogueItem.propertiesConnection.edges
+  const description = systemDetail?.physicalItem?.catalogueItem.description
 
   return (
     <Grid>
-      <Col sm={3} md={4}>
+      <Col sm={3} md={3}>
         <Input {...fields.partNumber} />
       </Col>
-      <Col sm={3} md={4}>
+      <Col sm={3} md={3}>
         <Combobox {...fields.catalogueSupplier} />
       </Col>
-      <Col sm={3} md={4}>
+      <Col sm={3} md={3}>
         <Input {...fields.eun} />
+      </Col>
+      <Col sm={3} md={3}>
+        <Input {...fields.serialNumber} />
       </Col>
       {description && (
         <Col sm="full" className="flex-col">
-          <p>Description:</p>
-          <p>{description}</p>
+          <FormattedMessage id={propertyMessage.title} values={createMessageValues({ title: 'Description' })} />
+          <Paragraph>{description}</Paragraph>
         </Col>
       )}
       {properties && properties.length > 0 && (
         <Col sm="full" className="flex-col">
-          <p>
-            <FormattedMessage id={propertyMessage.title} values={createMessageValues()} />
-          </p>
+          <FormattedMessage id={propertyMessage.title} values={createMessageValues({ title: 'Properties' })} />
           <ul className="flex space-x-4">
             {properties.map(edge => (
               <li key={edge.node.uid} className="flex">
@@ -67,10 +65,6 @@ export const PhysicalItemForm = () => {
       </Col>
       <Col sm="full">
         <TextArea {...fields.itemNotes} />
-      </Col>
-
-      <Col sm={3} md={4}>
-        <Input {...fields.serialNumber} />
       </Col>
     </Grid>
   )

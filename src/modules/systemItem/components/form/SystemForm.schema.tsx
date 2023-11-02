@@ -2,6 +2,7 @@ import { object, string } from 'yup'
 
 export const schema = object({
   name: string().required(),
+  systemLevel: object().nullable().required(),
   description: string().nullable(),
   systemType: object().nullable(),
   systemCode: string().nullable(),

@@ -10,7 +10,6 @@ import { FILE_TYPE } from '@/types/constants/files'
 
 import { useParentSystemDetail } from '../../hooks/useParentSystemDetail'
 import { useSystemDetail } from '../../hooks/useSystemDetail'
-import { useSystemSubmit } from '../../hooks/useSystemSubmit'
 import Breadcrumbs from '../Breadcrumps'
 import HeaderComponent from '../Header.comp'
 import { SystemMainForm } from './components/SystemMain.form'
@@ -18,10 +17,14 @@ import { schema } from './SystemForm.schema'
 
 const MemoizedSystemGallery = memo(ImageGallery)
 
+import { useRouter } from 'next/router'
+
 import Card from '@/components/layout/Card'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { classNames } from '@/utils'
 
+import { useSystemCreate } from '../../hooks/useSystemCreate'
+import { useSystemUpdate } from '../../hooks/useSystemUpdate'
 import { SystemItemCard } from './components/SystemItem.card'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -33,31 +36,43 @@ const FormCard = ({ children, className }: CardProps) => (
 )
 
 export const SystemForm = () => {
-  const { systemDetail, uid, disabledEdit } = useSystemDetail()
-  //const cataloguePermission = usePermission([ROLE.CATALOGUE_EDIT])
+  const { systemDetail, disabledEdit } = useSystemDetail()
 
-  const { parentUid, parentPath } = useParentSystemDetail()
+  const router = useRouter()
+  const uid = router.query.uid as string | undefined
+
+  const { parentPath } = useParentSystemDetail()
 
   const systemImageRef = useRef<ImageGalleryRef>()
 
-  const { submit, loadingSubmit } = useSystemSubmit(systemImageRef)
+  const { updateSystem, loading } = useSystemUpdate(systemImageRef)
+  const { createSystem, loading: createLoading } = useSystemCreate(systemImageRef)
 
   //TODO: typing
   const formMethods = useForm<any>({
     resolver: yupResolver(schema),
-    defaultValues: systemDetail
+    defaultValues: {
+      ...systemDetail,
+      responsible: { uid: systemDetail?.responsible?.uid, name: systemDetail?.responsible?.fullName as string }
+    }
   })
 
+  //TODO: typing
   const onSubmit = (data: any) => {
     // extract from data hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = data
-    submit({ ...rest, parentUid })
+    if (uid) {
+      updateSystem(rest)
+    }
+    if (!uid) {
+      createSystem(rest)
+    }
   }
 
   return (
     <Form formMethods={formMethods} onSubmit={onSubmit} enableLeaveWarning={true}>
-      <HeaderComponent loading={loadingSubmit} />
+      <HeaderComponent loading={loading || createLoading} />
       <Card>
         <Breadcrumbs parentPath={parentPath || (systemDetail?.parentPath as CodebookType[])} />
       </Card>

@@ -175,6 +175,8 @@ export const typeDefs = gql`
   type System {
     uid: ID! @id
     description: String
+    deleted: Boolean!
+    isTechnologicalUnit: Boolean
     name: String!
     systemAlias: String
     systemCode: String
@@ -182,10 +184,11 @@ export const typeDefs = gql`
     parentSystem: System @relationship(type: "HAS_SUBSYSTEM", direction: IN)
     location: Location @relationship(type: "HAS_LOCATION", direction: OUT)
     facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
-    item: Item @relationship(type: "CONTAINS_ITEM", direction: OUT)
+    physicalItem: Item @relationship(type: "CONTAINS_ITEM", direction: OUT)
     zone: Zone @relationship(type: "HAS_ZONE", direction: OUT)
     systemType: SystemType @relationship(type: "HAS_SYSTEM_TYPE", direction: OUT)
     responsible: Employee @relationship(type: "HAS_RESPONSIBLE", direction: OUT)
+    owner: Employee @relationship(type: "HAS_OWNER", direction: OUT)
     operators: [Employee!]! @relationship(type: "HAS_OPERATOR", direction: OUT)
     maintenedBy: [Employee!]! @relationship(type: "IS_MAINTENED_BY", direction: OUT)
     systemLevel: SystemLevel @relationship(type: "HAS_SYSTEM_LEVEL", direction: OUT)
@@ -215,34 +218,40 @@ export const typeDefs = gql`
     notes: String
   }
 
-  type SystemLevel {
+  interface codeBook {
     code: String!
     name: String!
-    uid: String!
+    uid: ID! @id
+  }
+
+  type SystemLevel {
+    uid: ID! @id
+    code: String!
+    name: String!
   }
 
   type SystemCriticality {
     code: String!
     name: String!
-    uid: String!
+    uid: ID! @id
   }
 
   type ItemCondition {
     code: String!
     name: String!
-    uid: String!
+    uid: ID! @id
   }
 
   type ItemUsage {
     code: String!
     name: String!
-    uid: String!
+    uid: ID! @id
   }
 
   type SystemImportance {
     code: String!
     name: String!
-    uid: String!
+    uid: ID! @id
   }
 
   type SystemType {
@@ -250,7 +259,7 @@ export const typeDefs = gql`
     mask: String!
     name: String!
     systemTypeGroupsContainsSystemType: [SystemTypeGroup!]! @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: IN)
-    uid: String!
+    uid: ID! @id
   }
 
   type Order {

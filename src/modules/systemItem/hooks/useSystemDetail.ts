@@ -43,6 +43,7 @@ const GET_SYSTEM = gql`
         name
       }
       location {
+        code
         name
         uid
       }
@@ -77,7 +78,7 @@ const GET_SYSTEM = gql`
         name
         uid
       }
-      item {
+      physicalItem {
         conditionStatus {
           name
           uid

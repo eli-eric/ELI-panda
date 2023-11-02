@@ -7,7 +7,7 @@ export const whereN = (uid?: string) => ({
 })
 
 export const connectN = (uid?: string) => ({
-  connect: whereN(uid)
+  connect: uid ? whereN(uid) : undefined
 })
 
 export const disconnectN = (uid?: string) => ({
@@ -16,4 +16,9 @@ export const disconnectN = (uid?: string) => ({
 
 export const deleteN = (uid?: string) => ({
   delete: whereN(uid)
+})
+
+export const connectAndDisconnectNode = (uid?: string, disconnectUid?: string) => ({
+  connect: uid ? whereN(uid) : undefined,
+  disconnect: whereN(disconnectUid)
 })

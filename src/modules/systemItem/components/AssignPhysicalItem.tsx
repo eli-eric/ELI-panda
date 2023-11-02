@@ -3,7 +3,6 @@ import { Fragment, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
-import { LinkDecorator } from '@/components/decorators'
 import ModalComponent from '@/components/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
 import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
@@ -18,14 +17,14 @@ export const AssignPhysicalItem = () => {
   const [openModal, setOpenModal] = useState(false)
   const [selectedSystem, setSelectedSystem] = useState<SystemDetail>()
   const { setValue, watch, reset, getValues } = useFormContext<SystemDetailFormType>()
-  const physicalItem = watch('item')
+  //const physicalItem = watch('physicalItem')
 
   const modalButtons: ModalButtons = {
     goNext: {
       text: messages.continue,
       onClick: () => {
         if (selectedSystem?.physicalItem) {
-          setValue('item', selectedSystem?.physicalItem, { shouldDirty: true })
+          setValue('physicalItem', selectedSystem?.physicalItem, { shouldDirty: true })
           setValue('name', selectedSystem?.name, { shouldDirty: true })
           setOpenModal(false)
         } else {
@@ -44,7 +43,7 @@ export const AssignPhysicalItem = () => {
       onClick: () => {
         reset({
           ...getValues(),
-          item: {
+          physicalItem: {
             uid: null
           }
         })
@@ -54,16 +53,17 @@ export const AssignPhysicalItem = () => {
     }
   }
 
+  // temporary solution to disable assign physical item
   return (
     <Fragment>
-      <button
+      {/*  <button
         type="button"
         onClick={() => {
           setOpenModal(true)
         }}
       >
         <LinkDecorator>{physicalItem ? 'Change Physical Item' : 'Assign Physical Item'}</LinkDecorator>
-      </button>
+      </button> */}
       <ModalComponent open={openModal} setOpen={setOpenModal} buttons={modalButtons}>
         <SystemsTable
           tableId={'systemsItem'}
