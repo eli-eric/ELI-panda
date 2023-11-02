@@ -25,6 +25,7 @@ import { classNames } from '@/utils'
 
 import { useSystemCreate } from '../../hooks/useSystemCreate'
 import { useSystemUpdate } from '../../hooks/useSystemUpdate'
+import type { SystemDetailFormType } from '../../types/form'
 import { SystemItemCard } from './components/SystemItem.card'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -42,23 +43,22 @@ export const SystemForm = () => {
   const uid = router.query.uid as string | undefined
 
   const { parentPath } = useParentSystemDetail()
-
   const systemImageRef = useRef<ImageGalleryRef>()
 
   const { updateSystem, loading } = useSystemUpdate(systemImageRef)
   const { createSystem, loading: createLoading } = useSystemCreate(systemImageRef)
 
   //TODO: typing
-  const formMethods = useForm<any>({
+  const formMethods = useForm<SystemDetailFormType>({
     resolver: yupResolver(schema),
     defaultValues: {
-      ...systemDetail,
+      ...(systemDetail as SystemDetailFormType),
       responsible: { uid: systemDetail?.responsible?.uid, name: systemDetail?.responsible?.fullName as string }
     }
   })
 
   //TODO: typing
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: SystemDetailFormType) => {
     // extract from data hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = data
@@ -86,7 +86,7 @@ export const SystemForm = () => {
             hasEditRole={!disabledEdit}
           />
         </SystemMainForm>
-        <SystemItemCard />
+        {systemDetail?.physicalItem && <SystemItemCard />}
       </FormCard>
       <DevTool control={formMethods.control} />
     </Form>

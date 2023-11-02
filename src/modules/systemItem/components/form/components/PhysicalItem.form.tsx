@@ -1,5 +1,7 @@
+import Link from 'next/link'
 import { FormattedMessage } from 'react-intl'
 
+import { LinkDecorator } from '@/components/decorators'
 import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
@@ -7,6 +9,7 @@ import { Col, Grid } from '@/components/grid/Grid'
 import { Paragraph } from '@/components/layout/Paragraph'
 import { message } from '@/i18n/src/messages'
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
+import { PATH } from '@/types/constants/paths'
 
 import { createMessageValues } from '../../../../../utils/formatters'
 import useSystemFormFields from '../SystemForm.fields'
@@ -66,6 +69,17 @@ export const PhysicalItemForm = () => {
       <Col sm="full">
         <TextArea {...fields.itemNotes} />
       </Col>
+      {systemDetail?.physicalItem?.order && (
+        <Col sm="full" className="flex-col">
+          <FormattedMessage
+            id={propertyMessage.title}
+            values={createMessageValues({ title: 'Item Order Information' })}
+          />
+          <Link href={PATH.ORDER + '/' + systemDetail.physicalItem.order.uid} target={'_blank'}>
+            <LinkDecorator>{systemDetail.physicalItem.order.name}</LinkDecorator>
+          </Link>
+        </Col>
+      )}
     </Grid>
   )
 }

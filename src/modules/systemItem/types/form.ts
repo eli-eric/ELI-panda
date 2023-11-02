@@ -1,5 +1,5 @@
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import type { PhysicalItem, SystemDetail } from '@/modules/systems/types/responses'
+import type { PhysicalItem } from '@/modules/systems/types/responses'
 
 export type SystemDetailFormType = {
   uid?: string // from router
@@ -14,8 +14,7 @@ export type SystemDetailFormType = {
   owner?: CodebookType // combobox - CODEBOOK.EMPLOYEE
   responsible?: CodebookType // combobox - CODEBOOK.EMPLOYEE
   importance?: CodebookType // listbox - CODEBOOK.SYSTEM_IMPORTANCE
-  hasSubsystems: boolean
-  subSystems?: SystemDetail[]
   systemLevel?: CodebookType
   physicalItem?: PhysicalItem
+  hasImageGalleryChanges?: boolean
 }

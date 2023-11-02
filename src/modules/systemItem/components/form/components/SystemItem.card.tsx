@@ -5,6 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { LinkDecorator } from '@/components/decorators'
 import Card from '@/components/layout/Card'
 import { Heading } from '@/components/layout/Heading'
+import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { PATH } from '@/types/constants/paths'
 
 import { AssignPhysicalItem } from '../../AssignPhysicalItem'
@@ -12,6 +13,7 @@ import { PhysicalItemForm } from './PhysicalItem.form'
 
 export const SystemItemCard = () => {
   const { control } = useFormContext()
+  const { systemDetail } = useSystemDetail()
   const item = useWatch({ control, name: 'physicalItem' })
 
   return (
