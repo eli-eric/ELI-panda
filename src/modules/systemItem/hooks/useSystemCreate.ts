@@ -72,11 +72,11 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
             description: systemForm.description,
             systemCode: systemForm.systemCode,
             systemAlias: systemForm.systemAlias,
+            systemLevel: systemForm?.systemLevel,
             systemType: connectN(systemForm?.systemType?.uid),
             location: connectN(systemForm?.location?.uid),
             zone: connectN(systemForm?.zone?.uid),
-            responsible: connectN(systemForm?.responsible?.uid),
-            systemLevel: connectN(systemForm?.systemLevel?.uid)
+            responsible: connectN(systemForm?.responsible?.uid)
           }
         ]
       }

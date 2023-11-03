@@ -33,7 +33,7 @@ const systemInput = ({ systemForm, systemDetail }: { systemForm; systemDetail })
   location: connectAndDisconnectNode(systemForm?.location?.uid, systemDetail?.location?.uid),
   zone: connectAndDisconnectNode(systemForm?.zone?.uid, systemDetail?.zone?.uid),
   responsible: connectAndDisconnectNode(systemForm?.responsible?.uid, systemDetail?.responsible?.uid),
-  systemLevel: connectAndDisconnectNode(systemForm?.systemLevel?.uid, systemDetail?.systemLevel?.uid),
+  systemLevel: systemForm?.systemLevel,
   physicalItem: {
     update: systemDetail?.physicalItem && {
       node: {

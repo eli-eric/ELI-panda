@@ -3,6 +3,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import Card from '@/components/layout/Card'
+import LoaderComponent from '@/components/loader.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { FILE_TYPE } from '@/types/constants/files'
 
@@ -12,11 +13,15 @@ import RelationsSection from './components/relationsSection/RelationsSection'
 import { useSystemDetail } from './hooks/useSystemDetail'
 
 export const SystemItemContainer = () => {
-  const { disabledEdit, uid, systemDetail } = useSystemDetail()
+  const { disabledEdit, uid, systemDetail, loading } = useSystemDetail()
+
+  if (loading) {
+    return <LoaderComponent />
+  }
 
   return (
     <Fragment>
-      <SystemForm />
+      {systemDetail && <SystemForm />}
       {uid && (
         <Card className="flex flex-col justify-between">
           <ErrorBoundary fallback={<ErrorPage />}>

@@ -191,7 +191,7 @@ export const typeDefs = gql`
     owner: Employee @relationship(type: "HAS_OWNER", direction: OUT)
     operators: [Employee!]! @relationship(type: "HAS_OPERATOR", direction: OUT)
     maintenedBy: [Employee!]! @relationship(type: "IS_MAINTENED_BY", direction: OUT)
-    systemLevel: SystemLevel @relationship(type: "HAS_SYSTEM_LEVEL", direction: OUT)
+    systemLevel: SystemLevel
     parentPath: [ParentPathItem]!
       @cypher(
         statement: """
@@ -203,6 +203,12 @@ export const typeDefs = gql`
         """
         columnName: "parentPath"
       )
+  }
+
+  enum SystemLevel {
+    TECHNOLOGY_UNIT
+    KEY_SYSTEMS
+    SUBSYSTEMS_AND_PARTS
   }
 
   type Item {
@@ -222,12 +228,6 @@ export const typeDefs = gql`
     code: String!
     name: String!
     uid: ID! @id
-  }
-
-  type SystemLevel {
-    uid: ID! @id
-    code: String!
-    name: String!
   }
 
   type SystemCriticality {

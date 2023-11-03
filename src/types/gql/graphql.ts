@@ -3418,12 +3418,6 @@ export type CreateSystemImportancesMutationResponse = {
   systemImportances: Array<SystemImportance>;
 };
 
-export type CreateSystemLevelsMutationResponse = {
-  __typename?: 'CreateSystemLevelsMutationResponse';
-  info: CreateInfo;
-  systemLevels: Array<SystemLevel>;
-};
-
 export type CreateSystemTypeGroupsMutationResponse = {
   __typename?: 'CreateSystemTypeGroupsMutationResponse';
   info: CreateInfo;
@@ -7374,7 +7368,6 @@ export type Mutation = {
   createSuppliers: CreateSuppliersMutationResponse;
   createSystemCriticalities: CreateSystemCriticalitiesMutationResponse;
   createSystemImportances: CreateSystemImportancesMutationResponse;
-  createSystemLevels: CreateSystemLevelsMutationResponse;
   createSystemTypeGroups: CreateSystemTypeGroupsMutationResponse;
   createSystemTypes: CreateSystemTypesMutationResponse;
   createSystems: CreateSystemsMutationResponse;
@@ -7403,7 +7396,6 @@ export type Mutation = {
   deleteSuppliers: DeleteInfo;
   deleteSystemCriticalities: DeleteInfo;
   deleteSystemImportances: DeleteInfo;
-  deleteSystemLevels: DeleteInfo;
   deleteSystemTypeGroups: DeleteInfo;
   deleteSystemTypes: DeleteInfo;
   deleteSystems: DeleteInfo;
@@ -7432,7 +7424,6 @@ export type Mutation = {
   updateSuppliers: UpdateSuppliersMutationResponse;
   updateSystemCriticalities: UpdateSystemCriticalitiesMutationResponse;
   updateSystemImportances: UpdateSystemImportancesMutationResponse;
-  updateSystemLevels: UpdateSystemLevelsMutationResponse;
   updateSystemTypeGroups: UpdateSystemTypeGroupsMutationResponse;
   updateSystemTypes: UpdateSystemTypesMutationResponse;
   updateSystems: UpdateSystemsMutationResponse;
@@ -7545,11 +7536,6 @@ export type MutationCreateSystemCriticalitiesArgs = {
 
 export type MutationCreateSystemImportancesArgs = {
   input: Array<SystemImportanceCreateInput>;
-};
-
-
-export type MutationCreateSystemLevelsArgs = {
-  input: Array<SystemLevelCreateInput>;
 };
 
 
@@ -7701,11 +7687,6 @@ export type MutationDeleteSystemCriticalitiesArgs = {
 
 export type MutationDeleteSystemImportancesArgs = {
   where?: InputMaybe<SystemImportanceWhere>;
-};
-
-
-export type MutationDeleteSystemLevelsArgs = {
-  where?: InputMaybe<SystemLevelWhere>;
 };
 
 
@@ -7923,12 +7904,6 @@ export type MutationUpdateSystemCriticalitiesArgs = {
 export type MutationUpdateSystemImportancesArgs = {
   update?: InputMaybe<SystemImportanceUpdateInput>;
   where?: InputMaybe<SystemImportanceWhere>;
-};
-
-
-export type MutationUpdateSystemLevelsArgs = {
-  update?: InputMaybe<SystemLevelUpdateInput>;
-  where?: InputMaybe<SystemLevelWhere>;
 };
 
 
@@ -8217,9 +8192,6 @@ export type Query = {
   systemImportances: Array<SystemImportance>;
   systemImportancesAggregate: SystemImportanceAggregateSelection;
   systemImportancesConnection: SystemImportancesConnection;
-  systemLevels: Array<SystemLevel>;
-  systemLevelsAggregate: SystemLevelAggregateSelection;
-  systemLevelsConnection: SystemLevelsConnection;
   systemTypeGroups: Array<SystemTypeGroup>;
   systemTypeGroupsAggregate: SystemTypeGroupAggregateSelection;
   systemTypeGroupsConnection: SystemTypeGroupsConnection;
@@ -8640,25 +8612,6 @@ export type QuerySystemImportancesConnectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<InputMaybe<SystemImportanceSort>>>;
   where?: InputMaybe<SystemImportanceWhere>;
-};
-
-
-export type QuerySystemLevelsArgs = {
-  options?: InputMaybe<SystemLevelOptions>;
-  where?: InputMaybe<SystemLevelWhere>;
-};
-
-
-export type QuerySystemLevelsAggregateArgs = {
-  where?: InputMaybe<SystemLevelWhere>;
-};
-
-
-export type QuerySystemLevelsConnectionArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<InputMaybe<SystemLevelSort>>>;
-  where?: InputMaybe<SystemLevelWhere>;
 };
 
 
@@ -10305,8 +10258,6 @@ export type System = {
   systemAlias?: Maybe<Scalars['String']['output']>;
   systemCode?: Maybe<Scalars['String']['output']>;
   systemLevel?: Maybe<SystemLevel>;
-  systemLevelAggregate?: Maybe<SystemSystemLevelSystemLevelAggregationSelection>;
-  systemLevelConnection: SystemSystemLevelConnection;
   systemType?: Maybe<SystemType>;
   systemTypeAggregate?: Maybe<SystemSystemTypeSystemTypeAggregationSelection>;
   systemTypeConnection: SystemSystemTypeConnection;
@@ -10515,28 +10466,6 @@ export type SystemSubSystemsConnectionArgs = {
 };
 
 
-export type SystemSystemLevelArgs = {
-  directed?: InputMaybe<Scalars['Boolean']['input']>;
-  options?: InputMaybe<SystemLevelOptions>;
-  where?: InputMaybe<SystemLevelWhere>;
-};
-
-
-export type SystemSystemLevelAggregateArgs = {
-  directed?: InputMaybe<Scalars['Boolean']['input']>;
-  where?: InputMaybe<SystemLevelWhere>;
-};
-
-
-export type SystemSystemLevelConnectionArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  directed?: InputMaybe<Scalars['Boolean']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<SystemSystemLevelConnectionSort>>;
-  where?: InputMaybe<SystemSystemLevelConnectionWhere>;
-};
-
-
 export type SystemSystemTypeArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   options?: InputMaybe<SystemTypeOptions>;
@@ -10600,7 +10529,6 @@ export type SystemConnectInput = {
   physicalItem?: InputMaybe<SystemPhysicalItemConnectFieldInput>;
   responsible?: InputMaybe<SystemResponsibleConnectFieldInput>;
   subSystems?: InputMaybe<Array<SystemSubSystemsConnectFieldInput>>;
-  systemLevel?: InputMaybe<SystemSystemLevelConnectFieldInput>;
   systemType?: InputMaybe<SystemSystemTypeConnectFieldInput>;
   zone?: InputMaybe<SystemZoneConnectFieldInput>;
 };
@@ -10610,7 +10538,6 @@ export type SystemConnectOrCreateInput = {
   parentSystem?: InputMaybe<SystemParentSystemConnectOrCreateFieldInput>;
   physicalItem?: InputMaybe<SystemPhysicalItemConnectOrCreateFieldInput>;
   subSystems?: InputMaybe<Array<SystemSubSystemsConnectOrCreateFieldInput>>;
-  systemLevel?: InputMaybe<SystemSystemLevelConnectOrCreateFieldInput>;
   systemType?: InputMaybe<SystemSystemTypeConnectOrCreateFieldInput>;
 };
 
@@ -10638,7 +10565,7 @@ export type SystemCreateInput = {
   subSystems?: InputMaybe<SystemSubSystemsFieldInput>;
   systemAlias?: InputMaybe<Scalars['String']['input']>;
   systemCode?: InputMaybe<Scalars['String']['input']>;
-  systemLevel?: InputMaybe<SystemSystemLevelFieldInput>;
+  systemLevel?: InputMaybe<SystemLevel>;
   systemType?: InputMaybe<SystemSystemTypeFieldInput>;
   zone?: InputMaybe<SystemZoneFieldInput>;
 };
@@ -10726,7 +10653,6 @@ export type SystemDeleteInput = {
   physicalItem?: InputMaybe<SystemPhysicalItemDeleteFieldInput>;
   responsible?: InputMaybe<SystemResponsibleDeleteFieldInput>;
   subSystems?: InputMaybe<Array<SystemSubSystemsDeleteFieldInput>>;
-  systemLevel?: InputMaybe<SystemSystemLevelDeleteFieldInput>;
   systemType?: InputMaybe<SystemSystemTypeDeleteFieldInput>;
   zone?: InputMaybe<SystemZoneDeleteFieldInput>;
 };
@@ -10741,7 +10667,6 @@ export type SystemDisconnectInput = {
   physicalItem?: InputMaybe<SystemPhysicalItemDisconnectFieldInput>;
   responsible?: InputMaybe<SystemResponsibleDisconnectFieldInput>;
   subSystems?: InputMaybe<Array<SystemSubSystemsDisconnectFieldInput>>;
-  systemLevel?: InputMaybe<SystemSystemLevelDisconnectFieldInput>;
   systemType?: InputMaybe<SystemSystemTypeDisconnectFieldInput>;
   zone?: InputMaybe<SystemZoneDisconnectFieldInput>;
 };
@@ -11043,95 +10968,11 @@ export type SystemItemPhysicalItemNodeAggregateSelection = {
   uid: IdAggregateSelectionNonNullable;
 };
 
-export type SystemLevel = {
-  __typename?: 'SystemLevel';
-  code: Scalars['String']['output'];
-  name: Scalars['String']['output'];
-  uid: Scalars['ID']['output'];
-};
-
-export type SystemLevelAggregateSelection = {
-  __typename?: 'SystemLevelAggregateSelection';
-  code: StringAggregateSelectionNonNullable;
-  count: Scalars['Int']['output'];
-  name: StringAggregateSelectionNonNullable;
-  uid: IdAggregateSelectionNonNullable;
-};
-
-export type SystemLevelConnectOrCreateWhere = {
-  node: SystemLevelUniqueWhere;
-};
-
-export type SystemLevelConnectWhere = {
-  node: SystemLevelWhere;
-};
-
-export type SystemLevelCreateInput = {
-  code: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-};
-
-export type SystemLevelEdge = {
-  __typename?: 'SystemLevelEdge';
-  cursor: Scalars['String']['output'];
-  node: SystemLevel;
-};
-
-export type SystemLevelOnCreateInput = {
-  code: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-};
-
-export type SystemLevelOptions = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  /** Specify one or more SystemLevelSort objects to sort SystemLevels by. The sorts will be applied in the order in which they are arranged in the array. */
-  sort?: InputMaybe<Array<SystemLevelSort>>;
-};
-
-/** Fields to sort SystemLevels by. The order in which sorts are applied is not guaranteed when specifying many fields in one SystemLevelSort object. */
-export type SystemLevelSort = {
-  code?: InputMaybe<SortDirection>;
-  name?: InputMaybe<SortDirection>;
-  uid?: InputMaybe<SortDirection>;
-};
-
-export type SystemLevelUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
-};
-
-export type SystemLevelUpdateInput = {
-  code?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type SystemLevelWhere = {
-  AND?: InputMaybe<Array<SystemLevelWhere>>;
-  NOT?: InputMaybe<SystemLevelWhere>;
-  OR?: InputMaybe<Array<SystemLevelWhere>>;
-  code?: InputMaybe<Scalars['String']['input']>;
-  code_CONTAINS?: InputMaybe<Scalars['String']['input']>;
-  code_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  code_IN?: InputMaybe<Array<Scalars['String']['input']>>;
-  code_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  name_CONTAINS?: InputMaybe<Scalars['String']['input']>;
-  name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  name_IN?: InputMaybe<Array<Scalars['String']['input']>>;
-  name_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
-  uid?: InputMaybe<Scalars['ID']['input']>;
-  uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
-  uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
-  uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
-  uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
-};
-
-export type SystemLevelsConnection = {
-  __typename?: 'SystemLevelsConnection';
-  edges: Array<SystemLevelEdge>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int']['output'];
-};
+export enum SystemLevel {
+  KeySystems = 'KEY_SYSTEMS',
+  SubsystemsAndParts = 'SUBSYSTEMS_AND_PARTS',
+  TechnologyUnit = 'TECHNOLOGY_UNIT'
+}
 
 export type SystemLocationAggregateInput = {
   AND?: InputMaybe<Array<SystemLocationAggregateInput>>;
@@ -11459,6 +11300,7 @@ export type SystemOnCreateInput = {
   name: Scalars['String']['input'];
   systemAlias?: InputMaybe<Scalars['String']['input']>;
   systemCode?: InputMaybe<Scalars['String']['input']>;
+  systemLevel?: InputMaybe<SystemLevel>;
 };
 
 export type SystemOperatorsAggregateInput = {
@@ -12118,7 +11960,6 @@ export type SystemRelationInput = {
   physicalItem?: InputMaybe<SystemPhysicalItemCreateFieldInput>;
   responsible?: InputMaybe<SystemResponsibleCreateFieldInput>;
   subSystems?: InputMaybe<Array<SystemSubSystemsCreateFieldInput>>;
-  systemLevel?: InputMaybe<SystemSystemLevelCreateFieldInput>;
   systemType?: InputMaybe<SystemSystemTypeCreateFieldInput>;
   zone?: InputMaybe<SystemZoneCreateFieldInput>;
 };
@@ -12299,6 +12140,7 @@ export type SystemSort = {
   name?: InputMaybe<SortDirection>;
   systemAlias?: InputMaybe<SortDirection>;
   systemCode?: InputMaybe<SortDirection>;
+  systemLevel?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
 };
 
@@ -12452,138 +12294,6 @@ export type SystemSubSystemsUpdateFieldInput = {
   disconnect?: InputMaybe<Array<SystemSubSystemsDisconnectFieldInput>>;
   update?: InputMaybe<SystemSubSystemsUpdateConnectionInput>;
   where?: InputMaybe<SystemSubSystemsConnectionWhere>;
-};
-
-export type SystemSystemLevelAggregateInput = {
-  AND?: InputMaybe<Array<SystemSystemLevelAggregateInput>>;
-  NOT?: InputMaybe<SystemSystemLevelAggregateInput>;
-  OR?: InputMaybe<Array<SystemSystemLevelAggregateInput>>;
-  count?: InputMaybe<Scalars['Int']['input']>;
-  count_GT?: InputMaybe<Scalars['Int']['input']>;
-  count_GTE?: InputMaybe<Scalars['Int']['input']>;
-  count_LT?: InputMaybe<Scalars['Int']['input']>;
-  count_LTE?: InputMaybe<Scalars['Int']['input']>;
-  node?: InputMaybe<SystemSystemLevelNodeAggregationWhereInput>;
-};
-
-export type SystemSystemLevelConnectFieldInput = {
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
-  overwrite?: Scalars['Boolean']['input'];
-  where?: InputMaybe<SystemLevelConnectWhere>;
-};
-
-export type SystemSystemLevelConnectOrCreateFieldInput = {
-  onCreate: SystemSystemLevelConnectOrCreateFieldInputOnCreate;
-  where: SystemLevelConnectOrCreateWhere;
-};
-
-export type SystemSystemLevelConnectOrCreateFieldInputOnCreate = {
-  node: SystemLevelOnCreateInput;
-};
-
-export type SystemSystemLevelConnection = {
-  __typename?: 'SystemSystemLevelConnection';
-  edges: Array<SystemSystemLevelRelationship>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int']['output'];
-};
-
-export type SystemSystemLevelConnectionSort = {
-  node?: InputMaybe<SystemLevelSort>;
-};
-
-export type SystemSystemLevelConnectionWhere = {
-  AND?: InputMaybe<Array<SystemSystemLevelConnectionWhere>>;
-  NOT?: InputMaybe<SystemSystemLevelConnectionWhere>;
-  OR?: InputMaybe<Array<SystemSystemLevelConnectionWhere>>;
-  node?: InputMaybe<SystemLevelWhere>;
-};
-
-export type SystemSystemLevelCreateFieldInput = {
-  node: SystemLevelCreateInput;
-};
-
-export type SystemSystemLevelDeleteFieldInput = {
-  where?: InputMaybe<SystemSystemLevelConnectionWhere>;
-};
-
-export type SystemSystemLevelDisconnectFieldInput = {
-  where?: InputMaybe<SystemSystemLevelConnectionWhere>;
-};
-
-export type SystemSystemLevelFieldInput = {
-  connect?: InputMaybe<SystemSystemLevelConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemSystemLevelConnectOrCreateFieldInput>;
-  create?: InputMaybe<SystemSystemLevelCreateFieldInput>;
-};
-
-export type SystemSystemLevelNodeAggregationWhereInput = {
-  AND?: InputMaybe<Array<SystemSystemLevelNodeAggregationWhereInput>>;
-  NOT?: InputMaybe<SystemSystemLevelNodeAggregationWhereInput>;
-  OR?: InputMaybe<Array<SystemSystemLevelNodeAggregationWhereInput>>;
-  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type SystemSystemLevelRelationship = {
-  __typename?: 'SystemSystemLevelRelationship';
-  cursor: Scalars['String']['output'];
-  node: SystemLevel;
-};
-
-export type SystemSystemLevelSystemLevelAggregationSelection = {
-  __typename?: 'SystemSystemLevelSystemLevelAggregationSelection';
-  count: Scalars['Int']['output'];
-  node?: Maybe<SystemSystemLevelSystemLevelNodeAggregateSelection>;
-};
-
-export type SystemSystemLevelSystemLevelNodeAggregateSelection = {
-  __typename?: 'SystemSystemLevelSystemLevelNodeAggregateSelection';
-  code: StringAggregateSelectionNonNullable;
-  name: StringAggregateSelectionNonNullable;
-  uid: IdAggregateSelectionNonNullable;
-};
-
-export type SystemSystemLevelUpdateConnectionInput = {
-  node?: InputMaybe<SystemLevelUpdateInput>;
-};
-
-export type SystemSystemLevelUpdateFieldInput = {
-  connect?: InputMaybe<SystemSystemLevelConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemSystemLevelConnectOrCreateFieldInput>;
-  create?: InputMaybe<SystemSystemLevelCreateFieldInput>;
-  delete?: InputMaybe<SystemSystemLevelDeleteFieldInput>;
-  disconnect?: InputMaybe<SystemSystemLevelDisconnectFieldInput>;
-  update?: InputMaybe<SystemSystemLevelUpdateConnectionInput>;
-  where?: InputMaybe<SystemSystemLevelConnectionWhere>;
 };
 
 export type SystemSystemParentSystemAggregationSelection = {
@@ -13542,7 +13252,7 @@ export type SystemUpdateInput = {
   subSystems?: InputMaybe<Array<SystemSubSystemsUpdateFieldInput>>;
   systemAlias?: InputMaybe<Scalars['String']['input']>;
   systemCode?: InputMaybe<Scalars['String']['input']>;
-  systemLevel?: InputMaybe<SystemSystemLevelUpdateFieldInput>;
+  systemLevel?: InputMaybe<SystemLevel>;
   systemType?: InputMaybe<SystemSystemTypeUpdateFieldInput>;
   zone?: InputMaybe<SystemZoneUpdateFieldInput>;
 };
@@ -13654,11 +13364,8 @@ export type SystemWhere = {
   systemCode_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   systemCode_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   systemCode_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
-  systemLevel?: InputMaybe<SystemLevelWhere>;
-  systemLevelAggregate?: InputMaybe<SystemSystemLevelAggregateInput>;
-  systemLevelConnection?: InputMaybe<SystemSystemLevelConnectionWhere>;
-  systemLevelConnection_NOT?: InputMaybe<SystemSystemLevelConnectionWhere>;
-  systemLevel_NOT?: InputMaybe<SystemLevelWhere>;
+  systemLevel?: InputMaybe<SystemLevel>;
+  systemLevel_IN?: InputMaybe<Array<InputMaybe<SystemLevel>>>;
   systemType?: InputMaybe<SystemTypeWhere>;
   systemTypeAggregate?: InputMaybe<SystemSystemTypeAggregateInput>;
   systemTypeConnection?: InputMaybe<SystemSystemTypeConnectionWhere>;
@@ -14344,12 +14051,6 @@ export type UpdateSystemImportancesMutationResponse = {
   __typename?: 'UpdateSystemImportancesMutationResponse';
   info: UpdateInfo;
   systemImportances: Array<SystemImportance>;
-};
-
-export type UpdateSystemLevelsMutationResponse = {
-  __typename?: 'UpdateSystemLevelsMutationResponse';
-  info: UpdateInfo;
-  systemLevels: Array<SystemLevel>;
 };
 
 export type UpdateSystemTypeGroupsMutationResponse = {

@@ -21,6 +21,7 @@ import { useRouter } from 'next/router'
 
 import Card from '@/components/layout/Card'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import { SystemLevel } from '@/types/gql/graphql'
 import { classNames } from '@/utils'
 
 import { useSystemCreate } from '../../hooks/useSystemCreate'
@@ -57,6 +58,8 @@ export const SystemForm = () => {
     }
   })
 
+  const systemLevel = formMethods.watch('systemLevel')
+
   //TODO: typing
   const onSubmit = (data: SystemDetailFormType) => {
     // extract from data hasImageGalleryChanges
@@ -76,7 +79,14 @@ export const SystemForm = () => {
       <Card>
         <Breadcrumbs parentPath={parentPath || (systemDetail?.parentPath as CodebookType[])} />
       </Card>
-      <FormCard className="bg-sky-100 shadow-md rounded-lg border">
+      <FormCard
+        className={classNames(
+          'shadow-md rounded-lg border',
+          systemLevel === SystemLevel.KeySystems && 'bg-primary-100',
+          systemLevel === SystemLevel.SubsystemsAndParts && 'bg-lime-100',
+          systemLevel === SystemLevel.TechnologyUnit && 'bg-sky-100'
+        )}
+      >
         <SystemMainForm>
           <MemoizedSystemGallery
             ref={systemImageRef}

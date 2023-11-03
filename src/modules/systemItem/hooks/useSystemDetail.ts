@@ -6,34 +6,6 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { ROLE } from '@/types/constants/roles'
 import type { Query } from '@/types/gql/graphql'
 
-/* export const useSystemDetail = () => {
-  const router = useRouter()
-  const uid = router.query.uid as string
-  const { system: systemEndpoint } = useEndpoint({ uid })
-
-  const { response, loading, error, mutate } = useFetch<SystemDetailFormType>({
-    url: uid && systemEndpoint,
-    config: {
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      revalidateOnMount: true
-    },
-    useMockFetcher: false
-  })
-  const { data: session } = useSession()
-  const disabledEdit = !session?.user.roles.includes(ROLE.SYSTEM_EDIT)
-
-  return {
-    systemDetail: response,
-    loading: loading,
-    error,
-    mutate,
-    disabledEdit,
-    uid,
-    systemEndpoint
-  }
-} */
-
 const GET_SYSTEM = gql`
   query System($where: SystemWhere) {
     systems(where: $where) {
@@ -66,10 +38,7 @@ const GET_SYSTEM = gql`
       }
       systemCode
       systemAlias
-      systemLevel {
-        name
-        uid
-      }
+      systemLevel
       systemType {
         name
         uid

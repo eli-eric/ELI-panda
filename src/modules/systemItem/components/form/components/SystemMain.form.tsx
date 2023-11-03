@@ -1,4 +1,3 @@
-import { gql, useQuery } from '@apollo/client'
 import type { ColumnDef } from '@tanstack/react-table'
 import { Fragment, useMemo } from 'react'
 
@@ -10,7 +9,7 @@ import Card from '@/components/layout/Card'
 import { CellWithDelete } from '@/modules/roomCard/components/table/CellWithDelete'
 import { ContactDeptButton } from '@/modules/roomCard/components/table/ContactDeptButton'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
-import type { Query } from '@/types/gql/graphql'
+import { SystemLevel } from '@/types/gql/graphql'
 
 import useSystemFormFields from '../SystemForm.fields'
 
@@ -18,20 +17,10 @@ interface SystemFormComponentProps {
   children?: React.ReactNode
 }
 
-const GET_SYSTEM_LEVELS = gql`
-  query GetSystemLevels {
-    systemLevels {
-      uid
-      name
-    }
-  }
-`
-
 export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
   const fields = useSystemFormFields()
 
-  const { data } = useQuery<Query>(GET_SYSTEM_LEVELS)
-
+  const systemLevels = Object.values(SystemLevel).map(level => level)
   const columnsMaintener = useMemo(
     (): ColumnDef<any, any>[] => [
       {
@@ -83,7 +72,7 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
               <Listbox {...fields.systemType} />
             </Col>
             <Col sm={3} md={6} lg={4}>
-              <Listbox {...fields.systemLevel} codebookResponse={data?.systemLevels} />
+              <Listbox {...fields.systemLevel} customOptions={systemLevels} />
             </Col>
             <Col sm={3} md={6} lg={8}>
               <Combobox {...fields.location} />
