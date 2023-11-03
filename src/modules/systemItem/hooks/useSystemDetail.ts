@@ -5,89 +5,13 @@ import { useSession } from 'next-auth/react'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { ROLE } from '@/types/constants/roles'
 import type { Query } from '@/types/gql/graphql'
+import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
 
 const GET_SYSTEM = gql`
+  ${SYSTEM_DETAIL}
   query System($where: SystemWhere) {
     systems(where: $where) {
-      name
-      parentPath {
-        uid
-        name
-      }
-      location {
-        code
-        name
-        uid
-      }
-      description
-      maintenedBy {
-        fullName
-        uid
-      }
-      operators {
-        fullName
-        uid
-      }
-      parentSystem {
-        name
-        uid
-      }
-      responsible {
-        fullName
-        uid
-      }
-      systemCode
-      systemAlias
-      systemLevel
-      systemType {
-        name
-        uid
-      }
-      zone {
-        name
-        uid
-      }
-      physicalItem {
-        conditionStatus {
-          name
-          uid
-        }
-        eun
-        name
-        notes
-        serialNumber
-        order {
-          name
-          uid
-        }
-        uid
-        itemUsage {
-          name
-          uid
-        }
-        catalogueItem {
-          catalogueNumber
-          description
-          name
-          uid
-          supplier {
-            name
-            uid
-          }
-          propertiesConnection {
-            edges {
-              value
-              node {
-                name
-                unit {
-                  name
-                  uid
-                }
-              }
-            }
-          }
-        }
-      }
+      ...SystemDetail
     }
   }
 `

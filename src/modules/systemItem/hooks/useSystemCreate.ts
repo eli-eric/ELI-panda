@@ -6,20 +6,21 @@ import { toast } from 'react-hot-toast'
 
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
-import { systemsRefresh } from '@/modules/systems/utils'
+import { addSubsystem } from '@/modules/systems/utils'
 import { PATH } from '@/types/constants/paths'
 import type { Mutation, MutationCreateSystemsArgs } from '@/types/gql/graphql'
+import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
 import { connectN } from '@/utils/graphql/mutations'
 
 import type { SystemDetailFormType } from '../types/form'
 import { useParentSystemDetail } from './useParentSystemDetail'
 
 const CREATE_SYSTEM = gql`
+  ${SYSTEM_DETAIL}
   mutation CreateSystems($input: [SystemCreateInput!]!) {
     createSystems(input: $input) {
-      systems {
-        name
-        uid
+      systems(where: $where) {
+        ...SystemDetail
       }
     }
   }
@@ -31,15 +32,18 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
   const { parentUid } = useParentSystemDetail()
   const { data: session } = useSession()
 
+  const onCompleted = ({ createSystems: { systems } }) => {
+    const responseUid = systems[0].uid
+    const body = systems[0]
+    imageRef?.current?.submit(responseUid, () => {
+      toast.success(`System ${responseUid} saved successfully`)
+      router.replace(PATH.SYSTEM + '/' + responseUid)
+      parentUid ? mutate(prev => prev && addSubsystem(parentUid, body, prev), { revalidate: false }) : mutate()
+    })
+  }
+
   const [create, { loading }] = useMutation<Mutation, MutationCreateSystemsArgs>(CREATE_SYSTEM, {
-    onCompleted: ({ createSystems: { systems } }) => {
-      const responseUid = systems[0].uid
-      imageRef?.current?.submit(responseUid, () => {
-        toast.success(`System ${responseUid} saved successfully`)
-        router.replace(PATH.SYSTEM + '/' + responseUid)
-        mutate(systemsRefresh, { revalidate: false })
-      })
-    }
+    onCompleted
   })
 
   const createSystem = (systemForm: SystemDetailFormType) => {

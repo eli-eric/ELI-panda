@@ -5,20 +5,21 @@ import { toast } from 'react-hot-toast'
 
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
-import { systemsRefresh } from '@/modules/systems/utils'
+import { updateSystem } from '@/modules/systems/utils'
 import { PATH } from '@/types/constants/paths'
 import type { Mutation, MutationUpdateSystemsArgs } from '@/types/gql/graphql'
+import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
 import { connectAndDisconnectNode } from '@/utils/graphql/mutations'
 
 import type { SystemDetailFormType } from '../types/form'
 import { useSystemDetail } from './useSystemDetail'
 
 const UPDATE_SYSTEM = gql`
+  ${SYSTEM_DETAIL}
   mutation UpdateSystems($where: SystemWhere, $update: SystemUpdateInput!) {
     updateSystems(where: $where, update: $update) {
       systems {
-        name
-        uid
+        ...SystemDetail
       }
     }
   }
@@ -60,6 +61,7 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
 
   const onCompleted = ({ updateSystems: { systems } }) => {
     const responseUid = systems[0].uid
+    const body = systems[0]
     imageRef?.current?.submit(responseUid, () => {
       toast.success(`System ${responseUid} saved successfully`)
       if (uid) {
@@ -67,7 +69,8 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
       } else {
         router.replace(PATH.SYSTEM + '/' + responseUid)
       }
-      mutate(systemsRefresh, { revalidate: false })
+      //mutate(systemsRefresh, { revalidate: false })
+      mutate(prev => prev && updateSystem(uid, body, prev), { revalidate: false })
 
       refetch()
     })

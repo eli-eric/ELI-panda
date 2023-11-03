@@ -62,7 +62,7 @@ export const typeDefs = gql`
   }
 
   type Employee {
-    uid: String!
+    uid: ID! @id
     firstName: String!
     fullName: String
     lastName: String!
@@ -76,7 +76,7 @@ export const typeDefs = gql`
   }
 
   type CatalogueCategory {
-    uid: String!
+    uid: ID! @id
     code: String!
     name: String!
     catalogueCategoriesHasSubcategory: [CatalogueCategory!]! @relationship(type: "HAS_SUBCATEGORY", direction: IN)
@@ -162,7 +162,7 @@ export const typeDefs = gql`
   type Role {
     code: String!
     name: String!
-    uid: String!
+    uid: ID! @id
     usersHasRole: [User!]! @relationship(type: "HAS_ROLE", direction: IN)
   }
 
@@ -224,12 +224,6 @@ export const typeDefs = gql`
     notes: String
   }
 
-  interface codeBook {
-    code: String!
-    name: String!
-    uid: ID! @id
-  }
-
   type SystemCriticality {
     code: String!
     name: String!
@@ -272,7 +266,7 @@ export const typeDefs = gql`
     facilitiesHasZone: [Facility!]! @relationship(type: "HAS_ZONE", direction: IN)
     hasSubzoneZones: [Zone!]! @relationship(type: "HAS_SUBZONE", direction: OUT)
     name: String!
-    uid: String!
+    uid: ID! @id
     zonesHasSubzone: [Zone!]! @relationship(type: "HAS_SUBZONE", direction: IN)
   }
 
@@ -284,10 +278,9 @@ export const typeDefs = gql`
   }
 
   type Unit {
-    catalogueCategoryPropertiesHasUnit: [CatalogueCategoryProperty!]! @relationship(type: "HAS_UNIT", direction: IN)
     code: String!
     name: String!
-    uid: String!
+    uid: ID! @id
   }
 
   type User {

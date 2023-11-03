@@ -54,7 +54,8 @@ export const SystemForm = () => {
     resolver: yupResolver(schema),
     defaultValues: {
       ...(systemDetail as SystemDetailFormType),
-      responsible: { uid: systemDetail?.responsible?.uid, name: systemDetail?.responsible?.fullName as string }
+      responsible: { uid: systemDetail?.responsible?.uid, name: systemDetail?.responsible?.fullName as string },
+      zone: { uid: systemDetail?.zone?.uid, name: systemDetail?.zone?.name as string }
     }
   })
 
