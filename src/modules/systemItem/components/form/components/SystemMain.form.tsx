@@ -8,6 +8,7 @@ import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
 import { CellWithDelete } from '@/modules/roomCard/components/table/CellWithDelete'
 import { ContactDeptButton } from '@/modules/roomCard/components/table/ContactDeptButton'
+import { SelectLocationTree } from '@/modules/shared/form/SelectLocation.combo'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { SystemLevel } from '@/types/gql/graphql'
 
@@ -75,7 +76,7 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
               <Listbox {...fields.systemLevel} customOptions={systemLevels} />
             </Col>
             <Col sm={3} md={6} lg={8}>
-              <Combobox {...fields.location} />
+              <SelectLocationTree locationField={fields.location} />
             </Col>
             <Col sm={3} md={6} lg={8}>
               <Combobox {...fields.zone} />

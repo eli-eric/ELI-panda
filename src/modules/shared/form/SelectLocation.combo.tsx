@@ -1,3 +1,4 @@
+import type { ColumnDef } from '@tanstack/react-table'
 import { Fragment, useEffect, useState } from 'react'
 
 import Combobox from '@/components/form/Combobox'
@@ -6,16 +7,18 @@ import { CodebookTreeModalGraphql } from '@/components/form/shared/CodebookTreeM
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps, Option } from '@/types/form'
 
-import { useLocation, useSubLocations } from '../hooks/useLocation'
-import { updateLocationWithSublocation } from '../utils'
+import { useLocation, useSubLocations } from '../../roomCard/hooks/useLocation'
+import { updateLocationWithSublocation } from '../../roomCard/utils'
 
 export const SelectLocationTree = ({
-  locationField
+  locationField,
+  className
 }: {
   locationField: FieldProps & {
     options?: Option[] | undefined
     codebook?: CODEBOOK | undefined
   }
+  className?: string
 }) => {
   const [open, setOpen] = useState(false)
   const [codebooktree, setCodebooktree] = useState<Codebooktree[]>([])
@@ -28,6 +31,7 @@ export const SelectLocationTree = ({
       setCodebooktree(
         locations.map(location => ({
           name: location.name,
+          code: location.code as string,
           uid: location.uid,
           roomCard: location.roomCard,
           isExpandable: location.subLocations.length > 0
@@ -49,17 +53,24 @@ export const SelectLocationTree = ({
     })
   }
 
+  const additionalColumn: ColumnDef<Codebooktree, string> = {
+    header: 'Code',
+    accessorKey: 'code',
+    id: 'code'
+  }
+
   return (
     <Fragment>
       <Combobox
         {...locationField}
-        className="w-72"
+        className={className}
         onClickIcon={() => {
           setOpen(true)
         }}
       />
       <CodebookTreeModalGraphql
         fetchChildren={fetchChildren}
+        additionalColumn={additionalColumn}
         data={codebooktree}
         open={open}
         loading={loading}

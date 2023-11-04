@@ -7,6 +7,7 @@ const GET_LOCATIONS = gql`
     locations(where: $where) {
       uid
       name
+      code
       subLocations {
         uid
       }
@@ -22,6 +23,7 @@ const GET_SUBLOCATIONS = gql`
       subLocations {
         uid
         name
+        code
         subLocations {
           uid
         }

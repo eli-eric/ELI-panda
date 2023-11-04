@@ -16,6 +16,7 @@ const messages = message.common.buttons
 export type Codebooktree = {
   name: string
   uid: string
+  code?: string
   children?: Codebooktree[]
   isExpandable?: boolean
 }
@@ -27,6 +28,7 @@ interface CodebookTreeModalProps {
   data?: Codebooktree[]
   name: string
   fetchChildren: (uid: string) => void
+  additionalColumn?: ColumnDef<Codebooktree, string>
 }
 
 export const CodebookTreeModalGraphql = ({
@@ -35,6 +37,7 @@ export const CodebookTreeModalGraphql = ({
   data,
   name,
   fetchChildren,
+  additionalColumn,
   loading
 }: CodebookTreeModalProps) => {
   const [item, setItem] = useState<CodebookType | undefined>(undefined)
@@ -46,8 +49,8 @@ export const CodebookTreeModalGraphql = ({
     []
   )
 
-  const columns = useMemo(
-    (): ColumnDef<Codebooktree, string>[] => [
+  const columns = useMemo((): ColumnDef<Codebooktree, string>[] => {
+    const columns: ColumnDef<Codebooktree, string>[] = [
       {
         header: 'Name',
         accessorKey: 'name',
@@ -84,9 +87,10 @@ export const CodebookTreeModalGraphql = ({
           </div>
         )
       }
-    ],
-    [fetchChildren]
-  )
+    ]
+    if (additionalColumn) columns.push(additionalColumn)
+    return columns
+  }, [fetchChildren, additionalColumn])
 
   const modalButtons: ModalButtons = {
     goNext: {
@@ -117,7 +121,8 @@ export const CodebookTreeModalGraphql = ({
           data={data}
           getSubRows={row => row.children}
           settings={{
-            enableRowSelection: true
+            enableRowSelection: true,
+            enableFiltering: true
           }}
           className={'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'}
           getRowProps={row => ({

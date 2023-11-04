@@ -11,6 +11,7 @@ export const updateLocationWithSublocation = (locations: Codebooktree[], subLoca
         ...location,
         children: subLocations.map(subLocation => ({
           name: subLocation.name,
+          code: subLocation.code,
           uid: subLocation.uid,
           isExpandable: subLocation.subLocations.length > 0
         }))

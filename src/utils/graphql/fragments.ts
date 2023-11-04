@@ -1,11 +1,5 @@
 import { gql } from '@apollo/client'
 
-export const CODEBOOK = gql`
-  fragment Codebook on Codebook {
-    name
-    uid
-  }
-`
 export const SYSTEM_FIELDS = gql`
   fragment SystemFields on System {
     name
