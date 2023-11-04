@@ -4,10 +4,10 @@ import React, { Fragment, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
-import { classNames } from '@/helpers'
 import { type CodebookFilter, type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
+import { classNames } from '@/utils'
 
 import { CodebookTreeModal } from './shared/CodebookTreeModal'
 
@@ -96,9 +96,7 @@ export const ComboboxTree = ({
               )}
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer">
                 <ChevronDownIcon
-                  className="h-4 w-4
-
- text-gray-500"
+                  className="h-4 w-4 text-gray-500"
                   aria-hidden="true"
                   onClick={() => {
                     setOpen(true)
@@ -136,12 +134,7 @@ export const ComboboxTree = ({
                               active ? 'text-white' : 'text-primary-500'
                             )}
                           >
-                            <CheckIcon
-                              className="h-4 w-4
-
-"
-                              aria-hidden="true"
-                            />
+                            <CheckIcon className="h-4 w-4" aria-hidden="true" />
                           </span>
                         )}
                       </Fragment>

@@ -7,10 +7,10 @@ import useSWR from 'swr'
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import executeRequest from '@/helpers/executeRequest'
-import { uniFetcher } from '@/helpers/fetcher'
 import { message } from '@/i18n/src/messages'
 import type { FILE_TYPE } from '@/types/constants/files'
+import executeRequest from '@/utils/executeRequest'
+import { uniFetcher } from '@/utils/fetcher'
 
 import { PandaTable } from '../table/pandaTable/PandaTable'
 import FileActions from './FileActions'
@@ -130,7 +130,12 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
         {...{
           tableId: 'filemanager',
           data: files,
-          columns
+          columns,
+          settings: {
+            enableSorting: true,
+            manualSorting: false,
+            enableFiltering: true
+          }
         }}
       />
     </div>

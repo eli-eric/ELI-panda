@@ -1,4 +1,3 @@
-import Tippy from '@tippyjs/react'
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
@@ -9,9 +8,10 @@ import Listbox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
 import { Col, Grid } from '@/components/grid/Grid'
 import Divider from '@/components/layout/Divider'
+import { Tooltip } from '@/components/Tooltip'
 import type { CodebookFilter } from '@/hooks/fetch/useCodebook'
 import { message } from '@/i18n/src/messages'
-import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
+import type { CatalogueItem } from '@/types/responses'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 
 import useOrderLineFormFields from './OrderLineForm.fields'
@@ -109,11 +109,11 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
       <Col md={orderLine?.uid ? 6 : 12} lg={orderLine?.uid ? 6 : 12}>
         {orderLine?.uid ? (
           <div className="flex flex-row w-full">
-            <Tippy content="Show only technological units">
+            <Tooltip content="Show only technological units">
               <div className="self-end mr-2 mb-1 flex-none">
                 <TechUnitToogle onChange={techUnitToogle} enabled={techUnitEnabled} />
               </div>
-            </Tippy>
+            </Tooltip>
             <div className="flex-1 w-full">
               <Combobox {...formFields.system} position="top" limit={50} filter={techUnitFilter} />
             </div>

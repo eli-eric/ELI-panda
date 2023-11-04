@@ -4,7 +4,7 @@ import { useFormContext, useWatch } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 import { message } from '@/i18n/src/messages'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 
@@ -26,6 +26,10 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
 
   const tableRef = useRef<Table<OrderLineFormType>>()
 
+  const handleAddOrderLine = () => {
+    setOpenOrderLineForm(true)
+  }
+
   useEffect(() => {
     if (tableRef.current) {
       tableRef.current.setColumnOrder(['name', 'partNumber', 'serialNumber', 'eun', 'isDelivered'])
@@ -38,14 +42,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
       <div className="flex flex-col">
         {!disabledEdit && (
           <div className="flex items-center mr-2">
-            <PlusButton
-              primary
-              buttonSize="large"
-              onClick={() => {
-                setOpenOrderLineForm(true)
-              }}
-              className="mb-2"
-            />
+            <PlusButton primary buttonSize="large" onClick={handleAddOrderLine} className="mb-2" />
           </div>
         )}
         <PandaTable

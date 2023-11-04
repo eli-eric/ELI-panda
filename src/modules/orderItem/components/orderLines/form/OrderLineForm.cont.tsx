@@ -3,12 +3,11 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { number, object, string } from 'yup'
 
-import { Heading } from '@/components/card/card.comp'
 import { FormModal } from '@/hooks/form/useFormModal'
-import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import CatalogueTableSelect from '@/modules/shared/catalogue/table/CatalogueTableSelect'
+import type { CatalogueItem } from '@/types/responses'
 
 import OrderLineFormComponent from './OrderLineForm.comp'
 
@@ -30,6 +29,13 @@ interface OrderLienFormProps {
 export const OrderLineForm = ({ orderLine, open, setOpen }: OrderLienFormProps) => {
   const [catalogueItem, setCatalogueItem] = useState<CatalogueItem | undefined>(undefined)
   const { setOrderLine } = useOrderLine()
+
+  const formMethods = useForm<OrderLineFormType>({
+    defaultValues: orderLine
+      ? { ...orderLine, currency: orderLine.currency || 'EUR' }
+      : { itemUsage: { uid: 'a2aae89a-5cbe-4042-a726-44012b158226', name: 'In System Part' } },
+    resolver: yupResolver(orderLineFormSchema)
+  })
   const modalSubmit = (data: OrderLineFormType) => {
     const dataToSend = { ...data }
     if (!dataToSend.price) {
@@ -38,19 +44,12 @@ export const OrderLineForm = ({ orderLine, open, setOpen }: OrderLienFormProps) 
     }
     delete dataToSend.quantity
     if (data.quantity) {
-      delete dataToSend.id
       for (let i = 0; i < data.quantity; i++) {
         setOrderLine(dataToSend)
       }
     } else setOrderLine(dataToSend)
+    formMethods.reset(dataToSend)
   }
-
-  const formMethods = useForm<OrderLineFormType>({
-    defaultValues: orderLine
-      ? { ...orderLine, currency: orderLine.currency || 'EUR' }
-      : { itemUsage: { uid: 'a2aae89a-5cbe-4042-a726-44012b158226', name: 'In System Part' }, quantity: 1 },
-    resolver: yupResolver(orderLineFormSchema)
-  })
 
   return (
     <FormModal
@@ -60,11 +59,7 @@ export const OrderLineForm = ({ orderLine, open, setOpen }: OrderLienFormProps) 
       open={open}
       renderOutsideForm={
         <div>
-          {orderLine?.uuid ? (
-            <Heading text={orderLine.name + ' - ' + orderLine.catalogueNumber} />
-          ) : (
-            <CatalogueTableSelect setItem={setCatalogueItem} selectedItem={catalogueItem} />
-          )}
+          <CatalogueTableSelect setItem={setCatalogueItem} selectedItem={catalogueItem} />
         </div>
       }
     >

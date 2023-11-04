@@ -1,5 +1,4 @@
-import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
@@ -14,8 +13,7 @@ interface Query {
   [key: string]: any
 }
 
-export default function useQueryManager(tableId: string) {
-  const router = useRouter()
+export default function useQueryManager(tableId: string): { query: Query } {
   const { instances } = useTableStateStore()
   //TODO: filters
   const sorting = instances[tableId]?.sortByQueryString || ''
@@ -25,7 +23,7 @@ export default function useQueryManager(tableId: string) {
   const orderStatusUID = instances[tableId]?.filter?.orderStatus?.uid || ''
   const procurementResponsibleUID = instances[tableId]?.filter?.procurementResponsible?.uid || ''
   const requestorUID = instances[tableId]?.filter?.requestor?.uid || ''
-  const columnFilter = useMemo(() => instances[tableId]?.columnFilter || [], [instances, tableId])
+  const columnFilter = useMemo(() => JSON.stringify(instances[tableId]?.columnFilter || []), [instances, tableId])
   const custom = useMemo(() => instances[tableId]?.custom || {}, [instances, tableId])
 
   const filter = useMemo(() => {
@@ -45,15 +43,5 @@ export default function useQueryManager(tableId: string) {
     return filter
   }, [supplierUID, orderStatusUID, procurementResponsibleUID, requestorUID])
 
-  const [query, setQuery] = useState<Query>({ pagination, ...custom })
-
-  useEffect(() => {
-    if (router.isReady) {
-      const columnFilterString = JSON.stringify(columnFilter)
-      const newQuery = { pagination, search, sorting, columnFilter: columnFilterString, ...filter, ...custom }
-      setQuery(newQuery)
-    }
-  }, [router.query.search, sorting, pagination, filter, router.isReady, search, custom, columnFilter])
-
-  return { query }
+  return { query: { pagination, search, columnFilter, sorting, ...filter, ...custom } }
 }

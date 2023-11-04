@@ -22,10 +22,10 @@ export const PhysicalItemForm = ({ children }: SystemFormComponentProps) => {
           <Input {...fields.catalogueName} />
         </Col>
         <Col sm={3} md={4}>
-          <Combobox {...fields.catalogueCategory} useFirstRender={false} />
+          <Combobox {...fields.catalogueCategory} />
         </Col>
         <Col sm={3} md={4}>
-          <Combobox {...fields.catalogueSupplier} useFirstRender={false} />
+          <Combobox {...fields.catalogueSupplier} />
         </Col>
         <Col sm={3} md={4}>
           <Input {...fields.partNumber} />

@@ -9,5 +9,7 @@ declare module '@tanstack/table-core' {
       enableColumnFilter: boolean
       codebookCode?: CODEBOOK
     }
+    noHeader?: boolean
+    headerElement?: React.ReactNode
   }
 }

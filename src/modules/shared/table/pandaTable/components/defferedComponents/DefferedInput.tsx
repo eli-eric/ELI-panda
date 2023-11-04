@@ -1,6 +1,6 @@
 import { useDeferredValue, useEffect, useState } from 'react'
 
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 
 export const DefferedInput = ({
   value: initialValue,

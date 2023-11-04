@@ -21,7 +21,15 @@ import { APP_BASE_URL } from './types/constants/common'
 // of the roles in the PATH_ROLES_CONFIG record for that path. If not, it redirects
 // them to a 404 page. Finally, it returns NextResponse.next() if all checks pass.
 
-const PROTECTED_PATHS = [PATH.DASHBOARD, PATH.CATALOGUE, PATH.SYSTEMS, PATH.REPORTS, PATH.ORDERS]
+const PROTECTED_PATHS = [
+  PATH.DASHBOARD,
+  PATH.CATALOGUE,
+  PATH.SYSTEMS,
+  PATH.REPORTS,
+  PATH.ORDERS,
+  PATH.ROOM_CARD,
+  PATH.ROOM_CARDS
+]
 
 const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
   [PATH.CATALOGUE]: [ROLE.CATALOGUE_CATEGORY_EDIT, ROLE.CATALOGUE_EDIT, ROLE.CATALOGUE_VIEW],
@@ -34,6 +42,8 @@ const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
   [PATH.SYSTEM]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
   [PATH.SYSTEMS_MOVING]: [ROLE.SYSTEM_EDIT],
   [PATH.CODEBOOKS]: [ROLE.CODEBOOKS_ADMIN],
+  [PATH.ROOM_CARD]: [ROLE.ROOM_CARD_VIEW, ROLE.ROOM_CARD_EDIT],
+  [PATH.ROOM_CARDS]: [ROLE.ROOM_CARD_VIEW, ROLE.ROOM_CARD_EDIT],
   [PATH.ROOT]: []
 }
 
@@ -49,6 +59,7 @@ export async function middleware(request: NextRequest) {
     }
     const currentPath = Object.keys(PATH_ROLES_CONFIG).find(key => pathname.startsWith(key)) as PATH
     const matchRolesToPath = PATH_ROLES_CONFIG[currentPath].some(role => user.roles.includes(role))
+
     if (!matchRolesToPath) {
       const url = new URL(`/404`, request.url)
       return NextResponse.redirect(url)

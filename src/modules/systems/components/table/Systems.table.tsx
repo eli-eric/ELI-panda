@@ -22,6 +22,7 @@ interface Props {
   enableDragAndDrop?: boolean
   getRowProps?: (row: Row<SystemDetail>) => GetRowPropsReturnType
   settings?: PandaTableSettings
+  RightSearchBarElement?: () => JSX.Element
 }
 
 export const SystemsTable = ({
@@ -31,7 +32,8 @@ export const SystemsTable = ({
   hideButtons = false,
   getRowProps,
   settings,
-  enableDragAndDrop
+  enableDragAndDrop,
+  RightSearchBarElement
 }: Props) => {
   const { systems, error, loading } = useSystems(tableId)
   const tableRef = useRef<Table<SystemDetail>>()
@@ -48,6 +50,7 @@ export const SystemsTable = ({
         useQuery={settings?.enableQueryURL}
         left={!hideButtons && !enableDragAndDrop ? <SearchBarButtons /> : undefined}
         onChange={onChangeSearch}
+        right={RightSearchBarElement && <RightSearchBarElement />}
       />
       <MemoizedTable
         ref={tableRef}
@@ -57,7 +60,7 @@ export const SystemsTable = ({
         tableId={tableId}
         getSubRows={row => row.subSystems}
         getRowProps={getRowProps}
-        settings={settings}
+        settings={{ ...settings, enableSorting: false }}
         className={className}
       />
       {error && <ErrorPage />}

@@ -1,3 +1,8 @@
+import { toast } from 'react-hot-toast'
+
+import axiosInstance from '@/core/axios/axiosInstance'
+import { BASE_URL } from '@/types/constants/common'
+
 import type { SystemDetail, SystemsResponse } from '../types/responses'
 
 export const makeSubsystems = (
@@ -42,7 +47,7 @@ export const updateSystem = (uid: string, newSystem: SystemDetail, prev: Systems
     for (let i = 0; i < data.length; i++) {
       let newItem = { ...data[i] }
       if (newItem.uid === uid) {
-        newItem = { ...newSystem }
+        newItem = { ...newSystem, hasSubsystems: data[i].hasSubsystems, subSystems: data[i].subSystems }
       } else if (newItem.subSystems) {
         newItem.subSystems = updateData(newItem.subSystems)
       }
@@ -69,4 +74,20 @@ export const addSubsystem = (parentUid: string, newSystem: SystemDetail, prev: S
     return result
   }
   return { ...prev, data: addData(prev.data) }
+}
+
+export const systemsRefresh = async (systems: SystemsResponse | undefined) => {
+  try {
+    const newSystems = await axiosInstance.get(BASE_URL + '/systems' + '?pagination={"page":1,"pageSize":50}')
+    const newSubSystems = await Promise.all<SystemDetail[]>(
+      newSystems?.data?.data?.map(async system => {
+        const newSubSystem = await axiosInstance.get<SystemDetail[]>(BASE_URL + '/system/' + system.uid + '/subsystems')
+        return { ...system, subSystems: newSubSystem.data }
+      })
+    )
+    return { ...newSystems.data, data: newSubSystems }
+  } catch (error) {
+    toast.error('Something went wrong while refreshing systems')
+    return systems
+  }
 }

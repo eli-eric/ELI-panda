@@ -5,7 +5,7 @@ import type { FC } from 'react'
 import { memo } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 
 import { Filter } from './Filter'
 
@@ -41,6 +41,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
   const { getState, setColumnOrder } = table
   const { columnOrder } = getState()
   const { column } = header
+  const HeaderElement = column.columnDef.meta?.headerElement
 
   const [, dropRef] = useDrop<Header<any, any>>({
     accept: 'column',
@@ -73,27 +74,30 @@ export const ColumnHeader: FC<ColumnHeader> = ({
       <div
         ref={previewRef}
         {...{
-          className: classNames('flex items-center'),
+          className: classNames('flex items-center justify-between'),
           style: {
             width: header.getSize()
           }
         }}
       >
-        <div
-          className={classNames(header.column.getCanSort() ? 'cursor-pointer select-none' : '', 'items-center')}
-          onClick={header.column.getToggleSortingHandler()}
-        >
-          {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-          {{
-            asc: ' 🔼',
-            desc: ' 🔽'
-          }[header.column.getIsSorted() as string] ?? null}
+        <div className="flex items-center">
+          <div
+            className={classNames(header.column.getCanSort() ? 'cursor-pointer select-none' : '', 'items-center')}
+            onClick={header.column.getToggleSortingHandler()}
+          >
+            {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+            {{
+              asc: ' 🔼',
+              desc: ' 🔽'
+            }[header.column.getIsSorted() as string] ?? null}
+          </div>
+          {enableColumnReordering && (
+            <button ref={dragRef} className="ml-2">
+              <ArrowsRightLeftIcon className="w-6 h-6" />
+            </button>
+          )}
         </div>
-        {enableColumnReordering && (
-          <button ref={dragRef} className="ml-2">
-            <ArrowsRightLeftIcon className="w-6 h-6" />
-          </button>
-        )}
+        {HeaderElement}
       </div>
       {enableFiltering && header.column.getCanFilter() ? (
         <MemoizedFilter manualFiltering={manualFiltering} column={header.column} table={table} data={data} />

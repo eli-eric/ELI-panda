@@ -4,17 +4,19 @@ import {
   ArrowUturnLeftIcon,
   FolderOpenIcon,
   FolderPlusIcon,
+  MinusIcon,
   NoSymbolIcon,
   PencilSquareIcon,
   PlusIcon,
   TrashIcon
 } from '@heroicons/react/24/outline'
 import Link from 'next/link'
+import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
 import type { UrlObject } from 'url'
 
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 
 import ButtonLoaderComponent from './button-loader.comp'
 
@@ -60,11 +62,11 @@ export const Button = ({
     className={classNames(
       'relative text-xs font-medium shadow-sm z-10 inline-flex items-center border border-gray-300 focus:outline-none focus:ring-0 focus:ring-primary-500',
       rounded,
-      className,
       loading ? 'bg-primary-700' : `bg-${!primary ? 'white' : 'primary-500'}`,
       buttonSize === 'small' ? 'px-1 py-1' : 'px-2 py-2',
       !primary ? !disabled && 'hover:bg-gray-100 text-gray-600' : !disabled && 'hover:bg-primary-700 text-white',
-      disabled ? 'bg-gray-200 text-gray-400' : ''
+      disabled ? 'bg-gray-200 text-gray-400' : '',
+      className
     )}
   >
     {loading && <ButtonLoaderComponent />}
@@ -100,6 +102,12 @@ export const DownloadButton = ({ buttonSize = 'small', ...restProps }: ButtonPro
 export const PlusButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <PlusIcon className="h-4 w-4" aria-hidden="true" />
+  </Button>
+)
+
+export const MinusButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+  <Button {...restProps} buttonSize={buttonSize}>
+    <MinusIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
@@ -156,9 +164,13 @@ export const TableDownloadButton = ({ type = 'button', ...props }: ButtonProps) 
   </button>
 )
 
-export const TableButtonsWrapper = ({ children }: { children: React.ReactNode }) => (
-  <div className="absolute flex items-center right-0 bg-inherit pr-1">{children}</div>
-)
+type TableButtonWrapperProps = {
+  position?: 'left-0' | 'right-0'
+}
+export const TableButtonsWrapper: FC<PropsWithChildren<TableButtonWrapperProps>> = ({
+  children,
+  position = 'right-0'
+}) => <div className={classNames('absolute flex items-center bg-inherit pr-1', position)}>{children}</div>
 
 interface TableActionsButtonsProps {
   onDeleteClick?: () => void
@@ -166,9 +178,16 @@ interface TableActionsButtonsProps {
   detailLink?: UrlObject | string
   addLink?: UrlObject | string
   isShown?: boolean
+  position?: 'left-0' | 'right-0'
 }
-export const TableActionsButtons = ({ onDeleteClick, canEdit, detailLink, addLink }: TableActionsButtonsProps) => (
-  <TableButtonsWrapper>
+export const TableActionsButtons: FC<TableActionsButtonsProps> = ({
+  onDeleteClick,
+  canEdit,
+  detailLink,
+  addLink,
+  position
+}) => (
+  <TableButtonsWrapper position={position}>
     {detailLink && (
       <Link href={detailLink} className={'flex items-center'}>
         <Fragment>{canEdit ? <TableEditButton /> : <TableOpenButton />}</Fragment>

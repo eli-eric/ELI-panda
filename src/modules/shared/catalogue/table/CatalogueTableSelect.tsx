@@ -5,8 +5,8 @@ import { useIntl } from 'react-intl'
 import { message } from '@/i18n/src/messages'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
-import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 import useTableStateStore from '@/store/useTableStateStore'
+import type { CatalogueItem } from '@/types/responses'
 
 import { Pagination } from '../../table/Pagination'
 import { SearchBar } from '../../table/SearchBar'
@@ -25,7 +25,7 @@ const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
   const tableId = 'catalogueItemsModal'
 
   const { catalogueItems, loading } = useCatalogueItems(tableId)
-  const { categoryList } = useCategoryList()
+  const { catalogueCategories } = useCategoryList()
 
   const selectColumn: ColumnDef<CatalogueItem, any> = useMemo(
     () => ({
@@ -61,7 +61,7 @@ const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
             additionalColumn={selectColumn}
             enableQueryURL={false}
             loading={loading}
-            categoryList={categoryList}
+            categoryList={catalogueCategories}
             catalogueItems={catalogueItems}
           />
         </fieldset>

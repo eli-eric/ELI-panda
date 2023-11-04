@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 
 import type { ColSizeProp } from './ColSizes'
 import { colSizes, lgColSizes, mdColSizes } from './ColSizes'

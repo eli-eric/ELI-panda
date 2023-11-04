@@ -1,4 +1,4 @@
-import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
+import type { CatalogueItem } from '@/types/responses'
 import type { TableResponse } from '@/modules/shared/table/pandaTable/types/responses'
 
 export interface CatalogueCategoryResponse {

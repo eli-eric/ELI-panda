@@ -8,10 +8,15 @@ on:
 jobs:
   use-secret:
     runs-on: self-hosted
+    env:
+      NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
+      MINIO_ACCESS_KEY_PROD: '${{ secrets.MINIO_ACCESS_KEY_DEV }}'
+      MINIO_SECRET_KEY_PROD: '${{ secrets.MINIO_SECRET_KEY_DEV }}'
+      NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}'
     steps:
       - name: Show secret stats
         run: |
-          echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_DEV }}" | "${{ secrets.MINIO_SECRET_KEY_DEV }}" | wc
+          echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_DEV }}" | "${{ secrets.MINIO_SECRET_KEY_DEV }}" | "${{ secrets.NEO4J_PASSWORD }}" | wc
   compose-up:
     runs-on: self-hosted
     needs: use-secret
@@ -23,3 +28,4 @@ jobs:
           NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
           MINIO_ACCESS_KEY_PROD: '${{ secrets.MINIO_ACCESS_KEY_DEV }}'
           MINIO_SECRET_KEY_PROD: '${{ secrets.MINIO_SECRET_KEY_DEV }}'
+          NEO4J_PASSWORD: '${{ secrets.NEO4J_PASSWORD }}'

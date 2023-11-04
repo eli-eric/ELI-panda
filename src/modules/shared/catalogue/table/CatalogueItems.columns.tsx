@@ -3,10 +3,9 @@ import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
-import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
-import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 import { CODEBOOK } from '@/types/constants/codebook'
+import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
 
 import { CategoryName } from './cells/CategoryNameCell'
 import { DescriptionCell } from './cells/DescriptionCell'
@@ -15,11 +14,17 @@ import { NameCell } from './cells/NameCell'
 
 const messages = message.cataloguePage.itemList.header
 
-export const useCatalogueItemsColumns = (tableId?: string, additionalColumn?: ColumnDef<CatalogueItem, any>) => {
+type Props = {
+  tableId?: string
+  additionalColumn?: ColumnDef<CatalogueItem, any>
+  categoryUID?: string
+  catalogueItems?: CatalogueItemsResponse
+}
+
+export const useCatalogueItemsColumns = ({ tableId, additionalColumn, categoryUID, catalogueItems }: Props) => {
   const intl = useIntl()
 
-  const { catalogueItems } = useCatalogueItems(tableId)
-  const { categoryList } = useCategoryList()
+  const { catalogueCategories } = useCategoryList()
 
   const columns: ColumnDef<CatalogueItem, any>[] = useMemo(() => {
     const columns: ColumnDef<CatalogueItem, any>[] = [
@@ -27,7 +32,7 @@ export const useCatalogueItemsColumns = (tableId?: string, additionalColumn?: Co
         header: intl.formatMessage({ id: messages.name }),
         accessorFn: row => row.name,
         id: 'name',
-        cell: props => <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} />,
+        cell: props => <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} categoryUID={categoryUID} />,
         size: 300,
         meta: { sticky: true, filter: { type: 'string', enableColumnFilter: true } }
       },
@@ -68,26 +73,32 @@ export const useCatalogueItemsColumns = (tableId?: string, additionalColumn?: Co
       }
     ]
 
-    let detailsColumns: ColumnDef<CatalogueItem, any>[] = []
-    if (catalogueItems?.columnDef && catalogueItems?.columnDef?.length > 0) {
-      detailsColumns = catalogueItems.columnDef?.map(def => ({
-        header: def.accessorKey,
-        id: def.accessorKey.replace(/\s/g, ''),
-        accessorFn: row => row.details?.find(originDetail => originDetail?.property.name === def.accessorKey)?.value,
+    if (
+      catalogueCategories?.length === 0 &&
+      catalogueItems?.data[0]?.details &&
+      catalogueItems?.data[0]?.details?.length > 0
+    ) {
+      const detailsColumns: ColumnDef<CatalogueItem, any>[] = catalogueItems?.data[0]?.details?.map(detail => ({
+        header: detail.property.name,
+        id: detail.property.name.replace(/\s/g, ''),
+        accessorFn: row =>
+          row.details?.find(originDetail => originDetail?.property.name === detail?.property.name)?.value,
         cell: ({ row: { original } }: CellContext<CatalogueItem, any>) => (
-          <span>{original.details?.find(originDetail => originDetail?.property.name === def.accessorKey)?.value}</span>
+          <span>
+            {original.details?.find(originDetail => originDetail?.property.name === detail?.property.name)?.value}
+          </span>
         )
       }))
-    }
-    if (categoryList && categoryList.length === 0) {
-      const categoryNameIndex = columns.findIndex(column => column.id === 'categoryName')
-      columns.splice(categoryNameIndex, 1)
+      if (detailsColumns) {
+        const categoryNameIndex = columns.findIndex(column => column.id === 'categoryName')
+        columns.splice(categoryNameIndex, 0, ...detailsColumns)
+      }
     }
     if (additionalColumn) {
       columns.push(additionalColumn)
     }
-    return [...columns, ...detailsColumns]
-  }, [intl, catalogueItems, additionalColumn, tableId, categoryList])
+    return columns
+  }, [intl, catalogueItems, catalogueCategories, additionalColumn, tableId, categoryUID])
 
   return columns
 }

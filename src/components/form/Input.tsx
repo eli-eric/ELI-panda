@@ -2,8 +2,8 @@ import React, { Fragment } from 'react'
 import { Controller } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 
-import { classNames } from '@/helpers'
 import type { FieldProps } from '@/types/form'
+import { classNames } from '@/utils'
 
 import { ValidationIcon } from './Icons'
 
@@ -144,7 +144,6 @@ export const InputAmount = ({
     <Controller
       name={name}
       control={control}
-      defaultValue={''}
       render={({ field, fieldState: { error } }) => (
         <InputWrapper hidden={hidden} className={className}>
           <Label label={label} />
@@ -179,7 +178,7 @@ export const InputCurrency = ({ name }: InputAmountProps) => {
     <Controller
       name={name}
       control={control}
-      defaultValue={''}
+      defaultValue={currencyOptions[0]}
       render={({ field }) => (
         <div className="absolute inset-y-0 right-0 flex items-center">
           <label htmlFor="currency" className="sr-only">

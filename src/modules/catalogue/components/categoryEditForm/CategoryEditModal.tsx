@@ -1,6 +1,7 @@
 import { type Dispatch, Fragment, type SetStateAction, Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { FormattedMessage } from 'react-intl'
+import { mutate } from 'swr'
 
 import { Button } from '@/components/Buttons'
 import ErrorPage from '@/components/error/ErrorPage'
@@ -12,11 +13,11 @@ import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 import { useCategoryList } from '../../hooks/useCategoryList'
 import CategoryEditForm from './CategoryEditForm'
-const formatData = (data: CategoryFormType, parentPath) =>
+const formatData = (data: CategoryFormType, parentUID) =>
   data.groups && data.groups.length !== 0
     ? {
         ...data,
-        parentPath: data.parentPath ? data.parentPath : parentPath,
+        parentPath: data.parentUID ? data.parentUID : parentUID,
         groups: data.groups?.map(group => ({
           ...group,
           properties: group.properties?.map(prop =>
@@ -34,35 +35,35 @@ const formatData = (data: CategoryFormType, parentPath) =>
         image: data?.image,
         name: data?.name,
         code: data?.code,
-        parentPath: data.parentPath ? data?.parentPath : parentPath
+        parentUID: data.parentUID ? data?.parentUID : parentUID
       }
 
 const { buttons } = message.common
 interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>
-  parentPath?: string
+  parentUID?: string
   uid?: string
 }
 
-const CategoryEditModal = ({ setOpen, parentPath = '', uid }: Props) => {
+const CategoryEditModal = ({ setOpen, parentUID, uid }: Props) => {
   const { catalogueCategoryEdit, catalogueCategoryImage } = useEndpoint({
-    path: parentPath,
     uid
   })
 
-  const { mutate } = useCategoryList()
+  const { refetch } = useCategoryList()
 
   const { submit, loading, error } = useSubmit({
     endpoint: catalogueCategoryEdit,
     method: uid ? 'put' : 'post',
-    mutateList: [catalogueCategoryEdit, catalogueCategoryImage],
     onSuccess: () => {
-      mutate()
+      refetch()
+      mutate(catalogueCategoryEdit)
+      mutate(catalogueCategoryImage)
       setOpen(false)
     }
   })
   const onSubmit = (data: CategoryFormType) => {
-    submit(formatData(data, parentPath))
+    submit(formatData(data, parentUID))
   }
 
   return (

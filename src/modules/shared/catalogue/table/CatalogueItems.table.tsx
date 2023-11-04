@@ -1,20 +1,22 @@
 import type { ColumnDef, Table } from '@tanstack/react-table'
-import { createContext, useEffect, useRef, useState } from 'react'
+import { createContext, useEffect, useRef } from 'react'
 
-import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
+import { useHoveringId } from '@/store/useHoveringId'
+import type { CatalogueCategory } from '@/types/gql/graphql'
+import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
 
 import { PandaTable } from '../../table/pandaTable/PandaTable'
 import { useCatalogueItemsColumns } from './CatalogueItems.columns'
-import type { CatalogueCategoryResponse, CatalogueItemsResponse } from './types/responses'
 
 interface CatalogueTableProps {
   additionalColumn?: ColumnDef<CatalogueItem, any>
   enableQueryURL?: boolean
   tableId?: string
   catalogueItems?: CatalogueItemsResponse
-  categoryList?: CatalogueCategoryResponse[]
+  categoryList?: CatalogueCategory[]
   loading?: boolean
   enableFiltering?: boolean
+  categoryUID?: string
 }
 
 export const CatalogueTableContext = createContext<{ isHoveringId: number | undefined | string }>({
@@ -28,11 +30,10 @@ export const CatalogueTable = ({
   catalogueItems,
   categoryList,
   loading,
-  enableFiltering = false
+  categoryUID
 }: CatalogueTableProps) => {
-  const [isHoveringId, setIsHoveringId] = useState<number | undefined | string>()
-
-  const columns = useCatalogueItemsColumns(tableId, additionalColumn)
+  const columns = useCatalogueItemsColumns({ tableId, additionalColumn, categoryUID, catalogueItems })
+  const { setHoveringId } = useHoveringId()
   const catalogueTableRef = useRef<Table<CatalogueItem>>()
 
   useEffect(() => {
@@ -51,30 +52,26 @@ export const CatalogueTable = ({
   }, [additionalColumn])
 
   return (
-    <CatalogueTableContext.Provider value={{ isHoveringId: isHoveringId }}>
-      <PandaTable
-        ref={catalogueTableRef}
-        columns={columns}
-        loading={loading}
-        tableId={tableId}
-        data={catalogueItems?.data}
-        getRowProps={({ id }) => ({
-          onMouseEnter: () => {
-            setIsHoveringId(id)
-          },
-          onMouseLeave: () => {
-            setIsHoveringId(undefined)
-          }
-        })}
-        className={'relative overflow-y-scroll scrollbar-style'}
-        settings={{
-          enableQueryURL,
-          enableColumnHiding: tableId === 'catalogueItems',
-          enableColumnReordering: tableId === 'catalogueItems',
-          enableFiltering,
-          manualFiltering: true
-        }}
-      />
-    </CatalogueTableContext.Provider>
+    <PandaTable
+      ref={catalogueTableRef}
+      columns={columns}
+      loading={loading}
+      tableId={tableId}
+      data={catalogueItems?.data}
+      getRowProps={({ id }) => ({
+        onMouseEnter: () => {
+          setHoveringId(id)
+        },
+        onMouseLeave: () => {
+          setHoveringId(undefined)
+        }
+      })}
+      className={'relative overflow-y-scroll scrollbar-style'}
+      settings={{
+        enableQueryURL,
+        enableColumnHiding: tableId === 'catalogueItems',
+        enableColumnReordering: tableId === 'catalogueItems'
+      }}
+    />
   )
 }

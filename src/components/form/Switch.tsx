@@ -1,7 +1,7 @@
 import { Switch } from '@headlessui/react'
 import { useState } from 'react'
 
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 
 interface Props {
   enabled: boolean

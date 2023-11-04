@@ -1,10 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: false
-  },
   swcMinify: false,
-  reactStrictMode: false,
+  reactStrictMode: true,
   output: 'standalone',
   images: {
     domains: [
@@ -19,6 +16,13 @@ const nextConfig = {
   env: {
     PANDA_API_GW_URL: process.env.PANDA_API_GW_URL,
     PANDA_ENV: process.env.PANDA_ENV
+  },
+  webpack: config => {
+    // this will override the experiments
+    config.experiments = { ...config.experiments, topLevelAwait: true }
+    // this will just update topLevelAwait property of config.experiments
+    // config.experiments.topLevelAwait = true
+    return config
   }
 }
 

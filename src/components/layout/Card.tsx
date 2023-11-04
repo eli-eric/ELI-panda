@@ -1,4 +1,4 @@
-import { classNames } from '@/helpers'
+import { classNames } from '@/utils'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode

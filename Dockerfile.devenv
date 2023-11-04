@@ -21,10 +21,17 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+ARG NEO4J_PASSWORD
+
 ENV PANDA_API_GW_URL="https://api-dev.panda.eli-beams.eu/v1"
 ENV PANDA_ENV="dev"
 ENV MINIO_ENDPOINT="minio-main"
 ENV MINIO_BUCKET_NAME="panda-dev"
+ENV NEO4J_USER="neo4j"
+ENV NEO4J_URI="bolt://panda-neo4j-dev:7687"
+ENV NEO4J_PASSWORD="${NEO4J_PASSWORD}"
+
+RUN env
 
 # This will do the trick, use the corresponding env file for each environment.
 # COPY .env.production.sample .env.production
@@ -40,6 +47,9 @@ ENV NEXTAUTH_URL="https://dev.panda.eli-beams.eu/"
 ENV PANDA_ENV="dev"
 ENV MINIO_ENDPOINT="minio-main"
 ENV MINIO_BUCKET_NAME="panda-dev"
+ENV NEO4J_USER="neo4j"
+ENV NEO4J_URI="bolt://panda-neo4j-dev:7687"
+ENV NEO4J_PASSWORD="${NEO4J_PASSWORD}"
 
 RUN env
 

@@ -22,10 +22,10 @@ const SystemFormComponent = ({ children }: SystemFormComponentProps) => {
           <Input {...fields.name} />
         </Col>
         <Col sm={3} md={4}>
-          <Combobox {...fields.owner} useFirstRender={false} />
+          <Combobox {...fields.owner} />
         </Col>
         <Col sm={3} md={4}>
-          <Combobox {...fields.responsible} useFirstRender={false} />
+          <Combobox {...fields.responsible} />
         </Col>
 
         <Col sm={3} md={4} lg={8}>
@@ -33,7 +33,7 @@ const SystemFormComponent = ({ children }: SystemFormComponentProps) => {
         </Col>
       </Col>
       <Col sm={3} md={6}>
-        <Combobox {...fields.location} useFirstRender={false} />
+        <Combobox {...fields.location} />
       </Col>
       <Col sm={3} md={6}>
         <Listbox {...fields.zone} useFirstRender={false} />
