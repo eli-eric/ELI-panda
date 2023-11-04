@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
+import { CODEBOOK } from '@/types/constants/codebook'
 import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
 
 import { CategoryName } from './cells/CategoryNameCell'
@@ -33,7 +34,7 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, categoryUI
         id: 'name',
         cell: props => <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} categoryUID={categoryUID} />,
         size: 300,
-        meta: { sticky: true }
+        meta: { sticky: true, filter: { type: 'string', enableColumnFilter: true } }
       },
       {
         header: intl.formatMessage({ id: messages.description }),
@@ -41,29 +42,34 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, categoryUI
         id: 'description',
         cell: DescriptionCell,
         maxSize: 100,
-        size: 100
+        size: 100,
+        meta: { filter: { type: 'string', enableColumnFilter: true } }
       },
       {
         header: intl.formatMessage({ id: messages.partNumber }),
         accessorFn: row => row.catalogueNumber,
-        id: 'partNumber'
+        id: 'partNumber',
+        meta: { filter: { type: 'string', enableColumnFilter: true } }
       },
       {
         header: intl.formatMessage({ id: messages.categoryName }),
         accessorFn: row => row.category,
         id: 'categoryName',
-        cell: CategoryName
+        cell: CategoryName,
+        meta: { filter: { type: 'autoComplete', enableColumnFilter: true, codebookCode: CODEBOOK.CATALOGUE_CATEGORY } }
       },
       {
         header: intl.formatMessage({ id: messages.supplier }),
         accessorFn: row => row.supplier?.name,
-        id: 'supplier'
+        id: 'supplier',
+        meta: { filter: { type: 'autoComplete', enableColumnFilter: true, codebookCode: CODEBOOK.SUPPLIER } }
       },
       {
         header: intl.formatMessage({ id: messages.supplierUrl }),
         accessorFn: row => row.manufacturerUrl,
         id: 'manufacturerUrl',
-        cell: ManufacturerUrl
+        cell: ManufacturerUrl,
+        meta: { filter: { type: 'string', enableColumnFilter: true } }
       }
     ]
 

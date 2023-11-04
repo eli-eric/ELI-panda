@@ -1,15 +1,24 @@
 import type { Column, Table } from '@tanstack/react-table'
-import { Fragment, useMemo } from 'react'
 
-import { classNames } from '@/utils'
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CODEBOOK } from '@/types/constants/codebook'
 
-import { DebouncedInput } from './DebouncedInput'
+import { DefferedCombobox } from './defferedComponents/DefferedCombobox'
+import { DefferedInput } from './defferedComponents/DefferedInput'
+import { DefferedListbox } from './defferedComponents/DefferedListbox'
 
-export const Filter = ({ column, data }: { column: Column<any, unknown>; table: Table<any>; data?: any }) => {
-  const columnFilterValue = data ? column.getFilterValue() : ''
-
-  const facetedUniqueValues = useMemo(() => (data ? column.getFacetedUniqueValues() : []), [data, column])
-  const sortedUniqueValues = useMemo(() => Array.from(facetedUniqueValues?.keys()).sort(), [facetedUniqueValues])
+export const Filter = ({
+  column,
+  data,
+  manualFiltering
+}: {
+  column: Column<any, unknown>
+  table: Table<any>
+  data?: any
+  manualFiltering: boolean
+}) => {
+  const filterType = column.columnDef.meta?.filter?.type
+  const codebook = column.columnDef.meta?.filter?.codebookCode as CODEBOOK
 
   const onChange = (value: string | number) => {
     if (data) {
@@ -17,24 +26,88 @@ export const Filter = ({ column, data }: { column: Column<any, unknown>; table: 
     }
   }
 
-  return (
-    <Fragment>
-      <datalist id={column.id + 'list'}>
-        {sortedUniqueValues.slice(0, 5000).map((value: any) => (
-          <option value={value} key={value} />
-        ))}
-      </datalist>
-      <DebouncedInput
-        type="text"
-        value={columnFilterValue as string}
-        onChange={onChange}
-        placeholder={`Search... (${data ? column.getFacetedUniqueValues().size : 0})`}
-        className={classNames(
-          'w-full placeholder:text-xs placeholder:font-normal rounded-md border-gray-300 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs'
-        )}
-        list={column.id + 'list'}
-      />
-      <div className="h-1" />
-    </Fragment>
-  )
+  switch (manualFiltering) {
+    case true:
+      {
+        switch (filterType) {
+          case 'listOfValues': {
+            return (
+              <DefferedListbox
+                value={column.getFilterValue() as CodebookType}
+                codebook={codebook}
+                onChange={onChange}
+              />
+            )
+          }
+          case 'number': {
+            const handleChangeFrom = (value: string | number) => {
+              column.setFilterValue((old: [number, number]) => {
+                if ((!value || value === '') && !old?.[1]) {
+                  return undefined
+                }
+
+                return [value, old?.[1]]
+              })
+            }
+            const handleChangeTo = (value: string | number) => {
+              column.setFilterValue((old: [number, number]) => {
+                if ((!value || value === '') && !old?.[0]) {
+                  return undefined
+                }
+                return [old?.[0], value]
+              })
+            }
+            return (
+              <div className="flex space-x-2">
+                <DefferedInput
+                  type="number"
+                  value={(column.getFilterValue() as [number, number])?.[0] ?? ''}
+                  onChange={handleChangeFrom}
+                  placeholder={'from'}
+                />
+                <DefferedInput
+                  type="number"
+                  value={(column.getFilterValue() as [number, number])?.[1] ?? ''}
+                  onChange={handleChangeTo}
+                  placeholder={'to'}
+                />
+              </div>
+            )
+          }
+          case 'autoComplete': {
+            return (
+              <DefferedCombobox
+                value={column.getFilterValue() as CodebookType}
+                codebook={codebook}
+                onChange={onChange}
+              />
+            )
+          }
+          case 'string': {
+            return (
+              <DefferedInput
+                type="text"
+                value={column.getFilterValue() as string}
+                onChange={onChange}
+                list={column.id + 'list'}
+              />
+            )
+          }
+        }
+      }
+      break
+    case false: {
+      return (
+        <DefferedInput
+          type="text"
+          value={column.getFilterValue() as string}
+          onChange={onChange}
+          placeholder={`Search... (${data ? column.getFacetedUniqueValues().size : 0})`}
+          list={column.id + 'list'}
+        />
+      )
+    }
+  }
+
+  return null
 }

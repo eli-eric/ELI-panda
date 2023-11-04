@@ -45,24 +45,7 @@ export const AssignPhysicalItem = () => {
         reset({
           ...getValues(),
           physicalItem: {
-            uid: null,
-            currency: '',
-            eun: '',
-            itemUsage: null,
-            price: null,
-            serialNumber: '',
-            catalogueItem: {
-              name: '',
-              category: null,
-              uid: null,
-              supplier: null,
-              catalogueNumber: '',
-              description: '',
-              details: null,
-              categoryName: '',
-              categoryPath: '',
-              manufacturerUrl: ''
-            }
+            uid: null
           }
         })
 

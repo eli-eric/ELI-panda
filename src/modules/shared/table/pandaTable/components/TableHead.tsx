@@ -8,9 +8,10 @@ interface Props {
   enableFiltering: boolean
   table: Table<any>
   data?: any
+  manualFiltering: boolean
 }
 
-export const TableHead: FC<Props> = ({ enableColumnReordering, table, data, enableFiltering }) => (
+export const TableHead: FC<Props> = ({ enableColumnReordering, table, data, enableFiltering, manualFiltering }) => (
   <thead className="bg-gray-50 border-b">
     {table.getHeaderGroups().map(headerGroup => (
       <tr key={headerGroup.id}>
@@ -24,6 +25,7 @@ export const TableHead: FC<Props> = ({ enableColumnReordering, table, data, enab
               key={header.id}
               enableColumnReordering={enableColumnReordering}
               enableFiltering={enableFiltering}
+              manualFiltering={manualFiltering}
               table={table}
               header={header}
               data={data}

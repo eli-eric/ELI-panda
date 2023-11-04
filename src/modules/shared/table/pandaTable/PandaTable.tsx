@@ -1,13 +1,16 @@
-import type { ColumnDef, ColumnFiltersState, Row, Table as ReactTable } from '@tanstack/react-table'
-import { getFacetedMinMaxValues, getFacetedRowModel, getFacetedUniqueValues } from '@tanstack/react-table'
-import { getSortedRowModel } from '@tanstack/react-table'
-import { getFilteredRowModel } from '@tanstack/react-table'
-import { getExpandedRowModel } from '@tanstack/react-table'
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import type { ColumnDef, Row, Table as ReactTable } from '@tanstack/react-table'
+import {
+  getCoreRowModel,
+  getExpandedRowModel,
+  getFacetedMinMaxValues,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getSortedRowModel,
+  useReactTable
+} from '@tanstack/react-table'
 import type { Ref } from 'react'
-import { useDeferredValue } from 'react'
-import { useState } from 'react'
-import { forwardRef, Fragment, useImperativeHandle } from 'react'
+import { forwardRef, Fragment, useDeferredValue, useImperativeHandle } from 'react'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
@@ -18,6 +21,7 @@ import { TableFoot } from './components/TableFoot'
 import { TableHead } from './components/TableHead'
 import { TableSettings } from './components/TableSettings'
 import { useExpanding } from './hooks/useExpanding'
+import { useFilters } from './hooks/useFilters'
 import { useOrdering } from './hooks/useOrdering'
 import { useSorting } from './hooks/useSorting'
 import { useVisibility } from './hooks/useVisibility'
@@ -31,6 +35,7 @@ export type PandaTableSettings = {
   enableColumnReordering?: boolean
   manualSorting?: boolean
   enableFiltering?: boolean
+  manualFiltering?: boolean
 }
 
 export interface GetRowPropsReturnType extends React.HTMLAttributes<HTMLTableRowElement> {
@@ -51,7 +56,6 @@ interface Props<T extends object> {
 
 const defaultPropGetter = () => ({})
 
-//TODO: I was not able to type this comp without using any
 export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
   <T extends object>(
     {
@@ -74,15 +78,15 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
       enableQueryURL = false,
       enableRowSelection = false,
       manualSorting = true,
-      enableFiltering = false
+      enableFiltering = false,
+      manualFiltering = true
     } = settings || {}
 
     const [columnVisibility, setColumnVisibility] = useVisibility(tableId)
     const [columnOrder, setColumnOrder] = useOrdering(tableId, columns)
     const [sorting, setSorting] = useSorting(tableId, enableQueryURL)
     const [expanded, setExpanded] = useExpanding(tableId)
-
-    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [columnFilters, setColumnFilters] = useFilters(tableId, enableQueryURL)
 
     const defferedData = useDeferredValue(data)
 
@@ -101,11 +105,12 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
       onColumnOrderChange: setColumnOrder,
       onColumnVisibilityChange: setColumnVisibility,
       onColumnFiltersChange: setColumnFilters,
-      columns: columns,
+      columns,
       data: defferedData || [],
-      enableSorting: enableSorting,
-      manualSorting: manualSorting,
-      enableRowSelection: enableRowSelection,
+      enableSorting,
+      manualSorting,
+      manualFiltering,
+      enableRowSelection,
       enableMultiRowSelection: false,
       enableSubRowSelection: true,
       state: { sorting, expanded, columnOrder, columnVisibility, columnFilters }
@@ -126,6 +131,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
                 enableColumnReordering={enableColumnReordering}
                 data={defferedData}
                 enableFiltering={enableFiltering}
+                manualFiltering={manualFiltering}
               />
               {defferedData && (
                 <Fragment>

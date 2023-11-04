@@ -1,5 +1,5 @@
 import type { ColumnDef, Table } from '@tanstack/react-table'
-import { useEffect, useRef } from 'react'
+import { createContext, useEffect, useRef } from 'react'
 
 import { useHoveringId } from '@/store/useHoveringId'
 import type { CatalogueCategory } from '@/types/gql/graphql'
@@ -15,8 +15,13 @@ interface CatalogueTableProps {
   catalogueItems?: CatalogueItemsResponse
   categoryList?: CatalogueCategory[]
   loading?: boolean
+  enableFiltering?: boolean
   categoryUID?: string
 }
+
+export const CatalogueTableContext = createContext<{ isHoveringId: number | undefined | string }>({
+  isHoveringId: undefined
+})
 
 export const CatalogueTable = ({
   additionalColumn,
