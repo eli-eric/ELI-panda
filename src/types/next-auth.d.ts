@@ -9,6 +9,7 @@ declare module 'next-auth' {
     email: string
     fullName: string
     facility: string
+    facilityCode: string
     roles: Array<Role>
     apiAccessToken: string
   }
@@ -24,6 +25,7 @@ declare module 'next-auth/jwt' {
     email: string
     fullName: string
     facility: string
+    facilityCode: string
     roles: Array<Role>
     apiAccessToken: string
   }

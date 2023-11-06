@@ -1,9 +1,10 @@
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import type { PhysicalItem, SystemDetail } from '@/modules/systems/types/responses'
+import type { PhysicalItem } from '@/modules/systems/types/responses'
+import type { Employee, SystemLevel } from '@/types/gql/graphql'
 
 export type SystemDetailFormType = {
   uid?: string // from router
-  name?: string // input
+  name: string // input
   description?: string // textarea
   parentPath?: CodebookType[]
   location?: CodebookType // combobox - CODEBOOK.LOCATION
@@ -14,7 +15,9 @@ export type SystemDetailFormType = {
   owner?: CodebookType // combobox - CODEBOOK.EMPLOYEE
   responsible?: CodebookType // combobox - CODEBOOK.EMPLOYEE
   importance?: CodebookType // listbox - CODEBOOK.SYSTEM_IMPORTANCE
-  hasSubsystems: boolean
-  subSystems?: SystemDetail[]
+  systemLevel?: SystemLevel
   physicalItem?: PhysicalItem
+  hasImageGalleryChanges?: boolean
+  operators?: Employee[]
+  maintenedBy?: Employee[]
 }

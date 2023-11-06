@@ -55,7 +55,7 @@ export const RelationNameCell = ({
   }
 
   return (
-    <div className="flex relative items-center my-1">
+    <div className="flex relative items-center">
       <span>{systemName}</span>
       <TableButtonsWrapper>
         <TableDeleteButton onClick={() => setOpenDelete(true)} />

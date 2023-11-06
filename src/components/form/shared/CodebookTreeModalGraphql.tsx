@@ -3,7 +3,6 @@ import type { ColumnDef } from '@tanstack/react-table'
 import classNames from 'classnames'
 import { useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { toast } from 'react-hot-toast'
 
 import ModalComponent from '@/components/modal/modal.comp'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
@@ -16,6 +15,7 @@ const messages = message.common.buttons
 export type Codebooktree = {
   name: string
   uid: string
+  code?: string
   children?: Codebooktree[]
   isExpandable?: boolean
 }
@@ -23,10 +23,12 @@ export type Codebooktree = {
 interface CodebookTreeModalProps {
   open: boolean
   loading?: boolean
+  enableFiltering?: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   data?: Codebooktree[]
   name: string
   fetchChildren: (uid: string) => void
+  additionalColumn?: ColumnDef<Codebooktree, string>
 }
 
 export const CodebookTreeModalGraphql = ({
@@ -35,6 +37,8 @@ export const CodebookTreeModalGraphql = ({
   data,
   name,
   fetchChildren,
+  additionalColumn,
+  enableFiltering,
   loading
 }: CodebookTreeModalProps) => {
   const [item, setItem] = useState<CodebookType | undefined>(undefined)
@@ -46,13 +50,14 @@ export const CodebookTreeModalGraphql = ({
     []
   )
 
-  const columns = useMemo(
-    (): ColumnDef<Codebooktree, string>[] => [
+  const columns = useMemo((): ColumnDef<Codebooktree, string>[] => {
+    const columns: ColumnDef<Codebooktree, string>[] = [
       {
         header: 'Name',
         accessorKey: 'name',
         id: 'name',
         size: 300,
+        meta: enableFiltering ? { filter: { type: 'string', enableColumnFilter: true } } : undefined,
         cell: ({ row, getValue }) => (
           <div
             style={{
@@ -84,9 +89,10 @@ export const CodebookTreeModalGraphql = ({
           </div>
         )
       }
-    ],
-    [fetchChildren]
-  )
+    ]
+    if (additionalColumn) columns.push(additionalColumn)
+    return columns
+  }, [fetchChildren, additionalColumn, enableFiltering])
 
   const modalButtons: ModalButtons = {
     goNext: {
@@ -117,17 +123,17 @@ export const CodebookTreeModalGraphql = ({
           data={data}
           getSubRows={row => row.children}
           settings={{
-            enableRowSelection: true
+            enableRowSelection: true,
+            enableFiltering: enableFiltering,
+            manualFiltering: true
           }}
           className={'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'}
           getRowProps={row => ({
             onClick: () => {
-              if (!row.original.roomCard) {
-                setItem({ uid: row.original.uid, name: row.original.name })
-              }
-              if (row.original.roomCard) {
-                toast.error('You can not select location with room card')
-              }
+              setItem({
+                uid: row.original.uid,
+                name: row.original.name + (row.original.code ? ` (${row.original.code})` : '')
+              })
             },
             className: classNames(
               item?.uid === row.original.uid ? 'bg-primary-200 hover:bg-primary-200' : '',

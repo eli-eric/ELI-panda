@@ -110,21 +110,14 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
 
   return (
     <div>
-      <Heading text={messages.title} />
-      {hasEditRole && (
-        <div>
+      <Heading text={messages.title}>
+        {hasEditRole && (
           <div {...getRootProps()}>
             <input {...getInputProps()} ref={fileInputRef} style={{ display: 'none' }} />
-            <PlusButton
-              className="mb-2"
-              buttonSize="large"
-              primary={!isDragActive}
-              type={'button'}
-              onClick={handleButtonClick}
-            />
+            <PlusButton buttonSize="large" primary={!isDragActive} type={'button'} onClick={handleButtonClick} />
           </div>
-        </div>
-      )}
+        )}
+      </Heading>
       {loading.some(value => value) && <ProgressBarComponent />}
       <PandaTable
         {...{

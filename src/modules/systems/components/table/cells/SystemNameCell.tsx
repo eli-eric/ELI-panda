@@ -85,32 +85,34 @@ export const SystemNameCell = ({
       }}
       className={classNames(isDragging && 'text-primary-500')}
     >
-      <div className="flex items-center" ref={previewRef}>
-        {enableDragAndDrop && (
-          <button ref={dragRef} className="mr-2">
-            <ArrowsRightLeftIcon className="w-5 h-5" />
-          </button>
-        )}
-        {original.hasSubsystems ? (
-          <button
-            onClick={() => {
-              if (!row.getIsExpanded()) {
-                setUid(original.uid)
-              } else {
-                setUid(null)
-              }
-              row.toggleExpanded()
-            }}
-            className="flex items-center hover:text-gray-400 cursor-pointer"
-          >
-            {row.getIsExpanded() ? <ChevronDownIcon className="w-4 h-4" /> : <ChevronRightIcon className="w-4 h-4" />}
-            <span className="pl-1">{getValue()}</span>
-          </button>
-        ) : (
-          <div className="flex items-center">
-            <span className="pl-5">{getValue()}</span>
-          </div>
-        )}
+      <div className="flex items-center" ref={dragRef}>
+        <div className="flex items-center" ref={previewRef}>
+          {enableDragAndDrop && (
+            <button className="mr-2">
+              <ArrowsRightLeftIcon className="w-5 h-5" />
+            </button>
+          )}
+          {original.hasSubsystems ? (
+            <button
+              onClick={() => {
+                if (!row.getIsExpanded()) {
+                  setUid(original.uid)
+                } else {
+                  setUid(null)
+                }
+                row.toggleExpanded()
+              }}
+              className="flex items-center hover:text-gray-400 cursor-pointer"
+            >
+              {row.getIsExpanded() ? <ChevronDownIcon className="w-4 h-4" /> : <ChevronRightIcon className="w-4 h-4" />}
+              <span className="pl-1">{getValue()}</span>
+            </button>
+          ) : (
+            <div className="flex items-center">
+              <span className="pl-5">{getValue()}</span>
+            </div>
+          )}
+        </div>
         {!hideButtons && (hoveringId === id || isMobile) && (
           <Fragment>
             {enableDragAndDrop ? (

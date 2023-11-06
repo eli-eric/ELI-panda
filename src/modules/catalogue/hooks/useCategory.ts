@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast'
 import type { Query } from '@/types/gql/graphql'
 
 const GET_CATEGORIES = gql`
-  query GetCategories($uid: String = null) {
+  query GetCategories($uid: ID = null) {
     catalogueCategories(where: { uid: $uid }) {
       uid
       name

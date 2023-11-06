@@ -2,9 +2,9 @@ import { Listbox as HUIListbox } from '@headlessui/react'
 import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import React, { useDeferredValue, useEffect, useState } from 'react'
 
-import { classNames } from '@/utils'
 import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
+import { classNames } from '@/utils'
 
 export type ListboxPropsT = {
   codebook?: CODEBOOK
@@ -14,7 +14,6 @@ export type ListboxPropsT = {
   optionsSize?: 'sm' | 'md' | 'lg'
   unit?: string
   customLabel?: string
-  useFirstRender?: boolean
   codebookResponse?: CodebookType[]
   onChange: (value: any) => void
   className?: string

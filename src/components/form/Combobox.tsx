@@ -100,7 +100,7 @@ const Combobox = ({
                   {customLabel ? customLabel : fm({ id: label })}
                 </HUICombobox.Label>
               )}
-              <div className="relative" onClick={onClickIcon}>
+              <div className="relative">
                 <ComboboxInput
                   {...{
                     value: field.value,

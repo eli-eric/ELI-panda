@@ -4,9 +4,9 @@ import { useFormContext, useWatch } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
-import { classNames } from '@/utils'
 import { message } from '@/i18n/src/messages'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
+import { classNames } from '@/utils'
 
 import type { OrderLineFormType } from '../../types/form'
 import useOrderLinesColumns from './components/OrderLines.columns'
@@ -38,13 +38,14 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
 
   return (
     <Fragment>
-      <Heading text={messages.orderLines} />
-      <div className="flex flex-col">
+      <Heading text={messages.orderLines}>
         {!disabledEdit && (
           <div className="flex items-center mr-2">
             <PlusButton primary buttonSize="large" onClick={handleAddOrderLine} className="mb-2" />
           </div>
         )}
+      </Heading>
+      <div className="flex flex-col">
         <PandaTable
           ref={tableRef}
           columns={columns}

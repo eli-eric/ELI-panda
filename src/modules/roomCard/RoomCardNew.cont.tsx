@@ -13,7 +13,7 @@ import { PATH } from '@/types/constants/paths'
 import type { RoomCard } from '@/types/gql/graphql'
 import { RoomCardStatus } from '@/types/gql/graphql'
 
-import { SelectLocationTree } from './components/SelectLocation.combo'
+import { SelectLocationTree } from '../shared/form/location/SelectLocation.combo'
 import { makeRoomCardsCreateData, useRoomCardCreate } from './hooks/useRoomCardCreate'
 import { RoomCardComponent } from './RoomCard.comp'
 import { useRoomCardStore } from './store/useRoomCardStore'
@@ -101,7 +101,7 @@ export const RoomCardNewContainer = () => {
     >
       <Fragment>
         <h1 className="text-2xl font-semibold">New room card</h1>
-        <SelectLocationTree locationField={fields.location} />
+        <SelectLocationTree className="w-72" locationField={fields.location} />
         <Listbox {...fields.status} className="w-72" customOptions={statuses} />
       </Fragment>
     </RoomCardComponent>

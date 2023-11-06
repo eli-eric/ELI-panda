@@ -1,65 +1,94 @@
 import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
-import Link from 'next/link'
-import { Fragment, memo, useRef } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
+import { memo, useRef } from 'react'
+import { useForm } from 'react-hook-form'
 
-import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
-import Card from '@/components/layout/Card'
-import { Heading } from '@/components/layout/Heading'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { FILE_TYPE } from '@/types/constants/files'
-import { PATH } from '@/types/constants/paths'
 
 import { useParentSystemDetail } from '../../hooks/useParentSystemDetail'
 import { useSystemDetail } from '../../hooks/useSystemDetail'
-import { useSystemSubmit } from '../../hooks/useSystemSubmit'
-import type { SystemDetailFormType } from '../../types/form'
-import { AssignPhysicalItem } from '../AssignPhysicalItem'
 import Breadcrumbs from '../Breadcrumps'
 import HeaderComponent from '../Header.comp'
-import { PhysicalItemForm } from './PhysicalItemForm.comp'
-import SystemFormComponent from './SystemForm.comp'
+import { SystemMainForm } from './components/SystemMain.form'
 import { schema } from './SystemForm.schema'
 
 const MemoizedSystemGallery = memo(ImageGallery)
 
-const SystemForm = () => {
-  const { systemDetail, uid, disabledEdit } = useSystemDetail()
-  //const cataloguePermission = usePermission([ROLE.CATALOGUE_EDIT])
+import { useRouter } from 'next/router'
 
-  const { parentUid, parentPath } = useParentSystemDetail()
+import Card from '@/components/layout/Card'
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import { SystemLevel } from '@/types/gql/graphql'
+import { classNames } from '@/utils'
 
+import { useSystemCreate } from '../../hooks/useSystemCreate'
+import { useSystemUpdate } from '../../hooks/useSystemUpdate'
+import type { SystemDetailFormType } from '../../types/form'
+import { SystemItemCard } from './components/SystemItem.card'
+
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  children?: React.ReactNode
+}
+
+const FormCard = ({ children, className }: CardProps) => (
+  <div className={classNames('mx-auto max-w-7xl', className)}>{children}</div>
+)
+
+export const SystemForm = () => {
+  const { systemDetail, disabledEdit } = useSystemDetail()
+
+  const router = useRouter()
+  const uid = router.query.uid as string | undefined
+
+  const { parentPath } = useParentSystemDetail()
   const systemImageRef = useRef<ImageGalleryRef>()
 
-  const { submit, loadingSubmit } = useSystemSubmit(systemImageRef)
+  const { updateSystem, loading } = useSystemUpdate(systemImageRef)
+  const { createSystem, loading: createLoading } = useSystemCreate(systemImageRef)
 
+  //TODO: typing
   const formMethods = useForm<SystemDetailFormType>({
     resolver: yupResolver(schema),
-    defaultValues: systemDetail
+    defaultValues: {
+      ...(systemDetail as SystemDetailFormType),
+      responsible: { uid: systemDetail?.responsible?.uid, name: systemDetail?.responsible?.fullName as string },
+      zone: { uid: systemDetail?.zone?.uid, name: systemDetail?.zone?.name as string }
+    }
   })
 
-  const { control } = formMethods
-  const physicalItem = useWatch({ control, name: 'physicalItem' })
+  const systemLevel = formMethods.watch('systemLevel')
 
-  const onSubmit = (data: any) => {
+  //TODO: typing
+  const onSubmit = (data: SystemDetailFormType) => {
     // extract from data hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = data
-    submit({ ...rest, parentUid })
+    if (uid) {
+      updateSystem(rest)
+    }
+    if (!uid) {
+      createSystem(rest)
+    }
   }
 
   return (
     <Form formMethods={formMethods} onSubmit={onSubmit} enableLeaveWarning={true}>
-      <HeaderComponent loading={loadingSubmit} />
-      <Breadcrumbs parentPath={parentPath || systemDetail?.parentPath} />
+      <HeaderComponent loading={loading || createLoading} />
       <Card>
-        <Heading customText="System">
-          <AssignPhysicalItem />
-        </Heading>
-        <SystemFormComponent>
+        <Breadcrumbs parentPath={parentPath || (systemDetail?.parentPath as CodebookType[])} />
+      </Card>
+      <FormCard
+        className={classNames(
+          'shadow-md rounded-lg border',
+          systemLevel === SystemLevel.KeySystems && 'bg-primary-100',
+          systemLevel === SystemLevel.SubsystemsAndParts && 'bg-lime-100',
+          systemLevel === SystemLevel.TechnologyUnit && 'bg-sky-100'
+        )}
+      >
+        <SystemMainForm>
           <MemoizedSystemGallery
             ref={systemImageRef}
             setValue={formMethods.setValue}
@@ -67,36 +96,10 @@ const SystemForm = () => {
             className="w-full"
             hasEditRole={!disabledEdit}
           />
-        </SystemFormComponent>
-        {physicalItem && (
-          <Fragment>
-            <Heading customText="Physical Item">
-              {physicalItem?.catalogueItem?.uid && (
-                <Link href={PATH.CATALOGUE_ITEM + '/' + physicalItem.catalogueItem.uid} target={'_blank'}>
-                  <Button primary>
-                    <span>View Catalogue Item</span>
-                  </Button>
-                </Link>
-              )}
-            </Heading>
-            <PhysicalItemForm>
-              <MemoizedSystemGallery
-                ref={systemImageRef}
-                setValue={formMethods.setValue}
-                config={{
-                  itemCategory: FILE_TYPE.CATALOGUE,
-                  itemId: physicalItem?.catalogueItem?.uid as string
-                }}
-                className="w-full"
-                hasEditRole={false}
-              />
-            </PhysicalItemForm>
-          </Fragment>
-        )}
-      </Card>
+        </SystemMainForm>
+        {systemDetail?.physicalItem && <SystemItemCard />}
+      </FormCard>
       <DevTool control={formMethods.control} />
     </Form>
   )
 }
-
-export default SystemForm
