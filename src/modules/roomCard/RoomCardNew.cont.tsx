@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { Fragment, useEffect } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { array, object, string } from 'yup'
 
@@ -35,7 +35,7 @@ export const RoomCardNewContainer = () => {
   const router = useRouter()
   const { watch, handleSubmit } = formMethods
   const { createRoomCard } = useRoomCardCreate()
-  const contactPersonsHall = useWatch({ control: formMethods.control, name: 'contactPersonsHall' })
+  const contactPersonsHall = watch('contactPersonsHall')
   const status = watch('status')
   const teams = watch('teams')
   const contactPersonsDept = watch('contactPersonsDept')
