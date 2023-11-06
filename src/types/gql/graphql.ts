@@ -8072,19 +8072,19 @@ export type PageInfo = {
 export type ParentPathItem = {
   __typename?: 'ParentPathItem';
   name?: Maybe<Scalars['String']['output']>;
-  uid?: Maybe<Scalars['String']['output']>;
+  uid: Scalars['ID']['output'];
 };
 
 export type ParentPathItemAggregateSelection = {
   __typename?: 'ParentPathItemAggregateSelection';
   count: Scalars['Int']['output'];
   name: StringAggregateSelectionNullable;
-  uid: StringAggregateSelectionNullable;
+  uid: IdAggregateSelectionNonNullable;
 };
 
 export type ParentPathItemCreateInput = {
   name?: InputMaybe<Scalars['String']['input']>;
-  uid?: InputMaybe<Scalars['String']['input']>;
+  uid: Scalars['ID']['input'];
 };
 
 export type ParentPathItemEdge = {
@@ -8108,7 +8108,7 @@ export type ParentPathItemSort = {
 
 export type ParentPathItemUpdateInput = {
   name?: InputMaybe<Scalars['String']['input']>;
-  uid?: InputMaybe<Scalars['String']['input']>;
+  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type ParentPathItemWhere = {
@@ -8120,11 +8120,11 @@ export type ParentPathItemWhere = {
   name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   name_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   name_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
-  uid?: InputMaybe<Scalars['String']['input']>;
-  uid_CONTAINS?: InputMaybe<Scalars['String']['input']>;
-  uid_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  uid_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  uid_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  uid?: InputMaybe<Scalars['ID']['input']>;
+  uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
+  uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
+  uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type ParentPathItemsConnection = {

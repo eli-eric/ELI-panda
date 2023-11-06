@@ -71,7 +71,7 @@ export const typeDefs = gql`
   }
 
   type ParentPathItem {
-    uid: String
+    uid: ID!
     name: String
   }
 
