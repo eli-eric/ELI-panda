@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast'
 import type { Employee, Query } from '@/types/gql/graphql'
 
 const GET_EMPLOYEE = gql`
-  query GetEmployee($uid: String!) {
+  query GetEmployee($uid: ID!) {
     employees(where: { uid: $uid }) {
       uid
       fullName

@@ -80,7 +80,13 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
             systemType: connectN(systemForm?.systemType?.uid),
             location: connectN(systemForm?.location?.uid),
             zone: connectN(systemForm?.zone?.uid),
-            responsible: connectN(systemForm?.responsible?.uid)
+            responsible: connectN(systemForm?.responsible?.uid),
+            operators: {
+              connect: systemForm?.operators?.map(operator => ({ where: { node: { uid: operator.uid } } }))
+            },
+            maintenedBy: {
+              connect: systemForm?.maintenedBy?.map(maintenedBy => ({ where: { node: { uid: maintenedBy.uid } } }))
+            }
           }
         ]
       }

@@ -3,7 +3,7 @@ export enum ROLE {
   SYSTEMS_VIEW = 'systems-view',
   REPORTS_VIEW = 'reports-view',
   BASICS = 'basics',
-  SYSTEM_EDIT = 'systems-edit',
+  SYSTEM_EDIT = 'room-card-edit',
   CATALOGUE_CATEGORY_EDIT = 'catalogue-category-edit',
   CATALOGUE_EDIT = 'catalogue-edit',
   ORDERS_VIEW = 'orders-view',
@@ -11,6 +11,6 @@ export enum ROLE {
   ORDERS_DELIVERY_EDIT = 'orders-delivery-edit',
   SUPPLIER_EDIT = 'supplier-edit',
   CODEBOOKS_ADMIN = 'codebooks-admin',
-  ROOM_CARD_VIEW = 'basics',
-  ROOM_CARD_EDIT = 'basics'
+  ROOM_CARD_VIEW = 'room-card-view',
+  ROOM_CARD_EDIT = 'room-card-edit'
 }

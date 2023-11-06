@@ -1,17 +1,15 @@
-import type { ColumnDef } from '@tanstack/react-table'
-import { Fragment, useMemo } from 'react'
+import { Fragment } from 'react'
 
 import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
-import { CellWithDelete } from '@/modules/roomCard/components/table/CellWithDelete'
-import { ContactDeptButton } from '@/modules/roomCard/components/table/ContactDeptButton'
 import { SelectLocationTree } from '@/modules/shared/form/location/SelectLocation.combo'
-import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { SystemLevel } from '@/types/gql/graphql'
 
+import { MaintenedByTable } from '../../table/MaintenedBy.table'
+import { OperatorsTable } from '../../table/Operators.table'
 import useSystemFormFields from '../SystemForm.fields'
 
 interface SystemFormComponentProps {
@@ -22,41 +20,6 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
   const fields = useSystemFormFields()
 
   const systemLevels = Object.values(SystemLevel).map(level => level)
-  const columnsMaintener = useMemo(
-    (): ColumnDef<any, any>[] => [
-      {
-        header: 'Maintened by',
-        meta: { headerElement: <ContactDeptButton /> },
-        columns: [
-          {
-            accessorKey: 'fullName',
-            meta: { noHeader: true },
-            cell: props => <CellWithDelete {...props} formName="contactPersonsDept" setDeleteItem={() => {}} />,
-            size: 563
-          }
-        ]
-      }
-    ],
-    []
-  )
-  const columnsOperators = useMemo(
-    (): ColumnDef<any, any>[] => [
-      {
-        header: 'Authorized Operators',
-        meta: { headerElement: <ContactDeptButton /> },
-
-        columns: [
-          {
-            accessorKey: 'fullName',
-            meta: { noHeader: true },
-            cell: props => <CellWithDelete {...props} formName="contactPersonsDept" setDeleteItem={() => {}} />,
-            size: 563
-          }
-        ]
-      }
-    ],
-    []
-  )
 
   return (
     <Fragment>
@@ -99,24 +62,10 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
             <Listbox {...fields.parentSystem} />
           </Col>
           <Col sm={3} md={6}>
-            <PandaTable
-              {...{
-                tableId: 'systemOperators',
-                columns: columnsOperators,
-                data: [{ fullName: 'Jan Novák' }, { fullName: 'Petr Novák' }, { fullName: 'Pavel Novák' }],
-                className: 'border-l border-gray-400 mb-0 pb-0  w-full'
-              }}
-            />
+            <OperatorsTable />
           </Col>
           <Col sm={3} md={6}>
-            <PandaTable
-              {...{
-                tableId: 'systemMainteners',
-                columns: columnsMaintener,
-                data: [{ fullName: 'Jan Novák' }, { fullName: 'Petr Novák' }, { fullName: 'Pavel Novák' }],
-                className: 'border-l border-gray-400 mb-0 pb-0  w-full'
-              }}
-            />
+            <MaintenedByTable />
           </Col>
         </Grid>
       </Card>

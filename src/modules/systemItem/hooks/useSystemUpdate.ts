@@ -9,8 +9,9 @@ import { updateSystem } from '@/modules/systems/utils'
 import { PATH } from '@/types/constants/paths'
 import type { Mutation, MutationUpdateSystemsArgs } from '@/types/gql/graphql'
 import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
-import { connectAndDisconnectNode } from '@/utils/graphql/mutations'
+import { connectAndDisconnectNode, whereN } from '@/utils/graphql/mutations'
 
+import { useSystemItemStore } from '../store/useSystemItemStore'
 import type { SystemDetailFormType } from '../types/form'
 import { useSystemDetail } from './useSystemDetail'
 
@@ -80,11 +81,27 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
     onCompleted
   })
 
+  const { newMaintenedBy, newOperators, disconnectOperators, disconnectMaintenedBy } = useSystemItemStore()
+
   const updateSystemQuery = (systemForm: SystemDetailFormType) => {
     update({
       variables: {
         where: { uid },
-        update: systemInput({ systemForm, systemDetail })
+        update: {
+          ...systemInput({ systemForm, systemDetail }),
+          operators: [
+            {
+              connect: newOperators.map(operator => whereN(operator.uid)),
+              disconnect: disconnectOperators.map(operator => whereN(operator.uid))
+            }
+          ],
+          maintenedBy: [
+            {
+              connect: newMaintenedBy.map(maintenedBy => whereN(maintenedBy.uid)),
+              disconnect: disconnectMaintenedBy.map(maintenedBy => whereN(maintenedBy.uid))
+            }
+          ]
+        }
       }
     })
   }

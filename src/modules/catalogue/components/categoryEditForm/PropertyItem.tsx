@@ -84,7 +84,6 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
             name={`${name}.type`}
             optionsSize={'sm'}
             emptyOption="Select type"
-            useFirstRender={false}
             allowEmptyOption={false}
             codebook={CODEBOOK.CATALOGUE_PROPERTY_TYPE}
           />
@@ -92,7 +91,6 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
             name={`${name}.unit`}
             optionsSize={'sm'}
             emptyOption="Select unit"
-            useFirstRender={false}
             allowEmptyOption={true}
             codebook={CODEBOOK.UNIT}
           />
