@@ -5,23 +5,29 @@ import { object } from 'yup'
 
 import Combobox from '@/components/form/Combobox'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
+import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
+import { HeaderButtonModalComponent } from '@/modules/roomCard/components/table/HeaderButtonModal.comp'
+import { useLazyEmployee } from '@/modules/roomCard/hooks/useLazyEmployee'
 import { CODEBOOK } from '@/types/constants/codebook'
-
-import { useLazyEmployee } from '../../hooks/useLazyEmployee'
-import { useRoomCardStore } from '../../store/useRoomCardStore'
-import { HeaderButtonModalComponent } from './HeaderButtonModal.comp'
+import type { ROLE } from '@/types/constants/roles'
 
 const nestedForm = message.roomCardsPage.nestedForm
 
-export const ContactDeptButton = () => {
+type Props = {
+  setEmployee: (employee: any) => void
+  name: string
+  editPersmissionRole: ROLE
+}
+
+export const HeaderAddButton = ({ setEmployee, name, editPersmissionRole }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const { setNewDeptContact } = useRoomCardStore()
+  const editPersmission = usePermission([editPersmissionRole])
 
   const formMethods = useForm({ resolver: yupResolver(makeSchema()) })
 
   const { control } = useFormContext()
-  const { insert, fields: arrayFields } = useFieldArray({ control, name: 'contactPersonsDept' })
+  const { insert, fields: arrayFields } = useFieldArray({ control, name })
 
   const [getEployee, employeeQuery] = useLazyEmployee()
 
@@ -30,7 +36,7 @@ export const ContactDeptButton = () => {
     insert(arrayFields.length, {
       ...employeeQuery
     })
-    setNewDeptContact(employeeQuery)
+    setEmployee(employeeQuery)
   }
 
   function makeSchema() {
@@ -54,6 +60,8 @@ export const ContactDeptButton = () => {
       codebook: CODEBOOK.EMPLOYEE
     }
   })
+
+  if (!editPersmission) return null
 
   return (
     <HeaderButtonModalComponent

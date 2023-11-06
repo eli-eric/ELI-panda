@@ -1,15 +1,14 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 
-import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
 import type { HallContactPerson, Team } from '@/types/gql/graphql'
 
 import { useRoomCardStore } from '../../store/useRoomCardStore'
 import { CellInput } from './CellInput'
 import { CellWithDelete } from './CellWithDelete'
-import { ContactDeptButton } from './ContactDeptButton'
 import { ContactHallButton } from './ContactHallButton'
+import { HeaderAddButton } from './HeaderAddButton'
 import { TeamButton } from './TeamButton'
 
 export type RoomCardProperties = {
@@ -19,14 +18,16 @@ export type RoomCardProperties = {
 }
 
 export const useRoomCardsColumns = () => {
-  const { setDeleteHallContact, setDisconnectDeptContact, setDisconnectTeam } = useRoomCardStore()
-  const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
+  const { setDeleteHallContact, setDisconnectDeptContact, setDisconnectTeam, setNewDeptContact, setNewTeam } =
+    useRoomCardStore()
 
   const columnsContactHall = useMemo(
     (): ColumnDef<HallContactPerson, any>[] => [
       {
         header: 'Contact - Hall',
-        meta: { headerElement: editPersmission ? <ContactHallButton /> : null },
+        meta: {
+          headerElement: <ContactHallButton />
+        },
         columns: [
           {
             accessorFn: ({ role }) => role?.name,
@@ -50,14 +51,22 @@ export const useRoomCardsColumns = () => {
         ]
       }
     ],
-    [setDeleteHallContact, editPersmission]
+    [setDeleteHallContact]
   )
 
   const columnsContactDept = useMemo(
     (): ColumnDef<any, any>[] => [
       {
         header: 'Contact - Dept. 99',
-        meta: { headerElement: editPersmission ? <ContactDeptButton /> : null },
+        meta: {
+          headerElement: (
+            <HeaderAddButton
+              setEmployee={setNewDeptContact}
+              editPersmissionRole={ROLE.ROOM_CARD_EDIT}
+              name={'contactPersonsDept'}
+            />
+          )
+        },
 
         columns: [
           {
@@ -74,19 +83,21 @@ export const useRoomCardsColumns = () => {
         ]
       }
     ],
-    [setDisconnectDeptContact, editPersmission]
+    [setDisconnectDeptContact, setNewDeptContact]
   )
 
   const columnsTeam = useMemo(
     (): ColumnDef<Team, any>[] => [
       {
         header: 'Team',
-        meta: { headerElement: editPersmission ? <TeamButton /> : null },
+        meta: {
+          headerElement: <TeamButton />
+        },
         accessorKey: 'name',
         cell: props => <CellWithDelete {...props} formName="teams" setDeleteItem={setDisconnectTeam} />
       }
     ],
-    [setDisconnectTeam, editPersmission]
+    [setDisconnectTeam]
   )
 
   const columnsCleanRooms = useMemo(

@@ -1,4 +1,5 @@
 import { Fragment } from 'react'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/Input'
@@ -6,10 +7,10 @@ import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
 import { SelectLocationTree } from '@/modules/shared/form/location/SelectLocation.combo'
+import { useSystemItemStore } from '@/modules/systemItem/store/useSystemItemStore'
 import { SystemLevel } from '@/types/gql/graphql'
 
-import { MaintenedByTable } from '../../table/MaintenedBy.table'
-import { OperatorsTable } from '../../table/Operators.table'
+import { EmployeeTable } from '../../table/Employee.table'
 import useSystemFormFields from '../SystemForm.fields'
 
 interface SystemFormComponentProps {
@@ -18,6 +19,10 @@ interface SystemFormComponentProps {
 
 export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
   const fields = useSystemFormFields()
+  const { setNewMaintenedBy, setDisconnectMaintenedBy, setNewOperator, setDisconnectOperator } = useSystemItemStore()
+  const { control } = useFormContext()
+  const maintenedBy = useWatch({ control, name: 'maintenedBy' })
+  const operators = useWatch({ control, name: 'operators' })
 
   const systemLevels = Object.values(SystemLevel).map(level => level)
 
@@ -62,10 +67,24 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
             <Listbox {...fields.parentSystem} />
           </Col>
           <Col sm={3} md={6}>
-            <OperatorsTable />
+            <EmployeeTable
+              name="operators"
+              tableId="systemOperators"
+              data={operators}
+              header={'Authorized Operators'}
+              setNewEmployee={setNewOperator}
+              setDisconnectEmployee={setDisconnectOperator}
+            />
           </Col>
           <Col sm={3} md={6}>
-            <MaintenedByTable />
+            <EmployeeTable
+              name="maintenedBy"
+              tableId="systemMainteners"
+              data={maintenedBy}
+              header={'Maintened By'}
+              setNewEmployee={setNewMaintenedBy}
+              setDisconnectEmployee={setDisconnectMaintenedBy}
+            />
           </Col>
         </Grid>
       </Card>
