@@ -1,5 +1,6 @@
 import { gql, useLazyQuery, useQuery } from '@apollo/client'
 
+import useTableStateStore from '@/store/useTableStateStore'
 import type { Query } from '@/types/gql/graphql'
 
 const GET_LOCATIONS = gql`
@@ -36,8 +37,22 @@ const GET_SUBLOCATIONS = gql`
 `
 
 export const useLocation = () => {
+  const { instances } = useTableStateStore()
+
+  const filter = instances['codebook-tree']?.columnFilter
+
+  const nameFilter = filter?.find(f => f.id === 'name')?.value
+  const codeFilter = filter?.find(f => f.id === 'code')?.value
+
   const { data, loading, error } = useQuery<Query>(GET_LOCATIONS, {
-    variables: { where: { parentLocation: null } }
+    variables: {
+      where: filter
+        ? {
+            name_CONTAINS: nameFilter,
+            code_CONTAINS: codeFilter
+          }
+        : { parentLocation: null }
+    }
   })
   return { locations: data?.locations, loading, error }
 }

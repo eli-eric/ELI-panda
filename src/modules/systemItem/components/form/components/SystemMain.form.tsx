@@ -8,7 +8,7 @@ import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
 import { CellWithDelete } from '@/modules/roomCard/components/table/CellWithDelete'
 import { ContactDeptButton } from '@/modules/roomCard/components/table/ContactDeptButton'
-import { SelectLocationTree } from '@/modules/shared/form/SelectLocation.combo'
+import { SelectLocationTree } from '@/modules/shared/form/location/SelectLocation.combo'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { SystemLevel } from '@/types/gql/graphql'
 

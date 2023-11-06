@@ -3,7 +3,6 @@ import type { ColumnDef } from '@tanstack/react-table'
 import classNames from 'classnames'
 import { useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { toast } from 'react-hot-toast'
 
 import ModalComponent from '@/components/modal/modal.comp'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
@@ -24,6 +23,7 @@ export type Codebooktree = {
 interface CodebookTreeModalProps {
   open: boolean
   loading?: boolean
+  enableFiltering?: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   data?: Codebooktree[]
   name: string
@@ -38,6 +38,7 @@ export const CodebookTreeModalGraphql = ({
   name,
   fetchChildren,
   additionalColumn,
+  enableFiltering,
   loading
 }: CodebookTreeModalProps) => {
   const [item, setItem] = useState<CodebookType | undefined>(undefined)
@@ -56,6 +57,7 @@ export const CodebookTreeModalGraphql = ({
         accessorKey: 'name',
         id: 'name',
         size: 300,
+        meta: enableFiltering ? { filter: { type: 'string', enableColumnFilter: true } } : undefined,
         cell: ({ row, getValue }) => (
           <div
             style={{
@@ -90,7 +92,7 @@ export const CodebookTreeModalGraphql = ({
     ]
     if (additionalColumn) columns.push(additionalColumn)
     return columns
-  }, [fetchChildren, additionalColumn])
+  }, [fetchChildren, additionalColumn, enableFiltering])
 
   const modalButtons: ModalButtons = {
     goNext: {
@@ -122,17 +124,16 @@ export const CodebookTreeModalGraphql = ({
           getSubRows={row => row.children}
           settings={{
             enableRowSelection: true,
-            enableFiltering: true
+            enableFiltering: enableFiltering,
+            manualFiltering: true
           }}
           className={'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'}
           getRowProps={row => ({
             onClick: () => {
-              if (!row.original.roomCard) {
-                setItem({ uid: row.original.uid, name: row.original.name })
-              }
-              if (row.original.roomCard) {
-                toast.error('You can not select location with room card')
-              }
+              setItem({
+                uid: row.original.uid,
+                name: row.original.name + (row.original.code ? ` (${row.original.code})` : '')
+              })
             },
             className: classNames(
               item?.uid === row.original.uid ? 'bg-primary-200 hover:bg-primary-200' : '',

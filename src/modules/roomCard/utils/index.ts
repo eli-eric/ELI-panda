@@ -1,30 +1,7 @@
-import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
-import type { Employee, Location, RoomCard, RoomCardUpdateInput, RoomCardWhere, Team } from '@/types/gql/graphql'
+import type { Employee, RoomCard, RoomCardUpdateInput, RoomCardWhere, Team } from '@/types/gql/graphql'
 import { whereN } from '@/utils/graphql/mutations'
 
 import type { HallContactPerson } from '../store/useRoomCardStore'
-
-export const updateLocationWithSublocation = (locations: Codebooktree[], subLocations: Location[], uid) =>
-  locations.map(location => {
-    if (location.uid === uid) {
-      return {
-        ...location,
-        children: subLocations.map(subLocation => ({
-          name: subLocation.name,
-          code: subLocation.code,
-          uid: subLocation.uid,
-          isExpandable: subLocation.subLocations.length > 0
-        }))
-      }
-    }
-    if (location.children) {
-      return {
-        ...location,
-        children: updateLocationWithSublocation(location.children, subLocations, uid)
-      }
-    }
-    return location
-  })
 
 type RoomCardUpdateType = {
   roomCard: RoomCard

@@ -12,16 +12,19 @@ import { SystemForm } from './components/form/SystemForm.cont'
 import RelationsSection from './components/relationsSection/RelationsSection'
 import { useSystemDetail } from './hooks/useSystemDetail'
 
-export const SystemItemContainer = () => {
-  const { disabledEdit, uid, systemDetail, loading } = useSystemDetail()
+interface Props {
+  uid?: string
+}
+
+export const SystemItemContainer = ({ uid }: Props) => {
+  const { systemDetail, disabledEdit, loading } = useSystemDetail()
 
   if (loading) {
     return <LoaderComponent />
   }
-
   return (
     <Fragment>
-      {systemDetail && <SystemForm />}
+      <SystemForm />
       {uid && (
         <Card className="flex flex-col justify-between">
           <ErrorBoundary fallback={<ErrorPage />}>

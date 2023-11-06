@@ -7,8 +7,8 @@ import { CodebookTreeModalGraphql } from '@/components/form/shared/CodebookTreeM
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps, Option } from '@/types/form'
 
-import { useLocation, useSubLocations } from '../../roomCard/hooks/useLocation'
-import { updateLocationWithSublocation } from '../../roomCard/utils'
+import { useLocation, useSubLocations } from './hooks/useLocation'
+import { updateLocationWithSublocation } from './utils'
 
 export const SelectLocationTree = ({
   locationField,
@@ -56,7 +56,8 @@ export const SelectLocationTree = ({
   const additionalColumn: ColumnDef<Codebooktree, string> = {
     header: 'Code',
     accessorKey: 'code',
-    id: 'code'
+    id: 'code',
+    meta: { filter: { type: 'string', enableColumnFilter: true } }
   }
 
   return (
@@ -74,6 +75,7 @@ export const SelectLocationTree = ({
         data={codebooktree}
         open={open}
         loading={loading}
+        enableFiltering={true}
         setOpen={setOpen}
         name={locationField.name}
       />

@@ -7,18 +7,16 @@ import { message } from 'src/i18n/src/messages'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
-import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { SystemItemContainer } from '@/modules/systemItem/SystemItem.cont'
 
 const messages = message.systemItem
 
-const SystemContainer = (): React.ReactElement => {
-  const { systemDetail, error } = useSystemDetail()
-  if (error) return <ErrorPage />
-  return <Fragment>{systemDetail && <SystemItemContainer />}</Fragment>
+interface Props {
+  key?: string
+  uid?: string
 }
 
-const SystemDetailPage: NextPage = () => {
+const SystemDetailPage: NextPage = ({ uid }: Props) => {
   const intl = useIntl()
 
   return (
@@ -29,7 +27,7 @@ const SystemDetailPage: NextPage = () => {
       </Head>
       <ErrorBoundary fallback={<ErrorPage />}>
         <Suspense fallback={<LoaderComponent />}>
-          <SystemContainer />
+          <SystemItemContainer uid={uid} />
         </Suspense>
       </ErrorBoundary>
     </Fragment>
@@ -37,7 +35,8 @@ const SystemDetailPage: NextPage = () => {
 }
 
 SystemDetailPage.getInitialProps = ({ query }) => ({
-  key: query.uid
+  key: query.uid,
+  uid: query.uid
 })
 
 export default SystemDetailPage

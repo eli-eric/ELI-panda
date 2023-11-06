@@ -13,7 +13,7 @@ import { PATH } from '@/types/constants/paths'
 import type { RoomCard } from '@/types/gql/graphql'
 import { RoomCardStatus } from '@/types/gql/graphql'
 
-import { SelectLocationTree } from '../shared/form/SelectLocation.combo'
+import { SelectLocationTree } from '../shared/form/location/SelectLocation.combo'
 import { makeRoomCardsCreateData, useRoomCardCreate } from './hooks/useRoomCardCreate'
 import { RoomCardComponent } from './RoomCard.comp'
 import { useRoomCardStore } from './store/useRoomCardStore'

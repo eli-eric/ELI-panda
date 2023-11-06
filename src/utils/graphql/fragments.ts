@@ -2,6 +2,7 @@ import { gql } from '@apollo/client'
 
 export const SYSTEM_FIELDS = gql`
   fragment SystemFields on System {
+    uid
     name
     systemCode
     systemAlias
