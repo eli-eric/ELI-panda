@@ -40,5 +40,6 @@ interface useEndpointsProps {
 }
 export const useEndpoint = ({ uid, query, path, itemUid }: useEndpointsProps = {}) => {
   const queryString = query ? '?' + new URLSearchParams(query as Record<string, string>).toString() : ''
+
   return useMemo(() => getEndpoints(uid, path, itemUid, queryString), [uid, path, itemUid, queryString])
 }

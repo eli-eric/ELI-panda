@@ -5,7 +5,9 @@ import { object } from 'yup'
 
 import Listbox from '@/components/form/Listbox'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
+import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
+import { ROLE } from '@/types/constants/roles'
 import type { RoomCard } from '@/types/gql/graphql'
 
 import { useTeams } from '../../hooks/useTeams'
@@ -16,6 +18,7 @@ const nestedForm = message.roomCardsPage.nestedForm
 
 export const TeamButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
 
   const formMethods = useForm({ resolver: yupResolver(makeSchema()) })
   const { setNewTeam } = useRoomCardStore()
@@ -50,7 +53,7 @@ export const TeamButton = () => {
         )
     })
   }
-
+  if (!editPersmission) return null
   return (
     <HeaderButtonModalComponent
       formMethods={formMethods}

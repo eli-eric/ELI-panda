@@ -3,7 +3,6 @@ import { Fragment, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
-import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
 import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
@@ -18,7 +17,7 @@ export const AssignPhysicalItem = () => {
   const [openModal, setOpenModal] = useState(false)
   const [selectedSystem, setSelectedSystem] = useState<SystemDetail>()
   const { setValue, watch, reset, getValues } = useFormContext<SystemDetailFormType>()
-  const physicalItem = watch('physicalItem')
+  //const physicalItem = watch('physicalItem')
 
   const modalButtons: ModalButtons = {
     goNext: {
@@ -45,24 +44,7 @@ export const AssignPhysicalItem = () => {
         reset({
           ...getValues(),
           physicalItem: {
-            uid: null,
-            currency: '',
-            eun: '',
-            itemUsage: null,
-            price: null,
-            serialNumber: '',
-            catalogueItem: {
-              name: '',
-              category: null,
-              uid: null,
-              supplier: null,
-              catalogueNumber: '',
-              description: '',
-              details: null,
-              categoryName: '',
-              categoryPath: '',
-              manufacturerUrl: ''
-            }
+            uid: null
           }
         })
 
@@ -71,17 +53,17 @@ export const AssignPhysicalItem = () => {
     }
   }
 
+  // temporary solution to disable assign physical item
   return (
     <Fragment>
-      <Button
-        primary
-        buttonSize="large"
+      {/*  <button
+        type="button"
         onClick={() => {
           setOpenModal(true)
         }}
       >
-        {physicalItem ? 'Change Physical Item' : 'Assign Physical Item'}
-      </Button>
+        <LinkDecorator>{physicalItem ? 'Change Physical Item' : 'Assign Physical Item'}</LinkDecorator>
+      </button> */}
       <ModalComponent open={openModal} setOpen={setOpenModal} buttons={modalButtons}>
         <SystemsTable
           tableId={'systemsItem'}

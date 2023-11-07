@@ -1,10 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useQueryState } from 'next-usequerystate'
 import type { FC } from 'react'
-import { Fragment, useEffect } from 'react'
-import { useState } from 'react'
-import { memo } from 'react'
-import { useMemo } from 'react'
+import { Fragment, memo, useEffect, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import uuid from 'react-uuid'
 import { useIsFirstRender } from 'usehooks-ts'
@@ -69,7 +66,14 @@ export const CodebooksContainer: FC = () => {
         enableColumnFilter: true,
         cell: props => (
           <FormCell {...props} lastAddedUUID={lastAddedUUID} mutate={mutate} codebookType={watchCodebook?.name} />
-        )
+        ),
+        meta: {
+          filter: {
+            type: 'number',
+            codebookCode: watchCodebook?.name,
+            enableColumnFilter: true
+          }
+        }
       }
     ],
     [lastAddedUUID, mutate, watchCodebook]
@@ -122,6 +126,7 @@ export const CodebooksContainer: FC = () => {
             loading: isLoading,
             settings: {
               enableFiltering: true,
+              manualFiltering: true,
               enableSorting: true,
               manualSorting: false
             }

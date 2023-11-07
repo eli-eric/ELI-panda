@@ -2,7 +2,6 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
 import useQueryManager from '@/hooks/useQueryManager'
 import type { CatalogueItemsResponse } from '@/types/responses'
-
 export const useCatalogueItems = (tableId = 'catalogueItems', categoryUID?: string) => {
   const { query } = useQueryManager(tableId)
   query.categoryUID = categoryUID || ''

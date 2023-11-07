@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
 import { Fragment, useEffect } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { array, object, string } from 'yup'
 
@@ -13,7 +13,7 @@ import { PATH } from '@/types/constants/paths'
 import type { RoomCard } from '@/types/gql/graphql'
 import { RoomCardStatus } from '@/types/gql/graphql'
 
-import { SelectLocationTree } from './components/SelectLocation.combo'
+import { SelectLocationTree } from '../shared/form/location/SelectLocation.combo'
 import { makeRoomCardsCreateData, useRoomCardCreate } from './hooks/useRoomCardCreate'
 import { RoomCardComponent } from './RoomCard.comp'
 import { useRoomCardStore } from './store/useRoomCardStore'
@@ -35,7 +35,7 @@ export const RoomCardNewContainer = () => {
   const router = useRouter()
   const { watch, handleSubmit } = formMethods
   const { createRoomCard } = useRoomCardCreate()
-  const contactPersonsHall = useWatch({ control: formMethods.control, name: 'contactPersonsHall' })
+  const contactPersonsHall = watch('contactPersonsHall')
   const status = watch('status')
   const teams = watch('teams')
   const contactPersonsDept = watch('contactPersonsDept')
@@ -101,7 +101,7 @@ export const RoomCardNewContainer = () => {
     >
       <Fragment>
         <h1 className="text-2xl font-semibold">New room card</h1>
-        <SelectLocationTree locationField={fields.location} />
+        <SelectLocationTree className="w-72" locationField={fields.location} />
         <Listbox {...fields.status} className="w-72" customOptions={statuses} />
       </Fragment>
     </RoomCardComponent>

@@ -16,7 +16,7 @@ const GET_CATEGORIES = gql`
 
 export const useCategoryList = () => {
   const router = useRouter()
-  const { uid } = router.query as { uid?: string }
+  const { uid } = router.query
   const { data, loading, error, refetch, previousData } = useQuery<Query>(GET_CATEGORIES, {
     variables: { parentCategory: uid ? { uid } : null }
   })

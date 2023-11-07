@@ -9,15 +9,24 @@ interface HeadingProps {
   className?: string
 
   textColor?: string
+  titleNode?: React.ReactNode
 }
 
-export const Heading = ({ text, children, customText, className, textColor = 'text-gray-900' }: HeadingProps) => (
-  <div className={classNames('mb-4 border-b border-gray-200 bg-white px-2 py-2 sm:px-3', className)}>
+export const Heading = ({
+  text,
+  children,
+  customText,
+  className,
+  textColor = 'text-gray-900',
+  titleNode
+}: HeadingProps) => (
+  <div className={classNames('mb-4 border-b border-gray-200 px-2 py-2 sm:px-3', className)}>
     <div className="-ml-2 -mt-1 flex flex-wrap h-12 items-center justify-between sm:flex-nowrap">
-      <div className="ml-2 mt-1">
+      <div className="ml-2 mt-1 flex items-center w-full">
         <h3 className={classNames('text-lg font-medium', textColor)}>
           {customText ? customText : <FormattedMessage id={text} />}
         </h3>
+        {titleNode}
       </div>
       {children && <div className="ml-2 mt-1 flex-shrink-0">{children}</div>}
     </div>

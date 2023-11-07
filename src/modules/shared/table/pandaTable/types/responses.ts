@@ -8,16 +8,7 @@ export type TableResponse<T> = {
 }
 
 export type ColumnDef<T> = {
-  header: string
   accessorKey: keyof T
-  type: 'string' | 'date' | 'boolean' | 'number'
-  enableColumnFilter: boolean
-  enableSorting: boolean
-} & {
-  header: string
-  accessorKey: keyof T
-  type: 'listOfValues'
-  enableColumnFilter: boolean
-  enableSorting: boolean
-  codebookCode: CODEBOOK
+  type: 'string' | 'date' | 'boolean' | 'number' | 'autoComplete' | 'listOfValues'
+  codebookCode?: CODEBOOK
 }

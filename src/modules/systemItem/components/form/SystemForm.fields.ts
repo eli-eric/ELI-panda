@@ -65,7 +65,7 @@ const useSystemEditFormFields = () => {
       label: form.systemCode.label,
       placeholder: form.systemCode.placeholder,
       rounded: 'rounded-md',
-      disabled: disabledEdit
+      disabled: true
     },
     systemAlias: {
       name: 'systemAlias',
@@ -74,11 +74,35 @@ const useSystemEditFormFields = () => {
       rounded: 'rounded-md',
       disabled: disabledEdit
     },
+    systemLevel: {
+      name: 'systemLevel',
+      label: form.systemLevel.label,
+      rounded: 'rounded-md',
+      disabled: disabledEdit
+    },
+    parentSystem: {
+      name: 'parentSystem',
+      label: form.parentSystem.label,
+      rounded: 'rounded-md',
+      disabled: true
+    },
     itemUsage: {
       name: 'physicalItem.itemUsage',
       label: form.physicalItem.itemUsage.label,
       codebook: CODEBOOK.ITEM_USAGE,
       disabled: disabledEdit
+    },
+    // TODO: add itemConditionStatus
+    itemConditionStatus: {
+      name: 'physicalItem.conditionStatus',
+      label: form.physicalItem.conditionStatus.label,
+      codebook: CODEBOOK.ITEM_CONDITION_STATUS,
+      disabled: disabledEdit
+    },
+    procurementStatus: {
+      name: 'physicalItem.procurementStatus',
+      label: form.physicalItem.procurementStatus.label,
+      disabled: true
     },
     price: {
       name: 'physicalItem.price',
@@ -96,6 +120,12 @@ const useSystemEditFormFields = () => {
       rounded: 'rounded-md',
       disabled: true
     },
+    itemNotes: {
+      name: 'physicalItem.notes',
+      label: form.physicalItem.notes.label,
+      rounded: 'rounded-md',
+      disabled: disabledEdit
+    },
     serialNumber: {
       name: 'physicalItem.serialNumber',
       label: form.physicalItem.serialNumber.label,
@@ -106,7 +136,7 @@ const useSystemEditFormFields = () => {
       name: 'physicalItem.catalogueItem.catalogueNumber',
       label: catalogueForm.catalogueNumber.label,
       rounded: 'rounded-md',
-      disabled: catalogueEdit
+      disabled: true
     },
     catalogueName: {
       name: 'physicalItem.catalogueItem.name',
@@ -120,16 +150,11 @@ const useSystemEditFormFields = () => {
       label: catalogueForm.description.label,
       disabled: catalogueEdit
     },
-    catalogueCategory: {
-      name: 'physicalItem.catalogueItem.category',
-      label: catalogueForm.category.label,
-      disabled: catalogueEdit,
-      codebook: CODEBOOK.CATALOGUE_CATEGORY
-    },
+
     catalogueSupplier: {
       name: 'physicalItem.catalogueItem.supplier',
       label: catalogueForm.manufacturer.label,
-      disabled: catalogueEdit,
+      disabled: true,
       codebook: CODEBOOK.SUPPLIER
     }
   })

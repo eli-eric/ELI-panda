@@ -115,6 +115,8 @@ export const messages = {
         systemType: { label: 'System Type' }, // system types codebook - SYSTEM_TYPE
         systemCode: { label: 'System Code', placeholder: 'System Code' },
         systemAlias: { label: 'System Alias', placeholder: 'System Alias' },
+        systemLevel: { label: 'System Level' }, // system levels codebook - SYSTEM_LEVEL
+        parentSystem: { label: 'Parent System or technology unit', placeholder: 'Parent System or technology unit' }, // codebook of systems{uid, name},  - SYSTEM
         location: { label: 'Location', placeholder: 'Type here...' }, // locations codebook - LOCATION
         owner: { label: 'Owner', placeholder: 'Type here...' }, // codebook of users{uid, name},  - USER
         responsiblePerson: { label: 'Responsible Person', placeholder: 'Responsible Person' },
@@ -127,7 +129,16 @@ export const messages = {
           itemUsage: { label: 'Item Usage' }, // codebook of item usage - ITEM_USAGE
           serialNumber: { label: 'Serial Number', placeholder: 'Serial Number' },
           eun: { label: 'Eun', placeholder: 'Eun' },
-          price: { label: 'Price', placeholder: 'Price' }
+          price: { label: 'Price', placeholder: 'Price' },
+          procurementStatus: { label: 'Procurement Status', placeholder: 'Procurement Status' }, // codebook of procurement status - PROCUREMENT_STATUS
+          conditionStatus: { label: 'Condition Status', placeholder: 'Condition Status' }, // codebook of condition status - ITEM_CONDITION_STATUS
+          notes: { label: 'Item notes' },
+          general: {
+            properties: {
+              property: '<p><strong><small>{name}</small></strong>: <small>{value} {unit}</small></p>',
+              title: '<label>{title}:</label>'
+            }
+          }
         }
       },
       deleteModal: {

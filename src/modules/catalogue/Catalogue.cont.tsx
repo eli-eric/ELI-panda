@@ -1,4 +1,4 @@
-import { Fragment, memo, useState } from 'react'
+import { Fragment, useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
@@ -11,7 +11,6 @@ import { CategoryListContainer } from './components/categoryList/CategoryList.co
 import { SearchBarButtons } from './components/SearchBarButtons'
 import { useCatalogueItems } from './hooks/useCatalogueItems'
 import { useCategoryList } from './hooks/useCategoryList'
-const MeoizedCatalogueTable = memo(CatalogueTable)
 
 interface Props {
   uid?: string
@@ -33,7 +32,7 @@ const CatalogueContainer = ({ uid: categoryUID }: Props) => {
         }}
       />
       <TableLayoutContainer deps={[open, catalogueItems, catalogueCategories]} className={'border-t border-gray-300'}>
-        <MeoizedCatalogueTable
+        <CatalogueTable
           tableId={tableId}
           catalogueItems={catalogueItems}
           loading={loading}

@@ -51,7 +51,7 @@ export const NameCell = ({
     method: 'delete',
     onSuccess: () => {
       setOpenDeleteWarn(false)
-      catalogueItems && mutate({ ...catalogueItems, data: catalogueItems?.data.filter(item => item.uid !== uid) })
+      catalogueItems && mutate({ ...catalogueItems, data: catalogueItems?.data?.filter(item => item.uid !== uid) })
     },
     onError: e => {
       if (e?.response?.status === 409) {

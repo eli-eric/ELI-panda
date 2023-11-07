@@ -36,16 +36,16 @@ export const SystemMovingForm = ({ parentPath }: SystemMovingFormProps) => {
       </Col>
 
       <Col sm={3} md={4} lg={8}>
-        <Listbox {...fields.importance} useFirstRender={false} />
+        <Listbox {...fields.importance} />
       </Col>
       <Col sm={3} md={6}>
         <Combobox {...fields.location} />
       </Col>
       <Col sm={3} md={6}>
-        <Listbox {...fields.zone} useFirstRender={false} />
+        <Listbox {...fields.zone} />
       </Col>
       <Col sm={3} md={6}>
-        <Listbox {...fields.systemType} useFirstRender={false} />
+        <Listbox {...fields.systemType} />
       </Col>
       <Col sm={3}>
         {/* @TODO: system code should be disabled? */}

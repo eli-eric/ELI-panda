@@ -20,7 +20,6 @@ type ComboboxPropsT = FieldProps &
     showAddButton?: boolean
     filter?: CodebookFilter[]
     customLabel?: string
-    useFirstRender?: boolean
   }
 
 export const ComboboxTree = ({

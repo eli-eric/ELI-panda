@@ -23,6 +23,7 @@ export default function useQueryManager(tableId: string): { query: Query } {
   const orderStatusUID = instances[tableId]?.filter?.orderStatus?.uid || ''
   const procurementResponsibleUID = instances[tableId]?.filter?.procurementResponsible?.uid || ''
   const requestorUID = instances[tableId]?.filter?.requestor?.uid || ''
+  const columnFilter = useMemo(() => JSON.stringify(instances[tableId]?.columnFilter || []), [instances, tableId])
   const custom = useMemo(() => instances[tableId]?.custom || {}, [instances, tableId])
 
   const filter = useMemo(() => {
@@ -42,5 +43,5 @@ export default function useQueryManager(tableId: string): { query: Query } {
     return filter
   }, [supplierUID, orderStatusUID, procurementResponsibleUID, requestorUID])
 
-  return { query: { pagination, search, sorting, ...filter, ...custom } }
+  return { query: { pagination, search, columnFilter, sorting, ...filter, ...custom } }
 }

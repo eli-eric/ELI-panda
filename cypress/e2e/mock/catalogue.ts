@@ -7,8 +7,10 @@ const itemsData: CatalogueItem[] = [
     catalogueNumber: 'CKF00040',
     description:
       'Dry multi-stage Roots technology, SD versions, ACP pumps with a pumping speed of max. 15 m3/h, No particle contamination, thanks to frictionless design: no wearing parts in the pumped gases path, No hydrocarbon vapors backstreaming: ACP series pumps are free of lubricant inside the pumping module, Constant performances (Pumping speed, max. and ultimate pressure), High reliability: thanks to our expertise of dry multi-stage Roots pumps since 1988, Low maintenance costs: no annual field service, complete overhaul only every 20000 hours for ACP 15, Condensable vapor ability: with gas ballast ports and drainable silencer',
-    categoryUID: 'vacuum-technology/pumps/dry-vacuum-pumps',
-    categoryName: 'Dry vacuum pumps',
+    category: {
+      uid: 'sdsad',
+      name: 'sdsad'
+    },
     manufacturerUrl:
       'https://www.pfeiffer-vacuum.com/en/products/vacuum-generation/multi-stage-roots-pumps/light-duty-applications/air-cooled/low-noise-acp-kits/32098/low-noise-kit-acp-15',
     details: [
@@ -133,8 +135,7 @@ const itemsData: CatalogueItem[] = [
     catalogueNumber: 'P2WW300001102',
     description:
       'The Alcatel Adixen ADP ADS Series Two Dry Pumps were designed to minimize potential residue deposits. This process is achieved by internal gas limitation, diluting the gas on each pump stage with N2, and adjusting the temperature in order to control gas condensation., P versions for light/medium applications, The Alcatel Adixen ADP ADS Series Two Dry Pumps offer M4 Monitoring, which consists of an electrical cabinet, hand held remote control, and an electronic cabinet. The ADP ADS Series Two Dry Pumps M4 Monitoring can be interfaced with the main production equipment., Clean: oil-free, dry pump providing no risk of contamination., Quiet: all models include an integrated silencer., Low power consumption., Nitrogen Purge levels can be easily controlled by the user.',
-    categoryUID: 'vacuum-technology/pumps/dry-vacuum-pumps',
-    categoryName: 'Dry vacuum pumps',
+    category: { name: 'vacuum-technology/pumps/dry-vacuum-pumps', uid: 'Dry vacuum pumps' },
     manufacturerUrl: 'https://www.ajvs.com/new/product_info.php?products_id=7511',
     details: [
       {
@@ -258,8 +259,7 @@ const itemsData: CatalogueItem[] = [
     catalogueNumber: 'CKF00042',
     description:
       'Dry multi-stage Roots technology, SD versions, ACP pumps with a pumping speed of max. 27 m3/h, No particle contamination, thanks to frictionless design: no wearing parts in the pumped gases path, No hydrocarbon vapors backstreaming: ACP series pumps are free of lubricant inside the pumping module, Constant performances (Pumping speed, max. and ultimate pressure), High reliability: thanks to our expertise of dry multi-stage Roots pumps since 1988, Low maintenance costs: no annual field service, complete overhaul only every 20000 hours for ACP 15, Condensable vapor ability: with gas ballast ports and drainable silencer',
-    categoryUID: 'vacuum-technology/pumps/dry-vacuum-pumps',
-    categoryName: 'Dry vacuum pumps',
+    category: { uid: 'vacuum-technology/pumps/dry-vacuum-pumps', name: 'Dry vacuum pumps' },
     manufacturerUrl:
       'https://www.pfeiffer-vacuum.com/en/products/vacuum-generation/multi-stage-roots-pumps/light-duty-applications/air-cooled/low-noise-acp-kits/32099/low-noise-kit-acp-28',
     details: [
@@ -384,8 +384,10 @@ const itemsData: CatalogueItem[] = [
     catalogueNumber: 'CKF00043',
     description:
       'Dry multi-stage Roots technology, SD versions, ACP pumps with a Pumping speed of max. 40 m3/h, No particle contamination, thanks to frictionless design: no wearing parts in the pumped gases path, No hydrocarbon vapors backstreaming: ACP series pumps are free of lubricant inside the pumping module, Constant performances (Pumping speed, max. and ultimate pressure), High reliability : thanks to our expertise of dry multi-stage Roots pumps since 1988, Low maintenance costs: no annual field service, complete overhaul only every 22000 hours for ACP 28/40, Condensable vapor ability: with gas ballast ports and drainable silencer. ACP series pumps can handle up to 100 g/h of pure water vapor',
-    categoryUID: 'vacuum-technology/pumps/dry-vacuum-pumps',
-    categoryName: 'Dry vacuum pumps',
+    category: {
+      uid: 'vacuum-technology/pumps/dry-vacuum-pumps',
+      name: 'Dry vacuum pumps'
+    },
     manufacturerUrl:
       'https://www.pfeiffer-vacuum.com/en/products/vacuum-generation/multi-stage-roots-pumps/light-duty-applications/air-cooled/sd-versions/12287/acp-40-standard-single-phase-manual-gas-ballast',
     details: [
@@ -510,8 +512,7 @@ const itemsData: CatalogueItem[] = [
     catalogueNumber: '161040V22',
     description:
       'The ECODRY plus is a family of dry-compression multi-stage Roots vacuum pumps, which sets new standards in noise reduction. The pumps have been specially designed for use in quiet and clean environments, such as analysis and research laboratories. ECODRY plus provide clean vacuum at maximum pumping speeds of 40 and 55 m��/h while creating low noise levels. They deliver stable vacuum performance for many years without maintenance., The pumps are based on the multi-stage Roots pumping principle with two contactless rotating rotors turning in opposite direction. Through their rotation the gas is moved from the inlet to the exhaust. By the effect of multiple pumping stages the gas is compressed from medium vacuum range to ambient pressure., The products are standing out due to the following features:, Quiet ��� With the integrated acoustic insulation and silencer the noise level of these pumps is lower than 52 dB(A) - quieter than a normal conversation., Clean ��� With an oil-free suction chamber and wear-free operation, neither oil vapors nor particles are contaminating the vacuum chamber or the environment., Maintenance-free ��� Changing oil or seals is not required - the pumps deliver stable vacuum performance for many years without maintenance., Easy to use ��� The pumps are compact, powered by regular single-phase sockets, air-cooled and easy to reposition by integrated wheels.',
-    categoryUID: 'vacuum-technology/pumps/dry-vacuum-pumps',
-    categoryName: 'Dry vacuum pumps',
+    category: { uid: 'vacuum-technology/pumps/dry-vacuum-pumps', name: 'Dry vacuum pumps' },
     manufacturerUrl:
       'https://www.leyboldproducts.de/en/products/dry-compressing-vacuum-pumps/ecodry-plus/pumps/2678/ecodry-40-plus',
     details: [
@@ -636,8 +637,7 @@ const itemsData: CatalogueItem[] = [
     catalogueNumber: '161065V22',
     description:
       'The ECODRY plus is a family of dry-compression multi-stage Roots vacuum pumps, which sets new standards in noise reduction. The pumps have been specially designed for use in quiet and clean environments, such as analysis and research laboratories. ECODRY plus provide clean vacuum at maximum pumping speeds of 40 and 55 m��/h while creating low noise levels. They deliver stable vacuum performance for many years without maintenance., The pumps are based on the multi-stage Roots pumping principle with two contactless rotating rotors turning in opposite direction. Through their rotation the gas is moved from the inlet to the exhaust. By the effect of multiple pumping stages the gas is compressed from medium vacuum range to ambient pressure., The products are standing out due to the following features:, Quiet ��� With the integrated acoustic insulation and silencer the noise level of these pumps is lower than 52 dB(A) - quieter than a normal conversation., Clean ��� With an oil-free suction chamber and wear-free operation, neither oil vapors nor particles are contaminating the vacuum chamber or the environment., Maintenance-free ��� Changing oil or seals is not required - the pumps deliver stable vacuum performance for many years without maintenance., Easy to use ��� The pumps are compact, powered by regular single-phase sockets, air-cooled and easy to reposition by integrated wheels.',
-    categoryUID: 'vacuum-technology/pumps/dry-vacuum-pumps',
-    categoryName: 'Dry vacuum pumps',
+    category: { uid: 'vacuum-technology/pumps/dry-vacuum-pumps', name: 'Dry vacuum pumps' },
     manufacturerUrl:
       'https://www.leyboldproducts.de/en/products/dry-compressing-vacuum-pumps/ecodry-plus/pumps/2679/ecodry-65-plus?c=15258',
     details: [
@@ -762,8 +762,10 @@ const itemsData: CatalogueItem[] = [
     catalogueNumber: 'GS510005',
     description:
       'Designed for high reliability, Adaptable to a wide range of applications, Long service interval and easy swap-out, Low cost of ownership, Minimum workplace and environmental impact, Simple to install and operate, Ideal for integration into larger systems',
-    categoryUID: 'vacuum-technology/pumps/dry-vacuum-pumps',
-    categoryName: 'Dry vacuum pumps',
+    category: {
+      uid: 'vacuum-technology/pumps/dry-vacuum-pumps',
+      name: 'Dry vacuum pumps'
+    },
     manufacturerUrl: 'https://shop.edwardsvacuum.com/products/gs510005/view.aspx',
     details: [
       {
@@ -887,8 +889,10 @@ const itemsData: CatalogueItem[] = [
     catalogueNumber: 'GS710002',
     description:
       'Designed for high reliability, Adaptable to a wide range of applications, Long service interval and easy swap-out, Low cost of ownership, Minimum workplace and environmental impact, Simple to install and operate, Ideal for integration into larger systems',
-    categoryUID: 'vacuum-technology/pumps/dry-vacuum-pumps',
-    categoryName: 'Dry vacuum pumps',
+    category: {
+      uid: 'vacuum-technology/pumps/dry-vacuum-pumps',
+      name: 'Dry vacuum pumps'
+    },
     manufacturerUrl: 'https://shop.edwardsvacuum.com/Products/View.aspx?sku=GS710002',
     details: [
       {
@@ -1012,8 +1016,10 @@ const itemsData: CatalogueItem[] = [
     catalogueNumber: 'GSF150000000',
     description:
       'Designed for high reliability, Adaptable to a wide range of applications, Long service interval and easy swap-out, Low cost of ownership, Minimum workplace and environmental impact, Simple to install and operate, Ideal for integration into larger systems',
-    categoryUID: 'vacuum-technology/pumps/dry-vacuum-pumps',
-    categoryName: 'Dry vacuum pumps',
+    category: {
+      uid: 'vacuum-technology/pumps/dry-vacuum-pumps',
+      name: 'Dry vacuum pumps'
+    },
     manufacturerUrl: 'https://shop.edwardsvacuum.com/Products/View.aspx?sku=GSF150000000',
     details: [
       {
@@ -1137,8 +1143,10 @@ const itemsData: CatalogueItem[] = [
     catalogueNumber: 'GSP150000000',
     description:
       'Designed for high reliability, Adaptable to a wide range of applications, Long service interval and easy swap-out, Low cost of ownership, Minimum workplace and environmental impact, Simple to install and operate, Ideal for integration into larger systems',
-    categoryUID: 'vacuum-technology/pumps/dry-vacuum-pumps',
-    categoryName: 'Dry vacuum pumps',
+    category: {
+      uid: 'vacuum-technology/pumps/dry-vacuum-pumps',
+      name: 'Dry vacuum pumps'
+    },
     manufacturerUrl: 'https://shop.edwardsvacuum.com/Products/View.aspx?sku=GSP150000000',
     details: [
       {
@@ -1262,8 +1270,10 @@ const itemsData: CatalogueItem[] = [
     catalogueNumber: 'A73601983',
     description:
       'Bearing shield ensures separation between process gases and bearing lubrication to ensure clean vacuum and no possibility of contamination to lubrication from process gases, which prolongs bearing life., �� Advanced scroll-form and tip-seal technologies - deliver best���in-class vacuum performance and unrivalled ultimate vacuum levels. , �� Unique tip seal design - significantly reduces wear to minimise maintenance and extend service life. , �� Quiet operation - with typical noise during operation \u003c 52 dB(A) for minimal environmental impact. , �� Advanced interface - providing a variety of traditional and analogue and digital control methods enabling remote control/monitoring via RS232 or RS485. , �� Integrated smart drive - with auto sensing input delivers optimised pumping performance globally. , �� Pump range - includes 6, 10, 15 and 20 m3h-1',
-    categoryUID: 'vacuum-technology/pumps/dry-vacuum-pumps',
-    categoryName: 'Dry vacuum pumps',
+    category: {
+      uid: 'vacuum-technology/pumps/dry-vacuum-pumps',
+      name: 'Dry vacuum pumps'
+    },
     manufacturerUrl: 'https://shop.edwardsvacuum.com/products/A73601983/view.aspx',
     details: [
       {
@@ -1387,8 +1397,10 @@ const itemsData: CatalogueItem[] = [
     catalogueNumber: 'A73801983',
     description:
       'Lubricant-free within the vacuum envelope and hermetically sealed means totally clean and dry vacuum to prevent cross contamination, No atmosphere to vacuum shaft seals means bearings are completely isolated, which prevents process attack and means the bearings run cooler and last longer, Simple single sided scroll arrangement combined with an innovative motor and bearing design allows for easy field service with a minimum of special tooling for low cost of ownership and maximum up-time, Improved motor and drive efficiencies for reduced power and cost of ownership, Advanced interface provides a variety of traditional, analogue and digital control methods enabling remote control/monitoring via USB, RS232 or RS485',
-    categoryUID: 'vacuum-technology/pumps/dry-vacuum-pumps',
-    categoryName: 'Dry vacuum pumps',
+    category: {
+      uid: 'vacuum-technology/pumps/dry-vacuum-pumps',
+      name: 'Dry vacuum pumps'
+    },
     manufacturerUrl: 'https://shop.edwardsvacuum.com/products/A73801983/view.aspx',
     details: [
       {

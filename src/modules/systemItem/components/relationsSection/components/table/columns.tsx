@@ -25,8 +25,8 @@ export const useRelationsColumns = ({ systemName }: Props) => {
         accessorKey: 'direction',
         cell: ({ getValue }) => (
           <div className="flex justify-center">
-            {getValue() === 'to' && <ArrowLongLeftIcon className="w-10 h-10" />}
-            {getValue() === 'from' && <ArrowLongRightIcon className="w-10 h-10" />}
+            {getValue() === 'to' && <ArrowLongLeftIcon className="w-7" />}
+            {getValue() === 'from' && <ArrowLongRightIcon className="w-7" />}
           </div>
         )
       },

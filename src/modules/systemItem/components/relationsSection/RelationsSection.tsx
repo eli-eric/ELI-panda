@@ -1,6 +1,7 @@
 import { memo, useState } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
+import { Heading } from '@/components/layout/Heading'
 import ModalComponent from '@/components/modal/modal.comp'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 
@@ -18,20 +19,21 @@ const RelationsSection = ({ systemName }: { systemName?: string }) => {
 
   return (
     <div>
-      <PlusButton
-        className="mb-2"
-        primary
-        buttonSize="large"
-        onClick={() => {
-          setOpenAddRelation(true)
-        }}
-      />
+      <Heading customText="Relations">
+        <PlusButton
+          primary
+          buttonSize="large"
+          onClick={() => {
+            setOpenAddRelation(true)
+          }}
+        />
+      </Heading>
       {relations && systemName && (
         <MemoizedTable
           data={relations}
           columns={columns}
           tableId={'relations'}
-          className={'relative overflow-x-auto'}
+          className={'relative overflow-x-auto mb-0 pb-0'}
         />
       )}
       <ModalComponent open={openAddRelation} setOpen={setOpenAddRelation} buttons={{ noButtons: true }}>
