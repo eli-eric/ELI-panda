@@ -19,9 +19,9 @@ interface SystemFormComponentProps {
 
 export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
   const fields = useSystemFormFields()
-  const { setNewMaintenedBy, setDisconnectMaintenedBy, setNewOperator, setDisconnectOperator } = useSystemItemStore()
+  const { setNewMaintainedBy, setDisconnectMaintainedBy, setNewOperator, setDisconnectOperator } = useSystemItemStore()
   const { control } = useFormContext()
-  const maintenedBy = useWatch({ control, name: 'maintenedBy' })
+  const MaintainedBy = useWatch({ control, name: 'MaintainedBy' })
   const operators = useWatch({ control, name: 'operators' })
 
   const systemLevels = Object.values(SystemLevel).map(level => level)
@@ -41,7 +41,11 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
               <Listbox {...fields.systemType} />
             </Col>
             <Col sm={3} md={6} lg={4}>
-              <Listbox {...fields.systemLevel} customOptions={systemLevels} />
+              <Listbox
+                {...fields.systemLevel}
+                customOptions={systemLevels}
+                defaultValue={SystemLevel.SubsystemsAndParts}
+              />
             </Col>
             <Col sm={3} md={6} lg={8}>
               <SelectLocationTree locationField={fields.location} />
@@ -78,12 +82,12 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
           </Col>
           <Col sm={3} md={6}>
             <EmployeeTable
-              name="maintenedBy"
+              name="maintainedBy"
               tableId="systemMainteners"
-              data={maintenedBy}
-              header={'Maintened By'}
-              setNewEmployee={setNewMaintenedBy}
-              setDisconnectEmployee={setDisconnectMaintenedBy}
+              data={MaintainedBy}
+              header={'Maintained By'}
+              setNewEmployee={setNewMaintainedBy}
+              setDisconnectEmployee={setDisconnectMaintainedBy}
             />
           </Col>
         </Grid>

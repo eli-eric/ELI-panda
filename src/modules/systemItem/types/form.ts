@@ -19,5 +19,5 @@ export type SystemDetailFormType = {
   physicalItem?: PhysicalItem
   hasImageGalleryChanges?: boolean
   operators?: Employee[]
-  maintenedBy?: Employee[]
+  maintainedBy?: Employee[]
 }

@@ -10247,9 +10247,9 @@ export type System = {
   location?: Maybe<Location>;
   locationAggregate?: Maybe<SystemLocationLocationAggregationSelection>;
   locationConnection: SystemLocationConnection;
-  maintenedBy: Array<Employee>;
-  maintenedByAggregate?: Maybe<SystemEmployeeMaintenedByAggregationSelection>;
-  maintenedByConnection: SystemMaintenedByConnection;
+  maintainedBy: Array<Employee>;
+  maintainedByAggregate?: Maybe<SystemEmployeeMaintainedByAggregationSelection>;
+  maintainedByConnection: SystemMaintainedByConnection;
   name: Scalars['String']['output'];
   operators: Array<Employee>;
   operatorsAggregate?: Maybe<SystemEmployeeOperatorsAggregationSelection>;
@@ -10327,25 +10327,25 @@ export type SystemLocationConnectionArgs = {
 };
 
 
-export type SystemMaintenedByArgs = {
+export type SystemMaintainedByArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   options?: InputMaybe<EmployeeOptions>;
   where?: InputMaybe<EmployeeWhere>;
 };
 
 
-export type SystemMaintenedByAggregateArgs = {
+export type SystemMaintainedByAggregateArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   where?: InputMaybe<EmployeeWhere>;
 };
 
 
-export type SystemMaintenedByConnectionArgs = {
+export type SystemMaintainedByConnectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<SystemMaintenedByConnectionSort>>;
-  where?: InputMaybe<SystemMaintenedByConnectionWhere>;
+  sort?: InputMaybe<Array<SystemMaintainedByConnectionSort>>;
+  where?: InputMaybe<SystemMaintainedByConnectionWhere>;
 };
 
 
@@ -10537,7 +10537,7 @@ export type SystemAggregateSelection = {
 export type SystemConnectInput = {
   facility?: InputMaybe<SystemFacilityConnectFieldInput>;
   location?: InputMaybe<SystemLocationConnectFieldInput>;
-  maintenedBy?: InputMaybe<Array<SystemMaintenedByConnectFieldInput>>;
+  maintainedBy?: InputMaybe<Array<SystemMaintainedByConnectFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsConnectFieldInput>>;
   owner?: InputMaybe<SystemOwnerConnectFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemConnectFieldInput>;
@@ -10550,7 +10550,7 @@ export type SystemConnectInput = {
 
 export type SystemConnectOrCreateInput = {
   location?: InputMaybe<SystemLocationConnectOrCreateFieldInput>;
-  maintenedBy?: InputMaybe<Array<SystemMaintenedByConnectOrCreateFieldInput>>;
+  maintainedBy?: InputMaybe<Array<SystemMaintainedByConnectOrCreateFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsConnectOrCreateFieldInput>>;
   owner?: InputMaybe<SystemOwnerConnectOrCreateFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemConnectOrCreateFieldInput>;
@@ -10575,7 +10575,7 @@ export type SystemCreateInput = {
   facility?: InputMaybe<SystemFacilityFieldInput>;
   isTechnologicalUnit?: InputMaybe<Scalars['Boolean']['input']>;
   location?: InputMaybe<SystemLocationFieldInput>;
-  maintenedBy?: InputMaybe<SystemMaintenedByFieldInput>;
+  maintainedBy?: InputMaybe<SystemMaintainedByFieldInput>;
   name: Scalars['String']['input'];
   operators?: InputMaybe<SystemOperatorsFieldInput>;
   owner?: InputMaybe<SystemOwnerFieldInput>;
@@ -10666,7 +10666,7 @@ export type SystemCriticalityWhere = {
 export type SystemDeleteInput = {
   facility?: InputMaybe<SystemFacilityDeleteFieldInput>;
   location?: InputMaybe<SystemLocationDeleteFieldInput>;
-  maintenedBy?: InputMaybe<Array<SystemMaintenedByDeleteFieldInput>>;
+  maintainedBy?: InputMaybe<Array<SystemMaintainedByDeleteFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsDeleteFieldInput>>;
   owner?: InputMaybe<SystemOwnerDeleteFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemDeleteFieldInput>;
@@ -10680,7 +10680,7 @@ export type SystemDeleteInput = {
 export type SystemDisconnectInput = {
   facility?: InputMaybe<SystemFacilityDisconnectFieldInput>;
   location?: InputMaybe<SystemLocationDisconnectFieldInput>;
-  maintenedBy?: InputMaybe<Array<SystemMaintenedByDisconnectFieldInput>>;
+  maintainedBy?: InputMaybe<Array<SystemMaintainedByDisconnectFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsDisconnectFieldInput>>;
   owner?: InputMaybe<SystemOwnerDisconnectFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemDisconnectFieldInput>;
@@ -10697,14 +10697,14 @@ export type SystemEdge = {
   node: System;
 };
 
-export type SystemEmployeeMaintenedByAggregationSelection = {
-  __typename?: 'SystemEmployeeMaintenedByAggregationSelection';
+export type SystemEmployeeMaintainedByAggregationSelection = {
+  __typename?: 'SystemEmployeeMaintainedByAggregationSelection';
   count: Scalars['Int']['output'];
-  node?: Maybe<SystemEmployeeMaintenedByNodeAggregateSelection>;
+  node?: Maybe<SystemEmployeeMaintainedByNodeAggregateSelection>;
 };
 
-export type SystemEmployeeMaintenedByNodeAggregateSelection = {
-  __typename?: 'SystemEmployeeMaintenedByNodeAggregateSelection';
+export type SystemEmployeeMaintainedByNodeAggregateSelection = {
+  __typename?: 'SystemEmployeeMaintainedByNodeAggregateSelection';
   email: StringAggregateSelectionNullable;
   firstName: StringAggregateSelectionNonNullable;
   fullName: StringAggregateSelectionNullable;
@@ -11145,73 +11145,73 @@ export type SystemLocationUpdateFieldInput = {
   where?: InputMaybe<SystemLocationConnectionWhere>;
 };
 
-export type SystemMaintenedByAggregateInput = {
-  AND?: InputMaybe<Array<SystemMaintenedByAggregateInput>>;
-  NOT?: InputMaybe<SystemMaintenedByAggregateInput>;
-  OR?: InputMaybe<Array<SystemMaintenedByAggregateInput>>;
+export type SystemMaintainedByAggregateInput = {
+  AND?: InputMaybe<Array<SystemMaintainedByAggregateInput>>;
+  NOT?: InputMaybe<SystemMaintainedByAggregateInput>;
+  OR?: InputMaybe<Array<SystemMaintainedByAggregateInput>>;
   count?: InputMaybe<Scalars['Int']['input']>;
   count_GT?: InputMaybe<Scalars['Int']['input']>;
   count_GTE?: InputMaybe<Scalars['Int']['input']>;
   count_LT?: InputMaybe<Scalars['Int']['input']>;
   count_LTE?: InputMaybe<Scalars['Int']['input']>;
-  node?: InputMaybe<SystemMaintenedByNodeAggregationWhereInput>;
+  node?: InputMaybe<SystemMaintainedByNodeAggregationWhereInput>;
 };
 
-export type SystemMaintenedByConnectFieldInput = {
+export type SystemMaintainedByConnectFieldInput = {
   /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<EmployeeConnectWhere>;
 };
 
-export type SystemMaintenedByConnectOrCreateFieldInput = {
-  onCreate: SystemMaintenedByConnectOrCreateFieldInputOnCreate;
+export type SystemMaintainedByConnectOrCreateFieldInput = {
+  onCreate: SystemMaintainedByConnectOrCreateFieldInputOnCreate;
   where: EmployeeConnectOrCreateWhere;
 };
 
-export type SystemMaintenedByConnectOrCreateFieldInputOnCreate = {
+export type SystemMaintainedByConnectOrCreateFieldInputOnCreate = {
   node: EmployeeOnCreateInput;
 };
 
-export type SystemMaintenedByConnection = {
-  __typename?: 'SystemMaintenedByConnection';
-  edges: Array<SystemMaintenedByRelationship>;
+export type SystemMaintainedByConnection = {
+  __typename?: 'SystemMaintainedByConnection';
+  edges: Array<SystemMaintainedByRelationship>;
   pageInfo: PageInfo;
   totalCount: Scalars['Int']['output'];
 };
 
-export type SystemMaintenedByConnectionSort = {
+export type SystemMaintainedByConnectionSort = {
   node?: InputMaybe<EmployeeSort>;
 };
 
-export type SystemMaintenedByConnectionWhere = {
-  AND?: InputMaybe<Array<SystemMaintenedByConnectionWhere>>;
-  NOT?: InputMaybe<SystemMaintenedByConnectionWhere>;
-  OR?: InputMaybe<Array<SystemMaintenedByConnectionWhere>>;
+export type SystemMaintainedByConnectionWhere = {
+  AND?: InputMaybe<Array<SystemMaintainedByConnectionWhere>>;
+  NOT?: InputMaybe<SystemMaintainedByConnectionWhere>;
+  OR?: InputMaybe<Array<SystemMaintainedByConnectionWhere>>;
   node?: InputMaybe<EmployeeWhere>;
 };
 
-export type SystemMaintenedByCreateFieldInput = {
+export type SystemMaintainedByCreateFieldInput = {
   node: EmployeeCreateInput;
 };
 
-export type SystemMaintenedByDeleteFieldInput = {
-  where?: InputMaybe<SystemMaintenedByConnectionWhere>;
+export type SystemMaintainedByDeleteFieldInput = {
+  where?: InputMaybe<SystemMaintainedByConnectionWhere>;
 };
 
-export type SystemMaintenedByDisconnectFieldInput = {
-  where?: InputMaybe<SystemMaintenedByConnectionWhere>;
+export type SystemMaintainedByDisconnectFieldInput = {
+  where?: InputMaybe<SystemMaintainedByConnectionWhere>;
 };
 
-export type SystemMaintenedByFieldInput = {
-  connect?: InputMaybe<Array<SystemMaintenedByConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<SystemMaintenedByConnectOrCreateFieldInput>>;
-  create?: InputMaybe<Array<SystemMaintenedByCreateFieldInput>>;
+export type SystemMaintainedByFieldInput = {
+  connect?: InputMaybe<Array<SystemMaintainedByConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<SystemMaintainedByConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<SystemMaintainedByCreateFieldInput>>;
 };
 
-export type SystemMaintenedByNodeAggregationWhereInput = {
-  AND?: InputMaybe<Array<SystemMaintenedByNodeAggregationWhereInput>>;
-  NOT?: InputMaybe<SystemMaintenedByNodeAggregationWhereInput>;
-  OR?: InputMaybe<Array<SystemMaintenedByNodeAggregationWhereInput>>;
+export type SystemMaintainedByNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<SystemMaintainedByNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<SystemMaintainedByNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<SystemMaintainedByNodeAggregationWhereInput>>;
   email_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   email_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   email_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -11289,24 +11289,24 @@ export type SystemMaintenedByNodeAggregationWhereInput = {
   phoneNumber_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type SystemMaintenedByRelationship = {
-  __typename?: 'SystemMaintenedByRelationship';
+export type SystemMaintainedByRelationship = {
+  __typename?: 'SystemMaintainedByRelationship';
   cursor: Scalars['String']['output'];
   node: Employee;
 };
 
-export type SystemMaintenedByUpdateConnectionInput = {
+export type SystemMaintainedByUpdateConnectionInput = {
   node?: InputMaybe<EmployeeUpdateInput>;
 };
 
-export type SystemMaintenedByUpdateFieldInput = {
-  connect?: InputMaybe<Array<SystemMaintenedByConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<SystemMaintenedByConnectOrCreateFieldInput>>;
-  create?: InputMaybe<Array<SystemMaintenedByCreateFieldInput>>;
-  delete?: InputMaybe<Array<SystemMaintenedByDeleteFieldInput>>;
-  disconnect?: InputMaybe<Array<SystemMaintenedByDisconnectFieldInput>>;
-  update?: InputMaybe<SystemMaintenedByUpdateConnectionInput>;
-  where?: InputMaybe<SystemMaintenedByConnectionWhere>;
+export type SystemMaintainedByUpdateFieldInput = {
+  connect?: InputMaybe<Array<SystemMaintainedByConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<SystemMaintainedByConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<SystemMaintainedByCreateFieldInput>>;
+  delete?: InputMaybe<Array<SystemMaintainedByDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<SystemMaintainedByDisconnectFieldInput>>;
+  update?: InputMaybe<SystemMaintainedByUpdateConnectionInput>;
+  where?: InputMaybe<SystemMaintainedByConnectionWhere>;
 };
 
 export type SystemOnCreateInput = {
@@ -11961,7 +11961,7 @@ export type SystemPhysicalItemUpdateFieldInput = {
 export type SystemRelationInput = {
   facility?: InputMaybe<SystemFacilityCreateFieldInput>;
   location?: InputMaybe<SystemLocationCreateFieldInput>;
-  maintenedBy?: InputMaybe<Array<SystemMaintenedByCreateFieldInput>>;
+  maintainedBy?: InputMaybe<Array<SystemMaintainedByCreateFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsCreateFieldInput>>;
   owner?: InputMaybe<SystemOwnerCreateFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemCreateFieldInput>;
@@ -13246,7 +13246,7 @@ export type SystemUpdateInput = {
   facility?: InputMaybe<SystemFacilityUpdateFieldInput>;
   isTechnologicalUnit?: InputMaybe<Scalars['Boolean']['input']>;
   location?: InputMaybe<SystemLocationUpdateFieldInput>;
-  maintenedBy?: InputMaybe<Array<SystemMaintenedByUpdateFieldInput>>;
+  maintainedBy?: InputMaybe<Array<SystemMaintainedByUpdateFieldInput>>;
   name?: InputMaybe<Scalars['String']['input']>;
   operators?: InputMaybe<Array<SystemOperatorsUpdateFieldInput>>;
   owner?: InputMaybe<SystemOwnerUpdateFieldInput>;
@@ -13282,23 +13282,23 @@ export type SystemWhere = {
   locationConnection?: InputMaybe<SystemLocationConnectionWhere>;
   locationConnection_NOT?: InputMaybe<SystemLocationConnectionWhere>;
   location_NOT?: InputMaybe<LocationWhere>;
-  maintenedByAggregate?: InputMaybe<SystemMaintenedByAggregateInput>;
-  /** Return Systems where all of the related SystemMaintenedByConnections match this filter */
-  maintenedByConnection_ALL?: InputMaybe<SystemMaintenedByConnectionWhere>;
-  /** Return Systems where none of the related SystemMaintenedByConnections match this filter */
-  maintenedByConnection_NONE?: InputMaybe<SystemMaintenedByConnectionWhere>;
-  /** Return Systems where one of the related SystemMaintenedByConnections match this filter */
-  maintenedByConnection_SINGLE?: InputMaybe<SystemMaintenedByConnectionWhere>;
-  /** Return Systems where some of the related SystemMaintenedByConnections match this filter */
-  maintenedByConnection_SOME?: InputMaybe<SystemMaintenedByConnectionWhere>;
+  maintainedByAggregate?: InputMaybe<SystemMaintainedByAggregateInput>;
+  /** Return Systems where all of the related SystemMaintainedByConnections match this filter */
+  maintainedByConnection_ALL?: InputMaybe<SystemMaintainedByConnectionWhere>;
+  /** Return Systems where none of the related SystemMaintainedByConnections match this filter */
+  maintainedByConnection_NONE?: InputMaybe<SystemMaintainedByConnectionWhere>;
+  /** Return Systems where one of the related SystemMaintainedByConnections match this filter */
+  maintainedByConnection_SINGLE?: InputMaybe<SystemMaintainedByConnectionWhere>;
+  /** Return Systems where some of the related SystemMaintainedByConnections match this filter */
+  maintainedByConnection_SOME?: InputMaybe<SystemMaintainedByConnectionWhere>;
   /** Return Systems where all of the related Employees match this filter */
-  maintenedBy_ALL?: InputMaybe<EmployeeWhere>;
+  maintainedBy_ALL?: InputMaybe<EmployeeWhere>;
   /** Return Systems where none of the related Employees match this filter */
-  maintenedBy_NONE?: InputMaybe<EmployeeWhere>;
+  maintainedBy_NONE?: InputMaybe<EmployeeWhere>;
   /** Return Systems where one of the related Employees match this filter */
-  maintenedBy_SINGLE?: InputMaybe<EmployeeWhere>;
+  maintainedBy_SINGLE?: InputMaybe<EmployeeWhere>;
   /** Return Systems where some of the related Employees match this filter */
-  maintenedBy_SOME?: InputMaybe<EmployeeWhere>;
+  maintainedBy_SOME?: InputMaybe<EmployeeWhere>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;

@@ -71,7 +71,7 @@ export const typeDefs = gql`
   }
 
   type ParentPathItem {
-    uid: ID!
+    uid: ID
     name: String
   }
 
@@ -190,9 +190,20 @@ export const typeDefs = gql`
     responsible: Employee @relationship(type: "HAS_RESPONSIBLE", direction: OUT)
     owner: Employee @relationship(type: "HAS_OWNER", direction: OUT)
     operators: [Employee!]! @relationship(type: "HAS_OPERATOR", direction: OUT)
-    maintenedBy: [Employee!]! @relationship(type: "IS_MAINTENED_BY", direction: OUT)
+    maintainedBy: [Employee!]! @relationship(type: "IS_MAINTAINED_BY", direction: OUT)
     systemLevel: SystemLevel
-    parentPath: [ParentPathItem]!
+    keySystem: System
+      @cypher(
+        statement: """
+        OPTIONAL MATCH path=(this)<-[:HAS_SUBSYSTEM*]-(parent:System)
+        WHERE parent.systemLevel IN ['TECHNOLOGY_UNIT', 'KEY_SYSTEMS']
+        RETURN parent as keySystem
+        ORDER BY LENGTH(path) ASC
+        LIMIT 1
+        """
+        columnName: "keySystem"
+      )
+    parentPath: [ParentPathItem]
       @cypher(
         statement: """
         OPTIONAL MATCH (parent)-[:HAS_SUBSYSTEM*1..50]->(this)

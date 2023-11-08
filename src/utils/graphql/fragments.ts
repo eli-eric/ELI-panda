@@ -8,6 +8,10 @@ export const SYSTEM_FIELDS = gql`
     systemAlias
     systemLevel
     description
+    keySystem {
+      uid
+      name
+    }
     parentPath {
       uid
       name
@@ -16,7 +20,7 @@ export const SYSTEM_FIELDS = gql`
       uid
       name
     }
-    maintenedBy {
+    maintainedBy {
       fullName
       uid
     }
