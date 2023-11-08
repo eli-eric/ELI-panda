@@ -69,7 +69,7 @@ export const CodebooksContainer: FC = () => {
         ),
         meta: {
           filter: {
-            type: 'number',
+            type: 'string',
             codebookCode: watchCodebook?.name,
             enableColumnFilter: true
           }
@@ -126,7 +126,7 @@ export const CodebooksContainer: FC = () => {
             loading: isLoading,
             settings: {
               enableFiltering: true,
-              manualFiltering: true,
+              manualFiltering: false,
               enableSorting: true,
               manualSorting: false
             }

@@ -32,7 +32,7 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
             tableId: 'roomCard-Contact',
             columns: columnsContactHall,
             data: contactPersonsHall?.length === 0 ? undefined : contactPersonsHall,
-            className: 'border-l pb-0 sm:mb-4'
+            className: 'relative border-l pb-0 sm:mb-4 z-0'
           }}
         />
         <PandaTable
@@ -40,7 +40,7 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
             tableId: 'roomCard-Contact-dept',
             columns: columnsContactDept,
             data: contactPersonsDept?.length === 0 ? undefined : contactPersonsDept,
-            className: 'border-l pb-0 sm:mb-4'
+            className: 'relative border-l pb-0 sm:mb-4 z-0'
           }}
         />
         <PandaTable
@@ -48,7 +48,7 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
             tableId: 'roomCard-team',
             columns: columnsTeam,
             data: teams?.length === 0 ? undefined : teams,
-            className: 'border-l pb-0 sm:mb-4'
+            className: 'relative border-l pb-0 sm:mb-4 z-0'
           }}
         />
       </div>
@@ -58,7 +58,7 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
           tableId: 'roomCard-cleanRooms',
           columns: columnsCleanRooms,
           data: cleanRooms,
-          className: 'border-l pb-0'
+          className: 'relative border-l pb-0 z-0'
         }}
       />
       <Heading customText="BULDING MAINTENANCE - FM" className="mb-0" textColor="text-primary-500" />
@@ -66,7 +66,7 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
         {...{
           tableId: 'roomCard-possibleParamsHeader',
           columns: columnsPossibleParameters,
-          className: 'border-l pb-0',
+          className: 'relative border-l pb-0 z-0',
           data: possibleParameters
         }}
       />
@@ -74,7 +74,7 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
         {...{
           tableId: 'roomCard-clientRequirementsHead',
           columns: columnsClientRequirements,
-          className: 'border-l pb-0',
+          className: 'relative border-l pb-0 z-0',
           data: clientRequirements
         }}
       />

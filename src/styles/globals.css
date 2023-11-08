@@ -70,3 +70,28 @@ body::-webkit-scrollbar-thumb:hover {
   scrollbar-width: thin;
   scrollbar-color: #e5e7eb #f3f4f6; /* Thumb and Track colors */
 }
+
+.react-datepicker-popper {
+  z-index: 9999 !important;
+}
+
+.select-reset {
+  appearance: none; /* This removes the default styling of select on most browsers */
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari and Chrome */
+  border: none; /* Remove borders */
+  outline: none; /* Remove focus outline */
+  padding: 0; /* Reset padding */
+  margin: -1; /* Reset margin */
+  background: inherit; /* Inherit background-color from parent */
+  color: inherit; /* Inherit font-color from parent */
+  font-family: inherit; /* Inherit font-family from parent */
+  font-size: inherit; /* Inherit font-size from parent */
+}
+
+/* Add custom styles here */
+.select-custom {
+  /* Your custom styles */
+  /* For example: */
+ 
+}
