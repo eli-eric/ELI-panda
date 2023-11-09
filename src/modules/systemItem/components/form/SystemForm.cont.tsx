@@ -75,8 +75,8 @@ export const SystemForm = () => {
   }
 
   return (
-    <Form formMethods={formMethods} onSubmit={onSubmit} enableLeaveWarning={true}>
-      <HeaderComponent loading={loading || createLoading} />
+    <Form formMethods={formMethods} enableLeaveWarning={true}>
+      <HeaderComponent loading={loading || createLoading} onSubmit={formMethods.handleSubmit(onSubmit)} />
       <Card>
         <Breadcrumbs parentPath={parentPath || (systemDetail?.parentPath as CodebookType[])} />
       </Card>

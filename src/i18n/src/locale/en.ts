@@ -116,7 +116,10 @@ export const messages = {
         systemCode: { label: 'System Code', placeholder: 'System Code' },
         systemAlias: { label: 'System Alias', placeholder: 'System Alias' },
         systemLevel: { label: 'System Level' }, // system levels codebook - SYSTEM_LEVEL
-        parentSystem: { label: 'Parent System or technology unit', placeholder: 'Parent System or technology unit' }, // codebook of systems{uid, name},  - SYSTEM
+        parentSystem: {
+          label: 'Parent Key System or Technology unit',
+          placeholder: 'Parent System or technology unit'
+        }, // codebook of systems{uid, name},  - SYSTEM
         location: { label: 'Location', placeholder: 'Type here...' }, // locations codebook - LOCATION
         owner: { label: 'Owner', placeholder: 'Type here...' }, // codebook of users{uid, name},  - USER
         responsiblePerson: { label: 'Responsible Person', placeholder: 'Responsible Person' },

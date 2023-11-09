@@ -81,7 +81,7 @@ const useSystemEditFormFields = () => {
       disabled: disabledEdit
     },
     parentSystem: {
-      name: 'parentSystem',
+      name: 'keySystem',
       label: form.parentSystem.label,
       rounded: 'rounded-md',
       disabled: true

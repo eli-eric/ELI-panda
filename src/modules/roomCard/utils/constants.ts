@@ -14,12 +14,12 @@ export const cleanRooms = [
     code: 'entryToHvacTent'
   },
   {
-    name: 'CLEANING SCHEDULE',
-    code: 'cleaningSchedule'
-  },
-  {
     name: 'ADDITIONAL REQUIREMENTS',
     code: 'additionalRequirements'
+  },
+  {
+    name: 'CLEANING SCHEDULE',
+    code: 'cleaningSchedule'
   }
 ]
 
