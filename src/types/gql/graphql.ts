@@ -4905,6 +4905,12 @@ export type IdAggregateSelectionNonNullable = {
   shortest: Scalars['ID']['output'];
 };
 
+export type IdAggregateSelectionNullable = {
+  __typename?: 'IDAggregateSelectionNullable';
+  longest?: Maybe<Scalars['ID']['output']>;
+  shortest?: Maybe<Scalars['ID']['output']>;
+};
+
 export type Item = {
   __typename?: 'Item';
   catalogueItem: CatalogueItem;
@@ -8072,19 +8078,19 @@ export type PageInfo = {
 export type ParentPathItem = {
   __typename?: 'ParentPathItem';
   name?: Maybe<Scalars['String']['output']>;
-  uid: Scalars['ID']['output'];
+  uid?: Maybe<Scalars['ID']['output']>;
 };
 
 export type ParentPathItemAggregateSelection = {
   __typename?: 'ParentPathItemAggregateSelection';
   count: Scalars['Int']['output'];
   name: StringAggregateSelectionNullable;
-  uid: IdAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNullable;
 };
 
 export type ParentPathItemCreateInput = {
   name?: InputMaybe<Scalars['String']['input']>;
-  uid: Scalars['ID']['input'];
+  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type ParentPathItemEdge = {
@@ -8123,7 +8129,7 @@ export type ParentPathItemWhere = {
   uid?: InputMaybe<Scalars['ID']['input']>;
   uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
   uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
-  uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
+  uid_IN?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -10244,12 +10250,13 @@ export type System = {
   facilityAggregate?: Maybe<SystemFacilityFacilityAggregationSelection>;
   facilityConnection: SystemFacilityConnection;
   isTechnologicalUnit?: Maybe<Scalars['Boolean']['output']>;
+  keySystem?: Maybe<System>;
   location?: Maybe<Location>;
   locationAggregate?: Maybe<SystemLocationLocationAggregationSelection>;
   locationConnection: SystemLocationConnection;
-  maintenedBy: Array<Employee>;
-  maintenedByAggregate?: Maybe<SystemEmployeeMaintenedByAggregationSelection>;
-  maintenedByConnection: SystemMaintenedByConnection;
+  maintainedBy: Array<Employee>;
+  maintainedByAggregate?: Maybe<SystemEmployeeMaintainedByAggregationSelection>;
+  maintainedByConnection: SystemMaintainedByConnection;
   name: Scalars['String']['output'];
   operators: Array<Employee>;
   operatorsAggregate?: Maybe<SystemEmployeeOperatorsAggregationSelection>;
@@ -10257,7 +10264,7 @@ export type System = {
   owner?: Maybe<Employee>;
   ownerAggregate?: Maybe<SystemEmployeeOwnerAggregationSelection>;
   ownerConnection: SystemOwnerConnection;
-  parentPath: Array<Maybe<ParentPathItem>>;
+  parentPath?: Maybe<Array<Maybe<ParentPathItem>>>;
   parentSystem?: Maybe<System>;
   parentSystemAggregate?: Maybe<SystemSystemParentSystemAggregationSelection>;
   parentSystemConnection: SystemParentSystemConnection;
@@ -10327,25 +10334,25 @@ export type SystemLocationConnectionArgs = {
 };
 
 
-export type SystemMaintenedByArgs = {
+export type SystemMaintainedByArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   options?: InputMaybe<EmployeeOptions>;
   where?: InputMaybe<EmployeeWhere>;
 };
 
 
-export type SystemMaintenedByAggregateArgs = {
+export type SystemMaintainedByAggregateArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   where?: InputMaybe<EmployeeWhere>;
 };
 
 
-export type SystemMaintenedByConnectionArgs = {
+export type SystemMaintainedByConnectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<SystemMaintenedByConnectionSort>>;
-  where?: InputMaybe<SystemMaintenedByConnectionWhere>;
+  sort?: InputMaybe<Array<SystemMaintainedByConnectionSort>>;
+  where?: InputMaybe<SystemMaintainedByConnectionWhere>;
 };
 
 
@@ -10537,7 +10544,7 @@ export type SystemAggregateSelection = {
 export type SystemConnectInput = {
   facility?: InputMaybe<SystemFacilityConnectFieldInput>;
   location?: InputMaybe<SystemLocationConnectFieldInput>;
-  maintenedBy?: InputMaybe<Array<SystemMaintenedByConnectFieldInput>>;
+  maintainedBy?: InputMaybe<Array<SystemMaintainedByConnectFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsConnectFieldInput>>;
   owner?: InputMaybe<SystemOwnerConnectFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemConnectFieldInput>;
@@ -10550,7 +10557,7 @@ export type SystemConnectInput = {
 
 export type SystemConnectOrCreateInput = {
   location?: InputMaybe<SystemLocationConnectOrCreateFieldInput>;
-  maintenedBy?: InputMaybe<Array<SystemMaintenedByConnectOrCreateFieldInput>>;
+  maintainedBy?: InputMaybe<Array<SystemMaintainedByConnectOrCreateFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsConnectOrCreateFieldInput>>;
   owner?: InputMaybe<SystemOwnerConnectOrCreateFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemConnectOrCreateFieldInput>;
@@ -10575,7 +10582,7 @@ export type SystemCreateInput = {
   facility?: InputMaybe<SystemFacilityFieldInput>;
   isTechnologicalUnit?: InputMaybe<Scalars['Boolean']['input']>;
   location?: InputMaybe<SystemLocationFieldInput>;
-  maintenedBy?: InputMaybe<SystemMaintenedByFieldInput>;
+  maintainedBy?: InputMaybe<SystemMaintainedByFieldInput>;
   name: Scalars['String']['input'];
   operators?: InputMaybe<SystemOperatorsFieldInput>;
   owner?: InputMaybe<SystemOwnerFieldInput>;
@@ -10666,7 +10673,7 @@ export type SystemCriticalityWhere = {
 export type SystemDeleteInput = {
   facility?: InputMaybe<SystemFacilityDeleteFieldInput>;
   location?: InputMaybe<SystemLocationDeleteFieldInput>;
-  maintenedBy?: InputMaybe<Array<SystemMaintenedByDeleteFieldInput>>;
+  maintainedBy?: InputMaybe<Array<SystemMaintainedByDeleteFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsDeleteFieldInput>>;
   owner?: InputMaybe<SystemOwnerDeleteFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemDeleteFieldInput>;
@@ -10680,7 +10687,7 @@ export type SystemDeleteInput = {
 export type SystemDisconnectInput = {
   facility?: InputMaybe<SystemFacilityDisconnectFieldInput>;
   location?: InputMaybe<SystemLocationDisconnectFieldInput>;
-  maintenedBy?: InputMaybe<Array<SystemMaintenedByDisconnectFieldInput>>;
+  maintainedBy?: InputMaybe<Array<SystemMaintainedByDisconnectFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsDisconnectFieldInput>>;
   owner?: InputMaybe<SystemOwnerDisconnectFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemDisconnectFieldInput>;
@@ -10697,14 +10704,14 @@ export type SystemEdge = {
   node: System;
 };
 
-export type SystemEmployeeMaintenedByAggregationSelection = {
-  __typename?: 'SystemEmployeeMaintenedByAggregationSelection';
+export type SystemEmployeeMaintainedByAggregationSelection = {
+  __typename?: 'SystemEmployeeMaintainedByAggregationSelection';
   count: Scalars['Int']['output'];
-  node?: Maybe<SystemEmployeeMaintenedByNodeAggregateSelection>;
+  node?: Maybe<SystemEmployeeMaintainedByNodeAggregateSelection>;
 };
 
-export type SystemEmployeeMaintenedByNodeAggregateSelection = {
-  __typename?: 'SystemEmployeeMaintenedByNodeAggregateSelection';
+export type SystemEmployeeMaintainedByNodeAggregateSelection = {
+  __typename?: 'SystemEmployeeMaintainedByNodeAggregateSelection';
   email: StringAggregateSelectionNullable;
   firstName: StringAggregateSelectionNonNullable;
   fullName: StringAggregateSelectionNullable;
@@ -11145,73 +11152,73 @@ export type SystemLocationUpdateFieldInput = {
   where?: InputMaybe<SystemLocationConnectionWhere>;
 };
 
-export type SystemMaintenedByAggregateInput = {
-  AND?: InputMaybe<Array<SystemMaintenedByAggregateInput>>;
-  NOT?: InputMaybe<SystemMaintenedByAggregateInput>;
-  OR?: InputMaybe<Array<SystemMaintenedByAggregateInput>>;
+export type SystemMaintainedByAggregateInput = {
+  AND?: InputMaybe<Array<SystemMaintainedByAggregateInput>>;
+  NOT?: InputMaybe<SystemMaintainedByAggregateInput>;
+  OR?: InputMaybe<Array<SystemMaintainedByAggregateInput>>;
   count?: InputMaybe<Scalars['Int']['input']>;
   count_GT?: InputMaybe<Scalars['Int']['input']>;
   count_GTE?: InputMaybe<Scalars['Int']['input']>;
   count_LT?: InputMaybe<Scalars['Int']['input']>;
   count_LTE?: InputMaybe<Scalars['Int']['input']>;
-  node?: InputMaybe<SystemMaintenedByNodeAggregationWhereInput>;
+  node?: InputMaybe<SystemMaintainedByNodeAggregationWhereInput>;
 };
 
-export type SystemMaintenedByConnectFieldInput = {
+export type SystemMaintainedByConnectFieldInput = {
   /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<EmployeeConnectWhere>;
 };
 
-export type SystemMaintenedByConnectOrCreateFieldInput = {
-  onCreate: SystemMaintenedByConnectOrCreateFieldInputOnCreate;
+export type SystemMaintainedByConnectOrCreateFieldInput = {
+  onCreate: SystemMaintainedByConnectOrCreateFieldInputOnCreate;
   where: EmployeeConnectOrCreateWhere;
 };
 
-export type SystemMaintenedByConnectOrCreateFieldInputOnCreate = {
+export type SystemMaintainedByConnectOrCreateFieldInputOnCreate = {
   node: EmployeeOnCreateInput;
 };
 
-export type SystemMaintenedByConnection = {
-  __typename?: 'SystemMaintenedByConnection';
-  edges: Array<SystemMaintenedByRelationship>;
+export type SystemMaintainedByConnection = {
+  __typename?: 'SystemMaintainedByConnection';
+  edges: Array<SystemMaintainedByRelationship>;
   pageInfo: PageInfo;
   totalCount: Scalars['Int']['output'];
 };
 
-export type SystemMaintenedByConnectionSort = {
+export type SystemMaintainedByConnectionSort = {
   node?: InputMaybe<EmployeeSort>;
 };
 
-export type SystemMaintenedByConnectionWhere = {
-  AND?: InputMaybe<Array<SystemMaintenedByConnectionWhere>>;
-  NOT?: InputMaybe<SystemMaintenedByConnectionWhere>;
-  OR?: InputMaybe<Array<SystemMaintenedByConnectionWhere>>;
+export type SystemMaintainedByConnectionWhere = {
+  AND?: InputMaybe<Array<SystemMaintainedByConnectionWhere>>;
+  NOT?: InputMaybe<SystemMaintainedByConnectionWhere>;
+  OR?: InputMaybe<Array<SystemMaintainedByConnectionWhere>>;
   node?: InputMaybe<EmployeeWhere>;
 };
 
-export type SystemMaintenedByCreateFieldInput = {
+export type SystemMaintainedByCreateFieldInput = {
   node: EmployeeCreateInput;
 };
 
-export type SystemMaintenedByDeleteFieldInput = {
-  where?: InputMaybe<SystemMaintenedByConnectionWhere>;
+export type SystemMaintainedByDeleteFieldInput = {
+  where?: InputMaybe<SystemMaintainedByConnectionWhere>;
 };
 
-export type SystemMaintenedByDisconnectFieldInput = {
-  where?: InputMaybe<SystemMaintenedByConnectionWhere>;
+export type SystemMaintainedByDisconnectFieldInput = {
+  where?: InputMaybe<SystemMaintainedByConnectionWhere>;
 };
 
-export type SystemMaintenedByFieldInput = {
-  connect?: InputMaybe<Array<SystemMaintenedByConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<SystemMaintenedByConnectOrCreateFieldInput>>;
-  create?: InputMaybe<Array<SystemMaintenedByCreateFieldInput>>;
+export type SystemMaintainedByFieldInput = {
+  connect?: InputMaybe<Array<SystemMaintainedByConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<SystemMaintainedByConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<SystemMaintainedByCreateFieldInput>>;
 };
 
-export type SystemMaintenedByNodeAggregationWhereInput = {
-  AND?: InputMaybe<Array<SystemMaintenedByNodeAggregationWhereInput>>;
-  NOT?: InputMaybe<SystemMaintenedByNodeAggregationWhereInput>;
-  OR?: InputMaybe<Array<SystemMaintenedByNodeAggregationWhereInput>>;
+export type SystemMaintainedByNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<SystemMaintainedByNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<SystemMaintainedByNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<SystemMaintainedByNodeAggregationWhereInput>>;
   email_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   email_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   email_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -11289,24 +11296,24 @@ export type SystemMaintenedByNodeAggregationWhereInput = {
   phoneNumber_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type SystemMaintenedByRelationship = {
-  __typename?: 'SystemMaintenedByRelationship';
+export type SystemMaintainedByRelationship = {
+  __typename?: 'SystemMaintainedByRelationship';
   cursor: Scalars['String']['output'];
   node: Employee;
 };
 
-export type SystemMaintenedByUpdateConnectionInput = {
+export type SystemMaintainedByUpdateConnectionInput = {
   node?: InputMaybe<EmployeeUpdateInput>;
 };
 
-export type SystemMaintenedByUpdateFieldInput = {
-  connect?: InputMaybe<Array<SystemMaintenedByConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<SystemMaintenedByConnectOrCreateFieldInput>>;
-  create?: InputMaybe<Array<SystemMaintenedByCreateFieldInput>>;
-  delete?: InputMaybe<Array<SystemMaintenedByDeleteFieldInput>>;
-  disconnect?: InputMaybe<Array<SystemMaintenedByDisconnectFieldInput>>;
-  update?: InputMaybe<SystemMaintenedByUpdateConnectionInput>;
-  where?: InputMaybe<SystemMaintenedByConnectionWhere>;
+export type SystemMaintainedByUpdateFieldInput = {
+  connect?: InputMaybe<Array<SystemMaintainedByConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<SystemMaintainedByConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<SystemMaintainedByCreateFieldInput>>;
+  delete?: InputMaybe<Array<SystemMaintainedByDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<SystemMaintainedByDisconnectFieldInput>>;
+  update?: InputMaybe<SystemMaintainedByUpdateConnectionInput>;
+  where?: InputMaybe<SystemMaintainedByConnectionWhere>;
 };
 
 export type SystemOnCreateInput = {
@@ -11961,7 +11968,7 @@ export type SystemPhysicalItemUpdateFieldInput = {
 export type SystemRelationInput = {
   facility?: InputMaybe<SystemFacilityCreateFieldInput>;
   location?: InputMaybe<SystemLocationCreateFieldInput>;
-  maintenedBy?: InputMaybe<Array<SystemMaintenedByCreateFieldInput>>;
+  maintainedBy?: InputMaybe<Array<SystemMaintainedByCreateFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsCreateFieldInput>>;
   owner?: InputMaybe<SystemOwnerCreateFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemCreateFieldInput>;
@@ -12486,32 +12493,32 @@ export type SystemType = {
   code: Scalars['String']['output'];
   mask: Scalars['String']['output'];
   name: Scalars['String']['output'];
-  systemTypeGroupsContainsSystemType: Array<SystemTypeGroup>;
-  systemTypeGroupsContainsSystemTypeAggregate?: Maybe<SystemTypeSystemTypeGroupSystemTypeGroupsContainsSystemTypeAggregationSelection>;
-  systemTypeGroupsContainsSystemTypeConnection: SystemTypeSystemTypeGroupsContainsSystemTypeConnection;
+  systemTypeGroup: SystemTypeGroup;
+  systemTypeGroupAggregate?: Maybe<SystemTypeSystemTypeGroupSystemTypeGroupAggregationSelection>;
+  systemTypeGroupConnection: SystemTypeSystemTypeGroupConnection;
   uid: Scalars['ID']['output'];
 };
 
 
-export type SystemTypeSystemTypeGroupsContainsSystemTypeArgs = {
+export type SystemTypeSystemTypeGroupArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   options?: InputMaybe<SystemTypeGroupOptions>;
   where?: InputMaybe<SystemTypeGroupWhere>;
 };
 
 
-export type SystemTypeSystemTypeGroupsContainsSystemTypeAggregateArgs = {
+export type SystemTypeSystemTypeGroupAggregateArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   where?: InputMaybe<SystemTypeGroupWhere>;
 };
 
 
-export type SystemTypeSystemTypeGroupsContainsSystemTypeConnectionArgs = {
+export type SystemTypeSystemTypeGroupConnectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeConnectionSort>>;
-  where?: InputMaybe<SystemTypeSystemTypeGroupsContainsSystemTypeConnectionWhere>;
+  sort?: InputMaybe<Array<SystemTypeSystemTypeGroupConnectionSort>>;
+  where?: InputMaybe<SystemTypeSystemTypeGroupConnectionWhere>;
 };
 
 export type SystemTypeAggregateSelection = {
@@ -12524,7 +12531,7 @@ export type SystemTypeAggregateSelection = {
 };
 
 export type SystemTypeConnectInput = {
-  systemTypeGroupsContainsSystemType?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeConnectFieldInput>>;
+  systemTypeGroup?: InputMaybe<SystemTypeSystemTypeGroupConnectFieldInput>;
 };
 
 export type SystemTypeConnectOrCreateWhere = {
@@ -12539,15 +12546,15 @@ export type SystemTypeCreateInput = {
   code: Scalars['String']['input'];
   mask: Scalars['String']['input'];
   name: Scalars['String']['input'];
-  systemTypeGroupsContainsSystemType?: InputMaybe<SystemTypeSystemTypeGroupsContainsSystemTypeFieldInput>;
+  systemTypeGroup?: InputMaybe<SystemTypeSystemTypeGroupFieldInput>;
 };
 
 export type SystemTypeDeleteInput = {
-  systemTypeGroupsContainsSystemType?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeDeleteFieldInput>>;
+  systemTypeGroup?: InputMaybe<SystemTypeSystemTypeGroupDeleteFieldInput>;
 };
 
 export type SystemTypeDisconnectInput = {
-  systemTypeGroupsContainsSystemType?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeDisconnectFieldInput>>;
+  systemTypeGroup?: InputMaybe<SystemTypeSystemTypeGroupDisconnectFieldInput>;
 };
 
 export type SystemTypeEdge = {
@@ -12558,58 +12565,58 @@ export type SystemTypeEdge = {
 
 export type SystemTypeGroup = {
   __typename?: 'SystemTypeGroup';
-  belongsToFacilityFacilities: Array<Facility>;
-  belongsToFacilityFacilitiesAggregate?: Maybe<SystemTypeGroupFacilityBelongsToFacilityFacilitiesAggregationSelection>;
-  belongsToFacilityFacilitiesConnection: SystemTypeGroupBelongsToFacilityFacilitiesConnection;
-  containsSystemTypeSystemTypes: Array<SystemType>;
-  containsSystemTypeSystemTypesAggregate?: Maybe<SystemTypeGroupSystemTypeContainsSystemTypeSystemTypesAggregationSelection>;
-  containsSystemTypeSystemTypesConnection: SystemTypeGroupContainsSystemTypeSystemTypesConnection;
+  facility: Facility;
+  facilityAggregate?: Maybe<SystemTypeGroupFacilityFacilityAggregationSelection>;
+  facilityConnection: SystemTypeGroupFacilityConnection;
   name: Scalars['String']['output'];
+  systemTypes: Array<SystemType>;
+  systemTypesAggregate?: Maybe<SystemTypeGroupSystemTypeSystemTypesAggregationSelection>;
+  systemTypesConnection: SystemTypeGroupSystemTypesConnection;
   uid: Scalars['String']['output'];
 };
 
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesArgs = {
+export type SystemTypeGroupFacilityArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   options?: InputMaybe<FacilityOptions>;
   where?: InputMaybe<FacilityWhere>;
 };
 
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesAggregateArgs = {
+export type SystemTypeGroupFacilityAggregateArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   where?: InputMaybe<FacilityWhere>;
 };
 
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesConnectionArgs = {
+export type SystemTypeGroupFacilityConnectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesConnectionSort>>;
-  where?: InputMaybe<SystemTypeGroupBelongsToFacilityFacilitiesConnectionWhere>;
+  sort?: InputMaybe<Array<SystemTypeGroupFacilityConnectionSort>>;
+  where?: InputMaybe<SystemTypeGroupFacilityConnectionWhere>;
 };
 
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesArgs = {
+export type SystemTypeGroupSystemTypesArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   options?: InputMaybe<SystemTypeOptions>;
   where?: InputMaybe<SystemTypeWhere>;
 };
 
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesAggregateArgs = {
+export type SystemTypeGroupSystemTypesAggregateArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   where?: InputMaybe<SystemTypeWhere>;
 };
 
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesConnectionArgs = {
+export type SystemTypeGroupSystemTypesConnectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesConnectionSort>>;
-  where?: InputMaybe<SystemTypeGroupContainsSystemTypeSystemTypesConnectionWhere>;
+  sort?: InputMaybe<Array<SystemTypeGroupSystemTypesConnectionSort>>;
+  where?: InputMaybe<SystemTypeGroupSystemTypesConnectionWhere>;
 };
 
 export type SystemTypeGroupAggregateSelection = {
@@ -12619,66 +12626,115 @@ export type SystemTypeGroupAggregateSelection = {
   uid: StringAggregateSelectionNonNullable;
 };
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesAggregateInput = {
-  AND?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesAggregateInput>>;
-  NOT?: InputMaybe<SystemTypeGroupBelongsToFacilityFacilitiesAggregateInput>;
-  OR?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesAggregateInput>>;
+export type SystemTypeGroupConnectInput = {
+  facility?: InputMaybe<SystemTypeGroupFacilityConnectFieldInput>;
+  systemTypes?: InputMaybe<Array<SystemTypeGroupSystemTypesConnectFieldInput>>;
+};
+
+export type SystemTypeGroupConnectOrCreateInput = {
+  systemTypes?: InputMaybe<Array<SystemTypeGroupSystemTypesConnectOrCreateFieldInput>>;
+};
+
+export type SystemTypeGroupConnectWhere = {
+  node: SystemTypeGroupWhere;
+};
+
+export type SystemTypeGroupCreateInput = {
+  facility?: InputMaybe<SystemTypeGroupFacilityFieldInput>;
+  name: Scalars['String']['input'];
+  systemTypes?: InputMaybe<SystemTypeGroupSystemTypesFieldInput>;
+  uid: Scalars['String']['input'];
+};
+
+export type SystemTypeGroupDeleteInput = {
+  facility?: InputMaybe<SystemTypeGroupFacilityDeleteFieldInput>;
+  systemTypes?: InputMaybe<Array<SystemTypeGroupSystemTypesDeleteFieldInput>>;
+};
+
+export type SystemTypeGroupDisconnectInput = {
+  facility?: InputMaybe<SystemTypeGroupFacilityDisconnectFieldInput>;
+  systemTypes?: InputMaybe<Array<SystemTypeGroupSystemTypesDisconnectFieldInput>>;
+};
+
+export type SystemTypeGroupEdge = {
+  __typename?: 'SystemTypeGroupEdge';
+  cursor: Scalars['String']['output'];
+  node: SystemTypeGroup;
+};
+
+export type SystemTypeGroupFacilityAggregateInput = {
+  AND?: InputMaybe<Array<SystemTypeGroupFacilityAggregateInput>>;
+  NOT?: InputMaybe<SystemTypeGroupFacilityAggregateInput>;
+  OR?: InputMaybe<Array<SystemTypeGroupFacilityAggregateInput>>;
   count?: InputMaybe<Scalars['Int']['input']>;
   count_GT?: InputMaybe<Scalars['Int']['input']>;
   count_GTE?: InputMaybe<Scalars['Int']['input']>;
   count_LT?: InputMaybe<Scalars['Int']['input']>;
   count_LTE?: InputMaybe<Scalars['Int']['input']>;
-  node?: InputMaybe<SystemTypeGroupBelongsToFacilityFacilitiesNodeAggregationWhereInput>;
+  node?: InputMaybe<SystemTypeGroupFacilityNodeAggregationWhereInput>;
 };
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesConnectFieldInput = {
-  connect?: InputMaybe<Array<FacilityConnectInput>>;
+export type SystemTypeGroupFacilityConnectFieldInput = {
+  connect?: InputMaybe<FacilityConnectInput>;
   /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<FacilityConnectWhere>;
 };
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesConnection = {
-  __typename?: 'SystemTypeGroupBelongsToFacilityFacilitiesConnection';
-  edges: Array<SystemTypeGroupBelongsToFacilityFacilitiesRelationship>;
+export type SystemTypeGroupFacilityConnection = {
+  __typename?: 'SystemTypeGroupFacilityConnection';
+  edges: Array<SystemTypeGroupFacilityRelationship>;
   pageInfo: PageInfo;
   totalCount: Scalars['Int']['output'];
 };
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesConnectionSort = {
+export type SystemTypeGroupFacilityConnectionSort = {
   node?: InputMaybe<FacilitySort>;
 };
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesConnectionWhere = {
-  AND?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesConnectionWhere>>;
-  NOT?: InputMaybe<SystemTypeGroupBelongsToFacilityFacilitiesConnectionWhere>;
-  OR?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesConnectionWhere>>;
+export type SystemTypeGroupFacilityConnectionWhere = {
+  AND?: InputMaybe<Array<SystemTypeGroupFacilityConnectionWhere>>;
+  NOT?: InputMaybe<SystemTypeGroupFacilityConnectionWhere>;
+  OR?: InputMaybe<Array<SystemTypeGroupFacilityConnectionWhere>>;
   node?: InputMaybe<FacilityWhere>;
 };
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesCreateFieldInput = {
+export type SystemTypeGroupFacilityCreateFieldInput = {
   node: FacilityCreateInput;
 };
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesDeleteFieldInput = {
+export type SystemTypeGroupFacilityDeleteFieldInput = {
   delete?: InputMaybe<FacilityDeleteInput>;
-  where?: InputMaybe<SystemTypeGroupBelongsToFacilityFacilitiesConnectionWhere>;
+  where?: InputMaybe<SystemTypeGroupFacilityConnectionWhere>;
 };
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesDisconnectFieldInput = {
+export type SystemTypeGroupFacilityDisconnectFieldInput = {
   disconnect?: InputMaybe<FacilityDisconnectInput>;
-  where?: InputMaybe<SystemTypeGroupBelongsToFacilityFacilitiesConnectionWhere>;
+  where?: InputMaybe<SystemTypeGroupFacilityConnectionWhere>;
 };
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesFieldInput = {
-  connect?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesConnectFieldInput>>;
-  create?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesCreateFieldInput>>;
+export type SystemTypeGroupFacilityFacilityAggregationSelection = {
+  __typename?: 'SystemTypeGroupFacilityFacilityAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<SystemTypeGroupFacilityFacilityNodeAggregateSelection>;
 };
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesNodeAggregationWhereInput = {
-  AND?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesNodeAggregationWhereInput>>;
-  NOT?: InputMaybe<SystemTypeGroupBelongsToFacilityFacilitiesNodeAggregationWhereInput>;
-  OR?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesNodeAggregationWhereInput>>;
+export type SystemTypeGroupFacilityFacilityNodeAggregateSelection = {
+  __typename?: 'SystemTypeGroupFacilityFacilityNodeAggregateSelection';
+  code: StringAggregateSelectionNonNullable;
+  name: StringAggregateSelectionNonNullable;
+  uid: StringAggregateSelectionNonNullable;
+};
+
+export type SystemTypeGroupFacilityFieldInput = {
+  connect?: InputMaybe<SystemTypeGroupFacilityConnectFieldInput>;
+  create?: InputMaybe<SystemTypeGroupFacilityCreateFieldInput>;
+};
+
+export type SystemTypeGroupFacilityNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<SystemTypeGroupFacilityNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<SystemTypeGroupFacilityNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<SystemTypeGroupFacilityNodeAggregationWhereInput>>;
   code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -12726,108 +12782,127 @@ export type SystemTypeGroupBelongsToFacilityFacilitiesNodeAggregationWhereInput 
   uid_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesRelationship = {
-  __typename?: 'SystemTypeGroupBelongsToFacilityFacilitiesRelationship';
+export type SystemTypeGroupFacilityRelationship = {
+  __typename?: 'SystemTypeGroupFacilityRelationship';
   cursor: Scalars['String']['output'];
   node: Facility;
 };
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesUpdateConnectionInput = {
+export type SystemTypeGroupFacilityUpdateConnectionInput = {
   node?: InputMaybe<FacilityUpdateInput>;
 };
 
-export type SystemTypeGroupBelongsToFacilityFacilitiesUpdateFieldInput = {
-  connect?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesConnectFieldInput>>;
-  create?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesCreateFieldInput>>;
-  delete?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesDeleteFieldInput>>;
-  disconnect?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesDisconnectFieldInput>>;
-  update?: InputMaybe<SystemTypeGroupBelongsToFacilityFacilitiesUpdateConnectionInput>;
-  where?: InputMaybe<SystemTypeGroupBelongsToFacilityFacilitiesConnectionWhere>;
+export type SystemTypeGroupFacilityUpdateFieldInput = {
+  connect?: InputMaybe<SystemTypeGroupFacilityConnectFieldInput>;
+  create?: InputMaybe<SystemTypeGroupFacilityCreateFieldInput>;
+  delete?: InputMaybe<SystemTypeGroupFacilityDeleteFieldInput>;
+  disconnect?: InputMaybe<SystemTypeGroupFacilityDisconnectFieldInput>;
+  update?: InputMaybe<SystemTypeGroupFacilityUpdateConnectionInput>;
+  where?: InputMaybe<SystemTypeGroupFacilityConnectionWhere>;
 };
 
-export type SystemTypeGroupConnectInput = {
-  belongsToFacilityFacilities?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesConnectFieldInput>>;
-  containsSystemTypeSystemTypes?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesConnectFieldInput>>;
+export type SystemTypeGroupOptions = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /** Specify one or more SystemTypeGroupSort objects to sort SystemTypeGroups by. The sorts will be applied in the order in which they are arranged in the array. */
+  sort?: InputMaybe<Array<SystemTypeGroupSort>>;
 };
 
-export type SystemTypeGroupConnectOrCreateInput = {
-  containsSystemTypeSystemTypes?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesConnectOrCreateFieldInput>>;
+export type SystemTypeGroupRelationInput = {
+  facility?: InputMaybe<SystemTypeGroupFacilityCreateFieldInput>;
+  systemTypes?: InputMaybe<Array<SystemTypeGroupSystemTypesCreateFieldInput>>;
 };
 
-export type SystemTypeGroupConnectWhere = {
-  node: SystemTypeGroupWhere;
+/** Fields to sort SystemTypeGroups by. The order in which sorts are applied is not guaranteed when specifying many fields in one SystemTypeGroupSort object. */
+export type SystemTypeGroupSort = {
+  name?: InputMaybe<SortDirection>;
+  uid?: InputMaybe<SortDirection>;
 };
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesAggregateInput = {
-  AND?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesAggregateInput>>;
-  NOT?: InputMaybe<SystemTypeGroupContainsSystemTypeSystemTypesAggregateInput>;
-  OR?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesAggregateInput>>;
+export type SystemTypeGroupSystemTypeSystemTypesAggregationSelection = {
+  __typename?: 'SystemTypeGroupSystemTypeSystemTypesAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<SystemTypeGroupSystemTypeSystemTypesNodeAggregateSelection>;
+};
+
+export type SystemTypeGroupSystemTypeSystemTypesNodeAggregateSelection = {
+  __typename?: 'SystemTypeGroupSystemTypeSystemTypesNodeAggregateSelection';
+  code: StringAggregateSelectionNonNullable;
+  mask: StringAggregateSelectionNonNullable;
+  name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type SystemTypeGroupSystemTypesAggregateInput = {
+  AND?: InputMaybe<Array<SystemTypeGroupSystemTypesAggregateInput>>;
+  NOT?: InputMaybe<SystemTypeGroupSystemTypesAggregateInput>;
+  OR?: InputMaybe<Array<SystemTypeGroupSystemTypesAggregateInput>>;
   count?: InputMaybe<Scalars['Int']['input']>;
   count_GT?: InputMaybe<Scalars['Int']['input']>;
   count_GTE?: InputMaybe<Scalars['Int']['input']>;
   count_LT?: InputMaybe<Scalars['Int']['input']>;
   count_LTE?: InputMaybe<Scalars['Int']['input']>;
-  node?: InputMaybe<SystemTypeGroupContainsSystemTypeSystemTypesNodeAggregationWhereInput>;
+  node?: InputMaybe<SystemTypeGroupSystemTypesNodeAggregationWhereInput>;
 };
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesConnectFieldInput = {
+export type SystemTypeGroupSystemTypesConnectFieldInput = {
   connect?: InputMaybe<Array<SystemTypeConnectInput>>;
   /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<SystemTypeConnectWhere>;
 };
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesConnectOrCreateFieldInput = {
-  onCreate: SystemTypeGroupContainsSystemTypeSystemTypesConnectOrCreateFieldInputOnCreate;
+export type SystemTypeGroupSystemTypesConnectOrCreateFieldInput = {
+  onCreate: SystemTypeGroupSystemTypesConnectOrCreateFieldInputOnCreate;
   where: SystemTypeConnectOrCreateWhere;
 };
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesConnectOrCreateFieldInputOnCreate = {
+export type SystemTypeGroupSystemTypesConnectOrCreateFieldInputOnCreate = {
   node: SystemTypeOnCreateInput;
 };
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesConnection = {
-  __typename?: 'SystemTypeGroupContainsSystemTypeSystemTypesConnection';
-  edges: Array<SystemTypeGroupContainsSystemTypeSystemTypesRelationship>;
+export type SystemTypeGroupSystemTypesConnection = {
+  __typename?: 'SystemTypeGroupSystemTypesConnection';
+  edges: Array<SystemTypeGroupSystemTypesRelationship>;
   pageInfo: PageInfo;
   totalCount: Scalars['Int']['output'];
 };
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesConnectionSort = {
+export type SystemTypeGroupSystemTypesConnectionSort = {
   node?: InputMaybe<SystemTypeSort>;
 };
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesConnectionWhere = {
-  AND?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesConnectionWhere>>;
-  NOT?: InputMaybe<SystemTypeGroupContainsSystemTypeSystemTypesConnectionWhere>;
-  OR?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesConnectionWhere>>;
+export type SystemTypeGroupSystemTypesConnectionWhere = {
+  AND?: InputMaybe<Array<SystemTypeGroupSystemTypesConnectionWhere>>;
+  NOT?: InputMaybe<SystemTypeGroupSystemTypesConnectionWhere>;
+  OR?: InputMaybe<Array<SystemTypeGroupSystemTypesConnectionWhere>>;
   node?: InputMaybe<SystemTypeWhere>;
 };
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesCreateFieldInput = {
+export type SystemTypeGroupSystemTypesCreateFieldInput = {
   node: SystemTypeCreateInput;
 };
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesDeleteFieldInput = {
+export type SystemTypeGroupSystemTypesDeleteFieldInput = {
   delete?: InputMaybe<SystemTypeDeleteInput>;
-  where?: InputMaybe<SystemTypeGroupContainsSystemTypeSystemTypesConnectionWhere>;
+  where?: InputMaybe<SystemTypeGroupSystemTypesConnectionWhere>;
 };
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesDisconnectFieldInput = {
+export type SystemTypeGroupSystemTypesDisconnectFieldInput = {
   disconnect?: InputMaybe<SystemTypeDisconnectInput>;
-  where?: InputMaybe<SystemTypeGroupContainsSystemTypeSystemTypesConnectionWhere>;
+  where?: InputMaybe<SystemTypeGroupSystemTypesConnectionWhere>;
 };
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesFieldInput = {
-  connect?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesConnectOrCreateFieldInput>>;
-  create?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesCreateFieldInput>>;
+export type SystemTypeGroupSystemTypesFieldInput = {
+  connect?: InputMaybe<Array<SystemTypeGroupSystemTypesConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<SystemTypeGroupSystemTypesConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<SystemTypeGroupSystemTypesCreateFieldInput>>;
 };
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesNodeAggregationWhereInput = {
-  AND?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesNodeAggregationWhereInput>>;
-  NOT?: InputMaybe<SystemTypeGroupContainsSystemTypeSystemTypesNodeAggregationWhereInput>;
-  OR?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesNodeAggregationWhereInput>>;
+export type SystemTypeGroupSystemTypesNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<SystemTypeGroupSystemTypesNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<SystemTypeGroupSystemTypesNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<SystemTypeGroupSystemTypesNodeAggregationWhereInput>>;
   code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -12875,98 +12950,30 @@ export type SystemTypeGroupContainsSystemTypeSystemTypesNodeAggregationWhereInpu
   name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesRelationship = {
-  __typename?: 'SystemTypeGroupContainsSystemTypeSystemTypesRelationship';
+export type SystemTypeGroupSystemTypesRelationship = {
+  __typename?: 'SystemTypeGroupSystemTypesRelationship';
   cursor: Scalars['String']['output'];
   node: SystemType;
 };
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesUpdateConnectionInput = {
+export type SystemTypeGroupSystemTypesUpdateConnectionInput = {
   node?: InputMaybe<SystemTypeUpdateInput>;
 };
 
-export type SystemTypeGroupContainsSystemTypeSystemTypesUpdateFieldInput = {
-  connect?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesConnectOrCreateFieldInput>>;
-  create?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesCreateFieldInput>>;
-  delete?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesDeleteFieldInput>>;
-  disconnect?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesDisconnectFieldInput>>;
-  update?: InputMaybe<SystemTypeGroupContainsSystemTypeSystemTypesUpdateConnectionInput>;
-  where?: InputMaybe<SystemTypeGroupContainsSystemTypeSystemTypesConnectionWhere>;
-};
-
-export type SystemTypeGroupCreateInput = {
-  belongsToFacilityFacilities?: InputMaybe<SystemTypeGroupBelongsToFacilityFacilitiesFieldInput>;
-  containsSystemTypeSystemTypes?: InputMaybe<SystemTypeGroupContainsSystemTypeSystemTypesFieldInput>;
-  name: Scalars['String']['input'];
-  uid: Scalars['String']['input'];
-};
-
-export type SystemTypeGroupDeleteInput = {
-  belongsToFacilityFacilities?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesDeleteFieldInput>>;
-  containsSystemTypeSystemTypes?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesDeleteFieldInput>>;
-};
-
-export type SystemTypeGroupDisconnectInput = {
-  belongsToFacilityFacilities?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesDisconnectFieldInput>>;
-  containsSystemTypeSystemTypes?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesDisconnectFieldInput>>;
-};
-
-export type SystemTypeGroupEdge = {
-  __typename?: 'SystemTypeGroupEdge';
-  cursor: Scalars['String']['output'];
-  node: SystemTypeGroup;
-};
-
-export type SystemTypeGroupFacilityBelongsToFacilityFacilitiesAggregationSelection = {
-  __typename?: 'SystemTypeGroupFacilityBelongsToFacilityFacilitiesAggregationSelection';
-  count: Scalars['Int']['output'];
-  node?: Maybe<SystemTypeGroupFacilityBelongsToFacilityFacilitiesNodeAggregateSelection>;
-};
-
-export type SystemTypeGroupFacilityBelongsToFacilityFacilitiesNodeAggregateSelection = {
-  __typename?: 'SystemTypeGroupFacilityBelongsToFacilityFacilitiesNodeAggregateSelection';
-  code: StringAggregateSelectionNonNullable;
-  name: StringAggregateSelectionNonNullable;
-  uid: StringAggregateSelectionNonNullable;
-};
-
-export type SystemTypeGroupOptions = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  /** Specify one or more SystemTypeGroupSort objects to sort SystemTypeGroups by. The sorts will be applied in the order in which they are arranged in the array. */
-  sort?: InputMaybe<Array<SystemTypeGroupSort>>;
-};
-
-export type SystemTypeGroupRelationInput = {
-  belongsToFacilityFacilities?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesCreateFieldInput>>;
-  containsSystemTypeSystemTypes?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesCreateFieldInput>>;
-};
-
-/** Fields to sort SystemTypeGroups by. The order in which sorts are applied is not guaranteed when specifying many fields in one SystemTypeGroupSort object. */
-export type SystemTypeGroupSort = {
-  name?: InputMaybe<SortDirection>;
-  uid?: InputMaybe<SortDirection>;
-};
-
-export type SystemTypeGroupSystemTypeContainsSystemTypeSystemTypesAggregationSelection = {
-  __typename?: 'SystemTypeGroupSystemTypeContainsSystemTypeSystemTypesAggregationSelection';
-  count: Scalars['Int']['output'];
-  node?: Maybe<SystemTypeGroupSystemTypeContainsSystemTypeSystemTypesNodeAggregateSelection>;
-};
-
-export type SystemTypeGroupSystemTypeContainsSystemTypeSystemTypesNodeAggregateSelection = {
-  __typename?: 'SystemTypeGroupSystemTypeContainsSystemTypeSystemTypesNodeAggregateSelection';
-  code: StringAggregateSelectionNonNullable;
-  mask: StringAggregateSelectionNonNullable;
-  name: StringAggregateSelectionNonNullable;
-  uid: IdAggregateSelectionNonNullable;
+export type SystemTypeGroupSystemTypesUpdateFieldInput = {
+  connect?: InputMaybe<Array<SystemTypeGroupSystemTypesConnectFieldInput>>;
+  connectOrCreate?: InputMaybe<Array<SystemTypeGroupSystemTypesConnectOrCreateFieldInput>>;
+  create?: InputMaybe<Array<SystemTypeGroupSystemTypesCreateFieldInput>>;
+  delete?: InputMaybe<Array<SystemTypeGroupSystemTypesDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<SystemTypeGroupSystemTypesDisconnectFieldInput>>;
+  update?: InputMaybe<SystemTypeGroupSystemTypesUpdateConnectionInput>;
+  where?: InputMaybe<SystemTypeGroupSystemTypesConnectionWhere>;
 };
 
 export type SystemTypeGroupUpdateInput = {
-  belongsToFacilityFacilities?: InputMaybe<Array<SystemTypeGroupBelongsToFacilityFacilitiesUpdateFieldInput>>;
-  containsSystemTypeSystemTypes?: InputMaybe<Array<SystemTypeGroupContainsSystemTypeSystemTypesUpdateFieldInput>>;
+  facility?: InputMaybe<SystemTypeGroupFacilityUpdateFieldInput>;
   name?: InputMaybe<Scalars['String']['input']>;
+  systemTypes?: InputMaybe<Array<SystemTypeGroupSystemTypesUpdateFieldInput>>;
   uid?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -12974,45 +12981,33 @@ export type SystemTypeGroupWhere = {
   AND?: InputMaybe<Array<SystemTypeGroupWhere>>;
   NOT?: InputMaybe<SystemTypeGroupWhere>;
   OR?: InputMaybe<Array<SystemTypeGroupWhere>>;
-  belongsToFacilityFacilitiesAggregate?: InputMaybe<SystemTypeGroupBelongsToFacilityFacilitiesAggregateInput>;
-  /** Return SystemTypeGroups where all of the related SystemTypeGroupBelongsToFacilityFacilitiesConnections match this filter */
-  belongsToFacilityFacilitiesConnection_ALL?: InputMaybe<SystemTypeGroupBelongsToFacilityFacilitiesConnectionWhere>;
-  /** Return SystemTypeGroups where none of the related SystemTypeGroupBelongsToFacilityFacilitiesConnections match this filter */
-  belongsToFacilityFacilitiesConnection_NONE?: InputMaybe<SystemTypeGroupBelongsToFacilityFacilitiesConnectionWhere>;
-  /** Return SystemTypeGroups where one of the related SystemTypeGroupBelongsToFacilityFacilitiesConnections match this filter */
-  belongsToFacilityFacilitiesConnection_SINGLE?: InputMaybe<SystemTypeGroupBelongsToFacilityFacilitiesConnectionWhere>;
-  /** Return SystemTypeGroups where some of the related SystemTypeGroupBelongsToFacilityFacilitiesConnections match this filter */
-  belongsToFacilityFacilitiesConnection_SOME?: InputMaybe<SystemTypeGroupBelongsToFacilityFacilitiesConnectionWhere>;
-  /** Return SystemTypeGroups where all of the related Facilities match this filter */
-  belongsToFacilityFacilities_ALL?: InputMaybe<FacilityWhere>;
-  /** Return SystemTypeGroups where none of the related Facilities match this filter */
-  belongsToFacilityFacilities_NONE?: InputMaybe<FacilityWhere>;
-  /** Return SystemTypeGroups where one of the related Facilities match this filter */
-  belongsToFacilityFacilities_SINGLE?: InputMaybe<FacilityWhere>;
-  /** Return SystemTypeGroups where some of the related Facilities match this filter */
-  belongsToFacilityFacilities_SOME?: InputMaybe<FacilityWhere>;
-  containsSystemTypeSystemTypesAggregate?: InputMaybe<SystemTypeGroupContainsSystemTypeSystemTypesAggregateInput>;
-  /** Return SystemTypeGroups where all of the related SystemTypeGroupContainsSystemTypeSystemTypesConnections match this filter */
-  containsSystemTypeSystemTypesConnection_ALL?: InputMaybe<SystemTypeGroupContainsSystemTypeSystemTypesConnectionWhere>;
-  /** Return SystemTypeGroups where none of the related SystemTypeGroupContainsSystemTypeSystemTypesConnections match this filter */
-  containsSystemTypeSystemTypesConnection_NONE?: InputMaybe<SystemTypeGroupContainsSystemTypeSystemTypesConnectionWhere>;
-  /** Return SystemTypeGroups where one of the related SystemTypeGroupContainsSystemTypeSystemTypesConnections match this filter */
-  containsSystemTypeSystemTypesConnection_SINGLE?: InputMaybe<SystemTypeGroupContainsSystemTypeSystemTypesConnectionWhere>;
-  /** Return SystemTypeGroups where some of the related SystemTypeGroupContainsSystemTypeSystemTypesConnections match this filter */
-  containsSystemTypeSystemTypesConnection_SOME?: InputMaybe<SystemTypeGroupContainsSystemTypeSystemTypesConnectionWhere>;
-  /** Return SystemTypeGroups where all of the related SystemTypes match this filter */
-  containsSystemTypeSystemTypes_ALL?: InputMaybe<SystemTypeWhere>;
-  /** Return SystemTypeGroups where none of the related SystemTypes match this filter */
-  containsSystemTypeSystemTypes_NONE?: InputMaybe<SystemTypeWhere>;
-  /** Return SystemTypeGroups where one of the related SystemTypes match this filter */
-  containsSystemTypeSystemTypes_SINGLE?: InputMaybe<SystemTypeWhere>;
-  /** Return SystemTypeGroups where some of the related SystemTypes match this filter */
-  containsSystemTypeSystemTypes_SOME?: InputMaybe<SystemTypeWhere>;
+  facility?: InputMaybe<FacilityWhere>;
+  facilityAggregate?: InputMaybe<SystemTypeGroupFacilityAggregateInput>;
+  facilityConnection?: InputMaybe<SystemTypeGroupFacilityConnectionWhere>;
+  facilityConnection_NOT?: InputMaybe<SystemTypeGroupFacilityConnectionWhere>;
+  facility_NOT?: InputMaybe<FacilityWhere>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   name_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   name_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  systemTypesAggregate?: InputMaybe<SystemTypeGroupSystemTypesAggregateInput>;
+  /** Return SystemTypeGroups where all of the related SystemTypeGroupSystemTypesConnections match this filter */
+  systemTypesConnection_ALL?: InputMaybe<SystemTypeGroupSystemTypesConnectionWhere>;
+  /** Return SystemTypeGroups where none of the related SystemTypeGroupSystemTypesConnections match this filter */
+  systemTypesConnection_NONE?: InputMaybe<SystemTypeGroupSystemTypesConnectionWhere>;
+  /** Return SystemTypeGroups where one of the related SystemTypeGroupSystemTypesConnections match this filter */
+  systemTypesConnection_SINGLE?: InputMaybe<SystemTypeGroupSystemTypesConnectionWhere>;
+  /** Return SystemTypeGroups where some of the related SystemTypeGroupSystemTypesConnections match this filter */
+  systemTypesConnection_SOME?: InputMaybe<SystemTypeGroupSystemTypesConnectionWhere>;
+  /** Return SystemTypeGroups where all of the related SystemTypes match this filter */
+  systemTypes_ALL?: InputMaybe<SystemTypeWhere>;
+  /** Return SystemTypeGroups where none of the related SystemTypes match this filter */
+  systemTypes_NONE?: InputMaybe<SystemTypeWhere>;
+  /** Return SystemTypeGroups where one of the related SystemTypes match this filter */
+  systemTypes_SINGLE?: InputMaybe<SystemTypeWhere>;
+  /** Return SystemTypeGroups where some of the related SystemTypes match this filter */
+  systemTypes_SOME?: InputMaybe<SystemTypeWhere>;
   uid?: InputMaybe<Scalars['String']['input']>;
   uid_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   uid_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
@@ -13041,7 +13036,7 @@ export type SystemTypeOptions = {
 };
 
 export type SystemTypeRelationInput = {
-  systemTypeGroupsContainsSystemType?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeCreateFieldInput>>;
+  systemTypeGroup?: InputMaybe<SystemTypeSystemTypeGroupCreateFieldInput>;
 };
 
 /** Fields to sort SystemTypes by. The order in which sorts are applied is not guaranteed when specifying many fields in one SystemTypeSort object. */
@@ -13052,78 +13047,66 @@ export type SystemTypeSort = {
   uid?: InputMaybe<SortDirection>;
 };
 
-export type SystemTypeSystemTypeGroupSystemTypeGroupsContainsSystemTypeAggregationSelection = {
-  __typename?: 'SystemTypeSystemTypeGroupSystemTypeGroupsContainsSystemTypeAggregationSelection';
-  count: Scalars['Int']['output'];
-  node?: Maybe<SystemTypeSystemTypeGroupSystemTypeGroupsContainsSystemTypeNodeAggregateSelection>;
-};
-
-export type SystemTypeSystemTypeGroupSystemTypeGroupsContainsSystemTypeNodeAggregateSelection = {
-  __typename?: 'SystemTypeSystemTypeGroupSystemTypeGroupsContainsSystemTypeNodeAggregateSelection';
-  name: StringAggregateSelectionNonNullable;
-  uid: StringAggregateSelectionNonNullable;
-};
-
-export type SystemTypeSystemTypeGroupsContainsSystemTypeAggregateInput = {
-  AND?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeAggregateInput>>;
-  NOT?: InputMaybe<SystemTypeSystemTypeGroupsContainsSystemTypeAggregateInput>;
-  OR?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeAggregateInput>>;
+export type SystemTypeSystemTypeGroupAggregateInput = {
+  AND?: InputMaybe<Array<SystemTypeSystemTypeGroupAggregateInput>>;
+  NOT?: InputMaybe<SystemTypeSystemTypeGroupAggregateInput>;
+  OR?: InputMaybe<Array<SystemTypeSystemTypeGroupAggregateInput>>;
   count?: InputMaybe<Scalars['Int']['input']>;
   count_GT?: InputMaybe<Scalars['Int']['input']>;
   count_GTE?: InputMaybe<Scalars['Int']['input']>;
   count_LT?: InputMaybe<Scalars['Int']['input']>;
   count_LTE?: InputMaybe<Scalars['Int']['input']>;
-  node?: InputMaybe<SystemTypeSystemTypeGroupsContainsSystemTypeNodeAggregationWhereInput>;
+  node?: InputMaybe<SystemTypeSystemTypeGroupNodeAggregationWhereInput>;
 };
 
-export type SystemTypeSystemTypeGroupsContainsSystemTypeConnectFieldInput = {
-  connect?: InputMaybe<Array<SystemTypeGroupConnectInput>>;
+export type SystemTypeSystemTypeGroupConnectFieldInput = {
+  connect?: InputMaybe<SystemTypeGroupConnectInput>;
   /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<SystemTypeGroupConnectWhere>;
 };
 
-export type SystemTypeSystemTypeGroupsContainsSystemTypeConnection = {
-  __typename?: 'SystemTypeSystemTypeGroupsContainsSystemTypeConnection';
-  edges: Array<SystemTypeSystemTypeGroupsContainsSystemTypeRelationship>;
+export type SystemTypeSystemTypeGroupConnection = {
+  __typename?: 'SystemTypeSystemTypeGroupConnection';
+  edges: Array<SystemTypeSystemTypeGroupRelationship>;
   pageInfo: PageInfo;
   totalCount: Scalars['Int']['output'];
 };
 
-export type SystemTypeSystemTypeGroupsContainsSystemTypeConnectionSort = {
+export type SystemTypeSystemTypeGroupConnectionSort = {
   node?: InputMaybe<SystemTypeGroupSort>;
 };
 
-export type SystemTypeSystemTypeGroupsContainsSystemTypeConnectionWhere = {
-  AND?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeConnectionWhere>>;
-  NOT?: InputMaybe<SystemTypeSystemTypeGroupsContainsSystemTypeConnectionWhere>;
-  OR?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeConnectionWhere>>;
+export type SystemTypeSystemTypeGroupConnectionWhere = {
+  AND?: InputMaybe<Array<SystemTypeSystemTypeGroupConnectionWhere>>;
+  NOT?: InputMaybe<SystemTypeSystemTypeGroupConnectionWhere>;
+  OR?: InputMaybe<Array<SystemTypeSystemTypeGroupConnectionWhere>>;
   node?: InputMaybe<SystemTypeGroupWhere>;
 };
 
-export type SystemTypeSystemTypeGroupsContainsSystemTypeCreateFieldInput = {
+export type SystemTypeSystemTypeGroupCreateFieldInput = {
   node: SystemTypeGroupCreateInput;
 };
 
-export type SystemTypeSystemTypeGroupsContainsSystemTypeDeleteFieldInput = {
+export type SystemTypeSystemTypeGroupDeleteFieldInput = {
   delete?: InputMaybe<SystemTypeGroupDeleteInput>;
-  where?: InputMaybe<SystemTypeSystemTypeGroupsContainsSystemTypeConnectionWhere>;
+  where?: InputMaybe<SystemTypeSystemTypeGroupConnectionWhere>;
 };
 
-export type SystemTypeSystemTypeGroupsContainsSystemTypeDisconnectFieldInput = {
+export type SystemTypeSystemTypeGroupDisconnectFieldInput = {
   disconnect?: InputMaybe<SystemTypeGroupDisconnectInput>;
-  where?: InputMaybe<SystemTypeSystemTypeGroupsContainsSystemTypeConnectionWhere>;
+  where?: InputMaybe<SystemTypeSystemTypeGroupConnectionWhere>;
 };
 
-export type SystemTypeSystemTypeGroupsContainsSystemTypeFieldInput = {
-  connect?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeConnectFieldInput>>;
-  create?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeCreateFieldInput>>;
+export type SystemTypeSystemTypeGroupFieldInput = {
+  connect?: InputMaybe<SystemTypeSystemTypeGroupConnectFieldInput>;
+  create?: InputMaybe<SystemTypeSystemTypeGroupCreateFieldInput>;
 };
 
-export type SystemTypeSystemTypeGroupsContainsSystemTypeNodeAggregationWhereInput = {
-  AND?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeNodeAggregationWhereInput>>;
-  NOT?: InputMaybe<SystemTypeSystemTypeGroupsContainsSystemTypeNodeAggregationWhereInput>;
-  OR?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeNodeAggregationWhereInput>>;
+export type SystemTypeSystemTypeGroupNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<SystemTypeSystemTypeGroupNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<SystemTypeSystemTypeGroupNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<SystemTypeSystemTypeGroupNodeAggregationWhereInput>>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -13156,23 +13139,35 @@ export type SystemTypeSystemTypeGroupsContainsSystemTypeNodeAggregationWhereInpu
   uid_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type SystemTypeSystemTypeGroupsContainsSystemTypeRelationship = {
-  __typename?: 'SystemTypeSystemTypeGroupsContainsSystemTypeRelationship';
+export type SystemTypeSystemTypeGroupRelationship = {
+  __typename?: 'SystemTypeSystemTypeGroupRelationship';
   cursor: Scalars['String']['output'];
   node: SystemTypeGroup;
 };
 
-export type SystemTypeSystemTypeGroupsContainsSystemTypeUpdateConnectionInput = {
+export type SystemTypeSystemTypeGroupSystemTypeGroupAggregationSelection = {
+  __typename?: 'SystemTypeSystemTypeGroupSystemTypeGroupAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<SystemTypeSystemTypeGroupSystemTypeGroupNodeAggregateSelection>;
+};
+
+export type SystemTypeSystemTypeGroupSystemTypeGroupNodeAggregateSelection = {
+  __typename?: 'SystemTypeSystemTypeGroupSystemTypeGroupNodeAggregateSelection';
+  name: StringAggregateSelectionNonNullable;
+  uid: StringAggregateSelectionNonNullable;
+};
+
+export type SystemTypeSystemTypeGroupUpdateConnectionInput = {
   node?: InputMaybe<SystemTypeGroupUpdateInput>;
 };
 
-export type SystemTypeSystemTypeGroupsContainsSystemTypeUpdateFieldInput = {
-  connect?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeConnectFieldInput>>;
-  create?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeCreateFieldInput>>;
-  delete?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeDeleteFieldInput>>;
-  disconnect?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeDisconnectFieldInput>>;
-  update?: InputMaybe<SystemTypeSystemTypeGroupsContainsSystemTypeUpdateConnectionInput>;
-  where?: InputMaybe<SystemTypeSystemTypeGroupsContainsSystemTypeConnectionWhere>;
+export type SystemTypeSystemTypeGroupUpdateFieldInput = {
+  connect?: InputMaybe<SystemTypeSystemTypeGroupConnectFieldInput>;
+  create?: InputMaybe<SystemTypeSystemTypeGroupCreateFieldInput>;
+  delete?: InputMaybe<SystemTypeSystemTypeGroupDeleteFieldInput>;
+  disconnect?: InputMaybe<SystemTypeSystemTypeGroupDisconnectFieldInput>;
+  update?: InputMaybe<SystemTypeSystemTypeGroupUpdateConnectionInput>;
+  where?: InputMaybe<SystemTypeSystemTypeGroupConnectionWhere>;
 };
 
 export type SystemTypeUniqueWhere = {
@@ -13183,7 +13178,7 @@ export type SystemTypeUpdateInput = {
   code?: InputMaybe<Scalars['String']['input']>;
   mask?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
-  systemTypeGroupsContainsSystemType?: InputMaybe<Array<SystemTypeSystemTypeGroupsContainsSystemTypeUpdateFieldInput>>;
+  systemTypeGroup?: InputMaybe<SystemTypeSystemTypeGroupUpdateFieldInput>;
 };
 
 export type SystemTypeWhere = {
@@ -13205,23 +13200,11 @@ export type SystemTypeWhere = {
   name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   name_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   name_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
-  systemTypeGroupsContainsSystemTypeAggregate?: InputMaybe<SystemTypeSystemTypeGroupsContainsSystemTypeAggregateInput>;
-  /** Return SystemTypes where all of the related SystemTypeSystemTypeGroupsContainsSystemTypeConnections match this filter */
-  systemTypeGroupsContainsSystemTypeConnection_ALL?: InputMaybe<SystemTypeSystemTypeGroupsContainsSystemTypeConnectionWhere>;
-  /** Return SystemTypes where none of the related SystemTypeSystemTypeGroupsContainsSystemTypeConnections match this filter */
-  systemTypeGroupsContainsSystemTypeConnection_NONE?: InputMaybe<SystemTypeSystemTypeGroupsContainsSystemTypeConnectionWhere>;
-  /** Return SystemTypes where one of the related SystemTypeSystemTypeGroupsContainsSystemTypeConnections match this filter */
-  systemTypeGroupsContainsSystemTypeConnection_SINGLE?: InputMaybe<SystemTypeSystemTypeGroupsContainsSystemTypeConnectionWhere>;
-  /** Return SystemTypes where some of the related SystemTypeSystemTypeGroupsContainsSystemTypeConnections match this filter */
-  systemTypeGroupsContainsSystemTypeConnection_SOME?: InputMaybe<SystemTypeSystemTypeGroupsContainsSystemTypeConnectionWhere>;
-  /** Return SystemTypes where all of the related SystemTypeGroups match this filter */
-  systemTypeGroupsContainsSystemType_ALL?: InputMaybe<SystemTypeGroupWhere>;
-  /** Return SystemTypes where none of the related SystemTypeGroups match this filter */
-  systemTypeGroupsContainsSystemType_NONE?: InputMaybe<SystemTypeGroupWhere>;
-  /** Return SystemTypes where one of the related SystemTypeGroups match this filter */
-  systemTypeGroupsContainsSystemType_SINGLE?: InputMaybe<SystemTypeGroupWhere>;
-  /** Return SystemTypes where some of the related SystemTypeGroups match this filter */
-  systemTypeGroupsContainsSystemType_SOME?: InputMaybe<SystemTypeGroupWhere>;
+  systemTypeGroup?: InputMaybe<SystemTypeGroupWhere>;
+  systemTypeGroupAggregate?: InputMaybe<SystemTypeSystemTypeGroupAggregateInput>;
+  systemTypeGroupConnection?: InputMaybe<SystemTypeSystemTypeGroupConnectionWhere>;
+  systemTypeGroupConnection_NOT?: InputMaybe<SystemTypeSystemTypeGroupConnectionWhere>;
+  systemTypeGroup_NOT?: InputMaybe<SystemTypeGroupWhere>;
   uid?: InputMaybe<Scalars['ID']['input']>;
   uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
   uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
@@ -13246,7 +13229,7 @@ export type SystemUpdateInput = {
   facility?: InputMaybe<SystemFacilityUpdateFieldInput>;
   isTechnologicalUnit?: InputMaybe<Scalars['Boolean']['input']>;
   location?: InputMaybe<SystemLocationUpdateFieldInput>;
-  maintenedBy?: InputMaybe<Array<SystemMaintenedByUpdateFieldInput>>;
+  maintainedBy?: InputMaybe<Array<SystemMaintainedByUpdateFieldInput>>;
   name?: InputMaybe<Scalars['String']['input']>;
   operators?: InputMaybe<Array<SystemOperatorsUpdateFieldInput>>;
   owner?: InputMaybe<SystemOwnerUpdateFieldInput>;
@@ -13282,23 +13265,23 @@ export type SystemWhere = {
   locationConnection?: InputMaybe<SystemLocationConnectionWhere>;
   locationConnection_NOT?: InputMaybe<SystemLocationConnectionWhere>;
   location_NOT?: InputMaybe<LocationWhere>;
-  maintenedByAggregate?: InputMaybe<SystemMaintenedByAggregateInput>;
-  /** Return Systems where all of the related SystemMaintenedByConnections match this filter */
-  maintenedByConnection_ALL?: InputMaybe<SystemMaintenedByConnectionWhere>;
-  /** Return Systems where none of the related SystemMaintenedByConnections match this filter */
-  maintenedByConnection_NONE?: InputMaybe<SystemMaintenedByConnectionWhere>;
-  /** Return Systems where one of the related SystemMaintenedByConnections match this filter */
-  maintenedByConnection_SINGLE?: InputMaybe<SystemMaintenedByConnectionWhere>;
-  /** Return Systems where some of the related SystemMaintenedByConnections match this filter */
-  maintenedByConnection_SOME?: InputMaybe<SystemMaintenedByConnectionWhere>;
+  maintainedByAggregate?: InputMaybe<SystemMaintainedByAggregateInput>;
+  /** Return Systems where all of the related SystemMaintainedByConnections match this filter */
+  maintainedByConnection_ALL?: InputMaybe<SystemMaintainedByConnectionWhere>;
+  /** Return Systems where none of the related SystemMaintainedByConnections match this filter */
+  maintainedByConnection_NONE?: InputMaybe<SystemMaintainedByConnectionWhere>;
+  /** Return Systems where one of the related SystemMaintainedByConnections match this filter */
+  maintainedByConnection_SINGLE?: InputMaybe<SystemMaintainedByConnectionWhere>;
+  /** Return Systems where some of the related SystemMaintainedByConnections match this filter */
+  maintainedByConnection_SOME?: InputMaybe<SystemMaintainedByConnectionWhere>;
   /** Return Systems where all of the related Employees match this filter */
-  maintenedBy_ALL?: InputMaybe<EmployeeWhere>;
+  maintainedBy_ALL?: InputMaybe<EmployeeWhere>;
   /** Return Systems where none of the related Employees match this filter */
-  maintenedBy_NONE?: InputMaybe<EmployeeWhere>;
+  maintainedBy_NONE?: InputMaybe<EmployeeWhere>;
   /** Return Systems where one of the related Employees match this filter */
-  maintenedBy_SINGLE?: InputMaybe<EmployeeWhere>;
+  maintainedBy_SINGLE?: InputMaybe<EmployeeWhere>;
   /** Return Systems where some of the related Employees match this filter */
-  maintenedBy_SOME?: InputMaybe<EmployeeWhere>;
+  maintainedBy_SOME?: InputMaybe<EmployeeWhere>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;

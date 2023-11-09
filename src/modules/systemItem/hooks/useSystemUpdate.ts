@@ -81,7 +81,7 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
     onCompleted
   })
 
-  const { newMaintenedBy, newOperators, disconnectOperators, disconnectMaintenedBy } = useSystemItemStore()
+  const { newMaintainedBy, newOperators, disconnectOperators, disconnectMaintainedBy } = useSystemItemStore()
 
   const updateSystemQuery = (systemForm: SystemDetailFormType) => {
     update({
@@ -95,10 +95,10 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
               disconnect: disconnectOperators.map(operator => whereN(operator.uid))
             }
           ],
-          maintenedBy: [
+          maintainedBy: [
             {
-              connect: newMaintenedBy.map(maintenedBy => whereN(maintenedBy.uid)),
-              disconnect: disconnectMaintenedBy.map(maintenedBy => whereN(maintenedBy.uid))
+              connect: newMaintainedBy.map(maintainedBy => whereN(maintainedBy.uid)),
+              disconnect: disconnectMaintainedBy.map(maintainedBy => whereN(maintainedBy.uid))
             }
           ]
         }

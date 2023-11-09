@@ -7,24 +7,25 @@ type SystemStore = {
   disconnectOperators: Employee[]
   setNewOperator: (employee: Employee) => void
   setDisconnectOperator: (employee: Employee) => void
-  newMaintenedBy: Employee[]
-  disconnectMaintenedBy: Employee[]
-  setNewMaintenedBy: (employee: Employee) => void
-  setDisconnectMaintenedBy: (employee: Employee) => void
+  newMaintainedBy: Employee[]
+  disconnectMaintainedBy: Employee[]
+  setNewMaintainedBy: (employee: Employee) => void
+  setDisconnectMaintainedBy: (employee: Employee) => void
   clear: () => void
 }
 
 export const useSystemItemStore = create<SystemStore>(set => ({
   newOperators: [],
   disconnectOperators: [],
-  newMaintenedBy: [],
-  disconnectMaintenedBy: [],
+  newMaintainedBy: [],
+  disconnectMaintainedBy: [],
   setNewOperator: (employee: Employee) => set(state => ({ newOperators: [...state.newOperators, employee] })),
   setDisconnectOperator: (employee: Employee) =>
     set(state => ({ disconnectOperators: [...state.disconnectOperators, employee] })),
-  setNewMaintenedBy: (employee: Employee) => set(state => ({ newMaintenedBy: [...state.newMaintenedBy, employee] })),
-  setDisconnectMaintenedBy: (employee: Employee) =>
-    set(state => ({ disconnectMaintenedBy: [...state.disconnectMaintenedBy, employee] })),
+  setNewMaintainedBy: (employee: Employee) => set(state => ({ newMaintainedBy: [...state.newMaintainedBy, employee] })),
+  setDisconnectMaintainedBy: (employee: Employee) =>
+    set(state => ({ disconnectMaintainedBy: [...state.disconnectMaintainedBy, employee] })),
 
-  clear: () => set(() => ({ disconnectOperators: [], disconnectMaintenedBy: [], newMaintenedBy: [], newOperators: [] }))
+  clear: () =>
+    set(() => ({ disconnectOperators: [], disconnectMaintainedBy: [], newMaintainedBy: [], newOperators: [] }))
 }))

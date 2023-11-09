@@ -25,6 +25,7 @@ export type ListboxPropsT = FieldProps & {
   onChange?: (value: any) => void
   className?: string
   defaultValue?: CodebookType[] | string | null
+  onClickIcon?: () => void
   //name: Path<any>
 }
 
@@ -45,7 +46,8 @@ const Listbox = ({
   customLabel,
   codebookResponse,
   placeholder,
-  onChange
+  onChange,
+  onClickIcon
 }: ListboxPropsT) => {
   const { control, setValue } = useFormContext()
   const intl = useIntl()
@@ -113,7 +115,7 @@ const Listbox = ({
               {!disabled && allowEmptyOption && <FormXMarkIcon onClick={handleClear} />}
               <div className="absolute inset-y-0 right-0 flex items-center pr-2">
                 {unit && <span className="text-gray-400 sm:text-sm">{unit}</span>}
-                <ChevronDownIcon className="h-4 w-4 text-gray-500" aria-hidden="true" />
+                <ChevronDownIcon onClick={onClickIcon} className="h-4 w-4 text-gray-500" aria-hidden="true" />
               </div>
             </HUIListbox.Button>
           </div>
