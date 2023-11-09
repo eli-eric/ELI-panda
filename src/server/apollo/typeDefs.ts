@@ -263,7 +263,7 @@ export const typeDefs = gql`
     code: String!
     mask: String!
     name: String!
-    systemTypeGroupsContainsSystemType: [SystemTypeGroup!]! @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: IN)
+    systemTypeGroup: SystemTypeGroup! @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: IN)
     uid: ID! @id
   }
 
@@ -282,8 +282,8 @@ export const typeDefs = gql`
   }
 
   type SystemTypeGroup {
-    belongsToFacilityFacilities: [Facility!]! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
-    containsSystemTypeSystemTypes: [SystemType!]! @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: OUT)
+    facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    systemTypes: [SystemType!]! @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: OUT)
     name: String!
     uid: String!
   }

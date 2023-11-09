@@ -7,6 +7,7 @@ import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
 import { SelectLocationTree } from '@/modules/shared/form/location/SelectLocation.combo'
+import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
 import { useSystemItemStore } from '@/modules/systemItem/store/useSystemItemStore'
 import { SystemLevel } from '@/types/gql/graphql'
 
@@ -21,7 +22,7 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
   const fields = useSystemFormFields()
   const { setNewMaintainedBy, setDisconnectMaintainedBy, setNewOperator, setDisconnectOperator } = useSystemItemStore()
   const { control } = useFormContext()
-  const MaintainedBy = useWatch({ control, name: 'MaintainedBy' })
+  const maintainedBy = useWatch({ control, name: 'maintainedBy' })
   const operators = useWatch({ control, name: 'operators' })
 
   const systemLevels = Object.values(SystemLevel).map(level => level)
@@ -38,7 +39,7 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
           </Col>
           <Col sm={3} md={6} lg={8} className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-x-2 gap-y-4 mb-auto">
             <Col sm={3} md={6} lg={4}>
-              <Listbox {...fields.systemType} />
+              <SystemTypeComboBox systemTypeField={fields.systemType} />
             </Col>
             <Col sm={3} md={6} lg={4}>
               <Listbox
@@ -84,7 +85,7 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
             <EmployeeTable
               name="maintainedBy"
               tableId="systemMainteners"
-              data={MaintainedBy}
+              data={maintainedBy}
               header={'Maintained By'}
               setNewEmployee={setNewMaintainedBy}
               setDisconnectEmployee={setDisconnectMaintainedBy}

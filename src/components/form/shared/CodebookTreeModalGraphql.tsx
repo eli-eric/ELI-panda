@@ -27,8 +27,11 @@ interface CodebookTreeModalProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   data?: Codebooktree[]
   name: string
-  fetchChildren: (uid: string) => void
+  fetchChildren?: (uid: string) => void
   additionalColumn?: ColumnDef<Codebooktree, string>
+  tableId?: string
+  selectParent?: boolean
+  manualFiltering?: boolean
 }
 
 export const CodebookTreeModalGraphql = ({
@@ -39,7 +42,10 @@ export const CodebookTreeModalGraphql = ({
   fetchChildren,
   additionalColumn,
   enableFiltering,
-  loading
+  loading,
+  tableId = 'codebook-tree',
+  selectParent = true,
+  manualFiltering
 }: CodebookTreeModalProps) => {
   const [item, setItem] = useState<CodebookType | undefined>(undefined)
   const { setValue } = useFormContext()
@@ -66,7 +72,7 @@ export const CodebookTreeModalGraphql = ({
             className={classNames('my-1 flex items-center')}
             onClick={() => {
               if (row.original.isExpandable) {
-                fetchChildren(row.original.uid)
+                fetchChildren && fetchChildren(row.original.uid)
                 row.toggleExpanded()
               }
             }}
@@ -118,22 +124,30 @@ export const CodebookTreeModalGraphql = ({
     <ModalComponent open={open} setOpen={setOpen} buttons={modalButtons}>
       <div className={classNames('max-h-[300px]', loading && ' opacity-70')}>
         <PandaTable
-          tableId="codebook-tree"
+          tableId={tableId}
           columns={columns}
           data={data}
           getSubRows={row => row.children}
           settings={{
             enableRowSelection: true,
             enableFiltering: enableFiltering,
-            manualFiltering: true
+            manualFiltering: manualFiltering
           }}
           className={'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'}
           getRowProps={row => ({
             onClick: () => {
-              setItem({
-                uid: row.original.uid,
-                name: row.original.name + (row.original.code ? ` (${row.original.code})` : '')
-              })
+              if (selectParent) {
+                setItem({
+                  uid: row.original.uid,
+                  name: row.original.name + (row.original.code ? ` (${row.original.code})` : '')
+                })
+              }
+              if (!row.original.isExpandable && !selectParent) {
+                setItem({
+                  uid: row.original.uid,
+                  name: row.original.name + (row.original.code ? ` (${row.original.code})` : '')
+                })
+              }
             },
             className: classNames(
               item?.uid === row.original.uid ? 'bg-primary-200 hover:bg-primary-200' : '',
