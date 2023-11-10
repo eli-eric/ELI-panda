@@ -2,10 +2,10 @@ import { useRouter } from 'next/router'
 
 import { BackButton, Button } from '@/components/Buttons'
 import Card from '@/components/layout/Card'
+import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
-
-import { useSystemDetail } from '../hooks/useSystemDetail'
+import { ROLE } from '@/types/constants/roles'
 
 interface Props {
   loading?: boolean
@@ -16,7 +16,7 @@ const messages = message.common.buttons
 
 const HeaderComponent = ({ loading, onSubmit }: Props) => {
   const router = useRouter()
-  const { disabledEdit } = useSystemDetail()
+  const disableEdit = usePermission([ROLE.SYSTEM_EDIT])
 
   return (
     <div className="sticky  top-0 z-20 flex h-16 flex-shrink-0 bg-white border-b">
@@ -30,7 +30,7 @@ const HeaderComponent = ({ loading, onSubmit }: Props) => {
               router.push(PATH.SYSTEMS)
             }}
           />
-          {!disabledEdit && (
+          {disableEdit && (
             <Button
               primary
               buttonSize="large"

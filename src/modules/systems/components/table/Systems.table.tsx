@@ -1,5 +1,5 @@
 import type { Row, Table } from '@tanstack/react-table'
-import { Fragment, memo, useCallback, useRef } from 'react'
+import { Fragment, useCallback, useRef } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { Pagination } from '@/modules/shared/table/Pagination'
@@ -11,8 +11,6 @@ import { useSystems } from '../../hooks/useSystems'
 import type { SystemDetail } from '../../types/responses'
 import { SearchBarButtons } from '../SearchBarButtons'
 import { useSystemsColumns } from './useSystemsColumns'
-
-const MemoizedTable = memo(PandaTable)
 
 interface Props {
   tableId: string
@@ -52,7 +50,7 @@ export const SystemsTable = ({
         onChange={onChangeSearch}
         right={RightSearchBarElement && <RightSearchBarElement />}
       />
-      <MemoizedTable
+      <PandaTable
         ref={tableRef}
         columns={columns}
         data={systems?.data}
