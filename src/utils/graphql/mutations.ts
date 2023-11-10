@@ -6,9 +6,12 @@ export const whereN = (uid?: string) => ({
   }
 })
 
-export const connectN = (uid?: string) => ({
-  connect: uid ? whereN(uid) : undefined
-})
+export const connectN = (uid?: string) =>
+  uid
+    ? {
+        connect: uid ? whereN(uid) : undefined
+      }
+    : undefined
 
 export const disconnectN = (uid?: string) => ({
   disconnect: whereN(uid)

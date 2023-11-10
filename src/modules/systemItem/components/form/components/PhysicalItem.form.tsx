@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useContext } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import { LinkDecorator } from '@/components/decorators'
@@ -8,7 +9,7 @@ import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import { Paragraph } from '@/components/layout/Paragraph'
 import { message } from '@/i18n/src/messages'
-import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
+import { SystemDetailContext } from '@/pages/system/[uid]'
 import { PATH } from '@/types/constants/paths'
 
 import { createMessageValues } from '../../../../../utils/formatters'
@@ -18,7 +19,7 @@ const propertyMessage = message.systemsPage.systemDetail.form.physicalItem.gener
 
 export const PhysicalItemForm = () => {
   const fields = useSystemFormFields()
-  const { systemDetail } = useSystemDetail()
+  const { systemDetail } = useContext(SystemDetailContext)
   const properties = systemDetail?.physicalItem?.catalogueItem.propertiesConnection.edges
   const description = systemDetail?.physicalItem?.catalogueItem.description
 

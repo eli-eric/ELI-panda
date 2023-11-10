@@ -19,7 +19,7 @@ const CREATE_SYSTEM = gql`
   ${SYSTEM_DETAIL}
   mutation CreateSystems($input: [SystemCreateInput!]!) {
     createSystems(input: $input) {
-      systems(where: $where) {
+      systems {
         ...SystemDetail
       }
     }

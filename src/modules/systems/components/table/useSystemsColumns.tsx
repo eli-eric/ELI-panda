@@ -58,7 +58,7 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
         id: 'location',
         size: 150
       },
-      { header: 'Owner', accessorFn: row => row.owner?.name, id: 'owner', size: 150 },
+      { header: 'Responsible', accessorFn: row => row.responsible?.name, id: 'responsible', size: 150 },
       {
         header: 'Description',
         accessorFn: row => row.description,

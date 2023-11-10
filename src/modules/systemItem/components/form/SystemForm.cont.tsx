@@ -1,6 +1,6 @@
 import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { memo, useRef } from 'react'
+import { memo, useContext, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
@@ -9,7 +9,6 @@ import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { FILE_TYPE } from '@/types/constants/files'
 
 import { useParentSystemDetail } from '../../hooks/useParentSystemDetail'
-import { useSystemDetail } from '../../hooks/useSystemDetail'
 import Breadcrumbs from '../Breadcrumps'
 import HeaderComponent from '../Header.comp'
 import { SystemMainForm } from './components/SystemMain.form'
@@ -21,6 +20,9 @@ import { useRouter } from 'next/router'
 
 import Card from '@/components/layout/Card'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import usePermission from '@/hooks/usePermission'
+import { SystemDetailContext } from '@/pages/system/[uid]'
+import { ROLE } from '@/types/constants/roles'
 import { SystemLevel } from '@/types/gql/graphql'
 import { classNames } from '@/utils'
 
@@ -38,7 +40,8 @@ const FormCard = ({ children, className }: CardProps) => (
 )
 
 export const SystemForm = () => {
-  const { systemDetail, disabledEdit } = useSystemDetail()
+  const { systemDetail } = useContext(SystemDetailContext)
+  const disableEdit = usePermission([ROLE.SYSTEM_EDIT])
 
   const router = useRouter()
   const uid = router.query.uid as string | undefined
@@ -94,7 +97,7 @@ export const SystemForm = () => {
             setValue={formMethods.setValue}
             config={{ itemCategory: FILE_TYPE.SYSTEM, itemId: String(uid) }}
             className="w-full"
-            hasEditRole={!disabledEdit}
+            hasEditRole={!disableEdit}
           />
         </SystemMainForm>
         {systemDetail?.physicalItem && <SystemItemCard />}
