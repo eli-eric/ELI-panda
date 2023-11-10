@@ -58,9 +58,7 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
   const router = useRouter()
   const uid = router.query.uid as string
   const { systemDetail, refetch } = useSystemDetail(uid)
-
   const { mutate } = useSystems('systems')
-
   const onCompleted = ({ updateSystems: { systems } }) => {
     const responseUid = systems[0].uid
     const body = systems[0]
@@ -81,7 +79,7 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
   const [update, { loading }] = useMutation<Mutation, MutationUpdateSystemsArgs>(UPDATE_SYSTEM, {
     onCompleted,
     onError: error => {
-      toast.error("Something went wrong, couldn't save system: " + error.message)
+      toast.error('Something went wrong: ' + error.message)
     }
   })
 
