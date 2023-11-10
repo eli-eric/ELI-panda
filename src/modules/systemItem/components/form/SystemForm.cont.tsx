@@ -87,8 +87,8 @@ export const SystemForm = () => {
         className={classNames(
           'shadow-md rounded-lg border',
           systemLevel === SystemLevel.KeySystems && 'bg-primary-100',
-          systemLevel === SystemLevel.SubsystemsAndParts && 'bg-lime-100',
-          systemLevel === SystemLevel.TechnologyUnit && 'bg-sky-100'
+          systemLevel === SystemLevel.SubsystemsAndParts && 'bg-sky-100',
+          systemLevel === SystemLevel.TechnologyUnit && 'bg-lime-100'
         )}
       >
         <SystemMainForm>

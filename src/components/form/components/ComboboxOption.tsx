@@ -1,8 +1,9 @@
 import { Combobox as HUICombobox } from '@headlessui/react'
-import { CheckIcon } from '@heroicons/react/24/outline'
 
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { classNames } from '@/utils'
+
+import { SelectOption } from './SelectOption'
 
 interface Props {
   item: CodebookType
@@ -11,7 +12,7 @@ interface Props {
 
 export const ComboboxOption = ({ item, selected }: Props) => (
   <HUICombobox.Option
-    key={item.uid}
+    as="div"
     value={item}
     defaultValue={''}
     className={({ active }) =>
@@ -21,20 +22,6 @@ export const ComboboxOption = ({ item, selected }: Props) => (
       )
     }
   >
-    {({ active }) => (
-      <>
-        <span className={classNames('block truncate', selected && 'font-semibold')}>{item.name}</span>
-        {selected && (
-          <span
-            className={classNames(
-              'absolute inset-y-0 right-0 flex items-center pr-4',
-              active ? 'text-white' : 'text-primary-500'
-            )}
-          >
-            <CheckIcon className="h-4 w-4" aria-hidden="true" />
-          </span>
-        )}
-      </>
-    )}
+    {({ active }) => <SelectOption item={item} selected={selected} active={active} />}
   </HUICombobox.Option>
 )
