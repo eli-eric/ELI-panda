@@ -61,7 +61,13 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
   const { mutate } = useSystems('systems')
   const onCompleted = ({ updateSystems: { systems } }) => {
     const responseUid = systems[0].uid
-    const body = systems[0]
+    const body = {
+      ...systems[0],
+      responsible: {
+        uid: systems[0].responsible.uid,
+        name: systems[0].responsible.fullName
+      }
+    }
     imageRef?.current?.submit(responseUid, () => {
       toast.success(`System ${responseUid} saved successfully`)
       if (uid) {
@@ -70,6 +76,7 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
         router.replace(PATH.SYSTEM + '/' + responseUid)
       }
       //mutate(systemsRefresh, { revalidate: false })
+      console.log('systemDetail', body)
       mutate(prev => prev && updateSystem(uid, body, prev), { revalidate: false })
 
       refetch()

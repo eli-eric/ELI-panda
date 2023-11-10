@@ -74,7 +74,6 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
           </Fragment>
         )
       },
-      { header: 'Responsible', accessorFn: row => row.responsible?.name, id: 'responsible', size: 150 },
       { header: 'Importance', accessorFn: row => row.importance?.name, id: 'importance', size: 150 },
       {
         header: 'Sub Systems Count',
