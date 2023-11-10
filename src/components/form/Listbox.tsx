@@ -1,5 +1,5 @@
 import { Listbox as HUIListbox } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import React, { useMemo } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
@@ -11,6 +11,7 @@ import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
 
 import { FormXMarkIcon } from './components/FormXMarkIcon'
+import { SelectOption } from './components/SelectOption'
 
 export type ListboxPropsT = FieldProps & {
   codebook?: CODEBOOK
@@ -140,22 +141,7 @@ const Listbox = ({
                 >
                   {({ active }) => {
                     const selected = customOptions ? field.value === item.uid : field.value?.uid === item.uid
-                    return (
-                      <>
-                        <span className={classNames('block truncate', selected && 'font-semibold')}>{item?.name}</span>
-
-                        {selected && (
-                          <span
-                            className={classNames(
-                              'absolute inset-y-0 right-0 flex items-center pr-4',
-                              active ? 'text-white' : 'text-primary-500'
-                            )}
-                          >
-                            <CheckIcon className="h-4 w-4" aria-hidden="true" />
-                          </span>
-                        )}
-                      </>
-                    )
+                    return <SelectOption item={item} selected={selected} active={active} />
                   }}
                 </HUIListbox.Option>
               ))}

@@ -1,13 +1,13 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Fragment, Suspense } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
+import { createContext, Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
+import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { SystemItemContainer } from '@/modules/systemItem/SystemItem.cont'
+import type { System } from '@/types/gql/graphql'
 
 const messages = message.systemItem
 
@@ -16,8 +16,23 @@ interface Props {
   uid?: string
 }
 
+type SystemDetailContextType = {
+  systemDetail?: System
+  loading: boolean
+}
+
+export const SystemDetailContext = createContext<SystemDetailContextType>({
+  systemDetail: undefined,
+  loading: false
+})
+
 const SystemDetailPage: NextPage = ({ uid }: Props) => {
   const intl = useIntl()
+  const { systemDetail, loading } = useSystemDetail(uid)
+
+  if (loading) {
+    return <LoaderComponent />
+  }
 
   return (
     <Fragment>
@@ -25,11 +40,9 @@ const SystemDetailPage: NextPage = ({ uid }: Props) => {
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-      <ErrorBoundary fallback={<ErrorPage />}>
-        <Suspense fallback={<LoaderComponent />}>
-          <SystemItemContainer uid={uid} />
-        </Suspense>
-      </ErrorBoundary>
+      <SystemDetailContext.Provider value={{ systemDetail, loading }}>
+        <SystemItemContainer uid={uid} />
+      </SystemDetailContext.Provider>
     </Fragment>
   )
 }

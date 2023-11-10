@@ -57,9 +57,8 @@ const systemInput = ({ systemForm, systemDetail }: { systemForm; systemDetail })
 export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>) => {
   const router = useRouter()
   const uid = router.query.uid as string
-  const { systemDetail, refetch } = useSystemDetail()
+  const { systemDetail, refetch } = useSystemDetail(uid)
   const { mutate } = useSystems('systems')
-
   const onCompleted = ({ updateSystems: { systems } }) => {
     const responseUid = systems[0].uid
     const body = systems[0]
@@ -78,7 +77,10 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
   }
 
   const [update, { loading }] = useMutation<Mutation, MutationUpdateSystemsArgs>(UPDATE_SYSTEM, {
-    onCompleted
+    onCompleted,
+    onError: error => {
+      toast.error('Something went wrong: ' + error.message)
+    }
   })
 
   const { newMaintainedBy, newOperators, disconnectOperators, disconnectMaintainedBy } = useSystemItemStore()

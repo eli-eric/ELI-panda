@@ -19,7 +19,7 @@ const CREATE_SYSTEM = gql`
   ${SYSTEM_DETAIL}
   mutation CreateSystems($input: [SystemCreateInput!]!) {
     createSystems(input: $input) {
-      systems(where: $where) {
+      systems {
         ...SystemDetail
       }
     }
@@ -43,7 +43,10 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
   }
 
   const [create, { loading }] = useMutation<Mutation, MutationCreateSystemsArgs>(CREATE_SYSTEM, {
-    onCompleted
+    onCompleted,
+    onError: error => {
+      toast.error('Something went wrong: ' + error.message)
+    }
   })
 
   const createSystem = (systemForm: SystemDetailFormType) => {
