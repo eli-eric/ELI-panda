@@ -4,6 +4,7 @@ import { createContext, Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
+import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { SystemItemContainer } from '@/modules/systemItem/SystemItem.cont'
@@ -28,10 +29,14 @@ export const SystemDetailContext = createContext<SystemDetailContextType>({
 
 const SystemDetailPage: NextPage = ({ uid }: Props) => {
   const intl = useIntl()
-  const { systemDetail, loading } = useSystemDetail(uid)
+  const { systemDetail, loading, error } = useSystemDetail(uid)
 
   if (loading) {
     return <LoaderComponent />
+  }
+
+  if (error) {
+    return <ErrorPage />
   }
 
   return (

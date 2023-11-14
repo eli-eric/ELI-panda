@@ -1,4 +1,5 @@
 import { gql, useQuery } from '@apollo/client'
+import { toast } from 'react-hot-toast'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import type { Query } from '@/types/gql/graphql'
@@ -15,7 +16,12 @@ const GET_SYSTEM = gql`
 
 export const useSystemDetail = (uid?: string) => {
   const { system: systemEndpoint } = useEndpoint({ uid })
-  const { data, error, loading, refetch } = useQuery<Query>(GET_SYSTEM, { variables: { where: { uid } } })
+  const { data, error, loading, refetch } = useQuery<Query>(GET_SYSTEM, {
+    variables: { where: { uid } },
+    onError: error => {
+      toast.error('Something went wrong while fetching system detail: ' + error.message)
+    }
+  })
 
   return {
     systemDetail: data?.systems[0],
