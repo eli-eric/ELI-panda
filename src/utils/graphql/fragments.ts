@@ -53,6 +53,10 @@ export const CATALOGUE_ITEM = gql`
     name
     catalogueNumber
     description
+    catalogueCategory {
+      uid
+      name
+    }
     supplier {
       uid
       name

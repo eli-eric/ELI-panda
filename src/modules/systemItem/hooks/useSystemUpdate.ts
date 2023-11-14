@@ -61,8 +61,16 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
   const { mutate } = useSystems('systems')
   const onCompleted = ({ updateSystems: { systems } }) => {
     const responseUid = systems[0].uid
+    console.log('responseUid', systems)
     const body = {
       ...systems[0],
+      physicalItem: systems[0]?.physicalItem && {
+        ...systems[0]?.physicalItem,
+        catalogueItem: systems[0]?.physicalItem?.catalogueItem && {
+          ...systems[0]?.physicalItem?.catalogueItem,
+          category: systems[0]?.physicalItem?.catalogueItem?.catalogueCategory
+        }
+      },
       responsible: systems[0]?.responsible && {
         uid: systems[0].responsible.uid,
         name: systems[0].responsible.fullName

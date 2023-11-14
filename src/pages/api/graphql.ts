@@ -11,7 +11,7 @@ import { authOptions } from './auth/[...nextauth]'
 
 const server = async (): Promise<ApolloServer> => {
   const schema = await neoSchema.getSchema()
-  //await neoSchema.assertIndexesAndConstraints({ options: { create: true, } })
+  //await neoSchema.assertIndexesAndConstraints({ options: { create: true } })
 
   const apolloConfig = {
     schema
@@ -22,7 +22,7 @@ const server = async (): Promise<ApolloServer> => {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions as NextAuthOptions)
 
-  if (!session?.user) {
+  if (!session?.user && process.env.PANDA_ENV !== 'localhost') {
     res.status(403).json('Authentication required.')
     return
   }
