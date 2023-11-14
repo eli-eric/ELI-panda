@@ -34,7 +34,7 @@ const DateInput = ({ name, disabled, rounded = 'rounded-md', className, hidden, 
         <div
           hidden={hidden}
           className={classNames(
-            'block z-50 w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+            'block z-10 w-full appearance-none placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
             className
           )}
         >
@@ -43,16 +43,15 @@ const DateInput = ({ name, disabled, rounded = 'rounded-md', className, hidden, 
               {label}
             </label>
           )}
-          <div hidden={hidden} className="relative z-50">
+          <div hidden={hidden} className="relative">
             <DatePicker
               {...restProps}
-              popperClassName="z-50"
               hidden={hidden}
               name={name}
               type="date"
               disabled={disabled}
               className={classNames(
-                'block z-50 w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                 rounded,
                 error ? 'border-red-500' : 'border-gray-300',
                 disabled ? 'bg-gray-100' : ''
