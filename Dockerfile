@@ -21,6 +21,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+ARG NEO4J_PASSWORD
+
 ENV PANDA_API_GW_URL="https://panda-api.eli-laser.eu/v1"
 ENV MINIO_ENDPOINT="minio-main"
 ENV MINIO_BUCKET_NAME="panda-production"
