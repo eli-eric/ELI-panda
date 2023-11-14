@@ -5,7 +5,7 @@ export const typeDefs = gql`
     roles: [String!]!
   }
 
-  type Location @authentication {
+  type Location {
     uid: ID! @id
     belongsToFacilityFacilities: [Facility!]! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
     code: String
@@ -23,12 +23,12 @@ export const typeDefs = gql`
     IN_PREPARATION_MODE
   }
 
-  type ContactPersonRole @authentication {
+  type ContactPersonRole {
     uid: ID! @id
     name: String!
   }
 
-  type HallContactPerson @authentication {
+  type HallContactPerson {
     uid: ID! @id
     employee: Employee! @relationship(type: "HAS_CONTACT_PERSON", direction: OUT)
     role: ContactPersonRole @relationship(type: "HAS_ROOM_CARD_ROLE", direction: OUT)
@@ -63,12 +63,12 @@ export const typeDefs = gql`
     humidity: String
   }
 
-  type Team @authentication {
+  type Team {
     uid: ID! @id
     name: String!
   }
 
-  type Employee @authentication {
+  type Employee {
     uid: ID! @id
     firstName: String!
     fullName: String
@@ -82,7 +82,7 @@ export const typeDefs = gql`
     name: String
   }
 
-  type CatalogueCategory @authentication {
+  type CatalogueCategory {
     uid: ID! @id
     code: String!
     name: String!
@@ -105,7 +105,7 @@ export const typeDefs = gql`
       )
   }
 
-  type CatalogueCategoryProperty @authentication {
+  type CatalogueCategoryProperty {
     catalogueCategoryPropertyGroupsContainsProperty: [CatalogueCategoryPropertyGroup!]!
       @relationship(type: "CONTAINS_PROPERTY", direction: IN)
     defaultValue: String!
@@ -118,7 +118,7 @@ export const typeDefs = gql`
     uid: String!
   }
 
-  type CatalogueCategoryPropertyGroup @authentication {
+  type CatalogueCategoryPropertyGroup {
     catalogueCategoriesHasGroup: [CatalogueCategory!]! @relationship(type: "HAS_GROUP", direction: IN)
     containsPropertyCatalogueCategoryProperties: [CatalogueCategoryProperty!]!
       @relationship(type: "CONTAINS_PROPERTY", direction: OUT)
@@ -126,7 +126,7 @@ export const typeDefs = gql`
     uid: String!
   }
 
-  type CatalogueCategoryPropertyType @authentication {
+  type CatalogueCategoryPropertyType {
     catalogueCategoryPropertiesIsPropertyType: [CatalogueCategoryProperty!]!
       @relationship(type: "IS_PROPERTY_TYPE", direction: IN)
     code: String!
@@ -134,7 +134,7 @@ export const typeDefs = gql`
     uid: String!
   }
 
-  type CatalogueItem @authentication {
+  type CatalogueItem {
     belongsToCategoryCatalogueCategories: [CatalogueCategory!]!
       @relationship(type: "BELONGS_TO_CATEGORY", direction: OUT)
     catalogueNumber: String!
@@ -151,7 +151,7 @@ export const typeDefs = gql`
     value: String
   }
 
-  type Facility @authentication {
+  type Facility {
     code: String!
     hasLocationLocations: [Location!]! @relationship(type: "HAS_LOCATION", direction: OUT)
     hasZoneZones: [Zone!]! @relationship(type: "HAS_ZONE", direction: OUT)
@@ -161,12 +161,12 @@ export const typeDefs = gql`
     uid: String!
   }
 
-  type Supplier @authentication {
+  type Supplier {
     uid: ID! @id
     name: String!
   }
 
-  type Role @authentication {
+  type Role {
     code: String!
     name: String!
     uid: ID! @id
@@ -236,7 +236,7 @@ export const typeDefs = gql`
     SUBSYSTEMS_AND_PARTS
   }
 
-  type Item @authentication {
+  type Item {
     uid: ID! @id
     eun: String
     name: String!
@@ -249,31 +249,31 @@ export const typeDefs = gql`
     notes: String
   }
 
-  type SystemCriticality @authentication {
+  type SystemCriticality {
     code: String!
     name: String!
     uid: ID! @id
   }
 
-  type ItemCondition @authentication {
+  type ItemCondition {
     code: String!
     name: String!
     uid: ID! @id
   }
 
-  type ItemUsage @authentication {
+  type ItemUsage {
     code: String!
     name: String!
     uid: ID! @id
   }
 
-  type SystemImportance @authentication {
+  type SystemImportance {
     code: String!
     name: String!
     uid: ID! @id
   }
 
-  type SystemType @authentication {
+  type SystemType {
     code: String!
     mask: String!
     name: String!
@@ -281,12 +281,12 @@ export const typeDefs = gql`
     uid: ID! @id
   }
 
-  type Order @authentication {
+  type Order {
     uid: ID! @id
     name: String!
   }
 
-  type Zone @authentication {
+  type Zone {
     code: String!
     facilitiesHasZone: [Facility!]! @relationship(type: "HAS_ZONE", direction: IN)
     hasSubzoneZones: [Zone!]! @relationship(type: "HAS_SUBZONE", direction: OUT)
@@ -295,20 +295,20 @@ export const typeDefs = gql`
     zonesHasSubzone: [Zone!]! @relationship(type: "HAS_SUBZONE", direction: IN)
   }
 
-  type SystemTypeGroup @authentication {
+  type SystemTypeGroup {
     facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
     systemTypes: [SystemType!]! @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: OUT)
     name: String!
     uid: String!
   }
 
-  type Unit @authentication {
+  type Unit {
     code: String!
     name: String!
     uid: ID! @id
   }
 
-  type User @authentication {
+  type User {
     email: String!
     firstName: String!
     hasRoleRoles: [Role!]! @relationship(type: "HAS_ROLE", direction: OUT)
