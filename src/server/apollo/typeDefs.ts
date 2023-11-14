@@ -34,14 +34,7 @@ export const typeDefs = gql`
     role: ContactPersonRole @relationship(type: "HAS_ROOM_CARD_ROLE", direction: OUT)
   }
 
-  type RoomCard
-    @authorization(
-      validate: [
-        { operations: [READ], where: { jwt: { roles_INCLUDES: "room-cards-view" } } }
-        { operations: [UPDATE], where: { jwt: { roles_INCLUDES: "room-cards-edit" } } }
-        { operations: [CREATE], where: { jwt: { roles_INCLUDES: "room-cards-edit" } } }
-      ]
-    ) {
+  type RoomCard @authentication {
     uid: ID! @id
     status: RoomCardStatus!
     contactPersonsHall: [HallContactPerson!]! @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: OUT)

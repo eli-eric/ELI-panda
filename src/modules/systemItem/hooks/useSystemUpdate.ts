@@ -63,7 +63,7 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
     const responseUid = systems[0].uid
     const body = {
       ...systems[0],
-      responsible: {
+      responsible: systems[0]?.responsible && {
         uid: systems[0].responsible.uid,
         name: systems[0].responsible.fullName
       }
@@ -75,10 +75,7 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
       } else {
         router.replace(PATH.SYSTEM + '/' + responseUid)
       }
-      //mutate(systemsRefresh, { revalidate: false })
-      console.log('systemDetail', body)
       mutate(prev => prev && updateSystem(uid, body, prev), { revalidate: false })
-
       refetch()
     })
   }
