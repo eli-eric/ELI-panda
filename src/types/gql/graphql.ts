@@ -2503,9 +2503,9 @@ export type CatalogueCategoryWhere = {
 
 export type CatalogueItem = {
   __typename?: 'CatalogueItem';
-  belongsToCategoryCatalogueCategories: Array<CatalogueCategory>;
-  belongsToCategoryCatalogueCategoriesAggregate?: Maybe<CatalogueItemCatalogueCategoryBelongsToCategoryCatalogueCategoriesAggregationSelection>;
-  belongsToCategoryCatalogueCategoriesConnection: CatalogueItemBelongsToCategoryCatalogueCategoriesConnection;
+  catalogueCategory: CatalogueCategory;
+  catalogueCategoryAggregate?: Maybe<CatalogueItemCatalogueCategoryCatalogueCategoryAggregationSelection>;
+  catalogueCategoryConnection: CatalogueItemCatalogueCategoryConnection;
   catalogueNumber: Scalars['String']['output'];
   description?: Maybe<Scalars['String']['output']>;
   manufacturerUrl: Scalars['String']['output'];
@@ -2520,25 +2520,25 @@ export type CatalogueItem = {
 };
 
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesArgs = {
+export type CatalogueItemCatalogueCategoryArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   options?: InputMaybe<CatalogueCategoryOptions>;
   where?: InputMaybe<CatalogueCategoryWhere>;
 };
 
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesAggregateArgs = {
+export type CatalogueItemCatalogueCategoryAggregateArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   where?: InputMaybe<CatalogueCategoryWhere>;
 };
 
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesConnectionArgs = {
+export type CatalogueItemCatalogueCategoryConnectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectionSort>>;
-  where?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectionWhere>;
+  sort?: InputMaybe<Array<CatalogueItemCatalogueCategoryConnectionSort>>;
+  where?: InputMaybe<CatalogueItemCatalogueCategoryConnectionWhere>;
 };
 
 
@@ -2595,76 +2595,89 @@ export type CatalogueItemAggregateSelection = {
   uid: StringAggregateSelectionNonNullable;
 };
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesAggregateInput = {
-  AND?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesAggregateInput>>;
-  NOT?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesAggregateInput>;
-  OR?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesAggregateInput>>;
+export type CatalogueItemCatalogueCategoryAggregateInput = {
+  AND?: InputMaybe<Array<CatalogueItemCatalogueCategoryAggregateInput>>;
+  NOT?: InputMaybe<CatalogueItemCatalogueCategoryAggregateInput>;
+  OR?: InputMaybe<Array<CatalogueItemCatalogueCategoryAggregateInput>>;
   count?: InputMaybe<Scalars['Int']['input']>;
   count_GT?: InputMaybe<Scalars['Int']['input']>;
   count_GTE?: InputMaybe<Scalars['Int']['input']>;
   count_LT?: InputMaybe<Scalars['Int']['input']>;
   count_LTE?: InputMaybe<Scalars['Int']['input']>;
-  node?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesNodeAggregationWhereInput>;
+  node?: InputMaybe<CatalogueItemCatalogueCategoryNodeAggregationWhereInput>;
 };
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesConnectFieldInput = {
-  connect?: InputMaybe<Array<CatalogueCategoryConnectInput>>;
+export type CatalogueItemCatalogueCategoryCatalogueCategoryAggregationSelection = {
+  __typename?: 'CatalogueItemCatalogueCategoryCatalogueCategoryAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<CatalogueItemCatalogueCategoryCatalogueCategoryNodeAggregateSelection>;
+};
+
+export type CatalogueItemCatalogueCategoryCatalogueCategoryNodeAggregateSelection = {
+  __typename?: 'CatalogueItemCatalogueCategoryCatalogueCategoryNodeAggregateSelection';
+  code: StringAggregateSelectionNonNullable;
+  name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type CatalogueItemCatalogueCategoryConnectFieldInput = {
+  connect?: InputMaybe<CatalogueCategoryConnectInput>;
   /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<CatalogueCategoryConnectWhere>;
 };
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesConnectOrCreateFieldInput = {
-  onCreate: CatalogueItemBelongsToCategoryCatalogueCategoriesConnectOrCreateFieldInputOnCreate;
+export type CatalogueItemCatalogueCategoryConnectOrCreateFieldInput = {
+  onCreate: CatalogueItemCatalogueCategoryConnectOrCreateFieldInputOnCreate;
   where: CatalogueCategoryConnectOrCreateWhere;
 };
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesConnectOrCreateFieldInputOnCreate = {
+export type CatalogueItemCatalogueCategoryConnectOrCreateFieldInputOnCreate = {
   node: CatalogueCategoryOnCreateInput;
 };
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesConnection = {
-  __typename?: 'CatalogueItemBelongsToCategoryCatalogueCategoriesConnection';
-  edges: Array<CatalogueItemBelongsToCategoryCatalogueCategoriesRelationship>;
+export type CatalogueItemCatalogueCategoryConnection = {
+  __typename?: 'CatalogueItemCatalogueCategoryConnection';
+  edges: Array<CatalogueItemCatalogueCategoryRelationship>;
   pageInfo: PageInfo;
   totalCount: Scalars['Int']['output'];
 };
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesConnectionSort = {
+export type CatalogueItemCatalogueCategoryConnectionSort = {
   node?: InputMaybe<CatalogueCategorySort>;
 };
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesConnectionWhere = {
-  AND?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectionWhere>>;
-  NOT?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectionWhere>;
-  OR?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectionWhere>>;
+export type CatalogueItemCatalogueCategoryConnectionWhere = {
+  AND?: InputMaybe<Array<CatalogueItemCatalogueCategoryConnectionWhere>>;
+  NOT?: InputMaybe<CatalogueItemCatalogueCategoryConnectionWhere>;
+  OR?: InputMaybe<Array<CatalogueItemCatalogueCategoryConnectionWhere>>;
   node?: InputMaybe<CatalogueCategoryWhere>;
 };
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesCreateFieldInput = {
+export type CatalogueItemCatalogueCategoryCreateFieldInput = {
   node: CatalogueCategoryCreateInput;
 };
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesDeleteFieldInput = {
+export type CatalogueItemCatalogueCategoryDeleteFieldInput = {
   delete?: InputMaybe<CatalogueCategoryDeleteInput>;
-  where?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectionWhere>;
+  where?: InputMaybe<CatalogueItemCatalogueCategoryConnectionWhere>;
 };
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesDisconnectFieldInput = {
+export type CatalogueItemCatalogueCategoryDisconnectFieldInput = {
   disconnect?: InputMaybe<CatalogueCategoryDisconnectInput>;
-  where?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectionWhere>;
+  where?: InputMaybe<CatalogueItemCatalogueCategoryConnectionWhere>;
 };
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesFieldInput = {
-  connect?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectOrCreateFieldInput>>;
-  create?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesCreateFieldInput>>;
+export type CatalogueItemCatalogueCategoryFieldInput = {
+  connect?: InputMaybe<CatalogueItemCatalogueCategoryConnectFieldInput>;
+  connectOrCreate?: InputMaybe<CatalogueItemCatalogueCategoryConnectOrCreateFieldInput>;
+  create?: InputMaybe<CatalogueItemCatalogueCategoryCreateFieldInput>;
 };
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesNodeAggregationWhereInput = {
-  AND?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesNodeAggregationWhereInput>>;
-  NOT?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesNodeAggregationWhereInput>;
-  OR?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesNodeAggregationWhereInput>>;
+export type CatalogueItemCatalogueCategoryNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<CatalogueItemCatalogueCategoryNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<CatalogueItemCatalogueCategoryNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<CatalogueItemCatalogueCategoryNodeAggregationWhereInput>>;
   code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -2697,39 +2710,6 @@ export type CatalogueItemBelongsToCategoryCatalogueCategoriesNodeAggregationWher
   name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesRelationship = {
-  __typename?: 'CatalogueItemBelongsToCategoryCatalogueCategoriesRelationship';
-  cursor: Scalars['String']['output'];
-  node: CatalogueCategory;
-};
-
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesUpdateConnectionInput = {
-  node?: InputMaybe<CatalogueCategoryUpdateInput>;
-};
-
-export type CatalogueItemBelongsToCategoryCatalogueCategoriesUpdateFieldInput = {
-  connect?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectOrCreateFieldInput>>;
-  create?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesCreateFieldInput>>;
-  delete?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesDeleteFieldInput>>;
-  disconnect?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesDisconnectFieldInput>>;
-  update?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesUpdateConnectionInput>;
-  where?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectionWhere>;
-};
-
-export type CatalogueItemCatalogueCategoryBelongsToCategoryCatalogueCategoriesAggregationSelection = {
-  __typename?: 'CatalogueItemCatalogueCategoryBelongsToCategoryCatalogueCategoriesAggregationSelection';
-  count: Scalars['Int']['output'];
-  node?: Maybe<CatalogueItemCatalogueCategoryBelongsToCategoryCatalogueCategoriesNodeAggregateSelection>;
-};
-
-export type CatalogueItemCatalogueCategoryBelongsToCategoryCatalogueCategoriesNodeAggregateSelection = {
-  __typename?: 'CatalogueItemCatalogueCategoryBelongsToCategoryCatalogueCategoriesNodeAggregateSelection';
-  code: StringAggregateSelectionNonNullable;
-  name: StringAggregateSelectionNonNullable;
-  uid: IdAggregateSelectionNonNullable;
-};
-
 export type CatalogueItemCatalogueCategoryPropertyPropertiesAggregationSelection = {
   __typename?: 'CatalogueItemCatalogueCategoryPropertyPropertiesAggregationSelection';
   count: Scalars['Int']['output'];
@@ -2751,14 +2731,34 @@ export type CatalogueItemCatalogueCategoryPropertyPropertiesNodeAggregateSelecti
   value: StringAggregateSelectionNullable;
 };
 
+export type CatalogueItemCatalogueCategoryRelationship = {
+  __typename?: 'CatalogueItemCatalogueCategoryRelationship';
+  cursor: Scalars['String']['output'];
+  node: CatalogueCategory;
+};
+
+export type CatalogueItemCatalogueCategoryUpdateConnectionInput = {
+  node?: InputMaybe<CatalogueCategoryUpdateInput>;
+};
+
+export type CatalogueItemCatalogueCategoryUpdateFieldInput = {
+  connect?: InputMaybe<CatalogueItemCatalogueCategoryConnectFieldInput>;
+  connectOrCreate?: InputMaybe<CatalogueItemCatalogueCategoryConnectOrCreateFieldInput>;
+  create?: InputMaybe<CatalogueItemCatalogueCategoryCreateFieldInput>;
+  delete?: InputMaybe<CatalogueItemCatalogueCategoryDeleteFieldInput>;
+  disconnect?: InputMaybe<CatalogueItemCatalogueCategoryDisconnectFieldInput>;
+  update?: InputMaybe<CatalogueItemCatalogueCategoryUpdateConnectionInput>;
+  where?: InputMaybe<CatalogueItemCatalogueCategoryConnectionWhere>;
+};
+
 export type CatalogueItemConnectInput = {
-  belongsToCategoryCatalogueCategories?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectFieldInput>>;
+  catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryConnectFieldInput>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesConnectFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierConnectFieldInput>;
 };
 
 export type CatalogueItemConnectOrCreateInput = {
-  belongsToCategoryCatalogueCategories?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectOrCreateFieldInput>>;
+  catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryConnectOrCreateFieldInput>;
   supplier?: InputMaybe<CatalogueItemSupplierConnectOrCreateFieldInput>;
 };
 
@@ -2767,7 +2767,7 @@ export type CatalogueItemConnectWhere = {
 };
 
 export type CatalogueItemCreateInput = {
-  belongsToCategoryCatalogueCategories?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesFieldInput>;
+  catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryFieldInput>;
   catalogueNumber: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   manufacturerUrl: Scalars['String']['input'];
@@ -2778,13 +2778,13 @@ export type CatalogueItemCreateInput = {
 };
 
 export type CatalogueItemDeleteInput = {
-  belongsToCategoryCatalogueCategories?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesDeleteFieldInput>>;
+  catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryDeleteFieldInput>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesDeleteFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierDeleteFieldInput>;
 };
 
 export type CatalogueItemDisconnectInput = {
-  belongsToCategoryCatalogueCategories?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesDisconnectFieldInput>>;
+  catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryDisconnectFieldInput>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesDisconnectFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierDisconnectFieldInput>;
 };
@@ -2987,7 +2987,7 @@ export type CatalogueItemPropertiesUpdateFieldInput = {
 };
 
 export type CatalogueItemRelationInput = {
-  belongsToCategoryCatalogueCategories?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesCreateFieldInput>>;
+  catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryCreateFieldInput>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesCreateFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierCreateFieldInput>;
 };
@@ -3118,7 +3118,7 @@ export type CatalogueItemSupplierUpdateFieldInput = {
 };
 
 export type CatalogueItemUpdateInput = {
-  belongsToCategoryCatalogueCategories?: InputMaybe<Array<CatalogueItemBelongsToCategoryCatalogueCategoriesUpdateFieldInput>>;
+  catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryUpdateFieldInput>;
   catalogueNumber?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   manufacturerUrl?: InputMaybe<Scalars['String']['input']>;
@@ -3132,23 +3132,11 @@ export type CatalogueItemWhere = {
   AND?: InputMaybe<Array<CatalogueItemWhere>>;
   NOT?: InputMaybe<CatalogueItemWhere>;
   OR?: InputMaybe<Array<CatalogueItemWhere>>;
-  belongsToCategoryCatalogueCategoriesAggregate?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesAggregateInput>;
-  /** Return CatalogueItems where all of the related CatalogueItemBelongsToCategoryCatalogueCategoriesConnections match this filter */
-  belongsToCategoryCatalogueCategoriesConnection_ALL?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectionWhere>;
-  /** Return CatalogueItems where none of the related CatalogueItemBelongsToCategoryCatalogueCategoriesConnections match this filter */
-  belongsToCategoryCatalogueCategoriesConnection_NONE?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectionWhere>;
-  /** Return CatalogueItems where one of the related CatalogueItemBelongsToCategoryCatalogueCategoriesConnections match this filter */
-  belongsToCategoryCatalogueCategoriesConnection_SINGLE?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectionWhere>;
-  /** Return CatalogueItems where some of the related CatalogueItemBelongsToCategoryCatalogueCategoriesConnections match this filter */
-  belongsToCategoryCatalogueCategoriesConnection_SOME?: InputMaybe<CatalogueItemBelongsToCategoryCatalogueCategoriesConnectionWhere>;
-  /** Return CatalogueItems where all of the related CatalogueCategories match this filter */
-  belongsToCategoryCatalogueCategories_ALL?: InputMaybe<CatalogueCategoryWhere>;
-  /** Return CatalogueItems where none of the related CatalogueCategories match this filter */
-  belongsToCategoryCatalogueCategories_NONE?: InputMaybe<CatalogueCategoryWhere>;
-  /** Return CatalogueItems where one of the related CatalogueCategories match this filter */
-  belongsToCategoryCatalogueCategories_SINGLE?: InputMaybe<CatalogueCategoryWhere>;
-  /** Return CatalogueItems where some of the related CatalogueCategories match this filter */
-  belongsToCategoryCatalogueCategories_SOME?: InputMaybe<CatalogueCategoryWhere>;
+  catalogueCategory?: InputMaybe<CatalogueCategoryWhere>;
+  catalogueCategoryAggregate?: InputMaybe<CatalogueItemCatalogueCategoryAggregateInput>;
+  catalogueCategoryConnection?: InputMaybe<CatalogueItemCatalogueCategoryConnectionWhere>;
+  catalogueCategoryConnection_NOT?: InputMaybe<CatalogueItemCatalogueCategoryConnectionWhere>;
+  catalogueCategory_NOT?: InputMaybe<CatalogueCategoryWhere>;
   catalogueNumber?: InputMaybe<Scalars['String']['input']>;
   catalogueNumber_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   catalogueNumber_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;

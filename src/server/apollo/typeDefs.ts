@@ -128,8 +128,7 @@ export const typeDefs = gql`
   }
 
   type CatalogueItem @authentication {
-    belongsToCategoryCatalogueCategories: [CatalogueCategory!]!
-      @relationship(type: "BELONGS_TO_CATEGORY", direction: OUT)
+    catalogueCategory: CatalogueCategory! @relationship(type: "BELONGS_TO_CATEGORY", direction: OUT)
     catalogueNumber: String!
     description: String
     properties: [CatalogueCategoryProperty!]!
