@@ -8,6 +8,7 @@ import { getToken } from 'next-auth/jwt'
 import { neoSchema } from '@/server/apollo/schema'
 
 import { authOptions } from './auth/[...nextauth]'
+import uuid from 'react-uuid'
 
 const server = async (): Promise<ApolloServer> => {
   const schema = await neoSchema.getSchema()
@@ -19,11 +20,33 @@ const server = async (): Promise<ApolloServer> => {
   return new ApolloServer(apolloConfig)
 }
 
+function logger(session, req, res, next) {
+  const uid = uuid()
+  const oldEnd = res.end
+  console.log(
+    new Date().toISOString(),
+    uid,
+    'user: ' + session?.user.fullName + ', userUid: ' + session?.user.uid,
+    req.body
+  )
+  res.end = function (chunk, ...rest) {
+    if (chunk)
+      console.log(
+        new Date().toISOString(),
+        uid,
+        'user: ' + session?.user.fullName + ', userUid: ' + session?.user.uid,
+        chunk?.toString()
+      )
+    oldEnd.apply(res, [chunk, ...rest])
+  }
+
+  next()
+}
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions as NextAuthOptions)
   if (process.env.PANDA_ENV !== 'localhost') {
-    console.log('user: ', session?.user.fullName, new Date().toISOString())
-    console.log('request: ', req.body, new Date().toISOString())
+    logger(session, req, res, () => {})
   }
 
   if (!session?.user && process.env.PANDA_ENV !== 'localhost') {
