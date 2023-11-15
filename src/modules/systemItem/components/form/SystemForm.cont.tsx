@@ -39,6 +39,7 @@ const FormCard = ({ children, className }: CardProps) => (
   <div className={classNames('mx-auto max-w-7xl', className)}>{children}</div>
 )
 
+//TODO:  split to update and create form
 export const SystemForm = () => {
   const { systemDetail } = useContext(SystemDetailContext)
   const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
@@ -52,19 +53,19 @@ export const SystemForm = () => {
   const { updateSystem, loading } = useSystemUpdate(systemImageRef)
   const { createSystem, loading: createLoading } = useSystemCreate(systemImageRef)
 
-  //TODO: typing
   const formMethods = useForm<SystemDetailFormType>({
     resolver: yupResolver(schema),
     defaultValues: {
       ...(systemDetail as SystemDetailFormType),
-      responsible: { uid: systemDetail?.responsible?.uid, name: systemDetail?.responsible?.fullName as string },
-      zone: { uid: systemDetail?.zone?.uid, name: systemDetail?.zone?.name as string }
+      responsible: systemDetail?.responsible
+        ? { uid: systemDetail?.responsible?.uid, name: systemDetail?.responsible?.fullName as string }
+        : undefined,
+      zone: systemDetail?.zone ? { uid: systemDetail?.zone?.uid, name: systemDetail?.zone?.name as string } : undefined
     }
   })
 
   const systemLevel = formMethods.watch('systemLevel')
 
-  //TODO: typing
   const onSubmit = (data: SystemDetailFormType) => {
     // extract from data hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

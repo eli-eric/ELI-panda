@@ -1,11 +1,13 @@
 import { gql, useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import type { MutableRefObject } from 'react'
+import { useContext } from 'react'
 import { toast } from 'react-hot-toast'
 
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { updateSystem } from '@/modules/systems/utils'
+import { SystemDetailContext } from '@/pages/system/[uid]'
 import { PATH } from '@/types/constants/paths'
 import type { Mutation, MutationUpdateSystemsArgs } from '@/types/gql/graphql'
 import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
@@ -13,7 +15,6 @@ import { connectAndDisconnectNode, whereN } from '@/utils/graphql/mutations'
 
 import { useSystemItemStore } from '../store/useSystemItemStore'
 import type { SystemDetailFormType } from '../types/form'
-import { useSystemDetail } from './useSystemDetail'
 
 const UPDATE_SYSTEM = gql`
   ${SYSTEM_DETAIL}
@@ -57,11 +58,10 @@ const systemInput = ({ systemForm, systemDetail }: { systemForm; systemDetail })
 export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>) => {
   const router = useRouter()
   const uid = router.query.uid as string
-  const { systemDetail, refetch } = useSystemDetail(uid)
+  const { systemDetail, refetch } = useContext(SystemDetailContext)
   const { mutate } = useSystems('systems')
   const onCompleted = ({ updateSystems: { systems } }) => {
     const responseUid = systems[0].uid
-    console.log('responseUid', systems)
     const body = {
       ...systems[0],
       physicalItem: systems[0]?.physicalItem && {

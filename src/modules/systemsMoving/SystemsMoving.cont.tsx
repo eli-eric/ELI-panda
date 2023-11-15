@@ -4,17 +4,20 @@ import { toast } from 'react-hot-toast'
 
 import { MinusButton, PlusButton } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
-import { classNames } from '@/utils'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { FormModal } from '@/hooks/form/useFormModal'
+import { classNames } from '@/utils'
 
 import { useSystems } from '../systems/hooks/useSystems'
 import { SystemsContainer } from '../systems/Systems.cont'
 import type { SystemDetail } from '../systems/types/responses'
 import { addSubsystem, filterSubsystem } from '../systems/utils'
 import { SystemMovingForm } from './form/SystemMoving.form'
-import type { SystemsMovingType } from './types/systemMoving'
+
+interface SystemsMovingType extends SystemDetail {
+  tableId: string
+}
 
 export const SystemsMovingContainer = () => {
   const [open, setOpen] = useState(false)
@@ -36,8 +39,8 @@ export const SystemsMovingContainer = () => {
       toast.error('System cannot be moved under itself or its sub-systems')
       return
     }
-    setParentSystem(to)
     setChildSystem(from)
+    setParentSystem(to)
     setOpen(true)
   }
 
@@ -66,15 +69,14 @@ export const SystemsMovingContainer = () => {
       if (!system.query.query.search) {
         system.mutate(prev => prev && method(childSystem.uid, prev), { revalidate: false })
       }
-      if (parentSystem?.subSystems) {
+      parentSystem &&
         system.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), { revalidate: false })
-      }
     }
 
     if (isSameTable) {
-      mutateSubsystem(currentAction.systems, filterSubsystem)
-    } else {
       mutateSubsystem(currentAction.oppositeSystems, filterSubsystem)
+    } else {
+      mutateSubsystem(currentAction.systems, filterSubsystem)
     }
 
     toast.success(`System ${childSystem.name} was moved under ${parentSystem?.name}`)
