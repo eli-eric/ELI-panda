@@ -1,4 +1,4 @@
-import { ApolloServer } from '@apollo/server'
+import { ApolloServer, BaseContext, GraphQLRequestContext } from '@apollo/server'
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { NextAuthOptions } from 'next-auth'
@@ -21,6 +21,10 @@ const server = async (): Promise<ApolloServer> => {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions as NextAuthOptions)
+  if (process.env.PANDA_ENV !== 'localhost') {
+    console.log('user: ', session?.user.fullName, new Date().toISOString())
+    console.log('request: ', req.body, new Date().toISOString())
+  }
 
   if (!session?.user && process.env.PANDA_ENV !== 'localhost') {
     res.status(403).json('Authentication required.')
