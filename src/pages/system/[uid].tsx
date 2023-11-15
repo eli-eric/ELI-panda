@@ -1,3 +1,4 @@
+import type { ApolloQueryResult, OperationVariables } from '@apollo/client'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { createContext, Fragment } from 'react'
@@ -8,7 +9,7 @@ import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { SystemItemContainer } from '@/modules/systemItem/SystemItem.cont'
-import type { System } from '@/types/gql/graphql'
+import type { Query, System } from '@/types/gql/graphql'
 
 const messages = message.systemItem
 
@@ -20,16 +21,18 @@ interface Props {
 type SystemDetailContextType = {
   systemDetail?: System
   loading: boolean
+  refetch: (variables?: Partial<OperationVariables> | undefined) => Promise<ApolloQueryResult<Query>>
 }
 
 export const SystemDetailContext = createContext<SystemDetailContextType>({
   systemDetail: undefined,
-  loading: false
+  loading: false,
+  refetch: () => Promise.resolve({} as ApolloQueryResult<Query>)
 })
 
 const SystemDetailPage: NextPage = ({ uid }: Props) => {
   const intl = useIntl()
-  const { systemDetail, loading, error } = useSystemDetail(uid)
+  const { systemDetail, loading, error, refetch } = useSystemDetail(uid)
 
   if (loading) {
     return <LoaderComponent />
@@ -45,7 +48,7 @@ const SystemDetailPage: NextPage = ({ uid }: Props) => {
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-      <SystemDetailContext.Provider value={{ systemDetail, loading }}>
+      <SystemDetailContext.Provider value={{ systemDetail, loading, refetch }}>
         <SystemItemContainer uid={uid} />
       </SystemDetailContext.Provider>
     </Fragment>

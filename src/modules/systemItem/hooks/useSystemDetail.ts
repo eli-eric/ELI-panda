@@ -20,7 +20,8 @@ export const useSystemDetail = (uid?: string) => {
     variables: { where: { uid } },
     onError: error => {
       toast.error('Something went wrong while fetching system detail: ' + error.message)
-    }
+    },
+    fetchPolicy: 'network-only'
   })
 
   return {
