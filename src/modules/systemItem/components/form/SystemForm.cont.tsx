@@ -41,7 +41,7 @@ const FormCard = ({ children, className }: CardProps) => (
 
 export const SystemForm = () => {
   const { systemDetail } = useContext(SystemDetailContext)
-  const disableEdit = usePermission([ROLE.SYSTEM_EDIT])
+  const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
 
   const router = useRouter()
   const uid = router.query.uid as string | undefined
@@ -97,7 +97,7 @@ export const SystemForm = () => {
             setValue={formMethods.setValue}
             config={{ itemCategory: FILE_TYPE.SYSTEM, itemId: String(uid) }}
             className="w-full"
-            hasEditRole={!disableEdit}
+            hasEditRole={hasEditRole}
           />
         </SystemMainForm>
         {systemDetail?.physicalItem && <SystemItemCard />}
