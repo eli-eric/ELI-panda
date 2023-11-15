@@ -16,7 +16,7 @@ const messages = message.common.buttons
 
 const HeaderComponent = ({ loading, onSubmit }: Props) => {
   const router = useRouter()
-  const disableEdit = usePermission([ROLE.SYSTEM_EDIT])
+  const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
 
   return (
     <div className="sticky  top-0 z-20 flex h-16 flex-shrink-0 bg-white border-b">
@@ -30,7 +30,7 @@ const HeaderComponent = ({ loading, onSubmit }: Props) => {
               router.push(PATH.SYSTEMS)
             }}
           />
-          {disableEdit && (
+          {hasEditRole && (
             <Button
               primary
               buttonSize="large"

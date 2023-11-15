@@ -19,7 +19,7 @@ interface Props {
 
 export const SystemItemContainer = ({ uid }: Props) => {
   const { systemDetail } = useContext(SystemDetailContext)
-  const disableEdit = usePermission([ROLE.SYSTEM_EDIT])
+  const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
 
   return (
     <Fragment>
@@ -33,7 +33,7 @@ export const SystemItemContainer = ({ uid }: Props) => {
           </ErrorBoundary>
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense fallback={<ProgressBarComponent />}>
-              <FileManager itemType={FILE_TYPE.SYSTEM} uid={uid} hasEditRole={!disableEdit} />
+              <FileManager itemType={FILE_TYPE.SYSTEM} uid={uid} hasEditRole={hasEditRole} />
             </Suspense>
           </ErrorBoundary>
         </Card>
