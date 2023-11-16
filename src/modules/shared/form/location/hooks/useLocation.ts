@@ -1,4 +1,5 @@
 import { gql, useLazyQuery, useQuery } from '@apollo/client'
+import { useSession } from 'next-auth/react'
 
 import useTableStateStore from '@/store/useTableStateStore'
 import type { Query } from '@/types/gql/graphql'
@@ -35,6 +36,7 @@ const GET_SUBLOCATIONS = gql`
 
 export const useLocation = () => {
   const { instances } = useTableStateStore()
+  const { data: session } = useSession()
 
   const filter = instances['codebook-tree']?.columnFilter
 
@@ -46,9 +48,17 @@ export const useLocation = () => {
       where: filter
         ? {
             name_CONTAINS: nameFilter,
-            code_CONTAINS: codeFilter
+            code_CONTAINS: codeFilter,
+            facility: {
+              code: session?.user?.facilityCode
+            }
           }
-        : { parentLocation: null }
+        : {
+            parentLocation: null,
+            facility: {
+              code: session?.user?.facilityCode
+            }
+          }
     }
   })
   return { locations: data?.locations, loading, error }
