@@ -17,11 +17,10 @@ const messages = message.cataloguePage.itemList.header
 type Props = {
   tableId?: string
   additionalColumn?: ColumnDef<CatalogueItem, any>
-  categoryUID?: string
   catalogueItems?: CatalogueItemsResponse
 }
 
-export const useCatalogueItemsColumns = ({ tableId, additionalColumn, categoryUID, catalogueItems }: Props) => {
+export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueItems }: Props) => {
   const intl = useIntl()
 
   const { catalogueCategories } = useCategoryList()
@@ -32,7 +31,7 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, categoryUI
         header: intl.formatMessage({ id: messages.name }),
         accessorFn: row => row.name,
         id: 'name',
-        cell: props => <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} categoryUID={categoryUID} />,
+        cell: props => <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} />,
         size: 300,
         meta: { sticky: true, filter: { type: 'string', enableColumnFilter: true } }
       },
@@ -98,7 +97,7 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, categoryUI
       columns.push(additionalColumn)
     }
     return columns
-  }, [intl, catalogueItems, catalogueCategories, additionalColumn, tableId, categoryUID])
+  }, [intl, catalogueItems, catalogueCategories, additionalColumn, tableId])
 
   return columns
 }

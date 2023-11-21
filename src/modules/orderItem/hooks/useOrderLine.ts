@@ -1,5 +1,5 @@
 import { useFieldArray, useFormContext } from 'react-hook-form'
-import uuid from 'react-uuid'
+import { v4 as uuid } from 'uuid'
 
 import type { OrderDetailFormType, OrderLineFormType } from '../types/form'
 

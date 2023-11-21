@@ -31,7 +31,8 @@ const schema = object().shape({
 })
 
 export const RoomCardNewContainer = () => {
-  const formMethods = useForm<RoomCard>({ resolver: yupResolver(schema) })
+  //TODO: fix typing
+  const formMethods = useForm<RoomCard>({ resolver: yupResolver(schema) as any })
   const router = useRouter()
   const { watch, handleSubmit } = formMethods
   const { createRoomCard } = useRoomCardCreate()

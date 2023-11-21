@@ -54,7 +54,7 @@ export const SystemForm = () => {
   const { createSystem, loading: createLoading } = useSystemCreate(systemImageRef)
 
   const formMethods = useForm<SystemDetailFormType>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as any,
     defaultValues: {
       ...(systemDetail as SystemDetailFormType),
       responsible: systemDetail?.responsible

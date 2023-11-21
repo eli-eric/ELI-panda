@@ -3,7 +3,7 @@ import { useQueryState } from 'next-usequerystate'
 import type { FC } from 'react'
 import { Fragment, memo, useEffect, useMemo, useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
-import uuid from 'react-uuid'
+import { v4 as uuid } from 'uuid'
 import { useIsFirstRender } from 'usehooks-ts'
 
 import { PlusButton } from '@/components/Buttons'

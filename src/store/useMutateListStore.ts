@@ -1,5 +1,4 @@
-import { create } from 'zustand'
-
+import { createWithEqualityFn as create } from 'zustand/traditional'
 type MutateInstance = {
   mutateUrl?: string
 }
