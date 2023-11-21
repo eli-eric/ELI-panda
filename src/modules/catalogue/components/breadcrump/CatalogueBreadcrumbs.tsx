@@ -7,13 +7,9 @@ import { PATH } from '@/types/constants/paths'
 import { useCategory } from '../../hooks/useCategory'
 import { useCategoryEdit } from '../../hooks/useCategoryEdit'
 
-interface Props {
-  categoryUID?: string
-}
-
-export const CatalogueBreadcrumbs = ({ categoryUID }: Props) => {
+export const CatalogueBreadcrumbs = () => {
   const { getAddButton } = useCategoryEdit({})
-  const { catalogueCategory } = useCategory(categoryUID)
+  const { catalogueCategory } = useCategory()
 
   return (
     <BreadcrumpContainer homeLink={PATH.CATALOGUE}>

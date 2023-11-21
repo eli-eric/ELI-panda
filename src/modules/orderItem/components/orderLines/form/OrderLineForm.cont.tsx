@@ -30,11 +30,12 @@ export const OrderLineForm = ({ orderLine, open, setOpen }: OrderLienFormProps) 
   const [catalogueItem, setCatalogueItem] = useState<CatalogueItem | undefined>(undefined)
   const { setOrderLine } = useOrderLine()
 
+  //TODO: type check for resolver
   const formMethods = useForm<OrderLineFormType>({
     defaultValues: orderLine
       ? { ...orderLine, currency: orderLine.currency || 'EUR' }
       : { itemUsage: { uid: 'a2aae89a-5cbe-4042-a726-44012b158226', name: 'In System Part' } },
-    resolver: yupResolver(orderLineFormSchema)
+    resolver: yupResolver(orderLineFormSchema) as any
   })
   const modalSubmit = (data: OrderLineFormType) => {
     const dataToSend = { ...data }

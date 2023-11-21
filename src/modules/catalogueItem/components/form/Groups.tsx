@@ -48,7 +48,7 @@ const Groups = () => {
                   (detail, index) =>
                     detail.propertyGroup === group && (
                       <GroupProperty
-                        key={detail.property.uid + index + detail.property.name}
+                        key={detail?.property?.uid && detail?.property?.uid + index + detail.property.name}
                         detail={detail}
                         index={index}
                       />

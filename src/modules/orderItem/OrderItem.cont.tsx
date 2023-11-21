@@ -8,10 +8,10 @@ import ErrorPage from '@/components/error/ErrorPage'
 import { Form } from '@/components/form/Form'
 import Card from '@/components/layout/Card'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import { convertDate } from '@/utils/formatters'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { FILE_TYPE } from '@/types/constants/files'
+import { convertDate } from '@/utils/formatters'
 
 import FileManager from '../shared/fileManager/FileManager'
 import OrderFormComponent from './components/form/OrderForm.comp'
@@ -30,8 +30,9 @@ export const OrderItemContainer = () => {
   const { formatMessage: fm } = useIntl()
   const withWarningModal = useWarningModal(fm({ id: messages.ordelineMissingModal.message }))
 
+  //TODO: type check for resolver
   const formMethods = useForm<OrderDetailFormType>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema) as any,
     defaultValues: {
       ...orderDetail,
       orderLines:

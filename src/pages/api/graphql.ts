@@ -8,7 +8,7 @@ import { getToken } from 'next-auth/jwt'
 import { neoSchema } from '@/server/apollo/schema'
 
 import { authOptions } from './auth/[...nextauth]'
-import uuid from 'react-uuid'
+import { v4 as uuid } from 'uuid'
 
 const server = async (): Promise<ApolloServer> => {
   const schema = await neoSchema.getSchema()

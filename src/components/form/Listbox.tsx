@@ -3,7 +3,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import React, { useMemo } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
-import uuid from 'react-uuid'
+import { v4 as uuid } from 'uuid'
 
 import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'

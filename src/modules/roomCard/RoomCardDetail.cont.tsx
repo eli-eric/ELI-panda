@@ -36,7 +36,8 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
 
   const { roomCard, loading } = useRoomCard(roomCardUid)
-  const formMethods = useForm<RoomCard>({ defaultValues: roomCard, resolver: yupResolver(schema) })
+  //TODO: fix typing
+  const formMethods = useForm<RoomCard>({ defaultValues: roomCard, resolver: yupResolver(schema) as any })
   const { reset, watch, handleSubmit } = formMethods
   const { updateRoomCard } = useRoomCardUpdate(roomCardUid)
   const { clear } = useRoomCardStore()

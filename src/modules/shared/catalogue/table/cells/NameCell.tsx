@@ -25,7 +25,6 @@ const modalMessage = message.ordersPage.deleteModal
 interface NameProps extends CellContext<CatalogueItem, any> {
   toDelete?: boolean
   tableId?: string
-  categoryUID?: string
 }
 
 //TODO: permissions
@@ -36,14 +35,13 @@ export const NameCell = ({
     id
   },
   toDelete,
-  tableId,
-  categoryUID
+  tableId
 }: NameProps) => {
   const { catalogueItem } = useEndpoint({ uid })
   const { hoveringId } = useHoveringId()
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
   const { formatMessage } = useIntl()
-  const { mutate, catalogueItems } = useCatalogueItems(tableId, categoryUID)
+  const { mutate, catalogueItems } = useCatalogueItems(tableId)
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
 
   const deleteSubmit = useSubmit({

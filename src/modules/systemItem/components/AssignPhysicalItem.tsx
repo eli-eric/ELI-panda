@@ -44,7 +44,7 @@ export const AssignPhysicalItem = () => {
         reset({
           ...getValues(),
           physicalItem: {
-            uid: null
+            uid: undefined,
           }
         })
 

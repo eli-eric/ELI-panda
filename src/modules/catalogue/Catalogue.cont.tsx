@@ -12,20 +12,16 @@ import { SearchBarButtons } from './components/SearchBarButtons'
 import { useCatalogueItems } from './hooks/useCatalogueItems'
 import { useCategoryList } from './hooks/useCategoryList'
 
-interface Props {
-  uid?: string
-}
-
-const CatalogueContainer = ({ uid: categoryUID }: Props) => {
+const CatalogueContainer = () => {
   const tableId = 'catalogueItems'
-  const { catalogueItems, error, loading } = useCatalogueItems(tableId, categoryUID)
+  const { catalogueItems, error, loading } = useCatalogueItems(tableId)
   const { catalogueCategories } = useCategoryList()
   const [open, setOpen] = useState(false)
 
   return (
     <Fragment>
       <SearchBar left={<SearchBarButtons />} tableId={tableId} />
-      <CatalogueBreadcrumbs categoryUID={categoryUID} />
+      <CatalogueBreadcrumbs />
       <CategoryListContainer
         onChange={open => {
           setOpen(open)
@@ -37,7 +33,6 @@ const CatalogueContainer = ({ uid: categoryUID }: Props) => {
           catalogueItems={catalogueItems}
           loading={loading}
           categoryList={catalogueCategories}
-          categoryUID={categoryUID}
         />
         <Pagination
           tableId={tableId}

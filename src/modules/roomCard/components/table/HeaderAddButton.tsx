@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
-import { object } from 'yup'
+import { mixed, object } from 'yup'
 
 import Combobox from '@/components/form/Combobox'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
@@ -11,6 +11,7 @@ import { HeaderButtonModalComponent } from '@/modules/roomCard/components/table/
 import { useLazyEmployee } from '@/modules/roomCard/hooks/useLazyEmployee'
 import { CODEBOOK } from '@/types/constants/codebook'
 import type { ROLE } from '@/types/constants/roles'
+import type { Employee } from '@/types/gql/graphql'
 
 const nestedForm = message.roomCardsPage.nestedForm
 
@@ -41,7 +42,7 @@ export const HeaderAddButton = ({ setEmployee, name, editPersmissionRole }: Prop
 
   function makeSchema() {
     return object().shape({
-      employee: object()
+      employee: mixed<Employee>()
         .nullable()
         .required('Employee is required')
         .test(
