@@ -21,6 +21,7 @@ export default function getDriver() {
       driver = neo4j.driver(uri, neo4j.auth.basic(username, password))
     }
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error('Error creating Neo4j driver.', error)
     throw error // re-throw the error so that calling code knows something went wrong
   }

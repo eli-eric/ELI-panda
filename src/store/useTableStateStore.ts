@@ -6,6 +6,7 @@ import type {
   VisibilityState
 } from '@tanstack/react-table'
 import { createWithEqualityFn as create } from 'zustand/traditional'
+
 import type { QueryFilter } from '@/modules/orders/types'
 
 type SortingInstance = {

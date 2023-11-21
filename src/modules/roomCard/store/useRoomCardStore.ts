@@ -1,4 +1,5 @@
 import { createWithEqualityFn as create } from 'zustand/traditional'
+
 import type { ContactPersonRole, Employee, Team } from '@/types/gql/graphql'
 
 export type HallContactPerson = {

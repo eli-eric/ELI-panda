@@ -18,8 +18,7 @@ export type RoomCardProperties = {
 }
 
 export const useRoomCardsColumns = () => {
-  const { setDeleteHallContact, setDisconnectDeptContact, setDisconnectTeam, setNewDeptContact, setNewTeam } =
-    useRoomCardStore()
+  const { setDeleteHallContact, setDisconnectDeptContact, setDisconnectTeam, setNewDeptContact } = useRoomCardStore()
 
   const columnsContactHall = useMemo(
     (): ColumnDef<HallContactPerson, any>[] => [

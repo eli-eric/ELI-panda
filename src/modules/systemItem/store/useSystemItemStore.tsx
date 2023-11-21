@@ -1,4 +1,5 @@
 import { createWithEqualityFn as create } from 'zustand/traditional'
+
 import type { Employee } from '@/types/gql/graphql'
 
 type SystemStore = {

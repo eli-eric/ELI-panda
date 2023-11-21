@@ -5,9 +5,9 @@ import type { UseFormSetValue } from 'react-hook-form'
 import type { FileItem } from 'src/modules/shared/fileManager/types'
 import useSWR from 'swr'
 
+import useWarningModal from '@/hooks/useWarningModal'
 import { classNames } from '@/utils'
 import { uniFetcher } from '@/utils/fetcher'
-import useWarningModal from '@/hooks/useWarningModal'
 
 import { ImagePlaceHolder } from './components/ImagePlaceHolder'
 import { ImageTabList } from './components/ImageTabList'

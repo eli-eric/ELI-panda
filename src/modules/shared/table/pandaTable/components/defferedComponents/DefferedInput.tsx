@@ -35,7 +35,8 @@ export const DefferedInput = ({
       {...props}
       value={query}
       className={classNames(
-        'w-full placeholder:text-xs placeholder:font-normal rounded-md border-gray-300 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs'
+        'w-full placeholder:text-xs placeholder:font-normal rounded-md border-gray-300 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs',
+        className
       )}
       onChange={e => setQuery(e.target.value)}
       name={'filter'}
