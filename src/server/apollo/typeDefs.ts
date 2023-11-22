@@ -299,7 +299,7 @@ export const typeDefs = gql`
     isEnabled: Boolean!
     lastName: String!
     passwordHash: String!
-    uid: String!
+    uid: ID! @id
     username: String!
   }
 

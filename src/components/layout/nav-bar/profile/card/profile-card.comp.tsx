@@ -5,15 +5,6 @@ import { message } from 'src/i18n/src/messages'
 
 const messages = message.layout.profile
 
-export const RoleBadge = ({ role }: { role: string }) => (
-  <span
-    key={role}
-    className="inline-flex mr-1 mb-1 items-center rounded-full bg-primary-100 px-2.5 py-0.5 text-xs font-medium text-gray-800"
-  >
-    {role}
-  </span>
-)
-
 const ProfileCardComponent = () => {
   const user = useSession().data?.user
 

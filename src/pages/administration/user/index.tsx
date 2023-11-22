@@ -11,9 +11,7 @@ const AdministrationPage: NextPage = (): React.ReactElement => (
       <title>{'Administration'}</title>
       <meta name="description" content="...." />
     </Head>
-    <h1 className="text-2xl font-semibold font-mono text-gray-600 mt-2 ml-1 sm:mt-4 sm:ml-4 uppercase">
-      Admin Section
-    </h1>
+
     <NewUserContainer />
   </>
 )

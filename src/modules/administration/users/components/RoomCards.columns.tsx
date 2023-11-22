@@ -1,7 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 
-import { RoleBadge } from '@/components/layout/nav-bar/profile/card/profile-card.comp'
+import { Badge } from '@/components/visuals/Badge'
 import type { User } from '@/types/gql/graphql'
 
 import { UserNameCell } from './UserNameCell'
@@ -44,7 +44,7 @@ export const useRoomCardsColumns = () => {
         header: 'Roles',
         accessorFn: row => row?.roles,
         id: 'roles',
-        cell: ({ getValue }) => <div>{getValue()?.map(role => <RoleBadge key={role.uid} role={role.code} />)}</div>,
+        cell: ({ getValue }) => <div>{getValue()?.map(role => <Badge key={role.uid}>{role.code}</Badge>)}</div>,
         size: 500
       },
       {

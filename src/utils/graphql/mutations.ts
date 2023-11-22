@@ -5,6 +5,13 @@ export const whereN = (uid?: string) => ({
     }
   }
 })
+export const whereC = (code?: string) => ({
+  where: {
+    node: {
+      code
+    }
+  }
+})
 
 export const connectN = (uid?: string) =>
   uid

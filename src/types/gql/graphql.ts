@@ -8197,7 +8197,7 @@ export type RoleUserUsersHasRoleNodeAggregateSelection = {
   firstName: StringAggregateSelectionNonNullable;
   lastName: StringAggregateSelectionNonNullable;
   passwordHash: StringAggregateSelectionNonNullable;
-  uid: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
   username: StringAggregateSelectionNonNullable;
 };
 
@@ -8321,21 +8321,6 @@ export type RoleUsersHasRoleNodeAggregationWhereInput = {
   passwordHash_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   passwordHash_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   passwordHash_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  uid_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  uid_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  uid_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  uid_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  uid_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  uid_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  uid_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  uid_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  uid_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  uid_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  uid_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  uid_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  uid_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  uid_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  uid_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   username_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   username_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   username_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -12870,7 +12855,7 @@ export type UpdateZonesMutationResponse = {
 export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
-  facility: Facility;
+  facility?: Maybe<Facility>;
   facilityAggregate?: Maybe<UserFacilityFacilityAggregationSelection>;
   facilityConnection: UserFacilityConnection;
   firstName: Scalars['String']['output'];
@@ -12880,7 +12865,7 @@ export type User = {
   roles: Array<Role>;
   rolesAggregate?: Maybe<UserRoleRolesAggregationSelection>;
   rolesConnection: UserRolesConnection;
-  uid: Scalars['String']['output'];
+  uid: Scalars['ID']['output'];
   username: Scalars['String']['output'];
 };
 
@@ -12935,7 +12920,7 @@ export type UserAggregateSelection = {
   firstName: StringAggregateSelectionNonNullable;
   lastName: StringAggregateSelectionNonNullable;
   passwordHash: StringAggregateSelectionNonNullable;
-  uid: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
   username: StringAggregateSelectionNonNullable;
 };
 
@@ -12956,7 +12941,6 @@ export type UserCreateInput = {
   lastName: Scalars['String']['input'];
   passwordHash: Scalars['String']['input'];
   roles?: InputMaybe<UserRolesFieldInput>;
-  uid: Scalars['String']['input'];
   username: Scalars['String']['input'];
 };
 
@@ -13270,7 +13254,6 @@ export type UserUpdateInput = {
   lastName?: InputMaybe<Scalars['String']['input']>;
   passwordHash?: InputMaybe<Scalars['String']['input']>;
   roles?: InputMaybe<Array<UserRolesUpdateFieldInput>>;
-  uid?: InputMaybe<Scalars['String']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -13321,11 +13304,11 @@ export type UserWhere = {
   roles_SINGLE?: InputMaybe<RoleWhere>;
   /** Return Users where some of the related Roles match this filter */
   roles_SOME?: InputMaybe<RoleWhere>;
-  uid?: InputMaybe<Scalars['String']['input']>;
-  uid_CONTAINS?: InputMaybe<Scalars['String']['input']>;
-  uid_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  uid_IN?: InputMaybe<Array<Scalars['String']['input']>>;
-  uid_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  uid?: InputMaybe<Scalars['ID']['input']>;
+  uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
+  uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
+  uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
   username_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   username_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
