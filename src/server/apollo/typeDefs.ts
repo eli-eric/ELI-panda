@@ -156,13 +156,6 @@ export const typeDefs = gql`
     name: String!
   }
 
-  type Role @authentication {
-    code: String!
-    name: String!
-    uid: ID! @id
-    usersHasRole: [User!]! @relationship(type: "HAS_ROLE", direction: IN)
-  }
-
   type SchemaMigration {
     dirty: Boolean!
     ts: DateTime!
@@ -301,11 +294,19 @@ export const typeDefs = gql`
   type User @authentication {
     email: String!
     firstName: String!
-    hasRoleRoles: [Role!]! @relationship(type: "HAS_ROLE", direction: OUT)
+    roles: [Role!]! @relationship(type: "HAS_ROLE", direction: OUT)
+    facility: Facility @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
     isEnabled: Boolean!
     lastName: String!
     passwordHash: String!
     uid: String!
     username: String!
+  }
+
+  type Role @authentication {
+    code: String!
+    name: String!
+    uid: ID! @id
+    usersHasRole: [User!]! @relationship(type: "HAS_ROLE", direction: IN)
   }
 `

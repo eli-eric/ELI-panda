@@ -1,3 +1,4 @@
+'use-client'
 import { Disclosure } from '@headlessui/react'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
@@ -14,8 +15,8 @@ export const NavigationComponent = () => {
     PROCESS_ENV && PROCESS_ENV === ENV.TEST
       ? 'You are in the TEST environment. This version is identical to the production version, but it uses a test database. Data are not persistent because of the override from the production database. (mostly on daily basis)'
       : PROCESS_ENV && PROCESS_ENV === ENV.DEV
-      ? 'You are in the DEV environment. This version is based on the dev branch in git. It uses a dev database. Data are not persistent.'
-      : undefined
+        ? 'You are in the DEV environment. This version is based on the dev branch in git. It uses a dev database. Data are not persistent.'
+        : undefined
 
   const EnvInfo = ({ infoText, env }: { infoText: string; env?: string }) => (
     <div className="flex flex-col justify-center items-center text-lg absolute left-2 top-2 font-mono">

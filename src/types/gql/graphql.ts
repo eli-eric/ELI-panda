@@ -189,18 +189,9 @@ export type CatalogueCategoryCatalogueCategoriesHasSubcategoryAggregateInput = {
 
 export type CatalogueCategoryCatalogueCategoriesHasSubcategoryConnectFieldInput = {
   connect?: InputMaybe<Array<CatalogueCategoryConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<CatalogueCategoryConnectWhere>;
-};
-
-export type CatalogueCategoryCatalogueCategoriesHasSubcategoryConnectOrCreateFieldInput = {
-  onCreate: CatalogueCategoryCatalogueCategoriesHasSubcategoryConnectOrCreateFieldInputOnCreate;
-  where: CatalogueCategoryConnectOrCreateWhere;
-};
-
-export type CatalogueCategoryCatalogueCategoriesHasSubcategoryConnectOrCreateFieldInputOnCreate = {
-  node: CatalogueCategoryOnCreateInput;
 };
 
 export type CatalogueCategoryCatalogueCategoriesHasSubcategoryConnection = {
@@ -237,7 +228,6 @@ export type CatalogueCategoryCatalogueCategoriesHasSubcategoryDisconnectFieldInp
 
 export type CatalogueCategoryCatalogueCategoriesHasSubcategoryFieldInput = {
   connect?: InputMaybe<Array<CatalogueCategoryCatalogueCategoriesHasSubcategoryConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<CatalogueCategoryCatalogueCategoriesHasSubcategoryConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<CatalogueCategoryCatalogueCategoriesHasSubcategoryCreateFieldInput>>;
 };
 
@@ -289,7 +279,6 @@ export type CatalogueCategoryCatalogueCategoriesHasSubcategoryUpdateConnectionIn
 
 export type CatalogueCategoryCatalogueCategoriesHasSubcategoryUpdateFieldInput = {
   connect?: InputMaybe<Array<CatalogueCategoryCatalogueCategoriesHasSubcategoryConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<CatalogueCategoryCatalogueCategoriesHasSubcategoryConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<CatalogueCategoryCatalogueCategoriesHasSubcategoryCreateFieldInput>>;
   delete?: InputMaybe<Array<CatalogueCategoryCatalogueCategoriesHasSubcategoryDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<CatalogueCategoryCatalogueCategoriesHasSubcategoryDisconnectFieldInput>>;
@@ -377,7 +366,7 @@ export type CatalogueCategoryCatalogueItemsBelongsToCategoryAggregateInput = {
 
 export type CatalogueCategoryCatalogueItemsBelongsToCategoryConnectFieldInput = {
   connect?: InputMaybe<Array<CatalogueItemConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<CatalogueItemConnectWhere>;
 };
@@ -527,16 +516,6 @@ export type CatalogueCategoryConnectInput = {
   parentCategory?: InputMaybe<CatalogueCategoryParentCategoryConnectFieldInput>;
 };
 
-export type CatalogueCategoryConnectOrCreateInput = {
-  catalogueCategoriesHasSubcategory?: InputMaybe<Array<CatalogueCategoryCatalogueCategoriesHasSubcategoryConnectOrCreateFieldInput>>;
-  hasSubcategoryCatalogueCategories?: InputMaybe<Array<CatalogueCategoryHasSubcategoryCatalogueCategoriesConnectOrCreateFieldInput>>;
-  parentCategory?: InputMaybe<CatalogueCategoryParentCategoryConnectOrCreateFieldInput>;
-};
-
-export type CatalogueCategoryConnectOrCreateWhere = {
-  node: CatalogueCategoryUniqueWhere;
-};
-
 export type CatalogueCategoryConnectWhere = {
   node: CatalogueCategoryWhere;
 };
@@ -587,7 +566,7 @@ export type CatalogueCategoryHasGroupCatalogueCategoryPropertyGroupsAggregateInp
 
 export type CatalogueCategoryHasGroupCatalogueCategoryPropertyGroupsConnectFieldInput = {
   connect?: InputMaybe<Array<CatalogueCategoryPropertyGroupConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<CatalogueCategoryPropertyGroupConnectWhere>;
 };
@@ -698,18 +677,9 @@ export type CatalogueCategoryHasSubcategoryCatalogueCategoriesAggregateInput = {
 
 export type CatalogueCategoryHasSubcategoryCatalogueCategoriesConnectFieldInput = {
   connect?: InputMaybe<Array<CatalogueCategoryConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<CatalogueCategoryConnectWhere>;
-};
-
-export type CatalogueCategoryHasSubcategoryCatalogueCategoriesConnectOrCreateFieldInput = {
-  onCreate: CatalogueCategoryHasSubcategoryCatalogueCategoriesConnectOrCreateFieldInputOnCreate;
-  where: CatalogueCategoryConnectOrCreateWhere;
-};
-
-export type CatalogueCategoryHasSubcategoryCatalogueCategoriesConnectOrCreateFieldInputOnCreate = {
-  node: CatalogueCategoryOnCreateInput;
 };
 
 export type CatalogueCategoryHasSubcategoryCatalogueCategoriesConnection = {
@@ -746,7 +716,6 @@ export type CatalogueCategoryHasSubcategoryCatalogueCategoriesDisconnectFieldInp
 
 export type CatalogueCategoryHasSubcategoryCatalogueCategoriesFieldInput = {
   connect?: InputMaybe<Array<CatalogueCategoryHasSubcategoryCatalogueCategoriesConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<CatalogueCategoryHasSubcategoryCatalogueCategoriesConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<CatalogueCategoryHasSubcategoryCatalogueCategoriesCreateFieldInput>>;
 };
 
@@ -798,17 +767,11 @@ export type CatalogueCategoryHasSubcategoryCatalogueCategoriesUpdateConnectionIn
 
 export type CatalogueCategoryHasSubcategoryCatalogueCategoriesUpdateFieldInput = {
   connect?: InputMaybe<Array<CatalogueCategoryHasSubcategoryCatalogueCategoriesConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<CatalogueCategoryHasSubcategoryCatalogueCategoriesConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<CatalogueCategoryHasSubcategoryCatalogueCategoriesCreateFieldInput>>;
   delete?: InputMaybe<Array<CatalogueCategoryHasSubcategoryCatalogueCategoriesDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<CatalogueCategoryHasSubcategoryCatalogueCategoriesDisconnectFieldInput>>;
   update?: InputMaybe<CatalogueCategoryHasSubcategoryCatalogueCategoriesUpdateConnectionInput>;
   where?: InputMaybe<CatalogueCategoryHasSubcategoryCatalogueCategoriesConnectionWhere>;
-};
-
-export type CatalogueCategoryOnCreateInput = {
-  code: Scalars['String']['input'];
-  name: Scalars['String']['input'];
 };
 
 export type CatalogueCategoryOptions = {
@@ -832,18 +795,9 @@ export type CatalogueCategoryParentCategoryAggregateInput = {
 
 export type CatalogueCategoryParentCategoryConnectFieldInput = {
   connect?: InputMaybe<CatalogueCategoryConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<CatalogueCategoryConnectWhere>;
-};
-
-export type CatalogueCategoryParentCategoryConnectOrCreateFieldInput = {
-  onCreate: CatalogueCategoryParentCategoryConnectOrCreateFieldInputOnCreate;
-  where: CatalogueCategoryConnectOrCreateWhere;
-};
-
-export type CatalogueCategoryParentCategoryConnectOrCreateFieldInputOnCreate = {
-  node: CatalogueCategoryOnCreateInput;
 };
 
 export type CatalogueCategoryParentCategoryConnection = {
@@ -880,7 +834,6 @@ export type CatalogueCategoryParentCategoryDisconnectFieldInput = {
 
 export type CatalogueCategoryParentCategoryFieldInput = {
   connect?: InputMaybe<CatalogueCategoryParentCategoryConnectFieldInput>;
-  connectOrCreate?: InputMaybe<CatalogueCategoryParentCategoryConnectOrCreateFieldInput>;
   create?: InputMaybe<CatalogueCategoryParentCategoryCreateFieldInput>;
 };
 
@@ -932,7 +885,6 @@ export type CatalogueCategoryParentCategoryUpdateConnectionInput = {
 
 export type CatalogueCategoryParentCategoryUpdateFieldInput = {
   connect?: InputMaybe<CatalogueCategoryParentCategoryConnectFieldInput>;
-  connectOrCreate?: InputMaybe<CatalogueCategoryParentCategoryConnectOrCreateFieldInput>;
   create?: InputMaybe<CatalogueCategoryParentCategoryCreateFieldInput>;
   delete?: InputMaybe<CatalogueCategoryParentCategoryDeleteFieldInput>;
   disconnect?: InputMaybe<CatalogueCategoryParentCategoryDisconnectFieldInput>;
@@ -1067,7 +1019,7 @@ export type CatalogueCategoryPropertyCatalogueCategoryPropertyGroupsContainsProp
 
 export type CatalogueCategoryPropertyCatalogueCategoryPropertyGroupsContainsPropertyConnectFieldInput = {
   connect?: InputMaybe<Array<CatalogueCategoryPropertyGroupConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<CatalogueCategoryPropertyGroupConnectWhere>;
 };
@@ -1183,10 +1135,6 @@ export type CatalogueCategoryPropertyConnectInput = {
   unit?: InputMaybe<CatalogueCategoryPropertyUnitConnectFieldInput>;
 };
 
-export type CatalogueCategoryPropertyConnectOrCreateInput = {
-  unit?: InputMaybe<CatalogueCategoryPropertyUnitConnectOrCreateFieldInput>;
-};
-
 export type CatalogueCategoryPropertyConnectWhere = {
   node: CatalogueCategoryPropertyWhere;
 };
@@ -1297,18 +1245,9 @@ export type CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupAggregateIn
 
 export type CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupConnectFieldInput = {
   connect?: InputMaybe<Array<CatalogueCategoryConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<CatalogueCategoryConnectWhere>;
-};
-
-export type CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupConnectOrCreateFieldInput = {
-  onCreate: CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupConnectOrCreateFieldInputOnCreate;
-  where: CatalogueCategoryConnectOrCreateWhere;
-};
-
-export type CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupConnectOrCreateFieldInputOnCreate = {
-  node: CatalogueCategoryOnCreateInput;
 };
 
 export type CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupConnection = {
@@ -1345,7 +1284,6 @@ export type CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupDisconnectF
 
 export type CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupFieldInput = {
   connect?: InputMaybe<Array<CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupCreateFieldInput>>;
 };
 
@@ -1397,7 +1335,6 @@ export type CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupUpdateConne
 
 export type CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupUpdateFieldInput = {
   connect?: InputMaybe<Array<CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupCreateFieldInput>>;
   delete?: InputMaybe<Array<CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupDisconnectFieldInput>>;
@@ -1438,10 +1375,6 @@ export type CatalogueCategoryPropertyGroupConnectInput = {
   containsPropertyCatalogueCategoryProperties?: InputMaybe<Array<CatalogueCategoryPropertyGroupContainsPropertyCatalogueCategoryPropertiesConnectFieldInput>>;
 };
 
-export type CatalogueCategoryPropertyGroupConnectOrCreateInput = {
-  catalogueCategoriesHasGroup?: InputMaybe<Array<CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupConnectOrCreateFieldInput>>;
-};
-
 export type CatalogueCategoryPropertyGroupConnectWhere = {
   node: CatalogueCategoryPropertyGroupWhere;
 };
@@ -1460,7 +1393,7 @@ export type CatalogueCategoryPropertyGroupContainsPropertyCatalogueCategoryPrope
 
 export type CatalogueCategoryPropertyGroupContainsPropertyCatalogueCategoryPropertiesConnectFieldInput = {
   connect?: InputMaybe<Array<CatalogueCategoryPropertyConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<CatalogueCategoryPropertyConnectWhere>;
 };
@@ -1721,7 +1654,7 @@ export type CatalogueCategoryPropertyIsPropertyTypeCatalogueCategoryPropertyType
 
 export type CatalogueCategoryPropertyIsPropertyTypeCatalogueCategoryPropertyTypesConnectFieldInput = {
   connect?: InputMaybe<Array<CatalogueCategoryPropertyTypeConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<CatalogueCategoryPropertyTypeConnectWhere>;
 };
@@ -1909,7 +1842,7 @@ export type CatalogueCategoryPropertyTypeCatalogueCategoryPropertiesIsPropertyTy
 
 export type CatalogueCategoryPropertyTypeCatalogueCategoryPropertiesIsPropertyTypeConnectFieldInput = {
   connect?: InputMaybe<Array<CatalogueCategoryPropertyConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<CatalogueCategoryPropertyConnectWhere>;
 };
@@ -2178,18 +2111,9 @@ export type CatalogueCategoryPropertyUnitAggregateInput = {
 };
 
 export type CatalogueCategoryPropertyUnitConnectFieldInput = {
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<UnitConnectWhere>;
-};
-
-export type CatalogueCategoryPropertyUnitConnectOrCreateFieldInput = {
-  onCreate: CatalogueCategoryPropertyUnitConnectOrCreateFieldInputOnCreate;
-  where: UnitConnectOrCreateWhere;
-};
-
-export type CatalogueCategoryPropertyUnitConnectOrCreateFieldInputOnCreate = {
-  node: UnitOnCreateInput;
 };
 
 export type CatalogueCategoryPropertyUnitConnection = {
@@ -2224,7 +2148,6 @@ export type CatalogueCategoryPropertyUnitDisconnectFieldInput = {
 
 export type CatalogueCategoryPropertyUnitFieldInput = {
   connect?: InputMaybe<CatalogueCategoryPropertyUnitConnectFieldInput>;
-  connectOrCreate?: InputMaybe<CatalogueCategoryPropertyUnitConnectOrCreateFieldInput>;
   create?: InputMaybe<CatalogueCategoryPropertyUnitCreateFieldInput>;
 };
 
@@ -2289,7 +2212,6 @@ export type CatalogueCategoryPropertyUnitUpdateConnectionInput = {
 
 export type CatalogueCategoryPropertyUnitUpdateFieldInput = {
   connect?: InputMaybe<CatalogueCategoryPropertyUnitConnectFieldInput>;
-  connectOrCreate?: InputMaybe<CatalogueCategoryPropertyUnitConnectOrCreateFieldInput>;
   create?: InputMaybe<CatalogueCategoryPropertyUnitCreateFieldInput>;
   delete?: InputMaybe<CatalogueCategoryPropertyUnitDeleteFieldInput>;
   disconnect?: InputMaybe<CatalogueCategoryPropertyUnitDisconnectFieldInput>;
@@ -2391,10 +2313,6 @@ export type CatalogueCategorySort = {
   code?: InputMaybe<SortDirection>;
   name?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
-};
-
-export type CatalogueCategoryUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type CatalogueCategoryUpdateInput = {
@@ -2622,18 +2540,9 @@ export type CatalogueItemCatalogueCategoryCatalogueCategoryNodeAggregateSelectio
 
 export type CatalogueItemCatalogueCategoryConnectFieldInput = {
   connect?: InputMaybe<CatalogueCategoryConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<CatalogueCategoryConnectWhere>;
-};
-
-export type CatalogueItemCatalogueCategoryConnectOrCreateFieldInput = {
-  onCreate: CatalogueItemCatalogueCategoryConnectOrCreateFieldInputOnCreate;
-  where: CatalogueCategoryConnectOrCreateWhere;
-};
-
-export type CatalogueItemCatalogueCategoryConnectOrCreateFieldInputOnCreate = {
-  node: CatalogueCategoryOnCreateInput;
 };
 
 export type CatalogueItemCatalogueCategoryConnection = {
@@ -2670,7 +2579,6 @@ export type CatalogueItemCatalogueCategoryDisconnectFieldInput = {
 
 export type CatalogueItemCatalogueCategoryFieldInput = {
   connect?: InputMaybe<CatalogueItemCatalogueCategoryConnectFieldInput>;
-  connectOrCreate?: InputMaybe<CatalogueItemCatalogueCategoryConnectOrCreateFieldInput>;
   create?: InputMaybe<CatalogueItemCatalogueCategoryCreateFieldInput>;
 };
 
@@ -2743,7 +2651,6 @@ export type CatalogueItemCatalogueCategoryUpdateConnectionInput = {
 
 export type CatalogueItemCatalogueCategoryUpdateFieldInput = {
   connect?: InputMaybe<CatalogueItemCatalogueCategoryConnectFieldInput>;
-  connectOrCreate?: InputMaybe<CatalogueItemCatalogueCategoryConnectOrCreateFieldInput>;
   create?: InputMaybe<CatalogueItemCatalogueCategoryCreateFieldInput>;
   delete?: InputMaybe<CatalogueItemCatalogueCategoryDeleteFieldInput>;
   disconnect?: InputMaybe<CatalogueItemCatalogueCategoryDisconnectFieldInput>;
@@ -2755,11 +2662,6 @@ export type CatalogueItemConnectInput = {
   catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryConnectFieldInput>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesConnectFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierConnectFieldInput>;
-};
-
-export type CatalogueItemConnectOrCreateInput = {
-  catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryConnectOrCreateFieldInput>;
-  supplier?: InputMaybe<CatalogueItemSupplierConnectOrCreateFieldInput>;
 };
 
 export type CatalogueItemConnectWhere = {
@@ -2818,7 +2720,7 @@ export type CatalogueItemPropertiesAggregateInput = {
 export type CatalogueItemPropertiesConnectFieldInput = {
   connect?: InputMaybe<Array<CatalogueCategoryPropertyConnectInput>>;
   edge?: InputMaybe<HasCataloguePropertyCreateInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<CatalogueCategoryPropertyConnectWhere>;
 };
@@ -3014,18 +2916,9 @@ export type CatalogueItemSupplierAggregateInput = {
 };
 
 export type CatalogueItemSupplierConnectFieldInput = {
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<SupplierConnectWhere>;
-};
-
-export type CatalogueItemSupplierConnectOrCreateFieldInput = {
-  onCreate: CatalogueItemSupplierConnectOrCreateFieldInputOnCreate;
-  where: SupplierConnectOrCreateWhere;
-};
-
-export type CatalogueItemSupplierConnectOrCreateFieldInputOnCreate = {
-  node: SupplierOnCreateInput;
 };
 
 export type CatalogueItemSupplierConnection = {
@@ -3060,7 +2953,6 @@ export type CatalogueItemSupplierDisconnectFieldInput = {
 
 export type CatalogueItemSupplierFieldInput = {
   connect?: InputMaybe<CatalogueItemSupplierConnectFieldInput>;
-  connectOrCreate?: InputMaybe<CatalogueItemSupplierConnectOrCreateFieldInput>;
   create?: InputMaybe<CatalogueItemSupplierCreateFieldInput>;
 };
 
@@ -3109,7 +3001,6 @@ export type CatalogueItemSupplierUpdateConnectionInput = {
 
 export type CatalogueItemSupplierUpdateFieldInput = {
   connect?: InputMaybe<CatalogueItemSupplierConnectFieldInput>;
-  connectOrCreate?: InputMaybe<CatalogueItemSupplierConnectOrCreateFieldInput>;
   create?: InputMaybe<CatalogueItemSupplierCreateFieldInput>;
   delete?: InputMaybe<CatalogueItemSupplierDeleteFieldInput>;
   disconnect?: InputMaybe<CatalogueItemSupplierDisconnectFieldInput>;
@@ -3206,10 +3097,6 @@ export type ContactPersonRoleAggregateSelection = {
   uid: IdAggregateSelectionNonNullable;
 };
 
-export type ContactPersonRoleConnectOrCreateWhere = {
-  node: ContactPersonRoleUniqueWhere;
-};
-
 export type ContactPersonRoleConnectWhere = {
   node: ContactPersonRoleWhere;
 };
@@ -3224,10 +3111,6 @@ export type ContactPersonRoleEdge = {
   node: ContactPersonRole;
 };
 
-export type ContactPersonRoleOnCreateInput = {
-  name: Scalars['String']['input'];
-};
-
 export type ContactPersonRoleOptions = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -3239,10 +3122,6 @@ export type ContactPersonRoleOptions = {
 export type ContactPersonRoleSort = {
   name?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
-};
-
-export type ContactPersonRoleUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type ContactPersonRoleUpdateInput = {
@@ -3326,8 +3205,10 @@ export type CreateHallContactPeopleMutationResponse = {
   info: CreateInfo;
 };
 
+/** Information about the number of nodes and relationships created during a create mutation */
 export type CreateInfo = {
   __typename?: 'CreateInfo';
+  /** @deprecated This field has been deprecated because bookmarks are now handled by the driver. */
   bookmark?: Maybe<Scalars['String']['output']>;
   nodesCreated: Scalars['Int']['output'];
   relationshipsCreated: Scalars['Int']['output'];
@@ -3453,8 +3334,10 @@ export type DateTimeAggregateSelectionNonNullable = {
   min: Scalars['DateTime']['output'];
 };
 
+/** Information about the number of nodes and relationships deleted during a delete mutation */
 export type DeleteInfo = {
   __typename?: 'DeleteInfo';
+  /** @deprecated This field has been deprecated because bookmarks are now handled by the driver. */
   bookmark?: Maybe<Scalars['String']['output']>;
   nodesDeleted: Scalars['Int']['output'];
   relationshipsDeleted: Scalars['Int']['output'];
@@ -3481,10 +3364,6 @@ export type EmployeeAggregateSelection = {
   uid: IdAggregateSelectionNonNullable;
 };
 
-export type EmployeeConnectOrCreateWhere = {
-  node: EmployeeUniqueWhere;
-};
-
 export type EmployeeConnectWhere = {
   node: EmployeeWhere;
 };
@@ -3503,14 +3382,6 @@ export type EmployeeEdge = {
   node: Employee;
 };
 
-export type EmployeeOnCreateInput = {
-  email?: InputMaybe<Scalars['String']['input']>;
-  firstName: Scalars['String']['input'];
-  fullName?: InputMaybe<Scalars['String']['input']>;
-  lastName: Scalars['String']['input'];
-  phoneNumber?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type EmployeeOptions = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -3526,10 +3397,6 @@ export type EmployeeSort = {
   lastName?: InputMaybe<SortDirection>;
   phoneNumber?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
-};
-
-export type EmployeeUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type EmployeeUpdateInput = {
@@ -3712,12 +3579,6 @@ export type FacilityConnectInput = {
   systemTypeGroupsBelongsToFacility?: InputMaybe<Array<FacilitySystemTypeGroupsBelongsToFacilityConnectFieldInput>>;
 };
 
-export type FacilityConnectOrCreateInput = {
-  hasLocationLocations?: InputMaybe<Array<FacilityHasLocationLocationsConnectOrCreateFieldInput>>;
-  hasZoneZones?: InputMaybe<Array<FacilityHasZoneZonesConnectOrCreateFieldInput>>;
-  locationsBelongsToFacility?: InputMaybe<Array<FacilityLocationsBelongsToFacilityConnectOrCreateFieldInput>>;
-};
-
 export type FacilityConnectWhere = {
   node: FacilityWhere;
 };
@@ -3766,18 +3627,9 @@ export type FacilityHasLocationLocationsAggregateInput = {
 
 export type FacilityHasLocationLocationsConnectFieldInput = {
   connect?: InputMaybe<Array<LocationConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<LocationConnectWhere>;
-};
-
-export type FacilityHasLocationLocationsConnectOrCreateFieldInput = {
-  onCreate: FacilityHasLocationLocationsConnectOrCreateFieldInputOnCreate;
-  where: LocationConnectOrCreateWhere;
-};
-
-export type FacilityHasLocationLocationsConnectOrCreateFieldInputOnCreate = {
-  node: LocationOnCreateInput;
 };
 
 export type FacilityHasLocationLocationsConnection = {
@@ -3814,7 +3666,6 @@ export type FacilityHasLocationLocationsDisconnectFieldInput = {
 
 export type FacilityHasLocationLocationsFieldInput = {
   connect?: InputMaybe<Array<FacilityHasLocationLocationsConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<FacilityHasLocationLocationsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<FacilityHasLocationLocationsCreateFieldInput>>;
 };
 
@@ -3866,7 +3717,6 @@ export type FacilityHasLocationLocationsUpdateConnectionInput = {
 
 export type FacilityHasLocationLocationsUpdateFieldInput = {
   connect?: InputMaybe<Array<FacilityHasLocationLocationsConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<FacilityHasLocationLocationsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<FacilityHasLocationLocationsCreateFieldInput>>;
   delete?: InputMaybe<Array<FacilityHasLocationLocationsDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<FacilityHasLocationLocationsDisconnectFieldInput>>;
@@ -3888,18 +3738,9 @@ export type FacilityHasZoneZonesAggregateInput = {
 
 export type FacilityHasZoneZonesConnectFieldInput = {
   connect?: InputMaybe<Array<ZoneConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<ZoneConnectWhere>;
-};
-
-export type FacilityHasZoneZonesConnectOrCreateFieldInput = {
-  onCreate: FacilityHasZoneZonesConnectOrCreateFieldInputOnCreate;
-  where: ZoneConnectOrCreateWhere;
-};
-
-export type FacilityHasZoneZonesConnectOrCreateFieldInputOnCreate = {
-  node: ZoneOnCreateInput;
 };
 
 export type FacilityHasZoneZonesConnection = {
@@ -3936,7 +3777,6 @@ export type FacilityHasZoneZonesDisconnectFieldInput = {
 
 export type FacilityHasZoneZonesFieldInput = {
   connect?: InputMaybe<Array<FacilityHasZoneZonesConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<FacilityHasZoneZonesConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<FacilityHasZoneZonesCreateFieldInput>>;
 };
 
@@ -3988,7 +3828,6 @@ export type FacilityHasZoneZonesUpdateConnectionInput = {
 
 export type FacilityHasZoneZonesUpdateFieldInput = {
   connect?: InputMaybe<Array<FacilityHasZoneZonesConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<FacilityHasZoneZonesConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<FacilityHasZoneZonesCreateFieldInput>>;
   delete?: InputMaybe<Array<FacilityHasZoneZonesDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<FacilityHasZoneZonesDisconnectFieldInput>>;
@@ -4036,18 +3875,9 @@ export type FacilityLocationsBelongsToFacilityAggregateInput = {
 
 export type FacilityLocationsBelongsToFacilityConnectFieldInput = {
   connect?: InputMaybe<Array<LocationConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<LocationConnectWhere>;
-};
-
-export type FacilityLocationsBelongsToFacilityConnectOrCreateFieldInput = {
-  onCreate: FacilityLocationsBelongsToFacilityConnectOrCreateFieldInputOnCreate;
-  where: LocationConnectOrCreateWhere;
-};
-
-export type FacilityLocationsBelongsToFacilityConnectOrCreateFieldInputOnCreate = {
-  node: LocationOnCreateInput;
 };
 
 export type FacilityLocationsBelongsToFacilityConnection = {
@@ -4084,7 +3914,6 @@ export type FacilityLocationsBelongsToFacilityDisconnectFieldInput = {
 
 export type FacilityLocationsBelongsToFacilityFieldInput = {
   connect?: InputMaybe<Array<FacilityLocationsBelongsToFacilityConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<FacilityLocationsBelongsToFacilityConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<FacilityLocationsBelongsToFacilityCreateFieldInput>>;
 };
 
@@ -4136,7 +3965,6 @@ export type FacilityLocationsBelongsToFacilityUpdateConnectionInput = {
 
 export type FacilityLocationsBelongsToFacilityUpdateFieldInput = {
   connect?: InputMaybe<Array<FacilityLocationsBelongsToFacilityConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<FacilityLocationsBelongsToFacilityConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<FacilityLocationsBelongsToFacilityCreateFieldInput>>;
   delete?: InputMaybe<Array<FacilityLocationsBelongsToFacilityDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<FacilityLocationsBelongsToFacilityDisconnectFieldInput>>;
@@ -4191,7 +4019,7 @@ export type FacilitySystemTypeGroupsBelongsToFacilityAggregateInput = {
 
 export type FacilitySystemTypeGroupsBelongsToFacilityConnectFieldInput = {
   connect?: InputMaybe<Array<SystemTypeGroupConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<SystemTypeGroupConnectWhere>;
 };
@@ -4473,15 +4301,6 @@ export type HallContactPersonConnectInput = {
   role?: InputMaybe<HallContactPersonRoleConnectFieldInput>;
 };
 
-export type HallContactPersonConnectOrCreateInput = {
-  employee?: InputMaybe<HallContactPersonEmployeeConnectOrCreateFieldInput>;
-  role?: InputMaybe<HallContactPersonRoleConnectOrCreateFieldInput>;
-};
-
-export type HallContactPersonConnectOrCreateWhere = {
-  node: HallContactPersonUniqueWhere;
-};
-
 export type HallContactPersonConnectWhere = {
   node: HallContactPersonWhere;
 };
@@ -4532,18 +4351,9 @@ export type HallContactPersonEmployeeAggregateInput = {
 };
 
 export type HallContactPersonEmployeeConnectFieldInput = {
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<EmployeeConnectWhere>;
-};
-
-export type HallContactPersonEmployeeConnectOrCreateFieldInput = {
-  onCreate: HallContactPersonEmployeeConnectOrCreateFieldInputOnCreate;
-  where: EmployeeConnectOrCreateWhere;
-};
-
-export type HallContactPersonEmployeeConnectOrCreateFieldInputOnCreate = {
-  node: EmployeeOnCreateInput;
 };
 
 export type HallContactPersonEmployeeConnection = {
@@ -4594,7 +4404,6 @@ export type HallContactPersonEmployeeEmployeeNodeAggregateSelection = {
 
 export type HallContactPersonEmployeeFieldInput = {
   connect?: InputMaybe<HallContactPersonEmployeeConnectFieldInput>;
-  connectOrCreate?: InputMaybe<HallContactPersonEmployeeConnectOrCreateFieldInput>;
   create?: InputMaybe<HallContactPersonEmployeeCreateFieldInput>;
 };
 
@@ -4691,17 +4500,11 @@ export type HallContactPersonEmployeeUpdateConnectionInput = {
 
 export type HallContactPersonEmployeeUpdateFieldInput = {
   connect?: InputMaybe<HallContactPersonEmployeeConnectFieldInput>;
-  connectOrCreate?: InputMaybe<HallContactPersonEmployeeConnectOrCreateFieldInput>;
   create?: InputMaybe<HallContactPersonEmployeeCreateFieldInput>;
   delete?: InputMaybe<HallContactPersonEmployeeDeleteFieldInput>;
   disconnect?: InputMaybe<HallContactPersonEmployeeDisconnectFieldInput>;
   update?: InputMaybe<HallContactPersonEmployeeUpdateConnectionInput>;
   where?: InputMaybe<HallContactPersonEmployeeConnectionWhere>;
-};
-
-export type HallContactPersonOnCreateInput = {
-  /** Appears because this input type would be empty otherwise because this type is composed of just generated and/or relationship properties. See https://neo4j.com/docs/graphql-manual/current/troubleshooting/faqs/ */
-  _emptyInput?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type HallContactPersonOptions = {
@@ -4729,18 +4532,9 @@ export type HallContactPersonRoleAggregateInput = {
 };
 
 export type HallContactPersonRoleConnectFieldInput = {
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<ContactPersonRoleConnectWhere>;
-};
-
-export type HallContactPersonRoleConnectOrCreateFieldInput = {
-  onCreate: HallContactPersonRoleConnectOrCreateFieldInputOnCreate;
-  where: ContactPersonRoleConnectOrCreateWhere;
-};
-
-export type HallContactPersonRoleConnectOrCreateFieldInputOnCreate = {
-  node: ContactPersonRoleOnCreateInput;
 };
 
 export type HallContactPersonRoleConnection = {
@@ -4775,7 +4569,6 @@ export type HallContactPersonRoleDisconnectFieldInput = {
 
 export type HallContactPersonRoleFieldInput = {
   connect?: InputMaybe<HallContactPersonRoleConnectFieldInput>;
-  connectOrCreate?: InputMaybe<HallContactPersonRoleConnectOrCreateFieldInput>;
   create?: InputMaybe<HallContactPersonRoleCreateFieldInput>;
 };
 
@@ -4812,7 +4605,6 @@ export type HallContactPersonRoleUpdateConnectionInput = {
 
 export type HallContactPersonRoleUpdateFieldInput = {
   connect?: InputMaybe<HallContactPersonRoleConnectFieldInput>;
-  connectOrCreate?: InputMaybe<HallContactPersonRoleConnectOrCreateFieldInput>;
   create?: InputMaybe<HallContactPersonRoleCreateFieldInput>;
   delete?: InputMaybe<HallContactPersonRoleDeleteFieldInput>;
   disconnect?: InputMaybe<HallContactPersonRoleDisconnectFieldInput>;
@@ -4823,10 +4615,6 @@ export type HallContactPersonRoleUpdateFieldInput = {
 /** Fields to sort HallContactPeople by. The order in which sorts are applied is not guaranteed when specifying many fields in one HallContactPersonSort object. */
 export type HallContactPersonSort = {
   uid?: InputMaybe<SortDirection>;
-};
-
-export type HallContactPersonUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type HallContactPersonUpdateInput = {
@@ -5040,7 +4828,7 @@ export type ItemCatalogueItemCatalogueItemNodeAggregateSelection = {
 
 export type ItemCatalogueItemConnectFieldInput = {
   connect?: InputMaybe<CatalogueItemConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<CatalogueItemConnectWhere>;
 };
@@ -5197,10 +4985,6 @@ export type ItemConditionAggregateSelection = {
   uid: IdAggregateSelectionNonNullable;
 };
 
-export type ItemConditionConnectOrCreateWhere = {
-  node: ItemConditionUniqueWhere;
-};
-
 export type ItemConditionConnectWhere = {
   node: ItemConditionWhere;
 };
@@ -5214,11 +4998,6 @@ export type ItemConditionEdge = {
   __typename?: 'ItemConditionEdge';
   cursor: Scalars['String']['output'];
   node: ItemCondition;
-};
-
-export type ItemConditionOnCreateInput = {
-  code: Scalars['String']['input'];
-  name: Scalars['String']['input'];
 };
 
 export type ItemConditionOptions = {
@@ -5248,18 +5027,9 @@ export type ItemConditionStatusAggregateInput = {
 };
 
 export type ItemConditionStatusConnectFieldInput = {
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<ItemConditionConnectWhere>;
-};
-
-export type ItemConditionStatusConnectOrCreateFieldInput = {
-  onCreate: ItemConditionStatusConnectOrCreateFieldInputOnCreate;
-  where: ItemConditionConnectOrCreateWhere;
-};
-
-export type ItemConditionStatusConnectOrCreateFieldInputOnCreate = {
-  node: ItemConditionOnCreateInput;
 };
 
 export type ItemConditionStatusConnection = {
@@ -5294,7 +5064,6 @@ export type ItemConditionStatusDisconnectFieldInput = {
 
 export type ItemConditionStatusFieldInput = {
   connect?: InputMaybe<ItemConditionStatusConnectFieldInput>;
-  connectOrCreate?: InputMaybe<ItemConditionStatusConnectOrCreateFieldInput>;
   create?: InputMaybe<ItemConditionStatusCreateFieldInput>;
 };
 
@@ -5346,16 +5115,11 @@ export type ItemConditionStatusUpdateConnectionInput = {
 
 export type ItemConditionStatusUpdateFieldInput = {
   connect?: InputMaybe<ItemConditionStatusConnectFieldInput>;
-  connectOrCreate?: InputMaybe<ItemConditionStatusConnectOrCreateFieldInput>;
   create?: InputMaybe<ItemConditionStatusCreateFieldInput>;
   delete?: InputMaybe<ItemConditionStatusDeleteFieldInput>;
   disconnect?: InputMaybe<ItemConditionStatusDisconnectFieldInput>;
   update?: InputMaybe<ItemConditionStatusUpdateConnectionInput>;
   where?: InputMaybe<ItemConditionStatusConnectionWhere>;
-};
-
-export type ItemConditionUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type ItemConditionUpdateInput = {
@@ -5397,17 +5161,6 @@ export type ItemConnectInput = {
   itemUsage?: InputMaybe<ItemItemUsageConnectFieldInput>;
   order?: InputMaybe<ItemOrderConnectFieldInput>;
   system?: InputMaybe<Array<ItemSystemConnectFieldInput>>;
-};
-
-export type ItemConnectOrCreateInput = {
-  conditionStatus?: InputMaybe<ItemConditionStatusConnectOrCreateFieldInput>;
-  itemUsage?: InputMaybe<ItemItemUsageConnectOrCreateFieldInput>;
-  order?: InputMaybe<ItemOrderConnectOrCreateFieldInput>;
-  system?: InputMaybe<Array<ItemSystemConnectOrCreateFieldInput>>;
-};
-
-export type ItemConnectOrCreateWhere = {
-  node: ItemUniqueWhere;
 };
 
 export type ItemConnectWhere = {
@@ -5474,18 +5227,9 @@ export type ItemItemUsageAggregateInput = {
 };
 
 export type ItemItemUsageConnectFieldInput = {
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<ItemUsageConnectWhere>;
-};
-
-export type ItemItemUsageConnectOrCreateFieldInput = {
-  onCreate: ItemItemUsageConnectOrCreateFieldInputOnCreate;
-  where: ItemUsageConnectOrCreateWhere;
-};
-
-export type ItemItemUsageConnectOrCreateFieldInputOnCreate = {
-  node: ItemUsageOnCreateInput;
 };
 
 export type ItemItemUsageConnection = {
@@ -5520,7 +5264,6 @@ export type ItemItemUsageDisconnectFieldInput = {
 
 export type ItemItemUsageFieldInput = {
   connect?: InputMaybe<ItemItemUsageConnectFieldInput>;
-  connectOrCreate?: InputMaybe<ItemItemUsageConnectOrCreateFieldInput>;
   create?: InputMaybe<ItemItemUsageCreateFieldInput>;
 };
 
@@ -5585,19 +5328,11 @@ export type ItemItemUsageUpdateConnectionInput = {
 
 export type ItemItemUsageUpdateFieldInput = {
   connect?: InputMaybe<ItemItemUsageConnectFieldInput>;
-  connectOrCreate?: InputMaybe<ItemItemUsageConnectOrCreateFieldInput>;
   create?: InputMaybe<ItemItemUsageCreateFieldInput>;
   delete?: InputMaybe<ItemItemUsageDeleteFieldInput>;
   disconnect?: InputMaybe<ItemItemUsageDisconnectFieldInput>;
   update?: InputMaybe<ItemItemUsageUpdateConnectionInput>;
   where?: InputMaybe<ItemItemUsageConnectionWhere>;
-};
-
-export type ItemOnCreateInput = {
-  eun?: InputMaybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
-  notes?: InputMaybe<Scalars['String']['input']>;
-  serialNumber?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ItemOptions = {
@@ -5620,18 +5355,9 @@ export type ItemOrderAggregateInput = {
 };
 
 export type ItemOrderConnectFieldInput = {
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<OrderConnectWhere>;
-};
-
-export type ItemOrderConnectOrCreateFieldInput = {
-  onCreate: ItemOrderConnectOrCreateFieldInputOnCreate;
-  where: OrderConnectOrCreateWhere;
-};
-
-export type ItemOrderConnectOrCreateFieldInputOnCreate = {
-  node: OrderOnCreateInput;
 };
 
 export type ItemOrderConnection = {
@@ -5666,7 +5392,6 @@ export type ItemOrderDisconnectFieldInput = {
 
 export type ItemOrderFieldInput = {
   connect?: InputMaybe<ItemOrderConnectFieldInput>;
-  connectOrCreate?: InputMaybe<ItemOrderConnectOrCreateFieldInput>;
   create?: InputMaybe<ItemOrderCreateFieldInput>;
 };
 
@@ -5715,7 +5440,6 @@ export type ItemOrderUpdateConnectionInput = {
 
 export type ItemOrderUpdateFieldInput = {
   connect?: InputMaybe<ItemOrderConnectFieldInput>;
-  connectOrCreate?: InputMaybe<ItemOrderConnectOrCreateFieldInput>;
   create?: InputMaybe<ItemOrderCreateFieldInput>;
   delete?: InputMaybe<ItemOrderDeleteFieldInput>;
   disconnect?: InputMaybe<ItemOrderDisconnectFieldInput>;
@@ -5754,18 +5478,9 @@ export type ItemSystemAggregateInput = {
 
 export type ItemSystemConnectFieldInput = {
   connect?: InputMaybe<Array<SystemConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<SystemConnectWhere>;
-};
-
-export type ItemSystemConnectOrCreateFieldInput = {
-  onCreate: ItemSystemConnectOrCreateFieldInputOnCreate;
-  where: SystemConnectOrCreateWhere;
-};
-
-export type ItemSystemConnectOrCreateFieldInputOnCreate = {
-  node: SystemOnCreateInput;
 };
 
 export type ItemSystemConnection = {
@@ -5802,7 +5517,6 @@ export type ItemSystemDisconnectFieldInput = {
 
 export type ItemSystemFieldInput = {
   connect?: InputMaybe<Array<ItemSystemConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<ItemSystemConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<ItemSystemCreateFieldInput>>;
 };
 
@@ -5899,16 +5613,11 @@ export type ItemSystemUpdateConnectionInput = {
 
 export type ItemSystemUpdateFieldInput = {
   connect?: InputMaybe<Array<ItemSystemConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<ItemSystemConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<ItemSystemCreateFieldInput>>;
   delete?: InputMaybe<Array<ItemSystemDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<ItemSystemDisconnectFieldInput>>;
   update?: InputMaybe<ItemSystemUpdateConnectionInput>;
   where?: InputMaybe<ItemSystemConnectionWhere>;
-};
-
-export type ItemUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type ItemUpdateInput = {
@@ -5938,10 +5647,6 @@ export type ItemUsageAggregateSelection = {
   uid: IdAggregateSelectionNonNullable;
 };
 
-export type ItemUsageConnectOrCreateWhere = {
-  node: ItemUsageUniqueWhere;
-};
-
 export type ItemUsageConnectWhere = {
   node: ItemUsageWhere;
 };
@@ -5957,11 +5662,6 @@ export type ItemUsageEdge = {
   node: ItemUsage;
 };
 
-export type ItemUsageOnCreateInput = {
-  code: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-};
-
 export type ItemUsageOptions = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -5974,10 +5674,6 @@ export type ItemUsageSort = {
   code?: InputMaybe<SortDirection>;
   name?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
-};
-
-export type ItemUsageUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type ItemUsageUpdateInput = {
@@ -6210,16 +5906,6 @@ export type LocationConnectInput = {
   subLocations?: InputMaybe<Array<LocationSubLocationsConnectFieldInput>>;
 };
 
-export type LocationConnectOrCreateInput = {
-  parentLocation?: InputMaybe<LocationParentLocationConnectOrCreateFieldInput>;
-  roomCard?: InputMaybe<LocationRoomCardConnectOrCreateFieldInput>;
-  subLocations?: InputMaybe<Array<LocationSubLocationsConnectOrCreateFieldInput>>;
-};
-
-export type LocationConnectOrCreateWhere = {
-  node: LocationUniqueWhere;
-};
-
 export type LocationConnectWhere = {
   node: LocationWhere;
 };
@@ -6267,7 +5953,7 @@ export type LocationFacilityAggregateInput = {
 
 export type LocationFacilityConnectFieldInput = {
   connect?: InputMaybe<FacilityConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<FacilityConnectWhere>;
 };
@@ -6418,11 +6104,6 @@ export type LocationLocationSubLocationsNodeAggregateSelection = {
   uid: IdAggregateSelectionNonNullable;
 };
 
-export type LocationOnCreateInput = {
-  code?: InputMaybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
-};
-
 export type LocationOptions = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -6444,18 +6125,9 @@ export type LocationParentLocationAggregateInput = {
 
 export type LocationParentLocationConnectFieldInput = {
   connect?: InputMaybe<LocationConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<LocationConnectWhere>;
-};
-
-export type LocationParentLocationConnectOrCreateFieldInput = {
-  onCreate: LocationParentLocationConnectOrCreateFieldInputOnCreate;
-  where: LocationConnectOrCreateWhere;
-};
-
-export type LocationParentLocationConnectOrCreateFieldInputOnCreate = {
-  node: LocationOnCreateInput;
 };
 
 export type LocationParentLocationConnection = {
@@ -6492,7 +6164,6 @@ export type LocationParentLocationDisconnectFieldInput = {
 
 export type LocationParentLocationFieldInput = {
   connect?: InputMaybe<LocationParentLocationConnectFieldInput>;
-  connectOrCreate?: InputMaybe<LocationParentLocationConnectOrCreateFieldInput>;
   create?: InputMaybe<LocationParentLocationCreateFieldInput>;
 };
 
@@ -6544,7 +6215,6 @@ export type LocationParentLocationUpdateConnectionInput = {
 
 export type LocationParentLocationUpdateFieldInput = {
   connect?: InputMaybe<LocationParentLocationConnectFieldInput>;
-  connectOrCreate?: InputMaybe<LocationParentLocationConnectOrCreateFieldInput>;
   create?: InputMaybe<LocationParentLocationCreateFieldInput>;
   delete?: InputMaybe<LocationParentLocationDeleteFieldInput>;
   disconnect?: InputMaybe<LocationParentLocationDisconnectFieldInput>;
@@ -6573,18 +6243,9 @@ export type LocationRoomCardAggregateInput = {
 
 export type LocationRoomCardConnectFieldInput = {
   connect?: InputMaybe<RoomCardConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<RoomCardConnectWhere>;
-};
-
-export type LocationRoomCardConnectOrCreateFieldInput = {
-  onCreate: LocationRoomCardConnectOrCreateFieldInputOnCreate;
-  where: RoomCardConnectOrCreateWhere;
-};
-
-export type LocationRoomCardConnectOrCreateFieldInputOnCreate = {
-  node: RoomCardOnCreateInput;
 };
 
 export type LocationRoomCardConnection = {
@@ -6621,7 +6282,6 @@ export type LocationRoomCardDisconnectFieldInput = {
 
 export type LocationRoomCardFieldInput = {
   connect?: InputMaybe<LocationRoomCardConnectFieldInput>;
-  connectOrCreate?: InputMaybe<LocationRoomCardConnectOrCreateFieldInput>;
   create?: InputMaybe<LocationRoomCardCreateFieldInput>;
 };
 
@@ -6862,7 +6522,6 @@ export type LocationRoomCardUpdateConnectionInput = {
 
 export type LocationRoomCardUpdateFieldInput = {
   connect?: InputMaybe<LocationRoomCardConnectFieldInput>;
-  connectOrCreate?: InputMaybe<LocationRoomCardConnectOrCreateFieldInput>;
   create?: InputMaybe<LocationRoomCardCreateFieldInput>;
   delete?: InputMaybe<LocationRoomCardDeleteFieldInput>;
   disconnect?: InputMaybe<LocationRoomCardDisconnectFieldInput>;
@@ -6891,18 +6550,9 @@ export type LocationSubLocationsAggregateInput = {
 
 export type LocationSubLocationsConnectFieldInput = {
   connect?: InputMaybe<Array<LocationConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<LocationConnectWhere>;
-};
-
-export type LocationSubLocationsConnectOrCreateFieldInput = {
-  onCreate: LocationSubLocationsConnectOrCreateFieldInputOnCreate;
-  where: LocationConnectOrCreateWhere;
-};
-
-export type LocationSubLocationsConnectOrCreateFieldInputOnCreate = {
-  node: LocationOnCreateInput;
 };
 
 export type LocationSubLocationsConnection = {
@@ -6939,7 +6589,6 @@ export type LocationSubLocationsDisconnectFieldInput = {
 
 export type LocationSubLocationsFieldInput = {
   connect?: InputMaybe<Array<LocationSubLocationsConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<LocationSubLocationsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<LocationSubLocationsCreateFieldInput>>;
 };
 
@@ -6991,16 +6640,11 @@ export type LocationSubLocationsUpdateConnectionInput = {
 
 export type LocationSubLocationsUpdateFieldInput = {
   connect?: InputMaybe<Array<LocationSubLocationsConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<LocationSubLocationsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<LocationSubLocationsCreateFieldInput>>;
   delete?: InputMaybe<Array<LocationSubLocationsDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<LocationSubLocationsDisconnectFieldInput>>;
   update?: InputMaybe<LocationSubLocationsUpdateConnectionInput>;
   where?: InputMaybe<LocationSubLocationsConnectionWhere>;
-};
-
-export type LocationUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type LocationUpdateInput = {
@@ -7459,7 +7103,6 @@ export type MutationDeleteZonesArgs = {
 
 export type MutationUpdateCatalogueCategoriesArgs = {
   connect?: InputMaybe<CatalogueCategoryConnectInput>;
-  connectOrCreate?: InputMaybe<CatalogueCategoryConnectOrCreateInput>;
   create?: InputMaybe<CatalogueCategoryRelationInput>;
   delete?: InputMaybe<CatalogueCategoryDeleteInput>;
   disconnect?: InputMaybe<CatalogueCategoryDisconnectInput>;
@@ -7470,7 +7113,6 @@ export type MutationUpdateCatalogueCategoriesArgs = {
 
 export type MutationUpdateCatalogueCategoryPropertiesArgs = {
   connect?: InputMaybe<CatalogueCategoryPropertyConnectInput>;
-  connectOrCreate?: InputMaybe<CatalogueCategoryPropertyConnectOrCreateInput>;
   create?: InputMaybe<CatalogueCategoryPropertyRelationInput>;
   delete?: InputMaybe<CatalogueCategoryPropertyDeleteInput>;
   disconnect?: InputMaybe<CatalogueCategoryPropertyDisconnectInput>;
@@ -7481,7 +7123,6 @@ export type MutationUpdateCatalogueCategoryPropertiesArgs = {
 
 export type MutationUpdateCatalogueCategoryPropertyGroupsArgs = {
   connect?: InputMaybe<CatalogueCategoryPropertyGroupConnectInput>;
-  connectOrCreate?: InputMaybe<CatalogueCategoryPropertyGroupConnectOrCreateInput>;
   create?: InputMaybe<CatalogueCategoryPropertyGroupRelationInput>;
   delete?: InputMaybe<CatalogueCategoryPropertyGroupDeleteInput>;
   disconnect?: InputMaybe<CatalogueCategoryPropertyGroupDisconnectInput>;
@@ -7502,7 +7143,6 @@ export type MutationUpdateCatalogueCategoryPropertyTypesArgs = {
 
 export type MutationUpdateCatalogueItemsArgs = {
   connect?: InputMaybe<CatalogueItemConnectInput>;
-  connectOrCreate?: InputMaybe<CatalogueItemConnectOrCreateInput>;
   create?: InputMaybe<CatalogueItemRelationInput>;
   delete?: InputMaybe<CatalogueItemDeleteInput>;
   disconnect?: InputMaybe<CatalogueItemDisconnectInput>;
@@ -7525,7 +7165,6 @@ export type MutationUpdateEmployeesArgs = {
 
 export type MutationUpdateFacilitiesArgs = {
   connect?: InputMaybe<FacilityConnectInput>;
-  connectOrCreate?: InputMaybe<FacilityConnectOrCreateInput>;
   create?: InputMaybe<FacilityRelationInput>;
   delete?: InputMaybe<FacilityDeleteInput>;
   disconnect?: InputMaybe<FacilityDisconnectInput>;
@@ -7536,7 +7175,6 @@ export type MutationUpdateFacilitiesArgs = {
 
 export type MutationUpdateHallContactPeopleArgs = {
   connect?: InputMaybe<HallContactPersonConnectInput>;
-  connectOrCreate?: InputMaybe<HallContactPersonConnectOrCreateInput>;
   create?: InputMaybe<HallContactPersonRelationInput>;
   delete?: InputMaybe<HallContactPersonDeleteInput>;
   disconnect?: InputMaybe<HallContactPersonDisconnectInput>;
@@ -7559,7 +7197,6 @@ export type MutationUpdateItemUsagesArgs = {
 
 export type MutationUpdateItemsArgs = {
   connect?: InputMaybe<ItemConnectInput>;
-  connectOrCreate?: InputMaybe<ItemConnectOrCreateInput>;
   create?: InputMaybe<ItemRelationInput>;
   delete?: InputMaybe<ItemDeleteInput>;
   disconnect?: InputMaybe<ItemDisconnectInput>;
@@ -7570,7 +7207,6 @@ export type MutationUpdateItemsArgs = {
 
 export type MutationUpdateLocationsArgs = {
   connect?: InputMaybe<LocationConnectInput>;
-  connectOrCreate?: InputMaybe<LocationConnectOrCreateInput>;
   create?: InputMaybe<LocationRelationInput>;
   delete?: InputMaybe<LocationDeleteInput>;
   disconnect?: InputMaybe<LocationDisconnectInput>;
@@ -7603,7 +7239,6 @@ export type MutationUpdateRolesArgs = {
 
 export type MutationUpdateRoomCardsArgs = {
   connect?: InputMaybe<RoomCardConnectInput>;
-  connectOrCreate?: InputMaybe<RoomCardConnectOrCreateInput>;
   create?: InputMaybe<RoomCardRelationInput>;
   delete?: InputMaybe<RoomCardDeleteInput>;
   disconnect?: InputMaybe<RoomCardDisconnectInput>;
@@ -7638,7 +7273,6 @@ export type MutationUpdateSystemImportancesArgs = {
 
 export type MutationUpdateSystemTypeGroupsArgs = {
   connect?: InputMaybe<SystemTypeGroupConnectInput>;
-  connectOrCreate?: InputMaybe<SystemTypeGroupConnectOrCreateInput>;
   create?: InputMaybe<SystemTypeGroupRelationInput>;
   delete?: InputMaybe<SystemTypeGroupDeleteInput>;
   disconnect?: InputMaybe<SystemTypeGroupDisconnectInput>;
@@ -7659,7 +7293,6 @@ export type MutationUpdateSystemTypesArgs = {
 
 export type MutationUpdateSystemsArgs = {
   connect?: InputMaybe<SystemConnectInput>;
-  connectOrCreate?: InputMaybe<SystemConnectOrCreateInput>;
   create?: InputMaybe<SystemRelationInput>;
   delete?: InputMaybe<SystemDeleteInput>;
   disconnect?: InputMaybe<SystemDisconnectInput>;
@@ -7682,7 +7315,6 @@ export type MutationUpdateUnitsArgs = {
 
 export type MutationUpdateUsersArgs = {
   connect?: InputMaybe<UserConnectInput>;
-  connectOrCreate?: InputMaybe<UserConnectOrCreateInput>;
   create?: InputMaybe<UserRelationInput>;
   delete?: InputMaybe<UserDeleteInput>;
   disconnect?: InputMaybe<UserDisconnectInput>;
@@ -7693,7 +7325,6 @@ export type MutationUpdateUsersArgs = {
 
 export type MutationUpdateZonesArgs = {
   connect?: InputMaybe<ZoneConnectInput>;
-  connectOrCreate?: InputMaybe<ZoneConnectOrCreateInput>;
   create?: InputMaybe<ZoneRelationInput>;
   delete?: InputMaybe<ZoneDeleteInput>;
   disconnect?: InputMaybe<ZoneDisconnectInput>;
@@ -7714,10 +7345,6 @@ export type OrderAggregateSelection = {
   uid: IdAggregateSelectionNonNullable;
 };
 
-export type OrderConnectOrCreateWhere = {
-  node: OrderUniqueWhere;
-};
-
 export type OrderConnectWhere = {
   node: OrderWhere;
 };
@@ -7732,10 +7359,6 @@ export type OrderEdge = {
   node: Order;
 };
 
-export type OrderOnCreateInput = {
-  name: Scalars['String']['input'];
-};
-
 export type OrderOptions = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -7747,10 +7370,6 @@ export type OrderOptions = {
 export type OrderSort = {
   name?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
-};
-
-export type OrderUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type OrderUpdateInput = {
@@ -8518,10 +8137,6 @@ export type RoleConnectInput = {
   usersHasRole?: InputMaybe<Array<RoleUsersHasRoleConnectFieldInput>>;
 };
 
-export type RoleConnectOrCreateWhere = {
-  node: RoleUniqueWhere;
-};
-
 export type RoleConnectWhere = {
   node: RoleWhere;
 };
@@ -8546,11 +8161,6 @@ export type RoleEdge = {
   node: Role;
 };
 
-export type RoleOnCreateInput = {
-  code: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-};
-
 export type RoleOptions = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -8567,10 +8177,6 @@ export type RoleSort = {
   code?: InputMaybe<SortDirection>;
   name?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
-};
-
-export type RoleUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type RoleUpdateInput = {
@@ -8609,7 +8215,7 @@ export type RoleUsersHasRoleAggregateInput = {
 
 export type RoleUsersHasRoleConnectFieldInput = {
   connect?: InputMaybe<Array<UserConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<UserConnectWhere>;
 };
@@ -8956,17 +8562,6 @@ export type RoomCardConnectInput = {
   teams?: InputMaybe<Array<RoomCardTeamsConnectFieldInput>>;
 };
 
-export type RoomCardConnectOrCreateInput = {
-  contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptConnectOrCreateFieldInput>>;
-  contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallConnectOrCreateFieldInput>>;
-  location?: InputMaybe<RoomCardLocationConnectOrCreateFieldInput>;
-  teams?: InputMaybe<Array<RoomCardTeamsConnectOrCreateFieldInput>>;
-};
-
-export type RoomCardConnectOrCreateWhere = {
-  node: RoomCardUniqueWhere;
-};
-
 export type RoomCardConnectWhere = {
   node: RoomCardWhere;
 };
@@ -8984,18 +8579,9 @@ export type RoomCardContactPersonsDeptAggregateInput = {
 };
 
 export type RoomCardContactPersonsDeptConnectFieldInput = {
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<EmployeeConnectWhere>;
-};
-
-export type RoomCardContactPersonsDeptConnectOrCreateFieldInput = {
-  onCreate: RoomCardContactPersonsDeptConnectOrCreateFieldInputOnCreate;
-  where: EmployeeConnectOrCreateWhere;
-};
-
-export type RoomCardContactPersonsDeptConnectOrCreateFieldInputOnCreate = {
-  node: EmployeeOnCreateInput;
 };
 
 export type RoomCardContactPersonsDeptConnection = {
@@ -9030,7 +8616,6 @@ export type RoomCardContactPersonsDeptDisconnectFieldInput = {
 
 export type RoomCardContactPersonsDeptFieldInput = {
   connect?: InputMaybe<Array<RoomCardContactPersonsDeptConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<RoomCardContactPersonsDeptConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<RoomCardContactPersonsDeptCreateFieldInput>>;
 };
 
@@ -9127,7 +8712,6 @@ export type RoomCardContactPersonsDeptUpdateConnectionInput = {
 
 export type RoomCardContactPersonsDeptUpdateFieldInput = {
   connect?: InputMaybe<Array<RoomCardContactPersonsDeptConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<RoomCardContactPersonsDeptConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<RoomCardContactPersonsDeptCreateFieldInput>>;
   delete?: InputMaybe<Array<RoomCardContactPersonsDeptDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<RoomCardContactPersonsDeptDisconnectFieldInput>>;
@@ -9149,18 +8733,9 @@ export type RoomCardContactPersonsHallAggregateInput = {
 
 export type RoomCardContactPersonsHallConnectFieldInput = {
   connect?: InputMaybe<Array<HallContactPersonConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<HallContactPersonConnectWhere>;
-};
-
-export type RoomCardContactPersonsHallConnectOrCreateFieldInput = {
-  onCreate: RoomCardContactPersonsHallConnectOrCreateFieldInputOnCreate;
-  where: HallContactPersonConnectOrCreateWhere;
-};
-
-export type RoomCardContactPersonsHallConnectOrCreateFieldInputOnCreate = {
-  node: HallContactPersonOnCreateInput;
 };
 
 export type RoomCardContactPersonsHallConnection = {
@@ -9197,7 +8772,6 @@ export type RoomCardContactPersonsHallDisconnectFieldInput = {
 
 export type RoomCardContactPersonsHallFieldInput = {
   connect?: InputMaybe<Array<RoomCardContactPersonsHallConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<RoomCardContactPersonsHallConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<RoomCardContactPersonsHallCreateFieldInput>>;
 };
 
@@ -9219,7 +8793,6 @@ export type RoomCardContactPersonsHallUpdateConnectionInput = {
 
 export type RoomCardContactPersonsHallUpdateFieldInput = {
   connect?: InputMaybe<Array<RoomCardContactPersonsHallConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<RoomCardContactPersonsHallConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<RoomCardContactPersonsHallCreateFieldInput>>;
   delete?: InputMaybe<Array<RoomCardContactPersonsHallDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<RoomCardContactPersonsHallDisconnectFieldInput>>;
@@ -9309,18 +8882,9 @@ export type RoomCardLocationAggregateInput = {
 
 export type RoomCardLocationConnectFieldInput = {
   connect?: InputMaybe<LocationConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<LocationConnectWhere>;
-};
-
-export type RoomCardLocationConnectOrCreateFieldInput = {
-  onCreate: RoomCardLocationConnectOrCreateFieldInputOnCreate;
-  where: LocationConnectOrCreateWhere;
-};
-
-export type RoomCardLocationConnectOrCreateFieldInputOnCreate = {
-  node: LocationOnCreateInput;
 };
 
 export type RoomCardLocationConnection = {
@@ -9357,7 +8921,6 @@ export type RoomCardLocationDisconnectFieldInput = {
 
 export type RoomCardLocationFieldInput = {
   connect?: InputMaybe<RoomCardLocationConnectFieldInput>;
-  connectOrCreate?: InputMaybe<RoomCardLocationConnectOrCreateFieldInput>;
   create?: InputMaybe<RoomCardLocationCreateFieldInput>;
 };
 
@@ -9422,29 +8985,11 @@ export type RoomCardLocationUpdateConnectionInput = {
 
 export type RoomCardLocationUpdateFieldInput = {
   connect?: InputMaybe<RoomCardLocationConnectFieldInput>;
-  connectOrCreate?: InputMaybe<RoomCardLocationConnectOrCreateFieldInput>;
   create?: InputMaybe<RoomCardLocationCreateFieldInput>;
   delete?: InputMaybe<RoomCardLocationDeleteFieldInput>;
   disconnect?: InputMaybe<RoomCardLocationDisconnectFieldInput>;
   update?: InputMaybe<RoomCardLocationUpdateConnectionInput>;
   where?: InputMaybe<RoomCardLocationConnectionWhere>;
-};
-
-export type RoomCardOnCreateInput = {
-  additionalRequirements?: InputMaybe<Scalars['String']['input']>;
-  cleaningSchedule?: InputMaybe<Scalars['String']['input']>;
-  compressedAirDistribution?: InputMaybe<Scalars['String']['input']>;
-  coolingWater?: InputMaybe<Scalars['String']['input']>;
-  entryToHvacTent?: InputMaybe<Scalars['String']['input']>;
-  humidity?: InputMaybe<Scalars['String']['input']>;
-  indoorEnvironmentQuality?: InputMaybe<Scalars['String']['input']>;
-  maxPressureInColdDistribution?: InputMaybe<Scalars['String']['input']>;
-  nitrogenCentralDistribution?: InputMaybe<Scalars['String']['input']>;
-  prescribedClothing?: InputMaybe<Scalars['String']['input']>;
-  pressureInCoolingSystem?: InputMaybe<Scalars['String']['input']>;
-  purityClass?: InputMaybe<Scalars['String']['input']>;
-  roomTemperature?: InputMaybe<Scalars['String']['input']>;
-  status: RoomCardStatus;
 };
 
 export type RoomCardOptions = {
@@ -9511,18 +9056,9 @@ export type RoomCardTeamsAggregateInput = {
 };
 
 export type RoomCardTeamsConnectFieldInput = {
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<TeamConnectWhere>;
-};
-
-export type RoomCardTeamsConnectOrCreateFieldInput = {
-  onCreate: RoomCardTeamsConnectOrCreateFieldInputOnCreate;
-  where: TeamConnectOrCreateWhere;
-};
-
-export type RoomCardTeamsConnectOrCreateFieldInputOnCreate = {
-  node: TeamOnCreateInput;
 };
 
 export type RoomCardTeamsConnection = {
@@ -9557,7 +9093,6 @@ export type RoomCardTeamsDisconnectFieldInput = {
 
 export type RoomCardTeamsFieldInput = {
   connect?: InputMaybe<Array<RoomCardTeamsConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<RoomCardTeamsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<RoomCardTeamsCreateFieldInput>>;
 };
 
@@ -9594,16 +9129,11 @@ export type RoomCardTeamsUpdateConnectionInput = {
 
 export type RoomCardTeamsUpdateFieldInput = {
   connect?: InputMaybe<Array<RoomCardTeamsConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<RoomCardTeamsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<RoomCardTeamsCreateFieldInput>>;
   delete?: InputMaybe<Array<RoomCardTeamsDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<RoomCardTeamsDisconnectFieldInput>>;
   update?: InputMaybe<RoomCardTeamsUpdateConnectionInput>;
   where?: InputMaybe<RoomCardTeamsConnectionWhere>;
-};
-
-export type RoomCardUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type RoomCardUpdateInput = {
@@ -9842,6 +9372,7 @@ export type SchemaMigrationsConnection = {
   totalCount: Scalars['Int']['output'];
 };
 
+/** An enum for sorting in either ascending or descending order. */
 export enum SortDirection {
   /** Sort by field values in ascending order. */
   Asc = 'ASC',
@@ -9874,10 +9405,6 @@ export type SupplierAggregateSelection = {
   uid: IdAggregateSelectionNonNullable;
 };
 
-export type SupplierConnectOrCreateWhere = {
-  node: SupplierUniqueWhere;
-};
-
 export type SupplierConnectWhere = {
   node: SupplierWhere;
 };
@@ -9892,10 +9419,6 @@ export type SupplierEdge = {
   node: Supplier;
 };
 
-export type SupplierOnCreateInput = {
-  name: Scalars['String']['input'];
-};
-
 export type SupplierOptions = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -9907,10 +9430,6 @@ export type SupplierOptions = {
 export type SupplierSort = {
   name?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
-};
-
-export type SupplierUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type SupplierUpdateInput = {
@@ -10253,23 +9772,6 @@ export type SystemConnectInput = {
   zone?: InputMaybe<SystemZoneConnectFieldInput>;
 };
 
-export type SystemConnectOrCreateInput = {
-  location?: InputMaybe<SystemLocationConnectOrCreateFieldInput>;
-  maintainedBy?: InputMaybe<Array<SystemMaintainedByConnectOrCreateFieldInput>>;
-  operators?: InputMaybe<Array<SystemOperatorsConnectOrCreateFieldInput>>;
-  owner?: InputMaybe<SystemOwnerConnectOrCreateFieldInput>;
-  parentSystem?: InputMaybe<SystemParentSystemConnectOrCreateFieldInput>;
-  physicalItem?: InputMaybe<SystemPhysicalItemConnectOrCreateFieldInput>;
-  responsible?: InputMaybe<SystemResponsibleConnectOrCreateFieldInput>;
-  subSystems?: InputMaybe<Array<SystemSubSystemsConnectOrCreateFieldInput>>;
-  systemType?: InputMaybe<SystemSystemTypeConnectOrCreateFieldInput>;
-  zone?: InputMaybe<SystemZoneConnectOrCreateFieldInput>;
-};
-
-export type SystemConnectOrCreateWhere = {
-  node: SystemUniqueWhere;
-};
-
 export type SystemConnectWhere = {
   node: SystemWhere;
 };
@@ -10480,7 +9982,7 @@ export type SystemFacilityAggregateInput = {
 
 export type SystemFacilityConnectFieldInput = {
   connect?: InputMaybe<FacilityConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<FacilityConnectWhere>;
 };
@@ -10713,18 +10215,9 @@ export type SystemLocationAggregateInput = {
 
 export type SystemLocationConnectFieldInput = {
   connect?: InputMaybe<LocationConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<LocationConnectWhere>;
-};
-
-export type SystemLocationConnectOrCreateFieldInput = {
-  onCreate: SystemLocationConnectOrCreateFieldInputOnCreate;
-  where: LocationConnectOrCreateWhere;
-};
-
-export type SystemLocationConnectOrCreateFieldInputOnCreate = {
-  node: LocationOnCreateInput;
 };
 
 export type SystemLocationConnection = {
@@ -10761,7 +10254,6 @@ export type SystemLocationDisconnectFieldInput = {
 
 export type SystemLocationFieldInput = {
   connect?: InputMaybe<SystemLocationConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemLocationConnectOrCreateFieldInput>;
   create?: InputMaybe<SystemLocationCreateFieldInput>;
 };
 
@@ -10826,7 +10318,6 @@ export type SystemLocationUpdateConnectionInput = {
 
 export type SystemLocationUpdateFieldInput = {
   connect?: InputMaybe<SystemLocationConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemLocationConnectOrCreateFieldInput>;
   create?: InputMaybe<SystemLocationCreateFieldInput>;
   delete?: InputMaybe<SystemLocationDeleteFieldInput>;
   disconnect?: InputMaybe<SystemLocationDisconnectFieldInput>;
@@ -10847,18 +10338,9 @@ export type SystemMaintainedByAggregateInput = {
 };
 
 export type SystemMaintainedByConnectFieldInput = {
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<EmployeeConnectWhere>;
-};
-
-export type SystemMaintainedByConnectOrCreateFieldInput = {
-  onCreate: SystemMaintainedByConnectOrCreateFieldInputOnCreate;
-  where: EmployeeConnectOrCreateWhere;
-};
-
-export type SystemMaintainedByConnectOrCreateFieldInputOnCreate = {
-  node: EmployeeOnCreateInput;
 };
 
 export type SystemMaintainedByConnection = {
@@ -10893,7 +10375,6 @@ export type SystemMaintainedByDisconnectFieldInput = {
 
 export type SystemMaintainedByFieldInput = {
   connect?: InputMaybe<Array<SystemMaintainedByConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<SystemMaintainedByConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<SystemMaintainedByCreateFieldInput>>;
 };
 
@@ -10990,22 +10471,11 @@ export type SystemMaintainedByUpdateConnectionInput = {
 
 export type SystemMaintainedByUpdateFieldInput = {
   connect?: InputMaybe<Array<SystemMaintainedByConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<SystemMaintainedByConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<SystemMaintainedByCreateFieldInput>>;
   delete?: InputMaybe<Array<SystemMaintainedByDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<SystemMaintainedByDisconnectFieldInput>>;
   update?: InputMaybe<SystemMaintainedByUpdateConnectionInput>;
   where?: InputMaybe<SystemMaintainedByConnectionWhere>;
-};
-
-export type SystemOnCreateInput = {
-  deleted: Scalars['Boolean']['input'];
-  description?: InputMaybe<Scalars['String']['input']>;
-  isTechnologicalUnit?: InputMaybe<Scalars['Boolean']['input']>;
-  name: Scalars['String']['input'];
-  systemAlias?: InputMaybe<Scalars['String']['input']>;
-  systemCode?: InputMaybe<Scalars['String']['input']>;
-  systemLevel?: InputMaybe<SystemLevel>;
 };
 
 export type SystemOperatorsAggregateInput = {
@@ -11021,18 +10491,9 @@ export type SystemOperatorsAggregateInput = {
 };
 
 export type SystemOperatorsConnectFieldInput = {
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<EmployeeConnectWhere>;
-};
-
-export type SystemOperatorsConnectOrCreateFieldInput = {
-  onCreate: SystemOperatorsConnectOrCreateFieldInputOnCreate;
-  where: EmployeeConnectOrCreateWhere;
-};
-
-export type SystemOperatorsConnectOrCreateFieldInputOnCreate = {
-  node: EmployeeOnCreateInput;
 };
 
 export type SystemOperatorsConnection = {
@@ -11067,7 +10528,6 @@ export type SystemOperatorsDisconnectFieldInput = {
 
 export type SystemOperatorsFieldInput = {
   connect?: InputMaybe<Array<SystemOperatorsConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<SystemOperatorsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<SystemOperatorsCreateFieldInput>>;
 };
 
@@ -11164,7 +10624,6 @@ export type SystemOperatorsUpdateConnectionInput = {
 
 export type SystemOperatorsUpdateFieldInput = {
   connect?: InputMaybe<Array<SystemOperatorsConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<SystemOperatorsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<SystemOperatorsCreateFieldInput>>;
   delete?: InputMaybe<Array<SystemOperatorsDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<SystemOperatorsDisconnectFieldInput>>;
@@ -11192,18 +10651,9 @@ export type SystemOwnerAggregateInput = {
 };
 
 export type SystemOwnerConnectFieldInput = {
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<EmployeeConnectWhere>;
-};
-
-export type SystemOwnerConnectOrCreateFieldInput = {
-  onCreate: SystemOwnerConnectOrCreateFieldInputOnCreate;
-  where: EmployeeConnectOrCreateWhere;
-};
-
-export type SystemOwnerConnectOrCreateFieldInputOnCreate = {
-  node: EmployeeOnCreateInput;
 };
 
 export type SystemOwnerConnection = {
@@ -11238,7 +10688,6 @@ export type SystemOwnerDisconnectFieldInput = {
 
 export type SystemOwnerFieldInput = {
   connect?: InputMaybe<SystemOwnerConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemOwnerConnectOrCreateFieldInput>;
   create?: InputMaybe<SystemOwnerCreateFieldInput>;
 };
 
@@ -11335,7 +10784,6 @@ export type SystemOwnerUpdateConnectionInput = {
 
 export type SystemOwnerUpdateFieldInput = {
   connect?: InputMaybe<SystemOwnerConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemOwnerConnectOrCreateFieldInput>;
   create?: InputMaybe<SystemOwnerCreateFieldInput>;
   delete?: InputMaybe<SystemOwnerDeleteFieldInput>;
   disconnect?: InputMaybe<SystemOwnerDisconnectFieldInput>;
@@ -11357,18 +10805,9 @@ export type SystemParentSystemAggregateInput = {
 
 export type SystemParentSystemConnectFieldInput = {
   connect?: InputMaybe<SystemConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<SystemConnectWhere>;
-};
-
-export type SystemParentSystemConnectOrCreateFieldInput = {
-  onCreate: SystemParentSystemConnectOrCreateFieldInputOnCreate;
-  where: SystemConnectOrCreateWhere;
-};
-
-export type SystemParentSystemConnectOrCreateFieldInputOnCreate = {
-  node: SystemOnCreateInput;
 };
 
 export type SystemParentSystemConnection = {
@@ -11405,7 +10844,6 @@ export type SystemParentSystemDisconnectFieldInput = {
 
 export type SystemParentSystemFieldInput = {
   connect?: InputMaybe<SystemParentSystemConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemParentSystemConnectOrCreateFieldInput>;
   create?: InputMaybe<SystemParentSystemCreateFieldInput>;
 };
 
@@ -11487,7 +10925,6 @@ export type SystemParentSystemUpdateConnectionInput = {
 
 export type SystemParentSystemUpdateFieldInput = {
   connect?: InputMaybe<SystemParentSystemConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemParentSystemConnectOrCreateFieldInput>;
   create?: InputMaybe<SystemParentSystemCreateFieldInput>;
   delete?: InputMaybe<SystemParentSystemDeleteFieldInput>;
   disconnect?: InputMaybe<SystemParentSystemDisconnectFieldInput>;
@@ -11509,18 +10946,9 @@ export type SystemPhysicalItemAggregateInput = {
 
 export type SystemPhysicalItemConnectFieldInput = {
   connect?: InputMaybe<ItemConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<ItemConnectWhere>;
-};
-
-export type SystemPhysicalItemConnectOrCreateFieldInput = {
-  onCreate: SystemPhysicalItemConnectOrCreateFieldInputOnCreate;
-  where: ItemConnectOrCreateWhere;
-};
-
-export type SystemPhysicalItemConnectOrCreateFieldInputOnCreate = {
-  node: ItemOnCreateInput;
 };
 
 export type SystemPhysicalItemConnection = {
@@ -11557,7 +10985,6 @@ export type SystemPhysicalItemDisconnectFieldInput = {
 
 export type SystemPhysicalItemFieldInput = {
   connect?: InputMaybe<SystemPhysicalItemConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemPhysicalItemConnectOrCreateFieldInput>;
   create?: InputMaybe<SystemPhysicalItemCreateFieldInput>;
 };
 
@@ -11639,7 +11066,6 @@ export type SystemPhysicalItemUpdateConnectionInput = {
 
 export type SystemPhysicalItemUpdateFieldInput = {
   connect?: InputMaybe<SystemPhysicalItemConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemPhysicalItemConnectOrCreateFieldInput>;
   create?: InputMaybe<SystemPhysicalItemCreateFieldInput>;
   delete?: InputMaybe<SystemPhysicalItemDeleteFieldInput>;
   disconnect?: InputMaybe<SystemPhysicalItemDisconnectFieldInput>;
@@ -11674,18 +11100,9 @@ export type SystemResponsibleAggregateInput = {
 };
 
 export type SystemResponsibleConnectFieldInput = {
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<EmployeeConnectWhere>;
-};
-
-export type SystemResponsibleConnectOrCreateFieldInput = {
-  onCreate: SystemResponsibleConnectOrCreateFieldInputOnCreate;
-  where: EmployeeConnectOrCreateWhere;
-};
-
-export type SystemResponsibleConnectOrCreateFieldInputOnCreate = {
-  node: EmployeeOnCreateInput;
 };
 
 export type SystemResponsibleConnection = {
@@ -11720,7 +11137,6 @@ export type SystemResponsibleDisconnectFieldInput = {
 
 export type SystemResponsibleFieldInput = {
   connect?: InputMaybe<SystemResponsibleConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemResponsibleConnectOrCreateFieldInput>;
   create?: InputMaybe<SystemResponsibleCreateFieldInput>;
 };
 
@@ -11817,7 +11233,6 @@ export type SystemResponsibleUpdateConnectionInput = {
 
 export type SystemResponsibleUpdateFieldInput = {
   connect?: InputMaybe<SystemResponsibleConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemResponsibleConnectOrCreateFieldInput>;
   create?: InputMaybe<SystemResponsibleCreateFieldInput>;
   delete?: InputMaybe<SystemResponsibleDeleteFieldInput>;
   disconnect?: InputMaybe<SystemResponsibleDisconnectFieldInput>;
@@ -11830,6 +11245,7 @@ export type SystemSort = {
   deleted?: InputMaybe<SortDirection>;
   description?: InputMaybe<SortDirection>;
   isTechnologicalUnit?: InputMaybe<SortDirection>;
+  keySystem?: InputMaybe<SortDirection>;
   name?: InputMaybe<SortDirection>;
   systemAlias?: InputMaybe<SortDirection>;
   systemCode?: InputMaybe<SortDirection>;
@@ -11851,18 +11267,9 @@ export type SystemSubSystemsAggregateInput = {
 
 export type SystemSubSystemsConnectFieldInput = {
   connect?: InputMaybe<Array<SystemConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<SystemConnectWhere>;
-};
-
-export type SystemSubSystemsConnectOrCreateFieldInput = {
-  onCreate: SystemSubSystemsConnectOrCreateFieldInputOnCreate;
-  where: SystemConnectOrCreateWhere;
-};
-
-export type SystemSubSystemsConnectOrCreateFieldInputOnCreate = {
-  node: SystemOnCreateInput;
 };
 
 export type SystemSubSystemsConnection = {
@@ -11899,7 +11306,6 @@ export type SystemSubSystemsDisconnectFieldInput = {
 
 export type SystemSubSystemsFieldInput = {
   connect?: InputMaybe<Array<SystemSubSystemsConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<SystemSubSystemsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<SystemSubSystemsCreateFieldInput>>;
 };
 
@@ -11981,7 +11387,6 @@ export type SystemSubSystemsUpdateConnectionInput = {
 
 export type SystemSubSystemsUpdateFieldInput = {
   connect?: InputMaybe<Array<SystemSubSystemsConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<SystemSubSystemsConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<SystemSubSystemsCreateFieldInput>>;
   delete?: InputMaybe<Array<SystemSubSystemsDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<SystemSubSystemsDisconnectFieldInput>>;
@@ -12033,18 +11438,9 @@ export type SystemSystemTypeAggregateInput = {
 
 export type SystemSystemTypeConnectFieldInput = {
   connect?: InputMaybe<SystemTypeConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<SystemTypeConnectWhere>;
-};
-
-export type SystemSystemTypeConnectOrCreateFieldInput = {
-  onCreate: SystemSystemTypeConnectOrCreateFieldInputOnCreate;
-  where: SystemTypeConnectOrCreateWhere;
-};
-
-export type SystemSystemTypeConnectOrCreateFieldInputOnCreate = {
-  node: SystemTypeOnCreateInput;
 };
 
 export type SystemSystemTypeConnection = {
@@ -12081,7 +11477,6 @@ export type SystemSystemTypeDisconnectFieldInput = {
 
 export type SystemSystemTypeFieldInput = {
   connect?: InputMaybe<SystemSystemTypeConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemSystemTypeConnectOrCreateFieldInput>;
   create?: InputMaybe<SystemSystemTypeCreateFieldInput>;
 };
 
@@ -12162,7 +11557,6 @@ export type SystemSystemTypeUpdateConnectionInput = {
 
 export type SystemSystemTypeUpdateFieldInput = {
   connect?: InputMaybe<SystemSystemTypeConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemSystemTypeConnectOrCreateFieldInput>;
   create?: InputMaybe<SystemSystemTypeCreateFieldInput>;
   delete?: InputMaybe<SystemSystemTypeDeleteFieldInput>;
   disconnect?: InputMaybe<SystemSystemTypeDisconnectFieldInput>;
@@ -12214,10 +11608,6 @@ export type SystemTypeAggregateSelection = {
 
 export type SystemTypeConnectInput = {
   systemTypeGroup?: InputMaybe<SystemTypeSystemTypeGroupConnectFieldInput>;
-};
-
-export type SystemTypeConnectOrCreateWhere = {
-  node: SystemTypeUniqueWhere;
 };
 
 export type SystemTypeConnectWhere = {
@@ -12313,10 +11703,6 @@ export type SystemTypeGroupConnectInput = {
   systemTypes?: InputMaybe<Array<SystemTypeGroupSystemTypesConnectFieldInput>>;
 };
 
-export type SystemTypeGroupConnectOrCreateInput = {
-  systemTypes?: InputMaybe<Array<SystemTypeGroupSystemTypesConnectOrCreateFieldInput>>;
-};
-
 export type SystemTypeGroupConnectWhere = {
   node: SystemTypeGroupWhere;
 };
@@ -12358,7 +11744,7 @@ export type SystemTypeGroupFacilityAggregateInput = {
 
 export type SystemTypeGroupFacilityConnectFieldInput = {
   connect?: InputMaybe<FacilityConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<FacilityConnectWhere>;
 };
@@ -12529,18 +11915,9 @@ export type SystemTypeGroupSystemTypesAggregateInput = {
 
 export type SystemTypeGroupSystemTypesConnectFieldInput = {
   connect?: InputMaybe<Array<SystemTypeConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<SystemTypeConnectWhere>;
-};
-
-export type SystemTypeGroupSystemTypesConnectOrCreateFieldInput = {
-  onCreate: SystemTypeGroupSystemTypesConnectOrCreateFieldInputOnCreate;
-  where: SystemTypeConnectOrCreateWhere;
-};
-
-export type SystemTypeGroupSystemTypesConnectOrCreateFieldInputOnCreate = {
-  node: SystemTypeOnCreateInput;
 };
 
 export type SystemTypeGroupSystemTypesConnection = {
@@ -12577,7 +11954,6 @@ export type SystemTypeGroupSystemTypesDisconnectFieldInput = {
 
 export type SystemTypeGroupSystemTypesFieldInput = {
   connect?: InputMaybe<Array<SystemTypeGroupSystemTypesConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<SystemTypeGroupSystemTypesConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<SystemTypeGroupSystemTypesCreateFieldInput>>;
 };
 
@@ -12644,7 +12020,6 @@ export type SystemTypeGroupSystemTypesUpdateConnectionInput = {
 
 export type SystemTypeGroupSystemTypesUpdateFieldInput = {
   connect?: InputMaybe<Array<SystemTypeGroupSystemTypesConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<SystemTypeGroupSystemTypesConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<SystemTypeGroupSystemTypesCreateFieldInput>>;
   delete?: InputMaybe<Array<SystemTypeGroupSystemTypesDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<SystemTypeGroupSystemTypesDisconnectFieldInput>>;
@@ -12704,12 +12079,6 @@ export type SystemTypeGroupsConnection = {
   totalCount: Scalars['Int']['output'];
 };
 
-export type SystemTypeOnCreateInput = {
-  code: Scalars['String']['input'];
-  mask: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-};
-
 export type SystemTypeOptions = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -12743,7 +12112,7 @@ export type SystemTypeSystemTypeGroupAggregateInput = {
 
 export type SystemTypeSystemTypeGroupConnectFieldInput = {
   connect?: InputMaybe<SystemTypeGroupConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<SystemTypeGroupConnectWhere>;
 };
@@ -12852,10 +12221,6 @@ export type SystemTypeSystemTypeGroupUpdateFieldInput = {
   where?: InputMaybe<SystemTypeSystemTypeGroupConnectionWhere>;
 };
 
-export type SystemTypeUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
-};
-
 export type SystemTypeUpdateInput = {
   code?: InputMaybe<Scalars['String']['input']>;
   mask?: InputMaybe<Scalars['String']['input']>;
@@ -12899,10 +12264,6 @@ export type SystemTypesConnection = {
   edges: Array<SystemTypeEdge>;
   pageInfo: PageInfo;
   totalCount: Scalars['Int']['output'];
-};
-
-export type SystemUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type SystemUpdateInput = {
@@ -13066,18 +12427,9 @@ export type SystemZoneAggregateInput = {
 
 export type SystemZoneConnectFieldInput = {
   connect?: InputMaybe<ZoneConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<ZoneConnectWhere>;
-};
-
-export type SystemZoneConnectOrCreateFieldInput = {
-  onCreate: SystemZoneConnectOrCreateFieldInputOnCreate;
-  where: ZoneConnectOrCreateWhere;
-};
-
-export type SystemZoneConnectOrCreateFieldInputOnCreate = {
-  node: ZoneOnCreateInput;
 };
 
 export type SystemZoneConnection = {
@@ -13114,7 +12466,6 @@ export type SystemZoneDisconnectFieldInput = {
 
 export type SystemZoneFieldInput = {
   connect?: InputMaybe<SystemZoneConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemZoneConnectOrCreateFieldInput>;
   create?: InputMaybe<SystemZoneCreateFieldInput>;
 };
 
@@ -13166,7 +12517,6 @@ export type SystemZoneUpdateConnectionInput = {
 
 export type SystemZoneUpdateFieldInput = {
   connect?: InputMaybe<SystemZoneConnectFieldInput>;
-  connectOrCreate?: InputMaybe<SystemZoneConnectOrCreateFieldInput>;
   create?: InputMaybe<SystemZoneCreateFieldInput>;
   delete?: InputMaybe<SystemZoneDeleteFieldInput>;
   disconnect?: InputMaybe<SystemZoneDisconnectFieldInput>;
@@ -13207,10 +12557,6 @@ export type TeamAggregateSelection = {
   uid: IdAggregateSelectionNonNullable;
 };
 
-export type TeamConnectOrCreateWhere = {
-  node: TeamUniqueWhere;
-};
-
 export type TeamConnectWhere = {
   node: TeamWhere;
 };
@@ -13225,10 +12571,6 @@ export type TeamEdge = {
   node: Team;
 };
 
-export type TeamOnCreateInput = {
-  name: Scalars['String']['input'];
-};
-
 export type TeamOptions = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -13240,10 +12582,6 @@ export type TeamOptions = {
 export type TeamSort = {
   name?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
-};
-
-export type TeamUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type TeamUpdateInput = {
@@ -13288,10 +12626,6 @@ export type UnitAggregateSelection = {
   uid: IdAggregateSelectionNonNullable;
 };
 
-export type UnitConnectOrCreateWhere = {
-  node: UnitUniqueWhere;
-};
-
 export type UnitConnectWhere = {
   node: UnitWhere;
 };
@@ -13307,11 +12641,6 @@ export type UnitEdge = {
   node: Unit;
 };
 
-export type UnitOnCreateInput = {
-  code: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-};
-
 export type UnitOptions = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
@@ -13324,10 +12653,6 @@ export type UnitSort = {
   code?: InputMaybe<SortDirection>;
   name?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
-};
-
-export type UnitUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type UnitUpdateInput = {
@@ -13417,8 +12742,10 @@ export type UpdateHallContactPeopleMutationResponse = {
   info: UpdateInfo;
 };
 
+/** Information about the number of nodes and relationships created and deleted during an update mutation */
 export type UpdateInfo = {
   __typename?: 'UpdateInfo';
+  /** @deprecated This field has been deprecated because bookmarks are now handled by the driver. */
   bookmark?: Maybe<Scalars['String']['output']>;
   nodesCreated: Scalars['Int']['output'];
   nodesDeleted: Scalars['Int']['output'];
@@ -13543,37 +12870,62 @@ export type UpdateZonesMutationResponse = {
 export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
+  facility: Facility;
+  facilityAggregate?: Maybe<UserFacilityFacilityAggregationSelection>;
+  facilityConnection: UserFacilityConnection;
   firstName: Scalars['String']['output'];
-  hasRoleRoles: Array<Role>;
-  hasRoleRolesAggregate?: Maybe<UserRoleHasRoleRolesAggregationSelection>;
-  hasRoleRolesConnection: UserHasRoleRolesConnection;
   isEnabled: Scalars['Boolean']['output'];
   lastName: Scalars['String']['output'];
   passwordHash: Scalars['String']['output'];
+  roles: Array<Role>;
+  rolesAggregate?: Maybe<UserRoleRolesAggregationSelection>;
+  rolesConnection: UserRolesConnection;
   uid: Scalars['String']['output'];
   username: Scalars['String']['output'];
 };
 
 
-export type UserHasRoleRolesArgs = {
+export type UserFacilityArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<FacilityOptions>;
+  where?: InputMaybe<FacilityWhere>;
+};
+
+
+export type UserFacilityAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<FacilityWhere>;
+};
+
+
+export type UserFacilityConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<UserFacilityConnectionSort>>;
+  where?: InputMaybe<UserFacilityConnectionWhere>;
+};
+
+
+export type UserRolesArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   options?: InputMaybe<RoleOptions>;
   where?: InputMaybe<RoleWhere>;
 };
 
 
-export type UserHasRoleRolesAggregateArgs = {
+export type UserRolesAggregateArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   where?: InputMaybe<RoleWhere>;
 };
 
 
-export type UserHasRoleRolesConnectionArgs = {
+export type UserRolesConnectionArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<UserHasRoleRolesConnectionSort>>;
-  where?: InputMaybe<UserHasRoleRolesConnectionWhere>;
+  sort?: InputMaybe<Array<UserRolesConnectionSort>>;
+  where?: InputMaybe<UserRolesConnectionWhere>;
 };
 
 export type UserAggregateSelection = {
@@ -13588,11 +12940,8 @@ export type UserAggregateSelection = {
 };
 
 export type UserConnectInput = {
-  hasRoleRoles?: InputMaybe<Array<UserHasRoleRolesConnectFieldInput>>;
-};
-
-export type UserConnectOrCreateInput = {
-  hasRoleRoles?: InputMaybe<Array<UserHasRoleRolesConnectOrCreateFieldInput>>;
+  facility?: InputMaybe<UserFacilityConnectFieldInput>;
+  roles?: InputMaybe<Array<UserRolesConnectFieldInput>>;
 };
 
 export type UserConnectWhere = {
@@ -13601,21 +12950,24 @@ export type UserConnectWhere = {
 
 export type UserCreateInput = {
   email: Scalars['String']['input'];
+  facility?: InputMaybe<UserFacilityFieldInput>;
   firstName: Scalars['String']['input'];
-  hasRoleRoles?: InputMaybe<UserHasRoleRolesFieldInput>;
   isEnabled: Scalars['Boolean']['input'];
   lastName: Scalars['String']['input'];
   passwordHash: Scalars['String']['input'];
+  roles?: InputMaybe<UserRolesFieldInput>;
   uid: Scalars['String']['input'];
   username: Scalars['String']['input'];
 };
 
 export type UserDeleteInput = {
-  hasRoleRoles?: InputMaybe<Array<UserHasRoleRolesDeleteFieldInput>>;
+  facility?: InputMaybe<UserFacilityDeleteFieldInput>;
+  roles?: InputMaybe<Array<UserRolesDeleteFieldInput>>;
 };
 
 export type UserDisconnectInput = {
-  hasRoleRoles?: InputMaybe<Array<UserHasRoleRolesDisconnectFieldInput>>;
+  facility?: InputMaybe<UserFacilityDisconnectFieldInput>;
+  roles?: InputMaybe<Array<UserRolesDisconnectFieldInput>>;
 };
 
 export type UserEdge = {
@@ -13624,76 +12976,230 @@ export type UserEdge = {
   node: User;
 };
 
-export type UserHasRoleRolesAggregateInput = {
-  AND?: InputMaybe<Array<UserHasRoleRolesAggregateInput>>;
-  NOT?: InputMaybe<UserHasRoleRolesAggregateInput>;
-  OR?: InputMaybe<Array<UserHasRoleRolesAggregateInput>>;
+export type UserFacilityAggregateInput = {
+  AND?: InputMaybe<Array<UserFacilityAggregateInput>>;
+  NOT?: InputMaybe<UserFacilityAggregateInput>;
+  OR?: InputMaybe<Array<UserFacilityAggregateInput>>;
   count?: InputMaybe<Scalars['Int']['input']>;
   count_GT?: InputMaybe<Scalars['Int']['input']>;
   count_GTE?: InputMaybe<Scalars['Int']['input']>;
   count_LT?: InputMaybe<Scalars['Int']['input']>;
   count_LTE?: InputMaybe<Scalars['Int']['input']>;
-  node?: InputMaybe<UserHasRoleRolesNodeAggregationWhereInput>;
+  node?: InputMaybe<UserFacilityNodeAggregationWhereInput>;
 };
 
-export type UserHasRoleRolesConnectFieldInput = {
-  connect?: InputMaybe<Array<RoleConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+export type UserFacilityConnectFieldInput = {
+  connect?: InputMaybe<FacilityConnectInput>;
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
-  where?: InputMaybe<RoleConnectWhere>;
+  where?: InputMaybe<FacilityConnectWhere>;
 };
 
-export type UserHasRoleRolesConnectOrCreateFieldInput = {
-  onCreate: UserHasRoleRolesConnectOrCreateFieldInputOnCreate;
-  where: RoleConnectOrCreateWhere;
-};
-
-export type UserHasRoleRolesConnectOrCreateFieldInputOnCreate = {
-  node: RoleOnCreateInput;
-};
-
-export type UserHasRoleRolesConnection = {
-  __typename?: 'UserHasRoleRolesConnection';
-  edges: Array<UserHasRoleRolesRelationship>;
+export type UserFacilityConnection = {
+  __typename?: 'UserFacilityConnection';
+  edges: Array<UserFacilityRelationship>;
   pageInfo: PageInfo;
   totalCount: Scalars['Int']['output'];
 };
 
-export type UserHasRoleRolesConnectionSort = {
+export type UserFacilityConnectionSort = {
+  node?: InputMaybe<FacilitySort>;
+};
+
+export type UserFacilityConnectionWhere = {
+  AND?: InputMaybe<Array<UserFacilityConnectionWhere>>;
+  NOT?: InputMaybe<UserFacilityConnectionWhere>;
+  OR?: InputMaybe<Array<UserFacilityConnectionWhere>>;
+  node?: InputMaybe<FacilityWhere>;
+};
+
+export type UserFacilityCreateFieldInput = {
+  node: FacilityCreateInput;
+};
+
+export type UserFacilityDeleteFieldInput = {
+  delete?: InputMaybe<FacilityDeleteInput>;
+  where?: InputMaybe<UserFacilityConnectionWhere>;
+};
+
+export type UserFacilityDisconnectFieldInput = {
+  disconnect?: InputMaybe<FacilityDisconnectInput>;
+  where?: InputMaybe<UserFacilityConnectionWhere>;
+};
+
+export type UserFacilityFacilityAggregationSelection = {
+  __typename?: 'UserFacilityFacilityAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<UserFacilityFacilityNodeAggregateSelection>;
+};
+
+export type UserFacilityFacilityNodeAggregateSelection = {
+  __typename?: 'UserFacilityFacilityNodeAggregateSelection';
+  code: StringAggregateSelectionNonNullable;
+  name: StringAggregateSelectionNonNullable;
+  uid: StringAggregateSelectionNonNullable;
+};
+
+export type UserFacilityFieldInput = {
+  connect?: InputMaybe<UserFacilityConnectFieldInput>;
+  create?: InputMaybe<UserFacilityCreateFieldInput>;
+};
+
+export type UserFacilityNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<UserFacilityNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<UserFacilityNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<UserFacilityNodeAggregationWhereInput>>;
+  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  uid_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UserFacilityRelationship = {
+  __typename?: 'UserFacilityRelationship';
+  cursor: Scalars['String']['output'];
+  node: Facility;
+};
+
+export type UserFacilityUpdateConnectionInput = {
+  node?: InputMaybe<FacilityUpdateInput>;
+};
+
+export type UserFacilityUpdateFieldInput = {
+  connect?: InputMaybe<UserFacilityConnectFieldInput>;
+  create?: InputMaybe<UserFacilityCreateFieldInput>;
+  delete?: InputMaybe<UserFacilityDeleteFieldInput>;
+  disconnect?: InputMaybe<UserFacilityDisconnectFieldInput>;
+  update?: InputMaybe<UserFacilityUpdateConnectionInput>;
+  where?: InputMaybe<UserFacilityConnectionWhere>;
+};
+
+export type UserOptions = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /** Specify one or more UserSort objects to sort Users by. The sorts will be applied in the order in which they are arranged in the array. */
+  sort?: InputMaybe<Array<UserSort>>;
+};
+
+export type UserRelationInput = {
+  facility?: InputMaybe<UserFacilityCreateFieldInput>;
+  roles?: InputMaybe<Array<UserRolesCreateFieldInput>>;
+};
+
+export type UserRoleRolesAggregationSelection = {
+  __typename?: 'UserRoleRolesAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<UserRoleRolesNodeAggregateSelection>;
+};
+
+export type UserRoleRolesNodeAggregateSelection = {
+  __typename?: 'UserRoleRolesNodeAggregateSelection';
+  code: StringAggregateSelectionNonNullable;
+  name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type UserRolesAggregateInput = {
+  AND?: InputMaybe<Array<UserRolesAggregateInput>>;
+  NOT?: InputMaybe<UserRolesAggregateInput>;
+  OR?: InputMaybe<Array<UserRolesAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<UserRolesNodeAggregationWhereInput>;
+};
+
+export type UserRolesConnectFieldInput = {
+  connect?: InputMaybe<Array<RoleConnectInput>>;
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<RoleConnectWhere>;
+};
+
+export type UserRolesConnection = {
+  __typename?: 'UserRolesConnection';
+  edges: Array<UserRolesRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type UserRolesConnectionSort = {
   node?: InputMaybe<RoleSort>;
 };
 
-export type UserHasRoleRolesConnectionWhere = {
-  AND?: InputMaybe<Array<UserHasRoleRolesConnectionWhere>>;
-  NOT?: InputMaybe<UserHasRoleRolesConnectionWhere>;
-  OR?: InputMaybe<Array<UserHasRoleRolesConnectionWhere>>;
+export type UserRolesConnectionWhere = {
+  AND?: InputMaybe<Array<UserRolesConnectionWhere>>;
+  NOT?: InputMaybe<UserRolesConnectionWhere>;
+  OR?: InputMaybe<Array<UserRolesConnectionWhere>>;
   node?: InputMaybe<RoleWhere>;
 };
 
-export type UserHasRoleRolesCreateFieldInput = {
+export type UserRolesCreateFieldInput = {
   node: RoleCreateInput;
 };
 
-export type UserHasRoleRolesDeleteFieldInput = {
+export type UserRolesDeleteFieldInput = {
   delete?: InputMaybe<RoleDeleteInput>;
-  where?: InputMaybe<UserHasRoleRolesConnectionWhere>;
+  where?: InputMaybe<UserRolesConnectionWhere>;
 };
 
-export type UserHasRoleRolesDisconnectFieldInput = {
+export type UserRolesDisconnectFieldInput = {
   disconnect?: InputMaybe<RoleDisconnectInput>;
-  where?: InputMaybe<UserHasRoleRolesConnectionWhere>;
+  where?: InputMaybe<UserRolesConnectionWhere>;
 };
 
-export type UserHasRoleRolesFieldInput = {
-  connect?: InputMaybe<Array<UserHasRoleRolesConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<UserHasRoleRolesConnectOrCreateFieldInput>>;
-  create?: InputMaybe<Array<UserHasRoleRolesCreateFieldInput>>;
+export type UserRolesFieldInput = {
+  connect?: InputMaybe<Array<UserRolesConnectFieldInput>>;
+  create?: InputMaybe<Array<UserRolesCreateFieldInput>>;
 };
 
-export type UserHasRoleRolesNodeAggregationWhereInput = {
-  AND?: InputMaybe<Array<UserHasRoleRolesNodeAggregationWhereInput>>;
-  NOT?: InputMaybe<UserHasRoleRolesNodeAggregationWhereInput>;
-  OR?: InputMaybe<Array<UserHasRoleRolesNodeAggregationWhereInput>>;
+export type UserRolesNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<UserRolesNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<UserRolesNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<UserRolesNodeAggregationWhereInput>>;
   code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -13726,48 +13232,23 @@ export type UserHasRoleRolesNodeAggregationWhereInput = {
   name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type UserHasRoleRolesRelationship = {
-  __typename?: 'UserHasRoleRolesRelationship';
+export type UserRolesRelationship = {
+  __typename?: 'UserRolesRelationship';
   cursor: Scalars['String']['output'];
   node: Role;
 };
 
-export type UserHasRoleRolesUpdateConnectionInput = {
+export type UserRolesUpdateConnectionInput = {
   node?: InputMaybe<RoleUpdateInput>;
 };
 
-export type UserHasRoleRolesUpdateFieldInput = {
-  connect?: InputMaybe<Array<UserHasRoleRolesConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<UserHasRoleRolesConnectOrCreateFieldInput>>;
-  create?: InputMaybe<Array<UserHasRoleRolesCreateFieldInput>>;
-  delete?: InputMaybe<Array<UserHasRoleRolesDeleteFieldInput>>;
-  disconnect?: InputMaybe<Array<UserHasRoleRolesDisconnectFieldInput>>;
-  update?: InputMaybe<UserHasRoleRolesUpdateConnectionInput>;
-  where?: InputMaybe<UserHasRoleRolesConnectionWhere>;
-};
-
-export type UserOptions = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  /** Specify one or more UserSort objects to sort Users by. The sorts will be applied in the order in which they are arranged in the array. */
-  sort?: InputMaybe<Array<UserSort>>;
-};
-
-export type UserRelationInput = {
-  hasRoleRoles?: InputMaybe<Array<UserHasRoleRolesCreateFieldInput>>;
-};
-
-export type UserRoleHasRoleRolesAggregationSelection = {
-  __typename?: 'UserRoleHasRoleRolesAggregationSelection';
-  count: Scalars['Int']['output'];
-  node?: Maybe<UserRoleHasRoleRolesNodeAggregateSelection>;
-};
-
-export type UserRoleHasRoleRolesNodeAggregateSelection = {
-  __typename?: 'UserRoleHasRoleRolesNodeAggregateSelection';
-  code: StringAggregateSelectionNonNullable;
-  name: StringAggregateSelectionNonNullable;
-  uid: IdAggregateSelectionNonNullable;
+export type UserRolesUpdateFieldInput = {
+  connect?: InputMaybe<Array<UserRolesConnectFieldInput>>;
+  create?: InputMaybe<Array<UserRolesCreateFieldInput>>;
+  delete?: InputMaybe<Array<UserRolesDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<UserRolesDisconnectFieldInput>>;
+  update?: InputMaybe<UserRolesUpdateConnectionInput>;
+  where?: InputMaybe<UserRolesConnectionWhere>;
 };
 
 /** Fields to sort Users by. The order in which sorts are applied is not guaranteed when specifying many fields in one UserSort object. */
@@ -13783,11 +13264,12 @@ export type UserSort = {
 
 export type UserUpdateInput = {
   email?: InputMaybe<Scalars['String']['input']>;
+  facility?: InputMaybe<UserFacilityUpdateFieldInput>;
   firstName?: InputMaybe<Scalars['String']['input']>;
-  hasRoleRoles?: InputMaybe<Array<UserHasRoleRolesUpdateFieldInput>>;
   isEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   passwordHash?: InputMaybe<Scalars['String']['input']>;
+  roles?: InputMaybe<Array<UserRolesUpdateFieldInput>>;
   uid?: InputMaybe<Scalars['String']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
 };
@@ -13801,28 +13283,16 @@ export type UserWhere = {
   email_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   email_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   email_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  facility?: InputMaybe<FacilityWhere>;
+  facilityAggregate?: InputMaybe<UserFacilityAggregateInput>;
+  facilityConnection?: InputMaybe<UserFacilityConnectionWhere>;
+  facilityConnection_NOT?: InputMaybe<UserFacilityConnectionWhere>;
+  facility_NOT?: InputMaybe<FacilityWhere>;
   firstName?: InputMaybe<Scalars['String']['input']>;
   firstName_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   firstName_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   firstName_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   firstName_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
-  hasRoleRolesAggregate?: InputMaybe<UserHasRoleRolesAggregateInput>;
-  /** Return Users where all of the related UserHasRoleRolesConnections match this filter */
-  hasRoleRolesConnection_ALL?: InputMaybe<UserHasRoleRolesConnectionWhere>;
-  /** Return Users where none of the related UserHasRoleRolesConnections match this filter */
-  hasRoleRolesConnection_NONE?: InputMaybe<UserHasRoleRolesConnectionWhere>;
-  /** Return Users where one of the related UserHasRoleRolesConnections match this filter */
-  hasRoleRolesConnection_SINGLE?: InputMaybe<UserHasRoleRolesConnectionWhere>;
-  /** Return Users where some of the related UserHasRoleRolesConnections match this filter */
-  hasRoleRolesConnection_SOME?: InputMaybe<UserHasRoleRolesConnectionWhere>;
-  /** Return Users where all of the related Roles match this filter */
-  hasRoleRoles_ALL?: InputMaybe<RoleWhere>;
-  /** Return Users where none of the related Roles match this filter */
-  hasRoleRoles_NONE?: InputMaybe<RoleWhere>;
-  /** Return Users where one of the related Roles match this filter */
-  hasRoleRoles_SINGLE?: InputMaybe<RoleWhere>;
-  /** Return Users where some of the related Roles match this filter */
-  hasRoleRoles_SOME?: InputMaybe<RoleWhere>;
   isEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   lastName_CONTAINS?: InputMaybe<Scalars['String']['input']>;
@@ -13834,6 +13304,23 @@ export type UserWhere = {
   passwordHash_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   passwordHash_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   passwordHash_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  rolesAggregate?: InputMaybe<UserRolesAggregateInput>;
+  /** Return Users where all of the related UserRolesConnections match this filter */
+  rolesConnection_ALL?: InputMaybe<UserRolesConnectionWhere>;
+  /** Return Users where none of the related UserRolesConnections match this filter */
+  rolesConnection_NONE?: InputMaybe<UserRolesConnectionWhere>;
+  /** Return Users where one of the related UserRolesConnections match this filter */
+  rolesConnection_SINGLE?: InputMaybe<UserRolesConnectionWhere>;
+  /** Return Users where some of the related UserRolesConnections match this filter */
+  rolesConnection_SOME?: InputMaybe<UserRolesConnectionWhere>;
+  /** Return Users where all of the related Roles match this filter */
+  roles_ALL?: InputMaybe<RoleWhere>;
+  /** Return Users where none of the related Roles match this filter */
+  roles_NONE?: InputMaybe<RoleWhere>;
+  /** Return Users where one of the related Roles match this filter */
+  roles_SINGLE?: InputMaybe<RoleWhere>;
+  /** Return Users where some of the related Roles match this filter */
+  roles_SOME?: InputMaybe<RoleWhere>;
   uid?: InputMaybe<Scalars['String']['input']>;
   uid_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   uid_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
@@ -13949,15 +13436,6 @@ export type ZoneConnectInput = {
   zonesHasSubzone?: InputMaybe<Array<ZoneZonesHasSubzoneConnectFieldInput>>;
 };
 
-export type ZoneConnectOrCreateInput = {
-  hasSubzoneZones?: InputMaybe<Array<ZoneHasSubzoneZonesConnectOrCreateFieldInput>>;
-  zonesHasSubzone?: InputMaybe<Array<ZoneZonesHasSubzoneConnectOrCreateFieldInput>>;
-};
-
-export type ZoneConnectOrCreateWhere = {
-  node: ZoneUniqueWhere;
-};
-
 export type ZoneConnectWhere = {
   node: ZoneWhere;
 };
@@ -14002,7 +13480,7 @@ export type ZoneFacilitiesHasZoneAggregateInput = {
 
 export type ZoneFacilitiesHasZoneConnectFieldInput = {
   connect?: InputMaybe<Array<FacilityConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<FacilityConnectWhere>;
 };
@@ -14141,18 +13619,9 @@ export type ZoneHasSubzoneZonesAggregateInput = {
 
 export type ZoneHasSubzoneZonesConnectFieldInput = {
   connect?: InputMaybe<Array<ZoneConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<ZoneConnectWhere>;
-};
-
-export type ZoneHasSubzoneZonesConnectOrCreateFieldInput = {
-  onCreate: ZoneHasSubzoneZonesConnectOrCreateFieldInputOnCreate;
-  where: ZoneConnectOrCreateWhere;
-};
-
-export type ZoneHasSubzoneZonesConnectOrCreateFieldInputOnCreate = {
-  node: ZoneOnCreateInput;
 };
 
 export type ZoneHasSubzoneZonesConnection = {
@@ -14189,7 +13658,6 @@ export type ZoneHasSubzoneZonesDisconnectFieldInput = {
 
 export type ZoneHasSubzoneZonesFieldInput = {
   connect?: InputMaybe<Array<ZoneHasSubzoneZonesConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<ZoneHasSubzoneZonesConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<ZoneHasSubzoneZonesCreateFieldInput>>;
 };
 
@@ -14241,17 +13709,11 @@ export type ZoneHasSubzoneZonesUpdateConnectionInput = {
 
 export type ZoneHasSubzoneZonesUpdateFieldInput = {
   connect?: InputMaybe<Array<ZoneHasSubzoneZonesConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<ZoneHasSubzoneZonesConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<ZoneHasSubzoneZonesCreateFieldInput>>;
   delete?: InputMaybe<Array<ZoneHasSubzoneZonesDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<ZoneHasSubzoneZonesDisconnectFieldInput>>;
   update?: InputMaybe<ZoneHasSubzoneZonesUpdateConnectionInput>;
   where?: InputMaybe<ZoneHasSubzoneZonesConnectionWhere>;
-};
-
-export type ZoneOnCreateInput = {
-  code: Scalars['String']['input'];
-  name: Scalars['String']['input'];
 };
 
 export type ZoneOptions = {
@@ -14272,10 +13734,6 @@ export type ZoneSort = {
   code?: InputMaybe<SortDirection>;
   name?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
-};
-
-export type ZoneUniqueWhere = {
-  uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type ZoneUpdateInput = {
@@ -14398,18 +13856,9 @@ export type ZoneZonesHasSubzoneAggregateInput = {
 
 export type ZoneZonesHasSubzoneConnectFieldInput = {
   connect?: InputMaybe<Array<ZoneConnectInput>>;
-  /** Whether or not to overwrite any matching relationship with the new properties. Will default to `false` in 4.0.0. */
+  /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<ZoneConnectWhere>;
-};
-
-export type ZoneZonesHasSubzoneConnectOrCreateFieldInput = {
-  onCreate: ZoneZonesHasSubzoneConnectOrCreateFieldInputOnCreate;
-  where: ZoneConnectOrCreateWhere;
-};
-
-export type ZoneZonesHasSubzoneConnectOrCreateFieldInputOnCreate = {
-  node: ZoneOnCreateInput;
 };
 
 export type ZoneZonesHasSubzoneConnection = {
@@ -14446,7 +13895,6 @@ export type ZoneZonesHasSubzoneDisconnectFieldInput = {
 
 export type ZoneZonesHasSubzoneFieldInput = {
   connect?: InputMaybe<Array<ZoneZonesHasSubzoneConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<ZoneZonesHasSubzoneConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<ZoneZonesHasSubzoneCreateFieldInput>>;
 };
 
@@ -14498,7 +13946,6 @@ export type ZoneZonesHasSubzoneUpdateConnectionInput = {
 
 export type ZoneZonesHasSubzoneUpdateFieldInput = {
   connect?: InputMaybe<Array<ZoneZonesHasSubzoneConnectFieldInput>>;
-  connectOrCreate?: InputMaybe<Array<ZoneZonesHasSubzoneConnectOrCreateFieldInput>>;
   create?: InputMaybe<Array<ZoneZonesHasSubzoneCreateFieldInput>>;
   delete?: InputMaybe<Array<ZoneZonesHasSubzoneDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<ZoneZonesHasSubzoneDisconnectFieldInput>>;

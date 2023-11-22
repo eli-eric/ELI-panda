@@ -1,5 +1,6 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 
@@ -21,6 +22,7 @@ interface Props {
 
 const ProfileDropdownComponent = ({ open }: Props) => {
   const user = useSession().data?.user
+  const router = useRouter()
   const fullName = user?.fullName
   const [inicials, setInicials] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
@@ -89,6 +91,21 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                       )}
                     >
                       Your Profile
+                    </button>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      onClick={() => {
+                        router.push(PATH.ADMIN)
+                      }}
+                      className={classNames(
+                        'w-full text-left block px-4 py-2 text-sm text-gray-700',
+                        active ? 'bg-gray-100' : ''
+                      )}
+                    >
+                      Administration
                     </button>
                   )}
                 </Menu.Item>

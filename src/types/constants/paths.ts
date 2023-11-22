@@ -15,7 +15,10 @@ export enum PATH {
   ORDER = '/order',
   CODEBOOKS = '/codebooks',
   ROOM_CARDS = '/room-cards',
-  ROOM_CARD = '/room-card'
+  ROOM_CARD = '/room-card',
+  ADMIN_USERS = '/administration/users',
+  ADMIN_USER = '/administration/user',
+  ADMIN = '/administration'
 }
 
 export const SUPPORT = 'https://eli-eric.atlassian.net/servicedesk/customer/portal/20'
