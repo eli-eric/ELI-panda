@@ -10,7 +10,6 @@ import { Tile, TileContainer } from '@/components/card/tile.comp'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
-//TODO: refactor this page
 const Links = [
   {
     name: 'Systems',

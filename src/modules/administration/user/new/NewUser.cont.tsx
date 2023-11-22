@@ -1,76 +1,28 @@
-import { gql, useQuery } from '@apollo/client'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
 import bcrypt from 'bcryptjs-react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import * as yup from 'yup'
 
-import { PlusButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
-import Listbox from '@/components/form/Listbox'
-import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
 import { PageHead } from '@/components/layout/PageHead'
 import { PageHeaderButtons } from '@/components/layout/PageHead.buttons'
-import { Badge } from '@/components/visuals/Badge'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
-import type { Facility, Query, UserCreateInput } from '@/types/gql/graphql'
+import type { UserCreateInput } from '@/types/gql/graphql'
 import { whereC, whereN } from '@/utils/graphql/mutations'
 
-import { UserForm } from '../components/User.form'
+import { UserForm } from '../components/form/User.form'
+import { UserRoles } from '../components/UserRoles'
 import { useUserCreate } from '../hooks/useUserCreate'
-
-const GET_ROLES = gql`
-  query GetRoles {
-    roles {
-      name
-      code
-      uid
-    }
-  }
-`
-type UserFormType = {
-  email: string
-  facility: Facility
-  firstName: string
-  isEnabled: boolean
-  lastName: string
-  password: string
-  confirmPassword: string
-  roles: CodebookType[]
-}
-
-const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  facility: yup.mixed<Facility>().required(),
-  firstName: yup.string().required(),
-  isEnabled: yup.boolean().required(),
-  lastName: yup.string().required(),
-  password: yup.string().required(),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('password')], 'Passwords must match')
-    .required(),
-  roles: yup.array().of(yup.mixed<CodebookType>().required()).required()
-})
+import type { UserFormType } from '../types/form'
+import { userFormSchema } from '../types/form'
 
 export const NewUserContainer = () => {
-  const formMethods = useForm<UserFormType>({ resolver: yupResolver(schema) })
-  const formRolesMethods = useForm()
+  const formMethods = useForm<UserFormType>({ resolver: yupResolver(userFormSchema) })
 
   const { fields, append, remove } = useFieldArray({ control: formMethods.control, name: 'roles' })
-
-  const selectedRole = formRolesMethods.watch('role')
-
-  const { data } = useQuery<Query>(GET_ROLES, {
-    onError: error => {
-      toast.error(error.message)
-    }
-  })
 
   const { createUser } = useUserCreate()
 
@@ -90,12 +42,24 @@ export const NewUserContainer = () => {
     createUser({ variables: { input: dataToSend } })
   }
 
+  const addRole = (selectedRole?: CodebookType) => {
+    if (fields?.find(role => role.uid === selectedRole?.uid)) {
+      toast.error('Role already exists!')
+      return
+    }
+    if (selectedRole) append({ uid: selectedRole.uid, name: selectedRole.name })
+  }
+
+  const removeRole = (roleIndex: number) => {
+    remove(roleIndex)
+    toast.success('Role removed!')
+  }
+
   return (
     <div>
       <Form
         {...{
           formMethods,
-          onSubmit: () => {},
           enableLeaveWarning: true
         }}
       >
@@ -103,7 +67,9 @@ export const NewUserContainer = () => {
           <h1 className="text-2xl font-semibold">New User</h1>
           <PageHeaderButtons
             {...{
-              onSubmitAndExit: () => {},
+              onSubmitAndExit: () => {
+                formMethods.handleSubmit(onSubmit)()
+              },
               onSubmit: () => {
                 formMethods.handleSubmit(onSubmit)()
               },
@@ -116,52 +82,7 @@ export const NewUserContainer = () => {
           <UserForm />
         </Card>
       </Form>
-      <DevTool control={formMethods.control} />
-      <Form {...{ formMethods: formRolesMethods }}>
-        <Card>
-          <Grid>
-            <Col md={6}>
-              <Listbox
-                name="role"
-                customLabel="Role"
-                codebookResponse={data?.roles.map(role => ({ uid: role.uid, name: role.name }))}
-              >
-                <PlusButton
-                  primary
-                  buttonSize="large"
-                  className="ml-1 px-[10px] py-[10px] self-baseline mt-5"
-                  type="button"
-                  onClick={() => {
-                    if (fields?.find(role => role.uid === selectedRole.uid)) {
-                      toast.error('Role already exists!')
-                      return
-                    }
-                    append({ uid: selectedRole.uid, name: selectedRole.name })
-                  }}
-                />
-              </Listbox>
-            </Col>
-            <Col md={6}>
-              <div className="flex flex-col">
-                <label className="block text-sm font-medium text-gray-900">{'Selected Roles:'}</label>
-                <div className="flex-grow">
-                  {fields?.map((role, i) => (
-                    <Badge key={role.uid}>
-                      <div className="flex flex-row">
-                        {role.name}
-                        <XMarkIcon
-                          className="ml-2 h-4 w-4 cursor-pointer hover:text-red-500"
-                          onClick={() => remove(i)}
-                        />
-                      </div>
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </Col>
-          </Grid>
-        </Card>
-      </Form>
+      <UserRoles addRole={addRole} removeRole={removeRole} selectedRoles={fields} />
     </div>
   )
 }

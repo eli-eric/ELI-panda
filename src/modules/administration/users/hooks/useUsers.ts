@@ -27,7 +27,6 @@ const USERS = gql`
 export const useUsers = () => {
   const [search] = useQueryState('search')
 
-  //TODO: search
   const { data, loading, error, refetch } = useQuery<Query>(USERS, {
     variables: {
       where: {
