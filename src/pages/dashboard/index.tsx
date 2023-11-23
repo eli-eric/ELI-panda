@@ -6,101 +6,35 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import usePermission from '@/hooks/usePermission'
-import { PATH, SUPPORT } from '@/types/constants/paths'
+import { Tile, TileContainer } from '@/components/card/tile.comp'
+import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
-//TODO: refactor this page
-const Links = {
-  catalogue: {
-    name: 'Catalogue',
-    link: PATH.CATALOGUE,
-    Icon: () => <IdentificationIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
-  },
-  orders: {
-    name: 'Orders',
-    link: PATH.ORDERS,
-    Icon: () => <ShoppingCartIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
-  },
-  systems: {
+const Links = [
+  {
     name: 'Systems',
     link: PATH.SYSTEMS,
-    Icon: () => <RectangleGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+    Icon: () => <RectangleGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
+    role: ROLE.SYSTEMS_VIEW
   },
-  support: {
+  {
+    name: 'Catalogue',
+    link: PATH.CATALOGUE,
+    Icon: () => <IdentificationIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
+    role: ROLE.CATALOGUE_VIEW
+  },
+  {
+    name: 'Orders',
+    link: PATH.ORDERS,
+    Icon: () => <ShoppingCartIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
+    role: ROLE.ORDERS_VIEW
+  },
+  {
     name: 'Support/Feedback',
     link: 'mailto:jiri.svacha@eli-beams.eu',
     Icon: () => <LifebuoyIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
   }
-}
-
-interface CardProps {
-  name: string
-  link: string
-  Icon: () => JSX.Element
-  legacyBehavior?: boolean
-}
-
-//TODO: clean up this page
-
-const Card = ({ name, link, Icon, legacyBehavior }: CardProps) => (
-  <Link href={link} legacyBehavior={legacyBehavior}>
-    {legacyBehavior ? (
-      <a target={'_blank'}>
-        <li
-          key={name}
-          className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
-        >
-          <div className="flex flex-1 flex-col p-8">
-            <Icon />
-            <h2 className="mt-6 text-xl font-medium text-gray-900">{name}</h2>
-            <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
-          </div>
-          <div>
-            <div className="-mt-px flex divide-x divide-gray-200">
-              <div className="flex w-0 flex-1"></div>
-              <div className="-ml-px flex w-0 flex-1"></div>
-            </div>
-          </div>
-        </li>
-      </a>
-    ) : (
-      <li
-        key={name}
-        className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
-      >
-        <div className="flex flex-1 flex-col p-8">
-          <Icon />
-          <h2 className="mt-6 text-xl font-medium text-gray-900">{name}</h2>
-          <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
-        </div>
-        <div>
-          <div className="-mt-px flex divide-x divide-gray-200">
-            <div className="flex w-0 flex-1"></div>
-            <div className="-ml-px flex w-0 flex-1"></div>
-          </div>
-        </div>
-      </li>
-    )}
-  </Link>
-)
-
-function DashboardCard() {
-  const hasSystemsRole = usePermission([ROLE.SYSTEMS_VIEW])
-  const hasCatalogueRole = usePermission([ROLE.CATALOGUE_VIEW])
-  const hasOrdersRole = usePermission([ROLE.ORDERS_VIEW])
-  return (
-    <ul
-      role="list"
-      className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2 py-2 sm:px-4 sm:py-4 my-5 mx-2"
-    >
-      {hasSystemsRole && <Card name="Systems" link={PATH.SYSTEMS} Icon={Links.systems.Icon} />}
-      {hasCatalogueRole && <Card name="Catalogue" link={PATH.CATALOGUE} Icon={Links.catalogue.Icon} />}
-      {hasOrdersRole && <Card name="Orders" link={PATH.ORDERS} Icon={Links.orders.Icon} />}
-      <Card name="Support/Feedback" link={SUPPORT} Icon={Links.support.Icon} legacyBehavior />
-    </ul>
-  )
-}
+]
 
 interface RelaseVersion {
   id: string
@@ -178,7 +112,11 @@ const DashboardPage: NextPage = (): JSX.Element => {
         {/* <h1 className="text-2xl font-semibold font-mono text-gray-600 mt-2 ml-1 sm:mt-4 sm:ml-4 uppercase">
           Dashboard
         </h1> */}
-        <DashboardCard />
+        <TileContainer>
+          {Links.map(link => (
+            <Tile key={link.link} name={link.name} Icon={link.Icon} link={link.link} role={link.role} />
+          ))}
+        </TileContainer>
 
         <ul role="list" className=" font-mono">
           {releases.map((item, idx) => (
