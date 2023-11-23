@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import bcrypt from 'bcryptjs-react'
 import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -44,6 +45,9 @@ export const EditUserContainer = ({ userUid }: Props) => {
       isEnabled: data.isEnabled,
       facility: { connect: whereC(data.facility.uid), disconnect: whereC(userDetail?.facility?.code) },
       username: data.email
+    }
+    if (data.password) {
+      dataToSend.passwordHash = bcrypt.hashSync(data.password, 12)
     }
 
     updateUser({ variables: { where: { uid: userUid }, update: dataToSend } })

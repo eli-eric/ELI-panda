@@ -1,6 +1,4 @@
 import { gql, useQuery } from '@apollo/client'
-import { useRouter } from 'next/router'
-import { Fragment } from 'react'
 import toast from 'react-hot-toast'
 
 import { Input } from '@/components/form/Input'
@@ -21,8 +19,6 @@ const GET_FACILITIES = gql`
 `
 
 export const UserForm = () => {
-  const router = useRouter()
-  const { uid } = router.query
   const fields = useUserFormFields()
   const { data } = useQuery<Query>(GET_FACILITIES, {
     onError: error => {
@@ -50,16 +46,12 @@ export const UserForm = () => {
           codebookResponse={data?.facilities.map(value => ({ name: value.name, uid: value.code }))}
         />
       </Col>
-      {!uid && (
-        <Fragment>
-          <Col md={6}>
-            <Input {...fields.password} type="password" />
-          </Col>
-          <Col md={6}>
-            <Input {...fields.confirmPassword} type="password" />
-          </Col>
-        </Fragment>
-      )}
+      <Col md={6}>
+        <Input {...fields.password} type="password" />
+      </Col>
+      <Col md={6}>
+        <Input {...fields.confirmPassword} type="password" />
+      </Col>
     </Grid>
   )
 }
