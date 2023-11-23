@@ -23,16 +23,16 @@ export enum PATH {
 
 export const SUPPORT = 'https://eli-eric.atlassian.net/servicedesk/customer/portal/20'
 
-export type NavBarLinkType = {
-  path: PATH
-  name?: string
-  role?: ROLE
-}
 export type NavigationType = {
   name: string
   links: NavBarLinkType[]
   role: ROLE
 }[]
+export type NavBarLinkType = {
+  path: PATH
+  name?: string
+  role?: ROLE
+}
 
 export const NAV_BAR_CONFIG: NavigationType = [
   {
@@ -54,18 +54,13 @@ export const NAV_BAR_CONFIG: NavigationType = [
     role: ROLE.ORDERS_VIEW
   },
   {
-    name: 'Dashboard',
-    links: [{ path: PATH.DASHBOARD }],
-    role: ROLE.BASICS
-  },
-  {
-    name: 'Codebooks',
-    links: [{ path: PATH.CODEBOOKS }],
-    role: ROLE.CODEBOOKS_ADMIN
-  },
-  {
     name: 'Room Cards',
     links: [{ path: PATH.ROOM_CARDS }],
     role: ROLE.ROOM_CARD_VIEW
+  },
+  {
+    name: 'Dashboard',
+    links: [{ path: PATH.DASHBOARD }],
+    role: ROLE.BASICS
   }
 ]

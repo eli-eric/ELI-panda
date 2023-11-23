@@ -1,4 +1,4 @@
-import { UserGroupIcon } from '@heroicons/react/24/outline'
+import { BookOpenIcon, UserGroupIcon } from '@heroicons/react/24/outline'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 
@@ -12,6 +12,12 @@ const Links = [
     link: PATH.ADMIN_USERS,
     Icon: () => <UserGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
     role: ROLE.ADMIN
+  },
+  {
+    name: 'Codebooks',
+    link: PATH.CODEBOOKS,
+    Icon: () => <BookOpenIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
+    role: ROLE.CODEBOOKS_ADMIN
   }
 ]
 
@@ -23,14 +29,16 @@ const AdministrationPage: NextPage = (): React.ReactElement => (
       <title>{'Administration'}</title>
       <meta name="description" content="...." />
     </Head>
-    <h1 className="text-2xl font-semibold font-mono text-gray-600 mt-2 ml-1 sm:mt-4 sm:ml-4 uppercase">
-      Admin Section
-    </h1>
-    <TileContainer>
-      {Links.map(link => (
-        <Tile key={link.link} name={link.name} Icon={link.Icon} link={link.link} role={link.role} />
-      ))}
-    </TileContainer>
+    <main className="mx-auto max-w-7xl flex-1">
+      <h1 className="text-2xl font-semibold font-mono text-gray-600 mt-2 ml-1 sm:mt-4 sm:ml-4 uppercase">
+        Admin Section
+      </h1>
+      <TileContainer>
+        {Links.map(link => (
+          <Tile key={link.link} name={link.name} Icon={link.Icon} link={link.link} role={link.role} />
+        ))}
+      </TileContainer>
+    </main>
   </>
 )
 

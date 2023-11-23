@@ -5,8 +5,10 @@ import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 
 import ModalComponent from '@/components/modal/modal.comp'
+import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { PATH, SUPPORT } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 import { classNames } from '@/utils'
 
@@ -26,6 +28,8 @@ const ProfileDropdownComponent = ({ open }: Props) => {
   const fullName = user?.fullName
   const [inicials, setInicials] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
+
+  const adminPermissions = usePermission([ROLE.ADMIN, ROLE.CODEBOOKS_ADMIN])
 
   useEffect(() => {
     if (!fullName) return
@@ -94,21 +98,23 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                     </button>
                   )}
                 </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <button
-                      onClick={() => {
-                        router.push(PATH.ADMIN)
-                      }}
-                      className={classNames(
-                        'w-full text-left block px-4 py-2 text-sm text-gray-700',
-                        active ? 'bg-gray-100' : ''
-                      )}
-                    >
-                      Administration
-                    </button>
-                  )}
-                </Menu.Item>
+                {adminPermissions && (
+                  <Menu.Item>
+                    {({ active }) => (
+                      <button
+                        onClick={() => {
+                          router.push(PATH.ADMIN)
+                        }}
+                        className={classNames(
+                          'w-full text-left block px-4 py-2 text-sm text-gray-700',
+                          active ? 'bg-gray-100' : ''
+                        )}
+                      >
+                        Administration
+                      </button>
+                    )}
+                  </Menu.Item>
+                )}
                 <Menu.Item>
                   {({ active }) => (
                     <button
