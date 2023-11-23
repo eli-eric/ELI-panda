@@ -58,7 +58,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
   return (
     <Fragment>
       {open === false ? (
-        <div data-testid="layout-profile" className="hidden z-30 sm:ml-6 sm:flex sm:items-center z-20">
+        <div data-testid="layout-profile" className="hidden z-30 sm:ml-6 sm:flex sm:items-center">
           <Menu as="div" className="relative ml-3">
             <div className="flex">
               <Link href={SUPPORT} legacyBehavior>

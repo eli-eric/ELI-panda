@@ -8,7 +8,7 @@ import { useHoveringId } from '@/store/useHoveringId'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
-import { useRoomCardsColumns } from './components/RoomCards.columns'
+import { useUsersColumns } from './components/User.columns'
 import { useUsers } from './hooks/useUsers'
 
 export const UsersContainer = () => {
@@ -17,7 +17,7 @@ export const UsersContainer = () => {
   const { users, loading, error, refetch } = useUsers()
   const { setHoveringId } = useHoveringId()
 
-  const columns = useRoomCardsColumns()
+  const columns = useUsersColumns()
 
   useEffect(() => {
     users?.forEach(roomCard => {

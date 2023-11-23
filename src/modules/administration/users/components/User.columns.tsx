@@ -6,7 +6,7 @@ import type { User } from '@/types/gql/graphql'
 
 import { UserNameCell } from './UserNameCell'
 
-export const useRoomCardsColumns = () => {
+export const useUsersColumns = () => {
   const columns = useMemo(
     (): ColumnDef<User, any>[] => [
       {
@@ -46,11 +46,6 @@ export const useRoomCardsColumns = () => {
         id: 'roles',
         cell: ({ getValue }) => <div>{getValue()?.map(role => <Badge key={role.uid}>{role.code}</Badge>)}</div>,
         size: 500
-      },
-      {
-        header: 'uid',
-        accessorFn: row => row?.uid,
-        id: 'purityClass'
       }
     ],
     []
