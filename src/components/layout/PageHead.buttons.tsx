@@ -6,7 +6,7 @@ import usePermission from '@/hooks/usePermission'
 import type { ROLE } from '@/types/constants/roles'
 
 type Props = {
-  onSubmitAndExit: () => void
+  onSubmitAndExit?: () => void
   onSubmit: () => void
   role: ROLE
   exitTo: string
@@ -22,9 +22,11 @@ export const PageHeaderButtons = ({ onSubmitAndExit, onSubmit, role, exitTo }: P
           <Button type="button" primary onClick={onSubmit}>
             Save
           </Button>
-          <Button type="button" primary onClick={onSubmitAndExit}>
-            Save and exit
-          </Button>
+          {onSubmitAndExit && (
+            <Button type="button" primary onClick={onSubmitAndExit}>
+              Save and exit
+            </Button>
+          )}
         </Fragment>
       )}
       <Link href={exitTo}>

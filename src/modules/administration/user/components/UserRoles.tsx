@@ -14,8 +14,8 @@ import { useRoles } from '../hooks/useRoles'
 
 type Props = {
   addRole: (role: CodebookType) => void
-  removeRole: (roleIndex: number) => void
-  selectedRoles: CodebookType[]
+  removeRole: (roleIndex: number, uid: string) => void
+  selectedRoles?: CodebookType[]
 }
 
 export const UserRoles: FC<Props> = ({ addRole, removeRole, selectedRoles }) => {
@@ -54,7 +54,7 @@ export const UserRoles: FC<Props> = ({ addRole, removeRole, selectedRoles }) => 
                       <XMarkIcon
                         className="ml-2 h-4 w-4 cursor-pointer hover:text-red-500"
                         onClick={() => {
-                          removeRole(i)
+                          removeRole(i, role.uid)
                         }}
                       />
                     </div>

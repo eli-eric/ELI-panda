@@ -1,21 +1,51 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { createContext, Fragment } from 'react'
 
-import { EditUserContainer } from '@/modules/administration/user/edit/EditUser.cont'
+import LoaderComponent from '@/components/loader.comp'
+import { EditUserContainer } from '@/modules/administration/user/EditUser.cont'
+import { useUserDetail } from '@/modules/administration/user/hooks/useUserDetail'
+import type { User } from '@/types/gql/graphql'
 
-const EditUserPage: NextPage = (): React.ReactElement => (
+interface Props {
+  key?: string
+  userUid?: string
+}
+
+type EditUserContextType = {
+  userDetail?: User
+  refetch: () => void
+}
+
+export const EditUserContext = createContext<EditUserContextType>({
+  userDetail: undefined,
+  refetch: () => {}
+})
+
+const EditUserPage: NextPage = ({ userUid }: Props): React.ReactElement => {
   //const intl = useIntl()
+  const { userDetail, refetch, loading } = useUserDetail(userUid)
 
-  <>
-    <Head>
-      <title>{'Administration'}</title>
-      <meta name="description" content="...." />
-    </Head>
-    <h1 className="text-2xl font-semibold font-mono text-gray-600 mt-2 ml-1 sm:mt-4 sm:ml-4 uppercase">
-      Admin Section
-    </h1>
-    <EditUserContainer />
-  </>
-)
+  if (loading) {
+    return <LoaderComponent />
+  }
+
+  return (
+    <Fragment>
+      <Head>
+        <title>{'Administration'}</title>
+        <meta name="description" content="...." />
+      </Head>
+      <EditUserContext.Provider value={{ userDetail, refetch }}>
+        <EditUserContainer userUid={userUid} />
+      </EditUserContext.Provider>
+    </Fragment>
+  )
+}
+
+EditUserPage.getInitialProps = ({ query }) => ({
+  key: query.uid,
+  userUid: query.uid
+})
 
 export default EditUserPage

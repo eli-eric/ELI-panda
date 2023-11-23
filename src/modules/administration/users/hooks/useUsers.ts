@@ -3,23 +3,13 @@ import { useQueryState } from 'next-usequerystate'
 import { toast } from 'react-hot-toast'
 
 import type { Query } from '@/types/gql/graphql'
+import { USER } from '@/utils/graphql/fragments'
 
 const USERS = gql`
+  ${USER}
   query Query($where: UserWhere) {
     users(where: $where) {
-      email
-      firstName
-      isEnabled
-      lastName
-      roles {
-        code
-        uid
-      }
-      username
-      uid
-      facility {
-        name
-      }
+      ...UserFields
     }
   }
 `
