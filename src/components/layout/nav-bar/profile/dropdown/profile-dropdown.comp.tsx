@@ -29,7 +29,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
   const [inicials, setInicials] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
 
-  const adminPermissions = usePermission([ROLE.ADMIN, ROLE.CODEBOOKS_ADMIN])
+  const adminPermissions = usePermission([ROLE.ADMIN])
 
   useEffect(() => {
     if (!fullName) return

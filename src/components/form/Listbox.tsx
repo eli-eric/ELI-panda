@@ -95,7 +95,7 @@ const Listbox = ({
               onChange && onChange(v)
             }}
             disabled={disabled}
-            className={classNames('relative flex flex-col w-full', className)}
+            className={classNames('relative flex flex-col w-full h-min', className)}
           >
             {(customLabel || label) && (
               <HUIListbox.Label className="block text-sm font-medium text-gray-900">
