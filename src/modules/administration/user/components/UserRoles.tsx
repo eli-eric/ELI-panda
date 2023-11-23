@@ -49,7 +49,7 @@ export const UserRoles: FC<Props> = ({ addRole, removeRole, selectedRoles }) => 
           </Col>
           <Col md={6}>
             <div className="flex flex-col">
-              <label className="block text-sm font-medium text-gray-900">{'Selected Roles:'}</label>
+              <label className="block text-sm font-medium text-gray-900">{'Assigned Roles:'}</label>
               <div className="flex-grow">
                 {selectedRoles?.map((role, i) => (
                   <Badge key={role.uid}>
