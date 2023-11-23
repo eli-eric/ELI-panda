@@ -1,4 +1,4 @@
-import { BookOpenIcon, UserGroupIcon } from '@heroicons/react/24/outline'
+import { UserGroupIcon } from '@heroicons/react/24/outline'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 
@@ -12,12 +12,6 @@ const Links = [
     link: PATH.ADMIN_USERS,
     Icon: () => <UserGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
     role: ROLE.ADMIN
-  },
-  {
-    name: 'Codebooks',
-    link: PATH.CODEBOOKS,
-    Icon: () => <BookOpenIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
-    role: ROLE.CODEBOOKS_ADMIN
   }
 ]
 

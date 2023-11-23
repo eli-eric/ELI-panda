@@ -22,6 +22,8 @@ export const UserRoles: FC<Props> = ({ addRole, removeRole, selectedRoles }) => 
   const roles = useRoles()
   const formMethods = useForm()
   const role = formMethods.watch('role')
+  const disctinctRoles = roles.filter(role => !selectedRoles?.find(selectedRole => selectedRole.uid === role.uid))
+
   return (
     <Form {...{ formMethods }}>
       <Card>
@@ -30,13 +32,15 @@ export const UserRoles: FC<Props> = ({ addRole, removeRole, selectedRoles }) => 
             <Listbox
               name="role"
               customLabel="Role"
-              codebookResponse={roles.map(role => ({ uid: role.uid, name: role.name }))}
+              codebookResponse={disctinctRoles.map(role => ({ uid: role.uid, name: role.name }))}
+              disabled={disctinctRoles.length === 0}
             >
               <PlusButton
                 primary
                 buttonSize="large"
                 className="ml-1 px-[10px] py-[10px] self-baseline mt-5"
                 type="button"
+                disabled={!role || disctinctRoles.length === 0}
                 onClick={() => {
                   addRole(role)
                 }}
