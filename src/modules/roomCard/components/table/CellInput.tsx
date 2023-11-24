@@ -83,5 +83,12 @@ export const CellInput = ({
     )
   }
 
-  return <input className="w-full bg-inherit py-1" {...register(code)} disabled={!editPersmission} name={code} />
+  return (
+    <input
+      className="w-full text-xs px-0 border-0 bg-inherit py-1"
+      {...register(code)}
+      disabled={!editPersmission}
+      name={code}
+    />
+  )
 }
