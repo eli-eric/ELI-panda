@@ -18,7 +18,10 @@ export enum PATH {
   ROOM_CARD = '/room-card',
   ADMIN_USERS = '/administration/users',
   ADMIN_USER = '/administration/user',
-  ADMIN = '/administration'
+  ADMIN = '/administration',
+  PROFILE_GENERAL = '/profile/general',
+  PROFILE_SECURITY = '/profile/security',
+  PROFILE_TEAM = '/profile/team'
 }
 
 export const SUPPORT = 'https://eli-eric.atlassian.net/servicedesk/customer/portal/20'

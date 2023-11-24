@@ -4,17 +4,10 @@ import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 
-import ModalComponent from '@/components/modal/modal.comp'
 import usePermission from '@/hooks/usePermission'
-import { message } from '@/i18n/src/messages'
 import { PATH, SUPPORT } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
-import type { ModalButtons } from '@/types/form'
 import { classNames } from '@/utils'
-
-import ProfileCardComponent from '../card/profile-card.comp'
-
-const messages = message.common.buttons
 
 interface Props {
   open: boolean
@@ -27,7 +20,6 @@ const ProfileDropdownComponent = ({ open }: Props) => {
   const router = useRouter()
   const fullName = user?.fullName
   const [inicials, setInicials] = useState('')
-  const [modalOpen, setModalOpen] = useState(false)
 
   const adminPermissions = usePermission([ROLE.ADMIN])
 
@@ -43,18 +35,6 @@ const ProfileDropdownComponent = ({ open }: Props) => {
     signOut({ callbackUrl: PATH.ROOT })
   }
 
-  const showModalHandler = () => {
-    setModalOpen(true)
-  }
-  const modalButtons: ModalButtons = {
-    goNext: {
-      text: messages.close,
-      testid: 'modal-button-close',
-      onClick: () => {
-        setModalOpen(false)
-      }
-    }
-  }
   return (
     <Fragment>
       {open === false ? (
@@ -88,7 +68,9 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                 <Menu.Item>
                   {({ active }) => (
                     <button
-                      onClick={showModalHandler}
+                      onClick={() => {
+                        router.push(PATH.PROFILE_GENERAL)
+                      }}
                       className={classNames(
                         'w-full text-left block px-4 py-2 text-sm text-gray-700',
                         active ? 'bg-gray-100' : ''
@@ -156,9 +138,6 @@ const ProfileDropdownComponent = ({ open }: Props) => {
           </div>
         </div>
       )}
-      <ModalComponent open={modalOpen} setOpen={setModalOpen} buttons={modalButtons} testid="profile">
-        <ProfileCardComponent />
-      </ModalComponent>
     </Fragment>
   )
 }

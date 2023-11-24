@@ -44,7 +44,8 @@ export const Input = ({
   hidden,
   label,
   onChange,
-  unit
+  unit,
+  id
 }: InputProps) => {
   const { control } = useFormContext()
 
@@ -59,6 +60,7 @@ export const Input = ({
           <div hidden={hidden} className="relative">
             <input
               {...field}
+              id={id}
               hidden={hidden}
               step="0.001"
               type={type}

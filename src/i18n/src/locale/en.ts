@@ -338,6 +338,21 @@ export const messages = {
   },
   orderItem: { head: 'ELI Panda - Order Item' },
   systemItem: { head: 'ELI Panda - System Item' },
+  profilePage: {
+    head: 'ELI Panda - Profile',
+    general: {
+      title: 'Profile',
+      subTitle: 'Personal details.'
+    },
+    security: {
+      title: 'Security',
+      subTitle: 'Change your password.'
+    },
+    team: {
+      title: 'Team',
+      subTitle: 'Team details.'
+    }
+  },
   defaul: { head: 'ELI Panda' },
   admin: {
     head: 'ELI Panda - Administration',

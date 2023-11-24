@@ -14,7 +14,7 @@ const UPDATE_USER = gql`
 `
 
 export const useUserUpdate = () => {
-  const [updateUser] = useMutation<Mutation>(UPDATE_USER, {
+  const [updateUser, { loading }] = useMutation<Mutation>(UPDATE_USER, {
     onError: err => {
       toast.error('Error while Updating user: ' + err.message)
     },
@@ -24,6 +24,7 @@ export const useUserUpdate = () => {
   })
 
   return {
-    updateUser
+    updateUser,
+    loading
   }
 }
