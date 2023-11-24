@@ -1,19 +1,16 @@
 import type { CellContext } from '@tanstack/react-table'
-import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { Button } from '@/components/Buttons'
-import { Input } from '@/components/form/Input'
 import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
 
 import type { RoomCardProperties } from './RoomCard.columns'
 
-const CleaningSchedule = () => {
+/* const CleaningSchedule = () => {
   const [selectedDays, setSelectedDays] = useState<{
     [key: string]: boolean
   }>()
-  const { register } = useFormContext()
+    const { register } = useFormContext()
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
 
   return (
@@ -42,7 +39,7 @@ const CleaningSchedule = () => {
       <Input rounded="rounded-md" name="cleaningShedule" type="date" />
     </div>
   )
-}
+} */
 
 export const CellInput = ({
   row: {

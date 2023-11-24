@@ -338,5 +338,35 @@ export const messages = {
   },
   orderItem: { head: 'ELI Panda - Order Item' },
   systemItem: { head: 'ELI Panda - System Item' },
-  defaul: { head: 'ELI Panda' }
+  profilePage: {
+    head: 'ELI Panda - Profile',
+    general: {
+      title: 'Profile',
+      subTitle: 'Personal details.'
+    },
+    security: {
+      title: 'Security',
+      subTitle: 'Change your password.'
+    },
+    team: {
+      title: 'Team',
+      subTitle: 'Team details.'
+    }
+  },
+  defaul: { head: 'ELI Panda' },
+  admin: {
+    head: 'ELI Panda - Administration',
+    users: {
+      form: {
+        email: { label: 'Email', placeholder: 'Email' },
+        isEnabled: { label: 'Is Enabled', placeholder: 'Is Enabled' },
+        firstName: { label: 'First Name', placeholder: 'First Name' },
+        lastName: { label: 'Last Name', placeholder: 'Last Name' },
+        username: { label: 'Username', placeholder: 'Username' },
+        facility: { label: 'Facility', placeholder: 'Facility' },
+        password: { label: 'Password', placeholder: 'Password' },
+        confirmPassword: { label: 'Confirm Password', placeholder: 'Confirm Password' }
+      }
+    }
+  }
 }

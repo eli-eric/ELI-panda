@@ -3,8 +3,8 @@ import { gql } from '@apollo/client'
 export const typeDefs = gql`
   type JWT @jwt {
     roles: [String!]!
+    uid: String!
   }
-
   type Location @authentication {
     uid: ID! @id
     facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
@@ -68,7 +68,7 @@ export const typeDefs = gql`
     email: String
   }
 
-  type ParentPathItem {
+  type ParentPathItem @authentication {
     uid: ID
     name: String
   }
@@ -156,14 +156,7 @@ export const typeDefs = gql`
     name: String!
   }
 
-  type Role @authentication {
-    code: String!
-    name: String!
-    uid: ID! @id
-    usersHasRole: [User!]! @relationship(type: "HAS_ROLE", direction: IN)
-  }
-
-  type SchemaMigration {
+  type SchemaMigration @authentication {
     dirty: Boolean!
     ts: DateTime!
     version: BigInt!
@@ -173,8 +166,7 @@ export const typeDefs = gql`
     @authorization(
       validate: [
         { operations: [READ], where: { jwt: { roles_INCLUDES: "systems-view" } } }
-        { operations: [UPDATE], where: { jwt: { roles_INCLUDES: "systems-edit" } } }
-        { operations: [CREATE], where: { jwt: { roles_INCLUDES: "systems-edit" } } }
+        { operations: [UPDATE, CREATE, DELETE, READ], where: { jwt: { roles_INCLUDES: "systems-edit" } } }
       ]
     ) {
     uid: ID! @id
@@ -298,14 +290,29 @@ export const typeDefs = gql`
     uid: ID! @id
   }
 
-  type User @authentication {
+  type User
+    @authorization(
+      validate: [
+        { operations: [UPDATE, READ], where: { node: { uid: "$jwt.uid" } } }
+        { operations: [UPDATE, CREATE, READ, DELETE], where: { jwt: { roles_INCLUDES: "admin" } } }
+      ]
+    ) {
     email: String!
     firstName: String!
-    hasRoleRoles: [Role!]! @relationship(type: "HAS_ROLE", direction: OUT)
+    roles: [Role!]! @relationship(type: "HAS_ROLE", direction: OUT)
+    facility: Facility @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
     isEnabled: Boolean!
     lastName: String!
     passwordHash: String!
-    uid: String!
+    passwordToChange: Boolean
+    uid: ID! @id
     username: String!
+  }
+
+  type Role @authentication {
+    code: String!
+    name: String!
+    uid: ID! @id
+    usersHasRole: [User!]! @relationship(type: "HAS_ROLE", direction: IN)
   }
 `

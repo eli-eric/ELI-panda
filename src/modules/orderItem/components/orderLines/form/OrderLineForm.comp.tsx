@@ -11,8 +11,8 @@ import Divider from '@/components/layout/Divider'
 import { Tooltip } from '@/components/Tooltip'
 import type { CodebookFilter } from '@/hooks/fetch/useCodebook'
 import { message } from '@/i18n/src/messages'
-import type { CatalogueItem } from '@/types/responses'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
+import type { CatalogueItem } from '@/types/responses'
 
 import useOrderLineFormFields from './OrderLineForm.fields'
 

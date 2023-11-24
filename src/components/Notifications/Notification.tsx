@@ -1,7 +1,7 @@
 import { Transition } from '@headlessui/react'
 import { CheckCircleIcon, ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
-import { resolveValue, toast, type Toast } from 'react-hot-toast'
+import { resolveValue, type Toast, toast } from 'react-hot-toast'
 
 import { classNames } from '@/utils'
 

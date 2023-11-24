@@ -15,7 +15,7 @@ export type SystemDetailFormType = {
   owner?: CodebookType // combobox - CODEBOOK.EMPLOYEE
   responsible?: CodebookType // combobox - CODEBOOK.EMPLOYEE
   importance?: CodebookType // listbox - CODEBOOK.SYSTEM_IMPORTANCE
-  systemLevel?: SystemLevel
+  systemLevel: SystemLevel
   physicalItem?: PhysicalItem
   hasImageGalleryChanges?: boolean
   operators?: Employee[]

@@ -15,7 +15,13 @@ export enum PATH {
   ORDER = '/order',
   CODEBOOKS = '/codebooks',
   ROOM_CARDS = '/room-cards',
-  ROOM_CARD = '/room-card'
+  ROOM_CARD = '/room-card',
+  ADMIN_USERS = '/administration/users',
+  ADMIN_USER = '/administration/user',
+  ADMIN = '/administration',
+  PROFILE_GENERAL = '/profile/general',
+  PROFILE_SECURITY = '/profile/security',
+  PROFILE_TEAM = '/profile/team'
 }
 
 export const SUPPORT = 'https://eli-eric.atlassian.net/servicedesk/customer/portal/20'
@@ -51,11 +57,6 @@ export const NAV_BAR_CONFIG: NavigationType = [
     role: ROLE.ORDERS_VIEW
   },
   {
-    name: 'Dashboard',
-    links: [{ path: PATH.DASHBOARD }],
-    role: ROLE.BASICS
-  },
-  {
     name: 'Codebooks',
     links: [{ path: PATH.CODEBOOKS }],
     role: ROLE.CODEBOOKS_ADMIN
@@ -64,5 +65,10 @@ export const NAV_BAR_CONFIG: NavigationType = [
     name: 'Room Cards',
     links: [{ path: PATH.ROOM_CARDS }],
     role: ROLE.ROOM_CARD_VIEW
+  },
+  {
+    name: 'Dashboard',
+    links: [{ path: PATH.DASHBOARD }],
+    role: ROLE.BASICS
   }
 ]

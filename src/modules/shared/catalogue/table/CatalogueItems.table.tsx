@@ -16,7 +16,6 @@ interface CatalogueTableProps {
   categoryList?: CatalogueCategory[]
   loading?: boolean
   enableFiltering?: boolean
-  categoryUID?: string
 }
 
 export const CatalogueTableContext = createContext<{ isHoveringId: number | undefined | string }>({
@@ -29,10 +28,9 @@ export const CatalogueTable = ({
   tableId = 'catalogueItems',
   catalogueItems,
   categoryList,
-  loading,
-  categoryUID
+  loading
 }: CatalogueTableProps) => {
-  const columns = useCatalogueItemsColumns({ tableId, additionalColumn, categoryUID, catalogueItems })
+  const columns = useCatalogueItemsColumns({ tableId, additionalColumn, catalogueItems })
   const { setHoveringId } = useHoveringId()
   const catalogueTableRef = useRef<Table<CatalogueItem>>()
 

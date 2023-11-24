@@ -16,7 +16,7 @@ const messages = message.common.buttons
 export const AssignPhysicalItem = () => {
   const [openModal, setOpenModal] = useState(false)
   const [selectedSystem, setSelectedSystem] = useState<SystemDetail>()
-  const { setValue, watch, reset, getValues } = useFormContext<SystemDetailFormType>()
+  const { setValue, reset, getValues } = useFormContext<SystemDetailFormType>()
   //const physicalItem = watch('physicalItem')
 
   const modalButtons: ModalButtons = {
@@ -44,7 +44,7 @@ export const AssignPhysicalItem = () => {
         reset({
           ...getValues(),
           physicalItem: {
-            uid: null
+            uid: undefined
           }
         })
 

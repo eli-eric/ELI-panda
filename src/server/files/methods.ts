@@ -62,10 +62,10 @@ export async function listFiles(req: NextApiRequest, res: NextApiResponse) {
   const result = list
     .map(obj => {
       const { lastModified, name: objFullPath, metadata } = obj
-      const ts = new Date(lastModified).getTime()
-      const [id] = objFullPath.split('/').reverse()
-      const name = decodeURIComponent(metadata['X-Amz-Meta-Name'])
-      const type = metadata['content-type']
+      const ts = new Date(lastModified as Date).getTime()
+      const [id] = objFullPath ? objFullPath.split('/').reverse() : []
+      const name = decodeURIComponent( metadata && metadata['X-Amz-Meta-Name'])
+      const type = metadata && metadata['content-type']
       const url = `${req.url}/${id}`
       return {
         id,

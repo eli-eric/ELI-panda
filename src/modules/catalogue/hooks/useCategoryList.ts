@@ -1,24 +1,35 @@
 import { gql, useQuery } from '@apollo/client'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
+import { CatalogueContext } from '@/pages/catalogue/[uid]'
 import type { Query } from '@/types/gql/graphql'
 
 const GET_CATEGORIES = gql`
-  query GetCategories($parentCategory: CatalogueCategoryWhere = null) {
-    catalogueCategories(where: { parentCategory: $parentCategory }) {
-      uid
+  query GetCategories($where: CatalogueCategoryWhere) {
+    catalogueCategories(where: $where) {
       name
+      uid
     }
   }
 `
 
 export const useCategoryList = () => {
-  const router = useRouter()
-  const { uid } = router.query
+  const { uid } = useContext(CatalogueContext)
   const { data, loading, error, refetch, previousData } = useQuery<Query>(GET_CATEGORIES, {
-    variables: { parentCategory: uid ? { uid } : null }
+    variables: {
+      where: uid
+        ? {
+            parentCategory: {
+              uid
+            }
+          }
+        : {
+            parentCategoryAggregate: {
+              count: 0
+            }
+          }
+    }
   })
 
   useEffect(() => {
@@ -29,7 +40,6 @@ export const useCategoryList = () => {
     catalogueCategories: data?.catalogueCategories || previousData?.catalogueCategories,
     loading: loading,
     error: error,
-    refetch,
-    uid: router.query.uid
+    refetch
   }
 }

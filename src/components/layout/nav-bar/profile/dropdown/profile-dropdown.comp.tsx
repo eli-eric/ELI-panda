@@ -1,17 +1,13 @@
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 
-import ModalComponent from '@/components/modal/modal.comp'
-import { message } from '@/i18n/src/messages'
+import usePermission from '@/hooks/usePermission'
 import { PATH, SUPPORT } from '@/types/constants/paths'
-import type { ModalButtons } from '@/types/form'
+import { ROLE } from '@/types/constants/roles'
 import { classNames } from '@/utils'
-
-import ProfileCardComponent from '../card/profile-card.comp'
-
-const messages = message.common.buttons
 
 interface Props {
   open: boolean
@@ -21,9 +17,11 @@ interface Props {
 
 const ProfileDropdownComponent = ({ open }: Props) => {
   const user = useSession().data?.user
+  const router = useRouter()
   const fullName = user?.fullName
   const [inicials, setInicials] = useState('')
-  const [modalOpen, setModalOpen] = useState(false)
+
+  const adminPermissions = usePermission([ROLE.ADMIN])
 
   useEffect(() => {
     if (!fullName) return
@@ -37,22 +35,10 @@ const ProfileDropdownComponent = ({ open }: Props) => {
     signOut({ callbackUrl: PATH.ROOT })
   }
 
-  const showModalHandler = () => {
-    setModalOpen(true)
-  }
-  const modalButtons: ModalButtons = {
-    goNext: {
-      text: messages.close,
-      testid: 'modal-button-close',
-      onClick: () => {
-        setModalOpen(false)
-      }
-    }
-  }
   return (
     <Fragment>
       {open === false ? (
-        <div data-testid="layout-profile" className="hidden z-30 sm:ml-6 sm:flex sm:items-center z-20">
+        <div data-testid="layout-profile" className="hidden z-30 sm:ml-6 sm:flex sm:items-center">
           <Menu as="div" className="relative ml-3">
             <div className="flex">
               <Link href={SUPPORT} legacyBehavior>
@@ -82,7 +68,9 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                 <Menu.Item>
                   {({ active }) => (
                     <button
-                      onClick={showModalHandler}
+                      onClick={() => {
+                        router.push(PATH.PROFILE_GENERAL)
+                      }}
                       className={classNames(
                         'w-full text-left block px-4 py-2 text-sm text-gray-700',
                         active ? 'bg-gray-100' : ''
@@ -92,6 +80,23 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                     </button>
                   )}
                 </Menu.Item>
+                {adminPermissions && (
+                  <Menu.Item>
+                    {({ active }) => (
+                      <button
+                        onClick={() => {
+                          router.push(PATH.ADMIN)
+                        }}
+                        className={classNames(
+                          'w-full text-left block px-4 py-2 text-sm text-gray-700',
+                          active ? 'bg-gray-100' : ''
+                        )}
+                      >
+                        Administration
+                      </button>
+                    )}
+                  </Menu.Item>
+                )}
                 <Menu.Item>
                   {({ active }) => (
                     <button
@@ -133,9 +138,6 @@ const ProfileDropdownComponent = ({ open }: Props) => {
           </div>
         </div>
       )}
-      <ModalComponent open={modalOpen} setOpen={setModalOpen} buttons={modalButtons} testid="profile">
-        <ProfileCardComponent />
-      </ModalComponent>
     </Fragment>
   )
 }

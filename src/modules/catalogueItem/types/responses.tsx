@@ -1,16 +1,16 @@
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 
 export interface CatalogueItem {
-  uid?: string | null
-  catalogueNumber?: string
-  name?: string
+  uid?: string
+  catalogueNumber: string
+  name: string
   description?: string
   categoryPath?: string
   categoryName?: string
-  category?: CodebookType | null
+  category: CodebookType
   supplier?: CodebookType | null
   manufacturerUrl?: string
-  details?: CatalogueItemDetail[] | null
+  details?: CatalogueItemDetail[]
 }
 
 export interface CatalogueItemDetail {
@@ -20,7 +20,7 @@ export interface CatalogueItemDetail {
 }
 
 export type CatalogueCategoryProperty = {
-  uid: string
+  uid?: string
   name: string
   listOfValues?: string[]
   defaultValue?: string

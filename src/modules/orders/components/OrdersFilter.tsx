@@ -1,5 +1,4 @@
-import type { TransitionOptions } from 'next-usequerystate'
-import { queryTypes } from 'next-usequerystate'
+import type { Options} from 'next-usequerystate';
 import { useQueryState } from 'next-usequerystate'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
@@ -35,19 +34,19 @@ export const OrdersFilter = () => {
 
   const [querySupplier, setQuerySupplier] = useQueryState(
     'supplier',
-    queryTypes.string.withDefault(JSON.stringify(filter?.supplier))
+    {defaultValue: JSON.stringify(filter?.supplier)}
   )
   const [queryOrderStatus, setQueryOrderStatus] = useQueryState(
     'orderStatus',
-    queryTypes.string.withDefault(JSON.stringify(filter?.orderStatus))
+    {defaultValue:JSON.stringify(filter?.orderStatus)}
   )
   const [queryProcurementResponsible, setQueryProcurementResponsible] = useQueryState(
     'procurementResponsible',
-    queryTypes.string.withDefault(JSON.stringify(filter?.procurementResponsible))
+    {defaultValue:JSON.stringify(filter?.procurementResponsible)}
   )
   const [queryRequestor, setQueryRequestor] = useQueryState(
     'requestor',
-    queryTypes.string.withDefault(JSON.stringify(filter?.requestor))
+    {defaultValue:JSON.stringify(filter?.requestor)}
   )
   const form = useForm<OrdersFilterForm>({
     defaultValues: {
@@ -77,10 +76,7 @@ export const OrdersFilter = () => {
   const handleFieldUpdate = (
     fieldName: string,
     fieldCodebook: CodebookType,
-    setFieldQuery: (
-      value: string | ((old: string | null) => string | null) | null,
-      transitionOptions?: TransitionOptions | undefined
-    ) => Promise<boolean>
+    setFieldQuery: (value: string | ((old: string) => string | null) | null, options?: Options | undefined) => Promise<URLSearchParams>
   ) => {
     const fieldUIDKey = fieldName
     if (fieldCodebook) {

@@ -61,11 +61,11 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
 
   const listOfValues = useMemo(() => watch(`${name}.listOfValues`) || [], [watch, name])
 
-  const getDefaultOption = (name, disabled = false) => ({
+  /* const getDefaultOption = (name, disabled = false) => ({
     value: '',
     name,
     disabled
-  })
+  }) */
 
   useEffect(() => {
     if (type?.uid !== PROPERTY_TYPE.LIST && listOfValues.length !== 0) {

@@ -112,3 +112,24 @@ export const SYSTEM_DETAIL = gql`
     }
   }
 `
+
+export const USER = gql`
+  fragment UserFields on User {
+    uid
+    email
+    firstName
+    isEnabled
+    lastName
+    roles {
+      name
+      code
+      uid
+    }
+    username
+    uid
+    facility {
+      name
+      code
+    }
+  }
+`

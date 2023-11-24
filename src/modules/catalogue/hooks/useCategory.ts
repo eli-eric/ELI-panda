@@ -1,7 +1,8 @@
 import { gql, useQuery } from '@apollo/client'
-import { useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
+import { CatalogueContext } from '@/pages/catalogue/[uid]'
 import type { Query } from '@/types/gql/graphql'
 
 const GET_CATEGORIES = gql`
@@ -16,7 +17,9 @@ const GET_CATEGORIES = gql`
     }
   }
 `
-export const useCategory = uid => {
+export const useCategory = () => {
+  const { uid } = useContext(CatalogueContext)
+
   const { data, loading, error, previousData } = useQuery<Query>(GET_CATEGORIES, {
     variables: { uid },
     returnPartialData: true

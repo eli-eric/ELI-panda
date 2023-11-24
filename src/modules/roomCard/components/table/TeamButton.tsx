@@ -1,14 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
-import { object } from 'yup'
+import { mixed, object } from 'yup'
 
 import Listbox from '@/components/form/Listbox'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { ROLE } from '@/types/constants/roles'
-import type { RoomCard } from '@/types/gql/graphql'
+import type { RoomCard, Team } from '@/types/gql/graphql'
 
 import { useTeams } from '../../hooks/useTeams'
 import { useRoomCardStore } from '../../store/useRoomCardStore'
@@ -43,7 +43,7 @@ export const TeamButton = () => {
 
   function makeSchema() {
     return object().shape({
-      team: object()
+      team: mixed<Team>()
         .nullable()
         .required('Team is required')
         .test(
