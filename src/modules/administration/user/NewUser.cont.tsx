@@ -29,7 +29,8 @@ export const NewUserContainer = () => {
         passwordHash: bcrypt.hashSync(data.password, 12),
         roles: { connect: fields?.map(role => whereN(role.uid)) },
         facility: { connect: whereC(data.facility.uid) },
-        username: data.email
+        username: data.email,
+        passwordToChange: true
       }
     ]
     createUser({ variables: { input: dataToSend } })

@@ -12862,6 +12862,7 @@ export type User = {
   isEnabled: Scalars['Boolean']['output'];
   lastName: Scalars['String']['output'];
   passwordHash: Scalars['String']['output'];
+  passwordToChange?: Maybe<Scalars['Boolean']['output']>;
   roles: Array<Role>;
   rolesAggregate?: Maybe<UserRoleRolesAggregationSelection>;
   rolesConnection: UserRolesConnection;
@@ -12940,6 +12941,7 @@ export type UserCreateInput = {
   isEnabled: Scalars['Boolean']['input'];
   lastName: Scalars['String']['input'];
   passwordHash: Scalars['String']['input'];
+  passwordToChange?: InputMaybe<Scalars['Boolean']['input']>;
   roles?: InputMaybe<UserRolesFieldInput>;
   username: Scalars['String']['input'];
 };
@@ -13242,6 +13244,7 @@ export type UserSort = {
   isEnabled?: InputMaybe<SortDirection>;
   lastName?: InputMaybe<SortDirection>;
   passwordHash?: InputMaybe<SortDirection>;
+  passwordToChange?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
   username?: InputMaybe<SortDirection>;
 };
@@ -13253,6 +13256,7 @@ export type UserUpdateInput = {
   isEnabled?: InputMaybe<Scalars['Boolean']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   passwordHash?: InputMaybe<Scalars['String']['input']>;
+  passwordToChange?: InputMaybe<Scalars['Boolean']['input']>;
   roles?: InputMaybe<Array<UserRolesUpdateFieldInput>>;
   username?: InputMaybe<Scalars['String']['input']>;
 };
@@ -13287,6 +13291,7 @@ export type UserWhere = {
   passwordHash_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   passwordHash_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   passwordHash_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  passwordToChange?: InputMaybe<Scalars['Boolean']['input']>;
   rolesAggregate?: InputMaybe<UserRolesAggregateInput>;
   /** Return Users where all of the related UserRolesConnections match this filter */
   rolesConnection_ALL?: InputMaybe<UserRolesConnectionWhere>;

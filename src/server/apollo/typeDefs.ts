@@ -304,6 +304,7 @@ export const typeDefs = gql`
     isEnabled: Boolean!
     lastName: String!
     passwordHash: String!
+    passwordToChange: Boolean
     uid: ID! @id
     username: String!
   }
