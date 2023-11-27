@@ -18,7 +18,8 @@ export const useUserDetail = (userUid?: string) => {
       where: {
         uid: userUid
       }
-    }
+    },
+    skip: !userUid
   })
   return {
     userDetail: data?.users[0] || previousData?.users[0],

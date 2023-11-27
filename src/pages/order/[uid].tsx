@@ -7,6 +7,7 @@ import { message } from 'src/i18n/src/messages'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
+import { useForceChangePassword } from '@/hooks/useForceChangePassword'
 import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
 import { OrderItemContainer } from '@/modules/orderItem/OrderItem.cont'
 
@@ -14,6 +15,8 @@ const messages = message.orderItem
 
 const OrderContainer = (): JSX.Element => {
   const { orderDetail, error } = useOrderDetail()
+  useForceChangePassword()
+
   if (error) return <ErrorPage />
   return <Fragment>{orderDetail ? <OrderItemContainer /> : <LoaderComponent />}</Fragment>
 }

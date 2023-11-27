@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { createContext, Fragment } from 'react'
 import { useIntl } from 'react-intl'
 
+import { useForceChangePassword } from '@/hooks/useForceChangePassword'
 import { message } from '@/i18n/src/messages'
 import CatalogueContainer from '@/modules/catalogue/Catalogue.cont'
 
@@ -20,6 +21,7 @@ export const CatalogueContext = createContext<CatalogueContextType>({})
 
 const CatalogueCategoryPage: NextPage = ({ uid }: CatalogueCategoryPageProps): JSX.Element => {
   const intl = useIntl()
+  useForceChangePassword()
 
   return (
     <Fragment>

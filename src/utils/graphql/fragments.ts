@@ -120,6 +120,7 @@ export const USER = gql`
     firstName
     isEnabled
     lastName
+    passwordToChange
     roles {
       name
       code

@@ -4,12 +4,14 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
+import { useForceChangePassword } from '@/hooks/useForceChangePassword'
 import OrdersContainer from '@/modules/orders/Orders.cont'
 
 const messages = message.ordersPage
 
 const OrdersPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
+  useForceChangePassword()
 
   return (
     <Fragment>

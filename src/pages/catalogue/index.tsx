@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 
+import { useForceChangePassword } from '@/hooks/useForceChangePassword'
 import { message } from '@/i18n/src/messages'
 import CatalogueContainer from '@/modules/catalogue/Catalogue.cont'
 
@@ -10,6 +11,7 @@ const { head } = message.cataloguePage
 
 const CatalogueCategoryHomePage: NextPage = (): JSX.Element => {
   const intl = useIntl()
+  useForceChangePassword()
 
   return (
     <Fragment>
