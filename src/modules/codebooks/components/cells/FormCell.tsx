@@ -109,7 +109,7 @@ export const FormCell = ({
   return (
     <form className="flex py-1" onSubmit={handleSubmit(onSubmit)}>
       <input
-        className="w-full bg-inherit"
+        className="w-full text-xs px-0 border-0 bg-inherit py-1"
         {...register(id)}
         onBlur={() => {
           if (isDirty) {

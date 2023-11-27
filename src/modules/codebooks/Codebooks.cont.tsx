@@ -122,6 +122,7 @@ export const CodebooksContainer: FC = () => {
           {...{
             tableId: 'codebooks',
             columns,
+            className: 'border-l pb-0',
             data: codebook?.data,
             loading: isLoading,
             settings: {
