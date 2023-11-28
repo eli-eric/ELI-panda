@@ -27,6 +27,21 @@ interface CodebookTreeModalProps {
   name: string
 }
 
+const highlightText = (text: string, highlight?: string): JSX.Element => {
+  if (!highlight) {
+    return <span>{text}</span>
+  }
+  const regex = new RegExp(`(${highlight})`, 'gi')
+  const parts = text.split(regex)
+  return (
+    <span>
+      {parts
+        .filter(part => part)
+        .map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
+    </span>
+  )
+}
+
 export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTreeModalProps) => {
   const [item, setItem] = useState<CodebookType | undefined>(undefined)
 
@@ -40,6 +55,8 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
   )
 
   const { query } = useQueryManager('codebook')
+
+  const search = JSON.parse(query.columnFilter || '[]')[0]?.value
 
   const tableRef = useRef<Table<Codebooktree>>(null)
 
@@ -97,16 +114,16 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
                   )}
                 </button>
 
-                <span className="ml-2">{getValue()}</span>
+                <span className="ml-2">{highlightText(getValue(), search)}</span>
               </div>
             ) : (
-              <span className="ml-2">{getValue()}</span>
+              <span className="ml-2">{highlightText(getValue(), search)}</span>
             )}
           </div>
         )
       }
     ],
-    []
+    [search]
   )
 
   const modalButtons: ModalButtons = {
