@@ -3,7 +3,7 @@ import { useDeferredValue, useEffect, useState } from 'react'
 import { classNames } from '@/utils'
 
 export const DefferedInput = ({
-  value: initialValue,
+  value: initialValue = '',
   onChange,
   className,
   ...props
@@ -33,7 +33,6 @@ export const DefferedInput = ({
   return (
     <input
       {...props}
-      defaultValue={''}
       value={query}
       className={classNames(
         'w-full placeholder:text-xs placeholder:font-normal rounded-md border-gray-300 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs',

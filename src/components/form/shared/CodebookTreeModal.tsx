@@ -46,7 +46,6 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
   useEffect(() => {
     if (tableRef.current) {
       const filter = tableRef.current.getState().columnFilters
-      console.log(filter)
       if (filter.length > 0) tableRef.current.toggleAllRowsExpanded(true)
       if (filter.length === 0) tableRef.current.toggleAllRowsExpanded(false)
     }
