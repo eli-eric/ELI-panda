@@ -33,6 +33,7 @@ export const DefferedInput = ({
   return (
     <input
       {...props}
+      defaultValue={''}
       value={query}
       className={classNames(
         'w-full placeholder:text-xs placeholder:font-normal rounded-md border-gray-300 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-xs',

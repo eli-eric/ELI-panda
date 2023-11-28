@@ -1,7 +1,7 @@
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
-import type { ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef, Table } from '@tanstack/react-table'
 import classNames from 'classnames'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ModalComponent from '@/components/modal/modal.comp'
@@ -41,10 +41,22 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
 
   const { query } = useQueryManager('codebook')
 
-  const { response } = useFetch<Codebooktree[]>({
+  const tableRef = useRef<Table<Codebooktree>>(null)
+
+  useEffect(() => {
+    if (tableRef.current) {
+      const filter = tableRef.current.getState().columnFilters
+      console.log(filter)
+      if (filter.length > 0) tableRef.current.toggleAllRowsExpanded(true)
+      if (filter.length === 0) tableRef.current.toggleAllRowsExpanded(false)
+    }
+  }, [query.columnFilter])
+
+  const { response, loading } = useFetch<Codebooktree[]>({
     url: `/codebook/${codebook}/tree` + '?' + 'columnFilter=' + query.columnFilter,
     config: {
-      suspense: false
+      suspense: false,
+      keepPreviousData: true
     }
   })
   const columns = useMemo(
@@ -122,7 +134,9 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
     <ModalComponent open={open} setOpen={setOpen} buttons={modalButtons}>
       <div className="max-h-[300px]">
         <PandaTable
+          ref={tableRef}
           tableId="codebook"
+          loading={loading}
           columns={columns}
           data={response}
           getSubRows={row => row.children}
