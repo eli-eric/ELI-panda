@@ -10,6 +10,7 @@ import useFetch from '@/hooks/fetch/useFetch'
 import useQueryManager from '@/hooks/useQueryManager'
 import { message } from '@/i18n/src/messages'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
+import useTableStateStore from '@/store/useTableStateStore'
 import type { ModalButtons } from '@/types/form'
 
 const messages = message.common.buttons
@@ -46,6 +47,7 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
   const [item, setItem] = useState<CodebookType | undefined>(undefined)
 
   const { setValue } = useFormContext()
+  const { reset } = useTableStateStore()
 
   useEffect(
     () => () => {
@@ -135,6 +137,7 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
         setValue(name, item)
         setOpen(false)
         setItem(undefined)
+        reset('codebook')
       }
     },
     goBack: {
