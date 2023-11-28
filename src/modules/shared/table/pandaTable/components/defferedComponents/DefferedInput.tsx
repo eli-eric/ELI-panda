@@ -3,7 +3,7 @@ import { useDeferredValue, useEffect, useState } from 'react'
 import { classNames } from '@/utils'
 
 export const DefferedInput = ({
-  value: initialValue,
+  value: initialValue = '',
   onChange,
   className,
   ...props

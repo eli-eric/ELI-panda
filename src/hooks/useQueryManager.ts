@@ -10,6 +10,7 @@ interface Query {
   orderStatusUID?: string
   procurementResponsibleUID?: string
   requestorUID?: string
+  columnFilter?: string
   [key: string]: any
 }
 
@@ -43,5 +44,10 @@ export default function useQueryManager(tableId: string): { query: Query } {
     return filter
   }, [supplierUID, orderStatusUID, procurementResponsibleUID, requestorUID])
 
-  return { query: { pagination, search, columnFilter, sorting, ...filter, ...custom } }
+  const query = useMemo(
+    () => ({ pagination, search, columnFilter, sorting, ...filter, ...custom }),
+    [pagination, search, columnFilter, sorting, filter, custom]
+  )
+
+  return { query }
 }

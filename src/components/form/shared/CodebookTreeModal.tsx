@@ -1,14 +1,16 @@
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
-import type { ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef, Table } from '@tanstack/react-table'
 import classNames from 'classnames'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ModalComponent from '@/components/modal/modal.comp'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import useFetch from '@/hooks/fetch/useFetch'
+import useQueryManager from '@/hooks/useQueryManager'
 import { message } from '@/i18n/src/messages'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
+import useTableStateStore from '@/store/useTableStateStore'
 import type { ModalButtons } from '@/types/form'
 
 const messages = message.common.buttons
@@ -26,10 +28,26 @@ interface CodebookTreeModalProps {
   name: string
 }
 
+const highlightText = (text: string, highlight?: string): JSX.Element => {
+  if (!highlight) {
+    return <span>{text}</span>
+  }
+  const regex = new RegExp(`(${highlight})`, 'gi')
+  const parts = text.split(regex)
+  return (
+    <span>
+      {parts
+        .filter(part => part)
+        .map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
+    </span>
+  )
+}
+
 export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTreeModalProps) => {
   const [item, setItem] = useState<CodebookType | undefined>(undefined)
 
   const { setValue } = useFormContext()
+  const { reset } = useTableStateStore()
 
   useEffect(
     () => () => {
@@ -38,19 +56,40 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
     []
   )
 
-  const { response } = useFetch<Codebooktree[]>({
-    url: `/codebook/${codebook}/tree`,
+  const { query } = useQueryManager('codebook')
+
+  const search = JSON.parse(query.columnFilter || '[]')[0]?.value
+
+  const tableRef = useRef<Table<Codebooktree>>(null)
+
+  useEffect(() => {
+    if (tableRef.current) {
+      const filter = tableRef.current.getState().columnFilters
+      if (filter.length > 0) tableRef.current.toggleAllRowsExpanded(true)
+      if (filter.length === 0) tableRef.current.toggleAllRowsExpanded(false)
+    }
+  }, [query.columnFilter])
+
+  const { response, loading } = useFetch<Codebooktree[]>({
+    url: `/codebook/${codebook}/tree` + '?' + 'columnFilter=' + query.columnFilter,
     config: {
-      suspense: false
+      suspense: false,
+      keepPreviousData: true
     }
   })
   const columns = useMemo(
     (): ColumnDef<Codebooktree, string>[] => [
       {
-        header: 'Categories',
+        header: 'Name',
         accessorKey: 'name',
         id: 'name',
         size: 300,
+        meta: {
+          filter: {
+            enableColumnFilter: true,
+            type: 'string'
+          }
+        },
         cell: ({ row, getValue }) => (
           <div
             style={{
@@ -77,16 +116,16 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
                   )}
                 </button>
 
-                <span className="ml-2">{getValue()}</span>
+                <span className="ml-2">{highlightText(getValue(), search)}</span>
               </div>
             ) : (
-              <span className="ml-2">{getValue()}</span>
+              <span className="ml-2">{highlightText(getValue(), search)}</span>
             )}
           </div>
         )
       }
     ],
-    []
+    [search]
   )
 
   const modalButtons: ModalButtons = {
@@ -98,6 +137,7 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
         setValue(name, item)
         setOpen(false)
         setItem(undefined)
+        reset('codebook')
       }
     },
     goBack: {
@@ -113,12 +153,16 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
     <ModalComponent open={open} setOpen={setOpen} buttons={modalButtons}>
       <div className="max-h-[300px]">
         <PandaTable
+          ref={tableRef}
           tableId="codebook"
+          loading={loading}
           columns={columns}
           data={response}
           getSubRows={row => row.children}
           settings={{
-            enableRowSelection: true
+            enableRowSelection: true,
+            enableFiltering: true,
+            manualFiltering: true
           }}
           className={'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'}
           getRowProps={row => ({

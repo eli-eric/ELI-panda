@@ -62,7 +62,12 @@ const useTableStateStore = create<TableState>(set => ({
         pagination: undefined,
         filter: undefined,
         search: undefined,
-        sortByQueryString: undefined
+        sortByQueryString: undefined,
+        columnFilter: undefined,
+        custom: undefined,
+        columnVisibility: undefined,
+        expanded: undefined,
+        columnOrder: undefined
       }
       return { instances: { ...state.instances, [tableId]: newInstance } }
     }),
