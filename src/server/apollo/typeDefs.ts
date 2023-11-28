@@ -3,7 +3,7 @@ import { gql } from '@apollo/client'
 export const typeDefs = gql`
   type JWT @jwt {
     roles: [String!]!
-    uid: String!
+    uid: ID!
   }
   type Location @authentication {
     uid: ID! @id
@@ -293,7 +293,7 @@ export const typeDefs = gql`
   type User
     @authorization(
       validate: [
-        { operations: [UPDATE, READ], where: { node: { uid: "$jwt.uid" } } }
+        { operations: [UPDATE, READ], where: { node: { uid: "$jwt.sub" } } }
         { operations: [UPDATE, CREATE, READ, DELETE], where: { jwt: { roles_INCLUDES: "admin" } } }
       ]
     ) {
