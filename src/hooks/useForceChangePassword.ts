@@ -15,7 +15,11 @@ export const useForceChangePassword = () => {
 
   useEffect(() => {
     if (userDetail) {
-      if (userDetail?.passwordToChange || userDetail?.passwordToChange === undefined) {
+      if (
+        userDetail?.passwordToChange === true ||
+        userDetail?.passwordToChange === undefined ||
+        userDetail?.passwordToChange === null
+      ) {
         withWarningModal(() => {
           router.push(PATH.PROFILE_SECURITY)
         })()

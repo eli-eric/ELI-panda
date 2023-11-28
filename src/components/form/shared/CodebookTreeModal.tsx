@@ -7,6 +7,7 @@ import { useFormContext } from 'react-hook-form'
 import ModalComponent from '@/components/modal/modal.comp'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import useFetch from '@/hooks/fetch/useFetch'
+import useQueryManager from '@/hooks/useQueryManager'
 import { message } from '@/i18n/src/messages'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import type { ModalButtons } from '@/types/form'
@@ -38,8 +39,10 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
     []
   )
 
+  const { query } = useQueryManager('codebook')
+
   const { response } = useFetch<Codebooktree[]>({
-    url: `/codebook/${codebook}/tree`,
+    url: `/codebook/${codebook}/tree` + '?' + 'columnFilter=' + query.columnFilter,
     config: {
       suspense: false
     }
@@ -47,10 +50,16 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
   const columns = useMemo(
     (): ColumnDef<Codebooktree, string>[] => [
       {
-        header: 'Categories',
+        header: 'Name',
         accessorKey: 'name',
         id: 'name',
         size: 300,
+        meta: {
+          filter: {
+            enableColumnFilter: true,
+            type: 'string'
+          }
+        },
         cell: ({ row, getValue }) => (
           <div
             style={{
@@ -118,7 +127,9 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
           data={response}
           getSubRows={row => row.children}
           settings={{
-            enableRowSelection: true
+            enableRowSelection: true,
+            enableFiltering: true,
+            manualFiltering: true
           }}
           className={'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'}
           getRowProps={row => ({

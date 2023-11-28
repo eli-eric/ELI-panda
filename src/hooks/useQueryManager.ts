@@ -10,6 +10,7 @@ interface Query {
   orderStatusUID?: string
   procurementResponsibleUID?: string
   requestorUID?: string
+  columnFilter?: string
   [key: string]: any
 }
 
