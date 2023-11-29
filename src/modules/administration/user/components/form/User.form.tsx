@@ -1,11 +1,14 @@
 import { gql, useQuery } from '@apollo/client'
+import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
+import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { Switch } from '@/components/form/Switch'
 import { Col, Grid } from '@/components/grid/Grid'
 import type { Query } from '@/types/gql/graphql'
+import { generatePassword } from '@/utils'
 
 import { useUserFormFields } from './User.fields'
 
@@ -20,11 +23,18 @@ const GET_FACILITIES = gql`
 
 export const UserForm = () => {
   const fields = useUserFormFields()
+  const { setValue } = useFormContext()
   const { data } = useQuery<Query>(GET_FACILITIES, {
     onError: error => {
       toast.error(error.message)
     }
   })
+
+  const generatePasswordHandler = () => {
+    const password = generatePassword()
+    setValue('password', password)
+    setValue('confirmPassword', password)
+  }
 
   return (
     <Grid>
@@ -47,7 +57,11 @@ export const UserForm = () => {
         />
       </Col>
       <Col md={6}>
-        <Input {...fields.password} type="password" />
+        <Input {...fields.password} type="password">
+          <Button primary onClick={generatePasswordHandler}>
+            Gen
+          </Button>
+        </Input>
       </Col>
       <Col md={6}>
         <Input {...fields.confirmPassword} type="password" />

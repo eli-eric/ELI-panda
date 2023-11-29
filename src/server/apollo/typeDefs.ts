@@ -3,7 +3,6 @@ import { gql } from '@apollo/client'
 export const typeDefs = gql`
   type JWT @jwt {
     roles: [String!]!
-    uid: ID!
   }
   type Location @authentication {
     uid: ID! @id
