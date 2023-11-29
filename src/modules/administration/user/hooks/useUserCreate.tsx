@@ -20,7 +20,7 @@ export const useUserCreate = () => {
     onError: err => {
       toast.error('Error while creating user:' + err.message)
     },
-    onCompleted: data => {
+    onCompleted: () => {
       router.back()
       toast.success('User was created successfully')
     }

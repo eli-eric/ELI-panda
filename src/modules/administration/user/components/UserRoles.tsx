@@ -24,7 +24,6 @@ export const UserRoles: FC<Props> = ({ addRole, removeRole, assignedRoles }) => 
   useEffect(() => {
     if (assignedRoles) {
       assignedRoles.forEach(({ code }) => {
-        console.log(code)
         formMethods.setValue(code, true)
       })
     }
