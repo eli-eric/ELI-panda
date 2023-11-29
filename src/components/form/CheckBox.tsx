@@ -13,13 +13,17 @@ const CheckBox = ({ name, placeholder, disabled, className, hidden, label, ...re
     <Controller
       name={name}
       control={control}
+      defaultValue={false}
       render={({ field }) => (
         <div className={classNames('relative flex items-start', className)}>
           <div className="flex h-5 items-center">
             <input
               {...field}
-              {...restProps}
-              defaultValue={undefined}
+              onChange={e => {
+                restProps.onChange && restProps.onChange(e)
+                field.onChange(e)
+              }}
+              checked={field.value}
               hidden={hidden}
               type="checkbox"
               disabled={disabled}

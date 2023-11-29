@@ -1,8 +1,8 @@
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
+import { CODEBOOK } from '@/types/constants/codebook'
 
 const { form } = message.admin.users
-const { form: catalogueForm } = message.cataloguePage.itemDetail
 
 export const useUserFormFields = () => {
   const disabledEdit = false
@@ -19,6 +19,14 @@ export const useUserFormFields = () => {
       label: form.firstName.label,
       placeholder: form.firstName.placeholder,
       disabled: disabledEdit,
+      rounded: 'rounded-md'
+    },
+    employee: {
+      name: 'employee',
+      label: form.employee.label,
+      placeholder: form.employee.placeholder,
+      disabled: disabledEdit,
+      codebook: CODEBOOK.EMPLOYEE,
       rounded: 'rounded-md'
     },
     lastName: {
