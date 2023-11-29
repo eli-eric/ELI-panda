@@ -88,6 +88,12 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
       {
         header: 'Files',
         accessorKey: 'name',
+        meta: {
+          filter: {
+            enableColumnFilter: true,
+            type: 'string'
+          }
+        },
         cell: ({ getValue, row: { original } }) => (
           <div className="flex items-center pt-1 pb-1">
             <FileActions file={original} mutate={mutate} endpoint={endpoint} files={files} hasEditRole={hasEditRole} />
@@ -127,7 +133,8 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
           settings: {
             enableSorting: true,
             manualSorting: false,
-            enableFiltering: true
+            enableFiltering: true,
+            manualFiltering: false
           }
         }}
       />
