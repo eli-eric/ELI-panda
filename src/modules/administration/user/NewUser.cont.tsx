@@ -45,7 +45,8 @@ export const NewUserContainer = () => {
     if (selectedRole) append({ uid: selectedRole.uid, name: selectedRole.name })
   }
 
-  const removeRole = (roleIndex: number) => {
+  const removeRole = (uid: string) => {
+    const roleIndex = fields.findIndex(role => role.uid === uid)
     remove(roleIndex)
     toast.success('Role removed!')
   }
@@ -57,8 +58,7 @@ export const NewUserContainer = () => {
         title: 'New User',
         onSubmit,
         addRole,
-        removeRole,
-        selectedRoles: fields
+        removeRole
       }}
     />
   )

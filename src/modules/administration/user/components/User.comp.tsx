@@ -5,6 +5,7 @@ import { PageHeaderButtons } from '@/components/layout/PageHead.buttons'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
+import type { Role } from '@/types/gql/graphql'
 
 import { UserForm } from './form/User.form'
 import { UserRoles } from './UserRoles'
@@ -13,12 +14,12 @@ interface Props {
   formMethods: any
   onSubmit: (data: any) => void
   addRole: (role: CodebookType) => void
-  removeRole: (roleIndex: number, uid: string) => void
-  selectedRoles?: CodebookType[]
+  removeRole: (uid: string) => void
+  assignedRoles?: Role[]
   title: string
 }
 
-export const UserComponent = ({ formMethods, onSubmit, addRole, removeRole, selectedRoles, title }: Props) => (
+export const UserComponent = ({ formMethods, onSubmit, addRole, removeRole, assignedRoles, title }: Props) => (
   <div>
     <Form
       {...{
@@ -42,6 +43,6 @@ export const UserComponent = ({ formMethods, onSubmit, addRole, removeRole, sele
         <UserForm />
       </Card>
     </Form>
-    <UserRoles addRole={addRole} removeRole={removeRole} selectedRoles={selectedRoles} />
+    <UserRoles addRole={addRole} removeRole={removeRole} assignedRoles={assignedRoles} />
   </div>
 )

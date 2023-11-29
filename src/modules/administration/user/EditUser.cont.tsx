@@ -81,7 +81,7 @@ export const EditUserContainer = ({ userUid }: Props) => {
     })
   }
 
-  const removeRole = (_, roleUid: string) => {
+  const removeRole = (roleUid: string) => {
     updateUser({
       variables: {
         where: { uid: userUid },
@@ -106,7 +106,7 @@ export const EditUserContainer = ({ userUid }: Props) => {
         onSubmit,
         addRole,
         removeRole,
-        selectedRoles: userDetail?.roles.map(role => ({ uid: role.uid, name: role.name }))
+        assignedRoles: userDetail?.roles
       }}
     />
   )
