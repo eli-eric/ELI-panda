@@ -44,7 +44,16 @@ export const ChangePasswordContainer: FC = () => {
   const makeSchema = () =>
     yup.object().shape({
       currentPassword: yup.string().required('Current password is required'),
-      newPassword: yup.string().required('New password is required'),
+      newPassword: yup
+        .string()
+        .required('New password is required')
+        .test('len', 'Must be longer then 8 characters', val => val?.length >= 8)
+        .test('password', 'Password must contain at least one uppercase, one lowercase and one number', val =>
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(val || '')
+        )
+        .test('password', 'Password must contain at least one special character', val =>
+          /^(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/.test(val || '')
+        ),
       confirmPassword: yup
         .string()
         .oneOf([yup.ref('newPassword')], 'Passwords must match')

@@ -19,7 +19,8 @@ export const useUserDetail = (userUid?: string) => {
         uid: userUid
       }
     },
-    skip: !userUid
+    skip: !userUid,
+    fetchPolicy: 'network-only'
   })
   return {
     userDetail: data?.users[0] || previousData?.users[0],
