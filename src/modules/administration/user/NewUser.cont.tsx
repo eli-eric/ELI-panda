@@ -7,10 +7,10 @@ import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import type { UserCreateInput } from '@/types/gql/graphql'
 import { whereC, whereN } from '@/utils/graphql/mutations'
 
+import { userFormSchema } from './components/form/User.schema'
 import { UserComponent } from './components/User.comp'
 import { useUserCreate } from './hooks/useUserCreate'
 import type { UserCreateFormType } from './types/form'
-import { userFormSchema } from './types/form'
 
 export const NewUserContainer = () => {
   const formMethods = useForm<UserCreateFormType>({ resolver: yupResolver(userFormSchema) })
@@ -30,7 +30,8 @@ export const NewUserContainer = () => {
         roles: { connect: fields?.map(role => whereN(role.uid)) },
         facility: { connect: whereC(data.facility.uid) },
         username: data.email,
-        passwordToChange: true
+        passwordToChange: true,
+        employee: { connect: whereN(data.employee.uid) }
       }
     ]
     createUser({ variables: { input: dataToSend } })

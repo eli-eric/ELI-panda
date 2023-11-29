@@ -9,10 +9,10 @@ import { EditUserContext } from '@/pages/administration/user/[uid]'
 import type { UserUpdateInput } from '@/types/gql/graphql'
 import { whereC, whereN } from '@/utils/graphql/mutations'
 
+import { userUpdateFormSchema } from './components/form/User.schema'
 import { UserComponent } from './components/User.comp'
 import { useUserUpdate } from './hooks/useUserUpdate'
 import type { UserUpdateFormType } from './types/form'
-import { userUpdateFormSchema } from './types/form'
 
 type Props = {
   userUid?: string
@@ -30,7 +30,13 @@ export const EditUserContainer = ({ userUid }: Props) => {
       facility: {
         uid: userDetail?.facility?.code,
         name: userDetail?.facility?.name
-      }
+      },
+      employee: userDetail?.employee
+        ? {
+            uid: userDetail?.employee?.uid,
+            name: userDetail?.employee?.fullName as string
+          }
+        : undefined
     },
     resolver: yupResolver(userUpdateFormSchema)
   })
@@ -44,6 +50,7 @@ export const EditUserContainer = ({ userUid }: Props) => {
       lastName: data.lastName,
       isEnabled: data.isEnabled,
       facility: { connect: whereC(data.facility.uid), disconnect: whereC(userDetail?.facility?.code) },
+      employee: { connect: whereN(data.employee?.uid), disconnect: whereN(userDetail?.employee?.uid) },
       username: data.email
     }
     if (data.password) {

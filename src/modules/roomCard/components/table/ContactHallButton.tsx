@@ -12,7 +12,7 @@ import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 import type { ContactPersonRole, Employee, Query } from '@/types/gql/graphql'
 
-import { useLazyEmployee } from '../../hooks/useLazyEmployee'
+import { useLazyEmployee } from '../../../../hooks/graphql/useLazyEmployee'
 import { useRoomCardStore } from '../../store/useRoomCardStore'
 import { HeaderButtonModalComponent } from './HeaderButtonModal.comp'
 
@@ -74,7 +74,7 @@ export const ContactHallButton = () => {
   function makeSchema() {
     return object().shape({
       role: mixed<ContactPersonRole>().required('Role is required'),
-      employee:  mixed<Employee>()
+      employee: mixed<Employee>()
         .nullable()
         .required('Employee is required')
         .test(
