@@ -7,7 +7,7 @@ export const typeDefs = gql`
   type Location @authentication {
     uid: ID! @id
     facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
-    code: String!
+    code: String
     subLocations: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: OUT)
     parentLocation: Location @relationship(type: "HAS_SUBLOCATION", direction: IN)
     name: String!

@@ -54,12 +54,15 @@ export const useLocation = () => {
             }
           }
         : {
-            parentLocation: null,
             facility: {
               code: session?.user?.facilityCode
+            },
+            parentLocationAggregate: {
+              count: 0
             }
           }
-    }
+    },
+    skip: !session?.user?.facilityCode
   })
   return { locations: data?.locations, loading, error }
 }

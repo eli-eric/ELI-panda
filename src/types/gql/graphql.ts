@@ -4238,7 +4238,7 @@ export type FacilityLocationHasLocationLocationsAggregationSelection = {
 
 export type FacilityLocationHasLocationLocationsNodeAggregateSelection = {
   __typename?: 'FacilityLocationHasLocationLocationsNodeAggregateSelection';
-  code: StringAggregateSelectionNonNullable;
+  code: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -4251,7 +4251,7 @@ export type FacilityLocationLocationsBelongsToFacilityAggregationSelection = {
 
 export type FacilityLocationLocationsBelongsToFacilityNodeAggregateSelection = {
   __typename?: 'FacilityLocationLocationsBelongsToFacilityNodeAggregateSelection';
-  code: StringAggregateSelectionNonNullable;
+  code: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -6184,7 +6184,7 @@ export type ItemsConnection = {
 
 export type Location = {
   __typename?: 'Location';
-  code: Scalars['String']['output'];
+  code?: Maybe<Scalars['String']['output']>;
   facility: Facility;
   facilityAggregate?: Maybe<LocationFacilityFacilityAggregationSelection>;
   facilityConnection: LocationFacilityConnection;
@@ -6291,7 +6291,7 @@ export type LocationSubLocationsConnectionArgs = {
 
 export type LocationAggregateSelection = {
   __typename?: 'LocationAggregateSelection';
-  code: StringAggregateSelectionNonNullable;
+  code: StringAggregateSelectionNullable;
   count: Scalars['Int']['output'];
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
@@ -6309,7 +6309,7 @@ export type LocationConnectWhere = {
 };
 
 export type LocationCreateInput = {
-  code: Scalars['String']['input'];
+  code?: InputMaybe<Scalars['String']['input']>;
   facility?: InputMaybe<LocationFacilityFieldInput>;
   name: Scalars['String']['input'];
   parentLocation?: InputMaybe<LocationParentLocationFieldInput>;
@@ -6484,7 +6484,7 @@ export type LocationLocationParentLocationAggregationSelection = {
 
 export type LocationLocationParentLocationNodeAggregateSelection = {
   __typename?: 'LocationLocationParentLocationNodeAggregateSelection';
-  code: StringAggregateSelectionNonNullable;
+  code: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -6497,7 +6497,7 @@ export type LocationLocationSubLocationsAggregationSelection = {
 
 export type LocationLocationSubLocationsNodeAggregateSelection = {
   __typename?: 'LocationLocationSubLocationsNodeAggregateSelection';
-  code: StringAggregateSelectionNonNullable;
+  code: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -7061,7 +7061,7 @@ export type LocationWhere = {
   code?: InputMaybe<Scalars['String']['input']>;
   code_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   code_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  code_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  code_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   code_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
   facility?: InputMaybe<FacilityWhere>;
   facilityAggregate?: InputMaybe<LocationFacilityAggregateInput>;
@@ -9323,7 +9323,7 @@ export type RoomCardLocationLocationAggregationSelection = {
 
 export type RoomCardLocationLocationNodeAggregateSelection = {
   __typename?: 'RoomCardLocationLocationNodeAggregateSelection';
-  code: StringAggregateSelectionNonNullable;
+  code: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -10656,7 +10656,7 @@ export type SystemLocationLocationAggregationSelection = {
 
 export type SystemLocationLocationNodeAggregateSelection = {
   __typename?: 'SystemLocationLocationNodeAggregateSelection';
-  code: StringAggregateSelectionNonNullable;
+  code: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
