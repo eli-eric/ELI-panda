@@ -3,19 +3,20 @@ import type { UseFormReturn } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
 import { PageHead } from '@/components/layout/PageHead'
-import type { Employee, HallContactPerson, RoomCard, RoomCardStatus, Team } from '@/types/gql/graphql'
+import type { RoomCardStatus, Team } from '@/types/gql/graphql'
 
 import { HeaderButtons } from './components/HeaderButtons'
 import { RoomCardStatusIcon } from './components/RoomCardStatusIcon'
 import { RoomCardTables } from './components/table/RoomCard.tables'
+import type { ContactPersonsHall, EmployeeType, RoomCardFormType } from './types/form'
 
 type Props = {
-  formMethods: UseFormReturn<RoomCard, any>
+  formMethods: UseFormReturn<RoomCardFormType, any>
   status: RoomCardStatus
   onSubmitAndExit: () => void
   onSubmit: () => void
-  contactPersonsHall: HallContactPerson[]
-  contactPersonsDept: Employee[]
+  contactPersonsHall: ContactPersonsHall[]
+  contactPersonsDept: EmployeeType[]
   teams: Team[]
 }
 

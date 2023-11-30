@@ -1,9 +1,10 @@
 import { gql, useMutation } from '@apollo/client'
 
-import type { Mutation, RoomCard } from '@/types/gql/graphql'
+import type { Mutation } from '@/types/gql/graphql'
 import { connectN } from '@/utils/graphql/mutations'
 
 import { whereN } from '../../../utils/graphql/mutations'
+import type { RoomCardFormType } from '../types/form'
 
 const CREATE_ROOM_CARD = gql`
   mutation CreateRoomCards($input: [RoomCardCreateInput!]!) {
@@ -15,7 +16,7 @@ const CREATE_ROOM_CARD = gql`
   }
 `
 
-export const makeRoomCardsCreateData = (formData?: RoomCard) => ({
+export const makeRoomCardsCreateData = (formData?: RoomCardFormType) => ({
   input: [
     {
       ...formData,
@@ -38,7 +39,7 @@ export const makeRoomCardsCreateData = (formData?: RoomCard) => ({
   ]
 })
 
-export const useRoomCardCreate = (formData?: RoomCard) => {
+export const useRoomCardCreate = (formData?: RoomCardFormType) => {
   const [createRoomCard] = useMutation<Mutation>(CREATE_ROOM_CARD, {
     variables: makeRoomCardsCreateData(formData),
     refetchQueries: ['RoomCards', 'RoomCard']
