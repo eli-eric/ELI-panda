@@ -1,6 +1,7 @@
 import type { ApolloQueryResult, OperationVariables } from '@apollo/client'
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { createContext, Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
@@ -32,7 +33,12 @@ export const SystemDetailContext = createContext<SystemDetailContextType>({
 
 const SystemDetailPage: NextPage = ({ uid }: Props) => {
   const intl = useIntl()
-  const { systemDetail, loading, error, refetch } = useSystemDetail(uid)
+  const router = useRouter()
+  const { systemDetail, loading, error, refetch } = useSystemDetail(uid, undefined, data => {
+    if (!data?.systems?.length) {
+      router.push('/404')
+    }
+  })
 
   if (loading) {
     return <LoaderComponent />
@@ -49,7 +55,7 @@ const SystemDetailPage: NextPage = ({ uid }: Props) => {
         <meta name="description" content="...." />
       </Head>
       <SystemDetailContext.Provider value={{ systemDetail, loading, refetch }}>
-        <SystemItemContainer uid={uid} />
+        {systemDetail && <SystemItemContainer uid={uid} />}
       </SystemDetailContext.Provider>
     </Fragment>
   )

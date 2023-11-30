@@ -9,6 +9,7 @@ export enum PATH {
 
   SYSTEMS_MOVING = '/systems/moving',
   SYSTEM = '/system',
+  SYSTEM_ALIAS = '/system/alias',
 
   REPORTS = '/reports',
   ORDERS = '/orders',
