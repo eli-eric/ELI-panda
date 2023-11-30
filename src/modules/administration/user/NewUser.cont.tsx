@@ -31,7 +31,7 @@ export const NewUserContainer = () => {
         facility: { connect: whereC(data.facility.uid) },
         username: data.email,
         passwordToChange: true,
-        employee: { connect: whereN(data.employee.uid) }
+        employee: data.employee ? { connect: whereN(data.employee?.uid) } : undefined
       }
     ]
     createUser({ variables: { input: dataToSend } })

@@ -7,7 +7,7 @@ export type UserCreateFormType = {
   isEnabled: boolean
   lastName: string
   password: string
-  employee: CodebookType
+  employee?: CodebookType | null
   confirmPassword: string
   roles: CodebookType[]
 }
@@ -17,7 +17,7 @@ export type UserUpdateFormType = {
   facility: CodebookType
   firstName: string
   isEnabled: boolean
-  employee?: CodebookType
+  employee?: CodebookType | null
   lastName: string
   password?: string
   confirmPassword?: string
