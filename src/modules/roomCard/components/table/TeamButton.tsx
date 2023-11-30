@@ -8,10 +8,11 @@ import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { ROLE } from '@/types/constants/roles'
-import type { RoomCard, Team } from '@/types/gql/graphql'
+import type { Team } from '@/types/gql/graphql'
 
 import { useTeams } from '../../hooks/useTeams'
 import { useRoomCardStore } from '../../store/useRoomCardStore'
+import type { RoomCardFormType } from '../../types/form'
 import { HeaderButtonModalComponent } from './HeaderButtonModal.comp'
 
 const nestedForm = message.roomCardsPage.nestedForm
@@ -25,7 +26,7 @@ export const TeamButton = () => {
 
   const { teams } = useTeams()
 
-  const { control } = useFormContext<RoomCard>()
+  const { control } = useFormContext<RoomCardFormType>()
   const { insert, fields: arrayFields } = useFieldArray({ control, name: 'teams' })
 
   const onSubmit = data => {
@@ -49,6 +50,7 @@ export const TeamButton = () => {
         .test(
           'is-unique',
           'Team already selected',
+          //eslint-disable-next-line
           value => !arrayFields.some(field => field.uid === value?.uid) // assuming each team has an 'id' property
         )
     })

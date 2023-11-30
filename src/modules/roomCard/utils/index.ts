@@ -1,10 +1,11 @@
-import type { Employee, RoomCard, RoomCardUpdateInput, RoomCardWhere, Team } from '@/types/gql/graphql'
+import type { Employee, RoomCardUpdateInput, RoomCardWhere, Team } from '@/types/gql/graphql'
 import { whereN } from '@/utils/graphql/mutations'
 
 import type { HallContactPerson } from '../store/useRoomCardStore'
+import type { RoomCardFormType } from '../types/form'
 
 type RoomCardUpdateType = {
-  roomCard: RoomCard
+  roomCard: RoomCardFormType
   newHallContacts: HallContactPerson[]
   deleteHallContacts: HallContactPerson[]
   newTeams: Team[]

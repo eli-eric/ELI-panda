@@ -3,8 +3,9 @@ import { useRouter } from 'next/router'
 
 import { PATH } from '@/types/constants/paths'
 
-import type { Mutation, RoomCard } from '../../../types/gql/graphql'
+import type { Mutation } from '../../../types/gql/graphql'
 import { useRoomCardStore } from '../store/useRoomCardStore'
+import type { RoomCardFormType } from '../types/form'
 import { updateRoomCardVariables } from '../utils'
 
 const UPDATE_ROOM_CARD = gql`
@@ -64,7 +65,7 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
   const { deleteHallContacts, disconnectDeptContacts, disconnectTeams, newDeptContacts, newHallContacts, newTeams } =
     useRoomCardStore()
 
-  const updateRoomCard = (roomCard: RoomCard, saveAndExit: boolean) =>
+  const updateRoomCard = (roomCard: RoomCardFormType, saveAndExit: boolean) =>
     update({
       variables: updateRoomCardVariables({
         uid: roomCardUid,

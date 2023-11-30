@@ -10,13 +10,13 @@ import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 import { PATH } from '@/types/constants/paths'
-import type { RoomCard } from '@/types/gql/graphql'
 import { RoomCardStatus } from '@/types/gql/graphql'
 
 import { SelectLocationTree } from '../shared/form/location/SelectLocation.combo'
 import { makeRoomCardsCreateData, useRoomCardCreate } from './hooks/useRoomCardCreate'
 import { RoomCardComponent } from './RoomCard.comp'
 import { useRoomCardStore } from './store/useRoomCardStore'
+import type { RoomCardFormType } from './types/form'
 
 const messages = message.roomCardsPage.form
 
@@ -32,7 +32,7 @@ const schema = object().shape({
 
 export const RoomCardNewContainer = () => {
   //TODO: fix typing
-  const formMethods = useForm<RoomCard>({ resolver: yupResolver(schema) as any })
+  const formMethods = useForm<RoomCardFormType>({ resolver: yupResolver(schema) as any })
   const router = useRouter()
   const { watch, handleSubmit } = formMethods
   const { createRoomCard } = useRoomCardCreate()

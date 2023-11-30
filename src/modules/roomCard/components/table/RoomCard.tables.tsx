@@ -3,14 +3,15 @@ import type { FC } from 'react'
 import Card from '@/components/layout/Card'
 import { Heading } from '@/components/layout/Heading'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
-import type { Employee, HallContactPerson, Team } from '@/types/gql/graphql'
+import type { Team } from '@/types/gql/graphql'
 
+import type { ContactPersonsHall, EmployeeType } from '../../types/form'
 import { cleanRooms, clientRequirements, possibleParameters } from '../../utils/constants'
 import { useRoomCardsColumns } from './RoomCard.columns'
 
 type Props = {
-  contactPersonsHall?: HallContactPerson[]
-  contactPersonsDept?: Employee[]
+  contactPersonsHall: ContactPersonsHall[]
+  contactPersonsDept: EmployeeType[]
   teams?: Team[]
 }
 
