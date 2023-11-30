@@ -1,10 +1,11 @@
-import { type FC, useEffect } from 'react'
+import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
 
 import CheckBox from '@/components/form/CheckBox'
 import { Form } from '@/components/form/Form'
 import Card from '@/components/layout/Card'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import { ROLE } from '@/types/constants/roles'
 import type { Role } from '@/types/gql/graphql'
 
 import { useRoles } from '../hooks/useRoles'
@@ -19,15 +20,19 @@ export const UserRoles: FC<Props> = ({ addRole, removeRole, assignedRoles }) => 
   const roles = useRoles()
   const formMethods = useForm<{
     [key: string]: boolean
-  }>()
-
-  useEffect(() => {
-    if (assignedRoles) {
-      assignedRoles.forEach(({ code }) => {
-        formMethods.setValue(code, true)
-      })
-    }
-  }, [assignedRoles, formMethods])
+  }>({
+    defaultValues: assignedRoles
+      ? assignedRoles.reduce((acc, { code }) => {
+          acc[code] = true
+          return acc
+        }, {})
+      : {
+          [ROLE.BASICS]: true,
+          [ROLE.CATALOGUE_VIEW]: true,
+          [ROLE.SYSTEMS_VIEW]: true,
+          [ROLE.ROOM_CARD_VIEW]: true
+        }
+  })
 
   return (
     <Form {...{ formMethods }}>

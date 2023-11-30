@@ -50,7 +50,10 @@ export const EditUserContainer = ({ userUid }: Props) => {
       lastName: data.lastName,
       isEnabled: data.isEnabled,
       facility: { connect: whereC(data.facility.uid), disconnect: whereC(userDetail?.facility?.code) },
-      employee: { connect: whereN(data.employee?.uid), disconnect: whereN(userDetail?.employee?.uid) },
+      employee: {
+        connect: data.employee ? whereN(data.employee?.uid) : undefined,
+        disconnect: whereN(userDetail?.employee?.uid)
+      },
       username: data.email
     }
     if (data.password) {

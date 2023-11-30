@@ -4,10 +4,10 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
 import { Button } from '@/components/Buttons'
+import CheckBox from '@/components/form/CheckBox'
 import Combobox from '@/components/form/Combobox'
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
-import { Switch } from '@/components/form/Switch'
 import { Col, Grid } from '@/components/grid/Grid'
 import { useLazyEmployee } from '@/hooks/graphql/useLazyEmployee'
 import type { Query } from '@/types/gql/graphql'
@@ -59,11 +59,11 @@ export const UserForm = () => {
 
   return (
     <Grid>
-      <Col md={1}>
-        <Switch {...fields.isEnabled} />
-      </Col>
-      <Col md={11}>
+      <Col md={6}>
         <Combobox {...fields.employee} filter={[{ key: 'all', value: 'true' }]} />
+      </Col>
+      <Col md={6} className="items-center sm:pl-2 pt-4">
+        <CheckBox {...fields.isEnabled} />
       </Col>
       <Col md={6}>
         <Input {...fields.firstName} />

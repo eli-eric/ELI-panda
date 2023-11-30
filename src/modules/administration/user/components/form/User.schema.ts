@@ -9,7 +9,7 @@ export const userFormSchema = yup.object().shape({
   isEnabled: yup.boolean().required(),
   lastName: yup.string().required(),
   password: yup.string().required(),
-  employee: yup.mixed<CodebookType>().required(),
+  employee: yup.mixed<CodebookType>().nullable(),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref('password')], 'Passwords must match')
@@ -29,7 +29,7 @@ export const userUpdateFormSchema = yup.object().shape({
   firstName: yup.string().required(),
   isEnabled: yup.boolean().required(),
   lastName: yup.string().required(),
-  employee: yup.mixed<CodebookType>(),
+  employee: yup.mixed<CodebookType>().nullable(),
   password: yup.string(),
   confirmPassword: yup.string().oneOf([yup.ref('password')], 'Passwords must match')
 })
