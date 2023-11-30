@@ -63,12 +63,7 @@ export const UserForm = () => {
         <Switch {...fields.isEnabled} />
       </Col>
       <Col md={11}>
-        <Combobox
-          {...fields.employee}
-          customCodebookQuery={{
-            f: 'all'
-          }}
-        />
+        <Combobox {...fields.employee} filter={[{ key: 'all', value: 'true' }]} />
       </Col>
       <Col md={6}>
         <Input {...fields.firstName} />

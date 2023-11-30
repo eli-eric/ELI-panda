@@ -27,9 +27,6 @@ type ComboboxPropsT = FieldProps &
     customLabel?: string
     onClickIcon?: () => void
     onSelect?: (item: CodebookType) => void
-    customCodebookQuery?: {
-      [key: string]: string
-    }
   }
 
 const Combobox = ({
@@ -48,8 +45,7 @@ const Combobox = ({
   showAddButton = false,
   onClickIcon,
   onChange,
-  onSelect,
-  customCodebookQuery
+  onSelect
 }: ComboboxPropsT) => {
   const { control, setValue } = useFormContext()
   const { formatMessage: fm } = useIntl()
@@ -57,7 +53,7 @@ const Combobox = ({
   const [query, setQuery] = useState<string>('')
   const codebookResponseData = useMemo(() => ({ data: codebookResponse, metadata: undefined }), [codebookResponse])
 
-  const { data } = useCodebook(codebook, { limit, filter, searchText: query, ...customCodebookQuery })
+  const { data } = useCodebook(codebook, { limit, filter, searchText: query })
 
   const options = useMemo(() => (data ? data : codebookResponseData), [data, codebookResponseData])
   const { getFormModal, setOpen } = useAddCodebookValue(options?.metadata)
