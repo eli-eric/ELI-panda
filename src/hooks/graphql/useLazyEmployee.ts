@@ -9,6 +9,12 @@ const GET_EMPLOYEE = gql`
     employees(where: { uid: $uid }) {
       uid
       fullName
+      firstName
+      facility {
+        code
+        name
+      }
+      lastName
       phoneNumber
     }
   }

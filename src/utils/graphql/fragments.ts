@@ -121,6 +121,10 @@ export const USER = gql`
     isEnabled
     lastName
     passwordToChange
+    employee {
+      uid
+      fullName
+    }
     roles {
       name
       code

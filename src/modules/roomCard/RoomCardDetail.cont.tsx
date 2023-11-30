@@ -9,13 +9,13 @@ import LoaderComponent from '@/components/loader.comp'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
-import type { RoomCard } from '@/types/gql/graphql'
 import { RoomCardStatus } from '@/types/gql/graphql'
 
 import { useRoomCard } from './hooks/useRoomCard'
 import { useRoomCardUpdate } from './hooks/useRoomCardUpdate'
 import { RoomCardComponent } from './RoomCard.comp'
 import { useRoomCardStore } from './store/useRoomCardStore'
+import type { RoomCardFormType } from './types/form'
 
 interface Props {
   roomCardUid?: string
@@ -37,7 +37,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
 
   const { roomCard, loading } = useRoomCard(roomCardUid)
   //TODO: fix typing
-  const formMethods = useForm<RoomCard>({ defaultValues: roomCard, resolver: yupResolver(schema) as any })
+  const formMethods = useForm<RoomCardFormType>({ defaultValues: {}, resolver: yupResolver(schema) as any })
   const { reset, watch, handleSubmit } = formMethods
   const { updateRoomCard } = useRoomCardUpdate(roomCardUid)
   const { clear } = useRoomCardStore()
@@ -50,16 +50,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
 
   useEffect(() => () => clear(), [clear])
 
-  useEffect(() => {
-    if (roomCard) {
-      reset({
-        ...roomCard,
-        contactPersonsHall: roomCard.contactPersonsHall?.map(contact => ({ ...contact, uuid: contact.uid }))
-      })
-    }
-  }, [roomCard, reset])
-
-  const onSubmit = handleSubmit((roomCard: RoomCard) => {
+  const onSubmit = handleSubmit((roomCard: RoomCardFormType) => {
     toast.promise(updateRoomCard(roomCard, false), {
       loading: 'Saving room card...',
       success: 'Room card was successfully updated',
@@ -67,7 +58,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
     })
   })
 
-  const onSubmitAndExit = handleSubmit((roomCard: RoomCard) => {
+  const onSubmitAndExit = handleSubmit((roomCard: RoomCardFormType) => {
     toast.promise(updateRoomCard(roomCard, true), {
       loading: 'Saving room card....',
       success: 'Room card was successfully updated',
@@ -86,16 +77,13 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
 
   return (
     <RoomCardComponent
-      {...{
-        formMethods,
-        status,
-        onSubmitAndExit,
-        onSubmit,
-        contactPersonsHall,
-        contactPersonsDept,
-        teams,
-        fields
-      }}
+      formMethods={formMethods}
+      status={status}
+      onSubmitAndExit={onSubmitAndExit}
+      onSubmit={onSubmit}
+      contactPersonsHall={contactPersonsHall}
+      contactPersonsDept={contactPersonsDept}
+      teams={teams}
     >
       <Fragment>
         <h1 className="text-2xl font-semibold">{roomCard?.location.name}</h1>

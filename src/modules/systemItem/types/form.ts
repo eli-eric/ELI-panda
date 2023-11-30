@@ -1,6 +1,7 @@
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { EmployeeType } from '@/modules/roomCard/types/form'
 import type { PhysicalItem } from '@/modules/systems/types/responses'
-import type { Employee, SystemLevel } from '@/types/gql/graphql'
+import type { SystemLevel } from '@/types/gql/graphql'
 
 export type SystemDetailFormType = {
   uid?: string // from router
@@ -18,6 +19,6 @@ export type SystemDetailFormType = {
   systemLevel: SystemLevel
   physicalItem?: PhysicalItem
   hasImageGalleryChanges?: boolean
-  operators?: Employee[]
-  maintainedBy?: Employee[]
+  operators?: EmployeeType[]
+  maintainedBy?: EmployeeType[]
 }

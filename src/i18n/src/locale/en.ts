@@ -361,6 +361,7 @@ export const messages = {
         email: { label: 'Email', placeholder: 'Email' },
         isEnabled: { label: 'Is Enabled', placeholder: 'Is Enabled' },
         firstName: { label: 'First Name', placeholder: 'First Name' },
+        employee: { label: 'Employee', placeholder: 'Find Employee' },
         lastName: { label: 'Last Name', placeholder: 'Last Name' },
         username: { label: 'Username', placeholder: 'Username' },
         facility: { label: 'Facility', placeholder: 'Facility' },

@@ -3346,11 +3346,61 @@ export type DeleteInfo = {
 export type Employee = {
   __typename?: 'Employee';
   email?: Maybe<Scalars['String']['output']>;
+  facility: Facility;
+  facilityAggregate?: Maybe<EmployeeFacilityFacilityAggregationSelection>;
+  facilityConnection: EmployeeFacilityConnection;
   firstName: Scalars['String']['output'];
   fullName?: Maybe<Scalars['String']['output']>;
   lastName: Scalars['String']['output'];
   phoneNumber?: Maybe<Scalars['String']['output']>;
   uid: Scalars['ID']['output'];
+  user?: Maybe<User>;
+  userAggregate?: Maybe<EmployeeUserUserAggregationSelection>;
+  userConnection: EmployeeUserConnection;
+};
+
+
+export type EmployeeFacilityArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<FacilityOptions>;
+  where?: InputMaybe<FacilityWhere>;
+};
+
+
+export type EmployeeFacilityAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<FacilityWhere>;
+};
+
+
+export type EmployeeFacilityConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<EmployeeFacilityConnectionSort>>;
+  where?: InputMaybe<EmployeeFacilityConnectionWhere>;
+};
+
+
+export type EmployeeUserArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<UserOptions>;
+  where?: InputMaybe<UserWhere>;
+};
+
+
+export type EmployeeUserAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<UserWhere>;
+};
+
+
+export type EmployeeUserConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<EmployeeUserConnectionSort>>;
+  where?: InputMaybe<EmployeeUserConnectionWhere>;
 };
 
 export type EmployeeAggregateSelection = {
@@ -3364,16 +3414,33 @@ export type EmployeeAggregateSelection = {
   uid: IdAggregateSelectionNonNullable;
 };
 
+export type EmployeeConnectInput = {
+  facility?: InputMaybe<EmployeeFacilityConnectFieldInput>;
+  user?: InputMaybe<EmployeeUserConnectFieldInput>;
+};
+
 export type EmployeeConnectWhere = {
   node: EmployeeWhere;
 };
 
 export type EmployeeCreateInput = {
   email?: InputMaybe<Scalars['String']['input']>;
+  facility?: InputMaybe<EmployeeFacilityFieldInput>;
   firstName: Scalars['String']['input'];
   fullName?: InputMaybe<Scalars['String']['input']>;
   lastName: Scalars['String']['input'];
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  user?: InputMaybe<EmployeeUserFieldInput>;
+};
+
+export type EmployeeDeleteInput = {
+  facility?: InputMaybe<EmployeeFacilityDeleteFieldInput>;
+  user?: InputMaybe<EmployeeUserDeleteFieldInput>;
+};
+
+export type EmployeeDisconnectInput = {
+  facility?: InputMaybe<EmployeeFacilityDisconnectFieldInput>;
+  user?: InputMaybe<EmployeeUserDisconnectFieldInput>;
 };
 
 export type EmployeeEdge = {
@@ -3382,11 +3449,155 @@ export type EmployeeEdge = {
   node: Employee;
 };
 
+export type EmployeeFacilityAggregateInput = {
+  AND?: InputMaybe<Array<EmployeeFacilityAggregateInput>>;
+  NOT?: InputMaybe<EmployeeFacilityAggregateInput>;
+  OR?: InputMaybe<Array<EmployeeFacilityAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<EmployeeFacilityNodeAggregationWhereInput>;
+};
+
+export type EmployeeFacilityConnectFieldInput = {
+  connect?: InputMaybe<FacilityConnectInput>;
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<FacilityConnectWhere>;
+};
+
+export type EmployeeFacilityConnection = {
+  __typename?: 'EmployeeFacilityConnection';
+  edges: Array<EmployeeFacilityRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type EmployeeFacilityConnectionSort = {
+  node?: InputMaybe<FacilitySort>;
+};
+
+export type EmployeeFacilityConnectionWhere = {
+  AND?: InputMaybe<Array<EmployeeFacilityConnectionWhere>>;
+  NOT?: InputMaybe<EmployeeFacilityConnectionWhere>;
+  OR?: InputMaybe<Array<EmployeeFacilityConnectionWhere>>;
+  node?: InputMaybe<FacilityWhere>;
+};
+
+export type EmployeeFacilityCreateFieldInput = {
+  node: FacilityCreateInput;
+};
+
+export type EmployeeFacilityDeleteFieldInput = {
+  delete?: InputMaybe<FacilityDeleteInput>;
+  where?: InputMaybe<EmployeeFacilityConnectionWhere>;
+};
+
+export type EmployeeFacilityDisconnectFieldInput = {
+  disconnect?: InputMaybe<FacilityDisconnectInput>;
+  where?: InputMaybe<EmployeeFacilityConnectionWhere>;
+};
+
+export type EmployeeFacilityFacilityAggregationSelection = {
+  __typename?: 'EmployeeFacilityFacilityAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<EmployeeFacilityFacilityNodeAggregateSelection>;
+};
+
+export type EmployeeFacilityFacilityNodeAggregateSelection = {
+  __typename?: 'EmployeeFacilityFacilityNodeAggregateSelection';
+  code: StringAggregateSelectionNonNullable;
+  name: StringAggregateSelectionNonNullable;
+  uid: StringAggregateSelectionNonNullable;
+};
+
+export type EmployeeFacilityFieldInput = {
+  connect?: InputMaybe<EmployeeFacilityConnectFieldInput>;
+  create?: InputMaybe<EmployeeFacilityCreateFieldInput>;
+};
+
+export type EmployeeFacilityNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<EmployeeFacilityNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<EmployeeFacilityNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<EmployeeFacilityNodeAggregationWhereInput>>;
+  code_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  code_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  code_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  uid_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type EmployeeFacilityRelationship = {
+  __typename?: 'EmployeeFacilityRelationship';
+  cursor: Scalars['String']['output'];
+  node: Facility;
+};
+
+export type EmployeeFacilityUpdateConnectionInput = {
+  node?: InputMaybe<FacilityUpdateInput>;
+};
+
+export type EmployeeFacilityUpdateFieldInput = {
+  connect?: InputMaybe<EmployeeFacilityConnectFieldInput>;
+  create?: InputMaybe<EmployeeFacilityCreateFieldInput>;
+  delete?: InputMaybe<EmployeeFacilityDeleteFieldInput>;
+  disconnect?: InputMaybe<EmployeeFacilityDisconnectFieldInput>;
+  update?: InputMaybe<EmployeeFacilityUpdateConnectionInput>;
+  where?: InputMaybe<EmployeeFacilityConnectionWhere>;
+};
+
 export type EmployeeOptions = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   /** Specify one or more EmployeeSort objects to sort Employees by. The sorts will be applied in the order in which they are arranged in the array. */
   sort?: InputMaybe<Array<EmployeeSort>>;
+};
+
+export type EmployeeRelationInput = {
+  facility?: InputMaybe<EmployeeFacilityCreateFieldInput>;
+  user?: InputMaybe<EmployeeUserCreateFieldInput>;
 };
 
 /** Fields to sort Employees by. The order in which sorts are applied is not guaranteed when specifying many fields in one EmployeeSort object. */
@@ -3401,10 +3612,184 @@ export type EmployeeSort = {
 
 export type EmployeeUpdateInput = {
   email?: InputMaybe<Scalars['String']['input']>;
+  facility?: InputMaybe<EmployeeFacilityUpdateFieldInput>;
   firstName?: InputMaybe<Scalars['String']['input']>;
   fullName?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  user?: InputMaybe<EmployeeUserUpdateFieldInput>;
+};
+
+export type EmployeeUserAggregateInput = {
+  AND?: InputMaybe<Array<EmployeeUserAggregateInput>>;
+  NOT?: InputMaybe<EmployeeUserAggregateInput>;
+  OR?: InputMaybe<Array<EmployeeUserAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<EmployeeUserNodeAggregationWhereInput>;
+};
+
+export type EmployeeUserConnectFieldInput = {
+  connect?: InputMaybe<UserConnectInput>;
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<UserConnectWhere>;
+};
+
+export type EmployeeUserConnection = {
+  __typename?: 'EmployeeUserConnection';
+  edges: Array<EmployeeUserRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type EmployeeUserConnectionSort = {
+  node?: InputMaybe<UserSort>;
+};
+
+export type EmployeeUserConnectionWhere = {
+  AND?: InputMaybe<Array<EmployeeUserConnectionWhere>>;
+  NOT?: InputMaybe<EmployeeUserConnectionWhere>;
+  OR?: InputMaybe<Array<EmployeeUserConnectionWhere>>;
+  node?: InputMaybe<UserWhere>;
+};
+
+export type EmployeeUserCreateFieldInput = {
+  node: UserCreateInput;
+};
+
+export type EmployeeUserDeleteFieldInput = {
+  delete?: InputMaybe<UserDeleteInput>;
+  where?: InputMaybe<EmployeeUserConnectionWhere>;
+};
+
+export type EmployeeUserDisconnectFieldInput = {
+  disconnect?: InputMaybe<UserDisconnectInput>;
+  where?: InputMaybe<EmployeeUserConnectionWhere>;
+};
+
+export type EmployeeUserFieldInput = {
+  connect?: InputMaybe<EmployeeUserConnectFieldInput>;
+  create?: InputMaybe<EmployeeUserCreateFieldInput>;
+};
+
+export type EmployeeUserNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<EmployeeUserNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<EmployeeUserNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<EmployeeUserNodeAggregationWhereInput>>;
+  email_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  email_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  username_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  username_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type EmployeeUserRelationship = {
+  __typename?: 'EmployeeUserRelationship';
+  cursor: Scalars['String']['output'];
+  node: User;
+};
+
+export type EmployeeUserUpdateConnectionInput = {
+  node?: InputMaybe<UserUpdateInput>;
+};
+
+export type EmployeeUserUpdateFieldInput = {
+  connect?: InputMaybe<EmployeeUserConnectFieldInput>;
+  create?: InputMaybe<EmployeeUserCreateFieldInput>;
+  delete?: InputMaybe<EmployeeUserDeleteFieldInput>;
+  disconnect?: InputMaybe<EmployeeUserDisconnectFieldInput>;
+  update?: InputMaybe<EmployeeUserUpdateConnectionInput>;
+  where?: InputMaybe<EmployeeUserConnectionWhere>;
+};
+
+export type EmployeeUserUserAggregationSelection = {
+  __typename?: 'EmployeeUserUserAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<EmployeeUserUserNodeAggregateSelection>;
+};
+
+export type EmployeeUserUserNodeAggregateSelection = {
+  __typename?: 'EmployeeUserUserNodeAggregateSelection';
+  email: StringAggregateSelectionNonNullable;
+  firstName: StringAggregateSelectionNonNullable;
+  lastName: StringAggregateSelectionNonNullable;
+  passwordHash: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+  username: StringAggregateSelectionNonNullable;
 };
 
 export type EmployeeWhere = {
@@ -3416,6 +3801,11 @@ export type EmployeeWhere = {
   email_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   email_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   email_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  facility?: InputMaybe<FacilityWhere>;
+  facilityAggregate?: InputMaybe<EmployeeFacilityAggregateInput>;
+  facilityConnection?: InputMaybe<EmployeeFacilityConnectionWhere>;
+  facilityConnection_NOT?: InputMaybe<EmployeeFacilityConnectionWhere>;
+  facility_NOT?: InputMaybe<FacilityWhere>;
   firstName?: InputMaybe<Scalars['String']['input']>;
   firstName_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   firstName_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
@@ -3441,6 +3831,11 @@ export type EmployeeWhere = {
   uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
   uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
   uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  user?: InputMaybe<UserWhere>;
+  userAggregate?: InputMaybe<EmployeeUserAggregateInput>;
+  userConnection?: InputMaybe<EmployeeUserConnectionWhere>;
+  userConnection_NOT?: InputMaybe<EmployeeUserConnectionWhere>;
+  user_NOT?: InputMaybe<UserWhere>;
 };
 
 export type EmployeesConnection = {
@@ -3843,7 +4238,7 @@ export type FacilityLocationHasLocationLocationsAggregationSelection = {
 
 export type FacilityLocationHasLocationLocationsNodeAggregateSelection = {
   __typename?: 'FacilityLocationHasLocationLocationsNodeAggregateSelection';
-  code: StringAggregateSelectionNullable;
+  code: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -3856,7 +4251,7 @@ export type FacilityLocationLocationsBelongsToFacilityAggregationSelection = {
 
 export type FacilityLocationLocationsBelongsToFacilityNodeAggregateSelection = {
   __typename?: 'FacilityLocationLocationsBelongsToFacilityNodeAggregateSelection';
-  code: StringAggregateSelectionNullable;
+  code: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -4351,6 +4746,7 @@ export type HallContactPersonEmployeeAggregateInput = {
 };
 
 export type HallContactPersonEmployeeConnectFieldInput = {
+  connect?: InputMaybe<EmployeeConnectInput>;
   /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<EmployeeConnectWhere>;
@@ -4379,10 +4775,12 @@ export type HallContactPersonEmployeeCreateFieldInput = {
 };
 
 export type HallContactPersonEmployeeDeleteFieldInput = {
+  delete?: InputMaybe<EmployeeDeleteInput>;
   where?: InputMaybe<HallContactPersonEmployeeConnectionWhere>;
 };
 
 export type HallContactPersonEmployeeDisconnectFieldInput = {
+  disconnect?: InputMaybe<EmployeeDisconnectInput>;
   where?: InputMaybe<HallContactPersonEmployeeConnectionWhere>;
 };
 
@@ -5786,7 +6184,7 @@ export type ItemsConnection = {
 
 export type Location = {
   __typename?: 'Location';
-  code?: Maybe<Scalars['String']['output']>;
+  code: Scalars['String']['output'];
   facility: Facility;
   facilityAggregate?: Maybe<LocationFacilityFacilityAggregationSelection>;
   facilityConnection: LocationFacilityConnection;
@@ -5893,7 +6291,7 @@ export type LocationSubLocationsConnectionArgs = {
 
 export type LocationAggregateSelection = {
   __typename?: 'LocationAggregateSelection';
-  code: StringAggregateSelectionNullable;
+  code: StringAggregateSelectionNonNullable;
   count: Scalars['Int']['output'];
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
@@ -5911,7 +6309,7 @@ export type LocationConnectWhere = {
 };
 
 export type LocationCreateInput = {
-  code?: InputMaybe<Scalars['String']['input']>;
+  code: Scalars['String']['input'];
   facility?: InputMaybe<LocationFacilityFieldInput>;
   name: Scalars['String']['input'];
   parentLocation?: InputMaybe<LocationParentLocationFieldInput>;
@@ -6086,7 +6484,7 @@ export type LocationLocationParentLocationAggregationSelection = {
 
 export type LocationLocationParentLocationNodeAggregateSelection = {
   __typename?: 'LocationLocationParentLocationNodeAggregateSelection';
-  code: StringAggregateSelectionNullable;
+  code: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -6099,7 +6497,7 @@ export type LocationLocationSubLocationsAggregationSelection = {
 
 export type LocationLocationSubLocationsNodeAggregateSelection = {
   __typename?: 'LocationLocationSubLocationsNodeAggregateSelection';
-  code: StringAggregateSelectionNullable;
+  code: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -6663,7 +7061,7 @@ export type LocationWhere = {
   code?: InputMaybe<Scalars['String']['input']>;
   code_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   code_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  code_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  code_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   code_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
   facility?: InputMaybe<FacilityWhere>;
   facilityAggregate?: InputMaybe<LocationFacilityAggregateInput>;
@@ -6981,6 +7379,7 @@ export type MutationDeleteContactPersonRolesArgs = {
 
 
 export type MutationDeleteEmployeesArgs = {
+  delete?: InputMaybe<EmployeeDeleteInput>;
   where?: InputMaybe<EmployeeWhere>;
 };
 
@@ -7158,6 +7557,10 @@ export type MutationUpdateContactPersonRolesArgs = {
 
 
 export type MutationUpdateEmployeesArgs = {
+  connect?: InputMaybe<EmployeeConnectInput>;
+  create?: InputMaybe<EmployeeRelationInput>;
+  delete?: InputMaybe<EmployeeDeleteInput>;
+  disconnect?: InputMaybe<EmployeeDisconnectInput>;
   update?: InputMaybe<EmployeeUpdateInput>;
   where?: InputMaybe<EmployeeWhere>;
 };
@@ -8564,6 +8967,7 @@ export type RoomCardContactPersonsDeptAggregateInput = {
 };
 
 export type RoomCardContactPersonsDeptConnectFieldInput = {
+  connect?: InputMaybe<Array<EmployeeConnectInput>>;
   /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<EmployeeConnectWhere>;
@@ -8592,10 +8996,12 @@ export type RoomCardContactPersonsDeptCreateFieldInput = {
 };
 
 export type RoomCardContactPersonsDeptDeleteFieldInput = {
+  delete?: InputMaybe<EmployeeDeleteInput>;
   where?: InputMaybe<RoomCardContactPersonsDeptConnectionWhere>;
 };
 
 export type RoomCardContactPersonsDeptDisconnectFieldInput = {
+  disconnect?: InputMaybe<EmployeeDisconnectInput>;
   where?: InputMaybe<RoomCardContactPersonsDeptConnectionWhere>;
 };
 
@@ -8917,7 +9323,7 @@ export type RoomCardLocationLocationAggregationSelection = {
 
 export type RoomCardLocationLocationNodeAggregateSelection = {
   __typename?: 'RoomCardLocationLocationNodeAggregateSelection';
-  code: StringAggregateSelectionNullable;
+  code: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -10250,7 +10656,7 @@ export type SystemLocationLocationAggregationSelection = {
 
 export type SystemLocationLocationNodeAggregateSelection = {
   __typename?: 'SystemLocationLocationNodeAggregateSelection';
-  code: StringAggregateSelectionNullable;
+  code: StringAggregateSelectionNonNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -10323,6 +10729,7 @@ export type SystemMaintainedByAggregateInput = {
 };
 
 export type SystemMaintainedByConnectFieldInput = {
+  connect?: InputMaybe<Array<EmployeeConnectInput>>;
   /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<EmployeeConnectWhere>;
@@ -10351,10 +10758,12 @@ export type SystemMaintainedByCreateFieldInput = {
 };
 
 export type SystemMaintainedByDeleteFieldInput = {
+  delete?: InputMaybe<EmployeeDeleteInput>;
   where?: InputMaybe<SystemMaintainedByConnectionWhere>;
 };
 
 export type SystemMaintainedByDisconnectFieldInput = {
+  disconnect?: InputMaybe<EmployeeDisconnectInput>;
   where?: InputMaybe<SystemMaintainedByConnectionWhere>;
 };
 
@@ -10476,6 +10885,7 @@ export type SystemOperatorsAggregateInput = {
 };
 
 export type SystemOperatorsConnectFieldInput = {
+  connect?: InputMaybe<Array<EmployeeConnectInput>>;
   /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<EmployeeConnectWhere>;
@@ -10504,10 +10914,12 @@ export type SystemOperatorsCreateFieldInput = {
 };
 
 export type SystemOperatorsDeleteFieldInput = {
+  delete?: InputMaybe<EmployeeDeleteInput>;
   where?: InputMaybe<SystemOperatorsConnectionWhere>;
 };
 
 export type SystemOperatorsDisconnectFieldInput = {
+  disconnect?: InputMaybe<EmployeeDisconnectInput>;
   where?: InputMaybe<SystemOperatorsConnectionWhere>;
 };
 
@@ -10636,6 +11048,7 @@ export type SystemOwnerAggregateInput = {
 };
 
 export type SystemOwnerConnectFieldInput = {
+  connect?: InputMaybe<EmployeeConnectInput>;
   /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<EmployeeConnectWhere>;
@@ -10664,10 +11077,12 @@ export type SystemOwnerCreateFieldInput = {
 };
 
 export type SystemOwnerDeleteFieldInput = {
+  delete?: InputMaybe<EmployeeDeleteInput>;
   where?: InputMaybe<SystemOwnerConnectionWhere>;
 };
 
 export type SystemOwnerDisconnectFieldInput = {
+  disconnect?: InputMaybe<EmployeeDisconnectInput>;
   where?: InputMaybe<SystemOwnerConnectionWhere>;
 };
 
@@ -11085,6 +11500,7 @@ export type SystemResponsibleAggregateInput = {
 };
 
 export type SystemResponsibleConnectFieldInput = {
+  connect?: InputMaybe<EmployeeConnectInput>;
   /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<EmployeeConnectWhere>;
@@ -11113,10 +11529,12 @@ export type SystemResponsibleCreateFieldInput = {
 };
 
 export type SystemResponsibleDeleteFieldInput = {
+  delete?: InputMaybe<EmployeeDeleteInput>;
   where?: InputMaybe<SystemResponsibleConnectionWhere>;
 };
 
 export type SystemResponsibleDisconnectFieldInput = {
+  disconnect?: InputMaybe<EmployeeDisconnectInput>;
   where?: InputMaybe<SystemResponsibleConnectionWhere>;
 };
 
@@ -12855,6 +13273,9 @@ export type UpdateZonesMutationResponse = {
 export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
+  employee?: Maybe<Employee>;
+  employeeAggregate?: Maybe<UserEmployeeEmployeeAggregationSelection>;
+  employeeConnection: UserEmployeeConnection;
   facility?: Maybe<Facility>;
   facilityAggregate?: Maybe<UserFacilityFacilityAggregationSelection>;
   facilityConnection: UserFacilityConnection;
@@ -12868,6 +13289,28 @@ export type User = {
   rolesConnection: UserRolesConnection;
   uid: Scalars['ID']['output'];
   username: Scalars['String']['output'];
+};
+
+
+export type UserEmployeeArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<EmployeeOptions>;
+  where?: InputMaybe<EmployeeWhere>;
+};
+
+
+export type UserEmployeeAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<EmployeeWhere>;
+};
+
+
+export type UserEmployeeConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<UserEmployeeConnectionSort>>;
+  where?: InputMaybe<UserEmployeeConnectionWhere>;
 };
 
 
@@ -12926,6 +13369,7 @@ export type UserAggregateSelection = {
 };
 
 export type UserConnectInput = {
+  employee?: InputMaybe<UserEmployeeConnectFieldInput>;
   facility?: InputMaybe<UserFacilityConnectFieldInput>;
   roles?: InputMaybe<Array<UserRolesConnectFieldInput>>;
 };
@@ -12936,6 +13380,7 @@ export type UserConnectWhere = {
 
 export type UserCreateInput = {
   email: Scalars['String']['input'];
+  employee?: InputMaybe<UserEmployeeFieldInput>;
   facility?: InputMaybe<UserFacilityFieldInput>;
   firstName: Scalars['String']['input'];
   isEnabled: Scalars['Boolean']['input'];
@@ -12947,11 +13392,13 @@ export type UserCreateInput = {
 };
 
 export type UserDeleteInput = {
+  employee?: InputMaybe<UserEmployeeDeleteFieldInput>;
   facility?: InputMaybe<UserFacilityDeleteFieldInput>;
   roles?: InputMaybe<Array<UserRolesDeleteFieldInput>>;
 };
 
 export type UserDisconnectInput = {
+  employee?: InputMaybe<UserEmployeeDisconnectFieldInput>;
   facility?: InputMaybe<UserFacilityDisconnectFieldInput>;
   roles?: InputMaybe<Array<UserRolesDisconnectFieldInput>>;
 };
@@ -12960,6 +13407,178 @@ export type UserEdge = {
   __typename?: 'UserEdge';
   cursor: Scalars['String']['output'];
   node: User;
+};
+
+export type UserEmployeeAggregateInput = {
+  AND?: InputMaybe<Array<UserEmployeeAggregateInput>>;
+  NOT?: InputMaybe<UserEmployeeAggregateInput>;
+  OR?: InputMaybe<Array<UserEmployeeAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<UserEmployeeNodeAggregationWhereInput>;
+};
+
+export type UserEmployeeConnectFieldInput = {
+  connect?: InputMaybe<EmployeeConnectInput>;
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<EmployeeConnectWhere>;
+};
+
+export type UserEmployeeConnection = {
+  __typename?: 'UserEmployeeConnection';
+  edges: Array<UserEmployeeRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type UserEmployeeConnectionSort = {
+  node?: InputMaybe<EmployeeSort>;
+};
+
+export type UserEmployeeConnectionWhere = {
+  AND?: InputMaybe<Array<UserEmployeeConnectionWhere>>;
+  NOT?: InputMaybe<UserEmployeeConnectionWhere>;
+  OR?: InputMaybe<Array<UserEmployeeConnectionWhere>>;
+  node?: InputMaybe<EmployeeWhere>;
+};
+
+export type UserEmployeeCreateFieldInput = {
+  node: EmployeeCreateInput;
+};
+
+export type UserEmployeeDeleteFieldInput = {
+  delete?: InputMaybe<EmployeeDeleteInput>;
+  where?: InputMaybe<UserEmployeeConnectionWhere>;
+};
+
+export type UserEmployeeDisconnectFieldInput = {
+  disconnect?: InputMaybe<EmployeeDisconnectInput>;
+  where?: InputMaybe<UserEmployeeConnectionWhere>;
+};
+
+export type UserEmployeeEmployeeAggregationSelection = {
+  __typename?: 'UserEmployeeEmployeeAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<UserEmployeeEmployeeNodeAggregateSelection>;
+};
+
+export type UserEmployeeEmployeeNodeAggregateSelection = {
+  __typename?: 'UserEmployeeEmployeeNodeAggregateSelection';
+  email: StringAggregateSelectionNullable;
+  firstName: StringAggregateSelectionNonNullable;
+  fullName: StringAggregateSelectionNullable;
+  lastName: StringAggregateSelectionNonNullable;
+  phoneNumber: StringAggregateSelectionNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type UserEmployeeFieldInput = {
+  connect?: InputMaybe<UserEmployeeConnectFieldInput>;
+  create?: InputMaybe<UserEmployeeCreateFieldInput>;
+};
+
+export type UserEmployeeNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<UserEmployeeNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<UserEmployeeNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<UserEmployeeNodeAggregationWhereInput>>;
+  email_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  email_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  fullName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  fullName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  fullName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  phoneNumber_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  phoneNumber_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  phoneNumber_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  phoneNumber_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  phoneNumber_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UserEmployeeRelationship = {
+  __typename?: 'UserEmployeeRelationship';
+  cursor: Scalars['String']['output'];
+  node: Employee;
+};
+
+export type UserEmployeeUpdateConnectionInput = {
+  node?: InputMaybe<EmployeeUpdateInput>;
+};
+
+export type UserEmployeeUpdateFieldInput = {
+  connect?: InputMaybe<UserEmployeeConnectFieldInput>;
+  create?: InputMaybe<UserEmployeeCreateFieldInput>;
+  delete?: InputMaybe<UserEmployeeDeleteFieldInput>;
+  disconnect?: InputMaybe<UserEmployeeDisconnectFieldInput>;
+  update?: InputMaybe<UserEmployeeUpdateConnectionInput>;
+  where?: InputMaybe<UserEmployeeConnectionWhere>;
 };
 
 export type UserFacilityAggregateInput = {
@@ -13109,6 +13728,7 @@ export type UserOptions = {
 };
 
 export type UserRelationInput = {
+  employee?: InputMaybe<UserEmployeeCreateFieldInput>;
   facility?: InputMaybe<UserFacilityCreateFieldInput>;
   roles?: InputMaybe<Array<UserRolesCreateFieldInput>>;
 };
@@ -13251,6 +13871,7 @@ export type UserSort = {
 
 export type UserUpdateInput = {
   email?: InputMaybe<Scalars['String']['input']>;
+  employee?: InputMaybe<UserEmployeeUpdateFieldInput>;
   facility?: InputMaybe<UserFacilityUpdateFieldInput>;
   firstName?: InputMaybe<Scalars['String']['input']>;
   isEnabled?: InputMaybe<Scalars['Boolean']['input']>;
@@ -13270,6 +13891,11 @@ export type UserWhere = {
   email_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   email_IN?: InputMaybe<Array<Scalars['String']['input']>>;
   email_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  employee?: InputMaybe<EmployeeWhere>;
+  employeeAggregate?: InputMaybe<UserEmployeeAggregateInput>;
+  employeeConnection?: InputMaybe<UserEmployeeConnectionWhere>;
+  employeeConnection_NOT?: InputMaybe<UserEmployeeConnectionWhere>;
+  employee_NOT?: InputMaybe<EmployeeWhere>;
   facility?: InputMaybe<FacilityWhere>;
   facilityAggregate?: InputMaybe<UserFacilityAggregateInput>;
   facilityConnection?: InputMaybe<UserFacilityConnectionWhere>;

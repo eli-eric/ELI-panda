@@ -7,7 +7,7 @@ export const typeDefs = gql`
   type Location @authentication {
     uid: ID! @id
     facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
-    code: String
+    code: String!
     subLocations: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: OUT)
     parentLocation: Location @relationship(type: "HAS_SUBLOCATION", direction: IN)
     name: String!
@@ -61,6 +61,8 @@ export const typeDefs = gql`
   type Employee @authentication {
     uid: ID! @id
     firstName: String!
+    user: User @relationship(type: "HAS_USER", direction: OUT)
+    facility: Facility! @relationship(type: "AFFILIATED_WITH_FACILITY", direction: OUT)
     fullName: String
     lastName: String!
     phoneNumber: String
@@ -304,6 +306,7 @@ export const typeDefs = gql`
     lastName: String!
     passwordHash: String!
     passwordToChange: Boolean
+    employee: Employee @relationship(type: "HAS_USER", direction: IN)
     uid: ID! @id
     username: String!
   }
