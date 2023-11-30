@@ -32,20 +32,22 @@ export const UserRoles: FC<Props> = ({ addRole, removeRole, assignedRoles }) => 
   return (
     <Form {...{ formMethods }}>
       <Card>
-        <label>Roles: </label>
-        <div className="flex-grow">
+        <div className="pb-2 font-bold">Roles</div>
+        <ul className="" role="list">
           {roles?.map(role => (
-            <CheckBox
-              key={role.uid}
-              name={role.code}
-              label={role.name}
-              onChange={e => {
-                e.target.checked ? addRole(role) : removeRole(role.uid)
-              }}
-              rounded="rounded-md"
-            />
+            <li key={role.uid} className="py-1">
+              <CheckBox
+                key={role.uid}
+                name={role.code}
+                label={role.name}
+                onChange={e => {
+                  e.target.checked ? addRole(role) : removeRole(role.uid)
+                }}
+                rounded="rounded-md"
+              />
+            </li>
           ))}
-        </div>
+        </ul>
       </Card>
     </Form>
   )
