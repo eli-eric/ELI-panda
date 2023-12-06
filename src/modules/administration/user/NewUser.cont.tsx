@@ -4,7 +4,8 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import type { UserCreateInput } from '@/types/gql/graphql'
+import { ROLE } from '@/types/constants/roles'
+import type { Role, UserCreateInput } from '@/types/gql/graphql'
 import { whereC, whereN } from '@/utils/graphql/mutations'
 
 import { userFormSchema } from './components/form/User.schema'
@@ -12,8 +13,20 @@ import { UserComponent } from './components/User.comp'
 import { useUserCreate } from './hooks/useUserCreate'
 import type { UserCreateFormType } from './types/form'
 
-export const NewUserContainer = () => {
-  const formMethods = useForm<UserCreateFormType>({ resolver: yupResolver(userFormSchema) })
+type Props = {
+  roles: Role[]
+}
+export const NewUserContainer = ({ roles }: Props) => {
+  const defaultRoles = [ROLE.BASICS, ROLE.CATALOGUE_VIEW, ROLE.SYSTEMS_VIEW, ROLE.ROOM_CARD_VIEW]
+  const defaultAssignedRoles = roles?.filter(role => defaultRoles.includes(role.code as ROLE))
+
+  const formMethods = useForm<UserCreateFormType>({
+    resolver: yupResolver(userFormSchema),
+    defaultValues: {
+      isEnabled: true,
+      roles: defaultAssignedRoles
+    }
+  })
 
   const { fields, append, remove } = useFieldArray({ control: formMethods.control, name: 'roles' })
 
@@ -42,13 +55,14 @@ export const NewUserContainer = () => {
       toast.error('Role already exists!')
       return
     }
-    if (selectedRole) append({ uid: selectedRole.uid, name: selectedRole.name })
+    if (selectedRole) {
+      append({ uid: selectedRole.uid, name: selectedRole.name })
+    }
   }
 
   const removeRole = (uid: string) => {
     const roleIndex = fields.findIndex(role => role.uid === uid)
     remove(roleIndex)
-    toast.success('Role removed!')
   }
 
   return (
@@ -58,7 +72,9 @@ export const NewUserContainer = () => {
         title: 'New User',
         onSubmit,
         addRole,
-        removeRole
+        removeRole,
+        roles,
+        assignedRoles: defaultAssignedRoles
       }}
     />
   )

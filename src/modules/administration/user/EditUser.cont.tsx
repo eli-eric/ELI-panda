@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { EditUserContext } from '@/pages/administration/user/[uid]'
-import type { UserUpdateInput } from '@/types/gql/graphql'
+import type { Role, UserUpdateInput } from '@/types/gql/graphql'
 import { whereC, whereN } from '@/utils/graphql/mutations'
 
 import { userUpdateFormSchema } from './components/form/User.schema'
@@ -16,9 +16,10 @@ import type { UserUpdateFormType } from './types/form'
 
 type Props = {
   userUid?: string
+  roles: Role[]
 }
 
-export const EditUserContainer = ({ userUid }: Props) => {
+export const EditUserContainer = ({ userUid, roles }: Props) => {
   const { userDetail, refetch } = useContext(EditUserContext)
 
   const formMethods = useForm<UserUpdateFormType>({
@@ -109,7 +110,8 @@ export const EditUserContainer = ({ userUid }: Props) => {
         onSubmit,
         addRole,
         removeRole,
-        assignedRoles: userDetail?.roles
+        assignedRoles: userDetail?.roles,
+        roles
       }}
     />
   )
