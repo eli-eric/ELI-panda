@@ -2,19 +2,23 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'
 
+import LoaderComponent from '@/components/loader.comp'
+import { useRoles } from '@/modules/administration/user/hooks/useRoles'
 import { NewUserContainer } from '@/modules/administration/user/NewUser.cont'
 
-const AdministrationPage: NextPage = (): React.ReactElement => (
-  //const intl = useIntl()
+const NewUserPage: NextPage = (): React.ReactElement => {
+  const roles = useRoles()
 
-  <Fragment>
-    <Head>
-      <title>{'Administration'}</title>
-      <meta name="description" content="...." />
-    </Head>
+  return (
+    <Fragment>
+      <Head>
+        <title>{'Administration'}</title>
+        <meta name="description" content="...." />
+      </Head>
 
-    <NewUserContainer />
-  </Fragment>
-)
+      {roles.length > 0 ? <NewUserContainer roles={roles} /> : <LoaderComponent />}
+    </Fragment>
+  )
+}
 
-export default AdministrationPage
+export default NewUserPage

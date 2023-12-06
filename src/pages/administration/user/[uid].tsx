@@ -4,6 +4,7 @@ import { createContext, Fragment } from 'react'
 
 import LoaderComponent from '@/components/loader.comp'
 import { EditUserContainer } from '@/modules/administration/user/EditUser.cont'
+import { useRoles } from '@/modules/administration/user/hooks/useRoles'
 import { useUserDetail } from '@/modules/administration/user/hooks/useUserDetail'
 import type { User } from '@/types/gql/graphql'
 
@@ -25,8 +26,9 @@ export const EditUserContext = createContext<EditUserContextType>({
 const EditUserPage: NextPage = ({ userUid }: Props): React.ReactElement => {
   //const intl = useIntl()
   const { userDetail, refetch, loading } = useUserDetail(userUid)
+  const roles = useRoles()
 
-  if (loading) {
+  if (loading && roles.length === 0 && !userDetail) {
     return <LoaderComponent />
   }
 
@@ -37,7 +39,7 @@ const EditUserPage: NextPage = ({ userUid }: Props): React.ReactElement => {
         <meta name="description" content="...." />
       </Head>
       <EditUserContext.Provider value={{ userDetail, refetch }}>
-        <EditUserContainer userUid={userUid} />
+        {userDetail && <EditUserContainer userUid={userUid} roles={roles} />}
       </EditUserContext.Provider>
     </Fragment>
   )

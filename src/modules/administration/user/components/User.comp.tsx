@@ -17,9 +17,10 @@ interface Props {
   removeRole: (uid: string) => void
   assignedRoles?: Role[]
   title: string
+  roles: Role[]
 }
 
-export const UserComponent = ({ formMethods, onSubmit, addRole, removeRole, assignedRoles, title }: Props) => (
+export const UserComponent = ({ formMethods, onSubmit, addRole, removeRole, assignedRoles, title, roles }: Props) => (
   <div>
     <Form
       {...{
@@ -43,6 +44,6 @@ export const UserComponent = ({ formMethods, onSubmit, addRole, removeRole, assi
         <UserForm />
       </Card>
     </Form>
-    <UserRoles addRole={addRole} removeRole={removeRole} assignedRoles={assignedRoles} />
+    <UserRoles addRole={addRole} removeRole={removeRole} assignedRoles={assignedRoles} roles={roles} />
   </div>
 )
