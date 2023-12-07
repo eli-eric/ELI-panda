@@ -1,4 +1,10 @@
-import { IdentificationIcon, LifebuoyIcon, RectangleGroupIcon, ShoppingCartIcon } from '@heroicons/react/24/outline'
+import {
+  IdentificationIcon,
+  LifebuoyIcon,
+  RectangleGroupIcon,
+  ShoppingCartIcon,
+  UserGroupIcon
+} from '@heroicons/react/24/outline'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'
@@ -29,6 +35,12 @@ const tiles = [
     link: PATH.ORDERS,
     Icon: () => <ShoppingCartIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
     role: ROLE.ORDERS_VIEW
+  },
+  {
+    name: 'Users',
+    link: PATH.ADMIN_USERS,
+    Icon: () => <UserGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
+    role: ROLE.ADMIN
   },
   {
     name: 'Support/Feedback',
