@@ -22,6 +22,7 @@
     "@hookform/error-message": "^2.0.1",
     "@hookform/resolvers": "^3.3.2",
     "@neo4j/graphql": "^4.4.2",
+    "@tanstack/match-sorter-utils": "^8.8.4",
     "@tanstack/react-table": "^8.10.7",
     "@tippyjs/react": "^4.2.6",
     "axios": "^1.6.2",

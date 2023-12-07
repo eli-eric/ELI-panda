@@ -28,7 +28,7 @@ export type ListboxPropsT = FieldProps & {
   defaultValue?: CodebookType[] | string | null
   onClickIcon?: () => void
   children?: React.ReactNode
-  //name: Path<any>
+  onClick?: () => void
 }
 
 const Listbox = ({
@@ -50,7 +50,8 @@ const Listbox = ({
   placeholder,
   onChange,
   onClickIcon,
-  children
+  children,
+  onClick
 }: ListboxPropsT) => {
   const { control, setValue } = useFormContext()
   const intl = useIntl()
@@ -105,7 +106,7 @@ const Listbox = ({
                   {customLabel ? customLabel : intl.formatMessage({ id: label })}
                 </HUIListbox.Label>
               )}
-              <div className="relative">
+              <div className="relative" onClick={onClick}>
                 <HUIListbox.Button
                   className={classNames(
                     'px-3 py-2 pb-2 border placeholder-gray-400 bg-white  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full h-[38px] appearance-none text-left',

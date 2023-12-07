@@ -260,6 +260,13 @@ export const typeDefs = gql`
     code: String!
     mask: String!
     name: String!
+    nameLowerCase: String
+      @cypher(
+        statement: """
+        RETURN toLower(this.name)
+        """
+        columnName: "nameLowerCase"
+      )
     systemTypeGroup: SystemTypeGroup! @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: IN)
     uid: ID! @id
   }
