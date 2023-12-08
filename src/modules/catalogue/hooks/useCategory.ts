@@ -17,7 +17,9 @@ const GET_CATEGORIES = gql`
     }
   }
 `
-export const useCategory = (catalogueUid: string | undefined) => {
+
+export const useCategory = (catalogueUid?: string) => {
+
   const { uid } = useContext(CatalogueContext)
 
   const { data, loading, error, previousData } = useQuery<Query>(GET_CATEGORIES, {
