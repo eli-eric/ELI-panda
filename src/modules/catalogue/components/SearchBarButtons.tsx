@@ -7,11 +7,12 @@ import { ROLE } from '@/types/constants/roles'
 
 export const SearchBarButtons = () => {
   const router = useRouter()
+  const uid = router.query.uid
   const handleRefresh = () => {
     mutate(key => typeof key === 'string' && key.startsWith('/catalogue/items'), undefined, { revalidate: true })
   }
   const handleAdd = () => {
-    router.push(PATH.CATALOGUE_ITEM)
+    router.push({ pathname: PATH.CATALOGUE_ITEM, query: uid ? { catalogueUid: uid } : undefined })
   }
   return (
     <SearchBarButtonsComponent handleAdd={handleAdd} handleRefresh={handleRefresh} editRole={ROLE.CATALOGUE_EDIT} />
