@@ -51,7 +51,6 @@ const useSystemEditFormFields = () => {
     systemType: {
       name: 'systemType',
       label: form.systemType.label,
-      codebook: CODEBOOK.SYSTEM_TYPE,
       disabled: disabledEdit
     },
     description: {

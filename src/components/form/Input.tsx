@@ -48,6 +48,7 @@ export const Input = ({
   label,
   onChange,
   unit,
+  defaultValue,
   id
 }: InputProps) => {
   const { control } = useFormContext()
@@ -62,7 +63,7 @@ export const Input = ({
     <Controller
       name={name}
       control={control}
-      defaultValue={''}
+      defaultValue={defaultValue || ''}
       render={({ field, fieldState: { error } }) => (
         <InputWrapper hidden={hidden} className={className}>
           <Label label={label} />

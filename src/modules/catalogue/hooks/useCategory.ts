@@ -17,12 +17,13 @@ const GET_CATEGORIES = gql`
     }
   }
 `
-export const useCategory = () => {
+export const useCategory = (catalogueUid: string | undefined) => {
   const { uid } = useContext(CatalogueContext)
 
   const { data, loading, error, previousData } = useQuery<Query>(GET_CATEGORIES, {
-    variables: { uid },
-    returnPartialData: true
+    variables: { uid: uid || catalogueUid },
+    returnPartialData: true,
+    skip: !uid && !catalogueUid
   })
 
   useEffect(() => {

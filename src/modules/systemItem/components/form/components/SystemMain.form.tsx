@@ -24,7 +24,6 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
   const { control } = useFormContext()
   const maintainedBy = useWatch({ control, name: 'maintainedBy' })
   const operators = useWatch({ control, name: 'operators' })
-
   const systemLevels = Object.values(SystemLevel).map(level => level)
 
   return (
