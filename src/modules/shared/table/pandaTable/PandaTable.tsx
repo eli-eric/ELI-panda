@@ -153,8 +153,6 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
       enableRowSelection,
       enableMultiRowSelection: false,
       enableColumnFilters: enableFiltering,
-      maxLeafRowFilterDepth: 1,
-      autoResetExpanded: false,
       enableSubRowSelection: true,
       state: { sorting, expanded, columnOrder, columnVisibility, columnFilters }
     })

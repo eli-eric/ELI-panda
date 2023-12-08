@@ -1,5 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { Fragment, memo, useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 
 import Listbox from '@/components/form/Listbox'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
@@ -9,8 +9,6 @@ import type { FieldProps, Option } from '@/types/form'
 import { highlightText } from '@/utils'
 
 import { useSystemTypeGroups } from './hooks/useSystemTypeGroups'
-
-const Modal = memo(CodebookTreeModalGraphql)
 
 export const SystemTypeComboBox = ({
   systemTypeField,
@@ -25,27 +23,11 @@ export const SystemTypeComboBox = ({
   const [open, setOpen] = useState(false)
   const { systemTypeGroups, filter } = useSystemTypeGroups()
 
-  const systemTypeGroupsData = useMemo(
-    () =>
-      systemTypeGroups?.map(group => ({
-        name: group.name,
-        uid: group.uid,
-        isExpandable: group?.systemTypes?.length > 0,
-        children: group.systemTypes.map(systemType => ({
-          name: systemType.name,
-          code: systemType.code,
-          uid: systemType.uid
-        }))
-      })),
-    [systemTypeGroups]
-  )
-
   const additionalColumn: ColumnDef<Codebooktree, string> = useMemo(
     () => ({
       header: 'Code',
       accessorKey: 'code',
       filterFn: 'fuzzy',
-
       cell: ({ getValue }) => highlightText(getValue() || '', (filter?.code as string) || ''),
       meta: {
         filter: {
@@ -66,9 +48,18 @@ export const SystemTypeComboBox = ({
           setOpen(true)
         }}
       />
-      <Modal
+      <CodebookTreeModalGraphql
         tableId="systemType-tree"
-        data={systemTypeGroupsData}
+        data={systemTypeGroups?.map(group => ({
+          name: group.name,
+          uid: group.uid,
+          isExpandable: group?.systemTypes?.length > 0,
+          children: group.systemTypes.map(systemType => ({
+            name: systemType.name,
+            code: systemType.code,
+            uid: systemType.uid
+          }))
+        }))}
         additionalColumn={additionalColumn}
         enableFiltering={true}
         manualFiltering={false}

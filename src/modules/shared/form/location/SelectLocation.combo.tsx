@@ -1,11 +1,13 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 
 import Combobox from '@/components/form/Combobox'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { CodebookTreeModalGraphql } from '@/components/form/shared/CodebookTreeModalGraphql'
+import useTableStateStore from '@/store/useTableStateStore'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps, Option } from '@/types/form'
+import { highlightText } from '@/utils'
 
 import { useLocation, useSubLocations } from './hooks/useLocation'
 import { updateLocationWithSublocation } from './utils'
@@ -20,6 +22,7 @@ export const SelectLocationTree = ({
   }
   className?: string
 }) => {
+  const tableId = 'location-tree'
   const [open, setOpen] = useState(false)
   const [codebooktree, setCodebooktree] = useState<Codebooktree[]>([])
   const { locations } = useLocation()
@@ -52,11 +55,15 @@ export const SelectLocationTree = ({
       variables: { where: { uid } }
     })
   }
+  const { instances } = useTableStateStore()
+  const filter = useMemo(() => instances[tableId]?.columnFilter, [instances, tableId])
+  const filterCode = filter?.find(item => item.id === 'code')?.value as string
 
   const additionalColumn: ColumnDef<Codebooktree, string> = {
     header: 'Code',
     accessorKey: 'code',
     id: 'code',
+    cell: ({ getValue }) => highlightText(getValue() || '', (filterCode as string) || ''),
     meta: { filter: { type: 'string', enableColumnFilter: true } }
   }
 
@@ -71,6 +78,7 @@ export const SelectLocationTree = ({
       />
       <CodebookTreeModalGraphql
         fetchChildren={fetchChildren}
+        tableId={tableId}
         additionalColumn={additionalColumn}
         data={codebooktree}
         open={open}
