@@ -1,14 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
 import { mixed, object } from 'yup'
 
+import { PlusButton } from '@/components/Buttons'
 import Combobox from '@/components/form/Combobox'
+import { FormModal } from '@/hooks/form/useFormModal'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
+import { useLazyEmployee } from '@/hooks/graphql/useLazyEmployee'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
-import { HeaderButtonModalComponent } from '@/modules/roomCard/components/table/HeaderButtonModal.comp'
-import { useLazyEmployee } from '@/hooks/graphql/useLazyEmployee'
 import { CODEBOOK } from '@/types/constants/codebook'
 import type { ROLE } from '@/types/constants/roles'
 import type { Employee } from '@/types/gql/graphql'
@@ -65,18 +66,24 @@ export const HeaderAddButton = ({ setEmployee, name, editPersmissionRole }: Prop
   if (!editPersmission) return null
 
   return (
-    <HeaderButtonModalComponent
-      formMethods={formMethods}
-      isModalOpen={isModalOpen}
-      onSubmit={onSubmit}
-      setIsModalOpen={setIsModalOpen}
-    >
-      <Combobox
-        {...fields.employee}
-        onSelect={value => {
-          if (value.uid) getEployee({ variables: { uid: value.uid } })
+    <Fragment>
+      <PlusButton
+        primary
+        type="button"
+        onClick={() => {
+          setIsModalOpen(true)
         }}
       />
-    </HeaderButtonModalComponent>
+      <FormModal formMethods={formMethods} open={isModalOpen} setOpen={setIsModalOpen} onSubmit={onSubmit}>
+        <div className="flex space-x-3">
+          <Combobox
+            {...fields.employee}
+            onSelect={value => {
+              if (value.uid) getEployee({ variables: { uid: value.uid } })
+            }}
+          />
+        </div>
+      </FormModal>
+    </Fragment>
   )
 }

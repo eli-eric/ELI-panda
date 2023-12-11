@@ -9,10 +9,11 @@ import useOrderDetail from '../hooks/useOrderDetail'
 
 interface Props {
   loading?: boolean
+  onSubmit?: () => void
 }
 const messages = message.common.buttons
 
-const HeaderComponent = ({ loading }: Props) => {
+const HeaderComponent = ({ loading, onSubmit }: Props) => {
   const router = useRouter()
   const { disabledEdit } = useOrderDetail()
 
@@ -28,7 +29,16 @@ const HeaderComponent = ({ loading }: Props) => {
               router.push(PATH.ORDERS)
             }}
           />
-          {!disabledEdit && <Button primary buttonSize="large" loading={loading} type="submit" text={messages.save} />}
+          {!disabledEdit && (
+            <Button
+              primary
+              buttonSize="large"
+              onClick={onSubmit}
+              loading={loading}
+              type="button"
+              text={messages.save}
+            />
+          )}
         </div>
       </Card>
     </div>

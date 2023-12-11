@@ -135,7 +135,7 @@ export const FormModal = <T extends FieldValues>({
   return (
     <ModalComponent open={open} setOpen={setOpen}>
       {renderOutsideForm}
-      <Form formMethods={formMethods} enableLeaveWarning={false} className={className}>
+      <Form formMethods={formMethods} onSubmit={onSubmit} enableLeaveWarning={false} className={className}>
         {children}
         {error && <ErrorPage />}
         <ModalButtonsComponent buttons={modalButtons} />
