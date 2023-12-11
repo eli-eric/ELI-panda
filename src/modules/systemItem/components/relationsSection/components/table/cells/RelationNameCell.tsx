@@ -7,6 +7,7 @@ import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
+import { useRelations } from '@/modules/systemItem/hooks/useRelations'
 import type { SystemRelationshipResponse } from '@/modules/systemItem/types/responses'
 import type { ModalButtons } from '@/types/form'
 
@@ -27,6 +28,7 @@ export const RelationNameCell = ({
   const { systemRelationships } = useEndpoint({ uid })
   const intl = useIntl()
   const [openDelete, setOpenDelete] = useState(false)
+  const { mutate } = useRelations()
 
   const { systemRelationship } = useEndpoint({ uid: relationUid })
   const { submit, error, loading } = useSubmit({
@@ -35,6 +37,7 @@ export const RelationNameCell = ({
     mutateList: [systemRelationships],
     onSuccess: () => {
       setOpenDelete(false)
+      mutate()
     }
   })
 
