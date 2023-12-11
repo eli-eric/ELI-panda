@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
-import { memo, useRef } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
@@ -13,6 +13,7 @@ import usePermission from '@/hooks/usePermission'
 import { FILE_TYPE } from '@/types/constants/files'
 import { ROLE } from '@/types/constants/roles'
 
+import { useCategory } from '../catalogue/hooks/useCategory'
 import FileManager from '../shared/fileManager/FileManager'
 import { ImageGallery } from '../shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '../shared/imageManager/types'
@@ -36,13 +37,28 @@ interface CatalogueForm extends CatalogueItem {
 const CatalogueItemContainer = () => {
   const { query } = useRouter()
   const queryUID = query.uid as string | undefined
+  const catalogueUid = query.catalogueUid as string | undefined
   const disabledEdit = !usePermission([ROLE.CATALOGUE_EDIT])
   const { item } = useItem()
   const fields = useCatalogueFormFields()
 
+  const { catalogueCategory } = useCategory(catalogueUid)
+
   const imageRef = useRef<ImageGalleryRef>()
   const formMethods = useForm<CatalogueForm>({ resolver: yupResolver(schema), defaultValues: { ...item } })
+  const { reset } = formMethods
   const { submit, loading } = useItemSubmit(imageRef)
+
+  useEffect(() => {
+    if (catalogueCategory) {
+      reset({
+        category: {
+          uid: catalogueCategory.uid,
+          name: catalogueCategory.name
+        }
+      })
+    }
+  }, [catalogueCategory, reset])
 
   const onSubmit = (catalogueItem: CatalogueForm) => {
     // extract from catalogueItem hasImageGalleryChanges

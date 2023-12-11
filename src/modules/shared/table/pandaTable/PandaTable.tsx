@@ -1,4 +1,6 @@
-import type { ColumnDef, Row, Table as ReactTable } from '@tanstack/react-table'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
+import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, FilterFn, Row, Table as ReactTable } from '@tanstack/react-table'
 import {
   getCoreRowModel,
   getExpandedRowModel,
@@ -26,6 +28,15 @@ import { useOrdering } from './hooks/useOrdering'
 import { useSorting } from './hooks/useSorting'
 import { useVisibility } from './hooks/useVisibility'
 
+declare module '@tanstack/table-core' {
+  interface FilterFns {
+    fuzzy: FilterFn<unknown>
+  }
+  interface FilterMeta {
+    itemRank: RankingInfo
+  }
+}
+
 export type PandaTableSettings = {
   enableSorting?: boolean
   enableFooter?: boolean
@@ -40,6 +51,32 @@ export type PandaTableSettings = {
 
 export interface GetRowPropsReturnType extends React.HTMLAttributes<HTMLTableRowElement> {
   dropSettings?: { accept: string; onDropHandler: (from: any, to: any) => void }
+}
+
+const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+  // Don't filter parent if child is matched
+  let parentPassed = false
+  row.subRows?.forEach(subRow => {
+    const itemRank = rankItem(subRow.getValue('name'), value)
+    if (itemRank.passed) {
+      parentPassed = true
+      return
+    }
+  })
+  if (parentPassed) {
+    return true
+  }
+
+  // Rank the item
+  const itemRank = rankItem(row.getValue(columnId), value)
+
+  // Store the itemRank info
+  addMeta({
+    itemRank
+  })
+
+  // Return if the item should be filtered in/out
+  return itemRank.passed
 }
 
 interface Props<T extends object> {
@@ -106,12 +143,16 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
       onColumnVisibilityChange: setColumnVisibility,
       onColumnFiltersChange: setColumnFilters,
       columns,
+      filterFns: {
+        fuzzy: fuzzyFilter
+      },
       data: defferedData || [],
       enableSorting,
       manualSorting,
       manualFiltering,
       enableRowSelection,
       enableMultiRowSelection: false,
+      enableColumnFilters: enableFiltering,
       enableSubRowSelection: true,
       state: { sorting, expanded, columnOrder, columnVisibility, columnFilters }
     })

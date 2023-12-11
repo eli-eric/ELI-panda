@@ -32,6 +32,7 @@ const GroupProperty = ({ detail, index }: Props) => {
         label={detail.property.name}
         disabled={disabled}
         rounded={'rounded-md'}
+        defaultValue={detail.property.defaultValue}
       />
     )
   }
@@ -44,6 +45,7 @@ const GroupProperty = ({ detail, index }: Props) => {
         disabled={disabled}
         rounded={'rounded-md'}
         type={'number'}
+        defaultValue={detail.property.defaultValue}
       />
     )
   }
@@ -56,6 +58,7 @@ const GroupProperty = ({ detail, index }: Props) => {
         customLabel={detail.property.name}
         rounded={'rounded-md'}
         customOptions={['true', 'false']}
+        defaultValue={detail.property.defaultValue}
       />
     )
   }

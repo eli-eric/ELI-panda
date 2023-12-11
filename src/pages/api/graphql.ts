@@ -12,7 +12,7 @@ import { v4 as uuid } from 'uuid'
 
 const server = async (): Promise<ApolloServer> => {
   const schema = await neoSchema.getSchema()
-  //await neoSchema.assertIndexesAndConstraints({ options: { create: true } })
+  await neoSchema.assertIndexesAndConstraints({ options: { create: true } })
 
   const apolloConfig = {
     schema

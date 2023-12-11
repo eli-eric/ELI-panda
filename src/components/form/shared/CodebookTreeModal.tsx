@@ -1,4 +1,3 @@
-import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef, Table } from '@tanstack/react-table'
 import classNames from 'classnames'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -12,6 +11,8 @@ import { message } from '@/i18n/src/messages'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { ModalButtons } from '@/types/form'
+
+import { ExpandableNameCell } from './ExpandableNameCell'
 
 const messages = message.common.buttons
 
@@ -44,6 +45,8 @@ const highlightText = (text: string, highlight?: string): JSX.Element => {
 }
 
 export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTreeModalProps) => {
+  const tableId = 'codebook'
+
   const [item, setItem] = useState<CodebookType | undefined>(undefined)
 
   const { setValue } = useFormContext()
@@ -56,7 +59,7 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
     []
   )
 
-  const { query } = useQueryManager('codebook')
+  const { query } = useQueryManager(tableId)
 
   const search = JSON.parse(query.columnFilter || '[]')[0]?.value
 
@@ -90,39 +93,7 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
             type: 'string'
           }
         },
-        cell: ({ row, getValue }) => (
-          <div
-            style={{
-              paddingLeft: `${row.depth * 2}rem`
-            }}
-            className={classNames('my-1 flex items-center')}
-            onClick={() => {
-              row.getToggleExpandedHandler()()
-            }}
-          >
-            {row.getCanExpand() ? (
-              <div
-                className={classNames(
-                  !row.original?.children && 'font-bold',
-                  'flex items-center',
-                  'cursot-pointer hover:text-gray-400'
-                )}
-              >
-                <button>
-                  {row.getIsExpanded() ? (
-                    <ChevronDownIcon className="w-4 h-4" />
-                  ) : (
-                    <ChevronRightIcon className="w-4 h-4" />
-                  )}
-                </button>
-
-                <span className="ml-2">{highlightText(getValue(), search)}</span>
-              </div>
-            ) : (
-              <span className="ml-2">{highlightText(getValue(), search)}</span>
-            )}
-          </div>
-        )
+        cell: ({ row, getValue }) => <ExpandableNameCell {...{ row, getValue, filterName: search }} />
       }
     ],
     [search]
@@ -137,7 +108,7 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
         setValue(name, item)
         setOpen(false)
         setItem(undefined)
-        reset('codebook')
+        reset(tableId)
       }
     },
     goBack: {
@@ -154,7 +125,7 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
       <div className="max-h-[300px]">
         <PandaTable
           ref={tableRef}
-          tableId="codebook"
+          tableId={tableId}
           loading={loading}
           columns={columns}
           data={response}

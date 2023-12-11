@@ -1,9 +1,12 @@
-import { Fragment, useState } from 'react'
+import type { ColumnDef } from '@tanstack/react-table'
+import { Fragment, useMemo, useState } from 'react'
 
 import Listbox from '@/components/form/Listbox'
+import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { CodebookTreeModalGraphql } from '@/components/form/shared/CodebookTreeModalGraphql'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps, Option } from '@/types/form'
+import { highlightText } from '@/utils'
 
 import { useSystemTypeGroups } from './hooks/useSystemTypeGroups'
 
@@ -18,14 +21,30 @@ export const SystemTypeComboBox = ({
   className?: string
 }) => {
   const [open, setOpen] = useState(false)
-  const { systemTypeGroups } = useSystemTypeGroups()
+  const { systemTypeGroups, filter } = useSystemTypeGroups()
+
+  const additionalColumn: ColumnDef<Codebooktree, string> = useMemo(
+    () => ({
+      header: 'Code',
+      accessorKey: 'code',
+      filterFn: 'fuzzy',
+      cell: ({ getValue }) => highlightText(getValue() || '', (filter?.code as string) || ''),
+      meta: {
+        filter: {
+          type: 'string',
+          enableColumnFilter: true
+        }
+      }
+    }),
+    [filter.code]
+  )
 
   return (
     <Fragment>
       <Listbox
         {...systemTypeField}
         className={className}
-        onClickIcon={() => {
+        onClick={() => {
           setOpen(true)
         }}
       />
@@ -37,9 +56,13 @@ export const SystemTypeComboBox = ({
           isExpandable: group?.systemTypes?.length > 0,
           children: group.systemTypes.map(systemType => ({
             name: systemType.name,
+            code: systemType.code,
             uid: systemType.uid
           }))
         }))}
+        additionalColumn={additionalColumn}
+        enableFiltering={true}
+        manualFiltering={false}
         open={open}
         selectParent={false}
         setOpen={setOpen}

@@ -38,7 +38,7 @@ export const useLocation = () => {
   const { instances } = useTableStateStore()
   const { data: session } = useSession()
 
-  const filter = instances['codebook-tree']?.columnFilter
+  const filter = instances['location-tree']?.columnFilter
 
   const nameFilter = filter?.find(f => f.id === 'name')?.value
   const codeFilter = filter?.find(f => f.id === 'code')?.value
