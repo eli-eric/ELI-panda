@@ -31,7 +31,7 @@ export const useRelationsColumns = ({ systemName }: Props) => {
         )
       },
       { header: 'Relationship Type', accessorKey: 'relationTypeCode', size: 30 },
-      { header: 'Foreign System', accessorKey: 'foreignSystemName' }
+      { header: 'Other System', accessorKey: 'foreignSystemName' }
     ],
     [systemName, uid]
   )

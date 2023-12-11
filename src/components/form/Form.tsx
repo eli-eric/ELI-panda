@@ -23,7 +23,16 @@ export const Form = <T extends FieldValues>({
   useFormNotification<T>({ control })
 
   return (
-    <form onSubmit={onSubmit && handleSubmit(onSubmit)} className={className}>
+    <form
+      onSubmit={
+        onSubmit
+          ? handleSubmit(onSubmit)
+          : e => {
+              e.preventDefault()
+            }
+      }
+      className={className}
+    >
       <FormProvider {...formMethods}>{children}</FormProvider>
       {enableLeaveWarning && <FormLeaveWarning formState={formState} />}
     </form>

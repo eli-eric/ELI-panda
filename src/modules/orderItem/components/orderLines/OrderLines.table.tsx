@@ -41,7 +41,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
       <Heading text={messages.orderLines}>
         {!disabledEdit && (
           <div className="flex items-center mr-2">
-            <PlusButton primary buttonSize="large" onClick={handleAddOrderLine} className="mb-2" />
+            <PlusButton primary type="button" buttonSize="large" onClick={handleAddOrderLine} className="mb-2" />
           </div>
         )}
       </Heading>

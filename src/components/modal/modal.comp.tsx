@@ -1,6 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { type Dispatch, Fragment, type SetStateAction } from 'react'
 
+import { useEscapeKey } from '@/hooks/useEscapeKey'
 import type { ModalButtons } from '@/types/form'
 
 import ModalButtonsComponent from './modal.buttons'
@@ -13,7 +14,11 @@ interface Props {
   buttons?: ModalButtons
 }
 
-export default function ModalComponent({ open, children, testid, buttons }: Props) {
+export default function ModalComponent({ open, children, testid, buttons, setOpen }: Props) {
+  useEscapeKey(() => {
+    setOpen(false)
+  })
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-40" onClose={() => {}} unmount={false}>

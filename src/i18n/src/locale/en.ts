@@ -124,7 +124,7 @@ export const messages = {
         owner: { label: 'Owner', placeholder: 'Type here...' }, // codebook of users{uid, name},  - USER
         responsiblePerson: { label: 'Responsible Person', placeholder: 'Responsible Person' },
         importance: { label: 'Importance' }, // codebook of importance - SYSTEM_IMPORTANCE
-        zone: { label: 'Zone' }, // codebook of zones - ZONE
+        zone: { label: 'Control System Zone' }, // codebook of zones - ZONE
         subZone: { label: 'Sub Zone' }, // codebook of subzones depend on selected zone SUB_ZONE (parentUID=ZONE.uid)
         criticalityClass: { label: 'Criticality Class' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
         parentUID: { label: 'ParentUID' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
