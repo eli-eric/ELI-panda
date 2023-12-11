@@ -11,6 +11,7 @@ import { Form } from '@/components/form/Form'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
+import { useRelations } from '@/modules/systemItem/hooks/useRelations'
 import useTableStateStore from '@/store/useTableStateStore'
 
 import { RELATION_TYPE_CODE } from '../../types/constants'
@@ -38,7 +39,9 @@ export const AddRelationForm = ({ setopen, systemName }: Props) => {
     uid: string
   }>()
 
-  const { systemRelationship, systemRelationships } = useEndpoint({
+  const { mutate } = useRelations()
+
+  const { systemRelationship } = useEndpoint({
     uid: router.query.uid as string
   })
   const relFormMethods = useForm<RelationFormType>({
@@ -49,9 +52,9 @@ export const AddRelationForm = ({ setopen, systemName }: Props) => {
   const { submit, loading, error } = useSubmit({
     endpoint: systemRelationship,
     method: 'post',
-    mutateList: [systemRelationships],
     onSuccess: () => {
       setopen(false)
+      mutate()
     }
   })
   const onSubmit = data => {

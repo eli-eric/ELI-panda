@@ -58,8 +58,8 @@ export const OrderItemContainer = () => {
 
   return (
     <Fragment>
-      <Form formMethods={formMethods} onSubmit={onSubmit} enableLeaveWarning={true}>
-        <HeaderComponent loading={loading} />
+      <Form formMethods={formMethods} enableLeaveWarning={true}>
+        <HeaderComponent loading={loading} onSubmit={formMethods.handleSubmit(onSubmit)} />
         <OrderFormComponent />
         <Card className="flex flex-col justify-between">
           <OrderLinesTable disabledEdit={disabledEdit} />
