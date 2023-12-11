@@ -10,6 +10,7 @@ export const useSystems = tableId => {
   const { response, loading, error, mutate } = useFetch<SystemsResponse>({
     config: {
       suspense: false,
+      revalidateOnMount: true,
       keepPreviousData: true
     },
     url: systemsList,
