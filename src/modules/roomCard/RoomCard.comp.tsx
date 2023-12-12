@@ -1,10 +1,10 @@
-import { DevTool } from '@hookform/devtools'
 import { type FC } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
+import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { PageHead } from '@/components/layout/PageHead'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import usePermission from '@/hooks/usePermission'
@@ -28,6 +28,7 @@ type Props = {
   contactPersonsHall: ContactPersonsHall[]
   contactPersonsDept: EmployeeType[]
   teams: Team[]
+  locations?: Codebooktree[]
 }
 
 export const RoomCardComponent: FC<Props> = ({
@@ -37,7 +38,8 @@ export const RoomCardComponent: FC<Props> = ({
   onSubmit,
   contactPersonsHall,
   contactPersonsDept,
-  teams
+  teams,
+  locations
 }) => {
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
   const statuses = Object.values(RoomCardStatus).map(value => value)
@@ -73,10 +75,10 @@ export const RoomCardComponent: FC<Props> = ({
         {...{
           contactPersonsHall: contactPersonsHall,
           contactPersonsDept,
-          teams
+          teams,
+          locations
         }}
       />
-      <DevTool control={formMethods.control} />
     </Form>
   )
 }

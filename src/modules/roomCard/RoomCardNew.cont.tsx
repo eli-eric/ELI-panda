@@ -14,7 +14,6 @@ import type { RoomCardFormType } from './types/form'
 
 const schema = object().shape({
   status: string().required('Status is required'),
-  location: object().nullable().required('Location is required'),
   teams: array().of(object().nullable().required('Team is required')).min(1, 'At least one team is required'),
   contactPersonsHall: array().of(object().required('Team is required')).min(1, 'At least one Hall contact is required'),
   contactPersonsDept: array()
@@ -33,6 +32,7 @@ export const RoomCardNewContainer = () => {
   const status = watch('status')
   const teams = watch('teams')
   const contactPersonsDept = watch('contactPersonsDept')
+  const locations = watch('locations')
 
   const { clear } = useRoomCardStore()
   useEffect(() => () => clear(), [clear])
@@ -74,7 +74,8 @@ export const RoomCardNewContainer = () => {
         onSubmit,
         contactPersonsHall,
         contactPersonsDept,
-        teams
+        teams,
+        locations
       }}
     />
   )

@@ -1,5 +1,6 @@
 import type { FC } from 'react'
 
+import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import Card from '@/components/layout/Card'
 import { Heading } from '@/components/layout/Heading'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
@@ -7,18 +8,27 @@ import type { Team } from '@/types/gql/graphql'
 
 import type { ContactPersonsHall, EmployeeType } from '../../types/form'
 import { cleanRooms, possibleParameters } from '../../utils/constants'
+import { AddLocationButton } from './AddLocationButton'
 import { useRoomCardsColumns } from './RoomCard.columns'
 
 type Props = {
   contactPersonsHall: ContactPersonsHall[]
   contactPersonsDept: EmployeeType[]
   teams?: Team[]
+  locations?: Codebooktree[]
 }
 
-export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHall, teams }) => {
-  const { columnsContactHall, columnsContactDept, columnsTeam, columnsCleanRooms, buildingMaintenanceColumns } =
-    useRoomCardsColumns()
+export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHall, teams, locations }) => {
+  const {
+    columnsContactHall,
+    columnsContactDept,
+    columnsTeam,
+    columnsCleanRooms,
+    buildingMaintenanceColumns,
+    locationColumns
+  } = useRoomCardsColumns()
 
+  console.log(locations)
   return (
     <Card className="pt-4">
       <div className="lg:flex justify-between">
@@ -63,6 +73,17 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
           columns: buildingMaintenanceColumns,
           className: 'relative border-l pb-0 z-0',
           data: possibleParameters
+        }}
+      />
+      <Heading customText="LOCATIONS" className="mb-0" textColor="text-primary-500">
+        <AddLocationButton />
+      </Heading>
+      <PandaTable
+        {...{
+          tableId: 'roomCard-locations',
+          columns: locationColumns,
+          className: 'relative border-l pb-0 z-0',
+          data: locations
         }}
       />
     </Card>

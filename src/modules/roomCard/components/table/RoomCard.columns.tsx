@@ -1,6 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 
+import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { ROLE } from '@/types/constants/roles'
 import type { HallContactPerson, Team } from '@/types/gql/graphql'
 
@@ -127,7 +128,7 @@ export const useRoomCardsColumns = () => {
       },
       {
         header: 'Possible parameters',
-        accessorKey: 'possibleParameters',
+        accessorKey: 'code',
         id: 'possibleParameters',
         cell: CellInput
       },
@@ -140,12 +141,28 @@ export const useRoomCardsColumns = () => {
     ],
     []
   )
+  const locationColumns = useMemo(
+    (): ColumnDef<Codebooktree, any>[] => [
+      {
+        header: 'Name',
+        accessorFn: ({ name }) => name,
+        id: 'name'
+      },
+      {
+        header: 'Code',
+        accessorFn: ({ code }) => code,
+        id: 'code'
+      }
+    ],
+    []
+  )
 
   return {
     columnsContactHall,
     columnsContactDept,
     columnsTeam,
     columnsCleanRooms,
-    buildingMaintenanceColumns
+    buildingMaintenanceColumns,
+    locationColumns
   }
 }
