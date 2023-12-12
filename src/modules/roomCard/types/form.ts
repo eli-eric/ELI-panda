@@ -30,7 +30,9 @@ export type RoomCardFormType = {
   compressedAirDistribution: string
   nitrogenCentralDistribution: string
   maxPressureInColdDistribution: string
-  pressureInCoolingSystem: string
-  roomTemperature: string
-  humidity: string
+  coolingWaterClient: string
+  indoorEnvironmentQualityClient: string
+  compressedAirDistributionClient: string
+  nitrogenCentralDistributionClient: string
+  maxPressureInColdDistributionClient: string
 }

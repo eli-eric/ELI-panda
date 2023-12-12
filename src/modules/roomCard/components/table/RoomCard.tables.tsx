@@ -6,7 +6,7 @@ import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import type { Team } from '@/types/gql/graphql'
 
 import type { ContactPersonsHall, EmployeeType } from '../../types/form'
-import { cleanRooms, clientRequirements, possibleParameters } from '../../utils/constants'
+import { cleanRooms, possibleParameters } from '../../utils/constants'
 import { useRoomCardsColumns } from './RoomCard.columns'
 
 type Props = {
@@ -16,14 +16,8 @@ type Props = {
 }
 
 export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHall, teams }) => {
-  const {
-    columnsContactHall,
-    columnsContactDept,
-    columnsTeam,
-    columnsCleanRooms,
-    columnsPossibleParameters,
-    columnsClientRequirements
-  } = useRoomCardsColumns()
+  const { columnsContactHall, columnsContactDept, columnsTeam, columnsCleanRooms, buildingMaintenanceColumns } =
+    useRoomCardsColumns()
 
   return (
     <Card className="pt-4">
@@ -65,18 +59,10 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
       <Heading customText="BULDING MAINTENANCE - FM" className="mb-0" textColor="text-primary-500" />
       <PandaTable
         {...{
-          tableId: 'roomCard-possibleParamsHeader',
-          columns: columnsPossibleParameters,
+          tableId: 'roomCard-buildingMaintenance',
+          columns: buildingMaintenanceColumns,
           className: 'relative border-l pb-0 z-0',
           data: possibleParameters
-        }}
-      />
-      <PandaTable
-        {...{
-          tableId: 'roomCard-clientRequirementsHead',
-          columns: columnsClientRequirements,
-          className: 'relative border-l pb-0 z-0',
-          data: clientRequirements
         }}
       />
     </Card>

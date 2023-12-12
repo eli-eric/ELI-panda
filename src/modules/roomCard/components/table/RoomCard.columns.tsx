@@ -118,41 +118,24 @@ export const useRoomCardsColumns = () => {
     ],
     []
   )
-  const columnsPossibleParameters = useMemo(
+  const buildingMaintenanceColumns = useMemo(
     (): ColumnDef<RoomCardProperties, any>[] => [
       {
-        header: 'Possible Parameters',
-        columns: [
-          {
-            accessorKey: 'name',
-            meta: { noHeader: true }
-          },
-          {
-            accessorKey: 'value',
-            meta: { noHeader: true },
-            cell: CellInput
-          }
-        ]
-      }
-    ],
-    []
-  )
-
-  const columnsClientRequirements = useMemo(
-    (): ColumnDef<RoomCardProperties, any>[] => [
+        header: 'Name',
+        accessorKey: 'name',
+        id: 'name'
+      },
       {
-        header: 'Client Requirements',
-        columns: [
-          {
-            accessorKey: 'name',
-            meta: { noHeader: true }
-          },
-          {
-            accessorKey: 'value',
-            meta: { noHeader: true },
-            cell: CellInput
-          }
-        ]
+        header: 'Possible parameters',
+        accessorKey: 'possibleParameters',
+        id: 'possibleParameters',
+        cell: CellInput
+      },
+      {
+        header: 'Client requirements',
+        accessorKey: 'clientRequirements',
+        id: 'clientRequirements',
+        cell: CellInput
       }
     ],
     []
@@ -163,7 +146,6 @@ export const useRoomCardsColumns = () => {
     columnsContactDept,
     columnsTeam,
     columnsCleanRooms,
-    columnsPossibleParameters,
-    columnsClientRequirements
+    buildingMaintenanceColumns
   }
 }

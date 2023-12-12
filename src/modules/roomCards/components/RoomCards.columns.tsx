@@ -81,21 +81,6 @@ export const useRoomCardsColumns = () => {
         accessorFn: row => row?.maxPressureInColdDistribution,
         id: 'maxPressureInColdDistribution',
         size: 250
-      },
-      {
-        header: 'Pressure in cooling system',
-        accessorFn: row => row?.pressureInCoolingSystem,
-        id: 'pressureInCoolingSystem'
-      },
-      {
-        header: 'Room temperature',
-        accessorFn: row => row?.roomTemperature,
-        id: 'roomTemperature'
-      },
-      {
-        header: 'Humidity',
-        accessorFn: row => row?.humidity,
-        id: 'humidity'
       }
     ],
     []

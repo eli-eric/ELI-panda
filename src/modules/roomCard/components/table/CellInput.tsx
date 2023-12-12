@@ -45,11 +45,11 @@ const CleaningSchedule = () => {
 export const CellInput = ({
   row: {
     original: { code }
-  }
+  },
+  column: { id }
 }: CellContext<RoomCardProperties, any>) => {
   const { register } = useFormContext()
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
-
   if (code === 'cleaningSchedule') {
     return <CleaningSchedule />
   }
@@ -74,13 +74,15 @@ export const CellInput = ({
       </select>
     )
   }
-  if (code === 'indoorEnvironmentQuality') {
+
+  if (id === 'clientRequirements') {
     return (
-      <select className="select-reset select-custom w-full" {...register(code)} disabled={!editPersmission} name={code}>
-        <option>room temperature 17 - 21 °C +/- 1°C; humidity 35 - 55% +/- 5%</option>
-        <option>room temperature 17 - 25 °C +/- 1°C; humidity 45 - 55% +/- 5%</option>
-        <option>not specified</option>
-      </select>
+      <input
+        className="w-full text-xs px-0 border-0 bg-inherit py-1"
+        {...register(code + 'Client')}
+        disabled={!editPersmission}
+        name={code + 'Client'}
+      />
     )
   }
 

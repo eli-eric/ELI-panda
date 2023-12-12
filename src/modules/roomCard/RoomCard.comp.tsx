@@ -1,3 +1,4 @@
+import { DevTool } from '@hookform/devtools'
 import { type FC } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 
@@ -7,6 +8,7 @@ import Listbox from '@/components/form/Listbox'
 import { PageHead } from '@/components/layout/PageHead'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import usePermission from '@/hooks/usePermission'
+import { message } from '@/i18n/src/messages'
 import { ROLE } from '@/types/constants/roles'
 import type { Team } from '@/types/gql/graphql'
 import { RoomCardStatus } from '@/types/gql/graphql'
@@ -15,6 +17,8 @@ import { HeaderButtons } from './components/HeaderButtons'
 import { RoomCardStatusIcon } from './components/RoomCardStatusIcon'
 import { RoomCardTables } from './components/table/RoomCard.tables'
 import type { ContactPersonsHall, EmployeeType, RoomCardFormType } from './types/form'
+
+const messages = message.roomCardsPage.form
 
 type Props = {
   formMethods: UseFormReturn<RoomCardFormType, any>
@@ -42,7 +46,7 @@ export const RoomCardComponent: FC<Props> = ({
       name: 'name',
       disabled: !editPersmission,
       rounded: 'rounded-md',
-      placeholder: 'Name'
+      placeholder: messages.name.placeholder
     },
     status: {
       name: 'status',
@@ -72,6 +76,7 @@ export const RoomCardComponent: FC<Props> = ({
           teams
         }}
       />
+      <DevTool control={formMethods.control} />
     </Form>
   )
 }

@@ -5,17 +5,12 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { array, object, string } from 'yup'
 
-import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
-import { message } from '@/i18n/src/messages'
-import { CODEBOOK } from '@/types/constants/codebook'
 import { PATH } from '@/types/constants/paths'
 
 import { makeRoomCardsCreateData, useRoomCardCreate } from './hooks/useRoomCardCreate'
 import { RoomCardComponent } from './RoomCard.comp'
 import { useRoomCardStore } from './store/useRoomCardStore'
 import type { RoomCardFormType } from './types/form'
-
-const messages = message.roomCardsPage.form
 
 const schema = object().shape({
   status: string().required('Status is required'),
@@ -30,6 +25,7 @@ const schema = object().shape({
 export const RoomCardNewContainer = () => {
   //TODO: fix typing
   const formMethods = useForm<RoomCardFormType>({ resolver: yupResolver(schema) as any })
+
   const router = useRouter()
   const { watch, handleSubmit } = formMethods
   const { createRoomCard } = useRoomCardCreate()
@@ -40,20 +36,6 @@ export const RoomCardNewContainer = () => {
 
   const { clear } = useRoomCardStore()
   useEffect(() => () => clear(), [clear])
-
-  const fields = useMakeFormFields({
-    location: {
-      name: 'location',
-      disabled: false,
-      placeholder: messages.location.placeholder,
-      codebook: CODEBOOK.LOCATION
-    },
-    status: {
-      name: 'status',
-      placeholder: messages.status.placeholder,
-      disabled: false
-    }
-  })
 
   const onSubmit = handleSubmit(data => {
     toast.promise(
@@ -92,8 +74,7 @@ export const RoomCardNewContainer = () => {
         onSubmit,
         contactPersonsHall,
         contactPersonsDept,
-        teams,
-        fields
+        teams
       }}
     />
   )

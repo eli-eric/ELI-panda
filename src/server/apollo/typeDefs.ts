@@ -60,9 +60,11 @@ export const typeDefs = gql`
     compressedAirDistribution: String
     nitrogenCentralDistribution: String
     maxPressureInColdDistribution: String
-    pressureInCoolingSystem: String
-    roomTemperature: String
-    humidity: String
+    coolingWaterClient: String
+    indoorEnvironmentQualityClient: String
+    compressedAirDistributionClient: String
+    nitrogenCentralDistributionClient: String
+    maxPressureInColdDistributionClient: String
   }
 
   type Team @authentication {

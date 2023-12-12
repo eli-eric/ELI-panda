@@ -32,17 +32,26 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   //TODO: fix typing
   const formMethods = useForm<RoomCardFormType>({
     defaultValues: {
-      cleaningScheduleDays: roomCard?.cleaningScheduleDays as any,
+      status: roomCard?.status as any,
       contactPersonsDept: roomCard?.contactPersonsDept as any,
       contactPersonsHall: roomCard?.contactPersonsHall as any,
-      status: roomCard?.status as any,
       teams: roomCard?.teams as any,
-      locations: roomCard?.locations as any,
-      purityClass: roomCard?.purityClass as any,
-      prescribedClothing: roomCard?.prescribedClothing as any,
+      purityClass: roomCard?.purityClass as string,
+      prescribedClothing: roomCard?.prescribedClothing as string,
+      entryToHvacTent: roomCard?.entryToHvacTent as string,
+      additionalRequirements: roomCard?.additionalRequirements as string,
+      cleaningScheduleDays: roomCard?.cleaningScheduleDays as any,
       cleaningScheduleDate: roomCard?.cleaningScheduleDate,
-      entryToHvacTent: roomCard?.entryToHvacTent as any,
-      additionalRequirements: roomCard?.additionalRequirements as any
+      coolingWater: roomCard?.coolingWater as string,
+      indoorEnvironmentQuality: roomCard?.indoorEnvironmentQuality as string,
+      compressedAirDistribution: roomCard?.compressedAirDistribution as string,
+      nitrogenCentralDistribution: roomCard?.nitrogenCentralDistribution as string,
+      maxPressureInColdDistribution: roomCard?.maxPressureInColdDistribution as string,
+      coolingWaterClient: roomCard?.coolingWaterClient as string,
+      indoorEnvironmentQualityClient: roomCard?.indoorEnvironmentQualityClient as string,
+      compressedAirDistributionClient: roomCard?.compressedAirDistributionClient as string,
+      nitrogenCentralDistributionClient: roomCard?.nitrogenCentralDistributionClient as string,
+      maxPressureInColdDistributionClient: roomCard?.maxPressureInColdDistributionClient as string
     },
     resolver: yupResolver(schema) as any
   })
