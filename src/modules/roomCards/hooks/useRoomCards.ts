@@ -8,6 +8,7 @@ const ROOM_CARDS = gql`
   query RoomCards($where: RoomCardWhere) {
     roomCards(where: $where) {
       uid
+      name
       purityClass
       prescribedClothing
       entryToHvacTent
@@ -22,7 +23,7 @@ const ROOM_CARDS = gql`
       roomTemperature
       humidity
       status
-      location {
+      locations {
         code
         name
       }
@@ -33,17 +34,6 @@ const ROOM_CARDS = gql`
 export const useRoomCards = () => {
   const [search] = useQueryState('search')
   const { data, loading, error, refetch } = useQuery<Query>(ROOM_CARDS, {
-    variables: {
-      where: {
-        AND: [
-          {
-            location: {
-              name_CONTAINS: search || ''
-            }
-          }
-        ]
-      }
-    },
     onError: () => {
       toast.error('Error loading room cards')
     }

@@ -11,7 +11,7 @@ export const typeDefs = gql`
     subLocations: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: OUT)
     parentLocation: Location @relationship(type: "HAS_SUBLOCATION", direction: IN)
     name: String!
-    roomCard: RoomCard @relationship(type: "HAS_ROOM_CARD", direction: OUT)
+    roomCards: [RoomCard!]! @relationship(type: "HAS_ROOM_CARD", direction: OUT)
   }
 
   enum RoomCardStatus {
@@ -43,10 +43,11 @@ export const typeDefs = gql`
 
   type RoomCard @authentication {
     uid: ID! @id
+    name: String!
     status: RoomCardStatus!
     contactPersonsHall: [HallContactPerson!]! @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: OUT)
     contactPersonsDept: [Employee!]! @relationship(type: "HAS_CONTACT_PERSON_DEPT", direction: OUT)
-    location: Location! @relationship(type: "HAS_ROOM_CARD", direction: IN)
+    locations: [Location!]! @relationship(type: "HAS_ROOM_CARD", direction: IN)
     teams: [Team!]! @relationship(type: "HAS_TEAM", direction: OUT)
     purityClass: String
     prescribedClothing: String

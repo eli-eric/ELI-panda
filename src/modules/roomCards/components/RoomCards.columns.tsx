@@ -1,6 +1,8 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
+import { v4 } from 'uuid'
 
+import { Badge } from '@/components/visuals/Badge'
 import type { RoomCard } from '@/types/gql/graphql'
 
 import { LocationCell } from './LocationCell'
@@ -9,23 +11,23 @@ export const useRoomCardsColumns = () => {
   const columns = useMemo(
     (): ColumnDef<RoomCard, any>[] => [
       {
-        header: 'Location',
-        accessorFn: row => row?.location.name,
+        header: 'Name',
+        accessorFn: row => row?.name,
         cell: LocationCell,
-        id: 'location',
+        id: 'name',
         size: 300,
         meta: { sticky: true }
-      },
-      {
-        header: 'Code',
-        accessorFn: row => row?.location.code,
-        id: 'code',
-        size: 100
       },
       {
         header: 'Status',
         accessorFn: row => row?.status,
         id: 'status'
+      },
+      {
+        header: 'Loactions',
+        id: 'locations',
+        accessorFn: row => row?.locations,
+        cell: ({ getValue }) => <div>{getValue()?.map(location => <Badge key={v4()}>{location.code}</Badge>)}</div>
       },
       {
         header: 'Purity class',

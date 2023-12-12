@@ -17,7 +17,7 @@ export type RoomCardFormType = {
   status: RoomCardStatus
   contactPersonsHall: ContactPersonsHall[]
   contactPersonsDept: EmployeeType[]
-  location: CodebookType
+  locations: CodebookType[]
   teams: Team[]
   purityClass: string
   prescribedClothing: string

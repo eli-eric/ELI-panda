@@ -237,13 +237,10 @@ export const InputDate = ({
   placeholder,
   disabled,
   rounded,
-  type = 'text',
   className,
-  children,
   hidden,
   label,
   onChange,
-  unit,
   defaultValue,
   id
 }: InputProps) => {

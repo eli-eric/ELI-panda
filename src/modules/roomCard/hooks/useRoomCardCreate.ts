@@ -21,7 +21,7 @@ export const makeRoomCardsCreateData = (formData?: RoomCardFormType) => ({
     {
       ...formData,
       cleaningScheduleDate: formData?.cleaningScheduleDate ? formData?.cleaningScheduleDate : undefined,
-      location: connectN(formData?.location.uid),
+      //location: connectN(formData?.location.uid),
       contactPersonsHall: {
         create: formData?.contactPersonsHall.map(contactPerson => ({
           node: {

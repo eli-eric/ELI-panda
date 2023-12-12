@@ -4,12 +4,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { array, object, string } from 'yup'
 
-import Listbox from '@/components/form/Listbox'
 import LoaderComponent from '@/components/loader.comp'
-import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
-import usePermission from '@/hooks/usePermission'
-import { ROLE } from '@/types/constants/roles'
-import { RoomCardStatus } from '@/types/gql/graphql'
 
 import { useRoomCard } from './hooks/useRoomCard'
 import { useRoomCardUpdate } from './hooks/useRoomCardUpdate'
@@ -33,8 +28,6 @@ const schema = object().shape({
 })
 
 export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
-  const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
-
   const { roomCard, loading } = useRoomCard(roomCardUid)
   //TODO: fix typing
   const formMethods = useForm<RoomCardFormType>({
@@ -44,7 +37,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
       contactPersonsHall: roomCard?.contactPersonsHall as any,
       status: roomCard?.status as any,
       teams: roomCard?.teams as any,
-      location: roomCard?.location as any,
+      locations: roomCard?.locations as any,
       purityClass: roomCard?.purityClass as any,
       prescribedClothing: roomCard?.prescribedClothing as any,
       cleaningScheduleDate: roomCard?.cleaningScheduleDate,
@@ -56,7 +49,6 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   const { watch, handleSubmit } = formMethods
   const { updateRoomCard } = useRoomCardUpdate(roomCardUid)
   const { clear } = useRoomCardStore()
-  const statuses = Object.values(RoomCardStatus).map(value => value)
 
   const status = watch('status')
   const teams = watch('teams')
@@ -81,13 +73,6 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
     })
   })
 
-  const fields = useMakeFormFields({
-    status: {
-      name: 'status',
-      disabled: !editPersmission
-    }
-  })
-
   if (loading) return <LoaderComponent />
 
   return (
@@ -101,14 +86,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
           contactPersonsHall={contactPersonsHall}
           contactPersonsDept={contactPersonsDept}
           teams={teams}
-        >
-          <Fragment>
-            <h1 className="text-2xl font-semibold">{roomCard?.location.name}</h1>
-            <h1 className="text-2xl font-semibold">{' - '}</h1>
-            <h1 className="text-2xl font-semibold">{roomCard?.location.code}</h1>
-            <Listbox {...fields.status} className="w-72" customOptions={statuses} />
-          </Fragment>
-        </RoomCardComponent>
+        />
       )}
     </Fragment>
   )
