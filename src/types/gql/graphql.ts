@@ -15,6 +15,8 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** A BigInt value up to 64 bits in size, which can be a number or a string if used inline, or a string only if used as a variable. Always returned as a string. */
   BigInt: { input: any; output: any; }
+  /** A date, represented as a 'yyyy-mm-dd' string */
+  Date: { input: any; output: any; }
   /** A date and time, represented as an ISO-8601 string */
   DateTime: { input: any; output: any; }
 };
@@ -3328,10 +3330,10 @@ export type CreateZonesMutationResponse = {
   zones: Array<Zone>;
 };
 
-export type DateTimeAggregateSelectionNonNullable = {
-  __typename?: 'DateTimeAggregateSelectionNonNullable';
-  max: Scalars['DateTime']['output'];
-  min: Scalars['DateTime']['output'];
+export type DateTimeAggregateSelectionNullable = {
+  __typename?: 'DateTimeAggregateSelectionNullable';
+  max?: Maybe<Scalars['DateTime']['output']>;
+  min?: Maybe<Scalars['DateTime']['output']>;
 };
 
 /** Information about the number of nodes and relationships deleted during a delete mutation */
@@ -6702,21 +6704,16 @@ export type LocationRoomCardNodeAggregationWhereInput = {
   additionalRequirements_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   additionalRequirements_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   additionalRequirements_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  cleaningSchedule_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  cleaningSchedule_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  cleaningSchedule_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  cleaningSchedule_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  cleaningSchedule_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  cleaningSchedule_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  cleaningSchedule_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  cleaningSchedule_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  cleaningSchedule_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  cleaningSchedule_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  cleaningSchedule_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  cleaningSchedule_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  cleaningSchedule_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  cleaningSchedule_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  cleaningSchedule_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  cleaningScheduleDate_MAX_EQUAL?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDate_MAX_GT?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDate_MAX_GTE?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDate_MAX_LT?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDate_MAX_LTE?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDate_MIN_EQUAL?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDate_MIN_GT?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDate_MIN_GTE?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDate_MIN_LT?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDate_MIN_LTE?: InputMaybe<Scalars['DateTime']['input']>;
   compressedAirDistribution_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   compressedAirDistribution_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   compressedAirDistribution_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -6899,7 +6896,7 @@ export type LocationRoomCardRoomCardAggregationSelection = {
 export type LocationRoomCardRoomCardNodeAggregateSelection = {
   __typename?: 'LocationRoomCardRoomCardNodeAggregateSelection';
   additionalRequirements: StringAggregateSelectionNullable;
-  cleaningSchedule: StringAggregateSelectionNullable;
+  cleaningScheduleDate: DateTimeAggregateSelectionNullable;
   compressedAirDistribution: StringAggregateSelectionNullable;
   coolingWater: StringAggregateSelectionNullable;
   entryToHvacTent: StringAggregateSelectionNullable;
@@ -8808,7 +8805,8 @@ export type RolesConnection = {
 export type RoomCard = {
   __typename?: 'RoomCard';
   additionalRequirements?: Maybe<Scalars['String']['output']>;
-  cleaningSchedule?: Maybe<Scalars['String']['output']>;
+  cleaningScheduleDate?: Maybe<Scalars['DateTime']['output']>;
+  cleaningScheduleDays?: Maybe<Array<CleaningScheduleDay>>;
   compressedAirDistribution?: Maybe<Scalars['String']['output']>;
   contactPersonsDept: Array<Employee>;
   contactPersonsDeptAggregate?: Maybe<RoomCardEmployeeContactPersonsDeptAggregationSelection>;
@@ -8927,7 +8925,7 @@ export type RoomCardTeamsConnectionArgs = {
 export type RoomCardAggregateSelection = {
   __typename?: 'RoomCardAggregateSelection';
   additionalRequirements: StringAggregateSelectionNullable;
-  cleaningSchedule: StringAggregateSelectionNullable;
+  cleaningScheduleDate: DateTimeAggregateSelectionNullable;
   compressedAirDistribution: StringAggregateSelectionNullable;
   coolingWater: StringAggregateSelectionNullable;
   count: Scalars['Int']['output'];
@@ -9193,7 +9191,8 @@ export type RoomCardContactPersonsHallUpdateFieldInput = {
 
 export type RoomCardCreateInput = {
   additionalRequirements?: InputMaybe<Scalars['String']['input']>;
-  cleaningSchedule?: InputMaybe<Scalars['String']['input']>;
+  cleaningScheduleDate?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDays?: InputMaybe<Array<CleaningScheduleDay>>;
   compressedAirDistribution?: InputMaybe<Scalars['String']['input']>;
   contactPersonsDept?: InputMaybe<RoomCardContactPersonsDeptFieldInput>;
   contactPersonsHall?: InputMaybe<RoomCardContactPersonsHallFieldInput>;
@@ -9400,7 +9399,7 @@ export type RoomCardRelationInput = {
 /** Fields to sort RoomCards by. The order in which sorts are applied is not guaranteed when specifying many fields in one RoomCardSort object. */
 export type RoomCardSort = {
   additionalRequirements?: InputMaybe<SortDirection>;
-  cleaningSchedule?: InputMaybe<SortDirection>;
+  cleaningScheduleDate?: InputMaybe<SortDirection>;
   compressedAirDistribution?: InputMaybe<SortDirection>;
   coolingWater?: InputMaybe<SortDirection>;
   entryToHvacTent?: InputMaybe<SortDirection>;
@@ -9529,7 +9528,8 @@ export type RoomCardTeamsUpdateFieldInput = {
 
 export type RoomCardUpdateInput = {
   additionalRequirements?: InputMaybe<Scalars['String']['input']>;
-  cleaningSchedule?: InputMaybe<Scalars['String']['input']>;
+  cleaningScheduleDate?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDays?: InputMaybe<Array<CleaningScheduleDay>>;
   compressedAirDistribution?: InputMaybe<Scalars['String']['input']>;
   contactPersonsDept?: InputMaybe<Array<RoomCardContactPersonsDeptUpdateFieldInput>>;
   contactPersonsHall?: InputMaybe<Array<RoomCardContactPersonsHallUpdateFieldInput>>;
@@ -9557,11 +9557,14 @@ export type RoomCardWhere = {
   additionalRequirements_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   additionalRequirements_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   additionalRequirements_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
-  cleaningSchedule?: InputMaybe<Scalars['String']['input']>;
-  cleaningSchedule_CONTAINS?: InputMaybe<Scalars['String']['input']>;
-  cleaningSchedule_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  cleaningSchedule_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  cleaningSchedule_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  cleaningScheduleDate?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDate_GT?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDate_GTE?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDate_IN?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
+  cleaningScheduleDate_LT?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDate_LTE?: InputMaybe<Scalars['DateTime']['input']>;
+  cleaningScheduleDays?: InputMaybe<Array<CleaningScheduleDay>>;
+  cleaningScheduleDays_INCLUDES?: InputMaybe<CleaningScheduleDay>;
   compressedAirDistribution?: InputMaybe<Scalars['String']['input']>;
   compressedAirDistribution_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   compressedAirDistribution_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
@@ -9692,20 +9695,19 @@ export type RoomCardsConnection = {
 export type SchemaMigration = {
   __typename?: 'SchemaMigration';
   dirty: Scalars['Boolean']['output'];
-  ts: Scalars['DateTime']['output'];
+  ts: Scalars['Date']['output'];
   version: Scalars['BigInt']['output'];
 };
 
 export type SchemaMigrationAggregateSelection = {
   __typename?: 'SchemaMigrationAggregateSelection';
   count: Scalars['Int']['output'];
-  ts: DateTimeAggregateSelectionNonNullable;
   version: BigIntAggregateSelectionNonNullable;
 };
 
 export type SchemaMigrationCreateInput = {
   dirty: Scalars['Boolean']['input'];
-  ts: Scalars['DateTime']['input'];
+  ts: Scalars['Date']['input'];
   version: Scalars['BigInt']['input'];
 };
 
@@ -9731,7 +9733,7 @@ export type SchemaMigrationSort = {
 
 export type SchemaMigrationUpdateInput = {
   dirty?: InputMaybe<Scalars['Boolean']['input']>;
-  ts?: InputMaybe<Scalars['DateTime']['input']>;
+  ts?: InputMaybe<Scalars['Date']['input']>;
   version?: InputMaybe<Scalars['BigInt']['input']>;
   version_DECREMENT?: InputMaybe<Scalars['BigInt']['input']>;
   version_INCREMENT?: InputMaybe<Scalars['BigInt']['input']>;
@@ -9742,12 +9744,12 @@ export type SchemaMigrationWhere = {
   NOT?: InputMaybe<SchemaMigrationWhere>;
   OR?: InputMaybe<Array<SchemaMigrationWhere>>;
   dirty?: InputMaybe<Scalars['Boolean']['input']>;
-  ts?: InputMaybe<Scalars['DateTime']['input']>;
-  ts_GT?: InputMaybe<Scalars['DateTime']['input']>;
-  ts_GTE?: InputMaybe<Scalars['DateTime']['input']>;
-  ts_IN?: InputMaybe<Array<Scalars['DateTime']['input']>>;
-  ts_LT?: InputMaybe<Scalars['DateTime']['input']>;
-  ts_LTE?: InputMaybe<Scalars['DateTime']['input']>;
+  ts?: InputMaybe<Scalars['Date']['input']>;
+  ts_GT?: InputMaybe<Scalars['Date']['input']>;
+  ts_GTE?: InputMaybe<Scalars['Date']['input']>;
+  ts_IN?: InputMaybe<Array<Scalars['Date']['input']>>;
+  ts_LT?: InputMaybe<Scalars['Date']['input']>;
+  ts_LTE?: InputMaybe<Scalars['Date']['input']>;
   version?: InputMaybe<Scalars['BigInt']['input']>;
   version_GT?: InputMaybe<Scalars['BigInt']['input']>;
   version_GTE?: InputMaybe<Scalars['BigInt']['input']>;
@@ -14573,6 +14575,16 @@ export type ZonesConnection = {
   pageInfo: PageInfo;
   totalCount: Scalars['Int']['output'];
 };
+
+export enum CleaningScheduleDay {
+  Friday = 'FRIDAY',
+  Monday = 'MONDAY',
+  Saturday = 'SATURDAY',
+  Sunday = 'SUNDAY',
+  Thursday = 'THURSDAY',
+  Tuesday = 'TUESDAY',
+  Wednesday = 'WEDNESDAY'
+}
 
 export type HasCatalogueProperty = {
   value?: Maybe<Scalars['String']['output']>;

@@ -37,8 +37,23 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
 
   const { roomCard, loading } = useRoomCard(roomCardUid)
   //TODO: fix typing
-  const formMethods = useForm<RoomCardFormType>({ defaultValues: {}, resolver: yupResolver(schema) as any })
-  const { reset, watch, handleSubmit } = formMethods
+  const formMethods = useForm<RoomCardFormType>({
+    defaultValues: {
+      cleaningScheduleDays: roomCard?.cleaningScheduleDays as any,
+      contactPersonsDept: roomCard?.contactPersonsDept as any,
+      contactPersonsHall: roomCard?.contactPersonsHall as any,
+      status: roomCard?.status as any,
+      teams: roomCard?.teams as any,
+      location: roomCard?.location as any,
+      purityClass: roomCard?.purityClass as any,
+      prescribedClothing: roomCard?.prescribedClothing as any,
+      cleaningScheduleDate: roomCard?.cleaningScheduleDate,
+      entryToHvacTent: roomCard?.entryToHvacTent as any,
+      additionalRequirements: roomCard?.additionalRequirements as any
+    },
+    resolver: yupResolver(schema) as any
+  })
+  const { watch, handleSubmit } = formMethods
   const { updateRoomCard } = useRoomCardUpdate(roomCardUid)
   const { clear } = useRoomCardStore()
   const statuses = Object.values(RoomCardStatus).map(value => value)
@@ -76,21 +91,25 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   if (loading) return <LoaderComponent />
 
   return (
-    <RoomCardComponent
-      formMethods={formMethods}
-      status={status}
-      onSubmitAndExit={onSubmitAndExit}
-      onSubmit={onSubmit}
-      contactPersonsHall={contactPersonsHall}
-      contactPersonsDept={contactPersonsDept}
-      teams={teams}
-    >
-      <Fragment>
-        <h1 className="text-2xl font-semibold">{roomCard?.location.name}</h1>
-        <h1 className="text-2xl font-semibold">{' - '}</h1>
-        <h1 className="text-2xl font-semibold">{roomCard?.location.code}</h1>
-        <Listbox {...fields.status} className="w-72" customOptions={statuses} />
-      </Fragment>
-    </RoomCardComponent>
+    <Fragment>
+      {roomCard && (
+        <RoomCardComponent
+          formMethods={formMethods}
+          status={status}
+          onSubmitAndExit={onSubmitAndExit}
+          onSubmit={onSubmit}
+          contactPersonsHall={contactPersonsHall}
+          contactPersonsDept={contactPersonsDept}
+          teams={teams}
+        >
+          <Fragment>
+            <h1 className="text-2xl font-semibold">{roomCard?.location.name}</h1>
+            <h1 className="text-2xl font-semibold">{' - '}</h1>
+            <h1 className="text-2xl font-semibold">{roomCard?.location.code}</h1>
+            <Listbox {...fields.status} className="w-72" customOptions={statuses} />
+          </Fragment>
+        </RoomCardComponent>
+      )}
+    </Fragment>
   )
 }

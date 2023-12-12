@@ -1,45 +1,46 @@
 import type { CellContext } from '@tanstack/react-table'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, useWatch } from 'react-hook-form'
 
+import { Button } from '@/components/Buttons'
+import { InputDate } from '@/components/form/Input'
 import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
+import type { CleaningScheduleDay } from '@/types/gql/graphql'
 
 import type { RoomCardProperties } from './RoomCard.columns'
 
-/* const CleaningSchedule = () => {
-  const [selectedDays, setSelectedDays] = useState<{
-    [key: string]: boolean
-  }>()
-    const { register } = useFormContext()
+const CleaningSchedule = () => {
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
+  const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'] as CleaningScheduleDay[]
+  const { setValue, control } = useFormContext()
+  const cleaningScheduleDays = useWatch({ control, name: 'cleaningScheduleDays' })
 
   return (
     <div className="flex">
-      <Button primary={selectedDays?.MO} onClick={() => setSelectedDays({ ...selectedDays, MO: !selectedDays?.MO })}>
-        MO
-      </Button>
-      <Button primary={selectedDays?.TU} onClick={() => setSelectedDays({ ...selectedDays, TU: !selectedDays?.TU })}>
-        TU
-      </Button>
-      <Button primary={selectedDays?.WE} onClick={() => setSelectedDays({ ...selectedDays, WE: !selectedDays?.WE })}>
-        WE
-      </Button>
-      <Button primary={selectedDays?.TH} onClick={() => setSelectedDays({ ...selectedDays, TH: !selectedDays?.TH })}>
-        TH
-      </Button>
-      <Button primary={selectedDays?.FR} onClick={() => setSelectedDays({ ...selectedDays, FR: !selectedDays?.FR })}>
-        FR
-      </Button>
-      <Button primary={selectedDays?.SA} onClick={() => setSelectedDays({ ...selectedDays, SA: !selectedDays?.SA })}>
-        SA
-      </Button>
-      <Button primary={selectedDays?.SU} onClick={() => setSelectedDays({ ...selectedDays, SU: !selectedDays?.SU })}>
-        SU
-      </Button>
-      <Input rounded="rounded-md" name="cleaningShedule" type="date" />
+      {days.map(day => (
+        <Button
+          key={day}
+          customDisabled={!editPersmission}
+          onClick={() => {
+            if (cleaningScheduleDays?.includes(day)) {
+              setValue(
+                'cleaningScheduleDays',
+                cleaningScheduleDays.filter(selectedDay => selectedDay !== day)
+              )
+            } else {
+              setValue('cleaningScheduleDays', [...(cleaningScheduleDays ?? []), day])
+            }
+          }}
+          type="button"
+          primary={cleaningScheduleDays?.includes(day) ? true : false}
+        >
+          {day.slice(0, 2)}
+        </Button>
+      ))}
+      <InputDate disabled={!editPersmission} rounded="rounded-md" name="cleaningScheduleDate" />
     </div>
   )
-} */
+}
 
 export const CellInput = ({
   row: {
@@ -49,9 +50,9 @@ export const CellInput = ({
   const { register } = useFormContext()
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
 
-  /* if (code === 'cleaningSchedule') {
+  if (code === 'cleaningSchedule') {
     return <CleaningSchedule />
-  } */
+  }
 
   if (code === 'purityClass') {
     return (

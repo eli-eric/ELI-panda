@@ -31,6 +31,16 @@ export const typeDefs = gql`
     role: ContactPersonRole @relationship(type: "HAS_ROOM_CARD_ROLE", direction: OUT)
   }
 
+  enum cleaningScheduleDay {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
+  }
+
   type RoomCard @authentication {
     uid: ID! @id
     status: RoomCardStatus!
@@ -41,7 +51,8 @@ export const typeDefs = gql`
     purityClass: String
     prescribedClothing: String
     entryToHvacTent: String
-    cleaningSchedule: String
+    cleaningScheduleDate: Date
+    cleaningScheduleDays: [cleaningScheduleDay!]
     additionalRequirements: String
     coolingWater: String
     indoorEnvironmentQuality: String
@@ -159,7 +170,7 @@ export const typeDefs = gql`
 
   type SchemaMigration @authentication {
     dirty: Boolean!
-    ts: DateTime!
+    ts: Date!
     version: BigInt!
   }
 

@@ -1,5 +1,5 @@
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import type { ContactPersonRole, RoomCardStatus, Team } from '@/types/gql/graphql'
+import type { CleaningScheduleDay, ContactPersonRole, RoomCardStatus, Team } from '@/types/gql/graphql'
 
 export type EmployeeType = {
   uid: string
@@ -22,7 +22,8 @@ export type RoomCardFormType = {
   purityClass: string
   prescribedClothing: string
   entryToHvacTent: string
-  cleaningSchedule: string
+  cleaningScheduleDate: string
+  cleaningScheduleDays?: CleaningScheduleDay[]
   additionalRequirements: string
   coolingWater: string
   indoorEnvironmentQuality: string

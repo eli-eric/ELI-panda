@@ -20,6 +20,7 @@ export const makeRoomCardsCreateData = (formData?: RoomCardFormType) => ({
   input: [
     {
       ...formData,
+      cleaningScheduleDate: formData?.cleaningScheduleDate ? formData?.cleaningScheduleDate : undefined,
       location: connectN(formData?.location.uid),
       contactPersonsHall: {
         create: formData?.contactPersonsHall.map(contactPerson => ({

@@ -9,7 +9,8 @@ const GET_ROOMCARD = gql`
       purityClass
       prescribedClothing
       entryToHvacTent
-      cleaningSchedule
+      cleaningScheduleDate
+      cleaningScheduleDays
       additionalRequirements
       coolingWater
       indoorEnvironmentQuality

@@ -44,7 +44,7 @@ export const useRoomCardsColumns = () => {
       },
       {
         header: 'Cleaning schedule',
-        accessorFn: row => row?.cleaningSchedule,
+        accessorFn: row => row?.cleaningScheduleDate,
         id: 'cleaningShedule'
       },
       {

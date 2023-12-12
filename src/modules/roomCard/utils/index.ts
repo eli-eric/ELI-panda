@@ -29,7 +29,8 @@ export const updateRoomCardVariables = ({
   },
   update: {
     additionalRequirements: roomCard.additionalRequirements,
-    cleaningSchedule: roomCard.cleaningSchedule,
+    cleaningScheduleDate: roomCard.cleaningScheduleDate,
+    cleaningScheduleDays: roomCard.cleaningScheduleDays,
     compressedAirDistribution: roomCard.compressedAirDistribution,
     coolingWater: roomCard.coolingWater,
     entryToHvacTent: roomCard.entryToHvacTent,

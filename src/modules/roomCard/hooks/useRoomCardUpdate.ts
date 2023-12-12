@@ -15,7 +15,7 @@ const UPDATE_ROOM_CARD = gql`
         purityClass
         prescribedClothing
         entryToHvacTent
-        cleaningSchedule
+        cleaningScheduleDate
         additionalRequirements
         coolingWater
         indoorEnvironmentQuality
