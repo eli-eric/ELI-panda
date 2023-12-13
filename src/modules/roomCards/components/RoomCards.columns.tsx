@@ -49,7 +49,7 @@ export const useRoomCardsColumns = () => {
       },
       {
         header: 'Cleaning schedule',
-        accessorFn: row => row?.cleaningScheduleDate,
+        accessorFn: row => row?.cleaningScheduleDays,
         id: 'cleaningShedule'
       },
       {

@@ -3084,6 +3084,16 @@ export type CatalogueItemsConnection = {
   totalCount: Scalars['Int']['output'];
 };
 
+export enum CleaningScheduleDay {
+  Friday = 'FRIDAY',
+  Monday = 'MONDAY',
+  Saturday = 'SATURDAY',
+  Sunday = 'SUNDAY',
+  Thursday = 'THURSDAY',
+  Tuesday = 'TUESDAY',
+  Wednesday = 'WEDNESDAY'
+}
+
 export type ContactPersonRole = {
   __typename?: 'ContactPersonRole';
   name: Scalars['String']['output'];
@@ -6642,8 +6652,6 @@ export type LocationRoomCardRoomCardsNodeAggregateSelection = {
   name: StringAggregateSelectionNonNullable;
   nitrogenCentralDistribution: StringAggregateSelectionNullable;
   nitrogenCentralDistributionClient: StringAggregateSelectionNullable;
-  prescribedClothing: StringAggregateSelectionNullable;
-  purityClass: StringAggregateSelectionNullable;
   uid: IdAggregateSelectionNonNullable;
 };
 
@@ -6902,36 +6910,6 @@ export type LocationRoomCardsNodeAggregationWhereInput = {
   nitrogenCentralDistribution_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   nitrogenCentralDistribution_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   nitrogenCentralDistribution_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  prescribedClothing_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  prescribedClothing_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  prescribedClothing_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  prescribedClothing_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  prescribedClothing_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  prescribedClothing_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  prescribedClothing_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  prescribedClothing_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  prescribedClothing_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  prescribedClothing_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  prescribedClothing_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  prescribedClothing_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  prescribedClothing_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  prescribedClothing_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  prescribedClothing_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  purityClass_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  purityClass_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  purityClass_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  purityClass_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  purityClass_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  purityClass_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  purityClass_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  purityClass_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  purityClass_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  purityClass_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  purityClass_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  purityClass_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  purityClass_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  purityClass_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  purityClass_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type LocationRoomCardsRelationship = {
@@ -7914,6 +7892,29 @@ export type ParentPathItemsConnection = {
   totalCount: Scalars['Int']['output'];
 };
 
+export enum PrescribedClothing {
+  BeardCover = 'BEARD_COVER',
+  BootsIso_5 = 'BOOTS_ISO_5',
+  Cap = 'CAP',
+  Coat = 'COAT',
+  CrShoes = 'CR_SHOES',
+  FaceMask = 'FACE_MASK',
+  Gloves = 'GLOVES',
+  Hood = 'HOOD',
+  OveralIso_5 = 'OVERAL_ISO_5',
+  OveralIso_7 = 'OVERAL_ISO_7',
+  ShoeCovers = 'SHOE_COVERS',
+  SocksIso_5 = 'SOCKS_ISO_5',
+  TShirtAndTrousers = 'T_SHIRT_AND_TROUSERS'
+}
+
+export enum PurityClass {
+  Iso_5 = 'ISO_5',
+  Iso_6 = 'ISO_6',
+  Iso_7 = 'ISO_7',
+  Iso_8 = 'ISO_8'
+}
+
 export type Query = {
   __typename?: 'Query';
   catalogueCategories: Array<CatalogueCategory>;
@@ -8869,8 +8870,8 @@ export type RoomCard = {
   name: Scalars['String']['output'];
   nitrogenCentralDistribution?: Maybe<Scalars['String']['output']>;
   nitrogenCentralDistributionClient?: Maybe<Scalars['String']['output']>;
-  prescribedClothing?: Maybe<Scalars['String']['output']>;
-  purityClass?: Maybe<Scalars['String']['output']>;
+  prescribedClothing: Array<PrescribedClothing>;
+  purityClass?: Maybe<PurityClass>;
   status: RoomCardStatus;
   teams: Array<Team>;
   teamsAggregate?: Maybe<RoomCardTeamTeamsAggregationSelection>;
@@ -8982,8 +8983,6 @@ export type RoomCardAggregateSelection = {
   name: StringAggregateSelectionNonNullable;
   nitrogenCentralDistribution: StringAggregateSelectionNullable;
   nitrogenCentralDistributionClient: StringAggregateSelectionNullable;
-  prescribedClothing: StringAggregateSelectionNullable;
-  purityClass: StringAggregateSelectionNullable;
   uid: IdAggregateSelectionNonNullable;
 };
 
@@ -9254,8 +9253,8 @@ export type RoomCardCreateInput = {
   name: Scalars['String']['input'];
   nitrogenCentralDistribution?: InputMaybe<Scalars['String']['input']>;
   nitrogenCentralDistributionClient?: InputMaybe<Scalars['String']['input']>;
-  prescribedClothing?: InputMaybe<Scalars['String']['input']>;
-  purityClass?: InputMaybe<Scalars['String']['input']>;
+  prescribedClothing: Array<PrescribedClothing>;
+  purityClass?: InputMaybe<PurityClass>;
   status: RoomCardStatus;
   teams?: InputMaybe<RoomCardTeamsFieldInput>;
 };
@@ -9461,7 +9460,6 @@ export type RoomCardSort = {
   name?: InputMaybe<SortDirection>;
   nitrogenCentralDistribution?: InputMaybe<SortDirection>;
   nitrogenCentralDistributionClient?: InputMaybe<SortDirection>;
-  prescribedClothing?: InputMaybe<SortDirection>;
   purityClass?: InputMaybe<SortDirection>;
   status?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
@@ -9597,8 +9595,8 @@ export type RoomCardUpdateInput = {
   name?: InputMaybe<Scalars['String']['input']>;
   nitrogenCentralDistribution?: InputMaybe<Scalars['String']['input']>;
   nitrogenCentralDistributionClient?: InputMaybe<Scalars['String']['input']>;
-  prescribedClothing?: InputMaybe<Scalars['String']['input']>;
-  purityClass?: InputMaybe<Scalars['String']['input']>;
+  prescribedClothing?: InputMaybe<Array<PrescribedClothing>>;
+  purityClass?: InputMaybe<PurityClass>;
   status?: InputMaybe<RoomCardStatus>;
   teams?: InputMaybe<Array<RoomCardTeamsUpdateFieldInput>>;
 };
@@ -9731,16 +9729,10 @@ export type RoomCardWhere = {
   nitrogenCentralDistribution_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   nitrogenCentralDistribution_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   nitrogenCentralDistribution_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
-  prescribedClothing?: InputMaybe<Scalars['String']['input']>;
-  prescribedClothing_CONTAINS?: InputMaybe<Scalars['String']['input']>;
-  prescribedClothing_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  prescribedClothing_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  prescribedClothing_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
-  purityClass?: InputMaybe<Scalars['String']['input']>;
-  purityClass_CONTAINS?: InputMaybe<Scalars['String']['input']>;
-  purityClass_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  purityClass_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  purityClass_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  prescribedClothing?: InputMaybe<Array<PrescribedClothing>>;
+  prescribedClothing_INCLUDES?: InputMaybe<PrescribedClothing>;
+  purityClass?: InputMaybe<PurityClass>;
+  purityClass_IN?: InputMaybe<Array<InputMaybe<PurityClass>>>;
   status?: InputMaybe<RoomCardStatus>;
   status_IN?: InputMaybe<Array<RoomCardStatus>>;
   teamsAggregate?: InputMaybe<RoomCardTeamsAggregateInput>;
@@ -14657,16 +14649,6 @@ export type ZonesConnection = {
   pageInfo: PageInfo;
   totalCount: Scalars['Int']['output'];
 };
-
-export enum CleaningScheduleDay {
-  Friday = 'FRIDAY',
-  Monday = 'MONDAY',
-  Saturday = 'SATURDAY',
-  Sunday = 'SUNDAY',
-  Thursday = 'THURSDAY',
-  Tuesday = 'TUESDAY',
-  Wednesday = 'WEDNESDAY'
-}
 
 export type HasCatalogueProperty = {
   value?: Maybe<Scalars['String']['output']>;

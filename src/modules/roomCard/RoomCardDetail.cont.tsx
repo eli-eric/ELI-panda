@@ -5,6 +5,7 @@ import { toast } from 'react-hot-toast'
 import { array, object, string } from 'yup'
 
 import LoaderComponent from '@/components/loader.comp'
+import type { PrescribedClothing } from '@/types/gql/graphql'
 
 import { useRoomCard } from './hooks/useRoomCard'
 import { useRoomCardUpdate } from './hooks/useRoomCardUpdate'
@@ -33,12 +34,13 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   const formMethods = useForm<RoomCardFormType>({
     defaultValues: {
       name: roomCard?.name as string,
-      status: roomCard?.status as any,
+      status: roomCard?.status,
       contactPersonsDept: roomCard?.contactPersonsDept as any,
       contactPersonsHall: roomCard?.contactPersonsHall as any,
       teams: roomCard?.teams as any,
-      purityClass: roomCard?.purityClass as string,
-      prescribedClothing: roomCard?.prescribedClothing as string,
+      locations: roomCard?.locations as any,
+      purityClass: roomCard?.purityClass as any,
+      prescribedClothing: roomCard?.prescribedClothing as PrescribedClothing[],
       entryToHvacTent: roomCard?.entryToHvacTent as string,
       additionalRequirements: roomCard?.additionalRequirements as string,
       cleaningScheduleDays: roomCard?.cleaningScheduleDays as any,
@@ -52,13 +54,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
       indoorEnvironmentQualityClient: roomCard?.indoorEnvironmentQualityClient as string,
       compressedAirDistributionClient: roomCard?.compressedAirDistributionClient as string,
       nitrogenCentralDistributionClient: roomCard?.nitrogenCentralDistributionClient as string,
-      maxPressureInColdDistributionClient: roomCard?.maxPressureInColdDistributionClient as string,
-      locations: roomCard?.locations.map(location => ({
-        uid: location.uid as string,
-        code: location.code as string,
-        name: location.name as string,
-        children: undefined
-      })) as any
+      maxPressureInColdDistributionClient: roomCard?.maxPressureInColdDistributionClient as string
     },
     resolver: yupResolver(schema) as any
   })

@@ -31,7 +31,7 @@ export const typeDefs = gql`
     role: ContactPersonRole @relationship(type: "HAS_ROOM_CARD_ROLE", direction: OUT)
   }
 
-  enum cleaningScheduleDay {
+  enum CleaningScheduleDay {
     MONDAY
     TUESDAY
     WEDNESDAY
@@ -39,6 +39,29 @@ export const typeDefs = gql`
     FRIDAY
     SATURDAY
     SUNDAY
+  }
+
+  enum PrescribedClothing {
+    CAP
+    GLOVES
+    BEARD_COVER
+    SHOE_COVERS
+    OVERAL_ISO_7
+    OVERAL_ISO_5
+    BOOTS_ISO_5
+    SOCKS_ISO_5
+    CR_SHOES
+    HOOD
+    FACE_MASK
+    COAT
+    T_SHIRT_AND_TROUSERS
+  }
+
+  enum PurityClass {
+    ISO_5
+    ISO_6
+    ISO_7
+    ISO_8
   }
 
   type RoomCard @authentication {
@@ -49,11 +72,11 @@ export const typeDefs = gql`
     contactPersonsDept: [Employee!]! @relationship(type: "HAS_CONTACT_PERSON_DEPT", direction: OUT)
     locations: [Location!]! @relationship(type: "HAS_ROOM_CARD", direction: IN)
     teams: [Team!]! @relationship(type: "HAS_TEAM", direction: OUT)
-    purityClass: String
-    prescribedClothing: String
+    purityClass: PurityClass
+    prescribedClothing: [PrescribedClothing!]!
     entryToHvacTent: String
     cleaningScheduleDate: Date
-    cleaningScheduleDays: [cleaningScheduleDay!]
+    cleaningScheduleDays: [CleaningScheduleDay!]
     additionalRequirements: String
     coolingWater: String
     indoorEnvironmentQuality: String

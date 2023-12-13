@@ -13,7 +13,7 @@ const ROOM_CARDS = gql`
       status
       prescribedClothing
       entryToHvacTent
-      cleaningScheduleDate
+      cleaningScheduleDays
       additionalRequirements
       coolingWater
       indoorEnvironmentQuality

@@ -1,5 +1,12 @@
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
-import type { CleaningScheduleDay, ContactPersonRole, RoomCardStatus, Team } from '@/types/gql/graphql'
+import type {
+  CleaningScheduleDay,
+  ContactPersonRole,
+  PrescribedClothing,
+  PurityClass,
+  RoomCardStatus,
+  Team
+} from '@/types/gql/graphql'
 
 export type EmployeeType = {
   uid: string
@@ -20,8 +27,8 @@ export type RoomCardFormType = {
   contactPersonsDept: EmployeeType[]
   locations: Codebooktree[]
   teams: Team[]
-  purityClass: string
-  prescribedClothing: string
+  purityClass: PurityClass
+  prescribedClothing: PrescribedClothing[]
   entryToHvacTent: string
   cleaningScheduleDate: string
   cleaningScheduleDays?: CleaningScheduleDay[]

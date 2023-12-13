@@ -2,10 +2,12 @@ import type { CellContext } from '@tanstack/react-table'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
+import { CheckBoxComponent } from '@/components/form/CheckBox'
 import { InputDate } from '@/components/form/Input'
 import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
 import type { CleaningScheduleDay } from '@/types/gql/graphql'
+import { PrescribedClothing, PurityClass } from '@/types/gql/graphql'
 
 import type { RoomCardProperties } from './RoomCard.columns'
 
@@ -42,50 +44,52 @@ const CleaningSchedule = () => {
   )
 }
 
-export const CellInput = ({
-  row: {
-    original: { code }
-  },
-  column: { id }
-}: CellContext<RoomCardProperties, any>) => {
+const PrescribedClothingSelect = () => {
+  const prescribedClothingEnums = Object.values(PrescribedClothing).map(value => value)
+  const { control, setValue } = useFormContext()
+  const prescribedClothing = useWatch({ control, name: 'prescribedClothing' })
+  return (
+    <div className="grid grid-cols-4 mt-1">
+      {prescribedClothingEnums.map((item, index) => (
+        <CheckBoxComponent
+          key={index}
+          defaultChecked={prescribedClothing.includes(item as any) ? true : false}
+          className="mr-1 mb-1 col-span-1"
+          label={item}
+          onChange={e => {
+            e.target.checked
+              ? setValue('prescribedClothing', [...prescribedClothing, item])
+              : setValue(
+                  'prescribedClothing',
+                  prescribedClothing.filter(selectedItem => selectedItem !== item)
+                )
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+type Props = {
+  code: string
+}
+
+const PurityClassSelect = ({ code }: Props) => {
+  const { register } = useFormContext()
+  const purityClass = Object.values(PurityClass).map(value => value)
+  const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
+  return (
+    <select className="select-reset select-custom w-full" {...register(code)} disabled={!editPersmission} name={code}>
+      {purityClass.map((purityClass, index) => (
+        <option key={index}>{purityClass}</option>
+      ))}
+    </select>
+  )
+}
+
+const DefaultInput = ({ code }: Props) => {
   const { register } = useFormContext()
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
-  if (code === 'cleaningSchedule') {
-    return <CleaningSchedule />
-  }
-
-  if (code === 'purityClass') {
-    return (
-      <select className="select-reset select-custom w-full" {...register(code)} disabled={!editPersmission} name={code}>
-        <option>ISO 5</option>
-        <option>ISO 6</option>
-        <option>ISO 7</option>
-        <option>ISO 8</option>
-      </select>
-    )
-  }
-  if (code === 'prescribedClothing') {
-    return (
-      <select className="select-reset select-custom w-full" {...register(code)} disabled={!editPersmission} name={code}>
-        <option>Cap, overall ISO 7, gloves, shoe covers, beard cover</option>
-        <option>Entry to LB 02.37.03 only in shoe covers. Entry to other rooms without restrictions</option>
-        <option>PPE are adapted to the type of used virus</option>
-        <option>Cap, overall ISO5 or blue underwear for ISO5, gloves, shoe covers, beard cover</option>
-      </select>
-    )
-  }
-
-  if (id === 'clientRequirements') {
-    return (
-      <input
-        className="w-full text-xs px-0 border-0 bg-inherit py-1"
-        {...register(code + 'Client')}
-        disabled={!editPersmission}
-        name={code + 'Client'}
-      />
-    )
-  }
-
   return (
     <input
       className="w-full text-xs px-0 border-0 bg-inherit py-1"
@@ -94,4 +98,26 @@ export const CellInput = ({
       name={code}
     />
   )
+}
+
+export const CellInput = ({
+  row: {
+    original: { code }
+  },
+  column: { id }
+}: CellContext<RoomCardProperties, any>) => {
+  switch (code) {
+    case 'cleaningSchedule':
+      return <CleaningSchedule />
+    case 'purityClass':
+      return <PurityClassSelect code={code} />
+    case 'prescribedClothing':
+      return <PrescribedClothingSelect />
+    default: {
+      if (id === 'clientRequirements') {
+        return <DefaultInput code={code + 'Client'} />
+      }
+      return <DefaultInput code={code} />
+    }
+  }
 }
