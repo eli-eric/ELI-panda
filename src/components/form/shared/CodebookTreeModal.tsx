@@ -29,21 +29,6 @@ interface CodebookTreeModalProps {
   name: string
 }
 
-const highlightText = (text: string, highlight?: string): JSX.Element => {
-  if (!highlight) {
-    return <span>{text}</span>
-  }
-  const regex = new RegExp(`(${highlight})`, 'gi')
-  const parts = text.split(regex)
-  return (
-    <span>
-      {parts
-        .filter(part => part)
-        .map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
-    </span>
-  )
-}
-
 export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTreeModalProps) => {
   const tableId = 'codebook'
 
