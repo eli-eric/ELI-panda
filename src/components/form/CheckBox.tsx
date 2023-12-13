@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { Controller } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 
@@ -20,12 +20,13 @@ export const CheckBoxComponent = ({
   ...restProps
 }: CheckBoxProps) => {
   const [checked, setChecked] = useState(defaultChecked)
+  const id = useId()
 
   return (
     <div className={classNames('relative flex items-start', className)}>
       <div className="flex h-5 items-center">
         <input
-          defaultChecked={defaultChecked}
+          id={'checkbox' + id}
           onChange={e => {
             restProps.onChange && restProps.onChange(e)
             setChecked(e.target.checked)
@@ -38,7 +39,9 @@ export const CheckBoxComponent = ({
         />
       </div>
       <div className="ml-3 text-sm">
-        <label className="font-medium text-gray-700">{label}</label>
+        <label htmlFor={'checkbox' + id} className="font-medium text-gray-700">
+          {label}
+        </label>
         <span className="text-gray-500">
           <span className="sr-only">{label}</span>
         </span>
