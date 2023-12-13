@@ -31,6 +31,11 @@ const ROOM_CARDS = gql`
 export const useRoomCards = () => {
   const [search] = useQueryState('search')
   const { data, loading, error, refetch } = useQuery<Query>(ROOM_CARDS, {
+    variables: {
+      where: {
+        name_CONTAINS: search || ''
+      }
+    },
     onError: () => {
       toast.error('Error loading room cards')
     }
