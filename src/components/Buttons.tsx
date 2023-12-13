@@ -39,6 +39,7 @@ interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   buttonSize?: 'small' | 'large'
   testid?: string
   text?: string
+  customDisabled?: boolean
 }
 
 export const Button = ({
@@ -52,12 +53,13 @@ export const Button = ({
   buttonSize,
   testid,
   type = 'button',
+  customDisabled = false,
   ...restProps
 }: ButtonProps) => (
   <button
     {...restProps}
     data-testid={testid}
-    disabled={loading ? true : disabled}
+    disabled={loading ? true : disabled || customDisabled}
     type={type}
     className={classNames(
       'relative text-xs font-medium shadow-sm z-10 inline-flex items-center border border-gray-300 focus:outline-none focus:ring-0 focus:ring-primary-500',

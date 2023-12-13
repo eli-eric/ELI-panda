@@ -7,7 +7,7 @@ import { ROLE } from '@/types/constants/roles'
 
 interface Props extends CellContext<any, any> {
   formName: string
-  setDeleteItem: (item: any) => void
+  setDeleteItem?: (item: any) => void
 }
 
 export const CellWithDelete = ({
@@ -27,7 +27,7 @@ export const CellWithDelete = ({
 
   const onDeleteClick = () => {
     remove(index)
-    setDeleteItem(item)
+    setDeleteItem && setDeleteItem(item)
   }
   return (
     <div className="flex items-center">

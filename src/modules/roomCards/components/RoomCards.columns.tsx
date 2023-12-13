@@ -1,6 +1,8 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
+import { v4 } from 'uuid'
 
+import { Badge } from '@/components/visuals/Badge'
 import type { RoomCard } from '@/types/gql/graphql'
 
 import { LocationCell } from './LocationCell'
@@ -9,23 +11,26 @@ export const useRoomCardsColumns = () => {
   const columns = useMemo(
     (): ColumnDef<RoomCard, any>[] => [
       {
-        header: 'Location',
-        accessorFn: row => row?.location.name,
+        header: 'Name',
+        accessorFn: row => row?.name,
         cell: LocationCell,
-        id: 'location',
+        id: 'name',
         size: 300,
         meta: { sticky: true }
-      },
-      {
-        header: 'Code',
-        accessorFn: row => row?.location.code,
-        id: 'code',
-        size: 100
       },
       {
         header: 'Status',
         accessorFn: row => row?.status,
         id: 'status'
+      },
+      {
+        header: 'Loactions',
+        id: 'locations',
+        accessorFn: row => row?.locations,
+        size: 300,
+        cell: ({ getValue }) => (
+          <div>{getValue()?.map(location => <Badge key={v4()}>{`${location.name} (${location.code})`}</Badge>)}</div>
+        )
       },
       {
         header: 'Purity class',
@@ -44,7 +49,7 @@ export const useRoomCardsColumns = () => {
       },
       {
         header: 'Cleaning schedule',
-        accessorFn: row => row?.cleaningSchedule,
+        accessorFn: row => row?.cleaningScheduleDays,
         id: 'cleaningShedule'
       },
       {
@@ -79,21 +84,6 @@ export const useRoomCardsColumns = () => {
         accessorFn: row => row?.maxPressureInColdDistribution,
         id: 'maxPressureInColdDistribution',
         size: 250
-      },
-      {
-        header: 'Pressure in cooling system',
-        accessorFn: row => row?.pressureInCoolingSystem,
-        id: 'pressureInCoolingSystem'
-      },
-      {
-        header: 'Room temperature',
-        accessorFn: row => row?.roomTemperature,
-        id: 'roomTemperature'
-      },
-      {
-        header: 'Humidity',
-        accessorFn: row => row?.humidity,
-        id: 'humidity'
       }
     ],
     []

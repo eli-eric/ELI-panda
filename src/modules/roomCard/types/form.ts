@@ -1,5 +1,12 @@
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import type { ContactPersonRole, RoomCardStatus, Team } from '@/types/gql/graphql'
+import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
+import type {
+  CleaningScheduleDay,
+  ContactPersonRole,
+  PrescribedClothing,
+  PurityClass,
+  RoomCardStatus,
+  Team
+} from '@/types/gql/graphql'
 
 export type EmployeeType = {
   uid: string
@@ -15,21 +22,25 @@ export type ContactPersonsHall = {
 
 export type RoomCardFormType = {
   status: RoomCardStatus
+  name: string
   contactPersonsHall: ContactPersonsHall[]
   contactPersonsDept: EmployeeType[]
-  location: CodebookType
+  locations: Codebooktree[]
   teams: Team[]
-  purityClass: string
-  prescribedClothing: string
+  purityClass: PurityClass
+  prescribedClothing: PrescribedClothing[]
   entryToHvacTent: string
-  cleaningSchedule: string
+  cleaningScheduleDate: string
+  cleaningScheduleDays?: CleaningScheduleDay[]
   additionalRequirements: string
   coolingWater: string
   indoorEnvironmentQuality: string
   compressedAirDistribution: string
   nitrogenCentralDistribution: string
   maxPressureInColdDistribution: string
-  pressureInCoolingSystem: string
-  roomTemperature: string
-  humidity: string
+  coolingWaterClient: string
+  indoorEnvironmentQualityClient: string
+  compressedAirDistributionClient: string
+  nitrogenCentralDistributionClient: string
+  maxPressureInColdDistributionClient: string
 }
