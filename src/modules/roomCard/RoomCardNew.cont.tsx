@@ -45,7 +45,8 @@ export const RoomCardNewContainer = () => {
     toast.promise(
       createRoomCard({
         variables: makeRoomCardsCreateData(data),
-        onCompleted: data => router.push(PATH.ROOM_CARD + '/' + data?.createRoomCards?.roomCards[0].uid)
+        onCompleted: data => router.push(PATH.ROOM_CARD + '/' + data?.createRoomCards?.roomCards[0].uid),
+        refetchQueries: ['RoomCards', 'RoomCard']
       }),
       {
         loading: 'Saving room card...',

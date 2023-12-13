@@ -80,16 +80,15 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
         newDeptContacts,
         newHallContacts,
         newTeams,
-        // keep that locations what is in origin and not in form
         disconnectLocations: roomCardOrigin?.locations
           ?.filter(originLocation => !roomCardForm.locations?.some(location => originLocation.uid === location.uid))
           .map(location => ({ uid: location.uid, code: location.code, name: location.name })) as Codebooktree[],
-        // keep that locations what is in form and not in origin
         newLocations: roomCardForm.locations
           ?.filter(location => !roomCardOrigin?.locations?.some(originLocation => originLocation.uid === location.uid))
           .map(location => ({ uid: location.uid, code: location.code, name: location.name })) as Codebooktree[]
       }),
-      onCompleted: () => saveAndExit && router.push(PATH.ROOM_CARDS)
+      onCompleted: () => saveAndExit && router.push(PATH.ROOM_CARDS),
+      refetchQueries: ['RoomCards', 'RoomCard']
     })
 
   return { updateRoomCard }
