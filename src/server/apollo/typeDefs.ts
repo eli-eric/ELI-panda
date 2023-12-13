@@ -73,7 +73,7 @@ export const typeDefs = gql`
     locations: [Location!]! @relationship(type: "HAS_ROOM_CARD", direction: IN)
     teams: [Team!]! @relationship(type: "HAS_TEAM", direction: OUT)
     purityClass: PurityClass
-    prescribedClothing: [PrescribedClothing!]!
+    prescribedClothing: [PrescribedClothing!]
     entryToHvacTent: String
     cleaningScheduleDate: Date
     cleaningScheduleDays: [CleaningScheduleDay!]
