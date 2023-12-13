@@ -1,29 +1,36 @@
 import type { FC } from 'react'
 
+import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import Card from '@/components/layout/Card'
 import { Heading } from '@/components/layout/Heading'
+import usePermission from '@/hooks/usePermission'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
+import { ROLE } from '@/types/constants/roles'
 import type { Team } from '@/types/gql/graphql'
 
 import type { ContactPersonsHall, EmployeeType } from '../../types/form'
-import { cleanRooms, clientRequirements, possibleParameters } from '../../utils/constants'
+import { cleanRooms, possibleParameters } from '../../utils/constants'
+import { AddLocationButton } from './AddLocationButton'
 import { useRoomCardsColumns } from './RoomCard.columns'
 
 type Props = {
   contactPersonsHall: ContactPersonsHall[]
   contactPersonsDept: EmployeeType[]
   teams?: Team[]
+  locations?: Codebooktree[]
 }
 
-export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHall, teams }) => {
+export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHall, teams, locations }) => {
   const {
     columnsContactHall,
     columnsContactDept,
     columnsTeam,
     columnsCleanRooms,
-    columnsPossibleParameters,
-    columnsClientRequirements
+    buildingMaintenanceColumns,
+    locationColumns
   } = useRoomCardsColumns()
+
+  const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
 
   return (
     <Card className="pt-4">
@@ -65,18 +72,21 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
       <Heading customText="BULDING MAINTENANCE - FM" className="mb-0" textColor="text-primary-500" />
       <PandaTable
         {...{
-          tableId: 'roomCard-possibleParamsHeader',
-          columns: columnsPossibleParameters,
+          tableId: 'roomCard-buildingMaintenance',
+          columns: buildingMaintenanceColumns,
           className: 'relative border-l pb-0 z-0',
           data: possibleParameters
         }}
       />
+      <Heading customText="LOCATIONS" className="mb-0" textColor="text-primary-500">
+        {editPersmission && <AddLocationButton />}
+      </Heading>
       <PandaTable
         {...{
-          tableId: 'roomCard-clientRequirementsHead',
-          columns: columnsClientRequirements,
+          tableId: 'roomCard-locations',
+          columns: locationColumns,
           className: 'relative border-l pb-0 z-0',
-          data: clientRequirements
+          data: locations?.length === 0 ? undefined : locations
         }}
       />
     </Card>

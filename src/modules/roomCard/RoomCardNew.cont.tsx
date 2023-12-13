@@ -1,28 +1,19 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useRouter } from 'next/router'
-import { Fragment, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { array, object, string } from 'yup'
 
-import Listbox from '@/components/form/Listbox'
-import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
-import { message } from '@/i18n/src/messages'
-import { CODEBOOK } from '@/types/constants/codebook'
 import { PATH } from '@/types/constants/paths'
-import { RoomCardStatus } from '@/types/gql/graphql'
 
-import { SelectLocationTree } from '../shared/form/location/SelectLocation.combo'
 import { makeRoomCardsCreateData, useRoomCardCreate } from './hooks/useRoomCardCreate'
 import { RoomCardComponent } from './RoomCard.comp'
 import { useRoomCardStore } from './store/useRoomCardStore'
 import type { RoomCardFormType } from './types/form'
 
-const messages = message.roomCardsPage.form
-
 const schema = object().shape({
   status: string().required('Status is required'),
-  location: object().nullable().required('Location is required'),
   teams: array().of(object().nullable().required('Team is required')).min(1, 'At least one team is required'),
   contactPersonsHall: array().of(object().required('Team is required')).min(1, 'At least one Hall contact is required'),
   contactPersonsDept: array()
@@ -33,6 +24,7 @@ const schema = object().shape({
 export const RoomCardNewContainer = () => {
   //TODO: fix typing
   const formMethods = useForm<RoomCardFormType>({ resolver: yupResolver(schema) as any })
+
   const router = useRouter()
   const { watch, handleSubmit } = formMethods
   const { createRoomCard } = useRoomCardCreate()
@@ -40,24 +32,10 @@ export const RoomCardNewContainer = () => {
   const status = watch('status')
   const teams = watch('teams')
   const contactPersonsDept = watch('contactPersonsDept')
-  const statuses = Object.values(RoomCardStatus).map(value => value)
+  const locations = watch('locations')
 
   const { clear } = useRoomCardStore()
   useEffect(() => () => clear(), [clear])
-
-  const fields = useMakeFormFields({
-    location: {
-      name: 'location',
-      disabled: false,
-      placeholder: messages.location.placeholder,
-      codebook: CODEBOOK.LOCATION
-    },
-    status: {
-      name: 'status',
-      placeholder: messages.status.placeholder,
-      disabled: false
-    }
-  })
 
   const onSubmit = handleSubmit(data => {
     toast.promise(
@@ -97,14 +75,8 @@ export const RoomCardNewContainer = () => {
         contactPersonsHall,
         contactPersonsDept,
         teams,
-        fields
+        locations
       }}
-    >
-      <Fragment>
-        <h1 className="text-2xl font-semibold">New room card</h1>
-        <SelectLocationTree className="w-72" locationField={fields.location} />
-        <Listbox {...fields.status} className="w-72" customOptions={statuses} />
-      </Fragment>
-    </RoomCardComponent>
+    />
   )
 }

@@ -1,6 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 
+import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { ROLE } from '@/types/constants/roles'
 import type { HallContactPerson, Team } from '@/types/gql/graphql'
 
@@ -118,41 +119,40 @@ export const useRoomCardsColumns = () => {
     ],
     []
   )
-  const columnsPossibleParameters = useMemo(
+  const buildingMaintenanceColumns = useMemo(
     (): ColumnDef<RoomCardProperties, any>[] => [
       {
-        header: 'Possible Parameters',
-        columns: [
-          {
-            accessorKey: 'name',
-            meta: { noHeader: true }
-          },
-          {
-            accessorKey: 'value',
-            meta: { noHeader: true },
-            cell: CellInput
-          }
-        ]
+        header: 'Name',
+        accessorKey: 'name',
+        id: 'name'
+      },
+      {
+        header: 'Possible parameters',
+        accessorKey: 'code',
+        id: 'possibleParameters',
+        cell: CellInput
+      },
+      {
+        header: 'Client requirements',
+        accessorKey: 'clientRequirements',
+        id: 'clientRequirements',
+        cell: CellInput
       }
     ],
     []
   )
-
-  const columnsClientRequirements = useMemo(
-    (): ColumnDef<RoomCardProperties, any>[] => [
+  const locationColumns = useMemo(
+    (): ColumnDef<Codebooktree, any>[] => [
       {
-        header: 'Client Requirements',
-        columns: [
-          {
-            accessorKey: 'name',
-            meta: { noHeader: true }
-          },
-          {
-            accessorKey: 'value',
-            meta: { noHeader: true },
-            cell: CellInput
-          }
-        ]
+        header: 'Name',
+        accessorFn: ({ name }) => name,
+        id: 'name',
+        cell: props => <CellWithDelete {...props} formName="locations" />
+      },
+      {
+        header: 'Code',
+        accessorFn: ({ code }) => code,
+        id: 'code'
       }
     ],
     []
@@ -163,7 +163,7 @@ export const useRoomCardsColumns = () => {
     columnsContactDept,
     columnsTeam,
     columnsCleanRooms,
-    columnsPossibleParameters,
-    columnsClientRequirements
+    buildingMaintenanceColumns,
+    locationColumns
   }
 }

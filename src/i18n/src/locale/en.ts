@@ -328,6 +328,7 @@ export const messages = {
     head: 'ELI Panda - Room Cards',
     form: {
       status: { label: 'Status', placeholder: 'Select Status' },
+      name: { label: 'Name', placeholder: 'Name' },
       location: { label: 'Location', placeholder: 'Select Location' }
     },
     nestedForm: {

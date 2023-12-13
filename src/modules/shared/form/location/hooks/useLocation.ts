@@ -26,9 +26,6 @@ const GET_SUBLOCATIONS = gql`
         subLocations {
           uid
         }
-        roomCard {
-          uid
-        }
       }
     }
   }

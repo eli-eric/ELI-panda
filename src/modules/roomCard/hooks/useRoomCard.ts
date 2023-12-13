@@ -6,20 +6,24 @@ import type { Query } from '@/types/gql/graphql'
 const GET_ROOMCARD = gql`
   query RoomCards($where: RoomCardWhere) {
     roomCards(where: $where) {
+      name
+      status
       purityClass
       prescribedClothing
       entryToHvacTent
-      cleaningSchedule
+      cleaningScheduleDate
+      cleaningScheduleDays
       additionalRequirements
       coolingWater
       indoorEnvironmentQuality
       compressedAirDistribution
       nitrogenCentralDistribution
       maxPressureInColdDistribution
-      pressureInCoolingSystem
-      roomTemperature
-      humidity
-      status
+      coolingWaterClient
+      indoorEnvironmentQualityClient
+      compressedAirDistributionClient
+      nitrogenCentralDistributionClient
+      maxPressureInColdDistributionClient
       contactPersonsHall {
         uid
         role {
@@ -37,7 +41,7 @@ const GET_ROOMCARD = gql`
         fullName
         phoneNumber
       }
-      location {
+      locations {
         code
         uid
         name

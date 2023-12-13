@@ -11,7 +11,7 @@ export const typeDefs = gql`
     subLocations: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: OUT)
     parentLocation: Location @relationship(type: "HAS_SUBLOCATION", direction: IN)
     name: String!
-    roomCard: RoomCard @relationship(type: "HAS_ROOM_CARD", direction: OUT)
+    roomCards: [RoomCard!]! @relationship(type: "HAS_ROOM_CARD", direction: OUT)
   }
 
   enum RoomCardStatus {
@@ -31,26 +31,63 @@ export const typeDefs = gql`
     role: ContactPersonRole @relationship(type: "HAS_ROOM_CARD_ROLE", direction: OUT)
   }
 
+  enum CleaningScheduleDay {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
+  }
+
+  enum PrescribedClothing {
+    CAP
+    GLOVES
+    BEARD_COVER
+    SHOE_COVERS
+    OVERAL_ISO_7
+    OVERAL_ISO_5
+    BOOTS_ISO_5
+    SOCKS_ISO_5
+    CR_SHOES
+    HOOD
+    FACE_MASK
+    COAT
+    T_SHIRT_AND_TROUSERS
+  }
+
+  enum PurityClass {
+    ISO_5
+    ISO_6
+    ISO_7
+    ISO_8
+  }
+
   type RoomCard @authentication {
     uid: ID! @id
+    name: String!
     status: RoomCardStatus!
     contactPersonsHall: [HallContactPerson!]! @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: OUT)
     contactPersonsDept: [Employee!]! @relationship(type: "HAS_CONTACT_PERSON_DEPT", direction: OUT)
-    location: Location! @relationship(type: "HAS_ROOM_CARD", direction: IN)
+    locations: [Location!]! @relationship(type: "HAS_ROOM_CARD", direction: IN)
     teams: [Team!]! @relationship(type: "HAS_TEAM", direction: OUT)
-    purityClass: String
-    prescribedClothing: String
+    purityClass: PurityClass
+    prescribedClothing: [PrescribedClothing!]!
     entryToHvacTent: String
-    cleaningSchedule: String
+    cleaningScheduleDate: Date
+    cleaningScheduleDays: [CleaningScheduleDay!]
     additionalRequirements: String
     coolingWater: String
     indoorEnvironmentQuality: String
     compressedAirDistribution: String
     nitrogenCentralDistribution: String
     maxPressureInColdDistribution: String
-    pressureInCoolingSystem: String
-    roomTemperature: String
-    humidity: String
+    coolingWaterClient: String
+    indoorEnvironmentQualityClient: String
+    compressedAirDistributionClient: String
+    nitrogenCentralDistributionClient: String
+    maxPressureInColdDistributionClient: String
   }
 
   type Team @authentication {
@@ -159,7 +196,7 @@ export const typeDefs = gql`
 
   type SchemaMigration @authentication {
     dirty: Boolean!
-    ts: DateTime!
+    ts: Date!
     version: BigInt!
   }
 

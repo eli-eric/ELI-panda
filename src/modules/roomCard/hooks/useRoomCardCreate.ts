@@ -20,7 +20,7 @@ export const makeRoomCardsCreateData = (formData?: RoomCardFormType) => ({
   input: [
     {
       ...formData,
-      location: connectN(formData?.location.uid),
+      cleaningScheduleDate: formData?.cleaningScheduleDate ? formData?.cleaningScheduleDate : undefined,
       contactPersonsHall: {
         create: formData?.contactPersonsHall.map(contactPerson => ({
           node: {
@@ -34,14 +34,16 @@ export const makeRoomCardsCreateData = (formData?: RoomCardFormType) => ({
       },
       teams: {
         connect: formData?.teams.map(team => whereN(team.uid))
+      },
+      locations: {
+        connect: formData?.locations.map(location => whereN(location.uid))
       }
     }
   ]
 })
 
-export const useRoomCardCreate = (formData?: RoomCardFormType) => {
+export const useRoomCardCreate = () => {
   const [createRoomCard] = useMutation<Mutation>(CREATE_ROOM_CARD, {
-    variables: makeRoomCardsCreateData(formData),
     refetchQueries: ['RoomCards', 'RoomCard']
   })
 

@@ -231,3 +231,57 @@ export const InputCurrency = ({ name }: InputAmountProps) => {
     />
   )
 }
+
+export const InputDate = ({
+  name,
+  placeholder,
+  disabled,
+  rounded,
+  className,
+  hidden,
+  label,
+  onChange,
+  defaultValue,
+  id
+}: InputProps) => {
+  const { control } = useFormContext()
+
+  return (
+    <Controller
+      name={name}
+      control={control}
+      defaultValue={defaultValue || ''}
+      render={({ field, fieldState: { error } }) => (
+        <InputWrapper hidden={hidden} className={className}>
+          <Label label={label} />
+          <div className="flex">
+            <div hidden={hidden} className="relative flex w-full">
+              <input
+                {...field}
+                type="date"
+                id={id}
+                hidden={hidden}
+                step="0.001"
+                disabled={disabled}
+                onChange={e => {
+                  if (onChange) {
+                    field.onChange(onChange(e.target.value))
+                  } else {
+                    field.onChange(e.target.value)
+                  }
+                }}
+                placeholder={placeholder}
+                className={classNames(
+                  'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                  rounded,
+                  error ? 'border-red-500' : 'border-gray-300',
+                  disabled ? 'bg-gray-100' : ''
+                )}
+              />
+            </div>
+          </div>
+        </InputWrapper>
+      )}
+    />
+  )
+}

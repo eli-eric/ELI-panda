@@ -8,21 +8,19 @@ const ROOM_CARDS = gql`
   query RoomCards($where: RoomCardWhere) {
     roomCards(where: $where) {
       uid
+      name
       purityClass
+      status
       prescribedClothing
       entryToHvacTent
-      cleaningSchedule
+      cleaningScheduleDays
       additionalRequirements
       coolingWater
       indoorEnvironmentQuality
       compressedAirDistribution
       nitrogenCentralDistribution
       maxPressureInColdDistribution
-      pressureInCoolingSystem
-      roomTemperature
-      humidity
-      status
-      location {
+      locations {
         code
         name
       }
@@ -35,13 +33,7 @@ export const useRoomCards = () => {
   const { data, loading, error, refetch } = useQuery<Query>(ROOM_CARDS, {
     variables: {
       where: {
-        AND: [
-          {
-            location: {
-              name_CONTAINS: search || ''
-            }
-          }
-        ]
+        name_CONTAINS: search || ''
       }
     },
     onError: () => {

@@ -5,7 +5,6 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ModalComponent from '@/components/modal/modal.comp'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { message } from '@/i18n/src/messages'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import useTableStateStore from '@/store/useTableStateStore'
@@ -29,12 +28,13 @@ interface CodebookTreeModalProps {
   enableFiltering?: boolean
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   data?: Codebooktree[]
-  name: string
+  name?: string
   fetchChildren?: (uid: string) => void
   additionalColumn?: ColumnDef<Codebooktree, string>
   tableId?: string
   selectParent?: boolean
   manualFiltering?: boolean
+  customSetValue?: (value?: Codebooktree) => void
 }
 
 export const CodebookTreeModalGraphql = ({
@@ -48,9 +48,10 @@ export const CodebookTreeModalGraphql = ({
   loading,
   tableId = 'codebook-tree',
   selectParent = true,
-  manualFiltering
+  manualFiltering,
+  customSetValue
 }: CodebookTreeModalProps) => {
-  const [item, setItem] = useState<CodebookType | undefined>(undefined)
+  const [item, setItem] = useState<Codebooktree | undefined>(undefined)
 
   const { instances } = useTableStateStore()
   const filter = useMemo(() => instances[tableId]?.columnFilter, [instances, tableId])
@@ -96,7 +97,7 @@ export const CodebookTreeModalGraphql = ({
       type: 'button',
       disabled: !item,
       onClick: () => {
-        setValue(name, item)
+        customSetValue ? customSetValue(item) : name && setValue(name, item)
         setOpen(false)
         setItem(undefined)
       }
@@ -130,13 +131,15 @@ export const CodebookTreeModalGraphql = ({
               if (selectParent) {
                 setItem({
                   uid: row.original.uid,
-                  name: row.original.name + (row.original.code ? ` (${row.original.code})` : '')
+                  name: row.original.name + (row.original.code && !customSetValue ? ` (${row.original.code})` : ''),
+                  code: row.original?.code
                 })
               }
               if (!row.original.isExpandable && !selectParent) {
                 setItem({
                   uid: row.original.uid,
-                  name: row.original.name + (row.original.code ? ` (${row.original.code})` : '')
+                  name: row.original.name + (row.original.code && !customSetValue ? ` (${row.original.code})` : ''),
+                  code: row.original?.code
                 })
               }
             },
