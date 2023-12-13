@@ -19,8 +19,8 @@ export const LocationCell = ({ getValue, row: { original, id } }: LocationCellPr
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
 
   const { hoveringId } = useHoveringId()
-  const { deleteRoomCard } = useRoomCardDelete(original.uid, original.location.name)
-  const withWarningModal = useWarningModal(`Are you sure you want to delete room card for "${original.location.name}"?`)
+  const { deleteRoomCard } = useRoomCardDelete(original.uid, original.name)
+  const withWarningModal = useWarningModal(`Are you sure you want to delete room card "${original.name}"?`)
   const handleDelete = () => {
     deleteRoomCard()
   }

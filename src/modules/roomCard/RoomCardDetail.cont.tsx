@@ -32,6 +32,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   //TODO: fix typing
   const formMethods = useForm<RoomCardFormType>({
     defaultValues: {
+      name: roomCard?.name as string,
       status: roomCard?.status as any,
       contactPersonsDept: roomCard?.contactPersonsDept as any,
       contactPersonsHall: roomCard?.contactPersonsHall as any,
@@ -51,7 +52,13 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
       indoorEnvironmentQualityClient: roomCard?.indoorEnvironmentQualityClient as string,
       compressedAirDistributionClient: roomCard?.compressedAirDistributionClient as string,
       nitrogenCentralDistributionClient: roomCard?.nitrogenCentralDistributionClient as string,
-      maxPressureInColdDistributionClient: roomCard?.maxPressureInColdDistributionClient as string
+      maxPressureInColdDistributionClient: roomCard?.maxPressureInColdDistributionClient as string,
+      locations: roomCard?.locations.map(location => ({
+        uid: location.uid as string,
+        code: location.code as string,
+        name: location.name as string,
+        children: undefined
+      })) as any
     },
     resolver: yupResolver(schema) as any
   })
@@ -63,6 +70,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   const teams = watch('teams')
   const contactPersonsHall = watch('contactPersonsHall')
   const contactPersonsDept = watch('contactPersonsDept')
+  const locations = watch('locations')
 
   useEffect(() => () => clear(), [clear])
 
@@ -95,6 +103,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
           contactPersonsHall={contactPersonsHall}
           contactPersonsDept={contactPersonsDept}
           teams={teams}
+          locations={locations}
         />
       )}
     </Fragment>

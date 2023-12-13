@@ -1,3 +1,4 @@
+import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import type { Employee, RoomCardUpdateInput, RoomCardWhere, Team } from '@/types/gql/graphql'
 import { whereN } from '@/utils/graphql/mutations'
 
@@ -12,6 +13,8 @@ type RoomCardUpdateType = {
   disconnectTeams: Team[]
   newDeptContacts: Employee[]
   disconnectDeptContacts: Employee[]
+  disconnectLocations: Codebooktree[]
+  newLocations: Codebooktree[]
   uid?: string
 }
 export const updateRoomCardVariables = ({
@@ -22,7 +25,9 @@ export const updateRoomCardVariables = ({
   newHallContacts,
   deleteHallContacts,
   newTeams,
-  disconnectTeams
+  disconnectTeams,
+  newLocations,
+  disconnectLocations
 }: RoomCardUpdateType): { where: RoomCardWhere; update: RoomCardUpdateInput } => ({
   where: {
     uid: uid
@@ -70,6 +75,12 @@ export const updateRoomCardVariables = ({
       {
         connect: newTeams.map(team => whereN(team.uid)),
         disconnect: disconnectTeams.map(team => whereN(team.uid))
+      }
+    ],
+    locations: [
+      {
+        connect: newLocations.map(location => whereN(location.uid)),
+        disconnect: disconnectLocations.map(location => whereN(location.uid))
       }
     ]
   }

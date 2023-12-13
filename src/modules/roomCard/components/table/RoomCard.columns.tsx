@@ -146,7 +146,8 @@ export const useRoomCardsColumns = () => {
       {
         header: 'Name',
         accessorFn: ({ name }) => name,
-        id: 'name'
+        id: 'name',
+        cell: props => <CellWithDelete {...props} formName="locations" />
       },
       {
         header: 'Code',

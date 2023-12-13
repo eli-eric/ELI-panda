@@ -73,7 +73,7 @@ export const RoomCardComponent: FC<Props> = ({
       </PageHead>
       <RoomCardTables
         {...{
-          contactPersonsHall: contactPersonsHall,
+          contactPersonsHall,
           contactPersonsDept,
           teams,
           locations

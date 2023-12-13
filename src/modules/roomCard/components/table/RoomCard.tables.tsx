@@ -3,7 +3,9 @@ import type { FC } from 'react'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import Card from '@/components/layout/Card'
 import { Heading } from '@/components/layout/Heading'
+import usePermission from '@/hooks/usePermission'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
+import { ROLE } from '@/types/constants/roles'
 import type { Team } from '@/types/gql/graphql'
 
 import type { ContactPersonsHall, EmployeeType } from '../../types/form'
@@ -28,7 +30,8 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
     locationColumns
   } = useRoomCardsColumns()
 
-  console.log(locations)
+  const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
+
   return (
     <Card className="pt-4">
       <div className="lg:flex justify-between">
@@ -76,14 +79,14 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
         }}
       />
       <Heading customText="LOCATIONS" className="mb-0" textColor="text-primary-500">
-        <AddLocationButton />
+        {editPersmission && <AddLocationButton />}
       </Heading>
       <PandaTable
         {...{
           tableId: 'roomCard-locations',
           columns: locationColumns,
           className: 'relative border-l pb-0 z-0',
-          data: locations
+          data: locations?.length === 0 ? undefined : locations
         }}
       />
     </Card>

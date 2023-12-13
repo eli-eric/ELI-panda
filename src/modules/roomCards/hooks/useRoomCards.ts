@@ -10,6 +10,7 @@ const ROOM_CARDS = gql`
       uid
       name
       purityClass
+      status
       prescribedClothing
       entryToHvacTent
       cleaningScheduleDate
@@ -19,10 +20,6 @@ const ROOM_CARDS = gql`
       compressedAirDistribution
       nitrogenCentralDistribution
       maxPressureInColdDistribution
-      pressureInCoolingSystem
-      roomTemperature
-      humidity
-      status
       locations {
         code
         name

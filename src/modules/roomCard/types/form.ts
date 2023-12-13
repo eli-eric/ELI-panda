@@ -15,6 +15,7 @@ export type ContactPersonsHall = {
 
 export type RoomCardFormType = {
   status: RoomCardStatus
+  name: string
   contactPersonsHall: ContactPersonsHall[]
   contactPersonsDept: EmployeeType[]
   locations: Codebooktree[]

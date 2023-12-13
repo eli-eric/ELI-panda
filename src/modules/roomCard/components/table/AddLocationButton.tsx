@@ -1,19 +1,28 @@
 import { Fragment } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 import { PlusButton } from '@/components/Buttons'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { CodebookTreeModalGraphql } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { useLocationModal } from '@/modules/shared/form/location/hooks/useLocationModal'
 
+import { useRoomCardStore } from '../../store/useRoomCardStore'
+
 export const AddLocationButton = () => {
   const { control } = useFormContext()
-  const { append } = useFieldArray({ control, name: 'locations' })
+  const { append, fields } = useFieldArray({ control, name: 'locations' })
   const { additionalColumn, codebooktree, fetchChildren, loading, open, setOpen, tableId } = useLocationModal()
+  const { setNewLocation } = useRoomCardStore()
 
   const addLocation = (item?: Codebooktree) => {
     if (item) {
+      if (fields.find((field: any) => field.uid === item.uid)) {
+        toast.error('Location already exists')
+        return
+      }
       append(item)
+      setNewLocation(item)
     }
   }
 

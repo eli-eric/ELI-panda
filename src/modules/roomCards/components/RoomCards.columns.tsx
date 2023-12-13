@@ -27,7 +27,10 @@ export const useRoomCardsColumns = () => {
         header: 'Loactions',
         id: 'locations',
         accessorFn: row => row?.locations,
-        cell: ({ getValue }) => <div>{getValue()?.map(location => <Badge key={v4()}>{location.code}</Badge>)}</div>
+        size: 300,
+        cell: ({ getValue }) => (
+          <div>{getValue()?.map(location => <Badge key={v4()}>{`${location.name} (${location.code})`}</Badge>)}</div>
+        )
       },
       {
         header: 'Purity class',

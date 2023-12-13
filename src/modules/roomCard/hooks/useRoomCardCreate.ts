@@ -35,6 +35,9 @@ export const makeRoomCardsCreateData = (formData?: RoomCardFormType) => ({
       },
       teams: {
         connect: formData?.teams.map(team => whereN(team.uid))
+      },
+      locations: {
+        connect: formData?.locations.map(location => whereN(location.uid))
       }
     }
   ]

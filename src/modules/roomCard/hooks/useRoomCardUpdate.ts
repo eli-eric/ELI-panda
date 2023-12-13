@@ -1,12 +1,14 @@
 import { gql, useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 
+import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { PATH } from '@/types/constants/paths'
 
 import type { Mutation } from '../../../types/gql/graphql'
 import { useRoomCardStore } from '../store/useRoomCardStore'
 import type { RoomCardFormType } from '../types/form'
 import { updateRoomCardVariables } from '../utils'
+import { useRoomCard } from './useRoomCard'
 
 const UPDATE_ROOM_CARD = gql`
   mutation Mutation($where: RoomCardWhere, $update: RoomCardUpdateInput) {
@@ -22,10 +24,11 @@ const UPDATE_ROOM_CARD = gql`
         compressedAirDistribution
         nitrogenCentralDistribution
         maxPressureInColdDistribution
-        pressureInCoolingSystem
-        roomTemperature
-        humidity
-        status
+        coolingWaterClient
+        indoorEnvironmentQualityClient
+        compressedAirDistributionClient
+        nitrogenCentralDistributionClient
+        maxPressureInColdDistributionClient
         contactPersonsHall {
           role {
             uid
@@ -42,7 +45,7 @@ const UPDATE_ROOM_CARD = gql`
           fullName
           phoneNumber
         }
-        location {
+        locations {
           code
           uid
           name
@@ -60,22 +63,31 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
   const [update] = useMutation<Mutation>(UPDATE_ROOM_CARD, {
     refetchQueries: ['RoomCards', 'RoomCard']
   })
+  const { roomCard: roomCardOrigin } = useRoomCard(roomCardUid)
   const router = useRouter()
 
   const { deleteHallContacts, disconnectDeptContacts, disconnectTeams, newDeptContacts, newHallContacts, newTeams } =
     useRoomCardStore()
 
-  const updateRoomCard = (roomCard: RoomCardFormType, saveAndExit: boolean) =>
+  const updateRoomCard = (roomCardForm: RoomCardFormType, saveAndExit: boolean) =>
     update({
       variables: updateRoomCardVariables({
         uid: roomCardUid,
-        roomCard,
+        roomCard: roomCardForm,
         deleteHallContacts,
         disconnectDeptContacts,
         disconnectTeams,
         newDeptContacts,
         newHallContacts,
-        newTeams
+        newTeams,
+        // keep that locations what is in origin and not in form
+        disconnectLocations: roomCardOrigin?.locations
+          ?.filter(originLocation => !roomCardForm.locations?.some(location => originLocation.uid === location.uid))
+          .map(location => ({ uid: location.uid, code: location.code, name: location.name })) as Codebooktree[],
+        // keep that locations what is in form and not in origin
+        newLocations: roomCardForm.locations
+          ?.filter(location => !roomCardOrigin?.locations?.some(originLocation => originLocation.uid === location.uid))
+          .map(location => ({ uid: location.uid, code: location.code, name: location.name })) as Codebooktree[]
       }),
       onCompleted: () => saveAndExit && router.push(PATH.ROOM_CARDS)
     })
