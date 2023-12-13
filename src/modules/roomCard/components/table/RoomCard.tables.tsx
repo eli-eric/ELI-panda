@@ -60,6 +60,17 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
           }}
         />
       </div>
+      <Heading customText="LOCATIONS" className="mb-0" textColor="text-primary-500">
+        {editPersmission && <AddLocationButton />}
+      </Heading>
+      <PandaTable
+        {...{
+          tableId: 'roomCard-locations',
+          columns: locationColumns,
+          className: 'relative border-l pb-0 z-0',
+          data: locations?.length === 0 ? undefined : locations
+        }}
+      />
       <Heading customText="CLEAN ROOMS" className="mb-0" textColor="text-primary-500" />
       <PandaTable
         {...{
@@ -76,17 +87,6 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
           columns: buildingMaintenanceColumns,
           className: 'relative border-l pb-0 z-0',
           data: possibleParameters
-        }}
-      />
-      <Heading customText="LOCATIONS" className="mb-0" textColor="text-primary-500">
-        {editPersmission && <AddLocationButton />}
-      </Heading>
-      <PandaTable
-        {...{
-          tableId: 'roomCard-locations',
-          columns: locationColumns,
-          className: 'relative border-l pb-0 z-0',
-          data: locations?.length === 0 ? undefined : locations
         }}
       />
     </Card>
