@@ -144,13 +144,13 @@ export const useRoomCardsColumns = () => {
   const locationColumns = useMemo(
     (): ColumnDef<Codebooktree, any>[] => [
       {
-        header: 'Name',
+        header: 'Location Name',
         accessorFn: ({ name }) => name,
         id: 'name',
         cell: props => <CellWithDelete {...props} formName="locations" />
       },
       {
-        header: 'Code',
+        header: 'Location Code',
         accessorFn: ({ code }) => code,
         id: 'code'
       }

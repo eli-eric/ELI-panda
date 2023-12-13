@@ -55,7 +55,7 @@ const PrescribedClothingSelect = () => {
           key={index}
           defaultChecked={prescribedClothing.includes(item as any) ? true : false}
           className="mr-1 mb-1 col-span-1"
-          label={item}
+          label={item.replace(/_/g, ' ')}
           onChange={e => {
             e.target.checked
               ? setValue('prescribedClothing', [...prescribedClothing, item])
