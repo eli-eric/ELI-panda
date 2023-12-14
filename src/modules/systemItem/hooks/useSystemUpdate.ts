@@ -120,5 +120,5 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
     })
   }
 
-  return { updateSystem: updateSystemQuery, loading }
+  return { updateSystem: updateSystemQuery, loading, update }
 }

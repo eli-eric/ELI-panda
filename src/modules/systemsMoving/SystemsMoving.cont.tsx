@@ -1,22 +1,34 @@
 import { Fragment, useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
+import { mutate } from 'swr'
 
 import { MinusButton, PlusButton } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { FormModal } from '@/hooks/form/useFormModal'
 import { classNames } from '@/utils'
+import { whereC, whereN } from '@/utils/graphql/mutations'
 
 import { useSystems } from '../systems/hooks/useSystems'
 import { SystemsContainer } from '../systems/Systems.cont'
 import type { SystemDetail } from '../systems/types/responses'
 import { addSubsystem, filterSubsystem } from '../systems/utils'
 import { SystemMovingForm } from './form/SystemMoving.form'
+import { useSystemMutation } from './hooks/useSystemMutate'
 
 interface SystemsMovingType extends SystemDetail {
   tableId: string
+}
+
+export type SystemMovingFormType = {
+  name: string
+  systemAlias?: string
+  description?: string
+  responsible?: CodebookType
+  zone?: CodebookType
+  location?: CodebookType
 }
 
 export const SystemsMovingContainer = () => {
@@ -29,8 +41,10 @@ export const SystemsMovingContainer = () => {
   const systemsRight = useSystems(tableIdRight)
 
   const [parentSystem, setParentSystem] = useState<SystemsMovingType | undefined>()
+  const { systemSubsystems: moveToParentKey } = useEndpoint({ uid: parentSystem?.uid || '' })
+  const { systemSubsystems: moveFromParentKey } = useEndpoint({ uid: childSystem?.parentUid || '' })
 
-  const formMethods = useForm<SystemsMovingType>({ defaultValues: childSystem })
+  const formMethods = useForm<SystemMovingFormType>()
   const { setValue, reset } = formMethods
 
   const onDropHandler = (from: SystemsMovingType, to: SystemsMovingType) => {
@@ -44,9 +58,7 @@ export const SystemsMovingContainer = () => {
     setOpen(true)
   }
 
-  const { system: systemEndpoint } = useEndpoint({ uid: childSystem?.uid })
-
-  const onSuccess = () => {
+  const onSuccess = async () => {
     const systemActions = {
       [tableIdLeft]: {
         systems: systemsLeft,
@@ -73,6 +85,11 @@ export const SystemsMovingContainer = () => {
         system.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), { revalidate: false })
     }
 
+    await mutate(moveToParentKey, data => data && [...data, childSystem], { revalidate: false })
+    await mutate(moveFromParentKey, data => data && data.filter(system => system.uid !== childSystem.uid), {
+      revalidate: false
+    })
+
     if (isSameTable) {
       mutateSubsystem(currentAction.oppositeSystems, filterSubsystem)
     } else {
@@ -82,19 +99,47 @@ export const SystemsMovingContainer = () => {
     toast.success(`System ${childSystem.name} was moved under ${parentSystem?.name}`)
   }
 
-  const { submit } = useSubmit({
-    endpoint: systemEndpoint,
-    method: 'put',
-    onSuccess: onSuccess
-  })
+  const { update } = useSystemMutation()
+
+  const updateSystem = (data: SystemMovingFormType) => {
+    update({
+      variables: {
+        where: { uid: childSystem?.uid },
+        update: {
+          name: data.name,
+          systemAlias: data.systemAlias,
+          parentSystem: {
+            disconnect: whereN(childSystem?.parentUid),
+            connect: whereN(parentSystem?.uid)
+          },
+          location: {
+            connect: data.location?.uid ? whereC(data.location?.uid) : undefined,
+            disconnect: childSystem?.location?.uid ? whereC(childSystem?.location?.uid) : undefined
+          },
+          responsible: {
+            connect: data.responsible?.uid ? whereN(data.responsible?.uid) : undefined,
+            disconnect: childSystem?.responsible?.uid ? whereN(childSystem?.responsible?.uid) : undefined
+          },
+          zone: {
+            connect: data.zone?.uid ? whereN(data.zone?.uid) : undefined,
+            disconnect: childSystem?.zone?.uid ? whereN(childSystem?.zone?.uid) : undefined
+          }
+        }
+      },
+      onCompleted: () => {
+        onSuccess()
+      }
+    })
+  }
 
   useEffect(() => {
     reset()
-    if (childSystem) {
-      for (const field in childSystem) {
-        setValue(field as keyof SystemsMovingType, childSystem[field])
-      }
-    }
+    setValue('name', childSystem?.name || '')
+    setValue('systemAlias', childSystem?.systemAlias)
+    setValue('description', childSystem?.description)
+    setValue('responsible', childSystem?.responsible)
+    setValue('zone', childSystem?.zone)
+    setValue('location', childSystem?.location)
   }, [childSystem, setValue, reset])
 
   const [showLeft, setShowLeft] = useState(true)
@@ -159,8 +204,8 @@ export const SystemsMovingContainer = () => {
 
       <FormModal
         formMethods={formMethods}
-        onSubmit={(data: SystemDetail) => {
-          submit({ ...data, uid: childSystem?.uid, parentUid: parentSystem?.uid })
+        onSubmit={(data: SystemMovingFormType) => {
+          updateSystem(data)
         }}
         open={open}
         setOpen={setOpen}

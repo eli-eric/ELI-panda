@@ -48,8 +48,8 @@ export const TableRow = ({ getRowProps, loading, row, index, tableId }: Props) =
       className={classNames(
         index % 2 === 0 ? undefined : 'bg-gray-100',
         'hover:bg-gray-200 text-gray-500 z-0',
-        isHoveringDrop ? 'bg-primary-200' : '',
-        className
+        className,
+        isHoveringDrop ? 'bg-primary-200' : ''
       )}
     >
       {row.getVisibleCells().map(cell => (
