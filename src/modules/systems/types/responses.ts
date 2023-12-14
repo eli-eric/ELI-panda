@@ -1,5 +1,6 @@
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
+import type { SystemLevel } from '@/types/gql/graphql'
 
 export type SystemsResponse = {
   data: SystemDetail[]
@@ -15,6 +16,7 @@ export type SystemDetail = {
   uid: string // from router
   name: string // input
   parentUid?: string
+  systemLevel?: SystemLevel
   systemCode?: string // automaticky generovaný viz system edit - api dodá J.Š.
   systemAlias?: string // input
   systemType?: CodebookType // ListBox

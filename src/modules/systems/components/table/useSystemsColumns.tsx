@@ -43,6 +43,7 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
           />
         )
       },
+      { header: 'System Level', accessorFn: row => row.systemLevel, id: 'systemLevel' },
       { header: 'System Code', accessorFn: row => row.systemCode, id: 'systemCode', size: 150 },
       { header: 'System Alias', accessorFn: row => row.systemAlias, id: 'systemAlias', size: 150 },
       {
@@ -121,7 +122,7 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
         header: 'Catalogue Name',
         accessorFn: row => row.physicalItem?.catalogueItem?.name,
         id: 'catalogueName',
-        size: 150,
+        size: 300,
         cell: ({ getValue, row: { original } }) => (
           <NewTabLink href={PATH.CATALOGUE_ITEM + '/' + original.physicalItem?.catalogueItem?.uid} value={getValue()} />
         )

@@ -23,12 +23,13 @@ import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import usePermission from '@/hooks/usePermission'
 import { SystemDetailContext } from '@/pages/system/[uid]'
 import { ROLE } from '@/types/constants/roles'
-import { SystemLevel } from '@/types/gql/graphql'
+import type { SystemLevel } from '@/types/gql/graphql'
 import { classNames } from '@/utils'
 
 import { useSystemCreate } from '../../hooks/useSystemCreate'
 import { useSystemUpdate } from '../../hooks/useSystemUpdate'
 import type { SystemDetailFormType } from '../../types/form'
+import { getColorBySystemLevel } from '../../utils'
 import { SystemItemCard } from './components/SystemItem.card'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -85,12 +86,7 @@ export const SystemForm = () => {
         <Breadcrumbs parentPath={parentPath || (systemDetail?.parentPath as CodebookType[])} />
       </Card>
       <FormCard
-        className={classNames(
-          'shadow-md rounded-lg border',
-          systemLevel === SystemLevel.KeySystems && 'bg-primary-100',
-          systemLevel === SystemLevel.SubsystemsAndParts && 'bg-sky-100',
-          systemLevel === SystemLevel.TechnologyUnit && 'bg-lime-100'
-        )}
+        className={classNames('shadow-md rounded-lg border', getColorBySystemLevel(systemLevel as SystemLevel))}
       >
         <SystemMainForm>
           <MemoizedSystemGallery
