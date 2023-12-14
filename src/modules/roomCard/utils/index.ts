@@ -33,6 +33,7 @@ export const updateRoomCardVariables = ({
     uid: uid
   },
   update: {
+    name: roomCard.name,
     additionalRequirements: roomCard.additionalRequirements,
     cleaningScheduleDate: roomCard.cleaningScheduleDate,
     cleaningScheduleDays: roomCard.cleaningScheduleDays,

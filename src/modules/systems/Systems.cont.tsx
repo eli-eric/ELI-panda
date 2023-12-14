@@ -5,6 +5,7 @@ import { createContext } from 'react'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { useHoveringId } from '@/store/useHoveringId'
 
+import { getColorBySystemLevel, getFontBySystemLevel } from '../systemItem/utils'
 import { SystemsTable } from './components/table/Systems.table'
 
 interface SystemsContextType {
@@ -50,7 +51,11 @@ export const SystemsContainer: FC<Props> = ({
           onMouseLeave: () => {
             setHoveringId(undefined)
           },
-          className: classNames(original?.physicalItem && 'font-bold text-gray-700'),
+          className: classNames(
+            original?.physicalItem && 'font-bold text-gray-700',
+            getColorBySystemLevel(original?.systemLevel),
+            getFontBySystemLevel(original?.systemLevel)
+          ),
           dropSettings
         })}
         settings={{

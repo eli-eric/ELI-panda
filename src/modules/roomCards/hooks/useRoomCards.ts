@@ -4,7 +4,7 @@ import { toast } from 'react-hot-toast'
 
 import type { Query } from '@/types/gql/graphql'
 
-const ROOM_CARDS = gql`
+export const ROOM_CARDS = gql`
   query RoomCards($where: RoomCardWhere) {
     roomCards(where: $where) {
       uid

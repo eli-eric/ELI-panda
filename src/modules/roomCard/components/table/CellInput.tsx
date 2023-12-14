@@ -9,6 +9,7 @@ import { ROLE } from '@/types/constants/roles'
 import type { CleaningScheduleDay } from '@/types/gql/graphql'
 import { PrescribedClothing, PurityClass } from '@/types/gql/graphql'
 
+import type { RoomCardFormType } from '../../types/form'
 import type { RoomCardProperties } from './RoomCard.columns'
 
 const CleaningSchedule = () => {
@@ -46,14 +47,15 @@ const CleaningSchedule = () => {
 
 const PrescribedClothingSelect = () => {
   const prescribedClothingEnums = Object.values(PrescribedClothing).map(value => value)
-  const { control, setValue } = useFormContext()
-  const prescribedClothing = useWatch({ control, name: 'prescribedClothing' })
+  const { control, setValue } = useFormContext<RoomCardFormType>()
+  const prescribedClothing = useWatch({ control, name: 'prescribedClothing' }) || []
+  console.log(prescribedClothing)
   return (
     <div className="grid grid-cols-4 mt-1">
       {prescribedClothingEnums.map((item, index) => (
         <CheckBoxComponent
           key={index}
-          defaultChecked={prescribedClothing.includes(item as any) ? true : false}
+          defaultChecked={prescribedClothing?.includes(item as any) ? true : false}
           className="mr-1 mb-1 col-span-1"
           label={item.replace(/_/g, ' ')}
           onChange={e => {

@@ -7,6 +7,7 @@ import { array, object, string } from 'yup'
 
 import { PATH } from '@/types/constants/paths'
 
+import { useRoomCards } from '../roomCards/hooks/useRoomCards'
 import { makeRoomCardsCreateData, useRoomCardCreate } from './hooks/useRoomCardCreate'
 import { RoomCardComponent } from './RoomCard.comp'
 import { useRoomCardStore } from './store/useRoomCardStore'
@@ -14,16 +15,21 @@ import type { RoomCardFormType } from './types/form'
 
 const schema = object().shape({
   status: string().required('Status is required'),
+  name: string().required('Name is required'),
   teams: array().of(object().nullable().required('Team is required')).min(1, 'At least one team is required'),
   contactPersonsHall: array().of(object().required('Team is required')).min(1, 'At least one Hall contact is required'),
   contactPersonsDept: array()
     .of(object().nullable().required('Team is required'))
-    .min(1, 'At least one department contact is required')
+    .min(1, 'At least one department contact is required'),
+  locations: array()
+    .of(object().nullable().required('Location is required'))
+    .min(1, 'At least one location is required')
 })
 
 export const RoomCardNewContainer = () => {
   //TODO: fix typing
   const formMethods = useForm<RoomCardFormType>({ resolver: yupResolver(schema) as any })
+  const { refetch } = useRoomCards()
 
   const router = useRouter()
   const { watch, handleSubmit } = formMethods
@@ -41,7 +47,11 @@ export const RoomCardNewContainer = () => {
     toast.promise(
       createRoomCard({
         variables: makeRoomCardsCreateData(data),
-        onCompleted: data => router.push(PATH.ROOM_CARD + '/' + data?.createRoomCards?.roomCards[0].uid)
+        onCompleted: data => {
+          refetch()
+          router.push(PATH.ROOM_CARD + '/' + data?.createRoomCards?.roomCards[0].uid)
+        },
+        refetchQueries: ['RoomCards', 'RoomCard']
       }),
       {
         loading: 'Saving room card...',
@@ -55,7 +65,10 @@ export const RoomCardNewContainer = () => {
     toast.promise(
       createRoomCard({
         variables: makeRoomCardsCreateData(data),
-        onCompleted: () => router.push(PATH.ROOM_CARDS)
+        onCompleted: () => {
+          refetch()
+          router.push(PATH.ROOM_CARDS)
+        }
       }),
       {
         loading: 'Saving room card...',

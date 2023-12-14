@@ -19,13 +19,15 @@ interface Props {
 
 const schema = object().shape({
   status: string().required('Status is required'),
-  teams: array().of(object().required('Team is required')).min(1, 'At least one team is required'),
-  contactPersonsHall: array()
-    .of(object().nullable().required('Team is required'))
-    .min(1, 'At least one Hall contact is required'),
+  name: string().required('Name is required'),
+  teams: array().of(object().nullable().required('Team is required')).min(1, 'At least one team is required'),
+  contactPersonsHall: array().of(object().required('Team is required')).min(1, 'At least one Hall contact is required'),
   contactPersonsDept: array()
     .of(object().nullable().required('Team is required'))
-    .min(1, 'At least one department contact is required')
+    .min(1, 'At least one department contact is required'),
+  locations: array()
+    .of(object().nullable().required('Location is required'))
+    .min(1, 'At least one location is required')
 })
 
 export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {

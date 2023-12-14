@@ -3,7 +3,7 @@ import { toast } from 'react-hot-toast'
 
 import type { Query } from '@/types/gql/graphql'
 
-const GET_ROOMCARD = gql`
+export const GET_ROOMCARD = gql`
   query RoomCards($where: RoomCardWhere) {
     roomCards(where: $where) {
       name
