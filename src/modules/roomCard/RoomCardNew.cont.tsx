@@ -7,6 +7,7 @@ import { array, object, string } from 'yup'
 
 import { PATH } from '@/types/constants/paths'
 
+import { useRoomCards } from '../roomCards/hooks/useRoomCards'
 import { makeRoomCardsCreateData, useRoomCardCreate } from './hooks/useRoomCardCreate'
 import { RoomCardComponent } from './RoomCard.comp'
 import { useRoomCardStore } from './store/useRoomCardStore'
@@ -28,6 +29,7 @@ const schema = object().shape({
 export const RoomCardNewContainer = () => {
   //TODO: fix typing
   const formMethods = useForm<RoomCardFormType>({ resolver: yupResolver(schema) as any })
+  const { refetch } = useRoomCards()
 
   const router = useRouter()
   const { watch, handleSubmit } = formMethods
@@ -45,7 +47,10 @@ export const RoomCardNewContainer = () => {
     toast.promise(
       createRoomCard({
         variables: makeRoomCardsCreateData(data),
-        onCompleted: data => router.push(PATH.ROOM_CARD + '/' + data?.createRoomCards?.roomCards[0].uid),
+        onCompleted: data => {
+          refetch()
+          router.push(PATH.ROOM_CARD + '/' + data?.createRoomCards?.roomCards[0].uid)
+        },
         refetchQueries: ['RoomCards', 'RoomCard']
       }),
       {
@@ -60,7 +65,10 @@ export const RoomCardNewContainer = () => {
     toast.promise(
       createRoomCard({
         variables: makeRoomCardsCreateData(data),
-        onCompleted: () => router.push(PATH.ROOM_CARDS)
+        onCompleted: () => {
+          refetch()
+          router.push(PATH.ROOM_CARDS)
+        }
       }),
       {
         loading: 'Saving room card...',

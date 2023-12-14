@@ -2,7 +2,7 @@ import { gql, useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
-import { ROOM_CARDS } from '@/modules/roomCards/hooks/useRoomCards'
+import { ROOM_CARDS, useRoomCards } from '@/modules/roomCards/hooks/useRoomCards'
 import { PATH } from '@/types/constants/paths'
 
 import type { Mutation } from '../../../types/gql/graphql'
@@ -68,6 +68,7 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
   })
   const { roomCard: roomCardOrigin } = useRoomCard(roomCardUid)
   const router = useRouter()
+  const { refetch } = useRoomCards()
 
   const { deleteHallContacts, disconnectDeptContacts, disconnectTeams, newDeptContacts, newHallContacts, newTeams } =
     useRoomCardStore()
@@ -90,7 +91,10 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
           ?.filter(location => !roomCardOrigin?.locations?.some(originLocation => originLocation.uid === location.uid))
           .map(location => ({ uid: location.uid, code: location.code, name: location.name })) as Codebooktree[]
       }),
-      onCompleted: () => saveAndExit && router.push(PATH.ROOM_CARDS),
+      onCompleted: () => {
+        refetch()
+        saveAndExit && router.push(PATH.ROOM_CARDS)
+      },
       refetchQueries: [ROOM_CARDS, GET_ROOMCARD]
     })
 
