@@ -16,6 +16,8 @@ const UPDATE_ROOM_CARD = gql`
     updateRoomCards(where: $where, update: $update) {
       roomCards {
         purityClass
+        name
+        status
         prescribedClothing
         entryToHvacTent
         cleaningScheduleDate
