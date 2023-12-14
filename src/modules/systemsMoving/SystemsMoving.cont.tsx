@@ -99,7 +99,7 @@ export const SystemsMovingContainer = () => {
     toast.success(`System ${childSystem.name} was moved under ${parentSystem?.name}`)
   }
 
-  const { update } = useSystemMutation()
+  const { update, loading } = useSystemMutation()
 
   const updateSystem = (data: SystemMovingFormType) => {
     update({
