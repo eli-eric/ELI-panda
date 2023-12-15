@@ -40,9 +40,13 @@ export const SystemsMovingContainer = () => {
   const systemsLeft = useSystems(tableIdLeft)
   const systemsRight = useSystems(tableIdRight)
 
+  const childParentUid = childSystem?.parentPath && childSystem?.parentPath[childSystem?.parentPath?.length - 1].uid
+
   const [parentSystem, setParentSystem] = useState<SystemsMovingType | undefined>()
   const { systemSubsystems: moveToParentKey } = useEndpoint({ uid: parentSystem?.uid || '' })
-  const { systemSubsystems: moveFromParentKey } = useEndpoint({ uid: childSystem?.parentUid || '' })
+  const { systemSubsystems: moveFromParentKey } = useEndpoint({
+    uid: childParentUid || ''
+  })
 
   const formMethods = useForm<SystemMovingFormType>()
   const { setValue, reset } = formMethods
@@ -99,7 +103,7 @@ export const SystemsMovingContainer = () => {
     toast.success(`System ${childSystem.name} was moved under ${parentSystem?.name}`)
   }
 
-  const { update, loading } = useSystemMutation()
+  const { update } = useSystemMutation()
 
   const updateSystem = (data: SystemMovingFormType) => {
     update({
@@ -109,7 +113,7 @@ export const SystemsMovingContainer = () => {
           name: data.name,
           systemAlias: data.systemAlias,
           parentSystem: {
-            disconnect: whereN(childSystem?.parentUid),
+            disconnect: whereN(childParentUid),
             connect: whereN(parentSystem?.uid)
           },
           location: {
