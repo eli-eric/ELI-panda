@@ -20,7 +20,7 @@ const getEndpoints = (uid?: string, path?: string, itemUid?: string, query?: str
     systemRelationship: `/system/relationship${uid ? '/' + uid : ''}`,
     systemsForRelationship: `/systems/for-relationship${query}`,
     systemSubsystemsForRelationship: `/system/${uid}/subsystems/for-relationship`,
-    systemSubsystems: `/system/${uid}/subsystems`,
+    systemSubsystems: uid ? `/system/${uid}/subsystems` : null,
     systemsList: `/systems${query}`,
     systemCode: `/system/systemCode${query}`,
     orders: `/orders${query}`,
