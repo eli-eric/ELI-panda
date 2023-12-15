@@ -14,7 +14,7 @@ import { whereC, whereN } from '@/utils/graphql/mutations'
 import { useSystems } from '../systems/hooks/useSystems'
 import { SystemsContainer } from '../systems/Systems.cont'
 import type { SystemDetail } from '../systems/types/responses'
-import { addSubsystem, filterSubsystem } from '../systems/utils'
+import { addSubsystem, filterSubsystem, filterSubsystemFromSubsystems } from '../systems/utils'
 import { SystemMovingForm } from './form/SystemMoving.form'
 import { useSystemMutation } from './hooks/useSystemMutate'
 
@@ -90,7 +90,7 @@ export const SystemsMovingContainer = () => {
     }
 
     await mutate(moveToParentKey, data => data && [...data, childSystem], { revalidate: false })
-    await mutate(moveFromParentKey, data => data && data.filter(system => system.uid !== childSystem.uid), {
+    await mutate(moveFromParentKey, data => data && filterSubsystemFromSubsystems(childSystem.uid, data), {
       revalidate: false
     })
 

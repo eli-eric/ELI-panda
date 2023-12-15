@@ -41,6 +41,23 @@ export const filterSubsystem = (uid: string | null, prev: SystemsResponse): Syst
   return { ...prev, data: filterData(prev.data) }
 }
 
+export const filterSubsystemFromSubsystems = (uid: string | null, prev: SystemDetail[]): SystemDetail[] => {
+  const filterData = (data: SystemDetail[]): SystemDetail[] => {
+    const result: SystemDetail[] = []
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].uid !== uid) {
+        const newItem = { ...data[i] }
+        if (newItem.subSystems) {
+          newItem.subSystems = filterData(newItem.subSystems)
+        }
+        result.push(newItem)
+      }
+    }
+    return result
+  }
+  return filterData(prev)
+}
+
 export const updateSystem = (uid: string, newSystem: SystemDetail, prev: SystemsResponse): SystemsResponse => {
   const updateData = (data: SystemDetail[]): SystemDetail[] => {
     const result: SystemDetail[] = []
