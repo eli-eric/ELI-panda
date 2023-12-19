@@ -20,36 +20,26 @@ export const SystemMovingForm = ({ parentPath }: SystemMovingFormProps) => {
       <Col lg={12}>
         <BreadcrumpContainer>
           <span className="text-sm font-medium text-gray-500">Target System: </span>
-          {parentPath?.map((item, index) => (
-            <BreadcrumpItem key={index} name={item.name} />
-          ))}
+          {parentPath?.map((item, index) => <BreadcrumpItem key={index} name={item.name} />)}
         </BreadcrumpContainer>
       </Col>
       <Col sm={3} md={4} lg={8}>
         <Input {...fields.name} />
       </Col>
       <Col sm={3} md={4}>
-        <Combobox {...fields.owner} />
-      </Col>
-      <Col sm={3} md={4}>
         <Combobox {...fields.responsible} />
-      </Col>
-
-      <Col sm={3} md={4} lg={8}>
-        <Listbox {...fields.importance} />
-      </Col>
-      <Col sm={3} md={6}>
-        <Combobox {...fields.location} />
       </Col>
       <Col sm={3} md={6}>
         <Listbox {...fields.zone} />
       </Col>
       <Col sm={3} md={6}>
-        <Listbox {...fields.systemType} />
+        <Combobox {...fields.location} />
+      </Col>
+      <Col sm={3} md={6}>
+        <Listbox {...fields.systemType} disabled />
       </Col>
       <Col sm={3}>
-        {/* @TODO: system code should be disabled? */}
-        <Input {...fields.systemCode} />
+        <Input {...fields.systemCode} disabled />
       </Col>
       <Col sm={3}>
         <Input {...fields.systemAlias} />

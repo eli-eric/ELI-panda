@@ -1,12 +1,14 @@
 import classNames from 'classnames'
 import type { FC } from 'react'
-import { createContext } from 'react'
+import { createContext, memo } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { useHoveringId } from '@/store/useHoveringId'
 
 import { getColorBySystemLevel, getFontBySystemLevel } from '../systemItem/utils'
 import { SystemsTable } from './components/table/Systems.table'
+
+const MemoizedSystemTable = memo(SystemsTable)
 
 interface SystemsContextType {
   isHoveringId: number | undefined | string
@@ -37,7 +39,7 @@ export const SystemsContainer: FC<Props> = ({
 
   return (
     <TableLayoutContainer className={className}>
-      <SystemsTable
+      <MemoizedSystemTable
         hideButtons={hideButtons}
         enableDragAndDrop={enableDragAndDrop}
         tableId={tableId}
