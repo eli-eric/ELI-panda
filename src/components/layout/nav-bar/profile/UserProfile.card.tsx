@@ -53,6 +53,24 @@ export const UserProfileCard = () => {
         </div>
         <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
           <dt className="text-sm font-medium text-gray-500">
+            <FormattedMessage id={securityMessages.apiDocs} />
+          </dt>
+          <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+            <span className="flex-grow">
+              <a
+                target="_blank"
+                className="text-primary-600 hover:underline"
+                href={process.env.PANDA_API_GW_URL?.replaceAll('v1', '')}
+                rel="noreferrer"
+              >
+                {' '}
+                {process.env.PANDA_API_GW_URL?.replaceAll('v1', '')}
+              </a>{' '}
+            </span>
+          </dd>
+        </div>
+        <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
+          <dt className="text-sm font-medium text-gray-500">
             <FormattedMessage id={securityMessages.api} />
           </dt>
           <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0 h-10 ">

@@ -349,7 +349,8 @@ export const messages = {
       title: 'Security',
       subTitle: 'Change your password.',
       api: 'REST API Token',
-      apiDescription: 'Get your API key to use ELI Panda API.'
+      apiDescription: 'Get your API key to use ELI Panda API.',
+      apiDocs: 'REST API Documentation'
     },
     team: {
       title: 'Team',
