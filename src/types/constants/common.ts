@@ -13,7 +13,7 @@ export const APP_BASE_URL =
   PROCESS_ENV == ENV.DEV
     ? 'https://dev.panda.eli-beams.eu'
     : PROCESS_ENV == ENV.TEST
-    ? 'https://test.panda.eli-beams.eu'
-    : PROCESS_ENV == ENV.LOCAL
-    ? 'http://localhost:5001'
-    : 'https://panda.eli-beams.eu'
+      ? 'https://test.panda.eli-beams.eu'
+      : PROCESS_ENV == ENV.LOCAL
+        ? 'http://localhost:5001'
+        : 'https://panda.eli-laser.eu'
