@@ -1,22 +1,15 @@
-import { Fragment, useCallback, useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Fragment, useCallback, useState } from 'react'
 import { toast } from 'react-hot-toast'
-import { mutate } from 'swr'
 
 import { MinusButton, PlusButton } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { FormModal } from '@/hooks/form/useFormModal'
 import { classNames } from '@/utils'
-import { whereC, whereN } from '@/utils/graphql/mutations'
 
-import { useSystems } from '../systems/hooks/useSystems'
 import { SystemsContainer } from '../systems/Systems.cont'
 import type { SystemDetail } from '../systems/types/responses'
-import { addSubsystem, filterSubsystem, filterSubsystemFromSubsystems } from '../systems/utils'
-import { SystemMovingForm } from './form/SystemMoving.form'
-import { useSystemMutation } from './hooks/useSystemMutate'
+import { SystemMovingModal } from './form/SystemMoving.modal'
+import { useSystemMovingStore } from './store/useSystemMovingStore'
 
 interface SystemsMovingType extends SystemDetail {
   tableId: string
@@ -32,119 +25,22 @@ export type SystemMovingFormType = {
 }
 
 export const SystemsMovingContainer = () => {
-  const [open, setOpen] = useState(false)
-  const tableIdLeft = 'systems-left'
-  const tableIdRight = 'systems-right'
+  const { tableIdLeft, tableIdRight, setChildSystem, setParentSystem } = useSystemMovingStore()
+  const [openModal, setOpenModal] = useState(false)
 
-  const [childSystem, setChildSystem] = useState<SystemsMovingType>()
-  const systemsLeft = useSystems(tableIdLeft)
-  const systemsRight = useSystems(tableIdRight)
-
-  const childParentUid = childSystem?.parentPath && childSystem?.parentPath[childSystem?.parentPath?.length - 1].uid
-
-  const [parentSystem, setParentSystem] = useState<SystemsMovingType | undefined>()
-  const { systemSubsystems: moveToParentKey } = useEndpoint({ uid: parentSystem?.uid || '' })
-  const { systemSubsystems: moveFromParentKey } = useEndpoint({
-    uid: childParentUid || ''
-  })
-
-  const formMethods = useForm<SystemMovingFormType>()
-  const { setValue, reset } = formMethods
-
-  const onDropHandler = (from: SystemsMovingType, to: SystemsMovingType) => {
-    const isNotAllowedToMove = to.parentPath?.some(parent => parent.uid === from.uid) || from.uid === to.uid || false
-    if (isNotAllowedToMove) {
-      toast.error('System cannot be moved under itself or its sub-systems')
-      return
-    }
-    setChildSystem(from)
-    setParentSystem(to)
-    setOpen(true)
-  }
-
-  const onSuccess = async () => {
-    const systemActions = {
-      [tableIdLeft]: {
-        systems: systemsLeft,
-        oppositeSystems: systemsRight
-      },
-      [tableIdRight]: {
-        systems: systemsRight,
-        oppositeSystems: systemsLeft
+  const onDropHandler = useCallback(
+    (from: SystemsMovingType, to: SystemsMovingType) => {
+      const isNotAllowedToMove = to.parentPath?.some(parent => parent.uid === from.uid) || from.uid === to.uid || false
+      if (isNotAllowedToMove) {
+        toast.error('System cannot be moved under itself or its sub-systems')
+        return
       }
-    }
-
-    const currentAction = systemActions[parentSystem?.tableId as keyof typeof systemActions]
-    const isSameTable = parentSystem?.tableId === childSystem?.tableId
-
-    if (!currentAction || !childSystem) {
-      return
-    }
-
-    const mutateSubsystem = (system, method) => {
-      if (!system.query.query.search) {
-        system.mutate(prev => prev && method(childSystem.uid, prev), { revalidate: false })
-      }
-      parentSystem &&
-        system.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), { revalidate: false })
-    }
-
-    await mutate(moveToParentKey, data => data && [...data, childSystem], { revalidate: false })
-    await mutate(moveFromParentKey, data => data && filterSubsystemFromSubsystems(childSystem.uid, data), {
-      revalidate: false
-    })
-
-    if (isSameTable) {
-      mutateSubsystem(currentAction.oppositeSystems, filterSubsystem)
-    } else {
-      mutateSubsystem(currentAction.systems, filterSubsystem)
-    }
-
-    toast.success(`System ${childSystem.name} was moved under ${parentSystem?.name}`)
-  }
-
-  const { update } = useSystemMutation()
-
-  const updateSystem = (data: SystemMovingFormType) => {
-    update({
-      variables: {
-        where: { uid: childSystem?.uid },
-        update: {
-          name: data.name,
-          systemAlias: data.systemAlias,
-          parentSystem: {
-            disconnect: whereN(childParentUid),
-            connect: whereN(parentSystem?.uid)
-          },
-          location: {
-            connect: data.location?.uid ? whereC(data.location?.uid) : undefined,
-            disconnect: childSystem?.location?.uid ? whereC(childSystem?.location?.uid) : undefined
-          },
-          responsible: {
-            connect: data.responsible?.uid ? whereN(data.responsible?.uid) : undefined,
-            disconnect: childSystem?.responsible?.uid ? whereN(childSystem?.responsible?.uid) : undefined
-          },
-          zone: {
-            connect: data.zone?.uid ? whereN(data.zone?.uid) : undefined,
-            disconnect: childSystem?.zone?.uid ? whereN(childSystem?.zone?.uid) : undefined
-          }
-        }
-      },
-      onCompleted: () => {
-        onSuccess()
-      }
-    })
-  }
-
-  useEffect(() => {
-    reset()
-    setValue('name', childSystem?.name || '')
-    setValue('systemAlias', childSystem?.systemAlias)
-    setValue('description', childSystem?.description)
-    setValue('responsible', childSystem?.responsible)
-    setValue('zone', childSystem?.zone)
-    setValue('location', childSystem?.location)
-  }, [childSystem, setValue, reset])
+      setChildSystem(from)
+      setParentSystem(to)
+      setOpenModal(true)
+    },
+    [setChildSystem, setParentSystem, setOpenModal]
+  )
 
   const [showLeft, setShowLeft] = useState(true)
   const toggleLeft = useCallback(() => setShowLeft(!showLeft), [showLeft])
@@ -161,7 +57,7 @@ export const SystemsMovingContainer = () => {
             hideButtons={false}
             enableDragAndDrop={true}
             className="border-r-4 border-gray-400"
-            dropSettings={{ onDropHandler: onDropHandler, accept: 'system' }}
+            dropSettings={{ onDropHandler, accept: 'system' }}
             enableQueryURL={false}
             RightSearchBarElement={() =>
               showRight ? (
@@ -206,21 +102,7 @@ export const SystemsMovingContainer = () => {
         )}
       </div>
 
-      <FormModal
-        formMethods={formMethods}
-        onSubmit={(data: SystemMovingFormType) => {
-          updateSystem(data)
-        }}
-        open={open}
-        setOpen={setOpen}
-      >
-        <SystemMovingForm
-          parentPath={[
-            ...(parentSystem?.parentPath || []),
-            { name: parentSystem?.name || '', uid: parentSystem?.uid || '' }
-          ]}
-        />
-      </FormModal>
+      <SystemMovingModal open={openModal} setOpen={setOpenModal} />
     </Fragment>
   )
 }

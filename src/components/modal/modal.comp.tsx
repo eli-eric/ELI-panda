@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { type Dispatch, Fragment, type SetStateAction } from 'react'
+import { Fragment } from 'react'
 
 import { useEscapeKey } from '@/hooks/useEscapeKey'
 import type { ModalButtons } from '@/types/form'
@@ -8,7 +8,7 @@ import ModalButtonsComponent from './modal.buttons'
 
 interface Props {
   open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
+  setOpen: (open: boolean) => void
   children: React.ReactNode
   testid?: string
   buttons?: ModalButtons
