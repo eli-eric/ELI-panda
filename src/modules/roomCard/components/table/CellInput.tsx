@@ -49,7 +49,6 @@ const PrescribedClothingSelect = () => {
   const prescribedClothingEnums = Object.values(PrescribedClothing).map(value => value)
   const { control, setValue } = useFormContext<RoomCardFormType>()
   const prescribedClothing = useWatch({ control, name: 'prescribedClothing' }) || []
-  console.log(prescribedClothing)
   return (
     <div className="grid grid-cols-4 mt-1">
       {prescribedClothingEnums.map((item, index) => (

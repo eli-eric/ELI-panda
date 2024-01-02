@@ -23,7 +23,7 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
   const formMethods = useForm<SystemMovingFormType>()
   const { setValue, reset } = formMethods
 
-  const { parentSystem, childSystem, tableIdLeft, tableIdRight } = useSystemMovingStore()
+  const { parentSystem, childSystem, tableIdLeft, tableIdRight, clear } = useSystemMovingStore()
 
   const systemsLeft = useSystems(tableIdLeft)
   const systemsRight = useSystems(tableIdRight)
@@ -38,58 +38,70 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
   const { update } = useSystemMutation()
 
   const mutateSubsystem = useCallback(
-    (system, method) => {
+    (system, method, formData) => {
       if (!childSystem?.uid) return
       if (!system.query.query.search) {
         system.mutate(prev => prev && method(childSystem?.uid, prev), { revalidate: false })
       }
+      const newParentPath = [{ uid: parentSystem?.uid, name: parentSystem?.name }]
       parentSystem &&
-        system.mutate(prev => prev && addSubsystem(parentSystem.uid, childSystem, prev), { revalidate: false })
+        system.mutate(
+          prev =>
+            prev && addSubsystem(parentSystem.uid, { ...childSystem, ...formData, parentPath: newParentPath }, prev),
+          {
+            revalidate: false
+          }
+        )
     },
     [childSystem, parentSystem]
   )
 
-  const onSuccess = useCallback(() => {
-    const systemActions = {
-      [tableIdLeft]: {
-        systems: systemsLeft,
-        oppositeSystems: systemsRight
-      },
-      [tableIdRight]: {
-        systems: systemsRight,
-        oppositeSystems: systemsLeft
+  const onSuccess = useCallback(
+    (formData: SystemMovingFormType) => {
+      const systemActions = {
+        [tableIdLeft]: {
+          systems: systemsLeft,
+          oppositeSystems: systemsRight
+        },
+        [tableIdRight]: {
+          systems: systemsRight,
+          oppositeSystems: systemsLeft
+        }
       }
-    }
-    const currentAction = systemActions[parentSystem?.tableId as keyof typeof systemActions]
-    const isSameTable = parentSystem?.tableId === childSystem?.tableId
+      const currentAction = systemActions[parentSystem?.tableId as keyof typeof systemActions]
+      const isSameTable = parentSystem?.tableId === childSystem?.tableId
 
-    if (!currentAction || !childSystem) {
-      return
-    }
+      if (!currentAction || !childSystem) {
+        return
+      }
 
-    mutate(moveToParentKey, data => data && [...data, childSystem], { revalidate: false })
-    mutate(moveFromParentKey, data => data && filterSubsystemFromSubsystems(childSystem.uid, data), {
-      revalidate: false
-    })
+      mutate(moveToParentKey, data => data && [...data, childSystem], { revalidate: false })
+      mutate(moveFromParentKey, data => data && filterSubsystemFromSubsystems(childSystem.uid, data), {
+        revalidate: false
+      })
 
-    if (isSameTable) {
-      mutateSubsystem(currentAction.oppositeSystems, filterSubsystem)
-    } else {
-      mutateSubsystem(currentAction.systems, filterSubsystem)
-    }
+      if (isSameTable) {
+        mutateSubsystem(currentAction.oppositeSystems, filterSubsystem, formData)
+      } else {
+        mutateSubsystem(currentAction.systems, filterSubsystem, formData)
+      }
 
-    toast.success(`System ${childSystem.name} was moved under ${parentSystem?.name}`)
-  }, [
-    childSystem,
-    parentSystem,
-    systemsLeft,
-    systemsRight,
-    tableIdLeft,
-    tableIdRight,
-    moveToParentKey,
-    moveFromParentKey,
-    mutateSubsystem
-  ])
+      toast.success(`System ${childSystem.name} was moved under ${parentSystem?.name}`)
+      clear()
+    },
+    [
+      childSystem,
+      parentSystem,
+      systemsLeft,
+      systemsRight,
+      tableIdLeft,
+      tableIdRight,
+      moveToParentKey,
+      moveFromParentKey,
+      mutateSubsystem,
+      clear
+    ]
+  )
 
   useEffect(() => {
     reset()
@@ -128,7 +140,7 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
           }
         },
         onCompleted: () => {
-          onSuccess()
+          onSuccess(data)
         }
       })
     },
