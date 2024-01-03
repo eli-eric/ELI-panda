@@ -5,6 +5,8 @@ declare module '@tanstack/table-core' {
   interface ColumnMeta<TData extends RowData, TValue> {
     sticky?: boolean
     className?: string
+
+    headerClassName?: string
     filter?: {
       type: 'string' | 'date' | 'boolean' | 'number' | 'listOfValues' | 'autoComplete'
       enableColumnFilter: boolean

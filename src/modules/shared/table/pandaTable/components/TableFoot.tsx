@@ -13,7 +13,10 @@ export const TableFoot: FC<Props> = ({ getFooterGroups }) => (
     {getFooterGroups().map(footerGroup => (
       <tr key={footerGroup.id} className={classNames('bg-gray-50')}>
         {footerGroup.headers.map(header => (
-          <td key={header.id} className={classNames('text-xs sm:pl-6 sm:pr-6 text-gray-500')}>
+          <td
+            key={header.id}
+            className={classNames('text-xs sm:pl-6 sm:pr-6 text-gray-500', header.column.columnDef.meta?.className)}
+          >
             {header.isPlaceholder ? null : flexRender(header.column.columnDef.footer, header.getContext())}
           </td>
         ))}
