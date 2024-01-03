@@ -18,18 +18,25 @@ export const CatalogueStatisticsContainer = ({ catalogueItemUid }: CatalogueStat
   return (
     <Fragment>
       <Heading customText="Statistics" />
-      <PandaTable
-        {...{
-          tableId: tableId,
-          data: itemStatistics,
-          columns: columns,
-          loading,
-          settings: {
-            enableFooter: true
-          },
-          className: 'relative overflow-x-auto'
-        }}
-      />
+      {loading && <div className="flex justify-center items-center h-16"></div>}
+      {!itemStatistics || itemStatistics.length === 0 ? (
+        <div className="flex justify-center items-center h-16">
+          <span className="text-2xl text-gray-500">No statistics available</span>
+        </div>
+      ) : (
+        <PandaTable
+          {...{
+            tableId: tableId,
+            data: itemStatistics,
+            columns: columns,
+            loading,
+            settings: {
+              enableFooter: true
+            },
+            className: 'relative overflow-x-auto'
+          }}
+        />
+      )}
     </Fragment>
   )
 }

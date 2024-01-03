@@ -138,6 +138,12 @@ export const RefreshButton = ({ buttonSize = 'small', ...restProps }: ButtonProp
   </Button>
 )
 
+export const StatsButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+  <Button {...restProps} buttonSize={buttonSize}>
+    <TableCellsIcon className="h-4 w-4" aria-hidden="true" />
+  </Button>
+)
+
 export const TableEditButton = ({ type = 'button', ...props }: ButtonProps) => (
   <button className="ml-2  hover:text-primary-500" type={type} {...props}>
     <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />

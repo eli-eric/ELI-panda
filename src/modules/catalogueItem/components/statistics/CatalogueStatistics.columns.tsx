@@ -1,4 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
+import type { FC, PropsWithChildren } from 'react'
 import { useMemo } from 'react'
 
 export type CatalogueStatistics = {
@@ -11,6 +12,8 @@ export type CatalogueStatistics = {
   stockItemsCount: number
   othersCount: number
 }
+
+const FooterBold: FC<PropsWithChildren> = ({ children }) => <span className="font-bold">{children}</span>
 
 export const useCatalogueStatisticsColumns = (itemStatistics?: CatalogueStatistics[]) => {
   const columns = useMemo((): ColumnDef<CatalogueStatistics, any>[] => {
@@ -26,9 +29,10 @@ export const useCatalogueStatisticsColumns = (itemStatistics?: CatalogueStatisti
         id: 'sparePartsCount',
         accessorFn: ({ sparePartsCount }) => sparePartsCount,
         size: 70,
-        footer: () => <span>{sparePartsCountTotal}</span>
+        footer: () => <FooterBold>{sparePartsCountTotal}</FooterBold>
       })
     }
+
     const inSystemPartsCountTotal = itemStatistics?.reduce(
       (acc, row) => (row.inSystemPartsCount ? acc + row.inSystemPartsCount : 0),
       0
@@ -39,9 +43,10 @@ export const useCatalogueStatisticsColumns = (itemStatistics?: CatalogueStatisti
         id: 'inSystemPartsCount',
         accessorFn: ({ inSystemPartsCount }) => inSystemPartsCount,
         size: 90,
-        footer: () => <span>{inSystemPartsCountTotal}</span>
+        footer: () => <FooterBold>{inSystemPartsCountTotal}</FooterBold>
       })
     }
+
     const experimentalLoanPoolPartsCountTotal = itemStatistics?.reduce(
       (acc, row) => acc + row.experimentalLoanPoolPartsCount,
       0
@@ -51,9 +56,10 @@ export const useCatalogueStatisticsColumns = (itemStatistics?: CatalogueStatisti
         header: 'Experimental loan pool parts',
         id: 'experimentalLoanPoolPartsCount',
         accessorFn: ({ experimentalLoanPoolPartsCount }) => experimentalLoanPoolPartsCount,
-        footer: () => <span>{experimentalLoanPoolPartsCountTotal}</span>
+        footer: () => <FooterBold>{experimentalLoanPoolPartsCountTotal}</FooterBold>
       })
     }
+
     const testAndMeasurementPartsCountTotal = itemStatistics?.reduce(
       (acc, row) => acc + row.testAndMeasurementPartsCount,
       0
@@ -63,9 +69,10 @@ export const useCatalogueStatisticsColumns = (itemStatistics?: CatalogueStatisti
         header: 'Test and measurement parts',
         id: 'testAndMeasurementPartsCount',
         accessorFn: ({ testAndMeasurementPartsCount }) => testAndMeasurementPartsCount,
-        footer: () => <span>{testAndMeasurementPartsCountTotal}</span>
+        footer: () => <FooterBold>{testAndMeasurementPartsCountTotal}</FooterBold>
       })
     }
+
     const stockItemsCountTotal = itemStatistics?.reduce(
       (acc, row) => (row.stockItemsCount ? acc + row.stockItemsCount : 0),
       0
@@ -76,9 +83,10 @@ export const useCatalogueStatisticsColumns = (itemStatistics?: CatalogueStatisti
         id: 'stockItemsCount',
         accessorFn: ({ stockItemsCount }) => stockItemsCount,
         size: 70,
-        footer: () => <span>{stockItemsCountTotal}</span>
+        footer: () => <FooterBold>{stockItemsCountTotal}</FooterBold>
       })
     }
+
     const othersCountTotal = itemStatistics?.reduce((acc, row) => acc + row.othersCount, 0)
     if (othersCountTotal && othersCountTotal > 0) {
       itemUsageColumns.push({
@@ -86,7 +94,7 @@ export const useCatalogueStatisticsColumns = (itemStatistics?: CatalogueStatisti
         id: 'othersCount',
         accessorFn: ({ othersCount }) => othersCount,
         size: 50,
-        footer: () => <span>{othersCountTotal}</span>
+        footer: () => <FooterBold>{othersCountTotal}</FooterBold>
       })
     }
 
@@ -104,7 +112,7 @@ export const useCatalogueStatisticsColumns = (itemStatistics?: CatalogueStatisti
         size: 50,
         footer: props => {
           const sum = props.table.getRowModel().rows.reduce((acc, row) => acc + row.original.total, 0)
-          return <span>{sum}</span>
+          return <FooterBold>{sum}</FooterBold>
         }
       }
     ]

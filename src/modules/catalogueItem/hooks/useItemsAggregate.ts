@@ -9,10 +9,10 @@ import type { CatalogueStatistics } from '../components/statistics/CatalogueStat
 //use faker to generate fake data
 
 export const useItemsAggregate = catalogueItemUid => {
-  const { catalogueItemStatistics } = useEndpoint({ uid: catalogueItemUid })
+  const { catalogueItemStatistics, catalogueItemsStatistics } = useEndpoint({ uid: catalogueItemUid })
 
   const { response, loading, error } = useFetch<CatalogueStatistics[]>({
-    url: () => (catalogueItemUid ? catalogueItemStatistics : null),
+    url: () => (catalogueItemUid ? catalogueItemStatistics : catalogueItemsStatistics),
     config: { suspense: false, revalidateOnMount: true },
     useMockFetcher: false,
     onError: () => {
