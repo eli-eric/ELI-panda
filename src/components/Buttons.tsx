@@ -8,6 +8,7 @@ import {
   NoSymbolIcon,
   PencilSquareIcon,
   PlusIcon,
+  TableCellsIcon,
   TrashIcon
 } from '@heroicons/react/24/outline'
 import Link from 'next/link'
@@ -155,6 +156,12 @@ export const TableDeleteButton = ({ type = 'button', ...props }: ButtonProps) =>
   </button>
 )
 
+export const TableStatsButton = ({ type = 'button', ...props }: ButtonProps) => (
+  <button className="ml-2 hover:text-primary-500" type={type} {...props}>
+    <TableCellsIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+
 export const TablePlusButton = ({ type = 'button', ...props }: ButtonProps) => (
   <button className="ml-2  hover:text-primary-500" type={type} {...props}>
     <PlusIcon className="h-4 w-4" aria-hidden="true" />
@@ -182,12 +189,13 @@ interface TableActionsButtonsProps {
   isShown?: boolean
   position?: 'left-0' | 'right-0'
 }
-export const TableActionsButtons: FC<TableActionsButtonsProps> = ({
+export const TableActionsButtons: FC<PropsWithChildren<TableActionsButtonsProps>> = ({
   onDeleteClick,
   canEdit,
   detailLink,
   addLink,
-  position
+  position,
+  children
 }) => (
   <TableButtonsWrapper position={position}>
     {detailLink && (
@@ -197,6 +205,7 @@ export const TableActionsButtons: FC<TableActionsButtonsProps> = ({
     )}
     {canEdit && (
       <Fragment>
+        {children}
         {onDeleteClick && <TableDeleteButton onClick={onDeleteClick} />}
         {addLink && (
           <Link href={addLink} className={'flex items-center'}>

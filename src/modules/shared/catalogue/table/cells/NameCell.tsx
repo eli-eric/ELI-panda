@@ -1,18 +1,20 @@
 import type { CellContext } from '@tanstack/react-table'
 import Link from 'next/link'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
-import { TableActionsButtons } from '@/components/Buttons'
+import { TableActionsButtons, TableStatsButton } from '@/components/Buttons'
 import { LinkDecorator } from '@/components/decorators'
+import { Modal } from '@/components/modal/modal.comp'
 import WarningModal from '@/components/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
+import { CatalogueStatisticsContainer } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.cont'
 import { useHoveringId } from '@/store/useHoveringId'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
@@ -99,7 +101,9 @@ export const NameCell = ({
             setOpenDeleteWarn(true)
           }}
           canEdit={canEdit}
-        />
+        >
+          <ModalStatisticsButton uid={uid} />
+        </TableActionsButtons>
       )}
       <WarningModal
         buttons={deleteButtons}
@@ -111,5 +115,22 @@ export const NameCell = ({
         error={deleteSubmit.error}
       />
     </div>
+  )
+}
+
+type ModalStatisticsButtonProps = {
+  uid: string
+}
+
+const ModalStatisticsButton = ({ uid }: ModalStatisticsButtonProps) => {
+  const [openStats, setOpenStats] = useState(false)
+
+  return (
+    <Fragment>
+      <TableStatsButton onClick={() => setOpenStats(true)} />
+      <Modal open={openStats} setOpen={setOpenStats}>
+        <CatalogueStatisticsContainer catalogueItemUid={uid} />
+      </Modal>
+    </Fragment>
   )
 }

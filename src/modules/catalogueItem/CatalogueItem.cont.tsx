@@ -23,6 +23,7 @@ import Groups from './components/form/Groups'
 import { schema } from './components/form/ItemForm.schema'
 import ItemHeader from './components/header/Header.comp'
 import { CatalogueOrders } from './components/orders/CatalogueOrders'
+import { CatalogueStatisticsContainer } from './components/statistics/CatalogueStatistics.cont'
 import useItem from './hooks/useItem'
 import useItemSubmit from './hooks/useItemSubmit'
 import type { CatalogueItem } from './types/responses'
@@ -34,15 +35,18 @@ interface CatalogueForm extends CatalogueItem {
   hasImageGalleryChanges?: boolean
 }
 
-const CatalogueItemContainer = () => {
+interface CatalogueItemContainerProps {
+  catalogueUID?: string
+}
+
+const CatalogueItemContainer = ({ catalogueUID }: CatalogueItemContainerProps) => {
   const { query } = useRouter()
   const queryUID = query.uid as string | undefined
-  const catalogueUid = query.catalogueUid as string | undefined
   const disabledEdit = !usePermission([ROLE.CATALOGUE_EDIT])
   const { item } = useItem()
   const fields = useCatalogueFormFields()
 
-  const { catalogueCategory } = useCategory(catalogueUid)
+  const { catalogueCategory } = useCategory(catalogueUID)
 
   const imageRef = useRef<ImageGalleryRef>()
   const formMethods = useForm<CatalogueForm>({ resolver: yupResolver(schema), defaultValues: { ...item } })
@@ -89,6 +93,7 @@ const CatalogueItemContainer = () => {
           </Suspense>
         </ErrorBoundary>
         <CatalogueOrders />
+        <CatalogueStatisticsContainer catalogueItemUid={catalogueUID} />
         {queryUID && (
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense>

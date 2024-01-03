@@ -58,3 +58,29 @@ export default function ModalComponent({ open, children, testid, buttons, setOpe
     </Transition.Root>
   )
 }
+
+export const Modal = ({ children, open, setOpen, buttons, testid = 'modal' }: Props) => {
+  const buttonsExist = buttons && (buttons.goBack || buttons.alternative || buttons.goNext)
+
+  const defaultButtons: ModalButtons = {
+    goNext: {
+      testid: 'close',
+      text: 'Close',
+      onClick: () => setOpen(false)
+    }
+  }
+
+  return (
+    <ModalComponent
+      {...{
+        testid,
+        open,
+        setOpen,
+        buttons
+      }}
+    >
+      {children}
+      {!buttonsExist && <ModalButtonsComponent testid={testid} buttons={defaultButtons} />}
+    </ModalComponent>
+  )
+}
