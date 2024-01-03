@@ -74,12 +74,13 @@ export const ColumnHeader: FC<ColumnHeader> = ({
       <div
         ref={previewRef}
         {...{
-          className: classNames('flex items-center justify-between'),
+          className: classNames('flex items-center justify-between', header.column.columnDef.meta?.headerClassName),
           style: {
             width: header.getSize()
           }
         }}
       >
+        {/* center header */}
         <div className="flex items-center">
           <div
             className={classNames(header.column.getCanSort() ? 'cursor-pointer select-none' : '', 'items-center')}

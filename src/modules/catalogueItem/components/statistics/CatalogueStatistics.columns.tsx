@@ -13,36 +13,32 @@ export type CatalogueStatistics = {
   othersCount: number
 }
 
-const FooterBold: FC<PropsWithChildren> = ({ children }) => <span className="font-bold">{children}</span>
+const FooterBold: FC<PropsWithChildren> = ({ children }) => <span className="font-bold text-right">{children}</span>
 
 export const useCatalogueStatisticsColumns = (itemStatistics?: CatalogueStatistics[]) => {
   const columns = useMemo((): ColumnDef<CatalogueStatistics, any>[] => {
     const itemUsageColumns: ColumnDef<CatalogueStatistics, any>[] = []
 
-    const sparePartsCountTotal = itemStatistics?.reduce(
-      (acc, row) => (row.sparePartsCount ? acc + row.sparePartsCount : 0),
-      0
-    )
+    const sparePartsCountTotal = itemStatistics?.reduce((acc, row) => acc + row.sparePartsCount, 0)
     if (sparePartsCountTotal && sparePartsCountTotal > 0) {
       itemUsageColumns.push({
         header: 'Spare parts',
         id: 'sparePartsCount',
         accessorFn: ({ sparePartsCount }) => sparePartsCount,
         size: 70,
+        meta: { className: 'text-right' },
         footer: () => <FooterBold>{sparePartsCountTotal}</FooterBold>
       })
     }
 
-    const inSystemPartsCountTotal = itemStatistics?.reduce(
-      (acc, row) => (row.inSystemPartsCount ? acc + row.inSystemPartsCount : 0),
-      0
-    )
+    const inSystemPartsCountTotal = itemStatistics?.reduce((acc, row) => acc + row.inSystemPartsCount, 0)
     if (inSystemPartsCountTotal && inSystemPartsCountTotal > 0) {
       itemUsageColumns.push({
         header: 'In system parts',
         id: 'inSystemPartsCount',
         accessorFn: ({ inSystemPartsCount }) => inSystemPartsCount,
         size: 90,
+        meta: { className: 'text-right' },
         footer: () => <FooterBold>{inSystemPartsCountTotal}</FooterBold>
       })
     }
@@ -56,6 +52,7 @@ export const useCatalogueStatisticsColumns = (itemStatistics?: CatalogueStatisti
         header: 'Experimental loan pool parts',
         id: 'experimentalLoanPoolPartsCount',
         accessorFn: ({ experimentalLoanPoolPartsCount }) => experimentalLoanPoolPartsCount,
+        meta: { className: 'text-right' },
         footer: () => <FooterBold>{experimentalLoanPoolPartsCountTotal}</FooterBold>
       })
     }
@@ -68,19 +65,18 @@ export const useCatalogueStatisticsColumns = (itemStatistics?: CatalogueStatisti
       itemUsageColumns.push({
         header: 'Test and measurement parts',
         id: 'testAndMeasurementPartsCount',
+        meta: { className: 'text-right' },
         accessorFn: ({ testAndMeasurementPartsCount }) => testAndMeasurementPartsCount,
         footer: () => <FooterBold>{testAndMeasurementPartsCountTotal}</FooterBold>
       })
     }
 
-    const stockItemsCountTotal = itemStatistics?.reduce(
-      (acc, row) => (row.stockItemsCount ? acc + row.stockItemsCount : 0),
-      0
-    )
+    const stockItemsCountTotal = itemStatistics?.reduce((acc, row) => acc + row.stockItemsCount, 0)
     if (stockItemsCountTotal && stockItemsCountTotal > 0) {
       itemUsageColumns.push({
         header: 'Stock items',
         id: 'stockItemsCount',
+        meta: { className: 'text-right' },
         accessorFn: ({ stockItemsCount }) => stockItemsCount,
         size: 70,
         footer: () => <FooterBold>{stockItemsCountTotal}</FooterBold>
@@ -94,6 +90,7 @@ export const useCatalogueStatisticsColumns = (itemStatistics?: CatalogueStatisti
         id: 'othersCount',
         accessorFn: ({ othersCount }) => othersCount,
         size: 50,
+        meta: { className: 'text-right' },
         footer: () => <FooterBold>{othersCountTotal}</FooterBold>
       })
     }
@@ -110,6 +107,7 @@ export const useCatalogueStatisticsColumns = (itemStatistics?: CatalogueStatisti
         id: 'total',
         accessorFn: ({ total }) => total,
         size: 50,
+        meta: { className: 'text-right' },
         footer: props => {
           const sum = props.table.getRowModel().rows.reduce((acc, row) => acc + row.original.total, 0)
           return <FooterBold>{sum}</FooterBold>
