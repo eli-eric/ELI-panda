@@ -31,18 +31,32 @@ export const CatalogueOrders = () => {
   const { uid } = router.query as { uid: string }
   const { catalogueOrders } = useEndpoint({ uid })
   const { response, loading } = useFetch<Order[]>({ url: catalogueOrders, config: { suspense: false } })
+
+  if (!response || response.length === 0) {
+    return (
+      <Fragment>
+        <Heading customText="Orders" />
+        <div className="flex justify-center items-center h-16">
+          <span className="text-2xl text-gray-500">No orders available</span>
+        </div>
+      </Fragment>
+    )
+  }
+
   return (
     <Fragment>
       <Heading customText="Orders" />
-      <PandaTable
-        {...{
-          tableId: tableId,
-          data: response,
-          columns,
-          loading,
-          className: 'relative overflow-x-auto'
-        }}
-      />
+      {
+        <PandaTable
+          {...{
+            tableId: tableId,
+            data: response,
+            columns,
+            loading,
+            className: 'relative overflow-x-auto'
+          }}
+        />
+      }
     </Fragment>
   )
 }

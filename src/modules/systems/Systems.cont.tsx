@@ -36,7 +36,6 @@ export const SystemsContainer: FC<Props> = ({
   RightSearchBarElement
 }: Props) => {
   const { setHoveringId } = useHoveringId()
-
   return (
     <TableLayoutContainer className={className}>
       <MemoizedSystemTable

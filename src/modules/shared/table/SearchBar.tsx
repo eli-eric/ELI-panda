@@ -1,6 +1,6 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
 import { useQueryState } from 'next-usequerystate'
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { useDebounce, useIsFirstRender } from 'usehooks-ts'
 
@@ -112,14 +112,16 @@ interface SearchBarButtonsProps {
   handleRefresh: () => void
   handleAdd: () => void
   editRole: ROLE
+  children?: React.ReactNode
 }
 
-export const SearchBarButtonsComponent = ({ editRole, handleRefresh, handleAdd }: SearchBarButtonsProps) => {
+export const SearchBarButtonsComponent = ({ editRole, handleRefresh, handleAdd, children }: SearchBarButtonsProps) => {
   const canEdit = usePermission([editRole])
   return (
     <div className="flex">
       <RefreshButton className="mr-1" buttonSize="large" onClick={handleRefresh} />
       {canEdit && <PlusButton primary className="mr-1" buttonSize="large" onClick={handleAdd} />}
+      {children}
     </div>
   )
 }

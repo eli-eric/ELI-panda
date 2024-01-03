@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { mutate } from 'swr'
 
+import { ModalStatisticsButtonLarge } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.button'
 import { SearchBarButtonsComponent } from '@/modules/shared/table/SearchBar'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
@@ -15,6 +16,8 @@ export const SearchBarButtons = () => {
     router.push({ pathname: PATH.CATALOGUE_ITEM, query: uid ? { catalogueUid: uid } : undefined })
   }
   return (
-    <SearchBarButtonsComponent handleAdd={handleAdd} handleRefresh={handleRefresh} editRole={ROLE.CATALOGUE_EDIT} />
+    <SearchBarButtonsComponent handleAdd={handleAdd} handleRefresh={handleRefresh} editRole={ROLE.CATALOGUE_EDIT}>
+      <ModalStatisticsButtonLarge />
+    </SearchBarButtonsComponent>
   )
 }

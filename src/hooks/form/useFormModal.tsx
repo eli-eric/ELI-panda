@@ -92,7 +92,7 @@ interface Props<T extends FieldValues> {
   error?: boolean
   children?: React.ReactNode
   open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setOpen: (open: boolean) => void
 }
 export const FormModal = <T extends FieldValues>({
   formMethods,

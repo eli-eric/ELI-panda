@@ -1,14 +1,17 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { type Dispatch, Fragment, type SetStateAction } from 'react'
+import { Fragment } from 'react'
 
 import { useEscapeKey } from '@/hooks/useEscapeKey'
+import { message } from '@/i18n/src/messages'
 import type { ModalButtons } from '@/types/form'
 
 import ModalButtonsComponent from './modal.buttons'
 
+const messages = message.common.buttons
+
 interface Props {
   open: boolean
-  setOpen: Dispatch<SetStateAction<boolean>>
+  setOpen: (open: boolean) => void
   children: React.ReactNode
   testid?: string
   buttons?: ModalButtons
@@ -56,5 +59,29 @@ export default function ModalComponent({ open, children, testid, buttons, setOpe
         </div>
       </Dialog>
     </Transition.Root>
+  )
+}
+
+export const Modal = ({ children, open, setOpen, buttons, testid = 'modal' }: Props) => {
+  const defaultButtons: ModalButtons = {
+    goNext: {
+      testid: 'close',
+      text: messages.close,
+      onClick: () => setOpen(false)
+    }
+  }
+
+  return (
+    <ModalComponent
+      {...{
+        testid,
+        open,
+        setOpen,
+        buttons
+      }}
+    >
+      {children}
+      {!buttons && <ModalButtonsComponent testid={testid} buttons={defaultButtons} />}
+    </ModalComponent>
   )
 }

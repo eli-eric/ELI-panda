@@ -174,6 +174,7 @@ export const typeDefs = gql`
     manufacturerUrl: String!
     name: String!
     uid: String!
+    item: Item @relationship(type: "IS_BASED_ON", direction: IN)
   }
 
   interface hasCatalogueProperty @relationshipProperties {
