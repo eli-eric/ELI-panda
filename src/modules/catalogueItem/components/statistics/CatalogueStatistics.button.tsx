@@ -1,19 +1,16 @@
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 
 import { StatsButton } from '@/components/Buttons'
-import { Modal } from '@/components/modal/modal.comp'
+import { useModal } from '@/hooks/useModal'
 
 import { CatalogueStatisticsContainer } from './CatalogueStatistics.cont'
 
 export const ModalStatisticsButtonLarge = () => {
-  const [openStats, setOpenStats] = useState(false)
+  const setOpenStats = useModal(<CatalogueStatisticsContainer />)
 
   return (
     <Fragment>
-      <StatsButton className="mr-1" buttonSize="large" onClick={() => setOpenStats(true)} />
-      <Modal open={openStats} setOpen={setOpenStats}>
-        <CatalogueStatisticsContainer />
-      </Modal>
+      <StatsButton className="mr-1" buttonSize="large" onClick={() => setOpenStats()()} />
     </Fragment>
   )
 }

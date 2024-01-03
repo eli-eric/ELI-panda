@@ -1,8 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
+import { shallow } from 'zustand/shallow'
 
 import { useEscapeKey } from '@/hooks/useEscapeKey'
 import { message } from '@/i18n/src/messages'
+import { useModalStore } from '@/store/useModalStore'
 import type { ModalButtons } from '@/types/form'
 
 import ModalButtonsComponent from './modal.buttons'
@@ -70,7 +72,6 @@ export const Modal = ({ children, open, setOpen, buttons, testid = 'modal' }: Pr
       onClick: () => setOpen(false)
     }
   }
-
   return (
     <ModalComponent
       {...{
@@ -83,5 +84,41 @@ export const Modal = ({ children, open, setOpen, buttons, testid = 'modal' }: Pr
       {children}
       {!buttons && <ModalButtonsComponent testid={testid} buttons={defaultButtons} />}
     </ModalComponent>
+  )
+}
+
+export const GenereralModal = () => {
+  const [params, patchParams, resetParams] = useModalStore(
+    state => [state.params, state.patchParams, state.resetParams],
+    shallow
+  )
+  const { isOpen, error, children, submit } = params
+
+  const buttons: ModalButtons = {
+    goNext: {
+      text: messages.continue,
+      loading: false,
+      onClick: () => patchParams({ isConfirmed: true })
+    },
+    goBack: {
+      text: messages.cancel,
+      onClick: () => {
+        resetParams()
+      }
+    }
+  }
+
+  return (
+    <Modal
+      {...{
+        open: isOpen,
+        setOpen: bool => patchParams({ isOpen: bool }),
+        buttons: submit ? buttons : undefined,
+        error,
+        testid: 'general-modal'
+      }}
+    >
+      {children}
+    </Modal>
   )
 }
