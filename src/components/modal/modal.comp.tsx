@@ -2,9 +2,12 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 
 import { useEscapeKey } from '@/hooks/useEscapeKey'
+import { message } from '@/i18n/src/messages'
 import type { ModalButtons } from '@/types/form'
 
 import ModalButtonsComponent from './modal.buttons'
+
+const messages = message.common.buttons
 
 interface Props {
   open: boolean
@@ -60,12 +63,10 @@ export default function ModalComponent({ open, children, testid, buttons, setOpe
 }
 
 export const Modal = ({ children, open, setOpen, buttons, testid = 'modal' }: Props) => {
-  const buttonsExist = buttons && (buttons.goBack || buttons.alternative || buttons.goNext)
-
   const defaultButtons: ModalButtons = {
     goNext: {
       testid: 'close',
-      text: 'Close',
+      text: messages.close,
       onClick: () => setOpen(false)
     }
   }
@@ -80,7 +81,7 @@ export const Modal = ({ children, open, setOpen, buttons, testid = 'modal' }: Pr
       }}
     >
       {children}
-      {!buttonsExist && <ModalButtonsComponent testid={testid} buttons={defaultButtons} />}
+      {!buttons && <ModalButtonsComponent testid={testid} buttons={defaultButtons} />}
     </ModalComponent>
   )
 }

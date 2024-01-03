@@ -1,6 +1,6 @@
 import type { CellContext } from '@tanstack/react-table'
 import Link from 'next/link'
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
@@ -42,6 +42,7 @@ export const NameCell = ({
   const { catalogueItem } = useEndpoint({ uid })
   const { hoveringId } = useHoveringId()
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
+  const [openStats, setOpenStats] = useState(false)
   const { formatMessage } = useIntl()
   const { mutate, catalogueItems } = useCatalogueItems(tableId)
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
@@ -102,7 +103,7 @@ export const NameCell = ({
           }}
           canEdit={canEdit}
         >
-          <ModalStatisticsButton uid={uid} />
+          <TableStatsButton onClick={() => setOpenStats(true)} />
         </TableActionsButtons>
       )}
       <WarningModal
@@ -114,23 +115,9 @@ export const NameCell = ({
         testid="CatalogueDeleteModal"
         error={deleteSubmit.error}
       />
-    </div>
-  )
-}
-
-type ModalStatisticsButtonProps = {
-  uid: string
-}
-
-const ModalStatisticsButton = ({ uid }: ModalStatisticsButtonProps) => {
-  const [openStats, setOpenStats] = useState(false)
-
-  return (
-    <Fragment>
-      <TableStatsButton onClick={() => setOpenStats(true)} />
       <Modal open={openStats} setOpen={setOpenStats}>
         <CatalogueStatisticsContainer catalogueItemUid={uid} />
       </Modal>
-    </Fragment>
+    </div>
   )
 }
