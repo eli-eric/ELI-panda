@@ -10,7 +10,11 @@ import CatalogueItemContainer from '@/modules/catalogueItem/CatalogueItem.cont'
 
 const messages = message.cataloguePage
 
-const NewCatalogueItemPage: NextPage = (): JSX.Element => {
+interface Props {
+  catalogueUid?: string
+}
+
+const NewCatalogueItemPage: NextPage = ({ catalogueUid }: Props): JSX.Element => {
   const intl = useIntl()
   return (
     <Fragment>
@@ -19,10 +23,14 @@ const NewCatalogueItemPage: NextPage = (): JSX.Element => {
         <meta name="description" content="...." />
       </Head>
       <ErrorBoundary fallback={<ErrorPage />}>
-        <CatalogueItemContainer />
+        <CatalogueItemContainer catalogueCategoryUid={catalogueUid} />
       </ErrorBoundary>
     </Fragment>
   )
 }
+
+NewCatalogueItemPage.getInitialProps = ({ query }) => ({
+  catalogueUid: query.catalogueUid
+})
 
 export default NewCatalogueItemPage

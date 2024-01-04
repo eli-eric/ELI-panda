@@ -11,17 +11,17 @@ import useItem from '@/modules/catalogueItem/hooks/useItem'
 
 const messages = message.cataloguePage
 
-const ItemContainer = ({ catalogueUID }: { catalogueUID?: string }) => {
+const ItemContainer = ({ uid }: { uid?: string }) => {
   const { item, error } = useItem()
   if (error) return <ErrorPage />
-  return <Fragment>{item ? <CatalogueItemContainer catalogueUID={catalogueUID} /> : <LoaderComponent />}</Fragment>
+  return <Fragment>{item ? <CatalogueItemContainer uid={uid} /> : <LoaderComponent />}</Fragment>
 }
 
 interface Props {
-  catalogueUID?: string
+  uid?: string
 }
 
-const CatalogueItemDetailPage: NextPage = ({ catalogueUID }: Props) => {
+const CatalogueItemDetailPage: NextPage = ({ uid }: Props) => {
   const intl = useIntl()
   return (
     <Fragment>
@@ -29,14 +29,14 @@ const CatalogueItemDetailPage: NextPage = ({ catalogueUID }: Props) => {
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-      <ItemContainer catalogueUID={catalogueUID} />
+      <ItemContainer uid={uid} />
     </Fragment>
   )
 }
 
 CatalogueItemDetailPage.getInitialProps = ({ query }) => ({
   key: query.uid,
-  catalogueUID: query.uid
+  uid: query.uid
 })
 
 export default CatalogueItemDetailPage

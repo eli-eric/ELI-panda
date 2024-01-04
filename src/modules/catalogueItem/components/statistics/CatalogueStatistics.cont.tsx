@@ -17,7 +17,7 @@ export const CatalogueStatisticsContainer = ({ catalogueItemUid }: CatalogueStat
 
   return (
     <Fragment>
-      <Heading customText="Statistics" />
+      <Heading customText="Statistics: Physical Items Inventory" />
       {itemStatistics && itemStatistics.length === 0 ? (
         <div className="flex justify-center items-center h-16">
           <span className="text-2xl text-gray-500">No statistics available</span>
