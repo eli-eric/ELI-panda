@@ -18,19 +18,24 @@ const QReader: NextPage = (): JSX.Element => {
         <meta name="description" content="...." />
       </Head>
 
-      <div>
-        <h1>QReader</h1>
+      <div className="container m-auto flex-col items-center justify-center">
+        <h1 className="text-xl font-mono text-center mt-2">PANDA QReader</h1>
 
         <QrReader
+          className="max-w-2xl m-auto p-2 "
           onResult={result => {
             if (result) {
-              setData(result?.toString())
+              let text = result?.getText()
+              //try to get second line of the text , it separated by \r\n
+              if (text?.includes('\r\n')) {
+                text = text?.split('\r\n')[1]
+              }
+              setData(text)
             }
           }}
-          containerStyle={{ width: '30%' }}
           constraints={{ facingMode: 'environment' }}
         />
-        <p className="text-3xl">{data}</p>
+        <div className="text-sm p-3 container text-center">{data}</div>
       </div>
     </Fragment>
   )
