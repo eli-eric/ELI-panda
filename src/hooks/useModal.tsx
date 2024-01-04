@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react'
-import { shallow } from 'zustand/shallow'
 
 import { useModalStore } from '@/store/useModalStore'
 
@@ -8,10 +7,7 @@ export const useModal = (children?: React.ReactNode, submit?: boolean) => {
     callback: undefined as Function | undefined,
     callbackArgs: undefined as any[] | undefined
   })
-  const [params, patchParams, resetParams] = useModalStore(
-    state => [state.params, state.patchParams, state.resetParams],
-    shallow
-  )
+  const { params, patchParams, resetParams } = useModalStore()
 
   const { isOpen, isConfirmed } = params
 

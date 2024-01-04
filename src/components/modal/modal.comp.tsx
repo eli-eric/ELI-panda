@@ -1,6 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import { shallow } from 'zustand/shallow'
 
 import { useEscapeKey } from '@/hooks/useEscapeKey'
 import { message } from '@/i18n/src/messages'
@@ -88,11 +87,8 @@ export const Modal = ({ children, open, setOpen, buttons, testid = 'modal' }: Pr
 }
 
 export const GenereralModal = () => {
-  const [params, patchParams, resetParams] = useModalStore(
-    state => [state.params, state.patchParams, state.resetParams],
-    shallow
-  )
-  const { isOpen, error, children, submit } = params
+  const { params, patchParams, resetParams } = useModalStore()
+  const { isOpen, error, children } = params
 
   const buttons: ModalButtons = {
     goNext: {
@@ -107,13 +103,12 @@ export const GenereralModal = () => {
       }
     }
   }
-
+  //TODO: make buttons configurable
   return (
     <Modal
       {...{
         open: isOpen,
         setOpen: bool => patchParams({ isOpen: bool }),
-        buttons: submit ? buttons : undefined,
         error,
         testid: 'general-modal'
       }}
