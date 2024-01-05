@@ -107,20 +107,16 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
         <Divider text={messages.formHeadings.systemInfo} />
       </Col>
       <Col md={orderLine?.uid ? 6 : 12} lg={orderLine?.uid ? 6 : 12}>
-        {orderLine?.uid ? (
-          <div className="flex flex-row w-full">
-            <Tooltip content="Show only technological units">
-              <div className="self-end mr-2 mb-1 flex-none">
-                <TechUnitToogle onChange={techUnitToogle} enabled={techUnitEnabled} />
-              </div>
-            </Tooltip>
-            <div className="flex-1 w-full">
-              <Combobox {...formFields.system} position="top" limit={50} filter={techUnitFilter} />
+        <div className="flex flex-row w-full">
+          <Tooltip content="Show only technological units">
+            <div className="self-end mr-2 mb-1 flex-none">
+              <TechUnitToogle onChange={techUnitToogle} enabled={techUnitEnabled} />
             </div>
+          </Tooltip>
+          <div className="flex-1 w-full">
+            <Combobox {...formFields.system} position="top" limit={50} filter={techUnitFilter} />
           </div>
-        ) : (
-          <Combobox {...formFields.system} position="top" limit={50} />
-        )}
+        </div>
       </Col>
       {orderLine?.uid && (
         <Col md={6} lg={6}>

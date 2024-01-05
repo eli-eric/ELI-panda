@@ -11,20 +11,21 @@ import type { CatalogueItem } from '@/types/responses'
 
 import OrderLineFormComponent from './OrderLineForm.comp'
 
+interface OrderLienFormProps {
+  orderLine?: OrderLineFormType
+  open: boolean
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
 const orderLineFormSchema = object({
   name: string().required(),
   catalogueNumber: string().required(),
   price: number()
     .transform(value => (Number.isNaN(value) ? null : value))
     .nullable(),
-  quantity: number().min(1).max(100)
+  quantity: number().min(1).max(100),
+  system: object().nullable().required('Parent system is required field.')
 })
-
-interface OrderLienFormProps {
-  orderLine?: OrderLineFormType
-  open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
 
 export const OrderLineForm = ({ orderLine, open, setOpen }: OrderLienFormProps) => {
   const [catalogueItem, setCatalogueItem] = useState<CatalogueItem | undefined>(undefined)

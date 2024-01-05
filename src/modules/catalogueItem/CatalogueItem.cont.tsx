@@ -1,5 +1,4 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useRouter } from 'next/router'
 import { memo, useEffect, useRef } from 'react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -36,17 +35,16 @@ interface CatalogueForm extends CatalogueItem {
 }
 
 interface CatalogueItemContainerProps {
-  catalogueUID?: string
+  uid?: string
+  catalogueCategoryUid?: string
 }
 
-const CatalogueItemContainer = ({ catalogueUID }: CatalogueItemContainerProps) => {
-  const { query } = useRouter()
-  const queryUID = query.uid as string | undefined
+const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemContainerProps) => {
   const disabledEdit = !usePermission([ROLE.CATALOGUE_EDIT])
   const { item } = useItem()
   const fields = useCatalogueFormFields()
 
-  const { catalogueCategory } = useCategory(catalogueUID)
+  const { catalogueCategory } = useCategory(catalogueCategoryUid)
 
   const imageRef = useRef<ImageGalleryRef>()
   const formMethods = useForm<CatalogueForm>({ resolver: yupResolver(schema), defaultValues: { ...item } })
@@ -78,7 +76,7 @@ const CatalogueItemContainer = ({ catalogueUID }: CatalogueItemContainerProps) =
         <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
           <MemoizedGallery
             ref={imageRef}
-            config={{ itemCategory: FILE_TYPE.CATALOGUE, itemId: String(queryUID) }}
+            config={{ itemCategory: FILE_TYPE.CATALOGUE, itemId: String(uid) }}
             className="relative h-full max-h-56 mt-6 pl-6 "
             hasEditRole={!disabledEdit}
           />
@@ -92,12 +90,12 @@ const CatalogueItemContainer = ({ catalogueUID }: CatalogueItemContainerProps) =
             <MemoizedGroups />
           </Suspense>
         </ErrorBoundary>
-        <CatalogueOrders />
-        <CatalogueStatisticsContainer catalogueItemUid={catalogueUID} />
-        {queryUID && (
+        {uid && <CatalogueOrders />}
+        {uid && <CatalogueStatisticsContainer catalogueItemUid={uid} />}
+        {uid && (
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense>
-              <FileManager itemType={FILE_TYPE.CATALOGUE} uid={queryUID} hasEditRole={!disabledEdit} />
+              <FileManager itemType={FILE_TYPE.CATALOGUE} uid={uid} hasEditRole={!disabledEdit} />
             </Suspense>
           </ErrorBoundary>
         )}

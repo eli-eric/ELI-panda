@@ -3,6 +3,7 @@ import { Fragment } from 'react'
 
 import { useEscapeKey } from '@/hooks/useEscapeKey'
 import { message } from '@/i18n/src/messages'
+import { useModalStore } from '@/store/useModalStore'
 import type { ModalButtons } from '@/types/form'
 
 import ModalButtonsComponent from './modal.buttons'
@@ -70,7 +71,6 @@ export const Modal = ({ children, open, setOpen, buttons, testid = 'modal' }: Pr
       onClick: () => setOpen(false)
     }
   }
-
   return (
     <ModalComponent
       {...{
@@ -83,5 +83,37 @@ export const Modal = ({ children, open, setOpen, buttons, testid = 'modal' }: Pr
       {children}
       {!buttons && <ModalButtonsComponent testid={testid} buttons={defaultButtons} />}
     </ModalComponent>
+  )
+}
+
+export const GenereralModal = () => {
+  const { params, patchParams, resetParams } = useModalStore()
+  const { isOpen, error, children } = params
+
+  const buttons: ModalButtons = {
+    goNext: {
+      text: messages.continue,
+      loading: false,
+      onClick: () => patchParams({ isConfirmed: true })
+    },
+    goBack: {
+      text: messages.cancel,
+      onClick: () => {
+        resetParams()
+      }
+    }
+  }
+  //TODO: make buttons configurable
+  return (
+    <Modal
+      {...{
+        open: isOpen,
+        setOpen: bool => patchParams({ isOpen: bool }),
+        error,
+        testid: 'general-modal'
+      }}
+    >
+      {children}
+    </Modal>
   )
 }
