@@ -8,6 +8,7 @@ import {
   NoSymbolIcon,
   PencilSquareIcon,
   PlusIcon,
+  QrCodeIcon,
   TableCellsIcon,
   TrashIcon
 } from '@heroicons/react/24/outline'
@@ -138,6 +139,11 @@ export const RefreshButton = ({ buttonSize = 'small', ...restProps }: ButtonProp
   </Button>
 )
 
+export const QRReaderButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+  <Button {...restProps} buttonSize={buttonSize}>
+    <QrCodeIcon className="h-4 w-4" aria-hidden="true" />
+  </Button>
+)
 export const StatsButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <TableCellsIcon className="h-4 w-4" aria-hidden="true" />
