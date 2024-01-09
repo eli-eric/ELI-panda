@@ -306,6 +306,7 @@ export const typeDefs = gql`
   type Order @authentication {
     uid: ID! @id
     name: String!
+    orderLines: [Item!]! @relationship(type: "HAS_ORDER_LINE", direction: OUT)
   }
 
   type Zone @authentication {

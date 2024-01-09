@@ -117,17 +117,45 @@ const ProfileDropdownComponent = ({ open }: Props) => {
       ) : (
         <div className="border-t border-gray-200 pt-4 pb-3">
           <div className="flex items-center px-4">
-            <div className="flex-shrink-0">
+            <Disclosure.Button
+              onClick={() => {
+                router.push(PATH.PROFILE_GENERAL)
+              }}
+              className="flex-shrink-0"
+            >
               <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
                 <span className="font-medium leading-none text-white">{inicials}</span>
               </span>
-            </div>
+            </Disclosure.Button>
 
             <div className="ml-3">
               <div className="text-base font-medium text-gray-800">{fullName}</div>
               <div className="text-sm font-medium text-gray-500">{user?.email}</div>
             </div>
           </div>
+          <div className="flex mt-3 space-y-1">
+            <Disclosure.Button
+              onClick={() => {
+                router.push(PATH.PROFILE_GENERAL)
+              }}
+              className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+            >
+              Your Profile
+            </Disclosure.Button>
+          </div>
+
+          {adminPermissions && (
+            <div className="flex mt-3 space-y-1">
+              <Disclosure.Button
+                onClick={() => {
+                  router.push(PATH.ADMIN)
+                }}
+                className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+              >
+                Administration
+              </Disclosure.Button>
+            </div>
+          )}
           <div className="flex mt-3 space-y-1">
             <Disclosure.Button
               onClick={signOutHandler}
