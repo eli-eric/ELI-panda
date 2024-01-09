@@ -1,12 +1,12 @@
 import Link from 'next/link'
-import type { FC, PropsWithChildren } from 'react'
+import { type FC, Fragment, type PropsWithChildren } from 'react'
 
 import usePermission from '@/hooks/usePermission'
 import type { ROLE } from '@/types/constants/roles'
 
 interface CardProps {
   name: string
-  link: string
+  link?: string
   Icon: () => JSX.Element
   legacyBehavior?: boolean
   role?: ROLE
@@ -18,26 +18,47 @@ export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
   if (!hasRole && role) return null
 
   return (
-    <Link href={link} legacyBehavior={legacyBehavior}>
-      {legacyBehavior ? (
-        <a target={'_blank'}>
-          <li
-            key={name}
-            className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
-          >
-            <div className="flex flex-1 flex-col p-8">
-              <Icon />
-              <h2 className="mt-6 text-xl font-medium text-gray-900">{name}</h2>
-              <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
-            </div>
-            <div>
-              <div className="-mt-px flex divide-x divide-gray-200">
-                <div className="flex w-0 flex-1"></div>
-                <div className="-ml-px flex w-0 flex-1"></div>
+    <Fragment>
+      {link ? (
+        <Link href={link} legacyBehavior={legacyBehavior}>
+          {legacyBehavior ? (
+            <a target={'_blank'}>
+              <li
+                key={name}
+                className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
+              >
+                <div className="flex flex-1 flex-col p-8">
+                  <Icon />
+                  <h2 className="mt-6 text-xl font-medium text-gray-900">{name}</h2>
+                  <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
+                </div>
+                <div>
+                  <div className="-mt-px flex divide-x divide-gray-200">
+                    <div className="flex w-0 flex-1"></div>
+                    <div className="-ml-px flex w-0 flex-1"></div>
+                  </div>
+                </div>
+              </li>
+            </a>
+          ) : (
+            <li
+              key={name}
+              className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
+            >
+              <div className="flex flex-1 flex-col p-8">
+                <Icon />
+                <h2 className="mt-6 text-xl font-medium text-gray-900">{name}</h2>
+                <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
               </div>
-            </div>
-          </li>
-        </a>
+              <div>
+                <div className="-mt-px flex divide-x divide-gray-200">
+                  <div className="flex w-0 flex-1"></div>
+                  <div className="-ml-px flex w-0 flex-1"></div>
+                </div>
+              </div>
+            </li>
+          )}
+        </Link>
       ) : (
         <li
           key={name}
@@ -56,7 +77,7 @@ export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
           </div>
         </li>
       )}
-    </Link>
+    </Fragment>
   )
 }
 

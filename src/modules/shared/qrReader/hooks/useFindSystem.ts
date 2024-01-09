@@ -34,3 +34,37 @@ export const useFindSystem = (eun?: string) => {
     error
   }
 }
+
+const GET_ORDER = gql`
+  query Orders($where: OrderWhere) {
+    orders(where: $where) {
+      name
+      uid
+    }
+  }
+`
+
+export const useFindOrder = (eun?: string) => {
+  const { data, error, loading } = useQuery<Query>(GET_ORDER, {
+    variables: {
+      where: {
+        orderLinesConnection_SOME: {
+          node: {
+            eun_CONTAINS: eun
+          }
+        }
+      }
+    },
+    skip: !eun,
+    onError: error => {
+      toast.error('Something went wrong while fetching system detail: ' + error.message)
+    },
+    fetchPolicy: 'network-only'
+  })
+
+  return {
+    order: data?.orders[0],
+    loading: loading,
+    error
+  }
+}
