@@ -111,6 +111,8 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
     setValue('responsible', childSystem?.responsible)
     setValue('zone', childSystem?.zone)
     setValue('location', childSystem?.location)
+    setValue('systemType', childSystem?.systemType)
+    setValue('systemCode', childSystem?.systemCode)
   }, [childSystem, setValue, reset])
 
   const updateSystem = useCallback(
