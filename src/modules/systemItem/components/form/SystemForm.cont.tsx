@@ -92,7 +92,14 @@ export const SystemForm = () => {
           <MemoizedSystemGallery
             ref={systemImageRef}
             setValue={formMethods.setValue}
-            config={{ itemCategory: FILE_TYPE.SYSTEM, itemId: String(uid) }}
+            config={{
+              itemCategory: FILE_TYPE.SYSTEM,
+              itemId: String(uid),
+              additionalParams: {
+                itemCategory: FILE_TYPE.CATALOGUE,
+                itemId: systemDetail?.physicalItem?.catalogueItem?.uid
+              }
+            }}
             className="w-full"
             hasEditRole={hasEditRole}
           />

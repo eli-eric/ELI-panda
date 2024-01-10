@@ -1,5 +1,5 @@
 import { Tab } from '@headlessui/react'
-import { forwardRef, Fragment, useEffect, useImperativeHandle } from 'react'
+import { forwardRef, Fragment, useEffect, useImperativeHandle, useMemo } from 'react'
 import { useDropzone } from 'react-dropzone'
 import type { UseFormSetValue } from 'react-hook-form'
 import type { FileItem } from 'src/modules/shared/fileManager/types'
@@ -25,15 +25,41 @@ type GalleryProps = {
 
 export const ImageGallery = forwardRef(
   (
-    { hasEditRole, className, setValue, config: { itemCategory, itemId, fileCategory = 'image' } }: GalleryProps,
+    {
+      hasEditRole,
+      className,
+      setValue,
+      config: { itemCategory, itemId, fileCategory = 'image', additionalParams }
+    }: GalleryProps,
     ref
   ) => {
     const endpoint = getEndpoint(itemCategory, itemId, fileCategory)
+    const additionalEndpoint = getEndpoint(additionalParams?.itemCategory, additionalParams?.itemId, fileCategory)
 
-    const { data, isLoading } = useSWR<FileItem[]>(endpoint, uniFetcher, {
+    const { data: primaryData, isLoading } = useSWR<FileItem[]>(endpoint, uniFetcher, {
       suspense: false,
       revalidateOnMount: true
     })
+
+    const { data: additionalData, isLoading: isLoadingAdditionalData } = useSWR<FileItem[]>(
+      additionalParams?.itemId ? additionalEndpoint : null,
+      uniFetcher,
+      {
+        suspense: false,
+        revalidateOnMount: true
+      }
+    )
+
+    const data = useMemo(() => {
+      if (primaryData && additionalData) {
+        return [...additionalData, ...primaryData]
+      } else if (primaryData) {
+        return primaryData
+      } else if (additionalData) {
+        return additionalData
+      }
+      return []
+    }, [primaryData, additionalData])
 
     const { submit, onDrop, hasChanges, handleDelete } = useImageGallery({ itemCategory, itemId, fileCategory })
 
@@ -66,7 +92,7 @@ export const ImageGallery = forwardRef(
 
     return (
       <Fragment>
-        {isLoading ? (
+        {isLoading || isLoadingAdditionalData ? (
           <ImagePlaceHolder className={className} />
         ) : (
           <div
