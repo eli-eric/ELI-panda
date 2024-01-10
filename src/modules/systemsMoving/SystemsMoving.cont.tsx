@@ -20,6 +20,8 @@ export type SystemMovingFormType = {
   systemAlias?: string
   description?: string
   responsible?: CodebookType
+  systemType?: CodebookType
+  systemCode?: string
   zone?: CodebookType
   location?: CodebookType
 }
