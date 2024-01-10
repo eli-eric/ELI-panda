@@ -1,2 +1,2 @@
-export const getEndpoint = (itemCategory: string, itemId: string, fileCategory: string) =>
+export const getEndpoint = (itemCategory?: string, itemId?: string, fileCategory?: string) =>
   `/api/${itemCategory}/${itemId}/${fileCategory}`

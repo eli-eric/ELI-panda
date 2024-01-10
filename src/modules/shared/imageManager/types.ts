@@ -16,4 +16,8 @@ export type Config = {
   itemCategory: FILE_TYPE
   itemId: string
   fileCategory?: string
+  additionalParams?: {
+    itemCategory?: FILE_TYPE
+    itemId?: string
+  }
 }
