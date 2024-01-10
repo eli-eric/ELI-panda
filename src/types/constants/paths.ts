@@ -25,7 +25,8 @@ export enum PATH {
   PROFILE_TEAM = '/profile/team'
 }
 
-export const SUPPORT = 'https://eli-eric.atlassian.net/servicedesk/customer/portal/20'
+export const SUPPORT =
+  'mailto:panda@eli-laser.eu?subject=Support%20request&body=Please%20describe%20your%20problem%20here.%20Do%20not%20change%20the%20subject,%20please.'
 
 export type NavBarLinkType = {
   path: PATH
