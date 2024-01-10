@@ -41,7 +41,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
           }}
         >
           <IntlProvider locale={locale} messages={messages['en']}>
-            <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 3000 }}>
+            <Toaster position="top-center" reverseOrder={false} toastOptions={{ duration: 1000 }}>
               {t => <Notification t={t} />}
             </Toaster>
             <DndProvider backend={HTML5Backend}>

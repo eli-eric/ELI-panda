@@ -77,7 +77,7 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
       }
     }
     imageRef?.current?.submit(responseUid, () => {
-      toast.success(`System ${responseUid} saved successfully`)
+      toast.success(`System saved successfully`)
       if (uid) {
         router.back()
       } else {
