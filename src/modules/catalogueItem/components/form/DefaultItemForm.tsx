@@ -1,14 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useFormContext, useWatch } from 'react-hook-form'
 
 import Combobox from '@/components/form/Combobox'
 import { ComboboxTree } from '@/components/form/ComboboxTree'
 import { Input } from '@/components/form/Input'
 import { Col, Grid } from '@/components/grid/Grid'
+import { useCategory } from '@/modules/catalogue/hooks/useCategory'
 
 import useCatalogueFormFields from './CatalogueForm.fields'
 
 const DefaultItemForm = () => {
-  const fields = useCatalogueFormFields()
+  const { control } = useFormContext()
+  const category = useWatch({ name: 'category', control })
+  const [parentPath, setParentPath] = React.useState<string | undefined>()
+
+  const { catalogueCategory } = useCategory(category?.uid)
+
+  useEffect(() => {
+    if (catalogueCategory) {
+      const categoryPathString = catalogueCategory.parentPath?.map((path: any) => path?.name).join(' > ')
+      setParentPath(categoryPathString)
+    }
+  }, [category, catalogueCategory])
+
+  const fields = useCatalogueFormFields(parentPath)
 
   return (
     <Grid className="px-4 py-5 sm:px-6">
