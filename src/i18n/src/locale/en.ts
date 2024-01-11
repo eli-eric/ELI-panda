@@ -91,7 +91,7 @@ export const messages = {
         name: { label: 'Name', placeholder: 'Name' },
         description: { label: 'Description', placeholder: 'Description' },
         catalogueNumber: { label: 'Part Number', placeholder: 'Part Number' },
-        category: { label: 'Category', placeholder: 'Type here...' }, // codebook of categories - CATEGORY
+        category: { label: 'Category: {parentPath}', placeholder: 'Type here...' }, // codebook of categories - CATEGORY
         manufacturer: { label: 'Supplier/Manufacturer', placeholder: 'Type here...' }, // codebook of manufacturers - MANUFACTURER
         manufacturerNumber: { label: 'Manufacturer Number', placeholder: 'Manufacturer Number' },
         manuFacturerUrl: { label: 'Supplier/Manufacturer Url', placeholder: 'Supplier/Manufacturer Url' }
