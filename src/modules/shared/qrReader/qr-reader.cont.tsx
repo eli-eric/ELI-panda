@@ -14,6 +14,7 @@ type DataType = { type: string; name: string; href: string }
 export const QrReaderContainer = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const [isVideoShown, setIsVideoShown] = useState(true)
   const [eun, setEun] = useState<string | undefined>()
   const [results, setResults] = useState<string | undefined>()
   const [data, setData] = useState<DataType[]>([])
@@ -51,7 +52,7 @@ export const QrReaderContainer = () => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
         .getUserMedia({
-          video: { facingMode: 'environment' }
+          video: { facingMode: 'environment', width: { ideal: 640 }, height: { ideal: 480 } }
         })
         .then(stream => {
           if (videoRef.current) {
@@ -92,11 +93,21 @@ export const QrReaderContainer = () => {
               }
               setEun(text)
               setResults(qrCode.data)
+              if (videoRef.current && videoRef.current.srcObject) {
+                const stream = videoRef.current.srcObject as MediaStream
+                const tracks = stream.getTracks()
+
+                tracks.forEach(track => {
+                  track.stop()
+                })
+
+                setIsVideoShown(false)
+              }
             }
           }
         }
       }
-    }, 1000)
+    }, 300)
 
     return () => clearInterval(interval)
   }, [])
@@ -104,7 +115,7 @@ export const QrReaderContainer = () => {
   return (
     <Fragment>
       <Heading customText="Scan QR code" />
-      <video ref={videoRef} width="640" height="480" />
+      {isVideoShown && <video ref={videoRef} width="640" height="480" />}
       <canvas ref={canvasRef} width="640" height="480" className="hidden" />
       <div className={classNames('text-sm p-3 container text-center', systemDetail || order ? 'hidden' : 'block')}>
         {results && <p className="text-gray-600">{results}</p>}
