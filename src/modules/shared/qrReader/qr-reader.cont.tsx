@@ -49,25 +49,43 @@ export const QrReaderContainer = () => {
 
   useEffect(() => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream
-          videoRef.current.play()
-        }
-      })
+      navigator.mediaDevices
+        .getUserMedia({
+          video: { facingMode: 'environment' }
+        })
+        .then(stream => {
+          if (videoRef.current) {
+            videoRef.current.srcObject = stream
+            videoRef.current.play()
+          }
+        })
+        .catch(() => {
+          // Fall back to any available camera
+          navigator.mediaDevices
+            .getUserMedia({
+              video: true
+            })
+            .then(stream => {
+              if (videoRef.current) {
+                videoRef.current.srcObject = stream
+                videoRef.current.play()
+              }
+            })
+        })
     }
 
     const interval = setInterval(() => {
       if (videoRef.current && canvasRef.current) {
         const context = canvasRef.current.getContext('2d')
-        console.log('active interva')
         if (context) {
           context.drawImage(videoRef.current, 0, 0, 640, 480)
           const imageData = context.getImageData(0, 0, 640, 480)
           const qrCode = jsQR(imageData.data, imageData.width, imageData.height)
           if (qrCode) {
             console.log(`QR Code detected: ${qrCode.data}`)
+
             if (qrCode.data) {
+              // ... other code ...
               let text = qrCode.data
               if (text?.includes('\r\n')) {
                 text = text?.split('\r\n')[1]
@@ -86,7 +104,7 @@ export const QrReaderContainer = () => {
   return (
     <Fragment>
       <Heading customText="Scan QR code" />
-      {(!systemDetail || !order) && <video ref={videoRef} width="640" height="480" />}
+      <video ref={videoRef} width="640" height="480" />
       <canvas ref={canvasRef} width="640" height="480" className="hidden" />
       <div className={classNames('text-sm p-3 container text-center', systemDetail || order ? 'hidden' : 'block')}>
         {results && <p className="text-gray-600">{results}</p>}
