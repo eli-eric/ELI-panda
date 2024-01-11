@@ -1,5 +1,3 @@
-import { useIntl } from 'react-intl'
-
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
@@ -9,10 +7,9 @@ import { ROLE } from '@/types/constants/roles'
 // messages
 const { form } = message.cataloguePage.itemDetail
 
-const useCatalogueFormFields = (parentPath?: string) => {
+const useCatalogueFormFields = () => {
   const disabled = !usePermission([ROLE.CATALOGUE_EDIT])
 
-  const { formatMessage: fm } = useIntl()
   return useMakeFormFields({
     name: {
       name: 'name',
@@ -30,7 +27,6 @@ const useCatalogueFormFields = (parentPath?: string) => {
     },
     category: {
       name: 'category',
-      label: fm({ id: form.category.label }, { parentPath }),
       disabled,
       rounded: 'rounded-md',
       codebook: CODEBOOK.CATALOGUE_CATEGORY
