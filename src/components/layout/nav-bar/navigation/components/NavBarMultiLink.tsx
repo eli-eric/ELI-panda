@@ -1,4 +1,4 @@
-import { Menu, Transition } from '@headlessui/react'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
 import classNames from 'classnames'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -66,7 +66,11 @@ export const NavBarMultiLink = ({ name, links, open }: Props) => {
                           active ? 'bg-gray-100' : ''
                         )}
                       >
-                        {link.name}
+                        {open === false ? (
+                          <span>{link.name}</span>
+                        ) : (
+                          <Disclosure.Button className={'w-full flex'}>{link.name}</Disclosure.Button>
+                        )}
                       </Link>
                     )}
                   </Menu.Item>
