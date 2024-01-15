@@ -17,6 +17,7 @@ export const CategoryItemComponent = ({ category }: Props) => {
   const router = useRouter()
   const { catalogueCategoryImage } = useEndpoint({ uid: category.uid })
   const image = useImage(catalogueCategoryImage)
+
   const { getEditButtons } = useCategoryEdit({
     editUid: category.uid
   })
