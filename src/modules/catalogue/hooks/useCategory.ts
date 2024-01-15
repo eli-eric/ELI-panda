@@ -10,6 +10,10 @@ const GET_CATEGORIES = gql`
     catalogueCategories(where: { uid: $uid }) {
       uid
       name
+      systemType {
+        uid
+        name
+      }
       parentPath {
         uid
         name
