@@ -119,6 +119,7 @@ export const typeDefs = gql`
     catalogueCategoriesHasSubcategory: [CatalogueCategory!]! @relationship(type: "HAS_SUBCATEGORY", direction: IN)
     catalogueItemsBelongsToCategory: [CatalogueItem!]! @relationship(type: "BELONGS_TO_CATEGORY", direction: IN)
     parentCategory: CatalogueCategory @relationship(type: "HAS_SUBCATEGORY", direction: IN)
+    systemType: SystemType @relationship(type: "HAS_SYSTEM_TYPE", direction: OUT)
     hasGroupCatalogueCategoryPropertyGroups: [CatalogueCategoryPropertyGroup!]!
       @relationship(type: "HAS_GROUP", direction: OUT)
     hasSubcategoryCatalogueCategories: [CatalogueCategory!]! @relationship(type: "HAS_SUBCATEGORY", direction: OUT)
