@@ -1,8 +1,10 @@
+import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
+import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
 import type { ColumnFiltersState } from '@tanstack/react-table'
 import { Fragment, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { FilterButton } from '@/components/Buttons'
+import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver'
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
@@ -89,7 +91,13 @@ export const SystemFilterButtonContainer = () => {
 
   return (
     <Fragment>
-      <FilterButton className="mr-1" buttonSize="large" onClick={() => setOpen(true)} />
+      <Button className="mr-1" buttonSize="large" onClick={() => setOpen(true)}>
+        {columnFilters.length > 0 ? (
+          <FunnelIconFull className="h-4 w-4" aria-hidden="true" />
+        ) : (
+          <FunnelIconEmpty className="h-4 w-4" aria-hidden="true" />
+        )}
+      </Button>
       <Form formMethods={formMethods}>
         <SlideOver panelTitle="System Filters" open={open} setOpen={setOpen} buttons={buttons}>
           <SystemsFilterForm />
