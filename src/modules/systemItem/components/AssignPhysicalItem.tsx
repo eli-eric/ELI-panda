@@ -3,7 +3,7 @@ import { Fragment, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
-import ModalComponent from '@/components/modal/modal.comp'
+import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
 import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
 import type { SystemDetail } from '@/modules/systems/types/responses'

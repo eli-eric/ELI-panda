@@ -62,6 +62,8 @@ export const SystemsContainer: FC<Props> = ({
         settings={{
           enableSorting: true,
           enableColumnHiding: true,
+          enableFiltering: true,
+          manualFiltering: true,
           enableQueryURL: enableQueryURL,
           enableColumnReordering: true
         }}

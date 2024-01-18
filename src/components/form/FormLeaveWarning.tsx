@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import type { FieldValues, FormState } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
-import WarningModal from '@/components/modal/warning/modal-warning.comp'
+import WarningModal from '@/components/overlays/modal/warning/modal-warning.comp'
 import { message } from '@/i18n/src/messages'
 import type { ModalButtons } from '@/types/form'
 
