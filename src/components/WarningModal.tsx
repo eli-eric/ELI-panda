@@ -1,4 +1,4 @@
-import Modal from 'src/components/modal/warning/modal-warning.comp'
+import Modal from '@/components/overlays/modal/warning/modal-warning.comp'
 import { useWarningModalStore } from 'src/store/useWarningModalStore'
 import { shallow } from 'zustand/shallow'
 

@@ -11,7 +11,7 @@ import { messages } from 'src/i18n/src'
 import { SWRConfig } from 'swr'
 
 import { NavigationComponent } from '@/components/layout/nav-bar/nav-bar.comp'
-import { GenereralModal } from '@/components/modal/modal.comp'
+import { GenereralModal } from '@/components/overlays/modal/modal.comp'
 import { Notification } from '@/components/Notifications/Notification'
 import { WarningModal } from '@/components/WarningModal'
 import { useLocale } from '@/hooks/useLocale'

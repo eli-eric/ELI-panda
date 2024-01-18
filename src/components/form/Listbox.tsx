@@ -118,7 +118,7 @@ const Listbox = ({
                   placeholder={placeholder}
                 >
                   <span className="block truncate">{value || (customOptions && allowEmptyOption && emptyOption)}</span>
-                  {!disabled && allowEmptyOption && <FormXMarkIcon onClick={handleClear} />}
+                  {!disabled && <FormXMarkIcon onClick={handleClear} />}
                   <div className="absolute inset-y-0 right-0 flex items-center pr-2">
                     {unit && <span className="text-gray-400 sm:text-sm">{unit}</span>}
                     <ChevronDownIcon onClick={onClickIcon} className="h-4 w-4 text-gray-500" aria-hidden="true" />
