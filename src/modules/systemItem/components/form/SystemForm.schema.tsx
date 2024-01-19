@@ -48,7 +48,6 @@ export const schema = object().shape({
   systemType: mixed<CodebookType>(), // ListBox
   systemCode: string(), // automaticky generovaný viz system edit - api dodá J.Š.
   systemAlias: string(), // input
-  owner: mixed<CodebookType>(), // combobox - CODEBOOK.EMPLOYEE
   importance: mixed<CodebookType>(), // listbox - CODEBOOK.SYSTEM_IMPORTANCE
   physicalItem: physicalItemSchema, // Use the defined PhysicalItem schema
   operators:  array().of(mixed<Employee>()),

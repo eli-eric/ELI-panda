@@ -36,10 +36,6 @@ const newSystem = (): SystemDetail => {
       uid: faker.datatype.uuid(),
       name: faker.name.lastName()
     },
-    owner: {
-      uid: faker.datatype.uuid(),
-      name: faker.name.lastName()
-    },
     importance: {
       uid: faker.datatype.uuid(),
       name: faker.name.lastName()
