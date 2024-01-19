@@ -20,6 +20,7 @@ type ComboboxPropsT = FieldProps &
     showAddButton?: boolean
     filter?: CodebookFilter[]
     customLabel?: string
+    onSelect?: (item?: any) => void
   }
 
 export const ComboboxTree = ({
@@ -33,7 +34,8 @@ export const ComboboxTree = ({
   limit = 10,
   filter,
   position = 'bottom',
-  rounded = 'rounded-md'
+  rounded = 'rounded-md',
+  onSelect
 }: ComboboxPropsT) => {
   const { control, setValue } = useFormContext()
   const { formatMessage: fm } = useIntl()
@@ -46,6 +48,7 @@ export const ComboboxTree = ({
   const handleClear = () => {
     setQuery('')
     setValue(name, null)
+    onSelect && onSelect(null)
   }
 
   return (
@@ -58,6 +61,10 @@ export const ComboboxTree = ({
           <HUICombobox
             as="div"
             {...field}
+            onChange={value => {
+              field.onChange(value)
+              onSelect && onSelect(value)
+            }}
             disabled={disabled}
             className={classNames('relative flex flex-col w-full mt-auto', className)}
           >
@@ -140,7 +147,7 @@ export const ComboboxTree = ({
           </HUICombobox>
         )}
       />
-      <CodebookTreeModal codebook={codebook} open={open} setOpen={setOpen} name={name} />
+      <CodebookTreeModal onSubmit={onSelect} codebook={codebook} open={open} setOpen={setOpen} name={name} />
     </Fragment>
   )
 }

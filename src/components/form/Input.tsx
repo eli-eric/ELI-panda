@@ -1,7 +1,8 @@
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
-import React, { Fragment, useState } from 'react'
-import { Controller } from 'react-hook-form'
+import React, { Fragment, useEffect, useState } from 'react'
+import { Controller, useWatch } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
+import { useDebounce } from 'usehooks-ts'
 
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
@@ -34,7 +35,8 @@ const Label = ({ label }: { label?: string }) =>
 export type InputProps = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
     unit?: string
-    onChange?: (value: string) => void
+    onChange?: (value: string | number | readonly string[] | undefined) => void
+    fieldClassName?: string
   }
 export const Input = ({
   name,
@@ -49,11 +51,25 @@ export const Input = ({
   onChange,
   unit,
   defaultValue,
-  id
+  id,
+  fieldClassName
 }: InputProps) => {
   const { control } = useFormContext()
 
   const [showPassword, setShowPassword] = useState(false)
+
+  const inputValue = useWatch({
+    control,
+    name
+  })
+
+  const inputValueDebounced = useDebounce(inputValue, 500)
+
+  useEffect(() => {
+    if (onChange) {
+      onChange(inputValueDebounced)
+    }
+  }, [inputValueDebounced])
 
   const toogleShowPassword = () => {
     setShowPassword(!showPassword)
@@ -77,18 +93,15 @@ export const Input = ({
                 type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
                 disabled={disabled}
                 onChange={e => {
-                  if (onChange) {
-                    field.onChange(onChange(e.target.value))
-                  } else {
-                    field.onChange(e.target.value)
-                  }
+                  field.onChange(e.target.value)
                 }}
                 placeholder={placeholder}
                 className={classNames(
                   'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                   rounded,
                   error ? 'border-red-500' : 'border-gray-300',
-                  disabled ? 'bg-gray-100' : ''
+                  disabled ? 'bg-gray-100' : '',
+                  fieldClassName
                 )}
               />
               {type === 'password' && (

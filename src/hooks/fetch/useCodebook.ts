@@ -17,7 +17,7 @@ export type CodebookTypeResponse = {
   data: CodebookType[]
 }
 
-export type CodebookType = { name: string; uid: string; additionalData?: string }
+export type CodebookType = { name: string; uid: string; additionalData?: string; code?: string }
 
 export type CodebookFilter = {
   key: string
