@@ -5,6 +5,7 @@ import type { FC } from 'react'
 import { memo } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
+import useTableStateStore from '@/store/useTableStateStore'
 import { classNames } from '@/utils'
 
 import { Filter } from './Filter'
@@ -24,6 +25,7 @@ const reorderColumn = (draggedColumnId: string, targetColumnId: string, columnOr
 interface ColumnHeader {
   header: Header<any, any>
   table: Table<any>
+  tableId: string
   enableColumnReordering: boolean
   enableFiltering: boolean
   manualFiltering: boolean
@@ -36,7 +38,8 @@ export const ColumnHeader: FC<ColumnHeader> = ({
   enableColumnReordering,
   data,
   enableFiltering,
-  manualFiltering
+  manualFiltering,
+  tableId
 }) => {
   const { getState, setColumnOrder } = table
   const { columnOrder } = getState()
@@ -58,6 +61,10 @@ export const ColumnHeader: FC<ColumnHeader> = ({
     item: () => column,
     type: 'column'
   })
+
+  const { instances } = useTableStateStore()
+
+  const filterInstance = instances[tableId]?.columnFilter
 
   return (
     <th
@@ -83,7 +90,11 @@ export const ColumnHeader: FC<ColumnHeader> = ({
         {/* center header */}
         <div className="flex items-center">
           <div
-            className={classNames(header.column.getCanSort() ? 'cursor-pointer select-none' : '', 'items-center')}
+            className={classNames(
+              header.column.getCanSort() ? 'cursor-pointer select-none' : '',
+              'items-center',
+              filterInstance?.find((columnFilter: any) => columnFilter.id === column.id) ? 'text-primary-500' : ''
+            )}
             onClick={header.column.getToggleSortingHandler()}
           >
             {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
