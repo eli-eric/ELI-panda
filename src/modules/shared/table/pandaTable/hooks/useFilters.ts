@@ -2,7 +2,7 @@ import type { ColumnFiltersState } from '@tanstack/react-table'
 import { useQueryState } from 'next-usequerystate'
 import type { Dispatch, SetStateAction } from 'react'
 import { useEffect, useMemo, useState } from 'react'
-import { useIsFirstRender } from 'usehooks-ts'
+import { useIsFirstRender, useLocalStorage } from 'usehooks-ts'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
@@ -18,6 +18,11 @@ export const useFilters = (
 
   const [columnFiltering, setFiltering] = useState<ColumnFiltersState>(filterInstance || [])
 
+  const [storedFilter, setStoredFilter] = useLocalStorage<ColumnFiltersState>(
+    'tableFilters' + '-' + tableId,
+    filterInstance
+  )
+
   const isFirstRender = useIsFirstRender()
 
   // initialize update table state and query state and instance on first render
@@ -27,19 +32,31 @@ export const useFilters = (
         if (filterQuery) {
           setFiltering(JSON.parse(filterQuery))
           setColumnFilter(tableId, JSON.parse(filterQuery))
-        }
-        if (filterInstance) {
+        } else if (filterInstance) {
           setFilterQuery(JSON.stringify(filterInstance))
           setFiltering(filterInstance)
+        } else if (storedFilter) {
+          setFilterQuery(JSON.stringify(storedFilter))
+          setFiltering(storedFilter)
         }
       }
     }
-  }, [isFirstRender, enableQueryURL, filterQuery, tableId, setColumnFilter, filterInstance, setFilterQuery])
+  }, [
+    isFirstRender,
+    enableQueryURL,
+    filterQuery,
+    tableId,
+    setColumnFilter,
+    filterInstance,
+    setFilterQuery,
+    storedFilter
+  ])
 
   // update effect
   useEffect(() => {
     if (!isFirstRender) {
       setColumnFilter(tableId, columnFiltering)
+      setStoredFilter(columnFiltering)
       if (enableQueryURL) setFilterQuery(columnFiltering.length === 0 ? null : JSON.stringify(columnFiltering))
     }
     // reason for disabling eslint: isFirstRender is a dependency but it should not trigger a re-render
