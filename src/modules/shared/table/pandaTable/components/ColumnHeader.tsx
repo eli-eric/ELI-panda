@@ -5,7 +5,6 @@ import type { FC } from 'react'
 import { memo } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
-import useTableStateStore from '@/store/useTableStateStore'
 import { classNames } from '@/utils'
 
 import { Filter } from './Filter'
@@ -62,10 +61,6 @@ export const ColumnHeader: FC<ColumnHeader> = ({
     type: 'column'
   })
 
-  const { instances } = useTableStateStore()
-
-  const filterInstance = instances[tableId]?.columnFilter
-
   return (
     <th
       ref={dropRef}
@@ -93,7 +88,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
             className={classNames(
               header.column.getCanSort() ? 'cursor-pointer select-none' : '',
               'items-center',
-              filterInstance?.find((columnFilter: any) => columnFilter.id === column.id) ? 'text-primary-500' : ''
+              header.column.getIsFiltered() ? 'text-primary-500' : ''
             )}
             onClick={header.column.getToggleSortingHandler()}
           >
