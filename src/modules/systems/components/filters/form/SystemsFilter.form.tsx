@@ -13,26 +13,28 @@ export const SystemsFilterForm = () => {
   const systemLevels = Object.values(SystemLevel).map(level => level)
 
   return (
-    <div>
-      <Input {...fields.name} />
-      <Listbox {...fields.systemLevel} customOptions={systemLevels} />
-      <Input {...fields.systemCode} />
-      <Input {...fields.systemAlias} />
-      <SystemTypeComboBox systemTypeField={fields.systemType} />
-      <Combobox {...fields.zone} />
-      <SelectLocationTree locationField={fields.location} />
-      <Combobox {...fields.responsible} />
-      <Input {...fields.description} />
-      <Listbox {...fields.importance} />
-      <div className="text-base font-semibold leading-6 pt-4 pb-4 text-gray-900">{'Physical Item filter'}</div>
-      <Listbox {...fields.itemUsage} />
-      <Input {...fields.eun} />
-      <Input {...fields.serialNumber} />
-      <Input {...fields.catalogueName} />
-      <ComboboxTree {...fields.category} />
+    <div className="md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]">
+      <div className="flex flex-col gap-2">
+        <Input {...fields.name} />
+        <SystemTypeComboBox systemTypeField={fields.systemType} />
+        <Combobox {...fields.responsible} />
+        <Input {...fields.systemCode} />
+        <Input {...fields.systemAlias} />
+        <Combobox {...fields.zone} />
+        <SelectLocationTree locationField={fields.location} />
+        <Listbox {...fields.systemLevel} customOptions={systemLevels} />
+        <Input {...fields.description} />
+      </div>
 
-      <Input {...fields.partNumber} />
-      <Combobox {...fields.catalogueSupplier} />
+      <div className="flex flex-col gap-2">
+        <Listbox {...fields.itemUsage} />
+        <Input {...fields.eun} />
+        <Input {...fields.partNumber} />
+        <Input {...fields.serialNumber} />
+        <Input {...fields.catalogueName} />
+        <ComboboxTree {...fields.category} />
+        <Combobox {...fields.catalogueSupplier} className="flex-grow" />
+      </div>
     </div>
   )
 }
