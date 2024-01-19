@@ -1,7 +1,7 @@
 import type { ColumnFiltersState } from '@tanstack/react-table'
 import { useQueryState } from 'next-usequerystate'
 import type { Dispatch, SetStateAction } from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useIsFirstRender } from 'usehooks-ts'
 
 import useTableStateStore from '@/store/useTableStateStore'
@@ -12,7 +12,7 @@ export const useFilters = (
 ): [ColumnFiltersState, Dispatch<SetStateAction<ColumnFiltersState>>] => {
   const { setColumnFilter, instances } = useTableStateStore()
 
-  const filterInstance = instances[tableId]?.columnFilter
+  const filterInstance = useMemo(() => instances[tableId]?.columnFilter || [], [instances, tableId])
 
   const [filterQuery, setFilterQuery] = useQueryState('filter', { history: 'replace' })
 
@@ -46,5 +46,5 @@ export const useFilters = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tableId, columnFiltering, enableQueryURL, setFilterQuery, setColumnFilter])
 
-  return [columnFiltering, setFiltering]
+  return [filterInstance, setFiltering]
 }
