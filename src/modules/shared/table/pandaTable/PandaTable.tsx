@@ -169,6 +169,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
             <table className="min-w-full divide-y divide-gray-300">
               <TableHead
                 table={table}
+                tableId={tableId}
                 enableColumnReordering={enableColumnReordering}
                 data={defferedData}
                 enableFiltering={enableFiltering}
