@@ -79,6 +79,7 @@ const Listbox = ({
 
   const handleClear = () => {
     setValue(name, null)
+    onChange && onChange(null)
   }
 
   return (

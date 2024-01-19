@@ -6,7 +6,7 @@ import { Input, TextArea } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
-import { SelectLocationTree } from '@/modules/shared/form/location/SelectLocation.combo'
+import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
 import { useSystemItemStore } from '@/modules/systemItem/store/useSystemItemStore'
 import { SystemLevel } from '@/types/gql/graphql'
@@ -48,7 +48,7 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
               />
             </Col>
             <Col sm={3} md={6} lg={8}>
-              <SelectLocationTree locationField={fields.location} />
+              <SelectLocationCombo locationField={fields.location} />
             </Col>
             <Col sm={3} md={6} lg={8}>
               <Combobox {...fields.zone} />

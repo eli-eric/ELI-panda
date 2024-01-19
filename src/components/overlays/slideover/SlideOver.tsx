@@ -4,18 +4,20 @@ import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
 
 import { Button } from '@/components/Buttons'
+import { classNames } from '@/utils'
+
+type ButtonType = {
+  type: 'button' | 'submit'
+  className?: string
+  text: string
+  onClick: () => void
+}
 
 export type SlideOverButtons = {
-  goNext: {
-    type: 'button' | 'submit'
-    text: string
-    onClick: () => void
-  }
-  goAlter?: {
-    type: 'button' | 'submit'
-    text: string
-    onClick: () => void
-  }
+  className?: string
+  goNext: ButtonType
+  goAlter?: ButtonType
+  goBack?: ButtonType
 }
 
 interface Props {
@@ -64,16 +66,27 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({ children, open, setOpe
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">{children}</div>
                   </div>
-                  <div className="flex flex-shrink-0 px-4 py-4 justify-between">
-                    <Button type="button" onClick={() => setOpen(false)}>
-                      Cancel
-                    </Button>
+                  <div className={classNames('flex flex-shrink-0 px-4 py-4 justify-between', buttons.className)}>
+                    {buttons.goBack && (
+                      <Button type="button" onClick={() => setOpen(false)} className={buttons.goBack.className}>
+                        Cancel
+                      </Button>
+                    )}
                     {buttons.goAlter && (
-                      <Button type={buttons.goAlter.type} onClick={buttons.goAlter.onClick}>
+                      <Button
+                        type={buttons.goAlter.type}
+                        onClick={buttons.goAlter.onClick}
+                        className={buttons.goAlter.className}
+                      >
                         {buttons.goAlter.text}
                       </Button>
                     )}
-                    <Button type={buttons.goNext.type} primary onClick={buttons.goNext.onClick}>
+                    <Button
+                      type={buttons.goNext.type}
+                      primary
+                      onClick={buttons.goNext.onClick}
+                      className={buttons.goNext.className}
+                    >
                       {buttons.goNext.text}
                     </Button>
                   </div>
