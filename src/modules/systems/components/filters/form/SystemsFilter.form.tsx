@@ -33,7 +33,8 @@ export const SystemsFilterForm = () => {
         <Input {...fields.serialNumber} />
         <Input {...fields.catalogueName} />
         <ComboboxTree {...fields.category} />
-        <Combobox {...fields.catalogueSupplier} className="flex-grow" />
+        <Combobox {...fields.catalogueSupplier} />
+        <div className="flex-grow"></div>
       </div>
     </div>
   )
