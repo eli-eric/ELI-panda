@@ -24,7 +24,6 @@ const reorderColumn = (draggedColumnId: string, targetColumnId: string, columnOr
 interface ColumnHeader {
   header: Header<any, any>
   table: Table<any>
-  tableId: string
   enableColumnReordering: boolean
   enableFiltering: boolean
   manualFiltering: boolean
@@ -37,8 +36,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
   enableColumnReordering,
   data,
   enableFiltering,
-  manualFiltering,
-  tableId
+  manualFiltering
 }) => {
   const { getState, setColumnOrder } = table
   const { columnOrder } = getState()
