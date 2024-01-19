@@ -156,7 +156,7 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
       },
       {
         header: 'Supplier',
-        accessorFn: row => row.physicalItem?.catalogueItem?.supplier,
+        accessorFn: row => row.physicalItem?.catalogueItem?.supplier?.name,
         id: 'supplier',
         size: 150
       }
