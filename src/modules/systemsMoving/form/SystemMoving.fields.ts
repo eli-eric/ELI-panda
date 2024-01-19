@@ -16,12 +16,6 @@ export const useSystemMovingFormFields = () => {
       rounded: 'rounded-md',
       disabled: disabledEdit
     },
-    owner: {
-      name: 'owner',
-      label: form.owner.label,
-      codebook: CODEBOOK.EMPLOYEE,
-      disabled: disabledEdit
-    },
     responsible: {
       name: 'responsible',
       label: form.responsiblePerson.label,

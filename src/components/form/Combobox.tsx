@@ -26,7 +26,7 @@ type ComboboxPropsT = FieldProps &
     filter?: CodebookFilter[]
     customLabel?: string
     onClickIcon?: () => void
-    onSelect?: (item: CodebookType) => void
+    onSelect?: (item?: CodebookType | null) => void
   }
 
 const Combobox = ({
@@ -70,6 +70,7 @@ const Combobox = ({
   const handleClear = () => {
     setQuery('')
     setValue(name, null)
+    onSelect && onSelect(null)
   }
 
   const handleChange = e => {

@@ -15,7 +15,6 @@ type SystemDetailResponse = {
   systemType?: SystemCodebok
   systemCode?: string
   systemAlias?: string
-  owner?: SystemCodebok
   importance?: SystemCodebok
   itemUID?: string
 }
@@ -48,7 +47,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<any>) 
           systemCode: faker.datatype.string(),
           systemAlias: faker.datatype.string(),
           location: getFakeCodebook('II.01.02', 'II.01.02 - Reception and staircase - ELI2 building > Ground floor'),
-          owner: getFakeCodebook('71864520-9e86-427c-901c-0c220f951775', 'Administrator Admin'),
           itemUID: undefined,
           systemType: getFakeCodebook('8783fa8c-cfd3-4519-830f-5bfd05166ad9')
         }

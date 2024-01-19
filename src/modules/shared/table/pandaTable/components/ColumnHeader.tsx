@@ -83,7 +83,11 @@ export const ColumnHeader: FC<ColumnHeader> = ({
         {/* center header */}
         <div className="flex items-center">
           <div
-            className={classNames(header.column.getCanSort() ? 'cursor-pointer select-none' : '', 'items-center')}
+            className={classNames(
+              header.column.getCanSort() ? 'cursor-pointer select-none' : '',
+              'items-center',
+              header.column.getIsFiltered() ? 'text-primary-500' : ''
+            )}
             onClick={header.column.getToggleSortingHandler()}
           >
             {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}

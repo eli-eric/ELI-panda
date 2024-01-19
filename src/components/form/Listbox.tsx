@@ -79,6 +79,7 @@ const Listbox = ({
 
   const handleClear = () => {
     setValue(name, null)
+    onChange && onChange(null)
   }
 
   return (
@@ -109,7 +110,7 @@ const Listbox = ({
               <div className="relative" onClick={onClick}>
                 <HUIListbox.Button
                   className={classNames(
-                    'px-3 py-2 pb-2 border placeholder-gray-400 bg-white  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full h-[38px] appearance-none text-left',
+                    'px-3 py-2 pb-2 border placeholder-gray-400 bg-white  focus:border-primary-500 focus:outline-none focus:ring-primary-500 focus:border-2 sm:text-sm block w-full h-[38px] appearance-none text-left',
                     field.value && !disabled ? 'pr-14' : 'pr-9',
                     rounded,
                     error ? 'border-red-500' : 'border-gray-300',

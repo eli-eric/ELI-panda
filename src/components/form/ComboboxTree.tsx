@@ -1,5 +1,5 @@
 import { Combobox as HUICombobox } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
+import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React, { Fragment, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
@@ -20,6 +20,7 @@ type ComboboxPropsT = FieldProps &
     showAddButton?: boolean
     filter?: CodebookFilter[]
     customLabel?: string
+    onSelect?: (item?: any) => void
   }
 
 export const ComboboxTree = ({
@@ -33,7 +34,8 @@ export const ComboboxTree = ({
   limit = 10,
   filter,
   position = 'bottom',
-  rounded = 'rounded-md'
+  rounded = 'rounded-md',
+  onSelect
 }: ComboboxPropsT) => {
   const { control, setValue } = useFormContext()
   const { formatMessage: fm } = useIntl()
@@ -46,6 +48,7 @@ export const ComboboxTree = ({
   const handleClear = () => {
     setQuery('')
     setValue(name, null)
+    onSelect && onSelect(null)
   }
 
   return (
@@ -58,6 +61,10 @@ export const ComboboxTree = ({
           <HUICombobox
             as="div"
             {...field}
+            onChange={value => {
+              field.onChange(value)
+              onSelect && onSelect(value)
+            }}
             disabled={disabled}
             className={classNames('relative flex flex-col w-full mt-auto', className)}
           >
@@ -85,12 +92,7 @@ export const ComboboxTree = ({
                   onClick={handleClear}
                   className="absolute mr-7 inset-y-0 right-0 flex items-center rounded-r-md px-1 focus:outline-none cursor-pointer text-gray-200  hover:text-red-500"
                 >
-                  <XMarkIcon
-                    className="h-4 w-4
-
- "
-                    aria-hidden="true"
-                  />
+                  <XMarkIcon className="h-4 w-4" aria-hidden="true" />
                 </div>
               )}
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer">
@@ -145,7 +147,7 @@ export const ComboboxTree = ({
           </HUICombobox>
         )}
       />
-      <CodebookTreeModal codebook={codebook} open={open} setOpen={setOpen} name={name} />
+      <CodebookTreeModal onSubmit={onSelect} codebook={codebook} open={open} setOpen={setOpen} name={name} />
     </Fragment>
   )
 }
