@@ -16,7 +16,7 @@ export const SystemsFilterForm = () => {
     <div className="md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]">
       <div className="flex flex-col gap-2">
         <Input {...fields.name} />
-        <SystemTypeComboBox systemTypeField={fields.systemType} />
+        <SystemTypeComboBox systemTypeField={fields.systemType} clickIcon={true} />
         <Combobox {...fields.responsible} />
         <Input {...fields.systemCode} />
         <Input {...fields.systemAlias} />

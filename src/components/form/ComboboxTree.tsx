@@ -1,5 +1,5 @@
 import { Combobox as HUICombobox } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
+import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React, { Fragment, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
@@ -85,12 +85,7 @@ export const ComboboxTree = ({
                   onClick={handleClear}
                   className="absolute mr-7 inset-y-0 right-0 flex items-center rounded-r-md px-1 focus:outline-none cursor-pointer text-gray-200  hover:text-red-500"
                 >
-                  <XMarkIcon
-                    className="h-4 w-4
-
- "
-                    aria-hidden="true"
-                  />
+                  <XMarkIcon className="h-4 w-4" aria-hidden="true" />
                 </div>
               )}
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer">

@@ -12,13 +12,15 @@ import { useSystemTypeGroups } from './hooks/useSystemTypeGroups'
 
 export const SystemTypeComboBox = ({
   systemTypeField,
-  className
+  className,
+  clickIcon
 }: {
   systemTypeField: FieldProps & {
     options?: Option[] | undefined
     codebook?: CODEBOOK | undefined
   }
   className?: string
+  clickIcon?: boolean
 }) => {
   const [open, setOpen] = useState(false)
   const { systemTypeGroups, filter } = useSystemTypeGroups()
@@ -41,13 +43,23 @@ export const SystemTypeComboBox = ({
 
   return (
     <Fragment>
-      <Listbox
-        {...systemTypeField}
-        className={className}
-        onClick={() => {
-          setOpen(true)
-        }}
-      />
+      {clickIcon ? (
+        <Listbox
+          {...systemTypeField}
+          className={className}
+          onClickIcon={() => {
+            setOpen(true)
+          }}
+        />
+      ) : (
+        <Listbox
+          {...systemTypeField}
+          className={className}
+          onClick={() => {
+            setOpen(true)
+          }}
+        />
+      )}
       <CodebookTreeModalGraphql
         tableId="systemType-tree"
         data={systemTypeGroups?.map(group => ({
