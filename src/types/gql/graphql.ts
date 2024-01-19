@@ -10873,9 +10873,6 @@ export type System = {
   operators: Array<Employee>;
   operatorsAggregate?: Maybe<SystemEmployeeOperatorsAggregationSelection>;
   operatorsConnection: SystemOperatorsConnection;
-  owner?: Maybe<Employee>;
-  ownerAggregate?: Maybe<SystemEmployeeOwnerAggregationSelection>;
-  ownerConnection: SystemOwnerConnection;
   parentPath?: Maybe<Array<Maybe<ParentPathItem>>>;
   parentSystem?: Maybe<System>;
   parentSystemAggregate?: Maybe<SystemSystemParentSystemAggregationSelection>;
@@ -10987,28 +10984,6 @@ export type SystemOperatorsConnectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<SystemOperatorsConnectionSort>>;
   where?: InputMaybe<SystemOperatorsConnectionWhere>;
-};
-
-
-export type SystemOwnerArgs = {
-  directed?: InputMaybe<Scalars['Boolean']['input']>;
-  options?: InputMaybe<EmployeeOptions>;
-  where?: InputMaybe<EmployeeWhere>;
-};
-
-
-export type SystemOwnerAggregateArgs = {
-  directed?: InputMaybe<Scalars['Boolean']['input']>;
-  where?: InputMaybe<EmployeeWhere>;
-};
-
-
-export type SystemOwnerConnectionArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  directed?: InputMaybe<Scalars['Boolean']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  sort?: InputMaybe<Array<SystemOwnerConnectionSort>>;
-  where?: InputMaybe<SystemOwnerConnectionWhere>;
 };
 
 
@@ -11158,7 +11133,6 @@ export type SystemConnectInput = {
   location?: InputMaybe<SystemLocationConnectFieldInput>;
   maintainedBy?: InputMaybe<Array<SystemMaintainedByConnectFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsConnectFieldInput>>;
-  owner?: InputMaybe<SystemOwnerConnectFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemConnectFieldInput>;
   physicalItem?: InputMaybe<SystemPhysicalItemConnectFieldInput>;
   responsible?: InputMaybe<SystemResponsibleConnectFieldInput>;
@@ -11180,7 +11154,6 @@ export type SystemCreateInput = {
   maintainedBy?: InputMaybe<SystemMaintainedByFieldInput>;
   name: Scalars['String']['input'];
   operators?: InputMaybe<SystemOperatorsFieldInput>;
-  owner?: InputMaybe<SystemOwnerFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemFieldInput>;
   physicalItem?: InputMaybe<SystemPhysicalItemFieldInput>;
   responsible?: InputMaybe<SystemResponsibleFieldInput>;
@@ -11270,7 +11243,6 @@ export type SystemDeleteInput = {
   location?: InputMaybe<SystemLocationDeleteFieldInput>;
   maintainedBy?: InputMaybe<Array<SystemMaintainedByDeleteFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsDeleteFieldInput>>;
-  owner?: InputMaybe<SystemOwnerDeleteFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemDeleteFieldInput>;
   physicalItem?: InputMaybe<SystemPhysicalItemDeleteFieldInput>;
   responsible?: InputMaybe<SystemResponsibleDeleteFieldInput>;
@@ -11284,7 +11256,6 @@ export type SystemDisconnectInput = {
   location?: InputMaybe<SystemLocationDisconnectFieldInput>;
   maintainedBy?: InputMaybe<Array<SystemMaintainedByDisconnectFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsDisconnectFieldInput>>;
-  owner?: InputMaybe<SystemOwnerDisconnectFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemDisconnectFieldInput>;
   physicalItem?: InputMaybe<SystemPhysicalItemDisconnectFieldInput>;
   responsible?: InputMaybe<SystemResponsibleDisconnectFieldInput>;
@@ -11323,22 +11294,6 @@ export type SystemEmployeeOperatorsAggregationSelection = {
 
 export type SystemEmployeeOperatorsNodeAggregateSelection = {
   __typename?: 'SystemEmployeeOperatorsNodeAggregateSelection';
-  email: StringAggregateSelectionNullable;
-  firstName: StringAggregateSelectionNonNullable;
-  fullName: StringAggregateSelectionNullable;
-  lastName: StringAggregateSelectionNonNullable;
-  phoneNumber: StringAggregateSelectionNullable;
-  uid: IdAggregateSelectionNonNullable;
-};
-
-export type SystemEmployeeOwnerAggregationSelection = {
-  __typename?: 'SystemEmployeeOwnerAggregationSelection';
-  count: Scalars['Int']['output'];
-  node?: Maybe<SystemEmployeeOwnerNodeAggregateSelection>;
-};
-
-export type SystemEmployeeOwnerNodeAggregateSelection = {
-  __typename?: 'SystemEmployeeOwnerNodeAggregateSelection';
   email: StringAggregateSelectionNullable;
   firstName: StringAggregateSelectionNonNullable;
   fullName: StringAggregateSelectionNullable;
@@ -12039,162 +11994,6 @@ export type SystemOptions = {
   sort?: InputMaybe<Array<SystemSort>>;
 };
 
-export type SystemOwnerAggregateInput = {
-  AND?: InputMaybe<Array<SystemOwnerAggregateInput>>;
-  NOT?: InputMaybe<SystemOwnerAggregateInput>;
-  OR?: InputMaybe<Array<SystemOwnerAggregateInput>>;
-  count?: InputMaybe<Scalars['Int']['input']>;
-  count_GT?: InputMaybe<Scalars['Int']['input']>;
-  count_GTE?: InputMaybe<Scalars['Int']['input']>;
-  count_LT?: InputMaybe<Scalars['Int']['input']>;
-  count_LTE?: InputMaybe<Scalars['Int']['input']>;
-  node?: InputMaybe<SystemOwnerNodeAggregationWhereInput>;
-};
-
-export type SystemOwnerConnectFieldInput = {
-  connect?: InputMaybe<EmployeeConnectInput>;
-  /** Whether or not to overwrite any matching relationship with the new properties. */
-  overwrite?: Scalars['Boolean']['input'];
-  where?: InputMaybe<EmployeeConnectWhere>;
-};
-
-export type SystemOwnerConnection = {
-  __typename?: 'SystemOwnerConnection';
-  edges: Array<SystemOwnerRelationship>;
-  pageInfo: PageInfo;
-  totalCount: Scalars['Int']['output'];
-};
-
-export type SystemOwnerConnectionSort = {
-  node?: InputMaybe<EmployeeSort>;
-};
-
-export type SystemOwnerConnectionWhere = {
-  AND?: InputMaybe<Array<SystemOwnerConnectionWhere>>;
-  NOT?: InputMaybe<SystemOwnerConnectionWhere>;
-  OR?: InputMaybe<Array<SystemOwnerConnectionWhere>>;
-  node?: InputMaybe<EmployeeWhere>;
-};
-
-export type SystemOwnerCreateFieldInput = {
-  node: EmployeeCreateInput;
-};
-
-export type SystemOwnerDeleteFieldInput = {
-  delete?: InputMaybe<EmployeeDeleteInput>;
-  where?: InputMaybe<SystemOwnerConnectionWhere>;
-};
-
-export type SystemOwnerDisconnectFieldInput = {
-  disconnect?: InputMaybe<EmployeeDisconnectInput>;
-  where?: InputMaybe<SystemOwnerConnectionWhere>;
-};
-
-export type SystemOwnerFieldInput = {
-  connect?: InputMaybe<SystemOwnerConnectFieldInput>;
-  create?: InputMaybe<SystemOwnerCreateFieldInput>;
-};
-
-export type SystemOwnerNodeAggregationWhereInput = {
-  AND?: InputMaybe<Array<SystemOwnerNodeAggregationWhereInput>>;
-  NOT?: InputMaybe<SystemOwnerNodeAggregationWhereInput>;
-  OR?: InputMaybe<Array<SystemOwnerNodeAggregationWhereInput>>;
-  email_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  email_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  email_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  email_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  email_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  email_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  email_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  email_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  email_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  email_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  email_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  email_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  email_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  email_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  email_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  firstName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  firstName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  firstName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  firstName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  firstName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  firstName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  firstName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  firstName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  firstName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  firstName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  firstName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  firstName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  firstName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  firstName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  firstName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  fullName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  fullName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  fullName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  fullName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  fullName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  fullName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  fullName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  fullName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  fullName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  fullName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  fullName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  fullName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  fullName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  fullName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  fullName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  lastName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  lastName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  lastName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  lastName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  lastName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  lastName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  lastName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  lastName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  lastName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  lastName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  lastName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  lastName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  phoneNumber_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  phoneNumber_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  phoneNumber_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  phoneNumber_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  phoneNumber_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  phoneNumber_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  phoneNumber_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  phoneNumber_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  phoneNumber_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  phoneNumber_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  phoneNumber_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  phoneNumber_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  phoneNumber_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  phoneNumber_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  phoneNumber_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type SystemOwnerRelationship = {
-  __typename?: 'SystemOwnerRelationship';
-  cursor: Scalars['String']['output'];
-  node: Employee;
-};
-
-export type SystemOwnerUpdateConnectionInput = {
-  node?: InputMaybe<EmployeeUpdateInput>;
-};
-
-export type SystemOwnerUpdateFieldInput = {
-  connect?: InputMaybe<SystemOwnerConnectFieldInput>;
-  create?: InputMaybe<SystemOwnerCreateFieldInput>;
-  delete?: InputMaybe<SystemOwnerDeleteFieldInput>;
-  disconnect?: InputMaybe<SystemOwnerDisconnectFieldInput>;
-  update?: InputMaybe<SystemOwnerUpdateConnectionInput>;
-  where?: InputMaybe<SystemOwnerConnectionWhere>;
-};
-
 export type SystemParentSystemAggregateInput = {
   AND?: InputMaybe<Array<SystemParentSystemAggregateInput>>;
   NOT?: InputMaybe<SystemParentSystemAggregateInput>;
@@ -12482,7 +12281,6 @@ export type SystemRelationInput = {
   location?: InputMaybe<SystemLocationCreateFieldInput>;
   maintainedBy?: InputMaybe<Array<SystemMaintainedByCreateFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsCreateFieldInput>>;
-  owner?: InputMaybe<SystemOwnerCreateFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemCreateFieldInput>;
   physicalItem?: InputMaybe<SystemPhysicalItemCreateFieldInput>;
   responsible?: InputMaybe<SystemResponsibleCreateFieldInput>;
@@ -13682,7 +13480,6 @@ export type SystemUpdateInput = {
   maintainedBy?: InputMaybe<Array<SystemMaintainedByUpdateFieldInput>>;
   name?: InputMaybe<Scalars['String']['input']>;
   operators?: InputMaybe<Array<SystemOperatorsUpdateFieldInput>>;
-  owner?: InputMaybe<SystemOwnerUpdateFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemUpdateFieldInput>;
   physicalItem?: InputMaybe<SystemPhysicalItemUpdateFieldInput>;
   responsible?: InputMaybe<SystemResponsibleUpdateFieldInput>;
@@ -13754,11 +13551,6 @@ export type SystemWhere = {
   operators_SINGLE?: InputMaybe<EmployeeWhere>;
   /** Return Systems where some of the related Employees match this filter */
   operators_SOME?: InputMaybe<EmployeeWhere>;
-  owner?: InputMaybe<EmployeeWhere>;
-  ownerAggregate?: InputMaybe<SystemOwnerAggregateInput>;
-  ownerConnection?: InputMaybe<SystemOwnerConnectionWhere>;
-  ownerConnection_NOT?: InputMaybe<SystemOwnerConnectionWhere>;
-  owner_NOT?: InputMaybe<EmployeeWhere>;
   parentSystem?: InputMaybe<SystemWhere>;
   parentSystemAggregate?: InputMaybe<SystemParentSystemAggregateInput>;
   parentSystemConnection?: InputMaybe<SystemParentSystemConnectionWhere>;

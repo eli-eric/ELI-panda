@@ -122,7 +122,6 @@ export const messages = {
           placeholder: 'Parent System or technology unit'
         }, // codebook of systems{uid, name},  - SYSTEM
         location: { label: 'Location', placeholder: 'Type here...' }, // locations codebook - LOCATION
-        owner: { label: 'Owner', placeholder: 'Type here...' }, // codebook of users{uid, name},  - USER
         responsiblePerson: { label: 'Responsible Person', placeholder: 'Responsible Person' },
         importance: { label: 'Importance' }, // codebook of importance - SYSTEM_IMPORTANCE
         zone: { label: 'Control System Zone' }, // codebook of zones - ZONE

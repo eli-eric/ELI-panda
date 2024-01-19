@@ -44,8 +44,7 @@ const useSystemsForRelColumns = (tableId: string) => {
         id: 'location',
         size: 150,
         cell: ({ getValue }) => getValue()?.name
-      },
-      { header: 'owner', accessorKey: 'owner', id: 'owner', size: 150, cell: ({ getValue }) => getValue()?.name }
+      }
     ],
     [setUid, tableId]
   )

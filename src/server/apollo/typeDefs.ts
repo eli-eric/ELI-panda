@@ -225,7 +225,6 @@ export const typeDefs = gql`
     zone: Zone @relationship(type: "HAS_ZONE", direction: OUT)
     systemType: SystemType @relationship(type: "HAS_SYSTEM_TYPE", direction: OUT)
     responsible: Employee @relationship(type: "HAS_RESPONSIBLE", direction: OUT)
-    owner: Employee @relationship(type: "HAS_OWNER", direction: OUT)
     operators: [Employee!]! @relationship(type: "HAS_OPERATOR", direction: OUT)
     maintainedBy: [Employee!]! @relationship(type: "IS_MAINTAINED_BY", direction: OUT)
     systemLevel: SystemLevel

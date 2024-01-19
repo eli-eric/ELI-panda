@@ -13,7 +13,6 @@ export type SystemDetailFormType = {
   systemType?: CodebookType // ListBox
   systemCode?: string // automaticky generovaný viz system edit - api dodá J.Š.
   systemAlias?: string // input
-  owner?: CodebookType // combobox - CODEBOOK.EMPLOYEE
   responsible?: CodebookType // combobox - CODEBOOK.EMPLOYEE
   importance?: CodebookType // listbox - CODEBOOK.SYSTEM_IMPORTANCE
   systemLevel: SystemLevel
