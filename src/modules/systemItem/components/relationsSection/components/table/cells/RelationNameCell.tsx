@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import { TableButtonsWrapper, TableDeleteButton } from '@/components/Buttons'
-import WarningModal from '@/components/modal/warning/modal-warning.comp'
+import WarningModal from '@/components/overlays/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'

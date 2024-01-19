@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 
 import type { ModalButtons } from '@/types/form'
 
-import { Button } from '../Buttons'
+import { Button } from '../../Buttons'
 
 interface Props {
   testid?: string

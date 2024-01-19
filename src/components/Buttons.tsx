@@ -4,6 +4,7 @@ import {
   ArrowUturnLeftIcon,
   FolderOpenIcon,
   FolderPlusIcon,
+  FunnelIcon,
   MinusIcon,
   NoSymbolIcon,
   PencilSquareIcon,
@@ -142,6 +143,12 @@ export const RefreshButton = ({ buttonSize = 'small', ...restProps }: ButtonProp
 export const QRReaderButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <QrCodeIcon className="h-4 w-4" aria-hidden="true" />
+  </Button>
+)
+
+export const FilterButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+  <Button {...restProps} buttonSize={buttonSize}>
+    <FunnelIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 export const StatsButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (

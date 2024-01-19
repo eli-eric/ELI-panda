@@ -7,8 +7,8 @@ import type { ObjectSchema } from 'yup'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { Form } from '@/components/form/Form'
-import ModalButtonsComponent from '@/components/modal/modal.buttons'
-import ModalComponent from '@/components/modal/modal.comp'
+import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
+import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
 import type { ModalButtons } from '@/types/form'
 
