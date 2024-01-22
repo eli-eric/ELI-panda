@@ -29,16 +29,17 @@ export const SystemFilterButtonContainer = () => {
   useEffect(() => {
     if (isFirstRender) {
       if (!storeFilters.length) {
-        console.log('columnFilters', columnFilters)
         reset(
           columnFilters.reduce((acc, curr) => {
+            if (curr.id === 'systemLevel') {
+              acc[curr.id] = { uid: curr.value, name: curr.value }
+            }
             acc[curr.id] = curr.value
             return acc
           }, {})
         )
       }
       if (storeFilters.length) {
-        console.log('storeFilters', storeFilters)
         reset(
           storeFilters.reduce((acc, curr) => {
             acc[curr.id] = curr.value
