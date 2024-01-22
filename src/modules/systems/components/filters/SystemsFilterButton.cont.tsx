@@ -1,7 +1,7 @@
 import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
 import type { ColumnFiltersState } from '@tanstack/react-table'
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
@@ -20,15 +20,15 @@ export const SystemFilterButtonContainer = () => {
   const formMethods = useForm()
   const { reset } = formMethods
 
-  /*   useEffect(() => {
+  useEffect(() => {
     reset(
       columnFilters.reduce((acc, curr) => {
         acc[curr.id] = curr.value
         return acc
       }, {})
     )
-  }, [columnFilters, reset])
- */
+  }, [])
+
   const onSubmit = (data: any) => {
     setColumnFilters(() => {
       const newFilters: ColumnFiltersState = []
