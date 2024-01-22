@@ -4,6 +4,7 @@ import Combobox from '@/components/form/Combobox'
 import { ComboboxTree } from '@/components/form/ComboboxTree'
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
+import { RangeSliderComponent } from '@/components/form/Range'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
@@ -73,7 +74,7 @@ export const SystemsFilterForm = () => {
         <Input {...fields.catalogueName} onChange={setFilter(fields.catalogueName.name)} isFilter={true} />
         <ComboboxTree {...fields.category} onSelect={setFilter(fields.category.name)} isFilter={true} />
         <Combobox {...fields.catalogueSupplier} onSelect={setFilter(fields.catalogueSupplier.name)} isFilter={true} />
-        <div className="flex-grow"></div>
+        <RangeSliderComponent min={0} max={10000} name={'price'} label={'Price'} onChange={setFilter('price')} />
       </div>
     </div>
   )
