@@ -65,7 +65,13 @@ export const SystemsFilterForm = () => {
         />
         <Combobox {...fields.zone} onSelect={setFilter(fields.zone.name)} />
         <SelectLocationCombo locationField={fields.location} onSelect={setFilter(fields.location.name)} />
-        <Listbox {...fields.systemLevel} customOptions={systemLevels} onChange={setFilter(fields.systemLevel.name)} />
+        <Listbox
+          {...fields.systemLevel}
+          customOptions={systemLevels}
+          onChange={v => {
+            setFilter(fields.systemLevel.name)(v?.name || null)
+          }}
+        />
         <Input
           {...fields.description}
           onChange={setFilter(fields.description.name)}
