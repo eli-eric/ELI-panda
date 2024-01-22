@@ -11,9 +11,10 @@ interface Props {
   disabled?: boolean
   error?: FieldError | undefined
   rounded?: string
+  isFilter?: boolean
 }
 
-export const ComboboxInput = ({ value, placeholder, disabled, error, onChange, rounded }: Props) => (
+export const ComboboxInput = ({ value, placeholder, disabled, error, onChange, rounded, isFilter }: Props) => (
   <Combobox.Input
     onChange={onChange}
     displayValue={(item: CodebookType) => item?.name}
@@ -24,7 +25,8 @@ export const ComboboxInput = ({ value, placeholder, disabled, error, onChange, r
       value && !disabled ? 'pr-14' : 'pr-9',
       rounded,
       error ? 'border-red-500' : 'border-gray-300',
-      disabled ? 'bg-gray-100' : ''
+      disabled ? 'bg-gray-100' : '',
+      isFilter ? value && 'border-2 border-lime-500' : ''
     )}
   />
 )

@@ -14,7 +14,8 @@ export const SystemTypeComboBox = ({
   systemTypeField,
   className,
   clickIcon,
-  onChange
+  onChange,
+  isFilter
 }: {
   systemTypeField: FieldProps & {
     options?: Option[] | undefined
@@ -23,6 +24,7 @@ export const SystemTypeComboBox = ({
   className?: string
   clickIcon?: boolean
   onChange?: (value?: any) => void
+  isFilter?: boolean
 }) => {
   const [open, setOpen] = useState(false)
   const { systemTypeGroups, filter } = useSystemTypeGroups()
@@ -53,6 +55,7 @@ export const SystemTypeComboBox = ({
           onClickIcon={() => {
             setOpen(true)
           }}
+          isFilter={isFilter}
         />
       ) : (
         <Listbox
@@ -62,6 +65,7 @@ export const SystemTypeComboBox = ({
           onClick={() => {
             setOpen(true)
           }}
+          isFilter={isFilter}
         />
       )}
       <CodebookTreeModalGraphql

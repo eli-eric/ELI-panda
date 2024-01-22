@@ -21,6 +21,7 @@ type ComboboxPropsT = FieldProps &
     filter?: CodebookFilter[]
     customLabel?: string
     onSelect?: (item?: any) => void
+    isFilter?: boolean
   }
 
 export const ComboboxTree = ({
@@ -35,7 +36,8 @@ export const ComboboxTree = ({
   filter,
   position = 'bottom',
   rounded = 'rounded-md',
-  onSelect
+  onSelect,
+  isFilter
 }: ComboboxPropsT) => {
   const { control, setValue } = useFormContext()
   const { formatMessage: fm } = useIntl()
@@ -84,7 +86,8 @@ export const ComboboxTree = ({
                   field.value && !disabled ? 'pr-14' : 'pr-9',
                   rounded,
                   error ? 'border-red-500' : 'border-gray-300',
-                  disabled ? 'bg-gray-100' : ''
+                  disabled ? 'bg-gray-100' : '',
+                  isFilter ? field.value && 'border-2 border-lime-500' : ''
                 )}
               />
               {field.value && !disabled && (

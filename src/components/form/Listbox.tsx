@@ -29,6 +29,7 @@ export type ListboxPropsT = FieldProps & {
   onClickIcon?: () => void
   children?: React.ReactNode
   onClick?: () => void
+  isFilter?: boolean
 }
 
 const Listbox = ({
@@ -51,7 +52,8 @@ const Listbox = ({
   onChange,
   onClickIcon,
   children,
-  onClick
+  onClick,
+  isFilter
 }: ListboxPropsT) => {
   const { control, setValue } = useFormContext()
   const intl = useIntl()
@@ -114,7 +116,8 @@ const Listbox = ({
                     field.value && !disabled ? 'pr-14' : 'pr-9',
                     rounded,
                     error ? 'border-red-500' : 'border-gray-300',
-                    disabled ? 'bg-gray-100' : ''
+                    disabled ? 'bg-gray-100' : '',
+                    isFilter ? field.value && 'border-2 border-lime-500' : ''
                   )}
                   placeholder={placeholder}
                 >

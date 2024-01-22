@@ -27,6 +27,7 @@ type ComboboxPropsT = FieldProps &
     customLabel?: string
     onClickIcon?: () => void
     onSelect?: (item?: CodebookType | null) => void
+    isFilter?: boolean
   }
 
 const Combobox = ({
@@ -45,7 +46,8 @@ const Combobox = ({
   showAddButton = false,
   onClickIcon,
   onChange,
-  onSelect
+  onSelect,
+  isFilter
 }: ComboboxPropsT) => {
   const { control, setValue } = useFormContext()
   const { formatMessage: fm } = useIntl()
@@ -105,6 +107,7 @@ const Combobox = ({
                 <ComboboxInput
                   {...{
                     value: field.value,
+                    isFilter,
                     error,
                     placeholder,
                     disabled,
