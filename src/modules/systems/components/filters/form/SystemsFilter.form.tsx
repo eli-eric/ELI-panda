@@ -19,7 +19,6 @@ export const SystemsFilterForm = () => {
 
   const setFilter = useCallback(
     (id: string) => (value: any) => {
-      console.log('setFilter', id, value)
       setColumnFilters(prev => {
         const filters = [...prev]
         const index = prev.findIndex(item => item.id === id)

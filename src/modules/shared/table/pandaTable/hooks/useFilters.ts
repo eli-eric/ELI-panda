@@ -17,8 +17,6 @@ export const useFilters = (
 
   const [filterQuery, setFilterQuery] = useQueryState('filter', { history: 'replace' })
 
-  //const [columnFiltering] = useState<ColumnFiltersState>(filterInstance || [])
-
   const isFirstRender = useIsFirstRender()
 
   const setFiltering: Dispatch<SetStateAction<ColumnFiltersState>> = useCallback(
@@ -39,20 +37,9 @@ export const useFilters = (
   // initialize update table state and query state and instance on first render
   useEffect(() => {
     if (isFirstRender && useFirstRender) {
-      console.log('isFirstRender', { filterInstance, filterQuery: JSON.parse(filterQuery || '[]') })
       setFiltering(filterInstance?.length > 0 ? filterInstance : JSON.parse(filterQuery || '[]'))
     }
   }, [isFirstRender, setFiltering, filterInstance, filterQuery, useFirstRender])
-
-  // update effect
-  /*  useEffect(() => {
-    if (!isFirstRender) {
-      setColumnFilter(tableId, columnFiltering)
-      if (enableQueryURL) setFilterQuery(columnFiltering.length === 0 ? null : JSON.stringify(columnFiltering))
-    }
-    // reason for disabling eslint: isFirstRender is a dependency but it should not trigger a re-render
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tableId, columnFiltering, enableQueryURL, setFilterQuery, setColumnFilter]) */
 
   return [filterInstance, setFiltering]
 }
