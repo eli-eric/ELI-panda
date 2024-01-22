@@ -15,10 +15,11 @@ import { useSystemsFilterFields } from './SystemsFilter.fields'
 export const SystemsFilterForm = () => {
   const fields = useSystemsFilterFields()
   const systemLevels = Object.values(SystemLevel).map(level => level)
-  const [filters, setColumnFilters] = useFilters('systems', true)
+  const [filters, setColumnFilters] = useFilters('systems', true, false)
 
   const setFilter = useCallback(
     (id: string) => (value: any) => {
+      console.log('setFilter', id, value)
       setColumnFilters(prev => {
         const filters = [...prev]
         const index = prev.findIndex(item => item.id === id)

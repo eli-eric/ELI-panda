@@ -8,7 +8,8 @@ import useTableStateStore from '@/store/useTableStateStore'
 
 export const useFilters = (
   tableId,
-  enableQueryURL
+  enableQueryURL,
+  useFirstRender = true
 ): [ColumnFiltersState, Dispatch<SetStateAction<ColumnFiltersState>>] => {
   const { setColumnFilter, instances } = useTableStateStore()
 
@@ -24,6 +25,7 @@ export const useFilters = (
     (filtering: SetStateAction<ColumnFiltersState>) => {
       if (typeof filtering === 'function') {
         const updatedFiltering = filtering(filterInstance)
+
         setColumnFilter(tableId, updatedFiltering)
         if (enableQueryURL) setFilterQuery(updatedFiltering.length === 0 ? null : JSON.stringify(updatedFiltering))
       } else {
@@ -36,27 +38,11 @@ export const useFilters = (
 
   // initialize update table state and query state and instance on first render
   useEffect(() => {
-    if (isFirstRender) {
-      if (enableQueryURL) {
-        if (filterQuery) {
-          setFiltering(JSON.parse(filterQuery))
-          /*    setColumnFilter(tableId, JSON.parse(filterQuery))
-        } else if (filterInstance) {
-          setFilterQuery(JSON.stringify(filterInstance))
-          setFiltering(filterInstance) */
-        }
-      }
+    if (isFirstRender && useFirstRender) {
+      console.log('isFirstRender', { filterInstance, filterQuery: JSON.parse(filterQuery || '[]') })
+      setFiltering(filterInstance?.length > 0 ? filterInstance : JSON.parse(filterQuery || '[]'))
     }
-  }, [
-    isFirstRender,
-    enableQueryURL,
-    filterQuery,
-    tableId,
-    setColumnFilter,
-    filterInstance,
-    setFilterQuery,
-    setFiltering
-  ])
+  }, [isFirstRender, setFiltering, filterInstance, filterQuery, useFirstRender])
 
   // update effect
   /*  useEffect(() => {
