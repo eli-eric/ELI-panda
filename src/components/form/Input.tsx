@@ -36,7 +36,7 @@ export type InputProps = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
     unit?: string
     onChange?: (value: string | number | readonly string[] | undefined) => void
-    fieldClassName?: string
+    isFilter?: boolean
   }
 export const Input = ({
   name,
@@ -52,7 +52,7 @@ export const Input = ({
   unit,
   defaultValue,
   id,
-  fieldClassName
+  isFilter
 }: InputProps) => {
   const { control } = useFormContext()
 
@@ -105,7 +105,7 @@ export const Input = ({
                   rounded,
                   error ? 'border-red-500' : 'border-gray-300',
                   disabled ? 'bg-gray-100' : '',
-                  fieldClassName
+                  isFilter ? field.value && 'border-2 border-lime-500' : ''
                 )}
               />
               {type === 'password' && (
