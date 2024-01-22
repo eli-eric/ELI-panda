@@ -2,7 +2,7 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import React, { Fragment, useEffect, useState } from 'react'
 import { Controller, useWatch } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
-import { useDebounce } from 'usehooks-ts'
+import { useDebounce, useIsFirstRender } from 'usehooks-ts'
 
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
@@ -64,8 +64,12 @@ export const Input = ({
   })
 
   const inputValueDebounced = useDebounce(inputValue, 500)
+  const isFirstRender = useIsFirstRender()
 
   useEffect(() => {
+    if (isFirstRender) {
+      return
+    }
     if (onChange) {
       onChange(inputValueDebounced)
     }
