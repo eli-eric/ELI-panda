@@ -4,18 +4,18 @@ import Combobox from '@/components/form/Combobox'
 import { ComboboxTree } from '@/components/form/ComboboxTree'
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
+import { RangeSliderComponent } from '@/components/form/Range'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { SystemLevel } from '@/types/gql/graphql'
-import { classNames } from '@/utils'
 
 import { useSystemsFilterFields } from './SystemsFilter.fields'
 
 export const SystemsFilterForm = () => {
   const fields = useSystemsFilterFields()
   const systemLevels = Object.values(SystemLevel).map(level => level)
-  const [filters, setColumnFilters] = useFilters('systems', true)
+  const [, setColumnFilters] = useFilters('systems', true, false)
 
   const setFilter = useCallback(
     (id: string) => (value: any) => {
@@ -36,64 +36,45 @@ export const SystemsFilterForm = () => {
     [setColumnFilters]
   )
 
-  const colorByFilter = (id: string) =>
-    classNames(filters.find(item => item.id === id)?.value ? 'border-2 border-lime-500' : '')
-
   return (
     <div className="md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]">
       <div className="flex flex-col gap-2">
-        <Input
-          {...fields.name}
-          onChange={setFilter(fields.name.name)}
-          fieldClassName={colorByFilter(fields.name.name)}
-        />
+        <Input {...fields.name} onChange={setFilter(fields.name.name)} isFilter={true} />
         <SystemTypeComboBox
           systemTypeField={fields.systemType}
           clickIcon={true}
           onChange={setFilter(fields.systemType.name)}
+          isFilter={true}
         />
-        <Combobox {...fields.responsible} onSelect={setFilter(fields.responsible.name)} />
-        <Input
-          {...fields.systemCode}
-          onChange={setFilter(fields.systemCode.name)}
-          fieldClassName={colorByFilter(fields.systemCode.name)}
+        <Combobox {...fields.responsible} onSelect={setFilter(fields.responsible.name)} isFilter={true} />
+        <Input {...fields.systemCode} onChange={setFilter(fields.systemCode.name)} isFilter={true} />
+        <Input {...fields.systemAlias} onChange={setFilter(fields.systemAlias.name)} isFilter={true} />
+        <Combobox {...fields.zone} onSelect={setFilter(fields.zone.name)} isFilter={true} />
+        <SelectLocationCombo
+          locationField={fields.location}
+          onSelect={setFilter(fields.location.name)}
+          isFilter={true}
         />
-        <Input
-          {...fields.systemAlias}
-          onChange={setFilter(fields.systemAlias.name)}
-          fieldClassName={colorByFilter(fields.systemAlias.name)}
+        <Listbox
+          {...fields.systemLevel}
+          customOptions={systemLevels}
+          onChange={v => {
+            setFilter(fields.systemLevel.name)(v?.name || null)
+          }}
+          isFilter={true}
         />
-        <Combobox {...fields.zone} onSelect={setFilter(fields.zone.name)} />
-        <SelectLocationCombo locationField={fields.location} onSelect={setFilter(fields.location.name)} />
-        <Listbox {...fields.systemLevel} customOptions={systemLevels} onChange={setFilter(fields.systemLevel.name)} />
-        <Input
-          {...fields.description}
-          onChange={setFilter(fields.description.name)}
-          fieldClassName={colorByFilter(fields.description.name)}
-        />
+        <Input {...fields.description} onChange={setFilter(fields.description.name)} isFilter={true} />
       </div>
 
       <div className="flex flex-col gap-2">
-        <Listbox {...fields.itemUsage} onChange={setFilter(fields.itemUsage.name)} />
-        <Input {...fields.eun} onChange={setFilter(fields.eun.name)} fieldClassName={colorByFilter(fields.eun.name)} />
-        <Input
-          {...fields.partNumber}
-          onChange={setFilter(fields.partNumber.name)}
-          fieldClassName={colorByFilter(fields.partNumber.name)}
-        />
-        <Input
-          {...fields.serialNumber}
-          onChange={setFilter(fields.serialNumber.name)}
-          fieldClassName={colorByFilter(fields.serialNumber.name)}
-        />
-        <Input
-          {...fields.catalogueName}
-          onChange={setFilter(fields.catalogueName.name)}
-          fieldClassName={colorByFilter(fields.catalogueName.name)}
-        />
-        <ComboboxTree {...fields.category} onSelect={setFilter(fields.category.name)} />
-        <Combobox {...fields.catalogueSupplier} onSelect={setFilter(fields.catalogueSupplier.name)} />
-        <div className="flex-grow"></div>
+        <Listbox {...fields.itemUsage} onChange={setFilter(fields.itemUsage.name)} isFilter={true} />
+        <Input {...fields.eun} onChange={setFilter(fields.eun.name)} isFilter={true} />
+        <Input {...fields.partNumber} onChange={setFilter(fields.partNumber.name)} isFilter={true} />
+        <Input {...fields.serialNumber} onChange={setFilter(fields.serialNumber.name)} isFilter={true} />
+        <Input {...fields.catalogueName} onChange={setFilter(fields.catalogueName.name)} isFilter={true} />
+        <ComboboxTree {...fields.category} onSelect={setFilter(fields.category.name)} isFilter={true} />
+        <Combobox {...fields.catalogueSupplier} onSelect={setFilter(fields.catalogueSupplier.name)} isFilter={true} />
+        <RangeSliderComponent min={0} max={10000} name={'price'} label={'Price'} onChange={setFilter('price')} />
       </div>
     </div>
   )

@@ -14,6 +14,7 @@ export const SelectLocationCombo = ({
   locationField: any
   className?: string
   onSelect?: (item?: CodebookType | null) => void
+  isFilter?: boolean
 }) => {
   const { additionalColumn, codebooktree, fetchChildren, loading, open, setOpen, tableId } = useLocationModal()
 
@@ -26,6 +27,7 @@ export const SelectLocationCombo = ({
         onClickIcon={() => {
           setOpen(true)
         }}
+        isFilter={true}
       />
       <CodebookTreeModalGraphql
         fetchChildren={fetchChildren}

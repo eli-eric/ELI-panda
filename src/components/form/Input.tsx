@@ -2,7 +2,7 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 import React, { Fragment, useEffect, useState } from 'react'
 import { Controller, useWatch } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
-import { useDebounce } from 'usehooks-ts'
+import { useDebounce, useIsFirstRender } from 'usehooks-ts'
 
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
@@ -36,7 +36,7 @@ export type InputProps = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
     unit?: string
     onChange?: (value: string | number | readonly string[] | undefined) => void
-    fieldClassName?: string
+    isFilter?: boolean
   }
 export const Input = ({
   name,
@@ -52,7 +52,7 @@ export const Input = ({
   unit,
   defaultValue,
   id,
-  fieldClassName
+  isFilter
 }: InputProps) => {
   const { control } = useFormContext()
 
@@ -64,8 +64,12 @@ export const Input = ({
   })
 
   const inputValueDebounced = useDebounce(inputValue, 500)
+  const isFirstRender = useIsFirstRender()
 
   useEffect(() => {
+    if (isFirstRender) {
+      return
+    }
     if (onChange) {
       onChange(inputValueDebounced)
     }
@@ -101,7 +105,7 @@ export const Input = ({
                   rounded,
                   error ? 'border-red-500' : 'border-gray-300',
                   disabled ? 'bg-gray-100' : '',
-                  fieldClassName
+                  isFilter ? field.value && 'border-2 border-lime-500' : ''
                 )}
               />
               {type === 'password' && (

@@ -16,6 +16,7 @@ import {
   TableOpenButton,
   TablePlusButton
 } from '@/components/Buttons'
+import { Tooltip } from '@/components/Tooltip'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import useWarningModal from '@/hooks/useWarningModal'
@@ -92,26 +93,38 @@ export const SystemNameCell = ({
               <ArrowsRightLeftIcon className="w-5 h-5" />
             </button>
           )}
-          {original.hasSubsystems ? (
-            <button
-              onClick={() => {
-                if (!row.getIsExpanded()) {
-                  setUid(original.uid)
-                } else {
-                  setUid(null)
-                }
-                row.toggleExpanded()
-              }}
-              className="flex items-center hover:text-gray-400 cursor-pointer"
-            >
-              {row.getIsExpanded() ? <ChevronDownIcon className="w-4 h-4" /> : <ChevronRightIcon className="w-4 h-4" />}
-              <span className="pl-1">{getValue()}</span>
-            </button>
-          ) : (
-            <div className="flex items-center">
-              <span className="pl-5">{getValue()}</span>
+          <Tooltip
+            content={original.parentPath?.map(v => v.name).join(' > ')}
+            placement="top"
+            className={original.parentPath && original.parentPath?.length > 0 ? '' : 'hidden'}
+          >
+            <div>
+              {original.hasSubsystems ? (
+                <button
+                  onClick={() => {
+                    if (!row.getIsExpanded()) {
+                      setUid(original.uid)
+                    } else {
+                      setUid(null)
+                    }
+                    row.toggleExpanded()
+                  }}
+                  className="flex items-center hover:text-gray-400 cursor-pointer"
+                >
+                  {row.getIsExpanded() ? (
+                    <ChevronDownIcon className="w-4 h-4" />
+                  ) : (
+                    <ChevronRightIcon className="w-4 h-4" />
+                  )}
+                  <span className="pl-1">{getValue()}</span>
+                </button>
+              ) : (
+                <div className="flex items-center">
+                  <span className="pl-5">{getValue()}</span>
+                </div>
+              )}
             </div>
-          )}
+          </Tooltip>
         </div>
         {!hideButtons && (hoveringId === id || isMobile) && (
           <Fragment>
