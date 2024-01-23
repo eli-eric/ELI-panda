@@ -1,5 +1,6 @@
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import RangeSlider from 'react-range-slider-input'
 
 interface Props {
@@ -23,6 +24,7 @@ export const RangeSliderComponent = ({ min, max, name, label, onChange }: Props)
           <div>
             <RangeSlider
               {...field}
+              className="range-slider-primary"
               min={min}
               max={max}
               onThumbDragEnd={() => {
@@ -33,9 +35,37 @@ export const RangeSliderComponent = ({ min, max, name, label, onChange }: Props)
               }}
               step={1}
             />
-            <div className="flex pt-2 justify-between">
-              <span className="text-sm font-medium text-gray-700">{field.value[0]}</span>
-              <span className="text-sm font-medium text-gray-700">{field.value[1]}</span>
+            <div className="flex pt-4 gap-14 w-full justify-between">
+              <input
+                type="number"
+                className="block border-gray-300 rounded-md w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
+                value={field.value[0]}
+                onChange={e => {
+                  if (e.target.value > max.toString()) {
+                    toast.error('Min value must be less than max value')
+                  }
+                  if (e.target.value > field.value[1]) {
+                    toast.error('Min value must be less than max value')
+                  } else {
+                    field.onChange(v => [e.target.value, v[1]])
+                  }
+                }}
+              />
+              <input
+                type="number"
+                onChange={e => {
+                  if (e.target.value < min.toString()) {
+                    toast.error('Max value must be greater than min value')
+                  }
+                  if (e.target.value < field.value[0]) {
+                    toast.error('Max value must be greater than min value')
+                  } else {
+                    field.onChange(v => [v[0], e.target.value])
+                  }
+                }}
+                className="block border-gray-300 rounded-md w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm"
+                value={field.value[1]}
+              />
             </div>
           </div>
         )}

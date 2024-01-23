@@ -95,3 +95,11 @@ body::-webkit-scrollbar-thumb:hover {
   /* Your custom styles */
   /* For example: */
 }
+
+.range-slider-primary .range-slider__range {
+  background: rgb(249 115 22);
+}
+
+.range-slider-primary .range-slider__thumb {
+  background: rgb(249 115 22);
+}
