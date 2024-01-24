@@ -1,30 +1,45 @@
 import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
-import { useQueryState } from 'next-usequerystate'
-import { Fragment, useEffect, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { useIsFirstRender } from 'usehooks-ts'
+import { Fragment, useMemo, useState } from 'react'
 
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver'
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
-import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
-import { useFormControlStore } from '@/store/useFormControlStore'
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
 
 import { useMinMaxPrice } from '../../hooks/useMinMaxPrice'
 import { SystemsFilterForm } from './form/SystemsFilter.form'
 
+type SystemFilterType = {
+  name: string
+  systemLevel: CodebookType | null
+  systemCode: string
+  systemAlias: string
+  systemType: CodebookType | null
+  zone: CodebookType | null
+  location: CodebookType | null
+  responsible: CodebookType | null
+  description: string
+  importance: CodebookType | null
+  itemUsage: CodebookType | null
+  eun: string
+  serialNumber: string
+  catalogueName: string
+  catalogueNumber: string
+  category: CodebookType | null
+  catalogueDescription: string
+  supplier: CodebookType | null
+  price: [number | undefined, number | undefined]
+}
+
 export const SystemFilterButtonContainer = () => {
   const [open, setOpen] = useState(false)
-
-  const [storeFilters, setColumnFilters] = useFilters('systems', true, false)
   const { minMaxPrice } = useMinMaxPrice()
+  const tableId = 'systems'
 
-  const [filterQuery] = useQueryState('filter', { history: 'replace' })
-  const columnFilters = useMemo(() => JSON.parse(filterQuery || '[]'), [filterQuery])
-
-  const defValues = useMemo(
+  const defValues = useMemo<SystemFilterType>(
     () => ({
       name: '',
       systemLevel: null,
@@ -42,70 +57,18 @@ export const SystemFilterButtonContainer = () => {
       catalogueName: '',
       catalogueNumber: '',
       category: null,
-      catalogueDescription: null,
+      catalogueDescription: '',
       supplier: null,
       price: [minMaxPrice?.min, minMaxPrice?.max]
     }),
     [minMaxPrice]
   )
-
-  const formMethods = useForm<any>({
-    defaultValues: defValues
+  const formMethods = useFormFilter<SystemFilterType>({
+    tableId,
+    defValues
   })
-
-  const { reset, setValue } = formMethods
-
-  const isFirstRender = useIsFirstRender()
-  const { fieldIdToSync, clear } = useFormControlStore()
-
-  useEffect(() => {
-    if (fieldIdToSync.length > 0) {
-      fieldIdToSync.forEach((fieldId: string) => {
-        setValue(fieldId, defValues[fieldId])
-      })
-      clear()
-    }
-  }, [fieldIdToSync, setValue, clear, defValues])
-
-  useEffect(() => {
-    if (isFirstRender) {
-      if (!storeFilters.length) {
-        reset(
-          columnFilters.reduce((acc, curr) => {
-            if (curr.id === 'systemLevel') {
-              acc[curr.id] = { uid: curr.value, name: curr.value }
-            }
-            acc[curr.id] = curr.value
-            return acc
-          }, {})
-        )
-      }
-      if (storeFilters.length) {
-        reset(
-          storeFilters.reduce((acc, curr) => {
-            acc[curr.id] = curr.value
-            return acc
-          }, {})
-        )
-      }
-    }
-  }, [storeFilters, isFirstRender, reset, columnFilters])
-
-  /*   const onSubmit = (data: any) => {
-    setColumnFilters(() => {
-      const newFilters: ColumnFiltersState = []
-      Object.keys(data).forEach(key => {
-        if (data[key]) {
-          newFilters.push({
-            id: key,
-            value: data[key]
-          })
-        }
-      })
-      return newFilters
-    })
-    reset(data)
-  } */
+  const { storeFilters, setColumnFilters } = useFormFilterState({ tableId })
+  const { reset } = formMethods
 
   const onClear = () => {
     reset(defValues, { keepValues: false })
@@ -134,7 +97,7 @@ export const SystemFilterButtonContainer = () => {
       </Button>
       <Form formMethods={formMethods}>
         <SlideOver panelTitle="System Filters" open={open} setOpen={setOpen} buttons={buttons}>
-          <SystemsFilterForm />
+          <SystemsFilterForm tableId={tableId} />
         </SlideOver>
       </Form>
     </Fragment>
