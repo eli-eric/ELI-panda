@@ -258,6 +258,11 @@ export const typeDefs = gql`
     SUBSYSTEMS_AND_PARTS
   }
 
+  interface hasOrderLine @relationshipProperties {
+    price: Int
+    currency: String
+  }
+
   type Item @authentication {
     uid: ID! @id
     eun: String
@@ -265,7 +270,7 @@ export const typeDefs = gql`
     serialNumber: String
     system: [System!]! @relationship(type: "CONTAINS_ITEM", direction: IN)
     catalogueItem: CatalogueItem! @relationship(type: "IS_BASED_ON", direction: OUT)
-    order: Order @relationship(type: "HAS_ORDER_LINE", direction: IN)
+    order: Order @relationship(type: "HAS_ORDER_LINE", direction: IN, properties: "hasOrderLine")
     itemUsage: ItemUsage @relationship(type: "HAS_ITEM_USAGE", direction: OUT)
     conditionStatus: ItemCondition @relationship(type: "HAS_CONDITION_STATUS", direction: OUT)
     notes: String

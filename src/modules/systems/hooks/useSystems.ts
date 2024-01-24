@@ -1,3 +1,5 @@
+import toast from 'react-hot-toast'
+
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
 
@@ -10,7 +12,10 @@ export const useSystems = tableId => {
   const { response, loading, error, mutate } = useFetch<SystemsResponse>({
     config: {
       suspense: false,
-      keepPreviousData: true
+      keepPreviousData: true,
+      onError: error => {
+        toast.error(error.message)
+      }
     },
     url: systemsList,
     useMockFetcher: false

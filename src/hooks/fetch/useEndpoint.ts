@@ -26,6 +26,7 @@ const getEndpoints = (uid?: string, path?: string, itemUid?: string, query?: str
     systemsList: `/systems${query}`,
     systemCode: `/system/systemCode${query}`,
     orders: `/orders${query}`,
+    ordersMinMaxPrice: `/orders/order-lines/min-max-prices`,
     order: `/order${uid ? '/' + uid : ''}`,
     orderLineDelivery: `/order/${uid}/orderline/${itemUid}/delivery`,
     eunforPrint: `/orders/eun-for-print/${uid}${query}`,

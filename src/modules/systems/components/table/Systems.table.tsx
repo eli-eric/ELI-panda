@@ -1,7 +1,6 @@
 import type { Row, Table } from '@tanstack/react-table'
 import { Fragment, useCallback, useRef } from 'react'
 
-import ErrorPage from '@/components/error/ErrorPage'
 import { Pagination } from '@/modules/shared/table/Pagination'
 import type { GetRowPropsReturnType, PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
@@ -33,7 +32,7 @@ export const SystemsTable = ({
   enableDragAndDrop,
   RightSearchBarElement
 }: Props) => {
-  const { systems, error, loading } = useSystems(tableId)
+  const { systems, loading } = useSystems(tableId)
   const tableRef = useRef<Table<SystemDetail>>()
   const { columns, pending } = useSystemsColumns({ tableId, hideButtons, enableDragAndDrop: enableDragAndDrop })
 
@@ -61,7 +60,6 @@ export const SystemsTable = ({
         settings={{ ...settings, enableSorting: false }}
         className={className}
       />
-      {error && <ErrorPage />}
       <Pagination
         tableId={tableId}
         settings={{
