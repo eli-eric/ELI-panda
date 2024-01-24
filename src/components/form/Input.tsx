@@ -1,5 +1,5 @@
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useId, useState } from 'react'
 import { Controller, useWatch } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 import { useDebounce, useIsFirstRender } from 'usehooks-ts'
@@ -29,8 +29,12 @@ const InputWrapper = ({
     {children}
   </div>
 )
-const Label = ({ label }: { label?: string }) =>
-  label ? <label className="text-sm font-medium text-gray-700">{label}</label> : null
+const Label = ({ label, htmlFor }: { label?: string; htmlFor: string }) =>
+  label ? (
+    <label htmlFor={htmlFor} className="text-sm font-medium text-gray-700">
+      {label}
+    </label>
+  ) : null
 
 export type InputProps = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
@@ -78,6 +82,7 @@ export const Input = ({
   const toogleShowPassword = () => {
     setShowPassword(!showPassword)
   }
+  const idHtml = useId()
 
   return (
     <Controller
@@ -86,12 +91,12 @@ export const Input = ({
       defaultValue={defaultValue || ''}
       render={({ field, fieldState: { error } }) => (
         <InputWrapper hidden={hidden} className={className}>
-          <Label label={label} />
+          <Label label={label} htmlFor={idHtml} />
           <div className="flex">
             <div hidden={hidden} className="relative flex w-full">
               <input
                 {...field}
-                id={id}
+                id={idHtml}
                 hidden={hidden}
                 step="0.001"
                 type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
@@ -147,6 +152,7 @@ type TextAreaWithErrorProps = FieldProps & React.InputHTMLAttributes<HTMLTextAre
 
 export const TextArea = ({ name, placeholder, disabled, rounded, label, className }: TextAreaWithErrorProps) => {
   const { control } = useFormContext()
+  const id = useId()
 
   return (
     <Controller
@@ -156,9 +162,10 @@ export const TextArea = ({ name, placeholder, disabled, rounded, label, classNam
       render={({ field, fieldState: { error } }) => (
         <InputWrapper className={className}>
           <Fragment>
-            <Label label={label} />
+            <Label htmlFor={id} label={label} />
             <textarea
               {...field}
+              id={id}
               rows={3}
               disabled={disabled}
               placeholder={placeholder}
@@ -190,17 +197,18 @@ export const InputAmount = ({
   children
 }: InputAmountProps) => {
   const { control } = useFormContext()
-
+  const id = useId()
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
         <InputWrapper hidden={hidden} className={className}>
-          <Label label={label} />
+          <Label htmlFor={id} label={label} />
           <div hidden={hidden} className="relative">
             <input
               {...field}
+              id={id}
               hidden={hidden}
               type={'number'}
               step="0.001"
@@ -258,10 +266,10 @@ export const InputDate = ({
   hidden,
   label,
   onChange,
-  defaultValue,
-  id
+  defaultValue
 }: InputProps) => {
   const { control } = useFormContext()
+  const idHtml = useId()
 
   return (
     <Controller
@@ -270,13 +278,13 @@ export const InputDate = ({
       defaultValue={defaultValue || ''}
       render={({ field, fieldState: { error } }) => (
         <InputWrapper hidden={hidden} className={className}>
-          <Label label={label} />
+          <Label htmlFor={idHtml} label={label} />
           <div className="flex">
             <div hidden={hidden} className="relative flex w-full">
               <input
                 {...field}
                 type="date"
-                id={id}
+                id={idHtml}
                 hidden={hidden}
                 step="0.001"
                 disabled={disabled}
