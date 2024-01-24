@@ -13,6 +13,7 @@ interface Props {
 
 export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange }: Props) => {
   const { control, setValue } = useFormContext()
+  console.log('control', max)
 
   const value = useWatch({ control, name })
 
@@ -48,7 +49,7 @@ export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange
                 onInput={v => {
                   field.onChange(v)
                 }}
-                step={10}
+                step={1}
               />
               <div className="flex pt-4 gap-14 w-full justify-between">
                 <input
