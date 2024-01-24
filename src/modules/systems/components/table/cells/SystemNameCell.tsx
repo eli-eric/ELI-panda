@@ -23,7 +23,6 @@ import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 // eslint-disable-next-line
-import { SystemsContext } from '@/modules/systems/Systems.cont'
 import type { SystemDetail } from '@/modules/systems/types/responses'
 import { filterSubsystem } from '@/modules/systems/utils'
 import { useHoveringId } from '@/store/useHoveringId'
