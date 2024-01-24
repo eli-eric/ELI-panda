@@ -1,42 +1,22 @@
-import { useCallback } from 'react'
-
 import Combobox from '@/components/form/Combobox'
 import { ComboboxTree } from '@/components/form/ComboboxTree'
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { RangeSliderComponent } from '@/components/form/Range'
+import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
-import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { useMinMaxPrice } from '@/modules/systems/hooks/useMinMaxPrice'
 import { SystemLevel } from '@/types/gql/graphql'
 
 import { useSystemsFilterFields } from './SystemsFilter.fields'
 
-export const SystemsFilterForm = () => {
+export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
   const fields = useSystemsFilterFields()
   const systemLevels = Object.values(SystemLevel).map(level => level)
-  const [, setColumnFilters] = useFilters('systems', true, false)
   const { minMaxPrice } = useMinMaxPrice()
 
-  const setFilter = useCallback(
-    (id: string) => (value: any) => {
-      setColumnFilters(prev => {
-        const filters = [...prev]
-        const index = prev.findIndex(item => item.id === id)
-        if (index !== -1) {
-          filters[index].value = value
-        } else if (value) {
-          filters.push({ id, value })
-        }
-        if (!value) {
-          filters.splice(index, 1)
-        }
-        return filters
-      })
-    },
-    [setColumnFilters]
-  )
+  const { setFilter } = useFormFilterState({ tableId })
 
   return (
     <div className="md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]">
