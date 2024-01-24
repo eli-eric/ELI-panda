@@ -56,18 +56,16 @@ export const SystemFilterButtonContainer = () => {
   const { reset, setValue } = formMethods
 
   const isFirstRender = useIsFirstRender()
-  const { instances, clear } = useFormControlStore()
-
-  const fieldToSync = useMemo(() => instances?.systemsFilter, [instances])
+  const { fieldIdToSync, clear } = useFormControlStore()
 
   useEffect(() => {
-    if (fieldToSync) {
-      fieldToSync.forEach((fieldId: string) => {
+    if (fieldIdToSync.length > 0) {
+      fieldIdToSync.forEach((fieldId: string) => {
         setValue(fieldId, defValues[fieldId])
       })
-      clear('systemsFilter')
+      clear()
     }
-  }, [fieldToSync, setValue, clear, defValues])
+  }, [fieldIdToSync, setValue, clear, defValues])
 
   useEffect(() => {
     if (isFirstRender) {

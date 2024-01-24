@@ -6,7 +6,7 @@ import { useFormControlStore } from '@/store/useFormControlStore'
 
 export const SystemFiltersBadges = () => {
   const [filters, setFilters] = useFilters('systems', true, false)
-  const { setInstance } = useFormControlStore()
+  const { setFieldIdToSync } = useFormControlStore()
 
   return (
     <div>
@@ -18,7 +18,7 @@ export const SystemFiltersBadges = () => {
             className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600"
             onClick={() => {
               setFilters(filters.filter(f => f.id !== filter.id))
-              setInstance('systemsFilter', filter.id)
+              setFieldIdToSync(filter.id)
             }}
           />
         </Badge>

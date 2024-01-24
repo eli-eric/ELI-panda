@@ -1,28 +1,19 @@
 import { createWithEqualityFn as create } from 'zustand/traditional'
 
 type FormControlState = {
-  instances?: Record<string, string[]>
-  setInstance: (instance: string, fieldId: string) => void
-  clear: (instance: string) => void
+  fieldIdToSync: string[]
+  setFieldIdToSync: (fieldId: string) => void
+  clear: () => void
 }
 
 export const useFormControlStore = create<FormControlState>(set => ({
-  instances: {},
-  setInstance: (instance, fieldId) =>
+  fieldIdToSync: [],
+  setFieldIdToSync: fieldId =>
     set(state => {
-      const newInstances = { ...state.instances }
-      if (!newInstances[instance]) {
-        newInstances[instance] = []
+      if (!state.fieldIdToSync.includes(fieldId)) {
+        return { fieldIdToSync: [...state.fieldIdToSync, fieldId] }
       }
-      newInstances[instance].push(fieldId)
-      return {
-        ...state,
-        instances: newInstances
-      }
+      return state
     }),
-  clear: instance =>
-    set(state => ({
-      ...state,
-      [instance]: []
-    }))
+  clear: () => set({ fieldIdToSync: [] })
 }))
