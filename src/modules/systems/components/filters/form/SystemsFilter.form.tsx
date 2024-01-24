@@ -8,6 +8,7 @@ import { RangeSliderComponent } from '@/components/form/Range'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
+import { useMinMaxPrice } from '@/modules/systems/hooks/useMinMaxPrice'
 import { SystemLevel } from '@/types/gql/graphql'
 
 import { useSystemsFilterFields } from './SystemsFilter.fields'
@@ -16,6 +17,7 @@ export const SystemsFilterForm = () => {
   const fields = useSystemsFilterFields()
   const systemLevels = Object.values(SystemLevel).map(level => level)
   const [, setColumnFilters] = useFilters('systems', true, false)
+  const { minMaxPrice } = useMinMaxPrice()
 
   const setFilter = useCallback(
     (id: string) => (value: any) => {
@@ -74,7 +76,13 @@ export const SystemsFilterForm = () => {
         <Input {...fields.catalogueName} onChange={setFilter(fields.catalogueName.name)} isFilter={true} />
         <ComboboxTree {...fields.category} onSelect={setFilter(fields.category.name)} isFilter={true} />
         <Combobox {...fields.catalogueSupplier} onSelect={setFilter(fields.catalogueSupplier.name)} isFilter={true} />
-        <RangeSliderComponent min={0} max={10000} name={'price'} label={'Price'} onChange={setFilter('price')} />
+        <RangeSliderComponent
+          min={minMaxPrice?.min}
+          max={minMaxPrice?.max}
+          name={'price'}
+          label={'Price'}
+          onChange={setFilter('price')}
+        />
       </div>
     </div>
   )
