@@ -10,6 +10,7 @@ import { Form } from '@/components/form/Form'
 import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver'
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
+import { useFormControlStore } from '@/store/useFormControlStore'
 
 import { useMinMaxPrice } from '../../hooks/useMinMaxPrice'
 import { SystemsFilterForm } from './form/SystemsFilter.form'
@@ -23,8 +24,8 @@ export const SystemFilterButtonContainer = () => {
   const [filterQuery] = useQueryState('filter', { history: 'replace' })
   const columnFilters = useMemo(() => JSON.parse(filterQuery || '[]'), [filterQuery])
 
-  const formMethods = useForm<any>({
-    defaultValues: {
+  const defValues = useMemo(
+    () => ({
       name: '',
       systemLevel: null,
       systemCode: '',
@@ -44,11 +45,29 @@ export const SystemFilterButtonContainer = () => {
       catalogueDescription: null,
       supplier: null,
       price: [minMaxPrice?.min, minMaxPrice?.max]
-    }
+    }),
+    [minMaxPrice]
+  )
+
+  const formMethods = useForm<any>({
+    defaultValues: defValues
   })
-  const { reset, setValue, getValues } = formMethods
+
+  const { reset, setValue } = formMethods
 
   const isFirstRender = useIsFirstRender()
+  const { instances, clear } = useFormControlStore()
+
+  const fieldToSync = useMemo(() => instances?.systemsFilter, [instances])
+
+  useEffect(() => {
+    if (fieldToSync) {
+      fieldToSync.forEach((fieldId: string) => {
+        setValue(fieldId, defValues[fieldId])
+      })
+      clear('systemsFilter')
+    }
+  }, [fieldToSync, setValue, clear, defValues])
 
   useEffect(() => {
     if (isFirstRender) {
@@ -74,17 +93,6 @@ export const SystemFilterButtonContainer = () => {
     }
   }, [storeFilters, isFirstRender, reset, columnFilters])
 
-  useEffect(() => {
-    if (!isFirstRender) {
-      const values = getValues()
-      Object.keys(values).forEach(key => {
-        if (!storeFilters.find(item => item.id === key)) {
-          setValue(key, '')
-        }
-      })
-    }
-  }, [storeFilters, getValues, isFirstRender, setValue])
-
   /*   const onSubmit = (data: any) => {
     setColumnFilters(() => {
       const newFilters: ColumnFiltersState = []
@@ -102,30 +110,7 @@ export const SystemFilterButtonContainer = () => {
   } */
 
   const onClear = () => {
-    reset(
-      {
-        name: '',
-        systemLevel: null,
-        systemCode: '',
-        systemAlias: '',
-        systemType: null,
-        zone: null,
-        location: null,
-        responsible: null,
-        description: '',
-        importance: null,
-        itemUsage: null,
-        eun: '',
-        serialNumber: '',
-        catalogueName: '',
-        catalogueNumber: '',
-        category: null,
-        catalogueDescription: null,
-        supplier: null,
-        price: [minMaxPrice?.min, minMaxPrice?.max]
-      },
-      { keepValues: false }
-    )
+    reset(defValues, { keepValues: false })
   }
 
   const buttons: SlideOverButtons = {
