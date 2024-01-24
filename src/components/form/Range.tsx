@@ -13,7 +13,6 @@ interface Props {
 
 export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange }: Props) => {
   const { control, setValue } = useFormContext()
-  console.log('control', max)
 
   const value = useWatch({ control, name })
 
