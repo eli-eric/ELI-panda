@@ -24,6 +24,7 @@ export const useFormFilter = <T extends FieldValues>({ tableId, defValues }: IFi
   const isFirstRender = useIsFirstRender()
   const { fieldIdToSync, clear } = useFormControlStore()
 
+  //sync form values (for example, when we click xmark icon in badge)
   useEffect(() => {
     if (fieldIdToSync.length > 0) {
       fieldIdToSync.forEach(fieldId => {
@@ -33,6 +34,7 @@ export const useFormFilter = <T extends FieldValues>({ tableId, defValues }: IFi
     }
   }, [fieldIdToSync, setValue, clear, defValues])
 
+  //set default values from store or from url on first render
   useEffect(() => {
     if (isFirstRender) {
       if (!storeFilters.length) {
@@ -63,6 +65,7 @@ export const useFormFilter = <T extends FieldValues>({ tableId, defValues }: IFi
 export const useFormFilterState = ({ tableId }: { tableId: string }) => {
   const [storeFilters, setColumnFilters] = useFilters(tableId, true, false)
 
+  //set filter value to store on change field and remove from store if value is empty
   const setFilter = useCallback(
     (id: string) => (value: any) => {
       setColumnFilters(prev => {
