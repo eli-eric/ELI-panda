@@ -11,17 +11,21 @@ import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 
+import { useMinMaxPrice } from '../../hooks/useMinMaxPrice'
 import { SystemsFilterForm } from './form/SystemsFilter.form'
 
 export const SystemFilterButtonContainer = () => {
   const [open, setOpen] = useState(false)
 
   const [storeFilters, setColumnFilters] = useFilters('systems', true, false)
+  const { minMaxPrice } = useMinMaxPrice()
 
   const [filterQuery] = useQueryState('filter', { history: 'replace' })
   const columnFilters = useMemo(() => JSON.parse(filterQuery || '[]'), [filterQuery])
 
-  const formMethods = useForm()
+  const formMethods = useForm<any>({
+    defaultValues: minMaxPrice ? { price: [minMaxPrice?.min, minMaxPrice?.max] } : undefined
+  })
   const { reset } = formMethods
 
   const isFirstRender = useIsFirstRender()
@@ -86,7 +90,8 @@ export const SystemFilterButtonContainer = () => {
         catalogueNumber: '',
         category: null,
         catalogueDescription: null,
-        supplier: null
+        supplier: null,
+        price: [minMaxPrice?.min, minMaxPrice?.max]
       },
       { keepValues: false }
     )
