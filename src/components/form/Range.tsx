@@ -27,7 +27,7 @@ export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange
 
   return (
     <div className="flex flex-col">
-      <label className="text-sm pb-2 font-medium text-gray-700">{label}</label>
+      <span className="text-sm pb-2 font-medium text-gray-700">{label}</span>
       <Controller
         name={name}
         control={control}
@@ -52,9 +52,10 @@ export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange
               />
               <div className="flex pt-4 gap-14 w-full justify-between">
                 <input
+                  name="min"
                   type="number"
                   className="block border-gray-300 rounded-md w-full appearance-none border px-2 py-1 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 text-sm"
-                  value={fieldValue[0]}
+                  value={fieldValue[0] || ''}
                   onChange={e => {
                     const value = Number(e.target.value)
                     if (value > max) {
@@ -73,6 +74,7 @@ export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange
                   }}
                 />
                 <input
+                  name="max"
                   type="number"
                   onChange={e => {
                     const value = Number(e.target.value)
@@ -91,7 +93,7 @@ export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange
                     }
                   }}
                   className="block border-gray-300 rounded-md w-full appearance-none border px-2 py-1 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 text-sm"
-                  value={fieldValue[1]}
+                  value={fieldValue[1] || ''}
                 />
               </div>
             </div>

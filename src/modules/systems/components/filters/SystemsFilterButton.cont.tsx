@@ -24,9 +24,29 @@ export const SystemFilterButtonContainer = () => {
   const columnFilters = useMemo(() => JSON.parse(filterQuery || '[]'), [filterQuery])
 
   const formMethods = useForm<any>({
-    defaultValues: minMaxPrice ? { price: [minMaxPrice?.min, minMaxPrice?.max] } : undefined
+    defaultValues: {
+      name: '',
+      systemLevel: null,
+      systemCode: '',
+      systemAlias: '',
+      systemType: null,
+      zone: null,
+      location: null,
+      responsible: null,
+      description: '',
+      importance: null,
+      itemUsage: null,
+      eun: '',
+      serialNumber: '',
+      catalogueName: '',
+      catalogueNumber: '',
+      category: null,
+      catalogueDescription: null,
+      supplier: null,
+      price: [minMaxPrice?.min, minMaxPrice?.max]
+    }
   })
-  const { reset } = formMethods
+  const { reset, setValue, getValues } = formMethods
 
   const isFirstRender = useIsFirstRender()
 
@@ -53,6 +73,17 @@ export const SystemFilterButtonContainer = () => {
       }
     }
   }, [storeFilters, isFirstRender, reset, columnFilters])
+
+  useEffect(() => {
+    if (!isFirstRender) {
+      const values = getValues()
+      Object.keys(values).forEach(key => {
+        if (!storeFilters.find(item => item.id === key)) {
+          setValue(key, '')
+        }
+      })
+    }
+  }, [storeFilters, getValues, isFirstRender, setValue])
 
   /*   const onSubmit = (data: any) => {
     setColumnFilters(() => {

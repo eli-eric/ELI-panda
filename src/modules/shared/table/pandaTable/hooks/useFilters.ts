@@ -37,9 +37,13 @@ export const useFilters = (
   // initialize update table state and query state and instance on first render
   useEffect(() => {
     if (isFirstRender && useFirstRender) {
-      setFiltering(filterInstance?.length > 0 ? filterInstance : JSON.parse(filterQuery || '[]'))
+      if (enableQueryURL) {
+        setFiltering(filterInstance?.length > 0 ? filterInstance : JSON.parse(filterQuery || '[]'))
+      } else {
+        setFiltering(filterInstance)
+      }
     }
-  }, [isFirstRender, setFiltering, filterInstance, filterQuery, useFirstRender])
+  }, [isFirstRender, setFiltering, filterInstance, filterQuery, useFirstRender, enableQueryURL])
 
   return [filterInstance, setFiltering]
 }
