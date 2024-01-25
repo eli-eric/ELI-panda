@@ -55,7 +55,6 @@ export const Input = ({
   onChange,
   unit,
   defaultValue,
-
   isFilter
 }: InputProps) => {
   const { control } = useFormContext()

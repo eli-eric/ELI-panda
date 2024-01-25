@@ -12,10 +12,6 @@ export const useCategoryProperties = (uid?: string) => {
     onError: () => {
       toast.error('Failed to load group details')
     },
-    onSuccess: data => {
-      toast.success('Group details loaded')
-      console.log(data)
-    },
     config: {
       suspense: false
     }

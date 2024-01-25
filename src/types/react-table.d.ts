@@ -1,5 +1,7 @@
 import '@tanstack/react-table'
 
+import type { PROPERTY_TYPE } from './catalogue/constants'
+
 declare module '@tanstack/table-core' {
   //eslint-disable-next-line
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -14,5 +16,12 @@ declare module '@tanstack/table-core' {
     }
     noHeader?: boolean
     headerElement?: React.ReactNode
+  }
+
+  interface ColumnFilter {
+    id: string
+    value: unknown
+    name?: string
+    type?: PROPERTY_TYPE
   }
 }

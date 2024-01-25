@@ -20,7 +20,7 @@ export interface CatalogueItemDetail {
 }
 
 export type CatalogueCategoryProperty = {
-  uid?: string
+  uid: string
   name: string
   listOfValues?: string[]
   defaultValue?: string
