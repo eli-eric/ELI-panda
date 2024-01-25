@@ -4,10 +4,13 @@ import { useFormContext } from 'react-hook-form'
 import Listbox from '@/components/form/Listbox'
 import { Modal } from '@/components/overlays/modal/modal.comp'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import { message } from '@/i18n/src/messages'
 import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps, ModalButtons, Option } from '@/types/form'
 import { classNames } from '@/utils'
+
+const messages = message.common.buttons
 
 export const SelectSystemComboBox = ({
   selectSystemField,
@@ -29,16 +32,16 @@ export const SelectSystemComboBox = ({
 
   const buttons: ModalButtons = {
     goNext: {
-      text: 'Continue',
+      text: messages.continue,
       disabled: !selectedSystem,
       onClick: () => {
-        setOpen(false)
         setValue('parentSystem', selectedSystem)
         onChange?.(selectedSystem)
+        setOpen(false)
       }
     },
     goBack: {
-      text: 'Cancel',
+      text: messages.cancel,
       onClick: () => {
         setOpen(false)
       }

@@ -32,6 +32,7 @@ type SystemFilterType = {
   catalogueDescription: string
   supplier: CodebookType | null
   price: [number | undefined, number | undefined]
+  parentSystem: CodebookType | null
 }
 
 export const SystemFilterButtonContainer = () => {
@@ -59,6 +60,7 @@ export const SystemFilterButtonContainer = () => {
       category: null,
       catalogueDescription: '',
       supplier: null,
+      parentSystem: null,
       price: [minMaxPrice?.min, minMaxPrice?.max]
     }),
     [minMaxPrice]
