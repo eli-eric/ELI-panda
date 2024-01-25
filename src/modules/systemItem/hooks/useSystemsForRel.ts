@@ -4,8 +4,8 @@ import type { SystemsResponse } from '@/modules/systems/types/responses'
 
 import useQueryManager from '../../../hooks/useQueryManager'
 
-export const useSystemsForRel = () => {
-  const query = useQueryManager('systemsForRel')
+export const useSystemsForRel = (tableId: string) => {
+  const query = useQueryManager(tableId)
   const { systemsForRelationship } = useEndpoint({ ...query })
   const { response, loading, error, mutate } = useFetch<SystemsResponse>({
     config: {
