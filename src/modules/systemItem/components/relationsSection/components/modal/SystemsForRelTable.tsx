@@ -64,7 +64,7 @@ export const SystemsForRelTable = ({ setSelectedSystem, selectedSystem, tableId 
 
   const pagination = instances[tableId]?.pagination
 
-  const { systems, loading } = useSystemsForRel()
+  const { systems, loading } = useSystemsForRel(tableId)
 
   const columns = useSystemsForRelColumns(tableId)
   useEffect(() => {

@@ -5,6 +5,7 @@ import Listbox from '@/components/form/Listbox'
 import { RangeSliderComponent } from '@/components/form/Range'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
+import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
 import { useMinMaxPrice } from '@/modules/systems/hooks/useMinMaxPrice'
 import { SystemLevel } from '@/types/gql/graphql'
@@ -21,6 +22,11 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
   return (
     <div className="md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]">
       <div className="flex flex-col gap-2">
+        <SelectSystemComboBox
+          selectSystemField={fields.parentSystem}
+          onChange={setFilter(fields.parentSystem.name)}
+          isFilter={true}
+        />
         <Input {...fields.name} onChange={setFilter(fields.name.name)} isFilter={true} />
         <SystemTypeComboBox
           systemTypeField={fields.systemType}
