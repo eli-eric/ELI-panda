@@ -8,6 +8,11 @@ const { form: catalogueForm } = message.cataloguePage.itemDetail
 export const useSystemsFilterFields = () => {
   const disabledEdit = false
   return useMakeFormFields({
+    parentSystem: {
+      name: 'parentSystem',
+      label: form.parentSystemFilter.label,
+      disabled: disabledEdit
+    },
     name: {
       name: 'name',
       label: form.name.label,

@@ -8,6 +8,7 @@ import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
+import { useFormControlStore } from '@/store/useFormControlStore'
 
 import { useMinMaxPrice } from '../../hooks/useMinMaxPrice'
 import { SystemsFilterForm } from './form/SystemsFilter.form'
@@ -32,6 +33,7 @@ type SystemFilterType = {
   catalogueDescription: string
   supplier: CodebookType | null
   price: [number | undefined, number | undefined]
+  parentSystem: CodebookType | null
 }
 
 export const SystemFilterButtonContainer = () => {
@@ -59,6 +61,7 @@ export const SystemFilterButtonContainer = () => {
       category: null,
       catalogueDescription: '',
       supplier: null,
+      parentSystem: null,
       price: [minMaxPrice?.min, minMaxPrice?.max]
     }),
     [minMaxPrice]
@@ -67,8 +70,9 @@ export const SystemFilterButtonContainer = () => {
     tableId,
     defValues
   })
+
   const { storeFilters, setColumnFilters } = useFormFilterState({ tableId })
-  const { reset } = formMethods
+  const { reset, control } = formMethods
 
   const onClear = () => {
     reset(defValues, { keepValues: false })
@@ -85,6 +89,18 @@ export const SystemFilterButtonContainer = () => {
       }
     }
   }
+
+  const category = useMemo(() => storeFilters.find(filter => filter.id === 'category'), [storeFilters])
+
+  const { setFieldIdToSync } = useFormControlStore()
+  /*
+  useEffect(() => {
+    storeFilters.forEach(filter => {
+      if (filter.type === 'catalogue_prop') {
+        setFieldIdToSync(filter.id)
+      }
+    })
+  }, [category, storeFilters, setFieldIdToSync]) */
 
   return (
     <Fragment>
