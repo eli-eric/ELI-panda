@@ -23,7 +23,7 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
   const systemLevels = Object.values(SystemLevel).map(level => level)
   const { minMaxPrice } = useMinMaxPrice()
 
-  const { setFilter } = useFormFilterState({ tableId })
+  const { setFilter, storeFilters } = useFormFilterState({ tableId })
 
   const { watch } = useFormContext()
 
@@ -85,65 +85,66 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
         <div className="col-span-2 md:grid md:grid-cols-2 md:gap-4">
           <span className=" col-span-2 text-base font-semibold leading-6 text-gray-900">Category Properties</span>
           {catalogueCategoryProperties.map(property => {
-            if (property.property.type.uid === PROPERTY_TYPE.TEXT) {
-              return (
-                <Input
-                  rounded="rounded-md"
-                  key={property.property.uid}
-                  name={`${property.property.name}`}
-                  label={property.property.name}
-                  onChange={setFilter(property.property.name)}
-                  isFilter={true}
-                />
-              )
+            console.log(property.property.name)
+            switch (property.property.type.uid) {
+              case PROPERTY_TYPE.TEXT:
+                return (
+                  <Input
+                    rounded="rounded-md"
+                    key={property.property.uid}
+                    unit={property.property.unit?.name}
+                    name={property.property.name}
+                    label={property.property.name}
+                    onChange={value => {
+                      setFilter(property.property.uid)(value, PROPERTY_TYPE.TEXT, property.property.name)
+                    }}
+                    isFilter={true}
+                  />
+                )
+              case PROPERTY_TYPE.NUMBER:
+                return (
+                  <Input
+                    rounded="rounded-md"
+                    key={property.property.uid}
+                    name={property.property.name}
+                    unit={property.property.unit?.name}
+                    label={property.property.name}
+                    onChange={value => {
+                      setFilter(property.property.uid)(value, PROPERTY_TYPE.NUMBER, property.property.name)
+                    }}
+                    isFilter={true}
+                    type="number"
+                  />
+                )
+              case PROPERTY_TYPE.BOOLEAN:
+                return (
+                  <Listbox
+                    key={property.property.uid}
+                    name={property.property.name}
+                    customLabel={property.property.name}
+                    onChange={value => {
+                      setFilter(property.property.uid)(value, PROPERTY_TYPE.BOOLEAN, property.property.name)
+                    }}
+                    isFilter={true}
+                    customOptions={['true', 'false']}
+                  />
+                )
+              case PROPERTY_TYPE.LIST:
+                return (
+                  <Listbox
+                    key={property.property.uid}
+                    name={property.property.name}
+                    customLabel={property.property.name}
+                    onChange={value => {
+                      setFilter(property.property.uid)(value, PROPERTY_TYPE.LIST, property.property.name)
+                    }}
+                    isFilter={true}
+                    customOptions={property.property.listOfValues}
+                  />
+                )
+              default:
+                return null
             }
-            if (property.property.type.uid === PROPERTY_TYPE.NUMBER) {
-              return (
-                <Input
-                  rounded="rounded-md"
-                  key={property.property.uid}
-                  name={`${property.property.name}`}
-                  label={property.property.name}
-                  onChange={setFilter(property.property.name)}
-                  isFilter={true}
-                  type={'number'}
-                />
-              )
-            }
-            if (property.property.type.uid === PROPERTY_TYPE.BOOLEAN) {
-              return (
-                <Listbox
-                  key={property.property.uid}
-                  name={`${property.property.name}`}
-                  customLabel={property.property.name}
-                  onChange={setFilter(property.property.name)}
-                  isFilter={true}
-                  customOptions={['true', 'false']}
-                />
-              )
-            }
-            if (property.property.type.uid === PROPERTY_TYPE.LIST) {
-              return (
-                <Listbox
-                  key={property.property.uid}
-                  name={`${property.property.name}`}
-                  customLabel={property.property.name}
-                  onChange={setFilter(property.property.name)}
-                  isFilter={true}
-                  customOptions={property.property.listOfValues}
-                />
-              )
-            }
-            return (
-              <Input
-                rounded="rounded-md"
-                key={property.property.uid}
-                name={`${property.property.name}`}
-                label={property.property.name}
-                onChange={setFilter(property.property.name)}
-                isFilter={true}
-              />
-            )
           })}
         </div>
       )}

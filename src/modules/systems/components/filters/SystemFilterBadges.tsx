@@ -13,7 +13,7 @@ export const SystemFiltersBadges = () => {
       {filters.length > 0 && <span className="text-sm pr-2 font-medium text-gray-600">Filters:</span>}
       {filters.map(filter => (
         <Badge key={filter.id}>
-          <span>{filter.id}</span>
+          <span>{filter.name}</span>
           <XMarkIcon
             className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600"
             onClick={() => {

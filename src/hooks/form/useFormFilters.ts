@@ -1,3 +1,4 @@
+import type { ColumnFilter } from '@tanstack/react-table'
 import { useQueryState } from 'next-usequerystate'
 import { useCallback, useEffect, useMemo } from 'react'
 import type { DefaultValues, FieldValues, Path } from 'react-hook-form'
@@ -67,21 +68,22 @@ export const useFormFilterState = ({ tableId }: { tableId: string }) => {
 
   //set filter value to store on change field and remove from store if value is empty
   const setFilter = useCallback(
-    (id: string) => (value: any) => {
-      setColumnFilters(prev => {
-        const filters = [...prev]
-        const index = prev.findIndex(item => item.id === id)
-        if (index !== -1) {
-          filters[index].value = value
-        } else if (value) {
-          filters.push({ id, value })
-        }
-        if (!value) {
-          filters.splice(index, 1)
-        }
-        return filters
-      })
-    },
+    (id: string) =>
+      (value: unknown, type?: ColumnFilter['type'], name: string = id) => {
+        setColumnFilters(prev => {
+          const filters = [...prev]
+          const index = prev.findIndex(item => item.id === id)
+          if (index !== -1) {
+            filters[index].value = value
+          } else if (value) {
+            filters.push({ id, value, type, name })
+          }
+          if (!value) {
+            filters.splice(index, 1)
+          }
+          return filters
+        })
+      },
     [setColumnFilters]
   )
 
