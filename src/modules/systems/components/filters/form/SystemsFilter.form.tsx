@@ -23,7 +23,7 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
   const systemLevels = Object.values(SystemLevel).map(level => level)
   const { minMaxPrice } = useMinMaxPrice()
 
-  const { setFilter, storeFilters } = useFormFilterState({ tableId })
+  const { setFilter } = useFormFilterState({ tableId })
 
   const { watch } = useFormContext()
 
@@ -85,7 +85,6 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
         <div className="col-span-2 md:grid md:grid-cols-2 md:gap-4">
           <span className=" col-span-2 text-base font-semibold leading-6 text-gray-900">Category Properties</span>
           {catalogueCategoryProperties.map(property => {
-            console.log(property.property.name)
             switch (property.property.type.uid) {
               case PROPERTY_TYPE.TEXT:
                 return (
