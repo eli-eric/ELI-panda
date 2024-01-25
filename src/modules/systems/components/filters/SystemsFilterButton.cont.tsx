@@ -72,7 +72,7 @@ export const SystemFilterButtonContainer = () => {
   })
 
   const { storeFilters, setColumnFilters } = useFormFilterState({ tableId })
-  const { reset, control } = formMethods
+  const { reset } = formMethods
 
   const onClear = () => {
     reset(defValues, { keepValues: false })
