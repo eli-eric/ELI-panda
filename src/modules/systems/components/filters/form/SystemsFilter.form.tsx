@@ -12,6 +12,7 @@ import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectS
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { useMinMaxPrice } from '@/modules/systems/hooks/useMinMaxPrice'
+import { useFormControlStore } from '@/store/useFormControlStore'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { SystemLevel } from '@/types/gql/graphql'
 import { classNames } from '@/utils'
@@ -24,6 +25,7 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
   const { minMaxPrice } = useMinMaxPrice()
 
   const { setFilter } = useFormFilterState({ tableId })
+  const { setCustomFieldIdToSync } = useFormControlStore()
 
   const { watch } = useFormContext()
 
@@ -92,10 +94,11 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
                     rounded="rounded-md"
                     key={property.property.uid}
                     unit={property.property.unit?.name}
-                    name={property.property.name}
+                    name={property.property.uid}
                     label={property.property.name}
                     onChange={value => {
                       setFilter(property.property.uid)(value, PROPERTY_TYPE.TEXT, property.property.name)
+                      setCustomFieldIdToSync(property.property.uid)
                     }}
                     isFilter={true}
                   />
@@ -105,11 +108,12 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
                   <Input
                     rounded="rounded-md"
                     key={property.property.uid}
-                    name={property.property.name}
+                    name={property.property.uid}
                     unit={property.property.unit?.name}
                     label={property.property.name}
                     onChange={value => {
                       setFilter(property.property.uid)(value, PROPERTY_TYPE.NUMBER, property.property.name)
+                      setCustomFieldIdToSync(property.property.uid)
                     }}
                     isFilter={true}
                     type="number"
@@ -119,10 +123,11 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
                 return (
                   <Listbox
                     key={property.property.uid}
-                    name={property.property.name}
+                    name={property.property.uid}
                     customLabel={property.property.name}
                     onChange={value => {
                       setFilter(property.property.uid)(value, PROPERTY_TYPE.BOOLEAN, property.property.name)
+                      setCustomFieldIdToSync(property.property.uid)
                     }}
                     isFilter={true}
                     customOptions={['true', 'false']}
@@ -132,10 +137,11 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
                 return (
                   <Listbox
                     key={property.property.uid}
-                    name={property.property.name}
+                    name={property.property.uid}
                     customLabel={property.property.name}
                     onChange={value => {
                       setFilter(property.property.uid)(value, PROPERTY_TYPE.LIST, property.property.name)
+                      setCustomFieldIdToSync(property.property.uid)
                     }}
                     isFilter={true}
                     customOptions={property.property.listOfValues}
