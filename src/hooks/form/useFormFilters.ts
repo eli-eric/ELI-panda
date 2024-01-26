@@ -14,7 +14,7 @@ interface IFilter<T> {
 }
 
 export const useFormFilter = <T extends FieldValues>({ tableId, defValues }: IFilter<T>) => {
-  const [storeFilters] = useFilters(tableId, true, false)
+  const [storeFilters, setFilters] = useFilters(tableId, true, false)
 
   const [filterQuery] = useQueryState('filter', { history: 'replace' })
   const columnFilters = useMemo(() => JSON.parse(filterQuery || '[]'), [filterQuery])
@@ -23,7 +23,8 @@ export const useFormFilter = <T extends FieldValues>({ tableId, defValues }: IFi
   })
   const { reset, setValue } = formMethods
   const isFirstRender = useIsFirstRender()
-  const { fieldIdToSync, clear } = useFormControlStore()
+  const { fieldIdToSync, clearFieldToSync, customFieldIdToSync, clearCustomFieldToSync, deleteCustom } =
+    useFormControlStore()
 
   //sync form values (for example, when we click xmark icon in badge)
   useEffect(() => {
@@ -31,9 +32,20 @@ export const useFormFilter = <T extends FieldValues>({ tableId, defValues }: IFi
       fieldIdToSync.forEach(fieldId => {
         setValue(fieldId as Path<T>, defValues[fieldId as Path<T>])
       })
-      clear()
+      clearFieldToSync()
     }
-  }, [fieldIdToSync, setValue, clear, defValues])
+  }, [fieldIdToSync, setValue, clearFieldToSync, defValues, setFilters])
+
+  //sync form values (for example, when we click xmark icon in badge)
+  useEffect(() => {
+    if (deleteCustom) {
+      customFieldIdToSync.forEach(fieldId => {
+        setValue(fieldId as any, null as any)
+        setFilters(prev => prev.filter(f => f.id !== fieldId))
+      })
+      clearCustomFieldToSync()
+    }
+  }, [customFieldIdToSync, setValue, clearCustomFieldToSync, defValues, setFilters, deleteCustom])
 
   //set default values from store or from url on first render
   useEffect(() => {

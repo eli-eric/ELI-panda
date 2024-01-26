@@ -117,7 +117,7 @@ export const messages = {
         systemCode: { label: 'System Code', placeholder: 'System Code' },
         systemAlias: { label: 'System Alias', placeholder: 'System Alias' },
         systemLevel: { label: 'System Level' }, // system levels codebook - SYSTEM_LEVEL
-        parentSystemFilter: { label: 'Paren System' }, // system levels codebook - SYSTEM_LEVEL
+        parentSystemFilter: { label: 'All subsystems for parent' }, // system levels codebook - SYSTEM_LEVEL
         parentSystem: {
           label: 'Parent Key System or Technology unit',
           placeholder: 'Parent System or technology unit'

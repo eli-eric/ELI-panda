@@ -1,6 +1,7 @@
 import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
+import { useWatch } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
@@ -90,17 +91,13 @@ export const SystemFilterButtonContainer = () => {
     }
   }
 
-  const category = useMemo(() => storeFilters.find(filter => filter.id === 'category'), [storeFilters])
+  const category = useWatch({ control: formMethods.control, name: 'category' })
 
-  const { setFieldIdToSync } = useFormControlStore()
-  /*
+  const { setDeletCustom } = useFormControlStore()
+
   useEffect(() => {
-    storeFilters.forEach(filter => {
-      if (filter.type === 'catalogue_prop') {
-        setFieldIdToSync(filter.id)
-      }
-    })
-  }, [category, storeFilters, setFieldIdToSync]) */
+    setDeletCustom()
+  }, [category, setDeletCustom])
 
   return (
     <Fragment>
