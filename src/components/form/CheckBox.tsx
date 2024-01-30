@@ -39,7 +39,7 @@ export const CheckBoxComponent = ({
         />
       </div>
       <div className="ml-3 text-sm">
-        <label htmlFor={'checkbox' + id} className="font-medium text-gray-700">
+        <label htmlFor={'checkbox' + id} className="font-medium text-gray-700 dark:text-gray-200">
           {label}
         </label>
         <span className="text-gray-500">
@@ -87,7 +87,7 @@ const CheckBox = ({
             />
           </div>
           <div className="ml-3 text-sm">
-            <label className="font-medium text-gray-700">{label}</label>
+            <label className="font-medium text-gray-700 dark:text-gray-200">{label}</label>
             <span className="text-gray-500">
               <span className="sr-only">{label}</span>
             </span>

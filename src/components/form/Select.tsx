@@ -42,7 +42,7 @@ export const SelectWithError = ({
             className
           )}
         >
-          {label && <label className="text-sm font-medium text-gray-700">{label}</label>}
+          {label && <label className="text-sm font-medium text-gray-700 dark:text-gray-200">{label}</label>}
           <select
             {...field}
             {...rest}

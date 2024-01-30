@@ -26,7 +26,7 @@ export const UserProfileNav = () => {
                 className={classNames(
                   item.href === currentPath
                     ? 'bg-gray-50 text-primary-600'
-                    : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50',
+                    : 'text-gray-700 dark:text-gray-200 hover:text-primary-600 hover:bg-gray-50',
                   'group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold'
                 )}
               >

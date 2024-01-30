@@ -118,7 +118,7 @@ export const QrReaderContainer = () => {
       {isVideoShown && <video ref={videoRef} width="640" height="480" />}
       <canvas ref={canvasRef} width="640" height="480" className="hidden" />
       <div className={classNames('text-sm p-3 container text-center', systemDetail || order ? 'hidden' : 'block')}>
-        {results && <p className="text-gray-600">{results}</p>}
+        {results && <p className="text-gray-600 dark:text-gray-200">{results}</p>}
       </div>
       {loading || (loadingOrder && <ProgressBarComponent />)}
       <div className={classNames(systemDetail || order ? 'block' : 'hidden')}>
@@ -135,14 +135,14 @@ interface Props {
 export const Results = ({ data }: Props) => (
   <ul
     role="list"
-    className="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
+    className="divide-y divide-gray-100 overflow-hidden bg-white dark:bg-gray-900 shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
   >
     {data.map(item => (
       <Link key={item.type} target="_blank" href={item.href}>
         <li className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6">
           <div className="flex min-w-0 gap-x-4">
             <div className="min-w-0 flex-auto">
-              <p className="text-sm font-semibold leading-6 text-gray-900">
+              <p className="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200">
                 <span className="absolute inset-x-0 -top-px bottom-0" />
                 {item.type}
               </p>

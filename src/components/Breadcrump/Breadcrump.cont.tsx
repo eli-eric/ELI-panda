@@ -9,9 +9,17 @@ interface Props {
   testId?: string
 }
 const BreadcrumpContainer = ({ testId, homeLink, children }: Props) => (
-  <div data-testid={testId} id="breadcrump" className={classNames('relative bg-white')}>
+  <div
+    data-testid={testId}
+    id="breadcrump"
+    className={classNames(
+      'relative bg-white dark:bg-gray-900',
+      'before:absolute before:top-0 before:bottom-0 before:left-0 before:w-6 before:bg-gradient-to-r  before:z-10',
+      'after:absolute after:top-0 after:bottom-0 after:right-0 after:w-6 after:bg-gradient-to-l from-white after:z-10'
+    )}
+  >
     <nav className="flex" aria-label="Breadcrumb">
-      <ol role="list" className="flex space-x-1 bg-white px-3 py-3 overflow-x-auto">
+      <ol role="list" className="flex space-x-1 bg-white dark:bg-gray-900 px-3 py-3 overflow-x-auto">
         {homeLink && (
           <li className="flex">
             <div className="flex items-center">

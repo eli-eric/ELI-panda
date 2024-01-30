@@ -7,7 +7,7 @@ export const messageFormatters = {
   small: (chunks: string) => <span className="text-xs">{chunks}</span>,
   strong: (chunks: string) => <span className="font-bold">{chunks}</span>,
   underline: (chunks: string) => <span className="underline">{chunks}</span>,
-  label: (chunks: string) => <span className="text-sm font-medium text-gray-700">{chunks}</span>,
+  label: (chunks: string) => <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{chunks}</span>,
   p: (chunks: string) => <p className="text-gray-500">{chunks}</p>
 }
 

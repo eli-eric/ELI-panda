@@ -4,7 +4,7 @@ import { DELIVERY_STATUS, ORDER_STATUS } from '../types'
 
 export const getColorClassStatus = (orderStatus: CodebookType, deliveryStatus: DELIVERY_STATUS) => {
   if (!orderStatus ?? !deliveryStatus) {
-    return 'bg-white'
+    return 'bg-white dark:bg-gray-900'
   }
   const statusMappingColor = [
     {
@@ -47,7 +47,7 @@ export const getColorClassStatus = (orderStatus: CodebookType, deliveryStatus: D
   // Find the matching color class based on orderStatus and deliveryStatus
   for (const mapping of statusMappingColor) {
     if (mapping.statuses.includes(orderStatus.uid) && mapping.statuses.includes(deliveryStatus)) {
-      return mapping.colorClass || 'bg-white'
+      return mapping.colorClass || 'bg-white dark:bg-gray-900'
     }
   }
 

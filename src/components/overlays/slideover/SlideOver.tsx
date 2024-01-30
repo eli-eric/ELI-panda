@@ -44,17 +44,17 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({ children, open, setOpe
               leaveTo="-translate-x-full"
             >
               <Dialog.Panel className="pointer-events-auto w-screen md:max-w-xl max-w-md">
-                <div className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
+                <div className="flex h-full flex-col divide-y divide-gray-200 bg-white dark:bg-gray-900 shadow-xl">
                   <div className="flex min-h-0 flex-1 flex-col overflow-y-scroll py-6">
                     <div className="px-4 sm:px-6">
                       <div className="flex items-start justify-between">
-                        <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
+                        <Dialog.Title className="text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">
                           {panelTitle}
                         </Dialog.Title>
                         <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
-                            className="relative rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                            className="relative rounded-md bg-white dark:bg-gray-900 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
                             onClick={() => setOpen(false)}
                           >
                             <span className="absolute -inset-2.5" />

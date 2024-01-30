@@ -32,7 +32,7 @@ export const NavigationComponent = () => {
       id="nav-bar"
       as="nav"
       className={classNames(
-        'border-b bg-white',
+        'border-b bg-white dark:bg-gray-900',
         PROCESS_ENV && PROCESS_ENV === ENV.DEV && 'bg-teal-100',
         PROCESS_ENV && PROCESS_ENV === ENV.TEST && 'bg-pink-50'
       )}

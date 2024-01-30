@@ -13,7 +13,7 @@ const ItemHeader = ({ disabledEdit, loading }: { disabledEdit: boolean; loading:
   }
 
   return (
-    <div className="sticky  top-0 z-20 flex h-16 flex-shrink-0 bg-white border-b">
+    <div className="sticky  top-0 z-20 flex h-16 flex-shrink-0 bg-white dark:bg-gray-900 border-b">
       <Card className="flex flex-1 justify-between">
         <div className="flex items-center mr-2">
           <BackButton className="mr-1" type="button" buttonSize="large" onClick={goBackHandler} />
