@@ -1,35 +1,29 @@
-import { createWithEqualityFn as create } from 'zustand/traditional'
+import { create } from 'zustand'
 
 type FormControlState = {
-  fieldIdToSync: string[]
-  customFieldIdToSync: string[]
+  fieldIdToSync: Set<string>
+  customFieldIdToSync: Set<string>
   deleteCustom: boolean
-  setFieldIdToSync: (fieldId: string) => void
-  setDeletCustom: () => void
-  setCustomFieldIdToSync: (fieldId: string) => void
+  toggleDeleteCustom: () => void
+  addFieldIdToSync: (fieldId: string) => void
+  addCustomFieldIdToSync: (fieldId: string) => void
   clearFieldToSync: () => void
   clearCustomFieldToSync: () => void
 }
 
 export const useFormControlStore = create<FormControlState>(set => ({
-  fieldIdToSync: [],
-  customFieldIdToSync: [],
+  fieldIdToSync: new Set(),
+  customFieldIdToSync: new Set(),
   deleteCustom: false,
-  setDeletCustom: () => set(state => ({ deleteCustom: !state.deleteCustom })),
-  setFieldIdToSync: fieldId =>
-    set(state => {
-      if (!state.fieldIdToSync.includes(fieldId)) {
-        return { fieldIdToSync: [...state.fieldIdToSync, fieldId] }
-      }
-      return state
-    }),
-  setCustomFieldIdToSync: fieldId =>
-    set(state => {
-      if (!state.customFieldIdToSync.includes(fieldId)) {
-        return { customFieldIdToSync: [...state.customFieldIdToSync, fieldId] }
-      }
-      return state
-    }),
-  clearFieldToSync: () => set({ fieldIdToSync: [] }),
-  clearCustomFieldToSync: () => set({ customFieldIdToSync: [], deleteCustom: false })
+  toggleDeleteCustom: () => set(state => ({ deleteCustom: !state.deleteCustom })),
+  addFieldIdToSync: fieldId =>
+    set(state => ({
+      fieldIdToSync: new Set(state.fieldIdToSync).add(fieldId)
+    })),
+  addCustomFieldIdToSync: fieldId =>
+    set(state => ({
+      customFieldIdToSync: new Set(state.customFieldIdToSync).add(fieldId)
+    })),
+  clearFieldToSync: () => set({ fieldIdToSync: new Set() }),
+  clearCustomFieldToSync: () => set({ customFieldIdToSync: new Set(), deleteCustom: false })
 }))
