@@ -15,10 +15,10 @@ export default function Divider({ text, className, children }: DividerProps) {
         <div className="w-full border-t border-gray-300" />
       </div>
       <div className="relative flex justify-center">
-        <span className="bg-white px-3 text-base font-semibold leading-6 text-gray-900">
+        <span className="bg-white dark:bg-gray-900 px-3 text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">
           <FormattedMessage id={text} />
         </span>
-        {children && <div className="bg-white pr-3">{children}</div>}
+        {children && <div className="bg-white dark:bg-gray-900 pr-3">{children}</div>}
       </div>
     </div>
   )

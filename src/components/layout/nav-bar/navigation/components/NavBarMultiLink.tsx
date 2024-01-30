@@ -47,7 +47,7 @@ export const NavBarMultiLink = ({ name, links, open }: Props) => {
         <Menu.Items
           className={classNames(
             !open &&
-              'absolute z-50 left-0 top-[58px] mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
+              'absolute z-50 left-0 top-[58px] mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-900 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
           )}
         >
           {links.map((link, index) => {
@@ -59,10 +59,10 @@ export const NavBarMultiLink = ({ name, links, open }: Props) => {
                       <Link
                         href={link.path}
                         className={classNames(
-                          'w-full text-left text-sm text-gray-700 block border-l-4 py-2 pl-3 pr-4 hover:bg-gray-50',
+                          'w-full text-left text-sm text-gray-700 dark:text-gray-200 block border-l-4 py-2 pl-3 pr-4 hover:bg-gray-50',
                           router.asPath.startsWith(link.path)
-                            ? 'text-gray-900 border-primary-500'
-                            : 'text-gray-500 hover:border-gray-300 hover:text-gray-700 border-transparent',
+                            ? 'text-gray-900 dark:text-gray-200 border-primary-500'
+                            : 'text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-200 border-transparent',
                           active ? 'bg-gray-100' : ''
                         )}
                       >

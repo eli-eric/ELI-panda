@@ -23,7 +23,7 @@ const Toggle = ({ enabled, onChange, className }: Props) => (
     <span
       aria-hidden="true"
       className={classNames(
-        'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+        'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white dark:bg-gray-900 shadow ring-0 transition duration-200 ease-in-out',
         enabled ? 'translate-x-5' : 'translate-x-0'
       )}
     />
@@ -55,7 +55,7 @@ export const Switch = ({ name, defaultValue = true, className, label }: SwitchPr
       defaultValue={defaultValue}
       render={({ field }) => (
         <label className="flex flex-col items-center">
-          <span className="mr-2 text-sm font-medium text-gray-900 pb-1">{label}</span>
+          <span className="mr-2 text-sm font-medium text-gray-900 dark:text-gray-200 pb-1">{label}</span>
           <SwitchHUI
             {...field}
             className={classNames(
@@ -67,7 +67,7 @@ export const Switch = ({ name, defaultValue = true, className, label }: SwitchPr
             <span
               aria-hidden="true"
               className={classNames(
-                'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+                'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white dark:bg-gray-900 shadow ring-0 transition duration-200 ease-in-out',
                 field.value ? 'translate-x-5' : 'translate-x-0'
               )}
             />

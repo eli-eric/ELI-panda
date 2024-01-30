@@ -64,7 +64,7 @@ export const ReleasesContainer = () => (
   <ul role="list" className=" font-mono">
     {releases.map((item, idx) => (
       <li key={idx} className="px-2 py-2 sm:px-4 sm:py-4 shadow-lg my-5 mx-2">
-        <h3 className="text-xl font-bold text-gray-700">
+        <h3 className="text-xl font-bold text-gray-700 dark:text-gray-200">
           Version {item.id} {idx === 0 && '- Latest version'}
         </h3>
         <div className="p-2">

@@ -24,7 +24,9 @@ export const CategoryPropFilters = ({ tableId }: { tableId: string }) => {
     <Fragment>
       {catalogueCategoryProperties?.length > 0 && (
         <div className="col-span-2 md:grid md:grid-cols-2 md:gap-4">
-          <span className=" col-span-2 text-base font-semibold leading-6 text-gray-900">Category Properties</span>
+          <span className=" col-span-2 text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">
+            Category Properties
+          </span>
           {catalogueCategoryProperties.map(property => {
             switch (property.property.type.uid) {
               case PROPERTY_TYPE.TEXT:

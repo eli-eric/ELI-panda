@@ -27,7 +27,7 @@ export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange
 
   return (
     <div className="flex flex-col">
-      <span className="text-sm pb-2 font-medium text-gray-700">{label}</span>
+      <span className="text-sm pb-2 font-medium text-gray-700 dark:text-gray-200">{label}</span>
       <Controller
         name={name}
         control={control}

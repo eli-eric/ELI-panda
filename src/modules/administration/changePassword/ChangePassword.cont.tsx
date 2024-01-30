@@ -90,7 +90,10 @@ export const ChangePasswordContainer: FC = () => {
       <div>
         <div className=" space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10  sm:pb-0">
           <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-            <label htmlFor="currentPassword" className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">
+            <label
+              htmlFor="currentPassword"
+              className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200 sm:pt-1.5"
+            >
               Current password
             </label>
             <Input
@@ -103,13 +106,19 @@ export const ChangePasswordContainer: FC = () => {
           </div>
 
           <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-            <label htmlFor="newPassword" className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">
+            <label
+              htmlFor="newPassword"
+              className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200 sm:pt-1.5"
+            >
               New password
             </label>
             <Input type="password" rounded="rounded-md" name="newPassword" id="newPassword" autoComplete="password" />
           </div>
           <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
-            <label htmlFor="confirmPassword" className="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200 sm:pt-1.5"
+            >
               Confirm new password
             </label>
             <Input

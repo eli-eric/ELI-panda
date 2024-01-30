@@ -31,7 +31,7 @@ const InputWrapper = ({
 )
 const Label = ({ label, htmlFor }: { label?: string; htmlFor: string }) =>
   label ? (
-    <label htmlFor={htmlFor} className="text-sm font-medium text-gray-700">
+    <label htmlFor={htmlFor} className="text-sm font-medium text-gray-700 dark:text-gray-200">
       {label}
     </label>
   ) : null
@@ -106,7 +106,7 @@ export const Input = ({
                 }}
                 placeholder={placeholder}
                 className={classNames(
-                  'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                  'block w-full appearance-none border px-3 py-2 placeholder-gray-400 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-50  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                   rounded,
                   error ? 'border-red-500' : 'border-gray-300',
                   disabled ? 'bg-gray-100' : '',
@@ -118,14 +118,14 @@ export const Input = ({
                   {showPassword ? (
                     <Tooltip content="Hide password">
                       <EyeIcon
-                        className="text-gray-400 h-4 w-4 sm:text-sm cursor-pointer hover:text-gray-600"
+                        className="text-gray-400 h-4 w-4 sm:text-sm cursor-pointer hover:text-gray-600 dark:text-gray-200"
                         onClick={toogleShowPassword}
                       />
                     </Tooltip>
                   ) : (
                     <Tooltip content="Show password">
                       <EyeSlashIcon
-                        className="text-gray-400 h-4 w-4 sm:text-sm cursor-pointer hover:text-gray-600"
+                        className="text-gray-400 h-4 w-4 sm:text-sm cursor-pointer hover:text-gray-600 dark:text-gray-200"
                         onClick={toogleShowPassword}
                       />
                     </Tooltip>
