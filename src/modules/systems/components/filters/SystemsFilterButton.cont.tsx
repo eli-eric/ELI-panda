@@ -1,7 +1,6 @@
 import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
-import { Fragment, useEffect, useMemo, useState } from 'react'
-import { useWatch } from 'react-hook-form'
+import { Fragment, useMemo, useState } from 'react'
 
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
@@ -9,7 +8,6 @@ import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
-import { useFormControlStore } from '@/store/useFormControlStore'
 
 import { useMinMaxPrice } from '../../hooks/useMinMaxPrice'
 import { SystemsFilterForm } from './form/SystemsFilter.form'
@@ -69,7 +67,8 @@ export const SystemFilterButtonContainer = () => {
   )
   const formMethods = useFormFilter<SystemFilterType>({
     tableId,
-    defValues
+    defValues,
+    customDependence: 'category'
   })
 
   const { storeFilters, setColumnFilters } = useFormFilterState({ tableId })
@@ -90,14 +89,6 @@ export const SystemFilterButtonContainer = () => {
       }
     }
   }
-
-  const category = useWatch({ control: formMethods.control, name: 'category' })
-
-  const { setDeletCustom } = useFormControlStore()
-
-  useEffect(() => {
-    setDeletCustom()
-  }, [category, setDeletCustom])
 
   return (
     <Fragment>

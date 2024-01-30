@@ -1,6 +1,3 @@
-import { useMemo } from 'react'
-import { useFormContext } from 'react-hook-form'
-
 import Combobox from '@/components/form/Combobox'
 import { ComboboxTree } from '@/components/form/ComboboxTree'
 import { Input } from '@/components/form/Input'
@@ -10,13 +7,11 @@ import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
-import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { useMinMaxPrice } from '@/modules/systems/hooks/useMinMaxPrice'
-import { useFormControlStore } from '@/store/useFormControlStore'
-import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { SystemLevel } from '@/types/gql/graphql'
 import { classNames } from '@/utils'
 
+import { CategoryPropFilters } from './CategoryPropFilters'
 import { useSystemsFilterFields } from './SystemsFilter.fields'
 
 export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
@@ -25,13 +20,6 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
   const { minMaxPrice } = useMinMaxPrice()
 
   const { setFilter } = useFormFilterState({ tableId })
-  const { setCustomFieldIdToSync } = useFormControlStore()
-
-  const { watch } = useFormContext()
-
-  const category = watch('category')
-  const uid = useMemo(() => category?.uid, [category])
-  const { catalogueCategoryProperties } = useCategoryProperties(uid)
 
   return (
     <div className={classNames('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
@@ -83,76 +71,7 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
           onChange={setFilter('price')}
         />
       </div>
-      {catalogueCategoryProperties && catalogueCategoryProperties?.length > 0 && (
-        <div className="col-span-2 md:grid md:grid-cols-2 md:gap-4">
-          <span className=" col-span-2 text-base font-semibold leading-6 text-gray-900">Category Properties</span>
-          {catalogueCategoryProperties.map(property => {
-            switch (property.property.type.uid) {
-              case PROPERTY_TYPE.TEXT:
-                return (
-                  <Input
-                    rounded="rounded-md"
-                    key={property.property.uid}
-                    unit={property.property.unit?.name}
-                    name={property.property.uid}
-                    label={property.property.name}
-                    onChange={value => {
-                      setFilter(property.property.uid)(value, PROPERTY_TYPE.TEXT, property.property.name)
-                      setCustomFieldIdToSync(property.property.uid)
-                    }}
-                    isFilter={true}
-                  />
-                )
-              case PROPERTY_TYPE.NUMBER:
-                return (
-                  <Input
-                    rounded="rounded-md"
-                    key={property.property.uid}
-                    name={property.property.uid}
-                    unit={property.property.unit?.name}
-                    label={property.property.name}
-                    onChange={value => {
-                      setFilter(property.property.uid)(value, PROPERTY_TYPE.NUMBER, property.property.name)
-                      setCustomFieldIdToSync(property.property.uid)
-                    }}
-                    isFilter={true}
-                    type="number"
-                  />
-                )
-              case PROPERTY_TYPE.BOOLEAN:
-                return (
-                  <Listbox
-                    key={property.property.uid}
-                    name={property.property.uid}
-                    customLabel={property.property.name}
-                    onChange={value => {
-                      setFilter(property.property.uid)(value, PROPERTY_TYPE.BOOLEAN, property.property.name)
-                      setCustomFieldIdToSync(property.property.uid)
-                    }}
-                    isFilter={true}
-                    customOptions={['true', 'false']}
-                  />
-                )
-              case PROPERTY_TYPE.LIST:
-                return (
-                  <Listbox
-                    key={property.property.uid}
-                    name={property.property.uid}
-                    customLabel={property.property.name}
-                    onChange={value => {
-                      setFilter(property.property.uid)(value, PROPERTY_TYPE.LIST, property.property.name)
-                      setCustomFieldIdToSync(property.property.uid)
-                    }}
-                    isFilter={true}
-                    customOptions={property.property.listOfValues}
-                  />
-                )
-              default:
-                return null
-            }
-          })}
-        </div>
-      )}
+      <CategoryPropFilters tableId={tableId} />
     </div>
   )
 }
