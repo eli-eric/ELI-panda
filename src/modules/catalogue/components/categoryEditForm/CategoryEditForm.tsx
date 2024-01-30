@@ -18,31 +18,34 @@ const categoryValidationschema: yup.ObjectSchema<CategoryFormType> = yup.object(
     yup.object().shape({
       uid: yup.string().required("UID can't be empty"),
       name: yup.string().required("Group Name can't be empty"),
-      properties: yup.array().of(
-        yup.object().shape({
-          uid: yup.string().required("UID can't be empty"),
-          name: yup.string().required("Property Name can't be empty"),
-          type: yup.mixed<CodebookType>().nullable(),
-          unit: yup.mixed<CodebookType>().nullable(),
-          defaultValue: yup.string().required("Default value can't be empty"),
-          listOfValues: yup.lazy((values) =>
-            Array.isArray(values)
-              ? yup.array().of(
-                  yup.object().shape({
-                    value: yup.string().required("Value can't be empty"),
-                  }),
-                )
-              : yup.array().of(yup.string().required("Value can't be empty"))
-          ),
-        }),
-      ).required("Properties can't be empty"),
-    }),
+      properties: yup
+        .array()
+        .of(
+          yup.object().shape({
+            uid: yup.string(),
+            name: yup.string().required("Property Name can't be empty"),
+            type: yup.mixed<CodebookType>().nullable(),
+            unit: yup.mixed<CodebookType>().nullable(),
+            defaultValue: yup.string().nullable(),
+            listOfValues: yup.lazy(values =>
+              Array.isArray(values)
+                ? yup.array().of(
+                    yup.object().shape({
+                      value: yup.string().required("Value can't be empty")
+                    })
+                  )
+                : yup.array().of(yup.string().required("Value can't be empty"))
+            )
+          })
+        )
+        .required("Properties can't be empty")
+    })
   ),
   parentUID: yup.string(),
   uid: yup.string(),
   code: yup.string().required("Code can't be empty"),
-  image: yup.string(),
-});
+  image: yup.string()
+})
 
 interface Props {
   uid?: string
@@ -76,8 +79,6 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
     defaultValues: response,
     resolver: yupResolver(categoryValidationschema)
   })
-
-  //useFormNotification<CategoryFormType>({ control: formMethods.control })
 
   return (
     <Fragment>

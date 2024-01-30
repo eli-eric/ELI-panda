@@ -1,5 +1,5 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
@@ -54,7 +54,8 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
   }
   const type = useWatch({ control, name: `${name}.type` })
 
-  const listOfValues = useMemo(() => watch(`${name}.listOfValues`) || [], [watch, name])
+  //eslint-disable-next-line
+  const listOfValues = watch(`${name}.listOfValues`) || []
 
   /* const getDefaultOption = (name, disabled = false) => ({
     value: '',
