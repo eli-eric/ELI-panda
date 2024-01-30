@@ -31,8 +31,6 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
     resolver: yupResolver(categoryValidationschema)
   })
 
-  //useFormNotification<CategoryFormType>({ control: formMethods.control })
-
   return (
     <Fragment>
       <Form formMethods={formMethods} onSubmit={onSubmit}>

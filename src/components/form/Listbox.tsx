@@ -139,7 +139,7 @@ const Listbox = ({
                 >
                   {options?.map(item => (
                     <HUIListbox.Option
-                      key={item.uid || uuid()}
+                      key={uuid()}
                       value={customOptions ? item : item.uid === '' ? null : item}
                       className={({ active }) =>
                         classNames(
