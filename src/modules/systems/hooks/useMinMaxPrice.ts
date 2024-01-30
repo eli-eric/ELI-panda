@@ -5,7 +5,7 @@ import useFetch from '@/hooks/fetch/useFetch'
 
 export const useMinMaxPrice = () => {
   const { ordersMinMaxPrice } = useEndpoint()
-  const { response, loading, mutate } = useFetch<{ min: number; max: number }>({
+  const { response } = useFetch<{ min: number; max: number }>({
     config: {
       suspense: false,
       keepPreviousData: true,
