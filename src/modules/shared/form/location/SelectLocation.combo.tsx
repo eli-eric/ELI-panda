@@ -9,7 +9,8 @@ import { useLocationModal } from './hooks/useLocationModal'
 export const SelectLocationCombo = ({
   locationField,
   className,
-  onSelect
+  onSelect,
+  isFilter = false
 }: {
   locationField: any
   className?: string
@@ -27,7 +28,7 @@ export const SelectLocationCombo = ({
         onClickIcon={() => {
           setOpen(true)
         }}
-        isFilter={true}
+        isFilter={isFilter}
       />
       <CodebookTreeModalGraphql
         fetchChildren={fetchChildren}
