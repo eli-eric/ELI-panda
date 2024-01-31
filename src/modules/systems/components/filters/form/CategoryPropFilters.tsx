@@ -38,7 +38,7 @@ export const CategoryPropFilters = ({ tableId }: { tableId: string }) => {
                     name={property.property.uid}
                     label={property.property.name}
                     onChange={value => {
-                      setFilter(property.property.uid)(value, PROPERTY_TYPE.TEXT, property.property.name)
+                      setFilter(property.property.uid)(value, property.property.type.code, property.property.name)
                       addCustomFieldIdToSync(property.property.uid)
                     }}
                     isFilter={true}
@@ -53,7 +53,7 @@ export const CategoryPropFilters = ({ tableId }: { tableId: string }) => {
                     unit={property.property.unit?.name}
                     label={property.property.name}
                     onChange={value => {
-                      setFilter(property.property.uid)(value, PROPERTY_TYPE.NUMBER, property.property.name)
+                      setFilter(property.property.uid)(value, property.property.type.code, property.property.name)
                       addCustomFieldIdToSync(property.property.uid)
                     }}
                     isFilter={true}
@@ -67,7 +67,7 @@ export const CategoryPropFilters = ({ tableId }: { tableId: string }) => {
                     name={property.property.uid}
                     customLabel={property.property.name}
                     onChange={value => {
-                      setFilter(property.property.uid)(value, PROPERTY_TYPE.BOOLEAN, property.property.name)
+                      setFilter(property.property.uid)(value, property.property.type.code, property.property.name)
                       addCustomFieldIdToSync(property.property.uid)
                     }}
                     isFilter={true}
@@ -81,7 +81,7 @@ export const CategoryPropFilters = ({ tableId }: { tableId: string }) => {
                     name={property.property.uid}
                     customLabel={property.property.name}
                     onChange={value => {
-                      setFilter(property.property.uid)(value, PROPERTY_TYPE.LIST, property.property.name)
+                      setFilter(property.property.uid)(value, property.property.type.code, property.property.name)
                       addCustomFieldIdToSync(property.property.uid)
                     }}
                     isFilter={true}
