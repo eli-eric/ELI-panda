@@ -9,7 +9,7 @@ export type Property = {
   name: string
   type?: CodebookType | null
   unit?: CodebookType | null
-  defaultValue: string
+  defaultValue?: string | null
   listOfValues?: Value[] | string[]
 }
 export type Group = {

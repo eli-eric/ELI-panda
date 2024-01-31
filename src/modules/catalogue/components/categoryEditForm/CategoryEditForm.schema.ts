@@ -16,11 +16,11 @@ export const categoryValidationschema: yup.ObjectSchema<CategoryFormType> = yup.
           .array()
           .of(
             yup.object().shape({
-              uid: yup.string().required("UID can't be empty"),
+              uid: yup.string(),
               name: yup.string().required("Property Name can't be empty"),
               type: yup.mixed<CodebookType>().nullable(),
               unit: yup.mixed<CodebookType>().nullable(),
-              defaultValue: yup.string().required("Default value can't be empty"),
+              defaultValue: yup.string().nullable(),
               listOfValues: yup.lazy(values =>
                 Array.isArray(values)
                   ? yup.array().of(

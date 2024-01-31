@@ -63,7 +63,7 @@ const DashboardPage: NextPage = (): JSX.Element => {
       </Head>
 
       <main className="mx-auto max-w-7xl flex-1">
-        {/* <h1 className="text-2xl font-semibold font-mono text-gray-600 mt-2 ml-1 sm:mt-4 sm:ml-4 uppercase">
+        {/* <h1 className="text-2xl font-semibold font-mono text-gray-600 dark:text-gray-200 mt-2 ml-1 sm:mt-4 sm:ml-4 uppercase">
           Dashboard
         </h1> */}
         <TileContainer>

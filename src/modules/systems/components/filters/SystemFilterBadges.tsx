@@ -10,7 +10,9 @@ export const SystemFiltersBadges = () => {
 
   return (
     <div>
-      {filters.length > 0 && <span className="text-sm pr-2 font-medium text-gray-600">Filters:</span>}
+      {filters.length > 0 && (
+        <span className="text-sm pr-2 font-medium text-gray-600 dark:text-gray-200">Filters:</span>
+      )}
       {filters.map(filter => (
         <Badge key={filter.id}>
           <span>{filter.name}</span>

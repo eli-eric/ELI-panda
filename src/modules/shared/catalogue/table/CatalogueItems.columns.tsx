@@ -2,10 +2,13 @@ import type { CellContext, ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
+import { Tooltip } from '@/components/Tooltip'
 import { message } from '@/i18n/src/messages'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
+import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { CODEBOOK } from '@/types/constants/codebook'
 import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
+import { classNames } from '@/utils'
 
 import { CategoryName } from './cells/CategoryNameCell'
 import { DescriptionCell } from './cells/DescriptionCell'
@@ -78,15 +81,34 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueI
       catalogueItems?.data[0]?.details?.length > 0
     ) {
       const detailsColumns: ColumnDef<CatalogueItem, any>[] = catalogueItems?.data[0]?.details?.map(detail => ({
-        header: detail.property.name,
+        header: () => {
+          const name =
+            detail?.property?.name.length > 10 ? detail?.property?.name.slice(0, 10) + '...' : detail?.property?.name
+          return (
+            <Tooltip content={detail?.property?.name}>
+              <div>
+                <span>{name}</span>
+              </div>
+            </Tooltip>
+          )
+        },
         id: detail.property.name.replace(/\s/g, ''),
+        size: 120,
+        meta: { className: classNames(detail?.property?.type.uid === PROPERTY_TYPE.NUMBER && 'text-right') },
         accessorFn: row =>
           row.details?.find(originDetail => originDetail?.property.name === detail?.property.name)?.value,
-        cell: ({ row: { original } }: CellContext<CatalogueItem, any>) => (
-          <span>
-            {original.details?.find(originDetail => originDetail?.property.name === detail?.property.name)?.value}
-          </span>
-        )
+        cell: ({ row: { original } }: CellContext<CatalogueItem, any>) => {
+          const value = original.details?.find(originDetail => originDetail?.property.name === detail?.property.name)
+            ?.value
+          const unit = detail?.property?.unit?.name
+          if (!value) return null
+          return (
+            <div>
+              <span className={classNames(unit && 'font-bold')}>{value}</span>
+              {unit && <span> {unit}</span>}
+            </div>
+          )
+        }
       }))
       if (detailsColumns) {
         const categoryNameIndex = columns.findIndex(column => column.id === 'categoryName')

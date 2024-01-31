@@ -15,7 +15,7 @@ const Custom404Page: NextPage = (): JSX.Element => {
   const { status } = useSession()
   return (
     <Fragment>
-      <div className="min-h-full bg-white py-16 px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+      <div className="min-h-full bg-white dark:bg-gray-900 py-16 px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
         <div className="mx-auto max-w-max">
           <div className="flex flex-shrink-0 justify-center pb-12">
             <div className="inline-flex">
@@ -28,7 +28,7 @@ const Custom404Page: NextPage = (): JSX.Element => {
             </p>
             <div className="sm:ml-6">
               <div className="sm:border-l sm:border-gray-200 sm:pl-6">
-                <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+                <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl">
                   <FormattedMessage id={common.custom404.notFound} />
                 </h1>
                 <p className="mt-1 text-base text-gray-500">
