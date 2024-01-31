@@ -25,11 +25,11 @@ export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
             <a target={'_blank'}>
               <li
                 key={name}
-                className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
+                className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white dark:bg-gray-900 dark:hover:bg-gray-600 dark:shadow-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
               >
                 <div className="flex flex-1 flex-col p-8">
                   <Icon />
-                  <h2 className="mt-6 text-xl font-medium text-gray-900">{name}</h2>
+                  <h2 className="mt-6 text-xl font-medium text-gray-900 dark:text-gray-200">{name}</h2>
                   <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
                 </div>
                 <div>
@@ -43,11 +43,11 @@ export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
           ) : (
             <li
               key={name}
-              className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
+              className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white dark:bg-gray-900 dark:hover:bg-gray-800 dark:text-gray-200 text-center shadow cursor-pointer hover:bg-gray-50 transition"
             >
               <div className="flex flex-1 flex-col p-8">
                 <Icon />
-                <h2 className="mt-6 text-xl font-medium text-gray-900">{name}</h2>
+                <h2 className="mt-6 text-xl font-medium text-gray-900 dark:text-gray-200">{name}</h2>
                 <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
               </div>
               <div>
@@ -62,11 +62,11 @@ export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
       ) : (
         <li
           key={name}
-          className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
+          className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white dark:bg-gray-900 dark:text-gray-200 text-center shadow cursor-pointer hover:bg-gray-50 transition"
         >
           <div className="flex flex-1 flex-col p-8">
             <Icon />
-            <h2 className="mt-6 text-xl font-medium text-gray-900">{name}</h2>
+            <h2 className="mt-6 text-xl font-medium text-gray-900 dark:text-gray-200">{name}</h2>
             <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
           </div>
           <div>

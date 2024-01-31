@@ -14,7 +14,7 @@ export const UserProfileLayout: FC<PropsWithChildren<Props>> = ({ children, titl
       <UserProfileNav />
       <main className="px-4 py-16 sm:px-6 lg:flex-auto lg:px-0 lg:py-20">
         <div className="border-b pb-5 border-gray-200">
-          <h3 className="text-lg font-medium leading-6 text-gray-900">
+          <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200">
             <FormattedMessage id={title} />
           </h3>
           <p className="mt-1 max-w-2xl text-sm text-gray-500">

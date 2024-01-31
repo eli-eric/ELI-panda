@@ -14,7 +14,7 @@ interface Props {
   tableId: string
 }
 export const TableBody: FC<Props> = ({ getRowModel, loading, getRowProps, tableId }) => (
-  <tbody className="bg-white">
+  <tbody className="bg-white dark:bg-gray-900">
     {getRowModel().rows.map((row, index) => (
       <MemoizedTableRow
         key={row.id}

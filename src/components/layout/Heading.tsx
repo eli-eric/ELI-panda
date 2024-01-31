@@ -17,7 +17,7 @@ export const Heading = ({
   children,
   customText,
   className,
-  textColor = 'text-gray-900',
+  textColor = 'text-gray-900 dark:text-gray-200',
   titleNode
 }: HeadingProps) => (
   <div className={classNames('mb-4 border-b border-gray-200 px-2 py-2 sm:px-3', className)}>

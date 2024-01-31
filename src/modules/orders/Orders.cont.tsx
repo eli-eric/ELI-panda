@@ -36,7 +36,7 @@ const OrdersContainer = () => {
               enableColumnHiding: true
             },
             getRowProps: ({ original: { orderStatus, deliveryStatus }, id }) => ({
-              className: classNames('bg-white', getColorClassStatus(orderStatus, deliveryStatus)),
+              className: classNames('bg-white dark:bg-gray-900', getColorClassStatus(orderStatus, deliveryStatus)),
               onMouseEnter: () => {
                 setHoveringId(id)
               },

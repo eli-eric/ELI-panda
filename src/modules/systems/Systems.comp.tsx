@@ -51,7 +51,7 @@ export const SystemsComponent: FC<Props> = ({
             setHoveringId(undefined)
           },
           className: classNames(
-            original?.physicalItem && 'font-bold text-gray-700',
+            original?.physicalItem && 'font-bold text-gray-700 dark:text-gray-200',
             getColorBySystemLevel(original?.systemLevel),
             getFontBySystemLevel(original?.systemLevel)
           ),

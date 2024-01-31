@@ -35,11 +35,11 @@ export const CheckBoxComponent = ({
           hidden={hidden}
           type="checkbox"
           disabled={disabled}
-          className="h-5 w-5 rounded border-primary-300 text-primary-600 focus:ring-primary-500  hover:cursor-pointer"
+          className="h-5 w-5 rounded border-primary-300 dark:bg-gray-700 text-primary-600 focus:ring-primary-500  hover:cursor-pointer"
         />
       </div>
       <div className="ml-3 text-sm">
-        <label htmlFor={'checkbox' + id} className="font-medium text-gray-700">
+        <label htmlFor={'checkbox' + id} className="font-medium text-gray-700 dark:text-gray-200">
           {label}
         </label>
         <span className="text-gray-500">
@@ -87,7 +87,7 @@ const CheckBox = ({
             />
           </div>
           <div className="ml-3 text-sm">
-            <label className="font-medium text-gray-700">{label}</label>
+            <label className="font-medium text-gray-700 dark:text-gray-200">{label}</label>
             <span className="text-gray-500">
               <span className="sr-only">{label}</span>
             </span>

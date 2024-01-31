@@ -23,7 +23,7 @@ export const UserProfileCard = () => {
           <dt className="text-sm font-medium text-gray-500">
             <FormattedMessage id={messages.fullName} />
           </dt>
-          <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+          <dd className="mt-1 flex text-sm text-gray-900 dark:text-gray-200 sm:col-span-2 sm:mt-0">
             <span className="flex-grow">{user?.fullName}</span>
           </dd>
         </div>
@@ -31,7 +31,7 @@ export const UserProfileCard = () => {
           <dt className="text-sm font-medium text-gray-500">
             <FormattedMessage id={messages.email} />
           </dt>
-          <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+          <dd className="mt-1 flex text-sm text-gray-900 dark:text-gray-200 sm:col-span-2 sm:mt-0">
             <span className="flex-grow">{user?.email}</span>
           </dd>
         </div>
@@ -39,7 +39,7 @@ export const UserProfileCard = () => {
           <dt className="text-sm font-medium text-gray-500">
             <FormattedMessage id={messages.facility} />
           </dt>
-          <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+          <dd className="mt-1 flex text-sm text-gray-900 dark:text-gray-200 sm:col-span-2 sm:mt-0">
             <span className="flex-grow">{user?.facility}</span>
           </dd>
         </div>
@@ -47,7 +47,7 @@ export const UserProfileCard = () => {
           <dt className="text-sm font-medium text-gray-500">
             <FormattedMessage id={messages.roles} />
           </dt>
-          <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+          <dd className="mt-1 flex text-sm text-gray-900 dark:text-gray-200 sm:col-span-2 sm:mt-0">
             <span className="flex-grow">{user?.roles.map(role => <Badge key={role}>{role}</Badge>)}</span>
           </dd>
         </div>
@@ -55,7 +55,7 @@ export const UserProfileCard = () => {
           <dt className="text-sm font-medium text-gray-500">
             <FormattedMessage id={securityMessages.apiDocs} />
           </dt>
-          <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+          <dd className="mt-1 flex text-sm text-gray-900 dark:text-gray-200 sm:col-span-2 sm:mt-0">
             <span className="flex-grow">
               <a
                 target="_blank"
@@ -73,7 +73,7 @@ export const UserProfileCard = () => {
           <dt className="text-sm font-medium text-gray-500">
             <FormattedMessage id={securityMessages.api} />
           </dt>
-          <dd className="mt-1 flex text-sm text-gray-900 sm:col-span-2 sm:mt-0 h-10 ">
+          <dd className="mt-1 flex text-sm text-gray-900 dark:text-gray-200 sm:col-span-2 sm:mt-0 h-10 ">
             <div className="overflow-x-auto mr-2">{user?.apiAccessToken}</div>
             <button
               type="button"
