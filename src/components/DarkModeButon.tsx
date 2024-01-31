@@ -6,7 +6,10 @@ const DarkModeButton = () => {
 
   useEffect(() => {
     if (localStorage && localStorage.theme) {
-      setDm(localStorage.theme === 'dark')
+      if (localStorage.theme === 'dark') {
+        setDm(true)
+        document.documentElement.classList.add('dark')
+      }
     }
   }, [])
 
