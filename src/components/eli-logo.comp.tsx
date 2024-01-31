@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import eliLogoLight from 'public/eli-logo-small.png'
 import eliLogoDark from 'public/eli-logo-small-dark.png'
+import { Fragment, useEffect, useState } from 'react'
 
 import { useDarkModeStore } from '@/store/useDarkModeStore'
 
@@ -9,17 +10,25 @@ interface Props {
 }
 
 const EliLogoComponent = ({ customClass }: Props) => {
-  const dms = useDarkModeStore()
+  const { isDark } = useDarkModeStore()
+  const [clientSide, setClientSide] = useState(false)
+
+  useEffect(() => {
+    // This will be executed only on the client side
+    setClientSide(true)
+  }, [])
+
+  // Display nothing or a loader until useEffect runs
+  if (!clientSide) return null
 
   return (
-    <Image
-      className={customClass}
-      src={dms.isDark ? eliLogoDark : eliLogoLight}
-      alt="Eli Logo"
-      width={200}
-      height={200}
-      priority={true}
-    />
+    <Fragment>
+      {isDark ? (
+        <Image className={customClass} src={eliLogoDark} alt="Eli Logo" width={200} height={200} priority={true} />
+      ) : (
+        <Image className={customClass} src={eliLogoLight} alt="Eli Logo" width={200} height={200} priority={true} />
+      )}
+    </Fragment>
   )
 }
 
