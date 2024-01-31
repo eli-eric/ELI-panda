@@ -51,21 +51,11 @@ export default function PaginationComponent({
         </p>
       </div>
       <div className="flex flex-1 justify-between sm:justify-end">
-        <Button
-          disabled={previousIsDisabled}
-          onClick={previousPageHandler}
-          buttonSize="small"
-          className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200"
-        >
+        <Button disabled={previousIsDisabled} onClick={previousPageHandler} buttonSize="small">
           <ChevronLeftIcon className="h-6 w-6 flex-shrink-0 " />
         </Button>
 
-        <Button
-          disabled={nextIsDisabled}
-          onClick={nextPageHandler}
-          className="ml-3 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200"
-          buttonSize="small"
-        >
+        <Button disabled={nextIsDisabled} onClick={nextPageHandler} className="ml-3 " buttonSize="small">
           <ChevronRightIcon className="h-6 w-6 flex-shrink-0" />
         </Button>
       </div>

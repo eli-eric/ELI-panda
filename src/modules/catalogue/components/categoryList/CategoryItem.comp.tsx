@@ -23,7 +23,7 @@ export const CategoryItemComponent = ({ category }: Props) => {
   })
   const path = PATH.CATALOGUE + '/' + category.uid
   return (
-    <div className="flex-row justify-between dark:hover:bg-gray-700 relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white dark:bg-gray-900 shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
+    <div className="flex-row justify-between dark:hover:bg-gray-700 relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white dark:bg-gray-800 shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
       <Link
         href={{
           pathname: path,
