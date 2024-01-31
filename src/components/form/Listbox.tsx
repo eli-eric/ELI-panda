@@ -112,7 +112,7 @@ const Listbox = ({
               <div className="relative" onClick={onClick}>
                 <HUIListbox.Button
                   className={classNames(
-                    'px-3 py-2 pb-2 border placeholder-gray-400 bg-white dark:bg-gray-900  focus:border-primary-500 focus:outline-none focus:ring-primary-500 focus:border-2 sm:text-sm block w-full h-[38px] appearance-none text-left',
+                    'px-3 py-2 pb-2 border placeholder-gray-400 bg-white dark:bg-gray-900 dark:text-gray-200  focus:border-primary-500 focus:outline-none focus:ring-primary-500 focus:border-2 sm:text-sm block w-full h-[38px] appearance-none text-left',
                     field.value && !disabled ? 'pr-14' : 'pr-9',
                     rounded,
                     error ? 'border-red-500' : 'border-gray-300',
@@ -132,7 +132,7 @@ const Listbox = ({
               {options?.length > 0 && (
                 <HUIListbox.Options
                   className={classNames(
-                    'absolute z-20 mt-1 w-full overflow-auto rounded-md bg-white dark:bg-gray-900 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
+                    'absolute z-20 mt-1 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
                     position === 'top' ? 'bottom-full' : 'top-full',
                     optionsSize === 'sm' ? 'max-h-40' : optionsSize === 'lg' ? 'max-h-64' : 'max-h-60'
                   )}

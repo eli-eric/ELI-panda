@@ -22,7 +22,7 @@ export const Grid = ({
 }: GridPropsT): JSX.Element => (
   <div
     className={classNames(
-      `grid grid-cols-3 md:grid-cols-6 lg:grid-cols-12 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-50`,
+      `grid grid-cols-3 md:grid-cols-6 lg:grid-cols-12 text-gray-900 `,
       `gap-y-${verticalSpacing}`,
       `gap-x-${horizontalSpacing}`,
       className
@@ -42,13 +42,7 @@ interface ColType extends React.HTMLAttributes<HTMLDivElement> {
 
 export const Col = ({ children, className, sm: col = 3, md, lg, ...restProps }: ColType): JSX.Element => (
   <div
-    className={classNames(
-      col && colSizes[col],
-      md && mdColSizes[md],
-      lg && lgColSizes[lg],
-      'flex bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-50',
-      className
-    )}
+    className={classNames(col && colSizes[col], md && mdColSizes[md], lg && lgColSizes[lg], 'flex', className)}
     {...restProps}
   >
     {children}

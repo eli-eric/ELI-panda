@@ -53,7 +53,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
           tableId={'orderLines'}
           className={'relative overflow-x-auto'}
           getRowProps={({ original: { isDelivered } }) => ({
-            className: classNames(isDelivered ? 'bg-green-100' : 'bg-white dark:bg-gray-900')
+            className: classNames(isDelivered ? 'bg-green-100 dark:bg-green-700' : 'bg-white dark:bg-gray-900')
           })}
           settings={{
             enableFooter: true,

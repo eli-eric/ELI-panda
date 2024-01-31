@@ -3,6 +3,8 @@ import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import type { Table } from '@tanstack/react-table'
 import type { FC } from 'react'
 
+import { classNames } from '@/utils'
+
 interface Props {
   table: Table<any>
 }
@@ -31,7 +33,10 @@ export const TableSettings: FC<Props> = ({ table }) => (
                       id: 'toggle-all',
                       checked: table.getIsAllColumnsVisible(),
                       onChange: table.getToggleAllColumnsVisibilityHandler(),
-                      className: 'focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 rounded'
+                      className: classNames(
+                        'focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 dark:text-primary-600 rounded',
+                        !table.getIsAllColumnsVisible() && 'dark:bg-gray-700'
+                      )
                     }}
                   />
                   <label
@@ -48,13 +53,14 @@ export const TableSettings: FC<Props> = ({ table }) => (
                 {table.getAllLeafColumns().map(column => (
                   <div key={column.id} className="flex items-center space-x-2 mr-4">
                     <input
-                      {...{
-                        type: 'checkbox',
-                        id: `checkbox-${column.id}`,
-                        checked: column.getIsVisible(),
-                        onChange: column.getToggleVisibilityHandler(),
-                        className: 'focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 rounded'
-                      }}
+                      type={'checkbox'}
+                      id={`checkbox-${column.id}`}
+                      checked={column.getIsVisible()}
+                      onChange={column.getToggleVisibilityHandler()}
+                      className={classNames(
+                        'focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 dark:text-primary-600 rounded',
+                        !column.getIsVisible() && 'dark:bg-gray-700'
+                      )}
                     />
                     <label
                       htmlFor={`checkbox-${column.id}`}

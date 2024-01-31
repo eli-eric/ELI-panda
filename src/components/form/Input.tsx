@@ -106,7 +106,7 @@ export const Input = ({
                 }}
                 placeholder={placeholder}
                 className={classNames(
-                  'block w-full appearance-none border px-3 py-2 placeholder-gray-400 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-50  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                  'block w-full appearance-none border px-3 py-2 placeholder-gray-400 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                   rounded,
                   error ? 'border-red-500' : 'border-gray-300',
                   disabled ? 'bg-gray-100' : '',
@@ -170,7 +170,7 @@ export const TextArea = ({ name, placeholder, disabled, rounded, label, classNam
               disabled={disabled}
               placeholder={placeholder}
               className={classNames(
-                'block w-full appearance-none px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm border',
+                'block w-full appearance-none px-3 py-2 dark:bg-gray-900 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm border',
                 rounded,
                 error ? 'border-red-500' : 'border-gray-300',
                 disabled ? 'bg-gray-100' : ''
@@ -297,7 +297,7 @@ export const InputDate = ({
                 }}
                 placeholder={placeholder}
                 className={classNames(
-                  'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                  'block w-full appearance-none dark:bg-gray-900 border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
                   rounded,
                   error ? 'border-red-500' : 'border-gray-300',
                   disabled ? 'bg-gray-100' : ''

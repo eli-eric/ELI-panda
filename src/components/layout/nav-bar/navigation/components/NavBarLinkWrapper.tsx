@@ -15,7 +15,7 @@ export const NavBarLinkWrapper = ({ children, links, className, open }: NavBarLi
     <div
       className={classNames(
         open
-          ? 'block w-full text-left border-l-4 py-2 pl-3 pr-4 text-base hover:bg-gray-50'
+          ? 'block w-full text-left border-l-4 py-2 pl-3 pr-4 text-base '
           : 'inline-flex items-center border-b-2 px-1 pt-1 text-sm',
         'font-medium h-full',
         links?.some(link => link.path === router.pathname) ||
