@@ -55,7 +55,7 @@ export default function PaginationComponent({
           disabled={previousIsDisabled}
           onClick={previousPageHandler}
           buttonSize="small"
-          className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-50"
+          className="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200"
         >
           <ChevronLeftIcon className="h-6 w-6 flex-shrink-0 " />
         </Button>
@@ -63,7 +63,7 @@ export default function PaginationComponent({
         <Button
           disabled={nextIsDisabled}
           onClick={nextPageHandler}
-          className="ml-3 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-50"
+          className="ml-3 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-200"
           buttonSize="small"
         >
           <ChevronRightIcon className="h-6 w-6 flex-shrink-0" />

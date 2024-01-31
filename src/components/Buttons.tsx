@@ -66,6 +66,7 @@ export const Button = ({
     type={type}
     className={classNames(
       'relative text-xs font-medium shadow-sm z-10 inline-flex items-center border border-gray-300 focus:outline-none focus:ring-0 focus:ring-primary-500',
+      'dark:hover:bg-gray-600',
       rounded,
       loading
         ? 'bg-primary-700'

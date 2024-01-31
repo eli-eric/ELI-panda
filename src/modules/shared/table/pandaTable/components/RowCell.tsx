@@ -19,7 +19,7 @@ export const RowCell: FC<Props> = ({ row, cell, loading }) => {
       id={id}
       style={{ width: cell.column.getSize() }}
       className={classNames(
-        'text-xs sm:pl-6 sm:pr-6 border-r border-b  border-gray-400',
+        'text-xs sm:pl-6 sm:pr-6 border-r border-b  border-gray-400 dark:text-gray-100',
         row.getIsSelected() ? 'text-white' : '',
         cell.column.columnDef.meta?.sticky
           ? 'sticky sm:left-0 z-30 backdrop-blur-2xl backdrop-filter border-r pt-1 pb-1'

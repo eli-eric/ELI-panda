@@ -76,7 +76,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                         router.push(PATH.PROFILE_GENERAL)
                       }}
                       className={classNames(
-                        'w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200',
+                        'w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 dark:hover:bg-gray-700',
                         active ? 'bg-gray-100' : ''
                       )}
                     >
@@ -92,7 +92,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                           router.push(PATH.ADMIN)
                         }}
                         className={classNames(
-                          'w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200',
+                          'w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 dark:hover:bg-gray-700',
                           active ? 'bg-gray-100' : ''
                         )}
                       >
@@ -106,7 +106,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                     <button
                       onClick={signOutHandler}
                       className={classNames(
-                        'w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200',
+                        'w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 dark:hover:bg-gray-700',
                         active ? 'bg-gray-100' : ''
                       )}
                     >
@@ -125,7 +125,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
               onClick={() => {
                 router.push(PATH.PROFILE_GENERAL)
               }}
-              className="flex-shrink-0"
+              className="flex-shrink-0 dark:hover:bg-gray-700"
             >
               <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
                 <span className="font-medium leading-none text-white">{inicials}</span>
@@ -142,7 +142,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
               onClick={() => {
                 router.push(PATH.PROFILE_GENERAL)
               }}
-              className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-200"
+              className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
             >
               Your Profile
             </Disclosure.Button>
@@ -154,7 +154,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                 onClick={() => {
                   router.push(PATH.ADMIN)
                 }}
-                className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-200"
+                className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 Administration
               </Disclosure.Button>
@@ -163,7 +163,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
           <div className="flex mt-3 space-y-1">
             <Disclosure.Button
               onClick={signOutHandler}
-              className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-200"
+              className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
             >
               Sign out
             </Disclosure.Button>

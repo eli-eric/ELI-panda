@@ -16,7 +16,7 @@ export const getColorClassStatus = (orderStatus: CodebookType, deliveryStatus: D
         ORDER_STATUS.ORDERED,
         DELIVERY_STATUS.COMPLETE
       ],
-      colorClass: 'bg-lime-200'
+      colorClass: 'bg-lime-200 dark:bg-lime-700'
     },
     {
       statuses: [
@@ -27,19 +27,19 @@ export const getColorClassStatus = (orderStatus: CodebookType, deliveryStatus: D
         ORDER_STATUS.ORDERED,
         DELIVERY_STATUS.PARTIAL
       ],
-      colorClass: 'bg-amber-400'
+      colorClass: 'bg-amber-400 dark:bg-amber-500'
     },
     {
       statuses: [ORDER_STATUS.ORDERED, DELIVERY_STATUS.NONE],
-      colorClass: 'bg-yellow-200'
+      colorClass: 'bg-yellow-200 dark:bg-yellow-700'
     },
     {
       statuses: [ORDER_STATUS.PLANNED, DELIVERY_STATUS.NONE],
-      colorClass: 'bg-blue-100'
+      colorClass: 'bg-blue-100 dark:bg-blue-700'
     },
     {
       statuses: [ORDER_STATUS.ORDER_COMPLETED, DELIVERY_STATUS.COMPLETE],
-      colorClass: 'bg-lime-400'
+      colorClass: 'bg-lime-400 dark:bg-lime-700'
     }
     // Add more mappings as needed
   ]

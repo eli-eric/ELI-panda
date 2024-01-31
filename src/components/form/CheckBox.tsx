@@ -35,7 +35,7 @@ export const CheckBoxComponent = ({
           hidden={hidden}
           type="checkbox"
           disabled={disabled}
-          className="h-5 w-5 rounded border-primary-300 text-primary-600 focus:ring-primary-500  hover:cursor-pointer"
+          className="h-5 w-5 rounded border-primary-300 dark:bg-gray-700 text-primary-600 focus:ring-primary-500  hover:cursor-pointer"
         />
       </div>
       <div className="ml-3 text-sm">

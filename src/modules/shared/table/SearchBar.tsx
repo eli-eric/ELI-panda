@@ -95,7 +95,7 @@ export const SearchBar = ({ useQuery = true, left, right, tableId, onChange }: P
               <input
                 {...register('search')}
                 id="search-field"
-                className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm"
+                className="block h-full w-full dark:bg-gray-900 border-transparent py-2 pl-8 pr-3 text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm"
                 placeholder="Search..."
                 type="search"
                 name="search"
