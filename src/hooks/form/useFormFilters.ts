@@ -111,7 +111,7 @@ export const useFormFilterState = ({ tableId }: { tableId: string }) => {
           if (!value) {
             filters.splice(index, 1)
           }
-          if (!value?.max && !value?.min) {
+          if (value?.max === null && value?.min === null) {
             filters.splice(index, 1)
           }
           return filters
