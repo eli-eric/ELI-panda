@@ -20,16 +20,22 @@ export const CategoryPropFilters = ({ tableId }: { tableId: string }) => {
   const uid = useMemo(() => category?.uid, [category])
   const { catalogueCategoryProperties } = useCategoryProperties(uid)
 
-  if (!catalogueCategoryProperties) return null
+  const categoryProperties = catalogueCategoryProperties?.sort((a, b) => {
+    if (a.property.type.uid === PROPERTY_TYPE.LIST) return -1
+    if (b.property.type.uid === PROPERTY_TYPE.LIST) return 1
+    return 0
+  })
+
+  if (!categoryProperties) return null
 
   return (
     <Fragment>
-      {catalogueCategoryProperties?.length > 0 && (
+      {categoryProperties?.length > 0 && (
         <div className="col-span-2 md:grid md:grid-cols-2 md:gap-4">
           <span className=" col-span-2 text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">
             Category Properties
           </span>
-          {catalogueCategoryProperties.map(property => {
+          {categoryProperties.map(property => {
             const label = property.property.name + (property.property.unit ? ` [${property.property.unit?.name}]` : '')
             switch (property.property.type.uid) {
               case PROPERTY_TYPE.TEXT: {
