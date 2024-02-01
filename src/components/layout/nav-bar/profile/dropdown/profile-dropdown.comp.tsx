@@ -41,8 +41,8 @@ const ProfileDropdownComponent = ({ open }: Props) => {
       {open === false ? (
         <div data-testid="layout-profile" className="hidden z-30 sm:ml-6 sm:flex sm:items-center">
           <Menu as="div" className="relative ml-3">
-            <div className="flex">
-              <div className="pr-6 pt-2">
+            <div className="flex items-center">
+              <div className="pr-6 items-center justify-center">
                 <DarkModeButton />
               </div>
               <Link href={SUPPORT} legacyBehavior>
