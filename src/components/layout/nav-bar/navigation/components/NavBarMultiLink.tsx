@@ -47,7 +47,7 @@ export const NavBarMultiLink = ({ name, links, open }: Props) => {
         <Menu.Items
           className={classNames(
             !open &&
-              'absolute z-50 left-0 top-[58px] mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-900 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
+              'absolute z-50 left-0 top-[58px] mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
           )}
         >
           {links.map((link, index) => {

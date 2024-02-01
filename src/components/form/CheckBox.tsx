@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
 
+//TODO:refactor checkboxes
 interface CheckBoxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string
   defaultChecked?: boolean
@@ -35,7 +36,10 @@ export const CheckBoxComponent = ({
           hidden={hidden}
           type="checkbox"
           disabled={disabled}
-          className="h-5 w-5 rounded border-primary-300 dark:bg-gray-700 text-primary-600 focus:ring-primary-500  hover:cursor-pointer"
+          className={classNames(
+            'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',
+            !checked && 'dark:bg-gray-700'
+          )}
         />
       </div>
       <div className="ml-3 text-sm">
@@ -83,7 +87,10 @@ const CheckBox = ({
               type="checkbox"
               disabled={disabled}
               placeholder={placeholder}
-              className="h-5 w-5 rounded border-primary-300 text-primary-600 focus:ring-primary-500  hover:cursor-pointer"
+              className={classNames(
+                'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',
+                !field.value && 'dark:bg-gray-700'
+              )}
             />
           </div>
           <div className="ml-3 text-sm">

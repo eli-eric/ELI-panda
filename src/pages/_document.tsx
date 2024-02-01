@@ -4,7 +4,7 @@ class MyDocument extends Document {
     return (
       <Html lang="en" className="h-full">
         <Head title="Eli Panda - " />
-        <body className="h-full bg-white dark:bg-gray-900 dark:bg-gray-900">
+        <body className="h-full bg-white dark:bg-gray-800 dark:bg-gray-800">
           <Main />
           <NextScript />
         </body>

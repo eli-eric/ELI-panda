@@ -29,7 +29,7 @@ export const UserComponent = ({ formMethods, onSubmit, addRole, removeRole, assi
       }}
     >
       <PageHead>
-        <h1 className="text-2xl font-semibold">{title}</h1>
+        <h1 className="text-2xl font-semibold dark:text-gray-200">{title}</h1>
         <PageHeaderButtons
           {...{
             onSubmit: () => {

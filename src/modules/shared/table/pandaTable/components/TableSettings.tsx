@@ -13,7 +13,7 @@ export const TableSettings: FC<Props> = ({ table }) => (
   <Disclosure>
     {({ open }) => (
       <div id="column-hiding">
-        <Disclosure.Button className="hover:text-primary-600 text-sm flex items-center justify-between w-full py-[2px] px-4  shadow-sm  text-gray-500 bg-white dark:bg-gray-900 hover:bg-gray-100 ">
+        <Disclosure.Button className="hover:text-primary-600 text-sm flex items-center justify-between w-full py-[2px] px-4  shadow-sm  text-gray-500 bg-white dark:bg-gray-800 hover:bg-gray-100 ">
           <span className="">{open ? 'Hide table options' : 'Show table options'}</span>
           {open ? (
             <XMarkIcon className="h-4 w-4" aria-hidden="true" />
@@ -22,7 +22,7 @@ export const TableSettings: FC<Props> = ({ table }) => (
           )}
         </Disclosure.Button>
 
-        <Disclosure.Panel className="bg-white dark:bg-gray-900  border-t border-gray-200 overflow-hidden sm:rounded-md">
+        <Disclosure.Panel className="bg-white dark:bg-gray-800  border-t border-gray-200 overflow-hidden sm:rounded-md">
           <ul className="divide-y divide-gray-200">
             <li>
               <div className="py-1 px-4">

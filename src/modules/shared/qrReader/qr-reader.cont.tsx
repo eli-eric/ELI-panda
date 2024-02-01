@@ -135,7 +135,7 @@ interface Props {
 export const Results = ({ data }: Props) => (
   <ul
     role="list"
-    className="divide-y divide-gray-100 overflow-hidden bg-white dark:bg-gray-900 shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
+    className="divide-y divide-gray-100 overflow-hidden bg-white dark:bg-gray-800 shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
   >
     {data.map(item => (
       <Link key={item.type} target="_blank" href={item.href}>
