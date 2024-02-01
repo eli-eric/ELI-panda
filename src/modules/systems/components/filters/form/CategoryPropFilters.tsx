@@ -3,6 +3,7 @@ import { useFormContext } from 'react-hook-form'
 
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
+import { RangeInput } from '@/components/form/RangeInput'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { useFormControlStore } from '@/store/useFormControlStore'
@@ -44,22 +45,22 @@ export const CategoryPropFilters = ({ tableId }: { tableId: string }) => {
                     isFilter={true}
                   />
                 )
-              case PROPERTY_TYPE.NUMBER:
+              case PROPERTY_TYPE.NUMBER: {
+                const label = `${property.property.name} [${property.property.unit?.name}]`
+
                 return (
-                  <Input
-                    rounded="rounded-md"
+                  <RangeInput
                     key={property.property.uid}
                     name={property.property.uid}
-                    unit={property.property.unit?.name}
-                    label={property.property.name}
+                    label={label}
                     onChange={value => {
                       setFilter(property.property.uid)(value, property.property.type.code, property.property.name)
                       addCustomFieldIdToSync(property.property.uid)
                     }}
                     isFilter={true}
-                    type="number"
                   />
                 )
+              }
               case PROPERTY_TYPE.BOOLEAN:
                 return (
                   <Listbox
