@@ -11,7 +11,7 @@ interface Props {
   options?: string[]
 }
 
-export const FilterCheckboxes = ({ name, label, onChange, isFilter, options }: Props) => {
+export const FilterCheckboxes = ({ name, label, onChange, options }: Props) => {
   const { control } = useFormContext()
 
   return (
