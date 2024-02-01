@@ -1,6 +1,7 @@
 import { Fragment, useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 
+import { FilterCheckboxes } from '@/components/form/FIlterCheckboxes'
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { RangeInput } from '@/components/form/RangeInput'
@@ -29,15 +30,16 @@ export const CategoryPropFilters = ({ tableId }: { tableId: string }) => {
             Category Properties
           </span>
           {catalogueCategoryProperties.map(property => {
+            const label = property.property.name + (property.property.unit ? ` [${property.property.unit?.name}]` : '')
             switch (property.property.type.uid) {
-              case PROPERTY_TYPE.TEXT:
+              case PROPERTY_TYPE.TEXT: {
                 return (
                   <Input
                     rounded="rounded-md"
                     key={property.property.uid}
                     unit={property.property.unit?.name}
                     name={property.property.uid}
-                    label={property.property.name}
+                    label={label}
                     onChange={value => {
                       setFilter(property.property.uid)(value, property.property.type.code, property.property.name)
                       addCustomFieldIdToSync(property.property.uid)
@@ -45,9 +47,8 @@ export const CategoryPropFilters = ({ tableId }: { tableId: string }) => {
                     isFilter={true}
                   />
                 )
+              }
               case PROPERTY_TYPE.NUMBER: {
-                const label = `${property.property.name} [${property.property.unit?.name}]`
-
                 return (
                   <RangeInput
                     key={property.property.uid}
@@ -61,12 +62,12 @@ export const CategoryPropFilters = ({ tableId }: { tableId: string }) => {
                   />
                 )
               }
-              case PROPERTY_TYPE.BOOLEAN:
+              case PROPERTY_TYPE.BOOLEAN: {
                 return (
                   <Listbox
                     key={property.property.uid}
                     name={property.property.uid}
-                    customLabel={property.property.name}
+                    customLabel={label}
                     onChange={value => {
                       setFilter(property.property.uid)(value, property.property.type.code, property.property.name)
                       addCustomFieldIdToSync(property.property.uid)
@@ -75,20 +76,22 @@ export const CategoryPropFilters = ({ tableId }: { tableId: string }) => {
                     customOptions={['true', 'false']}
                   />
                 )
-              case PROPERTY_TYPE.LIST:
+              }
+              case PROPERTY_TYPE.LIST: {
                 return (
-                  <Listbox
+                  <FilterCheckboxes
                     key={property.property.uid}
                     name={property.property.uid}
-                    customLabel={property.property.name}
+                    label={label}
                     onChange={value => {
                       setFilter(property.property.uid)(value, property.property.type.code, property.property.name)
                       addCustomFieldIdToSync(property.property.uid)
                     }}
                     isFilter={true}
-                    customOptions={property.property.listOfValues}
+                    options={property.property.listOfValues}
                   />
                 )
+              }
               default:
                 return null
             }

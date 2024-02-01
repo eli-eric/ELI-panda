@@ -18,6 +18,7 @@ export const CheckBoxComponent = ({
   hidden,
   label,
   defaultChecked,
+  checked: _checked,
   ...restProps
 }: CheckBoxProps) => {
   const [checked, setChecked] = useState(defaultChecked)
@@ -32,13 +33,13 @@ export const CheckBoxComponent = ({
             restProps.onChange && restProps.onChange(e)
             setChecked(e.target.checked)
           }}
-          checked={checked}
+          checked={_checked || checked}
           hidden={hidden}
           type="checkbox"
           disabled={disabled}
           className={classNames(
             'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',
-            !checked && 'dark:bg-gray-700'
+            !_checked && !checked && 'dark:bg-gray-700'
           )}
         />
       </div>
