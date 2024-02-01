@@ -21,8 +21,8 @@ export const NavBarLinkWrapper = ({ children, links, className, open }: NavBarLi
         links?.some(link => link.path === router.pathname) ||
           router.pathname === links?.[0]?.path ||
           router.asPath.startsWith(links?.[0]?.path || '')
-          ? 'text-gray-900 dark:text-gray-200 border-primary-500'
-          : 'text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-200 border-transparent',
+          ? 'text-gray-900 dark:text-gray-200 border-primary-500 dark:text-primary-600'
+          : 'text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-200 border-transparent dark:hover:text-primary-600 dark:hover:border-primary-600',
         className
       )}
     >
