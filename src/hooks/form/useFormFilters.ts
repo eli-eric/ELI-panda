@@ -23,18 +23,27 @@ function synchronizeFormFields(fieldIdToSync: Set<string>, setValue, defValues) 
 function synchronizeCustomFormFields(customFieldIdToSync, setValue, setFilters) {
   customFieldIdToSync.forEach(fieldId => {
     setValue(fieldId as any, null as any)
-    setFilters(prev => prev.filter(f => f.id !== fieldId))
   })
+  setFilters(prev => prev.filter(item => !customFieldIdToSync.has(item.id)))
 }
 
 export const useFormFilter = <T extends FieldValues>({ tableId, defValues, customDependence }: IFilter<T>) => {
   const [storeFilters, setFilters] = useFilters(tableId, true, false)
   const isFirstRender = useIsFirstRender()
-  const { fieldIdToSync, clearFieldToSync, customFieldIdToSync, clearCustomFieldToSync, deleteCustom } =
-    useFormControlStore()
+  const {
+    fieldIdToSync,
+    clearFieldToSync,
+    customFieldIdToSync,
+    clearCustomFieldToSync,
+    deleteCustom,
+    addCustomFieldIdToSync
+  } = useFormControlStore()
   const [filterQuery] = useQueryState('filter', { history: 'replace' })
 
-  const columnFiltersQuery = useMemo(() => JSON.parse(filterQuery || '[]'), [filterQuery])
+  const columnFilters = useMemo(
+    () => (filterQuery ? JSON.parse(filterQuery || '[]') : storeFilters),
+    [filterQuery, storeFilters]
+  )
   const formMethods = useForm<T>({
     defaultValues: defValues
   })
@@ -46,8 +55,11 @@ export const useFormFilter = <T extends FieldValues>({ tableId, defValues, custo
 
   //set custom field to delete from state and form
   useEffect(() => {
-    toggleDeleteCustom()
-  }, [customDep, toggleDeleteCustom])
+    if (isFirstRender) return
+    if (!customDep) {
+      toggleDeleteCustom()
+    }
+  }, [customDep, toggleDeleteCustom, isFirstRender])
 
   //sync form values (for example, when we click xmark icon in badge)
   useEffect(() => {
@@ -63,32 +75,30 @@ export const useFormFilter = <T extends FieldValues>({ tableId, defValues, custo
       synchronizeCustomFormFields(customFieldIdToSync, setValue, setFilters)
       clearCustomFieldToSync()
     }
-  }, [customFieldIdToSync, setValue, clearCustomFieldToSync, setFilters, deleteCustom])
+  }, [setValue, clearCustomFieldToSync, setFilters, deleteCustom, customFieldIdToSync])
 
   //set default values to form from store or from url on first render
   useEffect(() => {
     if (isFirstRender) {
-      if (!storeFilters.length) {
+      if (columnFilters.length) {
+        columnFilters.forEach(filter => {
+          if (filter.type) {
+            addCustomFieldIdToSync(filter.id)
+          }
+        })
         reset(
-          columnFiltersQuery.reduce((acc, curr) => {
+          columnFilters.reduce((acc, curr) => {
             if (curr.id === 'systemLevel') {
               acc[curr.id] = { uid: curr.value, name: curr.value }
             }
             acc[curr.id] = curr.value
+
             return acc
           }, {})
         )
       }
-      if (storeFilters.length) {
-        reset(
-          storeFilters.reduce((acc, curr) => {
-            acc[curr.id] = curr.value
-            return acc
-          }, {} as any)
-        )
-      }
     }
-  }, [storeFilters, isFirstRender, reset, columnFiltersQuery])
+  }, [isFirstRender, reset, columnFilters, addCustomFieldIdToSync])
 
   return formMethods
 }
@@ -112,6 +122,9 @@ export const useFormFilterState = ({ tableId }: { tableId: string }) => {
             filters.splice(index, 1)
           }
           if (value?.max === null && value?.min === null) {
+            filters.splice(index, 1)
+          }
+          if (value?.length === 0) {
             filters.splice(index, 1)
           }
           return filters

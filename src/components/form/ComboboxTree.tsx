@@ -1,5 +1,5 @@
 import { Combobox as HUICombobox } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { CheckIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import React, { Fragment, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
@@ -9,6 +9,7 @@ import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
 
+import { ChevronDown } from './Icons'
 import { CodebookTreeModal } from './shared/CodebookTreeModal'
 
 type ComboboxPropsT = FieldProps &
@@ -99,9 +100,7 @@ export const ComboboxTree = ({
                 </div>
               )}
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 cursor-pointer">
-                <ChevronDownIcon
-                  className="h-4 w-4 text-gray-500"
-                  aria-hidden="true"
+                <ChevronDown
                   onClick={() => {
                     setOpen(true)
                   }}

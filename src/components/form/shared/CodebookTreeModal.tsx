@@ -128,7 +128,7 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name, onSubmit }: C
               !row.original?.children && setItem({ uid: row.original.uid, name: row.original.name })
             },
             className: classNames(
-              item?.uid === row.original.uid ? 'bg-primary-200 hover:bg-primary-200' : '',
+              item?.uid === row.original.uid ? 'bg-primary-200 dark:bg-primary-500 hover:bg-primary-200' : '',
               'cursor-pointer'
             )
           })}
