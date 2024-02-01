@@ -1,5 +1,4 @@
 import { Listbox as HUIListbox } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import React, { useMemo } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
@@ -12,6 +11,7 @@ import { classNames } from '@/utils'
 
 import { FormXMarkIcon } from './components/FormXMarkIcon'
 import { SelectOption } from './components/SelectOption'
+import { ChevronDown } from './Icons'
 
 export type ListboxPropsT = FieldProps & {
   codebook?: CODEBOOK
@@ -112,7 +112,7 @@ const Listbox = ({
               <div className="relative" onClick={onClick}>
                 <HUIListbox.Button
                   className={classNames(
-                    'px-3 py-2 pb-2 border placeholder-gray-400 bg-white dark:bg-gray-900 dark:text-gray-200  focus:border-primary-500 focus:outline-none focus:ring-primary-500 focus:border-2 sm:text-sm block w-full h-[38px] appearance-none text-left',
+                    'form-field h-[38px]',
                     field.value && !disabled ? 'pr-14' : 'pr-9',
                     rounded,
                     error ? 'border-red-500' : 'border-gray-300',
@@ -125,7 +125,7 @@ const Listbox = ({
                   {!disabled && value && <FormXMarkIcon onClick={handleClear} />}
                   <div className="absolute inset-y-0 right-0 flex items-center pr-2">
                     {unit && <span className="text-gray-400 sm:text-sm">{unit}</span>}
-                    <ChevronDownIcon onClick={onClickIcon} className="h-4 w-4 text-gray-500" aria-hidden="true" />
+                    <ChevronDown onClick={onClickIcon} />
                   </div>
                 </HUIListbox.Button>
               </div>

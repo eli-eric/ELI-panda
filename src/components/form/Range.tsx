@@ -54,7 +54,7 @@ export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange
                 <input
                   name="min"
                   type="number"
-                  className="block border-gray-300 rounded-md w-full appearance-none border px-2 py-1 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 text-sm"
+                  className="form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm"
                   value={fieldValue[0] || ''}
                   onChange={e => {
                     const value = Number(e.target.value)
@@ -92,7 +92,7 @@ export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange
                       })
                     }
                   }}
-                  className="block border-gray-300 rounded-md w-full appearance-none border px-2 py-1 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 text-sm"
+                  className="form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm"
                   value={fieldValue[1] || ''}
                 />
               </div>
