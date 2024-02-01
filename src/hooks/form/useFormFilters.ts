@@ -99,7 +99,7 @@ export const useFormFilterState = ({ tableId }: { tableId: string }) => {
   //set filter value to store on change field and remove from store if value is empty
   const setFilter = useCallback(
     (id: string) =>
-      (value: unknown, type?: ColumnFilter['type'], name: string = id) => {
+      (value: any, type?: ColumnFilter['type'], name: string = id) => {
         setColumnFilters(prev => {
           const filters = [...prev]
           const index = prev.findIndex(item => item.id === id)
@@ -109,6 +109,9 @@ export const useFormFilterState = ({ tableId }: { tableId: string }) => {
             filters.push({ id, value, type, name })
           }
           if (!value) {
+            filters.splice(index, 1)
+          }
+          if (!value?.max && !value?.min) {
             filters.splice(index, 1)
           }
           return filters
