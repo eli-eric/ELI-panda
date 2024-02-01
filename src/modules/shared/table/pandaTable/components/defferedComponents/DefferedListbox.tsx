@@ -83,7 +83,7 @@ export const DefferedListbox = ({
       {options?.length > 0 && (
         <HUIListbox.Options
           className={classNames(
-            'absolute z-20 mt-1 w-full overflow-auto rounded-md bg-white dark:bg-gray-900 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
+            'absolute z-20 mt-1 w-full overflow-auto rounded-md bg-white dark:bg-gray-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
             position === 'top' ? 'bottom-full' : 'top-full',
             optionsSize === 'sm' ? 'max-h-40' : optionsSize === 'lg' ? 'max-h-64' : 'max-h-60'
           )}

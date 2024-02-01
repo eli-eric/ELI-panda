@@ -46,7 +46,7 @@ export const TableRow = ({ getRowProps, loading, row, index, tableId }: Props) =
       id={id}
       {...rest}
       className={classNames(
-        index % 2 === 0 ? undefined : 'bg-gray-100 dark:bg-gray-700',
+        index % 2 === 0 ? 'dark:bg-gray-800' : 'bg-gray-100 dark:bg-gray-700',
         'hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 z-0',
         className,
         isHoveringDrop ? 'bg-primary-200 dark:bg-primary-200' : ''

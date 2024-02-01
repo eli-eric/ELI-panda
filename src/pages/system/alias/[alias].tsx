@@ -47,7 +47,7 @@ const SystemAliasRedirectPage: NextPage = ({ alias }: Props) => {
         <meta name="description" content="...." />
       </Head>
       {!systemDetail ? (
-        <div className="min-h-full bg-white dark:bg-gray-900 py-16 px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+        <div className="min-h-full bg-white dark:bg-gray-800 py-16 px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
           <div className="mx-auto max-w-max">
             <div className="flex flex-shrink-0 justify-center pb-12">
               <div className="inline-flex">
