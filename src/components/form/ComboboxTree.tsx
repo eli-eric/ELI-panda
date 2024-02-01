@@ -82,7 +82,7 @@ export const ComboboxTree = ({
                 placeholder={placeholder}
                 autoComplete="off"
                 className={classNames(
-                  'px-3 py-2 border placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full appearance-none text-left truncate',
+                  'form-field',
                   field.value && !disabled ? 'pr-14' : 'pr-9',
                   rounded,
                   error ? 'border-red-500' : 'border-gray-300',

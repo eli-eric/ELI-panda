@@ -51,7 +51,7 @@ const DateInput = ({ name, disabled, rounded = 'rounded-md', className, hidden, 
               type="date"
               disabled={disabled}
               className={classNames(
-                'block w-full appearance-none dark:bg-gray-900 dark:text-gray-200 border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                'form-field',
                 rounded,
                 error ? 'border-red-500' : 'border-gray-300',
                 disabled ? 'bg-gray-100' : ''
