@@ -52,7 +52,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                   </span>
                 </a>
               </Link>
-              <Menu.Button className="flex rounded-full bg-white dark:bg-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+              <Menu.Button className="flex rounded-full bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
                 <span className="sr-only">Open user menu</span>
                 <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
                   <span className="font-medium leading-none text-white">{inicials}</span>
@@ -68,7 +68,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className=" absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-900 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items className=" absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <Menu.Item>
                   {({ active }) => (
                     <button

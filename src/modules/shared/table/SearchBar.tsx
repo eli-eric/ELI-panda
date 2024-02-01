@@ -75,7 +75,7 @@ export const SearchBar = ({ useQuery = true, left, right, tableId, onChange }: P
   }
 
   return (
-    <div id="search-bar" className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white dark:bg-gray-900 border-b">
+    <div id="search-bar" className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white dark:bg-gray-800 border-b">
       <div className="flex flex-1 justify-between px-4">
         {left && <div className="flex items-center mr-2">{left}</div>}
         <div className="flex flex-1">
@@ -95,7 +95,7 @@ export const SearchBar = ({ useQuery = true, left, right, tableId, onChange }: P
               <input
                 {...register('search')}
                 id="search-field"
-                className="block h-full w-full dark:bg-gray-900 border-transparent py-2 pl-8 pr-3 text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm"
+                className="block h-full w-full dark:bg-gray-800 border-transparent py-2 pl-8 pr-3 text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm"
                 placeholder="Search..."
                 type="search"
                 name="search"
