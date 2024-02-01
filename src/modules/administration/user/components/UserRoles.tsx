@@ -29,7 +29,7 @@ export const UserRoles: FC<Props> = ({ addRole, removeRole, assignedRoles, roles
   return (
     <Form {...{ formMethods }}>
       <Card>
-        <div className="pb-2 font-bold">Roles</div>
+        <div className="pb-2 font-bold dark:text-gray-200">Roles</div>
         <ul className="" role="list">
           {roles?.map(role => (
             <li key={role.uid} className="py-1">
