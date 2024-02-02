@@ -33,8 +33,8 @@ export const NavigationComponent = () => {
       as="nav"
       className={classNames(
         'border-b bg-white dark:bg-gray-800',
-        PROCESS_ENV && PROCESS_ENV === ENV.DEV && 'bg-teal-100',
-        PROCESS_ENV && PROCESS_ENV === ENV.TEST && 'bg-pink-50'
+        PROCESS_ENV && PROCESS_ENV === ENV.DEV && 'bg-teal-100 dark:bg-teal-900',
+        PROCESS_ENV && PROCESS_ENV === ENV.TEST && 'bg-pink-50 dark:bg-pink-900'
       )}
     >
       {({ open }) => (

@@ -3,9 +3,20 @@ PANDA_API_GW_URL="http://localhost:5001/api/mock-server"
 # NEXTAUTH_URL="ttp://panda.eli-beams.eu/"
 NEXTAUTH_URL="http://localhost:5001/"
 NEXTAUTH_SECRET="stored in gh actions secrets"
-PANDA_ENV="dev" #could be dev, test, production, if not set it is like production, localhost for local server
+PANDA_ENV="localhost" #could be dev, test, production, if not set it is like production, localhost for local server
 NEO4J_URI="bolt://xxx.xxx.xxx.xxx:xxxx"
 NEO4J_USER="neo4j"
 NEO4J_PASSWORD="heslo"
 NEO4J_SECRET="stored in gh actions secrets"
 
+
+
+KEYCLOAK_ID="panda"
+KEYCLOAK_SECRET="pandasecret"
+KEYCLOAK_ISSUER="https://panda-keycloak.dev.eli-laser.eu/realms/devel"
+
+
+MINIO_ENDPOINT="217.198.121.181"
+MINIO_BUCKET_NAME="panda-dev"
+MINIO_ACCESS_KEY=""
+MINIO_SECRET_KEY=""
