@@ -22,6 +22,7 @@ export interface FieldProps {
   rounded?: 'rounded-l-md' | 'rounded-t-md' | 'rounded-r-md' | 'rounded-b-md' | 'rounded-md'
   label?: string
   customLabel?: string
+  isFilter?: boolean
 
   type?: string
 }

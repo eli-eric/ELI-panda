@@ -9,6 +9,6 @@ export const SystemsContainer: FC = () => (
     enableDragAndDrop={false}
     tableId={'systems'}
     hideButtons={false}
-    RightSearchBarElement={SystemFiltersBadges}
+    RightSearchBarElement={() => <SystemFiltersBadges tableId={'systems'} />}
   />
 )

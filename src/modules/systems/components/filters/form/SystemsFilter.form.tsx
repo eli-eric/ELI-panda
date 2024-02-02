@@ -1,3 +1,6 @@
+import { useMemo } from 'react'
+import { useFormContext } from 'react-hook-form'
+
 import Combobox from '@/components/form/Combobox'
 import { ComboboxTree } from '@/components/form/ComboboxTree'
 import { FilterCheckboxes } from '@/components/form/FIlterCheckboxes'
@@ -20,6 +23,10 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
   const { minMaxPrice } = useMinMaxPrice()
 
   const { setFilter } = useFormFilterState({ tableId })
+  const { watch } = useFormContext()
+
+  const category = watch('category')
+  const uid = useMemo(() => category?.uid, [category])
 
   return (
     <div className={classNames('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
@@ -76,7 +83,7 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
           onChange={setFilter('price')}
         />
       </div>
-      <CategoryPropFilters tableId={tableId} />
+      <CategoryPropFilters tableId={tableId} uid={uid} />
     </div>
   )
 }

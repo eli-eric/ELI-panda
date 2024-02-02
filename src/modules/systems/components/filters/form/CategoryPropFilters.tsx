@@ -1,5 +1,4 @@
-import { Fragment, useMemo } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { Fragment } from 'react'
 
 import { FilterCheckboxes } from '@/components/form/FIlterCheckboxes'
 import { Input } from '@/components/form/Input'
@@ -10,14 +9,10 @@ import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProper
 import { useFormControlStore } from '@/store/useFormControlStore'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 
-export const CategoryPropFilters = ({ tableId }: { tableId: string }) => {
+export const CategoryPropFilters = ({ tableId, uid }: { tableId: string; uid?: string }) => {
   const { setFilter } = useFormFilterState({ tableId })
   const { addCustomFieldIdToSync } = useFormControlStore()
 
-  const { watch } = useFormContext()
-
-  const category = watch('category')
-  const uid = useMemo(() => category?.uid, [category])
   const { catalogueCategoryProperties } = useCategoryProperties(uid)
 
   // sort properties by type.uid list first and by name to in same order every time

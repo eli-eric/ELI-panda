@@ -27,7 +27,7 @@ export const CategoryItemComponent = ({ category }: Props) => {
       <Link
         href={{
           pathname: path,
-          query: router.query.search && { search: router.query.search }
+          query: { search: router.query.search, filter: router.query.filter }
         }}
         key={category.code}
         className="flex w-full items-center "

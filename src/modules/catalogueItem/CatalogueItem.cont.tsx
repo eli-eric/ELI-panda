@@ -48,7 +48,7 @@ const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemCont
   const { catalogueCategory } = useCategory(catalogueCategoryUid)
 
   const imageRef = useRef<ImageGalleryRef>()
-  const formMethods = useForm<CatalogueForm>({ resolver: yupResolver(schema), defaultValues: { ...item } })
+  const formMethods = useForm<any>({ resolver: yupResolver(schema), defaultValues: { ...item } })
   const { reset } = formMethods
   const { submit, loading } = useItemSubmit(imageRef)
 
