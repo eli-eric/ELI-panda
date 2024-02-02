@@ -1,7 +1,7 @@
 import Combobox from '@/components/form/Combobox'
 import { ComboboxTree } from '@/components/form/ComboboxTree'
+import { FilterCheckboxes } from '@/components/form/FIlterCheckboxes'
 import { Input } from '@/components/form/Input'
-import Listbox from '@/components/form/Listbox'
 import { RangeSliderComponent } from '@/components/form/RangeSlider'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
@@ -45,18 +45,23 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
           onSelect={setFilter(fields.location.name)}
           isFilter={true}
         />
-        <Listbox
-          {...fields.systemLevel}
-          customOptions={systemLevels}
-          onChange={v => {
-            setFilter(fields.systemLevel.name)(v?.name || null)
-          }}
+        <FilterCheckboxes
+          name={fields.systemLevel.name}
+          label="System Level"
+          options={systemLevels}
+          onChange={setFilter(fields.systemLevel.name)}
           isFilter={true}
         />
         <Input {...fields.description} onChange={setFilter(fields.description.name)} isFilter={true} />
       </div>
       <div className="flex flex-col gap-2">
-        <Listbox {...fields.itemUsage} onChange={setFilter(fields.itemUsage.name)} isFilter={true} />
+        <FilterCheckboxes
+          name={fields.itemUsage.name}
+          codebook={fields.itemUsage.codebook}
+          label="Item Usage"
+          onChange={setFilter(fields.itemUsage.name)}
+          isFilter={true}
+        />
         <Input {...fields.eun} onChange={setFilter(fields.eun.name)} isFilter={true} />
         <Input {...fields.partNumber} onChange={setFilter(fields.partNumber.name)} isFilter={true} />
         <Input {...fields.serialNumber} onChange={setFilter(fields.serialNumber.name)} isFilter={true} />
