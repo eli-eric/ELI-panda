@@ -22,7 +22,6 @@ export type SystemDetail = {
   systemType?: CodebookType // ListBox
   zone?: CodebookType // combobox
   location?: CodebookType // combobox - CODEBOOK.LOCATION
-  owner?: CodebookType // combobox - CODEBOOK.EMPLOYEE
   description?: string // textarea
   responsible?: CodebookType // combobox - CODEBOOK.EMPLOYEE
   importance?: CodebookType // listbox - CODEBOOK.SYSTEM_IMPORTANCE

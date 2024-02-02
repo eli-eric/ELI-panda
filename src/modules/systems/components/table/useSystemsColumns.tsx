@@ -100,6 +100,7 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
         accessorFn: row => row.physicalItem?.price,
         id: 'price',
         size: 150,
+        meta: { className: 'text-right' },
         cell: ({ getValue, row: { original } }) => (
           <span className="whitespace-nowrap">
             {getValue()} <span className="font-medium">{original.physicalItem?.currency}</span>
@@ -156,7 +157,7 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
       },
       {
         header: 'Supplier',
-        accessorFn: row => row.physicalItem?.catalogueItem?.supplier,
+        accessorFn: row => row.physicalItem?.catalogueItem?.supplier?.name,
         id: 'supplier',
         size: 150
       }

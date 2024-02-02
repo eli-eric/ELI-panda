@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 
+import DarkModeButton from '@/components/DarkModeButon'
 import usePermission from '@/hooks/usePermission'
 import { PATH, SUPPORT } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
@@ -40,7 +41,10 @@ const ProfileDropdownComponent = ({ open }: Props) => {
       {open === false ? (
         <div data-testid="layout-profile" className="hidden z-30 sm:ml-6 sm:flex sm:items-center">
           <Menu as="div" className="relative ml-3">
-            <div className="flex">
+            <div className="flex items-center">
+              <div className="pr-6 items-center justify-center">
+                <DarkModeButton />
+              </div>
               <Link href={SUPPORT} legacyBehavior>
                 <a target={'_blank'} rel="noreferrer">
                   <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500 mr-2">
@@ -48,7 +52,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                   </span>
                 </a>
               </Link>
-              <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+              <Menu.Button className="flex rounded-full bg-white dark:bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
                 <span className="sr-only">Open user menu</span>
                 <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
                   <span className="font-medium leading-none text-white">{inicials}</span>
@@ -64,7 +68,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Menu.Items className=" absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <Menu.Items className=" absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <Menu.Item>
                   {({ active }) => (
                     <button
@@ -72,7 +76,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                         router.push(PATH.PROFILE_GENERAL)
                       }}
                       className={classNames(
-                        'w-full text-left block px-4 py-2 text-sm text-gray-700',
+                        'w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 dark:hover:bg-gray-700',
                         active ? 'bg-gray-100' : ''
                       )}
                     >
@@ -88,7 +92,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                           router.push(PATH.ADMIN)
                         }}
                         className={classNames(
-                          'w-full text-left block px-4 py-2 text-sm text-gray-700',
+                          'w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 dark:hover:bg-gray-700',
                           active ? 'bg-gray-100' : ''
                         )}
                       >
@@ -102,7 +106,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                     <button
                       onClick={signOutHandler}
                       className={classNames(
-                        'w-full text-left block px-4 py-2 text-sm text-gray-700',
+                        'w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 dark:hover:bg-gray-700',
                         active ? 'bg-gray-100' : ''
                       )}
                     >
@@ -121,7 +125,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
               onClick={() => {
                 router.push(PATH.PROFILE_GENERAL)
               }}
-              className="flex-shrink-0"
+              className="flex-shrink-0 dark:hover:bg-gray-700"
             >
               <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-gray-500">
                 <span className="font-medium leading-none text-white">{inicials}</span>
@@ -129,7 +133,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
             </Disclosure.Button>
 
             <div className="ml-3">
-              <div className="text-base font-medium text-gray-800">{fullName}</div>
+              <div className="text-base font-medium text-gray-800 dark:text-gray-200">{fullName}</div>
               <div className="text-sm font-medium text-gray-500">{user?.email}</div>
             </div>
           </div>
@@ -138,7 +142,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
               onClick={() => {
                 router.push(PATH.PROFILE_GENERAL)
               }}
-              className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+              className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
             >
               Your Profile
             </Disclosure.Button>
@@ -150,7 +154,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
                 onClick={() => {
                   router.push(PATH.ADMIN)
                 }}
-                className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
               >
                 Administration
               </Disclosure.Button>
@@ -159,7 +163,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
           <div className="flex mt-3 space-y-1">
             <Disclosure.Button
               onClick={signOutHandler}
-              className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+              className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
             >
               Sign out
             </Disclosure.Button>

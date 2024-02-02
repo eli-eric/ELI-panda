@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 
 import type { ModalButtons } from '@/types/form'
 
-import { Button } from '../Buttons'
+import { Button } from '../../Buttons'
 
 interface Props {
   testid?: string
@@ -19,7 +19,7 @@ const ModalButtonsComponent = ({ testid, buttons }: Props) => (
             {...buttons.goBack}
             type={buttons.goBack?.type || 'button'}
             testid={`${testid}-${buttons.goBack.testid}`}
-            className="inline-flex w-full justify-center sm:mt-0 sm:text-sm text-gray-700"
+            className="inline-flex w-full justify-center sm:mt-0 sm:text-sm text-gray-700 dark:text-gray-200"
           />
         )}
         {buttons.alternative && (

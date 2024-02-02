@@ -1,7 +1,8 @@
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
-import React, { Fragment, useState } from 'react'
-import { Controller } from 'react-hook-form'
+import React, { Fragment, useEffect, useId, useState } from 'react'
+import { Controller, useWatch } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
+import { useDebounce, useIsFirstRender } from 'usehooks-ts'
 
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
@@ -28,13 +29,18 @@ const InputWrapper = ({
     {children}
   </div>
 )
-const Label = ({ label }: { label?: string }) =>
-  label ? <label className="text-sm font-medium text-gray-700">{label}</label> : null
+const Label = ({ label, htmlFor }: { label?: string; htmlFor: string }) =>
+  label ? (
+    <label htmlFor={htmlFor} className="text-sm font-medium text-gray-700 dark:text-gray-200">
+      {label}
+    </label>
+  ) : null
 
 export type InputProps = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
     unit?: string
-    onChange?: (value: string) => void
+    onChange?: (value: string | number | readonly string[] | undefined) => void
+    isFilter?: boolean
   }
 export const Input = ({
   name,
@@ -49,15 +55,34 @@ export const Input = ({
   onChange,
   unit,
   defaultValue,
-  id
+  isFilter
 }: InputProps) => {
   const { control } = useFormContext()
 
   const [showPassword, setShowPassword] = useState(false)
 
+  const inputValue = useWatch({
+    control,
+    name
+  })
+
+  const inputValueDebounced = useDebounce(inputValue, 500)
+  const isFirstRender = useIsFirstRender()
+
+  useEffect(() => {
+    if (isFirstRender) {
+      return
+    }
+    if (onChange) {
+      onChange(inputValueDebounced)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputValueDebounced])
+
   const toogleShowPassword = () => {
     setShowPassword(!showPassword)
   }
+  const idHtml = useId()
 
   return (
     <Controller
@@ -66,29 +91,26 @@ export const Input = ({
       defaultValue={defaultValue || ''}
       render={({ field, fieldState: { error } }) => (
         <InputWrapper hidden={hidden} className={className}>
-          <Label label={label} />
+          <Label label={label} htmlFor={idHtml} />
           <div className="flex">
             <div hidden={hidden} className="relative flex w-full">
               <input
                 {...field}
-                id={id}
+                id={idHtml}
                 hidden={hidden}
                 step="0.001"
                 type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
                 disabled={disabled}
                 onChange={e => {
-                  if (onChange) {
-                    field.onChange(onChange(e.target.value))
-                  } else {
-                    field.onChange(e.target.value)
-                  }
+                  field.onChange(e.target.value)
                 }}
                 placeholder={placeholder}
                 className={classNames(
-                  'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                  'form-field',
                   rounded,
                   error ? 'border-red-500' : 'border-gray-300',
-                  disabled ? 'bg-gray-100' : ''
+                  disabled ? 'bg-gray-100' : '',
+                  isFilter ? field.value && 'border-2 border-lime-500' : ''
                 )}
               />
               {type === 'password' && (
@@ -96,14 +118,14 @@ export const Input = ({
                   {showPassword ? (
                     <Tooltip content="Hide password">
                       <EyeIcon
-                        className="text-gray-400 h-4 w-4 sm:text-sm cursor-pointer hover:text-gray-600"
+                        className="text-gray-400 h-4 w-4 sm:text-sm cursor-pointer hover:text-gray-600 dark:text-gray-200"
                         onClick={toogleShowPassword}
                       />
                     </Tooltip>
                   ) : (
                     <Tooltip content="Show password">
                       <EyeSlashIcon
-                        className="text-gray-400 h-4 w-4 sm:text-sm cursor-pointer hover:text-gray-600"
+                        className="text-gray-400 h-4 w-4 sm:text-sm cursor-pointer hover:text-gray-600 dark:text-gray-200"
                         onClick={toogleShowPassword}
                       />
                     </Tooltip>
@@ -130,6 +152,7 @@ type TextAreaWithErrorProps = FieldProps & React.InputHTMLAttributes<HTMLTextAre
 
 export const TextArea = ({ name, placeholder, disabled, rounded, label, className }: TextAreaWithErrorProps) => {
   const { control } = useFormContext()
+  const id = useId()
 
   return (
     <Controller
@@ -139,14 +162,15 @@ export const TextArea = ({ name, placeholder, disabled, rounded, label, classNam
       render={({ field, fieldState: { error } }) => (
         <InputWrapper className={className}>
           <Fragment>
-            <Label label={label} />
+            <Label htmlFor={id} label={label} />
             <textarea
               {...field}
+              id={id}
               rows={3}
               disabled={disabled}
               placeholder={placeholder}
               className={classNames(
-                'block w-full appearance-none px-3 py-2 placeholder-gray-400 focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm border',
+                'form-field',
                 rounded,
                 error ? 'border-red-500' : 'border-gray-300',
                 disabled ? 'bg-gray-100' : ''
@@ -173,24 +197,25 @@ export const InputAmount = ({
   children
 }: InputAmountProps) => {
   const { control } = useFormContext()
-
+  const id = useId()
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
         <InputWrapper hidden={hidden} className={className}>
-          <Label label={label} />
+          <Label htmlFor={id} label={label} />
           <div hidden={hidden} className="relative">
             <input
               {...field}
+              id={id}
               hidden={hidden}
               type={'number'}
               step="0.001"
               disabled={disabled}
               placeholder={placeholder}
               className={classNames(
-                'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                'form-field',
                 rounded,
                 error ? 'border-red-500' : 'border-gray-300',
                 disabled ? 'bg-gray-100' : ''
@@ -241,10 +266,10 @@ export const InputDate = ({
   hidden,
   label,
   onChange,
-  defaultValue,
-  id
+  defaultValue
 }: InputProps) => {
   const { control } = useFormContext()
+  const idHtml = useId()
 
   return (
     <Controller
@@ -253,13 +278,13 @@ export const InputDate = ({
       defaultValue={defaultValue || ''}
       render={({ field, fieldState: { error } }) => (
         <InputWrapper hidden={hidden} className={className}>
-          <Label label={label} />
+          <Label htmlFor={idHtml} label={label} />
           <div className="flex">
             <div hidden={hidden} className="relative flex w-full">
               <input
                 {...field}
                 type="date"
-                id={id}
+                id={idHtml}
                 hidden={hidden}
                 step="0.001"
                 disabled={disabled}
@@ -272,7 +297,7 @@ export const InputDate = ({
                 }}
                 placeholder={placeholder}
                 className={classNames(
-                  'block w-full appearance-none border px-3 py-2 placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+                  'form-field',
                   rounded,
                   error ? 'border-red-500' : 'border-gray-300',
                   disabled ? 'bg-gray-100' : ''

@@ -12,31 +12,8 @@ import { message } from '@/i18n/src/messages'
 import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 import { useCategoryList } from '../../hooks/useCategoryList'
+import { formatData } from '../../utils'
 import CategoryEditForm from './CategoryEditForm'
-const formatData = (data: CategoryFormType, parentUID) =>
-  data.groups && data.groups.length !== 0
-    ? {
-        ...data,
-        parentPath: data.parentUID ? data.parentUID : parentUID,
-        groups: data.groups?.map(group => ({
-          ...group,
-          properties: group.properties?.map(prop =>
-            prop.listOfValues && prop.listOfValues.length !== 0
-              ? {
-                  ...prop,
-                  listOfValues: prop.listOfValues.map(value => value.value)
-                }
-              : { ...prop }
-          )
-        }))
-      }
-    : {
-        uid: data?.uid,
-        image: data?.image,
-        name: data?.name,
-        code: data?.code,
-        parentUID: data.parentUID ? data?.parentUID : parentUID
-      }
 
 const { buttons } = message.common
 interface Props {
@@ -86,7 +63,7 @@ const CategoryEditModal = ({ setOpen, parentUID, uid }: Props) => {
                   setOpen(false)
                 }}
                 disabled={loading}
-                className="inline-flex w-full justify-center sm:col-start-1 sm:mt-0 sm:text-sm text-gray-700"
+                className="inline-flex w-full justify-center sm:col-start-1 sm:mt-0 sm:text-sm text-gray-700 dark:text-gray-200"
               >
                 <FormattedMessage id={buttons.cancel} />
               </Button>

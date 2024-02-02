@@ -15,4 +15,11 @@ declare module '@tanstack/table-core' {
     noHeader?: boolean
     headerElement?: React.ReactNode
   }
+
+  interface ColumnFilter {
+    id: string
+    value: unknown
+    name?: string
+    type?: string
+  }
 }

@@ -9,6 +9,7 @@ import { Button } from '@/components/Buttons'
 import ImagePlaceHolder from '@/components/form/ImagePlaceHolder'
 import { Input } from '@/components/form/Input'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
+import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
 import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 interface FormImageProps {
@@ -76,15 +77,14 @@ const Main = ({ uid }: { uid?: string }) => {
         />
       )}
       <div className="flex flex-col col-span-3 flex-grow ml-10">
-        <div>
-          <div className="mt-1">
-            <Input name="name" label="Name" rounded="rounded-md" />
-          </div>
+        <div className="mt-1">
+          <Input name="name" label="Name" rounded="rounded-md" />
         </div>
-        <div>
-          <div className="mt-1">
-            <Input name="code" label="Code" disabled={true} rounded="rounded-md" />
-          </div>
+        <div className="mt-1">
+          <Input name="code" label="Code" disabled={true} rounded="rounded-md" />
+        </div>
+        <div className="mt-1">
+          <SystemTypeComboBox systemTypeField={{ name: 'systemType', label: 'System Type' }} />
         </div>
       </div>
     </div>

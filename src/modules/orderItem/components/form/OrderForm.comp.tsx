@@ -17,7 +17,9 @@ const OrderFormComponent = () => {
     <Card className="py-6">
       <Grid>
         <Col lg={6}>
-          <h1 className="text-2xl justify-center font-semibold text-gray-900">{uid ? 'EDIT ORDER' : 'NEW ORDER'}</h1>
+          <h1 className="text-2xl justify-center font-semibold text-gray-900 dark:text-gray-200">
+            {uid ? 'EDIT ORDER' : 'NEW ORDER'}
+          </h1>
         </Col>
         <Col lg={6}>
           <DateInput {...fields.orderDate} />

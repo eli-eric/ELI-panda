@@ -16,7 +16,7 @@ export const SystemItemCard = () => {
 
   return (
     <Card>
-      <Card className="bg-amber-100 rounded-md  shadow-md">
+      <Card className="bg-amber-100 dark:bg-amber-600 rounded-md  shadow-md">
         <Fragment>
           <Heading customText={'ITEM: ' + item?.catalogueItem?.name ?? 'No item Connectect'}>
             <div className="flex space-x-10">

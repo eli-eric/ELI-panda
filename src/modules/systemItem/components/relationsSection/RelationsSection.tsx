@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
-import ModalComponent from '@/components/modal/modal.comp'
+import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 
 import { useRelations } from '../../hooks/useRelations'

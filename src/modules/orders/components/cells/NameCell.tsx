@@ -1,6 +1,7 @@
 import type { CellContext } from '@tanstack/react-table'
 import Link from 'next/link'
 
+import { LinkDecorator } from '@/components/decorators'
 import { useHoveringId } from '@/store/useHoveringId'
 import { PATH } from '@/types/constants/paths'
 
@@ -16,9 +17,11 @@ export const NameCell = ({ getValue, row: { original, id } }: NameProps) => {
 
   return (
     <div className="flex items-center">
-      <Link href={PATH.ORDER + '/' + original.uid} className={'text-blue-700 cursor-pointer hover:underline'}>
-        <span>{getValue() || 'N/A'}</span>
-      </Link>
+      <LinkDecorator>
+        <Link href={PATH.ORDER + '/' + original.uid}>
+          <span>{getValue() || 'N/A'}</span>
+        </Link>
+      </LinkDecorator>
       <TableActions order={original} isHovering={id === hoveringId} />
     </div>
   )

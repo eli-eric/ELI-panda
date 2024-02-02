@@ -10,7 +10,7 @@ import { useSystemsForRel } from './useSystemsForRel'
 
 export const useSubsystemsForRel = () => {
   const [uid, setUid] = useState<string | null>(null)
-  const { mutate } = useSystemsForRel()
+  const { mutate } = useSystemsForRel('SystemSubsystemsForRel')
 
   const { systemSubsystemsForRelationship } = useEndpoint({ uid: uid || '' })
 

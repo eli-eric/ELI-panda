@@ -43,10 +43,10 @@ const AuthFormComponent = ({ onSubmit, loading }: Props) => {
       </div>
       <FormProvider {...formMethods}>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 border border-spacing-1 shadow sm:rounded-lg sm:px-10">
+          <div className="bg-white dark:bg-gray-800 py-8 px-4 border border-spacing-1 shadow sm:rounded-lg sm:px-10">
             <form className="space-y-6" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                   <FormattedMessage id={form.userName} />
                 </label>
                 <div className="mt-1">
@@ -56,7 +56,7 @@ const AuthFormComponent = ({ onSubmit, loading }: Props) => {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
                   <FormattedMessage id={form.password} />
                 </label>
                 <div className="mt-1">

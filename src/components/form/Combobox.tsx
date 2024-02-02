@@ -26,7 +26,8 @@ type ComboboxPropsT = FieldProps &
     filter?: CodebookFilter[]
     customLabel?: string
     onClickIcon?: () => void
-    onSelect?: (item: CodebookType) => void
+    onSelect?: (item?: CodebookType | null) => void
+    isFilter?: boolean
   }
 
 const Combobox = ({
@@ -45,7 +46,8 @@ const Combobox = ({
   showAddButton = false,
   onClickIcon,
   onChange,
-  onSelect
+  onSelect,
+  isFilter
 }: ComboboxPropsT) => {
   const { control, setValue } = useFormContext()
   const { formatMessage: fm } = useIntl()
@@ -70,6 +72,7 @@ const Combobox = ({
   const handleClear = () => {
     setQuery('')
     setValue(name, null)
+    onSelect && onSelect(null)
   }
 
   const handleChange = e => {
@@ -96,7 +99,7 @@ const Combobox = ({
               className={classNames('relative flex flex-col w-full', className)}
             >
               {(label || customLabel) && (
-                <HUICombobox.Label className="block text-sm font-medium text-gray-900">
+                <HUICombobox.Label className="block text-sm font-medium text-gray-900 dark:text-gray-200">
                   {customLabel ? customLabel : fm({ id: label })}
                 </HUICombobox.Label>
               )}
@@ -104,6 +107,7 @@ const Combobox = ({
                 <ComboboxInput
                   {...{
                     value: field.value,
+                    isFilter,
                     error,
                     placeholder,
                     disabled,
@@ -119,7 +123,7 @@ const Combobox = ({
               {options?.data && options.data.length > 0 && (
                 <HUICombobox.Options
                   className={classNames(
-                    'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
+                    'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
                     position === 'top' ? 'bottom-full' : 'top-full'
                   )}
                 >

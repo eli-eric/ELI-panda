@@ -85,7 +85,7 @@ export const DefferedCombobox = ({
       {options && options.length > 0 && (
         <HUICombobox.Options
           className={classNames(
-            'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
+            'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
             position === 'top' ? 'bottom-full' : 'top-full'
           )}
         >
@@ -97,7 +97,7 @@ export const DefferedCombobox = ({
               className={({ active }) =>
                 classNames(
                   'relative cursor-default select-none py-2 pl-3 pr-9',
-                  active ? 'bg-primary-500 text-white' : 'text-gray-900'
+                  active ? 'bg-primary-500 text-white' : 'text-gray-900 dark:text-gray-200'
                 )
               }
             >

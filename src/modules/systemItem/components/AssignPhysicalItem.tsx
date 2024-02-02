@@ -3,7 +3,7 @@ import { Fragment, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
-import ModalComponent from '@/components/modal/modal.comp'
+import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
 import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
 import type { SystemDetail } from '@/modules/systems/types/responses'
@@ -77,7 +77,7 @@ export const AssignPhysicalItem = () => {
             className: classNames(
               selectedSystem?.uid === original.uid ? 'bg-primary-200 hover:bg-primary-200' : '',
               'cursor-pointer',
-              original?.physicalItem && 'font-bold text-gray-700'
+              original?.physicalItem && 'font-bold text-gray-700 dark:text-gray-200'
             )
           })}
           hideButtons

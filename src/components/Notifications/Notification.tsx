@@ -16,7 +16,7 @@ export const Notification = ({ t }: Props) => {
   return (
     <div
       className={classNames(
-        'w-[800px] bg-white rounded-lg pointer-events-auto flex',
+        'w-[800px] bg-white dark:bg-gray-800 rounded-lg pointer-events-auto flex',
         t.visible ? 'animate-enter' : 'animate-leave'
       )}
     >
@@ -32,7 +32,7 @@ export const Notification = ({ t }: Props) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="pointer-events-auto w-full overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+          <div className="pointer-events-auto w-full overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5">
             <div className="p-4">
               <div className="flex items-start">
                 <div className="flex-shrink-0">
@@ -43,12 +43,12 @@ export const Notification = ({ t }: Props) => {
                   {t.type === 'loading' && <ButtonLoaderComponent />}
                 </div>
                 <div className="ml-3 w-0 flex-1 pt-0.5">
-                  <p className="text-sm font-medium text-gray-900">{resolveValue(t.message, t)}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-200">{resolveValue(t.message, t)}</p>
                 </div>
                 <div className="ml-4 flex flex-shrink-0">
                   <button
                     type="button"
-                    className="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    className="inline-flex rounded-md bg-white dark:bg-gray-800 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     onClick={() => {
                       setShow(false)
                       toast.dismiss(t.id)

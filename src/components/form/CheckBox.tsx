@@ -5,6 +5,7 @@ import { useFormContext } from 'react-hook-form'
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
 
+//TODO:refactor checkboxes
 interface CheckBoxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string
   defaultChecked?: boolean
@@ -17,6 +18,7 @@ export const CheckBoxComponent = ({
   hidden,
   label,
   defaultChecked,
+  checked: _checked,
   ...restProps
 }: CheckBoxProps) => {
   const [checked, setChecked] = useState(defaultChecked)
@@ -31,15 +33,18 @@ export const CheckBoxComponent = ({
             restProps.onChange && restProps.onChange(e)
             setChecked(e.target.checked)
           }}
-          checked={checked}
+          checked={_checked || checked}
           hidden={hidden}
           type="checkbox"
           disabled={disabled}
-          className="h-5 w-5 rounded border-primary-300 text-primary-600 focus:ring-primary-500  hover:cursor-pointer"
+          className={classNames(
+            'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',
+            !_checked && !checked && 'dark:bg-gray-700'
+          )}
         />
       </div>
       <div className="ml-3 text-sm">
-        <label htmlFor={'checkbox' + id} className="font-medium text-gray-700">
+        <label htmlFor={'checkbox' + id} className="font-medium text-gray-700 dark:text-gray-200">
           {label}
         </label>
         <span className="text-gray-500">
@@ -83,11 +88,14 @@ const CheckBox = ({
               type="checkbox"
               disabled={disabled}
               placeholder={placeholder}
-              className="h-5 w-5 rounded border-primary-300 text-primary-600 focus:ring-primary-500  hover:cursor-pointer"
+              className={classNames(
+                'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',
+                !field.value && 'dark:bg-gray-700'
+              )}
             />
           </div>
           <div className="ml-3 text-sm">
-            <label className="font-medium text-gray-700">{label}</label>
+            <label className="font-medium text-gray-700 dark:text-gray-200">{label}</label>
             <span className="text-gray-500">
               <span className="sr-only">{label}</span>
             </span>

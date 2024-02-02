@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { FC, PropsWithChildren } from 'react'
 
 export const LinkDecorator: FC<PropsWithChildren> = ({ children }) => (
-  <div className={'text-blue-700 text-sm cursor-pointer hover:underline'}>{children}</div>
+  <div className={'text-blue-700 dark:text-blue-500 text-sm cursor-pointer hover:underline'}>{children}</div>
 )
 
 interface NewTabLinkProps {

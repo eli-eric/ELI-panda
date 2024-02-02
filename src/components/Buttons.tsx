@@ -4,6 +4,7 @@ import {
   ArrowUturnLeftIcon,
   FolderOpenIcon,
   FolderPlusIcon,
+  FunnelIcon,
   MinusIcon,
   NoSymbolIcon,
   PencilSquareIcon,
@@ -64,12 +65,12 @@ export const Button = ({
     disabled={loading ? true : disabled || customDisabled}
     type={type}
     className={classNames(
-      'relative text-xs font-medium shadow-sm z-10 inline-flex items-center border border-gray-300 focus:outline-none focus:ring-0 focus:ring-primary-500',
+      'btn',
       rounded,
-      loading ? 'bg-primary-700' : `bg-${!primary ? 'white' : 'primary-500'}`,
+      loading && 'bg-primary-700',
       buttonSize === 'small' ? 'px-1 py-1' : 'px-2 py-2',
-      !primary ? !disabled && 'hover:bg-gray-100 text-gray-600' : !disabled && 'hover:bg-primary-700 text-white',
-      disabled ? 'bg-gray-200 text-gray-400' : '',
+      primary ? 'btn-primary' : 'btn-secondary',
+      disabled && 'btn-disabled',
       className
     )}
   >
@@ -142,6 +143,12 @@ export const RefreshButton = ({ buttonSize = 'small', ...restProps }: ButtonProp
 export const QRReaderButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <QrCodeIcon className="h-4 w-4" aria-hidden="true" />
+  </Button>
+)
+
+export const FilterButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+  <Button {...restProps} buttonSize={buttonSize}>
+    <FunnelIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 export const StatsButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (

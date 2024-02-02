@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import ModalComponent from '@/components/modal/modal.comp'
+import ModalComponent from '@/components/overlays/modal/modal.comp'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import useFetch from '@/hooks/fetch/useFetch'
 import useQueryManager from '@/hooks/useQueryManager'
@@ -27,9 +27,10 @@ interface CodebookTreeModalProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   codebook?: string
   name: string
+  onSubmit?: (item?: any) => void
 }
 
-export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTreeModalProps) => {
+export const CodebookTreeModal = ({ open, setOpen, codebook, name, onSubmit }: CodebookTreeModalProps) => {
   const tableId = 'codebook'
 
   const [item, setItem] = useState<CodebookType | undefined>(undefined)
@@ -90,6 +91,7 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
       type: 'button',
       disabled: !item,
       onClick: () => {
+        onSubmit && onSubmit(item)
         setValue(name, item)
         setOpen(false)
         setItem(undefined)
@@ -126,7 +128,7 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name }: CodebookTre
               !row.original?.children && setItem({ uid: row.original.uid, name: row.original.name })
             },
             className: classNames(
-              item?.uid === row.original.uid ? 'bg-primary-200 hover:bg-primary-200' : '',
+              item?.uid === row.original.uid ? 'bg-primary-200 dark:bg-primary-500 hover:bg-primary-200' : '',
               'cursor-pointer'
             )
           })}

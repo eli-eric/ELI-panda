@@ -13,14 +13,17 @@ export const useMakeFormFields = <T extends Record<string, FieldProps & { option
   }
 > => {
   const intl = useIntl()
-
   return Object.keys(fields).reduce(
     (prev, cur) => ({
       ...prev,
       [cur]: {
         ...fields[cur],
         'data-testid': fields[cur]['data-testid'] || fields[cur].name,
-        label: fields[cur].label ? intl.formatMessage({ id: fields[cur].label }) : undefined,
+        label: fields[cur].customLabel
+          ? fields[cur].customLabel
+          : fields[cur].label
+            ? intl.formatMessage({ id: fields[cur].label })
+            : undefined,
         customLabel: fields[cur].label ? intl.formatMessage({ id: fields[cur].label }) : undefined,
         codebook: fields[cur].codebook ? fields[cur].codebook : undefined,
         placeholder: fields[cur].placeholder ? intl.formatMessage({ id: fields[cur].placeholder }) : undefined

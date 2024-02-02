@@ -4,7 +4,8 @@ import classNames from 'classnames'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import ModalComponent from '@/components/modal/modal.comp'
+import ModalComponent from '@/components/overlays/modal/modal.comp'
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { message } from '@/i18n/src/messages'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import useTableStateStore from '@/store/useTableStateStore'
@@ -35,6 +36,7 @@ interface CodebookTreeModalProps {
   selectParent?: boolean
   manualFiltering?: boolean
   customSetValue?: (value?: Codebooktree) => void
+  onSelect?: (item?: CodebookType | null) => void
 }
 
 export const CodebookTreeModalGraphql = ({
@@ -49,7 +51,8 @@ export const CodebookTreeModalGraphql = ({
   tableId = 'codebook-tree',
   selectParent = true,
   manualFiltering,
-  customSetValue
+  customSetValue,
+  onSelect
 }: CodebookTreeModalProps) => {
   const [item, setItem] = useState<Codebooktree | undefined>(undefined)
 
@@ -98,6 +101,7 @@ export const CodebookTreeModalGraphql = ({
       disabled: !item,
       onClick: () => {
         customSetValue ? customSetValue(item) : name && setValue(name, item)
+        onSelect && onSelect(item)
         setOpen(false)
         setItem(undefined)
       }

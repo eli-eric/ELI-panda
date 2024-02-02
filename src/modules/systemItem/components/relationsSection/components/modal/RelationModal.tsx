@@ -88,7 +88,7 @@ export const AddRelationForm = ({ setopen, systemName }: Props) => {
               setopen(false)
             }}
             disabled={loading}
-            className="inline-flex w-full justify-center sm:col-start-1 sm:mt-0 sm:text-sm text-gray-700"
+            className="inline-flex w-full justify-center sm:col-start-1 sm:mt-0 sm:text-sm text-gray-700 dark:text-gray-200"
           >
             <FormattedMessage id={buttons.cancel} />
           </Button>

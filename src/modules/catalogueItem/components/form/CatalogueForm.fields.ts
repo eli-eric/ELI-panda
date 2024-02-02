@@ -9,6 +9,7 @@ const { form } = message.cataloguePage.itemDetail
 
 const useCatalogueFormFields = () => {
   const disabled = !usePermission([ROLE.CATALOGUE_EDIT])
+
   return useMakeFormFields({
     name: {
       name: 'name',
@@ -26,7 +27,6 @@ const useCatalogueFormFields = () => {
     },
     category: {
       name: 'category',
-      label: form.category.label,
       disabled,
       rounded: 'rounded-md',
       codebook: CODEBOOK.CATALOGUE_CATEGORY

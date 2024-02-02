@@ -88,13 +88,14 @@ export const messages = {
         edit: 'Edit'
       },
       form: {
-        name: { label: 'Name', placeholder: 'Name' },
+        name: { label: 'Catalogue Name', placeholder: 'Name' },
         description: { label: 'Description', placeholder: 'Description' },
         catalogueNumber: { label: 'Part Number', placeholder: 'Part Number' },
-        category: { label: 'Category', placeholder: 'Type here...' }, // codebook of categories - CATEGORY
+        category: { label: 'Category: {parentPath}', placeholder: 'Type here...' }, // codebook of categories - CATEGORY
         manufacturer: { label: 'Supplier/Manufacturer', placeholder: 'Type here...' }, // codebook of manufacturers - MANUFACTURER
         manufacturerNumber: { label: 'Manufacturer Number', placeholder: 'Manufacturer Number' },
-        manuFacturerUrl: { label: 'Supplier/Manufacturer Url', placeholder: 'Supplier/Manufacturer Url' }
+        manuFacturerUrl: { label: 'Supplier/Manufacturer Url', placeholder: 'Supplier/Manufacturer Url' },
+        catalogueCategory: { label: 'Catalogue Category' } // codebook of catalogue categories - CATALOGUE_CATEGORY
       }
     },
     edit: {
@@ -116,12 +117,12 @@ export const messages = {
         systemCode: { label: 'System Code', placeholder: 'System Code' },
         systemAlias: { label: 'System Alias', placeholder: 'System Alias' },
         systemLevel: { label: 'System Level' }, // system levels codebook - SYSTEM_LEVEL
+        parentSystemFilter: { label: 'All subsystems for parent' }, // system levels codebook - SYSTEM_LEVEL
         parentSystem: {
           label: 'Parent Key System or Technology unit',
           placeholder: 'Parent System or technology unit'
         }, // codebook of systems{uid, name},  - SYSTEM
         location: { label: 'Location', placeholder: 'Type here...' }, // locations codebook - LOCATION
-        owner: { label: 'Owner', placeholder: 'Type here...' }, // codebook of users{uid, name},  - USER
         responsiblePerson: { label: 'Responsible Person', placeholder: 'Responsible Person' },
         importance: { label: 'Importance' }, // codebook of importance - SYSTEM_IMPORTANCE
         zone: { label: 'Control System Zone' }, // codebook of zones - ZONE

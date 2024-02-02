@@ -2,20 +2,20 @@ import { Fragment } from 'react'
 
 import Combobox from '@/components/form/Combobox'
 import { CodebookTreeModalGraphql } from '@/components/form/shared/CodebookTreeModalGraphql'
-import type { CODEBOOK } from '@/types/constants/codebook'
-import type { FieldProps, Option } from '@/types/form'
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
 
 import { useLocationModal } from './hooks/useLocationModal'
 
-export const SelectLocationTree = ({
+export const SelectLocationCombo = ({
   locationField,
-  className
+  className,
+  onSelect,
+  isFilter = false
 }: {
-  locationField: FieldProps & {
-    options?: Option[] | undefined
-    codebook?: CODEBOOK | undefined
-  }
+  locationField: any
   className?: string
+  onSelect?: (item?: CodebookType | null) => void
+  isFilter?: boolean
 }) => {
   const { additionalColumn, codebooktree, fetchChildren, loading, open, setOpen, tableId } = useLocationModal()
 
@@ -23,13 +23,16 @@ export const SelectLocationTree = ({
     <Fragment>
       <Combobox
         {...locationField}
+        onSelect={onSelect}
         className={className}
         onClickIcon={() => {
           setOpen(true)
         }}
+        isFilter={isFilter}
       />
       <CodebookTreeModalGraphql
         fetchChildren={fetchChildren}
+        onSelect={onSelect}
         tableId={tableId}
         additionalColumn={additionalColumn}
         data={codebooktree}

@@ -1,6 +1,8 @@
 import { toast } from 'react-hot-toast'
 
 import axiosInstance from '@/core/axios/axiosInstance'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
+import useQueryManager from '@/hooks/useQueryManager'
 import { BASE_URL } from '@/types/constants/common'
 
 import type { SystemDetail, SystemsResponse } from '../types/responses'
@@ -93,18 +95,27 @@ export const addSubsystem = (parentUid: string, newSystem: SystemDetail, prev: S
   return { ...prev, data: addData(prev.data) }
 }
 
-export const systemsRefresh = async (systems: SystemsResponse | undefined) => {
-  try {
-    const newSystems = await axiosInstance.get(BASE_URL + '/systems' + '?pagination={"page":1,"pageSize":50}')
-    const newSubSystems = await Promise.all<SystemDetail[]>(
-      newSystems?.data?.data?.map(async system => {
-        const newSubSystem = await axiosInstance.get<SystemDetail[]>(BASE_URL + '/system/' + system.uid + '/subsystems')
-        return { ...system, subSystems: newSubSystem.data }
-      })
-    )
-    return { ...newSystems.data, data: newSubSystems }
-  } catch (error) {
-    toast.error('Something went wrong while refreshing systems')
-    return systems
+export const useSystemsRefresh = tableId => {
+  const query = useQueryManager(tableId)
+  const { systemsList } = useEndpoint({ ...query })
+
+  const systemsRefresh = async (systems: SystemsResponse | undefined) => {
+    try {
+      const newSystems = await axiosInstance.get(BASE_URL + systemsList)
+      const newSubSystems = await Promise.all<SystemDetail[]>(
+        newSystems?.data?.data?.map(async system => {
+          const newSubSystem = await axiosInstance.get<SystemDetail[]>(
+            BASE_URL + '/system/' + system.uid + '/subsystems'
+          )
+          return { ...system, subSystems: newSubSystem.data }
+        })
+      )
+      return { ...newSystems.data, data: newSubSystems }
+    } catch (error) {
+      toast.error('Something went wrong while refreshing systems')
+      return systems
+    }
   }
+
+  return systemsRefresh
 }

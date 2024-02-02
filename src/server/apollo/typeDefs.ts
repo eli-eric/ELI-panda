@@ -119,6 +119,7 @@ export const typeDefs = gql`
     catalogueCategoriesHasSubcategory: [CatalogueCategory!]! @relationship(type: "HAS_SUBCATEGORY", direction: IN)
     catalogueItemsBelongsToCategory: [CatalogueItem!]! @relationship(type: "BELONGS_TO_CATEGORY", direction: IN)
     parentCategory: CatalogueCategory @relationship(type: "HAS_SUBCATEGORY", direction: IN)
+    systemType: SystemType @relationship(type: "HAS_SYSTEM_TYPE", direction: OUT)
     hasGroupCatalogueCategoryPropertyGroups: [CatalogueCategoryPropertyGroup!]!
       @relationship(type: "HAS_GROUP", direction: OUT)
     hasSubcategoryCatalogueCategories: [CatalogueCategory!]! @relationship(type: "HAS_SUBCATEGORY", direction: OUT)
@@ -224,7 +225,6 @@ export const typeDefs = gql`
     zone: Zone @relationship(type: "HAS_ZONE", direction: OUT)
     systemType: SystemType @relationship(type: "HAS_SYSTEM_TYPE", direction: OUT)
     responsible: Employee @relationship(type: "HAS_RESPONSIBLE", direction: OUT)
-    owner: Employee @relationship(type: "HAS_OWNER", direction: OUT)
     operators: [Employee!]! @relationship(type: "HAS_OPERATOR", direction: OUT)
     maintainedBy: [Employee!]! @relationship(type: "IS_MAINTAINED_BY", direction: OUT)
     systemLevel: SystemLevel
@@ -258,6 +258,11 @@ export const typeDefs = gql`
     SUBSYSTEMS_AND_PARTS
   }
 
+  interface hasOrderLine @relationshipProperties {
+    price: Int
+    currency: String
+  }
+
   type Item @authentication {
     uid: ID! @id
     eun: String
@@ -265,7 +270,7 @@ export const typeDefs = gql`
     serialNumber: String
     system: [System!]! @relationship(type: "CONTAINS_ITEM", direction: IN)
     catalogueItem: CatalogueItem! @relationship(type: "IS_BASED_ON", direction: OUT)
-    order: Order @relationship(type: "HAS_ORDER_LINE", direction: IN)
+    order: Order @relationship(type: "HAS_ORDER_LINE", direction: IN, properties: "hasOrderLine")
     itemUsage: ItemUsage @relationship(type: "HAS_ITEM_USAGE", direction: OUT)
     conditionStatus: ItemCondition @relationship(type: "HAS_CONDITION_STATUS", direction: OUT)
     notes: String

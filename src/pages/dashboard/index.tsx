@@ -1,7 +1,6 @@
 import {
   IdentificationIcon,
   LifebuoyIcon,
-  QrCodeIcon,
   RectangleGroupIcon,
   ShoppingCartIcon,
   UserGroupIcon
@@ -15,8 +14,6 @@ import { message } from 'src/i18n/src/messages'
 import { Tile, TileContainer } from '@/components/card/tile.comp'
 import { ReleasesContainer } from '@/components/Releases.cont'
 import { useForceChangePassword } from '@/hooks/useForceChangePassword'
-import { useModal } from '@/hooks/useModal'
-import { QrReaderContainer } from '@/modules/shared/qrReader/qr-reader.cont'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
@@ -57,7 +54,6 @@ const messages = message.dashboardPage
 const DashboardPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
   useForceChangePassword()
-  const openQrReader = useModal(<QrReaderContainer />)
 
   return (
     <Fragment>
@@ -67,20 +63,10 @@ const DashboardPage: NextPage = (): JSX.Element => {
       </Head>
 
       <main className="mx-auto max-w-7xl flex-1">
-        {/* <h1 className="text-2xl font-semibold font-mono text-gray-600 mt-2 ml-1 sm:mt-4 sm:ml-4 uppercase">
+        {/* <h1 className="text-2xl font-semibold font-mono text-gray-600 dark:text-gray-200 mt-2 ml-1 sm:mt-4 sm:ml-4 uppercase">
           Dashboard
         </h1> */}
         <TileContainer>
-          <button
-            onClick={() => {
-              openQrReader()()
-            }}
-          >
-            <Tile
-              name="QR Reader"
-              Icon={() => <QrCodeIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />}
-            />
-          </button>
           {tiles.map(tile => (
             <Tile key={tile.link} name={tile.name} Icon={tile.Icon} link={tile.link} role={tile.role} />
           ))}

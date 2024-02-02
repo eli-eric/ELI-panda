@@ -11,7 +11,7 @@ interface Props {
 export const TableFoot: FC<Props> = ({ getFooterGroups }) => (
   <tfoot>
     {getFooterGroups().map(footerGroup => (
-      <tr key={footerGroup.id} className={classNames('bg-gray-50')}>
+      <tr key={footerGroup.id} className={classNames('bg-gray-50 dark:bg-gray-700 dark:text-gray-200')}>
         {footerGroup.headers.map(header => (
           <td
             key={header.id}

@@ -6,7 +6,7 @@ import { Tooltip } from '@/components/Tooltip'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { classNames } from '@/utils'
 
-import { SystemsContainer } from '../systems/Systems.cont'
+import { SystemsComponent } from '../systems/Systems.comp'
 import type { SystemDetail } from '../systems/types/responses'
 import { SystemMovingModal } from './form/SystemMoving.modal'
 import { useSystemMovingStore } from './store/useSystemMovingStore'
@@ -54,7 +54,7 @@ export const SystemsMovingContainer = () => {
     <Fragment>
       <div className={classNames('grid', showLeft && showRight ? 'grid-cols-2' : 'grid-cols-1')}>
         {showLeft && (
-          <SystemsContainer
+          <SystemsComponent
             tableId={tableIdLeft}
             hideButtons={false}
             enableDragAndDrop={true}
@@ -79,7 +79,7 @@ export const SystemsMovingContainer = () => {
           />
         )}
         {showRight && (
-          <SystemsContainer
+          <SystemsComponent
             tableId={tableIdRight}
             hideButtons={false}
             enableDragAndDrop={true}

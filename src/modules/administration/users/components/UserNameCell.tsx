@@ -2,6 +2,7 @@ import type { CellContext } from '@tanstack/react-table'
 import Link from 'next/link'
 
 import { TableActionsButtons } from '@/components/Buttons'
+import { LinkDecorator } from '@/components/decorators'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { useHoveringId } from '@/store/useHoveringId'
@@ -30,8 +31,10 @@ export const UserNameCell = ({ getValue, row: { original, id } }: LocationCellPr
 
   return (
     <div className="flex items-center">
-      <Link href={PATH.ADMIN_USER + '/' + original.uid} className={'text-blue-700 cursor-pointer hover:underline'}>
-        <span>{getValue()}</span>
+      <Link href={PATH.ADMIN_USER + '/' + original.uid}>
+        <LinkDecorator>
+          <span>{getValue()}</span>
+        </LinkDecorator>
       </Link>
       {hoveringId === id && editPersmission && <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />}
     </div>

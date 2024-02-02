@@ -8,6 +8,15 @@ export const SYSTEM_FIELDS = gql`
     systemAlias
     systemLevel
     description
+    subSystems {
+      uid
+      name
+      location {
+        uid
+        name
+      }
+      systemLevel
+    }
     keySystem {
       uid
       name

@@ -44,8 +44,7 @@ const useSystemsForRelColumns = (tableId: string) => {
         id: 'location',
         size: 150,
         cell: ({ getValue }) => getValue()?.name
-      },
-      { header: 'owner', accessorKey: 'owner', id: 'owner', size: 150, cell: ({ getValue }) => getValue()?.name }
+      }
     ],
     [setUid, tableId]
   )
@@ -65,7 +64,7 @@ export const SystemsForRelTable = ({ setSelectedSystem, selectedSystem, tableId 
 
   const pagination = instances[tableId]?.pagination
 
-  const { systems, loading } = useSystemsForRel()
+  const { systems, loading } = useSystemsForRel(tableId)
 
   const columns = useSystemsForRelColumns(tableId)
   useEffect(() => {

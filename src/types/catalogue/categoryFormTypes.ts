@@ -22,7 +22,8 @@ export type CategoryFormType = {
   parentUID?: string
   uid?: string
   name: string
+  systemType?: CodebookType | null
   code: string
   image?: string
-  groups?: Group[]
+  groups?: Group[] | null
 }

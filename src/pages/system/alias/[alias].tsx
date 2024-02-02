@@ -47,7 +47,7 @@ const SystemAliasRedirectPage: NextPage = ({ alias }: Props) => {
         <meta name="description" content="...." />
       </Head>
       {!systemDetail ? (
-        <div className="min-h-full bg-white py-16 px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
+        <div className="min-h-full bg-white dark:bg-gray-800 py-16 px-6 sm:py-24 md:grid md:place-items-center lg:px-8">
           <div className="mx-auto max-w-max">
             <div className="flex flex-shrink-0 justify-center pb-12">
               <div className="inline-flex">
@@ -60,7 +60,9 @@ const SystemAliasRedirectPage: NextPage = ({ alias }: Props) => {
               </p>
               <div className="sm:ml-6">
                 <div className="sm:border-l sm:border-gray-200 sm:pl-6">
-                  <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">System not found</h1>
+                  <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-200 sm:text-5xl">
+                    System not found
+                  </h1>
                   <p className="mt-1 text-base text-gray-500">
                     The system by alias was not found. Please check the URL and try again.
                   </p>
