@@ -19,13 +19,12 @@ export const RangeInput = ({ name, label, onChange, isFilter }: Props) => {
   useEffect(() => {
     if (inputValues) {
       clearErrors(name)
-      if (inputValues.min > inputValues.max) {
-        toast.error('Min value must be less than max value')
-        setError(name, { type: 'manual', message: 'Min value must be less than max value' })
-        return
-      }
-
       const handler = setTimeout(() => {
+        if (inputValues.min > inputValues.max) {
+          toast.error('Min value must be less than max value')
+          setError(name, { type: 'manual', message: 'Min value must be less than max value' })
+          return
+        }
         onChange &&
           onChange({
             min: inputValues.min !== '' ? inputValues.min : null,

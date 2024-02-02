@@ -20,12 +20,11 @@ export const CategoryPropFilters = ({ tableId }: { tableId: string }) => {
   const uid = useMemo(() => category?.uid, [category])
   const { catalogueCategoryProperties } = useCategoryProperties(uid)
 
-  // sort properties by type like and by name
+  // sort properties by type.uid list first and by name to in same order every time
   const categoryProperties = catalogueCategoryProperties?.sort((a, b) => {
-    if (a.property.type.uid === PROPERTY_TYPE.LIST) return -1
-    if (b.property.type.uid === PROPERTY_TYPE.LIST) return 1
-    if (a.property.name < b.property.name) return -1
-    return 0
+    if (a.property.type.uid === PROPERTY_TYPE.LIST && b.property.type.uid !== PROPERTY_TYPE.LIST) return -1
+    if (a.property.type.uid !== PROPERTY_TYPE.LIST && b.property.type.uid === PROPERTY_TYPE.LIST) return 1
+    return a.property.name.localeCompare(b.property.name)
   })
 
   if (!categoryProperties) return null
