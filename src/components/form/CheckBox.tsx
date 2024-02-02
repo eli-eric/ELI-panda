@@ -1,4 +1,4 @@
-import { useId, useState } from 'react'
+import { useId } from 'react'
 import { Controller } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 
@@ -12,16 +12,7 @@ interface CheckBoxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   hidden?: boolean
 }
 
-export const CheckBoxComponent = ({
-  disabled,
-  className,
-  hidden,
-  label,
-  defaultChecked,
-  checked: _checked,
-  ...restProps
-}: CheckBoxProps) => {
-  const [checked, setChecked] = useState(defaultChecked)
+export const CheckBoxComponent = ({ disabled, className, hidden, label, checked, ...restProps }: CheckBoxProps) => {
   const id = useId()
 
   return (
@@ -31,15 +22,14 @@ export const CheckBoxComponent = ({
           id={'checkbox' + id}
           onChange={e => {
             restProps.onChange && restProps.onChange(e)
-            setChecked(e.target.checked)
           }}
-          checked={_checked || checked}
+          checked={checked}
           hidden={hidden}
           type="checkbox"
           disabled={disabled}
           className={classNames(
             'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',
-            !_checked && !checked && 'dark:bg-gray-700'
+            !checked && 'dark:bg-gray-700'
           )}
         />
       </div>

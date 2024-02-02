@@ -32,8 +32,7 @@ export const FilterCheckboxes = ({ name, label, onChange, options, codebook }: P
             <div className="w-full">
               {options?.map(option => (
                 <CheckBoxComponent
-                  checked={fieldValue?.includes(option) || false}
-                  defaultChecked={fieldValue?.includes(option) || false}
+                  checked={fieldValue?.includes(option) ?? false}
                   onChange={e => {
                     const value = e.target.checked
                       ? [...(fieldValue || []), option]
@@ -48,8 +47,7 @@ export const FilterCheckboxes = ({ name, label, onChange, options, codebook }: P
               ))}
               {codebookOptions?.data?.map(option => (
                 <CheckBoxComponent
-                  checked={fieldValue?.includes(option.uid) || false}
-                  defaultChecked={fieldValue?.includes(option.uid) || false}
+                  checked={fieldValue?.includes(option.uid) ?? false}
                   onChange={e => {
                     const value = e.target.checked
                       ? [...(fieldValue || []), option.uid]

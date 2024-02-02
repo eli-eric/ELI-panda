@@ -54,7 +54,7 @@ const PrescribedClothingSelect = () => {
       {prescribedClothingEnums.map((item, index) => (
         <CheckBoxComponent
           key={index}
-          defaultChecked={prescribedClothing?.includes(item as any) ? true : false}
+          checked={prescribedClothing?.includes(item as any) ? true : false}
           className="mr-1 mb-1 col-span-1"
           label={item.replace(/_/g, ' ')}
           onChange={e => {
