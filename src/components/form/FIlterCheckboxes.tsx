@@ -1,6 +1,9 @@
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
+import { useCodebook } from '@/hooks/fetch/useCodebook'
+import type { CODEBOOK } from '@/types/constants/codebook'
+
 import { CheckBoxComponent } from './CheckBox'
 
 interface Props {
@@ -9,10 +12,12 @@ interface Props {
   onChange?: (v: any) => void
   isFilter?: boolean
   options?: string[]
+  codebook?: CODEBOOK
 }
 
-export const FilterCheckboxes = ({ name, label, onChange, options }: Props) => {
+export const FilterCheckboxes = ({ name, label, onChange, options, codebook }: Props) => {
   const { control } = useFormContext()
+  const { data: codebookOptions } = useCodebook(codebook)
 
   return (
     <div className="flex flex-col">
@@ -39,6 +44,22 @@ export const FilterCheckboxes = ({ name, label, onChange, options }: Props) => {
                   key={option}
                   className="pb-1"
                   label={option}
+                />
+              ))}
+              {codebookOptions?.data?.map(option => (
+                <CheckBoxComponent
+                  checked={fieldValue?.includes(option.uid) || false}
+                  defaultChecked={fieldValue?.includes(option.uid) || false}
+                  onChange={e => {
+                    const value = e.target.checked
+                      ? [...(fieldValue || []), option.uid]
+                      : fieldValue?.filter(item => item !== option.uid)
+                    field.onChange(value)
+                    onChange && onChange(value)
+                  }}
+                  key={option.uid}
+                  className="pb-1"
+                  label={option.name}
                 />
               ))}
             </div>
