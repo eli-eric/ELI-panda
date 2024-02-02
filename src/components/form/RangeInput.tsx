@@ -24,11 +24,7 @@ export const RangeInput = ({ name, label, onChange, isFilter }: Props) => {
         setError(name, { type: 'manual', message: 'Min value must be less than max value' })
         return
       }
-      if (inputValues.max < inputValues.min) {
-        toast.error('Max value must be greater than min value')
-        setError(name, { type: 'manual', message: 'Max value must be greater than min value' })
-        return
-      }
+
       const handler = setTimeout(() => {
         onChange &&
           onChange({
@@ -65,17 +61,10 @@ export const RangeInput = ({ name, label, onChange, isFilter }: Props) => {
                   value={fieldValue.min ?? ''}
                   onChange={e => {
                     const value = e.target.value === '' ? '' : Number(e.target.value)
-                    if (value > fieldValue?.max) {
-                      field.onChange({
-                        min: fieldValue?.max,
-                        max: fieldValue?.max
-                      })
-                    } else {
-                      field.onChange({
-                        min: value,
-                        max: fieldValue?.max
-                      })
-                    }
+                    field.onChange({
+                      min: value,
+                      max: fieldValue?.max
+                    })
                   }}
                 />
                 <input
@@ -85,17 +74,10 @@ export const RangeInput = ({ name, label, onChange, isFilter }: Props) => {
                   placeholder="Max"
                   onChange={e => {
                     const value = e.target.value === '' ? '' : Number(e.target.value)
-                    if (value < fieldValue?.min) {
-                      field.onChange({
-                        min: fieldValue?.min,
-                        max: fieldValue?.min
-                      })
-                    } else {
-                      field.onChange({
-                        min: fieldValue?.min,
-                        max: value
-                      })
-                    }
+                    field.onChange({
+                      min: fieldValue?.min,
+                      max: value
+                    })
                   }}
                   className={classNames(
                     'form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm',
