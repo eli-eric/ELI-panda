@@ -14,7 +14,7 @@ import { SystemsFilterForm } from './form/SystemsFilter.form'
 
 type SystemFilterType = {
   name: string
-  systemLevel: CodebookType | null
+  systemLevel: string[]
   systemCode: string
   systemAlias: string
   systemType: CodebookType | null
@@ -23,7 +23,7 @@ type SystemFilterType = {
   responsible: CodebookType | null
   description: string
   importance: CodebookType | null
-  itemUsage: CodebookType | null
+  itemUsage: string[]
   eun: string
   serialNumber: string
   catalogueName: string
@@ -43,7 +43,7 @@ export const SystemFilterButtonContainer = () => {
   const defValues = useMemo<SystemFilterType>(
     () => ({
       name: '',
-      systemLevel: null,
+      systemLevel: [],
       systemCode: '',
       systemAlias: '',
       systemType: null,
@@ -52,7 +52,7 @@ export const SystemFilterButtonContainer = () => {
       responsible: null,
       description: '',
       importance: null,
-      itemUsage: null,
+      itemUsage: [],
       eun: '',
       serialNumber: '',
       catalogueName: '',
