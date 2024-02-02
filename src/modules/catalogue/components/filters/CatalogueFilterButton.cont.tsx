@@ -55,8 +55,10 @@ export const CatalogueFilterButtonContainer = () => {
     tableId,
     defValues
   })
+  console.log('formMethods', formMethods.getValues())
 
   const { storeFilters, setColumnFilters } = useFormFilterState({ tableId })
+  console.log('storeFilters', storeFilters)
   const { reset } = formMethods
 
   const onClear = () => {

@@ -51,12 +51,13 @@ export const useFormFilter = <T extends FieldValues>({ tableId, defValues, custo
 
   const { toggleDeleteCustom } = useFormControlStore()
 
-  const customDep = customDependence ? formMethods.watch(customDependence) : null
+  //TODO: solve for catalogue item and changing uid
+  const customDep = customDependence ? formMethods.watch(customDependence) : 'XNA'
 
   //set custom field to delete from state and form
   useEffect(() => {
     if (isFirstRender) return
-    if (!customDep) {
+    if (!customDep && customDep !== 'XNA') {
       toggleDeleteCustom()
     }
   }, [customDep, toggleDeleteCustom, isFirstRender])
