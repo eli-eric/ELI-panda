@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 import { classNames } from '@/utils'
 
@@ -11,7 +12,34 @@ interface Props {
 }
 
 export const RangeInput = ({ name, label, onChange, isFilter }: Props) => {
-  const { control } = useFormContext()
+  const { control, watch, setError, clearErrors } = useFormContext()
+
+  const inputValues = watch(name)
+
+  useEffect(() => {
+    if (inputValues) {
+      clearErrors(name)
+      if (inputValues.min > inputValues.max) {
+        toast.error('Min value must be less than max value')
+        setError(name, { type: 'manual', message: 'Min value must be less than max value' })
+        return
+      }
+      if (inputValues.max < inputValues.min) {
+        toast.error('Max value must be greater than min value')
+        setError(name, { type: 'manual', message: 'Max value must be greater than min value' })
+        return
+      }
+      const handler = setTimeout(() => {
+        onChange &&
+          onChange({
+            min: inputValues.min !== '' ? inputValues.min : null,
+            max: inputValues.max !== '' ? inputValues.max : null
+          })
+      }, 500)
+      return () => clearTimeout(handler)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputValues, clearErrors, name, setError])
 
   return (
     <div className="flex flex-col">
@@ -19,8 +47,8 @@ export const RangeInput = ({ name, label, onChange, isFilter }: Props) => {
       <Controller
         name={name}
         control={control}
-        render={({ field }) => {
-          const fieldValue = field.value
+        render={({ field, fieldState: { error } }) => {
+          const fieldValue = field.value || {}
           return (
             <div className="w-full">
               <div className="flex pt-1 gap-14 w-full justify-between">
@@ -31,16 +59,23 @@ export const RangeInput = ({ name, label, onChange, isFilter }: Props) => {
                   placeholder="Min"
                   className={classNames(
                     'form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm',
-                    isFilter && field.value?.min && 'border-green-500'
+                    isFilter && fieldValue?.min && 'border-green-500',
+                    error && 'border-red-500'
                   )}
-                  value={fieldValue?.min || ''}
+                  value={fieldValue.min ?? ''}
                   onChange={e => {
-                    const value = Number(e.target.value)
-                    field.onChange({
-                      min: value,
-                      max: fieldValue?.max
-                    })
-                    onChange && onChange({ min: value || null, max: fieldValue?.max })
+                    const value = e.target.value === '' ? '' : Number(e.target.value)
+                    if (value > fieldValue?.max) {
+                      field.onChange({
+                        min: fieldValue?.max,
+                        max: fieldValue?.max
+                      })
+                    } else {
+                      field.onChange({
+                        min: value,
+                        max: fieldValue?.max
+                      })
+                    }
                   }}
                 />
                 <input
@@ -49,18 +84,25 @@ export const RangeInput = ({ name, label, onChange, isFilter }: Props) => {
                   pattern="[0-9]*"
                   placeholder="Max"
                   onChange={e => {
-                    const value = Number(e.target.value)
-                    field.onChange({
-                      min: fieldValue?.min,
-                      max: value
-                    })
-                    onChange && onChange({ min: fieldValue?.min, max: value || null })
+                    const value = e.target.value === '' ? '' : Number(e.target.value)
+                    if (value < fieldValue?.min) {
+                      field.onChange({
+                        min: fieldValue?.min,
+                        max: fieldValue?.min
+                      })
+                    } else {
+                      field.onChange({
+                        min: fieldValue?.min,
+                        max: value
+                      })
+                    }
                   }}
                   className={classNames(
                     'form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm',
-                    isFilter && fieldValue?.max && 'border-green-500'
+                    isFilter && fieldValue?.max && 'border-green-500',
+                    error && 'border-red-500'
                   )}
-                  value={fieldValue?.max || ''}
+                  value={fieldValue.max ?? ''}
                 />
               </div>
             </div>

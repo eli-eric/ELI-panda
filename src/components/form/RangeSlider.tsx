@@ -8,19 +8,33 @@ interface Props {
   max?: number
   name: string
   label: string
-  onChange?: (v: number[]) => void
+  onChange?: (v: any) => void
 }
 
 export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange }: Props) => {
   const { control, setValue } = useFormContext()
 
-  const value = useWatch({ control, name })
+  const inputValues = useWatch({ control, name })
+
+  /*  useEffect(() => {
+    if (inputValues) {
+      const handler = setTimeout(() => {
+        onChange &&
+          onChange({
+            min: inputValues.min !== '' ? inputValues.min : null,
+            max: inputValues.max !== '' ? inputValues.max : null
+          })
+      }, 500)
+      return () => clearTimeout(handler)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputValues, name]) */
 
   useEffect(() => {
-    if (value) {
-      setValue(name, value)
+    if (inputValues) {
+      setValue(name, inputValues)
     } else {
-      setValue(name, [min, max])
+      setValue(name, { min, max })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -31,7 +45,7 @@ export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange
       <Controller
         name={name}
         control={control}
-        defaultValue={[min, max]}
+        defaultValue={{ min, max }}
         render={({ field }) => {
           const fieldValue = field.value ?? [min, max]
           return (
@@ -39,14 +53,14 @@ export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange
               <RangeSlider
                 className="range-slider-primary"
                 defaultValue={fieldValue}
-                value={fieldValue}
+                value={[fieldValue.min, fieldValue.max]}
                 min={min}
                 max={max}
                 onThumbDragEnd={() => {
                   onChange && onChange(fieldValue)
                 }}
                 onInput={v => {
-                  field.onChange(v)
+                  field.onChange({ max: v[1], min: v[0] })
                 }}
                 step={1}
               />
@@ -54,20 +68,20 @@ export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange
                 <input
                   name="min"
                   type="number"
+                  placeholder={min.toString()}
                   className="form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm"
-                  value={fieldValue[0] || ''}
+                  value={fieldValue.min ?? ''}
                   onChange={e => {
-                    const value = Number(e.target.value)
-                    if (value > max) {
-                      toast.error('Min value must be less than max value')
-                    }
-                    if (value > fieldValue[1]) {
+                    const value = e.target.value === '' ? '' : Number(e.target.value)
+
+                    if (value > fieldValue.max) {
                       toast.error('Min value must be less than max value')
                     } else {
                       field.onChange(v => {
                         if (v) {
-                          onChange && onChange([value, v[1]])
-                          return [value, v[1]]
+                          const newValue = { min: value || null, max: v.max || null }
+                          onChange && onChange(newValue)
+                          return newValue
                         }
                       })
                     }
@@ -76,24 +90,23 @@ export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange
                 <input
                   name="max"
                   type="number"
+                  placeholder={max.toString()}
                   onChange={e => {
-                    const value = Number(e.target.value)
-                    if (value < min) {
-                      toast.error('Max value must be greater than min value')
-                    }
-                    if (value < fieldValue[0]) {
+                    const value = e.target.value === '' ? '' : Number(e.target.value)
+                    if (value < fieldValue.min) {
                       toast.error('Max value must be greater than min value')
                     } else {
                       field.onChange(v => {
                         if (v) {
-                          onChange && onChange([v[0], value])
-                          return [v[0], value]
+                          const newValue = { min: v.min || null, max: value || null }
+                          onChange && onChange(newValue)
+                          return newValue
                         }
                       })
                     }
                   }}
                   className="form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm"
-                  value={fieldValue[1] || ''}
+                  value={fieldValue.max ?? ''}
                 />
               </div>
             </div>
