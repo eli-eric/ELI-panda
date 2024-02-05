@@ -10,6 +10,7 @@ import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
+import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { useMinMaxPrice } from '@/modules/systems/hooks/useMinMaxPrice'
 import { SystemLevel } from '@/types/gql/graphql'
 import { classNames } from '@/utils'
@@ -27,6 +28,8 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
 
   const category = watch('category')
   const uid = useMemo(() => category?.uid, [category])
+
+  const { catalogueCategoryProperties } = useCategoryProperties(uid)
 
   return (
     <div className={classNames('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
@@ -83,7 +86,7 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
           onChange={setFilter('price')}
         />
       </div>
-      <CategoryPropFilters tableId={tableId} uid={uid} />
+      <CategoryPropFilters tableId={tableId} catalogueCategoryProperties={catalogueCategoryProperties} />
     </div>
   )
 }

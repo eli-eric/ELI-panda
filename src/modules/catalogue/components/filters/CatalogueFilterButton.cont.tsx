@@ -1,6 +1,6 @@
 import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
-import { Fragment, useContext, useMemo, useState } from 'react'
+import { Fragment, useContext, useEffect, useMemo, useState } from 'react'
 
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
@@ -9,8 +9,10 @@ import { SlideOver } from '@/components/overlays/slideover/SlideOver'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
 import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
+import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { CatalogueContext } from '@/pages/catalogue/[uid]'
 
+import { useCategory } from '../../hooks/useCategory'
 import { CatalogueFilterForm } from './form/CatalogueFilter.form'
 
 type SystemFilterType = {
@@ -55,11 +57,9 @@ export const CatalogueFilterButtonContainer = () => {
     tableId,
     defValues
   })
-  console.log('formMethods', formMethods.getValues())
 
   const { storeFilters, setColumnFilters } = useFormFilterState({ tableId })
-  console.log('storeFilters', storeFilters)
-  const { reset } = formMethods
+  const { reset, setValue } = formMethods
 
   const onClear = () => {
     reset(defValues, { keepValues: false })
@@ -77,6 +77,14 @@ export const CatalogueFilterButtonContainer = () => {
       }
     }
   }
+  const { catalogueCategoryProperties } = useCategoryProperties(uid)
+  const { catalogueCategory } = useCategory(uid)
+
+  useEffect(() => {
+    if (catalogueCategory) {
+      setValue('category', { name: catalogueCategory.name, uid: catalogueCategory.uid })
+    }
+  }, [catalogueCategory, setValue])
 
   return (
     <Fragment>
@@ -89,7 +97,7 @@ export const CatalogueFilterButtonContainer = () => {
       </Button>
       <Form formMethods={formMethods}>
         <SlideOver panelTitle="System Filters" open={open} setOpen={setOpen} buttons={buttons}>
-          <CatalogueFilterForm tableId={tableId} uid={uid} />
+          <CatalogueFilterForm tableId={tableId} catalogueCategoryProperties={catalogueCategoryProperties} />
         </SlideOver>
       </Form>
     </Fragment>

@@ -5,15 +5,18 @@ import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { RangeInput } from '@/components/form/RangeInput'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
-import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
+import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { useFormControlStore } from '@/store/useFormControlStore'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 
-export const CategoryPropFilters = ({ tableId, uid }: { tableId: string; uid?: string }) => {
+interface Props {
+  tableId: string
+  catalogueCategoryProperties?: CatalogueItemDetail[]
+}
+
+export const CategoryPropFilters = ({ tableId, catalogueCategoryProperties }: Props) => {
   const { setFilter } = useFormFilterState({ tableId })
   const { addCustomFieldIdToSync } = useFormControlStore()
-
-  const { catalogueCategoryProperties } = useCategoryProperties(uid)
 
   // sort properties by type.uid list first and by name to in same order every time
   const categoryProperties = catalogueCategoryProperties?.sort((a, b) => {
