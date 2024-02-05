@@ -1,3 +1,4 @@
+import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { memo, useEffect, useRef } from 'react'
 import { Suspense } from 'react'
@@ -51,6 +52,8 @@ const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemCont
   const { reset } = formMethods
   const { submit, loading } = useItemSubmit(imageRef)
 
+  console.log('CatalogueItemContainer', formMethods.formState.errors)
+
   useEffect(() => {
     if (catalogueCategory) {
       reset({
@@ -100,6 +103,7 @@ const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemCont
           </ErrorBoundary>
         )}
       </Card>
+      <DevTool control={formMethods.control} placement="bottom-right" />
     </Form>
   )
 }

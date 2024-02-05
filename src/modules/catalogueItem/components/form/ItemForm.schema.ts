@@ -12,11 +12,13 @@ export const schema = object({
   description: string(),
   categoryPath: string(),
   categoryName: string(),
-  supplier:  mixed<CodebookType>().nullable(),
+  supplier: mixed<CodebookType>().nullable(),
   manufacturerUrl: string(),
-  details: array().of(object({
-    propertyGroup: string().required(),
-    value: string(),
-    property: mixed<CatalogueCategoryProperty>().nullable().required(),
-  })),
+  details: array().of(
+    object({
+      propertyGroup: string().required(),
+      value: mixed<any>(),
+      property: mixed<CatalogueCategoryProperty>().nullable().required()
+    })
+  )
 })
