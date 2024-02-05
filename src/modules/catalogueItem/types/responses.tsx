@@ -15,7 +15,7 @@ export interface CatalogueItem {
 
 export interface CatalogueItemDetail {
   propertyGroup: string
-  value?: string
+  value?: any
   property: CatalogueCategoryProperty
 }
 

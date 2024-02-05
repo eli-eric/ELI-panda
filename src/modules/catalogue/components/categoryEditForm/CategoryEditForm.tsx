@@ -31,6 +31,8 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
     resolver: yupResolver(categoryValidationschema)
   })
 
+  console.log('formMethods', formMethods.formState.errors)
+
   return (
     <Fragment>
       <Form formMethods={formMethods} onSubmit={onSubmit}>

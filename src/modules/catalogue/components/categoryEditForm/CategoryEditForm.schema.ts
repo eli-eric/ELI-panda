@@ -20,7 +20,7 @@ export const categoryValidationschema: yup.ObjectSchema<CategoryFormType> = yup.
               name: yup.string().required("Property Name can't be empty"),
               type: yup.mixed<CodebookType>().nullable(),
               unit: yup.mixed<CodebookType>().nullable(),
-              defaultValue: yup.string().nullable(),
+              defaultValue: yup.string().nullable().notRequired(),
               listOfValues: yup.lazy(values =>
                 Array.isArray(values)
                   ? yup.array().of(

@@ -69,6 +69,20 @@ export const CategoryPropFilters = ({ tableId }: { tableId: string }) => {
                   />
                 )
               }
+              case PROPERTY_TYPE.RANGE: {
+                return (
+                  <RangeInput
+                    key={property.property.uid}
+                    name={property.property.uid}
+                    label={label}
+                    onChange={value => {
+                      setFilter(property.property.uid)(value, property.property.type.code, property.property.name)
+                      addCustomFieldIdToSync(property.property.uid)
+                    }}
+                    isFilter={true}
+                  />
+                )
+              }
               case PROPERTY_TYPE.BOOLEAN: {
                 return (
                   <Listbox

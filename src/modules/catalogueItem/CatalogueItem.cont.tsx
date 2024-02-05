@@ -1,3 +1,4 @@
+import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { memo, useEffect, useRef } from 'react'
 import { Suspense } from 'react'
@@ -100,6 +101,7 @@ const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemCont
           </ErrorBoundary>
         )}
       </Card>
+      <DevTool control={formMethods.control} placement="bottom-right" />
     </Form>
   )
 }
