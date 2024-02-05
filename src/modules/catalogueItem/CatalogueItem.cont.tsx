@@ -52,8 +52,6 @@ const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemCont
   const { reset } = formMethods
   const { submit, loading } = useItemSubmit(imageRef)
 
-  console.log('CatalogueItemContainer', formMethods.formState.errors)
-
   useEffect(() => {
     if (catalogueCategory) {
       reset({
