@@ -69,12 +69,48 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
     }
   }, [type, unregister, name, listOfValues])
 
+  const getDefaultField = (type?: PROPERTY_TYPE | string) => {
+    switch (type) {
+      case PROPERTY_TYPE.LIST:
+        return (
+          <Listbox
+            rounded="rounded-l-md"
+            name={`${name}.defaultValue`}
+            allowEmptyOption={true}
+            emptyOption="Select default"
+            customOptions={[...listOfValues.map(value => value.value)]}
+          />
+        )
+      case PROPERTY_TYPE.BOOLEAN:
+        return (
+          <Listbox
+            rounded="rounded-l-md"
+            name={`${name}.defaultValue`}
+            allowEmptyOption={true}
+            emptyOption="Select default"
+            customOptions={[...defaultBoolOptions]}
+          />
+        )
+      case PROPERTY_TYPE.RANGE:
+        return null
+      default:
+        return (
+          <Input
+            rounded="rounded-l-md"
+            name={`${name}.defaultValue`}
+            type={type && PROPERTY_INPUT_TYPE[type]}
+            placeholder="Default value"
+            disabled={!type}
+          />
+        )
+    }
+  }
+
   return (
     <div className="flex">
       <div className="flex-col flex-grow">
         <div className="flex flex-row flex-grow max-md:flex-wrap">
           <MoveButtons moveDown={moveDown} moveUp={moveUp} lenght={lenght} index={index} />
-
           <Input name={`${name}.name`} placeholder="Property name" rounded="rounded-r-md" />
           <Listbox
             name={`${name}.type`}
@@ -90,26 +126,7 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
             allowEmptyOption={true}
             codebook={CODEBOOK.UNIT}
           />
-
-          {type?.uid === PROPERTY_TYPE.LIST || type?.uid === PROPERTY_TYPE.BOOLEAN ? (
-            <Listbox
-              rounded="rounded-l-md"
-              name={`${name}.defaultValue`}
-              allowEmptyOption={true}
-              emptyOption="Select default"
-              customOptions={
-                type.uid === PROPERTY_TYPE.LIST ? [...listOfValues.map(value => value.value)] : [...defaultBoolOptions]
-              }
-            />
-          ) : (
-            <Input
-              rounded="rounded-l-md"
-              name={`${name}.defaultValue`}
-              type={type && PROPERTY_INPUT_TYPE[type?.uid]}
-              placeholder="Default value"
-              disabled={!type}
-            />
-          )}
+          {getDefaultField(type?.uid)}
           <Button rounded="rounded-r-md" onClick={handleRemoveProp}>
             <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
           </Button>

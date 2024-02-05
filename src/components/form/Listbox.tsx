@@ -19,7 +19,7 @@ export type ListboxPropsT = FieldProps & {
   allowEmptyOption?: boolean
   emptyOption?: string
   optionsSize?: 'sm' | 'md' | 'lg'
-  customOptions?: string[]
+  customOptions?: string[] | any[]
   unit?: string
   customLabel?: string
   codebookResponse?: CodebookType[]
