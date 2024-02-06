@@ -1,10 +1,11 @@
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
-import { useMemo } from 'react'
+import { useContext, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
 import { message } from '@/i18n/src/messages'
-import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
+import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
+import { CatalogueContext } from '@/pages/catalogue/[uid]'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { CODEBOOK } from '@/types/constants/codebook'
 import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
@@ -26,7 +27,9 @@ type Props = {
 export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueItems }: Props) => {
   const intl = useIntl()
 
-  const { catalogueCategories } = useCategoryList()
+  const { uid } = useContext(CatalogueContext)
+
+  const { catalogueCategoryProperties } = useCategoryProperties(uid)
 
   const columns: ColumnDef<CatalogueItem, any>[] = useMemo(() => {
     const columns: ColumnDef<CatalogueItem, any>[] = [
@@ -76,11 +79,11 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueI
     ]
 
     if (
-      catalogueCategories?.length === 0 &&
+      catalogueCategoryProperties &&
       catalogueItems?.data[0]?.details &&
       catalogueItems?.data[0]?.details?.length > 0
     ) {
-      const detailsColumns: ColumnDef<CatalogueItem, any>[] = catalogueItems?.data[0]?.details?.map(detail => ({
+      const detailsColumns: ColumnDef<CatalogueItem, any>[] = catalogueCategoryProperties?.map(detail => ({
         header: () => {
           const name =
             detail?.property?.name.length > 10 ? detail?.property?.name.slice(0, 10) + '...' : detail?.property?.name
@@ -94,20 +97,30 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueI
         },
         id: detail.property.name.replace(/\s/g, ''),
         size: 120,
-        meta: { className: classNames(detail?.property?.type.uid === PROPERTY_TYPE.NUMBER && 'text-right') },
+        meta: {
+          className: classNames(
+            (detail?.property?.type.uid === PROPERTY_TYPE.NUMBER ||
+              detail?.property?.type.uid === PROPERTY_TYPE.RANGE) &&
+              'text-right'
+          )
+        },
         accessorFn: row =>
           row.details?.find(originDetail => originDetail?.property.name === detail?.property.name)?.value,
         cell: ({ row: { original } }: CellContext<CatalogueItem, any>) => {
-          const value = original.details?.find(originDetail => originDetail?.property.name === detail?.property.name)
+          const value = original.details?.find(originDetail => originDetail?.property.uid === detail?.property.uid)
             ?.value
           const unit = detail?.property?.unit?.name
           if (!value) return null
           if (detail?.property?.type.uid === PROPERTY_TYPE.RANGE) {
+            let valObject = value
+            if (typeof valObject === 'string') {
+              valObject = JSON.parse(valObject)
+            }
             return (
               <div>
-                <span>{value?.min}</span>
+                <span>{valObject?.min}</span>
                 <span> - </span>
-                <span>{value?.max}</span>
+                <span>{valObject?.max}</span>
                 {unit && <span> {unit}</span>}
               </div>
             )
@@ -129,7 +142,7 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueI
       columns.push(additionalColumn)
     }
     return columns
-  }, [intl, catalogueItems, catalogueCategories, additionalColumn, tableId])
+  }, [intl, catalogueItems, additionalColumn, tableId, catalogueCategoryProperties])
 
   return columns
 }
