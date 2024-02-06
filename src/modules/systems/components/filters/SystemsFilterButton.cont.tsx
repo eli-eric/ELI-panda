@@ -1,6 +1,7 @@
 import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
+import { useIsFirstRender } from 'usehooks-ts'
 
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
@@ -8,6 +9,7 @@ import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
+import { useFormControlStore } from '@/store/useFormControlStore'
 
 import { useMinMaxPrice } from '../../hooks/useMinMaxPrice'
 import { SystemsFilterForm } from './form/SystemsFilter.form'
@@ -67,12 +69,24 @@ export const SystemFilterButtonContainer = () => {
   )
   const formMethods = useFormFilter<SystemFilterType>({
     tableId,
-    defValues,
-    customDependence: 'category'
+    defValues
   })
 
   const { storeFilters, setColumnFilters } = useFormFilterState({ tableId })
-  const { reset } = formMethods
+  const { reset, watch } = formMethods
+
+  const { toggleDeleteCustom } = useFormControlStore()
+
+  const category = watch('category')
+  const isFirstRender = useIsFirstRender()
+
+  //set custom field to delete from state and form
+  useEffect(() => {
+    if (isFirstRender) return
+    if (!category) {
+      toggleDeleteCustom()
+    }
+  }, [category, toggleDeleteCustom, isFirstRender])
 
   const onClear = () => {
     reset(defValues, { keepValues: false })

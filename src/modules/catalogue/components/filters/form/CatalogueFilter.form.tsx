@@ -4,6 +4,7 @@ import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import useCatalogueFormFields from '@/modules/catalogueItem/components/form/CatalogueForm.fields'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { CategoryPropFilters } from '@/modules/systems/components/filters/form/CategoryPropFilters'
+import { useFormControlStore } from '@/store/useFormControlStore'
 import { classNames } from '@/utils'
 
 interface CatalogueFilterFormProps {
@@ -15,6 +16,7 @@ export const CatalogueFilterForm = ({ tableId, catalogueCategoryProperties }: Ca
   const fields = useCatalogueFormFields()
 
   const { setFilter } = useFormFilterState({ tableId })
+  const { toggleDeleteCustom } = useFormControlStore()
 
   return (
     <div className={classNames('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
@@ -26,7 +28,16 @@ export const CatalogueFilterForm = ({ tableId, catalogueCategoryProperties }: Ca
         <Input {...fields.manufacturerUrl} onChange={setFilter(fields.manufacturerUrl.name)} isFilter={true} />
         <Input {...fields.supplier} onChange={setFilter(fields.supplier.name)} isFilter={true} />
       </div>
-      <ComboboxTree {...fields.category} onSelect={setFilter(fields.category.name)} isFilter={true} />
+      <ComboboxTree
+        {...fields.category}
+        onSelect={v => {
+          setFilter(fields.category.name)(v)
+          if (!v) {
+            toggleDeleteCustom()
+          }
+        }}
+        isFilter={true}
+      />
 
       <TextArea
         {...fields.description}

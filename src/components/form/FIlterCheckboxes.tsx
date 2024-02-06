@@ -1,5 +1,6 @@
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
+import { v4 } from 'uuid'
 
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
@@ -40,7 +41,7 @@ export const FilterCheckboxes = ({ name, label, onChange, options, codebook }: P
                     field.onChange(value)
                     onChange && onChange(value)
                   }}
-                  key={option}
+                  key={v4()}
                   className="pb-1"
                   label={option}
                 />

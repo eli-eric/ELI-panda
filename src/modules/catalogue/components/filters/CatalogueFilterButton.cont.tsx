@@ -1,6 +1,7 @@
 import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
 import { Fragment, useContext, useEffect, useMemo, useState } from 'react'
+import { useIsFirstRender } from 'usehooks-ts'
 
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
@@ -11,8 +12,8 @@ import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
 import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { CatalogueContext } from '@/pages/catalogue/[uid]'
+import { useFormControlStore } from '@/store/useFormControlStore'
 
-import { useCategory } from '../../hooks/useCategory'
 import { CatalogueFilterForm } from './form/CatalogueFilter.form'
 
 type SystemFilterType = {
@@ -64,7 +65,6 @@ export const CatalogueFilterButtonContainer = () => {
   const onClear = () => {
     reset(defValues, { keepValues: false })
   }
-  const { uid } = useContext(CatalogueContext)
 
   const buttons: SlideOverButtons = {
     goNext: {
@@ -77,14 +77,29 @@ export const CatalogueFilterButtonContainer = () => {
       }
     }
   }
-  const { catalogueCategoryProperties } = useCategoryProperties(uid)
-  const { catalogueCategory } = useCategory(uid)
+  const { toggleDeleteCustom, customFieldIdToSync } = useFormControlStore()
+
+  const category = formMethods.watch('category')
+  const { uid } = useContext(CatalogueContext)
+  const { catalogueCategoryProperties } = useCategoryProperties(category?.uid || uid)
+  const isFirstRender = useIsFirstRender()
 
   useEffect(() => {
-    if (catalogueCategory) {
-      setValue('category', { name: catalogueCategory.name, uid: catalogueCategory.uid })
+    if (catalogueCategoryProperties) {
+      const a = catalogueCategoryProperties.filter(prop => customFieldIdToSync.has(prop.property.uid))
+      if (a.length === 0) toggleDeleteCustom()
     }
-  }, [catalogueCategory, setValue])
+    // eslint-disable-next-line
+  }, [catalogueCategoryProperties])
+
+  useEffect(() => {
+    if (isFirstRender) {
+      return
+    }
+    if (!catalogueCategoryProperties && !category) {
+      toggleDeleteCustom()
+    }
+  }, [catalogueCategoryProperties, category, toggleDeleteCustom, isFirstRender])
 
   return (
     <Fragment>

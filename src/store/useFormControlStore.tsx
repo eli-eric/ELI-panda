@@ -7,6 +7,7 @@ type FormControlState = {
   toggleDeleteCustom: () => void
   addFieldIdToSync: (fieldId: string) => void
   addCustomFieldIdToSync: (fieldId: string) => void
+  addCustomFieldIdsToSync: (fieldIds: string[]) => void
   clearFieldToSync: () => void
   clearCustomFieldToSync: () => void
 }
@@ -23,6 +24,13 @@ export const useFormControlStore = create<FormControlState>(set => ({
   addCustomFieldIdToSync: fieldId =>
     set(state => {
       const newSet = new Set(state.customFieldIdToSync).add(fieldId)
+      return {
+        customFieldIdToSync: newSet
+      }
+    }),
+  addCustomFieldIdsToSync: fieldIds =>
+    set(() => {
+      const newSet = new Set<string>(fieldIds)
       return {
         customFieldIdToSync: newSet
       }

@@ -1,7 +1,7 @@
 import type { ColumnFilter } from '@tanstack/react-table'
 import { useQueryState } from 'next-usequerystate'
 import { useCallback, useEffect, useMemo } from 'react'
-import type { DefaultValues, FieldValues, Path } from 'react-hook-form'
+import type { DefaultValues, FieldValues } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 import { useIsFirstRender } from 'usehooks-ts'
 
@@ -11,7 +11,6 @@ import { useFormControlStore } from '@/store/useFormControlStore'
 interface IFilter<T> {
   tableId: string
   defValues: DefaultValues<T>
-  customDependence?: Path<T>
 }
 
 function synchronizeFormFields(fieldIdToSync: Set<string>, setValue, defValues) {
@@ -27,7 +26,7 @@ function synchronizeCustomFormFields(customFieldIdToSync, setValue, setFilters) 
   setFilters(prev => prev.filter(item => !customFieldIdToSync.has(item.id)))
 }
 
-export const useFormFilter = <T extends FieldValues>({ tableId, defValues, customDependence }: IFilter<T>) => {
+export const useFormFilter = <T extends FieldValues>({ tableId, defValues }: IFilter<T>) => {
   const [storeFilters, setFilters] = useFilters(tableId, true, false)
   const isFirstRender = useIsFirstRender()
   const {
@@ -48,19 +47,6 @@ export const useFormFilter = <T extends FieldValues>({ tableId, defValues, custo
     defaultValues: defValues
   })
   const { reset, setValue } = formMethods
-
-  const { toggleDeleteCustom } = useFormControlStore()
-
-  //TODO: solve for catalogue item and changing uid
-  const customDep = customDependence ? formMethods.watch(customDependence) : 'XNA'
-
-  //set custom field to delete from state and form
-  useEffect(() => {
-    if (isFirstRender) return
-    if (!customDep && customDep !== 'XNA') {
-      toggleDeleteCustom()
-    }
-  }, [customDep, toggleDeleteCustom, isFirstRender])
 
   //sync form values (for example, when we click xmark icon in badge)
   useEffect(() => {
