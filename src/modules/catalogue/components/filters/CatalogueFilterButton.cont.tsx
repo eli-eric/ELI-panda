@@ -60,7 +60,7 @@ export const CatalogueFilterButtonContainer = () => {
   })
 
   const { storeFilters, setColumnFilters } = useFormFilterState({ tableId })
-  const { reset, setValue } = formMethods
+  const { reset } = formMethods
 
   const onClear = () => {
     reset(defValues, { keepValues: false })
@@ -85,12 +85,14 @@ export const CatalogueFilterButtonContainer = () => {
   const isFirstRender = useIsFirstRender()
 
   useEffect(() => {
-    if (catalogueCategoryProperties) {
-      const a = catalogueCategoryProperties.filter(prop => customFieldIdToSync.has(prop.property.uid))
-      if (a.length === 0) toggleDeleteCustom()
+    if (isFirstRender) {
+      return
+    }
+    if (catalogueCategoryProperties?.filter(prop => customFieldIdToSync.has(prop.property.uid)).length === 0) {
+      toggleDeleteCustom()
     }
     // eslint-disable-next-line
-  }, [catalogueCategoryProperties])
+  }, [catalogueCategoryProperties, toggleDeleteCustom, isFirstRender])
 
   useEffect(() => {
     if (isFirstRender) {

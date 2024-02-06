@@ -30,6 +30,7 @@ export const CatalogueFilterForm = ({ tableId, catalogueCategoryProperties }: Ca
       </div>
       <ComboboxTree
         {...fields.category}
+        customLabel="Category"
         onSelect={v => {
           setFilter(fields.category.name)(v)
           if (!v) {
