@@ -84,7 +84,7 @@ const Main = ({ uid }: { uid?: string }) => {
           <Input name="code" label="Code" disabled={true} rounded="rounded-md" />
         </div>
         <div className="mt-1">
-          <SystemTypeComboBox systemTypeField={{ name: 'systemType', label: 'System Type' }} />
+          <SystemTypeComboBox systemTypeField={{ name: 'systemType', customLabel: 'System Type' }} />
         </div>
       </div>
     </div>
