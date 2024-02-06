@@ -27,31 +27,15 @@ const useItem = () => {
 
   const image = useImage(catalogueUid ? catalogueItemImage : null)
 
-  const itemFormatted = useMemo(
-    () =>
-      item
-        ? {
-            ...item,
-            details: item?.details?.map(detail => {
-              if (detail.property.type.code === 'range' && detail.value) {
-                return { ...detail, value: JSON.parse(detail.value) }
-              }
-              return detail
-            })
-          }
-        : undefined,
-    [item]
-  )
-
   const groups = useMemo(() => {
-    const groupsUnsorted = itemFormatted?.details
+    const groupsUnsorted = item?.details
       ?.map(item => item.propertyGroup)
       .filter((value, index, self) => self.indexOf(value) === index)
     const groups = groupsUnsorted?.sort((a, b) => a.localeCompare(b))
     return groups
-  }, [itemFormatted])
+  }, [item])
 
-  return { item: itemFormatted, loading: isLoading, error, mutate, image, groups }
+  return { item: item, loading: isLoading, error, mutate, image, groups }
 }
 
 export default useItem

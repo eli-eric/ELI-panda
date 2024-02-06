@@ -102,6 +102,16 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueI
             ?.value
           const unit = detail?.property?.unit?.name
           if (!value) return null
+          if (detail?.property?.type.uid === PROPERTY_TYPE.RANGE) {
+            return (
+              <div>
+                <span>{value?.min}</span>
+                <span> - </span>
+                <span>{value?.max}</span>
+                {unit && <span> {unit}</span>}
+              </div>
+            )
+          }
           return (
             <div>
               <span className={classNames(unit && 'font-bold')}>{value}</span>
