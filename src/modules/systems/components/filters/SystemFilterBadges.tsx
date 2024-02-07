@@ -4,8 +4,8 @@ import { Badge } from '@/components/visuals/Badge'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
 
-export const SystemFiltersBadges = () => {
-  const [filters, setFilters] = useFilters('systems', true, false)
+export const SystemFiltersBadges = ({ tableId }: { tableId: string }) => {
+  const [filters, setFilters] = useFilters(tableId, true, false)
   const { addFieldIdToSync } = useFormControlStore()
 
   return (

@@ -150,7 +150,15 @@ export const Input = ({
 
 type TextAreaWithErrorProps = FieldProps & React.InputHTMLAttributes<HTMLTextAreaElement>
 
-export const TextArea = ({ name, placeholder, disabled, rounded, label, className }: TextAreaWithErrorProps) => {
+export const TextArea = ({
+  name,
+  placeholder,
+  disabled,
+  rounded,
+  label,
+  className,
+  isFilter
+}: TextAreaWithErrorProps) => {
   const { control } = useFormContext()
   const id = useId()
 
@@ -173,7 +181,8 @@ export const TextArea = ({ name, placeholder, disabled, rounded, label, classNam
                 'form-field',
                 rounded,
                 error ? 'border-red-500' : 'border-gray-300',
-                disabled ? 'bg-gray-100' : ''
+                disabled ? 'bg-gray-100' : '',
+                isFilter ? field.value && 'border-2 border-lime-500' : ''
               )}
             />
             {error && <ValidationIcon />}

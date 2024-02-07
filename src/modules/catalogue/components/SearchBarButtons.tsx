@@ -6,6 +6,8 @@ import { SearchBarButtonsComponent } from '@/modules/shared/table/SearchBar'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
+import { CatalogueFilterButtonContainer } from './filters/CatalogueFilterButton.cont'
+
 export const SearchBarButtons = () => {
   const router = useRouter()
   const uid = router.query.uid
@@ -17,7 +19,10 @@ export const SearchBarButtons = () => {
   }
   return (
     <SearchBarButtonsComponent handleAdd={handleAdd} handleRefresh={handleRefresh} editRole={ROLE.CATALOGUE_EDIT}>
-      <ModalStatisticsButtonLarge />
+      <div>
+        <ModalStatisticsButtonLarge />
+        <CatalogueFilterButtonContainer />
+      </div>
     </SearchBarButtonsComponent>
   )
 }

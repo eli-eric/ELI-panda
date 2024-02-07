@@ -1,6 +1,6 @@
 import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Fragment, useContext, useEffect, useMemo, useState } from 'react'
 import { useIsFirstRender } from 'usehooks-ts'
 
 import { Button } from '@/components/Buttons'
@@ -9,10 +9,12 @@ import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
+import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
+import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
+import { CatalogueContext } from '@/pages/catalogue/[uid]'
 import { useFormControlStore } from '@/store/useFormControlStore'
 
-import { useMinMaxPrice } from '../../hooks/useMinMaxPrice'
-import { SystemsFilterForm } from './form/SystemsFilter.form'
+import { CatalogueFilterForm } from './form/CatalogueFilter.form'
 
 type SystemFilterType = {
   name: string
@@ -37,35 +39,20 @@ type SystemFilterType = {
   parentSystem: CodebookType | null
 }
 
-export const SystemFilterButtonContainer = () => {
+export const CatalogueFilterButtonContainer = () => {
   const [open, setOpen] = useState(false)
-  const { minMaxPrice } = useMinMaxPrice()
-  const tableId = 'systems'
+  const tableId = 'catalogueItems'
 
-  const defValues = useMemo<SystemFilterType>(
+  const defValues = useMemo<CatalogueItem>(
     () => ({
       name: '',
-      systemLevel: [],
-      systemCode: '',
-      systemAlias: '',
-      systemType: null,
-      zone: null,
-      location: null,
-      responsible: null,
-      description: '',
-      importance: null,
-      itemUsage: [],
-      eun: '',
-      serialNumber: '',
-      catalogueName: '',
-      catalogueNumber: '',
       category: null,
-      catalogueDescription: '',
+      catalogueNumber: '',
+      manufacturerUrl: '',
       supplier: null,
-      parentSystem: null,
-      price: [minMaxPrice?.min, minMaxPrice?.max]
+      description: ''
     }),
-    [minMaxPrice]
+    []
   )
   const formMethods = useFormFilter<SystemFilterType>({
     tableId,
@@ -73,20 +60,7 @@ export const SystemFilterButtonContainer = () => {
   })
 
   const { storeFilters, setColumnFilters } = useFormFilterState({ tableId })
-  const { reset, watch } = formMethods
-
-  const { toggleDeleteCustom } = useFormControlStore()
-
-  const category = watch('category')
-  const isFirstRender = useIsFirstRender()
-
-  //set custom field to delete from state and form
-  useEffect(() => {
-    if (isFirstRender) return
-    if (!category) {
-      toggleDeleteCustom()
-    }
-  }, [category, toggleDeleteCustom, isFirstRender])
+  const { reset } = formMethods
 
   const onClear = () => {
     reset(defValues, { keepValues: false })
@@ -103,6 +77,31 @@ export const SystemFilterButtonContainer = () => {
       }
     }
   }
+  const { toggleDeleteCustom, customFieldIdToSync } = useFormControlStore()
+
+  const category = formMethods.watch('category')
+  const { uid } = useContext(CatalogueContext)
+  const { catalogueCategoryProperties } = useCategoryProperties(category?.uid || uid)
+  const isFirstRender = useIsFirstRender()
+
+  useEffect(() => {
+    if (isFirstRender) {
+      return
+    }
+    if (catalogueCategoryProperties?.filter(prop => customFieldIdToSync.has(prop.property.uid)).length === 0) {
+      toggleDeleteCustom()
+    }
+    // eslint-disable-next-line
+  }, [catalogueCategoryProperties, toggleDeleteCustom, isFirstRender])
+
+  useEffect(() => {
+    if (isFirstRender) {
+      return
+    }
+    if (!catalogueCategoryProperties && !category) {
+      toggleDeleteCustom()
+    }
+  }, [catalogueCategoryProperties, category, toggleDeleteCustom, isFirstRender])
 
   return (
     <Fragment>
@@ -115,7 +114,7 @@ export const SystemFilterButtonContainer = () => {
       </Button>
       <Form formMethods={formMethods}>
         <SlideOver panelTitle="System Filters" open={open} setOpen={setOpen} buttons={buttons}>
-          <SystemsFilterForm tableId={tableId} />
+          <CatalogueFilterForm tableId={tableId} catalogueCategoryProperties={catalogueCategoryProperties} />
         </SlideOver>
       </Form>
     </Fragment>

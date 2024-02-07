@@ -6,6 +6,7 @@ import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { CatalogueTable } from '../shared/catalogue/table/CatalogueItems.table'
 import { Pagination } from '../shared/table/Pagination'
 import { SearchBar } from '../shared/table/SearchBar'
+import { SystemFiltersBadges } from '../systems/components/filters/SystemFilterBadges'
 import { CatalogueBreadcrumbs } from './components/breadcrump/CatalogueBreadcrumbs'
 import { CategoryListContainer } from './components/categoryList/CategoryList.cont'
 import { SearchBarButtons } from './components/SearchBarButtons'
@@ -20,7 +21,7 @@ const CatalogueContainer = () => {
 
   return (
     <Fragment>
-      <SearchBar left={<SearchBarButtons />} tableId={tableId} />
+      <SearchBar left={<SearchBarButtons />} tableId={tableId} right={<SystemFiltersBadges tableId={tableId} />} />
       <CatalogueBreadcrumbs />
       <CategoryListContainer
         onChange={open => {
