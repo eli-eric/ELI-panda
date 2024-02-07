@@ -62,6 +62,6 @@ export const clientRequirements = [
 
 export const statusColorMapping = (status: RoomCardStatus) => [
   status === 'DIRTY_MODE' && 'bg-red-200 dark:bg-red-500',
-  status === 'CLEAN_MODE' && 'bg-lime-200 dark:bg-lime-500',
-  status === 'IN_PREPARATION_MODE' && 'bg-primary-300 dark:bg-primary-500'
+  status === 'CLEAN_MODE' && 'bg-lime-200 dark:bg-lime-600',
+  status === 'IN_PREPARATION_MODE' && 'bg-primary-300 dark:bg-primary-600'
 ]
