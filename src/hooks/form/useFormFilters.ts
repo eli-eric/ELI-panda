@@ -11,6 +11,8 @@ import { useFormControlStore } from '@/store/useFormControlStore'
 interface IFilter<T> {
   tableId: string
   defValues: DefaultValues<T>
+
+  enableQueryURL?: boolean
 }
 
 function synchronizeFormFields(fieldIdToSync: Set<string>, setValue, defValues) {
@@ -26,8 +28,8 @@ function synchronizeCustomFormFields(customFieldIdToSync, setValue, setFilters) 
   setFilters(prev => prev.filter(item => !customFieldIdToSync.has(item.id)))
 }
 
-export const useFormFilter = <T extends FieldValues>({ tableId, defValues }: IFilter<T>) => {
-  const [storeFilters, setFilters] = useFilters(tableId, true, false)
+export const useFormFilter = <T extends FieldValues>({ tableId, defValues, enableQueryURL }: IFilter<T>) => {
+  const [storeFilters, setFilters] = useFilters(tableId, enableQueryURL, false)
   const isFirstRender = useIsFirstRender()
   const {
     fieldIdToSync,
@@ -90,8 +92,8 @@ export const useFormFilter = <T extends FieldValues>({ tableId, defValues }: IFi
   return formMethods
 }
 
-export const useFormFilterState = ({ tableId }: { tableId: string }) => {
-  const [storeFilters, setColumnFilters] = useFilters(tableId, true, false)
+export const useFormFilterState = ({ tableId, enableQueryUrl }: { tableId: string; enableQueryUrl?: boolean }) => {
+  const [storeFilters, setColumnFilters] = useFilters(tableId, enableQueryUrl, false)
 
   //set filter value to store on change field and remove from store if value is empty
   const setFilter = useCallback(

@@ -6,6 +6,7 @@ import { Tooltip } from '@/components/Tooltip'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { classNames } from '@/utils'
 
+import { SystemFilterButtonContainer } from '../systems/components/filters/SystemsFilterButton.cont'
 import { SystemsComponent } from '../systems/Systems.comp'
 import type { SystemDetail } from '../systems/types/responses'
 import { SystemMovingModal } from './form/SystemMoving.modal'
@@ -61,6 +62,7 @@ export const SystemsMovingContainer = () => {
             className="border-r-4 border-gray-400"
             dropSettings={{ onDropHandler, accept: 'system' }}
             enableQueryURL={false}
+            LeftSearchBarElement={() => <SystemFilterButtonContainer tableId={tableIdLeft} enableQueryURL={false} />}
             RightSearchBarElement={() =>
               showRight ? (
                 <Tooltip content="Hide systems window">
@@ -84,6 +86,7 @@ export const SystemsMovingContainer = () => {
             hideButtons={false}
             enableDragAndDrop={true}
             dropSettings={{ onDropHandler: onDropHandler, accept: 'system' }}
+            LeftSearchBarElement={() => <SystemFilterButtonContainer tableId={tableIdRight} enableQueryURL={false} />}
             enableQueryURL={false}
             RightSearchBarElement={() =>
               showLeft ? (

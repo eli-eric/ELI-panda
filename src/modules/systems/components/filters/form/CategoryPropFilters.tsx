@@ -12,10 +12,11 @@ import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 interface Props {
   tableId: string
   catalogueCategoryProperties?: CatalogueItemDetail[]
+  enableQueryUrl?: boolean
 }
 
-export const CategoryPropFilters = ({ tableId, catalogueCategoryProperties }: Props) => {
-  const { setFilter } = useFormFilterState({ tableId })
+export const CategoryPropFilters = ({ tableId, catalogueCategoryProperties, enableQueryUrl }: Props) => {
+  const { setFilter } = useFormFilterState({ tableId, enableQueryUrl })
   const { addCustomFieldIdToSync } = useFormControlStore()
 
   // sort properties by type.uid list first and by name to in same order every time

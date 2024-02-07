@@ -20,6 +20,7 @@ interface Props {
   getRowProps?: (row: Row<SystemDetail>) => GetRowPropsReturnType
   settings?: PandaTableSettings
   RightSearchBarElement?: () => JSX.Element
+  LeftSearchBarElement?: () => JSX.Element
 }
 
 export const SystemsTable = ({
@@ -30,6 +31,7 @@ export const SystemsTable = ({
   getRowProps,
   settings,
   enableDragAndDrop,
+  LeftSearchBarElement,
   RightSearchBarElement
 }: Props) => {
   const { systems, loading } = useSystems(tableId)
@@ -45,7 +47,13 @@ export const SystemsTable = ({
       <SearchBar
         tableId={tableId}
         useQuery={settings?.enableQueryURL}
-        left={!hideButtons && !enableDragAndDrop ? <SearchBarButtons /> : undefined}
+        left={
+          !hideButtons && !enableDragAndDrop ? (
+            <SearchBarButtons />
+          ) : LeftSearchBarElement ? (
+            <LeftSearchBarElement />
+          ) : undefined
+        }
         onChange={onChangeSearch}
         right={RightSearchBarElement && <RightSearchBarElement />}
       />
