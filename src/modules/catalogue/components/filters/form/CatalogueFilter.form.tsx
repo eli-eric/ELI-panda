@@ -28,9 +28,11 @@ export const CatalogueFilterForm = ({ tableId, catalogueCategoryProperties }: Ca
         <Input {...fields.manufacturerUrl} onChange={setFilter(fields.manufacturerUrl.name)} isFilter={true} />
         <Input {...fields.supplier} onChange={setFilter(fields.supplier.name)} isFilter={true} />
       </div>
+
       <ComboboxTree
         {...fields.category}
         customLabel="Category"
+        className="col-span-2"
         onSelect={v => {
           setFilter(fields.category.name)(v)
           if (!v) {
