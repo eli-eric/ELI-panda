@@ -62,7 +62,9 @@ export const RoomCardsContainer = () => {
           data: roomCards,
           settings: {
             enableSorting: true,
-            manualSorting: false
+            manualSorting: false,
+            enableColumnReordering: true,
+            enableColumnHiding: true
           },
           columns,
           className: 'relative overflow-x-auto scrollbar-style'
