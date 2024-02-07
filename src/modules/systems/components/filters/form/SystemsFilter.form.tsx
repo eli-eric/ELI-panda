@@ -18,12 +18,12 @@ import { classNames } from '@/utils'
 import { CategoryPropFilters } from './CategoryPropFilters'
 import { useSystemsFilterFields } from './SystemsFilter.fields'
 
-export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
+export const SystemsFilterForm = ({ tableId, enableQueryUrl }: { tableId: string; enableQueryUrl: boolean }) => {
   const fields = useSystemsFilterFields()
   const systemLevels = Object.values(SystemLevel).map(level => level)
   const { minMaxPrice } = useMinMaxPrice()
 
-  const { setFilter } = useFormFilterState({ tableId })
+  const { setFilter } = useFormFilterState({ tableId, enableQueryUrl })
   const { watch } = useFormContext()
 
   const category = watch('category')
@@ -86,7 +86,11 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
           onChange={setFilter('price')}
         />
       </div>
-      <CategoryPropFilters tableId={tableId} catalogueCategoryProperties={catalogueCategoryProperties} />
+      <CategoryPropFilters
+        tableId={tableId}
+        catalogueCategoryProperties={catalogueCategoryProperties}
+        enableQueryUrl={enableQueryUrl}
+      />
     </div>
   )
 }
