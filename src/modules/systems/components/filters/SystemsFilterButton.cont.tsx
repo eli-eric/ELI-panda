@@ -36,11 +36,13 @@ type SystemFilterType = {
   price: [number | undefined, number | undefined]
   parentSystem: CodebookType | null
 }
-
-export const SystemFilterButtonContainer = () => {
+interface Props {
+  tableId: string
+  enableQueryURL?: boolean
+}
+export const SystemFilterButtonContainer = ({ tableId = 'systems', enableQueryURL = true }: Props) => {
   const [open, setOpen] = useState(false)
   const { minMaxPrice } = useMinMaxPrice()
-  const tableId = 'systems'
 
   const defValues = useMemo<SystemFilterType>(
     () => ({
@@ -69,10 +71,11 @@ export const SystemFilterButtonContainer = () => {
   )
   const formMethods = useFormFilter<SystemFilterType>({
     tableId,
-    defValues
+    defValues,
+    enableQueryURL: enableQueryURL
   })
 
-  const { storeFilters, setColumnFilters } = useFormFilterState({ tableId })
+  const { storeFilters, setColumnFilters } = useFormFilterState({ tableId, enableQueryUrl: enableQueryURL })
   const { reset, watch } = formMethods
 
   const { toggleDeleteCustom } = useFormControlStore()
@@ -115,7 +118,7 @@ export const SystemFilterButtonContainer = () => {
       </Button>
       <Form formMethods={formMethods}>
         <SlideOver panelTitle="System Filters" open={open} setOpen={setOpen} buttons={buttons}>
-          <SystemsFilterForm tableId={tableId} />
+          <SystemsFilterForm tableId={tableId} enableQueryUrl={enableQueryURL} />
         </SlideOver>
       </Form>
     </Fragment>
