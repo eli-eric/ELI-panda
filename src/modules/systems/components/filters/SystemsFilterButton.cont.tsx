@@ -37,7 +37,7 @@ type SystemFilterType = {
   parentSystem: CodebookType | null
 }
 interface Props {
-  tableId: string
+  tableId?: string
   enableQueryURL?: boolean
 }
 export const SystemFilterButtonContainer = ({ tableId = 'systems', enableQueryURL = true }: Props) => {
