@@ -17,7 +17,7 @@ export const schema = object({
   details: array().of(
     object({
       propertyGroup: string().required(),
-      value: mixed<any>(),
+      value: mixed<any>().nullable(),
       property: mixed<CatalogueCategoryProperty>().nullable().required()
     })
   )

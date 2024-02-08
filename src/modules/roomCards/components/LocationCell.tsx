@@ -28,7 +28,10 @@ export const LocationCell = ({ getValue, row: { original, id } }: LocationCellPr
 
   return (
     <div className="flex items-center">
-      <Link href={PATH.ROOM_CARD + '/' + original.uid} className={'text-blue-700 cursor-pointer hover:underline'}>
+      <Link
+        href={PATH.ROOM_CARD + '/' + original.uid}
+        className={'text-blue-700 dark:text-gray-200 dark:underline cursor-pointer hover:underline'}
+      >
         <span>{getValue()}</span>
       </Link>
       {hoveringId === id && editPersmission && <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />}

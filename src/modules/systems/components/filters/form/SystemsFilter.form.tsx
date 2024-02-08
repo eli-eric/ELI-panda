@@ -1,3 +1,6 @@
+import { useMemo } from 'react'
+import { useFormContext } from 'react-hook-form'
+
 import Combobox from '@/components/form/Combobox'
 import { ComboboxTree } from '@/components/form/ComboboxTree'
 import { FilterCheckboxes } from '@/components/form/FIlterCheckboxes'
@@ -7,6 +10,7 @@ import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
+import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { useMinMaxPrice } from '@/modules/systems/hooks/useMinMaxPrice'
 import { SystemLevel } from '@/types/gql/graphql'
 import { classNames } from '@/utils'
@@ -14,12 +18,18 @@ import { classNames } from '@/utils'
 import { CategoryPropFilters } from './CategoryPropFilters'
 import { useSystemsFilterFields } from './SystemsFilter.fields'
 
-export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
+export const SystemsFilterForm = ({ tableId, enableQueryUrl }: { tableId: string; enableQueryUrl: boolean }) => {
   const fields = useSystemsFilterFields()
   const systemLevels = Object.values(SystemLevel).map(level => level)
   const { minMaxPrice } = useMinMaxPrice()
 
-  const { setFilter } = useFormFilterState({ tableId })
+  const { setFilter } = useFormFilterState({ tableId, enableQueryUrl })
+  const { watch } = useFormContext()
+
+  const category = watch('category')
+  const uid = useMemo(() => category?.uid, [category])
+
+  const { catalogueCategoryProperties } = useCategoryProperties(uid)
 
   return (
     <div className={classNames('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
@@ -76,7 +86,11 @@ export const SystemsFilterForm = ({ tableId }: { tableId: string }) => {
           onChange={setFilter('price')}
         />
       </div>
-      <CategoryPropFilters tableId={tableId} />
+      <CategoryPropFilters
+        tableId={tableId}
+        catalogueCategoryProperties={catalogueCategoryProperties}
+        enableQueryUrl={enableQueryUrl}
+      />
     </div>
   )
 }

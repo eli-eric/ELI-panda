@@ -1,24 +1,23 @@
-import { Fragment, useMemo } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { Fragment } from 'react'
 
 import { FilterCheckboxes } from '@/components/form/FIlterCheckboxes'
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { RangeInput } from '@/components/form/RangeInput'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
-import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
+import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { useFormControlStore } from '@/store/useFormControlStore'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 
-export const CategoryPropFilters = ({ tableId }: { tableId: string }) => {
-  const { setFilter } = useFormFilterState({ tableId })
+interface Props {
+  tableId: string
+  catalogueCategoryProperties?: CatalogueItemDetail[]
+  enableQueryUrl?: boolean
+}
+
+export const CategoryPropFilters = ({ tableId, catalogueCategoryProperties, enableQueryUrl }: Props) => {
+  const { setFilter } = useFormFilterState({ tableId, enableQueryUrl })
   const { addCustomFieldIdToSync } = useFormControlStore()
-
-  const { watch } = useFormContext()
-
-  const category = watch('category')
-  const uid = useMemo(() => category?.uid, [category])
-  const { catalogueCategoryProperties } = useCategoryProperties(uid)
 
   // sort properties by type.uid list first and by name to in same order every time
   const categoryProperties = catalogueCategoryProperties?.sort((a, b) => {
