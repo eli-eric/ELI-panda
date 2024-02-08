@@ -1,5 +1,5 @@
 import { ComboboxTree } from '@/components/form/ComboboxTree'
-import { Input, TextArea } from '@/components/form/Input'
+import { Input } from '@/components/form/Input'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import useCatalogueFormFields from '@/modules/catalogueItem/components/form/CatalogueForm.fields'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
@@ -15,7 +15,7 @@ interface CatalogueFilterFormProps {
 export const CatalogueFilterForm = ({ tableId, catalogueCategoryProperties }: CatalogueFilterFormProps) => {
   const fields = useCatalogueFormFields()
 
-  const { setFilter } = useFormFilterState({ tableId })
+  const { setFilter } = useFormFilterState({ tableId, enableQueryUrl: true })
   const { toggleDeleteCustom } = useFormControlStore()
 
   return (
@@ -42,13 +42,17 @@ export const CatalogueFilterForm = ({ tableId, catalogueCategoryProperties }: Ca
         isFilter={true}
       />
 
-      <TextArea
+      <Input
         {...fields.description}
         className="col-span-2"
         onChange={setFilter(fields.description.name)}
         isFilter={true}
       />
-      <CategoryPropFilters tableId={tableId} catalogueCategoryProperties={catalogueCategoryProperties} />
+      <CategoryPropFilters
+        tableId={tableId}
+        catalogueCategoryProperties={catalogueCategoryProperties}
+        enableQueryUrl={true}
+      />
     </div>
   )
 }

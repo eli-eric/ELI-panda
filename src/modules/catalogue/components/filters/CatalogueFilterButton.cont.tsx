@@ -56,10 +56,11 @@ export const CatalogueFilterButtonContainer = () => {
   )
   const formMethods = useFormFilter<SystemFilterType>({
     tableId,
-    defValues
+    defValues,
+    enableQueryURL: true
   })
 
-  const { storeFilters, setColumnFilters } = useFormFilterState({ tableId })
+  const { storeFilters, setColumnFilters } = useFormFilterState({ tableId, enableQueryUrl: true })
   const { reset } = formMethods
 
   const onClear = () => {
