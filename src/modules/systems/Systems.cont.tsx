@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 
-import { SystemFiltersBadges } from './components/filters/SystemFilterBadges'
+import { FilterBadges } from '../shared/form/FilterBadges'
 import { SystemsComponent } from './Systems.comp'
 
 export const SystemsContainer: FC = () => (
@@ -9,6 +9,6 @@ export const SystemsContainer: FC = () => (
     enableDragAndDrop={false}
     tableId={'systems'}
     hideButtons={false}
-    RightSearchBarElement={() => <SystemFiltersBadges tableId={'systems'} />}
+    RightSearchBarElement={() => <FilterBadges tableId={'systems'} />}
   />
 )

@@ -6,6 +6,7 @@ import { Tooltip } from '@/components/Tooltip'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { classNames } from '@/utils'
 
+import { FilterBadges } from '../shared/form/FilterBadges'
 import { SystemFilterButtonContainer } from '../systems/components/filters/SystemsFilterButton.cont'
 import { SystemsComponent } from '../systems/Systems.comp'
 import type { SystemDetail } from '../systems/types/responses'
@@ -63,21 +64,24 @@ export const SystemsMovingContainer = () => {
             dropSettings={{ onDropHandler, accept: 'system' }}
             enableQueryURL={false}
             LeftSearchBarElement={() => <SystemFilterButtonContainer tableId={tableIdLeft} enableQueryURL={false} />}
-            RightSearchBarElement={() =>
-              showRight ? (
-                <Tooltip content="Hide systems window">
-                  <div>
-                    <MinusButton onClick={toggleLeft} />
-                  </div>
-                </Tooltip>
-              ) : (
-                <Tooltip content="Show systems window">
-                  <div>
-                    <PlusButton onClick={toggleRight} />
-                  </div>
-                </Tooltip>
-              )
-            }
+            RightSearchBarElement={() => (
+              <>
+                <FilterBadges tableId={tableIdLeft} />
+                {showRight ? (
+                  <Tooltip content="Hide systems window">
+                    <div>
+                      <MinusButton onClick={toggleLeft} />
+                    </div>
+                  </Tooltip>
+                ) : (
+                  <Tooltip content="Show systems window">
+                    <div>
+                      <PlusButton onClick={toggleRight} />
+                    </div>
+                  </Tooltip>
+                )}
+              </>
+            )}
           />
         )}
         {showRight && (
@@ -88,21 +92,24 @@ export const SystemsMovingContainer = () => {
             dropSettings={{ onDropHandler: onDropHandler, accept: 'system' }}
             LeftSearchBarElement={() => <SystemFilterButtonContainer tableId={tableIdRight} enableQueryURL={false} />}
             enableQueryURL={false}
-            RightSearchBarElement={() =>
-              showLeft ? (
-                <Tooltip content="Hide systems window">
-                  <div>
-                    <MinusButton onClick={toggleRight} />
-                  </div>
-                </Tooltip>
-              ) : (
-                <Tooltip content="Show systems window">
-                  <div>
-                    <PlusButton onClick={toggleLeft} />
-                  </div>
-                </Tooltip>
-              )
-            }
+            RightSearchBarElement={() => (
+              <>
+                <FilterBadges tableId={tableIdRight} />
+                {showLeft ? (
+                  <Tooltip content="Hide systems window">
+                    <div>
+                      <MinusButton onClick={toggleRight} />
+                    </div>
+                  </Tooltip>
+                ) : (
+                  <Tooltip content="Show systems window">
+                    <div>
+                      <PlusButton onClick={toggleLeft} />
+                    </div>
+                  </Tooltip>
+                )}
+              </>
+            )}
           />
         )}
       </div>
