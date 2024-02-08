@@ -23,10 +23,12 @@ export const RangeInput = ({ name, label, onChange, isFilter, disabled, placehol
     if (inputValues) {
       clearErrors(name)
       const handler = setTimeout(() => {
-        if (inputValues.min > inputValues.max) {
-          toast.error('Min value must be less than max value')
-          setError(name, { type: 'manual', message: 'Min value must be less than max value' })
-          return
+        if (required) {
+          if (inputValues.min > inputValues.max) {
+            toast.error('Min value must be less than max value')
+            setError(name, { type: 'manual', message: 'Min value must be less than max value' })
+            return
+          }
         }
         onChange &&
           onChange({
