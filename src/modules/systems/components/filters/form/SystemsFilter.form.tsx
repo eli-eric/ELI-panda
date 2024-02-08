@@ -15,7 +15,7 @@ import { useMinMaxPrice } from '@/modules/systems/hooks/useMinMaxPrice'
 import { SystemLevel } from '@/types/gql/graphql'
 import { classNames } from '@/utils'
 
-import { CategoryPropFilters } from './CategoryPropFilters'
+import { CategoryPropFilters } from '../../../../shared/form/CategoryPropFilters'
 import { useSystemsFilterFields } from './SystemsFilter.fields'
 
 export const SystemsFilterForm = ({ tableId, enableQueryUrl }: { tableId: string; enableQueryUrl: boolean }) => {

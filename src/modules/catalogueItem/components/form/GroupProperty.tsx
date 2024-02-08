@@ -78,7 +78,7 @@ const GroupProperty = ({ detail, index }: Props) => {
       const label = detail.property.unit?.name
         ? `${detail.property.name} [${detail.property.unit?.name}]`
         : detail.property.name
-      return <RangeInput name={`details.${index}.value`} label={label} disabled={disabled} />
+      return <RangeInput required name={`details.${index}.value`} label={label} disabled={disabled} />
     }
     default: {
       return (

@@ -59,6 +59,7 @@ export const CategoryPropFilters = ({ tableId, catalogueCategoryProperties, enab
                   <RangeInput
                     key={property.property.uid}
                     name={property.property.uid}
+                    placeholder={{ min: 'Value', max: '+/-' }}
                     label={label}
                     onChange={value => {
                       setFilter(property.property.uid)(value, property.property.type.code, property.property.name)
@@ -73,6 +74,7 @@ export const CategoryPropFilters = ({ tableId, catalogueCategoryProperties, enab
                   <RangeInput
                     key={property.property.uid}
                     name={property.property.uid}
+                    placeholder={{ min: 'Value', max: '+/-' }}
                     label={label}
                     onChange={value => {
                       setFilter(property.property.uid)(value, property.property.type.code, property.property.name)

@@ -3,7 +3,7 @@ import { Input } from '@/components/form/Input'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import useCatalogueFormFields from '@/modules/catalogueItem/components/form/CatalogueForm.fields'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
-import { CategoryPropFilters } from '@/modules/systems/components/filters/form/CategoryPropFilters'
+import { CategoryPropFilters } from '@/modules/shared/form/CategoryPropFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
 import { classNames } from '@/utils'
 

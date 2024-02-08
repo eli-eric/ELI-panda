@@ -22,7 +22,7 @@ export const TableSettings: FC<Props> = ({ table }) => (
           )}
         </Disclosure.Button>
 
-        <Disclosure.Panel className="bg-white dark:bg-gray-800  border-t border-gray-200 overflow-hidden ">
+        <Disclosure.Panel className="bg-white dark:bg-gray-800  border-t border-gray-200 overflow-hidden">
           <ul className="divide-y divide-gray-200">
             <li>
               <div className="py-1 px-4">
