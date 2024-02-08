@@ -68,7 +68,9 @@ export const CatalogueTable = ({
       settings={{
         enableQueryURL,
         enableColumnHiding: tableId === 'catalogueItems',
-        enableColumnReordering: tableId === 'catalogueItems'
+        enableColumnReordering: tableId === 'catalogueItems',
+        enableSorting: tableId === 'catalogueItems',
+        manualSorting: tableId === 'catalogueItems'
       }}
     />
   )

@@ -12,22 +12,22 @@ export const CategoryListContainer = ({ onChange }: Props) => (
     {({ open }) => (
       <div id="category-list" className="flex flex-col">
         <Disclosure.Button
-          className="lg:hidden border flex justify-between rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500"
+          className="border-t hover:text-primary-600 dark:hover:bg-slate-600 text-sm flex items-center justify-between w-full py-[2px] px-4  shadow-sm  text-gray-500 bg-white dark:bg-gray-800 hover:bg-gray-100"
           onClick={() => {
             onChange(!open)
           }}
         >
-          <span className="text-xs">{open ? 'Hide' : 'Show'} Categories</span>
+          <span className="">{open ? 'Hide' : 'Show'} Categories</span>
           {open ? (
             <XMarkIcon className="block h-4 w-4" aria-hidden="true" />
           ) : (
             <ChevronDownIcon className="block h-4 w-4" aria-hidden="true" />
           )}
         </Disclosure.Button>
-        <div className="lg:grid hidden">
+        {/*  <div className="lg:grid hidden">
           <CategoryList />
-        </div>
-        <Disclosure.Panel className={'lg:hidden grid'}>
+        </div> */}
+        <Disclosure.Panel className={' grid'}>
           <CategoryList />
         </Disclosure.Panel>
       </div>

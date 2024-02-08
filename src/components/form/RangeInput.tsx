@@ -8,11 +8,13 @@ interface Props {
   name: string
   label: string
   onChange?: (v: any) => void
+  required?: boolean
+  placeholder?: { min: string; max: string }
   isFilter?: boolean
   disabled?: boolean
 }
 
-export const RangeInput = ({ name, label, onChange, isFilter, disabled }: Props) => {
+export const RangeInput = ({ name, label, onChange, isFilter, disabled, placeholder, required }: Props) => {
   const { control, watch, setError, clearErrors } = useFormContext()
 
   const inputValues = watch(name)
@@ -21,10 +23,12 @@ export const RangeInput = ({ name, label, onChange, isFilter, disabled }: Props)
     if (inputValues) {
       clearErrors(name)
       const handler = setTimeout(() => {
-        if (inputValues.min > inputValues.max) {
-          toast.error('Min value must be less than max value')
-          setError(name, { type: 'manual', message: 'Min value must be less than max value' })
-          return
+        if (required) {
+          if (inputValues.min > inputValues.max) {
+            toast.error('Min value must be less than max value')
+            setError(name, { type: 'manual', message: 'Min value must be less than max value' })
+            return
+          }
         }
         onChange &&
           onChange({
@@ -52,7 +56,8 @@ export const RangeInput = ({ name, label, onChange, isFilter, disabled }: Props)
                   name={'min' + name}
                   type="number"
                   pattern="[0-9]*"
-                  placeholder="Min"
+                  required={required ? !!field.value?.max : false}
+                  placeholder={placeholder?.min || 'Min'}
                   className={classNames(
                     'form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm',
                     isFilter && fieldValue?.min && 'border-green-500',
@@ -72,7 +77,8 @@ export const RangeInput = ({ name, label, onChange, isFilter, disabled }: Props)
                   name={'max' + name}
                   type="number"
                   pattern="[0-9]*"
-                  placeholder="Max"
+                  placeholder={placeholder?.max || 'Max'}
+                  required={required ? !!field.value?.min : false}
                   onChange={e => {
                     const value = e.target.value === '' ? '' : Number(e.target.value)
                     field.onChange({
