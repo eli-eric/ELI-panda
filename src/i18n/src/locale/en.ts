@@ -339,6 +339,7 @@ export const messages = {
         },
         supplier: { label: 'Supplier', placeholder: '...type here' },
         orderStatus: { label: 'Order Status' },
+        deliveryStatus: { label: 'Delivery Status' },
         notes: { label: 'Notes' },
         orderDate: { label: 'Order Date' },
         procurementResponsible: {

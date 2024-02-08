@@ -71,6 +71,12 @@ const useOrderFormFields = () => {
       rounded: 'rounded-md',
       codebook: CODEBOOK.ORDER_STATUS
     },
+    deliveryStatus: {
+      name: 'deliveryStatus',
+      label: form.deliveryStatus.label,
+      disabled: disabledEdit,
+      rounded: 'rounded-md'
+    },
     notes: {
       name: 'notes',
       label: form.notes.label,

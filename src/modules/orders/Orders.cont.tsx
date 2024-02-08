@@ -5,6 +5,7 @@ import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import type { Order } from '@/types/responses/orders'
 import { classNames } from '@/utils'
 
+import { FilterBadges } from '../shared/form/FilterBadges'
 import { Pagination } from '../shared/table/Pagination'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
@@ -12,7 +13,6 @@ import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '../shared/table/SearchBar'
 import { HeaderButtons } from './components/HeaderButtons'
 import { useOrderColumns } from './components/OrderColumns'
-import { OrdersFilter } from './components/OrdersFilter'
 import { useOrders } from './hooks/useOrders'
 import { getColorClassStatus } from './utils/getColorClassStatus'
 
@@ -43,9 +43,9 @@ const OrdersContainer = () => {
   return (
     <TableLayoutContainer>
       <SearchBar
-        tableId={tableId}
+        tableId="orders"
         left={<HeaderButtons />}
-        right={<OrdersFilter />}
+        right={<FilterBadges tableId="orders" />}
       />
       {!error && (
         <PandaTableV2<Order>

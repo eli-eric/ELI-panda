@@ -1,0 +1,89 @@
+import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
+import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
+import { Fragment, useMemo, useState } from 'react'
+
+import { Button } from '@/components/Buttons'
+import { Form } from '@/components/form/Form'
+import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver'
+import { SlideOver } from '@/components/overlays/slideover/SlideOver'
+import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
+
+import { OrdersFilter } from './OrdersFilter'
+
+type OrderFilterType = {
+  name: string
+  orderNumber: string
+  requestNumber: string
+  contractNumber: string
+  supplier: string
+  requestor: string
+  procurementResponsible: string
+  orderStatus: string[]
+  notes: string
+  orderDate: string
+  lastUpdateTime: string
+  lastUpdateBy: string
+}
+
+export const OrderFilterButton = () => {
+  const [open, setOpen] = useState(false)
+  const tableId = 'orders'
+
+  const defValues = useMemo<OrderFilterType>(
+    () => ({
+      name: '',
+      orderNumber: '',
+      requestNumber: '',
+      contractNumber: '',
+      supplier: '',
+      requestor: '',
+      procurementResponsible: '',
+      orderStatus: [],
+      notes: '',
+      orderDate: '',
+      lastUpdateTime: '',
+      lastUpdateBy: ''
+    }),
+    []
+  )
+  const formMethods = useFormFilter<OrderFilterType>({
+    tableId,
+    defValues,
+    enableQueryURL: true
+  })
+
+  const { storeFilters, setColumnFilters } = useFormFilterState({ tableId, enableQueryUrl: true })
+  const { reset } = formMethods
+
+  const onClear = () => {
+    reset(defValues, { keepValues: false })
+  }
+
+  const buttons: SlideOverButtons = {
+    goNext: {
+      type: 'button',
+      className: 'w-full justify-center',
+      text: 'Clear filters',
+      onClick: () => {
+        onClear()
+        setColumnFilters([])
+      }
+    }
+  }
+  return (
+    <Fragment>
+      <Button className="mr-1" buttonSize="large" onClick={() => setOpen(true)}>
+        {storeFilters.length > 0 ? (
+          <FunnelIconFull className="h-4 w-4" aria-hidden="true" />
+        ) : (
+          <FunnelIconEmpty className="h-4 w-4" aria-hidden="true" />
+        )}
+      </Button>
+      <Form formMethods={formMethods}>
+        <SlideOver panelTitle="Orders Filters" open={open} setOpen={setOpen} buttons={buttons}>
+          <OrdersFilter />
+        </SlideOver>
+      </Form>
+    </Fragment>
+  )
+}
