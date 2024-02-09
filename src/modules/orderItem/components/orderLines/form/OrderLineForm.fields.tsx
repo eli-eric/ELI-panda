@@ -24,8 +24,7 @@ const useOrderLineFormFields = (enabled: boolean) =>
       name: 'system',
       label: form.systemName.label,
       placeholder: form.systemName.placeholder,
-      rounded: 'rounded-md',
-      codebook: CODEBOOK.SYSTEM
+      rounded: 'rounded-md'
     },
     price: {
       name: 'price',
