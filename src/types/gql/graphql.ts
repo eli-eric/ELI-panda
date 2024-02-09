@@ -3577,6 +3577,12 @@ export type CreateFacilitiesMutationResponse = {
   info: CreateInfo;
 };
 
+export type CreateFilterSettingsMutationResponse = {
+  __typename?: 'CreateFilterSettingsMutationResponse';
+  filterSettings: Array<FilterSettings>;
+  info: CreateInfo;
+};
+
 export type CreateHallContactPeopleMutationResponse = {
   __typename?: 'CreateHallContactPeopleMutationResponse';
   hallContactPeople: Array<HallContactPerson>;
@@ -3692,6 +3698,12 @@ export type CreateUnitsMutationResponse = {
   __typename?: 'CreateUnitsMutationResponse';
   info: CreateInfo;
   units: Array<Unit>;
+};
+
+export type CreateUserSettingsMutationResponse = {
+  __typename?: 'CreateUserSettingsMutationResponse';
+  info: CreateInfo;
+  userSettings: Array<UserSettings>;
 };
 
 export type CreateUsersMutationResponse = {
@@ -4995,6 +5007,233 @@ export type FacilityZoneHasZoneZonesNodeAggregateSelection = {
   uid: IdAggregateSelectionNonNullable;
 };
 
+export type FilterSettings = {
+  __typename?: 'FilterSettings';
+  name: Scalars['String']['output'];
+  settings: Scalars['String']['output'];
+  tableId: Scalars['String']['output'];
+  uid: Scalars['ID']['output'];
+  userSettings: UserSettings;
+  userSettingsAggregate?: Maybe<FilterSettingsUserSettingsUserSettingsAggregationSelection>;
+  userSettingsConnection: FilterSettingsUserSettingsConnection;
+};
+
+
+export type FilterSettingsUserSettingsArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<UserSettingsOptions>;
+  where?: InputMaybe<UserSettingsWhere>;
+};
+
+
+export type FilterSettingsUserSettingsAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<UserSettingsWhere>;
+};
+
+
+export type FilterSettingsUserSettingsConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<FilterSettingsUserSettingsConnectionSort>>;
+  where?: InputMaybe<FilterSettingsUserSettingsConnectionWhere>;
+};
+
+export type FilterSettingsAggregateSelection = {
+  __typename?: 'FilterSettingsAggregateSelection';
+  count: Scalars['Int']['output'];
+  name: StringAggregateSelectionNonNullable;
+  settings: StringAggregateSelectionNonNullable;
+  tableId: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type FilterSettingsConnectInput = {
+  userSettings?: InputMaybe<FilterSettingsUserSettingsConnectFieldInput>;
+};
+
+export type FilterSettingsConnectWhere = {
+  node: FilterSettingsWhere;
+};
+
+export type FilterSettingsConnection = {
+  __typename?: 'FilterSettingsConnection';
+  edges: Array<FilterSettingsEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type FilterSettingsCreateInput = {
+  name: Scalars['String']['input'];
+  settings: Scalars['String']['input'];
+  tableId: Scalars['String']['input'];
+  userSettings?: InputMaybe<FilterSettingsUserSettingsFieldInput>;
+};
+
+export type FilterSettingsDeleteInput = {
+  userSettings?: InputMaybe<FilterSettingsUserSettingsDeleteFieldInput>;
+};
+
+export type FilterSettingsDisconnectInput = {
+  userSettings?: InputMaybe<FilterSettingsUserSettingsDisconnectFieldInput>;
+};
+
+export type FilterSettingsEdge = {
+  __typename?: 'FilterSettingsEdge';
+  cursor: Scalars['String']['output'];
+  node: FilterSettings;
+};
+
+export type FilterSettingsOptions = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /** Specify one or more FilterSettingsSort objects to sort FilterSettings by. The sorts will be applied in the order in which they are arranged in the array. */
+  sort?: InputMaybe<Array<FilterSettingsSort>>;
+};
+
+export type FilterSettingsRelationInput = {
+  userSettings?: InputMaybe<FilterSettingsUserSettingsCreateFieldInput>;
+};
+
+/** Fields to sort FilterSettings by. The order in which sorts are applied is not guaranteed when specifying many fields in one FilterSettingsSort object. */
+export type FilterSettingsSort = {
+  name?: InputMaybe<SortDirection>;
+  settings?: InputMaybe<SortDirection>;
+  tableId?: InputMaybe<SortDirection>;
+  uid?: InputMaybe<SortDirection>;
+};
+
+export type FilterSettingsUpdateInput = {
+  name?: InputMaybe<Scalars['String']['input']>;
+  settings?: InputMaybe<Scalars['String']['input']>;
+  tableId?: InputMaybe<Scalars['String']['input']>;
+  userSettings?: InputMaybe<FilterSettingsUserSettingsUpdateFieldInput>;
+};
+
+export type FilterSettingsUserSettingsAggregateInput = {
+  AND?: InputMaybe<Array<FilterSettingsUserSettingsAggregateInput>>;
+  NOT?: InputMaybe<FilterSettingsUserSettingsAggregateInput>;
+  OR?: InputMaybe<Array<FilterSettingsUserSettingsAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<FilterSettingsUserSettingsNodeAggregationWhereInput>;
+};
+
+export type FilterSettingsUserSettingsConnectFieldInput = {
+  connect?: InputMaybe<UserSettingsConnectInput>;
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<UserSettingsConnectWhere>;
+};
+
+export type FilterSettingsUserSettingsConnection = {
+  __typename?: 'FilterSettingsUserSettingsConnection';
+  edges: Array<FilterSettingsUserSettingsRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type FilterSettingsUserSettingsConnectionSort = {
+  node?: InputMaybe<UserSettingsSort>;
+};
+
+export type FilterSettingsUserSettingsConnectionWhere = {
+  AND?: InputMaybe<Array<FilterSettingsUserSettingsConnectionWhere>>;
+  NOT?: InputMaybe<FilterSettingsUserSettingsConnectionWhere>;
+  OR?: InputMaybe<Array<FilterSettingsUserSettingsConnectionWhere>>;
+  node?: InputMaybe<UserSettingsWhere>;
+};
+
+export type FilterSettingsUserSettingsCreateFieldInput = {
+  node: UserSettingsCreateInput;
+};
+
+export type FilterSettingsUserSettingsDeleteFieldInput = {
+  delete?: InputMaybe<UserSettingsDeleteInput>;
+  where?: InputMaybe<FilterSettingsUserSettingsConnectionWhere>;
+};
+
+export type FilterSettingsUserSettingsDisconnectFieldInput = {
+  disconnect?: InputMaybe<UserSettingsDisconnectInput>;
+  where?: InputMaybe<FilterSettingsUserSettingsConnectionWhere>;
+};
+
+export type FilterSettingsUserSettingsFieldInput = {
+  connect?: InputMaybe<FilterSettingsUserSettingsConnectFieldInput>;
+  create?: InputMaybe<FilterSettingsUserSettingsCreateFieldInput>;
+};
+
+export type FilterSettingsUserSettingsNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<FilterSettingsUserSettingsNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<FilterSettingsUserSettingsNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<FilterSettingsUserSettingsNodeAggregationWhereInput>>;
+};
+
+export type FilterSettingsUserSettingsRelationship = {
+  __typename?: 'FilterSettingsUserSettingsRelationship';
+  cursor: Scalars['String']['output'];
+  node: UserSettings;
+};
+
+export type FilterSettingsUserSettingsUpdateConnectionInput = {
+  node?: InputMaybe<UserSettingsUpdateInput>;
+};
+
+export type FilterSettingsUserSettingsUpdateFieldInput = {
+  connect?: InputMaybe<FilterSettingsUserSettingsConnectFieldInput>;
+  create?: InputMaybe<FilterSettingsUserSettingsCreateFieldInput>;
+  delete?: InputMaybe<FilterSettingsUserSettingsDeleteFieldInput>;
+  disconnect?: InputMaybe<FilterSettingsUserSettingsDisconnectFieldInput>;
+  update?: InputMaybe<FilterSettingsUserSettingsUpdateConnectionInput>;
+  where?: InputMaybe<FilterSettingsUserSettingsConnectionWhere>;
+};
+
+export type FilterSettingsUserSettingsUserSettingsAggregationSelection = {
+  __typename?: 'FilterSettingsUserSettingsUserSettingsAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<FilterSettingsUserSettingsUserSettingsNodeAggregateSelection>;
+};
+
+export type FilterSettingsUserSettingsUserSettingsNodeAggregateSelection = {
+  __typename?: 'FilterSettingsUserSettingsUserSettingsNodeAggregateSelection';
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type FilterSettingsWhere = {
+  AND?: InputMaybe<Array<FilterSettingsWhere>>;
+  NOT?: InputMaybe<FilterSettingsWhere>;
+  OR?: InputMaybe<Array<FilterSettingsWhere>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  name_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  settings?: InputMaybe<Scalars['String']['input']>;
+  settings_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  settings_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  settings_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  settings_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  tableId?: InputMaybe<Scalars['String']['input']>;
+  tableId_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  tableId_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  tableId_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  tableId_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  uid?: InputMaybe<Scalars['ID']['input']>;
+  uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
+  uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
+  uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  userSettings?: InputMaybe<UserSettingsWhere>;
+  userSettingsAggregate?: InputMaybe<FilterSettingsUserSettingsAggregateInput>;
+  userSettingsConnection?: InputMaybe<FilterSettingsUserSettingsConnectionWhere>;
+  userSettingsConnection_NOT?: InputMaybe<FilterSettingsUserSettingsConnectionWhere>;
+  userSettings_NOT?: InputMaybe<UserSettingsWhere>;
+};
+
 export type HallContactPeopleConnection = {
   __typename?: 'HallContactPeopleConnection';
   edges: Array<HallContactPersonEdge>;
@@ -5761,6 +6000,14 @@ export type IdAggregateSelectionNullable = {
   shortest?: Maybe<Scalars['ID']['output']>;
 };
 
+export type IntAggregateSelectionNullable = {
+  __typename?: 'IntAggregateSelectionNullable';
+  average?: Maybe<Scalars['Float']['output']>;
+  max?: Maybe<Scalars['Int']['output']>;
+  min?: Maybe<Scalars['Int']['output']>;
+  sum?: Maybe<Scalars['Int']['output']>;
+};
+
 export type Item = {
   __typename?: 'Item';
   catalogueItem: CatalogueItem;
@@ -6457,11 +6704,13 @@ export type ItemOrderAggregateInput = {
   count_GTE?: InputMaybe<Scalars['Int']['input']>;
   count_LT?: InputMaybe<Scalars['Int']['input']>;
   count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  edge?: InputMaybe<ItemOrderEdgeAggregationWhereInput>;
   node?: InputMaybe<ItemOrderNodeAggregationWhereInput>;
 };
 
 export type ItemOrderConnectFieldInput = {
   connect?: InputMaybe<OrderConnectInput>;
+  edge?: InputMaybe<HasOrderLineCreateInput>;
   /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<OrderConnectWhere>;
@@ -6475,6 +6724,7 @@ export type ItemOrderConnection = {
 };
 
 export type ItemOrderConnectionSort = {
+  edge?: InputMaybe<HasOrderLineSort>;
   node?: InputMaybe<OrderSort>;
 };
 
@@ -6482,10 +6732,12 @@ export type ItemOrderConnectionWhere = {
   AND?: InputMaybe<Array<ItemOrderConnectionWhere>>;
   NOT?: InputMaybe<ItemOrderConnectionWhere>;
   OR?: InputMaybe<Array<ItemOrderConnectionWhere>>;
+  edge?: InputMaybe<HasOrderLineWhere>;
   node?: InputMaybe<OrderWhere>;
 };
 
 export type ItemOrderCreateFieldInput = {
+  edge?: InputMaybe<HasOrderLineCreateInput>;
   node: OrderCreateInput;
 };
 
@@ -6497,6 +6749,47 @@ export type ItemOrderDeleteFieldInput = {
 export type ItemOrderDisconnectFieldInput = {
   disconnect?: InputMaybe<OrderDisconnectInput>;
   where?: InputMaybe<ItemOrderConnectionWhere>;
+};
+
+export type ItemOrderEdgeAggregationWhereInput = {
+  AND?: InputMaybe<Array<ItemOrderEdgeAggregationWhereInput>>;
+  NOT?: InputMaybe<ItemOrderEdgeAggregationWhereInput>;
+  OR?: InputMaybe<Array<ItemOrderEdgeAggregationWhereInput>>;
+  currency_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  currency_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  currency_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  currency_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  currency_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  currency_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  currency_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  currency_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  currency_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  currency_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  currency_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  currency_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  currency_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  currency_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  currency_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  price_AVERAGE_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  price_AVERAGE_GT?: InputMaybe<Scalars['Float']['input']>;
+  price_AVERAGE_GTE?: InputMaybe<Scalars['Float']['input']>;
+  price_AVERAGE_LT?: InputMaybe<Scalars['Float']['input']>;
+  price_AVERAGE_LTE?: InputMaybe<Scalars['Float']['input']>;
+  price_MAX_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  price_MAX_GT?: InputMaybe<Scalars['Int']['input']>;
+  price_MAX_GTE?: InputMaybe<Scalars['Int']['input']>;
+  price_MAX_LT?: InputMaybe<Scalars['Int']['input']>;
+  price_MAX_LTE?: InputMaybe<Scalars['Int']['input']>;
+  price_MIN_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  price_MIN_GT?: InputMaybe<Scalars['Int']['input']>;
+  price_MIN_GTE?: InputMaybe<Scalars['Int']['input']>;
+  price_MIN_LT?: InputMaybe<Scalars['Int']['input']>;
+  price_MIN_LTE?: InputMaybe<Scalars['Int']['input']>;
+  price_SUM_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  price_SUM_GT?: InputMaybe<Scalars['Int']['input']>;
+  price_SUM_GTE?: InputMaybe<Scalars['Int']['input']>;
+  price_SUM_LT?: InputMaybe<Scalars['Int']['input']>;
+  price_SUM_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ItemOrderFieldInput = {
@@ -6528,7 +6821,14 @@ export type ItemOrderNodeAggregationWhereInput = {
 export type ItemOrderOrderAggregationSelection = {
   __typename?: 'ItemOrderOrderAggregationSelection';
   count: Scalars['Int']['output'];
+  edge?: Maybe<ItemOrderOrderEdgeAggregateSelection>;
   node?: Maybe<ItemOrderOrderNodeAggregateSelection>;
+};
+
+export type ItemOrderOrderEdgeAggregateSelection = {
+  __typename?: 'ItemOrderOrderEdgeAggregateSelection';
+  currency: StringAggregateSelectionNullable;
+  price: IntAggregateSelectionNullable;
 };
 
 export type ItemOrderOrderNodeAggregateSelection = {
@@ -6537,13 +6837,16 @@ export type ItemOrderOrderNodeAggregateSelection = {
   uid: IdAggregateSelectionNonNullable;
 };
 
-export type ItemOrderRelationship = {
+export type ItemOrderRelationship = HasOrderLine & {
   __typename?: 'ItemOrderRelationship';
+  currency?: Maybe<Scalars['String']['output']>;
   cursor: Scalars['String']['output'];
   node: Order;
+  price?: Maybe<Scalars['Int']['output']>;
 };
 
 export type ItemOrderUpdateConnectionInput = {
+  edge?: InputMaybe<HasOrderLineUpdateInput>;
   node?: InputMaybe<OrderUpdateInput>;
 };
 
@@ -7847,6 +8150,7 @@ export type Mutation = {
   createContactPersonRoles: CreateContactPersonRolesMutationResponse;
   createEmployees: CreateEmployeesMutationResponse;
   createFacilities: CreateFacilitiesMutationResponse;
+  createFilterSettings: CreateFilterSettingsMutationResponse;
   createHallContactPeople: CreateHallContactPeopleMutationResponse;
   createItemConditions: CreateItemConditionsMutationResponse;
   createItemUsages: CreateItemUsagesMutationResponse;
@@ -7865,6 +8169,7 @@ export type Mutation = {
   createSystems: CreateSystemsMutationResponse;
   createTeams: CreateTeamsMutationResponse;
   createUnits: CreateUnitsMutationResponse;
+  createUserSettings: CreateUserSettingsMutationResponse;
   createUsers: CreateUsersMutationResponse;
   createZones: CreateZonesMutationResponse;
   deleteCatalogueCategories: DeleteInfo;
@@ -7875,6 +8180,7 @@ export type Mutation = {
   deleteContactPersonRoles: DeleteInfo;
   deleteEmployees: DeleteInfo;
   deleteFacilities: DeleteInfo;
+  deleteFilterSettings: DeleteInfo;
   deleteHallContactPeople: DeleteInfo;
   deleteItemConditions: DeleteInfo;
   deleteItemUsages: DeleteInfo;
@@ -7893,6 +8199,7 @@ export type Mutation = {
   deleteSystems: DeleteInfo;
   deleteTeams: DeleteInfo;
   deleteUnits: DeleteInfo;
+  deleteUserSettings: DeleteInfo;
   deleteUsers: DeleteInfo;
   deleteZones: DeleteInfo;
   updateCatalogueCategories: UpdateCatalogueCategoriesMutationResponse;
@@ -7903,6 +8210,7 @@ export type Mutation = {
   updateContactPersonRoles: UpdateContactPersonRolesMutationResponse;
   updateEmployees: UpdateEmployeesMutationResponse;
   updateFacilities: UpdateFacilitiesMutationResponse;
+  updateFilterSettings: UpdateFilterSettingsMutationResponse;
   updateHallContactPeople: UpdateHallContactPeopleMutationResponse;
   updateItemConditions: UpdateItemConditionsMutationResponse;
   updateItemUsages: UpdateItemUsagesMutationResponse;
@@ -7921,6 +8229,7 @@ export type Mutation = {
   updateSystems: UpdateSystemsMutationResponse;
   updateTeams: UpdateTeamsMutationResponse;
   updateUnits: UpdateUnitsMutationResponse;
+  updateUserSettings: UpdateUserSettingsMutationResponse;
   updateUsers: UpdateUsersMutationResponse;
   updateZones: UpdateZonesMutationResponse;
 };
@@ -7963,6 +8272,11 @@ export type MutationCreateEmployeesArgs = {
 
 export type MutationCreateFacilitiesArgs = {
   input: Array<FacilityCreateInput>;
+};
+
+
+export type MutationCreateFilterSettingsArgs = {
+  input: Array<FilterSettingsCreateInput>;
 };
 
 
@@ -8056,6 +8370,11 @@ export type MutationCreateUnitsArgs = {
 };
 
 
+export type MutationCreateUserSettingsArgs = {
+  input: Array<UserSettingsCreateInput>;
+};
+
+
 export type MutationCreateUsersArgs = {
   input: Array<UserCreateInput>;
 };
@@ -8110,6 +8429,12 @@ export type MutationDeleteEmployeesArgs = {
 export type MutationDeleteFacilitiesArgs = {
   delete?: InputMaybe<FacilityDeleteInput>;
   where?: InputMaybe<FacilityWhere>;
+};
+
+
+export type MutationDeleteFilterSettingsArgs = {
+  delete?: InputMaybe<FilterSettingsDeleteInput>;
+  where?: InputMaybe<FilterSettingsWhere>;
 };
 
 
@@ -8212,6 +8537,12 @@ export type MutationDeleteUnitsArgs = {
 };
 
 
+export type MutationDeleteUserSettingsArgs = {
+  delete?: InputMaybe<UserSettingsDeleteInput>;
+  where?: InputMaybe<UserSettingsWhere>;
+};
+
+
 export type MutationDeleteUsersArgs = {
   delete?: InputMaybe<UserDeleteInput>;
   where?: InputMaybe<UserWhere>;
@@ -8297,6 +8628,16 @@ export type MutationUpdateFacilitiesArgs = {
   disconnect?: InputMaybe<FacilityDisconnectInput>;
   update?: InputMaybe<FacilityUpdateInput>;
   where?: InputMaybe<FacilityWhere>;
+};
+
+
+export type MutationUpdateFilterSettingsArgs = {
+  connect?: InputMaybe<FilterSettingsConnectInput>;
+  create?: InputMaybe<FilterSettingsRelationInput>;
+  delete?: InputMaybe<FilterSettingsDeleteInput>;
+  disconnect?: InputMaybe<FilterSettingsDisconnectInput>;
+  update?: InputMaybe<FilterSettingsUpdateInput>;
+  where?: InputMaybe<FilterSettingsWhere>;
 };
 
 
@@ -8441,6 +8782,16 @@ export type MutationUpdateTeamsArgs = {
 export type MutationUpdateUnitsArgs = {
   update?: InputMaybe<UnitUpdateInput>;
   where?: InputMaybe<UnitWhere>;
+};
+
+
+export type MutationUpdateUserSettingsArgs = {
+  connect?: InputMaybe<UserSettingsConnectInput>;
+  create?: InputMaybe<UserSettingsRelationInput>;
+  delete?: InputMaybe<UserSettingsDeleteInput>;
+  disconnect?: InputMaybe<UserSettingsDisconnectInput>;
+  update?: InputMaybe<UserSettingsUpdateInput>;
+  where?: InputMaybe<UserSettingsWhere>;
 };
 
 
@@ -8869,6 +9220,9 @@ export type Query = {
   facilities: Array<Facility>;
   facilitiesAggregate: FacilityAggregateSelection;
   facilitiesConnection: FacilitiesConnection;
+  filterSettings: Array<FilterSettings>;
+  filterSettingsAggregate: FilterSettingsAggregateSelection;
+  filterSettingsConnection: FilterSettingsConnection;
   hallContactPeople: Array<HallContactPerson>;
   hallContactPeopleAggregate: HallContactPersonAggregateSelection;
   hallContactPeopleConnection: HallContactPeopleConnection;
@@ -8923,6 +9277,9 @@ export type Query = {
   units: Array<Unit>;
   unitsAggregate: UnitAggregateSelection;
   unitsConnection: UnitsConnection;
+  userSettings: Array<UserSettings>;
+  userSettingsAggregate: UserSettingsAggregateSelection;
+  userSettingsConnection: UserSettingsConnection;
   users: Array<User>;
   usersAggregate: UserAggregateSelection;
   usersConnection: UsersConnection;
@@ -9081,6 +9438,25 @@ export type QueryFacilitiesConnectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<InputMaybe<FacilitySort>>>;
   where?: InputMaybe<FacilityWhere>;
+};
+
+
+export type QueryFilterSettingsArgs = {
+  options?: InputMaybe<FilterSettingsOptions>;
+  where?: InputMaybe<FilterSettingsWhere>;
+};
+
+
+export type QueryFilterSettingsAggregateArgs = {
+  where?: InputMaybe<FilterSettingsWhere>;
+};
+
+
+export type QueryFilterSettingsConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<FilterSettingsSort>>>;
+  where?: InputMaybe<FilterSettingsWhere>;
 };
 
 
@@ -9423,6 +9799,25 @@ export type QueryUnitsConnectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<InputMaybe<UnitSort>>>;
   where?: InputMaybe<UnitWhere>;
+};
+
+
+export type QueryUserSettingsArgs = {
+  options?: InputMaybe<UserSettingsOptions>;
+  where?: InputMaybe<UserSettingsWhere>;
+};
+
+
+export type QueryUserSettingsAggregateArgs = {
+  where?: InputMaybe<UserSettingsWhere>;
+};
+
+
+export type QueryUserSettingsConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<UserSettingsSort>>>;
+  where?: InputMaybe<UserSettingsWhere>;
 };
 
 
@@ -13935,6 +14330,12 @@ export type UpdateFacilitiesMutationResponse = {
   info: UpdateInfo;
 };
 
+export type UpdateFilterSettingsMutationResponse = {
+  __typename?: 'UpdateFilterSettingsMutationResponse';
+  filterSettings: Array<FilterSettings>;
+  info: UpdateInfo;
+};
+
 export type UpdateHallContactPeopleMutationResponse = {
   __typename?: 'UpdateHallContactPeopleMutationResponse';
   hallContactPeople: Array<HallContactPerson>;
@@ -14054,6 +14455,12 @@ export type UpdateUnitsMutationResponse = {
   units: Array<Unit>;
 };
 
+export type UpdateUserSettingsMutationResponse = {
+  __typename?: 'UpdateUserSettingsMutationResponse';
+  info: UpdateInfo;
+  userSettings: Array<UserSettings>;
+};
+
 export type UpdateUsersMutationResponse = {
   __typename?: 'UpdateUsersMutationResponse';
   info: UpdateInfo;
@@ -14084,6 +14491,9 @@ export type User = {
   rolesAggregate?: Maybe<UserRoleRolesAggregationSelection>;
   rolesConnection: UserRolesConnection;
   uid: Scalars['ID']['output'];
+  userSettings?: Maybe<UserSettings>;
+  userSettingsAggregate?: Maybe<UserUserSettingsUserSettingsAggregationSelection>;
+  userSettingsConnection: UserUserSettingsConnection;
   username: Scalars['String']['output'];
 };
 
@@ -14153,6 +14563,28 @@ export type UserRolesConnectionArgs = {
   where?: InputMaybe<UserRolesConnectionWhere>;
 };
 
+
+export type UserUserSettingsArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<UserSettingsOptions>;
+  where?: InputMaybe<UserSettingsWhere>;
+};
+
+
+export type UserUserSettingsAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<UserSettingsWhere>;
+};
+
+
+export type UserUserSettingsConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<UserUserSettingsConnectionSort>>;
+  where?: InputMaybe<UserUserSettingsConnectionWhere>;
+};
+
 export type UserAggregateSelection = {
   __typename?: 'UserAggregateSelection';
   count: Scalars['Int']['output'];
@@ -14168,6 +14600,7 @@ export type UserConnectInput = {
   employee?: InputMaybe<UserEmployeeConnectFieldInput>;
   facility?: InputMaybe<UserFacilityConnectFieldInput>;
   roles?: InputMaybe<Array<UserRolesConnectFieldInput>>;
+  userSettings?: InputMaybe<UserUserSettingsConnectFieldInput>;
 };
 
 export type UserConnectWhere = {
@@ -14184,6 +14617,7 @@ export type UserCreateInput = {
   passwordHash: Scalars['String']['input'];
   passwordToChange?: InputMaybe<Scalars['Boolean']['input']>;
   roles?: InputMaybe<UserRolesFieldInput>;
+  userSettings?: InputMaybe<UserUserSettingsFieldInput>;
   username: Scalars['String']['input'];
 };
 
@@ -14191,12 +14625,14 @@ export type UserDeleteInput = {
   employee?: InputMaybe<UserEmployeeDeleteFieldInput>;
   facility?: InputMaybe<UserFacilityDeleteFieldInput>;
   roles?: InputMaybe<Array<UserRolesDeleteFieldInput>>;
+  userSettings?: InputMaybe<UserUserSettingsDeleteFieldInput>;
 };
 
 export type UserDisconnectInput = {
   employee?: InputMaybe<UserEmployeeDisconnectFieldInput>;
   facility?: InputMaybe<UserFacilityDisconnectFieldInput>;
   roles?: InputMaybe<Array<UserRolesDisconnectFieldInput>>;
+  userSettings?: InputMaybe<UserUserSettingsDisconnectFieldInput>;
 };
 
 export type UserEdge = {
@@ -14527,6 +14963,7 @@ export type UserRelationInput = {
   employee?: InputMaybe<UserEmployeeCreateFieldInput>;
   facility?: InputMaybe<UserFacilityCreateFieldInput>;
   roles?: InputMaybe<Array<UserRolesCreateFieldInput>>;
+  userSettings?: InputMaybe<UserUserSettingsCreateFieldInput>;
 };
 
 export type UserRoleRolesAggregationSelection = {
@@ -14653,6 +15090,471 @@ export type UserRolesUpdateFieldInput = {
   where?: InputMaybe<UserRolesConnectionWhere>;
 };
 
+export type UserSettings = {
+  __typename?: 'UserSettings';
+  filterSettings: Array<FilterSettings>;
+  filterSettingsAggregate?: Maybe<UserSettingsFilterSettingsFilterSettingsAggregationSelection>;
+  filterSettingsConnection: UserSettingsFilterSettingsConnection;
+  uid: Scalars['ID']['output'];
+  user: User;
+  userAggregate?: Maybe<UserSettingsUserUserAggregationSelection>;
+  userConnection: UserSettingsUserConnection;
+};
+
+
+export type UserSettingsFilterSettingsArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<FilterSettingsOptions>;
+  where?: InputMaybe<FilterSettingsWhere>;
+};
+
+
+export type UserSettingsFilterSettingsAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<FilterSettingsWhere>;
+};
+
+
+export type UserSettingsFilterSettingsConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<UserSettingsFilterSettingsConnectionSort>>;
+  where?: InputMaybe<UserSettingsFilterSettingsConnectionWhere>;
+};
+
+
+export type UserSettingsUserArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<UserOptions>;
+  where?: InputMaybe<UserWhere>;
+};
+
+
+export type UserSettingsUserAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<UserWhere>;
+};
+
+
+export type UserSettingsUserConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<UserSettingsUserConnectionSort>>;
+  where?: InputMaybe<UserSettingsUserConnectionWhere>;
+};
+
+export type UserSettingsAggregateSelection = {
+  __typename?: 'UserSettingsAggregateSelection';
+  count: Scalars['Int']['output'];
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type UserSettingsConnectInput = {
+  filterSettings?: InputMaybe<Array<UserSettingsFilterSettingsConnectFieldInput>>;
+  user?: InputMaybe<UserSettingsUserConnectFieldInput>;
+};
+
+export type UserSettingsConnectWhere = {
+  node: UserSettingsWhere;
+};
+
+export type UserSettingsConnection = {
+  __typename?: 'UserSettingsConnection';
+  edges: Array<UserSettingsEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type UserSettingsCreateInput = {
+  filterSettings?: InputMaybe<UserSettingsFilterSettingsFieldInput>;
+  user?: InputMaybe<UserSettingsUserFieldInput>;
+};
+
+export type UserSettingsDeleteInput = {
+  filterSettings?: InputMaybe<Array<UserSettingsFilterSettingsDeleteFieldInput>>;
+  user?: InputMaybe<UserSettingsUserDeleteFieldInput>;
+};
+
+export type UserSettingsDisconnectInput = {
+  filterSettings?: InputMaybe<Array<UserSettingsFilterSettingsDisconnectFieldInput>>;
+  user?: InputMaybe<UserSettingsUserDisconnectFieldInput>;
+};
+
+export type UserSettingsEdge = {
+  __typename?: 'UserSettingsEdge';
+  cursor: Scalars['String']['output'];
+  node: UserSettings;
+};
+
+export type UserSettingsFilterSettingsAggregateInput = {
+  AND?: InputMaybe<Array<UserSettingsFilterSettingsAggregateInput>>;
+  NOT?: InputMaybe<UserSettingsFilterSettingsAggregateInput>;
+  OR?: InputMaybe<Array<UserSettingsFilterSettingsAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<UserSettingsFilterSettingsNodeAggregationWhereInput>;
+};
+
+export type UserSettingsFilterSettingsConnectFieldInput = {
+  connect?: InputMaybe<Array<FilterSettingsConnectInput>>;
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<FilterSettingsConnectWhere>;
+};
+
+export type UserSettingsFilterSettingsConnection = {
+  __typename?: 'UserSettingsFilterSettingsConnection';
+  edges: Array<UserSettingsFilterSettingsRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type UserSettingsFilterSettingsConnectionSort = {
+  node?: InputMaybe<FilterSettingsSort>;
+};
+
+export type UserSettingsFilterSettingsConnectionWhere = {
+  AND?: InputMaybe<Array<UserSettingsFilterSettingsConnectionWhere>>;
+  NOT?: InputMaybe<UserSettingsFilterSettingsConnectionWhere>;
+  OR?: InputMaybe<Array<UserSettingsFilterSettingsConnectionWhere>>;
+  node?: InputMaybe<FilterSettingsWhere>;
+};
+
+export type UserSettingsFilterSettingsCreateFieldInput = {
+  node: FilterSettingsCreateInput;
+};
+
+export type UserSettingsFilterSettingsDeleteFieldInput = {
+  delete?: InputMaybe<FilterSettingsDeleteInput>;
+  where?: InputMaybe<UserSettingsFilterSettingsConnectionWhere>;
+};
+
+export type UserSettingsFilterSettingsDisconnectFieldInput = {
+  disconnect?: InputMaybe<FilterSettingsDisconnectInput>;
+  where?: InputMaybe<UserSettingsFilterSettingsConnectionWhere>;
+};
+
+export type UserSettingsFilterSettingsFieldInput = {
+  connect?: InputMaybe<Array<UserSettingsFilterSettingsConnectFieldInput>>;
+  create?: InputMaybe<Array<UserSettingsFilterSettingsCreateFieldInput>>;
+};
+
+export type UserSettingsFilterSettingsFilterSettingsAggregationSelection = {
+  __typename?: 'UserSettingsFilterSettingsFilterSettingsAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<UserSettingsFilterSettingsFilterSettingsNodeAggregateSelection>;
+};
+
+export type UserSettingsFilterSettingsFilterSettingsNodeAggregateSelection = {
+  __typename?: 'UserSettingsFilterSettingsFilterSettingsNodeAggregateSelection';
+  name: StringAggregateSelectionNonNullable;
+  settings: StringAggregateSelectionNonNullable;
+  tableId: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+};
+
+export type UserSettingsFilterSettingsNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<UserSettingsFilterSettingsNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<UserSettingsFilterSettingsNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<UserSettingsFilterSettingsNodeAggregationWhereInput>>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  settings_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  settings_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  settings_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  settings_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  settings_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  settings_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  settings_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  settings_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  settings_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  settings_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  settings_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  settings_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  settings_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  settings_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  settings_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  tableId_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  tableId_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  tableId_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  tableId_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  tableId_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  tableId_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  tableId_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  tableId_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  tableId_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  tableId_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  tableId_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  tableId_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  tableId_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  tableId_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  tableId_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UserSettingsFilterSettingsRelationship = {
+  __typename?: 'UserSettingsFilterSettingsRelationship';
+  cursor: Scalars['String']['output'];
+  node: FilterSettings;
+};
+
+export type UserSettingsFilterSettingsUpdateConnectionInput = {
+  node?: InputMaybe<FilterSettingsUpdateInput>;
+};
+
+export type UserSettingsFilterSettingsUpdateFieldInput = {
+  connect?: InputMaybe<Array<UserSettingsFilterSettingsConnectFieldInput>>;
+  create?: InputMaybe<Array<UserSettingsFilterSettingsCreateFieldInput>>;
+  delete?: InputMaybe<Array<UserSettingsFilterSettingsDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<UserSettingsFilterSettingsDisconnectFieldInput>>;
+  update?: InputMaybe<UserSettingsFilterSettingsUpdateConnectionInput>;
+  where?: InputMaybe<UserSettingsFilterSettingsConnectionWhere>;
+};
+
+export type UserSettingsOptions = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /** Specify one or more UserSettingsSort objects to sort UserSettings by. The sorts will be applied in the order in which they are arranged in the array. */
+  sort?: InputMaybe<Array<UserSettingsSort>>;
+};
+
+export type UserSettingsRelationInput = {
+  filterSettings?: InputMaybe<Array<UserSettingsFilterSettingsCreateFieldInput>>;
+  user?: InputMaybe<UserSettingsUserCreateFieldInput>;
+};
+
+/** Fields to sort UserSettings by. The order in which sorts are applied is not guaranteed when specifying many fields in one UserSettingsSort object. */
+export type UserSettingsSort = {
+  uid?: InputMaybe<SortDirection>;
+};
+
+export type UserSettingsUpdateInput = {
+  filterSettings?: InputMaybe<Array<UserSettingsFilterSettingsUpdateFieldInput>>;
+  user?: InputMaybe<UserSettingsUserUpdateFieldInput>;
+};
+
+export type UserSettingsUserAggregateInput = {
+  AND?: InputMaybe<Array<UserSettingsUserAggregateInput>>;
+  NOT?: InputMaybe<UserSettingsUserAggregateInput>;
+  OR?: InputMaybe<Array<UserSettingsUserAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<UserSettingsUserNodeAggregationWhereInput>;
+};
+
+export type UserSettingsUserConnectFieldInput = {
+  connect?: InputMaybe<UserConnectInput>;
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<UserConnectWhere>;
+};
+
+export type UserSettingsUserConnection = {
+  __typename?: 'UserSettingsUserConnection';
+  edges: Array<UserSettingsUserRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type UserSettingsUserConnectionSort = {
+  node?: InputMaybe<UserSort>;
+};
+
+export type UserSettingsUserConnectionWhere = {
+  AND?: InputMaybe<Array<UserSettingsUserConnectionWhere>>;
+  NOT?: InputMaybe<UserSettingsUserConnectionWhere>;
+  OR?: InputMaybe<Array<UserSettingsUserConnectionWhere>>;
+  node?: InputMaybe<UserWhere>;
+};
+
+export type UserSettingsUserCreateFieldInput = {
+  node: UserCreateInput;
+};
+
+export type UserSettingsUserDeleteFieldInput = {
+  delete?: InputMaybe<UserDeleteInput>;
+  where?: InputMaybe<UserSettingsUserConnectionWhere>;
+};
+
+export type UserSettingsUserDisconnectFieldInput = {
+  disconnect?: InputMaybe<UserDisconnectInput>;
+  where?: InputMaybe<UserSettingsUserConnectionWhere>;
+};
+
+export type UserSettingsUserFieldInput = {
+  connect?: InputMaybe<UserSettingsUserConnectFieldInput>;
+  create?: InputMaybe<UserSettingsUserCreateFieldInput>;
+};
+
+export type UserSettingsUserNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<UserSettingsUserNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<UserSettingsUserNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<UserSettingsUserNodeAggregationWhereInput>>;
+  email_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  email_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  email_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  email_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  firstName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  firstName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  firstName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  lastName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  lastName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  lastName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  passwordHash_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  passwordHash_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  username_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  username_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  username_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  username_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  username_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type UserSettingsUserRelationship = {
+  __typename?: 'UserSettingsUserRelationship';
+  cursor: Scalars['String']['output'];
+  node: User;
+};
+
+export type UserSettingsUserUpdateConnectionInput = {
+  node?: InputMaybe<UserUpdateInput>;
+};
+
+export type UserSettingsUserUpdateFieldInput = {
+  connect?: InputMaybe<UserSettingsUserConnectFieldInput>;
+  create?: InputMaybe<UserSettingsUserCreateFieldInput>;
+  delete?: InputMaybe<UserSettingsUserDeleteFieldInput>;
+  disconnect?: InputMaybe<UserSettingsUserDisconnectFieldInput>;
+  update?: InputMaybe<UserSettingsUserUpdateConnectionInput>;
+  where?: InputMaybe<UserSettingsUserConnectionWhere>;
+};
+
+export type UserSettingsUserUserAggregationSelection = {
+  __typename?: 'UserSettingsUserUserAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<UserSettingsUserUserNodeAggregateSelection>;
+};
+
+export type UserSettingsUserUserNodeAggregateSelection = {
+  __typename?: 'UserSettingsUserUserNodeAggregateSelection';
+  email: StringAggregateSelectionNonNullable;
+  firstName: StringAggregateSelectionNonNullable;
+  lastName: StringAggregateSelectionNonNullable;
+  passwordHash: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+  username: StringAggregateSelectionNonNullable;
+};
+
+export type UserSettingsWhere = {
+  AND?: InputMaybe<Array<UserSettingsWhere>>;
+  NOT?: InputMaybe<UserSettingsWhere>;
+  OR?: InputMaybe<Array<UserSettingsWhere>>;
+  filterSettingsAggregate?: InputMaybe<UserSettingsFilterSettingsAggregateInput>;
+  /** Return UserSettings where all of the related UserSettingsFilterSettingsConnections match this filter */
+  filterSettingsConnection_ALL?: InputMaybe<UserSettingsFilterSettingsConnectionWhere>;
+  /** Return UserSettings where none of the related UserSettingsFilterSettingsConnections match this filter */
+  filterSettingsConnection_NONE?: InputMaybe<UserSettingsFilterSettingsConnectionWhere>;
+  /** Return UserSettings where one of the related UserSettingsFilterSettingsConnections match this filter */
+  filterSettingsConnection_SINGLE?: InputMaybe<UserSettingsFilterSettingsConnectionWhere>;
+  /** Return UserSettings where some of the related UserSettingsFilterSettingsConnections match this filter */
+  filterSettingsConnection_SOME?: InputMaybe<UserSettingsFilterSettingsConnectionWhere>;
+  /** Return UserSettings where all of the related FilterSettings match this filter */
+  filterSettings_ALL?: InputMaybe<FilterSettingsWhere>;
+  /** Return UserSettings where none of the related FilterSettings match this filter */
+  filterSettings_NONE?: InputMaybe<FilterSettingsWhere>;
+  /** Return UserSettings where one of the related FilterSettings match this filter */
+  filterSettings_SINGLE?: InputMaybe<FilterSettingsWhere>;
+  /** Return UserSettings where some of the related FilterSettings match this filter */
+  filterSettings_SOME?: InputMaybe<FilterSettingsWhere>;
+  uid?: InputMaybe<Scalars['ID']['input']>;
+  uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
+  uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
+  uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  user?: InputMaybe<UserWhere>;
+  userAggregate?: InputMaybe<UserSettingsUserAggregateInput>;
+  userConnection?: InputMaybe<UserSettingsUserConnectionWhere>;
+  userConnection_NOT?: InputMaybe<UserSettingsUserConnectionWhere>;
+  user_NOT?: InputMaybe<UserWhere>;
+};
+
 /** Fields to sort Users by. The order in which sorts are applied is not guaranteed when specifying many fields in one UserSort object. */
 export type UserSort = {
   email?: InputMaybe<SortDirection>;
@@ -14675,7 +15577,100 @@ export type UserUpdateInput = {
   passwordHash?: InputMaybe<Scalars['String']['input']>;
   passwordToChange?: InputMaybe<Scalars['Boolean']['input']>;
   roles?: InputMaybe<Array<UserRolesUpdateFieldInput>>;
+  userSettings?: InputMaybe<UserUserSettingsUpdateFieldInput>;
   username?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UserUserSettingsAggregateInput = {
+  AND?: InputMaybe<Array<UserUserSettingsAggregateInput>>;
+  NOT?: InputMaybe<UserUserSettingsAggregateInput>;
+  OR?: InputMaybe<Array<UserUserSettingsAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<UserUserSettingsNodeAggregationWhereInput>;
+};
+
+export type UserUserSettingsConnectFieldInput = {
+  connect?: InputMaybe<UserSettingsConnectInput>;
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<UserSettingsConnectWhere>;
+};
+
+export type UserUserSettingsConnection = {
+  __typename?: 'UserUserSettingsConnection';
+  edges: Array<UserUserSettingsRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type UserUserSettingsConnectionSort = {
+  node?: InputMaybe<UserSettingsSort>;
+};
+
+export type UserUserSettingsConnectionWhere = {
+  AND?: InputMaybe<Array<UserUserSettingsConnectionWhere>>;
+  NOT?: InputMaybe<UserUserSettingsConnectionWhere>;
+  OR?: InputMaybe<Array<UserUserSettingsConnectionWhere>>;
+  node?: InputMaybe<UserSettingsWhere>;
+};
+
+export type UserUserSettingsCreateFieldInput = {
+  node: UserSettingsCreateInput;
+};
+
+export type UserUserSettingsDeleteFieldInput = {
+  delete?: InputMaybe<UserSettingsDeleteInput>;
+  where?: InputMaybe<UserUserSettingsConnectionWhere>;
+};
+
+export type UserUserSettingsDisconnectFieldInput = {
+  disconnect?: InputMaybe<UserSettingsDisconnectInput>;
+  where?: InputMaybe<UserUserSettingsConnectionWhere>;
+};
+
+export type UserUserSettingsFieldInput = {
+  connect?: InputMaybe<UserUserSettingsConnectFieldInput>;
+  create?: InputMaybe<UserUserSettingsCreateFieldInput>;
+};
+
+export type UserUserSettingsNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<UserUserSettingsNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<UserUserSettingsNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<UserUserSettingsNodeAggregationWhereInput>>;
+};
+
+export type UserUserSettingsRelationship = {
+  __typename?: 'UserUserSettingsRelationship';
+  cursor: Scalars['String']['output'];
+  node: UserSettings;
+};
+
+export type UserUserSettingsUpdateConnectionInput = {
+  node?: InputMaybe<UserSettingsUpdateInput>;
+};
+
+export type UserUserSettingsUpdateFieldInput = {
+  connect?: InputMaybe<UserUserSettingsConnectFieldInput>;
+  create?: InputMaybe<UserUserSettingsCreateFieldInput>;
+  delete?: InputMaybe<UserUserSettingsDeleteFieldInput>;
+  disconnect?: InputMaybe<UserUserSettingsDisconnectFieldInput>;
+  update?: InputMaybe<UserUserSettingsUpdateConnectionInput>;
+  where?: InputMaybe<UserUserSettingsConnectionWhere>;
+};
+
+export type UserUserSettingsUserSettingsAggregationSelection = {
+  __typename?: 'UserUserSettingsUserSettingsAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<UserUserSettingsUserSettingsNodeAggregateSelection>;
+};
+
+export type UserUserSettingsUserSettingsNodeAggregateSelection = {
+  __typename?: 'UserUserSettingsUserSettingsNodeAggregateSelection';
+  uid: IdAggregateSelectionNonNullable;
 };
 
 export type UserWhere = {
@@ -14736,6 +15731,11 @@ export type UserWhere = {
   uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
   uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
   uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  userSettings?: InputMaybe<UserSettingsWhere>;
+  userSettingsAggregate?: InputMaybe<UserUserSettingsAggregateInput>;
+  userSettingsConnection?: InputMaybe<UserUserSettingsConnectionWhere>;
+  userSettingsConnection_NOT?: InputMaybe<UserUserSettingsConnectionWhere>;
+  userSettings_NOT?: InputMaybe<UserSettingsWhere>;
   username?: InputMaybe<Scalars['String']['input']>;
   username_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   username_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
@@ -15395,4 +16395,43 @@ export type HasCataloguePropertyWhere = {
   value_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   value_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   value_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type HasOrderLine = {
+  currency?: Maybe<Scalars['String']['output']>;
+  price?: Maybe<Scalars['Int']['output']>;
+};
+
+export type HasOrderLineCreateInput = {
+  currency?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type HasOrderLineSort = {
+  currency?: InputMaybe<SortDirection>;
+  price?: InputMaybe<SortDirection>;
+};
+
+export type HasOrderLineUpdateInput = {
+  currency?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<Scalars['Int']['input']>;
+  price_DECREMENT?: InputMaybe<Scalars['Int']['input']>;
+  price_INCREMENT?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type HasOrderLineWhere = {
+  AND?: InputMaybe<Array<HasOrderLineWhere>>;
+  NOT?: InputMaybe<HasOrderLineWhere>;
+  OR?: InputMaybe<Array<HasOrderLineWhere>>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  currency_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  currency_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  currency_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  currency_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  price?: InputMaybe<Scalars['Int']['input']>;
+  price_GT?: InputMaybe<Scalars['Int']['input']>;
+  price_GTE?: InputMaybe<Scalars['Int']['input']>;
+  price_IN?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  price_LT?: InputMaybe<Scalars['Int']['input']>;
+  price_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
