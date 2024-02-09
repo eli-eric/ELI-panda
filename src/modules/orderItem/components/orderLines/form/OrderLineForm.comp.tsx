@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
-import { toast } from 'react-hot-toast'
 
 import Combobox from '@/components/form/Combobox'
 import { Input, InputAmount, InputCurrency, TextArea } from '@/components/form/Input'
@@ -8,7 +7,6 @@ import Listbox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
 import { Col, Grid } from '@/components/grid/Grid'
 import Divider from '@/components/layout/Divider'
-import type { CodebookFilter } from '@/hooks/fetch/useCodebook'
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
@@ -29,15 +27,15 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
   const formFields = useOrderLineFormFields(enabled)
   const { setValue, watch, unregister } = useFormContext<OrderLineFormType>()
   const system = watch('system')
-  const technologicalUnitToogle = useToggle(true)
-  const { Toggle: TechUnitToogle, enabled: techUnitEnabled } = technologicalUnitToogle
-  const [techUnitFilter, setTechUnitFilter] = useState<CodebookFilter[] | undefined>(undefined)
+  /*   const technologicalUnitToogle = useToggle(true)
+  const { toggle: techunittoogle, enabled: techunitenabled } = technologicalunittoogle
+  const [techunitfilter, settechunitfilter] = usestate<codebookfilter[] | undefined>(undefined)
 
-  const techUnitToogle = enable => {
-    technologicalUnitToogle.toggle()
-    setTechUnitFilter([{ key: 'technologicalUnits', value: enable }])
-    toast.success('Technological unit filter is' + ' ' + enable)
-  }
+  const techunittoogle = enable => {
+    technologicalunittoogle.toggle()
+    settechunitfilter([{ key: 'technologicalunits', value: enable }])
+    toast.success('technological unit filter is' + ' ' + enable)
+  } */
 
   // set default value
   useEffect(() => {

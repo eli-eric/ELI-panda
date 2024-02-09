@@ -87,22 +87,9 @@ export const Modal = ({ children, open, setOpen, buttons, testid = 'modal' }: Pr
 }
 
 export const GenereralModal = () => {
-  const { params, patchParams, resetParams } = useModalStore()
+  const { params, patchParams } = useModalStore()
   const { isOpen, error, children } = params
 
-  const buttons: ModalButtons = {
-    goNext: {
-      text: messages.continue,
-      loading: false,
-      onClick: () => patchParams({ isConfirmed: true })
-    },
-    goBack: {
-      text: messages.cancel,
-      onClick: () => {
-        resetParams()
-      }
-    }
-  }
   //TODO: make buttons configurable
   return (
     <Modal
