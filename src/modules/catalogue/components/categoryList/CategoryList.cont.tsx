@@ -1,5 +1,6 @@
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { isMobile } from 'react-device-detect'
 
 import { CategoryList } from './CategoryList.comp'
 
@@ -8,7 +9,7 @@ interface Props {
 }
 
 export const CategoryListContainer = ({ onChange }: Props) => (
-  <Disclosure>
+  <Disclosure defaultOpen={!isMobile}>
     {({ open }) => (
       <div id="category-list" className="flex flex-col">
         <Disclosure.Button
