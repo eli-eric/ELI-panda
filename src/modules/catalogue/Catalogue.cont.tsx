@@ -17,7 +17,7 @@ const CatalogueContainer = () => {
   const tableId = 'catalogueItems'
   const { catalogueItems, error, loading } = useCatalogueItems(tableId)
   const { catalogueCategories } = useCategoryList()
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(true)
 
   return (
     <Fragment>

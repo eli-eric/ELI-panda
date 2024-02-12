@@ -83,8 +83,6 @@ export const QrReaderContainer = () => {
           const imageData = context.getImageData(0, 0, 640, 480)
           const qrCode = jsQR(imageData.data, imageData.width, imageData.height)
           if (qrCode) {
-            console.log(`QR Code detected: ${qrCode.data}`)
-
             if (qrCode.data) {
               // ... other code ...
               let text = qrCode.data
