@@ -4,6 +4,7 @@ import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
 
 import { Button } from '@/components/Buttons'
+import Combobox from '@/components/form/Combobox'
 import { classNames } from '@/utils'
 
 type ButtonType = {
@@ -65,6 +66,18 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({ children, open, setOpe
                       </div>
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">{children}</div>
+                  </div>
+                  <div className="flex px-4 py-4">
+                    <Combobox name="test" />
+                    <Button className="pb-2" primary buttonSize="large">
+                      Apply
+                    </Button>
+                    <Button className="pb-2" primary buttonSize="large">
+                      Update
+                    </Button>
+                    <Button className="pb-2" primary buttonSize="large">
+                      New
+                    </Button>
                   </div>
                   <div className={classNames('flex flex-shrink-0 px-4 py-4 justify-between', buttons.className)}>
                     {buttons.goBack && (

@@ -359,15 +359,7 @@ export const typeDefs = gql`
   type UserSettings @authentication {
     uid: ID! @id
     user: User! @relationship(type: "HAS_SETTINGS", direction: IN)
-    filterSettings: [FilterSettings!]! @relationship(type: "HAS_FILTER_SETTINGS", direction: OUT)
-  }
-
-  type FilterSettings @authentication {
-    uid: ID! @id
-    name: String!
-    userSettings: UserSettings! @relationship(type: "HAS_FILTER_SETTINGS", direction: IN)
-    settings: String!
-    tableId: String!
+    filterSettings: [String]!
   }
 
   type Role @authentication {

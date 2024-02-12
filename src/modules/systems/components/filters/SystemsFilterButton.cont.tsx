@@ -118,7 +118,9 @@ export const SystemFilterButtonContainer = ({ tableId = 'systems', enableQueryUR
       </Button>
       <Form formMethods={formMethods}>
         <SlideOver panelTitle="System Filters" open={open} setOpen={setOpen} buttons={buttons}>
-          <SystemsFilterForm tableId={tableId} enableQueryUrl={enableQueryURL} />
+          <div className="flex flex-col h-full justify-between">
+            <SystemsFilterForm tableId={tableId} enableQueryUrl={enableQueryURL} />
+          </div>
         </SlideOver>
       </Form>
     </Fragment>
