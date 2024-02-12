@@ -9,6 +9,7 @@ import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
+import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
 import { useFormControlStore } from '@/store/useFormControlStore'
 
 import { useMinMaxPrice } from '../../hooks/useMinMaxPrice'
@@ -117,7 +118,13 @@ export const SystemFilterButtonContainer = ({ tableId = 'systems', enableQueryUR
         )}
       </Button>
       <Form formMethods={formMethods}>
-        <SlideOver panelTitle="System Filters" open={open} setOpen={setOpen} buttons={buttons}>
+        <SlideOver
+          RenderSettings={<FilterSaveSettings tableId={tableId} />}
+          panelTitle="System Filters"
+          open={open}
+          setOpen={setOpen}
+          buttons={buttons}
+        >
           <div className="flex flex-col h-full justify-between">
             <SystemsFilterForm tableId={tableId} enableQueryUrl={enableQueryURL} />
           </div>
