@@ -11,6 +11,7 @@ import Listbox from '@/components/form/Listbox'
 import { Modal } from '@/components/overlays/modal/modal.comp'
 import { useFilterCreate } from '@/hooks/filter/useFilterCreate'
 import { useFilterDetails } from '@/hooks/filter/useFilterDetails'
+import { useFilterUpdate } from '@/hooks/filter/useFilterUpdate'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
 import type { ModalButtons } from '@/types/form'
@@ -32,7 +33,31 @@ export const FilterSaveSettings = ({ tableId, enableQueryURL, resetForm, defaulF
   const { createUserSettings, loading } = useFilterCreate({ tableId })
   const { filters, refetch } = useFilterDetails(tableId)
 
+  const { updateSavedFilter } = useFilterUpdate(savedFilter?.uid, storeFilters)
   const user = useSession().data?.user
+
+  const handleUpdateSavedFilter = () => {
+    updateSavedFilter({
+      variables: {
+        input: {
+          where: {
+            uid: savedFilter?.uid
+          },
+          update: {
+            value: JSON.stringify(storeFilters)
+          }
+        }
+      },
+      onError: () => {
+        toast.error('Error updating filter')
+      },
+      onCompleted: () => {
+        refetch()
+        formMethods.setValue('savedFilter', { ...savedFilter, value: JSON.stringify(storeFilters) })
+        toast.success('Filter updated successfully')
+      }
+    })
+  }
 
   const submitNewFilter = data => {
     createUserSettings({
@@ -118,30 +143,28 @@ export const FilterSaveSettings = ({ tableId, enableQueryURL, resetForm, defaulF
     <div className="flex w-full">
       <Form formMethods={formMethods} className="flex w-full">
         <Listbox name="savedFilter" codebookResponse={filters} position="top" />
+        <Button onClick={applyFilter} disabled={!savedFilter} className="pb-2" primary buttonSize="large">
+          Apply
+        </Button>
         <Button
-          onClick={() => {
-            applyFilter()
-          }}
-          disabled={!savedFilter}
+          onClick={handleUpdateSavedFilter}
           className="pb-2"
           primary
           buttonSize="large"
+          disabled={storeFilters.length === 0 || !savedFilter}
         >
-          Apply
-        </Button>
-        <Button className="pb-2" primary buttonSize="large" disabled={storeFilters.length === 0}>
           Update
         </Button>
         <Button
           onClick={() => {
             setOpen(true)
           }}
-          className="pb-2"
+          className="pb-2 whitespace-nowrap"
           primary
           disabled={storeFilters.length === 0}
           buttonSize="large"
         >
-          New
+          Save new
         </Button>
       </Form>
       <Form formMethods={inputFormMethods}>
