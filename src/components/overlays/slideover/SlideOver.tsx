@@ -25,8 +25,16 @@ interface Props {
   setOpen: (open: boolean) => void
   panelTitle: string
   buttons: SlideOverButtons
+  RenderSettings?: JSX.Element
 }
-export const SlideOver: FC<PropsWithChildren<Props>> = ({ children, open, setOpen, panelTitle, buttons }) => (
+export const SlideOver: FC<PropsWithChildren<Props>> = ({
+  children,
+  open,
+  setOpen,
+  panelTitle,
+  buttons,
+  RenderSettings
+}) => (
   <Transition.Root show={open} as={Fragment}>
     <Dialog as="div" className="relative z-10" onClose={setOpen}>
       <div className="fixed inset-0" />
@@ -66,6 +74,7 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({ children, open, setOpe
                     </div>
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">{children}</div>
                   </div>
+                  {RenderSettings && <div className="flex px-4 py-4">{RenderSettings}</div>}
                   <div className={classNames('flex flex-shrink-0 px-4 py-4 justify-between', buttons.className)}>
                     {buttons.goBack && (
                       <Button type="button" onClick={() => setOpen(false)} className={buttons.goBack.className}>

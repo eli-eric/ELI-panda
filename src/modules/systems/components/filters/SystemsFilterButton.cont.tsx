@@ -9,6 +9,7 @@ import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
+import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
 import { useFormControlStore } from '@/store/useFormControlStore'
 
 import { useMinMaxPrice } from '../../hooks/useMinMaxPrice'
@@ -91,17 +92,13 @@ export const SystemFilterButtonContainer = ({ tableId = 'systems', enableQueryUR
     }
   }, [category, toggleDeleteCustom, isFirstRender])
 
-  const onClear = () => {
-    reset(defValues, { keepValues: false })
-  }
-
   const buttons: SlideOverButtons = {
     goNext: {
       type: 'button',
       className: 'w-full justify-center',
       text: 'Clear filters',
       onClick: () => {
-        onClear()
+        reset(defValues, { keepValues: false })
         setColumnFilters([])
       }
     }
@@ -116,11 +113,24 @@ export const SystemFilterButtonContainer = ({ tableId = 'systems', enableQueryUR
           <FunnelIconEmpty className="h-4 w-4" aria-hidden="true" />
         )}
       </Button>
-      <Form formMethods={formMethods}>
-        <SlideOver panelTitle="System Filters" open={open} setOpen={setOpen} buttons={buttons}>
+      <SlideOver
+        RenderSettings={
+          <FilterSaveSettings
+            tableId={tableId}
+            enableQueryURL={enableQueryURL}
+            resetForm={formMethods.reset}
+            defaulFormValues={defValues}
+          />
+        }
+        panelTitle="System Filters"
+        open={open}
+        setOpen={setOpen}
+        buttons={buttons}
+      >
+        <Form className="flex flex-col h-full justify-between" formMethods={formMethods}>
           <SystemsFilterForm tableId={tableId} enableQueryUrl={enableQueryURL} />
-        </SlideOver>
-      </Form>
+        </Form>
+      </SlideOver>
     </Fragment>
   )
 }
