@@ -113,26 +113,24 @@ export const SystemFilterButtonContainer = ({ tableId = 'systems', enableQueryUR
           <FunnelIconEmpty className="h-4 w-4" aria-hidden="true" />
         )}
       </Button>
-      <Form formMethods={formMethods}>
-        <SlideOver
-          RenderSettings={
-            <FilterSaveSettings
-              tableId={tableId}
-              enableQueryURL={enableQueryURL}
-              resetForm={formMethods.reset}
-              defaulFormValues={defValues}
-            />
-          }
-          panelTitle="System Filters"
-          open={open}
-          setOpen={setOpen}
-          buttons={buttons}
-        >
-          <div className="flex flex-col h-full justify-between">
-            <SystemsFilterForm tableId={tableId} enableQueryUrl={enableQueryURL} />
-          </div>
-        </SlideOver>
-      </Form>
+      <SlideOver
+        RenderSettings={
+          <FilterSaveSettings
+            tableId={tableId}
+            enableQueryURL={enableQueryURL}
+            resetForm={formMethods.reset}
+            defaulFormValues={defValues}
+          />
+        }
+        panelTitle="System Filters"
+        open={open}
+        setOpen={setOpen}
+        buttons={buttons}
+      >
+        <Form className="flex flex-col h-full justify-between" formMethods={formMethods}>
+          <SystemsFilterForm tableId={tableId} enableQueryUrl={enableQueryURL} />
+        </Form>
+      </SlideOver>
     </Fragment>
   )
 }

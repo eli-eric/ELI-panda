@@ -1,3 +1,4 @@
+import { TrashIcon } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 import type { UseFormReset } from 'react-hook-form'
@@ -10,6 +11,7 @@ import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { Modal } from '@/components/overlays/modal/modal.comp'
 import { useFilterCreate } from '@/hooks/filter/useFilterCreate'
+import { useFilterDelete } from '@/hooks/filter/useFilterDelete'
 import { useFilterDetails } from '@/hooks/filter/useFilterDetails'
 import { useFilterUpdate } from '@/hooks/filter/useFilterUpdate'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
@@ -138,10 +140,34 @@ export const FilterSaveSettings = ({ tableId, enableQueryURL, resetForm, defaulF
       }
     }
   }
+  const { deleteSavedFilter } = useFilterDelete()
+  const handleDeleteFilter = () => {
+    if (savedFilter) {
+      deleteSavedFilter({
+        variables: {
+          where: {
+            uid: savedFilter.uid
+          }
+        },
+        onError: () => {
+          toast.error('Error deleting filter')
+        },
+        onCompleted: () => {
+          formMethods.setValue('savedFilter', null)
+          resetForm(defaulFormValues, { keepValues: false })
+          refetch()
+          toast.success('Filter deleted successfully')
+        }
+      })
+    }
+  }
 
   return (
     <div className="flex w-full">
       <Form formMethods={formMethods} className="flex w-full">
+        <Button onClick={handleDeleteFilter} disabled={!savedFilter} className="pb-2" primary buttonSize="large">
+          <TrashIcon className="h-5 w-5" aria-hidden="true" />
+        </Button>
         <Listbox name="savedFilter" codebookResponse={filters} position="top" />
         <Button onClick={applyFilter} disabled={!savedFilter} className="pb-2" primary buttonSize="large">
           Apply
