@@ -1,6 +1,8 @@
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
+import type { UseFormReset } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
@@ -10,19 +12,26 @@ import { Modal } from '@/components/overlays/modal/modal.comp'
 import { useFilterCreate } from '@/hooks/filter/useFilterCreate'
 import { useFilterDetails } from '@/hooks/filter/useFilterDetails'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { useFormControlStore } from '@/store/useFormControlStore'
 import type { ModalButtons } from '@/types/form'
 
 interface Props {
   tableId: string
+  enableQueryURL: boolean
+  resetForm: UseFormReset<any>
+  defaulFormValues: any
 }
-export const FilterSaveSettings = ({ tableId }: Props) => {
+export const FilterSaveSettings = ({ tableId, enableQueryURL, resetForm, defaulFormValues }: Props) => {
   const formMethods = useForm()
-  const { createUserSettings } = useFilterCreate({ tableId, name: 'test' })
-  const [open, setOpen] = useState(false)
+  const savedFilter = formMethods.watch('savedFilter')
   const inputFormMethods = useForm()
+  const [open, setOpen] = useState(false)
+  const { storeFilters, setColumnFilters } = useFormFilterState({ tableId, enableQueryUrl: enableQueryURL })
+  const { addCustomFieldIdToSync } = useFormControlStore()
 
-  const { storeFilters } = useFormFilterState({ tableId })
+  const { createUserSettings, loading } = useFilterCreate({ tableId })
   const { filters, refetch } = useFilterDetails(tableId)
+
   const user = useSession().data?.user
 
   const submitNewFilter = data => {
@@ -45,12 +54,52 @@ export const FilterSaveSettings = ({ tableId }: Props) => {
           }
         ]
       },
+      onError: () => {
+        toast.error('Error creating filter')
+      },
       onCompleted: () => {
         refetch()
+        setOpen(false)
+        toast.success('Filter created successfully')
       }
     })
   }
 
+  const applyFilter = () => {
+    if (savedFilter) {
+      const value = JSON.parse(savedFilter.value)
+      value.forEach(filter => {
+        if (filter.type) {
+          addCustomFieldIdToSync(filter.id)
+        }
+      })
+      resetForm(
+        () => {
+          const defValues = Object.keys(defaulFormValues).reduce((acc, curr) => {
+            const filter = value.find(item => item.id === curr)
+            if (filter) {
+              acc[curr] = filter.value
+            } else {
+              acc[curr] = defaulFormValues[curr]
+            }
+            return acc
+          }, {})
+          value.forEach(filter => {
+            if (filter.type) {
+              defValues[filter.id] = filter.value
+            }
+          })
+          return defValues
+        },
+
+        { keepValues: false }
+      )
+      //wait for form to reset otherwise it will not have the correct values in filter state
+      setTimeout(() => {
+        setColumnFilters(value)
+      }, 1000)
+    }
+  }
   const buttons: ModalButtons = {
     goBack: {
       text: 'Cancel',
@@ -58,9 +107,9 @@ export const FilterSaveSettings = ({ tableId }: Props) => {
     },
     goNext: {
       text: 'Save',
+      loading,
       onClick: () => {
         inputFormMethods.handleSubmit(submitNewFilter)()
-        setOpen(false)
       }
     }
   }
@@ -68,12 +117,16 @@ export const FilterSaveSettings = ({ tableId }: Props) => {
   return (
     <div className="flex w-full">
       <Form formMethods={formMethods} className="flex w-full">
-        <Listbox
-          name="test"
-          codebookResponse={filters?.map(filter => ({ name: filter.name, uid: filter.uid }))}
-          position="top"
-        />
-        <Button className="pb-2" primary buttonSize="large">
+        <Listbox name="savedFilter" codebookResponse={filters} position="top" />
+        <Button
+          onClick={() => {
+            applyFilter()
+          }}
+          disabled={!savedFilter}
+          className="pb-2"
+          primary
+          buttonSize="large"
+        >
           Apply
         </Button>
         <Button className="pb-2" primary buttonSize="large" disabled={storeFilters.length === 0}>

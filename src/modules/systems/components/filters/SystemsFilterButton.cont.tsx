@@ -92,17 +92,13 @@ export const SystemFilterButtonContainer = ({ tableId = 'systems', enableQueryUR
     }
   }, [category, toggleDeleteCustom, isFirstRender])
 
-  const onClear = () => {
-    reset(defValues, { keepValues: false })
-  }
-
   const buttons: SlideOverButtons = {
     goNext: {
       type: 'button',
       className: 'w-full justify-center',
       text: 'Clear filters',
       onClick: () => {
-        onClear()
+        reset(defValues, { keepValues: false })
         setColumnFilters([])
       }
     }
@@ -119,7 +115,14 @@ export const SystemFilterButtonContainer = ({ tableId = 'systems', enableQueryUR
       </Button>
       <Form formMethods={formMethods}>
         <SlideOver
-          RenderSettings={<FilterSaveSettings tableId={tableId} />}
+          RenderSettings={
+            <FilterSaveSettings
+              tableId={tableId}
+              enableQueryURL={enableQueryURL}
+              resetForm={formMethods.reset}
+              defaulFormValues={defValues}
+            />
+          }
           panelTitle="System Filters"
           open={open}
           setOpen={setOpen}
