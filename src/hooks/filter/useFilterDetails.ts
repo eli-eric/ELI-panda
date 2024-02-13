@@ -1,5 +1,4 @@
 import { gql, useQuery } from '@apollo/client'
-import type { ColumnFilter } from '@tanstack/react-table'
 import { useSession } from 'next-auth/react'
 
 import type { Query } from '@/types/gql/graphql'
@@ -14,14 +13,10 @@ const GET_FILTERS = gql`
     }
   }
 `
-type FilterDetails = {
-  name: string
-  value: ColumnFilter[]
-}
 
 export const useFilterDetails = (tableId: string, filterUid?: string) => {
   const user = useSession().data?.user
-  const { data } = useQuery<Query>(GET_FILTERS, {
+  const { data, refetch } = useQuery<Query>(GET_FILTERS, {
     variables: {
       userSettingsWhere: {
         user: {
@@ -33,5 +28,5 @@ export const useFilterDetails = (tableId: string, filterUid?: string) => {
     }
   })
 
-  return { filters: data?.userSettings }
+  return { filters: data?.userSettings, refetch }
 }

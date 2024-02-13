@@ -22,7 +22,7 @@ export const FilterSaveSettings = ({ tableId }: Props) => {
   const inputFormMethods = useForm()
 
   const { storeFilters } = useFormFilterState({ tableId })
-  const { filters } = useFilterDetails(tableId)
+  const { filters, refetch } = useFilterDetails(tableId)
   const user = useSession().data?.user
 
   const submitNewFilter = data => {
@@ -44,6 +44,9 @@ export const FilterSaveSettings = ({ tableId }: Props) => {
             }
           }
         ]
+      },
+      onCompleted: () => {
+        refetch()
       }
     })
   }
