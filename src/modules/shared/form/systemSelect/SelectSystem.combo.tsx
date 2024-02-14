@@ -16,7 +16,7 @@ export const SelectSystemComboBox = ({
   selectSystemField,
   className,
   onChange,
-  isFilter
+  isFilter = false
 }: {
   selectSystemField: FieldProps & {
     options?: Option[] | undefined
@@ -35,7 +35,7 @@ export const SelectSystemComboBox = ({
       text: messages.continue,
       disabled: !selectedSystem,
       onClick: () => {
-        setValue('parentSystem', selectedSystem)
+        setValue(selectSystemField.name, selectedSystem)
         onChange?.(selectedSystem)
         setOpen(false)
       }
@@ -71,7 +71,12 @@ export const SelectSystemComboBox = ({
             onClick: () => {
               setSelectedSystem({ name: row.original.name, uid: row.original.uid })
             },
-            className: classNames(selectedSystem?.uid === row.original.uid ? 'bg-primary-200' : '', 'cursor-pointer')
+            className: classNames(
+              selectedSystem?.uid === row.original.uid
+                ? 'bg-primary-200 hover:bg-primary-200 dark:bg-primary-600 dark:hover:bg-primary-600'
+                : '',
+              'cursor-pointer'
+            )
           })}
         />
       </Modal>

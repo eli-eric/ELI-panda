@@ -1,7 +1,7 @@
-import Modal from '@/components/overlays/modal/warning/modal-warning.comp'
 import { useWarningModalStore } from 'src/store/useWarningModalStore'
 import { shallow } from 'zustand/shallow'
 
+import Modal from '@/components/overlays/modal/warning/modal-warning.comp'
 import { message as intlMessage } from '@/i18n/src/messages'
 
 export const WarningModal = () => {

@@ -10,6 +10,7 @@ import { SlideOver } from '@/components/overlays/slideover/SlideOver'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
 import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
+import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { CatalogueContext } from '@/pages/catalogue/[uid]'
 import { useFormControlStore } from '@/store/useFormControlStore'
@@ -113,11 +114,24 @@ export const CatalogueFilterButtonContainer = () => {
           <FunnelIconEmpty className="h-4 w-4" aria-hidden="true" />
         )}
       </Button>
-      <Form formMethods={formMethods}>
-        <SlideOver panelTitle="System Filters" open={open} setOpen={setOpen} buttons={buttons}>
+      <SlideOver
+        RenderSettings={
+          <FilterSaveSettings
+            tableId={tableId}
+            enableQueryURL={true}
+            resetForm={formMethods.reset}
+            defaulFormValues={defValues}
+          />
+        }
+        panelTitle="System Filters"
+        open={open}
+        setOpen={setOpen}
+        buttons={buttons}
+      >
+        <Form formMethods={formMethods}>
           <CatalogueFilterForm tableId={tableId} catalogueCategoryProperties={catalogueCategoryProperties} />
-        </SlideOver>
-      </Form>
+        </Form>
+      </SlideOver>
     </Fragment>
   )
 }

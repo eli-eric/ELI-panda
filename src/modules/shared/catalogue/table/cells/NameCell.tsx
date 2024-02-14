@@ -19,7 +19,6 @@ import { ROLE } from '@/types/constants/roles'
 import type { CatalogueItem } from '@/types/responses'
 import { createMessageValues } from '@/utils/formatters'
 
-const buttonsMessage = message.common.buttons
 const modalMessage = message.ordersPage.deleteModal
 
 interface NameProps extends CellContext<CatalogueItem, any> {

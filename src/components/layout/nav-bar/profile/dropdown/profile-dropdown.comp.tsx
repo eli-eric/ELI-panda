@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { signOut, useSession } from 'next-auth/react'
 import { Fragment, useEffect, useState } from 'react'
 
-import DarkModeButton from '@/components/DarkModeButon'
+import { DarkModeSwitch } from '@/components/DarkModeSwitch'
 import usePermission from '@/hooks/usePermission'
 import { PATH, SUPPORT } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
@@ -43,7 +43,7 @@ const ProfileDropdownComponent = ({ open }: Props) => {
           <Menu as="div" className="relative ml-3">
             <div className="flex items-center">
               <div className="pr-6 items-center justify-center">
-                <DarkModeButton />
+                <DarkModeSwitch />
               </div>
               <Link href={SUPPORT} legacyBehavior>
                 <a target={'_blank'} rel="noreferrer">

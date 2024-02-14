@@ -1,4 +1,5 @@
 import type { Column, Table } from '@tanstack/react-table'
+import { useCallback } from 'react'
 
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
@@ -20,11 +21,39 @@ export const Filter = ({
   const filterType = column.columnDef.meta?.filter?.type
   const codebook = column.columnDef.meta?.filter?.codebookCode as CODEBOOK
 
-  const onChange = (value: string | number) => {
-    if (data) {
-      column.setFilterValue(value)
-    }
-  }
+  const { setFilterValue } = column
+
+  const onChange = useCallback(
+    (value: string | number) => {
+      setFilterValue(value)
+    },
+    [setFilterValue]
+  )
+
+  const handleChangeFrom = useCallback(
+    (value: string | number) => {
+      setFilterValue((old: [number, number]) => {
+        if ((!value || value === '') && !old?.[1]) {
+          return undefined
+        }
+
+        return [value, old?.[1]]
+      })
+    },
+    [setFilterValue]
+  )
+
+  const handleChangeTo = useCallback(
+    (value: string | number) => {
+      setFilterValue((old: [number, number]) => {
+        if ((!value || value === '') && !old?.[0]) {
+          return undefined
+        }
+        return [old?.[0], value]
+      })
+    },
+    [setFilterValue]
+  )
 
   switch (manualFiltering) {
     case true:
@@ -40,23 +69,6 @@ export const Filter = ({
             )
           }
           case 'number': {
-            const handleChangeFrom = (value: string | number) => {
-              column.setFilterValue((old: [number, number]) => {
-                if ((!value || value === '') && !old?.[1]) {
-                  return undefined
-                }
-
-                return [value, old?.[1]]
-              })
-            }
-            const handleChangeTo = (value: string | number) => {
-              column.setFilterValue((old: [number, number]) => {
-                if ((!value || value === '') && !old?.[0]) {
-                  return undefined
-                }
-                return [old?.[0], value]
-              })
-            }
             return (
               <div className="flex space-x-2">
                 <DefferedInput

@@ -137,32 +137,32 @@ export const typeDefs = gql`
   }
 
   type CatalogueCategoryProperty @authentication {
+    uid: String!
+    value: String
+    name: String!
+    defaultValue: String!
+    unit: Unit @relationship(type: "HAS_UNIT", direction: OUT)
     catalogueCategoryPropertyGroupsContainsProperty: [CatalogueCategoryPropertyGroup!]!
       @relationship(type: "CONTAINS_PROPERTY", direction: IN)
-    defaultValue: String!
-    value: String
-    unit: Unit @relationship(type: "HAS_UNIT", direction: OUT)
     isPropertyTypeCatalogueCategoryPropertyTypes: [CatalogueCategoryPropertyType!]!
       @relationship(type: "IS_PROPERTY_TYPE", direction: OUT)
     listOfValues: String!
-    name: String!
-    uid: String!
   }
 
   type CatalogueCategoryPropertyGroup @authentication {
+    uid: String!
+    name: String!
     catalogueCategoriesHasGroup: [CatalogueCategory!]! @relationship(type: "HAS_GROUP", direction: IN)
     containsPropertyCatalogueCategoryProperties: [CatalogueCategoryProperty!]!
       @relationship(type: "CONTAINS_PROPERTY", direction: OUT)
-    name: String!
-    uid: String!
   }
 
   type CatalogueCategoryPropertyType @authentication {
+    uid: String!
+    name: String!
+    code: String!
     catalogueCategoryPropertiesIsPropertyType: [CatalogueCategoryProperty!]!
       @relationship(type: "IS_PROPERTY_TYPE", direction: IN)
-    code: String!
-    name: String!
-    uid: String!
   }
 
   type CatalogueItem @authentication {
@@ -354,6 +354,14 @@ export const typeDefs = gql`
     employee: Employee @relationship(type: "HAS_USER", direction: IN)
     uid: ID! @id
     username: String!
+    userSettings: [UserSettings!]! @relationship(type: "HAS_SETTINGS", direction: OUT)
+  }
+  type UserSettings @authentication {
+    uid: ID! @id
+    user: User! @relationship(type: "HAS_SETTINGS", direction: IN)
+    name: String!
+    key: String!
+    value: String!
   }
 
   type Role @authentication {

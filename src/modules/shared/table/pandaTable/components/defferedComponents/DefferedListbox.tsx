@@ -1,6 +1,6 @@
 import { Listbox as HUIListbox } from '@headlessui/react'
 import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
-import React, { useDeferredValue, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
@@ -35,7 +35,6 @@ export const DefferedListbox = ({
   const options = data?.data || []
 
   const [value, setValue] = useState<CodebookType | undefined>(initialValue)
-  const defferedValue = useDeferredValue(value)
 
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -46,15 +45,12 @@ export const DefferedListbox = ({
     setValue(initialValue)
   }, [initialValue])
 
-  useEffect(() => {
-    if (defferedValue === value) onChange(value)
-  }, [defferedValue, value, onChange])
-
   return (
     <HUIListbox
       as="div"
       onChange={(v: CodebookType) => {
         setValue(v)
+        onChange(v)
       }}
       className={classNames('relative flex flex-col w-full mt-auto', className)}
     >

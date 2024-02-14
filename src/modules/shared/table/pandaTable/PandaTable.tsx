@@ -1,5 +1,4 @@
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
-import { rankItem } from '@tanstack/match-sorter-utils'
 import type { ColumnDef, FilterFn, Row, Table as ReactTable } from '@tanstack/react-table'
 import {
   getCoreRowModel,
@@ -12,7 +11,7 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 import type { Ref } from 'react'
-import { forwardRef, Fragment, useDeferredValue, useImperativeHandle } from 'react'
+import { createContext, forwardRef, Fragment, useDeferredValue, useImperativeHandle } from 'react'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
@@ -27,6 +26,7 @@ import { useFilters } from './hooks/useFilters'
 import { useOrdering } from './hooks/useOrdering'
 import { useSorting } from './hooks/useSorting'
 import { useVisibility } from './hooks/useVisibility'
+import { fuzzyFilter } from './utils'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -53,32 +53,6 @@ export interface GetRowPropsReturnType extends React.HTMLAttributes<HTMLTableRow
   dropSettings?: { accept: string; onDropHandler: (from: any, to: any) => void }
 }
 
-const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-  // Don't filter parent if child is matched
-  let parentPassed = false
-  row.subRows?.forEach(subRow => {
-    const itemRank = rankItem(subRow.getValue('name'), value)
-    if (itemRank.passed) {
-      parentPassed = true
-      return
-    }
-  })
-  if (parentPassed) {
-    return true
-  }
-
-  // Rank the item
-  const itemRank = rankItem(row.getValue(columnId), value)
-
-  // Store the itemRank info
-  addMeta({
-    itemRank
-  })
-
-  // Return if the item should be filtered in/out
-  return itemRank.passed
-}
-
 interface Props<T extends object> {
   data?: T[]
   tableId: string
@@ -92,6 +66,7 @@ interface Props<T extends object> {
 }
 
 const defaultPropGetter = () => ({})
+export const TableSettingsContext = createContext<PandaTableSettings | undefined>(undefined)
 
 export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
   <T extends object>(
@@ -162,7 +137,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
     }))
 
     return (
-      <Fragment>
+      <TableSettingsContext.Provider value={settings}>
         {enableColumnHiding && <TableSettings table={table} />}
         <div className={classNames('h-full flex flex-col border-t border-gray-300 pb-4', className)}>
           <div className="inline-block min-w-full align-middle">
@@ -190,7 +165,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
             {defferedData?.length === 0 && <EmptyResults />}
           </div>
         </div>
-      </Fragment>
+      </TableSettingsContext.Provider>
     )
   }
 )

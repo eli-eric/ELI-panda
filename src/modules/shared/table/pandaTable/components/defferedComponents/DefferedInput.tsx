@@ -1,6 +1,8 @@
-import { useDeferredValue, useEffect, useState } from 'react'
+import { useContext, useDeferredValue, useEffect, useState } from 'react'
 
 import { classNames } from '@/utils'
+
+import { TableSettingsContext } from '../../PandaTable'
 
 export const DefferedInput = ({
   value: initialValue = '',
@@ -13,29 +15,39 @@ export const DefferedInput = ({
   className?: string
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) => {
   const [query, setQuery] = useState(initialValue)
-  const deferredQuery = useDeferredValue(query)
+  const settings = useContext(TableSettingsContext)
+  const { manualFiltering } = settings || {}
+
+  const defferedQuery = useDeferredValue(query)
 
   useEffect(() => {
     setQuery(initialValue)
   }, [initialValue])
 
   useEffect(() => {
-    if (query === deferredQuery) {
-      const timer = setTimeout(() => {
-        onChange(deferredQuery)
-      }, 500)
-      return () => {
-        clearTimeout(timer)
+    if (manualFiltering) {
+      if (defferedQuery === query) {
+        const timer = setTimeout(() => {
+          onChange(defferedQuery)
+        }, 500)
+        return () => {
+          clearTimeout(timer)
+        }
       }
+    } else {
+      defferedQuery === query && onChange(defferedQuery)
     }
-  }, [deferredQuery, query, onChange])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, manualFiltering, defferedQuery])
 
   return (
     <input
       {...props}
       value={query}
       className={classNames('form-field rounded-md', className)}
-      onChange={e => setQuery(e.target.value)}
+      onChange={e => {
+        setQuery(e.target.value)
+      }}
       name={'filter'}
     />
   )
