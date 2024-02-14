@@ -23,7 +23,6 @@ export const useFilters = (
     (filtering: SetStateAction<ColumnFiltersState>) => {
       if (typeof filtering === 'function') {
         const updatedFiltering = filtering(filterInstance)
-
         setColumnFilter(tableId, updatedFiltering)
         if (enableQueryURL) setFilterQuery(updatedFiltering.length === 0 ? null : JSON.stringify(updatedFiltering))
       } else {

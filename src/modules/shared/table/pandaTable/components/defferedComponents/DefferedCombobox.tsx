@@ -31,7 +31,6 @@ export const DefferedCombobox = ({
   const options = data?.data || []
 
   const [value, setValue] = useState<CodebookType | undefined>(initialValue)
-  const defferedValue = useDeferredValue(value)
 
   const handleClear = () => {
     setValue(undefined)
@@ -42,17 +41,13 @@ export const DefferedCombobox = ({
     setQuery(initialValue?.name || '')
   }, [initialValue])
 
-  useEffect(() => {
-    if (defferedValue === value) onChange(value)
-  }, [defferedValue, value, onChange])
-
   return (
     <HUICombobox
       as="div"
       value={value}
       onChange={(v: CodebookType) => {
         setValue(v)
-        setQuery(v?.name || '')
+        onChange(v)
       }}
       className={classNames('relative flex flex-col w-full mt-auto', className)}
     >

@@ -38,6 +38,7 @@ export const SelectLocationCombo = ({
         data={codebooktree}
         open={open}
         loading={loading}
+        manualFiltering={true}
         enableFiltering={true}
         setOpen={setOpen}
         name={locationField.name}
