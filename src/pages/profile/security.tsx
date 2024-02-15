@@ -4,7 +4,7 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import { UserProfileLayout } from '@/components/layout/nav-bar/profile/UserProfile.layout'
+import { UserProfileLayout } from '@/components/layout/navigation-bar/profile/UserProfile.layout'
 import { ChangePasswordContainer } from '@/modules/administration/changePassword/ChangePassword.cont'
 
 const messages = message.profilePage
