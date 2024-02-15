@@ -1,5 +1,5 @@
 import type { Row } from '@tanstack/react-table'
-import { memo, useId, useState } from 'react'
+import { useId, useState } from 'react'
 import { useDrop } from 'react-dnd'
 
 import type { SystemDetail } from '@/modules/systems/types/responses'
@@ -7,8 +7,6 @@ import { classNames } from '@/utils'
 
 import type { GetRowPropsReturnType } from '../PandaTable'
 import { RowCell } from './RowCell'
-
-const MemoizedRowCell = memo(RowCell)
 
 interface Props {
   getRowProps: (row: Row<any>) => GetRowPropsReturnType
@@ -53,7 +51,7 @@ export const TableRow = ({ getRowProps, loading, row, index, tableId }: Props) =
       )}
     >
       {row.getVisibleCells().map(cell => (
-        <MemoizedRowCell key={cell.id} cell={cell} loading={loading} row={row} />
+        <RowCell key={cell.id} cell={cell} loading={loading} row={row} />
       ))}
     </tr>
   )

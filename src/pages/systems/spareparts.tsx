@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { Fragment } from 'react'
 
 import { useForceChangePassword } from '@/hooks/useForceChangePassword'
+import { SystemsSparePartsContainer } from '@/modules/systemsSpareParts/SystemSpareParts.cont'
 
 const SystemsPage: NextPage = () => {
   useForceChangePassword()
@@ -12,7 +13,7 @@ const SystemsPage: NextPage = () => {
       <Head>
         <title>Spare Parts</title>
       </Head>
-      <h1>Systems Spare Parts</h1>
+      <SystemsSparePartsContainer />
     </Fragment>
   )
 }
