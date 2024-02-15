@@ -1,20 +1,14 @@
-import classNames from 'classnames'
-import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
-import { NAV_BAR_CONFIG, PATH, SUPPORT } from '@/types/constants/paths'
+import { NAV_BAR_CONFIG, PATH } from '@/types/constants/paths'
 
 import { NavBarLink } from './NavBarLink'
 const navMessages = message.layout
 
-interface Props {
-  open: boolean
-}
-
-const NavigationListContainer = ({ open }: Props) => {
+export const MenuItemsList = ({ open }: { open: boolean }) => {
   const { status, data } = useSession()
   const userRoles = data?.user.roles
   const intl = useIntl()
@@ -28,19 +22,6 @@ const NavigationListContainer = ({ open }: Props) => {
                 return <NavBarLink key={index} name={navBarSetting.name} links={navBarSetting.links} open={open} />
               }
             })}
-            {open && (
-              <Link href={SUPPORT} legacyBehavior>
-                <a
-                  target="_blank"
-                  className={classNames(
-                    'block w-full text-left border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium',
-                    'text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700 dark:text-gray-200'
-                  )}
-                >
-                  {intl.formatMessage({ id: navMessages.support })}
-                </a>
-              </Link>
-            )}
           </Fragment>
         ) : (
           <NavBarLink name={intl.formatMessage({ id: navMessages.login })} links={[{ path: PATH.ROOT }]} open={open} />
@@ -49,5 +30,3 @@ const NavigationListContainer = ({ open }: Props) => {
     </Fragment>
   )
 }
-
-export default NavigationListContainer

@@ -4,8 +4,8 @@ import { Fragment } from 'react'
 
 import type { NavBarLinkType } from '@/types/constants/paths'
 
-import { NavBarLinkWrapper } from './components/NavBarLinkWrapper'
-import { NavBarMultiLink } from './components/NavBarMultiLink'
+import { NavBarLinkWrapper } from './NavBarLinkWrapper'
+import { NavBarMultiLink } from './NavBarMultiLink'
 
 interface Props {
   name: string
