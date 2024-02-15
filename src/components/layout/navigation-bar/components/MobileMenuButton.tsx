@@ -2,7 +2,7 @@ import { Disclosure } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
 export const MobileMenuButton = ({ open }: { open: boolean }) => (
-  <div className="-mr-2 flex items-center sm:hidden">
+  <div className="-mr-2 flex items-center lg:hidden">
     {/* Mobile menu button */}
     <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-primary-800 hover:text-gray-500 ">
       <span className="sr-only">Open main menu</span>

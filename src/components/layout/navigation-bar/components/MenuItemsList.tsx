@@ -8,13 +8,18 @@ import { NAV_BAR_CONFIG, PATH } from '@/types/constants/paths'
 import { NavBarLink } from './NavBarLink'
 const navMessages = message.layout
 
-export const MenuItemsList = ({ open }: { open: boolean }) => {
+interface Props {
+  open: boolean
+  className?: string
+}
+
+export const MenuItemsList = ({ open, className }: Props) => {
   const { status, data } = useSession()
   const userRoles = data?.user.roles
   const intl = useIntl()
   return (
     <Fragment>
-      <div className={open === false ? 'hidden sm:ml-6 sm:flex sm:space-x-8' : 'space-y-1 pt-2 pb-3'}>
+      <div className={className}>
         {status === 'authenticated' ? (
           <Fragment>
             {NAV_BAR_CONFIG.map((navBarSetting, index) => {
