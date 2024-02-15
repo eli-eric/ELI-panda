@@ -1,7 +1,7 @@
 import { Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
 import { signOut, useSession } from 'next-auth/react'
-import { Fragment, useMemo } from 'react'
+import React, { Fragment, useMemo } from 'react'
 
 import { DarkModeSwitch } from '@/components/DarkModeSwitch'
 import usePermission from '@/hooks/usePermission'
@@ -9,15 +9,13 @@ import { PATH, SUPPORT } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import { classNames } from '@/utils'
 
-//TODO: clean up this component
+interface MenuLinkDecoratorProps {
+  children: React.ReactNode
+  active: boolean
+}
+type MenuLinkProps = MenuLinkDecoratorProps & { href: string }
 
-const MenuLink = ({ href, children, active }) => (
-  <Link href={href}>
-    <MenuLinkDecorator active={active}>{children}</MenuLinkDecorator>
-  </Link>
-)
-
-const MenuLinkDecorator = ({ children, active }) => (
+const MenuLinkDecorator = ({ children, active }: MenuLinkDecoratorProps) => (
   <div
     className={classNames(
       'w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 dark:hover:bg-gray-700',
@@ -27,6 +25,13 @@ const MenuLinkDecorator = ({ children, active }) => (
     {children}
   </div>
 )
+
+const MenuLink = ({ href, children, active }: MenuLinkProps) => (
+  <Link href={href}>
+    <MenuLinkDecorator active={active}>{children}</MenuLinkDecorator>
+  </Link>
+)
+
 export const UserMenu = () => {
   const user = useSession().data?.user
   const fullName = user?.fullName
@@ -47,7 +52,7 @@ export const UserMenu = () => {
     <Fragment>
       <div data-testid="layout-profile" className="z-30 ml-6 flex items-center">
         <div className="flex items-center">
-          <div className="md:mr-10 mr-3 mt-1 md:mt-1 md:items-center md:justify-center">
+          <div className="lg:mr-10 mr-3 mt-1 lg:mt-1 lg:items-center lg:justify-center">
             <DarkModeSwitch />
           </div>
           <Link href={SUPPORT} legacyBehavior>
