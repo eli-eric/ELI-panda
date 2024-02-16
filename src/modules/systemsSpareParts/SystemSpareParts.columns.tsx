@@ -1,13 +1,14 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
 import type { HTMLProps } from 'react'
-import { Fragment, useEffect, useMemo, useRef } from 'react'
+import { Fragment, useMemo } from 'react'
 
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import usePermission from '@/hooks/usePermission'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
+import { classNames } from '@/utils'
 
 import { SystemNameCell } from '../systems/components/table/cells/SystemNameCell'
 import { useSubsystems } from '../systems/hooks/useSubsystems'
@@ -19,20 +20,20 @@ interface SystemsColumnsProps {
   tableId: string
 }
 
-function IndeterminateCheckbox({
-  indeterminate,
-  className = '',
-  ...rest
-}: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) {
-  const ref = useRef<HTMLInputElement>(null!)
-
-  useEffect(() => {
-    if (typeof indeterminate === 'boolean') {
-      ref.current.indeterminate = !rest.checked && indeterminate
-    }
-  }, [ref, indeterminate])
-
-  return <input type="checkbox" ref={ref} className={className + ' cursor-pointer'} {...rest} />
+function IndeterminateCheckbox({ className, ...rest }: HTMLProps<HTMLInputElement>) {
+  return (
+    <input
+      type="checkbox"
+      className={classNames(
+        className,
+        !rest.disabled && 'cursor-pointer',
+        'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',
+        !rest.checked && 'dark:bg-gray-700',
+        rest.disabled && 'bg-gray-300 dark:bg-gray-500'
+      )}
+      {...rest}
+    />
+  )
 }
 
 export const useSystemsSparePartsColumns = ({ tableId }: SystemsColumnsProps) => {
@@ -44,14 +45,13 @@ export const useSystemsSparePartsColumns = ({ tableId }: SystemsColumnsProps) =>
       {
         id: 'select',
         size: 20,
+        meta: { sticky: true },
         cell: ({ row }) => (
           <div className="px-1">
             <IndeterminateCheckbox
-              {...{
-                checked: row.getIsSelected(),
-                disabled: !row.getCanSelect(),
-                onChange: () => row.toggleSelected(!row.getIsSelected(), { selectChildren: false })
-              }}
+              checked={row.getIsSelected()}
+              disabled={!row.getCanSelect()}
+              onChange={() => row.toggleSelected(undefined, { selectChildren: false })}
             />
           </div>
         )
@@ -60,7 +60,7 @@ export const useSystemsSparePartsColumns = ({ tableId }: SystemsColumnsProps) =>
         header: 'Name',
         accessorFn: row => row.name,
         id: 'name',
-        size: tableId === 'systemsItem' ? 400 : 440,
+        size: 440,
         enableHiding: false,
         cell: props => (
           <SystemNameCell

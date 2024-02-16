@@ -6,14 +6,12 @@ import { TableRow } from './TableRow'
 
 interface Props {
   getRowModel: () => RowModel<any>
-  loading?: boolean
   getRowProps: (row: Row<any>) => GetRowPropsReturnType
-  tableId: string
 }
-export const TableBody: FC<Props> = ({ getRowModel, loading, getRowProps, tableId }) => (
+export const TableBody: FC<Props> = ({ getRowModel, getRowProps }) => (
   <tbody className="bg-white dark:bg-gray-800">
     {getRowModel().rows.map((row, index) => (
-      <TableRow key={row.id} tableId={tableId} loading={loading} row={row} index={index} getRowProps={getRowProps} />
+      <TableRow key={row.id} row={row} index={index} getRowProps={getRowProps} />
     ))}
   </tbody>
 )

@@ -1,15 +1,13 @@
 import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
 import type { ColumnOrderState, Header, Table } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
-import type { FC } from 'react'
-import { memo } from 'react'
+import { type FC, useContext } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
 import { classNames } from '@/utils'
 
+import { PandaTableContext } from '../PandaTableCotrolled'
 import { Filter } from './Filter'
-
-const MemoizedFilter = memo(Filter)
 
 const reorderColumn = (draggedColumnId: string, targetColumnId: string, columnOrder: string[]): ColumnOrderState => {
   columnOrder.splice(
@@ -24,24 +22,18 @@ const reorderColumn = (draggedColumnId: string, targetColumnId: string, columnOr
 interface ColumnHeader {
   header: Header<any, any>
   table: Table<any>
-  enableColumnReordering: boolean
-  enableFiltering: boolean
-  manualFiltering: boolean
+
   data?: any
 }
 
-export const ColumnHeader: FC<ColumnHeader> = ({
-  header,
-  table,
-  enableColumnReordering,
-  data,
-  enableFiltering,
-  manualFiltering
-}) => {
+export const ColumnHeader: FC<ColumnHeader> = ({ header, table }) => {
   const { getState, setColumnOrder } = table
   const { columnOrder } = getState()
   const { column } = header
   const HeaderElement = column.columnDef.meta?.headerElement
+  const { settings } = useContext(PandaTableContext)
+
+  const { enableColumnReordering, enableFiltering, manualFiltering = false } = settings
 
   const [, dropRef] = useDrop<Header<any, any>>({
     accept: 'column',
@@ -105,7 +97,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
         {HeaderElement}
       </div>
       {enableFiltering && header.column.getCanFilter() ? (
-        <MemoizedFilter manualFiltering={manualFiltering} column={header.column} table={table} data={data} />
+        <Filter manualFiltering={manualFiltering} column={header.column} table={table} />
       ) : null}
     </th>
   )

@@ -4,14 +4,10 @@ import type { FC } from 'react'
 import { ColumnHeader } from './ColumnHeader'
 
 interface Props {
-  enableColumnReordering: boolean
-  enableFiltering: boolean
   table: Table<any>
-  data?: any
-  manualFiltering: boolean
 }
 
-export const TableHead: FC<Props> = ({ enableColumnReordering, table, data, enableFiltering, manualFiltering }) => (
+export const TableHead: FC<Props> = ({ table }) => (
   <thead className="bg-gray-50 border-b">
     {table.getHeaderGroups().map(headerGroup => (
       <tr key={headerGroup.id}>
@@ -20,17 +16,7 @@ export const TableHead: FC<Props> = ({ enableColumnReordering, table, data, enab
           if (noHeader) {
             return null
           }
-          return (
-            <ColumnHeader
-              key={header.id}
-              enableColumnReordering={enableColumnReordering}
-              enableFiltering={enableFiltering}
-              manualFiltering={manualFiltering}
-              table={table}
-              header={header}
-              data={data}
-            />
-          )
+          return <ColumnHeader key={header.id} table={table} header={header} />
         })}
       </tr>
     ))}
