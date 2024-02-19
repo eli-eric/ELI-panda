@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
+import { Button } from '@/components/Buttons'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { classNames } from '@/utils'
@@ -31,7 +32,13 @@ export const SystemsSparePartsContainer = () => {
   const tableSettings: PandaTableSettings<SystemDetail> = useMemo(
     () => ({
       enableRowSelection: row =>
-        !selectedSystemType ? true : row.original.systemType?.uid === selectedSystemType?.uid ? true : false,
+        !row.original.systemType
+          ? false
+          : !selectedSystemType
+            ? true
+            : row.original.systemType?.uid === selectedSystemType?.uid
+              ? true
+              : false,
       enableMultiRowSelection: true,
       enableColumnHiding: true,
       enableColumnReordering: true,
@@ -55,8 +62,9 @@ export const SystemsSparePartsContainer = () => {
     getSubRows: row => row.subSystems || []
   })
 
-  const { getSelectedRowModel } = table
-  const firstSelectedSystemType = getSelectedRowModel().flatRows[0]?.original?.systemType
+  const firstSelectedSystemType =
+    table.getSelectedRowModel().flatRows[0]?.original?.systemType ||
+    table2.getSelectedRowModel().flatRows[0]?.original.systemType
 
   useEffect(() => {
     if (firstSelectedSystemType) {
@@ -67,7 +75,7 @@ export const SystemsSparePartsContainer = () => {
   }, [firstSelectedSystemType, setSelectedSystemType])
 
   return (
-    <div className={classNames(' grid grid-cols-2')}>
+    <div className={classNames('grid grid-cols-2')}>
       <TableLayoutContainer deps={[sysetms1.systems]} className="border-r-4 border-gray-400">
         <SearchBar
           tableId={tableId1}
@@ -78,6 +86,7 @@ export const SystemsSparePartsContainer = () => {
         />
         <PandaTableControlled
           data={sysetms1.systems?.data}
+          tableHeading="Spare Parts"
           tableId={tableId1}
           table={table}
           loading={sysetms1.loading || columns1.pending}
@@ -105,11 +114,17 @@ export const SystemsSparePartsContainer = () => {
           tableId={tableId2}
           useQuery={false}
           left={<SystemFilterButtonContainer tableId={tableId2} enableQueryURL={false} />}
-          right={<FilterBadges tableId={tableId2} />}
+          right={
+            <div className="flex">
+              <FilterBadges tableId={tableId2} />
+              <Button primary>Assign Spare Parts</Button>
+            </div>
+          }
           onChange={() => table.resetExpanded()}
         />
         <PandaTableControlled
           data={sysetms2.systems?.data}
+          tableHeading="For System"
           tableId={tableId2}
           table={table2}
           loading={sysetms2.loading || columns2.pending}

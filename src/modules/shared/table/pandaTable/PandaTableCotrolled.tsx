@@ -24,6 +24,7 @@ export const PandaTableContext = createContext<PandaTableContextType>({
 
 interface Props {
   settings?: PandaTableSettings<any>
+  tableHeading?: string
   className?: string
   data: any
   loading: boolean
@@ -39,7 +40,8 @@ export const PandaTableControlled = ({
   table,
   loading,
   tableId,
-  getRowProps = defaultPropGetter
+  getRowProps = defaultPropGetter,
+  tableHeading
 }: Props) => {
   const { enableFooter = false, enableColumnHiding = false } = settings || {}
 
@@ -51,6 +53,14 @@ export const PandaTableControlled = ({
         loading
       }}
     >
+      {tableHeading && (
+        <div
+          id="table-heading"
+          className="text-sm items-center w-full py-[2px] px-4 text-center shadow-sm  text-primary-600 bg-white dark:bg-gray-800  "
+        >
+          <span>{tableHeading}</span>
+        </div>
+      )}
       {enableColumnHiding && <TableSettings table={table} />}
       <div className={classNames('h-full flex flex-col border-t border-gray-300 pb-4', className)}>
         <div className="inline-block min-w-full align-middle">
