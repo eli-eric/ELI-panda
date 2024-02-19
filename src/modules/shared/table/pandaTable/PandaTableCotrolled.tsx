@@ -1,4 +1,4 @@
-import type { Table } from '@tanstack/react-table'
+import type { Row, Table } from '@tanstack/react-table'
 import { createContext, Fragment } from 'react'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
@@ -9,7 +9,7 @@ import { TableBody } from './components/TableBody'
 import { TableFoot } from './components/TableFoot'
 import { TableHead } from './components/TableHead'
 import { TableSettings } from './components/TableSettings'
-import type { PandaTableSettings } from './PandaTable'
+import { defaultPropGetter, type GetRowPropsReturnType, type PandaTableSettings } from './PandaTable'
 
 type PandaTableContextType = {
   settings: PandaTableSettings<any>
@@ -23,21 +23,30 @@ export const PandaTableContext = createContext<PandaTableContextType>({
 })
 
 interface Props {
-  settings: PandaTableSettings<any>
+  settings?: PandaTableSettings<any>
   className?: string
   data: any
   loading: boolean
-  getRowProps
+  getRowProps?: (row: Row<any>) => GetRowPropsReturnType
+
   tableId: string
   table: Table<any>
 }
-export const PandaTableControlled = ({ settings, className, data, table, loading, tableId, getRowProps }: Props) => {
+export const PandaTableControlled = ({
+  settings,
+  className,
+  data,
+  table,
+  loading,
+  tableId,
+  getRowProps = defaultPropGetter
+}: Props) => {
   const { enableFooter = false, enableColumnHiding = false } = settings || {}
 
   return (
     <PandaTableContext.Provider
       value={{
-        settings,
+        settings: settings || {},
         tableId,
         loading
       }}

@@ -59,7 +59,7 @@ interface Props<T extends object> {
   settings?: PandaTableSettings<T>
 }
 
-const defaultPropGetter = () => ({})
+export const defaultPropGetter = () => ({})
 
 export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
   <T extends object>(
