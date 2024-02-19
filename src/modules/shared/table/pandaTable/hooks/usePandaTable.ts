@@ -9,13 +9,13 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import { useState } from 'react'
 
 import type { PandaTableSettings } from '../PandaTable'
 import { fuzzyFilter } from '../utils'
 import { useExpanding } from './useExpanding'
 import { useFilters } from './useFilters'
 import { useOrdering } from './useOrdering'
+import { useRowSelection } from './useRowSelection'
 import { useSorting } from './useSorting'
 import { useVisibility } from './useVisibility'
 
@@ -44,7 +44,7 @@ export const usePandaTable = <T>({ tableId, columns, settings, data, getSubRows 
   const [sorting, setSorting] = useSorting(tableId, enableQueryURL)
   const [expanded, setExpanded] = useExpanding(tableId)
   const [columnFilters, setColumnFilters] = useFilters(tableId, enableQueryURL)
-  const [rowSelection, setRowSelection] = useState({})
+  const [rowSelection, setRowSelection] = useRowSelection(tableId)
 
   // react-table hook
   const table = useReactTable<T>({
@@ -61,7 +61,7 @@ export const usePandaTable = <T>({ tableId, columns, settings, data, getSubRows 
     onColumnOrderChange: setColumnOrder,
     onColumnVisibilityChange: setColumnVisibility,
     onColumnFiltersChange: setColumnFilters,
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: setRowSelection || {},
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
