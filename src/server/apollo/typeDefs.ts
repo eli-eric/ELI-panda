@@ -1,6 +1,10 @@
 import { gql } from '@apollo/client'
 
 export const typeDefs = gql`
+  type Mutation {
+    createSparePartRelation(fromSystemIds: [ID!]!, toSystemIds: [ID!]!): String
+  }
+
   type JWT @jwt {
     roles: [String!]!
   }
