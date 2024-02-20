@@ -1,28 +1,37 @@
-import type { Driver } from 'neo4j-driver'
+import { type Driver } from 'neo4j-driver'
 import type { TransactionPromise } from 'neo4j-driver-core'
+import type { User } from 'next-auth'
+
+import { ROLE } from '@/types/constants/roles'
 
 const createSparePartRelationsResolver = async (
   _source: unknown,
   { fromSystemIds, toSystemIds }: { fromSystemIds: string[]; toSystemIds: string[] },
-  context: { executor: { executionContext: Driver } },
+  context: { executor: { executionContext: Driver }; authorization: { isAuthenticated: boolean; jwt: User } },
   // eslint-disable-next-line
   _info: unknown
 ): Promise<string> => {
   const session = context.executor.executionContext.session()
   let transaction: TransactionPromise | undefined
-  const existingRelations: string[] = []
+  const existingRelationsDetails: string[] = []
 
+  if (!context.authorization.isAuthenticated || !context.authorization.jwt.roles.includes(ROLE.SYSTEM_EDIT)) {
+    throw new Error('Unauthorized: You do not have permission to perform this action.')
+  }
   try {
     transaction = session.beginTransaction()
 
     for (const fromSystemId of fromSystemIds) {
       for (const toSystemId of toSystemIds) {
         const relationExistsQuery = `
-          MATCH (from:System {uid: $fromSystemId})-[r:IS_SPARE_FOR]->(to:System {uid: $toSystemId})
-          RETURN count(r) as count
+          MATCH (from:System {uid: $fromSystemId}), (to:System {uid: $toSystemId})
+          OPTIONAL MATCH (from)-[r:IS_SPARE_FOR]->(to)
+          RETURN count(r) as count, from.name as fromName, to.name as toName
         `
         const result = await transaction.run(relationExistsQuery, { fromSystemId, toSystemId })
         const count = result.records[0].get('count').toInt()
+        const fromName = result.records[0].get('fromName')
+        const toName = result.records[0].get('toName')
 
         if (count === 0) {
           const createRelationQuery = `
@@ -31,15 +40,15 @@ const createSparePartRelationsResolver = async (
           `
           await transaction.run(createRelationQuery, { fromSystemId, toSystemId })
         } else {
-          existingRelations.push(`Relation between ${fromSystemId} and ${toSystemId} already exists.`)
+          existingRelationsDetails.push(`Relation between "${fromName}" and "${toName}" already exists.`)
         }
       }
     }
 
     await transaction.commit()
 
-    if (existingRelations.length > 0) {
-      return `Some relations were not created because they already exist: ${existingRelations.join('; ')}`
+    if (existingRelationsDetails.length > 0) {
+      return `Some relations were not created because they already exist: ${existingRelationsDetails.join('; ')}`
     }
 
     return 'All relations created successfully'
