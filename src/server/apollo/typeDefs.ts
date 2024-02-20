@@ -218,6 +218,7 @@ export const typeDefs = gql`
     systemAlias: String
     systemCode: String
     subSystems: [System!]! @relationship(type: "HAS_SUBSYSTEM", direction: OUT)
+    spareParts: [System!]! @relationship(type: "IS_SPARE_FOR", direction: OUT, nestedOperations: [CONNECT, DISCONNECT])
     parentSystem: System @relationship(type: "HAS_SUBSYSTEM", direction: IN)
     location: Location @relationship(type: "HAS_LOCATION", direction: OUT)
     facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)

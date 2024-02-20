@@ -19,7 +19,7 @@ import { useSystemsSparePartsColumns } from './SystemSpareParts.columns'
 
 export const SystemsSparePartsContainer = () => {
   const tableId1 = 'SpareParts'
-  const tableId2 = 'SpareFor'
+  const tableId2 = 'forSystem'
 
   const sysetms1 = useSystems(tableId1)
   const sysetms2 = useSystems(tableId2)
@@ -54,6 +54,7 @@ export const SystemsSparePartsContainer = () => {
     settings: tableSettings,
     getSubRows: row => row.subSystems || []
   })
+
   const table = usePandaTable<SystemDetail>({
     tableId: tableId1,
     data: sysetms1.systems?.data,
