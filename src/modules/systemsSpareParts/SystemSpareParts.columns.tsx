@@ -39,7 +39,6 @@ function IndeterminateCheckbox({ className, ...rest }: HTMLProps<HTMLInputElemen
 export const useSystemsSparePartsColumns = ({ tableId }: SystemsColumnsProps) => {
   const { setUid, pending } = useSubsystems(tableId)
   const canEdit = usePermission([ROLE.SYSTEM_EDIT])
-
   const columns = useMemo(
     (): ColumnDef<SystemDetail, any>[] => [
       {

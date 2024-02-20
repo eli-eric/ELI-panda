@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import { Button } from '@/components/Buttons'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
@@ -15,6 +16,7 @@ import { getColorBySystemLevel, getFontBySystemLevel } from '../systemItem/utils
 import { SystemFilterButtonContainer } from '../systems/components/filters/SystemsFilterButton.cont'
 import { useSystems } from '../systems/hooks/useSystems'
 import type { SystemDetail } from '../systems/types/responses'
+import { useAssignSpareParts } from './hooks/useAssignSpareParts'
 import { useSystemsSparePartsColumns } from './SystemSpareParts.columns'
 
 export const SystemsSparePartsContainer = () => {
@@ -63,9 +65,13 @@ export const SystemsSparePartsContainer = () => {
     getSubRows: row => row.subSystems || []
   })
 
+  const table1SelectedRawModel = table.getSelectedRowModel().flatRows
+  const table1SelectedUids = table1SelectedRawModel.map(sel => sel.original.uid)
+  const table2SelectedRawModel = table2.getSelectedRowModel().flatRows
+  const table2SelectedUids = table2SelectedRawModel.map(sel => sel.original.uid)
+
   const firstSelectedSystemType =
-    table.getSelectedRowModel().flatRows[0]?.original?.systemType ||
-    table2.getSelectedRowModel().flatRows[0]?.original.systemType
+    table1SelectedRawModel[0]?.original?.systemType || table2SelectedRawModel[0]?.original.systemType
 
   useEffect(() => {
     if (firstSelectedSystemType) {
@@ -74,6 +80,22 @@ export const SystemsSparePartsContainer = () => {
       setSelectedSystemType(undefined)
     }
   }, [firstSelectedSystemType, setSelectedSystemType])
+
+  const { assignSpareParts, loading } = useAssignSpareParts()
+
+  const handleAssignSpareParts = () => {
+    assignSpareParts({
+      variables: { fromSystemIds: table1SelectedUids, toSystemIds: table2SelectedUids },
+      onCompleted: data => {
+        toast.success(data.createSparePartRelation as string)
+        table.resetRowSelection()
+        table2.resetRowSelection()
+      },
+      onError: erorr => {
+        toast.error(erorr.message)
+      }
+    })
+  }
 
   return (
     <div className={classNames('grid grid-cols-2')}>
@@ -118,7 +140,14 @@ export const SystemsSparePartsContainer = () => {
           right={
             <div className="flex">
               <FilterBadges tableId={tableId2} />
-              <Button primary>Assign Spare Parts</Button>
+              <Button
+                primary
+                disabled={table1SelectedUids.length === 0 || table2SelectedUids.length === 0}
+                loading={loading}
+                onClick={handleAssignSpareParts}
+              >
+                Assign Spare Parts
+              </Button>
             </div>
           }
           onChange={() => table.resetExpanded()}
