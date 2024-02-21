@@ -10,6 +10,7 @@ import { ROLE } from '@/types/constants/roles'
 
 import FileManager from '../shared/fileManager/FileManager'
 import { SystemForm } from './components/form/SystemForm.cont'
+import { SparePartsContainer } from './components/spare-parts/SpareParts.cont'
 import { SubSystemsContainer } from './components/subsystems/SubSystems.cont'
 
 interface Props {
@@ -23,12 +24,8 @@ export const SystemItemContainer = ({ uid }: Props) => {
       <SystemForm />
       {uid && (
         <Card className="flex flex-col justify-between">
-          {/* <ErrorBoundary fallback={<ErrorPage />}>
-            <Suspense fallback={<ProgressBarComponent />}>
-              <RelationsSection systemName={systemDetail?.name} />
-            </Suspense>
-          </ErrorBoundary> */}
           <SubSystemsContainer />
+          <SparePartsContainer />
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense fallback={<ProgressBarComponent />}>
               <FileManager itemType={FILE_TYPE.SYSTEM} uid={uid} hasEditRole={hasEditRole} />

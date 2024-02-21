@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import toast from 'react-hot-toast'
 
 import { Button } from '@/components/Buttons'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { classNames } from '@/utils'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
@@ -29,24 +28,17 @@ export const SystemsSparePartsContainer = () => {
   const columns1 = useSystemsSparePartsColumns({ tableId: tableId1 })
   const columns2 = useSystemsSparePartsColumns({ tableId: tableId2 })
 
-  const [selectedSystemType, setSelectedSystemType] = useState<CodebookType | undefined>()
+  // const [selectedSystemType, setSelectedSystemType] = useState<CodebookType | undefined>()
 
   const tableSettings: PandaTableSettings<SystemDetail> = useMemo(
     () => ({
-      enableRowSelection: row =>
-        !row.original.systemType
-          ? false
-          : !selectedSystemType
-            ? true
-            : row.original.systemType?.uid === selectedSystemType?.uid
-              ? true
-              : false,
+      enableRowSelection: true,
       enableMultiRowSelection: true,
       enableColumnHiding: true,
       enableColumnReordering: true,
       enableQueryURL: false
     }),
-    [selectedSystemType]
+    []
   )
 
   const table2 = usePandaTable<SystemDetail>({
@@ -70,16 +62,16 @@ export const SystemsSparePartsContainer = () => {
   const table2SelectedRawModel = table2.getSelectedRowModel().flatRows
   const table2SelectedUids = table2SelectedRawModel.map(sel => sel.original.uid)
 
-  const firstSelectedSystemType =
-    table1SelectedRawModel[0]?.original?.systemType || table2SelectedRawModel[0]?.original.systemType
+  // const firstSelectedSystemType =
+  // table1SelectedRawModel[0]?.original?.systemType || table2SelectedRawModel[0]?.original.systemType
 
-  useEffect(() => {
-    if (firstSelectedSystemType) {
-      setSelectedSystemType(firstSelectedSystemType)
-    } else {
-      setSelectedSystemType(undefined)
-    }
-  }, [firstSelectedSystemType, setSelectedSystemType])
+  // useEffect(() => {
+  //   if (firstSelectedSystemType) {
+  //     setSelectedSystemType(firstSelectedSystemType)
+  //   } else {
+  //     setSelectedSystemType(undefined)
+  //   }
+  // }, [firstSelectedSystemType, setSelectedSystemType])
 
   const { assignSpareParts, loading } = useAssignSpareParts()
 
@@ -87,7 +79,7 @@ export const SystemsSparePartsContainer = () => {
     assignSpareParts({
       variables: { fromSystemIds: table1SelectedUids, toSystemIds: table2SelectedUids },
       onCompleted: data => {
-        toast.success(data.createSparePartRelation as string)
+        toast.success(data.createSparePartRelation as string, { duration: 10000 })
         table.resetRowSelection()
         table2.resetRowSelection()
       },

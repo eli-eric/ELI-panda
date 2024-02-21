@@ -119,6 +119,12 @@ export const SYSTEM_DETAIL = gql`
     physicalItem {
       ...PhysicalItemFields
     }
+    spareParts {
+      ...SystemFields
+      physicalItem {
+        ...PhysicalItemFields
+      }
+    }
   }
 `
 

@@ -11396,6 +11396,7 @@ export type SystemDeleteInput = {
   parentSystem?: InputMaybe<SystemParentSystemDeleteFieldInput>;
   physicalItem?: InputMaybe<SystemPhysicalItemDeleteFieldInput>;
   responsible?: InputMaybe<SystemResponsibleDeleteFieldInput>;
+  spareParts?: InputMaybe<Array<SystemSparePartsDeleteFieldInput>>;
   subSystems?: InputMaybe<Array<SystemSubSystemsDeleteFieldInput>>;
   systemType?: InputMaybe<SystemSystemTypeDeleteFieldInput>;
   zone?: InputMaybe<SystemZoneDeleteFieldInput>;
@@ -12435,6 +12436,7 @@ export type SystemRelationInput = {
   parentSystem?: InputMaybe<SystemParentSystemCreateFieldInput>;
   physicalItem?: InputMaybe<SystemPhysicalItemCreateFieldInput>;
   responsible?: InputMaybe<SystemResponsibleCreateFieldInput>;
+  spareParts?: InputMaybe<Array<SystemSparePartsCreateFieldInput>>;
   subSystems?: InputMaybe<Array<SystemSubSystemsCreateFieldInput>>;
   systemType?: InputMaybe<SystemSystemTypeCreateFieldInput>;
   zone?: InputMaybe<SystemZoneCreateFieldInput>;
@@ -12646,6 +12648,15 @@ export type SystemSparePartsConnectionWhere = {
   node?: InputMaybe<SystemWhere>;
 };
 
+export type SystemSparePartsCreateFieldInput = {
+  node: SystemCreateInput;
+};
+
+export type SystemSparePartsDeleteFieldInput = {
+  delete?: InputMaybe<SystemDeleteInput>;
+  where?: InputMaybe<SystemSparePartsConnectionWhere>;
+};
+
 export type SystemSparePartsDisconnectFieldInput = {
   disconnect?: InputMaybe<SystemDisconnectInput>;
   where?: InputMaybe<SystemSparePartsConnectionWhere>;
@@ -12653,6 +12664,7 @@ export type SystemSparePartsDisconnectFieldInput = {
 
 export type SystemSparePartsFieldInput = {
   connect?: InputMaybe<Array<SystemSparePartsConnectFieldInput>>;
+  create?: InputMaybe<Array<SystemSparePartsCreateFieldInput>>;
 };
 
 export type SystemSparePartsNodeAggregationWhereInput = {
@@ -12727,9 +12739,16 @@ export type SystemSparePartsRelationship = {
   node: System;
 };
 
+export type SystemSparePartsUpdateConnectionInput = {
+  node?: InputMaybe<SystemUpdateInput>;
+};
+
 export type SystemSparePartsUpdateFieldInput = {
   connect?: InputMaybe<Array<SystemSparePartsConnectFieldInput>>;
+  create?: InputMaybe<Array<SystemSparePartsCreateFieldInput>>;
+  delete?: InputMaybe<Array<SystemSparePartsDeleteFieldInput>>;
   disconnect?: InputMaybe<Array<SystemSparePartsDisconnectFieldInput>>;
+  update?: InputMaybe<SystemSparePartsUpdateConnectionInput>;
   where?: InputMaybe<SystemSparePartsConnectionWhere>;
 };
 
