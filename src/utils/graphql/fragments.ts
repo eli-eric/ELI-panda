@@ -6,6 +6,8 @@ export const SYSTEM_FIELDS = gql`
     name
     systemCode
     systemAlias
+    minimalSpareParstCount
+    isCritical
     systemLevel
     description
     subSystems {
@@ -118,6 +120,12 @@ export const SYSTEM_DETAIL = gql`
     ...SystemFields
     physicalItem {
       ...PhysicalItemFields
+    }
+    spareParts {
+      ...SystemFields
+      physicalItem {
+        ...PhysicalItemFields
+      }
     }
   }
 `

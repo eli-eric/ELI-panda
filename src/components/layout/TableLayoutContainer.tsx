@@ -18,6 +18,7 @@ export const TableLayoutContainer = ({ children, deps, className }: Props) => {
       // Handler to call on window resize
       const handleResize = () => {
         const searchBar = document.getElementById('search-bar')?.clientHeight || 0
+        const tableHeading = document.getElementById('table-heading')?.clientHeight || 0
         const navHeader = document.getElementById('nav-bar')?.clientHeight || 0
         const emptyResults = document.getElementById('empty-results')?.clientHeight || 0
         const columnHiding = document.getElementById('column-hiding')?.clientHeight || 0
@@ -25,7 +26,14 @@ export const TableLayoutContainer = ({ children, deps, className }: Props) => {
         const catalogueBreadcrump = document.getElementById('breadcrump')?.clientHeight || 0
         const cataloguePaging = document.getElementById('paging')?.clientHeight || 0
         const height =
-          searchBar + columnHiding + categoryList + cataloguePaging + catalogueBreadcrump + navHeader - emptyResults
+          searchBar +
+          tableHeading +
+          columnHiding +
+          categoryList +
+          cataloguePaging +
+          catalogueBreadcrump +
+          navHeader -
+          emptyResults
 
         // REVIEW LAYOUT HEIGHT + 3  // TODO
         setHeight(height + 3)

@@ -18,7 +18,7 @@ interface Props {
   hideButtons?: boolean
   enableDragAndDrop?: boolean
   getRowProps?: (row: Row<SystemDetail>) => GetRowPropsReturnType
-  settings?: PandaTableSettings
+  settings?: PandaTableSettings<SystemDetail>
   RightSearchBarElement?: () => JSX.Element
   LeftSearchBarElement?: () => JSX.Element
 }

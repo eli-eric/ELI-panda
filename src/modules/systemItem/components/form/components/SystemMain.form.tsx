@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
+import CheckBox from '@/components/form/CheckBox'
 import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
@@ -51,7 +52,7 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
               <SelectLocationCombo locationField={fields.location} />
             </Col>
             <Col sm={3} md={6} lg={8}>
-              <Combobox {...fields.zone} />
+              <Combobox {...fields.zone} />C
             </Col>
             <Col sm={3} md={6} lg={4}>
               <Input {...fields.systemCode} />
@@ -95,6 +96,16 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
         </Grid>
       </Card>
 
+      <Card className="border-t border-gray-400">
+        <Grid>
+          <Col sm={3} md={5} lg={2}>
+            <Input type="number" {...fields.minimalSpareParstCount} />
+          </Col>
+          <Col sm={3} md={4} lg={1} className="">
+            <CheckBox {...fields.isCritical} className="items-end pb-2" />
+          </Col>
+        </Grid>
+      </Card>
       <Card className="border-t border-gray-400 ">
         <Grid>
           <Col sm="full">
