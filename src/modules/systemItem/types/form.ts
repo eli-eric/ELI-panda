@@ -8,7 +8,9 @@ export type SystemDetailFormType = {
   name: string // input
   description?: string // textarea
   parentPath?: CodebookType[]
+  isCritical: boolean // checkbox
   location?: CodebookType // combobox - CODEBOOK.LOCATION
+  minimalSpareParstCount: number
   zone?: CodebookType // combobox
   systemType?: CodebookType // ListBox
   systemCode?: string // automaticky generovaný viz system edit - api dodá J.Š.

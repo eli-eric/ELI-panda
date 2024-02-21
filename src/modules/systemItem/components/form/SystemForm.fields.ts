@@ -18,6 +18,18 @@ const useSystemEditFormFields = () => {
       rounded: 'rounded-md',
       disabled: disabledEdit
     },
+    isCritical: {
+      name: 'isCritical',
+      label: form.isCritical.label,
+      rounded: 'rounded-md',
+      disabled: disabledEdit
+    },
+    minimalSpareParstCount: {
+      name: 'minimalSpareParstCount',
+      label: form.minimalSpareParstCount.label,
+      rounded: 'rounded-md',
+      disabled: disabledEdit
+    },
     responsible: {
       name: 'responsible',
       label: form.responsiblePerson.label,

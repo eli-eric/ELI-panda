@@ -6718,6 +6718,26 @@ export type ItemSystemNodeAggregationWhereInput = {
   description_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   description_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   description_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_AVERAGE_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_GT?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_GTE?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_LT?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_LTE?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_MAX_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_GT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_GTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_LT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_LTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_GT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_GTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_LT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_LTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_GT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_GTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_LT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -6780,6 +6800,7 @@ export type ItemSystemSystemAggregationSelection = {
 export type ItemSystemSystemNodeAggregateSelection = {
   __typename?: 'ItemSystemSystemNodeAggregateSelection';
   description: StringAggregateSelectionNullable;
+  minimalSpareParstCount: IntAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   systemAlias: StringAggregateSelectionNullable;
   systemCode: StringAggregateSelectionNullable;
@@ -10984,6 +11005,7 @@ export type System = {
   facility: Facility;
   facilityAggregate?: Maybe<SystemFacilityFacilityAggregationSelection>;
   facilityConnection: SystemFacilityConnection;
+  isCritical?: Maybe<Scalars['Boolean']['output']>;
   isTechnologicalUnit?: Maybe<Scalars['Boolean']['output']>;
   keySystem?: Maybe<System>;
   location?: Maybe<Location>;
@@ -10992,6 +11014,7 @@ export type System = {
   maintainedBy: Array<Employee>;
   maintainedByAggregate?: Maybe<SystemEmployeeMaintainedByAggregationSelection>;
   maintainedByConnection: SystemMaintainedByConnection;
+  minimalSpareParstCount?: Maybe<Scalars['Int']['output']>;
   name: Scalars['String']['output'];
   operators: Array<Employee>;
   operatorsAggregate?: Maybe<SystemEmployeeOperatorsAggregationSelection>;
@@ -11270,6 +11293,7 @@ export type SystemAggregateSelection = {
   __typename?: 'SystemAggregateSelection';
   count: Scalars['Int']['output'];
   description: StringAggregateSelectionNullable;
+  minimalSpareParstCount: IntAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   systemAlias: StringAggregateSelectionNullable;
   systemCode: StringAggregateSelectionNullable;
@@ -11298,9 +11322,11 @@ export type SystemCreateInput = {
   deleted: Scalars['Boolean']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   facility?: InputMaybe<SystemFacilityFieldInput>;
+  isCritical?: InputMaybe<Scalars['Boolean']['input']>;
   isTechnologicalUnit?: InputMaybe<Scalars['Boolean']['input']>;
   location?: InputMaybe<SystemLocationFieldInput>;
   maintainedBy?: InputMaybe<SystemMaintainedByFieldInput>;
+  minimalSpareParstCount?: InputMaybe<Scalars['Int']['input']>;
   name: Scalars['String']['input'];
   operators?: InputMaybe<SystemOperatorsFieldInput>;
   parentSystem?: InputMaybe<SystemParentSystemFieldInput>;
@@ -12221,6 +12247,26 @@ export type SystemParentSystemNodeAggregationWhereInput = {
   description_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   description_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   description_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_AVERAGE_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_GT?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_GTE?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_LT?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_LTE?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_MAX_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_GT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_GTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_LT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_LTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_GT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_GTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_LT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_LTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_GT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_GTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_LT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -12602,8 +12648,10 @@ export type SystemResponsibleUpdateFieldInput = {
 export type SystemSort = {
   deleted?: InputMaybe<SortDirection>;
   description?: InputMaybe<SortDirection>;
+  isCritical?: InputMaybe<SortDirection>;
   isTechnologicalUnit?: InputMaybe<SortDirection>;
   keySystem?: InputMaybe<SortDirection>;
+  minimalSpareParstCount?: InputMaybe<SortDirection>;
   name?: InputMaybe<SortDirection>;
   systemAlias?: InputMaybe<SortDirection>;
   systemCode?: InputMaybe<SortDirection>;
@@ -12686,6 +12734,26 @@ export type SystemSparePartsNodeAggregationWhereInput = {
   description_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   description_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   description_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_AVERAGE_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_GT?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_GTE?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_LT?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_LTE?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_MAX_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_GT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_GTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_LT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_LTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_GT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_GTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_LT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_LTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_GT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_GTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_LT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -12827,6 +12895,26 @@ export type SystemSubSystemsNodeAggregationWhereInput = {
   description_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   description_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   description_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_AVERAGE_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_GT?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_GTE?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_LT?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_AVERAGE_LTE?: InputMaybe<Scalars['Float']['input']>;
+  minimalSpareParstCount_MAX_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_GT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_GTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_LT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MAX_LTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_GT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_GTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_LT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_MIN_LTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_GT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_GTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_LT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_SUM_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -12902,6 +12990,7 @@ export type SystemSystemParentSystemAggregationSelection = {
 export type SystemSystemParentSystemNodeAggregateSelection = {
   __typename?: 'SystemSystemParentSystemNodeAggregateSelection';
   description: StringAggregateSelectionNullable;
+  minimalSpareParstCount: IntAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   systemAlias: StringAggregateSelectionNullable;
   systemCode: StringAggregateSelectionNullable;
@@ -12917,6 +13006,7 @@ export type SystemSystemSparePartsAggregationSelection = {
 export type SystemSystemSparePartsNodeAggregateSelection = {
   __typename?: 'SystemSystemSparePartsNodeAggregateSelection';
   description: StringAggregateSelectionNullable;
+  minimalSpareParstCount: IntAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   systemAlias: StringAggregateSelectionNullable;
   systemCode: StringAggregateSelectionNullable;
@@ -12932,6 +13022,7 @@ export type SystemSystemSubSystemsAggregationSelection = {
 export type SystemSystemSubSystemsNodeAggregateSelection = {
   __typename?: 'SystemSystemSubSystemsNodeAggregateSelection';
   description: StringAggregateSelectionNullable;
+  minimalSpareParstCount: IntAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   systemAlias: StringAggregateSelectionNullable;
   systemCode: StringAggregateSelectionNullable;
@@ -13784,9 +13875,13 @@ export type SystemUpdateInput = {
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   facility?: InputMaybe<SystemFacilityUpdateFieldInput>;
+  isCritical?: InputMaybe<Scalars['Boolean']['input']>;
   isTechnologicalUnit?: InputMaybe<Scalars['Boolean']['input']>;
   location?: InputMaybe<SystemLocationUpdateFieldInput>;
   maintainedBy?: InputMaybe<Array<SystemMaintainedByUpdateFieldInput>>;
+  minimalSpareParstCount?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_DECREMENT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_INCREMENT?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   operators?: InputMaybe<Array<SystemOperatorsUpdateFieldInput>>;
   parentSystem?: InputMaybe<SystemParentSystemUpdateFieldInput>;
@@ -13816,6 +13911,7 @@ export type SystemWhere = {
   facilityConnection?: InputMaybe<SystemFacilityConnectionWhere>;
   facilityConnection_NOT?: InputMaybe<SystemFacilityConnectionWhere>;
   facility_NOT?: InputMaybe<FacilityWhere>;
+  isCritical?: InputMaybe<Scalars['Boolean']['input']>;
   isTechnologicalUnit?: InputMaybe<Scalars['Boolean']['input']>;
   location?: InputMaybe<LocationWhere>;
   locationAggregate?: InputMaybe<SystemLocationAggregateInput>;
@@ -13839,6 +13935,12 @@ export type SystemWhere = {
   maintainedBy_SINGLE?: InputMaybe<EmployeeWhere>;
   /** Return Systems where some of the related Employees match this filter */
   maintainedBy_SOME?: InputMaybe<EmployeeWhere>;
+  minimalSpareParstCount?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_GT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_GTE?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_IN?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
+  minimalSpareParstCount_LT?: InputMaybe<Scalars['Int']['input']>;
+  minimalSpareParstCount_LTE?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;

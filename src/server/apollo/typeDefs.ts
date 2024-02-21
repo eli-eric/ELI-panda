@@ -221,6 +221,8 @@ export const typeDefs = gql`
     name: String!
     systemAlias: String
     systemCode: String
+    minimalSpareParstCount: Int
+    isCritical: Boolean
     subSystems: [System!]! @relationship(type: "HAS_SUBSYSTEM", direction: OUT)
     spareParts: [System!]! @relationship(type: "IS_SPARE_FOR", direction: IN)
     parentSystem: System @relationship(type: "HAS_SUBSYSTEM", direction: IN)

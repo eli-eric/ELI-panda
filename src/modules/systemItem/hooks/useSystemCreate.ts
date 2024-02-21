@@ -10,7 +10,7 @@ import { addSubsystem } from '@/modules/systems/utils'
 import { PATH } from '@/types/constants/paths'
 import type { Mutation, MutationCreateSystemsArgs } from '@/types/gql/graphql'
 import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
-import { connectN } from '@/utils/graphql/mutations'
+import { connectN, whereC, whereN } from '@/utils/graphql/mutations'
 
 import type { SystemDetailFormType } from '../types/form'
 import { useParentSystemDetail } from './useParentSystemDetail'
@@ -54,29 +54,20 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
       variables: {
         input: [
           {
-            parentSystem: parentUid
-              ? {
-                  connect: {
-                    where: {
-                      node: {
-                        uid: parentUid
-                      }
-                    }
-                  }
-                }
-              : undefined,
+            parentSystem: {
+              connect: whereN(parentUid)
+            },
             name: systemForm.name,
             facility: {
-              connect: {
-                where: {
-                  node: {
-                    code: session?.user.facilityCode
-                  }
-                }
-              }
+              connect: whereC(session?.user?.facilityCode)
             },
             deleted: false,
             description: systemForm.description,
+            isCritical: systemForm.isCritical,
+            minimalSpareParstCount: !systemForm.minimalSpareParstCount
+              ? null
+              : Number(systemForm.minimalSpareParstCount),
+
             systemCode: systemForm.systemCode,
             systemAlias: systemForm.systemAlias,
             systemLevel: systemForm?.systemLevel,

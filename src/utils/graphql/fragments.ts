@@ -6,6 +6,8 @@ export const SYSTEM_FIELDS = gql`
     name
     systemCode
     systemAlias
+    minimalSpareParstCount
+    isCritical
     systemLevel
     description
     subSystems {
