@@ -1,8 +1,10 @@
-import { useMemo } from 'react'
+import type { Row } from '@tanstack/react-table'
+import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 
 import { Button } from '@/components/Buttons'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
+import useWarningModal from '@/hooks/useWarningModal'
 import { classNames } from '@/utils'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
@@ -19,8 +21,8 @@ import { useAssignSpareParts } from './hooks/useAssignSpareParts'
 import { useSystemsSparePartsColumns } from './SystemSpareParts.columns'
 
 export const SystemsSparePartsContainer = () => {
-  const tableId1 = 'SpareParts'
-  const tableId2 = 'forSystem'
+  const tableId1 = 'spare-parts'
+  const tableId2 = 'for-system'
 
   const sysetms1 = useSystems(tableId1)
   const sysetms2 = useSystems(tableId2)
@@ -28,11 +30,11 @@ export const SystemsSparePartsContainer = () => {
   const columns1 = useSystemsSparePartsColumns({ tableId: tableId1 })
   const columns2 = useSystemsSparePartsColumns({ tableId: tableId2 })
 
-  // const [selectedSystemType, setSelectedSystemType] = useState<CodebookType | undefined>()
+  const [selectedRawModel, setSelectedRawModel] = useState<Row<SystemDetail>[]>()
+  const [selectedRawModel2, setSelectedRawModel2] = useState<Row<SystemDetail>[]>()
 
   const tableSettings: PandaTableSettings<SystemDetail> = useMemo(
     () => ({
-      enableRowSelection: true,
       enableMultiRowSelection: true,
       enableColumnHiding: true,
       enableColumnReordering: true,
@@ -45,7 +47,10 @@ export const SystemsSparePartsContainer = () => {
     tableId: tableId2,
     data: sysetms2.systems?.data,
     columns: columns2.columns,
-    settings: tableSettings,
+    settings: {
+      enableRowSelection: row => !selectedRawModel?.some(system => row.original.uid === system.original.uid),
+      ...tableSettings
+    },
     getSubRows: row => row.subSystems || []
   })
 
@@ -53,7 +58,10 @@ export const SystemsSparePartsContainer = () => {
     tableId: tableId1,
     data: sysetms1.systems?.data,
     columns: columns1.columns,
-    settings: tableSettings,
+    settings: {
+      enableRowSelection: row => !selectedRawModel2?.some(system => row.original.uid === system.original.uid),
+      ...tableSettings
+    },
     getSubRows: row => row.subSystems || []
   })
 
@@ -62,20 +70,18 @@ export const SystemsSparePartsContainer = () => {
   const table2SelectedRawModel = table2.getSelectedRowModel().flatRows
   const table2SelectedUids = table2SelectedRawModel.map(sel => sel.original.uid)
 
-  // const firstSelectedSystemType =
-  // table1SelectedRawModel[0]?.original?.systemType || table2SelectedRawModel[0]?.original.systemType
+  useEffect(() => {
+    setSelectedRawModel2(table2SelectedRawModel)
+  }, [table2SelectedRawModel])
 
-  // useEffect(() => {
-  //   if (firstSelectedSystemType) {
-  //     setSelectedSystemType(firstSelectedSystemType)
-  //   } else {
-  //     setSelectedSystemType(undefined)
-  //   }
-  // }, [firstSelectedSystemType, setSelectedSystemType])
+  useEffect(() => {
+    setSelectedRawModel(table1SelectedRawModel)
+  }, [table1SelectedRawModel])
 
+  const withWarningModal = useWarningModal('Are you sure you want to continue? The system types do not match.')
   const { assignSpareParts, loading } = useAssignSpareParts()
 
-  const handleAssignSpareParts = () => {
+  const saveRelations = () => {
     assignSpareParts({
       variables: { fromSystemIds: table1SelectedUids, toSystemIds: table2SelectedUids },
       onCompleted: data => {
@@ -87,6 +93,21 @@ export const SystemsSparePartsContainer = () => {
         toast.error(erorr.message)
       }
     })
+  }
+
+  const handleAssignSpareParts = () => {
+    const isSameSystemType = table1SelectedRawModel.every(
+      system =>
+        system.original.systemType !== undefined &&
+        table2SelectedRawModel.some(
+          system2 =>
+            system2.original.systemType !== undefined &&
+            system.original.systemType?.uid === system2.original.systemType?.uid
+        )
+    )
+    if (!isSameSystemType) {
+      withWarningModal(saveRelations)()
+    } else saveRelations()
   }
 
   return (
