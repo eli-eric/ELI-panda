@@ -50,7 +50,7 @@ export const UserMenu = () => {
 
   return (
     <Fragment>
-      <div data-testid="layout-profile" className="z-30 ml-6 flex items-center">
+      <div data-testid="layout-profile" className="ml-6 flex items-center">
         <div className="flex items-center">
           <div className="lg:mr-10 mr-3 mt-1 lg:mt-1 lg:items-center lg:justify-center">
             <DarkModeSwitch />

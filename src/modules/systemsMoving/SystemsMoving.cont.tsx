@@ -90,7 +90,9 @@ export const SystemsMovingContainer = () => {
             hideButtons={false}
             enableDragAndDrop={true}
             dropSettings={{ onDropHandler: onDropHandler, accept: 'system' }}
-            LeftSearchBarElement={() => <SystemFilterButtonContainer tableId={tableIdRight} enableQueryURL={false} />}
+            LeftSearchBarElement={() => (
+              <SystemFilterButtonContainer panelSlide="right" tableId={tableIdRight} enableQueryURL={false} />
+            )}
             enableQueryURL={false}
             RightSearchBarElement={() => (
               <>

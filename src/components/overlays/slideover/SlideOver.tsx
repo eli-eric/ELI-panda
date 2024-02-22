@@ -26,6 +26,7 @@ interface Props {
   panelTitle: string
   buttons: SlideOverButtons
   RenderSettings?: JSX.Element
+  panelSlide?: 'left' | 'right'
 }
 export const SlideOver: FC<PropsWithChildren<Props>> = ({
   children,
@@ -33,7 +34,8 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
   setOpen,
   panelTitle,
   buttons,
-  RenderSettings
+  RenderSettings,
+  panelSlide = 'left'
 }) => (
   <Transition.Root show={open} as={Fragment}>
     <Dialog as="div" className="relative z-10" onClose={setOpen}>
@@ -41,15 +43,20 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
 
       <div className="fixed inset-0 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="pointer-events-none fixed inset-y-0 left-0 flex max-w-full pr-10">
+          <div
+            className={classNames(
+              'pointer-events-none fixed inset-y-0 flex max-w-full',
+              panelSlide === 'left' ? 'left-0' : 'right-0'
+            )}
+          >
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500 sm:duration-700"
-              enterFrom="-translate-x-full"
-              enterTo="translate-x-0"
+              enterFrom={panelSlide === 'left' ? '-translate-x-full' : 'translate-x-full'}
+              enterTo={'translate-x-0'}
               leave="transform transition ease-in-out duration-500 sm:duration-700"
-              leaveFrom="translate-x-0"
-              leaveTo="-translate-x-full"
+              leaveFrom={'translate-x-0'}
+              leaveTo={panelSlide === 'left' ? '-translate-x-full' : 'translate-x-full'}
             >
               <Dialog.Panel className="pointer-events-auto w-screen md:max-w-xl max-w-md">
                 <div className="flex h-full flex-col divide-y divide-gray-200 bg-white dark:bg-gray-800 shadow-xl">
