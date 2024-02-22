@@ -18,7 +18,7 @@ type MenuLinkProps = MenuLinkDecoratorProps & { href: string }
 const MenuLinkDecorator = ({ children, active }: MenuLinkDecoratorProps) => (
   <div
     className={classNames(
-      'w-full text-left block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 dark:hover:bg-gray-700',
+      'w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 dark:text-gray-200 dark:hover:bg-gray-700',
       active ? 'bg-gray-100 dark:bg-gray-700' : ''
     )}
   >
@@ -79,7 +79,7 @@ export const UserMenu = () => {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className=" absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <Menu.Items className="z-30 absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white dark:bg-gray-800 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               <Menu.Item>
                 {({ active }) => (
                   <MenuLink href={PATH.PROFILE_GENERAL} active={active}>
@@ -99,7 +99,9 @@ export const UserMenu = () => {
               <Menu.Item>
                 {({ active }) => (
                   <MenuLinkDecorator active={active}>
-                    <button onClick={signOutHandler}>Sign out</button>
+                    <button onClick={signOutHandler} className="w-full text-left">
+                      Sign out
+                    </button>
                   </MenuLinkDecorator>
                 )}
               </Menu.Item>
