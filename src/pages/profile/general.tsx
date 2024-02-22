@@ -4,8 +4,8 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import { UserProfileCard } from '@/components/layout/nav-bar/profile/UserProfile.card'
-import { UserProfileLayout } from '@/components/layout/nav-bar/profile/UserProfile.layout'
+import { UserProfileCard } from '@/components/layout/navigation-bar/profile/UserProfile.card'
+import { UserProfileLayout } from '@/components/layout/navigation-bar/profile/UserProfile.layout'
 
 const messages = message.profilePage
 

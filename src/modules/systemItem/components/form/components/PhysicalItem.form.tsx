@@ -46,7 +46,7 @@ export const PhysicalItemForm = () => {
       {properties && properties.length > 0 && (
         <Col sm="full" className="flex-col">
           <FormattedMessage id={propertyMessage.title} values={createMessageValues({ title: 'Properties' })} />
-          <ul className="grid grid-cols- lg:grid-cols-12 md:grid-cols-6 sm:grid-cols-3 ">
+          <ul className="grid grid-cols-4 lg:grid-cols-12 md:grid-cols-6 sm:grid-cols-3 ">
             {properties.map(edge => (
               <li key={edge.node.uid} className="flex col-span-3">
                 <FormattedMessage

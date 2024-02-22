@@ -112,6 +112,8 @@ export const messages = {
     systemDetail: {
       form: {
         name: { label: 'Name', placeholder: 'Name' },
+        isCritical: { label: 'Is Critical' },
+        minimalSpareParstCount: { label: 'Minimal Spare Parts Count', placeholder: 'Minimal Spare Parts Count' },
         description: { label: 'Description', placeholder: 'Description' },
         systemType: { label: 'System Type' }, // system types codebook - SYSTEM_TYPE
         systemCode: { label: 'System Code', placeholder: 'System Code' },

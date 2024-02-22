@@ -1,27 +1,25 @@
 import type { Row } from '@tanstack/react-table'
-import { memo, useId, useState } from 'react'
+import { useContext, useId, useState } from 'react'
 import { useDrop } from 'react-dnd'
 
 import type { SystemDetail } from '@/modules/systems/types/responses'
 import { classNames } from '@/utils'
 
 import type { GetRowPropsReturnType } from '../PandaTable'
+import { PandaTableContext } from '../PandaTableCotrolled'
 import { RowCell } from './RowCell'
-
-const MemoizedRowCell = memo(RowCell)
 
 interface Props {
   getRowProps: (row: Row<any>) => GetRowPropsReturnType
-  loading?: boolean
   row: Row<any>
   index: number
-  tableId: string
 }
 
-export const TableRow = ({ getRowProps, loading, row, index, tableId }: Props) => {
+export const TableRow = ({ getRowProps, row, index }: Props) => {
   const [isHoveringDrop, setIsHoveringDrop] = useState(false)
   const { dropSettings, className, ...rest } = getRowProps(row)
   const id = useId()
+  const { tableId, loading } = useContext(PandaTableContext)
 
   const [, dropRef] = useDrop<SystemDetail>({
     accept: dropSettings?.accept || 'table-row',
@@ -53,7 +51,7 @@ export const TableRow = ({ getRowProps, loading, row, index, tableId }: Props) =
       )}
     >
       {row.getVisibleCells().map(cell => (
-        <MemoizedRowCell key={cell.id} cell={cell} loading={loading} row={row} />
+        <RowCell key={cell.id} cell={cell} loading={loading} row={row} />
       ))}
     </tr>
   )

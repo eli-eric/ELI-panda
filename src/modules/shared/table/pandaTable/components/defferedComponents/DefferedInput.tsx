@@ -2,7 +2,7 @@ import { useContext, useDeferredValue, useEffect, useState } from 'react'
 
 import { classNames } from '@/utils'
 
-import { TableSettingsContext } from '../../PandaTable'
+import { PandaTableContext } from '../../PandaTableCotrolled'
 
 export const DefferedInput = ({
   value: initialValue = '',
@@ -15,7 +15,7 @@ export const DefferedInput = ({
   className?: string
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>) => {
   const [query, setQuery] = useState(initialValue)
-  const settings = useContext(TableSettingsContext)
+  const { settings } = useContext(PandaTableContext)
   const { manualFiltering } = settings || {}
 
   const defferedQuery = useDeferredValue(query)

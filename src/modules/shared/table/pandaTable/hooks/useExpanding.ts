@@ -9,9 +9,11 @@ export const useExpanding = (tableId): [ExpandedState, Dispatch<SetStateAction<E
   const expandedInstance = instances[tableId]?.expanded
 
   const [expanded, setExpanded] = useState<ExpandedState>(expandedInstance || {})
+
   useEffect(() => {
     setExpand(tableId, expanded)
-  }, [expanded, setExpand, tableId])
+    // eslint-disable-next-line
+  }, [expanded, tableId])
 
   return [expanded, setExpanded]
 }

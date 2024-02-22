@@ -4,13 +4,22 @@ const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
   images: {
-    domains: [
-      'localhost',
-      'panda.eli-beams.eu',
-      'source.unsplash.com',
-      'api.panda.eli-beams.eu',
-      'panda.eli-laser.eu',
-      'panda-api.eli-laser.eu'
+    remotePatterns: [
+      {
+        hostname: 'localhost'
+      },
+      {
+        hostname: 'panda.eli-beams.eu'
+      },
+      {
+        hostname: 'api.panda.eli-beams.eu'
+      },
+      {
+        hostname: 'panda.eli-laser.eu'
+      },
+      {
+        hostname: 'panda-api.eli-laser.eu'
+      }
     ]
   },
   env: {

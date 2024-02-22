@@ -2,6 +2,7 @@ import type {
   ColumnFilter,
   ColumnOrderState,
   ExpandedState,
+  RowSelectionState,
   SortingState,
   VisibilityState
 } from '@tanstack/react-table'
@@ -11,6 +12,7 @@ import type { QueryFilter } from '@/modules/orders/types'
 
 type SortingInstance = {
   sortBy?: SortingState
+  rowSelection?: RowSelectionState
   sortByQueryString?: string
   pagination?: string
   filter?: QueryFilter
@@ -25,6 +27,7 @@ type SortingInstance = {
 type TableState = {
   instances: Record<string, SortingInstance>
   setSortBy: (tableId: string, sortBy: SortingInstance['sortBy']) => void
+  setRowSelection: (tableId: string, rowSelection: SortingInstance['rowSelection']) => void
   setSortByQueryString: (tableId: string, sortByQueryString: SortingInstance['sortByQueryString']) => void
   setPagination: (tableId: string, pagination: SortingInstance['pagination']) => void
   reset: (tableId: string) => void
@@ -42,6 +45,11 @@ const useTableStateStore = create<TableState>(set => ({
   setSortBy: (tableId, sortBy) =>
     set(state => {
       const newInstance = { ...state.instances[tableId], sortBy }
+      return { instances: { ...state.instances, [tableId]: newInstance } }
+    }),
+  setRowSelection: (tableId, rowSelection) =>
+    set(state => {
+      const newInstance = { ...state.instances[tableId], rowSelection }
       return { instances: { ...state.instances, [tableId]: newInstance } }
     }),
   setPagination: (tableId, pagination) =>

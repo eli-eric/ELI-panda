@@ -63,7 +63,7 @@ export const NavBarMultiLink = ({ name, links, open }: Props) => {
                           router.asPath.startsWith(link.path)
                             ? 'text-gray-900 dark:text-gray-200 border-primary-500'
                             : 'text-gray-500 hover:border-gray-300 hover:text-gray-700 dark:text-gray-200 border-transparent',
-                          active ? 'bg-gray-100' : ''
+                          active ? 'bg-gray-100 dark:bg-gray-800' : ''
                         )}
                       >
                         {open === false ? (

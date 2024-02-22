@@ -10,12 +10,10 @@ import { DefferedListbox } from './defferedComponents/DefferedListbox'
 
 export const Filter = ({
   column,
-  data,
   manualFiltering
 }: {
   column: Column<any, unknown>
   table: Table<any>
-  data?: any
   manualFiltering: boolean
 }) => {
   const filterType = column.columnDef.meta?.filter?.type
@@ -114,7 +112,7 @@ export const Filter = ({
           type="text"
           value={column.getFilterValue() as string}
           onChange={onChange}
-          placeholder={`Search... (${data ? column.getFacetedUniqueValues().size : 0})`}
+          placeholder={`Search... (${column?.getFacetedUniqueValues()?.size})`}
           list={column.id + 'list'}
         />
       )

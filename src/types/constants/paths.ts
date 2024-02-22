@@ -6,11 +6,10 @@ export enum PATH {
   CATALOGUE = '/catalogue',
   CATALOGUE_ITEM = '/catalogue/item',
   SYSTEMS = '/systems/overview',
-
   SYSTEMS_MOVING = '/systems/moving',
+  SPARE_PARTS = '/systems/spareparts',
   SYSTEM = '/system',
   SYSTEM_ALIAS = '/system/alias',
-
   REPORTS = '/reports',
   ORDERS = '/orders',
   ORDER = '/order',
@@ -44,7 +43,8 @@ export const NAV_BAR_CONFIG: NavigationType = [
     name: 'Systems',
     links: [
       { path: PATH.SYSTEMS, name: 'Systems', role: ROLE.SYSTEMS_VIEW },
-      { path: PATH.SYSTEMS_MOVING, name: 'Moving', role: ROLE.SYSTEM_EDIT }
+      { path: PATH.SYSTEMS_MOVING, name: 'Moving', role: ROLE.SYSTEM_EDIT },
+      { path: PATH.SPARE_PARTS, name: 'Spare Parts', role: ROLE.SYSTEM_EDIT }
     ],
     role: ROLE.SYSTEMS_VIEW
   },

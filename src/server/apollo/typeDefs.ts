@@ -1,6 +1,10 @@
 import { gql } from '@apollo/client'
 
 export const typeDefs = gql`
+  type Mutation {
+    createSparePartRelation(fromSystemIds: [ID!]!, toSystemIds: [ID!]!): String
+  }
+
   type JWT @jwt {
     roles: [String!]!
   }
@@ -217,7 +221,10 @@ export const typeDefs = gql`
     name: String!
     systemAlias: String
     systemCode: String
+    minimalSpareParstCount: Int
+    isCritical: Boolean
     subSystems: [System!]! @relationship(type: "HAS_SUBSYSTEM", direction: OUT)
+    spareParts: [System!]! @relationship(type: "IS_SPARE_FOR", direction: IN)
     parentSystem: System @relationship(type: "HAS_SUBSYSTEM", direction: IN)
     location: Location @relationship(type: "HAS_LOCATION", direction: OUT)
     facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
