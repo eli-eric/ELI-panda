@@ -128,7 +128,7 @@ export const SystemsSparePartsContainer = () => {
         <SearchBar
           tableId={tableId2}
           useQuery={false}
-          left={<SystemFilterButtonContainer tableId={tableId2} enableQueryURL={false} />}
+          left={<SystemFilterButtonContainer panelSlide="right" tableId={tableId2} enableQueryURL={false} />}
           right={
             <div className="flex">
               <FilterBadges tableId={tableId2} />

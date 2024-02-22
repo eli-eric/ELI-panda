@@ -40,8 +40,9 @@ type SystemFilterType = {
 interface Props {
   tableId?: string
   enableQueryURL?: boolean
+  panelSlide?: 'left' | 'right'
 }
-export const SystemFilterButtonContainer = ({ tableId = 'systems', enableQueryURL = true }: Props) => {
+export const SystemFilterButtonContainer = ({ panelSlide, tableId = 'systems', enableQueryURL = true }: Props) => {
   const [open, setOpen] = useState(false)
   const { minMaxPrice } = useMinMaxPrice()
 
@@ -123,6 +124,7 @@ export const SystemFilterButtonContainer = ({ tableId = 'systems', enableQueryUR
           />
         }
         panelTitle="System Filters"
+        panelSlide={panelSlide}
         open={open}
         setOpen={setOpen}
         buttons={buttons}
