@@ -54,7 +54,7 @@ export const NAV_BAR_CONFIG: NavigationType = [
   {
     name: 'Systems',
     links: [
-      { path: PATH.SYSTEMS, name: 'Systems', role: ROLE.SYSTEMS_VIEW },
+      { path: PATH.SYSTEMS, name: 'Overview', role: ROLE.SYSTEMS_VIEW },
       { path: PATH.SYSTEMS_MOVING, name: 'Moving', role: ROLE.SYSTEM_EDIT },
       { path: PATH.SPARE_PARTS, name: 'Spare Parts', role: ROLE.SYSTEM_EDIT }
     ],
