@@ -11,7 +11,7 @@ import { IntlProvider } from 'react-intl'
 import { messages } from 'src/i18n/src'
 import { SWRConfig } from 'swr'
 
-import { NavigationBar } from '@/components/layout/navigation-bar/NavigationBar'
+import { SidebarNavigation } from '@/components/layout/navigation/SideBarNavigation'
 import { Notification } from '@/components/Notifications/Notification'
 import { GenereralModal } from '@/components/overlays/modal/modal.comp'
 import { WarningModal } from '@/components/WarningModal'
@@ -52,8 +52,12 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
               {t => <Notification t={t} />}
             </Toaster>
             <DndProvider backend={HTML5Backend}>
-              <NavigationBar />
-              <Component {...pageProps} />
+              <div className="flex min-h-screen">
+                <SidebarNavigation />
+                <main className="flex-1 overflow-auto">
+                  <div>{<Component {...pageProps} />}</div>
+                </main>
+              </div>
               <GenereralModal />
               <WarningModal />
             </DndProvider>

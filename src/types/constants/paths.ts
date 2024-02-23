@@ -1,3 +1,13 @@
+import {
+  CreditCardIcon,
+  HomeIcon,
+  RectangleStackIcon,
+  ShoppingCartIcon,
+  SquaresPlusIcon,
+  TableCellsIcon
+} from '@heroicons/react/24/outline'
+import type { ElementType } from 'react'
+
 import { ROLE } from './roles'
 
 export enum PATH {
@@ -34,8 +44,10 @@ export type NavBarLinkType = {
 }
 export type NavigationType = {
   name: string
-  links: NavBarLinkType[]
+  links?: NavBarLinkType[]
+  link?: string
   role: ROLE
+  Icon: ElementType
 }[]
 
 export const NAV_BAR_CONFIG: NavigationType = [
@@ -46,31 +58,37 @@ export const NAV_BAR_CONFIG: NavigationType = [
       { path: PATH.SYSTEMS_MOVING, name: 'Moving', role: ROLE.SYSTEM_EDIT },
       { path: PATH.SPARE_PARTS, name: 'Spare Parts', role: ROLE.SYSTEM_EDIT }
     ],
-    role: ROLE.SYSTEMS_VIEW
+    role: ROLE.SYSTEMS_VIEW,
+    Icon: SquaresPlusIcon
   },
   {
     name: 'Catalogue',
-    links: [{ path: PATH.CATALOGUE }],
-    role: ROLE.CATALOGUE_VIEW
+    link: PATH.CATALOGUE,
+    role: ROLE.CATALOGUE_VIEW,
+    Icon: RectangleStackIcon
   },
   {
     name: 'Orders',
-    links: [{ path: PATH.ORDERS }],
-    role: ROLE.ORDERS_VIEW
+    link: PATH.ORDERS,
+    role: ROLE.ORDERS_VIEW,
+    Icon: ShoppingCartIcon
   },
   {
     name: 'Codebooks',
-    links: [{ path: PATH.CODEBOOKS }],
-    role: ROLE.CODEBOOKS_ADMIN
+    link: PATH.CODEBOOKS,
+    role: ROLE.CODEBOOKS_ADMIN,
+    Icon: TableCellsIcon
   },
   {
     name: 'Room Cards',
-    links: [{ path: PATH.ROOM_CARDS }],
-    role: ROLE.ROOM_CARD_VIEW
+    link: PATH.ROOM_CARDS,
+    role: ROLE.ROOM_CARD_VIEW,
+    Icon: CreditCardIcon
   },
   {
     name: 'Dashboard',
-    links: [{ path: PATH.DASHBOARD }],
-    role: ROLE.BASICS
+    link: PATH.DASHBOARD,
+    role: ROLE.BASICS,
+    Icon: HomeIcon
   }
 ]
