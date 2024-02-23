@@ -55,7 +55,7 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
               <Combobox {...fields.zone} />
             </Col>
             <Col sm={3} md={6} lg={4}>
-              <Input {...fields.systemCode} />
+              <Input {...fields.systemCode} defaultValue={''} />
             </Col>
             <Col sm={3} md={6} lg={4}>
               <Input {...fields.systemAlias} />
@@ -99,10 +99,10 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
       <Card className="border-t border-gray-400">
         <Grid>
           <Col sm={3} md={5} lg={2}>
-            <Input type="number" {...fields.minimalSpareParstCount} />
+            <Input type="number" defaultValue={''} {...fields.minimalSpareParstCount} />
           </Col>
-          <Col sm={3} md={4} lg={1} className="">
-            <CheckBox {...fields.isCritical} className="items-end pb-2" />
+          <Col sm={3} md={4} lg={2}>
+            <CheckBox {...fields.isCritical} label="Is critical" className="items-end pb-2" />
           </Col>
         </Grid>
       </Card>

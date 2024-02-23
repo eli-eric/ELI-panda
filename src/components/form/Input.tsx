@@ -96,6 +96,7 @@ export const Input = ({
             <div hidden={hidden} className="relative flex w-full">
               <input
                 {...field}
+                value={field.value || ''}
                 id={idHtml}
                 hidden={hidden}
                 step="0.001"
@@ -157,7 +158,8 @@ export const TextArea = ({
   rounded,
   label,
   className,
-  isFilter
+  isFilter,
+  defaultValue
 }: TextAreaWithErrorProps) => {
   const { control } = useFormContext()
   const id = useId()
@@ -166,7 +168,7 @@ export const TextArea = ({
     <Controller
       name={name}
       control={control}
-      defaultValue={''}
+      defaultValue={defaultValue || ''}
       render={({ field, fieldState: { error } }) => (
         <InputWrapper className={className}>
           <Fragment>

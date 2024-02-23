@@ -47,33 +47,24 @@ export const CheckBoxComponent = ({ disabled, className, hidden, label, checked,
 
 type InputProps = FieldProps & React.InputHTMLAttributes<HTMLInputElement>
 
-const CheckBox = ({
-  name,
-  placeholder,
-  disabled,
-  className,
-  hidden,
-  label,
-  defaultChecked,
-  ...restProps
-}: InputProps) => {
+const CheckBox = ({ name, placeholder, disabled, className, hidden, label, ...restProps }: InputProps) => {
   const { control } = useFormContext()
 
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue={defaultChecked}
       render={({ field }) => (
         <div className={classNames('relative flex items-start', className)}>
           <div className="flex h-5 items-center">
             <input
               {...field}
+              value={field.value || false}
               onChange={e => {
                 restProps.onChange && restProps.onChange(e)
                 field.onChange(e)
               }}
-              checked={field.value}
+              checked={field.value || false}
               hidden={hidden}
               type="checkbox"
               disabled={disabled}
