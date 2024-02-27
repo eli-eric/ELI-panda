@@ -16,6 +16,8 @@ import { DarkModeSwitch } from '@/components/DarkModeSwitch'
 import { NAV_BAR_CONFIG, PATH, SUPPORT } from '@/types/constants/paths'
 import { classNames } from '@/utils'
 
+import { NavBarButton, NavBarItem, NavBarLink } from './NavBarItems'
+
 export const SidebarNavigation = () => {
   const session = useSession()
   const { status } = session
@@ -76,69 +78,49 @@ export const SidebarNavigation = () => {
         {NAV_BAR_CONFIG.map(item => {
           if (item.links) {
             return (
-              <div key={item.name} onClick={() => toggleItemExpansion(item.name)} className="flex flex-col">
-                <div className="flex items-center p-4 hover:bg-gray-700 cursor-pointer">
-                  <div>
-                    <item.Icon
-                      className={classNames(
-                        'h-6 w-6 text-white',
-                        item.links.some(link => link.path === pathName) && 'text-primary-600'
-                      )}
-                    />
-                  </div>
-                  <span
-                    className={classNames(
-                      `ml-4`,
-                      isExpanded ? 'opacity-100' : 'opacity-0',
-                      `transition-opacity duration-200 whitespace-nowrap text-gray-200`,
-                      item.links.some(link => link.path === pathName) && 'text-primary-600'
-                    )}
+              <div key={item.name} className="flex flex-col">
+                <NavBarButton onClick={() => toggleItemExpansion(item.name)}>
+                  <NavBarItem
+                    isExpanded={isExpanded}
+                    Icon={item.Icon}
+                    text={item.name}
+                    isActive={item.links.some(subItem => pathName.startsWith(subItem.path))}
+                  />
+                  <div
+                    className={classNames('transition-opacity duration-300', isExpanded ? 'opacity-100' : 'opacity-0')}
                   >
-                    {item.name}
-                  </span>
-                  {expandedItems[item.name] ? (
-                    <ChevronDownIcon className="ml-auto h-5 w-5 text-gray-200" />
-                  ) : (
-                    <ChevronRightIcon className="ml-auto h-5 w-5 text-gray-200" />
-                  )}
-                </div>
-                {expandedItems[item.name] &&
-                  item.links.map(subItem => (
-                    <Link key={subItem.name} href={subItem.path}>
-                      <div
-                        className={classNames(
-                          'pl-12 p-4 hover:bg-gray-700 block text-left text-gray-200',
-                          subItem.path === pathName && 'text-primary-600'
-                        )}
-                      >
-                        {subItem.name}
-                      </div>
-                    </Link>
-                  ))}
+                    {expandedItems[item.name] ? (
+                      <ChevronDownIcon className="ml-auto h-5 w-5 text-gray-200" />
+                    ) : (
+                      <ChevronRightIcon className="ml-auto h-5 w-5 text-gray-200" />
+                    )}
+                  </div>
+                </NavBarButton>
+                {expandedItems[item.name] && (
+                  <div className="pl-10">
+                    {item.links.map(subItem => (
+                      <NavBarLink key={subItem.name} href={subItem.path}>
+                        <NavBarItem
+                          isExpanded={isExpanded}
+                          text={subItem.name}
+                          isActive={pathName.startsWith(subItem.path)}
+                        />
+                      </NavBarLink>
+                    ))}
+                  </div>
+                )}
               </div>
             )
           } else {
             return (
-              <Link key={item.name} href={item.link || '#'} className="flex items-center p-4 hover:bg-gray-700">
-                <div>
-                  <item.Icon
-                    className={classNames(
-                      'h-6 w-6 text-gray-200',
-                      pathName.startsWith(item?.link || '') && 'text-primary-600'
-                    )}
-                  />
-                </div>
-                <span
-                  className={classNames(
-                    `ml-4`,
-                    isExpanded ? 'opacity-100' : 'opacity-0',
-                    `transition-opacity duration-200 whitespace-nowrap text-gray-200`,
-                    pathName.startsWith(item?.link || '') && 'text-primary-600'
-                  )}
-                >
-                  {item.name}
-                </span>
-              </Link>
+              <NavBarLink key={item.name} href={item.link}>
+                <NavBarItem
+                  isExpanded={isExpanded}
+                  Icon={item.Icon}
+                  text={item.name}
+                  isActive={pathName.startsWith(item.link || '')}
+                />
+              </NavBarLink>
             )
           }
         })}
@@ -162,43 +144,19 @@ export const SidebarNavigation = () => {
           </a>
         </Link>
         {additionalItems.map(item => (
-          <Link key={item.name} href={item.link} className="flex items-center p-4 hover:bg-gray-700">
-            <div>
-              <item.Icon
-                className={classNames(
-                  'h-6 w-6 text-white',
-                  pathName.startsWith(item?.link || '') && 'text-primary-600'
-                )}
-              />
-            </div>
-            <span
-              className={classNames(
-                `ml-4`,
-                isExpanded ? 'opacity-100' : 'opacity-0',
-                `transition-opacity duration-200 whitespace-nowrap text-gray-200`,
-                pathName.startsWith(item?.link || '') && 'text-primary-600'
-              )}
-            >
-              {item.name}
-            </span>
-          </Link>
+          <NavBarLink key={item.name} href={item.link}>
+            <NavBarItem
+              key={item.name}
+              isActive={pathName.startsWith(item.link || '')}
+              isExpanded={isExpanded}
+              Icon={item.Icon}
+              text={item.name}
+            />
+          </NavBarLink>
         ))}
-        <div className=" p-4 hover:bg-gray-700">
-          <button className="flex items-center " onClick={signOutHandler}>
-            <div>
-              <PowerIcon className="h-6 w-6 text-white" />
-            </div>
-            <span
-              className={classNames(
-                `ml-4`,
-                isExpanded ? 'opacity-100' : 'opacity-0',
-                `transition-opacity duration-200 whitespace-nowrap text-gray-200`
-              )}
-            >
-              Sign out
-            </span>
-          </button>
-        </div>
+        <NavBarButton onClick={signOutHandler}>
+          <NavBarItem isExpanded={isExpanded} Icon={PowerIcon} text={'Sign out'} />
+        </NavBarButton>
       </div>
     </div>
   )
