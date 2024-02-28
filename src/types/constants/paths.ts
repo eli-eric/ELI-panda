@@ -4,7 +4,9 @@ import {
   RectangleStackIcon,
   ShoppingCartIcon,
   SquaresPlusIcon,
-  TableCellsIcon
+  TableCellsIcon,
+  UserGroupIcon,
+  UserIcon
 } from '@heroicons/react/24/outline'
 import type { ElementType } from 'react'
 
@@ -40,7 +42,7 @@ export const SUPPORT =
 export type NavBarLinkType = {
   path: PATH
   name?: string
-  role?: ROLE
+  role: ROLE
 }
 export type NavigationType = {
   name: string
@@ -51,6 +53,12 @@ export type NavigationType = {
 }[]
 
 export const NAV_BAR_CONFIG: NavigationType = [
+  {
+    name: 'Dashboard',
+    link: PATH.DASHBOARD,
+    role: ROLE.BASICS,
+    Icon: HomeIcon
+  },
   {
     name: 'Systems',
     links: [
@@ -84,11 +92,11 @@ export const NAV_BAR_CONFIG: NavigationType = [
     link: PATH.ROOM_CARDS,
     role: ROLE.ROOM_CARD_VIEW,
     Icon: CreditCardIcon
-  },
-  {
-    name: 'Dashboard',
-    link: PATH.DASHBOARD,
-    role: ROLE.BASICS,
-    Icon: HomeIcon
   }
+]
+
+// Additional items for the bottom of the sidebar
+export const USER_NAVIGATION = [
+  { name: 'Profile', link: PATH.PROFILE_GENERAL, Icon: UserIcon, role: ROLE.BASICS },
+  { name: 'Administration', link: PATH.ADMIN_USERS, Icon: UserGroupIcon, role: ROLE.ADMIN }
 ]

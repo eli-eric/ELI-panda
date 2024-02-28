@@ -54,7 +54,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
             <DndProvider backend={HTML5Backend}>
               <div className="flex min-h-screen">
                 <SidebarNavigation />
-                <main className="flex-1 overflow-auto">
+                <main className="flex-1 overflow-auto z-10">
                   <div>{<Component {...pageProps} />}</div>
                 </main>
               </div>
