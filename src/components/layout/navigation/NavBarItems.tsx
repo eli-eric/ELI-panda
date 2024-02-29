@@ -1,10 +1,12 @@
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import type { ElementType } from 'react'
-import { type FC, type PropsWithChildren } from 'react'
+import { type FC, Fragment, type PropsWithChildren } from 'react'
 
 import usePermission from '@/hooks/usePermission'
+import type { NavigationType } from '@/types/constants/paths'
 import { SUPPORT } from '@/types/constants/paths'
 import type { ROLE } from '@/types/constants/roles'
 
@@ -117,5 +119,54 @@ export const SupportLink: FC<SupportLinkProps> = ({ isExpanded }) => {
         </NavBarTitle>
       </a>
     </Link>
+  )
+}
+
+interface NavBarMultiLinkProps {
+  item: NavigationType
+  isExpanded: boolean
+  toggleItemExpansion: (itemName: string) => void
+  expandedItems: Record<string, boolean>
+  role: ROLE
+}
+
+export const NavBarMultiLink: FC<NavBarMultiLinkProps> = ({
+  toggleItemExpansion,
+  item,
+  isExpanded,
+  expandedItems,
+  role
+}) => {
+  const pathName = usePathname()
+  const permission = usePermission([role])
+  if (!permission) return null
+
+  return (
+    <div key={item.name} className="flex flex-col ">
+      <NavBarButton
+        isExpanded={isExpanded}
+        onClick={() => toggleItemExpansion(item.name)}
+        Icon={item.Icon}
+        text={item.name}
+        isActive={item.links?.some(subItem => pathName.startsWith(subItem.path))}
+      >
+        <ChevronIcon isExpanded={isExpanded} open={expandedItems[item.name]} />
+      </NavBarButton>
+      {expandedItems[item.name] && (
+        <Fragment>
+          {item.links?.map(subItem => (
+            <NavBarLink
+              className="text-xs pl-10"
+              role={subItem.role}
+              key={subItem.name}
+              href={subItem.path}
+              isExpanded={isExpanded}
+              text={subItem.name}
+              isActive={pathName.startsWith(subItem.path)}
+            />
+          ))}
+        </Fragment>
+      )}
+    </div>
   )
 }

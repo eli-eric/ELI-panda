@@ -29,12 +29,12 @@ export const SidebarNavigation = () => {
     })
   }
 
-  if (status === 'unauthenticated') return null
+  if (status === 'unauthenticated' || status === 'loading') return null
 
   return (
     <div
       className={classNames(
-        `flex flex-col justify-between`,
+        `hidden lg:flex lg:flex-col lg:justify-between`,
         isExpanded ? 'w-64' : 'w-14',
         `h-full min-h-screen sticky left-0 top-0 bottom-0 truesition-all duration-300 ease-in-out bg-gray-800 border-r border-gray-900 dark:bg-gray-900 dark:border-gray-200 pb-4`
       )}

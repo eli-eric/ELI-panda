@@ -22,10 +22,18 @@ export const TableLayoutContainer = ({ children, deps, className }: Props) => {
         const emptyResults = document.getElementById('empty-results')?.clientHeight || 0
         const columnHiding = document.getElementById('column-hiding')?.clientHeight || 0
         const categoryList = document.getElementById('category-list')?.clientHeight || 0
+        const navBar = document.getElementById('nav-bar')?.clientHeight || 0
         const catalogueBreadcrump = document.getElementById('breadcrump')?.clientHeight || 0
         const cataloguePaging = document.getElementById('paging')?.clientHeight || 0
         const height =
-          searchBar + tableHeading + columnHiding + categoryList + cataloguePaging + catalogueBreadcrump - emptyResults
+          searchBar +
+          tableHeading +
+          columnHiding +
+          categoryList +
+          cataloguePaging +
+          catalogueBreadcrump +
+          navBar -
+          emptyResults
 
         // REVIEW LAYOUT HEIGHT + 3  // TODO
         setHeight(height + 1)
