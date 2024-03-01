@@ -5,15 +5,17 @@ import { usePathname } from 'next/navigation'
 import type { ElementType } from 'react'
 import { type FC, Fragment, type PropsWithChildren } from 'react'
 
+import { Tooltip } from '@/components/Tooltip'
 import usePermission from '@/hooks/usePermission'
 import type { NavigationType } from '@/types/constants/paths'
 import { SUPPORT } from '@/types/constants/paths'
 import type { ROLE } from '@/types/constants/roles'
 
-export const NavBarTitle: FC<PropsWithChildren<{ isActive?: boolean; isExpanded: boolean }>> = ({
+export const NavBarTitle: FC<PropsWithChildren<{ className?: string; isActive?: boolean; isExpanded: boolean }>> = ({
   isActive,
   isExpanded,
-  children
+  children,
+  className
 }) => {
   return (
     <span
@@ -21,7 +23,8 @@ export const NavBarTitle: FC<PropsWithChildren<{ isActive?: boolean; isExpanded:
         `ml-4`,
         isExpanded ? 'opacity-100' : 'opacity-0',
         `transition-opacity duration-200 whitespace-nowrap text-gray-200`,
-        isActive && 'text-primary-600'
+        isActive && 'text-primary-600',
+        className
       )}
     >
       {children}
@@ -39,11 +42,13 @@ interface NavBarItemProps {
 const NavBarItem: FC<PropsWithChildren<NavBarItemProps>> = ({ isExpanded, text, Icon, isActive }) => {
   return (
     <div className="flex">
-      {Icon && (
-        <div>
-          <Icon className={classNames('h-6 w-6 text-gray-200', isActive && 'text-primary-600')} />
-        </div>
-      )}
+      <Tooltip content={text} placement="top-start" disabled={isExpanded}>
+        {Icon && (
+          <div>
+            <Icon className={classNames('h-6 w-6 text-gray-200', isActive && 'text-primary-600')} />
+          </div>
+        )}
+      </Tooltip>
       <NavBarTitle isActive={isActive} isExpanded={isExpanded}>
         {text}
       </NavBarTitle>
@@ -125,10 +130,12 @@ export const SupportLink: FC<SupportLinkProps> = ({ isExpanded }) => {
   return (
     <Link href={SUPPORT} legacyBehavior>
       <a target={'_blank'} rel="noreferrer" className="flex items-center p-4 text-center hover:bg-gray-700">
-        <div className="ml-1">
-          <span className={classNames('h-6 w-6 text-2xl text-center text-white')}>?</span>
-        </div>
-        <NavBarTitle isExpanded={isExpanded} isActive={false}>
+        <Tooltip content="Support" placement="top-start" disabled={isExpanded}>
+          <div className="ml-2">
+            <span className={classNames('h-6 w-6 text-2xl text-center text-white')}>?</span>
+          </div>
+        </Tooltip>
+        <NavBarTitle className="ml-5" isExpanded={isExpanded} isActive={false}>
           Support
         </NavBarTitle>
       </a>
