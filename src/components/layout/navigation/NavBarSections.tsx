@@ -34,9 +34,15 @@ interface MainNavigationProps {
   isExpanded: boolean
   toggleItemExpansion: (itemName: string) => void
   expandedItems: Record<string, boolean>
+  setOpen?: (open: boolean) => void
 }
 
-export const MainNavigation: FC<MainNavigationProps> = ({ isExpanded, expandedItems, toggleItemExpansion }) => {
+export const MainNavigation: FC<MainNavigationProps> = ({
+  setOpen,
+  isExpanded,
+  expandedItems,
+  toggleItemExpansion
+}) => {
   const pathName = usePathname()
   return (
     <div className="flex-grow">
@@ -45,6 +51,7 @@ export const MainNavigation: FC<MainNavigationProps> = ({ isExpanded, expandedIt
           return (
             <NavBarMultiLink
               key={item.name}
+              setOpen={setOpen}
               item={item}
               role={item.role}
               isExpanded={isExpanded}
@@ -56,6 +63,7 @@ export const MainNavigation: FC<MainNavigationProps> = ({ isExpanded, expandedIt
           return (
             <NavBarLink
               key={item.name}
+              setOpen={setOpen}
               role={item.role}
               href={item.link}
               isExpanded={isExpanded}
@@ -72,11 +80,13 @@ export const MainNavigation: FC<MainNavigationProps> = ({ isExpanded, expandedIt
 
 interface UserSectionProps {
   isExpanded: boolean
+  setOpen?: (open: boolean) => void
 }
 
-export const UserSection: FC<UserSectionProps> = ({ isExpanded }) => {
+export const UserSection: FC<UserSectionProps> = ({ setOpen, isExpanded }) => {
   const pathName = usePathname()
   const signOutHandler = () => {
+    setOpen && setOpen(false)
     signOut({ callbackUrl: PATH.ROOT })
   }
   return (
@@ -85,6 +95,7 @@ export const UserSection: FC<UserSectionProps> = ({ isExpanded }) => {
       {USER_NAVIGATION.map(item => (
         <NavBarLink
           key={item.name}
+          setOpen={setOpen}
           role={item.role}
           href={item.link}
           isActive={pathName.startsWith(item.link || '')}

@@ -43,7 +43,7 @@ export const SlideOverNavigation: FC<PropsWithChildren<Props>> = ({ open, setOpe
                         <div className="ml-3 flex h-7 items-center">
                           <button
                             type="button"
-                            className="relative rounded-md bg-slate-700 text-gray-400 hover:text-gray-500"
+                            className="relative rounded-md text-gray-400 hover:text-gray-500"
                             onClick={() => setOpen(false)}
                           >
                             <span className="absolute -inset-2.5" />
@@ -53,9 +53,7 @@ export const SlideOverNavigation: FC<PropsWithChildren<Props>> = ({ open, setOpe
                         </div>
                       </div>
                     </div>
-                    <div className="relative mt-6 flex-1 px-4 sm:px-6" onClick={() => setOpen(false)}>
-                      {children}
-                    </div>
+                    <div className="relative mt-6 flex-1 px-4 sm:px-6">{children}</div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

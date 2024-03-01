@@ -39,10 +39,15 @@ export const NavigationMobile = () => {
         </button>
       </div>
       <SlideOverNavigation panelSlide="right" open={openNav} setOpen={setOpenNav}>
-        <MainNavigation isExpanded={true} toggleItemExpansion={toggleItemExpansion} expandedItems={expandedItems} />
+        <MainNavigation
+          isExpanded={true}
+          toggleItemExpansion={toggleItemExpansion}
+          setOpen={setOpenNav}
+          expandedItems={expandedItems}
+        />
       </SlideOverNavigation>
       <SlideOverNavigation panelSlide="left" open={openSettings} setOpen={setOpenSettings}>
-        <UserSection isExpanded={true} />
+        <UserSection isExpanded={true} setOpen={setOpenSettings} />
       </SlideOverNavigation>
     </Fragment>
   )

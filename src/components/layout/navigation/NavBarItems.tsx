@@ -55,12 +55,26 @@ interface NavBarLinkProps extends NavBarItemProps {
   href?: string
   className?: string
   role: ROLE
+  setOpen?: (open: boolean) => void
 }
-export const NavBarLink: FC<NavBarLinkProps> = ({ className, href = '#', isExpanded, Icon, isActive, text, role }) => {
+export const NavBarLink: FC<NavBarLinkProps> = ({
+  setOpen,
+  className,
+  href = '#',
+  isExpanded,
+  Icon,
+  isActive,
+  text,
+  role
+}) => {
   const permission = usePermission([role])
   if (!permission) return null
   return (
-    <Link href={href} className={classNames('flex items-center p-4 hover:bg-gray-700', className)}>
+    <Link
+      href={href}
+      onClick={() => setOpen && setOpen(false)}
+      className={classNames('flex items-center p-4 hover:bg-gray-700', className)}
+    >
       <NavBarItem isExpanded={isExpanded} Icon={Icon} text={text} isActive={isActive} />
     </Link>
   )
@@ -128,6 +142,7 @@ interface NavBarMultiLinkProps {
   toggleItemExpansion: (itemName: string) => void
   expandedItems: Record<string, boolean>
   role: ROLE
+  setOpen?: (open: boolean) => void
 }
 
 export const NavBarMultiLink: FC<NavBarMultiLinkProps> = ({
@@ -135,7 +150,8 @@ export const NavBarMultiLink: FC<NavBarMultiLinkProps> = ({
   item,
   isExpanded,
   expandedItems,
-  role
+  role,
+  setOpen
 }) => {
   const pathName = usePathname()
   const permission = usePermission([role])
@@ -157,6 +173,7 @@ export const NavBarMultiLink: FC<NavBarMultiLinkProps> = ({
           {item.links?.map(subItem => (
             <NavBarLink
               className="text-xs pl-10"
+              setOpen={setOpen}
               role={subItem.role}
               key={subItem.name}
               href={subItem.path}
