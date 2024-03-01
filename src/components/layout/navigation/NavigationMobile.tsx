@@ -1,15 +1,18 @@
-import { Bars3Icon } from '@heroicons/react/24/outline'
+import { Bars3Icon, Cog6ToothIcon } from '@heroicons/react/24/outline'
+import { useSession } from 'next-auth/react'
 import { Fragment, useState } from 'react'
 
-import { DarkModeSwitch } from '@/components/DarkModeSwitch'
 import EliLogoComponent from '@/components/eli-logo.comp'
-import { SlideOver } from '@/components/overlays/slideover/SlideOver'
+import { SlideOverNavigation } from '@/components/overlays/slideover/SlideOverNavigation'
 import { classNames } from '@/utils'
 
-import { MainNavigation } from './NavBarSections'
+import { MainNavigation, UserSection } from './NavBarSections'
 
 export const NavigationMobile = () => {
-  const [open, setOpen] = useState(false)
+  const session = useSession()
+  const status = session.status
+  const [openNav, setOpenNav] = useState(false)
+  const [openSettings, setOpenSettings] = useState(false)
   const [expandedItems, setExpandedItems] = useState({})
 
   // toggleItemExpansion for expand multiple links naviagtion
@@ -27,15 +30,20 @@ export const NavigationMobile = () => {
         id="nav-bar"
         className={'lg:hidden flex w-full justify-between text-center items-center dark:bg-gray-800 bg-slate-500'}
       >
-        <button onClick={() => setOpen(!open)} className="pl-2">
-          <Bars3Icon className="h-10 w-10 p-2 text-white rounded-full hover:bg-gray-600" />
+        <button onClick={() => setOpenSettings(!openSettings)} className="pl-2">
+          <Cog6ToothIcon className="h-10 w-10 p-2 text-white rounded-full hover:bg-gray-600" />
         </button>
         <EliLogoComponent customClass={classNames('h-6 w-12')} />
-        <DarkModeSwitch className={classNames('mr-2')} />
+        <button onClick={() => setOpenNav(!openNav)} className="pl-2">
+          <Bars3Icon className="h-10 w-10 p-2 text-white rounded-full hover:bg-gray-600" />
+        </button>
       </div>
-      <SlideOver open={open} setOpen={setOpen}>
+      <SlideOverNavigation panelSlide="right" open={openNav} setOpen={setOpenNav}>
         <MainNavigation isExpanded={true} toggleItemExpansion={toggleItemExpansion} expandedItems={expandedItems} />
-      </SlideOver>
+      </SlideOverNavigation>
+      <SlideOverNavigation panelSlide="left" open={openSettings} setOpen={setOpenSettings}>
+        <UserSection isExpanded={true} />
+      </SlideOverNavigation>
     </Fragment>
   )
 }
