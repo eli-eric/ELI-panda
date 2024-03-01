@@ -50,9 +50,9 @@ export type NavigationType = {
   link?: string
   role: ROLE
   Icon: ElementType
-}[]
+}
 
-export const NAV_BAR_CONFIG: NavigationType = [
+export const NAV_BAR_CONFIG: NavigationType[] = [
   {
     name: 'Dashboard',
     link: PATH.DASHBOARD,

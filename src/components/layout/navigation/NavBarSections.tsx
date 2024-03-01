@@ -1,13 +1,14 @@
 import { Bars3Icon, PowerIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
-import { type FC, Fragment } from 'react'
+import { type FC } from 'react'
 
 import { DarkModeSwitch } from '@/components/DarkModeSwitch'
+import EliLogoComponent from '@/components/eli-logo.comp'
 import { NAV_BAR_CONFIG, PATH, USER_NAVIGATION } from '@/types/constants/paths'
 import { classNames } from '@/utils'
 
-import { ChevronIcon, NavBarButton, NavBarLink, SupportLink } from './NavBarItems'
+import { NavBarButton, NavBarLink, NavBarMultiLink, SupportLink } from './NavBarItems'
 
 interface NavBarHeaderProps {
   isExpanded: boolean
@@ -15,7 +16,7 @@ interface NavBarHeaderProps {
 }
 export const NavBarHeader: FC<NavBarHeaderProps> = ({ isExpanded, onCollapse }) => {
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between w-full">
       <button onClick={onCollapse} className="pt-2 pb-10 pl-2">
         {isExpanded ? (
           <XMarkIcon className="h-10 w-10 p-2 text-white rounded-full hover:bg-gray-600" />
@@ -23,6 +24,7 @@ export const NavBarHeader: FC<NavBarHeaderProps> = ({ isExpanded, onCollapse }) 
           <Bars3Icon className="h-10 w-10 p-2 text-white rounded-full hover:bg-gray-600" />
         )}
       </button>
+      <EliLogoComponent customClass={classNames('h-10 w-12 pt-4', !isExpanded && 'hidden')} />
       <DarkModeSwitch className={classNames(!isExpanded && 'hidden', 'mt-4 mr-2')} />
     </div>
   )
@@ -32,46 +34,36 @@ interface MainNavigationProps {
   isExpanded: boolean
   toggleItemExpansion: (itemName: string) => void
   expandedItems: Record<string, boolean>
+  setOpen?: (open: boolean) => void
 }
 
-export const MainNavigation: FC<MainNavigationProps> = ({ isExpanded, expandedItems, toggleItemExpansion }) => {
+export const MainNavigation: FC<MainNavigationProps> = ({
+  setOpen,
+  isExpanded,
+  expandedItems,
+  toggleItemExpansion
+}) => {
   const pathName = usePathname()
   return (
     <div className="flex-grow">
       {NAV_BAR_CONFIG.map(item => {
         if (item.links) {
           return (
-            <div key={item.name} className="flex flex-col ">
-              <NavBarButton
-                isExpanded={isExpanded}
-                onClick={() => toggleItemExpansion(item.name)}
-                Icon={item.Icon}
-                text={item.name}
-                isActive={item.links.some(subItem => pathName.startsWith(subItem.path))}
-              >
-                <ChevronIcon isExpanded={isExpanded} open={expandedItems[item.name]} />
-              </NavBarButton>
-              {expandedItems[item.name] && (
-                <Fragment>
-                  {item.links.map(subItem => (
-                    <NavBarLink
-                      className="text-xs pl-10"
-                      role={subItem.role}
-                      key={subItem.name}
-                      href={subItem.path}
-                      isExpanded={isExpanded}
-                      text={subItem.name}
-                      isActive={pathName.startsWith(subItem.path)}
-                    />
-                  ))}
-                </Fragment>
-              )}
-            </div>
+            <NavBarMultiLink
+              key={item.name}
+              setOpen={setOpen}
+              item={item}
+              role={item.role}
+              isExpanded={isExpanded}
+              toggleItemExpansion={toggleItemExpansion}
+              expandedItems={expandedItems}
+            />
           )
         } else {
           return (
             <NavBarLink
               key={item.name}
+              setOpen={setOpen}
               role={item.role}
               href={item.link}
               isExpanded={isExpanded}
@@ -88,11 +80,13 @@ export const MainNavigation: FC<MainNavigationProps> = ({ isExpanded, expandedIt
 
 interface UserSectionProps {
   isExpanded: boolean
+  setOpen?: (open: boolean) => void
 }
 
-export const UserSection: FC<UserSectionProps> = ({ isExpanded }) => {
+export const UserSection: FC<UserSectionProps> = ({ setOpen, isExpanded }) => {
   const pathName = usePathname()
   const signOutHandler = () => {
+    setOpen && setOpen(false)
     signOut({ callbackUrl: PATH.ROOT })
   }
   return (
@@ -101,6 +95,7 @@ export const UserSection: FC<UserSectionProps> = ({ isExpanded }) => {
       {USER_NAVIGATION.map(item => (
         <NavBarLink
           key={item.name}
+          setOpen={setOpen}
           role={item.role}
           href={item.link}
           isActive={pathName.startsWith(item.link || '')}
