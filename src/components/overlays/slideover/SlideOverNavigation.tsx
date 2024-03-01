@@ -53,7 +53,7 @@ export const SlideOverNavigation: FC<PropsWithChildren<Props>> = ({ open, setOpe
                         </div>
                       </div>
                     </div>
-                    <div className="relative mt-6 flex-1 sm:px-6">{children}</div>
+                    <div className="relative mt-6 flex-1">{children}</div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
