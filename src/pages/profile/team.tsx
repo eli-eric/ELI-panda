@@ -5,7 +5,7 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import { UserProfileLayout } from '@/components/layout/navigation-bar/profile/UserProfile.layout'
+import { UserProfileLayout } from '@/components/user-profile/UserProfile.layout'
 
 const messages = message.profilePage
 

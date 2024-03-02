@@ -225,6 +225,7 @@ export const typeDefs = gql`
     isCritical: Boolean
     subSystems: [System!]! @relationship(type: "HAS_SUBSYSTEM", direction: OUT)
     spareParts: [System!]! @relationship(type: "IS_SPARE_FOR", direction: IN)
+    sparePartsFor: [System!]! @relationship(type: "IS_SPARE_FOR", direction: OUT)
     parentSystem: System @relationship(type: "HAS_SUBSYSTEM", direction: IN)
     location: Location @relationship(type: "HAS_LOCATION", direction: OUT)
     facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)

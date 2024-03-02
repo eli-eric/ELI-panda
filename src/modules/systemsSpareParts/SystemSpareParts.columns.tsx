@@ -10,9 +10,9 @@ import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import { classNames } from '@/utils'
 
-import { SystemNameCell } from '../systems/components/table/cells/SystemNameCell'
 import { useSubsystems } from '../systems/hooks/useSubsystems'
 import type { SystemDetail } from '../systems/types/responses'
+import { SpareNameCell } from './components/NameCell'
 
 // eslint-disable-next-line
 
@@ -61,16 +61,7 @@ export const useSystemsSparePartsColumns = ({ tableId }: SystemsColumnsProps) =>
         id: 'name',
         size: 440,
         enableHiding: false,
-        cell: props => (
-          <SystemNameCell
-            {...props}
-            setUid={setUid}
-            canEdit={canEdit}
-            hideButtons={false}
-            tableId={tableId}
-            enableDragAndDrop={false}
-          />
-        )
+        cell: props => <SpareNameCell {...props} setUid={setUid} tableId={tableId} />
       },
       { header: 'System Level', accessorFn: row => row.systemLevel, id: 'systemLevel' },
       { header: 'System Code', accessorFn: row => row.systemCode, id: 'systemCode', size: 150 },

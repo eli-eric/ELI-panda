@@ -32,7 +32,7 @@ import { createMessageValues } from '@/utils/formatters'
 const messages = message.systemsPage.systemDetail.deleteModal
 
 interface SystemNameCellProps extends CellContext<SystemDetail, any> {
-  setUid: (uid: string | null) => void
+  setUid?: (uid: string | null) => void
   canEdit?: boolean
   hideButtons?: boolean
   tableId: string
@@ -55,6 +55,8 @@ export const SystemNameCell = ({
   const { hoveringId } = useHoveringId()
   const { mutate } = useSystems(tableId)
   const { formatMessage: fm } = useIntl()
+  const valueFirstLetter = getValue().charAt(0)
+  const valueRest = getValue().slice(1)
 
   const { submit } = useSubmit<string>({
     endpoint: system,
@@ -102,9 +104,9 @@ export const SystemNameCell = ({
                 <button
                   onClick={() => {
                     if (!row.getIsExpanded()) {
-                      setUid(original.uid)
+                      setUid && setUid(original.uid)
                     } else {
-                      setUid(null)
+                      setUid && setUid(null)
                     }
                     row.toggleExpanded()
                   }}
@@ -115,11 +117,31 @@ export const SystemNameCell = ({
                   ) : (
                     <ChevronRightIcon className="w-4 h-4" />
                   )}
-                  <span className="pl-1">{getValue()}</span>
+                  <span className="pl-1">
+                    <span
+                      className={classNames(
+                        original.physicalItem?.itemUsage?.uid === '25c189d0-0564-43a7-90d9-65b7083bea98' &&
+                          'text-red-900'
+                      )}
+                    >
+                      {valueFirstLetter}
+                    </span>
+                    <span>{valueRest}</span>
+                  </span>
                 </button>
               ) : (
                 <div className="flex items-center">
-                  <span className="pl-5">{getValue()}</span>
+                  <span className="pl-5">
+                    <span
+                      className={classNames(
+                        original.physicalItem?.itemUsage?.uid === '25c189d0-0564-43a7-90d9-65b7083bea98' &&
+                          'text-red-900'
+                      )}
+                    >
+                      {valueFirstLetter}
+                    </span>
+                    <span>{valueRest}</span>
+                  </span>
                 </div>
               )}
             </div>

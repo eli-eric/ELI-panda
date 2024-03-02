@@ -23,8 +23,8 @@ export type SlideOverButtons = {
 interface Props {
   open: boolean
   setOpen: (open: boolean) => void
-  panelTitle: string
-  buttons: SlideOverButtons
+  panelTitle?: string
+  buttons?: SlideOverButtons
   RenderSettings?: JSX.Element
   panelSlide?: 'left' | 'right'
 }
@@ -40,7 +40,6 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
   <Transition.Root show={open} as={Fragment}>
     <Dialog as="div" className="relative z-10" onClose={setOpen}>
       <div className="fixed inset-0" />
-
       <div className="fixed inset-0 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <div
@@ -82,30 +81,32 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
                     <div className="relative mt-6 flex-1 px-4 sm:px-6">{children}</div>
                   </div>
                   {RenderSettings && <div className="flex px-4 py-4">{RenderSettings}</div>}
-                  <div className={classNames('flex flex-shrink-0 px-4 py-4 justify-between', buttons.className)}>
-                    {buttons.goBack && (
-                      <Button type="button" onClick={() => setOpen(false)} className={buttons.goBack.className}>
-                        Cancel
-                      </Button>
-                    )}
-                    {buttons.goAlter && (
+                  {buttons && (
+                    <div className={classNames('flex flex-shrink-0 px-4 py-4 justify-between', buttons.className)}>
+                      {buttons.goBack && (
+                        <Button type="button" onClick={() => setOpen(false)} className={buttons.goBack.className}>
+                          Cancel
+                        </Button>
+                      )}
+                      {buttons.goAlter && (
+                        <Button
+                          type={buttons.goAlter.type}
+                          onClick={buttons.goAlter.onClick}
+                          className={buttons.goAlter.className}
+                        >
+                          {buttons.goAlter.text}
+                        </Button>
+                      )}
                       <Button
-                        type={buttons.goAlter.type}
-                        onClick={buttons.goAlter.onClick}
-                        className={buttons.goAlter.className}
+                        type={buttons.goNext.type}
+                        primary
+                        onClick={buttons.goNext.onClick}
+                        className={buttons.goNext.className}
                       >
-                        {buttons.goAlter.text}
+                        {buttons.goNext.text}
                       </Button>
-                    )}
-                    <Button
-                      type={buttons.goNext.type}
-                      primary
-                      onClick={buttons.goNext.onClick}
-                      className={buttons.goNext.className}
-                    >
-                      {buttons.goNext.text}
-                    </Button>
-                  </div>
+                    </div>
+                  )}
                 </div>
               </Dialog.Panel>
             </Transition.Child>

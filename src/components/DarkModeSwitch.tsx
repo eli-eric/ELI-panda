@@ -1,11 +1,14 @@
 import { Switch } from '@headlessui/react'
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline'
+import type { FC } from 'react'
 import { useEffect, useState } from 'react'
 
 import { useDarkModeStore } from '@/store/useDarkModeStore'
 import { classNames } from '@/utils'
-
-export const DarkModeSwitch = () => {
+interface Props {
+  className?: string
+}
+export const DarkModeSwitch: FC<Props> = ({ className }) => {
   const { isDark, toggleDarkMode } = useDarkModeStore()
 
   const [clientSide, setClientSide] = useState(false)
@@ -23,7 +26,8 @@ export const DarkModeSwitch = () => {
       onChange={() => toggleDarkMode()}
       className={classNames(
         isDark ? 'bg-gray-500' : 'bg-gray-200',
-        'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out 2 '
+        'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out',
+        className
       )}
     >
       <span
