@@ -1,4 +1,5 @@
 import { Bars3Icon, PowerIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import { type FC } from 'react'
@@ -24,7 +25,9 @@ export const NavBarHeader: FC<NavBarHeaderProps> = ({ isExpanded, onCollapse }) 
           <Bars3Icon className="h-10 w-10 p-2 text-white rounded-full hover:bg-gray-600" />
         )}
       </button>
-      <EliLogoComponent customClass={classNames('h-10 w-12 pt-4', !isExpanded && 'hidden')} />
+      <Link href={PATH.DASHBOARD}>
+        <EliLogoComponent customClass={classNames('h-10 w-12 pt-4', !isExpanded && 'hidden')} />
+      </Link>
       <DarkModeSwitch className={classNames(!isExpanded && 'hidden', 'mt-4 mr-2')} />
     </div>
   )

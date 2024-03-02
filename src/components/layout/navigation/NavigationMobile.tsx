@@ -1,9 +1,12 @@
 import { Bars3Icon, Cog6ToothIcon } from '@heroicons/react/24/outline'
+import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { Fragment, useState } from 'react'
 
 import EliLogoComponent from '@/components/eli-logo.comp'
 import { SlideOverNavigation } from '@/components/overlays/slideover/SlideOverNavigation'
+import { ENV, PROCESS_ENV } from '@/types/constants/common'
+import { PATH } from '@/types/constants/paths'
 import { classNames } from '@/utils'
 
 import { MainNavigation, UserSection } from './NavBarSections'
@@ -28,12 +31,18 @@ export const NavigationMobile = () => {
     <Fragment>
       <div
         id="nav-bar"
-        className={'lg:hidden flex w-full justify-between text-center items-center dark:bg-gray-800 bg-slate-500'}
+        className={classNames(
+          'lg:hidden flex w-full justify-between text-center items-center dark:bg-gray-800 bg-slate-500',
+          PROCESS_ENV && PROCESS_ENV === ENV.DEV && 'bg-teal-100 dark:bg-teal-900',
+          PROCESS_ENV && PROCESS_ENV === ENV.TEST && 'bg-pink-50 dark:bg-pink-900'
+        )}
       >
         <button onClick={() => setOpenSettings(!openSettings)} className="pl-2">
           <Cog6ToothIcon className="h-10 w-10 p-2 text-white rounded-full hover:bg-gray-600" />
         </button>
-        <EliLogoComponent customClass={classNames('h-6 w-12')} />
+        <Link href={PATH.DASHBOARD}>
+          <EliLogoComponent customClass={classNames('h-6 w-12')} />
+        </Link>
         <button onClick={() => setOpenNav(!openNav)} className="pl-2">
           <Bars3Icon className="h-10 w-10 p-2 text-white rounded-full hover:bg-gray-600" />
         </button>
