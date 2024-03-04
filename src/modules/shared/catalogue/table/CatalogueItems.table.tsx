@@ -1,6 +1,7 @@
 import type { ColumnDef, Table } from '@tanstack/react-table'
 import { createContext, useEffect, useRef } from 'react'
 
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useHoveringId } from '@/store/useHoveringId'
 import type { CatalogueCategory } from '@/types/gql/graphql'
 import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
@@ -16,6 +17,7 @@ interface CatalogueTableProps {
   categoryList?: CatalogueCategory[]
   loading?: boolean
   enableFiltering?: boolean
+  setCategoryFilter?: (value: CodebookType) => void
 }
 
 export const CatalogueTableContext = createContext<{ isHoveringId: number | undefined | string }>({
@@ -28,9 +30,10 @@ export const CatalogueTable = ({
   tableId = 'catalogueItems',
   catalogueItems,
   categoryList,
-  loading
+  loading,
+  setCategoryFilter
 }: CatalogueTableProps) => {
-  const columns = useCatalogueItemsColumns({ tableId, additionalColumn, catalogueItems })
+  const columns = useCatalogueItemsColumns({ tableId, additionalColumn, catalogueItems, setCategoryFilter })
   const { setHoveringId } = useHoveringId()
   const catalogueTableRef = useRef<Table<CatalogueItem>>()
 

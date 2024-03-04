@@ -1,11 +1,12 @@
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
-import { useContext, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { message } from '@/i18n/src/messages'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
-import { CatalogueContext } from '@/pages/catalogue/[uid]'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { CODEBOOK } from '@/types/constants/codebook'
 import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
@@ -19,16 +20,17 @@ import { NameCell } from './cells/NameCell'
 const messages = message.cataloguePage.itemList.header
 
 type Props = {
-  tableId?: string
+  tableId: string
   additionalColumn?: ColumnDef<CatalogueItem, any>
   catalogueItems?: CatalogueItemsResponse
+  setCategoryFilter?: (value: CodebookType) => void
 }
 
-export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueItems }: Props) => {
+export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueItems, setCategoryFilter }: Props) => {
   const intl = useIntl()
-
-  const { uid } = useContext(CatalogueContext)
-
+  const { storeFilters } = useFormFilterState({ tableId, enableQueryUrl: true })
+  const filter = storeFilters?.find(filter => filter.id === 'category')
+  const uid = (filter?.value as { uid: string })?.uid
   const { catalogueCategoryProperties } = useCategoryProperties(uid)
 
   const columns: ColumnDef<CatalogueItem, any>[] = useMemo(() => {
@@ -60,7 +62,7 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueI
         header: intl.formatMessage({ id: messages.categoryName }),
         accessorFn: row => row.category,
         id: 'categoryName',
-        cell: CategoryName,
+        cell: props => <CategoryName {...props} setCategoryFilter={setCategoryFilter} />,
         meta: { filter: { type: 'autoComplete', enableColumnFilter: true, codebookCode: CODEBOOK.CATALOGUE_CATEGORY } }
       },
       {
@@ -142,6 +144,7 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueI
       columns.push(additionalColumn)
     }
     return columns
+    // eslint-disable-next-line
   }, [intl, catalogueItems, additionalColumn, tableId, catalogueCategoryProperties])
 
   return columns
