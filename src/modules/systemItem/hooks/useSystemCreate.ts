@@ -54,9 +54,11 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
       variables: {
         input: [
           {
-            parentSystem: {
-              connect: whereN(parentUid)
-            },
+            parentSystem: parentUid
+              ? {
+                  connect: whereN(parentUid)
+                }
+              : undefined,
             name: systemForm.name,
             facility: {
               connect: whereC(session?.user?.facilityCode)
