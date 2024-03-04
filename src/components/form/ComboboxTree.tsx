@@ -33,7 +33,7 @@ export const ComboboxTree = ({
   label,
   disabled,
   className,
-  limit = 10,
+  limit = 20,
   filter,
   position = 'bottom',
   rounded = 'rounded-md',

@@ -125,10 +125,12 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name, onSubmit }: C
           className={'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'}
           getRowProps={row => ({
             onClick: () => {
-              !row.original?.children && setItem({ uid: row.original.uid, name: row.original.name })
+              setItem({ uid: row.original.uid, name: row.original.name })
             },
             className: classNames(
-              item?.uid === row.original.uid ? 'bg-primary-200 dark:bg-primary-500 hover:bg-primary-200' : '',
+              item?.uid === row.original.uid
+                ? 'bg-primary-200 dark:bg-primary-500 hover:bg-primary-200 dark:hover:bg-primary-500'
+                : '',
               'cursor-pointer'
             )
           })}
