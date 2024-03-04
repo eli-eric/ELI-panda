@@ -1,33 +1,29 @@
 import Image from 'next/image'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
 
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useImage } from '@/hooks/fetch/useImage'
-import { PATH } from '@/types/constants/paths'
 import type { CatalogueCategory } from '@/types/gql/graphql'
 
 import { useCategoryEdit } from '../../hooks/useCategoryEdit'
 
 interface Props {
   category: CatalogueCategory
+  setCategoryFilter: (value: CodebookType) => void
 }
 
-export const CategoryItemComponent = ({ category }: Props) => {
-  const router = useRouter()
+export const CategoryItemComponent = ({ category, setCategoryFilter }: Props) => {
   const { catalogueCategoryImage } = useEndpoint({ uid: category.uid })
   const image = useImage(catalogueCategoryImage)
 
   const { getEditButtons } = useCategoryEdit({
     editUid: category.uid
   })
-  const path = PATH.CATALOGUE + '/' + category.uid
   return (
     <div className="flex-row justify-between dark:hover:bg-gray-600 relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white dark:bg-gray-700 shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
-      <Link
-        href={{
-          pathname: path,
-          query: { search: router.query.search, filter: router.query.filter }
+      <button
+        onClick={() => {
+          setCategoryFilter({ uid: category.uid, name: category.name })
         }}
         key={category.code}
         className="flex w-full items-center "
@@ -47,7 +43,7 @@ export const CategoryItemComponent = ({ category }: Props) => {
             <p className="text-sm font-medium text-gray-900 dark:text-gray-200">{category.name}</p>
           </div>
         </div>
-      </Link>
+      </button>
       {getEditButtons()}
     </div>
   )

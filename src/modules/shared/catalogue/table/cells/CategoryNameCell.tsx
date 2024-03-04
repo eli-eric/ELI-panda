@@ -1,20 +1,21 @@
 import type { CellContext } from '@tanstack/react-table'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { Fragment } from 'react'
 
 import { LinkDecorator } from '@/components/decorators'
-import { PATH } from '@/types/constants/paths'
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import type { CatalogueItem } from '@/types/responses'
 
-export const CategoryName = ({ getValue }: CellContext<CatalogueItem, any>) => {
-  const router = useRouter()
-  const link = PATH.CATALOGUE + '/' + getValue()?.uid
+interface CategoryNameProps extends CellContext<CatalogueItem, any> {
+  setCategoryFilter?: (value: CodebookType) => void
+}
+
+export const CategoryName = ({ getValue, setCategoryFilter, row: { original } }: CategoryNameProps) => {
   return (
-    <Fragment>
-      <Link href={{ pathname: link, query: { search: router.query.search } }}>
-        <LinkDecorator>{getValue()?.name}</LinkDecorator>
-      </Link>
-    </Fragment>
+    <button
+      onClick={() => {
+        setCategoryFilter?.({ uid: getValue()?.uid, name: getValue()?.name })
+      }}
+    >
+      <LinkDecorator>{getValue()?.name}</LinkDecorator>
+    </button>
   )
 }

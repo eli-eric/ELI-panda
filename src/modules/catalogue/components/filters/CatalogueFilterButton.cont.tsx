@@ -1,46 +1,28 @@
+'use client'
 import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
-import { Fragment, useContext, useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
+import type { UseFormReturn } from 'react-hook-form'
 import { useIsFirstRender } from 'usehooks-ts'
 
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver'
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
+import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
-import { CatalogueContext } from '@/pages/catalogue/[uid]'
 import { useFormControlStore } from '@/store/useFormControlStore'
 
+import type { SystemFilterType } from '../../types/filter'
 import { CatalogueFilterForm } from './form/CatalogueFilter.form'
 
-type SystemFilterType = {
-  name: string
-  systemLevel: string[]
-  systemCode: string
-  systemAlias: string
-  systemType: CodebookType | null
-  zone: CodebookType | null
-  location: CodebookType | null
-  responsible: CodebookType | null
-  description: string
-  importance: CodebookType | null
-  itemUsage: string[]
-  eun: string
-  serialNumber: string
-  catalogueName: string
-  catalogueNumber: string
-  category: CodebookType | null
-  catalogueDescription: string
-  supplier: CodebookType | null
-  price: [number | undefined, number | undefined]
-  parentSystem: CodebookType | null
+interface CatalogueFilterButtonContainerProps {
+  filterFormMethods: UseFormReturn<SystemFilterType, any, undefined>
 }
 
-export const CatalogueFilterButtonContainer = () => {
+export const CatalogueFilterButtonContainer = ({ filterFormMethods }: CatalogueFilterButtonContainerProps) => {
   const [open, setOpen] = useState(false)
   const tableId = 'catalogueItems'
 
@@ -55,14 +37,9 @@ export const CatalogueFilterButtonContainer = () => {
     }),
     []
   )
-  const formMethods = useFormFilter<SystemFilterType>({
-    tableId,
-    defValues,
-    enableQueryURL: true
-  })
+  const { reset, watch } = filterFormMethods
 
   const { storeFilters, setColumnFilters } = useFormFilterState({ tableId, enableQueryUrl: true })
-  const { reset } = formMethods
 
   const onClear = () => {
     reset(defValues, { keepValues: false })
@@ -81,9 +58,8 @@ export const CatalogueFilterButtonContainer = () => {
   }
   const { toggleDeleteCustom, customFieldIdToSync } = useFormControlStore()
 
-  const category = formMethods.watch('category')
-  const { uid } = useContext(CatalogueContext)
-  const { catalogueCategoryProperties } = useCategoryProperties(category?.uid || uid)
+  const category = watch('category')
+  const { catalogueCategoryProperties } = useCategoryProperties(category?.uid)
   const isFirstRender = useIsFirstRender()
 
   useEffect(() => {
@@ -116,19 +92,14 @@ export const CatalogueFilterButtonContainer = () => {
       </Button>
       <SlideOver
         RenderSettings={
-          <FilterSaveSettings
-            tableId={tableId}
-            enableQueryURL={true}
-            resetForm={formMethods.reset}
-            defaulFormValues={defValues}
-          />
+          <FilterSaveSettings tableId={tableId} enableQueryURL={true} resetForm={reset} defaulFormValues={defValues} />
         }
         panelTitle="System Filters"
         open={open}
         setOpen={setOpen}
         buttons={buttons}
       >
-        <Form formMethods={formMethods}>
+        <Form formMethods={filterFormMethods}>
           <CatalogueFilterForm tableId={tableId} catalogueCategoryProperties={catalogueCategoryProperties} />
         </Form>
       </SlideOver>
