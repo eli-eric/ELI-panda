@@ -20,9 +20,9 @@ export const NavBarHeader: FC<NavBarHeaderProps> = ({ isExpanded, onCollapse }) 
     <div className="flex justify-between w-full">
       <button onClick={onCollapse} className="pt-2 pb-10 pl-2">
         {isExpanded ? (
-          <XMarkIcon className="h-10 w-10 p-2 text-white rounded-full hover:bg-gray-600" />
+          <XMarkIcon className="h-10 w-10 p-2 text-gray-600 dark:text-gray-200 rounded-full hover:bg-gray-300 hover:dark:bg-gray-600" />
         ) : (
-          <Bars3Icon className="h-10 w-10 p-2 text-white rounded-full hover:bg-gray-600" />
+          <Bars3Icon className="h-10 w-10 p-2 text-gray-600 dark:text-gray-200 rounded-full hover:bg-gray-300 hover:dark:bg-gray-600" />
         )}
       </button>
       <Link href={PATH.DASHBOARD}>
