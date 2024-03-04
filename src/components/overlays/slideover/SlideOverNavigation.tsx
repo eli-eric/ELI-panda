@@ -36,7 +36,7 @@ export const SlideOverNavigation: FC<PropsWithChildren<Props>> = ({ open, setOpe
                 leaveTo={panelSlide === 'left' ? '-translate-x-full' : 'translate-x-full'}
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
-                  <div className="flex h-full flex-col py-3 bg-slate-600 dark:bg-gray-900">
+                  <div className="flex h-full flex-col py-3 bg-slate-200 dark:bg-gray-900">
                     <div className="px-4 sm:px-6">
                       <div className="flex items-start justify-between">
                         <DarkModeSwitch className="ml-3 mt-1 text-center" />

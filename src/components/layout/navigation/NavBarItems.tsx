@@ -22,7 +22,7 @@ export const NavBarTitle: FC<PropsWithChildren<{ className?: string; isActive?: 
       className={classNames(
         `ml-4`,
         isExpanded ? 'opacity-100' : 'opacity-0',
-        `transition-opacity duration-200 whitespace-nowrap text-gray-200`,
+        `transition-opacity duration-200 whitespace-nowrap text-gray-600 dark:text-gray-200`,
         isActive && 'text-primary-600',
         className
       )}
@@ -45,7 +45,7 @@ const NavBarItem: FC<PropsWithChildren<NavBarItemProps>> = ({ isExpanded, text, 
       <Tooltip content={text} placement="top-start" disabled={isExpanded}>
         {Icon && (
           <div>
-            <Icon className={classNames('h-6 w-6 text-gray-200', isActive && 'text-primary-600')} />
+            <Icon className={classNames('h-6 w-6 text-gray-600 dark:text-gray-200', isActive && 'text-primary-600')} />
           </div>
         )}
       </Tooltip>
@@ -78,7 +78,7 @@ export const NavBarLink: FC<NavBarLinkProps> = ({
     <Link
       href={href}
       onClick={() => setOpen && setOpen(false)}
-      className={classNames('flex items-center p-4 hover:bg-gray-700', className)}
+      className={classNames('flex items-center p-4 hover:bg-gray-300 hover:dark:bg-gray-700', className)}
     >
       <NavBarItem isExpanded={isExpanded} Icon={Icon} text={text} isActive={isActive} />
     </Link>
@@ -98,7 +98,10 @@ export const NavBarButton: FC<PropsWithChildren<NavBarButtonProps>> = ({
   children
 }) => {
   return (
-    <button className="flex items-center justify-between w-full p-4 hover:bg-gray-700" onClick={onClick}>
+    <button
+      className="flex items-center justify-between w-full p-4 hover:dark:bg-gray-700 hover:bg-gray-300"
+      onClick={onClick}
+    >
       <NavBarItem isExpanded={isExpanded} Icon={Icon} text={text} isActive={isActive} />
       {children}
     </button>
@@ -114,9 +117,9 @@ export const ChevronIcon: FC<ChevronIconProps> = ({ isExpanded, open }) => {
   return (
     <div className={classNames('transition-opacity duration-300', isExpanded ? 'opacity-100' : 'opacity-0')}>
       {open ? (
-        <ChevronDownIcon className="ml-auto h-5 w-5 text-gray-200" />
+        <ChevronDownIcon className="ml-auto h-5 w-5 dark:text-gray-200 text-gray-600" />
       ) : (
-        <ChevronRightIcon className="ml-auto h-5 w-5 text-gray-200" />
+        <ChevronRightIcon className="ml-auto h-5 w-5 dark:text-gray-200 text-gray-600 " />
       )}
     </div>
   )
@@ -129,10 +132,14 @@ interface SupportLinkProps {
 export const SupportLink: FC<SupportLinkProps> = ({ isExpanded }) => {
   return (
     <Link href={SUPPORT} legacyBehavior>
-      <a target={'_blank'} rel="noreferrer" className="flex items-center p-4 text-center hover:bg-gray-700">
+      <a
+        target={'_blank'}
+        rel="noreferrer"
+        className="flex items-center p-4 text-center hover:bg-gray-300 hover:dark:bg-gray-700"
+      >
         <Tooltip content="Support" placement="top-start" disabled={isExpanded}>
           <div className="ml-2">
-            <span className={classNames('h-6 w-6 text-2xl text-center text-white')}>?</span>
+            <span className={classNames('h-6 w-6 text-2xl text-center text-gray-500 dark:text-gray-200')}>?</span>
           </div>
         </Tooltip>
         <NavBarTitle className="ml-5" isExpanded={isExpanded} isActive={false}>

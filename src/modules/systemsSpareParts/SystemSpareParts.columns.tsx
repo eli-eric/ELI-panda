@@ -182,7 +182,7 @@ export const useSystemsSparePartsColumns = ({ tableId }: SystemsColumnsProps) =>
         size: 150
       }
     ],
-    [setUid, canEdit, tableId]
+    [setUid, tableId]
   )
 
   return { columns, pending }
