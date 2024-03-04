@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import type { UseFormReturn } from 'react-hook-form'
 import { mutate } from 'swr'
 
 import { ModalStatisticsButtonLarge } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.button'
@@ -8,7 +9,11 @@ import { ROLE } from '@/types/constants/roles'
 
 import { CatalogueFilterButtonContainer } from './filters/CatalogueFilterButton.cont'
 
-export const SearchBarButtons = () => {
+interface SearchBarButtonsProps {
+  filterFormMethods: UseFormReturn<any, any, any>
+}
+
+export const SearchBarButtons = ({ filterFormMethods }: SearchBarButtonsProps) => {
   const router = useRouter()
   const uid = router.query.uid
   const handleRefresh = () => {
@@ -21,7 +26,7 @@ export const SearchBarButtons = () => {
     <SearchBarButtonsComponent handleAdd={handleAdd} handleRefresh={handleRefresh} editRole={ROLE.CATALOGUE_EDIT}>
       <div>
         <ModalStatisticsButtonLarge />
-        <CatalogueFilterButtonContainer />
+        <CatalogueFilterButtonContainer filterFormMethods={filterFormMethods} />
       </div>
     </SearchBarButtonsComponent>
   )

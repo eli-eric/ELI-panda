@@ -1,8 +1,8 @@
 import { gql, useQuery } from '@apollo/client'
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
-import { CatalogueContext } from '@/pages/catalogue/[uid]'
+import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import type { Query } from '@/types/gql/graphql'
 
 const GET_CATEGORIES = gql`
@@ -15,7 +15,10 @@ const GET_CATEGORIES = gql`
 `
 
 export const useCategoryList = () => {
-  const { uid } = useContext(CatalogueContext)
+  const tableId = 'catalogueItems'
+  const { storeFilters } = useFormFilterState({ tableId, enableQueryUrl: true })
+  const filter = storeFilters?.find(filter => filter.id === 'category')
+  const uid = (filter?.value as { uid: string })?.uid
   const { data, loading, error, refetch, previousData } = useQuery<Query>(GET_CATEGORIES, {
     variables: {
       where: uid

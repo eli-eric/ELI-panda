@@ -1,5 +1,7 @@
 import '@tanstack/react-table'
 
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
+
 declare module '@tanstack/table-core' {
   //eslint-disable-next-line
   interface ColumnMeta<TData extends RowData, TValue> {
@@ -18,7 +20,7 @@ declare module '@tanstack/table-core' {
 
   interface ColumnFilter {
     id: string
-    value: unknown
+    value: string | number | boolean | Date | null | CodebookType | { min?: number; max?: number }
     name?: string
     type?: string
   }
