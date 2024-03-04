@@ -7,11 +7,10 @@ import { SearchBarButtonsComponent } from '@/modules/shared/table/SearchBar'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
-import type { SystemFilterType } from '../types/filter'
 import { CatalogueFilterButtonContainer } from './filters/CatalogueFilterButton.cont'
 
 interface SearchBarButtonsProps {
-  filterFormMethods: UseFormReturn<SystemFilterType, any, undefined>
+  filterFormMethods: UseFormReturn<any, any, any>
 }
 
 export const SearchBarButtons = ({ filterFormMethods }: SearchBarButtonsProps) => {

@@ -15,11 +15,10 @@ import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { useFormControlStore } from '@/store/useFormControlStore'
 
-import type { SystemFilterType } from '../../types/filter'
 import { CatalogueFilterForm } from './form/CatalogueFilter.form'
 
 interface CatalogueFilterButtonContainerProps {
-  filterFormMethods: UseFormReturn<SystemFilterType, any, undefined>
+  filterFormMethods: UseFormReturn<any, any, any>
 }
 
 export const CatalogueFilterButtonContainer = ({ filterFormMethods }: CatalogueFilterButtonContainerProps) => {

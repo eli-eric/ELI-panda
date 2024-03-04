@@ -8,7 +8,7 @@ interface CategoryNameProps extends CellContext<CatalogueItem, any> {
   setCategoryFilter?: (value: CodebookType) => void
 }
 
-export const CategoryName = ({ getValue, setCategoryFilter, row: { original } }: CategoryNameProps) => {
+export const CategoryName = ({ getValue, setCategoryFilter }: CategoryNameProps) => {
   return (
     <button
       onClick={() => {
