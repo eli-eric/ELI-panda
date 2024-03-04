@@ -23,7 +23,7 @@ export const NavBarTitle: FC<PropsWithChildren<{ className?: string; isActive?: 
         `ml-4`,
         isExpanded ? 'opacity-100' : 'opacity-0',
         `transition-opacity duration-200 whitespace-nowrap text-gray-600 dark:text-gray-200`,
-        isActive && 'text-primary-600',
+        isActive && 'text-primary-600 dark:text-primary-600',
         className
       )}
     >
@@ -45,7 +45,12 @@ const NavBarItem: FC<PropsWithChildren<NavBarItemProps>> = ({ isExpanded, text, 
       <Tooltip content={text} placement="top-start" disabled={isExpanded}>
         {Icon && (
           <div>
-            <Icon className={classNames('h-6 w-6 text-gray-600 dark:text-gray-200', isActive && 'text-primary-600')} />
+            <Icon
+              className={classNames(
+                'h-6 w-6 text-gray-600 dark:text-gray-200',
+                isActive && 'text-primary-600 dark:text-primary-600'
+              )}
+            />
           </div>
         )}
       </Tooltip>
