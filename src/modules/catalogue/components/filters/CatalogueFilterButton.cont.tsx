@@ -93,7 +93,7 @@ export const CatalogueFilterButtonContainer = ({ filterFormMethods }: CatalogueF
         RenderSettings={
           <FilterSaveSettings tableId={tableId} enableQueryURL={true} resetForm={reset} defaulFormValues={defValues} />
         }
-        panelTitle="System Filters"
+        panelTitle="Catalogue Filters"
         open={open}
         setOpen={setOpen}
         buttons={buttons}
