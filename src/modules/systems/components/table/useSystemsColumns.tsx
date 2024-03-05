@@ -10,6 +10,7 @@ import { ROLE } from '@/types/constants/roles'
 
 import { useSubsystems } from '../../hooks/useSubsystems'
 import type { SystemDetail } from '../../types/responses'
+import { IconCell } from './cells/IconCell'
 // eslint-disable-next-line
 import { SystemNameCell } from './cells/SystemNameCell'
 
@@ -25,6 +26,13 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
 
   const columns = useMemo(
     (): ColumnDef<SystemDetail, any>[] => [
+      {
+        header: 'icon',
+        id: 'icon',
+        size: 50,
+        cell: IconCell,
+        meta: { sticky: true }
+      },
       {
         header: 'Name',
         accessorFn: row => row.name,
@@ -43,7 +51,8 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
           />
         )
       },
-      { header: 'System Level', accessorFn: row => row.systemLevel, id: 'systemLevel' },
+      { header: 'System Level', accessorFn: row => row.systemLevel, id: 'systemLevel', size: 170 },
+
       { header: 'System Code', accessorFn: row => row.systemCode, id: 'systemCode', size: 150 },
       { header: 'System Alias', accessorFn: row => row.systemAlias, id: 'systemAlias', size: 150 },
       {

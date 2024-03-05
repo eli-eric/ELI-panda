@@ -11,12 +11,12 @@ export const TableHead: FC<Props> = ({ table }) => (
   <thead className="bg-gray-50 border-b">
     {table.getHeaderGroups().map(headerGroup => (
       <tr key={headerGroup.id}>
-        {headerGroup.headers.map(header => {
+        {headerGroup.headers.map((header, index) => {
           const noHeader = header.column.columnDef.meta?.noHeader
           if (noHeader) {
             return null
           }
-          return <ColumnHeader key={header.id} table={table} header={header} />
+          return <ColumnHeader key={header.id} table={table} header={header} index={index} />
         })}
       </tr>
     ))}
