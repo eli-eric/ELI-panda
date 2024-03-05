@@ -4,8 +4,8 @@ import { useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { message } from '@/i18n/src/messages'
+import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { CODEBOOK } from '@/types/constants/codebook'
@@ -28,9 +28,7 @@ type Props = {
 
 export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueItems, setCategoryFilter }: Props) => {
   const intl = useIntl()
-  const { storeFilters } = useFormFilterState({ tableId, enableQueryUrl: true })
-  const filter = storeFilters?.find(filter => filter.id === 'category')
-  const uid = (filter?.value as { uid: string })?.uid
+  const uid = useCategoryUid()
   const { catalogueCategoryProperties } = useCategoryProperties(uid)
 
   const columns: ColumnDef<CatalogueItem, any>[] = useMemo(() => {

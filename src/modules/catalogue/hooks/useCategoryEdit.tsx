@@ -5,7 +5,6 @@ import {
   PlusIcon,
   TrashIcon
 } from '@heroicons/react/24/outline'
-import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import { type Dispatch, Fragment, type SetStateAction, useEffect, useState } from 'react'
 
@@ -19,6 +18,7 @@ import type { ModalButtons } from '@/types/form'
 import { useSubmit } from '../../../hooks/fetch/useSubmit'
 import CategoryEditModal from '../components/categoryEditForm/CategoryEditModal'
 import { useCategoryList } from './useCategoryList'
+import { useCategoryUid } from './useCategoryUid'
 
 interface EditModalProps {
   testid: string
@@ -41,8 +41,8 @@ export const useCategoryEdit = ({ editUid }: { editUid?: string }) => {
   const [openCopyEdit, setOpenCopyEdit] = useState(false)
   const [openDelete, setOpenDelete] = useState(false)
   const [copyCategoryUid, setCopyCategoporyUid] = useState<string | null>()
-  const router = useRouter()
-  const { uid: parentUID } = router.query as { uid?: string }
+
+  const parentUID = useCategoryUid()
   const { refetch } = useCategoryList()
 
   const { data: session } = useSession()
