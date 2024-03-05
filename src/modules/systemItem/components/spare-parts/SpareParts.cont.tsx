@@ -10,6 +10,8 @@ export const SparePartsContainer = () => {
   const columns = useSubsystemsColumns()
   const { systemDetail } = useContext(SystemDetailContext)
 
+  if (!systemDetail?.spareParts || systemDetail.spareParts.length < 1) return null
+
   return (
     <Fragment>
       <Heading customText="Spare Parts" />
