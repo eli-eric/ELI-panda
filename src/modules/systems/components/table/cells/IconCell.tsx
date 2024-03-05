@@ -1,4 +1,4 @@
-import { CogIcon, CubeIcon } from '@heroicons/react/24/solid'
+import { CogIcon, CubeIcon, ShoppingBagIcon } from '@heroicons/react/24/solid'
 import type { CellContext } from '@tanstack/react-table'
 import type { FC } from 'react'
 
@@ -16,7 +16,18 @@ export const IconCell: FC<CellContext<SystemDetail, any>> = ({ row }) => {
       )
     }
     case ITEM_USAGE.IN_SYSTEM_PART: {
-      return <CubeIcon className="h-4 w-4 text-cyan-500" />
+      return (
+        <Tooltip content="In system part">
+          <CubeIcon className="h-4 w-4 text-cyan-500" />
+        </Tooltip>
+      )
+    }
+    case ITEM_USAGE.STOCK_ITEM: {
+      return (
+        <Tooltip content="Stock item">
+          <ShoppingBagIcon className="h-4 w-4 text-green-500" />
+        </Tooltip>
+      )
     }
   }
 }

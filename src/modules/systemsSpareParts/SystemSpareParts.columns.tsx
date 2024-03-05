@@ -5,11 +5,10 @@ import { Fragment, useMemo } from 'react'
 
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
-import usePermission from '@/hooks/usePermission'
 import { PATH } from '@/types/constants/paths'
-import { ROLE } from '@/types/constants/roles'
 import { classNames } from '@/utils'
 
+import { IconCell } from '../systems/components/table/cells/IconCell'
 import { useSubsystems } from '../systems/hooks/useSubsystems'
 import type { SystemDetail } from '../systems/types/responses'
 import { SpareNameCell } from './components/NameCell'
@@ -38,13 +37,21 @@ function IndeterminateCheckbox({ className, ...rest }: HTMLProps<HTMLInputElemen
 
 export const useSystemsSparePartsColumns = ({ tableId }: SystemsColumnsProps) => {
   const { setUid, pending } = useSubsystems(tableId)
-  const canEdit = usePermission([ROLE.SYSTEM_EDIT])
   const columns = useMemo(
     (): ColumnDef<SystemDetail, any>[] => [
       {
-        id: 'select',
-        size: 20,
+        id: 'icons',
+        header: 'icon',
+        size: 40,
         meta: { sticky: true },
+        cell: IconCell
+      },
+      {
+        id: 'select',
+        header: 'sel',
+        size: 40,
+        meta: { sticky: true },
+        enableHiding: false,
         cell: ({ row }) => (
           <div className="px-1">
             <IndeterminateCheckbox
