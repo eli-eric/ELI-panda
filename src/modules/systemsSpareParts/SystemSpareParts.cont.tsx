@@ -1,5 +1,4 @@
-import type { Row } from '@tanstack/react-table'
-import { useEffect, useMemo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 
 import { Button } from '@/components/Buttons'
@@ -20,6 +19,9 @@ import type { SystemDetail } from '../systems/types/responses'
 import { useAssignSpareParts } from './hooks/useAssignSpareParts'
 import { useSystemsSparePartsColumns } from './SystemSpareParts.columns'
 
+const FilterMemoized = memo(SystemFilterButtonContainer)
+const BadgesMemoized = memo(FilterBadges)
+
 export const SystemsSparePartsContainer = () => {
   const tableId1 = 'spare-parts'
   const tableId2 = 'for-system'
@@ -27,11 +29,11 @@ export const SystemsSparePartsContainer = () => {
   const sysetms1 = useSystems(tableId1)
   const sysetms2 = useSystems(tableId2)
 
-  const columns1 = useSystemsSparePartsColumns({ tableId: tableId1 })
-  const columns2 = useSystemsSparePartsColumns({ tableId: tableId2 })
+  const [table1SelectedUids, setTable1SelectedUids] = useState<string[]>([])
+  const [table2SelectedUids, setTable2SelectedUids] = useState<string[]>([])
 
-  const [selectedRawModel, setSelectedRawModel] = useState<Row<SystemDetail>[]>()
-  const [selectedRawModel2, setSelectedRawModel2] = useState<Row<SystemDetail>[]>()
+  const columns1 = useSystemsSparePartsColumns({ tableId: tableId1, setSelectedUids: setTable1SelectedUids })
+  const columns2 = useSystemsSparePartsColumns({ tableId: tableId2, setSelectedUids: setTable2SelectedUids })
 
   const tableSettings: PandaTableSettings<SystemDetail> = useMemo(
     () => ({
@@ -43,40 +45,30 @@ export const SystemsSparePartsContainer = () => {
     []
   )
 
-  const table2 = usePandaTable<SystemDetail>({
-    tableId: tableId2,
-    data: sysetms2.systems?.data,
-    columns: columns2.columns,
-    settings: {
-      enableRowSelection: row => !selectedRawModel?.some(system => row.original.uid === system.original.uid),
-      ...tableSettings
-    },
-    getSubRows: row => row.subSystems || []
-  })
-
   const table = usePandaTable<SystemDetail>({
     tableId: tableId1,
     data: sysetms1.systems?.data,
     columns: columns1.columns,
     settings: {
-      enableRowSelection: row => !selectedRawModel2?.some(system => row.original.uid === system.original.uid),
+      enableRowSelection: row => !table2SelectedUids?.some(uid => row.original.uid === uid),
       ...tableSettings
     },
     getSubRows: row => row.subSystems || []
   })
 
-  const table1SelectedRawModel = table.getSelectedRowModel().flatRows
-  const table1SelectedUids = table1SelectedRawModel.map(sel => sel.original.uid)
-  const table2SelectedRawModel = table2.getSelectedRowModel().flatRows
-  const table2SelectedUids = table2SelectedRawModel.map(sel => sel.original.uid)
+  const table2 = usePandaTable<SystemDetail>({
+    tableId: tableId2,
+    data: sysetms2.systems?.data,
+    columns: columns2.columns,
+    settings: {
+      enableRowSelection: row => !table1SelectedUids?.some(uid => row.original.uid === uid),
+      ...tableSettings
+    },
+    getSubRows: row => row.subSystems || []
+  })
 
-  useEffect(() => {
-    setSelectedRawModel2(table2SelectedRawModel)
-  }, [table2SelectedRawModel])
-
-  useEffect(() => {
-    setSelectedRawModel(table1SelectedRawModel)
-  }, [table1SelectedRawModel])
+  const { getSelectedRowModel } = table
+  const { getSelectedRowModel: getSelectedRowModel2 } = table2
 
   const withWarningModal = useWarningModal('Are you sure you want to continue? The system types do not match.')
   const { assignSpareParts, loading } = useAssignSpareParts()
@@ -88,6 +80,8 @@ export const SystemsSparePartsContainer = () => {
         toast.success(data.createSparePartRelation as string, { duration: 10000 })
         table.resetRowSelection()
         table2.resetRowSelection()
+        setTable1SelectedUids([])
+        setTable2SelectedUids([])
       },
       onError: erorr => {
         toast.error(erorr.message)
@@ -96,10 +90,10 @@ export const SystemsSparePartsContainer = () => {
   }
 
   const handleAssignSpareParts = () => {
-    const isSameSystemType = table1SelectedRawModel.every(
+    const isSameSystemType = getSelectedRowModel().flatRows.every(
       system =>
         system.original.systemType !== undefined &&
-        table2SelectedRawModel.some(
+        getSelectedRowModel2().flatRows.some(
           system2 =>
             system2.original.systemType !== undefined &&
             system.original.systemType?.uid === system2.original.systemType?.uid
@@ -116,8 +110,8 @@ export const SystemsSparePartsContainer = () => {
         <SearchBar
           tableId={tableId1}
           useQuery={false}
-          left={<SystemFilterButtonContainer tableId={tableId1} enableQueryURL={false} />}
-          right={<FilterBadges tableId={tableId1} />}
+          left={<FilterMemoized tableId={tableId1} enableQueryURL={false} />}
+          right={<BadgesMemoized tableId={tableId1} />}
           onChange={() => table.resetExpanded()}
         />
         <PandaTableControlled
@@ -149,10 +143,10 @@ export const SystemsSparePartsContainer = () => {
         <SearchBar
           tableId={tableId2}
           useQuery={false}
-          left={<SystemFilterButtonContainer panelSlide="right" tableId={tableId2} enableQueryURL={false} />}
+          left={<FilterMemoized panelSlide="right" tableId={tableId2} enableQueryURL={false} />}
           right={
             <div className="flex">
-              <FilterBadges tableId={tableId2} />
+              <BadgesMemoized tableId={tableId2} />
               <Button
                 primary
                 disabled={table1SelectedUids.length === 0 || table2SelectedUids.length === 0}
