@@ -4,21 +4,21 @@ import { Heading } from '@/components/layout/Heading'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { SystemDetailContext } from '@/pages/system/[uid]'
 
-import { useSubsystemsColumns } from './SubSystems.columns'
+import { useSubsystemsColumns } from '../subsystems/SubSystems.columns'
 
-export const SubSystemsContainer = () => {
+export const SparePartsFor = () => {
   const columns = useSubsystemsColumns()
   const { systemDetail } = useContext(SystemDetailContext)
-  if (!systemDetail?.subSystems || systemDetail.subSystems.length < 1) return null
+  if (!systemDetail?.sparePartsFor || systemDetail.sparePartsFor.length < 1) return null
 
   return (
     <Fragment>
-      <Heading customText="Sub Systems" />
+      <Heading customText="Spare Part For Systems" />
       <PandaTable
         columns={columns}
         tableId={'subsystems'}
         className={'relative overflow-x-auto mb-0 pb-0'}
-        data={systemDetail?.subSystems}
+        data={systemDetail?.sparePartsFor || []}
       />
     </Fragment>
   )

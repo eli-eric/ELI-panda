@@ -175,6 +175,7 @@ export const TextArea = ({
             <Label htmlFor={id} label={label} />
             <textarea
               {...field}
+              value={field.value || ''}
               id={id}
               rows={3}
               disabled={disabled}

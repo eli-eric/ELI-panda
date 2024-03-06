@@ -16,8 +16,6 @@ interface SystemNameCellProps extends CellContext<SystemDetail, any> {
 
 export const SpareNameCell: FC<SystemNameCellProps> = ({ tableId, row, setUid, getValue }) => {
   const { original } = row
-  const valueFirstLetter = getValue().charAt(0)
-  const valueRest = getValue().slice(1)
 
   return (
     <div
@@ -52,29 +50,13 @@ export const SpareNameCell: FC<SystemNameCellProps> = ({ tableId, row, setUid, g
                     <ChevronRightIcon className="w-4 h-4" />
                   )}
                   <span className="pl-1">
-                    <span
-                      className={classNames(
-                        original.physicalItem?.itemUsage?.uid === '25c189d0-0564-43a7-90d9-65b7083bea98' &&
-                          'text-red-900'
-                      )}
-                    >
-                      {valueFirstLetter}
-                    </span>
-                    <span>{valueRest}</span>
+                    <span>{getValue()}</span>
                   </span>
                 </button>
               ) : (
                 <div className="flex items-center">
                   <span className="pl-5">
-                    <span
-                      className={classNames(
-                        original.physicalItem?.itemUsage?.uid === '25c189d0-0564-43a7-90d9-65b7083bea98' &&
-                          'text-red-500'
-                      )}
-                    >
-                      {valueFirstLetter}
-                    </span>
-                    <span>{valueRest}</span>
+                    <span>{getValue()}</span>
                   </span>
                 </div>
               )}
