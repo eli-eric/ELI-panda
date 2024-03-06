@@ -29,13 +29,6 @@ export const SparePartsContainer = () => {
     )
   }
 
-  const Test = () => {
-    return (
-      <div>
-        <span>test333</span>
-      </div>
-    )
-  }
   return (
     <Fragment>
       <Heading customText="Spare Parts">
