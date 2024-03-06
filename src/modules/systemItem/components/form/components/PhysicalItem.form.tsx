@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { useContext } from 'react'
 import { FormattedMessage } from 'react-intl'
+import { v4 } from 'uuid'
 
 import { LinkDecorator } from '@/components/decorators'
 import Combobox from '@/components/form/Combobox'
@@ -48,7 +49,7 @@ export const PhysicalItemForm = () => {
           <FormattedMessage id={propertyMessage.title} values={createMessageValues({ title: 'Properties' })} />
           <ul className="grid grid-cols-4 lg:grid-cols-12 md:grid-cols-6 sm:grid-cols-3 ">
             {properties.map(edge => (
-              <li key={edge.node.uid} className="flex col-span-3">
+              <li key={v4()} className="flex col-span-3">
                 <FormattedMessage
                   id={propertyMessage.property}
                   values={createMessageValues({ name: edge.node.name, value: edge.value, unit: edge.node.unit?.name })}

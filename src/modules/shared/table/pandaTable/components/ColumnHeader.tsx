@@ -1,14 +1,14 @@
 import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
 import type { ColumnOrderState, Header, Table } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
-import { type FC, useContext } from 'react'
+import React, { type FC, useContext } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
 import { classNames } from '@/utils'
 
 import { PandaTableContext } from '../PandaTableCotrolled'
 import { Filter } from './Filter'
-
+import styles from './RowCell.module.css'
 const reorderColumn = (draggedColumnId: string, targetColumnId: string, columnOrder: string[]): ColumnOrderState => {
   columnOrder.splice(
     columnOrder.indexOf(targetColumnId),
@@ -22,11 +22,12 @@ const reorderColumn = (draggedColumnId: string, targetColumnId: string, columnOr
 interface ColumnHeader {
   header: Header<any, any>
   table: Table<any>
+  index: number
 
   data?: any
 }
 
-export const ColumnHeader: FC<ColumnHeader> = ({ header, table }) => {
+export const ColumnHeader: FC<ColumnHeader> = ({ header, table, index: headerIndex }) => {
   const { getState, setColumnOrder } = table
   const { columnOrder } = getState()
   const { column } = header
@@ -50,17 +51,32 @@ export const ColumnHeader: FC<ColumnHeader> = ({ header, table }) => {
     item: () => column,
     type: 'column'
   })
+  const stickyCellsSize = table.getAllColumns().reduce((acc, col, index) => {
+    if (index < headerIndex) {
+      if (header.column.columnDef.meta?.sticky) {
+        return acc + col.getSize() + 45
+      }
+    }
+    return acc
+  }, 0)
 
   return (
     <th
       ref={dropRef}
       colSpan={header.colSpan}
-      style={{ opacity: isDragging ? 0.5 : 1, width: header.getSize() }}
+      style={
+        {
+          opacity: isDragging ? 0.5 : 1,
+          width: header.getSize(),
+          '--left': header.column.columnDef.meta?.sticky ? `${headerIndex === 0 ? 0 : stickyCellsSize}px` : undefined
+        } as React.CSSProperties
+      }
       className={classNames(
         'whitespace-nowrap border-r border-b dark:bg-gray-900 border-gray-400 bg-opacity-75 py-2 pl-3 pr-3 text-left text-xs font-semibold text-gray-900 dark:text-gray-200 backdrop-blur backdrop-filter sm:pl-6 sm:pr-5',
         header.column.columnDef.meta?.sticky
-          ? 'sticky sm:left-0 top-0 text-ellipsis z-40 backdrop-blur-2xl backdrop-filter border-r'
-          : 'sticky top-0 z-10'
+          ? 'sticky top-0 text-ellipsis z-40 backdrop-blur-2xl backdrop-filter border-r'
+          : 'sticky top-0 z-10',
+        styles.cell
       )}
     >
       <div
