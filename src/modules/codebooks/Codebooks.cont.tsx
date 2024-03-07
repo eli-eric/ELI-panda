@@ -1,32 +1,30 @@
-import type { ColumnDef } from '@tanstack/react-table'
+'use client'
 import { useQueryState } from 'next-usequerystate'
 import type { FC } from 'react'
-import { Fragment, memo, useEffect, useMemo, useState } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
+import { Fragment, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { mutate } from 'swr'
 import { useIsFirstRender } from 'usehooks-ts'
 import { v4 as uuid } from 'uuid'
 
 import { PlusButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import Listbox from '@/components/form/Listbox'
-import Card from '@/components/layout/Card'
 import { PageHead } from '@/components/layout/PageHead'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import { useCodebook } from '@/hooks/fetch/useCodebook'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import type { CODEBOOK } from '@/types/constants/codebook'
 
-import { PandaTable } from '../shared/table/pandaTable/PandaTable'
-import { FormCell } from './components/cells/FormCell'
+import CodebookTable from './components/CodebookTable'
 
 const { selectCodebookForm } = message.codebooksPage
-
-const MemoizedTable = memo(PandaTable)
-
-export const CodebooksContainer: FC = () => {
+interface Props {
+  selectedCodebook?: string
+}
+export const CodebooksContainer: FC<Props> = () => {
   const [lastAddedUUID, setLastAddedUUID] = useState<string>()
   const [selectedCodebookQuery, setSelectedCoodebookQuery] = useQueryState('selectedCodebook')
 
@@ -35,8 +33,6 @@ export const CodebooksContainer: FC = () => {
   const { setValue } = formMethods
 
   const isFirstRender = useIsFirstRender()
-
-  const watchCodebook = useWatch({ name: 'codebook', control: formMethods.control })
 
   const { codebooks } = useEndpoint({ query: { editable: true } })
   const { response } = useFetch<{ code: string; type: string }[]>({ url: codebooks })
@@ -49,36 +45,6 @@ export const CodebooksContainer: FC = () => {
     }
   })
 
-  const {
-    data: codebook,
-    mutate,
-    isLoading
-  } = useCodebook(watchCodebook?.name, {
-    limit: 10000
-  })
-
-  const columns = useMemo(
-    (): ColumnDef<CodebookType, any>[] => [
-      {
-        header: 'Name',
-        id: 'name',
-        accessorKey: 'name',
-        enableColumnFilter: true,
-        cell: props => (
-          <FormCell {...props} lastAddedUUID={lastAddedUUID} mutate={mutate} codebookType={watchCodebook?.name} />
-        ),
-        meta: {
-          filter: {
-            type: 'string',
-            codebookCode: watchCodebook?.name,
-            enableColumnFilter: true
-          }
-        }
-      }
-    ],
-    [lastAddedUUID, mutate, watchCodebook]
-  )
-
   useEffect(() => {
     if (isFirstRender) {
       if (selectedCodebookQuery)
@@ -87,11 +53,12 @@ export const CodebooksContainer: FC = () => {
           name: selectedCodebookQuery as CODEBOOK
         })
     }
-  }, [isFirstRender, selectedCodebookQuery, setValue])
+  }, [isFirstRender, setValue, selectedCodebookQuery])
 
   const handleAddNewCodebookValue = () => {
     const id = uuid()
     mutate(
+      `/codebook/${selectedCodebookQuery}?limit=5000&filter=undefined`,
       prev => {
         if (prev) {
           return { data: [{ name: '', uid: '', uuid: id }, ...prev.data], metadata: prev.metadata }
@@ -105,35 +72,20 @@ export const CodebooksContainer: FC = () => {
   return (
     <Fragment>
       <PageHead>
-        <PlusButton buttonSize="large" onClick={handleAddNewCodebookValue} />
+        <PlusButton buttonSize="large" onClick={handleAddNewCodebookValue} disabled={!selectedCodebookQuery} />
         <Form {...{ formMethods }}>
           <Listbox
             {...fields.codebook}
+            placeholder="Select codebook..."
             className={'w-72'}
             onChange={(v: CodebookType) => {
-              setSelectedCoodebookQuery(v.uid)
+              setSelectedCoodebookQuery(v?.uid || null)
             }}
             codebookResponse={response?.map(code => ({ name: code.code, uid: code.code }))}
           />
         </Form>
       </PageHead>
-      <Card>
-        <MemoizedTable
-          {...{
-            tableId: 'codebooks',
-            columns,
-            className: 'border-l pb-0',
-            data: codebook?.data,
-            loading: isLoading,
-            settings: {
-              enableFiltering: true,
-              manualFiltering: false,
-              enableSorting: true,
-              manualSorting: false
-            }
-          }}
-        />
-      </Card>
+      <CodebookTable lastAddedUUID={lastAddedUUID} />
     </Fragment>
   )
 }

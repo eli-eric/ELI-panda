@@ -119,9 +119,9 @@ const Listbox = ({
                     disabled ? 'bg-gray-100' : '',
                     isFilter ? field.value && 'border-2 border-lime-500' : ''
                   )}
-                  placeholder={placeholder}
                 >
                   <span className="block truncate">{value || (customOptions && allowEmptyOption && emptyOption)}</span>
+                  {placeholder && !value && <span className="block truncate text-gray-400">{placeholder}</span>}
                   {!disabled && value && <FormXMarkIcon onClick={handleClear} />}
                   <div className="absolute inset-y-0 right-0 flex items-center pr-2">
                     {unit && <span className="text-gray-400 sm:text-sm">{unit}</span>}
