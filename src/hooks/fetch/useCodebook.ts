@@ -1,3 +1,5 @@
+import { startTransition, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import useSWR from 'swr/immutable'
 
 import type { CODEBOOK } from '@/types/constants/codebook'
@@ -29,16 +31,35 @@ export type CodebookQuery = {
   searchText?: string
   limit?: number
 }
-export const useCodebook = (codebookName?: CODEBOOK, query?: CodebookQuery) => {
+export const useCodebook = (codebookName?: CODEBOOK, query?: CodebookQuery, keepPreviousData: boolean = true) => {
   const filterString = JSON.stringify(query?.filter)
   const { codebook } = useEndpoint({
     path: codebookName,
     query: { ...query, filter: filterString }
   })
-  const { data, mutate, isLoading } = useSWR<CodebookTypeResponse>(codebookName && codebook, fetcher, {
+
+  const [data, setData] = useState<CodebookTypeResponse | undefined>()
+
+  const {
+    data: d,
+    mutate,
+    isLoading,
+    isValidating
+  } = useSWR<CodebookTypeResponse>(codebookName && codebook, fetcher, {
     suspense: false,
-    keepPreviousData: true
+    keepPreviousData,
+    onError: (error, key) => {
+      toast.error(`Failed to fetch codebook: ${codebookName}`)
+    }
   })
 
-  return { data, mutate, isLoading }
+  useEffect(() => {
+    if (d) {
+      startTransition(() => {
+        setData(d)
+      })
+    }
+  }, [d])
+
+  return { data, mutate, isLoading: isLoading || isValidating }
 }
