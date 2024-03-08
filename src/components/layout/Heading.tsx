@@ -21,7 +21,7 @@ export const Heading = ({
   titleNode
 }: HeadingProps) => (
   <div className={classNames('mb-4 border-b border-gray-200 px-2 py-2 sm:px-3', className)}>
-    <div className="-ml-2 -mt-1 flex flex-wrap h-12 items-center justify-between sm:flex-nowrap">
+    <div className="-ml-2 -mt-1 flex h-12 items-center justify-between">
       <div className="ml-2 mt-1 flex items-center w-full">
         <h3 className={classNames('text-lg font-medium', textColor)}>
           {customText ? customText : <FormattedMessage id={text} />}

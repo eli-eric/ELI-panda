@@ -35,6 +35,7 @@ const systemInput = ({ systemForm, systemDetail }: { systemForm; systemDetail })
   isCritical: systemForm.isCritical,
   minimalSpareParstCount: !systemForm.minimalSpareParstCount ? null : Number(systemForm.minimalSpareParstCount),
   systemType: connectAndDisconnectNode(systemForm?.systemType?.uid, systemDetail?.systemType?.uid),
+  responsibleTeam: connectAndDisconnectNode(systemForm?.responsibleTeam?.uid, systemDetail?.responsibleTeam?.uid),
   location: connectAndDisconnectNode(systemForm?.location?.uid, systemDetail?.location?.uid),
   zone: connectAndDisconnectNode(systemForm?.zone?.uid, systemDetail?.zone?.uid),
   responsible: connectAndDisconnectNode(systemForm?.responsible?.uid, systemDetail?.responsible?.uid),

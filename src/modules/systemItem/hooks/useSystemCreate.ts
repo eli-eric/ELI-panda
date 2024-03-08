@@ -66,6 +66,7 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
             deleted: false,
             description: systemForm.description,
             isCritical: systemForm.isCritical,
+            responsibleTeam: connectN(systemForm?.responsibleTeam?.uid),
             minimalSpareParstCount: !systemForm.minimalSpareParstCount
               ? null
               : Number(systemForm.minimalSpareParstCount),

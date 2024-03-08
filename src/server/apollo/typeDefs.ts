@@ -114,6 +114,7 @@ export const typeDefs = gql`
   type ParentPathItem @authentication {
     uid: ID
     name: String
+    systemLevel: SystemLevel
   }
 
   type CatalogueCategory @authentication {
@@ -223,6 +224,7 @@ export const typeDefs = gql`
     systemCode: String
     minimalSpareParstCount: Int
     isCritical: Boolean
+    responsibleTeam: Team @relationship(type: "HAS_RESPONSIBLE_TEAM", direction: OUT)
     subSystems: [System!]! @relationship(type: "HAS_SUBSYSTEM", direction: OUT)
     spareParts: [System!]! @relationship(type: "IS_SPARE_FOR", direction: IN)
     sparePartsFor: [System!]! @relationship(type: "IS_SPARE_FOR", direction: OUT)
@@ -251,10 +253,10 @@ export const typeDefs = gql`
       @cypher(
         statement: """
         OPTIONAL MATCH (parent)-[:HAS_SUBSYSTEM*1..50]->(this)
-        WITH this, reverse(collect({uid: parent.uid, name: parent.name})) AS parentPaths
+        WITH this, reverse(collect({uid: parent.uid, name: parent.name, systemLevel: parent.systemLevel})) AS parentPaths
         WITH this, CASE WHEN size(parentPaths) = 0 THEN [this] ELSE parentPaths END AS finalPaths
         UNWIND finalPaths AS finalPath
-        RETURN {uid: finalPath.uid, name: finalPath.name} as parentPath
+        RETURN {uid: finalPath.uid, name: finalPath.name, systemLevel: finalPath.systemLevel} as parentPath
         """
         columnName: "parentPath"
       )
