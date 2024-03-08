@@ -3,6 +3,7 @@ import toast from 'react-hot-toast'
 import useSWR from 'swr/immutable'
 
 import type { CODEBOOK } from '@/types/constants/codebook'
+import type { SystemLevel } from '@/types/gql/graphql'
 import { fetcher } from '@/utils/fetcher'
 
 import { useEndpoint } from './useEndpoint'
@@ -19,7 +20,13 @@ export type CodebookTypeResponse = {
   data: CodebookType[]
 }
 
-export type CodebookType = { name: string; uid: string; additionalData?: string; code?: string }
+export type CodebookType = {
+  name: string
+  uid: string
+  additionalData?: string
+  code?: string
+  systemLevel?: SystemLevel
+}
 
 export type CodebookFilter = {
   key: string

@@ -120,9 +120,9 @@ export const messages = {
         systemAlias: { label: 'System Alias', placeholder: 'System Alias' },
         systemLevel: { label: 'System Level' }, // system levels codebook - SYSTEM_LEVEL
         parentSystemFilter: { label: 'All subsystems for parent' }, // system levels codebook - SYSTEM_LEVEL
-        parentSystem: {
-          label: 'Parent Key System or Technology unit',
-          placeholder: 'Parent System or technology unit'
+        team: {
+          label: 'Responsible Team',
+          placeholder: 'Select Team...'
         }, // codebook of systems{uid, name},  - SYSTEM
         location: { label: 'Location', placeholder: 'Type here...' }, // locations codebook - LOCATION
         responsiblePerson: { label: 'Responsible Person', placeholder: 'Responsible Person' },

@@ -8,6 +8,10 @@ export const SYSTEM_FIELDS = gql`
     systemAlias
     minimalSpareParstCount
     isCritical
+    responsibleTeam {
+      uid
+      name
+    }
     systemLevel
     description
     subSystems {
@@ -26,6 +30,7 @@ export const SYSTEM_FIELDS = gql`
     parentPath {
       uid
       name
+      systemLevel
     }
     location {
       uid

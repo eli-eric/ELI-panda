@@ -10,6 +10,7 @@ export type SystemDetailFormType = {
   parentPath?: CodebookType[]
   isCritical: boolean // checkbox
   location?: CodebookType // combobox - CODEBOOK.LOCATION
+  responsibleTeam?: CodebookType // listbox - graphql
   minimalSpareParstCount: number
   zone?: CodebookType // combobox
   systemType?: CodebookType // ListBox

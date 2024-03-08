@@ -3,15 +3,18 @@ import Link from 'next/link'
 
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import type { Maybe } from '@/types/gql/graphql'
+import { SystemLevel } from '@/types/gql/graphql'
+import { classNames } from '@/utils'
 
 interface Props {
   name?: Maybe<string>
   link?: string
   setCategoryFilter?: (value: CodebookType) => void
   path?: CodebookType
+  systemLevel?: SystemLevel
 }
 
-const BreadcrumpItem = ({ name, link, setCategoryFilter, path }: Props) => {
+const BreadcrumpItem = ({ name, link, setCategoryFilter, path, systemLevel }: Props) => {
   if (setCategoryFilter && path) {
     return (
       <li key={name} className="flex">
@@ -35,7 +38,11 @@ const BreadcrumpItem = ({ name, link, setCategoryFilter, path }: Props) => {
         {link ? (
           <Link
             href={{ pathname: link }}
-            className="ml-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-200 dark:hover:text-primary-600"
+            className={classNames(
+              'ml-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-200 dark:hover:text-primary-600',
+              systemLevel === SystemLevel.KeySystems && 'text-primary-600 dark:text-primary-400',
+              systemLevel === SystemLevel.TechnologyUnit && 'text-lime-700 dark:text-lime-200'
+            )}
           >
             {name}
           </Link>

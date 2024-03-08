@@ -8880,6 +8880,7 @@ export type PageInfo = {
 export type ParentPathItem = {
   __typename?: 'ParentPathItem';
   name?: Maybe<Scalars['String']['output']>;
+  systemLevel?: Maybe<SystemLevel>;
   uid?: Maybe<Scalars['ID']['output']>;
 };
 
@@ -8892,6 +8893,7 @@ export type ParentPathItemAggregateSelection = {
 
 export type ParentPathItemCreateInput = {
   name?: InputMaybe<Scalars['String']['input']>;
+  systemLevel?: InputMaybe<SystemLevel>;
   uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -8911,11 +8913,13 @@ export type ParentPathItemOptions = {
 /** Fields to sort ParentPathItems by. The order in which sorts are applied is not guaranteed when specifying many fields in one ParentPathItemSort object. */
 export type ParentPathItemSort = {
   name?: InputMaybe<SortDirection>;
+  systemLevel?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
 };
 
 export type ParentPathItemUpdateInput = {
   name?: InputMaybe<Scalars['String']['input']>;
+  systemLevel?: InputMaybe<SystemLevel>;
   uid?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -8928,6 +8932,8 @@ export type ParentPathItemWhere = {
   name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   name_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   name_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  systemLevel?: InputMaybe<SystemLevel>;
+  systemLevel_IN?: InputMaybe<Array<InputMaybe<SystemLevel>>>;
   uid?: InputMaybe<Scalars['ID']['input']>;
   uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
   uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
@@ -11029,6 +11035,9 @@ export type System = {
   responsible?: Maybe<Employee>;
   responsibleAggregate?: Maybe<SystemEmployeeResponsibleAggregationSelection>;
   responsibleConnection: SystemResponsibleConnection;
+  responsibleTeam?: Maybe<Team>;
+  responsibleTeamAggregate?: Maybe<SystemTeamResponsibleTeamAggregationSelection>;
+  responsibleTeamConnection: SystemResponsibleTeamConnection;
   spareParts: Array<System>;
   sparePartsAggregate?: Maybe<SystemSystemSparePartsAggregationSelection>;
   sparePartsConnection: SystemSparePartsConnection;
@@ -11205,6 +11214,28 @@ export type SystemResponsibleConnectionArgs = {
 };
 
 
+export type SystemResponsibleTeamArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<TeamOptions>;
+  where?: InputMaybe<TeamWhere>;
+};
+
+
+export type SystemResponsibleTeamAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<TeamWhere>;
+};
+
+
+export type SystemResponsibleTeamConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<SystemResponsibleTeamConnectionSort>>;
+  where?: InputMaybe<SystemResponsibleTeamConnectionWhere>;
+};
+
+
 export type SystemSparePartsArgs = {
   directed?: InputMaybe<Scalars['Boolean']['input']>;
   options?: InputMaybe<SystemOptions>;
@@ -11333,6 +11364,7 @@ export type SystemConnectInput = {
   parentSystem?: InputMaybe<SystemParentSystemConnectFieldInput>;
   physicalItem?: InputMaybe<SystemPhysicalItemConnectFieldInput>;
   responsible?: InputMaybe<SystemResponsibleConnectFieldInput>;
+  responsibleTeam?: InputMaybe<SystemResponsibleTeamConnectFieldInput>;
   spareParts?: InputMaybe<Array<SystemSparePartsConnectFieldInput>>;
   sparePartsFor?: InputMaybe<Array<SystemSparePartsForConnectFieldInput>>;
   subSystems?: InputMaybe<Array<SystemSubSystemsConnectFieldInput>>;
@@ -11358,6 +11390,7 @@ export type SystemCreateInput = {
   parentSystem?: InputMaybe<SystemParentSystemFieldInput>;
   physicalItem?: InputMaybe<SystemPhysicalItemFieldInput>;
   responsible?: InputMaybe<SystemResponsibleFieldInput>;
+  responsibleTeam?: InputMaybe<SystemResponsibleTeamFieldInput>;
   spareParts?: InputMaybe<SystemSparePartsFieldInput>;
   sparePartsFor?: InputMaybe<SystemSparePartsForFieldInput>;
   subSystems?: InputMaybe<SystemSubSystemsFieldInput>;
@@ -11449,6 +11482,7 @@ export type SystemDeleteInput = {
   parentSystem?: InputMaybe<SystemParentSystemDeleteFieldInput>;
   physicalItem?: InputMaybe<SystemPhysicalItemDeleteFieldInput>;
   responsible?: InputMaybe<SystemResponsibleDeleteFieldInput>;
+  responsibleTeam?: InputMaybe<SystemResponsibleTeamDeleteFieldInput>;
   spareParts?: InputMaybe<Array<SystemSparePartsDeleteFieldInput>>;
   sparePartsFor?: InputMaybe<Array<SystemSparePartsForDeleteFieldInput>>;
   subSystems?: InputMaybe<Array<SystemSubSystemsDeleteFieldInput>>;
@@ -11464,6 +11498,7 @@ export type SystemDisconnectInput = {
   parentSystem?: InputMaybe<SystemParentSystemDisconnectFieldInput>;
   physicalItem?: InputMaybe<SystemPhysicalItemDisconnectFieldInput>;
   responsible?: InputMaybe<SystemResponsibleDisconnectFieldInput>;
+  responsibleTeam?: InputMaybe<SystemResponsibleTeamDisconnectFieldInput>;
   spareParts?: InputMaybe<Array<SystemSparePartsDisconnectFieldInput>>;
   sparePartsFor?: InputMaybe<Array<SystemSparePartsForDisconnectFieldInput>>;
   subSystems?: InputMaybe<Array<SystemSubSystemsDisconnectFieldInput>>;
@@ -12511,6 +12546,7 @@ export type SystemRelationInput = {
   parentSystem?: InputMaybe<SystemParentSystemCreateFieldInput>;
   physicalItem?: InputMaybe<SystemPhysicalItemCreateFieldInput>;
   responsible?: InputMaybe<SystemResponsibleCreateFieldInput>;
+  responsibleTeam?: InputMaybe<SystemResponsibleTeamCreateFieldInput>;
   spareParts?: InputMaybe<Array<SystemSparePartsCreateFieldInput>>;
   sparePartsFor?: InputMaybe<Array<SystemSparePartsForCreateFieldInput>>;
   subSystems?: InputMaybe<Array<SystemSubSystemsCreateFieldInput>>;
@@ -12659,6 +12695,99 @@ export type SystemResponsibleRelationship = {
   __typename?: 'SystemResponsibleRelationship';
   cursor: Scalars['String']['output'];
   node: Employee;
+};
+
+export type SystemResponsibleTeamAggregateInput = {
+  AND?: InputMaybe<Array<SystemResponsibleTeamAggregateInput>>;
+  NOT?: InputMaybe<SystemResponsibleTeamAggregateInput>;
+  OR?: InputMaybe<Array<SystemResponsibleTeamAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<SystemResponsibleTeamNodeAggregationWhereInput>;
+};
+
+export type SystemResponsibleTeamConnectFieldInput = {
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<TeamConnectWhere>;
+};
+
+export type SystemResponsibleTeamConnection = {
+  __typename?: 'SystemResponsibleTeamConnection';
+  edges: Array<SystemResponsibleTeamRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type SystemResponsibleTeamConnectionSort = {
+  node?: InputMaybe<TeamSort>;
+};
+
+export type SystemResponsibleTeamConnectionWhere = {
+  AND?: InputMaybe<Array<SystemResponsibleTeamConnectionWhere>>;
+  NOT?: InputMaybe<SystemResponsibleTeamConnectionWhere>;
+  OR?: InputMaybe<Array<SystemResponsibleTeamConnectionWhere>>;
+  node?: InputMaybe<TeamWhere>;
+};
+
+export type SystemResponsibleTeamCreateFieldInput = {
+  node: TeamCreateInput;
+};
+
+export type SystemResponsibleTeamDeleteFieldInput = {
+  where?: InputMaybe<SystemResponsibleTeamConnectionWhere>;
+};
+
+export type SystemResponsibleTeamDisconnectFieldInput = {
+  where?: InputMaybe<SystemResponsibleTeamConnectionWhere>;
+};
+
+export type SystemResponsibleTeamFieldInput = {
+  connect?: InputMaybe<SystemResponsibleTeamConnectFieldInput>;
+  create?: InputMaybe<SystemResponsibleTeamCreateFieldInput>;
+};
+
+export type SystemResponsibleTeamNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<SystemResponsibleTeamNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<SystemResponsibleTeamNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<SystemResponsibleTeamNodeAggregationWhereInput>>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type SystemResponsibleTeamRelationship = {
+  __typename?: 'SystemResponsibleTeamRelationship';
+  cursor: Scalars['String']['output'];
+  node: Team;
+};
+
+export type SystemResponsibleTeamUpdateConnectionInput = {
+  node?: InputMaybe<TeamUpdateInput>;
+};
+
+export type SystemResponsibleTeamUpdateFieldInput = {
+  connect?: InputMaybe<SystemResponsibleTeamConnectFieldInput>;
+  create?: InputMaybe<SystemResponsibleTeamCreateFieldInput>;
+  delete?: InputMaybe<SystemResponsibleTeamDeleteFieldInput>;
+  disconnect?: InputMaybe<SystemResponsibleTeamDisconnectFieldInput>;
+  update?: InputMaybe<SystemResponsibleTeamUpdateConnectionInput>;
+  where?: InputMaybe<SystemResponsibleTeamConnectionWhere>;
 };
 
 export type SystemResponsibleUpdateConnectionInput = {
@@ -13374,6 +13503,18 @@ export type SystemSystemTypeUpdateFieldInput = {
   disconnect?: InputMaybe<SystemSystemTypeDisconnectFieldInput>;
   update?: InputMaybe<SystemSystemTypeUpdateConnectionInput>;
   where?: InputMaybe<SystemSystemTypeConnectionWhere>;
+};
+
+export type SystemTeamResponsibleTeamAggregationSelection = {
+  __typename?: 'SystemTeamResponsibleTeamAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<SystemTeamResponsibleTeamNodeAggregateSelection>;
+};
+
+export type SystemTeamResponsibleTeamNodeAggregateSelection = {
+  __typename?: 'SystemTeamResponsibleTeamNodeAggregateSelection';
+  name: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
 };
 
 export type SystemType = {
@@ -14094,6 +14235,7 @@ export type SystemUpdateInput = {
   parentSystem?: InputMaybe<SystemParentSystemUpdateFieldInput>;
   physicalItem?: InputMaybe<SystemPhysicalItemUpdateFieldInput>;
   responsible?: InputMaybe<SystemResponsibleUpdateFieldInput>;
+  responsibleTeam?: InputMaybe<SystemResponsibleTeamUpdateFieldInput>;
   spareParts?: InputMaybe<Array<SystemSparePartsUpdateFieldInput>>;
   sparePartsFor?: InputMaybe<Array<SystemSparePartsForUpdateFieldInput>>;
   subSystems?: InputMaybe<Array<SystemSubSystemsUpdateFieldInput>>;
@@ -14185,6 +14327,11 @@ export type SystemWhere = {
   responsibleAggregate?: InputMaybe<SystemResponsibleAggregateInput>;
   responsibleConnection?: InputMaybe<SystemResponsibleConnectionWhere>;
   responsibleConnection_NOT?: InputMaybe<SystemResponsibleConnectionWhere>;
+  responsibleTeam?: InputMaybe<TeamWhere>;
+  responsibleTeamAggregate?: InputMaybe<SystemResponsibleTeamAggregateInput>;
+  responsibleTeamConnection?: InputMaybe<SystemResponsibleTeamConnectionWhere>;
+  responsibleTeamConnection_NOT?: InputMaybe<SystemResponsibleTeamConnectionWhere>;
+  responsibleTeam_NOT?: InputMaybe<TeamWhere>;
   responsible_NOT?: InputMaybe<EmployeeWhere>;
   sparePartsAggregate?: InputMaybe<SystemSparePartsAggregateInput>;
   /** Return Systems where all of the related SystemSparePartsConnections match this filter */
