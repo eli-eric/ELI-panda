@@ -3,6 +3,7 @@ import { Fragment, useContext } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
+import { Tooltip } from '@/components/Tooltip'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { SystemDetailContext } from '@/pages/system/[uid]'
@@ -19,13 +20,18 @@ export const SparePartsContainer = () => {
 
   const AssignSparePartButton = () => {
     return (
-      <PlusButton
-        primary
-        onClick={() => {
-          setFilter('name')(systemDetail?.name)
-          router.push(PATH.SPARE_PARTS)
-        }}
-      />
+      <Tooltip content="Redirect to assign Spare Part page">
+        <div>
+          <PlusButton
+            primary
+            buttonSize="large"
+            onClick={() => {
+              setFilter('name')(systemDetail?.name)
+              router.push(PATH.SPARE_PARTS)
+            }}
+          />
+        </div>
+      </Tooltip>
     )
   }
 
