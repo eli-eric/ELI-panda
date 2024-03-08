@@ -18,6 +18,9 @@ const MemoizedSystemGallery = memo(ImageGallery)
 
 import { useRouter } from 'next/router'
 
+import CheckBox from '@/components/form/CheckBox'
+import { Input } from '@/components/form/Input'
+import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import usePermission from '@/hooks/usePermission'
@@ -31,6 +34,7 @@ import { useSystemUpdate } from '../../hooks/useSystemUpdate'
 import type { SystemDetailFormType } from '../../types/form'
 import { getColorBySystemLevel } from '../../utils'
 import { SystemItemCard } from './components/SystemItem.card'
+import useSystemEditFormFields from './SystemForm.fields'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
@@ -44,6 +48,7 @@ const FormCard = ({ children, className }: CardProps) => (
 export const SystemForm = () => {
   const { systemDetail } = useContext(SystemDetailContext)
   const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
+  const fields = useSystemEditFormFields()
 
   const router = useRouter()
   const uid = router.query.uid as string | undefined
@@ -105,6 +110,16 @@ export const SystemForm = () => {
           />
         </SystemMainForm>
         {systemDetail?.physicalItem && <SystemItemCard />}
+        <Card className="border-t border-gray-400">
+          <Grid>
+            <Col sm={3} md={5} lg={2}>
+              <Input type="number" defaultValue={''} {...fields.minimalSpareParstCount} />
+            </Col>
+            <Col sm={3} md={4} lg={2}>
+              <CheckBox {...fields.isCritical} label="Is critical" className="items-end pb-2" />
+            </Col>
+          </Grid>
+        </Card>
       </FormCard>
       <DevTool control={formMethods.control} />
     </Form>

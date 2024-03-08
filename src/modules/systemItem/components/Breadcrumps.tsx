@@ -12,9 +12,9 @@ interface BreadcrumbsProps {
 const Breadcrumbs = ({ parentPath }: BreadcrumbsProps) => (
   <BreadcrumpContainer homeLink={PATH.SYSTEMS}>
     <Fragment>
-      {parentPath?.map((codebook, i) => {
-        const link = PATH.SYSTEM + '/' + codebook.uid
-        return <BreadcrumpItem key={i} name={codebook?.name} link={link} />
+      {parentPath?.map((system, i) => {
+        const link = PATH.SYSTEM + '/' + system.uid
+        return <BreadcrumpItem key={i} name={system?.name} systemLevel={system.systemLevel} link={link} />
       })}
     </Fragment>
   </BreadcrumpContainer>
