@@ -55,7 +55,8 @@ export const Input = ({
   onChange,
   unit,
   defaultValue,
-  isFilter
+  isFilter,
+  step = '0.001'
 }: InputProps) => {
   const { control } = useFormContext()
 
@@ -96,10 +97,10 @@ export const Input = ({
             <div hidden={hidden} className="relative flex w-full">
               <input
                 {...field}
+                step={step}
                 value={field.value || ''}
                 id={idHtml}
                 hidden={hidden}
-                step="0.001"
                 type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
                 disabled={disabled}
                 onChange={e => {

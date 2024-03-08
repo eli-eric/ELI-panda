@@ -113,7 +113,7 @@ export const SystemForm = () => {
         <Card className="border-t border-gray-400">
           <Grid>
             <Col sm={3} md={5} lg={2}>
-              <Input type="number" defaultValue={''} {...fields.minimalSpareParstCount} />
+              <Input step={1} type="number" defaultValue={''} {...fields.minimalSpareParstCount} />
             </Col>
             <Col sm={3} md={4} lg={2}>
               <CheckBox {...fields.isCritical} label="Is critical" className="items-end pb-2" />
