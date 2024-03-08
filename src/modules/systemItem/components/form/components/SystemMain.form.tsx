@@ -1,7 +1,6 @@
 import { Fragment } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
-import CheckBox from '@/components/form/CheckBox'
 import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
@@ -94,17 +93,6 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
               setNewEmployee={setNewMaintainedBy}
               setDisconnectEmployee={setDisconnectMaintainedBy}
             />
-          </Col>
-        </Grid>
-      </Card>
-
-      <Card className="border-t border-gray-400">
-        <Grid>
-          <Col sm={3} md={5} lg={2}>
-            <Input type="number" defaultValue={''} {...fields.minimalSpareParstCount} />
-          </Col>
-          <Col sm={3} md={4} lg={2}>
-            <CheckBox {...fields.isCritical} label="Is critical" className="items-end pb-2" />
           </Col>
         </Grid>
       </Card>
