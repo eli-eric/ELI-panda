@@ -12,11 +12,16 @@ import { useSparePartsColumns } from './SpareParts.columns'
 interface ShowSpareButtonProps {
   tableId: string
   uid: string
+  sparesIn: number
+  sparesOut: number
 }
 
-export const ShowSpareButton: FC<ShowSpareButtonProps> = ({ uid, tableId }) => {
+export const ShowSpareButton: FC<ShowSpareButtonProps> = ({ uid, tableId, sparesIn, sparesOut }) => {
   const setSpareShow = useModal(<SparePartsModal uid={uid} />)
   const setSpareForShow = useModal(<SparePartsForModal uid={uid} />)
+  if (tableId === 'spare-parts' && sparesOut === 0) return null
+  if (tableId === 'for-system' && sparesIn === 0) return null
+
   return <TableStatsButton onClick={tableId === 'spare-parts' ? setSpareForShow() : setSpareShow()} />
 }
 
