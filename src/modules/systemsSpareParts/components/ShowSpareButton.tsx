@@ -19,8 +19,8 @@ interface ShowSpareButtonProps {
 export const ShowSpareButton: FC<ShowSpareButtonProps> = ({ uid, tableId, sparesIn, sparesOut }) => {
   const setSpareShow = useModal(<SparePartsModal uid={uid} />)
   const setSpareForShow = useModal(<SparePartsForModal uid={uid} />)
-  if (tableId === 'spare-parts' && sparesOut === 0) return null
-  if (tableId === 'for-system' && sparesIn === 0) return null
+  if (tableId === 'spare-parts' && (sparesOut === 0 || !sparesOut)) return null
+  if (tableId === 'for-system' && (sparesIn === 0 || !sparesIn)) return null
 
   return <TableStatsButton onClick={tableId === 'spare-parts' ? setSpareForShow() : setSpareShow()} />
 }
