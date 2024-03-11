@@ -16,6 +16,7 @@ interface SystemNameCellProps extends CellContext<SystemDetail, any> {
 
 export const SpareNameCell: FC<SystemNameCellProps> = ({ tableId, row, setUid, getValue }) => {
   const { original } = row
+  const { sparesIn, sparesOut } = original
 
   return (
     <div
@@ -65,7 +66,7 @@ export const SpareNameCell: FC<SystemNameCellProps> = ({ tableId, row, setUid, g
         </div>
 
         <TableButtonsWrapper>
-          <ShowSpareButton tableId={tableId} uid={original.uid} />
+          <ShowSpareButton tableId={tableId} uid={original.uid} sparesIn={sparesIn} sparesOut={sparesOut} />
         </TableButtonsWrapper>
       </div>
     </div>
