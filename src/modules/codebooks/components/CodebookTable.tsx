@@ -1,13 +1,15 @@
 'use client'
-import type { ColumnDef } from '@tanstack/react-table'
+import { type ColumnDef } from '@tanstack/react-table'
 import { useQueryState } from 'next-usequerystate'
 import type { FC } from 'react'
 import { useMemo } from 'react'
 
-import Card from '@/components/layout/Card'
+import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
+import ProgressBarComponent from '@/components/progress-bar.comp'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useCodebook } from '@/hooks/fetch/useCodebook'
-import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
+import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
+import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
 import type { CODEBOOK } from '@/types/constants/codebook'
 
 import { FormCell } from './cells/FormCell'
@@ -51,26 +53,44 @@ const CodebookTable: FC<Props> = ({ lastAddedUUID }) => {
     [lastAddedUUID, mutate, selectedCodebookQuery]
   )
 
+  const table = usePandaTable<CodebookType>({
+    tableId: 'codebooks',
+    data: codebook?.data || [],
+    columns,
+    settings: {
+      enableFiltering: true,
+      manualFiltering: false,
+      enableSorting: true,
+      manualSorting: false,
+      enablePagination: true
+    }
+  })
+
+  if (isLoading) return <ProgressBarComponent />
+
   return (
-    <Card>
+    <div className="mx-auto max-w-7xl">
       {selectedCodebookQuery && codebook?.data && codebook?.data.length > 0 && (
-        <PandaTable
-          {...{
-            tableId: 'codebooks',
-            columns,
-            className: 'border-l pb-0',
-            data: codebook?.data,
-            loading: isLoading,
-            settings: {
-              enableFiltering: true,
-              manualFiltering: false,
-              enableSorting: true,
-              manualSorting: false
-            }
-          }}
-        />
+        <TableLayoutContainer>
+          <PandaTableControlled
+            {...{
+              table,
+              tableId: 'codebooks',
+              className: 'relative overflow-scroll scrollbar-style border-l',
+              data: codebook?.data,
+              loading: isLoading,
+              settings: {
+                enableFiltering: true,
+                manualFiltering: false,
+                enablePagination: true,
+                enableSorting: true,
+                manualSorting: false
+              }
+            }}
+          />
+        </TableLayoutContainer>
       )}
-    </Card>
+    </div>
   )
 }
 

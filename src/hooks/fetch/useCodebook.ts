@@ -55,7 +55,7 @@ export const useCodebook = (codebookName?: CODEBOOK, query?: CodebookQuery, keep
   } = useSWR<CodebookTypeResponse>(codebookName && codebook, fetcher, {
     suspense: false,
     keepPreviousData,
-    onError: (error, key) => {
+    onError: () => {
       toast.error(`Failed to fetch codebook: ${codebookName}`)
     }
   })
