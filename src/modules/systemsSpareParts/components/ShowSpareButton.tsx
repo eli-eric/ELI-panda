@@ -12,8 +12,8 @@ import { useSparePartsColumns } from './SpareParts.columns'
 interface ShowSpareButtonProps {
   tableId: string
   uid: string
-  sparesIn: number
-  sparesOut: number
+  sparesIn?: number
+  sparesOut?: number
 }
 
 export const ShowSpareButton: FC<ShowSpareButtonProps> = ({ uid, tableId, sparesIn, sparesOut }) => {

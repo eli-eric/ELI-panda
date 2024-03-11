@@ -15,8 +15,8 @@ type SystemStatistics = {
 export type SystemDetail = {
   uid: string // from router
   name: string // input
-  sparesIn: number
-  sparesOut: number
+  sparesIn?: number
+  sparesOut?: number
   parentUid?: string
   systemLevel?: SystemLevel
   systemCode?: string // automaticky generovaný viz system edit - api dodá J.Š.
