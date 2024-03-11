@@ -39,6 +39,7 @@ export type PandaTableSettings<T> = {
   enableColumnReordering?: boolean
   manualSorting?: boolean
   enableFiltering?: boolean
+  enablePagination?: boolean
   manualFiltering?: boolean
   enableMultiRowSelection?: boolean | ((row: Row<T>) => boolean) | undefined
 }

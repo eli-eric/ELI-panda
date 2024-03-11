@@ -19,6 +19,7 @@ export const TableLayoutContainer = ({ children, deps, className }: Props) => {
       const handleResize = () => {
         const searchBar = document.getElementById('search-bar')?.clientHeight || 0
         const tableHeading = document.getElementById('table-heading')?.clientHeight || 0
+        const pageHead = document.getElementById('page-head')?.clientHeight || 0
         const emptyResults = document.getElementById('empty-results')?.clientHeight || 0
         const columnHiding = document.getElementById('column-hiding')?.clientHeight || 0
         const categoryList = document.getElementById('category-list')?.clientHeight || 0
@@ -28,6 +29,7 @@ export const TableLayoutContainer = ({ children, deps, className }: Props) => {
         const height =
           searchBar +
           tableHeading +
+          pageHead +
           columnHiding +
           categoryList +
           cataloguePaging +
