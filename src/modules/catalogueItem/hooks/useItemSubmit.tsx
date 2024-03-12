@@ -31,16 +31,14 @@ const useItemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>)
           ...prev,
           data: prev.data.map(item => {
             if (item.uid === responseUid) {
-              return {
-                ...data
-              }
+              return { uid: uid, ...data }
             }
             return item
           })
         }),
         { revalidate: false }
       )
-      mutate(catalogueItem, () => data, { revalidate: false })
+      mutate(catalogueItem, () => ({ uid: uid, ...data }), { revalidate: false })
     },
     onError: () => {
       toast.error('Error saving item')
