@@ -1,4 +1,4 @@
-import type { ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef, PaginationState } from '@tanstack/react-table'
 import {
   getCoreRowModel,
   getExpandedRowModel,
@@ -6,9 +6,11 @@ import {
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
+import { useState } from 'react'
 
 import type { PandaTableSettings } from '../PandaTable'
 import { fuzzyFilter } from '../utils'
@@ -34,6 +36,7 @@ export const usePandaTable = <T>({ tableId, columns, settings, data, getSubRows 
     enableQueryURL = false,
     enableRowSelection = false,
     manualSorting = true,
+    enablePagination = false,
     enableFiltering = false,
     manualFiltering = true,
     enableMultiRowSelection = false
@@ -45,6 +48,10 @@ export const usePandaTable = <T>({ tableId, columns, settings, data, getSubRows 
   const [expanded, setExpanded] = useExpanding(tableId)
   const [columnFilters, setColumnFilters] = useFilters(tableId, enableQueryURL)
   const [rowSelection, setRowSelection] = useRowSelection(tableId)
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 50
+  })
 
   // react-table hook
   const table = useReactTable<T>({
@@ -55,6 +62,7 @@ export const usePandaTable = <T>({ tableId, columns, settings, data, getSubRows 
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
+    getPaginationRowModel: enablePagination ? getPaginationRowModel() : undefined,
     getSubRows,
     onExpandedChange: setExpanded,
     onSortingChange: setSorting,
@@ -62,6 +70,7 @@ export const usePandaTable = <T>({ tableId, columns, settings, data, getSubRows 
     onColumnVisibilityChange: setColumnVisibility,
     onColumnFiltersChange: setColumnFilters,
     onRowSelectionChange: setRowSelection || {},
+    onPaginationChange: setPagination,
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -72,9 +81,10 @@ export const usePandaTable = <T>({ tableId, columns, settings, data, getSubRows 
     manualFiltering,
     enableRowSelection,
     enableMultiRowSelection,
+    manualPagination: !enablePagination,
     enableColumnFilters: enableFiltering,
     enableSubRowSelection: true,
-    state: { sorting, expanded, columnOrder, columnVisibility, columnFilters, rowSelection }
+    state: { sorting, expanded, columnOrder, columnVisibility, columnFilters, rowSelection, pagination }
   })
 
   return table

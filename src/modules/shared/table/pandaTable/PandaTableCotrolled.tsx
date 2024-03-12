@@ -3,6 +3,7 @@ import { createContext, Fragment } from 'react'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
+import PaginationComponent from '@/components/table/Pagination.comp'
 import { classNames } from '@/utils'
 
 import { TableBody } from './components/TableBody'
@@ -43,7 +44,7 @@ export const PandaTableControlled = ({
   getRowProps = defaultPropGetter,
   tableHeading
 }: Props) => {
-  const { enableFooter = false, enableColumnHiding = false } = settings || {}
+  const { enableFooter = false, enableColumnHiding = false, enablePagination = false } = settings || {}
 
   return (
     <PandaTableContext.Provider
@@ -77,6 +78,20 @@ export const PandaTableControlled = ({
           {data?.length === 0 && <EmptyResults />}
         </div>
       </div>
+      {enablePagination && (
+        <PaginationComponent
+          page={table.getState().pagination.pageIndex + 1}
+          pageSize={50}
+          pageNumbers={table.getPageCount()}
+          itemsTotalCount={data?.length}
+          nextPageHandler={() => {
+            table.nextPage()
+          }}
+          previousPageHandler={() => {
+            table.previousPage()
+          }}
+        />
+      )}
     </PandaTableContext.Provider>
   )
 }
