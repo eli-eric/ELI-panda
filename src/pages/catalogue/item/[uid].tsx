@@ -23,7 +23,6 @@ interface Props {
 
 const CatalogueItemDetailPage: NextPage = ({ uid }: Props) => {
   const intl = useIntl()
-  console.log('uid', uid)
   return (
     <Fragment>
       <Head>
