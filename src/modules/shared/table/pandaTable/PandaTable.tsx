@@ -87,7 +87,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
     } = settings || {}
 
     const [columnVisibility, setColumnVisibility] = useVisibility(tableId)
-    const [columnOrder, setColumnOrder] = useOrdering(tableId, columns)
+    const [columnOrder, setColumnOrder] = useOrdering(tableId)
     const [sorting, setSorting] = useSorting(tableId, enableQueryURL)
     const [expanded, setExpanded] = useExpanding(tableId)
     const [columnFilters, setColumnFilters] = useFilters(tableId, enableQueryURL)
