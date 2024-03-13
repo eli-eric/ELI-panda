@@ -4,7 +4,6 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import { useForceChangePassword } from '@/hooks/useForceChangePassword'
 import { CodebooksContainer } from '@/modules/codebooks/Codebooks.cont'
 
 const messages = message.orderItem
@@ -14,7 +13,6 @@ interface Props {
 
 const CodeBookEditorPage: NextPage = ({ selectedCodebook }: Props): JSX.Element => {
   const intl = useIntl()
-  useForceChangePassword()
 
   return (
     <Fragment>

@@ -33,12 +33,7 @@ const Group = ({ name, remove, index, moveDown, moveUp, lenght }: groupProps) =>
             <MoveButtons moveDown={moveDown} moveUp={moveUp} lenght={lenght} index={index} />
             <Input name={`${name}.name`} placeholder="Group Name" />
             <Button rounded="rounded-r-md" onClick={handleRemoveGroup}>
-              <TrashIcon
-                className="h-4 w-4
-
- text-red-700"
-                aria-hidden="true"
-              />
+              <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
             </Button>
           </span>
         </div>

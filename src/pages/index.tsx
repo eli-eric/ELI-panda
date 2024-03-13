@@ -23,23 +23,39 @@ const LoginPage: NextPage = (): JSX.Element => {
   const handleLoginSubmit = data => {
     setLoading(true)
     setErrorMessage(undefined)
-    signIn('credentials', {
-      redirect: false,
-      callbackUrl: callbackUrl,
-      ...data
-    })
-      .then(response => {
-        if (response?.error) {
-          setErrorMessage('Wrong username or password!')
+    if (data.username.includes('@eli-beams.eu')) {
+      signIn('azure-ad-beamlines')
+        .then(response => {
+          if (response?.error) {
+            setErrorMessage('Something went wrong.')
+            setLoading(false)
+          }
+          if (response?.ok) {
+            router.push(callbackUrl)
+          }
+        })
+        .finally(() => {
           setLoading(false)
-        }
-        if (response?.ok) {
-          router.push(callbackUrl)
-        }
+        })
+    } else {
+      signIn('credentials', {
+        redirect: false,
+        callbackUrl: callbackUrl,
+        ...data
       })
-      .finally(() => {
-        setLoading(false)
-      })
+        .then(response => {
+          if (response?.error) {
+            setErrorMessage('Wrong username or password!')
+            setLoading(false)
+          }
+          if (response?.ok) {
+            router.push(callbackUrl)
+          }
+        })
+        .finally(() => {
+          setLoading(false)
+        })
+    }
   }
 
   return (
