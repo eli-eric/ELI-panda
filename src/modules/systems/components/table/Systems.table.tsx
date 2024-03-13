@@ -65,7 +65,7 @@ export const SystemsTable = ({
         tableId={tableId}
         getSubRows={row => row.subSystems}
         getRowProps={getRowProps}
-        settings={{ ...settings, enableSorting: false }}
+        settings={{ ...settings, enableSorting: false, enableColumnReordering: false }}
         className={className}
       />
       <Pagination

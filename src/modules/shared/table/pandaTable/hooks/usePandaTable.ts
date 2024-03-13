@@ -39,11 +39,12 @@ export const usePandaTable = <T>({ tableId, columns, settings, data, getSubRows 
     enablePagination = false,
     enableFiltering = false,
     manualFiltering = true,
-    enableMultiRowSelection = false
+    enableMultiRowSelection = false,
+    enableColumnReordering = false
   } = settings || {}
 
   const [columnVisibility, setColumnVisibility] = useVisibility(tableId)
-  const [columnOrder, setColumnOrder] = useOrdering(tableId, columns)
+  const [columnOrder, setColumnOrder] = useOrdering(tableId)
   const [sorting, setSorting] = useSorting(tableId, enableQueryURL)
   const [expanded, setExpanded] = useExpanding(tableId)
   const [columnFilters, setColumnFilters] = useFilters(tableId, enableQueryURL)
@@ -84,7 +85,15 @@ export const usePandaTable = <T>({ tableId, columns, settings, data, getSubRows 
     manualPagination: !enablePagination,
     enableColumnFilters: enableFiltering,
     enableSubRowSelection: true,
-    state: { sorting, expanded, columnOrder, columnVisibility, columnFilters, rowSelection, pagination }
+    state: {
+      sorting,
+      expanded,
+      columnOrder: enableColumnReordering ? columnOrder : undefined,
+      columnVisibility,
+      columnFilters,
+      rowSelection,
+      pagination
+    }
   })
 
   return table

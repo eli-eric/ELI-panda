@@ -59,8 +59,7 @@ export const useSystemsSparePartsColumns = ({ tableId, setSelectedUids }: System
     (): ColumnDef<SystemDetail, any>[] => [
       {
         id: 'icons',
-        header: 'icon',
-        size: 40,
+        size: 20,
         meta: { sticky: true },
         cell: IconCell
       },
