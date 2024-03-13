@@ -13,7 +13,6 @@ import { message } from 'src/i18n/src/messages'
 
 import { Tile, TileContainer } from '@/components/card/tile.comp'
 import { ReleasesContainer } from '@/components/Releases.cont'
-import { useForceChangePassword } from '@/hooks/useForceChangePassword'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
@@ -53,7 +52,6 @@ const messages = message.dashboardPage
 
 const DashboardPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
-  useForceChangePassword()
 
   return (
     <Fragment>

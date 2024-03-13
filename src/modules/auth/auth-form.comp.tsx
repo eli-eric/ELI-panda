@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { signIn } from 'next-auth/react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
@@ -44,6 +45,44 @@ const AuthFormComponent = ({ onSubmit, loading }: Props) => {
       <FormProvider {...formMethods}>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-white dark:bg-gray-800 py-8 px-4 border border-spacing-1 shadow sm:rounded-lg sm:px-10">
+            <div className="pb-6">
+              <Button
+                primary
+                disabled
+                type="button"
+                className="mt-4 w-full justify-center"
+                onClick={() => signIn('azure-ad-beamlines')}
+              >
+                ELI - ALPS SSO
+              </Button>
+              <Button
+                primary
+                type="button"
+                className="mt-4 w-full justify-center"
+                onClick={() => signIn('azure-ad-beamlines')}
+              >
+                ELI - BEAMLINES SSO
+              </Button>
+              <Button
+                primary
+                disabled
+                type="button"
+                className="mt-4 w-full justify-center"
+                onClick={() => signIn('azure-ad-beamlines')}
+              >
+                ELI - NP SSO
+              </Button>
+            </div>
+            <div className="relative mb-4">
+              <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                <div className="w-full border-t border-gray-300" />
+              </div>
+              <div className="relative flex justify-center">
+                <span className="text-gray-700 dark:text-gray-200 font-medium isolate inline-flex rounded-md bg-white text-sm px-2">
+                  Other Users
+                </span>
+              </div>
+            </div>
             <form className="space-y-6" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-200">

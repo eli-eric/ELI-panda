@@ -4,7 +4,7 @@ import { Fragment, Suspense } from 'react'
 import { useIntl } from 'react-intl'
 
 import LoaderComponent from '@/components/loader.comp'
-import { useForceChangePassword } from '@/hooks/useForceChangePassword'
+
 import { message } from '@/i18n/src/messages'
 import CatalogueContainer from '@/modules/catalogue/Catalogue.cont'
 
@@ -12,7 +12,6 @@ const { head } = message.cataloguePage
 
 const CatalogueCategoryHomePage: NextPage = (): JSX.Element => {
   const intl = useIntl()
-  useForceChangePassword()
 
   return (
     <Fragment>

@@ -1,12 +1,22 @@
 import axios from 'axios'
 import NextAuth from 'next-auth/next'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import AzureADProvider from 'next-auth/providers/azure-ad'
+import getDriver from '@/utils/neo4j'
+
+var jwt = require('jsonwebtoken')
 
 export const authOptions = {
   session: {
     jwt: true
   },
   providers: [
+    AzureADProvider({
+      id: 'azure-ad-beamlines',
+      clientId: process.env.AZURE_AD_BEAMLINES_CLIENT_ID,
+      clientSecret: process.env.AZURE_AD_BEAMLINES_CLIENT_SECRET,
+      tenantId: process.env.AZURE_AD_BEAMLINES_TENANT_ID
+    }),
     CredentialsProvider({
       async authorize(credentials) {
         const result = await axios({
@@ -42,6 +52,33 @@ export const authOptions = {
   callbacks: {
     async jwt(params) {
       // update token
+
+      const providerId = params?.account?.provider
+
+      if (providerId === 'azure-ad-beamlines') {
+        const firstName = params.user.name.split(' ')[1]
+        const lastName = params.user.name.split(' ')[0]
+        const user = await neo4GetOrCreateUser(params.user.email, firstName, lastName)
+        const token = jwt.sign(
+          {
+            sub: user.uid,
+            jti: user.email,
+            exp: Date.now() + 1000 * 60 * 60 * 24 * 365,
+            facilityName: user.facilityName,
+            facilityCode: user.facilityCode,
+            roles: user.roles
+          },
+          process.env.NEXTAUTH_SECRET
+        )
+        params.token.roles = user.roles
+        params.token.apiAccessToken = token
+        params.token.facility = user.facilityName
+        params.token.facilityCode = user.facilityCode
+        params.token.uid = user.uid
+        params.token.fullName = user.firstName + ' ' + user.lastName
+        return params.token
+      }
+
       if (params.user?.roles) {
         params.token.roles = params.user.roles
         params.token.apiAccessToken = params.user.accessToken
@@ -74,3 +111,51 @@ export const authOptions = {
 }
 
 export default NextAuth(authOptions)
+
+const neo4GetOrCreateUser = async (email, firstName, lastName) => {
+  const driver = getDriver()
+  const session = driver.session()
+  let transaction
+  try {
+    transaction = session.beginTransaction()
+    const usersQuery = `MATCH(f:Facility{code:"B"})
+OPTIONAL MATCH(u:User) WHERE TOLOWER(u.email) =$email
+CALL apoc.do.when(
+u IS NULL,
+'CREATE(newUsr:User{uid: apoc.create.uuid(), email: $email, username: $email, firstName: $firstName, lastName: $lastName ,isEnabled: true}) MERGE(newUsr)-[:BELONGS_TO_FACILITY]->(f) RETURN newUsr as user',
+'RETURN u as user', {u:u, f:f, email:$email, firstName:$firstName, lastName:$lastName}
+)
+YIELD value
+WITH value.user as user, f
+OPTIONAL MATCH(empl:Employee) WHERE TOLOWER(empl.email) =$email
+CALL apoc.do.when(
+empl IS NOT NULL,
+'MERGE(empl)-[:HAS_USER]->(u)',
+'', {u:user, empl:empl, email:$email}
+)
+YIELD value
+WITH user, f
+OPTIONAL MATCH(user)-[:HAS_ROLE]->(roles:Role)
+CALL apoc.do.when(
+roles IS NULL,
+'MATCH(roles:Role) WHERE roles.code in ["basics", "catalogue-view", "systems-view", "room-cards-view", "orders-view"] MERGE(u)-[:HAS_ROLE]->(roles) return roles',
+'RETURN r as roles', {u:user, r:roles}
+)
+YIELD value
+WITH user, collect(value.roles.code) as roles, f
+RETURN DISTINCT { uid: user.uid, email: user.email, facilityName: f.name, facilityCode: f.code, roles: roles  } as user;`
+
+    const result = await transaction.run(usersQuery, { email, firstName, lastName })
+
+    await transaction.commit()
+    return result.records[0].get('user')
+  } catch (e) {
+    console.log('🚀 ~ neo4GetOrCreateUser ~ e:', e)
+    if (transaction) {
+      await transaction.rollback()
+    }
+    throw new Error(e)
+  } finally {
+    await session.close()
+  }
+}
