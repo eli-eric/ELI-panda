@@ -1,5 +1,5 @@
 import type { Row, Table } from '@tanstack/react-table'
-import { Fragment, useCallback, useRef } from 'react'
+import { Fragment, useCallback, useEffect, useRef } from 'react'
 
 import { Pagination } from '@/modules/shared/table/Pagination'
 import type { GetRowPropsReturnType, PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
@@ -40,6 +40,12 @@ export const SystemsTable = ({
 
   const onChangeSearch = useCallback(() => {
     tableRef.current?.resetExpanded()
+  }, [tableRef])
+
+  useEffect(() => {
+    if (tableRef.current) {
+      tableRef.current.setColumnOrder(['icon', 'name'])
+    }
   }, [tableRef])
 
   return (
