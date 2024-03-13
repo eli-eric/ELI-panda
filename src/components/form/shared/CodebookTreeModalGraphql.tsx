@@ -1,6 +1,5 @@
 import type { Table } from '@tanstack/react-table'
 import { type ColumnDef } from '@tanstack/react-table'
-import classNames from 'classnames'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
@@ -10,6 +9,7 @@ import { message } from '@/i18n/src/messages'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { ModalButtons } from '@/types/form'
+import { classNames } from '@/utils'
 
 import { ExpandableNameCell } from './ExpandableNameCell'
 
@@ -148,7 +148,8 @@ export const CodebookTreeModalGraphql = ({
               }
             },
             className: classNames(
-              item?.uid === row.original.uid ? 'bg-primary-200 hover:bg-primary-200' : '',
+              item?.uid === row.original.uid &&
+                'bg-primary-200 dark:bg-primary-600 hover:bg-primary-200 dark:hover:bg-primary-600',
               'cursor-pointer'
             )
           })}

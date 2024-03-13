@@ -67,7 +67,7 @@ export const SystemsComponent: FC<Props> = ({
           enableFiltering: true,
           manualFiltering: true,
           enableQueryURL: enableQueryURL,
-          enableColumnReordering: true
+          enableColumnReordering: false
         }}
       />
     </TableLayoutContainer>

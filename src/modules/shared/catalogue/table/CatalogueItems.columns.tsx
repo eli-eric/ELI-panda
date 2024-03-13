@@ -34,6 +34,14 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueI
   const columns: ColumnDef<CatalogueItem, any>[] = useMemo(() => {
     const columns: ColumnDef<CatalogueItem, any>[] = [
       {
+        header: 'name2',
+        accessorFn: row => row.name,
+        id: 'name2',
+        cell: props => <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} />,
+        size: 300,
+        meta: { sticky: true, filter: { type: 'string', enableColumnFilter: true } }
+      },
+      {
         header: intl.formatMessage({ id: messages.name }),
         accessorFn: row => row.name,
         id: 'name',
@@ -107,8 +115,9 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueI
         accessorFn: row =>
           row.details?.find(originDetail => originDetail?.property.name === detail?.property.name)?.value,
         cell: ({ row: { original } }: CellContext<CatalogueItem, any>) => {
-          const value = original.details?.find(originDetail => originDetail?.property.uid === detail?.property.uid)
-            ?.value
+          const value = original.details?.find(
+            originDetail => originDetail?.property.uid === detail?.property.uid
+          )?.value
           const unit = detail?.property?.unit?.name
           if (!value) return null
           if (detail?.property?.type.uid === PROPERTY_TYPE.RANGE) {

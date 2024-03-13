@@ -83,7 +83,8 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
       manualSorting = true,
       enableFiltering = false,
       manualFiltering = true,
-      enableMultiRowSelection = false
+      enableMultiRowSelection = false,
+      enableColumnReordering = false
     } = settings || {}
 
     const [columnVisibility, setColumnVisibility] = useVisibility(tableId)
@@ -121,7 +122,14 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
       enableMultiRowSelection,
       enableColumnFilters: enableFiltering,
       enableSubRowSelection: true,
-      state: { sorting, expanded, columnOrder, columnVisibility, columnFilters, rowSelection }
+      state: {
+        sorting,
+        expanded,
+        columnOrder: enableColumnReordering ? columnOrder : undefined,
+        columnVisibility,
+        columnFilters,
+        rowSelection
+      }
     })
 
     useImperativeHandle(ref, () => ({

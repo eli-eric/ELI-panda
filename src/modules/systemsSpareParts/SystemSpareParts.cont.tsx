@@ -39,7 +39,7 @@ export const SystemsSparePartsContainer = () => {
     () => ({
       enableMultiRowSelection: true,
       enableColumnHiding: true,
-      enableColumnReordering: true,
+      enableColumnReordering: false,
       enableQueryURL: false
     }),
     []

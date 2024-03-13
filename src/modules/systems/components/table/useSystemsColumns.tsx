@@ -27,9 +27,8 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
   const columns = useMemo(
     (): ColumnDef<SystemDetail, any>[] => [
       {
-        header: 'icon',
         id: 'icon',
-        size: 50,
+        size: 20,
         cell: IconCell,
         meta: { sticky: true }
       },
