@@ -14,13 +14,16 @@ services:
       - MINIO_ACCESS_KEY_TEST=${MINIO_ACCESS_KEY_TEST}
       - MINIO_SECRET_KEY_TEST=${MINIO_SECRET_KEY_TEST}
       - NEO4J_PASSWORD=${NEO4J_PASSWORD}
+      - AZURE_AD_BEAMLINES_CLIENT_ID=${AZURE_AD_BEAMLINES_CLIENT_ID}
+      - AZURE_AD_BEAMLINES_CLIENT_SECRET=${AZURE_AD_BEAMLINES_CLIENT_SECRET}
+      - AZURE_AD_BEAMLINES_TENANT_ID=${AZURE_AD_BEAMLINES_TENANT_ID}
     build:
       context: ./
       dockerfile: Dockerfile.testenv
       labels:
         - panda-frontend-ui-main-app-test
       args:
-        - NEO4J_PASSWORD=${NEO4J_PASSWORD}  
+        - NEO4J_PASSWORD=${NEO4J_PASSWORD}
     networks:
       - panda-net-test
     ports:
