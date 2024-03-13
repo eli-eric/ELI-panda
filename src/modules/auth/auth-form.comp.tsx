@@ -78,7 +78,7 @@ const AuthFormComponent = ({ onSubmit, loading }: Props) => {
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center">
-                <span className="text-gray-700 dark:text-gray-200 font-medium isolate inline-flex rounded-md bg-white text-sm px-2">
+                <span className="text-gray-700 dark:text-gray-200 font-medium isolate inline-flex rounded-md bg-white dark:bg-gray-800 text-sm px-2">
                   Other Users
                 </span>
               </div>
