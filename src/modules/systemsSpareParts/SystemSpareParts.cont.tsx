@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 
 import { Button } from '@/components/Buttons'
@@ -66,6 +66,12 @@ export const SystemsSparePartsContainer = () => {
     },
     getSubRows: row => row.subSystems || []
   })
+
+  useEffect(() => {
+    table.setColumnOrder(['icon', 'select'])
+    table2.setColumnOrder(['icon', 'select'])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const { getSelectedRowModel } = table
   const { getSelectedRowModel: getSelectedRowModel2 } = table2

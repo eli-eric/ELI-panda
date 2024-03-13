@@ -34,20 +34,12 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueI
   const columns: ColumnDef<CatalogueItem, any>[] = useMemo(() => {
     const columns: ColumnDef<CatalogueItem, any>[] = [
       {
-        header: 'name2',
-        accessorFn: row => row.name,
-        id: 'name2',
-        cell: props => <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} />,
-        size: 300,
-        meta: { sticky: true, filter: { type: 'string', enableColumnFilter: true } }
-      },
-      {
         header: intl.formatMessage({ id: messages.name }),
         accessorFn: row => row.name,
         id: 'name',
         cell: props => <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} />,
         size: 300,
-        meta: { sticky: true, filter: { type: 'string', enableColumnFilter: true } }
+        meta: { sticky: additionalColumn ? false : true, filter: { type: 'string', enableColumnFilter: true } }
       },
       {
         header: intl.formatMessage({ id: messages.description }),
