@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { signIn } from 'next-auth/react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
@@ -75,6 +76,10 @@ const AuthFormComponent = ({ onSubmit, loading }: Props) => {
                 <FormattedMessage id={loading ? authButtonMessages.isLoading : authButtonMessages.default} />
               </Button>
             </form>
+
+            <Button primary type="button" className="mt-4 w-full justify-center" onClick={() => signIn('azure-ad')}>
+              ELI - Beamlines SSO
+            </Button>
           </div>
         </div>
       </FormProvider>

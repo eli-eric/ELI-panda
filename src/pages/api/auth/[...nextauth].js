@@ -1,12 +1,22 @@
 import axios from 'axios'
 import NextAuth from 'next-auth/next'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import AzureADProvider from 'next-auth/providers/azure-ad'
+import getDriver from '@/utils/neo4j'
+
+var jwt = require('jsonwebtoken')
 
 export const authOptions = {
   session: {
     jwt: true
   },
   providers: [
+    AzureADProvider({
+      id: 'azure-ad',
+      clientId: process.env.AZURE_AD_BEAMLINES_CLIENT_ID,
+      clientSecret: process.env.AZURE_AD_BEAMLINES_CLIENT_SECRET,
+      tenantId: process.env.AZURE_AD_BEAMLINES_TENANT_ID
+    }),
     CredentialsProvider({
       async authorize(credentials) {
         const result = await axios({
@@ -42,6 +52,37 @@ export const authOptions = {
   callbacks: {
     async jwt(params) {
       // update token
+
+      const providerId = params?.account?.provider
+
+      if (providerId === 'azure-ad') {
+        // todo
+      }
+
+      // const token = jwt.sign(
+      //   {
+      //     sub: 'mojeid',
+      //     jti: 'jiri.svacha@eli-beams.eu',
+      //     exp: Date.now() + 1000 * 60 * 60 * 24 * 365,
+      //     facilityName: 'ELI - Beamlines',
+      //     facilityCode: 'B',
+      //     roles: ['basics', 'systems-view', 'catalogue-view']
+      //   },
+      //   process.env.NEXTAUTH_SECRET
+      // )
+
+      // const neo4jDriver = getDriver()
+
+      // neo4jDriver
+      //   .session()
+      //   .run('MATCH (n:User) RETURN { email: n.email, name: n.firstName + " " + n.lastName} as user LIMIT 5')
+      //   .then(result => {
+      //     result.records.forEach(record => {
+      //       const node = record.get('user')
+      //       console.log(node.email)
+      //     })
+      //   })
+
       if (params.user?.roles) {
         params.token.roles = params.user.roles
         params.token.apiAccessToken = params.user.accessToken
