@@ -143,7 +143,7 @@ roles IS NULL,
 )
 YIELD value
 WITH user, collect(value.roles.code) as roles, f
-RETURN DISTINCT { uid: user.uid, email: user.email, facilityName: f.name, facilityCode: f.code, roles: roles  } as user;`
+RETURN DISTINCT { uid: user.uid, email: user.email, firstName: user.firstName, lastName: user.lastName, facilityName: f.name, facilityCode: f.code, roles: roles  } as user;`
 
     const result = await transaction.run(usersQuery, { email, firstName, lastName })
 
