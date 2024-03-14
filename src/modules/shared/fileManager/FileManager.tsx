@@ -111,7 +111,11 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
     onDrop
   })
 
-  const { onClick: onClickHandler, ...restRootProps } = getRootProps()
+  const { onClick, ...restRootProps } = getRootProps()
+
+  const onClickHandler = e => {
+    fileInputRef.current?.click() && onClick && onClick(e)
+  }
 
   return (
     <div>
