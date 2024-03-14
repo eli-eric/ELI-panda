@@ -122,7 +122,7 @@ const neo4GetOrCreateUser = async (email, firstName, lastName) => {
 OPTIONAL MATCH(u:User) WHERE TOLOWER(u.email) =$email
 CALL apoc.do.when(
 u IS NULL,
-'CREATE(newUsr:User{uid: apoc.create.uuid(), email: $email, username: $email, firstName: $firstName, lastName: $lastName ,isEnabled: true}) MERGE(newUsr)-[:BELONGS_TO_FACILITY]->(f) RETURN newUsr as user',
+'CREATE(newUsr:User{uid: apoc.create.uuid(), email: $email, username: $email, firstName: $firstName, lastName: $lastName ,isEnabled: true, createdAt: datetime(), createdBy: "autocreated"}) MERGE(newUsr)-[:BELONGS_TO_FACILITY]->(f) RETURN newUsr as user',
 'RETURN u as user', {u:u, f:f, email:$email, firstName:$firstName, lastName:$lastName}
 )
 YIELD value
