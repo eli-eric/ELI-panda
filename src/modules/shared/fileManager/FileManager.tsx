@@ -1,5 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'react-hot-toast'
 import useSWR from 'swr'
@@ -111,6 +111,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
     onDrop
   })
   const handleButtonClick = () => {
+    console.log('handleButtonClick')
     fileInputRef.current?.click() // Safely access the current property
   }
 
@@ -118,10 +119,12 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
     <div>
       <Heading text={messages.title}>
         {hasEditRole && (
-          <div {...getRootProps()}>
-            <input {...getInputProps()} ref={fileInputRef} style={{ display: 'none' }} />
+          <Fragment>
+            <div {...getRootProps()}>
+              <input {...getInputProps()} ref={fileInputRef} style={{ display: 'none' }} />
+            </div>
             <PlusButton buttonSize="large" primary={!isDragActive} type={'button'} onClick={handleButtonClick} />
-          </div>
+          </Fragment>
         )}
       </Heading>
       {loading.some(value => value) && <ProgressBarComponent />}
