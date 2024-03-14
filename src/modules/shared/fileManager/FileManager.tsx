@@ -1,5 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'react-hot-toast'
 import useSWR from 'swr'
@@ -110,18 +110,23 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop
   })
-  const handleButtonClick = () => {
-    fileInputRef.current?.click() // Safely access the current property
+
+  const { onClick, ...restRootProps } = getRootProps()
+
+  const onClickHandler = e => {
+    fileInputRef.current?.click() && onClick && onClick(e)
   }
 
   return (
     <div>
       <Heading text={messages.title}>
         {hasEditRole && (
-          <div {...getRootProps()}>
-            <input {...getInputProps()} ref={fileInputRef} style={{ display: 'none' }} />
-            <PlusButton buttonSize="large" primary={!isDragActive} type={'button'} onClick={handleButtonClick} />
-          </div>
+          <Fragment>
+            <div {...restRootProps}>
+              <input {...getInputProps()} ref={fileInputRef} style={{ display: 'none' }} />
+              <PlusButton buttonSize="large" primary={!isDragActive} type={'button'} onClick={onClickHandler} />
+            </div>
+          </Fragment>
         )}
       </Heading>
       {loading.some(value => value) && <ProgressBarComponent />}
