@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
-import toast from 'react-hot-toast'
 
 import { classNames } from '@/utils'
 
@@ -14,7 +13,7 @@ interface Props {
   disabled?: boolean
 }
 
-export const RangeInput = ({ name, label, onChange, isFilter, disabled, placeholder, required }: Props) => {
+export const RangeInput = ({ name, label, onChange, isFilter, disabled, placeholder }: Props) => {
   const { control, watch, setError, clearErrors } = useFormContext()
 
   const inputValues = watch(name)
@@ -23,13 +22,6 @@ export const RangeInput = ({ name, label, onChange, isFilter, disabled, placehol
     if (inputValues) {
       clearErrors(name)
       const handler = setTimeout(() => {
-        if (required) {
-          if (inputValues.min > inputValues.max) {
-            toast.error('Min value must be less than max value')
-            setError(name, { type: 'manual', message: 'Min value must be less than max value' })
-            return
-          }
-        }
         onChange &&
           onChange({
             min: inputValues.min !== '' ? inputValues.min : null,
@@ -56,7 +48,6 @@ export const RangeInput = ({ name, label, onChange, isFilter, disabled, placehol
                   name={'min' + name}
                   type="number"
                   pattern="[0-9]*"
-                  required={required ? !!field.value?.max : false}
                   placeholder={placeholder?.min || 'Min'}
                   className={classNames(
                     'form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm',
@@ -78,7 +69,6 @@ export const RangeInput = ({ name, label, onChange, isFilter, disabled, placehol
                   type="number"
                   pattern="[0-9]*"
                   placeholder={placeholder?.max || 'Max'}
-                  required={required ? !!field.value?.min : false}
                   onChange={e => {
                     const value = e.target.value === '' ? '' : Number(e.target.value)
                     field.onChange({

@@ -1,0 +1,49 @@
+=== etnra id / azure ad config:
+# list of steps you have to do:
+go to https://portal.azure.com
+navigate to the entra id / azure ad service
+select "App registrations" on the left
+click "+ New registration" at the top
+use this name: "ELI ERIC PANDA"
+use this account type: "Accounts in this organizational directory only (ELI Beamlines only - Single tenant)"
+
+!!! IMPORTANT: LATER set redirect URI to na URI to type "web" and use the one provdied by keycloak
+
+then click register
+
+--- this part will be done later ---
+# note: redirect URI can be later set from the overview page in the entra id page of the app you made
+# or you can add it by going to your app page in entra id -> authentication -> add platform
+when adding redirect URI, select platform type "web"
+
+redirect uri used (replace any spaces with %20 !) replace azure-ad with provider id for each facility for example for bemalines it is azure-ad-bemalines:
+http://localhost:5001/api/auth/callback/azure-ad
+https://panda.eli-laser.eu/api/auth/callback/azure-ad
+https://dev.panda.eli-beams.eu/api/auth/callback/azure-ad
+https://test.panda.eli-beams.eu/api/auth/callback/azure-ad
+
+then leave logout URI empty
+as for tokens:
+  enable: Access tokens (used for implicit flows)  # maybe we can disable this later???
+  enable: ID tokens (used for implicit and hybrid flows)
+
+note: "Allow public client flows" is left at OFF (default setting)
+--- end of part that will be done later ---
+
+# additional config:
+from left menu select "Token configuration"
+click "+ Add optional claim"
+select token type "id" and claims "email", "upn" and click add, then confirm turning on microsoft graph api permissions
+
+# if you want to have azure ad group info in the token and be able to restict access based on groups in the app, also do this:
+click "+ Add groups claim"
+select "security groups"
+go to "token properties by type" for all token types (ID, Access, SAML) are set it to DNSDomain\sAMAccountName
+# this will cause the azure ad groups to be present in the groups claim in the oicd identity token (not sure if it's actually called a claim, but this value is definately in the json)
+# you can also check "emit groups as role claims" for all token types (this will cause the azure ad groups to be present in the role claim in the oicd identity token) (if you do this, you will have to configure keycloak mappers a bit differently) (it's probably better to not do this and use the groups claim, which is the default behavior)
+and click add
+
+# LATER make a secret in entra id app config->certificates & secrets->new client secret
+description: "panda.eli-laser.eu"
+expires: 730 days
+(secret only visible once!)
