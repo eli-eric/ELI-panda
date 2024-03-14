@@ -110,20 +110,18 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop
   })
-  const handleButtonClick = () => {
-    console.log('handleButtonClick')
-    fileInputRef.current?.click() // Safely access the current property
-  }
+
+  const { onClick: onClickHandler, ...restRootProps } = getRootProps()
 
   return (
     <div>
       <Heading text={messages.title}>
         {hasEditRole && (
           <Fragment>
-            <div {...getRootProps()}>
+            <div {...restRootProps}>
               <input {...getInputProps()} ref={fileInputRef} style={{ display: 'none' }} />
+              <PlusButton buttonSize="large" primary={!isDragActive} type={'button'} onClick={onClickHandler} />
             </div>
-            <PlusButton buttonSize="large" primary={!isDragActive} type={'button'} onClick={handleButtonClick} />
           </Fragment>
         )}
       </Heading>
