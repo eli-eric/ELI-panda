@@ -1,10 +1,13 @@
 'use client'
+import { XMarkIcon } from '@heroicons/react/24/outline'
+import { useQueryState } from 'next-usequerystate'
 import { Fragment, useCallback, useMemo, useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
+import { Badge } from '@/components/visuals/Badge'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
+import { useFormFilter } from '@/hooks/form/useFormFilters'
 
 import type { CatalogueItem } from '../catalogueItem/types/responses'
 import { CatalogueTable } from '../shared/catalogue/table/CatalogueItems.table'
@@ -22,6 +25,7 @@ const CatalogueContainer = () => {
   const tableId = 'catalogueItems'
   const { catalogueItems, error, loading } = useCatalogueItems(tableId)
   const { catalogueCategories } = useCategoryList()
+  const [categoryQuery, setCategoryQuery] = useQueryState('category', { history: 'push' })
   const defValues = useMemo<CatalogueItem>(
     () => ({
       name: '',
@@ -41,16 +45,11 @@ const CatalogueContainer = () => {
     enableQueryURL: true
   })
 
-  const { setValue } = filterFormMethods
-
-  const { setFilter } = useFormFilterState({ tableId, enableQueryUrl: true })
-
   const setCategoryFilter = useCallback(
     (value: CodebookType | null) => {
-      setFilter('category')(value)
-      setValue('category', value)
+      setCategoryQuery(value ? JSON.stringify(value) : null)
     },
-    [setFilter, setValue]
+    [setCategoryQuery]
   )
 
   return (
@@ -58,7 +57,24 @@ const CatalogueContainer = () => {
       <SearchBar
         left={<SearchBarButtons filterFormMethods={filterFormMethods} />}
         tableId={tableId}
-        right={<FilterBadges tableId={tableId} />}
+        right={
+          <FilterBadges
+            tableId={tableId}
+            additionalBadge={
+              categoryQuery ? (
+                <Badge>
+                  <span>{'category'}</span>
+                  <XMarkIcon
+                    className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600"
+                    onClick={() => {
+                      setCategoryQuery(null)
+                    }}
+                  />
+                </Badge>
+              ) : undefined
+            }
+          />
+        }
       />
       <CatalogueBreadcrumbs setCategoryFilter={setCategoryFilter} />
       <CategoryListContainer

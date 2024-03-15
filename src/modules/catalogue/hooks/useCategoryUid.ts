@@ -1,10 +1,10 @@
-import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { useQueryState } from 'next-usequerystate'
+
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
 
 export const useCategoryUid = () => {
-  const tableId = 'catalogueItems'
-  const { storeFilters } = useFormFilterState({ tableId, enableQueryUrl: true })
-  const filter = storeFilters?.find(filter => filter.id === 'category')
-  const uid = (filter?.value as { uid: string })?.uid
+  const [categoryQuery] = useQueryState('category', { history: 'push' })
+  const category: CodebookType | null = categoryQuery ? JSON.parse(categoryQuery) : null
 
-  return uid
+  return category?.uid
 }
