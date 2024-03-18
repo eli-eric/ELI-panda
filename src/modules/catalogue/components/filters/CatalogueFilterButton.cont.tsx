@@ -86,7 +86,7 @@ export const CatalogueFilterButtonContainer = ({ filterFormMethods }: CatalogueF
   return (
     <Fragment>
       <Button className="mr-1" buttonSize="large" onClick={() => setOpen(true)}>
-        {storeFilters.length > 0 ? (
+        {storeFilters.length > 0 || categoryQuery ? (
           <FunnelIconFull className="h-4 w-4" aria-hidden="true" />
         ) : (
           <FunnelIconEmpty className="h-4 w-4" aria-hidden="true" />

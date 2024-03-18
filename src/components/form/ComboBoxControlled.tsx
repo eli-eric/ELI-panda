@@ -86,6 +86,7 @@ export const ComboboxTreeControlled = ({
             'form-field',
             value && !disabled ? 'pr-14' : 'pr-9',
             rounded,
+            'border-gray-300',
             disabled ? 'bg-gray-100' : '',
             isFilter ? value && 'border-2 border-lime-500' : ''
           )}
