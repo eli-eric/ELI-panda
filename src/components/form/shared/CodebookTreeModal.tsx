@@ -6,8 +6,8 @@ import { useFormContext } from 'react-hook-form'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import useFetch from '@/hooks/fetch/useFetch'
-import useQueryManager from '@/hooks/useQueryManager'
 import { message } from '@/i18n/src/messages'
+import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { ModalButtons } from '@/types/form'
@@ -38,16 +38,9 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name, onSubmit }: C
   const { setValue } = useFormContext()
   const { reset } = useTableStateStore()
 
-  useEffect(
-    () => () => {
-      setItem(undefined)
-    },
-    []
-  )
+  const [filterState] = useFilters(tableId, false, false)
 
-  const { query } = useQueryManager(tableId)
-
-  const search = JSON.parse(query.columnFilter || '[]')[0]?.value
+  const search = filterState[0]?.value as string
 
   const tableRef = useRef<Table<Codebooktree>>(null)
 
@@ -57,10 +50,13 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name, onSubmit }: C
       if (filter.length > 0) tableRef.current.toggleAllRowsExpanded(true)
       if (filter.length === 0) tableRef.current.toggleAllRowsExpanded(false)
     }
-  }, [query.columnFilter])
+    return () => {
+      setItem(undefined)
+    }
+  }, [search])
 
   const { response, loading } = useFetch<Codebooktree[]>({
-    url: `/codebook/${codebook}/tree` + '?' + 'columnFilter=' + query.columnFilter,
+    url: `/codebook/${codebook}/tree` + '?' + 'columnFilter=' + JSON.stringify(filterState),
     config: {
       suspense: false,
       keepPreviousData: true
@@ -79,10 +75,10 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name, onSubmit }: C
             type: 'string'
           }
         },
-        cell: ({ row, getValue }) => <ExpandableNameCell {...{ row, getValue, filterName: search }} />
+        cell: ({ row, getValue, table: { getState } }) => <ExpandableNameCell {...{ row, getValue, getState }} />
       }
     ],
-    [search]
+    []
   )
 
   const modalButtons: ModalButtons = {
