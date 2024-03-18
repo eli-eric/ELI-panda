@@ -25,6 +25,7 @@ import { useSystems } from '@/modules/systems/hooks/useSystems'
 // eslint-disable-next-line
 import type { SystemDetail } from '@/modules/systems/types/responses'
 import { filterSubsystem } from '@/modules/systems/utils'
+import { ShowSpareButton } from '@/modules/systemsSpareParts/components/ShowSpareButton'
 import { useHoveringId } from '@/store/useHoveringId'
 import { PATH } from '@/types/constants/paths'
 import { createMessageValues } from '@/utils/formatters'
@@ -51,6 +52,7 @@ export const SystemNameCell = ({
   enableDragAndDrop = false
 }: SystemNameCellProps) => {
   const { original, id } = row
+  const { sparesIn, sparesOut } = original
   const { system } = useEndpoint({ uid: original.uid })
   const { hoveringId } = useHoveringId()
   const { mutate } = useSystems(tableId)
@@ -157,7 +159,9 @@ export const SystemNameCell = ({
                 addLink={{ pathname: PATH.SYSTEM, query: { parentUid: original.uid } }}
                 detailLink={PATH.SYSTEM + '/' + original.uid}
                 canEdit={canEdit}
-              />
+              >
+                <ShowSpareButton tableId={tableId} uid={original.uid} sparesIn={sparesIn} sparesOut={sparesOut} />
+              </TableActionsButtons>
             )}
           </Fragment>
         )}

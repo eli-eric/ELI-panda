@@ -3,6 +3,7 @@ import { Fragment } from 'react'
 
 import { TableStatsButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
+import { Tooltip } from '@/components/Tooltip'
 import { useModal } from '@/hooks/useModal'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 
@@ -16,34 +17,18 @@ interface ShowSpareButtonProps {
   sparesOut?: number
 }
 
-export const ShowSpareButton: FC<ShowSpareButtonProps> = ({ uid, tableId, sparesIn, sparesOut }) => {
-  const setSpareShow = useModal(<SparePartsModal uid={uid} />)
-  const setSpareForShow = useModal(<SparePartsForModal uid={uid} />)
-  if (tableId === 'spare-parts' && (sparesOut === 0 || !sparesOut)) return null
-  if (tableId === 'for-system' && (sparesIn === 0 || !sparesIn)) return null
-
-  return <TableStatsButton onClick={tableId === 'spare-parts' ? setSpareForShow() : setSpareShow()} />
-}
-
-interface SpareModalProps {
-  uid: string
-}
-
-const SparePartsModal: FC<SpareModalProps> = ({ uid }) => {
+const SparePartsModal: FC<ShowSpareButtonProps> = ({ uid }) => {
   const { spareParts, loading } = useGetSpareParts(uid)
   const sparePartsColumns = useSparePartsColumns({ tableId: 'sparePartsModal' })
   return (
     <Fragment>
-      <Heading customText="Spare Parts list:" />
+      <Heading customText="Spare Parts:" />
       <PandaTable
         {...{
           tableId: 'sparePartsModal',
           data: spareParts,
           columns: sparePartsColumns,
           loading,
-          settings: {
-            enableFooter: true
-          },
           className: 'relative overflow-x-auto'
         }}
       />
@@ -51,24 +36,62 @@ const SparePartsModal: FC<SpareModalProps> = ({ uid }) => {
   )
 }
 
-const SparePartsForModal: FC<SpareModalProps> = ({ uid }) => {
+const SparePartsForModal: FC<ShowSpareButtonProps> = ({ uid }) => {
   const { spareParts, loading } = useGetSparePartsFor(uid)
   const sparePartsColumns = useSparePartsColumns({ tableId: 'sparePartsForModal' })
   return (
     <Fragment>
-      <Heading customText="Spare Parts For list:" />
+      <Heading customText="Spare Part for Systems:" />
       <PandaTable
         {...{
           tableId: 'sparePartsForModal',
           data: spareParts,
           columns: sparePartsColumns,
           loading,
-          settings: {
-            enableFooter: true
-          },
           className: 'relative overflow-x-auto'
         }}
       />
     </Fragment>
   )
+}
+
+export const ShowSpareButton: FC<ShowSpareButtonProps> = ({ uid, tableId, sparesIn, sparesOut }) => {
+  const setSpareShow = useModal(<SparePartsModal tableId={tableId} uid={uid} />)
+  const setSpareForShow = useModal(<SparePartsForModal tableId={tableId} uid={uid} />)
+
+  const isSparePartsTable = tableId === 'spare-parts' && (sparesOut === 0 || !sparesOut)
+  const isForSystemTable = tableId === 'for-system' && (sparesIn === 0 || !sparesIn)
+  const isSystemsTable = tableId === 'systems'
+
+  if (isSparePartsTable || isForSystemTable) return null
+
+  if (isSystemsTable) {
+    const hasSparesIn = sparesIn && sparesIn > 0
+    const hasSparesOut = sparesOut && sparesOut > 0
+
+    if (hasSparesIn && hasSparesOut) {
+      return (
+        <div className="flex items-center">
+          <Tooltip content="Spare Parts" placement="top">
+            <div className="flex items-center">
+              <TableStatsButton onClick={setSpareShow()} />
+            </div>
+          </Tooltip>
+          <Tooltip content="Spare Part for Systems" placement="top">
+            <div className="flex items-center">
+              <TableStatsButton onClick={setSpareForShow()} />
+            </div>
+          </Tooltip>
+        </div>
+      )
+    } else if (hasSparesIn) {
+      return <TableStatsButton onClick={setSpareShow()} />
+    } else if (hasSparesOut) {
+      return <TableStatsButton onClick={setSpareForShow()} />
+    } else {
+      return null
+    }
+  }
+
+  return <TableStatsButton onClick={tableId === 'spare-parts' ? setSpareForShow() : setSpareShow()} />
 }
