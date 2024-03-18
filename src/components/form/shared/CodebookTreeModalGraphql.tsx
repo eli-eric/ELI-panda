@@ -1,12 +1,12 @@
-import type { Table } from '@tanstack/react-table'
 import { type ColumnDef } from '@tanstack/react-table'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { message } from '@/i18n/src/messages'
-import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
+import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
+import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { ModalButtons } from '@/types/form'
 import { classNames } from '@/utils'
@@ -47,7 +47,7 @@ export const CodebookTreeModalGraphql = ({
   fetchChildren,
   additionalColumn,
   enableFiltering,
-  loading,
+  loading = false,
   tableId = 'codebook-tree',
   selectParent = true,
   manualFiltering,
@@ -59,26 +59,8 @@ export const CodebookTreeModalGraphql = ({
   const { instances } = useTableStateStore()
   const filter = useMemo(() => instances[tableId]?.columnFilter, [instances, tableId])
   const filterName = filter?.find(item => item.id === 'name')?.value as string
-
   const { setValue } = useFormContext()
-  useEffect(
-    () => () => {
-      setItem(undefined)
-    },
-    []
-  )
-
-  const tableRef = useRef<Table<Codebooktree>>(null)
-
-  useEffect(() => {
-    if (tableRef.current) {
-      const filter = tableRef.current.getState().columnFilters || []
-      if (filter.length > 0) tableRef.current.toggleAllRowsExpanded(true)
-      if (filter.length === 0) tableRef.current.toggleAllRowsExpanded(false)
-    }
-  }, [filter])
-
-  const columns = useMemo((): ColumnDef<Codebooktree, string>[] => {
+  const columns = useMemo((): ColumnDef<Codebooktree, any>[] => {
     const columns: ColumnDef<Codebooktree, string>[] = [
       {
         header: 'Name',
@@ -93,6 +75,28 @@ export const CodebookTreeModalGraphql = ({
     if (additionalColumn) columns.push(additionalColumn)
     return columns
   }, [fetchChildren, additionalColumn, enableFiltering, filterName])
+
+  const table = usePandaTable<Codebooktree>({
+    tableId,
+    columns,
+    data,
+    settings: {
+      enableRowSelection: true,
+      enableFiltering: enableFiltering,
+      manualFiltering: manualFiltering
+    },
+    getSubRows: row => row?.children || []
+  })
+
+  const { toggleAllRowsExpanded } = table
+
+  useEffect(() => {
+    if (filter && filter?.length > 0) toggleAllRowsExpanded(true)
+    if (!filter || filter.length === 0) toggleAllRowsExpanded(false)
+    return () => {
+      setItem(undefined)
+    }
+  }, [filter, toggleAllRowsExpanded])
 
   const modalButtons: ModalButtons = {
     goNext: {
@@ -118,12 +122,11 @@ export const CodebookTreeModalGraphql = ({
   return (
     <ModalComponent open={open} setOpen={setOpen} buttons={modalButtons}>
       <div className={classNames('max-h-[300px]', loading && ' opacity-70')}>
-        <PandaTable
-          ref={tableRef}
+        <PandaTableControlled
           tableId={tableId}
-          columns={columns}
           data={data}
-          getSubRows={row => row.children}
+          table={table}
+          loading={loading}
           settings={{
             enableRowSelection: true,
             enableFiltering: enableFiltering,
