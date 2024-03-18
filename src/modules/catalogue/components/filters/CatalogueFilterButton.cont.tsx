@@ -1,6 +1,7 @@
 'use client'
 import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
+import { useQueryState } from 'next-usequerystate'
 import { Fragment, useEffect, useMemo, useState } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import { useIsFirstRender } from 'usehooks-ts'
@@ -9,6 +10,7 @@ import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver'
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
@@ -24,6 +26,8 @@ interface CatalogueFilterButtonContainerProps {
 export const CatalogueFilterButtonContainer = ({ filterFormMethods }: CatalogueFilterButtonContainerProps) => {
   const [open, setOpen] = useState(false)
   const tableId = 'catalogueItems'
+  const [categoryQuery] = useQueryState('category', { history: 'push' })
+  const category: CodebookType | null = categoryQuery ? JSON.parse(categoryQuery) : null
 
   const defValues = useMemo<CatalogueItem>(
     () => ({
@@ -36,7 +40,7 @@ export const CatalogueFilterButtonContainer = ({ filterFormMethods }: CatalogueF
     }),
     []
   )
-  const { reset, watch } = filterFormMethods
+  const { reset } = filterFormMethods
 
   const { storeFilters, setColumnFilters } = useFormFilterState({ tableId, enableQueryUrl: true })
 
@@ -57,7 +61,6 @@ export const CatalogueFilterButtonContainer = ({ filterFormMethods }: CatalogueF
   }
   const { toggleDeleteCustom, customFieldIdToSync } = useFormControlStore()
 
-  const category = watch('category')
   const { catalogueCategoryProperties } = useCategoryProperties(category?.uid)
   const isFirstRender = useIsFirstRender()
 
@@ -83,7 +86,7 @@ export const CatalogueFilterButtonContainer = ({ filterFormMethods }: CatalogueF
   return (
     <Fragment>
       <Button className="mr-1" buttonSize="large" onClick={() => setOpen(true)}>
-        {storeFilters.length > 0 ? (
+        {storeFilters.length > 0 || categoryQuery ? (
           <FunnelIconFull className="h-4 w-4" aria-hidden="true" />
         ) : (
           <FunnelIconEmpty className="h-4 w-4" aria-hidden="true" />

@@ -1,4 +1,6 @@
-import { ComboboxTree } from '@/components/form/ComboboxTree'
+import { useQueryState } from 'next-usequerystate'
+
+import { ComboboxTreeControlled } from '@/components/form/ComboBoxControlled'
 import { Input } from '@/components/form/Input'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import useCatalogueFormFields from '@/modules/catalogueItem/components/form/CatalogueForm.fields'
@@ -14,6 +16,7 @@ interface CatalogueFilterFormProps {
 
 export const CatalogueFilterForm = ({ tableId, catalogueCategoryProperties }: CatalogueFilterFormProps) => {
   const fields = useCatalogueFormFields()
+  const [categoryQuery, setCategoryQuery] = useQueryState('category', { history: 'push' })
 
   const { setFilter } = useFormFilterState({ tableId, enableQueryUrl: true })
   const { toggleDeleteCustom } = useFormControlStore()
@@ -29,12 +32,13 @@ export const CatalogueFilterForm = ({ tableId, catalogueCategoryProperties }: Ca
         <Input {...fields.supplier} onChange={setFilter(fields.supplier.name)} isFilter={true} />
       </div>
 
-      <ComboboxTree
+      <ComboboxTreeControlled
         {...fields.category}
+        value={categoryQuery ? JSON.parse(categoryQuery) : null}
         customLabel="Category"
         className="col-span-2"
-        onSelect={v => {
-          setFilter(fields.category.name)(v)
+        onChange={v => {
+          setCategoryQuery(v ? JSON.stringify(v) : null)
           if (!v) {
             toggleDeleteCustom()
           }
