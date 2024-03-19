@@ -95,6 +95,7 @@ export const ComboboxTreeControlled = ({
         {value && !disabled && <FormXMarkIcon onClick={handleClear} />}
         <button
           className="absolute inset-y-0 right-0 flex items-center pr-2"
+          type="button"
           onClick={() => {
             setOpen(true)
           }}
