@@ -6,6 +6,7 @@ import { useHoveringId } from '@/store/useHoveringId'
 import { PATH } from '@/types/constants/paths'
 
 import type { Order } from '../../types'
+import TableActions from '../TableActions'
 
 interface NameProps extends CellContext<Order, any> {
   isHoveringId?: number | string
@@ -16,10 +17,10 @@ export const NameCell = ({ getValue, row: { original, id } }: NameProps) => {
 
   return (
     <div className="flex items-center">
-      <Link href={PATH.ORDER + '/' + original.uid}>
+      <Link href={PATH.ORDER + '/' + original.uid} className="flex items-center">
         <LinkDecorator>{getValue() || 'N/A'}</LinkDecorator>
       </Link>
-      {/* <TableActions order={original} isHovering={id === hoveringId} /> */}
+      <TableActions order={original} isHovering={id === hoveringId} />
     </div>
   )
 }
