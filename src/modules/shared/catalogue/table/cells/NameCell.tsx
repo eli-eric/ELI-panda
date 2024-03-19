@@ -1,6 +1,5 @@
 import type { CellContext } from '@tanstack/react-table'
 import Link from 'next/link'
-import { isMobile } from 'react-device-detect'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
@@ -14,7 +13,6 @@ import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { CatalogueStatisticsContainer } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.cont'
-import { useHoveringId } from '@/store/useHoveringId'
 import { ROLE } from '@/types/constants/roles'
 import type { CatalogueItem } from '@/types/responses'
 import { createMessageValues } from '@/utils/formatters'
@@ -37,7 +35,6 @@ export const NameCell = ({
   tableId
 }: NameProps) => {
   const { catalogueItem } = useEndpoint({ uid })
-  const { hoveringId } = useHoveringId()
   const { formatMessage } = useIntl()
   const { mutate, catalogueItems } = useCatalogueItems(tableId)
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
@@ -76,7 +73,7 @@ export const NameCell = ({
           </LinkDecorator>
         </Link>
       )}
-      {toDelete && (hoveringId === id || isMobile) && (
+      {toDelete && (
         <TableActionsButtons
           onDeleteClick={() => {
             withWarningModal(

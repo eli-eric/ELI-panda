@@ -19,10 +19,9 @@ const modalMessage = message.ordersPage.deleteModal
 
 interface Props {
   order: Order
-  isHovering?: boolean
 }
 
-export const TableActions = ({ order, isHovering }: Props) => {
+export const TableActions = ({ order }: Props) => {
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
   const { formatMessage } = useIntl()
   const { name } = order
@@ -58,14 +57,12 @@ export const TableActions = ({ order, isHovering }: Props) => {
 
   return (
     <Fragment>
-      {isHovering && (
-        <TableActionsButtons
-          onDeleteClick={() => {
-            setOpenDeleteWarn(true)
-          }}
-          canEdit={canEdit}
-        />
-      )}
+      <TableActionsButtons
+        onDeleteClick={() => {
+          setOpenDeleteWarn(true)
+        }}
+        canEdit={canEdit}
+      />
       <WarningModal
         buttons={deleteButtons}
         open={openDeleteWarn}

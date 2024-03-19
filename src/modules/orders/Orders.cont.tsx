@@ -1,5 +1,3 @@
-import { memo } from 'react'
-
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { classNames } from '@/utils'
@@ -14,8 +12,6 @@ import { OrdersFilter } from './components/OrdersFilter'
 import { useOrders } from './hooks/useOrders'
 import { getColorClassStatus } from './utils/getColorClassStatus'
 
-const MemoizedTable = memo(PandaTable)
-
 const OrdersContainer = () => {
   const { orderList, loading, error } = useOrders()
   const Name = props => <NameCell {...props} />
@@ -25,7 +21,7 @@ const OrdersContainer = () => {
     <TableLayoutContainer>
       <SearchBar tableId="orders" left={<HeaderButtons />} right={<OrdersFilter />} />
       {!error && (
-        <MemoizedTable
+        <PandaTable
           {...{
             settings: {
               enableQueryURL: true,
