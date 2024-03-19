@@ -18,9 +18,7 @@ export const NameCell = ({ getValue, row: { original, id } }: NameProps) => {
   return (
     <div className="flex items-center">
       <Link href={PATH.ORDER + '/' + original.uid}>
-        <LinkDecorator>
-          <span>{getValue() || 'N/A'}</span>
-        </LinkDecorator>
+        <LinkDecorator>{getValue() || 'N/A'}</LinkDecorator>
       </Link>
       <TableActions order={original} isHovering={id === hoveringId} />
     </div>
