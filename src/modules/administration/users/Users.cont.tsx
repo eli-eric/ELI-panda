@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { SearchBar, SearchBarButtonsComponent } from '@/modules/shared/table/SearchBar'
-import { useHoveringId } from '@/store/useHoveringId'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
@@ -15,7 +14,6 @@ export const UsersContainer = () => {
   const tableId = 'users'
   const router = useRouter()
   const { users, loading, error, refetch } = useUsers()
-  const { setHoveringId } = useHoveringId()
 
   const columns = useUsersColumns()
 
@@ -46,14 +44,6 @@ export const UsersContainer = () => {
       <PandaTable
         {...{
           tableId,
-          getRowProps: ({ id }) => ({
-            onMouseEnter: () => {
-              setHoveringId(id)
-            },
-            onMouseLeave: () => {
-              setHoveringId(undefined)
-            }
-          }),
           loading,
           error,
           data: users,

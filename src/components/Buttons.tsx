@@ -16,6 +16,7 @@ import {
 import Link from 'next/link'
 import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
+import { isMobile } from 'react-device-detect'
 import { FormattedMessage } from 'react-intl'
 import type { UrlObject } from 'url'
 
@@ -198,7 +199,17 @@ type TableButtonWrapperProps = {
 export const TableButtonsWrapper: FC<PropsWithChildren<TableButtonWrapperProps>> = ({
   children,
   position = 'right-0'
-}) => <div className={classNames('absolute flex items-center bg-inherit pr-1', position)}>{children}</div>
+}) => (
+  <div
+    className={classNames(
+      'absolute flex items-center bg-inherit pr-1 opacity-0 group-hover:opacity-100',
+      position,
+      isMobile && 'opacity-100'
+    )}
+  >
+    {children}
+  </div>
+)
 
 interface TableActionsButtonsProps {
   onDeleteClick?: () => void

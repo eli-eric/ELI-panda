@@ -3,7 +3,6 @@ import type { CellContext } from '@tanstack/react-table'
 import classNames from 'classnames'
 import Link from 'next/link'
 import { Fragment } from 'react'
-import { isMobile } from 'react-device-detect'
 import { useDrag } from 'react-dnd'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
@@ -26,7 +25,6 @@ import { useSystems } from '@/modules/systems/hooks/useSystems'
 import type { SystemDetail } from '@/modules/systems/types/responses'
 import { filterSubsystem } from '@/modules/systems/utils'
 import { ShowSpareButton } from '@/modules/systemsSpareParts/components/ShowSpareButton'
-import { useHoveringId } from '@/store/useHoveringId'
 import { PATH } from '@/types/constants/paths'
 import { createMessageValues } from '@/utils/formatters'
 
@@ -54,7 +52,6 @@ export const SystemNameCell = ({
   const { original, id } = row
   const { sparesIn, sparesOut } = original
   const { system } = useEndpoint({ uid: original.uid })
-  const { hoveringId } = useHoveringId()
   const { mutate } = useSystems(tableId)
   const { formatMessage: fm } = useIntl()
 
@@ -131,7 +128,7 @@ export const SystemNameCell = ({
             </div>
           </Tooltip>
         </div>
-        {!hideButtons && (hoveringId === id || isMobile) && (
+        {!hideButtons && (
           <Fragment>
             {enableDragAndDrop ? (
               <TableButtonsWrapper>

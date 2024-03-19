@@ -2,7 +2,6 @@ import type { CellContext } from '@tanstack/react-table'
 import Link from 'next/link'
 
 import { LinkDecorator } from '@/components/decorators'
-import { useHoveringId } from '@/store/useHoveringId'
 import { PATH } from '@/types/constants/paths'
 
 import type { Order } from '../../types'
@@ -12,17 +11,13 @@ interface NameProps extends CellContext<Order, any> {
   isHoveringId?: number | string
 }
 
-export const NameCell = ({ getValue, row: { original, id } }: NameProps) => {
-  const { hoveringId } = useHoveringId()
-
+export const NameCell = ({ getValue, row: { original } }: NameProps) => {
   return (
     <div className="flex items-center">
-      <LinkDecorator>
-        <Link href={PATH.ORDER + '/' + original.uid}>
-          <span>{getValue() || 'N/A'}</span>
-        </Link>
-      </LinkDecorator>
-      <TableActions order={original} isHovering={id === hoveringId} />
+      <Link href={PATH.ORDER + '/' + original.uid} className="flex items-center">
+        <LinkDecorator>{getValue() || 'N/A'}</LinkDecorator>
+      </Link>
+      <TableActions order={original} />
     </div>
   )
 }
