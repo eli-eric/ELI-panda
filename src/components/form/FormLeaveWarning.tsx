@@ -38,7 +38,7 @@ export const FormLeaveWarning = <T extends FieldValues>({ formState, config }: P
       }
     }
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (isDirty) {
+      if (isDirty && !isSubmitSuccessful) {
         event.preventDefault()
         event.returnValue = '' // Required for Chrome
       }
