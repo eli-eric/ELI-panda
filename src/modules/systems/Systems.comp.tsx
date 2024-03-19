@@ -3,7 +3,6 @@ import type { FC } from 'react'
 import { createContext } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import { useHoveringId } from '@/store/useHoveringId'
 
 import { getColorBySystemLevel, getFontBySystemLevel } from '../systemItem/utils'
 import { SystemsTable } from './components/table/Systems.table'
@@ -36,7 +35,6 @@ export const SystemsComponent: FC<Props> = ({
   LeftSearchBarElement,
   RightSearchBarElement
 }: Props) => {
-  const { setHoveringId } = useHoveringId()
   return (
     <TableLayoutContainer className={className}>
       <SystemsTable
@@ -47,13 +45,7 @@ export const SystemsComponent: FC<Props> = ({
         LeftSearchBarElement={LeftSearchBarElement}
         pageSizeDefault={50}
         className={'relative overflow-scroll scrollbar-style'}
-        getRowProps={({ id, original }) => ({
-          onMouseEnter: () => {
-            setHoveringId(id)
-          },
-          onMouseLeave: () => {
-            setHoveringId(undefined)
-          },
+        getRowProps={({ original }) => ({
           className: classNames(
             original?.physicalItem && 'font-bold text-gray-700 dark:text-gray-200',
             getColorBySystemLevel(original?.systemLevel),

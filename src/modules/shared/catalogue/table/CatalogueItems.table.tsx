@@ -2,7 +2,6 @@ import type { ColumnDef, Table } from '@tanstack/react-table'
 import { createContext, useEffect, useRef } from 'react'
 
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import { useHoveringId } from '@/store/useHoveringId'
 import type { CatalogueCategory } from '@/types/gql/graphql'
 import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
 
@@ -34,7 +33,6 @@ export const CatalogueTable = ({
   setCategoryFilter
 }: CatalogueTableProps) => {
   const columns = useCatalogueItemsColumns({ tableId, additionalColumn, catalogueItems, setCategoryFilter })
-  const { setHoveringId } = useHoveringId()
   const catalogueTableRef = useRef<Table<CatalogueItem>>()
 
   useEffect(() => {
@@ -59,14 +57,6 @@ export const CatalogueTable = ({
       loading={loading}
       tableId={tableId}
       data={catalogueItems?.data}
-      getRowProps={({ id }) => ({
-        onMouseEnter: () => {
-          setHoveringId(id)
-        },
-        onMouseLeave: () => {
-          setHoveringId(undefined)
-        }
-      })}
       className={'relative overflow-y-scroll scrollbar-style'}
       settings={{
         enableQueryURL,

@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import { useHoveringId } from '@/store/useHoveringId'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import { classNames } from '@/utils'
@@ -17,7 +16,6 @@ export const RoomCardsContainer = () => {
   const tableId = 'roomCards'
   const router = useRouter()
   const { roomCards, loading, error, refetch } = useRoomCards()
-  const { setHoveringId } = useHoveringId()
 
   const columns = useRoomCardsColumns()
 
@@ -48,14 +46,8 @@ export const RoomCardsContainer = () => {
       <PandaTable
         {...{
           tableId,
-          getRowProps: ({ original: { status }, id }) => ({
-            className: classNames(...statusColorMapping(status)),
-            onMouseEnter: () => {
-              setHoveringId(id)
-            },
-            onMouseLeave: () => {
-              setHoveringId(undefined)
-            }
+          getRowProps: ({ original: { status } }) => ({
+            className: classNames(...statusColorMapping(status))
           }),
           loading,
           error,

@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { TableActionsButtons } from '@/components/Buttons'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
-import { useHoveringId } from '@/store/useHoveringId'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import type { RoomCard } from '@/types/gql/graphql'
@@ -15,10 +14,9 @@ interface LocationCellProps extends CellContext<RoomCard, any> {
   isHoveringId?: number | string
 }
 
-export const LocationCell = ({ getValue, row: { original, id } }: LocationCellProps) => {
+export const LocationCell = ({ getValue, row: { original } }: LocationCellProps) => {
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
 
-  const { hoveringId } = useHoveringId()
   const { deleteRoomCard } = useRoomCardDelete(original.uid, original.name)
   const withWarningModal = useWarningModal(`Are you sure you want to delete room card "${original.name}"?`)
   const handleDelete = () => {
@@ -34,7 +32,7 @@ export const LocationCell = ({ getValue, row: { original, id } }: LocationCellPr
       >
         <span>{getValue()}</span>
       </Link>
-      {hoveringId === id && editPersmission && <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />}
+      {editPersmission && <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />}
     </div>
   )
 }
