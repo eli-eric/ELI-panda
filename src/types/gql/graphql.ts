@@ -2610,6 +2610,9 @@ export type CatalogueItem = {
   properties: Array<CatalogueCategoryProperty>;
   propertiesAggregate?: Maybe<CatalogueItemCatalogueCategoryPropertyPropertiesAggregationSelection>;
   propertiesConnection: CatalogueItemPropertiesConnection;
+  relatedCatalogueItems: Array<CatalogueItem>;
+  relatedCatalogueItemsAggregate?: Maybe<CatalogueItemCatalogueItemRelatedCatalogueItemsAggregationSelection>;
+  relatedCatalogueItemsConnection: CatalogueItemRelatedCatalogueItemsConnection;
   supplier?: Maybe<Supplier>;
   supplierAggregate?: Maybe<CatalogueItemSupplierSupplierAggregationSelection>;
   supplierConnection: CatalogueItemSupplierConnection;
@@ -2680,6 +2683,28 @@ export type CatalogueItemPropertiesConnectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<CatalogueItemPropertiesConnectionSort>>;
   where?: InputMaybe<CatalogueItemPropertiesConnectionWhere>;
+};
+
+
+export type CatalogueItemRelatedCatalogueItemsArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<CatalogueItemOptions>;
+  where?: InputMaybe<CatalogueItemWhere>;
+};
+
+
+export type CatalogueItemRelatedCatalogueItemsAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<CatalogueItemWhere>;
+};
+
+
+export type CatalogueItemRelatedCatalogueItemsConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsConnectionSort>>;
+  where?: InputMaybe<CatalogueItemRelatedCatalogueItemsConnectionWhere>;
 };
 
 
@@ -2859,10 +2884,26 @@ export type CatalogueItemCatalogueCategoryUpdateFieldInput = {
   where?: InputMaybe<CatalogueItemCatalogueCategoryConnectionWhere>;
 };
 
+export type CatalogueItemCatalogueItemRelatedCatalogueItemsAggregationSelection = {
+  __typename?: 'CatalogueItemCatalogueItemRelatedCatalogueItemsAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<CatalogueItemCatalogueItemRelatedCatalogueItemsNodeAggregateSelection>;
+};
+
+export type CatalogueItemCatalogueItemRelatedCatalogueItemsNodeAggregateSelection = {
+  __typename?: 'CatalogueItemCatalogueItemRelatedCatalogueItemsNodeAggregateSelection';
+  catalogueNumber: StringAggregateSelectionNonNullable;
+  description: StringAggregateSelectionNullable;
+  manufacturerUrl: StringAggregateSelectionNonNullable;
+  name: StringAggregateSelectionNonNullable;
+  uid: StringAggregateSelectionNonNullable;
+};
+
 export type CatalogueItemConnectInput = {
   catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryConnectFieldInput>;
   item?: InputMaybe<CatalogueItemItemConnectFieldInput>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesConnectFieldInput>>;
+  relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsConnectFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierConnectFieldInput>;
 };
 
@@ -2878,6 +2919,7 @@ export type CatalogueItemCreateInput = {
   manufacturerUrl: Scalars['String']['input'];
   name: Scalars['String']['input'];
   properties?: InputMaybe<CatalogueItemPropertiesFieldInput>;
+  relatedCatalogueItems?: InputMaybe<CatalogueItemRelatedCatalogueItemsFieldInput>;
   supplier?: InputMaybe<CatalogueItemSupplierFieldInput>;
   uid: Scalars['String']['input'];
 };
@@ -2886,6 +2928,7 @@ export type CatalogueItemDeleteInput = {
   catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryDeleteFieldInput>;
   item?: InputMaybe<CatalogueItemItemDeleteFieldInput>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesDeleteFieldInput>>;
+  relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsDeleteFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierDeleteFieldInput>;
 };
 
@@ -2893,6 +2936,7 @@ export type CatalogueItemDisconnectInput = {
   catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryDisconnectFieldInput>;
   item?: InputMaybe<CatalogueItemItemDisconnectFieldInput>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesDisconnectFieldInput>>;
+  relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsDisconnectFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierDisconnectFieldInput>;
 };
 
@@ -3249,10 +3293,167 @@ export type CatalogueItemPropertiesUpdateFieldInput = {
   where?: InputMaybe<CatalogueItemPropertiesConnectionWhere>;
 };
 
+export type CatalogueItemRelatedCatalogueItemsAggregateInput = {
+  AND?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsAggregateInput>>;
+  NOT?: InputMaybe<CatalogueItemRelatedCatalogueItemsAggregateInput>;
+  OR?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<CatalogueItemRelatedCatalogueItemsNodeAggregationWhereInput>;
+};
+
+export type CatalogueItemRelatedCatalogueItemsConnectFieldInput = {
+  connect?: InputMaybe<Array<CatalogueItemConnectInput>>;
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<CatalogueItemConnectWhere>;
+};
+
+export type CatalogueItemRelatedCatalogueItemsConnection = {
+  __typename?: 'CatalogueItemRelatedCatalogueItemsConnection';
+  edges: Array<CatalogueItemRelatedCatalogueItemsRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type CatalogueItemRelatedCatalogueItemsConnectionSort = {
+  node?: InputMaybe<CatalogueItemSort>;
+};
+
+export type CatalogueItemRelatedCatalogueItemsConnectionWhere = {
+  AND?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsConnectionWhere>>;
+  NOT?: InputMaybe<CatalogueItemRelatedCatalogueItemsConnectionWhere>;
+  OR?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsConnectionWhere>>;
+  node?: InputMaybe<CatalogueItemWhere>;
+};
+
+export type CatalogueItemRelatedCatalogueItemsCreateFieldInput = {
+  node: CatalogueItemCreateInput;
+};
+
+export type CatalogueItemRelatedCatalogueItemsDeleteFieldInput = {
+  delete?: InputMaybe<CatalogueItemDeleteInput>;
+  where?: InputMaybe<CatalogueItemRelatedCatalogueItemsConnectionWhere>;
+};
+
+export type CatalogueItemRelatedCatalogueItemsDisconnectFieldInput = {
+  disconnect?: InputMaybe<CatalogueItemDisconnectInput>;
+  where?: InputMaybe<CatalogueItemRelatedCatalogueItemsConnectionWhere>;
+};
+
+export type CatalogueItemRelatedCatalogueItemsFieldInput = {
+  connect?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsConnectFieldInput>>;
+  create?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsCreateFieldInput>>;
+};
+
+export type CatalogueItemRelatedCatalogueItemsNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<CatalogueItemRelatedCatalogueItemsNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsNodeAggregationWhereInput>>;
+  catalogueNumber_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  catalogueNumber_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  catalogueNumber_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  catalogueNumber_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  catalogueNumber_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  catalogueNumber_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  catalogueNumber_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  catalogueNumber_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  catalogueNumber_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  catalogueNumber_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  catalogueNumber_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  catalogueNumber_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  catalogueNumber_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  catalogueNumber_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  catalogueNumber_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  description_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  description_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  description_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  description_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  description_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  description_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  description_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  description_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  description_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  description_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  description_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  description_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  description_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  description_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  description_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  manufacturerUrl_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  manufacturerUrl_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  manufacturerUrl_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  manufacturerUrl_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  manufacturerUrl_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  manufacturerUrl_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  manufacturerUrl_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  manufacturerUrl_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  manufacturerUrl_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  manufacturerUrl_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  manufacturerUrl_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  manufacturerUrl_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  manufacturerUrl_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  manufacturerUrl_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  manufacturerUrl_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  uid_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  uid_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  uid_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  uid_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type CatalogueItemRelatedCatalogueItemsRelationship = {
+  __typename?: 'CatalogueItemRelatedCatalogueItemsRelationship';
+  cursor: Scalars['String']['output'];
+  node: CatalogueItem;
+};
+
+export type CatalogueItemRelatedCatalogueItemsUpdateConnectionInput = {
+  node?: InputMaybe<CatalogueItemUpdateInput>;
+};
+
+export type CatalogueItemRelatedCatalogueItemsUpdateFieldInput = {
+  connect?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsConnectFieldInput>>;
+  create?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsCreateFieldInput>>;
+  delete?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsDisconnectFieldInput>>;
+  update?: InputMaybe<CatalogueItemRelatedCatalogueItemsUpdateConnectionInput>;
+  where?: InputMaybe<CatalogueItemRelatedCatalogueItemsConnectionWhere>;
+};
+
 export type CatalogueItemRelationInput = {
   catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryCreateFieldInput>;
   item?: InputMaybe<CatalogueItemItemCreateFieldInput>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesCreateFieldInput>>;
+  relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsCreateFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierCreateFieldInput>;
 };
 
@@ -3378,6 +3579,7 @@ export type CatalogueItemUpdateInput = {
   manufacturerUrl?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesUpdateFieldInput>>;
+  relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsUpdateFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierUpdateFieldInput>;
   uid?: InputMaybe<Scalars['String']['input']>;
 };
@@ -3433,6 +3635,23 @@ export type CatalogueItemWhere = {
   properties_SINGLE?: InputMaybe<CatalogueCategoryPropertyWhere>;
   /** Return CatalogueItems where some of the related CatalogueCategoryProperties match this filter */
   properties_SOME?: InputMaybe<CatalogueCategoryPropertyWhere>;
+  relatedCatalogueItemsAggregate?: InputMaybe<CatalogueItemRelatedCatalogueItemsAggregateInput>;
+  /** Return CatalogueItems where all of the related CatalogueItemRelatedCatalogueItemsConnections match this filter */
+  relatedCatalogueItemsConnection_ALL?: InputMaybe<CatalogueItemRelatedCatalogueItemsConnectionWhere>;
+  /** Return CatalogueItems where none of the related CatalogueItemRelatedCatalogueItemsConnections match this filter */
+  relatedCatalogueItemsConnection_NONE?: InputMaybe<CatalogueItemRelatedCatalogueItemsConnectionWhere>;
+  /** Return CatalogueItems where one of the related CatalogueItemRelatedCatalogueItemsConnections match this filter */
+  relatedCatalogueItemsConnection_SINGLE?: InputMaybe<CatalogueItemRelatedCatalogueItemsConnectionWhere>;
+  /** Return CatalogueItems where some of the related CatalogueItemRelatedCatalogueItemsConnections match this filter */
+  relatedCatalogueItemsConnection_SOME?: InputMaybe<CatalogueItemRelatedCatalogueItemsConnectionWhere>;
+  /** Return CatalogueItems where all of the related CatalogueItems match this filter */
+  relatedCatalogueItems_ALL?: InputMaybe<CatalogueItemWhere>;
+  /** Return CatalogueItems where none of the related CatalogueItems match this filter */
+  relatedCatalogueItems_NONE?: InputMaybe<CatalogueItemWhere>;
+  /** Return CatalogueItems where one of the related CatalogueItems match this filter */
+  relatedCatalogueItems_SINGLE?: InputMaybe<CatalogueItemWhere>;
+  /** Return CatalogueItems where some of the related CatalogueItems match this filter */
+  relatedCatalogueItems_SOME?: InputMaybe<CatalogueItemWhere>;
   supplier?: InputMaybe<SupplierWhere>;
   supplierAggregate?: InputMaybe<CatalogueItemSupplierAggregateInput>;
   supplierConnection?: InputMaybe<CatalogueItemSupplierConnectionWhere>;
