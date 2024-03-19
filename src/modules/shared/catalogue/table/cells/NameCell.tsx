@@ -28,8 +28,7 @@ interface NameProps extends CellContext<CatalogueItem, any> {
 export const NameCell = ({
   getValue,
   row: {
-    original: { uid },
-    id
+    original: { uid }
   },
   toDelete,
   tableId
