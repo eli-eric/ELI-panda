@@ -47,6 +47,7 @@ const CleaningSchedule = () => {
 
 const PrescribedClothingSelect = () => {
   const prescribedClothingEnums = Object.values(PrescribedClothing).map(value => value)
+  const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
   const { control, setValue } = useFormContext<RoomCardFormType>()
   const prescribedClothing = useWatch({ control, name: 'prescribedClothing' }) || []
   return (
@@ -57,6 +58,7 @@ const PrescribedClothingSelect = () => {
           checked={prescribedClothing?.includes(item as any) ? true : false}
           className="mr-1 mb-1 col-span-1"
           label={item.replace(/_/g, ' ')}
+          disabled={!editPersmission}
           onChange={e => {
             e.target.checked
               ? setValue('prescribedClothing', [...prescribedClothing, item])

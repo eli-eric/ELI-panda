@@ -7,8 +7,10 @@ import { mixed, object } from 'yup'
 
 import Combobox from '@/components/form/Combobox'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
+import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
+import { ROLE } from '@/types/constants/roles'
 import type { ContactPersonRole, Employee, Query } from '@/types/gql/graphql'
 
 import { useLazyEmployee } from '../../../../hooks/graphql/useLazyEmployee'
@@ -33,6 +35,7 @@ export type ContactHallForm = {
 
 export const ContactHallButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const canEdit = usePermission([ROLE.ROOM_CARD_EDIT])
 
   const formMethods = useForm<ContactHallForm>({ resolver: yupResolver(makeSchema()) })
 
@@ -84,6 +87,8 @@ export const ContactHallButton = () => {
         )
     })
   }
+
+  if (!canEdit) return null
 
   return (
     <HeaderButtonModalComponent
