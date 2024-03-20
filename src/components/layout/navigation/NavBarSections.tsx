@@ -6,6 +6,8 @@ import { type FC } from 'react'
 
 import { DarkModeSwitch } from '@/components/DarkModeSwitch'
 import EliLogoComponent from '@/components/eli-logo.comp'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
+import useFetch from '@/hooks/fetch/useFetch'
 import { NAV_BAR_CONFIG, PATH, USER_NAVIGATION } from '@/types/constants/paths'
 import { classNames } from '@/utils'
 
@@ -47,9 +49,16 @@ export const MainNavigation: FC<MainNavigationProps> = ({
   toggleItemExpansion
 }) => {
   const pathName = usePathname()
+
+  const { codebooks } = useEndpoint({ query: { editable: true } })
+  const { response } = useFetch<{ code: string; type: string }[]>({ url: codebooks, config: { suspense: false } })
+
   return (
     <div className="flex-grow">
       {NAV_BAR_CONFIG.map(item => {
+        if (item.name === 'Codebooks' && response?.length === 0) {
+          return null
+        }
         if (item.links) {
           return (
             <NavBarMultiLink
