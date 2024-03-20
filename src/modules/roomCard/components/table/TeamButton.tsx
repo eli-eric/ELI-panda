@@ -3,16 +3,16 @@ import { useState } from 'react'
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
 import { mixed, object } from 'yup'
 
-import Listbox from '@/components/form/Listbox'
+import Combobox from '@/components/form/Combobox'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
+import { CODEBOOK } from '@/types/constants/codebook'
 import { ROLE } from '@/types/constants/roles'
 import type { Team } from '@/types/gql/graphql'
 
 import { useTeams } from '../../hooks/useTeams'
 import { useRoomCardStore } from '../../store/useRoomCardStore'
-import type { RoomCardFormType } from '../../types/form'
 import { HeaderButtonModalComponent } from './HeaderButtonModal.comp'
 
 const nestedForm = message.roomCardsPage.nestedForm
@@ -26,7 +26,7 @@ export const TeamButton = () => {
 
   const { teams } = useTeams()
 
-  const { control } = useFormContext<RoomCardFormType>()
+  const { control } = useFormContext<any>()
   const { insert, fields: arrayFields } = useFieldArray({ control, name: 'teams' })
 
   const onSubmit = data => {
@@ -38,7 +38,8 @@ export const TeamButton = () => {
     team: {
       name: 'team',
       disabled: false,
-      label: nestedForm.team.label
+      label: nestedForm.team.label,
+      codebook: CODEBOOK.TEAM
     }
   })
 
@@ -51,7 +52,7 @@ export const TeamButton = () => {
           'is-unique',
           'Team already selected',
           //eslint-disable-next-line
-          value => !arrayFields.some(field => field.uid === value?.uid) // assuming each team has an 'id' property
+          value => !arrayFields.some((field: any) => field.uid === value?.uid) // assuming each team has an 'id' property
         )
     })
   }
@@ -63,7 +64,7 @@ export const TeamButton = () => {
       onSubmit={onSubmit}
       setIsModalOpen={setIsModalOpen}
     >
-      <Listbox {...fields.team} codebookResponse={teams} />
+      <Combobox {...fields.team} codebookResponse={teams} />
     </HeaderButtonModalComponent>
   )
 }

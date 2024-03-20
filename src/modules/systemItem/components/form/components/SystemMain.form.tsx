@@ -6,7 +6,6 @@ import { Input, TextArea } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
-import { useTeams } from '@/modules/roomCard/hooks/useTeams'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
 import { useSystemItemStore } from '@/modules/systemItem/store/useSystemItemStore'
@@ -26,7 +25,6 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
   const maintainedBy = useWatch({ control, name: 'maintainedBy' })
   const operators = useWatch({ control, name: 'operators' })
   const systemLevels = Object.values(SystemLevel).map(level => level)
-  const { teams } = useTeams()
 
   return (
     <Fragment>
@@ -67,7 +65,7 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
       <Card className="border-t border-gray-400">
         <Grid>
           <Col sm={3} md={6}>
-            <Listbox {...fields.team} codebookResponse={teams} />
+            <Combobox {...fields.team} />
           </Col>
           <Col sm={3} md={6}>
             <Combobox {...fields.responsible} />
