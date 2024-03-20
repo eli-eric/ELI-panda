@@ -61,7 +61,7 @@ export const CodebooksContainer: FC<Props> = () => {
       `/codebook/${selectedCodebookQuery}?limit=5000&filter=undefined`,
       prev => {
         if (prev) {
-          return { data: [{ name: '', uid: '', uuid: id }, ...prev.data], metadata: prev.metadata }
+          return { data: [{ name: '', uid: '', uuid: id }, ...(prev?.data || [])], metadata: prev.metadata }
         }
       },
       { revalidate: false }
