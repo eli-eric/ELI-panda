@@ -76,7 +76,7 @@ const CodebookTable: FC<Props> = ({ lastAddedUUID }) => {
             {...{
               table,
               tableId: 'codebooks',
-              className: 'relative overflow-scroll scrollbar-style border-l',
+              className: 'relative overflow-scroll scrollbar-style border-l border-r',
               data: codebook?.data,
               loading: isLoading,
               settings: {
