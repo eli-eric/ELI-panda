@@ -1,4 +1,5 @@
 import {
+  CreditCardIcon,
   IdentificationIcon,
   LifebuoyIcon,
   RectangleGroupIcon,
@@ -34,6 +35,12 @@ const tiles = [
     link: PATH.ORDERS,
     Icon: () => <ShoppingCartIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
     role: ROLE.ORDERS_VIEW
+  },
+  {
+    name: 'Room Cards',
+    link: PATH.ROOM_CARDS,
+    Icon: () => <CreditCardIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
+    role: ROLE.ROOM_CARD_VIEW
   },
   {
     name: 'Users',
