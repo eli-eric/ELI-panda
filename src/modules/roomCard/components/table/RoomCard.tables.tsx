@@ -3,10 +3,10 @@ import type { FC } from 'react'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import Card from '@/components/layout/Card'
 import { Heading } from '@/components/layout/Heading'
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import usePermission from '@/hooks/usePermission'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { ROLE } from '@/types/constants/roles'
-import type { Team } from '@/types/gql/graphql'
 
 import type { ContactPersonsHall, EmployeeType } from '../../types/form'
 import { cleanRooms, possibleParameters } from '../../utils/constants'
@@ -16,7 +16,7 @@ import { useRoomCardsColumns } from './RoomCard.columns'
 type Props = {
   contactPersonsHall: ContactPersonsHall[]
   contactPersonsDept: EmployeeType[]
-  teams?: Team[]
+  teams?: CodebookType[]
   locations?: Codebooktree[]
 }
 

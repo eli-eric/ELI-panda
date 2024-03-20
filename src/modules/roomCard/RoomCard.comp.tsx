@@ -6,11 +6,11 @@ import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { PageHead } from '@/components/layout/PageHead'
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { ROLE } from '@/types/constants/roles'
-import type { Team } from '@/types/gql/graphql'
 import { RoomCardStatus } from '@/types/gql/graphql'
 
 import { HeaderButtons } from './components/HeaderButtons'
@@ -27,7 +27,7 @@ type Props = {
   onSubmit: () => void
   contactPersonsHall: ContactPersonsHall[]
   contactPersonsDept: EmployeeType[]
-  teams: Team[]
+  teams: CodebookType[]
   locations?: Codebooktree[]
 }
 

@@ -98,6 +98,7 @@ export const typeDefs = gql`
   type Team @authentication {
     uid: ID! @id
     name: String!
+    facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
   }
 
   type Employee @authentication {

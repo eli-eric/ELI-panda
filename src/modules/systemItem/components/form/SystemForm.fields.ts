@@ -90,7 +90,8 @@ const useSystemEditFormFields = () => {
       label: form.team.label,
       placeholder: form.team.placeholder,
       rounded: 'rounded-md',
-      disabled: disabledEdit
+      disabled: disabledEdit,
+      codebook: CODEBOOK.TEAM
     },
     itemUsage: {
       name: 'physicalItem.itemUsage',
