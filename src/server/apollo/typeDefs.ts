@@ -27,6 +27,7 @@ export const typeDefs = gql`
   type ContactPersonRole @authentication {
     uid: ID! @id
     name: String!
+    facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
   }
 
   type HallContactPerson @authentication {
@@ -190,11 +191,7 @@ export const typeDefs = gql`
 
   type Facility @authentication {
     code: String!
-    hasLocationLocations: [Location!]! @relationship(type: "HAS_LOCATION", direction: OUT)
-    hasZoneZones: [Zone!]! @relationship(type: "HAS_ZONE", direction: OUT)
-    locationsBelongsToFacility: [Location!]! @relationship(type: "BELONGS_TO_FACILITY", direction: IN)
     name: String!
-    systemTypeGroupsBelongsToFacility: [SystemTypeGroup!]! @relationship(type: "BELONGS_TO_FACILITY", direction: IN)
     uid: String!
   }
 

@@ -6,7 +6,6 @@ import { v4 as uuid } from 'uuid'
 import { mixed, object } from 'yup'
 
 import Combobox from '@/components/form/Combobox'
-import Listbox from '@/components/form/Listbox'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
@@ -67,7 +66,8 @@ export const ContactHallButton = () => {
     role: {
       name: 'role',
       label: nestedForm.role.label,
-      disabled: false
+      disabled: false,
+      codebook: CODEBOOK.CONTACT_PERSON_ROLE
     }
   })
 
@@ -92,7 +92,7 @@ export const ContactHallButton = () => {
       onSubmit={onSubmit}
       setIsModalOpen={setIsModalOpen}
     >
-      <Listbox {...fields.role} codebookResponse={data?.contactPersonRoles} />
+      <Combobox {...fields.role} codebookResponse={data?.contactPersonRoles} />
       <Combobox
         {...fields.employee}
         onSelect={value => {
