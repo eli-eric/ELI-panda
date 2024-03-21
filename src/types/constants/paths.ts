@@ -1,9 +1,9 @@
 import {
   CreditCardIcon,
   HomeIcon,
+  RectangleGroupIcon,
   RectangleStackIcon,
   ShoppingCartIcon,
-  SquaresPlusIcon,
   TableCellsIcon,
   UserGroupIcon,
   UserIcon
@@ -67,7 +67,7 @@ export const NAV_BAR_CONFIG: NavigationType[] = [
       { path: PATH.SPARE_PARTS, name: 'Spare Parts', role: ROLE.SYSTEM_EDIT }
     ],
     role: ROLE.SYSTEMS_VIEW,
-    Icon: SquaresPlusIcon
+    Icon: RectangleGroupIcon
   },
   {
     name: 'Catalogue',

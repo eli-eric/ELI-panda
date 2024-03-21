@@ -78,6 +78,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
   ) => {
     const {
       enableSorting = false,
+      enableColumnReordering = true,
       enableQueryURL = false,
       enableRowSelection = false,
       manualSorting = true,
@@ -105,7 +106,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
       getSubRows,
       onExpandedChange: setExpanded,
       onSortingChange: setSorting,
-      onColumnOrderChange: setColumnOrder,
+      onColumnOrderChange: enableColumnReordering ? setColumnOrder : undefined,
       onColumnVisibilityChange: setColumnVisibility,
       onColumnFiltersChange: setColumnFilters,
       onRowSelectionChange: setRowSelection,
@@ -124,7 +125,7 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
       state: {
         sorting,
         expanded,
-        columnOrder,
+        columnOrder: enableColumnReordering ? columnOrder : undefined,
         columnVisibility,
         columnFilters,
         rowSelection

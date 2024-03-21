@@ -9,6 +9,7 @@ import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
 import { useSubsystems } from '../../hooks/useSubsystems'
+import type { ITEM_USAGE } from '../../types/constants'
 import type { SystemDetail } from '../../types/responses'
 import { IconCell } from './cells/IconCell'
 // eslint-disable-next-line
@@ -29,7 +30,9 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
       {
         id: 'icon',
         size: 20,
-        cell: IconCell,
+        cell: ({ row: { original } }) => (
+          <IconCell itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE} />
+        ),
         meta: { sticky: true }
       },
       {

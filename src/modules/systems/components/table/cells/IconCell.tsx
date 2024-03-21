@@ -6,15 +6,17 @@ import {
   CubeIcon,
   ShoppingBagIcon
 } from '@heroicons/react/24/solid'
-import type { CellContext } from '@tanstack/react-table'
 import type { FC } from 'react'
 
 import { Tooltip } from '@/components/Tooltip'
 import { ITEM_USAGE } from '@/modules/systems/types/constants'
-import type { SystemDetail } from '@/modules/systems/types/responses'
 
-export const IconCell: FC<CellContext<SystemDetail, any>> = ({ row }) => {
-  switch (row.original.physicalItem?.itemUsage?.uid) {
+interface Props {
+  itemUsageUid?: ITEM_USAGE
+}
+
+export const IconCell: FC<Props> = ({ itemUsageUid }) => {
+  switch (itemUsageUid) {
     case ITEM_USAGE.SPARE_PART: {
       return (
         <Tooltip content="Spare part">

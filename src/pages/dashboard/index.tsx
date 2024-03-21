@@ -1,9 +1,10 @@
 import {
   CreditCardIcon,
-  IdentificationIcon,
   LifebuoyIcon,
   RectangleGroupIcon,
+  RectangleStackIcon,
   ShoppingCartIcon,
+  TableCellsIcon,
   UserGroupIcon
 } from '@heroicons/react/24/outline'
 import type { NextPage } from 'next'
@@ -27,7 +28,7 @@ const tiles = [
   {
     name: 'Catalogue',
     link: PATH.CATALOGUE,
-    Icon: () => <IdentificationIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
+    Icon: () => <RectangleStackIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
     role: ROLE.CATALOGUE_VIEW
   },
   {
@@ -47,6 +48,12 @@ const tiles = [
     link: PATH.ADMIN_USERS,
     Icon: () => <UserGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
     role: ROLE.ADMIN
+  },
+  {
+    name: 'Codebooks',
+    link: PATH.CODEBOOKS,
+    Icon: () => <TableCellsIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
+    role: ROLE.CODEBOOKS_ADMIN
   },
   {
     name: 'Support/Feedback',
