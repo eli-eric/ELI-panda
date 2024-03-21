@@ -10,6 +10,7 @@ import { classNames } from '@/utils'
 
 import { IconCell } from '../systems/components/table/cells/IconCell'
 import { useSubsystems } from '../systems/hooks/useSubsystems'
+import type { ITEM_USAGE } from '../systems/types/constants'
 import type { SystemDetail } from '../systems/types/responses'
 import { SpareNameCell } from './components/NameCell'
 
@@ -61,7 +62,7 @@ export const useSystemsSparePartsColumns = ({ tableId, setSelectedUids }: System
         id: 'icons',
         size: 20,
         meta: { sticky: true },
-        cell: IconCell
+        cell: ({ row: { original } }) => <IconCell itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE} />
       },
       {
         id: 'select',

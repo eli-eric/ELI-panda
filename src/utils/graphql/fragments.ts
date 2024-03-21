@@ -22,6 +22,22 @@ export const SYSTEM_FIELDS = gql`
         name
       }
       systemLevel
+      systemAlias
+      parentPath {
+        uid
+        name
+        systemLevel
+      }
+      physicalItem {
+        uid
+        eun
+        name
+        serialNumber
+        itemUsage {
+          uid
+          name
+        }
+      }
     }
     keySystem {
       uid
@@ -35,6 +51,7 @@ export const SYSTEM_FIELDS = gql`
     location {
       uid
       name
+      code
     }
     maintainedBy {
       fullName

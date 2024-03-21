@@ -8,11 +8,14 @@ import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { SystemDetailContext } from '@/pages/system/[uid]'
 import { PATH } from '@/types/constants/paths'
+import { classNames } from '@/utils'
 
-import { useSubsystemsColumns } from '../subsystems/SubSystems.columns'
+import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
+import { useSubSystemsColumns } from '../spare-parts/SpareParts.columns'
 
 export const SparePartsFor = () => {
-  const columns = useSubsystemsColumns()
+  const tableId = 'sparePartFor'
+  const columns = useSubSystemsColumns(tableId)
   const { systemDetail } = useContext(SystemDetailContext)
   const router = useRouter()
   const { setFilter } = useFormFilterState({ tableId: 'spare-parts', enableQueryUrl: false })
@@ -36,13 +39,21 @@ export const SparePartsFor = () => {
 
   return (
     <Fragment>
-      <Heading customText="Spare Part For Systems">
+      <Heading customText="Designated spare part for">
         <AssignSparePartButton />
       </Heading>
       {systemDetail?.sparePartsFor && systemDetail.sparePartsFor.length > 0 && (
         <PandaTable
           columns={columns}
-          tableId={'subsystems'}
+          getRowProps={({ original }) => ({
+            className: classNames(
+              original?.physicalItem && 'font-bold text-gray-700 dark:text-gray-200',
+              getColorBySystemLevel(original?.systemLevel),
+              getFontBySystemLevel(original?.systemLevel)
+            )
+          })}
+          tableId={tableId}
+          settings={{ enableColumnReordering: false }}
           className={'relative overflow-x-auto mb-0 pb-0'}
           data={systemDetail?.sparePartsFor || []}
         />

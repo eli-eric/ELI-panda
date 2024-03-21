@@ -8,11 +8,14 @@ import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { SystemDetailContext } from '@/pages/system/[uid]'
 import { PATH } from '@/types/constants/paths'
+import { classNames } from '@/utils'
 
-import { useSubsystemsColumns } from '../subsystems/SubSystems.columns'
+import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
+import { useSubSystemsColumns } from './SpareParts.columns'
 
 export const SparePartsContainer = () => {
-  const columns = useSubsystemsColumns()
+  const tableId = 'spareParts'
+  const columns = useSubSystemsColumns(tableId)
   const { systemDetail } = useContext(SystemDetailContext)
 
   const { setFilter } = useFormFilterState({ tableId: 'for-system', enableQueryUrl: false })
@@ -43,7 +46,15 @@ export const SparePartsContainer = () => {
       {systemDetail?.spareParts && systemDetail.spareParts.length > 0 && (
         <PandaTable
           columns={columns}
-          tableId={'subsystems'}
+          getRowProps={({ original }) => ({
+            className: classNames(
+              original?.physicalItem && 'font-bold text-gray-700 dark:text-gray-200',
+              getColorBySystemLevel(original?.systemLevel),
+              getFontBySystemLevel(original?.systemLevel)
+            )
+          })}
+          settings={{ enableColumnReordering: false }}
+          tableId={tableId}
           className={'relative overflow-x-auto mb-0 pb-0'}
           data={systemDetail?.spareParts}
         />
