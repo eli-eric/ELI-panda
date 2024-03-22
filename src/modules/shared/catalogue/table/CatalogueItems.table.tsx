@@ -1,15 +1,16 @@
-import type { ColumnDef, Table } from '@tanstack/react-table'
+import type { Row, Table } from '@tanstack/react-table'
 import { createContext, useEffect, useRef } from 'react'
 
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import type { CatalogueCategory } from '@/types/gql/graphql'
 import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
 
+import type { GetRowPropsReturnType } from '../../table/pandaTable/PandaTable'
 import { PandaTable } from '../../table/pandaTable/PandaTable'
 import { useCatalogueItemsColumns } from './CatalogueItems.columns'
 
 interface CatalogueTableProps {
-  additionalColumn?: ColumnDef<CatalogueItem, any>
+  hideButtons?: boolean
   enableQueryURL?: boolean
   tableId?: string
   catalogueItems?: CatalogueItemsResponse
@@ -17,6 +18,7 @@ interface CatalogueTableProps {
   loading?: boolean
   enableFiltering?: boolean
   setCategoryFilter?: (value: CodebookType) => void
+  getRowProps?: (row: Row<any>) => GetRowPropsReturnType
 }
 
 export const CatalogueTableContext = createContext<{ isHoveringId: number | undefined | string }>({
@@ -24,15 +26,16 @@ export const CatalogueTableContext = createContext<{ isHoveringId: number | unde
 })
 
 export const CatalogueTable = ({
-  additionalColumn,
+  hideButtons,
   enableQueryURL = true,
   tableId = 'catalogueItems',
   catalogueItems,
+  getRowProps,
   categoryList,
   loading,
   setCategoryFilter
 }: CatalogueTableProps) => {
-  const columns = useCatalogueItemsColumns({ tableId, additionalColumn, catalogueItems, setCategoryFilter })
+  const columns = useCatalogueItemsColumns({ tableId, hideButtons, catalogueItems, setCategoryFilter })
   const catalogueTableRef = useRef<Table<CatalogueItem>>()
 
   useEffect(() => {
@@ -42,20 +45,13 @@ export const CatalogueTable = ({
     }
   }, [categoryList, columns])
 
-  useEffect(() => {
-    if (catalogueTableRef.current) {
-      if (additionalColumn) {
-        catalogueTableRef.current.setColumnOrder(['select'])
-      }
-    }
-  }, [additionalColumn])
-
   return (
     <PandaTable
       ref={catalogueTableRef}
       columns={columns}
       loading={loading}
       tableId={tableId}
+      getRowProps={getRowProps}
       data={catalogueItems?.data}
       className={'relative overflow-y-scroll scrollbar-style'}
       settings={{
