@@ -49,7 +49,7 @@ export const SystemNameCell = ({
   tableId,
   enableDragAndDrop = false
 }: SystemNameCellProps) => {
-  const { original, id } = row
+  const { original } = row
   const { sparesIn, sparesOut } = original
   const { system } = useEndpoint({ uid: original.uid })
   const { mutate } = useSystems(tableId)

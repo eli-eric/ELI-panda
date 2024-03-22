@@ -95,6 +95,18 @@ export const addSubsystem = (parentUid: string, newSystem: SystemDetail, prev: S
   return { ...prev, data: addData(prev.data) }
 }
 
+export const addSubsystemToSubsystems = (prev: SystemDetail[], newSystem: SystemDetail): SystemDetail[] => {
+  return [...prev, newSystem]
+}
+export const updateSubSystem = (prev: SystemDetail[], newSystem: SystemDetail): SystemDetail[] => {
+  return prev.map(system => {
+    if (system.uid === newSystem.uid) {
+      return newSystem
+    }
+    return system
+  })
+}
+
 export const useSystemsRefresh = tableId => {
   const query = useQueryManager(tableId)
   const { systemsList } = useEndpoint({ ...query })
