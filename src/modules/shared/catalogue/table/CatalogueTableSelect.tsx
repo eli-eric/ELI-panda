@@ -1,19 +1,14 @@
-import type { ColumnDef } from '@tanstack/react-table'
-import { type Dispatch, Fragment, type SetStateAction, useEffect, useMemo } from 'react'
-import { useIntl } from 'react-intl'
+import { type Dispatch, Fragment, type SetStateAction, useEffect } from 'react'
 
-import { message } from '@/i18n/src/messages'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { CatalogueItem } from '@/types/responses'
+import { classNames } from '@/utils'
 
 import { Pagination } from '../../table/Pagination'
 import { SearchBar } from '../../table/SearchBar'
 import { CatalogueTable } from './CatalogueItems.table'
-import { SelectCell } from './cells/SelectCell'
-
-const messages = message.cataloguePage.itemList.header
 
 interface Props {
   setItem: Dispatch<SetStateAction<CatalogueItem | undefined>>
@@ -21,21 +16,11 @@ interface Props {
 }
 
 const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
-  const intl = useIntl()
   const tableId = 'catalogueItemsModal'
 
   const { catalogueItems, loading } = useCatalogueItems(tableId)
   const { catalogueCategories } = useCategoryList()
 
-  const selectColumn: ColumnDef<CatalogueItem, any> = useMemo(
-    () => ({
-      header: intl.formatMessage({ id: messages.select }),
-      id: 'select',
-      cell: props => <SelectCell {...props} setItem={setItem} selectedItem={selectedItem} />,
-      size: 70
-    }),
-    [intl, setItem, selectedItem]
-  )
   const { instances } = useTableStateStore()
 
   const pagination = instances[tableId]?.pagination
@@ -55,16 +40,25 @@ const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
         }}
       />
       <div className="h-full overflow-y-hidden min-h-[245px] border-t border-gray-300">
-        <fieldset>
-          <CatalogueTable
-            tableId={tableId}
-            additionalColumn={selectColumn}
-            enableQueryURL={false}
-            loading={loading}
-            categoryList={catalogueCategories}
-            catalogueItems={catalogueItems}
-          />
-        </fieldset>
+        <CatalogueTable
+          tableId={tableId}
+          enableQueryURL={false}
+          hideButtons={true}
+          loading={loading}
+          getRowProps={row => ({
+            className: classNames(
+              'cursor-pointer',
+              row.original.uid === selectedItem?.uid
+                ? 'bg-primary-300 dark:bg-primary-600 hover:bg-color-300 dark:hover:bg-color-600'
+                : ''
+            ),
+            onClick: () => {
+              setItem(row.original)
+            }
+          })}
+          categoryList={catalogueCategories}
+          catalogueItems={catalogueItems}
+        />
       </div>
       <Pagination
         tableId={tableId}

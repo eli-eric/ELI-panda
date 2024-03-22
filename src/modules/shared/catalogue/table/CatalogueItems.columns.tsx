@@ -21,12 +21,12 @@ const messages = message.cataloguePage.itemList.header
 
 type Props = {
   tableId: string
-  additionalColumn?: ColumnDef<CatalogueItem, any>
+  hideButtons?: boolean
   catalogueItems?: CatalogueItemsResponse
   setCategoryFilter?: (value: CodebookType) => void
 }
 
-export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueItems, setCategoryFilter }: Props) => {
+export const useCatalogueItemsColumns = ({ tableId, hideButtons, catalogueItems, setCategoryFilter }: Props) => {
   const intl = useIntl()
   const uid = useCategoryUid()
   const { catalogueCategoryProperties } = useCategoryProperties(uid)
@@ -37,9 +37,9 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueI
         header: intl.formatMessage({ id: messages.name }),
         accessorFn: row => row.name,
         id: 'name',
-        cell: props => <NameCell {...props} toDelete={!additionalColumn} tableId={tableId} />,
+        cell: props => <NameCell {...props} hideButtons={hideButtons} tableId={tableId} />,
         size: 300,
-        meta: { sticky: additionalColumn ? false : true, filter: { type: 'string', enableColumnFilter: true } }
+        meta: { sticky: hideButtons ? false : true, filter: { type: 'string', enableColumnFilter: true } }
       },
       {
         header: intl.formatMessage({ id: messages.description }),
@@ -139,12 +139,10 @@ export const useCatalogueItemsColumns = ({ tableId, additionalColumn, catalogueI
         columns.splice(categoryNameIndex, 0, ...detailsColumns)
       }
     }
-    if (additionalColumn) {
-      columns.push(additionalColumn)
-    }
+
     return columns
     // eslint-disable-next-line
-  }, [intl, catalogueItems, additionalColumn, tableId, catalogueCategoryProperties])
+  }, [intl, catalogueItems, tableId, catalogueCategoryProperties, hideButtons])
 
   return columns
 }

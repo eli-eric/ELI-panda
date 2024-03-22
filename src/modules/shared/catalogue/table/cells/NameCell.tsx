@@ -20,7 +20,7 @@ import { createMessageValues } from '@/utils/formatters'
 const modalMessage = message.ordersPage.deleteModal
 
 interface NameProps extends CellContext<CatalogueItem, any> {
-  toDelete?: boolean
+  hideButtons?: boolean
   tableId?: string
 }
 
@@ -30,7 +30,7 @@ export const NameCell = ({
   row: {
     original: { uid }
   },
-  toDelete,
+  hideButtons,
   tableId
 }: NameProps) => {
   const { catalogueItem } = useEndpoint({ uid })
@@ -72,7 +72,7 @@ export const NameCell = ({
           </LinkDecorator>
         </Link>
       )}
-      {toDelete && (
+      {!hideButtons && (
         <TableActionsButtons
           onDeleteClick={() => {
             withWarningModal(
