@@ -3,10 +3,12 @@ import { useRouter } from 'next/router'
 import type { MutableRefObject } from 'react'
 import { useContext } from 'react'
 import { toast } from 'react-hot-toast'
+import { mutate as mutateEndpoint } from 'swr'
 
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
-import { updateSystem } from '@/modules/systems/utils'
+import { updateSubSystem, updateSystem } from '@/modules/systems/utils'
 import { SystemDetailContext } from '@/pages/system/[uid]'
 import { PATH } from '@/types/constants/paths'
 import type { Mutation, MutationUpdateSystemsArgs } from '@/types/gql/graphql'
@@ -63,6 +65,7 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
   const uid = router.query.uid as string
   const { systemDetail, refetch } = useContext(SystemDetailContext)
   const { mutate } = useSystems('systems')
+  const { systemSubsystems } = useEndpoint({ uid: systemDetail?.parentSystem?.uid || '' })
   const onCompleted = ({ updateSystems: { systems } }) => {
     const responseUid = systems[0].uid
     const body = {
@@ -86,6 +89,7 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
       } else {
         router.replace(PATH.SYSTEM + '/' + responseUid)
       }
+      mutateEndpoint(systemSubsystems, prev => updateSubSystem(prev, body), { revalidate: false })
       mutate(prev => prev && updateSystem(uid, body, prev), { revalidate: false })
       refetch()
     })
