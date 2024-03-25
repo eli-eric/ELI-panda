@@ -1,4 +1,4 @@
-import { Query } from '@/types/gql/graphql'
+import type { Query } from '@/types/gql/graphql'
 import { useMutation, gql } from '@apollo/client'
 import { useRouter } from 'next/router'
 
@@ -40,9 +40,6 @@ export const useCreateRelatedItem = ({ uid }: Props) => {
           }
         ]
       }
-    },
-    onError: error => {
-      console.log(error)
     }
   })
 

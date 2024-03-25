@@ -8,6 +8,9 @@ import { useCreateRelatedItem } from '../../hooks/useCreateRelatedItem'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 import { useRelatedItems } from '../../hooks/useItem'
+import { message } from '@/i18n/src/messages'
+
+const messages = message.common.buttons
 
 interface Props {
   open: boolean
@@ -58,11 +61,11 @@ export const SelectRelatatedItemsModal: FC<Props> = ({ open, setOpen }) => {
 
   const buttons: ModalButtons = {
     goBack: {
-      text: 'Cancel',
+      text: messages.close,
       onClick: () => setOpen(false)
     },
     goNext: {
-      text: 'Save',
+      text: messages.continue,
       onClick: submitModal,
       loading
     }
