@@ -65,7 +65,7 @@ const GET_RELATED_ITEMS = gql`
 export const useRelatedItems = () => {
   const router = useRouter()
   const uid = router.query.uid as string
-  const { data, loading } = useQuery<Query>(GET_RELATED_ITEMS, {
+  const { data, loading, refetch } = useQuery<Query>(GET_RELATED_ITEMS, {
     variables: {
       where: {
         uid
@@ -74,7 +74,7 @@ export const useRelatedItems = () => {
     skip: !uid
   })
 
-  return { data: data?.catalogueItems[0].relatedCatalogueItems, loading }
+  return { data: data?.catalogueItems[0].relatedCatalogueItems, loading, refetch }
 }
 
 export default useItem

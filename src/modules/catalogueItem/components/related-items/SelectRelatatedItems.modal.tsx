@@ -1,9 +1,13 @@
-import type { FC } from 'react'
+import { useState, type FC } from 'react'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import CatalogueTableSelect from '@/modules/shared/catalogue/table/CatalogueTableSelect'
-import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type { ModalButtons } from '@/types/form'
+import type { CatalogueItem } from '@/types/responses'
+import { useCreateRelatedItem } from '../../hooks/useCreateRelatedItem'
+import { useRouter } from 'next/router'
+import toast from 'react-hot-toast'
+import { useRelatedItems } from '../../hooks/useItem'
 
 interface Props {
   open: boolean
@@ -11,6 +15,47 @@ interface Props {
 }
 
 export const SelectRelatatedItemsModal: FC<Props> = ({ open, setOpen }) => {
+  const [selectedItem, setSelectedItem] = useState<CatalogueItem | undefined>()
+  const { createRelatedItem, loading } = useCreateRelatedItem({ uid: selectedItem?.uid })
+  const { refetch } = useRelatedItems()
+  const router = useRouter()
+  const itemUid = router.query.uid as string
+
+  const submitModal = () => {
+    if (selectedItem) {
+      createRelatedItem({
+        variables: {
+          where: {
+            uid: itemUid
+          },
+          update: {
+            relatedCatalogueItems: [
+              {
+                connect: [
+                  {
+                    where: {
+                      node: {
+                        uid: selectedItem.uid
+                      }
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        onError: error => {
+          toast.error(error.message)
+        },
+        onCompleted: () => {
+          setOpen(false)
+          setSelectedItem(undefined)
+          refetch()
+        }
+      })
+    }
+  }
+
   const buttons: ModalButtons = {
     goBack: {
       text: 'Cancel',
@@ -18,18 +63,14 @@ export const SelectRelatatedItemsModal: FC<Props> = ({ open, setOpen }) => {
     },
     goNext: {
       text: 'Save',
-      onClick: () => {}
+      onClick: submitModal,
+      loading
     }
   }
 
-  const table = usePandaTable({
-    columns: [],
-    tableId: 'relatedItems'
-  })
-
   return (
     <ModalComponent {...{ open, setOpen, buttons }}>
-      <CatalogueTableSelect setItem={() => {}} />
+      <CatalogueTableSelect setItem={setSelectedItem} selectedItem={selectedItem} />
     </ModalComponent>
   )
 }
