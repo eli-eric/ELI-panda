@@ -7,6 +7,7 @@ import { useIsFirstRender } from 'usehooks-ts'
 
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
+import useTableStateStore from '@/store/useTableStateStore'
 
 interface IFilter<T> {
   tableId: string
@@ -30,6 +31,11 @@ function synchronizeCustomFormFields(customFieldIdToSync, setValue, setFilters) 
 
 export const useFormFilter = <T extends FieldValues>({ tableId, defValues, enableQueryURL }: IFilter<T>) => {
   const [storeFilters, setFilters] = useFilters(tableId, enableQueryURL, false)
+
+  const [, setQuerySearch] = useQueryState('search', { history: 'replace' })
+  const { setSearch, instances } = useTableStateStore()
+  const searchInstance = instances[tableId]?.search
+
   const isFirstRender = useIsFirstRender()
   const {
     fieldIdToSync,
@@ -88,6 +94,23 @@ export const useFormFilter = <T extends FieldValues>({ tableId, defValues, enabl
       }
     }
   }, [isFirstRender, reset, columnFilters, addCustomFieldIdToSync])
+
+  //clear search on filter change, clear filters on search change
+  useEffect(() => {
+    if (searchInstance) {
+      reset(defValues, { keepValues: false })
+      setFilters([])
+    }
+    //eslint-disable-next-line
+  }, [searchInstance])
+
+  useEffect(() => {
+    if (filterQuery) {
+      setQuerySearch(null, { shallow: true })
+      setSearch(tableId, undefined)
+    }
+    //eslint-disable-next-line
+  }, [filterQuery])
 
   return formMethods
 }

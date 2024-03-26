@@ -1,7 +1,6 @@
 import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
 import { Fragment, useEffect, useMemo, useState } from 'react'
-import { useIsFirstRender } from 'usehooks-ts'
 
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
@@ -83,15 +82,13 @@ export const SystemFilterButtonContainer = ({ panelSlide, tableId = 'systems', e
   const { toggleDeleteCustom } = useFormControlStore()
 
   const category = watch('category')
-  const isFirstRender = useIsFirstRender()
 
   //set custom field to delete from state and form
   useEffect(() => {
-    if (isFirstRender) return
     if (!category) {
       toggleDeleteCustom()
     }
-  }, [category, toggleDeleteCustom, isFirstRender])
+  }, [category, toggleDeleteCustom])
 
   const buttons: SlideOverButtons = {
     goNext: {

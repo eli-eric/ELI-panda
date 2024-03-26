@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import useTableStateStore from '@/store/useTableStateStore'
 
 import type { CodebookType } from './fetch/useCodebook'
+import { useDebounce } from './useDebounce'
 
 interface Query {
   pagination?: string
@@ -28,7 +29,8 @@ export default function useQueryManager(tableId: string): { query: Query } {
   //TODO: filters
   const sorting = instances[tableId]?.sortByQueryString || ''
   const pagination = instances[tableId]?.pagination || ''
-  const search = instances[tableId]?.search || ''
+  const searchInstance = instances[tableId]?.search || ''
+  const search = useDebounce(searchInstance, 500)
   const supplierUID = instances[tableId]?.filter?.supplier?.uid || ''
   const orderStatusUID = instances[tableId]?.filter?.orderStatus?.uid || ''
   const procurementResponsibleUID = instances[tableId]?.filter?.procurementResponsible?.uid || ''
