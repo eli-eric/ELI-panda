@@ -2602,7 +2602,7 @@ export type CatalogueItem = {
   catalogueCategoryConnection: CatalogueItemCatalogueCategoryConnection;
   catalogueNumber: Scalars['String']['output'];
   description?: Maybe<Scalars['String']['output']>;
-  item?: Maybe<Item>;
+  item: Array<Item>;
   itemAggregate?: Maybe<CatalogueItemItemItemAggregationSelection>;
   itemConnection: CatalogueItemItemConnection;
   manufacturerUrl: Scalars['String']['output'];
@@ -2901,7 +2901,7 @@ export type CatalogueItemCatalogueItemRelatedCatalogueItemsNodeAggregateSelectio
 
 export type CatalogueItemConnectInput = {
   catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryConnectFieldInput>;
-  item?: InputMaybe<CatalogueItemItemConnectFieldInput>;
+  item?: InputMaybe<Array<CatalogueItemItemConnectFieldInput>>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesConnectFieldInput>>;
   relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsConnectFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierConnectFieldInput>;
@@ -2926,7 +2926,7 @@ export type CatalogueItemCreateInput = {
 
 export type CatalogueItemDeleteInput = {
   catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryDeleteFieldInput>;
-  item?: InputMaybe<CatalogueItemItemDeleteFieldInput>;
+  item?: InputMaybe<Array<CatalogueItemItemDeleteFieldInput>>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesDeleteFieldInput>>;
   relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsDeleteFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierDeleteFieldInput>;
@@ -2934,7 +2934,7 @@ export type CatalogueItemDeleteInput = {
 
 export type CatalogueItemDisconnectInput = {
   catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryDisconnectFieldInput>;
-  item?: InputMaybe<CatalogueItemItemDisconnectFieldInput>;
+  item?: InputMaybe<Array<CatalogueItemItemDisconnectFieldInput>>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesDisconnectFieldInput>>;
   relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsDisconnectFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierDisconnectFieldInput>;
@@ -2959,7 +2959,7 @@ export type CatalogueItemItemAggregateInput = {
 };
 
 export type CatalogueItemItemConnectFieldInput = {
-  connect?: InputMaybe<ItemConnectInput>;
+  connect?: InputMaybe<Array<ItemConnectInput>>;
   /** Whether or not to overwrite any matching relationship with the new properties. */
   overwrite?: Scalars['Boolean']['input'];
   where?: InputMaybe<ItemConnectWhere>;
@@ -2998,8 +2998,8 @@ export type CatalogueItemItemDisconnectFieldInput = {
 };
 
 export type CatalogueItemItemFieldInput = {
-  connect?: InputMaybe<CatalogueItemItemConnectFieldInput>;
-  create?: InputMaybe<CatalogueItemItemCreateFieldInput>;
+  connect?: InputMaybe<Array<CatalogueItemItemConnectFieldInput>>;
+  create?: InputMaybe<Array<CatalogueItemItemCreateFieldInput>>;
 };
 
 export type CatalogueItemItemItemAggregationSelection = {
@@ -3094,10 +3094,10 @@ export type CatalogueItemItemUpdateConnectionInput = {
 };
 
 export type CatalogueItemItemUpdateFieldInput = {
-  connect?: InputMaybe<CatalogueItemItemConnectFieldInput>;
-  create?: InputMaybe<CatalogueItemItemCreateFieldInput>;
-  delete?: InputMaybe<CatalogueItemItemDeleteFieldInput>;
-  disconnect?: InputMaybe<CatalogueItemItemDisconnectFieldInput>;
+  connect?: InputMaybe<Array<CatalogueItemItemConnectFieldInput>>;
+  create?: InputMaybe<Array<CatalogueItemItemCreateFieldInput>>;
+  delete?: InputMaybe<Array<CatalogueItemItemDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<CatalogueItemItemDisconnectFieldInput>>;
   update?: InputMaybe<CatalogueItemItemUpdateConnectionInput>;
   where?: InputMaybe<CatalogueItemItemConnectionWhere>;
 };
@@ -3451,7 +3451,7 @@ export type CatalogueItemRelatedCatalogueItemsUpdateFieldInput = {
 
 export type CatalogueItemRelationInput = {
   catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryCreateFieldInput>;
-  item?: InputMaybe<CatalogueItemItemCreateFieldInput>;
+  item?: InputMaybe<Array<CatalogueItemItemCreateFieldInput>>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesCreateFieldInput>>;
   relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsCreateFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierCreateFieldInput>;
@@ -3575,7 +3575,7 @@ export type CatalogueItemUpdateInput = {
   catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryUpdateFieldInput>;
   catalogueNumber?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  item?: InputMaybe<CatalogueItemItemUpdateFieldInput>;
+  item?: InputMaybe<Array<CatalogueItemItemUpdateFieldInput>>;
   manufacturerUrl?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesUpdateFieldInput>>;
@@ -3603,11 +3603,23 @@ export type CatalogueItemWhere = {
   description_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
   description_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   description_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
-  item?: InputMaybe<ItemWhere>;
   itemAggregate?: InputMaybe<CatalogueItemItemAggregateInput>;
-  itemConnection?: InputMaybe<CatalogueItemItemConnectionWhere>;
-  itemConnection_NOT?: InputMaybe<CatalogueItemItemConnectionWhere>;
-  item_NOT?: InputMaybe<ItemWhere>;
+  /** Return CatalogueItems where all of the related CatalogueItemItemConnections match this filter */
+  itemConnection_ALL?: InputMaybe<CatalogueItemItemConnectionWhere>;
+  /** Return CatalogueItems where none of the related CatalogueItemItemConnections match this filter */
+  itemConnection_NONE?: InputMaybe<CatalogueItemItemConnectionWhere>;
+  /** Return CatalogueItems where one of the related CatalogueItemItemConnections match this filter */
+  itemConnection_SINGLE?: InputMaybe<CatalogueItemItemConnectionWhere>;
+  /** Return CatalogueItems where some of the related CatalogueItemItemConnections match this filter */
+  itemConnection_SOME?: InputMaybe<CatalogueItemItemConnectionWhere>;
+  /** Return CatalogueItems where all of the related Items match this filter */
+  item_ALL?: InputMaybe<ItemWhere>;
+  /** Return CatalogueItems where none of the related Items match this filter */
+  item_NONE?: InputMaybe<ItemWhere>;
+  /** Return CatalogueItems where one of the related Items match this filter */
+  item_SINGLE?: InputMaybe<ItemWhere>;
+  /** Return CatalogueItems where some of the related Items match this filter */
+  item_SOME?: InputMaybe<ItemWhere>;
   manufacturerUrl?: InputMaybe<Scalars['String']['input']>;
   manufacturerUrl_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   manufacturerUrl_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
