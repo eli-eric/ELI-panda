@@ -176,13 +176,14 @@ export const typeDefs = gql`
     catalogueCategory: CatalogueCategory! @relationship(type: "BELONGS_TO_CATEGORY", direction: OUT)
     catalogueNumber: String!
     description: String
+    relatedCatalogueItems: [CatalogueItem!]! @relationship(type: "IS_RELATED_TO", direction: OUT)
     properties: [CatalogueCategoryProperty!]!
       @relationship(type: "HAS_CATALOGUE_PROPERTY", direction: OUT, properties: "hasCatalogueProperty")
     supplier: Supplier @relationship(type: "HAS_SUPPLIER", direction: OUT)
     manufacturerUrl: String!
     name: String!
     uid: String!
-    item: Item @relationship(type: "IS_BASED_ON", direction: IN)
+    item: [Item!]! @relationship(type: "IS_BASED_ON", direction: IN)
   }
 
   interface hasCatalogueProperty @relationshipProperties {

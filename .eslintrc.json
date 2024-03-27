@@ -18,8 +18,6 @@
     "import"
   ],
   "rules": {
-    "simple-import-sort/imports": 1,
-    "simple-import-sort/exports": "warn",
     "unused-imports/no-unused-imports": "warn",
     "@typescript-eslint/consistent-type-imports": "warn",
     "@typescript-eslint/explicit-function-return-type": "off",

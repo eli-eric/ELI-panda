@@ -30,7 +30,7 @@ const RoomCardDetail: NextPage = ({ roomCardUid }: Props) => {
         <meta name="description" content="...." />
       </Head>
 
-      {roomCard && <RoomCardDetailContainer roomCardUid={roomCardUid} />}
+      {roomCard && roomCardUid && <RoomCardDetailContainer roomCardUid={roomCardUid} />}
     </Fragment>
   )
 }

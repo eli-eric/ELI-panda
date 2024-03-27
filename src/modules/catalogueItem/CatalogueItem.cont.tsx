@@ -23,6 +23,7 @@ import Groups from './components/form/Groups'
 import { schema } from './components/form/ItemForm.schema'
 import ItemHeader from './components/header/Header.comp'
 import { CatalogueOrders } from './components/orders/CatalogueOrders'
+import { RelatedItemsContainer } from './components/related-items/RelatedItems.cont'
 import { CatalogueStatisticsContainer } from './components/statistics/CatalogueStatistics.cont'
 import useItem from './hooks/useItem'
 import useItemSubmit from './hooks/useItemSubmit'
@@ -91,6 +92,7 @@ const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemCont
             <MemoizedGroups />
           </Suspense>
         </ErrorBoundary>
+        <RelatedItemsContainer />
         {uid && <CatalogueOrders />}
         {uid && <CatalogueStatisticsContainer catalogueItemUid={uid} />}
         {uid && (
