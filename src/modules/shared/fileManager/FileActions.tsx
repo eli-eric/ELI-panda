@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { useCallback } from 'react'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
@@ -48,11 +47,9 @@ const FileActions = ({ file, endpoint, files, mutate, hasEditRole }: FileActions
 
   return (
     <div className="flex items-center">
-      <Link href={file.url} passHref legacyBehavior={true}>
-        <a target="_blank" className="hover:text-primary-500 flex items-center">
-          <TableDownloadButton className="mr-1" />
-        </a>
-      </Link>
+      <a target="_blank" href={file.url} rel="noreferrer" className="hover:text-primary-500 flex items-center">
+        <TableDownloadButton className="mr-1" />
+      </a>
       {hasEditRole && <TableDeleteButton onClick={() => withWarningModal(handleDelete)(file.id)} />}
     </div>
   )
