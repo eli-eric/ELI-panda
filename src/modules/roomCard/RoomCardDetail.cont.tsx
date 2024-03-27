@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Fragment, useEffect } from 'react'
+import { Fragment, Suspense, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { array, object, string } from 'yup'
@@ -12,9 +12,17 @@ import { useRoomCardUpdate } from './hooks/useRoomCardUpdate'
 import { RoomCardComponent } from './RoomCard.comp'
 import { useRoomCardStore } from './store/useRoomCardStore'
 import type { RoomCardFormType } from './types/form'
+import FileManager from '../shared/fileManager/FileManager'
+import { FILE_TYPE } from '@/types/constants/files'
+import usePermission from '@/hooks/usePermission'
+import { ROLE } from '@/types/constants/roles'
+import ProgressBarComponent from '@/components/progress-bar.comp'
+import { ErrorBoundary } from 'react-error-boundary'
+import ErrorPage from '@/components/error/ErrorPage'
+import Card from '@/components/layout/Card'
 
 interface Props {
-  roomCardUid?: string
+  roomCardUid: string
 }
 
 const schema = object().shape({
@@ -32,6 +40,7 @@ const schema = object().shape({
 
 export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   const { roomCard, loading } = useRoomCard(roomCardUid)
+  const canEdit = usePermission([ROLE.ROOM_CARD_EDIT])
   //TODO: fix typing
   const formMethods = useForm<RoomCardFormType>({
     defaultValues: {
@@ -92,18 +101,23 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
 
   return (
     <Fragment>
-      {roomCard && (
-        <RoomCardComponent
-          formMethods={formMethods}
-          status={status}
-          onSubmitAndExit={onSubmitAndExit}
-          onSubmit={onSubmit}
-          contactPersonsHall={contactPersonsHall}
-          contactPersonsDept={contactPersonsDept}
-          teams={teams}
-          locations={locations}
-        />
-      )}
+      <RoomCardComponent
+        formMethods={formMethods}
+        status={status}
+        onSubmitAndExit={onSubmitAndExit}
+        onSubmit={onSubmit}
+        contactPersonsHall={contactPersonsHall}
+        contactPersonsDept={contactPersonsDept}
+        teams={teams}
+        locations={locations}
+      />
+      <Card className="flex flex-col justify-between">
+        <Suspense fallback={<ProgressBarComponent />}>
+          <ErrorBoundary fallback={<ErrorPage />}>
+            <FileManager itemType={FILE_TYPE.ROOM_CARD} uid={roomCardUid} hasEditRole={canEdit} />
+          </ErrorBoundary>
+        </Suspense>
+      </Card>
     </Fragment>
   )
 }
