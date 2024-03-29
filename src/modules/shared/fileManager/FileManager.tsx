@@ -89,7 +89,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
         res => {
           toast.success(`${res.name} - was updated`)
         },
-        e => {
+        () => {
           toast.error(`Failed to update file`)
         }
       )
@@ -147,7 +147,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
         cell: ({ getValue, row: { original } }) => (
           <div className="flex items-center">
             {getValue() &&
-              getValue().map(v => (
+              getValue().map((v: string) => (
                 <Badge key={v4()} className="mt-1">
                   {v}
                   <XMarkIcon
@@ -157,7 +157,9 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
                       mutate(
                         prevs =>
                           (prevs || []).map(prev =>
-                            prev.id === original.id ? { ...prev, tags: getValue()?.filter(f => f !== v) } : prev
+                            prev.id === original.id
+                              ? { ...prev, tags: getValue()?.filter((f: string) => f !== v) }
+                              : prev
                           ),
                         { revalidate: false }
                       )
@@ -197,7 +199,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
     ]
 
     return cols
-  }, [hasEditRole, files, endpoint, mutate])
+  }, [hasEditRole, files, endpoint, mutate, handlePut])
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -223,19 +225,21 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
         )}
       </Heading>
       {loading.some(value => value) && <ProgressBarComponent />}
-      <PandaTable
-        {...{
-          tableId: 'filemanager',
-          data: files,
-          columns,
-          settings: {
-            enableSorting: true,
-            manualSorting: false,
-            enableFiltering: true,
-            manualFiltering: false
-          }
-        }}
-      />
+      {files && (
+        <PandaTable
+          {...{
+            tableId: 'filemanager',
+            data: files,
+            columns,
+            settings: {
+              enableSorting: true,
+              manualSorting: false,
+              enableFiltering: true,
+              manualFiltering: false
+            }
+          }}
+        />
+      )}
     </div>
   )
 }
