@@ -7,7 +7,8 @@ import type { FileItem } from '../../fileManager/types'
 const fallbackImage: FileItem = {
   id: 'fallback',
   name: 'fallback image',
-  url: '/no-image.png'
+  url: '/no-image.png',
+  size: 0
 }
 
 interface ImageTabPanelsProps {

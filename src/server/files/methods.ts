@@ -64,15 +64,19 @@ export async function listFiles(req: NextApiRequest, res: NextApiResponse) {
       const { lastModified, name: objFullPath, metadata } = obj
       const ts = new Date(lastModified as Date).getTime()
       const [id] = objFullPath ? objFullPath.split('/').reverse() : []
-      const name = decodeURIComponent( metadata && metadata['X-Amz-Meta-Name'])
+      const name = decodeURIComponent(metadata && metadata['X-Amz-Meta-Name'])
+      const tags = metadata && metadata['X-Amz-Meta-Tags']
       const type = metadata && metadata['content-type']
       const url = `${req.url}/${id}`
+      const size = obj.size
       return {
         id,
         name,
         type,
         url,
-        ts
+        ts,
+        size,
+        tags: tags ? tags.split(',').map(decodeURIComponent) : []
       }
     })
     .sort((a, b) => b.ts - a.ts)
@@ -82,7 +86,7 @@ export async function listFiles(req: NextApiRequest, res: NextApiResponse) {
 
 export async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
   const { prefix } = getPathInfo(req, res)
-  const { name, payload } = req.body
+  const { name, payload, tags } = req.body
   const id = nanoid()
 
   const regex = /^data:(.*?);base64,(.*)$/
@@ -94,9 +98,12 @@ export async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
   const mimeType = match[1]
   const buffer = Buffer.from(match[2], 'base64')
 
+  const tagsString = tags?.map(tag => encodeURIComponent(tag)).join(',')
+
   const metaData = {
     'Content-Type': mimeType,
-    name: encodeURIComponent(name)
+    name: encodeURIComponent(name),
+    tags: tagsString
   }
 
   await s3Client.putObject(bucket, prefix + id, buffer, buffer.length, metaData)
@@ -105,7 +112,7 @@ export async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
   if (!existingObject) return res.status(404).json({})
 
   logger.debug(composeDebugMessage(req, 'Successfully saved file'))
-  res.status(201).json({ id, name, url, type: mimeType })
+  res.status(201).json({ id, name, url, type: mimeType, tags })
 }
 
 export async function removeFile(req: NextApiRequest, res: NextApiResponse) {
@@ -115,4 +122,31 @@ export async function removeFile(req: NextApiRequest, res: NextApiResponse) {
   await s3Client.removeObject(bucket, fullPath)
   logger.debug(composeDebugMessage(req, 'Successfully deleted file'))
   res.status(200).json({})
+}
+
+export async function updateFile(req: NextApiRequest, res: NextApiResponse) {
+  const { fullPath } = getPathInfo(req, res)
+  const { name, tags } = req.body
+
+  const obj = await s3Client.statObject(bucket, fullPath)
+  if (!obj) return res.status(404).json({})
+
+  const fileStream = await s3Client.getObject(bucket, fullPath)
+  const buffer = await new Promise<Buffer>((resolve, reject) => {
+    const chunks: Buffer[] = []
+    fileStream.on('data', (chunk: Buffer) => chunks.push(chunk))
+    fileStream.on('end', () => resolve(Buffer.concat(chunks)))
+    fileStream.on('error', reject)
+  })
+
+  const metaData = {
+    ...obj.metaData,
+    name: encodeURIComponent(name),
+    tags: tags.map(tag => encodeURIComponent(tag)).join(',')
+  }
+
+  await s3Client.putObject(bucket, fullPath, buffer, metaData)
+
+  logger.debug(composeDebugMessage(req, 'Successfully updated file'))
+  res.status(200).json({ name, tags })
 }
