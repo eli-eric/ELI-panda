@@ -3,6 +3,7 @@ import type { FilterFn } from '@tanstack/react-table'
 
 export const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Don't filter parent if child is matched
+
   let parentPassed = false
   row.subRows?.forEach(subRow => {
     const itemRank = rankItem(subRow.getValue(columnId), value)
