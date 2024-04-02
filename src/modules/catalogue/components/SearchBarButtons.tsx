@@ -8,6 +8,7 @@ import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
 import { CatalogueFilterButtonContainer } from './filters/CatalogueFilterButton.cont'
+import { useCategoryUid } from '../hooks/useCategoryUid'
 
 interface SearchBarButtonsProps {
   filterFormMethods: UseFormReturn<any, any, any>
@@ -15,7 +16,7 @@ interface SearchBarButtonsProps {
 
 export const SearchBarButtons = ({ filterFormMethods }: SearchBarButtonsProps) => {
   const router = useRouter()
-  const uid = router.query.uid
+  const uid = useCategoryUid()
   const handleRefresh = () => {
     mutate(key => typeof key === 'string' && key.startsWith('/catalogue/items'), undefined, { revalidate: true })
   }
