@@ -1,20 +1,18 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { Fragment } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import ErrorPage from '@/components/error/ErrorPage'
 import CatalogueItemContainer from '@/modules/catalogueItem/CatalogueItem.cont'
 
 const messages = message.cataloguePage
 
 interface Props {
-  catalogueUid?: string
+  categoryUid?: string
 }
 
-const NewCatalogueItemPage: NextPage = ({ catalogueUid }: Props): JSX.Element => {
+const NewCatalogueItemPage: NextPage = ({ categoryUid }: Props): JSX.Element => {
   const intl = useIntl()
   return (
     <Fragment>
@@ -22,15 +20,13 @@ const NewCatalogueItemPage: NextPage = ({ catalogueUid }: Props): JSX.Element =>
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-      <ErrorBoundary fallback={<ErrorPage />}>
-        <CatalogueItemContainer catalogueCategoryUid={catalogueUid} />
-      </ErrorBoundary>
+      <CatalogueItemContainer catalogueCategoryUid={categoryUid} />
     </Fragment>
   )
 }
 
 NewCatalogueItemPage.getInitialProps = ({ query }) => ({
-  catalogueUid: query.catalogueUid
+  categoryUid: query.categoryUid
 })
 
 export default NewCatalogueItemPage

@@ -1,3 +1,4 @@
+'use client'
 import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { memo, useEffect, useRef } from 'react'
@@ -30,7 +31,6 @@ import useItemSubmit from './hooks/useItemSubmit'
 import type { CatalogueItem } from './types/responses'
 
 const MemoizedGallery = memo(ImageGallery)
-const MemoizedGroups = memo(Groups)
 
 interface CatalogueForm extends CatalogueItem {
   hasImageGalleryChanges?: boolean
@@ -62,7 +62,7 @@ const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemCont
         }
       })
     }
-  }, [catalogueCategory, reset])
+  }, [catalogueCategory])
 
   const onSubmit = (catalogueItem: CatalogueForm) => {
     // extract from catalogueItem hasImageGalleryChanges
@@ -87,12 +87,8 @@ const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemCont
           </div>
         </div>
         <TextArea {...fields.description} className={'px-4 py-5 sm:px-6'} />
-        <ErrorBoundary fallback={<ErrorPage />}>
-          <Suspense>
-            <MemoizedGroups />
-          </Suspense>
-        </ErrorBoundary>
-        <RelatedItemsContainer />
+        <Groups />
+        {uid && <RelatedItemsContainer />}
         {uid && <CatalogueOrders />}
         {uid && <CatalogueStatisticsContainer catalogueItemUid={uid} />}
         {uid && (
