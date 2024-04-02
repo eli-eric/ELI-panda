@@ -30,7 +30,7 @@ export type RoomCardFormType = {
   purityClass: PurityClass
   prescribedClothing: PrescribedClothing[]
   entryToHvacTent: string
-  cleaningScheduleDate?: string
+  cleaningScheduleDate?: string | null
   cleaningScheduleDays?: CleaningScheduleDay[]
   additionalRequirements: string
   coolingWater: string
