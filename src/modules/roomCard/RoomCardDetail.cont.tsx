@@ -55,7 +55,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
       entryToHvacTent: roomCard?.entryToHvacTent as string,
       additionalRequirements: roomCard?.additionalRequirements as string,
       cleaningScheduleDays: roomCard?.cleaningScheduleDays as any,
-      cleaningScheduleDate: roomCard?.cleaningScheduleDate,
+      cleaningScheduleDate: roomCard?.cleaningScheduleDate || '',
       coolingWater: roomCard?.coolingWater as string,
       indoorEnvironmentQuality: roomCard?.indoorEnvironmentQuality as string,
       compressedAirDistribution: roomCard?.compressedAirDistribution as string,

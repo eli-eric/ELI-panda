@@ -13,7 +13,8 @@ import useFetch from './useFetch'
 const fallbackImage: FileItem = {
   id: 'fallback',
   name: 'fallback image',
-  url: '/no-image.png'
+  url: '/no-image.png',
+  size: 0
 }
 export const useImage = (endpoint?: string | null, useNoImage = true): string | StaticImageData => {
   const { response: image } = useFetch<string>({ url: endpoint, config: { suspense: false } })

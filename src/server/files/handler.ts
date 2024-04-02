@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { composeDebugMessage } from 'src/server/logger'
 
 import logger from '../logger'
-import { downloadFile, getPathInfo, listFiles, removeFile, uploadFile } from './methods'
+import { downloadFile, getPathInfo, listFiles, removeFile, updateFile, uploadFile } from './methods'
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -18,6 +18,8 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
         return uploadFile(req, res)
       case 'DELETE':
         return removeFile(req, res)
+      case 'PUT':
+        return updateFile(req, res)
       default:
         throw new Error('Method not supported')
     }
