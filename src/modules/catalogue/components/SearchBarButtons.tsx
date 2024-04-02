@@ -21,7 +21,7 @@ export const SearchBarButtons = ({ filterFormMethods }: SearchBarButtonsProps) =
     mutate(key => typeof key === 'string' && key.startsWith('/catalogue/items'), undefined, { revalidate: true })
   }
   const handleAdd = () => {
-    router.push({ pathname: PATH.CATALOGUE_ITEM, query: uid ? { catalogueUid: uid } : undefined })
+    router.push({ pathname: PATH.CATALOGUE_ITEM, query: uid ? { categoryUid: uid } : undefined })
   }
   return (
     <SearchBarButtonsComponent handleAdd={handleAdd} handleRefresh={handleRefresh} editRole={ROLE.CATALOGUE_EDIT}>

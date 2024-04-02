@@ -55,7 +55,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
       entryToHvacTent: roomCard?.entryToHvacTent as string,
       additionalRequirements: roomCard?.additionalRequirements as string,
       cleaningScheduleDays: roomCard?.cleaningScheduleDays as any,
-      cleaningScheduleDate: roomCard?.cleaningScheduleDate || '',
+      cleaningScheduleDate: (roomCard?.cleaningScheduleDate as string) || '',
       coolingWater: roomCard?.coolingWater as string,
       indoorEnvironmentQuality: roomCard?.indoorEnvironmentQuality as string,
       compressedAirDistribution: roomCard?.compressedAirDistribution as string,
@@ -82,11 +82,20 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   useEffect(() => () => clear(), [clear])
 
   const onSubmit = handleSubmit((roomCard: RoomCardFormType) => {
-    toast.promise(updateRoomCard(roomCard, false), {
-      loading: 'Saving room card...',
-      success: 'Room card was successfully updated',
-      error: 'Error while saving room card'
-    })
+    toast.promise(
+      updateRoomCard(
+        {
+          ...roomCard,
+          cleaningScheduleDate: roomCard?.cleaningScheduleDate ? roomCard.cleaningScheduleDate : undefined
+        },
+        false
+      ),
+      {
+        loading: 'Saving room card...',
+        success: 'Room card was successfully updated',
+        error: 'Error while saving room card'
+      }
+    )
   })
 
   const onSubmitAndExit = handleSubmit((roomCard: RoomCardFormType) => {

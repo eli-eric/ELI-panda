@@ -130,7 +130,7 @@ WITH value.user as user, f
 OPTIONAL MATCH(empl:Employee) WHERE TOLOWER(empl.email) =$email
 CALL apoc.do.when(
 empl IS NOT NULL,
-'MERGE(empl)-[:HAS_USER]->(u)',
+'MERGE(empl)-[:HAS_USER]->(u) RETURN empl, u',
 '', {u:user, empl:empl, email:$email}
 )
 YIELD value
