@@ -86,7 +86,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
       updateRoomCard(
         {
           ...roomCard,
-          cleaningScheduleDate: roomCard?.cleaningScheduleDate ? roomCard.cleaningScheduleDate : undefined
+          cleaningScheduleDate: roomCard?.cleaningScheduleDate ? roomCard.cleaningScheduleDate : null
         },
         false
       ),
