@@ -33,13 +33,15 @@ export const GET_ROOMCARD = gql`
         employee {
           uid
           fullName
-          phoneNumber
+          phone1
+          phone2
         }
       }
       contactPersonsDept {
         uid
         fullName
-        phoneNumber
+        phone1
+        phone2
       }
       locations {
         code
