@@ -11,7 +11,8 @@ import type {
 export type EmployeeType = {
   uid: string
   fullName: string
-  phoneNumber: string
+  phone1: string
+  phone2: string
 }
 
 export type ContactPersonsHall = {

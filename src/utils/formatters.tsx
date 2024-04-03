@@ -32,3 +32,12 @@ export const createMessageValues = (values: any = {}): Record<string, any> => ({
 export function convertDate(date) {
   return moment(date).startOf('day').utcOffset(new Date().getTimezoneOffset()).format()
 }
+
+export function formatPhoneNumber(number: string) {
+  number = number.toString()
+  number = number.slice(3) // Odstranění kódu země (420)
+
+  const formattedNumber = number.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3')
+
+  return formattedNumber
+}

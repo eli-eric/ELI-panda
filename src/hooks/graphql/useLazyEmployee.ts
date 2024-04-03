@@ -15,7 +15,8 @@ const GET_EMPLOYEE = gql`
         name
       }
       lastName
-      phoneNumber
+      phone1
+      phone2
     }
   }
 `

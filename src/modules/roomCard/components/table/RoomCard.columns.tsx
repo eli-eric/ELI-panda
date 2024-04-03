@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { ROLE } from '@/types/constants/roles'
-import type { HallContactPerson, Team } from '@/types/gql/graphql'
+import type { Employee, HallContactPerson, Team } from '@/types/gql/graphql'
 
 import { useRoomCardStore } from '../../store/useRoomCardStore'
 import { CellInput } from './CellInput'
@@ -11,6 +11,7 @@ import { CellWithDelete } from './CellWithDelete'
 import { ContactHallButton } from './ContactHallButton'
 import { HeaderAddButton } from './HeaderAddButton'
 import { TeamButton } from './TeamButton'
+import { formatPhoneNumber } from '@/utils/formatters'
 
 export type RoomCardProperties = {
   name: string
@@ -38,15 +39,19 @@ export const useRoomCardsColumns = () => {
           {
             accessorFn: ({ employee: { fullName } }) => fullName,
             id: 'fullName',
-            meta: { noHeader: true }
-          },
-          {
-            accessorFn: ({ employee: { phoneNumber } }) => phoneNumber,
-            id: 'phone',
+            meta: { noHeader: true },
             cell: props => (
               <CellWithDelete {...props} formName="contactPersonsHall" setDeleteItem={setDeleteHallContact} />
-            ),
-            meta: { noHeader: true }
+            )
+          },
+          {
+            accessorFn: ({ employee: { phone1: p1, phone2: p2 } }) => {
+              const phoneArr = [p1, p2].filter(Boolean)
+              return phoneArr
+            },
+            id: 'phone',
+            meta: { noHeader: true },
+            cell: ({ getValue }) => getValue()?.map((phone, index) => <div key={index}>{formatPhoneNumber(phone)}</div>)
           }
         ]
       }
@@ -55,7 +60,7 @@ export const useRoomCardsColumns = () => {
   )
 
   const columnsContactDept = useMemo(
-    (): ColumnDef<any, any>[] => [
+    (): ColumnDef<Employee, any>[] => [
       {
         header: 'Contact - Dept. 99',
         meta: {
@@ -71,14 +76,19 @@ export const useRoomCardsColumns = () => {
         columns: [
           {
             accessorKey: 'fullName',
-            meta: { noHeader: true }
-          },
-          {
-            accessorKey: 'phoneNumber',
+            meta: { noHeader: true },
             cell: props => (
               <CellWithDelete {...props} formName="contactPersonsDept" setDeleteItem={setDisconnectDeptContact} />
-            ),
-            meta: { noHeader: true }
+            )
+          },
+          {
+            id: 'phone',
+            accessorFn: ({ phone2: p2, phone1: p1 }) => {
+              const phoneArr = [p1, p2].filter(Boolean)
+              return phoneArr
+            },
+            meta: { noHeader: true },
+            cell: ({ getValue }) => getValue().map((phone, index) => <div key={index}>{formatPhoneNumber(phone)}</div>)
           }
         ]
       }

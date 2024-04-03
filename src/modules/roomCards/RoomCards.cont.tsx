@@ -55,7 +55,7 @@ export const RoomCardsContainer = () => {
           settings: {
             enableSorting: true,
             manualSorting: false,
-            enableColumnReordering: true,
+            enableColumnReordering: false,
             enableColumnHiding: true
           },
           columns,

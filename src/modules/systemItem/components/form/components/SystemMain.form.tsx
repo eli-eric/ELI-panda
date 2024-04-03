@@ -65,7 +65,7 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
       <Card className="border-t border-gray-400">
         <Grid>
           <Col sm={3} md={6}>
-            <Combobox {...fields.team} />
+            <Combobox {...fields.team} limit={50} />
           </Col>
           <Col sm={3} md={6}>
             <Combobox {...fields.responsible} />

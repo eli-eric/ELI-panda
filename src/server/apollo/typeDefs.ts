@@ -109,7 +109,13 @@ export const typeDefs = gql`
     facility: Facility! @relationship(type: "AFFILIATED_WITH_FACILITY", direction: OUT)
     fullName: String
     lastName: String!
-    phoneNumber: String
+    phone1: String
+    phone2: String
+    superiorName: String
+    superiorNUmber: String
+    jobPosition: String
+    jobPositionCode: String
+    workPlaceName: String
     email: String
   }
 
