@@ -16,17 +16,17 @@ export const SystemCodeButton = () => {
 
   return (
     <div className="flex">
-      <Button primary loading={loading} onClick={handleClear} className="sm:mt-5 mt-6 w-full flex justify-center">
-        Clear
-      </Button>
       <Button
         primary
         loading={loading}
         disabled={disabled}
         onClick={handleGenerate}
-        className="sm:mt-5 mt-6 w-full flex justify-center"
+        className="sm:mt-5 mr-2 mt-6 w-full flex justify-center"
       >
         Generate
+      </Button>
+      <Button primary loading={loading} onClick={handleClear} className="sm:mt-5 mt-6 w-full flex justify-center">
+        Release
       </Button>
     </div>
   )
