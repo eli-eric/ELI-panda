@@ -1,7 +1,9 @@
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
-import { useEffect, useState } from 'react'
+import { SystemDetailContext } from '@/pages/system/[uid]'
+import { useContext, useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 type SystemCodeGenerateQuery = {
   zoneUID?: string
@@ -12,12 +14,12 @@ type SystemCodeGenerateQuery = {
 
 export const useSystemCodeGenerate = () => {
   const [query, setQuery] = useState<SystemCodeGenerateQuery>({})
-
+  const { systemDetail } = useContext(SystemDetailContext)
   const { control, setValue } = useFormContext()
 
   const zoneUID = useWatch({ name: 'zone', control })?.uid
   const locationUID = useWatch({ name: 'location', control })?.uid
-  const parentUID = '??'
+  const parentUID = systemDetail?.parentSystem?.uid
   const systemTypeUID = useWatch({ name: 'systemType', control })?.uid
 
   useEffect(() => {
@@ -25,6 +27,34 @@ export const useSystemCodeGenerate = () => {
     if (locationUID) setQuery(prev => ({ ...prev, locationUID }))
     if (parentUID) setQuery(prev => ({ ...prev, parentUID }))
     if (systemTypeUID) setQuery(prev => ({ ...prev, systemTypeUID }))
+    if (!zoneUID) {
+      setQuery(prev => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { zoneUID, ...rest } = prev
+        return rest
+      })
+    }
+    if (!locationUID) {
+      setQuery(prev => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { locationUID, ...rest } = prev
+        return rest
+      })
+    }
+    if (!parentUID) {
+      setQuery(prev => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { parentUID, ...rest } = prev
+        return rest
+      })
+    }
+    if (!systemTypeUID) {
+      setQuery(prev => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { systemTypeUID, ...rest } = prev
+        return rest
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zoneUID, locationUID, parentUID, systemTypeUID])
 
@@ -37,6 +67,9 @@ export const useSystemCodeGenerate = () => {
     method: 'get',
     onSuccess: res => {
       setValue('systemCode', res)
+    },
+    onError: err => {
+      toast.error('Failed to generate system code: ' + err.response?.data)
     }
   })
 

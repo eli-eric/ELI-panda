@@ -4,7 +4,7 @@ import { useSystemCodeGenerate } from '@/modules/systemItem/hooks/useSystemCodeG
 
 export const SystemCodeButton = () => {
   const { loading, getSystemCode, disabled } = useSystemCodeGenerate()
-  const { clearSystemCode } = useSystemCodeClear()
+  const { clearSystemCode, loading: pending } = useSystemCodeClear()
 
   const handleGenerate = () => {
     getSystemCode()
@@ -15,17 +15,22 @@ export const SystemCodeButton = () => {
   }
 
   return (
-    <div className="flex">
+    <div className="flex w-full">
       <Button
         primary
-        loading={loading}
+        loading={loading || pending}
         disabled={disabled}
         onClick={handleGenerate}
         className="sm:mt-5 mr-2 mt-6 w-full flex justify-center"
       >
         Generate
       </Button>
-      <Button primary loading={loading} onClick={handleClear} className="sm:mt-5 mt-6 w-full flex justify-center">
+      <Button
+        primary
+        loading={loading || pending}
+        onClick={handleClear}
+        className="sm:mt-5 mt-6 w-full flex justify-center"
+      >
         Release
       </Button>
     </div>
