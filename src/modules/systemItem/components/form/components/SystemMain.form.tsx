@@ -13,6 +13,8 @@ import { SystemLevel } from '@/types/gql/graphql'
 
 import { EmployeeTable } from '../../table/Employee.table'
 import useSystemFormFields from '../SystemForm.fields'
+import { Button } from '@/components/Buttons'
+import { SystemCodeButton } from './SystemCodeGenerate.button'
 
 interface SystemFormComponentProps {
   children?: React.ReactNode
@@ -53,11 +55,11 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
             <Col sm={3} md={6} lg={8}>
               <Combobox {...fields.zone} />
             </Col>
-            <Col sm={3} md={6} lg={4}>
+            <Col sm={2} md={5} lg={6}>
               <Input {...fields.systemCode} defaultValue={''} />
             </Col>
-            <Col sm={3} md={6} lg={4}>
-              <Input {...fields.systemAlias} />
+            <Col sm={1} md={1} lg={2}>
+              <SystemCodeButton />
             </Col>
           </Col>
         </Grid>
