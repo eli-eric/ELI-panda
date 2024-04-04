@@ -32,7 +32,7 @@ const UPDATE_SYSTEM = gql`
 const systemInput = ({ systemForm, systemDetail }: { systemForm; systemDetail }) => ({
   name: systemForm.name,
   description: systemForm.description,
-  systemCode: systemForm.systemCode,
+  systemCode: systemForm.systemCode === '' ? null : systemForm.systemCode,
   systemAlias: systemForm.systemAlias,
   isCritical: systemForm.isCritical,
   minimalSpareParstCount: !systemForm.minimalSpareParstCount ? null : Number(systemForm.minimalSpareParstCount),
