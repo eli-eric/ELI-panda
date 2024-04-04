@@ -17,7 +17,7 @@ const GET_SYSTEM = gql`
 export const useSystemDetail = (uid?: string, alias?: string, onCompleted?: (data: Query) => void) => {
   const { system: systemEndpoint } = useEndpoint({ uid })
   const { data, error, loading, refetch } = useQuery<Query>(GET_SYSTEM, {
-    variables: { where: { uid, systemAlias: alias } },
+    variables: { where: { uid, systemCode: alias } },
     onError: error => {
       toast.error('Something went wrong while fetching system detail: ' + error.message)
     },

@@ -6,7 +6,7 @@ import { BASE_URL } from '@/types/constants/common'
 
 interface UseSubmitProps<T> {
   endpoint: string
-  method: 'post' | 'put' | 'delete'
+  method: 'post' | 'put' | 'delete' | 'get'
   mutateList?: string[]
   onSuccess?: (data: T, body: any) => void
   onError?: (error: AxiosError) => void
