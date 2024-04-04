@@ -70,7 +70,7 @@ const useSystemEditFormFields = () => {
       label: form.systemCode.label,
       placeholder: form.systemCode.placeholder,
       rounded: 'rounded-md',
-      disabled: true
+      disabled: false
     },
     systemAlias: {
       name: 'systemAlias',
