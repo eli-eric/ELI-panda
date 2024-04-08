@@ -53,7 +53,7 @@ export const CatalogueTable = ({
       tableId={tableId}
       getRowProps={getRowProps}
       data={catalogueItems?.data}
-      className={'relative overflow-y-scroll scrollbar-style'}
+      className={'relative overflow-y-scroll scrollbar-style text-sm'}
       settings={{
         enableQueryURL,
         enableColumnHiding: tableId === 'catalogueItems',
