@@ -36,7 +36,7 @@ export const RowCell: FC<Props> = ({ row, cell, loading }) => {
         } as React.CSSProperties
       }
       className={classNames(
-        'text-xs sm:pl-6 sm:pr-6 border-r border-b  border-gray-400 dark:text-gray-100',
+        'sm:pl-6 sm:pr-6 border-r border-b border-gray-400 dark:text-gray-100',
         cell.column.columnDef.meta?.sticky ? 'sticky z-30 backdrop-blur-2xl backdrop-filter border-r pt-1 pb-1' : '',
         loading ? 'opacity-50' : '',
         cell.column.columnDef.meta?.className,

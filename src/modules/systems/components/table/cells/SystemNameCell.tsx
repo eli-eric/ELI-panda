@@ -85,7 +85,21 @@ export const SystemNameCell = ({
       className={classNames(isDragging && 'text-primary-500')}
     >
       <div className="flex items-center" ref={dragRef}>
-        <div className="flex items-center" ref={previewRef}>
+        <div
+          className={classNames(
+            'flex items-center w-full py-1',
+            original.hasSubsystems && 'group/expand cursor-pointer'
+          )}
+          onClick={() => {
+            if (!row.getIsExpanded()) {
+              setUid && setUid(original.uid)
+            } else {
+              setUid && setUid(null)
+            }
+            row.toggleExpanded()
+          }}
+          ref={previewRef}
+        >
           {enableDragAndDrop && (
             <button className="mr-2">
               <ArrowsRightLeftIcon className="w-5 h-5" />
@@ -98,17 +112,7 @@ export const SystemNameCell = ({
           >
             <div>
               {original.hasSubsystems ? (
-                <button
-                  onClick={() => {
-                    if (!row.getIsExpanded()) {
-                      setUid && setUid(original.uid)
-                    } else {
-                      setUid && setUid(null)
-                    }
-                    row.toggleExpanded()
-                  }}
-                  className="flex items-center hover:text-gray-400 cursor-pointer"
-                >
+                <div className="flex items-center group-hover/expand:text-gray-400 cursor-pointer">
                   {row.getIsExpanded() ? (
                     <ChevronDownIcon className="w-4 h-4" />
                   ) : (
@@ -117,7 +121,7 @@ export const SystemNameCell = ({
                   <span className="pl-1">
                     <span>{getValue()}</span>
                   </span>
-                </button>
+                </div>
               ) : (
                 <div className="flex items-center">
                   <span className="pl-5">
