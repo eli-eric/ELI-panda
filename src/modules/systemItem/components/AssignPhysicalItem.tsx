@@ -17,14 +17,13 @@ const messages = message.common.buttons
 export const AssignPhysicalItem = () => {
   const [openModal, setOpenModal] = useState(false)
   const { selectedPhysicalSystem, setSelectedPhysicalSystem } = useSystemItemStore()
-  const { setValue, reset, getValues } = useFormContext<SystemDetailFormType>()
+  const { setValue } = useFormContext<SystemDetailFormType>()
 
   const modalButtons: ModalButtons = {
     goNext: {
       text: messages.continue,
       onClick: () => {
         if (selectedPhysicalSystem?.physicalItem) {
-          console.log(selectedPhysicalSystem.physicalItem)
           setValue('physicalItem', selectedPhysicalSystem?.physicalItem, { shouldDirty: true })
           setOpenModal(false)
         } else {
@@ -35,19 +34,6 @@ export const AssignPhysicalItem = () => {
     goBack: {
       text: messages.cancel,
       onClick: () => {
-        setOpenModal(false)
-      }
-    },
-    alternative: {
-      text: messages.addNew,
-      onClick: () => {
-        reset({
-          ...getValues(),
-          physicalItem: {
-            uid: undefined
-          }
-        })
-
         setOpenModal(false)
       }
     }
