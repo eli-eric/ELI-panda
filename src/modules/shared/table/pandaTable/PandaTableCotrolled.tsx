@@ -57,13 +57,13 @@ export const PandaTableControlled = ({
       {tableHeading && (
         <div
           id="table-heading"
-          className="text-sm items-center w-full py-[2px] px-4 text-center shadow-sm  text-primary-600 bg-white dark:bg-gray-800  "
+          className="items-center w-full py-[2px] px-4 text-center shadow-sm  text-primary-600 bg-white dark:bg-gray-800  "
         >
           <span>{tableHeading}</span>
         </div>
       )}
       {enableColumnHiding && <TableSettings table={table} />}
-      <div className={classNames('h-full flex flex-col border-t border-gray-300 pb-4', className)}>
+      <div className={classNames('h-full flex flex-col border-t border-gray-300 pb-4 text-sm', className)}>
         <div className="inline-block min-w-full align-middle">
           <table className="min-w-full divide-y divide-gray-300">
             <TableHead table={table} />

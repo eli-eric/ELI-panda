@@ -186,7 +186,7 @@ export const typeDefs = gql`
     properties: [CatalogueCategoryProperty!]!
       @relationship(type: "HAS_CATALOGUE_PROPERTY", direction: OUT, properties: "hasCatalogueProperty")
     supplier: Supplier @relationship(type: "HAS_SUPPLIER", direction: OUT)
-    manufacturerUrl: String!
+    manufacturerUrl: String
     name: String!
     uid: String!
     item: [Item!]! @relationship(type: "IS_BASED_ON", direction: IN)

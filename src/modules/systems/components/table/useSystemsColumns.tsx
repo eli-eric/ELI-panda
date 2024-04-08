@@ -63,7 +63,25 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
         id: 'systemType',
         size: 150
       },
-      { header: 'Control System Zone', accessorFn: row => row.zone?.name, id: 'zone', size: 150 },
+      {
+        header: 'CS Zone',
+        accessorFn: row => row.zone,
+        id: 'zone',
+        size: 80,
+        meta: { className: 'text-right' },
+        cell: ({ getValue }) => {
+          const value = getValue()
+          return (
+            value && (
+              <div className="flex justify-end">
+                <Tooltip content={value?.name}>
+                  <p>{value?.code}</p>
+                </Tooltip>
+              </div>
+            )
+          )
+        }
+      },
       {
         header: 'Location',
         accessorFn: row => row.location?.name,
