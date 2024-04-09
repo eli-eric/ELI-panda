@@ -6,26 +6,25 @@ import { toast } from 'react-hot-toast'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
 import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
-import type { SystemDetail } from '@/modules/systems/types/responses'
 import type { ModalButtons } from '@/types/form'
 
 import type { SystemDetailFormType } from '../types/form'
+import { Button } from '@/components/Buttons'
+import { useSystemItemStore } from '../store/useSystemItemStore'
 
 const messages = message.common.buttons
 
 export const AssignPhysicalItem = () => {
   const [openModal, setOpenModal] = useState(false)
-  const [selectedSystem, setSelectedSystem] = useState<SystemDetail>()
-  const { setValue, reset, getValues } = useFormContext<SystemDetailFormType>()
-  //const physicalItem = watch('physicalItem')
+  const { selectedPhysicalSystem, setSelectedPhysicalSystem } = useSystemItemStore()
+  const { setValue } = useFormContext<SystemDetailFormType>()
 
   const modalButtons: ModalButtons = {
     goNext: {
       text: messages.continue,
       onClick: () => {
-        if (selectedSystem?.physicalItem) {
-          setValue('physicalItem', selectedSystem?.physicalItem, { shouldDirty: true })
-          setValue('name', selectedSystem?.name, { shouldDirty: true })
+        if (selectedPhysicalSystem?.physicalItem) {
+          setValue('physicalItem', selectedPhysicalSystem?.physicalItem, { shouldDirty: true })
           setOpenModal(false)
         } else {
           toast.error('This system does not have a physical item')
@@ -37,33 +36,21 @@ export const AssignPhysicalItem = () => {
       onClick: () => {
         setOpenModal(false)
       }
-    },
-    alternative: {
-      text: messages.addNew,
-      onClick: () => {
-        reset({
-          ...getValues(),
-          physicalItem: {
-            uid: undefined
-          }
-        })
-
-        setOpenModal(false)
-      }
     }
   }
 
-  // temporary solution to disable assign physical item
   return (
     <Fragment>
-      {/*  <button
+      <Button
+        primary
+        className="my-4"
         type="button"
         onClick={() => {
           setOpenModal(true)
         }}
       >
-        <LinkDecorator>{physicalItem ? 'Change Physical Item' : 'Assign Physical Item'}</LinkDecorator>
-      </button> */}
+        {'Assign Physical Item'}
+      </Button>
       <ModalComponent open={openModal} setOpen={setOpenModal} buttons={modalButtons}>
         <SystemsTable
           tableId={'systemsItem'}
@@ -72,11 +59,13 @@ export const AssignPhysicalItem = () => {
           className={'overflow-y-auto relative h-[423px]'}
           getRowProps={({ original }) => ({
             onClick: () => {
-              setSelectedSystem(original)
+              if (original?.physicalItem) setSelectedPhysicalSystem(original)
             },
             className: classNames(
-              selectedSystem?.uid === original.uid ? 'bg-primary-200 hover:bg-primary-200' : '',
-              'cursor-pointer',
+              selectedPhysicalSystem?.uid === original.uid
+                ? 'bg-primary-200 hover:bg-primary-200 dark:hover:bg-primary-600 dark:bg-primary-600'
+                : '',
+              original?.physicalItem && 'cursor-pointer',
               original?.physicalItem && 'font-bold text-gray-700 dark:text-gray-200'
             )
           })}

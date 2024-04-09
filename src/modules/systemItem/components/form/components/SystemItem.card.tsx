@@ -7,7 +7,6 @@ import Card from '@/components/layout/Card'
 import { Heading } from '@/components/layout/Heading'
 import { PATH } from '@/types/constants/paths'
 
-import { AssignPhysicalItem } from '../../AssignPhysicalItem'
 import { PhysicalItemForm } from './PhysicalItem.form'
 
 export const SystemItemCard = () => {
@@ -25,7 +24,6 @@ export const SystemItemCard = () => {
                   <LinkDecorator>View Catalogue Item</LinkDecorator>
                 </Link>
               )}
-              <AssignPhysicalItem />
             </div>
           </Heading>
           {item && <PhysicalItemForm />}

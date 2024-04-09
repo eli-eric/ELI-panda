@@ -11,7 +11,7 @@ import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { updateSubSystem, updateSystem } from '@/modules/systems/utils'
 import { SystemDetailContext } from '@/pages/system/[uid]'
 import { PATH } from '@/types/constants/paths'
-import type { Mutation, MutationUpdateSystemsArgs } from '@/types/gql/graphql'
+import type { Mutation } from '@/types/gql/graphql'
 import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
 import { connectAndDisconnectNode, whereN } from '@/utils/graphql/mutations'
 
@@ -20,7 +20,19 @@ import type { SystemDetailFormType } from '../types/form'
 
 const UPDATE_SYSTEM = gql`
   ${SYSTEM_DETAIL}
-  mutation UpdateSystems($where: SystemWhere, $update: SystemUpdateInput!) {
+  mutation UpdateSystems(
+    $where: SystemWhere
+    $update: SystemUpdateInput!
+    $updateItemsWhere: ItemWhere
+    $disconnectItems: ItemDisconnectInput
+    $connectItems: ItemConnectInput
+    $updateItem: ItemUpdateInput
+  ) {
+    updateItems(disconnect: $disconnectItems, where: $updateItemsWhere, connect: $connectItems, update: $updateItem) {
+      items {
+        name
+      }
+    }
     updateSystems(where: $where, update: $update) {
       systems {
         ...SystemDetail
@@ -43,7 +55,7 @@ const systemInput = ({ systemForm, systemDetail }: { systemForm; systemDetail })
   responsible: connectAndDisconnectNode(systemForm?.responsible?.uid, systemDetail?.responsible?.uid),
   systemLevel: systemForm?.systemLevel,
   physicalItem: {
-    update: systemDetail?.physicalItem && {
+    update: systemForm?.physicalItem && {
       node: {
         notes: systemForm?.physicalItem?.notes,
         serialNumber: systemForm?.physicalItem?.serialNumber,
@@ -66,6 +78,7 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
   const { systemDetail, refetch } = useContext(SystemDetailContext)
   const { mutate } = useSystems('systems')
   const { systemSubsystems } = useEndpoint({ uid: systemDetail?.parentSystem?.uid || '' })
+
   const onCompleted = ({ updateSystems: { systems } }) => {
     const responseUid = systems[0].uid
     const body = {
@@ -95,16 +108,17 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
     })
   }
 
-  const [update, { loading }] = useMutation<Mutation, MutationUpdateSystemsArgs>(UPDATE_SYSTEM, {
+  const [update, { loading }] = useMutation<Mutation>(UPDATE_SYSTEM, {
     onCompleted,
     onError: error => {
       toast.error('Something went wrong: ' + error.message)
     }
   })
 
-  const { newMaintainedBy, newOperators, disconnectOperators, disconnectMaintainedBy } = useSystemItemStore()
+  const { newMaintainedBy, newOperators, disconnectOperators, disconnectMaintainedBy, selectedPhysicalSystem } =
+    useSystemItemStore()
 
-  const updateSystemQuery = (systemForm: SystemDetailFormType) => {
+  function updateSystemQuery(systemForm: SystemDetailFormType) {
     update({
       variables: {
         where: { uid },
@@ -122,6 +136,43 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
               disconnect: disconnectMaintainedBy.map(maintainedBy => whereN(maintainedBy.uid))
             }
           ]
+        },
+        connectItems: selectedPhysicalSystem && {
+          system: [
+            {
+              where: {
+                node: {
+                  uid: uid
+                }
+              }
+            }
+          ]
+        },
+        disconnectItems: selectedPhysicalSystem && {
+          system: [
+            {
+              where: {
+                node: {
+                  uid: selectedPhysicalSystem?.uid
+                }
+              }
+            }
+          ]
+        },
+        updateItemsWhere: selectedPhysicalSystem && {
+          uid: selectedPhysicalSystem?.physicalItem?.uid
+        },
+        updateItem: selectedPhysicalSystem && {
+          notes: systemForm?.physicalItem?.notes,
+          serialNumber: systemForm?.physicalItem?.serialNumber,
+          itemUsage: connectAndDisconnectNode(
+            systemForm?.physicalItem?.itemUsage?.uid,
+            systemDetail?.physicalItem?.itemUsage?.uid
+          ),
+          conditionStatus: connectAndDisconnectNode(
+            systemForm?.physicalItem?.conditionStatus?.uid,
+            systemDetail?.physicalItem?.conditionStatus?.uid
+          )
         }
       }
     })

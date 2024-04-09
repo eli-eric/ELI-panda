@@ -35,6 +35,7 @@ import type { SystemDetailFormType } from '../../types/form'
 import { getColorBySystemLevel } from '../../utils'
 import { SystemItemCard } from './components/SystemItem.card'
 import useSystemEditFormFields from './SystemForm.fields'
+import { AssignPhysicalItem } from '../AssignPhysicalItem'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
@@ -71,6 +72,8 @@ export const SystemForm = () => {
   })
 
   const systemLevel = formMethods.watch('systemLevel')
+
+  const physicalItem = formMethods.watch('physicalItem')
 
   const onSubmit = (data: SystemDetailFormType) => {
     // extract from data hasImageGalleryChanges
@@ -109,14 +112,17 @@ export const SystemForm = () => {
             hasEditRole={hasEditRole}
           />
         </SystemMainForm>
-        {systemDetail?.physicalItem && <SystemItemCard />}
+        {physicalItem && <SystemItemCard />}
         <Card className="border-t border-gray-400">
           <Grid>
-            <Col sm={3} md={5} lg={2}>
+            <Col sm={1} md={3} lg={2}>
               <Input step={1} type="number" defaultValue={''} {...fields.minimalSpareParstCount} />
             </Col>
-            <Col sm={3} md={4} lg={2}>
+            <Col sm={1} md={1} lg={2}>
               <CheckBox {...fields.isCritical} label="Is critical" className="items-end pb-2" />
+            </Col>
+            <Col sm={1} md={2} lg={8} className="flex justify-end">
+              {!systemDetail?.physicalItem && <AssignPhysicalItem />}
             </Col>
           </Grid>
         </Card>
