@@ -14,6 +14,7 @@ import { PATH } from '@/types/constants/paths'
 import type { Mutation } from '@/types/gql/graphql'
 import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
 import { connectAndDisconnectNode, whereN } from '@/utils/graphql/mutations'
+import { makeSystemInputBody } from './utils'
 
 import { useSystemItemStore } from '../store/useSystemItemStore'
 import type { SystemDetailFormType } from '../types/form'
@@ -24,11 +25,9 @@ const UPDATE_SYSTEM = gql`
     $where: SystemWhere
     $update: SystemUpdateInput!
     $updateItemsWhere: ItemWhere
-    $disconnectItems: ItemDisconnectInput
-    $connectItems: ItemConnectInput
     $updateItem: ItemUpdateInput
   ) {
-    updateItems(disconnect: $disconnectItems, where: $updateItemsWhere, connect: $connectItems, update: $updateItem) {
+    updateItems(where: $updateItemsWhere, update: $updateItem) {
       items {
         name
       }
@@ -41,43 +40,15 @@ const UPDATE_SYSTEM = gql`
   }
 `
 
-const systemInput = ({ systemForm, systemDetail }: { systemForm; systemDetail }) => ({
-  name: systemForm.name,
-  description: systemForm.description,
-  systemCode: systemForm.systemCode === '' ? null : systemForm.systemCode,
-  systemAlias: systemForm.systemAlias,
-  isCritical: systemForm.isCritical,
-  minimalSpareParstCount: !systemForm.minimalSpareParstCount ? null : Number(systemForm.minimalSpareParstCount),
-  systemType: connectAndDisconnectNode(systemForm?.systemType?.uid, systemDetail?.systemType?.uid),
-  responsibleTeam: connectAndDisconnectNode(systemForm?.responsibleTeam?.uid, systemDetail?.responsibleTeam?.uid),
-  location: connectAndDisconnectNode(systemForm?.location?.uid, systemDetail?.location?.uid),
-  zone: connectAndDisconnectNode(systemForm?.zone?.uid, systemDetail?.zone?.uid),
-  responsible: connectAndDisconnectNode(systemForm?.responsible?.uid, systemDetail?.responsible?.uid),
-  systemLevel: systemForm?.systemLevel,
-  physicalItem: {
-    update: systemForm?.physicalItem && {
-      node: {
-        notes: systemForm?.physicalItem?.notes,
-        serialNumber: systemForm?.physicalItem?.serialNumber,
-        itemUsage: connectAndDisconnectNode(
-          systemForm?.physicalItem?.itemUsage?.uid,
-          systemDetail?.physicalItem?.itemUsage?.uid
-        ),
-        conditionStatus: connectAndDisconnectNode(
-          systemForm?.physicalItem?.conditionStatus?.uid,
-          systemDetail?.physicalItem?.conditionStatus?.uid
-        )
-      }
-    }
-  }
-})
-
 export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>) => {
   const router = useRouter()
   const uid = router.query.uid as string
   const { systemDetail, refetch } = useContext(SystemDetailContext)
   const { mutate } = useSystems('systems')
   const { systemSubsystems } = useEndpoint({ uid: systemDetail?.parentSystem?.uid || '' })
+
+  const { newMaintainedBy, newOperators, disconnectOperators, disconnectMaintainedBy, selectedPhysicalSystem } =
+    useSystemItemStore()
 
   const onCompleted = ({ updateSystems: { systems } }) => {
     const responseUid = systems[0].uid
@@ -115,15 +86,12 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
     }
   })
 
-  const { newMaintainedBy, newOperators, disconnectOperators, disconnectMaintainedBy, selectedPhysicalSystem } =
-    useSystemItemStore()
-
-  function updateSystemQuery(systemForm: SystemDetailFormType) {
+  const updateSystemQuery = (systemForm: SystemDetailFormType) => {
     update({
       variables: {
         where: { uid },
         update: {
-          ...systemInput({ systemForm, systemDetail }),
+          ...makeSystemInputBody({ systemForm, systemDetail }),
           operators: [
             {
               connect: newOperators.map(operator => whereN(operator.uid)),
@@ -137,32 +105,14 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
             }
           ]
         },
-        connectItems: selectedPhysicalSystem && {
-          system: [
-            {
-              where: {
-                node: {
-                  uid: uid
-                }
-              }
-            }
-          ]
-        },
-        disconnectItems: selectedPhysicalSystem && {
-          system: [
-            {
-              where: {
-                node: {
-                  uid: selectedPhysicalSystem?.uid
-                }
-              }
-            }
-          ]
-        },
         updateItemsWhere: selectedPhysicalSystem && {
           uid: selectedPhysicalSystem?.physicalItem?.uid
         },
         updateItem: selectedPhysicalSystem && {
+          system: {
+            connect: whereN(uid),
+            disconnect: whereN(selectedPhysicalSystem?.uid)
+          },
           notes: systemForm?.physicalItem?.notes,
           serialNumber: systemForm?.physicalItem?.serialNumber,
           itemUsage: connectAndDisconnectNode(
