@@ -42,7 +42,7 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
     imageRef?.current?.submit(responseUid, () => {
       toast.success(`System ${responseUid} saved successfully`)
       router.replace(PATH.SYSTEM + '/' + responseUid)
-      mutateEndpoint(systemSubsystems, prev => addSubsystemToSubsystems(prev, body), {
+      mutateEndpoint(systemSubsystems, prev => prev && addSubsystemToSubsystems(prev, body), {
         revalidate: false
       })
       parentUid ? mutate(prev => prev && addSubsystem(parentUid, body, prev), { revalidate: false }) : mutate()
