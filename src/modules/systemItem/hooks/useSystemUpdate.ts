@@ -26,6 +26,9 @@ const UPDATE_SYSTEM = gql`
     $update: SystemUpdateInput!
     $updateItemsWhere: ItemWhere
     $updateItem: ItemUpdateInput
+    $node: String
+    $nodeUid: String
+    $action: String
   ) {
     updateItems(where: $updateItemsWhere, update: $updateItem) {
       items {
@@ -37,6 +40,7 @@ const UPDATE_SYSTEM = gql`
         ...SystemDetail
       }
     }
+    updatedByResolver(node: $node, nodeUid: $nodeUid, action: $action)
   }
 `
 
@@ -105,10 +109,10 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
             }
           ]
         },
-        updateItemsWhere: selectedPhysicalSystem && {
-          uid: selectedPhysicalSystem?.physicalItem?.uid
+        updateItemsWhere: {
+          uid: selectedPhysicalSystem?.physicalItem?.uid ? selectedPhysicalSystem?.physicalItem?.uid : null
         },
-        updateItem: selectedPhysicalSystem && {
+        updateItem: {
           system: {
             connect: whereN(uid),
             disconnect: whereN(selectedPhysicalSystem?.uid)
@@ -123,7 +127,10 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
             systemForm?.physicalItem?.conditionStatus?.uid,
             systemDetail?.physicalItem?.conditionStatus?.uid
           )
-        }
+        },
+        node: 'System',
+        nodeUid: uid,
+        action: 'UPDATE'
       }
     })
   }

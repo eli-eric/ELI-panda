@@ -3,6 +3,7 @@ import { gql } from '@apollo/client'
 export const typeDefs = gql`
   type Mutation {
     createSparePartRelation(fromSystemIds: [ID!]!, toSystemIds: [ID!]!): String
+    updatedByResolver(node: String, nodeUid: String, action: String): String
   }
 
   type JWT @jwt {
@@ -213,6 +214,17 @@ export const typeDefs = gql`
     version: BigInt!
   }
 
+  interface wasUpdatedBy @relationshipProperties {
+    at: DateTime! @timestamp
+    action: Actions!
+  }
+
+  enum Actions {
+    INSERT
+    UPDATE
+    DELETE
+  }
+
   type System
     @authorization(
       validate: [
@@ -243,6 +255,7 @@ export const typeDefs = gql`
     operators: [Employee!]! @relationship(type: "HAS_OPERATOR", direction: OUT)
     maintainedBy: [Employee!]! @relationship(type: "IS_MAINTAINED_BY", direction: OUT)
     systemLevel: SystemLevel
+    updatedBy: [User!]! @relationship(type: "WAS_UPDATED_BY", direction: OUT, properties: "wasUpdatedBy")
     keySystem: System
       @cypher(
         statement: """
@@ -283,7 +296,7 @@ export const typeDefs = gql`
     eun: String
     name: String!
     serialNumber: String
-    system: System! @relationship(type: "CONTAINS_ITEM", direction: IN)
+    system: System @relationship(type: "CONTAINS_ITEM", direction: IN)
     catalogueItem: CatalogueItem! @relationship(type: "IS_BASED_ON", direction: OUT)
     order: Order @relationship(type: "HAS_ORDER_LINE", direction: IN, properties: "hasOrderLine")
     itemUsage: ItemUsage @relationship(type: "HAS_ITEM_USAGE", direction: OUT)

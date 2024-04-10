@@ -10,7 +10,7 @@ import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { addSubsystem, addSubsystemToSubsystems } from '@/modules/systems/utils'
 import { PATH } from '@/types/constants/paths'
-import type { Mutation, MutationCreateSystemsArgs } from '@/types/gql/graphql'
+import type { Mutation } from '@/types/gql/graphql'
 import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
 import { connectN, whereC, whereN } from '@/utils/graphql/mutations'
 
@@ -49,7 +49,7 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
     })
   }
 
-  const [create, { loading }] = useMutation<Mutation, MutationCreateSystemsArgs>(CREATE_SYSTEM, {
+  const [create, { loading }] = useMutation<Mutation>(CREATE_SYSTEM, {
     onCompleted,
     onError: error => {
       toast.error('Something went wrong: ' + error.message)
@@ -90,6 +90,9 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
             },
             maintainedBy: {
               connect: systemForm?.maintainedBy?.map(employee => ({ where: { node: { uid: employee.uid } } }))
+            },
+            updatedBy: {
+              connect: [{ where: { node: { uid: session?.user?.uid } }, edge: { action: 'INSERT' } }]
             }
           }
         ]
