@@ -283,7 +283,7 @@ export const typeDefs = gql`
     eun: String
     name: String!
     serialNumber: String
-    system: [System!]! @relationship(type: "CONTAINS_ITEM", direction: IN)
+    system: System! @relationship(type: "CONTAINS_ITEM", direction: IN)
     catalogueItem: CatalogueItem! @relationship(type: "IS_BASED_ON", direction: OUT)
     order: Order @relationship(type: "HAS_ORDER_LINE", direction: IN, properties: "hasOrderLine")
     itemUsage: ItemUsage @relationship(type: "HAS_ITEM_USAGE", direction: OUT)
