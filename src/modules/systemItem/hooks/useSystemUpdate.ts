@@ -102,7 +102,7 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
       } else {
         router.replace(PATH.SYSTEM + '/' + responseUid)
       }
-      mutateEndpoint(systemSubsystems, prev => updateSubSystem(prev, body), { revalidate: false })
+      mutateEndpoint(systemSubsystems, prev => prev && updateSubSystem(prev, body), { revalidate: false })
       mutate(prev => prev && updateSystem(uid, body, prev), { revalidate: false })
       refetch()
     })
