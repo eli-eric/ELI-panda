@@ -1,20 +1,22 @@
-import type { Row, Table } from '@tanstack/react-table'
-import { Fragment, useCallback, useEffect, useRef } from 'react'
+import type { Row } from '@tanstack/react-table'
+import { Fragment, useCallback, useEffect } from 'react'
 
 import { Pagination } from '@/modules/shared/table/Pagination'
 import type { GetRowPropsReturnType, PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
-import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 
 import { useSystems } from '../../hooks/useSystems'
 import type { SystemDetail } from '../../types/responses'
 import { SearchBarButtons } from '../SearchBarButtons'
 import { useSystemsColumns } from './useSystemsColumns'
+import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
+import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
 
 interface Props {
   tableId: string
   pageSizeDefault?: number
   className?: string
+  collapseOnUnMount?: boolean
   hideButtons?: boolean
   enableDragAndDrop?: boolean
   getRowProps?: (row: Row<SystemDetail>) => GetRowPropsReturnType
@@ -32,21 +34,33 @@ export const SystemsTable = ({
   settings,
   enableDragAndDrop,
   LeftSearchBarElement,
-  RightSearchBarElement
+  RightSearchBarElement,
+  collapseOnUnMount
 }: Props) => {
   const { systems, loading } = useSystems(tableId)
-  const tableRef = useRef<Table<SystemDetail>>()
   const { columns, pending } = useSystemsColumns({ tableId, hideButtons, enableDragAndDrop: enableDragAndDrop })
 
+  const table = usePandaTable({
+    tableId,
+    columns,
+    data: systems?.data,
+    getSubRows: original => original.subSystems ?? [],
+    settings: { ...settings, enableSorting: false, enableColumnReordering: false }
+  })
+
   const onChangeSearch = useCallback(() => {
-    tableRef.current?.resetExpanded()
-  }, [tableRef])
+    table.resetExpanded()
+  }, [table])
 
   useEffect(() => {
-    if (tableRef.current) {
-      tableRef.current.setColumnOrder(['icon', 'name'])
+    table.setColumnOrder(['icon', 'name'])
+
+    return () => {
+      if (collapseOnUnMount) {
+        table.resetExpanded()
+      }
     }
-  }, [tableRef])
+  }, [collapseOnUnMount, table])
 
   return (
     <Fragment>
@@ -63,13 +77,11 @@ export const SystemsTable = ({
         onChange={onChangeSearch}
         right={RightSearchBarElement && <RightSearchBarElement />}
       />
-      <PandaTable
-        ref={tableRef}
-        columns={columns}
+      <PandaTableControlled
         data={systems?.data}
+        table={table}
         loading={loading || pending}
         tableId={tableId}
-        getSubRows={row => row.subSystems}
         getRowProps={getRowProps}
         settings={{ ...settings, enableSorting: false, enableColumnReordering: false }}
         className={className}

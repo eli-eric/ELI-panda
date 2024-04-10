@@ -54,8 +54,14 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
   const { mutate } = useSystems('systems')
   const { systemSubsystems } = useEndpoint({ uid: systemDetail?.parentSystem?.uid || '' })
 
-  const { newMaintainedBy, newOperators, disconnectOperators, disconnectMaintainedBy, selectedPhysicalSystem } =
-    useSystemItemStore()
+  const {
+    newMaintainedBy,
+    newOperators,
+    disconnectOperators,
+    disconnectMaintainedBy,
+    selectedPhysicalSystem,
+    setSelectedPhysicalSystem
+  } = useSystemItemStore()
 
   const onCompleted = ({ updateSystems: { systems } }) => {
     const responseUid = systems[0].uid
@@ -82,7 +88,21 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
       }
       mutateEndpoint(systemSubsystems, prev => prev && updateSubSystem(prev, body), { revalidate: false })
       mutate(prev => prev && updateSystem(uid, body, prev), { revalidate: false })
+      if (selectedPhysicalSystem) {
+        mutateEndpoint(
+          systemSubsystems,
+          prev => prev && updateSubSystem(prev, { ...selectedPhysicalSystem, physicalItem: undefined }),
+          { revalidate: false }
+        )
+        mutate(
+          prev =>
+            prev &&
+            updateSystem(selectedPhysicalSystem?.uid, { ...selectedPhysicalSystem, physicalItem: undefined }, prev),
+          { revalidate: false }
+        )
+      }
       refetch()
+      setSelectedPhysicalSystem(undefined)
     })
   }
 
