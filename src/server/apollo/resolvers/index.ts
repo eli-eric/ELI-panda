@@ -1,10 +1,12 @@
 import createSparePartRelationsResolver from './createSparePartRelationResolver'
+import itemOriginatedResolver from './itemOriginatedResolver'
 import updatedByResolver from './updatedByResolver'
 
 const resolvers = {
   Mutation: {
     createSparePartRelation: createSparePartRelationsResolver,
-    updatedByResolver: updatedByResolver
+    updatedByResolver: updatedByResolver,
+    itemOriginatedResolver: itemOriginatedResolver
   }
 }
 

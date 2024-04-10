@@ -54,6 +54,7 @@ export const AssignPhysicalItem = () => {
       <ModalComponent open={openModal} setOpen={setOpenModal} buttons={modalButtons}>
         <SystemsTable
           tableId={'systemsItem'}
+          collapseOnUnMount={true}
           settings={{ enableQueryURL: false, enableColumnHiding: true }}
           pageSizeDefault={10}
           className={'overflow-y-auto relative h-[423px]'}

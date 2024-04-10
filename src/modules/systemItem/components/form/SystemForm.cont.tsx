@@ -122,7 +122,7 @@ export const SystemForm = () => {
               <CheckBox {...fields.isCritical} label="Is critical" className="items-end pb-2" />
             </Col>
             <Col sm={1} md={2} lg={8} className="flex justify-end">
-              {!systemDetail?.physicalItem && <AssignPhysicalItem />}
+              {!systemDetail?.physicalItem && uid && <AssignPhysicalItem />}
             </Col>
           </Grid>
         </Card>
