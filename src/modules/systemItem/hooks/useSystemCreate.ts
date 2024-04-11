@@ -36,12 +36,16 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
 
   const { systemSubsystems } = useEndpoint({ uid: parentUid || '' })
 
-  const onCompleted = ({ createSystems: { systems } }) => {
+  const onCompleted = ({ createSystems: { systems } }, saveAndExit?: boolean) => {
     const responseUid = systems[0].uid
     const body = systems[0]
     imageRef?.current?.submit(responseUid, () => {
       toast.success(`System ${responseUid} saved successfully`)
-      router.replace(PATH.SYSTEM + '/' + responseUid)
+      if (saveAndExit) {
+        router.back()
+      } else {
+        router.replace(PATH.SYSTEM + '/' + responseUid)
+      }
       mutateEndpoint(systemSubsystems, prev => prev && addSubsystemToSubsystems(prev, body), {
         revalidate: false
       })
@@ -50,13 +54,12 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
   }
 
   const [create, { loading }] = useMutation<Mutation>(CREATE_SYSTEM, {
-    onCompleted,
     onError: error => {
       toast.error('Something went wrong: ' + error.message)
     }
   })
 
-  const createSystem = (systemForm: SystemDetailFormType) => {
+  const createSystem = (systemForm: SystemDetailFormType, saveAndExit?: boolean) => {
     create({
       variables: {
         input: [
@@ -96,6 +99,9 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
             }
           }
         ]
+      },
+      onCompleted: response => {
+        onCompleted(response, saveAndExit)
       }
     })
   }

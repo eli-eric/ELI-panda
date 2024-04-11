@@ -9,17 +9,17 @@ import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { PATH } from '@/types/constants/paths'
 
 const useItemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>) => {
-  const { query, back, replace } = useRouter()
+  const { query, replace, back } = useRouter()
   const uid = query.uid as string | undefined
   const { catalogueItem } = useEndpoint({ uid: uid })
 
   const { response, submit, loading } = useSubmit<string>({
     endpoint: catalogueItem,
     method: uid ? 'put' : 'post',
-    onSuccess: (responseUid, data) => {
+    onSuccess: (responseUid, data, custom) => {
       imageRef?.current?.submit(responseUid, () => {
         toast.success('Item saved')
-        if (uid) {
+        if (custom?.saveAndExit) {
           back()
         } else {
           replace(PATH.CATALOGUE_ITEM + '/' + responseUid)
