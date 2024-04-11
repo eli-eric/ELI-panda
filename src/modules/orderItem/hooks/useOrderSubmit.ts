@@ -17,9 +17,9 @@ export const useOrderSubmit = () => {
   const { submit, loading } = useSubmit<string>({
     endpoint: orderEndpoint,
     method: uid ? 'put' : 'post',
-    onSuccess: uid => {
+    onSuccess: (uid, _, custom) => {
       toast.success(`Order ${uid} saved successfully`)
-      router.push(uid ? PATH.ORDER + '/' + uid : PATH.ORDERS)
+      if (custom?.saveAndExit) router.push(uid ? PATH.ORDER + '/' + uid : PATH.ORDERS)
       mutate()
       mutateDetail()
     },

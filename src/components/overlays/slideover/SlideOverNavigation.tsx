@@ -15,7 +15,7 @@ interface Props {
 export const SlideOverNavigation: FC<PropsWithChildren<Props>> = ({ open, setOpen, children, panelSlide = 'left' }) => {
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+      <Dialog as="div" className="relative z-50" onClose={setOpen}>
         <div className="fixed inset-0" />
 
         <div className="fixed inset-0 overflow-hidden">

@@ -1,7 +1,7 @@
 import { Bars3Icon, Cog6ToothIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 
 import EliLogoComponent from '@/components/eli-logo.comp'
 import { SlideOverNavigation } from '@/components/overlays/slideover/SlideOverNavigation'
@@ -28,7 +28,7 @@ export const NavigationMobile = () => {
 
   if (status === 'unauthenticated' || status === 'loading') return null
   return (
-    <Fragment>
+    <header className="sticky top-0 z-20">
       <div
         id="nav-bar"
         className={classNames(
@@ -58,6 +58,6 @@ export const NavigationMobile = () => {
       <SlideOverNavigation panelSlide="left" open={openSettings} setOpen={setOpenSettings}>
         <UserSection isExpanded={true} setOpen={setOpenSettings} />
       </SlideOverNavigation>
-    </Fragment>
+    </header>
   )
 }

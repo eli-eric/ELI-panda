@@ -63,7 +63,7 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
     setSelectedPhysicalSystem
   } = useSystemItemStore()
 
-  const onCompleted = ({ updateSystems: { systems } }) => {
+  const onCompleted = ({ updateSystems: { systems } }, saveAndExit?: boolean) => {
     const responseUid = systems[0].uid
     const body = {
       ...systems[0],
@@ -81,7 +81,7 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
     }
     imageRef?.current?.submit(responseUid, () => {
       toast.success(`System saved successfully`)
-      if (uid) {
+      if (saveAndExit) {
         router.back()
       } else {
         router.replace(PATH.SYSTEM + '/' + responseUid)
@@ -107,13 +107,12 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
   }
 
   const [update, { loading }] = useMutation<Mutation>(UPDATE_SYSTEM, {
-    onCompleted,
     onError: error => {
       toast.error('Something went wrong: ' + error.message)
     }
   })
 
-  const updateSystemQuery = (systemForm: SystemDetailFormType) => {
+  const updateSystemQuery = (systemForm: SystemDetailFormType, saveAndExit?: boolean) => {
     update({
       variables: {
         where: { uid },
@@ -156,6 +155,9 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
         action: 'UPDATE',
         itemUid: selectedPhysicalSystem?.physicalItem?.uid,
         systemOriginatedUid: selectedPhysicalSystem?.uid
+      },
+      onCompleted: response => {
+        onCompleted(response, saveAndExit)
       }
     })
   }

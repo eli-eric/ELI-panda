@@ -10,7 +10,6 @@ import { FILE_TYPE } from '@/types/constants/files'
 
 import { useParentSystemDetail } from '../../hooks/useParentSystemDetail'
 import Breadcrumbs from '../Breadcrumps'
-import HeaderComponent from '../Header.comp'
 import { SystemMainForm } from './components/SystemMain.form'
 import { schema } from './SystemForm.schema'
 
@@ -36,6 +35,7 @@ import { getColorBySystemLevel } from '../../utils'
 import { SystemItemCard } from './components/SystemItem.card'
 import useSystemEditFormFields from './SystemForm.fields'
 import { AssignPhysicalItem } from '../AssignPhysicalItem'
+import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
@@ -87,9 +87,26 @@ export const SystemForm = () => {
     }
   }
 
+  const onSubmitAndExit = (data: SystemDetailFormType) => {
+    // extract from data hasImageGalleryChanges
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { hasImageGalleryChanges, ...rest } = data
+    if (uid) {
+      updateSystem(rest, true)
+    }
+    if (!uid) {
+      createSystem(rest, true)
+    }
+  }
+
   return (
-    <Form formMethods={formMethods} enableLeaveWarning={true}>
-      <HeaderComponent loading={loading || createLoading} onSubmit={formMethods.handleSubmit(onSubmit)} />
+    <Form className="relative" formMethods={formMethods} enableLeaveWarning={true}>
+      <HeaderWithButtons
+        loading={loading || createLoading}
+        editRole={ROLE.SYSTEM_EDIT}
+        onSubmit={formMethods.handleSubmit(onSubmit)}
+        onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
+      />
       <Card>
         <Breadcrumbs parentPath={parentPath || (systemDetail?.parentPath as CodebookType[])} />
       </Card>

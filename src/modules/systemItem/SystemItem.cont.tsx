@@ -21,7 +21,7 @@ interface Props {
 export const SystemItemContainer = ({ uid }: Props) => {
   const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
   return (
-    <div>
+    <div className="h-screen">
       <SystemForm />
       {uid && (
         <Card className="flex flex-col justify-between">

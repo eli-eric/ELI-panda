@@ -8,7 +8,13 @@ interface UseSubmitProps<T> {
   endpoint: string
   method: 'post' | 'put' | 'delete' | 'get'
   mutateList?: string[]
-  onSuccess?: (data: T, body: any) => void
+  onSuccess?: (
+    data: T,
+    body: any,
+    custom?: {
+      [key: string]: any
+    }
+  ) => void
   onError?: (error: AxiosError) => void
 }
 
@@ -17,12 +23,17 @@ export const useSubmit = <T>({ endpoint, method, onSuccess, onError }: UseSubmit
   const [error, setError] = useState<string>()
   const [loading, setloading] = useState<boolean>(false)
 
-  const submit = (body?: any) => {
+  const submit = (
+    body?: any,
+    custom?: {
+      [key: string]: any
+    }
+  ) => {
     setloading(true)
     axiosInstance[method](BASE_URL + endpoint, body)
       .then(res => {
         setResponse(res.data)
-        if (onSuccess) onSuccess(res.data, body)
+        if (onSuccess) onSuccess(res.data, body, custom)
       })
       .catch(err => {
         if (onError) onError(err)
