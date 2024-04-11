@@ -1,13 +1,13 @@
 import { type Driver } from 'neo4j-driver'
 import type { TransactionPromise } from 'neo4j-driver-core'
-import type { User } from 'next-auth'
 
 import { ROLE } from '@/types/constants/roles'
+import type { JWT } from 'next-auth/jwt'
 
 const createSparePartRelationsResolver = async (
   _source: unknown,
   { fromSystemIds, toSystemIds }: { fromSystemIds: string[]; toSystemIds: string[] },
-  context: { executor: { executionContext: Driver }; authorization: { isAuthenticated: boolean; jwt: User } },
+  context: { executor: { executionContext: Driver }; authorization: { isAuthenticated: boolean; jwt: JWT } },
   // eslint-disable-next-line
   _info: unknown
 ): Promise<string> => {
@@ -63,8 +63,4 @@ const createSparePartRelationsResolver = async (
   }
 }
 
-export const resolvers = {
-  Mutation: {
-    createSparePartRelation: createSparePartRelationsResolver
-  }
-}
+export default createSparePartRelationsResolver

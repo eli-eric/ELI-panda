@@ -33,7 +33,7 @@ export const SidebarNavigation = () => {
   if (status === 'unauthenticated' || status === 'loading') return null
 
   return (
-    <div
+    <aside
       className={classNames(
         `hidden lg:flex lg:flex-col lg:justify-between`,
         isExpanded ? 'w-64' : 'w-14',
@@ -45,6 +45,6 @@ export const SidebarNavigation = () => {
       <NavBarHeader isExpanded={isExpanded} onCollapse={onCollapse} />
       <MainNavigation isExpanded={isExpanded} toggleItemExpansion={toggleItemExpansion} expandedItems={expandedItems} />
       <UserSection isExpanded={isExpanded} />
-    </div>
+    </aside>
   )
 }

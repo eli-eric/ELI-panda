@@ -10,7 +10,7 @@ import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { addSubsystem, addSubsystemToSubsystems } from '@/modules/systems/utils'
 import { PATH } from '@/types/constants/paths'
-import type { Mutation, MutationCreateSystemsArgs } from '@/types/gql/graphql'
+import type { Mutation } from '@/types/gql/graphql'
 import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
 import { connectN, whereC, whereN } from '@/utils/graphql/mutations'
 
@@ -36,12 +36,16 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
 
   const { systemSubsystems } = useEndpoint({ uid: parentUid || '' })
 
-  const onCompleted = ({ createSystems: { systems } }) => {
+  const onCompleted = ({ createSystems: { systems } }, saveAndExit?: boolean) => {
     const responseUid = systems[0].uid
     const body = systems[0]
     imageRef?.current?.submit(responseUid, () => {
       toast.success(`System ${responseUid} saved successfully`)
-      router.replace(PATH.SYSTEM + '/' + responseUid)
+      if (saveAndExit) {
+        router.back()
+      } else {
+        router.replace(PATH.SYSTEM + '/' + responseUid)
+      }
       mutateEndpoint(systemSubsystems, prev => prev && addSubsystemToSubsystems(prev, body), {
         revalidate: false
       })
@@ -49,14 +53,13 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
     })
   }
 
-  const [create, { loading }] = useMutation<Mutation, MutationCreateSystemsArgs>(CREATE_SYSTEM, {
-    onCompleted,
+  const [create, { loading }] = useMutation<Mutation>(CREATE_SYSTEM, {
     onError: error => {
       toast.error('Something went wrong: ' + error.message)
     }
   })
 
-  const createSystem = (systemForm: SystemDetailFormType) => {
+  const createSystem = (systemForm: SystemDetailFormType, saveAndExit?: boolean) => {
     create({
       variables: {
         input: [
@@ -90,9 +93,15 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
             },
             maintainedBy: {
               connect: systemForm?.maintainedBy?.map(employee => ({ where: { node: { uid: employee.uid } } }))
+            },
+            updatedBy: {
+              connect: [{ where: { node: { uid: session?.user?.uid } }, edge: { action: 'INSERT' } }]
             }
           }
         ]
+      },
+      onCompleted: response => {
+        onCompleted(response, saveAndExit)
       }
     })
   }

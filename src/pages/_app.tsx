@@ -11,8 +11,6 @@ import { IntlProvider } from 'react-intl'
 import { messages } from 'src/i18n/src'
 import { SWRConfig } from 'swr'
 
-import { NavigationMobile } from '@/components/layout/navigation/NavigationMobile'
-import { SidebarNavigation } from '@/components/layout/navigation/SideBarNavigation'
 import { Notification } from '@/components/Notifications/Notification'
 import { GenereralModal } from '@/components/overlays/modal/modal.comp'
 import { WarningModal } from '@/components/WarningModal'
@@ -20,6 +18,7 @@ import { useLocale } from '@/hooks/useLocale'
 import { useApollo } from '@/server/apollo/client'
 import { useDarkModeStore } from '@/store/useDarkModeStore'
 import { fetcher } from '@/utils/fetcher'
+import { Layout } from '@/components/layout/Layout'
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
   const apolloClient = useApollo(pageProps.initialApolloState)
@@ -53,13 +52,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
               {t => <Notification t={t} />}
             </Toaster>
             <DndProvider backend={HTML5Backend}>
-              <div className="flex flex-col lg:flex-row min-h-screen">
-                <NavigationMobile />
-                <SidebarNavigation />
-                <main className="flex-1 overflow-auto z-10">
-                  <div>{<Component {...pageProps} />}</div>
-                </main>
-              </div>
+              <Layout>{<Component {...pageProps} />}</Layout>
               <GenereralModal />
               <WarningModal />
             </DndProvider>
