@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Fragment, Suspense } from 'react'
+import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
@@ -16,11 +16,12 @@ import { convertDate } from '@/utils/formatters'
 import FileManager from '../shared/fileManager/FileManager'
 import OrderFormComponent from './components/form/OrderForm.comp'
 import { schema } from './components/form/OrderForm.schema'
-import HeaderComponent from './components/Header.comp'
 import OrderLinesTable from './components/orderLines/OrderLines.table'
 import useOrderDetail from './hooks/useOrderDetail'
 import { useOrderSubmit } from './hooks/useOrderSubmit'
 import type { OrderDetailFormType } from './types/form'
+import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
+import { ROLE } from '@/types/constants/roles'
 
 const messages = message.ordersPage
 
@@ -55,23 +56,42 @@ export const OrderItemContainer = () => {
       submit({ ...data, orderLines: orderLines, orderDate: convertDate(data.orderDate) })
     }
   }
+  const onSubmitAndExit = (data: OrderDetailFormType) => {
+    const orderLines = data.orderLines.map(orderLine => {
+      // extract uuid from orderLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { uuid, ...rest } = orderLine
+      return rest
+    })
+    if (data.orderLines.length === 0 || !data.orderLines) {
+      withWarningModal(submit)(
+        { ...data, orderLines: orderLines, orderDate: convertDate(data.orderDate) },
+        { saveAndExit: true }
+      )
+    } else {
+      submit({ ...data, orderLines: orderLines, orderDate: convertDate(data.orderDate) }, { saveAndExit: true })
+    }
+  }
 
   return (
-    <Fragment>
-      <Form formMethods={formMethods} enableLeaveWarning={true}>
-        <HeaderComponent loading={loading} onSubmit={formMethods.handleSubmit(onSubmit)} />
-        <OrderFormComponent />
-        <Card className="flex flex-col justify-between">
-          <OrderLinesTable disabledEdit={disabledEdit} />
-          {uid && (
-            <ErrorBoundary fallback={<ErrorPage />}>
-              <Suspense fallback={<ProgressBarComponent />}>
-                <FileManager itemType={FILE_TYPE.ORDER} uid={uid} hasEditRole={!disabledEdit} />
-              </Suspense>
-            </ErrorBoundary>
-          )}
-        </Card>
-      </Form>
-    </Fragment>
+    <Form className="h-screen" formMethods={formMethods} enableLeaveWarning={true}>
+      <HeaderWithButtons
+        loading={loading}
+        editRole={ROLE.ORDERS_EDIT}
+        onSubmit={formMethods.handleSubmit(onSubmit)}
+        onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
+      />
+      <OrderFormComponent />
+      <Card className="flex flex-col justify-between">
+        <OrderLinesTable disabledEdit={disabledEdit} />
+        {uid && (
+          <ErrorBoundary fallback={<ErrorPage />}>
+            <Suspense fallback={<ProgressBarComponent />}>
+              <FileManager itemType={FILE_TYPE.ORDER} uid={uid} hasEditRole={!disabledEdit} />
+            </Suspense>
+          </ErrorBoundary>
+        )}
+      </Card>
+    </Form>
   )
 }

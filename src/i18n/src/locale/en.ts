@@ -2,6 +2,7 @@ export const messages = {
   common: {
     buttons: {
       close: 'Close',
+      saveAndExit: 'Save and Exit',
       continue: 'Continue',
       cancel: 'Cancel',
       save: 'Save',

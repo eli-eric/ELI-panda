@@ -22,13 +22,13 @@ import useCatalogueFormFields from './components/form/CatalogueForm.fields'
 import DefaultItemForm from './components/form/DefaultItemForm'
 import Groups from './components/form/Groups'
 import { schema } from './components/form/ItemForm.schema'
-import ItemHeader from './components/header/Header.comp'
 import { CatalogueOrders } from './components/orders/CatalogueOrders'
 import { RelatedItemsContainer } from './components/related-items/RelatedItems.cont'
 import { CatalogueStatisticsContainer } from './components/statistics/CatalogueStatistics.cont'
 import useItem from './hooks/useItem'
 import useItemSubmit from './hooks/useItemSubmit'
 import type { CatalogueItem } from './types/responses'
+import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 
 const MemoizedGallery = memo(ImageGallery)
 
@@ -62,6 +62,7 @@ const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemCont
         }
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [catalogueCategory])
 
   const onSubmit = (catalogueItem: CatalogueForm) => {
@@ -70,10 +71,21 @@ const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemCont
     const { hasImageGalleryChanges, ...rest } = catalogueItem
     submit(rest as CatalogueItem)
   }
+  const onSubmitAndExit = (catalogueItem: CatalogueForm) => {
+    // extract from catalogueItem hasImageGalleryChanges
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { hasImageGalleryChanges, ...rest } = catalogueItem
+    submit(rest as CatalogueItem, { saveAndExit: true })
+  }
 
   return (
-    <Form formMethods={formMethods} enableLeaveWarning={true} onSubmit={onSubmit}>
-      <ItemHeader disabledEdit={disabledEdit} loading={loading} />
+    <Form className="h-screen" formMethods={formMethods} enableLeaveWarning={true}>
+      <HeaderWithButtons
+        loading={loading}
+        editRole={ROLE.CATALOGUE_EDIT}
+        onSubmit={formMethods.handleSubmit(onSubmit)}
+        onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
+      />
       <Card className="flex flex-col justify-between pb-5">
         <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
           <MemoizedGallery
