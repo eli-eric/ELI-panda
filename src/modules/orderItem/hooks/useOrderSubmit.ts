@@ -7,6 +7,7 @@ import { useOrders } from '@/modules/orders/hooks/useOrders'
 import { PATH } from '@/types/constants/paths'
 
 import useOrderDetail from './useOrderDetail'
+import { navigateBack } from '@/utils'
 
 export const useOrderSubmit = () => {
   const router = useRouter()
@@ -19,9 +20,16 @@ export const useOrderSubmit = () => {
     method: uid ? 'put' : 'post',
     onSuccess: (uid, _, custom) => {
       toast.success(`Order ${uid} saved successfully`)
-      if (custom?.saveAndExit) router.push(uid ? PATH.ORDER + '/' + uid : PATH.ORDERS)
+
       mutate()
       mutateDetail()
+      if (custom?.saveAndExit) {
+        navigateBack()
+      } else {
+        if (uid) {
+          router.push(PATH.ORDER + '/' + uid)
+        }
+      }
     },
     onError: e => toast.error(e.message)
   })

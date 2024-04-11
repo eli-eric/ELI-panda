@@ -52,3 +52,11 @@ export const highlightText = (text: string, highlight?: string): JSX.Element => 
     </span>
   )
 }
+
+export const navigateBack = () => {
+  if (window.history.length > 1) {
+    window.history.back()
+  } else {
+    window.close()
+  }
+}

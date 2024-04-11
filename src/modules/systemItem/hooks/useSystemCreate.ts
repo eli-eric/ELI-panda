@@ -16,6 +16,7 @@ import { connectN, whereC, whereN } from '@/utils/graphql/mutations'
 
 import type { SystemDetailFormType } from '../types/form'
 import { useParentSystemDetail } from './useParentSystemDetail'
+import { navigateBack } from '@/utils'
 
 const CREATE_SYSTEM = gql`
   ${SYSTEM_DETAIL}
@@ -41,15 +42,15 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
     const body = systems[0]
     imageRef?.current?.submit(responseUid, () => {
       toast.success(`System ${responseUid} saved successfully`)
-      if (saveAndExit) {
-        router.back()
-      } else {
-        router.replace(PATH.SYSTEM + '/' + responseUid)
-      }
       mutateEndpoint(systemSubsystems, prev => prev && addSubsystemToSubsystems(prev, body), {
         revalidate: false
       })
       parentUid ? mutate(prev => prev && addSubsystem(parentUid, body, prev), { revalidate: false }) : mutate()
+      if (saveAndExit) {
+        navigateBack()
+      } else {
+        router.replace(PATH.SYSTEM + '/' + responseUid)
+      }
     })
   }
 
