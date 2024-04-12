@@ -4,27 +4,40 @@ import type { FileItem } from './types'
 import { uniFetcher } from '@/utils/fetcher'
 import executeRequest from '@/utils/executeRequest'
 import toast from 'react-hot-toast'
+import { useFilesStore } from './useFileStore'
 
 export const useFileRequests = ({ itemType, uid }) => {
   const endpoint = `/api/${itemType}/${uid}/files`
-  const { data: files, mutate } = useSWR<Array<FileItem>>(endpoint, uniFetcher)
+  const { setFiles, files } = useFilesStore()
+  const { data, mutate } = useSWR<Array<FileItem>>(endpoint, uniFetcher)
+
+  useEffect(() => {
+    data && setFiles(data.map(file => ({ ...file, type: 'FILE' })))
+  }, [data, setFiles])
+
   const [loading, setLoading] = useState<Array<boolean>>([])
   const [newFile, setNewFile] = useState<
-    Array<{ name: string; payload: string }>
+    Array<{ name: string; payload: string; type: 'FILE' | 'LINK' }>
   >([])
 
   const onDrop = useCallback(async (files: File[]) => {
     const updatedFiles = await Promise.all(
       files.map(
         file =>
-          new Promise<{ name: string; payload: string }>((resolve, reject) => {
-            const reader = new FileReader()
-            reader.onload = () => {
-              resolve({ name: file.name, payload: reader.result as string })
+          new Promise<{ name: string; payload: string; type: 'FILE' }>(
+            (resolve, reject) => {
+              const reader = new FileReader()
+              reader.onload = () => {
+                resolve({
+                  name: file.name,
+                  payload: reader.result as string,
+                  type: 'FILE'
+                })
+              }
+              reader.onerror = reject
+              reader.readAsDataURL(file)
             }
-            reader.onerror = reject
-            reader.readAsDataURL(file)
-          })
+          )
       )
     )
     setNewFile(updatedFiles)

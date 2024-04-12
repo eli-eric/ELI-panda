@@ -11,7 +11,8 @@ import { PandaTable } from '../table/pandaTable/PandaTable'
 import { useFileColumns } from './FileTable.columns'
 import { useFileRequests } from './useFileRequests'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
-import { ModalButtons } from '@/types/form'
+import type { ModalButtons } from '@/types/form'
+import { useFilesStore } from './useFileStore'
 
 const messages = message.common.files
 const buttons = message.common.buttons
@@ -26,7 +27,10 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   const [open, setOpen] = useState(false)
   const [openLinkModal, setOpenLinkModal] = useState(false)
 
+  const { setNewFile } = useFilesStore()
+
   const [linkValue, setLinkValue] = useState('')
+  const [linkName, setLinkName] = useState('')
 
   const { onDrop, handlePut, loading, mutate, files, endpoint } =
     useFileRequests({ itemType, uid })
@@ -55,6 +59,13 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
     goNext: {
       text: buttons.continue,
       onClick: () => {
+        setNewFile({
+          id: 'link-' + linkValue,
+          size: 0,
+          name: linkName,
+          url: linkValue,
+          type: 'LINK'
+        })
         setOpenLinkModal(false)
       }
     },
@@ -134,6 +145,13 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
           buttons: modalLinkButtons
         }}
       >
+        <input
+          type="string"
+          className="form-field rounded-md"
+          placeholder="Write link name here"
+          value={linkName}
+          onChange={e => setLinkName(e.target.value)}
+        />
         <input
           type="string"
           className="form-field rounded-md"
