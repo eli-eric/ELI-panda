@@ -38,7 +38,10 @@ export function generatePassword() {
   return password
 }
 
-export const highlightText = (text: string, highlight?: string): JSX.Element => {
+export const highlightText = (
+  text: string,
+  highlight?: string
+): JSX.Element => {
   if (!highlight) {
     return <span>{text}</span>
   }
@@ -48,7 +51,25 @@ export const highlightText = (text: string, highlight?: string): JSX.Element => 
     <span>
       {parts
         .filter(part => part)
-        .map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
+        .map((part, i) =>
+          regex.test(part) ? (
+            <mark key={i}>{part}</mark>
+          ) : (
+            <span key={i}>{part}</span>
+          )
+        )}
     </span>
   )
+}
+
+export const navigateBack = (navigateExit?: () => void) => {
+  if (window.history.length > 1) {
+    if (navigateExit) {
+      navigateExit()
+    } else {
+      window.history.back()
+    }
+  } else {
+    window.close()
+  }
 }

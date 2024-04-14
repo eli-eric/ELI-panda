@@ -43,7 +43,6 @@ interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
   buttonSize?: 'small' | 'large'
   testid?: string
   text?: string
-  customDisabled?: boolean
 }
 
 export const Button = ({
@@ -57,13 +56,12 @@ export const Button = ({
   buttonSize,
   testid,
   type = 'button',
-  customDisabled = false,
   ...restProps
 }: ButtonProps) => (
   <button
     {...restProps}
     data-testid={testid}
-    disabled={loading ? true : disabled || customDisabled}
+    disabled={loading ? true : disabled}
     type={type}
     className={classNames(
       'btn',
@@ -81,78 +79,117 @@ export const Button = ({
   </button>
 )
 
-export const DeleteButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+export const DeleteButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
   </Button>
 )
 
-export const EditButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+export const EditButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
-export const DetailButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+export const DetailButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <FolderOpenIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
-export const DownloadButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+export const DownloadButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
-export const PlusButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+export const PlusButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <PlusIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
-export const MinusButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+export const MinusButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <MinusIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
-export const BackButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+export const BackButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <ArrowUturnLeftIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
-export const SaveButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+export const SaveButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <FolderPlusIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
-export const CancelButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+export const CancelButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <NoSymbolIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
-export const RefreshButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+export const RefreshButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <ArrowPathIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
-export const QRReaderButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+export const QRReaderButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <QrCodeIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 
-export const FilterButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+export const FilterButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <FunnelIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
-export const StatsButton = ({ buttonSize = 'small', ...restProps }: ButtonProps) => (
+export const StatsButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <TableCellsIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
@@ -170,13 +207,23 @@ export const TableOpenButton = ({ type = 'button', ...props }: ButtonProps) => (
   </button>
 )
 
-export const TableDeleteButton = ({ type = 'button', ...props }: ButtonProps) => (
-  <button className="ml-2 hover:text-primary-500 text-red-700" type={type} {...props}>
+export const TableDeleteButton = ({
+  type = 'button',
+  ...props
+}: ButtonProps) => (
+  <button
+    className="ml-2 hover:text-primary-500 text-red-700"
+    type={type}
+    {...props}
+  >
     <TrashIcon className="h-4 w-4" aria-hidden="true" />
   </button>
 )
 
-export const TableStatsButton = ({ type = 'button', ...props }: ButtonProps) => (
+export const TableStatsButton = ({
+  type = 'button',
+  ...props
+}: ButtonProps) => (
   <button className="ml-2 hover:text-primary-500" type={type} {...props}>
     <TableCellsIcon className="h-4 w-4" aria-hidden="true" />
   </button>
@@ -187,7 +234,10 @@ export const TablePlusButton = ({ type = 'button', ...props }: ButtonProps) => (
     <PlusIcon className="h-4 w-4" aria-hidden="true" />
   </button>
 )
-export const TableDownloadButton = ({ type = 'button', ...props }: ButtonProps) => (
+export const TableDownloadButton = ({
+  type = 'button',
+  ...props
+}: ButtonProps) => (
   <button className="ml-2  hover:text-primary-500" type={type} {...props}>
     <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
   </button>
@@ -196,10 +246,9 @@ export const TableDownloadButton = ({ type = 'button', ...props }: ButtonProps) 
 type TableButtonWrapperProps = {
   position?: 'left-0' | 'right-0'
 }
-export const TableButtonsWrapper: FC<PropsWithChildren<TableButtonWrapperProps>> = ({
-  children,
-  position = 'right-0'
-}) => (
+export const TableButtonsWrapper: FC<
+  PropsWithChildren<TableButtonWrapperProps>
+> = ({ children, position = 'right-0' }) => (
   <div
     className={classNames(
       'absolute flex items-center bg-inherit pr-1 opacity-0 group-hover:opacity-100',
@@ -219,18 +268,15 @@ interface TableActionsButtonsProps {
   isShown?: boolean
   position?: 'left-0' | 'right-0'
 }
-export const TableActionsButtons: FC<PropsWithChildren<TableActionsButtonsProps>> = ({
-  onDeleteClick,
-  canEdit,
-  detailLink,
-  addLink,
-  position,
-  children
-}) => (
+export const TableActionsButtons: FC<
+  PropsWithChildren<TableActionsButtonsProps>
+> = ({ onDeleteClick, canEdit, detailLink, addLink, position, children }) => (
   <TableButtonsWrapper position={position}>
     {detailLink && (
       <Link href={detailLink} className={'flex items-center'}>
-        <Fragment>{canEdit ? <TableEditButton /> : <TableOpenButton />}</Fragment>
+        <Fragment>
+          {canEdit ? <TableEditButton /> : <TableOpenButton />}
+        </Fragment>
       </Link>
     )}
     {canEdit && (

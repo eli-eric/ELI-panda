@@ -7,9 +7,10 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { PATH } from '@/types/constants/paths'
+import { navigateBack } from '@/utils'
 
 const useItemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>) => {
-  const { query, replace, back } = useRouter()
+  const { query, replace } = useRouter()
   const uid = query.uid as string | undefined
   const { catalogueItem } = useEndpoint({ uid: uid })
 
@@ -20,7 +21,7 @@ const useItemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>)
       imageRef?.current?.submit(responseUid, () => {
         toast.success('Item saved')
         if (custom?.saveAndExit) {
-          back()
+          navigateBack()
         } else {
           replace(PATH.CATALOGUE_ITEM + '/' + responseUid)
         }
