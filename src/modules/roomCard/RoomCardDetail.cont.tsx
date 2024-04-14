@@ -99,11 +99,20 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   })
 
   const onSubmitAndExit = handleSubmit((roomCard: RoomCardFormType) => {
-    toast.promise(updateRoomCard(roomCard, true), {
-      loading: 'Saving room card....',
-      success: 'Room card was successfully updated',
-      error: 'Error while saving room card'
-    })
+    toast.promise(
+      updateRoomCard(
+        {
+          ...roomCard,
+          cleaningScheduleDate: roomCard?.cleaningScheduleDate ? roomCard.cleaningScheduleDate : null
+        },
+        true
+      ),
+      {
+        loading: 'Saving room card....',
+        success: 'Room card was successfully updated',
+        error: 'Error while saving room card'
+      }
+    )
   })
 
   if (loading) return <LoaderComponent />

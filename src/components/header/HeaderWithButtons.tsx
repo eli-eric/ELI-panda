@@ -15,7 +15,12 @@ interface Props {
 }
 const messages = message.common.buttons
 
-export const HeaderWithButtons = ({ loading, onSubmit, onSubmitAndExit, editRole }: Props) => {
+export const HeaderWithButtons = ({
+  loading,
+  onSubmit,
+  onSubmitAndExit,
+  editRole
+}: Props) => {
   const disabledEdit = usePermission([editRole])
   const { back } = useRouter()
 
@@ -27,7 +32,12 @@ export const HeaderWithButtons = ({ loading, onSubmit, onSubmitAndExit, editRole
     <div className="sticky  top-0 z-20 flex h-16 flex-shrink-0 bg-white dark:bg-gray-800 border-b">
       <Card className="flex flex-1 justify-between">
         <div className="flex items-center mr-2">
-          <BackButton className="mr-2" type="button" buttonSize="large" onClick={onBack} />
+          <BackButton
+            className="mr-2"
+            type="button"
+            buttonSize="large"
+            onClick={onBack}
+          />
           {disabledEdit && (
             <Fragment>
               <Button
@@ -35,6 +45,7 @@ export const HeaderWithButtons = ({ loading, onSubmit, onSubmitAndExit, editRole
                 buttonSize="large"
                 onClick={onSubmitAndExit}
                 loading={loading}
+                disabled={loading}
                 type="button"
                 text={messages.saveAndExit}
               />
@@ -43,6 +54,7 @@ export const HeaderWithButtons = ({ loading, onSubmit, onSubmitAndExit, editRole
                 className="ml-2"
                 buttonSize="large"
                 onClick={onSubmit}
+                disabled={loading}
                 loading={loading}
                 type="button"
                 text={messages.save}

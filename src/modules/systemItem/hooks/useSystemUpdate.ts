@@ -18,6 +18,7 @@ import { makeSystemInputBody } from './utils'
 
 import { useSystemItemStore } from '../store/useSystemItemStore'
 import type { SystemDetailFormType } from '../types/form'
+import { navigateBack } from '@/utils'
 
 const UPDATE_SYSTEM = gql`
   ${SYSTEM_DETAIL}
@@ -81,11 +82,6 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
     }
     imageRef?.current?.submit(responseUid, () => {
       toast.success(`System saved successfully`)
-      if (saveAndExit) {
-        router.back()
-      } else {
-        router.replace(PATH.SYSTEM + '/' + responseUid)
-      }
       mutateEndpoint(systemSubsystems, prev => prev && updateSubSystem(prev, body), { revalidate: false })
       mutate(prev => prev && updateSystem(uid, body, prev), { revalidate: false })
       if (selectedPhysicalSystem) {
@@ -103,6 +99,11 @@ export const useSystemUpdate = (imageRef?: MutableRefObject<ImageGalleryRef | un
       }
       refetch()
       setSelectedPhysicalSystem(undefined)
+      if (saveAndExit) {
+        navigateBack()
+      } else {
+        router.replace(PATH.SYSTEM + '/' + responseUid)
+      }
     })
   }
 
