@@ -14,16 +14,27 @@ import type { RoomCardProperties } from './RoomCard.columns'
 
 const CleaningSchedule = () => {
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
-  const days = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY', 'SUNDAY'] as CleaningScheduleDay[]
+  const days = [
+    'MONDAY',
+    'TUESDAY',
+    'WEDNESDAY',
+    'THURSDAY',
+    'FRIDAY',
+    'SATURDAY',
+    'SUNDAY'
+  ] as CleaningScheduleDay[]
   const { setValue, control } = useFormContext()
-  const cleaningScheduleDays = useWatch({ control, name: 'cleaningScheduleDays' })
+  const cleaningScheduleDays = useWatch({
+    control,
+    name: 'cleaningScheduleDays'
+  })
 
   return (
     <div className="flex">
       {days.map(day => (
         <Button
           key={day}
-          customDisabled={!editPersmission}
+          disabled={!editPersmission}
           onClick={() => {
             if (cleaningScheduleDays?.includes(day)) {
               setValue(
@@ -31,7 +42,10 @@ const CleaningSchedule = () => {
                 cleaningScheduleDays.filter(selectedDay => selectedDay !== day)
               )
             } else {
-              setValue('cleaningScheduleDays', [...(cleaningScheduleDays ?? []), day])
+              setValue('cleaningScheduleDays', [
+                ...(cleaningScheduleDays ?? []),
+                day
+              ])
             }
           }}
           type="button"
@@ -40,16 +54,23 @@ const CleaningSchedule = () => {
           {day.slice(0, 2)}
         </Button>
       ))}
-      <InputDate disabled={!editPersmission} rounded="rounded-md" name="cleaningScheduleDate" />
+      <InputDate
+        disabled={!editPersmission}
+        rounded="rounded-md"
+        name="cleaningScheduleDate"
+      />
     </div>
   )
 }
 
 const PrescribedClothingSelect = () => {
-  const prescribedClothingEnums = Object.values(PrescribedClothing).map(value => value)
+  const prescribedClothingEnums = Object.values(PrescribedClothing).map(
+    value => value
+  )
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
   const { control, setValue } = useFormContext<RoomCardFormType>()
-  const prescribedClothing = useWatch({ control, name: 'prescribedClothing' }) || []
+  const prescribedClothing =
+    useWatch({ control, name: 'prescribedClothing' }) || []
   return (
     <div className="grid grid-cols-4 mt-1">
       {prescribedClothingEnums.map((item, index) => (
@@ -64,7 +85,9 @@ const PrescribedClothingSelect = () => {
               ? setValue('prescribedClothing', [...prescribedClothing, item])
               : setValue(
                   'prescribedClothing',
-                  prescribedClothing.filter(selectedItem => selectedItem !== item)
+                  prescribedClothing.filter(
+                    selectedItem => selectedItem !== item
+                  )
                 )
           }}
         />
@@ -82,7 +105,12 @@ const PurityClassSelect = ({ code }: Props) => {
   const purityClass = Object.values(PurityClass).map(value => value)
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
   return (
-    <select className="select-reset select-custom w-full" {...register(code)} disabled={!editPersmission} name={code}>
+    <select
+      className="select-reset select-custom w-full"
+      {...register(code)}
+      disabled={!editPersmission}
+      name={code}
+    >
       {purityClass.map((purityClass, index) => (
         <option key={index}>{purityClass}</option>
       ))}

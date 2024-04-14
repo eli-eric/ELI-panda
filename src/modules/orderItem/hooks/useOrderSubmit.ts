@@ -24,7 +24,8 @@ export const useOrderSubmit = () => {
       mutate()
       mutateDetail()
       if (custom?.saveAndExit) {
-        navigateBack()
+        const navigateExit = () => router.push(PATH.ORDERS)
+        navigateBack(navigateExit)
       } else {
         if (uid) {
           router.push(PATH.ORDER + '/' + uid)

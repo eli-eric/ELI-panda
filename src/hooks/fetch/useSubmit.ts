@@ -1,5 +1,5 @@
 import type { AxiosError } from 'axios'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import axiosInstance from '@/core/axios/axiosInstance'
 import { BASE_URL } from '@/types/constants/common'
@@ -18,10 +18,16 @@ interface UseSubmitProps<T> {
   onError?: (error: AxiosError) => void
 }
 
-export const useSubmit = <T>({ endpoint, method, onSuccess, onError }: UseSubmitProps<T>) => {
+export const useSubmit = <T>({
+  endpoint,
+  method,
+  onSuccess,
+  onError
+}: UseSubmitProps<T>) => {
   const [response, setResponse] = useState<T | null>(null)
   const [error, setError] = useState<string>()
   const [loading, setloading] = useState<boolean>(false)
+  const isSubmittingRef = useRef<boolean>(false) // Ref to track submission state
 
   const submit = (
     body?: any,
@@ -29,6 +35,8 @@ export const useSubmit = <T>({ endpoint, method, onSuccess, onError }: UseSubmit
       [key: string]: any
     }
   ) => {
+    if (isSubmittingRef.current) return
+    isSubmittingRef.current = true
     setloading(true)
     axiosInstance[method](BASE_URL + endpoint, body)
       .then(res => {
@@ -40,6 +48,7 @@ export const useSubmit = <T>({ endpoint, method, onSuccess, onError }: UseSubmit
         setError(err)
       })
       .finally(() => {
+        isSubmittingRef.current = false
         setloading(false)
       })
   }
