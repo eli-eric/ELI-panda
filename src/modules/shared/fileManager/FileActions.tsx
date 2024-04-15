@@ -2,7 +2,6 @@ import type { FC } from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
-import type { KeyedMutator } from 'swr'
 
 import { TableDeleteButton, TableDownloadButton } from '@/components/Buttons'
 import useWarningModal from '@/hooks/useWarningModal'
@@ -10,48 +9,82 @@ import { message } from '@/i18n/src/messages'
 import executeRequest from '@/utils/executeRequest'
 import { createMessageValues } from '@/utils/formatters'
 
-import type { FileItem } from './types'
+import type { FileItem, FileItemExtended } from './types'
+import { useQueryClient } from 'react-query'
+import { useLinkDelete } from './hooks/useLinks'
 
 const messages = message.common.fileManager
 
 interface FileActionsProps {
-  file: FileItem
+  file: FileItemExtended
   endpoint: string
-  files?: FileItem[]
-  mutate: KeyedMutator<FileItem[]>
+  files?: FileItemExtended[]
 
   hasEditRole?: boolean
+  itemType: string
+  uid: string
 }
 
-const FileActions = ({ file, endpoint, files, mutate, hasEditRole }: FileActionsProps) => {
+const FileActions = ({
+  file,
+  endpoint,
+  files,
+  hasEditRole,
+  itemType,
+  uid
+}: FileActionsProps) => {
   const intl = useIntl()
+  const queryClient = useQueryClient()
+  const { mutate } = useLinkDelete({ parentUid: uid, uid: file.id })
 
   const handleDelete = useCallback(
     (id: string) => {
-      const name = (files ?? []).find(obj => obj.id === id)?.name
-      executeRequest(
-        `${endpoint}/${id}`,
-        { method: 'delete' },
-        () => {
-          toast.success(`Deleted ${name}`)
-          mutate((files ?? []).filter(obj => obj.id !== id))
-        },
-        () => toast.error(`Failed to delete ${name}`)
-      )
+      if (file.type === 'LINK') {
+        mutate(file.id)
+      } else {
+        const name = (files ?? []).find(obj => obj.id === id)?.name
+        executeRequest(
+          `${endpoint}/${id}`,
+          { method: 'delete' },
+          () => {
+            toast.success(`Deleted ${name}`)
+            queryClient.setQueryData<FileItem[]>(
+              ['files', itemType, uid],
+              old => {
+                if (!old) return []
+                return old?.filter(obj => obj.id !== id)
+              }
+            )
+          },
+          () => toast.error(`Failed to delete ${name}`)
+        )
+      }
     },
-    [endpoint, files, mutate]
+    [endpoint, files, itemType, queryClient, uid]
   )
 
   const withWarningModal = useWarningModal(
-    intl.formatMessage({ id: messages.deleteModal.text }, createMessageValues({ fileName: file.name }))
+    intl.formatMessage(
+      { id: messages.deleteModal.text },
+      createMessageValues({ fileName: file.name })
+    )
   )
 
   return (
     <div className="flex items-center">
-      <a target="_blank" href={file.url} rel="noreferrer" className="hover:text-primary-500 flex items-center">
+      <a
+        target="_blank"
+        href={file.url}
+        rel="noreferrer"
+        className="hover:text-primary-500 flex items-center"
+      >
         <TableDownloadButton className="mr-1" />
       </a>
-      {hasEditRole && <TableDeleteButton onClick={() => withWarningModal(handleDelete)(file.id)} />}
+      {hasEditRole && (
+        <TableDeleteButton
+          onClick={() => withWarningModal(handleDelete)(file.id)}
+        />
+      )}
     </div>
   )
 }
@@ -88,7 +121,10 @@ interface FileNameEditorProps {
   onConfirm: (fileName: string) => void
 }
 
-export const FileNameEditor: FC<FileNameEditorProps> = ({ initialFileName, onConfirm }) => {
+export const FileNameEditor: FC<FileNameEditorProps> = ({
+  initialFileName,
+  onConfirm
+}) => {
   const [isEditing, setIsEditing] = useState(false)
   const [fileName, setFileName] = useState('')
   const [fileExtension, setFileExtension] = useState('')

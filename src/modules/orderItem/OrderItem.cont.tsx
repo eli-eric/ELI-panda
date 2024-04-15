@@ -10,7 +10,7 @@ import Card from '@/components/layout/Card'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
-import { FILE_TYPE } from '@/types/constants/files'
+import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { convertDate } from '@/utils/formatters'
 
 import FileManager from '../shared/fileManager/FileManager'
@@ -29,7 +29,9 @@ export const OrderItemContainer = () => {
   const { disabledEdit, uid, orderDetail } = useOrderDetail()
   const { submit, loading } = useOrderSubmit()
   const { formatMessage: fm } = useIntl()
-  const withWarningModal = useWarningModal(fm({ id: messages.ordelineMissingModal.message }))
+  const withWarningModal = useWarningModal(
+    fm({ id: messages.ordelineMissingModal.message })
+  )
 
   //TODO: type check for resolver
   const formMethods = useForm<OrderDetailFormType>({
@@ -37,9 +39,16 @@ export const OrderItemContainer = () => {
     defaultValues: {
       ...orderDetail,
       orderLines:
-        orderDetail?.orderLines && orderDetail?.orderLines.map(orderLine => ({ ...orderLine, uuid: orderLine.uid })),
+        orderDetail?.orderLines &&
+        orderDetail?.orderLines.map(orderLine => ({
+          ...orderLine,
+          uuid: orderLine.uid
+        })),
       orderDate: orderDetail?.orderDate,
-      orderStatus: orderDetail?.orderStatus || { uid: 'c5ef9d00-ac38-44c1-b48a-fde0d7095c54', name: 'Requested' }
+      orderStatus: orderDetail?.orderStatus || {
+        uid: 'c5ef9d00-ac38-44c1-b48a-fde0d7095c54',
+        name: 'Requested'
+      }
     }
   })
 
@@ -51,9 +60,17 @@ export const OrderItemContainer = () => {
       return rest
     })
     if (data.orderLines.length === 0 || !data.orderLines) {
-      withWarningModal(submit)({ ...data, orderLines: orderLines, orderDate: convertDate(data.orderDate) })
+      withWarningModal(submit)({
+        ...data,
+        orderLines: orderLines,
+        orderDate: convertDate(data.orderDate)
+      })
     } else {
-      submit({ ...data, orderLines: orderLines, orderDate: convertDate(data.orderDate) })
+      submit({
+        ...data,
+        orderLines: orderLines,
+        orderDate: convertDate(data.orderDate)
+      })
     }
   }
   const onSubmitAndExit = (data: OrderDetailFormType) => {
@@ -65,16 +82,31 @@ export const OrderItemContainer = () => {
     })
     if (data.orderLines.length === 0 || !data.orderLines) {
       withWarningModal(submit)(
-        { ...data, orderLines: orderLines, orderDate: convertDate(data.orderDate) },
+        {
+          ...data,
+          orderLines: orderLines,
+          orderDate: convertDate(data.orderDate)
+        },
         { saveAndExit: true }
       )
     } else {
-      submit({ ...data, orderLines: orderLines, orderDate: convertDate(data.orderDate) }, { saveAndExit: true })
+      submit(
+        {
+          ...data,
+          orderLines: orderLines,
+          orderDate: convertDate(data.orderDate)
+        },
+        { saveAndExit: true }
+      )
     }
   }
 
   return (
-    <Form className="h-screen" formMethods={formMethods} enableLeaveWarning={true}>
+    <Form
+      className="h-screen"
+      formMethods={formMethods}
+      enableLeaveWarning={true}
+    >
       <HeaderWithButtons
         loading={loading}
         editRole={ROLE.ORDERS_EDIT}
@@ -87,7 +119,11 @@ export const OrderItemContainer = () => {
         {uid && (
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense fallback={<ProgressBarComponent />}>
-              <FileManager itemType={FILE_TYPE.ORDER} uid={uid} hasEditRole={!disabledEdit} />
+              <FileManager
+                itemType={FILE_TYPE.ORDER}
+                uid={uid}
+                hasEditRole={!disabledEdit}
+              />
             </Suspense>
           </ErrorBoundary>
         )}

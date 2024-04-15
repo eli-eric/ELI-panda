@@ -11,7 +11,7 @@ import { Form } from '@/components/form/Form'
 import { TextArea } from '@/components/form/Input'
 import Card from '@/components/layout/Card'
 import usePermission from '@/hooks/usePermission'
-import { FILE_TYPE } from '@/types/constants/files'
+import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ROLE } from '@/types/constants/roles'
 
 import { useCategory } from '../catalogue/hooks/useCategory'
@@ -41,7 +41,10 @@ interface CatalogueItemContainerProps {
   catalogueCategoryUid?: string
 }
 
-const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemContainerProps) => {
+const CatalogueItemContainer = ({
+  uid,
+  catalogueCategoryUid
+}: CatalogueItemContainerProps) => {
   const disabledEdit = !usePermission([ROLE.CATALOGUE_EDIT])
   const { item } = useItem()
   const fields = useCatalogueFormFields()
@@ -49,7 +52,10 @@ const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemCont
   const { catalogueCategory } = useCategory(catalogueCategoryUid)
 
   const imageRef = useRef<ImageGalleryRef>()
-  const formMethods = useForm<any>({ resolver: yupResolver(schema), defaultValues: { ...item } })
+  const formMethods = useForm<any>({
+    resolver: yupResolver(schema),
+    defaultValues: { ...item }
+  })
   const { reset } = formMethods
   const { submit, loading } = useItemSubmit(imageRef)
 
@@ -79,7 +85,11 @@ const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemCont
   }
 
   return (
-    <Form className="h-screen" formMethods={formMethods} enableLeaveWarning={true}>
+    <Form
+      className="h-screen"
+      formMethods={formMethods}
+      enableLeaveWarning={true}
+    >
       <HeaderWithButtons
         loading={loading}
         editRole={ROLE.CATALOGUE_EDIT}
@@ -106,7 +116,11 @@ const CatalogueItemContainer = ({ uid, catalogueCategoryUid }: CatalogueItemCont
         {uid && (
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense>
-              <FileManager itemType={FILE_TYPE.CATALOGUE} uid={uid} hasEditRole={!disabledEdit} />
+              <FileManager
+                itemType={FILE_TYPE.CATALOGUE}
+                uid={uid}
+                hasEditRole={!disabledEdit}
+              />
             </Suspense>
           </ErrorBoundary>
         )}

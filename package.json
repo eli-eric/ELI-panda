@@ -54,6 +54,7 @@
     "react-hook-form": "^7.48.2",
     "react-hot-toast": "^2.4.0",
     "react-intl": "^6.5.5",
+    "react-query": "^3.39.3",
     "react-range-slider-input": "^3.0.7",
     "sharp": "^0.32.6",
     "swr": "^2.2.4",
