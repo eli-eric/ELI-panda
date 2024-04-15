@@ -111,7 +111,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
         )}
       </Heading>
       {loading.some(value => value) && <ProgressBarComponent />}
-      {files && (
+      {files.length > 0 && (
         <PandaTable
           {...{
             tableId: 'filemanager',

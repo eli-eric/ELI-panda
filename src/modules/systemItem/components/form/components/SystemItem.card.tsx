@@ -17,16 +17,23 @@ export const SystemItemCard = () => {
     <Card>
       <Card className="bg-amber-100 dark:bg-amber-600 rounded-md  shadow-md">
         <Fragment>
-          <Heading customText={'ITEM: ' + item?.catalogueItem?.name ?? 'No item Connectect'}>
+          <Heading
+            customText={
+              'ITEM: ' + item?.catalogueItem?.name ?? 'No item Connectect'
+            }
+          >
             <div className="flex space-x-10">
               {item?.catalogueItem?.uid && (
-                <Link href={PATH.CATALOGUE_ITEM + '/' + item.catalogueItem.uid} target={'_blank'}>
+                <Link
+                  href={PATH.CATALOGUE_ITEM + '/' + item.catalogueItem.uid}
+                  target={'_blank'}
+                >
                   <LinkDecorator>View Catalogue Item</LinkDecorator>
                 </Link>
               )}
             </div>
           </Heading>
-          {item && <PhysicalItemForm />}
+          {item && <PhysicalItemForm uid={item.uid} />}
         </Fragment>
       </Card>
     </Card>
