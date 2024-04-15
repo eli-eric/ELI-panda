@@ -1,4 +1,4 @@
-import type { FILE_TYPE } from '@/types/constants/files'
+import type { FILE_TYPE } from '../fileManager/types'
 
 export type Status = {
   successfulUploads?: string[]
@@ -8,7 +8,11 @@ export type Status = {
 }
 
 export type ImageGalleryRef = {
-  submit: (itemId: string, onSuccess?: (status: Status) => void, onError?: (status: Status) => void) => void
+  submit: (
+    itemId: string,
+    onSuccess?: (status: Status) => void,
+    onError?: (status: Status) => void
+  ) => void
   hasChanges: boolean
 }
 
