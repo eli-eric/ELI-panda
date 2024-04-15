@@ -1,25 +1,20 @@
 import type { FC } from 'react'
 import { useCallback, useEffect, useState } from 'react'
-import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
 import { TableDeleteButton, TableDownloadButton } from '@/components/Buttons'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
-import executeRequest from '@/utils/executeRequest'
 import { createMessageValues } from '@/utils/formatters'
 
-import type { FileItem, FileItemExtended } from './types'
-import { useQueryClient } from 'react-query'
+import type { FileItemExtended } from './types'
 import { useLinkDelete } from './hooks/useLinks'
+import { useFileDelete } from './hooks/useFiles'
 
 const messages = message.common.fileManager
 
 interface FileActionsProps {
   file: FileItemExtended
-  endpoint: string
-  files?: FileItemExtended[]
-
   hasEditRole?: boolean
   itemType: string
   uid: string
@@ -27,40 +22,23 @@ interface FileActionsProps {
 
 const FileActions = ({
   file,
-  endpoint,
-  files,
   hasEditRole,
   itemType,
   uid
 }: FileActionsProps) => {
   const intl = useIntl()
-  const queryClient = useQueryClient()
   const { mutate } = useLinkDelete({ parentUid: uid, uid: file.id })
+  const { mutate: deleteFile } = useFileDelete({ itemType, uid, id: file.id })
 
   const handleDelete = useCallback(
     (id: string) => {
       if (file.type === 'LINK') {
-        mutate(file.id)
+        mutate(id)
       } else {
-        const name = (files ?? []).find(obj => obj.id === id)?.name
-        executeRequest(
-          `${endpoint}/${id}`,
-          { method: 'delete' },
-          () => {
-            toast.success(`Deleted ${name}`)
-            queryClient.setQueryData<FileItem[]>(
-              ['files', itemType, uid],
-              old => {
-                if (!old) return []
-                return old?.filter(obj => obj.id !== id)
-              }
-            )
-          },
-          () => toast.error(`Failed to delete ${name}`)
-        )
+        deleteFile()
       }
     },
-    [endpoint, files, itemType, queryClient, uid]
+    [mutate, deleteFile, file]
   )
 
   const withWarningModal = useWarningModal(

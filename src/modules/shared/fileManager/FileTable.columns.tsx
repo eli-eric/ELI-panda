@@ -7,14 +7,7 @@ import { v4 } from 'uuid'
 import type { FileItemExtended } from './types'
 import { useLinkUpdate } from './hooks/useLinks'
 
-export const useFileColumns = ({
-  hasEditRole,
-  files,
-  endpoint,
-  handlePut,
-  itemType,
-  uid
-}) => {
+export const useFileColumns = ({ hasEditRole, handlePut, itemType, uid }) => {
   const { mutate } = useLinkUpdate({ parentUid: uid })
   const columns = useMemo(() => {
     const cols: ColumnDef<FileItemExtended, any>[] = [
@@ -24,8 +17,6 @@ export const useFileColumns = ({
         cell: ({ row: { original } }) => (
           <FileActions
             file={original}
-            endpoint={endpoint}
-            files={files}
             itemType={itemType}
             uid={uid}
             hasEditRole={hasEditRole}
@@ -137,7 +128,7 @@ export const useFileColumns = ({
     ]
 
     return cols
-  }, [hasEditRole, files, endpoint, handlePut, itemType, uid, mutate])
+  }, [hasEditRole, handlePut, itemType, uid, mutate])
 
   return columns
 }

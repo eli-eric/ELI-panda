@@ -100,5 +100,5 @@ export const useFileRequests = ({ itemType, uid }) => {
     newFile.length > 0 && handlePost()
   }, [newFile, handlePost])
 
-  return { onDrop, handlePost, handlePut, loading, endpoint }
+  return { onDrop, handlePost, handlePut, loading }
 }

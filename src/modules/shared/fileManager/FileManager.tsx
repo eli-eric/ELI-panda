@@ -47,7 +47,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   const [linkValue, setLinkValue] = useState('')
   const [linkName, setLinkName] = useState('')
 
-  const { onDrop, handlePut, loading, endpoint } = useFileRequests({
+  const { onDrop, handlePut, loading } = useFileRequests({
     itemType,
     uid
   })
@@ -55,10 +55,8 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   // Define columns for useGeneralTable
   const columns = useFileColumns({
     hasEditRole,
-    files,
     itemType,
     uid,
-    endpoint,
     handlePut
   })
 
