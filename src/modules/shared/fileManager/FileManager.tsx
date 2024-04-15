@@ -1,18 +1,19 @@
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useMemo, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 import { Button, PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { message } from '@/i18n/src/messages'
-import type { FILE_TYPE } from '@/types/constants/files'
 
 import { PandaTable } from '../table/pandaTable/PandaTable'
 import { useFileColumns } from './FileTable.columns'
-import { useFileRequests } from './useFileRequests'
+import { useFileRequests } from './hooks/useFileRequests'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import type { ModalButtons } from '@/types/form'
-import { useFilesStore } from './useFileStore'
+import type { FILE_TYPE } from './types'
+import { useLinkCreate, useLinks } from './hooks/useLinks'
+import { useFiles } from './hooks/useFiles'
 
 const messages = message.common.files
 const buttons = message.common.buttons
@@ -26,21 +27,38 @@ type FileManagerProps = {
 const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
   const [open, setOpen] = useState(false)
   const [openLinkModal, setOpenLinkModal] = useState(false)
+  const { data: filesData } = useFiles({ itemType, uid })
+  const { data: linksData } = useLinks({ uid })
 
-  const { setNewFile } = useFilesStore()
+  const { mutate: linkCreate } = useLinkCreate({ parentUid: uid })
+
+  const files = useMemo(() => {
+    return [
+      ...(filesData?.map(file => ({ ...file, type: 'FILE' })) || []),
+      ...(linksData?.map(link => ({
+        ...link,
+        id: link.uid,
+        type: 'LINK',
+        size: 0
+      })) || [])
+    ]
+  }, [filesData, linksData])
 
   const [linkValue, setLinkValue] = useState('')
   const [linkName, setLinkName] = useState('')
 
-  const { onDrop, handlePut, loading, mutate, files, endpoint } =
-    useFileRequests({ itemType, uid })
+  const { onDrop, handlePut, loading, endpoint } = useFileRequests({
+    itemType,
+    uid
+  })
 
   // Define columns for useGeneralTable
   const columns = useFileColumns({
     hasEditRole,
     files,
+    itemType,
+    uid,
     endpoint,
-    mutate,
     handlePut
   })
 
@@ -59,13 +77,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
     goNext: {
       text: buttons.continue,
       onClick: () => {
-        setNewFile({
-          id: 'link-' + linkValue,
-          size: 0,
-          name: linkName,
-          url: linkValue,
-          type: 'LINK'
-        })
+        linkCreate({ name: linkName, url: linkValue })
         setOpenLinkModal(false)
       }
     },

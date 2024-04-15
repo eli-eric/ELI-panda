@@ -1,19 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
-import useSWR from 'swr'
-import type { FileItem } from './types'
-import { uniFetcher } from '@/utils/fetcher'
+import type { FileItem } from '../types'
 import executeRequest from '@/utils/executeRequest'
 import toast from 'react-hot-toast'
-import { useFilesStore } from './useFileStore'
+import { useQueryClient } from 'react-query'
 
 export const useFileRequests = ({ itemType, uid }) => {
   const endpoint = `/api/${itemType}/${uid}/files`
-  const { setFiles, files } = useFilesStore()
-  const { data, mutate } = useSWR<Array<FileItem>>(endpoint, uniFetcher)
-
-  useEffect(() => {
-    data && setFiles(data.map(file => ({ ...file, type: 'FILE' })))
-  }, [data, setFiles])
+  const queryClient = useQueryClient()
 
   const [loading, setLoading] = useState<Array<boolean>>([])
   const [newFile, setNewFile] = useState<
@@ -58,7 +51,9 @@ export const useFileRequests = ({ itemType, uid }) => {
             updatedLoading[index] = false
             return updatedLoading
           })
-          mutate([...(files ?? []), res])
+          queryClient.setQueryData<FileItem[]>(['files', itemType, uid], old =>
+            old ? [res, ...old] : [res]
+          )
           toast.success(`Uploaded ${name}`)
         },
         () => {
@@ -72,7 +67,7 @@ export const useFileRequests = ({ itemType, uid }) => {
       )
     })
     setNewFile([])
-  }, [endpoint, mutate, files, newFile])
+  }, [endpoint, newFile, queryClient, itemType, uid])
 
   const handlePut = useCallback(
     (id: string, body: { name?: string; tags?: string[] }) => {
@@ -80,6 +75,17 @@ export const useFileRequests = ({ itemType, uid }) => {
         `${endpoint}/${id}`,
         { method: 'PUT', body: JSON.stringify(body) },
         res => {
+          queryClient.setQueryData<FileItem[]>(
+            ['files', itemType, uid],
+            old => {
+              if (!old) return []
+              return old.map(file =>
+                file.id === id
+                  ? { ...file, name: res.name, tags: res.tags }
+                  : file
+              )
+            }
+          )
           toast.success(`${res.name} - was updated`)
         },
         () => {
@@ -87,12 +93,12 @@ export const useFileRequests = ({ itemType, uid }) => {
         }
       )
     },
-    [endpoint]
+    [endpoint, itemType, uid, queryClient]
   )
 
   useEffect(() => {
     newFile.length > 0 && handlePost()
   }, [newFile, handlePost])
 
-  return { onDrop, handlePost, handlePut, loading, mutate, files, endpoint }
+  return { onDrop, handlePost, handlePut, loading, endpoint }
 }

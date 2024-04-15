@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form'
 import { Form } from '@/components/form/Form'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
-import { FILE_TYPE } from '@/types/constants/files'
+import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 
 import { useParentSystemDetail } from '../../hooks/useParentSystemDetail'
 import Breadcrumbs from '../Breadcrumps'
@@ -58,16 +58,25 @@ export const SystemForm = () => {
   const systemImageRef = useRef<ImageGalleryRef>()
 
   const { updateSystem, loading } = useSystemUpdate(systemImageRef)
-  const { createSystem, loading: createLoading } = useSystemCreate(systemImageRef)
+  const { createSystem, loading: createLoading } =
+    useSystemCreate(systemImageRef)
 
   const formMethods = useForm<SystemDetailFormType>({
     resolver: yupResolver(schema) as any,
     defaultValues: {
       ...(systemDetail as SystemDetailFormType),
       responsible: systemDetail?.responsible
-        ? { uid: systemDetail?.responsible?.uid, name: systemDetail?.responsible?.fullName as string }
+        ? {
+            uid: systemDetail?.responsible?.uid,
+            name: systemDetail?.responsible?.fullName as string
+          }
         : undefined,
-      zone: systemDetail?.zone ? { uid: systemDetail?.zone?.uid, name: systemDetail?.zone?.name as string } : undefined
+      zone: systemDetail?.zone
+        ? {
+            uid: systemDetail?.zone?.uid,
+            name: systemDetail?.zone?.name as string
+          }
+        : undefined
     }
   })
 
@@ -100,7 +109,11 @@ export const SystemForm = () => {
   }
 
   return (
-    <Form className="relative" formMethods={formMethods} enableLeaveWarning={true}>
+    <Form
+      className="relative"
+      formMethods={formMethods}
+      enableLeaveWarning={true}
+    >
       <HeaderWithButtons
         loading={loading || createLoading}
         editRole={ROLE.SYSTEM_EDIT}
@@ -108,10 +121,17 @@ export const SystemForm = () => {
         onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
       />
       <Card>
-        <Breadcrumbs parentPath={parentPath || (systemDetail?.parentPath as CodebookType[])} />
+        <Breadcrumbs
+          parentPath={
+            parentPath || (systemDetail?.parentPath as CodebookType[])
+          }
+        />
       </Card>
       <FormCard
-        className={classNames('shadow-md rounded-lg border', getColorBySystemLevel(systemLevel as SystemLevel))}
+        className={classNames(
+          'shadow-md rounded-lg border',
+          getColorBySystemLevel(systemLevel as SystemLevel)
+        )}
       >
         <SystemMainForm>
           <MemoizedSystemGallery
@@ -133,10 +153,19 @@ export const SystemForm = () => {
         <Card className="border-t border-gray-400">
           <Grid>
             <Col sm={1} md={3} lg={2}>
-              <Input step={1} type="number" defaultValue={''} {...fields.minimalSpareParstCount} />
+              <Input
+                step={1}
+                type="number"
+                defaultValue={''}
+                {...fields.minimalSpareParstCount}
+              />
             </Col>
             <Col sm={1} md={1} lg={2}>
-              <CheckBox {...fields.isCritical} label="Is critical" className="items-end pb-2" />
+              <CheckBox
+                {...fields.isCritical}
+                label="Is critical"
+                className="items-end pb-2"
+              />
             </Col>
             <Col sm={1} md={2} lg={8} className="flex justify-end">
               {!systemDetail?.physicalItem && uid && <AssignPhysicalItem />}

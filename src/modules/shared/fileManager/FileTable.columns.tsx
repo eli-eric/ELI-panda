@@ -1,29 +1,33 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import FileActions, { FileNameEditor, TagInput } from './FileActions'
-import type { FileItem } from './types'
 import { useMemo } from 'react'
 import { Badge } from '@/components/visuals/Badge'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { v4 } from 'uuid'
+import type { FileItemExtended } from './types'
+import { useLinkUpdate } from './hooks/useLinks'
 
 export const useFileColumns = ({
   hasEditRole,
   files,
   endpoint,
-  mutate,
-  handlePut
+  handlePut,
+  itemType,
+  uid
 }) => {
+  const { mutate } = useLinkUpdate({ parentUid: uid })
   const columns = useMemo(() => {
-    const cols: ColumnDef<FileItem, any>[] = [
+    const cols: ColumnDef<FileItemExtended, any>[] = [
       {
         header: 'actions',
         size: 20,
         cell: ({ row: { original } }) => (
           <FileActions
             file={original}
-            mutate={mutate}
             endpoint={endpoint}
             files={files}
+            itemType={itemType}
+            uid={uid}
             hasEditRole={hasEditRole}
           />
         )
@@ -43,16 +47,11 @@ export const useFileColumns = ({
             initialFileName={getValue()}
             onConfirm={(newName: string) => {
               if (original.name === newName) return
-              handlePut(original.id, { name: newName, tags: original.tags })
-              mutate(
-                prev =>
-                  (prev || []).map(v =>
-                    v.id === original.id ? { ...v, name: newName } : v
-                  ),
-                {
-                  revalidate: false
-                }
-              )
+              if (original.type === 'LINK') {
+                mutate({ ...original, name: newName, uid: original.id })
+              } else {
+                handlePut(original.id, { name: newName, tags: original.tags })
+              }
             }}
           />
         )
@@ -76,24 +75,18 @@ export const useFileColumns = ({
                   <XMarkIcon
                     className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600"
                     onClick={() => {
-                      handlePut(original.id, {
-                        name: original.name,
-                        tags: (original.tags || []).filter(f => f !== v)
-                      })
-                      mutate(
-                        prevs =>
-                          (prevs || []).map(prev =>
-                            prev.id === original.id
-                              ? {
-                                  ...prev,
-                                  tags: getValue()?.filter(
-                                    (f: string) => f !== v
-                                  )
-                                }
-                              : prev
-                          ),
-                        { revalidate: false }
-                      )
+                      if (original.type === 'LINK') {
+                        mutate({
+                          ...original,
+                          tags: (original.tags || []).filter(f => f !== v),
+                          uid: original.id
+                        })
+                      } else {
+                        handlePut(original.id, {
+                          name: original.name,
+                          tags: (original.tags || []).filter(f => f !== v)
+                        })
+                      }
                     }}
                   />
                 </Badge>
@@ -101,23 +94,28 @@ export const useFileColumns = ({
             <TagInput
               onConfirm={(tag: string) => {
                 if (original.tags?.includes(tag)) return
-                handlePut(original.id, {
-                  name: original.name,
-                  tags: [...(original.tags || []), tag]
-                })
-                mutate(
-                  prev =>
-                    (prev || []).map(v =>
-                      v.id === original.id
-                        ? { ...v, tags: [...(v.tags || []), tag] }
-                        : v
-                    ),
-                  { revalidate: false }
-                )
+                if (original.type === 'LINK') {
+                  mutate({
+                    ...original,
+                    tags: [...(original.tags || []), tag],
+                    uid: original.id
+                  })
+                } else {
+                  handlePut(original.id, {
+                    name: original.name,
+                    tags: [...(original.tags || []), tag]
+                  })
+                }
               }}
             />
           </div>
         )
+      },
+      {
+        header: 'Type',
+        accessorKey: 'type',
+        size: 20,
+        enableColumnFilter: false
       },
       {
         header: 'Size',
@@ -139,7 +137,7 @@ export const useFileColumns = ({
     ]
 
     return cols
-  }, [hasEditRole, files, endpoint, mutate, handlePut])
+  }, [hasEditRole, files, endpoint, handlePut, itemType, uid, mutate])
 
   return columns
 }

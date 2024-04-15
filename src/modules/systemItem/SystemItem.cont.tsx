@@ -5,7 +5,7 @@ import ErrorPage from '@/components/error/ErrorPage'
 import Card from '@/components/layout/Card'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import usePermission from '@/hooks/usePermission'
-import { FILE_TYPE } from '@/types/constants/files'
+import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ROLE } from '@/types/constants/roles'
 
 import FileManager from '../shared/fileManager/FileManager'
@@ -30,7 +30,11 @@ export const SystemItemContainer = ({ uid }: Props) => {
           <SparePartsFor />
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense fallback={<ProgressBarComponent />}>
-              <FileManager itemType={FILE_TYPE.SYSTEM} uid={uid} hasEditRole={hasEditRole} />
+              <FileManager
+                itemType={FILE_TYPE.SYSTEM}
+                uid={uid}
+                hasEditRole={hasEditRole}
+              />
             </Suspense>
           </ErrorBoundary>
         </Card>

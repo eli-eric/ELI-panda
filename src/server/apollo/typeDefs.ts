@@ -215,6 +215,7 @@ export const typeDefs = gql`
     name: String!
     uid: String!
     item: [Item!]! @relationship(type: "IS_BASED_ON", direction: IN)
+    links: [Link!]! @relationship(type: "HAS_LINK", direction: OUT)
   }
 
   interface hasCatalogueProperty @relationshipProperties {
@@ -290,6 +291,7 @@ export const typeDefs = gql`
     maintainedBy: [Employee!]!
       @relationship(type: "IS_MAINTAINED_BY", direction: OUT)
     systemLevel: SystemLevel
+    links: [Link!]! @relationship(type: "HAS_LINK", direction: OUT)
     updatedBy: [User!]!
       @relationship(
         type: "WAS_UPDATED_BY"
@@ -322,6 +324,8 @@ export const typeDefs = gql`
 
   type Link @authentication {
     uid: ID! @id
+    parentUid: String!
+    parentType: String!
     url: String!
     name: String!
     tags: [String!]!

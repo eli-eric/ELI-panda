@@ -1,6 +1,9 @@
-import { useMemo } from 'react'
-
-const getEndpoints = (uid?: string, path?: string, itemUid?: string, query?: string) => {
+export const getEndpoints = (
+  uid?: string,
+  path?: string,
+  itemUid?: string,
+  query?: string
+) => {
   const endpoints = {
     catalogueCategories: `/catalogue/categories${path}`,
     catalogueCategoryImage: `/catalogue/category/${uid}/image`,
@@ -32,7 +35,9 @@ const getEndpoints = (uid?: string, path?: string, itemUid?: string, query?: str
     orderLineDelivery: `/order/${uid}/orderline/${itemUid}/delivery`,
     eunforPrint: `/orders/eun-for-print/${uid}${query}`,
     codebook: `/codebook/${path}${query}`,
-    codebooks: `/codebooks${query}`
+    codebooks: `/codebooks${query}`,
+    links: `/files/links/${uid}`,
+    link: `/files/link/${uid}`
   }
   return endpoints
 }
@@ -42,8 +47,15 @@ interface useEndpointsProps {
   query?: unknown
   path?: string
 }
-export const useEndpoint = ({ uid, query, path, itemUid }: useEndpointsProps = {}) => {
-  const queryString = query ? '?' + new URLSearchParams(query as Record<string, string>).toString() : ''
+export const useEndpoint = ({
+  uid,
+  query,
+  path,
+  itemUid
+}: useEndpointsProps = {}) => {
+  const queryString = query
+    ? '?' + new URLSearchParams(query as Record<string, string>).toString()
+    : ''
 
   return getEndpoints(uid, path, itemUid, queryString)
 }
