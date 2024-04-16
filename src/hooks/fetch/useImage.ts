@@ -2,7 +2,7 @@ import type { StaticImageData } from 'next/image'
 import useSWR from 'swr'
 
 import type { FileItem } from '@/modules/shared/fileManager/types'
-import { FILE_TYPE } from '@/types/constants/files'
+import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { uniFetcher } from '@/utils/fetcher'
 
 import { getEndpoint } from './../../modules/shared/imageManager/utils/index'
@@ -16,8 +16,14 @@ const fallbackImage: FileItem = {
   url: '/no-image.png',
   size: 0
 }
-export const useImage = (endpoint?: string | null, useNoImage = true): string | StaticImageData => {
-  const { response: image } = useFetch<string>({ url: endpoint, config: { suspense: false } })
+export const useImage = (
+  endpoint?: string | null,
+  useNoImage = true
+): string | StaticImageData => {
+  const { response: image } = useFetch<string>({
+    url: endpoint,
+    config: { suspense: false }
+  })
   return image ? image : useNoImage ? fallbackImage.url : ''
 }
 
