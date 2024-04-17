@@ -1,12 +1,16 @@
 import {
-  ChevronRightIcon,
   DocumentDuplicateIcon,
   PencilSquareIcon,
-  PlusIcon,
   TrashIcon
 } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
-import { type Dispatch, Fragment, type SetStateAction, useEffect, useState } from 'react'
+import {
+  type Dispatch,
+  Fragment,
+  type SetStateAction,
+  useEffect,
+  useState
+} from 'react'
 
 import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
@@ -16,7 +20,7 @@ import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 
 import { useSubmit } from '../../../hooks/fetch/useSubmit'
-import CategoryEditModal from '../components/categoryEditForm/CategoryEditModal'
+import CategoryEditContainer from '../components/categoryEdit/CategoryEdit.cont'
 import { useCategoryList } from './useCategoryList'
 import { useCategoryUid } from './useCategoryUid'
 
@@ -28,9 +32,20 @@ interface EditModalProps {
   parentUID?: string
 }
 
-const EditModal = ({ testid, open, setOpen, uid, parentUID }: EditModalProps) => (
-  <ModalComponent open={open} setOpen={setOpen} buttons={{ noButtons: true }} testid={testid}>
-    <CategoryEditModal setOpen={setOpen} parentUID={parentUID} uid={uid} />
+const EditModal = ({
+  testid,
+  open,
+  setOpen,
+  uid,
+  parentUID
+}: EditModalProps) => (
+  <ModalComponent
+    open={open}
+    setOpen={setOpen}
+    buttons={{ noButtons: true }}
+    testid={testid}
+  >
+    <CategoryEditContainer setOpen={setOpen} parentUID={parentUID} uid={uid} />
   </ModalComponent>
 )
 
@@ -136,7 +151,13 @@ export const useCategoryEdit = ({ editUid }: { editUid?: string }) => {
               <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
             </Button>
           </div>
-          <EditModal open={openEdit} parentUID={parentUID} uid={editUid} setOpen={setOpenEdit} testid="catalogueEdit" />
+          <EditModal
+            open={openEdit}
+            parentUID={parentUID}
+            uid={editUid}
+            setOpen={setOpenEdit}
+            testid="catalogueEdit"
+          />
           <WarningModal
             title="Warning"
             message="Are you sure you want to remove this Category?"
@@ -169,27 +190,5 @@ export const useCategoryEdit = ({ editUid }: { editUid?: string }) => {
     }
   }
 
-  const getAddButton = () => {
-    if (session?.user.roles.includes(ROLE.CATALOGUE_CATEGORY_EDIT)) {
-      return (
-        <Fragment>
-          <li className="flex">
-            <div className="flex items-center">
-              <ChevronRightIcon className="h-4 w-4 mr-2 flex-shrink-0 text-gray-400" aria-hidden="true" />
-              <Button
-                onClick={() => {
-                  setOpenEdit(true)
-                }}
-              >
-                <PlusIcon className="h-4 w-4" aria-hidden="true" />
-              </Button>
-            </div>
-          </li>
-          <EditModal open={openEdit} setOpen={setOpenEdit} parentUID={parentUID} testid="catalogueEdit" />
-        </Fragment>
-      )
-    }
-  }
-
-  return { getEditButtons, getAddButton }
+  return { getEditButtons }
 }

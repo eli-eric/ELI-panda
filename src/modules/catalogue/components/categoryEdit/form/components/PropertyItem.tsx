@@ -5,7 +5,6 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
-import type { CategoryFormType } from './types'
 
 import {
   defaultBoolOptions,
@@ -13,7 +12,7 @@ import {
   PROPERTY_TYPE
 } from '@/types/catalogue/constants'
 import { CODEBOOK } from '@/types/constants/codebook'
-
+import type { CategoryFormType } from '../../types'
 import MoveButtons from './MoveButtons'
 
 //TODO: fix bugs

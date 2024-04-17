@@ -4,14 +4,14 @@ import { Fragment } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
-import type { CategoryFormType } from './types'
 
-import { useCategory } from '../../hooks/useCategory'
-import { useCategoryDetail } from '../../hooks/useCategoryDetail'
+import GroupList from './components/GroupList'
+import Main from './components/Main'
+import { PhysicalItemProperties } from './components/PhysicalItemProperties'
+import { useCategory } from '@/modules/catalogue/hooks/useCategory'
+import { useCategoryDetail } from '@/modules/catalogue/hooks/useCategoryDetail'
 import { categoryValidationschema } from './CategoryEditForm.schema'
-import GroupList from './GroupList'
-import Main from './Main'
-import { PhysicalItemProperties } from './PhysicalItemProperties'
+import type { CategoryFormType } from '../types'
 
 interface Props {
   uid?: string

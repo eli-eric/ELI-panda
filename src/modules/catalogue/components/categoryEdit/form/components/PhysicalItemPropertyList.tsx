@@ -2,9 +2,9 @@ import { PlusIcon } from '@heroicons/react/24/outline'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
-import type { CategoryFormType } from './types'
 
 import PropertyItem from './PropertyItem'
+import type { CategoryFormType } from '../../types'
 
 interface Props {
   name: `physicalItemProperties`

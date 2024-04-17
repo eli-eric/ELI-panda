@@ -10,7 +10,7 @@ import ImagePlaceHolder from '@/components/form/ImagePlaceHolder'
 import { Input } from '@/components/form/Input'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
-import type { CategoryFormType } from './types'
+import type { CategoryFormType } from '../../types'
 
 interface FormImageProps {
   image: string
