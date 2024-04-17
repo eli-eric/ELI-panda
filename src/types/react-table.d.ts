@@ -10,7 +10,13 @@ declare module '@tanstack/table-core' {
 
     headerClassName?: string
     filter?: {
-      type: 'string' | 'date' | 'boolean' | 'number' | 'listOfValues' | 'autoComplete'
+      type:
+        | 'string'
+        | 'date'
+        | 'boolean'
+        | 'number'
+        | 'listOfValues'
+        | 'autoComplete'
       enableColumnFilter: boolean
       codebookCode?: CODEBOOK
     }
@@ -20,7 +26,14 @@ declare module '@tanstack/table-core' {
 
   interface ColumnFilter {
     id: string
-    value: string | number | boolean | Date | null | CodebookType | { min?: number; max?: number }
+    value:
+      | string
+      | number
+      | boolean
+      | Date
+      | null
+      | CodebookType
+      | { min?: number; max?: number }
     name?: string
     type?: string
   }

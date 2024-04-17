@@ -9,7 +9,7 @@ import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
-import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
+import type { CategoryFormType } from './types'
 
 import { useCategoryList } from '../../hooks/useCategoryList'
 import { formatData } from '../../utils'

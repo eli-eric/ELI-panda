@@ -7,14 +7,14 @@ import type { CategoryFormType } from './types'
 import PropertyItem from './PropertyItem'
 
 interface Props {
-  name: `groups.${number}`
+  name: `physicalItemProperties`
 }
 
-const PropertyList = ({ name }: Props) => {
+export const PhysicalItemPropertyList = ({ name }: Props) => {
   const { control } = useFormContext<CategoryFormType>()
   const { fields, append, remove, move } = useFieldArray<CategoryFormType>({
     control,
-    name: `${name}.properties`
+    name: name
   })
 
   const handleAddProp = () => {
@@ -40,7 +40,7 @@ const PropertyList = ({ name }: Props) => {
             <PropertyItem
               removeProp={remove}
               index={index}
-              name={`${name}.properties.${index}`}
+              name={`${name}.${index}`}
               length={fields.length}
               moveDown={handleMoveDown}
               moveUp={handleMoveUp}
@@ -50,15 +50,8 @@ const PropertyList = ({ name }: Props) => {
         ))}
       </ul>
       <Button onClick={handleAddProp}>
-        <PlusIcon
-          className="h-4 w-4
-
-"
-          aria-hidden="true"
-        />
+        <PlusIcon className="h-4 w-4" aria-hidden="true" />
       </Button>
     </div>
   )
 }
-
-export default PropertyList
