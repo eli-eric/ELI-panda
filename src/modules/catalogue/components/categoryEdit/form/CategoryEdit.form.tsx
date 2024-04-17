@@ -1,4 +1,3 @@
-import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Fragment } from 'react'
 import { useForm } from 'react-hook-form'
@@ -45,7 +44,6 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
           {children}
         </div>
       </Form>
-      <DevTool control={formMethods.control} />
     </Fragment>
   )
 }
