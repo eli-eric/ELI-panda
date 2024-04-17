@@ -2,7 +2,7 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
 
 import { useCategory } from './useCategory'
-import type { CategoryFormType } from '../components/categoryEditForm/types'
+import type { CategoryFormType } from '../components/categoryEdit/types'
 
 export const useCategoryDetail = (uid?: string) => {
   const { catalogueCategoryEdit } = useEndpoint({ uid })

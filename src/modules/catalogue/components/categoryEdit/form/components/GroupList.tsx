@@ -6,7 +6,7 @@ import { Input } from '@/components/form/Input'
 
 import MoveButtons from './MoveButtons'
 import PropertyList from './PropertyList'
-import type { CategoryFormType } from './types'
+import type { CategoryFormType } from '../../types'
 
 interface groupProps {
   name: `groups.${number}`

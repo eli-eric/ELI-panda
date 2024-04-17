@@ -6,13 +6,14 @@ import BreadcrumpItem from '@/components/Breadcrump/Breadcrump.item'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 
 import { useCategory } from '../../hooks/useCategory'
-import { useCategoryEdit } from '../../hooks/useCategoryEdit'
+import { AddCategoryButton } from '../categoryEdit/AddCateforyButton'
 
 type CatalogueBreadcrumbsProps = {
   setCategoryFilter: (value: CodebookType | null) => void
 }
-export const CatalogueBreadcrumbs = ({ setCategoryFilter }: CatalogueBreadcrumbsProps) => {
-  const { getAddButton } = useCategoryEdit({})
+export const CatalogueBreadcrumbs = ({
+  setCategoryFilter
+}: CatalogueBreadcrumbsProps) => {
   const { catalogueCategory } = useCategory()
 
   return (
@@ -46,7 +47,7 @@ export const CatalogueBreadcrumbs = ({ setCategoryFilter }: CatalogueBreadcrumbs
             path={{ uid: catalogueCategory.uid, name: catalogueCategory.name }}
           />
         )}
-        {getAddButton()}
+        <AddCategoryButton />
       </Fragment>
     </BreadcrumpContainer>
   )

@@ -1,4 +1,4 @@
-import type { CategoryFormType } from '../components/categoryEditForm/types'
+import type { CategoryFormType } from '../components/categoryEdit/types'
 
 export const formatData = (data: CategoryFormType, parentUID) =>
   data.groups && data.groups.length !== 0
@@ -18,10 +18,19 @@ export const formatData = (data: CategoryFormType, parentUID) =>
         }))
       }
     : {
+        ...data,
         uid: data?.uid,
         image: data?.image,
         systemType: data?.systemType,
         name: data?.name,
         code: data?.code,
-        parentUID: data.parentUID ? data?.parentUID : parentUID
+        parentUID: data.parentUID ? data?.parentUID : parentUID,
+        physicalItemProperties: data?.physicalItemProperties?.map(prop =>
+          prop.listOfValues && prop.listOfValues.length !== 0
+            ? {
+                ...prop,
+                listOfValues: prop.listOfValues.map(value => value.value)
+              }
+            : { ...prop }
+        )
       }
