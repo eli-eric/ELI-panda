@@ -1,4 +1,4 @@
-import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
+import type { CategoryFormType } from '../components/categoryEditForm/types'
 
 export const formatData = (data: CategoryFormType, parentUID) =>
   data.groups && data.groups.length !== 0

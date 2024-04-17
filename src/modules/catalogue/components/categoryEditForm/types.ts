@@ -26,4 +26,5 @@ export type CategoryFormType = {
   code: string
   image?: string
   groups?: Group[] | null
+  physicalItemProperties?: Property[]
 }

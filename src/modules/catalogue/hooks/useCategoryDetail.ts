@@ -1,8 +1,8 @@
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
-import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 import { useCategory } from './useCategory'
+import type { CategoryFormType } from '../components/categoryEditForm/types'
 
 export const useCategoryDetail = (uid?: string) => {
   const { catalogueCategoryEdit } = useEndpoint({ uid })
@@ -22,7 +22,15 @@ export const useCategoryDetail = (uid?: string) => {
                   value: value
                 }))
               }))
-            }))
+            })),
+            physicalItemProperties: data.physicalItemProperties?.map(
+              property => ({
+                ...property,
+                listOfValues: property.listOfValues?.map(value => ({
+                  value: value
+                }))
+              })
+            )
           }
         : { ...data },
     onError: () => {}
