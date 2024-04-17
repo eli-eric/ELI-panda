@@ -4,14 +4,23 @@ import { Badge } from '@/components/visuals/Badge'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
 
-export const FilterBadges = ({ tableId, additionalBadge }: { tableId: string; additionalBadge?: JSX.Element }) => {
+export const FilterBadges = ({
+  tableId,
+  additionalBadge
+}: {
+  tableId: string
+  additionalBadge?: JSX.Element
+}) => {
   const [filters, setFilters] = useFilters(tableId, true, false)
   const { addFieldIdToSync } = useFormControlStore()
+  //render only client
 
   return (
     <div>
       {(filters.length > 0 || additionalBadge) && (
-        <span className="text-sm pr-2 font-medium text-gray-600 dark:text-gray-200">Filters:</span>
+        <span className="text-sm pr-2 font-medium text-gray-600 dark:text-gray-200">
+          Filters:
+        </span>
       )}
       {additionalBadge}
       {filters.map(filter => (

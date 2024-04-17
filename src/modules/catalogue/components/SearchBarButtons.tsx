@@ -14,17 +14,30 @@ interface SearchBarButtonsProps {
   filterFormMethods: UseFormReturn<any, any, any>
 }
 
-export const SearchBarButtons = ({ filterFormMethods }: SearchBarButtonsProps) => {
+export const SearchBarButtons = ({
+  filterFormMethods
+}: SearchBarButtonsProps) => {
   const router = useRouter()
   const uid = useCategoryUid()
   const handleRefresh = () => {
-    mutate(key => typeof key === 'string' && key.startsWith('/catalogue/items'), undefined, { revalidate: true })
+    mutate(
+      key => typeof key === 'string' && key.startsWith('/catalogue/items'),
+      undefined,
+      { revalidate: true }
+    )
   }
   const handleAdd = () => {
-    router.push({ pathname: PATH.CATALOGUE_ITEM, query: uid ? { categoryUid: uid } : undefined })
+    router.push({
+      pathname: PATH.CATALOGUE_ITEM,
+      query: uid ? { categoryUid: uid } : undefined
+    })
   }
   return (
-    <SearchBarButtonsComponent handleAdd={handleAdd} handleRefresh={handleRefresh} editRole={ROLE.CATALOGUE_EDIT}>
+    <SearchBarButtonsComponent
+      handleAdd={handleAdd}
+      handleRefresh={handleRefresh}
+      editRole={ROLE.CATALOGUE_EDIT}
+    >
       <div>
         <ModalStatisticsButtonLarge />
         <CatalogueFilterButtonContainer filterFormMethods={filterFormMethods} />

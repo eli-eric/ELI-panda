@@ -6,7 +6,7 @@ import BreadcrumpItem from '@/components/Breadcrump/Breadcrump.item'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 
 import { useCategory } from '../../hooks/useCategory'
-import { AddCategoryButton } from '../categoryEdit/AddCateforyButton'
+import { AddCategoryButton } from '../categoryEdit/components/AddCateforyButton'
 
 type CatalogueBreadcrumbsProps = {
   setCategoryFilter: (value: CodebookType | null) => void

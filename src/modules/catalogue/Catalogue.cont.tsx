@@ -1,4 +1,3 @@
-'use client'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useQueryState } from 'next-usequerystate'
 import { Fragment, useCallback, useMemo, useState } from 'react'
@@ -25,7 +24,9 @@ const CatalogueContainer = () => {
   const tableId = 'catalogueItems'
   const { catalogueItems, error, loading } = useCatalogueItems(tableId)
   const { catalogueCategories } = useCategoryList()
-  const [categoryQuery, setCategoryQuery] = useQueryState('category', { history: 'push' })
+  const [categoryQuery, setCategoryQuery] = useQueryState('category', {
+    history: 'push'
+  })
   const defValues = useMemo<CatalogueItem>(
     () => ({
       name: '',
@@ -83,7 +84,10 @@ const CatalogueContainer = () => {
           setOpen(open)
         }}
       />
-      <TableLayoutContainer deps={[open, catalogueItems, catalogueCategories]} className={'border-t border-gray-300'}>
+      <TableLayoutContainer
+        deps={[open, catalogueItems, catalogueCategories]}
+        className={'border-t border-gray-300'}
+      >
         <CatalogueTable
           tableId={tableId}
           setCategoryFilter={setCategoryFilter}
