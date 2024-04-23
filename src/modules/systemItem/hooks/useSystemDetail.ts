@@ -5,7 +5,7 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import type { Query } from '@/types/gql/graphql'
 import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
 
-const GET_SYSTEM = gql`
+const systemDetailQuery = gql`
   ${SYSTEM_DETAIL}
   query System($where: SystemWhere) {
     systems(where: $where) {
@@ -14,12 +14,18 @@ const GET_SYSTEM = gql`
   }
 `
 
-export const useSystemDetail = (uid?: string, alias?: string, onCompleted?: (data: Query) => void) => {
+export const useSystemDetail = (
+  uid?: string,
+  alias?: string,
+  onCompleted?: (data: Query) => void
+) => {
   const { system: systemEndpoint } = useEndpoint({ uid })
-  const { data, error, loading, refetch } = useQuery<Query>(GET_SYSTEM, {
+  const { data, error, loading, refetch } = useQuery<Query>(systemDetailQuery, {
     variables: { where: { uid, systemCode: alias } },
     onError: error => {
-      toast.error('Something went wrong while fetching system detail: ' + error.message)
+      toast.error(
+        'Something went wrong while fetching system detail: ' + error.message
+      )
     },
     onCompleted,
     fetchPolicy: 'network-only'

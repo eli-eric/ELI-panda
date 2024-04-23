@@ -1,19 +1,17 @@
-import { gql, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { toast } from 'react-hot-toast'
-
-import type { Query } from '@/types/gql/graphql'
-
-const GET_TEAMS = gql`
-  query Query {
+import { gql } from '@/types/gql'
+const teamsQuery = gql(`
+  query TeamsQuery {
     teams {
       uid
       name
     }
   }
-`
+`)
 
 export const useTeams = () => {
-  const { data, loading, error } = useQuery<Query>(GET_TEAMS, {
+  const { data, loading, error } = useQuery(teamsQuery, {
     onError: () => {
       toast.error(`Something went wrong with fetch teams!`)
     }

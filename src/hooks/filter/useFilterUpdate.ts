@@ -1,7 +1,10 @@
 import { gql, useMutation } from '@apollo/client'
 
 const UPDATE_FILTER = gql`
-  mutation Mutation($where: UserSettingsWhere, $update: UserSettingsUpdateInput) {
+  mutation UpdateFilterMutation(
+    $where: UserSettingsWhere
+    $update: UserSettingsUpdateInput
+  ) {
     updateUserSettings(where: $where, update: $update) {
       userSettings {
         name

@@ -1,9 +1,7 @@
-import { gql, useMutation } from '@apollo/client'
-import toast from 'react-hot-toast'
+import { gql } from '@/types/gql'
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 
-import type { Mutation } from '@/types/gql/graphql'
-
-const UPDATE_USER = gql`
+const UPDATE_USER = gql(`
   mutation UpdateUsers($where: UserWhere, $update: UserUpdateInput) {
     updateUsers(where: $where, update: $update) {
       users {
@@ -11,20 +9,12 @@ const UPDATE_USER = gql`
       }
     }
   }
-`
+`)
 
 export const useUserUpdate = () => {
-  const [updateUser, { loading }] = useMutation<Mutation>(UPDATE_USER, {
-    onError: err => {
-      toast.error('Error while Updating user: ' + err.message)
-    },
-    onCompleted: () => {
-      toast.success('User was updated successfully')
-    }
-  })
-
+  const { mutate, isLoading } = useGraphQLMutation(UPDATE_USER)
   return {
-    updateUser,
-    loading
+    updateUser: mutate,
+    loading: isLoading
   }
 }

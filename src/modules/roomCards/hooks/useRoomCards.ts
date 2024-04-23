@@ -4,8 +4,8 @@ import { toast } from 'react-hot-toast'
 
 import type { Query } from '@/types/gql/graphql'
 
-export const ROOM_CARDS = gql`
-  query RoomCards($where: RoomCardWhere) {
+export const roomCardsQuery = gql`
+  query RoomCardsQuery($where: RoomCardWhere) {
     roomCards(where: $where) {
       uid
       name
@@ -30,7 +30,7 @@ export const ROOM_CARDS = gql`
 
 export const useRoomCards = () => {
   const [search] = useQueryState('search')
-  const { data, loading, error, refetch } = useQuery<Query>(ROOM_CARDS, {
+  const { data, loading, error, refetch } = useQuery<Query>(roomCardsQuery, {
     variables: {
       where: {
         name_CONTAINS: search || ''

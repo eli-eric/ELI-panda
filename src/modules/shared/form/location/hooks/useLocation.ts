@@ -5,7 +5,7 @@ import useTableStateStore from '@/store/useTableStateStore'
 import type { Query } from '@/types/gql/graphql'
 
 const GET_LOCATIONS = gql`
-  query Query($where: LocationWhere) {
+  query LocationsQuery($where: LocationWhere) {
     locations(where: $where) {
       uid
       name
@@ -17,7 +17,7 @@ const GET_LOCATIONS = gql`
   }
 `
 const GET_SUBLOCATIONS = gql`
-  query Query($where: LocationWhere) {
+  query SubLocationsQuery($where: LocationWhere) {
     locations(where: $where) {
       subLocations {
         uid
@@ -64,6 +64,12 @@ export const useLocation = () => {
   return { locations: data?.locations, loading, error }
 }
 export const useSubLocations = () => {
-  const [getSubLocations, { data, loading, error }] = useLazyQuery<Query>(GET_SUBLOCATIONS)
-  return { subLocations: data?.locations[0].subLocations, loading, error, getSubLocations }
+  const [getSubLocations, { data, loading, error }] =
+    useLazyQuery<Query>(GET_SUBLOCATIONS)
+  return {
+    subLocations: data?.locations[0].subLocations,
+    loading,
+    error,
+    getSubLocations
+  }
 }

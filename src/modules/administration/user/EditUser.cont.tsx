@@ -50,7 +50,10 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
       firstName: data.firstName,
       lastName: data.lastName,
       isEnabled: data.isEnabled,
-      facility: { connect: whereC(data.facility.uid), disconnect: whereC(userDetail?.facility?.code) },
+      facility: {
+        connect: whereC(data.facility.uid),
+        disconnect: whereC(userDetail?.facility?.code)
+      },
       employee: {
         connect: data.employee ? whereN(data.employee?.uid) : undefined,
         disconnect: whereN(userDetail?.employee?.uid)
@@ -61,7 +64,7 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
       dataToSend.passwordHash = bcrypt.hashSync(data.password, 12)
     }
 
-    updateUser({ variables: { where: { uid: userUid }, update: dataToSend } })
+    updateUser({ where: { uid: userUid }, update: dataToSend })
   }
 
   const addRole = (selectedRole?: CodebookType) => {
@@ -69,37 +72,43 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
       toast.error('Role already exists!')
       return
     }
-    updateUser({
-      variables: {
+    updateUser(
+      {
         where: { uid: userUid },
         update: {
           roles: [
             {
-              connect: whereN(selectedRole?.uid)
+              connect: [whereN(selectedRole?.uid)]
             }
           ]
         }
+      },
+      {
+        onSuccess: () => {
+          refetch()
+        }
       }
-    }).finally(() => {
-      refetch()
-    })
+    )
   }
 
   const removeRole = (roleUid: string) => {
-    updateUser({
-      variables: {
+    updateUser(
+      {
         where: { uid: userUid },
         update: {
           roles: [
             {
-              disconnect: whereN(roleUid)
+              disconnect: [whereN(roleUid)]
             }
           ]
         }
+      },
+      {
+        onSuccess: () => {
+          refetch()
+        }
       }
-    }).finally(() => {
-      refetch()
-    })
+    )
   }
 
   return (

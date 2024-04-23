@@ -21,7 +21,7 @@ type FormType = {
 }
 
 const GET_USER_PASSWORD = gql`
-  query Query($uid: ID!) {
+  query UserPWDQuery($uid: ID!) {
     users(where: { uid: $uid }) {
       uid
       passwordHash
@@ -30,14 +30,17 @@ const GET_USER_PASSWORD = gql`
 `
 export const ChangePasswordContainer: FC = () => {
   const userUid = useSession().data?.user?.uid
-  const [getUserPassword, { loading: loadingGet }] = useLazyQuery<Query>(GET_USER_PASSWORD, {
-    variables: {
-      uid: userUid
-    },
-    onError: () => {
-      toast.error('Something went wrong.')
+  const [getUserPassword, { loading: loadingGet }] = useLazyQuery<Query>(
+    GET_USER_PASSWORD,
+    {
+      variables: {
+        uid: userUid
+      },
+      onError: () => {
+        toast.error('Something went wrong.')
+      }
     }
-  })
+  )
 
   const { updateUser, loading } = useUserUpdate()
 
@@ -47,12 +50,20 @@ export const ChangePasswordContainer: FC = () => {
       newPassword: yup
         .string()
         .required('New password is required')
-        .test('len', 'Must be longer then 8 characters', val => val?.length >= 8)
-        .test('password', 'Password must contain at least one uppercase, one lowercase and one number', val =>
-          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(val || '')
+        .test(
+          'len',
+          'Must be longer then 8 characters',
+          val => val?.length >= 8
         )
-        .test('password', 'Password must contain at least one special character', val =>
-          /^(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/.test(val || '')
+        .test(
+          'password',
+          'Password must contain at least one uppercase, one lowercase and one number',
+          val => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(val || '')
+        )
+        .test(
+          'password',
+          'Password must contain at least one special character',
+          val => /^(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/.test(val || '')
         ),
       confirmPassword: yup
         .string()
@@ -65,7 +76,10 @@ export const ChangePasswordContainer: FC = () => {
   const onSubmit = (passwordData: FormType) => {
     getUserPassword().then(data => {
       const passwordHash = data?.data?.users[0]?.passwordHash
-      const confirmed = bcrypt.compareSync(formMethods.getValues('currentPassword'), passwordHash || '')
+      const confirmed = bcrypt.compareSync(
+        formMethods.getValues('currentPassword'),
+        passwordHash || ''
+      )
       if (confirmed) {
         const dataToSend = {
           passwordHash: bcrypt.hashSync(passwordData.newPassword, 12),
@@ -80,7 +94,9 @@ export const ChangePasswordContainer: FC = () => {
         })
       } else {
         toast.error('Wrong current password!')
-        formMethods.setError('currentPassword', { message: 'Wrong current password' })
+        formMethods.setError('currentPassword', {
+          message: 'Wrong current password'
+        })
       }
     })
   }
@@ -112,7 +128,13 @@ export const ChangePasswordContainer: FC = () => {
             >
               New password
             </label>
-            <Input type="password" rounded="rounded-md" name="newPassword" id="newPassword" autoComplete="password" />
+            <Input
+              type="password"
+              rounded="rounded-md"
+              name="newPassword"
+              id="newPassword"
+              autoComplete="password"
+            />
           </div>
           <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
             <label

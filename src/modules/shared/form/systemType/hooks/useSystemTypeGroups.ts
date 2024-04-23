@@ -5,11 +5,17 @@ import useTableStateStore from '@/store/useTableStateStore'
 import type { Query } from '@/types/gql/graphql'
 
 const GET_SYSTEM_TYPE_GROUPS = gql`
-  query Query($systemTypesWhere: SystemTypeWhere, $where: SystemTypeGroupWhere) {
+  query SystemTypeQuery(
+    $systemTypesWhere: SystemTypeWhere
+    $where: SystemTypeGroupWhere
+  ) {
     systemTypeGroups(where: $where, options: { sort: [{ name: ASC }] }) {
       name
       uid
-      systemTypes(where: $systemTypesWhere, options: { sort: [{ name: ASC }] }) {
+      systemTypes(
+        where: $systemTypesWhere
+        options: { sort: [{ name: ASC }] }
+      ) {
         name
         code
         uid

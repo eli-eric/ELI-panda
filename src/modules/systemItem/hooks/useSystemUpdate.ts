@@ -12,7 +12,6 @@ import { updateSubSystem, updateSystem } from '@/modules/systems/utils'
 import { SystemDetailContext } from '@/pages/system/[uid]'
 import { PATH } from '@/types/constants/paths'
 import type { Mutation } from '@/types/gql/graphql'
-import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
 import { connectAndDisconnectNode, whereN } from '@/utils/graphql/mutations'
 import { makeSystemInputBody } from './utils'
 
@@ -24,9 +23,8 @@ import { BASE_URL } from '@/types/constants/common'
 import { useMutation as useQueryMutation } from '@tanstack/react-query'
 import type { PhysicalItemProperty } from '@/modules/systems/types/responses'
 
-const UPDATE_SYSTEM = gql`
-  ${SYSTEM_DETAIL}
-  mutation UpdateSystems(
+const systemDetailMutation = gql`
+  mutation UpdateSystemMutation(
     $where: SystemWhere
     $update: SystemUpdateInput!
     $updateItemsWhere: ItemWhere
@@ -44,7 +42,7 @@ const UPDATE_SYSTEM = gql`
     }
     updateSystems(where: $where, update: $update) {
       systems {
-        ...SystemDetail
+        uid
       }
     }
     updatedByResolver(node: $node, nodeUid: $nodeUid, action: $action)
@@ -157,7 +155,7 @@ export const useSystemUpdate = (
     })
   }
 
-  const [update, { loading }] = useMutation<Mutation>(UPDATE_SYSTEM, {
+  const [update, { loading }] = useMutation<Mutation>(systemDetailMutation, {
     onError: error => {
       toast.error('Something went wrong: ' + error.message)
     }

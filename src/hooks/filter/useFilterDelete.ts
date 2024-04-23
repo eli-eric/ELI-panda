@@ -1,13 +1,13 @@
 import { gql, useMutation } from '@apollo/client'
 
-const DELETE_FILTER = gql`
-  mutation Mutation($where: UserSettingsWhere) {
+const deleteFilterMutation = gql`
+  mutation DeleteFilterMutation($where: UserSettingsWhere) {
     deleteUserSettings(where: $where) {
       nodesDeleted
     }
   }
 `
 export const useFilterDelete = () => {
-  const [deleteSavedFilter, { loading }] = useMutation(DELETE_FILTER)
+  const [deleteSavedFilter, { loading }] = useMutation(deleteFilterMutation)
   return { deleteSavedFilter, loading }
 }

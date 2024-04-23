@@ -3,8 +3,8 @@ import { toast } from 'react-hot-toast'
 
 import type { Query } from '@/types/gql/graphql'
 
-export const GET_ROOMCARD = gql`
-  query RoomCards($where: RoomCardWhere) {
+export const roomCardQuery = gql`
+  query RoomCardQuery($where: RoomCardWhere) {
     roomCards(where: $where) {
       name
       status
@@ -57,7 +57,7 @@ export const GET_ROOMCARD = gql`
 `
 
 export const useRoomCard = (roomCardUid?: string) => {
-  const { data, error, loading } = useQuery<Query>(GET_ROOMCARD, {
+  const { data, error, loading } = useQuery<Query>(roomCardQuery, {
     variables: { where: { uid: roomCardUid } },
     onError: () => {
       toast.error('Something went wrong during loading room card')

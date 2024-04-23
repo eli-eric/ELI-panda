@@ -18,7 +18,7 @@ import type { SystemDetailFormType } from '../types/form'
 import { useParentSystemDetail } from './useParentSystemDetail'
 import { navigateBack } from '@/utils'
 
-const CREATE_SYSTEM = gql`
+const createSystemMutation = gql`
   ${SYSTEM_DETAIL}
   mutation CreateSystems($input: [SystemCreateInput!]!) {
     createSystems(input: $input) {
@@ -29,7 +29,9 @@ const CREATE_SYSTEM = gql`
   }
 `
 
-export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>) => {
+export const useSystemCreate = (
+  imageRef?: MutableRefObject<ImageGalleryRef | undefined>
+) => {
   const router = useRouter()
   const { mutate } = useSystems('systems')
   const { parentUid } = useParentSystemDetail()
@@ -37,15 +39,26 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
 
   const { systemSubsystems } = useEndpoint({ uid: parentUid || '' })
 
-  const onCompleted = ({ createSystems: { systems } }, saveAndExit?: boolean) => {
+  const onCompleted = (
+    { createSystems: { systems } },
+    saveAndExit?: boolean
+  ) => {
     const responseUid = systems[0].uid
     const body = systems[0]
     imageRef?.current?.submit(responseUid, () => {
       toast.success(`System ${responseUid} saved successfully`)
-      mutateEndpoint(systemSubsystems, prev => prev && addSubsystemToSubsystems(prev, body), {
-        revalidate: false
-      })
-      parentUid ? mutate(prev => prev && addSubsystem(parentUid, body, prev), { revalidate: false }) : mutate()
+      mutateEndpoint(
+        systemSubsystems,
+        prev => prev && addSubsystemToSubsystems(prev, body),
+        {
+          revalidate: false
+        }
+      )
+      parentUid
+        ? mutate(prev => prev && addSubsystem(parentUid, body, prev), {
+            revalidate: false
+          })
+        : mutate()
       if (saveAndExit) {
         navigateBack()
       } else {
@@ -54,13 +67,16 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
     })
   }
 
-  const [create, { loading }] = useMutation<Mutation>(CREATE_SYSTEM, {
+  const [create, { loading }] = useMutation<Mutation>(createSystemMutation, {
     onError: error => {
       toast.error('Something went wrong: ' + error.message)
     }
   })
 
-  const createSystem = (systemForm: SystemDetailFormType, saveAndExit?: boolean) => {
+  const createSystem = (
+    systemForm: SystemDetailFormType,
+    saveAndExit?: boolean
+  ) => {
     create({
       variables: {
         input: [
@@ -82,7 +98,8 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
               ? null
               : Number(systemForm.minimalSpareParstCount),
 
-            systemCode: systemForm.systemCode === '' ? null : systemForm.systemCode,
+            systemCode:
+              systemForm.systemCode === '' ? null : systemForm.systemCode,
             systemAlias: systemForm.systemAlias,
             systemLevel: systemForm?.systemLevel,
             systemType: connectN(systemForm?.systemType?.uid),
@@ -90,13 +107,22 @@ export const useSystemCreate = (imageRef?: MutableRefObject<ImageGalleryRef | un
             zone: connectN(systemForm?.zone?.uid),
             responsible: connectN(systemForm?.responsible?.uid),
             operators: {
-              connect: systemForm?.operators?.map(operator => ({ where: { node: { uid: operator.uid } } }))
+              connect: systemForm?.operators?.map(operator => ({
+                where: { node: { uid: operator.uid } }
+              }))
             },
             maintainedBy: {
-              connect: systemForm?.maintainedBy?.map(employee => ({ where: { node: { uid: employee.uid } } }))
+              connect: systemForm?.maintainedBy?.map(employee => ({
+                where: { node: { uid: employee.uid } }
+              }))
             },
             updatedBy: {
-              connect: [{ where: { node: { uid: session?.user?.uid } }, edge: { action: 'INSERT' } }]
+              connect: [
+                {
+                  where: { node: { uid: session?.user?.uid } },
+                  edge: { action: 'INSERT' }
+                }
+              ]
             }
           }
         ]

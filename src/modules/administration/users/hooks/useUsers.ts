@@ -7,7 +7,7 @@ import { USER } from '@/utils/graphql/fragments'
 
 const USERS = gql`
   ${USER}
-  query Query($where: UserWhere) {
+  query UsersQuery($where: UserWhere) {
     users(where: $where) {
       ...UserFields
     }

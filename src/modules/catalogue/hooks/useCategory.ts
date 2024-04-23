@@ -6,7 +6,7 @@ import type { Query } from '@/types/gql/graphql'
 import { useCategoryUid } from './useCategoryUid'
 
 const GET_CATEGORIES = gql`
-  query GetCategories($uid: ID = null) {
+  query GetCategory($uid: ID = null) {
     catalogueCategories(where: { uid: $uid }) {
       uid
       name

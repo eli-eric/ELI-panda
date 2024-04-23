@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import type { Query } from '@/types/gql/graphql'
 
 const GET_SPARE_PARTS = gql`
-  query Systems($where: SystemWhere) {
+  query SystemsSpareParts($where: SystemWhere) {
     systems(where: $where) {
       spareParts {
         name
@@ -46,7 +46,7 @@ export const useGetSpareParts = uid => {
 }
 
 const GET_SPARE_PARTS_FOR = gql`
-  query Systems($where: SystemWhere) {
+  query SystemSparePartsFor($where: SystemWhere) {
     systems(where: $where) {
       sparePartsFor {
         name

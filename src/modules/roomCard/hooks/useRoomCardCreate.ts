@@ -6,7 +6,7 @@ import { connectN } from '@/utils/graphql/mutations'
 import { whereN } from '../../../utils/graphql/mutations'
 import type { RoomCardFormType } from '../types/form'
 
-const CREATE_ROOM_CARD = gql`
+const createRoomCardMutation = gql`
   mutation CreateRoomCards($input: [RoomCardCreateInput!]!) {
     createRoomCards(input: $input) {
       roomCards {
@@ -20,7 +20,9 @@ export const makeRoomCardsCreateData = (formData?: RoomCardFormType) => ({
   input: [
     {
       ...formData,
-      cleaningScheduleDate: formData?.cleaningScheduleDate ? formData?.cleaningScheduleDate : undefined,
+      cleaningScheduleDate: formData?.cleaningScheduleDate
+        ? formData?.cleaningScheduleDate
+        : undefined,
       contactPersonsHall: {
         create: formData?.contactPersonsHall.map(contactPerson => ({
           node: {
@@ -30,7 +32,9 @@ export const makeRoomCardsCreateData = (formData?: RoomCardFormType) => ({
         }))
       },
       contactPersonsDept: {
-        connect: formData?.contactPersonsDept.map(contactPerson => whereN(contactPerson.uid))
+        connect: formData?.contactPersonsDept.map(contactPerson =>
+          whereN(contactPerson.uid)
+        )
       },
       teams: {
         connect: formData?.teams.map(team => whereN(team.uid))
@@ -43,7 +47,7 @@ export const makeRoomCardsCreateData = (formData?: RoomCardFormType) => ({
 })
 
 export const useRoomCardCreate = () => {
-  const [createRoomCard] = useMutation<Mutation>(CREATE_ROOM_CARD, {
+  const [createRoomCard] = useMutation<Mutation>(createRoomCardMutation, {
     refetchQueries: ['RoomCards', 'RoomCard']
   })
 

@@ -3,8 +3,11 @@ import { toast } from 'react-hot-toast'
 
 import { useRoomCards } from './useRoomCards'
 
-const ROOM_CARD_DELETE = gql`
-  mutation DeleteRoomCards($deleteHallContactPeopleWhere: HallContactPersonWhere, $where: RoomCardWhere) {
+const roomCardDeleteMutation = gql`
+  mutation DeleteRoomCards(
+    $deleteHallContactPeopleWhere: HallContactPersonWhere
+    $where: RoomCardWhere
+  ) {
     deleteRoomCards(where: $where) {
       nodesDeleted
     }
@@ -17,7 +20,7 @@ const ROOM_CARD_DELETE = gql`
 export const useRoomCardDelete = (uid: string, name: string) => {
   const { refetch } = useRoomCards()
 
-  const [deleteRoomCard] = useMutation(ROOM_CARD_DELETE, {
+  const [deleteRoomCard] = useMutation(roomCardDeleteMutation, {
     variables: {
       where: {
         uid
