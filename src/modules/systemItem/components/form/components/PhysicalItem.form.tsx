@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Suspense, useContext } from 'react'
+import { Fragment, Suspense, useContext } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import { LinkDecorator } from '@/components/decorators'
@@ -63,7 +63,7 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
         </Col>
       )}
       {catalogueItemProperties && catalogueItemProperties.length > 0 && (
-        <Col sm="full" className="flex-col">
+        <Col sm="full" className="flex-col border rounded-md p-3">
           <FormattedMessage
             id={propertyMessage.title}
             values={createMessageValues({ title: 'Catalgoue Properties' })}
@@ -85,19 +85,25 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
         </Col>
       )}
       {properties && properties.length > 0 && (
-        <Col sm="full" className="flex-col">
-          <FormattedMessage
-            id={propertyMessage.title}
-            values={createMessageValues({ title: 'Item Properties' })}
-          />
-          {properties.map((property, index) => (
-            <ItemProperty
-              key={property.property.uid}
-              detail={property}
-              index={index}
-            />
-          ))}
-        </Col>
+        <Fragment>
+          <Grid className="col-span-full border rounded-md p-3">
+            <Col sm={'full'} className="mb-0">
+              <FormattedMessage
+                id={propertyMessage.title}
+                values={createMessageValues({ title: 'Item Properties' })}
+              />
+            </Col>
+            {properties.map((property, index) => (
+              <Col key={property.property.uid} sm={3} md={3}>
+                <ItemProperty
+                  key={property.property.uid}
+                  detail={property}
+                  index={index}
+                />
+              </Col>
+            ))}
+          </Grid>
+        </Fragment>
       )}
 
       <Col sm={3} md={4}>

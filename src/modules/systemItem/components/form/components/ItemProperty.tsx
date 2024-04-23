@@ -28,7 +28,7 @@ export const ItemProperty = ({ detail, index }: Props) => {
     case PROPERTY_TYPE.TEXT:
       return (
         <Input
-          name={`properties.${index}.value`}
+          name={`physicalItem.properties.${index}.value`}
           unit={detail.property.unit?.name}
           label={detail.property.name}
           disabled={disabled}
@@ -39,7 +39,7 @@ export const ItemProperty = ({ detail, index }: Props) => {
     case PROPERTY_TYPE.NUMBER:
       return (
         <Input
-          name={`properties.${index}.value`}
+          name={`physicalItem.properties.${index}.value`}
           unit={detail.property.unit?.name}
           label={detail.property.name}
           disabled={disabled}
@@ -51,7 +51,7 @@ export const ItemProperty = ({ detail, index }: Props) => {
     case PROPERTY_TYPE.BOOLEAN:
       return (
         <Listbox
-          name={`properties.${index}.value`}
+          name={`physicalItem.properties.${index}.value`}
           disabled={disabled}
           unit={detail.property.unit?.name}
           customLabel={detail.property.name}
@@ -63,7 +63,7 @@ export const ItemProperty = ({ detail, index }: Props) => {
     case PROPERTY_TYPE.LIST:
       return (
         <Listbox
-          name={`properties.${index}.value`}
+          name={`physicalItem.properties.${index}.value`}
           allowEmptyOption={true}
           unit={detail.property.unit?.name}
           disabled={disabled}
@@ -80,7 +80,7 @@ export const ItemProperty = ({ detail, index }: Props) => {
       return (
         <RangeInput
           required
-          name={`properties.${index}.value`}
+          name={`physicalItem.properties.${index}.value`}
           label={label}
           disabled={disabled}
         />
@@ -89,7 +89,7 @@ export const ItemProperty = ({ detail, index }: Props) => {
     default: {
       return (
         <Input
-          name={`properties.${index}.value`}
+          name={`physicalItem.properties.${index}.value`}
           disabled={disabled}
           label={detail.property.name}
           rounded={'rounded-md'}

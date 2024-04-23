@@ -15,7 +15,15 @@ export const formatData = (data: CategoryFormType, parentUID) =>
                 }
               : { ...prop }
           )
-        }))
+        })),
+        physicalItemProperties: data?.physicalItemProperties?.map(prop =>
+          prop.listOfValues && prop.listOfValues.length !== 0
+            ? {
+                ...prop,
+                listOfValues: prop.listOfValues.map(value => value.value)
+              }
+            : { ...prop }
+        )
       }
     : {
         ...data,
