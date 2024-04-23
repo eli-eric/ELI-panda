@@ -1983,7 +1983,7 @@
     lodash.merge "^4.6.2"
     postcss-selector-parser "6.0.10"
 
-"@tanstack/eslint-plugin-query@^5.8.4":
+"@tanstack/eslint-plugin-query@^5.28.11":
   version "5.28.11"
   resolved "https://registry.yarnpkg.com/@tanstack/eslint-plugin-query/-/eslint-plugin-query-5.28.11.tgz#0a46f2b301b706d993fc4bc25fef60c1fb639101"
   integrity sha512-bODGLeG4WCGmHVKCh3bH1KLfq7xdi1jsRjTESV6ifCw1mZ0m2fBMxAjK42KjbhJwcvNdTlYHI+YY/aZWBk4Niw==

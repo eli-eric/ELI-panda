@@ -57,7 +57,10 @@ export const SystemForm = () => {
   const { parentPath } = useParentSystemDetail()
   const systemImageRef = useRef<ImageGalleryRef>()
 
-  const { updateSystem, loading } = useSystemUpdate(systemImageRef)
+  const { updateSystem, loading } = useSystemUpdate(
+    systemImageRef,
+    systemDetail?.physicalItem?.uid
+  )
   const { createSystem, loading: createLoading } =
     useSystemCreate(systemImageRef)
 

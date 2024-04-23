@@ -13,7 +13,6 @@ import { SystemLevel } from '@/types/gql/graphql'
 
 import { EmployeeTable } from '../../table/Employee.table'
 import useSystemFormFields from '../SystemForm.fields'
-import { Button } from '@/components/Buttons'
 import { SystemCodeButton } from './SystemCodeGenerate.button'
 
 interface SystemFormComponentProps {
@@ -22,7 +21,12 @@ interface SystemFormComponentProps {
 
 export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
   const fields = useSystemFormFields()
-  const { setNewMaintainedBy, setDisconnectMaintainedBy, setNewOperator, setDisconnectOperator } = useSystemItemStore()
+  const {
+    setNewMaintainedBy,
+    setDisconnectMaintainedBy,
+    setNewOperator,
+    setDisconnectOperator
+  } = useSystemItemStore()
   const { control } = useFormContext()
   const maintainedBy = useWatch({ control, name: 'maintainedBy' })
   const operators = useWatch({ control, name: 'operators' })
@@ -38,7 +42,12 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
           <Col sm={3} md={6} lg={4} className="md:pr-4">
             {children}
           </Col>
-          <Col sm={3} md={6} lg={8} className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-x-2 gap-y-4 mb-auto">
+          <Col
+            sm={3}
+            md={6}
+            lg={8}
+            className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-8 gap-x-2 gap-y-4 mb-auto"
+          >
             <Col sm={3} md={6} lg={4}>
               <SystemTypeComboBox systemTypeField={fields.systemType} />
             </Col>

@@ -49,4 +49,19 @@ export type PhysicalItem = {
   eun?: string // input
   serialNumber?: string // input
   catalogueItem?: CatalogueItem
+  properties?: PhysicalItemProperty[]
+}
+
+export interface PhysicalItemProperty {
+  value?: any
+  property: ItemProperty
+}
+
+export type ItemProperty = {
+  uid: string
+  name: string
+  listOfValues?: string[]
+  defaultValue?: string
+  type: CodebookType
+  unit?: CodebookType
 }
