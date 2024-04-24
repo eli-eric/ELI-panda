@@ -36,5 +36,6 @@ declare module '@tanstack/table-core' {
       | { min?: number; max?: number }
     name?: string
     type?: string
+    propType?: string
   }
 }
