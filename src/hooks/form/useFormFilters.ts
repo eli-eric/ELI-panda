@@ -153,14 +153,19 @@ export const useFormFilterState = ({
   //set filter value to store on change field and remove from store if value is empty
   const setFilter = useCallback(
     (id: string) =>
-      (value: any, type?: ColumnFilter['type'], name: string = id) => {
+      (
+        value: any,
+        type?: ColumnFilter['type'],
+        name: string = id,
+        propType?: string
+      ) => {
         setColumnFilters(prev => {
           const filters = [...prev]
           const index = prev.findIndex(item => item.id === id)
           if (index !== -1) {
             filters[index].value = value
           } else if (value) {
-            filters.push({ id, value, type, name })
+            filters.push({ id, value, type, name, propType })
           }
           if (!value) {
             filters.splice(index, 1)

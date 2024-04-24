@@ -14,6 +14,7 @@ export const getEndpoints = (
     catalogueItemImage: `/catalogue/item/${uid}/image`,
     catalogueCategoryEdit: `/catalogue/category${uid ? '/' + uid : ''}`,
     catalogueCategoryProperties: `/catalogue/category/${uid}/properties${query}`,
+    cataloguePhysicalItemProperties: `/catalogue/category/${uid}/physical-item-properties`,
     catalogueOrders: `/catalogue/${uid}/orders`,
     system: `/system${uid ? '/' + uid : ''}`,
     systemCodeGenerate: `/system/systemCode${query}`,
