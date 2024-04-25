@@ -25,7 +25,7 @@ const SystemAliasRedirectPage: NextPage = ({ alias }: Props) => {
   const intl = useIntl()
   const { push } = useRouter()
 
-  const { loading, error, systemDetail } = useSystemDetail(undefined, alias, data => {
+  const { loading, error, systemDetail } = useSystemDetail(alias, data => {
     const uid = data?.systems[0]?.uid
     if (uid) {
       push(PATH.SYSTEM + '/' + uid)
@@ -64,11 +64,16 @@ const SystemAliasRedirectPage: NextPage = ({ alias }: Props) => {
                     System not found
                   </h1>
                   <p className="mt-1 text-base text-gray-500">
-                    The system by alias was not found. Please check the URL and try again.
+                    The system by alias was not found. Please check the URL and
+                    try again.
                   </p>
                 </div>
                 <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent sm:pl-6">
-                  <Link href={status === 'authenticated' ? PATH.DASHBOARD : PATH.ROOT}>
+                  <Link
+                    href={
+                      status === 'authenticated' ? PATH.DASHBOARD : PATH.ROOT
+                    }
+                  >
                     <Button primary>
                       <FormattedMessage id={common.buttons.home} />
                     </Button>

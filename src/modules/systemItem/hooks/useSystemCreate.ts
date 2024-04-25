@@ -11,7 +11,6 @@ import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { addSubsystem, addSubsystemToSubsystems } from '@/modules/systems/utils'
 import { PATH } from '@/types/constants/paths'
 import type { Mutation } from '@/types/gql/graphql'
-import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
 import { connectN, whereC, whereN } from '@/utils/graphql/mutations'
 
 import type { SystemDetailFormType } from '../types/form'
@@ -19,7 +18,6 @@ import { useParentSystemDetail } from './useParentSystemDetail'
 import { navigateBack } from '@/utils'
 
 const createSystemMutation = gql`
-  ${SYSTEM_DETAIL}
   mutation CreateSystems($input: [SystemCreateInput!]!) {
     createSystems(input: $input) {
       systems {

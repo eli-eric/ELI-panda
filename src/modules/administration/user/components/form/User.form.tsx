@@ -1,7 +1,5 @@
-import { gql, useQuery } from '@apollo/client'
 import { useEffect } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
-import toast from 'react-hot-toast'
 
 import { Button } from '@/components/Buttons'
 import CheckBox from '@/components/form/CheckBox'
@@ -10,28 +8,34 @@ import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import { useLazyEmployee } from '@/hooks/graphql/useLazyEmployee'
-import type { Query } from '@/types/gql/graphql'
 import { generatePassword } from '@/utils'
 
 import { useUserFormFields } from './User.fields'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
+import toast from 'react-hot-toast'
 
-const GET_FACILITIES = gql`
+const GET_FACILITIES = gql(`
   query GetFacilities {
     facilities {
       code
       name
     }
   }
-`
+`)
 
 export const UserForm = () => {
   const fields = useUserFormFields()
   const { setValue, control } = useFormContext()
-  const { data } = useQuery<Query>(GET_FACILITIES, {
-    onError: error => {
-      toast.error(error.message)
+  const { data } = useGraphQL(
+    GET_FACILITIES,
+    {},
+    {
+      onError: () => {
+        toast.error('Failed to fetch facilities')
+      }
     }
-  })
+  )
 
   const [getEmployee, employee] = useLazyEmployee()
 
@@ -47,7 +51,10 @@ export const UserForm = () => {
     if (employee) {
       setValue('firstName', employee.firstName)
       setValue('lastName', employee.lastName)
-      setValue('facility', { uid: employee.facility.code, name: employee.facility.name })
+      setValue('facility', {
+        uid: employee.facility.code,
+        name: employee.facility.name
+      })
     }
   }, [employee, setValue])
 
@@ -60,7 +67,10 @@ export const UserForm = () => {
   return (
     <Grid>
       <Col md={6}>
-        <Combobox {...fields.employee} filter={[{ key: 'all', value: 'true' }]} />
+        <Combobox
+          {...fields.employee}
+          filter={[{ key: 'all', value: 'true' }]}
+        />
       </Col>
       <Col md={6} className="items-center sm:pl-2 pt-4">
         <CheckBox {...fields.isEnabled} />
@@ -77,7 +87,10 @@ export const UserForm = () => {
       <Col md={6}>
         <Listbox
           {...fields.facility}
-          codebookResponse={data?.facilities.map(value => ({ name: value.name, uid: value.code }))}
+          codebookResponse={data?.facilities.map(value => ({
+            name: value.name,
+            uid: value.code
+          }))}
         />
       </Col>
       <Col md={6}>

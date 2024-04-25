@@ -1,32 +1,53 @@
-import { gql, useQuery } from '@apollo/client'
 import { useQueryState } from 'next-usequerystate'
 import { toast } from 'react-hot-toast'
 
-import type { Query } from '@/types/gql/graphql'
-import { USER } from '@/utils/graphql/fragments'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
-const USERS = gql`
-  ${USER}
+const USERS = gql(`
   query UsersQuery($where: UserWhere) {
     users(where: $where) {
-      ...UserFields
-    }
+      uid
+      email
+      firstName
+      isEnabled
+      lastName
+      passwordToChange
+      employee {
+        uid
+        fullName
+      }
+      roles {
+        name
+        code
+        uid
+      }
+      username
+      uid
+      facility {
+        name
+        code
+      }
   }
-`
+  }
+`)
 
 export const useUsers = () => {
   const [search] = useQueryState('search')
 
-  const { data, loading, error, refetch } = useQuery<Query>(USERS, {
-    variables: {
+  const { data, isLoading, error, refetch } = useGraphQL(
+    USERS,
+    {
       where: {
         username_CONTAINS: search || ''
       }
     },
-    onError: () => {
-      toast.error('Error loading users')
+    {
+      onError: () => {
+        toast.error('Error loading users')
+      }
     }
-  })
+  )
 
-  return { users: data?.users, loading, error, refetch }
+  return { users: data?.users, loading: isLoading, error, refetch }
 }

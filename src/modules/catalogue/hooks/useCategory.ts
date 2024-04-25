@@ -1,11 +1,8 @@
-import { gql, useQuery } from '@apollo/client'
-import { toast } from 'react-hot-toast'
-
-import type { Query } from '@/types/gql/graphql'
-
 import { useCategoryUid } from './useCategoryUid'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
-const GET_CATEGORIES = gql`
+const GET_CATEGORIES = gql(`
   query GetCategory($uid: ID = null) {
     catalogueCategories(where: { uid: $uid }) {
       uid
@@ -20,22 +17,21 @@ const GET_CATEGORIES = gql`
       }
     }
   }
-`
+`)
 
 export const useCategory = (catalogueCategoryUid?: string) => {
   const uid = useCategoryUid()
-  const { data, loading, error } = useQuery<Query>(GET_CATEGORIES, {
-    variables: { uid: uid || catalogueCategoryUid },
-    returnPartialData: true,
-    skip: !uid && !catalogueCategoryUid,
-    onError: () => {
-      toast.error('Failed to load category')
-    }
-  })
+  const { data, isLoading, error } = useGraphQL(
+    GET_CATEGORIES,
+    {
+      uid: uid || catalogueCategoryUid
+    },
+    { onError: () => {} }
+  )
 
   return {
     catalogueCategory: data?.catalogueCategories[0],
-    loading: loading,
+    loading: isLoading,
     error: error
   }
 }

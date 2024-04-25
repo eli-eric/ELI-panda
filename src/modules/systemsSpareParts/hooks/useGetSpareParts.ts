@@ -1,9 +1,9 @@
-import { gql, useQuery } from '@apollo/client'
 import toast from 'react-hot-toast'
 
-import type { Query } from '@/types/gql/graphql'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
-const GET_SPARE_PARTS = gql`
+const GET_SPARE_PARTS = gql(`
   query SystemsSpareParts($where: SystemWhere) {
     systems(where: $where) {
       spareParts {
@@ -27,25 +27,27 @@ const GET_SPARE_PARTS = gql`
       }
     }
   }
-`
+`)
 
 export const useGetSpareParts = uid => {
-  const { data, loading } = useQuery<Query>(GET_SPARE_PARTS, {
-    variables: {
+  const { data, isLoading: loading } = useGraphQL(
+    GET_SPARE_PARTS,
+    {
       where: {
         uid: uid
       }
     },
-    onError: () => {
-      toast.error('Something went wrong')
-    },
-    fetchPolicy: 'no-cache'
-  })
+    {
+      onError: () => {
+        toast.error('Something went wrong')
+      }
+    }
+  )
 
   return { spareParts: data?.systems[0].spareParts, loading }
 }
 
-const GET_SPARE_PARTS_FOR = gql`
+const GET_SPARE_PARTS_FOR = gql(`
   query SystemSparePartsFor($where: SystemWhere) {
     systems(where: $where) {
       sparePartsFor {
@@ -69,19 +71,21 @@ const GET_SPARE_PARTS_FOR = gql`
       }
     }
   }
-`
+`)
 export const useGetSparePartsFor = uid => {
-  const { data, loading } = useQuery<Query>(GET_SPARE_PARTS_FOR, {
-    variables: {
+  const { data, isLoading: loading } = useGraphQL(
+    GET_SPARE_PARTS_FOR,
+    {
       where: {
         uid: uid
       }
     },
-    onError: () => {
-      toast.error('Something went wrong')
-    },
-    fetchPolicy: 'no-cache'
-  })
+    {
+      onError: () => {
+        toast.error('Something went wrong')
+      }
+    }
+  )
 
   return { spareParts: data?.systems[0].sparePartsFor, loading }
 }

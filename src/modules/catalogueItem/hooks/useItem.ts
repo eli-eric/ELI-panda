@@ -1,20 +1,22 @@
 'use-client'
 
-import { gql, useQuery } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useFetch from '@/hooks/fetch/useFetch'
 import { useImage } from '@/hooks/fetch/useImage'
-import type { Query } from '@/types/gql/graphql'
 
 import type { CatalogueItem } from '../types/responses'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
 const useItem = () => {
   const router = useRouter()
   const catalogueUid = router.query.uid as string
-  const { catalogueItem, catalogueItemImage } = useEndpoint({ uid: catalogueUid })
+  const { catalogueItem, catalogueItemImage } = useEndpoint({
+    uid: catalogueUid
+  })
 
   const {
     response: item,
@@ -40,7 +42,7 @@ const useItem = () => {
   return { item: item, loading: isLoading, error, mutate, image, groups }
 }
 
-const GET_RELATED_ITEMS = gql`
+const GET_RELATED_ITEMS = gql(`
   query RelatedCatalogueItems($where: CatalogueItemWhere) {
     catalogueItems(where: $where) {
       relatedCatalogueItems {
@@ -60,21 +62,28 @@ const GET_RELATED_ITEMS = gql`
       }
     }
   }
-`
+`)
 
 export const useRelatedItems = () => {
   const router = useRouter()
   const uid = router.query.uid as string
-  const { data, loading, refetch } = useQuery<Query>(GET_RELATED_ITEMS, {
-    variables: {
+  const { data, isLoading, refetch } = useGraphQL(
+    GET_RELATED_ITEMS,
+    {
       where: {
         uid
       }
     },
-    skip: !uid
-  })
+    {
+      enabled: !!uid
+    }
+  )
 
-  return { data: data?.catalogueItems[0].relatedCatalogueItems, loading, refetch }
+  return {
+    data: data?.catalogueItems[0].relatedCatalogueItems,
+    loading: isLoading,
+    refetch
+  }
 }
 
 export default useItem

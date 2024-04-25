@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { EditUserContext } from '@/pages/administration/user/[uid]'
-import type { Role, UserUpdateInput } from '@/types/gql/graphql'
+import type { GetRolesQuery, UserUpdateInput } from '@/types/gql/graphql'
 import { whereC, whereN } from '@/utils/graphql/mutations'
 
 import { userUpdateFormSchema } from './components/form/User.schema'
@@ -16,7 +16,7 @@ import type { UserUpdateFormType } from './types/form'
 
 type Props = {
   userUid?: string
-  roles: Role[]
+  roles: GetRolesQuery['roles']
 }
 
 export const EditUserContainer = ({ userUid, roles }: Props) => {
@@ -42,7 +42,11 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
     resolver: yupResolver(userUpdateFormSchema)
   })
 
-  const { updateUser } = useUserUpdate()
+  const onSuccess = () => {
+    refetch()
+  }
+
+  const { updateUser } = useUserUpdate(onSuccess)
 
   const onSubmit = (data: UserUpdateFormType) => {
     const dataToSend: UserUpdateInput = {
@@ -72,43 +76,29 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
       toast.error('Role already exists!')
       return
     }
-    updateUser(
-      {
-        where: { uid: userUid },
-        update: {
-          roles: [
-            {
-              connect: [whereN(selectedRole?.uid)]
-            }
-          ]
-        }
-      },
-      {
-        onSuccess: () => {
-          refetch()
-        }
+    updateUser({
+      where: { uid: userUid },
+      update: {
+        roles: [
+          {
+            connect: [whereN(selectedRole?.uid)]
+          }
+        ]
       }
-    )
+    })
   }
 
   const removeRole = (roleUid: string) => {
-    updateUser(
-      {
-        where: { uid: userUid },
-        update: {
-          roles: [
-            {
-              disconnect: [whereN(roleUid)]
-            }
-          ]
-        }
-      },
-      {
-        onSuccess: () => {
-          refetch()
-        }
+    updateUser({
+      where: { uid: userUid },
+      update: {
+        roles: [
+          {
+            disconnect: [whereN(roleUid)]
+          }
+        ]
       }
-    )
+    })
   }
 
   return (

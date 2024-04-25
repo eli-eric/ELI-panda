@@ -1,10 +1,10 @@
-import { gql, useQuery } from '@apollo/client'
 import toast from 'react-hot-toast'
 
 import useTableStateStore from '@/store/useTableStateStore'
-import type { Query } from '@/types/gql/graphql'
+import { gql } from '@/types/gql'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 
-const GET_SYSTEM_TYPE_GROUPS = gql`
+const GET_SYSTEM_TYPE_GROUPS = gql(`
   query SystemTypeQuery(
     $systemTypesWhere: SystemTypeWhere
     $where: SystemTypeGroupWhere
@@ -22,7 +22,7 @@ const GET_SYSTEM_TYPE_GROUPS = gql`
       }
     }
   }
-`
+`)
 
 export const useSystemTypeGroups = () => {
   const { instances } = useTableStateStore()
@@ -31,14 +31,18 @@ export const useSystemTypeGroups = () => {
   const filterCode = columnFilter?.find(item => item.id === 'code')?.value
   const filterName = columnFilter?.find(item => item.id === 'name')?.value
 
-  const { data, loading, error } = useQuery<Query>(GET_SYSTEM_TYPE_GROUPS, {
-    onError: err => {
-      toast.error(err.message)
+  const { data, isLoading, error } = useGraphQL(
+    GET_SYSTEM_TYPE_GROUPS,
+    {},
+    {
+      onError: err => {
+        toast.error(err.message)
+      }
     }
-  })
+  )
   return {
     systemTypeGroups: data?.systemTypeGroups,
-    loading,
+    loading: isLoading,
     error,
     filter: {
       name: filterName,

@@ -28,6 +28,29 @@ const GET_USER_PASSWORD = gql`
     }
   }
 `
+
+const makeSchema = () =>
+  yup.object().shape({
+    currentPassword: yup.string().required('Current password is required'),
+    newPassword: yup
+      .string()
+      .required('New password is required')
+      .test('len', 'Must be longer then 8 characters', val => val?.length >= 8)
+      .test(
+        'password',
+        'Password must contain at least one uppercase, one lowercase and one number',
+        val => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(val || '')
+      )
+      .test(
+        'password',
+        'Password must contain at least one special character',
+        val => /^(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/.test(val || '')
+      ),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref('newPassword')], 'Passwords must match')
+      .required('Confirm password is required')
+  })
 export const ChangePasswordContainer: FC = () => {
   const userUid = useSession().data?.user?.uid
   const [getUserPassword, { loading: loadingGet }] = useLazyQuery<Query>(
@@ -41,37 +64,14 @@ export const ChangePasswordContainer: FC = () => {
       }
     }
   )
-
-  const { updateUser, loading } = useUserUpdate()
-
-  const makeSchema = () =>
-    yup.object().shape({
-      currentPassword: yup.string().required('Current password is required'),
-      newPassword: yup
-        .string()
-        .required('New password is required')
-        .test(
-          'len',
-          'Must be longer then 8 characters',
-          val => val?.length >= 8
-        )
-        .test(
-          'password',
-          'Password must contain at least one uppercase, one lowercase and one number',
-          val => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(val || '')
-        )
-        .test(
-          'password',
-          'Password must contain at least one special character',
-          val => /^(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/.test(val || '')
-        ),
-      confirmPassword: yup
-        .string()
-        .oneOf([yup.ref('newPassword')], 'Passwords must match')
-        .required('Confirm password is required')
-    })
-
   const formMethods = useForm<FormType>({ resolver: yupResolver(makeSchema()) })
+
+  const onSuccess = () => {
+    toast.success('Password was updated successfully')
+    formMethods.reset()
+  }
+
+  const { updateUser, loading } = useUserUpdate(onSuccess)
 
   const onSubmit = (passwordData: FormType) => {
     getUserPassword().then(data => {
@@ -86,11 +86,8 @@ export const ChangePasswordContainer: FC = () => {
           passwordToChange: false
         }
         updateUser({
-          variables: { where: { uid: userUid }, update: dataToSend },
-          onCompleted: () => {
-            toast.success('Password was updated successfully')
-            formMethods.reset()
-          }
+          where: { uid: userUid },
+          update: dataToSend
         })
       } else {
         toast.error('Wrong current password!')

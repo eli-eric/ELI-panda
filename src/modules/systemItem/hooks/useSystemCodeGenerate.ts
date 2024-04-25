@@ -1,9 +1,9 @@
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
-import { SystemDetailContext } from '@/pages/system/[uid]'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { useSystemDetail } from './useSystemDetail'
 
 type SystemCodeGenerateQuery = {
   zoneUID?: string
@@ -14,7 +14,7 @@ type SystemCodeGenerateQuery = {
 
 export const useSystemCodeGenerate = () => {
   const [query, setQuery] = useState<SystemCodeGenerateQuery>({})
-  const { systemDetail } = useContext(SystemDetailContext)
+  const { systemDetail } = useSystemDetail()
   const { control, setValue } = useFormContext()
 
   const zoneUID = useWatch({ name: 'zone', control })?.uid
@@ -73,5 +73,10 @@ export const useSystemCodeGenerate = () => {
     }
   })
 
-  return { systemCode: 'systemCode', getSystemCode: submit, loading, disabled: systemTypeUID === undefined }
+  return {
+    systemCode: 'systemCode',
+    getSystemCode: submit,
+    loading,
+    disabled: systemTypeUID === undefined
+  }
 }

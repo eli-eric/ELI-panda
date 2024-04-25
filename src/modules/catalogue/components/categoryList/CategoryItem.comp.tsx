@@ -3,12 +3,12 @@ import Image from 'next/image'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useImage } from '@/hooks/fetch/useImage'
-import type { CatalogueCategory } from '@/types/gql/graphql'
 
 import { CategoryButtons } from '../categoryEdit/components/CategoryButtons'
+import type { GetCategoriesQuery } from '@/types/gql/graphql'
 
 interface Props {
-  category: CatalogueCategory
+  category: GetCategoriesQuery['catalogueCategories'][0]
   setCategoryFilter: (value: CodebookType) => void
 }
 

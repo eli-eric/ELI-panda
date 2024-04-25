@@ -11,8 +11,10 @@ const UPDATE_USER = gql(`
   }
 `)
 
-export const useUserUpdate = () => {
-  const { mutate, isLoading } = useGraphQLMutation(UPDATE_USER)
+export const useUserUpdate = (onSuccess: () => void) => {
+  const { mutate, isLoading } = useGraphQLMutation(UPDATE_USER, {
+    onSuccess: () => onSuccess()
+  })
   return {
     updateUser: mutate,
     loading: isLoading

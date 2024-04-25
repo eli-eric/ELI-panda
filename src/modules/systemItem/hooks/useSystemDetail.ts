@@ -1,39 +1,56 @@
-import { gql, useQuery } from '@apollo/client'
 import { toast } from 'react-hot-toast'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import type { Query } from '@/types/gql/graphql'
-import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
+import { gql, useFragment } from '@/types/gql'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { useRouter } from 'next/router'
+import {
+  CatalogueItemFragment,
+  SystemDetailFragment
+} from '@/utils/graphql/fragments'
 
-const systemDetailQuery = gql`
-  ${SYSTEM_DETAIL}
-  query System($where: SystemWhere) {
+const systemDetailQuery = gql(`
+  query SystemDetail($where: SystemWhere) {
     systems(where: $where) {
       ...SystemDetail
-    }
   }
-`
+   }
+`)
 
-export const useSystemDetail = (
-  uid?: string,
-  alias?: string,
-  onCompleted?: (data: Query) => void
-) => {
+export const useSystemDetail = (alias?: string, onSuccess?: (data) => void) => {
+  const router = useRouter()
+  const uid = router.query.uid as string | undefined
+
   const { system: systemEndpoint } = useEndpoint({ uid })
-  const { data, error, loading, refetch } = useQuery<Query>(systemDetailQuery, {
-    variables: { where: { uid, systemCode: alias } },
-    onError: error => {
-      toast.error(
-        'Something went wrong while fetching system detail: ' + error.message
-      )
+  const { data, error, isLoading, refetch } = useGraphQL(
+    systemDetailQuery,
+    {
+      where: { uid, systemCode: alias }
     },
-    onCompleted,
-    fetchPolicy: 'network-only'
-  })
+    {
+      onError: error => {
+        toast.error(
+          'Something went wrong while fetching system detail: ' + error.message
+        )
+      },
+      onSuccess: data => {
+        onSuccess && onSuccess(data)
+      }
+    }
+  )
+
+  const systemDetail = useFragment(SystemDetailFragment, data?.systems[0])
+  const physicalItem = systemDetail?.physicalItem
+  const catalogueItem = useFragment(
+    CatalogueItemFragment,
+    physicalItem?.catalogueItem
+  )
 
   return {
-    systemDetail: data?.systems[0],
-    loading: loading,
+    systemDetail,
+    physicalItem,
+    catalogueItem,
+    loading: isLoading,
     error,
     refetch,
     systemEndpoint

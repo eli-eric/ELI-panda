@@ -1,7 +1,6 @@
 import { gql, useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import type { MutableRefObject } from 'react'
-import { useContext } from 'react'
 import { toast } from 'react-hot-toast'
 import { mutate as mutateEndpoint } from 'swr'
 
@@ -9,7 +8,6 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { updateSubSystem, updateSystem } from '@/modules/systems/utils'
-import { SystemDetailContext } from '@/pages/system/[uid]'
 import { PATH } from '@/types/constants/paths'
 import type { Mutation } from '@/types/gql/graphql'
 import { connectAndDisconnectNode, whereN } from '@/utils/graphql/mutations'
@@ -22,6 +20,7 @@ import axiosInstance from '@/core/axios/axiosInstance'
 import { BASE_URL } from '@/types/constants/common'
 import { useMutation as useQueryMutation } from '@tanstack/react-query'
 import type { PhysicalItemProperty } from '@/modules/systems/types/responses'
+import { useSystemDetail } from './useSystemDetail'
 
 const systemDetailMutation = gql`
   mutation UpdateSystemMutation(
@@ -79,7 +78,7 @@ export const useSystemUpdate = (
   const router = useRouter()
   const { mutate: mutateProperties } = usePropertiesUpdate(physicalItemUid)
   const uid = router.query.uid as string
-  const { systemDetail, refetch } = useContext(SystemDetailContext)
+  const { systemDetail, refetch } = useSystemDetail()
   const { mutate } = useSystems('systems')
   const { systemSubsystems } = useEndpoint({
     uid: systemDetail?.parentSystem?.uid || ''

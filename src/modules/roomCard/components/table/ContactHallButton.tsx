@@ -1,4 +1,3 @@
-import { gql, useQuery } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
@@ -11,22 +10,24 @@ import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 import { ROLE } from '@/types/constants/roles'
-import type { ContactPersonRole, Employee, Query } from '@/types/gql/graphql'
+import type { ContactPersonRole, Employee } from '@/types/gql/graphql'
 
 import { useLazyEmployee } from '../../../../hooks/graphql/useLazyEmployee'
 import { useRoomCardStore } from '../../store/useRoomCardStore'
 import { HeaderButtonModalComponent } from './HeaderButtonModal.comp'
+import { gql } from '@/types/gql'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 
 const nestedForm = message.roomCardsPage.nestedForm
 
-const GET_CONTACT_PERSON_ROLES = gql`
+const GET_CONTACT_PERSON_ROLES = gql(`
   query GetContactPersonRoles {
     contactPersonRoles {
       uid
       name
     }
   }
-`
+`)
 
 export type ContactHallForm = {
   role: ContactPersonRole
@@ -37,14 +38,19 @@ export const ContactHallButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const canEdit = usePermission([ROLE.ROOM_CARD_EDIT])
 
-  const formMethods = useForm<ContactHallForm>({ resolver: yupResolver(makeSchema()) })
+  const formMethods = useForm<ContactHallForm>({
+    resolver: yupResolver(makeSchema())
+  })
 
   const { setNewHallContact } = useRoomCardStore()
 
-  const { data } = useQuery<Query>(GET_CONTACT_PERSON_ROLES)
+  const { data } = useGraphQL(GET_CONTACT_PERSON_ROLES)
 
   const { control } = useFormContext()
-  const { insert, fields: arrayFields } = useFieldArray({ control, name: 'contactPersonsHall' })
+  const { insert, fields: arrayFields } = useFieldArray({
+    control,
+    name: 'contactPersonsHall'
+  })
 
   const [getEployee, employee] = useLazyEmployee()
 
@@ -83,7 +89,10 @@ export const ContactHallButton = () => {
         .test(
           'is-unique',
           'Cannot select the same employee twice',
-          value => !arrayFields.some((field: any) => field?.employee.uid === value?.uid)
+          value =>
+            !arrayFields.some(
+              (field: any) => field?.employee.uid === value?.uid
+            )
         )
     })
   }

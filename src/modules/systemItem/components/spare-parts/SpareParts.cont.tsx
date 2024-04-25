@@ -1,24 +1,27 @@
 import { useRouter } from 'next/router'
-import { Fragment, useContext } from 'react'
+import { Fragment } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import { Tooltip } from '@/components/Tooltip'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
-import { SystemDetailContext } from '@/pages/system/[uid]'
 import { PATH } from '@/types/constants/paths'
 import { classNames } from '@/utils'
 
 import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
 import { useSubSystemsColumns } from './SpareParts.columns'
+import { useSystemDetail } from '../../hooks/useSystemDetail'
 
 export const SparePartsContainer = () => {
   const tableId = 'spareParts'
   const columns = useSubSystemsColumns(tableId)
-  const { systemDetail } = useContext(SystemDetailContext)
+  const { systemDetail } = useSystemDetail()
 
-  const { setFilter } = useFormFilterState({ tableId: 'for-system', enableQueryUrl: false })
+  const { setFilter } = useFormFilterState({
+    tableId: 'for-system',
+    enableQueryUrl: false
+  })
   const router = useRouter()
 
   const AssignSparePartButton = () => {
@@ -48,7 +51,8 @@ export const SparePartsContainer = () => {
           columns={columns}
           getRowProps={({ original }) => ({
             className: classNames(
-              original?.physicalItem && 'font-bold text-gray-700 dark:text-gray-200',
+              original?.physicalItem &&
+                'font-bold text-gray-700 dark:text-gray-200',
               getColorBySystemLevel(original?.systemLevel),
               getFontBySystemLevel(original?.systemLevel)
             )

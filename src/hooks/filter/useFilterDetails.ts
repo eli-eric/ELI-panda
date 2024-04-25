@@ -1,9 +1,10 @@
-import { gql, useQuery } from '@apollo/client'
 import { useSession } from 'next-auth/react'
 
-import type { Query } from '@/types/gql/graphql'
+import { useGraphQL } from '../fetch/useGraphQL'
+import { gql } from '@/types/gql'
+import toast from 'react-hot-toast'
 
-const GET_FILTERS = gql`
+const GET_FILTERS = gql(`
   query UserSettings($userSettingsWhere: UserSettingsWhere) {
     userSettings(where: $userSettingsWhere) {
       uid
@@ -12,12 +13,13 @@ const GET_FILTERS = gql`
       value
     }
   }
-`
+`)
 
 export const useFilterDetails = (tableId: string, filterUid?: string) => {
   const user = useSession().data?.user
-  const { data, refetch } = useQuery<Query>(GET_FILTERS, {
-    variables: {
+  const { data, refetch } = useGraphQL(
+    GET_FILTERS,
+    {
       userSettingsWhere: {
         user: {
           uid: user?.uid
@@ -25,8 +27,13 @@ export const useFilterDetails = (tableId: string, filterUid?: string) => {
         key_CONTAINS: `filter-${tableId}`,
         ...(filterUid && { uid: filterUid })
       }
+    },
+    {
+      onError: () => {
+        toast.error('Failed to fetch filters')
+      }
     }
-  })
+  )
 
   return { filters: data?.userSettings, refetch }
 }

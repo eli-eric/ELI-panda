@@ -1,9 +1,9 @@
-import { gql, useQuery } from '@apollo/client'
 import toast from 'react-hot-toast'
 
-import type { Query } from '@/types/gql/graphql'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
-const GET_ROLES = gql`
+const GET_ROLES = gql(`
   query GetRoles {
     roles {
       name
@@ -11,13 +11,17 @@ const GET_ROLES = gql`
       uid
     }
   }
-`
+`)
 
 export const useRoles = () => {
-  const { data } = useQuery<Query>(GET_ROLES, {
-    onError: error => {
-      toast.error(error.message)
+  const { data } = useGraphQL(
+    GET_ROLES,
+    {},
+    {
+      onError: error => {
+        toast.error(error.message)
+      }
     }
-  })
+  )
   return data?.roles || []
 }
