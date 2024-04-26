@@ -1,4 +1,3 @@
-'use client'
 import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
 import { useQueryState } from 'next-usequerystate'
@@ -23,11 +22,15 @@ interface CatalogueFilterButtonContainerProps {
   filterFormMethods: UseFormReturn<any, any, any>
 }
 
-export const CatalogueFilterButtonContainer = ({ filterFormMethods }: CatalogueFilterButtonContainerProps) => {
+export const CatalogueFilterButtonContainer = ({
+  filterFormMethods
+}: CatalogueFilterButtonContainerProps) => {
   const [open, setOpen] = useState(false)
   const tableId = 'catalogueItems'
   const [categoryQuery] = useQueryState('category', { history: 'push' })
-  const category: CodebookType | null = categoryQuery ? JSON.parse(categoryQuery) : null
+  const category: CodebookType | null = categoryQuery
+    ? JSON.parse(categoryQuery)
+    : null
 
   const defValues = useMemo<CatalogueItem>(
     () => ({
@@ -42,7 +45,10 @@ export const CatalogueFilterButtonContainer = ({ filterFormMethods }: CatalogueF
   )
   const { reset } = filterFormMethods
 
-  const { storeFilters, setColumnFilters } = useFormFilterState({ tableId, enableQueryUrl: true })
+  const { storeFilters, setColumnFilters } = useFormFilterState({
+    tableId,
+    enableQueryUrl: true
+  })
 
   const onClear = () => {
     reset(defValues, { keepValues: false })
@@ -68,7 +74,11 @@ export const CatalogueFilterButtonContainer = ({ filterFormMethods }: CatalogueF
     if (isFirstRender) {
       return
     }
-    if (catalogueCategoryProperties?.filter(prop => customFieldIdToSync.has(prop.property.uid)).length === 0) {
+    if (
+      catalogueCategoryProperties?.filter(prop =>
+        customFieldIdToSync.has(prop.property.uid)
+      ).length === 0
+    ) {
       toggleDeleteCustom()
     }
     // eslint-disable-next-line
@@ -94,7 +104,12 @@ export const CatalogueFilterButtonContainer = ({ filterFormMethods }: CatalogueF
       </Button>
       <SlideOver
         RenderSettings={
-          <FilterSaveSettings tableId={tableId} enableQueryURL={true} resetForm={reset} defaulFormValues={defValues} />
+          <FilterSaveSettings
+            tableId={tableId}
+            enableQueryURL={true}
+            resetForm={reset}
+            defaulFormValues={defValues}
+          />
         }
         panelTitle="Catalogue Filters"
         open={open}
@@ -102,7 +117,10 @@ export const CatalogueFilterButtonContainer = ({ filterFormMethods }: CatalogueF
         buttons={buttons}
       >
         <Form formMethods={filterFormMethods}>
-          <CatalogueFilterForm tableId={tableId} catalogueCategoryProperties={catalogueCategoryProperties} />
+          <CatalogueFilterForm
+            tableId={tableId}
+            catalogueCategoryProperties={catalogueCategoryProperties}
+          />
         </Form>
       </SlideOver>
     </Fragment>

@@ -5,20 +5,20 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useImage } from '@/hooks/fetch/useImage'
 import type { CatalogueCategory } from '@/types/gql/graphql'
 
-import { useCategoryEdit } from '../../hooks/useCategoryEdit'
+import { CategoryButtons } from '../categoryEdit/components/CategoryButtons'
 
 interface Props {
   category: CatalogueCategory
   setCategoryFilter: (value: CodebookType) => void
 }
 
-export const CategoryItemComponent = ({ category, setCategoryFilter }: Props) => {
+export const CategoryItemComponent = ({
+  category,
+  setCategoryFilter
+}: Props) => {
   const { catalogueCategoryImage } = useEndpoint({ uid: category.uid })
   const image = useImage(catalogueCategoryImage)
 
-  const { getEditButtons } = useCategoryEdit({
-    editUid: category.uid
-  })
   return (
     <div className="flex-row justify-between dark:hover:bg-gray-600 relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white dark:bg-gray-700 shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
       <button
@@ -40,11 +40,13 @@ export const CategoryItemComponent = ({ category, setCategoryFilter }: Props) =>
         <div className="min-w-0 flex-1 mx-6 my-4">
           <div className="focus:outline-none">
             <span className="absolute inset-0" aria-hidden="true" />
-            <p className="text-sm font-medium text-gray-900 dark:text-gray-200">{category.name}</p>
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
+              {category.name}
+            </p>
           </div>
         </div>
       </button>
-      {getEditButtons()}
+      <CategoryButtons uid={category.uid} />
     </div>
   )
 }

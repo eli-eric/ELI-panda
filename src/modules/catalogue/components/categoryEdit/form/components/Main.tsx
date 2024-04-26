@@ -10,7 +10,7 @@ import ImagePlaceHolder from '@/components/form/ImagePlaceHolder'
 import { Input } from '@/components/form/Input'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
-import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
+import type { CategoryFormType } from '../../types'
 
 interface FormImageProps {
   image: string
@@ -20,7 +20,12 @@ interface FormImageProps {
 const FormImage = ({ image, onDelete }: FormImageProps) => (
   <div className="mt-1 flex-col w-full justify-center  border-gray-300 ">
     <Image width={300} height={300} alt="" src={image} />
-    <Button type="button" onClick={onDelete} className="w-full justify-center" rounded="rounded-b-md">
+    <Button
+      type="button"
+      onClick={onDelete}
+      className="w-full justify-center"
+      rounded="rounded-b-md"
+    >
       <TrashIcon
         className="h-4 w-4
 
@@ -33,7 +38,9 @@ const FormImage = ({ image, onDelete }: FormImageProps) => (
 
 const Main = ({ uid }: { uid?: string }) => {
   const { catalogueCategoryImage } = useEndpoint({ uid: uid })
-  const { data: categoryImage } = useSWR(uid ? catalogueCategoryImage : undefined)
+  const { data: categoryImage } = useSWR(
+    uid ? catalogueCategoryImage : undefined
+  )
 
   const [showImageUid, setShowImage] = useState<boolean>(!!uid)
   const { watch, setValue } = useFormContext<CategoryFormType>()
@@ -62,7 +69,10 @@ const Main = ({ uid }: { uid?: string }) => {
   return (
     <div className="grid grid-cols-4 pb-5">
       {image === 'deleted' || (!categoryImage && !image) ? (
-        <ImagePlaceHolder getInputProps={getInputProps} getRootProps={getRootProps} />
+        <ImagePlaceHolder
+          getInputProps={getInputProps}
+          getRootProps={getRootProps}
+        />
       ) : (
         <FormImage
           image={image ? image : categoryImage}
@@ -81,10 +91,17 @@ const Main = ({ uid }: { uid?: string }) => {
           <Input name="name" label="Name" rounded="rounded-md" />
         </div>
         <div className="mt-1">
-          <Input name="code" label="Code" disabled={true} rounded="rounded-md" />
+          <Input
+            name="code"
+            label="Code"
+            disabled={true}
+            rounded="rounded-md"
+          />
         </div>
         <div className="mt-1">
-          <SystemTypeComboBox systemTypeField={{ name: 'systemType', customLabel: 'System Type' }} />
+          <SystemTypeComboBox
+            systemTypeField={{ name: 'systemType', customLabel: 'System Type' }}
+          />
         </div>
       </div>
     </div>

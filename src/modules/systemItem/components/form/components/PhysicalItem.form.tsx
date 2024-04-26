@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import { Suspense, useContext } from 'react'
+import { Fragment, Suspense, useContext } from 'react'
 import { FormattedMessage } from 'react-intl'
-import { v4 } from 'uuid'
 
 import { LinkDecorator } from '@/components/decorators'
 import Combobox from '@/components/form/Combobox'
@@ -22,16 +21,21 @@ import FileManager from '@/modules/shared/fileManager/FileManager'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
+import { useItemProperties } from '@/modules/systemItem/hooks/useItemProperties'
+import { ItemProperty } from './ItemProperty'
 
 const propertyMessage =
   message.systemsPage.systemDetail.form.physicalItem.general.properties
 
-export const PhysicalItemForm = ({ uid }) => {
+export const PhysicalItemForm = ({ uid }: { uid: string }) => {
   const fields = useSystemFormFields()
   const { systemDetail } = useContext(SystemDetailContext)
 
-  const properties =
-    systemDetail?.physicalItem?.catalogueItem.propertiesConnection.edges
+  const { data: properties } = useItemProperties(uid)
+
+  const catalogueItemProperties =
+    systemDetail?.physicalItem?.catalogueItem?.propertiesConnection?.edges
+
   const description = systemDetail?.physicalItem?.catalogueItem.description
   const canEdit = usePermission([ROLE.SYSTEM_EDIT])
 
@@ -58,15 +62,15 @@ export const PhysicalItemForm = ({ uid }) => {
           <Paragraph>{description}</Paragraph>
         </Col>
       )}
-      {properties && properties.length > 0 && (
-        <Col sm="full" className="flex-col">
+      {catalogueItemProperties && catalogueItemProperties.length > 0 && (
+        <Col sm="full" className="flex-col border rounded-md p-3">
           <FormattedMessage
             id={propertyMessage.title}
-            values={createMessageValues({ title: 'Properties' })}
+            values={createMessageValues({ title: 'Catalgoue Properties' })}
           />
           <ul className="grid grid-cols-4 lg:grid-cols-12 md:grid-cols-6 sm:grid-cols-3 ">
-            {properties.map(edge => (
-              <li key={v4()} className="flex col-span-3">
+            {catalogueItemProperties.map(edge => (
+              <li key={edge.node.uid} className="flex col-span-3">
                 <FormattedMessage
                   id={propertyMessage.property}
                   values={createMessageValues({
@@ -80,6 +84,28 @@ export const PhysicalItemForm = ({ uid }) => {
           </ul>
         </Col>
       )}
+      {properties && properties.length > 0 && (
+        <Fragment>
+          <Grid className="col-span-full border rounded-md p-3">
+            <Col sm={'full'} className="mb-0">
+              <FormattedMessage
+                id={propertyMessage.title}
+                values={createMessageValues({ title: 'Item Properties' })}
+              />
+            </Col>
+            {properties.map((property, index) => (
+              <Col key={property.property.uid} sm={3} md={3}>
+                <ItemProperty
+                  key={property.property.uid}
+                  detail={property}
+                  index={index}
+                />
+              </Col>
+            ))}
+          </Grid>
+        </Fragment>
+      )}
+
       <Col sm={3} md={4}>
         <Listbox {...fields.itemUsage} />
       </Col>
