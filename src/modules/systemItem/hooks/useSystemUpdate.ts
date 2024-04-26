@@ -1,4 +1,4 @@
-import { gql, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import type { MutableRefObject } from 'react'
 import { toast } from 'react-hot-toast'
@@ -21,8 +21,9 @@ import { BASE_URL } from '@/types/constants/common'
 import { useMutation as useQueryMutation } from '@tanstack/react-query'
 import type { PhysicalItemProperty } from '@/modules/systems/types/responses'
 import { useSystemDetail } from './useSystemDetail'
+import { gql } from '@/types/gql'
 
-const systemDetailMutation = gql`
+const systemDetailMutation = gql(`
   mutation UpdateSystemMutation(
     $where: SystemWhere
     $update: SystemUpdateInput!
@@ -41,7 +42,7 @@ const systemDetailMutation = gql`
     }
     updateSystems(where: $where, update: $update) {
       systems {
-        uid
+        ...SystemDetail
       }
     }
     updatedByResolver(node: $node, nodeUid: $nodeUid, action: $action)
@@ -50,7 +51,7 @@ const systemDetailMutation = gql`
       systemOriginatedUid: $systemOriginatedUid
     )
   }
-`
+`)
 
 const updateItemProperties = async (
   uid: string,
@@ -112,6 +113,7 @@ export const useSystemUpdate = (
         name: systems[0].responsible.fullName
       }
     }
+    console.log('onCompleted -> body', body)
     imageRef?.current?.submit(responseUid, () => {
       toast.success(`System saved successfully`)
       mutateEndpoint(
@@ -154,7 +156,7 @@ export const useSystemUpdate = (
     })
   }
 
-  const [update, { loading }] = useMutation<Mutation>(systemDetailMutation, {
+  const [update, { loading }] = useMutation(systemDetailMutation, {
     onError: error => {
       toast.error('Something went wrong: ' + error.message)
     }
