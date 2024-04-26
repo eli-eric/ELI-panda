@@ -12,6 +12,7 @@ interface Props {
   onSubmit?: () => void
   onSubmitAndExit?: () => void
   editRole: ROLE
+  customElement?: React.ReactNode
 }
 const messages = message.common.buttons
 
@@ -19,7 +20,8 @@ export const HeaderWithButtons = ({
   loading,
   onSubmit,
   onSubmitAndExit,
-  editRole
+  editRole,
+  customElement
 }: Props) => {
   const disabledEdit = usePermission([editRole])
   const { back } = useRouter()
@@ -62,6 +64,7 @@ export const HeaderWithButtons = ({
             </Fragment>
           )}
         </div>
+        {customElement}
       </Card>
     </div>
   )

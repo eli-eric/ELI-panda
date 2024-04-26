@@ -2,9 +2,9 @@ import { type Driver } from 'neo4j-driver'
 import type { TransactionPromise } from 'neo4j-driver-core'
 import type { JWT } from 'next-auth/jwt'
 
-const updatedByResolver = async (
+const systemMovedFromResolver = async (
   _source: unknown,
-  { node, nodeUid, action }: { node: string; nodeUid: string; action: string },
+  { systemFromUid, systemUid }: { systemFromUid: string; systemUid: string },
   context: {
     executor: { executionContext: Driver }
     authorization: { isAuthenticated: boolean; jwt: JWT }
@@ -25,14 +25,14 @@ const updatedByResolver = async (
     transaction = session.beginTransaction()
 
     const createRelationQuery = `
-        MATCH (a:${node}), (u:User)
-        WHERE a.uid = $nodeUid AND u.uid = $userUid
-        CREATE (a)-[r:WAS_UPDATED_BY { action: $action, at: datetime() }]->(u)
+        MATCH (a:System), (b:System)
+        WHERE a.uid = $systemFromUid AND b.uid = $systemUid
+        CREATE (b)-[r:WAS_MOVED_FROM { at: datetime(), userUid: $userUid }]->(a)
         `
     await transaction.run(createRelationQuery, {
-      nodeUid,
+      systemFromUid,
       userUid: context.authorization.jwt.sub,
-      action
+      systemUid
     })
 
     await transaction.commit()
@@ -50,4 +50,4 @@ const updatedByResolver = async (
   }
 }
 
-export default updatedByResolver
+export default systemMovedFromResolver

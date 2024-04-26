@@ -6,7 +6,11 @@ import { mutate } from 'swr'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { FormModal } from '@/hooks/form/useFormModal'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
-import { addSubsystem, filterSubsystem, filterSubsystemFromSubsystems } from '@/modules/systems/utils'
+import {
+  addSubsystem,
+  filterSubsystem,
+  filterSubsystemFromSubsystems
+} from '@/modules/systems/utils'
 import { whereC, whereN } from '@/utils/graphql/mutations'
 
 import { useSystemMutation } from '../hooks/useSystemMutate'
@@ -23,14 +27,19 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
   const formMethods = useForm<SystemMovingFormType>()
   const { setValue, reset } = formMethods
 
-  const { parentSystem, childSystem, tableIdLeft, tableIdRight, clear } = useSystemMovingStore()
+  const { parentSystem, childSystem, tableIdLeft, tableIdRight, clear } =
+    useSystemMovingStore()
 
   const systemsLeft = useSystems(tableIdLeft)
   const systemsRight = useSystems(tableIdRight)
 
-  const childParentUid = childSystem?.parentPath && childSystem?.parentPath[childSystem?.parentPath?.length - 1].uid
+  const childParentUid =
+    childSystem?.parentPath &&
+    childSystem?.parentPath[childSystem?.parentPath?.length - 1].uid
 
-  const { systemSubsystems: moveToParentKey } = useEndpoint({ uid: parentSystem?.uid || '' })
+  const { systemSubsystems: moveToParentKey } = useEndpoint({
+    uid: parentSystem?.uid || ''
+  })
   const { systemSubsystems: moveFromParentKey } = useEndpoint({
     uid: childParentUid || ''
   })
@@ -41,13 +50,22 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
     (system, method, formData) => {
       if (!childSystem?.uid) return
       if (!system.query.query.search) {
-        system.mutate(prev => prev && method(childSystem?.uid, prev), { revalidate: false })
+        system.mutate(prev => prev && method(childSystem?.uid, prev), {
+          revalidate: false
+        })
       }
-      const newParentPath = [{ uid: parentSystem?.uid, name: parentSystem?.name }]
+      const newParentPath = [
+        { uid: parentSystem?.uid, name: parentSystem?.name }
+      ]
       parentSystem &&
         system.mutate(
           prev =>
-            prev && addSubsystem(parentSystem.uid, { ...childSystem, ...formData, parentPath: newParentPath }, prev),
+            prev &&
+            addSubsystem(
+              parentSystem.uid,
+              { ...childSystem, ...formData, parentPath: newParentPath },
+              prev
+            ),
           {
             revalidate: false
           }
@@ -68,25 +86,38 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
           oppositeSystems: systemsLeft
         }
       }
-      const currentAction = systemActions[parentSystem?.tableId as keyof typeof systemActions]
+      const currentAction =
+        systemActions[parentSystem?.tableId as keyof typeof systemActions]
       const isSameTable = parentSystem?.tableId === childSystem?.tableId
 
       if (!currentAction || !childSystem) {
         return
       }
 
-      mutate(moveToParentKey, data => data && [...data, childSystem], { revalidate: false })
-      mutate(moveFromParentKey, data => data && filterSubsystemFromSubsystems(childSystem.uid, data), {
+      mutate(moveToParentKey, data => data && [...data, childSystem], {
         revalidate: false
       })
+      mutate(
+        moveFromParentKey,
+        data => data && filterSubsystemFromSubsystems(childSystem.uid, data),
+        {
+          revalidate: false
+        }
+      )
 
       if (isSameTable) {
-        mutateSubsystem(currentAction.oppositeSystems, filterSubsystem, formData)
+        mutateSubsystem(
+          currentAction.oppositeSystems,
+          filterSubsystem,
+          formData
+        )
       } else {
         mutateSubsystem(currentAction.systems, filterSubsystem, formData)
       }
 
-      toast.success(`System ${childSystem.name} was moved under ${parentSystem?.name}`)
+      toast.success(
+        `System ${childSystem.name} was moved under ${parentSystem?.name}`
+      )
       clear()
     },
     [
@@ -128,18 +159,30 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
               connect: whereN(parentSystem?.uid)
             },
             location: {
-              connect: data.location?.uid ? whereC(data.location?.uid) : undefined,
-              disconnect: childSystem?.location?.uid ? whereC(childSystem?.location?.uid) : undefined
+              connect: data.location?.uid
+                ? whereC(data.location?.uid)
+                : undefined,
+              disconnect: childSystem?.location?.uid
+                ? whereC(childSystem?.location?.uid)
+                : undefined
             },
             responsible: {
-              connect: data.responsible?.uid ? whereN(data.responsible?.uid) : undefined,
-              disconnect: childSystem?.responsible?.uid ? whereN(childSystem?.responsible?.uid) : undefined
+              connect: data.responsible?.uid
+                ? whereN(data.responsible?.uid)
+                : undefined,
+              disconnect: childSystem?.responsible?.uid
+                ? whereN(childSystem?.responsible?.uid)
+                : undefined
             },
             zone: {
               connect: data.zone?.uid ? whereN(data.zone?.uid) : undefined,
-              disconnect: childSystem?.zone?.uid ? whereN(childSystem?.zone?.uid) : undefined
+              disconnect: childSystem?.zone?.uid
+                ? whereN(childSystem?.zone?.uid)
+                : undefined
             }
-          }
+          },
+          systemFromUid: childParentUid,
+          systemUid: childSystem?.uid
         },
         onCompleted: () => {
           onSuccess(data)
@@ -150,7 +193,12 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
   )
 
   return (
-    <FormModal formMethods={formMethods} onSubmit={updateSystem} open={open} setOpen={setOpen}>
+    <FormModal
+      formMethods={formMethods}
+      onSubmit={updateSystem}
+      open={open}
+      setOpen={setOpen}
+    >
       <SystemMovingForm
         parentPath={[
           ...(parentSystem?.parentPath || []),
