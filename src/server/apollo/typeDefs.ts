@@ -5,6 +5,7 @@ export const typeDefs = gql`
     createSparePartRelation(fromSystemIds: [ID!]!, toSystemIds: [ID!]!): String
     updatedByResolver(node: String, nodeUid: String, action: String): String
     itemOriginatedResolver(itemUid: String, systemOriginatedUid: String): String
+    systemMovedFromResolver(systemFromUid: String, systemUid: String): String
   }
 
   type JWT @jwt {

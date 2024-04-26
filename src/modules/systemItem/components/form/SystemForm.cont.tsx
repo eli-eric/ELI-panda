@@ -36,6 +36,7 @@ import { SystemItemCard } from './components/SystemItem.card'
 import useSystemEditFormFields from './SystemForm.fields'
 import { AssignPhysicalItem } from '../AssignPhysicalItem'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
+import { ShowHistoryButton } from '../history/ShowHistoryButton'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
@@ -122,6 +123,7 @@ export const SystemForm = () => {
         editRole={ROLE.SYSTEM_EDIT}
         onSubmit={formMethods.handleSubmit(onSubmit)}
         onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
+        customElement={<ShowHistoryButton />}
       />
       <Card>
         <Breadcrumbs

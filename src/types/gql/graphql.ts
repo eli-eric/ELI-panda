@@ -8174,6 +8174,7 @@ export type Mutation = {
   deleteUsers: DeleteInfo;
   deleteZones: DeleteInfo;
   itemOriginatedResolver?: Maybe<Scalars['String']['output']>;
+  systemMovedFromResolver?: Maybe<Scalars['String']['output']>;
   updateCatalogueCategories: UpdateCatalogueCategoriesMutationResponse;
   updateCatalogueCategoryProperties: UpdateCatalogueCategoryPropertiesMutationResponse;
   updateCatalogueCategoryPropertyGroups: UpdateCatalogueCategoryPropertyGroupsMutationResponse;
@@ -8537,6 +8538,12 @@ export type MutationDeleteZonesArgs = {
 export type MutationItemOriginatedResolverArgs = {
   itemUid?: InputMaybe<Scalars['String']['input']>;
   systemOriginatedUid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationSystemMovedFromResolverArgs = {
+  systemFromUid?: InputMaybe<Scalars['String']['input']>;
+  systemUid?: InputMaybe<Scalars['String']['input']>;
 };
 
 
