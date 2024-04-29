@@ -31,7 +31,7 @@ export const ShowHistoryButton = () => {
 
   const { data, error, isError } = useQuery<History[]>({
     queryKey: ['history', { uid }],
-    queryFn: queryFetcher('history'),
+    queryFn: queryFetcher('systemHistory'),
     enabled: open
   })
 

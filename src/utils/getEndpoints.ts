@@ -41,7 +41,8 @@ export const getEndpoints = ({ uid, path, itemUid, query }: EndpointProps) => {
     codebooks: `/codebooks${query}`,
     links: `/files/links/${uid}`,
     link: `/files/link/${uid}`,
-    history: `/system/${uid}/history`
+    systemHistory: `/system/${uid}/history`,
+    physicalItemProperties: `/physical-item/${uid}/properties`
   }
   return endpoints
 }
