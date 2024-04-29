@@ -13,6 +13,7 @@ export type History = {
   changedAt: string
   changedBy: string
   historyType: 'GENERAL' | 'ITEM' | 'MOVE'
+  action: string
   detail: {
     systemUid: string
     systemName: string

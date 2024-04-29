@@ -4,6 +4,7 @@ import type { History } from './ShowHistoryButton'
 import { classNames } from '@/utils'
 import Link from 'next/link'
 import { PATH } from '@/types/constants/paths'
+import { formatDate } from '@/utils/formatters'
 
 interface Props {
   history?: History[]
@@ -30,19 +31,53 @@ export const HistoryFeeds: FC<Props> = ({ history }) => {
                 <span className="font-medium text-gray-900">
                   {historyItem.changedBy}
                 </span>{' '}
-                {historyItem.historyType === 'GENERAL'
-                  ? 'made changes to the system'
-                  : historyItem.historyType === 'ITEM'
-                    ? `changed the item ${historyItem.detail.systemName}`
-                    : historyItem.historyType === 'MOVE'
-                      ? `moved the system`
-                      : ''}
+                {historyItem.historyType === 'GENERAL' ? (
+                  `made ${historyItem.action}`
+                ) : historyItem.historyType === 'ITEM' ? (
+                  <span>
+                    {`move Item to `}
+                    <Link
+                      href={PATH.SYSTEM + '/' + historyItem.detail.systemUid}
+                      target="_blank"
+                      className="text-blue-500 hover:underline"
+                    >
+                      {historyItem.detail.systemName}
+                    </Link>{' '}
+                  </span>
+                ) : historyItem.historyType === 'MOVE' ? (
+                  historyItem.detail.direction === 'IN' ? (
+                    <span>
+                      moved the{' '}
+                      <Link
+                        href={PATH.SYSTEM + '/' + historyItem.detail.systemUid}
+                        target="_blank"
+                        className="text-blue-500 hover:underline"
+                      >
+                        {historyItem.detail.systemName}
+                      </Link>{' '}
+                      from under that system
+                    </span>
+                  ) : (
+                    <span>
+                      this system was moved from{' '}
+                      <Link
+                        href={PATH.SYSTEM + '/' + historyItem.detail.systemUid}
+                        target="_blank"
+                        className="text-blue-500 hover:underline"
+                      >
+                        {historyItem.detail.systemName}
+                      </Link>
+                    </span>
+                  )
+                ) : (
+                  ''
+                )}
               </p>
               <time
                 dateTime={historyItem.changedAt}
                 className="flex-none py-0.5 text-xs leading-5 text-gray-500"
               >
-                {historyItem.changedAt}
+                {formatDate(historyItem.changedAt)}
               </time>
             </>
           </li>
