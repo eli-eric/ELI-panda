@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import type { FileItem } from '../types'
 import executeRequest from '@/utils/executeRequest'
 import toast from 'react-hot-toast'
-import { useQueryClient } from 'react-query'
+import { useQueryClient } from '@tanstack/react-query'
 
 export const useFileRequests = ({ itemType, uid }) => {
   const endpoint = `/api/${itemType}/${uid}/files`

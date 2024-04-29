@@ -1,9 +1,15 @@
 import { getEndpoints } from '@/hooks/fetch/useEndpoint'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient
+} from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import axiosInstance from '@/core/axios/axiosInstance'
 import { BASE_URL } from '@/types/constants/common'
 import type { FileLinkPostResponse, FileLinkResponse } from '../types'
+import { useEffect } from 'react'
 
 const fetchLinks = (uid: string): Promise<FileLinkPostResponse[]> => {
   const { links } = getEndpoints(uid)
@@ -32,13 +38,18 @@ const deleteLink = (linkUid: string): Promise<string> => {
 }
 
 export const useLinks = ({ uid }) => {
-  return useQuery(['links', uid], () => fetchLinks(uid), {
-    onError: error => {
-      toast.error('Failed to fetch links: ' + error)
-    },
-
-    keepPreviousData: true
+  const response = useQuery({
+    queryKey: ['links', uid],
+    queryFn: () => fetchLinks(uid),
+    placeholderData: keepPreviousData
   })
+  useEffect(() => {
+    if (response.isError) {
+      toast.error('Failed to fetch links' + ' ' + response.error.message)
+    }
+  }, [response.isError, response.error])
+
+  return response
 }
 
 export const useLinkCreate = ({ parentUid }) => {

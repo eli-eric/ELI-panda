@@ -2,7 +2,8 @@ import axiosInstance from '@/core/axios/axiosInstance'
 import type { PhysicalItemProperty } from '@/modules/systems/types/responses'
 import { BASE_URL } from '@/types/constants/common'
 import toast from 'react-hot-toast'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 
 const getItemProperties = async (uid?: string) => {
   const endpoint = `/physical-item/${uid}/properties`
@@ -10,15 +11,18 @@ const getItemProperties = async (uid?: string) => {
 }
 
 export const useItemProperties = (uid?: string) => {
-  return useQuery<PhysicalItemProperty[]>(
-    ['physical-item', uid, 'properties'],
-    () => getItemProperties(uid),
-    {
-      enabled: !!uid,
-      retry: false,
-      onError: error => {
-        toast.error('Failed to fetch item properties: ' + error)
-      }
+  const response = useQuery<PhysicalItemProperty[]>({
+    queryKey: ['physical-item', uid, 'properties'],
+    queryFn: () => getItemProperties(uid),
+    enabled: !!uid,
+    retry: false
+  })
+
+  useEffect(() => {
+    if (response.isError) {
+      toast.error('Failed to fetch item properties')
     }
-  )
+  }, [response.isError])
+
+  return response
 }
