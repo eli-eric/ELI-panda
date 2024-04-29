@@ -5,8 +5,8 @@ import { BASE_URL } from '@/types/constants/common'
 import { ClockIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 import { HistoryFeeds } from './HistoryFeeds'
-import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
+import { useQuery } from '@tanstack/react-query'
 
 export type History = {
   uid: string
@@ -21,9 +21,10 @@ export type History = {
   }
 }
 
-const fetchHistory = (uid: string) => {
+const fetchHistory = props => {
+  const { queryKey } = props
   return axiosInstance
-    .get(BASE_URL + `/system/${uid}/history`)
+    .get(BASE_URL + `/system/${queryKey[1]}/history`)
     .then(res => res.data)
 }
 
@@ -32,13 +33,11 @@ export const ShowHistoryButton = () => {
   const router = useRouter()
   const { uid } = router.query as { uid: string }
 
-  const { data } = useQuery<History[]>(
-    ['history', uid],
-    () => fetchHistory(uid),
-    {
-      enabled: open
-    }
-  )
+  const { data } = useQuery<History[]>({
+    queryKey: ['history', uid],
+    queryFn: fetchHistory,
+    enabled: open
+  })
 
   return (
     <Fragment>

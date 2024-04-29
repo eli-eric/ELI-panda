@@ -1,7 +1,7 @@
 import type { FileItem } from '../types'
 import axiosInstance from '@/core/axios/axiosInstance'
 import toast from 'react-hot-toast'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 const getFiles = (itemType: string, uid: string): Promise<Array<FileItem>> => {
   const endpoint = `/api/${itemType}/${uid}/files`
@@ -18,7 +18,10 @@ const deleteFile = (
 }
 
 export const useFiles = ({ itemType, uid }) => {
-  return useQuery(['files', itemType, uid], () => getFiles(itemType, uid))
+  return useQuery({
+    queryKey: ['files', itemType, uid],
+    queryFn: () => getFiles(itemType, uid)
+  })
 }
 
 export const useFileDelete = ({ itemType, uid, id }) => {
