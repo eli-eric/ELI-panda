@@ -24,11 +24,11 @@ export const HistoryFeeds: FC<Props> = ({ history }) => {
               <div className="w-px bg-gray-200" />
             </div>
             <>
-              <div className="relative flex h-6 w-6 flex-none items-center justify-center bg-white">
+              <div className="relative flex h-6 w-6 flex-none items-center justify-center bg-white dark:bg-gray-800">
                 <div className="h-1.5 w-1.5 rounded-full bg-gray-100 ring-1 ring-gray-300" />
               </div>
-              <p className="flex-auto py-0.5 text-xs leading-5 text-gray-500">
-                <span className="font-medium text-gray-900">
+              <p className="flex-auto py-0.5 text-xs leading-5 text-gray-500 dark:text-gray-400">
+                <span className="font-medium text-gray-900 dark:text-gray-200">
                   {historyItem.changedBy}
                 </span>{' '}
                 {historyItem.historyType === 'GENERAL' ? (
@@ -75,7 +75,7 @@ export const HistoryFeeds: FC<Props> = ({ history }) => {
               </p>
               <time
                 dateTime={historyItem.changedAt}
-                className="flex-none py-0.5 text-xs leading-5 text-gray-500"
+                className="flex-none py-0.5 text-xs leading-5 text-gray-500 dark:text-gray-400"
               >
                 {formatDate(historyItem.changedAt)}
               </time>
