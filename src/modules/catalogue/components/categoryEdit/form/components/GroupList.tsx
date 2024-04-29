@@ -3,10 +3,10 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/Input'
-import { type CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
 import MoveButtons from './MoveButtons'
 import PropertyList from './PropertyList'
+import type { CategoryFormType } from '../../types'
 
 interface groupProps {
   name: `groups.${number}`
@@ -18,7 +18,14 @@ interface groupProps {
   moveDown: (index: number) => void
 }
 
-const Group = ({ name, remove, index, moveDown, moveUp, lenght }: groupProps) => {
+const Group = ({
+  name,
+  remove,
+  index,
+  moveDown,
+  moveUp,
+  lenght
+}: groupProps) => {
   const handleRemoveGroup = () => {
     remove(index)
   }
@@ -30,7 +37,12 @@ const Group = ({ name, remove, index, moveDown, moveUp, lenght }: groupProps) =>
         </div>
         <div className="relative flex justify-center">
           <span className="isolate inline-flex rounded-md shadow-sm">
-            <MoveButtons moveDown={moveDown} moveUp={moveUp} lenght={lenght} index={index} />
+            <MoveButtons
+              moveDown={moveDown}
+              moveUp={moveUp}
+              lenght={lenght}
+              index={index}
+            />
             <Input name={`${name}.name`} placeholder="Group Name" />
             <Button rounded="rounded-r-md" onClick={handleRemoveGroup}>
               <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
@@ -49,7 +61,10 @@ const Group = ({ name, remove, index, moveDown, moveUp, lenght }: groupProps) =>
 
 const GroupList = () => {
   const { control } = useFormContext<CategoryFormType>()
-  const { fields, append, remove, move } = useFieldArray({ control, name: 'groups' })
+  const { fields, append, remove, move } = useFieldArray({
+    control,
+    name: 'groups'
+  })
 
   const handleAddGroup = () => {
     append({
@@ -92,12 +107,7 @@ const GroupList = () => {
         </div>
         <div className="relative flex justify-center">
           <Button onClick={handleAddGroup}>
-            <PlusIcon
-              className="h-4 w-4
-
-"
-              aria-hidden="true"
-            />
+            <PlusIcon className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
       </div>

@@ -13,7 +13,7 @@ import { RoomCardComponent } from './RoomCard.comp'
 import { useRoomCardStore } from './store/useRoomCardStore'
 import type { RoomCardFormType } from './types/form'
 import FileManager from '../shared/fileManager/FileManager'
-import { FILE_TYPE } from '@/types/constants/files'
+import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
 import ProgressBarComponent from '@/components/progress-bar.comp'
@@ -28,8 +28,12 @@ interface Props {
 const schema = object().shape({
   status: string().required('Status is required'),
   name: string().required('Name is required'),
-  teams: array().of(object().nullable().required('Team is required')).min(1, 'At least one team is required'),
-  contactPersonsHall: array().of(object().required('Team is required')).min(1, 'At least one Hall contact is required'),
+  teams: array()
+    .of(object().nullable().required('Team is required'))
+    .min(1, 'At least one team is required'),
+  contactPersonsHall: array()
+    .of(object().required('Team is required'))
+    .min(1, 'At least one Hall contact is required'),
   contactPersonsDept: array()
     .of(object().nullable().required('Team is required'))
     .min(1, 'At least one department contact is required'),
@@ -59,13 +63,19 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
       coolingWater: roomCard?.coolingWater as string,
       indoorEnvironmentQuality: roomCard?.indoorEnvironmentQuality as string,
       compressedAirDistribution: roomCard?.compressedAirDistribution as string,
-      nitrogenCentralDistribution: roomCard?.nitrogenCentralDistribution as string,
-      maxPressureInColdDistribution: roomCard?.maxPressureInColdDistribution as string,
+      nitrogenCentralDistribution:
+        roomCard?.nitrogenCentralDistribution as string,
+      maxPressureInColdDistribution:
+        roomCard?.maxPressureInColdDistribution as string,
       coolingWaterClient: roomCard?.coolingWaterClient as string,
-      indoorEnvironmentQualityClient: roomCard?.indoorEnvironmentQualityClient as string,
-      compressedAirDistributionClient: roomCard?.compressedAirDistributionClient as string,
-      nitrogenCentralDistributionClient: roomCard?.nitrogenCentralDistributionClient as string,
-      maxPressureInColdDistributionClient: roomCard?.maxPressureInColdDistributionClient as string
+      indoorEnvironmentQualityClient:
+        roomCard?.indoorEnvironmentQualityClient as string,
+      compressedAirDistributionClient:
+        roomCard?.compressedAirDistributionClient as string,
+      nitrogenCentralDistributionClient:
+        roomCard?.nitrogenCentralDistributionClient as string,
+      maxPressureInColdDistributionClient:
+        roomCard?.maxPressureInColdDistributionClient as string
     },
     resolver: yupResolver(schema) as any
   })
@@ -86,7 +96,9 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
       updateRoomCard(
         {
           ...roomCard,
-          cleaningScheduleDate: roomCard?.cleaningScheduleDate ? roomCard.cleaningScheduleDate : null
+          cleaningScheduleDate: roomCard?.cleaningScheduleDate
+            ? roomCard.cleaningScheduleDate
+            : null
         },
         false
       ),
@@ -103,7 +115,9 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
       updateRoomCard(
         {
           ...roomCard,
-          cleaningScheduleDate: roomCard?.cleaningScheduleDate ? roomCard.cleaningScheduleDate : null
+          cleaningScheduleDate: roomCard?.cleaningScheduleDate
+            ? roomCard.cleaningScheduleDate
+            : null
         },
         true
       ),
@@ -132,7 +146,11 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
       <Card className="flex flex-col justify-between">
         <Suspense fallback={<ProgressBarComponent />}>
           <ErrorBoundary fallback={<ErrorPage />}>
-            <FileManager itemType={FILE_TYPE.ROOM_CARD} uid={roomCardUid} hasEditRole={canEdit} />
+            <FileManager
+              itemType={FILE_TYPE.ROOM_CARD}
+              uid={roomCardUid}
+              hasEditRole={canEdit}
+            />
           </ErrorBoundary>
         </Suspense>
       </Card>

@@ -9,11 +9,11 @@ import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
-import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
+import type { CategoryFormType } from './types'
 
 import { useCategoryList } from '../../hooks/useCategoryList'
 import { formatData } from '../../utils'
-import CategoryEditForm from './CategoryEditForm'
+import CategoryEditForm from './form/CategoryEdit.form'
 
 const { buttons } = message.common
 interface Props {
@@ -22,7 +22,7 @@ interface Props {
   uid?: string
 }
 
-const CategoryEditModal = ({ setOpen, parentUID, uid }: Props) => {
+const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
   const { catalogueCategoryEdit, catalogueCategoryImage } = useEndpoint({
     uid
   })
@@ -76,4 +76,4 @@ const CategoryEditModal = ({ setOpen, parentUID, uid }: Props) => {
   )
 }
 
-export default CategoryEditModal
+export default CategoryEditContainer

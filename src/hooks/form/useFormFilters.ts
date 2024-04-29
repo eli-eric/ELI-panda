@@ -1,6 +1,6 @@
 import type { ColumnFilter } from '@tanstack/react-table'
 import { useQueryState } from 'next-usequerystate'
-import { useCallback, useEffect, useMemo } from 'react'
+import { startTransition, useCallback, useEffect, useMemo } from 'react'
 import type { DefaultValues, FieldValues } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 import { useIsFirstRender } from 'usehooks-ts'
@@ -16,20 +16,32 @@ interface IFilter<T> {
   enableQueryURL?: boolean
 }
 
-function synchronizeFormFields(fieldIdToSync: Set<string>, setValue, defValues) {
+function synchronizeFormFields(
+  fieldIdToSync: Set<string>,
+  setValue,
+  defValues
+) {
   fieldIdToSync.forEach(fieldId => {
     setValue(fieldId, defValues[fieldId])
   })
 }
 
-function synchronizeCustomFormFields(customFieldIdToSync, setValue, setFilters) {
+function synchronizeCustomFormFields(
+  customFieldIdToSync,
+  setValue,
+  setFilters
+) {
   customFieldIdToSync.forEach(fieldId => {
     setValue(fieldId as any, null as any)
   })
   setFilters(prev => prev.filter(item => !customFieldIdToSync.has(item.id)))
 }
 
-export const useFormFilter = <T extends FieldValues>({ tableId, defValues, enableQueryURL }: IFilter<T>) => {
+export const useFormFilter = <T extends FieldValues>({
+  tableId,
+  defValues,
+  enableQueryURL
+}: IFilter<T>) => {
   const [storeFilters, setFilters] = useFilters(tableId, enableQueryURL, false)
 
   const [, setQuerySearch] = useQueryState('search', { history: 'replace' })
@@ -70,27 +82,35 @@ export const useFormFilter = <T extends FieldValues>({ tableId, defValues, enabl
       synchronizeCustomFormFields(customFieldIdToSync, setValue, setFilters)
       clearCustomFieldToSync()
     }
-  }, [setValue, clearCustomFieldToSync, setFilters, deleteCustom, customFieldIdToSync])
+  }, [
+    setValue,
+    clearCustomFieldToSync,
+    setFilters,
+    deleteCustom,
+    customFieldIdToSync
+  ])
 
   //set default values to form from store or from url on first render
   useEffect(() => {
     if (isFirstRender) {
       if (columnFilters.length) {
-        columnFilters.forEach(filter => {
-          if (filter.type) {
-            addCustomFieldIdToSync(filter.id)
-          }
-        })
-        reset(
-          columnFilters.reduce((acc, curr) => {
-            if (curr.id === 'systemLevel') {
-              acc[curr.id] = { uid: curr.value, name: curr.value }
+        startTransition(() => {
+          columnFilters.forEach(filter => {
+            if (filter.type) {
+              addCustomFieldIdToSync(filter.id)
             }
-            acc[curr.id] = curr.value
+          })
+          reset(
+            columnFilters.reduce((acc, curr) => {
+              if (curr.id === 'systemLevel') {
+                acc[curr.id] = { uid: curr.value, name: curr.value }
+              }
+              acc[curr.id] = curr.value
 
-            return acc
-          }, {})
-        )
+              return acc
+            }, {})
+          )
+        })
       }
     }
   }, [isFirstRender, reset, columnFilters, addCustomFieldIdToSync])
@@ -106,8 +126,10 @@ export const useFormFilter = <T extends FieldValues>({ tableId, defValues, enabl
 
   useEffect(() => {
     if (filterQuery) {
-      setQuerySearch(null, { shallow: true })
-      setSearch(tableId, undefined)
+      startTransition(() => {
+        setQuerySearch(null, { shallow: true })
+        setSearch(tableId, undefined)
+      })
     }
     //eslint-disable-next-line
   }, [filterQuery])
@@ -115,20 +137,35 @@ export const useFormFilter = <T extends FieldValues>({ tableId, defValues, enabl
   return formMethods
 }
 
-export const useFormFilterState = ({ tableId, enableQueryUrl }: { tableId: string; enableQueryUrl?: boolean }) => {
-  const [storeFilters, setColumnFilters] = useFilters(tableId, enableQueryUrl, false)
+export const useFormFilterState = ({
+  tableId,
+  enableQueryUrl
+}: {
+  tableId: string
+  enableQueryUrl?: boolean
+}) => {
+  const [storeFilters, setColumnFilters] = useFilters(
+    tableId,
+    enableQueryUrl,
+    false
+  )
 
   //set filter value to store on change field and remove from store if value is empty
   const setFilter = useCallback(
     (id: string) =>
-      (value: any, type?: ColumnFilter['type'], name: string = id) => {
+      (
+        value: any,
+        type?: ColumnFilter['type'],
+        name: string = id,
+        propType?: string
+      ) => {
         setColumnFilters(prev => {
           const filters = [...prev]
           const index = prev.findIndex(item => item.id === id)
           if (index !== -1) {
             filters[index].value = value
           } else if (value) {
-            filters.push({ id, value, type, name })
+            filters.push({ id, value, type, name, propType })
           }
           if (!value) {
             filters.splice(index, 1)

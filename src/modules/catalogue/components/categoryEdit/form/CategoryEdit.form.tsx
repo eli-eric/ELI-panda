@@ -1,16 +1,16 @@
-import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Fragment } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
-import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
 
-import { useCategory } from '../../hooks/useCategory'
-import { useCategoryDetail } from '../../hooks/useCategoryDetail'
+import GroupList from './components/GroupList'
+import Main from './components/Main'
+import { PhysicalItemProperties } from './components/PhysicalItemProperties'
+import { useCategory } from '@/modules/catalogue/hooks/useCategory'
+import { useCategoryDetail } from '@/modules/catalogue/hooks/useCategoryDetail'
 import { categoryValidationschema } from './CategoryEditForm.schema'
-import GroupList from './GroupList'
-import Main from './Main'
+import type { CategoryFormType } from '../types'
 
 interface Props {
   uid?: string
@@ -25,7 +25,10 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
   const formMethods = useForm<CategoryFormType>({
     defaultValues: !uid
       ? {
-          systemType: { uid: catalogueCategory?.systemType?.uid, name: catalogueCategory?.systemType?.name }
+          systemType: {
+            uid: catalogueCategory?.systemType?.uid,
+            name: catalogueCategory?.systemType?.name
+          }
         }
       : categoryDetail,
     resolver: yupResolver(categoryValidationschema)
@@ -37,10 +40,10 @@ const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
         <div className="flex-1">
           <Main uid={uid} />
           <GroupList />
+          <PhysicalItemProperties />
           {children}
         </div>
       </Form>
-      <DevTool control={formMethods.control} />
     </Fragment>
   )
 }

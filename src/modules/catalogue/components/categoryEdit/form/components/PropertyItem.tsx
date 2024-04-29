@@ -5,10 +5,14 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
-import type { CategoryFormType } from '@/types/catalogue/categoryFormTypes'
-import { defaultBoolOptions, PROPERTY_INPUT_TYPE, PROPERTY_TYPE } from '@/types/catalogue/constants'
-import { CODEBOOK } from '@/types/constants/codebook'
 
+import {
+  defaultBoolOptions,
+  PROPERTY_INPUT_TYPE,
+  PROPERTY_TYPE
+} from '@/types/catalogue/constants'
+import { CODEBOOK } from '@/types/constants/codebook'
+import type { CategoryFormType } from '../../types'
 import MoveButtons from './MoveButtons'
 
 //TODO: fix bugs
@@ -21,7 +25,11 @@ const ValueItem = ({ removeValue, index, name }) => {
 
   return (
     <div className="flex">
-      <Input rounded="rounded-l-md" name={`${name}.value`} placeholder="Value" />
+      <Input
+        rounded="rounded-l-md"
+        name={`${name}.value`}
+        placeholder="Value"
+      />
       <Button rounded="rounded-r-md" onClick={handleRemoveValue}>
         <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
       </Button>
@@ -29,7 +37,9 @@ const ValueItem = ({ removeValue, index, name }) => {
   )
 }
 interface Props {
-  name: `groups.${number}.properties.${number}`
+  name:
+    | `groups.${number}.properties.${number}`
+    | `physicalItemProperties.${number}`
   removeProp: (index: number) => void
   index: number
   length: number
@@ -39,7 +49,14 @@ interface Props {
   moveUp: (index: number) => void
 }
 
-const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Props) => {
+const PropertyItem = ({
+  name,
+  removeProp,
+  index,
+  moveDown,
+  moveUp,
+  lenght
+}: Props) => {
   const { watch, control, unregister } = useFormContext<CategoryFormType>()
   const { fields, append, remove } = useFieldArray({
     control,
@@ -110,8 +127,17 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
     <div className="flex">
       <div className="flex-col flex-grow">
         <div className="flex flex-row flex-grow max-md:flex-wrap">
-          <MoveButtons moveDown={moveDown} moveUp={moveUp} lenght={lenght} index={index} />
-          <Input name={`${name}.name`} placeholder="Property name" rounded="rounded-r-md" />
+          <MoveButtons
+            moveDown={moveDown}
+            moveUp={moveUp}
+            lenght={lenght}
+            index={index}
+          />
+          <Input
+            name={`${name}.name`}
+            placeholder="Property name"
+            rounded="rounded-r-md"
+          />
           <Listbox
             name={`${name}.type`}
             optionsSize={'sm'}
@@ -136,7 +162,12 @@ const PropertyItem = ({ name, removeProp, index, moveDown, moveUp, lenght }: Pro
             <h3 className="text-sm">List of Values:</h3>
             <div className="flex flex-wrap">
               {fields.map((field, index) => (
-                <ValueItem removeValue={remove} key={field.id} index={index} name={`${name}.listOfValues.${index}`} />
+                <ValueItem
+                  removeValue={remove}
+                  key={field.id}
+                  index={index}
+                  name={`${name}.listOfValues.${index}`}
+                />
               ))}
               <Button onClick={handleAddValue}>
                 <PlusIcon className="h-4 w-4" aria-hidden="true" />

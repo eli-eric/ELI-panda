@@ -31,7 +31,10 @@ const InputWrapper = ({
 )
 const Label = ({ label, htmlFor }: { label?: string; htmlFor: string }) =>
   label ? (
-    <label htmlFor={htmlFor} className="text-sm font-medium text-gray-700 dark:text-gray-200">
+    <label
+      htmlFor={htmlFor}
+      className="text-sm font-medium text-gray-700 dark:text-gray-200"
+    >
       {label}
     </label>
   ) : null
@@ -101,7 +104,13 @@ export const Input = ({
                 value={field.value || ''}
                 id={idHtml}
                 hidden={hidden}
-                type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
+                type={
+                  type === 'password'
+                    ? showPassword
+                      ? 'text'
+                      : 'password'
+                    : type
+                }
                 disabled={disabled}
                 onChange={e => {
                   field.onChange(e.target.value)
@@ -150,7 +159,8 @@ export const Input = ({
   )
 }
 
-type TextAreaWithErrorProps = FieldProps & React.InputHTMLAttributes<HTMLTextAreaElement>
+type TextAreaWithErrorProps = FieldProps &
+  React.InputHTMLAttributes<HTMLTextAreaElement>
 
 export const TextArea = ({
   name,

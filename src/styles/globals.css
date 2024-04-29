@@ -28,6 +28,9 @@
   .form-field {
     @apply block w-full text-left appearance-none border px-3 py-2 placeholder-gray-400 bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-200  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm;
   }
+  .form-field-combo {
+    @apply block w-full text-left appearance-none border placeholder-gray-400 bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-200  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm;
+  }
   .btn {
     @apply relative text-xs font-medium shadow-sm z-10 inline-flex items-center border border-gray-300 focus:outline-none focus:ring-0 focus:ring-primary-500 dark:hover:bg-gray-500;
   }

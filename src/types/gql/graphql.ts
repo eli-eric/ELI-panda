@@ -2613,6 +2613,9 @@ export type CatalogueItem = {
   item: Array<Item>;
   itemAggregate?: Maybe<CatalogueItemItemItemAggregationSelection>;
   itemConnection: CatalogueItemItemConnection;
+  links: Array<Link>;
+  linksAggregate?: Maybe<CatalogueItemLinkLinksAggregationSelection>;
+  linksConnection: CatalogueItemLinksConnection;
   manufacturerUrl?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   properties: Array<CatalogueCategoryProperty>;
@@ -2669,6 +2672,28 @@ export type CatalogueItemItemConnectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<CatalogueItemItemConnectionSort>>;
   where?: InputMaybe<CatalogueItemItemConnectionWhere>;
+};
+
+
+export type CatalogueItemLinksArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<LinkOptions>;
+  where?: InputMaybe<LinkWhere>;
+};
+
+
+export type CatalogueItemLinksAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<LinkWhere>;
+};
+
+
+export type CatalogueItemLinksConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<CatalogueItemLinksConnectionSort>>;
+  where?: InputMaybe<CatalogueItemLinksConnectionWhere>;
 };
 
 
@@ -2910,6 +2935,7 @@ export type CatalogueItemCatalogueItemRelatedCatalogueItemsNodeAggregateSelectio
 export type CatalogueItemConnectInput = {
   catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryConnectFieldInput>;
   item?: InputMaybe<Array<CatalogueItemItemConnectFieldInput>>;
+  links?: InputMaybe<Array<CatalogueItemLinksConnectFieldInput>>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesConnectFieldInput>>;
   relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsConnectFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierConnectFieldInput>;
@@ -2924,6 +2950,7 @@ export type CatalogueItemCreateInput = {
   catalogueNumber: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   item?: InputMaybe<CatalogueItemItemFieldInput>;
+  links?: InputMaybe<CatalogueItemLinksFieldInput>;
   manufacturerUrl?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   properties?: InputMaybe<CatalogueItemPropertiesFieldInput>;
@@ -2935,6 +2962,7 @@ export type CatalogueItemCreateInput = {
 export type CatalogueItemDeleteInput = {
   catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryDeleteFieldInput>;
   item?: InputMaybe<Array<CatalogueItemItemDeleteFieldInput>>;
+  links?: InputMaybe<Array<CatalogueItemLinksDeleteFieldInput>>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesDeleteFieldInput>>;
   relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsDeleteFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierDeleteFieldInput>;
@@ -2943,6 +2971,7 @@ export type CatalogueItemDeleteInput = {
 export type CatalogueItemDisconnectInput = {
   catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryDisconnectFieldInput>;
   item?: InputMaybe<Array<CatalogueItemItemDisconnectFieldInput>>;
+  links?: InputMaybe<Array<CatalogueItemLinksDisconnectFieldInput>>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesDisconnectFieldInput>>;
   relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsDisconnectFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierDisconnectFieldInput>;
@@ -3108,6 +3137,159 @@ export type CatalogueItemItemUpdateFieldInput = {
   disconnect?: InputMaybe<Array<CatalogueItemItemDisconnectFieldInput>>;
   update?: InputMaybe<CatalogueItemItemUpdateConnectionInput>;
   where?: InputMaybe<CatalogueItemItemConnectionWhere>;
+};
+
+export type CatalogueItemLinkLinksAggregationSelection = {
+  __typename?: 'CatalogueItemLinkLinksAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<CatalogueItemLinkLinksNodeAggregateSelection>;
+};
+
+export type CatalogueItemLinkLinksNodeAggregateSelection = {
+  __typename?: 'CatalogueItemLinkLinksNodeAggregateSelection';
+  name: StringAggregateSelectionNonNullable;
+  parentType: StringAggregateSelectionNonNullable;
+  parentUid: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+  url: StringAggregateSelectionNonNullable;
+};
+
+export type CatalogueItemLinksAggregateInput = {
+  AND?: InputMaybe<Array<CatalogueItemLinksAggregateInput>>;
+  NOT?: InputMaybe<CatalogueItemLinksAggregateInput>;
+  OR?: InputMaybe<Array<CatalogueItemLinksAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<CatalogueItemLinksNodeAggregationWhereInput>;
+};
+
+export type CatalogueItemLinksConnectFieldInput = {
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<LinkConnectWhere>;
+};
+
+export type CatalogueItemLinksConnection = {
+  __typename?: 'CatalogueItemLinksConnection';
+  edges: Array<CatalogueItemLinksRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type CatalogueItemLinksConnectionSort = {
+  node?: InputMaybe<LinkSort>;
+};
+
+export type CatalogueItemLinksConnectionWhere = {
+  AND?: InputMaybe<Array<CatalogueItemLinksConnectionWhere>>;
+  NOT?: InputMaybe<CatalogueItemLinksConnectionWhere>;
+  OR?: InputMaybe<Array<CatalogueItemLinksConnectionWhere>>;
+  node?: InputMaybe<LinkWhere>;
+};
+
+export type CatalogueItemLinksCreateFieldInput = {
+  node: LinkCreateInput;
+};
+
+export type CatalogueItemLinksDeleteFieldInput = {
+  where?: InputMaybe<CatalogueItemLinksConnectionWhere>;
+};
+
+export type CatalogueItemLinksDisconnectFieldInput = {
+  where?: InputMaybe<CatalogueItemLinksConnectionWhere>;
+};
+
+export type CatalogueItemLinksFieldInput = {
+  connect?: InputMaybe<Array<CatalogueItemLinksConnectFieldInput>>;
+  create?: InputMaybe<Array<CatalogueItemLinksCreateFieldInput>>;
+};
+
+export type CatalogueItemLinksNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<CatalogueItemLinksNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<CatalogueItemLinksNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<CatalogueItemLinksNodeAggregationWhereInput>>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  parentType_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  parentType_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  parentType_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  parentType_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  parentType_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  parentType_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  parentType_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  parentType_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  parentType_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  parentType_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  parentType_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  parentType_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  parentType_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  parentType_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  parentType_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  parentUid_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  parentUid_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  parentUid_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  parentUid_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  parentUid_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  url_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  url_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  url_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  url_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  url_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  url_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  url_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  url_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  url_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  url_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  url_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  url_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  url_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  url_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  url_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type CatalogueItemLinksRelationship = {
+  __typename?: 'CatalogueItemLinksRelationship';
+  cursor: Scalars['String']['output'];
+  node: Link;
+};
+
+export type CatalogueItemLinksUpdateConnectionInput = {
+  node?: InputMaybe<LinkUpdateInput>;
+};
+
+export type CatalogueItemLinksUpdateFieldInput = {
+  connect?: InputMaybe<Array<CatalogueItemLinksConnectFieldInput>>;
+  create?: InputMaybe<Array<CatalogueItemLinksCreateFieldInput>>;
+  delete?: InputMaybe<Array<CatalogueItemLinksDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<CatalogueItemLinksDisconnectFieldInput>>;
+  update?: InputMaybe<CatalogueItemLinksUpdateConnectionInput>;
+  where?: InputMaybe<CatalogueItemLinksConnectionWhere>;
 };
 
 export type CatalogueItemOptions = {
@@ -3460,6 +3642,7 @@ export type CatalogueItemRelatedCatalogueItemsUpdateFieldInput = {
 export type CatalogueItemRelationInput = {
   catalogueCategory?: InputMaybe<CatalogueItemCatalogueCategoryCreateFieldInput>;
   item?: InputMaybe<Array<CatalogueItemItemCreateFieldInput>>;
+  links?: InputMaybe<Array<CatalogueItemLinksCreateFieldInput>>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesCreateFieldInput>>;
   relatedCatalogueItems?: InputMaybe<Array<CatalogueItemRelatedCatalogueItemsCreateFieldInput>>;
   supplier?: InputMaybe<CatalogueItemSupplierCreateFieldInput>;
@@ -3584,6 +3767,7 @@ export type CatalogueItemUpdateInput = {
   catalogueNumber?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   item?: InputMaybe<Array<CatalogueItemItemUpdateFieldInput>>;
+  links?: InputMaybe<Array<CatalogueItemLinksUpdateFieldInput>>;
   manufacturerUrl?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   properties?: InputMaybe<Array<CatalogueItemPropertiesUpdateFieldInput>>;
@@ -3628,6 +3812,23 @@ export type CatalogueItemWhere = {
   item_SINGLE?: InputMaybe<ItemWhere>;
   /** Return CatalogueItems where some of the related Items match this filter */
   item_SOME?: InputMaybe<ItemWhere>;
+  linksAggregate?: InputMaybe<CatalogueItemLinksAggregateInput>;
+  /** Return CatalogueItems where all of the related CatalogueItemLinksConnections match this filter */
+  linksConnection_ALL?: InputMaybe<CatalogueItemLinksConnectionWhere>;
+  /** Return CatalogueItems where none of the related CatalogueItemLinksConnections match this filter */
+  linksConnection_NONE?: InputMaybe<CatalogueItemLinksConnectionWhere>;
+  /** Return CatalogueItems where one of the related CatalogueItemLinksConnections match this filter */
+  linksConnection_SINGLE?: InputMaybe<CatalogueItemLinksConnectionWhere>;
+  /** Return CatalogueItems where some of the related CatalogueItemLinksConnections match this filter */
+  linksConnection_SOME?: InputMaybe<CatalogueItemLinksConnectionWhere>;
+  /** Return CatalogueItems where all of the related Links match this filter */
+  links_ALL?: InputMaybe<LinkWhere>;
+  /** Return CatalogueItems where none of the related Links match this filter */
+  links_NONE?: InputMaybe<LinkWhere>;
+  /** Return CatalogueItems where one of the related Links match this filter */
+  links_SINGLE?: InputMaybe<LinkWhere>;
+  /** Return CatalogueItems where some of the related Links match this filter */
+  links_SOME?: InputMaybe<LinkWhere>;
   manufacturerUrl?: InputMaybe<Scalars['String']['input']>;
   manufacturerUrl_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   manufacturerUrl_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
@@ -4031,6 +4232,12 @@ export type CreateItemsMutationResponse = {
   __typename?: 'CreateItemsMutationResponse';
   info: CreateInfo;
   items: Array<Item>;
+};
+
+export type CreateLinksMutationResponse = {
+  __typename?: 'CreateLinksMutationResponse';
+  info: CreateInfo;
+  links: Array<Link>;
 };
 
 export type CreateLocationsMutationResponse = {
@@ -6858,6 +7065,110 @@ export type ItemsConnection = {
   totalCount: Scalars['Int']['output'];
 };
 
+export type Link = {
+  __typename?: 'Link';
+  name: Scalars['String']['output'];
+  parentType: Scalars['String']['output'];
+  parentUid: Scalars['String']['output'];
+  tags: Array<Scalars['String']['output']>;
+  uid: Scalars['ID']['output'];
+  url: Scalars['String']['output'];
+};
+
+export type LinkAggregateSelection = {
+  __typename?: 'LinkAggregateSelection';
+  count: Scalars['Int']['output'];
+  name: StringAggregateSelectionNonNullable;
+  parentType: StringAggregateSelectionNonNullable;
+  parentUid: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+  url: StringAggregateSelectionNonNullable;
+};
+
+export type LinkConnectWhere = {
+  node: LinkWhere;
+};
+
+export type LinkCreateInput = {
+  name: Scalars['String']['input'];
+  parentType: Scalars['String']['input'];
+  parentUid: Scalars['String']['input'];
+  tags: Array<Scalars['String']['input']>;
+  url: Scalars['String']['input'];
+};
+
+export type LinkEdge = {
+  __typename?: 'LinkEdge';
+  cursor: Scalars['String']['output'];
+  node: Link;
+};
+
+export type LinkOptions = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  /** Specify one or more LinkSort objects to sort Links by. The sorts will be applied in the order in which they are arranged in the array. */
+  sort?: InputMaybe<Array<LinkSort>>;
+};
+
+/** Fields to sort Links by. The order in which sorts are applied is not guaranteed when specifying many fields in one LinkSort object. */
+export type LinkSort = {
+  name?: InputMaybe<SortDirection>;
+  parentType?: InputMaybe<SortDirection>;
+  parentUid?: InputMaybe<SortDirection>;
+  uid?: InputMaybe<SortDirection>;
+  url?: InputMaybe<SortDirection>;
+};
+
+export type LinkUpdateInput = {
+  name?: InputMaybe<Scalars['String']['input']>;
+  parentType?: InputMaybe<Scalars['String']['input']>;
+  parentUid?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
+  tags_POP?: InputMaybe<Scalars['Int']['input']>;
+  tags_PUSH?: InputMaybe<Array<Scalars['String']['input']>>;
+  url?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type LinkWhere = {
+  AND?: InputMaybe<Array<LinkWhere>>;
+  NOT?: InputMaybe<LinkWhere>;
+  OR?: InputMaybe<Array<LinkWhere>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  name_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  parentType?: InputMaybe<Scalars['String']['input']>;
+  parentType_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  parentType_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  parentType_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  parentType_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  parentUid?: InputMaybe<Scalars['String']['input']>;
+  parentUid_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  parentUid_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  parentUid_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  parentUid_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
+  tags_INCLUDES?: InputMaybe<Scalars['String']['input']>;
+  uid?: InputMaybe<Scalars['ID']['input']>;
+  uid_CONTAINS?: InputMaybe<Scalars['ID']['input']>;
+  uid_ENDS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  uid_IN?: InputMaybe<Array<Scalars['ID']['input']>>;
+  uid_STARTS_WITH?: InputMaybe<Scalars['ID']['input']>;
+  url?: InputMaybe<Scalars['String']['input']>;
+  url_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  url_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  url_IN?: InputMaybe<Array<Scalars['String']['input']>>;
+  url_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type LinksConnection = {
+  __typename?: 'LinksConnection';
+  edges: Array<LinkEdge>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
 export type Location = {
   __typename?: 'Location';
   code?: Maybe<Scalars['String']['output']>;
@@ -7813,6 +8124,7 @@ export type Mutation = {
   createItemConditions: CreateItemConditionsMutationResponse;
   createItemUsages: CreateItemUsagesMutationResponse;
   createItems: CreateItemsMutationResponse;
+  createLinks: CreateLinksMutationResponse;
   createLocations: CreateLocationsMutationResponse;
   createOrders: CreateOrdersMutationResponse;
   createParentPathItems: CreateParentPathItemsMutationResponse;
@@ -7843,6 +8155,7 @@ export type Mutation = {
   deleteItemConditions: DeleteInfo;
   deleteItemUsages: DeleteInfo;
   deleteItems: DeleteInfo;
+  deleteLinks: DeleteInfo;
   deleteLocations: DeleteInfo;
   deleteOrders: DeleteInfo;
   deleteParentPathItems: DeleteInfo;
@@ -7860,6 +8173,8 @@ export type Mutation = {
   deleteUserSettings: DeleteInfo;
   deleteUsers: DeleteInfo;
   deleteZones: DeleteInfo;
+  itemOriginatedResolver?: Maybe<Scalars['String']['output']>;
+  systemMovedFromResolver?: Maybe<Scalars['String']['output']>;
   updateCatalogueCategories: UpdateCatalogueCategoriesMutationResponse;
   updateCatalogueCategoryProperties: UpdateCatalogueCategoryPropertiesMutationResponse;
   updateCatalogueCategoryPropertyGroups: UpdateCatalogueCategoryPropertyGroupsMutationResponse;
@@ -7872,6 +8187,7 @@ export type Mutation = {
   updateItemConditions: UpdateItemConditionsMutationResponse;
   updateItemUsages: UpdateItemUsagesMutationResponse;
   updateItems: UpdateItemsMutationResponse;
+  updateLinks: UpdateLinksMutationResponse;
   updateLocations: UpdateLocationsMutationResponse;
   updateOrders: UpdateOrdersMutationResponse;
   updateParentPathItems: UpdateParentPathItemsMutationResponse;
@@ -7950,6 +8266,11 @@ export type MutationCreateItemUsagesArgs = {
 
 export type MutationCreateItemsArgs = {
   input: Array<ItemCreateInput>;
+};
+
+
+export type MutationCreateLinksArgs = {
+  input: Array<LinkCreateInput>;
 };
 
 
@@ -8113,6 +8434,11 @@ export type MutationDeleteItemsArgs = {
 };
 
 
+export type MutationDeleteLinksArgs = {
+  where?: InputMaybe<LinkWhere>;
+};
+
+
 export type MutationDeleteLocationsArgs = {
   delete?: InputMaybe<LocationDeleteInput>;
   where?: InputMaybe<LocationWhere>;
@@ -8206,6 +8532,18 @@ export type MutationDeleteUsersArgs = {
 export type MutationDeleteZonesArgs = {
   delete?: InputMaybe<ZoneDeleteInput>;
   where?: InputMaybe<ZoneWhere>;
+};
+
+
+export type MutationItemOriginatedResolverArgs = {
+  itemUid?: InputMaybe<Scalars['String']['input']>;
+  systemOriginatedUid?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationSystemMovedFromResolverArgs = {
+  systemFromUid?: InputMaybe<Scalars['String']['input']>;
+  systemUid?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -8314,6 +8652,12 @@ export type MutationUpdateItemsArgs = {
   disconnect?: InputMaybe<ItemDisconnectInput>;
   update?: InputMaybe<ItemUpdateInput>;
   where?: InputMaybe<ItemWhere>;
+};
+
+
+export type MutationUpdateLinksArgs = {
+  update?: InputMaybe<LinkUpdateInput>;
+  where?: InputMaybe<LinkWhere>;
 };
 
 
@@ -8893,6 +9237,9 @@ export type Query = {
   items: Array<Item>;
   itemsAggregate: ItemAggregateSelection;
   itemsConnection: ItemsConnection;
+  links: Array<Link>;
+  linksAggregate: LinkAggregateSelection;
+  linksConnection: LinksConnection;
   locations: Array<Location>;
   locationsAggregate: LocationAggregateSelection;
   locationsConnection: LocationsConnection;
@@ -9172,6 +9519,25 @@ export type QueryItemsConnectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<InputMaybe<ItemSort>>>;
   where?: InputMaybe<ItemWhere>;
+};
+
+
+export type QueryLinksArgs = {
+  options?: InputMaybe<LinkOptions>;
+  where?: InputMaybe<LinkWhere>;
+};
+
+
+export type QueryLinksAggregateArgs = {
+  where?: InputMaybe<LinkWhere>;
+};
+
+
+export type QueryLinksConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<InputMaybe<LinkSort>>>;
+  where?: InputMaybe<LinkWhere>;
 };
 
 
@@ -10997,6 +11363,9 @@ export type System = {
   isCritical?: Maybe<Scalars['Boolean']['output']>;
   isTechnologicalUnit?: Maybe<Scalars['Boolean']['output']>;
   keySystem?: Maybe<System>;
+  links: Array<Link>;
+  linksAggregate?: Maybe<SystemLinkLinksAggregationSelection>;
+  linksConnection: SystemLinksConnection;
   location?: Maybe<Location>;
   locationAggregate?: Maybe<SystemLocationLocationAggregationSelection>;
   locationConnection: SystemLocationConnection;
@@ -11065,6 +11434,28 @@ export type SystemFacilityConnectionArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<SystemFacilityConnectionSort>>;
   where?: InputMaybe<SystemFacilityConnectionWhere>;
+};
+
+
+export type SystemLinksArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  options?: InputMaybe<LinkOptions>;
+  where?: InputMaybe<LinkWhere>;
+};
+
+
+export type SystemLinksAggregateArgs = {
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: InputMaybe<LinkWhere>;
+};
+
+
+export type SystemLinksConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  directed?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Array<SystemLinksConnectionSort>>;
+  where?: InputMaybe<SystemLinksConnectionWhere>;
 };
 
 
@@ -11366,6 +11757,7 @@ export type SystemAggregateSelection = {
 
 export type SystemConnectInput = {
   facility?: InputMaybe<SystemFacilityConnectFieldInput>;
+  links?: InputMaybe<Array<SystemLinksConnectFieldInput>>;
   location?: InputMaybe<SystemLocationConnectFieldInput>;
   maintainedBy?: InputMaybe<Array<SystemMaintainedByConnectFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsConnectFieldInput>>;
@@ -11391,6 +11783,7 @@ export type SystemCreateInput = {
   facility?: InputMaybe<SystemFacilityFieldInput>;
   isCritical?: InputMaybe<Scalars['Boolean']['input']>;
   isTechnologicalUnit?: InputMaybe<Scalars['Boolean']['input']>;
+  links?: InputMaybe<SystemLinksFieldInput>;
   location?: InputMaybe<SystemLocationFieldInput>;
   maintainedBy?: InputMaybe<SystemMaintainedByFieldInput>;
   minimalSpareParstCount?: InputMaybe<Scalars['Int']['input']>;
@@ -11486,6 +11879,7 @@ export type SystemCriticalityWhere = {
 
 export type SystemDeleteInput = {
   facility?: InputMaybe<SystemFacilityDeleteFieldInput>;
+  links?: InputMaybe<Array<SystemLinksDeleteFieldInput>>;
   location?: InputMaybe<SystemLocationDeleteFieldInput>;
   maintainedBy?: InputMaybe<Array<SystemMaintainedByDeleteFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsDeleteFieldInput>>;
@@ -11503,6 +11897,7 @@ export type SystemDeleteInput = {
 
 export type SystemDisconnectInput = {
   facility?: InputMaybe<SystemFacilityDisconnectFieldInput>;
+  links?: InputMaybe<Array<SystemLinksDisconnectFieldInput>>;
   location?: InputMaybe<SystemLocationDisconnectFieldInput>;
   maintainedBy?: InputMaybe<Array<SystemMaintainedByDisconnectFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsDisconnectFieldInput>>;
@@ -11819,6 +12214,159 @@ export enum SystemLevel {
   SubsystemsAndParts = 'SUBSYSTEMS_AND_PARTS',
   TechnologyUnit = 'TECHNOLOGY_UNIT'
 }
+
+export type SystemLinkLinksAggregationSelection = {
+  __typename?: 'SystemLinkLinksAggregationSelection';
+  count: Scalars['Int']['output'];
+  node?: Maybe<SystemLinkLinksNodeAggregateSelection>;
+};
+
+export type SystemLinkLinksNodeAggregateSelection = {
+  __typename?: 'SystemLinkLinksNodeAggregateSelection';
+  name: StringAggregateSelectionNonNullable;
+  parentType: StringAggregateSelectionNonNullable;
+  parentUid: StringAggregateSelectionNonNullable;
+  uid: IdAggregateSelectionNonNullable;
+  url: StringAggregateSelectionNonNullable;
+};
+
+export type SystemLinksAggregateInput = {
+  AND?: InputMaybe<Array<SystemLinksAggregateInput>>;
+  NOT?: InputMaybe<SystemLinksAggregateInput>;
+  OR?: InputMaybe<Array<SystemLinksAggregateInput>>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  count_GT?: InputMaybe<Scalars['Int']['input']>;
+  count_GTE?: InputMaybe<Scalars['Int']['input']>;
+  count_LT?: InputMaybe<Scalars['Int']['input']>;
+  count_LTE?: InputMaybe<Scalars['Int']['input']>;
+  node?: InputMaybe<SystemLinksNodeAggregationWhereInput>;
+};
+
+export type SystemLinksConnectFieldInput = {
+  /** Whether or not to overwrite any matching relationship with the new properties. */
+  overwrite?: Scalars['Boolean']['input'];
+  where?: InputMaybe<LinkConnectWhere>;
+};
+
+export type SystemLinksConnection = {
+  __typename?: 'SystemLinksConnection';
+  edges: Array<SystemLinksRelationship>;
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type SystemLinksConnectionSort = {
+  node?: InputMaybe<LinkSort>;
+};
+
+export type SystemLinksConnectionWhere = {
+  AND?: InputMaybe<Array<SystemLinksConnectionWhere>>;
+  NOT?: InputMaybe<SystemLinksConnectionWhere>;
+  OR?: InputMaybe<Array<SystemLinksConnectionWhere>>;
+  node?: InputMaybe<LinkWhere>;
+};
+
+export type SystemLinksCreateFieldInput = {
+  node: LinkCreateInput;
+};
+
+export type SystemLinksDeleteFieldInput = {
+  where?: InputMaybe<SystemLinksConnectionWhere>;
+};
+
+export type SystemLinksDisconnectFieldInput = {
+  where?: InputMaybe<SystemLinksConnectionWhere>;
+};
+
+export type SystemLinksFieldInput = {
+  connect?: InputMaybe<Array<SystemLinksConnectFieldInput>>;
+  create?: InputMaybe<Array<SystemLinksCreateFieldInput>>;
+};
+
+export type SystemLinksNodeAggregationWhereInput = {
+  AND?: InputMaybe<Array<SystemLinksNodeAggregationWhereInput>>;
+  NOT?: InputMaybe<SystemLinksNodeAggregationWhereInput>;
+  OR?: InputMaybe<Array<SystemLinksNodeAggregationWhereInput>>;
+  name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  name_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  name_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  name_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  parentType_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  parentType_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  parentType_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  parentType_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  parentType_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  parentType_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  parentType_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  parentType_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  parentType_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  parentType_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  parentType_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  parentType_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  parentType_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  parentType_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  parentType_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  parentUid_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  parentUid_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  parentUid_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  parentUid_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  parentUid_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  parentUid_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  url_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  url_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  url_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  url_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  url_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  url_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  url_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  url_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  url_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  url_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  url_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  url_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  url_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  url_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  url_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type SystemLinksRelationship = {
+  __typename?: 'SystemLinksRelationship';
+  cursor: Scalars['String']['output'];
+  node: Link;
+};
+
+export type SystemLinksUpdateConnectionInput = {
+  node?: InputMaybe<LinkUpdateInput>;
+};
+
+export type SystemLinksUpdateFieldInput = {
+  connect?: InputMaybe<Array<SystemLinksConnectFieldInput>>;
+  create?: InputMaybe<Array<SystemLinksCreateFieldInput>>;
+  delete?: InputMaybe<Array<SystemLinksDeleteFieldInput>>;
+  disconnect?: InputMaybe<Array<SystemLinksDisconnectFieldInput>>;
+  update?: InputMaybe<SystemLinksUpdateConnectionInput>;
+  where?: InputMaybe<SystemLinksConnectionWhere>;
+};
 
 export type SystemLocationAggregateInput = {
   AND?: InputMaybe<Array<SystemLocationAggregateInput>>;
@@ -12747,6 +13295,7 @@ export type SystemPhysicalItemUpdateFieldInput = {
 
 export type SystemRelationInput = {
   facility?: InputMaybe<SystemFacilityCreateFieldInput>;
+  links?: InputMaybe<Array<SystemLinksCreateFieldInput>>;
   location?: InputMaybe<SystemLocationCreateFieldInput>;
   maintainedBy?: InputMaybe<Array<SystemMaintainedByCreateFieldInput>>;
   operators?: InputMaybe<Array<SystemOperatorsCreateFieldInput>>;
@@ -14523,6 +15072,7 @@ export type SystemUpdateInput = {
   facility?: InputMaybe<SystemFacilityUpdateFieldInput>;
   isCritical?: InputMaybe<Scalars['Boolean']['input']>;
   isTechnologicalUnit?: InputMaybe<Scalars['Boolean']['input']>;
+  links?: InputMaybe<Array<SystemLinksUpdateFieldInput>>;
   location?: InputMaybe<SystemLocationUpdateFieldInput>;
   maintainedBy?: InputMaybe<Array<SystemMaintainedByUpdateFieldInput>>;
   minimalSpareParstCount?: InputMaybe<Scalars['Int']['input']>;
@@ -14764,6 +15314,23 @@ export type SystemWhere = {
   facility_NOT?: InputMaybe<FacilityWhere>;
   isCritical?: InputMaybe<Scalars['Boolean']['input']>;
   isTechnologicalUnit?: InputMaybe<Scalars['Boolean']['input']>;
+  linksAggregate?: InputMaybe<SystemLinksAggregateInput>;
+  /** Return Systems where all of the related SystemLinksConnections match this filter */
+  linksConnection_ALL?: InputMaybe<SystemLinksConnectionWhere>;
+  /** Return Systems where none of the related SystemLinksConnections match this filter */
+  linksConnection_NONE?: InputMaybe<SystemLinksConnectionWhere>;
+  /** Return Systems where one of the related SystemLinksConnections match this filter */
+  linksConnection_SINGLE?: InputMaybe<SystemLinksConnectionWhere>;
+  /** Return Systems where some of the related SystemLinksConnections match this filter */
+  linksConnection_SOME?: InputMaybe<SystemLinksConnectionWhere>;
+  /** Return Systems where all of the related Links match this filter */
+  links_ALL?: InputMaybe<LinkWhere>;
+  /** Return Systems where none of the related Links match this filter */
+  links_NONE?: InputMaybe<LinkWhere>;
+  /** Return Systems where one of the related Links match this filter */
+  links_SINGLE?: InputMaybe<LinkWhere>;
+  /** Return Systems where some of the related Links match this filter */
+  links_SOME?: InputMaybe<LinkWhere>;
   location?: InputMaybe<LocationWhere>;
   locationAggregate?: InputMaybe<SystemLocationAggregateInput>;
   locationConnection?: InputMaybe<SystemLocationConnectionWhere>;
@@ -15471,6 +16038,12 @@ export type UpdateItemsMutationResponse = {
   __typename?: 'UpdateItemsMutationResponse';
   info: UpdateInfo;
   items: Array<Item>;
+};
+
+export type UpdateLinksMutationResponse = {
+  __typename?: 'UpdateLinksMutationResponse';
+  info: UpdateInfo;
+  links: Array<Link>;
 };
 
 export type UpdateLocationsMutationResponse = {

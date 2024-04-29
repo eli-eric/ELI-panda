@@ -5,6 +5,7 @@ export const typeDefs = gql`
     createSparePartRelation(fromSystemIds: [ID!]!, toSystemIds: [ID!]!): String
     updatedByResolver(node: String, nodeUid: String, action: String): String
     itemOriginatedResolver(itemUid: String, systemOriginatedUid: String): String
+    systemMovedFromResolver(systemFromUid: String, systemUid: String): String
   }
 
   type JWT @jwt {
@@ -12,10 +13,13 @@ export const typeDefs = gql`
   }
   type Location @authentication {
     uid: ID! @id
-    facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    facility: Facility!
+      @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
     code: String
-    subLocations: [Location!]! @relationship(type: "HAS_SUBLOCATION", direction: OUT)
-    parentLocation: Location @relationship(type: "HAS_SUBLOCATION", direction: IN)
+    subLocations: [Location!]!
+      @relationship(type: "HAS_SUBLOCATION", direction: OUT)
+    parentLocation: Location
+      @relationship(type: "HAS_SUBLOCATION", direction: IN)
     name: String!
     roomCards: [RoomCard!]! @relationship(type: "HAS_ROOM_CARD", direction: OUT)
   }
@@ -29,14 +33,18 @@ export const typeDefs = gql`
   type ContactPersonRole @authentication {
     uid: ID! @id
     name: String!
-    facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    facility: Facility!
+      @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
   }
 
   type HallContactPerson @authentication {
     uid: ID! @id
-    employee: Employee! @relationship(type: "HAS_CONTACT_PERSON", direction: OUT)
-    role: ContactPersonRole @relationship(type: "HAS_ROOM_CARD_ROLE", direction: OUT)
-    roomCard: RoomCard! @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: IN)
+    employee: Employee!
+      @relationship(type: "HAS_CONTACT_PERSON", direction: OUT)
+    role: ContactPersonRole
+      @relationship(type: "HAS_ROOM_CARD_ROLE", direction: OUT)
+    roomCard: RoomCard!
+      @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: IN)
   }
 
   enum CleaningScheduleDay {
@@ -76,8 +84,10 @@ export const typeDefs = gql`
     uid: ID! @id
     name: String!
     status: RoomCardStatus!
-    contactPersonsHall: [HallContactPerson!]! @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: OUT)
-    contactPersonsDept: [Employee!]! @relationship(type: "HAS_CONTACT_PERSON_DEPT", direction: OUT)
+    contactPersonsHall: [HallContactPerson!]!
+      @relationship(type: "HAS_CONTACT_PERSON_HALL", direction: OUT)
+    contactPersonsDept: [Employee!]!
+      @relationship(type: "HAS_CONTACT_PERSON_DEPT", direction: OUT)
     locations: [Location!]! @relationship(type: "HAS_ROOM_CARD", direction: IN)
     teams: [Team!]! @relationship(type: "HAS_TEAM", direction: OUT)
     purityClass: PurityClass
@@ -101,14 +111,16 @@ export const typeDefs = gql`
   type Team @authentication {
     uid: ID! @id
     name: String!
-    facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    facility: Facility!
+      @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
   }
 
   type Employee @authentication {
     uid: ID! @id
     firstName: String!
     user: User @relationship(type: "HAS_USER", direction: OUT)
-    facility: Facility! @relationship(type: "AFFILIATED_WITH_FACILITY", direction: OUT)
+    facility: Facility!
+      @relationship(type: "AFFILIATED_WITH_FACILITY", direction: OUT)
     fullName: String
     lastName: String!
     phone1: String
@@ -131,13 +143,18 @@ export const typeDefs = gql`
     uid: ID! @id
     code: String!
     name: String!
-    catalogueCategoriesHasSubcategory: [CatalogueCategory!]! @relationship(type: "HAS_SUBCATEGORY", direction: IN)
-    catalogueItemsBelongsToCategory: [CatalogueItem!]! @relationship(type: "BELONGS_TO_CATEGORY", direction: IN)
-    parentCategory: CatalogueCategory @relationship(type: "HAS_SUBCATEGORY", direction: IN)
-    systemType: SystemType @relationship(type: "HAS_SYSTEM_TYPE", direction: OUT)
+    catalogueCategoriesHasSubcategory: [CatalogueCategory!]!
+      @relationship(type: "HAS_SUBCATEGORY", direction: IN)
+    catalogueItemsBelongsToCategory: [CatalogueItem!]!
+      @relationship(type: "BELONGS_TO_CATEGORY", direction: IN)
+    parentCategory: CatalogueCategory
+      @relationship(type: "HAS_SUBCATEGORY", direction: IN)
+    systemType: SystemType
+      @relationship(type: "HAS_SYSTEM_TYPE", direction: OUT)
     hasGroupCatalogueCategoryPropertyGroups: [CatalogueCategoryPropertyGroup!]!
       @relationship(type: "HAS_GROUP", direction: OUT)
-    hasSubcategoryCatalogueCategories: [CatalogueCategory!]! @relationship(type: "HAS_SUBCATEGORY", direction: OUT)
+    hasSubcategoryCatalogueCategories: [CatalogueCategory!]!
+      @relationship(type: "HAS_SUBCATEGORY", direction: OUT)
     parentPath: [ParentPathItem]!
       @cypher(
         statement: """
@@ -167,7 +184,8 @@ export const typeDefs = gql`
   type CatalogueCategoryPropertyGroup @authentication {
     uid: String!
     name: String!
-    catalogueCategoriesHasGroup: [CatalogueCategory!]! @relationship(type: "HAS_GROUP", direction: IN)
+    catalogueCategoriesHasGroup: [CatalogueCategory!]!
+      @relationship(type: "HAS_GROUP", direction: IN)
     containsPropertyCatalogueCategoryProperties: [CatalogueCategoryProperty!]!
       @relationship(type: "CONTAINS_PROPERTY", direction: OUT)
   }
@@ -181,17 +199,24 @@ export const typeDefs = gql`
   }
 
   type CatalogueItem @authentication {
-    catalogueCategory: CatalogueCategory! @relationship(type: "BELONGS_TO_CATEGORY", direction: OUT)
+    catalogueCategory: CatalogueCategory!
+      @relationship(type: "BELONGS_TO_CATEGORY", direction: OUT)
     catalogueNumber: String!
     description: String
-    relatedCatalogueItems: [CatalogueItem!]! @relationship(type: "IS_RELATED_TO", direction: OUT)
+    relatedCatalogueItems: [CatalogueItem!]!
+      @relationship(type: "IS_RELATED_TO", direction: OUT)
     properties: [CatalogueCategoryProperty!]!
-      @relationship(type: "HAS_CATALOGUE_PROPERTY", direction: OUT, properties: "hasCatalogueProperty")
+      @relationship(
+        type: "HAS_CATALOGUE_PROPERTY"
+        direction: OUT
+        properties: "hasCatalogueProperty"
+      )
     supplier: Supplier @relationship(type: "HAS_SUPPLIER", direction: OUT)
     manufacturerUrl: String
     name: String!
     uid: String!
     item: [Item!]! @relationship(type: "IS_BASED_ON", direction: IN)
+    links: [Link!]! @relationship(type: "HAS_LINK", direction: OUT)
   }
 
   interface hasCatalogueProperty @relationshipProperties {
@@ -229,8 +254,14 @@ export const typeDefs = gql`
   type System
     @authorization(
       validate: [
-        { operations: [READ], where: { jwt: { roles_INCLUDES: "systems-view" } } }
-        { operations: [UPDATE, CREATE, DELETE, READ], where: { jwt: { roles_INCLUDES: "systems-edit" } } }
+        {
+          operations: [READ]
+          where: { jwt: { roles_INCLUDES: "systems-view" } }
+        }
+        {
+          operations: [UPDATE, CREATE, DELETE, READ]
+          where: { jwt: { roles_INCLUDES: "systems-edit" } }
+        }
       ]
     ) {
     uid: ID! @id
@@ -242,21 +273,32 @@ export const typeDefs = gql`
     systemCode: String
     minimalSpareParstCount: Int
     isCritical: Boolean
-    responsibleTeam: Team @relationship(type: "HAS_RESPONSIBLE_TEAM", direction: OUT)
+    responsibleTeam: Team
+      @relationship(type: "HAS_RESPONSIBLE_TEAM", direction: OUT)
     subSystems: [System!]! @relationship(type: "HAS_SUBSYSTEM", direction: OUT)
     spareParts: [System!]! @relationship(type: "IS_SPARE_FOR", direction: IN)
-    sparePartsFor: [System!]! @relationship(type: "IS_SPARE_FOR", direction: OUT)
+    sparePartsFor: [System!]!
+      @relationship(type: "IS_SPARE_FOR", direction: OUT)
     parentSystem: System @relationship(type: "HAS_SUBSYSTEM", direction: IN)
     location: Location @relationship(type: "HAS_LOCATION", direction: OUT)
-    facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    facility: Facility!
+      @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
     physicalItem: Item @relationship(type: "CONTAINS_ITEM", direction: OUT)
     zone: Zone @relationship(type: "HAS_ZONE", direction: OUT)
-    systemType: SystemType @relationship(type: "HAS_SYSTEM_TYPE", direction: OUT)
+    systemType: SystemType
+      @relationship(type: "HAS_SYSTEM_TYPE", direction: OUT)
     responsible: Employee @relationship(type: "HAS_RESPONSIBLE", direction: OUT)
     operators: [Employee!]! @relationship(type: "HAS_OPERATOR", direction: OUT)
-    maintainedBy: [Employee!]! @relationship(type: "IS_MAINTAINED_BY", direction: OUT)
+    maintainedBy: [Employee!]!
+      @relationship(type: "IS_MAINTAINED_BY", direction: OUT)
     systemLevel: SystemLevel
-    updatedBy: [User!]! @relationship(type: "WAS_UPDATED_BY", direction: OUT, properties: "wasUpdatedBy")
+    links: [Link!]! @relationship(type: "HAS_LINK", direction: OUT)
+    updatedBy: [User!]!
+      @relationship(
+        type: "WAS_UPDATED_BY"
+        direction: OUT
+        properties: "wasUpdatedBy"
+      )
     keySystem: System
       @cypher(
         statement: """
@@ -281,6 +323,15 @@ export const typeDefs = gql`
       )
   }
 
+  type Link @authentication {
+    uid: ID! @id
+    parentUid: String!
+    parentType: String!
+    url: String!
+    name: String!
+    tags: [String!]!
+  }
+
   enum SystemLevel {
     TECHNOLOGY_UNIT
     KEY_SYSTEMS
@@ -298,10 +349,17 @@ export const typeDefs = gql`
     name: String!
     serialNumber: String
     system: System @relationship(type: "CONTAINS_ITEM", direction: IN)
-    catalogueItem: CatalogueItem! @relationship(type: "IS_BASED_ON", direction: OUT)
-    order: Order @relationship(type: "HAS_ORDER_LINE", direction: IN, properties: "hasOrderLine")
+    catalogueItem: CatalogueItem!
+      @relationship(type: "IS_BASED_ON", direction: OUT)
+    order: Order
+      @relationship(
+        type: "HAS_ORDER_LINE"
+        direction: IN
+        properties: "hasOrderLine"
+      )
     itemUsage: ItemUsage @relationship(type: "HAS_ITEM_USAGE", direction: OUT)
-    conditionStatus: ItemCondition @relationship(type: "HAS_CONDITION_STATUS", direction: OUT)
+    conditionStatus: ItemCondition
+      @relationship(type: "HAS_CONDITION_STATUS", direction: OUT)
     notes: String
   }
 
@@ -333,7 +391,8 @@ export const typeDefs = gql`
     code: String!
     mask: String!
     name: String!
-    systemTypeGroup: SystemTypeGroup! @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: IN)
+    systemTypeGroup: SystemTypeGroup!
+      @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: IN)
     uid: ID! @id
   }
 
@@ -345,7 +404,8 @@ export const typeDefs = gql`
 
   type Zone @authentication {
     code: String!
-    facilitiesHasZone: [Facility!]! @relationship(type: "HAS_ZONE", direction: IN)
+    facilitiesHasZone: [Facility!]!
+      @relationship(type: "HAS_ZONE", direction: IN)
     hasSubzoneZones: [Zone!]! @relationship(type: "HAS_SUBZONE", direction: OUT)
     name: String!
     uid: ID! @id
@@ -353,8 +413,10 @@ export const typeDefs = gql`
   }
 
   type SystemTypeGroup @authentication {
-    facility: Facility! @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
-    systemTypes: [SystemType!]! @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: OUT)
+    facility: Facility!
+      @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    systemTypes: [SystemType!]!
+      @relationship(type: "CONTAINS_SYSTEM_TYPE", direction: OUT)
     name: String!
     uid: String!
   }
@@ -369,13 +431,17 @@ export const typeDefs = gql`
     @authorization(
       validate: [
         { operations: [UPDATE, READ], where: { node: { uid: "$jwt.sub" } } }
-        { operations: [UPDATE, CREATE, READ, DELETE], where: { jwt: { roles_INCLUDES: "admin" } } }
+        {
+          operations: [UPDATE, CREATE, READ, DELETE]
+          where: { jwt: { roles_INCLUDES: "admin" } }
+        }
       ]
     ) {
     email: String!
     firstName: String!
     roles: [Role!]! @relationship(type: "HAS_ROLE", direction: OUT)
-    facility: Facility @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
+    facility: Facility
+      @relationship(type: "BELONGS_TO_FACILITY", direction: OUT)
     isEnabled: Boolean!
     lastName: String!
     passwordHash: String!
@@ -383,7 +449,8 @@ export const typeDefs = gql`
     employee: Employee @relationship(type: "HAS_USER", direction: IN)
     uid: ID! @id
     username: String!
-    userSettings: [UserSettings!]! @relationship(type: "HAS_SETTINGS", direction: OUT)
+    userSettings: [UserSettings!]!
+      @relationship(type: "HAS_SETTINGS", direction: OUT)
   }
   type UserSettings @authentication {
     uid: ID! @id

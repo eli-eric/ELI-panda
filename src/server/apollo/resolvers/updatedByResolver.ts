@@ -5,7 +5,10 @@ import type { JWT } from 'next-auth/jwt'
 const updatedByResolver = async (
   _source: unknown,
   { node, nodeUid, action }: { node: string; nodeUid: string; action: string },
-  context: { executor: { executionContext: Driver }; authorization: { isAuthenticated: boolean; jwt: JWT } },
+  context: {
+    executor: { executionContext: Driver }
+    authorization: { isAuthenticated: boolean; jwt: JWT }
+  },
   // eslint-disable-next-line
   _info: unknown
 ): Promise<string> => {
@@ -13,7 +16,9 @@ const updatedByResolver = async (
   let transaction: TransactionPromise | undefined
 
   if (!context.authorization.isAuthenticated) {
-    throw new Error('Unauthorized: You do not have permission to perform this action.')
+    throw new Error(
+      'Unauthorized: You do not have permission to perform this action.'
+    )
   }
 
   try {
@@ -24,7 +29,11 @@ const updatedByResolver = async (
         WHERE a.uid = $nodeUid AND u.uid = $userUid
         CREATE (a)-[r:WAS_UPDATED_BY { action: $action, at: datetime() }]->(u)
         `
-    await transaction.run(createRelationQuery, { nodeUid, userUid: context.authorization.jwt.sub, action })
+    await transaction.run(createRelationQuery, {
+      nodeUid,
+      userUid: context.authorization.jwt.sub,
+      action
+    })
 
     await transaction.commit()
 
@@ -33,7 +42,8 @@ const updatedByResolver = async (
     if (transaction) {
       await transaction.rollback()
     }
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error'
     throw new Error(`Failed to relation: ${errorMessage}`)
   } finally {
     await session.close()

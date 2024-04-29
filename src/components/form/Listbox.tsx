@@ -66,7 +66,9 @@ const Listbox = ({
       targetOptions.push({ uid: '', name: emptyOption })
     }
     if (customOptions) {
-      targetOptions.push(...customOptions.map(item => ({ uid: item, name: item })))
+      targetOptions.push(
+        ...customOptions.map(item => ({ uid: item, name: item }))
+      )
     }
     if (codebookOptions?.data) {
       targetOptions.push(...codebookOptions.data)
@@ -75,9 +77,16 @@ const Listbox = ({
       targetOptions.push(...codebookResponse)
     }
     return targetOptions
-  }, [allowEmptyOption, emptyOption, codebookOptions, customOptions, codebookResponse])
+  }, [
+    allowEmptyOption,
+    emptyOption,
+    codebookOptions,
+    customOptions,
+    codebookResponse
+  ])
 
-  const handleChange = (value: any) => (value?.uid === '' ? null : customOptions ? value.uid : value)
+  const handleChange = (value: any) =>
+    value?.uid === '' ? null : customOptions ? value.uid : value
 
   const handleClear = () => {
     setValue(name, null)
@@ -90,7 +99,8 @@ const Listbox = ({
       control={control}
       defaultValue={defaultValue}
       render={({ field, fieldState: { error } }) => {
-        const value = typeof field.value === 'string' ? field.value : field.value?.name
+        const value =
+          typeof field.value === 'string' ? field.value : field.value?.name
 
         return (
           <>
@@ -102,29 +112,51 @@ const Listbox = ({
                 onChange && onChange(v)
               }}
               disabled={disabled}
-              className={classNames('relative flex flex-col w-full h-min', className)}
+              className={classNames(
+                'relative flex flex-col w-full h-min',
+                className
+              )}
             >
               {(customLabel || label) && (
                 <HUIListbox.Label className="block text-sm font-medium text-gray-900 dark:text-gray-200">
-                  {customLabel ? customLabel : intl.formatMessage({ id: label })}
+                  {customLabel
+                    ? customLabel
+                    : intl.formatMessage({ id: label })}
                 </HUIListbox.Label>
               )}
               <div className="relative" onClick={onClick}>
                 <HUIListbox.Button
                   className={classNames(
-                    'form-field h-[38px]',
-                    field.value && !disabled ? 'pr-14' : 'pr-9',
+                    'form-field-combo h-[38px]',
+                    field.value && !disabled ? '' : '',
                     rounded,
                     error ? 'border-red-500' : 'border-gray-300',
                     disabled ? 'bg-gray-100' : '',
                     isFilter ? field.value && 'border-2 border-lime-500' : ''
                   )}
                 >
-                  <span className="block truncate">{value || (customOptions && allowEmptyOption && emptyOption)}</span>
-                  {placeholder && !value && <span className="block truncate text-gray-400">{placeholder}</span>}
-                  {!disabled && value && <FormXMarkIcon onClick={handleClear} />}
+                  <button
+                    type="button"
+                    onClick={onClickIcon}
+                    className="h-full w-full pr-12 ml-3 text-left"
+                  >
+                    <span className="block truncate">
+                      {value ||
+                        (customOptions && allowEmptyOption && emptyOption)}
+                    </span>
+                    {placeholder && !value && (
+                      <span className="block truncate text-gray-400">
+                        {placeholder}
+                      </span>
+                    )}
+                  </button>
+                  {!disabled && value && (
+                    <FormXMarkIcon onClick={handleClear} />
+                  )}
                   <div className="absolute inset-y-0 right-0 flex items-center pr-2">
-                    {unit && <span className="text-gray-400 sm:text-sm">{unit}</span>}
+                    {unit && (
+                      <span className="text-gray-400 sm:text-sm">{unit}</span>
+                    )}
                     <ChevronDown onClick={onClickIcon} />
                   </div>
                 </HUIListbox.Button>
@@ -134,23 +166,39 @@ const Listbox = ({
                   className={classNames(
                     'absolute z-20 mt-1 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
                     position === 'top' ? 'bottom-full' : 'top-full',
-                    optionsSize === 'sm' ? 'max-h-40' : optionsSize === 'lg' ? 'max-h-64' : 'max-h-60'
+                    optionsSize === 'sm'
+                      ? 'max-h-40'
+                      : optionsSize === 'lg'
+                        ? 'max-h-64'
+                        : 'max-h-60'
                   )}
                 >
                   {options?.map(item => (
                     <HUIListbox.Option
                       key={uuid()}
-                      value={customOptions ? item : item.uid === '' ? null : item}
+                      value={
+                        customOptions ? item : item.uid === '' ? null : item
+                      }
                       className={({ active }) =>
                         classNames(
                           'relative cursor-default select-none py-2 pl-3 pr-9',
-                          active ? 'bg-primary-500 text-white' : 'text-gray-900 dark:text-gray-200'
+                          active
+                            ? 'bg-primary-500 text-white'
+                            : 'text-gray-900 dark:text-gray-200'
                         )
                       }
                     >
                       {({ active }) => {
-                        const selected = customOptions ? field.value === item.uid : field.value?.uid === item.uid
-                        return <SelectOption item={item} selected={selected} active={active} />
+                        const selected = customOptions
+                          ? field.value === item.uid
+                          : field.value?.uid === item.uid
+                        return (
+                          <SelectOption
+                            item={item}
+                            selected={selected}
+                            active={active}
+                          />
+                        )
                       }}
                     </HUIListbox.Option>
                   ))}

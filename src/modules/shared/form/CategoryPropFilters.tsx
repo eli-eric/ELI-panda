@@ -13,16 +13,30 @@ interface Props {
   tableId: string
   catalogueCategoryProperties?: CatalogueItemDetail[]
   enableQueryUrl?: boolean
+  isItemProperties?: boolean
 }
 
-export const CategoryPropFilters = ({ tableId, catalogueCategoryProperties, enableQueryUrl }: Props) => {
+export const CategoryPropFilters = ({
+  tableId,
+  catalogueCategoryProperties,
+  enableQueryUrl,
+  isItemProperties
+}: Props) => {
   const { setFilter } = useFormFilterState({ tableId, enableQueryUrl })
   const { addCustomFieldIdToSync } = useFormControlStore()
 
   // sort properties by type.uid list first and by name to in same order every time
   const categoryProperties = catalogueCategoryProperties?.sort((a, b) => {
-    if (a.property.type.uid === PROPERTY_TYPE.LIST && b.property.type.uid !== PROPERTY_TYPE.LIST) return -1
-    if (a.property.type.uid !== PROPERTY_TYPE.LIST && b.property.type.uid === PROPERTY_TYPE.LIST) return 1
+    if (
+      a.property.type.uid === PROPERTY_TYPE.LIST &&
+      b.property.type.uid !== PROPERTY_TYPE.LIST
+    )
+      return -1
+    if (
+      a.property.type.uid !== PROPERTY_TYPE.LIST &&
+      b.property.type.uid === PROPERTY_TYPE.LIST
+    )
+      return 1
     return a.property.name.localeCompare(b.property.name)
   })
 
@@ -33,10 +47,14 @@ export const CategoryPropFilters = ({ tableId, catalogueCategoryProperties, enab
       {categoryProperties?.length > 0 && (
         <div className="col-span-2 md:grid md:grid-cols-2 md:gap-4">
           <span className=" col-span-2 text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">
-            Category Properties
+            {isItemProperties ? 'Item Properties' : 'Category Properties'}
           </span>
           {categoryProperties.map(property => {
-            const label = property.property.name + (property.property.unit ? ` [${property.property.unit?.name}]` : '')
+            const label =
+              property.property.name +
+              (property.property.unit
+                ? ` [${property.property.unit?.name}]`
+                : '')
             switch (property.property.type.uid) {
               case PROPERTY_TYPE.TEXT: {
                 return (
@@ -47,7 +65,12 @@ export const CategoryPropFilters = ({ tableId, catalogueCategoryProperties, enab
                     name={property.property.uid}
                     label={label}
                     onChange={value => {
-                      setFilter(property.property.uid)(value, property.property.type.code, property.property.name)
+                      setFilter(property.property.uid)(
+                        value,
+                        property.property.type.code,
+                        property.property.name,
+                        isItemProperties ? 'PHYSICAL_ITEM' : 'CATALOGUE_ITEM'
+                      )
                       addCustomFieldIdToSync(property.property.uid)
                     }}
                     isFilter={true}
@@ -62,7 +85,13 @@ export const CategoryPropFilters = ({ tableId, catalogueCategoryProperties, enab
                     required
                     label={label}
                     onChange={value => {
-                      setFilter(property.property.uid)(value, property.property.type.code, property.property.name)
+                      setFilter(property.property.uid)(
+                        value,
+                        property.property.type.code,
+                        property.property.name,
+
+                        isItemProperties ? 'PHYSICAL_ITEM' : 'CATALOGUE_ITEM'
+                      )
                       addCustomFieldIdToSync(property.property.uid)
                     }}
                     isFilter={true}
@@ -77,7 +106,12 @@ export const CategoryPropFilters = ({ tableId, catalogueCategoryProperties, enab
                     placeholder={{ min: 'Value', max: '+/-' }}
                     label={label}
                     onChange={value => {
-                      setFilter(property.property.uid)(value, property.property.type.code, property.property.name)
+                      setFilter(property.property.uid)(
+                        value,
+                        property.property.type.code,
+                        property.property.name,
+                        isItemProperties ? 'PHYSICAL_ITEM' : 'CATALOGUE_ITEM'
+                      )
                       addCustomFieldIdToSync(property.property.uid)
                     }}
                     isFilter={true}
@@ -91,7 +125,12 @@ export const CategoryPropFilters = ({ tableId, catalogueCategoryProperties, enab
                     name={property.property.uid}
                     customLabel={label}
                     onChange={value => {
-                      setFilter(property.property.uid)(value, property.property.type.code, property.property.name)
+                      setFilter(property.property.uid)(
+                        value,
+                        property.property.type.code,
+                        property.property.name,
+                        isItemProperties ? 'PHYSICAL_ITEM' : 'CATALOGUE_ITEM'
+                      )
                       addCustomFieldIdToSync(property.property.uid)
                     }}
                     isFilter={true}
@@ -106,7 +145,12 @@ export const CategoryPropFilters = ({ tableId, catalogueCategoryProperties, enab
                     name={property.property.uid}
                     label={label}
                     onChange={value => {
-                      setFilter(property.property.uid)(value, property.property.type.code, property.property.name)
+                      setFilter(property.property.uid)(
+                        value,
+                        property.property.type.code,
+                        property.property.name,
+                        isItemProperties ? 'PHYSICAL_ITEM' : 'CATALOGUE_ITEM'
+                      )
                       addCustomFieldIdToSync(property.property.uid)
                     }}
                     isFilter={true}
