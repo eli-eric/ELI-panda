@@ -4,7 +4,11 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
-import { type CodebookFilter, type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
+import {
+  type CodebookFilter,
+  type CodebookType,
+  useCodebook
+} from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
@@ -53,18 +57,26 @@ const Combobox = ({
   const { formatMessage: fm } = useIntl()
 
   const [query, setQuery] = useState<string>('')
-  const codebookResponseData = useMemo(() => ({ data: codebookResponse, metadata: undefined }), [codebookResponse])
+  const codebookResponseData = useMemo(
+    () => ({ data: codebookResponse, metadata: undefined }),
+    [codebookResponse]
+  )
 
   const { data } = useCodebook(codebook, { limit, filter, searchText: query })
 
-  const options = useMemo(() => (data ? data : codebookResponseData), [data, codebookResponseData])
+  const options = useMemo(
+    () => (data ? data : codebookResponseData),
+    [data, codebookResponseData]
+  )
   const { getFormModal, setOpen } = useAddCodebookValue(options?.metadata)
   const [hasAddPermission, setHasAddPermission] = useState(false)
   const { data: session } = useSession()
 
   useEffect(() => {
     if (showAddButton && options?.metadata?.roleEdit && session?.user?.roles) {
-      const hasTargetPermission = session.user.roles.includes(options.metadata.roleEdit)
+      const hasTargetPermission = session.user.roles.includes(
+        options.metadata.roleEdit
+      )
       setHasAddPermission(hasTargetPermission)
     }
   }, [options, session, showAddButton])
@@ -104,19 +116,27 @@ const Combobox = ({
                 </HUICombobox.Label>
               )}
               <div className="relative">
-                <ComboboxInput
-                  {...{
-                    value: field.value,
-                    isFilter,
-                    error,
-                    placeholder,
-                    disabled,
-                    rounded,
-                    onChange: handleChange
-                  }}
-                />
+                <button
+                  type="button"
+                  className="relative h-full w-full"
+                  onClick={onClickIcon}
+                >
+                  <ComboboxInput
+                    {...{
+                      value: field.value,
+                      isFilter,
+                      error,
+                      placeholder,
+                      disabled,
+                      rounded,
+                      onChange: handleChange
+                    }}
+                  />
+                </button>
 
-                {field.value && !disabled && <FormXMarkIcon onClick={handleClear} />}
+                {field.value && !disabled && (
+                  <FormXMarkIcon onClick={handleClear} />
+                )}
                 <ComboboxButton onClick={onClickIcon} />
               </div>
 
@@ -128,7 +148,11 @@ const Combobox = ({
                   )}
                 >
                   {options.data.map(item => (
-                    <ComboboxOption key={item.uid} item={item} selected={field.value?.uid === item.uid} />
+                    <ComboboxOption
+                      key={item.uid}
+                      item={item}
+                      selected={field.value?.uid === item.uid}
+                    />
                   ))}
                 </HUICombobox.Options>
               )}

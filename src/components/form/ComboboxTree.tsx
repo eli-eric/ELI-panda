@@ -4,7 +4,11 @@ import React, { Fragment, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
-import { type CodebookFilter, type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
+import {
+  type CodebookFilter,
+  type CodebookType,
+  useCodebook
+} from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
@@ -46,7 +50,11 @@ export const ComboboxTree = ({
   const [open, setOpen] = useState(false)
 
   const [query, setQuery] = useState<string>('')
-  const { data: options } = useCodebook(codebook, { limit, filter, searchText: query })
+  const { data: options } = useCodebook(codebook, {
+    limit,
+    filter,
+    searchText: query
+  })
 
   const handleClear = () => {
     setQuery('')
@@ -69,7 +77,10 @@ export const ComboboxTree = ({
               onSelect && onSelect(value)
             }}
             disabled={disabled}
-            className={classNames('relative flex flex-col w-full mt-auto', className)}
+            className={classNames(
+              'relative flex flex-col w-full mt-auto',
+              className
+            )}
           >
             {(label || customLabel) && (
               <HUICombobox.Label className="block text-sm font-medium text-gray-900 dark:text-gray-200">
@@ -77,20 +88,28 @@ export const ComboboxTree = ({
               </HUICombobox.Label>
             )}
             <div className="relative">
-              <HUICombobox.Input
-                onChange={e => setQuery(e.target.value)}
-                displayValue={(item: CodebookType) => item?.name}
-                placeholder={placeholder}
-                autoComplete="off"
-                className={classNames(
-                  'form-field',
-                  field.value && !disabled ? 'pr-14' : 'pr-9',
-                  rounded,
-                  error ? 'border-red-500' : 'border-gray-300',
-                  disabled ? 'bg-gray-100' : '',
-                  isFilter ? field.value && 'border-2 border-lime-500' : ''
-                )}
-              />
+              <button
+                type="button"
+                className="relative w-full h-full"
+                onClick={() => {
+                  setOpen(true)
+                }}
+              >
+                <HUICombobox.Input
+                  onChange={e => setQuery(e.target.value)}
+                  displayValue={(item: CodebookType) => item?.name}
+                  placeholder={placeholder}
+                  autoComplete="off"
+                  className={classNames(
+                    'form-field',
+                    field.value && !disabled ? 'pr-14' : 'pr-9',
+                    rounded,
+                    error ? 'border-red-500' : 'border-gray-300',
+                    disabled ? 'bg-gray-100' : '',
+                    isFilter ? field.value && 'border-2 border-lime-500' : ''
+                  )}
+                />
+              </button>
               {field.value && !disabled && (
                 <div
                   onClick={handleClear}
@@ -123,13 +142,22 @@ export const ComboboxTree = ({
                     className={({ active }) =>
                       classNames(
                         'relative cursor-default select-none py-2 pl-3 pr-9',
-                        active ? 'bg-primary-500 text-white' : 'text-gray-900 dark:text-gray-200'
+                        active
+                          ? 'bg-primary-500 text-white'
+                          : 'text-gray-900 dark:text-gray-200'
                       )
                     }
                   >
                     {({ active, selected }) => (
                       <Fragment>
-                        <span className={classNames('block truncate', selected && 'font-semibold')}>{item.name}</span>
+                        <span
+                          className={classNames(
+                            'block truncate',
+                            selected && 'font-semibold'
+                          )}
+                        >
+                          {item.name}
+                        </span>
                         {selected && (
                           <span
                             className={classNames(
@@ -149,7 +177,13 @@ export const ComboboxTree = ({
           </HUICombobox>
         )}
       />
-      <CodebookTreeModal onSubmit={onSelect} codebook={codebook} open={open} setOpen={setOpen} name={name} />
+      <CodebookTreeModal
+        onSubmit={onSelect}
+        codebook={codebook}
+        open={open}
+        setOpen={setOpen}
+        name={name}
+      />
     </Fragment>
   )
 }
