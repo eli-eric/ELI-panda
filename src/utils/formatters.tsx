@@ -7,8 +7,14 @@ export const messageFormatters = {
   small: (chunks: string) => <span className="text-xs">{chunks}</span>,
   strong: (chunks: string) => <span className="font-bold">{chunks}</span>,
   underline: (chunks: string) => <span className="underline">{chunks}</span>,
-  label: (chunks: string) => <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{chunks}</span>,
-  p: (chunks: string) => <p className="text-gray-500 dark:text-gray-200">{chunks}</p>
+  label: (chunks: string) => (
+    <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+      {chunks}
+    </span>
+  ),
+  p: (chunks: string) => (
+    <p className="text-gray-500 dark:text-gray-200">{chunks}</p>
+  )
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,7 +36,10 @@ export const createMessageValues = (values: any = {}): Record<string, any> => ({
 })
 
 export function convertDate(date) {
-  return moment(date).startOf('day').utcOffset(new Date().getTimezoneOffset()).format()
+  return moment(date)
+    .startOf('day')
+    .utcOffset(new Date().getTimezoneOffset())
+    .format()
 }
 
 export function formatPhoneNumber(number: string) {
@@ -40,4 +49,13 @@ export function formatPhoneNumber(number: string) {
   const formattedNumber = number.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3')
 
   return formattedNumber
+}
+
+export function formatDate(date) {
+  const newDate = new Date(date)
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    dateStyle: 'full',
+    timeStyle: 'short'
+  })
+  return formatter.format(newDate)
 }

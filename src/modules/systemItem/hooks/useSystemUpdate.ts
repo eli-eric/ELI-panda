@@ -21,7 +21,7 @@ import type { SystemDetailFormType } from '../types/form'
 import { navigateBack } from '@/utils'
 import axiosInstance from '@/core/axios/axiosInstance'
 import { BASE_URL } from '@/types/constants/common'
-import { useMutation as useQueryMutation } from 'react-query'
+import { useMutation as useQueryMutation } from '@tanstack/react-query'
 import type { PhysicalItemProperty } from '@/modules/systems/types/responses'
 
 const UPDATE_SYSTEM = gql`

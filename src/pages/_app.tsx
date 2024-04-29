@@ -19,7 +19,7 @@ import { useApollo } from '@/server/apollo/client'
 import { useDarkModeStore } from '@/store/useDarkModeStore'
 import { fetcher } from '@/utils/fetcher'
 import { Layout } from '@/components/layout/Layout'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 const queryClient = new QueryClient()
 
