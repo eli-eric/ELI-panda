@@ -59,3 +59,7 @@ export function formatDate(date) {
   })
   return formatter.format(newDate)
 }
+
+export function makeQuery(query: Record<string, string>) {
+  return '?' + new URLSearchParams(query).toString()
+}

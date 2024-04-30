@@ -5,7 +5,6 @@ import { useFormContext } from 'react-hook-form'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import useFetch from '@/hooks/fetch/useFetch'
 import { message } from '@/i18n/src/messages'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
@@ -13,6 +12,8 @@ import useTableStateStore from '@/store/useTableStateStore'
 import type { ModalButtons } from '@/types/form'
 
 import { ExpandableNameCell } from './ExpandableNameCell'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { queryFetcher } from '@/utils/fetcher'
 
 const messages = message.common.buttons
 
@@ -30,7 +31,13 @@ interface CodebookTreeModalProps {
   onSubmit?: (item?: any) => void
 }
 
-export const CodebookTreeModal = ({ open, setOpen, codebook, name, onSubmit }: CodebookTreeModalProps) => {
+export const CodebookTreeModal = ({
+  open,
+  setOpen,
+  codebook,
+  name,
+  onSubmit
+}: CodebookTreeModalProps) => {
   const tableId = 'codebook'
 
   const [item, setItem] = useState<CodebookType | undefined>(undefined)
@@ -55,13 +62,15 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name, onSubmit }: C
     }
   }, [search])
 
-  const { response, loading } = useFetch<Codebooktree[]>({
-    url: `/codebook/${codebook}/tree` + '?' + 'columnFilter=' + JSON.stringify(filterState),
-    config: {
-      suspense: false,
-      keepPreviousData: true
-    }
+  const { data: response, isLoading: loading } = useQuery<Codebooktree[]>({
+    queryKey: [
+      'codebookTree',
+      { codebook, query: '?' + 'columnFilter=' + JSON.stringify(filterState) }
+    ],
+    queryFn: queryFetcher('codebookTree'),
+    placeholderData: keepPreviousData
   })
+
   const columns = useMemo(
     (): ColumnDef<Codebooktree, string>[] => [
       {
@@ -75,7 +84,9 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name, onSubmit }: C
             type: 'string'
           }
         },
-        cell: ({ row, getValue, table: { getState } }) => <ExpandableNameCell {...{ row, getValue, getState }} />
+        cell: ({ row, getValue, table: { getState } }) => (
+          <ExpandableNameCell {...{ row, getValue, getState }} />
+        )
       }
     ],
     []
@@ -118,7 +129,9 @@ export const CodebookTreeModal = ({ open, setOpen, codebook, name, onSubmit }: C
             enableFiltering: true,
             manualFiltering: true
           }}
-          className={'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'}
+          className={
+            'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'
+          }
           getRowProps={row => ({
             onClick: () => {
               setItem({ uid: row.original.uid, name: row.original.name })

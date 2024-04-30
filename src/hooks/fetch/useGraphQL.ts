@@ -1,13 +1,12 @@
 import request from 'graphql-request'
 import { type TypedDocumentNode } from '@graphql-typed-document-node/core'
-import type { UseMutationOptions, UseQueryOptions } from 'react-query'
-import { useQuery, type UseQueryResult } from 'react-query'
+import type { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query'
+import { useQuery, type UseQueryResult } from '@tanstack/react-query'
 import {
   useMutation,
   type UseMutationResult,
   type MutationFunction
-} from 'react-query'
-import toast from 'react-hot-toast'
+} from '@tanstack/react-query'
 
 type Variables = Record<string, any> | undefined
 
@@ -28,25 +27,17 @@ export function useGraphQL<TResult, TVariables extends Variables>(
 ): UseQueryResult<TResult, Error> {
   const adjustedOptions: UseQueryOptions<TResult, Error, TResult, any[]> = {
     ...options,
-    onError: error => {
-      if (options?.onError) {
-        options.onError(error)
-      } else {
-        toast.error(error.message)
-      }
-    },
+
     queryFn: async ({ queryKey }) => {
       return typedGraphQLRequest<TResult, TVariables>(
         document,
         queryKey[1] ? (queryKey[1] as TVariables) : undefined
       )
-    }
+    },
+    queryKey: [(document.definitions[0] as any).name.value, variables, document]
   }
 
-  return useQuery(
-    [(document.definitions[0] as any).name.value, variables],
-    adjustedOptions
-  )
+  return useQuery(adjustedOptions)
 }
 
 export function useGraphQLMutation<
@@ -66,5 +57,8 @@ export function useGraphQLMutation<
     return request('/api/graphql', document, variables ?? undefined)
   }
 
-  return useMutation(mutate, options)
+  return useMutation({
+    ...options,
+    mutationFn: mutate
+  })
 }

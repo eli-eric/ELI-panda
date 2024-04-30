@@ -1,6 +1,9 @@
+import { message } from '@/i18n/src/messages'
 import { useCategoryUid } from './useCategoryUid'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
+import { useEffect } from 'react'
+import toast from 'react-hot-toast'
 
 const GET_CATEGORIES = gql(`
   query GetCategory($uid: ID = null) {
@@ -21,13 +24,15 @@ const GET_CATEGORIES = gql(`
 
 export const useCategory = (catalogueCategoryUid?: string) => {
   const uid = useCategoryUid()
-  const { data, isLoading, error } = useGraphQL(
-    GET_CATEGORIES,
-    {
-      uid: uid || catalogueCategoryUid
-    },
-    { onError: () => {} }
-  )
+  const { data, isLoading, error } = useGraphQL(GET_CATEGORIES, {
+    uid: uid || catalogueCategoryUid
+  })
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Error fetching category: ' + error.message)
+    }
+  }, [error])
 
   return {
     catalogueCategory: data?.catalogueCategories[0],

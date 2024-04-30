@@ -1,11 +1,20 @@
+import type { CODEBOOK } from '@/types/constants/codebook'
+
 export interface EndpointProps {
   uid?: string
   path?: string
   itemUid?: string
   query?: string
+  codebook?: CODEBOOK
 }
 
-export const getEndpoints = ({ uid, path, itemUid, query }: EndpointProps) => {
+export const getEndpoints = ({
+  uid,
+  path,
+  itemUid,
+  query,
+  codebook
+}: EndpointProps) => {
   const endpoints = {
     catalogueCategories: `/catalogue/categories${path}`,
     catalogueCategoryImage: `/catalogue/category/${uid}/image`,
@@ -41,7 +50,8 @@ export const getEndpoints = ({ uid, path, itemUid, query }: EndpointProps) => {
     codebooks: `/codebooks${query}`,
     links: `/files/links/${uid}`,
     link: `/files/link/${uid}`,
-    history: `/system/${uid}/history`
+    history: `/system/${uid}/history`,
+    codebookTree: `/codebook/${codebook}/tree${query}`
   }
   return endpoints
 }

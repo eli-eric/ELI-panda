@@ -6,18 +6,26 @@ import { type FC } from 'react'
 
 import { DarkModeSwitch } from '@/components/DarkModeSwitch'
 import EliLogoComponent from '@/components/eli-logo.comp'
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useFetch from '@/hooks/fetch/useFetch'
 import { NAV_BAR_CONFIG, PATH, USER_NAVIGATION } from '@/types/constants/paths'
 import { classNames } from '@/utils'
 
-import { NavBarButton, NavBarLink, NavBarMultiLink, SupportLink } from './NavBarItems'
+import {
+  NavBarButton,
+  NavBarLink,
+  NavBarMultiLink,
+  SupportLink
+} from './NavBarItems'
+import { useQuery } from '@tanstack/react-query'
+import { queryFetcher } from '@/utils/fetcher'
 
 interface NavBarHeaderProps {
   isExpanded: boolean
   onCollapse: () => void
 }
-export const NavBarHeader: FC<NavBarHeaderProps> = ({ isExpanded, onCollapse }) => {
+export const NavBarHeader: FC<NavBarHeaderProps> = ({
+  isExpanded,
+  onCollapse
+}) => {
   return (
     <div className="flex justify-between w-full">
       <button onClick={onCollapse} className="pt-2 pb-10 pl-2">
@@ -28,9 +36,13 @@ export const NavBarHeader: FC<NavBarHeaderProps> = ({ isExpanded, onCollapse }) 
         )}
       </button>
       <Link href={PATH.DASHBOARD}>
-        <EliLogoComponent customClass={classNames('h-10 w-12 pt-4', !isExpanded && 'hidden')} />
+        <EliLogoComponent
+          customClass={classNames('h-10 w-12 pt-4', !isExpanded && 'hidden')}
+        />
       </Link>
-      <DarkModeSwitch className={classNames(!isExpanded && 'hidden', 'mt-4 mr-2')} />
+      <DarkModeSwitch
+        className={classNames(!isExpanded && 'hidden', 'mt-4 mr-2')}
+      />
     </div>
   )
 }
@@ -50,13 +62,15 @@ export const MainNavigation: FC<MainNavigationProps> = ({
 }) => {
   const pathName = usePathname()
 
-  const { codebooks } = useEndpoint({ query: { editable: true } })
-  const { response } = useFetch<{ code: string; type: string }[]>({ url: codebooks, config: { suspense: false } })
+  const { data: codebooks } = useQuery<{ code: string; type: string }[]>({
+    queryKey: ['codebooks'],
+    queryFn: queryFetcher('codebooks')
+  })
 
   return (
     <div className="flex-grow">
       {NAV_BAR_CONFIG.map(item => {
-        if (item.name === 'Codebooks' && response?.length === 0) {
+        if (item.name === 'Codebooks' && codebooks?.length === 0) {
           return null
         }
         if (item.links) {
@@ -116,7 +130,12 @@ export const UserSection: FC<UserSectionProps> = ({ setOpen, isExpanded }) => {
           text={item.name}
         />
       ))}
-      <NavBarButton onClick={signOutHandler} isExpanded={isExpanded} Icon={PowerIcon} text={'Sign out'} />
+      <NavBarButton
+        onClick={signOutHandler}
+        isExpanded={isExpanded}
+        Icon={PowerIcon}
+        text={'Sign out'}
+      />
     </div>
   )
 }

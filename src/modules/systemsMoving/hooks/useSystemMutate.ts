@@ -1,8 +1,5 @@
-import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
 import { gql, useMutation } from '@apollo/client'
 import toast from 'react-hot-toast'
-
-import type { Mutation, MutationUpdateSystemsArgs } from '@/types/gql/graphql'
 
 const UPDATE_SYSTEM = gql`
   mutation UpdateSystemParentMutation(
