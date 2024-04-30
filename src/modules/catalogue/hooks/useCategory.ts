@@ -1,4 +1,3 @@
-import { message } from '@/i18n/src/messages'
 import { useCategoryUid } from './useCategoryUid'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'

@@ -3,6 +3,7 @@ import toast from 'react-hot-toast'
 import useTableStateStore from '@/store/useTableStateStore'
 import { gql } from '@/types/gql'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { useEffect } from 'react'
 
 const GET_SYSTEM_TYPE_GROUPS = gql(`
   query SystemTypeQuery(
@@ -31,15 +32,14 @@ export const useSystemTypeGroups = () => {
   const filterCode = columnFilter?.find(item => item.id === 'code')?.value
   const filterName = columnFilter?.find(item => item.id === 'name')?.value
 
-  const { data, isLoading, error } = useGraphQL(
-    GET_SYSTEM_TYPE_GROUPS,
-    {},
-    {
-      onError: err => {
-        toast.error(err.message)
-      }
+  const { data, isLoading, error } = useGraphQL(GET_SYSTEM_TYPE_GROUPS)
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to fetch system type groups')
     }
-  )
+  }, [error])
+
   return {
     systemTypeGroups: data?.systemTypeGroups,
     loading: isLoading,

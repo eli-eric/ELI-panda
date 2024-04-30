@@ -4,29 +4,29 @@ import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useFetch from '@/hooks/fetch/useFetch'
 import { useImage } from '@/hooks/fetch/useImage'
 
 import type { CatalogueItem } from '../types/responses'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
+import { useQuery } from '@tanstack/react-query'
+import { queryFetcher } from '@/utils/fetcher'
 
-const useItem = () => {
+export const useCatalogueItem = () => {
   const router = useRouter()
   const catalogueUid = router.query.uid as string
-  const { catalogueItem, catalogueItemImage } = useEndpoint({
+  const { catalogueItemImage } = useEndpoint({
     uid: catalogueUid
   })
 
   const {
-    response: item,
-    loading: isLoading,
-    error,
-    mutate
-  } = useFetch<CatalogueItem>({
-    url: () => (catalogueUid ? catalogueItem : null),
-    config: { suspense: false, revalidateOnMount: true },
-    useMockFetcher: false
+    data: item,
+    isLoading,
+    error
+  } = useQuery<CatalogueItem>({
+    queryKey: ['catalogueItem', { uid: catalogueUid }],
+    queryFn: queryFetcher('catalogueItem'),
+    enabled: !!catalogueUid
   })
 
   const image = useImage(catalogueUid ? catalogueItemImage : null)
@@ -39,7 +39,7 @@ const useItem = () => {
     return groups
   }, [item])
 
-  return { item: item, loading: isLoading, error, mutate, image, groups }
+  return { item: item, loading: isLoading, error, image, groups }
 }
 
 const GET_RELATED_ITEMS = gql(`
@@ -85,5 +85,3 @@ export const useRelatedItems = () => {
     refetch
   }
 }
-
-export default useItem

@@ -9,7 +9,6 @@ import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { updateSubSystem, updateSystem } from '@/modules/systems/utils'
 import { PATH } from '@/types/constants/paths'
-import type { Mutation } from '@/types/gql/graphql'
 import { connectAndDisconnectNode, whereN } from '@/utils/graphql/mutations'
 import { makeSystemInputBody } from './utils'
 
@@ -113,7 +112,6 @@ export const useSystemUpdate = (
         name: systems[0].responsible.fullName
       }
     }
-    console.log('onCompleted -> body', body)
     imageRef?.current?.submit(responseUid, () => {
       toast.success(`System saved successfully`)
       mutateEndpoint(

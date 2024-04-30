@@ -2,6 +2,7 @@ import toast from 'react-hot-toast'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
+import { useEffect } from 'react'
 
 const GET_ROLES = gql(`
   query GetRoles {
@@ -14,14 +15,13 @@ const GET_ROLES = gql(`
 `)
 
 export const useRoles = () => {
-  const { data } = useGraphQL(
-    GET_ROLES,
-    {},
-    {
-      onError: error => {
-        toast.error(error.message)
-      }
+  const { data, error } = useGraphQL(GET_ROLES)
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to fetch roles')
     }
-  )
+  }, [error])
+
   return data?.roles || []
 }

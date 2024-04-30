@@ -2,6 +2,7 @@ import toast from 'react-hot-toast'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
+import { useEffect } from 'react'
 
 const GET_SPARE_PARTS = gql(`
   query SystemsSpareParts($where: SystemWhere) {
@@ -30,21 +31,19 @@ const GET_SPARE_PARTS = gql(`
 `)
 
 export const useGetSpareParts = uid => {
-  const { data, isLoading: loading } = useGraphQL(
-    GET_SPARE_PARTS,
-    {
-      where: {
-        uid: uid
-      }
-    },
-    {
-      onError: () => {
-        toast.error('Something went wrong')
-      }
+  const { data, isLoading, error } = useGraphQL(GET_SPARE_PARTS, {
+    where: {
+      uid: uid
     }
-  )
+  })
 
-  return { spareParts: data?.systems[0].spareParts, loading }
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to fetch spare parts')
+    }
+  }, [error])
+
+  return { spareParts: data?.systems[0].spareParts, loading: isLoading }
 }
 
 const GET_SPARE_PARTS_FOR = gql(`
@@ -73,19 +72,17 @@ const GET_SPARE_PARTS_FOR = gql(`
   }
 `)
 export const useGetSparePartsFor = uid => {
-  const { data, isLoading: loading } = useGraphQL(
-    GET_SPARE_PARTS_FOR,
-    {
-      where: {
-        uid: uid
-      }
-    },
-    {
-      onError: () => {
-        toast.error('Something went wrong')
-      }
+  const { data, isLoading, error } = useGraphQL(GET_SPARE_PARTS_FOR, {
+    where: {
+      uid: uid
     }
-  )
+  })
 
-  return { spareParts: data?.systems[0].sparePartsFor, loading }
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to fetch spare parts')
+    }
+  }, [error])
+
+  return { spareParts: data?.systems[0].sparePartsFor, loading: isLoading }
 }

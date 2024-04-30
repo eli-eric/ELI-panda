@@ -6,28 +6,37 @@ import { useFormContext } from 'react-hook-form'
 import { Heading } from '@/components/layout/Heading'
 
 import useGroupDetails from '../../hooks/useGroupDetails'
-import useItem from '../../hooks/useItem'
 import type { CatalogueItem, CatalogueItemDetail } from '../../types/responses'
 import GroupProperty from './GroupProperty'
+import { useCatalogueItem } from '../../hooks/useItem'
 
 const Groups = () => {
   const { unregister, watch } = useFormContext<CatalogueItem>()
-  const [details, setDetails] = useState<{ groups?: string[]; details?: CatalogueItemDetail[] }>()
+  const [details, setDetails] = useState<{
+    groups?: string[]
+    details?: CatalogueItemDetail[]
+  }>()
 
   const category = watch('category')
 
-  const { item, groups: groupsItem } = useItem()
+  const { item, groups: groupsItem } = useCatalogueItem()
   const { groups: groupsDetail, groupDetails } = useGroupDetails(category?.uid)
 
   useEffect(() => {
     if (category?.uid === item?.category?.uid) {
-      const itemDetails = sortBy(item?.details, ['propertyGroup', 'property.name'])
+      const itemDetails = sortBy(item?.details, [
+        'propertyGroup',
+        'property.name'
+      ])
       setDetails({
         groups: groupsItem,
         details: itemDetails
       })
     } else {
-      const itemDetails = sortBy(groupDetails, ['propertyGroup', 'property.name'])
+      const itemDetails = sortBy(groupDetails, [
+        'propertyGroup',
+        'property.name'
+      ])
       setDetails({
         groups: groupsDetail,
         details: itemDetails
@@ -42,12 +51,18 @@ const Groups = () => {
           <Fragment key={group}>
             <Heading customText={group} />
             <div className="px-4 sm:px-6">
-              <dl key={group} className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+              <dl
+                key={group}
+                className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-4"
+              >
                 {details.details?.map(
                   (detail, index) =>
                     detail.propertyGroup === group && (
                       <GroupProperty
-                        key={detail?.property?.uid && detail?.property?.uid + index + detail.property.name}
+                        key={
+                          detail?.property?.uid &&
+                          detail?.property?.uid + index + detail.property.name
+                        }
                         detail={detail}
                         index={index}
                       />

@@ -3,6 +3,7 @@ import { toast } from 'react-hot-toast'
 
 import { gql } from '@/types/gql'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { useEffect } from 'react'
 
 export const roomCardsQuery = gql(`
   query RoomCardsQuery($where: RoomCardWhere) {
@@ -30,19 +31,17 @@ export const roomCardsQuery = gql(`
 
 export const useRoomCards = () => {
   const [search] = useQueryState('search')
-  const { data, isLoading, error, refetch } = useGraphQL(
-    roomCardsQuery,
-    {
-      where: {
-        name_CONTAINS: search || ''
-      }
-    },
-    {
-      onError: () => {
-        toast.error('Error loading room cards')
-      }
+  const { data, isLoading, error, refetch } = useGraphQL(roomCardsQuery, {
+    where: {
+      name_CONTAINS: search || ''
     }
-  )
+  })
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to fetch room cards')
+    }
+  }, [error])
 
   return { roomCards: data?.roomCards, loading: isLoading, error, refetch }
 }

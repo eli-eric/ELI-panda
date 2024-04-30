@@ -27,15 +27,13 @@ const GET_FACILITIES = gql(`
 export const UserForm = () => {
   const fields = useUserFormFields()
   const { setValue, control } = useFormContext()
-  const { data } = useGraphQL(
-    GET_FACILITIES,
-    {},
-    {
-      onError: () => {
-        toast.error('Failed to fetch facilities')
-      }
+  const { data, error } = useGraphQL(GET_FACILITIES, {})
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to fetch facilities')
     }
-  )
+  }, [error])
 
   const [getEmployee, employee] = useLazyEmployee()
 

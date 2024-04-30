@@ -62,18 +62,6 @@
           { "selector": "enum", "format": ["UPPER_CASE"] }
         ]
       }
-    },
-    {
-      "files": ["*.graphql"],
-      "parser": "@graphql-eslint/eslint-plugin",
-      "plugins": ["@graphql-eslint"],
-      "rules": {
-        "@graphql-eslint/known-type-names": "error"
-      }
-    },
-    {
-      "files": ["*.js", "*.jsx", "*.ts", "*.tsx"],
-      "processor": "@graphql-eslint/graphql"
     }
   ]
 }

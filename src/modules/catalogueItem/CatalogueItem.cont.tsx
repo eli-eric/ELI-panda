@@ -25,10 +25,10 @@ import { schema } from './components/form/ItemForm.schema'
 import { CatalogueOrders } from './components/orders/CatalogueOrders'
 import { RelatedItemsContainer } from './components/related-items/RelatedItems.cont'
 import { CatalogueStatisticsContainer } from './components/statistics/CatalogueStatistics.cont'
-import useItem from './hooks/useItem'
 import useItemSubmit from './hooks/useItemSubmit'
 import type { CatalogueItem } from './types/responses'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
+import { useCatalogueItem } from './hooks/useItem'
 
 const MemoizedGallery = memo(ImageGallery)
 
@@ -46,7 +46,7 @@ const CatalogueItemContainer = ({
   catalogueCategoryUid
 }: CatalogueItemContainerProps) => {
   const disabledEdit = !usePermission([ROLE.CATALOGUE_EDIT])
-  const { item } = useItem()
+  const { item } = useCatalogueItem()
   const fields = useCatalogueFormFields()
 
   const { catalogueCategory } = useCategory(catalogueCategoryUid)

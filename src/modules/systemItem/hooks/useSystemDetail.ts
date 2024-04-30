@@ -8,6 +8,7 @@ import {
   CatalogueItemFragment,
   SystemDetailFragment
 } from '@/utils/graphql/fragments'
+import { useEffect } from 'react'
 
 const systemDetailQuery = gql(`
   query SystemDetail($where: SystemWhere) {
@@ -22,22 +23,22 @@ export const useSystemDetail = (alias?: string, onSuccess?: (data) => void) => {
   const uid = router.query.uid as string | undefined
 
   const { system: systemEndpoint } = useEndpoint({ uid })
-  const { data, error, isLoading, refetch } = useGraphQL(
+  const { data, error, isLoading, refetch, status } = useGraphQL(
     systemDetailQuery,
     {
       where: { uid, systemCode: alias }
-    },
-    {
-      onError: error => {
-        toast.error(
-          'Something went wrong while fetching system detail: ' + error.message
-        )
-      },
-      onSuccess: data => {
-        onSuccess && onSuccess(data)
-      }
     }
   )
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to fetch system detail')
+    }
+    if (status === 'success') {
+      onSuccess?.(data)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [error, status, data])
 
   const systemDetail = useFragment(SystemDetailFragment, data?.systems[0])
   const physicalItem = systemDetail?.physicalItem
