@@ -1,10 +1,10 @@
 import type { CategoryFormType } from '../components/categoryEdit/types'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { queryFetcher } from '@/utils/fetcher'
 import { useMemo } from 'react'
 
 export const useCategoryDetail = (uid?: string) => {
-  const { data, isLoading } = useSuspenseQuery<CategoryFormType>({
+  const { data, isLoading } = useQuery<CategoryFormType>({
     queryKey: ['categoryDetail', { uid }],
     queryFn: queryFetcher('catalogueCategoryEdit')
   })

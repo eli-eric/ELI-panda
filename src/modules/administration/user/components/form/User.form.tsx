@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { startTransition, useEffect } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
@@ -46,14 +46,16 @@ export const UserForm = () => {
   }, [epmloyeeForm, getEmployee])
 
   useEffect(() => {
-    if (employee) {
-      setValue('firstName', employee.firstName)
-      setValue('lastName', employee.lastName)
-      setValue('facility', {
-        uid: employee.facility.code,
-        name: employee.facility.name
-      })
-    }
+    startTransition(() => {
+      if (employee) {
+        setValue('firstName', employee.firstName)
+        setValue('lastName', employee.lastName)
+        setValue('facility', {
+          uid: employee.facility.code,
+          name: employee.facility.name
+        })
+      }
+    })
   }, [employee, setValue])
 
   const generatePasswordHandler = () => {

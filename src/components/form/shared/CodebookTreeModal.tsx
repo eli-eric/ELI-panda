@@ -1,6 +1,6 @@
 import type { ColumnDef, Table } from '@tanstack/react-table'
 import classNames from 'classnames'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
@@ -52,11 +52,13 @@ export const CodebookTreeModal = ({
   const tableRef = useRef<Table<Codebooktree>>(null)
 
   useEffect(() => {
-    if (tableRef.current) {
-      const filter = tableRef.current.getState().columnFilters
-      if (filter.length > 0) tableRef.current.toggleAllRowsExpanded(true)
-      if (filter.length === 0) tableRef.current.toggleAllRowsExpanded(false)
-    }
+    startTransition(() => {
+      if (tableRef.current) {
+        const filter = tableRef.current.getState().columnFilters
+        if (filter.length > 0) tableRef.current.toggleAllRowsExpanded(true)
+        if (filter.length === 0) tableRef.current.toggleAllRowsExpanded(false)
+      }
+    })
     return () => {
       setItem(undefined)
     }

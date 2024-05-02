@@ -1,6 +1,6 @@
 'use client'
 import { sortBy } from 'lodash'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, startTransition, useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { Heading } from '@/components/layout/Heading'
@@ -23,25 +23,27 @@ const Groups = () => {
   const { groups: groupsDetail, groupDetails } = useGroupDetails(category?.uid)
 
   useEffect(() => {
-    if (category?.uid === item?.category?.uid) {
-      const itemDetails = sortBy(item?.details, [
-        'propertyGroup',
-        'property.name'
-      ])
-      setDetails({
-        groups: groupsItem,
-        details: itemDetails
-      })
-    } else {
-      const itemDetails = sortBy(groupDetails, [
-        'propertyGroup',
-        'property.name'
-      ])
-      setDetails({
-        groups: groupsDetail,
-        details: itemDetails
-      })
-    }
+    startTransition(() => {
+      if (category?.uid === item?.category?.uid) {
+        const itemDetails = sortBy(item?.details, [
+          'propertyGroup',
+          'property.name'
+        ])
+        setDetails({
+          groups: groupsItem,
+          details: itemDetails
+        })
+      } else {
+        const itemDetails = sortBy(groupDetails, [
+          'propertyGroup',
+          'property.name'
+        ])
+        setDetails({
+          groups: groupsDetail,
+          details: itemDetails
+        })
+      }
+    })
   }, [groupsItem, groupsDetail, groupDetails, category, item, unregister])
 
   return (

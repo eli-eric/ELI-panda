@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { startTransition, useCallback, useEffect, useState } from 'react'
 import { shallow } from 'zustand/shallow'
 
 import { useWarningModalStore } from '@/store/useWarningModalStore'
@@ -19,28 +19,35 @@ const useWarningModal = (globalMessage?: string) => {
   const { callback, callbackArgs } = execData
 
   useEffect(() => {
-    if (callback && callbackArgs && isConfirmed) {
-      try {
-        callback(...callbackArgs)
-        resetParams()
-      } catch (err) {
-        patchParams({ error: String(err) })
+    startTransition(() => {
+      if (callback && callbackArgs && isConfirmed) {
+        try {
+          callback(...callbackArgs)
+          resetParams()
+        } catch (err) {
+          patchParams({ error: String(err) })
+        }
       }
-    }
+    })
   }, [isConfirmed, callback, callbackArgs, resetParams, patchParams])
 
   //Cancel execution on close
   useEffect(() => {
-    if (!isOpen && callbackArgs) {
-      setExecData({
-        callback: undefined,
-        callbackArgs: undefined
-      })
-    }
+    startTransition(() => {
+      if (!isOpen && callbackArgs) {
+        setExecData({
+          callback: undefined,
+          callbackArgs: undefined
+        })
+      }
+    })
   }, [callback, callbackArgs, isOpen])
 
   const withWarningModal = useCallback(
-    <T extends any[], R>(callback: (...callbackArgs: T) => R, message?: string) =>
+    <T extends any[], R>(
+      callback: (...callbackArgs: T) => R,
+      message?: string
+    ) =>
       (...callbackArgs: T) => {
         const newParams = {
           isOpen: true,

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { startTransition, useEffect } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
@@ -23,10 +23,14 @@ const DefaultItemForm = () => {
   const { catalogueCategory } = useCategory(category?.uid)
 
   useEffect(() => {
-    if (catalogueCategory) {
-      const categoryPathString = catalogueCategory.parentPath?.map((path: any) => path?.name).join(' > ')
-      setParentPath(categoryPathString)
-    }
+    startTransition(() => {
+      if (catalogueCategory) {
+        const categoryPathString = catalogueCategory.parentPath
+          ?.map((path: any) => path?.name)
+          .join(' > ')
+        setParentPath(categoryPathString)
+      }
+    })
   }, [category, catalogueCategory])
 
   return (
@@ -38,7 +42,10 @@ const DefaultItemForm = () => {
         <Input {...fields.catalogueNumber} />
       </Col>
       <Col lg={12}>
-        <ComboboxTree {...fields.category} customLabel={fm({ id: form.category.label }, { parentPath })} />
+        <ComboboxTree
+          {...fields.category}
+          customLabel={fm({ id: form.category.label }, { parentPath })}
+        />
       </Col>
       <Col lg={6}>
         <Combobox {...fields.supplier} />

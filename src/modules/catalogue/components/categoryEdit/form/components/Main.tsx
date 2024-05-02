@@ -1,6 +1,6 @@
 import { TrashIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
-import { useCallback, useEffect, useState } from 'react'
+import { startTransition, useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
 import useSWR from 'swr'
@@ -62,8 +62,10 @@ const Main = ({ uid }: { uid?: string }) => {
   const name = watch('name')
 
   useEffect(() => {
-    const codeValue = name ? name.replace(/\s+/g, '-').toLowerCase() : ''
-    setValue('code', codeValue)
+    startTransition(() => {
+      const codeValue = name ? name.replace(/\s+/g, '-').toLowerCase() : ''
+      setValue('code', codeValue)
+    })
   }, [name, setValue, categoryImage, image])
 
   return (

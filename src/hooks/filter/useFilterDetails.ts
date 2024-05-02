@@ -28,7 +28,7 @@ export const useFilterDetails = (tableId: string, filterUid?: string) => {
     }
   })
   useEffect(() => {
-    if (!error) {
+    if (error) {
       toast.error('Failed to fetch filters')
     }
   }, [error])

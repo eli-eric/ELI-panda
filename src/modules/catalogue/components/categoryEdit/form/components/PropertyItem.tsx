@@ -1,5 +1,5 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { useEffect } from 'react'
+import { startTransition, useEffect } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
@@ -81,9 +81,11 @@ const PropertyItem = ({
   }) */
 
   useEffect(() => {
-    if (type?.uid !== PROPERTY_TYPE.LIST && listOfValues.length !== 0) {
-      unregister(`${name}.listOfValues`)
-    }
+    startTransition(() => {
+      if (type?.uid !== PROPERTY_TYPE.LIST && listOfValues.length !== 0) {
+        unregister(`${name}.listOfValues`)
+      }
+    })
   }, [type, unregister, name, listOfValues])
 
   const getDefaultField = (type?: PROPERTY_TYPE | string) => {
