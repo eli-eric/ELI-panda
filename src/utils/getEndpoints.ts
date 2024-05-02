@@ -9,10 +9,10 @@ export interface EndpointProps {
 }
 
 export const getEndpoints = ({
-  uid,
-  path,
-  itemUid,
-  query,
+  uid = '',
+  path = '',
+  itemUid = '',
+  query = '',
   codebook
 }: EndpointProps) => {
   const endpoints = {

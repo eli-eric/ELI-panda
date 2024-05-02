@@ -24,6 +24,6 @@ export const queryFetcher =
   (endpointType: keyof ReturnType<typeof getEndpoints>) =>
   async ({ queryKey }) => {
     const query = queryKey[1] as EndpointProps
-    const endpoint = getEndpoints(query)[endpointType] as string
+    const endpoint = getEndpoints(query || {})[endpointType] as string
     return axiosInstance.get(BASE_URL + endpoint).then(res => res.data)
   }

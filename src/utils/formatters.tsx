@@ -60,6 +60,6 @@ export function formatDate(date) {
   return formatter.format(newDate)
 }
 
-export function makeQuery(query: Record<string, string>) {
+export function makeQuery(query: Record<string, any>) {
   return '?' + new URLSearchParams(query).toString()
 }
