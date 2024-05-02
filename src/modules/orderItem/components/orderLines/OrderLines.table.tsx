@@ -32,7 +32,13 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
 
   useEffect(() => {
     if (tableRef.current) {
-      tableRef.current.setColumnOrder(['name', 'partNumber', 'serialNumber', 'eun', 'isDelivered'])
+      tableRef.current.setColumnOrder([
+        'name',
+        'partNumber',
+        'serialNumber',
+        'eun',
+        'isDelivered'
+      ])
     }
   }, [tableRef])
 
@@ -41,11 +47,17 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
       <Heading text={messages.orderLines}>
         {!disabledEdit && (
           <div className="flex items-center mr-2">
-            <PlusButton primary type="button" buttonSize="large" onClick={handleAddOrderLine} className="mb-2" />
+            <PlusButton
+              primary
+              type="button"
+              buttonSize="large"
+              onClick={handleAddOrderLine}
+              className="mb-2"
+            />
           </div>
         )}
       </Heading>
-      <div className="flex flex-col">
+      <div className="flex flex-col max-h-[500px] mb-5">
         <PandaTable
           ref={tableRef}
           columns={columns}
@@ -53,7 +65,11 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
           tableId={'orderLines'}
           className={'relative overflow-x-auto'}
           getRowProps={({ original: { isDelivered } }) => ({
-            className: classNames(isDelivered ? 'bg-green-100 dark:bg-green-700' : 'bg-white dark:bg-gray-800')
+            className: classNames(
+              isDelivered
+                ? 'bg-green-100 dark:bg-green-700'
+                : 'bg-white dark:bg-gray-800'
+            )
           })}
           settings={{
             enableFooter: true,
