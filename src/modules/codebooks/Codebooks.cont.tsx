@@ -1,6 +1,6 @@
 import { useQueryState } from 'next-usequerystate'
 import type { FC } from 'react'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, startTransition, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { v4 as uuid } from 'uuid'
 
@@ -56,11 +56,13 @@ export const CodebooksContainer: FC<Props> = () => {
   })
 
   useEffect(() => {
-    if (selectedCodebookQuery)
-      setValue('codebook', {
-        uid: selectedCodebookQuery as CODEBOOK,
-        name: selectedCodebookQuery as CODEBOOK
-      })
+    startTransition(() => {
+      if (selectedCodebookQuery)
+        setValue('codebook', {
+          uid: selectedCodebookQuery as CODEBOOK,
+          name: selectedCodebookQuery as CODEBOOK
+        })
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, startTransition, useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
@@ -14,7 +14,7 @@ const CatalogueCategoryHomePage: NextPage = (): JSX.Element => {
   //HOT FIX
   const [isClient, setIsClient] = useState(false)
   useEffect(() => {
-    setIsClient(true)
+    startTransition(() => setIsClient(true))
   }, [])
 
   return (

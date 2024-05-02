@@ -3,7 +3,7 @@ import '../styles/globals.css'
 import { ApolloProvider } from '@apollo/client'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
-import { useEffect, useState } from 'react'
+import { Suspense, lazy, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { Toaster } from 'react-hot-toast'
@@ -16,10 +16,8 @@ import { GenereralModal } from '@/components/overlays/modal/modal.comp'
 import { WarningModal } from '@/components/WarningModal'
 import { useLocale } from '@/hooks/useLocale'
 import { useApollo } from '@/server/apollo/client'
-import { useDarkModeStore } from '@/store/useDarkModeStore'
 import { fetcher } from '@/utils/fetcher'
 import { Layout } from '@/components/layout/Layout'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import {
   HydrationBoundary,
@@ -27,23 +25,19 @@ import {
   QueryClientProvider
 } from '@tanstack/react-query'
 
-const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {}
-        }
-      })
+const ReactQueryDevtoolsProduction = lazy(() =>
+  import('@tanstack/react-query-devtools/build/modern/production.js').then(
+    d => ({
+      default: d.ReactQueryDevtools
+    })
   )
+)
+
+const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
+  const [queryClient] = useState(() => new QueryClient())
 
   const apolloClient = useApollo(pageProps.initialApolloState)
   const locale = useLocale()
-  const { setStoredTheme } = useDarkModeStore()
-
-  useEffect(() => {
-    setStoredTheme()
-  }, [setStoredTheme])
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -85,7 +79,11 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
           </ApolloProvider>
         </SessionProvider>
       </HydrationBoundary>
-      <ReactQueryDevtools />
+      {process.env.NODE_ENV === 'development' && (
+        <Suspense fallback={null}>
+          <ReactQueryDevtoolsProduction />
+        </Suspense>
+      )}
     </QueryClientProvider>
   )
 }
