@@ -2,7 +2,10 @@ import type { Row } from '@tanstack/react-table'
 import { Fragment, useCallback, useEffect } from 'react'
 
 import { Pagination } from '@/modules/shared/table/Pagination'
-import type { GetRowPropsReturnType, PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
+import type {
+  GetRowPropsReturnType,
+  PandaTableSettings
+} from '@/modules/shared/table/pandaTable/PandaTable'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 
 import { useSystems } from '../../hooks/useSystems'
@@ -38,14 +41,21 @@ export const SystemsTable = ({
   collapseOnUnMount
 }: Props) => {
   const { systems, loading } = useSystems(tableId)
-  const { columns, pending } = useSystemsColumns({ tableId, hideButtons, enableDragAndDrop: enableDragAndDrop })
+  const { columns, pending } = useSystemsColumns({
+    tableId,
+    hideButtons,
+    enableDragAndDrop: enableDragAndDrop
+  })
 
   const table = usePandaTable({
     tableId,
     columns,
     data: systems?.data,
     getSubRows: original => original.subSystems ?? [],
-    settings: { ...settings, enableSorting: false, enableColumnReordering: false }
+    settings: {
+      ...settings,
+      enableColumnReordering: false
+    }
   })
 
   const onChangeSearch = useCallback(() => {
@@ -83,7 +93,10 @@ export const SystemsTable = ({
         loading={loading || pending}
         tableId={tableId}
         getRowProps={getRowProps}
-        settings={{ ...settings, enableSorting: false, enableColumnReordering: false }}
+        settings={{
+          ...settings,
+          enableColumnReordering: false
+        }}
         className={className}
       />
       <Pagination
