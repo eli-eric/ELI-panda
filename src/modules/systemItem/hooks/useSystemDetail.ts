@@ -28,6 +28,9 @@ export const useSystemDetail = (alias?: string, onSuccess?: (data) => void) => {
     systemDetailQuery,
     {
       where: { uid, systemCode: alias }
+    },
+    {
+      enabled: !!uid
     }
   )
 

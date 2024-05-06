@@ -9,12 +9,13 @@ export const useSystems = tableId => {
 
   const queryKey = ['systemsList', { query: makeQuery(query) }, tableId]
 
-  const { data, isLoading, error, dataUpdatedAt } = useQuery<SystemsResponse>({
-    queryKey,
-    queryFn: queryFetcher('systemsList'),
-    placeholderData: keepPreviousData,
-    refetchOnMount: false
-  })
+  const { data, isLoading, error, dataUpdatedAt, refetch } =
+    useQuery<SystemsResponse>({
+      queryKey,
+      queryFn: queryFetcher('systemsList'),
+      placeholderData: keepPreviousData,
+      refetchOnMount: false
+    })
 
   return {
     systems: data,
@@ -22,6 +23,7 @@ export const useSystems = tableId => {
     error,
     query,
     queryKey,
-    dataUpdatedAt
+    dataUpdatedAt,
+    refetch
   }
 }

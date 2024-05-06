@@ -5,6 +5,9 @@ import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
 import { SystemItemContainer } from '@/modules/systemItem/SystemItem.cont'
+import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
+import LoaderComponent from '@/components/loader.comp'
+import ErrorPage from '@/components/error/ErrorPage'
 
 const messages = message.systemItem
 
@@ -15,6 +18,15 @@ interface Props {
 
 const SystemDetailPage: NextPage = ({ uid }: Props) => {
   const intl = useIntl()
+  const { systemDetail, loading, error } = useSystemDetail()
+
+  if (loading) {
+    return <LoaderComponent />
+  }
+
+  if (error) {
+    return <ErrorPage />
+  }
 
   return (
     <Fragment>
@@ -22,8 +34,7 @@ const SystemDetailPage: NextPage = ({ uid }: Props) => {
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-
-      <SystemItemContainer uid={uid} />
+      {systemDetail && <SystemItemContainer uid={uid} />}
     </Fragment>
   )
 }

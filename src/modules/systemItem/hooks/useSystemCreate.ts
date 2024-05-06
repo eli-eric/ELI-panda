@@ -15,12 +15,15 @@ import { connectN, whereC, whereN } from '@/utils/graphql/mutations'
 
 import type { SystemDetailFormType } from '../types/form'
 import { navigateBack } from '@/utils'
+import { useQueryClient } from '@tanstack/react-query'
+import type { SystemsResponse } from '@/modules/systems/types/responses'
 
 const createSystemMutation = gql`
   mutation CreateSystems($input: [SystemCreateInput!]!) {
     createSystems(input: $input) {
       systems {
-        ...SystemDetail
+        uid
+        name
       }
     }
   }
@@ -30,7 +33,8 @@ export const useSystemCreate = (
   imageRef?: MutableRefObject<ImageGalleryRef | undefined>
 ) => {
   const router = useRouter()
-  const { mutate } = useSystems('systems')
+  const { queryKey, refetch } = useSystems('systems')
+  const queryClient = useQueryClient()
   const parentUid = router.query.parentUid as string | undefined
   const { data: session } = useSession()
 
@@ -52,10 +56,13 @@ export const useSystemCreate = (
         }
       )
       parentUid
-        ? mutate(prev => prev && addSubsystem(parentUid, body, prev), {
-            revalidate: false
+        ? queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
+            if (prev) {
+              return addSubsystem(parentUid, body, prev)
+            }
+            return prev
           })
-        : mutate()
+        : refetch()
       if (saveAndExit) {
         navigateBack()
       } else {

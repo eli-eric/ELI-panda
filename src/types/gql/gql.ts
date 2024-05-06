@@ -41,8 +41,9 @@ const documents = {
     "\n  query LocationsQuery($where: LocationWhere) {\n    locations(where: $where) {\n      uid\n      name\n      code\n      subLocations {\n        uid\n      }\n    }\n  }\n": types.LocationsQueryDocument,
     "\n  query SubLocationsQuery($where: LocationWhere) {\n    locations(where: $where) {\n      subLocations {\n        uid\n        name\n        code\n        subLocations {\n          uid\n        }\n      }\n    }\n  }\n": types.SubLocationsQueryDocument,
     "\n  query SystemTypeQuery(\n    $systemTypesWhere: SystemTypeWhere\n    $where: SystemTypeGroupWhere\n  ) {\n    systemTypeGroups(where: $where, options: { sort: [{ name: ASC }] }) {\n      name\n      uid\n      systemTypes(\n        where: $systemTypesWhere\n        options: { sort: [{ name: ASC }] }\n      ) {\n        name\n        code\n        uid\n      }\n    }\n  }\n": types.SystemTypeQueryDocument,
+    "\n  query SystemDetailParent($where: SystemWhere) {\n    systems(where: $where) {\n      uid\n      name\n      parentPath {\n        uid\n        name\n        systemLevel\n      }\n  }\n   }\n": types.SystemDetailParentDocument,
     "\n  mutation ClearSystemCodeMutation(\n    $where: SystemWhere\n    $update: SystemUpdateInput\n  ) {\n    updateSystems(where: $where, update: $update) {\n      systems {\n        systemCode\n      }\n    }\n  }\n": types.ClearSystemCodeMutationDocument,
-    "\n  mutation CreateSystems($input: [SystemCreateInput!]!) {\n    createSystems(input: $input) {\n      systems {\n        ...SystemDetail\n      }\n    }\n  }\n": types.CreateSystemsDocument,
+    "\n  mutation CreateSystems($input: [SystemCreateInput!]!) {\n    createSystems(input: $input) {\n      systems {\n        uid\n        name\n      }\n    }\n  }\n": types.CreateSystemsDocument,
     "\n  query SystemDetail($where: SystemWhere) {\n    systems(where: $where) {\n      ...SystemDetail\n  }\n   }\n": types.SystemDetailDocument,
     "\n  mutation UpdateSystemMutation(\n    $where: SystemWhere\n    $update: SystemUpdateInput!\n    $updateItemsWhere: ItemWhere\n    $updateItem: ItemUpdateInput\n    $node: String\n    $nodeUid: String\n    $action: String\n    $itemUid: String\n    $systemOriginatedUid: String\n  ) {\n    updateItems(where: $updateItemsWhere, update: $updateItem) {\n      items {\n        name\n      }\n    }\n    updateSystems(where: $where, update: $update) {\n      systems {\n        ...SystemDetail\n      }\n    }\n    updatedByResolver(node: $node, nodeUid: $nodeUid, action: $action)\n    itemOriginatedResolver(\n      itemUid: $itemUid\n      systemOriginatedUid: $systemOriginatedUid\n    )\n  }\n": types.UpdateSystemMutationDocument,
     "\n  mutation UpdateSystemParentMutation(\n    $where: SystemWhere\n    $update: SystemUpdateInput!\n    $systemFromUid: String\n    $systemUid: String\n  ) {\n    updateSystems(where: $where, update: $update) {\n      systems {\n        ...SystemDetail\n      }\n    }\n    systemMovedFromResolver(\n      systemFromUid: $systemFromUid\n      systemUid: $systemUid\n    )\n  }\n": types.UpdateSystemParentMutationDocument,
@@ -185,11 +186,15 @@ export function gql(source: "\n  query SystemTypeQuery(\n    $systemTypesWhere: 
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n  query SystemDetailParent($where: SystemWhere) {\n    systems(where: $where) {\n      uid\n      name\n      parentPath {\n        uid\n        name\n        systemLevel\n      }\n  }\n   }\n"): (typeof documents)["\n  query SystemDetailParent($where: SystemWhere) {\n    systems(where: $where) {\n      uid\n      name\n      parentPath {\n        uid\n        name\n        systemLevel\n      }\n  }\n   }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "\n  mutation ClearSystemCodeMutation(\n    $where: SystemWhere\n    $update: SystemUpdateInput\n  ) {\n    updateSystems(where: $where, update: $update) {\n      systems {\n        systemCode\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation ClearSystemCodeMutation(\n    $where: SystemWhere\n    $update: SystemUpdateInput\n  ) {\n    updateSystems(where: $where, update: $update) {\n      systems {\n        systemCode\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation CreateSystems($input: [SystemCreateInput!]!) {\n    createSystems(input: $input) {\n      systems {\n        ...SystemDetail\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation CreateSystems($input: [SystemCreateInput!]!) {\n    createSystems(input: $input) {\n      systems {\n        ...SystemDetail\n      }\n    }\n  }\n"];
+export function gql(source: "\n  mutation CreateSystems($input: [SystemCreateInput!]!) {\n    createSystems(input: $input) {\n      systems {\n        uid\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation CreateSystems($input: [SystemCreateInput!]!) {\n    createSystems(input: $input) {\n      systems {\n        uid\n        name\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

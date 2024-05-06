@@ -36,6 +36,7 @@ import { AssignPhysicalItem } from '../AssignPhysicalItem'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import { ShowHistoryButton } from '../history/ShowHistoryButton'
 import { useSystemDetail } from '../../hooks/useSystemDetail'
+import { useSystemParentPath } from '../../hooks/useParentPath'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
@@ -50,6 +51,7 @@ export const SystemForm = () => {
   const { systemDetail, catalogueItem } = useSystemDetail()
   const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
   const fields = useSystemEditFormFields()
+  const { parentPath } = useSystemParentPath()
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { spareParts, sparePartsFor, subSystems, __typename, ...rest } =
@@ -127,7 +129,11 @@ export const SystemForm = () => {
         customElement={<ShowHistoryButton />}
       />
       <Card>
-        <Breadcrumbs parentPath={systemDetail?.parentPath as CodebookType[]} />
+        <Breadcrumbs
+          parentPath={
+            (systemDetail?.parentPath as CodebookType[]) || parentPath
+          }
+        />
       </Card>
       <FormCard
         className={classNames(
