@@ -1,4 +1,8 @@
-import { ArrowsRightLeftIcon, ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import {
+  ArrowsRightLeftIcon,
+  ChevronDownIcon,
+  ChevronRightIcon
+} from '@heroicons/react/24/outline'
 import type { CellContext } from '@tanstack/react-table'
 import classNames from 'classnames'
 import Link from 'next/link'
@@ -22,16 +26,20 @@ import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 // eslint-disable-next-line
-import type { SystemDetail } from '@/modules/systems/types/responses'
+import type {
+  SystemDetail,
+  SystemsResponse
+} from '@/modules/systems/types/responses'
 import { filterSubsystem } from '@/modules/systems/utils'
 import { ShowSpareButton } from '@/modules/systemsSpareParts/components/ShowSpareButton'
 import { PATH } from '@/types/constants/paths'
 import { createMessageValues } from '@/utils/formatters'
+import { useQueryClient } from '@tanstack/react-query'
 
 const messages = message.systemsPage.systemDetail.deleteModal
 
 interface SystemNameCellProps extends CellContext<SystemDetail, any> {
-  setUid?: (uid: string | null) => void
+  setUid: (uid: string | null) => void
   canEdit?: boolean
   hideButtons?: boolean
   tableId: string
@@ -52,7 +60,10 @@ export const SystemNameCell = ({
   const { original } = row
   const { sparesIn, sparesOut } = original
   const { system } = useEndpoint({ uid: original.uid })
-  const { mutate } = useSystems(tableId)
+  const { queryKey } = useSystems(tableId)
+
+  const queryClient = useQueryClient()
+
   const { formatMessage: fm } = useIntl()
 
   const { submit } = useSubmit<string>({
@@ -60,14 +71,22 @@ export const SystemNameCell = ({
     method: 'delete',
     onSuccess: () => {
       toast.success(`System ${original.name} deleted`)
-      mutate(prev => prev && filterSubsystem(original.uid, prev), { revalidate: false })
+
+      queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
+        if (prev) {
+          return filterSubsystem(original.uid, prev)
+        }
+        return prev
+      })
     },
     onError: () => {
       toast.error(`Error deleting system ${original.name}`)
     }
   })
 
-  const withWarningModal = useWarningModal(fm({ id: messages.message }, createMessageValues({ name: original.name })))
+  const withWarningModal = useWarningModal(
+    fm({ id: messages.message }, createMessageValues({ name: original.name }))
+  )
 
   const [{ isDragging }, dragRef, previewRef] = useDrag({
     collect: monitor => ({
@@ -92,9 +111,9 @@ export const SystemNameCell = ({
           )}
           onClick={() => {
             if (!row.getIsExpanded()) {
-              setUid && setUid(original.uid)
-            } else {
-              setUid && setUid(null)
+              if (!original.subSystems?.length) {
+                setUid(original.uid)
+              }
             }
             row.toggleExpanded()
           }}
@@ -108,7 +127,11 @@ export const SystemNameCell = ({
           <Tooltip
             content={original.parentPath?.map(v => v.name).join(' > ')}
             placement="top"
-            className={original.parentPath && original.parentPath?.length > 0 ? '' : 'hidden'}
+            className={
+              original.parentPath && original.parentPath?.length > 0
+                ? ''
+                : 'hidden'
+            }
           >
             <div>
               {original.hasSubsystems ? (
@@ -137,8 +160,14 @@ export const SystemNameCell = ({
             {enableDragAndDrop ? (
               <TableButtonsWrapper>
                 <Link href={PATH.SYSTEM + '/' + original.uid} legacyBehavior>
-                  <a target={'_blank'} rel="noreferrer" className="flex items-center">
-                    <Fragment>{canEdit ? <TableEditButton /> : <TableOpenButton />}</Fragment>
+                  <a
+                    target={'_blank'}
+                    rel="noreferrer"
+                    className="flex items-center"
+                  >
+                    <Fragment>
+                      {canEdit ? <TableEditButton /> : <TableOpenButton />}
+                    </Fragment>
                   </a>
                 </Link>
                 <TableDeleteButton
@@ -146,8 +175,18 @@ export const SystemNameCell = ({
                     withWarningModal(submit)()
                   }}
                 />
-                <Link href={{ pathname: PATH.SYSTEM, query: { parentUid: original.uid } }} legacyBehavior>
-                  <a target={'_blank'} rel="noreferrer" className="flex items-center">
+                <Link
+                  href={{
+                    pathname: PATH.SYSTEM,
+                    query: { parentUid: original.uid }
+                  }}
+                  legacyBehavior
+                >
+                  <a
+                    target={'_blank'}
+                    rel="noreferrer"
+                    className="flex items-center"
+                  >
                     <TablePlusButton />
                   </a>
                 </Link>
@@ -157,11 +196,19 @@ export const SystemNameCell = ({
                 onDeleteClick={() => {
                   withWarningModal(submit)()
                 }}
-                addLink={{ pathname: PATH.SYSTEM, query: { parentUid: original.uid } }}
+                addLink={{
+                  pathname: PATH.SYSTEM,
+                  query: { parentUid: original.uid }
+                }}
                 detailLink={PATH.SYSTEM + '/' + original.uid}
                 canEdit={canEdit}
               >
-                <ShowSpareButton tableId={tableId} uid={original.uid} sparesIn={sparesIn} sparesOut={sparesOut} />
+                <ShowSpareButton
+                  tableId={tableId}
+                  uid={original.uid}
+                  sparesIn={sparesIn}
+                  sparesOut={sparesOut}
+                />
               </TableActionsButtons>
             )}
           </Fragment>
