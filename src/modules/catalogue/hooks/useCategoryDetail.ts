@@ -6,7 +6,8 @@ import { useMemo } from 'react'
 export const useCategoryDetail = (uid?: string) => {
   const { data, isLoading } = useQuery<CategoryFormType>({
     queryKey: ['categoryDetail', { uid }],
-    queryFn: queryFetcher('catalogueCategoryEdit')
+    queryFn: queryFetcher('catalogueCategoryEdit'),
+    enabled: !!uid
   })
 
   const categoryDetail = useMemo(() => {
