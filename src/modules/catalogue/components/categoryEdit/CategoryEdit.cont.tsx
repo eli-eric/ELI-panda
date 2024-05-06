@@ -1,7 +1,6 @@
 'use client'
 import { type Dispatch, Fragment, type SetStateAction } from 'react'
 import { FormattedMessage } from 'react-intl'
-import { mutate } from 'swr'
 
 import { Button } from '@/components/Buttons'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
@@ -26,7 +25,7 @@ interface Props {
 }
 
 const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
-  const { catalogueCategoryEdit, catalogueCategoryImage } = useEndpoint({
+  const { catalogueCategoryEdit } = useEndpoint({
     uid
   })
 
@@ -40,8 +39,6 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
     method: uid ? 'put' : 'post',
     onSuccess: () => {
       refetch()
-      mutate(catalogueCategoryEdit)
-      mutate(catalogueCategoryImage)
       setOpen(false)
     },
     onError: () => {

@@ -32,8 +32,10 @@ const GET_SPARE_PARTS = gql(`
 
 export const useGetSpareParts = uid => {
   const { data, isLoading, error } = useGraphQL(GET_SPARE_PARTS, {
-    where: {
-      uid: uid
+    variables: {
+      where: {
+        uid: uid
+      }
     }
   })
 
@@ -73,8 +75,10 @@ const GET_SPARE_PARTS_FOR = gql(`
 `)
 export const useGetSparePartsFor = uid => {
   const { data, isLoading, error } = useGraphQL(GET_SPARE_PARTS_FOR, {
-    where: {
-      uid: uid
+    variables: {
+      where: {
+        uid: uid
+      }
     }
   })
 

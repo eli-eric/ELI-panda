@@ -3,12 +3,11 @@ import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import type { MutableRefObject } from 'react'
 import { toast } from 'react-hot-toast'
-import { mutate as mutateEndpoint } from 'swr'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
-import { addSubsystem, addSubsystemToSubsystems } from '@/modules/systems/utils'
+import { addSubsystem } from '@/modules/systems/utils'
 import { PATH } from '@/types/constants/paths'
 import type { Mutation } from '@/types/gql/graphql'
 import { connectN, whereC, whereN } from '@/utils/graphql/mutations'
@@ -48,13 +47,14 @@ export const useSystemCreate = (
     const body = systems[0]
     imageRef?.current?.submit(responseUid, () => {
       toast.success(`System ${responseUid} saved successfully`)
-      mutateEndpoint(
+      //TODO: mutate
+      /*   mutateEndpoint(
         systemSubsystems,
         prev => prev && addSubsystemToSubsystems(prev, body),
         {
           revalidate: false
         }
-      )
+      ) */
       parentUid
         ? queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
             if (prev) {

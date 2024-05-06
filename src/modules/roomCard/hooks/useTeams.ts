@@ -12,7 +12,7 @@ const teamsQuery = gql(`
 `)
 
 export const useTeams = () => {
-  const { data, isLoading, error } = useGraphQL(teamsQuery, {})
+  const { data, isLoading, error } = useGraphQL(teamsQuery)
 
   useEffect(() => {
     if (error) {

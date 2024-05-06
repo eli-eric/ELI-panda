@@ -59,7 +59,9 @@ export const roomCardQuery = gql(`
 
 export const useRoomCard = (roomCardUid?: string) => {
   const { data, error, isLoading } = useGraphQL(roomCardQuery, {
-    where: { uid: roomCardUid }
+    variables: {
+      where: { uid: roomCardUid }
+    }
   })
 
   useEffect(() => {

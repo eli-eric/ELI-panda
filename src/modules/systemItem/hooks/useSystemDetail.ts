@@ -27,10 +27,12 @@ export const useSystemDetail = (alias?: string, onSuccess?: (data) => void) => {
   const { data, error, isLoading, refetch, status } = useGraphQL(
     systemDetailQuery,
     {
-      where: { uid, systemCode: alias }
-    },
-    {
-      enabled: !!uid
+      variables: {
+        where: { uid, systemCode: alias }
+      },
+      enabled: !!uid,
+      refetchOnMount: 'always',
+      refetchOnReconnect: 'always'
     }
   )
 

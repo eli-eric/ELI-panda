@@ -23,15 +23,12 @@ export const useSystemParentPath = () => {
 
   const { system: systemEndpoint } = useEndpoint({ uid })
 
-  const { data, error, isLoading, refetch } = useGraphQL(
-    systemDetailQuery,
-    {
+  const { data, error, isLoading, refetch } = useGraphQL(systemDetailQuery, {
+    variables: {
       where: { uid }
     },
-    {
-      enabled: !!uid
-    }
-  )
+    enabled: !!uid
+  })
 
   const parentPath =
     data?.systems[0]?.parentPath && data?.systems[0]?.parentPath?.length > 0

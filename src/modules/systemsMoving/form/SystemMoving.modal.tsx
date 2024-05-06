@@ -1,16 +1,11 @@
 import { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { mutate } from 'swr'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { FormModal } from '@/hooks/form/useFormModal'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
-import {
-  addSubsystem,
-  filterSubsystem,
-  filterSubsystemFromSubsystems
-} from '@/modules/systems/utils'
+import { addSubsystem, filterSubsystem } from '@/modules/systems/utils'
 import { whereC, whereN } from '@/utils/graphql/mutations'
 
 import { useSystemMutation } from '../hooks/useSystemMutate'
@@ -45,7 +40,7 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
   })
 
   const { update } = useSystemMutation()
-
+  // TODO: mutateSubsystem
   const mutateSubsystem = useCallback(
     (system, method, formData) => {
       if (!childSystem?.uid) return
@@ -93,8 +88,8 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
       if (!currentAction || !childSystem) {
         return
       }
-
-      mutate(moveToParentKey, data => data && [...data, childSystem], {
+      //TODO: mutate
+      /*  mutate(moveToParentKey, data => data && [...data, childSystem], {
         revalidate: false
       })
       mutate(
@@ -103,7 +98,7 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
         {
           revalidate: false
         }
-      )
+      ) */
 
       if (isSameTable) {
         mutateSubsystem(

@@ -18,17 +18,19 @@ const GET_CATEGORIES = gql(`
 export const useCategoryList = () => {
   const uid = useCategoryUid()
   const { data, isLoading, error, refetch } = useGraphQL(GET_CATEGORIES, {
-    where: uid
-      ? {
-          parentCategory: {
-            uid
+    variables: {
+      where: uid
+        ? {
+            parentCategory: {
+              uid
+            }
           }
-        }
-      : {
-          parentCategoryAggregate: {
-            count: 0
+        : {
+            parentCategoryAggregate: {
+              count: 0
+            }
           }
-        }
+    }
   })
 
   useEffect(() => {

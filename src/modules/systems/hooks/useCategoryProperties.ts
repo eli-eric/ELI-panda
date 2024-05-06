@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 
 export const useCategoryProperties = (uid?: string) => {
   const { data, error } = useQuery<CatalogueItemDetail[]>({
-    queryKey: ['catalogueItem', { uid }],
+    queryKey: ['catalogueCategoryProperties', { uid }],
     queryFn: queryFetcher('catalogueCategoryProperties'),
     enabled: !!uid
   })

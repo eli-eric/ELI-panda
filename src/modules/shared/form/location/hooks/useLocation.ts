@@ -45,9 +45,8 @@ export const useLocation = () => {
     | string
     | undefined
 
-  const { data, isLoading, error } = useGraphQL(
-    GET_LOCATIONS,
-    {
+  const { data, isLoading, error } = useGraphQL(GET_LOCATIONS, {
+    variables: {
       where: filter
         ? {
             name_CONTAINS: nameFilter,
@@ -65,10 +64,8 @@ export const useLocation = () => {
             }
           }
     },
-    {
-      enabled: !!session?.user?.facilityCode
-    }
-  )
+    enabled: !!session?.user?.facilityCode
+  })
   return { locations: data?.locations, loading: isLoading, error }
 }
 export const useSubLocations = () => {

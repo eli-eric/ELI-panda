@@ -2,9 +2,7 @@ import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import type { MutableRefObject } from 'react'
 import { toast } from 'react-hot-toast'
-import { mutate as mutateEndpoint } from 'swr'
 
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { updateSubSystem, updateSystem } from '@/modules/systems/utils'
@@ -17,8 +15,15 @@ import type { SystemDetailFormType } from '../types/form'
 import { navigateBack } from '@/utils'
 import axiosInstance from '@/core/axios/axiosInstance'
 import { BASE_URL } from '@/types/constants/common'
-import { useMutation as useQueryMutation } from '@tanstack/react-query'
-import type { PhysicalItemProperty } from '@/modules/systems/types/responses'
+import {
+  useQueryClient,
+  useMutation as useQueryMutation
+} from '@tanstack/react-query'
+import type {
+  PhysicalItemProperty,
+  SystemDetail,
+  SystemsResponse
+} from '@/modules/systems/types/responses'
 import { useSystemDetail } from './useSystemDetail'
 import { gql } from '@/types/gql'
 
@@ -79,10 +84,16 @@ export const useSystemUpdate = (
   const { mutate: mutateProperties } = usePropertiesUpdate(physicalItemUid)
   const uid = router.query.uid as string
   const { systemDetail, refetch } = useSystemDetail()
-  const { mutate } = useSystems('systems')
-  const { systemSubsystems } = useEndpoint({
-    uid: systemDetail?.parentSystem?.uid || ''
-  })
+  const { queryKey } = useSystems('systems')
+
+  const queryClient = useQueryClient()
+
+  const queryKeySubsystems = [
+    'subsystems',
+    {
+      uid: systemDetail?.parentSystem?.uid || ''
+    }
+  ]
 
   const {
     newMaintainedBy,
@@ -97,6 +108,7 @@ export const useSystemUpdate = (
     { updateSystems: { systems } },
     saveAndExit?: boolean
   ) => {
+    refetch()
     const responseUid = systems[0].uid
     const body = {
       ...systems[0],
@@ -114,37 +126,43 @@ export const useSystemUpdate = (
     }
     imageRef?.current?.submit(responseUid, () => {
       toast.success(`System saved successfully`)
-      mutateEndpoint(
-        systemSubsystems,
-        prev => prev && updateSubSystem(prev, body),
-        { revalidate: false }
-      )
-      mutate(prev => prev && updateSystem(uid, body, prev), {
-        revalidate: false
+
+      queryClient.setQueryData<SystemDetail[]>(queryKey, prev => {
+        if (prev) {
+          return updateSubSystem(prev, body)
+        }
+        return prev
       })
+
+      queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
+        if (prev) {
+          return updateSystem(uid, body, prev)
+        }
+        return prev
+      })
+
       if (selectedPhysicalSystem) {
-        mutateEndpoint(
-          systemSubsystems,
-          prev =>
-            prev &&
-            updateSubSystem(prev, {
+        queryClient.setQueryData<SystemDetail[]>(queryKeySubsystems, prev => {
+          if (prev) {
+            return updateSubSystem(prev, {
               ...selectedPhysicalSystem,
               physicalItem: undefined
-            }),
-          { revalidate: false }
-        )
-        mutate(
-          prev =>
-            prev &&
-            updateSystem(
+            })
+          }
+          return prev
+        })
+
+        queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
+          if (prev) {
+            return updateSystem(
               selectedPhysicalSystem?.uid,
               { ...selectedPhysicalSystem, physicalItem: undefined },
               prev
-            ),
-          { revalidate: false }
-        )
+            )
+          }
+          return prev
+        })
       }
-      refetch()
       setSelectedPhysicalSystem(undefined)
       if (saveAndExit) {
         navigateBack()

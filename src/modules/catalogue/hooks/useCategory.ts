@@ -24,7 +24,9 @@ const GET_CATEGORIES = gql(`
 export const useCategory = (catalogueCategoryUid?: string) => {
   const uid = useCategoryUid()
   const { data, isLoading, error } = useGraphQL(GET_CATEGORIES, {
-    uid: uid || catalogueCategoryUid
+    variables: {
+      uid: uid || catalogueCategoryUid
+    }
   })
 
   useEffect(() => {

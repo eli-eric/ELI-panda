@@ -87,24 +87,38 @@ export const updateSystem = (
   newSystem: SystemDetail,
   prev: SystemsResponse
 ): SystemsResponse => {
-  const updateData = (data: SystemDetail[]): SystemDetail[] => {
-    const result: SystemDetail[] = []
-    for (let i = 0; i < data.length; i++) {
-      let newItem = { ...data[i] }
-      if (newItem.uid === uid) {
-        newItem = {
-          ...newSystem,
-          hasSubsystems: data[i].hasSubsystems,
-          subSystems: data[i].subSystems
-        }
-      } else if (newItem.subSystems) {
-        newItem.subSystems = updateData(newItem.subSystems)
-      }
-      result.push(newItem)
+  const cloneSystemDetail = (system: SystemDetail): SystemDetail => {
+    return {
+      ...system,
+      subSystems: system.subSystems ? [...system.subSystems] : []
     }
-    return result
   }
-  return { ...prev, data: updateData(prev.data) }
+
+  const cloneAndUpdate = (data: SystemDetail[]): SystemDetail[] => {
+    return data.map(item => {
+      if (item.uid === uid) {
+        // Clone the item and update with newSystem details
+        return {
+          ...newSystem,
+          hasSubsystems: item.hasSubsystems,
+          subSystems: item.subSystems ? [...item.subSystems] : []
+        }
+      } else if (item.subSystems) {
+        // Recursively clone and update in subSystems
+        return { ...item, subSystems: cloneAndUpdate(item.subSystems) }
+      }
+      return cloneSystemDetail(item) // Return a clone of the original item
+    })
+  }
+
+  // Clone the prev.data array
+  const newData: SystemDetail[] = prev.data.map(cloneSystemDetail)
+
+  // Recursively clone and update
+  const updatedData = cloneAndUpdate(newData)
+
+  // Return a new SystemsResponse with updated data
+  return { ...prev, data: updatedData }
 }
 
 export const addSubsystem = (

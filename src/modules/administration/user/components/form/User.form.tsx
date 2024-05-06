@@ -27,7 +27,7 @@ const GET_FACILITIES = gql(`
 export const UserForm = () => {
   const fields = useUserFormFields()
   const { setValue, control } = useFormContext()
-  const { data, error } = useGraphQL(GET_FACILITIES, {})
+  const { data, error } = useGraphQL(GET_FACILITIES)
 
   useEffect(() => {
     if (error) {

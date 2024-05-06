@@ -37,8 +37,10 @@ export const useUsers = () => {
   const [search] = useQueryState('search')
 
   const { data, isLoading, error, refetch } = useGraphQL(USERS, {
-    where: {
-      username_CONTAINS: search || ''
+    variables: {
+      where: {
+        username_CONTAINS: search || ''
+      }
     }
   })
 

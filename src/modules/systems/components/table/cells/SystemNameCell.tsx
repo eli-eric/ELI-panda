@@ -39,7 +39,7 @@ import { useQueryClient } from '@tanstack/react-query'
 const messages = message.systemsPage.systemDetail.deleteModal
 
 interface SystemNameCellProps extends CellContext<SystemDetail, any> {
-  setUid: (uid: string | null) => void
+  setUid?: (uid: string | null) => void
   canEdit?: boolean
   hideButtons?: boolean
   tableId: string
@@ -112,7 +112,7 @@ export const SystemNameCell = ({
           onClick={() => {
             if (!row.getIsExpanded()) {
               if (!original.subSystems?.length) {
-                setUid(original.uid)
+                setUid?.(original.uid)
               }
             }
             row.toggleExpanded()
