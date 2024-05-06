@@ -1,12 +1,9 @@
 import type { StaticImageData } from 'next/image'
-import useSWR from 'swr'
 
 import type { FileItem } from '@/modules/shared/fileManager/types'
-import { FILE_TYPE } from '@/modules/shared/fileManager/types'
-import { uniFetcher } from '@/utils/fetcher'
+import { fetcher } from '@/utils/fetcher'
 
-import { getEndpoint } from './../../modules/shared/imageManager/utils/index'
-import useFetch from './useFetch'
+import { useQuery } from '@tanstack/react-query'
 
 //deprecated
 
@@ -20,18 +17,11 @@ export const useImage = (
   endpoint?: string | null,
   useNoImage = true
 ): string | StaticImageData => {
-  const { response: image } = useFetch<string>({
-    url: endpoint,
-    config: { suspense: false }
+  const { data: image } = useQuery<string>({
+    queryKey: [endpoint],
+    queryFn: () => fetcher(endpoint),
+    enabled: !!endpoint
   })
-  return image ? image : useNoImage ? fallbackImage.url : ''
-}
 
-export const useCatalogueImage = uid => {
-  const ep = getEndpoint(FILE_TYPE.CATALOGUE, uid, 'image')
-  const { data } = useSWR<FileItem[]>(ep, uniFetcher, {
-    suspense: false,
-    revalidateOnMount: true
-  })
-  return data && data.length > 0 ? data[0] : fallbackImage
+  return image ? image : useNoImage ? fallbackImage.url : ''
 }
