@@ -8,10 +8,33 @@ import { message } from '@/i18n/src/messages'
 
 import type { Order } from '../types'
 import { DeliveryStatusMapping } from '../types'
+import Link from 'next/link'
+import { PATH } from '@/types/constants/paths'
+import { LinkDecorator } from '@/components/decorators'
+import { NameCell } from './cells/NameCell'
 
 const messages = message.ordersPage.ordersTable.header
 
-export const useOrderColumns = ({ NameCell }: { NameCell: (props: CellContext<Order, any>) => JSX.Element }) => {
+const LinkNameCell = ({
+  getValue,
+  row: { original }
+}: CellContext<Order, any>) => (
+  <div className="flex items-center">
+    <Link href={PATH.ORDER + '/' + original.uid} legacyBehavior>
+      <a target={'_blank'} rel="noreferrer">
+        <LinkDecorator>
+          <span>{getValue()}</span>
+        </LinkDecorator>
+      </a>
+    </Link>
+  </div>
+)
+
+interface Props {
+  isReadOnly: boolean
+}
+
+export const useOrderColumns = ({ isReadOnly }: Props) => {
   const intl = useIntl()
 
   const columns = useMemo(
@@ -20,7 +43,7 @@ export const useOrderColumns = ({ NameCell }: { NameCell: (props: CellContext<Or
         header: intl.formatMessage({ id: messages.name }),
         accessorKey: 'name',
         id: 'name',
-        cell: NameCell,
+        cell: isReadOnly ? LinkNameCell : NameCell,
         size: 300,
         meta: { sticky: true, className: 'sm:pr-8' },
         enableHiding: false
@@ -53,13 +76,21 @@ export const useOrderColumns = ({ NameCell }: { NameCell: (props: CellContext<Or
         accessorKey: 'deliveryStatus',
         cell: ({ getValue }) => <span>{DeliveryStatusMapping[getValue()]}</span>
       },
-      { header: intl.formatMessage({ id: messages.supplier }), accessorKey: 'supplier', id: 'supplier', size: 300 },
+      {
+        header: intl.formatMessage({ id: messages.supplier }),
+        accessorKey: 'supplier',
+        id: 'supplier',
+        size: 300
+      },
       {
         header: intl.formatMessage({ id: messages.procurementResponsible }),
         accessorKey: 'procurementResponsible',
         size: 200
       },
-      { header: intl.formatMessage({ id: messages.requestor }), accessorKey: 'requestor' },
+      {
+        header: intl.formatMessage({ id: messages.requestor }),
+        accessorKey: 'requestor'
+      },
       {
         header: intl.formatMessage({ id: messages.notes }),
         accessorKey: 'notes',
@@ -78,7 +109,14 @@ export const useOrderColumns = ({ NameCell }: { NameCell: (props: CellContext<Or
       {
         header: intl.formatMessage({ id: messages.lastUpdateTime }),
         accessorKey: 'lastUpdateTime',
-        cell: ({ getValue }) => <FormattedDate value={getValue()} day="2-digit" month="long" year="numeric" />,
+        cell: ({ getValue }) => (
+          <FormattedDate
+            value={getValue()}
+            day="2-digit"
+            month="long"
+            year="numeric"
+          />
+        ),
         id: 'lastUpdateTime',
         meta: { className: 'text-right' }
       },
@@ -92,14 +130,19 @@ export const useOrderColumns = ({ NameCell }: { NameCell: (props: CellContext<Or
         accessorKey: 'orderDate',
         cell: ({ getValue }) => (
           <span className="text-right">
-            <FormattedDate value={getValue()} day="2-digit" month="long" year="numeric" />
+            <FormattedDate
+              value={getValue()}
+              day="2-digit"
+              month="long"
+              year="numeric"
+            />
           </span>
         ),
         id: 'orderDate',
         meta: { className: 'text-right' }
       }
     ],
-    [intl, NameCell]
+    [intl, isReadOnly]
   )
 
   return columns

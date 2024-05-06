@@ -35,7 +35,7 @@ export const TableActions = ({ order }: Props) => {
     method: 'delete',
     onSuccess: () => {
       setOpenDeleteWarn(false)
-      orderList && mutate({ ...orderList, data: orderList?.data.filter(item => item.uid !== order.uid) })
+      orderList && mutate()
     }
   })
 
@@ -68,7 +68,10 @@ export const TableActions = ({ order }: Props) => {
         open={openDeleteWarn}
         setOpen={setOpenDeleteWarn}
         title={modalMessage.title}
-        message={formatMessage({ id: modalMessage.message }, createMessageValues({ name }))}
+        message={formatMessage(
+          { id: modalMessage.message },
+          createMessageValues({ name })
+        )}
         testid="OrderDeleteModal"
         error={deleteSubmit.error}
       />
