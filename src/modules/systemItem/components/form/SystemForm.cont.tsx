@@ -8,7 +8,6 @@ import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 
-import { useParentSystemDetail } from '../../hooks/useParentSystemDetail'
 import Breadcrumbs from '../Breadcrumps'
 import { SystemMainForm } from './components/SystemMain.form'
 import { schema } from './SystemForm.schema'
@@ -59,7 +58,6 @@ export const SystemForm = () => {
   const router = useRouter()
   const uid = router.query.uid as string | undefined
 
-  const { parentPath } = useParentSystemDetail()
   const systemImageRef = useRef<ImageGalleryRef>()
 
   const { updateSystem, loading } = useSystemUpdate(
@@ -129,11 +127,7 @@ export const SystemForm = () => {
         customElement={<ShowHistoryButton />}
       />
       <Card>
-        <Breadcrumbs
-          parentPath={
-            parentPath || (systemDetail?.parentPath as CodebookType[])
-          }
-        />
+        <Breadcrumbs parentPath={systemDetail?.parentPath as CodebookType[]} />
       </Card>
       <FormCard
         className={classNames(

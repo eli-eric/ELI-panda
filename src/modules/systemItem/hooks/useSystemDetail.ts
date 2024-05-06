@@ -23,6 +23,7 @@ export const useSystemDetail = (alias?: string, onSuccess?: (data) => void) => {
   const uid = router.query.uid as string | undefined
 
   const { system: systemEndpoint } = useEndpoint({ uid })
+
   const { data, error, isLoading, refetch, status } = useGraphQL(
     systemDetailQuery,
     {

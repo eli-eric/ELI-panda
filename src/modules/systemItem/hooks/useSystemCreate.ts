@@ -14,7 +14,6 @@ import type { Mutation } from '@/types/gql/graphql'
 import { connectN, whereC, whereN } from '@/utils/graphql/mutations'
 
 import type { SystemDetailFormType } from '../types/form'
-import { useParentSystemDetail } from './useParentSystemDetail'
 import { navigateBack } from '@/utils'
 
 const createSystemMutation = gql`
@@ -32,7 +31,7 @@ export const useSystemCreate = (
 ) => {
   const router = useRouter()
   const { mutate } = useSystems('systems')
-  const { parentUid } = useParentSystemDetail()
+  const parentUid = router.query.parentUid as string | undefined
   const { data: session } = useSession()
 
   const { systemSubsystems } = useEndpoint({ uid: parentUid || '' })
