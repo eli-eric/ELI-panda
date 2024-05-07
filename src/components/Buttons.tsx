@@ -212,9 +212,9 @@ export const TableDeleteButton = ({
   ...props
 }: ButtonProps) => (
   <button
+    {...props}
     className="ml-2 hover:text-primary-500 text-red-700"
     type={type}
-    {...props}
   >
     <TrashIcon className="h-4 w-4" aria-hidden="true" />
   </button>
@@ -245,15 +245,17 @@ export const TableDownloadButton = ({
 
 type TableButtonWrapperProps = {
   position?: 'left-0' | 'right-0'
+  className?: string
 }
 export const TableButtonsWrapper: FC<
   PropsWithChildren<TableButtonWrapperProps>
-> = ({ children, position = 'right-0' }) => (
+> = ({ children, position = 'right-0', className }) => (
   <div
     className={classNames(
       'absolute flex items-center bg-inherit pr-1 opacity-0 group-hover:opacity-100',
       position,
-      isMobile && 'opacity-100'
+      isMobile && 'opacity-100',
+      className
     )}
   >
     {children}
@@ -267,11 +269,20 @@ interface TableActionsButtonsProps {
   addLink?: UrlObject | string
   isShown?: boolean
   position?: 'left-0' | 'right-0'
+  className?: string
 }
 export const TableActionsButtons: FC<
   PropsWithChildren<TableActionsButtonsProps>
-> = ({ onDeleteClick, canEdit, detailLink, addLink, position, children }) => (
-  <TableButtonsWrapper position={position}>
+> = ({
+  onDeleteClick,
+  canEdit,
+  detailLink,
+  addLink,
+  position,
+  children,
+  className
+}) => (
+  <TableButtonsWrapper position={position} className={className}>
     {detailLink && (
       <Link href={detailLink} className={'flex items-center'}>
         <Fragment>

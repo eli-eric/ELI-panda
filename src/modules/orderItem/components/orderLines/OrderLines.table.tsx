@@ -73,6 +73,8 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
           })}
           settings={{
             enableFooter: true,
+            enableFiltering: true,
+            manualFiltering: false,
             enableQueryURL: false,
             enableSorting: true,
             manualSorting: false

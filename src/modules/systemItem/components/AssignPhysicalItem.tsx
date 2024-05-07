@@ -16,7 +16,8 @@ const messages = message.common.buttons
 
 export const AssignPhysicalItem = () => {
   const [openModal, setOpenModal] = useState(false)
-  const { selectedPhysicalSystem, setSelectedPhysicalSystem } = useSystemItemStore()
+  const { selectedPhysicalSystem, setSelectedPhysicalSystem } =
+    useSystemItemStore()
   const { setValue } = useFormContext<SystemDetailFormType>()
 
   const modalButtons: ModalButtons = {
@@ -24,7 +25,9 @@ export const AssignPhysicalItem = () => {
       text: messages.continue,
       onClick: () => {
         if (selectedPhysicalSystem?.physicalItem) {
-          setValue('physicalItem', selectedPhysicalSystem?.physicalItem, { shouldDirty: true })
+          setValue('physicalItem', selectedPhysicalSystem?.physicalItem, {
+            shouldDirty: true
+          })
           setOpenModal(false)
         } else {
           toast.error('This system does not have a physical item')
@@ -43,7 +46,7 @@ export const AssignPhysicalItem = () => {
     <Fragment>
       <Button
         primary
-        className="my-4"
+        className="mt-4 max-h-10"
         type="button"
         onClick={() => {
           setOpenModal(true)
@@ -51,7 +54,11 @@ export const AssignPhysicalItem = () => {
       >
         {'Assign Physical Item'}
       </Button>
-      <ModalComponent open={openModal} setOpen={setOpenModal} buttons={modalButtons}>
+      <ModalComponent
+        open={openModal}
+        setOpen={setOpenModal}
+        buttons={modalButtons}
+      >
         <SystemsTable
           tableId={'systemsItem'}
           collapseOnUnMount={true}
@@ -67,7 +74,8 @@ export const AssignPhysicalItem = () => {
                 ? 'bg-primary-200 hover:bg-primary-200 dark:hover:bg-primary-600 dark:bg-primary-600'
                 : '',
               original?.physicalItem && 'cursor-pointer',
-              original?.physicalItem && 'font-bold text-gray-700 dark:text-gray-200'
+              original?.physicalItem &&
+                'font-bold text-gray-700 dark:text-gray-200'
             )
           })}
           hideButtons
