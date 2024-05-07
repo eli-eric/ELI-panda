@@ -43,6 +43,10 @@
   .btn-disabled {
     @apply cursor-not-allowed opacity-30 bg-gray-300 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-700;
   }
+
+  .link {
+    @apply text-blue-700 dark:text-gray-300 dark:underline cursor-pointer hover:underline;
+  }
 }
 
 /* styles/globals.css */

@@ -11,7 +11,13 @@ import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { PATH } from '@/types/constants/paths'
 
-import { OrderisDeliveredAction, OrderLineActionButtons, PriceFooter, PrintEunButton } from './OrderLine.actions'
+import {
+  OrderisDeliveredAction,
+  OrderLineActionButtons,
+  PriceFooter,
+  PrintEunButton
+} from './OrderLine.actions'
+import Link from 'next/link'
 
 const messages = message.ordersPage.orderLines.orderLinesTable.header
 
@@ -37,7 +43,10 @@ const useOrderLinesColumns = () => {
         header: formatMessage({ id: messages.catalogueNumber }),
         accessorKey: 'catalogueNumber',
         cell: ({ getValue, row: { original } }) => (
-          <NewTabLink href={PATH.CATALOGUE_ITEM + '/' + original.catalogueUid} value={getValue()} />
+          <NewTabLink
+            href={PATH.CATALOGUE_ITEM + '/' + original.catalogueUid}
+            value={getValue()}
+          />
         )
       },
       {
@@ -47,15 +56,21 @@ const useOrderLinesColumns = () => {
       {
         header: formatMessage({ id: messages.eun }),
         accessorKey: 'eun',
-        cell: ({ row: { original } }) => <PrintEunButton orderLine={original} />,
+        cell: ({ row: { original } }) => (
+          <PrintEunButton orderLine={original} />
+        ),
         size: 60
       },
       {
         header: formatMessage({ id: messages.isDelivered }),
         accessorKey: 'isDelivered',
         cell: ({ getValue, row: { original } }) =>
-          uid ? <OrderisDeliveredAction orderLine={original} checked={getValue()} /> : null,
-        size: 90
+          uid ? (
+            <OrderisDeliveredAction orderLine={original} checked={getValue()} />
+          ) : null,
+        size: 90,
+        meta: { filter: { enableColumnFilter: false, type: 'boolean' } },
+        enableColumnFilter: false
       },
       {
         header: formatMessage({ id: messages.notes }),
@@ -77,25 +92,34 @@ const useOrderLinesColumns = () => {
         accessorKey: 'price',
         cell: ({ getValue, row: { original } }) => (
           <span className="whitespace-nowrap">
-            {getValue()} <span className="font-medium ">{original.currency}</span>
+            {getValue()}{' '}
+            <span className="font-medium ">{original.currency}</span>
           </span>
         ),
         footer: props => <PriceFooter rows={props.table.getRowModel().rows} />
       },
       {
         header: formatMessage({ id: messages.itemUsage }),
-        accessorKey: 'itemUsage',
-        cell: ({ getValue }) => <span>{getValue()?.name}</span>
+        accessorFn: row => row.itemUsage?.name,
+        cell: ({ getValue }) => <span>{getValue()}</span>
       },
       {
         header: formatMessage({ id: messages.system }),
-        accessorKey: 'system',
-        cell: ({ getValue }) => <span>{getValue()?.name.split('-')[0]}</span>
+        accessorFn: row => row.system?.name,
+        cell: ({ getValue, row: { original } }) => (
+          <Link
+            className="link"
+            href={PATH.SYSTEM + '/' + original.system?.uid}
+            target="_blank"
+          >
+            <span>{getValue()?.split('-')[0]}</span>
+          </Link>
+        )
       },
       {
         header: formatMessage({ id: messages.location }),
-        accessorKey: 'location',
-        cell: ({ getValue }) => <span>{getValue()?.name.split(' - ')[0]}</span>
+        accessorFn: row => row.location?.name,
+        cell: ({ getValue }) => <span>{getValue()?.split(' - ')[0]}</span>
       }
     ]
     return cols
