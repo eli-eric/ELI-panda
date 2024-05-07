@@ -12,14 +12,25 @@ export const messages = {
     custom404: {
       title: '404',
       notFound: 'Page not found',
-      message: 'Please check the URL in the address bar and try again.Probably you have no permission.'
+      message:
+        'Please check the URL in the address bar and try again.Probably you have no permission.'
     },
     property: {
       description: 'Description'
     },
     warning: 'Warning',
-    fileManager: { deleteModal: { title: 'Warning', text: 'Are you sure you want to remove {fileName}?' } },
-    form: { leaveWarning: { title: 'Warning', text: 'You have unsaved changes. Are you sure you want to leave?' } },
+    fileManager: {
+      deleteModal: {
+        title: 'Warning',
+        text: 'Are you sure you want to remove {fileName}?'
+      }
+    },
+    form: {
+      leaveWarning: {
+        title: 'Warning',
+        text: 'You have unsaved changes. Are you sure you want to leave?'
+      }
+    },
     files: { title: 'Files' }
   },
   layout: {
@@ -92,10 +103,22 @@ export const messages = {
         name: { label: 'Catalogue Name', placeholder: 'Name' },
         description: { label: 'Description', placeholder: 'Description' },
         catalogueNumber: { label: 'Part Number', placeholder: 'Part Number' },
-        category: { label: 'Category: {parentPath}', placeholder: 'Type here...' }, // codebook of categories - CATEGORY
-        manufacturer: { label: 'Supplier/Manufacturer', placeholder: 'Type here...' }, // codebook of manufacturers - MANUFACTURER
-        manufacturerNumber: { label: 'Manufacturer Number', placeholder: 'Manufacturer Number' },
-        manuFacturerUrl: { label: 'Supplier/Manufacturer Url', placeholder: 'Supplier/Manufacturer Url' },
+        category: {
+          label: 'Category: {parentPath}',
+          placeholder: 'Type here...'
+        }, // codebook of categories - CATEGORY
+        manufacturer: {
+          label: 'Supplier/Manufacturer',
+          placeholder: 'Type here...'
+        }, // codebook of manufacturers - MANUFACTURER
+        manufacturerNumber: {
+          label: 'Manufacturer Number',
+          placeholder: 'Manufacturer Number'
+        },
+        manuFacturerUrl: {
+          label: 'Supplier/Manufacturer Url',
+          placeholder: 'Supplier/Manufacturer Url'
+        },
         catalogueCategory: { label: 'Catalogue Category' } // codebook of catalogue categories - CATALOGUE_CATEGORY
       }
     },
@@ -114,7 +137,10 @@ export const messages = {
       form: {
         name: { label: 'Name', placeholder: 'Name' },
         isCritical: { label: 'Is Critical' },
-        minimalSpareParstCount: { label: 'Minimal Spare Parts Count', placeholder: 'Minimal Spare Parts Count' },
+        minimalSpareParstCount: {
+          label: 'Minimal Spare Parts Count',
+          placeholder: 'Minimal Spare Parts Count'
+        },
         description: { label: 'Description', placeholder: 'Description' },
         systemType: { label: 'System Type' }, // system types codebook - SYSTEM_TYPE
         systemCode: { label: 'System Code', placeholder: 'System Code' },
@@ -126,7 +152,10 @@ export const messages = {
           placeholder: 'Select Team...'
         }, // codebook of systems{uid, name},  - SYSTEM
         location: { label: 'Location', placeholder: 'Type here...' }, // locations codebook - LOCATION
-        responsiblePerson: { label: 'Responsible Person', placeholder: 'Responsible Person' },
+        responsiblePerson: {
+          label: 'Responsible Person',
+          placeholder: 'Responsible Person'
+        },
         importance: { label: 'Importance' }, // codebook of importance - SYSTEM_IMPORTANCE
         zone: { label: 'Control System Zone' }, // codebook of zones - ZONE
         subZone: { label: 'Sub Zone' }, // codebook of subzones depend on selected zone SUB_ZONE (parentUID=ZONE.uid)
@@ -134,22 +163,33 @@ export const messages = {
         parentUID: { label: 'ParentUID' }, // codebook of criticalities - SYSTEM_CRITICALITY_CLASS
         physicalItem: {
           itemUsage: { label: 'Item Usage' }, // codebook of item usage - ITEM_USAGE
-          serialNumber: { label: 'Serial Number', placeholder: 'Serial Number' },
+          serialNumber: {
+            label: 'Serial Number',
+            placeholder: 'Serial Number'
+          },
           eun: { label: 'Eun', placeholder: 'Eun' },
           price: { label: 'Price', placeholder: 'Price' },
-          procurementStatus: { label: 'Procurement Status', placeholder: 'Procurement Status' }, // codebook of procurement status - PROCUREMENT_STATUS
-          conditionStatus: { label: 'Condition Status', placeholder: 'Condition Status' }, // codebook of condition status - ITEM_CONDITION_STATUS
+          procurementStatus: {
+            label: 'Procurement Status',
+            placeholder: 'Procurement Status'
+          }, // codebook of procurement status - PROCUREMENT_STATUS
+          conditionStatus: {
+            label: 'Condition Status',
+            placeholder: 'Condition Status'
+          }, // codebook of condition status - ITEM_CONDITION_STATUS
           notes: { label: 'Item notes' },
           general: {
             properties: {
-              property: '<p><strong><small>{name}</small></strong>: <small>{value} {unit}</small></p>',
+              property:
+                '<p><strong><small>{name}</small></strong>: <small>{value} {unit}</small></p>',
               title: '<label>{title}:</label>'
             }
           }
         }
       },
       deleteModal: {
-        message: 'Are you sure you want to delete this {name} and all sub-systems?'
+        message:
+          'Are you sure you want to delete this {name} and all sub-systems?'
       }
     },
     itemDetail: {
@@ -270,17 +310,29 @@ export const messages = {
       form: {
         name: { label: 'Name', placeholder: 'Name' },
         orderNumber: { label: 'Order Number', placeholder: 'Order Number' },
-        requestNumber: { label: 'Request Number', placeholder: 'Request Number' },
-        contractNumber: { label: 'Contract Number', placeholder: 'Contract Number' },
+        requestNumber: {
+          label: 'Request Number',
+          placeholder: 'Request Number'
+        },
+        contractNumber: {
+          label: 'Contract Number',
+          placeholder: 'Contract Number'
+        },
         supplier: { label: 'Supplier', placeholder: '...type here' },
         orderStatus: { label: 'Order Status' },
         notes: { label: 'Notes' },
         orderDate: { label: 'Order Date' },
-        procurementResponsible: { label: 'Procurement Responsible', placeholder: '...type here' },
+        procurementResponsible: {
+          label: 'Procurement Responsible',
+          placeholder: '...type here'
+        },
         requestor: { label: 'Requestor', placeholder: '...type here' }
       }
     },
-    deleteModal: { title: 'Warning', message: 'Are you sure you want to delete {name}?' },
+    deleteModal: {
+      title: 'Warning',
+      message: 'Are you sure you want to delete {name}?'
+    },
     ordelineMissingModal: {
       title: 'Warning',
       message: 'Order lines is missing are you sure you want to continue?'
@@ -317,8 +369,14 @@ export const messages = {
           notes: 'Notes'
         }
       },
-      deleteModal: { title: 'Warning', message: 'Are you sure you want to delete <medium>{name}</medium>?' },
-      missingSerialNumber: { title: 'Warning', message: 'Serial number is missing, please fill it.' }
+      deleteModal: {
+        title: 'Warning',
+        message: 'Are you sure you want to delete <medium>{name}</medium>?'
+      },
+      missingSerialNumber: {
+        title: 'Warning',
+        message: 'Serial number is missing, please fill it.'
+      }
     }
   },
   codebooksPage: {
@@ -343,6 +401,7 @@ export const messages = {
   },
   orderItem: { head: 'ELI Panda - Order Item' },
   systemItem: { head: 'ELI Panda - System Item' },
+  systemTypeEdit: { head: 'ELI Panda - System Type Edit' },
   profilePage: {
     head: 'ELI Panda - Profile',
     general: {
@@ -374,7 +433,10 @@ export const messages = {
         username: { label: 'Username', placeholder: 'Username' },
         facility: { label: 'Facility', placeholder: 'Facility' },
         password: { label: 'Password', placeholder: 'Password' },
-        confirmPassword: { label: 'Confirm Password', placeholder: 'Confirm Password' }
+        confirmPassword: {
+          label: 'Confirm Password',
+          placeholder: 'Confirm Password'
+        }
       }
     }
   }

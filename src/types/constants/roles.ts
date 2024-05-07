@@ -4,6 +4,7 @@ export enum ROLE {
   REPORTS_VIEW = 'reports-view',
   BASICS = 'basics',
   SYSTEM_EDIT = 'systems-edit',
+  SYSTEM_TYPE_EDIT = 'system-type-edit',
   CATALOGUE_CATEGORY_EDIT = 'catalogue-category-edit',
   CATALOGUE_EDIT = 'catalogue-edit',
   ORDERS_VIEW = 'orders-view',
