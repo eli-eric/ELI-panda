@@ -10,6 +10,9 @@ interface Props {
   history?: History[]
 }
 export const HistoryFeeds: FC<Props> = ({ history }) => {
+  if (history?.length === 0) {
+    return <p className="text-gray-500 dark:text-gray-400">No history found</p>
+  }
   return (
     <Fragment>
       <ul role="list" className="space-y-6">
