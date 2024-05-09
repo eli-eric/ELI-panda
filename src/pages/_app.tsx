@@ -1,6 +1,5 @@
 import '../styles/globals.css'
 
-import { ApolloProvider } from '@apollo/client'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
 import { Suspense, lazy, useState } from 'react'
@@ -14,7 +13,6 @@ import { Notification } from '@/components/Notifications/Notification'
 import { GenereralModal } from '@/components/overlays/modal/modal.comp'
 import { WarningModal } from '@/components/WarningModal'
 import { useLocale } from '@/hooks/useLocale'
-import { useApollo } from '@/server/apollo/client'
 import { Layout } from '@/components/layout/Layout'
 
 import {
@@ -34,29 +32,26 @@ const ReactQueryDevtoolsProduction = lazy(() =>
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
   const [queryClient] = useState(() => new QueryClient())
 
-  const apolloClient = useApollo(pageProps.initialApolloState)
   const locale = useLocale()
 
   return (
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={pageProps.dehydratedState}>
         <SessionProvider session={session} refetchOnWindowFocus={false}>
-          <ApolloProvider client={apolloClient}>
-            <IntlProvider locale={locale} messages={messages['en']}>
-              <Toaster
-                position="top-center"
-                reverseOrder={false}
-                toastOptions={{ duration: 1000 }}
-              >
-                {t => <Notification t={t} />}
-              </Toaster>
-              <DndProvider backend={HTML5Backend}>
-                <Layout>{<Component {...pageProps} />}</Layout>
-                <GenereralModal />
-                <WarningModal />
-              </DndProvider>
-            </IntlProvider>
-          </ApolloProvider>
+          <IntlProvider locale={locale} messages={messages['en']}>
+            <Toaster
+              position="top-center"
+              reverseOrder={false}
+              toastOptions={{ duration: 1000 }}
+            >
+              {t => <Notification t={t} />}
+            </Toaster>
+            <DndProvider backend={HTML5Backend}>
+              <Layout>{<Component {...pageProps} />}</Layout>
+              <GenereralModal />
+              <WarningModal />
+            </DndProvider>
+          </IntlProvider>
         </SessionProvider>
       </HydrationBoundary>
       {process.env.NODE_ENV === 'development' && (

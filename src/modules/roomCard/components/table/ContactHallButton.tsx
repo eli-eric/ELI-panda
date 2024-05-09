@@ -1,6 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
-import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
+import {
+  useFieldArray,
+  useForm,
+  useFormContext,
+  useWatch
+} from 'react-hook-form'
 import { v4 as uuid } from 'uuid'
 import { mixed, object } from 'yup'
 
@@ -12,11 +17,11 @@ import { CODEBOOK } from '@/types/constants/codebook'
 import { ROLE } from '@/types/constants/roles'
 import type { ContactPersonRole, Employee } from '@/types/gql/graphql'
 
-import { useLazyEmployee } from '../../../../hooks/graphql/useLazyEmployee'
 import { useRoomCardStore } from '../../store/useRoomCardStore'
 import { HeaderButtonModalComponent } from './HeaderButtonModal.comp'
 import { gql } from '@/types/gql'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { useEmployee } from '@/hooks/graphql/useEmployee'
 
 const nestedForm = message.roomCardsPage.nestedForm
 
@@ -52,16 +57,22 @@ export const ContactHallButton = () => {
     name: 'contactPersonsHall'
   })
 
-  const [getEployee, employee] = useLazyEmployee()
+  const formEmployee = useWatch({ control, name: 'employee' })
+
+  const { employee } = useEmployee(formEmployee?.uid)
 
   const onSubmit = (data: { role: ContactPersonRole }) => {
     if (employee) {
       insert(arrayFields.length, {
-        employee: employee,
+        employee: {
+          ...employee,
+          facilityConnection: null,
+          userConnection: null
+        },
         role: data?.role,
         uuid: uuid()
       })
-      setNewHallContact({ employee: employee, role: data?.role })
+      setNewHallContact({ employee: employee as Employee, role: data?.role })
     }
   }
 
@@ -107,12 +118,7 @@ export const ContactHallButton = () => {
       setIsModalOpen={setIsModalOpen}
     >
       <Combobox {...fields.role} codebookResponse={data?.contactPersonRoles} />
-      <Combobox
-        {...fields.employee}
-        onSelect={value => {
-          if (value.uid) getEployee({ variables: { uid: value.uid } })
-        }}
-      />
+      <Combobox {...fields.employee} />
     </HeaderButtonModalComponent>
   )
 }

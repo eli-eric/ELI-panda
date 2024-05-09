@@ -13,8 +13,8 @@ export const useLocationModal = () => {
   const [open, setOpen] = useState(false)
   const [codebooktree, setCodebooktree] = useState<Codebooktree[]>([])
   const { locations } = useLocation()
-  const { getSubLocations, subLocations, loading } = useSubLocations()
   const [uid, setUid] = useState<string>('')
+  const { subLocations, loading } = useSubLocations(uid)
 
   useEffect(() => {
     if (locations) {
@@ -39,9 +39,6 @@ export const useLocationModal = () => {
 
   const fetchChildren = (uid: string) => {
     setUid(uid)
-    getSubLocations({
-      variables: { where: { uid } }
-    })
   }
   const { instances } = useTableStateStore()
   const filter = useMemo(

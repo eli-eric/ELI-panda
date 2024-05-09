@@ -1,4 +1,3 @@
-import { gql, useLazyQuery } from '@apollo/client'
 import { yupResolver } from '@hookform/resolvers/yup'
 import bcrypt from 'bcryptjs-react'
 import { useSession } from 'next-auth/react'
@@ -10,9 +9,10 @@ import * as yup from 'yup'
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/Input'
-import type { Query } from '@/types/gql/graphql'
 
 import { useUserUpdate } from '../user/hooks/useUserUpdate'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
 type FormType = {
   currentPassword: string
@@ -20,14 +20,14 @@ type FormType = {
   confirmPassword: string
 }
 
-const GET_USER_PASSWORD = gql`
+const GET_USER_PASSWORD = gql(`
   query UserPWDQuery($uid: ID!) {
     users(where: { uid: $uid }) {
       uid
       passwordHash
     }
   }
-`
+`)
 
 const makeSchema = () =>
   yup.object().shape({
@@ -53,17 +53,14 @@ const makeSchema = () =>
   })
 export const ChangePasswordContainer: FC = () => {
   const userUid = useSession().data?.user?.uid
-  const [getUserPassword, { loading: loadingGet }] = useLazyQuery<Query>(
-    GET_USER_PASSWORD,
-    {
-      variables: {
-        uid: userUid
-      },
-      onError: () => {
-        toast.error('Something went wrong.')
-      }
-    }
-  )
+
+  const { data: userPassword, isLoading } = useGraphQL(GET_USER_PASSWORD, {
+    variables: {
+      uid: userUid || ''
+    },
+    enabled: !!userUid
+  })
+
   const formMethods = useForm<FormType>({ resolver: yupResolver(makeSchema()) })
 
   const onSuccess = () => {
@@ -74,28 +71,26 @@ export const ChangePasswordContainer: FC = () => {
   const { updateUser, loading } = useUserUpdate(onSuccess)
 
   const onSubmit = (passwordData: FormType) => {
-    getUserPassword().then(data => {
-      const passwordHash = data?.data?.users[0]?.passwordHash
-      const confirmed = bcrypt.compareSync(
-        formMethods.getValues('currentPassword'),
-        passwordHash || ''
-      )
-      if (confirmed) {
-        const dataToSend = {
-          passwordHash: bcrypt.hashSync(passwordData.newPassword, 12),
-          passwordToChange: false
-        }
-        updateUser({
-          where: { uid: userUid },
-          update: dataToSend
-        })
-      } else {
-        toast.error('Wrong current password!')
-        formMethods.setError('currentPassword', {
-          message: 'Wrong current password'
-        })
+    const passwordHash = userPassword?.users[0]?.passwordHash
+    const confirmed = bcrypt.compareSync(
+      passwordData.currentPassword,
+      passwordHash || ''
+    )
+    if (confirmed) {
+      const dataToSend = {
+        passwordHash: bcrypt.hashSync(passwordData.newPassword, 12),
+        passwordToChange: false
       }
-    })
+      updateUser({
+        where: { uid: userUid },
+        update: dataToSend
+      })
+    } else {
+      toast.error('Wrong current password!')
+      formMethods.setError('currentPassword', {
+        message: 'Wrong current password'
+      })
+    }
   }
 
   return (
@@ -158,7 +153,7 @@ export const ChangePasswordContainer: FC = () => {
           >
             Cancel
           </Button>
-          <Button type="submit" primary loading={loading || loadingGet}>
+          <Button type="submit" primary loading={loading || isLoading}>
             Update Password
           </Button>
         </div>

@@ -3,7 +3,6 @@ import { useSession } from 'next-auth/react'
 import useTableStateStore from '@/store/useTableStateStore'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
-import { useLazyQuery } from '@apollo/client'
 
 const GET_LOCATIONS = gql(`
   query LocationsQuery($where: LocationWhere) {
@@ -68,13 +67,14 @@ export const useLocation = () => {
   })
   return { locations: data?.locations, loading: isLoading, error }
 }
-export const useSubLocations = () => {
-  const [getSubLocations, { data, loading, error }] =
-    useLazyQuery(GET_SUBLOCATIONS)
+export const useSubLocations = (uid?: string) => {
+  const { data, isLoading, error } = useGraphQL(GET_SUBLOCATIONS, {
+    variables: { where: { uid } },
+    enabled: !!uid
+  })
   return {
     subLocations: data?.locations[0].subLocations,
-    loading,
-    error,
-    getSubLocations
+    loading: isLoading,
+    error
   }
 }

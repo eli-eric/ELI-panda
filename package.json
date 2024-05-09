@@ -14,7 +14,6 @@
     "generate:watch": "graphql-codegen --config --watch"
   },
   "dependencies": {
-    "@apollo/client": "^3.8.7",
     "@apollo/server": "^4.9.5",
     "@as-integrations/next": "^3.0.0",
     "@faker-js/faker": "^8.3.1",
