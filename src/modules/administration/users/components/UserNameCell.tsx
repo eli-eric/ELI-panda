@@ -15,15 +15,18 @@ interface LocationCellProps extends CellContext<User, any> {
   isHoveringId?: number | string
 }
 
-export const UserNameCell = ({ getValue, row: { original } }: LocationCellProps) => {
+export const UserNameCell = ({
+  getValue,
+  row: { original }
+}: LocationCellProps) => {
   const editPersmission = usePermission([ROLE.ADMIN])
 
-  const { deleteUser } = useUserDelete(original.uid, original.username)
+  const [deleteUser] = useUserDelete(original.username)
   const withWarningModal = useWarningModal(
     `Are you sure you want to delete user: "${original.firstName} ${original.lastName}"?`
   )
   const handleDelete = () => {
-    deleteUser()
+    deleteUser({ where: { uid: original.uid } })
   }
   const onDeleteClick = () => withWarningModal(handleDelete)()
 
@@ -34,7 +37,9 @@ export const UserNameCell = ({ getValue, row: { original } }: LocationCellProps)
           <span>{getValue()}</span>
         </LinkDecorator>
       </Link>
-      {editPersmission && <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />}
+      {editPersmission && (
+        <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />
+      )}
     </div>
   )
 }

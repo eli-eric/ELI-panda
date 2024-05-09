@@ -40,7 +40,7 @@ export const NewUserContainer = ({ roles }: Props) => {
     name: 'roles'
   })
 
-  const { createUser } = useUserCreate()
+  const [createUser] = useUserCreate()
 
   const onSubmit = (data: UserCreateFormType) => {
     const dataToSend: UserCreateInput[] = [
@@ -59,7 +59,7 @@ export const NewUserContainer = ({ roles }: Props) => {
           : undefined
       }
     ]
-    createUser({ variables: { input: dataToSend } })
+    createUser({ input: dataToSend })
   }
 
   const addRole = (selectedRole?: CodebookType) => {

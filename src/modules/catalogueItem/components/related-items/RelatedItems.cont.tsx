@@ -25,8 +25,8 @@ export const RelatedItemsContainer = () => {
   const { disconnectRelatedItem } = useDisconnectRelatedItem()
 
   const onDisconnect = (uid: string) => () => {
-    disconnectRelatedItem({
-      variables: {
+    disconnectRelatedItem(
+      {
         where: {
           uid: itemUid
         },
@@ -46,10 +46,12 @@ export const RelatedItemsContainer = () => {
           ]
         }
       },
-      onCompleted: () => {
-        refetch()
+      {
+        onSuccess: () => {
+          refetch()
+        }
       }
-    })
+    )
   }
 
   return (
@@ -71,7 +73,11 @@ export const RelatedItemsContainer = () => {
                     <Link href={PATH.CATALOGUE_ITEM + `/${original.uid}`}>
                       <LinkDecorator>{getValue()}</LinkDecorator>
                     </Link>
-                    {canEdit && <TableDeleteButton onClick={withWarn(onDisconnect(original.uid))} />}
+                    {canEdit && (
+                      <TableDeleteButton
+                        onClick={withWarn(onDisconnect(original.uid))}
+                      />
+                    )}
                   </div>
                 )
               }

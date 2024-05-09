@@ -1,10 +1,10 @@
-import { gql, useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 
-import type { Mutation } from '@/types/gql/graphql'
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
-const CREATE_USER = gql`
+const CREATE_USER = gql(`
   mutation CreateUser($input: [UserCreateInput!]!) {
     createUsers(input: $input) {
       users {
@@ -12,21 +12,19 @@ const CREATE_USER = gql`
       }
     }
   }
-`
+`)
 
 export const useUserCreate = () => {
   const router = useRouter()
-  const [createUser] = useMutation<Mutation>(CREATE_USER, {
+  const { mutate } = useGraphQLMutation(CREATE_USER, {
     onError: err => {
       toast.error('Error while creating user:' + err.message)
     },
-    onCompleted: () => {
+    onSuccess: () => {
       router.back()
       toast.success('User was created successfully')
     }
   })
 
-  return {
-    createUser
-  }
+  return [mutate]
 }
