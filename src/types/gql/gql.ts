@@ -16,7 +16,7 @@ const documents = {
     "\n  mutation CreateFilterMutation($input: [UserSettingsCreateInput!]!) {\n    createUserSettings(input: $input) {\n      userSettings {\n        key\n      }\n    }\n  }\n": types.CreateFilterMutationDocument,
     "\n  mutation DeleteFilterMutation($where: UserSettingsWhere) {\n    deleteUserSettings(where: $where) {\n      nodesDeleted\n    }\n  }\n": types.DeleteFilterMutationDocument,
     "\n  query UserSettings($userSettingsWhere: UserSettingsWhere) {\n    userSettings(where: $userSettingsWhere) {\n      uid\n      key\n      name\n      value\n    }\n  }\n": types.UserSettingsDocument,
-    "\n  mutation UpdateFilterMutation(\n    $where: UserSettingsWhere\n    $update: UserSettingsUpdateInput\n  ) {\n    updateUserSettings(where: $where, update: $update) {\n      userSettings {\n        name\n        uid\n      }\n    }\n  }\n": types.UpdateFilterMutationDocument,
+    "\n  mutation UpdateFilterMutation(\n    $where: UserSettingsWhere\n    $update: UserSettingsUpdateInput\n  ) {\n    updateUserSettings(where: $where, update: $update) {\n      userSettings {\n        name\n        uid\n        value\n      }\n    }\n  }\n": types.UpdateFilterMutationDocument,
     "\n  query GetEmployee($uid: ID!) {\n    employees(where: { uid: $uid }) {\n      uid\n      fullName\n      firstName\n      facility {\n        code\n        name\n      }\n      lastName\n      phone1\n      phone2\n    }\n  }\n": types.GetEmployeeDocument,
     "\n  query UserPWDQuery($uid: ID!) {\n    users(where: { uid: $uid }) {\n      uid\n      passwordHash\n    }\n  }\n": types.UserPwdQueryDocument,
     "\n  query GetFacilities {\n    facilities {\n      code\n      name\n    }\n  }\n": types.GetFacilitiesDocument,
@@ -86,7 +86,7 @@ export function gql(source: "\n  query UserSettings($userSettingsWhere: UserSett
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation UpdateFilterMutation(\n    $where: UserSettingsWhere\n    $update: UserSettingsUpdateInput\n  ) {\n    updateUserSettings(where: $where, update: $update) {\n      userSettings {\n        name\n        uid\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateFilterMutation(\n    $where: UserSettingsWhere\n    $update: UserSettingsUpdateInput\n  ) {\n    updateUserSettings(where: $where, update: $update) {\n      userSettings {\n        name\n        uid\n      }\n    }\n  }\n"];
+export function gql(source: "\n  mutation UpdateFilterMutation(\n    $where: UserSettingsWhere\n    $update: UserSettingsUpdateInput\n  ) {\n    updateUserSettings(where: $where, update: $update) {\n      userSettings {\n        name\n        uid\n        value\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateFilterMutation(\n    $where: UserSettingsWhere\n    $update: UserSettingsUpdateInput\n  ) {\n    updateUserSettings(where: $where, update: $update) {\n      userSettings {\n        name\n        uid\n        value\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
