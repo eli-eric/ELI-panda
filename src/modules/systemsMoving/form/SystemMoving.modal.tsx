@@ -143,8 +143,8 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
 
   const updateSystem = useCallback(
     (data: SystemMovingFormType) => {
-      update({
-        variables: {
+      update(
+        {
           where: { uid: childSystem?.uid },
           update: {
             name: data.name,
@@ -179,10 +179,12 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
           systemFromUid: childParentUid,
           systemUid: childSystem?.uid
         },
-        onCompleted: () => {
-          onSuccess(data)
+        {
+          onSuccess: () => {
+            onSuccess(data)
+          }
         }
-      })
+      )
     },
     [childSystem, childParentUid, parentSystem, update, onSuccess]
   )

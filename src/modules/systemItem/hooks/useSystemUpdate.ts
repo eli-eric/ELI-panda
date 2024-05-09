@@ -1,4 +1,3 @@
-import { useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import type { MutableRefObject } from 'react'
 import { toast } from 'react-hot-toast'
@@ -26,6 +25,7 @@ import type {
 } from '@/modules/systems/types/responses'
 import { useSystemDetail } from './useSystemDetail'
 import { gql } from '@/types/gql'
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 
 const systemDetailMutation = gql(`
   mutation UpdateSystemMutation(
@@ -172,18 +172,21 @@ export const useSystemUpdate = (
     })
   }
 
-  const [update, { loading }] = useMutation(systemDetailMutation, {
-    onError: error => {
-      toast.error('Something went wrong: ' + error.message)
+  const { mutate: update, isPending } = useGraphQLMutation(
+    systemDetailMutation,
+    {
+      onError: error => {
+        toast.error('Something went wrong: ' + error.message)
+      }
     }
-  })
+  )
 
   const updateSystemQuery = (
     systemForm: SystemDetailFormType,
     saveAndExit?: boolean
   ) => {
-    update({
-      variables: {
+    update(
+      {
         where: { uid },
         update: {
           ...makeSystemInputBody({ systemForm, systemDetail }),
@@ -233,14 +236,16 @@ export const useSystemUpdate = (
         itemUid: selectedPhysicalSystem?.physicalItem?.uid,
         systemOriginatedUid: selectedPhysicalSystem?.uid
       },
-      onCompleted: response => {
-        onCompleted(response, saveAndExit)
-        if (systemForm.physicalItem?.properties) {
-          mutateProperties(systemForm.physicalItem?.properties)
+      {
+        onSuccess: response => {
+          onCompleted(response, saveAndExit)
+          if (systemForm.physicalItem?.properties) {
+            mutateProperties(systemForm.physicalItem?.properties)
+          }
         }
       }
-    })
+    )
   }
 
-  return { updateSystem: updateSystemQuery, loading, update }
+  return { updateSystem: updateSystemQuery, loading: isPending, update }
 }

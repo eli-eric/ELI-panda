@@ -1,17 +1,13 @@
-import { useMutation } from '@apollo/client'
-
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
-import {
-  roomCardsQuery,
-  useRoomCards
-} from '@/modules/roomCards/hooks/useRoomCards'
+import { useRoomCards } from '@/modules/roomCards/hooks/useRoomCards'
 
 import { useRoomCardStore } from '../store/useRoomCardStore'
 import type { RoomCardFormType } from '../types/form'
 import { updateRoomCardVariables } from '../utils'
-import { roomCardQuery, useRoomCard } from './useRoomCard'
+import { useRoomCard } from './useRoomCard'
 import { navigateBack } from '@/utils'
 import { gql } from '@/types/gql'
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 
 const updateRoomCardMutation = gql(`
   mutation UpdateRoomCardMutation(
@@ -70,9 +66,11 @@ const updateRoomCardMutation = gql(`
 `)
 
 export const useRoomCardUpdate = (roomCardUid?: string) => {
-  const [update] = useMutation(updateRoomCardMutation, {
-    refetchQueries: ['RoomCards', 'RoomCard']
-  })
+  // const [update] = useMutation(updateRoomCardMutation, {
+  // refetchQueries: ['RoomCards', 'RoomCard']
+  // })
+
+  const { mutateAsync: update } = useGraphQLMutation(updateRoomCardMutation)
   const { roomCard: roomCardOrigin } = useRoomCard(roomCardUid)
   const { refetch } = useRoomCards()
 
@@ -89,8 +87,8 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
     roomCardForm: RoomCardFormType,
     saveAndExit: boolean
   ) =>
-    update({
-      variables: updateRoomCardVariables({
+    update(
+      updateRoomCardVariables({
         uid: roomCardUid,
         roomCard: roomCardForm,
         deleteHallContacts,
@@ -124,14 +122,17 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
             name: location.name
           })) as Codebooktree[]
       }),
-      onCompleted: () => {
-        refetch()
-        if (saveAndExit) {
-          navigateBack()
+      {
+        onSuccess: () => {
+          refetch()
+          if (saveAndExit) {
+            navigateBack()
+          }
         }
-      },
-      refetchQueries: [roomCardsQuery, roomCardQuery]
-    })
+        //TODO: add refetchQueries
+        // refetchQueries: [roomCardsQuery, roomCardQuery]
+      }
+    )
 
   return { updateRoomCard }
 }

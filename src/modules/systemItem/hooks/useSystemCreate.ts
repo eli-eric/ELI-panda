@@ -1,23 +1,23 @@
-import { gql, useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import type { MutableRefObject } from 'react'
 import { toast } from 'react-hot-toast'
 
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { addSubsystem } from '@/modules/systems/utils'
 import { PATH } from '@/types/constants/paths'
-import type { Mutation } from '@/types/gql/graphql'
 import { connectN, whereC, whereN } from '@/utils/graphql/mutations'
 
 import type { SystemDetailFormType } from '../types/form'
 import { navigateBack } from '@/utils'
 import { useQueryClient } from '@tanstack/react-query'
 import type { SystemsResponse } from '@/modules/systems/types/responses'
+import { gql } from '@/types/gql'
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { Actions } from '@/types/gql/graphql'
 
-const createSystemMutation = gql`
+const createSystemMutation = gql(`
   mutation CreateSystems($input: [SystemCreateInput!]!) {
     createSystems(input: $input) {
       systems {
@@ -26,7 +26,7 @@ const createSystemMutation = gql`
       }
     }
   }
-`
+`)
 
 export const useSystemCreate = (
   imageRef?: MutableRefObject<ImageGalleryRef | undefined>
@@ -36,8 +36,6 @@ export const useSystemCreate = (
   const queryClient = useQueryClient()
   const parentUid = router.query.parentUid as string | undefined
   const { data: session } = useSession()
-
-  const { systemSubsystems } = useEndpoint({ uid: parentUid || '' })
 
   const onCompleted = (
     { createSystems: { systems } },
@@ -71,18 +69,21 @@ export const useSystemCreate = (
     })
   }
 
-  const [create, { loading }] = useMutation<Mutation>(createSystemMutation, {
-    onError: error => {
-      toast.error('Something went wrong: ' + error.message)
+  const { mutate: create, isPending } = useGraphQLMutation(
+    createSystemMutation,
+    {
+      onError: error => {
+        toast.error('Something went wrong: ' + error.message)
+      }
     }
-  })
+  )
 
   const createSystem = (
     systemForm: SystemDetailFormType,
     saveAndExit?: boolean
   ) => {
-    create({
-      variables: {
+    create(
+      {
         input: [
           {
             parentSystem: parentUid
@@ -90,7 +91,7 @@ export const useSystemCreate = (
                   connect: whereN(parentUid)
                 }
               : undefined,
-            name: systemForm.name,
+            name: systemForm.name || '',
             facility: {
               connect: whereC(session?.user?.facilityCode)
             },
@@ -124,18 +125,20 @@ export const useSystemCreate = (
               connect: [
                 {
                   where: { node: { uid: session?.user?.uid } },
-                  edge: { action: 'INSERT' }
+                  edge: { action: Actions.Insert }
                 }
               ]
             }
           }
         ]
       },
-      onCompleted: response => {
-        onCompleted(response, saveAndExit)
+      {
+        onSuccess: response => {
+          onCompleted(response, saveAndExit)
+        }
       }
-    })
+    )
   }
 
-  return { createSystem, loading }
+  return { createSystem, loading: isPending }
 }
