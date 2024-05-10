@@ -41,12 +41,24 @@ const PROTECTED_PATHS = [
 ]
 
 const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
-  [PATH.CATALOGUE]: [ROLE.CATALOGUE_CATEGORY_EDIT, ROLE.CATALOGUE_EDIT, ROLE.CATALOGUE_VIEW],
-  [PATH.CATALOGUE_ITEM]: [ROLE.CATALOGUE_CATEGORY_EDIT, ROLE.CATALOGUE_EDIT, ROLE.CATALOGUE_VIEW],
+  [PATH.CATALOGUE]: [
+    ROLE.CATALOGUE_CATEGORY_EDIT,
+    ROLE.CATALOGUE_EDIT,
+    ROLE.CATALOGUE_VIEW
+  ],
+  [PATH.CATALOGUE_ITEM]: [
+    ROLE.CATALOGUE_CATEGORY_EDIT,
+    ROLE.CATALOGUE_EDIT,
+    ROLE.CATALOGUE_VIEW
+  ],
   [PATH.DASHBOARD]: [ROLE.BASICS],
   [PATH.REPORTS]: [ROLE.REPORTS_VIEW],
   [PATH.SYSTEMS]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
-  [PATH.ORDERS]: [ROLE.ORDERS_VIEW, ROLE.ORDERS_EDIT, ROLE.ORDERS_DELIVERY_EDIT],
+  [PATH.ORDERS]: [
+    ROLE.ORDERS_VIEW,
+    ROLE.ORDERS_EDIT,
+    ROLE.ORDERS_DELIVERY_EDIT
+  ],
   [PATH.ORDER]: [ROLE.ORDERS_VIEW, ROLE.ORDERS_EDIT, ROLE.ORDERS_DELIVERY_EDIT],
   [PATH.SYSTEM]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
   [PATH.SYSTEMS_MOVING]: [ROLE.SYSTEM_EDIT],
@@ -61,12 +73,15 @@ const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
   [PATH.PROFILE_SECURITY]: [ROLE.BASICS],
   [PATH.PROFILE_TEAM]: [ROLE.BASICS],
   [PATH.SYSTEM_ALIAS]: [ROLE.SYSTEMS_VIEW],
+  [PATH.SYSTEM_TYPE_EDIT]: [ROLE.SYSTEM_TYPE_EDIT, ROLE.SYSTEM_TYPE_VIEW],
   [PATH.ROOT]: []
 }
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
-  const matchesProtectedPath = PROTECTED_PATHS.some(path => pathname.startsWith(path))
+  const matchesProtectedPath = PROTECTED_PATHS.some(path =>
+    pathname.startsWith(path)
+  )
   const user = await getToken({ req: request })
   if (matchesProtectedPath) {
     if (!user) {
@@ -74,8 +89,12 @@ export async function middleware(request: NextRequest) {
       url.searchParams.set('callbackUrl', encodeURI(APP_BASE_URL + pathname))
       return NextResponse.redirect(url)
     }
-    const currentPath = Object.keys(PATH_ROLES_CONFIG).find(key => pathname.startsWith(key)) as PATH
-    const matchRolesToPath = PATH_ROLES_CONFIG[currentPath].some(role => user.roles.includes(role))
+    const currentPath = Object.keys(PATH_ROLES_CONFIG).find(key =>
+      pathname.startsWith(key)
+    ) as PATH
+    const matchRolesToPath = PATH_ROLES_CONFIG[currentPath].some(role =>
+      user.roles.includes(role)
+    )
 
     if (!matchRolesToPath) {
       const url = new URL(`/404`, request.url)
