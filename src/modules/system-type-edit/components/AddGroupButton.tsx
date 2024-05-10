@@ -2,30 +2,68 @@ import { PlusButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/Input'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
+import axiosInstance from '@/core/axios/axiosInstance'
+import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
+import { BASE_URL } from '@/types/constants/common'
+import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
+import type { QueryObserverResult, RefetchOptions } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
+import type { FC } from 'react'
 import { Fragment, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 const messages = message.common.buttons
 
-export const AddGroupButton: React.FC = () => {
+interface Props {
+  refetch: (
+    options?: RefetchOptions | undefined
+  ) => Promise<QueryObserverResult<CodebookType[], Error>>
+}
+
+export const AddGroupButton: FC<Props> = ({ refetch }) => {
   const [open, setOpen] = useState(false)
+
+  const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
 
   const formMethods = useForm()
 
+  const { mutate, isPending } = useMutation({
+    mutationFn: async () => {
+      const res = await axiosInstance
+        .post(BASE_URL + `/system/system-type-group`, formMethods.getValues())
+        .then(res => res.data)
+      return res.data
+    },
+    onSuccess: () => {
+      refetch()
+      setOpen(false)
+      formMethods.reset()
+      toast.success(`Group was created.`)
+    },
+    onError: () => {
+      toast.error(`Failed to create group.`)
+      setOpen(false)
+    }
+  })
+
   const buttons: ModalButtons = {
     goNext: {
-      onClick: () => setOpen(false),
-      text: messages.save
+      onClick: () => mutate(),
+      text: messages.save,
+      loading: isPending
     },
     goBack: {
       onClick: () => setOpen(false),
-      text: messages.cancel
+      text: messages.cancel,
+      loading: isPending
     }
   }
   return (
     <Fragment>
-      <PlusButton primary onClick={() => setOpen(!open)} />
+      <PlusButton primary disabled={!canEdit} onClick={() => setOpen(!open)} />
       <ModalComponent open={open} setOpen={setOpen} buttons={buttons}>
         <Form formMethods={formMethods}>
           <Input name="name" label="Name" rounded="rounded-md" />

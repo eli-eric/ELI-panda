@@ -46,7 +46,7 @@ const SystemTypeEditContainer: FC = () => {
         <div className="flex-1 mr-2 justify-center">
           <div className="text-center flex justify-between px-4 py-2 bg-slate-200 dark:bg-slate-600 rounded-md shadow-sm">
             Groups
-            <AddGroupButton />
+            <AddGroupButton refetch={refetchGroups} />
           </div>
           <ul className="">
             {systemTypeGroups?.map(item => (
@@ -63,11 +63,15 @@ const SystemTypeEditContainer: FC = () => {
         <div className="flex-1 justify-center">
           <div className="text-center flex justify-between px-4 py-2 bg-slate-200 dark:bg-slate-600 rounded-md shadow-sm">
             System Types
-            <AddSystemTypeButton selectedGroup={selectedGroup} />
+            <AddSystemTypeButton
+              selectedGroup={selectedGroup}
+              refetch={refetchSystemTypes}
+            />
           </div>
           <ul>
             {systemTypes?.map(item => (
               <SystemTypeItem
+                groupUid={selectedGroup}
                 key={item.uid}
                 systemType={item}
                 refetch={refetchSystemTypes}

@@ -15,15 +15,25 @@ import {
   type RefetchOptions
 } from '@tanstack/react-query'
 import axiosInstance from '@/core/axios/axiosInstance'
+import { BASE_URL } from '@/types/constants/common'
+import toast from 'react-hot-toast'
+import usePermission from '@/hooks/usePermission'
+import { ROLE } from '@/types/constants/roles'
 const messages = message.common.buttons
 interface Props {
   systemType: SystemTypesResponse
+  groupUid?: string | null
   refetch: (
     options?: RefetchOptions | undefined
   ) => Promise<QueryObserverResult<SystemTypesResponse[], Error>>
 }
-export const SystemTypeItem: FC<Props> = ({ systemType, refetch }) => {
+export const SystemTypeItem: FC<Props> = ({
+  systemType,
+  refetch,
+  groupUid
+}) => {
   const [openEdit, setOpenEdit] = useState(false)
+  const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
 
   const withWarningModal = useWarningModal(
     `Are you sure you want to delete ${systemType.name}?`
@@ -41,21 +51,30 @@ export const SystemTypeItem: FC<Props> = ({ systemType, refetch }) => {
   const { mutate } = useMutation({
     mutationFn: async () => {
       const res = await axiosInstance
-        .put(`/system/system-type/${systemType.uid}`, formMethods.getValues())
+        .put(
+          BASE_URL +
+            `/system/system-type-group/${groupUid}/system-type/${systemType.uid}`,
+          formMethods.getValues()
+        )
         .then(res => res.data)
       return res.data
     },
     onSuccess: () => {
       refetch()
       setOpenEdit(false)
+      toast.success(`${systemType.name} was updated.`)
     }
   })
   const { mutate: deleteType } = useMutation({
     mutationFn: async () => {
       const res = await axiosInstance
-        .delete(`/system/system-type/${systemType.uid}`)
+        .delete(BASE_URL + `/system/system-type/${systemType.uid}`)
         .then(res => res.data)
       return res.data
+    },
+    onSuccess: () => {
+      refetch()
+      toast.success(`${systemType.name} was deleted.`)
     }
   })
 
@@ -64,7 +83,8 @@ export const SystemTypeItem: FC<Props> = ({ systemType, refetch }) => {
       onClick: () => {
         mutate()
       },
-      text: messages.save
+      text: messages.save,
+      disabled: !canEdit
     },
     goBack: {
       onClick: () => setOpenEdit(false),
@@ -90,14 +110,31 @@ export const SystemTypeItem: FC<Props> = ({ systemType, refetch }) => {
               setOpenEdit(true)
             }}
           />
-          <DeleteButton onClick={() => withWarningModal(deleteType)()} />
+          {canEdit && (
+            <DeleteButton onClick={() => withWarningModal(deleteType)()} />
+          )}
         </div>
       </li>
       <ModalComponent open={openEdit} setOpen={setOpenEdit} buttons={buttons}>
         <Form formMethods={formMethods}>
-          <Input name="name" label="Name" rounded="rounded-md" />
-          <Input name="code" label="Code" rounded="rounded-md" />
-          <Input name="mask" label="Mask" rounded="rounded-md" />
+          <Input
+            name="name"
+            label="Name"
+            rounded="rounded-md"
+            disabled={!canEdit}
+          />
+          <Input
+            name="code"
+            label="Code"
+            rounded="rounded-md"
+            disabled={!canEdit}
+          />
+          <Input
+            name="mask"
+            label="Mask"
+            rounded="rounded-md"
+            disabled={!canEdit}
+          />
         </Form>
       </ModalComponent>
     </Fragment>

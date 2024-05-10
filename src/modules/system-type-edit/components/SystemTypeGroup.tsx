@@ -2,15 +2,23 @@ import { DeleteButton, EditButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/Input'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
+import axiosInstance from '@/core/axios/axiosInstance'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import { useSubmit } from '@/hooks/fetch/useSubmit'
+import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
+import { BASE_URL } from '@/types/constants/common'
+import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 import { classNames } from '@/utils'
-import type { QueryObserverResult, RefetchOptions } from '@tanstack/react-query'
+import {
+  useMutation,
+  type QueryObserverResult,
+  type RefetchOptions
+} from '@tanstack/react-query'
 import { Fragment, useState, type FC } from 'react'
 import { useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 const messages = message.common.buttons
 
@@ -26,9 +34,12 @@ interface Props {
 export const SystemTypeGroup: FC<Props> = ({
   systemTypeGroup,
   selectedGroup,
-  setSelectedGroup
+  setSelectedGroup,
+  refetch
 }) => {
   const [openEdit, setOpenEdit] = useState(false)
+
+  const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
 
   const withWarningModal = useWarningModal(
     `Are you sure you want to delete ${systemTypeGroup.name}?`
@@ -40,10 +51,24 @@ export const SystemTypeGroup: FC<Props> = ({
     }
   })
 
-  const { submit, loading } = useSubmit({
-    endpoint: `/system/system-type-group/${systemTypeGroup.uid}`,
-    method: 'put',
+  //TODO: bit refactor after big merge
+  const { mutate: submit, isPending } = useMutation({
+    mutationFn: async () => {
+      const res = await axiosInstance
+        .put(
+          BASE_URL + `/system/system-type-group/${systemTypeGroup.uid}`,
+          formMethods.getValues()
+        )
+        .then(res => res.data)
+      return res.data
+    },
     onSuccess: () => {
+      refetch()
+      setOpenEdit(false)
+      toast.success(`${systemTypeGroup.name} was updated.`)
+    },
+    onError: () => {
+      toast.error(`Failed to update ${systemTypeGroup.name}.`)
       setOpenEdit(false)
     }
   })
@@ -51,10 +76,10 @@ export const SystemTypeGroup: FC<Props> = ({
   const buttons: ModalButtons = {
     goNext: {
       onClick: () => {
-        submit(formMethods.getValues())
+        submit()
       },
       text: messages.save,
-      loading
+      loading: isPending
     },
     goBack: {
       onClick: () => setOpenEdit(false),
@@ -75,15 +100,17 @@ export const SystemTypeGroup: FC<Props> = ({
         key={systemTypeGroup.uid}
       >
         {systemTypeGroup.name}
-        <div>
-          <EditButton
-            className="mr-2"
-            onClick={() => {
-              setOpenEdit(true)
-            }}
-          />
-          <DeleteButton onClick={() => withWarningModal(() => {})()} />
-        </div>
+        {canEdit && (
+          <div>
+            <EditButton
+              className="mr-2"
+              onClick={() => {
+                setOpenEdit(true)
+              }}
+            />
+            <DeleteButton onClick={() => withWarningModal(() => {})()} />
+          </div>
+        )}
       </li>
       <ModalComponent open={openEdit} setOpen={setOpenEdit} buttons={buttons}>
         <Form formMethods={formMethods}>
