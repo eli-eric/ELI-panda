@@ -21,6 +21,7 @@ export enum PATH {
   SYSTEMS_MOVING = '/systems/moving',
   SPARE_PARTS = '/systems/spareparts',
   SYSTEM = '/system',
+  SYSTEM_TYPE_EDIT = '/system/type-edit',
   SYSTEM_ALIAS = '/system/alias',
   REPORTS = '/reports',
   ORDERS = '/orders',
@@ -64,7 +65,12 @@ export const NAV_BAR_CONFIG: NavigationType[] = [
     links: [
       { path: PATH.SYSTEMS, name: 'Overview', role: ROLE.SYSTEMS_VIEW },
       { path: PATH.SYSTEMS_MOVING, name: 'Moving', role: ROLE.SYSTEM_EDIT },
-      { path: PATH.SPARE_PARTS, name: 'Spare Parts', role: ROLE.SYSTEM_EDIT }
+      { path: PATH.SPARE_PARTS, name: 'Spare Parts', role: ROLE.SYSTEM_EDIT },
+      {
+        path: PATH.SYSTEM_TYPE_EDIT,
+        name: 'System Type Edit',
+        role: ROLE.SYSTEM_EDIT
+      }
     ],
     role: ROLE.SYSTEMS_VIEW,
     Icon: RectangleGroupIcon
@@ -97,6 +103,16 @@ export const NAV_BAR_CONFIG: NavigationType[] = [
 
 // Additional items for the bottom of the sidebar
 export const USER_NAVIGATION = [
-  { name: 'Profile', link: PATH.PROFILE_GENERAL, Icon: UserIcon, role: ROLE.BASICS },
-  { name: 'Administration', link: PATH.ADMIN_USERS, Icon: UserGroupIcon, role: ROLE.ADMIN }
+  {
+    name: 'Profile',
+    link: PATH.PROFILE_GENERAL,
+    Icon: UserIcon,
+    role: ROLE.BASICS
+  },
+  {
+    name: 'Administration',
+    link: PATH.ADMIN_USERS,
+    Icon: UserGroupIcon,
+    role: ROLE.ADMIN
+  }
 ]
