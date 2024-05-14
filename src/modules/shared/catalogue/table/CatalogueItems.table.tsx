@@ -2,26 +2,28 @@ import type { Row, Table } from '@tanstack/react-table'
 import { createContext, useEffect, useRef } from 'react'
 
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import type { CatalogueCategory } from '@/types/gql/graphql'
 import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
 
 import type { GetRowPropsReturnType } from '../../table/pandaTable/PandaTable'
 import { PandaTable } from '../../table/pandaTable/PandaTable'
 import { useCatalogueItemsColumns } from './CatalogueItems.columns'
+import type { GetCategoriesQuery } from '@/types/gql/graphql'
 
 interface CatalogueTableProps {
   hideButtons?: boolean
   enableQueryURL?: boolean
   tableId?: string
   catalogueItems?: CatalogueItemsResponse
-  categoryList?: CatalogueCategory[]
+  categoryList?: GetCategoriesQuery['catalogueCategories']
   loading?: boolean
   enableFiltering?: boolean
   setCategoryFilter?: (value: CodebookType) => void
   getRowProps?: (row: Row<any>) => GetRowPropsReturnType
 }
 
-export const CatalogueTableContext = createContext<{ isHoveringId: number | undefined | string }>({
+export const CatalogueTableContext = createContext<{
+  isHoveringId: number | undefined | string
+}>({
   isHoveringId: undefined
 })
 
@@ -35,13 +37,22 @@ export const CatalogueTable = ({
   loading,
   setCategoryFilter
 }: CatalogueTableProps) => {
-  const columns = useCatalogueItemsColumns({ tableId, hideButtons, catalogueItems, setCategoryFilter })
+  const columns = useCatalogueItemsColumns({
+    tableId,
+    hideButtons,
+    catalogueItems,
+    setCategoryFilter
+  })
   const catalogueTableRef = useRef<Table<CatalogueItem>>()
 
   useEffect(() => {
     if (catalogueTableRef.current) {
-      catalogueTableRef.current.setColumnVisibility({ categoryName: categoryList?.length !== 0 })
-      catalogueTableRef.current.setColumnOrder(catalogueTableRef.current.getAllLeafColumns().map(column => column.id))
+      catalogueTableRef.current.setColumnVisibility({
+        categoryName: categoryList?.length !== 0
+      })
+      catalogueTableRef.current.setColumnOrder(
+        catalogueTableRef.current.getAllLeafColumns().map(column => column.id)
+      )
     }
   }, [categoryList, columns])
 

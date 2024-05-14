@@ -1,10 +1,14 @@
-import { gql, useMutation } from '@apollo/client'
 import { toast } from 'react-hot-toast'
 
 import { useRoomCards } from './useRoomCards'
+import { gql } from '@/types/gql'
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 
-const ROOM_CARD_DELETE = gql`
-  mutation DeleteRoomCards($deleteHallContactPeopleWhere: HallContactPersonWhere, $where: RoomCardWhere) {
+const roomCardDeleteMutation = gql(`
+  mutation DeleteRoomCards(
+    $deleteHallContactPeopleWhere: HallContactPersonWhere
+    $where: RoomCardWhere
+  ) {
     deleteRoomCards(where: $where) {
       nodesDeleted
     }
@@ -12,13 +16,22 @@ const ROOM_CARD_DELETE = gql`
       nodesDeleted
     }
   }
-`
+`)
 
 export const useRoomCardDelete = (uid: string, name: string) => {
   const { refetch } = useRoomCards()
 
-  const [deleteRoomCard] = useMutation(ROOM_CARD_DELETE, {
-    variables: {
+  const { mutate } = useGraphQLMutation(roomCardDeleteMutation, {
+    onSuccess: () => {
+      refetch()
+      toast.success(`Room card ${name} was deleted`)
+    },
+    onError: () => {
+      toast.error(`Something went wrong with delete ${name} room card!`)
+    }
+  })
+  const deleteRoomCard = () => {
+    mutate({
       where: {
         uid
       },
@@ -27,15 +40,8 @@ export const useRoomCardDelete = (uid: string, name: string) => {
           uid
         }
       }
-    },
-    onCompleted: () => {
-      refetch()
-      toast.success(`Room card ${name} was deleted`)
-    },
-    onError: () => {
-      toast.error(`Something went wrong with delete ${name} room card!`)
-    }
-  })
+    })
+  }
 
   return { deleteRoomCard }
 }

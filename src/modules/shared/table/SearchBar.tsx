@@ -32,17 +32,25 @@ export const SearchBar = ({
 
   const onChangeRef = useRef(onChange)
 
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   useEffect(() => {
     const delayInputTimeoutId = setTimeout(() => {
-      if (onChangeRef.current) {
-        onChangeRef.current(value)
-      }
-      setSearch(tableId, value)
-      if (useQuery) {
-        setQuerySearch(value, { shallow: true })
+      if (mounted) {
+        if (onChangeRef.current) {
+          onChangeRef.current(value)
+        }
+        setSearch(tableId, value)
+        if (useQuery) {
+          setQuerySearch(value, { shallow: true })
+        }
       }
     }, 500)
     return () => clearTimeout(delayInputTimeoutId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 
   return (

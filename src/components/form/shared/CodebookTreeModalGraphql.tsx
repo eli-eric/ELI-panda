@@ -1,5 +1,5 @@
 import { type ColumnDef } from '@tanstack/react-table'
-import { useEffect, useMemo, useState } from 'react'
+import { startTransition, useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
@@ -57,7 +57,10 @@ export const CodebookTreeModalGraphql = ({
   const [item, setItem] = useState<Codebooktree | undefined>(undefined)
 
   const { instances } = useTableStateStore()
-  const filter = useMemo(() => instances[tableId]?.columnFilter, [instances, tableId])
+  const filter = useMemo(
+    () => instances[tableId]?.columnFilter,
+    [instances, tableId]
+  )
   const filterName = filter?.find(item => item.id === 'name')?.value as string
   const { setValue } = useFormContext()
   const columns = useMemo((): ColumnDef<Codebooktree, any>[] => {
@@ -68,8 +71,14 @@ export const CodebookTreeModalGraphql = ({
         id: 'name',
         filterFn: 'fuzzy',
         size: 300,
-        meta: enableFiltering ? { filter: { type: 'string', enableColumnFilter: true } } : undefined,
-        cell: ({ row, getValue }) => <ExpandableNameCell {...{ row, getValue, fetchChildren, filterName }} />
+        meta: enableFiltering
+          ? { filter: { type: 'string', enableColumnFilter: true } }
+          : undefined,
+        cell: ({ row, getValue }) => (
+          <ExpandableNameCell
+            {...{ row, getValue, fetchChildren, filterName }}
+          />
+        )
       }
     ]
     if (additionalColumn) columns.push(additionalColumn)
@@ -91,8 +100,10 @@ export const CodebookTreeModalGraphql = ({
   const { toggleAllRowsExpanded } = table
 
   useEffect(() => {
-    if (filter && filter?.length > 0) toggleAllRowsExpanded(true)
-    if (!filter || filter.length === 0) toggleAllRowsExpanded(false)
+    startTransition(() => {
+      if (filter && filter?.length > 0) toggleAllRowsExpanded(true)
+      if (!filter || filter.length === 0) toggleAllRowsExpanded(false)
+    })
     return () => {
       setItem(undefined)
     }
@@ -132,20 +143,30 @@ export const CodebookTreeModalGraphql = ({
             enableFiltering: enableFiltering,
             manualFiltering: manualFiltering
           }}
-          className={'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'}
+          className={
+            'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'
+          }
           getRowProps={row => ({
             onClick: () => {
               if (selectParent) {
                 setItem({
                   uid: row.original.uid,
-                  name: row.original.name + (row.original.code && !customSetValue ? ` (${row.original.code})` : ''),
+                  name:
+                    row.original.name +
+                    (row.original.code && !customSetValue
+                      ? ` (${row.original.code})`
+                      : ''),
                   code: row.original?.code
                 })
               }
               if (!row.original.isExpandable && !selectParent) {
                 setItem({
                   uid: row.original.uid,
-                  name: row.original.name + (row.original.code && !customSetValue ? ` (${row.original.code})` : ''),
+                  name:
+                    row.original.name +
+                    (row.original.code && !customSetValue
+                      ? ` (${row.original.code})`
+                      : ''),
                   code: row.original?.code
                 })
               }

@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { Fragment, Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
 import ErrorPage from '@/components/error/ErrorPage'
@@ -20,25 +20,28 @@ interface Props {
 
 export const SystemItemContainer = ({ uid }: Props) => {
   const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
+
   return (
     <div className="h-screen">
-      <SystemForm />
-      {uid && (
-        <Card className="flex flex-col justify-between">
-          <SubSystemsContainer />
-          <SparePartsContainer />
-          <SparePartsFor />
-          <ErrorBoundary fallback={<ErrorPage />}>
-            <Suspense fallback={<ProgressBarComponent />}>
-              <FileManager
-                itemType={FILE_TYPE.SYSTEM}
-                uid={uid}
-                hasEditRole={hasEditRole}
-              />
-            </Suspense>
-          </ErrorBoundary>
-        </Card>
-      )}
+      <Fragment>
+        <SystemForm />
+        {uid && (
+          <Card className="flex flex-col justify-between">
+            <SubSystemsContainer />
+            <SparePartsContainer />
+            <SparePartsFor />
+            <ErrorBoundary fallback={<ErrorPage />}>
+              <Suspense fallback={<ProgressBarComponent />}>
+                <FileManager
+                  itemType={FILE_TYPE.SYSTEM}
+                  uid={uid}
+                  hasEditRole={hasEditRole}
+                />
+              </Suspense>
+            </ErrorBoundary>
+          </Card>
+        )}
+      </Fragment>
     </div>
   )
 }

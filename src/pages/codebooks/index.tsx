@@ -11,7 +11,9 @@ interface Props {
   selectedCodebook?: string
 }
 
-const CodeBookEditorPage: NextPage = ({ selectedCodebook }: Props): JSX.Element => {
+const CodeBookEditorPage: NextPage = ({
+  selectedCodebook
+}: Props): JSX.Element => {
   const intl = useIntl()
 
   return (

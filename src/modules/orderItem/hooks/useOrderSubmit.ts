@@ -11,7 +11,7 @@ import { navigateBack } from '@/utils'
 
 export const useOrderSubmit = () => {
   const router = useRouter()
-  const { mutate: mutateDetail, uid } = useOrderDetail()
+  const { invalidateQuery, uid } = useOrderDetail()
   const { order: orderEndpoint } = useEndpoint({ uid })
   const { mutate } = useOrders()
 
@@ -22,7 +22,7 @@ export const useOrderSubmit = () => {
       toast.success(`Order ${uid} saved successfully`)
 
       mutate()
-      mutateDetail()
+      invalidateQuery()
       if (custom?.saveAndExit) {
         const navigateExit = () => router.push(PATH.ORDERS)
         navigateBack(navigateExit)

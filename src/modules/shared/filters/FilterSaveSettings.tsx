@@ -24,46 +24,57 @@ interface Props {
   resetForm: UseFormReset<any>
   defaulFormValues: any
 }
-export const FilterSaveSettings = ({ tableId, enableQueryURL, resetForm, defaulFormValues }: Props) => {
+export const FilterSaveSettings = ({
+  tableId,
+  enableQueryURL,
+  resetForm,
+  defaulFormValues
+}: Props) => {
   const formMethods = useForm()
   const savedFilter = formMethods.watch('savedFilter')
   const inputFormMethods = useForm()
   const [open, setOpen] = useState(false)
-  const { storeFilters, setColumnFilters } = useFormFilterState({ tableId, enableQueryUrl: enableQueryURL })
+  const { storeFilters, setColumnFilters } = useFormFilterState({
+    tableId,
+    enableQueryUrl: enableQueryURL
+  })
   const { addCustomFieldIdToSync } = useFormControlStore()
 
   const { createUserSettings, loading } = useFilterCreate({ tableId })
   const { filters, refetch } = useFilterDetails(tableId)
 
-  const { updateSavedFilter } = useFilterUpdate(savedFilter?.uid, storeFilters)
+  const { updateSavedFilter } = useFilterUpdate()
   const user = useSession().data?.user
 
   const handleUpdateSavedFilter = () => {
-    updateSavedFilter({
-      variables: {
-        input: {
-          where: {
-            uid: savedFilter?.uid
-          },
-          update: {
-            value: JSON.stringify(storeFilters)
-          }
+    updateSavedFilter(
+      {
+        where: {
+          uid: savedFilter?.uid
+        },
+        update: {
+          value: JSON.stringify(storeFilters)
         }
       },
-      onError: () => {
-        toast.error('Error updating filter')
-      },
-      onCompleted: () => {
-        refetch()
-        formMethods.setValue('savedFilter', { ...savedFilter, value: JSON.stringify(storeFilters) })
-        toast.success('Filter updated successfully')
+      {
+        onError: () => {
+          toast.error('Error updating filter')
+        },
+        onSuccess: () => {
+          refetch()
+          formMethods.setValue('savedFilter', {
+            ...savedFilter,
+            value: JSON.stringify(storeFilters)
+          })
+          toast.success('Filter updated successfully')
+        }
       }
-    })
+    )
   }
 
   const submitNewFilter = data => {
-    createUserSettings({
-      variables: {
+    createUserSettings(
+      {
         input: [
           {
             key: `filter-${tableId}-${data.filterName.toLowerCase().split(' ').join('')}`,
@@ -81,15 +92,17 @@ export const FilterSaveSettings = ({ tableId, enableQueryURL, resetForm, defaulF
           }
         ]
       },
-      onError: () => {
-        toast.error('Error creating filter')
-      },
-      onCompleted: () => {
-        refetch()
-        setOpen(false)
-        toast.success('Filter created successfully')
+      {
+        onError: () => {
+          toast.error('Error creating filter')
+        },
+        onSuccess: () => {
+          refetch()
+          setOpen(false)
+          toast.success('Filter created successfully')
+        }
       }
-    })
+    )
   }
 
   const applyFilter = () => {
@@ -102,15 +115,18 @@ export const FilterSaveSettings = ({ tableId, enableQueryURL, resetForm, defaulF
       })
       resetForm(
         () => {
-          const defValues = Object.keys(defaulFormValues).reduce((acc, curr) => {
-            const filter = value.find(item => item.id === curr)
-            if (filter) {
-              acc[curr] = filter.value
-            } else {
-              acc[curr] = defaulFormValues[curr]
-            }
-            return acc
-          }, {})
+          const defValues = Object.keys(defaulFormValues).reduce(
+            (acc, curr) => {
+              const filter = value.find(item => item.id === curr)
+              if (filter) {
+                acc[curr] = filter.value
+              } else {
+                acc[curr] = defaulFormValues[curr]
+              }
+              return acc
+            },
+            {}
+          )
           value.forEach(filter => {
             if (filter.type) {
               defValues[filter.id] = filter.value
@@ -143,33 +159,47 @@ export const FilterSaveSettings = ({ tableId, enableQueryURL, resetForm, defaulF
   const { deleteSavedFilter } = useFilterDelete()
   const handleDeleteFilter = () => {
     if (savedFilter) {
-      deleteSavedFilter({
-        variables: {
+      deleteSavedFilter(
+        {
           where: {
             uid: savedFilter.uid
           }
         },
-        onError: () => {
-          toast.error('Error deleting filter')
-        },
-        onCompleted: () => {
-          formMethods.setValue('savedFilter', null)
-          resetForm(defaulFormValues, { keepValues: false })
-          refetch()
-          toast.success('Filter deleted successfully')
+        {
+          onError: () => {
+            toast.error('Error deleting filter')
+          },
+          onSuccess: () => {
+            formMethods.setValue('savedFilter', null)
+            resetForm(defaulFormValues, { keepValues: false })
+            refetch()
+            toast.success('Filter deleted successfully')
+          }
         }
-      })
+      )
     }
   }
 
   return (
     <div className="flex w-full">
       <Form formMethods={formMethods} className="flex w-full">
-        <Button onClick={handleDeleteFilter} disabled={!savedFilter} className="pb-2" primary buttonSize="large">
+        <Button
+          onClick={handleDeleteFilter}
+          disabled={!savedFilter}
+          className="pb-2"
+          primary
+          buttonSize="large"
+        >
           <TrashIcon className="h-5 w-5" aria-hidden="true" />
         </Button>
         <Listbox name="savedFilter" codebookResponse={filters} position="top" />
-        <Button onClick={applyFilter} disabled={!savedFilter} className="pb-2" primary buttonSize="large">
+        <Button
+          onClick={applyFilter}
+          disabled={!savedFilter}
+          className="pb-2"
+          primary
+          buttonSize="large"
+        >
           Apply
         </Button>
         <Button
@@ -195,7 +225,12 @@ export const FilterSaveSettings = ({ tableId, enableQueryURL, resetForm, defaulF
       </Form>
       <Form formMethods={inputFormMethods}>
         <Modal open={open} setOpen={setOpen} buttons={buttons}>
-          <Input placeholder="Type filter name" name="filterName" rounded="rounded-md" customLabel="Filter Name" />
+          <Input
+            placeholder="Type filter name"
+            name="filterName"
+            rounded="rounded-md"
+            customLabel="Filter Name"
+          />
         </Modal>
       </Form>
     </div>

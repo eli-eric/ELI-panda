@@ -1,18 +1,23 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Fragment, useState } from 'react'
-import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
+import {
+  useFieldArray,
+  useForm,
+  useFormContext,
+  useWatch
+} from 'react-hook-form'
 import { mixed, object } from 'yup'
 
 import { PlusButton } from '@/components/Buttons'
 import Combobox from '@/components/form/Combobox'
 import { FormModal } from '@/hooks/form/useFormModal'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
-import { useLazyEmployee } from '@/hooks/graphql/useLazyEmployee'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 import type { ROLE } from '@/types/constants/roles'
 import type { Employee } from '@/types/gql/graphql'
+import { useEmployee } from '@/hooks/graphql/useEmployee'
 
 const nestedForm = message.roomCardsPage.nestedForm
 
@@ -22,7 +27,11 @@ type Props = {
   editPersmissionRole: ROLE
 }
 
-export const HeaderAddButton = ({ setEmployee, name, editPersmissionRole }: Props) => {
+export const HeaderAddButton = ({
+  setEmployee,
+  name,
+  editPersmissionRole
+}: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const editPersmission = usePermission([editPersmissionRole])
 
@@ -31,14 +40,16 @@ export const HeaderAddButton = ({ setEmployee, name, editPersmissionRole }: Prop
   const { control } = useFormContext()
   const { insert, fields: arrayFields } = useFieldArray({ control, name })
 
-  const [getEployee, employeeQuery] = useLazyEmployee()
+  const formEmployee = useWatch({ control, name: 'employee' })
+
+  const { employee } = useEmployee(formEmployee?.uid)
 
   const onSubmit = () => {
-    if (!employeeQuery) return
+    if (!employee) return
     insert(arrayFields.length, {
-      ...employeeQuery
+      ...employee
     })
-    setEmployee(employeeQuery)
+    setEmployee(employee)
   }
 
   function makeSchema() {
@@ -74,14 +85,14 @@ export const HeaderAddButton = ({ setEmployee, name, editPersmissionRole }: Prop
           setIsModalOpen(true)
         }}
       />
-      <FormModal formMethods={formMethods} open={isModalOpen} setOpen={setIsModalOpen} onSubmit={onSubmit}>
+      <FormModal
+        formMethods={formMethods}
+        open={isModalOpen}
+        setOpen={setIsModalOpen}
+        onSubmit={onSubmit}
+      >
         <div className="flex space-x-3">
-          <Combobox
-            {...fields.employee}
-            onSelect={value => {
-              if (value.uid) getEployee({ variables: { uid: value.uid } })
-            }}
-          />
+          <Combobox {...fields.employee} />
         </div>
       </FormModal>
     </Fragment>

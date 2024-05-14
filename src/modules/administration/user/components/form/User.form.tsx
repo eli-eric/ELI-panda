@@ -1,7 +1,5 @@
-import { gql, useQuery } from '@apollo/client'
-import { useEffect } from 'react'
+import { startTransition, useEffect } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
-import toast from 'react-hot-toast'
 
 import { Button } from '@/components/Buttons'
 import CheckBox from '@/components/form/CheckBox'
@@ -9,46 +7,49 @@ import Combobox from '@/components/form/Combobox'
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
-import { useLazyEmployee } from '@/hooks/graphql/useLazyEmployee'
-import type { Query } from '@/types/gql/graphql'
 import { generatePassword } from '@/utils'
 
 import { useUserFormFields } from './User.fields'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
+import toast from 'react-hot-toast'
+import { useEmployee } from '@/hooks/graphql/useEmployee'
 
-const GET_FACILITIES = gql`
+const GET_FACILITIES = gql(`
   query GetFacilities {
     facilities {
       code
       name
     }
   }
-`
+`)
 
 export const UserForm = () => {
   const fields = useUserFormFields()
   const { setValue, control } = useFormContext()
-  const { data } = useQuery<Query>(GET_FACILITIES, {
-    onError: error => {
-      toast.error(error.message)
-    }
-  })
+  const { data, error } = useGraphQL(GET_FACILITIES)
 
-  const [getEmployee, employee] = useLazyEmployee()
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to fetch facilities')
+    }
+  }, [error])
 
   const epmloyeeForm = useWatch({ control, name: 'employee' })
 
-  useEffect(() => {
-    if (epmloyeeForm) {
-      getEmployee({ variables: { uid: epmloyeeForm.uid } })
-    }
-  }, [epmloyeeForm, getEmployee])
+  const { employee } = useEmployee(epmloyeeForm.uid)
 
   useEffect(() => {
-    if (employee) {
-      setValue('firstName', employee.firstName)
-      setValue('lastName', employee.lastName)
-      setValue('facility', { uid: employee.facility.code, name: employee.facility.name })
-    }
+    startTransition(() => {
+      if (employee) {
+        setValue('firstName', employee.firstName)
+        setValue('lastName', employee.lastName)
+        setValue('facility', {
+          uid: employee.facility.code,
+          name: employee.facility.name
+        })
+      }
+    })
   }, [employee, setValue])
 
   const generatePasswordHandler = () => {
@@ -60,7 +61,10 @@ export const UserForm = () => {
   return (
     <Grid>
       <Col md={6}>
-        <Combobox {...fields.employee} filter={[{ key: 'all', value: 'true' }]} />
+        <Combobox
+          {...fields.employee}
+          filter={[{ key: 'all', value: 'true' }]}
+        />
       </Col>
       <Col md={6} className="items-center sm:pl-2 pt-4">
         <CheckBox {...fields.isEnabled} />
@@ -77,7 +81,10 @@ export const UserForm = () => {
       <Col md={6}>
         <Listbox
           {...fields.facility}
-          codebookResponse={data?.facilities.map(value => ({ name: value.name, uid: value.code }))}
+          codebookResponse={data?.facilities.map(value => ({
+            name: value.name,
+            uid: value.code
+          }))}
         />
       </Col>
       <Col md={6}>

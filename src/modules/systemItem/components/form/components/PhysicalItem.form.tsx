@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Fragment, Suspense, useContext } from 'react'
+import { Fragment, Suspense } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import { LinkDecorator } from '@/components/decorators'
@@ -9,7 +9,6 @@ import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import { Paragraph } from '@/components/layout/Paragraph'
 import { message } from '@/i18n/src/messages'
-import { SystemDetailContext } from '@/pages/system/[uid]'
 import { PATH } from '@/types/constants/paths'
 
 import { createMessageValues } from '../../../../../utils/formatters'
@@ -23,20 +22,21 @@ import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
 import { useItemProperties } from '@/modules/systemItem/hooks/useItemProperties'
 import { ItemProperty } from './ItemProperty'
+import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 
 const propertyMessage =
   message.systemsPage.systemDetail.form.physicalItem.general.properties
 
 export const PhysicalItemForm = ({ uid }: { uid: string }) => {
   const fields = useSystemFormFields()
-  const { systemDetail } = useContext(SystemDetailContext)
+
+  const { catalogueItem, physicalItem } = useSystemDetail()
 
   const { data: properties } = useItemProperties(uid)
 
-  const catalogueItemProperties =
-    systemDetail?.physicalItem?.catalogueItem?.propertiesConnection?.edges
+  const catalogueItemProperties = catalogueItem?.propertiesConnection?.edges
 
-  const description = systemDetail?.physicalItem?.catalogueItem.description
+  const description = catalogueItem?.description
   const canEdit = usePermission([ROLE.SYSTEM_EDIT])
 
   return (
@@ -118,19 +118,17 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
       <Col sm="full">
         <TextArea {...fields.itemNotes} />
       </Col>
-      {systemDetail?.physicalItem?.order && (
+      {physicalItem?.order && (
         <Col sm="full" className="flex-col">
           <FormattedMessage
             id={propertyMessage.title}
             values={createMessageValues({ title: 'Item Order Information' })}
           />
           <Link
-            href={PATH.ORDER + '/' + systemDetail.physicalItem.order.uid}
+            href={PATH.ORDER + '/' + physicalItem.order.uid}
             target={'_blank'}
           >
-            <LinkDecorator>
-              {systemDetail.physicalItem.order.name}
-            </LinkDecorator>
+            <LinkDecorator>{physicalItem.order.name}</LinkDecorator>
           </Link>
         </Col>
       )}

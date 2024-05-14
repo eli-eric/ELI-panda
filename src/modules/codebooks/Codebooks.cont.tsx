@@ -1,24 +1,23 @@
-'use client'
 import { useQueryState } from 'next-usequerystate'
 import type { FC } from 'react'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, startTransition, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { mutate } from 'swr'
-import { useIsFirstRender } from 'usehooks-ts'
 import { v4 as uuid } from 'uuid'
 
 import { PlusButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import Listbox from '@/components/form/Listbox'
 import { PageHead } from '@/components/layout/PageHead'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useFetch from '@/hooks/fetch/useFetch'
+import type { CodebookTypeResponse } from '@/hooks/fetch/useCodebook'
+import { useCodebook, type CodebookType } from '@/hooks/fetch/useCodebook'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import type { CODEBOOK } from '@/types/constants/codebook'
 
 import CodebookTable from './components/CodebookTable'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { queryFetcher } from '@/utils/fetcher'
+import LoaderComponent from '@/components/loader.comp'
 
 const { selectCodebookForm } = message.codebooksPage
 interface Props {
@@ -26,16 +25,26 @@ interface Props {
 }
 export const CodebooksContainer: FC<Props> = () => {
   const [lastAddedUUID, setLastAddedUUID] = useState<string>()
-  const [selectedCodebookQuery, setSelectedCoodebookQuery] = useQueryState('selectedCodebook')
 
-  const formMethods = useForm<{ codebook?: { uid: CODEBOOK; name: CODEBOOK } }>({})
+  const [selectedCodebookQuery, setSelectedCoodebookQuery] =
+    useQueryState('selectedCodebook')
+
+  const formMethods = useForm<{ codebook?: { uid: CODEBOOK; name: CODEBOOK } }>(
+    {}
+  )
+
+  const { queryKey } = useCodebook(selectedCodebookQuery as CODEBOOK, {
+    limit: 5000
+  })
+
+  const queryClient = useQueryClient()
 
   const { setValue } = formMethods
 
-  const isFirstRender = useIsFirstRender()
-
-  const { codebooks } = useEndpoint({ query: { editable: true } })
-  const { response } = useFetch<{ code: string; type: string }[]>({ url: codebooks })
+  const { data, isLoading } = useQuery({
+    queryKey: ['codebooks', { query: { editable: 'true' } }],
+    queryFn: queryFetcher<{ code: string; type: string }[]>('codebooks')
+  })
 
   const fields = useMakeFormFields({
     codebook: {
@@ -46,33 +55,47 @@ export const CodebooksContainer: FC<Props> = () => {
   })
 
   useEffect(() => {
-    if (isFirstRender) {
+    startTransition(() => {
       if (selectedCodebookQuery)
         setValue('codebook', {
           uid: selectedCodebookQuery as CODEBOOK,
           name: selectedCodebookQuery as CODEBOOK
         })
-    }
-  }, [isFirstRender, setValue, selectedCodebookQuery])
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleAddNewCodebookValue = () => {
     const id = uuid()
-    mutate(
-      `/codebook/${selectedCodebookQuery}?limit=5000&filter=undefined`,
-      prev => {
-        if (prev) {
-          return { data: [{ name: '', uid: '', uuid: id }, ...(prev?.data || [])], metadata: prev.metadata }
-        }
-      },
-      { revalidate: false }
+    queryClient.setQueryData<CodebookTypeResponse>(
+      queryKey,
+      prev =>
+        prev
+          ? {
+              ...prev,
+              data: [{ name: '', uid: '', uuid: id }, ...(prev.data || [])]
+            }
+          : {
+              metadata: { code: '', type: '' },
+              data: [{ name: '', uid: '', uuid: id }]
+            },
+      { updatedAt: Date.now() }
     )
     setLastAddedUUID(id)
   }
 
+  if (isLoading) return <LoaderComponent />
+
+  if (!data) return null
+
   return (
     <Fragment>
       <PageHead>
-        <PlusButton buttonSize="large" onClick={handleAddNewCodebookValue} disabled={!selectedCodebookQuery} />
+        <PlusButton
+          buttonSize="large"
+          onClick={handleAddNewCodebookValue}
+          disabled={!selectedCodebookQuery}
+        />
         <Form {...{ formMethods }}>
           <Listbox
             {...fields.codebook}
@@ -81,11 +104,18 @@ export const CodebooksContainer: FC<Props> = () => {
             onChange={(v: CodebookType) => {
               setSelectedCoodebookQuery(v?.uid || null)
             }}
-            codebookResponse={response?.map(code => ({ name: code.code, uid: code.code }))}
+            codebookResponse={data?.map(code => ({
+              name: code.code,
+              uid: code.code
+            }))}
           />
         </Form>
       </PageHead>
-      <CodebookTable lastAddedUUID={lastAddedUUID} />
+      <CodebookTable
+        queryKey={queryKey}
+        lastAddedUUID={lastAddedUUID}
+        selectedCodebookQuery={selectedCodebookQuery}
+      />
     </Fragment>
   )
 }

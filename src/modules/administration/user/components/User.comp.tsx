@@ -5,7 +5,7 @@ import { PageHeaderButtons } from '@/components/layout/PageHead.buttons'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
-import type { Role } from '@/types/gql/graphql'
+import type { GetRolesQuery } from '@/types/gql/graphql'
 
 import { UserForm } from './form/User.form'
 import { UserRoles } from './UserRoles'
@@ -15,12 +15,20 @@ interface Props {
   onSubmit: (data: any) => void
   addRole: (role: CodebookType) => void
   removeRole: (uid: string) => void
-  assignedRoles?: Role[]
+  assignedRoles?: GetRolesQuery['roles']
   title: string
-  roles: Role[]
+  roles: GetRolesQuery['roles']
 }
 
-export const UserComponent = ({ formMethods, onSubmit, addRole, removeRole, assignedRoles, title, roles }: Props) => (
+export const UserComponent = ({
+  formMethods,
+  onSubmit,
+  addRole,
+  removeRole,
+  assignedRoles,
+  title,
+  roles
+}: Props) => (
   <div>
     <Form
       {...{
@@ -44,6 +52,11 @@ export const UserComponent = ({ formMethods, onSubmit, addRole, removeRole, assi
         <UserForm />
       </Card>
     </Form>
-    <UserRoles addRole={addRole} removeRole={removeRole} assignedRoles={assignedRoles} roles={roles} />
+    <UserRoles
+      addRole={addRole}
+      removeRole={removeRole}
+      assignedRoles={assignedRoles}
+      roles={roles}
+    />
   </div>
 )

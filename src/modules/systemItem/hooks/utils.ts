@@ -1,4 +1,4 @@
-import type { System } from '@/types/gql/graphql'
+import type { SystemDetailFragment } from '@/types/gql/graphql'
 import type { SystemDetailFormType } from '../types/form'
 import { connectAndDisconnectNode } from '@/utils/graphql/mutations'
 
@@ -7,19 +7,36 @@ export const makeSystemInputBody = ({
   systemDetail
 }: {
   systemForm: SystemDetailFormType
-  systemDetail?: System
+  systemDetail?: SystemDetailFragment | null
 }) => ({
   name: systemForm.name,
   description: systemForm.description,
   systemCode: systemForm.systemCode === '' ? null : systemForm.systemCode,
   systemAlias: systemForm.systemAlias,
   isCritical: systemForm.isCritical,
-  minimalSpareParstCount: !systemForm.minimalSpareParstCount ? null : Number(systemForm.minimalSpareParstCount),
-  systemType: connectAndDisconnectNode(systemForm?.systemType?.uid, systemDetail?.systemType?.uid),
-  responsibleTeam: connectAndDisconnectNode(systemForm?.responsibleTeam?.uid, systemDetail?.responsibleTeam?.uid),
-  location: connectAndDisconnectNode(systemForm?.location?.uid, systemDetail?.location?.uid),
-  zone: connectAndDisconnectNode(systemForm?.zone?.uid, systemDetail?.zone?.uid),
-  responsible: connectAndDisconnectNode(systemForm?.responsible?.uid, systemDetail?.responsible?.uid),
+  minimalSpareParstCount: !systemForm.minimalSpareParstCount
+    ? null
+    : Number(systemForm.minimalSpareParstCount),
+  systemType: connectAndDisconnectNode(
+    systemForm?.systemType?.uid,
+    systemDetail?.systemType?.uid
+  ),
+  responsibleTeam: connectAndDisconnectNode(
+    systemForm?.responsibleTeam?.uid,
+    systemDetail?.responsibleTeam?.uid
+  ),
+  location: connectAndDisconnectNode(
+    systemForm?.location?.uid,
+    systemDetail?.location?.uid
+  ),
+  zone: connectAndDisconnectNode(
+    systemForm?.zone?.uid,
+    systemDetail?.zone?.uid
+  ),
+  responsible: connectAndDisconnectNode(
+    systemForm?.responsible?.uid,
+    systemDetail?.responsible?.uid
+  ),
   systemLevel: systemForm?.systemLevel,
   physicalItem: {
     update: systemForm?.physicalItem && {

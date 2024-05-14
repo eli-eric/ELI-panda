@@ -1,16 +1,16 @@
 import { TrashIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
-import { useCallback, useEffect, useState } from 'react'
+import { startTransition, useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
-import useSWR from 'swr'
 
 import { Button } from '@/components/Buttons'
 import ImagePlaceHolder from '@/components/form/ImagePlaceHolder'
 import { Input } from '@/components/form/Input'
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
 import type { CategoryFormType } from '../../types'
+import { useQuery } from '@tanstack/react-query'
+import { queryFetcher } from '@/utils/fetcher'
 
 interface FormImageProps {
   image: string
@@ -37,10 +37,11 @@ const FormImage = ({ image, onDelete }: FormImageProps) => (
 )
 
 const Main = ({ uid }: { uid?: string }) => {
-  const { catalogueCategoryImage } = useEndpoint({ uid: uid })
-  const { data: categoryImage } = useSWR(
-    uid ? catalogueCategoryImage : undefined
-  )
+  const { data: categoryImage } = useQuery({
+    queryKey: ['categoryImage', { uid }],
+    queryFn: queryFetcher<string>('catalogueCategoryImage'),
+    initialData: ''
+  })
 
   const [showImageUid, setShowImage] = useState<boolean>(!!uid)
   const { watch, setValue } = useFormContext<CategoryFormType>()
@@ -62,8 +63,10 @@ const Main = ({ uid }: { uid?: string }) => {
   const name = watch('name')
 
   useEffect(() => {
-    const codeValue = name ? name.replace(/\s+/g, '-').toLowerCase() : ''
-    setValue('code', codeValue)
+    startTransition(() => {
+      const codeValue = name ? name.replace(/\s+/g, '-').toLowerCase() : ''
+      setValue('code', codeValue)
+    })
   }, [name, setValue, categoryImage, image])
 
   return (

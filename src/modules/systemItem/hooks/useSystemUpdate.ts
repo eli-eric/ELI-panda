@@ -1,18 +1,11 @@
-import { gql, useMutation } from '@apollo/client'
 import { useRouter } from 'next/router'
 import type { MutableRefObject } from 'react'
-import { useContext } from 'react'
 import { toast } from 'react-hot-toast'
-import { mutate as mutateEndpoint } from 'swr'
 
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { updateSubSystem, updateSystem } from '@/modules/systems/utils'
-import { SystemDetailContext } from '@/pages/system/[uid]'
 import { PATH } from '@/types/constants/paths'
-import type { Mutation } from '@/types/gql/graphql'
-import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
 import { connectAndDisconnectNode, whereN } from '@/utils/graphql/mutations'
 import { makeSystemInputBody } from './utils'
 
@@ -21,12 +14,21 @@ import type { SystemDetailFormType } from '../types/form'
 import { navigateBack } from '@/utils'
 import axiosInstance from '@/core/axios/axiosInstance'
 import { BASE_URL } from '@/types/constants/common'
-import { useMutation as useQueryMutation } from '@tanstack/react-query'
-import type { PhysicalItemProperty } from '@/modules/systems/types/responses'
+import {
+  useQueryClient,
+  useMutation as useQueryMutation
+} from '@tanstack/react-query'
+import type {
+  PhysicalItemProperty,
+  SystemDetail,
+  SystemsResponse
+} from '@/modules/systems/types/responses'
+import { useSystemDetail } from './useSystemDetail'
+import { gql } from '@/types/gql'
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 
-const UPDATE_SYSTEM = gql`
-  ${SYSTEM_DETAIL}
-  mutation UpdateSystems(
+const systemDetailMutation = gql(`
+  mutation UpdateSystemMutation(
     $where: SystemWhere
     $update: SystemUpdateInput!
     $updateItemsWhere: ItemWhere
@@ -53,7 +55,7 @@ const UPDATE_SYSTEM = gql`
       systemOriginatedUid: $systemOriginatedUid
     )
   }
-`
+`)
 
 const updateItemProperties = async (
   uid: string,
@@ -81,11 +83,17 @@ export const useSystemUpdate = (
   const router = useRouter()
   const { mutate: mutateProperties } = usePropertiesUpdate(physicalItemUid)
   const uid = router.query.uid as string
-  const { systemDetail, refetch } = useContext(SystemDetailContext)
-  const { mutate } = useSystems('systems')
-  const { systemSubsystems } = useEndpoint({
-    uid: systemDetail?.parentSystem?.uid || ''
-  })
+  const { systemDetail, refetch } = useSystemDetail()
+  const { queryKey } = useSystems('systems')
+
+  const queryClient = useQueryClient()
+
+  const queryKeySubsystems = [
+    'subsystems',
+    {
+      uid: systemDetail?.parentSystem?.uid || ''
+    }
+  ]
 
   const {
     newMaintainedBy,
@@ -100,6 +108,7 @@ export const useSystemUpdate = (
     { updateSystems: { systems } },
     saveAndExit?: boolean
   ) => {
+    refetch()
     const responseUid = systems[0].uid
     const body = {
       ...systems[0],
@@ -116,59 +125,70 @@ export const useSystemUpdate = (
       }
     }
     imageRef?.current?.submit(responseUid, () => {
-      toast.success(`System saved successfully`)
-      mutateEndpoint(
-        systemSubsystems,
-        prev => prev && updateSubSystem(prev, body),
-        { revalidate: false }
+      queryClient.setQueriesData<SystemDetail[]>(
+        { queryKey: ['subsystems'], exact: false },
+        prev => {
+          if (prev) {
+            return updateSubSystem(prev, body)
+          }
+          return prev
+        }
       )
-      mutate(prev => prev && updateSystem(uid, body, prev), {
-        revalidate: false
+
+      queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
+        if (prev) {
+          return updateSystem(uid, body, prev)
+        }
+        return prev
       })
+
       if (selectedPhysicalSystem) {
-        mutateEndpoint(
-          systemSubsystems,
-          prev =>
-            prev &&
-            updateSubSystem(prev, {
+        queryClient.setQueryData<SystemDetail[]>(queryKeySubsystems, prev => {
+          if (prev) {
+            return updateSubSystem(prev, {
               ...selectedPhysicalSystem,
               physicalItem: undefined
-            }),
-          { revalidate: false }
-        )
-        mutate(
-          prev =>
-            prev &&
-            updateSystem(
+            })
+          }
+          return prev
+        })
+
+        queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
+          if (prev) {
+            return updateSystem(
               selectedPhysicalSystem?.uid,
               { ...selectedPhysicalSystem, physicalItem: undefined },
               prev
-            ),
-          { revalidate: false }
-        )
+            )
+          }
+          return prev
+        })
       }
-      refetch()
       setSelectedPhysicalSystem(undefined)
       if (saveAndExit) {
         navigateBack()
       } else {
         router.replace(PATH.SYSTEM + '/' + responseUid)
       }
+      toast.success(`System saved successfully`)
     })
   }
 
-  const [update, { loading }] = useMutation<Mutation>(UPDATE_SYSTEM, {
-    onError: error => {
-      toast.error('Something went wrong: ' + error.message)
+  const { mutate: update, isPending } = useGraphQLMutation(
+    systemDetailMutation,
+    {
+      onError: error => {
+        toast.error('Something went wrong: ' + error.message)
+      }
     }
-  })
+  )
 
   const updateSystemQuery = (
     systemForm: SystemDetailFormType,
     saveAndExit?: boolean
   ) => {
-    update({
-      variables: {
+    update(
+      {
         where: { uid },
         update: {
           ...makeSystemInputBody({ systemForm, systemDetail }),
@@ -218,14 +238,16 @@ export const useSystemUpdate = (
         itemUid: selectedPhysicalSystem?.physicalItem?.uid,
         systemOriginatedUid: selectedPhysicalSystem?.uid
       },
-      onCompleted: response => {
-        onCompleted(response, saveAndExit)
-        if (systemForm.physicalItem?.properties) {
-          mutateProperties(systemForm.physicalItem?.properties)
+      {
+        onSuccess: response => {
+          onCompleted(response, saveAndExit)
+          if (systemForm.physicalItem?.properties) {
+            mutateProperties(systemForm.physicalItem?.properties)
+          }
         }
       }
-    })
+    )
   }
 
-  return { updateSystem: updateSystemQuery, loading, update }
+  return { updateSystem: updateSystemQuery, loading: isPending, update }
 }

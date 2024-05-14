@@ -5,7 +5,6 @@ import { classNames } from '@/utils'
 import { Pagination } from '../shared/table/Pagination'
 import { PandaTable } from '../shared/table/pandaTable/PandaTable'
 import { SearchBar } from '../shared/table/SearchBar'
-import { NameCell } from './components/cells/NameCell'
 import { HeaderButtons } from './components/HeaderButtons'
 import { useOrderColumns } from './components/OrderColumns'
 import { OrdersFilter } from './components/OrdersFilter'
@@ -14,12 +13,15 @@ import { getColorClassStatus } from './utils/getColorClassStatus'
 
 const OrdersContainer = () => {
   const { orderList, loading, error } = useOrders()
-  const Name = props => <NameCell {...props} />
-  const columns = useOrderColumns({ NameCell: Name })
+  const columns = useOrderColumns({ isReadOnly: false })
 
   return (
     <TableLayoutContainer>
-      <SearchBar tableId="orders" left={<HeaderButtons />} right={<OrdersFilter />} />
+      <SearchBar
+        tableId="orders"
+        left={<HeaderButtons />}
+        right={<OrdersFilter />}
+      />
       {!error && (
         <PandaTable
           {...{
@@ -30,7 +32,10 @@ const OrdersContainer = () => {
               enableColumnHiding: true
             },
             getRowProps: ({ original: { orderStatus, deliveryStatus } }) => ({
-              className: classNames('bg-white dark:bg-gray-800', getColorClassStatus(orderStatus, deliveryStatus))
+              className: classNames(
+                'bg-white dark:bg-gray-800',
+                getColorClassStatus(orderStatus, deliveryStatus)
+              )
             }),
             columns,
             tableId: 'orders',
@@ -43,7 +48,11 @@ const OrdersContainer = () => {
       {!error && (
         <Pagination
           {...{
-            settings: { enableQueryURL: true, pageSizeDefault: 50, total: orderList?.totalCount },
+            settings: {
+              enableQueryURL: true,
+              pageSizeDefault: 50,
+              total: orderList?.totalCount
+            },
             tableId: 'orders'
           }}
         />

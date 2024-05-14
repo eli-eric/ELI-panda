@@ -1,6 +1,4 @@
-import { nanoid } from 'nanoid'
 import { useCallback, useRef } from 'react'
-import { mutate } from 'swr'
 
 import axiosInstance from '@/core/axios/axiosInstance'
 
@@ -8,7 +6,12 @@ import type { FileItem, ProcessedFile } from '../../fileManager/types'
 import type { Status } from '../types'
 import { getEndpoint } from '.'
 
-export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
+export const useImageGallery = ({
+  itemCategory,
+  itemId,
+  fileCategory,
+  refetch
+}) => {
   const endpoint = getEndpoint(itemCategory, itemId, fileCategory)
 
   const dueUploadRef = useRef<ProcessedFile[]>([])
@@ -16,11 +19,13 @@ export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
 
   const handleDelete = (obj: FileItem) => {
     if (obj.id.startsWith('temp')) {
-      dueUploadRef.current = dueUploadRef.current.filter(file => file.name !== obj.name)
+      dueUploadRef.current = dueUploadRef.current.filter(
+        file => file.name !== obj.name
+      )
     } else {
       dueDeleteRef.current = [...dueDeleteRef.current, obj]
     }
-    mutate(endpoint, data => data?.filter(file => file.id !== obj.id), { revalidate: false })
+    refetch()
   }
 
   const onDrop = (files: File[]) => {
@@ -38,35 +43,38 @@ export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
       )
     ).then(files => {
       dueUploadRef.current = [...dueUploadRef.current, ...files]
-      const tempFiles = files.map(file => {
-        const id = `temp-${nanoid()}`
-        const url = file.payload
-        return {
-          ...file,
-          id,
-          url
-        }
-      })
-      mutate(endpoint, data => [...tempFiles, ...(data ?? [])], { revalidate: false })
+      refetch()
     })
   }
 
   const submit = useCallback(
-    (itemId: string, onSuccess?: (status: Status) => void, onError?: (status: Status) => void) => {
+    (
+      itemId: string,
+      onSuccess?: (status: Status) => void,
+      onError?: (status: Status) => void
+    ) => {
       const status: Status = {}
       const deletePromise = Promise.all(
-        dueDeleteRef.current.map(file => axiosInstance.delete(`${endpoint}/${file.id}`))
+        dueDeleteRef.current.map(file =>
+          axiosInstance.delete(`${endpoint}/${file.id}`)
+        )
       )
         .then(() => {
-          status.successfulDeletions = dueDeleteRef.current.map(file => file.name)
+          status.successfulDeletions = dueDeleteRef.current.map(
+            file => file.name
+          )
         })
         .catch(() => {
           status.failedDeletions = dueDeleteRef.current.map(file => file.name)
         })
 
-      const ep = itemId ? getEndpoint(itemCategory, itemId, fileCategory) : endpoint
+      const ep = itemId
+        ? getEndpoint(itemCategory, itemId, fileCategory)
+        : endpoint
 
-      const uploadPromise = Promise.all(dueUploadRef.current.map(file => axiosInstance.post(ep, file)))
+      const uploadPromise = Promise.all(
+        dueUploadRef.current.map(file => axiosInstance.post(ep, file))
+      )
         .then(() => {
           status.successfulUploads = dueUploadRef.current.map(file => file.name)
         })
@@ -89,6 +97,7 @@ export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
     onDrop,
     handleDelete,
     submit,
-    hasChanges: dueUploadRef.current.length > 0 || dueDeleteRef.current.length > 0
+    hasChanges:
+      dueUploadRef.current.length > 0 || dueDeleteRef.current.length > 0
   }
 }

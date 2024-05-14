@@ -2,14 +2,16 @@ import type { CellContext } from '@tanstack/react-table'
 import { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
-import type { KeyedMutator } from 'swr'
 
 import { TableDeleteButton } from '@/components/Buttons'
-import type { CodebookType, CodebookTypeResponse } from '@/hooks/fetch/useCodebook'
+import type { CodebookTypeResponse } from '@/hooks/fetch/useCodebook'
+import { type CodebookType } from '@/hooks/fetch/useCodebook'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import useWarningModal from '@/hooks/useWarningModal'
 import type { CODEBOOK } from '@/types/constants/codebook'
+import type { QueryKey } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface ExtendedCodebookType extends CodebookType {
   uuid?: string
@@ -17,50 +19,59 @@ interface ExtendedCodebookType extends CodebookType {
 
 interface FormCellProps extends CellContext<ExtendedCodebookType, any> {
   lastAddedUUID?: string
-  mutate: KeyedMutator<CodebookTypeResponse>
   codebookType?: CODEBOOK
+  queryKey: QueryKey
 }
 
 export const FormCell = ({
   column: { id },
   getValue,
+  queryKey,
   row: {
     original: { uuid, uid }
   },
   lastAddedUUID,
-  mutate,
   codebookType
 }: FormCellProps) => {
-  const { register, handleSubmit, formState, reset, setFocus, control } = useForm({
-    defaultValues: { [id]: getValue() }
-  })
+  const { register, handleSubmit, formState, reset, setFocus, control } =
+    useForm({
+      defaultValues: { [id]: getValue() }
+    })
+
+  const queryClient = useQueryClient()
 
   const name = useWatch({ name: id, control })
 
   const method = uid ? 'put' : 'post'
 
-  const { codebook: endpoint } = useEndpoint({ path: codebookType + (uid ? `/${uid}` : '') })
+  const { codebook: endpoint } = useEndpoint({
+    path: codebookType + (uid ? `/${uid}` : '')
+  })
 
   const { submit } = useSubmit<CodebookType>({
     endpoint,
     method: method,
     onSuccess: data => {
       toast.success(`Codebook value added successfully`)
-      mutate(
-        prev =>
-          prev && {
-            metadata: prev?.metadata,
-            data: prev.data.map((value: ExtendedCodebookType) =>
-              uuid ? (value.uuid === uuid ? data : value) : value.uid === uid ? { name, uid } : value
-            )
-          },
-        {
-          revalidate: false
+      queryClient.setQueryData<CodebookTypeResponse>(queryKey, prev => {
+        if (!prev) return prev
+        return {
+          ...prev,
+          data: prev.data.map((value: ExtendedCodebookType) =>
+            uuid
+              ? value.uuid === uuid
+                ? data
+                : value
+              : value.uid === uid
+                ? { name, uid }
+                : value
+          )
         }
-      )
+      })
     },
     onError: () => {
       toast.error('something went wrong')
+      queryClient.invalidateQueries({ queryKey })
       reset({ [id]: getValue() })
     }
   })
@@ -70,14 +81,13 @@ export const FormCell = ({
     method: 'delete',
     onSuccess: data => {
       toast.success(`Codebook ${data.name} successfully deleted.`)
-      mutate(
-        prev =>
-          prev && {
-            metadata: prev?.metadata,
-            data: prev.data.filter((value: ExtendedCodebookType) => value.uid !== uid)
-          },
-        { revalidate: false }
-      )
+      queryClient.setQueryData<CodebookTypeResponse>(queryKey, prev => {
+        if (!prev) return prev
+        return {
+          ...prev,
+          data: prev.data.filter(item => item.uid !== uid)
+        }
+      })
       reset(data)
     },
     onError: () => {
@@ -92,7 +102,9 @@ export const FormCell = ({
     submit({ name: data[id], uid: uid ? uid : undefined })
   }
 
-  const withWarningModal = useWarningModal(`Are you sure you want to delete ${getValue()} value from codebook?`)
+  const withWarningModal = useWarningModal(
+    `Are you sure you want to delete ${getValue()} value from codebook?`
+  )
 
   useEffect(() => {
     if (!!lastAddedUUID && uuid === lastAddedUUID) {

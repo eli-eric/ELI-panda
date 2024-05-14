@@ -1,27 +1,22 @@
-import { gql, useMutation } from '@apollo/client'
+import { gql } from '@/types/gql'
+import { useGraphQLMutation } from '../fetch/useGraphQL'
 
-const UPDATE_FILTER = gql`
-  mutation Mutation($where: UserSettingsWhere, $update: UserSettingsUpdateInput) {
+const UPDATE_FILTER = gql(`
+  mutation UpdateFilterMutation(
+    $where: UserSettingsWhere
+    $update: UserSettingsUpdateInput
+  ) {
     updateUserSettings(where: $where, update: $update) {
       userSettings {
         name
         uid
+        value
       }
     }
   }
-`
-export const useFilterUpdate = (uid, value) => {
-  const [updateSavedFilter, { loading }] = useMutation(UPDATE_FILTER, {
-    variables: {
-      input: {
-        where: {
-          uid
-        },
-        update: {
-          value: JSON.stringify(value)
-        }
-      }
-    }
-  })
-  return { updateSavedFilter, loading }
+`)
+export const useFilterUpdate = () => {
+  const { mutate, isPending } = useGraphQLMutation(UPDATE_FILTER)
+
+  return { updateSavedFilter: mutate, loading: isPending }
 }

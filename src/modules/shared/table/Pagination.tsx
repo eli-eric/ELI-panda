@@ -1,5 +1,5 @@
 import { useQueryState } from 'next-usequerystate'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { startTransition, useCallback, useEffect, useState } from 'react'
 import { useIsFirstRender } from 'usehooks-ts'
 
 import PaginationComponent from '@/components/table/Pagination.comp'
@@ -13,6 +13,7 @@ interface PaginationProps {
     pageSizeDefault?: number
   }
 }
+//TODO: refactor to use useQueryState and avoid useEffects
 
 export const Pagination = ({ tableId, settings }: PaginationProps) => {
   const { enableQueryURL, total, pageSizeDefault = 10 } = settings || {}
@@ -37,36 +38,39 @@ export const Pagination = ({ tableId, settings }: PaginationProps) => {
   const isFirstRender = useIsFirstRender()
 
   useEffect(() => {
-    setPage(1)
+    startTransition(() => {
+      setPage(1)
+    })
   }, [search, filter, sortBy])
 
   //calculate page numbers
   useEffect(() => {
-    const itemsTotalCount = total
-    if (itemsTotalCount) {
-      const pageCount = Math.ceil(itemsTotalCount / pageSize)
-      setPageNumbers(pageCount)
-    }
+    startTransition(() => {
+      const itemsTotalCount = total
+      if (itemsTotalCount) {
+        const pageCount = Math.ceil(itemsTotalCount / pageSize)
+        setPageNumbers(pageCount)
+      }
+    })
   }, [pageSize, total])
 
   //initial page load
   useEffect(() => {
-    if (isFirstRender) {
-      if (enableQueryURL) {
-        if (queryPage) {
-          setPage(parseInt(queryPage))
-          setPagination(tableId, `{"page":${queryPage},"pageSize":${pageSize}}`)
-        } else {
-          setQueryPage(page.toString())
-          setPage(1)
-          setPagination(tableId, `{"page":${page},"pageSize":${pageSize}}`)
-        }
+    if (enableQueryURL) {
+      if (queryPage) {
+        setPage(parseInt(queryPage))
+        setPagination(tableId, `{"page":${queryPage},"pageSize":${pageSize}}`)
       } else {
+        setQueryPage(page.toString())
         setPage(1)
         setPagination(tableId, `{"page":${page},"pageSize":${pageSize}}`)
       }
+    } else {
+      setPage(1)
+      setPagination(tableId, `{"page":${page},"pageSize":${pageSize}}`)
     }
-  }, [isFirstRender, page, queryPage, enableQueryURL, pageSize, setPagination, tableId, setQueryPage])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   //page change
   useEffect(() => {

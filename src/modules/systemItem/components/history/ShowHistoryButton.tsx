@@ -29,9 +29,9 @@ export const ShowHistoryButton = () => {
   const router = useRouter()
   const { uid } = router.query as { uid: string }
 
-  const { data, error, isError } = useQuery<History[]>({
+  const { data, error, isError } = useQuery({
     queryKey: ['history', { uid }],
-    queryFn: queryFetcher('history'),
+    queryFn: queryFetcher<History[]>('history'),
     enabled: open
   })
 

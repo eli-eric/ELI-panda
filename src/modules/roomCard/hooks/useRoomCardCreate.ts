@@ -1,12 +1,11 @@
-import { gql, useMutation } from '@apollo/client'
-
-import type { Mutation } from '@/types/gql/graphql'
 import { connectN } from '@/utils/graphql/mutations'
 
 import { whereN } from '../../../utils/graphql/mutations'
 import type { RoomCardFormType } from '../types/form'
+import { gql } from '@/types/gql'
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 
-const CREATE_ROOM_CARD = gql`
+const createRoomCardMutation = gql(`
   mutation CreateRoomCards($input: [RoomCardCreateInput!]!) {
     createRoomCards(input: $input) {
       roomCards {
@@ -14,13 +13,16 @@ const CREATE_ROOM_CARD = gql`
       }
     }
   }
-`
+`)
 
-export const makeRoomCardsCreateData = (formData?: RoomCardFormType) => ({
+export const makeRoomCardsCreateData = (formData: RoomCardFormType) => ({
   input: [
     {
       ...formData,
-      cleaningScheduleDate: formData?.cleaningScheduleDate ? formData?.cleaningScheduleDate : undefined,
+      name: formData?.name ? formData?.name : '',
+      cleaningScheduleDate: formData?.cleaningScheduleDate
+        ? formData?.cleaningScheduleDate
+        : undefined,
       contactPersonsHall: {
         create: formData?.contactPersonsHall.map(contactPerson => ({
           node: {
@@ -30,7 +32,9 @@ export const makeRoomCardsCreateData = (formData?: RoomCardFormType) => ({
         }))
       },
       contactPersonsDept: {
-        connect: formData?.contactPersonsDept.map(contactPerson => whereN(contactPerson.uid))
+        connect: formData?.contactPersonsDept.map(contactPerson =>
+          whereN(contactPerson.uid)
+        )
       },
       teams: {
         connect: formData?.teams.map(team => whereN(team.uid))
@@ -43,9 +47,8 @@ export const makeRoomCardsCreateData = (formData?: RoomCardFormType) => ({
 })
 
 export const useRoomCardCreate = () => {
-  const [createRoomCard] = useMutation<Mutation>(CREATE_ROOM_CARD, {
-    refetchQueries: ['RoomCards', 'RoomCard']
-  })
+  //TODO     refetchQueries: ['RoomCards', 'RoomCard']
+  const { mutateAsync } = useGraphQLMutation(createRoomCardMutation)
 
-  return { createRoomCard }
+  return { createRoomCard: mutateAsync }
 }

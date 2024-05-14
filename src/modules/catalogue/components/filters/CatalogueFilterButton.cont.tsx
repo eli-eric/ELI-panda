@@ -1,7 +1,7 @@
 import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
 import { useQueryState } from 'next-usequerystate'
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Fragment, startTransition, useEffect, useMemo, useState } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import { useIsFirstRender } from 'usehooks-ts'
 
@@ -71,25 +71,23 @@ export const CatalogueFilterButtonContainer = ({
   const isFirstRender = useIsFirstRender()
 
   useEffect(() => {
-    if (isFirstRender) {
-      return
-    }
     if (
       catalogueCategoryProperties?.filter(prop =>
         customFieldIdToSync.has(prop.property.uid)
       ).length === 0
     ) {
-      toggleDeleteCustom()
+      startTransition(() => {
+        toggleDeleteCustom()
+      })
     }
     // eslint-disable-next-line
   }, [catalogueCategoryProperties, toggleDeleteCustom, isFirstRender])
 
   useEffect(() => {
-    if (isFirstRender) {
-      return
-    }
     if (!catalogueCategoryProperties && !category) {
-      toggleDeleteCustom()
+      startTransition(() => {
+        toggleDeleteCustom()
+      })
     }
   }, [catalogueCategoryProperties, category, toggleDeleteCustom, isFirstRender])
 

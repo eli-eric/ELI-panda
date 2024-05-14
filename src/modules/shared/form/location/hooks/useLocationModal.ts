@@ -13,8 +13,8 @@ export const useLocationModal = () => {
   const [open, setOpen] = useState(false)
   const [codebooktree, setCodebooktree] = useState<Codebooktree[]>([])
   const { locations } = useLocation()
-  const { getSubLocations, subLocations, loading } = useSubLocations()
   const [uid, setUid] = useState<string>('')
+  const { subLocations, loading } = useSubLocations(uid)
 
   useEffect(() => {
     if (locations) {
@@ -31,25 +31,28 @@ export const useLocationModal = () => {
 
   useEffect(() => {
     if (subLocations) {
-      setCodebooktree(prev => updateLocationWithSublocation(prev, subLocations, uid))
+      setCodebooktree(prev =>
+        updateLocationWithSublocation(prev, subLocations, uid)
+      )
     }
   }, [subLocations, uid])
 
   const fetchChildren = (uid: string) => {
     setUid(uid)
-    getSubLocations({
-      variables: { where: { uid } }
-    })
   }
   const { instances } = useTableStateStore()
-  const filter = useMemo(() => instances[tableId]?.columnFilter, [instances, tableId])
+  const filter = useMemo(
+    () => instances[tableId]?.columnFilter,
+    [instances, tableId]
+  )
   const filterCode = filter?.find(item => item.id === 'code')?.value as string
 
   const additionalColumn: ColumnDef<Codebooktree, string> = {
     header: 'Code',
     accessorKey: 'code',
     id: 'code',
-    cell: ({ getValue }) => highlightText(getValue() || '', (filterCode as string) || ''),
+    cell: ({ getValue }) =>
+      highlightText(getValue() || '', (filterCode as string) || ''),
     meta: { filter: { type: 'string', enableColumnFilter: true } }
   }
 

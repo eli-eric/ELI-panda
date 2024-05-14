@@ -10,7 +10,9 @@ interface CatalogueStatisticsProps {
   catalogueItemUid?: string
 }
 
-export const CatalogueStatisticsContainer = ({ catalogueItemUid }: CatalogueStatisticsProps) => {
+export const CatalogueStatisticsContainer = ({
+  catalogueItemUid
+}: CatalogueStatisticsProps) => {
   const tableId = 'catalogueStatistics'
   const { itemStatistics, loading } = useItemsAggregate(catalogueItemUid)
   const columns = useCatalogueStatisticsColumns(itemStatistics)
@@ -20,7 +22,9 @@ export const CatalogueStatisticsContainer = ({ catalogueItemUid }: CatalogueStat
       <Heading customText="Statistics: Physical Items Inventory" />
       {itemStatistics && itemStatistics.length === 0 ? (
         <div className="flex justify-center items-center h-16">
-          <span className="text-2xl text-gray-500">No statistics available</span>
+          <span className="text-2xl text-gray-500">
+            No statistics available
+          </span>
         </div>
       ) : (
         <PandaTable

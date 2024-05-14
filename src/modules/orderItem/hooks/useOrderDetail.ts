@@ -2,33 +2,32 @@ import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useFetch from '@/hooks/fetch/useFetch'
 import { ROLE } from '@/types/constants/roles'
 
 import type { OrderDetailFormType } from '../types/form'
+import { useQuery } from '@tanstack/react-query'
+import { queryFetcher } from '@/utils/fetcher'
 
 const useOrderDetail = () => {
   const router = useRouter()
   const uid = router.query.uid as string | undefined
   const { order: orderEndpoint } = useEndpoint({ uid })
-  const { response, loading, error, mutate } = useFetch<OrderDetailFormType>({
-    url: uid && orderEndpoint,
-    config: {
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
-      revalidateOnMount: true,
-      revalidateIfStale: true,
-      suspense: false
-    }
+
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['order', { uid }],
+    queryFn: queryFetcher<OrderDetailFormType>('order'),
+    enabled: !!uid,
+    refetchOnMount: true
   })
+
   const { data: session } = useSession()
   const disabledEdit = !session?.user.roles.includes(ROLE.ORDERS_EDIT)
 
   return {
-    orderDetail: response,
-    loading: loading,
+    orderDetail: data,
+    invalidateQuery: refetch,
+    loading: isLoading,
     error,
-    mutate,
     disabledEdit,
     uid,
     orderEndpoint

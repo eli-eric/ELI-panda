@@ -135,11 +135,7 @@ const Listbox = ({
                     isFilter ? field.value && 'border-2 border-lime-500' : ''
                   )}
                 >
-                  <button
-                    type="button"
-                    onClick={onClickIcon}
-                    className="h-full w-full pr-12 ml-3 text-left"
-                  >
+                  <div onClick={onClickIcon} className=" pr-12 ml-3 text-left">
                     <span className="block truncate">
                       {value ||
                         (customOptions && allowEmptyOption && emptyOption)}
@@ -149,7 +145,7 @@ const Listbox = ({
                         {placeholder}
                       </span>
                     )}
-                  </button>
+                  </div>
                   {!disabled && value && (
                     <FormXMarkIcon onClick={handleClear} />
                   )}
