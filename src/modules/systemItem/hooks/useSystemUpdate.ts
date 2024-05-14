@@ -125,14 +125,15 @@ export const useSystemUpdate = (
       }
     }
     imageRef?.current?.submit(responseUid, () => {
-      toast.success(`System saved successfully`)
-
-      queryClient.setQueryData<SystemDetail[]>(queryKey, prev => {
-        if (prev) {
-          return updateSubSystem(prev, body)
+      queryClient.setQueriesData<SystemDetail[]>(
+        { queryKey: ['subsystems'], exact: false },
+        prev => {
+          if (prev) {
+            return updateSubSystem(prev, body)
+          }
+          return prev
         }
-        return prev
-      })
+      )
 
       queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
         if (prev) {
@@ -169,6 +170,7 @@ export const useSystemUpdate = (
       } else {
         router.replace(PATH.SYSTEM + '/' + responseUid)
       }
+      toast.success(`System saved successfully`)
     })
   }
 

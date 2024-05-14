@@ -9,7 +9,7 @@ export const useSystems = tableId => {
   const queryKey = [tableId, { query }]
 
   const { data, isLoading, error, dataUpdatedAt, refetch } = useQuery({
-    queryKey: [tableId, { query }],
+    queryKey: ['systems', { query }],
     queryFn: queryFetcher<SystemsResponse>('systemsList'),
     placeholderData: keepPreviousData,
     refetchOnMount: false

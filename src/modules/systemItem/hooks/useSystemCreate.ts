@@ -21,8 +21,7 @@ const createSystemMutation = gql(`
   mutation CreateSystems($input: [SystemCreateInput!]!) {
     createSystems(input: $input) {
       systems {
-        uid
-        name
+       ...SystemDetail
       }
     }
   }

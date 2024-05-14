@@ -54,7 +54,8 @@ export const SystemsTable = ({
     getSubRows: original => original.subSystems ?? [],
     settings: {
       ...settings,
-      enableColumnReordering: false
+      enableColumnReordering: false,
+      defaultColumnOrder: ['icon', 'name']
     }
   })
 
@@ -63,8 +64,6 @@ export const SystemsTable = ({
   }, [table])
 
   useEffect(() => {
-    table.setColumnOrder(['icon', 'name'])
-
     return () => {
       if (collapseOnUnMount) {
         table.resetExpanded()

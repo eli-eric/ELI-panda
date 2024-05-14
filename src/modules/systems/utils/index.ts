@@ -126,6 +126,7 @@ export const addSubsystem = (
   newSystem: SystemDetail,
   prev: SystemsResponse
 ): SystemsResponse => {
+  console.log('addSubsystem', parentUid, newSystem)
   const addData = (data: SystemDetail[]): SystemDetail[] => {
     const result: SystemDetail[] = []
     for (let i = 0; i < data.length; i++) {
@@ -142,25 +143,41 @@ export const addSubsystem = (
     }
     return result
   }
-  return { ...prev, data: addData(prev.data) }
+  const newData: SystemDetail[] = prev.data.map(system => ({ ...system }))
+  const updatedData = addData(newData)
+  const deepCopyPrev = { ...prev, data: [...updatedData] } // Deep copy of prev with updated data
+  return deepCopyPrev
 }
 
-export const addSubsystemToSubsystems = (
-  prev: SystemDetail[],
-  newSystem: SystemDetail
-): SystemDetail[] => {
-  return [...prev, newSystem]
-}
 export const updateSubSystem = (
   prev: SystemDetail[],
   newSystem: SystemDetail
 ): SystemDetail[] => {
-  return prev.map(system => {
-    if (system.uid === newSystem.uid) {
-      return newSystem
+  const cloneSystemDetail = (system: SystemDetail): SystemDetail => {
+    return {
+      ...system,
+      subSystems: system.subSystems ? [...system.subSystems] : []
     }
-    return system
-  })
+  }
+  const cloneAndUpdate = (data: SystemDetail[]): SystemDetail[] => {
+    return data.map(item => {
+      if (item.uid === newSystem.uid) {
+        // Clone the item and update with newSystem details
+        return {
+          ...newSystem,
+          subSystems: item.subSystems ? [...item.subSystems] : []
+        }
+      } else if (item.subSystems) {
+        // Recursively clone and update in subSystems
+        return { ...item, subSystems: cloneAndUpdate(item.subSystems) }
+      }
+      return cloneSystemDetail(item) // Return a clone of the original item
+    })
+  }
+  // Clone the prev array
+  const newData: SystemDetail[] = prev.map(cloneSystemDetail)
+  // Recursively clone and update
+  return cloneAndUpdate(newData)
 }
 
 export const useSystemsRefresh = tableId => {
