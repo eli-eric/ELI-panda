@@ -4,9 +4,13 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import OrdersContainer from '@/modules/orders/Orders.cont'
+import dynamic from 'next/dynamic'
 
 const messages = message.ordersPage
+
+const OrdersContainer = dynamic(() => import('@/modules/orders/Orders.cont'), {
+  ssr: false
+})
 
 const OrdersPage: NextPage = (): JSX.Element => {
   const intl = useIntl()

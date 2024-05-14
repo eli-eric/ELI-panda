@@ -1,5 +1,10 @@
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
-import type { ColumnDef, FilterFn, Row, Table as ReactTable } from '@tanstack/react-table'
+import type {
+  ColumnDef,
+  FilterFn,
+  Row,
+  Table as ReactTable
+} from '@tanstack/react-table'
 import {
   getCoreRowModel,
   getExpandedRowModel,
@@ -42,9 +47,11 @@ export type PandaTableSettings<T> = {
   enablePagination?: boolean
   manualFiltering?: boolean
   enableMultiRowSelection?: boolean | ((row: Row<T>) => boolean) | undefined
+  defaultColumnOrder?: string[]
 }
 
-export interface GetRowPropsReturnType extends React.HTMLAttributes<HTMLTableRowElement> {
+export interface GetRowPropsReturnType
+  extends React.HTMLAttributes<HTMLTableRowElement> {
   dropSettings?: { accept: string; onDropHandler: (from: any, to: any) => void }
 }
 
@@ -91,7 +98,10 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
     const [columnOrder, setColumnOrder] = useOrdering(tableId)
     const [sorting, setSorting] = useSorting(tableId, enableQueryURL)
     const [expanded, setExpanded] = useExpanding(tableId)
-    const [columnFilters, setColumnFilters] = useFilters(tableId, enableQueryURL)
+    const [columnFilters, setColumnFilters] = useFilters(
+      tableId,
+      enableQueryURL
+    )
     const [rowSelection, setRowSelection] = useState({})
 
     // react-table hook
