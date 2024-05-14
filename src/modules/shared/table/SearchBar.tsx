@@ -31,8 +31,8 @@ export const SearchBar = ({
   const [value, setValue] = useState(searchInstance || '')
 
   const onChangeRef = useRef(onChange)
-  const [mounted, setMounted] = useState(false)
 
+  const [mounted, setMounted] = useState(false)
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -50,6 +50,7 @@ export const SearchBar = ({
       }
     }, 500)
     return () => clearTimeout(delayInputTimeoutId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 
   return (

@@ -2,16 +2,21 @@ import { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { FormModal } from '@/hooks/form/useFormModal'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
-import { addSubsystem, filterSubsystem } from '@/modules/systems/utils'
+import {
+  addSubsystem,
+  filterSubsystem,
+  filterSubsystemFromSubsystems
+} from '@/modules/systems/utils'
 import { whereC, whereN } from '@/utils/graphql/mutations'
 
 import { useSystemMutation } from '../hooks/useSystemMutate'
 import { useSystemMovingStore } from '../store/useSystemMovingStore'
 import type { SystemMovingFormType } from '../SystemsMoving.cont'
 import { SystemMovingForm } from './SystemMoving.form'
+import { useQueryClient } from '@tanstack/react-query'
+import type { SystemDetail } from '@/modules/systems/types/responses'
 
 interface Props {
   open: boolean
@@ -28,23 +33,18 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
   const systemsLeft = useSystems(tableIdLeft)
   const systemsRight = useSystems(tableIdRight)
 
+  const queryClient = useQueryClient()
+
   const childParentUid =
     childSystem?.parentPath &&
     childSystem?.parentPath[childSystem?.parentPath?.length - 1].uid
 
-  const { systemSubsystems: moveToParentKey } = useEndpoint({
-    uid: parentSystem?.uid || ''
-  })
-  const { systemSubsystems: moveFromParentKey } = useEndpoint({
-    uid: childParentUid || ''
-  })
-
   const { update } = useSystemMutation()
-  // TODO: mutateSubsystem
+
   const mutateSubsystem = useCallback(
     (system, method, formData) => {
       if (!childSystem?.uid) return
-      if (!system.query.query.search) {
+      if (!system.query.search) {
         system.mutate(prev => prev && method(childSystem?.uid, prev), {
           revalidate: false
         })
@@ -56,6 +56,7 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
         system.mutate(
           prev =>
             prev &&
+            parentSystem.subSystems &&
             addSubsystem(
               parentSystem.uid,
               { ...childSystem, ...formData, parentPath: newParentPath },
@@ -88,17 +89,28 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
       if (!currentAction || !childSystem) {
         return
       }
-      //TODO: mutate
-      /*  mutate(moveToParentKey, data => data && [...data, childSystem], {
-        revalidate: false
-      })
-      mutate(
-        moveFromParentKey,
-        data => data && filterSubsystemFromSubsystems(childSystem.uid, data),
-        {
-          revalidate: false
+
+      queryClient.setQueryData<SystemDetail[]>(
+        ['subsystems', { uid: parentSystem?.uid }],
+        prev => {
+          if (prev) {
+            const newSubsystems = [...prev] // Create a copy of the previous array
+            newSubsystems.push(childSystem) // Add the childSystem to the new array
+            return newSubsystems // Return the new array
+          }
+          return prev
         }
-      ) */
+      )
+
+      queryClient.setQueryData<SystemDetail[]>(
+        ['subsystems', { uid: childParentUid }],
+        prev => {
+          if (prev) {
+            return filterSubsystemFromSubsystems(childSystem.uid, prev)
+          }
+          return prev
+        }
+      )
 
       if (isSameTable) {
         mutateSubsystem(
@@ -122,8 +134,8 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
       systemsRight,
       tableIdLeft,
       tableIdRight,
-      moveToParentKey,
-      moveFromParentKey,
+      childParentUid,
+      queryClient,
       mutateSubsystem,
       clear
     ]

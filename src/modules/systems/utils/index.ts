@@ -59,7 +59,11 @@ export const filterSubsystem = (
     }
     return result
   }
-  return { ...prev, data: filterData(prev.data) }
+  // Deep copy the prev object
+  const deepCopyPrev: SystemsResponse = JSON.parse(JSON.stringify(prev))
+  // Filter the data in the deep copy
+  deepCopyPrev.data = filterData(deepCopyPrev.data)
+  return deepCopyPrev
 }
 
 export const filterSubsystemFromSubsystems = (
@@ -79,7 +83,9 @@ export const filterSubsystemFromSubsystems = (
     }
     return result
   }
-  return filterData(prev)
+  // Deep copy the prev array
+  const deepCopyPrev: SystemDetail[] = JSON.parse(JSON.stringify(prev))
+  return filterData(deepCopyPrev)
 }
 
 export const updateSystem = (
@@ -126,7 +132,6 @@ export const addSubsystem = (
   newSystem: SystemDetail,
   prev: SystemsResponse
 ): SystemsResponse => {
-  console.log('addSubsystem', parentUid, newSystem)
   const addData = (data: SystemDetail[]): SystemDetail[] => {
     const result: SystemDetail[] = []
     for (let i = 0; i < data.length; i++) {
