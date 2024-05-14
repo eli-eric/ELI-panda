@@ -6,13 +6,13 @@ import { queryFetcher } from '@/utils/fetcher'
 //use faker to generate fake data
 
 export const useItemsAggregate = (uid?: string) => {
-  const { data, error, isLoading } = useQuery<CatalogueStatistics[]>({
+  const { data, error, isLoading } = useQuery({
     queryKey: uid
       ? ['catalogueItemStatistics', { uid }]
       : ['catalogueItemsStatistics'],
     queryFn: uid
-      ? queryFetcher('catalogueItemStatistics')
-      : queryFetcher('catalogueItemsStatistics')
+      ? queryFetcher<CatalogueStatistics[]>('catalogueItemStatistics')
+      : queryFetcher<CatalogueStatistics[]>('catalogueItemsStatistics')
   })
 
   return { itemStatistics: data, loading: isLoading, error }

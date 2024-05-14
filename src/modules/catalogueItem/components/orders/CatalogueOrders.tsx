@@ -14,9 +14,9 @@ export const CatalogueOrders = () => {
   const columns = useOrderColumns({ isReadOnly: true })
   const router = useRouter()
   const { uid } = router.query as { uid: string }
-  const { data, isLoading: loading } = useQuery<Order[]>({
+  const { data, isLoading: loading } = useQuery({
     queryKey: ['catalogueOrders', { uid }],
-    queryFn: queryFetcher('catalogueOrders')
+    queryFn: queryFetcher<Order[]>('catalogueOrders')
   })
 
   if (!data || data.length === 0) {

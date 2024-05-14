@@ -95,10 +95,6 @@ export const SystemsTable = ({
         getRowProps={getRowProps}
         settings={{
           ...settings,
-<<<<<<< HEAD
-=======
-          enableSorting: false,
->>>>>>> 0765cc74 (systems and subsystems query)
           enableColumnReordering: false
         }}
         className={className}

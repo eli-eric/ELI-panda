@@ -13,9 +13,9 @@ const useOrderDetail = () => {
   const uid = router.query.uid as string | undefined
   const { order: orderEndpoint } = useEndpoint({ uid })
 
-  const { data, isLoading, error, refetch } = useQuery<OrderDetailFormType>({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['order', { uid }],
-    queryFn: queryFetcher('order'),
+    queryFn: queryFetcher<OrderDetailFormType>('order'),
     enabled: !!uid,
     refetchOnMount: true
   })

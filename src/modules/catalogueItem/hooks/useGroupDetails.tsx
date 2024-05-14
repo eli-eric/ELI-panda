@@ -4,17 +4,16 @@ import { useMemo } from 'react'
 import type { CatalogueItemDetail } from '../types/responses'
 import { useQuery } from '@tanstack/react-query'
 import { queryFetcher } from '@/utils/fetcher'
-import { makeQuery } from '@/utils/formatters'
 
 const useGroupDetails = (uid?: string) => {
   const router = useRouter()
   const itemUid = router.query.uid as string | undefined
-  const { data } = useQuery<CatalogueItemDetail[]>({
+  const { data } = useQuery({
     queryKey: [
       'catalogueCategoryProperties',
-      itemUid ? { uid, query: makeQuery({ itemUid }) } : { uid }
+      itemUid ? { uid, query: { itemUid } } : { uid }
     ],
-    queryFn: queryFetcher('catalogueCategoryProperties')
+    queryFn: queryFetcher<CatalogueItemDetail[]>('catalogueCategoryProperties')
   })
 
   const groups = useMemo(() => {

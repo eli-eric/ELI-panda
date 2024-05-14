@@ -1,9 +1,9 @@
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { SystemLevel } from '@/types/gql/graphql'
+import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { makeQuery } from '@/utils/formatters'
 
 export type CodeBookMetaData = {
   code: string
@@ -38,17 +38,17 @@ export type CodebookQuery = {
 export const useCodebook = (codebookName?: CODEBOOK, query?: CodebookQuery) => {
   const filterString = JSON.stringify(query?.filter || '')
 
-  const queryKey = [
+  const queryKey: QueryFetcherKey = [
     'codebook',
     {
       path: codebookName,
-      query: makeQuery({ ...query, filter: filterString })
+      query: { ...query, filter: filterString }
     }
   ]
 
-  const { data, isLoading } = useQuery<CodebookTypeResponse>({
+  const { data, isLoading } = useQuery({
     queryKey: queryKey,
-    queryFn: queryFetcher('codebook'),
+    queryFn: queryFetcher<CodebookTypeResponse>('codebook'),
     placeholderData: keepPreviousData,
     enabled: !!codebookName
   })

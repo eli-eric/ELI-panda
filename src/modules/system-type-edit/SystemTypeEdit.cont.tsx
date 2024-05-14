@@ -1,6 +1,4 @@
-import axiosInstance from '@/core/axios/axiosInstance'
 import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import { BASE_URL } from '@/types/constants/common'
 import { useQuery } from '@tanstack/react-query'
 import { useState, type FC } from 'react'
 import { SystemTypeGroup } from './components/SystemTypeGroup'
@@ -8,35 +6,18 @@ import type { SystemTypesResponse } from './types'
 import { AddGroupButton } from './components/AddGroupButton'
 import { AddSystemTypeButton } from './components/AddSystemTypeButton'
 import { SystemTypeItem } from './components/SystemTypeItem'
+import { queryFetcher } from '@/utils/fetcher'
 
 const SystemTypeEditContainer: FC = () => {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null)
 
-  //TODO: Bit refactor after merge with react-query branch
-  const { data: systemTypeGroups, refetch: refetchGroups } = useQuery<
-    CodebookType[]
-  >({
-    queryKey: ['system-types-groups'],
-    queryFn: async () => {
-      const res = axiosInstance
-        .get(BASE_URL + '/system/system-type-groups')
-        .then(res => res.data)
-      return res
-    }
+  const { data: systemTypeGroups, refetch: refetchGroups } = useQuery({
+    queryKey: ['system-type-groups'],
+    queryFn: queryFetcher<CodebookType[]>(`systemTypeGroups`)
   })
-  //TODO: Bit refactor after merge with react-query branch
-  const { data: systemTypes, refetch: refetchSystemTypes } = useQuery<
-    SystemTypesResponse[]
-  >({
-    queryKey: ['system-types', selectedGroup],
-    queryFn: async () => {
-      const res = axiosInstance
-        .get(
-          BASE_URL + `/system/system-type-group/${selectedGroup}/system-types`
-        )
-        .then(res => res.data)
-      return res
-    },
+  const { data: systemTypes, refetch: refetchSystemTypes } = useQuery({
+    queryKey: ['system-types', { uid: selectedGroup }],
+    queryFn: queryFetcher<SystemTypesResponse[]>(`systemTypeGroupTypes`),
     enabled: !!selectedGroup
   })
 

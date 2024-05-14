@@ -62,9 +62,9 @@ export const MainNavigation: FC<MainNavigationProps> = ({
 }) => {
   const pathName = usePathname()
 
-  const { data: codebooks } = useQuery<{ code: string; type: string }[]>({
+  const { data: codebooks } = useQuery({
     queryKey: ['codebooks'],
-    queryFn: queryFetcher('codebooks')
+    queryFn: queryFetcher<{ code: string; type: string }[]>('codebooks')
   })
 
   return (

@@ -64,12 +64,12 @@ export const CodebookTreeModal = ({
     }
   }, [search])
 
-  const { data: response, isLoading: loading } = useQuery<Codebooktree[]>({
+  const { data: response, isLoading: loading } = useQuery({
     queryKey: [
       'codebookTree',
-      { codebook, query: '?' + 'columnFilter=' + JSON.stringify(filterState) }
+      { codebook, query: { columnFilter: JSON.stringify(filterState) } }
     ],
-    queryFn: queryFetcher('codebookTree'),
+    queryFn: queryFetcher<Codebooktree[]>('codebookTree'),
     placeholderData: keepPreviousData
   })
 

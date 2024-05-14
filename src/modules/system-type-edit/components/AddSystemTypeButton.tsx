@@ -28,6 +28,7 @@ export const AddSystemTypeButton: FC<Props> = ({ selectedGroup, refetch }) => {
 
   const formMethods = useForm()
 
+  //TODO: bit refactor after big merge
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       const res = await axiosInstance

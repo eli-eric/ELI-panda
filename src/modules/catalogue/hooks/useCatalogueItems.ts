@@ -1,7 +1,7 @@
 import useQueryManager from '@/hooks/useQueryManager'
 import type { CatalogueItemsResponse } from '@/types/responses'
+import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
-import { makeQuery } from '@/utils/formatters'
 import {
   keepPreviousData,
   useQuery,
@@ -12,17 +12,17 @@ import toast from 'react-hot-toast'
 export const useCatalogueItems = (tableId = 'catalogueItems') => {
   const { query } = useQueryManager(tableId)
   const pagination = JSON.parse(query.pagination || '{}')
-  const queryKey = [
+  const queryKey: QueryFetcherKey = [
     'catalogueItems',
-    { query: makeQuery({ ...pagination, ...query }) }
+    { query: { ...pagination, ...query } }
   ]
   const {
     data,
     isFetching: loading,
     error
-  } = useQuery<CatalogueItemsResponse>({
+  } = useQuery({
     queryKey,
-    queryFn: queryFetcher('catalogueItems'),
+    queryFn: queryFetcher<CatalogueItemsResponse>('catalogueItems'),
     refetchOnMount: true,
     placeholderData: keepPreviousData,
     refetchInterval: 1000 * 60 * 5

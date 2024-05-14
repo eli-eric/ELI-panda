@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import type { SystemDetail, SystemsResponse } from '../types/responses'
 import { useSystems } from './useSystems'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 import { addSubsystems } from '../utils'
 
@@ -12,11 +13,11 @@ export const useSubsystems = tableId => {
 
   const queryClient = useQueryClient()
 
-  const queryKeySubsystems = ['subsystems', { uid }]
+  const queryKeySubsystems: QueryFetcherKey = ['subsystems', { uid }]
 
-  const { isLoading: pending, data: response } = useQuery<SystemDetail[]>({
+  const { isLoading: pending, data: response } = useQuery({
     queryKey: queryKeySubsystems,
-    queryFn: queryFetcher('systemSubsystems'),
+    queryFn: queryFetcher<SystemDetail[]>('systemSubsystems'),
     enabled: !!uid
   })
 

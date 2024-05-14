@@ -17,7 +17,6 @@ import type { CODEBOOK } from '@/types/constants/codebook'
 import CodebookTable from './components/CodebookTable'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { queryFetcher } from '@/utils/fetcher'
-import { makeQuery } from '@/utils/formatters'
 import LoaderComponent from '@/components/loader.comp'
 
 const { selectCodebookForm } = message.codebooksPage
@@ -42,9 +41,9 @@ export const CodebooksContainer: FC<Props> = () => {
 
   const { setValue } = formMethods
 
-  const { data, isLoading } = useQuery<{ code: string; type: string }[]>({
-    queryKey: ['codebooks', { query: makeQuery({ editable: 'true' }) }],
-    queryFn: queryFetcher('codebooks')
+  const { data, isLoading } = useQuery({
+    queryKey: ['codebooks', { query: { editable: 'true' } }],
+    queryFn: queryFetcher<{ code: string; type: string }[]>('codebooks')
   })
 
   const fields = useMakeFormFields({

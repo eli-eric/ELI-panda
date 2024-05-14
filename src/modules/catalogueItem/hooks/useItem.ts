@@ -23,9 +23,9 @@ export const useCatalogueItem = () => {
     data: item,
     isLoading,
     error
-  } = useQuery<CatalogueItem>({
+  } = useQuery({
     queryKey: ['catalogueItem', { uid: catalogueUid }],
-    queryFn: queryFetcher('catalogueItem'),
+    queryFn: queryFetcher<CatalogueItem>('catalogueItem'),
     enabled: !!catalogueUid
   })
 

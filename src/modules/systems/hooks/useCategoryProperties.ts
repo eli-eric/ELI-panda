@@ -6,9 +6,9 @@ import { queryFetcher } from '@/utils/fetcher'
 import { useEffect } from 'react'
 
 export const useCategoryProperties = (uid?: string) => {
-  const { data, error } = useQuery<CatalogueItemDetail[]>({
+  const { data, error } = useQuery({
     queryKey: ['catalogueCategoryProperties', { uid }],
-    queryFn: queryFetcher('catalogueCategoryProperties'),
+    queryFn: queryFetcher<CatalogueItemDetail[]>('catalogueCategoryProperties'),
     enabled: !!uid
   })
 

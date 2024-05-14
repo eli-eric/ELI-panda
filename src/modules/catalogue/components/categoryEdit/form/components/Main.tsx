@@ -38,8 +38,9 @@ const FormImage = ({ image, onDelete }: FormImageProps) => (
 
 const Main = ({ uid }: { uid?: string }) => {
   const { data: categoryImage } = useQuery({
-    queryKey: ['categoryImage', uid],
-    queryFn: queryFetcher('catalogueCategoryImage')
+    queryKey: ['categoryImage', { uid }],
+    queryFn: queryFetcher<string>('catalogueCategoryImage'),
+    initialData: ''
   })
 
   const [showImageUid, setShowImage] = useState<boolean>(!!uid)

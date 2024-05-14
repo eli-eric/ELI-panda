@@ -4,9 +4,9 @@ import { queryFetcher } from '@/utils/fetcher'
 import { useMemo } from 'react'
 
 export const useCategoryDetail = (uid?: string) => {
-  const { data, isLoading } = useQuery<CategoryFormType>({
+  const { data, isLoading } = useQuery({
     queryKey: ['categoryDetail', { uid }],
-    queryFn: queryFetcher('catalogueCategoryEdit'),
+    queryFn: queryFetcher<CategoryFormType>('catalogueCategoryEdit'),
     enabled: !!uid
   })
 

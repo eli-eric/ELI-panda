@@ -1,20 +1,23 @@
 import type { CODEBOOK } from '@/types/constants/codebook'
+import { makeQuery } from './formatters'
 
 export interface EndpointProps {
-  uid?: string
-  path?: string
-  itemUid?: string
-  query?: string
-  codebook?: CODEBOOK
+  uid?: string | null
+  path?: string | null
+
+  itemUid?: string | null
+  query?: Record<string, string | number | boolean | null> | null
+  codebook?: CODEBOOK | null | string
 }
 
 export const getEndpoints = ({
   uid = '',
   path = '',
   itemUid = '',
-  query = '',
+  query: q,
   codebook
 }: EndpointProps) => {
+  const query = q ? makeQuery(q) : ''
   const endpoints = {
     catalogueCategories: `/catalogue/categories${path}`,
     catalogueCategoryImage: `/catalogue/category/${uid}/image`,
@@ -51,6 +54,8 @@ export const getEndpoints = ({
     links: `/files/links/${uid}`,
     link: `/files/link/${uid}`,
     history: `/system/${uid}/history`,
+    systemTypeGroupTypes: `/system/system-type-group/${uid}/system-types`,
+    systemTypeGroups: `/system/system-type-groups`,
     codebookTree: `/codebook/${codebook}/tree${query}`
   }
   return endpoints
