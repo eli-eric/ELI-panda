@@ -1,10 +1,5 @@
-'use-client'
-
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useImage } from '@/hooks/fetch/useImage'
 
 import type { CatalogueItem } from '../types/responses'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
@@ -15,9 +10,6 @@ import { queryFetcher } from '@/utils/fetcher'
 export const useCatalogueItem = () => {
   const router = useRouter()
   const catalogueUid = router.query.uid as string
-  const { catalogueItemImage } = useEndpoint({
-    uid: catalogueUid
-  })
 
   const {
     data: item,
@@ -29,8 +21,6 @@ export const useCatalogueItem = () => {
     enabled: !!catalogueUid
   })
 
-  const image = useImage(catalogueUid ? catalogueItemImage : null)
-
   const groups = useMemo(() => {
     const groupsUnsorted = item?.details
       ?.map(item => item.propertyGroup)
@@ -39,7 +29,7 @@ export const useCatalogueItem = () => {
     return groups
   }, [item])
 
-  return { item: item, loading: isLoading, error, image, groups }
+  return { item: item, loading: isLoading, error, groups }
 }
 
 const GET_RELATED_ITEMS = gql(`
