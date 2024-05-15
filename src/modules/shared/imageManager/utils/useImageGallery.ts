@@ -5,6 +5,8 @@ import axiosInstance from '@/core/axios/axiosInstance'
 import type { FileItem, ProcessedFile } from '../../fileManager/types'
 import type { Status } from '../types'
 import { getEndpoint } from '.'
+import { useQueryClient } from '@tanstack/react-query'
+import { nanoid } from 'nanoid'
 
 export const useImageGallery = ({
   itemCategory,
@@ -13,6 +15,8 @@ export const useImageGallery = ({
   refetch
 }) => {
   const endpoint = getEndpoint(itemCategory, itemId, fileCategory)
+
+  const queryClient = useQueryClient()
 
   const dueUploadRef = useRef<ProcessedFile[]>([])
   const dueDeleteRef = useRef<FileItem[]>([])
@@ -25,7 +29,9 @@ export const useImageGallery = ({
     } else {
       dueDeleteRef.current = [...dueDeleteRef.current, obj]
     }
-    refetch()
+    queryClient.setQueryData<FileItem[]>(['fileItem', endpoint], data =>
+      data?.filter(file => file.id !== obj.id)
+    )
   }
 
   const onDrop = (files: File[]) => {
@@ -43,7 +49,19 @@ export const useImageGallery = ({
       )
     ).then(files => {
       dueUploadRef.current = [...dueUploadRef.current, ...files]
-      refetch()
+      const tempFiles = files.map(file => {
+        const id = `temp-${nanoid()}`
+        const url = file.payload
+        return {
+          ...file,
+          id,
+          url,
+          size: 0 // Add the missing 'size' property with a default value
+        }
+      })
+      queryClient.setQueryData<FileItem[]>(['fileItem', endpoint], data =>
+        data ? [...tempFiles, ...(data ?? [])] : tempFiles
+      )
     })
   }
 
