@@ -4,10 +4,15 @@ import getDriver from '@/utils/neo4j'
 
 import resolvers from './resolvers'
 import { readFileSync } from 'fs'
+import path from 'path'
 
 const driver = getDriver()
 
-const typeDefs = readFileSync('src/server/apollo/schema.graphql', 'utf8')
+const schemaPath = path.resolve(
+  process.cwd(),
+  'src/server/apollo/schema.graphql'
+)
+const typeDefs = readFileSync(schemaPath, 'utf8')
 
 export const neoSchema = new Neo4jGraphQL({
   typeDefs,
