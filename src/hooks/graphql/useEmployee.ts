@@ -18,7 +18,7 @@ const GET_EMPLOYEE = gql(`
   }
 `)
 
-export const useEmployee = (uid?: string) => {
+export const useEmployee = (uid?: string | null) => {
   const { data, isLoading } = useGraphQL(GET_EMPLOYEE, {
     variables: { uid: uid || '' },
     enabled: !!uid

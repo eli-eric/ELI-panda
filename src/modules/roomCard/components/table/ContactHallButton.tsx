@@ -1,11 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
-import {
-  useFieldArray,
-  useForm,
-  useFormContext,
-  useWatch
-} from 'react-hook-form'
+import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
 import { v4 as uuid } from 'uuid'
 import { mixed, object } from 'yup'
 
@@ -57,9 +52,9 @@ export const ContactHallButton = () => {
     name: 'contactPersonsHall'
   })
 
-  const formEmployee = useWatch({ control, name: 'employee' })
+  const [employeeUid, setEmployeeUid] = useState<string | null>(null)
 
-  const { employee } = useEmployee(formEmployee?.uid)
+  const { employee } = useEmployee(employeeUid)
 
   const onSubmit = (data: { role: ContactPersonRole }) => {
     if (employee) {
@@ -73,6 +68,7 @@ export const ContactHallButton = () => {
         uuid: uuid()
       })
       setNewHallContact({ employee: employee as Employee, role: data?.role })
+      setEmployeeUid(null)
     }
   }
 
@@ -116,9 +112,13 @@ export const ContactHallButton = () => {
       isModalOpen={isModalOpen}
       onSubmit={onSubmit}
       setIsModalOpen={setIsModalOpen}
+      disableSubmit={!(employee && employeeUid)}
     >
       <Combobox {...fields.role} codebookResponse={data?.contactPersonRoles} />
-      <Combobox {...fields.employee} />
+      <Combobox
+        {...fields.employee}
+        onSelect={v => setEmployeeUid(v ? v.uid : null)}
+      />
     </HeaderButtonModalComponent>
   )
 }

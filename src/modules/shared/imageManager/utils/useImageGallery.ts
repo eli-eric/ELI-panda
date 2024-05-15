@@ -8,12 +8,7 @@ import { getEndpoint } from '.'
 import { useQueryClient } from '@tanstack/react-query'
 import { nanoid } from 'nanoid'
 
-export const useImageGallery = ({
-  itemCategory,
-  itemId,
-  fileCategory,
-  refetch
-}) => {
+export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
   const endpoint = getEndpoint(itemCategory, itemId, fileCategory)
 
   const queryClient = useQueryClient()

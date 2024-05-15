@@ -47,11 +47,7 @@ export const ImageGallery = forwardRef(
       fileCategory
     )
 
-    const {
-      data: primaryData,
-      isLoading,
-      refetch
-    } = useQuery<FileItem[]>({
+    const { data: primaryData, isLoading } = useQuery<FileItem[]>({
       queryKey: ['fileItem', endpoint],
       queryFn: async () => uniFetcher(endpoint),
       refetchOnMount: true
@@ -79,8 +75,7 @@ export const ImageGallery = forwardRef(
     const { submit, onDrop, hasChanges, handleDelete } = useImageGallery({
       itemCategory,
       itemId,
-      fileCategory,
-      refetch
+      fileCategory
     })
 
     useImperativeHandle(

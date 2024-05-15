@@ -1,11 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Fragment, useState } from 'react'
-import {
-  useFieldArray,
-  useForm,
-  useFormContext,
-  useWatch
-} from 'react-hook-form'
+import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
 import { mixed, object } from 'yup'
 
 import { PlusButton } from '@/components/Buttons'
@@ -40,9 +35,9 @@ export const HeaderAddButton = ({
   const { control } = useFormContext()
   const { insert, fields: arrayFields } = useFieldArray({ control, name })
 
-  const formEmployee = useWatch({ control, name: 'employee' })
+  const [employeeUid, setEmployeeUid] = useState<string | null>(null)
 
-  const { employee } = useEmployee(formEmployee?.uid)
+  const { employee } = useEmployee(employeeUid)
 
   const onSubmit = () => {
     if (!employee) return
@@ -50,6 +45,7 @@ export const HeaderAddButton = ({
       ...employee
     })
     setEmployee(employee)
+    setEmployeeUid(null)
   }
 
   function makeSchema() {
@@ -88,11 +84,15 @@ export const HeaderAddButton = ({
       <FormModal
         formMethods={formMethods}
         open={isModalOpen}
+        disableSubmit={!(employee && employeeUid)}
         setOpen={setIsModalOpen}
         onSubmit={onSubmit}
       >
         <div className="flex space-x-3">
-          <Combobox {...fields.employee} />
+          <Combobox
+            {...fields.employee}
+            onSelect={v => setEmployeeUid(v ? v.uid : null)}
+          />
         </div>
       </FormModal>
     </Fragment>
