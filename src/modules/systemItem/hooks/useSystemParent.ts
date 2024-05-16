@@ -14,11 +14,23 @@ const systemDetailQuery = gql(`
         name
         systemLevel
       }
+      responsible {
+        uid
+        fullName
+      }
+      location {
+        uid
+        name
+      }
+      zone {
+        uid
+        name
+      }
   }
    }
 `)
 
-export const useSystemParentPath = () => {
+export const useSystemParent = () => {
   const router = useRouter()
   const uid = router.query.parentUid as string | undefined
 
@@ -40,6 +52,7 @@ export const useSystemParentPath = () => {
       : [{ uid: data?.systems[0]?.uid, name: data?.systems[0]?.name }]
 
   return {
+    parentSystem: data?.systems[0],
     parentPath,
     loading: isLoading,
     error,

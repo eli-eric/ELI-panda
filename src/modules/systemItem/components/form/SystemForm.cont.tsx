@@ -1,6 +1,6 @@
 import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { memo, useRef } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
@@ -27,9 +27,9 @@ import type { SystemLevel } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
 import { classNames } from '@/utils'
 
-import { useSystemParentPath } from '../../hooks/useParentPath'
 import { useSystemCreate } from '../../hooks/useSystemCreate'
 import { useSystemDetail } from '../../hooks/useSystemDetail'
+import { useSystemParent } from '../../hooks/useSystemParent'
 import { useSystemUpdate } from '../../hooks/useSystemUpdate'
 import type { SystemDetailFormType } from '../../types/form'
 import { getColorBySystemLevel } from '../../utils'
@@ -51,7 +51,7 @@ export const SystemForm = () => {
   const { systemDetail, catalogueItem } = useSystemDetail()
   const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
   const fields = useSystemEditFormFields()
-  const { parentPath } = useSystemParentPath()
+  const { parentPath, parentSystem } = useSystemParent()
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { spareParts, sparePartsFor, subSystems, __typename, ...rest } =
@@ -88,6 +88,28 @@ export const SystemForm = () => {
         : undefined
     }
   })
+
+  // set default values for responsible, zone and location
+  useEffect(() => {
+    if (parentSystem) {
+      parentSystem.responsible &&
+        formMethods.setValue('responsible', {
+          uid: parentSystem.responsible?.uid,
+          name: parentSystem.responsible?.fullName
+        })
+      parentSystem.zone &&
+        formMethods.setValue('zone', {
+          uid: parentSystem.zone?.uid,
+          name: parentSystem.zone?.name as string
+        })
+      parentSystem.location &&
+        formMethods.setValue('location', {
+          uid: parentSystem.location?.uid,
+          name: parentSystem.location?.name as string
+        })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [parentSystem])
 
   const systemLevel = formMethods.watch('systemLevel')
   const physicalItem = formMethods.watch('physicalItem')
