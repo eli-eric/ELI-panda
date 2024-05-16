@@ -21,7 +21,11 @@ interface SystemsColumnsProps {
   enableDragAndDrop?: boolean
 }
 
-export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: SystemsColumnsProps) => {
+export const useSystemsColumns = ({
+  tableId,
+  hideButtons,
+  enableDragAndDrop
+}: SystemsColumnsProps) => {
   const { setUid, pending } = useSubsystems(tableId)
   const canEdit = usePermission([ROLE.SYSTEM_EDIT])
 
@@ -31,7 +35,9 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
         id: 'icon',
         size: 20,
         cell: ({ row: { original } }) => (
-          <IconCell itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE} />
+          <IconCell
+            itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE}
+          />
         ),
         meta: { sticky: true }
       },
@@ -40,7 +46,10 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
         accessorFn: row => row.name,
         id: 'name',
         size: tableId === 'systemsItem' ? 400 : 440,
-        meta: tableId === 'systemsItem' ? { sticky: true } : { sticky: true, className: 'sm:pr-[70px]' },
+        meta:
+          tableId === 'systemsItem'
+            ? { sticky: true }
+            : { sticky: true, className: 'sm:pr-[70px]' },
         enableHiding: false,
         cell: props => (
           <SystemNameCell
@@ -53,10 +62,25 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
           />
         )
       },
-      { header: 'System Level', accessorFn: row => row.systemLevel, id: 'systemLevel', size: 170 },
+      {
+        header: 'System Level',
+        accessorFn: row => row.systemLevel,
+        id: 'systemLevel',
+        size: 170
+      },
 
-      { header: 'System Code', accessorFn: row => row.systemCode, id: 'systemCode', size: 150 },
-      { header: 'System Alias', accessorFn: row => row.systemAlias, id: 'systemAlias', size: 150 },
+      {
+        header: 'System Code',
+        accessorFn: row => row.systemCode,
+        id: 'systemCode',
+        size: 150
+      },
+      {
+        header: 'System Alias',
+        accessorFn: row => row.systemAlias,
+        id: 'systemAlias',
+        size: 150
+      },
       {
         header: 'System Type',
         accessorFn: row => row.systemType?.name,
@@ -88,7 +112,12 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
         id: 'location',
         size: 150
       },
-      { header: 'Responsible', accessorFn: row => row.responsible?.name, id: 'responsible', size: 150 },
+      {
+        header: 'Responsible',
+        accessorFn: row => row.responsible?.name,
+        id: 'responsible',
+        size: 150
+      },
       {
         header: 'Description',
         accessorFn: row => row.description,
@@ -104,7 +133,12 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
           </Fragment>
         )
       },
-      { header: 'Importance', accessorFn: row => row.importance?.name, id: 'importance', size: 150 },
+      {
+        header: 'Importance',
+        accessorFn: row => row.importance?.name,
+        id: 'importance',
+        size: 150
+      },
       {
         header: 'Sub Systems Count',
         accessorFn: row => row.statistics?.subsystemsCount,
@@ -132,7 +166,10 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
         meta: { className: 'text-right' },
         cell: ({ getValue, row: { original } }) => (
           <span className="whitespace-nowrap">
-            {getValue()} <span className="font-medium">{original.physicalItem?.currency}</span>
+            {getValue()}{' '}
+            <span className="font-medium">
+              {original.physicalItem?.currency}
+            </span>
           </span>
         )
       },
@@ -154,7 +191,14 @@ export const useSystemsColumns = ({ tableId, hideButtons, enableDragAndDrop }: S
         id: 'catalogueName',
         size: 300,
         cell: ({ getValue, row: { original } }) => (
-          <NewTabLink href={PATH.CATALOGUE_ITEM + '/' + original.physicalItem?.catalogueItem?.uid} value={getValue()} />
+          <NewTabLink
+            href={
+              PATH.CATALOGUE_ITEM +
+              '/' +
+              original.physicalItem?.catalogueItem?.uid
+            }
+            value={getValue()}
+          />
         )
       },
       {

@@ -3,7 +3,10 @@ import { useEffect } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
-import { SearchBar, SearchBarButtonsComponent } from '@/modules/shared/table/SearchBar'
+import {
+  SearchBar,
+  SearchBarButtonsComponent
+} from '@/modules/shared/table/SearchBar'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 

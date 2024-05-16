@@ -3,7 +3,12 @@ import { useIntl } from 'react-intl'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps, Option } from '@/types/form'
 
-export const useMakeFormFields = <T extends Record<string, FieldProps & { options?: Option[]; codebook?: CODEBOOK }>>(
+export const useMakeFormFields = <
+  T extends Record<
+    string,
+    FieldProps & { options?: Option[]; codebook?: CODEBOOK }
+  >
+>(
   fields: T
 ): Record<
   keyof T,
@@ -24,9 +29,13 @@ export const useMakeFormFields = <T extends Record<string, FieldProps & { option
           : fields[cur].label
             ? intl.formatMessage({ id: fields[cur].label })
             : undefined,
-        customLabel: fields[cur].label ? intl.formatMessage({ id: fields[cur].label }) : undefined,
+        customLabel: fields[cur].label
+          ? intl.formatMessage({ id: fields[cur].label })
+          : undefined,
         codebook: fields[cur].codebook ? fields[cur].codebook : undefined,
-        placeholder: fields[cur].placeholder ? intl.formatMessage({ id: fields[cur].placeholder }) : undefined
+        placeholder: fields[cur].placeholder
+          ? intl.formatMessage({ id: fields[cur].placeholder })
+          : undefined
       }
     }),
     {}

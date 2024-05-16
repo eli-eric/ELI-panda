@@ -18,7 +18,10 @@ interface Props<T extends FieldValues> {
   config?: Config
 }
 
-export const FormLeaveWarning = <T extends FieldValues>({ formState, config }: Props<T>) => {
+export const FormLeaveWarning = <T extends FieldValues>({
+  formState,
+  config
+}: Props<T>) => {
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
   const [nextUrl, setNextUrl] = useState<string>('')

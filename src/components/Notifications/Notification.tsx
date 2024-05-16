@@ -1,5 +1,9 @@
 import { Transition } from '@headlessui/react'
-import { CheckCircleIcon, ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import {
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
+  XMarkIcon
+} from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
 import { resolveValue, type Toast, toast } from 'react-hot-toast'
 
@@ -37,13 +41,23 @@ export const Notification = ({ t }: Props) => {
               <div className="flex items-start">
                 <div className="flex-shrink-0">
                   {t.type === 'error' && (
-                    <ExclamationTriangleIcon className="h-6 w-6 text-red-400 dark:text-black" aria-hidden="true" />
+                    <ExclamationTriangleIcon
+                      className="h-6 w-6 text-red-400 dark:text-black"
+                      aria-hidden="true"
+                    />
                   )}
-                  {t.type === 'success' && <CheckCircleIcon className="h-6 w-6 text-green-400" aria-hidden="true" />}
+                  {t.type === 'success' && (
+                    <CheckCircleIcon
+                      className="h-6 w-6 text-green-400"
+                      aria-hidden="true"
+                    />
+                  )}
                   {t.type === 'loading' && <ButtonLoaderComponent />}
                 </div>
                 <div className="ml-3 w-0 flex-1 pt-0.5">
-                  <p className="text-sm font-medium text-gray-900 dark:text-gray-200">{resolveValue(t.message, t)}</p>
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
+                    {resolveValue(t.message, t)}
+                  </p>
                 </div>
                 <div className="ml-4 flex flex-shrink-0">
                   <button

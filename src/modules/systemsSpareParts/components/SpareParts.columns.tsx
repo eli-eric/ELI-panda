@@ -20,17 +20,33 @@ export const useSparePartsColumns = ({ tableId }: SystemsColumnsProps) => {
         size: 400,
         meta: { sticky: true, className: 'sm:pr-[70px]' },
         enableHiding: false,
-        cell: props => <SystemNameCell {...props} hideButtons={true} tableId={tableId} />
+        cell: props => (
+          <SystemNameCell {...props} hideButtons={true} tableId={tableId} />
+        )
       },
-      { header: 'System Level', accessorFn: row => row.systemLevel, id: 'systemLevel' },
-      { header: 'System Code', accessorFn: row => row.systemCode, id: 'systemCode', size: 150 },
+      {
+        header: 'System Level',
+        accessorFn: row => row.systemLevel,
+        id: 'systemLevel'
+      },
+      {
+        header: 'System Code',
+        accessorFn: row => row.systemCode,
+        id: 'systemCode',
+        size: 150
+      },
       {
         header: 'System Type',
         accessorFn: row => row.systemType?.name,
         id: 'systemType',
         size: 150
       },
-      { header: 'Control System Zone', accessorFn: row => row.zone?.name, id: 'zone', size: 150 },
+      {
+        header: 'Control System Zone',
+        accessorFn: row => row.zone?.name,
+        id: 'zone',
+        size: 150
+      },
       {
         header: 'Location',
         accessorFn: row => row.location?.name,

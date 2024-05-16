@@ -32,7 +32,10 @@ const DisclosureComponent = ({ title, children, defaultOpen }: Props) => (
                     aria-hidden="true"
                   />
                 ) : (
-                  <PlusIcon className="block h-6 w-6 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
+                  <PlusIcon
+                    className="block h-6 w-6 text-gray-400 group-hover:text-gray-500"
+                    aria-hidden="true"
+                  />
                 )}
               </span>
             </Disclosure.Button>

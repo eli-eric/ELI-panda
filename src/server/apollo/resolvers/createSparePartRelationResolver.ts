@@ -6,8 +6,14 @@ import type { JWT } from 'next-auth/jwt'
 
 const createSparePartRelationsResolver = async (
   _source: unknown,
-  { fromSystemIds, toSystemIds }: { fromSystemIds: string[]; toSystemIds: string[] },
-  context: { executor: { executionContext: Driver }; authorization: { isAuthenticated: boolean; jwt: JWT } },
+  {
+    fromSystemIds,
+    toSystemIds
+  }: { fromSystemIds: string[]; toSystemIds: string[] },
+  context: {
+    executor: { executionContext: Driver }
+    authorization: { isAuthenticated: boolean; jwt: JWT }
+  },
   // eslint-disable-next-line
   _info: unknown
 ): Promise<string> => {
@@ -15,8 +21,13 @@ const createSparePartRelationsResolver = async (
   let transaction: TransactionPromise | undefined
   const existingRelationsDetails: string[] = []
 
-  if (!context.authorization.isAuthenticated || !context.authorization.jwt.roles.includes(ROLE.SYSTEM_EDIT)) {
-    throw new Error('Unauthorized: You do not have permission to perform this action.')
+  if (
+    !context.authorization.isAuthenticated ||
+    !context.authorization.jwt.roles.includes(ROLE.SYSTEM_EDIT)
+  ) {
+    throw new Error(
+      'Unauthorized: You do not have permission to perform this action.'
+    )
   }
   try {
     transaction = session.beginTransaction()
@@ -28,7 +39,10 @@ const createSparePartRelationsResolver = async (
           OPTIONAL MATCH (from)-[r:IS_SPARE_FOR]->(to)
           RETURN count(r) as count, from.name as fromName, to.name as toName
         `
-        const result = await transaction.run(relationExistsQuery, { fromSystemId, toSystemId })
+        const result = await transaction.run(relationExistsQuery, {
+          fromSystemId,
+          toSystemId
+        })
         const count = result.records[0].get('count').toInt()
         const fromName = result.records[0].get('fromName')
         const toName = result.records[0].get('toName')
@@ -38,9 +52,14 @@ const createSparePartRelationsResolver = async (
             MATCH (from:System {uid: $fromSystemId}), (to:System {uid: $toSystemId})
             CREATE (from)-[:IS_SPARE_FOR]->(to)
           `
-          await transaction.run(createRelationQuery, { fromSystemId, toSystemId })
+          await transaction.run(createRelationQuery, {
+            fromSystemId,
+            toSystemId
+          })
         } else {
-          existingRelationsDetails.push(`Relation between "${fromName}" and "${toName}" already exists.`)
+          existingRelationsDetails.push(
+            `Relation between "${fromName}" and "${toName}" already exists.`
+          )
         }
       }
     }
@@ -56,7 +75,8 @@ const createSparePartRelationsResolver = async (
     if (transaction) {
       await transaction.rollback()
     }
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error'
     throw new Error(`Failed to create spare part relations: ${errorMessage}`)
   } finally {
     await session.close()

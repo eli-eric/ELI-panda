@@ -34,7 +34,8 @@ export const SystemTypeComboBox = ({
       header: 'Code',
       accessorKey: 'code',
       filterFn: 'fuzzy',
-      cell: ({ getValue }) => highlightText(getValue() || '', (filter?.code as string) || ''),
+      cell: ({ getValue }) =>
+        highlightText(getValue() || '', (filter?.code as string) || ''),
       meta: {
         filter: {
           type: 'string',

@@ -9,7 +9,11 @@ import { classNames } from '@/utils'
 import { PandaTableContext } from '../PandaTableCotrolled'
 import { Filter } from './Filter'
 import styles from './RowCell.module.css'
-const reorderColumn = (draggedColumnId: string, targetColumnId: string, columnOrder: string[]): ColumnOrderState => {
+const reorderColumn = (
+  draggedColumnId: string,
+  targetColumnId: string,
+  columnOrder: string[]
+): ColumnOrderState => {
   columnOrder.splice(
     columnOrder.indexOf(targetColumnId),
     0,
@@ -27,19 +31,31 @@ interface ColumnHeader {
   data?: any
 }
 
-export const ColumnHeader: FC<ColumnHeader> = ({ header, table, index: headerIndex }) => {
+export const ColumnHeader: FC<ColumnHeader> = ({
+  header,
+  table,
+  index: headerIndex
+}) => {
   const { getState, setColumnOrder } = table
   const { columnOrder } = getState()
   const { column } = header
   const HeaderElement = column.columnDef.meta?.headerElement
   const { settings } = useContext(PandaTableContext)
 
-  const { enableColumnReordering, enableFiltering, manualFiltering = false } = settings
+  const {
+    enableColumnReordering,
+    enableFiltering,
+    manualFiltering = false
+  } = settings
 
   const [, dropRef] = useDrop<Header<any, any>>({
     accept: 'column',
     drop: draggedColumn => {
-      const newColumnOrder = reorderColumn(draggedColumn.id, column.id, columnOrder)
+      const newColumnOrder = reorderColumn(
+        draggedColumn.id,
+        column.id,
+        columnOrder
+      )
       setColumnOrder(newColumnOrder)
     }
   })
@@ -68,7 +84,9 @@ export const ColumnHeader: FC<ColumnHeader> = ({ header, table, index: headerInd
         {
           opacity: isDragging ? 0.5 : 1,
           width: header.getSize(),
-          '--left': header.column.columnDef.meta?.sticky ? `${headerIndex === 0 ? 0 : stickyCellsSize}px` : undefined
+          '--left': header.column.columnDef.meta?.sticky
+            ? `${headerIndex === 0 ? 0 : stickyCellsSize}px`
+            : undefined
         } as React.CSSProperties
       }
       className={classNames(
@@ -82,7 +100,10 @@ export const ColumnHeader: FC<ColumnHeader> = ({ header, table, index: headerInd
       <div
         ref={previewRef}
         {...{
-          className: classNames('flex items-center justify-between', header.column.columnDef.meta?.headerClassName),
+          className: classNames(
+            'flex items-center justify-between',
+            header.column.columnDef.meta?.headerClassName
+          ),
           style: {
             width: header.getSize()
           }
@@ -98,7 +119,9 @@ export const ColumnHeader: FC<ColumnHeader> = ({ header, table, index: headerInd
             )}
             onClick={header.column.getToggleSortingHandler()}
           >
-            {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+            {header.isPlaceholder
+              ? null
+              : flexRender(header.column.columnDef.header, header.getContext())}
             {{
               asc: ' 🔼',
               desc: ' 🔽'
@@ -113,7 +136,11 @@ export const ColumnHeader: FC<ColumnHeader> = ({ header, table, index: headerInd
         {HeaderElement}
       </div>
       {enableFiltering && header.column.getCanFilter() ? (
-        <Filter manualFiltering={manualFiltering} column={header.column} table={table} />
+        <Filter
+          manualFiltering={manualFiltering}
+          column={header.column}
+          table={table}
+        />
       ) : null}
     </th>
   )

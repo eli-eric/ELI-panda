@@ -5,7 +5,9 @@ import { Fragment } from 'react'
 import { Tooltip } from '@/components/Tooltip'
 import type { CatalogueItem } from '@/types/responses'
 
-export const DescriptionCell = ({ getValue }: CellContext<CatalogueItem, any>) => (
+export const DescriptionCell = ({
+  getValue
+}: CellContext<CatalogueItem, any>) => (
   <Fragment>
     {getValue() && (
       <Tooltip content={getValue()}>

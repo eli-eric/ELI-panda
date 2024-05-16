@@ -14,7 +14,9 @@ export const TableSettings: FC<Props> = ({ table }) => (
     {({ open }) => (
       <div id="column-hiding">
         <Disclosure.Button className="hover:text-primary-600 dark:hover:bg-slate-600 text-sm flex items-center justify-between w-full py-[2px] px-4  shadow-sm  text-gray-500 bg-white dark:bg-gray-800 hover:bg-gray-100 ">
-          <span className="">{open ? 'Hide table options' : 'Show table options'}</span>
+          <span className="">
+            {open ? 'Hide table options' : 'Show table options'}
+          </span>
           {open ? (
             <XMarkIcon className="h-4 w-4" aria-hidden="true" />
           ) : (
@@ -51,7 +53,10 @@ export const TableSettings: FC<Props> = ({ table }) => (
             <li>
               <div className="px-4 py-1 flex flex-wrap">
                 {table.getAllLeafColumns().map(column => (
-                  <div key={column.id} className="flex items-center space-x-2 mr-4">
+                  <div
+                    key={column.id}
+                    className="flex items-center space-x-2 mr-4"
+                  >
                     <input
                       type={'checkbox'}
                       id={`checkbox-${column.id}`}

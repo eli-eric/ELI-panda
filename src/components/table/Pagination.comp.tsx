@@ -27,10 +27,15 @@ export default function PaginationComponent({
   nextPageHandler
 }: Props) {
   const noResults = itemsTotalCount === 0
-  const nextIsDisabled = noResults || pageNumbers === page || !pageNumbers || !itemsTotalCount
+  const nextIsDisabled =
+    noResults || pageNumbers === page || !pageNumbers || !itemsTotalCount
   const previousIsDisabled = noResults || page === 1
   const from = noResults ? 0 : 1 + (page - 1) * pageSize
-  const to = noResults ? 0 : pageNumbers === page ? itemsTotalCount : page * pageSize
+  const to = noResults
+    ? 0
+    : pageNumbers === page
+      ? itemsTotalCount
+      : page * pageSize
   return (
     <nav
       data-testid="paging"
@@ -51,11 +56,20 @@ export default function PaginationComponent({
         </p>
       </div>
       <div className="flex flex-1 justify-between sm:justify-end">
-        <Button disabled={previousIsDisabled} onClick={previousPageHandler} buttonSize="small">
+        <Button
+          disabled={previousIsDisabled}
+          onClick={previousPageHandler}
+          buttonSize="small"
+        >
           <ChevronLeftIcon className="h-6 w-6 flex-shrink-0 " />
         </Button>
 
-        <Button disabled={nextIsDisabled} onClick={nextPageHandler} className="ml-3 " buttonSize="small">
+        <Button
+          disabled={nextIsDisabled}
+          onClick={nextPageHandler}
+          className="ml-3 "
+          buttonSize="small"
+        >
           <ChevronRightIcon className="h-6 w-6 flex-shrink-0" />
         </Button>
       </div>

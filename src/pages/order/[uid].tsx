@@ -16,7 +16,11 @@ const OrderContainer = (): JSX.Element => {
   const { orderDetail, error } = useOrderDetail()
 
   if (error) return <ErrorPage />
-  return <Fragment>{orderDetail ? <OrderItemContainer /> : <LoaderComponent />}</Fragment>
+  return (
+    <Fragment>
+      {orderDetail ? <OrderItemContainer /> : <LoaderComponent />}
+    </Fragment>
+  )
 }
 
 const OrderItemPage: NextPage = (): JSX.Element => {

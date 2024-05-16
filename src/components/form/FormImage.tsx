@@ -13,7 +13,12 @@ interface FormImageProps {
 const FormImage = ({ image, imageStyle, onDelete }: FormImageProps) => (
   <div className="flex flex-col justify-center border-gray-300">
     <Image width={300} height={300} style={imageStyle} alt="" src={image} />
-    <Button type="button" onClick={onDelete} className="w-full justify-center" rounded="rounded-b-md">
+    <Button
+      type="button"
+      onClick={onDelete}
+      className="w-full justify-center"
+      rounded="rounded-b-md"
+    >
       <TrashIcon
         className="h-4 w-4
 

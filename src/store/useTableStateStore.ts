@@ -27,17 +27,35 @@ type SortingInstance = {
 type TableState = {
   instances: Record<string, SortingInstance>
   setSortBy: (tableId: string, sortBy: SortingInstance['sortBy']) => void
-  setRowSelection: (tableId: string, rowSelection: SortingInstance['rowSelection']) => void
-  setSortByQueryString: (tableId: string, sortByQueryString: SortingInstance['sortByQueryString']) => void
-  setPagination: (tableId: string, pagination: SortingInstance['pagination']) => void
+  setRowSelection: (
+    tableId: string,
+    rowSelection: SortingInstance['rowSelection']
+  ) => void
+  setSortByQueryString: (
+    tableId: string,
+    sortByQueryString: SortingInstance['sortByQueryString']
+  ) => void
+  setPagination: (
+    tableId: string,
+    pagination: SortingInstance['pagination']
+  ) => void
   reset: (tableId: string) => void
   setFilter: (tableId: string, filter: SortingInstance['filter']) => void
-  setColumnFilter: (tableId: string, columnFilter: SortingInstance['columnFilter']) => void
+  setColumnFilter: (
+    tableId: string,
+    columnFilter: SortingInstance['columnFilter']
+  ) => void
   setSearch: (tableId: string, search: SortingInstance['search']) => void
   setCustom: (tableId: string, custom: SortingInstance['custom']) => void
-  setVisibility: (tableId: string, columnVisibility: SortingInstance['columnVisibility']) => void
+  setVisibility: (
+    tableId: string,
+    columnVisibility: SortingInstance['columnVisibility']
+  ) => void
   setExpand: (tableId: string, expanded: SortingInstance['expanded']) => void
-  setOrder: (tableId: string, columnOrder: SortingInstance['columnOrder']) => void
+  setOrder: (
+    tableId: string,
+    columnOrder: SortingInstance['columnOrder']
+  ) => void
 }
 
 const useTableStateStore = create<TableState>(set => ({

@@ -14,7 +14,12 @@ interface SystemNameCellProps extends CellContext<SystemDetail, any> {
   setUid: (uid: string | null) => void
 }
 
-export const SpareNameCell: FC<SystemNameCellProps> = ({ tableId, row, setUid, getValue }) => {
+export const SpareNameCell: FC<SystemNameCellProps> = ({
+  tableId,
+  row,
+  setUid,
+  getValue
+}) => {
   const { original } = row
   const { sparesIn, sparesOut } = original
 
@@ -30,7 +35,11 @@ export const SpareNameCell: FC<SystemNameCellProps> = ({ tableId, row, setUid, g
           <Tooltip
             content={original.parentPath?.map(v => v.name).join(' > ')}
             placement="top"
-            className={original.parentPath && original.parentPath?.length > 0 ? '' : 'hidden'}
+            className={
+              original.parentPath && original.parentPath?.length > 0
+                ? ''
+                : 'hidden'
+            }
           >
             <div>
               {original.hasSubsystems ? (
@@ -66,7 +75,12 @@ export const SpareNameCell: FC<SystemNameCellProps> = ({ tableId, row, setUid, g
         </div>
 
         <TableButtonsWrapper>
-          <ShowSpareButton tableId={tableId} uid={original.uid} sparesIn={sparesIn} sparesOut={sparesOut} />
+          <ShowSpareButton
+            tableId={tableId}
+            uid={original.uid}
+            sparesIn={sparesIn}
+            sparesOut={sparesOut}
+          />
         </TableButtonsWrapper>
       </div>
     </div>

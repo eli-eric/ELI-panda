@@ -27,7 +27,10 @@ export const TeamButton = () => {
   const { teams } = useTeams()
 
   const { control } = useFormContext<any>()
-  const { insert, fields: arrayFields } = useFieldArray({ control, name: 'teams' })
+  const { insert, fields: arrayFields } = useFieldArray({
+    control,
+    name: 'teams'
+  })
 
   const onSubmit = data => {
     insert(arrayFields.length, data.team)

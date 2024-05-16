@@ -11,7 +11,12 @@ interface Props {
 export const TableBody: FC<Props> = ({ getRowModel, getRowProps }) => (
   <tbody className="bg-white dark:bg-gray-800">
     {getRowModel().rows.map((row, index) => (
-      <TableRow key={row.id} row={row} index={index} getRowProps={getRowProps} />
+      <TableRow
+        key={row.id}
+        row={row}
+        index={index}
+        getRowProps={getRowProps}
+      />
     ))}
   </tbody>
 )

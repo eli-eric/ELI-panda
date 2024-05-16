@@ -2,7 +2,14 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { composeDebugMessage } from 'src/server/logger'
 
 import logger from '../logger'
-import { downloadFile, getPathInfo, listFiles, removeFile, updateFile, uploadFile } from './methods'
+import {
+  downloadFile,
+  getPathInfo,
+  listFiles,
+  removeFile,
+  updateFile,
+  uploadFile
+} from './methods'
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   try {

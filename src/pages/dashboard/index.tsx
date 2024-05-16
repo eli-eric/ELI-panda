@@ -22,43 +22,57 @@ const tiles = [
   {
     name: 'Systems',
     link: PATH.SYSTEMS,
-    Icon: () => <RectangleGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
+    Icon: () => (
+      <RectangleGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+    ),
     role: ROLE.SYSTEMS_VIEW
   },
   {
     name: 'Catalogue',
     link: PATH.CATALOGUE,
-    Icon: () => <RectangleStackIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
+    Icon: () => (
+      <RectangleStackIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+    ),
     role: ROLE.CATALOGUE_VIEW
   },
   {
     name: 'Orders',
     link: PATH.ORDERS,
-    Icon: () => <ShoppingCartIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
+    Icon: () => (
+      <ShoppingCartIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+    ),
     role: ROLE.ORDERS_VIEW
   },
   {
     name: 'Room Cards',
     link: PATH.ROOM_CARDS,
-    Icon: () => <CreditCardIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
+    Icon: () => (
+      <CreditCardIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+    ),
     role: ROLE.ROOM_CARD_VIEW
   },
   {
     name: 'Users',
     link: PATH.ADMIN_USERS,
-    Icon: () => <UserGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
+    Icon: () => (
+      <UserGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+    ),
     role: ROLE.ADMIN
   },
   {
     name: 'Codebooks',
     link: PATH.CODEBOOKS,
-    Icon: () => <TableCellsIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
+    Icon: () => (
+      <TableCellsIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+    ),
     role: ROLE.CODEBOOKS_ADMIN
   },
   {
     name: 'Support/Feedback',
     link: 'mailto:jiri.svacha@eli-beams.eu',
-    Icon: () => <LifebuoyIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+    Icon: () => (
+      <LifebuoyIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+    )
   }
 ]
 
@@ -80,7 +94,13 @@ const DashboardPage: NextPage = (): JSX.Element => {
         </h1> */}
         <TileContainer>
           {tiles.map(tile => (
-            <Tile key={tile.link} name={tile.name} Icon={tile.Icon} link={tile.link} role={tile.role} />
+            <Tile
+              key={tile.link}
+              name={tile.name}
+              Icon={tile.Icon}
+              link={tile.link}
+              role={tile.role}
+            />
           ))}
         </TileContainer>
         <ReleasesContainer />

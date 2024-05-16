@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import Combobox from '@/components/form/Combobox'
-import { Input, InputAmount, InputCurrency, TextArea } from '@/components/form/Input'
+import {
+  Input,
+  InputAmount,
+  InputCurrency,
+  TextArea
+} from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
 import { Col, Grid } from '@/components/grid/Grid'
@@ -41,8 +46,14 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
   useEffect(() => {
     if (!enabled) {
       setValue('name', catalogueItem?.name || orderLine?.name || '')
-      setValue('catalogueNumber', catalogueItem?.catalogueNumber || orderLine?.catalogueNumber || '')
-      setValue('catalogueUid', catalogueItem?.uid || orderLine?.catalogueUid || '')
+      setValue(
+        'catalogueNumber',
+        catalogueItem?.catalogueNumber || orderLine?.catalogueNumber || ''
+      )
+      setValue(
+        'catalogueUid',
+        catalogueItem?.uid || orderLine?.catalogueUid || ''
+      )
     }
   }, [catalogueItem, orderLine, enabled, setValue])
 
@@ -118,7 +129,12 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
       </Col>
       {orderLine?.uid && (
         <Col md={6} lg={6}>
-          <Combobox {...formFields.location} position="top" limit={50} disabled={locationEnable} />
+          <Combobox
+            {...formFields.location}
+            position="top"
+            limit={50}
+            disabled={locationEnable}
+          />
         </Col>
       )}
       {orderLine?.uid && (

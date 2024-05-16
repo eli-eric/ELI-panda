@@ -18,14 +18,25 @@ interface Props {
   buttons?: ModalButtons
 }
 
-export default function ModalComponent({ open, children, testid, buttons, setOpen }: Props) {
+export default function ModalComponent({
+  open,
+  children,
+  testid,
+  buttons,
+  setOpen
+}: Props) {
   useEscapeKey(() => {
     setOpen(false)
   })
 
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-40" onClose={() => {}} unmount={false}>
+      <Dialog
+        as="div"
+        className="relative z-40"
+        onClose={() => {}}
+        unmount={false}
+      >
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -38,7 +49,10 @@ export default function ModalComponent({ open, children, testid, buttons, setOpe
           <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
         </Transition.Child>
 
-        <div data-testid={testid + '-modal'} className="fixed inset-0 z-10 overflow-y-auto">
+        <div
+          data-testid={testid + '-modal'}
+          className="fixed inset-0 z-10 overflow-y-auto"
+        >
           <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <Transition.Child
               as={Fragment}
@@ -52,7 +66,9 @@ export default function ModalComponent({ open, children, testid, buttons, setOpe
               <Dialog.Panel className="relative transform  rounded-lg bg-white dark:bg-gray-800 px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 w-full sm:max-w-5xl sm:p-6">
                 <Fragment>
                   {children}
-                  {buttons?.noButtons !== true && <ModalButtonsComponent testid={testid} buttons={buttons} />}
+                  {buttons?.noButtons !== true && (
+                    <ModalButtonsComponent testid={testid} buttons={buttons} />
+                  )}
                 </Fragment>
               </Dialog.Panel>
             </Transition.Child>
@@ -63,7 +79,13 @@ export default function ModalComponent({ open, children, testid, buttons, setOpe
   )
 }
 
-export const Modal = ({ children, open, setOpen, buttons, testid = 'modal' }: Props) => {
+export const Modal = ({
+  children,
+  open,
+  setOpen,
+  buttons,
+  testid = 'modal'
+}: Props) => {
   const defaultButtons: ModalButtons = {
     goNext: {
       testid: 'close',
@@ -81,7 +103,9 @@ export const Modal = ({ children, open, setOpen, buttons, testid = 'modal' }: Pr
       }}
     >
       {children}
-      {!buttons && <ModalButtonsComponent testid={testid} buttons={defaultButtons} />}
+      {!buttons && (
+        <ModalButtonsComponent testid={testid} buttons={defaultButtons} />
+      )}
     </ModalComponent>
   )
 }

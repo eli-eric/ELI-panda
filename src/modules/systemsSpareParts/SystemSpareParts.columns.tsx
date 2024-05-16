@@ -26,7 +26,13 @@ interface IndeterminateCheckboxProps extends HTMLProps<HTMLInputElement> {
   row: Row<SystemDetail>
 }
 
-function IndeterminateCheckbox({ className, setSelectedUids, checked, row, ...rest }: IndeterminateCheckboxProps) {
+function IndeterminateCheckbox({
+  className,
+  setSelectedUids,
+  checked,
+  row,
+  ...rest
+}: IndeterminateCheckboxProps) {
   return (
     <input
       type="checkbox"
@@ -54,7 +60,10 @@ function IndeterminateCheckbox({ className, setSelectedUids, checked, row, ...re
   )
 }
 
-export const useSystemsSparePartsColumns = ({ tableId, setSelectedUids }: SystemsColumnsProps) => {
+export const useSystemsSparePartsColumns = ({
+  tableId,
+  setSelectedUids
+}: SystemsColumnsProps) => {
   const { setUid, pending } = useSubsystems(tableId)
   const columns = useMemo(
     (): ColumnDef<SystemDetail, any>[] => [
@@ -62,7 +71,11 @@ export const useSystemsSparePartsColumns = ({ tableId, setSelectedUids }: System
         id: 'icons',
         size: 20,
         meta: { sticky: true },
-        cell: ({ row: { original } }) => <IconCell itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE} />
+        cell: ({ row: { original } }) => (
+          <IconCell
+            itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE}
+          />
+        )
       },
       {
         id: 'select',
@@ -87,25 +100,51 @@ export const useSystemsSparePartsColumns = ({ tableId, setSelectedUids }: System
         id: 'name',
         size: 440,
         enableHiding: false,
-        cell: props => <SpareNameCell {...props} setUid={setUid} tableId={tableId} />
+        cell: props => (
+          <SpareNameCell {...props} setUid={setUid} tableId={tableId} />
+        )
       },
-      { header: 'System Level', accessorFn: row => row.systemLevel, id: 'systemLevel' },
-      { header: 'System Code', accessorFn: row => row.systemCode, id: 'systemCode', size: 150 },
-      { header: 'System Alias', accessorFn: row => row.systemAlias, id: 'systemAlias', size: 150 },
+      {
+        header: 'System Level',
+        accessorFn: row => row.systemLevel,
+        id: 'systemLevel'
+      },
+      {
+        header: 'System Code',
+        accessorFn: row => row.systemCode,
+        id: 'systemCode',
+        size: 150
+      },
+      {
+        header: 'System Alias',
+        accessorFn: row => row.systemAlias,
+        id: 'systemAlias',
+        size: 150
+      },
       {
         header: 'System Type',
         accessorFn: row => row.systemType?.name,
         id: 'systemType',
         size: 150
       },
-      { header: 'Control System Zone', accessorFn: row => row.zone?.name, id: 'zone', size: 150 },
+      {
+        header: 'Control System Zone',
+        accessorFn: row => row.zone?.name,
+        id: 'zone',
+        size: 150
+      },
       {
         header: 'Location',
         accessorFn: row => row.location?.name,
         id: 'location',
         size: 150
       },
-      { header: 'Responsible', accessorFn: row => row.responsible?.name, id: 'responsible', size: 150 },
+      {
+        header: 'Responsible',
+        accessorFn: row => row.responsible?.name,
+        id: 'responsible',
+        size: 150
+      },
       {
         header: 'Description',
         accessorFn: row => row.description,
@@ -121,7 +160,12 @@ export const useSystemsSparePartsColumns = ({ tableId, setSelectedUids }: System
           </Fragment>
         )
       },
-      { header: 'Importance', accessorFn: row => row.importance?.name, id: 'importance', size: 150 },
+      {
+        header: 'Importance',
+        accessorFn: row => row.importance?.name,
+        id: 'importance',
+        size: 150
+      },
       {
         header: 'Sub Systems Count',
         accessorFn: row => row.statistics?.subsystemsCount,
@@ -149,7 +193,10 @@ export const useSystemsSparePartsColumns = ({ tableId, setSelectedUids }: System
         meta: { className: 'text-right' },
         cell: ({ getValue, row: { original } }) => (
           <span className="whitespace-nowrap">
-            {getValue()} <span className="font-medium">{original.physicalItem?.currency}</span>
+            {getValue()}{' '}
+            <span className="font-medium">
+              {original.physicalItem?.currency}
+            </span>
           </span>
         )
       },
@@ -171,7 +218,14 @@ export const useSystemsSparePartsColumns = ({ tableId, setSelectedUids }: System
         id: 'catalogueName',
         size: 300,
         cell: ({ getValue, row: { original } }) => (
-          <NewTabLink href={PATH.CATALOGUE_ITEM + '/' + original.physicalItem?.catalogueItem?.uid} value={getValue()} />
+          <NewTabLink
+            href={
+              PATH.CATALOGUE_ITEM +
+              '/' +
+              original.physicalItem?.catalogueItem?.uid
+            }
+            value={getValue()}
+          />
         )
       },
       {

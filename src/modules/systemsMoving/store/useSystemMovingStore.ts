@@ -21,8 +21,10 @@ export const useSystemMovingStore = create<SystemMovingStoreType>(set => ({
   parentSystem: undefined,
   tableIdLeft: 'systems-left',
   tableIdRight: 'systems-right',
-  setChildSystem: (childSystem: SystemsMovingType) => set(() => ({ childSystem })),
-  setParentSystem: (parentSystem: SystemsMovingType) => set(() => ({ parentSystem })),
+  setChildSystem: (childSystem: SystemsMovingType) =>
+    set(() => ({ childSystem })),
+  setParentSystem: (parentSystem: SystemsMovingType) =>
+    set(() => ({ parentSystem })),
   clear: () =>
     set(() => ({
       childSystem: undefined,

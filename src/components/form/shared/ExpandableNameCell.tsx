@@ -12,7 +12,12 @@ interface ExpandableNameCellProps {
   getValue: () => string
 }
 
-export const ExpandableNameCell = ({ row, filterName, fetchChildren, getValue }: ExpandableNameCellProps) => (
+export const ExpandableNameCell = ({
+  row,
+  filterName,
+  fetchChildren,
+  getValue
+}: ExpandableNameCellProps) => (
   <div
     style={{
       paddingLeft: `${row.depth * 2}rem`
@@ -26,9 +31,18 @@ export const ExpandableNameCell = ({ row, filterName, fetchChildren, getValue }:
     }}
   >
     {row.original.isExpandable || row.getCanExpand() ? (
-      <div className={classNames('flex items-center', 'cursot-pointer hover:text-gray-400')}>
+      <div
+        className={classNames(
+          'flex items-center',
+          'cursot-pointer hover:text-gray-400'
+        )}
+      >
         <button>
-          {row.getIsExpanded() ? <ChevronDownIcon className="w-4 h-4" /> : <ChevronRightIcon className="w-4 h-4" />}
+          {row.getIsExpanded() ? (
+            <ChevronDownIcon className="w-4 h-4" />
+          ) : (
+            <ChevronRightIcon className="w-4 h-4" />
+          )}
         </button>
 
         <span className="ml-2">{highlightText(getValue(), filterName)}</span>

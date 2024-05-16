@@ -8,7 +8,11 @@ interface Props extends CellContext<CatalogueItem, any> {
   selectedItem?: CatalogueItem
 }
 
-export const SelectCell = ({ row: { original }, setItem, selectedItem }: Props) => (
+export const SelectCell = ({
+  row: { original },
+  setItem,
+  selectedItem
+}: Props) => (
   <div className="ml-3 flex h-5 items-center">
     <input
       id={`side-${original.uid}`}

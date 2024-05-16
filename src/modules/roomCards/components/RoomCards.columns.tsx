@@ -29,7 +29,11 @@ export const useRoomCardsColumns = () => {
         accessorFn: row => row?.locations,
         size: 300,
         cell: ({ getValue }) => (
-          <div>{getValue()?.map(location => <Badge key={v4()}>{`${location.name} (${location.code})`}</Badge>)}</div>
+          <div>
+            {getValue()?.map(location => (
+              <Badge key={v4()}>{`${location.name} (${location.code})`}</Badge>
+            ))}
+          </div>
         )
       },
       {

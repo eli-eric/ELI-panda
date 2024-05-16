@@ -12,7 +12,15 @@ import { ValidationIcon } from './Icons'
 
 type InputProps = FieldProps & React.InputHTMLAttributes<HTMLInputElement>
 
-const DateInput = ({ name, disabled, rounded = 'rounded-md', className, hidden, label, ...restProps }: InputProps) => {
+const DateInput = ({
+  name,
+  disabled,
+  rounded = 'rounded-md',
+  className,
+  hidden,
+  label,
+  ...restProps
+}: InputProps) => {
   const {
     control,
     formState: { defaultValues }
@@ -39,7 +47,10 @@ const DateInput = ({ name, disabled, rounded = 'rounded-md', className, hidden, 
           )}
         >
           {label && (
-            <label hidden={hidden} className="text-sm font-medium text-gray-700 dark:text-gray-200">
+            <label
+              hidden={hidden}
+              className="text-sm font-medium text-gray-700 dark:text-gray-200"
+            >
               {label}
             </label>
           )}

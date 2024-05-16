@@ -51,11 +51,15 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-500 sm:duration-700"
-              enterFrom={panelSlide === 'left' ? '-translate-x-full' : 'translate-x-full'}
+              enterFrom={
+                panelSlide === 'left' ? '-translate-x-full' : 'translate-x-full'
+              }
               enterTo={'translate-x-0'}
               leave="transform transition ease-in-out duration-500 sm:duration-700"
               leaveFrom={'translate-x-0'}
-              leaveTo={panelSlide === 'left' ? '-translate-x-full' : 'translate-x-full'}
+              leaveTo={
+                panelSlide === 'left' ? '-translate-x-full' : 'translate-x-full'
+              }
             >
               <Dialog.Panel className="pointer-events-auto w-screen md:max-w-xl max-w-md">
                 <div className="flex h-full flex-col divide-y divide-gray-200 bg-white dark:bg-gray-800 shadow-xl">
@@ -78,13 +82,26 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
                         </div>
                       </div>
                     </div>
-                    <div className="relative mt-6 flex-1 px-4 sm:px-6">{children}</div>
+                    <div className="relative mt-6 flex-1 px-4 sm:px-6">
+                      {children}
+                    </div>
                   </div>
-                  {RenderSettings && <div className="flex px-4 py-4">{RenderSettings}</div>}
+                  {RenderSettings && (
+                    <div className="flex px-4 py-4">{RenderSettings}</div>
+                  )}
                   {buttons && (
-                    <div className={classNames('flex flex-shrink-0 px-4 py-4 justify-between', buttons.className)}>
+                    <div
+                      className={classNames(
+                        'flex flex-shrink-0 px-4 py-4 justify-between',
+                        buttons.className
+                      )}
+                    >
                       {buttons.goBack && (
-                        <Button type="button" onClick={() => setOpen(false)} className={buttons.goBack.className}>
+                        <Button
+                          type="button"
+                          onClick={() => setOpen(false)}
+                          className={buttons.goBack.className}
+                        >
                           Cancel
                         </Button>
                       )}

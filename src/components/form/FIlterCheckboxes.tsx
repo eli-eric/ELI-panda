@@ -16,13 +16,21 @@ interface Props {
   codebook?: CODEBOOK
 }
 
-export const FilterCheckboxes = ({ name, label, onChange, options, codebook }: Props) => {
+export const FilterCheckboxes = ({
+  name,
+  label,
+  onChange,
+  options,
+  codebook
+}: Props) => {
   const { control } = useFormContext()
   const { data: codebookOptions } = useCodebook(codebook)
 
   return (
     <div className="flex flex-col">
-      <span className="text-sm pb-1 font-medium text-gray-700 dark:text-gray-200">{label}</span>
+      <span className="text-sm pb-1 font-medium text-gray-700 dark:text-gray-200">
+        {label}
+      </span>
       <Controller
         name={name}
         control={control}

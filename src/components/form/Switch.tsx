@@ -45,7 +45,12 @@ interface SwitchProps {
   label?: string
 }
 
-export const Switch = ({ name, defaultValue = true, className, label }: SwitchProps) => {
+export const Switch = ({
+  name,
+  defaultValue = true,
+  className,
+  label
+}: SwitchProps) => {
   const { control } = useFormContext()
 
   return (
@@ -55,7 +60,9 @@ export const Switch = ({ name, defaultValue = true, className, label }: SwitchPr
       defaultValue={defaultValue}
       render={({ field }) => (
         <label className="flex flex-col items-center">
-          <span className="mr-2 text-sm font-medium text-gray-900 dark:text-gray-200 pb-1">{label}</span>
+          <span className="mr-2 text-sm font-medium text-gray-900 dark:text-gray-200 pb-1">
+            {label}
+          </span>
           <SwitchHUI
             {...field}
             className={classNames(

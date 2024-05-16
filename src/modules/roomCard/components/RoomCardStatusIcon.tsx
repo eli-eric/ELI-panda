@@ -10,6 +10,11 @@ type Props = {
 
 export const RoomCardStatusIcon = ({ status }: Props) => (
   <Tooltip content={`Room status: ${status}`}>
-    <div className={classNames('w-10 h-10 rounded-full', ...statusColorMapping(status))} />
+    <div
+      className={classNames(
+        'w-10 h-10 rounded-full',
+        ...statusColorMapping(status)
+      )}
+    />
   </Tooltip>
 )

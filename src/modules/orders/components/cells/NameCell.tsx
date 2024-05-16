@@ -14,7 +14,10 @@ interface NameProps extends CellContext<Order, any> {
 export const NameCell = ({ getValue, row: { original } }: NameProps) => {
   return (
     <div className="flex items-center">
-      <Link href={PATH.ORDER + '/' + original.uid} className="flex items-center">
+      <Link
+        href={PATH.ORDER + '/' + original.uid}
+        className="flex items-center"
+      >
         <LinkDecorator>{getValue() || 'N/A'}</LinkDecorator>
       </Link>
       <TableActions order={original} />

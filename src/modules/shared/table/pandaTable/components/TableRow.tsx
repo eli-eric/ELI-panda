@@ -34,7 +34,8 @@ export const TableRow = ({ getRowProps, row, index }: Props) => {
       }, 50)
     },
     drop: item => {
-      dropSettings && dropSettings.onDropHandler(item, { tableId, ...row.original })
+      dropSettings &&
+        dropSettings.onDropHandler(item, { tableId, ...row.original })
     }
   })
 

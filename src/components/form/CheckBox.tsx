@@ -12,7 +12,14 @@ interface CheckBoxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   hidden?: boolean
 }
 
-export const CheckBoxComponent = ({ disabled, className, hidden, label, checked, ...restProps }: CheckBoxProps) => {
+export const CheckBoxComponent = ({
+  disabled,
+  className,
+  hidden,
+  label,
+  checked,
+  ...restProps
+}: CheckBoxProps) => {
   const id = useId()
 
   return (
@@ -34,7 +41,10 @@ export const CheckBoxComponent = ({ disabled, className, hidden, label, checked,
         />
       </div>
       <div className="ml-3 text-sm">
-        <label htmlFor={'checkbox' + id} className="font-medium text-gray-700 dark:text-gray-200">
+        <label
+          htmlFor={'checkbox' + id}
+          className="font-medium text-gray-700 dark:text-gray-200"
+        >
           {label}
         </label>
         <span className="text-gray-500">
@@ -47,7 +57,15 @@ export const CheckBoxComponent = ({ disabled, className, hidden, label, checked,
 
 type InputProps = FieldProps & React.InputHTMLAttributes<HTMLInputElement>
 
-const CheckBox = ({ name, placeholder, disabled, className, hidden, label, ...restProps }: InputProps) => {
+const CheckBox = ({
+  name,
+  placeholder,
+  disabled,
+  className,
+  hidden,
+  label,
+  ...restProps
+}: InputProps) => {
   const { control } = useFormContext()
 
   return (
@@ -76,7 +94,9 @@ const CheckBox = ({ name, placeholder, disabled, className, hidden, label, ...re
             />
           </div>
           <div className="ml-3 text-sm">
-            <label className="font-medium text-gray-700 dark:text-gray-200">{label}</label>
+            <label className="font-medium text-gray-700 dark:text-gray-200">
+              {label}
+            </label>
             <span className="text-gray-500">
               <span className="sr-only">{label}</span>
             </span>

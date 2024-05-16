@@ -1,5 +1,10 @@
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
-import type { Employee, RoomCardUpdateInput, RoomCardWhere, Team } from '@/types/gql/graphql'
+import type {
+  Employee,
+  RoomCardUpdateInput,
+  RoomCardWhere,
+  Team
+} from '@/types/gql/graphql'
 import { whereN } from '@/utils/graphql/mutations'
 
 import type { HallContactPerson } from '../store/useRoomCardStore'
@@ -28,7 +33,10 @@ export const updateRoomCardVariables = ({
   disconnectTeams,
   newLocations,
   disconnectLocations
-}: RoomCardUpdateType): { where: RoomCardWhere; update: RoomCardUpdateInput } => ({
+}: RoomCardUpdateType): {
+  where: RoomCardWhere
+  update: RoomCardUpdateInput
+} => ({
   where: {
     uid: uid
   },
@@ -48,13 +56,17 @@ export const updateRoomCardVariables = ({
     compressedAirDistributionClient: roomCard.compressedAirDistributionClient,
     coolingWaterClient: roomCard.coolingWaterClient,
     indoorEnvironmentQualityClient: roomCard.indoorEnvironmentQualityClient,
-    maxPressureInColdDistributionClient: roomCard.maxPressureInColdDistributionClient,
-    nitrogenCentralDistributionClient: roomCard.nitrogenCentralDistributionClient,
+    maxPressureInColdDistributionClient:
+      roomCard.maxPressureInColdDistributionClient,
+    nitrogenCentralDistributionClient:
+      roomCard.nitrogenCentralDistributionClient,
     status: roomCard.status,
     contactPersonsDept: [
       {
         connect: newDeptContacts.map(deptContact => whereN(deptContact?.uid)),
-        disconnect: disconnectDeptContacts.map(deptContact => whereN(deptContact?.uid))
+        disconnect: disconnectDeptContacts.map(deptContact =>
+          whereN(deptContact?.uid)
+        )
       }
     ],
     contactPersonsHall: [

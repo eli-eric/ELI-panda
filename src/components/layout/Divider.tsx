@@ -18,7 +18,9 @@ export default function Divider({ text, className, children }: DividerProps) {
         <span className="bg-white dark:bg-gray-800 px-3 text-base font-semibold leading-6 text-gray-900 dark:text-gray-200">
           <FormattedMessage id={text} />
         </span>
-        {children && <div className="bg-white dark:bg-gray-800 pr-3">{children}</div>}
+        {children && (
+          <div className="bg-white dark:bg-gray-800 pr-3">{children}</div>
+        )}
       </div>
     </div>
   )
