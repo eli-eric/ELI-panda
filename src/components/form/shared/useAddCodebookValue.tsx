@@ -3,9 +3,9 @@ import { toast } from 'react-hot-toast'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import useFormModal from '@/hooks/form/useFormModal'
+import type { CodeBookMetaData } from '@/types/responses/codebook'
 
 import { Input } from '../Input'
-import type { CodeBookMetaData } from '@/types/responses/codebook'
 
 const useAddCodebookValue = (codebook?: CodeBookMetaData) => {
   const { codebook: endpoint } = useEndpoint({ path: codebook?.code })

@@ -7,12 +7,12 @@ import { v4 as uuid } from 'uuid'
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
+import type { CodebookType } from '@/types/responses/codebook'
 import { classNames } from '@/utils'
 
 import { FormXMarkIcon } from './components/FormXMarkIcon'
 import { SelectOption } from './components/SelectOption'
 import { ChevronDown } from './Icons'
-import type { CodebookType } from '@/types/responses/codebook'
 
 export type ListboxPropsT = FieldProps & {
   codebook?: CODEBOOK

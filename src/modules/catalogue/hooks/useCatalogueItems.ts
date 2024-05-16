@@ -1,7 +1,3 @@
-import useQueryManager from '@/hooks/useQueryManager'
-import type { CatalogueItemsResponse } from '@/types/responses/catalogue'
-import type { QueryFetcherKey } from '@/utils/fetcher'
-import { queryFetcher } from '@/utils/fetcher'
 import {
   keepPreviousData,
   useQuery,
@@ -9,6 +5,11 @@ import {
 } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
+
+import useQueryManager from '@/hooks/useQueryManager'
+import type { CatalogueItemsResponse } from '@/types/responses/catalogue'
+import type { QueryFetcherKey } from '@/utils/fetcher'
+import { queryFetcher } from '@/utils/fetcher'
 export const useCatalogueItems = (tableId = 'catalogueItems') => {
   const { query } = useQueryManager(tableId)
   const pagination = JSON.parse(query.pagination || '{}')

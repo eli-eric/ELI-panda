@@ -1,10 +1,10 @@
 import type { NextPage } from 'next'
+import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
-import dynamic from 'next/dynamic'
 
 const { head } = message.cataloguePage
 

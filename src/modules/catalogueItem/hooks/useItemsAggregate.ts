@@ -1,8 +1,10 @@
 'use-client'
 
-import type { CatalogueStatistics } from '../components/statistics/CatalogueStatistics.columns'
 import { useQuery } from '@tanstack/react-query'
+
 import { queryFetcher } from '@/utils/fetcher'
+
+import type { CatalogueStatistics } from '../components/statistics/CatalogueStatistics.columns'
 //use faker to generate fake data
 
 export const useItemsAggregate = (uid?: string) => {

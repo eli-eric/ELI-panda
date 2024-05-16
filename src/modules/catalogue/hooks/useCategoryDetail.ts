@@ -1,7 +1,9 @@
-import type { CategoryFormType } from '../components/categoryEdit/types'
 import { useQuery } from '@tanstack/react-query'
-import { queryFetcher } from '@/utils/fetcher'
 import { useMemo } from 'react'
+
+import { queryFetcher } from '@/utils/fetcher'
+
+import type { CategoryFormType } from '../components/categoryEdit/types'
 
 export const useCategoryDetail = (uid?: string) => {
   const { data, isLoading } = useQuery({

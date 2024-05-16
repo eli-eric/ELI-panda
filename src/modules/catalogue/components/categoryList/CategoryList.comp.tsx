@@ -2,7 +2,6 @@ import { Fragment } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import type { CodebookType } from '@/types/responses/codebook'
-
 import { classNames } from '@/utils'
 
 import { useCategoryList } from '../../hooks/useCategoryList'

@@ -1,9 +1,10 @@
+import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
-import type { CatalogueItem } from '../types/responses'
-import { useQuery } from '@tanstack/react-query'
 import { queryFetcher } from '@/utils/fetcher'
+
+import type { CatalogueItem } from '../types/responses'
 
 export const useCatalogueItem = () => {
   const router = useRouter()

@@ -1,8 +1,9 @@
 import { toast } from 'react-hot-toast'
 
-import { useUsers } from './useUsers'
-import { gql } from '@/types/gql'
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
+
+import { useUsers } from './useUsers'
 
 const DELETE_USER = gql(`
   mutation DeleteUsers($where: UserWhere) {

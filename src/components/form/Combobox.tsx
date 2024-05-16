@@ -7,6 +7,7 @@ import { useIntl } from 'react-intl'
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
+import type { CodebookFilter, CodebookType } from '@/types/responses/codebook'
 import { classNames } from '@/utils'
 
 import { PlusButton } from '../Buttons'
@@ -15,7 +16,6 @@ import { ComboboxInput } from './components/ComboboxInput'
 import { ComboboxOption } from './components/ComboboxOption'
 import { FormXMarkIcon } from './components/FormXMarkIcon'
 import useAddCodebookValue from './shared/useAddCodebookValue'
-import type { CodebookFilter, CodebookType } from '@/types/responses/codebook'
 
 type ComboboxPropsT = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {

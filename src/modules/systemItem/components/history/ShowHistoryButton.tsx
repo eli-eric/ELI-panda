@@ -1,13 +1,15 @@
+import { ClockIcon } from '@heroicons/react/24/outline'
+import { useQuery } from '@tanstack/react-query'
+import { useRouter } from 'next/router'
+import { Fragment, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+
 import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
-import { ClockIcon } from '@heroicons/react/24/outline'
-import { Fragment, useEffect, useState } from 'react'
-import { HistoryFeeds } from './HistoryFeeds'
-import { useRouter } from 'next/router'
-import { useQuery } from '@tanstack/react-query'
 import { message } from '@/i18n/src/messages'
-import toast from 'react-hot-toast'
 import { queryFetcher } from '@/utils/fetcher'
+
+import { HistoryFeeds } from './HistoryFeeds'
 
 const messages = message.common.buttons
 

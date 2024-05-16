@@ -1,9 +1,9 @@
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 import { connectN } from '@/utils/graphql/mutations'
 
 import { whereN } from '../../../utils/graphql/mutations'
 import type { RoomCardFormType } from '../types/form'
-import { gql } from '@/types/gql'
-import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 
 const createRoomCardMutation = gql(`
   mutation CreateRoomCards($input: [RoomCardCreateInput!]!) {

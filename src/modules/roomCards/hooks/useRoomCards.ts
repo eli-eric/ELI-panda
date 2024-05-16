@@ -1,9 +1,9 @@
 import { useQueryState } from 'next-usequerystate'
+import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
-import { gql } from '@/types/gql'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
-import { useEffect } from 'react'
+import { gql } from '@/types/gql'
 
 export const roomCardsQuery = gql(`
   query RoomCardsQuery($where: RoomCardWhere) {

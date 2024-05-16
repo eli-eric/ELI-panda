@@ -3,8 +3,8 @@ import Link from 'next/link'
 
 import { LinkDecorator } from '@/components/decorators'
 import { PATH } from '@/types/constants/paths'
+import type { Order } from '@/types/responses/orders'
 
-import type { Order } from '../../types'
 import TableActions from '../TableActions'
 
 interface NameProps extends CellContext<Order, any> {

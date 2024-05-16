@@ -1,11 +1,13 @@
-import type { ColumnDef } from '@tanstack/react-table'
-import FileActions, { FileNameEditor, TagInput } from './FileActions'
-import { useMemo } from 'react'
-import { Badge } from '@/components/visuals/Badge'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import type { ColumnDef } from '@tanstack/react-table'
+import { useMemo } from 'react'
 import { v4 } from 'uuid'
-import type { FileItemExtended } from './types'
+
+import { Badge } from '@/components/visuals/Badge'
+
+import FileActions, { FileNameEditor, TagInput } from './FileActions'
 import { useLinkUpdate } from './hooks/useLinks'
+import type { FileItemExtended } from './types'
 
 export const useFileColumns = ({ hasEditRole, handlePut, itemType, uid }) => {
   const { mutate } = useLinkUpdate({ parentUid: uid })

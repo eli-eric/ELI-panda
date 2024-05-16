@@ -1,7 +1,6 @@
 import { Combobox as HUICombobox } from '@headlessui/react'
 
 import type { CodebookType } from '@/types/responses/codebook'
-
 import { classNames } from '@/utils'
 
 import { SelectOption } from './SelectOption'

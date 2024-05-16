@@ -7,12 +7,12 @@ import { PlusButton } from '@/components/Buttons'
 import Combobox from '@/components/form/Combobox'
 import { FormModal } from '@/hooks/form/useFormModal'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
+import { useEmployee } from '@/hooks/graphql/useEmployee'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 import type { ROLE } from '@/types/constants/roles'
 import type { Employee } from '@/types/gql/graphql'
-import { useEmployee } from '@/hooks/graphql/useEmployee'
 
 const nestedForm = message.roomCardsPage.nestedForm
 

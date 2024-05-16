@@ -5,13 +5,13 @@ import { useIntl } from 'react-intl'
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
+import type { CodebookFilter, CodebookType } from '@/types/responses/codebook'
 import { classNames } from '@/utils'
 
 import { ComboboxOption } from './components/ComboboxOption'
 import { FormXMarkIcon } from './components/FormXMarkIcon'
 import { ChevronDown } from './Icons'
 import { CodebookTreeModal } from './shared/CodebookTreeModal'
-import type { CodebookFilter, CodebookType } from '@/types/responses/codebook'
 
 type ComboboxPropsT = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {

@@ -1,17 +1,16 @@
 import type { Row, Table } from '@tanstack/react-table'
 import { createContext, useEffect, useRef } from 'react'
 
-import type { CodebookType } from '@/types/responses/codebook'
-
+import type { GetCategoriesQuery } from '@/types/gql/graphql'
 import type {
   CatalogueItem,
   CatalogueItemsResponse
 } from '@/types/responses/catalogue'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import type { GetRowPropsReturnType } from '../../table/pandaTable/PandaTable'
 import { PandaTable } from '../../table/pandaTable/PandaTable'
 import { useCatalogueItemsColumns } from './CatalogueItems.columns'
-import type { GetCategoriesQuery } from '@/types/gql/graphql'
 
 interface CatalogueTableProps {
   hideButtons?: boolean

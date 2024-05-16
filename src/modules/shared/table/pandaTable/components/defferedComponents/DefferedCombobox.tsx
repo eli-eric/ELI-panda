@@ -8,8 +8,8 @@ import React, { useDeferredValue, useEffect, useState } from 'react'
 
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
-import { classNames } from '@/utils'
 import type { CodebookType } from '@/types/responses/codebook'
+import { classNames } from '@/utils'
 
 type ComboboxPropsT = {
   codebook?: CODEBOOK

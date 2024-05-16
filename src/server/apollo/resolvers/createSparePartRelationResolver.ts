@@ -1,8 +1,8 @@
 import { type Driver } from 'neo4j-driver'
 import type { TransactionPromise } from 'neo4j-driver-core'
+import type { JWT } from 'next-auth/jwt'
 
 import { ROLE } from '@/types/constants/roles'
-import type { JWT } from 'next-auth/jwt'
 
 const createSparePartRelationsResolver = async (
   _source: unknown,

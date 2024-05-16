@@ -1,19 +1,19 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
+import { TableDeleteButton } from '@/components/Buttons'
 import { LinkDecorator } from '@/components/decorators'
 import { Heading } from '@/components/layout/Heading'
+import usePermission from '@/hooks/usePermission'
+import useWarningModal from '@/hooks/useWarningModal'
+import { DescriptionCell } from '@/modules/shared/catalogue/table/cells/DescriptionCell'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PATH } from '@/types/constants/paths'
-
-import { AddRelatatedItemButton } from './AddRelatatedItemButton'
-import { TableDeleteButton } from '@/components/Buttons'
-import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
-import { DescriptionCell } from '@/modules/shared/catalogue/table/cells/DescriptionCell'
-import useWarningModal from '@/hooks/useWarningModal'
+
 import { useDisconnectRelatedItem } from '../../hooks/useDisconnectRelatedItem'
-import { useRouter } from 'next/router'
 import { useRelatedItems } from '../../hooks/useRelatedItems'
+import { AddRelatatedItemButton } from './AddRelatatedItemButton'
 
 export const RelatedItemsContainer = () => {
   const { data, refetch } = useRelatedItems()

@@ -1,4 +1,5 @@
 import { Tab } from '@headlessui/react'
+import { useQuery } from '@tanstack/react-query'
 import {
   forwardRef,
   Fragment,
@@ -20,7 +21,6 @@ import { ImageTabPanels } from './components/ImageTabPanels'
 import type { Config } from './types'
 import { getEndpoint } from './utils'
 import { useImageGallery } from './utils/useImageGallery'
-import { useQuery } from '@tanstack/react-query'
 
 type GalleryProps = {
   config: Config

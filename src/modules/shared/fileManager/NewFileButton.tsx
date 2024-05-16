@@ -1,9 +1,11 @@
-import { Button, PlusButton } from '@/components/Buttons'
-import { message } from '@/i18n/src/messages'
-import type { ModalButtons } from '@/types/form'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
 import type { FC } from 'react'
 import { Fragment, useEffect, useRef, useState } from 'react'
+
+import { Button, PlusButton } from '@/components/Buttons'
+import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { message } from '@/i18n/src/messages'
+import type { ModalButtons } from '@/types/form'
+
 import { useLinkCreate } from './hooks/useLinks'
 
 const buttons = message.common.buttons

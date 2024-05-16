@@ -1,12 +1,12 @@
+import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { ROLE } from '@/types/constants/roles'
+import { queryFetcher } from '@/utils/fetcher'
 
 import type { OrderDetailFormType } from '../types/form'
-import { useQuery } from '@tanstack/react-query'
-import { queryFetcher } from '@/utils/fetcher'
 
 const useOrderDetail = () => {
   const router = useRouter()

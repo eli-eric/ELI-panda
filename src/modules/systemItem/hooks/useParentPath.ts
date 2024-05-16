@@ -1,7 +1,8 @@
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { gql } from '@/types/gql'
-import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { useRouter } from 'next/router'
+
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
 const systemDetailQuery = gql(`
   query SystemDetailParent($where: SystemWhere) {

@@ -4,13 +4,12 @@ import { toast } from 'react-hot-toast'
 import { MinusButton, PlusButton } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
 import type { CodebookType } from '@/types/responses/codebook'
-
+import type { SystemDetail } from '@/types/responses/systems'
 import { classNames } from '@/utils'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
 import { SystemFilterButtonContainer } from '../systems/components/filters/SystemsFilterButton.cont'
 import { SystemsComponent } from '../systems/Systems.comp'
-import type { SystemDetail } from '@/types/responses/systems'
 import { SystemMovingModal } from './form/SystemMoving.modal'
 import { useSystemMovingStore } from './store/useSystemMovingStore'
 

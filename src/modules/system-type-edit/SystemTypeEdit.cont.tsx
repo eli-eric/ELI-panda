@@ -1,13 +1,14 @@
-import type { CodebookType } from '@/types/responses/codebook'
-
 import { useQuery } from '@tanstack/react-query'
-import { useState, type FC } from 'react'
-import { SystemTypeGroup } from './components/SystemTypeGroup'
-import type { SystemTypesResponse } from './types'
+import { type FC, useState } from 'react'
+
+import type { CodebookType } from '@/types/responses/codebook'
+import { queryFetcher } from '@/utils/fetcher'
+
 import { AddGroupButton } from './components/AddGroupButton'
 import { AddSystemTypeButton } from './components/AddSystemTypeButton'
+import { SystemTypeGroup } from './components/SystemTypeGroup'
 import { SystemTypeItem } from './components/SystemTypeItem'
-import { queryFetcher } from '@/utils/fetcher'
+import type { SystemTypesResponse } from './types'
 
 const SystemTypeEditContainer: FC = () => {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null)

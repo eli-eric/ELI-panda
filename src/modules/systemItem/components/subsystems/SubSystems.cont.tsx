@@ -7,9 +7,9 @@ import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PATH } from '@/types/constants/paths'
 import { classNames } from '@/utils'
 
+import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
 import { useSubSystemsColumns } from '../spare-parts/SpareParts.columns'
-import { useSystemDetail } from '../../hooks/useSystemDetail'
 
 export const SubSystemsContainer = () => {
   const tableId = 'subsystems'

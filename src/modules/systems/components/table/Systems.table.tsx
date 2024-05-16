@@ -2,18 +2,18 @@ import type { Row } from '@tanstack/react-table'
 import { Fragment, useCallback, useEffect } from 'react'
 
 import { Pagination } from '@/modules/shared/table/Pagination'
+import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type {
   GetRowPropsReturnType,
   PandaTableSettings
 } from '@/modules/shared/table/pandaTable/PandaTable'
+import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
+import type { SystemDetail } from '@/types/responses/systems'
 
 import { useSystems } from '../../hooks/useSystems'
-import type { SystemDetail } from '@/types/responses/systems'
 import { SearchBarButtons } from '../SearchBarButtons'
 import { useSystemsColumns } from './useSystemsColumns'
-import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
-import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
 
 interface Props {
   tableId: string

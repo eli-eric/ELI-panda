@@ -3,8 +3,8 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 
-import PropertyItem from './PropertyItem'
 import type { CategoryFormType } from '../../types'
+import PropertyItem from './PropertyItem'
 
 interface Props {
   name: `groups.${number}`

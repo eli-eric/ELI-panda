@@ -1,21 +1,21 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
 import type { MutableRefObject } from 'react'
 import { toast } from 'react-hot-toast'
 
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { addSubsystem } from '@/modules/systems/utils'
 import { PATH } from '@/types/constants/paths'
+import { gql } from '@/types/gql'
+import { Actions } from '@/types/gql/graphql'
+import type { SystemsResponse } from '@/types/responses/systems'
+import { navigateBack } from '@/utils'
 import { connectN, whereC, whereN } from '@/utils/graphql/mutations'
 
 import type { SystemDetailFormType } from '../types/form'
-import { navigateBack } from '@/utils'
-import { useQueryClient } from '@tanstack/react-query'
-import type { SystemsResponse } from '@/types/responses/systems'
-import { gql } from '@/types/gql'
-import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
-import { Actions } from '@/types/gql/graphql'
 
 const createSystemMutation = gql(`
   mutation CreateSystems($input: [SystemCreateInput!]!) {

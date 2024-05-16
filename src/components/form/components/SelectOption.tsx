@@ -2,7 +2,6 @@ import { CheckIcon } from '@heroicons/react/24/outline'
 
 import { Tooltip } from '@/components/Tooltip'
 import type { CodebookType } from '@/types/responses/codebook'
-
 import { classNames } from '@/utils'
 
 type Props = {

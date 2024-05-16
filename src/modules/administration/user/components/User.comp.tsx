@@ -2,11 +2,10 @@ import { Form } from '@/components/form/Form'
 import Card from '@/components/layout/Card'
 import { PageHead } from '@/components/layout/PageHead'
 import { PageHeaderButtons } from '@/components/layout/PageHead.buttons'
-import type { CodebookType } from '@/types/responses/codebook'
-
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import type { GetRolesQuery } from '@/types/gql/graphql'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { UserForm } from './form/User.form'
 import { UserRoles } from './UserRoles'

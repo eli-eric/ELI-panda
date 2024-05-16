@@ -1,9 +1,10 @@
 import { useSession } from 'next-auth/react'
+import { useEffect } from 'react'
+import toast from 'react-hot-toast'
+
+import { gql } from '@/types/gql'
 
 import { useGraphQL } from '../fetch/useGraphQL'
-import { gql } from '@/types/gql'
-import toast from 'react-hot-toast'
-import { useEffect } from 'react'
 
 const GET_FILTERS = gql(`
   query UserSettings($userSettingsWhere: UserSettingsWhere) {

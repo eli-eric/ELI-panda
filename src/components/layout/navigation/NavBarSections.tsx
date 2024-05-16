@@ -1,4 +1,5 @@
 import { Bars3Icon, PowerIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
@@ -8,6 +9,7 @@ import { DarkModeSwitch } from '@/components/DarkModeSwitch'
 import EliLogoComponent from '@/components/eli-logo.comp'
 import { NAV_BAR_CONFIG, PATH, USER_NAVIGATION } from '@/types/constants/paths'
 import { classNames } from '@/utils'
+import { queryFetcher } from '@/utils/fetcher'
 
 import {
   NavBarButton,
@@ -15,8 +17,6 @@ import {
   NavBarMultiLink,
   SupportLink
 } from './NavBarItems'
-import { useQuery } from '@tanstack/react-query'
-import { queryFetcher } from '@/utils/fetcher'
 
 interface NavBarHeaderProps {
   isExpanded: boolean

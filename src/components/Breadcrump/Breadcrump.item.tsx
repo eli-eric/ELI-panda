@@ -3,8 +3,8 @@ import Link from 'next/link'
 
 import type { Maybe } from '@/types/gql/graphql'
 import { SystemLevel } from '@/types/gql/graphql'
-import { classNames } from '@/utils'
 import type { CodebookType } from '@/types/responses/codebook'
+import { classNames } from '@/utils'
 
 interface Props {
   name?: Maybe<string>

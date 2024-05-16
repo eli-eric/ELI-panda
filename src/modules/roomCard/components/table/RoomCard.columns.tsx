@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { ROLE } from '@/types/constants/roles'
 import type { Employee, HallContactPerson, Team } from '@/types/gql/graphql'
+import { formatPhoneNumber } from '@/utils/formatters'
 
 import { useRoomCardStore } from '../../store/useRoomCardStore'
 import { CellInput } from './CellInput'
@@ -11,7 +12,6 @@ import { CellWithDelete } from './CellWithDelete'
 import { ContactHallButton } from './ContactHallButton'
 import { HeaderAddButton } from './HeaderAddButton'
 import { TeamButton } from './TeamButton'
-import { formatPhoneNumber } from '@/utils/formatters'
 
 export type RoomCardProperties = {
   name: string

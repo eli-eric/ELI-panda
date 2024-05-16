@@ -1,8 +1,7 @@
-import type { CodebookType } from '@/types/responses/codebook'
-
 import type { EmployeeType } from '@/modules/roomCard/types/form'
-import type { PhysicalItem } from '@/types/responses/systems'
 import type { SystemLevel } from '@/types/gql/graphql'
+import type { CodebookType } from '@/types/responses/codebook'
+import type { PhysicalItem } from '@/types/responses/systems'
 
 export type SystemDetailFormType = {
   uid?: string | null

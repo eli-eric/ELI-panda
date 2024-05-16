@@ -9,10 +9,10 @@ import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
+import type { Order } from '@/types/responses/orders'
 import { createMessageValues } from '@/utils/formatters'
 
 import { useOrders } from '../hooks/useOrders'
-import type { Order } from '../types'
 
 const buttonsMessage = message.common.buttons
 const modalMessage = message.ordersPage.deleteModal

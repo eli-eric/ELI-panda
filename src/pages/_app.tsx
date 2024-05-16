@@ -1,25 +1,24 @@
 import '../styles/globals.css'
 
+import {
+  HydrationBoundary,
+  QueryClient,
+  QueryClientProvider
+} from '@tanstack/react-query'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
-import { Suspense, lazy, useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { Toaster } from 'react-hot-toast'
 import { IntlProvider } from 'react-intl'
 import { messages } from 'src/i18n/src'
 
+import { Layout } from '@/components/layout/Layout'
 import { Notification } from '@/components/Notifications/Notification'
 import { GenereralModal } from '@/components/overlays/modal/modal.comp'
 import { WarningModal } from '@/components/WarningModal'
 import { useLocale } from '@/hooks/useLocale'
-import { Layout } from '@/components/layout/Layout'
-
-import {
-  HydrationBoundary,
-  QueryClient,
-  QueryClientProvider
-} from '@tanstack/react-query'
 
 const ReactQueryDevtoolsProduction = lazy(() =>
   import('@tanstack/react-query-devtools/build/modern/production.js').then(

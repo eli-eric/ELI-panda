@@ -3,13 +3,13 @@ import { Fragment } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
+import type { CodebookType } from '@/types/responses/codebook'
 
+import type { CategoryFormType } from '../types'
+import { categoryValidationschema } from './CategoryEditForm.schema'
 import GroupList from './components/GroupList'
 import Main from './components/Main'
 import { PhysicalItemProperties } from './components/PhysicalItemProperties'
-import { categoryValidationschema } from './CategoryEditForm.schema'
-import type { CategoryFormType } from '../types'
-import type { CodebookType } from '@/types/responses/codebook'
 
 interface Props {
   uid?: string

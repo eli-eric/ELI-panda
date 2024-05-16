@@ -1,4 +1,5 @@
 import { TrashIcon } from '@heroicons/react/24/outline'
+import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 import { startTransition, useCallback, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
@@ -8,9 +9,9 @@ import { Button } from '@/components/Buttons'
 import ImagePlaceHolder from '@/components/form/ImagePlaceHolder'
 import { Input } from '@/components/form/Input'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
-import type { CategoryFormType } from '../../types'
-import { useQuery } from '@tanstack/react-query'
 import { queryFetcher } from '@/utils/fetcher'
+
+import type { CategoryFormType } from '../../types'
 
 interface FormImageProps {
   image: string

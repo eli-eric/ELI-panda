@@ -5,9 +5,9 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { useOrders } from '@/modules/orders/hooks/useOrders'
 import { PATH } from '@/types/constants/paths'
+import { navigateBack } from '@/utils'
 
 import useOrderDetail from './useOrderDetail'
-import { navigateBack } from '@/utils'
 
 export const useOrderSubmit = () => {
   const router = useRouter()

@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -9,14 +10,13 @@ import {
   filterSubsystem,
   filterSubsystemFromSubsystems
 } from '@/modules/systems/utils'
+import type { SystemDetail } from '@/types/responses/systems'
 import { whereC, whereN } from '@/utils/graphql/mutations'
 
 import { useSystemMutation } from '../hooks/useSystemMutate'
 import { useSystemMovingStore } from '../store/useSystemMovingStore'
 import type { SystemMovingFormType } from '../SystemsMoving.cont'
 import { SystemMovingForm } from './SystemMoving.form'
-import { useQueryClient } from '@tanstack/react-query'
-import type { SystemDetail } from '@/types/responses/systems'
 
 interface Props {
   open: boolean

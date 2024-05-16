@@ -6,12 +6,12 @@ import { Fragment, useMemo } from 'react'
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import { PATH } from '@/types/constants/paths'
+import type { SystemDetail } from '@/types/responses/systems'
 import { classNames } from '@/utils'
 
 import { IconCell } from '../systems/components/table/cells/IconCell'
 import { useSubsystems } from '../systems/hooks/useSubsystems'
 import type { ITEM_USAGE } from '../systems/types/constants'
-import type { SystemDetail } from '@/types/responses/systems'
 import { SpareNameCell } from './components/NameCell'
 
 // eslint-disable-next-line

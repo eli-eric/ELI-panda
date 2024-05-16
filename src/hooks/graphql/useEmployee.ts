@@ -1,4 +1,5 @@
 import { gql } from '@/types/gql'
+
 import { useGraphQL } from '../fetch/useGraphQL'
 
 const GET_EMPLOYEE = gql(`

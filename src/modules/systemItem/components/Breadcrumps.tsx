@@ -2,9 +2,8 @@ import { Fragment } from 'react'
 
 import BreadcrumpContainer from '@/components/Breadcrump/Breadcrump.cont'
 import BreadcrumpItem from '@/components/Breadcrump/Breadcrump.item'
-import type { CodebookType } from '@/types/responses/codebook'
-
 import { PATH } from '@/types/constants/paths'
+import type { CodebookType } from '@/types/responses/codebook'
 
 interface BreadcrumbsProps {
   parentPath?: CodebookType[]

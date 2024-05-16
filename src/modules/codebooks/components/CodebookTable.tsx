@@ -1,19 +1,18 @@
 'use client'
+import type { QueryKey } from '@tanstack/react-query'
 import { type ColumnDef } from '@tanstack/react-table'
 import type { FC } from 'react'
 import { useMemo } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import type { CodebookType } from '@/types/responses/codebook'
-
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
 import type { CODEBOOK } from '@/types/constants/codebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { FormCell } from './cells/FormCell'
-import type { QueryKey } from '@tanstack/react-query'
 
 interface Props {
   lastAddedUUID?: string

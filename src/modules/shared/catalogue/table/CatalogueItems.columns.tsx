@@ -3,8 +3,6 @@ import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
-import type { CodebookType } from '@/types/responses/codebook'
-
 import { message } from '@/i18n/src/messages'
 import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
@@ -14,6 +12,7 @@ import type {
   CatalogueItem,
   CatalogueItemsResponse
 } from '@/types/responses/catalogue'
+import type { CodebookType } from '@/types/responses/codebook'
 import { classNames } from '@/utils'
 
 import { CategoryName } from './cells/CategoryNameCell'

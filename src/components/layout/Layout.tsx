@@ -1,12 +1,14 @@
 import {
-  startTransition,
-  useEffect,
   type FC,
-  type PropsWithChildren
+  type PropsWithChildren,
+  startTransition,
+  useEffect
 } from 'react'
-import { SidebarNavigation } from './navigation/SideBarNavigation'
-import { NavigationMobile } from './navigation/NavigationMobile'
+
 import { useDarkModeStore } from '@/store/useDarkModeStore'
+
+import { NavigationMobile } from './navigation/NavigationMobile'
+import { SidebarNavigation } from './navigation/SideBarNavigation'
 
 export const Layout: FC<PropsWithChildren> = ({ children }) => {
   const { setStoredTheme } = useDarkModeStore()

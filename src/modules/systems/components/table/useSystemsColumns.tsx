@@ -7,10 +7,10 @@ import { Tooltip } from '@/components/Tooltip'
 import usePermission from '@/hooks/usePermission'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
+import type { SystemDetail } from '@/types/responses/systems'
 
 import { useSubsystems } from '../../hooks/useSubsystems'
 import type { ITEM_USAGE } from '../../types/constants'
-import type { SystemDetail } from '@/types/responses/systems'
 import { IconCell } from './cells/IconCell'
 // eslint-disable-next-line
 import { SystemNameCell } from './cells/SystemNameCell'

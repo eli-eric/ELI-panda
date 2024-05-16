@@ -1,13 +1,13 @@
+import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 
+import { FALLBACK_IMAGE } from '@/types/constants/general'
+import type { GetCategoriesQuery } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
+import { classNames } from '@/utils'
+import { queryFetcher } from '@/utils/fetcher'
 
 import { CategoryButtons } from '../categoryEdit/components/CategoryButtons'
-import type { GetCategoriesQuery } from '@/types/gql/graphql'
-import { FALLBACK_IMAGE } from '@/types/constants/general'
-import { useQuery } from '@tanstack/react-query'
-import { queryFetcher } from '@/utils/fetcher'
-import { classNames } from '@/utils'
 
 interface Props {
   category: GetCategoriesQuery['catalogueCategories'][0]

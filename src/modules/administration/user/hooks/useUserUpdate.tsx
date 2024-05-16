@@ -1,5 +1,5 @@
-import { gql } from '@/types/gql'
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
 const UPDATE_USER = gql(`
   mutation UpdateUsers($where: UserWhere, $update: UserUpdateInput) {

@@ -1,16 +1,16 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
+import Link from 'next/link'
 import { Fragment, useMemo } from 'react'
 import { FormattedDate, useIntl } from 'react-intl'
 
+import { LinkDecorator } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import { message } from '@/i18n/src/messages'
-
-import type { Order } from '../types'
-import { DeliveryStatusMapping } from '../types'
-import Link from 'next/link'
 import { PATH } from '@/types/constants/paths'
-import { LinkDecorator } from '@/components/decorators'
+import type { Order } from '@/types/responses/orders'
+
+import { DeliveryStatusMapping } from '../types'
 import { NameCell } from './cells/NameCell'
 
 const messages = message.ordersPage.ordersTable.header

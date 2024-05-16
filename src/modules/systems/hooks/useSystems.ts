@@ -1,12 +1,14 @@
-import useQueryManager from '../../../hooks/useQueryManager'
-import type { SystemsResponse } from '@/types/responses/systems'
 import {
   keepPreviousData,
   useQuery,
   useQueryClient
 } from '@tanstack/react-query'
+
+import type { SystemsResponse } from '@/types/responses/systems'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
+
+import useQueryManager from '../../../hooks/useQueryManager'
 
 export const useSystems = tableId => {
   const { query } = useQueryManager(tableId)

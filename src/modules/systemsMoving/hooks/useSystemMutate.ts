@@ -1,6 +1,7 @@
+import toast from 'react-hot-toast'
+
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
-import toast from 'react-hot-toast'
 
 const UPDATE_SYSTEM = gql(`
   mutation UpdateSystemParentMutation(

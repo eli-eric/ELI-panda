@@ -3,13 +3,12 @@ import { startTransition, useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
-import type { CodebookType } from '@/types/responses/codebook'
-
 import { message } from '@/i18n/src/messages'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { ModalButtons } from '@/types/form'
+import type { CodebookType } from '@/types/responses/codebook'
 import { classNames } from '@/utils'
 
 import { ExpandableNameCell } from './ExpandableNameCell'

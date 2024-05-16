@@ -1,13 +1,14 @@
-import { useState, type FC } from 'react'
+import { useRouter } from 'next/router'
+import { type FC, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { message } from '@/i18n/src/messages'
 import CatalogueTableSelect from '@/modules/shared/catalogue/table/CatalogueTableSelect'
 import type { ModalButtons } from '@/types/form'
 import type { CatalogueItem } from '@/types/responses/catalogue'
+
 import { useCreateRelatedItem } from '../../hooks/useCreateRelatedItem'
-import { useRouter } from 'next/router'
-import toast from 'react-hot-toast'
-import { message } from '@/i18n/src/messages'
 import { useRelatedItems } from '../../hooks/useRelatedItems'
 
 const messages = message.common.buttons

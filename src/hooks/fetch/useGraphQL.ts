@@ -1,5 +1,4 @@
 import { type TypedDocumentNode } from '@graphql-typed-document-node/core'
-import { request } from 'graphql-request'
 import type {
   MutationFunction,
   UseMutationOptions,
@@ -9,8 +8,8 @@ import type {
 import {
   useMutation,
   useQuery,
-  type UseQueryResult
-} from '@tanstack/react-query'
+  type UseQueryResult} from '@tanstack/react-query'
+import { request } from 'graphql-request'
 
 type Variables = Record<string, any> | undefined
 

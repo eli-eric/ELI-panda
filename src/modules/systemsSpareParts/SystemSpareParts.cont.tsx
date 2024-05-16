@@ -4,6 +4,7 @@ import toast from 'react-hot-toast'
 import { Button } from '@/components/Buttons'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import useWarningModal from '@/hooks/useWarningModal'
+import type { SystemDetail } from '@/types/responses/systems'
 import { classNames } from '@/utils'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
@@ -18,7 +19,6 @@ import {
 } from '../systemItem/utils'
 import { SystemFilterButtonContainer } from '../systems/components/filters/SystemsFilterButton.cont'
 import { useSystems } from '../systems/hooks/useSystems'
-import type { SystemDetail } from '@/types/responses/systems'
 import { useAssignSpareParts } from './hooks/useAssignSpareParts'
 import { useSystemsSparePartsColumns } from './SystemSpareParts.columns'
 

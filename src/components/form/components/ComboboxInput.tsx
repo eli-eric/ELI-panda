@@ -2,7 +2,6 @@ import { Combobox } from '@headlessui/react'
 import type { FieldError } from 'react-hook-form'
 
 import type { CodebookType } from '@/types/responses/codebook'
-
 import { classNames } from '@/utils'
 
 interface Props {

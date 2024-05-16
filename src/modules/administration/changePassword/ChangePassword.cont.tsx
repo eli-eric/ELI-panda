@@ -9,10 +9,10 @@ import * as yup from 'yup'
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/Input'
-
-import { useUserUpdate } from '../user/hooks/useUserUpdate'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
+
+import { useUserUpdate } from '../user/hooks/useUserUpdate'
 
 type FormType = {
   currentPassword: string

@@ -6,9 +6,9 @@ import { SearchBarButtonsComponent } from '@/modules/shared/table/SearchBar'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
-import { CatalogueFilterButtonContainer } from './filters/CatalogueFilterButton.cont'
-import { useCategoryUid } from '../hooks/useCategoryUid'
 import { useCatalogueItems } from '../hooks/useCatalogueItems'
+import { useCategoryUid } from '../hooks/useCategoryUid'
+import { CatalogueFilterButtonContainer } from './filters/CatalogueFilterButton.cont'
 
 interface SearchBarButtonsProps {
   filterFormMethods: UseFormReturn<any, any, any>

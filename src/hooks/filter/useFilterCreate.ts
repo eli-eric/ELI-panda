@@ -1,6 +1,7 @@
-import { useFilterDetails } from './useFilterDetails'
-import { useGraphQLMutation } from '../fetch/useGraphQL'
 import { gql } from '@/types/gql'
+
+import { useGraphQLMutation } from '../fetch/useGraphQL'
+import { useFilterDetails } from './useFilterDetails'
 
 const createFilterMutation = gql(`
   mutation CreateFilterMutation($input: [UserSettingsCreateInput!]!) {

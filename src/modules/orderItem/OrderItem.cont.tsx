@@ -6,11 +6,13 @@ import { useIntl } from 'react-intl'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { Form } from '@/components/form/Form'
+import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
+import { ROLE } from '@/types/constants/roles'
 import { convertDate } from '@/utils/formatters'
 
 import FileManager from '../shared/fileManager/FileManager'
@@ -20,8 +22,6 @@ import OrderLinesTable from './components/orderLines/OrderLines.table'
 import useOrderDetail from './hooks/useOrderDetail'
 import { useOrderSubmit } from './hooks/useOrderSubmit'
 import type { OrderDetailFormType } from './types/form'
-import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
-import { ROLE } from '@/types/constants/roles'
 
 const messages = message.ordersPage
 

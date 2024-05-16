@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react'
 
-import useTableStateStore from '@/store/useTableStateStore'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import useTableStateStore from '@/store/useTableStateStore'
 import { gql } from '@/types/gql'
 
 const GET_LOCATIONS = gql(`

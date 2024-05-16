@@ -1,9 +1,10 @@
-import axiosInstance from '@/core/axios/axiosInstance'
-import type { PhysicalItemProperty } from '@/types/responses/systems'
-import { BASE_URL } from '@/types/constants/common'
-import toast from 'react-hot-toast'
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
+import toast from 'react-hot-toast'
+
+import axiosInstance from '@/core/axios/axiosInstance'
+import { BASE_URL } from '@/types/constants/common'
+import type { PhysicalItemProperty } from '@/types/responses/systems'
 
 const getItemProperties = async (uid?: string) => {
   const endpoint = `/physical-item/${uid}/properties`

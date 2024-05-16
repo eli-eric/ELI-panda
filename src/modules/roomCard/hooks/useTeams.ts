@@ -1,7 +1,8 @@
-import { toast } from 'react-hot-toast'
-import { gql } from '@/types/gql'
-import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { useEffect } from 'react'
+import { toast } from 'react-hot-toast'
+
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 const teamsQuery = gql(`
   query TeamsQuery {
     teams {

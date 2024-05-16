@@ -1,5 +1,6 @@
 import { startTransition, useEffect } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 import { Button } from '@/components/Buttons'
 import CheckBox from '@/components/form/CheckBox'
@@ -7,13 +8,12 @@ import Combobox from '@/components/form/Combobox'
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { useEmployee } from '@/hooks/graphql/useEmployee'
+import { gql } from '@/types/gql'
 import { generatePassword } from '@/utils'
 
 import { useUserFormFields } from './User.fields'
-import { useGraphQL } from '@/hooks/fetch/useGraphQL'
-import { gql } from '@/types/gql'
-import toast from 'react-hot-toast'
-import { useEmployee } from '@/hooks/graphql/useEmployee'
 
 const GET_FACILITIES = gql(`
   query GetFacilities {

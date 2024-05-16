@@ -1,6 +1,7 @@
 import type { SystemDetailFragment } from '@/types/gql/graphql'
-import type { SystemDetailFormType } from '../types/form'
 import { connectAndDisconnectNode } from '@/utils/graphql/mutations'
+
+import type { SystemDetailFormType } from '../types/form'
 
 export const makeSystemInputBody = ({
   systemForm,

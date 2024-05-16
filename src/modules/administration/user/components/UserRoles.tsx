@@ -4,9 +4,8 @@ import { useForm } from 'react-hook-form'
 import CheckBox from '@/components/form/CheckBox'
 import { Form } from '@/components/form/Form'
 import Card from '@/components/layout/Card'
-import type { CodebookType } from '@/types/responses/codebook'
-
 import type { GetRolesQuery } from '@/types/gql/graphql'
+import type { CodebookType } from '@/types/responses/codebook'
 
 type Props = {
   addRole: (role: CodebookType) => void

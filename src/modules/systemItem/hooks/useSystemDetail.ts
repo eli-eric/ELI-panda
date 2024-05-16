@@ -1,14 +1,14 @@
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { gql, useFragment } from '@/types/gql'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
-import { useRouter } from 'next/router'
+import { gql, useFragment } from '@/types/gql'
 import {
   CatalogueItemFragment,
   SystemDetailFragment
 } from '@/utils/graphql/fragments'
-import { useEffect } from 'react'
 
 const systemDetailQuery = gql(`
   query SystemDetail($where: SystemWhere) {

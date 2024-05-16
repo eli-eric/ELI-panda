@@ -1,8 +1,10 @@
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { useEffect, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
+
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
+import { useSubmit } from '@/hooks/fetch/useSubmit'
+
 import { useSystemDetail } from './useSystemDetail'
 
 type SystemCodeGenerateQuery = {

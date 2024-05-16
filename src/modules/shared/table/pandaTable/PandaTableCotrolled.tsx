@@ -1,5 +1,5 @@
 import type { Row, Table } from '@tanstack/react-table'
-import { createContext, Fragment } from 'react'
+import { createContext,Fragment } from 'react'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
@@ -13,8 +13,7 @@ import { TableSettings } from './components/TableSettings'
 import {
   defaultPropGetter,
   type GetRowPropsReturnType,
-  type PandaTableSettings
-} from './PandaTable'
+  type PandaTableSettings} from './PandaTable'
 
 type PandaTableContextType = {
   settings: PandaTableSettings<any>

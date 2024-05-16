@@ -1,5 +1,6 @@
-import { classNames } from '@/utils'
 import type { FC, PropsWithChildren } from 'react'
+
+import { classNames } from '@/utils'
 
 interface Props {
   className?: string

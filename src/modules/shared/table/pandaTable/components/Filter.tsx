@@ -1,9 +1,8 @@
 import type { Column, Table } from '@tanstack/react-table'
 import { useCallback } from 'react'
 
-import type { CodebookType } from '@/types/responses/codebook'
-
 import type { CODEBOOK } from '@/types/constants/codebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { DefferedCombobox } from './defferedComponents/DefferedCombobox'
 import { DefferedInput } from './defferedComponents/DefferedInput'

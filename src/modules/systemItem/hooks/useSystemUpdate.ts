@@ -1,31 +1,30 @@
+import {
+  useMutation as useQueryMutation,
+  useQueryClient} from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import type { MutableRefObject } from 'react'
 import { toast } from 'react-hot-toast'
 
+import axiosInstance from '@/core/axios/axiosInstance'
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { updateSubSystem, updateSystem } from '@/modules/systems/utils'
-import { PATH } from '@/types/constants/paths'
-import { connectAndDisconnectNode, whereN } from '@/utils/graphql/mutations'
-import { makeSystemInputBody } from './utils'
-
-import { useSystemItemStore } from '../store/useSystemItemStore'
-import type { SystemDetailFormType } from '../types/form'
-import { navigateBack } from '@/utils'
-import axiosInstance from '@/core/axios/axiosInstance'
 import { BASE_URL } from '@/types/constants/common'
-import {
-  useQueryClient,
-  useMutation as useQueryMutation
-} from '@tanstack/react-query'
+import { PATH } from '@/types/constants/paths'
+import { gql } from '@/types/gql'
 import type {
   PhysicalItemProperty,
   SystemDetail,
   SystemsResponse
 } from '@/types/responses/systems'
+import { navigateBack } from '@/utils'
+import { connectAndDisconnectNode, whereN } from '@/utils/graphql/mutations'
+
+import { useSystemItemStore } from '../store/useSystemItemStore'
+import type { SystemDetailFormType } from '../types/form'
 import { useSystemDetail } from './useSystemDetail'
-import { gql } from '@/types/gql'
-import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { makeSystemInputBody } from './utils'
 
 const systemDetailMutation = gql(`
   mutation UpdateSystemMutation(

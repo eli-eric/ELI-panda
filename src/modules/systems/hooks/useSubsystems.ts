@@ -1,11 +1,12 @@
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 
 import type { SystemDetail, SystemsResponse } from '@/types/responses/systems'
-import { useSystems } from './useSystems'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
+
 import { addSubsystems } from '../utils'
+import { useSystems } from './useSystems'
 
 export const useSubsystems = tableId => {
   const [uid, setUid] = useState<string | null>(null)

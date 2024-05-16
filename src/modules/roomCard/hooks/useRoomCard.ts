@@ -1,8 +1,8 @@
+import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql } from '@/types/gql'
-import { useEffect } from 'react'
 
 export const roomCardQuery = gql(`
   query RoomCardQuery($where: RoomCardWhere) {

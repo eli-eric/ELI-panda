@@ -5,13 +5,12 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
-
 import {
   defaultBoolOptions,
   PROPERTY_INPUT_TYPE,
-  PROPERTY_TYPE
-} from '@/types/catalogue/constants'
+  PROPERTY_TYPE} from '@/types/catalogue/constants'
 import { CODEBOOK } from '@/types/constants/codebook'
+
 import type { CategoryFormType } from '../../types'
 import MoveButtons from './MoveButtons'
 

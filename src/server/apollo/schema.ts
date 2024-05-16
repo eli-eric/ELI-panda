@@ -1,10 +1,10 @@
 import { Neo4jGraphQL } from '@neo4j/graphql'
+import { readFileSync } from 'fs'
+import path from 'path'
 
 import getDriver from '@/utils/neo4j'
 
 import resolvers from './resolvers'
-import { readFileSync } from 'fs'
-import path from 'path'
 
 const driver = getDriver()
 

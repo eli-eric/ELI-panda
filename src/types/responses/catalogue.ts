@@ -1,6 +1,5 @@
-import type { CodebookType } from '@/types/responses/codebook'
-
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
+import type { CodebookType } from '@/types/responses/codebook'
 
 export interface CatalogueItem {
   uid: string

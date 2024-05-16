@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+
 import { queryFetcher } from '@/utils/fetcher'
 
 export const useMinMaxPrice = () => {

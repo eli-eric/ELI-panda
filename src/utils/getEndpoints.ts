@@ -1,4 +1,5 @@
 import type { CODEBOOK } from '@/types/constants/codebook'
+
 import { makeQuery } from './formatters'
 
 export interface EndpointProps {

@@ -1,7 +1,8 @@
-import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
-import { gql } from '@/types/gql'
 import { useFormContext } from 'react-hook-form'
 import toast from 'react-hot-toast'
+
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
 const clearSystemCodeMutation = gql(`
   mutation ClearSystemCodeMutation(

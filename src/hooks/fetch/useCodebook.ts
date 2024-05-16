@@ -1,3 +1,5 @@
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type {
   CodebookQuery,
@@ -5,8 +7,6 @@ import type {
 } from '@/types/responses/codebook'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
-
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
 export const useCodebook = (codebookName?: CODEBOOK, query?: CodebookQuery) => {
   const filterString = JSON.stringify(query?.filter || '')

@@ -1,7 +1,7 @@
 import toast from 'react-hot-toast'
 
-import { gql } from '@/types/gql'
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
 const ASSIGN_SPARE_PARTS = gql(`
   mutation CreateSparePartRelation($fromSystemIds: [ID!]!, $toSystemIds: [ID!]!) {

@@ -8,11 +8,10 @@ import { useDebounce } from 'usehooks-ts'
 import Combobox from '@/components/form/Combobox'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
-import type { CodebookType } from '@/types/responses/codebook'
-
 import { message } from '@/i18n/src/messages'
 import useTableStateStore from '@/store/useTableStateStore'
 import { CODEBOOK } from '@/types/constants/codebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import type { QueryFilter } from '../types'
 

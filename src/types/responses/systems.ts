@@ -1,7 +1,6 @@
-import type { CodebookType } from '@/types/responses/codebook'
-
 import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 import type { SystemLevel } from '@/types/gql/graphql'
+import type { CodebookType } from '@/types/responses/codebook'
 
 export type SystemsResponse = {
   data: SystemDetail[]

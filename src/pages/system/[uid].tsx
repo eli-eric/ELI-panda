@@ -4,10 +4,10 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import { SystemItemContainer } from '@/modules/systemItem/SystemItem.cont'
-import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
-import LoaderComponent from '@/components/loader.comp'
 import ErrorPage from '@/components/error/ErrorPage'
+import LoaderComponent from '@/components/loader.comp'
+import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
+import { SystemItemContainer } from '@/modules/systemItem/SystemItem.cont'
 
 const messages = message.systemItem
 

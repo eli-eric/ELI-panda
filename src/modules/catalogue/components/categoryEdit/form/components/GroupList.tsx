@@ -4,9 +4,9 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/Input'
 
+import type { CategoryFormType } from '../../types'
 import MoveButtons from './MoveButtons'
 import PropertyList from './PropertyList'
-import type { CategoryFormType } from '../../types'
 
 interface groupProps {
   name: `groups.${number}`

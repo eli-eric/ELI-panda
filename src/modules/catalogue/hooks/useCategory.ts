@@ -1,8 +1,10 @@
-import { useCategoryUid } from './useCategoryUid'
-import { useGraphQL } from '@/hooks/fetch/useGraphQL'
-import { gql } from '@/types/gql'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
+
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
+
+import { useCategoryUid } from './useCategoryUid'
 
 const GET_CATEGORIES = gql(`
   query GetCategory($uid: ID = null) {

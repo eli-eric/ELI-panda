@@ -1,4 +1,5 @@
 import { gql } from '@/types/gql'
+
 import { useGraphQLMutation } from '../fetch/useGraphQL'
 
 const deleteFilterMutation = gql(`

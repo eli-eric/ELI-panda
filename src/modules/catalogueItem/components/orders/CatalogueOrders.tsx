@@ -1,11 +1,11 @@
+import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
 import { Heading } from '@/components/layout/Heading'
 import { useOrderColumns } from '@/modules/orders/components/OrderColumns'
-import type { Order } from '@/modules/orders/types'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
-import { useQuery } from '@tanstack/react-query'
+import type { Order } from '@/types/responses/orders'
 import { queryFetcher } from '@/utils/fetcher'
 
 export const CatalogueOrders = () => {

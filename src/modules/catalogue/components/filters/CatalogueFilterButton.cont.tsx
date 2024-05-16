@@ -9,13 +9,12 @@ import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver'
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
-import type { CodebookType } from '@/types/responses/codebook'
-
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { useFormControlStore } from '@/store/useFormControlStore'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { CatalogueFilterForm } from './form/CatalogueFilter.form'
 
