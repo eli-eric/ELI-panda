@@ -1,7 +1,8 @@
 import { Combobox } from '@headlessui/react'
 import type { FieldError } from 'react-hook-form'
 
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
+
 import { classNames } from '@/utils'
 
 interface Props {
@@ -14,7 +15,15 @@ interface Props {
   isFilter?: boolean
 }
 
-export const ComboboxInput = ({ value, placeholder, disabled, error, onChange, rounded, isFilter }: Props) => (
+export const ComboboxInput = ({
+  value,
+  placeholder,
+  disabled,
+  error,
+  onChange,
+  rounded,
+  isFilter
+}: Props) => (
   <Combobox.Input
     onChange={onChange}
     displayValue={(item: CodebookType) => item?.name}

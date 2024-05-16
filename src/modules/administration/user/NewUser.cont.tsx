@@ -3,7 +3,8 @@ import bcrypt from 'bcryptjs-react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
+
 import { ROLE } from '@/types/constants/roles'
 import type { GetRolesQuery, UserCreateInput } from '@/types/gql/graphql'
 import { whereC, whereN } from '@/utils/graphql/mutations'

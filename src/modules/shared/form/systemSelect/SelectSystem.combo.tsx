@@ -3,7 +3,8 @@ import { useFormContext } from 'react-hook-form'
 
 import Listbox from '@/components/form/Listbox'
 import { Modal } from '@/components/overlays/modal/modal.comp'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
+
 import { message } from '@/i18n/src/messages'
 import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
 import type { CODEBOOK } from '@/types/constants/codebook'
@@ -27,7 +28,9 @@ export const SelectSystemComboBox = ({
   isFilter?: boolean
 }) => {
   const [open, setOpen] = useState(false)
-  const [selectedSystem, setSelectedSystem] = useState<CodebookType | null>(null)
+  const [selectedSystem, setSelectedSystem] = useState<CodebookType | null>(
+    null
+  )
   const { setValue } = useFormContext()
 
   const buttons: ModalButtons = {
@@ -69,7 +72,10 @@ export const SelectSystemComboBox = ({
           }}
           getRowProps={row => ({
             onClick: () => {
-              setSelectedSystem({ name: row.original.name, uid: row.original.uid })
+              setSelectedSystem({
+                name: row.original.name,
+                uid: row.original.uid
+              })
             },
             className: classNames(
               selectedSystem?.uid === row.original.uid

@@ -3,7 +3,8 @@ import { toast } from 'react-hot-toast'
 
 import { MinusButton, PlusButton } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
+
 import { classNames } from '@/utils'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
@@ -29,12 +30,16 @@ export type SystemMovingFormType = {
 }
 
 export const SystemsMovingContainer = () => {
-  const { tableIdLeft, tableIdRight, setChildSystem, setParentSystem } = useSystemMovingStore()
+  const { tableIdLeft, tableIdRight, setChildSystem, setParentSystem } =
+    useSystemMovingStore()
   const [openModal, setOpenModal] = useState(false)
 
   const onDropHandler = useCallback(
     (from: SystemsMovingType, to: SystemsMovingType) => {
-      const isNotAllowedToMove = to.parentPath?.some(parent => parent.uid === from.uid) || from.uid === to.uid || false
+      const isNotAllowedToMove =
+        to.parentPath?.some(parent => parent.uid === from.uid) ||
+        from.uid === to.uid ||
+        false
       if (isNotAllowedToMove) {
         toast.error('System cannot be moved under itself or its sub-systems')
         return
@@ -54,7 +59,12 @@ export const SystemsMovingContainer = () => {
 
   return (
     <Fragment>
-      <div className={classNames('grid', showLeft && showRight ? 'grid-cols-2' : 'grid-cols-1')}>
+      <div
+        className={classNames(
+          'grid',
+          showLeft && showRight ? 'grid-cols-2' : 'grid-cols-1'
+        )}
+      >
         {showLeft && (
           <SystemsComponent
             tableId={tableIdLeft}
@@ -63,7 +73,12 @@ export const SystemsMovingContainer = () => {
             className="border-r-4 border-gray-400"
             dropSettings={{ onDropHandler, accept: 'system' }}
             enableQueryURL={false}
-            LeftSearchBarElement={() => <SystemFilterButtonContainer tableId={tableIdLeft} enableQueryURL={false} />}
+            LeftSearchBarElement={() => (
+              <SystemFilterButtonContainer
+                tableId={tableIdLeft}
+                enableQueryURL={false}
+              />
+            )}
             RightSearchBarElement={() => (
               <>
                 <FilterBadges tableId={tableIdLeft} />
@@ -91,7 +106,11 @@ export const SystemsMovingContainer = () => {
             enableDragAndDrop={true}
             dropSettings={{ onDropHandler: onDropHandler, accept: 'system' }}
             LeftSearchBarElement={() => (
-              <SystemFilterButtonContainer panelSlide="right" tableId={tableIdRight} enableQueryURL={false} />
+              <SystemFilterButtonContainer
+                panelSlide="right"
+                tableId={tableIdRight}
+                enableQueryURL={false}
+              />
             )}
             enableQueryURL={false}
             RightSearchBarElement={() => (

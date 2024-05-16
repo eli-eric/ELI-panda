@@ -4,7 +4,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { v4 as uuid } from 'uuid'
 
-import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
+import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
@@ -12,6 +12,7 @@ import { classNames } from '@/utils'
 import { FormXMarkIcon } from './components/FormXMarkIcon'
 import { SelectOption } from './components/SelectOption'
 import { ChevronDown } from './Icons'
+import type { CodebookType } from '@/types/responses/codebook'
 
 export type ListboxPropsT = FieldProps & {
   codebook?: CODEBOOK

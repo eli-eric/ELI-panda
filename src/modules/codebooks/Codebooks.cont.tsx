@@ -8,8 +8,7 @@ import { PlusButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import Listbox from '@/components/form/Listbox'
 import { PageHead } from '@/components/layout/PageHead'
-import type { CodebookTypeResponse } from '@/hooks/fetch/useCodebook'
-import { useCodebook, type CodebookType } from '@/hooks/fetch/useCodebook'
+import { useCodebook } from '@/hooks/fetch/useCodebook'
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import type { CODEBOOK } from '@/types/constants/codebook'
@@ -18,6 +17,10 @@ import CodebookTable from './components/CodebookTable'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { queryFetcher } from '@/utils/fetcher'
 import LoaderComponent from '@/components/loader.comp'
+import type {
+  CodebookType,
+  CodebookTypeResponse
+} from '@/types/responses/codebook'
 
 const { selectCodebookForm } = message.codebooksPage
 interface Props {

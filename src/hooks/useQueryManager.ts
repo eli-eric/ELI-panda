@@ -2,8 +2,7 @@ import { useQueryState } from 'next-usequerystate'
 import { useMemo } from 'react'
 
 import useTableStateStore from '@/store/useTableStateStore'
-
-import type { CodebookType } from './fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 interface Query {
   pagination?: string

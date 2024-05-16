@@ -1,7 +1,8 @@
 import type { Row, Table } from '@tanstack/react-table'
 import { createContext, useEffect, useRef } from 'react'
 
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
+
 import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
 
 import type { GetRowPropsReturnType } from '../../table/pandaTable/PandaTable'

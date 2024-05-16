@@ -1,6 +1,7 @@
 import { Combobox as HUICombobox } from '@headlessui/react'
 
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
+
 import { classNames } from '@/utils'
 
 import { SelectOption } from './SelectOption'
@@ -18,10 +19,14 @@ export const ComboboxOption = ({ item, selected }: Props) => (
     className={({ active }) =>
       classNames(
         'relative cursor-default select-none py-2 pl-3 pr-9',
-        active ? 'bg-primary-500 text-white' : 'text-gray-900 dark:text-gray-200'
+        active
+          ? 'bg-primary-500 text-white'
+          : 'text-gray-900 dark:text-gray-200'
       )
     }
   >
-    {({ active }) => <SelectOption item={item} selected={selected} active={active} />}
+    {({ active }) => (
+      <SelectOption item={item} selected={selected} active={active} />
+    )}
   </HUICombobox.Option>
 )

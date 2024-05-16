@@ -1,6 +1,6 @@
 import { array, mixed, object, string } from 'yup'
 
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import type { CatalogueCategoryProperty } from '../../types/responses'
 

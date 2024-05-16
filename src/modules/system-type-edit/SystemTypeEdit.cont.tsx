@@ -1,4 +1,5 @@
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
+
 import { useQuery } from '@tanstack/react-query'
 import { useState, type FC } from 'react'
 import { SystemTypeGroup } from './components/SystemTypeGroup'

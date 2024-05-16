@@ -1,4 +1,4 @@
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import type { DELIVERY_STATUS } from './types'
 

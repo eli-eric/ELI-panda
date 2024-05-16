@@ -13,7 +13,8 @@ import { formatData } from '../../utils'
 import CategoryEditForm from './form/CategoryEdit.form'
 import { useCategory } from '../../hooks/useCategory'
 import { useCategoryDetail } from '../../hooks/useCategoryDetail'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
+
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import toast from 'react-hot-toast'
 

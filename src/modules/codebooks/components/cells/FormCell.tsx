@@ -4,14 +4,16 @@ import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
 import { TableDeleteButton } from '@/components/Buttons'
-import type { CodebookTypeResponse } from '@/hooks/fetch/useCodebook'
-import { type CodebookType } from '@/hooks/fetch/useCodebook'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import useWarningModal from '@/hooks/useWarningModal'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { QueryKey } from '@tanstack/react-query'
 import { useQueryClient } from '@tanstack/react-query'
+import type {
+  CodebookType,
+  CodebookTypeResponse
+} from '@/types/responses/codebook'
 
 interface ExtendedCodebookType extends CodebookType {
   uuid?: string

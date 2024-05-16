@@ -1,6 +1,7 @@
 import * as yup from 'yup'
 
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
+
 import type { CategoryFormType } from '../types'
 
 export const categoryValidationschema: yup.ObjectSchema<CategoryFormType> = yup

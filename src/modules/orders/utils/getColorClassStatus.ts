@@ -1,8 +1,11 @@
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { DELIVERY_STATUS, ORDER_STATUS } from '../types'
 
-export const getColorClassStatus = (orderStatus: CodebookType, deliveryStatus: DELIVERY_STATUS) => {
+export const getColorClassStatus = (
+  orderStatus: CodebookType,
+  deliveryStatus: DELIVERY_STATUS
+) => {
   if (!orderStatus ?? !deliveryStatus) {
     return 'bg-white dark:bg-gray-800'
   }
@@ -46,7 +49,10 @@ export const getColorClassStatus = (orderStatus: CodebookType, deliveryStatus: D
 
   // Find the matching color class based on orderStatus and deliveryStatus
   for (const mapping of statusMappingColor) {
-    if (mapping.statuses.includes(orderStatus.uid) && mapping.statuses.includes(deliveryStatus)) {
+    if (
+      mapping.statuses.includes(orderStatus.uid) &&
+      mapping.statuses.includes(deliveryStatus)
+    ) {
       return mapping.colorClass || 'bg-white dark:bg-gray-800'
     }
   }

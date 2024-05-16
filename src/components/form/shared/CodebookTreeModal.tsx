@@ -4,7 +4,8 @@ import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
+
 import { message } from '@/i18n/src/messages'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'

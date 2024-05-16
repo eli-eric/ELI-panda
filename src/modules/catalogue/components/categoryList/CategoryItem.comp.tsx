@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { CategoryButtons } from '../categoryEdit/components/CategoryButtons'
 import type { GetCategoriesQuery } from '@/types/gql/graphql'

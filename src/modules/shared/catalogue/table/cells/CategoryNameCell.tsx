@@ -1,14 +1,18 @@
 import type { CellContext } from '@tanstack/react-table'
 
 import { LinkDecorator } from '@/components/decorators'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
+
 import type { CatalogueItem } from '@/types/responses'
 
 interface CategoryNameProps extends CellContext<CatalogueItem, any> {
   setCategoryFilter?: (value: CodebookType) => void
 }
 
-export const CategoryName = ({ getValue, setCategoryFilter }: CategoryNameProps) => {
+export const CategoryName = ({
+  getValue,
+  setCategoryFilter
+}: CategoryNameProps) => {
   return (
     <button
       onClick={() => {

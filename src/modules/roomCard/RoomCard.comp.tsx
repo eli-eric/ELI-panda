@@ -6,7 +6,8 @@ import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { PageHead } from '@/components/layout/PageHead'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
+
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
@@ -16,7 +17,11 @@ import { RoomCardStatus } from '@/types/gql/graphql'
 import { HeaderButtons } from './components/HeaderButtons'
 import { RoomCardStatusIcon } from './components/RoomCardStatusIcon'
 import { RoomCardTables } from './components/table/RoomCard.tables'
-import type { ContactPersonsHall, EmployeeType, RoomCardFormType } from './types/form'
+import type {
+  ContactPersonsHall,
+  EmployeeType,
+  RoomCardFormType
+} from './types/form'
 
 const messages = message.roomCardsPage.form
 
@@ -69,7 +74,9 @@ export const RoomCardComponent: FC<Props> = ({
             customOptions={statuses}
           />
         </div>
-        <HeaderButtons {...{ onSubmitAndExit, onSubmit, editPersmission: true }} />
+        <HeaderButtons
+          {...{ onSubmitAndExit, onSubmit, editPersmission: true }}
+        />
       </PageHead>
       <RoomCardTables
         {...{

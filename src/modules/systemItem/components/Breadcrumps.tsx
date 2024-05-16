@@ -2,7 +2,8 @@ import { Fragment } from 'react'
 
 import BreadcrumpContainer from '@/components/Breadcrump/Breadcrump.cont'
 import BreadcrumpItem from '@/components/Breadcrump/Breadcrump.item'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
+
 import { PATH } from '@/types/constants/paths'
 
 interface BreadcrumbsProps {
@@ -14,7 +15,14 @@ const Breadcrumbs = ({ parentPath }: BreadcrumbsProps) => (
     <Fragment>
       {parentPath?.map((system, i) => {
         const link = PATH.SYSTEM + '/' + system.uid
-        return <BreadcrumpItem key={i} name={system?.name} systemLevel={system.systemLevel} link={link} />
+        return (
+          <BreadcrumpItem
+            key={i}
+            name={system?.name}
+            systemLevel={system.systemLevel}
+            link={link}
+          />
+        )
       })}
     </Fragment>
   </BreadcrumpContainer>

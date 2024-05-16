@@ -2,7 +2,7 @@ import { Combobox as HUICombobox } from '@headlessui/react'
 import React, { useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 
-import { type CodebookFilter, type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
+import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
@@ -11,6 +11,7 @@ import { ComboboxOption } from './components/ComboboxOption'
 import { FormXMarkIcon } from './components/FormXMarkIcon'
 import { ChevronDown } from './Icons'
 import { CodebookTreeModal } from './shared/CodebookTreeModal'
+import type { CodebookFilter, CodebookType } from '@/types/responses/codebook'
 
 type ComboboxPropsT = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
@@ -48,11 +49,17 @@ export const ComboboxTreeControlled = ({
   const { formatMessage: fm } = useIntl()
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState<string>('')
-  const codebookResponseData = useMemo(() => ({ data: codebookResponse, metadata: undefined }), [codebookResponse])
+  const codebookResponseData = useMemo(
+    () => ({ data: codebookResponse, metadata: undefined }),
+    [codebookResponse]
+  )
 
   const { data } = useCodebook(codebook, { limit, filter, searchText: query })
 
-  const options = useMemo(() => (data ? data : codebookResponseData), [data, codebookResponseData])
+  const options = useMemo(
+    () => (data ? data : codebookResponseData),
+    [data, codebookResponseData]
+  )
 
   const handleClear = () => {
     setQuery('')
@@ -111,11 +118,21 @@ export const ComboboxTreeControlled = ({
           )}
         >
           {options.data.map(item => (
-            <ComboboxOption key={item.uid} item={item} selected={value?.uid === item.uid} />
+            <ComboboxOption
+              key={item.uid}
+              item={item}
+              selected={value?.uid === item.uid}
+            />
           ))}
         </HUICombobox.Options>
       )}{' '}
-      <CodebookTreeModal onSubmit={onChange} codebook={codebook} open={open} setOpen={setOpen} name={name} />
+      <CodebookTreeModal
+        onSubmit={onChange}
+        codebook={codebook}
+        open={open}
+        setOpen={setOpen}
+        name={name}
+      />
     </HUICombobox>
   )
 }

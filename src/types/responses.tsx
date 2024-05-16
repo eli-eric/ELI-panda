@@ -1,13 +1,6 @@
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
+import type { CodebookType } from '@/types/responses/codebook'
 
-export interface CatalogueCategoryResponse {
-  uid: string
-  image?: string
-  name: string
-  code: string
-  parentPath: string
-}
+import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 
 export interface CatalogueItem {
   uid: string

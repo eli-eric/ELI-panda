@@ -9,7 +9,7 @@ import Main from './components/Main'
 import { PhysicalItemProperties } from './components/PhysicalItemProperties'
 import { categoryValidationschema } from './CategoryEditForm.schema'
 import type { CategoryFormType } from '../types'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 interface Props {
   uid?: string

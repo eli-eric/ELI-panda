@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 export const userFormSchema = yup.object().shape({
   email: yup.string().email().required(),
@@ -31,5 +31,7 @@ export const userUpdateFormSchema = yup.object().shape({
   lastName: yup.string().required(),
   employee: yup.mixed<CodebookType>().nullable(),
   password: yup.string(),
-  confirmPassword: yup.string().oneOf([yup.ref('password')], 'Passwords must match')
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('password')], 'Passwords must match')
 })

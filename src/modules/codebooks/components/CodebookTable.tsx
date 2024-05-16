@@ -5,7 +5,8 @@ import { useMemo } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
+
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'

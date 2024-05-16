@@ -4,17 +4,14 @@ import React, { Fragment, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
-import {
-  type CodebookFilter,
-  type CodebookType,
-  useCodebook
-} from '@/hooks/fetch/useCodebook'
+import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
 
 import { ChevronDown } from './Icons'
 import { CodebookTreeModal } from './shared/CodebookTreeModal'
+import type { CodebookFilter, CodebookType } from '@/types/responses/codebook'
 
 type ComboboxPropsT = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
