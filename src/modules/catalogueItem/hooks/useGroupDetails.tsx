@@ -20,7 +20,7 @@ const useGroupDetails = (uid?: string) => {
     const groupsUnsorted = data
       ?.map(item => item.propertyGroup)
       .filter((value, index, self) => self.indexOf(value) === index)
-    // order groups by name
+
     const groups = groupsUnsorted?.sort((a, b) => a.localeCompare(b))
     return groups
   }, [data])

@@ -5,7 +5,6 @@ import { Heading } from '@/components/layout/Heading'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PATH } from '@/types/constants/paths'
 
-import { useRelatedItems } from '../../hooks/useItem'
 import { AddRelatatedItemButton } from './AddRelatatedItemButton'
 import { TableDeleteButton } from '@/components/Buttons'
 import usePermission from '@/hooks/usePermission'
@@ -14,14 +13,14 @@ import { DescriptionCell } from '@/modules/shared/catalogue/table/cells/Descript
 import useWarningModal from '@/hooks/useWarningModal'
 import { useDisconnectRelatedItem } from '../../hooks/useDisconnectRelatedItem'
 import { useRouter } from 'next/router'
+import { useRelatedItems } from '../../hooks/useRelatedItems'
 
 export const RelatedItemsContainer = () => {
-  const { data } = useRelatedItems()
+  const { data, refetch } = useRelatedItems()
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
   const router = useRouter()
   const itemUid = router.query.uid as string
   const withWarn = useWarningModal('Are you sure you want to delete relation?')
-  const { refetch } = useRelatedItems()
   const { disconnectRelatedItem } = useDisconnectRelatedItem()
 
   const onDisconnect = (uid: string) => () => {

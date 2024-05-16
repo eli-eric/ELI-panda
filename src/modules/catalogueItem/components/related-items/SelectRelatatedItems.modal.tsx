@@ -7,8 +7,8 @@ import type { CatalogueItem } from '@/types/responses'
 import { useCreateRelatedItem } from '../../hooks/useCreateRelatedItem'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
-import { useRelatedItems } from '../../hooks/useItem'
 import { message } from '@/i18n/src/messages'
+import { useRelatedItems } from '../../hooks/useRelatedItems'
 
 const messages = message.common.buttons
 

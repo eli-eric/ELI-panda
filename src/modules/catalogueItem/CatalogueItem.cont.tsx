@@ -1,4 +1,3 @@
-'use client'
 import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { memo, useEffect, useRef } from 'react'
