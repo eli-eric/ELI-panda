@@ -14,7 +14,7 @@ import { message } from '@/i18n/src/messages'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { CatalogueStatisticsContainer } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.cont'
 import { ROLE } from '@/types/constants/roles'
-import type { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses/catalogue'
 import { createMessageValues } from '@/utils/formatters'
 
 const modalMessage = message.ordersPage.deleteModal

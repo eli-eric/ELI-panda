@@ -4,7 +4,7 @@ import type { FC } from 'react'
 
 import { TableButtonsWrapper } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
-import type { SystemDetail } from '@/modules/systems/types/responses'
+import type { SystemDetail } from '@/types/responses/systems'
 import { classNames } from '@/utils'
 
 import { ShowSpareButton } from './ShowSpareButton'

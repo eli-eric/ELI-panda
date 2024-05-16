@@ -26,10 +26,7 @@ import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 // eslint-disable-next-line
-import type {
-  SystemDetail,
-  SystemsResponse
-} from '@/modules/systems/types/responses'
+import type { SystemDetail, SystemsResponse } from '@/types/responses/systems'
 import { filterSubsystem } from '@/modules/systems/utils'
 import { ShowSpareButton } from '@/modules/systemsSpareParts/components/ShowSpareButton'
 import { PATH } from '@/types/constants/paths'

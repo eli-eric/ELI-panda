@@ -18,7 +18,7 @@ import {
 } from '../systemItem/utils'
 import { SystemFilterButtonContainer } from '../systems/components/filters/SystemsFilterButton.cont'
 import { useSystems } from '../systems/hooks/useSystems'
-import type { SystemDetail } from '../systems/types/responses'
+import type { SystemDetail } from '@/types/responses/systems'
 import { useAssignSpareParts } from './hooks/useAssignSpareParts'
 import { useSystemsSparePartsColumns } from './SystemSpareParts.columns'
 

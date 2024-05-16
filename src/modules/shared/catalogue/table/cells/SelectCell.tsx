@@ -1,7 +1,7 @@
 import type { CellContext } from '@tanstack/react-table'
 import type { Dispatch, SetStateAction } from 'react'
 
-import type { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses/catalogue'
 
 interface Props extends CellContext<CatalogueItem, any> {
   setItem: Dispatch<SetStateAction<CatalogueItem | undefined>>

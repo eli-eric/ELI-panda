@@ -4,7 +4,7 @@ import { Fragment, useMemo } from 'react'
 
 import { Tooltip } from '@/components/Tooltip'
 import { SystemNameCell } from '@/modules/systems/components/table/cells/SystemNameCell'
-import type { SystemDetail } from '@/modules/systems/types/responses'
+import type { SystemDetail } from '@/types/responses/systems'
 
 interface SystemsColumnsProps {
   tableId: string

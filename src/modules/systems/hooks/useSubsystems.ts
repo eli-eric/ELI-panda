@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import type { SystemDetail, SystemsResponse } from '../types/responses'
+import type { SystemDetail, SystemsResponse } from '@/types/responses/systems'
 import { useSystems } from './useSystems'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import type { QueryFetcherKey } from '@/utils/fetcher'

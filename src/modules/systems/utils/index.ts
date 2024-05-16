@@ -5,7 +5,7 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import useQueryManager from '@/hooks/useQueryManager'
 import { BASE_URL } from '@/types/constants/common'
 
-import type { SystemDetail, SystemsResponse } from '../types/responses'
+import type { SystemDetail, SystemsResponse } from '@/types/responses/systems'
 
 export const addSubsystems = (
   prev: SystemDetail[],

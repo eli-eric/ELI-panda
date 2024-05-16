@@ -10,7 +10,7 @@ import { ROLE } from '@/types/constants/roles'
 
 import { useSubsystems } from '../../hooks/useSubsystems'
 import type { ITEM_USAGE } from '../../types/constants'
-import type { SystemDetail } from '../../types/responses'
+import type { SystemDetail } from '@/types/responses/systems'
 import { IconCell } from './cells/IconCell'
 // eslint-disable-next-line
 import { SystemNameCell } from './cells/SystemNameCell'

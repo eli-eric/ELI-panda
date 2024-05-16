@@ -9,7 +9,7 @@ import type {
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 
 import { useSystems } from '../../hooks/useSystems'
-import type { SystemDetail } from '../../types/responses'
+import type { SystemDetail } from '@/types/responses/systems'
 import { SearchBarButtons } from '../SearchBarButtons'
 import { useSystemsColumns } from './useSystemsColumns'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'

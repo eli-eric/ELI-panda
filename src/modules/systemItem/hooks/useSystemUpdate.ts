@@ -22,7 +22,7 @@ import type {
   PhysicalItemProperty,
   SystemDetail,
   SystemsResponse
-} from '@/modules/systems/types/responses'
+} from '@/types/responses/systems'
 import { useSystemDetail } from './useSystemDetail'
 import { gql } from '@/types/gql'
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'

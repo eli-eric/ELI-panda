@@ -10,7 +10,10 @@ import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { CODEBOOK } from '@/types/constants/codebook'
-import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
+import type {
+  CatalogueItem,
+  CatalogueItemsResponse
+} from '@/types/responses/catalogue'
 import { classNames } from '@/utils'
 
 import { CategoryName } from './cells/CategoryNameCell'

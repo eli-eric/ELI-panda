@@ -3,7 +3,10 @@ import { createContext, useEffect, useRef } from 'react'
 
 import type { CodebookType } from '@/types/responses/codebook'
 
-import type { CatalogueItem, CatalogueItemsResponse } from '@/types/responses'
+import type {
+  CatalogueItem,
+  CatalogueItemsResponse
+} from '@/types/responses/catalogue'
 
 import type { GetRowPropsReturnType } from '../../table/pandaTable/PandaTable'
 import { PandaTable } from '../../table/pandaTable/PandaTable'

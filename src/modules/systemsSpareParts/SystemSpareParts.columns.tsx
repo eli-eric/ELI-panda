@@ -11,7 +11,7 @@ import { classNames } from '@/utils'
 import { IconCell } from '../systems/components/table/cells/IconCell'
 import { useSubsystems } from '../systems/hooks/useSubsystems'
 import type { ITEM_USAGE } from '../systems/types/constants'
-import type { SystemDetail } from '../systems/types/responses'
+import type { SystemDetail } from '@/types/responses/systems'
 import { SpareNameCell } from './components/NameCell'
 
 // eslint-disable-next-line

@@ -1,6 +1,6 @@
-import { CatalogueItem } from '@/types/responses'
+import { CatalogueItem } from '@/types/responses/catalogue'
 
-const itemsData: CatalogueItem[] = [
+const itemsData = [
   {
     uid: '18473f51-515e-44b3-b1a9-0c9dbab0be49',
     name: ' ACP 15',

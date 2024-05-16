@@ -1,5 +1,5 @@
 import useQueryManager from '../../../hooks/useQueryManager'
-import type { SystemsResponse } from '../types/responses'
+import type { SystemsResponse } from '@/types/responses/systems'
 import {
   keepPreviousData,
   useQuery,

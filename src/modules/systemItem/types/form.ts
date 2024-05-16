@@ -1,7 +1,7 @@
 import type { CodebookType } from '@/types/responses/codebook'
 
 import type { EmployeeType } from '@/modules/roomCard/types/form'
-import type { PhysicalItem } from '@/modules/systems/types/responses'
+import type { PhysicalItem } from '@/types/responses/systems'
 import type { SystemLevel } from '@/types/gql/graphql'
 
 export type SystemDetailFormType = {

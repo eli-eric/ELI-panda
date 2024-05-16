@@ -7,7 +7,7 @@ import { FormModal } from '@/hooks/form/useFormModal'
 import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import CatalogueTableSelect from '@/modules/shared/catalogue/table/CatalogueTableSelect'
-import type { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses/catalogue'
 
 import OrderLineFormComponent from './OrderLineForm.comp'
 

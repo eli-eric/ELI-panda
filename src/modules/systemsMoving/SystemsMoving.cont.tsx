@@ -10,7 +10,7 @@ import { classNames } from '@/utils'
 import { FilterBadges } from '../shared/form/FilterBadges'
 import { SystemFilterButtonContainer } from '../systems/components/filters/SystemsFilterButton.cont'
 import { SystemsComponent } from '../systems/Systems.comp'
-import type { SystemDetail } from '../systems/types/responses'
+import type { SystemDetail } from '@/types/responses/systems'
 import { SystemMovingModal } from './form/SystemMoving.modal'
 import { useSystemMovingStore } from './store/useSystemMovingStore'
 

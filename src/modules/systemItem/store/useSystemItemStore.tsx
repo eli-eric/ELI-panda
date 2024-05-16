@@ -1,7 +1,7 @@
 import { createWithEqualityFn as create } from 'zustand/traditional'
 
 import type { Employee } from '@/types/gql/graphql'
-import type { SystemDetail } from '@/modules/systems/types/responses'
+import type { SystemDetail } from '@/types/responses/systems'
 
 type SystemStore = {
   newOperators: Employee[]

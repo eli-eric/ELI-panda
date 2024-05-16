@@ -1,5 +1,5 @@
 import axiosInstance from '@/core/axios/axiosInstance'
-import type { PhysicalItemProperty } from '@/modules/systems/types/responses'
+import type { PhysicalItemProperty } from '@/types/responses/systems'
 import { BASE_URL } from '@/types/constants/common'
 import toast from 'react-hot-toast'
 import { useQuery } from '@tanstack/react-query'

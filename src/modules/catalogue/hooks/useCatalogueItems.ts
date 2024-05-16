@@ -1,5 +1,5 @@
 import useQueryManager from '@/hooks/useQueryManager'
-import type { CatalogueItemsResponse } from '@/types/responses'
+import type { CatalogueItemsResponse } from '@/types/responses/catalogue'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 import {

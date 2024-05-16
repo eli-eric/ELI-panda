@@ -15,7 +15,7 @@ import Divider from '@/components/layout/Divider'
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
-import type { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses/catalogue'
 
 import useOrderLineFormFields from './OrderLineForm.fields'
 

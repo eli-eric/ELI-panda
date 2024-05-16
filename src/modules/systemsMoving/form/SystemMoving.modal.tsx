@@ -16,7 +16,7 @@ import { useSystemMovingStore } from '../store/useSystemMovingStore'
 import type { SystemMovingFormType } from '../SystemsMoving.cont'
 import { SystemMovingForm } from './SystemMoving.form'
 import { useQueryClient } from '@tanstack/react-query'
-import type { SystemDetail } from '@/modules/systems/types/responses'
+import type { SystemDetail } from '@/types/responses/systems'
 
 interface Props {
   open: boolean

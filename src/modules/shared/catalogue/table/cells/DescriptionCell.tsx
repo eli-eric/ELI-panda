@@ -3,7 +3,7 @@ import type { CellContext } from '@tanstack/react-table'
 import { Fragment } from 'react'
 
 import { Tooltip } from '@/components/Tooltip'
-import type { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses/catalogue'
 
 export const DescriptionCell = ({
   getValue
