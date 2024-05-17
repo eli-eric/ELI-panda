@@ -43,7 +43,7 @@ export const useSystemCreate = (
     const responseUid = systems[0].uid
     const body = systems[0]
     imageRef?.current?.submit(responseUid, () => {
-      toast.success(`System ${responseUid} saved successfully`)
+      toast.success(`System ${body.name} was saved successfully`)
       //TODO: mutate
       /*   mutateEndpoint(
         systemSubsystems,

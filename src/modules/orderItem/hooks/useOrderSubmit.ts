@@ -19,7 +19,7 @@ export const useOrderSubmit = () => {
     endpoint: orderEndpoint,
     method: uid ? 'put' : 'post',
     onSuccess: (uid, _, custom) => {
-      toast.success(`Order ${uid} saved successfully`)
+      toast.success(`Order was successfully saved.`)
 
       mutate()
       invalidateQuery()
