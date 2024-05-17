@@ -40,7 +40,8 @@ export const useSubsystems = tableId => {
       )
       setUid(null)
     }
-  }, [response, queryClient, queryKey, uid])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response])
 
   return { setUid, pending, queryKey: queryKeySubsystems }
 }
