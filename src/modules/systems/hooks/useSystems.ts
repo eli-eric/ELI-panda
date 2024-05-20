@@ -19,7 +19,9 @@ export const useSystems = (tableId: string = 'systems') => {
     queryKey,
     queryFn: queryFetcher<SystemsResponse>('systemsList'),
     placeholderData: keepPreviousData,
-    refetchOnMount: false
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false
   })
 
   const queryClient = useQueryClient()
