@@ -10,10 +10,10 @@ import { queryFetcher } from '@/utils/fetcher'
 
 import useQueryManager from '../../../hooks/useQueryManager'
 
-export const useSystems = tableId => {
+export const useSystems = (tableId: string = 'systems') => {
   const { query } = useQueryManager(tableId)
 
-  const queryKey: QueryFetcherKey = ['systems', { query }]
+  const queryKey: QueryFetcherKey = [tableId, { query }]
 
   const { data, isLoading, error, dataUpdatedAt, refetch } = useQuery({
     queryKey,
