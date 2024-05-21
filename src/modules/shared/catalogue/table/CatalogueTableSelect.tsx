@@ -3,7 +3,7 @@ import { type Dispatch, Fragment, type SetStateAction, useEffect } from 'react'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
 import useTableStateStore from '@/store/useTableStateStore'
-import type { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses/catalogue'
 import { classNames } from '@/utils'
 
 import { Pagination } from '../../table/Pagination'

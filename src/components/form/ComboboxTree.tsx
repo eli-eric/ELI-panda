@@ -4,13 +4,10 @@ import React, { Fragment, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
-import {
-  type CodebookFilter,
-  type CodebookType,
-  useCodebook
-} from '@/hooks/fetch/useCodebook'
+import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
+import type { CodebookFilter, CodebookType } from '@/types/responses/codebook'
 import { classNames } from '@/utils'
 
 import { ChevronDown } from './Icons'

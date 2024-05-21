@@ -1,12 +1,12 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { createContext, Fragment } from 'react'
+import { createContext,Fragment } from 'react'
 
 import LoaderComponent from '@/components/loader.comp'
 import { EditUserContainer } from '@/modules/administration/user/EditUser.cont'
 import { useRoles } from '@/modules/administration/user/hooks/useRoles'
 import { useUserDetail } from '@/modules/administration/user/hooks/useUserDetail'
-import type { User } from '@/types/gql/graphql'
+import type { UserQueryQuery } from '@/types/gql/graphql'
 
 interface Props {
   key?: string
@@ -14,7 +14,7 @@ interface Props {
 }
 
 type EditUserContextType = {
-  userDetail?: User
+  userDetail?: UserQueryQuery['users'][0]
   refetch: () => void
 }
 

@@ -4,9 +4,9 @@ import { useContext } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { EditUserContext } from '@/pages/administration/user/[uid]'
-import type { Role, UserUpdateInput } from '@/types/gql/graphql'
+import type { GetRolesQuery, UserUpdateInput } from '@/types/gql/graphql'
+import type { CodebookType } from '@/types/responses/codebook'
 import { whereC, whereN } from '@/utils/graphql/mutations'
 
 import { userUpdateFormSchema } from './components/form/User.schema'
@@ -16,7 +16,7 @@ import type { UserUpdateFormType } from './types/form'
 
 type Props = {
   userUid?: string
-  roles: Role[]
+  roles: GetRolesQuery['roles']
 }
 
 export const EditUserContainer = ({ userUid, roles }: Props) => {
@@ -42,7 +42,11 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
     resolver: yupResolver(userUpdateFormSchema)
   })
 
-  const { updateUser } = useUserUpdate()
+  const onSuccess = () => {
+    refetch()
+  }
+
+  const { updateUser } = useUserUpdate(onSuccess)
 
   const onSubmit = (data: UserUpdateFormType) => {
     const dataToSend: UserUpdateInput = {
@@ -50,7 +54,10 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
       firstName: data.firstName,
       lastName: data.lastName,
       isEnabled: data.isEnabled,
-      facility: { connect: whereC(data.facility.uid), disconnect: whereC(userDetail?.facility?.code) },
+      facility: {
+        connect: whereC(data.facility.uid),
+        disconnect: whereC(userDetail?.facility?.code)
+      },
       employee: {
         connect: data.employee ? whereN(data.employee?.uid) : undefined,
         disconnect: whereN(userDetail?.employee?.uid)
@@ -61,7 +68,7 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
       dataToSend.passwordHash = bcrypt.hashSync(data.password, 12)
     }
 
-    updateUser({ variables: { where: { uid: userUid }, update: dataToSend } })
+    updateUser({ where: { uid: userUid }, update: dataToSend })
   }
 
   const addRole = (selectedRole?: CodebookType) => {
@@ -70,35 +77,27 @@ export const EditUserContainer = ({ userUid, roles }: Props) => {
       return
     }
     updateUser({
-      variables: {
-        where: { uid: userUid },
-        update: {
-          roles: [
-            {
-              connect: whereN(selectedRole?.uid)
-            }
-          ]
-        }
+      where: { uid: userUid },
+      update: {
+        roles: [
+          {
+            connect: [whereN(selectedRole?.uid)]
+          }
+        ]
       }
-    }).finally(() => {
-      refetch()
     })
   }
 
   const removeRole = (roleUid: string) => {
     updateUser({
-      variables: {
-        where: { uid: userUid },
-        update: {
-          roles: [
-            {
-              disconnect: whereN(roleUid)
-            }
-          ]
-        }
+      where: { uid: userUid },
+      update: {
+        roles: [
+          {
+            disconnect: [whereN(roleUid)]
+          }
+        ]
       }
-    }).finally(() => {
-      refetch()
     })
   }
 

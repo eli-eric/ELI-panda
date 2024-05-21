@@ -14,22 +14,45 @@ interface CatalogueFilterFormProps {
   catalogueCategoryProperties?: CatalogueItemDetail[]
 }
 
-export const CatalogueFilterForm = ({ tableId, catalogueCategoryProperties }: CatalogueFilterFormProps) => {
+export const CatalogueFilterForm = ({
+  tableId,
+  catalogueCategoryProperties
+}: CatalogueFilterFormProps) => {
   const fields = useCatalogueFormFields()
-  const [categoryQuery, setCategoryQuery] = useQueryState('category', { history: 'push' })
+  const [categoryQuery, setCategoryQuery] = useQueryState('category', {
+    history: 'push'
+  })
 
   const { setFilter } = useFormFilterState({ tableId, enableQueryUrl: true })
   const { toggleDeleteCustom } = useFormControlStore()
 
   return (
-    <div className={classNames('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
+    <div
+      className={classNames('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}
+    >
       <div className="flex flex-col gap-2">
-        <Input {...fields.name} onChange={setFilter(fields.name.name)} isFilter={true} />
-        <Input {...fields.catalogueNumber} onChange={setFilter(fields.catalogueNumber.name)} isFilter={true} />
+        <Input
+          {...fields.name}
+          onChange={setFilter(fields.name.name)}
+          isFilter={true}
+        />
+        <Input
+          {...fields.catalogueNumber}
+          onChange={setFilter(fields.catalogueNumber.name)}
+          isFilter={true}
+        />
       </div>
       <div className="flex flex-col gap-2">
-        <Input {...fields.manufacturerUrl} onChange={setFilter(fields.manufacturerUrl.name)} isFilter={true} />
-        <Input {...fields.supplier} onChange={setFilter(fields.supplier.name)} isFilter={true} />
+        <Input
+          {...fields.manufacturerUrl}
+          onChange={setFilter(fields.manufacturerUrl.name)}
+          isFilter={true}
+        />
+        <Input
+          {...fields.supplier}
+          onChange={setFilter(fields.supplier.name)}
+          isFilter={true}
+        />
       </div>
 
       <ComboboxTreeControlled

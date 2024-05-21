@@ -3,32 +3,33 @@ import { Fragment } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
+import type { CodebookType } from '@/types/responses/codebook'
 
+import type { CategoryFormType } from '../types'
+import { categoryValidationschema } from './CategoryEditForm.schema'
 import GroupList from './components/GroupList'
 import Main from './components/Main'
 import { PhysicalItemProperties } from './components/PhysicalItemProperties'
-import { useCategory } from '@/modules/catalogue/hooks/useCategory'
-import { useCategoryDetail } from '@/modules/catalogue/hooks/useCategoryDetail'
-import { categoryValidationschema } from './CategoryEditForm.schema'
-import type { CategoryFormType } from '../types'
 
 interface Props {
   uid?: string
   onSubmit: (data: CategoryFormType) => void
   children: React.ReactNode
+  systemType?: CodebookType
+  categoryDetail: CategoryFormType
 }
 
-const CategoryEditForm = ({ uid, onSubmit, children }: Props) => {
-  const { catalogueCategory } = useCategory()
-  const { categoryDetail } = useCategoryDetail(uid)
-
+const CategoryEditForm = ({
+  uid,
+  onSubmit,
+  children,
+  systemType,
+  categoryDetail
+}: Props) => {
   const formMethods = useForm<CategoryFormType>({
     defaultValues: !uid
       ? {
-          systemType: {
-            uid: catalogueCategory?.systemType?.uid,
-            name: catalogueCategory?.systemType?.name
-          }
+          systemType
         }
       : categoryDetail,
     resolver: yupResolver(categoryValidationschema)

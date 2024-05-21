@@ -2,7 +2,7 @@ import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { isMobile } from 'react-device-detect'
 
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { CategoryList } from './CategoryList.comp'
 
@@ -11,7 +11,10 @@ interface Props {
   setCategoryFilter: (value: CodebookType) => void
 }
 
-export const CategoryListContainer = ({ onChange, setCategoryFilter }: Props) => (
+export const CategoryListContainer = ({
+  onChange,
+  setCategoryFilter
+}: Props) => (
   <Disclosure defaultOpen={!isMobile}>
     {({ open }) => (
       <div id="category-list" className="flex flex-col">

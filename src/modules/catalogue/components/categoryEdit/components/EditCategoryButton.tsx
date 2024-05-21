@@ -1,9 +1,11 @@
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { PencilSquareIcon } from '@heroicons/react/24/outline'
 import type { FC } from 'react'
 import { Fragment, useState } from 'react'
-import CategoryEditContainer from '../CategoryEdit.cont'
-import { PencilSquareIcon } from '@heroicons/react/24/outline'
+
 import { Button } from '@/components/Buttons'
+import ModalComponent from '@/components/overlays/modal/modal.comp'
+
+import CategoryEditContainer from '../CategoryEdit.cont'
 
 interface EditCategoryProps {
   uid: string

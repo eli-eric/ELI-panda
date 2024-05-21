@@ -1,10 +1,10 @@
-import { SYSTEM_DETAIL } from '@/utils/graphql/fragments'
-import { gql, useMutation } from '@apollo/client'
 import toast from 'react-hot-toast'
 
-const UPDATE_SYSTEM = gql`
-  ${SYSTEM_DETAIL}
-  mutation UpdateSystems(
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
+
+const UPDATE_SYSTEM = gql(`
+  mutation UpdateSystemParentMutation(
     $where: SystemWhere
     $update: SystemUpdateInput!
     $systemFromUid: String
@@ -20,14 +20,14 @@ const UPDATE_SYSTEM = gql`
       systemUid: $systemUid
     )
   }
-`
+`)
 
 export const useSystemMutation = () => {
-  const [update, { loading }] = useMutation(UPDATE_SYSTEM, {
+  const { mutate, isPending } = useGraphQLMutation(UPDATE_SYSTEM, {
     onError: error => {
       toast.error('Something went wrong: ' + error.message)
     }
   })
 
-  return { update, loading }
+  return { update: mutate, loading: isPending }
 }

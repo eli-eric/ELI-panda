@@ -3,8 +3,7 @@ import type {
   ColumnDef,
   FilterFn,
   Row,
-  Table as ReactTable
-} from '@tanstack/react-table'
+  Table as ReactTable} from '@tanstack/react-table'
 import {
   getCoreRowModel,
   getExpandedRowModel,

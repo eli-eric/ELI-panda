@@ -1,5 +1,6 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Fragment, useMemo } from 'react'
 import { useIntl } from 'react-intl'
@@ -17,7 +18,6 @@ import {
   PriceFooter,
   PrintEunButton
 } from './OrderLine.actions'
-import Link from 'next/link'
 
 const messages = message.ordersPage.orderLines.orderLinesTable.header
 

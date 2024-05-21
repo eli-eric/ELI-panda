@@ -1,7 +1,11 @@
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
-import type { Location } from '@/types/gql/graphql'
+import type { LocationsQueryQuery } from '@/types/gql/graphql'
 
-export const updateLocationWithSublocation = (locations: Codebooktree[], subLocations: Location[], uid) =>
+export const updateLocationWithSublocation = (
+  locations: Codebooktree[],
+  subLocations: LocationsQueryQuery['locations'],
+  uid
+) =>
   locations.map(location => {
     if (location.uid === uid) {
       return {
@@ -17,7 +21,11 @@ export const updateLocationWithSublocation = (locations: Codebooktree[], subLoca
     if (location.children) {
       return {
         ...location,
-        children: updateLocationWithSublocation(location.children, subLocations, uid)
+        children: updateLocationWithSublocation(
+          location.children,
+          subLocations,
+          uid
+        )
       }
     }
     return location

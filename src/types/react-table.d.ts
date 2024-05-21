@@ -1,6 +1,6 @@
 import '@tanstack/react-table'
 
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 declare module '@tanstack/table-core' {
   //eslint-disable-next-line

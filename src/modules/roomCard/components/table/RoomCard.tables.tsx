@@ -3,10 +3,10 @@ import type { FC } from 'react'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import Card from '@/components/layout/Card'
 import { Heading } from '@/components/layout/Heading'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import usePermission from '@/hooks/usePermission'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { ROLE } from '@/types/constants/roles'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import type { ContactPersonsHall, EmployeeType } from '../../types/form'
 import { cleanRooms, possibleParameters } from '../../utils/constants'
@@ -20,7 +20,12 @@ type Props = {
   locations?: Codebooktree[]
 }
 
-export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHall, teams, locations }) => {
+export const RoomCardTables: FC<Props> = ({
+  contactPersonsDept,
+  contactPersonsHall,
+  teams,
+  locations
+}) => {
   const {
     columnsContactHall,
     columnsContactDept,
@@ -39,7 +44,8 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
           {...{
             tableId: 'roomCard-Contact',
             columns: columnsContactHall,
-            data: contactPersonsHall?.length === 0 ? undefined : contactPersonsHall,
+            data:
+              contactPersonsHall?.length === 0 ? undefined : contactPersonsHall,
             className: 'relative border-l pb-0 sm:mb-4 z-0'
           }}
         />
@@ -47,7 +53,8 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
           {...{
             tableId: 'roomCard-Contact-dept',
             columns: columnsContactDept,
-            data: contactPersonsDept?.length === 0 ? undefined : contactPersonsDept,
+            data:
+              contactPersonsDept?.length === 0 ? undefined : contactPersonsDept,
             className: 'relative border-l pb-0 sm:mb-4 z-0'
           }}
         />
@@ -60,7 +67,11 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
           }}
         />
       </div>
-      <Heading customText="LOCATIONS" className="mb-0" textColor="text-primary-500">
+      <Heading
+        customText="LOCATIONS"
+        className="mb-0"
+        textColor="text-primary-500"
+      >
         {editPersmission && <AddLocationButton />}
       </Heading>
       <PandaTable
@@ -71,7 +82,11 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
           data: locations?.length === 0 ? undefined : locations
         }}
       />
-      <Heading customText="CLEAN ROOMS" className="mb-0" textColor="text-primary-500" />
+      <Heading
+        customText="CLEAN ROOMS"
+        className="mb-0"
+        textColor="text-primary-500"
+      />
       <PandaTable
         {...{
           tableId: 'roomCard-cleanRooms',
@@ -80,7 +95,11 @@ export const RoomCardTables: FC<Props> = ({ contactPersonsDept, contactPersonsHa
           className: 'relative border-l pb-0 z-0'
         }}
       />
-      <Heading customText="BULDING MAINTENANCE - FM" className="mb-0" textColor="text-primary-500" />
+      <Heading
+        customText="BULDING MAINTENANCE - FM"
+        className="mb-0"
+        textColor="text-primary-500"
+      />
       <PandaTable
         {...{
           tableId: 'roomCard-buildingMaintenance',

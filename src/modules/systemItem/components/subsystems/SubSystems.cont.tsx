@@ -1,21 +1,22 @@
 import Link from 'next/link'
-import { Fragment, useContext } from 'react'
+import { Fragment } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
-import { SystemDetailContext } from '@/pages/system/[uid]'
 import { PATH } from '@/types/constants/paths'
 import { classNames } from '@/utils'
 
+import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
 import { useSubSystemsColumns } from '../spare-parts/SpareParts.columns'
 
 export const SubSystemsContainer = () => {
   const tableId = 'subsystems'
   const columns = useSubSystemsColumns(tableId)
-  const { systemDetail } = useContext(SystemDetailContext)
-  if (!systemDetail?.subSystems || systemDetail.subSystems.length < 1) return null
+  const { systemDetail } = useSystemDetail()
+  if (!systemDetail?.subSystems || systemDetail.subSystems.length < 1)
+    return null
 
   return (
     <Fragment>
@@ -38,7 +39,8 @@ export const SubSystemsContainer = () => {
         settings={{ enableColumnReordering: false }}
         getRowProps={({ original }) => ({
           className: classNames(
-            original?.physicalItem && 'font-bold text-gray-700 dark:text-gray-200',
+            original?.physicalItem &&
+              'font-bold text-gray-700 dark:text-gray-200',
             getColorBySystemLevel(original?.systemLevel),
             getFontBySystemLevel(original?.systemLevel)
           )

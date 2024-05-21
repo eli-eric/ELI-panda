@@ -1,9 +1,9 @@
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
 
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import type { Maybe } from '@/types/gql/graphql'
 import { SystemLevel } from '@/types/gql/graphql'
+import type { CodebookType } from '@/types/responses/codebook'
 import { classNames } from '@/utils'
 
 interface Props {
@@ -14,14 +14,25 @@ interface Props {
   systemLevel?: SystemLevel
 }
 
-const BreadcrumpItem = ({ name, link, setCategoryFilter, path, systemLevel }: Props) => {
+const BreadcrumpItem = ({
+  name,
+  link,
+  setCategoryFilter,
+  path,
+  systemLevel
+}: Props) => {
   if (setCategoryFilter && path) {
     return (
       <li key={name} className="flex">
         <div className="flex items-center whitespace-nowrap">
-          <ChevronRightIcon className="h-4 w-4 flex-shrink-0 text-gray-400" aria-hidden="true" />
+          <ChevronRightIcon
+            className="h-4 w-4 flex-shrink-0 text-gray-400"
+            aria-hidden="true"
+          />
           <button
-            onClick={() => setCategoryFilter({ uid: path.uid, name: path.name })}
+            onClick={() =>
+              setCategoryFilter({ uid: path.uid, name: path.name })
+            }
             className="ml-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-200 dark:hover:text-primary-600"
           >
             {name}
@@ -34,14 +45,19 @@ const BreadcrumpItem = ({ name, link, setCategoryFilter, path, systemLevel }: Pr
   return (
     <li key={name} className="flex">
       <div className="flex items-center whitespace-nowrap">
-        <ChevronRightIcon className="h-4 w-4 flex-shrink-0 text-gray-400" aria-hidden="true" />
+        <ChevronRightIcon
+          className="h-4 w-4 flex-shrink-0 text-gray-400"
+          aria-hidden="true"
+        />
         {link ? (
           <Link
             href={{ pathname: link }}
             className={classNames(
               'ml-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-200 dark:hover:text-primary-600',
-              systemLevel === SystemLevel.KeySystems && 'text-primary-600 dark:text-primary-400',
-              systemLevel === SystemLevel.TechnologyUnit && 'text-lime-700 dark:text-lime-200'
+              systemLevel === SystemLevel.KeySystems &&
+                'text-primary-600 dark:text-primary-400',
+              systemLevel === SystemLevel.TechnologyUnit &&
+                'text-lime-700 dark:text-lime-200'
             )}
           >
             {name}

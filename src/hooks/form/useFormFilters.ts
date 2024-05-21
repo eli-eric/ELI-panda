@@ -3,7 +3,6 @@ import { useQueryState } from 'next-usequerystate'
 import { startTransition, useCallback, useEffect, useMemo } from 'react'
 import type { DefaultValues, FieldValues } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
-import { useIsFirstRender } from 'usehooks-ts'
 
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
@@ -48,7 +47,6 @@ export const useFormFilter = <T extends FieldValues>({
   const { setSearch, instances } = useTableStateStore()
   const searchInstance = instances[tableId]?.search
 
-  const isFirstRender = useIsFirstRender()
   const {
     fieldIdToSync,
     clearFieldToSync,
@@ -71,16 +69,20 @@ export const useFormFilter = <T extends FieldValues>({
   //sync form values (for example, when we click xmark icon in badge)
   useEffect(() => {
     if (fieldIdToSync.size > 0) {
-      synchronizeFormFields(fieldIdToSync, setValue, defValues)
-      clearFieldToSync()
+      startTransition(() => {
+        synchronizeFormFields(fieldIdToSync, setValue, defValues)
+        clearFieldToSync()
+      })
     }
   }, [fieldIdToSync, setValue, clearFieldToSync, defValues, setFilters])
 
   //sync form values when dynamic/custom form fields changed
   useEffect(() => {
     if (deleteCustom) {
-      synchronizeCustomFormFields(customFieldIdToSync, setValue, setFilters)
-      clearCustomFieldToSync()
+      startTransition(() => {
+        synchronizeCustomFormFields(customFieldIdToSync, setValue, setFilters)
+        clearCustomFieldToSync()
+      })
     }
   }, [
     setValue,
@@ -92,34 +94,35 @@ export const useFormFilter = <T extends FieldValues>({
 
   //set default values to form from store or from url on first render
   useEffect(() => {
-    if (isFirstRender) {
-      if (columnFilters.length) {
-        startTransition(() => {
-          columnFilters.forEach(filter => {
-            if (filter.type) {
-              addCustomFieldIdToSync(filter.id)
-            }
-          })
-          reset(
-            columnFilters.reduce((acc, curr) => {
-              if (curr.id === 'systemLevel') {
-                acc[curr.id] = { uid: curr.value, name: curr.value }
-              }
-              acc[curr.id] = curr.value
-
-              return acc
-            }, {})
-          )
+    if (columnFilters.length) {
+      startTransition(() => {
+        columnFilters.forEach(filter => {
+          if (filter.type) {
+            addCustomFieldIdToSync(filter.id)
+          }
         })
-      }
+        reset(
+          columnFilters.reduce((acc, curr) => {
+            if (curr.id === 'systemLevel') {
+              acc[curr.id] = { uid: curr.value, name: curr.value }
+            }
+            acc[curr.id] = curr.value
+
+            return acc
+          }, {})
+        )
+      })
     }
-  }, [isFirstRender, reset, columnFilters, addCustomFieldIdToSync])
+    //eslint-disable-next-line
+  }, [])
 
   //clear search on filter change, clear filters on search change
   useEffect(() => {
     if (searchInstance) {
-      reset(defValues, { keepValues: false })
-      setFilters([])
+      startTransition(() => {
+        reset(defValues, { keepValues: false })
+        setFilters([])
+      })
     }
     //eslint-disable-next-line
   }, [searchInstance])

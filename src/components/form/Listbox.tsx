@@ -4,9 +4,10 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { v4 as uuid } from 'uuid'
 
-import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
+import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
+import type { CodebookType } from '@/types/responses/codebook'
 import { classNames } from '@/utils'
 
 import { FormXMarkIcon } from './components/FormXMarkIcon'
@@ -135,11 +136,7 @@ const Listbox = ({
                     isFilter ? field.value && 'border-2 border-lime-500' : ''
                   )}
                 >
-                  <button
-                    type="button"
-                    onClick={onClickIcon}
-                    className="h-full w-full pr-12 ml-3 text-left"
-                  >
+                  <div onClick={onClickIcon} className=" pr-12 ml-3 text-left">
                     <span className="block truncate">
                       {value ||
                         (customOptions && allowEmptyOption && emptyOption)}
@@ -149,7 +146,7 @@ const Listbox = ({
                         {placeholder}
                       </span>
                     )}
-                  </button>
+                  </div>
                   {!disabled && value && (
                     <FormXMarkIcon onClick={handleClear} />
                   )}

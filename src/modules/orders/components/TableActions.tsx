@@ -9,10 +9,10 @@ import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
+import type { Order } from '@/types/responses/orders'
 import { createMessageValues } from '@/utils/formatters'
 
 import { useOrders } from '../hooks/useOrders'
-import type { Order } from '../types'
 
 const buttonsMessage = message.common.buttons
 const modalMessage = message.ordersPage.deleteModal
@@ -35,7 +35,7 @@ export const TableActions = ({ order }: Props) => {
     method: 'delete',
     onSuccess: () => {
       setOpenDeleteWarn(false)
-      orderList && mutate({ ...orderList, data: orderList?.data.filter(item => item.uid !== order.uid) })
+      orderList && mutate()
     }
   })
 
@@ -68,7 +68,10 @@ export const TableActions = ({ order }: Props) => {
         open={openDeleteWarn}
         setOpen={setOpenDeleteWarn}
         title={modalMessage.title}
-        message={formatMessage({ id: modalMessage.message }, createMessageValues({ name }))}
+        message={formatMessage(
+          { id: modalMessage.message },
+          createMessageValues({ name })
+        )}
         testid="OrderDeleteModal"
         error={deleteSubmit.error}
       />

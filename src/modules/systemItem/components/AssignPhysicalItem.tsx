@@ -3,14 +3,14 @@ import { Fragment, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
+import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
 import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
 import type { ModalButtons } from '@/types/form'
 
-import type { SystemDetailFormType } from '../types/form'
-import { Button } from '@/components/Buttons'
 import { useSystemItemStore } from '../store/useSystemItemStore'
+import type { SystemDetailFormType } from '../types/form'
 
 const messages = message.common.buttons
 

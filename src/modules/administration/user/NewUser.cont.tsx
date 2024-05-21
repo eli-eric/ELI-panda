@@ -3,9 +3,9 @@ import bcrypt from 'bcryptjs-react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { ROLE } from '@/types/constants/roles'
-import type { Role, UserCreateInput } from '@/types/gql/graphql'
+import type { GetRolesQuery, UserCreateInput } from '@/types/gql/graphql'
+import type { CodebookType } from '@/types/responses/codebook'
 import { whereC, whereN } from '@/utils/graphql/mutations'
 
 import { userFormSchema } from './components/form/User.schema'
@@ -14,11 +14,18 @@ import { useUserCreate } from './hooks/useUserCreate'
 import type { UserCreateFormType } from './types/form'
 
 type Props = {
-  roles: Role[]
+  roles: GetRolesQuery['roles']
 }
 export const NewUserContainer = ({ roles }: Props) => {
-  const defaultRoles = [ROLE.BASICS, ROLE.CATALOGUE_VIEW, ROLE.SYSTEMS_VIEW, ROLE.ROOM_CARD_VIEW]
-  const defaultAssignedRoles = roles?.filter(role => defaultRoles.includes(role.code as ROLE))
+  const defaultRoles = [
+    ROLE.BASICS,
+    ROLE.CATALOGUE_VIEW,
+    ROLE.SYSTEMS_VIEW,
+    ROLE.ROOM_CARD_VIEW
+  ]
+  const defaultAssignedRoles = roles?.filter(role =>
+    defaultRoles.includes(role.code as ROLE)
+  )
 
   const formMethods = useForm<UserCreateFormType>({
     resolver: yupResolver(userFormSchema),
@@ -28,9 +35,12 @@ export const NewUserContainer = ({ roles }: Props) => {
     }
   })
 
-  const { fields, append, remove } = useFieldArray({ control: formMethods.control, name: 'roles' })
+  const { fields, append, remove } = useFieldArray({
+    control: formMethods.control,
+    name: 'roles'
+  })
 
-  const { createUser } = useUserCreate()
+  const [createUser] = useUserCreate()
 
   const onSubmit = (data: UserCreateFormType) => {
     const dataToSend: UserCreateInput[] = [
@@ -44,10 +54,12 @@ export const NewUserContainer = ({ roles }: Props) => {
         facility: { connect: whereC(data.facility.uid) },
         username: data.email,
         passwordToChange: true,
-        employee: data.employee ? { connect: whereN(data.employee?.uid) } : undefined
+        employee: data.employee
+          ? { connect: whereN(data.employee?.uid) }
+          : undefined
       }
     ]
-    createUser({ variables: { input: dataToSend } })
+    createUser({ input: dataToSend })
   }
 
   const addRole = (selectedRole?: CodebookType) => {

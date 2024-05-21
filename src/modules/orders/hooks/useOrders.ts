@@ -1,18 +1,24 @@
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useFetch from '@/hooks/fetch/useFetch'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useMemo } from 'react'
 
-import useQueryManager from '../../../hooks/useQueryManager'
-import type { OrderListResponse } from '../types'
+import useQueryManager from '@/hooks/useQueryManager'
+import type { OrderListResponse } from '@/types/responses/orders'
+import type { QueryFetcherKey } from '@/utils/fetcher'
+import { queryFetcher } from '@/utils/fetcher'
 
 export const useOrders = () => {
-  const query = useQueryManager('orders')
-  const { orders } = useEndpoint({ ...query })
-  const { response, loading, error, mutate } = useFetch<OrderListResponse>({
-    config: {
-      suspense: false,
-      keepPreviousData: true
-    },
-    url: orders
+  const { query } = useQueryManager('orders')
+
+  const queryKey: QueryFetcherKey = useMemo(
+    () => ['orders', { query }],
+    [query]
+  )
+
+  const { data, isFetching, error, refetch } = useQuery({
+    queryKey,
+    queryFn: queryFetcher<OrderListResponse>('orders'),
+    placeholderData: keepPreviousData
   })
-  return { orderList: response, loading, error, mutate }
+
+  return { orderList: data, loading: isFetching, error, mutate: refetch }
 }

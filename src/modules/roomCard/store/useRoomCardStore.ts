@@ -39,19 +39,36 @@ export const useRoomCardStore = create<RoomCardStore>(set => ({
   newLocations: [],
   disconnectLocations: [],
   setNewHallContact: (newHallContact: HallContactPerson) =>
-    set(state => ({ newHallContacts: [...state.newHallContacts, newHallContact] })),
+    set(state => ({
+      newHallContacts: [...state.newHallContacts, newHallContact]
+    })),
   setDeleteHallContact: (disconnectHallContact: HallContactPerson) =>
-    set(state => ({ deleteHallContacts: [...state.deleteHallContacts, disconnectHallContact] })),
-  setNewTeam: (newTeam: Team) => set(state => ({ newTeams: [...state.newTeams, newTeam] })),
+    set(state => ({
+      deleteHallContacts: [...state.deleteHallContacts, disconnectHallContact]
+    })),
+  setNewTeam: (newTeam: Team) =>
+    set(state => ({ newTeams: [...state.newTeams, newTeam] })),
   setDisconnectTeam: (disconnectTeam: Team) =>
-    set(state => ({ disconnectTeams: [...state.disconnectTeams, disconnectTeam] })),
+    set(state => ({
+      disconnectTeams: [...state.disconnectTeams, disconnectTeam]
+    })),
   setNewDeptContact: (newDeptContact: Employee) =>
-    set(state => ({ newDeptContacts: [...state.newDeptContacts, newDeptContact] })),
+    set(state => ({
+      newDeptContacts: [...state.newDeptContacts, newDeptContact]
+    })),
   setDisconnectDeptContact: (disconnectDeptContact: Employee) =>
-    set(state => ({ disconnectDeptContacts: [...state.disconnectDeptContacts, disconnectDeptContact] })),
-  setNewLocation: (newLocation: Codebooktree) => set(state => ({ newLocations: [...state.newLocations, newLocation] })),
+    set(state => ({
+      disconnectDeptContacts: [
+        ...state.disconnectDeptContacts,
+        disconnectDeptContact
+      ]
+    })),
+  setNewLocation: (newLocation: Codebooktree) =>
+    set(state => ({ newLocations: [...state.newLocations, newLocation] })),
   setDisconnectLocation: (disconnectLocation: Codebooktree) =>
-    set(state => ({ disconnectLocations: [...state.disconnectLocations, disconnectLocation] })),
+    set(state => ({
+      disconnectLocations: [...state.disconnectLocations, disconnectLocation]
+    })),
   clear: () =>
     set(() => ({
       newHallContacts: [],

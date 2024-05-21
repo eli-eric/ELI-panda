@@ -1,4 +1,4 @@
-import type { Options} from 'next-usequerystate';
+import type { Options } from 'next-usequerystate'
 import { useQueryState } from 'next-usequerystate'
 import { useEffect, useState } from 'react'
 import { FormProvider, useForm, useWatch } from 'react-hook-form'
@@ -8,10 +8,10 @@ import { useDebounce } from 'usehooks-ts'
 import Combobox from '@/components/form/Combobox'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { message } from '@/i18n/src/messages'
 import useTableStateStore from '@/store/useTableStateStore'
 import { CODEBOOK } from '@/types/constants/codebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import type { QueryFilter } from '../types'
 
@@ -32,32 +32,41 @@ export const OrdersFilter = () => {
   const filter = instances.orders?.filter
   const { formatMessage: fm } = useIntl()
 
-  const [querySupplier, setQuerySupplier] = useQueryState(
-    'supplier',
-    {defaultValue: JSON.stringify(filter?.supplier)}
-  )
-  const [queryOrderStatus, setQueryOrderStatus] = useQueryState(
-    'orderStatus',
-    {defaultValue:JSON.stringify(filter?.orderStatus)}
-  )
-  const [queryProcurementResponsible, setQueryProcurementResponsible] = useQueryState(
-    'procurementResponsible',
-    {defaultValue:JSON.stringify(filter?.procurementResponsible)}
-  )
-  const [queryRequestor, setQueryRequestor] = useQueryState(
-    'requestor',
-    {defaultValue:JSON.stringify(filter?.requestor)}
-  )
+  const [querySupplier, setQuerySupplier] = useQueryState('supplier', {
+    defaultValue: JSON.stringify(filter?.supplier)
+  })
+  const [queryOrderStatus, setQueryOrderStatus] = useQueryState('orderStatus', {
+    defaultValue: JSON.stringify(filter?.orderStatus)
+  })
+  const [queryProcurementResponsible, setQueryProcurementResponsible] =
+    useQueryState('procurementResponsible', {
+      defaultValue: JSON.stringify(filter?.procurementResponsible)
+    })
+  const [queryRequestor, setQueryRequestor] = useQueryState('requestor', {
+    defaultValue: JSON.stringify(filter?.requestor)
+  })
   const form = useForm<OrdersFilterForm>({
     defaultValues: {
-      supplier: querySupplier ? JSON.parse(querySupplier) : filter?.supplier ? filter.supplier : null,
-      orderStatus: queryOrderStatus ? JSON.parse(queryOrderStatus) : filter?.orderStatus ? filter.orderStatus : null,
+      supplier: querySupplier
+        ? JSON.parse(querySupplier)
+        : filter?.supplier
+          ? filter.supplier
+          : null,
+      orderStatus: queryOrderStatus
+        ? JSON.parse(queryOrderStatus)
+        : filter?.orderStatus
+          ? filter.orderStatus
+          : null,
       procurementResponsible: queryProcurementResponsible
         ? JSON.parse(queryProcurementResponsible)
         : filter?.procurementResponsible
-        ? filter.procurementResponsible
-        : null,
-      requestor: queryRequestor ? JSON.parse(queryRequestor) : filter?.requestor ? filter.supplier : null
+          ? filter.procurementResponsible
+          : null,
+      requestor: queryRequestor
+        ? JSON.parse(queryRequestor)
+        : filter?.requestor
+          ? filter.supplier
+          : null
     }
   })
   const [queryFilter, setQuery] = useState<QueryFilter>({} as QueryFilter)
@@ -65,8 +74,14 @@ export const OrdersFilter = () => {
   const { control } = form
 
   const supplier = useDebounce(useWatch({ control, name: 'supplier' }), 300)
-  const orderStatus = useDebounce(useWatch({ control, name: 'orderStatus' }), 300)
-  const procurementResponsible = useDebounce(useWatch({ control, name: 'procurementResponsible' }), 300)
+  const orderStatus = useDebounce(
+    useWatch({ control, name: 'orderStatus' }),
+    300
+  )
+  const procurementResponsible = useDebounce(
+    useWatch({ control, name: 'procurementResponsible' }),
+    300
+  )
   const requestor = useDebounce(useWatch({ control, name: 'requestor' }), 300)
 
   useEffect(() => {
@@ -76,7 +91,10 @@ export const OrdersFilter = () => {
   const handleFieldUpdate = (
     fieldName: string,
     fieldCodebook: CodebookType,
-    setFieldQuery: (value: string | ((old: string) => string | null) | null, options?: Options | undefined) => Promise<URLSearchParams>
+    setFieldQuery: (
+      value: string | ((old: string) => string | null) | null,
+      options?: Options | undefined
+    ) => Promise<URLSearchParams>
   ) => {
     const fieldUIDKey = fieldName
     if (fieldCodebook) {
@@ -105,7 +123,11 @@ export const OrdersFilter = () => {
   }, [orderStatus, setQueryOrderStatus])
 
   useEffect(() => {
-    handleFieldUpdate('procurementResponsible', procurementResponsible, setQueryProcurementResponsible)
+    handleFieldUpdate(
+      'procurementResponsible',
+      procurementResponsible,
+      setQueryProcurementResponsible
+    )
   }, [procurementResponsible, setQueryProcurementResponsible])
 
   useEffect(() => {
@@ -135,7 +157,9 @@ export const OrdersFilter = () => {
           <Col>
             <Listbox
               name="procurementResponsible"
-              placeholder={fm({ id: ordersFilterMessages.procurementResponsible.label })}
+              placeholder={fm({
+                id: ordersFilterMessages.procurementResponsible.label
+              })}
               codebook={CODEBOOK.PROCUREMENTER}
               allowEmptyOption={true}
               emptyOption="All Procurement Responsibles"

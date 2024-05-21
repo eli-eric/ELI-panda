@@ -1,14 +1,13 @@
 import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { memo, useContext, useRef } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
+import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
-import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 
-import { useParentSystemDetail } from '../../hooks/useParentSystemDetail'
 import Breadcrumbs from '../Breadcrumps'
 import { SystemMainForm } from './components/SystemMain.form'
 import { schema } from './SystemForm.schema'
@@ -20,23 +19,24 @@ import { useRouter } from 'next/router'
 import CheckBox from '@/components/form/CheckBox'
 import { Input } from '@/components/form/Input'
 import { Col, Grid } from '@/components/grid/Grid'
+import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import usePermission from '@/hooks/usePermission'
-import { SystemDetailContext } from '@/pages/system/[uid]'
 import { ROLE } from '@/types/constants/roles'
 import type { SystemLevel } from '@/types/gql/graphql'
+import type { CodebookType } from '@/types/responses/codebook'
 import { classNames } from '@/utils'
 
 import { useSystemCreate } from '../../hooks/useSystemCreate'
+import { useSystemDetail } from '../../hooks/useSystemDetail'
+import { useSystemParent } from '../../hooks/useSystemParent'
 import { useSystemUpdate } from '../../hooks/useSystemUpdate'
 import type { SystemDetailFormType } from '../../types/form'
 import { getColorBySystemLevel } from '../../utils'
+import { AssignPhysicalItem } from '../AssignPhysicalItem'
+import { ShowHistoryButton } from '../history/ShowHistoryButton'
 import { SystemItemCard } from './components/SystemItem.card'
 import useSystemEditFormFields from './SystemForm.fields'
-import { AssignPhysicalItem } from '../AssignPhysicalItem'
-import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
-import { ShowHistoryButton } from '../history/ShowHistoryButton'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
@@ -48,14 +48,18 @@ const FormCard = ({ children, className }: CardProps) => (
 
 //TODO:  split to update and create form
 export const SystemForm = () => {
-  const { systemDetail } = useContext(SystemDetailContext)
+  const { systemDetail, catalogueItem } = useSystemDetail()
   const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
   const fields = useSystemEditFormFields()
+  const { parentPath, parentSystem } = useSystemParent()
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { spareParts, sparePartsFor, subSystems, __typename, ...rest } =
+    systemDetail || {}
 
   const router = useRouter()
   const uid = router.query.uid as string | undefined
 
-  const { parentPath } = useParentSystemDetail()
   const systemImageRef = useRef<ImageGalleryRef>()
 
   const { updateSystem, loading } = useSystemUpdate(
@@ -65,16 +69,17 @@ export const SystemForm = () => {
   const { createSystem, loading: createLoading } =
     useSystemCreate(systemImageRef)
 
-  const formMethods = useForm<SystemDetailFormType>({
+  const formMethods = useForm<any>({
     resolver: yupResolver(schema) as any,
     defaultValues: {
-      ...(systemDetail as SystemDetailFormType),
-      responsible: systemDetail?.responsible
-        ? {
-            uid: systemDetail?.responsible?.uid,
-            name: systemDetail?.responsible?.fullName as string
-          }
-        : undefined,
+      ...rest,
+      responsible:
+        systemDetail?.responsible && systemDetail?.responsible?.fullName
+          ? {
+              uid: systemDetail?.responsible?.uid,
+              name: systemDetail?.responsible?.fullName
+            }
+          : undefined,
       zone: systemDetail?.zone
         ? {
             uid: systemDetail?.zone?.uid,
@@ -84,10 +89,30 @@ export const SystemForm = () => {
     }
   })
 
+  // set default values for responsible, zone and location
+  useEffect(() => {
+    if (parentSystem) {
+      parentSystem.responsible &&
+        formMethods.setValue('responsible', {
+          uid: parentSystem.responsible?.uid,
+          name: parentSystem.responsible?.fullName
+        })
+      parentSystem.zone &&
+        formMethods.setValue('zone', {
+          uid: parentSystem.zone?.uid,
+          name: parentSystem.zone?.name as string
+        })
+      parentSystem.location &&
+        formMethods.setValue('location', {
+          uid: parentSystem.location?.uid,
+          name: parentSystem.location?.name as string
+        })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [parentSystem])
+
   const systemLevel = formMethods.watch('systemLevel')
-
   const physicalItem = formMethods.watch('physicalItem')
-
   const onSubmit = (data: SystemDetailFormType) => {
     // extract from data hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -128,7 +153,7 @@ export const SystemForm = () => {
       <Card>
         <Breadcrumbs
           parentPath={
-            parentPath || (systemDetail?.parentPath as CodebookType[])
+            (systemDetail?.parentPath as CodebookType[]) || parentPath
           }
         />
       </Card>
@@ -147,7 +172,7 @@ export const SystemForm = () => {
               itemId: String(uid),
               additionalParams: {
                 itemCategory: FILE_TYPE.CATALOGUE,
-                itemId: systemDetail?.physicalItem?.catalogueItem?.uid
+                itemId: catalogueItem?.uid
               }
             }}
             className="w-full"

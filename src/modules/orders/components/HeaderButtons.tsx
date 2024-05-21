@@ -16,5 +16,11 @@ export const HeaderButtons = () => {
     router.push(PATH.ORDER)
   }
 
-  return <SearchBarButtonsComponent handleAdd={handleAdd} handleRefresh={handleRefresh} editRole={ROLE.ORDERS_EDIT} />
+  return (
+    <SearchBarButtonsComponent
+      handleAdd={handleAdd}
+      handleRefresh={handleRefresh}
+      editRole={ROLE.ORDERS_EDIT}
+    />
+  )
 }

@@ -1,10 +1,12 @@
+import Link from 'next/link'
 import type { FC } from 'react'
 import { Fragment } from 'react'
-import type { History } from './ShowHistoryButton'
-import { classNames } from '@/utils'
-import Link from 'next/link'
+
 import { PATH } from '@/types/constants/paths'
+import { classNames } from '@/utils'
 import { formatDate } from '@/utils/formatters'
+
+import type { History } from './ShowHistoryButton'
 
 interface Props {
   history?: History[]

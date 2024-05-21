@@ -1,13 +1,15 @@
-import { gql, useMutation } from '@apollo/client'
+import { gql } from '@/types/gql'
 
-const DELETE_FILTER = gql`
-  mutation Mutation($where: UserSettingsWhere) {
+import { useGraphQLMutation } from '../fetch/useGraphQL'
+
+const deleteFilterMutation = gql(`
+  mutation DeleteFilterMutation($where: UserSettingsWhere) {
     deleteUserSettings(where: $where) {
       nodesDeleted
     }
   }
-`
+`)
 export const useFilterDelete = () => {
-  const [deleteSavedFilter, { loading }] = useMutation(DELETE_FILTER)
-  return { deleteSavedFilter, loading }
+  const { mutate, isPending } = useGraphQLMutation(deleteFilterMutation)
+  return { deleteSavedFilter: mutate, loading: isPending }
 }

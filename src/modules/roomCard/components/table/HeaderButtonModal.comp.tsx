@@ -10,6 +10,7 @@ interface Props {
   onSubmit: (data: any) => void
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
   isModalOpen: boolean
+  disableSubmit?: boolean
 }
 
 export const HeaderButtonModalComponent: FC<PropsWithChildren<Props>> = ({
@@ -17,7 +18,8 @@ export const HeaderButtonModalComponent: FC<PropsWithChildren<Props>> = ({
   formMethods,
   onSubmit,
   isModalOpen,
-  setIsModalOpen
+  setIsModalOpen,
+  disableSubmit
 }) => (
   <Fragment>
     <PlusButton
@@ -27,7 +29,13 @@ export const HeaderButtonModalComponent: FC<PropsWithChildren<Props>> = ({
         setIsModalOpen(true)
       }}
     />
-    <FormModal formMethods={formMethods} open={isModalOpen} setOpen={setIsModalOpen} onSubmit={onSubmit}>
+    <FormModal
+      formMethods={formMethods}
+      disableSubmit={disableSubmit}
+      open={isModalOpen}
+      setOpen={setIsModalOpen}
+      onSubmit={onSubmit}
+    >
       <div className="flex space-x-3">{children}</div>
     </FormModal>
   </Fragment>

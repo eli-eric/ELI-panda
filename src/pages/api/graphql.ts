@@ -1,4 +1,8 @@
-import { ApolloServer, BaseContext, GraphQLRequestContext } from '@apollo/server'
+import {
+  ApolloServer,
+  BaseContext,
+  GraphQLRequestContext
+} from '@apollo/server'
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { NextAuthOptions } from 'next-auth'
@@ -44,7 +48,11 @@ function logger(session, req, res, next) {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getServerSession(req, res, authOptions as NextAuthOptions)
+  const session = await getServerSession(
+    req,
+    res,
+    authOptions as NextAuthOptions
+  )
   if (process.env.PANDA_ENV !== 'localhost') {
     logger(session, req, res, () => {})
   }

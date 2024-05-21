@@ -4,12 +4,12 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import { message } from '@/i18n/src/messages'
+import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
+import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
 import { classNames } from '@/utils'
 
 import useOrderLinesColumns from './components/OrderLines.columns'
 import { OrderLineForm } from './form/OrderLineForm.cont'
-import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
-import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 
 const messages = message.ordersPage.orderDetail.sectionHeadings
 

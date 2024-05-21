@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router'
+
 import { Button } from '@/components/Buttons'
 import { useSystemCodeClear } from '@/modules/systemItem/hooks/useSystemCodeClear'
 import { useSystemCodeGenerate } from '@/modules/systemItem/hooks/useSystemCodeGenerate'
@@ -5,13 +7,22 @@ import { useSystemCodeGenerate } from '@/modules/systemItem/hooks/useSystemCodeG
 export const SystemCodeButton = () => {
   const { loading, getSystemCode, disabled } = useSystemCodeGenerate()
   const { clearSystemCode, loading: pending } = useSystemCodeClear()
+  const router = useRouter()
+  const uid = router.query.uid as string | undefined
 
   const handleGenerate = () => {
     getSystemCode()
   }
 
   const handleClear = () => {
-    clearSystemCode()
+    clearSystemCode({
+      where: {
+        uid: uid
+      },
+      update: {
+        systemCode: null
+      }
+    })
   }
 
   return (

@@ -1,9 +1,14 @@
 import { Combobox as HUICombobox } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon, XMarkIcon } from '@heroicons/react/20/solid'
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  XMarkIcon
+} from '@heroicons/react/20/solid'
 import React, { useDeferredValue, useEffect, useState } from 'react'
 
-import { type CodebookType, useCodebook } from '@/hooks/fetch/useCodebook'
+import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
+import type { CodebookType } from '@/types/responses/codebook'
 import { classNames } from '@/utils'
 
 type ComboboxPropsT = {
@@ -26,7 +31,10 @@ export const DefferedCombobox = ({
 }: ComboboxPropsT) => {
   const [query, setQuery] = useState<string>(initialValue?.name || '')
   const defferedQuery = useDeferredValue(query)
-  const { data } = useCodebook(codebook, { searchText: defferedQuery, limit: 20 })
+  const { data } = useCodebook(codebook, {
+    searchText: defferedQuery,
+    limit: 20
+  })
 
   const options = data?.data || []
 
@@ -73,7 +81,10 @@ export const DefferedCombobox = ({
           </div>
         )}
         <HUICombobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-          <ChevronDownIcon className="h-4 w-4text-gray-500" aria-hidden="true" />
+          <ChevronDownIcon
+            className="h-4 w-4text-gray-500"
+            aria-hidden="true"
+          />
         </HUICombobox.Button>
       </div>
 
@@ -92,7 +103,9 @@ export const DefferedCombobox = ({
               className={({ active }) =>
                 classNames(
                   'relative cursor-default select-none py-2 pl-3 pr-9',
-                  active ? 'bg-primary-500 text-white' : 'text-gray-900 dark:text-gray-200'
+                  active
+                    ? 'bg-primary-500 text-white'
+                    : 'text-gray-900 dark:text-gray-200'
                 )
               }
             >
@@ -100,7 +113,14 @@ export const DefferedCombobox = ({
                 const selected = value?.uid === item.uid
                 return (
                   <>
-                    <span className={classNames('block truncate', selected && 'font-semibold')}>{item.name}</span>
+                    <span
+                      className={classNames(
+                        'block truncate',
+                        selected && 'font-semibold'
+                      )}
+                    >
+                      {item.name}
+                    </span>
                     {selected && (
                       <span
                         className={classNames(

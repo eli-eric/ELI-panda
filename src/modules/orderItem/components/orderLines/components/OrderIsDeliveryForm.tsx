@@ -23,7 +23,11 @@ export const OrderIsDeliveryForm = () => {
       </Col>
 
       <Col md={12}>
-        <CheckBox name="manualEun" label={fm({ id: orderLines.form.manualEun.label })} rounded="rounded-md" />
+        <CheckBox
+          name="manualEun"
+          label={fm({ id: orderLines.form.manualEun.label })}
+          rounded="rounded-md"
+        />
       </Col>
       {manualEun && (
         <Col md={12}>

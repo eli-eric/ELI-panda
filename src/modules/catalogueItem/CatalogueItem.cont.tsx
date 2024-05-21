@@ -1,4 +1,3 @@
-'use client'
 import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { memo, useEffect, useRef } from 'react'
@@ -9,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import ErrorPage from '@/components/error/ErrorPage'
 import { Form } from '@/components/form/Form'
 import { TextArea } from '@/components/form/Input'
+import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'
 import usePermission from '@/hooks/usePermission'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
@@ -25,10 +25,9 @@ import { schema } from './components/form/ItemForm.schema'
 import { CatalogueOrders } from './components/orders/CatalogueOrders'
 import { RelatedItemsContainer } from './components/related-items/RelatedItems.cont'
 import { CatalogueStatisticsContainer } from './components/statistics/CatalogueStatistics.cont'
-import useItem from './hooks/useItem'
+import { useCatalogueItem } from './hooks/useItem'
 import useItemSubmit from './hooks/useItemSubmit'
 import type { CatalogueItem } from './types/responses'
-import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 
 const MemoizedGallery = memo(ImageGallery)
 
@@ -46,7 +45,7 @@ const CatalogueItemContainer = ({
   catalogueCategoryUid
 }: CatalogueItemContainerProps) => {
   const disabledEdit = !usePermission([ROLE.CATALOGUE_EDIT])
-  const { item } = useItem()
+  const { item } = useCatalogueItem()
   const fields = useCatalogueFormFields()
 
   const { catalogueCategory } = useCategory(catalogueCategoryUid)

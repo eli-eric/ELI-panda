@@ -4,7 +4,7 @@ import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { useSystemMovingFormFields } from './SystemMoving.fields'
 
@@ -19,8 +19,12 @@ export const SystemMovingForm = ({ parentPath }: SystemMovingFormProps) => {
     <Grid>
       <Col lg={12}>
         <BreadcrumpContainer>
-          <span className="text-sm font-medium text-gray-500">Target System: </span>
-          {parentPath?.map((item, index) => <BreadcrumpItem key={index} name={item.name} />)}
+          <span className="text-sm font-medium text-gray-500">
+            Target System:{' '}
+          </span>
+          {parentPath?.map((item, index) => (
+            <BreadcrumpItem key={index} name={item.name} />
+          ))}
         </BreadcrumpContainer>
       </Col>
       <Col sm={3} md={4} lg={8}>

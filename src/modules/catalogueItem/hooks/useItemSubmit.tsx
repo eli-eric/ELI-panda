@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import type { MutableRefObject } from 'react'
 import { toast } from 'react-hot-toast'
-import { mutate } from 'swr'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
@@ -9,7 +8,9 @@ import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { PATH } from '@/types/constants/paths'
 import { navigateBack } from '@/utils'
 
-const useItemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>) => {
+const useItemSubmit = (
+  imageRef?: MutableRefObject<ImageGalleryRef | undefined>
+) => {
   const { query, replace } = useRouter()
   const uid = query.uid as string | undefined
   const { catalogueItem } = useEndpoint({ uid: uid })
@@ -26,20 +27,6 @@ const useItemSubmit = (imageRef?: MutableRefObject<ImageGalleryRef | undefined>)
           replace(PATH.CATALOGUE_ITEM + '/' + responseUid)
         }
       })
-      mutate(
-        key => typeof key === 'string' && key.startsWith('/catalogue/items'),
-        prev => ({
-          ...prev,
-          data: prev.data.map(item => {
-            if (item.uid === responseUid) {
-              return { uid: uid, ...data }
-            }
-            return item
-          })
-        }),
-        { revalidate: false }
-      )
-      mutate(catalogueItem, () => ({ uid: uid, ...data }), { revalidate: false })
     },
     onError: () => {
       toast.error('Error saving item')

@@ -22,8 +22,12 @@ export const CellWithDelete = ({
   const { remove, fields } = useFieldArray({ control, name: formName })
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
   // any type because of react-table and component is for more contexts
-  const index = fields.findIndex((field: any) => field?.uid === uid ?? field?.uuid === uuid)
-  const item = fields.find((field: any) => field?.uid === uid ?? field?.uuid === uuid)
+  const index = fields.findIndex(
+    (field: any) => field?.uid === uid ?? field?.uuid === uuid
+  )
+  const item = fields.find(
+    (field: any) => field?.uid === uid ?? field?.uuid === uuid
+  )
 
   const onDeleteClick = () => {
     remove(index)
@@ -31,7 +35,9 @@ export const CellWithDelete = ({
   }
   return (
     <div className="flex items-center">
-      {editPersmission && <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />}
+      {editPersmission && (
+        <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />
+      )}
       <span>{getValue()}</span>
     </div>
   )

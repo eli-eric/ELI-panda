@@ -14,7 +14,7 @@ import { message } from '@/i18n/src/messages'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { CatalogueStatisticsContainer } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.cont'
 import { ROLE } from '@/types/constants/roles'
-import type { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses/catalogue'
 import { createMessageValues } from '@/utils/formatters'
 
 const modalMessage = message.ordersPage.deleteModal
@@ -35,20 +35,24 @@ export const NameCell = ({
 }: NameProps) => {
   const { catalogueItem } = useEndpoint({ uid })
   const { formatMessage } = useIntl()
-  const { mutate, catalogueItems } = useCatalogueItems(tableId)
+  const { refetch, catalogueItems } = useCatalogueItems(tableId)
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
-  const setOpenStats = useModal(<CatalogueStatisticsContainer catalogueItemUid={uid} />)
+  const setOpenStats = useModal(
+    <CatalogueStatisticsContainer catalogueItemUid={uid} />
+  )
   const withWarningModal = useWarningModal()
 
   const deleteSubmit = useSubmit({
     endpoint: catalogueItem,
     method: 'delete',
     onSuccess: () => {
-      catalogueItems && mutate({ ...catalogueItems, data: catalogueItems?.data?.filter(item => item.uid !== uid) })
+      catalogueItems && refetch()
     },
     onError: e => {
       if (e?.response?.status === 409) {
-        toast.error(`Can't delete ${getValue()}, it is binded in another items.`)
+        toast.error(
+          `Can't delete ${getValue()}, it is binded in another items.`
+        )
       } else {
         toast.error(`Error deleting ${getValue()}.`)
       }
@@ -58,7 +62,11 @@ export const NameCell = ({
   return (
     <div className="flex items-center">
       {tableId === 'catalogueItemsModal' ? (
-        <Link href={{ pathname: '/catalogue/item/' + uid }} legacyBehavior className="flex items-center">
+        <Link
+          href={{ pathname: '/catalogue/item/' + uid }}
+          legacyBehavior
+          className="flex items-center"
+        >
           <a target="_blank" rel="noopener noreferrer">
             <LinkDecorator>
               <span>{getValue()}</span>
@@ -66,7 +74,10 @@ export const NameCell = ({
           </a>
         </Link>
       ) : (
-        <Link href={{ pathname: '/catalogue/item/' + uid }} className="flex items-center">
+        <Link
+          href={{ pathname: '/catalogue/item/' + uid }}
+          className="flex items-center"
+        >
           <LinkDecorator>
             <span>{getValue()}</span>
           </LinkDecorator>
@@ -77,7 +88,10 @@ export const NameCell = ({
           onDeleteClick={() => {
             withWarningModal(
               () => deleteSubmit.submit(),
-              formatMessage({ id: modalMessage.message }, createMessageValues({ name: getValue() }))
+              formatMessage(
+                { id: modalMessage.message },
+                createMessageValues({ name: getValue() })
+              )
             )()
           }}
           canEdit={canEdit}

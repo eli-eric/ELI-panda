@@ -18,7 +18,10 @@ const ProfileSecurityPage: NextPage = (): JSX.Element => {
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-      <UserProfileLayout title={messages.security.title} subTitle={messages.security.subTitle}>
+      <UserProfileLayout
+        title={messages.security.title}
+        subTitle={messages.security.subTitle}
+      >
         <ChangePasswordContainer />
       </UserProfileLayout>
     </Fragment>

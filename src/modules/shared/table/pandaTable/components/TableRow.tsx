@@ -2,7 +2,7 @@ import type { Row } from '@tanstack/react-table'
 import { useContext, useId, useState } from 'react'
 import { useDrop } from 'react-dnd'
 
-import type { SystemDetail } from '@/modules/systems/types/responses'
+import type { SystemDetail } from '@/types/responses/systems'
 import { classNames } from '@/utils'
 
 import type { GetRowPropsReturnType } from '../PandaTable'
@@ -34,7 +34,8 @@ export const TableRow = ({ getRowProps, row, index }: Props) => {
       }, 50)
     },
     drop: item => {
-      dropSettings && dropSettings.onDropHandler(item, { tableId, ...row.original })
+      dropSettings &&
+        dropSettings.onDropHandler(item, { tableId, ...row.original })
     }
   })
 

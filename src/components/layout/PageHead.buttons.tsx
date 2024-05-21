@@ -12,7 +12,12 @@ type Props = {
   exitTo: string
 }
 
-export const PageHeaderButtons = ({ onSubmitAndExit, onSubmit, role, exitTo }: Props) => {
+export const PageHeaderButtons = ({
+  onSubmitAndExit,
+  onSubmit,
+  role,
+  exitTo
+}: Props) => {
   const editPersmission = usePermission([role])
 
   return (

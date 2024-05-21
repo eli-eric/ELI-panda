@@ -1,9 +1,11 @@
-import type { Query } from '@/types/gql/graphql'
-import { useMutation, gql } from '@apollo/client'
-import { useRouter } from 'next/router'
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
-const CREATE_RELATED_ITEM = gql`
-  mutation Mutation($where: CatalogueItemWhere, $update: CatalogueItemUpdateInput) {
+const CREATE_RELATED_ITEM = gql(`
+  mutation CreateRelatedItemMutation(
+    $where: CatalogueItemWhere
+    $update: CatalogueItemUpdateInput
+  ) {
     updateCatalogueItems(where: $where, update: $update) {
       catalogueItems {
         relatedCatalogueItems {
@@ -12,41 +14,13 @@ const CREATE_RELATED_ITEM = gql`
       }
     }
   }
-`
-interface Props {
-  uid?: string
-}
+`)
 
-export const useCreateRelatedItem = ({ uid }: Props) => {
-  const router = useRouter()
-  const itemUid = router.query.uid as string
-  const [createRelatedItem, { data, error, loading }] = useMutation<Query>(CREATE_RELATED_ITEM, {
-    variables: {
-      where: {
-        uid: itemUid
-      },
-      update: {
-        relatedCatalogueItems: [
-          {
-            connect: [
-              {
-                where: {
-                  node: {
-                    uid
-                  }
-                }
-              }
-            ]
-          }
-        ]
-      }
-    }
-  })
+export const useCreateRelatedItem = () => {
+  const { mutate, isPending } = useGraphQLMutation(CREATE_RELATED_ITEM)
 
   return {
-    createRelatedItem,
-    loading,
-    data,
-    error
+    createRelatedItem: mutate,
+    loading: isPending
   }
 }

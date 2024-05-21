@@ -1,7 +1,7 @@
 import { FunnelIcon as FunnelIconEmpty } from '@heroicons/react/24/outline'
 import { FunnelIcon as FunnelIconFull } from '@heroicons/react/24/solid'
 import { useQueryState } from 'next-usequerystate'
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Fragment, startTransition, useEffect, useMemo, useState } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import { useIsFirstRender } from 'usehooks-ts'
 
@@ -9,12 +9,12 @@ import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver'
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { useFormControlStore } from '@/store/useFormControlStore'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { CatalogueFilterForm } from './form/CatalogueFilter.form'
 
@@ -71,25 +71,23 @@ export const CatalogueFilterButtonContainer = ({
   const isFirstRender = useIsFirstRender()
 
   useEffect(() => {
-    if (isFirstRender) {
-      return
-    }
     if (
       catalogueCategoryProperties?.filter(prop =>
         customFieldIdToSync.has(prop.property.uid)
       ).length === 0
     ) {
-      toggleDeleteCustom()
+      startTransition(() => {
+        toggleDeleteCustom()
+      })
     }
     // eslint-disable-next-line
   }, [catalogueCategoryProperties, toggleDeleteCustom, isFirstRender])
 
   useEffect(() => {
-    if (isFirstRender) {
-      return
-    }
     if (!catalogueCategoryProperties && !category) {
-      toggleDeleteCustom()
+      startTransition(() => {
+        toggleDeleteCustom()
+      })
     }
   }, [catalogueCategoryProperties, category, toggleDeleteCustom, isFirstRender])
 

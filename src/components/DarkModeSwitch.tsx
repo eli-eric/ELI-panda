@@ -1,7 +1,7 @@
 import { Switch } from '@headlessui/react'
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline'
 import type { FC } from 'react'
-import { useEffect, useState } from 'react'
+import { startTransition, useEffect, useState } from 'react'
 
 import { useDarkModeStore } from '@/store/useDarkModeStore'
 import { classNames } from '@/utils'
@@ -15,7 +15,7 @@ export const DarkModeSwitch: FC<Props> = ({ className }) => {
 
   useEffect(() => {
     // This will be executed only on the client side
-    setClientSide(true)
+    startTransition(() => setClientSide(true))
   }, [])
 
   // Display nothing or a loader until useEffect runs
@@ -38,7 +38,9 @@ export const DarkModeSwitch: FC<Props> = ({ className }) => {
       >
         <span
           className={classNames(
-            isDark ? 'opacity-0 duration-100 ease-out' : 'opacity-100 duration-200 ease-in',
+            isDark
+              ? 'opacity-0 duration-100 ease-out'
+              : 'opacity-100 duration-200 ease-in',
             'absolute inset-0 flex h-full w-full items-center justify-center transition-opacity'
           )}
           aria-hidden="true"
@@ -47,7 +49,9 @@ export const DarkModeSwitch: FC<Props> = ({ className }) => {
         </span>
         <span
           className={classNames(
-            isDark ? 'opacity-100 duration-200 ease-in' : 'opacity-0 duration-100 ease-out',
+            isDark
+              ? 'opacity-100 duration-200 ease-in'
+              : 'opacity-0 duration-100 ease-out',
             'absolute inset-0 flex h-full w-full items-center justify-center transition-opacity'
           )}
           aria-hidden="true"
@@ -57,7 +61,9 @@ export const DarkModeSwitch: FC<Props> = ({ className }) => {
       </span>
       <span
         className={classNames(
-          isDark ? 'opacity-0 duration-100 ease-out' : 'opacity-100 duration-200 ease-in',
+          isDark
+            ? 'opacity-0 duration-100 ease-out'
+            : 'opacity-100 duration-200 ease-in',
           'absolute right-0 pr-1 inset-y-0 flex items-center justify-center transition-opacity'
         )}
         aria-hidden="true"
@@ -66,7 +72,9 @@ export const DarkModeSwitch: FC<Props> = ({ className }) => {
       </span>
       <span
         className={classNames(
-          isDark ? 'opacity-100 duration-200 ease-in' : 'opacity-0 duration-100 ease-out',
+          isDark
+            ? 'opacity-100 duration-200 ease-in'
+            : 'opacity-0 duration-100 ease-out',
           'absolute left-0 pl-1 inset-y-0 flex items-center justify-center transition-opacity'
         )}
         aria-hidden="true"

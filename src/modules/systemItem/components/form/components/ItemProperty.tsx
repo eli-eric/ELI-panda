@@ -7,7 +7,7 @@ import { RangeInput } from '@/components/form/RangeInput'
 import usePermission from '@/hooks/usePermission'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { ROLE } from '@/types/constants/roles'
-import type { PhysicalItemProperty } from '@/modules/systems/types/responses'
+import type { PhysicalItemProperty } from '@/types/responses/systems'
 
 interface Props {
   detail: PhysicalItemProperty

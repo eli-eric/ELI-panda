@@ -1,3 +1,7 @@
+import { TrashIcon } from '@heroicons/react/24/outline'
+import type { FC } from 'react'
+import { Fragment, useState } from 'react'
+
 import { Button } from '@/components/Buttons'
 import WarningModal from '@/components/overlays/modal/warning/modal-warning.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
@@ -5,9 +9,6 @@ import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
 import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
 import type { ModalButtons } from '@/types/form'
-import { TrashIcon } from '@heroicons/react/24/outline'
-import type { FC } from 'react'
-import { Fragment, useState } from 'react'
 
 const messages = message.common
 

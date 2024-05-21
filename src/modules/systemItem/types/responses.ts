@@ -1,4 +1,4 @@
-import type { SystemDetail } from '@/modules/systems/types/responses'
+import type { SystemDetail } from '@/types/responses/systems'
 
 export type SystemsForRelResponse = {
   data: SystemDetail[]

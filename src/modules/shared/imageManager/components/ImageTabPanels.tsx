@@ -17,7 +17,10 @@ interface ImageTabPanelsProps {
 }
 
 export const ImageTabPanels = ({ data, getRootProps }: ImageTabPanelsProps) => (
-  <Tab.Panels {...getRootProps()} className="h-full flex rounded-b-md border border-t-0 border-gray-300 justify-center">
+  <Tab.Panels
+    {...getRootProps()}
+    className="h-full flex rounded-b-md border border-t-0 border-gray-300 justify-center"
+  >
     {(data && data.length > 0 ? data : [fallbackImage]).map(obj => (
       <Tab.Panel key={obj.id} className="flex">
         <Image

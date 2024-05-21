@@ -14,11 +14,16 @@ interface LocationCellProps extends CellContext<RoomCard, any> {
   isHoveringId?: number | string
 }
 
-export const LocationCell = ({ getValue, row: { original } }: LocationCellProps) => {
+export const LocationCell = ({
+  getValue,
+  row: { original }
+}: LocationCellProps) => {
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
 
   const { deleteRoomCard } = useRoomCardDelete(original.uid, original.name)
-  const withWarningModal = useWarningModal(`Are you sure you want to delete room card "${original.name}"?`)
+  const withWarningModal = useWarningModal(
+    `Are you sure you want to delete room card "${original.name}"?`
+  )
   const handleDelete = () => {
     deleteRoomCard()
   }
@@ -28,11 +33,15 @@ export const LocationCell = ({ getValue, row: { original } }: LocationCellProps)
     <div className="flex items-center">
       <Link
         href={PATH.ROOM_CARD + '/' + original.uid}
-        className={'text-blue-700 dark:text-gray-200 dark:underline cursor-pointer hover:underline'}
+        className={
+          'text-blue-700 dark:text-gray-200 dark:underline cursor-pointer hover:underline'
+        }
       >
         <span>{getValue()}</span>
       </Link>
-      {editPersmission && <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />}
+      {editPersmission && (
+        <TableActionsButtons onDeleteClick={onDeleteClick} canEdit={true} />
+      )}
     </div>
   )
 }

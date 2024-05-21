@@ -22,18 +22,6 @@ logger.debug(
 const s3Client = new Client(config)
 
 //Make sure we have buckets
-s3Client.bucketExists(bucket, function (err, exists) {
-  if (err) {
-    return logger.error(`Error checking if ${bucket} exists`, err)
-  }
-  if (!exists) {
-    s3Client.makeBucket(bucket, function (err) {
-      if (err) {
-        return logger.error(`Error creating ${bucket}`, err)
-      }
-      logger.info(`${bucket} created successfully`)
-    })
-  }
-})
+s3Client.bucketExists(bucket)
 
 export default s3Client

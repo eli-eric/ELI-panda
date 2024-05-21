@@ -1,26 +1,23 @@
-import { gql, useMutation } from '@apollo/client'
 import { toast } from 'react-hot-toast'
+
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
 import { useUsers } from './useUsers'
 
-const DELETE_USER = gql`
+const DELETE_USER = gql(`
   mutation DeleteUsers($where: UserWhere) {
     deleteUsers(where: $where) {
       nodesDeleted
     }
   }
-`
+`)
 
-export const useUserDelete = (uid: string, name: string) => {
+export const useUserDelete = (name: string) => {
   const { refetch } = useUsers()
 
-  const [deleteUser] = useMutation(DELETE_USER, {
-    variables: {
-      where: {
-        uid
-      }
-    },
-    onCompleted: () => {
+  const { mutate } = useGraphQLMutation(DELETE_USER, {
+    onSuccess: () => {
       refetch()
       toast.success(`User ${name} was deleted`)
     },
@@ -29,5 +26,5 @@ export const useUserDelete = (uid: string, name: string) => {
     }
   })
 
-  return { deleteUser }
+  return [mutate]
 }

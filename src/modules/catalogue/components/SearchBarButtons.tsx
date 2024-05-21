@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router'
 import type { UseFormReturn } from 'react-hook-form'
-import { mutate } from 'swr'
 
 import { ModalStatisticsButtonLarge } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.button'
 import { SearchBarButtonsComponent } from '@/modules/shared/table/SearchBar'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
-import { CatalogueFilterButtonContainer } from './filters/CatalogueFilterButton.cont'
+import { useCatalogueItems } from '../hooks/useCatalogueItems'
 import { useCategoryUid } from '../hooks/useCategoryUid'
+import { CatalogueFilterButtonContainer } from './filters/CatalogueFilterButton.cont'
 
 interface SearchBarButtonsProps {
   filterFormMethods: UseFormReturn<any, any, any>
@@ -19,12 +19,9 @@ export const SearchBarButtons = ({
 }: SearchBarButtonsProps) => {
   const router = useRouter()
   const uid = useCategoryUid()
+  const { refetch } = useCatalogueItems()
   const handleRefresh = () => {
-    mutate(
-      key => typeof key === 'string' && key.startsWith('/catalogue/items'),
-      undefined,
-      { revalidate: true }
-    )
+    refetch()
   }
   const handleAdd = () => {
     router.push({

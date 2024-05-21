@@ -1,22 +1,24 @@
-import { gql, useMutation } from '@apollo/client'
+import { gql } from '@/types/gql'
 
+import { useGraphQLMutation } from '../fetch/useGraphQL'
 import { useFilterDetails } from './useFilterDetails'
 
-const CREATE_FILTER = gql`
-  mutation Mutation($input: [UserSettingsCreateInput!]!) {
+const createFilterMutation = gql(`
+  mutation CreateFilterMutation($input: [UserSettingsCreateInput!]!) {
     createUserSettings(input: $input) {
       userSettings {
         key
       }
     }
   }
-`
+`)
 export const useFilterCreate = ({ tableId }: { tableId: string }) => {
   const { refetch } = useFilterDetails(tableId)
-  const [createUserSettings, { loading }] = useMutation(CREATE_FILTER, {
-    onCompleted: () => {
+  const { mutate, isPending } = useGraphQLMutation(createFilterMutation, {
+    onSuccess: () => {
       refetch()
     }
   })
-  return { createUserSettings, loading }
+
+  return { createUserSettings: mutate, loading: isPending }
 }

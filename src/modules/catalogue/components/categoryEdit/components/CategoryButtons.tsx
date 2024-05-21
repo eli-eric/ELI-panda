@@ -1,9 +1,11 @@
 import type { FC } from 'react'
+
+import usePermission from '@/hooks/usePermission'
+import { ROLE } from '@/types/constants/roles'
+
 import { CopyCategoryButton } from './CopyCategoryButton'
 import { DeleteCategoryButton } from './DeleteCategoryButton'
 import { EditCategoryButton } from './EditCategoryButton'
-import usePermission from '@/hooks/usePermission'
-import { ROLE } from '@/types/constants/roles'
 
 interface CategoryButtonsProps {
   uid: string

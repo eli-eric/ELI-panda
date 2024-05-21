@@ -1,11 +1,12 @@
-import { gql, useQuery } from '@apollo/client'
 import { useQueryState } from 'next-usequerystate'
+import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
-import type { Query } from '@/types/gql/graphql'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
-export const ROOM_CARDS = gql`
-  query RoomCards($where: RoomCardWhere) {
+export const roomCardsQuery = gql(`
+  query RoomCardsQuery($where: RoomCardWhere) {
     roomCards(where: $where) {
       uid
       name
@@ -26,20 +27,23 @@ export const ROOM_CARDS = gql`
       }
     }
   }
-`
+`)
 
 export const useRoomCards = () => {
   const [search] = useQueryState('search')
-  const { data, loading, error, refetch } = useQuery<Query>(ROOM_CARDS, {
+  const { data, isLoading, error, refetch } = useGraphQL(roomCardsQuery, {
     variables: {
       where: {
         name_CONTAINS: search || ''
       }
-    },
-    onError: () => {
-      toast.error('Error loading room cards')
     }
   })
 
-  return { roomCards: data?.roomCards, loading, error, refetch }
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to fetch room cards')
+    }
+  }, [error])
+
+  return { roomCards: data?.roomCards, loading: isLoading, error, refetch }
 }

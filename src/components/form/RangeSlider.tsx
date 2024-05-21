@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { startTransition, useEffect } from 'react'
 import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import RangeSlider from 'react-range-slider-input'
@@ -11,37 +11,33 @@ interface Props {
   onChange?: (v: any) => void
 }
 
-export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange }: Props) => {
+export const RangeSliderComponent = ({
+  min = 0,
+  max = 100,
+  name,
+  label,
+  onChange
+}: Props) => {
   const { control, setValue } = useFormContext()
 
   const inputValues = useWatch({ control, name })
 
-  /*  useEffect(() => {
-    if (inputValues) {
-      const handler = setTimeout(() => {
-        onChange &&
-          onChange({
-            min: inputValues.min !== '' ? inputValues.min : null,
-            max: inputValues.max !== '' ? inputValues.max : null
-          })
-      }, 500)
-      return () => clearTimeout(handler)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputValues, name]) */
-
   useEffect(() => {
-    if (inputValues) {
-      setValue(name, inputValues)
-    } else {
-      setValue(name, { min, max })
-    }
+    startTransition(() => {
+      if (inputValues) {
+        setValue(name, inputValues)
+      } else {
+        setValue(name, { min, max })
+      }
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <div className="flex flex-col">
-      <span className="text-sm pb-2 font-medium text-gray-700 dark:text-gray-200">{label}</span>
+      <span className="text-sm pb-2 font-medium text-gray-700 dark:text-gray-200">
+        {label}
+      </span>
       <Controller
         name={name}
         control={control}
@@ -72,14 +68,18 @@ export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange
                   className="form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm"
                   value={fieldValue.min ?? ''}
                   onChange={e => {
-                    const value = e.target.value === '' ? '' : Number(e.target.value)
+                    const value =
+                      e.target.value === '' ? '' : Number(e.target.value)
 
                     if (value > fieldValue.max) {
                       toast.error('Min value must be less than max value')
                     } else {
                       field.onChange(v => {
                         if (v) {
-                          const newValue = { min: value || null, max: v.max || null }
+                          const newValue = {
+                            min: value || null,
+                            max: v.max || null
+                          }
                           onChange && onChange(newValue)
                           return newValue
                         }
@@ -92,13 +92,17 @@ export const RangeSliderComponent = ({ min = 0, max = 100, name, label, onChange
                   type="number"
                   placeholder={max.toString()}
                   onChange={e => {
-                    const value = e.target.value === '' ? '' : Number(e.target.value)
+                    const value =
+                      e.target.value === '' ? '' : Number(e.target.value)
                     if (value < fieldValue.min) {
                       toast.error('Max value must be greater than min value')
                     } else {
                       field.onChange(v => {
                         if (v) {
-                          const newValue = { min: v.min || null, max: value || null }
+                          const newValue = {
+                            min: v.min || null,
+                            max: value || null
+                          }
                           onChange && onChange(newValue)
                           return newValue
                         }

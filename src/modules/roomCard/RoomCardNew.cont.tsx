@@ -8,7 +8,10 @@ import { array, object, string } from 'yup'
 import { PATH } from '@/types/constants/paths'
 
 import { useRoomCards } from '../roomCards/hooks/useRoomCards'
-import { makeRoomCardsCreateData, useRoomCardCreate } from './hooks/useRoomCardCreate'
+import {
+  makeRoomCardsCreateData,
+  useRoomCardCreate
+} from './hooks/useRoomCardCreate'
 import { RoomCardComponent } from './RoomCard.comp'
 import { useRoomCardStore } from './store/useRoomCardStore'
 import type { RoomCardFormType } from './types/form'
@@ -16,8 +19,12 @@ import type { RoomCardFormType } from './types/form'
 const schema = object().shape({
   status: string().required('Status is required'),
   name: string().required('Name is required'),
-  teams: array().of(object().nullable().required('Team is required')).min(1, 'At least one team is required'),
-  contactPersonsHall: array().of(object().required('Team is required')).min(1, 'At least one Hall contact is required'),
+  teams: array()
+    .of(object().nullable().required('Team is required'))
+    .min(1, 'At least one team is required'),
+  contactPersonsHall: array()
+    .of(object().required('Team is required'))
+    .min(1, 'At least one Hall contact is required'),
   contactPersonsDept: array()
     .of(object().nullable().required('Team is required'))
     .min(1, 'At least one department contact is required'),
@@ -28,7 +35,9 @@ const schema = object().shape({
 
 export const RoomCardNewContainer = () => {
   //TODO: fix typing
-  const formMethods = useForm<RoomCardFormType>({ resolver: yupResolver(schema) as any })
+  const formMethods = useForm<RoomCardFormType>({
+    resolver: yupResolver(schema) as any
+  })
   const { refetch } = useRoomCards()
 
   const router = useRouter()
@@ -45,13 +54,15 @@ export const RoomCardNewContainer = () => {
 
   const onSubmit = handleSubmit(data => {
     toast.promise(
-      createRoomCard({
-        variables: makeRoomCardsCreateData(data),
-        onCompleted: data => {
+      createRoomCard(makeRoomCardsCreateData(data), {
+        onSuccess: data => {
           refetch()
-          router.push(PATH.ROOM_CARD + '/' + data?.createRoomCards?.roomCards[0].uid)
-        },
-        refetchQueries: ['RoomCards', 'RoomCard']
+          router.push(
+            PATH.ROOM_CARD + '/' + data?.createRoomCards?.roomCards[0].uid
+          )
+        }
+        // TODO
+        //refetchQueries: ['RoomCards', 'RoomCard']
       }),
       {
         loading: 'Saving room card...',
@@ -63,9 +74,8 @@ export const RoomCardNewContainer = () => {
 
   const onSubmitAndExit = handleSubmit(data => {
     toast.promise(
-      createRoomCard({
-        variables: makeRoomCardsCreateData(data),
-        onCompleted: () => {
+      createRoomCard(makeRoomCardsCreateData(data), {
+        onSuccess: () => {
           refetch()
           router.push(PATH.ROOM_CARDS)
         }

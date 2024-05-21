@@ -1,14 +1,16 @@
+import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useImage } from '@/hooks/fetch/useImage'
-import type { CatalogueCategory } from '@/types/gql/graphql'
+import { FALLBACK_IMAGE } from '@/types/constants/general'
+import type { GetCategoriesQuery } from '@/types/gql/graphql'
+import type { CodebookType } from '@/types/responses/codebook'
+import { classNames } from '@/utils'
+import { queryFetcher } from '@/utils/fetcher'
 
 import { CategoryButtons } from '../categoryEdit/components/CategoryButtons'
 
 interface Props {
-  category: CatalogueCategory
+  category: GetCategoriesQuery['catalogueCategories'][0]
   setCategoryFilter: (value: CodebookType) => void
 }
 
@@ -16,8 +18,11 @@ export const CategoryItemComponent = ({
   category,
   setCategoryFilter
 }: Props) => {
-  const { catalogueCategoryImage } = useEndpoint({ uid: category.uid })
-  const image = useImage(catalogueCategoryImage)
+  const { data: image, isLoading } = useQuery({
+    queryKey: ['category-image', { uid: category.uid }],
+    queryFn: queryFetcher<string>('catalogueCategoryImage'),
+    enabled: !!category.uid
+  })
 
   return (
     <div className="flex-row justify-between dark:hover:bg-gray-600 relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white dark:bg-gray-700 shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
@@ -30,11 +35,14 @@ export const CategoryItemComponent = ({
       >
         <div className="flex-shrink-0 mx-6 my-4">
           <Image
-            className="h-10 w-10 rounded-sm object-contain"
+            className={classNames(
+              'h-10 w-10 rounded-sm object-contain',
+              isLoading && 'animate-pulse'
+            )}
             width={200}
             height={200}
             alt={category.name}
-            src={image}
+            src={image || FALLBACK_IMAGE.url}
           />
         </div>
         <div className="min-w-0 flex-1 mx-6 my-4">

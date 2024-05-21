@@ -10,6 +10,7 @@ import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
+import { useCategoryItemProperties } from '@/modules/systems/hooks/useCategoryItemProperties'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { useMinMaxPrice } from '@/modules/systems/hooks/useMinMaxPrice'
 import { SystemLevel } from '@/types/gql/graphql'
@@ -17,7 +18,6 @@ import { classNames } from '@/utils'
 
 import { CategoryPropFilters } from '../../../../shared/form/CategoryPropFilters'
 import { useSystemsFilterFields } from './SystemsFilter.fields'
-import { useCategoryItemProperties } from '@/modules/systems/hooks/useCategoryItemProperties'
 
 export const SystemsFilterForm = ({
   tableId,

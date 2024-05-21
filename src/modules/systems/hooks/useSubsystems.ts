@@ -1,33 +1,47 @@
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
-import { toast } from 'react-hot-toast'
 
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useFetch from '@/hooks/fetch/useFetch'
+import type { SystemDetail, SystemsResponse } from '@/types/responses/systems'
+import type { QueryFetcherKey } from '@/utils/fetcher'
+import { queryFetcher } from '@/utils/fetcher'
 
-import type { SystemDetail } from '../types/responses'
-import { makeSubsystems } from '../utils'
+import { addSubsystems } from '../utils'
 import { useSystems } from './useSystems'
 
 export const useSubsystems = tableId => {
   const [uid, setUid] = useState<string | null>(null)
-  const { mutate } = useSystems(tableId)
+  const { queryKey } = useSystems(tableId)
 
-  const { systemSubsystems } = useEndpoint({ uid: uid || '' })
+  const queryClient = useQueryClient()
 
-  const { loading: pending, response } = useFetch<SystemDetail[]>({
-    url: uid ? systemSubsystems : null,
-    config: {
-      suspense: false,
-      onError: () => toast.error('Error fetching subsystems')
-    }
+  const queryKeySubsystems: QueryFetcherKey = ['subsystems', { uid }]
+
+  const { isLoading: pending, data: response } = useQuery({
+    queryKey: queryKeySubsystems,
+    queryFn: queryFetcher<SystemDetail[]>('systemSubsystems'),
+    enabled: !!uid
   })
 
   useEffect(() => {
     if (response) {
-      mutate(prev => prev && makeSubsystems(uid, prev, response), { revalidate: false })
+      queryClient.setQueryData<SystemsResponse>(
+        queryKey,
+        prev => {
+          if (prev) {
+            return {
+              ...prev,
+              data: addSubsystems(prev.data, response, uid)
+            }
+          } else {
+            return prev
+          }
+        },
+        { updatedAt: Date.now() }
+      )
       setUid(null)
     }
-  }, [response, mutate, uid])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [response])
 
-  return { setUid, pending }
+  return { setUid, pending, queryKey: queryKeySubsystems }
 }

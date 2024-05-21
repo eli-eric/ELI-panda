@@ -18,7 +18,10 @@ const ProfileTeamPage: NextPage = (): JSX.Element => {
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-      <UserProfileLayout title={messages.team.title} subTitle={messages.team.subTitle}>
+      <UserProfileLayout
+        title={messages.team.title}
+        subTitle={messages.team.subTitle}
+      >
         {/* under construction page with heroicon */}
         <CogIcon
           className="mx-auto h-16 w-16 text-gray-400"
@@ -28,7 +31,9 @@ const ProfileTeamPage: NextPage = (): JSX.Element => {
           aria-hidden="true"
         />
 
-        <h1 className="text-center text-3xl font-bold text-gray-900 dark:text-gray-200">Under construction</h1>
+        <h1 className="text-center text-3xl font-bold text-gray-900 dark:text-gray-200">
+          Under construction
+        </h1>
         <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-200">
           This page is under construction. Please check back later.
         </p>

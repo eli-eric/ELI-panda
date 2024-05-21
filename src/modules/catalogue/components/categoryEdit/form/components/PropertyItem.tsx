@@ -1,17 +1,16 @@
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { useEffect } from 'react'
+import { startTransition, useEffect } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
-
 import {
   defaultBoolOptions,
   PROPERTY_INPUT_TYPE,
-  PROPERTY_TYPE
-} from '@/types/catalogue/constants'
+  PROPERTY_TYPE} from '@/types/catalogue/constants'
 import { CODEBOOK } from '@/types/constants/codebook'
+
 import type { CategoryFormType } from '../../types'
 import MoveButtons from './MoveButtons'
 
@@ -81,9 +80,11 @@ const PropertyItem = ({
   }) */
 
   useEffect(() => {
-    if (type?.uid !== PROPERTY_TYPE.LIST && listOfValues.length !== 0) {
-      unregister(`${name}.listOfValues`)
-    }
+    startTransition(() => {
+      if (type?.uid !== PROPERTY_TYPE.LIST && listOfValues.length !== 0) {
+        unregister(`${name}.listOfValues`)
+      }
+    })
   }, [type, unregister, name, listOfValues])
 
   const getDefaultField = (type?: PROPERTY_TYPE | string) => {

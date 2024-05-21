@@ -1,16 +1,18 @@
-import type { ModalButtons } from '@/types/form'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
 import type { FC } from 'react'
 import { Fragment, useEffect, useState } from 'react'
-import CategoryEditContainer from '../CategoryEdit.cont'
-import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
-import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
-import { useSubmit } from '@/hooks/fetch/useSubmit'
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import WarningModal from '@/components/overlays/modal/warning/modal-warning.comp'
-import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
+
 import { Button } from '@/components/Buttons'
+import ModalComponent from '@/components/overlays/modal/modal.comp'
+import WarningModal from '@/components/overlays/modal/warning/modal-warning.comp'
+import { useEndpoint } from '@/hooks/fetch/useEndpoint'
+import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
+import { useCategoryList } from '@/modules/catalogue/hooks/useCategoryList'
+import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
+import type { ModalButtons } from '@/types/form'
+
+import CategoryEditContainer from '../CategoryEdit.cont'
 
 const messages = message.common
 
