@@ -34,3 +34,21 @@ export const queryFetcher = <T>(
   }
   return querFn
 }
+
+export const serverQueryFetcher = <T>(
+  endpointType: keyof ReturnType<typeof getEndpoints>,
+  token
+) => {
+  const querFn: QueryFunction<T, QueryFetcherKey> = async ({ queryKey }) => {
+    const queryParams = queryKey[1] as EndpointProps
+    const endpoint = getEndpoints(queryParams || {})[endpointType] as string
+    return axios
+      .get(BASE_URL + endpoint, {
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      })
+      .then(res => res.data)
+  }
+  return querFn
+}

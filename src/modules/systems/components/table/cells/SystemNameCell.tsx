@@ -25,13 +25,13 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
-import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { filterSubsystem } from '@/modules/systems/utils'
 import { ShowSpareButton } from '@/modules/systemsSpareParts/components/ShowSpareButton'
 import { PATH } from '@/types/constants/paths'
 // eslint-disable-next-line
 import type { SystemDetail, SystemsResponse } from '@/types/responses/systems'
 import { createMessageValues } from '@/utils/formatters'
+import type { EndpointProps } from '@/utils/getEndpoints'
 
 const messages = message.systemsPage.systemDetail.deleteModal
 
@@ -43,6 +43,7 @@ interface SystemNameCellProps extends CellContext<SystemDetail, any> {
   isHoveringId?: number | undefined | string
 
   enableDragAndDrop?: boolean
+  queryKey?: [string, EndpointProps]
 }
 
 export const SystemNameCell = ({
@@ -52,12 +53,12 @@ export const SystemNameCell = ({
   canEdit = true,
   hideButtons = false,
   tableId,
+  queryKey,
   enableDragAndDrop = false
 }: SystemNameCellProps) => {
   const { original } = row
   const { sparesIn, sparesOut } = original
   const { system } = useEndpoint({ uid: original.uid })
-  const { queryKey } = useSystems(tableId)
 
   const queryClient = useQueryClient()
 
@@ -68,13 +69,14 @@ export const SystemNameCell = ({
     method: 'delete',
     onSuccess: () => {
       toast.success(`System ${original.name} deleted`)
-
-      queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
-        if (prev) {
-          return filterSubsystem(original.uid, prev)
-        }
-        return prev
-      })
+      if (queryKey) {
+        queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
+          if (prev) {
+            return filterSubsystem(original.uid, prev)
+          }
+          return prev
+        })
+      }
     },
     onError: () => {
       toast.error(`Error deleting system ${original.name}`)

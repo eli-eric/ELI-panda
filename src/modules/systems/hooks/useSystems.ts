@@ -29,7 +29,6 @@ export const useSystems = (tableId: string = 'systems') => {
   const mutate = (mutator: (prev: SystemsResponse) => SystemsResponse) => {
     queryClient.setQueryData(queryKey, mutator)
   }
-
   return {
     systems: data,
     loading: isLoading,

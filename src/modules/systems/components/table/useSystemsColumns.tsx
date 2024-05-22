@@ -10,6 +10,7 @@ import { ROLE } from '@/types/constants/roles'
 import type { SystemDetail } from '@/types/responses/systems'
 
 import { useSubsystems } from '../../hooks/useSubsystems'
+import { useSystems } from '../../hooks/useSystems'
 import type { ITEM_USAGE } from '../../types/constants'
 import { IconCell } from './cells/IconCell'
 // eslint-disable-next-line
@@ -28,6 +29,7 @@ export const useSystemsColumns = ({
 }: SystemsColumnsProps) => {
   const { setUid, pending } = useSubsystems(tableId)
   const canEdit = usePermission([ROLE.SYSTEM_EDIT])
+  const { queryKey } = useSystems(tableId)
 
   const columns = useMemo(
     (): ColumnDef<SystemDetail, any>[] => [
@@ -56,6 +58,7 @@ export const useSystemsColumns = ({
             {...props}
             setUid={setUid}
             canEdit={canEdit}
+            queryKey={queryKey}
             hideButtons={hideButtons}
             tableId={tableId}
             enableDragAndDrop={enableDragAndDrop}
@@ -235,7 +238,7 @@ export const useSystemsColumns = ({
         size: 150
       }
     ],
-    [setUid, canEdit, hideButtons, tableId, enableDragAndDrop]
+    [setUid, canEdit, hideButtons, tableId, enableDragAndDrop, queryKey]
   )
 
   return { columns, pending }
