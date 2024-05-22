@@ -40,6 +40,9 @@ export const useSubsystems = tableId => {
       )
       setUid(null)
     }
+    return () => {
+      setUid(null)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response])
 

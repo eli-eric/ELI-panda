@@ -227,3 +227,5 @@ export const SystemsSparePartsContainer = () => {
     </div>
   )
 }
+
+export default SystemsSparePartsContainer
