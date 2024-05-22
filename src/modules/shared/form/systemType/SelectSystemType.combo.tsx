@@ -1,7 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { Fragment, useMemo, useState } from 'react'
 
-import Listbox from '@/components/form/Listbox'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { CodebookTreeModalGraphql } from '@/components/form/shared/CodebookTreeModalGraphql'
 import type { CODEBOOK } from '@/types/constants/codebook'
@@ -9,6 +8,7 @@ import type { FieldProps, Option } from '@/types/form'
 import { highlightText } from '@/utils'
 
 import { useSystemTypeGroups } from './hooks/useSystemTypeGroups'
+import { ModalSelect } from '@/components/form/ModalSelect'
 
 export const SystemTypeComboBox = ({
   systemTypeField,
@@ -49,17 +49,17 @@ export const SystemTypeComboBox = ({
   return (
     <Fragment>
       {clickIcon ? (
-        <Listbox
+        <ModalSelect
           {...systemTypeField}
           className={className}
           onChange={onChange}
-          onClickIcon={() => {
+          onClick={() => {
             setOpen(true)
           }}
           isFilter={isFilter}
         />
       ) : (
-        <Listbox
+        <ModalSelect
           {...systemTypeField}
           className={className}
           onChange={onChange}
