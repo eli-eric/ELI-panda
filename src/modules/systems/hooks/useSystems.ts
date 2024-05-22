@@ -15,7 +15,7 @@ export const useSystems = (tableId: string = 'systems') => {
 
   const queryKey: QueryFetcherKey = [tableId, { query }]
 
-  const { data, isLoading, error, dataUpdatedAt, refetch } = useQuery({
+  const { data, isFetching, error, dataUpdatedAt, refetch } = useQuery({
     queryKey,
     queryFn: queryFetcher<SystemsResponse>('systemsList'),
     placeholderData: keepPreviousData,
@@ -31,7 +31,7 @@ export const useSystems = (tableId: string = 'systems') => {
   }
   return {
     systems: data,
-    loading: isLoading,
+    loading: isFetching,
     error,
     query,
     queryKey,
