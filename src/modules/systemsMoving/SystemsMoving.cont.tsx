@@ -28,7 +28,7 @@ export type SystemMovingFormType = {
   location?: CodebookType
 }
 
-export const SystemsMovingContainer = () => {
+const SystemsMovingContainer = () => {
   const { tableIdLeft, tableIdRight, setChildSystem, setParentSystem } =
     useSystemMovingStore()
   const [openModal, setOpenModal] = useState(false)
@@ -138,3 +138,5 @@ export const SystemsMovingContainer = () => {
     </Fragment>
   )
 }
+
+export default SystemsMovingContainer

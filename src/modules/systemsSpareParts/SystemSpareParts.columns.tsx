@@ -10,9 +10,9 @@ import type { SystemDetail } from '@/types/responses/systems'
 import { classNames } from '@/utils'
 
 import { IconCell } from '../systems/components/table/cells/IconCell'
+import { SystemNameCell } from '../systems/components/table/cells/SystemNameCell'
 import { useSubsystems } from '../systems/hooks/useSubsystems'
 import type { ITEM_USAGE } from '../systems/types/constants'
-import { SpareNameCell } from './components/NameCell'
 
 // eslint-disable-next-line
 
@@ -101,7 +101,12 @@ export const useSystemsSparePartsColumns = ({
         size: 440,
         enableHiding: false,
         cell: props => (
-          <SpareNameCell {...props} setUid={setUid} tableId={tableId} />
+          <SystemNameCell
+            {...props}
+            hideButtons={true}
+            setUid={setUid}
+            tableId={tableId}
+          />
         )
       },
       {

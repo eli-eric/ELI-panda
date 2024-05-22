@@ -3,7 +3,7 @@ import type { FC } from 'react'
 import { FilterBadges } from '../shared/form/FilterBadges'
 import { SystemsComponent } from './Systems.comp'
 
-export const SystemsContainer: FC = () => (
+const SystemsContainer: FC = () => (
   <SystemsComponent
     enableQueryURL={true}
     enableDragAndDrop={false}
@@ -12,3 +12,5 @@ export const SystemsContainer: FC = () => (
     RightSearchBarElement={() => <FilterBadges tableId={'systems'} />}
   />
 )
+
+export default SystemsContainer

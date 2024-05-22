@@ -1,8 +1,14 @@
 import type { NextPage } from 'next'
+import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { Fragment } from 'react'
 
-import { SystemsMovingContainer } from '@/modules/systemsMoving/SystemsMoving.cont'
+const SystemsMovingContainer = dynamic(
+  () => import('@/modules/systemsMoving/SystemsMoving.cont'),
+  {
+    ssr: false
+  }
+)
 
 const SystemsMovingPage: NextPage = () => {
   return (
