@@ -53,13 +53,18 @@ export async function getServerSideProps(context) {
     authOptions as NextAuthOptions
   )
 
-  await queryClient.prefetchQuery({
-    queryKey,
-    queryFn: serverQueryFetcher<SystemsResponse>(
-      'systemsList',
-      session?.user.apiAccessToken
-    )
-  })
+  const querySystemsData =
+    await queryClient.getQueryData<SystemsResponse>(queryKey)
+
+  if (!querySystemsData) {
+    await queryClient.prefetchQuery({
+      queryKey,
+      queryFn: serverQueryFetcher<SystemsResponse>(
+        'systemsList',
+        session?.user.apiAccessToken
+      )
+    })
+  }
 
   return {
     props: {
