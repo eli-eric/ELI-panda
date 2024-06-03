@@ -10,6 +10,7 @@ export type SystemDetailFormType = {
   parentPath?: CodebookType[]
   isCritical: boolean | null
   location?: CodebookType | null
+  attribute?: CodebookType | null
   responsibleTeam?: CodebookType | null
   minimalSpareParstCount: number | null
   zone?: CodebookType | null
