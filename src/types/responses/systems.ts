@@ -22,6 +22,7 @@ export type SystemDetail = {
   systemCode?: string
   systemAlias?: string
   systemType?: CodebookType
+  attribute?: CodebookType
   zone?: CodebookType
   location?: CodebookType
   description?: string

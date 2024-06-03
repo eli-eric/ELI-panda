@@ -91,6 +91,12 @@ export const useSystemsColumns = ({
         size: 150
       },
       {
+        header: 'Attribute',
+        accessorFn: row => row.attribute?.name,
+        id: 'attribute',
+        size: 150
+      },
+      {
         header: 'CS Zone',
         accessorFn: row => row.zone,
         id: 'zone',
