@@ -8,10 +8,10 @@ import { message } from '@/i18n/src/messages'
 import { PandaTable } from '../table/pandaTable/PandaTable'
 import { useFileColumns } from './FileTable.columns'
 import { useFileRequests } from './hooks/useFileRequests'
-import type { FILE_TYPE } from './types'
-import { useLinks } from './hooks/useLinks'
 import { useFiles } from './hooks/useFiles'
+import { useLinks } from './hooks/useLinks'
 import { NewFileButton } from './NewFileButton'
+import type { FILE_TYPE } from './types'
 
 const messages = message.common.files
 

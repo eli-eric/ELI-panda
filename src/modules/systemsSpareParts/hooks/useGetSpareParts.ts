@@ -1,10 +1,11 @@
-import { gql, useQuery } from '@apollo/client'
+import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 
-import type { Query } from '@/types/gql/graphql'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
-const GET_SPARE_PARTS = gql`
-  query Systems($where: SystemWhere) {
+const GET_SPARE_PARTS = gql(`
+  query SystemsSpareParts($where: SystemWhere) {
     systems(where: $where) {
       spareParts {
         name
@@ -27,26 +28,28 @@ const GET_SPARE_PARTS = gql`
       }
     }
   }
-`
+`)
 
 export const useGetSpareParts = uid => {
-  const { data, loading } = useQuery<Query>(GET_SPARE_PARTS, {
+  const { data, isLoading, error } = useGraphQL(GET_SPARE_PARTS, {
     variables: {
       where: {
         uid: uid
       }
-    },
-    onError: () => {
-      toast.error('Something went wrong')
-    },
-    fetchPolicy: 'no-cache'
+    }
   })
 
-  return { spareParts: data?.systems[0].spareParts, loading }
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to fetch spare parts')
+    }
+  }, [error])
+
+  return { spareParts: data?.systems[0].spareParts, loading: isLoading }
 }
 
-const GET_SPARE_PARTS_FOR = gql`
-  query Systems($where: SystemWhere) {
+const GET_SPARE_PARTS_FOR = gql(`
+  query SystemSparePartsFor($where: SystemWhere) {
     systems(where: $where) {
       sparePartsFor {
         name
@@ -69,19 +72,21 @@ const GET_SPARE_PARTS_FOR = gql`
       }
     }
   }
-`
+`)
 export const useGetSparePartsFor = uid => {
-  const { data, loading } = useQuery<Query>(GET_SPARE_PARTS_FOR, {
+  const { data, isLoading, error } = useGraphQL(GET_SPARE_PARTS_FOR, {
     variables: {
       where: {
         uid: uid
       }
-    },
-    onError: () => {
-      toast.error('Something went wrong')
-    },
-    fetchPolicy: 'no-cache'
+    }
   })
 
-  return { spareParts: data?.systems[0].sparePartsFor, loading }
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to fetch spare parts')
+    }
+  }, [error])
+
+  return { spareParts: data?.systems[0].sparePartsFor, loading: isLoading }
 }

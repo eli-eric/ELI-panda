@@ -8,7 +8,11 @@ interface Props {
   subTitle: string
 }
 
-export const UserProfileLayout: FC<PropsWithChildren<Props>> = ({ children, title, subTitle }) => (
+export const UserProfileLayout: FC<PropsWithChildren<Props>> = ({
+  children,
+  title,
+  subTitle
+}) => (
   <>
     <div className="mx-auto max-w-7xl lg:flex lg:gap-x-16 lg:px-8">
       <UserProfileNav />

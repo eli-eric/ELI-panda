@@ -1,11 +1,11 @@
-import { toast } from 'react-hot-toast'
-
-import { getEndpoints } from '@/hooks/fetch/useEndpoint'
-import axiosInstance from '@/core/axios/axiosInstance'
-import { BASE_URL } from '@/types/constants/common'
-import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
+import { toast } from 'react-hot-toast'
+
+import axiosInstance from '@/core/axios/axiosInstance'
+import { getEndpoints } from '@/hooks/fetch/useEndpoint'
+import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
+import { BASE_URL } from '@/types/constants/common'
 
 const getItemProperties = props => {
   const { queryKey } = props

@@ -16,7 +16,8 @@ export const useFormControlStore = create<FormControlState>(set => ({
   fieldIdToSync: new Set(),
   customFieldIdToSync: new Set(),
   deleteCustom: false,
-  toggleDeleteCustom: () => set(state => ({ deleteCustom: !state.deleteCustom })),
+  toggleDeleteCustom: () =>
+    set(state => ({ deleteCustom: !state.deleteCustom })),
   addFieldIdToSync: fieldId =>
     set(state => ({
       fieldIdToSync: new Set(state.fieldIdToSync).add(fieldId)
@@ -36,5 +37,6 @@ export const useFormControlStore = create<FormControlState>(set => ({
       }
     }),
   clearFieldToSync: () => set({ fieldIdToSync: new Set() }),
-  clearCustomFieldToSync: () => set({ customFieldIdToSync: new Set(), deleteCustom: false })
+  clearCustomFieldToSync: () =>
+    set({ customFieldIdToSync: new Set(), deleteCustom: false })
 }))

@@ -1,4 +1,17 @@
-export type ColSizeProp = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 'full'
+export type ColSizeProp =
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12
+  | 'full'
 
 export const colSizes: Record<ColSizeProp, string> = {
   1: 'col-span-1',

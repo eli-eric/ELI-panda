@@ -1,18 +1,45 @@
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useFetch from '@/hooks/fetch/useFetch'
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient
+} from '@tanstack/react-query'
+import { useEffect } from 'react'
+import toast from 'react-hot-toast'
+
 import useQueryManager from '@/hooks/useQueryManager'
-import type { CatalogueItemsResponse } from '@/types/responses'
+import type { CatalogueItemsResponse } from '@/types/responses/catalogue'
+import type { QueryFetcherKey } from '@/utils/fetcher'
+import { queryFetcher } from '@/utils/fetcher'
 export const useCatalogueItems = (tableId = 'catalogueItems') => {
   const { query } = useQueryManager(tableId)
   const pagination = JSON.parse(query.pagination || '{}')
-  const { catalogueItems } = useEndpoint({ query: { ...pagination, ...query } })
-  const { response, loading, error, mutate } = useFetch<CatalogueItemsResponse>({
-    url: catalogueItems,
-    config: {
-      suspense: false,
-      keepPreviousData: true,
-      refreshInterval: 15000
-    }
+  const queryKey: QueryFetcherKey = [
+    'catalogueItems',
+    { query: { ...pagination, ...query } }
+  ]
+  const {
+    data,
+    isFetching: loading,
+    error
+  } = useQuery({
+    queryKey,
+    queryFn: queryFetcher<CatalogueItemsResponse>('catalogueItems'),
+    refetchOnMount: true,
+    placeholderData: keepPreviousData,
+    refetchInterval: 1000 * 60 * 5
   })
-  return { catalogueItems: response, loading, error, mutate }
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Error fetching catalogue items: ' + error.message)
+    }
+  }, [error])
+
+  const queryClient = useQueryClient()
+  const refetch = () =>
+    queryClient.invalidateQueries({
+      queryKey
+    })
+
+  return { catalogueItems: data, loading, error, refetch }
 }

@@ -1,24 +1,26 @@
-import { DeleteButton, EditButton } from '@/components/Buttons'
-import { classNames } from '@/utils'
-import { Fragment, useState, type FC } from 'react'
-import type { SystemTypesResponse } from '../types'
-import useWarningModal from '@/hooks/useWarningModal'
+import {
+  type QueryObserverResult,
+  type RefetchOptions,
+  useMutation
+} from '@tanstack/react-query'
+import { type FC, Fragment, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import type { ModalButtons } from '@/types/form'
-import { message } from '@/i18n/src/messages'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import toast from 'react-hot-toast'
+
+import { DeleteButton, EditButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/Input'
-import {
-  useMutation,
-  type QueryObserverResult,
-  type RefetchOptions
-} from '@tanstack/react-query'
+import ModalComponent from '@/components/overlays/modal/modal.comp'
 import axiosInstance from '@/core/axios/axiosInstance'
-import { BASE_URL } from '@/types/constants/common'
-import toast from 'react-hot-toast'
 import usePermission from '@/hooks/usePermission'
+import useWarningModal from '@/hooks/useWarningModal'
+import { message } from '@/i18n/src/messages'
+import { BASE_URL } from '@/types/constants/common'
 import { ROLE } from '@/types/constants/roles'
+import type { ModalButtons } from '@/types/form'
+import { classNames } from '@/utils'
+
+import type { SystemTypesResponse } from '../types'
 const messages = message.common.buttons
 interface Props {
   systemType: SystemTypesResponse

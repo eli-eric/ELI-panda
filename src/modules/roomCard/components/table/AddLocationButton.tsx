@@ -12,7 +12,15 @@ import { useRoomCardStore } from '../../store/useRoomCardStore'
 export const AddLocationButton = () => {
   const { control } = useFormContext()
   const { append, fields } = useFieldArray({ control, name: 'locations' })
-  const { additionalColumn, codebooktree, fetchChildren, loading, open, setOpen, tableId } = useLocationModal()
+  const {
+    additionalColumn,
+    codebooktree,
+    fetchChildren,
+    loading,
+    open,
+    setOpen,
+    tableId
+  } = useLocationModal()
   const { setNewLocation } = useRoomCardStore()
 
   const addLocation = (item?: Codebooktree) => {

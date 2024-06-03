@@ -1,30 +1,45 @@
-import { gql, useQuery } from '@apollo/client'
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
-import type { Query } from '@/types/gql/graphql'
-import { USER } from '@/utils/graphql/fragments'
-
-const USERS = gql`
-  ${USER}
-  query Query($where: UserWhere) {
+const USERS = gql(`
+  query UserQuery($where: UserWhere) {
     users(where: $where) {
-      ...UserFields
+      uid
+      email
+      firstName
+      isEnabled
+      lastName
+      passwordToChange
+      employee {
+        uid
+        fullName
+      }
+      roles {
+        name
+        code
+        uid
+      }
+      username
+      uid
+      facility {
+        name
+        code
+      }
     }
   }
-`
+`)
 
 export const useUserDetail = (userUid?: string) => {
-  const { data, refetch, loading, previousData } = useQuery<Query>(USERS, {
+  const { data, refetch, isLoading } = useGraphQL(USERS, {
     variables: {
       where: {
         uid: userUid
       }
-    },
-    skip: !userUid,
-    fetchPolicy: 'network-only'
+    }
   })
   return {
-    userDetail: data?.users[0] || previousData?.users[0],
+    userDetail: data?.users[0],
     refetch,
-    loading
+    loading: isLoading
   }
 }

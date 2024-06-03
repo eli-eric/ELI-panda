@@ -1,7 +1,7 @@
 import { createWithEqualityFn as create } from 'zustand/traditional'
 
 import type { Employee } from '@/types/gql/graphql'
-import type { SystemDetail } from '@/modules/systems/types/responses'
+import type { SystemDetail } from '@/types/responses/systems'
 
 type SystemStore = {
   newOperators: Employee[]
@@ -23,14 +23,26 @@ export const useSystemItemStore = create<SystemStore>(set => ({
   selectedPhysicalSystem: undefined,
   newMaintainedBy: [],
   disconnectMaintainedBy: [],
-  setNewOperator: (employee: Employee) => set(state => ({ newOperators: [...state.newOperators, employee] })),
-  setSelectedPhysicalSystem: (system?: SystemDetail) => set(() => ({ selectedPhysicalSystem: system })),
+  setNewOperator: (employee: Employee) =>
+    set(state => ({ newOperators: [...state.newOperators, employee] })),
+  setSelectedPhysicalSystem: (system?: SystemDetail) =>
+    set(() => ({ selectedPhysicalSystem: system })),
   setDisconnectOperator: (employee: Employee) =>
-    set(state => ({ disconnectOperators: [...state.disconnectOperators, employee] })),
-  setNewMaintainedBy: (employee: Employee) => set(state => ({ newMaintainedBy: [...state.newMaintainedBy, employee] })),
+    set(state => ({
+      disconnectOperators: [...state.disconnectOperators, employee]
+    })),
+  setNewMaintainedBy: (employee: Employee) =>
+    set(state => ({ newMaintainedBy: [...state.newMaintainedBy, employee] })),
   setDisconnectMaintainedBy: (employee: Employee) =>
-    set(state => ({ disconnectMaintainedBy: [...state.disconnectMaintainedBy, employee] })),
+    set(state => ({
+      disconnectMaintainedBy: [...state.disconnectMaintainedBy, employee]
+    })),
 
   clear: () =>
-    set(() => ({ disconnectOperators: [], disconnectMaintainedBy: [], newMaintainedBy: [], newOperators: [] }))
+    set(() => ({
+      disconnectOperators: [],
+      disconnectMaintainedBy: [],
+      newMaintainedBy: [],
+      newOperators: []
+    }))
 }))

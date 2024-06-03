@@ -1,9 +1,9 @@
 import { toast } from 'react-hot-toast'
 
-import type { CodeBookMetaData } from '@/hooks/fetch/useCodebook'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import useFormModal from '@/hooks/form/useFormModal'
+import type { CodeBookMetaData } from '@/types/responses/codebook'
 
 import { Input } from '../Input'
 
@@ -16,11 +16,15 @@ const useAddCodebookValue = (codebook?: CodeBookMetaData) => {
       toast.success(`Codebook value added successfully`)
     },
     onError: err => {
-      toast.error(err.response?.status ? 'Codebook value already exists' : err.message)
+      toast.error(
+        err.response?.status ? 'Codebook value already exists' : err.message
+      )
     }
   })
   const { getFormModal, setOpen } = useFormModal<{ name: string }>({
-    renderForm: () => <Input name="name" label="Codebook Value" rounded="rounded-md" />,
+    renderForm: () => (
+      <Input name="name" label="Codebook Value" rounded="rounded-md" />
+    ),
     onSubmit: data => {
       submit({ name: data.name })
     }

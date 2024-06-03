@@ -20,14 +20,19 @@ export const useSubSystemsColumns = (tableId?: string) => {
           row: {
             original: { physicalItem }
           }
-        }) => <IconCell itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE} />
+        }) => (
+          <IconCell itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE} />
+        )
       },
       {
         header: 'System Name',
         accessorKey: 'name',
         id: 'name',
         cell: ({ getValue, row: { original } }) => (
-          <Tooltip content={original.parentPath?.map(v => v?.name).join(' > ')} placement="top">
+          <Tooltip
+            content={original.parentPath?.map(v => v?.name).join(' > ')}
+            placement="top"
+          >
             <Link href={PATH.SYSTEM + '/' + original.uid}>
               <LinkDecorator>{getValue()}</LinkDecorator>
             </Link>
@@ -41,7 +46,10 @@ export const useSubSystemsColumns = (tableId?: string) => {
       },
       {
         header: 'location',
-        accessorFn: row => (row.location?.name ? row.location?.name + ' - ' + (row.location?.code || '') : '')
+        accessorFn: row =>
+          row.location?.name
+            ? row.location?.name + ' - ' + (row.location?.code || '')
+            : ''
       }
     ]
     if (tableId === 'spareParts') {
@@ -54,7 +62,8 @@ export const useSubSystemsColumns = (tableId?: string) => {
     if (tableId === 'sparePartFor') {
       columns.push({
         header: 'Part Number',
-        accessorFn: row => row?.physicalItem?.catalogueItem.catalogueNumber || '',
+        accessorFn: row =>
+          row?.physicalItem?.catalogueItem.catalogueNumber || '',
         id: 'partNumber'
       })
     }

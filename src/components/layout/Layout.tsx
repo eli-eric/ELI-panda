@@ -1,6 +1,7 @@
-import type { FC, PropsWithChildren } from 'react'
-import { SidebarNavigation } from './navigation/SideBarNavigation'
+import { type FC, type PropsWithChildren } from 'react'
+
 import { NavigationMobile } from './navigation/NavigationMobile'
+import { SidebarNavigation } from './navigation/SideBarNavigation'
 
 export const Layout: FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -11,9 +12,3 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
     </div>
   )
 }
-
-// const Original Layout = <div className="flex flex-col lg:flex-row min-h-screen">
-// <NavigationMobile />
-// <SidebarNavigation />
-// <main className="flex-1 overflow-auto min-h-screen z-10">{<Component {...pageProps} />}</main>
-// </div>

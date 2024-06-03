@@ -5,13 +5,13 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { useOrders } from '@/modules/orders/hooks/useOrders'
 import { PATH } from '@/types/constants/paths'
+import { navigateBack } from '@/utils'
 
 import useOrderDetail from './useOrderDetail'
-import { navigateBack } from '@/utils'
 
 export const useOrderSubmit = () => {
   const router = useRouter()
-  const { mutate: mutateDetail, uid } = useOrderDetail()
+  const { invalidateQuery, uid } = useOrderDetail()
   const { order: orderEndpoint } = useEndpoint({ uid })
   const { mutate } = useOrders()
 
@@ -19,10 +19,10 @@ export const useOrderSubmit = () => {
     endpoint: orderEndpoint,
     method: uid ? 'put' : 'post',
     onSuccess: (uid, _, custom) => {
-      toast.success(`Order ${uid} saved successfully`)
+      toast.success(`Order was successfully saved.`)
 
       mutate()
-      mutateDetail()
+      invalidateQuery()
       if (custom?.saveAndExit) {
         const navigateExit = () => router.push(PATH.ORDERS)
         navigateBack(navigateExit)

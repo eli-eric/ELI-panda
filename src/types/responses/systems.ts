@@ -1,6 +1,6 @@
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import type { CatalogueItem } from '@/modules/catalogueItem/types/responses'
 import type { SystemLevel } from '@/types/gql/graphql'
+import type { CodebookType } from '@/types/responses/codebook'
 
 export type SystemsResponse = {
   data: SystemDetail[]
@@ -13,20 +13,20 @@ type SystemStatistics = {
 }
 
 export type SystemDetail = {
-  uid: string // from router
-  name: string // input
+  uid: string
+  name: string
   sparesIn?: number
   sparesOut?: number
   parentUid?: string
   systemLevel?: SystemLevel
-  systemCode?: string // automaticky generovaný viz system edit - api dodá J.Š.
-  systemAlias?: string // input
-  systemType?: CodebookType // ListBox
-  zone?: CodebookType // combobox
-  location?: CodebookType // combobox - CODEBOOK.LOCATION
-  description?: string // textarea
-  responsible?: CodebookType // combobox - CODEBOOK.EMPLOYEE
-  importance?: CodebookType // listbox - CODEBOOK.SYSTEM_IMPORTANCE
+  systemCode?: string
+  systemAlias?: string
+  systemType?: CodebookType
+  zone?: CodebookType
+  location?: CodebookType
+  description?: string
+  responsible?: CodebookType
+  importance?: CodebookType
   physicalItem?: PhysicalItem
   parentPath?: CodebookType[]
   hasSubsystems?: boolean
@@ -34,29 +34,18 @@ export type SystemDetail = {
   statistics?: SystemStatistics
 }
 
-export type SystemListResponse = {
-  data: SystemDetail[]
-  totalCount: number
-}
-
 export type PhysicalItem = {
   uid?: string
   conditionStatus?: CodebookType
-  itemUsage?: CodebookType // combobox - CODEBOOK.ITEM_USAGE
-  price?: number // input
+  itemUsage?: CodebookType
+  price?: number
   currency?: string
   notes?: string
-  eun?: string // input
-  serialNumber?: string // input
+  eun?: string
+  serialNumber?: string
   catalogueItem?: CatalogueItem
   properties?: PhysicalItemProperty[]
 }
-
-export interface PhysicalItemProperty {
-  value?: any
-  property: ItemProperty
-}
-
 export type ItemProperty = {
   uid: string
   name: string
@@ -64,4 +53,9 @@ export type ItemProperty = {
   defaultValue?: string
   type: CodebookType
   unit?: CodebookType
+}
+
+export interface PhysicalItemProperty {
+  value?: any
+  property: ItemProperty
 }

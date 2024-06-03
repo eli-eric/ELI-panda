@@ -1,22 +1,29 @@
-import { gql, useQuery } from '@apollo/client'
+import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 
+import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import useTableStateStore from '@/store/useTableStateStore'
-import type { Query } from '@/types/gql/graphql'
+import { gql } from '@/types/gql'
 
-const GET_SYSTEM_TYPE_GROUPS = gql`
-  query Query($systemTypesWhere: SystemTypeWhere, $where: SystemTypeGroupWhere) {
+const GET_SYSTEM_TYPE_GROUPS = gql(`
+  query SystemTypeQuery(
+    $systemTypesWhere: SystemTypeWhere
+    $where: SystemTypeGroupWhere
+  ) {
     systemTypeGroups(where: $where, options: { sort: [{ name: ASC }] }) {
       name
       uid
-      systemTypes(where: $systemTypesWhere, options: { sort: [{ name: ASC }] }) {
+      systemTypes(
+        where: $systemTypesWhere
+        options: { sort: [{ name: ASC }] }
+      ) {
         name
         code
         uid
       }
     }
   }
-`
+`)
 
 export const useSystemTypeGroups = () => {
   const { instances } = useTableStateStore()
@@ -25,14 +32,17 @@ export const useSystemTypeGroups = () => {
   const filterCode = columnFilter?.find(item => item.id === 'code')?.value
   const filterName = columnFilter?.find(item => item.id === 'name')?.value
 
-  const { data, loading, error } = useQuery<Query>(GET_SYSTEM_TYPE_GROUPS, {
-    onError: err => {
-      toast.error(err.message)
+  const { data, isLoading, error } = useGraphQL(GET_SYSTEM_TYPE_GROUPS)
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to fetch system type groups')
     }
-  })
+  }, [error])
+
   return {
     systemTypeGroups: data?.systemTypeGroups,
-    loading,
+    loading: isLoading,
     error,
     filter: {
       name: filterName,

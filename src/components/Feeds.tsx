@@ -1,5 +1,5 @@
-import { Fragment } from 'react'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { Fragment } from 'react'
 
 const activity = [
   {

@@ -3,7 +3,23 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en" className="h-full">
-        <Head title="Eli Panda - " />
+        <Head title="Eli Panda - ">
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function() {
+                  const theme = localStorage.getItem('theme');
+                  const themeObj = JSON.parse(theme);
+                  if (themeObj.state.isDark === true) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                })();
+              `
+            }}
+          ></script>
+        </Head>
         <body className="h-full bg-white  dark:bg-gray-800">
           <Main />
           <NextScript />

@@ -7,14 +7,18 @@ import { message } from 'src/i18n/src/messages'
 import ErrorPage from '@/components/error/ErrorPage'
 import LoaderComponent from '@/components/loader.comp'
 import CatalogueItemContainer from '@/modules/catalogueItem/CatalogueItem.cont'
-import useItem from '@/modules/catalogueItem/hooks/useItem'
+import { useCatalogueItem } from '@/modules/catalogueItem/hooks/useItem'
 
 const messages = message.cataloguePage
 
 const ItemContainer = ({ uid }: { uid?: string }) => {
-  const { item, error } = useItem()
+  const { item, error } = useCatalogueItem()
   if (error) return <ErrorPage />
-  return <Fragment>{item ? <CatalogueItemContainer uid={uid} /> : <LoaderComponent />}</Fragment>
+  return (
+    <Fragment>
+      {item ? <CatalogueItemContainer uid={uid} /> : <LoaderComponent />}
+    </Fragment>
+  )
 }
 
 interface Props {

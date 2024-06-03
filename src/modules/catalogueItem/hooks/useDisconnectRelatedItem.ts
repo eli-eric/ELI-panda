@@ -1,8 +1,11 @@
-import type { Query } from '@/types/gql/graphql'
-import { useMutation, gql } from '@apollo/client'
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
-const DISCONNECT_RELATED_ITEM = gql`
-  mutation Mutation($where: CatalogueItemWhere, $update: CatalogueItemUpdateInput) {
+const DISCONNECT_RELATED_ITEM = gql(`
+  mutation DisconnectRelatedItemMutation(
+    $where: CatalogueItemWhere
+    $update: CatalogueItemUpdateInput
+  ) {
     updateCatalogueItems(where: $where, update: $update) {
       catalogueItems {
         relatedCatalogueItems {
@@ -11,14 +14,12 @@ const DISCONNECT_RELATED_ITEM = gql`
       }
     }
   }
-`
+`)
 
 export const useDisconnectRelatedItem = () => {
-  const [disconnectRelatedItem, { data, error, loading }] = useMutation<Query>(DISCONNECT_RELATED_ITEM)
+  const { mutate, isPending } = useGraphQLMutation(DISCONNECT_RELATED_ITEM)
   return {
-    disconnectRelatedItem,
-    loading,
-    data,
-    error
+    disconnectRelatedItem: mutate,
+    loading: isPending
   }
 }

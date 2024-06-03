@@ -1,14 +1,15 @@
-import { useState, type FC } from 'react'
+import { useRouter } from 'next/router'
+import { type FC, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { message } from '@/i18n/src/messages'
 import CatalogueTableSelect from '@/modules/shared/catalogue/table/CatalogueTableSelect'
 import type { ModalButtons } from '@/types/form'
-import type { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses/catalogue'
+
 import { useCreateRelatedItem } from '../../hooks/useCreateRelatedItem'
-import { useRouter } from 'next/router'
-import toast from 'react-hot-toast'
-import { useRelatedItems } from '../../hooks/useItem'
-import { message } from '@/i18n/src/messages'
+import { useRelatedItems } from '../../hooks/useRelatedItems'
 
 const messages = message.common.buttons
 
@@ -19,15 +20,15 @@ interface Props {
 
 export const SelectRelatatedItemsModal: FC<Props> = ({ open, setOpen }) => {
   const [selectedItem, setSelectedItem] = useState<CatalogueItem | undefined>()
-  const { createRelatedItem, loading } = useCreateRelatedItem({ uid: selectedItem?.uid })
+  const { createRelatedItem, loading } = useCreateRelatedItem()
   const { refetch } = useRelatedItems()
   const router = useRouter()
   const itemUid = router.query.uid as string
 
   const submitModal = () => {
     if (selectedItem) {
-      createRelatedItem({
-        variables: {
+      createRelatedItem(
+        {
           where: {
             uid: itemUid
           },
@@ -47,15 +48,17 @@ export const SelectRelatatedItemsModal: FC<Props> = ({ open, setOpen }) => {
             ]
           }
         },
-        onError: error => {
-          toast.error(error.message)
-        },
-        onCompleted: () => {
-          setOpen(false)
-          setSelectedItem(undefined)
-          refetch()
+        {
+          onError: error => {
+            toast.error(error.message)
+          },
+          onSuccess: () => {
+            setOpen(false)
+            setSelectedItem(undefined)
+            refetch()
+          }
         }
-      })
+      )
     }
   }
 
@@ -73,7 +76,10 @@ export const SelectRelatatedItemsModal: FC<Props> = ({ open, setOpen }) => {
 
   return (
     <ModalComponent {...{ open, setOpen, buttons }}>
-      <CatalogueTableSelect setItem={setSelectedItem} selectedItem={selectedItem} />
+      <CatalogueTableSelect
+        setItem={setSelectedItem}
+        selectedItem={selectedItem}
+      />
     </ModalComponent>
   )
 }

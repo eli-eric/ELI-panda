@@ -13,7 +13,14 @@ interface Props {
   disabled?: boolean
 }
 
-export const RangeInput = ({ name, label, onChange, isFilter, disabled, placeholder }: Props) => {
+export const RangeInput = ({
+  name,
+  label,
+  onChange,
+  isFilter,
+  disabled,
+  placeholder
+}: Props) => {
   const { control, watch, setError, clearErrors } = useFormContext()
 
   const inputValues = watch(name)
@@ -35,7 +42,9 @@ export const RangeInput = ({ name, label, onChange, isFilter, disabled, placehol
 
   return (
     <div className="flex flex-col">
-      <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{label}</span>
+      <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+        {label}
+      </span>
       <Controller
         name={name}
         control={control}
@@ -57,7 +66,8 @@ export const RangeInput = ({ name, label, onChange, isFilter, disabled, placehol
                   )}
                   value={fieldValue.min ?? ''}
                   onChange={e => {
-                    const value = e.target.value === '' ? '' : Number(e.target.value)
+                    const value =
+                      e.target.value === '' ? '' : Number(e.target.value)
                     field.onChange({
                       min: value,
                       max: fieldValue?.max
@@ -70,7 +80,8 @@ export const RangeInput = ({ name, label, onChange, isFilter, disabled, placehol
                   pattern="[0-9]*"
                   placeholder={placeholder?.max || 'Max'}
                   onChange={e => {
-                    const value = e.target.value === '' ? '' : Number(e.target.value)
+                    const value =
+                      e.target.value === '' ? '' : Number(e.target.value)
                     field.onChange({
                       min: fieldValue?.min,
                       max: value

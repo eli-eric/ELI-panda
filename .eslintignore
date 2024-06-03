@@ -3,3 +3,4 @@ cypress
 src/pages/api
 tailwind.config.js
 cypress.config.ts
+src/types/gql

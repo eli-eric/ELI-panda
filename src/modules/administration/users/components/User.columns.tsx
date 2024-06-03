@@ -45,7 +45,11 @@ export const useUsersColumns = () => {
         header: 'Roles',
         accessorFn: row => row?.roles,
         id: 'roles',
-        cell: ({ getValue }) => <div>{getValue()?.map(role => <Badge key={v4()}>{role.code}</Badge>)}</div>,
+        cell: ({ getValue }) => (
+          <div>
+            {getValue()?.map(role => <Badge key={v4()}>{role.code}</Badge>)}
+          </div>
+        ),
         size: 500
       }
     ],

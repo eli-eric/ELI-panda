@@ -1,23 +1,22 @@
-import { gql, useMutation } from '@apollo/client'
 import toast from 'react-hot-toast'
 
-import type { Mutation } from '@/types/gql/graphql'
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { gql } from '@/types/gql'
 
-const ASSIGN_SPARE_PARTS = gql`
+const ASSIGN_SPARE_PARTS = gql(`
   mutation CreateSparePartRelation($fromSystemIds: [ID!]!, $toSystemIds: [ID!]!) {
     createSparePartRelation(fromSystemIds: $fromSystemIds, toSystemIds: $toSystemIds)
   }
-`
+`)
 
-export const useAssignSpareParts = (fromSystemIds?: string[], toSystemIds?: string[]) => {
-  const [assignSpareParts, { loading }] = useMutation<Mutation>(ASSIGN_SPARE_PARTS, {
-    variables: { fromSystemIds, toSystemIds },
-    onCompleted: data => {
+export const useAssignSpareParts = () => {
+  const { mutate, isPending } = useGraphQLMutation(ASSIGN_SPARE_PARTS, {
+    onSuccess: data => {
       toast.success(data.createSparePartRelation as string)
     },
     onError: erorr => {
       toast.error(erorr.message)
     }
   })
-  return { assignSpareParts, loading }
+  return { assignSpareParts: mutate, loading: isPending }
 }

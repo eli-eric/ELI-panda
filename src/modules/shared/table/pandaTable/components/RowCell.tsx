@@ -32,12 +32,16 @@ export const RowCell: FC<Props> = ({ row, cell, loading }) => {
       style={
         {
           width: cell.column.getSize(),
-          '--left': cell.column.columnDef.meta?.sticky ? `${rowIndex === 0 ? 0 : stickyCellsSize}px` : undefined
+          '--left': cell.column.columnDef.meta?.sticky
+            ? `${rowIndex === 0 ? 0 : stickyCellsSize}px`
+            : undefined
         } as React.CSSProperties
       }
       className={classNames(
         'sm:pl-6 sm:pr-6 border-r border-b border-gray-400 dark:text-gray-100',
-        cell.column.columnDef.meta?.sticky ? 'sticky z-30 backdrop-blur-2xl backdrop-filter border-r pt-1 pb-1' : '',
+        cell.column.columnDef.meta?.sticky
+          ? 'sticky z-30 backdrop-blur-2xl backdrop-filter border-r pt-1 pb-1'
+          : '',
         loading ? 'opacity-50' : '',
         cell.column.columnDef.meta?.className,
         styles.cell

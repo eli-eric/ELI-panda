@@ -1,16 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import Combobox from '@/components/form/Combobox'
-import { Input, InputAmount, InputCurrency, TextArea } from '@/components/form/Input'
+import {
+  Input,
+  InputAmount,
+  InputCurrency,
+  TextArea
+} from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
 import { Col, Grid } from '@/components/grid/Grid'
 import Divider from '@/components/layout/Divider'
 import { message } from '@/i18n/src/messages'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
+import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
 import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
-import type { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses/catalogue'
 
 import useOrderLineFormFields from './OrderLineForm.fields'
 
@@ -23,26 +28,21 @@ interface Props {
 
 const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
   const { enabled, toggle, Toggle } = useToggle(false)
-  const [locationEnable, setLocationEnable] = useState(false)
   const formFields = useOrderLineFormFields(enabled)
-  const { setValue, watch, unregister } = useFormContext<OrderLineFormType>()
-  const system = watch('system')
-  /*   const technologicalUnitToogle = useToggle(true)
-  const { toggle: techunittoogle, enabled: techunitenabled } = technologicalunittoogle
-  const [techunitfilter, settechunitfilter] = usestate<codebookfilter[] | undefined>(undefined)
-
-  const techunittoogle = enable => {
-    technologicalunittoogle.toggle()
-    settechunitfilter([{ key: 'technologicalunits', value: enable }])
-    toast.success('technological unit filter is' + ' ' + enable)
-  } */
+  const { setValue } = useFormContext<OrderLineFormType>()
 
   // set default value
   useEffect(() => {
     if (!enabled) {
       setValue('name', catalogueItem?.name || orderLine?.name || '')
-      setValue('catalogueNumber', catalogueItem?.catalogueNumber || orderLine?.catalogueNumber || '')
-      setValue('catalogueUid', catalogueItem?.uid || orderLine?.catalogueUid || '')
+      setValue(
+        'catalogueNumber',
+        catalogueItem?.catalogueNumber || orderLine?.catalogueNumber || ''
+      )
+      setValue(
+        'catalogueUid',
+        catalogueItem?.uid || orderLine?.catalogueUid || ''
+      )
     }
   }, [catalogueItem, orderLine, enabled, setValue])
 
@@ -54,16 +54,6 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
       setValue('catalogueUid', '')
     }
   }, [enabled, setValue])
-
-  // set location enable on system change
-  useEffect(() => {
-    if (system) {
-      setLocationEnable(false)
-      unregister('location')
-    } else {
-      setLocationEnable(true)
-    }
-  }, [system, unregister])
 
   return (
     <Grid>
@@ -118,7 +108,7 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
       </Col>
       {orderLine?.uid && (
         <Col md={6} lg={6}>
-          <Combobox {...formFields.location} position="top" limit={50} disabled={locationEnable} />
+          <SelectLocationCombo locationField={formFields.location} />
         </Col>
       )}
       {orderLine?.uid && (

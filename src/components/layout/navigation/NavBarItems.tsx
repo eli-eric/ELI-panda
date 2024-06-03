@@ -11,12 +11,13 @@ import type { NavigationType } from '@/types/constants/paths'
 import { SUPPORT } from '@/types/constants/paths'
 import type { ROLE } from '@/types/constants/roles'
 
-export const NavBarTitle: FC<PropsWithChildren<{ className?: string; isActive?: boolean; isExpanded: boolean }>> = ({
-  isActive,
-  isExpanded,
-  children,
-  className
-}) => {
+export const NavBarTitle: FC<
+  PropsWithChildren<{
+    className?: string
+    isActive?: boolean
+    isExpanded: boolean
+  }>
+> = ({ isActive, isExpanded, children, className }) => {
   return (
     <span
       className={classNames(
@@ -39,7 +40,12 @@ interface NavBarItemProps {
   isActive?: boolean
 }
 
-const NavBarItem: FC<PropsWithChildren<NavBarItemProps>> = ({ isExpanded, text, Icon, isActive }) => {
+const NavBarItem: FC<PropsWithChildren<NavBarItemProps>> = ({
+  isExpanded,
+  text,
+  Icon,
+  isActive
+}) => {
   return (
     <div className="flex">
       <Tooltip content={text} placement="top-start" disabled={isExpanded}>
@@ -83,9 +89,17 @@ export const NavBarLink: FC<NavBarLinkProps> = ({
     <Link
       href={href}
       onClick={() => setOpen && setOpen(false)}
-      className={classNames('flex items-center p-4 hover:bg-gray-300 hover:dark:bg-gray-700', className)}
+      className={classNames(
+        'flex items-center p-4 hover:bg-gray-300 hover:dark:bg-gray-700',
+        className
+      )}
     >
-      <NavBarItem isExpanded={isExpanded} Icon={Icon} text={text} isActive={isActive} />
+      <NavBarItem
+        isExpanded={isExpanded}
+        Icon={Icon}
+        text={text}
+        isActive={isActive}
+      />
     </Link>
   )
 }
@@ -107,7 +121,12 @@ export const NavBarButton: FC<PropsWithChildren<NavBarButtonProps>> = ({
       className="flex items-center justify-between w-full p-4 hover:dark:bg-gray-700 hover:bg-gray-300"
       onClick={onClick}
     >
-      <NavBarItem isExpanded={isExpanded} Icon={Icon} text={text} isActive={isActive} />
+      <NavBarItem
+        isExpanded={isExpanded}
+        Icon={Icon}
+        text={text}
+        isActive={isActive}
+      />
       {children}
     </button>
   )
@@ -120,7 +139,12 @@ interface ChevronIconProps {
 
 export const ChevronIcon: FC<ChevronIconProps> = ({ isExpanded, open }) => {
   return (
-    <div className={classNames('transition-opacity duration-300', isExpanded ? 'opacity-100' : 'opacity-0')}>
+    <div
+      className={classNames(
+        'transition-opacity duration-300',
+        isExpanded ? 'opacity-100' : 'opacity-0'
+      )}
+    >
       {open ? (
         <ChevronDownIcon className="ml-auto h-5 w-5 dark:text-gray-200 text-gray-600" />
       ) : (
@@ -144,7 +168,13 @@ export const SupportLink: FC<SupportLinkProps> = ({ isExpanded }) => {
       >
         <Tooltip content="Support" placement="top-start" disabled={isExpanded}>
           <div className="ml-2">
-            <span className={classNames('h-6 w-6 text-2xl text-center text-gray-500 dark:text-gray-200')}>?</span>
+            <span
+              className={classNames(
+                'h-6 w-6 text-2xl text-center text-gray-500 dark:text-gray-200'
+              )}
+            >
+              ?
+            </span>
           </div>
         </Tooltip>
         <NavBarTitle className="ml-5" isExpanded={isExpanded} isActive={false}>
@@ -183,7 +213,9 @@ export const NavBarMultiLink: FC<NavBarMultiLinkProps> = ({
         onClick={() => toggleItemExpansion(item.name)}
         Icon={item.Icon}
         text={item.name}
-        isActive={item.links?.some(subItem => pathName.startsWith(subItem.path))}
+        isActive={item.links?.some(subItem =>
+          pathName.startsWith(subItem.path)
+        )}
       >
         <ChevronIcon isExpanded={isExpanded} open={expandedItems[item.name]} />
       </NavBarButton>

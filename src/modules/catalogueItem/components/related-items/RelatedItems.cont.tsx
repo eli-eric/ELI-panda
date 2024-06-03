@@ -1,32 +1,31 @@
 import Link from 'next/link'
-
-import { LinkDecorator } from '@/components/decorators'
-import { Heading } from '@/components/layout/Heading'
-import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
-import { PATH } from '@/types/constants/paths'
-
-import { useRelatedItems } from '../../hooks/useItem'
-import { AddRelatatedItemButton } from './AddRelatatedItemButton'
-import { TableDeleteButton } from '@/components/Buttons'
-import usePermission from '@/hooks/usePermission'
-import { ROLE } from '@/types/constants/roles'
-import { DescriptionCell } from '@/modules/shared/catalogue/table/cells/DescriptionCell'
-import useWarningModal from '@/hooks/useWarningModal'
-import { useDisconnectRelatedItem } from '../../hooks/useDisconnectRelatedItem'
 import { useRouter } from 'next/router'
 
+import { TableDeleteButton } from '@/components/Buttons'
+import { LinkDecorator } from '@/components/decorators'
+import { Heading } from '@/components/layout/Heading'
+import usePermission from '@/hooks/usePermission'
+import useWarningModal from '@/hooks/useWarningModal'
+import { DescriptionCell } from '@/modules/shared/catalogue/table/cells/DescriptionCell'
+import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
+import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
+
+import { useDisconnectRelatedItem } from '../../hooks/useDisconnectRelatedItem'
+import { useRelatedItems } from '../../hooks/useRelatedItems'
+import { AddRelatatedItemButton } from './AddRelatatedItemButton'
+
 export const RelatedItemsContainer = () => {
-  const { data } = useRelatedItems()
+  const { data, refetch } = useRelatedItems()
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
   const router = useRouter()
   const itemUid = router.query.uid as string
   const withWarn = useWarningModal('Are you sure you want to delete relation?')
-  const { refetch } = useRelatedItems()
   const { disconnectRelatedItem } = useDisconnectRelatedItem()
 
   const onDisconnect = (uid: string) => () => {
-    disconnectRelatedItem({
-      variables: {
+    disconnectRelatedItem(
+      {
         where: {
           uid: itemUid
         },
@@ -46,10 +45,12 @@ export const RelatedItemsContainer = () => {
           ]
         }
       },
-      onCompleted: () => {
-        refetch()
+      {
+        onSuccess: () => {
+          refetch()
+        }
       }
-    })
+    )
   }
 
   return (
@@ -71,7 +72,11 @@ export const RelatedItemsContainer = () => {
                     <Link href={PATH.CATALOGUE_ITEM + `/${original.uid}`}>
                       <LinkDecorator>{getValue()}</LinkDecorator>
                     </Link>
-                    {canEdit && <TableDeleteButton onClick={withWarn(onDisconnect(original.uid))} />}
+                    {canEdit && (
+                      <TableDeleteButton
+                        onClick={withWarn(onDisconnect(original.uid))}
+                      />
+                    )}
                   </div>
                 )
               }

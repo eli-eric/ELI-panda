@@ -40,9 +40,22 @@ interface ColType extends React.HTMLAttributes<HTMLDivElement> {
   lg?: ColSizeProp
 }
 
-export const Col = ({ children, className, sm: col = 3, md, lg, ...restProps }: ColType): JSX.Element => (
+export const Col = ({
+  children,
+  className,
+  sm: col = 3,
+  md,
+  lg,
+  ...restProps
+}: ColType): JSX.Element => (
   <div
-    className={classNames(col && colSizes[col], md && mdColSizes[md], lg && lgColSizes[lg], 'flex', className)}
+    className={classNames(
+      col && colSizes[col],
+      md && mdColSizes[md],
+      lg && lgColSizes[lg],
+      'flex',
+      className
+    )}
     {...restProps}
   >
     {children}

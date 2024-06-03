@@ -15,7 +15,9 @@ const messages = message.authPage
 const LoginPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
   const router = useRouter()
-  const callbackUrl = decodeURI((router.query?.callbackUrl as string) ?? PATH.DASHBOARD)
+  const callbackUrl = decodeURI(
+    (router.query?.callbackUrl as string) ?? PATH.DASHBOARD
+  )
 
   const [errorMessage, setErrorMessage] = useState<string>()
   const [loading, setLoading] = useState<boolean>(false)

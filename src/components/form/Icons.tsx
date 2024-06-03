@@ -11,5 +11,9 @@ interface ChevronDownProps {
   onClick?: () => void
 }
 export const ChevronDown = ({ onClick }: ChevronDownProps) => (
-  <ChevronDownIcon onClick={onClick} className="h-4 w-4 text-gray-500 dark:text-gray-200" aria-hidden="true" />
+  <ChevronDownIcon
+    onClick={onClick}
+    className="h-4 w-4 text-gray-500 dark:text-gray-200"
+    aria-hidden="true"
+  />
 )

@@ -33,8 +33,12 @@ export const NavigationMobile = () => {
         id="nav-bar"
         className={classNames(
           'lg:hidden flex w-full justify-between text-center items-center dark:bg-gray-800 bg-slate-100',
-          PROCESS_ENV && PROCESS_ENV === ENV.DEV && 'bg-teal-600 dark:bg-teal-900',
-          PROCESS_ENV && PROCESS_ENV === ENV.TEST && 'bg-pink-600 dark:bg-pink-900'
+          PROCESS_ENV &&
+            PROCESS_ENV === ENV.DEV &&
+            'bg-teal-600 dark:bg-teal-900',
+          PROCESS_ENV &&
+            PROCESS_ENV === ENV.TEST &&
+            'bg-pink-600 dark:bg-pink-900'
         )}
       >
         <button onClick={() => setOpenSettings(!openSettings)} className="pl-2">
@@ -47,7 +51,11 @@ export const NavigationMobile = () => {
           <Bars3Icon className="h-10 w-10 p-2 text-gray-600 dark:text-gray-200 rounded-full hover:bg-gray-300 hover:dark:bg-gray-600" />
         </button>
       </div>
-      <SlideOverNavigation panelSlide="right" open={openNav} setOpen={setOpenNav}>
+      <SlideOverNavigation
+        panelSlide="right"
+        open={openNav}
+        setOpen={setOpenNav}
+      >
         <MainNavigation
           isExpanded={true}
           toggleItemExpansion={toggleItemExpansion}
@@ -55,7 +63,11 @@ export const NavigationMobile = () => {
           expandedItems={expandedItems}
         />
       </SlideOverNavigation>
-      <SlideOverNavigation panelSlide="left" open={openSettings} setOpen={setOpenSettings}>
+      <SlideOverNavigation
+        panelSlide="left"
+        open={openSettings}
+        setOpen={setOpenSettings}
+      >
         <UserSection isExpanded={true} setOpen={setOpenSettings} />
       </SlideOverNavigation>
     </header>

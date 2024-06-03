@@ -27,156 +27,92 @@ type SortingInstance = {
 type TableState = {
   instances: Record<string, SortingInstance>
   setSortBy: (tableId: string, sortBy: SortingInstance['sortBy']) => void
-  setRowSelection: (tableId: string, rowSelection: SortingInstance['rowSelection']) => void
-  setSortByQueryString: (tableId: string, sortByQueryString: SortingInstance['sortByQueryString']) => void
-  setPagination: (tableId: string, pagination: SortingInstance['pagination']) => void
+  setRowSelection: (
+    tableId: string,
+    rowSelection: SortingInstance['rowSelection']
+  ) => void
+  setSortByQueryString: (
+    tableId: string,
+    sortByQueryString: SortingInstance['sortByQueryString']
+  ) => void
+  setPagination: (
+    tableId: string,
+    pagination: SortingInstance['pagination']
+  ) => void
   reset: (tableId: string) => void
   setFilter: (tableId: string, filter: SortingInstance['filter']) => void
-  setColumnFilter: (tableId: string, columnFilter: SortingInstance['columnFilter']) => void
+  setColumnFilter: (
+    tableId: string,
+    columnFilter: SortingInstance['columnFilter']
+  ) => void
   setSearch: (tableId: string, search: SortingInstance['search']) => void
   setCustom: (tableId: string, custom: SortingInstance['custom']) => void
-  setVisibility: (tableId: string, columnVisibility: SortingInstance['columnVisibility']) => void
+  setVisibility: (
+    tableId: string,
+    columnVisibility: SortingInstance['columnVisibility']
+  ) => void
   setExpand: (tableId: string, expanded: SortingInstance['expanded']) => void
-  setOrder: (tableId: string, columnOrder: SortingInstance['columnOrder']) => void
+  setOrder: (
+    tableId: string,
+    columnOrder: SortingInstance['columnOrder']
+  ) => void
 }
 
-const useTableStateStore = create<TableState>(set => ({
-  instances: {},
-  setSortBy: (tableId, sortBy) =>
+const useTableStateStore = create<TableState>(set => {
+  const updateInstance = (
+    tableId: string,
+    key: keyof SortingInstance,
+    value: any
+  ) => {
     set(state => {
-      const newInstance = { ...state.instances[tableId], sortBy }
-      return { instances: { ...state.instances, [tableId]: newInstance } }
-    }),
-  setRowSelection: (tableId, rowSelection) =>
-    set(state => {
-      const newInstance = { ...state.instances[tableId], rowSelection }
-      return { instances: { ...state.instances, [tableId]: newInstance } }
-    }),
-  setPagination: (tableId, pagination) =>
-    set(state => {
-      const newInstance = { ...state.instances[tableId], pagination }
-      return { instances: { ...state.instances, [tableId]: newInstance } }
-    }),
-  setSortByQueryString: (tableId, sortByQueryString) =>
-    set(state => {
-      const newInstance = { ...state.instances[tableId], sortByQueryString }
-      return { instances: { ...state.instances, [tableId]: newInstance } }
-    }),
-  reset: tableId =>
-    set(state => {
-      const newInstance = {
-        ...state.instances[tableId],
-        sortBy: undefined,
-        pagination: undefined,
-        filter: undefined,
-        search: undefined,
-        sortByQueryString: undefined,
-        columnFilter: undefined,
-        custom: undefined,
-        columnVisibility: undefined,
-        expanded: undefined,
-        columnOrder: undefined
-      }
-      return { instances: { ...state.instances, [tableId]: newInstance } }
-    }),
-  setFilter: (tableId, filter) =>
-    set(state => {
-      if (!state.instances?.[tableId]) {
-        const newInstance = { ...state.instances[tableId], filter }
-        return { instances: { ...state.instances, [tableId]: newInstance } }
+      const instance = state.instances?.[tableId] || {}
+      if (value && Object.keys(value).length === 0) {
+        delete instance[key]
       } else {
-        if (filter && Object.keys(filter).length === 0) {
-          delete state.instances[tableId].filter
-        } else {
-          state.instances[tableId].filter = filter
-        }
-        return { instances: { ...state.instances } }
+        instance[key] = value
       }
-    }),
-  setSearch: (tableId, search) =>
-    set(state => {
-      if (!state.instances?.[tableId]) {
-        const newInstance = { ...state.instances[tableId], search }
-        return { instances: { ...state.instances, [tableId]: newInstance } }
-      } else {
-        if (search === '') {
-          delete state.instances[tableId].search
-        } else {
-          state.instances[tableId].search = search
-        }
-        return { instances: { ...state.instances } }
-      }
-    }),
-  setCustom: (tableId, custom) =>
-    set(state => {
-      if (!state.instances?.[tableId]) {
-        const newInstance = { ...state.instances[tableId], custom }
-        return { instances: { ...state.instances, [tableId]: newInstance } }
-      } else {
-        if (custom && Object.keys(custom).length === 0) {
-          delete state.instances[tableId].custom
-        } else {
-          state.instances[tableId].custom = custom
-        }
-        return { instances: { ...state.instances } }
-      }
-    }),
-  setVisibility: (tableId, columnVisibility) =>
-    set(state => {
-      if (!state.instances?.[tableId]) {
-        const newInstance = { ...state.instances[tableId], columnVisibility }
-        return { instances: { ...state.instances, [tableId]: newInstance } }
-      } else {
-        if (columnVisibility && Object.keys(columnVisibility).length === 0) {
-          delete state.instances[tableId].columnVisibility
-        } else {
-          state.instances[tableId].columnVisibility = columnVisibility
-        }
-        return { instances: { ...state.instances } }
-      }
-    }),
-  setExpand: (tableId, expanded) =>
-    set(state => {
-      if (!state.instances?.[tableId]) {
-        const newInstance = { ...state.instances[tableId], expanded }
-        return { instances: { ...state.instances, [tableId]: newInstance } }
-      } else {
-        if (expanded && Object.keys(expanded).length === 0) {
-          delete state.instances[tableId].expanded
-        } else {
-          state.instances[tableId].expanded = expanded
-        }
-        return { instances: { ...state.instances } }
-      }
-    }),
-  setOrder: (tableId, columnOrder) =>
-    set(state => {
-      if (!state.instances?.[tableId]) {
-        const newInstance = { ...state.instances[tableId], columnOrder }
-        return { instances: { ...state.instances, [tableId]: newInstance } }
-      } else {
-        if (columnOrder && Object.keys(columnOrder).length === 0) {
-          delete state.instances[tableId].columnOrder
-        } else {
-          state.instances[tableId].columnOrder = columnOrder
-        }
-        return { instances: { ...state.instances } }
-      }
-    }),
-  setColumnFilter: (tableId, columnFilter) =>
-    set(state => {
-      if (!state.instances?.[tableId]) {
-        const newInstance = { ...state.instances[tableId], columnFilter }
-        return { instances: { ...state.instances, [tableId]: newInstance } }
-      } else {
-        if (columnFilter && Object.keys(columnFilter).length === 0) {
-          delete state.instances[tableId].columnFilter
-        } else {
-          state.instances[tableId].columnFilter = columnFilter
-        }
-        return { instances: { ...state.instances } }
-      }
+      return { instances: { ...state.instances, [tableId]: { ...instance } } }
     })
-}))
+  }
+
+  return {
+    instances: {},
+    setSortBy: (tableId, sortBy) => updateInstance(tableId, 'sortBy', sortBy),
+    setRowSelection: (tableId, rowSelection) =>
+      updateInstance(tableId, 'rowSelection', rowSelection),
+    setPagination: (tableId, pagination) =>
+      updateInstance(tableId, 'pagination', pagination),
+    setSortByQueryString: (tableId, sortByQueryString) =>
+      updateInstance(tableId, 'sortByQueryString', sortByQueryString),
+    setFilter: (tableId, filter) => updateInstance(tableId, 'filter', filter),
+    setSearch: (tableId, search) => updateInstance(tableId, 'search', search),
+    setCustom: (tableId, custom) => updateInstance(tableId, 'custom', custom),
+    setVisibility: (tableId, columnVisibility) =>
+      updateInstance(tableId, 'columnVisibility', columnVisibility),
+    setExpand: (tableId, expanded) =>
+      updateInstance(tableId, 'expanded', expanded),
+    setOrder: (tableId, columnOrder) =>
+      updateInstance(tableId, 'columnOrder', columnOrder),
+    setColumnFilter: (tableId, columnFilter) =>
+      updateInstance(tableId, 'columnFilter', columnFilter),
+    reset: tableId =>
+      set(state => {
+        const newInstance = {
+          ...state.instances[tableId],
+          sortBy: undefined,
+          pagination: undefined,
+          filter: undefined,
+          search: undefined,
+          sortByQueryString: undefined,
+          columnFilter: undefined,
+          custom: undefined,
+          columnVisibility: undefined,
+          expanded: undefined,
+          columnOrder: undefined
+        }
+        return { instances: { ...state.instances, [tableId]: newInstance } }
+      })
+  }
+})
 
 export default useTableStateStore

@@ -1,6 +1,5 @@
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
-
-import type { DELIVERY_STATUS } from './types'
+import type { DELIVERY_STATUS } from '@/modules/orders/types'
+import type { CodebookType } from '@/types/responses/codebook'
 
 export type Order = {
   uid: string

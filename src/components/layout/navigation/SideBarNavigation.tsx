@@ -38,12 +38,20 @@ export const SidebarNavigation = () => {
         `hidden lg:flex lg:flex-col lg:justify-between`,
         isExpanded ? 'w-64' : 'w-14',
         `h-full min-h-screen sticky left-0 top-0 bottom-0 truesition-all duration-300 ease-in-out bg-slate-100 border-r border-gray-900 dark:bg-gray-900 dark:border-gray-200 pb-4`,
-        PROCESS_ENV && PROCESS_ENV === ENV.DEV && 'bg-teal-100 dark:bg-teal-900',
-        PROCESS_ENV && PROCESS_ENV === ENV.TEST && 'bg-pink-100 dark:bg-pink-900'
+        PROCESS_ENV &&
+          PROCESS_ENV === ENV.DEV &&
+          'bg-teal-100 dark:bg-teal-900',
+        PROCESS_ENV &&
+          PROCESS_ENV === ENV.TEST &&
+          'bg-pink-100 dark:bg-pink-900'
       )}
     >
       <NavBarHeader isExpanded={isExpanded} onCollapse={onCollapse} />
-      <MainNavigation isExpanded={isExpanded} toggleItemExpansion={toggleItemExpansion} expandedItems={expandedItems} />
+      <MainNavigation
+        isExpanded={isExpanded}
+        toggleItemExpansion={toggleItemExpansion}
+        expandedItems={expandedItems}
+      />
       <UserSection isExpanded={isExpanded} />
     </aside>
   )

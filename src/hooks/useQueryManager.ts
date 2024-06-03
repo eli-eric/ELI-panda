@@ -2,9 +2,7 @@ import { useQueryState } from 'next-usequerystate'
 import { useMemo } from 'react'
 
 import useTableStateStore from '@/store/useTableStateStore'
-
-import type { CodebookType } from './fetch/useCodebook'
-import { useDebounce } from './useDebounce'
+import type { CodebookType } from '@/types/responses/codebook'
 
 interface Query {
   pagination?: string
@@ -21,26 +19,41 @@ interface Query {
 export default function useQueryManager(tableId: string): { query: Query } {
   const { instances } = useTableStateStore()
   const [categoryQuery] = useQueryState('category', { history: 'push' })
-  const category: CodebookType | null = categoryQuery ? JSON.parse(categoryQuery) : null
+  const category: CodebookType | null = categoryQuery
+    ? JSON.parse(categoryQuery)
+    : null
   const categoryFilter = useMemo(
-    () => (category ? { value: category, id: 'category', name: 'category' } : undefined),
+    () =>
+      category
+        ? { value: category, id: 'category', name: 'category' }
+        : undefined,
     [category]
   )
-  //TODO: filters
+
+  const [searchQuery] = useQueryState('search')
+  const [pageQuery] = useQueryState('page')
+
   const sorting = instances[tableId]?.sortByQueryString || ''
-  const pagination = instances[tableId]?.pagination || ''
-  const searchInstance = instances[tableId]?.search || ''
-  const search = useDebounce(searchInstance, 500)
+  const pagination =
+    instances[tableId]?.pagination || `{"page":${pageQuery || 1},"pageSize":50}`
+  const search = instances[tableId]?.search || searchQuery || ''
   const supplierUID = instances[tableId]?.filter?.supplier?.uid || ''
   const orderStatusUID = instances[tableId]?.filter?.orderStatus?.uid || ''
-  const procurementResponsibleUID = instances[tableId]?.filter?.procurementResponsible?.uid || ''
+  const procurementResponsibleUID =
+    instances[tableId]?.filter?.procurementResponsible?.uid || ''
   const requestorUID = instances[tableId]?.filter?.requestor?.uid || ''
   //columnFilter merge with categoryFilter
   const columnFilter = useMemo(
-    () => JSON.stringify((instances[tableId]?.columnFilter || []).concat(categoryFilter || [])),
+    () =>
+      JSON.stringify(
+        (instances[tableId]?.columnFilter || []).concat(categoryFilter || [])
+      ),
     [instances, tableId, categoryFilter]
   )
-  const custom = useMemo(() => instances[tableId]?.custom || {}, [instances, tableId])
+  const custom = useMemo(
+    () => instances[tableId]?.custom || {},
+    [instances, tableId]
+  )
 
   const filter = useMemo(() => {
     const filter: any = {}

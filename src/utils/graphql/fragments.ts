@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client'
+import { gql } from '@/types/gql'
 
-export const SYSTEM_FIELDS = gql`
+export const SystemFieldsFragment = gql(`
   fragment SystemFields on System {
     uid
     name
@@ -78,10 +78,10 @@ export const SYSTEM_FIELDS = gql`
       name
     }
   }
-`
+`)
 
-export const CATALOGUE_ITEM = gql`
-  fragment CatalogueItemFields on CatalogueItem {
+export const CatalogueItemFragment = gql(`
+  fragment CatalogueItem on CatalogueItem {
     uid
     name
     catalogueNumber
@@ -98,6 +98,7 @@ export const CATALOGUE_ITEM = gql`
       edges {
         value
         node {
+          uid
           name
           unit {
             name
@@ -107,11 +108,10 @@ export const CATALOGUE_ITEM = gql`
       }
     }
   }
-`
+`)
 
-export const PHYSICAL_ITEM = gql`
-  ${CATALOGUE_ITEM}
-  fragment PhysicalItemFields on Item {
+export const PhysicalItemFragment = gql(`
+  fragment PhysicalItem on Item {
     uid
     eun
     name
@@ -130,36 +130,128 @@ export const PHYSICAL_ITEM = gql`
       name
     }
     catalogueItem {
-      ...CatalogueItemFields
+      ...CatalogueItem
     }
   }
-`
+`)
 
-export const SYSTEM_DETAIL = gql`
-  ${SYSTEM_FIELDS}
-  ${PHYSICAL_ITEM}
+export const SystemDetailFragment = gql(`
   fragment SystemDetail on System {
-    ...SystemFields
+    uid
+    name
+    systemCode
+    systemAlias
+    minimalSpareParstCount
+    isCritical
+    responsibleTeam {
+      uid
+      name
+    }
+    systemLevel
+    description
+    subSystems {
+      uid
+      name
+      location {
+        uid
+        name
+      }
+      systemLevel
+      systemAlias
+      parentPath {
+        uid
+        name
+        systemLevel
+      }
+      physicalItem {
+        uid
+        eun
+        name
+        serialNumber
+        itemUsage {
+          uid
+          name
+        }
+      }
+    }
+    keySystem {
+      uid
+      name
+    }
+    parentPath {
+      uid
+      name
+      systemLevel
+    }
+    location {
+      uid
+      name
+      code
+    }
+    maintainedBy {
+      fullName
+      uid
+    }
+    operators {
+      uid
+      fullName
+    }
+    parentSystem {
+      uid
+      name
+    }
+    responsible {
+      uid
+      fullName
+    }
+    systemType {
+      uid
+      name
+    }
+    zone {
+      uid
+      name
+    }
     physicalItem {
-      ...PhysicalItemFields
+      uid
+    eun
+    name
+    notes
+    serialNumber
+    conditionStatus {
+      uid
+      name
+    }
+    order {
+      uid
+      name
+    }
+    itemUsage {
+      uid
+      name
+    }
+    catalogueItem {
+      ...CatalogueItem
+    }
     }
     spareParts {
       ...SystemFields
       physicalItem {
-        ...PhysicalItemFields
+        ...PhysicalItem
       }
     }
     sparePartsFor {
       ...SystemFields
       physicalItem {
-        ...PhysicalItemFields
+        ...PhysicalItem
       }
     }
-  }
-`
 
-export const USER = gql`
-  fragment UserFields on User {
+  }
+`)
+
+export const UserFragment = gql(`
+  fragment User on User {
     uid
     email
     firstName
@@ -181,5 +273,6 @@ export const USER = gql`
       name
       code
     }
+
   }
-`
+`)

@@ -30,7 +30,13 @@ interface Props<T> {
   getSubRows?: (original: T, index: number) => T[]
 }
 
-export const usePandaTable = <T>({ tableId, columns, settings, data, getSubRows }: Props<T>) => {
+export const usePandaTable = <T>({
+  tableId,
+  columns,
+  settings,
+  data,
+  getSubRows
+}: Props<T>) => {
   const {
     enableSorting = false,
     enableQueryURL = false,
@@ -44,7 +50,10 @@ export const usePandaTable = <T>({ tableId, columns, settings, data, getSubRows 
   } = settings || {}
 
   const [columnVisibility, setColumnVisibility] = useVisibility(tableId)
-  const [columnOrder, setColumnOrder] = useOrdering(tableId)
+  const [columnOrder, setColumnOrder] = useOrdering(
+    tableId,
+    settings?.defaultColumnOrder
+  )
   const [sorting, setSorting] = useSorting(tableId, enableQueryURL)
   const [expanded, setExpanded] = useExpanding(tableId)
   const [columnFilters, setColumnFilters] = useFilters(tableId, enableQueryURL)
@@ -63,7 +72,9 @@ export const usePandaTable = <T>({ tableId, columns, settings, data, getSubRows 
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
-    getPaginationRowModel: enablePagination ? getPaginationRowModel() : undefined,
+    getPaginationRowModel: enablePagination
+      ? getPaginationRowModel()
+      : undefined,
     getSubRows,
     onExpandedChange: setExpanded,
     onSortingChange: setSorting,

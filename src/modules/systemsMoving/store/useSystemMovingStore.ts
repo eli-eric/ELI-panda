@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import type { SystemDetail } from '@/modules/systems/types/responses'
+import type { SystemDetail } from '@/types/responses/systems'
 
 interface SystemsMovingType extends SystemDetail {
   tableId: string
@@ -21,8 +21,10 @@ export const useSystemMovingStore = create<SystemMovingStoreType>(set => ({
   parentSystem: undefined,
   tableIdLeft: 'systems-left',
   tableIdRight: 'systems-right',
-  setChildSystem: (childSystem: SystemsMovingType) => set(() => ({ childSystem })),
-  setParentSystem: (parentSystem: SystemsMovingType) => set(() => ({ parentSystem })),
+  setChildSystem: (childSystem: SystemsMovingType) =>
+    set(() => ({ childSystem })),
+  setParentSystem: (parentSystem: SystemsMovingType) =>
+    set(() => ({ parentSystem })),
   clear: () =>
     set(() => ({
       childSystem: undefined,

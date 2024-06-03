@@ -1,17 +1,13 @@
 import classNames from 'classnames'
 import type { FC } from 'react'
-import { createContext } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 
-import { getColorBySystemLevel, getFontBySystemLevel } from '../systemItem/utils'
+import {
+  getColorBySystemLevel,
+  getFontBySystemLevel
+} from '../systemItem/utils'
 import { SystemsTable } from './components/table/Systems.table'
-
-interface SystemsContextType {
-  isHoveringId: number | undefined | string
-}
-
-export const SystemsContext = createContext<SystemsContextType>({ isHoveringId: undefined })
 
 interface Props {
   enableQueryURL?: boolean
@@ -47,7 +43,8 @@ export const SystemsComponent: FC<Props> = ({
         className={'relative overflow-scroll scrollbar-style'}
         getRowProps={({ original }) => ({
           className: classNames(
-            original?.physicalItem && 'font-bold text-gray-700 dark:text-gray-200',
+            original?.physicalItem &&
+              'font-bold text-gray-700 dark:text-gray-200',
             getColorBySystemLevel(original?.systemLevel),
             getFontBySystemLevel(original?.systemLevel)
           ),

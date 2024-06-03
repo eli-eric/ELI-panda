@@ -1,10 +1,12 @@
-import { PlusButton } from '@/components/Buttons'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { Fragment, useState } from 'react'
+
+import { PlusButton } from '@/components/Buttons'
+import ModalComponent from '@/components/overlays/modal/modal.comp'
 import usePermission from '@/hooks/usePermission'
-import { ROLE } from '@/types/constants/roles'
 import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
+import { ROLE } from '@/types/constants/roles'
+
 import CategoryEditContainer from '../CategoryEdit.cont'
 
 export const AddCategoryButton = () => {

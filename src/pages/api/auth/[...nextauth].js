@@ -58,7 +58,11 @@ export const authOptions = {
       if (providerId === 'azure-ad-beamlines') {
         const firstName = params.user.name.split(' ')[1]
         const lastName = params.user.name.split(' ')[0]
-        const user = await neo4GetOrCreateUser(params.user.email, firstName, lastName)
+        const user = await neo4GetOrCreateUser(
+          params.user.email,
+          firstName,
+          lastName
+        )
         const token = jwt.sign(
           {
             sub: user.uid,
@@ -85,7 +89,8 @@ export const authOptions = {
         params.token.facility = params.user.facility
         params.token.facilityCode = params.user.facilityCode
         params.token.uid = params.user.uid
-        params.token.fullName = params.user.firstName + ' ' + params.user.lastName
+        params.token.fullName =
+          params.user.firstName + ' ' + params.user.lastName
       }
       // return final_token
       return params.token
@@ -145,7 +150,11 @@ YIELD value
 WITH user, collect(value.roles.code) as roles, f
 RETURN DISTINCT { uid: user.uid, email: user.email, firstName: user.firstName, lastName: user.lastName, facilityName: f.name, facilityCode: f.code, roles: roles  } as user;`
 
-    const result = await transaction.run(usersQuery, { email, firstName, lastName })
+    const result = await transaction.run(usersQuery, {
+      email,
+      firstName,
+      lastName
+    })
 
     await transaction.commit()
     return result.records[0].get('user')

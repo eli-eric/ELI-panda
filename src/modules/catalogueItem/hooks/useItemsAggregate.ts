@@ -1,24 +1,21 @@
 'use-client'
 
-import toast from 'react-hot-toast'
+import { useQuery } from '@tanstack/react-query'
 
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useFetch from '@/hooks/fetch/useFetch'
+import { queryFetcher } from '@/utils/fetcher'
 
 import type { CatalogueStatistics } from '../components/statistics/CatalogueStatistics.columns'
 //use faker to generate fake data
 
-export const useItemsAggregate = catalogueItemUid => {
-  const { catalogueItemStatistics, catalogueItemsStatistics } = useEndpoint({ uid: catalogueItemUid })
-
-  const { response, loading, error } = useFetch<CatalogueStatistics[]>({
-    url: () => (catalogueItemUid ? catalogueItemStatistics : catalogueItemsStatistics),
-    config: { suspense: false, revalidateOnMount: true },
-    useMockFetcher: false,
-    onError: () => {
-      toast.error('Error fetching catalogue item statistics')
-    }
+export const useItemsAggregate = (uid?: string) => {
+  const { data, error, isLoading } = useQuery({
+    queryKey: uid
+      ? ['catalogueItemStatistics', { uid }]
+      : ['catalogueItemsStatistics'],
+    queryFn: uid
+      ? queryFetcher<CatalogueStatistics[]>('catalogueItemStatistics')
+      : queryFetcher<CatalogueStatistics[]>('catalogueItemsStatistics')
   })
 
-  return { itemStatistics: response, loading, error }
+  return { itemStatistics: data, loading: isLoading, error }
 }

@@ -5,7 +5,11 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
-import { TableButtonsWrapper, TableDeleteButton, TableEditButton } from '@/components/Buttons'
+import {
+  TableButtonsWrapper,
+  TableDeleteButton,
+  TableEditButton
+} from '@/components/Buttons'
 import { Heading } from '@/components/card/card.comp'
 import { useToggle } from '@/components/form/Switch'
 import WarningModal from '@/components/overlays/modal/warning/modal-warning.comp'
@@ -28,7 +32,11 @@ const messages = message.common.buttons
 
 const orderLines = message.ordersPage.orderLines
 
-export const OrderLineActionButtons = ({ orderLine }: { orderLine: OrderLineFormType }) => {
+export const OrderLineActionButtons = ({
+  orderLine
+}: {
+  orderLine: OrderLineFormType
+}) => {
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
   const [openOrderLineForm, setOpenOrderLineForm] = useState(false)
   const { formatMessage: fm } = useIntl()
@@ -64,27 +72,45 @@ export const OrderLineActionButtons = ({ orderLine }: { orderLine: OrderLineForm
           }}
         />
       </TableButtonsWrapper>
-      <OrderLineForm orderLine={orderLine} open={openOrderLineForm} setOpen={setOpenOrderLineForm} />
+      <OrderLineForm
+        orderLine={orderLine}
+        open={openOrderLineForm}
+        setOpen={setOpenOrderLineForm}
+      />
       <WarningModal
         buttons={deleteButtons}
         open={openDeleteWarn}
         setOpen={setOpenDeleteWarn}
         title={orderLines.deleteModal.title}
-        message={fm({ id: orderLines.deleteModal.message }, createMessageValues({ name: orderLine.name }))}
+        message={fm(
+          { id: orderLines.deleteModal.message },
+          createMessageValues({ name: orderLine.name })
+        )}
         testid="OrderLineDelete"
       />
     </Fragment>
   )
 }
 
-export const OrderisDeliveredAction = ({ orderLine, checked }: { orderLine: OrderLineFormType; checked?: boolean }) => {
+export const OrderisDeliveredAction = ({
+  orderLine,
+  checked
+}: {
+  orderLine: OrderLineFormType
+  checked?: boolean
+}) => {
   const { enabled, toggle, Toggle } = useToggle(checked)
   const uid = useRouter().query.uid as string
-  const { orderLineDelivery } = useEndpoint({ uid: uid, itemUid: orderLine.uid })
+  const { orderLineDelivery } = useEndpoint({
+    uid: uid,
+    itemUid: orderLine.uid
+  })
   const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
   const { setOrderLine } = useOrderLine()
 
-  const formMethods = useForm<OrderLineFormType>({ defaultValues: { serialNumber: orderLine?.serialNumber || '' } })
+  const formMethods = useForm<OrderLineFormType>({
+    defaultValues: { serialNumber: orderLine?.serialNumber || '' }
+  })
 
   const { submit } = useSubmit<OrderLineFormType>({
     endpoint: orderLineDelivery,
@@ -126,7 +152,11 @@ export const OrderisDeliveredAction = ({ orderLine, checked }: { orderLine: Orde
         setOpen={setOpen}
         renderOutsideForm={<Heading text="Fill missing Serial Number" />}
         onSubmit={data => {
-          submit({ serialNumber: data?.serialNumber, isDelivered: !enabled, eun: data?.eun || undefined })
+          submit({
+            serialNumber: data?.serialNumber,
+            isDelivered: !enabled,
+            eun: data?.eun || undefined
+          })
         }}
         formMethods={formMethods}
       >
@@ -136,8 +166,15 @@ export const OrderisDeliveredAction = ({ orderLine, checked }: { orderLine: Orde
   )
 }
 
-export const PrintEunButton = ({ orderLine }: { orderLine: OrderLineFormType }) => {
-  const { eunforPrint } = useEndpoint({ uid: orderLine.eun, query: { printEUN: true } })
+export const PrintEunButton = ({
+  orderLine
+}: {
+  orderLine: OrderLineFormType
+}) => {
+  const { eunforPrint } = useEndpoint({
+    uid: orderLine.eun,
+    query: { printEUN: true }
+  })
   const { submit } = useSubmit({
     endpoint: eunforPrint,
     method: 'put',
@@ -165,9 +202,15 @@ export const PrintEunButton = ({ orderLine }: { orderLine: OrderLineFormType }) 
 }
 
 export const PriceFooter = ({ rows }: { rows: Row<OrderLineFormType>[] }) => {
-  const total = rows.reduce((sum, { original: { price } }) => sum + (price || 0), 0)
-  const totalCurrencyRows = rows.filter(({ original: { currency } }) => currency != undefined)
-  const totalCurrency = totalCurrencyRows.length > 0 ? totalCurrencyRows[0].original.currency : ''
+  const total = rows.reduce(
+    (sum, { original: { price } }) => sum + (price || 0),
+    0
+  )
+  const totalCurrencyRows = rows.filter(
+    ({ original: { currency } }) => currency != undefined
+  )
+  const totalCurrency =
+    totalCurrencyRows.length > 0 ? totalCurrencyRows[0].original.currency : ''
   return (
     <Fragment>
       {rows.length > 0 && (

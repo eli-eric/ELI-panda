@@ -18,7 +18,10 @@ const ProfileGeneralPage: NextPage = (): JSX.Element => {
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-      <UserProfileLayout title={messages.general.title} subTitle={messages.general.subTitle}>
+      <UserProfileLayout
+        title={messages.general.title}
+        subTitle={messages.general.subTitle}
+      >
         <UserProfileCard />
       </UserProfileLayout>
     </Fragment>

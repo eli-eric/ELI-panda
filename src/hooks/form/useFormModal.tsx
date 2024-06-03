@@ -37,7 +37,10 @@ const useFormModal = <T extends FieldValues>({
   schema
 }: useFormModalProps<T>) => {
   const [open, setOpen] = useState(false)
-  const formMethods = useForm({ defaultValues: defaultValues, resolver: schema ? yupResolver(schema) : undefined })
+  const formMethods = useForm({
+    defaultValues: defaultValues,
+    resolver: schema ? yupResolver(schema) : undefined
+  })
   const { handleSubmit, reset, control, formState } = formMethods
   useFormNotification({ control })
   useEffect(() => {
@@ -89,6 +92,7 @@ interface Props<T extends FieldValues> {
   onSubmit: (data: T) => void
   formMethods: UseFormReturn<T, any>
   loading?: boolean
+  disableSubmit?: boolean
   error?: boolean
   children?: React.ReactNode
   open: boolean
@@ -103,7 +107,8 @@ export const FormModal = <T extends FieldValues>({
   loading,
   open = false,
   setOpen,
-  className
+  className,
+  disableSubmit = false
 }: Props<T>) => {
   const { handleSubmit, reset, formState } = formMethods
   useEffect(() => {
@@ -119,6 +124,7 @@ export const FormModal = <T extends FieldValues>({
     goNext: {
       text: messages.save,
       loading: formState.isSubmitting || loading,
+      disabled: disableSubmit,
       type: 'button',
       onClick: handleSubmit(onSubmit)
     },
@@ -135,7 +141,12 @@ export const FormModal = <T extends FieldValues>({
   return (
     <ModalComponent open={open} setOpen={setOpen}>
       {renderOutsideForm}
-      <Form formMethods={formMethods} onSubmit={onSubmit} enableLeaveWarning={false} className={className}>
+      <Form
+        formMethods={formMethods}
+        onSubmit={onSubmit}
+        enableLeaveWarning={false}
+        className={className}
+      >
         {children}
         {error && <ErrorPage />}
         <ModalButtonsComponent buttons={modalButtons} />

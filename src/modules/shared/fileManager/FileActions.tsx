@@ -7,9 +7,9 @@ import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { createMessageValues } from '@/utils/formatters'
 
-import type { FileItemExtended } from './types'
-import { useLinkDelete } from './hooks/useLinks'
 import { useFileDelete } from './hooks/useFiles'
+import { useLinkDelete } from './hooks/useLinks'
+import type { FileItemExtended } from './types'
 
 const messages = message.common.fileManager
 

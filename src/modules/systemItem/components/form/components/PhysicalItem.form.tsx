@@ -1,27 +1,27 @@
 import Link from 'next/link'
-import { Fragment, Suspense, useContext } from 'react'
+import { Fragment, Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { FormattedMessage } from 'react-intl'
 
 import { LinkDecorator } from '@/components/decorators'
+import ErrorPage from '@/components/error/ErrorPage'
 import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/Input'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import { Paragraph } from '@/components/layout/Paragraph'
+import ProgressBarComponent from '@/components/progress-bar.comp'
+import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
-import { SystemDetailContext } from '@/pages/system/[uid]'
+import FileManager from '@/modules/shared/fileManager/FileManager'
+import { FILE_TYPE } from '@/modules/shared/fileManager/types'
+import { useItemProperties } from '@/modules/systemItem/hooks/useItemProperties'
+import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 
 import { createMessageValues } from '../../../../../utils/formatters'
 import useSystemFormFields from '../SystemForm.fields'
-import { ErrorBoundary } from 'react-error-boundary'
-import ErrorPage from '@/components/error/ErrorPage'
-import ProgressBarComponent from '@/components/progress-bar.comp'
-import FileManager from '@/modules/shared/fileManager/FileManager'
-import { FILE_TYPE } from '@/modules/shared/fileManager/types'
-import usePermission from '@/hooks/usePermission'
-import { ROLE } from '@/types/constants/roles'
-import { useItemProperties } from '@/modules/systemItem/hooks/useItemProperties'
 import { ItemProperty } from './ItemProperty'
 
 const propertyMessage =
@@ -29,14 +29,14 @@ const propertyMessage =
 
 export const PhysicalItemForm = ({ uid }: { uid: string }) => {
   const fields = useSystemFormFields()
-  const { systemDetail } = useContext(SystemDetailContext)
+
+  const { catalogueItem, physicalItem } = useSystemDetail()
 
   const { data: properties } = useItemProperties(uid)
 
-  const catalogueItemProperties =
-    systemDetail?.physicalItem?.catalogueItem?.propertiesConnection?.edges
+  const catalogueItemProperties = catalogueItem?.propertiesConnection?.edges
 
-  const description = systemDetail?.physicalItem?.catalogueItem.description
+  const description = catalogueItem?.description
   const canEdit = usePermission([ROLE.SYSTEM_EDIT])
 
   return (
@@ -118,19 +118,17 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
       <Col sm="full">
         <TextArea {...fields.itemNotes} />
       </Col>
-      {systemDetail?.physicalItem?.order && (
+      {physicalItem?.order && (
         <Col sm="full" className="flex-col">
           <FormattedMessage
             id={propertyMessage.title}
             values={createMessageValues({ title: 'Item Order Information' })}
           />
           <Link
-            href={PATH.ORDER + '/' + systemDetail.physicalItem.order.uid}
+            href={PATH.ORDER + '/' + physicalItem.order.uid}
             target={'_blank'}
           >
-            <LinkDecorator>
-              {systemDetail.physicalItem.order.name}
-            </LinkDecorator>
+            <LinkDecorator>{physicalItem.order.name}</LinkDecorator>
           </Link>
         </Col>
       )}

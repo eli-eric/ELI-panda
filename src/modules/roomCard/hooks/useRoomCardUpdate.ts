@@ -1,17 +1,19 @@
-import { gql, useMutation } from '@apollo/client'
-
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
-import { ROOM_CARDS, useRoomCards } from '@/modules/roomCards/hooks/useRoomCards'
+import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { useRoomCards } from '@/modules/roomCards/hooks/useRoomCards'
+import { gql } from '@/types/gql'
+import { navigateBack } from '@/utils'
 
-import type { Mutation } from '../../../types/gql/graphql'
 import { useRoomCardStore } from '../store/useRoomCardStore'
 import type { RoomCardFormType } from '../types/form'
 import { updateRoomCardVariables } from '../utils'
-import { GET_ROOMCARD, useRoomCard } from './useRoomCard'
-import { navigateBack } from '@/utils'
+import { useRoomCard } from './useRoomCard'
 
-const UPDATE_ROOM_CARD = gql`
-  mutation Mutation($where: RoomCardWhere, $update: RoomCardUpdateInput) {
+const updateRoomCardMutation = gql(`
+  mutation UpdateRoomCardMutation(
+    $where: RoomCardWhere
+    $update: RoomCardUpdateInput
+  ) {
     updateRoomCards(where: $where, update: $update) {
       roomCards {
         purityClass
@@ -61,21 +63,32 @@ const UPDATE_ROOM_CARD = gql`
       }
     }
   }
-`
+`)
 
 export const useRoomCardUpdate = (roomCardUid?: string) => {
-  const [update] = useMutation<Mutation>(UPDATE_ROOM_CARD, {
-    refetchQueries: ['RoomCards', 'RoomCard']
-  })
+  // const [update] = useMutation(updateRoomCardMutation, {
+  // refetchQueries: ['RoomCards', 'RoomCard']
+  // })
+
+  const { mutateAsync: update } = useGraphQLMutation(updateRoomCardMutation)
   const { roomCard: roomCardOrigin } = useRoomCard(roomCardUid)
   const { refetch } = useRoomCards()
 
-  const { deleteHallContacts, disconnectDeptContacts, disconnectTeams, newDeptContacts, newHallContacts, newTeams } =
-    useRoomCardStore()
+  const {
+    deleteHallContacts,
+    disconnectDeptContacts,
+    disconnectTeams,
+    newDeptContacts,
+    newHallContacts,
+    newTeams
+  } = useRoomCardStore()
 
-  const updateRoomCard = (roomCardForm: RoomCardFormType, saveAndExit: boolean) =>
-    update({
-      variables: updateRoomCardVariables({
+  const updateRoomCard = (
+    roomCardForm: RoomCardFormType,
+    saveAndExit: boolean
+  ) =>
+    update(
+      updateRoomCardVariables({
         uid: roomCardUid,
         roomCard: roomCardForm,
         deleteHallContacts,
@@ -85,20 +98,41 @@ export const useRoomCardUpdate = (roomCardUid?: string) => {
         newHallContacts,
         newTeams,
         disconnectLocations: roomCardOrigin?.locations
-          ?.filter(originLocation => !roomCardForm.locations?.some(location => originLocation.uid === location.uid))
-          .map(location => ({ uid: location.uid, code: location.code, name: location.name })) as Codebooktree[],
+          ?.filter(
+            originLocation =>
+              !roomCardForm.locations?.some(
+                location => originLocation.uid === location.uid
+              )
+          )
+          .map(location => ({
+            uid: location.uid,
+            code: location.code,
+            name: location.name
+          })) as Codebooktree[],
         newLocations: roomCardForm.locations
-          ?.filter(location => !roomCardOrigin?.locations?.some(originLocation => originLocation.uid === location.uid))
-          .map(location => ({ uid: location.uid, code: location.code, name: location.name })) as Codebooktree[]
+          ?.filter(
+            location =>
+              !roomCardOrigin?.locations?.some(
+                originLocation => originLocation.uid === location.uid
+              )
+          )
+          .map(location => ({
+            uid: location.uid,
+            code: location.code,
+            name: location.name
+          })) as Codebooktree[]
       }),
-      onCompleted: () => {
-        refetch()
-        if (saveAndExit) {
-          navigateBack()
+      {
+        onSuccess: () => {
+          refetch()
+          if (saveAndExit) {
+            navigateBack()
+          }
         }
-      },
-      refetchQueries: [ROOM_CARDS, GET_ROOMCARD]
-    })
+        //TODO: add refetchQueries
+        // refetchQueries: [roomCardsQuery, roomCardQuery]
+      }
+    )
 
   return { updateRoomCard }
 }

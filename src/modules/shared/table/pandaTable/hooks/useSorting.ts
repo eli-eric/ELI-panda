@@ -6,12 +6,17 @@ import { useIsFirstRender } from 'usehooks-ts'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
-export const useSorting = (tableId, enableQueryURL): [SortingState, Dispatch<SetStateAction<SortingState>>] => {
+export const useSorting = (
+  tableId,
+  enableQueryURL
+): [SortingState, Dispatch<SetStateAction<SortingState>>] => {
   const { setSortBy, setSortByQueryString, instances } = useTableStateStore()
   const sortByInstance = instances[tableId]?.sortBy
   const sortByStringInstance = instances[tableId]?.sortByQueryString
 
-  const [sortByQuery, setSortByQuery] = useQueryState('sortBy', { history: 'replace' })
+  const [sortByQuery, setSortByQuery] = useQueryState('sortBy', {
+    history: 'replace'
+  })
   // table state
   const [sorting, setSorting] = useState<SortingState>(sortByInstance || [])
 
@@ -26,7 +31,10 @@ export const useSorting = (tableId, enableQueryURL): [SortingState, Dispatch<Set
           const parsed = JSON.parse(sortByQuery)
           setSorting(parsed)
           setSortBy(tableId, parsed)
-          setSortByQueryString(tableId, parsed.length === 0 ? undefined : sortByQuery)
+          setSortByQueryString(
+            tableId,
+            parsed.length === 0 ? undefined : sortByQuery
+          )
           // check if sortByStringInstance is set
         } else if (sortByStringInstance) {
           setSortByQuery(sortByStringInstance)
@@ -48,14 +56,24 @@ export const useSorting = (tableId, enableQueryURL): [SortingState, Dispatch<Set
   useEffect(() => {
     if (!isFirstRender) {
       setSortBy(tableId, sorting)
-      setSortByQueryString(tableId, sorting.length === 0 ? undefined : JSON.stringify(sorting))
+      setSortByQueryString(
+        tableId,
+        sorting.length === 0 ? undefined : JSON.stringify(sorting)
+      )
       if (enableQueryURL) {
         setSortByQuery(sorting.length === 0 ? null : JSON.stringify(sorting))
       }
     }
     // reason for disabling eslint: isFirstRender is a dependency but it should not trigger a re-render
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tableId, sorting, enableQueryURL, setSortByQuery, setSortBy, setSortByQueryString])
+  }, [
+    tableId,
+    sorting,
+    enableQueryURL,
+    setSortByQuery,
+    setSortBy,
+    setSortByQueryString
+  ])
 
   return [sorting, setSorting]
 }

@@ -1,20 +1,12 @@
-import toast from 'react-hot-toast'
+import { useQuery } from '@tanstack/react-query'
 
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useFetch from '@/hooks/fetch/useFetch'
+import { queryFetcher } from '@/utils/fetcher'
 
 export const useMinMaxPrice = () => {
-  const { ordersMinMaxPrice } = useEndpoint()
-  const { response } = useFetch<{ min: number; max: number }>({
-    config: {
-      suspense: false,
-      keepPreviousData: true,
-      onError: error => {
-        toast.error(error.message)
-      }
-    },
-    url: ordersMinMaxPrice,
-    useMockFetcher: false
+  const { data } = useQuery({
+    queryKey: ['ordersMinMaxPrice'],
+    queryFn: queryFetcher<{ min: number; max: number }>('ordersMinMaxPrice')
   })
-  return { minMaxPrice: response }
+
+  return { minMaxPrice: data }
 }

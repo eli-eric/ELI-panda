@@ -5,7 +5,10 @@ import type { OrderDetailFormType, OrderLineFormType } from '../types/form'
 
 export const useOrderLine = () => {
   const { control } = useFormContext<OrderDetailFormType>()
-  const { insert, update, fields, remove } = useFieldArray({ control, name: 'orderLines' })
+  const { insert, update, fields, remove } = useFieldArray({
+    control,
+    name: 'orderLines'
+  })
 
   //  set the order lines to the form
   const setOrderLine = (orderLine: OrderLineFormType) => {

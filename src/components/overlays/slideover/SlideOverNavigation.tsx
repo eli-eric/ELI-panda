@@ -12,7 +12,12 @@ interface Props {
   panelSlide?: 'left' | 'right'
 }
 
-export const SlideOverNavigation: FC<PropsWithChildren<Props>> = ({ open, setOpen, children, panelSlide = 'left' }) => {
+export const SlideOverNavigation: FC<PropsWithChildren<Props>> = ({
+  open,
+  setOpen,
+  children,
+  panelSlide = 'left'
+}) => {
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={setOpen}>
@@ -29,11 +34,19 @@ export const SlideOverNavigation: FC<PropsWithChildren<Props>> = ({ open, setOpe
               <Transition.Child
                 as={Fragment}
                 enter="transform transition ease-in-out duration-500 sm:duration-700"
-                enterFrom={panelSlide === 'left' ? '-translate-x-full' : 'translate-x-full'}
+                enterFrom={
+                  panelSlide === 'left'
+                    ? '-translate-x-full'
+                    : 'translate-x-full'
+                }
                 enterTo={'translate-x-0'}
                 leave="transform transition ease-in-out duration-500 sm:duration-700"
                 leaveFrom={'translate-x-0'}
-                leaveTo={panelSlide === 'left' ? '-translate-x-full' : 'translate-x-full'}
+                leaveTo={
+                  panelSlide === 'left'
+                    ? '-translate-x-full'
+                    : 'translate-x-full'
+                }
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
                   <div className="flex h-full flex-col py-3 bg-slate-200 dark:bg-gray-900">

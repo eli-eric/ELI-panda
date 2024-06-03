@@ -1,31 +1,36 @@
 'use client'
+import type { QueryKey } from '@tanstack/react-query'
 import { type ColumnDef } from '@tanstack/react-table'
-import { useQueryState } from 'next-usequerystate'
 import type { FC } from 'react'
 import { useMemo } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
 import type { CODEBOOK } from '@/types/constants/codebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { FormCell } from './cells/FormCell'
 
 interface Props {
   lastAddedUUID?: string
+  selectedCodebookQuery?: string | null
+  queryKey: QueryKey
 }
-const CodebookTable: FC<Props> = ({ lastAddedUUID }) => {
-  const [selectedCodebookQuery] = useQueryState('selectedCodebook')
-  const {
-    data: codebook,
-    mutate,
-    isLoading
-  } = useCodebook(selectedCodebookQuery as CODEBOOK, {
-    limit: 5000
-  })
+const CodebookTable: FC<Props> = ({
+  lastAddedUUID,
+  selectedCodebookQuery,
+  queryKey
+}) => {
+  const { data: codebook, isLoading } = useCodebook(
+    selectedCodebookQuery as CODEBOOK,
+    {
+      limit: 5000
+    }
+  )
+
   const columns = useMemo(
     (): ColumnDef<CodebookType, any>[] => [
       {
@@ -36,8 +41,8 @@ const CodebookTable: FC<Props> = ({ lastAddedUUID }) => {
         cell: props => (
           <FormCell
             {...props}
+            queryKey={queryKey}
             lastAddedUUID={lastAddedUUID}
-            mutate={mutate}
             codebookType={selectedCodebookQuery as CODEBOOK}
           />
         ),
@@ -50,7 +55,7 @@ const CodebookTable: FC<Props> = ({ lastAddedUUID }) => {
         }
       }
     ],
-    [lastAddedUUID, mutate, selectedCodebookQuery]
+    [lastAddedUUID, selectedCodebookQuery, queryKey]
   )
 
   const table = usePandaTable<CodebookType>({
@@ -76,7 +81,8 @@ const CodebookTable: FC<Props> = ({ lastAddedUUID }) => {
             {...{
               table,
               tableId: 'codebooks',
-              className: 'relative overflow-scroll scrollbar-style border-l border-r',
+              className:
+                'relative overflow-scroll scrollbar-style border-l border-r',
               data: codebook?.data,
               loading: isLoading,
               settings: {

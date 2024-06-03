@@ -9,7 +9,14 @@ interface OrdersTableProps {
   tableId: string
 }
 
-export const OrdersTable = ({ seettings, getRowProps, columns, data, loading, tableId }: OrdersTableProps) => (
+export const OrdersTable = ({
+  seettings,
+  getRowProps,
+  columns,
+  data,
+  loading,
+  tableId
+}: OrdersTableProps) => (
   <PandaTable
     {...{
       settings: seettings,

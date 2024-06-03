@@ -1,21 +1,22 @@
+import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import useFetch from '@/hooks/fetch/useFetch'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
+import { queryFetcher } from '@/utils/fetcher'
 
 export const useCategoryProperties = (uid?: string) => {
-  const { catalogueCategoryProperties } = useEndpoint({ uid })
-
-  const { response } = useFetch<CatalogueItemDetail[]>({
-    url: uid && catalogueCategoryProperties,
-    onError: () => {
-      toast.error('Failed to load group details')
-    },
-    config: {
-      suspense: false
-    }
+  const { data, error } = useQuery({
+    queryKey: ['catalogueCategoryProperties', { uid }],
+    queryFn: queryFetcher<CatalogueItemDetail[]>('catalogueCategoryProperties'),
+    enabled: !!uid
   })
 
-  return { catalogueCategoryProperties: response }
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to fetch category properties')
+    }
+  }, [error])
+
+  return { catalogueCategoryProperties: data }
 }

@@ -1,9 +1,15 @@
 import { Tab } from '@headlessui/react'
-import { forwardRef, Fragment, useEffect, useImperativeHandle, useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import {
+  forwardRef,
+  Fragment,
+  useEffect,
+  useImperativeHandle,
+  useMemo
+} from 'react'
 import { useDropzone } from 'react-dropzone'
 import type { UseFormSetValue } from 'react-hook-form'
 import type { FileItem } from 'src/modules/shared/fileManager/types'
-import useSWR from 'swr'
 
 import useWarningModal from '@/hooks/useWarningModal'
 import { classNames } from '@/utils'
@@ -34,21 +40,26 @@ export const ImageGallery = forwardRef(
     ref
   ) => {
     const endpoint = getEndpoint(itemCategory, itemId, fileCategory)
-    const additionalEndpoint = getEndpoint(additionalParams?.itemCategory, additionalParams?.itemId, fileCategory)
 
-    const { data: primaryData, isLoading } = useSWR<FileItem[]>(endpoint, uniFetcher, {
-      suspense: false,
-      revalidateOnMount: true
+    const additionalEndpoint = getEndpoint(
+      additionalParams?.itemCategory,
+      additionalParams?.itemId,
+      fileCategory
+    )
+
+    const { data: primaryData, isLoading } = useQuery<FileItem[]>({
+      queryKey: ['fileItem', endpoint],
+      queryFn: async () => uniFetcher(endpoint),
+      refetchOnMount: true
     })
 
-    const { data: additionalData, isLoading: isLoadingAdditionalData } = useSWR<FileItem[]>(
-      additionalParams?.itemId ? additionalEndpoint : null,
-      uniFetcher,
-      {
-        suspense: false,
-        revalidateOnMount: true
-      }
-    )
+    const { data: additionalData, isLoading: isLoadingAdditionalData } =
+      useQuery<FileItem[]>({
+        queryKey: ['fileItem', additionalEndpoint],
+        queryFn: async () => uniFetcher(additionalEndpoint),
+        refetchOnMount: true,
+        enabled: !!additionalParams?.itemId
+      })
 
     const data = useMemo(() => {
       if (primaryData && additionalData) {
@@ -61,7 +72,11 @@ export const ImageGallery = forwardRef(
       return []
     }, [primaryData, additionalData])
 
-    const { submit, onDrop, hasChanges, handleDelete } = useImageGallery({ itemCategory, itemId, fileCategory })
+    const { submit, onDrop, hasChanges, handleDelete } = useImageGallery({
+      itemCategory,
+      itemId,
+      fileCategory
+    })
 
     useImperativeHandle(
       ref,

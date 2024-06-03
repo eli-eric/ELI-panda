@@ -1,5 +1,5 @@
 import type { Row, Table } from '@tanstack/react-table'
-import { createContext, Fragment } from 'react'
+import { createContext,Fragment } from 'react'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
@@ -10,7 +10,10 @@ import { TableBody } from './components/TableBody'
 import { TableFoot } from './components/TableFoot'
 import { TableHead } from './components/TableHead'
 import { TableSettings } from './components/TableSettings'
-import { defaultPropGetter, type GetRowPropsReturnType, type PandaTableSettings } from './PandaTable'
+import {
+  defaultPropGetter,
+  type GetRowPropsReturnType,
+  type PandaTableSettings} from './PandaTable'
 
 type PandaTableContextType = {
   settings: PandaTableSettings<any>
@@ -28,7 +31,7 @@ interface Props {
   tableHeading?: string
   className?: string
   data: any
-  loading: boolean
+  loading?: boolean
   getRowProps?: (row: Row<any>) => GetRowPropsReturnType
 
   tableId: string
@@ -39,12 +42,16 @@ export const PandaTableControlled = ({
   className,
   data,
   table,
-  loading,
+  loading = false,
   tableId,
   getRowProps = defaultPropGetter,
   tableHeading
 }: Props) => {
-  const { enableFooter = false, enableColumnHiding = false, enablePagination = false } = settings || {}
+  const {
+    enableFooter = false,
+    enableColumnHiding = false,
+    enablePagination = false
+  } = settings || {}
 
   return (
     <PandaTableContext.Provider
@@ -63,14 +70,24 @@ export const PandaTableControlled = ({
         </div>
       )}
       {enableColumnHiding && <TableSettings table={table} />}
-      <div className={classNames('h-full flex flex-col border-t border-gray-300 pb-4 text-sm', className)}>
+      <div
+        className={classNames(
+          'h-full flex flex-col border-t border-gray-300 pb-4 text-sm',
+          className
+        )}
+      >
         <div className="inline-block min-w-full align-middle">
           <table className="min-w-full divide-y divide-gray-300">
             <TableHead table={table} />
             {data && (
               <Fragment>
-                <TableBody getRowProps={getRowProps} getRowModel={table.getRowModel} />
-                {enableFooter && <TableFoot getFooterGroups={table.getFooterGroups} />}
+                <TableBody
+                  getRowProps={getRowProps}
+                  getRowModel={table.getRowModel}
+                />
+                {enableFooter && (
+                  <TableFoot getFooterGroups={table.getFooterGroups} />
+                )}
               </Fragment>
             )}
           </table>

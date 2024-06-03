@@ -16,7 +16,11 @@ const NewUserPage: NextPage = (): React.ReactElement => {
         <meta name="description" content="...." />
       </Head>
 
-      {roles.length > 0 ? <NewUserContainer roles={roles} /> : <LoaderComponent />}
+      {roles.length > 0 ? (
+        <NewUserContainer roles={roles} />
+      ) : (
+        <LoaderComponent />
+      )}
     </Fragment>
   )
 }

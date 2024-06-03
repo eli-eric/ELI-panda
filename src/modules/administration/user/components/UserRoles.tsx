@@ -4,17 +4,22 @@ import { useForm } from 'react-hook-form'
 import CheckBox from '@/components/form/CheckBox'
 import { Form } from '@/components/form/Form'
 import Card from '@/components/layout/Card'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
-import type { Role } from '@/types/gql/graphql'
+import type { GetRolesQuery } from '@/types/gql/graphql'
+import type { CodebookType } from '@/types/responses/codebook'
 
 type Props = {
   addRole: (role: CodebookType) => void
   removeRole: (uid: string) => void
-  assignedRoles?: Role[]
-  roles: Role[]
+  assignedRoles?: GetRolesQuery['roles']
+  roles: GetRolesQuery['roles']
 }
 
-export const UserRoles: FC<Props> = ({ addRole, removeRole, assignedRoles, roles }) => {
+export const UserRoles: FC<Props> = ({
+  addRole,
+  removeRole,
+  assignedRoles,
+  roles
+}) => {
   const formMethods = useForm<{
     [key: string]: boolean
   }>({

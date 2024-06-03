@@ -1,25 +1,25 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Fragment, Suspense, useEffect } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { array, object, string } from 'yup'
 
+import ErrorPage from '@/components/error/ErrorPage'
+import Card from '@/components/layout/Card'
 import LoaderComponent from '@/components/loader.comp'
+import ProgressBarComponent from '@/components/progress-bar.comp'
+import usePermission from '@/hooks/usePermission'
+import { FILE_TYPE } from '@/modules/shared/fileManager/types'
+import { ROLE } from '@/types/constants/roles'
 import type { PrescribedClothing } from '@/types/gql/graphql'
 
+import FileManager from '../shared/fileManager/FileManager'
 import { useRoomCard } from './hooks/useRoomCard'
 import { useRoomCardUpdate } from './hooks/useRoomCardUpdate'
 import { RoomCardComponent } from './RoomCard.comp'
 import { useRoomCardStore } from './store/useRoomCardStore'
 import type { RoomCardFormType } from './types/form'
-import FileManager from '../shared/fileManager/FileManager'
-import { FILE_TYPE } from '@/modules/shared/fileManager/types'
-import usePermission from '@/hooks/usePermission'
-import { ROLE } from '@/types/constants/roles'
-import ProgressBarComponent from '@/components/progress-bar.comp'
-import { ErrorBoundary } from 'react-error-boundary'
-import ErrorPage from '@/components/error/ErrorPage'
-import Card from '@/components/layout/Card'
 
 interface Props {
   roomCardUid: string

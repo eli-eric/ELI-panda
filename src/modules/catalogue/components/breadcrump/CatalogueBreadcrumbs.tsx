@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 
 import BreadcrumpContainer from '@/components/Breadcrump/Breadcrump.cont'
 import BreadcrumpItem from '@/components/Breadcrump/Breadcrump.item'
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { useCategory } from '../../hooks/useCategory'
 import { AddCategoryButton } from '../categoryEdit/components/AddCateforyButton'

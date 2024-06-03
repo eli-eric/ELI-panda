@@ -1,10 +1,10 @@
 import type { NextPage } from 'next'
+import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
 import Card from '@/components/layout/Card'
-import dynamic from 'next/dynamic'
 
 const messages = message.systemTypeEdit
 

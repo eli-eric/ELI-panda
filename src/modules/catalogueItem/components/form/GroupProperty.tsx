@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { startTransition, useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { Input } from '@/components/form/Input'
@@ -19,9 +19,11 @@ const GroupProperty = ({ detail, index }: Props) => {
   const disabled = !usePermission([ROLE.CATALOGUE_EDIT])
   const { setValue } = useFormContext()
 
-  React.useEffect(() => {
-    Object.keys(detail).forEach(key => {
-      setValue(`details.${index}.${key}`, detail[key])
+  useEffect(() => {
+    startTransition(() => {
+      Object.keys(detail).forEach(key => {
+        setValue(`details.${index}.${key}`, detail[key])
+      })
     })
   }, [detail, index, setValue])
 
@@ -78,7 +80,14 @@ const GroupProperty = ({ detail, index }: Props) => {
       const label = detail.property.unit?.name
         ? `${detail.property.name} [${detail.property.unit?.name}]`
         : detail.property.name
-      return <RangeInput required name={`details.${index}.value`} label={label} disabled={disabled} />
+      return (
+        <RangeInput
+          required
+          name={`details.${index}.value`}
+          label={label}
+          disabled={disabled}
+        />
+      )
     }
     default: {
       return (

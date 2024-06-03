@@ -8,10 +8,14 @@ import s3Client, { config } from '../s3client'
 const { bucket } = config
 
 export const getPathInfo = (req: NextApiRequest, res: NextApiResponse) => {
-  const [, , itemCategory, itemId, fileCategory, fileId] = (req.url ?? '').split('/')
+  const [, , itemCategory, itemId, fileCategory, fileId] = (
+    req.url ?? ''
+  ).split('/')
 
   if (!(itemCategory && itemId && fileCategory)) {
-    logger.info(composeDebugMessage(req, 'Failed to extract PathInfo from request'))
+    logger.info(
+      composeDebugMessage(req, 'Failed to extract PathInfo from request')
+    )
     res.status(400).end()
   }
 
@@ -27,9 +31,15 @@ export async function downloadFile(req: NextApiRequest, res: NextApiResponse) {
   const objectInfo = await s3Client.statObject(bucket, fullPath)
   if (!objectInfo) return res.status(404).end()
 
-  res.setHeader('Content-Type', objectInfo.metaData['content-type'] || 'application/octet-stream')
+  res.setHeader(
+    'Content-Type',
+    objectInfo.metaData['content-type'] || 'application/octet-stream'
+  )
   res.setHeader('Content-Length', objectInfo.size)
-  res.setHeader('Content-Disposition', `filename=${objectInfo.metaData['name']}`)
+  res.setHeader(
+    'Content-Disposition',
+    `filename=${objectInfo.metaData['name']}`
+  )
 
   const fileStream = await s3Client.getObject(bucket, fullPath)
   await new Promise((resolve, reject) => {
@@ -42,22 +52,29 @@ export async function downloadFile(req: NextApiRequest, res: NextApiResponse) {
 export async function listFiles(req: NextApiRequest, res: NextApiResponse) {
   const { prefix } = getPathInfo(req, res)
 
-  const list: BucketItemWithMetadata[] = await new Promise((resolve, reject) => {
-    const stream = s3Client.extensions.listObjectsV2WithMetadata(bucket, prefix)
+  const list: BucketItemWithMetadata[] = await new Promise(
+    (resolve, reject) => {
+      const stream = s3Client.extensions.listObjectsV2WithMetadata(
+        bucket,
+        prefix
+      )
 
-    const objects: BucketItemWithMetadata[] = []
+      const objects: BucketItemWithMetadata[] = []
 
-    stream.on('data', obj => {
-      objects.push(obj)
-    })
+      stream.on('data', obj => {
+        objects.push(obj)
+      })
 
-    stream.once('error', reject)
+      stream.once('error', reject)
 
-    stream.once('end', () => {
-      logger.debug(composeDebugMessage(req, 'Successfully listed objects in the bucket'))
-      resolve(objects)
-    })
-  })
+      stream.once('end', () => {
+        logger.debug(
+          composeDebugMessage(req, 'Successfully listed objects in the bucket')
+        )
+        resolve(objects)
+      })
+    }
+  )
 
   const result = list
     .map(obj => {
@@ -145,7 +162,7 @@ export async function updateFile(req: NextApiRequest, res: NextApiResponse) {
     tags: tags.map(tag => encodeURIComponent(tag)).join(',')
   }
 
-  await s3Client.putObject(bucket, fullPath, buffer, metaData)
+  await s3Client.putObject(bucket, fullPath, buffer, buffer.length, metaData)
 
   logger.debug(composeDebugMessage(req, 'Successfully updated file'))
   res.status(200).json({ name, tags })

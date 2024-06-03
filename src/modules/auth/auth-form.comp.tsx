@@ -74,7 +74,10 @@ const AuthFormComponent = ({ onSubmit, loading }: Props) => {
               </Button>
             </div>
             <div className="relative mb-4">
-              <div className="absolute inset-0 flex items-center" aria-hidden="true">
+              <div
+                className="absolute inset-0 flex items-center"
+                aria-hidden="true"
+              >
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center">
@@ -83,19 +86,38 @@ const AuthFormComponent = ({ onSubmit, loading }: Props) => {
                 </span>
               </div>
             </div>
-            <form className="space-y-6" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+            <form
+              className="space-y-6"
+              action="#"
+              method="POST"
+              onSubmit={handleSubmit(onSubmit)}
+            >
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >
                   <FormattedMessage id={form.userName} />
                 </label>
                 <div className="mt-1">
-                  <Input id="text" name="username" rounded="rounded-md" type="text" autoComplete="text" />
-                  <p className="text-xs text-red-500">{errors.username?.message}</p>
+                  <Input
+                    id="text"
+                    name="username"
+                    rounded="rounded-md"
+                    type="text"
+                    autoComplete="text"
+                  />
+                  <p className="text-xs text-red-500">
+                    {errors.username?.message}
+                  </p>
                 </div>
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >
                   <FormattedMessage id={form.password} />
                 </label>
                 <div className="mt-1">
@@ -106,12 +128,25 @@ const AuthFormComponent = ({ onSubmit, loading }: Props) => {
                     type="password"
                     autoComplete="current-password"
                   />
-                  <p className="text-xs text-red-500">{errors.password?.message}</p>
+                  <p className="text-xs text-red-500">
+                    {errors.password?.message}
+                  </p>
                 </div>
               </div>
 
-              <Button primary loading={loading} type="submit" className="w-full justify-center">
-                <FormattedMessage id={loading ? authButtonMessages.isLoading : authButtonMessages.default} />
+              <Button
+                primary
+                loading={loading}
+                type="submit"
+                className="w-full justify-center"
+              >
+                <FormattedMessage
+                  id={
+                    loading
+                      ? authButtonMessages.isLoading
+                      : authButtonMessages.default
+                  }
+                />
               </Button>
             </form>
           </div>

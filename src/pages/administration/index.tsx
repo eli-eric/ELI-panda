@@ -10,7 +10,9 @@ const Links = [
   {
     name: 'Users',
     link: PATH.ADMIN_USERS,
-    Icon: () => <UserGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />,
+    Icon: () => (
+      <UserGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+    ),
     role: ROLE.ADMIN
   }
 ]
@@ -29,7 +31,13 @@ const AdministrationPage: NextPage = (): React.ReactElement => (
       </h1>
       <TileContainer>
         {Links.map(link => (
-          <Tile key={link.link} name={link.name} Icon={link.Icon} link={link.link} role={link.role} />
+          <Tile
+            key={link.link}
+            name={link.name}
+            Icon={link.Icon}
+            link={link.link}
+            role={link.role}
+          />
         ))}
       </TileContainer>
     </main>

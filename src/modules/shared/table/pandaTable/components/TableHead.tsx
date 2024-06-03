@@ -16,7 +16,14 @@ export const TableHead: FC<Props> = ({ table }) => (
           if (noHeader) {
             return null
           }
-          return <ColumnHeader key={header.id} table={table} header={header} index={index} />
+          return (
+            <ColumnHeader
+              key={header.id}
+              table={table}
+              header={header}
+              index={index}
+            />
+          )
         })}
       </tr>
     ))}

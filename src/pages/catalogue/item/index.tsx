@@ -12,7 +12,9 @@ interface Props {
   categoryUid?: string
 }
 
-const NewCatalogueItemPage: NextPage = ({ categoryUid }: Props): JSX.Element => {
+const NewCatalogueItemPage: NextPage = ({
+  categoryUid
+}: Props): JSX.Element => {
   const intl = useIntl()
   return (
     <Fragment>

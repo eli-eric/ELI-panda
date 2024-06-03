@@ -7,7 +7,10 @@ import { Tooltip } from '@/components/Tooltip'
 import { useModal } from '@/hooks/useModal'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 
-import { useGetSpareParts, useGetSparePartsFor } from '../hooks/useGetSpareParts'
+import {
+  useGetSpareParts,
+  useGetSparePartsFor
+} from '../hooks/useGetSpareParts'
 import { useSparePartsColumns } from './SpareParts.columns'
 
 interface ShowSpareButtonProps {
@@ -38,7 +41,9 @@ const SparePartsModal: FC<ShowSpareButtonProps> = ({ uid }) => {
 
 const SparePartsForModal: FC<ShowSpareButtonProps> = ({ uid }) => {
   const { spareParts, loading } = useGetSparePartsFor(uid)
-  const sparePartsColumns = useSparePartsColumns({ tableId: 'sparePartsForModal' })
+  const sparePartsColumns = useSparePartsColumns({
+    tableId: 'sparePartsForModal'
+  })
   return (
     <Fragment>
       <Heading customText="Spare Part for Systems:" />
@@ -55,12 +60,21 @@ const SparePartsForModal: FC<ShowSpareButtonProps> = ({ uid }) => {
   )
 }
 
-export const ShowSpareButton: FC<ShowSpareButtonProps> = ({ uid, tableId, sparesIn, sparesOut }) => {
+export const ShowSpareButton: FC<ShowSpareButtonProps> = ({
+  uid,
+  tableId,
+  sparesIn,
+  sparesOut
+}) => {
   const setSpareShow = useModal(<SparePartsModal tableId={tableId} uid={uid} />)
-  const setSpareForShow = useModal(<SparePartsForModal tableId={tableId} uid={uid} />)
+  const setSpareForShow = useModal(
+    <SparePartsForModal tableId={tableId} uid={uid} />
+  )
 
-  const isSparePartsTable = tableId === 'spare-parts' && (sparesOut === 0 || !sparesOut)
-  const isForSystemTable = tableId === 'for-system' && (sparesIn === 0 || !sparesIn)
+  const isSparePartsTable =
+    tableId === 'spare-parts' && (sparesOut === 0 || !sparesOut)
+  const isForSystemTable =
+    tableId === 'for-system' && (sparesIn === 0 || !sparesIn)
   const isSystemsTable = tableId === 'systems'
 
   if (isSparePartsTable || isForSystemTable) return null
@@ -93,5 +107,9 @@ export const ShowSpareButton: FC<ShowSpareButtonProps> = ({ uid, tableId, spares
     }
   }
 
-  return <TableStatsButton onClick={tableId === 'spare-parts' ? setSpareForShow() : setSpareShow()} />
+  return (
+    <TableStatsButton
+      onClick={tableId === 'spare-parts' ? setSpareForShow() : setSpareShow()}
+    />
+  )
 }

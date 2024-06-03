@@ -1,8 +1,8 @@
 import type { Column, Table } from '@tanstack/react-table'
 import { useCallback } from 'react'
 
-import type { CodebookType } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { DefferedCombobox } from './defferedComponents/DefferedCombobox'
 import { DefferedInput } from './defferedComponents/DefferedInput'
@@ -71,13 +71,17 @@ export const Filter = ({
               <div className="flex space-x-2">
                 <DefferedInput
                   type="number"
-                  value={(column.getFilterValue() as [number, number])?.[0] ?? ''}
+                  value={
+                    (column.getFilterValue() as [number, number])?.[0] ?? ''
+                  }
                   onChange={handleChangeFrom}
                   placeholder={'from'}
                 />
                 <DefferedInput
                   type="number"
-                  value={(column.getFilterValue() as [number, number])?.[1] ?? ''}
+                  value={
+                    (column.getFilterValue() as [number, number])?.[1] ?? ''
+                  }
                   onChange={handleChangeTo}
                   placeholder={'to'}
                 />

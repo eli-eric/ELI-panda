@@ -4,11 +4,15 @@ import { useEffect, useState } from 'react'
 
 import useTableStateStore from '@/store/useTableStateStore'
 
-export const useExpanding = (tableId): [ExpandedState, Dispatch<SetStateAction<ExpandedState>>] => {
+export const useExpanding = (
+  tableId
+): [ExpandedState, Dispatch<SetStateAction<ExpandedState>>] => {
   const { instances, setExpand } = useTableStateStore()
   const expandedInstance = instances[tableId]?.expanded
 
-  const [expanded, setExpanded] = useState<ExpandedState>(expandedInstance || {})
+  const [expanded, setExpanded] = useState<ExpandedState>(
+    expandedInstance || {}
+  )
 
   useEffect(() => {
     setExpand(tableId, expanded)

@@ -1,14 +1,18 @@
 import type { CellContext } from '@tanstack/react-table'
 import type { Dispatch, SetStateAction } from 'react'
 
-import type { CatalogueItem } from '@/types/responses'
+import type { CatalogueItem } from '@/types/responses/catalogue'
 
 interface Props extends CellContext<CatalogueItem, any> {
   setItem: Dispatch<SetStateAction<CatalogueItem | undefined>>
   selectedItem?: CatalogueItem
 }
 
-export const SelectCell = ({ row: { original }, setItem, selectedItem }: Props) => (
+export const SelectCell = ({
+  row: { original },
+  setItem,
+  selectedItem
+}: Props) => (
   <div className="ml-3 flex h-5 items-center">
     <input
       id={`side-${original.uid}`}

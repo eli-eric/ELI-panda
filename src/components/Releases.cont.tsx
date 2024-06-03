@@ -90,7 +90,11 @@ export const ReleasesContainer = () => (
                     {feature.link && (
                       <span>
                         [
-                        <Link className="text-sky-600" href={feature.link} target="_blank">
+                        <Link
+                          className="text-sky-600"
+                          href={feature.link}
+                          target="_blank"
+                        >
                           {feature.link}
                         </Link>
                         ]

@@ -34,14 +34,24 @@ export const EmployeeTable = ({
         header: header,
         meta: {
           headerElement: (
-            <HeaderAddButton setEmployee={setNewEmployee} name={name} editPersmissionRole={ROLE.SYSTEM_EDIT} />
+            <HeaderAddButton
+              setEmployee={setNewEmployee}
+              name={name}
+              editPersmissionRole={ROLE.SYSTEM_EDIT}
+            />
           )
         },
         columns: [
           {
             accessorKey: 'fullName',
             meta: { noHeader: true },
-            cell: props => <CellWithDelete {...props} name={name} setDeleteItem={setDisconnectEmployee} />,
+            cell: props => (
+              <CellWithDelete
+                {...props}
+                name={name}
+                setDeleteItem={setDisconnectEmployee}
+              />
+            ),
             size: 563
           }
         ]
@@ -56,7 +66,10 @@ export const EmployeeTable = ({
         tableId,
         columns: columnsOperators,
         data: data?.length === 0 ? undefined : data,
-        className: classNames('border-l border-r border-gray-400 mb-0 pb-0 h-fit overflow-hidden', className)
+        className: classNames(
+          'border-l border-r border-gray-400 mb-0 pb-0 h-fit overflow-hidden',
+          className
+        )
       }}
     />
   )
