@@ -1,6 +1,7 @@
 import { Fragment, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
+import { ModalSelect } from '@/components/form/ModalSelect'
 import { Modal } from '@/components/overlays/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
 import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
@@ -8,7 +9,6 @@ import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps, ModalButtons, Option } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
 import { classNames } from '@/utils'
-import { ModalSelect } from '@/components/form/ModalSelect'
 
 const messages = message.common.buttons
 

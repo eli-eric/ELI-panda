@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-query'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { Toaster } from 'react-hot-toast'
@@ -19,6 +19,7 @@ import { Notification } from '@/components/Notifications/Notification'
 import { GenereralModal } from '@/components/overlays/modal/modal.comp'
 import { WarningModal } from '@/components/WarningModal'
 import { useLocale } from '@/hooks/useLocale'
+import { useDarkModeStore } from '@/store/useDarkModeStore'
 
 const ReactQueryDevtoolsProduction = lazy(() =>
   import('@tanstack/react-query-devtools/build/modern/production.js').then(
@@ -29,9 +30,23 @@ const ReactQueryDevtoolsProduction = lazy(() =>
 )
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
-  const [queryClient] = useState(() => new QueryClient())
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 1000 * 60
+          }
+        }
+      })
+  )
 
   const locale = useLocale()
+  const setStoredTheme = useDarkModeStore(state => state.setStoredTheme)
+
+  useEffect(() => {
+    setStoredTheme()
+  }, [setStoredTheme])
 
   return (
     <QueryClientProvider client={queryClient}>

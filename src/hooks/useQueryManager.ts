@@ -31,9 +31,11 @@ export default function useQueryManager(tableId: string): { query: Query } {
   )
 
   const [searchQuery] = useQueryState('search')
+  const [pageQuery] = useQueryState('page')
 
   const sorting = instances[tableId]?.sortByQueryString || ''
-  const pagination = instances[tableId]?.pagination || ''
+  const pagination =
+    instances[tableId]?.pagination || `{"page":${pageQuery || 1},"pageSize":50}`
   const search = instances[tableId]?.search || searchQuery || ''
   const supplierUID = instances[tableId]?.filter?.supplier?.uid || ''
   const orderStatusUID = instances[tableId]?.filter?.orderStatus?.uid || ''

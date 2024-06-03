@@ -64,9 +64,9 @@ export const ModalSelect = ({
               className
             )}
           >
-            {(customLabel || label) && (
+            {label && (
               <HUIListbox.Label className="block text-sm font-medium text-gray-900 dark:text-gray-200">
-                {customLabel ? customLabel : intl.formatMessage({ id: label })}
+                {label}
               </HUIListbox.Label>
             )}
             <div>
@@ -81,17 +81,14 @@ export const ModalSelect = ({
                 )}
               >
                 <div onClick={onClick}>
-                  <button
-                    type="button"
-                    className="h-full w-full pr-12 ml-3 text-left"
-                  >
+                  <div className="h-full w-full pr-12 ml-3 text-left">
                     <span className="block truncate">{value}</span>
                     {placeholder && !value && (
                       <span className="block truncate text-gray-400">
                         {placeholder}
                       </span>
                     )}
-                  </button>
+                  </div>
                   <div className="absolute inset-y-0 right-0 flex items-center pr-2">
                     <TableCellsIcon
                       onClick={onClick}
