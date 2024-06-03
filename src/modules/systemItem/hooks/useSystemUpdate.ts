@@ -1,6 +1,7 @@
 import {
   useMutation as useQueryMutation,
-  useQueryClient} from '@tanstack/react-query'
+  useQueryClient
+} from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import type { MutableRefObject } from 'react'
 import { toast } from 'react-hot-toast'
@@ -134,13 +135,6 @@ export const useSystemUpdate = (
         }
       )
 
-      queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
-        if (prev) {
-          return updateSystem(uid, body, prev)
-        }
-        return prev
-      })
-
       if (selectedPhysicalSystem) {
         queryClient.setQueryData<SystemDetail[]>(queryKeySubsystems, prev => {
           if (prev) {
@@ -159,6 +153,15 @@ export const useSystemUpdate = (
               { ...selectedPhysicalSystem, physicalItem: undefined },
               prev
             )
+          }
+          return prev
+        })
+      } else {
+        //TODO: fix mutation in deeper hierarchy
+        queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
+          console.log('prev', prev)
+          if (prev) {
+            return updateSystem(uid, body, prev)
           }
           return prev
         })
