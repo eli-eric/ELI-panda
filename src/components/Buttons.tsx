@@ -13,6 +13,7 @@ import {
   TableCellsIcon,
   TrashIcon
 } from '@heroicons/react/24/outline'
+import { FolderArrowDownIcon } from '@heroicons/react/24/solid'
 import Link from 'next/link'
 import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
@@ -184,6 +185,14 @@ export const FilterButton = ({
 }: ButtonProps) => (
   <Button {...restProps} buttonSize={buttonSize}>
     <FunnelIcon className="h-4 w-4" aria-hidden="true" />
+  </Button>
+)
+export const CSVButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
+  <Button {...restProps} buttonSize={buttonSize}>
+    <FolderArrowDownIcon className="h-4 w-4" aria-hidden="true" />
   </Button>
 )
 export const StatsButton = ({
