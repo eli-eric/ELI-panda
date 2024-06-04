@@ -4,6 +4,7 @@ import { SearchBarButtonsComponent } from '@/modules/shared/table/SearchBar'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
+import { ExportCsvButton } from './ExportCsvButton'
 import { SystemFilterButtonContainer } from './filters/SystemsFilterButton.cont'
 
 export const SearchBarButtons = () => {
@@ -23,6 +24,7 @@ export const SearchBarButtons = () => {
       editRole={ROLE.SYSTEM_EDIT}
     >
       <SystemFilterButtonContainer />
+      <ExportCsvButton />
     </SearchBarButtonsComponent>
   )
 }
