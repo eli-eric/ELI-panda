@@ -30,7 +30,7 @@ export const useSystemDetail = (alias?: string, onSuccess?: (data) => void) => {
       variables: {
         where: { uid, systemCode: alias }
       },
-      enabled: !!uid,
+      enabled: !!uid || !!alias,
       refetchOnMount: 'always',
       refetchOnReconnect: 'always'
     }
