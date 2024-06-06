@@ -214,8 +214,7 @@ export const PriceFooter = ({ rows }: { rows: Row<OrderLineFormType>[] }) => {
   return (
     <Fragment>
       {rows.length > 0 && (
-        <div className="flex flex-col whitespace-nowrap">
-          <span className="font-medium">{'Total:'}</span>
+        <div className="flex flex-col whitespace-nowrap py-1">
           <span className="font-medium">{`${parseFloat(total.toFixed(2))} ${totalCurrency}`}</span>
         </div>
       )}
