@@ -37,7 +37,10 @@ const useOrderLinesColumns = () => {
           </div>
         ),
         meta: { sticky: true, className: 'sm:pr-12' },
-        size: 240
+        size: 240,
+        footer: ({ table: { getRowCount } }) => (
+          <span>Total: {getRowCount()} line(s)</span>
+        )
       },
       {
         header: formatMessage({ id: messages.catalogueNumber }),
