@@ -1,10 +1,12 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
+import Image from 'next/image'
 import { Fragment, useMemo } from 'react'
 
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import usePermission from '@/hooks/usePermission'
+import { fallbackImage } from '@/types/constants/common'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import type { SystemDetail } from '@/types/responses/systems'
@@ -34,20 +36,43 @@ export const useSystemsColumns = ({
   const columns = useMemo(
     (): ColumnDef<SystemDetail, any>[] => [
       {
+        id: 'miniImageUrl',
+        size: 32,
+        header: '',
+        meta: {
+          sticky: true,
+          className: 'pl-0 pr-0'
+        },
+        accessorFn: row => row?.miniImageUrl?.[0],
+        cell: ({ getValue }) => {
+          return (
+            <Image
+              src={getValue() || fallbackImage.url}
+              alt="img"
+              width={50}
+              height={50}
+              className="rounded-full w-8 h-8 object-cover justify-center"
+            />
+          )
+        }
+      },
+      {
         id: 'icon',
-        size: 20,
+        size: 30,
         cell: ({ row: { original } }) => (
-          <IconCell
-            itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE}
-          />
+          <div className="ml-2">
+            <IconCell
+              itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE}
+            />
+          </div>
         ),
-        meta: { sticky: true }
+        meta: { sticky: true, className: 'pl-0 pr-0' }
       },
       {
         header: 'Name',
         accessorFn: row => row.name,
         id: 'name',
-        size: tableId === 'systemsItem' ? 400 : 440,
+        size: tableId === 'systemsItem' ? 400 : 480,
         meta:
           tableId === 'systemsItem'
             ? { sticky: true }
@@ -88,7 +113,7 @@ export const useSystemsColumns = ({
         header: 'System Type',
         accessorFn: row => row.systemType?.name,
         id: 'systemType',
-        size: 150
+        size: 200
       },
       {
         header: 'Attribute',

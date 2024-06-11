@@ -17,7 +17,7 @@ const ImagePlaceHolder = ({ getRootProps, getInputProps }: Props) => (
       <div className=" text-sm text-gray-600 dark:text-gray-200">
         <ImageIcon />
         <div className="relative  rounded-md bg-white dark:bg-gray-800 font-medium text-primary-500">
-          <span>Upload a file</span>
+          <span>Upload a image</span>
           <input {...getInputProps()} name="image" className="sr-only" />
         </div>
       </div>

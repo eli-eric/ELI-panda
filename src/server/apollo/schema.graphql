@@ -135,6 +135,7 @@ type CatalogueCategory @authentication {
   uid: ID! @id
   code: String!
   name: String!
+  miniImageUrl: String
   catalogueCategoriesHasSubcategory: [CatalogueCategory!]!
     @relationship(type: "HAS_SUBCATEGORY", direction: IN)
   catalogueItemsBelongsToCategory: [CatalogueItem!]!

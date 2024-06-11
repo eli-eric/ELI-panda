@@ -19,7 +19,7 @@ export const RowCell: FC<Props> = ({ row, cell, loading }) => {
   const stickyCellsSize = row.getAllCells().reduce((acc, cell, index) => {
     if (index < rowIndex) {
       if (cell.column.columnDef.meta?.sticky) {
-        return acc + cell.column.getSize() + 45
+        return acc + cell.column.getSize()
       }
     }
     return acc
@@ -38,7 +38,7 @@ export const RowCell: FC<Props> = ({ row, cell, loading }) => {
         } as React.CSSProperties
       }
       className={classNames(
-        'sm:pl-6 sm:pr-6 border-r border-b border-gray-400 dark:text-gray-100',
+        ' border-r border-b border-gray-400 dark:text-gray-100 pl-3 pr-3',
         cell.column.columnDef.meta?.sticky
           ? 'sticky z-30 backdrop-blur-2xl backdrop-filter border-r pt-1 pb-1'
           : '',

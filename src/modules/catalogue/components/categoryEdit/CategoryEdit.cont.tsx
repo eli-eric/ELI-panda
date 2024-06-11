@@ -1,5 +1,5 @@
 'use client'
-import { type Dispatch, Fragment, type SetStateAction } from 'react'
+import { type Dispatch, Fragment, type SetStateAction, useRef } from 'react'
 import toast from 'react-hot-toast'
 import { FormattedMessage } from 'react-intl'
 
@@ -8,6 +8,7 @@ import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
+import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { useCategory } from '../../hooks/useCategory'
@@ -29,17 +30,22 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
     uid
   })
 
+  const imageRef = useRef<ImageGalleryRef>(null)
+
   const { catalogueCategory } = useCategory()
   const { categoryDetail, isLoading } = useCategoryDetail(uid)
 
   const { refetch } = useCategoryList()
 
-  const { submit, loading } = useSubmit({
+  const { submit, loading } = useSubmit<{ uid: string; name: string }>({
     endpoint: catalogueCategoryEdit,
     method: uid ? 'put' : 'post',
-    onSuccess: () => {
-      refetch()
-      setOpen(false)
+    onSuccess: data => {
+      imageRef.current?.submit(data.uid, () => {
+        refetch()
+        setOpen(false)
+        toast.success(`Category ${data.name} saved`)
+      })
     },
     onError: () => {
       toast.error('Error saving category')
@@ -56,6 +62,7 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
         <CategoryEditForm
           onSubmit={onSubmit}
           uid={uid}
+          imageRef={imageRef}
           categoryDetail={categoryDetail as CategoryFormType}
           systemType={catalogueCategory?.systemType as CodebookType}
         >
