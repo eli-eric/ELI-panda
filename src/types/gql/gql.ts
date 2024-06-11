@@ -27,7 +27,7 @@ const documents = {
     "\n  mutation DeleteUsers($where: UserWhere) {\n    deleteUsers(where: $where) {\n      nodesDeleted\n    }\n  }\n": types.DeleteUsersDocument,
     "\n  query UsersQuery($where: UserWhere) {\n    users(where: $where) {\n      uid\n      email\n      firstName\n      isEnabled\n      lastName\n      passwordToChange\n      employee {\n        uid\n        fullName\n      }\n      roles {\n        name\n        code\n        uid\n      }\n      username\n      uid\n      facility {\n        name\n        code\n      }\n  }\n  }\n": types.UsersQueryDocument,
     "\n  query GetCategory($uid: ID = null) {\n    catalogueCategories(where: { uid: $uid }) {\n      uid\n      name\n      systemType {\n        uid\n        name\n      }\n      parentPath {\n        uid\n        name\n      }\n    }\n  }\n": types.GetCategoryDocument,
-    "\n  query GetCategories($where: CatalogueCategoryWhere) {\n    catalogueCategories(where: $where) {\n      name\n      uid\n      code\n    }\n  }\n": types.GetCategoriesDocument,
+    "\n  query GetCategories($where: CatalogueCategoryWhere) {\n    catalogueCategories(where: $where) {\n      name\n      uid\n      code\n      miniImageUrl\n    }\n  }\n": types.GetCategoriesDocument,
     "\n  mutation CreateRelatedItemMutation(\n    $where: CatalogueItemWhere\n    $update: CatalogueItemUpdateInput\n  ) {\n    updateCatalogueItems(where: $where, update: $update) {\n      catalogueItems {\n        relatedCatalogueItems {\n          name\n        }\n      }\n    }\n  }\n": types.CreateRelatedItemMutationDocument,
     "\n  mutation DisconnectRelatedItemMutation(\n    $where: CatalogueItemWhere\n    $update: CatalogueItemUpdateInput\n  ) {\n    updateCatalogueItems(where: $where, update: $update) {\n      catalogueItems {\n        relatedCatalogueItems {\n          name\n        }\n      }\n    }\n  }\n": types.DisconnectRelatedItemMutationDocument,
     "\n  query RelatedCatalogueItems($where: CatalogueItemWhere) {\n    catalogueItems(where: $where) {\n      relatedCatalogueItems {\n        name\n        catalogueCategory {\n          name\n          uid\n        }\n        supplier {\n          name\n          uid\n        }\n        description\n        catalogueNumber\n        uid\n        manufacturerUrl\n      }\n    }\n  }\n": types.RelatedCatalogueItemsDocument,
@@ -130,7 +130,7 @@ export function gql(source: "\n  query GetCategory($uid: ID = null) {\n    catal
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetCategories($where: CatalogueCategoryWhere) {\n    catalogueCategories(where: $where) {\n      name\n      uid\n      code\n    }\n  }\n"): (typeof documents)["\n  query GetCategories($where: CatalogueCategoryWhere) {\n    catalogueCategories(where: $where) {\n      name\n      uid\n      code\n    }\n  }\n"];
+export function gql(source: "\n  query GetCategories($where: CatalogueCategoryWhere) {\n    catalogueCategories(where: $where) {\n      name\n      uid\n      code\n      miniImageUrl\n    }\n  }\n"): (typeof documents)["\n  query GetCategories($where: CatalogueCategoryWhere) {\n    catalogueCategories(where: $where) {\n      name\n      uid\n      code\n      miniImageUrl\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

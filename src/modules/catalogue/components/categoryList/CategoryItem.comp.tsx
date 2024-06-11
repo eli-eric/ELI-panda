@@ -1,11 +1,9 @@
-import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 
 import { FALLBACK_IMAGE } from '@/types/constants/general'
 import type { GetCategoriesQuery } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
 import { classNames } from '@/utils'
-import { queryFetcher } from '@/utils/fetcher'
 
 import { CategoryButtons } from '../categoryEdit/components/CategoryButtons'
 
@@ -18,12 +16,7 @@ export const CategoryItemComponent = ({
   category,
   setCategoryFilter
 }: Props) => {
-  const { data: image, isLoading } = useQuery({
-    queryKey: ['category-image', { uid: category.uid }],
-    queryFn: queryFetcher<string>('catalogueCategoryImage'),
-    enabled: !!category.uid
-  })
-
+  const image = category?.miniImageUrl?.split(';')[0]
   return (
     <div className="flex-row justify-between dark:hover:bg-gray-600 relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white dark:bg-gray-700 shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
       <button
@@ -35,10 +28,7 @@ export const CategoryItemComponent = ({
       >
         <div className="flex-shrink-0 mx-6 my-4">
           <Image
-            className={classNames(
-              'h-10 w-10 rounded-sm object-contain',
-              isLoading && 'animate-pulse'
-            )}
+            className={classNames('h-10 w-10 rounded-sm object-contain')}
             width={200}
             height={200}
             alt={category.name}

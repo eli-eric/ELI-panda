@@ -58,6 +58,7 @@ export type CatalogueCategory = {
   hasSubcategoryCatalogueCategories: Array<CatalogueCategory>;
   hasSubcategoryCatalogueCategoriesAggregate?: Maybe<CatalogueCategoryCatalogueCategoryHasSubcategoryCatalogueCategoriesAggregationSelection>;
   hasSubcategoryCatalogueCategoriesConnection: CatalogueCategoryHasSubcategoryCatalogueCategoriesConnection;
+  miniImageUrl?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   parentCategory?: Maybe<CatalogueCategory>;
   parentCategoryAggregate?: Maybe<CatalogueCategoryCatalogueCategoryParentCategoryAggregationSelection>;
@@ -205,6 +206,7 @@ export type CatalogueCategoryAggregateSelection = {
   __typename?: 'CatalogueCategoryAggregateSelection';
   code: StringAggregateSelectionNonNullable;
   count: Scalars['Int']['output'];
+  miniImageUrl: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -284,6 +286,21 @@ export type CatalogueCategoryCatalogueCategoriesHasSubcategoryNodeAggregationWhe
   code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -329,6 +346,7 @@ export type CatalogueCategoryCatalogueCategoryCatalogueCategoriesHasSubcategoryA
 export type CatalogueCategoryCatalogueCategoryCatalogueCategoriesHasSubcategoryNodeAggregateSelection = {
   __typename?: 'CatalogueCategoryCatalogueCategoryCatalogueCategoriesHasSubcategoryNodeAggregateSelection';
   code: StringAggregateSelectionNonNullable;
+  miniImageUrl: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -342,6 +360,7 @@ export type CatalogueCategoryCatalogueCategoryHasSubcategoryCatalogueCategoriesA
 export type CatalogueCategoryCatalogueCategoryHasSubcategoryCatalogueCategoriesNodeAggregateSelection = {
   __typename?: 'CatalogueCategoryCatalogueCategoryHasSubcategoryCatalogueCategoriesNodeAggregateSelection';
   code: StringAggregateSelectionNonNullable;
+  miniImageUrl: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -355,6 +374,7 @@ export type CatalogueCategoryCatalogueCategoryParentCategoryAggregationSelection
 export type CatalogueCategoryCatalogueCategoryParentCategoryNodeAggregateSelection = {
   __typename?: 'CatalogueCategoryCatalogueCategoryParentCategoryNodeAggregateSelection';
   code: StringAggregateSelectionNonNullable;
+  miniImageUrl: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -561,6 +581,7 @@ export type CatalogueCategoryCreateInput = {
   code: Scalars['String']['input'];
   hasGroupCatalogueCategoryPropertyGroups?: InputMaybe<CatalogueCategoryHasGroupCatalogueCategoryPropertyGroupsFieldInput>;
   hasSubcategoryCatalogueCategories?: InputMaybe<CatalogueCategoryHasSubcategoryCatalogueCategoriesFieldInput>;
+  miniImageUrl?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   parentCategory?: InputMaybe<CatalogueCategoryParentCategoryFieldInput>;
   systemType?: InputMaybe<CatalogueCategorySystemTypeFieldInput>;
@@ -776,6 +797,21 @@ export type CatalogueCategoryHasSubcategoryCatalogueCategoriesNodeAggregationWhe
   code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -894,6 +930,21 @@ export type CatalogueCategoryParentCategoryNodeAggregationWhereInput = {
   code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -1344,6 +1395,21 @@ export type CatalogueCategoryPropertyGroupCatalogueCategoriesHasGroupNodeAggrega
   code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -1389,6 +1455,7 @@ export type CatalogueCategoryPropertyGroupCatalogueCategoryCatalogueCategoriesHa
 export type CatalogueCategoryPropertyGroupCatalogueCategoryCatalogueCategoriesHasGroupNodeAggregateSelection = {
   __typename?: 'CatalogueCategoryPropertyGroupCatalogueCategoryCatalogueCategoriesHasGroupNodeAggregateSelection';
   code: StringAggregateSelectionNonNullable;
+  miniImageUrl: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -2350,6 +2417,7 @@ export type CatalogueCategoryRelationInput = {
 /** Fields to sort CatalogueCategories by. The order in which sorts are applied is not guaranteed when specifying many fields in one CatalogueCategorySort object. */
 export type CatalogueCategorySort = {
   code?: InputMaybe<SortDirection>;
+  miniImageUrl?: InputMaybe<SortDirection>;
   name?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
 };
@@ -2500,6 +2568,7 @@ export type CatalogueCategoryUpdateInput = {
   code?: InputMaybe<Scalars['String']['input']>;
   hasGroupCatalogueCategoryPropertyGroups?: InputMaybe<Array<CatalogueCategoryHasGroupCatalogueCategoryPropertyGroupsUpdateFieldInput>>;
   hasSubcategoryCatalogueCategories?: InputMaybe<Array<CatalogueCategoryHasSubcategoryCatalogueCategoriesUpdateFieldInput>>;
+  miniImageUrl?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   parentCategory?: InputMaybe<CatalogueCategoryParentCategoryUpdateFieldInput>;
   systemType?: InputMaybe<CatalogueCategorySystemTypeUpdateFieldInput>;
@@ -2582,6 +2651,11 @@ export type CatalogueCategoryWhere = {
   hasSubcategoryCatalogueCategories_SINGLE?: InputMaybe<CatalogueCategoryWhere>;
   /** Return CatalogueCategories where some of the related CatalogueCategories match this filter */
   hasSubcategoryCatalogueCategories_SOME?: InputMaybe<CatalogueCategoryWhere>;
+  miniImageUrl?: InputMaybe<Scalars['String']['input']>;
+  miniImageUrl_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  miniImageUrl_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  miniImageUrl_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  miniImageUrl_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_CONTAINS?: InputMaybe<Scalars['String']['input']>;
   name_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
@@ -2794,6 +2868,7 @@ export type CatalogueItemCatalogueCategoryCatalogueCategoryAggregationSelection 
 export type CatalogueItemCatalogueCategoryCatalogueCategoryNodeAggregateSelection = {
   __typename?: 'CatalogueItemCatalogueCategoryCatalogueCategoryNodeAggregateSelection';
   code: StringAggregateSelectionNonNullable;
+  miniImageUrl: StringAggregateSelectionNullable;
   name: StringAggregateSelectionNonNullable;
   uid: IdAggregateSelectionNonNullable;
 };
@@ -2861,6 +2936,21 @@ export type CatalogueItemCatalogueCategoryNodeAggregationWhereInput = {
   code_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   code_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  miniImageUrl_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  miniImageUrl_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
   name_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
   name_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
@@ -18498,7 +18588,7 @@ export type GetCategoriesQueryVariables = Exact<{
 }>;
 
 
-export type GetCategoriesQuery = { __typename?: 'Query', catalogueCategories: Array<{ __typename?: 'CatalogueCategory', name: string, uid: string, code: string }> };
+export type GetCategoriesQuery = { __typename?: 'Query', catalogueCategories: Array<{ __typename?: 'CatalogueCategory', name: string, uid: string, code: string, miniImageUrl?: string | null }> };
 
 export type CreateRelatedItemMutationMutationVariables = Exact<{
   where?: InputMaybe<CatalogueItemWhere>;
@@ -18727,7 +18817,7 @@ export const UpdateUsersDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const DeleteUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodesDeleted"}}]}}]}}]} as unknown as DocumentNode<DeleteUsersMutation, DeleteUsersMutationVariables>;
 export const UsersQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UsersQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"isEnabled"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"passwordToChange"}},{"kind":"Field","name":{"kind":"Name","value":"employee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"facility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]} as unknown as DocumentNode<UsersQueryQuery, UsersQueryQueryVariables>;
 export const GetCategoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCategory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uid"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}},"defaultValue":{"kind":"NullValue"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uid"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"systemType"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"parentPath"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetCategoryQuery, GetCategoryQueryVariables>;
-export const GetCategoriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCategories"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueCategoryWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]} as unknown as DocumentNode<GetCategoriesQuery, GetCategoriesQueryVariables>;
+export const GetCategoriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCategories"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueCategoryWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueCategories"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"miniImageUrl"}}]}}]}}]} as unknown as DocumentNode<GetCategoriesQuery, GetCategoriesQueryVariables>;
 export const CreateRelatedItemMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateRelatedItemMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueItemWhere"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueItemUpdateInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCatalogueItems"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"relatedCatalogueItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<CreateRelatedItemMutationMutation, CreateRelatedItemMutationMutationVariables>;
 export const DisconnectRelatedItemMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DisconnectRelatedItemMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueItemWhere"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueItemUpdateInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateCatalogueItems"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"relatedCatalogueItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<DisconnectRelatedItemMutationMutation, DisconnectRelatedItemMutationMutationVariables>;
 export const RelatedCatalogueItemsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"RelatedCatalogueItems"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CatalogueItemWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"catalogueItems"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"relatedCatalogueItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"catalogueCategory"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"supplier"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"catalogueNumber"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"manufacturerUrl"}}]}}]}}]}}]} as unknown as DocumentNode<RelatedCatalogueItemsQuery, RelatedCatalogueItemsQueryVariables>;

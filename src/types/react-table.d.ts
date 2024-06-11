@@ -20,6 +20,7 @@ declare module '@tanstack/table-core' {
       enableColumnFilter: boolean
       codebookCode?: CODEBOOK
     }
+    enableReorder?: boolean
     noHeader?: boolean
     headerElement?: React.ReactNode
   }

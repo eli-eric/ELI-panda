@@ -87,7 +87,7 @@ export const messages = {
         uid: 'UID',
         name: 'Name',
         select: 'Select Item',
-        description: 'Description',
+        description: 'Descr.',
         categoryName: 'Category name',
         supplier: 'Supplier',
         supplierUrl: 'Supplier Url',
