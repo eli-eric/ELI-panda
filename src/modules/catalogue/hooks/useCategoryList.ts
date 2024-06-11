@@ -12,6 +12,7 @@ const GET_CATEGORIES = gql(`
       name
       uid
       code
+      miniImageUrl
     }
   }
 `)

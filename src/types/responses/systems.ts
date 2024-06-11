@@ -33,6 +33,7 @@ export type SystemDetail = {
   hasSubsystems?: boolean
   subSystems?: SystemDetail[]
   statistics?: SystemStatistics
+  miniImageUrl?: string[]
 }
 
 export type PhysicalItem = {

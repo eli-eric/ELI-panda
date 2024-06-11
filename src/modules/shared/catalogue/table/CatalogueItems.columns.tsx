@@ -1,4 +1,5 @@
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
+import Image from 'next/image'
 import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -8,6 +9,7 @@ import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
 import { CODEBOOK } from '@/types/constants/codebook'
+import { fallbackImage } from '@/types/constants/common'
 import type {
   CatalogueItem,
   CatalogueItemsResponse
@@ -42,6 +44,29 @@ export const useCatalogueItemsColumns = ({
   const columns: ColumnDef<CatalogueItem, any>[] = useMemo(() => {
     const columns: ColumnDef<CatalogueItem, any>[] = [
       {
+        id: 'miniImageUrl',
+        size: 32,
+        header: '',
+        enableColumnFilter: false,
+        meta: {
+          sticky: true,
+          enableReorder: false,
+          className: 'pl-0 pr-0'
+        },
+        accessorFn: row => row?.miniImageUrl?.[0],
+        cell: ({ getValue }) => {
+          return (
+            <Image
+              src={getValue() || fallbackImage.url}
+              alt="img"
+              width={50}
+              height={50}
+              className="rounded-full w-8 h-8 object-cover justify-center"
+            />
+          )
+        }
+      },
+      {
         header: intl.formatMessage({ id: messages.name }),
         accessorFn: row => row.name,
         id: 'name',
@@ -59,8 +84,7 @@ export const useCatalogueItemsColumns = ({
         accessorFn: row => row.description,
         id: 'description',
         cell: DescriptionCell,
-        maxSize: 100,
-        size: 100,
+        size: 90,
         meta: { filter: { type: 'string', enableColumnFilter: true } }
       },
       {

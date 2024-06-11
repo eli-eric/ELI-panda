@@ -3,6 +3,7 @@ import { Fragment } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
+import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import type { CategoryFormType } from '../types'
@@ -17,6 +18,7 @@ interface Props {
   children: React.ReactNode
   systemType?: CodebookType
   categoryDetail: CategoryFormType
+  imageRef?: React.MutableRefObject<ImageGalleryRef | null>
 }
 
 const CategoryEditForm = ({
@@ -24,7 +26,8 @@ const CategoryEditForm = ({
   onSubmit,
   children,
   systemType,
-  categoryDetail
+  categoryDetail,
+  imageRef
 }: Props) => {
   const formMethods = useForm<CategoryFormType>({
     defaultValues: !uid
@@ -39,7 +42,7 @@ const CategoryEditForm = ({
     <Fragment>
       <Form formMethods={formMethods} onSubmit={onSubmit}>
         <div className="flex-1">
-          <Main uid={uid} />
+          <Main uid={uid} imageRef={imageRef} />
           <GroupList />
           <PhysicalItemProperties />
           {children}
