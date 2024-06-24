@@ -45,7 +45,7 @@ export const useCatalogueItemsColumns = ({
     const columns: ColumnDef<CatalogueItem, any>[] = [
       {
         id: 'miniImageUrl',
-        size: 32,
+        size: 57,
         header: '',
         enableColumnFilter: false,
         meta: {
@@ -61,7 +61,7 @@ export const useCatalogueItemsColumns = ({
               alt="img"
               width={50}
               height={50}
-              className="rounded-full w-8 h-8 object-cover justify-center"
+              className="rounded-full w-8 h-8 min-w-8 object-cover justify-center"
             />
           )
         }

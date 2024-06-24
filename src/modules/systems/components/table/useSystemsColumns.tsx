@@ -37,11 +37,10 @@ export const useSystemsColumns = ({
     (): ColumnDef<SystemDetail, any>[] => [
       {
         id: 'miniImageUrl',
-        size: 32,
+        size: 57,
         header: '',
         meta: {
-          sticky: true,
-          className: 'pl-0 pr-0'
+          sticky: true
         },
         accessorFn: row => row?.miniImageUrl?.[0],
         cell: ({ getValue }) => {
@@ -51,22 +50,22 @@ export const useSystemsColumns = ({
               alt="img"
               width={50}
               height={50}
-              className="rounded-full w-8 h-8 object-cover justify-center"
+              className="rounded-full w-8 h-8 min-w-8 object-cover justify-center"
             />
           )
         }
       },
       {
         id: 'icon',
-        size: 30,
+        size: 41,
+        meta: { sticky: true },
         cell: ({ row: { original } }) => (
-          <div className="ml-2">
+          <div>
             <IconCell
               itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE}
             />
           </div>
-        ),
-        meta: { sticky: true, className: 'pl-0 pr-0' }
+        )
       },
       {
         header: 'Name',
