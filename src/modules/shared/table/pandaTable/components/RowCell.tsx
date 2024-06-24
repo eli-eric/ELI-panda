@@ -16,14 +16,16 @@ export const RowCell: FC<Props> = ({ row, cell, loading }) => {
   const id = useId()
   const rowIndex = row.getAllCells().indexOf(cell)
 
-  const stickyCellsSize = row.getAllCells().reduce((acc, cell, index) => {
-    if (index < rowIndex) {
-      if (cell.column.columnDef.meta?.sticky) {
-        return acc + cell.column.getSize()
+  const stickyCellsSize =
+    row.getAllCells().reduce((acc, cell, index) => {
+      if (index < rowIndex) {
+        if (cell.column.columnDef.meta?.sticky) {
+          return acc + cell.column.getSize()
+        }
       }
-    }
-    return acc
-  }, 0)
+      return acc
+    }, 0) +
+    1 * rowIndex
 
   return (
     <td
@@ -43,8 +45,8 @@ export const RowCell: FC<Props> = ({ row, cell, loading }) => {
           ? 'sticky z-30 backdrop-blur-2xl backdrop-filter border-r pt-1 pb-1'
           : '',
         loading ? 'opacity-50' : '',
-        cell.column.columnDef.meta?.className,
-        styles.cell
+        styles.cell,
+        cell.column.columnDef.meta?.className
       )}
     >
       {flexRender(cell.column.columnDef.cell, cell.getContext())}

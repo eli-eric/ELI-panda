@@ -67,14 +67,16 @@ export const ColumnHeader: FC<ColumnHeader> = ({
     item: () => column,
     type: 'column'
   })
-  const stickyCellsSize = table.getAllColumns().reduce((acc, col, index) => {
-    if (index < headerIndex) {
-      if (header.column.columnDef.meta?.sticky) {
-        return acc + col.getSize()
+  const stickyCellsSize =
+    table.getAllColumns().reduce((acc, col, index) => {
+      if (index < headerIndex) {
+        if (header.column.columnDef.meta?.sticky) {
+          return acc + col.getSize()
+        }
       }
-    }
-    return acc
-  }, 0)
+      return acc
+    }, 0) +
+    1 * headerIndex
 
   return (
     <th
@@ -86,11 +88,11 @@ export const ColumnHeader: FC<ColumnHeader> = ({
           width: header.getSize(),
           '--left': header.column.columnDef.meta?.sticky
             ? `${headerIndex === 0 ? 0 : stickyCellsSize}px`
-            : undefined
+            : null
         } as React.CSSProperties
       }
       className={classNames(
-        'whitespace-nowrap border-r border-b dark:bg-gray-900 border-gray-400 bg-opacity-75 py-2 text-left font-semibold text-gray-900 dark:text-gray-200 backdrop-blur backdrop-filter',
+        'whitespace-nowrap border-r outline-offset-0 dark:bg-gray-900 border-gray-400 bg-opacity-75 py-2 text-left font-semibold text-gray-900 dark:text-gray-200 backdrop-blur backdrop-filter',
         header.column.columnDef.meta?.sticky
           ? 'sticky top-0 text-ellipsis z-40 backdrop-blur-2xl backdrop-filter border-r'
           : 'sticky top-0 z-10',
