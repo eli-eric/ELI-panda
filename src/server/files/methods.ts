@@ -1,8 +1,8 @@
+import Jimp from 'jimp'
 import type { BucketItemWithMetadata } from 'minio'
 import { nanoid } from 'nanoid'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getToken } from 'next-auth/jwt'
-import sharp from 'sharp'
 import stream from 'stream'
 
 import { BASE_URL } from '@/types/constants/common'
@@ -37,16 +37,17 @@ const resizeImageAndUpload = async (prefix, name) => {
 
     const originalFileMeta = await s3Client.statObject(bucket, name)
 
-    const transformer = sharp().resize(100)
-
-    const outputBuffer = await new Promise((resolve, reject) => {
-      const buffers: any[] = []
+    const buffer: Buffer = await new Promise((resolve, reject) => {
+      const chunks: any[] = []
       fileStream
-        .pipe(transformer)
-        .on('data', data => buffers.push(data))
+        .on('data', chunk => chunks.push(chunk))
+        .on('end', () => resolve(Buffer.concat(chunks)))
         .on('error', reject)
-        .on('end', () => resolve(Buffer.concat(buffers)))
     })
+
+    const image = await Jimp.read(buffer)
+    image.resize(100, Jimp.AUTO)
+    const outputBuffer = await image.getBufferAsync(Jimp.MIME_PNG)
 
     const bufferStream = new stream.PassThrough()
     bufferStream.end(outputBuffer)
@@ -74,27 +75,37 @@ const handleMiniImages = async (config: {
   const { req, res, id, isDelete = false } = config
   const { prefix, shortPrefix, uid } = getPathInfo(req, res)
 
-  try {
-    const files = await s3Client.listObjectsV2(
-      bucket,
-      `${shortPrefix}image-small`,
-      true
-    )
-
-    const token = await getToken({ req })
-
-    const urls: string[] = []
-
-    for await (const file of files) {
-      urls.push('/api/' + file.name)
-    }
-    if (!isDelete) {
-      resizeImageAndUpload(shortPrefix, prefix + id)
-    }
-    await saveUrlsToNode(uid, urls, token)
-  } catch (e) {
-    throw new Error('Failed to handle mini images')
+  if (!isDelete) {
+    await resizeImageAndUpload(shortPrefix, prefix + id)
   }
+
+  const list: BucketItemWithMetadata[] = await new Promise(
+    (resolve, reject) => {
+      const stream = s3Client.extensions.listObjectsV2WithMetadata(
+        bucket,
+        `/${shortPrefix}image-small`,
+        true
+      )
+
+      const objects: BucketItemWithMetadata[] = []
+
+      stream.on('data', obj => {
+        objects.push(obj)
+      })
+
+      stream.once('error', reject)
+
+      stream.once('end', () => {
+        resolve(objects)
+      })
+    }
+  )
+
+  const urls = list?.map(obj => '/api/' + obj.name)
+
+  const token = await getToken({ req })
+
+  await saveUrlsToNode(uid, urls, token)
 }
 
 export const getPathInfo = (req: NextApiRequest, res: NextApiResponse) => {
@@ -219,18 +230,17 @@ export async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
   const existingObject = await s3Client.statObject(bucket, prefix + id)
   if (!existingObject) return res.status(404).json({})
 
-  logger.debug(composeDebugMessage(req, 'Successfully saved file'))
-
   const isImage = prefix.includes('/image')
   if (isImage) {
     try {
-      await handleMiniImages({ req, res, id })
+      await handleMiniImages({ req, res, id, isDelete: false })
     } catch (e) {
       logger.error(e)
       return res.status(500).json({ error: 'Failed to save mini image' })
     }
   }
 
+  logger.debug(composeDebugMessage(req, 'Successfully saved file'))
   res.status(201).json({ id, name, url, type: mimeType, tags })
 }
 
