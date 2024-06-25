@@ -102,7 +102,12 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
             </div>
           </Tooltip> */}
           <div className="flex-1 w-full">
-            <SelectSystemComboBox selectSystemField={formFields.system} />
+            <SelectSystemComboBox
+              selectSystemField={{
+                ...formFields.system,
+                disabled: !!orderLine?.uid
+              }}
+            />
           </div>
         </div>
       </Col>
