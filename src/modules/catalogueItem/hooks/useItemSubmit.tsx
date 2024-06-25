@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
+import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { PATH } from '@/types/constants/paths'
 import { navigateBack } from '@/utils'
@@ -14,6 +15,7 @@ const useItemSubmit = (
   const { query, replace, reload } = useRouter()
   const uid = query.uid as string | undefined
   const { catalogueItem } = useEndpoint({ uid: uid })
+  const { refetch } = useCatalogueItems()
 
   const { response, submit, loading } = useSubmit<string>({
     endpoint: catalogueItem,
@@ -22,6 +24,7 @@ const useItemSubmit = (
       imageRef?.current?.submit(responseUid, () => {
         if (custom?.saveAndExit) {
           navigateBack()
+          refetch()
         } else {
           if (!uid) {
             replace(PATH.CATALOGUE_ITEM + '/' + responseUid)
