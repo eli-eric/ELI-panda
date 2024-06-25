@@ -1,5 +1,11 @@
 'use client'
-import { type Dispatch, Fragment, type SetStateAction, useRef } from 'react'
+import {
+  type Dispatch,
+  Fragment,
+  type SetStateAction,
+  useRef,
+  useState
+} from 'react'
 import toast from 'react-hot-toast'
 import { FormattedMessage } from 'react-intl'
 
@@ -34,6 +40,7 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
 
   const { catalogueCategory } = useCategory()
   const { categoryDetail, isLoading } = useCategoryDetail(uid)
+  const [loadingSubmit, setLoadingSubmit] = useState(false)
 
   const { refetch } = useCategoryList()
 
@@ -45,6 +52,7 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
         refetch()
         setOpen(false)
         toast.success(`Category ${data.name} saved`)
+        setLoadingSubmit(false)
       })
     },
     onError: () => {
@@ -52,6 +60,7 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
     }
   })
   const onSubmit = (data: CategoryFormType) => {
+    setLoadingSubmit(true)
     submit(formatData(data, parentUID))
   }
 
@@ -70,7 +79,7 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
             <Button
               type="submit"
               primary
-              loading={loading}
+              loading={loading || loadingSubmit}
               className="inline-flex w-full justify-center sm:col-start-2 sm:mt-0 sm:text-sm"
             >
               <FormattedMessage id={buttons.save} />
