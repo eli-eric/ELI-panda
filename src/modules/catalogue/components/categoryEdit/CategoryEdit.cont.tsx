@@ -17,6 +17,7 @@ import { message } from '@/i18n/src/messages'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import type { CodebookType } from '@/types/responses/codebook'
 
+import { useCatalogueItems } from '../../hooks/useCatalogueItems'
 import { useCategory } from '../../hooks/useCategory'
 import { useCategoryDetail } from '../../hooks/useCategoryDetail'
 import { useCategoryList } from '../../hooks/useCategoryList'
@@ -36,6 +37,8 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
     uid
   })
 
+  const { refetch: refetchItems } = useCatalogueItems()
+
   const imageRef = useRef<ImageGalleryRef>(null)
 
   const { catalogueCategory } = useCategory()
@@ -50,6 +53,7 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
     onSuccess: data => {
       imageRef.current?.submit(data.uid, () => {
         refetch()
+        refetchItems()
         setOpen(false)
         toast.success(`Category ${data.name} saved`)
         setLoadingSubmit(false)
