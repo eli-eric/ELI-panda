@@ -83,7 +83,7 @@ export const AddSystemTypeButton: FC<Props> = ({ selectedGroup, refetch }) => {
             name="systemAttribute"
             codebook={CODEBOOK.SYSTEM_ATTRIBUTE}
             rounded="rounded-md"
-            label="System Attribute"
+            customLabel="System Attribute"
             emptyOption="Select System Attribute"
           />
         </Form>

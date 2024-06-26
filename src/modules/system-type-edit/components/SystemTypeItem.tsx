@@ -144,7 +144,7 @@ export const SystemTypeItem: FC<Props> = ({
             name="systemAttribute"
             codebook={CODEBOOK.SYSTEM_ATTRIBUTE}
             rounded="rounded-md"
-            label="System Attribute"
+            customLabel="System Attribute"
             disabled={!canEdit}
           />
         </Form>
