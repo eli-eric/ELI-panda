@@ -10,11 +10,13 @@ import toast from 'react-hot-toast'
 import { DeleteButton, EditButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/Input'
+import Listbox from '@/components/form/Listbox'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import axiosInstance from '@/core/axios/axiosInstance'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
+import { CODEBOOK } from '@/types/constants/codebook'
 import { BASE_URL } from '@/types/constants/common'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
@@ -135,6 +137,13 @@ export const SystemTypeItem: FC<Props> = ({
             name="mask"
             label="Mask"
             rounded="rounded-md"
+            disabled={!canEdit}
+          />
+          <Listbox
+            name="systemAttribute"
+            codebook={CODEBOOK.SYSTEM_ATTRIBUTE}
+            rounded="rounded-md"
+            label="System Attribute"
             disabled={!canEdit}
           />
         </Form>

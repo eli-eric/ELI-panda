@@ -7,10 +7,12 @@ import toast from 'react-hot-toast'
 import { PlusButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/Input'
+import Listbox from '@/components/form/Listbox'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import axiosInstance from '@/core/axios/axiosInstance'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
+import { CODEBOOK } from '@/types/constants/codebook'
 import { BASE_URL } from '@/types/constants/common'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
@@ -77,6 +79,13 @@ export const AddSystemTypeButton: FC<Props> = ({ selectedGroup, refetch }) => {
           <Input name="name" label="Name" rounded="rounded-md" />
           <Input name="code" label="Code" rounded="rounded-md" />
           <Input name="mask" label="Mask" rounded="rounded-md" />
+          <Listbox
+            name="systemAttribute"
+            codebook={CODEBOOK.SYSTEM_ATTRIBUTE}
+            rounded="rounded-md"
+            label="System Attribute"
+            emptyOption="Select System Attribute"
+          />
         </Form>
       </ModalComponent>
     </Fragment>
