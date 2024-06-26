@@ -112,15 +112,9 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
         }
       )
 
-      if (isSameTable) {
-        mutateSubsystem(
-          currentAction.oppositeSystems,
-          filterSubsystem,
-          formData
-        )
-      } else {
-        mutateSubsystem(currentAction.systems, filterSubsystem, formData)
-      }
+      mutateSubsystem(currentAction.oppositeSystems, filterSubsystem, formData)
+
+      mutateSubsystem(currentAction.systems, filterSubsystem, formData)
 
       toast.success(
         `System ${childSystem.name} was moved under ${parentSystem?.name}`
