@@ -25,8 +25,7 @@ export const useCatalogueItems = (tableId = 'catalogueItems') => {
     queryKey,
     queryFn: queryFetcher<CatalogueItemsResponse>('catalogueItems'),
     refetchOnMount: true,
-    placeholderData: keepPreviousData,
-    refetchInterval: 1000 * 60 * 5
+    placeholderData: keepPreviousData
   })
 
   useEffect(() => {
