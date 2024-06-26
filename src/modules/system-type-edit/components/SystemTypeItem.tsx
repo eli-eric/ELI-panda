@@ -47,7 +47,8 @@ export const SystemTypeItem: FC<Props> = ({
     defaultValues: {
       name: systemType.name,
       code: systemType.code,
-      mask: systemType.mask
+      mask: systemType.mask,
+      systemAttribute: systemType.systemAttribute
     }
   })
 
