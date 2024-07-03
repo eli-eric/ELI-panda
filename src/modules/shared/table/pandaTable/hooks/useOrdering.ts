@@ -12,17 +12,28 @@ export const useOrdering = (
     defaultColumnOrder
   )
 
+  // Ensure that defaultColumnOrder is always the first part of the column order
+  const enforceDefaultOrder = useCallback(
+    (columnOrder: ColumnOrderState): ColumnOrderState => {
+      const filteredOrder = columnOrder.filter(
+        col => !defaultColumnOrder.includes(col)
+      )
+      return [...defaultColumnOrder, ...filteredOrder]
+    },
+    [defaultColumnOrder]
+  )
+
   const setColumnOrder: Dispatch<SetStateAction<ColumnOrderState>> =
     useCallback(
       (columnOrder: SetStateAction<ColumnOrderState>) => {
         if (typeof columnOrder === 'function') {
           const updatedColumnOrder = columnOrder(storedOrder)
-          setStoredOrder(updatedColumnOrder)
+          setStoredOrder(enforceDefaultOrder(updatedColumnOrder))
         } else {
-          setStoredOrder(columnOrder)
+          setStoredOrder(enforceDefaultOrder(columnOrder))
         }
       },
-      [storedOrder, setStoredOrder]
+      [storedOrder, setStoredOrder, enforceDefaultOrder]
     )
 
   return [storedOrder, setColumnOrder]
