@@ -70,7 +70,7 @@ export const CatalogueTable = ({
       className={'relative overflow-y-scroll scrollbar-style text-sm'}
       settings={{
         enableQueryURL,
-        defaultColumnOrder: columns.map(column => column.id || ''),
+        defaultColumnOrder: ['miniImageUrl', 'name'],
         enableColumnHiding: tableId === 'catalogueItems',
         enableColumnReordering: tableId === 'catalogueItems',
         enableSorting: tableId === 'catalogueItems',

@@ -50,7 +50,6 @@ export const useCatalogueItemsColumns = ({
         enableColumnFilter: false,
         meta: {
           sticky: true,
-          enableReorder: false,
           className: 'pl-0 pr-0'
         },
         accessorFn: row => row?.miniImageUrl?.[0],
