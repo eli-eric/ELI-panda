@@ -34,9 +34,7 @@ export enum PATH {
   ADMIN = '/administration',
   PROFILE_GENERAL = '/profile/general',
   PROFILE_SECURITY = '/profile/security',
-  PROFILE_TEAM = '/profile/team',
-  HTMX_TEST_1 = '/api/htmx-test/htmx-test-1',
-  HTMX_TEST_2 = '/api/htmx-test/htmx-test-2'
+  PROFILE_TEAM = '/profile/team'
 }
 
 export const SUPPORT =
