@@ -56,15 +56,15 @@ export const authOptions = {
       const providerId = params?.account?.provider
 
       if (providerId === 'azure-ad-beamlines') {
-        names = params.user.name.split(' ')
+        let names = params.user.name.split(' ')
         let firstName = ''
         let lastName = ''
 
         if (names.length === 1) {
           firstName = names[0]
         } else if (names.length === 2) {
-          firstName = names[0]
-          lastName = names[1]
+          firstName = names[1]
+          lastName = names[0]
         }
 
         const user = await neo4GetOrCreateUser(
