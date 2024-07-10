@@ -56,7 +56,7 @@ export const authOptions = {
       const providerId = params?.account?.provider
 
       if (providerId === 'azure-ad-beamlines') {
-        names = params.account.name.split(' ')
+        let names = params.user.name.split(' ')
         let firstName = ''
         let lastName = ''
 
