@@ -5645,6 +5645,11 @@ hoist-non-react-statics@^3.3.0, hoist-non-react-statics@^3.3.1, hoist-non-react-
   dependencies:
     react-is "^16.7.0"
 
+htmx.org@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/htmx.org/-/htmx.org-2.0.0.tgz#709dc3de877d93da5df1ab28d22c5b8d29a907f1"
+  integrity sha512-N0r1VjrqeCpig0mTi2/sooDZBeQlp1RBohnWQ/ufqc7ICaI0yjs04fNGhawm6+/HWhJFlcXn8MqOjWI9QGG2lQ==
+
 http-errors@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/http-errors/-/http-errors-2.0.0.tgz#b7774a1486ef73cf7667ac9ae0858c012c57b9d3"

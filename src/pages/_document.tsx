@@ -4,6 +4,7 @@ class MyDocument extends Document {
     return (
       <Html lang="en" className="h-full">
         <Head title="Eli Panda - ">
+          <script src="https://unpkg.com/htmx.org" async></script>
           <script
             dangerouslySetInnerHTML={{
               __html: `
@@ -16,6 +17,13 @@ class MyDocument extends Document {
                     document.documentElement.classList.remove('dark');
                   }
                 })();
+
+                document.addEventListener('htmx:configRequest', function(event) {
+                  const token = localStorage.getItem('apiAccessToken');
+                  if (token) {
+                    event.detail.headers['Authorization'] = 'Bearer ' + token;
+                  }
+                });
               `
             }}
           ></script>

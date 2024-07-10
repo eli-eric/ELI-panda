@@ -104,6 +104,15 @@ const DashboardPage: NextPage = (): JSX.Element => {
           ))}
         </TileContainer>
         <ReleasesContainer />
+        <div id="htmxDiv">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            data-hx-get="http://localhost:50000/v1/systems/htmx-test-1"
+            data-hx-target="#htmxDiv"
+          >
+            HTMX test 1
+          </button>
+        </div>
       </main>
     </Fragment>
   )

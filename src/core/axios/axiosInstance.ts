@@ -7,6 +7,8 @@ axiosInstance.interceptors.request.use(async config => {
   const session = await getSession()
   if (session?.user) {
     config.headers['authorization'] = `Bearer ${session.user.apiAccessToken}`
+    //save apiAccessToken to local storage
+    localStorage.setItem('apiAccessToken', session.user.apiAccessToken)
   }
   return config
 })
