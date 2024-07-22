@@ -1,6 +1,6 @@
 import { Combobox as HUICombobox } from '@headlessui/react'
 import { useSession } from 'next-auth/react'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
@@ -66,17 +66,12 @@ const Combobox = ({
     [data, codebookResponseData]
   )
   const { getFormModal, setOpen } = useAddCodebookValue(options?.metadata)
-  const [hasAddPermission, setHasAddPermission] = useState(false)
   const { data: session } = useSession()
 
-  useEffect(() => {
-    if (showAddButton && options?.metadata?.roleEdit && session?.user?.roles) {
-      const hasTargetPermission = session.user.roles.includes(
-        options.metadata.roleEdit
-      )
-      setHasAddPermission(hasTargetPermission)
-    }
-  }, [options, session, showAddButton])
+  const hasAddPermission =
+    showAddButton &&
+    options?.metadata?.roleEdit &&
+    session?.user?.roles?.includes(options.metadata.roleEdit)
 
   const handleClear = () => {
     setQuery('')

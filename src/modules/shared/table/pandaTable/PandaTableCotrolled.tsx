@@ -1,5 +1,6 @@
 import type { Row, Table } from '@tanstack/react-table'
-import { createContext,Fragment } from 'react'
+import { useVirtualizer } from '@tanstack/react-virtual'
+import React, { createContext, Fragment } from 'react'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
@@ -13,7 +14,8 @@ import { TableSettings } from './components/TableSettings'
 import {
   defaultPropGetter,
   type GetRowPropsReturnType,
-  type PandaTableSettings} from './PandaTable'
+  type PandaTableSettings
+} from './PandaTable'
 
 type PandaTableContextType = {
   settings: PandaTableSettings<any>
@@ -53,6 +55,21 @@ export const PandaTableControlled = ({
     enablePagination = false
   } = settings || {}
 
+  const { rows } = table.getRowModel()
+
+  const parentRef = React.useRef<HTMLDivElement>(null)
+
+  const virtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 43,
+    overscan: 20
+  })
+
+  const totalSize = virtualizer.getTotalSize()
+
+  console.log('table render ', totalSize)
+
   return (
     <PandaTableContext.Provider
       value={{
@@ -70,20 +87,26 @@ export const PandaTableControlled = ({
         </div>
       )}
       {enableColumnHiding && <TableSettings table={table} />}
+
       <div
+        ref={parentRef}
         className={classNames(
           'h-full flex flex-col border-t border-gray-300 pb-4 text-sm',
           className
         )}
       >
-        <div className="inline-block min-w-full align-middle">
+        <div
+          className="inline-block min-w-full align-middle"
+          style={{ height: `${virtualizer.getTotalSize()}px` }}
+        >
           <table className="min-w-full divide-y divide-gray-300">
             <TableHead table={table} />
             {data && (
               <Fragment>
                 <TableBody
+                  virtualizer={virtualizer}
                   getRowProps={getRowProps}
-                  getRowModel={table.getRowModel}
+                  rows={rows}
                 />
                 {enableFooter && (
                   <TableFoot getFooterGroups={table.getFooterGroups} />

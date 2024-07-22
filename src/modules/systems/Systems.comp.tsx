@@ -13,7 +13,7 @@ interface Props {
   enableQueryURL?: boolean
   enableDragAndDrop?: boolean
   tableId?: string
-  dropSettings?: any
+  dropsettings?: any
   className?: string
   hideButtons?: boolean
   RightSearchBarElement?: () => JSX.Element
@@ -25,7 +25,7 @@ export const SystemsComponent: FC<Props> = ({
   enableQueryURL = true,
   enableDragAndDrop,
   tableId = 'systems',
-  dropSettings,
+  dropsettings,
   className,
   hideButtons = false,
   LeftSearchBarElement,
@@ -48,7 +48,7 @@ export const SystemsComponent: FC<Props> = ({
             getColorBySystemLevel(original?.systemLevel),
             getFontBySystemLevel(original?.systemLevel)
           ),
-          dropSettings
+          dropsettings
         })}
         settings={{
           enableSorting: true,

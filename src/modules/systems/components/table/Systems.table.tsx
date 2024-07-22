@@ -1,5 +1,5 @@
 import type { Row } from '@tanstack/react-table'
-import { Fragment, useCallback, useEffect } from 'react'
+import { Fragment, memo, useCallback, useEffect } from 'react'
 
 import { Pagination } from '@/modules/shared/table/Pagination'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
@@ -14,6 +14,8 @@ import type { SystemDetail } from '@/types/responses/systems'
 import { useSystems } from '../../hooks/useSystems'
 import { SearchBarButtons } from '../SearchBarButtons'
 import { useSystemsColumns } from './useSystemsColumns'
+
+const MemoizedSearchBar = memo(SearchBar)
 
 interface Props {
   tableId: string
@@ -69,11 +71,12 @@ export const SystemsTable = ({
         table.resetExpanded()
       }
     }
-  }, [collapseOnUnMount, table])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <Fragment>
-      <SearchBar
+      <MemoizedSearchBar
         tableId={tableId}
         useQuery={settings?.enableQueryURL}
         left={

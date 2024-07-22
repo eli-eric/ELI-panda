@@ -70,7 +70,7 @@ const SystemsMovingContainer = () => {
             hideButtons={false}
             enableDragAndDrop={true}
             className="border-r-4 border-gray-400"
-            dropSettings={{ onDropHandler, accept: 'system' }}
+            dropsettings={{ onDropHandler, accept: 'system' }}
             enableQueryURL={false}
             LeftSearchBarElement={() => (
               <SystemFilterButtonContainer
@@ -103,7 +103,7 @@ const SystemsMovingContainer = () => {
             tableId={tableIdRight}
             hideButtons={false}
             enableDragAndDrop={true}
-            dropSettings={{ onDropHandler: onDropHandler, accept: 'system' }}
+            dropsettings={{ onDropHandler: onDropHandler, accept: 'system' }}
             LeftSearchBarElement={() => (
               <SystemFilterButtonContainer
                 panelSlide="right"

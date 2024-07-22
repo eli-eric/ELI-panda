@@ -3,37 +3,17 @@ import {
   ChevronDownIcon,
   ChevronRightIcon
 } from '@heroicons/react/24/outline'
-import { useQueryClient } from '@tanstack/react-query'
 import type { CellContext } from '@tanstack/react-table'
 import classNames from 'classnames'
-import Link from 'next/link'
-import { Fragment } from 'react'
 import { useDrag } from 'react-dnd'
-import { toast } from 'react-hot-toast'
-import { useIntl } from 'react-intl'
 
-import {
-  TableActionsButtons,
-  TableButtonsWrapper,
-  TableDeleteButton,
-  TableEditButton,
-  TableOpenButton,
-  TablePlusButton
-} from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useSubmit } from '@/hooks/fetch/useSubmit'
-import useWarningModal from '@/hooks/useWarningModal'
-import { message } from '@/i18n/src/messages'
-import { filterSubsystem } from '@/modules/systems/utils'
-import { ShowSpareButton } from '@/modules/systemsSpareParts/components/ShowSpareButton'
-import { PATH } from '@/types/constants/paths'
 // eslint-disable-next-line
 import type { SystemDetail, SystemsResponse } from '@/types/responses/systems'
-import { createMessageValues } from '@/utils/formatters'
+import { truncateString } from '@/utils'
 import type { EndpointProps } from '@/utils/getEndpoints'
 
-const messages = message.systemsPage.systemDetail.deleteModal
+import { SystemActionButtons } from './SystemActionButtons'
 
 interface SystemNameCellProps extends CellContext<SystemDetail, any> {
   setUid?: (uid: string | null) => void
@@ -58,34 +38,6 @@ export const SystemNameCell = ({
 }: SystemNameCellProps) => {
   const { original } = row
   const { sparesIn, sparesOut } = original
-  const { system } = useEndpoint({ uid: original.uid })
-
-  const queryClient = useQueryClient()
-
-  const { formatMessage: fm } = useIntl()
-
-  const { submit } = useSubmit<string>({
-    endpoint: system,
-    method: 'delete',
-    onSuccess: () => {
-      toast.success(`System ${original.name} deleted`)
-      if (queryKey) {
-        queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
-          if (prev) {
-            return filterSubsystem(original.uid, prev)
-          }
-          return prev
-        })
-      }
-    },
-    onError: () => {
-      toast.error(`Error deleting system ${original.name}`)
-    }
-  })
-
-  const withWarningModal = useWarningModal(
-    fm({ id: messages.message }, createMessageValues({ name: original.name }))
-  )
 
   const [{ isDragging }, dragRef, previewRef] = useDrag({
     collect: monitor => ({
@@ -95,10 +47,12 @@ export const SystemNameCell = ({
     type: 'system'
   })
 
+  const value = truncateString(getValue(), 33)
+
   return (
     <div
       style={{
-        paddingLeft: `${row.depth * 2}rem`
+        paddingLeft: `${row.depth * 1.01}rem`
       }}
       className={classNames(isDragging && 'text-primary-500')}
     >
@@ -124,7 +78,12 @@ export const SystemNameCell = ({
             </button>
           )}
           <Tooltip
-            content={original.parentPath?.map(v => v.name).join(' > ')}
+            content={(original.parentPath
+              ? [...original.parentPath, { name: getValue() }]
+              : []
+            )
+              ?.map(v => v.name)
+              .join(' > ')}
             placement="top"
             className={
               original.parentPath && original.parentPath?.length > 0
@@ -141,77 +100,29 @@ export const SystemNameCell = ({
                     <ChevronRightIcon className="w-4 h-4" />
                   )}
                   <span className="pl-1">
-                    <span>{getValue()}</span>
+                    <span>{value}</span>
                   </span>
                 </div>
               ) : (
                 <div className="flex items-center">
                   <span className="pl-5">
-                    <span>{getValue()}</span>
+                    <span>{value}</span>
                   </span>
                 </div>
               )}
             </div>
           </Tooltip>
         </div>
-        {!hideButtons && (
-          <Fragment>
-            {enableDragAndDrop ? (
-              <TableButtonsWrapper>
-                <Link href={PATH.SYSTEM + '/' + original.uid} legacyBehavior>
-                  <a
-                    target={'_blank'}
-                    rel="noreferrer"
-                    className="flex items-center"
-                  >
-                    <Fragment>
-                      {canEdit ? <TableEditButton /> : <TableOpenButton />}
-                    </Fragment>
-                  </a>
-                </Link>
-                <TableDeleteButton
-                  onClick={() => {
-                    withWarningModal(submit)()
-                  }}
-                />
-                <Link
-                  href={{
-                    pathname: PATH.SYSTEM,
-                    query: { parentUid: original.uid }
-                  }}
-                  legacyBehavior
-                >
-                  <a
-                    target={'_blank'}
-                    rel="noreferrer"
-                    className="flex items-center"
-                  >
-                    <TablePlusButton />
-                  </a>
-                </Link>
-              </TableButtonsWrapper>
-            ) : (
-              <TableActionsButtons
-                onDeleteClick={() => {
-                  withWarningModal(submit)()
-                }}
-                addLink={{
-                  pathname: PATH.SYSTEM,
-                  query: { parentUid: original.uid }
-                }}
-                detailLink={PATH.SYSTEM + '/' + original.uid}
-                canEdit={canEdit}
-              >
-                <ShowSpareButton
-                  tableId={tableId}
-                  uid={original.uid}
-                  sparesIn={sparesIn}
-                  sparesOut={sparesOut}
-                />
-              </TableActionsButtons>
-            )}
-          </Fragment>
-        )}
+        <SystemActionButtons
+          original={original}
+          canEdit={canEdit}
+          hideButtons={hideButtons}
+          enableDragAndDrop={enableDragAndDrop}
+          sparesIn={sparesIn}
+          sparesOut={sparesOut}
+          queryKey={queryKey}
+          tableId={tableId}
+        />
       </div>
     </div>
   )
