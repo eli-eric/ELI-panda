@@ -54,7 +54,10 @@ export const SystemNameCell = ({
       style={{
         paddingLeft: `${row.depth * 1.01}rem`
       }}
-      className={classNames(isDragging && 'text-primary-500')}
+      className={classNames(
+        isDragging && 'text-primary-500',
+        'flex justify-center'
+      )}
     >
       <div className="flex items-center" ref={dragRef}>
         <div

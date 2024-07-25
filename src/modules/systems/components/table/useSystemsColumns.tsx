@@ -94,7 +94,7 @@ export const useSystemsColumns = ({
         header: 'System Level',
         accessorFn: row => row.systemLevel,
         id: 'systemLevel',
-        size: 170
+        size: 210
       },
 
       {

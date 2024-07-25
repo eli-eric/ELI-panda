@@ -1,5 +1,4 @@
 import type { Row } from '@tanstack/react-table'
-import type { VirtualItem, Virtualizer } from '@tanstack/react-virtual'
 import { useContext, useId, useState } from 'react'
 import { useDrop } from 'react-dnd'
 
@@ -13,18 +12,46 @@ import { RowCell } from './RowCell'
 interface Props {
   getRowProps: (row: Row<any>) => GetRowPropsReturnType
   row: Row<any>
-  virtualRow: VirtualItem<Element>
   index: number
-  virtualizer: Virtualizer<HTMLDivElement, Element>
 }
 
-export const TableRow = ({
-  getRowProps,
-  row,
-  index,
-  virtualRow,
-  virtualizer
-}: Props) => {
+export const TableRow = ({ getRowProps, row, index }: Props) => {
+  const { dropsettings } = getRowProps(row)
+
+  return (
+    <>
+      {dropsettings ? (
+        <TableRowOnDrop getRowProps={getRowProps} row={row} index={index} />
+      ) : (
+        <TableRowNoDrop getRowProps={getRowProps} row={row} index={index} />
+      )}
+    </>
+  )
+}
+
+const TableRowNoDrop = ({ getRowProps, row, index }: Props) => {
+  const { className, ...rest } = getRowProps(row)
+  const id = useId()
+  const { loading } = useContext(PandaTableContext)
+
+  return (
+    <tr
+      id={id}
+      {...rest}
+      className={classNames(
+        index % 2 === 0 ? 'dark:bg-gray-800' : 'bg-gray-100 dark:bg-gray-700',
+        'group hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 z-0',
+        className
+      )}
+    >
+      {row.getVisibleCells().map(cell => (
+        <RowCell key={cell.id} cell={cell} loading={loading} row={row} />
+      ))}
+    </tr>
+  )
+}
+
+const TableRowOnDrop = ({ getRowProps, row, index }: Props) => {
   const [isHoveringDrop, setIsHoveringDrop] = useState(false)
   const { dropsettings, className, ...rest } = getRowProps(row)
   const id = useId()
@@ -50,15 +77,9 @@ export const TableRow = ({
 
   return (
     <tr
-      data-index={virtualRow.index} //needed for dynamic row height measurement
-      ref={node => virtualizer.measureElement(node)} //measure dynamic row height
-      key={row.id}
+      ref={dropsettings && dropRef}
       id={id}
       {...rest}
-      style={{
-        height: `${virtualRow.size}px`,
-        transform: `translateY(${virtualRow.start - index * virtualRow.size}px)`
-      }}
       className={classNames(
         index % 2 === 0 ? 'dark:bg-gray-800' : 'bg-gray-100 dark:bg-gray-700',
         'group hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 z-0',
@@ -66,11 +87,9 @@ export const TableRow = ({
         isHoveringDrop ? 'bg-primary-200 dark:bg-primary-600' : ''
       )}
     >
-      <div ref={dropsettings && dropRef}>
-        {row.getVisibleCells().map(cell => (
-          <RowCell key={cell.id} cell={cell} loading={loading} row={row} />
-        ))}
-      </div>
+      {row.getVisibleCells().map(cell => (
+        <RowCell key={cell.id} cell={cell} loading={loading} row={row} />
+      ))}
     </tr>
   )
 }

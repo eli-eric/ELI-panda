@@ -2,10 +2,12 @@ import type { FC } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 
+import { FilterBadges } from '../shared/form/FilterBadges'
 import { PandaTablev2 } from '../shared/table/divTable/PandaTableV2'
 import { Pagination } from '../shared/table/Pagination'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import { SearchBar } from '../shared/table/SearchBar'
+import { SearchBarButtons } from './components/SearchBarButtons'
 import { useSystemsColumns } from './components/table/useSystemsColumns'
 import { useSystems } from './hooks/useSystems'
 
@@ -31,11 +33,19 @@ const SystemsContainer: FC = () => {
 
   return (
     <TableLayoutContainer>
-      <SearchBar tableId={tableId} useQuery={true} />
+      <SearchBar
+        tableId={tableId}
+        useQuery={true}
+        left={<SearchBarButtons />}
+        right={<FilterBadges tableId={'systems'} />}
+      />
       <PandaTablev2
         data={systems?.data || []}
         table={table}
         tableId={tableId}
+        settings={{
+          enableColumnHiding: true
+        }}
       />
       <Pagination
         tableId={tableId}

@@ -1,6 +1,5 @@
 import type { Row, Table } from '@tanstack/react-table'
-import { useVirtualizer } from '@tanstack/react-virtual'
-import React, { createContext, Fragment } from 'react'
+import { createContext, Fragment } from 'react'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
@@ -55,39 +54,6 @@ export const PandaTableControlled = ({
     enablePagination = false
   } = settings || {}
 
-  const { rows } = table.getRowModel()
-
-  const visibleColumns = table.getVisibleLeafColumns()
-
-  //The virtualizers need to know the scrollable container element
-  const tableContainerRef = React.useRef<HTMLDivElement>(null)
-
-  //we are using a slightly different virtualization strategy for columns (compared to virtual rows) in order to support dynamic row heights
-  const columnVirtualizer = useVirtualizer({
-    count: visibleColumns.length,
-    estimateSize: index => visibleColumns[index].getSize(), //estimate width of each column for accurate scrollbar dragging
-    getScrollElement: () => tableContainerRef.current,
-    horizontal: true,
-    overscan: 3 //how many columns to render on each side off screen each way (adjust this for performance)
-  })
-
-  //dynamic row height virtualization - alternatively you could use a simpler fixed row height strategy without the need for `measureElement`
-  const rowVirtualizer = useVirtualizer({
-    count: rows.length,
-    estimateSize: () => 43, //estimate row height for accurate scrollbar dragging
-    getScrollElement: () => tableContainerRef.current,
-    //measure dynamic row height, except in firefox because it measures table border height incorrectly
-    measureElement:
-      typeof window !== 'undefined' &&
-      navigator.userAgent.indexOf('Firefox') === -1
-        ? element => element?.getBoundingClientRect().height
-        : undefined,
-    overscan: 5
-  })
-
-  const virtualColumns = columnVirtualizer.getVirtualItems()
-  const virtualRows = rowVirtualizer.getVirtualItems()
-
   return (
     <PandaTableContext.Provider
       value={{
@@ -105,9 +71,7 @@ export const PandaTableControlled = ({
         </div>
       )}
       {enableColumnHiding && <TableSettings table={table} />}
-
       <div
-        ref={tableContainerRef}
         className={classNames(
           'h-full flex flex-col border-t border-gray-300 pb-4 text-sm',
           className
@@ -119,9 +83,8 @@ export const PandaTableControlled = ({
             {data && (
               <Fragment>
                 <TableBody
-                  virtualizer={rowVirtualizer}
                   getRowProps={getRowProps}
-                  rows={rows}
+                  getRowModel={table.getRowModel}
                 />
                 {enableFooter && (
                   <TableFoot getFooterGroups={table.getFooterGroups} />
