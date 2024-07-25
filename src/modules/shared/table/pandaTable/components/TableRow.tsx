@@ -1,5 +1,5 @@
 import type { Row } from '@tanstack/react-table'
-import type { VirtualItem } from '@tanstack/react-virtual'
+import type { VirtualItem, Virtualizer } from '@tanstack/react-virtual'
 import { useContext, useId, useState } from 'react'
 import { useDrop } from 'react-dnd'
 
@@ -15,9 +15,16 @@ interface Props {
   row: Row<any>
   virtualRow: VirtualItem<Element>
   index: number
+  virtualizer: Virtualizer<HTMLDivElement, Element>
 }
 
-export const TableRow = ({ getRowProps, row, index, virtualRow }: Props) => {
+export const TableRow = ({
+  getRowProps,
+  row,
+  index,
+  virtualRow,
+  virtualizer
+}: Props) => {
   const [isHoveringDrop, setIsHoveringDrop] = useState(false)
   const { dropsettings, className, ...rest } = getRowProps(row)
   const id = useId()
@@ -43,7 +50,9 @@ export const TableRow = ({ getRowProps, row, index, virtualRow }: Props) => {
 
   return (
     <tr
-      ref={dropsettings && dropRef}
+      data-index={virtualRow.index} //needed for dynamic row height measurement
+      ref={node => virtualizer.measureElement(node)} //measure dynamic row height
+      key={row.id}
       id={id}
       {...rest}
       style={{
@@ -57,9 +66,11 @@ export const TableRow = ({ getRowProps, row, index, virtualRow }: Props) => {
         isHoveringDrop ? 'bg-primary-200 dark:bg-primary-600' : ''
       )}
     >
-      {row.getVisibleCells().map(cell => (
-        <RowCell key={cell.id} cell={cell} loading={loading} row={row} />
-      ))}
+      <div ref={dropsettings && dropRef}>
+        {row.getVisibleCells().map(cell => (
+          <RowCell key={cell.id} cell={cell} loading={loading} row={row} />
+        ))}
+      </div>
     </tr>
   )
 }

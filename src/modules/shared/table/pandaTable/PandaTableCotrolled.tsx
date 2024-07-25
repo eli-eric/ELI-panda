@@ -57,18 +57,36 @@ export const PandaTableControlled = ({
 
   const { rows } = table.getRowModel()
 
-  const parentRef = React.useRef<HTMLDivElement>(null)
+  const visibleColumns = table.getVisibleLeafColumns()
 
-  const virtualizer = useVirtualizer({
-    count: rows.length,
-    getScrollElement: () => parentRef.current,
-    estimateSize: () => 43,
-    overscan: 20
+  //The virtualizers need to know the scrollable container element
+  const tableContainerRef = React.useRef<HTMLDivElement>(null)
+
+  //we are using a slightly different virtualization strategy for columns (compared to virtual rows) in order to support dynamic row heights
+  const columnVirtualizer = useVirtualizer({
+    count: visibleColumns.length,
+    estimateSize: index => visibleColumns[index].getSize(), //estimate width of each column for accurate scrollbar dragging
+    getScrollElement: () => tableContainerRef.current,
+    horizontal: true,
+    overscan: 3 //how many columns to render on each side off screen each way (adjust this for performance)
   })
 
-  const totalSize = virtualizer.getTotalSize()
+  //dynamic row height virtualization - alternatively you could use a simpler fixed row height strategy without the need for `measureElement`
+  const rowVirtualizer = useVirtualizer({
+    count: rows.length,
+    estimateSize: () => 43, //estimate row height for accurate scrollbar dragging
+    getScrollElement: () => tableContainerRef.current,
+    //measure dynamic row height, except in firefox because it measures table border height incorrectly
+    measureElement:
+      typeof window !== 'undefined' &&
+      navigator.userAgent.indexOf('Firefox') === -1
+        ? element => element?.getBoundingClientRect().height
+        : undefined,
+    overscan: 5
+  })
 
-  console.log('table render ', totalSize)
+  const virtualColumns = columnVirtualizer.getVirtualItems()
+  const virtualRows = rowVirtualizer.getVirtualItems()
 
   return (
     <PandaTableContext.Provider
@@ -89,22 +107,19 @@ export const PandaTableControlled = ({
       {enableColumnHiding && <TableSettings table={table} />}
 
       <div
-        ref={parentRef}
+        ref={tableContainerRef}
         className={classNames(
           'h-full flex flex-col border-t border-gray-300 pb-4 text-sm',
           className
         )}
       >
-        <div
-          className="inline-block min-w-full align-middle"
-          style={{ height: `${virtualizer.getTotalSize()}px` }}
-        >
+        <div className="inline-block min-w-full align-middle">
           <table className="min-w-full divide-y divide-gray-300">
             <TableHead table={table} />
             {data && (
               <Fragment>
                 <TableBody
-                  virtualizer={virtualizer}
+                  virtualizer={rowVirtualizer}
                   getRowProps={getRowProps}
                   rows={rows}
                 />

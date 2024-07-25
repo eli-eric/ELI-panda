@@ -15,7 +15,7 @@ import type { EndpointProps } from '@/utils/getEndpoints'
 
 import { SystemActionButtons } from './SystemActionButtons'
 
-interface SystemNameCellProps extends CellContext<SystemDetail, any> {
+interface SystemNameCellProps extends CellContext<any, any> {
   setUid?: (uid: string | null) => void
   canEdit?: boolean
   hideButtons?: boolean
