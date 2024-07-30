@@ -6,9 +6,10 @@ import React from 'react'
 import { classNames } from '@/utils'
 
 import { TableSettings } from '../pandaTable/components/TableSettings'
-import type {
-  GetRowPropsReturnType,
-  PandaTableSettings
+import {
+  defaultPropGetter,
+  type GetRowPropsReturnType,
+  type PandaTableSettings
 } from '../pandaTable/PandaTable'
 import styles from './RowCell.module.css'
 
@@ -30,7 +31,8 @@ export const PandaTablev2 = ({
   loading,
   settings,
   tableHeading,
-  tableId
+  tableId,
+  getRowProps = defaultPropGetter
 }: Props) => {
   const {
     enableFooter = false,
@@ -76,27 +78,27 @@ export const PandaTablev2 = ({
       {enableColumnHiding && <TableSettings table={table} />}
       <div
         ref={tableContainerRef}
-        className="overflow-auto relative max-h-screen text-sm"
+        className="overflow-auto relative max-h-screen text-sm border-t"
       >
         <table className="grid">
           <thead className="grid sticky top-0 z-10">
             {table.getHeaderGroups().map(headerGroup => (
               <tr className="flex w-full" key={headerGroup.id}>
-                {virtualPaddingLeft ? (
-                  //fake empty column to the left for virtualization scroll padding
-                  <th style={{ display: 'flex', width: virtualPaddingLeft }} />
-                ) : null}
-                {headerGroup.headers.map((header, index) => {
-                  const stickyCellsSize =
-                    table.getAllColumns().reduce((acc, col, index) => {
-                      if (index < index) {
+                {headerGroup.headers.map((header, headerIndex) => {
+                  const noHeader = header.column.columnDef.meta?.noHeader
+                  if (noHeader) {
+                    return null
+                  }
+                  const stickyCellsSize = table
+                    .getAllColumns()
+                    .reduce((acc, col, index) => {
+                      if (index < headerIndex) {
                         if (header.column.columnDef.meta?.sticky) {
                           return acc + col.getSize()
                         }
                       }
                       return acc
-                    }, 0) +
-                    1 * index
+                    }, 0)
                   return (
                     <th
                       className={classNames(
@@ -104,15 +106,17 @@ export const PandaTablev2 = ({
                         'whitespace-nowrap border-r outline-offset-0 dark:bg-gray-900 border-gray-400 bg-opacity-75 p-2 text-left font-semibold text-gray-900 dark:text-gray-200 backdrop-blur backdrop-filter',
                         header.column.columnDef.meta?.sticky
                           ? 'sticky top-0 text-ellipsis z-40 backdrop-blur-2xl backdrop-filter border-r'
-                          : 'sticky top-0 z-10'
+                          : 'sticky top-0 z-10',
+                        styles.cell
                       )}
                       key={header.id}
                       style={
                         {
                           width: header.getSize(),
                           '--left': header.column.columnDef.meta?.sticky
-                            ? `${index === 0 ? 0 : stickyCellsSize}px`
-                            : null
+                            ? `${headerIndex === 0 ? 0 : stickyCellsSize}px`
+                            : null,
+                          position: 'sticky'
                         } as React.CSSProperties
                       }
                     >
@@ -141,6 +145,7 @@ export const PandaTablev2 = ({
           >
             {virtualRows.map(virtualRow => {
               const row = rows[virtualRow.index] as Row<any>
+              const { className, ...rest } = getRowProps(row)
               const visibleCells = row.getVisibleCells()
 
               return (
@@ -151,7 +156,8 @@ export const PandaTablev2 = ({
                     virtualRow.index % 2 === 0
                       ? 'dark:bg-gray-800'
                       : 'bg-gray-100 dark:bg-gray-700',
-                    'group hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 z-0'
+                    'group hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 z-0',
+                    className
                   )}
                   key={row.id}
                   data-index={virtualRow.index} //needed for dynamic row height measurement
@@ -162,6 +168,7 @@ export const PandaTablev2 = ({
                     transform: `translateY(${virtualRow.start}px)`, //this should always be a `style` as it changes on scroll
                     width: '100%'
                   }}
+                  {...rest}
                 >
                   {virtualPaddingLeft ? (
                     //fake empty column to the left for virtualization scroll padding
@@ -169,17 +176,17 @@ export const PandaTablev2 = ({
                       style={{ display: 'flex', width: virtualPaddingLeft }}
                     />
                   ) : null}
-                  {visibleCells.map((cell, index) => {
-                    const stickyCellsSize =
-                      row.getAllCells().reduce((acc, cell, index) => {
-                        if (index < index) {
+                  {visibleCells.map((cell, i) => {
+                    const stickyCellsSize = row
+                      .getAllCells()
+                      .reduce((acc, cell, index) => {
+                        if (index < i) {
                           if (cell.column.columnDef.meta?.sticky) {
                             return acc + cell.column.getSize()
                           }
                         }
                         return acc
-                      }, 0) +
-                      1 * index
+                      }, 0)
                     return (
                       <td
                         key={cell.id}
@@ -187,7 +194,7 @@ export const PandaTablev2 = ({
                           {
                             width: cell.column.getSize(),
                             '--left': cell.column.columnDef.meta?.sticky
-                              ? `${index === 0 ? 0 : stickyCellsSize}px`
+                              ? `${i === 0 ? 0 : stickyCellsSize}px`
                               : undefined
                           } as React.CSSProperties
                         }

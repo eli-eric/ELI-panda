@@ -1,12 +1,17 @@
 import type { FC } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
+import { classNames } from '@/utils'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
 import { PandaTablev2 } from '../shared/table/divTable/PandaTableV2'
 import { Pagination } from '../shared/table/Pagination'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import { SearchBar } from '../shared/table/SearchBar'
+import {
+  getColorBySystemLevel,
+  getFontBySystemLevel
+} from '../systemItem/utils'
 import { SearchBarButtons } from './components/SearchBarButtons'
 import { useSystemsColumns } from './components/table/useSystemsColumns'
 import { useSystems } from './hooks/useSystems'
@@ -46,6 +51,14 @@ const SystemsContainer: FC = () => {
         settings={{
           enableColumnHiding: true
         }}
+        getRowProps={({ original }) => ({
+          className: classNames(
+            original?.physicalItem &&
+              'font-bold text-gray-700 dark:text-gray-200',
+            getColorBySystemLevel(original?.systemLevel),
+            getFontBySystemLevel(original?.systemLevel)
+          )
+        })}
       />
       <Pagination
         tableId={tableId}
