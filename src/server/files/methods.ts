@@ -45,7 +45,22 @@ const resizeImageAndUpload = async (prefix, name) => {
         .on('error', reject)
     })
 
+    if (originalFileMeta.metaData['content-type'] === 'image/webp') {
+      const newDir = `${prefix}image-small`
+      const newFileName = `${newDir}/${name.split('/')[name.split('/').length - 1]}`
+      await s3Client.putObject(
+        bucket,
+        newFileName,
+        buffer,
+        originalFileMeta.size,
+        originalFileMeta.metaData
+      )
+
+      return
+    }
+
     const image = await Jimp.read(buffer)
+
     image.resize(100, Jimp.AUTO)
     const outputBuffer = await image.getBufferAsync(Jimp.MIME_PNG)
 
