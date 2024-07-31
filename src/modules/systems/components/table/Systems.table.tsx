@@ -1,13 +1,13 @@
 import type { Row } from '@tanstack/react-table'
 import { Fragment, memo, useCallback, useEffect } from 'react'
 
+import { PandaTablev2 } from '@/modules/shared/table/divTable/PandaTableV2'
 import { Pagination } from '@/modules/shared/table/Pagination'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type {
   GetRowPropsReturnType,
   PandaTableSettings
 } from '@/modules/shared/table/pandaTable/PandaTable'
-import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 import type { SystemDetail } from '@/types/responses/systems'
 
@@ -89,7 +89,7 @@ export const SystemsTable = ({
         onChange={onChangeSearch}
         right={RightSearchBarElement && <RightSearchBarElement />}
       />
-      <PandaTableControlled
+      <PandaTablev2
         data={systems?.data}
         table={table}
         loading={loading || pending}

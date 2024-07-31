@@ -13,6 +13,7 @@ import s3Client, { config } from '../s3client'
 const { bucket } = config
 
 const saveUrlsToNode = async (uid: string, urls: string[], token) => {
+  console.log('urls', urls)
   const response = await fetch(`${BASE_URL}/files/node/${uid}/mini-image-url`, {
     method: 'POST',
     body: JSON.stringify({

@@ -3,8 +3,10 @@ import { flexRender } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import React from 'react'
 
+import PaginationComponent from '@/components/table/Pagination.comp'
 import { classNames } from '@/utils'
 
+import { TableFoot } from '../pandaTable/components/TableFoot'
 import { TableSettings } from '../pandaTable/components/TableSettings'
 import {
   defaultPropGetter,
@@ -31,6 +33,7 @@ export const PandaTablev2 = ({
   loading,
   settings,
   tableHeading,
+  className,
   tableId,
   getRowProps = defaultPropGetter
 }: Props) => {
@@ -78,7 +81,10 @@ export const PandaTablev2 = ({
       {enableColumnHiding && <TableSettings table={table} />}
       <div
         ref={tableContainerRef}
-        className="overflow-auto relative max-h-screen text-sm border-t"
+        className={classNames(
+          'overflow-auto relative h-full text-sm border-t',
+          className
+        )}
       >
         <table className="grid">
           <thead className="grid sticky top-0 z-10">
@@ -220,8 +226,25 @@ export const PandaTablev2 = ({
               )
             })}
           </tbody>
+          {enableFooter && (
+            <TableFoot getFooterGroups={table.getFooterGroups} />
+          )}
         </table>
       </div>
+      {enablePagination && (
+        <PaginationComponent
+          page={table.getState().pagination.pageIndex + 1}
+          pageSize={50}
+          pageNumbers={table.getPageCount()}
+          itemsTotalCount={data?.length}
+          nextPageHandler={() => {
+            table.nextPage()
+          }}
+          previousPageHandler={() => {
+            table.previousPage()
+          }}
+        />
+      )}
     </>
   )
 }
