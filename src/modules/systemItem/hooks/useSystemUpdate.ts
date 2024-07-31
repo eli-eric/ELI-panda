@@ -159,7 +159,6 @@ export const useSystemUpdate = (
       } else {
         //TODO: fix mutation in deeper hierarchy
         queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
-          console.log('prev', prev)
           if (prev) {
             return updateSystem(uid, body, prev)
           }
