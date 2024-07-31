@@ -37,7 +37,7 @@ export const UserForm = () => {
 
   const epmloyeeForm = useWatch({ control, name: 'employee' })
 
-  const { employee } = useEmployee(epmloyeeForm.uid)
+  const { employee } = useEmployee(epmloyeeForm?.uid)
 
   useEffect(() => {
     startTransition(() => {
