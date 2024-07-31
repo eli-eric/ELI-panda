@@ -32,7 +32,15 @@ export const useOrderSubmit = () => {
         }
       }
     },
-    onError: e => toast.error(e.message)
+    onError: e => {
+      if (e.response?.status === 409) {
+        toast.error(
+          'Order was updated by another user. Please refresh the page. And try again.'
+        )
+      } else {
+        toast.error(e.message)
+      }
+    }
   })
 
   return { loading, submit }
