@@ -15,6 +15,7 @@ export const SystemCodeButton = () => {
   }
 
   const handleClear = () => {
+    if (!uid) return
     clearSystemCode({
       where: {
         uid: uid
@@ -38,6 +39,7 @@ export const SystemCodeButton = () => {
       </Button>
       <Button
         primary
+        disabled={disabled}
         loading={loading || pending}
         onClick={handleClear}
         className="sm:mt-5 mt-6 w-full flex justify-center"
