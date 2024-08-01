@@ -12,7 +12,7 @@ import { navigateBack } from '@/utils'
 const useItemSubmit = (
   imageRef?: MutableRefObject<ImageGalleryRef | undefined>
 ) => {
-  const { query, replace } = useRouter()
+  const { query, replace, reload } = useRouter()
   const uid = query.uid as string | undefined
   const { catalogueItem } = useEndpoint({ uid: uid })
   const { refetch } = useCatalogueItems()
@@ -20,15 +20,18 @@ const useItemSubmit = (
   const { response, submit, loading } = useSubmit<string>({
     endpoint: catalogueItem,
     method: uid ? 'put' : 'post',
-    onSuccess: (responseUid, data, custom) => {
+    onSuccess: (responseUid, _, custom) => {
       imageRef?.current?.submit(responseUid, () => {
-        toast.success('Item saved')
         if (custom?.saveAndExit) {
           navigateBack()
           refetch()
         } else {
-          replace(PATH.CATALOGUE_ITEM + '/' + responseUid)
-          refetch()
+          if (!uid) {
+            replace(PATH.CATALOGUE_ITEM + '/' + responseUid)
+          } else {
+            reload()
+          }
+          toast.success('Item saved')
         }
       })
     },

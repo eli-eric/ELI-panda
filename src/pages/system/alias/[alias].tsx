@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import { Fragment } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
@@ -24,6 +25,7 @@ interface Props {
 const SystemAliasRedirectPage: NextPage = ({ alias }: Props) => {
   const intl = useIntl()
   const { push } = useRouter()
+  const { status } = useSession()
 
   const { loading, error, systemDetail } = useSystemDetail(alias, data => {
     const uid = data?.systems[0]?.uid
