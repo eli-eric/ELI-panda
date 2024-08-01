@@ -2,7 +2,6 @@ import { Listbox as HUIListbox } from '@headlessui/react'
 import { TableCellsIcon } from '@heroicons/react/24/outline'
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
-import { useIntl } from 'react-intl'
 
 import type { FieldProps } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -11,7 +10,6 @@ import { classNames } from '@/utils'
 import { FormXMarkIcon } from './components/FormXMarkIcon'
 
 export type ListboxPropsT = FieldProps & {
-  customLabel?: string
   onChange?: (value: any) => void
   className?: string
   defaultValue?: CodebookType[] | string | null
@@ -25,14 +23,12 @@ export const ModalSelect = ({
   label,
   disabled,
   className,
-  customLabel,
   placeholder = 'Click here to select',
   onChange,
   onClick,
   isFilter
 }: ListboxPropsT) => {
   const { control, setValue } = useFormContext()
-  const intl = useIntl()
 
   const handleChange = (value: any) => (value?.uid === '' ? null : value)
 

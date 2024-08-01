@@ -4,6 +4,7 @@ import type { CodebookType } from '@/types/responses/codebook'
 
 export interface OrderDetailFormType extends FieldValues {
   uid: string
+  lastUpdateTime?: string
   name: string
   orderNumber: number
   requestNumber: number
