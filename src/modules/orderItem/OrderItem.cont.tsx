@@ -27,7 +27,6 @@ const messages = message.ordersPage
 
 export const OrderItemContainer = () => {
   const { disabledEdit, uid, orderDetail } = useOrderDetail()
-  const { submit, loading } = useOrderSubmit()
   const { formatMessage: fm } = useIntl()
   const withWarningModal = useWarningModal(
     fm({ id: messages.ordelineMissingModal.message })
@@ -51,6 +50,7 @@ export const OrderItemContainer = () => {
       }
     }
   })
+  const { submit, loading } = useOrderSubmit(formMethods.reset)
 
   const onSubmit = (data: OrderDetailFormType) => {
     const orderLines = data.orderLines.map(orderLine => {
