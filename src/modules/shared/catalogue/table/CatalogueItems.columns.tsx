@@ -8,7 +8,6 @@ import { message } from '@/i18n/src/messages'
 import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
-import { CODEBOOK } from '@/types/constants/codebook'
 import { fallbackImage } from '@/types/constants/common'
 import type {
   CatalogueItem,
@@ -74,8 +73,7 @@ export const useCatalogueItemsColumns = ({
         ),
         size: 300,
         meta: {
-          sticky: hideButtons ? false : true,
-          filter: { type: 'string', enableColumnFilter: true }
+          sticky: hideButtons ? false : true
         }
       },
       {
@@ -83,48 +81,34 @@ export const useCatalogueItemsColumns = ({
         accessorFn: row => row.description,
         id: 'description',
         cell: DescriptionCell,
-        size: 90,
-        meta: { filter: { type: 'string', enableColumnFilter: true } }
+        size: 90
       },
       {
         header: intl.formatMessage({ id: messages.partNumber }),
         accessorFn: row => row.catalogueNumber,
-        id: 'partNumber',
-        meta: { filter: { type: 'string', enableColumnFilter: true } }
+        id: 'partNumber'
       },
       {
         header: intl.formatMessage({ id: messages.categoryName }),
         accessorFn: row => row.category,
         id: 'categoryName',
+        size: 200,
         cell: props => (
           <CategoryName {...props} setCategoryFilter={setCategoryFilter} />
-        ),
-        meta: {
-          filter: {
-            type: 'autoComplete',
-            enableColumnFilter: true,
-            codebookCode: CODEBOOK.CATALOGUE_CATEGORY
-          }
-        }
+        )
       },
       {
         header: intl.formatMessage({ id: messages.supplier }),
         accessorFn: row => row.supplier?.name,
         id: 'supplier',
-        meta: {
-          filter: {
-            type: 'autoComplete',
-            enableColumnFilter: true,
-            codebookCode: CODEBOOK.SUPPLIER
-          }
-        }
+        size: 200
       },
       {
         header: intl.formatMessage({ id: messages.supplierUrl }),
         accessorFn: row => row.manufacturerUrl,
         id: 'manufacturerUrl',
-        cell: ManufacturerUrl,
-        meta: { filter: { type: 'string', enableColumnFilter: true } }
+        size: 250,
+        cell: ManufacturerUrl
       }
     ]
 
@@ -149,14 +133,7 @@ export const useCatalogueItemsColumns = ({
             )
           },
           id: detail.property.name.replace(/\s/g, ''),
-          size: 120,
-          meta: {
-            className: classNames(
-              (detail?.property?.type.uid === PROPERTY_TYPE.NUMBER ||
-                detail?.property?.type.uid === PROPERTY_TYPE.RANGE) &&
-                'text-right'
-            )
-          },
+          size: 150,
           accessorFn: row =>
             row.details?.find(
               originDetail =>

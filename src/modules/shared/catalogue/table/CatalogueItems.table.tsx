@@ -1,15 +1,13 @@
-import type { Row, Table } from '@tanstack/react-table'
-import { createContext, useEffect, useRef } from 'react'
+import type { Row } from '@tanstack/react-table'
+import { createContext, useEffect } from 'react'
 
 import type { GetCategoriesQuery } from '@/types/gql/graphql'
-import type {
-  CatalogueItem,
-  CatalogueItemsResponse
-} from '@/types/responses/catalogue'
+import type { CatalogueItemsResponse } from '@/types/responses/catalogue'
 import type { CodebookType } from '@/types/responses/codebook'
 
+import { usePandaTable } from '../../table/pandaTable/hooks/usePandaTable'
 import type { GetRowPropsReturnType } from '../../table/pandaTable/PandaTable'
-import { PandaTable } from '../../table/pandaTable/PandaTable'
+import { PandaTablev2 } from '../../table/pandaTableV2/PandaTableV2'
 import { useCatalogueItemsColumns } from './CatalogueItems.columns'
 
 interface CatalogueTableProps {
@@ -46,23 +44,30 @@ export const CatalogueTable = ({
     catalogueItems,
     setCategoryFilter
   })
-  const catalogueTableRef = useRef<Table<CatalogueItem>>()
+
+  const table = usePandaTable({
+    tableId,
+    columns,
+    data: catalogueItems?.data,
+    settings: {
+      enableSorting: true,
+      enableQueryURL: true,
+      enableColumnHiding: true,
+      enableColumnReordering: true,
+      manualSorting: true
+    }
+  })
 
   useEffect(() => {
-    if (catalogueTableRef.current) {
-      catalogueTableRef.current.setColumnVisibility({
-        categoryName: categoryList?.length !== 0
-      })
-      catalogueTableRef.current.setColumnOrder(
-        catalogueTableRef.current.getAllLeafColumns().map(column => column.id)
-      )
-    }
-  }, [categoryList, columns])
+    table.setColumnVisibility({
+      categoryName: categoryList?.length !== 0
+    })
+    table.setColumnOrder(table.getAllLeafColumns().map(column => column.id))
+  }, [categoryList, columns, table])
 
   return (
-    <PandaTable
-      ref={catalogueTableRef}
-      columns={columns}
+    <PandaTablev2
+      table={table}
       loading={loading}
       tableId={tableId}
       getRowProps={getRowProps}

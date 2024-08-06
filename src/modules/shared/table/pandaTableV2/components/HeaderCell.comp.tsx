@@ -44,8 +44,10 @@ export const HeaderCellComponent: FC<Props> = ({
         isSticky
           ? 'sticky top-0 text-ellipsis z-40 backdrop-blur-2xl backdrop-filter border-r'
           : 'sticky top-0 z-10',
-        styles.cell
+        styles.cell,
+        header.column.columnDef.meta?.headerClassName
       )}
+      colSpan={header.colSpan}
       style={
         {
           width: header.getSize(),
@@ -56,7 +58,23 @@ export const HeaderCellComponent: FC<Props> = ({
         } as React.CSSProperties
       }
     >
-      {flexRender(header.column.columnDef.header, header.getContext())}
+      <div
+        className={classNames(
+          'h-full w-full',
+          header.column.getCanSort() ? 'cursor-pointer select-none' : ''
+        )}
+        onClick={
+          header.column.getCanSort()
+            ? header.column.getToggleSortingHandler()
+            : undefined
+        }
+      >
+        {flexRender(header.column.columnDef.header, header.getContext())}
+        {{
+          asc: ' 🔼',
+          desc: ' 🔽'
+        }[header.column.getIsSorted() as string] ?? null}
+      </div>
     </th>
   )
 }

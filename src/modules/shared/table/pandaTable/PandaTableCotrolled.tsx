@@ -70,7 +70,15 @@ export const PandaTableControlled = ({
           <span>{tableHeading}</span>
         </div>
       )}
-      {enableColumnHiding && <TableSettings table={table} />}
+      {enableColumnHiding && (
+        <TableSettings
+          getAllLeafColumns={table.getAllLeafColumns}
+          getIsAllColumnsVisible={table.getIsAllColumnsVisible}
+          getToggleAllColumnsVisibilityHandler={
+            table.getToggleAllColumnsVisibilityHandler
+          }
+        />
+      )}
       <div
         className={classNames(
           'h-full flex flex-col border-t border-gray-300 pb-4 text-sm',

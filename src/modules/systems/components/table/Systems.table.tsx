@@ -1,13 +1,13 @@
 import type { Row } from '@tanstack/react-table'
 import { Fragment, memo, useCallback, useEffect } from 'react'
 
-import { PandaTablev2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { Pagination } from '@/modules/shared/table/Pagination'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type {
   GetRowPropsReturnType,
   PandaTableSettings
 } from '@/modules/shared/table/pandaTable/PandaTable'
+import { PandaTablev2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 import type { SystemDetail } from '@/types/responses/systems'
 
