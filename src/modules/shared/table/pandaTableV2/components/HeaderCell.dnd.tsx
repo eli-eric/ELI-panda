@@ -79,7 +79,8 @@ export const HeaderCellDNDComponent: FC<Props> = ({
     <th
       ref={dropRef}
       className={classNames(
-        'whitespace-nowrap border-r outline-offset-0 dark:bg-gray-900 border-gray-400 bg-opacity-75 p-2 text-left font-semibold text-gray-900 dark:text-gray-200 backdrop-blur backdrop-filter',
+        'border-r outline-offset-0 border-gray-400 ',
+        'whitespace-nowrap p-2 text-left font-semibold text-gray-900 dark:text-gray-200',
         isSticky
           ? 'sticky top-0 text-ellipsis z-40 backdrop-blur-2xl backdrop-filter border-r'
           : 'sticky top-0 z-10',

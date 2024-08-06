@@ -73,7 +73,7 @@ export const PandaTablev2 = ({
       enablePagination={enablePagination}
       itemsTotalCount={data?.length}
     >
-      <thead className="sticky top-0 z-10">
+      <thead className="sticky top-0 z-10 dark:bg-gray-900  bg-opacity-75  backdrop-blur backdrop-filter">
         {table.getHeaderGroups().map(headerGroup => (
           <tr className="flex w-full" key={headerGroup.id}>
             {headerGroup.headers.map((header, headerIndex) => {

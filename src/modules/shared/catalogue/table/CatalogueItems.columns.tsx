@@ -48,8 +48,7 @@ export const useCatalogueItemsColumns = ({
         header: '',
         enableColumnFilter: false,
         meta: {
-          sticky: true,
-          className: 'pl-0 pr-0'
+          sticky: true
         },
         accessorFn: row => row?.miniImageUrl?.[0],
         cell: ({ getValue }) => {
