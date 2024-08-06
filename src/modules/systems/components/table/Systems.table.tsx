@@ -7,7 +7,7 @@ import type {
   GetRowPropsReturnType,
   PandaTableSettings
 } from '@/modules/shared/table/pandaTable/PandaTable'
-import { PandaTablev2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
+import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
 import type { SystemDetail } from '@/types/responses/systems'
 
@@ -89,7 +89,7 @@ export const SystemsTable = ({
         onChange={onChangeSearch}
         right={RightSearchBarElement && <RightSearchBarElement />}
       />
-      <PandaTablev2
+      <PandaTableV2
         data={systems?.data}
         table={table}
         loading={loading || pending}

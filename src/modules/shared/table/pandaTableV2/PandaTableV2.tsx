@@ -25,7 +25,7 @@ interface Props {
   table: Table<any>
 }
 
-export const PandaTablev2 = ({
+export const PandaTableV2 = ({
   data,
   table,
   loading = false,

@@ -4,7 +4,7 @@ import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { classNames } from '@/utils'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
-import { PandaTablev2 } from '../shared/table/pandaTableV2/PandaTableV2'
+import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
 import { Pagination } from '../shared/table/Pagination'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import { SearchBar } from '../shared/table/SearchBar'
@@ -44,7 +44,7 @@ const SystemsContainer: FC = () => {
         left={<SearchBarButtons />}
         right={<FilterBadges tableId={'systems'} />}
       />
-      <PandaTablev2
+      <PandaTableV2
         data={systems?.data || []}
         table={table}
         tableId={tableId}

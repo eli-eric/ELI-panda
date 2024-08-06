@@ -7,7 +7,7 @@ import type { CodebookType } from '@/types/responses/codebook'
 
 import { usePandaTable } from '../../table/pandaTable/hooks/usePandaTable'
 import type { GetRowPropsReturnType } from '../../table/pandaTable/PandaTable'
-import { PandaTablev2 } from '../../table/pandaTableV2/PandaTableV2'
+import { PandaTableV2 } from '../../table/pandaTableV2/PandaTableV2'
 import { useCatalogueItemsColumns } from './CatalogueItems.columns'
 
 interface CatalogueTableProps {
@@ -66,7 +66,7 @@ export const CatalogueTable = ({
   }, [categoryList, columns, table])
 
   return (
-    <PandaTablev2
+    <PandaTableV2
       table={table}
       loading={loading}
       tableId={tableId}
