@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useQueryState } from 'next-usequerystate'
 import type { FC } from 'react'
-import { Fragment, startTransition, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { v4 as uuid } from 'uuid'
 
@@ -33,7 +33,14 @@ export const CodebooksContainer: FC<Props> = () => {
     useQueryState('selectedCodebook')
 
   const formMethods = useForm<{ codebook?: { uid: CODEBOOK; name: CODEBOOK } }>(
-    {}
+    {
+      defaultValues: {
+        codebook: {
+          uid: selectedCodebookQuery as CODEBOOK,
+          name: selectedCodebookQuery as CODEBOOK
+        }
+      }
+    }
   )
 
   const { queryKey } = useCodebook(selectedCodebookQuery as CODEBOOK, {
@@ -41,8 +48,6 @@ export const CodebooksContainer: FC<Props> = () => {
   })
 
   const queryClient = useQueryClient()
-
-  const { setValue } = formMethods
 
   const { data, isLoading } = useQuery({
     queryKey: ['codebooks', { query: { editable: 'true' } }],
@@ -56,17 +61,6 @@ export const CodebooksContainer: FC<Props> = () => {
       rounded: 'rounded-md'
     }
   })
-
-  useEffect(() => {
-    startTransition(() => {
-      if (selectedCodebookQuery)
-        setValue('codebook', {
-          uid: selectedCodebookQuery as CODEBOOK,
-          name: selectedCodebookQuery as CODEBOOK
-        })
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const handleAddNewCodebookValue = () => {
     const id = uuid()

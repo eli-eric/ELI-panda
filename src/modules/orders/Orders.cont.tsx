@@ -3,7 +3,8 @@ import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { classNames } from '@/utils'
 
 import { Pagination } from '../shared/table/Pagination'
-import { PandaTable } from '../shared/table/pandaTable/PandaTable'
+import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
+import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '../shared/table/SearchBar'
 import { HeaderButtons } from './components/HeaderButtons'
 import { useOrderColumns } from './components/OrderColumns'
@@ -15,6 +16,18 @@ const OrdersContainer = () => {
   const { orderList, loading, error } = useOrders()
   const columns = useOrderColumns({ isReadOnly: false })
 
+  const table = usePandaTable({
+    tableId: 'orders',
+    columns,
+    data: orderList?.data,
+    settings: {
+      enableSorting: true,
+      enableQueryURL: true,
+      enableColumnHiding: true,
+      enableColumnReordering: true
+    }
+  })
+
   return (
     <TableLayoutContainer>
       <SearchBar
@@ -23,8 +36,9 @@ const OrdersContainer = () => {
         right={<OrdersFilter />}
       />
       {!error && (
-        <PandaTable
+        <PandaTableV2
           {...{
+            table,
             settings: {
               enableQueryURL: true,
               enableSorting: true,

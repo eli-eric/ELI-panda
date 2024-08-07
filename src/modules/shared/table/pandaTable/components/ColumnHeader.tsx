@@ -74,6 +74,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
           return acc + col.getSize()
         }
       }
+
       return acc
     }, 0) +
     1 * headerIndex

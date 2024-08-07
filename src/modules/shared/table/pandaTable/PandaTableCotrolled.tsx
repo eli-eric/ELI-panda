@@ -1,5 +1,5 @@
 import type { Row, Table } from '@tanstack/react-table'
-import { createContext,Fragment } from 'react'
+import { createContext, Fragment } from 'react'
 
 import EmptyResults from '@/components/empty-section/EmptyResults'
 import ProgressBarComponent from '@/components/progress-bar.comp'
@@ -13,7 +13,8 @@ import { TableSettings } from './components/TableSettings'
 import {
   defaultPropGetter,
   type GetRowPropsReturnType,
-  type PandaTableSettings} from './PandaTable'
+  type PandaTableSettings
+} from './PandaTable'
 
 type PandaTableContextType = {
   settings: PandaTableSettings<any>
@@ -69,7 +70,15 @@ export const PandaTableControlled = ({
           <span>{tableHeading}</span>
         </div>
       )}
-      {enableColumnHiding && <TableSettings table={table} />}
+      {enableColumnHiding && (
+        <TableSettings
+          getAllLeafColumns={table.getAllLeafColumns}
+          getIsAllColumnsVisible={table.getIsAllColumnsVisible}
+          getToggleAllColumnsVisibilityHandler={
+            table.getToggleAllColumnsVisibilityHandler
+          }
+        />
+      )}
       <div
         className={classNames(
           'h-full flex flex-col border-t border-gray-300 pb-4 text-sm',

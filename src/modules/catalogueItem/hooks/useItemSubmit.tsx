@@ -31,8 +31,8 @@ const useItemSubmit = (
           } else {
             reload()
           }
-          toast.success('Item saved')
         }
+        toast.success('Item saved')
       })
     },
     onError: () => {
