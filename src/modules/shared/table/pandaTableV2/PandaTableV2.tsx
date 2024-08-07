@@ -12,6 +12,7 @@ import { HeaderCellComponent } from './components/HeaderCell.comp'
 import { HeaderCellDNDComponent } from './components/HeaderCell.dnd'
 import { TableContainer } from './components/Table.cont'
 import { TableRowComponent } from './components/TableRow.comp'
+import { TableRowDNDComponent } from './components/TableRow.dnd'
 
 interface Props {
   settings?: PandaTableSettings<any>
@@ -111,7 +112,17 @@ export const PandaTableV2 = ({
       >
         {virtualRows.map(virtualRow => {
           const row = rows[virtualRow.index] as Row<any>
-          return (
+          return getRowProps(row).dropsettings ? (
+            <TableRowDNDComponent
+              key={virtualRow.key}
+              row={row}
+              getRowProps={getRowProps}
+              virtualRow={virtualRow}
+              measureElement={rowVirtualizer.measureElement}
+              loading={loading}
+              tableId={tableId}
+            />
+          ) : (
             <TableRowComponent
               key={virtualRow.key}
               row={row}
