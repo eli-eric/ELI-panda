@@ -67,14 +67,17 @@ export const ColumnHeader: FC<ColumnHeader> = ({
     item: () => column,
     type: 'column'
   })
-  const stickyCellsSize = table.getAllColumns().reduce((acc, col, index) => {
-    if (index < headerIndex) {
-      if (header.column.columnDef.meta?.sticky) {
-        return acc + col.getSize() + 45
+  const stickyCellsSize =
+    table.getAllColumns().reduce((acc, col, index) => {
+      if (index < headerIndex) {
+        if (header.column.columnDef.meta?.sticky) {
+          return acc + col.getSize()
+        }
       }
-    }
-    return acc
-  }, 0)
+
+      return acc
+    }, 0) +
+    1 * headerIndex
 
   return (
     <th
@@ -86,11 +89,11 @@ export const ColumnHeader: FC<ColumnHeader> = ({
           width: header.getSize(),
           '--left': header.column.columnDef.meta?.sticky
             ? `${headerIndex === 0 ? 0 : stickyCellsSize}px`
-            : undefined
+            : null
         } as React.CSSProperties
       }
       className={classNames(
-        'whitespace-nowrap border-r border-b dark:bg-gray-900 border-gray-400 bg-opacity-75 py-2 pl-3 pr-3 text-left font-semibold text-gray-900 dark:text-gray-200 backdrop-blur backdrop-filter sm:pl-6 sm:pr-5',
+        'whitespace-nowrap border-r outline-offset-0 dark:bg-gray-900 border-gray-400 bg-opacity-75 py-2 text-left font-semibold text-gray-900 dark:text-gray-200 backdrop-blur backdrop-filter',
         header.column.columnDef.meta?.sticky
           ? 'sticky top-0 text-ellipsis z-40 backdrop-blur-2xl backdrop-filter border-r'
           : 'sticky top-0 z-10',
@@ -101,7 +104,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
         ref={previewRef}
         {...{
           className: classNames(
-            'flex items-center justify-between',
+            'flex items-center justify-between pl-3',
             header.column.columnDef.meta?.headerClassName
           ),
           style: {
@@ -127,11 +130,15 @@ export const ColumnHeader: FC<ColumnHeader> = ({
               desc: ' 🔽'
             }[header.column.getIsSorted() as string] ?? null}
           </div>
-          {enableColumnReordering && (
-            <button ref={dragRef} className="ml-2">
-              <ArrowsRightLeftIcon className="w-6 h-6" />
-            </button>
-          )}
+          {enableColumnReordering &&
+            header?.column?.columnDef?.meta?.enableReorder !== false && (
+              <button
+                ref={dragRef}
+                className={classNames(header.getContext() && 'pl-2')}
+              >
+                <ArrowsRightLeftIcon className="w-6 h-6" />
+              </button>
+            )}
         </div>
         {HeaderElement}
       </div>

@@ -96,6 +96,7 @@ export const useSystemCreate = (
             },
             deleted: false,
             description: systemForm.description,
+            attribute: connectN(systemForm?.attribute?.uid),
             isCritical: systemForm.isCritical,
             responsibleTeam: connectN(systemForm?.responsibleTeam?.uid),
             minimalSpareParstCount: !systemForm.minimalSpareParstCount

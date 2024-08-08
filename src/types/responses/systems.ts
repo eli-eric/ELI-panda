@@ -22,6 +22,7 @@ export type SystemDetail = {
   systemCode?: string
   systemAlias?: string
   systemType?: CodebookType
+  attribute?: CodebookType
   zone?: CodebookType
   location?: CodebookType
   description?: string
@@ -32,6 +33,7 @@ export type SystemDetail = {
   hasSubsystems?: boolean
   subSystems?: SystemDetail[]
   statistics?: SystemStatistics
+  miniImageUrl?: string[]
 }
 
 export type PhysicalItem = {

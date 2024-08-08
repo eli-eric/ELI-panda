@@ -148,6 +148,10 @@ export const SystemDetailFragment = gql(`
       name
     }
     systemLevel
+    attribute {
+      uid
+      name
+    }
     description
     subSystems {
       uid

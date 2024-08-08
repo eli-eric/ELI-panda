@@ -73,3 +73,14 @@ export const navigateBack = (navigateExit?: () => void) => {
     window.close()
   }
 }
+
+export function truncateString(str?: string, length = 30) {
+  if (!str) {
+    return ''
+  }
+  if (str.length > length) {
+    return str.slice(0, length) + '...'
+  } else {
+    return str
+  }
+}

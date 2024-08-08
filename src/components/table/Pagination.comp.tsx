@@ -40,7 +40,7 @@ export default function PaginationComponent({
     <nav
       data-testid="paging"
       id="paging"
-      className="flex items-center justify-between border-t border-gray-200 bg-white dark:bg-gray-900 px-3 py-2 sm:px-6"
+      className="flex items-center justify-between border-t border-gray-200 bg-white dark:bg-gray-900 px-3 py-2 sm:px-6 sticky bottom-0 z-10"
       aria-label="Pagination"
     >
       <div className="hidden sm:block pr-2">

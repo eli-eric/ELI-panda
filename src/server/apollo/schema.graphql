@@ -135,6 +135,7 @@ type CatalogueCategory @authentication {
   uid: ID! @id
   code: String!
   name: String!
+  miniImageUrl: String
   catalogueCategoriesHasSubcategory: [CatalogueCategory!]!
     @relationship(type: "HAS_SUBCATEGORY", direction: IN)
   catalogueItemsBelongsToCategory: [CatalogueItem!]!
@@ -225,6 +226,11 @@ type Supplier @authentication {
   name: String!
 }
 
+type SystemAttribute @authentication {
+  uid: ID! @id
+  name: String!
+}
+
 type SchemaMigration @authentication {
   dirty: Boolean!
   ts: Date!
@@ -274,6 +280,8 @@ type System
   systemType: SystemType @relationship(type: "HAS_SYSTEM_TYPE", direction: OUT)
   responsible: Employee @relationship(type: "HAS_RESPONSIBLE", direction: OUT)
   operators: [Employee!]! @relationship(type: "HAS_OPERATOR", direction: OUT)
+  attribute: SystemAttribute
+    @relationship(type: "HAS_SYSTEM_ATTRIBUTE", direction: OUT)
   maintainedBy: [Employee!]!
     @relationship(type: "IS_MAINTAINED_BY", direction: OUT)
   systemLevel: SystemLevel

@@ -16,7 +16,8 @@ export enum FILE_TYPE {
   CATALOGUE = 'catalogue',
   ORDER = 'order',
   ROOM_CARD = 'room-card',
-  ITEM = 'item'
+  ITEM = 'item',
+  CATEGORY = 'catalogue-category'
 }
 
 export type FileLinkResponse = {

@@ -28,6 +28,9 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
     setDisconnectOperator
   } = useSystemItemStore()
   const { control } = useFormContext()
+
+  const systemLevel = useWatch({ control, name: 'systemLevel' })
+
   const maintainedBy = useWatch({ control, name: 'maintainedBy' })
   const operators = useWatch({ control, name: 'operators' })
   const systemLevels = Object.values(SystemLevel).map(level => level)
@@ -70,6 +73,11 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
             <Col sm={1} md={1} lg={2}>
               <SystemCodeButton />
             </Col>
+            {systemLevel === SystemLevel.KeySystems && (
+              <Col sm={3} md={6} lg={8}>
+                <Listbox {...fields.attribute} />
+              </Col>
+            )}
           </Col>
         </Grid>
       </Card>
@@ -81,28 +89,32 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
           <Col sm={3} md={6}>
             <Combobox {...fields.responsible} />
           </Col>
-          <Col sm={3} md={6}>
-            <EmployeeTable
-              name="operators"
-              className="w-full"
-              tableId="systemOperators"
-              data={operators}
-              header={'Authorized Operators'}
-              setNewEmployee={setNewOperator}
-              setDisconnectEmployee={setDisconnectOperator}
-            />
-          </Col>
-          <Col sm={3} md={6}>
-            <EmployeeTable
-              name="maintainedBy"
-              className="w-full"
-              tableId="systemMainteners"
-              data={maintainedBy}
-              header={'Maintained By'}
-              setNewEmployee={setNewMaintainedBy}
-              setDisconnectEmployee={setDisconnectMaintainedBy}
-            />
-          </Col>
+          {systemLevel !== SystemLevel.SubsystemsAndParts && (
+            <Fragment>
+              <Col sm={3} md={6}>
+                <EmployeeTable
+                  name="operators"
+                  className="w-full"
+                  tableId="systemOperators"
+                  data={operators}
+                  header={'Authorized Operators'}
+                  setNewEmployee={setNewOperator}
+                  setDisconnectEmployee={setDisconnectOperator}
+                />
+              </Col>
+              <Col sm={3} md={6}>
+                <EmployeeTable
+                  name="maintainedBy"
+                  className="w-full"
+                  tableId="systemMainteners"
+                  data={maintainedBy}
+                  header={'Maintained By'}
+                  setNewEmployee={setNewMaintainedBy}
+                  setDisconnectEmployee={setDisconnectMaintainedBy}
+                />
+              </Col>
+            </Fragment>
+          )}
         </Grid>
       </Card>
       <Card className="border-t border-gray-400 ">
