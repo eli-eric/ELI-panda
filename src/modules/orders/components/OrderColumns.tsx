@@ -52,12 +52,14 @@ export const useOrderColumns = ({ isReadOnly }: Props) => {
         header: intl.formatMessage({ id: messages.orderNumber }),
         accessorKey: 'orderNumber',
         id: 'orderNumber',
+        size: 200,
         meta: { className: 'text-right' }
       },
       {
         header: intl.formatMessage({ id: messages.requestNumber }),
         accessorKey: 'requestNumber',
         id: 'requestNumber',
+        size: 200,
         meta: { className: 'text-right' }
       },
       {
@@ -85,7 +87,7 @@ export const useOrderColumns = ({ isReadOnly }: Props) => {
       {
         header: intl.formatMessage({ id: messages.procurementResponsible }),
         accessorKey: 'procurementResponsible',
-        size: 200
+        size: 230
       },
       {
         header: intl.formatMessage({ id: messages.requestor }),
@@ -117,6 +119,7 @@ export const useOrderColumns = ({ isReadOnly }: Props) => {
             year="numeric"
           />
         ),
+        size: 200,
         id: 'lastUpdateTime',
         meta: { className: 'text-right' }
       },
