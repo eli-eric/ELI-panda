@@ -19,7 +19,7 @@ const saveUrlsToNode = async (
   nodeLabel
 ) => {
   const response = await fetch(
-    `${BASE_URL}/files/node/${uid}/mini-image-url&nodeLabel=${nodeLabel}`,
+    `${BASE_URL}/files/node/${uid}/mini-image-url?&nodeLabel=${nodeLabel}`,
     {
       method: 'POST',
       body: JSON.stringify({
