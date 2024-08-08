@@ -54,7 +54,8 @@ export const CatalogueTable = ({
       enableQueryURL: true,
       enableColumnHiding: true,
       enableColumnReordering: true,
-      manualSorting: true
+      manualSorting: true,
+      defaultColumnOrder: ['miniImageUrl', 'name']
     }
   })
 
