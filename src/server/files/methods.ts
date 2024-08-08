@@ -12,18 +12,25 @@ import s3Client, { config } from '../s3client'
 
 const { bucket } = config
 
-const saveUrlsToNode = async (uid: string, urls: string[], token) => {
-  console.log('urls', urls)
-  const response = await fetch(`${BASE_URL}/files/node/${uid}/mini-image-url`, {
-    method: 'POST',
-    body: JSON.stringify({
-      url: urls.length ? urls : null
-    }),
-    headers: {
-      Authorization: 'Bearer ' + token?.apiAccessToken,
-      'Content-Type': 'application/json'
+const saveUrlsToNode = async (
+  uid: string,
+  urls: string[],
+  token,
+  nodeLabel
+) => {
+  const response = await fetch(
+    `${BASE_URL}/files/node/${uid}/mini-image-url&nodeLabel=${nodeLabel}`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        url: urls.length ? urls : null
+      }),
+      headers: {
+        Authorization: 'Bearer ' + token?.apiAccessToken,
+        'Content-Type': 'application/json'
+      }
     }
-  })
+  )
 
   if (!response.ok) {
     throw new Error('Failed to save urls to node')
@@ -121,7 +128,14 @@ const handleMiniImages = async (config: {
 
   const token = await getToken({ req })
 
-  await saveUrlsToNode(uid, urls, token)
+  const prefixLabel = prefix.split('/')[1]
+
+  const nodeLabel = {
+    catalogue: 'CatalogueItem',
+    'catalogue-category': 'CatalogueCategory',
+    system: 'System'
+  }
+  await saveUrlsToNode(uid, urls, token, nodeLabel[prefixLabel])
 }
 
 export const getPathInfo = (req: NextApiRequest, res: NextApiResponse) => {
