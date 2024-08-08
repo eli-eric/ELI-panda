@@ -2,7 +2,7 @@ import Document, { Head, Html, Main, NextScript } from 'next/document'
 class MyDocument extends Document {
   render() {
     return (
-      <Html lang="en" className="h-full">
+      <Html lang="en">
         <Head title="Eli Panda - ">
           <script
             dangerouslySetInnerHTML={{
@@ -20,7 +20,7 @@ class MyDocument extends Document {
             }}
           ></script>
         </Head>
-        <body className="h-full bg-white  dark:bg-gray-800">
+        <body className=" bg-white  dark:bg-gray-800">
           <Main />
           <NextScript />
         </body>

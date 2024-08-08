@@ -1,98 +1,44 @@
-import { TrashIcon } from '@heroicons/react/24/outline'
-import { useQuery } from '@tanstack/react-query'
-import Image from 'next/image'
-import { startTransition, useCallback, useEffect, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
 import { useFormContext } from 'react-hook-form'
 
-import { Button } from '@/components/Buttons'
-import ImagePlaceHolder from '@/components/form/ImagePlaceHolder'
 import { Input } from '@/components/form/Input'
+import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
-import { queryFetcher } from '@/utils/fetcher'
+import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
+import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 
 import type { CategoryFormType } from '../../types'
 
-interface FormImageProps {
-  image: string
-  onDelete: () => void
-}
-
-const FormImage = ({ image, onDelete }: FormImageProps) => (
-  <div className="mt-1 flex-col w-full justify-center  border-gray-300 ">
-    <Image width={300} height={300} alt="" src={image} />
-    <Button
-      type="button"
-      onClick={onDelete}
-      className="w-full justify-center"
-      rounded="rounded-b-md"
-    >
-      <TrashIcon
-        className="h-4 w-4
-
- text-red-700"
-        aria-hidden="true"
-      />
-    </Button>
-  </div>
-)
-
-const Main = ({ uid }: { uid?: string }) => {
-  const { data: categoryImage } = useQuery({
-    queryKey: ['categoryImage', { uid }],
-    queryFn: queryFetcher<string>('catalogueCategoryImage'),
-    initialData: ''
-  })
-
-  const [showImageUid, setShowImage] = useState<boolean>(!!uid)
-  const { watch, setValue } = useFormContext<CategoryFormType>()
-  const onDrop = useCallback(
-    files => {
-      const reader = new FileReader()
-      reader.readAsDataURL(files[0])
-      reader.onload = () => setValue('image', reader.result as string)
-    },
-    [setValue]
-  )
-  const { getRootProps, getInputProps } = useDropzone({
-    maxFiles: 1,
-    accept: { 'image/*': [] },
-    onDrop
-  })
-
-  const image = watch('image')
-  const name = watch('name')
-
-  useEffect(() => {
-    startTransition(() => {
-      const codeValue = name ? name.replace(/\s+/g, '-').toLowerCase() : ''
-      setValue('code', codeValue)
-    })
-  }, [name, setValue, categoryImage, image])
+const Main = ({
+  uid,
+  imageRef
+}: {
+  uid?: string
+  imageRef?: React.MutableRefObject<ImageGalleryRef | null>
+}) => {
+  const { setValue } = useFormContext<CategoryFormType>()
 
   return (
     <div className="grid grid-cols-4 pb-5">
-      {image === 'deleted' || (!categoryImage && !image) ? (
-        <ImagePlaceHolder
-          getInputProps={getInputProps}
-          getRootProps={getRootProps}
-        />
-      ) : (
-        <FormImage
-          image={image ? image : categoryImage}
-          onDelete={() => {
-            if (showImageUid && !!categoryImage) {
-              setShowImage(false)
-              setValue('image', 'deleted')
-            } else {
-              setValue('image', '')
-            }
-          }}
-        />
-      )}
+      <ImageGallery
+        ref={imageRef}
+        allowMultipleImages={false}
+        hasEditRole={true}
+        config={{
+          itemCategory: FILE_TYPE.CATEGORY,
+          itemId: String(uid)
+        }}
+      />
       <div className="flex flex-col col-span-3 flex-grow ml-10">
         <div className="mt-1">
-          <Input name="name" label="Name" rounded="rounded-md" />
+          <Input
+            name="name"
+            label="Name"
+            rounded="rounded-md"
+            onChange={v => {
+              const codeValue = v ? v.replace(/\s+/g, '-').toLowerCase() : ''
+              setValue('code', codeValue)
+            }}
+          />
         </div>
         <div className="mt-1">
           <Input

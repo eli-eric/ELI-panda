@@ -16,13 +16,49 @@ interface Props {
 }
 
 export const TableRow = ({ getRowProps, row, index }: Props) => {
+  const { dropsettings } = getRowProps(row)
+
+  return (
+    <>
+      {dropsettings ? (
+        <TableRowOnDrop getRowProps={getRowProps} row={row} index={index} />
+      ) : (
+        <TableRowNoDrop getRowProps={getRowProps} row={row} index={index} />
+      )}
+    </>
+  )
+}
+
+const TableRowNoDrop = ({ getRowProps, row, index }: Props) => {
+  const { className, ...rest } = getRowProps(row)
+  const id = useId()
+  const { loading } = useContext(PandaTableContext)
+
+  return (
+    <tr
+      id={id}
+      {...rest}
+      className={classNames(
+        index % 2 === 0 ? 'dark:bg-gray-800' : 'bg-gray-100 dark:bg-gray-700',
+        'group hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 z-0',
+        className
+      )}
+    >
+      {row.getVisibleCells().map(cell => (
+        <RowCell key={cell.id} cell={cell} loading={loading} row={row} />
+      ))}
+    </tr>
+  )
+}
+
+const TableRowOnDrop = ({ getRowProps, row, index }: Props) => {
   const [isHoveringDrop, setIsHoveringDrop] = useState(false)
-  const { dropSettings, className, ...rest } = getRowProps(row)
+  const { dropsettings, className, ...rest } = getRowProps(row)
   const id = useId()
   const { tableId, loading } = useContext(PandaTableContext)
 
   const [, dropRef] = useDrop<SystemDetail>({
-    accept: dropSettings?.accept || 'table-row',
+    accept: dropsettings?.accept || 'table-row',
     hover: (item, monitor) => {
       if (monitor.isOver({ shallow: true }) && item.uid !== row.original.uid) {
         setIsHoveringDrop(true)
@@ -34,14 +70,14 @@ export const TableRow = ({ getRowProps, row, index }: Props) => {
       }, 50)
     },
     drop: item => {
-      dropSettings &&
-        dropSettings.onDropHandler(item, { tableId, ...row.original })
+      dropsettings &&
+        dropsettings.onDropHandler(item, { tableId, ...row.original })
     }
   })
 
   return (
     <tr
-      ref={dropSettings && dropRef}
+      ref={dropsettings && dropRef}
       id={id}
       {...rest}
       className={classNames(

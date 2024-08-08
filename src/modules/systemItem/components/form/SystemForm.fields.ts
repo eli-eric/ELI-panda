@@ -18,6 +18,12 @@ const useSystemEditFormFields = () => {
       rounded: 'rounded-md',
       disabled: disabledEdit
     },
+    attribute: {
+      name: 'attribute',
+      label: form.attribute.label,
+      rounded: 'rounded-md',
+      codebook: CODEBOOK.SYSTEM_ATTRIBUTE
+    },
     isCritical: {
       name: 'isCritical',
       label: form.isCritical.label,

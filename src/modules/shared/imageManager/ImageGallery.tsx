@@ -27,6 +27,7 @@ type GalleryProps = {
   hasEditRole?: boolean
   className?: string
   setValue?: UseFormSetValue<any>
+  allowMultipleImages?: boolean
 }
 
 export const ImageGallery = forwardRef(
@@ -35,6 +36,7 @@ export const ImageGallery = forwardRef(
       hasEditRole,
       className,
       setValue,
+      allowMultipleImages = true,
       config: { itemCategory, itemId, fileCategory = 'image', additionalParams }
     }: GalleryProps,
     ref
@@ -123,6 +125,7 @@ export const ImageGallery = forwardRef(
                 <Fragment>
                   <ImageTabList
                     data={data}
+                    allowMultipleImages={allowMultipleImages}
                     canEdit={hasEditRole}
                     open={open}
                     getInputProps={getInputProps}
@@ -130,7 +133,11 @@ export const ImageGallery = forwardRef(
                     withWarnModal={withWarnModal}
                     selectedIndex={selectedIndex}
                   />
-                  <ImageTabPanels data={data} getRootProps={getRootProps} />
+                  <ImageTabPanels
+                    data={data}
+                    getRootProps={getRootProps}
+                    open={open}
+                  />
                 </Fragment>
               )}
             </Tab.Group>

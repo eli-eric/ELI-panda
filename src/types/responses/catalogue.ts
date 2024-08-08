@@ -9,6 +9,7 @@ export interface CatalogueItem {
   supplier?: CodebookType
   manufacturerUrl: string
   catalogueNumber: string
+  miniImageUrl?: string[]
   details?: CatalogueItemDetail[]
 }
 

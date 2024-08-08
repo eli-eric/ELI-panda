@@ -1,15 +1,20 @@
 import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import type { Table } from '@tanstack/react-table'
 import type { FC } from 'react'
 
 import { classNames } from '@/utils'
 
 interface Props {
-  table: Table<any>
+  getIsAllColumnsVisible: () => boolean
+  getToggleAllColumnsVisibilityHandler: () => (e: unknown) => void
+  getAllLeafColumns: () => any[]
 }
 
-export const TableSettings: FC<Props> = ({ table }) => (
+export const TableSettings: FC<Props> = ({
+  getAllLeafColumns,
+  getIsAllColumnsVisible,
+  getToggleAllColumnsVisibilityHandler
+}) => (
   <Disclosure>
     {({ open }) => (
       <div id="column-hiding">
@@ -33,11 +38,11 @@ export const TableSettings: FC<Props> = ({ table }) => (
                     {...{
                       type: 'checkbox',
                       id: 'toggle-all',
-                      checked: table.getIsAllColumnsVisible(),
-                      onChange: table.getToggleAllColumnsVisibilityHandler(),
+                      checked: getIsAllColumnsVisible(),
+                      onChange: getToggleAllColumnsVisibilityHandler(),
                       className: classNames(
                         'focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 dark:text-primary-600 rounded',
-                        !table.getIsAllColumnsVisible() && 'dark:bg-gray-700'
+                        !getIsAllColumnsVisible() && 'dark:bg-gray-700'
                       )
                     }}
                   />
@@ -52,7 +57,7 @@ export const TableSettings: FC<Props> = ({ table }) => (
             </li>
             <li>
               <div className="px-4 py-1 flex flex-wrap">
-                {table.getAllLeafColumns().map(column => (
+                {getAllLeafColumns().map(column => (
                   <div
                     key={column.id}
                     className="flex items-center space-x-2 mr-4"

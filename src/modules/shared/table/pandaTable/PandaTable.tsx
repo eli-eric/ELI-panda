@@ -3,7 +3,8 @@ import type {
   ColumnDef,
   FilterFn,
   Row,
-  Table as ReactTable} from '@tanstack/react-table'
+  Table as ReactTable
+} from '@tanstack/react-table'
 import {
   getCoreRowModel,
   getExpandedRowModel,
@@ -51,7 +52,7 @@ export type PandaTableSettings<T> = {
 
 export interface GetRowPropsReturnType
   extends React.HTMLAttributes<HTMLTableRowElement> {
-  dropSettings?: { accept: string; onDropHandler: (from: any, to: any) => void }
+  dropsettings?: { accept: string; onDropHandler: (from: any, to: any) => void }
 }
 
 interface Props<T extends object> {
@@ -94,7 +95,10 @@ export const PandaTable = forwardRef<ReactTable<any> | undefined, Props<any>>(
     } = settings || {}
 
     const [columnVisibility, setColumnVisibility] = useVisibility(tableId)
-    const [columnOrder, setColumnOrder] = useOrdering(tableId)
+    const [columnOrder, setColumnOrder] = useOrdering(
+      tableId,
+      settings?.defaultColumnOrder
+    )
     const [sorting, setSorting] = useSorting(tableId, enableQueryURL)
     const [expanded, setExpanded] = useExpanding(tableId)
     const [columnFilters, setColumnFilters] = useFilters(

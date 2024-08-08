@@ -1,13 +1,16 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
+import Image from 'next/image'
 import { Fragment, useMemo } from 'react'
 
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import usePermission from '@/hooks/usePermission'
+import { fallbackImage } from '@/types/constants/common'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import type { SystemDetail } from '@/types/responses/systems'
+import { truncateString } from '@/utils'
 
 import { useSubsystems } from '../../hooks/useSubsystems'
 import { useSystems } from '../../hooks/useSystems'
@@ -34,20 +37,42 @@ export const useSystemsColumns = ({
   const columns = useMemo(
     (): ColumnDef<SystemDetail, any>[] => [
       {
+        id: 'miniImageUrl',
+        size: 57,
+        header: '',
+        meta: {
+          sticky: true
+        },
+        accessorFn: row => row?.miniImageUrl?.[0],
+        cell: ({ getValue }) => {
+          return (
+            <Image
+              src={getValue() || fallbackImage.url}
+              alt="img"
+              width={50}
+              height={50}
+              className="rounded-full w-8 h-8 min-w-8 object-cover justify-center"
+            />
+          )
+        }
+      },
+      {
         id: 'icon',
-        size: 20,
+        size: 41,
+        meta: { sticky: true },
         cell: ({ row: { original } }) => (
-          <IconCell
-            itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE}
-          />
-        ),
-        meta: { sticky: true }
+          <div>
+            <IconCell
+              itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE}
+            />
+          </div>
+        )
       },
       {
         header: 'Name',
         accessorFn: row => row.name,
         id: 'name',
-        size: tableId === 'systemsItem' ? 400 : 440,
+        size: tableId === 'systemsItem' ? 400 : 480,
         meta:
           tableId === 'systemsItem'
             ? { sticky: true }
@@ -69,7 +94,7 @@ export const useSystemsColumns = ({
         header: 'System Level',
         accessorFn: row => row.systemLevel,
         id: 'systemLevel',
-        size: 170
+        size: 210
       },
 
       {
@@ -88,6 +113,12 @@ export const useSystemsColumns = ({
         header: 'System Type',
         accessorFn: row => row.systemType?.name,
         id: 'systemType',
+        size: 240
+      },
+      {
+        header: 'Attribute',
+        accessorFn: row => row.attribute?.name,
+        id: 'attribute',
         size: 150
       },
       {
@@ -159,7 +190,12 @@ export const useSystemsColumns = ({
         header: 'Item Usage',
         accessorFn: row => row.physicalItem?.itemUsage?.name,
         id: 'itemUsage',
-        size: 150
+        cell: ({ getValue }) => (
+          <Tooltip content={getValue()}>
+            <div>{truncateString(getValue(), 15)}</div>
+          </Tooltip>
+        ),
+        size: 170
       },
       {
         header: 'Price',
@@ -194,14 +230,18 @@ export const useSystemsColumns = ({
         id: 'catalogueName',
         size: 300,
         cell: ({ getValue, row: { original } }) => (
-          <NewTabLink
-            href={
-              PATH.CATALOGUE_ITEM +
-              '/' +
-              original.physicalItem?.catalogueItem?.uid
-            }
-            value={getValue()}
-          />
+          <Tooltip content={getValue()}>
+            <div>
+              <NewTabLink
+                href={
+                  PATH.CATALOGUE_ITEM +
+                  '/' +
+                  original.physicalItem?.catalogueItem?.uid
+                }
+                value={truncateString(getValue(), 30)}
+              />
+            </div>
+          </Tooltip>
         )
       },
       {
@@ -229,6 +269,11 @@ export const useSystemsColumns = ({
         header: 'Catalogue Category',
         accessorFn: row => row.physicalItem?.catalogueItem?.category?.name,
         id: 'catalogueCategory',
+        cell: ({ getValue }) => (
+          <Tooltip content={getValue()}>
+            <div>{truncateString(getValue(), 17)}</div>
+          </Tooltip>
+        ),
         size: 170
       },
       {

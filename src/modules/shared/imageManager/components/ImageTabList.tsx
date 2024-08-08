@@ -1,7 +1,9 @@
 import { Tab } from '@headlessui/react'
+import Image from 'next/image'
 import type { InputHTMLAttributes } from 'react'
 
 import { DeleteButton, PlusButton } from '@/components/Buttons'
+import { classNames } from '@/utils'
 
 import type { FileItem } from '../../fileManager/types'
 
@@ -16,6 +18,7 @@ type ImageTabListProps = {
     message: string
   ) => (arg: any) => void
   selectedIndex: number
+  allowMultipleImages: boolean
 }
 
 export const ImageTabList = ({
@@ -25,14 +28,15 @@ export const ImageTabList = ({
   getInputProps,
   handleDelete,
   withWarnModal,
-  selectedIndex
+  selectedIndex,
+  allowMultipleImages
 }: ImageTabListProps) => (
   <Tab.List
     className={`rounded-t-md border border-gray-300 flex gap-1 justify-between`}
   >
-    {canEdit && (
+    <input {...getInputProps()} />
+    {canEdit && allowMultipleImages && (
       <div>
-        <input {...getInputProps()} />
         <PlusButton
           type="button"
           onClick={open}
@@ -40,31 +44,42 @@ export const ImageTabList = ({
         />
       </div>
     )}
-    <div className="flex flex-wrap w-full justify-center">
-      {data?.map(obj => (
-        <Tab key={obj.id}>
-          {({ selected }) => (
-            <span className={`px-1 ${selected && 'text-orange-600'} text-sm`}>
-              &bull;
-            </span>
-          )}
-        </Tab>
-      ))}
-    </div>
-    {canEdit && (
-      <div>
-        <DeleteButton
-          type="button"
-          onClick={() =>
-            withWarnModal(
-              handleDelete,
-              `Are you sure you want to delete ${(data ?? [])[selectedIndex]?.name}?`
-            )((data ?? [])[selectedIndex])
-          }
-          className="flex border-0 border-l rounded-none rounded-tr-md"
-          disabled={!data || data.length === 0}
-        />
+    {allowMultipleImages && (
+      <div className="flex flex-wrap w-full justify-center space-x-1">
+        {data?.map(obj => (
+          <Tab key={obj.id}>
+            {({ selected }) => (
+              <Image
+                className={classNames(
+                  'rounded-full size-5',
+                  selected && 'border-2 border-primary-500 size-6'
+                )}
+                src={obj.url}
+                alt={obj.name}
+                width={20}
+                height={20}
+              />
+            )}
+          </Tab>
+        ))}
       </div>
+    )}
+    {canEdit && (
+      <DeleteButton
+        type="button"
+        onClick={() =>
+          withWarnModal(
+            handleDelete,
+            `Are you sure you want to delete ${(data ?? [])[selectedIndex]?.name}?`
+          )((data ?? [])[selectedIndex])
+        }
+        className={classNames(
+          'flex border-0 border-l rounded-none rounded-tr-md',
+          !allowMultipleImages &&
+            'min-w-full items-center justify-center rounded-tl-md border-l-0'
+        )}
+        disabled={!data || data.length === 0}
+      />
     )}
   </Tab.List>
 )
