@@ -11,7 +11,7 @@ import { FilterBadges } from '../shared/form/FilterBadges'
 import { Pagination } from '../shared/table/Pagination'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
-import { PandaTableControlled } from '../shared/table/pandaTable/PandaTableCotrolled'
+import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '../shared/table/SearchBar'
 import {
   getColorBySystemLevel,
@@ -143,7 +143,7 @@ export const SystemsSparePartsContainer = () => {
           right={<BadgesMemoized tableId={tableId1} />}
           onChange={() => table.resetExpanded()}
         />
-        <PandaTableControlled
+        <PandaTableV2
           data={sysetms1.systems?.data}
           tableHeading="Spare Parts"
           tableId={tableId1}
@@ -198,7 +198,7 @@ export const SystemsSparePartsContainer = () => {
           }
           onChange={() => table.resetExpanded()}
         />
-        <PandaTableControlled
+        <PandaTableV2
           data={sysetms2.systems?.data}
           tableHeading="For System"
           tableId={tableId2}

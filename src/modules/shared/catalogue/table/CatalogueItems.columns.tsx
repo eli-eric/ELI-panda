@@ -8,7 +8,7 @@ import { message } from '@/i18n/src/messages'
 import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
-import { fallbackImage } from '@/types/constants/common'
+import { FALLBACK_IMAGE } from '@/types/constants/common'
 import type {
   CatalogueItem,
   CatalogueItemsResponse
@@ -54,7 +54,7 @@ export const useCatalogueItemsColumns = ({
         cell: ({ getValue }) => {
           return (
             <Image
-              src={getValue() || fallbackImage.url}
+              src={getValue() || FALLBACK_IMAGE.url}
               alt="img"
               width={50}
               height={50}

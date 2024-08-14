@@ -84,7 +84,7 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
       }
       const currentAction =
         systemActions[parentSystem?.tableId as keyof typeof systemActions]
-      const isSameTable = parentSystem?.tableId === childSystem?.tableId
+      //const isSameTable = parentSystem?.tableId === childSystem?.tableId
 
       if (!currentAction || !childSystem) {
         return

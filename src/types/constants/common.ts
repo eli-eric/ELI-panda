@@ -21,9 +21,9 @@ export const APP_BASE_URL =
         ? 'http://localhost:5001'
         : 'https://panda.eli-laser.eu'
 
-export const fallbackImage: FileItem = {
+export const FALLBACK_IMAGE: FileItem = {
   id: 'fallback',
   name: 'fallback image',
-  url: '/no-image.png',
+  url: '/logo192.png',
   size: 0
 }

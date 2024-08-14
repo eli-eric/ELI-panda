@@ -69,29 +69,29 @@ export const useSystemsSparePartsColumns = ({
     (): ColumnDef<SystemDetail, any>[] => [
       {
         id: 'icons',
-        size: 20,
+        size: 41,
         meta: { sticky: true },
         cell: ({ row: { original } }) => (
-          <IconCell
-            itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE}
-          />
+          <div>
+            <IconCell
+              itemUsageUid={original.physicalItem?.itemUsage?.uid as ITEM_USAGE}
+            />
+          </div>
         )
       },
       {
         id: 'select',
         header: 'sel',
-        size: 40,
+        size: 41,
         meta: { sticky: true },
         enableHiding: false,
         cell: ({ row }) => (
-          <div className="px-1">
-            <IndeterminateCheckbox
-              row={row}
-              checked={row.getIsSelected()}
-              disabled={!row.getCanSelect()}
-              setSelectedUids={setSelectedUids}
-            />
-          </div>
+          <IndeterminateCheckbox
+            row={row}
+            checked={row.getIsSelected()}
+            disabled={!row.getCanSelect()}
+            setSelectedUids={setSelectedUids}
+          />
         )
       },
       {
