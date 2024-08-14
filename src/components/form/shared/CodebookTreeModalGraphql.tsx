@@ -1,5 +1,5 @@
 import { type ColumnDef } from '@tanstack/react-table'
-import { startTransition, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
@@ -100,10 +100,8 @@ export const CodebookTreeModalGraphql = ({
   const { toggleAllRowsExpanded } = table
 
   useEffect(() => {
-    startTransition(() => {
-      if (filter && filter?.length > 0) toggleAllRowsExpanded(true)
-      if (!filter || filter.length === 0) toggleAllRowsExpanded(false)
-    })
+    if (filter && filter?.length > 0) toggleAllRowsExpanded(true)
+    if (!filter || filter.length === 0) toggleAllRowsExpanded(false)
     return () => {
       setItem(undefined)
     }
