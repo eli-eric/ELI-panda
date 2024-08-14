@@ -6,7 +6,7 @@ import { Fragment, useMemo } from 'react'
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import usePermission from '@/hooks/usePermission'
-import { fallbackImage } from '@/types/constants/common'
+import { FALLBACK_IMAGE } from '@/types/constants/common'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 import type { SystemDetail } from '@/types/responses/systems'
@@ -47,7 +47,7 @@ export const useSystemsColumns = ({
         cell: ({ getValue }) => {
           return (
             <Image
-              src={getValue() || fallbackImage.url}
+              src={getValue() || FALLBACK_IMAGE.url}
               alt="img"
               width={50}
               height={50}

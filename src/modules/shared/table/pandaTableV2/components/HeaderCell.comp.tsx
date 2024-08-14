@@ -40,10 +40,8 @@ export const HeaderCellComponent: FC<Props> = ({
   return (
     <th
       className={classNames(
-        'whitespace-nowrap flex border-r outline-offset-0 dark:bg-gray-900 border-gray-400 bg-opacity-75 p-2 text-left font-semibold text-gray-900 dark:text-gray-200 backdrop-blur backdrop-filter',
-        isSticky
-          ? 'sticky top-0 text-ellipsis z-40 backdrop-blur-2xl backdrop-filter border-r'
-          : 'sticky top-0 z-10',
+        'whitespace-nowrap flex border-r outline-offset-0 bg-white dark:bg-gray-900 border-gray-400 bg-opacity-95 p-2 text-left font-semibold text-gray-900 dark:text-gray-200 backdrop-blur backdrop-filter',
+        isSticky ? 'sticky top-0 t z-40 ' : 'sticky top-0 z-10',
         styles.cell,
         header.column.columnDef.meta?.headerClassName
       )}
