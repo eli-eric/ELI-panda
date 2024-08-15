@@ -1,6 +1,8 @@
 import type { Table } from '@tanstack/react-table'
 import { type FC, Fragment, type PropsWithChildren } from 'react'
 
+import EmptyResults from '@/components/empty-section/EmptyResults'
+import ProgressBarComponent from '@/components/progress-bar.comp'
 import PaginationComponent from '@/components/table/Pagination.comp'
 import { classNames } from '@/utils'
 
@@ -8,6 +10,8 @@ import { TableSettings } from '../../pandaTable/components/TableSettings'
 
 interface Props {
   table: Table<any>
+  isLoading?: boolean
+  isEmpty?: boolean
   tableHeading?: string
   className?: string
   enableColumnHiding?: boolean
@@ -24,7 +28,9 @@ export const TableContainer: FC<PropsWithChildren<Props>> = ({
   enableColumnHiding,
   tableContainerRef,
   enablePagination,
-  itemsTotalCount
+  itemsTotalCount,
+  isLoading,
+  isEmpty
 }) => {
   return (
     <Fragment>
@@ -53,6 +59,8 @@ export const TableContainer: FC<PropsWithChildren<Props>> = ({
         )}
       >
         <table className="min-w-full">{children}</table>
+        {isLoading && <ProgressBarComponent />}
+        {isEmpty && <EmptyResults />}
       </div>
       {enablePagination && (
         <PaginationComponent
