@@ -40,60 +40,66 @@ export const useOrderColumns = ({ isReadOnly }: Props) => {
   const columns = useMemo(
     (): ColumnDef<Order, any>[] => [
       {
+        id: 'name',
         header: intl.formatMessage({ id: messages.name }),
         accessorKey: 'name',
-        id: 'name',
         cell: isReadOnly ? LinkNameCell : NameCell,
         size: 300,
         meta: { sticky: true, className: 'sm:pr-8' },
         enableHiding: false
       },
       {
+        id: 'orderNumber',
         header: intl.formatMessage({ id: messages.orderNumber }),
         accessorKey: 'orderNumber',
-        id: 'orderNumber',
         size: 200,
-        meta: { className: 'text-right' }
+        meta: { className: 'justify-end' }
       },
       {
+        id: 'requestNumber',
         header: intl.formatMessage({ id: messages.requestNumber }),
         accessorKey: 'requestNumber',
-        id: 'requestNumber',
         size: 200,
-        meta: { className: 'text-right' }
+        meta: { className: 'justify-end' }
       },
       {
+        id: 'contractNumber',
         header: intl.formatMessage({ id: messages.contractNumber }),
         accessorKey: 'contractNumber',
-        id: 'contractNumber',
-        meta: { className: 'text-right' }
+        size: 200,
+        meta: { className: 'justify-end' }
       },
       {
+        id: 'orderStatus',
         header: intl.formatMessage({ id: messages.orderStatus }),
         accessorFn: row => row?.orderStatus?.name,
-        id: 'orderStatus'
+        size: 150
       },
       {
+        id: 'deliveryStatus',
         header: intl.formatMessage({ id: messages.deliveryStatus }),
         accessorKey: 'deliveryStatus',
         cell: ({ getValue }) => <span>{DeliveryStatusMapping[getValue()]}</span>
       },
       {
+        id: 'supplier',
         header: intl.formatMessage({ id: messages.supplier }),
         accessorKey: 'supplier',
-        id: 'supplier',
         size: 300
       },
       {
+        id: 'procurementResponsible',
         header: intl.formatMessage({ id: messages.procurementResponsible }),
         accessorKey: 'procurementResponsible',
         size: 230
       },
       {
+        id: 'requestor',
         header: intl.formatMessage({ id: messages.requestor }),
         accessorKey: 'requestor'
       },
       {
+        id: 'notes',
         header: intl.formatMessage({ id: messages.notes }),
         accessorKey: 'notes',
         cell: ({ getValue }) => (
@@ -105,10 +111,10 @@ export const useOrderColumns = ({ isReadOnly }: Props) => {
             )}
           </Fragment>
         ),
-        id: 'notes',
         size: 90
       },
       {
+        id: 'lastUpdateTime',
         header: intl.formatMessage({ id: messages.lastUpdateTime }),
         accessorKey: 'lastUpdateTime',
         cell: ({ getValue }) => (
@@ -120,29 +126,28 @@ export const useOrderColumns = ({ isReadOnly }: Props) => {
           />
         ),
         size: 200,
-        id: 'lastUpdateTime',
-        meta: { className: 'text-right' }
+        meta: { className: 'justify-end' }
       },
       {
+        id: 'lastUpdateBy',
         header: intl.formatMessage({ id: messages.lastUpdateBy }),
         accessorKey: 'lastUpdateBy',
         size: 200
       },
       {
+        id: 'orderDate',
         header: intl.formatMessage({ id: messages.orderDate }),
         accessorKey: 'orderDate',
         cell: ({ getValue }) => (
-          <span className="text-right">
-            <FormattedDate
-              value={getValue()}
-              day="2-digit"
-              month="long"
-              year="numeric"
-            />
-          </span>
+          <FormattedDate
+            value={getValue()}
+            day="2-digit"
+            month="long"
+            year="numeric"
+          />
         ),
-        id: 'orderDate',
-        meta: { className: 'text-right' }
+        size: 170,
+        meta: { className: 'justify-end' }
       }
     ],
     [intl, isReadOnly]

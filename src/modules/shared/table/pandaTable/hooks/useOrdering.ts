@@ -30,6 +30,7 @@ export const useOrdering = (
           const updatedColumnOrder = columnOrder(storedOrder)
           setStoredOrder(enforceDefaultOrder(updatedColumnOrder))
         } else {
+          console.log('columnOrder', columnOrder)
           setStoredOrder(enforceDefaultOrder(columnOrder))
         }
       },

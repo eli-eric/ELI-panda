@@ -1,9 +1,13 @@
+import { useEffect } from 'react'
+
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
+import type { Order } from '@/types/responses/orders'
 import { classNames } from '@/utils'
 
 import { Pagination } from '../shared/table/Pagination'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
+import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '../shared/table/SearchBar'
 import { HeaderButtons } from './components/HeaderButtons'
@@ -15,36 +19,39 @@ import { getColorClassStatus } from './utils/getColorClassStatus'
 const OrdersContainer = () => {
   const { orderList, loading, error } = useOrders()
   const columns = useOrderColumns({ isReadOnly: false })
+  const tableId = 'orders'
+
+  const tableSettings: PandaTableSettings<Order> = {
+    enableSorting: true,
+    enableQueryURL: true,
+    enableColumnHiding: true,
+    enableColumnReordering: true,
+    defaultColumnOrder: ['name']
+  }
 
   const table = usePandaTable({
-    tableId: 'orders',
+    tableId,
     columns,
     data: orderList?.data,
-    settings: {
-      enableSorting: true,
-      enableQueryURL: true,
-      enableColumnHiding: true,
-      enableColumnReordering: true
-    }
+    settings: tableSettings
   })
+
+  useEffect(() => {
+    table.setColumnOrder(table.getAllLeafColumns().map(column => column.id))
+  }, [columns, table])
 
   return (
     <TableLayoutContainer>
       <SearchBar
-        tableId="orders"
+        tableId={tableId}
         left={<HeaderButtons />}
         right={<OrdersFilter />}
       />
       {!error && (
-        <PandaTableV2
+        <PandaTableV2<Order>
           {...{
             table,
-            settings: {
-              enableQueryURL: true,
-              enableSorting: true,
-              enableColumnReordering: true,
-              enableColumnHiding: true
-            },
+            settings: tableSettings,
             getRowProps: ({ original: { orderStatus, deliveryStatus } }) => ({
               className: classNames(
                 'bg-white dark:bg-gray-800',
@@ -52,7 +59,7 @@ const OrdersContainer = () => {
               )
             }),
             columns,
-            tableId: 'orders',
+            tableId,
             data: orderList?.data,
             loading: loading,
             className: 'relative overflow-x-auto scrollbar-style'
@@ -67,7 +74,7 @@ const OrdersContainer = () => {
               pageSizeDefault: 50,
               total: orderList?.totalCount
             },
-            tableId: 'orders'
+            tableId
           }}
         />
       )}

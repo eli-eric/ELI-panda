@@ -14,19 +14,19 @@ import { TableContainer } from './components/Table.cont'
 import { TableRowComponent } from './components/TableRow.comp'
 import { TableRowDNDComponent } from './components/TableRow.dnd'
 
-interface Props {
-  settings?: PandaTableSettings<any>
+interface Props<T> {
+  settings?: PandaTableSettings<T>
   tableHeading?: string
   className?: string
-  data: any
+  data?: T[]
   loading?: boolean
-  getRowProps?: (row: Row<any>) => GetRowPropsReturnType
+  getRowProps?: (row: Row<T>) => GetRowPropsReturnType
 
   tableId: string
-  table: Table<any>
+  table: Table<T>
 }
 
-export const PandaTableV2 = ({
+export function PandaTableV2<T>({
   data,
   table,
   loading = false,
@@ -35,7 +35,7 @@ export const PandaTableV2 = ({
   className,
   tableId,
   getRowProps = defaultPropGetter
-}: Props) => {
+}: Props<T>) {
   const {
     enableFooter = false,
     enableColumnHiding = false,
@@ -73,6 +73,8 @@ export const PandaTableV2 = ({
       tableContainerRef={tableContainerRef}
       enablePagination={enablePagination}
       itemsTotalCount={data?.length}
+      isLoading={loading && !data}
+      isEmpty={data?.length === 0}
     >
       <thead className="sticky top-0 z-10 dark:bg-gray-900  bg-opacity-75  backdrop-blur backdrop-filter">
         {table.getHeaderGroups().map(headerGroup => (

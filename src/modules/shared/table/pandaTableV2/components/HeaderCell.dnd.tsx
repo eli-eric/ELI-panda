@@ -80,7 +80,7 @@ export const HeaderCellDNDComponent: FC<Props> = ({
       ref={dropRef}
       className={classNames(
         'border-r outline-offset-0 border-gray-400 ',
-        'whitespace-nowrap p-2 text-left font-semibold text-gray-900 dark:text-gray-200',
+        'whitespace-nowrap p-2 text-left bg-white dark:bg-gray-900 font-semibold text-gray-900 dark:text-gray-200',
         isSticky
           ? 'sticky top-0 text-ellipsis z-40 backdrop-blur-2xl backdrop-filter border-r'
           : 'sticky top-0 z-10',
@@ -116,12 +116,14 @@ export const HeaderCellDNDComponent: FC<Props> = ({
           asc: ' 🔼',
           desc: ' 🔽'
         }[header.column.getIsSorted() as string] ?? null}
-        <button
-          ref={dragRef}
-          className={classNames(header.getContext() && 'pl-2')}
-        >
-          <ArrowsRightLeftIcon className="w-6 h-6" />
-        </button>
+        {!isSticky && (
+          <button
+            ref={dragRef}
+            className={classNames(header.getContext() && 'pl-2')}
+          >
+            <ArrowsRightLeftIcon className="w-6 h-6" />
+          </button>
+        )}
       </div>
     </th>
   )
