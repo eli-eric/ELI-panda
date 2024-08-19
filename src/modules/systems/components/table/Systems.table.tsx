@@ -56,8 +56,8 @@ export const SystemsTable = ({
     getSubRows: original => original.subSystems ?? [],
     settings: {
       ...settings,
-      enableColumnReordering: false,
-      defaultColumnOrder: ['icon', 'name']
+      enableColumnReordering: true,
+      defaultColumnOrder: ['miniImageUrl', 'icon', 'name']
     }
   })
 
@@ -66,13 +66,14 @@ export const SystemsTable = ({
   }, [table])
 
   useEffect(() => {
+    table.setColumnOrder(table.getAllLeafColumns().map(column => column.id))
     return () => {
       if (collapseOnUnMount) {
         table.resetExpanded()
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [table])
 
   return (
     <Fragment>
@@ -97,7 +98,7 @@ export const SystemsTable = ({
         getRowProps={getRowProps}
         settings={{
           ...settings,
-          enableColumnReordering: false
+          enableColumnReordering: true
         }}
         className={className}
       />

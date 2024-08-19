@@ -1,9 +1,11 @@
 import { type ColumnDef } from '@tanstack/react-table'
+import { forEach } from 'lodash'
 import { useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
+import { useExpanding } from '@/modules/shared/table/pandaTable/hooks/useExpanding'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
 import useTableStateStore from '@/store/useTableStateStore'
@@ -62,7 +64,11 @@ export const CodebookTreeModalGraphql = ({
     [instances, tableId]
   )
   const filterName = filter?.find(item => item.id === 'name')?.value as string
+
   const { setValue } = useFormContext()
+
+  const [, setExpand] = useExpanding(tableId)
+
   const columns = useMemo((): ColumnDef<Codebooktree, any>[] => {
     const columns: ColumnDef<Codebooktree, string>[] = [
       {
@@ -97,15 +103,21 @@ export const CodebookTreeModalGraphql = ({
     getSubRows: row => row?.children || []
   })
 
-  const { toggleAllRowsExpanded } = table
-
   useEffect(() => {
-    if (filter && filter?.length > 0) toggleAllRowsExpanded(true)
-    if (!filter || filter.length === 0) toggleAllRowsExpanded(false)
+    const expand = {}
+    if (filter && filter?.length > 0) {
+      forEach(data, (_, i) => (expand[i] = true))
+      setExpand(expand)
+    }
+    if (!filter || filter.length === 0) {
+      forEach(data, (_, i) => (expand[i] = false))
+      setExpand(expand)
+    }
     return () => {
       setItem(undefined)
     }
-  }, [filter, toggleAllRowsExpanded])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter])
 
   const modalButtons: ModalButtons = {
     goNext: {
