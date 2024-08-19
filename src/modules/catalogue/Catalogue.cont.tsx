@@ -1,6 +1,6 @@
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useQueryState } from 'next-usequerystate'
-import { Fragment, useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
@@ -54,7 +54,7 @@ const CatalogueContainer = () => {
   )
 
   return (
-    <Fragment>
+    <div className="z-10">
       <SearchBar
         left={<SearchBarButtons filterFormMethods={filterFormMethods} />}
         tableId={tableId}
@@ -105,7 +105,7 @@ const CatalogueContainer = () => {
         />
         {error && <ErrorPage />}
       </TableLayoutContainer>
-    </Fragment>
+    </div>
   )
 }
 

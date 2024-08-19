@@ -21,7 +21,7 @@ export const NavBarTitle: FC<
   return (
     <span
       className={classNames(
-        `ml-4`,
+        `ml-4 z-0`,
         isExpanded ? 'opacity-100' : 'opacity-0',
         `transition-opacity duration-200 whitespace-nowrap text-gray-600 dark:text-gray-200`,
         isActive && 'text-primary-600 dark:text-primary-600',
@@ -47,7 +47,7 @@ const NavBarItem: FC<PropsWithChildren<NavBarItemProps>> = ({
   isActive
 }) => {
   return (
-    <div className="flex">
+    <div className={classNames('flex ')}>
       <Tooltip content={text} placement="top-start" disabled={isExpanded}>
         {Icon && (
           <div>
@@ -90,7 +90,7 @@ export const NavBarLink: FC<NavBarLinkProps> = ({
       href={href}
       onClick={() => setOpen && setOpen(false)}
       className={classNames(
-        'flex items-center p-4 hover:bg-gray-300 hover:dark:bg-gray-700',
+        'flex items-center p-4 overflow-hidden hover:bg-gray-300 hover:dark:bg-gray-700',
         className
       )}
     >
@@ -118,7 +118,7 @@ export const NavBarButton: FC<PropsWithChildren<NavBarButtonProps>> = ({
 }) => {
   return (
     <button
-      className="flex items-center justify-between w-full p-4 hover:dark:bg-gray-700 hover:bg-gray-300"
+      className="flex items-center overflow-hidden justify-between w-full p-4 hover:dark:bg-gray-700 hover:bg-gray-300"
       onClick={onClick}
     >
       <NavBarItem
