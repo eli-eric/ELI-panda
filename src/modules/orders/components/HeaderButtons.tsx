@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router'
+import React from 'react'
 
 import { SearchBarButtonsComponent } from '@/modules/shared/table/SearchBar'
 import { PATH } from '@/types/constants/paths'
