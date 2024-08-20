@@ -17,7 +17,7 @@ const MemoizedSystemGallery = memo(ImageGallery)
 import { useRouter } from 'next/router'
 
 import CheckBox from '@/components/form/CheckBox'
-import { Input } from '@/components/form/Input'
+import { Input } from '@/components/form/inputs'
 import { Col, Grid } from '@/components/grid/Grid'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'

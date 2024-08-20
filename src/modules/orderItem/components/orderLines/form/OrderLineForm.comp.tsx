@@ -6,7 +6,7 @@ import {
   InputAmount,
   InputCurrency,
   TextArea
-} from '@/components/form/Input'
+} from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
 import { Col, Grid } from '@/components/grid/Grid'

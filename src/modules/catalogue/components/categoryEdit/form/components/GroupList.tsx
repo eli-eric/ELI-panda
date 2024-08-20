@@ -2,7 +2,7 @@ import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
-import { Input } from '@/components/form/Input'
+import { Input } from '@/components/form/inputs'
 
 import type { CategoryFormType } from '../../types'
 import MoveButtons from './MoveButtons'

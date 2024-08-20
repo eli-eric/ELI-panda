@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 
 import { FilterCheckboxes } from '@/components/form/FIlterCheckboxes'
-import { Input } from '@/components/form/Input'
+import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { RangeInput } from '@/components/form/RangeInput'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'

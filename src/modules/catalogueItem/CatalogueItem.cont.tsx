@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { Form } from '@/components/form/Form'
-import { TextArea } from '@/components/form/Input'
+import { TextArea } from '@/components/form/inputs'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'
 import usePermission from '@/hooks/usePermission'

@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
 import CheckBox from '@/components/form/CheckBox'
-import { Input } from '@/components/form/Input'
+import { Input } from '@/components/form/inputs'
 import { Col, Grid } from '@/components/grid/Grid'
 import { message } from '@/i18n/src/messages'
 

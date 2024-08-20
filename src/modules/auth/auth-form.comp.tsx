@@ -7,7 +7,7 @@ import * as yup from 'yup'
 
 import { Button } from '@/components/Buttons'
 import EliLogoComponent from '@/components/eli-logo.comp'
-import { Input } from '@/components/form/Input'
+import { Input } from '@/components/form/inputs'
 
 const { title, form } = message.authPage
 const authButtonMessages = message.authPage.form.button
