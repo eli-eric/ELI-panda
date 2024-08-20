@@ -4,7 +4,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
 
-import { InputWrapper, Label } from './shared'
+import { InputWrapper, Label } from '../shared'
 
 type InputProps = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {

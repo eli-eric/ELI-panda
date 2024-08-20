@@ -8,7 +8,7 @@ import { Tooltip } from '@/components/Tooltip'
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
 
-import { InputWrapper, Label } from './shared'
+import { InputWrapper, Label } from '../shared'
 
 export type InputProps = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
@@ -100,6 +100,9 @@ export const Input = ({
                   {showPassword ? (
                     <Tooltip content="Hide password">
                       <EyeIcon
+                        data-testid="toggle-password-visibility"
+                        aria-label="Show password"
+                        role="button"
                         className="text-gray-400 h-4 w-4 sm:text-sm cursor-pointer hover:text-gray-600 dark:text-gray-200"
                         onClick={toogleShowPassword}
                       />
@@ -107,6 +110,9 @@ export const Input = ({
                   ) : (
                     <Tooltip content="Show password">
                       <EyeSlashIcon
+                        data-testid="toggle-password-visibility"
+                        role="button"
+                        aria-label="Hide password"
                         className="text-gray-400 h-4 w-4 sm:text-sm cursor-pointer hover:text-gray-600 dark:text-gray-200"
                         onClick={toogleShowPassword}
                       />

@@ -1,5 +1,5 @@
-import BreadcrumpContainer from '@/components/Breadcrump/Breadcrump.cont'
-import BreadcrumpItem from '@/components/Breadcrump/Breadcrump.item'
+import BreadcrumpContainer from '@/components/breadcrump/Breadcrump.cont'
+import BreadcrumpItem from '@/components/breadcrump/Breadcrump.item'
 import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'

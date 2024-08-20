@@ -10,11 +10,9 @@ interface NewTabLinkProps {
   value?: string
 }
 export const NewTabLink: FC<NewTabLinkProps> = ({ href, value }) => (
-  <Link href={href} legacyBehavior>
-    <a target={'_blank'}>
-      <LinkDecorator>
-        <span>{value}</span>
-      </LinkDecorator>
-    </a>
+  <Link href={href} target="_blank">
+    <LinkDecorator>
+      <span>{value}</span>
+    </LinkDecorator>
   </Link>
 )

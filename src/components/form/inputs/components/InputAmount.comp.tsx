@@ -1,54 +1,50 @@
-import { Fragment, useId } from 'react'
+import { useId } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
 import type { FieldProps } from '@/types/form'
 import { classNames } from '@/utils'
 
-import { ValidationIcon } from '../Icons'
-import { InputWrapper, Label } from './shared'
+import { InputWrapper, Label } from '../shared'
+type InputAmountProps = FieldProps & React.InputHTMLAttributes<HTMLInputElement>
 
-type TextAreaWithErrorProps = FieldProps &
-  React.InputHTMLAttributes<HTMLTextAreaElement>
-
-export const TextArea = ({
+export const InputAmount = ({
   name,
   placeholder,
   disabled,
   rounded,
-  label,
   className,
-  isFilter,
-  defaultValue
-}: TextAreaWithErrorProps) => {
+  hidden,
+  label,
+  children
+}: InputAmountProps) => {
   const { control } = useFormContext()
   const id = useId()
-
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue={defaultValue || ''}
       render={({ field, fieldState: { error } }) => (
-        <InputWrapper className={className}>
-          <Fragment>
-            <Label htmlFor={id} label={label} />
-            <textarea
+        <InputWrapper hidden={hidden} className={className}>
+          <Label htmlFor={id} label={label} />
+          <div hidden={hidden} className="relative">
+            <input
               {...field}
               value={field.value || ''}
               id={id}
-              rows={3}
+              hidden={hidden}
+              type={'number'}
+              step="0.001"
               disabled={disabled}
               placeholder={placeholder}
               className={classNames(
                 'form-field',
                 rounded,
                 error ? 'border-red-500' : 'border-gray-300',
-                disabled ? 'bg-gray-100' : '',
-                isFilter ? field.value && 'border-2 border-lime-500' : ''
+                disabled ? 'bg-gray-100' : ''
               )}
             />
-            {error && <ValidationIcon />}
-          </Fragment>
+            {children}
+          </div>
         </InputWrapper>
       )}
     />
