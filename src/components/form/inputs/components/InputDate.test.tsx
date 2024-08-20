@@ -5,12 +5,12 @@ import { fireEvent, render, screen } from '@testing-library/react'
 
 import { FormWrapper } from '@/testutils/components'
 
-import { InputDate } from '../components/InputDate.comp'
+import { InputDate } from './InputDate.comp'
 
 describe('InputDate', () => {
   it('renders without crashing', () => {
     render(<InputDate name="testDate" />, { wrapper: FormWrapper })
-    expect(screen.getByRole('textbox')).toBeInTheDocument()
+    expect(screen.getByTestId('testDate')).toBeInTheDocument()
   })
 
   it('has the correct default value', () => {
@@ -18,25 +18,23 @@ describe('InputDate', () => {
     render(<InputDate name="testDate" defaultValue={defaultValue} />, {
       wrapper: FormWrapper
     })
-    expect(screen.getByRole('textbox')).toHaveValue(defaultValue)
+    expect(screen.getByTestId('testDate')).toHaveValue(defaultValue)
   })
 
   it('changes value on user input', () => {
-    const { getByRole } = render(<InputDate name="testDate" />, {
-      wrapper: FormWrapper
-    })
-    const input = getByRole('textbox')
+    render(<InputDate name="testDate" />, { wrapper: FormWrapper })
+    const input = screen.getByTestId('testDate')
     fireEvent.change(input, { target: { value: '2023-02-01' } })
     expect(input).toHaveValue('2023-02-01')
   })
 
   it('is disabled when disabled prop is true', () => {
     render(<InputDate name="testDate" disabled />, { wrapper: FormWrapper })
-    expect(screen.getByRole('textbox')).toBeDisabled()
+    expect(screen.getByTestId('testDate')).toBeDisabled()
   })
 
   it('is hidden when hidden prop is true', () => {
     render(<InputDate name="testDate" hidden />, { wrapper: FormWrapper })
-    expect(screen.getByRole('textbox')).not.toBeVisible()
+    expect(screen.queryByTestId('testDate')).not.toBeVisible()
   })
 })

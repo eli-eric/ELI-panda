@@ -47,7 +47,7 @@ export const TextArea = ({
                 isFilter ? field.value && 'border-2 border-lime-500' : ''
               )}
             />
-            {error && <ValidationIcon />}
+            {error && <ValidationIcon data-testid="validation-icon" />}
           </Fragment>
         </InputWrapper>
       )}

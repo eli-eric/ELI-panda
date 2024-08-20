@@ -6,7 +6,7 @@ import React from 'react'
 
 import { FormWrapper } from '@/testutils/components'
 
-import { Input } from '../components/Input.comp'
+import { Input } from './Input.comp'
 
 describe('Input component', () => {
   it('renders the input with the correct props', () => {

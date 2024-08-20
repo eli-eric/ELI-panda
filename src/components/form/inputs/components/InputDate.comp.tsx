@@ -39,10 +39,10 @@ export const InputDate = ({
             <div hidden={hidden} className="relative flex w-full">
               <input
                 {...field}
+                data-testid={name}
                 type="date"
                 id={idHtml}
                 hidden={hidden}
-                step="0.001"
                 disabled={disabled}
                 onChange={e => {
                   if (onChange) {

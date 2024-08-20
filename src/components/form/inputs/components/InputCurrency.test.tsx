@@ -5,7 +5,7 @@ import { fireEvent, render, screen } from '@testing-library/react'
 
 import { FormWrapper } from '@/testutils/components'
 
-import { InputCurrency } from '../components/InputCurrency.comp'
+import { InputCurrency } from './InputCurrency.comp'
 
 describe('InputCurrency', () => {
   it('renders without crashing', () => {

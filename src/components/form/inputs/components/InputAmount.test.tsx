@@ -6,7 +6,7 @@ import React from 'react'
 
 import { FormWrapper } from '@/testutils/components'
 
-import { InputAmount } from '../components/InputAmount.comp'
+import { InputAmount } from './InputAmount.comp'
 
 describe('InputAmount component', () => {
   it('renders the input with the correct label', () => {
