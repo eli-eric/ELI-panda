@@ -3,9 +3,9 @@ import '@testing-library/jest-dom'
 
 import { fireEvent, render, screen } from '@testing-library/react'
 
-import { FormWrapper } from '@/testutils/components'
+import { FormWrapper } from '@/testutils'
 
-import { InputDate } from './InputDate.comp'
+import { InputDate } from '../components/InputDate.comp'
 
 describe('InputDate', () => {
   it('renders without crashing', () => {

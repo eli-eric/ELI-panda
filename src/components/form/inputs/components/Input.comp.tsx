@@ -45,18 +45,14 @@ export const Input = ({
   const isFirstRender = useIsFirstRender()
 
   useEffect(() => {
-    if (isFirstRender) {
-      return
-    }
-    if (onChange) {
+    if (!isFirstRender && onChange) {
       onChange(inputValueDebounced)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputValueDebounced])
 
-  const toogleShowPassword = () => {
-    setShowPassword(!showPassword)
-  }
+  const toogleShowPassword = () => setShowPassword(!showPassword)
+
   const idHtml = useId()
 
   return (

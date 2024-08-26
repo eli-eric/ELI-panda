@@ -4,9 +4,9 @@ import '@testing-library/jest-dom'
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
-import { FormWrapper } from '@/testutils/components'
+import { FormWrapper } from '@/testutils'
 
-import { InputAmount } from './InputAmount.comp'
+import { InputAmount } from '../components/InputAmount.comp'
 
 describe('InputAmount component', () => {
   it('renders the input with the correct label', () => {

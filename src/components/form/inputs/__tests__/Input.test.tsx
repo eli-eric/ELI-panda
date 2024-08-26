@@ -4,9 +4,9 @@ import '@testing-library/jest-dom'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import React from 'react'
 
-import { FormWrapper } from '@/testutils/components'
+import { FormWrapper } from '@/testutils'
 
-import { Input } from './Input.comp'
+import { Input } from '../components/Input.comp'
 
 describe('Input component', () => {
   it('renders the input with the correct props', () => {

@@ -1,8 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 
-import { FormWrapper } from '@/testutils/components'
+import { FormWrapper } from '@/testutils'
 
-import { TextArea } from './TextArea.comp'
+import { TextArea } from '../components/TextArea.comp'
 
 describe('TextArea', () => {
   it('renders without crashing', () => {

@@ -3,9 +3,9 @@ import '@testing-library/jest-dom'
 
 import { fireEvent, render, screen } from '@testing-library/react'
 
-import { FormWrapper } from '@/testutils/components'
+import { FormWrapper } from '@/testutils'
 
-import { InputCurrency } from './InputCurrency.comp'
+import { InputCurrency } from '../components/InputCurrency.comp'
 
 describe('InputCurrency', () => {
   it('renders without crashing', () => {
