@@ -4,16 +4,13 @@ import {
   catalogueItem,
   catalogueItems
 } from './mock/catalogue'
+import { codebooks } from './mock/codebooks'
 export const API_MAPPING = {
   //authorization
-  providers: ['GET', Cypress.env('host') + '/api/auth/providers', providers],
-  csrf: ['GET', Cypress.env('host') + '/api/auth/csrf', csrfToken],
-  credentials: [
-    'POST',
-    Cypress.env('host') + '/api/auth/callback/credentials?',
-    credentials
-  ],
-  session: ['GET', Cypress.env('host') + '/api/auth/session', {}],
+  providers: ['GET', '/api/auth/providers', providers],
+  csrf: ['GET', '/api/auth/csrf', csrfToken],
+  credentials: ['POST', '/api/auth/callback/credentials', credentials],
+  session: ['GET', '/api/auth/session', {}],
   //catalogue
   catalogueCategories: [
     'GET',
@@ -22,7 +19,13 @@ export const API_MAPPING = {
   ],
   catalogueItems: ['GET', '/api/mock-server/catalogue/items*', {}],
   //catalogue item
-  catalogueItem: ['GET', '/api/mock-server/catalogue/item/*', catalogueItem]
+  catalogueItem: ['GET', '/api/mock-server/catalogue/item/*', catalogueItem],
+  //codebooks
+  codebooks: [
+    'GET',
+    'https://api-dev.panda.eli-beams.eu/v1/codebooks',
+    codebooks
+  ]
 }
 
 export const SCRENARIOS = {

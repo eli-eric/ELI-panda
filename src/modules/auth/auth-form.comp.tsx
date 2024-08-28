@@ -58,6 +58,7 @@ const AuthFormComponent = ({ onSubmit, loading }: Props) => {
               <Button
                 primary
                 type="button"
+                testid="beamlines"
                 className="mt-4 w-full justify-center"
                 onClick={() => signIn('azure-ad-beamlines')}
               >

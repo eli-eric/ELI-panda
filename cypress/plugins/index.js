@@ -1,4 +1,7 @@
 /// <reference types="cypress" />
+
+const { MicrosoftSocialLogin } = require('cypress-social-logins').plugins
+
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //
@@ -16,6 +19,9 @@
  * @type {Cypress.PluginConfig}
  */
 module.exports = (on, config) => {
+  on('task', {
+    MicrosoftSocialLogin: MicrosoftSocialLogin
+  })
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
 }
