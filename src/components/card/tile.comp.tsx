@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { type FC, Fragment, type PropsWithChildren } from 'react'
+import { type FC, type PropsWithChildren } from 'react'
 
 import usePermission from '@/hooks/usePermission'
 import type { ROLE } from '@/types/constants/roles'
@@ -18,7 +18,7 @@ export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
   if (!hasRole && role) return null
 
   return (
-    <Fragment>
+    <div data-testid={`tile-${name}`}>
       {link ? (
         <Link
           href={link}
@@ -64,12 +64,13 @@ export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
           </div>
         </li>
       )}
-    </Fragment>
+    </div>
   )
 }
 
 export const TileContainer: FC<PropsWithChildren> = ({ children }) => (
   <ul
+    data-testid="tile-container"
     role="list"
     className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 px-2 py-2 sm:px-4 sm:py-4 my-5 mx-2"
   >

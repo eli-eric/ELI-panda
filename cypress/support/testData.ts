@@ -1,4 +1,4 @@
-export const testCredenmtials: loginNextAuthParams = {
+export const testCredAdmin: loginNextAuthParams = {
   name: 'Smrčka Jan',
   email: 'jan.smrcka@eli-beams.eu',
   sub: 'G50e-GurebjSri-q_ibPKFCHuJOhHT-VQPfpMjrNoi0',
