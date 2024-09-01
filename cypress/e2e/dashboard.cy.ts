@@ -18,4 +18,34 @@ describe('Dashboard', () => {
     cy.get("[data-testid='tile-Orders']").should('exist')
     cy.get("[data-testid='tile-Room Cards']").should('exist')
   })
+
+  it('Dashboard - Systems', () => {
+    cy.get("[data-testid='tile-Systems']").click()
+    cy.url().should('include', '/systems')
+  })
+
+  it('Dashboard - Catalogue', () => {
+    cy.get("[data-testid='tile-Catalogue']").click()
+    cy.url().should('include', '/catalogue')
+  })
+
+  it('Dashboard - Orders', () => {
+    cy.get("[data-testid='tile-Orders']").click()
+    cy.url().should('include', '/orders')
+  })
+
+  it('Dashboard - Room Cards', () => {
+    cy.get("[data-testid='tile-Room Cards']").click()
+    cy.url().should('include', '/room-cards')
+  })
+
+  it('Dashboard - Users', () => {
+    cy.get("[data-testid='tile-Users']").click()
+    cy.url().should('include', 'administration/users')
+  })
+
+  it('Dashboard - Codebooks', () => {
+    cy.get("[data-testid='tile-Codebooks']").click()
+    cy.url().should('include', '/codebooks')
+  })
 })
