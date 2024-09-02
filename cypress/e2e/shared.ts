@@ -1,3 +1,4 @@
+import graphql from '@/pages/api/graphql'
 import { credentials, csrfToken, providers, session } from './mock/auth'
 import {
   catalogueCategories,
@@ -21,11 +22,7 @@ export const API_MAPPING = {
   //catalogue item
   catalogueItem: ['GET', '/api/mock-server/catalogue/item/*', catalogueItem],
   //codebooks
-  codebooks: [
-    'GET',
-    'https://api-dev.panda.eli-beams.eu/v1/codebooks',
-    codebooks
-  ]
+  codebooks: ['GET', '/codebooks', codebooks]
 }
 
 export const SCRENARIOS = {

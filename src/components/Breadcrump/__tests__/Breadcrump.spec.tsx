@@ -1,12 +1,9 @@
-/// <reference types="jest" />
-import '@testing-library/jest-dom'
-
 // BreadcrumpContainer.test.tsx
 import { render, screen } from '@testing-library/react'
 import React from 'react'
 
-import BreadcrumpContainer from '../Breadcrump.cont'
-import BreadcrumpItem from '../Breadcrump.item'
+import { BreadcrumpContainer } from '../Breadcrump.cont'
+import { BreadcrumpItem } from '../Breadcrump.item'
 
 describe('BreadcrumpContainer', () => {
   it('renders multiple BreadcrumpItems correctly', () => {

@@ -1,6 +1,3 @@
-/// <reference types="jest" />
-import '@testing-library/jest-dom'
-
 import { fireEvent, render, screen } from '@testing-library/react'
 
 // Mock this if needed

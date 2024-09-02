@@ -3046,13 +3046,12 @@
     lz-string "^1.5.0"
     pretty-format "^27.0.2"
 
-"@testing-library/jest-dom@^6.4.8":
-  version "6.4.8"
-  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-6.4.8.tgz#9c435742b20c6183d4e7034f2b329d562c079daa"
-  integrity sha512-JD0G+Zc38f5MBHA4NgxQMR5XtO5Jx9g86jqturNTt2WUfRmLDIY7iKkWHDCCTiDuFMre6nxAD5wHw9W5kI4rGw==
+"@testing-library/jest-dom@^6.5.0":
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-6.5.0.tgz#50484da3f80fb222a853479f618a9ce5c47bfe54"
+  integrity sha512-xGGHpBXYSHUUr6XsKBfs85TWlYKpTc37cSBBVrXcib2MkHLboWlkClhWF37JKlDb9KEq3dHs+f2xR7XJEWGBxA==
   dependencies:
     "@adobe/css-tools" "^4.4.0"
-    "@babel/runtime" "^7.9.2"
     aria-query "^5.0.0"
     chalk "^3.0.0"
     css.escape "^1.5.1"
@@ -3166,6 +3165,13 @@
   integrity sha512-K6uROf1LD88uDQqJCktA4yzL1YYAK6NgfsI0v/mTgyPKWsX1CnJ0XPSDhViejru1GcRkLWb8RlzFYJRqGUbaug==
   dependencies:
     "@types/node" "*"
+
+"@types/cypress@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@types/cypress/-/cypress-1.1.3.tgz#0a700c040d53e9e12b5af98e41d4a88c39f39b6a"
+  integrity sha512-OXe0Gw8LeCflkG1oPgFpyrYWJmEKqYncBsD/J0r17r0ETx/TnIGDNLwXt/pFYSYuYTpzcq1q3g62M9DrfsBL4g==
+  dependencies:
+    cypress "*"
 
 "@types/express-serve-static-core@^4.17.30", "@types/express-serve-static-core@^4.17.33":
   version "4.19.5"
@@ -4965,10 +4971,10 @@ cypress-social-logins@^1.14.2:
     otplib "^12.0.1"
     puppeteer "^22.15.0"
 
-cypress@^13.5.1:
-  version "13.13.3"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-13.13.3.tgz#21ee054bb4e00b3858f2e33b4f8f4e69128470a9"
-  integrity sha512-hUxPrdbJXhUOTzuML+y9Av7CKoYznbD83pt8g3klgpioEha0emfx4WNIuVRx0C76r0xV2MIwAW9WYiXfVJYFQw==
+cypress@*, cypress@^13.14.1:
+  version "13.14.1"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-13.14.1.tgz#05875bbbf6333e858a92aed33ba67d7ddf8370d7"
+  integrity sha512-Wo+byPmjps66hACEH5udhXINEiN3qS3jWNGRzJOjrRJF3D0+YrcP2LVB1T7oYaVQM/S+eanqEvBWYc8cf7Vcbg==
   dependencies:
     "@cypress/request" "^3.0.1"
     "@cypress/xvfb" "^1.2.4"
@@ -10909,7 +10915,7 @@ typescript-memoize@^1.1.1:
   resolved "https://registry.yarnpkg.com/typescript-memoize/-/typescript-memoize-1.1.1.tgz#02737495d5df6ebf72c07ba0d002e8f4cf5ccfa0"
   integrity sha512-GQ90TcKpIH4XxYTI2F98yEQYZgjNMOGPpOgdjIBhaLaWji5HPWlRnZ4AeA1hfBxtY7bCGDJsqDDHk/KaHOl5bA==
 
-typescript@^5.2.2:
+typescript@^5.3.3:
   version "5.5.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.5.4.tgz#d9852d6c82bad2d2eda4fd74a5762a8f5909e9ba"
   integrity sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==

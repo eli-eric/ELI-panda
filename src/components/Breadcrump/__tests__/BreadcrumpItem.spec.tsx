@@ -1,10 +1,7 @@
-/// <reference types="jest" />
-import '@testing-library/jest-dom'
-
 import { fireEvent, render, screen } from '@testing-library/react'
 import React from 'react'
 
-import BreadcrumpItem from '../Breadcrump.item'
+import { BreadcrumpItem } from '../Breadcrump.item'
 
 describe('BreadcrumpItem', () => {
   it('renders link correctly', () => {
