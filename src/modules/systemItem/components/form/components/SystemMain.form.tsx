@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import Combobox from '@/components/form/Combobox'
-import { Input, TextArea } from '@/components/form/Input'
+import { Input, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'

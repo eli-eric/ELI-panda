@@ -5,7 +5,7 @@ import { useSubmit } from '@/hooks/fetch/useSubmit'
 import useFormModal from '@/hooks/form/useFormModal'
 import type { CodeBookMetaData } from '@/types/responses/codebook'
 
-import { Input } from '../Input'
+import { Input } from '../inputs'
 
 const useAddCodebookValue = (codebook?: CodeBookMetaData) => {
   const { codebook: endpoint } = useEndpoint({ path: codebook?.code })

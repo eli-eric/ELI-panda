@@ -4,6 +4,7 @@ export default defineConfig({
   projectId: 'dnzwr8',
   taskTimeout: 10000,
   requestTimeout: 10000,
+  chromeWebSecurity: false,
   e2e: {
     setupNodeEvents(on, config) {
       // implement node event listeners here

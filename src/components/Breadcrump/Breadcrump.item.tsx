@@ -14,7 +14,7 @@ interface Props {
   systemLevel?: SystemLevel
 }
 
-const BreadcrumpItem = ({
+export const BreadcrumpItem = ({
   name,
   link,
   setCategoryFilter,
@@ -69,5 +69,3 @@ const BreadcrumpItem = ({
     </li>
   )
 }
-
-export default BreadcrumpItem

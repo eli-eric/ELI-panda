@@ -7,7 +7,7 @@ import toast from 'react-hot-toast'
 
 import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
-import { Input } from '@/components/form/Input'
+import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { Modal } from '@/components/overlays/modal/modal.comp'
 import { useFilterCreate } from '@/hooks/filter/useFilterCreate'
