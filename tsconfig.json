@@ -16,7 +16,7 @@
     "noImplicitAny": false,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
     },
@@ -26,13 +26,6 @@
       }
     ]
   },
-  "include": [
-    "next-env.d.ts",
-    "@/types/**/*.ts",
-    "**/*.tsx",
-    "**/*.ts",
-    ".next/@/types/**/*.ts",
-    ".next/types/**/*.ts"
-  ],
+  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", "cypress", "cypress.config.ts"]
 }
