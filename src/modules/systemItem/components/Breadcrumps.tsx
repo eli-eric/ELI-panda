@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 
-import { BreadcrumpContainer, BreadcrumpItem } from '@/components/breadcrump'
+import { BreadcrumpContainer } from '@/components/breadcrump/Breadcrump.cont'
+import { BreadcrumpItem } from '@/components/breadcrump/Breadcrump.item'
 import { PATH } from '@/types/constants/paths'
 import type { CodebookType } from '@/types/responses/codebook'
 
