@@ -1,0 +1,5 @@
+export { Input } from './components/Input.comp'
+export { InputAmount } from './components/InputAmount.comp'
+export { InputCurrency } from './components/InputCurrency.comp'
+export { InputDate } from './components/InputDate.comp'
+export { TextArea } from './components/TextArea.comp'

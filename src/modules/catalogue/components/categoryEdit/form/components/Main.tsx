@@ -1,6 +1,6 @@
 import { useFormContext } from 'react-hook-form'
 
-import { Input } from '@/components/form/Input'
+import { Input } from '@/components/form/inputs'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'

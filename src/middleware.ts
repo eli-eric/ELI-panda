@@ -1,8 +1,11 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { getToken } from 'next-auth/jwt'
 
-import { PATH } from '@/types/constants/paths'
-import { ROLE } from '@/types/constants/roles'
+import {
+  PATH,
+  PATH_ROLES_CONFIG,
+  PROTECTED_PATHS
+} from '@/types/constants/paths'
 
 import { APP_BASE_URL } from './types/constants/common'
 
@@ -20,62 +23,6 @@ import { APP_BASE_URL } from './types/constants/common'
 // get the user object from the request and checks if any of their roles match any
 // of the roles in the PATH_ROLES_CONFIG record for that path. If not, it redirects
 // them to a 404 page. Finally, it returns NextResponse.next() if all checks pass.
-
-const PROTECTED_PATHS = [
-  PATH.DASHBOARD,
-  PATH.CATALOGUE,
-  PATH.SYSTEMS,
-  PATH.SYSTEM,
-  PATH.REPORTS,
-  PATH.ORDERS,
-  PATH.ROOM_CARD,
-  PATH.ROOM_CARDS,
-  PATH.ADMIN_USERS,
-  PATH.ADMIN_USER,
-  PATH.ADMIN,
-  PATH.PROFILE_GENERAL,
-  PATH.PROFILE_SECURITY,
-  PATH.PROFILE_TEAM,
-  PATH.SYSTEMS_MOVING,
-  PATH.SYSTEM_ALIAS
-]
-
-const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
-  [PATH.CATALOGUE]: [
-    ROLE.CATALOGUE_CATEGORY_EDIT,
-    ROLE.CATALOGUE_EDIT,
-    ROLE.CATALOGUE_VIEW
-  ],
-  [PATH.CATALOGUE_ITEM]: [
-    ROLE.CATALOGUE_CATEGORY_EDIT,
-    ROLE.CATALOGUE_EDIT,
-    ROLE.CATALOGUE_VIEW
-  ],
-  [PATH.DASHBOARD]: [ROLE.BASICS],
-  [PATH.REPORTS]: [ROLE.REPORTS_VIEW],
-  [PATH.SYSTEMS]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
-  [PATH.ORDERS]: [
-    ROLE.ORDERS_VIEW,
-    ROLE.ORDERS_EDIT,
-    ROLE.ORDERS_DELIVERY_EDIT
-  ],
-  [PATH.ORDER]: [ROLE.ORDERS_VIEW, ROLE.ORDERS_EDIT, ROLE.ORDERS_DELIVERY_EDIT],
-  [PATH.SYSTEM]: [ROLE.SYSTEM_EDIT, ROLE.SYSTEMS_VIEW],
-  [PATH.SYSTEMS_MOVING]: [ROLE.SYSTEM_EDIT],
-  [PATH.SPARE_PARTS]: [ROLE.SYSTEM_EDIT],
-  [PATH.CODEBOOKS]: [ROLE.CODEBOOKS_ADMIN],
-  [PATH.ROOM_CARD]: [ROLE.ROOM_CARD_VIEW, ROLE.ROOM_CARD_EDIT],
-  [PATH.ROOM_CARDS]: [ROLE.ROOM_CARD_VIEW, ROLE.ROOM_CARD_EDIT],
-  [PATH.ADMIN_USERS]: [ROLE.ADMIN],
-  [PATH.ADMIN_USER]: [ROLE.ADMIN],
-  [PATH.ADMIN]: [ROLE.ADMIN],
-  [PATH.PROFILE_GENERAL]: [ROLE.BASICS],
-  [PATH.PROFILE_SECURITY]: [ROLE.BASICS],
-  [PATH.PROFILE_TEAM]: [ROLE.BASICS],
-  [PATH.SYSTEM_ALIAS]: [ROLE.SYSTEMS_VIEW],
-  [PATH.SYSTEM_TYPE_EDIT]: [ROLE.SYSTEM_TYPE_EDIT, ROLE.SYSTEM_TYPE_VIEW],
-  [PATH.ROOT]: []
-}
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl

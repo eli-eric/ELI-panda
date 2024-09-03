@@ -1,7 +1,7 @@
 import React from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { Input } from '@/components/form/Input'
+import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { RangeInput } from '@/components/form/RangeInput'
 import usePermission from '@/hooks/usePermission'

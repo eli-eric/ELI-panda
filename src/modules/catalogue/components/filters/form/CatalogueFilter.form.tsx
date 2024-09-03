@@ -1,7 +1,7 @@
 import { useQueryState } from 'next-usequerystate'
 
 import { ComboboxTreeControlled } from '@/components/form/ComboBoxControlled'
-import { Input } from '@/components/form/Input'
+import { Input } from '@/components/form/inputs'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import useCatalogueFormFields from '@/modules/catalogueItem/components/form/CatalogueForm.fields'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'

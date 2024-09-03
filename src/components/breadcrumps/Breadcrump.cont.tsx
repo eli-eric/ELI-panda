@@ -8,7 +8,7 @@ interface Props {
   homeLink?: string
   testId?: string
 }
-const BreadcrumpContainer = ({ testId, homeLink, children }: Props) => (
+export const BreadcrumpContainer = ({ testId, homeLink, children }: Props) => (
   <div
     data-testid={testId}
     id="breadcrump"
@@ -37,5 +37,3 @@ const BreadcrumpContainer = ({ testId, homeLink, children }: Props) => (
     </nav>
   </div>
 )
-
-export default BreadcrumpContainer

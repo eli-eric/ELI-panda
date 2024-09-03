@@ -1,0 +1,30 @@
+export const testCredAdmin: loginNextAuthParams = {
+  name: 'Smrčka Jan',
+  email: 'jan.smrcka@eli-beams.eu',
+  sub: 'G50e-GurebjSri-q_ibPKFCHuJOhHT-VQPfpMjrNoi0',
+  roles: [
+    'catalogue-category-edit',
+    'supplier-edit',
+    'systems-edit',
+    'orders-view',
+    'systems-view',
+    'basics',
+    'orders-delivery-edit',
+    'catalogue-edit',
+    'orders-edit',
+    'catalogue-view',
+    'codebooks-admin',
+    'room-cards-edit',
+    'room-cards-view',
+    'admin',
+    'system-attribute-edit',
+    'system-types-edit',
+    'system-types-view'
+  ],
+  apiAccessToken: Cypress.env('token'),
+  facility: 'ELI - Beamlines',
+  facilityCode: 'B',
+  uid: '86312de9-2402-4e2b-b897-b67bf9bf21cb',
+  fullName: 'Jan Smrčka',
+  jti: '137f3643-b13e-4b48-8811-9b50aa63144b'
+}

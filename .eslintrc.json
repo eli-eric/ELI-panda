@@ -64,6 +64,12 @@
           { "selector": "enum", "format": ["UPPER_CASE"] }
         ]
       }
+    },
+    {
+      "files": ["tests/**/*"],
+      "env": {
+        "jest": true
+      }
     }
   ]
 }

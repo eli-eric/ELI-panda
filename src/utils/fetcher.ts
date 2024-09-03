@@ -7,18 +7,6 @@ import { BASE_URL } from '@/types/constants/common'
 import type { EndpointProps } from './getEndpoints'
 import { getEndpoints } from './getEndpoints'
 
-export async function fetcher(url) {
-  const res = await axiosInstance.get(BASE_URL + url).then(res => res.data)
-  return res
-}
-
-export async function mockFetcher(url) {
-  const res = await axiosInstance
-    .get('/api/mock-server' + url)
-    .then(res => res.data)
-  return res
-}
-
 export const uniFetcher = async url =>
   await axios.get(url).then(res => res.data)
 
@@ -31,24 +19,6 @@ export const queryFetcher = <T>(
     const queryParams = queryKey[1] as EndpointProps
     const endpoint = getEndpoints(queryParams || {})[endpointType] as string
     return axiosInstance.get(BASE_URL + endpoint).then(res => res.data)
-  }
-  return querFn
-}
-
-export const serverQueryFetcher = <T>(
-  endpointType: keyof ReturnType<typeof getEndpoints>,
-  token
-) => {
-  const querFn: QueryFunction<T, QueryFetcherKey> = async ({ queryKey }) => {
-    const queryParams = queryKey[1] as EndpointProps
-    const endpoint = getEndpoints(queryParams || {})[endpointType] as string
-    return axios
-      .get(BASE_URL + endpoint, {
-        headers: {
-          authorization: `Bearer ${token}`
-        }
-      })
-      .then(res => res.data)
   }
   return querFn
 }
