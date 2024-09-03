@@ -17,6 +17,7 @@ describe('Dashboard', () => {
     cy.get("[data-testid='tile-Catalogue']").should('exist')
     cy.get("[data-testid='tile-Orders']").should('exist')
     cy.get("[data-testid='tile-Room Cards']").should('exist')
+    cy.contains('GENERAL FILES').should('exist')
   })
 
   it('Dashboard - Systems', () => {

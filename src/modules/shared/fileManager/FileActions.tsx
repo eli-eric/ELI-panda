@@ -97,11 +97,13 @@ export const TagInput: FC<TagInputProps> = ({ onConfirm }) => {
 interface FileNameEditorProps {
   initialFileName: string
   onConfirm: (fileName: string) => void
+  hasEditRole?: boolean
 }
 
 export const FileNameEditor: FC<FileNameEditorProps> = ({
   initialFileName,
-  onConfirm
+  onConfirm,
+  hasEditRole
 }) => {
   const [isEditing, setIsEditing] = useState(false)
   const [fileName, setFileName] = useState('')
@@ -129,7 +131,7 @@ export const FileNameEditor: FC<FileNameEditorProps> = ({
   }
 
   return (
-    <div className="w-full" onClick={() => setIsEditing(true)}>
+    <div className="w-full" onClick={() => hasEditRole && setIsEditing(true)}>
       {isEditing ? (
         <input
           type="text"

@@ -15,6 +15,9 @@ import { message } from 'src/i18n/src/messages'
 
 import { Tile, TileContainer } from '@/components/card/tile.comp'
 import { ReleasesContainer } from '@/components/Releases.cont'
+import usePermission from '@/hooks/usePermission'
+import FileManager from '@/modules/shared/fileManager/FileManager'
+import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
@@ -81,6 +84,7 @@ const messages = message.dashboardPage
 const DashboardPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
 
+  const hasEditRole = usePermission([ROLE.DASHBOARD_FILES_ADMIN])
   return (
     <Fragment>
       <Head>
@@ -103,6 +107,12 @@ const DashboardPage: NextPage = (): JSX.Element => {
             />
           ))}
         </TileContainer>
+        <FileManager
+          itemType={FILE_TYPE.GENERAL}
+          uid="dashboard"
+          hasEditRole={hasEditRole}
+          customTitle="GENERAL FILES"
+        />
         <ReleasesContainer />
       </main>
     </Fragment>

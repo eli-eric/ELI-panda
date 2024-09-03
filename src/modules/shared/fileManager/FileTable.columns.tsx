@@ -36,17 +36,20 @@ export const useFileColumns = ({ hasEditRole, handlePut, itemType, uid }) => {
           }
         },
         cell: ({ getValue, row: { original } }) => (
-          <FileNameEditor
-            initialFileName={getValue()}
-            onConfirm={(newName: string) => {
-              if (original.name === newName) return
-              if (original.type === 'LINK') {
-                mutate({ ...original, name: newName, uid: original.id })
-              } else {
-                handlePut(original.id, { name: newName, tags: original.tags })
-              }
-            }}
-          />
+          <div className="pt-1 pb-1">
+            <FileNameEditor
+              initialFileName={getValue()}
+              hasEditRole={hasEditRole}
+              onConfirm={(newName: string) => {
+                if (original.name === newName) return
+                if (original.type === 'LINK') {
+                  mutate({ ...original, name: newName, uid: original.id })
+                } else {
+                  handlePut(original.id, { name: newName, tags: original.tags })
+                }
+              }}
+            />
+          </div>
         )
       },
       {
@@ -84,23 +87,25 @@ export const useFileColumns = ({ hasEditRole, handlePut, itemType, uid }) => {
                   />
                 </Badge>
               ))}
-            <TagInput
-              onConfirm={(tag: string) => {
-                if (original.tags?.includes(tag)) return
-                if (original.type === 'LINK') {
-                  mutate({
-                    ...original,
-                    tags: [...(original.tags || []), tag],
-                    uid: original.id
-                  })
-                } else {
-                  handlePut(original.id, {
-                    name: original.name,
-                    tags: [...(original.tags || []), tag]
-                  })
-                }
-              }}
-            />
+            {hasEditRole && (
+              <TagInput
+                onConfirm={(tag: string) => {
+                  if (original.tags?.includes(tag)) return
+                  if (original.type === 'LINK') {
+                    mutate({
+                      ...original,
+                      tags: [...(original.tags || []), tag],
+                      uid: original.id
+                    })
+                  } else {
+                    handlePut(original.id, {
+                      name: original.name,
+                      tags: [...(original.tags || []), tag]
+                    })
+                  }
+                }}
+              />
+            )}
           </div>
         )
       },
