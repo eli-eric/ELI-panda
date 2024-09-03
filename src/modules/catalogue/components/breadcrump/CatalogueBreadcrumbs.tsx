@@ -1,7 +1,7 @@
 import { HomeIcon } from '@heroicons/react/24/outline'
 import { Fragment } from 'react'
 
-import { BreadcrumpContainer, BreadcrumpItem } from '@/components/Breadcrump'
+import { BreadcrumpContainer, BreadcrumpItem } from '@/components/breadcrump'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { useCategory } from '../../hooks/useCategory'

@@ -19,9 +19,15 @@ type FileManagerProps = {
   itemType: FILE_TYPE
   uid: string
   hasEditRole?: boolean
+  customTitle?: string
 }
 
-const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
+const FileManager = ({
+  itemType,
+  uid,
+  hasEditRole,
+  customTitle
+}: FileManagerProps) => {
   const { data: filesData } = useFiles({ itemType, uid })
   const { data: linksData } = useLinks({ uid })
 
@@ -63,7 +69,7 @@ const FileManager = ({ itemType, uid, hasEditRole }: FileManagerProps) => {
 
   return (
     <div>
-      <Heading text={messages.title}>
+      <Heading text={messages.title} customText={customTitle}>
         {hasEditRole && (
           <Fragment>
             <div {...restRootProps}>
