@@ -36,4 +36,7 @@
 //   }
 // }
 
+// Import commands for third-party auth providers
+import './auth-provider-commands/nextAuth'
+
 export {}

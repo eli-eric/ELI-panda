@@ -9,7 +9,7 @@ import toast from 'react-hot-toast'
 
 import { DeleteButton, EditButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
-import { Input } from '@/components/form/Input'
+import { Input } from '@/components/form/inputs'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import axiosInstance from '@/core/axios/axiosInstance'
 import usePermission from '@/hooks/usePermission'

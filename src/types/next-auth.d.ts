@@ -20,10 +20,9 @@ declare module 'next-auth' {
 
 declare module 'next-auth/jwt' {
   interface JWT {
-    uid: string
-    username: string
-    email: string
-    fullName: string
+    sub: string
+    jti: string
+    exp: number
     facility: string
     facilityCode: string
     roles: Array<Role>

@@ -8,7 +8,8 @@ import type {
 import {
   useMutation,
   useQuery,
-  type UseQueryResult} from '@tanstack/react-query'
+  type UseQueryResult
+} from '@tanstack/react-query'
 import { request } from 'graphql-request'
 
 type Variables = Record<string, any> | undefined

@@ -15,5 +15,6 @@ export enum ROLE {
   CODEBOOKS_ADMIN = 'codebooks-admin',
   ROOM_CARD_VIEW = 'room-cards-view',
   ROOM_CARD_EDIT = 'room-cards-edit',
-  ADMIN = 'admin'
+  ADMIN = 'admin',
+  DASHBOARD_FILES_ADMIN = 'dashboard-files-admin'
 }

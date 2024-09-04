@@ -10,7 +10,7 @@ class MyDocument extends Document {
                 (function() {
                   const theme = localStorage.getItem('theme');
                   const themeObj = JSON.parse(theme);
-                  if (themeObj.state.isDark === true) {
+                  if (themeObj && themeObj.state.isDark === true) {
                     document.documentElement.classList.add('dark');
                   } else {
                     document.documentElement.classList.remove('dark');

@@ -3,7 +3,7 @@ import { useFormContext, useWatch } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import { CheckBoxComponent } from '@/components/form/CheckBox'
-import { InputDate } from '@/components/form/Input'
+import { InputDate } from '@/components/form/inputs'
 import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
 import type { CleaningScheduleDay } from '@/types/gql/graphql'

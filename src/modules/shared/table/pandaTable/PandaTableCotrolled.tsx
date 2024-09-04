@@ -81,7 +81,7 @@ export const PandaTableControlled = ({
       )}
       <div
         className={classNames(
-          'h-full flex flex-col border-t border-gray-300 pb-4 text-sm',
+          'h-full flex flex-col border-t border-l border-gray-300 mb-4 text-sm',
           className
         )}
       >

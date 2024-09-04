@@ -2,7 +2,7 @@ import { type FC } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
-import { Input } from '@/components/form/Input'
+import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import { PageHead } from '@/components/layout/PageHead'

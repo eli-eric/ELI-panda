@@ -4,7 +4,7 @@ import { useIntl } from 'react-intl'
 
 import Combobox from '@/components/form/Combobox'
 import { ComboboxTree } from '@/components/form/ComboboxTree'
-import { Input } from '@/components/form/Input'
+import { Input } from '@/components/form/inputs'
 import { Col, Grid } from '@/components/grid/Grid'
 import { message } from '@/i18n/src/messages'
 import { useCategory } from '@/modules/catalogue/hooks/useCategory'

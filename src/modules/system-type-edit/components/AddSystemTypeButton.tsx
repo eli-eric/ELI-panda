@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 
 import { PlusButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
-import { Input } from '@/components/form/Input'
+import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import axiosInstance from '@/core/axios/axiosInstance'
