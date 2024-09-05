@@ -35,13 +35,3 @@ jobs:
           AZURE_AD_BEAMLINES_CLIENT_ID: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}'
           AZURE_AD_BEAMLINES_CLIENT_SECRET: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}'
           AZURE_AD_BEAMLINES_TENANT_ID: '${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}'
-  tests:
-    runs-on: self-hosted
-    needs: compose-up
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Run tests
-        run: |
-          gh workflow run lint-and-e2e-tests.yml
