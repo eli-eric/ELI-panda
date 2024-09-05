@@ -12,7 +12,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install dependencies
-        run: yarn in
+        run: yarn install
+      - name: Run unit tests
+        run: yarn test
   use-secret:
     runs-on: self-hosted
     env:
