@@ -6,6 +6,15 @@ on:
       - 'main'
 
 jobs:
+  unit-tests:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: yarn install
+      - name: Run unit tests
+        run: yarn test
   use-secret:
     runs-on: self-hosted
     steps:
