@@ -1,6 +1,6 @@
 import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { memo, useEffect, useRef } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
@@ -26,7 +26,7 @@ import { CatalogueOrders } from './components/orders/CatalogueOrders'
 import { RelatedItemsContainer } from './components/related-items/RelatedItems.cont'
 import { CatalogueStatisticsContainer } from './components/statistics/CatalogueStatistics.cont'
 import { useCatalogueItem } from './hooks/useItem'
-import useItemSubmit from './hooks/useItemSubmit'
+import { useItemSubmit } from './hooks/useItemSubmit'
 import type { CatalogueItem } from './types/responses'
 
 const MemoizedGallery = memo(ImageGallery)
@@ -47,6 +47,7 @@ const CatalogueItemContainer = ({
   const disabledEdit = !usePermission([ROLE.CATALOGUE_EDIT])
   const { item } = useCatalogueItem()
   const fields = useCatalogueFormFields()
+  const [saveAndExit, setSaveAndExit] = useState(false)
 
   const { catalogueCategory } = useCategory(catalogueCategoryUid)
 
@@ -56,7 +57,7 @@ const CatalogueItemContainer = ({
     defaultValues: { ...item }
   })
   const { reset } = formMethods
-  const { submit, loading } = useItemSubmit(imageRef)
+  const { submit, loading } = useItemSubmit(reset, imageRef, saveAndExit)
 
   useEffect(() => {
     if (catalogueCategory) {
@@ -74,13 +75,15 @@ const CatalogueItemContainer = ({
     // extract from catalogueItem hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = catalogueItem
+    setSaveAndExit(false)
     submit(rest as CatalogueItem)
   }
   const onSubmitAndExit = (catalogueItem: CatalogueForm) => {
     // extract from catalogueItem hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = catalogueItem
-    submit(rest as CatalogueItem, { saveAndExit: true })
+    setSaveAndExit(true)
+    submit(rest as CatalogueItem)
   }
 
   return (

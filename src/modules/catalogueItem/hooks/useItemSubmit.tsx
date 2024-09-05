@@ -1,46 +1,60 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import type { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import type { MutableRefObject } from 'react'
+import type { UseFormReset } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useSubmit } from '@/hooks/fetch/useSubmit'
-import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { PATH } from '@/types/constants/paths'
 import { navigateBack } from '@/utils'
+import { queryMutate } from '@/utils/fetcher'
 
-const useItemSubmit = (
-  imageRef?: MutableRefObject<ImageGalleryRef | undefined>
+import type { CatalogueItem } from '../types/responses'
+import { useCatalogueItem } from './useItem'
+
+export const useItemSubmit = (
+  reset: UseFormReset<any>,
+  imageRef?: MutableRefObject<ImageGalleryRef | undefined>,
+  saveAndExit?: boolean
 ) => {
-  const { query, replace, reload } = useRouter()
+  const { query, replace } = useRouter()
   const uid = query.uid as string | undefined
-  const { catalogueItem } = useEndpoint({ uid: uid })
-  const { refetch } = useCatalogueItems()
 
-  const { response, submit, loading } = useSubmit<string>({
-    endpoint: catalogueItem,
-    method: uid ? 'put' : 'post',
-    onSuccess: (responseUid, _, custom) => {
-      imageRef?.current?.submit(responseUid, () => {
-        if (custom?.saveAndExit) {
+  const { queryKey } = useCatalogueItem()
+  const queryClient = useQueryClient()
+
+  const { mutate, isPending } = useMutation({
+    mutationKey: queryKey,
+    mutationFn: queryMutate<CatalogueItem, CatalogueItem>(
+      'catalogueItem',
+      uid ? 'put' : 'post',
+      uid
+    ),
+    onSuccess: catalogueItem => {
+      queryClient.setQueryData(queryKey, catalogueItem.data)
+      queryClient.invalidateQueries({ queryKey: ['catalogueItems'] })
+      reset(catalogueItem.data)
+
+      imageRef?.current?.submit(catalogueItem.data?.uid, () => {
+        if (saveAndExit) {
           navigateBack()
-          refetch()
         } else {
           if (!uid) {
-            replace(PATH.CATALOGUE_ITEM + '/' + responseUid)
-          } else {
-            reload()
+            replace(PATH.CATALOGUE_ITEM + '/' + catalogueItem.data?.uid)
           }
         }
         toast.success('Item saved')
       })
     },
-    onError: () => {
-      toast.error('Error saving item')
+    onError: (error: AxiosError) => {
+      if (error.response?.status === 409) {
+        toast.error('Item with was edited by another user')
+      } else {
+        toast.error('Failed to save item: ' + error.message)
+      }
     }
   })
 
-  return { response, submit, loading }
+  return { submit: mutate, loading: isPending }
 }
-
-export default useItemSubmit

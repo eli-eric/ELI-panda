@@ -1,4 +1,5 @@
-import type { QueryFunction } from '@tanstack/react-query'
+import type { MutateFunction, QueryFunction } from '@tanstack/react-query'
+import type { AxiosError, AxiosResponse } from 'axios'
 import axios from 'axios'
 
 import axiosInstance from '@/core/axios/axiosInstance'
@@ -21,4 +22,23 @@ export const queryFetcher = <T>(
     return axiosInstance.get(BASE_URL + endpoint).then(res => res.data)
   }
   return querFn
+}
+
+export const queryMutate = <TResponse, TVariables>(
+  endpointType: keyof ReturnType<typeof getEndpoints>,
+  mutationType: 'post' | 'put' | 'delete',
+  uid?: string
+) => {
+  const mutateFn: MutateFunction<
+    AxiosResponse<TResponse>,
+    AxiosError,
+    TVariables
+  > = variables => {
+    const endpoint = getEndpoints({ uid })[endpointType] as string | undefined
+    if (!endpoint) {
+      throw new Error(`Endpoint for type ${endpointType} not found`)
+    }
+    return axiosInstance[mutationType](BASE_URL + endpoint, variables || {})
+  }
+  return mutateFn
 }

@@ -1,7 +1,7 @@
 import type { CodebookType } from '@/types/responses/codebook'
 
 export interface CatalogueItem {
-  uid?: string
+  uid: string
   catalogueNumber: string
   name: string
   description?: string
