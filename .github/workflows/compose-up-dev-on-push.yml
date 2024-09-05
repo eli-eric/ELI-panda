@@ -34,7 +34,7 @@ jobs:
         run: yarn test
   compose-up:
     runs-on: self-hosted
-    needs: use-secret
+    needs: unit-tests
     steps:
       - uses: actions/checkout@v3
       - run: |
