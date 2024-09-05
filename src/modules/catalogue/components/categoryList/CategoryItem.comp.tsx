@@ -20,6 +20,7 @@ export const CategoryItemComponent = ({
   return (
     <div className="flex-row justify-between dark:hover:bg-gray-600 relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white dark:bg-gray-700 shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
       <button
+        data-testid={`category-item-${category.uid}`}
         onClick={() => {
           setCategoryFilter({ uid: category.uid, name: category.name })
         }}
