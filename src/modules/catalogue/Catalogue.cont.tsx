@@ -8,7 +8,7 @@ import { Badge } from '@/components/visuals/Badge'
 import { useFormFilter } from '@/hooks/form/useFormFilters'
 import type { CodebookType } from '@/types/responses/codebook'
 
-import type { CatalogueItem } from '../catalogueItem/types/responses'
+import type { CatalogueItemForm } from '../catalogueItem/types/responses'
 import { CatalogueTable } from '../shared/catalogue/table/CatalogueItems.table'
 import { FilterBadges } from '../shared/form/FilterBadges'
 import { Pagination } from '../shared/table/Pagination'
@@ -27,7 +27,7 @@ const CatalogueContainer = () => {
   const [categoryQuery, setCategoryQuery] = useQueryState('category', {
     history: 'push'
   })
-  const defValues = useMemo<CatalogueItem>(
+  const defValues = useMemo<CatalogueItemForm>(
     () => ({
       name: '',
       category: null,
