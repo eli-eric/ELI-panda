@@ -109,7 +109,7 @@ const DashboardPage: NextPage = (): JSX.Element => {
         </TileContainer>
         <FileManager
           itemType={FILE_TYPE.GENERAL}
-          uid="dashboard"
+          uid="dashboard-files"
           hasEditRole={hasEditRole}
           customTitle="GENERAL FILES"
         />
