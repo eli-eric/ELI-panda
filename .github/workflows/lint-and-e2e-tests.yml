@@ -26,22 +26,27 @@ jobs:
       - name: Lint 🤓
         run: yarn lint
 
-  # cypress-run:
-  #   name: Cypress run - test
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+      - name: Test 🧪
+        run: yarn test
 
-  #     - name: Cypress run
-  #       uses: cypress-io/github-action@v5
-  #       with:
-  #         record: true
-  #         browser: chrome
-  #       env:
-  #         CYPRESS_host: http://localhost:5001
-  #         # pass the Cypress Cloud record key as an environment variable
-  #         CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-  #         # # pass GitHub token to allow accurately detecting a build vs a re-run build
-  #         # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         PANDA_API_GW_URL: http://localhost:5001/api/mock-server
+  cypress-run:
+    name: Cypress run - test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v5
+        with:
+          record: true
+          browser: chrome
+        env:
+          CYPRESS_host: http://localhost:5001
+          CYPRESS_token: ${{ secrets.CYPRESS_LOGIN_TOKEN }}
+          CYPRESS_nextauth_secret: ${{ secrets.NEXTAUTH_SECRET }}
+          PANDA_API_GW_URL: ${{ env.PANDA_API_GW_URL }}
+          # pass the Cypress Cloud record key as an environment variable
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          # # pass GitHub token to allow accurately detecting a build vs a re-run build
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
