@@ -1,26 +1,32 @@
 import {
   drag,
   forceCenter,
+  ForceLink,
   forceLink,
   forceManyBody,
   forceSimulation,
   select,
   zoom
 } from 'd3'
-import type { FC } from 'react'
-import { useEffect, useRef } from 'react'
+import type { FC, PropsWithChildren } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import { MinusButton, PlusButton } from '@/components/Buttons'
+import { MinusButton, PlusButton, StatsButton } from '@/components/Buttons'
 
+import type { RenderStatsProps } from './GraphModal'
 import type { GraphNode, SystemGraphResponse } from './types'
 
 interface Props {
   data: SystemGraphResponse
+  renderStats: (props: RenderStatsProps) => JSX.Element | null
 }
 
-export const GraphView: FC<Props> = ({ data }) => {
+const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
   const svgRef = useRef<SVGSVGElement>(null)
   const zoomRef = useRef<any>(null)
+
+  const [openStats, setOpenStats] = useState(false)
+  const [selectedNode, setSelectedNode] = useState<GraphNode>(data.nodes[0])
 
   useEffect(() => {
     const svg = select(svgRef.current) // Select the SVG element using D3
@@ -123,8 +129,8 @@ export const GraphView: FC<Props> = ({ data }) => {
       .data(links) // Bind the link data
       .join('text') // Enter, update, and remove text labels as needed
       .attr('class', 'relationship') // Add class for styling
-      .attr('x', d => ((d.source.x ?? 0) + (d.target.x ?? 0)) / 2) // Set x-position at the midpoint of the link
-      .attr('y', d => ((d.source.y ?? 0) + (d.target.y ?? 0)) / 2) // Set y-position at the midpoint of the link
+      .attr('x', d => ((d.source?.x ?? 0) + (d.target?.x ?? 0)) / 2) // Set x-position at the midpoint of the link
+      .attr('y', d => ((d.source?.y ?? 0) + (d.target?.y ?? 0)) / 2) // Set y-position at the midpoint of the link
       .attr('dy', -10) // Offset the text vertically
       .attr('text-anchor', 'middle') // Center the text horizontally
       .text(d => d.relationship) // Set the text content to the relationship type
@@ -133,15 +139,15 @@ export const GraphView: FC<Props> = ({ data }) => {
 
     // Update simulation nodes and links on every tick
     simulation.nodes(data.nodes).on('tick', ticked) // Update positions on each tick
-    ;(simulation.force('link') as d3.ForceLink<GraphNode, any>).links(links) // Update the simulation with the links
+    ;(simulation.force('link') as ForceLink<GraphNode, any>)?.links(links) // Update the simulation with the links
 
     function ticked() {
       // Update link positions as the simulation progresses
       link
-        .attr('x1', d => d.source.x ?? 0) // Set the x1 position for the link source
-        .attr('y1', d => d.source.y ?? 0) // Set the y1 position for the link source
-        .attr('x2', d => d.target.x ?? 0) // Set the x2 position for the link target
-        .attr('y2', d => d.target.y ?? 0) // Set the y2 position for the link target
+        .attr('x1', d => d.source?.x ?? 0) // Set the x1 position for the link source
+        .attr('y1', d => d.source?.y ?? 0) // Set the y1 position for the link source
+        .attr('x2', d => d.target?.x ?? 0) // Set the x2 position for the link target
+        .attr('y2', d => d.target?.y ?? 0) // Set the y2 position for the link target
 
       // Update node positions as the simulation progresses
       node.attr('cx', d => d.x ?? 0).attr('cy', d => d.y ?? 0) // Set the x and y positions for the nodes
@@ -153,8 +159,8 @@ export const GraphView: FC<Props> = ({ data }) => {
 
       // Update relationship label positions as the simulation progresses
       relationshipLabels
-        .attr('x', d => ((d.source.x ?? 0) + (d.target.x ?? 0)) / 2) // Update the x position of the relationship label
-        .attr('y', d => ((d.source.y ?? 0) + (d.target.y ?? 0)) / 2) // Update the y position of the relationship label
+        .attr('x', d => ((d.source?.x ?? 0) + (d.target?.x ?? 0)) / 2) // Update the x position of the relationship label
+        .attr('y', d => ((d.source?.y ?? 0) + (d.target?.y ?? 0)) / 2) // Update the y position of the relationship label
     }
 
     // Define what happens when dragging starts
@@ -190,15 +196,27 @@ export const GraphView: FC<Props> = ({ data }) => {
     zoomRef.current.scaleBy(select(svgRef.current), 0.8) // Decrease scale by 20%
   }
 
+  const handleOpenStats = () => setOpenStats(!openStats)
+
   return (
-    <div>
-      <div className="mb-2">
+    <div className="">
+      <div className="mb-2 flex justify-between">
         <div>
-          <PlusButton onClick={zoomIn} className="mr-2" />{' '}
           <MinusButton onClick={zoomOut} />
+          <PlusButton onClick={zoomIn} className="mr-2" />
         </div>
+        <StatsButton onClick={handleOpenStats} />
       </div>
-      <svg ref={svgRef} className="w-full border rounded-md" height="600"></svg>{' '}
+      <div className="flex">
+        <svg
+          ref={svgRef}
+          className="w-full border rounded-md"
+          height="600"
+        ></svg>
+        {renderStats({ open: openStats })}
+      </div>
     </div>
   )
 }
+
+export default GraphView

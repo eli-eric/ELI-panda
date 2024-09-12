@@ -24,7 +24,7 @@ export const SystemItemContainer = ({ uid }: Props) => {
 
   return (
     <div className="h-screen">
-      <GraphModalButton />
+      <GraphModalButton uid={uid} />
       <Fragment>
         <SystemForm />
         {uid && (
