@@ -4,15 +4,16 @@ import { Suspense } from 'react'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import { SystemGraphResponse } from './types'
+import { GraphNode, SystemGraphResponse } from './types'
 import { queryFetcher } from '@/utils/fetcher'
 import ErrorPage from '@/components/error/ErrorPage'
 import { ErrorBoundary } from 'react-error-boundary'
 
-const GraphViewLazy = dynamic(() => import('./GraphView'))
+const GraphViewLazy = dynamic(() => import('../d3/graph/GraphView'))
 
 export type RenderStatsProps = {
   open: boolean
+  selectedNode: GraphNode | null
 }
 
 export const GraphModal = ({ open, setOpen, uid }) => {
@@ -24,9 +25,13 @@ export const GraphModal = ({ open, setOpen, uid }) => {
 
   console.log(data)
 
-  const renderStats = ({ open }: RenderStatsProps) => {
+  const renderStats = ({ open, selectedNode }: RenderStatsProps) => {
     if (!open) return null
-    return <div className="h-full w-72 border rounded-md pr-4 pl-4">Stats</div>
+    return (
+      <div className="h-full w-72 border rounded-md pr-4 pl-4">
+        {selectedNode?.name}
+      </div>
+    )
   }
 
   return (

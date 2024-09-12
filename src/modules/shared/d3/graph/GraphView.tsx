@@ -13,12 +13,14 @@ import { useEffect, useRef, useState } from 'react'
 
 import { MinusButton, PlusButton, StatsButton } from '@/components/Buttons'
 
-import type { RenderStatsProps } from './GraphModal'
 import type { GraphNode, SystemGraphResponse } from './types'
 
 interface Props {
   data: SystemGraphResponse
-  renderStats: (props: RenderStatsProps) => JSX.Element | null
+  renderStats: (props: {
+    open: boolean
+    selectedNode: GraphNode | null
+  }) => JSX.Element | null
 }
 
 const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
@@ -26,7 +28,7 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
   const zoomRef = useRef<any>(null)
 
   const [openStats, setOpenStats] = useState(false)
-  const [selectedNode, setSelectedNode] = useState<GraphNode>(data.nodes[0])
+  const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null) // Allow null initially
 
   useEffect(() => {
     const svg = select(svgRef.current) // Select the SVG element using D3
@@ -69,8 +71,7 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
 
     // Set up zoom
     const zoomHandler = zoom().on('zoom', event => {
-      // On zoom event, apply the zoom transformation to the <g> group containing graph elements
-      svg.select('g').attr('transform', event.transform)
+      svg.select('g').attr('transform', event.transform) // On zoom event, apply the zoom transformation to the <g> group containing graph elements
     })
     svg.call(zoomHandler as any) // Apply zoom functionality to the SVG
 
@@ -112,6 +113,7 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
       .attr('stroke-width', 2) // Set the stroke width
       .attr('fill', 'none') // Prevent filling the area between the curves
       .attr('marker-end', 'url(#arrowhead)') // Add the arrow marker to the end of the path
+      .style('cursor', 'pointer') // Change cursor to pointer on hover
       .on('click', function (event, d) {
         // Remove highlights from all lines
         link
@@ -137,6 +139,8 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
       .join('circle') // Enter, update, and remove circles as needed
       .attr('r', circleRadius) // Set the radius of each circle
       .attr('fill', '#69b3a2') // Set the fill color of the circles
+      .attr('data-uid', d => d.uid) // Set data-uid attribute for easier selection
+      .style('cursor', 'pointer') // Change cursor to pointer on hover
       .call(
         drag<SVGCircleElement, GraphNode>() // Enable dragging for the nodes
           .on('start', dragstarted) // Define the behavior on drag start
@@ -156,6 +160,18 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
       .text(d => d.name) // Set the text content to the node's name
       .style('font-size', '12px') // Set the font size
       .style('fill', '#000') // Set the font color
+      .style('cursor', 'pointer') // Change cursor to pointer on hover
+      .on('click', function (event, d) {
+        // Update the state when the node label is clicked
+        setSelectedNode(d) // Save the selected node to state
+
+        // Optionally, highlight the clicked node (optional visual feedback)
+        node.attr('stroke', null) // Reset all nodes
+
+        select(`circle[data-uid='${d.uid}']`)
+          .attr('stroke', 'orange')
+          .attr('stroke-width', 3) // Highlight the corresponding node
+      })
 
     // Add relationship labels to the links
     const relationshipLabels = g
@@ -170,8 +186,8 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
       .text(d => d.relationship) // Set the text content to the relationship type
       .style('font-size', '10px') // Set the font size
       .style('fill', '#666') // Set the font color
+      .style('cursor', 'pointer') // Change cursor to pointer on hover
       .on('click', function (event, d) {
-        // Remove highlights from all lines
         link
           .attr('stroke', '#ccc')
           .attr('stroke-width', 2)
@@ -199,14 +215,12 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
         const dy = (d.target?.y ?? 0) - (d.source?.y ?? 0)
         const dr = Math.sqrt(dx * dx + dy * dy) // Distance between nodes
 
-        // Calculate total number of links between the same nodes
         const totalLinks = links.filter(
           l =>
             (l.source === d.source && l.target === d.target) ||
             (l.source === d.target && l.target === d.source)
         ).length
 
-        // Determine the index of the current link among all links between the same nodes
         const linkIndex = links
           .filter(
             l =>
@@ -215,11 +229,14 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
           )
           .indexOf(d)
 
-        // Apply curvature only for multiple links; keep straight lines for single links
         const curvature =
           totalLinks > 1 ? (linkIndex - (totalLinks - 1) / 2) * 30 : 0 // Only apply curvature for multiple links
 
-        return `M${d.source?.x},${d.source?.y} Q${(d.source?.x ?? 0) + dx / 2 + curvature},${(d.source?.y ?? 0) + dy / 2 + curvature} ${d.target?.x},${d.target?.y}`
+        return `M${d.source?.x},${d.source?.y} Q${
+          (d.source?.x ?? 0) + dx / 2 + curvature
+        },${(d.source?.y ?? 0) + dy / 2 + curvature} ${d.target?.x},${
+          d.target?.y
+        }`
       })
 
       node.attr('cx', d => d.x ?? 0).attr('cy', d => d.y ?? 0)
@@ -278,7 +295,11 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
     // Define what happens when dragging starts
     function dragstarted(this: SVGCircleElement, event: any, d: GraphNode) {
       if (!event.active) simulation.alphaTarget(0.3).restart() // Restart the simulation if not already active
-      select(this).raise().attr('stroke', 'black') // Raise the dragged node and change its stroke color
+      setSelectedNode(d) // Save the selected node to state
+
+      // Optionally, highlight the clicked node (optional visual feedback)
+      node.attr('stroke', null) // Reset all nodes
+      select(this).attr('stroke', 'orange').attr('stroke-width', 3) // Highlight the clicked node
       d.fx = d.x // Fix the node's x position
       d.fy = d.y // Fix the node's y position
     }
@@ -292,7 +313,6 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
     // Define what happens when dragging ends
     function dragended(this: SVGCircleElement, event: any, d: GraphNode) {
       if (!event.active) simulation.alphaTarget(0) // Lower the simulation's alpha target when dragging ends
-      select(this).attr('stroke', null) // Remove the stroke color
       d.fx = d.x // Keep the node fixed at the current x position
       d.fy = d.y // Keep the node fixed at the current y position
     }
@@ -325,7 +345,7 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
           className="w-full border rounded-md"
           height="600"
         ></svg>
-        {renderStats({ open: openStats })}
+        {renderStats({ open: openStats, selectedNode })}
       </div>
     </div>
   )
