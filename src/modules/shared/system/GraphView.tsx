@@ -37,19 +37,35 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
 
     // Append arrow markers to the SVG (only once)
     svg.select('defs').remove() // Remove any existing defs (definitions) to avoid duplication
-    svg
-      .append('defs') // Add definitions (defs) to SVG
-      .append('marker') // Add a marker for arrowheads
-      .attr('id', 'arrowhead') // Set an ID for referencing the arrowhead marker
-      .attr('viewBox', '0 -5 10 10') // Define the viewbox for the arrow shape
-      .attr('refX', 17) // Position of the arrowhead relative to the node boundary
-      .attr('refY', 0) // Vertically center the arrowhead
-      .attr('markerWidth', 6) // Define the width of the arrowhead
-      .attr('markerHeight', 6) // Define the height of the arrowhead
-      .attr('orient', 'auto') // Automatically orient the arrowhead
-      .append('path') // Create the arrowhead path (triangle shape)
-      .attr('d', 'M 0,-5 L 10,0 L 0,5') // Define the path for the arrowhead shape
+    const defs = svg.append('defs') // Add definitions (defs) to SVG
+
+    // Default gray arrow marker
+    defs
+      .append('marker')
+      .attr('id', 'arrowhead')
+      .attr('viewBox', '0 -5 10 10')
+      .attr('refX', 17)
+      .attr('refY', 0)
+      .attr('markerWidth', 6)
+      .attr('markerHeight', 6)
+      .attr('orient', 'auto')
+      .append('path')
+      .attr('d', 'M 0,-5 L 10,0 L 0,5')
       .attr('fill', '#ccc') // Set arrowhead color to gray
+
+    // Highlighted orange arrow marker
+    defs
+      .append('marker')
+      .attr('id', 'arrowhead-highlight')
+      .attr('viewBox', '0 -5 10 10')
+      .attr('refX', circleRadius + 7) // Position the arrowhead relative to the node boundary
+      .attr('refY', 0)
+      .attr('markerWidth', 6) // Set the fixed width of the arrowhead for highlighted lines
+      .attr('markerHeight', 6) // Set the fixed height of the arrowhead for highlighted lines
+      .attr('orient', 'auto')
+      .append('path')
+      .attr('d', 'M 0,-5 L 10,0 L 0,5') // Define the path for the arrowhead shape
+      .attr('fill', 'orange') // Set arrowhead color to orange for highlighting
 
     // Set up zoom
     const zoomHandler = zoom().on('zoom', event => {
@@ -87,14 +103,32 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
       .force('charge', forceManyBody().strength(-300)) // Add a repulsion force (negative charge pushes nodes apart)
       .force('center', forceCenter(width / 2, height / 2)) // Center the graph on the SVG
 
-    // Add the links (lines) between nodes with arrow markers
+    // Add the links (paths) between nodes with arrow markers and curves for multiple relationships
     const link = g
-      .selectAll('line') // Select all existing lines
+      .selectAll('path') // Use 'path' instead of 'line' for curves
       .data(links) // Bind the link data
-      .join('line') // Enter, update, and remove lines as needed
+      .join('path') // Enter, update, and remove paths as needed
       .attr('stroke', '#ccc') // Set the stroke color to gray
       .attr('stroke-width', 2) // Set the stroke width
-      .attr('marker-end', 'url(#arrowhead)') // Add the arrow marker to the end of the line
+      .attr('fill', 'none') // Prevent filling the area between the curves
+      .attr('marker-end', 'url(#arrowhead)') // Add the arrow marker to the end of the path
+      .on('click', function (event, d) {
+        // Remove highlights from all lines
+        link
+          .attr('stroke', '#ccc')
+          .attr('stroke-width', 2)
+          .attr('marker-end', 'url(#arrowhead)')
+        relationshipLabels.style('fill', '#666')
+
+        // Highlight the clicked line
+        select(this)
+          .attr('stroke', 'orange')
+          .attr('stroke-width', 2)
+          .attr('marker-end', 'url(#arrowhead-highlight)')
+
+        // Highlight the corresponding label
+        relationshipLabels.filter(label => label === d).style('fill', 'orange')
+      })
 
     // Add the node circles
     const node = g
@@ -136,31 +170,109 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
       .text(d => d.relationship) // Set the text content to the relationship type
       .style('font-size', '10px') // Set the font size
       .style('fill', '#666') // Set the font color
+      .on('click', function (event, d) {
+        // Remove highlights from all lines
+        link
+          .attr('stroke', '#ccc')
+          .attr('stroke-width', 2)
+          .attr('marker-end', 'url(#arrowhead)')
+        relationshipLabels.style('fill', '#666')
 
-    // Update simulation nodes and links on every tick
-    simulation.nodes(data.nodes).on('tick', ticked) // Update positions on each tick
-    ;(simulation.force('link') as ForceLink<GraphNode, any>)?.links(links) // Update the simulation with the links
+        // Highlight the corresponding line
+        link
+          .filter(linkData => linkData === d)
+          .attr('stroke', 'orange')
+          .attr('stroke-width', 2)
+          .attr('marker-end', 'url(#arrowhead-highlight)')
+
+        // Highlight the clicked label
+        select(this).style('fill', 'orange')
+      })
+
+    // Update simulation on every tick
+    simulation.nodes(data.nodes).on('tick', ticked)
+    ;(simulation.force('link') as ForceLink<GraphNode, any>)?.links(links)
 
     function ticked() {
-      // Update link positions as the simulation progresses
-      link
-        .attr('x1', d => d.source?.x ?? 0) // Set the x1 position for the link source
-        .attr('y1', d => d.source?.y ?? 0) // Set the y1 position for the link source
-        .attr('x2', d => d.target?.x ?? 0) // Set the x2 position for the link target
-        .attr('y2', d => d.target?.y ?? 0) // Set the y2 position for the link target
+      link.attr('d', (d, i, nodes) => {
+        const dx = (d.target?.x ?? 0) - (d.source?.x ?? 0)
+        const dy = (d.target?.y ?? 0) - (d.source?.y ?? 0)
+        const dr = Math.sqrt(dx * dx + dy * dy) // Distance between nodes
 
-      // Update node positions as the simulation progresses
-      node.attr('cx', d => d.x ?? 0).attr('cy', d => d.y ?? 0) // Set the x and y positions for the nodes
+        // Calculate total number of links between the same nodes
+        const totalLinks = links.filter(
+          l =>
+            (l.source === d.source && l.target === d.target) ||
+            (l.source === d.target && l.target === d.source)
+        ).length
 
-      // Update node label positions as the simulation progresses
+        // Determine the index of the current link among all links between the same nodes
+        const linkIndex = links
+          .filter(
+            l =>
+              (l.source === d.source && l.target === d.target) ||
+              (l.source === d.target && l.target === d.source)
+          )
+          .indexOf(d)
+
+        // Apply curvature only for multiple links; keep straight lines for single links
+        const curvature =
+          totalLinks > 1 ? (linkIndex - (totalLinks - 1) / 2) * 30 : 0 // Only apply curvature for multiple links
+
+        return `M${d.source?.x},${d.source?.y} Q${(d.source?.x ?? 0) + dx / 2 + curvature},${(d.source?.y ?? 0) + dy / 2 + curvature} ${d.target?.x},${d.target?.y}`
+      })
+
+      node.attr('cx', d => d.x ?? 0).attr('cy', d => d.y ?? 0)
+
       nodeLabels
         .attr('x', d => d.x ?? 0) // Update the x position of the label
-        .attr('y', d => (d.y ?? 0) - circleRadius - 5) // Update the y position of the label
+        .attr('y', d => (d.y ?? 0) - circleRadius - 5) // Update the y position above the node circle
 
-      // Update relationship label positions as the simulation progresses
       relationshipLabels
-        .attr('x', d => ((d.source?.x ?? 0) + (d.target?.x ?? 0)) / 2) // Update the x position of the relationship label
-        .attr('y', d => ((d.source?.y ?? 0) + (d.target?.y ?? 0)) / 2) // Update the y position of the relationship label
+        .attr('x', (d, i, nodes) => {
+          const dx = (d.target?.x ?? 0) - (d.source?.x ?? 0)
+          const dy = (d.target?.y ?? 0) - (d.source?.y ?? 0)
+          const totalLinks = links.filter(
+            l =>
+              (l.source === d.source && l.target === d.target) ||
+              (l.source === d.target && l.target === d.source)
+          ).length
+
+          const linkIndex = links
+            .filter(
+              l =>
+                (l.source === d.source && l.target === d.target) ||
+                (l.source === d.target && l.target === d.source)
+            )
+            .indexOf(d)
+
+          const labelOffset =
+            totalLinks > 1 ? (linkIndex - (totalLinks - 1) / 2) * 20 : 0
+
+          return ((d.source?.x ?? 0) + (d.target?.x ?? 0)) / 2 + labelOffset
+        })
+        .attr('y', (d, i, nodes) => {
+          const dx = (d.target?.x ?? 0) - (d.source?.x ?? 0)
+          const dy = (d.target?.y ?? 0) - (d.source?.y ?? 0)
+          const totalLinks = links.filter(
+            l =>
+              (l.source === d.source && l.target === d.target) ||
+              (l.source === d.target && l.target === d.source)
+          ).length
+
+          const linkIndex = links
+            .filter(
+              l =>
+                (l.source === d.source && l.target === d.target) ||
+                (l.source === d.target && l.target === d.source)
+            )
+            .indexOf(d)
+
+          const labelOffset =
+            totalLinks > 1 ? (linkIndex - (totalLinks - 1) / 2) * 20 : 0
+
+          return ((d.source?.y ?? 0) + (d.target?.y ?? 0)) / 2 + labelOffset
+        })
     }
 
     // Define what happens when dragging starts

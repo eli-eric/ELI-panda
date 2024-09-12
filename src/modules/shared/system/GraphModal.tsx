@@ -26,7 +26,7 @@ export const GraphModal = ({ open, setOpen, uid }) => {
 
   const renderStats = ({ open }: RenderStatsProps) => {
     if (!open) return null
-    return <div className="h-full w-11 border rounded-md p-4">Stats</div>
+    return <div className="h-full w-72 border rounded-md pr-4 pl-4">Stats</div>
   }
 
   return (
@@ -35,10 +35,7 @@ export const GraphModal = ({ open, setOpen, uid }) => {
         {data && (
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense>
-              <GraphViewLazy
-                data={data}
-                renderStats={renderStats}
-              ></GraphViewLazy>
+              <GraphViewLazy data={data} renderStats={renderStats} />
             </Suspense>
           </ErrorBoundary>
         )}

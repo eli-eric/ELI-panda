@@ -11,7 +11,8 @@ import {
   PlusIcon,
   QrCodeIcon,
   TableCellsIcon,
-  TrashIcon
+  TrashIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline'
 import { FolderArrowDownIcon } from '@heroicons/react/24/solid'
 import Link from 'next/link'
@@ -213,6 +214,12 @@ export const TableEditButton = ({ type = 'button', ...props }: ButtonProps) => (
 export const TableOpenButton = ({ type = 'button', ...props }: ButtonProps) => (
   <button className="ml-2  hover:text-primary-500" type={type} {...props}>
     <FolderOpenIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+
+export const XmarkButton = ({ type = 'button', ...props }: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
+    <XMarkIcon className="h-4 w-4" aria-hidden="true" />
   </button>
 )
 
