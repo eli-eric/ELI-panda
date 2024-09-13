@@ -280,24 +280,14 @@ export const useSystemsColumns = ({
       {
         header: 'Order Number',
         accessorFn: row => row.physicalItem?.orderNumber,
+        cell: ({ getValue, row: { original } }) => (
+          <NewTabLink
+            href={PATH.ORDER + '/' + original.physicalItem?.orderUid}
+            value={getValue()}
+          />
+        ),
         id: 'orderNumber',
         size: 150
-      },
-      {
-        header: 'Order UID',
-        accessorFn: row => row.physicalItem?.orderUid,
-        cell: ({ getValue }) => (
-          <Tooltip content={PATH.ORDER + '/' + getValue()}>
-            <div>
-              <NewTabLink
-                href={PATH.ORDER + '/' + getValue()}
-                value={getValue()}
-              />
-            </div>
-          </Tooltip>
-        ),
-        id: 'orderUid',
-        size: 350
       }
     ],
     [setUid, canEdit, hideButtons, tableId, enableDragAndDrop, queryKey]
