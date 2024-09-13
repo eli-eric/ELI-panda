@@ -47,6 +47,8 @@ export type PhysicalItem = {
   serialNumber?: string
   catalogueItem?: CatalogueItem
   properties?: PhysicalItemProperty[]
+  orderNumber?: string
+  orderUid?: string
 }
 export type ItemProperty = {
   uid: string

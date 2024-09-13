@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 
+import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 
 import type { CatalogueItem } from '../types/responses'
@@ -9,13 +10,15 @@ import type { CatalogueItem } from '../types/responses'
 export const useCatalogueItem = () => {
   const router = useRouter()
   const catalogueUid = router.query.uid as string
+  const queryKey: QueryFetcherKey = ['catalogueItem', { uid: catalogueUid }]
 
   const {
     data: item,
     isLoading,
-    error
+    error,
+    refetch
   } = useQuery({
-    queryKey: ['catalogueItem', { uid: catalogueUid }],
+    queryKey,
     queryFn: queryFetcher<CatalogueItem>('catalogueItem'),
     enabled: !!catalogueUid
   })
@@ -28,5 +31,5 @@ export const useCatalogueItem = () => {
     return groups
   }, [item])
 
-  return { item: item, loading: isLoading, error, groups }
+  return { item: item, loading: isLoading, error, groups, refetch, queryKey }
 }
