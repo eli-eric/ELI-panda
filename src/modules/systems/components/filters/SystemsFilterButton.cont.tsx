@@ -27,6 +27,7 @@ type SystemFilterType = {
   importance: CodebookType | null
   itemUsage: string[]
   eun: string
+  order: string
   serialNumber: string
   catalogueName: string
   catalogueNumber: string
@@ -63,6 +64,7 @@ export const SystemFilterButtonContainer = ({
       importance: null,
       itemUsage: [],
       eun: '',
+      order: '',
       serialNumber: '',
       catalogueName: '',
       catalogueNumber: '',

@@ -168,6 +168,7 @@ export const messages = {
             label: 'Serial Number',
             placeholder: 'Serial Number'
           },
+          order: { label: 'Order', placeholder: 'Order' },
           eun: { label: 'Eun', placeholder: 'Eun' },
           price: { label: 'Price', placeholder: 'Price' },
           procurementStatus: {

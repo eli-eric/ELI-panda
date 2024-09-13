@@ -94,7 +94,12 @@ export const useSystemsFilterFields = () => {
       rounded: 'rounded-md',
       disabled: disabledEdit
     },
-
+    order: {
+      name: 'order',
+      label: form.physicalItem.order.label,
+      rounded: 'rounded-md',
+      disabled: disabledEdit
+    },
     eun: {
       name: 'eun',
       label: form.physicalItem.eun.label,
