@@ -107,6 +107,11 @@ export const SystemsFilterForm = ({
           isFilter={true}
         />
         <Input
+          {...fields.order}
+          onChange={setFilter(fields.order.name)}
+          isFilter={true}
+        />
+        <Input
           {...fields.eun}
           onChange={setFilter(fields.eun.name)}
           isFilter={true}
