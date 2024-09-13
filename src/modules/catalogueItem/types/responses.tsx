@@ -1,7 +1,19 @@
 import type { CodebookType } from '@/types/responses/codebook'
 
+export interface CatalogueItemForm {
+  catalogueNumber: string
+  name: string
+  description?: string
+  categoryPath?: string
+  categoryName?: string
+  category: CodebookType | null
+  supplier?: CodebookType | null
+  manufacturerUrl?: string
+  details?: CatalogueItemDetail[]
+}
+
 export interface CatalogueItem {
-  uid?: string
+  uid: string
   catalogueNumber: string
   name: string
   description?: string
