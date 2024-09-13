@@ -77,12 +77,12 @@ export function PandaTableV2<T>({
       isEmpty={data?.length === 0}
     >
       <thead className="sticky top-0 z-10 dark:bg-gray-900  bg-opacity-75  backdrop-blur backdrop-filter">
-        {table.getHeaderGroups().map(headerGroup => (
-          <tr className="flex w-full" key={headerGroup.id}>
-            {headerGroup.headers.map((header, headerIndex) => {
-              return (
-                <>
-                  {enableColumnReordering ? (
+        {table.getHeaderGroups().map(headerGroup => {
+          return (
+            <tr className="flex w-full" key={headerGroup.id}>
+              {headerGroup.headers.map((header, headerIndex) => {
+                if (enableColumnReordering) {
+                  return (
                     <HeaderCellDNDComponent
                       key={header.id}
                       header={header}
@@ -91,19 +91,21 @@ export function PandaTableV2<T>({
                       setColumnOrder={table.setColumnOrder}
                       columnOrder={table.getState().columnOrder}
                     />
-                  ) : (
-                    <HeaderCellComponent
-                      key={header.id}
-                      header={header}
-                      headerIndex={headerIndex}
-                      columns={table.getAllColumns()}
-                    />
-                  )}
-                </>
-              )
-            })}
-          </tr>
-        ))}
+                  )
+                }
+
+                return (
+                  <HeaderCellComponent
+                    key={header.id}
+                    header={header}
+                    headerIndex={headerIndex}
+                    columns={table.getAllColumns()}
+                  />
+                )
+              })}
+            </tr>
+          )
+        })}
       </thead>
       <tbody
         style={{
@@ -112,29 +114,30 @@ export function PandaTableV2<T>({
           position: 'relative' //needed for absolute positioning of rows
         }}
       >
-        {virtualRows.map(virtualRow => {
-          const row = rows[virtualRow.index] as Row<any>
-          return getRowProps(row).dropsettings ? (
-            <TableRowDNDComponent
-              key={virtualRow.key}
-              row={row}
-              getRowProps={getRowProps}
-              virtualRow={virtualRow}
-              measureElement={rowVirtualizer.measureElement}
-              loading={loading}
-              tableId={tableId}
-            />
-          ) : (
-            <TableRowComponent
-              key={virtualRow.key}
-              row={row}
-              getRowProps={getRowProps}
-              virtualRow={virtualRow}
-              measureElement={rowVirtualizer.measureElement}
-              loading={loading}
-            />
-          )
-        })}
+        {data &&
+          virtualRows.map(virtualRow => {
+            const row = rows[virtualRow.index] as Row<any>
+            return getRowProps(row).dropsettings ? (
+              <TableRowDNDComponent
+                key={virtualRow.key}
+                row={row}
+                getRowProps={getRowProps}
+                virtualRow={virtualRow}
+                measureElement={rowVirtualizer.measureElement}
+                loading={loading}
+                tableId={tableId}
+              />
+            ) : (
+              <TableRowComponent
+                key={virtualRow.key}
+                row={row}
+                getRowProps={getRowProps}
+                virtualRow={virtualRow}
+                measureElement={rowVirtualizer.measureElement}
+                loading={loading}
+              />
+            )
+          })}
       </tbody>
       {enableFooter && <TableFoot getFooterGroups={table.getFooterGroups} />}
     </TableContainer>
