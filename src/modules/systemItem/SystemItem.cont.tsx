@@ -9,7 +9,6 @@ import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ROLE } from '@/types/constants/roles'
 
 import FileManager from '../shared/fileManager/FileManager'
-import { GraphModalButton } from '../shared/system/GraphModalButton'
 import { SystemForm } from './components/form/SystemForm.cont'
 import { SparePartsFor } from './components/spare-for/SpareFor.cont'
 import { SparePartsContainer } from './components/spare-parts/SpareParts.cont'
@@ -24,7 +23,6 @@ export const SystemItemContainer = ({ uid }: Props) => {
 
   return (
     <div className="h-screen">
-      <GraphModalButton uid={uid} />
       <Fragment>
         <SystemForm />
         {uid && (

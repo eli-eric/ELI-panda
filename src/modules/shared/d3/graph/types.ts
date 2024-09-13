@@ -17,3 +17,8 @@ export type SystemGraphResponse = {
   nodes: GraphNode[]
   links: GraphLink[]
 }
+
+export type RenderStatsProps = {
+  open: boolean
+  selectedNode: GraphNode | null
+}

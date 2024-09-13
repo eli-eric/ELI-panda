@@ -1,7 +1,7 @@
+import type { D3DragEvent, ForceLink, ZoomBehavior } from 'd3'
 import {
   drag,
   forceCenter,
-  ForceLink,
   forceLink,
   forceManyBody,
   forceSimulation,
@@ -9,7 +9,7 @@ import {
   zoom
 } from 'd3'
 import type { FC, PropsWithChildren } from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { MinusButton, PlusButton, StatsButton } from '@/components/Buttons'
 
@@ -24,24 +24,113 @@ interface Props {
 }
 
 const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
-  const svgRef = useRef<SVGSVGElement>(null)
-  const zoomRef = useRef<any>(null)
+  const svgRef = useRef<SVGSVGElement | null>(null)
+  const zoomRef = useRef<ZoomBehavior<SVGSVGElement, unknown> | null>(null) // Updated type
+  const circleRadius = 10
 
   const [openStats, setOpenStats] = useState(false)
-  const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null) // Allow null initially
+  const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null)
+
+  // Event handlers wrapped with useCallback
+  const zoomIn = useCallback(() => {
+    if (svgRef.current && zoomRef.current) {
+      const svg = select<SVGSVGElement, unknown>(svgRef.current)
+      zoomRef.current.scaleBy(svg, 1.2)
+    }
+  }, [])
+
+  const zoomOut = useCallback(() => {
+    if (svgRef.current && zoomRef.current) {
+      const svg = select<SVGSVGElement, unknown>(svgRef.current)
+      zoomRef.current.scaleBy(svg, 0.8)
+    }
+  }, [])
+
+  const handleOpenStats = useCallback(() => {
+    setOpenStats(prev => !prev)
+  }, [])
+
+  // Drag event handlers
+  const dragstarted = useCallback(
+    (
+      event: D3DragEvent<SVGCircleElement, GraphNode, unknown>,
+      d: GraphNode
+    ) => {
+      if (!event.active) simulationRef.current?.alphaTarget(0.3).restart()
+      setSelectedNode(d)
+
+      nodeSelectionRef.current?.attr('stroke', null)
+      select(event.sourceEvent.currentTarget)
+        .attr('stroke', 'orange')
+        .attr('stroke-width', 3)
+
+      d.fx = d.x
+      d.fy = d.y
+    },
+    []
+  )
+
+  const dragged = useCallback(
+    (
+      event: D3DragEvent<SVGCircleElement, GraphNode, unknown>,
+      d: GraphNode
+    ) => {
+      d.fx = event.x
+      d.fy = event.y
+    },
+    []
+  )
+
+  const dragended = useCallback(
+    (
+      event: D3DragEvent<SVGCircleElement, GraphNode, unknown>,
+      d: GraphNode
+    ) => {
+      if (!event.active) simulationRef.current?.alphaTarget(0)
+      d.fx = d.x
+      d.fy = d.y
+    },
+    []
+  )
+
+  const simulationRef = useRef<d3.Simulation<GraphNode, undefined> | null>(null)
+  const nodeSelectionRef = useRef<d3.Selection<
+    SVGCircleElement,
+    GraphNode,
+    SVGGElement,
+    unknown
+  > | null>(null)
+  const linkSelectionRef = useRef<d3.Selection<
+    SVGPathElement,
+    any,
+    SVGGElement,
+    unknown
+  > | null>(null)
+  const relationshipLabelsRef = useRef<d3.Selection<
+    SVGTextElement,
+    any,
+    SVGGElement,
+    unknown
+  > | null>(null)
 
   useEffect(() => {
-    const svg = select(svgRef.current) // Select the SVG element using D3
-    const width = svg.node()?.clientWidth || 800 // Get SVG width, or default to 800
-    const height = svg.node()?.clientHeight || 600 // Get SVG height, or default to 600
+    if (!data || !data.nodes || !data.links) {
+      console.error('Invalid data provided to GraphView component.')
+      return
+    }
 
-    const circleRadius = 10 // Define the radius of the node circle
+    const svgElement = svgRef.current
+    if (!svgElement) return
 
-    // Append arrow markers to the SVG (only once)
-    svg.select('defs').remove() // Remove any existing defs (definitions) to avoid duplication
-    const defs = svg.append('defs') // Add definitions (defs) to SVG
+    // Ensure svg is correctly typed
+    const svg = select<SVGSVGElement, unknown>(svgElement)
+    const width = svg.node()?.clientWidth || 800
+    const height = svg.node()?.clientHeight || 600
 
-    // Default gray arrow marker
+    svg.select('defs').remove()
+    const defs = svg.append('defs')
+
+    // Define arrow markers
     defs
       .append('marker')
       .attr('id', 'arrowhead')
@@ -53,184 +142,176 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
       .attr('orient', 'auto')
       .append('path')
       .attr('d', 'M 0,-5 L 10,0 L 0,5')
-      .attr('fill', '#ccc') // Set arrowhead color to gray
+      .attr('fill', '#ccc')
 
-    // Highlighted orange arrow marker
     defs
       .append('marker')
       .attr('id', 'arrowhead-highlight')
       .attr('viewBox', '0 -5 10 10')
-      .attr('refX', circleRadius + 7) // Position the arrowhead relative to the node boundary
+      .attr('refX', circleRadius + 7)
       .attr('refY', 0)
-      .attr('markerWidth', 6) // Set the fixed width of the arrowhead for highlighted lines
-      .attr('markerHeight', 6) // Set the fixed height of the arrowhead for highlighted lines
+      .attr('markerWidth', 6)
+      .attr('markerHeight', 6)
       .attr('orient', 'auto')
       .append('path')
-      .attr('d', 'M 0,-5 L 10,0 L 0,5') // Define the path for the arrowhead shape
-      .attr('fill', 'orange') // Set arrowhead color to orange for highlighting
+      .attr('d', 'M 0,-5 L 10,0 L 0,5')
+      .attr('fill', 'orange')
 
-    // Set up zoom
-    const zoomHandler = zoom().on('zoom', event => {
-      svg.select('g').attr('transform', event.transform) // On zoom event, apply the zoom transformation to the <g> group containing graph elements
+    // Initialize zoom behavior with updated generic type
+    const zoomHandler = zoom<SVGSVGElement, unknown>().on('zoom', event => {
+      svg.select('g').attr('transform', event.transform)
     })
-    svg.call(zoomHandler as any) // Apply zoom functionality to the SVG
+    svg.call(zoomHandler)
+    zoomRef.current = zoomHandler
 
-    zoomRef.current = zoomHandler // Store the zoom handler reference for buttons
-
-    // Create a group to contain graph elements (so we can zoom/pan the entire group)
-    let g: d3.Selection<SVGGElement, unknown, null, undefined> = svg.select('g')
+    // Create or select the group element
+    let g = svg.select<SVGGElement>('g')
     if (g.empty()) {
-      g = svg.append('g') // If no group exists, create one
+      g = svg.append('g')
     }
 
-    // Convert IDs to node objects
-    const nodeMap = new Map(data.nodes.map(node => [node.uid, node])) // Create a map of nodes by their uid
-
-    // Map the links data to use node objects instead of IDs
+    // Map nodes and links
+    const nodeMap = new Map(data.nodes.map(node => [node.uid, node]))
     const links = data.links.map(link => ({
       ...link,
-      source: nodeMap.get(link.source) as GraphNode, // Convert source ID to node object
-      target: nodeMap.get(link.target) as GraphNode // Convert target ID to node object
+      source: nodeMap.get(link.source) as GraphNode,
+      target: nodeMap.get(link.target) as GraphNode
     }))
 
-    // Set up the simulation
-    const simulation = forceSimulation<GraphNode>() // Create the force simulation
+    // Initialize force simulation
+    const simulation = forceSimulation<GraphNode>()
       .force(
-        'link', // Add a force for links
+        'link',
         forceLink<GraphNode, any>()
-          .id(d => d.uid) // Set the id accessor to uid
-          .distance(100) // Set the link distance (space between connected nodes)
+          .id(d => d.uid)
+          .distance(100)
       )
-      .force('charge', forceManyBody().strength(-300)) // Add a repulsion force (negative charge pushes nodes apart)
-      .force('center', forceCenter(width / 2, height / 2)) // Center the graph on the SVG
+      .force('charge', forceManyBody().strength(-300))
+      .force('center', forceCenter(width / 2, height / 2))
 
-    // Add the links (paths) between nodes with arrow markers and curves for multiple relationships
+    simulationRef.current = simulation
+
+    // Add links
     const link = g
-      .selectAll('path') // Use 'path' instead of 'line' for curves
-      .data(links) // Bind the link data
-      .join('path') // Enter, update, and remove paths as needed
-      .attr('stroke', '#ccc') // Set the stroke color to gray
-      .attr('stroke-width', 2) // Set the stroke width
-      .attr('fill', 'none') // Prevent filling the area between the curves
-      .attr('marker-end', 'url(#arrowhead)') // Add the arrow marker to the end of the path
-      .style('cursor', 'pointer') // Change cursor to pointer on hover
-      .on('click', function (event, d) {
-        // Remove highlights from all lines
-        link
-          .attr('stroke', '#ccc')
-          .attr('stroke-width', 2)
-          .attr('marker-end', 'url(#arrowhead)')
-        relationshipLabels.style('fill', '#666')
+      .selectAll<SVGPathElement, any>('path')
+      .data(links)
+      .join('path')
+      .attr('stroke', '#ccc')
+      .attr('stroke-width', 2)
+      .attr('fill', 'none')
+      .attr('marker-end', 'url(#arrowhead)')
+      .style('cursor', 'pointer')
+      .attr('class', 'link') // Tailwind CSS class can be applied here
 
-        // Highlight the clicked line
-        select(this)
-          .attr('stroke', 'orange')
-          .attr('stroke-width', 2)
-          .attr('marker-end', 'url(#arrowhead-highlight)')
+    linkSelectionRef.current = link
 
-        // Highlight the corresponding label
-        relationshipLabels.filter(label => label === d).style('fill', 'orange')
-      })
+    link.on('click', function (event, d) {
+      // Reset styles
+      link
+        .attr('stroke', '#ccc')
+        .attr('stroke-width', 2)
+        .attr('marker-end', 'url(#arrowhead)')
+      relationshipLabels.style('fill', '#666')
 
-    // Add the node circles
+      // Highlight clicked link
+      select(this)
+        .attr('stroke', 'orange')
+        .attr('stroke-width', 2)
+        .attr('marker-end', 'url(#arrowhead-highlight)')
+
+      // Highlight corresponding label
+      relationshipLabels.filter(label => label === d).style('fill', 'orange')
+    })
+
+    // Add nodes
     const node = g
-      .selectAll('circle') // Select all existing circles
-      .data(data.nodes) // Bind the node data
-      .join('circle') // Enter, update, and remove circles as needed
-      .attr('r', circleRadius) // Set the radius of each circle
-      .attr('fill', '#69b3a2') // Set the fill color of the circles
-      .attr('data-uid', d => d.uid) // Set data-uid attribute for easier selection
-      .style('cursor', 'pointer') // Change cursor to pointer on hover
+      .selectAll<SVGCircleElement, GraphNode>('circle')
+      .data(data.nodes)
+      .join('circle')
+      .attr('r', circleRadius)
+      .attr('fill', '#69b3a2')
+      .attr('data-uid', d => d.uid)
+      .style('cursor', 'pointer')
+      .attr('class', 'node') // Tailwind CSS class can be applied here
+      .attr('role', 'button') // Accessibility
+      .attr('aria-label', d => `Node ${d.name}`)
       .call(
-        drag<SVGCircleElement, GraphNode>() // Enable dragging for the nodes
-          .on('start', dragstarted) // Define the behavior on drag start
-          .on('drag', dragged) // Define the behavior while dragging
-          .on('end', dragended) as any // Define the behavior on drag end
+        drag<SVGCircleElement, GraphNode>()
+          .on('start', dragstarted)
+          .on('drag', dragged)
+          .on('end', dragended)
       )
 
-    // Add labels to the nodes
+    nodeSelectionRef.current = node
+
+    // Add node labels
     const nodeLabels = g
-      .selectAll('text.node-label') // Select all existing text labels for nodes
-      .data(data.nodes) // Bind the node data
-      .join('text') // Enter, update, and remove text labels as needed
-      .attr('class', 'node-label') // Add class for styling
-      .attr('x', d => d.x ?? 0) // Set the x-position of the label based on node x
-      .attr('y', d => (d.y ?? 0) - circleRadius - 5) // Set the y-position above the node circle
-      .attr('text-anchor', 'middle') // Center the text horizontally
-      .text(d => d.name) // Set the text content to the node's name
-      .style('font-size', '12px') // Set the font size
-      .style('fill', '#000') // Set the font color
-      .style('cursor', 'pointer') // Change cursor to pointer on hover
-      .on('click', function (event, d) {
-        // Update the state when the node label is clicked
-        setSelectedNode(d) // Save the selected node to state
+      .selectAll<SVGTextElement, GraphNode>('text.node-label')
+      .data(data.nodes)
+      .join('text')
+      .attr('class', 'node-label')
+      .attr('text-anchor', 'middle')
+      .text(d => d.name || d.label || '')
+      .style('font-size', '12px')
+      .style('fill', '#000')
+      .style('cursor', 'pointer')
 
-        // Optionally, highlight the clicked node (optional visual feedback)
-        node.attr('stroke', null) // Reset all nodes
+    nodeLabels.on('click', function (event, d) {
+      setSelectedNode(d)
+      node.attr('stroke', null)
 
-        select(`circle[data-uid='${d.uid}']`)
-          .attr('stroke', 'orange')
-          .attr('stroke-width', 3) // Highlight the corresponding node
-      })
+      select(`circle[data-uid='${d.uid}']`)
+        .attr('stroke', 'orange')
+        .attr('stroke-width', 3)
+    })
 
-    // Add relationship labels to the links
+    // Add relationship labels
     const relationshipLabels = g
-      .selectAll('text.relationship') // Select all existing text labels for relationships
-      .data(links) // Bind the link data
-      .join('text') // Enter, update, and remove text labels as needed
-      .attr('class', 'relationship') // Add class for styling
-      .attr('x', d => ((d.source?.x ?? 0) + (d.target?.x ?? 0)) / 2) // Set x-position at the midpoint of the link
-      .attr('y', d => ((d.source?.y ?? 0) + (d.target?.y ?? 0)) / 2) // Set y-position at the midpoint of the link
-      .attr('dy', -10) // Offset the text vertically
-      .attr('text-anchor', 'middle') // Center the text horizontally
-      .text(d => d.relationship) // Set the text content to the relationship type
-      .style('font-size', '10px') // Set the font size
-      .style('fill', '#666') // Set the font color
-      .style('cursor', 'pointer') // Change cursor to pointer on hover
-      .on('click', function (event, d) {
-        link
-          .attr('stroke', '#ccc')
-          .attr('stroke-width', 2)
-          .attr('marker-end', 'url(#arrowhead)')
-        relationshipLabels.style('fill', '#666')
+      .selectAll<SVGTextElement, any>('text.relationship')
+      .data(links)
+      .join('text')
+      .attr('class', 'relationship')
+      .attr('dy', -10)
+      .attr('text-anchor', 'middle')
+      .text(d => d.relationship)
+      .style('font-size', '10px')
+      .style('fill', '#666')
+      .style('cursor', 'pointer')
 
-        // Highlight the corresponding line
-        link
-          .filter(linkData => linkData === d)
-          .attr('stroke', 'orange')
-          .attr('stroke-width', 2)
-          .attr('marker-end', 'url(#arrowhead-highlight)')
+    relationshipLabelsRef.current = relationshipLabels
 
-        // Highlight the clicked label
-        select(this).style('fill', 'orange')
-      })
+    relationshipLabels.on('click', function (event, d) {
+      link
+        .attr('stroke', '#ccc')
+        .attr('stroke-width', 2)
+        .attr('marker-end', 'url(#arrowhead)')
+      relationshipLabels.style('fill', '#666')
 
-    // Update simulation on every tick
+      // Highlight corresponding link
+      link
+        .filter(linkData => linkData === d)
+        .attr('stroke', 'orange')
+        .attr('stroke-width', 2)
+        .attr('marker-end', 'url(#arrowhead-highlight)')
+
+      // Highlight clicked label
+      select(this).style('fill', 'orange')
+    })
+
+    // Start simulation
     simulation.nodes(data.nodes).on('tick', ticked)
     ;(simulation.force('link') as ForceLink<GraphNode, any>)?.links(links)
 
     function ticked() {
-      link.attr('d', (d, i, nodes) => {
+      // Update link positions
+      link.attr('d', d => {
         const dx = (d.target?.x ?? 0) - (d.source?.x ?? 0)
         const dy = (d.target?.y ?? 0) - (d.source?.y ?? 0)
-        const dr = Math.sqrt(dx * dx + dy * dy) // Distance between nodes
 
-        const totalLinks = links.filter(
-          l =>
-            (l.source === d.source && l.target === d.target) ||
-            (l.source === d.target && l.target === d.source)
-        ).length
-
-        const linkIndex = links
-          .filter(
-            l =>
-              (l.source === d.source && l.target === d.target) ||
-              (l.source === d.target && l.target === d.source)
-          )
-          .indexOf(d)
+        const { totalLinks, linkIndex } = getLinkMetrics(d)
 
         const curvature =
-          totalLinks > 1 ? (linkIndex - (totalLinks - 1) / 2) * 30 : 0 // Only apply curvature for multiple links
+          totalLinks > 1 ? (linkIndex - (totalLinks - 1) / 2) * 30 : 0
 
         return `M${d.source?.x},${d.source?.y} Q${
           (d.source?.x ?? 0) + dx / 2 + curvature
@@ -239,99 +320,57 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
         }`
       })
 
+      // Update node positions
       node.attr('cx', d => d.x ?? 0).attr('cy', d => d.y ?? 0)
 
+      // Update node labels
       nodeLabels
-        .attr('x', d => d.x ?? 0) // Update the x position of the label
-        .attr('y', d => (d.y ?? 0) - circleRadius - 5) // Update the y position above the node circle
+        .attr('x', d => d.x ?? 0)
+        .attr('y', d => (d.y ?? 0) - circleRadius - 5)
 
+      // Update relationship labels
       relationshipLabels
-        .attr('x', (d, i, nodes) => {
-          const dx = (d.target?.x ?? 0) - (d.source?.x ?? 0)
-          const dy = (d.target?.y ?? 0) - (d.source?.y ?? 0)
-          const totalLinks = links.filter(
-            l =>
-              (l.source === d.source && l.target === d.target) ||
-              (l.source === d.target && l.target === d.source)
-          ).length
-
-          const linkIndex = links
-            .filter(
-              l =>
-                (l.source === d.source && l.target === d.target) ||
-                (l.source === d.target && l.target === d.source)
-            )
-            .indexOf(d)
-
-          const labelOffset =
-            totalLinks > 1 ? (linkIndex - (totalLinks - 1) / 2) * 20 : 0
-
+        .attr('x', d => {
+          const { labelOffset } = getLinkMetrics(d)
           return ((d.source?.x ?? 0) + (d.target?.x ?? 0)) / 2 + labelOffset
         })
-        .attr('y', (d, i, nodes) => {
-          const dx = (d.target?.x ?? 0) - (d.source?.x ?? 0)
-          const dy = (d.target?.y ?? 0) - (d.source?.y ?? 0)
-          const totalLinks = links.filter(
-            l =>
-              (l.source === d.source && l.target === d.target) ||
-              (l.source === d.target && l.target === d.source)
-          ).length
-
-          const linkIndex = links
-            .filter(
-              l =>
-                (l.source === d.source && l.target === d.target) ||
-                (l.source === d.target && l.target === d.source)
-            )
-            .indexOf(d)
-
-          const labelOffset =
-            totalLinks > 1 ? (linkIndex - (totalLinks - 1) / 2) * 20 : 0
-
+        .attr('y', d => {
+          const { labelOffset } = getLinkMetrics(d)
           return ((d.source?.y ?? 0) + (d.target?.y ?? 0)) / 2 + labelOffset
         })
     }
 
-    // Define what happens when dragging starts
-    function dragstarted(this: SVGCircleElement, event: any, d: GraphNode) {
-      if (!event.active) simulation.alphaTarget(0.3).restart() // Restart the simulation if not already active
-      setSelectedNode(d) // Save the selected node to state
+    // Helper function to compute link metrics
+    const getLinkMetrics = (d: any) => {
+      const totalLinks = links.filter(
+        l =>
+          (l.source === d.source && l.target === d.target) ||
+          (l.source === d.target && l.target === d.source)
+      ).length
 
-      // Optionally, highlight the clicked node (optional visual feedback)
-      node.attr('stroke', null) // Reset all nodes
-      select(this).attr('stroke', 'orange').attr('stroke-width', 3) // Highlight the clicked node
-      d.fx = d.x // Fix the node's x position
-      d.fy = d.y // Fix the node's y position
+      const linkIndex = links
+        .filter(
+          l =>
+            (l.source === d.source && l.target === d.target) ||
+            (l.source === d.target && l.target === d.source)
+        )
+        .indexOf(d)
+
+      const labelOffset =
+        totalLinks > 1 ? (linkIndex - (totalLinks - 1) / 2) * 20 : 0
+
+      return { totalLinks, linkIndex, labelOffset }
     }
 
-    // Define what happens while dragging
-    function dragged(event: any, d: GraphNode) {
-      d.fx = event.x // Update the node's fixed x position to the drag event's x
-      d.fy = event.y // Update the node's fixed y position to the drag event's y
+    // Cleanup function
+    return () => {
+      simulation.stop()
+      svg.selectAll('*').remove()
     }
-
-    // Define what happens when dragging ends
-    function dragended(this: SVGCircleElement, event: any, d: GraphNode) {
-      if (!event.active) simulation.alphaTarget(0) // Lower the simulation's alpha target when dragging ends
-      d.fx = d.x // Keep the node fixed at the current x position
-      d.fy = d.y // Keep the node fixed at the current y position
-    }
-  }, [data])
-
-  // Function to zoom in by scaling up the graph
-  const zoomIn = () => {
-    zoomRef.current.scaleBy(select(svgRef.current), 1.2) // Increase scale by 20%
-  }
-
-  // Function to zoom out by scaling down the graph
-  const zoomOut = () => {
-    zoomRef.current.scaleBy(select(svgRef.current), 0.8) // Decrease scale by 20%
-  }
-
-  const handleOpenStats = () => setOpenStats(!openStats)
+  }, [data, dragstarted, dragged, dragended])
 
   return (
-    <div className="">
+    <div>
       <div className="mb-2 flex justify-between">
         <div>
           <MinusButton onClick={zoomOut} />

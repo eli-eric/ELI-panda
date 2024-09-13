@@ -1,10 +1,9 @@
 import type { FC } from 'react'
 import { Fragment, useState } from 'react'
 
-import { PlusButton } from '@/components/Buttons'
+import { GraphTreeButton, TableGraphTreeButton } from '@/components/Buttons'
 
 import { GraphModal } from './GraphModal'
-import type { SystemGraphResponse } from './types'
 
 interface Props {
   uid?: string
@@ -17,9 +16,32 @@ export const GraphModalButton: FC<Props> = ({ uid }) => {
     setOpen(true)
   }
 
+  if (!uid) {
+    return null
+  }
+
   return (
     <Fragment>
-      <PlusButton onClick={openModal} />
+      <GraphTreeButton buttonSize="large" onClick={openModal} />
+      <GraphModal open={open} setOpen={setOpen} uid={uid} />
+    </Fragment>
+  )
+}
+
+export const GraphModalTableButton: FC<Props> = ({ uid }) => {
+  const [open, setOpen] = useState(false)
+
+  function openModal() {
+    setOpen(true)
+  }
+
+  if (!uid) {
+    return null
+  }
+
+  return (
+    <Fragment>
+      <TableGraphTreeButton onClick={openModal} />
       <GraphModal open={open} setOpen={setOpen} uid={uid} />
     </Fragment>
   )

@@ -22,6 +22,7 @@ import { Col, Grid } from '@/components/grid/Grid'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'
 import usePermission from '@/hooks/usePermission'
+import { GraphModalButton } from '@/modules/shared/system/GraphModalButton'
 import { ROLE } from '@/types/constants/roles'
 import type { SystemLevel } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -148,7 +149,12 @@ export const SystemForm = () => {
         editRole={ROLE.SYSTEM_EDIT}
         onSubmit={formMethods.handleSubmit(onSubmit)}
         onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
-        customElement={<ShowHistoryButton />}
+        customElement={
+          <div className="flex gap-2">
+            <GraphModalButton uid={uid} />
+            <ShowHistoryButton />
+          </div>
+        }
       />
       <Card>
         <Breadcrumbs

@@ -1,29 +1,31 @@
 import { useQuery } from '@tanstack/react-query'
 import dynamic from 'next/dynamic'
+import type { FC } from 'react'
 import { Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 
+import ErrorPage from '@/components/error/ErrorPage'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import { GraphNode, SystemGraphResponse } from './types'
 import { queryFetcher } from '@/utils/fetcher'
-import ErrorPage from '@/components/error/ErrorPage'
-import { ErrorBoundary } from 'react-error-boundary'
+
+import type { RenderStatsProps } from '../d3/graph/types'
+import type { SystemGraphResponse } from './types'
 
 const GraphViewLazy = dynamic(() => import('../d3/graph/GraphView'))
 
-export type RenderStatsProps = {
+interface GraphModalProps {
   open: boolean
-  selectedNode: GraphNode | null
+  setOpen: (open: boolean) => void
+  uid: string
 }
 
-export const GraphModal = ({ open, setOpen, uid }) => {
+export const GraphModal: FC<GraphModalProps> = ({ open, setOpen, uid }) => {
   const { data } = useQuery({
     queryKey: ['systemGraph', { uid }],
     queryFn: queryFetcher<SystemGraphResponse>('generalGraph'),
     enabled: open
   })
-
-  console.log(data)
 
   const renderStats = ({ open, selectedNode }: RenderStatsProps) => {
     if (!open) return null

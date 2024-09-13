@@ -10,6 +10,7 @@ import {
   PencilSquareIcon,
   PlusIcon,
   QrCodeIcon,
+  ShareIcon,
   TableCellsIcon,
   TrashIcon,
   XMarkIcon
@@ -205,9 +206,26 @@ export const StatsButton = ({
   </Button>
 )
 
+export const GraphTreeButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
+  <Button {...restProps} buttonSize={buttonSize}>
+    <ShareIcon className="h-4 w-4" aria-hidden="true" />
+  </Button>
+)
+
 export const TableEditButton = ({ type = 'button', ...props }: ButtonProps) => (
   <button className="ml-2  hover:text-primary-500" type={type} {...props}>
     <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+export const TableGraphTreeButton = ({
+  type = 'button',
+  ...props
+}: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
+    <ShareIcon className="h-4 w-4" aria-hidden="true" />
   </button>
 )
 
