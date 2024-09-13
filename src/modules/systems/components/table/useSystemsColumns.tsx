@@ -18,6 +18,7 @@ import type { ITEM_USAGE } from '../../types/constants'
 import { IconCell } from './cells/IconCell'
 // eslint-disable-next-line
 import { SystemNameCell } from './cells/SystemNameCell'
+import { get } from 'lodash'
 
 interface SystemsColumnsProps {
   tableId: string
@@ -104,12 +105,6 @@ export const useSystemsColumns = ({
         size: 150
       },
       {
-        header: 'System Alias',
-        accessorFn: row => row.systemAlias,
-        id: 'systemAlias',
-        size: 150
-      },
-      {
         header: 'System Type',
         accessorFn: row => row.systemType?.name,
         id: 'systemType',
@@ -125,7 +120,7 @@ export const useSystemsColumns = ({
         header: 'CS Zone',
         accessorFn: row => row.zone,
         id: 'zone',
-        size: 80,
+        size: 120,
         meta: { className: 'text-right' },
         cell: ({ getValue }) => {
           const value = getValue()
@@ -281,6 +276,28 @@ export const useSystemsColumns = ({
         accessorFn: row => row.physicalItem?.catalogueItem?.supplier?.name,
         id: 'supplier',
         size: 150
+      },
+      {
+        header: 'Order Number',
+        accessorFn: row => row.physicalItem?.orderNumber,
+        id: 'orderNumber',
+        size: 150
+      },
+      {
+        header: 'Order UID',
+        accessorFn: row => row.physicalItem?.orderUid,
+        cell: ({ getValue }) => (
+          <Tooltip content={PATH.ORDER + '/' + getValue()}>
+            <div>
+              <NewTabLink
+                href={PATH.ORDER + '/' + getValue()}
+                value={getValue()}
+              />
+            </div>
+          </Tooltip>
+        ),
+        id: 'orderUid',
+        size: 350
       }
     ],
     [setUid, canEdit, hideButtons, tableId, enableDragAndDrop, queryKey]
