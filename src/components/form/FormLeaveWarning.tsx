@@ -33,6 +33,12 @@ export const FormLeaveWarning = <T extends FieldValues>({
   // handle route change events
   useEffect(() => {
     const handleRouteChange = (url: string) => {
+      const currentPath = router.asPath.split('?')[0]
+      const nextPath = url.split('?')[0]
+      if (currentPath === nextPath) {
+        // Same page navigation, ignore
+        return
+      }
       if (isDirty && !isOpen && !isSubmitSuccessful) {
         events.emit('routeChangeError')
         setNextUrl(url)

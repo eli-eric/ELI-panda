@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { toast } from 'react-hot-toast'
 
@@ -11,15 +12,17 @@ import useOrderDetail from './useOrderDetail'
 
 export const useOrderSubmit = (formReset: (t: any) => void) => {
   const router = useRouter()
-  const { invalidateQuery, uid, orderDetail } = useOrderDetail()
+  const { uid, orderDetail, queryKey } = useOrderDetail()
   const { order: orderEndpoint } = useEndpoint({ uid })
   const { mutate } = useOrders()
+
+  const queryClient = useQueryClient()
 
   const { submit, loading } = useSubmit<string>({
     endpoint: orderEndpoint,
     method: uid ? 'put' : 'post',
     onSuccess: (uid, _, custom) => {
-      invalidateQuery()
+      queryClient.invalidateQueries({ queryKey })
 
       mutate()
       formReset({
