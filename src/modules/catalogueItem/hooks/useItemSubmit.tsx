@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import type { MutableRefObject } from 'react'
-import type { UseFormReset } from 'react-hook-form'
+import type { UseFormSetValue } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
@@ -14,7 +14,7 @@ import type { CatalogueItem } from '../types/responses'
 import { useCatalogueItem } from './useItem'
 
 export const useItemSubmit = (
-  reset: UseFormReset<any>,
+  setvalue: UseFormSetValue<any>,
   imageRef?: MutableRefObject<ImageGalleryRef | undefined>,
   saveAndExit?: boolean
 ) => {
@@ -22,6 +22,7 @@ export const useItemSubmit = (
   const uid = query.uid as string | undefined
 
   const { queryKey } = useCatalogueItem()
+
   const queryClient = useQueryClient()
 
   const { mutate, isPending } = useMutation({
@@ -34,7 +35,8 @@ export const useItemSubmit = (
     onSuccess: catalogueItem => {
       queryClient.setQueryData(queryKey, catalogueItem.data)
       queryClient.invalidateQueries({ queryKey: ['catalogueItems'] })
-      reset(catalogueItem.data)
+
+      setvalue('lastUpdateTime', catalogueItem.data?.lastUpdateTime)
 
       imageRef?.current?.submit(catalogueItem.data?.uid, () => {
         if (saveAndExit) {
