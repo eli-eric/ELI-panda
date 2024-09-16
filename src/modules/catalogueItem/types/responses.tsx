@@ -23,6 +23,7 @@ export interface CatalogueItem {
   supplier?: CodebookType | null
   manufacturerUrl?: string
   details?: CatalogueItemDetail[]
+  lastUpdateTime: string
 }
 
 export interface CatalogueItemDetail {

@@ -1,4 +1,4 @@
-import React, { startTransition, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { Input } from '@/components/form/inputs'
@@ -20,10 +20,8 @@ const GroupProperty = ({ detail, index }: Props) => {
   const { setValue } = useFormContext()
 
   useEffect(() => {
-    startTransition(() => {
-      Object.keys(detail).forEach(key => {
-        setValue(`details.${index}.${key}`, detail[key])
-      })
+    Object.keys(detail).forEach(key => {
+      setValue(`details.${index}.${key}`, detail[key])
     })
   }, [detail, index, setValue])
 
