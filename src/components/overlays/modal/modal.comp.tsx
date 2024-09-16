@@ -1,14 +1,13 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
 
+import { XmarkButton } from '@/components/Buttons'
 import { useEscapeKey } from '@/hooks/useEscapeKey'
 import { message } from '@/i18n/src/messages'
 import { useModalStore } from '@/store/useModalStore'
 import type { ModalButtons } from '@/types/form'
 
 import ModalButtonsComponent from './modal.buttons'
-import { XmarkButton } from '@/components/Buttons'
-import { func } from 'prop-types'
 
 const messages = message.common.buttons
 
@@ -69,7 +68,7 @@ export default function ModalComponent({
               leaveFrom="opacity-100 translate-y-0 sm:scale-100"
               leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-              <Dialog.Panel className="relative transform  rounded-lg bg-white dark:bg-gray-800 px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 w-full sm:max-w-5xl sm:p-6 sm:pt-7">
+              <Dialog.Panel className="relative transform  rounded-lg bg-white dark:bg-gray-800 px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 w-full sm:max-w-6xl sm:p-6 sm:pt-7">
                 <div className="absolute right-2 top-2">
                   <XmarkButton onClick={closeModal} />
                 </div>

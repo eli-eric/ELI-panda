@@ -11,24 +11,37 @@ import {
 import type { FC, PropsWithChildren } from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { MinusButton, PlusButton, StatsButton } from '@/components/Buttons'
+import {
+  FilterButton,
+  MinusButton,
+  PlusButton,
+  StatsButton
+} from '@/components/Buttons'
+import { classNames } from '@/utils'
 
 import type { GraphNode, SystemGraphResponse } from './types'
 
 interface Props {
   data: SystemGraphResponse
+
+  renderFilter: (props: { open: boolean }) => JSX.Element | null
   renderStats: (props: {
     open: boolean
     selectedNode: GraphNode | null
   }) => JSX.Element | null
 }
 
-const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
+const GraphView: FC<PropsWithChildren<Props>> = ({
+  data,
+  renderStats,
+  renderFilter
+}) => {
   const svgRef = useRef<SVGSVGElement | null>(null)
   const zoomRef = useRef<ZoomBehavior<SVGSVGElement, unknown> | null>(null) // Updated type
   const circleRadius = 10
 
   const [openStats, setOpenStats] = useState(false)
+  const [openFilter, setOpenFilter] = useState(false)
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null)
 
   // Event handlers wrapped with useCallback
@@ -48,6 +61,12 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
 
   const handleOpenStats = useCallback(() => {
     setOpenStats(prev => !prev)
+    setOpenFilter(false)
+  }, [])
+
+  const handleOpenFilter = useCallback(() => {
+    setOpenFilter(prev => !prev)
+    setOpenStats(false)
   }, [])
 
   // Drag event handlers
@@ -372,16 +391,21 @@ const GraphView: FC<PropsWithChildren<Props>> = ({ data, renderStats }) => {
   return (
     <div>
       <div className="mb-2 flex justify-between">
-        <div>
+        <div className="flex gap-x-1">
+          <FilterButton onClick={handleOpenFilter} />
           <MinusButton onClick={zoomOut} />
-          <PlusButton onClick={zoomIn} className="mr-2" />
+          <PlusButton onClick={zoomIn} />
         </div>
-        <StatsButton onClick={handleOpenStats} />
+        <StatsButton onClick={handleOpenStats} disabled={!selectedNode} />
       </div>
-      <div className="flex">
+      <div className="grid grid-cols-12 gap-x-2">
+        {renderFilter({ open: openFilter })}
         <svg
           ref={svgRef}
-          className="w-full border rounded-md"
+          className={classNames(
+            'w-full border rounded-md',
+            openStats ? 'col-span-7' : openFilter ? 'col-span-8' : 'col-span-12'
+          )}
           height="600"
         ></svg>
         {renderStats({ open: openStats, selectedNode })}
