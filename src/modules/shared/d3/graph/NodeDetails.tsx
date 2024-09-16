@@ -11,15 +11,36 @@ export const NodeDetails: FC<Props> = ({ node }) => {
 
   if (keys.length) {
     return (
-      <div className="h-full col-span-5 border rounded-md pr-4 pl-4">
-        {keys.map(key => (
-          <div key={key}>
-            <span className="">{key}: </span>
-            <span>{node.properties[key]}</span>
+      <div className="h-[600px] overflow-auto col-span-5 border rounded-lg shadow-sm p-4 bg-white">
+        <div className="mb-4">
+          <div className="text-xl font-semibold text-gray-800">
+            Detail Properties
           </div>
-        ))}
+        </div>
+        <div className="overflow-y-auto">
+          {keys.map((key, idx) => (
+            <div
+              key={key}
+              className={`${
+                idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'
+              } p-2 rounded-md flex justify-between items-center`}
+            >
+              <span className="font-medium text-gray-600">{key}:</span>
+              <div className="ml-2 overflow-x-auto max-w-full">
+                <span className="whitespace-nowrap text-gray-900">
+                  {node.properties[key]}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     )
   }
-  return <div></div>
+
+  return (
+    <div className="h-full col-span-5 border rounded-lg shadow-sm p-4 bg-white">
+      No properties available
+    </div>
+  )
 }
