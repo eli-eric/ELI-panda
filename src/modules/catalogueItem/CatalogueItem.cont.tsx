@@ -56,8 +56,8 @@ const CatalogueItemContainer = ({
     resolver: yupResolver(schema),
     defaultValues: { ...item }
   })
-  const { reset } = formMethods
-  const { submit, loading } = useItemSubmit(reset, imageRef, saveAndExit)
+  const { reset, setValue } = formMethods
+  const { submit, loading } = useItemSubmit(setValue, imageRef, saveAndExit)
 
   useEffect(() => {
     if (catalogueCategory) {
