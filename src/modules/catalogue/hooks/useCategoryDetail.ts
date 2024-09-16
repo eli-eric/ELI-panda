@@ -1,13 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
+import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryFetcher } from '@/utils/fetcher'
 
 import type { CategoryFormType } from '../components/categoryEdit/types'
 
 export const useCategoryDetail = (uid?: string) => {
+  const queryKey: QueryFetcherKey = ['categoryDetail', { uid }]
+
   const { data, isLoading } = useQuery({
-    queryKey: ['categoryDetail', { uid }],
+    queryKey,
     queryFn: queryFetcher<CategoryFormType>('catalogueCategoryEdit'),
     enabled: !!uid
   })
@@ -37,5 +40,5 @@ export const useCategoryDetail = (uid?: string) => {
       : { ...data }
   }, [data])
 
-  return { categoryDetail, isLoading }
+  return { categoryDetail, isLoading, queryKey }
 }

@@ -1,4 +1,5 @@
 'use client'
+import { useQueryClient } from '@tanstack/react-query'
 import {
   type Dispatch,
   Fragment,
@@ -42,8 +43,9 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
   const imageRef = useRef<ImageGalleryRef>(null)
 
   const { catalogueCategory } = useCategory()
-  const { categoryDetail, isLoading } = useCategoryDetail(uid)
+  const { categoryDetail, isLoading, queryKey } = useCategoryDetail(uid)
   const [loadingSubmit, setLoadingSubmit] = useState(false)
+  const queryClient = useQueryClient()
 
   const { refetch } = useCategoryList()
 
@@ -57,6 +59,8 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
         setOpen(false)
         toast.success(`Category ${data.name} saved`)
         setLoadingSubmit(false)
+
+        queryClient.invalidateQueries({ queryKey })
       })
     },
     onError: () => {
