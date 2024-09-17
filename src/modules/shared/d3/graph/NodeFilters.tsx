@@ -9,7 +9,7 @@ import type { SystemGraphResponse } from './types'
 
 interface Props {
   uid: string
-  setData: Dispatch<SetStateAction<SystemGraphResponse | null>>
+  setData: Dispatch<SetStateAction<SystemGraphResponse | undefined>>
   relationships?: string[]
 }
 
@@ -41,6 +41,7 @@ export const NodeFilters: FC<Props> = ({ uid, setData, relationships }) => {
         links: filteredLinks
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter])
 
   return (
