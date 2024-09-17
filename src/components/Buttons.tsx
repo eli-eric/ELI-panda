@@ -10,8 +10,10 @@ import {
   PencilSquareIcon,
   PlusIcon,
   QrCodeIcon,
+  ShareIcon,
   TableCellsIcon,
-  TrashIcon
+  TrashIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline'
 import { FolderArrowDownIcon } from '@heroicons/react/24/solid'
 import Link from 'next/link'
@@ -204,15 +206,38 @@ export const StatsButton = ({
   </Button>
 )
 
+export const GraphTreeButton = ({
+  buttonSize = 'small',
+  ...restProps
+}: ButtonProps) => (
+  <Button {...restProps} buttonSize={buttonSize}>
+    <ShareIcon className="h-4 w-4" aria-hidden="true" />
+  </Button>
+)
+
 export const TableEditButton = ({ type = 'button', ...props }: ButtonProps) => (
   <button className="ml-2  hover:text-primary-500" type={type} {...props}>
     <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+export const TableGraphTreeButton = ({
+  type = 'button',
+  ...props
+}: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
+    <ShareIcon className="h-4 w-4" aria-hidden="true" />
   </button>
 )
 
 export const TableOpenButton = ({ type = 'button', ...props }: ButtonProps) => (
   <button className="ml-2  hover:text-primary-500" type={type} {...props}>
     <FolderOpenIcon className="h-4 w-4" aria-hidden="true" />
+  </button>
+)
+
+export const XmarkButton = ({ type = 'button', ...props }: ButtonProps) => (
+  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
+    <XMarkIcon className="h-4 w-4" aria-hidden="true" />
   </button>
 )
 

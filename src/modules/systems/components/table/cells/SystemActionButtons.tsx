@@ -15,6 +15,7 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
+import { GraphModalTableButton } from '@/modules/shared/system/GraphModalButton'
 import { filterSubsystem } from '@/modules/systems/utils'
 import { ShowSpareButton } from '@/modules/systemsSpareParts/components/ShowSpareButton'
 import { PATH } from '@/types/constants/paths'
@@ -119,6 +120,7 @@ export const SystemActionButtons = ({
                 sparesIn={sparesIn}
                 sparesOut={sparesOut}
               />
+              <GraphModalTableButton uid={original.uid} />
             </TableActionsButtons>
           )}
         </>

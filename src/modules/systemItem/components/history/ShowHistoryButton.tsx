@@ -46,7 +46,7 @@ export const ShowHistoryButton = () => {
   return (
     <Fragment>
       <Button buttonSize="large" type="button" onClick={() => setOpen(!open)}>
-        <ClockIcon className="w-5 h-5" />
+        <ClockIcon className="w-4 h-4" />
       </Button>
       <ModalComponent
         open={open}
