@@ -25,7 +25,7 @@ interface GraphModalProps {
 }
 
 export const GraphModal: FC<GraphModalProps> = ({ open, setOpen, uid }) => {
-  const [data, setData] = useState<SystemGraphResponse | null>(null)
+  const [data, setData] = useState<SystemGraphResponse | undefined>(undefined)
 
   const { data: response } = useQuery({
     queryKey: ['systemGraph', { uid }],
@@ -43,18 +43,44 @@ export const GraphModal: FC<GraphModalProps> = ({ open, setOpen, uid }) => {
   const formMethods = useForm()
 
   useEffect(() => {
-    if (response) {
-      setData(response)
-      formMethods.reset({
-        relationships: uniqueRelationships?.reduce(
-          (acc, relationship) => {
+    if (response && uniqueRelationships) {
+      const defaultRelationships = uniqueRelationships?.reduce(
+        (acc, relationship) => {
+          if (
+            relationship === 'WAS_UPDATED_BY' ||
+            relationship === 'WAS_MOVED_FROM'
+          ) {
+            acc[relationship] = false
+          } else {
             acc[relationship] = true
-            return acc
-          },
-          {} as { [key: string]: boolean }
+          }
+
+          return acc
+        },
+        {} as { [key: string]: boolean }
+      )
+
+      const filteredLinks = response.links.filter(
+        link => defaultRelationships[link.relationship]
+      )
+
+      const filteredNodes = response.nodes.filter(node =>
+        filteredLinks.some(
+          link => link.source === node.uid || link.target === node.uid
         )
+      )
+
+      const newResponse = {
+        nodes: filteredNodes,
+        links: filteredLinks
+      }
+
+      setData(newResponse)
+      formMethods.reset({
+        relationships: defaultRelationships
       })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response])
 
   const renderStats = ({ open, selectedNode }: RenderStatsProps) => {

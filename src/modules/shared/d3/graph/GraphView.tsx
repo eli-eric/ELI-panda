@@ -17,7 +17,7 @@ import {
   PlusButton,
   StatsButton
 } from '@/components/Buttons'
-import { classNames } from '@/utils'
+import { classNames, truncateString } from '@/utils'
 
 import type { GraphNode, SystemGraphResponse } from './types'
 import { getNodeColor } from './utils'
@@ -78,6 +78,8 @@ const GraphView: FC<PropsWithChildren<Props>> = ({
     ) => {
       if (!event.active) simulationRef.current?.alphaTarget(0.3).restart()
       setSelectedNode(d)
+      setOpenStats(true)
+      setOpenFilter(false)
 
       nodeSelectionRef.current?.attr('stroke', null)
       select(event.sourceEvent.currentTarget)
@@ -221,7 +223,6 @@ const GraphView: FC<PropsWithChildren<Props>> = ({
       .attr('fill', 'none')
       .attr('marker-end', 'url(#arrowhead)')
       .style('cursor', 'pointer')
-      .attr('class', 'link') // Tailwind CSS class can be applied here
 
     linkSelectionRef.current = link
 
@@ -271,7 +272,7 @@ const GraphView: FC<PropsWithChildren<Props>> = ({
       .join('text')
       .attr('class', 'node-label')
       .attr('text-anchor', 'middle')
-      .text(d => d.name || d.label || '')
+      .text(d => truncateString(d.name || d.label, 10))
       .style('font-size', '12px')
       .style('fill', '#000')
       .style('cursor', 'pointer')
