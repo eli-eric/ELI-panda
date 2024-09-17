@@ -20,6 +20,7 @@ import {
 import { classNames } from '@/utils'
 
 import type { GraphNode, SystemGraphResponse } from './types'
+import { getNodeColor } from './utils'
 
 interface Props {
   data: SystemGraphResponse
@@ -248,7 +249,7 @@ const GraphView: FC<PropsWithChildren<Props>> = ({
       .data(data.nodes)
       .join('circle')
       .attr('r', circleRadius)
-      .attr('fill', '#69b3a2')
+      .attr('fill', d => getNodeColor(d.label || ''))
       .attr('data-uid', d => d.uid)
       .style('cursor', 'pointer')
       .attr('class', 'node') // Tailwind CSS class can be applied here
