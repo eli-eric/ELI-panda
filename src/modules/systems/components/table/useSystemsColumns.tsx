@@ -18,7 +18,6 @@ import type { ITEM_USAGE } from '../../types/constants'
 import { IconCell } from './cells/IconCell'
 // eslint-disable-next-line
 import { SystemNameCell } from './cells/SystemNameCell'
-import { get } from 'lodash'
 
 interface SystemsColumnsProps {
   tableId: string
