@@ -137,10 +137,9 @@ export const messages = {
       form: {
         name: { label: 'Name', placeholder: 'Name' },
         attribute: { label: 'Attribute' }, // codebook of attributes - SYSTEM_ATTRIBUTE
-        isCritical: { label: 'Is Critical' },
-        minimalSpareParstCount: {
-          label: 'Minimal Spare Parts Count',
-          placeholder: 'Minimal Spare Parts Count'
+        minimalSpareCoverage: {
+          label: 'Minimal Coverage',
+          placeholder: 'Minimal Coverage'
         },
         description: { label: 'Description', placeholder: 'Description' },
         systemType: { label: 'System Type' }, // system types codebook - SYSTEM_TYPE

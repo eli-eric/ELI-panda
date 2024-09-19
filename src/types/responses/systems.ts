@@ -20,9 +20,10 @@ export type SystemDetail = {
   parentUid?: string
   systemLevel?: SystemLevel
   systemCode?: string
-  systemAlias?: string
   systemType?: CodebookType
   attribute?: CodebookType
+  minimalSpareCoverage?: number
+  sparePartsCoverage?: number
   zone?: CodebookType
   location?: CodebookType
   description?: string

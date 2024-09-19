@@ -8,7 +8,6 @@ export type SystemDetailFormType = {
   name: string | null
   description?: string | null
   parentPath?: CodebookType[]
-  isCritical: boolean | null
   location?: CodebookType | null
   attribute?: CodebookType | null
   responsibleTeam?: CodebookType | null

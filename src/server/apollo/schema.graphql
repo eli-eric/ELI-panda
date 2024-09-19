@@ -266,7 +266,8 @@ type System
   systemAlias: String
   systemCode: String
   minimalSpareParstCount: Int
-  isCritical: Boolean
+  minimalSpareCoverage: Int
+  sparePartsCoverage: Int
   responsibleTeam: Team
     @relationship(type: "HAS_RESPONSIBLE_TEAM", direction: OUT)
   subSystems: [System!]! @relationship(type: "HAS_SUBSYSTEM", direction: OUT)
