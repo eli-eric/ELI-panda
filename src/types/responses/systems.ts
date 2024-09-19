@@ -10,6 +10,8 @@ export type SystemsResponse = {
 type SystemStatistics = {
   subsystemsCount?: number
   sparePartsCount?: number
+  minimalSpareParstCount?: number
+  sp_coverage?: number
 }
 
 export type SystemDetail = {
@@ -22,8 +24,6 @@ export type SystemDetail = {
   systemCode?: string
   systemType?: CodebookType
   attribute?: CodebookType
-  minimalSpareParstCount?: number
-  sp_coverage?: number
   zone?: CodebookType
   location?: CodebookType
   description?: string
