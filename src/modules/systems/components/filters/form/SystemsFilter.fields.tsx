@@ -62,13 +62,6 @@ export const useSystemsFilterFields = () => {
       rounded: 'rounded-md',
       disabled: disabledEdit
     },
-    systemAlias: {
-      name: 'systemAlias',
-      label: form.systemAlias.label,
-      placeholder: form.systemAlias.placeholder,
-      rounded: 'rounded-md',
-      disabled: disabledEdit
-    },
     systemLevel: {
       name: 'systemLevel',
       label: form.systemLevel.label,

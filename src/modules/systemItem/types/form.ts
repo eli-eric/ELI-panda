@@ -11,11 +11,11 @@ export type SystemDetailFormType = {
   location?: CodebookType | null
   attribute?: CodebookType | null
   responsibleTeam?: CodebookType | null
-  minimalSpareParstCount: number | null
+  minimalSpareCoverage?: number | null
+  sparePartsCoverage?: number | null
   zone?: CodebookType | null
   systemType?: CodebookType | null
   systemCode?: string | null
-  systemAlias?: string | null
   responsible?: CodebookType | null
   importance?: CodebookType | null
   systemLevel: SystemLevel | null

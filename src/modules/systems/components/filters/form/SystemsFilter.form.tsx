@@ -70,11 +70,6 @@ export const SystemsFilterForm = ({
           onChange={setFilter(fields.systemCode.name)}
           isFilter={true}
         />
-        <Input
-          {...fields.systemAlias}
-          onChange={setFilter(fields.systemAlias.name)}
-          isFilter={true}
-        />
         <Combobox
           {...fields.zone}
           onSelect={setFilter(fields.zone.name)}

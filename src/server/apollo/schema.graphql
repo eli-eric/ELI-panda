@@ -263,7 +263,6 @@ type System
   deleted: Boolean!
   isTechnologicalUnit: Boolean
   name: String!
-  systemAlias: String
   systemCode: String
   minimalSpareParstCount: Int
   minimalSpareCoverage: Int

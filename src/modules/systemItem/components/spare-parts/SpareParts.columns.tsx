@@ -40,11 +40,6 @@ export const useSubSystemsColumns = (tableId?: string) => {
         )
       },
       {
-        header: 'System Alias',
-        accessorKey: 'systemAlias',
-        id: 'systemAlias'
-      },
-      {
         header: 'location',
         accessorFn: row =>
           row.location?.name

@@ -21,7 +21,6 @@ export const SystemFieldsFragment = gql(`
         name
       }
       systemLevel
-      systemAlias
       parentPath {
         uid
         name
@@ -139,7 +138,6 @@ export const SystemDetailFragment = gql(`
     uid
     name
     systemCode
-    systemAlias
     sparePartsCoverage 
     minimalSpareCoverage
     responsibleTeam {
@@ -160,7 +158,6 @@ export const SystemDetailFragment = gql(`
         name
       }
       systemLevel
-      systemAlias
       parentPath {
         uid
         name

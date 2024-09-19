@@ -13,15 +13,13 @@ export const makeSystemInputBody = ({
   name: systemForm.name,
   description: systemForm.description,
   systemCode: systemForm.systemCode === '' ? null : systemForm.systemCode,
-  systemAlias: systemForm.systemAlias,
   attribute: connectAndDisconnectNode(
     systemForm?.attribute?.uid,
     systemDetail?.attribute?.uid
   ),
-  isCritical: systemForm.isCritical,
-  minimalSpareParstCount: !systemForm.minimalSpareParstCount
+  minimalSpareCoverage: !systemForm.minimalSpareCoverage
     ? null
-    : Number(systemForm.minimalSpareParstCount),
+    : Number(systemForm.minimalSpareCoverage),
   systemType: connectAndDisconnectNode(
     systemForm?.systemType?.uid,
     systemDetail?.systemType?.uid
