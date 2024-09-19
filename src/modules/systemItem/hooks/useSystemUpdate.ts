@@ -8,15 +8,12 @@ import { toast } from 'react-hot-toast'
 
 import axiosInstance from '@/core/axios/axiosInstance'
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import useQueryManager from '@/hooks/useQueryManager'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
-import { useSystems } from '@/modules/systems/hooks/useSystems'
-import { updateSubSystem, updateSystem } from '@/modules/systems/utils'
 import { BASE_URL } from '@/types/constants/common'
-import { PATH } from '@/types/constants/paths'
 import { gql } from '@/types/gql'
 import type {
   PhysicalItemProperty,
-  SystemDetail,
   SystemsResponse
 } from '@/types/responses/systems'
 import { navigateBack } from '@/utils'
@@ -24,6 +21,7 @@ import { connectAndDisconnectNode, whereN } from '@/utils/graphql/mutations'
 
 import { useSystemItemStore } from '../store/useSystemItemStore'
 import type { SystemDetailFormType } from '../types/form'
+import { useRecalculate } from './useRecalculate'
 import { useSystemDetail } from './useSystemDetail'
 import { makeSystemInputBody } from './utils'
 
@@ -84,16 +82,41 @@ export const useSystemUpdate = (
   const { mutate: mutateProperties } = usePropertiesUpdate(physicalItemUid)
   const uid = router.query.uid as string
   const { systemDetail, refetch } = useSystemDetail()
-  const { queryKey } = useSystems('systems')
+  // const { queryKey } = useSystems('systems')
 
   const queryClient = useQueryClient()
 
-  const queryKeySubsystems = [
-    'subsystems',
-    {
-      uid: systemDetail?.parentSystem?.uid || ''
-    }
-  ]
+  // const queryKeySubsystems = [
+  //   'subsystems',
+  //   {
+  //     uid: systemDetail?.parentSystem?.uid || ''
+  //   }
+  // ]
+
+  const { query } = useQueryManager('systems')
+
+  const onFinish = (data: SystemsResponse) => {
+    console.log('onFinish', query, data)
+
+    queryClient.setQueryData<SystemsResponse, any>(
+      ['systems', { query }],
+      prev => {
+        return {
+          ...prev,
+          data: data
+        }
+      }
+    )
+    setSelectedPhysicalSystem(undefined)
+    // if (saveAndExit) {
+    navigateBack()
+    // } else {
+    // router.replace(PATH.SYSTEM + '/' + responseUid)
+    // }
+    toast.success(`System saved successfully`)
+  }
+
+  const [recalculate] = useRecalculate(onFinish)
 
   const {
     newMaintainedBy,
@@ -110,68 +133,61 @@ export const useSystemUpdate = (
   ) => {
     refetch()
     const responseUid = systems[0].uid
-    const body = {
-      ...systems[0],
-      physicalItem: systems[0]?.physicalItem && {
-        ...systems[0]?.physicalItem,
-        catalogueItem: systems[0]?.physicalItem?.catalogueItem && {
-          ...systems[0]?.physicalItem?.catalogueItem,
-          category: systems[0]?.physicalItem?.catalogueItem?.catalogueCategory
-        }
-      },
-      responsible: systems[0]?.responsible && {
-        uid: systems[0].responsible.uid,
-        name: systems[0].responsible.fullName
-      }
-    }
+    // const body = {
+    //   ...systems[0],
+    //   physicalItem: systems[0]?.physicalItem && {
+    //     ...systems[0]?.physicalItem,
+    //     catalogueItem: systems[0]?.physicalItem?.catalogueItem && {
+    //       ...systems[0]?.physicalItem?.catalogueItem,
+    //       category: systems[0]?.physicalItem?.catalogueItem?.catalogueCategory
+    //     }
+    //   },
+    //   responsible: systems[0]?.responsible && {
+    //     uid: systems[0].responsible.uid,
+    //     name: systems[0].responsible.fullName
+    //   }
+    // }
     imageRef?.current?.submit(responseUid, () => {
-      queryClient.setQueriesData<SystemDetail[]>(
-        { queryKey: ['subsystems'], exact: false },
-        prev => {
-          if (prev) {
-            return updateSubSystem(prev, body)
-          }
-          return prev
-        }
-      )
+      // queryClient.setQueriesData<SystemDetail[]>(
+      //   { queryKey: ['subsystems'], exact: false },
+      //   prev => {
+      //     if (prev) {
+      //       return updateSubSystem(prev, body)
+      //     }
+      //     return prev
+      //   }
+      // )
 
-      if (selectedPhysicalSystem) {
-        queryClient.setQueryData<SystemDetail[]>(queryKeySubsystems, prev => {
-          if (prev) {
-            return updateSubSystem(prev, {
-              ...selectedPhysicalSystem,
-              physicalItem: undefined
-            })
-          }
-          return prev
-        })
+      // if (selectedPhysicalSystem) {
+      //   queryClient.setQueryData<SystemDetail[]>(queryKeySubsystems, prev => {
+      //     if (prev) {
+      //       return updateSubSystem(prev, {
+      //         ...selectedPhysicalSystem,
+      //         physicalItem: undefined
+      //       })
+      //     }
+      //     return prev
+      //   })
 
-        queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
-          if (prev) {
-            return updateSystem(
-              selectedPhysicalSystem?.uid,
-              { ...selectedPhysicalSystem, physicalItem: undefined },
-              prev
-            )
-          }
-          return prev
-        })
-      } else {
-        //TODO: fix mutation in deeper hierarchy
-        queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
-          if (prev) {
-            return updateSystem(uid, body, prev)
-          }
-          return prev
-        })
-      }
-      setSelectedPhysicalSystem(undefined)
-      if (saveAndExit) {
-        navigateBack()
-      } else {
-        router.replace(PATH.SYSTEM + '/' + responseUid)
-      }
-      toast.success(`System saved successfully`)
+      //   queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
+      //     if (prev) {
+      //       return updateSystem(
+      //         selectedPhysicalSystem?.uid,
+      //         { ...selectedPhysicalSystem, physicalItem: undefined },
+      //         prev
+      //       )
+      //     }
+      //     return prev
+      //   })
+      // } else {
+      //   queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
+      //     if (prev) {
+      //       return updateSystem(uid, body, prev)
+      //     }
+      //     return prev
+      //   })
+      // }
+      recalculate(null)
     })
   }
 

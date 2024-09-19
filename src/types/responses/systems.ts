@@ -37,6 +37,11 @@ export type SystemDetail = {
   miniImageUrl?: string[]
 }
 
+export type SystemDetailCut = {
+  uid: string
+  subSystems?: SystemDetail[]
+}
+
 export type PhysicalItem = {
   uid?: string
   conditionStatus?: CodebookType
