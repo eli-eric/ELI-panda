@@ -5,8 +5,8 @@ export const SystemFieldsFragment = gql(`
     uid
     name
     systemCode
-    sparePartsCoverage 
-    minimalSpareCoverage
+    sp_coverage
+    minimalSpareParstCount
     responsibleTeam {
       uid
       name
@@ -138,8 +138,8 @@ export const SystemDetailFragment = gql(`
     uid
     name
     systemCode
-    sparePartsCoverage 
-    minimalSpareCoverage
+    sp_coverage
+    minimalSpareParstCount
     responsibleTeam {
       uid
       name

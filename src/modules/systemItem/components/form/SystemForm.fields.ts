@@ -24,9 +24,9 @@ const useSystemEditFormFields = () => {
       rounded: 'rounded-md',
       codebook: CODEBOOK.SYSTEM_ATTRIBUTE
     },
-    minimalSpareCoverage: {
-      name: 'minimalSpareCoverage',
-      label: form.minimalSpareCoverage.label,
+    minimalSpareParstCount: {
+      name: 'minimalSpareParstCount',
+      label: form.minimalSpareParstCount.label,
       rounded: 'rounded-md',
       disabled: disabledEdit
     },

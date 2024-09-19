@@ -98,9 +98,9 @@ export const useSystemCreate = (
             description: systemForm.description,
             attribute: connectN(systemForm?.attribute?.uid),
             responsibleTeam: connectN(systemForm?.responsibleTeam?.uid),
-            minimalSpareCoverage: !systemForm.minimalSpareCoverage
+            minimalSpareParstCount: !systemForm.minimalSpareParstCount
               ? null
-              : Number(systemForm.minimalSpareCoverage),
+              : Number(systemForm.minimalSpareParstCount),
 
             systemCode:
               systemForm.systemCode === '' ? null : systemForm.systemCode,

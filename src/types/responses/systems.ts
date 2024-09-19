@@ -22,8 +22,8 @@ export type SystemDetail = {
   systemCode?: string
   systemType?: CodebookType
   attribute?: CodebookType
-  minimalSpareCoverage?: number
-  sparePartsCoverage?: number
+  minimalSpareParstCount?: number
+  sp_coverage?: number
   zone?: CodebookType
   location?: CodebookType
   description?: string

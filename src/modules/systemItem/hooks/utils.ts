@@ -17,9 +17,9 @@ export const makeSystemInputBody = ({
     systemForm?.attribute?.uid,
     systemDetail?.attribute?.uid
   ),
-  minimalSpareCoverage: !systemForm.minimalSpareCoverage
+  minimalSpareParstCount: !systemForm.minimalSpareParstCount
     ? null
-    : Number(systemForm.minimalSpareCoverage),
+    : Number(systemForm.minimalSpareParstCount),
   systemType: connectAndDisconnectNode(
     systemForm?.systemType?.uid,
     systemDetail?.systemType?.uid

@@ -137,7 +137,7 @@ export const messages = {
       form: {
         name: { label: 'Name', placeholder: 'Name' },
         attribute: { label: 'Attribute' }, // codebook of attributes - SYSTEM_ATTRIBUTE
-        minimalSpareCoverage: {
+        minimalSpareParstCount: {
           isCritical: { label: 'Is Critical' },
           label: 'Minimal Coverage',
           placeholder: 'Minimal Coverage'

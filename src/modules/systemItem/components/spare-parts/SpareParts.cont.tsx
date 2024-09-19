@@ -53,9 +53,9 @@ export const SparePartsContainer = () => {
         titleNode={
           <div className="flex w-[300px] ml-4 items-center">
             <h3 className="text-lg font-medium whitespace-nowrap mr-2 text-red-500">
-              {`${systemDetail?.sparePartsCoverage || 'N/A'} out of`}
+              {`${systemDetail?.sp_coverage || 'N/A'} out of`}
             </h3>
-            <Input className="mb-5" {...fields.minimalSpareCoverage} />
+            <Input className="mb-5" {...fields.minimalSpareParstCount} />
           </div>
         }
       >

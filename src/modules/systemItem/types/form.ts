@@ -11,8 +11,8 @@ export type SystemDetailFormType = {
   location?: CodebookType | null
   attribute?: CodebookType | null
   responsibleTeam?: CodebookType | null
-  minimalSpareCoverage?: number | null
-  sparePartsCoverage?: number | null
+  minimalSpareParstCount?: number | null
+  sp_coverage?: number | null
   zone?: CodebookType | null
   systemType?: CodebookType | null
   systemCode?: string | null
