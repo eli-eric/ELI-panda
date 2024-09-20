@@ -52,7 +52,6 @@ export const useSystemDetail = (alias?: string, onSuccess?: (data) => void) => {
     CatalogueItemFragment,
     physicalItem?.catalogueItem
   )
-  console.log('systemDetail', typeof systemDetail?.sp_coverage)
 
   return {
     systemDetail,

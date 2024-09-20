@@ -8,8 +8,6 @@ import classNames from 'classnames'
 import { useDrag } from 'react-dnd'
 
 import { Tooltip } from '@/components/Tooltip'
-// eslint-disable-next-line
-import type { SystemDetail, SystemsResponse } from '@/types/responses/systems'
 import { truncateString } from '@/utils'
 import type { EndpointProps } from '@/utils/getEndpoints'
 
@@ -49,6 +47,15 @@ export const SystemNameCell = ({
 
   const value = truncateString(getValue(), 33)
 
+  const handleExpand = () => {
+    if (!row.getIsExpanded()) {
+      if (!original.subSystems?.length) {
+        setUid?.(original.uid)
+      }
+    }
+    row.toggleExpanded()
+  }
+
   return (
     <div
       style={{
@@ -65,14 +72,7 @@ export const SystemNameCell = ({
             'flex items-center w-full py-1',
             original.hasSubsystems && 'group/expand cursor-pointer'
           )}
-          onClick={() => {
-            if (!row.getIsExpanded()) {
-              if (!original.subSystems?.length) {
-                setUid?.(original.uid)
-              }
-            }
-            row.toggleExpanded()
-          }}
+          onClick={handleExpand}
           ref={previewRef}
         >
           {enableDragAndDrop && (

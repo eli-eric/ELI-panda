@@ -9,8 +9,14 @@ import { queryMutate } from '@/utils/fetcher'
 import type { PruneSystemDetail } from './utils'
 import { pruneSystemDetail } from './utils'
 
-export const useRecalculate = (onSuccess: () => void) => {
-  const { query } = useQueryManager('systems')
+export const useRecalculate = ({
+  onSuccess,
+  tableId = 'systems'
+}: {
+  onSuccess: () => void
+  tableId?: string
+}) => {
+  const { query } = useQueryManager(tableId)
 
   const queryClient = useQueryClient()
 
@@ -24,7 +30,7 @@ export const useRecalculate = (onSuccess: () => void) => {
     },
     onSuccess: data => {
       queryClient.setQueryData<SystemsResponse, QueryFetcherKey>(
-        ['systems', { query }],
+        [tableId, { query }],
         prev =>
           prev
             ? {
@@ -47,7 +53,7 @@ export const useRecalculate = (onSuccess: () => void) => {
     },
     onSuccess: () => {
       const systems = queryClient.getQueryData<SystemsResponse>([
-        'systems',
+        tableId,
         { query }
       ])
       if (systems) {

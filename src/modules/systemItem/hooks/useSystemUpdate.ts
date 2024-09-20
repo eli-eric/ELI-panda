@@ -74,7 +74,7 @@ export const useSystemUpdate = (
   const router = useRouter()
   const { mutate: mutateProperties } = usePropertiesUpdate(physicalItemUid)
   const uid = router.query.uid as string
-  const { systemDetail, refetch } = useSystemDetail()
+  const { systemDetail } = useSystemDetail()
 
   const [saveAndExit, setSaveAndExit] = useState(false)
 
@@ -88,7 +88,9 @@ export const useSystemUpdate = (
     toast.success(`System saved successfully`)
   }
 
-  const [recalculate] = useRecalculate(onFinish)
+  const [recalculate] = useRecalculate({
+    onSuccess: onFinish
+  })
 
   const {
     newMaintainedBy,

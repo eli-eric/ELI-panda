@@ -51,7 +51,7 @@ export const SystemActionButtons = ({
 
   const queryClient = useQueryClient()
 
-  const [relcalculate] = useRecalculate(() => {
+  const onRecalculateFinish = () => {
     toast.success(`System ${original.name} deleted`)
     if (queryKey) {
       queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
@@ -61,6 +61,10 @@ export const SystemActionButtons = ({
         return prev
       })
     }
+  }
+
+  const [relcalculate] = useRecalculate({
+    onSuccess: onRecalculateFinish
   })
 
   const { formatMessage: fm } = useIntl()
