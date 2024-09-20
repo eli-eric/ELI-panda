@@ -10,6 +10,8 @@ export type SystemsResponse = {
 type SystemStatistics = {
   subsystemsCount?: number
   sparePartsCount?: number
+  minimalSpareParstCount?: number
+  sp_coverage?: number
 }
 
 export type SystemDetail = {
@@ -20,7 +22,6 @@ export type SystemDetail = {
   parentUid?: string
   systemLevel?: SystemLevel
   systemCode?: string
-  systemAlias?: string
   systemType?: CodebookType
   attribute?: CodebookType
   zone?: CodebookType
@@ -34,6 +35,11 @@ export type SystemDetail = {
   subSystems?: SystemDetail[]
   statistics?: SystemStatistics
   miniImageUrl?: string[]
+}
+
+export type SystemDetailCut = {
+  uid: string
+  subSystems?: SystemDetail[]
 }
 
 export type PhysicalItem = {

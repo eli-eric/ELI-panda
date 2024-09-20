@@ -16,6 +16,7 @@ import { useSubSystemsColumns } from '../spare-parts/SpareParts.columns'
 export const SparePartsFor = () => {
   const tableId = 'sparePartFor'
   const columns = useSubSystemsColumns(tableId)
+
   const { systemDetail } = useSystemDetail()
   const router = useRouter()
   const { setFilter } = useFormFilterState({

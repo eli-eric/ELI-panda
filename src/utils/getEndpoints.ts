@@ -58,7 +58,9 @@ export const getEndpoints = ({
     systemTypeGroupTypes: `/system/system-type-group/${uid}/system-types`,
     systemTypeGroups: `/system/system-type-groups`,
     codebookTree: `/codebook/${codebook}/tree${query}`,
-    generalGraph: `/general/${uid}/graph`
+    generalGraph: `/general/${uid}/graph`,
+    recalculateSpareParts: '/systems/recalculate-spare-parts',
+    systemsReload: '/systems/reload'
   }
   return endpoints
 }

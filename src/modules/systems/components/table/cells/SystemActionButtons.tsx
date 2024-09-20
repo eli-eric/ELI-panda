@@ -16,6 +16,7 @@ import { useSubmit } from '@/hooks/fetch/useSubmit'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { GraphModalTableButton } from '@/modules/shared/system/GraphModalButton'
+import { useRecalculate } from '@/modules/systemItem/hooks/useRecalculate'
 import { filterSubsystem } from '@/modules/systems/utils'
 import { ShowSpareButton } from '@/modules/systemsSpareParts/components/ShowSpareButton'
 import { PATH } from '@/types/constants/paths'
@@ -50,20 +51,28 @@ export const SystemActionButtons = ({
 
   const queryClient = useQueryClient()
 
+  const onRecalculateFinish = () => {
+    toast.success(`System ${original.name} deleted`)
+    if (queryKey) {
+      queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
+        if (prev) {
+          return filterSubsystem(original.uid, prev)
+        }
+        return prev
+      })
+    }
+  }
+
+  const [relcalculate] = useRecalculate({
+    onSuccess: onRecalculateFinish
+  })
+
   const { formatMessage: fm } = useIntl()
   const { submit } = useSubmit<string>({
     endpoint: system,
     method: 'delete',
     onSuccess: () => {
-      toast.success(`System ${original.name} deleted`)
-      if (queryKey) {
-        queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
-          if (prev) {
-            return filterSubsystem(original.uid, prev)
-          }
-          return prev
-        })
-      }
+      relcalculate(null)
     },
     onError: () => {
       toast.error(`Error deleting system ${original.name}`)

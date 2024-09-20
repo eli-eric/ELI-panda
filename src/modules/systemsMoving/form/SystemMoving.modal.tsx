@@ -138,7 +138,6 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
   useEffect(() => {
     reset()
     setValue('name', childSystem?.name || '')
-    setValue('systemAlias', childSystem?.systemAlias)
     setValue('description', childSystem?.description)
     setValue('responsible', childSystem?.responsible)
     setValue('zone', childSystem?.zone)
@@ -154,7 +153,6 @@ export const SystemMovingModal = ({ open, setOpen }: Props) => {
           where: { uid: childSystem?.uid },
           update: {
             name: data.name,
-            systemAlias: data.systemAlias,
             parentSystem: {
               disconnect: whereN(childParentUid),
               connect: whereN(parentSystem?.uid)

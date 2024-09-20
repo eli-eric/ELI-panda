@@ -179,7 +179,18 @@ export const useSystemsColumns = ({
         id: 'sparePartsCount',
         size: 200
       },
-
+      {
+        header: 'Min. Spare Coverage',
+        accessorFn: row => row.statistics?.minimalSpareParstCount,
+        id: 'minimalSpareParstCount',
+        size: 200
+      },
+      {
+        header: 'Spare Parts Coverage',
+        accessorFn: row => row.statistics?.sp_coverage,
+        id: 'sp_coverage',
+        size: 200
+      },
       {
         header: 'Item Usage',
         accessorFn: row => row.physicalItem?.itemUsage?.name,

@@ -2,6 +2,7 @@ import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
+import { Input } from '@/components/form/inputs'
 import { Heading } from '@/components/layout/Heading'
 import { Tooltip } from '@/components/Tooltip'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
@@ -11,12 +12,15 @@ import { classNames } from '@/utils'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
+import useSystemEditFormFields from '../form/SystemForm.fields'
 import { useSubSystemsColumns } from './SpareParts.columns'
 
 export const SparePartsContainer = () => {
   const tableId = 'spareParts'
   const columns = useSubSystemsColumns(tableId)
   const { systemDetail } = useSystemDetail()
+
+  const fields = useSystemEditFormFields()
 
   const { setFilter } = useFormFilterState({
     tableId: 'for-system',
@@ -43,7 +47,18 @@ export const SparePartsContainer = () => {
 
   return (
     <Fragment>
-      <Heading customText="Spare Parts">
+      <Heading
+        className="mt-4"
+        customText="Spare Parts"
+        titleNode={
+          <div className="flex w-[300px] ml-4 items-center">
+            <h3 className="text-lg font-medium whitespace-nowrap mr-2 text-red-500">
+              {`${systemDetail?.sp_coverage || 'N/A'} out of`}
+            </h3>
+            <Input className="mb-5" {...fields.minimalSpareParstCount} />
+          </div>
+        }
+      >
         <AssignSparePartButton />
       </Heading>
       {systemDetail?.spareParts && systemDetail.spareParts.length > 0 && (

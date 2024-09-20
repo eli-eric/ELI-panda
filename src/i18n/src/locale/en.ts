@@ -137,15 +137,14 @@ export const messages = {
       form: {
         name: { label: 'Name', placeholder: 'Name' },
         attribute: { label: 'Attribute' }, // codebook of attributes - SYSTEM_ATTRIBUTE
-        isCritical: { label: 'Is Critical' },
         minimalSpareParstCount: {
-          label: 'Minimal Spare Parts Count',
-          placeholder: 'Minimal Spare Parts Count'
+          isCritical: { label: 'Is Critical' },
+          label: 'Minimal Coverage',
+          placeholder: 'Minimal Coverage'
         },
         description: { label: 'Description', placeholder: 'Description' },
         systemType: { label: 'System Type' }, // system types codebook - SYSTEM_TYPE
         systemCode: { label: 'System Code', placeholder: 'System Code' },
-        systemAlias: { label: 'System Alias', placeholder: 'System Alias' },
         systemLevel: { label: 'System Level' }, // system levels codebook - SYSTEM_LEVEL
         parentSystemFilter: { label: 'All subsystems for parent' }, // system levels codebook - SYSTEM_LEVEL
         team: {

@@ -45,9 +45,6 @@ export const SystemMovingForm = ({ parentPath }: SystemMovingFormProps) => {
       <Col sm={3}>
         <Input {...fields.systemCode} disabled />
       </Col>
-      <Col sm={3}>
-        <Input {...fields.systemAlias} />
-      </Col>
       <Col sm="full">
         <TextArea {...fields.description} />
       </Col>

@@ -263,10 +263,9 @@ type System
   deleted: Boolean!
   isTechnologicalUnit: Boolean
   name: String!
-  systemAlias: String
   systemCode: String
   minimalSpareParstCount: Int
-  isCritical: Boolean
+  sp_coverage: Float
   responsibleTeam: Team
     @relationship(type: "HAS_RESPONSIBLE_TEAM", direction: OUT)
   subSystems: [System!]! @relationship(type: "HAS_SUBSYSTEM", direction: OUT)

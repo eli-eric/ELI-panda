@@ -121,12 +121,6 @@ export const useSystemsSparePartsColumns = ({
         size: 150
       },
       {
-        header: 'System Alias',
-        accessorFn: row => row.systemAlias,
-        id: 'systemAlias',
-        size: 150
-      },
-      {
         header: 'System Type',
         accessorFn: row => row.systemType?.name,
         id: 'systemType',
