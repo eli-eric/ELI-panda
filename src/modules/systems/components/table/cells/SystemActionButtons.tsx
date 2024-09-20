@@ -78,9 +78,11 @@ export const SystemActionButtons = ({
       toast.error(`Error deleting system ${original.name}`)
     }
   })
+
   const withWarningModal = useWarningModal(
     fm({ id: messages.message }, createMessageValues({ name: original.name }))
   )
+
   return (
     <>
       {!hideButtons && (
