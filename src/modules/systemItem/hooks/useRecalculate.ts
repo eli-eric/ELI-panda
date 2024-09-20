@@ -23,7 +23,7 @@ export const useRecalculate = (onSuccess: () => void) => {
         prev => {
           return {
             ...prev,
-            data: data
+            data: data.data
           }
         }
       )

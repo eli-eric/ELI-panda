@@ -265,7 +265,7 @@ type System
   name: String!
   systemCode: String
   minimalSpareParstCount: Int
-  sp_coverage: Int
+  sp_coverage: Float
   responsibleTeam: Team
     @relationship(type: "HAS_RESPONSIBLE_TEAM", direction: OUT)
   subSystems: [System!]! @relationship(type: "HAS_SUBSYSTEM", direction: OUT)
