@@ -74,12 +74,13 @@ export const useSystemUpdate = (
   const router = useRouter()
   const { mutate: mutateProperties } = usePropertiesUpdate(physicalItemUid)
   const uid = router.query.uid as string
-  const { systemDetail } = useSystemDetail()
+  const { systemDetail, refetch } = useSystemDetail()
 
   const [saveAndExit, setSaveAndExit] = useState(false)
 
   const onFinish = () => {
     setSelectedPhysicalSystem(undefined)
+    refetch()
     if (saveAndExit) {
       navigateBack()
     } else {
