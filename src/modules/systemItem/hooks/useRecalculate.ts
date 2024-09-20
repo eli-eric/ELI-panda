@@ -1,27 +1,33 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 import useQueryManager from '@/hooks/useQueryManager'
-import type { SystemDetail, SystemsResponse } from '@/types/responses/systems'
+import type { SystemsResponse } from '@/types/responses/systems'
 import { queryMutate } from '@/utils/fetcher'
 
-function pruneSystemDetail(system: SystemDetail) {
-  const { uid } = system
-  const children = system.subSystems?.map(pruneSystemDetail)
-  return {
-    uid,
-    children
-  }
-}
+import { pruneSystemDetail } from './utils'
 
-export const useRecalculate = (onSuccess: (data: SystemsResponse) => void) => {
+export const useRecalculate = (onSuccess: () => void) => {
   const { query } = useQueryManager('systems')
 
   const queryClient = useQueryClient()
 
   const { mutate: reloadSystems } = useMutation({
     mutationFn: queryMutate<SystemsResponse, any>('systemsReload', 'post'),
+    onError: error => {
+      toast.error('Something went wrong: ' + error.message)
+    },
     onSuccess: data => {
-      onSuccess(data.data)
+      queryClient.setQueryData<SystemsResponse, any>(
+        ['systems', { query }],
+        prev => {
+          return {
+            ...prev,
+            data: data
+          }
+        }
+      )
+      onSuccess()
     }
   })
 
@@ -30,16 +36,15 @@ export const useRecalculate = (onSuccess: (data: SystemsResponse) => void) => {
       'recalculateSpareParts',
       'post'
     ),
+    onError: error => {
+      toast.error('Something went wrong: ' + error.message)
+    },
     onSuccess: () => {
       const systems = queryClient.getQueryData<SystemsResponse>([
         'systems',
         { query }
       ])
-      console.log('systems', systems)
-
       const body = systems?.data.map(pruneSystemDetail)
-      console.log('body', body)
-
       reloadSystems(body)
     }
   })

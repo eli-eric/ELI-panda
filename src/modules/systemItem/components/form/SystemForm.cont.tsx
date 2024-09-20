@@ -113,10 +113,10 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = data
     if (uid) {
-      updateSystem(rest)
+      updateSystem(rest, false)
     }
     if (!uid) {
-      createSystem(rest)
+      createSystem(rest, false)
     }
   }
 

@@ -1,4 +1,5 @@
 import type { SystemDetailFragment } from '@/types/gql/graphql'
+import type { SystemDetail } from '@/types/responses/systems'
 import { connectAndDisconnectNode } from '@/utils/graphql/mutations'
 
 import type { SystemDetailFormType } from '../types/form'
@@ -58,3 +59,17 @@ export const makeSystemInputBody = ({
     }
   }
 })
+
+export type PruneSystemDetail = {
+  uid: string
+  children?: PruneSystemDetail[]
+}
+
+export function pruneSystemDetail(system: SystemDetail): PruneSystemDetail {
+  const { uid } = system
+  const children = system.subSystems?.map(pruneSystemDetail)
+  return {
+    uid,
+    children
+  }
+}
