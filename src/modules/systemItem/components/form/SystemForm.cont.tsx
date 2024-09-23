@@ -48,9 +48,14 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
   const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
   const { parentPath, parentSystem } = useSystemParent()
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { spareParts, sparePartsFor, subSystems, __typename, ...rest } =
-    systemDetail || {}
+  const {
+    sparePartsConnection, // eslint-disable-line @typescript-eslint/no-unused-vars
+    sparePartsCoverageSum, // eslint-disable-line @typescript-eslint/no-unused-vars
+    sparePartsFor, // eslint-disable-line @typescript-eslint/no-unused-vars
+    subSystems, // eslint-disable-line @typescript-eslint/no-unused-vars
+    __typename, // eslint-disable-line @typescript-eslint/no-unused-vars
+    ...rest
+  } = systemDetail || {}
 
   const router = useRouter()
   const uid = router.query.uid as string | undefined

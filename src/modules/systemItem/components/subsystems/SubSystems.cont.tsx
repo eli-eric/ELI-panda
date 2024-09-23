@@ -9,7 +9,7 @@ import { classNames } from '@/utils'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
-import { useSubSystemsColumns } from '../spare-parts/SpareParts.columns'
+import { useSubSystemsColumns } from './SubSustems.columns'
 
 export const SubSystemsContainer = () => {
   const tableId = 'subsystems'

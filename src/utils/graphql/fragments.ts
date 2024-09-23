@@ -6,6 +6,7 @@ export const SystemFieldsFragment = gql(`
     name
     systemCode
     sp_coverage
+    sparePartsCoverageSum
     minimalSpareParstCount
     responsibleTeam {
       uid
@@ -139,6 +140,7 @@ export const SystemDetailFragment = gql(`
     name
     systemCode
     sp_coverage
+    sparePartsCoverageSum
     minimalSpareParstCount
     responsibleTeam {
       uid
@@ -234,10 +236,24 @@ export const SystemDetailFragment = gql(`
       ...CatalogueItem
     }
     }
-    spareParts {
-      ...SystemFields
-      physicalItem {
-        ...PhysicalItem
+    sparePartsConnection {
+      edges {
+        coverage
+        node {
+          name
+          uid
+          parentPath {
+            name
+            uid
+          }
+          location {
+            name
+            code
+          }
+          physicalItem {
+            ...PhysicalItem
+          }
+        }
       }
     }
     sparePartsFor {
