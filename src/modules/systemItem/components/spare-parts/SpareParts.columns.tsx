@@ -9,6 +9,8 @@ import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import { PATH } from '@/types/constants/paths'
 import type { SystemInterfaceSparePartsRelationship } from '@/types/gql/graphql'
 
+import { SparePartsActionsCell } from './SparePartsActionsCell'
+
 export const useSparePartsColumns = () => {
   const columns = useMemo((): ColumnDef<
     SystemInterfaceSparePartsRelationship,
@@ -60,8 +62,8 @@ export const useSparePartsColumns = () => {
           accessorFn: row =>
             row.node.location?.name
               ? row.node.location?.name +
-                ' - ' +
-                (row.node.location?.code || '')
+              ' - ' +
+              (row.node.location?.code || '')
               : ''
         },
         {
@@ -76,6 +78,12 @@ export const useSparePartsColumns = () => {
           id: 'eun',
           header: 'EUN',
           accessorFn: row => row?.node.physicalItem?.eun as string
+        },
+        {
+          id: 'actions',
+          header: 'Actions',
+          size: 20,
+          cell: SparePartsActionsCell
         }
       ]
 
