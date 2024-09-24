@@ -155,6 +155,8 @@ export const SystemDetailFragment = gql(`
     subSystems {
       uid
       name
+      sp_coverage
+      minimalSpareParstCount
       location {
         uid
         name

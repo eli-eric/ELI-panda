@@ -13,7 +13,7 @@ import { useSubSystemsColumns } from './SubSustems.columns'
 
 export const SubSystemsContainer = () => {
   const tableId = 'subsystems'
-  const columns = useSubSystemsColumns(tableId)
+  const columns = useSubSystemsColumns()
   const { systemDetail } = useSystemDetail()
   if (!systemDetail?.subSystems || systemDetail.subSystems.length < 1)
     return null
@@ -43,7 +43,10 @@ export const SubSystemsContainer = () => {
               original?.physicalItem &&
                 'font-bold text-gray-700 dark:text-gray-200',
               getColorBySystemLevel(original?.systemLevel),
-              getFontBySystemLevel(original?.systemLevel)
+              getFontBySystemLevel(original?.systemLevel),
+              original?.sp_coverage != null &&
+                original.sp_coverage < 1 &&
+                'text-red-500 dark:text-red-500 font-bold'
             )
           })}
           data={systemDetail?.subSystems}

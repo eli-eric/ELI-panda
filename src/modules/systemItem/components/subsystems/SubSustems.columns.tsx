@@ -8,8 +8,9 @@ import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import { PATH } from '@/types/constants/paths'
 import type { System } from '@/types/gql/graphql'
+import { classNames } from '@/utils'
 
-export const useSubSystemsColumns = (tableId?: string) => {
+export const useSubSystemsColumns = () => {
   const columns = useMemo((): ColumnDef<System, string>[] => {
     const columns: ColumnDef<System, string>[] = [
       {
@@ -34,10 +35,34 @@ export const useSubSystemsColumns = (tableId?: string) => {
             placement="top"
           >
             <Link href={PATH.SYSTEM + '/' + original.uid}>
-              <LinkDecorator>{getValue()}</LinkDecorator>
+              <LinkDecorator
+                className={classNames(
+                  original?.sp_coverage != null &&
+                    original.sp_coverage < 1 &&
+                    'text-red-500 dark:text-red-500'
+                )}
+              >
+                {getValue()}
+              </LinkDecorator>
             </Link>
           </Tooltip>
         )
+      },
+      {
+        header: 'Spare Parts Coverage',
+        accessorKey: 'sp_coverage',
+        id: 'sp_coverage',
+        meta: {
+          className: 'text-right'
+        }
+      },
+      {
+        header: 'Minimal Spare Parts Count',
+        accessorKey: 'minimalSpareParstCount',
+        id: 'minimalSpareParstCount',
+        meta: {
+          className: 'text-right'
+        }
       },
       {
         header: 'location',
@@ -47,24 +72,9 @@ export const useSubSystemsColumns = (tableId?: string) => {
             : ''
       }
     ]
-    if (tableId === 'spareParts') {
-      columns.push({
-        header: 'EUN',
-        accessorFn: row => row?.physicalItem?.eun as string,
-        id: 'eun'
-      })
-    }
-    if (tableId === 'sparePartFor') {
-      columns.push({
-        header: 'Part Number',
-        accessorFn: row =>
-          row?.physicalItem?.catalogueItem.catalogueNumber || '',
-        id: 'partNumber'
-      })
-    }
 
     return columns
-  }, [tableId])
+  }, [])
 
   return columns
 }
