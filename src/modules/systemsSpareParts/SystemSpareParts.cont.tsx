@@ -13,6 +13,7 @@ import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '../shared/table/SearchBar'
+import { useRecalculate } from '../systemItem/hooks/useRecalculate'
 import {
   getColorBySystemLevel,
   getFontBySystemLevel
@@ -92,6 +93,9 @@ export const SystemsSparePartsContainer = () => {
   )
   const { assignSpareParts, loading } = useAssignSpareParts()
 
+  const [recalculate1] = useRecalculate({ tableId: tableId1 })
+  const [recalculate2] = useRecalculate({ tableId: tableId2 })
+
   const saveRelations = () => {
     assignSpareParts(
       {
@@ -107,6 +111,8 @@ export const SystemsSparePartsContainer = () => {
           table2.resetRowSelection()
           setTable1SelectedUids([])
           setTable2SelectedUids([])
+          recalculate1(null)
+          recalculate2(null)
         },
         onError: erorr => {
           toast.error(erorr.message)
