@@ -12,6 +12,7 @@ import useQueryManager from '../../../hooks/useQueryManager'
 
 export const useSystems = (tableId: string = 'systems') => {
   const { query } = useQueryManager(tableId)
+  console.log('query', query)
 
   const queryKey: QueryFetcherKey = [tableId, { query }]
 

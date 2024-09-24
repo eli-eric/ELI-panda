@@ -5,8 +5,8 @@ import { PlusButton } from '@/components/Buttons'
 import { Input } from '@/components/form/inputs'
 import { Heading } from '@/components/layout/Heading'
 import { Tooltip } from '@/components/Tooltip'
-import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
+import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
 import { classNames } from '@/utils'
 
@@ -22,12 +22,9 @@ export const SparePartsContainer = () => {
 
   const fields = useSystemEditFormFields()
 
-  const { setFilter } = useFormFilterState({
-    tableId: 'for-system',
-    enableQueryUrl: false
-  })
   const router = useRouter()
 
+  const { setSearch } = useTableStateStore()
   const AssignSparePartButton = () => {
     return (
       <Tooltip content="Redirect to assign Spare Part page">
@@ -36,7 +33,7 @@ export const SparePartsContainer = () => {
             primary
             buttonSize="large"
             onClick={() => {
-              setFilter('name')(systemDetail?.name)
+              setSearch('for-system', systemDetail?.uid)
               router.push(PATH.SPARE_PARTS)
             }}
           />
