@@ -47,10 +47,9 @@ export const SystemsComponent: FC<Props> = ({
             getFontBySystemLevel(original?.systemLevel),
             original?.physicalItem &&
               'font-bold text-gray-700 dark:text-gray-200',
-            original?.statistics?.sp_coverage &&
-              original?.statistics?.sp_coverage < 1
-              ? 'text-red-500 dark:text-red-500 font-bold'
-              : ''
+            original?.statistics?.sp_coverage != null &&
+              original.statistics.sp_coverage < 1 &&
+              'text-red-500 dark:text-red-500 font-bold'
           ),
           dropsettings
         })}

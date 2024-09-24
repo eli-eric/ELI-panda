@@ -32,21 +32,23 @@ export const SubSystemsContainer = () => {
           <PlusButton buttonSize="large" primary />
         </Link>
       </Heading>
-      <PandaTable
-        columns={columns}
-        tableId={tableId}
-        className={'relative overflow-x-auto mb-0 pb-0'}
-        settings={{ enableColumnReordering: false }}
-        getRowProps={({ original }) => ({
-          className: classNames(
-            original?.physicalItem &&
-              'font-bold text-gray-700 dark:text-gray-200',
-            getColorBySystemLevel(original?.systemLevel),
-            getFontBySystemLevel(original?.systemLevel)
-          )
-        })}
-        data={systemDetail?.subSystems}
-      />
+      <div className="max-h-[500px] overflow-auto min-h-0">
+        <PandaTable
+          columns={columns}
+          tableId={tableId}
+          className={'relative overflow-x-auto mb-0 pb-0'}
+          settings={{ enableColumnReordering: false }}
+          getRowProps={({ original }) => ({
+            className: classNames(
+              original?.physicalItem &&
+                'font-bold text-gray-700 dark:text-gray-200',
+              getColorBySystemLevel(original?.systemLevel),
+              getFontBySystemLevel(original?.systemLevel)
+            )
+          })}
+          data={systemDetail?.subSystems}
+        />
+      </div>
     </Fragment>
   )
 }
