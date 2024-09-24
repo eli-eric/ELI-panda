@@ -13,6 +13,11 @@ export const useSystemsFilterFields = () => {
       label: form.parentSystemFilter.label,
       disabled: disabledEdit
     },
+    sparePartsCoverage: {
+      name: 'sparePartsCoverage',
+      label: form.sparePartsCoverage.label,
+      disabled: disabledEdit
+    },
     name: {
       name: 'name',
       label: form.name.label,
