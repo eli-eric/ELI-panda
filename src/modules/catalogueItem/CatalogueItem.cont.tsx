@@ -57,7 +57,11 @@ const CatalogueItemContainer = ({
     defaultValues: { ...item }
   })
   const { reset, setValue } = formMethods
-  const { submit, loading } = useItemSubmit(setValue, imageRef, saveAndExit)
+  const { submit, loading } = useItemSubmit({
+    setvalue: setValue,
+    imageRef: imageRef,
+    saveAndExit
+  })
 
   useEffect(() => {
     if (catalogueCategory) {
