@@ -5,6 +5,7 @@ import Combobox from '@/components/form/Combobox'
 import { ComboboxTree } from '@/components/form/ComboboxTree'
 import { FilterCheckboxes } from '@/components/form/FIlterCheckboxes'
 import { Input } from '@/components/form/inputs'
+import { RangeInput } from '@/components/form/RangeInput'
 import { RangeSliderComponent } from '@/components/form/RangeSlider'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
@@ -91,6 +92,14 @@ export const SystemsFilterForm = ({
           {...fields.description}
           onChange={setFilter(fields.description.name)}
           isFilter={true}
+        />
+        <RangeInput
+          {...fields.sparePartsCoverage}
+          placeholder={{ min: 'Min', max: 'Max' }}
+          isFilter={true}
+          onChange={value => {
+            setFilter(fields.sparePartsCoverage.name)(value)
+          }}
         />
       </div>
       <div className="flex flex-col gap-2">

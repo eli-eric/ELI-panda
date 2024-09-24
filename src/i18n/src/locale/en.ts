@@ -135,6 +135,10 @@ export const messages = {
     head: 'ELI Panda - Systems',
     systemDetail: {
       form: {
+        sparePartsCoverage: {
+          label: 'Spare Parts Coverage',
+          placeholder: 'Spare Parts Coverage'
+        },
         name: { label: 'Name', placeholder: 'Name' },
         attribute: { label: 'Attribute' }, // codebook of attributes - SYSTEM_ATTRIBUTE
         minimalSpareParstCount: {
