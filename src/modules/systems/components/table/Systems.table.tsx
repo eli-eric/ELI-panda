@@ -9,6 +9,7 @@ import type {
 } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
+import { useRecalculate } from '@/modules/systemItem/hooks/useRecalculate'
 import type { SystemDetail } from '@/types/responses/systems'
 
 import { useSystems } from '../../hooks/useSystems'
@@ -48,6 +49,14 @@ export const SystemsTable = ({
     hideButtons,
     enableDragAndDrop: enableDragAndDrop
   })
+  const [recalculate] = useRecalculate({ tableId })
+
+  useEffect(() => {
+    if (systems) {
+      recalculate(null)
+    }
+    // eslint-disable-next-line
+  }, [])
 
   const table = usePandaTable({
     tableId,
