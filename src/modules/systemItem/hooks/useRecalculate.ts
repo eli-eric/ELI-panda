@@ -13,7 +13,7 @@ export const useRecalculate = ({
   onSuccess,
   tableId = 'systems'
 }: {
-  onSuccess: () => void
+  onSuccess?: () => void
   tableId?: string
 }) => {
   const { query } = useQueryManager(tableId)
@@ -39,7 +39,7 @@ export const useRecalculate = ({
               }
             : prev
       )
-      onSuccess()
+      onSuccess?.()
     }
   })
 

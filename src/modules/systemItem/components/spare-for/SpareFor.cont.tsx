@@ -11,11 +11,11 @@ import { classNames } from '@/utils'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
-import { useSubSystemsColumns } from '../spare-parts/SpareParts.columns'
+import { useSpareForColumns } from './SpareFor.columns'
 
 export const SparePartsFor = () => {
   const tableId = 'sparePartFor'
-  const columns = useSubSystemsColumns(tableId)
+  const columns = useSpareForColumns(tableId)
 
   const { systemDetail } = useSystemDetail()
   const router = useRouter()
