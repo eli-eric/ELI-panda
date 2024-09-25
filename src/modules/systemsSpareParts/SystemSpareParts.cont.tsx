@@ -1,8 +1,10 @@
+import { useRouter } from 'next/router'
 import { memo, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 
 import { Button } from '@/components/Buttons'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
+import useQueryManager from '@/hooks/useQueryManager'
 import useWarningModal from '@/hooks/useWarningModal'
 import type { SystemDetail } from '@/types/responses/systems'
 import { classNames } from '@/utils'
@@ -10,6 +12,7 @@ import { classNames } from '@/utils'
 import { FilterBadges } from '../shared/form/FilterBadges'
 import { Pagination } from '../shared/table/Pagination'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
+import { useRowSelection } from '../shared/table/pandaTable/hooks/useRowSelection'
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '../shared/table/SearchBar'
@@ -35,6 +38,16 @@ export const SystemsSparePartsContainer = () => {
 
   const [table1SelectedUids, setTable1SelectedUids] = useState<string[]>([])
   const [table2SelectedUids, setTable2SelectedUids] = useState<string[]>([])
+
+  const router = useRouter()
+
+  const selectedUid = router.query.selectedUid as string | undefined
+
+  const {
+    query: { search }
+  } = useQueryManager(tableId2)
+
+  const [, setRowSelection] = useRowSelection(tableId2)
 
   const columns1 = useSystemsSparePartsColumns({
     tableId: tableId1,
@@ -135,6 +148,17 @@ export const SystemsSparePartsContainer = () => {
       withWarningModal(saveRelations)()
     } else saveRelations()
   }
+
+  useEffect(() => {
+    if (selectedUid && selectedUid === search) {
+      setTable2SelectedUids([selectedUid])
+      setRowSelection({ 0: true })
+    } else {
+      setTable2SelectedUids([])
+      setRowSelection({})
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className={classNames('grid grid-cols-2')}>
