@@ -4,7 +4,6 @@ export type SystemFilterType = {
   name: string
   systemLevel: string[]
   systemCode: string
-  systemAlias: string
   systemType: CodebookType | null
   zone: CodebookType | null
   location: CodebookType | null

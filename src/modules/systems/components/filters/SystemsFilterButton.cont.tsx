@@ -18,7 +18,6 @@ type SystemFilterType = {
   name: string
   systemLevel: string[]
   systemCode: string
-  systemAlias: string
   systemType: CodebookType | null
   zone: CodebookType | null
   location: CodebookType | null
@@ -55,7 +54,6 @@ export const SystemFilterButtonContainer = ({
       name: '',
       systemLevel: [],
       systemCode: '',
-      systemAlias: '',
       systemType: null,
       zone: null,
       location: null,

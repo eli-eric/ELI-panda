@@ -5,7 +5,7 @@ import { classNames } from '@/utils'
 
 interface Props {
   name: string
-  label: string
+  label?: string
   onChange?: (v: any) => void
   required?: boolean
   placeholder?: { min: string; max: string }

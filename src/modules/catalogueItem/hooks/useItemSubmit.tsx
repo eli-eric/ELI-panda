@@ -13,11 +13,15 @@ import { queryMutate } from '@/utils/fetcher'
 import type { CatalogueItem } from '../types/responses'
 import { useCatalogueItem } from './useItem'
 
-export const useItemSubmit = (
-  setvalue: UseFormSetValue<any>,
-  imageRef?: MutableRefObject<ImageGalleryRef | undefined>,
+export const useItemSubmit = ({
+  setvalue,
+  imageRef,
+  saveAndExit
+}: {
+  setvalue: UseFormSetValue<any>
+  imageRef?: MutableRefObject<ImageGalleryRef | undefined>
   saveAndExit?: boolean
-) => {
+}) => {
   const { query, replace } = useRouter()
   const uid = query.uid as string | undefined
 
@@ -26,14 +30,16 @@ export const useItemSubmit = (
   const queryClient = useQueryClient()
 
   const { mutate, isPending } = useMutation({
-    mutationKey: queryKey,
+    mutationKey: ['catalogueItemCreateUpdate', { uid }],
     mutationFn: queryMutate<CatalogueItem, CatalogueItem>(
       'catalogueItem',
       uid ? 'put' : 'post',
       uid
     ),
     onSuccess: catalogueItem => {
-      queryClient.setQueryData(queryKey, catalogueItem.data)
+      if (uid) {
+        queryClient.setQueryData(queryKey, catalogueItem.data)
+      }
       queryClient.invalidateQueries({ queryKey: ['catalogueItems'] })
 
       setvalue('lastUpdateTime', catalogueItem.data?.lastUpdateTime)

@@ -38,7 +38,7 @@ export const RowCellComponent: FC<Props> = ({ cell, row, loading, index }) => {
       }
       className={classNames(
         'flex items-center',
-        'border-r border-b border-gray-400 dark:text-gray-100 pl-3 pr-3',
+        'border-r border-b border-gray-400 pl-3 pr-3',
         cell.column.columnDef.meta?.sticky
           ? 'sticky z-30 backdrop-blur-2xl backdrop-filter border-r pt-1 pb-1'
           : '',

@@ -9,7 +9,7 @@ import type { CatalogueItem } from '../types/responses'
 
 export const useCatalogueItem = () => {
   const router = useRouter()
-  const catalogueUid = router.query.uid as string
+  const catalogueUid = router.query.uid as string | undefined
   const queryKey: QueryFetcherKey = ['catalogueItem', { uid: catalogueUid }]
 
   const {

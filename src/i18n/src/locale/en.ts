@@ -135,17 +135,19 @@ export const messages = {
     head: 'ELI Panda - Systems',
     systemDetail: {
       form: {
+        sparePartsCoverage: {
+          label: 'Spare Parts Coverage',
+          placeholder: 'Spare Parts Coverage'
+        },
         name: { label: 'Name', placeholder: 'Name' },
         attribute: { label: 'Attribute' }, // codebook of attributes - SYSTEM_ATTRIBUTE
-        isCritical: { label: 'Is Critical' },
         minimalSpareParstCount: {
-          label: 'Minimal Spare Parts Count',
-          placeholder: 'Minimal Spare Parts Count'
+          isCritical: { label: 'Is Critical' },
+          label: 'Minimum Spare Parts'
         },
         description: { label: 'Description', placeholder: 'Description' },
         systemType: { label: 'System Type' }, // system types codebook - SYSTEM_TYPE
         systemCode: { label: 'System Code', placeholder: 'System Code' },
-        systemAlias: { label: 'System Alias', placeholder: 'System Alias' },
         systemLevel: { label: 'System Level' }, // system levels codebook - SYSTEM_LEVEL
         parentSystemFilter: { label: 'All subsystems for parent' }, // system levels codebook - SYSTEM_LEVEL
         team: {

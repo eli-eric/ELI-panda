@@ -24,23 +24,24 @@ export const SystemItemContainer = ({ uid }: Props) => {
   return (
     <div className="h-screen">
       <Fragment>
-        <SystemForm />
-        {uid && (
-          <Card className="flex flex-col justify-between">
-            <SubSystemsContainer />
-            <SparePartsContainer />
-            <SparePartsFor />
-            <ErrorBoundary fallback={<ErrorPage />}>
-              <Suspense fallback={<ProgressBarComponent />}>
-                <FileManager
-                  itemType={FILE_TYPE.SYSTEM}
-                  uid={uid}
-                  hasEditRole={hasEditRole}
-                />
-              </Suspense>
-            </ErrorBoundary>
-          </Card>
-        )}
+        <SystemForm>
+          {uid && (
+            <Card className="flex flex-col justify-between">
+              <SubSystemsContainer />
+              <SparePartsContainer />
+              <SparePartsFor />
+              <ErrorBoundary fallback={<ErrorPage />}>
+                <Suspense fallback={<ProgressBarComponent />}>
+                  <FileManager
+                    itemType={FILE_TYPE.SYSTEM}
+                    uid={uid}
+                    hasEditRole={hasEditRole}
+                  />
+                </Suspense>
+              </ErrorBoundary>
+            </Card>
+          )}
+        </SystemForm>
       </Fragment>
     </div>
   )

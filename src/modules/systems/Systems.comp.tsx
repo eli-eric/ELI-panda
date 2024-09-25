@@ -43,10 +43,13 @@ export const SystemsComponent: FC<Props> = ({
         className={'relative overflow-scroll scrollbar-style'}
         getRowProps={({ original }) => ({
           className: classNames(
+            getColorBySystemLevel(original?.systemLevel),
+            getFontBySystemLevel(original?.systemLevel),
             original?.physicalItem &&
               'font-bold text-gray-700 dark:text-gray-200',
-            getColorBySystemLevel(original?.systemLevel),
-            getFontBySystemLevel(original?.systemLevel)
+            original?.statistics?.sp_coverage != null &&
+              original.statistics.sp_coverage < 1 &&
+              'text-red-500 dark:text-red-500 font-bold'
           ),
           dropsettings
         })}
