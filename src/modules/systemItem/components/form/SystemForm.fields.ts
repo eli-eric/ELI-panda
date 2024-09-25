@@ -26,7 +26,6 @@ const useSystemEditFormFields = () => {
     },
     minimalSpareParstCount: {
       name: 'minimalSpareParstCount',
-      label: form.minimalSpareParstCount.label,
       rounded: 'rounded-md',
       disabled: disabledEdit
     },

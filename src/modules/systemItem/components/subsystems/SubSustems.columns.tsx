@@ -50,8 +50,9 @@ export const useSubSystemsColumns = () => {
       },
       {
         header: 'Spare Parts Coverage',
-        accessorKey: 'sp_coverage',
         id: 'sp_coverage',
+        accessorFn: ({ sp_coverage }) =>
+          sp_coverage ? sp_coverage.toFixed(2) : '',
         meta: {
           className: 'text-right'
         }

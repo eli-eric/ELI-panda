@@ -142,8 +142,9 @@ export const messages = {
         name: { label: 'Name', placeholder: 'Name' },
         attribute: { label: 'Attribute' }, // codebook of attributes - SYSTEM_ATTRIBUTE
         minimalSpareParstCount: {
-          isCritical: { label: 'Is Critical' },
-          label: 'Minimum Spare Parts'
+          label:
+            'Set a minimum number of required spare parts for this system:',
+          placeholder: 'Minimal Spare Parts Count'
         },
         description: { label: 'Description', placeholder: 'Description' },
         systemType: { label: 'System Type' }, // system types codebook - SYSTEM_TYPE
@@ -190,6 +191,10 @@ export const messages = {
             }
           }
         }
+      },
+      minimalSparePartsModal: {
+        message:
+          'Enter a value here only for systems (parts) where you want to monitor the availability of spare parts. Systems with lower then the required  spare part coverage will be then highlighted in red in the systems table grid. {br} {br} Note that you can use rational numbers to define that the spare parts coverage can be shared. For example, you can set the value to 0.25 meaning that it is sufficient to have one spare part shared between 4 systems.'
       },
       deleteModal: {
         message:
