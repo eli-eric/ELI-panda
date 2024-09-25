@@ -34,7 +34,9 @@ export const SparePartsContainer = () => {
             buttonSize="large"
             onClick={() => {
               setSearch('for-system', systemDetail?.uid)
-              router.push(PATH.SPARE_PARTS)
+              router.push(
+                PATH.SPARE_PARTS + `?selectedUid=${systemDetail?.uid}`
+              )
             }}
           />
         </div>
