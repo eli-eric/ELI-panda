@@ -62,17 +62,23 @@ export const useSparePartsColumns = () => {
           accessorFn: row =>
             row.node.location?.name
               ? row.node.location?.name +
-              ' - ' +
-              (row.node.location?.code || '')
+                ' - ' +
+                (row.node.location?.code || '')
               : ''
         },
         {
           id: 'coverage',
-          header: 'Coverage',
+          header: 'SP Coverage',
           meta: {
             className: 'text-right'
           },
-          accessorFn: row => String(row.coverage)
+          accessorFn: row => String(Number(row?.coverage).toFixed(2))
+        },
+        {
+          id: 'partNumber',
+          header: 'Part Number',
+          accessorFn: row =>
+            row?.node.physicalItem?.catalogueItem?.catalogueNumber as string
         },
         {
           id: 'eun',

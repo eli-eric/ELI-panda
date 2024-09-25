@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
+import { useFormContext, useWatch } from 'react-hook-form'
 
-import { PlusButton } from '@/components/Buttons'
-import { Input } from '@/components/form/inputs'
+import { Button } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import { Tooltip } from '@/components/Tooltip'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
@@ -12,15 +12,19 @@ import { classNames } from '@/utils'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
-import useSystemEditFormFields from '../form/SystemForm.fields'
+import { SetMinimalSparesButton } from './SetMinimalSparesButton'
 import { useSparePartsColumns } from './SpareParts.columns'
 
 export const SparePartsContainer = () => {
   const tableId = 'spareParts'
   const columns = useSparePartsColumns()
   const { systemDetail } = useSystemDetail()
+  const { control } = useFormContext()
 
-  const fields = useSystemEditFormFields()
+  const minSparePartsCount = useWatch({
+    control,
+    name: 'minimalSpareParstCount'
+  })
 
   const router = useRouter()
 
@@ -29,7 +33,7 @@ export const SparePartsContainer = () => {
     return (
       <Tooltip content="Redirect to assign Spare Part page">
         <div>
-          <PlusButton
+          <Button
             primary
             buttonSize="large"
             onClick={() => {
@@ -38,7 +42,9 @@ export const SparePartsContainer = () => {
                 PATH.SPARE_PARTS + `?selectedUid=${systemDetail?.uid}`
               )
             }}
-          />
+          >
+            Assign Spare Parts
+          </Button>
         </div>
       </Tooltip>
     )
@@ -51,10 +57,19 @@ export const SparePartsContainer = () => {
         customText="Spare Parts"
         titleNode={
           <div className="flex w-[300px] ml-4 items-center">
-            <h3 className="text-lg font-medium whitespace-nowrap mr-2 text-red-500">
-              {`${systemDetail?.sparePartsCoverageSum || 'N/A'} out of`}
+            <h3
+              className={classNames(
+                'font-medium whitespace-nowrap mr-4',
+                systemDetail?.sparePartsCoverageSum && minSparePartsCount
+                  ? systemDetail?.sparePartsCoverageSum < minSparePartsCount
+                    ? 'text-red-500 dark:text-red-500'
+                    : 'text-green-500 dark:text-green-500'
+                  : 'text-gray-500 dark:text-gray-300'
+              )}
+            >
+              {`Available ${systemDetail?.sparePartsCoverageSum || '0'} out of ${minSparePartsCount || '0'} required`}
             </h3>
-            <Input className="mb-5" {...fields.minimalSpareParstCount} />
+            <SetMinimalSparesButton />
           </div>
         }
       >
