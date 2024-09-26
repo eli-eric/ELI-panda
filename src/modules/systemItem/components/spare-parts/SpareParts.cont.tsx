@@ -1,17 +1,13 @@
-import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
-import { Button } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
-import { Tooltip } from '@/components/Tooltip'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
-import useTableStateStore from '@/store/useTableStateStore'
-import { PATH } from '@/types/constants/paths'
 import { classNames } from '@/utils'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
+import { AssignSparePartButton } from './AssignSparePartsButton'
 import { SetMinimalSparesButton } from './SetMinimalSparesButton'
 import { useSparePartsColumns } from './SpareParts.columns'
 
@@ -25,30 +21,6 @@ export const SparePartsContainer = () => {
     control,
     name: 'minimalSpareParstCount'
   })
-
-  const router = useRouter()
-
-  const { setSearch } = useTableStateStore()
-  const AssignSparePartButton = () => {
-    return (
-      <Tooltip content="Redirect to assign Spare Part page">
-        <div>
-          <Button
-            primary
-            buttonSize="large"
-            onClick={() => {
-              setSearch('for-system', systemDetail?.uid)
-              router.push(
-                PATH.SPARE_PARTS + `?selectedUid=${systemDetail?.uid}`
-              )
-            }}
-          >
-            Assign Spare Parts
-          </Button>
-        </div>
-      </Tooltip>
-    )
-  }
 
   return (
     <Fragment>
