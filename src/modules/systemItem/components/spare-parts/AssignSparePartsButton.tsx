@@ -4,15 +4,13 @@ import { FormattedMessage } from 'react-intl'
 import { Button } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
 import { message } from '@/i18n/src/messages'
+import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { useSparesStore } from '@/modules/systemsSpareParts/store/useSparesStore'
 import useTableStateStore from '@/store/useTableStateStore'
 import { PATH } from '@/types/constants/paths'
+import { SystemLevel } from '@/types/gql/graphql'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
-import { useFormFilterState } from '@/hooks/form/useFormFilters'
-import { SystemLevel } from '@/types/gql/graphql'
-import { set } from 'lodash'
-import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 
 const messages = message.systemsPage.systemDetail.spareParts.buttons
 

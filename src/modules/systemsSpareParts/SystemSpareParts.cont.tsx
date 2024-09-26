@@ -25,7 +25,6 @@ import { useSystems } from '../systems/hooks/useSystems'
 import { useAssignSpareParts } from './hooks/useAssignSpareParts'
 import { useSparesStore } from './store/useSparesStore'
 import { useSystemsSparePartsColumns } from './SystemSpareParts.columns'
-import { set } from 'lodash'
 
 const FilterMemoized = memo(SystemFilterButtonContainer)
 

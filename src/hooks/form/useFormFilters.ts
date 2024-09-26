@@ -162,7 +162,6 @@ export const useFormFilterState = ({
         name: string = id,
         propType?: string
       ) => {
-        console.log({ value, type, name, propType })
         setColumnFilters(prev => {
           const filters = [...prev]
           const index = prev.findIndex(item => item.id === id)
