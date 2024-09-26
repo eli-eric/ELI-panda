@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { memo, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 
@@ -24,10 +23,11 @@ import {
 import { SystemFilterButtonContainer } from '../systems/components/filters/SystemsFilterButton.cont'
 import { useSystems } from '../systems/hooks/useSystems'
 import { useAssignSpareParts } from './hooks/useAssignSpareParts'
+import { useSparesStore } from './store/useSparesStore'
 import { useSystemsSparePartsColumns } from './SystemSpareParts.columns'
+import { set } from 'lodash'
 
 const FilterMemoized = memo(SystemFilterButtonContainer)
-const BadgesMemoized = memo(FilterBadges)
 
 export const SystemsSparePartsContainer = () => {
   const tableId1 = 'spare-parts'
@@ -39,9 +39,7 @@ export const SystemsSparePartsContainer = () => {
   const [table1SelectedUids, setTable1SelectedUids] = useState<string[]>([])
   const [table2SelectedUids, setTable2SelectedUids] = useState<string[]>([])
 
-  const router = useRouter()
-
-  const selectedUid = router.query.selectedUid as string | undefined
+  const { selectedUidForSystem, setSelectedUidForSystem } = useSparesStore()
 
   const {
     query: { search }
@@ -150,13 +148,15 @@ export const SystemsSparePartsContainer = () => {
   }
 
   useEffect(() => {
-    if (selectedUid && selectedUid === search) {
-      setTable2SelectedUids([selectedUid])
+    if (selectedUidForSystem && selectedUidForSystem === search) {
+      setTable2SelectedUids([selectedUidForSystem])
       setRowSelection({ 0: true })
     } else {
       setTable2SelectedUids([])
       setRowSelection({})
+      setSelectedUidForSystem(undefined)
     }
+    return () => setSelectedUidForSystem(undefined)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -170,7 +170,7 @@ export const SystemsSparePartsContainer = () => {
           tableId={tableId1}
           useQuery={false}
           left={<FilterMemoized tableId={tableId1} enableQueryURL={false} />}
-          right={<BadgesMemoized tableId={tableId1} />}
+          right={<FilterBadges enableQueryURL={false} tableId={tableId1} />}
           onChange={() => table.resetExpanded()}
         />
         <PandaTableV2
@@ -217,7 +217,7 @@ export const SystemsSparePartsContainer = () => {
           }
           right={
             <div className="flex">
-              <BadgesMemoized tableId={tableId2} />
+              <FilterBadges enableQueryURL={false} tableId={tableId2} />
               <Button
                 primary
                 disabled={

@@ -192,6 +192,12 @@ export const messages = {
           }
         }
       },
+      spareParts: {
+        buttons: {
+          assign: 'Assign Spares',
+          set: 'Set'
+        }
+      },
       minimalSparePartsModal: {
         message:
           'Enter a value here only for systems (parts) where you want to monitor the availability of spare parts. Systems with lower then the required  spare part coverage will be then highlighted in red in the systems table grid. {br} {br} Note that you can use rational numbers to define that the spare parts coverage can be shared. For example, you can set the value to 0.25 meaning that it is sufficient to have one spare part shared between 4 systems.'

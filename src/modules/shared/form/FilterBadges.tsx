@@ -6,12 +6,14 @@ import { useFormControlStore } from '@/store/useFormControlStore'
 
 export const FilterBadges = ({
   tableId,
-  additionalBadge
+  additionalBadge,
+  enableQueryURL = true
 }: {
   tableId: string
+  enableQueryURL?: boolean
   additionalBadge?: JSX.Element
 }) => {
-  const [filters, setFilters] = useFilters(tableId, true, false)
+  const [filters, setFilters] = useFilters(tableId, enableQueryURL, false)
   const { addFieldIdToSync } = useFormControlStore()
   //render only client
 

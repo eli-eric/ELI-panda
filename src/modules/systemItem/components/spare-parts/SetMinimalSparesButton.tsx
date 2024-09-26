@@ -47,7 +47,7 @@ export const SetMinimalSparesButton = () => {
   return (
     <Fragment>
       <Button primary onClick={handleOpen}>
-        Set
+        <FormattedMessage id={messages.systemDetail.spareParts.buttons.set} />
       </Button>
       <ModalComponent buttons={buttons} open={open} setOpen={setOpen}>
         <div className="flex items-center">
