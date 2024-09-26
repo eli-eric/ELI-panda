@@ -1,4 +1,5 @@
 import { Fragment, useState } from 'react'
+import { useFormContext, useWatch } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 
 import { Button } from '@/components/Buttons'
@@ -8,6 +9,7 @@ import { Paragraph } from '@/components/visuals/Paragraph'
 import { message } from '@/i18n/src/messages'
 import type { ModalButtons } from '@/types/form'
 
+import { useSystemDetail } from '../../hooks/useSystemDetail'
 import useSystemEditFormFields from '../form/SystemForm.fields'
 
 const messages = message.systemsPage
@@ -16,17 +18,28 @@ const messageButtons = message.common.buttons
 export const SetMinimalSparesButton = () => {
   const [open, setOpen] = useState(false)
   const fields = useSystemEditFormFields()
+  const { systemDetail } = useSystemDetail()
+
+  const [minValue, setMinValue] = useState(systemDetail?.minimalSpareParstCount)
+
+  const { setValue, control } = useFormContext()
+
+  const formValue = useWatch({ control, name: 'minimalSpareParstCount' })
 
   const buttons: ModalButtons = {
     goNext: {
       text: messageButtons.save,
       onClick: () => {
         setOpen(false)
+        setMinValue(formValue)
       }
     },
     goBack: {
       text: messageButtons.cancel,
-      onClick: () => setOpen(false)
+      onClick: () => {
+        setValue('minimalSpareParstCount', minValue)
+        setOpen(false)
+      }
     }
   }
 
@@ -45,8 +58,8 @@ export const SetMinimalSparesButton = () => {
           </label>
           <Input
             {...fields.minimalSpareParstCount}
+            type="number"
             className="w-24"
-            autoFocus={true}
           />
         </div>
         <Paragraph
