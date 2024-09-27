@@ -40,6 +40,11 @@ export const useSpareForColumns = (tableId?: string) => {
         )
       },
       {
+        header: 'System Code',
+        accessorKey: 'systemCode',
+        id: 'systemCode'
+      },
+      {
         header: 'location',
         accessorFn: row =>
           row.location?.name
