@@ -39,7 +39,7 @@ export const SparePartsContainer = () => {
                   : 'text-gray-500 dark:text-gray-300'
               )}
             >
-              {`Available ${systemDetail?.sparePartsCoverageSum || '0'} out of ${minSparePartsCount || '0'} required`}
+              {`Available ${systemDetail?.sparePartsCoverageSum?.toFixed(2) || '0'} out of ${minSparePartsCount || '0'} required`}
             </h3>
             <SetMinimalSparesButton />
           </div>
