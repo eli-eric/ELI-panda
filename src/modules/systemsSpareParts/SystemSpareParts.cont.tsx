@@ -132,18 +132,68 @@ export const SystemsSparePartsContainer = () => {
   }
 
   const handleAssignSpareParts = () => {
-    const isSameSystemType = getSelectedRowModel().flatRows.every(
-      system =>
-        system.original.systemType !== undefined &&
-        getSelectedRowModel2().flatRows.some(
-          system2 =>
-            system2.original.systemType !== undefined &&
-            system.original.systemType?.uid === system2.original.systemType?.uid
-        )
-    )
+    const isSameSystemType =
+      getSelectedRowModel().flatRows.every(
+        system =>
+          system.original.systemType !== undefined &&
+          getSelectedRowModel2().flatRows.some(
+            system2 =>
+              system2.original.systemType !== undefined &&
+              system.original.systemType?.uid ===
+                system2.original.systemType?.uid
+          )
+      ) &&
+      getSelectedRowModel().flatRows.some(
+        system => system.original.systemType !== undefined
+      ) &&
+      getSelectedRowModel2().flatRows.some(
+        system2 => system2.original.systemType !== undefined
+      )
+
+    const isSamePartNumber =
+      getSelectedRowModel().flatRows.every(
+        system =>
+          system.original.physicalItem?.catalogueItem?.catalogueNumber !==
+            undefined &&
+          getSelectedRowModel2().flatRows.some(
+            system2 =>
+              system2.original.physicalItem?.catalogueItem?.catalogueNumber !==
+                undefined &&
+              system.original.physicalItem?.catalogueItem?.catalogueNumber ===
+                system2.original.physicalItem?.catalogueItem?.catalogueNumber
+          )
+      ) &&
+      getSelectedRowModel().flatRows.some(
+        system =>
+          system.original.physicalItem?.catalogueItem?.catalogueNumber !==
+          undefined
+      ) &&
+      getSelectedRowModel2().flatRows.some(
+        system2 =>
+          system2.original.physicalItem?.catalogueItem?.catalogueNumber !==
+          undefined
+      )
+
+    if (!isSamePartNumber && !isSameSystemType) {
+      withWarningModal(
+        saveRelations,
+        ' Are you sure you want to continue? The Part Numbers and System Types do not match.'
+      )()
+      return
+    }
+    if (!isSamePartNumber) {
+      withWarningModal(
+        saveRelations,
+        "'Are you sure you want to continue? The Part Numbers do not match."
+      )()
+      return
+    }
     if (!isSameSystemType) {
       withWarningModal(saveRelations)()
-    } else saveRelations()
+      return
+    }
+
+    saveRelations()
   }
 
   useEffect(() => {
