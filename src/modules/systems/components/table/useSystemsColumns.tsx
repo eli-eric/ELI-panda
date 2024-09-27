@@ -91,13 +91,6 @@ export const useSystemsColumns = ({
         )
       },
       {
-        header: 'System Level',
-        accessorFn: row => row.systemLevel,
-        id: 'systemLevel',
-        size: 210
-      },
-
-      {
         header: 'System Code',
         accessorFn: row => row.systemCode,
         id: 'systemCode',
@@ -108,12 +101,6 @@ export const useSystemsColumns = ({
         accessorFn: row => row.systemType?.name,
         id: 'systemType',
         size: 240
-      },
-      {
-        header: 'Attribute',
-        accessorFn: row => row.attribute?.name,
-        id: 'attribute',
-        size: 150
       },
       {
         header: 'CS Zone',
@@ -174,33 +161,20 @@ export const useSystemsColumns = ({
         size: 200
       },
       {
-        header: 'Spare Parts Count',
-        accessorFn: row => row.statistics?.sparePartsCount,
-        id: 'sparePartsCount',
-        size: 200
-      },
-      {
-        header: 'Minimal Spare Parts Count',
+        header: 'SP Requirement',
         accessorFn: row => row.statistics?.minimalSpareParstCount,
         id: 'minimalSpareParstCount',
         size: 200
       },
       {
-        header: 'Spare Parts Coverage',
-        accessorFn: row => row.statistics?.sp_coverage,
+        header: 'SP Coverage',
+        accessorFn: row =>
+          row.statistics?.sp_coverage &&
+          (
+            parseFloat(Number(row.statistics?.sp_coverage).toFixed(2)) * 100
+          ).toString() + '%',
         id: 'sp_coverage',
         size: 200
-      },
-      {
-        header: 'Item Usage',
-        accessorFn: row => row.physicalItem?.itemUsage?.name,
-        id: 'itemUsage',
-        cell: ({ getValue }) => (
-          <Tooltip content={getValue()}>
-            <div>{truncateString(getValue(), 15)}</div>
-          </Tooltip>
-        ),
-        size: 170
       },
       {
         header: 'Price',

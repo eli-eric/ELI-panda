@@ -68,7 +68,7 @@ export const useSparePartsColumns = () => {
         },
         {
           id: 'coverage',
-          header: 'SP Coverage',
+          header: 'SP Assigned',
           meta: {
             className: 'text-right'
           },
