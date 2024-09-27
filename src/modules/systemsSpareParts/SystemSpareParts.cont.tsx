@@ -113,10 +113,7 @@ export const SystemsSparePartsContainer = () => {
         toSystemIds: table2SelectedUids
       },
       {
-        onSuccess: data => {
-          toast.success(data.createSparePartRelation as string, {
-            duration: 10000
-          })
+        onSuccess: () => {
           table.resetRowSelection()
           table2.resetRowSelection()
           setTable1SelectedUids([])
