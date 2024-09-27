@@ -37,17 +37,19 @@ const createSparePartRelationsResolver = async (
         const relationExistsQuery = `
           MATCH (from:System {uid: $fromSystemId}), (to:System {uid: $toSystemId})
           OPTIONAL MATCH (from)-[r:IS_SPARE_FOR]->(to)
-          RETURN count(r) as count, from.name as fromName, to.name as toName
+          OPTIONAL MATCH (to)-[reverseR:IS_SPARE_FOR]->(from)
+          RETURN count(r) as count, count(reverseR) as reverseCount, from.name as fromName, to.name as toName
         `
         const result = await transaction.run(relationExistsQuery, {
           fromSystemId,
           toSystemId
         })
         const count = result.records[0].get('count').toInt()
+        const reverseCount = result.records[0].get('reverseCount').toInt()
         const fromName = result.records[0].get('fromName')
         const toName = result.records[0].get('toName')
 
-        if (count === 0) {
+        if (count === 0 && reverseCount === 0) {
           const createRelationQuery = `
             MATCH (from:System {uid: $fromSystemId}), (to:System {uid: $toSystemId})
             CREATE (from)-[:IS_SPARE_FOR]->(to)
@@ -58,7 +60,7 @@ const createSparePartRelationsResolver = async (
           })
         } else {
           existingRelationsDetails.push(
-            `Relation between "${fromName}" and "${toName}" already exists.`
+            `Relation between "${fromName}" and "${toName}" already exists or reverse relation exists.`
           )
         }
       }
@@ -67,7 +69,7 @@ const createSparePartRelationsResolver = async (
     await transaction.commit()
 
     if (existingRelationsDetails.length > 0) {
-      return `Some relations were not created because they already exist: ${existingRelationsDetails.join('; ')}`
+      return `Error: Some relations were not created because they already exist or reverse relations exist: ${existingRelationsDetails.join('; ')}`
     }
 
     return 'All relations created successfully'
