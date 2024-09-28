@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 
+import CheckBox from '@/components/form/CheckBox'
 import Combobox from '@/components/form/Combobox'
 import { ComboboxTree } from '@/components/form/ComboboxTree'
 import { FilterCheckboxes } from '@/components/form/FIlterCheckboxes'
@@ -100,6 +101,14 @@ export const SystemsFilterForm = ({
           onChange={value => {
             setFilter(fields.sparePartsCoverage.name)(value)
           }}
+        />
+        <CheckBox
+          {...fields.criticalSpCoverage}
+          label="Critical SP Coverage"
+          onChange={e => {
+            setFilter(fields.criticalSpCoverage.name)(e.target.checked)
+          }}
+          isFilter={true}
         />
       </div>
       <div className="flex flex-col gap-2">

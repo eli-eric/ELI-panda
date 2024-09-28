@@ -135,6 +135,9 @@ export const messages = {
     head: 'ELI Panda - Systems',
     systemDetail: {
       form: {
+        criticalSpCoverage: {
+          label: 'Critical SP Coverage'
+        },
         sparePartsCoverage: {
           label: 'Spare Parts Coverage',
           placeholder: 'Spare Parts Coverage'

@@ -18,6 +18,11 @@ export const useSystemsFilterFields = () => {
       label: form.sparePartsCoverage.label,
       disabled: disabledEdit
     },
+    criticalSpCoverage: {
+      name: 'criticalSpCoverage',
+      label: form.criticalSpCoverage.label,
+      disabled: disabledEdit
+    },
     name: {
       name: 'name',
       label: form.name.label,
