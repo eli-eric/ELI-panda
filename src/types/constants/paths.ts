@@ -34,7 +34,8 @@ export enum PATH {
   ADMIN = '/administration',
   PROFILE_GENERAL = '/profile/general',
   PROFILE_SECURITY = '/profile/security',
-  PROFILE_TEAM = '/profile/team'
+  PROFILE_TEAM = '/profile/team',
+  LAYOUT = '/layout'
 }
 
 export const SUPPORT =
@@ -170,5 +171,6 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
   [PATH.PROFILE_TEAM]: [ROLE.BASICS],
   [PATH.SYSTEM_ALIAS]: [ROLE.SYSTEMS_VIEW],
   [PATH.SYSTEM_TYPE_EDIT]: [ROLE.SYSTEM_TYPE_EDIT, ROLE.SYSTEM_TYPE_VIEW],
+  [PATH.LAYOUT]: [ROLE.BASICS],
   [PATH.ROOT]: []
 }
