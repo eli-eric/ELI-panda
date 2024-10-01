@@ -49,7 +49,14 @@ export const useSubSystemsColumns = () => {
         )
       },
       {
-        header: 'Spare Parts Coverage',
+        header: 'location',
+        accessorFn: row =>
+          row.location?.name
+            ? row.location?.name + ' - ' + (row.location?.code || '')
+            : ''
+      },
+      {
+        header: 'SP Coverage',
         id: 'sp_coverage',
         accessorFn: ({ sp_coverage }) =>
           sp_coverage ? sp_coverage.toFixed(2) : '',
@@ -58,19 +65,12 @@ export const useSubSystemsColumns = () => {
         }
       },
       {
-        header: 'Minimal Spare Parts Count',
+        header: 'SP Count',
         accessorKey: 'minimalSpareParstCount',
         id: 'minimalSpareParstCount',
         meta: {
           className: 'text-right'
         }
-      },
-      {
-        header: 'location',
-        accessorFn: row =>
-          row.location?.name
-            ? row.location?.name + ' - ' + (row.location?.code || '')
-            : ''
       }
     ]
 

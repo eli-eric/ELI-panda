@@ -28,7 +28,7 @@ export const SetMinimalSparesButton = () => {
 
   const buttons: ModalButtons = {
     goNext: {
-      text: messageButtons.save,
+      text: messageButtons.ok,
       onClick: () => {
         setOpen(false)
         setMinValue(formValue)
