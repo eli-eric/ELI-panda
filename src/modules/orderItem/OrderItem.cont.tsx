@@ -103,7 +103,7 @@ export const OrderItemContainer = () => {
 
   return (
     <Form
-      className="h-screen"
+      className="h-screen overflow-auto"
       formMethods={formMethods}
       enableLeaveWarning={true}
     >

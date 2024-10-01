@@ -22,13 +22,13 @@ export const SystemItemContainer = ({ uid }: Props) => {
   const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
 
   return (
-    <div className="h-screen">
+    <div className="h-screen overflow-auto">
       <Fragment>
         <SystemForm>
           {uid && (
             <Card className="flex flex-col justify-between">
-              <SubSystemsContainer />
               <SparePartsContainer />
+              <SubSystemsContainer />
               <SparePartsFor />
               <ErrorBoundary fallback={<ErrorPage />}>
                 <Suspense fallback={<ProgressBarComponent />}>

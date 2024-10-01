@@ -8,7 +8,7 @@ export const Layout: FC<PropsWithChildren> = ({ children }) => {
     <div className="flex flex-col min-h-screen lg:flex-row">
       <NavigationMobile />
       <SidebarNavigation />
-      <main className="flex-1 overflow-auto">{children}</main>
+      <main className="flex-1 overflow-hidden">{children}</main>
     </div>
   )
 }
