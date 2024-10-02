@@ -1,30 +1,43 @@
-import { useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import type { AxiosError, AxiosResponse } from 'axios'
 import { useRouter } from 'next/router'
 import { toast } from 'react-hot-toast'
 
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { useOrders } from '@/modules/orders/hooks/useOrders'
 import { PATH } from '@/types/constants/paths'
-import { navigateBack } from '@/utils'
+import { queryMutate } from '@/utils/fetcher'
 
+import type { OrderDetailFormType } from '../types/form'
 import useOrderDetail from './useOrderDetail'
 
 export const useOrderSubmit = (formReset: (t: any) => void) => {
   const router = useRouter()
-  const { uid, orderDetail, queryKey } = useOrderDetail()
-  const { order: orderEndpoint } = useEndpoint({ uid })
-  const { mutate } = useOrders()
+  const { uid, queryKey } = useOrderDetail()
+  const { mutate: refetchOrders } = useOrders()
 
   const queryClient = useQueryClient()
 
-  const { submit, loading } = useSubmit<string>({
-    endpoint: orderEndpoint,
-    method: uid ? 'put' : 'post',
-    onSuccess: (uid, _, custom) => {
-      queryClient.invalidateQueries({ queryKey })
+  const { mutate, isPending } = useMutation({
+    mutationFn: queryMutate<OrderDetailFormType, OrderDetailFormType>(
+      'order',
+      uid ? 'put' : 'post',
+      uid
+    ),
+    onError: (e: AxiosError) => {
+      if (e.response?.status === 409) {
+        toast.error(
+          'Order was updated by another user. Please refresh the page. And try again.'
+        )
+      } else {
+        toast.error(e.message)
+      }
+    }
+  })
 
-      mutate()
+  const handleOnSuccess =
+    (saveAndExit: boolean) =>
+    (data: AxiosResponse<OrderDetailFormType, any>) => {
+      const orderDetail = data.data
       formReset({
         ...orderDetail,
         orderLines:
@@ -39,28 +52,24 @@ export const useOrderSubmit = (formReset: (t: any) => void) => {
           name: 'Requested'
         }
       })
-      if (custom?.saveAndExit) {
-        const navigateExit = () => router.push(PATH.ORDERS)
-        navigateBack(navigateExit)
+      queryClient.invalidateQueries({ queryKey })
+
+      refetchOrders()
+      if (saveAndExit) {
+        router.push(PATH.ORDERS)
       } else {
-        if (uid) {
-          router.push(PATH.ORDER + '/' + uid)
-        } else {
-          router.reload()
+        if (!uid) {
+          router.push(PATH.ORDER + '/' + orderDetail.uid)
         }
-      }
-      toast.success(`Order was successfully saved.`)
-    },
-    onError: e => {
-      if (e.response?.status === 409) {
-        toast.error(
-          'Order was updated by another user. Please refresh the page. And try again.'
-        )
-      } else {
-        toast.error(e.message)
+        toast.success(`Order was successfully saved.`)
       }
     }
-  })
 
-  return { loading, submit }
+  const submit = (data: OrderDetailFormType, saveAndExit: boolean) => {
+    mutate(data, {
+      onSuccess: handleOnSuccess(saveAndExit)
+    })
+  }
+
+  return { loading: isPending, submit }
 }

@@ -89,17 +89,19 @@ export const RoomCardNewContainer = () => {
   })
 
   return (
-    <RoomCardComponent
-      {...{
-        formMethods,
-        status,
-        onSubmitAndExit,
-        onSubmit,
-        contactPersonsHall,
-        contactPersonsDept,
-        teams,
-        locations
-      }}
-    />
+    <div className="relative h-screen overflow-auto">
+      <RoomCardComponent
+        {...{
+          formMethods,
+          status,
+          onSubmitAndExit,
+          onSubmit,
+          contactPersonsHall,
+          contactPersonsDept,
+          teams,
+          locations
+        }}
+      />
+    </div>
   )
 }

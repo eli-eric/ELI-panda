@@ -28,6 +28,7 @@ const messages = message.ordersPage
 export const OrderItemContainer = () => {
   const { disabledEdit, uid, orderDetail } = useOrderDetail()
   const { formatMessage: fm } = useIntl()
+
   const withWarningModal = useWarningModal(
     fm({ id: messages.ordelineMissingModal.message })
   )
@@ -60,17 +61,23 @@ export const OrderItemContainer = () => {
       return rest
     })
     if (data.orderLines.length === 0 || !data.orderLines) {
-      withWarningModal(submit)({
-        ...data,
-        orderLines: orderLines,
-        orderDate: convertDate(data.orderDate)
-      })
+      withWarningModal(submit)(
+        {
+          ...data,
+          orderLines: orderLines,
+          orderDate: convertDate(data.orderDate)
+        },
+        false
+      )
     } else {
-      submit({
-        ...data,
-        orderLines: orderLines,
-        orderDate: convertDate(data.orderDate)
-      })
+      submit(
+        {
+          ...data,
+          orderLines: orderLines,
+          orderDate: convertDate(data.orderDate)
+        },
+        false
+      )
     }
   }
   const onSubmitAndExit = (data: OrderDetailFormType) => {
@@ -87,7 +94,7 @@ export const OrderItemContainer = () => {
           orderLines: orderLines,
           orderDate: convertDate(data.orderDate)
         },
-        { saveAndExit: true }
+        true
       )
     } else {
       submit(
@@ -96,14 +103,14 @@ export const OrderItemContainer = () => {
           orderLines: orderLines,
           orderDate: convertDate(data.orderDate)
         },
-        { saveAndExit: true }
+        true
       )
     }
   }
 
   return (
     <Form
-      className="h-screen"
+      className="h-screen overflow-auto"
       formMethods={formMethods}
       enableLeaveWarning={true}
     >

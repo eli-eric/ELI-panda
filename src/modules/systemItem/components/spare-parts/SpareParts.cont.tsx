@@ -17,6 +17,13 @@ export const SparePartsContainer = () => {
   const { systemDetail } = useSystemDetail()
   const { control } = useFormContext()
 
+  const sparePartsCoverageSum =
+    systemDetail?.sparePartsCoverageSum ||
+    systemDetail?.sparePartsConnection.edges.reduce(
+      (acc, { coverage }) => coverage || 0 + acc,
+      0
+    )
+
   const minSparePartsCount = useWatch({
     control,
     name: 'minimalSpareParstCount'
@@ -32,8 +39,8 @@ export const SparePartsContainer = () => {
             <h3
               className={classNames(
                 'font-medium whitespace-nowrap mr-4',
-                systemDetail?.sparePartsCoverageSum && minSparePartsCount
-                  ? systemDetail?.sparePartsCoverageSum < minSparePartsCount
+                sparePartsCoverageSum && minSparePartsCount
+                  ? sparePartsCoverageSum < minSparePartsCount
                     ? 'text-red-500 dark:text-red-500'
                     : 'text-green-500 dark:text-green-500'
                   : 'text-gray-500 dark:text-gray-300'

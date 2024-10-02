@@ -7,7 +7,8 @@ export const messages = {
       cancel: 'Cancel',
       save: 'Save',
       home: 'Go Home',
-      addNew: 'Add new item'
+      addNew: 'Add new item',
+      ok: 'OK'
     },
     custom404: {
       title: '404',
