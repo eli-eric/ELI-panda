@@ -13,6 +13,16 @@ export const useSystemsFilterFields = () => {
       label: form.parentSystemFilter.label,
       disabled: disabledEdit
     },
+    sparePartsCoverage: {
+      name: 'sparePartsCoverage',
+      label: form.sparePartsCoverage.label,
+      disabled: disabledEdit
+    },
+    criticalSpCoverage: {
+      name: 'criticalSpCoverage',
+      label: form.criticalSpCoverage.label,
+      disabled: disabledEdit
+    },
     name: {
       name: 'name',
       label: form.name.label,
@@ -59,13 +69,6 @@ export const useSystemsFilterFields = () => {
       name: 'systemCode',
       label: form.systemCode.label,
       placeholder: form.systemCode.placeholder,
-      rounded: 'rounded-md',
-      disabled: disabledEdit
-    },
-    systemAlias: {
-      name: 'systemAlias',
-      label: form.systemAlias.label,
-      placeholder: form.systemAlias.placeholder,
       rounded: 'rounded-md',
       disabled: disabledEdit
     },

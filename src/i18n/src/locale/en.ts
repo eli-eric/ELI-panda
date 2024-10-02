@@ -7,7 +7,8 @@ export const messages = {
       cancel: 'Cancel',
       save: 'Save',
       home: 'Go Home',
-      addNew: 'Add new item'
+      addNew: 'Add new item',
+      ok: 'OK'
     },
     custom404: {
       title: '404',
@@ -135,17 +136,23 @@ export const messages = {
     head: 'ELI Panda - Systems',
     systemDetail: {
       form: {
+        criticalSpCoverage: {
+          label: 'Critical SP Coverage'
+        },
+        sparePartsCoverage: {
+          label: 'Spare Parts Coverage',
+          placeholder: 'Spare Parts Coverage'
+        },
         name: { label: 'Name', placeholder: 'Name' },
         attribute: { label: 'Attribute' }, // codebook of attributes - SYSTEM_ATTRIBUTE
-        isCritical: { label: 'Is Critical' },
         minimalSpareParstCount: {
-          label: 'Minimal Spare Parts Count',
+          label:
+            'Set a minimum number of required spare parts for this system:',
           placeholder: 'Minimal Spare Parts Count'
         },
         description: { label: 'Description', placeholder: 'Description' },
         systemType: { label: 'System Type' }, // system types codebook - SYSTEM_TYPE
         systemCode: { label: 'System Code', placeholder: 'System Code' },
-        systemAlias: { label: 'System Alias', placeholder: 'System Alias' },
         systemLevel: { label: 'System Level' }, // system levels codebook - SYSTEM_LEVEL
         parentSystemFilter: { label: 'All subsystems for parent' }, // system levels codebook - SYSTEM_LEVEL
         team: {
@@ -188,6 +195,16 @@ export const messages = {
             }
           }
         }
+      },
+      spareParts: {
+        buttons: {
+          assign: 'Assign Spares',
+          set: 'Set'
+        }
+      },
+      minimalSparePartsModal: {
+        message:
+          'Enter a value here only for systems (parts) where you want to monitor the availability of spare parts. Systems with lower then the required  spare part coverage will be then highlighted in red in the systems table grid. {br} {br} Note that you can use rational numbers to define that the spare parts coverage can be shared. For example, you can set the value to 0.25 meaning that it is sufficient to have one spare part shared between 4 systems.'
       },
       deleteModal: {
         message:

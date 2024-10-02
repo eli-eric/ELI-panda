@@ -1,5 +1,5 @@
-import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
+import type { FC, PropsWithChildren } from 'react'
 import { memo, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -16,12 +16,10 @@ const MemoizedSystemGallery = memo(ImageGallery)
 
 import { useRouter } from 'next/router'
 
-import CheckBox from '@/components/form/CheckBox'
-import { Input } from '@/components/form/inputs'
-import { Col, Grid } from '@/components/grid/Grid'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'
 import usePermission from '@/hooks/usePermission'
+import { GraphModalButton } from '@/modules/shared/system/GraphModalButton'
 import { ROLE } from '@/types/constants/roles'
 import type { SystemLevel } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -33,10 +31,8 @@ import { useSystemParent } from '../../hooks/useSystemParent'
 import { useSystemUpdate } from '../../hooks/useSystemUpdate'
 import type { SystemDetailFormType } from '../../types/form'
 import { getColorBySystemLevel } from '../../utils'
-import { AssignPhysicalItem } from '../AssignPhysicalItem'
 import { ShowHistoryButton } from '../history/ShowHistoryButton'
 import { SystemItemCard } from './components/SystemItem.card'
-import useSystemEditFormFields from './SystemForm.fields'
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
@@ -47,15 +43,19 @@ const FormCard = ({ children, className }: CardProps) => (
 )
 
 //TODO:  split to update and create form
-export const SystemForm = () => {
+export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
   const { systemDetail, catalogueItem } = useSystemDetail()
   const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
-  const fields = useSystemEditFormFields()
   const { parentPath, parentSystem } = useSystemParent()
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { spareParts, sparePartsFor, subSystems, __typename, ...rest } =
-    systemDetail || {}
+  const {
+    sparePartsConnection, // eslint-disable-line @typescript-eslint/no-unused-vars
+    sparePartsCoverageSum, // eslint-disable-line @typescript-eslint/no-unused-vars
+    sparePartsFor, // eslint-disable-line @typescript-eslint/no-unused-vars
+    subSystems, // eslint-disable-line @typescript-eslint/no-unused-vars
+    __typename, // eslint-disable-line @typescript-eslint/no-unused-vars
+    ...rest
+  } = systemDetail || {}
 
   const router = useRouter()
   const uid = router.query.uid as string | undefined
@@ -118,10 +118,10 @@ export const SystemForm = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = data
     if (uid) {
-      updateSystem(rest)
+      updateSystem(rest, false)
     }
     if (!uid) {
-      createSystem(rest)
+      createSystem(rest, false)
     }
   }
 
@@ -148,7 +148,12 @@ export const SystemForm = () => {
         editRole={ROLE.SYSTEM_EDIT}
         onSubmit={formMethods.handleSubmit(onSubmit)}
         onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
-        customElement={<ShowHistoryButton />}
+        customElement={
+          <div className="flex gap-2">
+            <GraphModalButton uid={uid} />
+            <ShowHistoryButton />
+          </div>
+        }
       />
       <Card>
         <Breadcrumbs
@@ -180,30 +185,8 @@ export const SystemForm = () => {
           />
         </SystemMainForm>
         {physicalItem && <SystemItemCard />}
-        <Card className="border-t border-gray-400">
-          <Grid>
-            <Col sm={1} md={3} lg={2}>
-              <Input
-                step={1}
-                type="number"
-                defaultValue={''}
-                {...fields.minimalSpareParstCount}
-              />
-            </Col>
-            <Col sm={1} md={1} lg={2}>
-              <CheckBox
-                {...fields.isCritical}
-                label="Is critical"
-                className="items-end pb-2"
-              />
-            </Col>
-            <Col sm={1} md={2} lg={8} className="flex justify-end">
-              {!systemDetail?.physicalItem && uid && <AssignPhysicalItem />}
-            </Col>
-          </Grid>
-        </Card>
       </FormCard>
-      <DevTool control={formMethods.control} />
+      {children}
     </Form>
   )
 }

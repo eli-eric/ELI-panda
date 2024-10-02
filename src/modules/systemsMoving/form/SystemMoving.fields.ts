@@ -58,13 +58,6 @@ export const useSystemMovingFormFields = () => {
       placeholder: form.systemCode.placeholder,
       rounded: 'rounded-md',
       disabled: disabledEdit
-    },
-    systemAlias: {
-      name: 'systemAlias',
-      label: form.systemAlias.label,
-      placeholder: form.systemAlias.placeholder,
-      rounded: 'rounded-md',
-      disabled: disabledEdit
     }
   })
 }

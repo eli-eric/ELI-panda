@@ -1,10 +1,12 @@
 import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 
+import CheckBox from '@/components/form/CheckBox'
 import Combobox from '@/components/form/Combobox'
 import { ComboboxTree } from '@/components/form/ComboboxTree'
 import { FilterCheckboxes } from '@/components/form/FIlterCheckboxes'
 import { Input } from '@/components/form/inputs'
+import { RangeInput } from '@/components/form/RangeInput'
 import { RangeSliderComponent } from '@/components/form/RangeSlider'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocation.combo'
@@ -70,11 +72,6 @@ export const SystemsFilterForm = ({
           onChange={setFilter(fields.systemCode.name)}
           isFilter={true}
         />
-        <Input
-          {...fields.systemAlias}
-          onChange={setFilter(fields.systemAlias.name)}
-          isFilter={true}
-        />
         <Combobox
           {...fields.zone}
           onSelect={setFilter(fields.zone.name)}
@@ -95,6 +92,22 @@ export const SystemsFilterForm = ({
         <Input
           {...fields.description}
           onChange={setFilter(fields.description.name)}
+          isFilter={true}
+        />
+        <RangeInput
+          {...fields.sparePartsCoverage}
+          placeholder={{ min: 'Min', max: 'Max' }}
+          isFilter={true}
+          onChange={value => {
+            setFilter(fields.sparePartsCoverage.name)(value)
+          }}
+        />
+        <CheckBox
+          {...fields.criticalSpCoverage}
+          label="Critical SP Coverage"
+          onChange={e => {
+            setFilter(fields.criticalSpCoverage.name)(e.target.checked)
+          }}
           isFilter={true}
         />
       </div>

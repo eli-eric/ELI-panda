@@ -121,12 +121,6 @@ export const useSystemsSparePartsColumns = ({
         size: 150
       },
       {
-        header: 'System Alias',
-        accessorFn: row => row.systemAlias,
-        id: 'systemAlias',
-        size: 150
-      },
-      {
         header: 'System Type',
         accessorFn: row => row.systemType?.name,
         id: 'systemType',
@@ -183,7 +177,18 @@ export const useSystemsSparePartsColumns = ({
         id: 'sparePartsCount',
         size: 200
       },
-
+      {
+        header: 'Minimal Spare Parts Count',
+        accessorFn: row => row.statistics?.minimalSpareParstCount,
+        id: 'minimalSpareParstCount',
+        size: 200
+      },
+      {
+        header: 'Spare Parts Coverage',
+        accessorFn: row => row.statistics?.sp_coverage,
+        id: 'sp_coverage',
+        size: 200
+      },
       {
         header: 'Item Usage',
         accessorFn: row => row.physicalItem?.itemUsage?.name,

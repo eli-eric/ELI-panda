@@ -19,7 +19,6 @@ interface SystemsMovingType extends SystemDetail {
 
 export type SystemMovingFormType = {
   name: string
-  systemAlias?: string
   description?: string
   responsible?: CodebookType
   systemType?: CodebookType

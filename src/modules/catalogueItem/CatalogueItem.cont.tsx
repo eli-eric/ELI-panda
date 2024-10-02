@@ -57,7 +57,11 @@ const CatalogueItemContainer = ({
     defaultValues: { ...item }
   })
   const { reset, setValue } = formMethods
-  const { submit, loading } = useItemSubmit(setValue, imageRef, saveAndExit)
+  const { submit, loading } = useItemSubmit({
+    setvalue: setValue,
+    imageRef: imageRef,
+    saveAndExit
+  })
 
   useEffect(() => {
     if (catalogueCategory) {
@@ -88,7 +92,7 @@ const CatalogueItemContainer = ({
 
   return (
     <Form
-      className="h-screen"
+      className="h-screen overflow-auto"
       formMethods={formMethods}
       enableLeaveWarning={true}
     >

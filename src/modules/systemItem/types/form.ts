@@ -8,15 +8,14 @@ export type SystemDetailFormType = {
   name: string | null
   description?: string | null
   parentPath?: CodebookType[]
-  isCritical: boolean | null
   location?: CodebookType | null
   attribute?: CodebookType | null
   responsibleTeam?: CodebookType | null
-  minimalSpareParstCount: number | null
+  minimalSpareParstCount?: number | null
+  sp_coverage?: number | null
   zone?: CodebookType | null
   systemType?: CodebookType | null
   systemCode?: string | null
-  systemAlias?: string | null
   responsible?: CodebookType | null
   importance?: CodebookType | null
   systemLevel: SystemLevel | null

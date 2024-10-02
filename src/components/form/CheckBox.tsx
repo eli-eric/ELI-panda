@@ -68,6 +68,10 @@ const CheckBox = ({
 }: InputProps) => {
   const { control } = useFormContext()
 
+  const id = useId()
+
+  const htmlFor = `checkbox-${id}-${name}`
+
   return (
     <Controller
       name={name}
@@ -77,6 +81,7 @@ const CheckBox = ({
           <div className="flex h-5 items-center">
             <input
               {...field}
+              id={htmlFor}
               value={field.value || false}
               onChange={e => {
                 restProps.onChange && restProps.onChange(e)
@@ -94,7 +99,10 @@ const CheckBox = ({
             />
           </div>
           <div className="ml-3 text-sm">
-            <label className="font-medium text-gray-700 dark:text-gray-200">
+            <label
+              htmlFor={htmlFor}
+              className="font-medium text-gray-700 dark:text-gray-200"
+            >
               {label}
             </label>
             <span className="text-gray-500">

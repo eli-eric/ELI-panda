@@ -24,15 +24,8 @@ const useSystemEditFormFields = () => {
       rounded: 'rounded-md',
       codebook: CODEBOOK.SYSTEM_ATTRIBUTE
     },
-    isCritical: {
-      name: 'isCritical',
-      label: form.isCritical.label,
-      rounded: 'rounded-md',
-      disabled: disabledEdit
-    },
     minimalSpareParstCount: {
       name: 'minimalSpareParstCount',
-      label: form.minimalSpareParstCount.label,
       rounded: 'rounded-md',
       disabled: disabledEdit
     },
@@ -77,13 +70,6 @@ const useSystemEditFormFields = () => {
       placeholder: form.systemCode.placeholder,
       rounded: 'rounded-md',
       disabled: false
-    },
-    systemAlias: {
-      name: 'systemAlias',
-      label: form.systemAlias.label,
-      placeholder: form.systemAlias.placeholder,
-      rounded: 'rounded-md',
-      disabled: disabledEdit
     },
     systemLevel: {
       name: 'systemLevel',

@@ -7,69 +7,94 @@ import { Tooltip } from '@/components/Tooltip'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import { PATH } from '@/types/constants/paths'
-import type { System } from '@/types/gql/graphql'
+import type { SystemInterfaceSparePartsRelationship } from '@/types/gql/graphql'
 
-export const useSubSystemsColumns = (tableId?: string) => {
-  const columns = useMemo((): ColumnDef<System, string>[] => {
-    const columns: ColumnDef<System, string>[] = [
-      {
-        id: 'icon',
-        size: 20,
-        header: 'Icon',
-        cell: ({
-          row: {
-            original: { physicalItem }
-          }
-        }) => (
-          <IconCell itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE} />
-        )
-      },
-      {
-        header: 'System Name',
-        accessorKey: 'name',
-        id: 'name',
-        cell: ({ getValue, row: { original } }) => (
-          <Tooltip
-            content={original.parentPath?.map(v => v?.name).join(' > ')}
-            placement="top"
-          >
-            <Link href={PATH.SYSTEM + '/' + original.uid}>
-              <LinkDecorator>{getValue()}</LinkDecorator>
-            </Link>
-          </Tooltip>
-        )
-      },
-      {
-        header: 'System Alias',
-        accessorKey: 'systemAlias',
-        id: 'systemAlias'
-      },
-      {
-        header: 'location',
-        accessorFn: row =>
-          row.location?.name
-            ? row.location?.name + ' - ' + (row.location?.code || '')
-            : ''
-      }
-    ]
-    if (tableId === 'spareParts') {
-      columns.push({
-        header: 'EUN',
-        accessorFn: row => row?.physicalItem?.eun as string,
-        id: 'eun'
-      })
-    }
-    if (tableId === 'sparePartFor') {
-      columns.push({
-        header: 'Part Number',
-        accessorFn: row =>
-          row?.physicalItem?.catalogueItem.catalogueNumber || '',
-        id: 'partNumber'
-      })
-    }
+import { SparePartsActionsCell } from './SparePartsActionsCell'
+
+export const useSparePartsColumns = () => {
+  const columns = useMemo((): ColumnDef<
+    SystemInterfaceSparePartsRelationship,
+    string
+  >[] => {
+    const columns: ColumnDef<SystemInterfaceSparePartsRelationship, string>[] =
+      [
+        {
+          id: 'icon',
+          header: 'Icon',
+          size: 20,
+          cell: ({
+            row: {
+              original: {
+                node: { physicalItem }
+              }
+            }
+          }) => (
+            <IconCell
+              itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE}
+            />
+          )
+        },
+        {
+          id: 'name',
+          header: 'System Name',
+          accessorFn: row => row.node.name,
+          cell: ({
+            getValue,
+            row: {
+              original: {
+                node: { parentPath, uid }
+              }
+            }
+          }) => (
+            <Tooltip
+              content={parentPath?.map(v => v?.name).join(' > ')}
+              placement="top"
+            >
+              <Link href={PATH.SYSTEM + '/' + uid}>
+                <LinkDecorator>{getValue()}</LinkDecorator>
+              </Link>
+            </Tooltip>
+          )
+        },
+        {
+          header: 'location',
+          id: 'location',
+          accessorFn: row =>
+            row.node.location?.name
+              ? row.node.location?.name +
+                ' - ' +
+                (row.node.location?.code || '')
+              : ''
+        },
+        {
+          id: 'coverage',
+          header: 'SP Assigned',
+          meta: {
+            className: 'text-right'
+          },
+          accessorFn: row => String(Number(row?.coverage).toFixed(2))
+        },
+        {
+          id: 'partNumber',
+          header: 'Part Number',
+          accessorFn: row =>
+            row?.node.physicalItem?.catalogueItem?.catalogueNumber as string
+        },
+        {
+          id: 'eun',
+          header: 'EUN',
+          accessorFn: row => row?.node.physicalItem?.eun as string
+        },
+        {
+          id: 'actions',
+          header: 'Actions',
+          size: 20,
+          cell: SparePartsActionsCell
+        }
+      ]
 
     return columns
-  }, [tableId])
+  }, [])
 
   return columns
 }

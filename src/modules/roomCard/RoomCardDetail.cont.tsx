@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Fragment, Suspense, useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
@@ -132,7 +132,7 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
   if (loading) return <LoaderComponent />
 
   return (
-    <Fragment>
+    <div className="relative h-screen overflow-auto">
       <RoomCardComponent
         formMethods={formMethods}
         status={status}
@@ -154,6 +154,6 @@ export const RoomCardDetailContainer = ({ roomCardUid }: Props) => {
           </ErrorBoundary>
         </Suspense>
       </Card>
-    </Fragment>
+    </div>
   )
 }

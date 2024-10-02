@@ -12,7 +12,11 @@ const ASSIGN_SPARE_PARTS = gql(`
 export const useAssignSpareParts = () => {
   const { mutate, isPending } = useGraphQLMutation(ASSIGN_SPARE_PARTS, {
     onSuccess: data => {
-      toast.success(data.createSparePartRelation as string)
+      if (data.createSparePartRelation?.includes('Error')) {
+        toast.error(data.createSparePartRelation as string, { duration: 10000 })
+      } else {
+        toast.success(data.createSparePartRelation as string)
+      }
     },
     onError: erorr => {
       toast.error(erorr.message)
