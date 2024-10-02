@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
-import { v4 as uuid } from 'uuid'
 import { mixed, object } from 'yup'
 
 import Combobox from '@/components/form/Combobox'
@@ -65,7 +64,7 @@ export const ContactHallButton = () => {
           userConnection: null
         },
         role: data?.role,
-        uuid: uuid()
+        uuid: crypto.randomUUID()
       })
       setNewHallContact({ employee: employee as Employee, role: data?.role })
       setEmployeeUid(null)

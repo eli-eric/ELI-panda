@@ -1,7 +1,6 @@
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { v4 } from 'uuid'
 
 import { Badge } from '@/components/visuals/Badge'
 
@@ -66,7 +65,7 @@ export const useFileColumns = ({ hasEditRole, handlePut, itemType, uid }) => {
           <div className="flex items-center">
             {getValue() &&
               getValue().map((v: string) => (
-                <Badge key={v4()} className="mt-1">
+                <Badge key={v} className="mt-1">
                   {v}
                   <XMarkIcon
                     className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600"

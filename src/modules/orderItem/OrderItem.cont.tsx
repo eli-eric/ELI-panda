@@ -80,6 +80,7 @@ export const OrderItemContainer = () => {
       )
     }
   }
+
   const onSubmitAndExit = (data: OrderDetailFormType) => {
     const orderLines = data.orderLines.map(orderLine => {
       // extract uuid from orderLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)

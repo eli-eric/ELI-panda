@@ -1,6 +1,5 @@
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
-import { v4 } from 'uuid'
 
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
@@ -49,7 +48,7 @@ export const FilterCheckboxes = ({
                     field.onChange(value)
                     onChange && onChange(value)
                   }}
-                  key={v4()}
+                  key={crypto.randomUUID()}
                   className="pb-1"
                   label={option}
                 />

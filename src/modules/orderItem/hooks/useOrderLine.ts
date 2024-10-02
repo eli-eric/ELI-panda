@@ -1,5 +1,4 @@
 import { useFieldArray, useFormContext } from 'react-hook-form'
-import { v4 as uuid } from 'uuid'
 
 import type { OrderDetailFormType, OrderLineFormType } from '../types/form'
 
@@ -17,7 +16,7 @@ export const useOrderLine = () => {
       const index = fields.findIndex(item => item.uuid === orderLine.uuid)
       update(index, dataToSave)
     } else {
-      dataToSave.uuid = uuid()
+      dataToSave.uuid = crypto.randomUUID()
       insert(fields.length, dataToSave)
     }
   }

@@ -1,6 +1,5 @@
 import Jimp from 'jimp'
 import type { BucketItemWithMetadata } from 'minio'
-import { nanoid } from 'nanoid'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getToken } from 'next-auth/jwt'
 import stream from 'stream'
@@ -236,7 +235,7 @@ export async function listFiles(req: NextApiRequest, res: NextApiResponse) {
 export async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
   const { prefix } = getPathInfo(req, res)
   const { name, payload, tags } = req.body
-  const id = nanoid()
+  const id = crypto.randomUUID()
 
   const regex = /^data:(.*?);base64,(.*)$/
   const match = payload.match(regex)

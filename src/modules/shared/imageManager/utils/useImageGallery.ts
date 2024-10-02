@@ -1,5 +1,4 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { nanoid } from 'nanoid'
 import { useCallback, useRef } from 'react'
 
 import axiosInstance from '@/core/axios/axiosInstance'
@@ -45,7 +44,7 @@ export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
     ).then(files => {
       dueUploadRef.current = [...dueUploadRef.current, ...files]
       const tempFiles = files.map(file => {
-        const id = `temp-${nanoid()}`
+        const id = `temp-${crypto.randomUUID()}`
         const url = file.payload
         return {
           ...file,
