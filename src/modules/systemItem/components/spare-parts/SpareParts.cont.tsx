@@ -39,8 +39,8 @@ export const SparePartsContainer = () => {
             <h3
               className={classNames(
                 'font-medium whitespace-nowrap mr-4',
-                sparePartsCoverageSum && minSparePartsCount
-                  ? sparePartsCoverageSum < minSparePartsCount
+                minSparePartsCount
+                  ? sparePartsCoverageSum || 0 < minSparePartsCount
                     ? 'text-red-500 dark:text-red-500'
                     : 'text-green-500 dark:text-green-500'
                   : 'text-gray-500 dark:text-gray-300'

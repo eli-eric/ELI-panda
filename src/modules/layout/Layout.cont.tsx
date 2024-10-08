@@ -15,12 +15,24 @@ const LayoutContainer = () => {
         href?: string
       }>
     ) {
+      const allowedIframeOrigins = [
+        'https://layout.eli-beams.eu'
+        // Add other allowed origins if necessary
+      ]
+
+      if (!allowedIframeOrigins.includes(event.origin)) {
+        console.warn('Message from unauthorized origin:', event.origin)
+        return
+      }
+
       const { href } = event.data
       if (href) {
         const query = new URLSearchParams(href.split('?')[1])
         const systemCode = query.get('getDeviceInfo')
-        systemCode && setAlias(systemCode)
-        setOpenDetailInfo(true)
+        if (systemCode) {
+          setAlias(systemCode)
+          setOpenDetailInfo(true)
+        }
       }
     }
     window.addEventListener('message', handleMessage)
@@ -35,7 +47,7 @@ const LayoutContainer = () => {
       <iframe
         src="https://layout.eli-beams.eu/index.html"
         className="h-full w-full"
-        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+        sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-top-navigation-by-user-activation"
       ></iframe>
       <SlideOver
         panelSlide="right"
