@@ -1,27 +1,51 @@
-import { useEffect } from 'react'
+import { Fragment, useEffect, useState } from 'react'
+
+import { SlideOver } from '@/components/overlays/slideover/SlideOver'
+
+import { SystemDetailInfo } from './components/system-detail-info.comp'
 
 const LayoutContainer = () => {
+  const [alias, setAlias] = useState<string | undefined>(undefined)
+  const [openDetailInfo, setOpenDetailInfo] = useState(false)
+
   useEffect(() => {
-    const handleMessage = event => {
-      event.preventDefault()
-
-      const { type, data } = event.data
-      console.log('event', type, data)
+    function handleMessage(
+      event: MessageEvent<{
+        type: string
+        href?: string
+      }>
+    ) {
+      const { href } = event.data
+      if (href) {
+        const query = new URLSearchParams(href.split('?')[1])
+        const systemCode = query.get('getDeviceInfo')
+        systemCode && setAlias(systemCode)
+        setOpenDetailInfo(true)
+      }
     }
-
-    window.addEventListener('click', handleMessage)
-
+    window.addEventListener('message', handleMessage)
     return () => {
-      window.removeEventListener('click', handleMessage)
+      window.removeEventListener('message', handleMessage)
+      setAlias(undefined)
     }
   }, [])
 
   return (
-    <iframe
-      src="https://layout.eli-beams.eu"
-      className="h-full w-full"
-      sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-    ></iframe>
+    <Fragment>
+      <iframe
+        src="https://layout.eli-beams.eu/index.html"
+        className="h-full w-full"
+        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+      ></iframe>
+      <SlideOver
+        panelSlide="right"
+        panelTitle="System Detail Info"
+        open={openDetailInfo}
+        setOpen={setOpenDetailInfo}
+      >
+        <SystemDetailInfo alias={alias} />
+      </SlideOver>
+    </Fragment>
   )
 }
 
