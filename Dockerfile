@@ -34,6 +34,7 @@ ENV AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}"
 ENV AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}"
 
 
+
 # This will do the trick, use the corresponding env file for each environment.
 # COPY .env.production.sample .env.production
 RUN yarn build
@@ -53,6 +54,7 @@ ENV NEO4J_PASSWORD="${NEO4J_PASSWORD}"
 ENV AZURE_AD_BEAMLINES_CLIENT_ID="${AZURE_AD_BEAMLINES_CLIENT_ID}"
 ENV AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}"
 ENV AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}"
+ENV NEXT_SHARP_PATH="${NEXT_SHARP_PATH}"
 
 RUN env
 
@@ -66,6 +68,8 @@ COPY --from=builder /app/public ./public
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Ensure Sharp is copied to the production container
+COPY --from=builder /app/node_modules ./node_modules
 
 
 USER nextjs
