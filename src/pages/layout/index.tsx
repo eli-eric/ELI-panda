@@ -6,9 +6,9 @@ import { message } from 'src/i18n/src/messages'
 
 import LayoutContainer from '@/modules/layout/Layout.cont'
 
-const messages = message.orderItem
+const messages = message.layoutPage
 
-const OrderItemPage: NextPage = (): JSX.Element => {
+const EliLayoutPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
 
   return (
@@ -22,4 +22,4 @@ const OrderItemPage: NextPage = (): JSX.Element => {
   )
 }
 
-export default OrderItemPage
+export default EliLayoutPage

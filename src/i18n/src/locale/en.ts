@@ -458,5 +458,8 @@ export const messages = {
         }
       }
     }
+  },
+  layoutPage: {
+    head: 'ELI Panda - Layout'
   }
 }

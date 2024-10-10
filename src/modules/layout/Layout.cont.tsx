@@ -1,8 +1,12 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, lazy, Suspense, useEffect, useState } from 'react'
 
-import { SlideOver } from '@/components/overlays/slideover/SlideOver'
+const SystemDetailInfo = lazy(
+  () => import('@/modules/layout/components/system-detail-info.comp')
+)
 
-import { SystemDetailInfo } from './components/system-detail-info.comp'
+const SlideOver = lazy(
+  () => import('@/components/overlays/slideover/SlideOver')
+)
 
 const LayoutContainer = () => {
   const [alias, setAlias] = useState<string | undefined>(undefined)
@@ -21,6 +25,7 @@ const LayoutContainer = () => {
       ]
 
       if (!allowedIframeOrigins.includes(event.origin)) {
+        // eslint-disable-next-line no-console
         console.warn('Message from unauthorized origin:', event.origin)
         return
       }
@@ -49,14 +54,18 @@ const LayoutContainer = () => {
         className="h-full w-full"
         sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-top-navigation-by-user-activation"
       ></iframe>
-      <SlideOver
-        panelSlide="right"
-        panelTitle="System Detail Info"
-        open={openDetailInfo}
-        setOpen={setOpenDetailInfo}
-      >
-        <SystemDetailInfo alias={alias} />
-      </SlideOver>
+      <Suspense>
+        <SlideOver
+          panelSlide="right"
+          panelTitle="System Detail Info"
+          open={openDetailInfo}
+          setOpen={setOpenDetailInfo}
+        >
+          <Suspense>
+            <SystemDetailInfo alias={alias} />
+          </Suspense>
+        </SlideOver>
+      </Suspense>
     </Fragment>
   )
 }
