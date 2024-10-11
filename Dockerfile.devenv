@@ -79,4 +79,4 @@ EXPOSE 5001
 
 ENV PORT 5001
 
-CMD ["node", "server.js"]
+CMD ["node", ".next/standalone/server.js"]
