@@ -1,25 +1,34 @@
-# 1. Install dependencies only when needed
-FROM node:18 AS deps
+# Stage 1: Build the application and compile sharp from source
+FROM node:18-alpine AS builder
+
+# Install build tools and dependencies required to compile sharp
+RUN apk add --no-cache \
+    libc6-compat \
+    python3 \
+    make \
+    g++ \
+    vips-dev \
+    autoconf \
+    automake \
+    libtool \
+    pkgconfig
 
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
+# Copy package files and install dependencies
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+
+# Install all dependencies, including devDependencies, and build sharp from source
 RUN \
-    if [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
-    elif [ -f package-lock.json ]; then npm ci; \
-    elif [ -f pnpm-lock.yaml ]; then npm install -g pnpm && pnpm install; \
+    if [ -f yarn.lock ]; then npm_config_build_from_source=true yarn install --frozen-lockfile; \
+    elif [ -f package-lock.json ]; then npm_config_build_from_source=true npm ci; \
+    elif [ -f pnpm-lock.yaml ]; then npm install -g pnpm && npm_config_build_from_source=true pnpm install; \
     else echo "Lockfile not found." && exit 1; \
     fi
 
-# 2. Rebuild the source code only when needed
-FROM node:18 AS builder
-WORKDIR /app
-
-COPY --from=deps /app/node_modules ./node_modules
+# Copy the rest of the application's source code
 COPY . .
 
-# Set environment variables
 ARG NEO4J_PASSWORD
 
 ENV PANDA_API_GW_URL="https://api-dev.panda.eli-beams.eu/v1"
@@ -34,16 +43,21 @@ ENV AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}"
 ENV AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}"
 ENV NEXT_SHARP_PATH="${NEXT_SHARP_PATH}"
 
-# Build the application
+RUN env
+
+# This will do the trick, use the corresponding env file for each environment.
+# COPY .env.production.sample .env.production
 RUN yarn build
 
 # 3. Production image, copy all the files and run next
-FROM node:18 AS runner
+FROM node:18-alpine AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
+# Install runtime dependencies
+RUN apk add --no-cache libc6-compat
 
-# Copy environment variables
+# Set environment variables for production
+ENV NODE_ENV=production
 ENV PANDA_API_GW_URL="https://api-dev.panda.eli-beams.eu/v1"
 ENV NEXTAUTH_URL="https://dev.panda.eli-beams.eu/"
 ENV PANDA_ENV="dev"
@@ -57,19 +71,35 @@ ENV AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}"
 ENV AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}"
 ENV NEXT_SHARP_PATH="${NEXT_SHARP_PATH}"
 
-# Create non-root user
-RUN addgroup --gid 1001 nodejs
-RUN adduser --uid 1001 --ingroup nodejs --disabled-password nextjs
+RUN env
 
-# Copy necessary files
+
+# Copy only the necessary files from the builder
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/yarn.lock ./
+
+# Install only production dependencies
+RUN \
+    if [ -f yarn.lock ]; then yarn install --frozen-lockfile --production --ignore-scripts; \
+    elif [ -f package-lock.json ]; then npm ci --only=production --ignore-scripts; \
+    else echo "Lockfile not found." && exit 1; \
+    fi
+
+# Copy the built application and necessary files
+COPY --from=builder /app/.next/ ./.next/
 COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/package.json ./
 
-# Set user and expose port
+# Create non-root user and set permissions
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001 && \
+    chown -R nextjs:nodejs /app
+
 USER nextjs
+
 EXPOSE 5001
 ENV PORT 5001
 
 # Start the application
-CMD ["node", "server.js"]
+CMD ["node", ".next/standalone/server.js"]
