@@ -1,44 +1,19 @@
 # 1. Install dependencies only when needed
-FROM node:18-alpine AS deps
-
-# Install build tools and dependencies
-RUN apk add --no-cache \
-    libc6-compat \
-    python3 \
-    make \
-    g++ \
-    vips-dev \
-    autoconf \
-    automake \
-    libtool \
-    pkgconfig
+FROM node:18 AS deps
 
 WORKDIR /app
 
-# Install dependencies with build flags
+# Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN \
-    if [ -f yarn.lock ]; then npm_config_build_from_source=true yarn install --frozen-lockfile; \
-    elif [ -f package-lock.json ]; then npm_config_build_from_source=true npm ci; \
-    elif [ -f pnpm-lock.yaml ]; then npm install -g pnpm && npm_config_build_from_source=true pnpm install; \
+    if [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
+    elif [ -f package-lock.json ]; then npm ci; \
+    elif [ -f pnpm-lock.yaml ]; then npm install -g pnpm && pnpm install; \
     else echo "Lockfile not found." && exit 1; \
     fi
 
 # 2. Rebuild the source code only when needed
-FROM node:18-alpine AS builder
-
-# Copy build tools
-RUN apk add --no-cache \
-    libc6-compat \
-    python3 \
-    make \
-    g++ \
-    vips-dev \
-    autoconf \
-    automake \
-    libtool \
-    pkgconfig
-
+FROM node:18 AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
@@ -63,8 +38,7 @@ ENV NEXT_SHARP_PATH="${NEXT_SHARP_PATH}"
 RUN yarn build
 
 # 3. Production image, copy all the files and run next
-FROM node:18-alpine AS runner
-
+FROM node:18 AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -83,12 +57,9 @@ ENV AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}"
 ENV AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}"
 ENV NEXT_SHARP_PATH="${NEXT_SHARP_PATH}"
 
-# Install libc6-compat for runtime
-RUN apk add --no-cache libc6-compat
-
 # Create non-root user
-RUN addgroup -g 1001 -S nodejs
-RUN adduser -S nextjs -u 1001
+RUN addgroup --gid 1001 nodejs
+RUN adduser --uid 1001 --ingroup nodejs --disabled-password nextjs
 
 # Copy necessary files
 COPY --from=builder /app/public ./public
