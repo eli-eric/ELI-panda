@@ -1,100 +1,80 @@
-# Stage 1: Build Stage
-FROM node:18-alpine AS builder
-
-# Install build tools and dependencies required to compile sharp
-RUN apk add --no-cache \
-    python3 \
-    make \
-    g++ \
-    vips-dev
+# 1. Install dependencies only when needed
+FROM node:18-alpine AS deps
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
-# Copy package files and install dependencies
-COPY package.json yarn.lock ./
+# Install dependencies based on the preferred package manager
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+RUN \
+    if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+    elif [ -f package-lock.json ]; then npm ci; \
+    elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i; \
+    else echo "Lockfile not found." && exit 1; \
+    fi
 
-# Set environment variables to build sharp from source
-ENV npm_config_platform=linuxmusl \
-    npm_config_build_from_source=true
 
-# Install all dependencies, including devDependencies
-RUN yarn install --frozen-lockfile
-
-# Copy the rest of the application's source code
+# 2. Rebuild the source code only when needed
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Set build-time environment variables (ARG)
 ARG NEO4J_PASSWORD
-ARG AZURE_AD_BEAMLINES_CLIENT_ID
-ARG AZURE_AD_BEAMLINES_CLIENT_SECRET
-ARG AZURE_AD_BEAMLINES_TENANT_ID
-ARG NEXT_SHARP_PATH
 
-# Set environment variables for the build stage
-ENV PANDA_API_GW_URL="https://api-dev.panda.eli-beams.eu/v1" \
-    PANDA_ENV="dev" \
-    MINIO_ENDPOINT="minio-main" \
-    MINIO_BUCKET_NAME="panda-dev" \
-    NEO4J_USER="neo4j" \
-    NEO4J_URI="bolt://panda-neo4j-dev:7687" \
-    NEO4J_PASSWORD="${NEO4J_PASSWORD}" \
-    AZURE_AD_BEAMLINES_CLIENT_ID="${AZURE_AD_BEAMLINES_CLIENT_ID}" \
-    AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}" \
-    AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}" \
-    NEXT_SHARP_PATH="${NEXT_SHARP_PATH}"
+ENV PANDA_API_GW_URL="https://api-dev.panda.eli-beams.eu/v1"
+ENV PANDA_ENV="dev"
+ENV MINIO_ENDPOINT="minio-main"
+ENV MINIO_BUCKET_NAME="panda-dev"
+ENV NEO4J_USER="neo4j"
+ENV NEO4J_URI="bolt://panda-neo4j-dev:7687"
+ENV NEO4J_PASSWORD="${NEO4J_PASSWORD}"
+ENV AZURE_AD_BEAMLINES_CLIENT_ID="${AZURE_AD_BEAMLINES_CLIENT_ID}"
+ENV AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}"
+ENV AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}"
 
-# Build the application
+RUN env
+
+# This will do the trick, use the corresponding env file for each environment.
+# COPY .env.production.sample .env.production
 RUN yarn build
 
-# Stage 2: Production Stage
+# 3. Production image, copy all the files and run next
 FROM node:18-alpine AS runner
-
 WORKDIR /app
 
-# Install runtime dependencies
-RUN apk add --no-cache \
-    libc6-compat \
-    vips
+ENV NODE_ENV=production
+ENV PANDA_API_GW_URL="https://api-dev.panda.eli-beams.eu/v1"
+ENV NEXTAUTH_URL="https://dev.panda.eli-beams.eu/"
+ENV PANDA_ENV="dev"
+ENV MINIO_ENDPOINT="minio-main"
+ENV MINIO_BUCKET_NAME="panda-dev"
+ENV NEO4J_USER="neo4j"
+ENV NEO4J_URI="bolt://panda-neo4j-dev:7687"
+ENV NEO4J_PASSWORD="${NEO4J_PASSWORD}"
+ENV AZURE_AD_BEAMLINES_CLIENT_ID="${AZURE_AD_BEAMLINES_CLIENT_ID}"
+ENV AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}"
+ENV AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}"
 
-# Set environment variables for the production stage
-ENV NODE_ENV="production" \
-    PANDA_API_GW_URL="https://api-dev.panda.eli-beams.eu/v1" \
-    NEXTAUTH_URL="https://dev.panda.eli-beams.eu/" \
-    PANDA_ENV="dev" \
-    MINIO_ENDPOINT="minio-main" \
-    MINIO_BUCKET_NAME="panda-dev" \
-    NEO4J_USER="neo4j" \
-    NEO4J_URI="bolt://panda-neo4j-dev:7687" \
-    NEO4J_PASSWORD="${NEO4J_PASSWORD}" \
-    AZURE_AD_BEAMLINES_CLIENT_ID="${AZURE_AD_BEAMLINES_CLIENT_ID}" \
-    AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}" \
-    AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}" \
-    NEXT_SHARP_PATH="${NEXT_SHARP_PATH}"
+RUN env
 
-# Copy the built application and necessary files
-COPY --from=builder /app/.next/ ./.next/
+
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.js ./
-COPY --from=builder /app/package.json ./
 
-# Copy the production node_modules from the builder
-COPY --from=builder /app/node_modules ./node_modules
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Remove development dependencies
-RUN yarn install --production --ignore-scripts --prefer-offline
-
-# Remove unnecessary files to reduce image size
-RUN rm -rf /var/cache/apk/* /tmp/*
-
-# Create non-root user and set permissions
-RUN addgroup -S nodejs && \
-    adduser -S nextjs -G nodejs && \
-    chown -R nextjs:nodejs /app
 
 USER nextjs
 
 EXPOSE 5001
+
 ENV PORT 5001
 
-# Start the application
-CMD ["node", ".next/standalone/server.js"]
+CMD ["node", "server.js"]
