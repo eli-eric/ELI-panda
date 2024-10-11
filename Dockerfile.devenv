@@ -1,89 +1,75 @@
-# Stage 1: Build the application and compile sharp from source
+# Stage 1: Build Stage
 FROM node:18-alpine AS builder
 
 # Install build tools and dependencies required to compile sharp
 RUN apk add --no-cache \
-    libc6-compat \
     python3 \
     make \
     g++ \
-    vips-dev \
-    autoconf \
-    automake \
-    libtool \
-    pkgconfig
+    vips-dev
 
 WORKDIR /app
 
 # Copy package files and install dependencies
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+COPY package.json yarn.lock ./
 
-# Install all dependencies, including devDependencies, and build sharp from source
-RUN \
-    if [ -f yarn.lock ]; then npm_config_build_from_source=true yarn install --frozen-lockfile; \
-    elif [ -f package-lock.json ]; then npm_config_build_from_source=true npm ci; \
-    elif [ -f pnpm-lock.yaml ]; then npm install -g pnpm && npm_config_build_from_source=true pnpm install; \
-    else echo "Lockfile not found." && exit 1; \
-    fi
+# Set environment variables to build sharp from source
+ENV npm_config_platform=linuxmusl \
+    npm_config_build_from_source=true
+
+# Install all dependencies, including devDependencies
+RUN yarn install --frozen-lockfile
 
 # Copy the rest of the application's source code
 COPY . .
 
+# Set build-time environment variables (ARG)
 ARG NEO4J_PASSWORD
+ARG AZURE_AD_BEAMLINES_CLIENT_ID
+ARG AZURE_AD_BEAMLINES_CLIENT_SECRET
+ARG AZURE_AD_BEAMLINES_TENANT_ID
+ARG NEXT_SHARP_PATH
 
-ENV PANDA_API_GW_URL="https://api-dev.panda.eli-beams.eu/v1"
-ENV PANDA_ENV="dev"
-ENV MINIO_ENDPOINT="minio-main"
-ENV MINIO_BUCKET_NAME="panda-dev"
-ENV NEO4J_USER="neo4j"
-ENV NEO4J_URI="bolt://panda-neo4j-dev:7687"
-ENV NEO4J_PASSWORD="${NEO4J_PASSWORD}"
-ENV AZURE_AD_BEAMLINES_CLIENT_ID="${AZURE_AD_BEAMLINES_CLIENT_ID}"
-ENV AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}"
-ENV AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}"
-ENV NEXT_SHARP_PATH="${NEXT_SHARP_PATH}"
+# Set environment variables for the build stage
+ENV PANDA_API_GW_URL="https://api-dev.panda.eli-beams.eu/v1" \
+    PANDA_ENV="dev" \
+    MINIO_ENDPOINT="minio-main" \
+    MINIO_BUCKET_NAME="panda-dev" \
+    NEO4J_USER="neo4j" \
+    NEO4J_URI="bolt://panda-neo4j-dev:7687" \
+    NEO4J_PASSWORD="${NEO4J_PASSWORD}" \
+    AZURE_AD_BEAMLINES_CLIENT_ID="${AZURE_AD_BEAMLINES_CLIENT_ID}" \
+    AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}" \
+    AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}" \
+    NEXT_SHARP_PATH="${NEXT_SHARP_PATH}"
 
-RUN env
-
-# This will do the trick, use the corresponding env file for each environment.
-# COPY .env.production.sample .env.production
+# Build the application
 RUN yarn build
 
-# 3. Production image, copy all the files and run next
+# Stage 2: Production Stage
 FROM node:18-alpine AS runner
+
 WORKDIR /app
 
 # Install runtime dependencies
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache \
+    libc6-compat \
+    vips
 
-# Set environment variables for production
-ENV NODE_ENV=production
-ENV PANDA_API_GW_URL="https://api-dev.panda.eli-beams.eu/v1"
-ENV NEXTAUTH_URL="https://dev.panda.eli-beams.eu/"
-ENV PANDA_ENV="dev"
-ENV MINIO_ENDPOINT="minio-main"
-ENV MINIO_BUCKET_NAME="panda-dev"
-ENV NEO4J_USER="neo4j"
-ENV NEO4J_URI="bolt://panda-neo4j-dev:7687"
-ENV NEO4J_PASSWORD="${NEO4J_PASSWORD}"
-ENV AZURE_AD_BEAMLINES_CLIENT_ID="${AZURE_AD_BEAMLINES_CLIENT_ID}"
-ENV AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}"
-ENV AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}"
-ENV NEXT_SHARP_PATH="${NEXT_SHARP_PATH}"
-
-RUN env
-
-
-# Copy only the necessary files from the builder
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/yarn.lock ./
-
-# Install only production dependencies
-RUN \
-    if [ -f yarn.lock ]; then yarn install --frozen-lockfile --production --ignore-scripts; \
-    elif [ -f package-lock.json ]; then npm ci --only=production --ignore-scripts; \
-    else echo "Lockfile not found." && exit 1; \
-    fi
+# Set environment variables for the production stage
+ENV NODE_ENV="production" \
+    PANDA_API_GW_URL="https://api-dev.panda.eli-beams.eu/v1" \
+    NEXTAUTH_URL="https://dev.panda.eli-beams.eu/" \
+    PANDA_ENV="dev" \
+    MINIO_ENDPOINT="minio-main" \
+    MINIO_BUCKET_NAME="panda-dev" \
+    NEO4J_USER="neo4j" \
+    NEO4J_URI="bolt://panda-neo4j-dev:7687" \
+    NEO4J_PASSWORD="${NEO4J_PASSWORD}" \
+    AZURE_AD_BEAMLINES_CLIENT_ID="${AZURE_AD_BEAMLINES_CLIENT_ID}" \
+    AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}" \
+    AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}" \
+    NEXT_SHARP_PATH="${NEXT_SHARP_PATH}"
 
 # Copy the built application and necessary files
 COPY --from=builder /app/.next/ ./.next/
@@ -91,9 +77,18 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/package.json ./
 
+# Copy the production node_modules from the builder
+COPY --from=builder /app/node_modules ./node_modules
+
+# Remove development dependencies
+RUN yarn install --production --ignore-scripts --prefer-offline
+
+# Remove unnecessary files to reduce image size
+RUN rm -rf /var/cache/apk/* /tmp/*
+
 # Create non-root user and set permissions
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nextjs -u 1001 && \
+RUN addgroup -S nodejs && \
+    adduser -S nextjs -G nodejs && \
     chown -R nextjs:nodejs /app
 
 USER nextjs
