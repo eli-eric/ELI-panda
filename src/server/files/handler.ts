@@ -19,7 +19,7 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     }
     switch (req.method) {
       case 'GET':
-        const { id } = getPathInfo(req, res)
+        const { id } = getPathInfo(req)
         return id ? downloadFile(req, res) : listFiles(req, res)
       case 'POST':
         return uploadFile(req, res)
