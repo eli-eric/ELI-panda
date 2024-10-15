@@ -10,8 +10,7 @@ import { SystemDetailParameter } from './system-detail-parameter.comp'
 type Props = {
   alias?: string
 }
-
-const SystemDetailInfo: FC<Props> = ({ alias }) => {
+export const SystemDetailInfo: FC<Props> = ({ alias }) => {
   const { loading, error, systemDetail, catalogueItem } = useSystemDetail(alias)
 
   if (loading) {
@@ -69,5 +68,3 @@ const SystemDetailInfo: FC<Props> = ({ alias }) => {
     </div>
   )
 }
-
-export default SystemDetailInfo

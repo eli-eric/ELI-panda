@@ -121,7 +121,7 @@ type Employee @authentication {
   superiorNUmber: String
   jobPosition: String
   jobPositionCode: String
-  workPlaceName: String
+  workplaceName: String
   email: String
 }
 
