@@ -327,6 +327,8 @@ export const messages = {
         orderLines: 'Order Lines'
       },
       form: {
+        eun: { label: 'EUN', placeholder: 'EUN' },
+        partNumber: { label: 'Part Number', placeholder: 'Part Number' },
         name: { label: 'Name', placeholder: 'Name' },
         orderNumber: { label: 'Order Number', placeholder: 'Order Number' },
         requestNumber: {

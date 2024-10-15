@@ -18,6 +18,20 @@ const useOrderFormFields = () => {
       disabled: disabledEdit,
       rounded: 'rounded-md'
     },
+    eun: {
+      name: 'eun',
+      label: form.eun.label,
+      placeholder: form.eun.placeholder,
+      disabled: disabledEdit,
+      rounded: 'rounded-md'
+    },
+    partNumber: {
+      name: 'partNumber',
+      label: form.partNumber.label,
+      placeholder: form.partNumber.placeholder,
+      disabled: disabledEdit,
+      rounded: 'rounded-md'
+    },
     orderNumber: {
       name: 'orderNumber',
       label: form.orderNumber.label,

@@ -6,6 +6,8 @@ import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import useOrderFormFields from '@/modules/orderItem/components/form/OrderForm.fields'
 import { classNames } from '@/utils'
 
+import { DELIVERY_STATUS, DeliveryStatusMapping } from '../../types'
+
 //TODO: 1. Create a new file in src/hooks/table/useOrdersFilter.tsx
 //TODO: 2. Refactor the code to use the new useQueryState hook
 
@@ -16,7 +18,12 @@ export const OrdersFilter = () => {
     tableId: 'orders',
     enableQueryUrl: true
   })
-  // const deliveryStatus = Object.values(DELIVERY_STATUS).map(status => status)
+  const deliveryStatusArray = Object.values(DELIVERY_STATUS)
+    .filter((value): value is DELIVERY_STATUS => typeof value === 'number')
+    .map(uid => ({
+      uid: String(uid),
+      name: DeliveryStatusMapping[uid]
+    }))
 
   return (
     <div
@@ -38,6 +45,13 @@ export const OrdersFilter = () => {
           name={fields.orderStatus.name}
           codebook={fields.orderStatus.codebook}
           onChange={setFilter(fields.orderStatus.name)}
+          isFilter={true}
+        />
+        <FilterCheckboxes
+          label="Delivery Status"
+          name={fields.deliveryStatus.name}
+          customCodebookOptions={deliveryStatusArray}
+          onChange={setFilter(fields.deliveryStatus.name)}
           isFilter={true}
         />
       </div>
@@ -67,12 +81,16 @@ export const OrdersFilter = () => {
           onSelect={setFilter(fields.requestor.name)}
           isFilter={true}
         />
-        {/* <FilterCheckboxes
-          label="Delivery Status"
-          name={fields.deliveryStatus.name}
-          onChange={setFilter(fields.deliveryStatus.name)}
+        <Input
+          {...fields.eun}
+          onChange={setFilter(fields.eun.name)}
           isFilter={true}
-        /> */}
+        />
+        <Input
+          {...fields.partNumber}
+          onChange={setFilter(fields.partNumber.name)}
+          isFilter={true}
+        />
       </div>
       <Input
         className="col-span-2"
