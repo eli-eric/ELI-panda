@@ -54,7 +54,7 @@ export const OrdersFilter = () => {
         />
         <Combobox
           {...fields.supplier}
-          onChange={setFilter(fields.supplier.name)}
+          onSelect={setFilter(fields.supplier.name)}
           isFilter={true}
         />
         <Listbox
@@ -64,7 +64,7 @@ export const OrdersFilter = () => {
         />
         <Combobox
           {...fields.requestor}
-          onChange={setFilter(fields.requestor.name)}
+          onSelect={setFilter(fields.requestor.name)}
           isFilter={true}
         />
         {/* <FilterCheckboxes

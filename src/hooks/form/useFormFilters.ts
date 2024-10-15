@@ -129,10 +129,8 @@ export const useFormFilter = <T extends FieldValues>({
 
   useEffect(() => {
     if (filterQuery) {
-      startTransition(() => {
-        setQuerySearch(null, { shallow: true })
-        setSearch(tableId, undefined)
-      })
+      setQuerySearch(null, { shallow: true })
+      setSearch(tableId, undefined)
     }
     //eslint-disable-next-line
   }, [filterQuery])

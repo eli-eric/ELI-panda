@@ -7,6 +7,7 @@ import { Form } from '@/components/form/Form'
 import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver'
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
 import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
+import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
 
 import { OrdersFilter } from './OrdersFilter'
 
@@ -52,7 +53,10 @@ export const OrderFilterButton = () => {
     enableQueryURL: true
   })
 
-  const { storeFilters, setColumnFilters } = useFormFilterState({ tableId, enableQueryUrl: true })
+  const { storeFilters, setColumnFilters } = useFormFilterState({
+    tableId,
+    enableQueryUrl: true
+  })
   const { reset } = formMethods
 
   const onClear = () => {
@@ -79,11 +83,24 @@ export const OrderFilterButton = () => {
           <FunnelIconEmpty className="h-4 w-4" aria-hidden="true" />
         )}
       </Button>
-      <Form formMethods={formMethods}>
-        <SlideOver panelTitle="Orders Filters" open={open} setOpen={setOpen} buttons={buttons}>
+      <SlideOver
+        RenderSettings={
+          <FilterSaveSettings
+            tableId={tableId}
+            enableQueryURL={true}
+            resetForm={formMethods.reset}
+            defaulFormValues={defValues}
+          />
+        }
+        panelTitle="Orders Filters"
+        open={open}
+        setOpen={setOpen}
+        buttons={buttons}
+      >
+        <Form formMethods={formMethods}>
           <OrdersFilter />
-        </SlideOver>
-      </Form>
+        </Form>
+      </SlideOver>
     </Fragment>
   )
 }
