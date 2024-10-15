@@ -327,6 +327,8 @@ export const messages = {
         orderLines: 'Order Lines'
       },
       form: {
+        eun: { label: 'EUN', placeholder: 'EUN' },
+        partNumber: { label: 'Part Number', placeholder: 'Part Number' },
         name: { label: 'Name', placeholder: 'Name' },
         orderNumber: { label: 'Order Number', placeholder: 'Order Number' },
         requestNumber: {
@@ -339,6 +341,7 @@ export const messages = {
         },
         supplier: { label: 'Supplier', placeholder: '...type here' },
         orderStatus: { label: 'Order Status' },
+        deliveryStatus: { label: 'Delivery Status' },
         notes: { label: 'Notes' },
         orderDate: { label: 'Order Date' },
         procurementResponsible: {

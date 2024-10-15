@@ -129,10 +129,8 @@ export const useFormFilter = <T extends FieldValues>({
 
   useEffect(() => {
     if (filterQuery) {
-      startTransition(() => {
-        setQuerySearch(null, { shallow: true })
-        setSearch(tableId, undefined)
-      })
+      setQuerySearch(null, { shallow: true })
+      setSearch(tableId, undefined)
     }
     //eslint-disable-next-line
   }, [filterQuery])
@@ -163,28 +161,39 @@ export const useFormFilterState = ({
         propType?: string
       ) => {
         setColumnFilters(prev => {
+          console.log('PREV', prev, id, value)
           const filters = [...prev]
-          const index = prev.findIndex(item => item.id === id)
-          if (index !== -1) {
-            filters[index].value = value
-          } else if (value) {
-            filters.push({ id, value, type, name, propType })
+          let index = filters.findIndex(item => item.id === id)
+
+          // Handle adding or updating filters
+          if (value) {
+            if (index !== -1) {
+              filters[index] = {
+                ...filters[index],
+                value,
+                type,
+                name,
+                propType
+              }
+            } else {
+              filters.push({ id, value, type, name, propType })
+              index = filters.length - 1 // Update index to the new item's index
+            }
           }
-          if (!value) {
+
+          // Conditions for removing filters
+          const shouldRemove =
+            !value ||
+            (value?.max === null && value?.min === null) ||
+            (value?.max === null && value?.min === undefined) ||
+            (value?.max === undefined && value?.min === null) ||
+            value?.length === 0
+
+          if (shouldRemove && index !== -1) {
             filters.splice(index, 1)
           }
-          if (value?.max === null && value?.min === null) {
-            filters.splice(index, 1)
-          }
-          if (value?.max === null && value?.min === undefined) {
-            filters.splice(index, 1)
-          }
-          if (value?.max === undefined && value?.min === null) {
-            filters.splice(index, 1)
-          }
-          if (value?.length === 0) {
-            filters.splice(index, 1)
-          }
+
+          console.log('NEW', filters, id, value)
           return filters
         })
       },
