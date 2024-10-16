@@ -32,3 +32,4 @@ jobs:
           CYPRESS_LOGIN_TOKEN: ${{ secrets.CYPRESS_LOGIN_TOKEN }}
           CYPRESS_host: http://localhost:5001
           CYPRESS_nextauth_secret: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXT_SHARP_PATH: '${{ secrets.NEXT_SHARP_PATH }}'

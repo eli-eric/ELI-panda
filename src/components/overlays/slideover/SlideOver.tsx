@@ -133,3 +133,5 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
     </Dialog>
   </Transition.Root>
 )
+
+export default SlideOver

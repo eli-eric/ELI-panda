@@ -2,7 +2,6 @@ import { Listbox as HUIListbox } from '@headlessui/react'
 import React, { useMemo } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
-import { v4 as uuid } from 'uuid'
 
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
@@ -172,7 +171,7 @@ const Listbox = ({
                 >
                   {options?.map(item => (
                     <HUIListbox.Option
-                      key={uuid()}
+                      key={crypto.randomUUID()}
                       value={
                         customOptions ? item : item.uid === '' ? null : item
                       }

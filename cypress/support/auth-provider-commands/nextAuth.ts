@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid'
 import { encode } from 'next-auth/jwt'
 import type { JWT } from 'next-auth/jwt'
 
@@ -29,7 +28,7 @@ Cypress.Commands.add(
       fullName: fullName,
       roles: roles,
       sub: uid,
-      jti: uuidv4(),
+      jti: crypto.randomUUID(),
       exp: expiry
     }
 

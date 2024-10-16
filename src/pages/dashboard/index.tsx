@@ -1,6 +1,7 @@
 import {
   CreditCardIcon,
   LifebuoyIcon,
+  PhotoIcon,
   RectangleGroupIcon,
   RectangleStackIcon,
   ShoppingCartIcon,
@@ -75,6 +76,13 @@ const tiles = [
     link: 'mailto:jiri.svacha@eli-beams.eu',
     Icon: () => (
       <LifebuoyIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+    )
+  },
+  {
+    name: 'Layout',
+    link: PATH.LAYOUT,
+    Icon: () => (
+      <PhotoIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
     )
   }
 ]

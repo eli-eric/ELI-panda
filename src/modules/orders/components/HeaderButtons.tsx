@@ -6,6 +6,7 @@ import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
 import { useOrders } from '../hooks/useOrders'
+import { OrderFilterButton } from './filters/OrderFilterButton.cont'
 
 export const HeaderButtons = () => {
   const { mutate } = useOrders()
@@ -22,6 +23,8 @@ export const HeaderButtons = () => {
       handleAdd={handleAdd}
       handleRefresh={handleRefresh}
       editRole={ROLE.ORDERS_EDIT}
-    />
+    >
+      <OrderFilterButton />
+    </SearchBarButtonsComponent>
   )
 }

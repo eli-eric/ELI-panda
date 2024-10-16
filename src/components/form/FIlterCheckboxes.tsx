@@ -1,9 +1,9 @@
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
-import { v4 } from 'uuid'
 
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { CheckBoxComponent } from './CheckBox'
 
@@ -13,6 +13,7 @@ interface Props {
   onChange?: (v: any) => void
   isFilter?: boolean
   options?: string[]
+  customCodebookOptions?: CodebookType[]
   codebook?: CODEBOOK
 }
 
@@ -21,7 +22,8 @@ export const FilterCheckboxes = ({
   label,
   onChange,
   options,
-  codebook
+  codebook,
+  customCodebookOptions
 }: Props) => {
   const { control } = useFormContext()
   const { data: codebookOptions } = useCodebook(codebook)
@@ -49,12 +51,12 @@ export const FilterCheckboxes = ({
                     field.onChange(value)
                     onChange && onChange(value)
                   }}
-                  key={v4()}
+                  key={crypto.randomUUID()}
                   className="pb-1"
                   label={option}
                 />
               ))}
-              {codebookOptions?.data?.map(option => (
+              {(customCodebookOptions || codebookOptions?.data)?.map(option => (
                 <CheckBoxComponent
                   checked={fieldValue?.includes(option.uid) ?? false}
                   onChange={e => {

@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Show secret stats
         run: |
-          echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_PROD }}" | "${{ secrets.MINIO_SECRET_KEY_PROD }}" | "${{ secrets.NEO4J_PASSWORD }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" | "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}" | wc | wc
+          echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_PROD }}" | "${{ secrets.MINIO_SECRET_KEY_PROD }}" | "${{ secrets.NEO4J_PASSWORD }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" | "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}" | "${{ secrets.NEXT_SHARP_PATH }}" | wc
   unit-tests:
     runs-on: self-hosted
     needs: use-secret
@@ -42,3 +42,4 @@ jobs:
           AZURE_AD_BEAMLINES_CLIENT_ID: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}'
           AZURE_AD_BEAMLINES_CLIENT_SECRET: '${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}'
           AZURE_AD_BEAMLINES_TENANT_ID: '${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}'
+          NEXT_SHARP_PATH: '${{ secrets.NEXT_SHARP_PATH }}'
