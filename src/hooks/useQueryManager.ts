@@ -8,10 +8,6 @@ interface Query {
   pagination?: string
   search?: string
   sorting?: string
-  supplierUID?: string
-  orderStatusUID?: string
-  procurementResponsibleUID?: string
-  requestorUID?: string
   columnFilter?: string
   [key: string]: any
 }
@@ -22,6 +18,7 @@ export default function useQueryManager(tableId: string): { query: Query } {
   const category: CodebookType | null = categoryQuery
     ? JSON.parse(categoryQuery)
     : null
+
   const categoryFilter = useMemo(
     () =>
       category
@@ -34,14 +31,11 @@ export default function useQueryManager(tableId: string): { query: Query } {
   const [pageQuery] = useQueryState('page')
 
   const sorting = instances[tableId]?.sortByQueryString || ''
+
   const pagination =
     instances[tableId]?.pagination || `{"page":${pageQuery || 1},"pageSize":50}`
   const search = instances[tableId]?.search || searchQuery || ''
-  const supplierUID = instances[tableId]?.filter?.supplier?.uid || ''
-  const orderStatusUID = instances[tableId]?.filter?.orderStatus?.uid || ''
-  const procurementResponsibleUID =
-    instances[tableId]?.filter?.procurementResponsible?.uid || ''
-  const requestorUID = instances[tableId]?.filter?.requestor?.uid || ''
+
   //columnFilter merge with categoryFilter
   const columnFilter = useMemo(
     () =>
@@ -55,26 +49,9 @@ export default function useQueryManager(tableId: string): { query: Query } {
     [instances, tableId]
   )
 
-  const filter = useMemo(() => {
-    const filter: any = {}
-    if (supplierUID) {
-      filter.supplierUID = supplierUID
-    }
-    if (orderStatusUID) {
-      filter.orderStatusUID = orderStatusUID
-    }
-    if (procurementResponsibleUID) {
-      filter.procurementResponsibleUID = procurementResponsibleUID
-    }
-    if (requestorUID) {
-      filter.requestorUID = requestorUID
-    }
-    return filter
-  }, [supplierUID, orderStatusUID, procurementResponsibleUID, requestorUID])
-
   const query = useMemo(
-    () => ({ pagination, search, columnFilter, sorting, ...filter, ...custom }),
-    [pagination, search, columnFilter, sorting, filter, custom]
+    () => ({ pagination, search, columnFilter, sorting, ...custom }),
+    [pagination, search, columnFilter, sorting, custom]
   )
 
   return { query }
