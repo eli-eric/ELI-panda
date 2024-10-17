@@ -5,6 +5,7 @@ import type { DefaultValues, FieldValues } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
+import { useSearchStore } from '@/modules/shared/table/store/useSarchStore'
 import { useFormControlStore } from '@/store/useFormControlStore'
 import useTableStateStore from '@/store/useTableStateStore'
 
@@ -43,8 +44,8 @@ export const useFormFilter = <T extends FieldValues>({
 }: IFilter<T>) => {
   const [storeFilters, setFilters] = useFilters(tableId, enableQueryURL, false)
 
-  const [, setQuerySearch] = useQueryState('search', { history: 'replace' })
-  const { setSearch, instances } = useTableStateStore()
+  const { instances } = useTableStateStore()
+
   const searchInstance = instances[tableId]?.search
 
   const {
@@ -55,6 +56,7 @@ export const useFormFilter = <T extends FieldValues>({
     deleteCustom,
     addCustomFieldIdToSync
   } = useFormControlStore()
+
   const [filterQuery] = useQueryState('filter', { history: 'replace' })
 
   const columnFilters = useMemo(
@@ -127,14 +129,6 @@ export const useFormFilter = <T extends FieldValues>({
     //eslint-disable-next-line
   }, [searchInstance])
 
-  useEffect(() => {
-    if (filterQuery) {
-      setQuerySearch(null, { shallow: true })
-      setSearch(tableId, undefined)
-    }
-    //eslint-disable-next-line
-  }, [filterQuery])
-
   return formMethods
 }
 
@@ -150,6 +144,29 @@ export const useFormFilterState = ({
     enableQueryUrl,
     false
   )
+  const [, setQueryPage] = useQueryState('page', { history: 'replace' })
+  const { setPagination, setSearch } = useTableStateStore()
+
+  const [, setQuerySearch] = useQueryState('search', { history: 'replace' })
+  const { setSearchValue } = useSearchStore()
+
+  const clearPageAndSearch = useCallback(() => {
+    setPagination(tableId, `{"page":${1},"pageSize":${50}}`)
+    setSearch(tableId, '')
+    setSearchValue('')
+    if (enableQueryUrl) {
+      setQueryPage('1', { shallow: true })
+      setQuerySearch(null, { shallow: true })
+    }
+  }, [
+    setPagination,
+    setSearch,
+    setSearchValue,
+    tableId,
+    enableQueryUrl,
+    setQueryPage,
+    setQuerySearch
+  ])
 
   //set filter value to store on change field and remove from store if value is empty
   const setFilter = useCallback(
@@ -160,6 +177,8 @@ export const useFormFilterState = ({
         name: string = id,
         propType?: string
       ) => {
+        clearPageAndSearch()
+        //set filter value to store
         setColumnFilters(prev => {
           const filters = [...prev]
           let index = filters.findIndex(item => item.id === id)
@@ -195,7 +214,7 @@ export const useFormFilterState = ({
           return filters
         })
       },
-    [setColumnFilters]
+    [setColumnFilters, clearPageAndSearch]
   )
 
   return { storeFilters, setFilter, setColumnFilters }

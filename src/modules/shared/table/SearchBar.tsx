@@ -7,9 +7,10 @@ import usePermission from '@/hooks/usePermission'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { ROLE } from '@/types/constants/roles'
 
+import { useSearchStore } from './store/useSarchStore'
+
 interface Props {
   useQuery?: boolean
-
   left?: JSX.Element
   right?: JSX.Element
   tableId: string
@@ -26,17 +27,22 @@ export const SearchBar = ({
   const [querySearch, setQuerySearch] = useQueryState('search', {
     history: 'replace'
   })
+
   const { setSearch, instances } = useTableStateStore()
   const searchInstance = querySearch || instances[tableId]?.search
-  const [value, setValue] = useState(searchInstance || '')
+
+  const { setSearchValue, value } = useSearchStore()
 
   const onChangeRef = useRef(onChange)
 
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    if (!mounted) {
+      setMounted(true)
+      setSearchValue(searchInstance || '')
+    }
+  }, [mounted, searchInstance, setSearchValue])
 
   useEffect(() => {
     const delayInputTimeoutId = setTimeout(() => {
@@ -73,7 +79,7 @@ export const SearchBar = ({
               <input
                 value={value || ''}
                 onChange={e => {
-                  setValue(e.target.value)
+                  setSearchValue(e.target.value)
                 }}
                 id="search-field"
                 className="block h-full w-full dark:bg-gray-800 border-transparent py-2 pl-8 pr-3 text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm"
