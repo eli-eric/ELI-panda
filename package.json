@@ -37,6 +37,7 @@
     "deepmerge": "^4.2.2",
     "env-cmd": "^10.1.0",
     "graphql": "^16.8.1",
+    "jimp": "^0.22.12",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "minio": "^7.1.3",

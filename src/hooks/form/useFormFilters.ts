@@ -161,7 +161,6 @@ export const useFormFilterState = ({
         propType?: string
       ) => {
         setColumnFilters(prev => {
-          console.log('PREV', prev, id, value)
           const filters = [...prev]
           let index = filters.findIndex(item => item.id === id)
 
@@ -193,7 +192,6 @@ export const useFormFilterState = ({
             filters.splice(index, 1)
           }
 
-          console.log('NEW', filters, id, value)
           return filters
         })
       },
