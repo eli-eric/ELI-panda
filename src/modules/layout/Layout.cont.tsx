@@ -21,17 +21,6 @@ const LayoutContainer = () => {
         href?: string
       }>
     ) {
-      const allowedIframeOrigins = [
-        'https://layout.eli-beams.eu',
-        'https://panda.eli-laser.eu',
-        'https://dev.panda.eli-beams.eu',
-        'https://test.panda.eli-beams.eu'
-      ]
-      if (!allowedIframeOrigins.includes(event.origin)) {
-        console.warn('Message from unauthorized origin:', event.origin)
-        return
-      }
-
       const { href } = event.data
       if (href) {
         const query = new URLSearchParams(href.split('?')[1])
