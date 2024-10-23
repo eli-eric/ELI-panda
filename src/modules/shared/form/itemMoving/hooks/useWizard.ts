@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { message } from '@/i18n/src/messages'
 
 import type { Step } from '../constants/steps'
@@ -9,6 +11,13 @@ type WizzardSettings = {
   handleCancel: () => void
 }
 
+const steps: Step[] = [
+  { id: 1, name: 'Select or Create' },
+  { id: 2, name: 'Destination/Parent System' },
+  { id: 3, name: 'System Detail' },
+  { id: 4, name: 'Summary' }
+]
+
 const messages = message.common.buttons
 
 export const useWizard = ({
@@ -16,9 +25,14 @@ export const useWizard = ({
   handleFinish,
   handleCancel
 }: WizzardSettings) => {
-  const { setStep, nextStep, prevStep, currentStepId } = useItemWizardStore()
+  const { setStep, nextStep, prevStep, currentStepId, setStepPath } =
+    useItemWizardStore()
 
   const lastStepId = steps.length
+
+  useEffect(() => {
+    setStepPath(steps)
+  }, [])
 
   const handleNext = () => {
     if (currentStepId === steps.length) {

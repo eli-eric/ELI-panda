@@ -8,11 +8,11 @@ import type { ModalButtons } from '@/types/form'
 import type { Step } from './constants/steps'
 import { useWizard } from './hooks/useWizard'
 import { DestinationSystem } from './steps/DestinationSystem'
-import { SelectOrCreate } from './steps/SelectOrCreate'
+import { InitWizardPath } from './steps/InitWizardPath'
 import { StepIndicator } from './steps/StepsIndicator'
 
 const steps: Step[] = [
-  { id: 1, name: 'Select or create' },
+  { id: 1, name: 'Init Wizard Path' },
   { id: 2, name: 'Destination System' },
   { id: 3, name: 'Detail information' },
   { id: 4, name: 'Summary' }
@@ -27,11 +27,13 @@ export const ItemMoveForm: FC<Props> = ({ setShow }) => {
 
   const { handleSubmit } = formMethods
 
-  const handleFinish = () =>
-    handleSubmit(data => {
-      console.log(data)
-      setShow(false)
-    })
+  const submit = data => {
+    console.log(data)
+  }
+
+  const handleFinish = () => handleSubmit(submit)()
+
+  const handleCancel = () => setShow(false)
 
   const {
     next,
@@ -42,8 +44,8 @@ export const ItemMoveForm: FC<Props> = ({ setShow }) => {
     backButtonMessage
   } = useWizard({
     steps,
-    handleFinish: () => console.log('Finish'),
-    handleCancel: () => setShow(false)
+    handleFinish,
+    handleCancel
   })
 
   const buttons: ModalButtons = {
@@ -66,8 +68,10 @@ export const ItemMoveForm: FC<Props> = ({ setShow }) => {
         currentStepId={currentStepId}
       />
       <Form formMethods={formMethods} className="mt-5">
-        {currentStepId === 1 && <SelectOrCreate />}
-        {currentStepId === 2 && <DestinationSystem />}
+        <div className="h-[451px]">
+          {currentStepId === 1 && <InitWizardPath />}
+          {currentStepId === 2 && <DestinationSystem />}
+        </div>
         <ModalButtonsComponent buttons={buttons} />
       </Form>
     </div>

@@ -2,6 +2,7 @@ import type { FC } from 'react'
 import { Fragment } from 'react'
 
 import type { Step } from '../constants/steps'
+import { useItemWizardStore } from '../store/useItemWizardState'
 
 type Props = {
   steps: Step[]
@@ -9,16 +10,13 @@ type Props = {
   onStepClick: (stepId: number) => void
 }
 
-export const StepIndicator: FC<Props> = ({
-  steps,
-  currentStepId,
-  onStepClick
-}) => {
-  const currentIndex = steps.findIndex(step => step.id === currentStepId)
+export const StepIndicator: FC<Props> = ({ onStepClick }) => {
+  const { stepPath, currentStepId } = useItemWizardStore()
+  const currentIndex = stepPath.findIndex(step => step.id === currentStepId)
 
   return (
     <div className="flex items-center w-full pb-4 border-b">
-      {steps.map((step, index) => {
+      {stepPath.map((step, index) => {
         const isActive = index === currentIndex
         const isCompleted = index < currentIndex
 
@@ -35,18 +33,18 @@ export const StepIndicator: FC<Props> = ({
                     ? 'bg-orange-500'
                     : isCompleted
                       ? 'bg-orange-500'
-                      : 'bg-gray-300 hover:bg-gray-400'
+                      : 'bg-gray-300 hover:bg-gray-400 dark:text-gray-900'
                 }`}
               >
                 {index + 1}
               </div>
-              <div className="mt-1 text-sm font-medium text-center">
+              <div className="mt-1 text-sm font-medium text-center text-gray-900 dark:text-gray-200">
                 {step.name}
               </div>
             </div>
 
             {/* Connector */}
-            {index < steps.length - 1 && (
+            {index < stepPath.length - 1 && (
               <div className="flex-1 flex items-center">
                 <div
                   className={`h-1 ${isCompleted ? 'bg-orange-500' : 'bg-gray-300'} w-full`}
