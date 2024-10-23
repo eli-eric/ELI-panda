@@ -12,7 +12,7 @@ type Props = {
 export const ItemMoveModal: FC<Props> = ({ show, setShow }) => {
   return (
     <ModalComponent open={show} setOpen={setShow}>
-      <ItemMoveForm />
+      <ItemMoveForm setShow={setShow} />
     </ModalComponent>
   )
 }

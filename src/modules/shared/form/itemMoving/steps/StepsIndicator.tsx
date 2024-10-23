@@ -17,7 +17,7 @@ export const StepIndicator: FC<Props> = ({
   const currentIndex = steps.findIndex(step => step.id === currentStepId)
 
   return (
-    <div className="flex items-center w-full">
+    <div className="flex items-center w-full pb-4 border-b">
       {steps.map((step, index) => {
         const isActive = index === currentIndex
         const isCompleted = index < currentIndex

@@ -1,60 +1,60 @@
-import { type FC, useState } from 'react'
+import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import type { ModalButtons } from '@/types/form'
 
+import type { Step } from './constants/steps'
+import { useWizard } from './hooks/useWizard'
 import { DestinationSystem } from './steps/DestinationSystem'
+import { SelectOrCreate } from './steps/SelectOrCreate'
 import { StepIndicator } from './steps/StepsIndicator'
 
-const steps = [
+const steps: Step[] = [
   { id: 1, name: 'Select or create' },
   { id: 2, name: 'Destination System' },
   { id: 3, name: 'Detail information' },
   { id: 4, name: 'Summary' }
 ]
 
-export const ItemMoveForm: FC = () => {
+type Props = {
+  setShow: (show: boolean) => void
+}
+
+export const ItemMoveForm: FC<Props> = ({ setShow }) => {
   const formMethods = useForm()
-  const [currentStepId, setCurrentStepId] = useState(1)
 
-  const handleStepClick = (stepId: number) => {
-    // handle step click
-    console.log('Step Clicked:', stepId)
-  }
+  const { handleSubmit } = formMethods
 
-  const handleNext = () => {
-    // handle next
-    setCurrentStepId(prev => {
-      const nextStep = prev + 1
-      const lastStepId = steps[steps.length - 1]?.id
-      if (nextStep > lastStepId) {
-        return lastStepId
-      }
-      return nextStep
+  const handleFinish = () =>
+    handleSubmit(data => {
+      console.log(data)
+      setShow(false)
     })
-  }
 
-  const handleBack = () => {
-    // handle back
-    setCurrentStepId(prev => {
-      const prevStep = prev - 1
-      if (prevStep < 1) {
-        return 1
-      }
-      return prevStep
-    })
-  }
+  const {
+    next,
+    back,
+    setStep,
+    currentStepId,
+    nextButtonMessage,
+    backButtonMessage
+  } = useWizard({
+    steps,
+    handleFinish: () => console.log('Finish'),
+    handleCancel: () => setShow(false)
+  })
 
   const buttons: ModalButtons = {
     goNext: {
-      text: 'Next',
-      onClick: handleNext
+      text: nextButtonMessage,
+      onClick: next,
+      hidden: currentStepId === 1
     },
     goBack: {
-      text: 'Back',
-      onClick: handleBack
+      text: backButtonMessage,
+      onClick: back
     }
   }
 
@@ -62,11 +62,12 @@ export const ItemMoveForm: FC = () => {
     <div>
       <StepIndicator
         steps={steps}
-        onStepClick={handleStepClick}
+        onStepClick={setStep}
         currentStepId={currentStepId}
       />
-      <Form formMethods={formMethods}>
-        {currentStepId === 1 && <DestinationSystem />}
+      <Form formMethods={formMethods} className="mt-5">
+        {currentStepId === 1 && <SelectOrCreate />}
+        {currentStepId === 2 && <DestinationSystem />}
         <ModalButtonsComponent buttons={buttons} />
       </Form>
     </div>
