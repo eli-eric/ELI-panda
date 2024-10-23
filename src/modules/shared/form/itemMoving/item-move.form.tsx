@@ -1,20 +1,18 @@
 import { type FC } from 'react'
-import { useForm } from 'react-hook-form'
 
-import { Form } from '@/components/form/Form'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import type { ModalButtons } from '@/types/form'
 
+import { StepIndicator } from '../wizard/components/StepsIndicator'
+import { useWizard } from '../wizard/hooks/useWizard'
 import type { Step } from './constants/steps'
-import { useWizard } from './hooks/useWizard'
 import { DestinationSystem } from './steps/DestinationSystem'
 import { InitWizardPath } from './steps/InitWizardPath'
-import { StepIndicator } from './steps/StepsIndicator'
 
 const steps: Step[] = [
-  { id: 1, name: 'Init Wizard Path' },
-  { id: 2, name: 'Destination System' },
-  { id: 3, name: 'Detail information' },
+  { id: 1, name: 'Select or create' },
+  { id: 2, name: 'Parent/Destination System' },
+  { id: 3, name: 'System Detail' },
   { id: 4, name: 'Summary' }
 ]
 
@@ -23,36 +21,22 @@ type Props = {
 }
 
 export const ItemMoveForm: FC<Props> = ({ setShow }) => {
-  const formMethods = useForm()
-
-  const { handleSubmit } = formMethods
-
-  const submit = data => {
-    console.log(data)
-  }
-
-  const handleFinish = () => handleSubmit(submit)()
+  const handleFinish = () => setShow(false)
 
   const handleCancel = () => setShow(false)
 
-  const {
-    next,
-    back,
-    setStep,
-    currentStepId,
-    nextButtonMessage,
-    backButtonMessage
-  } = useWizard({
-    steps,
-    handleFinish,
-    handleCancel
-  })
+  const { next, back, currentStep, nextButtonMessage, backButtonMessage } =
+    useWizard({
+      steps,
+      handleFinish,
+      handleCancel
+    })
 
   const buttons: ModalButtons = {
     goNext: {
       text: nextButtonMessage,
       onClick: next,
-      hidden: currentStepId === 1
+      hidden: currentStep === 1
     },
     goBack: {
       text: backButtonMessage,
@@ -60,20 +44,26 @@ export const ItemMoveForm: FC<Props> = ({ setShow }) => {
     }
   }
 
+  const renderStep = () => {
+    switch (currentStep) {
+      case 1:
+        return <InitWizardPath />
+      case 2:
+        return <DestinationSystem />
+      case 3:
+        return <div>System Detail</div>
+      case 4:
+        return <div>Summary</div>
+      default:
+        return <div>Smth went wrong</div>
+    }
+  }
+
   return (
     <div>
-      <StepIndicator
-        steps={steps}
-        onStepClick={setStep}
-        currentStepId={currentStepId}
-      />
-      <Form formMethods={formMethods} className="mt-5">
-        <div className="h-[451px]">
-          {currentStepId === 1 && <InitWizardPath />}
-          {currentStepId === 2 && <DestinationSystem />}
-        </div>
-        <ModalButtonsComponent buttons={buttons} />
-      </Form>
+      <StepIndicator steps={steps} />
+      <div className="h-[451px]">{renderStep()}</div>
+      <ModalButtonsComponent buttons={buttons} />
     </div>
   )
 }

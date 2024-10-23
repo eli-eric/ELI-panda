@@ -1,12 +1,10 @@
 import { FolderPlusIcon, RectangleGroupIcon } from '@heroicons/react/24/outline'
 import type { FC, HTMLAttributes, PropsWithChildren } from 'react'
-import { useFormContext } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
 
-import type { Step } from '../constants/steps'
-import { useItemWizardStore } from '../store/useItemWizardState'
+import { useWizardStore } from '../../wizard/store/useWizardStore'
 
 const messages = message.systemItem.itemMove.buttons
 
@@ -25,32 +23,14 @@ const NextButton: FC<PropsWithChildren<HTMLAttributes<HTMLButtonElement>>> = ({
   )
 }
 
-const stepsDestination: Step[] = [
-  { id: 1, name: 'Init Wizard Path' },
-  { id: 2, name: 'Destination System' },
-  { id: 3, name: 'System Detail' },
-  { id: 4, name: 'Summary' }
-]
-
-const stepsCreate: Step[] = [
-  { id: 1, name: 'Init Wizard Path' },
-  { id: 2, name: 'Select Parent System' },
-  { id: 3, name: 'System Detail' },
-  { id: 4, name: 'Summary' }
-]
-
 export const InitWizardPath: FC = () => {
-  const { nextStep, setStepPath } = useItemWizardStore()
-
-  const { setValue } = useFormContext()
+  const { setNextStep } = useWizardStore()
 
   const goToDestinationSystem = () => {
-    setStepPath(stepsDestination)
-    nextStep()
+    setNextStep()
   }
   const goToSystemDetail = () => {
-    setStepPath(stepsCreate)
-    nextStep()
+    setNextStep()
   }
 
   return (
