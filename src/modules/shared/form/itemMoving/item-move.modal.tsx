@@ -2,17 +2,22 @@ import type { FC } from 'react'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 
+import { useWizardStore } from '../wizard/store/useWizardStore'
 import { ItemMoveForm } from './item-move.form'
+import { useModalWizardStore } from './store/useModalWizardStore'
 
-type Props = {
-  show: boolean
-  setShow: (show: boolean) => void
-}
+export const ItemMoveModal: FC = () => {
+  const { open, setOpen } = useModalWizardStore()
+  const { resetWizard } = useWizardStore()
 
-export const ItemMoveModal: FC<Props> = ({ show, setShow }) => {
+  const handleClose = (open: boolean) => {
+    setOpen(open)
+    resetWizard()
+  }
+
   return (
-    <ModalComponent open={show} setOpen={setShow}>
-      <ItemMoveForm setShow={setShow} />
+    <ModalComponent open={open} setOpen={handleClose}>
+      <ItemMoveForm />
     </ModalComponent>
   )
 }

@@ -1,57 +1,61 @@
-import { type FC } from 'react'
-
-import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
-import type { ModalButtons } from '@/types/form'
+import { type FC, useEffect, useState } from 'react'
 
 import { StepIndicator } from '../wizard/components/StepsIndicator'
 import { useWizard } from '../wizard/hooks/useWizard'
 import type { Step } from './constants/steps'
-import { DestinationSystem } from './steps/DestinationSystem'
-import { InitWizardPath } from './steps/InitWizardPath'
+import { InitWizardPath } from './steps/InitWizardPath.step'
+import { SelectSystemContainer } from './steps/system-selection/SystemSelect.cont'
+import { SystemDetailStep } from './steps/SystemDetail.step'
+import { useModalWizardStore } from './store/useModalWizardStore'
 
-const steps: Step[] = [
+const defaultSteps: Step[] = [
   { id: 1, name: 'Select or create' },
   { id: 2, name: 'Parent/Destination System' },
   { id: 3, name: 'System Detail' },
   { id: 4, name: 'Summary' }
 ]
 
-type Props = {
-  setShow: (show: boolean) => void
-}
+export const ItemMoveForm: FC = () => {
+  const handleFinish = () => {}
 
-export const ItemMoveForm: FC<Props> = ({ setShow }) => {
-  const handleFinish = () => setShow(false)
+  const { isMovingToNewSystem } = useModalWizardStore()
 
-  const handleCancel = () => setShow(false)
+  const [steps, setSteps] = useState<Step[]>(defaultSteps)
 
-  const { next, back, currentStep, nextButtonMessage, backButtonMessage } =
-    useWizard({
-      steps,
-      handleFinish,
-      handleCancel
-    })
-
-  const buttons: ModalButtons = {
-    goNext: {
-      text: nextButtonMessage,
-      onClick: next,
-      hidden: currentStep === 1
-    },
-    goBack: {
-      text: backButtonMessage,
-      onClick: back
+  useEffect(() => {
+    if (isMovingToNewSystem === true) {
+      setSteps([
+        { id: 1, name: 'Select or create' },
+        { id: 2, name: 'Parent System' },
+        { id: 3, name: 'System Detail' },
+        { id: 4, name: 'Summary' }
+      ])
+    } else if (isMovingToNewSystem === false) {
+      setSteps([
+        { id: 1, name: 'Select or create' },
+        { id: 2, name: 'Destination System' },
+        { id: 3, name: 'System Detail' },
+        { id: 4, name: 'Summary' }
+      ])
     }
-  }
+  }, [isMovingToNewSystem])
+
+  const handleCancel = () => {}
+
+  const { currentStep } = useWizard({
+    steps,
+    handleFinish,
+    handleCancel
+  })
 
   const renderStep = () => {
     switch (currentStep) {
       case 1:
         return <InitWizardPath />
       case 2:
-        return <DestinationSystem />
+        return <SelectSystemContainer />
       case 3:
-        return <div>System Detail</div>
+        return <SystemDetailStep />
       case 4:
         return <div>Summary</div>
       default:
@@ -62,8 +66,7 @@ export const ItemMoveForm: FC<Props> = ({ setShow }) => {
   return (
     <div>
       <StepIndicator steps={steps} />
-      <div className="h-[451px]">{renderStep()}</div>
-      <ModalButtonsComponent buttons={buttons} />
+      {renderStep()}
     </div>
   )
 }

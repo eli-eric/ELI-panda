@@ -1,9 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { type FC, useMemo } from 'react'
+import { useMemo } from 'react'
 
-import { Pagination } from '@/modules/shared/table/Pagination'
-import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
-import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import { SystemNameCell } from '@/modules/systems/components/table/cells/SystemNameCell'
 import { useSubsystems } from '@/modules/systems/hooks/useSubsystems'
@@ -11,12 +8,12 @@ import { useSystems } from '@/modules/systems/hooks/useSystems'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import type { SystemDetail } from '@/types/responses/systems'
 
-export const DestinationSystem: FC = () => {
+export const useDestinationColumns = () => {
   const tableId = 'destionation-systems'
 
-  const { setUid, pending } = useSubsystems(tableId)
+  const { setUid } = useSubsystems(tableId)
 
-  const { systems, queryKey } = useSystems(tableId)
+  const { queryKey } = useSystems(tableId)
 
   const columns = useMemo(
     (): ColumnDef<SystemDetail>[] => [
@@ -69,33 +66,5 @@ export const DestinationSystem: FC = () => {
     [queryKey, setUid, tableId]
   )
 
-  const table = usePandaTable<SystemDetail>({
-    tableId,
-    data: systems?.data || [],
-    columns,
-    getSubRows: row => row.subSystems || []
-  })
-
-  return (
-    <div>
-      <div className="h-[400px]">
-        <PandaTableV2
-          {...{
-            tableId,
-            data: systems?.data || [],
-            columns,
-            table
-          }}
-        />
-      </div>
-      <Pagination
-        tableId={tableId}
-        settings={{
-          total: systems?.totalCount,
-          enableQueryURL: false,
-          pageSizeDefault: 50
-        }}
-      />
-    </div>
-  )
+  return columns
 }

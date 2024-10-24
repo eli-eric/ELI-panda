@@ -1,5 +1,3 @@
-import { message } from '@/i18n/src/messages'
-
 import { useWizardStore } from '../store/useWizardStore'
 import type { Step } from '../types/wizard'
 
@@ -9,23 +7,19 @@ type WizzardSettings = {
   handleCancel: () => void
 }
 
-const messages = message.common.buttons
-
 export const useWizard = ({
   steps,
   handleFinish,
   handleCancel
 }: WizzardSettings) => {
-  const { currentStep, setNextStep, setPrevStep, formData, resetWizard } =
+  const { currentStep, goNext, goBack, formData, resetWizard } =
     useWizardStore()
-
-  const lastStepId = steps.length
 
   const handleNext = () => {
     if (currentStep === steps.length) {
       handleFinish(formData)
     } else {
-      setNextStep()
+      goNext()
     }
   }
 
@@ -34,16 +28,13 @@ export const useWizard = ({
       resetWizard()
       handleCancel()
     } else {
-      setPrevStep()
+      goBack()
     }
   }
 
   return {
-    next: handleNext,
-    back: handleBack,
-    currentStep,
-    nextButtonMessage:
-      currentStep === lastStepId ? messages.finish : messages.next,
-    backButtonMessage: currentStep === 1 ? messages.cancel : messages.back
+    goNext: handleNext,
+    goBack: handleBack,
+    currentStep
   }
 }

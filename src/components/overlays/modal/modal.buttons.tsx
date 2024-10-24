@@ -1,20 +1,24 @@
 import { Fragment } from 'react'
 
 import type { ModalButtons } from '@/types/form'
+import { classNames } from '@/utils'
 
 import { Button } from '../../Buttons'
 
 interface Props {
   testid?: string
-
   buttons?: ModalButtons
+  className?: string
 }
 
-const ModalButtonsComponent = ({ testid, buttons }: Props) => (
+const ModalButtonsComponent = ({ testid, buttons, className }: Props) => (
   <Fragment>
     {buttons && (
       <div
-        className={`mt-5 sm:mt-6 sm:flex sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3`}
+        className={classNames(
+          `mt-5 sm:mt-6 sm:flex sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3`,
+          className
+        )}
       >
         {buttons.goBack && !buttons.goBack.hidden && (
           <Button
