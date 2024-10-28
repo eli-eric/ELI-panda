@@ -4,9 +4,11 @@ import { useForm } from 'react-hook-form'
 import { BreadcrumpContainer, BreadcrumpItem } from '@/components/breadcrumps'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
+import Listbox from '@/components/form/Listbox'
 import Card, { FormCard } from '@/components/layout/Card'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import { message } from '@/i18n/src/messages'
+import useSystemEditFormFields from '@/modules/systemItem/components/form/SystemForm.fields'
 import { getColorBySystemLevel } from '@/modules/systemItem/utils'
 import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -20,6 +22,7 @@ import { useModalWizardStore } from '../store/useModalWizardStore'
 const messages = message.common.buttons
 
 export const SystemDetailStep: FC = () => {
+  const fields = useSystemEditFormFields()
   const { goNext, goBack, formData } = useWizardStore()
   const { isMovingToNewSystem } = useModalWizardStore()
 
@@ -83,11 +86,15 @@ export const SystemDetailStep: FC = () => {
           )}
         >
           <div className="grid grid-cols-2 gap-2">
-            <SelectLocationCombo
-              locationField={{ name: 'location', label: 'Location' }}
-            />
-            <Input name="systemName" label="System name" rounded="rounded-md" />
+            <Input {...fields.name} />
+            <SelectLocationCombo locationField={{ ...fields.location }} />
           </div>
+          <Card className="bg-amber-100 dark:bg-amber-600 mt-4 rounded-md  shadow-md">
+            <div className="grid grid-cols-2 gap-2">
+              <Listbox {...fields.itemUsage} />
+              <Listbox {...fields.itemConditionStatus} />
+            </div>
+          </Card>
         </FormCard>
       </Form>
       <ModalButtonsComponent buttons={buttons} />
