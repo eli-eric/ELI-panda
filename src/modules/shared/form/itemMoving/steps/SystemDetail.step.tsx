@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { type FC, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
+import { FormattedMessage } from 'react-intl'
 import * as yup from 'yup'
 
 import { BreadcrumpContainer, BreadcrumpItem } from '@/components/breadcrumps'
@@ -8,21 +9,24 @@ import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import Card, { FormCard } from '@/components/layout/Card'
+import { Heading } from '@/components/layout/Heading'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import { message } from '@/i18n/src/messages'
-import { SystemDetailParameter } from '@/modules/layout/components/system-detail-parameter.comp'
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { getColorBySystemLevel } from '@/modules/systemItem/utils'
 import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
 import type { SystemDetail } from '@/types/responses/systems'
 import { classNames } from '@/utils'
+import { createMessageValues } from '@/utils/formatters'
 
 import { SelectLocationCombo } from '../../location/SelectLocation.combo'
 import { useWizardStore } from '../../wizard/store/useWizardStore'
 import { useFormFields } from '../hooks/useFormFields'
 import { useModalWizardStore } from '../store/useModalWizardStore'
 
+const propertyMessage =
+  message.systemsPage.systemDetail.form.physicalItem.general.properties
 const messages = message.common.buttons
 
 type SystemDetailForm = {
@@ -44,33 +48,31 @@ export const SystemDetailStep: FC = () => {
 
   const system = formData.system as SystemDetail
   const parentPath = useMemo(() => {
-    if (isMovingToNewSystem) {
-      return [
-        ...(system?.parentPath || []),
-        { uid: system?.uid, name: system?.name }
-      ]
-    } else {
-      return system?.parentPath || []
-    }
-  }, [system, isMovingToNewSystem])
+    return [
+      ...(system?.parentPath || []),
+      { uid: system?.uid, name: system?.name }
+    ]
+  }, [system])
 
   const { physicalItem, systemDetail, catalogueItem } = useSystemDetail()
 
   const defaultValues = isMovingToNewSystem
     ? {
-        itemUsage: systemDetail?.physicalItem?.itemUsage || {},
-        conditionStatus: systemDetail?.physicalItem?.conditionStatus || {}
+        itemUsage: systemDetail?.physicalItem?.itemUsage || undefined,
+        conditionStatus:
+          systemDetail?.physicalItem?.conditionStatus || undefined
       }
     : {
-        location: systemDetail?.location
+        location: formData?.system?.location
           ? {
-              name: systemDetail?.location?.name,
-              uid: systemDetail?.location?.uid
+              name: formData?.system?.location?.name,
+              uid: formData.system?.location?.uid
             }
           : undefined,
-        name: systemDetail?.name || '',
-        itemUsage: systemDetail?.physicalItem?.itemUsage || {},
-        conditionStatus: systemDetail?.physicalItem?.conditionStatus || {}
+        name: formData?.system?.name || '',
+        itemUsage: systemDetail?.physicalItem?.itemUsage || undefined,
+        conditionStatus:
+          systemDetail?.physicalItem?.conditionStatus || undefined
       }
 
   const formMethods = useForm<SystemDetailForm>({
@@ -79,9 +81,8 @@ export const SystemDetailStep: FC = () => {
   })
 
   const submit = (data: SystemDetailForm) => {
-    console.log(data)
-    //updateFormData({ system: { ...system, ...data } })
-    //goNext()
+    updateFormData({ ...formData, ...data })
+    goNext()
   }
   const { isValid } = formMethods.formState
 
@@ -136,34 +137,67 @@ export const SystemDetailStep: FC = () => {
             <SelectLocationCombo locationField={{ ...fields.location }} />
           </div>
           {!isMovingToNewSystem && (
-            <div>
-              <SystemDetailParameter
-                title="Code"
-                value={systemDetail?.systemCode}
-              />
-              <SystemDetailParameter
-                title="Zone"
-                value={systemDetail?.zone?.name}
-              />
-            </div>
+            <ul className="grid grid-cols-1">
+              <li className="flex col-span-1">
+                <FormattedMessage
+                  id={propertyMessage.property}
+                  values={createMessageValues({
+                    name: 'Code',
+                    value: formData?.system?.systemCode,
+                    unit: ''
+                  })}
+                />
+              </li>
+              <li className="flex col-span-1">
+                <FormattedMessage
+                  id={propertyMessage.property}
+                  values={createMessageValues({
+                    name: 'Zone',
+                    value: formData?.system?.zone?.name,
+                    unit: ''
+                  })}
+                />
+              </li>
+            </ul>
           )}
           <Card className="bg-amber-100 dark:bg-amber-600 mt-4 rounded-md  shadow-md">
-            <div>
-              <SystemDetailParameter title="Name" value={physicalItem?.name} />
-              <SystemDetailParameter title="Eun" value={physicalItem?.eun} />
-              <SystemDetailParameter
-                title="Serial number"
-                value={physicalItem?.serialNumber}
-              />
-              <SystemDetailParameter
-                title="Part number"
-                value={catalogueItem?.catalogueNumber}
-              />
-            </div>
+            <Heading customText={`Item: ${catalogueItem?.name}`} />
             <div className="grid grid-cols-2 gap-2">
               <Listbox {...fields.itemUsage} />
               <Listbox {...fields.itemConditionStatus} />
             </div>
+            <ul className="grid grid-cols-1">
+              <li className="flex col-span-1">
+                <FormattedMessage
+                  id={propertyMessage.property}
+                  values={createMessageValues({
+                    name: 'Serial Number',
+                    value: physicalItem?.serialNumber,
+                    unit: ''
+                  })}
+                />
+              </li>
+              <li className="flex col-span-1">
+                <FormattedMessage
+                  id={propertyMessage.property}
+                  values={createMessageValues({
+                    name: 'Eun',
+                    value: physicalItem?.eun,
+                    unit: ''
+                  })}
+                />
+              </li>
+              <li className="flex col-span-1">
+                <FormattedMessage
+                  id={propertyMessage.property}
+                  values={createMessageValues({
+                    name: 'Part Number',
+                    value: catalogueItem?.catalogueNumber,
+                    unit: ''
+                  })}
+                />
+              </li>
+            </ul>
           </Card>
         </FormCard>
       </Form>

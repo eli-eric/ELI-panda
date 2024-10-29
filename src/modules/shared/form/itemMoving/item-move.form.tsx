@@ -4,6 +4,7 @@ import { StepIndicator } from '../wizard/components/StepsIndicator'
 import { useWizard } from '../wizard/hooks/useWizard'
 import type { Step } from './constants/steps'
 import { InitWizardPath } from './steps/InitWizardPath.step'
+import { SummaryStep } from './steps/Summary.step'
 import { SelectSystemContainer } from './steps/system-selection/SystemSelect.cont'
 import { SystemDetailStep } from './steps/SystemDetail.step'
 import { useModalWizardStore } from './store/useModalWizardStore'
@@ -57,7 +58,7 @@ export const ItemMoveForm: FC = () => {
       case 3:
         return <SystemDetailStep />
       case 4:
-        return <div>Summary</div>
+        return <SummaryStep />
       default:
         return <div>Smth went wrong</div>
     }
