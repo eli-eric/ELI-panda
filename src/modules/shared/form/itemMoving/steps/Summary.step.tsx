@@ -24,7 +24,7 @@ export const SummaryStep: FC = () => {
   const { isMovingToNewSystem, setOpen, setSelectedSystem } =
     useModalWizardStore()
   const { physicalItem, catalogueItem, systemDetail } = useSystemDetail()
-  const { formData, goBack, resetWizard } = useWizardStore()
+  const { formData, goBack, resetWizard, updateFormData } = useWizardStore()
   const router = useRouter()
   const { invalidate } = useSystems('destination-systems')
 
@@ -47,7 +47,7 @@ export const SummaryStep: FC = () => {
   const submitWizard = () => {
     mutate({
       condition: formData.conditionStatus,
-      deleteSourceSystem: false,
+      deleteSourceSystem: formData.deleteSourceSystem || false,
       destinationSystemUid: isMovingToNewSystem ? null : formData.system.uid,
       sourceSystemUid: systemDetail?.uid || '',
       parentSystemUid: isMovingToNewSystem ? formData.system.uid : null,
@@ -121,7 +121,13 @@ export const SummaryStep: FC = () => {
           </ul>
         </div>
       </Card>
-      <CheckBoxComponent label="DELETE SOURCE SYSTEM?" />
+      <CheckBoxComponent
+        label="DELETE SOURCE SYSTEM?"
+        defaultChecked={formData.deleteSourceSystem || false}
+        onChange={e => {
+          updateFormData({ deleteSourceSystem: e.target.checked })
+        }}
+      />
       <ModalButtonsComponent buttons={buttons} />
     </Fragment>
   )

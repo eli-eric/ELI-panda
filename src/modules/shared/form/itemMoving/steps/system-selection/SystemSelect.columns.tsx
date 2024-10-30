@@ -9,7 +9,7 @@ import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import type { SystemDetail } from '@/types/responses/systems'
 
 export const useDestinationColumns = () => {
-  const tableId = 'destionation-systems'
+  const tableId = 'destination-systems'
 
   const { setUid } = useSubsystems(tableId)
 
