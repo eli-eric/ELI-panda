@@ -1,5 +1,5 @@
 import { FolderPlusIcon, RectangleGroupIcon } from '@heroicons/react/24/outline'
-import { type FC, type HTMLAttributes, type PropsWithChildren } from 'react'
+import { type FC } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
@@ -8,26 +8,14 @@ import type { ModalButtons } from '@/types/form'
 
 import { useWizardStore } from '../../wizard/store/useWizardStore'
 import { useModalWizardStore } from '../store/useModalWizardStore'
+import { InitWizardButton } from './components/InitWizard.btn'
 
 const messages = message.systemItem.itemMove.buttons
 const commonButton = message.common.buttons
-const NextButton: FC<PropsWithChildren<HTMLAttributes<HTMLButtonElement>>> = ({
-  children,
-  ...rest
-}) => {
-  return (
-    <button
-      {...rest}
-      type="button"
-      className="relative block w-full h-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-    >
-      {children}
-    </button>
-  )
-}
 
 export const InitWizardPath: FC = () => {
-  const { setOpen, setIsMovingToNewSystem } = useModalWizardStore()
+  const { setOpen, setIsMovingToNewSystem, setSelectedSystem } =
+    useModalWizardStore()
   const { goNext, resetWizard } = useWizardStore()
 
   const goToDestinationSystem = () => {
@@ -42,6 +30,7 @@ export const InitWizardPath: FC = () => {
   const handleCancel = () => {
     setOpen(false)
     resetWizard()
+    setSelectedSystem(null)
   }
 
   const buttons: ModalButtons = {
@@ -61,19 +50,19 @@ export const InitWizardPath: FC = () => {
           create a new one.
         </p>
         <div className="flex space-x-10 items-center">
-          <NextButton onClick={goToSystemDetail}>
+          <InitWizardButton onClick={goToSystemDetail}>
             <FolderPlusIcon className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-300" />
             <span className="mt-2 block text-sm font-semibold text-gray-900 dark:text-gray-200">
               <FormattedMessage id={messages.createNewSystem} />
             </span>
-          </NextButton>
+          </InitWizardButton>
           <h3 className="text-gray-900 dark:text-gray-200 text-md">OR</h3>
-          <NextButton onClick={goToDestinationSystem}>
+          <InitWizardButton onClick={goToDestinationSystem}>
             <RectangleGroupIcon className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-300" />
             <span className="mt-2 block text-sm font-semibold text-gray-900 dark:text-gray-200">
               <FormattedMessage id={messages.destionationSystem} />
             </span>
-          </NextButton>
+          </InitWizardButton>
         </div>
       </div>
       <ModalButtonsComponent buttons={buttons} />

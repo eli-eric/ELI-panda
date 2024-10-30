@@ -3,21 +3,22 @@ import type { FC } from 'react'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 
 import { useWizardStore } from '../wizard/store/useWizardStore'
-import { ItemMoveForm } from './item-move.form'
+import { ItemMoveContainer } from './item-move.cont'
 import { useModalWizardStore } from './store/useModalWizardStore'
 
 export const ItemMoveModal: FC = () => {
-  const { open, setOpen } = useModalWizardStore()
+  const { open, setOpen, setSelectedSystem } = useModalWizardStore()
   const { resetWizard } = useWizardStore()
 
   const handleClose = (open: boolean) => {
     setOpen(open)
     resetWizard()
+    setSelectedSystem(null)
   }
 
   return (
     <ModalComponent open={open} setOpen={handleClose}>
-      <ItemMoveForm />
+      <ItemMoveContainer />
     </ModalComponent>
   )
 }

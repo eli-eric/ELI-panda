@@ -9,6 +9,7 @@ interface WizardState {
   goNext: () => void
   goBack: () => void
   updateFormData: (data: Record<string, any>) => void
+  setFormData: (data: Record<string, any>) => void
   resetWizard: () => void
 }
 
@@ -20,5 +21,6 @@ export const useWizardStore = create<WizardState>(set => ({
   setCurrentStep: step => set({ currentStep: step }),
   updateFormData: data =>
     set(state => ({ formData: { ...state.formData, ...data } })),
+  setFormData: data => set({ formData: data }),
   resetWizard: () => set({ currentStep: 1, formData: {} })
 }))

@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { type FC, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
-import { FormattedMessage } from 'react-intl'
 import * as yup from 'yup'
 
 import { BreadcrumpContainer, BreadcrumpItem } from '@/components/breadcrumps'
@@ -18,15 +17,13 @@ import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
 import type { SystemDetail } from '@/types/responses/systems'
 import { classNames } from '@/utils'
-import { createMessageValues } from '@/utils/formatters'
 
 import { SelectLocationCombo } from '../../location/SelectLocation.combo'
 import { useWizardStore } from '../../wizard/store/useWizardStore'
 import { useFormFields } from '../hooks/useFormFields'
 import { useModalWizardStore } from '../store/useModalWizardStore'
+import { SummaryListParam } from './components/SymmaryListParam.comp'
 
-const propertyMessage =
-  message.systemsPage.systemDetail.form.physicalItem.general.properties
 const messages = message.common.buttons
 
 type SystemDetailForm = {
@@ -58,21 +55,34 @@ export const SystemDetailStep: FC = () => {
 
   const defaultValues = isMovingToNewSystem
     ? {
-        itemUsage: systemDetail?.physicalItem?.itemUsage || undefined,
+        name: formData?.name || '',
+        location: formData?.location || undefined,
+        itemUsage:
+          formData?.itemUsage ||
+          systemDetail?.physicalItem?.itemUsage ||
+          undefined,
         conditionStatus:
-          systemDetail?.physicalItem?.conditionStatus || undefined
+          formData?.conditionStatus ||
+          systemDetail?.physicalItem?.conditionStatus ||
+          undefined
       }
     : {
-        location: formData?.system?.location
-          ? {
-              name: formData?.system?.location?.name,
-              uid: formData.system?.location?.uid
-            }
-          : undefined,
-        name: formData?.system?.name || '',
-        itemUsage: systemDetail?.physicalItem?.itemUsage || undefined,
+        location:
+          formData?.location || formData?.system?.location
+            ? {
+                name: formData?.system?.location?.name,
+                uid: formData.system?.location?.uid
+              }
+            : undefined,
+        name: formData?.name || formData?.system?.name || '',
+        itemUsage:
+          formData?.itemUsage ||
+          systemDetail?.physicalItem?.itemUsage ||
+          undefined,
         conditionStatus:
-          systemDetail?.physicalItem?.conditionStatus || undefined
+          formData?.conditionStatus ||
+          systemDetail?.physicalItem?.conditionStatus ||
+          undefined
       }
 
   const formMethods = useForm<SystemDetailForm>({
@@ -81,7 +91,7 @@ export const SystemDetailStep: FC = () => {
   })
 
   const submit = (data: SystemDetailForm) => {
-    updateFormData({ ...formData, ...data })
+    updateFormData({ ...data })
     goNext()
   }
   const { isValid } = formMethods.formState
@@ -138,26 +148,14 @@ export const SystemDetailStep: FC = () => {
           </div>
           {!isMovingToNewSystem && (
             <ul className="grid grid-cols-1">
-              <li className="flex col-span-1">
-                <FormattedMessage
-                  id={propertyMessage.property}
-                  values={createMessageValues({
-                    name: 'Code',
-                    value: formData?.system?.systemCode,
-                    unit: ''
-                  })}
-                />
-              </li>
-              <li className="flex col-span-1">
-                <FormattedMessage
-                  id={propertyMessage.property}
-                  values={createMessageValues({
-                    name: 'Zone',
-                    value: formData?.system?.zone?.name,
-                    unit: ''
-                  })}
-                />
-              </li>
+              <SummaryListParam
+                name="Code"
+                value={formData?.system?.systemCode}
+              />
+              <SummaryListParam
+                name="Zone"
+                value={formData?.system?.zone?.name}
+              />
             </ul>
           )}
           <Card className="bg-amber-100 dark:bg-amber-600 mt-4 rounded-md  shadow-md">
@@ -167,36 +165,15 @@ export const SystemDetailStep: FC = () => {
               <Listbox {...fields.itemConditionStatus} />
             </div>
             <ul className="grid grid-cols-1">
-              <li className="flex col-span-1">
-                <FormattedMessage
-                  id={propertyMessage.property}
-                  values={createMessageValues({
-                    name: 'Serial Number',
-                    value: physicalItem?.serialNumber,
-                    unit: ''
-                  })}
-                />
-              </li>
-              <li className="flex col-span-1">
-                <FormattedMessage
-                  id={propertyMessage.property}
-                  values={createMessageValues({
-                    name: 'Eun',
-                    value: physicalItem?.eun,
-                    unit: ''
-                  })}
-                />
-              </li>
-              <li className="flex col-span-1">
-                <FormattedMessage
-                  id={propertyMessage.property}
-                  values={createMessageValues({
-                    name: 'Part Number',
-                    value: catalogueItem?.catalogueNumber,
-                    unit: ''
-                  })}
-                />
-              </li>
+              <SummaryListParam
+                name="Serial Number"
+                value={physicalItem?.serialNumber || ''}
+              />
+              <SummaryListParam name="Eun" value={physicalItem?.eun || ''} />
+              <SummaryListParam
+                name="Part Number"
+                value={catalogueItem?.catalogueNumber || ''}
+              />
             </ul>
           </Card>
         </FormCard>

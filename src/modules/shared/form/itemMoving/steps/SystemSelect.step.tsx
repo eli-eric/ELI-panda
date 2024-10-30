@@ -12,21 +12,21 @@ import type { ModalButtons } from '@/types/form'
 import type { SystemDetail } from '@/types/responses/systems'
 import { classNames } from '@/utils'
 
-import { FilterBadges } from '../../../FilterBadges'
-import { useWizardStore } from '../../../wizard/store/useWizardStore'
-import { useModalWizardStore } from '../../store/useModalWizardStore'
-import { FilterButton } from './filter/FilterButton'
-import { useDestinationColumns } from './SystemSelect.columns'
+import { FilterBadges } from '../../FilterBadges'
+import { useWizardStore } from '../../wizard/store/useWizardStore'
+import { useModalWizardStore } from '../store/useModalWizardStore'
+import { FilterButton } from './system-selection/filter/FilterButton'
+import { useDestinationColumns } from './system-selection/SystemSelect.columns'
 
 const messages = message.common.buttons
 
 export const SelectSystemContainer: FC = () => {
-  const tableId = 'destionation-systems'
+  const tableId = 'destination-systems'
 
   const { selectedSystem, setSelectedSystem, isMovingToNewSystem } =
     useModalWizardStore()
 
-  const { goNext, goBack, updateFormData } = useWizardStore()
+  const { goNext, goBack, setFormData } = useWizardStore()
 
   const { systems } = useSystems(tableId)
 
@@ -38,7 +38,7 @@ export const SelectSystemContainer: FC = () => {
       disabled: !selectedSystem,
       onClick: () => {
         if (selectedSystem) {
-          updateFormData({ system: selectedSystem })
+          setFormData({ system: selectedSystem })
           goNext()
         }
       }

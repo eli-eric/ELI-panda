@@ -1,12 +1,12 @@
 import { type FC, useEffect, useState } from 'react'
 
 import { StepIndicator } from '../wizard/components/StepsIndicator'
-import { useWizard } from '../wizard/hooks/useWizard'
-import type { Step } from './constants/steps'
+import { useWizardStore } from '../wizard/store/useWizardStore'
+import type { Step } from '../wizard/types/wizard'
 import { InitWizardPath } from './steps/InitWizardPath.step'
 import { SummaryStep } from './steps/Summary.step'
-import { SelectSystemContainer } from './steps/system-selection/SystemSelect.cont'
 import { SystemDetailStep } from './steps/SystemDetail.step'
+import { SelectSystemContainer } from './steps/SystemSelect.step'
 import { useModalWizardStore } from './store/useModalWizardStore'
 
 const defaultSteps: Step[] = [
@@ -16,10 +16,9 @@ const defaultSteps: Step[] = [
   { id: 4, name: 'Summary' }
 ]
 
-export const ItemMoveForm: FC = () => {
-  const handleFinish = () => {}
-
+export const ItemMoveContainer: FC = () => {
   const { isMovingToNewSystem } = useModalWizardStore()
+  const { currentStep } = useWizardStore()
 
   const [steps, setSteps] = useState<Step[]>(defaultSteps)
 
@@ -41,14 +40,6 @@ export const ItemMoveForm: FC = () => {
     }
   }, [isMovingToNewSystem])
 
-  const handleCancel = () => {}
-
-  const { currentStep } = useWizard({
-    steps,
-    handleFinish,
-    handleCancel
-  })
-
   const renderStep = () => {
     switch (currentStep) {
       case 1:
@@ -60,7 +51,7 @@ export const ItemMoveForm: FC = () => {
       case 4:
         return <SummaryStep />
       default:
-        return <div>Smth went wrong</div>
+        return <div>Something went wrong</div>
     }
   }
 

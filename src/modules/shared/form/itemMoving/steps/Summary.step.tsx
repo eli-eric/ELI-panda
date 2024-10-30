@@ -3,66 +3,70 @@ import type { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import { type FC, Fragment } from 'react'
 import toast from 'react-hot-toast'
-import { FormattedMessage } from 'react-intl'
 
 import { CheckBoxComponent } from '@/components/form/CheckBox'
 import Card from '@/components/layout/Card'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import { message } from '@/i18n/src/messages'
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
+import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { PATH } from '@/types/constants/paths'
 import type { ModalButtons } from '@/types/form'
 import { queryMutate } from '@/utils/fetcher'
-import { createMessageValues } from '@/utils/formatters'
 
 import { useWizardStore } from '../../wizard/store/useWizardStore'
 import { useModalWizardStore } from '../store/useModalWizardStore'
-const propertyMessage =
-  message.systemsPage.systemDetail.form.physicalItem.general.properties
+import type { ItemMovePost } from '../types'
+import { SummaryListParam } from './components/SymmaryListParam.comp'
 const btnMessages = message.common.buttons
 
 export const SummaryStep: FC = () => {
-  const { isMovingToNewSystem } = useModalWizardStore()
+  const { isMovingToNewSystem, setOpen, setSelectedSystem } =
+    useModalWizardStore()
   const { physicalItem, catalogueItem, systemDetail } = useSystemDetail()
-  const { formData } = useWizardStore()
-
+  const { formData, goBack, resetWizard } = useWizardStore()
   const router = useRouter()
+  const { invalidate } = useSystems('destination-systems')
 
   const { mutate, isPending } = useMutation({
     mutationKey: ['moveItem'],
-    mutationFn: queryMutate('physicalItemMove', 'post'),
+    mutationFn: queryMutate<string, ItemMovePost>('physicalItemMove', 'post'),
     onError: (e: AxiosError) => {
       toast.error(`Error: ${e.response?.data}`)
     },
     onSuccess: r => {
-      console.log('r', r)
       toast.success('Item moved successfully')
+      setOpen(false)
+      resetWizard()
+      setSelectedSystem(null)
+      invalidate()
       router.push(PATH.SYSTEM + '/' + r.data)
     }
   })
+
+  const submitWizard = () => {
+    mutate({
+      condition: formData.conditionStatus,
+      deleteSourceSystem: false,
+      destinationSystemUid: isMovingToNewSystem ? null : formData.system.uid,
+      sourceSystemUid: systemDetail?.uid || '',
+      parentSystemUid: isMovingToNewSystem ? formData.system.uid : null,
+      systemName: formData.name,
+      location: formData.location,
+      itemUsage: formData.itemUsage
+    })
+  }
 
   const buttons: ModalButtons = {
     goNext: {
       text: btnMessages.continue,
       disabled: false,
       loading: isPending,
-      onClick: () => {
-        mutate({
-          condition: formData.conditionStatus,
-          deleteSourceSystem: false,
-          destinationSystemUid: isMovingToNewSystem
-            ? null
-            : formData.system.uid,
-          sourceSystemUid: systemDetail?.uid,
-          parentSystemUid: isMovingToNewSystem ? formData.system.uid : null,
-          systemName: formData.name,
-          location: formData.location
-        })
-      }
+      onClick: submitWizard
     },
     goBack: {
       text: btnMessages.back,
-      onClick: () => {}
+      onClick: goBack
     }
   }
 
@@ -74,103 +78,46 @@ export const SummaryStep: FC = () => {
             <h3 className="font-bold underline">
               {isMovingToNewSystem ? 'New System:' : 'Destination System:'}
             </h3>
-            <li>
-              <FormattedMessage
-                id={propertyMessage.property}
-                values={createMessageValues({
-                  name: isMovingToNewSystem
-                    ? 'Destination System Name'
-                    : 'System Name',
-                  value: formData?.name,
-                  unit: ''
-                })}
-              />
-            </li>
-            <li>
-              <FormattedMessage
-                id={propertyMessage.property}
-                values={createMessageValues({
-                  name: 'Code',
-                  value: formData?.system?.systemCode,
-                  unit: ''
-                })}
-              />
-            </li>
-            <li>
-              <FormattedMessage
-                id={propertyMessage.property}
-                values={createMessageValues({
-                  name: 'Zone',
-                  value: formData?.system?.zone?.name,
-                  unit: ''
-                })}
-              />
-            </li>
-            <li>
-              <FormattedMessage
-                id={propertyMessage.property}
-                values={createMessageValues({
-                  name: 'Location',
-                  value: formData?.location?.name,
-                  unit: ''
-                })}
-              />
-            </li>
+            <SummaryListParam
+              {...{
+                name: isMovingToNewSystem
+                  ? 'Destination System Name'
+                  : 'System Name',
+                value: formData?.name
+              }}
+            />
+            <SummaryListParam
+              name="Code"
+              value={isMovingToNewSystem ? '' : formData?.system?.systemCode}
+            />
+
+            <SummaryListParam
+              name="Zone"
+              value={isMovingToNewSystem ? '' : formData?.system?.zone?.name}
+            />
+            <SummaryListParam
+              name="Location"
+              value={formData?.location?.name}
+            />
           </ul>
           <ul className="grid grid-cols-1">
             <h3 className="font-bold underline text-gray-600 dark:text-gray-200">
               Moving Item:
             </h3>
-            <li>
-              <FormattedMessage
-                id={propertyMessage.property}
-                values={createMessageValues({
-                  name: 'Usage',
-                  value: formData?.itemUsage?.name,
-                  unit: ''
-                })}
-              />
-            </li>
-            <li>
-              <FormattedMessage
-                id={propertyMessage.property}
-                values={createMessageValues({
-                  name: 'Serial Number',
-                  value: physicalItem?.serialNumber,
-                  unit: ''
-                })}
-              />
-            </li>
-            <li>
-              <FormattedMessage
-                id={propertyMessage.property}
-                values={createMessageValues({
-                  name: 'Eun',
-                  value: physicalItem?.eun,
-                  unit: ''
-                })}
-              />
-            </li>
-            <li>
-              <FormattedMessage
-                id={propertyMessage.property}
-                values={createMessageValues({
-                  name: 'Condition Status',
-                  value: formData?.conditionStatus?.name,
-                  unit: ''
-                })}
-              />
-            </li>
-            <li>
-              <FormattedMessage
-                id={propertyMessage.property}
-                values={createMessageValues({
-                  name: 'Part Number',
-                  value: catalogueItem?.catalogueNumber,
-                  unit: ''
-                })}
-              />
-            </li>
+            <SummaryListParam name="Usage" value={formData?.itemUsage?.name} />
+            <SummaryListParam
+              name="Serial Number"
+              value={physicalItem?.serialNumber || ''}
+            />
+            <SummaryListParam name="Eun" value={physicalItem?.eun || ''} />
+            <SummaryListParam
+              name="Condition Status"
+              value={formData?.conditionStatus?.name || ''}
+            />
+            <SummaryListParam
+              name="Part Number"
+              value={catalogueItem?.catalogueNumber || ''}
+            />
           </ul>
         </div>
       </Card>
