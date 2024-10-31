@@ -60,7 +60,8 @@ export const getEndpoints = ({
     codebookTree: `/codebook/${codebook}/tree${query}`,
     generalGraph: `/general/${uid}/graph`,
     recalculateSpareParts: '/systems/recalculate-spare-parts',
-    systemsReload: '/systems/reload'
+    systemsReload: '/systems/reload',
+    physicalItemMove: `/physical-item/move`
   }
   return endpoints
 }
