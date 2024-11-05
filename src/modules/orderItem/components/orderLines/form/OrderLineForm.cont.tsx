@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { number, object, string } from 'yup'
 
@@ -37,16 +37,22 @@ export const OrderLineForm = ({
   )
   const { setOrderLine } = useOrderLine()
 
+  const defaultValues = useMemo(
+    () =>
+      orderLine
+        ? { ...orderLine, currency: orderLine.currency || 'EUR' }
+        : {
+            itemUsage: {
+              uid: 'a2aae89a-5cbe-4042-a726-44012b158226',
+              name: 'In System Part'
+            }
+          },
+    [orderLine]
+  )
+
   //TODO: type check for resolver
   const formMethods = useForm<OrderLineFormType>({
-    defaultValues: orderLine
-      ? { ...orderLine, currency: orderLine.currency || 'EUR' }
-      : {
-          itemUsage: {
-            uid: 'a2aae89a-5cbe-4042-a726-44012b158226',
-            name: 'In System Part'
-          }
-        },
+    defaultValues: defaultValues,
     resolver: yupResolver(orderLineFormSchema) as any
   })
   const modalSubmit = (data: OrderLineFormType) => {
@@ -61,7 +67,7 @@ export const OrderLineForm = ({
         setOrderLine(dataToSend)
       }
     } else setOrderLine(dataToSend)
-    formMethods.reset(dataToSend)
+    formMethods.reset(defaultValues)
   }
 
   return (

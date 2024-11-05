@@ -60,7 +60,7 @@ export const useDestinationColumns = () => {
       {
         header: 'Location',
         id: 'location',
-        accessorFn: row => row?.location?.code
+        accessorFn: row => row?.location?.name
       }
     ],
     [queryKey, setUid, tableId]
