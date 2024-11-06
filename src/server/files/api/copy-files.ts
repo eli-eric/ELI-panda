@@ -3,7 +3,6 @@
 import type { BucketItem } from 'minio'
 import { CopyConditions } from 'minio'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { getToken } from 'next-auth/jwt'
 import path from 'path'
 
 import logger, { composeDebugMessage } from '@/server/logger'
@@ -31,12 +30,6 @@ const copyFiles = async (req: NextApiRequest, res: NextApiResponse) => {
   // Ensure the request method is POST.
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' })
-  }
-
-  // Get the authentication token from the request.
-  const token = await getToken({ req })
-  if (!token) {
-    return res.status(401).json({ error: 'Unauthorized' })
   }
 
   // Ensure that the request body has the correct structure
@@ -81,7 +74,7 @@ const copyFiles = async (req: NextApiRequest, res: NextApiResponse) => {
         const sourceObjectName = obj.name
 
         // Ensure the sourceObjectName starts with sourcePrefix
-        if (!sourceObjectName.startsWith(sourcePrefix)) {
+        if (!sourceObjectName?.startsWith(sourcePrefix)) {
           logger.warn(
             `Skipping object ${sourceObjectName} as it does not start with sourcePrefix`
           )
@@ -195,6 +188,7 @@ const getMiniImageUrls = async (uid: string): Promise<string[]> => {
   // Construct URLs for each mini image.
   const urls = list.map(obj => '/api/' + obj.name)
 
+  console.log(urls)
   return urls
 }
 
