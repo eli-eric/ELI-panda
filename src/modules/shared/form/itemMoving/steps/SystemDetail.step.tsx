@@ -55,35 +55,35 @@ export const SystemDetailStep: FC = () => {
 
   const defaultValues = isMovingToNewSystem
     ? {
-        name: formData?.name || '',
-        location: formData?.location || undefined,
-        itemUsage:
-          formData?.itemUsage ||
-          systemDetail?.physicalItem?.itemUsage ||
-          undefined,
-        conditionStatus:
-          formData?.conditionStatus ||
-          systemDetail?.physicalItem?.conditionStatus ||
-          undefined
-      }
+      name: formData?.name || physicalItem?.name || '',
+      location: formData?.location || undefined,
+      itemUsage:
+        formData?.itemUsage ||
+        systemDetail?.physicalItem?.itemUsage ||
+        undefined,
+      conditionStatus:
+        formData?.conditionStatus ||
+        systemDetail?.physicalItem?.conditionStatus ||
+        undefined
+    }
     : {
-        location:
-          formData?.location || formData?.system?.location
-            ? {
-                name: formData?.system?.location?.name,
-                uid: formData.system?.location?.uid
-              }
-            : undefined,
-        name: formData?.name || formData?.system?.name || '',
-        itemUsage:
-          formData?.itemUsage ||
-          systemDetail?.physicalItem?.itemUsage ||
-          undefined,
-        conditionStatus:
-          formData?.conditionStatus ||
-          systemDetail?.physicalItem?.conditionStatus ||
-          undefined
-      }
+      location:
+        formData?.location || formData?.system?.location
+          ? {
+            name: formData?.system?.location?.name,
+            uid: formData.system?.location?.uid
+          }
+          : undefined,
+      name: formData?.name || formData?.system?.name || '',
+      itemUsage:
+        formData?.itemUsage ||
+        systemDetail?.physicalItem?.itemUsage ||
+        undefined,
+      conditionStatus:
+        formData?.conditionStatus ||
+        systemDetail?.physicalItem?.conditionStatus ||
+        undefined
+    }
 
   const formMethods = useForm<SystemDetailForm>({
     defaultValues,
