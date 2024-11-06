@@ -7,13 +7,11 @@ import s3Client, { config } from '@/server/s3client'
 
 import { handleMiniImages } from '../service/image-service'
 import { getPathInfo } from '../utils/path-utils'
+import { withErrorHandler } from '../utils/with-error-handler'
 
 const { bucket } = config
 
-export default async function removeFile(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function removeFile(req: NextApiRequest, res: NextApiResponse) {
   const pathInfo = getPathInfo(req)
   if (!pathInfo) {
     return res.status(400).json({ error: 'Invalid path' })
@@ -39,3 +37,5 @@ export default async function removeFile(
     res.status(500).json({ error: 'Failed to delete file' })
   }
 }
+
+export default withErrorHandler(removeFile)

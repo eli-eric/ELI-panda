@@ -61,7 +61,8 @@ export const getEndpoints = ({
     generalGraph: `/general/${uid}/graph`,
     recalculateSpareParts: '/systems/recalculate-spare-parts',
     systemsReload: '/systems/reload',
-    physicalItemMove: `/physical-item/move`
+    physicalItemMove: `/physical-item/move`,
+    systemFilesCopy: `/api/system/images/copy`
   }
   return endpoints
 }
