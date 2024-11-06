@@ -10,3 +10,8 @@ export type ItemMovePost = {
   sourceSystemUid: string
   systemName: string
 }
+
+export type SystemFileCopy = {
+  sourceUid: string
+  destinationUid: string
+}

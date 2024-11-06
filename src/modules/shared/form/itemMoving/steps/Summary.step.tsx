@@ -16,7 +16,7 @@ import { queryMutate } from '@/utils/fetcher'
 
 import { useWizardStore } from '../../wizard/store/useWizardStore'
 import { useModalWizardStore } from '../store/useModalWizardStore'
-import type { ItemMovePost } from '../types'
+import type { ItemMovePost, SystemFileCopy } from '../types'
 import { SummaryListParam } from './components/SymmaryListParam.comp'
 const btnMessages = message.common.buttons
 
@@ -28,6 +28,31 @@ export const SummaryStep: FC = () => {
   const router = useRouter()
   const { invalidate } = useSystems('destination-systems')
 
+  const onSuccessfulMove = (uid: string) => {
+    toast.success('Item moved successfully')
+    setOpen(false)
+    resetWizard()
+    setSelectedSystem(null)
+    invalidate()
+    router.push(PATH.SYSTEM + '/' + uid)
+  }
+
+  const { mutate: mutateFiles, isPending: isPendingFiles } = useMutation({
+    mutationKey: ['moveFiles'],
+    mutationFn: queryMutate<string, SystemFileCopy>(
+      'systemFilesCopy',
+      'post',
+      undefined,
+      true
+    ),
+    onError: (e: AxiosError) => {
+      toast.error(`Error: ${e.response?.data}`)
+    },
+    onSuccess: (_, data) => {
+      onSuccessfulMove(data.destinationUid)
+    }
+  })
+
   const { mutate, isPending } = useMutation({
     mutationKey: ['moveItem'],
     mutationFn: queryMutate<string, ItemMovePost>('physicalItemMove', 'post'),
@@ -35,12 +60,14 @@ export const SummaryStep: FC = () => {
       toast.error(`Error: ${e.response?.data}`)
     },
     onSuccess: r => {
-      toast.success('Item moved successfully')
-      setOpen(false)
-      resetWizard()
-      setSelectedSystem(null)
-      invalidate()
-      router.push(PATH.SYSTEM + '/' + r.data)
+      //if (isMovingToNewSystem) {
+      // mutateFiles({
+      //  sourceUid: systemDetail?.uid || '',
+      // destinationUid: r.data
+      //})
+      //} else {
+      onSuccessfulMove(r.data)
+      // }
     }
   })
 
@@ -61,7 +88,7 @@ export const SummaryStep: FC = () => {
     goNext: {
       text: btnMessages.continue,
       disabled: false,
-      loading: isPending,
+      loading: isPending || isPendingFiles,
       onClick: submitWizard
     },
     goBack: {

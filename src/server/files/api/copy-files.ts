@@ -4,6 +4,7 @@ import type { BucketItem } from 'minio'
 import { CopyConditions } from 'minio'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getToken } from 'next-auth/jwt'
+import path from 'path'
 
 import logger, { composeDebugMessage } from '@/server/logger'
 import s3Client, { config } from '@/server/s3client'
@@ -47,10 +48,24 @@ const copyFiles = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(400).json({ error: 'Invalid request body' })
   }
 
+  // Verify that sourceUid and destinationUid are different
+  if (sourceUid === destinationUid) {
+    logger.error(
+      composeDebugMessage(req, 'Source and destination UIDs are the same')
+    )
+    return res
+      .status(400)
+      .json({ error: 'Source and destination UIDs must be different' })
+  }
+
   try {
     // Define the source and destination prefixes based on the UIDs.
     const sourcePrefix = `/system/${sourceUid}/`
     const destinationPrefix = `/system/${destinationUid}/`
+
+    // Log prefixes
+    logger.debug(`Source Prefix: ${sourcePrefix}`)
+    logger.debug(`Destination Prefix: ${destinationPrefix}`)
 
     // List all objects under the source UID directory.
     const objects = await listObjects(bucket, sourcePrefix)
@@ -64,11 +79,36 @@ const copyFiles = async (req: NextApiRequest, res: NextApiResponse) => {
     await Promise.all(
       objects.map(async obj => {
         const sourceObjectName = obj.name
-        const destinationObjectName = sourceObjectName?.replace(
-          sourcePrefix,
-          destinationPrefix
+
+        // Ensure the sourceObjectName starts with sourcePrefix
+        if (!sourceObjectName.startsWith(sourcePrefix)) {
+          logger.warn(
+            `Skipping object ${sourceObjectName} as it does not start with sourcePrefix`
+          )
+          return
+        }
+
+        // Get the relative path after the sourcePrefix
+        const relativePath = sourceObjectName.substring(sourcePrefix.length)
+
+        // Construct the destinationObjectName
+        const destinationObjectName = path.posix.join(
+          destinationPrefix,
+          relativePath
         )
-        if (!destinationObjectName) return
+
+        // Add logging
+        logger.debug(
+          `Copying object from ${sourceObjectName} to ${destinationObjectName}`
+        )
+
+        // Check if source and destination names are the same
+        if (sourceObjectName === destinationObjectName) {
+          logger.warn(
+            `Skipping copy for ${sourceObjectName} as source and destination are the same.`
+          )
+          return
+        }
 
         const copyConditions = new CopyConditions()
 
@@ -97,9 +137,28 @@ const copyFiles = async (req: NextApiRequest, res: NextApiResponse) => {
     // Send a success response.
     res.status(200).json({ message: 'Files copied successfully' })
   } catch (error) {
-    // Log the error and send an error response.
-    logger.error(`Failed to copy files: ${error}`)
-    res.status(500).json({ error: 'Failed to copy files' })
+    let errorMessage = 'Unknown error'
+
+    // Type guard to check if error is an instance of Error
+    if (error instanceof Error) {
+      errorMessage = error.message
+    } else if (typeof error === 'string') {
+      // If error is a string
+      errorMessage = error
+    } else {
+      // For other types, convert to string
+      errorMessage = JSON.stringify(error)
+    }
+
+    // Log the error with more details
+    logger.error(
+      `Failed to copy files from ${sourceUid} to ${destinationUid}: ${errorMessage}`
+    )
+
+    // Send the response
+    res
+      .status(500)
+      .json({ error: 'Failed to copy files', details: errorMessage })
   }
 }
 
