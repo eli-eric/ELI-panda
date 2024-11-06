@@ -5,13 +5,19 @@ import { CopyConditions } from 'minio'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getToken } from 'next-auth/jwt'
 
-import logger from '@/server/logger'
+import logger, { composeDebugMessage } from '@/server/logger'
 import s3Client, { config } from '@/server/s3client'
 
 import { saveUrlsToNode } from '../service/node-service'
 import { withErrorHandler } from '../utils/with-error-handler'
 
 const { bucket } = config
+
+// Define an interface for the request body
+interface CopyFilesRequestBody {
+  sourceUid: string
+  destinationUid: string
+}
 
 /**
  * API handler to copy all files from a source UID directory to a destination UID directory in MinIO.
@@ -32,14 +38,13 @@ const copyFiles = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
-  // Extract sourceUid and destinationUid from the request body.
-  const { sourceUid, destinationUid } = req.body
+  // Ensure that the request body has the correct structure
+  const body = req.body as CopyFilesRequestBody
+  const { sourceUid, destinationUid } = body
 
-  // Validate that both sourceUid and destinationUid are provided.
-  if (!sourceUid || !destinationUid) {
-    return res
-      .status(400)
-      .json({ error: 'Source and destination UIDs are required' })
+  if (!body || !sourceUid || !destinationUid) {
+    logger.error(composeDebugMessage(req, 'Invalid request body'))
+    return res.status(400).json({ error: 'Invalid request body' })
   }
 
   try {
