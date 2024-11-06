@@ -3,12 +3,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import logger from '@/server/logger'
-import s3Client from '@/server/s3client'
+import s3Client, { config } from '@/server/s3client'
 
 import { handleMiniImages } from '../service/image-service'
 import { getPathInfo } from '../utils/path-utils'
 
-const bucket = process.env.S3_BUCKET as string
+const { bucket } = config
 
 export default async function removeFile(
   req: NextApiRequest,
