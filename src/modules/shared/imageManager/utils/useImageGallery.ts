@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useRef } from 'react'
+import toast from 'react-hot-toast'
 
 import axiosInstance from '@/core/axios/axiosInstance'
 
@@ -97,6 +98,9 @@ export const useImageGallery = ({ itemCategory, itemId, fileCategory }) => {
       Promise.allSettled([deletePromise, uploadPromise])
         .then(() => {
           onSuccess && onSuccess(status)
+          if (status.failedDeletions?.length || status.failedUploads?.length) {
+            toast.error('Some files failed to upload or delete')
+          }
         })
         .catch(() => {
           onError && onError(status)
