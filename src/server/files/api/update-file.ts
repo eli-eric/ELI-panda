@@ -7,13 +7,11 @@ import s3Client, { config } from '@/server/s3client'
 
 import { getPathInfo } from '../utils/path-utils'
 import { streamToBuffer } from '../utils/stream-utils'
+import { withErrorHandler } from '../utils/with-error-handler'
 
 const { bucket } = config
 
-export default async function updateFile(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function updateFile(req: NextApiRequest, res: NextApiResponse) {
   const pathInfo = getPathInfo(req)
   if (!pathInfo) {
     return res.status(400).json({ error: 'Invalid path' })
@@ -43,3 +41,5 @@ export default async function updateFile(
     res.status(500).json({ error: 'Failed to update file' })
   }
 }
+
+export default withErrorHandler(updateFile)

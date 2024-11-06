@@ -6,13 +6,11 @@ import s3Client, { config } from '@/server/s3client'
 
 import { handleMiniImages } from '../service/image-service'
 import { getPathInfo } from '../utils/path-utils'
+import { withErrorHandler } from '../utils/with-error-handler'
 
 const { bucket } = config
 
-export default async function uploadFile(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
   const pathInfo = getPathInfo(req)
   if (!pathInfo) {
     return res.status(400).json({ error: 'Invalid path' })
@@ -63,3 +61,5 @@ export default async function uploadFile(
     .status(201)
     .json({ id, name, url: `${req.url}/${id}`, type: mimeType, tags })
 }
+
+export default withErrorHandler(uploadFile)

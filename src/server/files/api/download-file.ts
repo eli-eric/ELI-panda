@@ -7,10 +7,7 @@ import { getPathInfo } from '../utils/path-utils'
 
 const { bucket } = config
 
-export default async function downloadFile(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function downloadFile(req: NextApiRequest, res: NextApiResponse) {
   const pathInfo = getPathInfo(req)
   if (!pathInfo) {
     return res.status(400).json({ error: 'Invalid path' })
@@ -36,3 +33,5 @@ export default async function downloadFile(
     res.status(500).end()
   })
 }
+
+export default downloadFile

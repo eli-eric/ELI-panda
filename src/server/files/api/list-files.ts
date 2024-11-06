@@ -7,13 +7,11 @@ import logger from '@/server/logger'
 import s3Client, { config } from '@/server/s3client'
 
 import { getPathInfo } from '../utils/path-utils'
+import { withErrorHandler } from '../utils/with-error-handler'
 
 const { bucket } = config
 
-export default async function listFiles(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+async function listFiles(req: NextApiRequest, res: NextApiResponse) {
   const pathInfo = getPathInfo(req)
   if (!pathInfo) {
     return res.status(400).json({ error: 'Invalid path' })
@@ -70,3 +68,5 @@ const listObjectsWithMetadata = (
     stream.on('end', () => resolve(objects))
   })
 }
+
+export default withErrorHandler(listFiles)
