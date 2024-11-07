@@ -1,6 +1,5 @@
 // api/copyFiles.ts
 
-import type { BucketItem } from 'minio'
 import { CopyConditions } from 'minio'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getToken } from 'next-auth/jwt'
@@ -10,6 +9,7 @@ import logger, { composeDebugMessage } from '@/server/logger'
 import s3Client, { config } from '@/server/s3client'
 
 import { saveUrlsToNode } from '../service/node-service'
+import { getMiniImageUrls, listObjects } from '../utils/copy-file.utils'
 import { withErrorHandler } from '../utils/with-error-handler'
 
 const { bucket } = config
@@ -160,42 +160,6 @@ const copyFiles = async (req: NextApiRequest, res: NextApiResponse) => {
       .status(500)
       .json({ error: 'Failed to copy files', details: errorMessage })
   }
-}
-
-/**
- * Helper function to list all objects under a given prefix in the bucket.
- *
- * @param bucket - The name of the bucket.
- * @param prefix - The prefix path to list objects from.
- * @returns A promise that resolves to an array of BucketItem objects.
- */
-const listObjects = (bucket: string, prefix: string): Promise<BucketItem[]> => {
-  return new Promise((resolve, reject) => {
-    const stream = s3Client.listObjectsV2(bucket, prefix, true)
-    const objects: BucketItem[] = []
-
-    stream.on('data', obj => objects.push(obj))
-    stream.on('error', reject)
-    stream.on('end', () => resolve(objects))
-  })
-}
-
-/**
- * Helper function to get mini image URLs for a given UID.
- *
- * @param uid - The UID of the system.
- * @returns A promise that resolves to an array of mini image URLs.
- */
-const getMiniImageUrls = async (uid: string): Promise<string[]> => {
-  const prefix = `/system/${uid}/image-small/`
-
-  // List all objects under the mini image directory.
-  const list = await listObjects(bucket, prefix)
-
-  // Construct URLs for each mini image.
-  const urls = list.map(obj => '/api/' + obj.name)
-
-  return urls
 }
 
 // Export the handler with error handling applied.
