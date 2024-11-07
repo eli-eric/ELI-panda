@@ -10,11 +10,11 @@ type Props = {
 
 export const StepIndicator: FC<Props> = ({ steps }) => {
   const { currentStep } = useWizardStore()
-  const currentIndex = steps.findIndex(step => step.id === currentStep)
+  const currentIndex = steps?.findIndex(step => step.id === currentStep)
 
   return (
     <div className="flex items-center w-full pb-4 border-b">
-      {steps.map((step, index) => {
+      {steps?.map((step, index) => {
         const isActive = index === currentIndex
         const isCompleted = index < currentIndex
 

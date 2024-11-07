@@ -8,22 +8,27 @@ import type { ModalButtons } from '@/types/form'
 
 import { useWizardStore } from '../../wizard/store/useWizardStore'
 import { useModalWizardStore } from '../store/useModalWizardStore'
+import { MOVE_TYPE } from '../types/constants'
 import { InitWizardButton } from './components/InitWizard.btn'
 
 const messages = message.systemItem.itemMove.buttons
 const commonButton = message.common.buttons
 
 export const InitWizardPath: FC = () => {
-  const { setOpen, setIsMovingToNewSystem, setSelectedSystem } =
+  const { setOpen, setSelectedSystem, setMoveType, setIsMovingToNewSystem } =
     useModalWizardStore()
+
   const { goNext, resetWizard } = useWizardStore()
 
   const goToDestinationSystem = () => {
     goNext()
+    setMoveType(MOVE_TYPE.DESTINATION_SYSTEM)
     setIsMovingToNewSystem(false)
   }
-  const goToSystemDetail = () => {
+
+  const goToParentSystem = () => {
     goNext()
+    setMoveType(MOVE_TYPE.NEW_SYSTEM)
     setIsMovingToNewSystem(true)
   }
 
@@ -50,7 +55,7 @@ export const InitWizardPath: FC = () => {
           create a new one.
         </p>
         <div className="flex space-x-10 items-center">
-          <InitWizardButton onClick={goToSystemDetail}>
+          <InitWizardButton onClick={goToParentSystem}>
             <FolderPlusIcon className="w-12 h-12 mx-auto text-gray-400 dark:text-gray-300" />
             <span className="mt-2 block text-sm font-semibold text-gray-900 dark:text-gray-200">
               <FormattedMessage id={messages.createNewSystem} />

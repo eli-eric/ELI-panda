@@ -15,3 +15,14 @@ export type SystemFileCopy = {
   sourceUid: string
   destinationUid: string
 }
+
+export type ItemExchangePost = {
+  condition: CodebookType | null
+  deleteSourceSystem: boolean
+  destinationSystemUid: string
+  itemUsage: CodebookType | null
+  location: CodebookType | null
+  parentSystemUid: string
+  sourceSystemUid: string
+  systemName: string
+}
