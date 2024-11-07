@@ -78,18 +78,18 @@ const copyFiles = async (req: NextApiRequest, res: NextApiResponse) => {
     // Copy each object to the destination directory concurrently.
     await Promise.all(
       objects.map(async obj => {
-        const sourceObjectName = obj.name
+        const sourceObjectName = '/' + obj.name
 
         // Ensure the sourceObjectName starts with sourcePrefix
         if (!sourceObjectName?.startsWith(sourcePrefix)) {
           logger.warn(
-            `Skipping object ${sourceObjectName} as it does not start with sourcePrefix`
+            `Skipping object ${sourceObjectName} as it does not start with sourcePrefix: ${sourcePrefix}`
           )
           return
         }
 
         // Get the relative path after the sourcePrefix
-        const relativePath = sourceObjectName.substring(sourcePrefix.length)
+        const relativePath = sourceObjectName?.substring(sourcePrefix.length)
 
         // Construct the destinationObjectName
         const destinationObjectName = path.posix.join(

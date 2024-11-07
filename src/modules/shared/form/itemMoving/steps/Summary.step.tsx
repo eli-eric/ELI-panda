@@ -60,14 +60,14 @@ export const SummaryStep: FC = () => {
       toast.error(`Error: ${e.response?.data}`)
     },
     onSuccess: r => {
-      //if (isMovingToNewSystem) {
-      // mutateFiles({
-      //  sourceUid: systemDetail?.uid || '',
-      // destinationUid: r.data
-      //})
-      //} else {
-      onSuccessfulMove(r.data)
-      // }
+      if (isMovingToNewSystem) {
+        mutateFiles({
+          sourceUid: systemDetail?.uid || '',
+          destinationUid: r.data
+        })
+      } else {
+        onSuccessfulMove(r.data)
+      }
     }
   })
 
