@@ -62,6 +62,7 @@ export const getEndpoints = ({
     recalculateSpareParts: '/systems/recalculate-spare-parts',
     systemsReload: '/systems/reload',
     physicalItemMove: `/physical-item/move`,
+    physicalItemReplace: `/physical-item/replace`,
     systemFilesCopy: `/api/system/images/copy`
   }
   return endpoints
