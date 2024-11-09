@@ -25,7 +25,7 @@ export const OldItemDestinationStep: FC = () => {
 
   const { setOldItemParentSystem, oldItemParentSystem } = useModalWizardStore()
 
-  const { goNext, goBack, setFormData } = useWizardStore()
+  const { goNext, goBack, updateFormData } = useWizardStore()
 
   const { systems } = useSystems(tableId)
 
@@ -37,7 +37,7 @@ export const OldItemDestinationStep: FC = () => {
       disabled: !oldItemParentSystem,
       onClick: () => {
         goNext()
-        setFormData({ parentSystemUid: oldItemParentSystem?.uid })
+        updateFormData({ parentSystemUid: oldItemParentSystem?.uid })
       }
     },
     goBack: {

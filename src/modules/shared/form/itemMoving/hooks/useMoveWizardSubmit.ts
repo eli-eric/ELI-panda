@@ -11,10 +11,16 @@ import { queryMutate } from '@/utils/fetcher'
 import { useWizardStore } from '../../wizard/store/useWizardStore'
 import { useModalWizardStore } from '../store/useModalWizardStore'
 import type { ItemMovePost, SystemFileCopy } from '../types'
+import { MOVE_TYPE } from '../types/constants'
 
 export const useMoveWizardSubmit = () => {
-  const { isMovingToNewSystem, setOpen, setSelectedSystem, moveType } =
-    useModalWizardStore()
+  const {
+    isMovingToNewSystem,
+    setOpen,
+    setSelectedSystem,
+    moveType,
+    oldItemParentSystem
+  } = useModalWizardStore()
 
   const { physicalItem, catalogueItem, systemDetail } = useSystemDetail()
   const { formData, goBack, resetWizard, updateFormData } = useWizardStore()
@@ -64,27 +70,62 @@ export const useMoveWizardSubmit = () => {
     }
   })
 
+  const { mutate: mutateReplace, isPending: isPendingReplace } = useMutation({
+    mutationKey: ['moveItem'],
+    mutationFn: queryMutate<string, ItemMovePost>(
+      'physicalItemReplace',
+      'post'
+    ),
+    onError: (e: AxiosError) => {
+      toast.error(`Error: ${e.response?.data}`)
+    },
+    onSuccess: r => {
+      if (isMovingToNewSystem) {
+        mutateFiles({
+          sourceUid: systemDetail?.uid || '',
+          destinationUid: r.data
+        })
+      } else {
+        onSuccessfulMove(r.data)
+      }
+    }
+  })
+
   const submitWizard = () => {
-    mutate({
-      condition: formData.conditionStatus,
-      deleteSourceSystem: formData.deleteSourceSystem || false,
-      destinationSystemUid: isMovingToNewSystem ? null : formData.system.uid,
-      sourceSystemUid: systemDetail?.uid || '',
-      parentSystemUid: isMovingToNewSystem ? formData.system.uid : null,
-      systemName: formData.name,
-      location: formData.location,
-      itemUsage: formData.itemUsage
-    })
+    if (moveType === MOVE_TYPE.EXCHANGE) {
+      return mutateReplace({
+        condition: formData.conditionStatus,
+        deleteSourceSystem: formData.deleteSourceSystem || false,
+        destinationSystemUid: formData.system.uid,
+        sourceSystemUid: systemDetail?.uid || '',
+        parentSystemUid: oldItemParentSystem?.uid || '',
+        systemName: formData.name,
+        location: formData.location,
+        itemUsage: formData.itemUsage
+      })
+    } else {
+      mutate({
+        condition: formData.conditionStatus,
+        deleteSourceSystem: formData.deleteSourceSystem || false,
+        destinationSystemUid: isMovingToNewSystem ? null : formData.system.uid,
+        sourceSystemUid: systemDetail?.uid || '',
+        parentSystemUid: isMovingToNewSystem ? formData.system.uid : null,
+        systemName: formData.name,
+        location: formData.location,
+        itemUsage: formData.itemUsage
+      })
+    }
   }
 
   return {
     submitWizard,
-    isPending: isPending || isPendingFiles,
+    isPending: isPending || isPendingFiles || isPendingReplace,
     goBack,
     physicalItem,
     catalogueItem,
     formData,
     updateFormData,
-    isMovingToNewSystem
+    isMovingToNewSystem,
+    oldItemParentSystem
   }
 }

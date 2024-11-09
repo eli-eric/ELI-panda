@@ -5,6 +5,7 @@ import Card from '@/components/layout/Card'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import { message } from '@/i18n/src/messages'
 import type { ModalButtons } from '@/types/form'
+import { classNames } from '@/utils'
 
 import { useMoveWizardSubmit } from '../hooks/useMoveWizardSubmit'
 import { SummaryListParam } from './components/SymmaryListParam.comp'
@@ -19,8 +20,11 @@ export const SummaryStep: FC = () => {
     physicalItem,
     catalogueItem,
     isMovingToNewSystem,
-    updateFormData
+    updateFormData,
+    oldItemParentSystem
   } = useMoveWizardSubmit()
+
+  console.log('SummaryStep', formData)
 
   const buttons: ModalButtons = {
     goNext: {
@@ -38,7 +42,11 @@ export const SummaryStep: FC = () => {
   return (
     <Fragment>
       <Card title="Summary">
-        <div className="grid grid-cols-2">
+        <div
+          className={classNames(
+            oldItemParentSystem ? 'grid grid-cols-3' : 'grid grid-cols-2'
+          )}
+        >
           <ul className="grid grid-cols-1">
             <h3 className="font-bold underline">
               {isMovingToNewSystem ? 'New System:' : 'Destination System:'}
@@ -84,6 +92,29 @@ export const SummaryStep: FC = () => {
               value={catalogueItem?.catalogueNumber || ''}
             />
           </ul>
+          {oldItemParentSystem && (
+            <ul className="grid grid-cols-1">
+              <h3 className="font-bold underline">Old Item Parent System:</h3>
+              <SummaryListParam
+                {...{
+                  name: 'System Name',
+                  value: oldItemParentSystem?.name
+                }}
+              />
+              <SummaryListParam
+                name="Code"
+                value={oldItemParentSystem?.systemCode}
+              />
+              <SummaryListParam
+                name="Zone"
+                value={oldItemParentSystem?.zone?.name}
+              />
+              <SummaryListParam
+                name="Location"
+                value={oldItemParentSystem?.location?.name}
+              />
+            </ul>
+          )}
         </div>
       </Card>
       <CheckBoxComponent
