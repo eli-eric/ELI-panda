@@ -9,7 +9,7 @@ const propertyMessage =
 
 type Props = {
   name: string
-  value: string
+  value?: string
 }
 export const SummaryListParam: FC<Props> = ({ name, value }) => {
   return (

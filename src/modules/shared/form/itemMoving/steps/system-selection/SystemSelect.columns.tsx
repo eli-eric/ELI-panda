@@ -8,9 +8,7 @@ import { useSystems } from '@/modules/systems/hooks/useSystems'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import type { SystemDetail } from '@/types/responses/systems'
 
-export const useDestinationColumns = () => {
-  const tableId = 'destination-systems'
-
+export const useDestinationColumns = (tableId: string) => {
   const { setUid } = useSubsystems(tableId)
 
   const { queryKey } = useSystems(tableId)

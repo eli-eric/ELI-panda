@@ -15,23 +15,17 @@ import { classNames } from '@/utils'
 import { FilterBadges } from '../../FilterBadges'
 import { useWizardStore } from '../../wizard/store/useWizardStore'
 import { useModalWizardStore } from '../store/useModalWizardStore'
-import { MOVE_TYPE } from '../types/constants'
 import { FilterButton } from './system-selection/filter/FilterButton'
 import { useDestinationColumns } from './system-selection/SystemSelect.columns'
 
 const messages = message.common.buttons
 
-export const SelectSystemContainer: FC = () => {
-  const tableId = 'destination-systems'
+export const OldItemDestinationStep: FC = () => {
+  const tableId = 'old-item-destination-systems'
 
-  const {
-    selectedSystem,
-    setSelectedSystem,
-    isMovingToNewSystem,
-    setMoveType
-  } = useModalWizardStore()
+  const { setOldItemParentSystem, oldItemParentSystem } = useModalWizardStore()
 
-  const { goNext, goBack, setFormData } = useWizardStore()
+  const { goNext, goBack, updateFormData } = useWizardStore()
 
   const { systems } = useSystems(tableId)
 
@@ -40,18 +34,17 @@ export const SelectSystemContainer: FC = () => {
   const buttons: ModalButtons = {
     goNext: {
       text: messages.next,
-      disabled: !selectedSystem,
+      disabled: !oldItemParentSystem,
       onClick: () => {
-        if (selectedSystem) {
-          setFormData({ system: selectedSystem })
-          goNext()
-        }
+        goNext()
+        updateFormData({ parentSystemUid: oldItemParentSystem?.uid })
       }
     },
     goBack: {
       text: messages.back,
       onClick: () => {
         goBack()
+        setOldItemParentSystem(null)
       }
     }
   }
@@ -65,19 +58,13 @@ export const SelectSystemContainer: FC = () => {
   const getRowProps = (row: Row<SystemDetail>) => ({
     onClick: () => {
       if (row.original.physicalItem) {
-        setSelectedSystem(row.original)
-        setMoveType(MOVE_TYPE.EXCHANGE)
+        return
       } else {
-        setSelectedSystem(row.original)
-        setMoveType(
-          isMovingToNewSystem
-            ? MOVE_TYPE.NEW_SYSTEM
-            : MOVE_TYPE.DESTINATION_SYSTEM
-        )
+        setOldItemParentSystem(row.original)
       }
     },
     className: classNames(
-      selectedSystem?.uid === row.original.uid
+      oldItemParentSystem?.uid === row.original.uid
         ? 'bg-primary-200 hover:bg-primary-200 dark:bg-primary-600 dark:hover:bg-primary-600'
         : '',
       'cursor-pointer'

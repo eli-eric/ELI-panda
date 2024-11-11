@@ -5,6 +5,7 @@ import { useFormContext, useWatch } from 'react-hook-form'
 import { LinkDecorator } from '@/components/decorators'
 import Card from '@/components/layout/Card'
 import { Heading } from '@/components/layout/Heading'
+import { ItemAssignButton } from '@/modules/shared/form/itemAssign/item-assign.button'
 import { ItemMoveButton } from '@/modules/shared/form/itemMoving/item-move.button'
 import { PATH } from '@/types/constants/paths'
 
@@ -20,7 +21,7 @@ export const SystemItemCard = () => {
         <Fragment>
           <Heading
             customText={
-              'ITEM: ' + item?.catalogueItem?.name ?? 'No item Connectect'
+              'ITEM: ' + (item?.catalogueItem?.name || 'No item Connectect')
             }
           >
             <div className="flex space-x-4 items-center">
@@ -32,7 +33,7 @@ export const SystemItemCard = () => {
                   <LinkDecorator>View Catalogue Item</LinkDecorator>
                 </Link>
               )}
-              <ItemMoveButton />
+              {item ? <ItemMoveButton /> : <ItemAssignButton />}
             </div>
           </Heading>
           {item && <PhysicalItemForm uid={item.uid} />}

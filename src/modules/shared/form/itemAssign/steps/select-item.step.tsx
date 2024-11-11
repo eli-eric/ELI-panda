@@ -13,25 +13,19 @@ import type { SystemDetail } from '@/types/responses/systems'
 import { classNames } from '@/utils'
 
 import { FilterBadges } from '../../FilterBadges'
+import { FilterButton } from '../../itemMoving/steps/system-selection/filter/FilterButton'
+import { useDestinationColumns } from '../../itemMoving/steps/system-selection/SystemSelect.columns'
+import { useModalWizardStore } from '../../itemMoving/store/useModalWizardStore'
 import { useWizardStore } from '../../wizard/store/useWizardStore'
-import { useModalWizardStore } from '../store/useModalWizardStore'
-import { MOVE_TYPE } from '../types/constants'
-import { FilterButton } from './system-selection/filter/FilterButton'
-import { useDestinationColumns } from './system-selection/SystemSelect.columns'
 
 const messages = message.common.buttons
 
-export const SelectSystemContainer: FC = () => {
-  const tableId = 'destination-systems'
+export const SelectItemStep: FC = () => {
+  const tableId = 'assign-item-systems'
 
-  const {
-    selectedSystem,
-    setSelectedSystem,
-    isMovingToNewSystem,
-    setMoveType
-  } = useModalWizardStore()
+  const { setSelectedSystem, selectedSystem } = useModalWizardStore()
 
-  const { goNext, goBack, setFormData } = useWizardStore()
+  const { goNext, goBack, updateFormData } = useWizardStore()
 
   const { systems } = useSystems(tableId)
 
@@ -42,16 +36,15 @@ export const SelectSystemContainer: FC = () => {
       text: messages.next,
       disabled: !selectedSystem,
       onClick: () => {
-        if (selectedSystem) {
-          setFormData({ system: selectedSystem })
-          goNext()
-        }
+        goNext()
+        updateFormData({ sourceSystemUid: selectedSystem?.uid })
       }
     },
     goBack: {
       text: messages.back,
       onClick: () => {
         goBack()
+        setSelectedSystem(null)
       }
     }
   }
@@ -66,14 +59,8 @@ export const SelectSystemContainer: FC = () => {
     onClick: () => {
       if (row.original.physicalItem) {
         setSelectedSystem(row.original)
-        setMoveType(MOVE_TYPE.EXCHANGE)
       } else {
-        setSelectedSystem(row.original)
-        setMoveType(
-          isMovingToNewSystem
-            ? MOVE_TYPE.NEW_SYSTEM
-            : MOVE_TYPE.DESTINATION_SYSTEM
-        )
+        return
       }
     },
     className: classNames(
