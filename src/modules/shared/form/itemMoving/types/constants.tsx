@@ -1,3 +1,5 @@
+import { ItemAssignSummaryStep } from '../../itemAssign/steps/item-assign-summary.step'
+import { SelectItemStep } from '../../itemAssign/steps/select-item.step'
 import type { Step } from '../../wizard/types/wizard'
 import { InitWizardPath } from '../steps/InitWizardPath.step'
 import { OldItemDestinationStep } from '../steps/OldItemDestination.step'
@@ -8,6 +10,7 @@ import { SelectSystemContainer } from '../steps/SystemSelect.step'
 export enum MOVE_TYPE {
   NEW_SYSTEM = 'new-system',
   DESTINATION_SYSTEM = 'destination-system',
+  ASSIGN = 'assign',
   EXCHANGE = 'exchange',
   DEFAULT = 'default'
 }
@@ -37,6 +40,10 @@ export const stepComponentsMap = {
     2: <SelectSystemContainer />,
     3: <SystemDetailStep />,
     4: <SummaryStep />
+  },
+  [MOVE_TYPE.ASSIGN]: {
+    1: <SelectItemStep />,
+    2: <ItemAssignSummaryStep />
   }
 }
 
@@ -67,4 +74,9 @@ export const exchangeSteps: Step[] = [
   { id: 3, name: 'System Detail' },
   { id: 4, name: 'Select Parent for old Item' },
   { id: 5, name: 'Summary' }
+]
+
+export const assignSteps: Step[] = [
+  { id: 1, name: 'Select Item to Assign' },
+  { id: 2, name: 'Summary' }
 ]

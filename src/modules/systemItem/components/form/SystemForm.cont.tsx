@@ -176,7 +176,7 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
             hasEditRole={hasEditRole}
           />
         </SystemMainForm>
-        {physicalItem && <SystemItemCard />}
+        <SystemItemCard />
       </FormCard>
       {children}
     </Form>

@@ -19,7 +19,8 @@ export const useMoveWizardSubmit = () => {
     setOpen,
     setSelectedSystem,
     moveType,
-    oldItemParentSystem
+    oldItemParentSystem,
+    selectedSystem
   } = useModalWizardStore()
 
   const { physicalItem, catalogueItem, systemDetail } = useSystemDetail()
@@ -33,7 +34,11 @@ export const useMoveWizardSubmit = () => {
     resetWizard()
     setSelectedSystem(null)
     invalidate()
-    router.push(PATH.SYSTEM + '/' + uid)
+    if (moveType === MOVE_TYPE.ASSIGN) {
+      router.reload()
+    } else {
+      router.push(PATH.SYSTEM + '/' + uid)
+    }
   }
 
   const { mutate: mutateFiles, isPending: isPendingFiles } = useMutation({
@@ -103,6 +108,17 @@ export const useMoveWizardSubmit = () => {
         location: formData.location,
         itemUsage: formData.itemUsage
       })
+    } else if (moveType === MOVE_TYPE.ASSIGN) {
+      return mutate({
+        condition: selectedSystem?.physicalItem?.conditionStatus || null,
+        deleteSourceSystem: formData.deleteSourceSystem || false,
+        destinationSystemUid: systemDetail?.uid || '',
+        sourceSystemUid: selectedSystem?.uid || '',
+        parentSystemUid: null,
+        systemName: selectedSystem?.name || '',
+        location: selectedSystem?.location || null,
+        itemUsage: selectedSystem?.physicalItem?.itemUsage || null
+      })
     } else {
       mutate({
         condition: formData.conditionStatus,
@@ -126,6 +142,7 @@ export const useMoveWizardSubmit = () => {
     formData,
     updateFormData,
     isMovingToNewSystem,
-    oldItemParentSystem
+    oldItemParentSystem,
+    selectedSystem
   }
 }

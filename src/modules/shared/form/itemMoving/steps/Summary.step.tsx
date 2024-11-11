@@ -24,8 +24,6 @@ export const SummaryStep: FC = () => {
     oldItemParentSystem
   } = useMoveWizardSubmit()
 
-  console.log('SummaryStep', formData)
-
   const buttons: ModalButtons = {
     goNext: {
       text: btnMessages.continue,
