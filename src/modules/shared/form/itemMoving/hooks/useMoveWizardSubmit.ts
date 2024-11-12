@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
-import { useSystems } from '@/modules/systems/hooks/useSystems'
+import { useSystemsReload } from '@/modules/systemItem/hooks/useSystemsReload'
 import { PATH } from '@/types/constants/paths'
 import type { CodebookType } from '@/types/responses/codebook'
 import { queryMutate } from '@/utils/fetcher'
@@ -27,15 +27,24 @@ export const useMoveWizardSubmit = () => {
   const { physicalItem, catalogueItem, systemDetail } = useSystemDetail()
   const { formData, goBack, resetWizard, updateFormData } = useWizardStore()
   const router = useRouter()
-  const { invalidate } = useSystems('destination-systems')
+
+  const [systemsReload] = useSystemsReload({ tableId: 'systems' })
+  const [destinationSystemsReload] = useSystemsReload({
+    tableId: 'destination-systems'
+  })
+  const [assignSystemsReload] = useSystemsReload({
+    tableId: 'assign-item-systems'
+  })
 
   const onSuccessfulMove = (uid: string) => {
     toast.success('Item moved successfully')
     setOpen(false)
     resetWizard()
     setSelectedSystem(null)
-    invalidate()
+    systemsReload()
+    destinationSystemsReload()
     if (moveType === MOVE_TYPE.ASSIGN) {
+      assignSystemsReload()
       router.reload()
     } else {
       router.push(PATH.SYSTEM + '/' + uid)
