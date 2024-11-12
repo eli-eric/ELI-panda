@@ -15,6 +15,7 @@ export const ItemAssignContainer: FC = () => {
 
   useEffect(() => {
     setMoveType(MOVE_TYPE.ASSIGN)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

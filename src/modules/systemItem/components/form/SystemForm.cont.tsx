@@ -104,7 +104,6 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
   }, [parentSystem])
 
   const systemLevel = formMethods.watch('systemLevel')
-  const physicalItem = formMethods.watch('physicalItem')
   const onSubmit = (data: SystemDetailFormType) => {
     // extract from data hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -176,7 +175,7 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
             hasEditRole={hasEditRole}
           />
         </SystemMainForm>
-        <SystemItemCard />
+        {uid && <SystemItemCard />}
       </FormCard>
       {children}
     </Form>
