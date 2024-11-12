@@ -18,7 +18,7 @@ export const useSystemsReload = ({ tableId = 'systems', onSuccess }: Props) => {
 
   const queryClient = useQueryClient()
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: queryMutate<SystemDetail[], PruneSystemDetail[]>(
       'systemsReload',
       'post'
@@ -49,8 +49,10 @@ export const useSystemsReload = ({ tableId = 'systems', onSuccess }: Props) => {
     if (systems) {
       const body = systems?.data.map(pruneSystemDetail)
       mutate(body)
+    } else {
+      onSuccess?.()
     }
   }
 
-  return [reload]
+  return [reload, isPending] as const
 }

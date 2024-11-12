@@ -19,7 +19,8 @@ export const useSubsystems = (tableId: string) => {
   const { isLoading: pending, data: response } = useQuery({
     queryKey: queryKeySubsystems,
     queryFn: queryFetcher<SystemDetail[]>('systemSubsystems'),
-    enabled: !!uid
+    enabled: !!uid,
+    staleTime: 0
   })
 
   useEffect(() => {
