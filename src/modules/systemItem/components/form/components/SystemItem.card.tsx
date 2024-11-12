@@ -20,9 +20,7 @@ export const SystemItemCard = () => {
       <Card className="bg-amber-100 dark:bg-amber-600 rounded-md  shadow-md">
         <Fragment>
           <Heading
-            customText={
-              'ITEM: ' + (item?.catalogueItem?.name || 'No item Connectect')
-            }
+            customText={'ITEM: ' + (item?.catalogueItem?.name || 'No item')}
           >
             <div className="flex space-x-4 items-center">
               {item?.catalogueItem?.uid && (
