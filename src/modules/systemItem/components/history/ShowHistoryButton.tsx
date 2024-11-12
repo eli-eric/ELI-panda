@@ -9,22 +9,10 @@ import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
 import { queryFetcher } from '@/utils/fetcher'
 
+import type { HistoryResponse } from '../../types/responses'
 import { HistoryFeeds } from './HistoryFeeds'
 
 const messages = message.common.buttons
-
-export type History = {
-  uid: string
-  changedAt: string
-  changedBy: string
-  historyType: 'GENERAL' | 'ITEM' | 'MOVE'
-  action: string
-  detail: {
-    systemUid: string
-    systemName: string
-    direction: 'IN' | 'OUT'
-  }
-}
 
 export const ShowHistoryButton = () => {
   const [open, setOpen] = useState(false)
@@ -33,7 +21,7 @@ export const ShowHistoryButton = () => {
 
   const { data, error, isError } = useQuery({
     queryKey: ['history', { uid }],
-    queryFn: queryFetcher<History[]>('history'),
+    queryFn: queryFetcher<HistoryResponse[]>('history'),
     enabled: open
   })
 

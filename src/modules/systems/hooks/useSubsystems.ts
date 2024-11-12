@@ -8,7 +8,7 @@ import { queryFetcher } from '@/utils/fetcher'
 import { addSubsystems } from '../utils'
 import { useSystems } from './useSystems'
 
-export const useSubsystems = tableId => {
+export const useSubsystems = (tableId: string) => {
   const [uid, setUid] = useState<string | null>(null)
   const { queryKey } = useSystems(tableId)
 
@@ -19,7 +19,8 @@ export const useSubsystems = tableId => {
   const { isLoading: pending, data: response } = useQuery({
     queryKey: queryKeySubsystems,
     queryFn: queryFetcher<SystemDetail[]>('systemSubsystems'),
-    enabled: !!uid
+    enabled: !!uid,
+    staleTime: 0
   })
 
   useEffect(() => {

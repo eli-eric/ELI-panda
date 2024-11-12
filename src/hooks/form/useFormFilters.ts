@@ -210,7 +210,6 @@ export const useFormFilterState = ({
           if (shouldRemove && index !== -1) {
             filters.splice(index, 1)
           }
-
           return filters
         })
       },

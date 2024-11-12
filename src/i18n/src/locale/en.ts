@@ -2,6 +2,9 @@ export const messages = {
   common: {
     buttons: {
       close: 'Close',
+      next: 'Next',
+      back: 'Back',
+      finish: 'Finish',
       saveAndExit: 'Save and Exit',
       continue: 'Continue',
       cancel: 'Cancel',
@@ -422,7 +425,15 @@ export const messages = {
     }
   },
   orderItem: { head: 'ELI Panda - Order Item' },
-  systemItem: { head: 'ELI Panda - System Item' },
+  systemItem: {
+    head: 'ELI Panda - System Item',
+    itemMove: {
+      buttons: {
+        destionationSystem: 'Select Destination System for Item',
+        createNewSystem: 'Create New System for Item'
+      }
+    }
+  },
   systemTypeEdit: { head: 'ELI Panda - System Type Edit' },
   profilePage: {
     head: 'ELI Panda - Profile',

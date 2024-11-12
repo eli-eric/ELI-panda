@@ -2,14 +2,12 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { composeDebugMessage } from 'src/server/logger'
 
 import logger from '../logger'
-import {
-  downloadFile,
-  getPathInfo,
-  listFiles,
-  removeFile,
-  updateFile,
-  uploadFile
-} from './methods'
+import downloadFile from './api/download-file'
+import listFiles from './api/list-files'
+import removeFile from './api/remove-file'
+import updateFile from './api/update-file'
+import uploadFile from './api/upload-file'
+import { getPathInfo } from './utils/path-utils'
 
 const handler = (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -19,8 +17,8 @@ const handler = (req: NextApiRequest, res: NextApiResponse) => {
     }
     switch (req.method) {
       case 'GET':
-        const { id } = getPathInfo(req, res)
-        return id ? downloadFile(req, res) : listFiles(req, res)
+        const pathInfo = getPathInfo(req)
+        return pathInfo?.id ? downloadFile(req, res) : listFiles(req, res)
       case 'POST':
         return uploadFile(req, res)
       case 'DELETE':

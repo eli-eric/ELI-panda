@@ -12,6 +12,7 @@ export type Button = {
   type?: 'button' | 'submit' | 'reset' | undefined
   onClick?: () => void
   testid?: string
+  hidden?: boolean
 }
 
 export interface FieldProps {
