@@ -7,6 +7,10 @@ import { Pagination } from '@/modules/shared/table/Pagination'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
+import {
+  getColorBySystemLevel,
+  getFontBySystemLevel
+} from '@/modules/systemItem/utils'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import type { ModalButtons } from '@/types/form'
 import type { SystemDetail } from '@/types/responses/systems'
@@ -64,6 +68,13 @@ export const SelectItemStep: FC = () => {
       }
     },
     className: classNames(
+      getColorBySystemLevel(row.original?.systemLevel),
+      getFontBySystemLevel(row.original?.systemLevel),
+      row.original?.physicalItem &&
+        'font-bold text-gray-700 dark:text-gray-200',
+      row.original?.statistics?.sp_coverage != null &&
+        row.original.statistics.sp_coverage < 1 &&
+        'text-red-500 dark:text-red-500 font-bold',
       selectedSystem?.uid === row.original.uid
         ? 'bg-primary-200 hover:bg-primary-200 dark:bg-primary-600 dark:hover:bg-primary-600'
         : '',
