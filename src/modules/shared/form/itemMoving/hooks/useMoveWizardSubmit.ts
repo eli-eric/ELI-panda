@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 import toast from 'react-hot-toast'
 
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
@@ -28,27 +29,42 @@ export const useMoveWizardSubmit = () => {
   const { formData, goBack, resetWizard, updateFormData } = useWizardStore()
   const router = useRouter()
 
-  const [systemsReload] = useSystemsReload({ tableId: 'systems' })
-  const [destinationSystemsReload] = useSystemsReload({
-    tableId: 'destination-systems'
-  })
-  const [assignSystemsReload] = useSystemsReload({
-    tableId: 'assign-item-systems'
-  })
+  const [redirectUid, setRedirectUid] = useState<string | null>(null)
 
-  const onSuccessfulMove = (uid: string) => {
+  const onSuccessRedirect = () => {
     toast.success('Item moved successfully')
     setOpen(false)
     resetWizard()
     setSelectedSystem(null)
-    systemsReload()
-    destinationSystemsReload()
     if (moveType === MOVE_TYPE.ASSIGN) {
-      assignSystemsReload()
       router.reload()
     } else {
-      router.push(PATH.SYSTEM + '/' + uid)
+      router.push(PATH.SYSTEM + '/' + redirectUid)
     }
+  }
+
+  const [systemsReload, isLoadingSystems] = useSystemsReload({
+    tableId: 'systems',
+    onSuccess: () => {
+      onSuccessRedirect()
+    }
+  })
+  const [destinationSystemsReload, isLoadingDestination] = useSystemsReload({
+    tableId: 'destination-systems',
+    onSuccess: () => {
+      systemsReload()
+    }
+  })
+  const [assignSystemsReload, isLoadingAssign] = useSystemsReload({
+    tableId: 'assign-item-systems',
+    onSuccess: () => {
+      destinationSystemsReload()
+    }
+  })
+
+  const onSuccessfulMove = (uid: string) => {
+    setRedirectUid(uid)
+    assignSystemsReload()
   }
 
   const { mutate: mutateFiles, isPending: isPendingFiles } = useMutation({
@@ -145,7 +161,13 @@ export const useMoveWizardSubmit = () => {
 
   return {
     submitWizard,
-    isPending: isPending || isPendingFiles || isPendingReplace,
+    isPending:
+      isPending ||
+      isPendingFiles ||
+      isPendingReplace ||
+      isLoadingSystems ||
+      isLoadingDestination ||
+      isLoadingAssign,
     goBack,
     physicalItem,
     catalogueItem,
