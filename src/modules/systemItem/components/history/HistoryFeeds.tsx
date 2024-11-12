@@ -18,7 +18,7 @@ export const HistoryFeeds: FC<Props> = ({ history }) => {
   }
 
   return (
-    <ul role="list" className="space-y-6">
+    <ul role="list" className="space-y-6 max-h-96 overflow-y-auto">
       {history.map((historyItem, index) => (
         <HistoryFeedItem
           key={historyItem.uid}
@@ -37,7 +37,7 @@ interface HistoryFeedItemProps {
 
 const HistoryFeedItem: FC<HistoryFeedItemProps> = ({ historyItem, isLast }) => {
   return (
-    <li className="relative flex gap-x-4">
+    <li className="relative flex gap-x-4 pr-2">
       <div
         className={classNames(
           isLast ? 'h-6' : '-bottom-6',
@@ -117,7 +117,7 @@ function renderHistoryMessage(historyItem: HistoryResponse) {
       if (detail.direction === 'IN') {
         return (
           <>
-            moved item to{' '}
+            moved item from{' '}
             <Link
               href={`${PATH.SYSTEM}/${detail.systemUid}`}
               target="_blank"
@@ -130,7 +130,7 @@ function renderHistoryMessage(historyItem: HistoryResponse) {
       } else {
         return (
           <>
-            moved item from{' '}
+            moved item to{' '}
             <Link
               href={`${PATH.SYSTEM}/${detail.systemUid}`}
               target="_blank"
