@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { PATH } from '@/types/constants/paths'
+import type { CodebookType } from '@/types/responses/codebook'
 import { queryMutate } from '@/utils/fetcher'
 
 import { useWizardStore } from '../../wizard/store/useWizardStore'
@@ -115,8 +116,8 @@ export const useMoveWizardSubmit = () => {
         destinationSystemUid: systemDetail?.uid || '',
         sourceSystemUid: selectedSystem?.uid || '',
         parentSystemUid: null,
-        systemName: selectedSystem?.name || '',
-        location: selectedSystem?.location || null,
+        systemName: systemDetail?.name || '',
+        location: (systemDetail?.location as CodebookType) || null,
         itemUsage: selectedSystem?.physicalItem?.itemUsage || null
       })
     } else {
