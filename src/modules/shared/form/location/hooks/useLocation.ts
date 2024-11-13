@@ -1,4 +1,5 @@
 import { useSession } from 'next-auth/react'
+import { useMemo } from 'react'
 
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import useTableStateStore from '@/store/useTableStateStore'
@@ -65,15 +66,30 @@ export const useLocation = () => {
     },
     enabled: !!session?.user?.facilityCode
   })
-  return { locations: data?.locations, loading: isLoading, error }
+  const locations = useMemo(() => {
+    return data?.locations?.sort((a, b) => {
+      return (a.code ?? '').localeCompare(b.code ?? '')
+    })
+  }, [data])
+
+  return { locations, loading: isLoading, error }
 }
+
 export const useSubLocations = (uid?: string) => {
   const { data, isLoading, error } = useGraphQL(GET_SUBLOCATIONS, {
     variables: { where: { uid } },
     enabled: !!uid
   })
+
+  // sort the sublocations by code, code can be udnerfined
+  const subLocations = useMemo(() => {
+    return data?.locations[0].subLocations.sort((a, b) => {
+      return (a.code ?? '').localeCompare(b.code ?? '')
+    })
+  }, [data])
+
   return {
-    subLocations: data?.locations[0].subLocations,
+    subLocations,
     loading: isLoading,
     error
   }
