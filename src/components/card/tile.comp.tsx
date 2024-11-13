@@ -1,8 +1,9 @@
 import Link from 'next/link'
 import { type FC, type PropsWithChildren } from 'react'
 
-import usePermission from '@/hooks/usePermission'
 import type { ROLE } from '@/types/constants/roles'
+
+import { AccessControl } from '../auth/AccesControl'
 
 interface CardProps {
   name: string
@@ -13,21 +14,38 @@ interface CardProps {
 }
 
 export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
-  const hasRole = usePermission([role ?? ''])
-
-  if (!hasRole && role) return null
-
   return (
-    <div data-testid={`tile-${name}`}>
-      {link ? (
-        <Link
-          href={link}
-          legacyBehavior={legacyBehavior}
-          target={legacyBehavior ? '_blank' : undefined}
-        >
+    <AccessControl roles={role}>
+      <div data-testid={`tile-${name}`}>
+        {link ? (
+          <Link
+            href={link}
+            legacyBehavior={legacyBehavior}
+            target={legacyBehavior ? '_blank' : undefined}
+          >
+            <li
+              key={name}
+              className="col-span-1 flex flex-col rounded-lg bg-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-200 dark:shadow-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
+            >
+              <div className="flex flex-1 flex-col p-8">
+                <Icon />
+                <h2 className="mt-6 text-xl font-medium text-gray-900 dark:text-gray-200">
+                  {name}
+                </h2>
+                <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
+              </div>
+              <div>
+                <div className="-mt-px flex ">
+                  <div className="flex w-0 flex-1"></div>
+                  <div className="-ml-px flex w-0 flex-1"></div>
+                </div>
+              </div>
+            </li>
+          </Link>
+        ) : (
           <li
             key={name}
-            className="col-span-1 flex flex-col rounded-lg bg-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-200 dark:shadow-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
+            className="col-span-1 flex flex-col rounded-lg bg-white dark:bg-gray-800 dark:text-gray-200 text-center shadow cursor-pointer hover:bg-gray-50 transition"
           >
             <div className="flex flex-1 flex-col p-8">
               <Icon />
@@ -43,28 +61,9 @@ export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
               </div>
             </div>
           </li>
-        </Link>
-      ) : (
-        <li
-          key={name}
-          className="col-span-1 flex flex-col rounded-lg bg-white dark:bg-gray-800 dark:text-gray-200 text-center shadow cursor-pointer hover:bg-gray-50 transition"
-        >
-          <div className="flex flex-1 flex-col p-8">
-            <Icon />
-            <h2 className="mt-6 text-xl font-medium text-gray-900 dark:text-gray-200">
-              {name}
-            </h2>
-            <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
-          </div>
-          <div>
-            <div className="-mt-px flex ">
-              <div className="flex w-0 flex-1"></div>
-              <div className="-ml-px flex w-0 flex-1"></div>
-            </div>
-          </div>
-        </li>
-      )}
-    </div>
+        )}
+      </div>
+    </AccessControl>
   )
 }
 
