@@ -1,27 +1,25 @@
 import { memo, useEffect, useMemo, useState } from 'react'
+import toast from 'react-hot-toast'
 
 import { Button } from '@/components/Buttons'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import useQueryManager from '@/hooks/useQueryManager'
-import useWarningModal from '@/hooks/useWarningModal'
 import type { SystemDetail } from '@/types/responses/systems'
 import { classNames } from '@/utils'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
 import { Pagination } from '../shared/table/Pagination'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
-import { useRowSelection } from '../shared/table/pandaTable/hooks/useRowSelection'
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '../shared/table/SearchBar'
-import { useRecalculate } from '../systemItem/hooks/useRecalculate'
+import { useSystemsReload } from '../systemItem/hooks/useSystemsReload'
 import {
   getColorBySystemLevel,
   getFontBySystemLevel
 } from '../systemItem/utils'
 import { SystemFilterButtonContainer } from '../systems/components/filters/SystemsFilterButton.cont'
 import { useSystems } from '../systems/hooks/useSystems'
-import { useSparesStore } from '../systemsSpareParts/store/useSparesStore'
+import { useMoveSubmit } from './hooks/useMoveSubmit'
 import { useMoveSystemsColumns } from './move-systems.columns'
 
 const FilterMemoized = memo(SystemFilterButtonContainer)
@@ -35,14 +33,6 @@ export const SystemsMultiMoveContainer = () => {
 
   const [table1SelectedUids, setTable1SelectedUids] = useState<string[]>([])
   const [table2SelectedUids, setTable2SelectedUids] = useState<string[]>([])
-
-  const { selectedUidForSystem, setSelectedUidForSystem } = useSparesStore()
-
-  const {
-    query: { search }
-  } = useQueryManager(tableId2)
-
-  const [, setRowSelection] = useRowSelection(tableId2)
 
   const columns1 = useMoveSystemsColumns({
     tableId: tableId1,
@@ -125,32 +115,36 @@ export const SystemsMultiMoveContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const { getSelectedRowModel } = table
-  const { getSelectedRowModel: getSelectedRowModel2 } = table2
-
-  const withWarningModal = useWarningModal(
-    'Are you sure you want to continue? The system types do not match.'
-  )
-
-  const submit = () => {
-    console.log('submit')
+  const onSucess = () => {
+    toast.success('Systems moved successfully')
   }
 
-  const [recalculate1] = useRecalculate({ tableId: tableId1 })
-  const [recalculate2] = useRecalculate({ tableId: tableId2 })
+  const [reloadSystems1] = useSystemsReload({
+    tableId: tableId1,
+    onSuccess: onSucess
+  })
+  const [reloadSystems2] = useSystemsReload({
+    tableId: tableId2,
+    onSuccess: reloadSystems1
+  })
 
-  useEffect(() => {
-    if (selectedUidForSystem && selectedUidForSystem === search) {
-      setTable2SelectedUids([selectedUidForSystem])
-      setRowSelection({ 0: true })
-    } else {
-      setTable2SelectedUids([])
-      setRowSelection({})
-      setSelectedUidForSystem(undefined)
-    }
-    return () => setSelectedUidForSystem(undefined)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const { mutate } = useMoveSubmit()
+
+  const onSuccess = () => {
+    reloadSystems2()
+  }
+
+  const submit = () => {
+    mutate(
+      {
+        systemsToMoveUids: table2SelectedUids,
+        targetParentSystemUid: table1SelectedUids[0]
+      },
+      {
+        onSuccess
+      }
+    )
+  }
 
   return (
     <div className={classNames('grid grid-cols-2')}>
@@ -164,7 +158,7 @@ export const SystemsMultiMoveContainer = () => {
           left={<FilterMemoized tableId={tableId1} enableQueryURL={false} />}
           right={<FilterBadges enableQueryURL={false} tableId={tableId1} />}
           onChange={() => table.resetExpanded()}
-        />
+        />{' '}
         <PandaTableV2
           data={sysetms1.systems?.data}
           tableHeading="Destination System"
