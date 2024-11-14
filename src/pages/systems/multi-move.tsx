@@ -3,8 +3,11 @@ import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { Fragment } from 'react'
 
-const SystemsMovingContainer = dynamic(
-  () => import('@/modules/systemsMoving/SystemsMoving.cont'),
+const SystemsMultiMove = dynamic(
+  () =>
+    import('@/modules/systems-multi-move/systems-multi-move.cont').then(
+      mod => mod.SystemsMultiMoveContainer
+    ),
   {
     ssr: false
   }
@@ -16,7 +19,7 @@ const SystemsMovingPage: NextPage = () => {
       <Head>
         <title>Systems Moving</title>
       </Head>
-      <div>MULTI MOVE SYSTEMS</div>
+      <SystemsMultiMove />
     </Fragment>
   )
 }
