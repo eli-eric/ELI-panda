@@ -116,11 +116,22 @@ export const SystemsMultiMoveContainer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const resetSelection = () => {
+    // reset selected rows
+    setSelectedRows1([])
+    setSelectedRows2([])
+    setTable1SelectedUids([])
+    setTable2SelectedUids([])
+    table2.resetRowSelection()
+    table.resetRowSelection()
+  }
+
   const { mutate } = useMoveSubmit({
     destinationTableId: tableId1,
     movingTableId: tableId2,
     destinationSystemUid: table1SelectedUids[0],
-    movingSystems: selectedRows2
+    movingSystems: selectedRows2,
+    resetSelection
   })
 
   const submit = () => {
@@ -166,7 +177,7 @@ export const SystemsMultiMoveContainer = () => {
         />
         <PandaTableV2
           data={sysetms2.systems?.data}
-          tableHeading="Moving Systems"
+          tableHeading="Systems to Move"
           tableId={tableId2}
           table={table2}
           loading={sysetms2.loading || columns2.pending}
@@ -205,7 +216,7 @@ export const SystemsMultiMoveContainer = () => {
         />{' '}
         <PandaTableV2
           data={sysetms1.systems?.data}
-          tableHeading="Destination System"
+          tableHeading="Target Parent System"
           tableId={tableId1}
           table={table}
           loading={sysetms1.loading || columns1.pending}

@@ -13,6 +13,7 @@ interface Props {
   movingSystems: SystemDetail[]
   destinationTableId: string
   movingTableId: string
+  resetSelection: () => void
 }
 
 // recursion to find correct uid in subSystems and update it
@@ -71,7 +72,8 @@ export const useMoveSubmit = ({
   destinationSystemUid,
   movingSystems,
   destinationTableId,
-  movingTableId
+  movingTableId,
+  resetSelection
 }: Props) => {
   const { query: destinationTableQuery } = useQueryManager(destinationTableId)
   const { query: movingTableQuery } = useQueryManager(movingTableId)
@@ -103,6 +105,7 @@ export const useMoveSubmit = ({
             }
           : prev
     )
+    resetSelection()
     toast.success('Systems moved successfully')
   }
 
