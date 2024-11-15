@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 import useQueryManager from '@/hooks/useQueryManager'
 import type { SystemDetail, SystemsResponse } from '@/types/responses/systems'
@@ -45,6 +46,27 @@ const updateDestinationRows = (
   return newRows
 }
 
+const removeMovingRows = (
+  originalData: SystemDetail[],
+  movingSystems: SystemDetail[]
+): SystemDetail[] => {
+  const newRows = originalData
+    .map(row => {
+      if (movingSystems.find(moving => moving.uid === row.uid)) {
+        return undefined
+      } else if (row.subSystems) {
+        return {
+          ...row,
+          subSystems: removeMovingRows(row.subSystems, movingSystems)
+        }
+      } else {
+        return row
+      }
+    })
+    .filter(Boolean) as SystemDetail[]
+  return newRows
+}
+
 export const useMoveSubmit = ({
   destinationSystemUid,
   movingSystems,
@@ -71,6 +93,17 @@ export const useMoveSubmit = ({
             }
           : prev
     )
+    queryClient.setQueryData<SystemsResponse, QueryFetcherKey>(
+      [movingTableId, { query: movingTableQuery }],
+      prev =>
+        prev
+          ? {
+              ...prev,
+              data: removeMovingRows(prev.data, movingSystems)
+            }
+          : prev
+    )
+    toast.success('Systems moved successfully')
   }
 
   return useMutation({
