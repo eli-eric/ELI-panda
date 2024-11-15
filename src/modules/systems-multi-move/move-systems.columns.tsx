@@ -19,13 +19,13 @@ import type { ITEM_USAGE } from '../systems/types/constants'
 interface SystemsColumnsProps {
   tableId: string
   setSelectedUids: Dispatch<SetStateAction<string[]>>
-  isDestination: boolean
+  setSelectedRows: Dispatch<SetStateAction<SystemDetail[]>>
 }
 
 interface IndeterminateCheckboxProps extends HTMLProps<HTMLInputElement> {
   setSelectedUids: Dispatch<SetStateAction<string[]>>
   row: Row<SystemDetail>
-  isDestination: boolean
+  setSelectedRows: Dispatch<SetStateAction<SystemDetail[]>>
 }
 
 function IndeterminateCheckbox({
@@ -33,17 +33,27 @@ function IndeterminateCheckbox({
   setSelectedUids,
   checked,
   row,
-  isDestination,
+  setSelectedRows,
   ...rest
 }: IndeterminateCheckboxProps) {
   const onChange = () => {
     row.toggleSelected(undefined, { selectChildren: false })
+
     setSelectedUids(prev => {
       const index = prev.indexOf(row.original.uid)
       if (index > -1) {
         return [...prev.slice(0, index), ...prev.slice(index + 1)]
       } else {
         return [...prev, row.original.uid]
+      }
+    })
+
+    setSelectedRows(prev => {
+      const index = prev.findIndex(r => r.uid === row.original.uid)
+      if (index > -1) {
+        return [...prev.slice(0, index), ...prev.slice(index + 1)]
+      } else {
+        return [...prev, row.original]
       }
     })
   }
@@ -68,7 +78,7 @@ function IndeterminateCheckbox({
 export const useMoveSystemsColumns = ({
   tableId,
   setSelectedUids,
-  isDestination
+  setSelectedRows
 }: SystemsColumnsProps) => {
   const { setUid, pending } = useSubsystems(tableId)
   const columns = useMemo(
@@ -94,7 +104,7 @@ export const useMoveSystemsColumns = ({
         cell: ({ row }) => (
           <IndeterminateCheckbox
             row={row}
-            isDestination={isDestination}
+            setSelectedRows={setSelectedRows}
             checked={row.getIsSelected()}
             disabled={!row.getCanSelect()}
             setSelectedUids={setSelectedUids}
@@ -279,7 +289,7 @@ export const useMoveSystemsColumns = ({
         size: 150
       }
     ],
-    [setUid, tableId, setSelectedUids]
+    [setUid, tableId, setSelectedUids, setSelectedRows]
   )
 
   return { columns, pending }
