@@ -32,7 +32,7 @@ export const SystemsMultiMoveContainer = () => {
   const [table1SelectedUids, setTable1SelectedUids] = useState<string[]>([])
   const [table2SelectedUids, setTable2SelectedUids] = useState<string[]>([])
 
-  const [selectedRows1, setSelectedRows1] = useState<SystemDetail[]>([])
+  const [, setSelectedRows1] = useState<SystemDetail[]>([])
   const [selectedRows2, setSelectedRows2] = useState<SystemDetail[]>([])
 
   const columns1 = useMoveSystemsColumns({
@@ -63,15 +63,12 @@ export const SystemsMultiMoveContainer = () => {
     const isSelectedParent = system.parentPath?.some(path =>
       table2SelectedUids.includes(path?.uid)
     )
-
     if (isSelectedSameDestination) {
       return false
     }
-
     if (isSelectedParent) {
       return false
     }
-
     return true
   }
 
@@ -213,7 +210,7 @@ export const SystemsMultiMoveContainer = () => {
           left={<FilterMemoized tableId={tableId1} enableQueryURL={false} />}
           right={<FilterBadges enableQueryURL={false} tableId={tableId1} />}
           onChange={() => table.resetExpanded()}
-        />{' '}
+        />
         <PandaTableV2
           data={sysetms1.systems?.data}
           tableHeading="Target Parent System"

@@ -26,6 +26,7 @@ const updateDestinationRows = (
     if (row.uid === destinationSystemUid) {
       return {
         ...row,
+        hasSubSystems: true,
         subSystems: row.subSystems
           ? [...row.subSystems, ...movingSystems]
           : undefined
@@ -87,11 +88,7 @@ export const useMoveSubmit = ({
         prev
           ? {
               ...prev,
-              data: updateDestinationRows(
-                prev.data,
-                movingSystems,
-                destinationSystemUid
-              )
+              data: removeMovingRows(prev.data, movingSystems)
             }
           : prev
     )
@@ -105,6 +102,36 @@ export const useMoveSubmit = ({
             }
           : prev
     )
+    queryClient.setQueryData<SystemsResponse, QueryFetcherKey>(
+      [destinationTableId, { query: destinationTableQuery }],
+      prev =>
+        prev
+          ? {
+              ...prev,
+              data: updateDestinationRows(
+                prev.data,
+                movingSystems,
+                destinationSystemUid
+              )
+            }
+          : prev
+    )
+
+    queryClient.setQueryData<SystemsResponse, QueryFetcherKey>(
+      [movingTableId, { query: movingTableQuery }],
+      prev =>
+        prev
+          ? {
+              ...prev,
+              data: updateDestinationRows(
+                prev.data,
+                movingSystems,
+                destinationSystemUid
+              )
+            }
+          : prev
+    )
+
     resetSelection()
     toast.success('Systems moved successfully')
   }

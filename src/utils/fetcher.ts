@@ -8,7 +8,7 @@ import { BASE_URL } from '@/types/constants/common'
 import type { EndpointProps } from './getEndpoints'
 import { getEndpoints } from './getEndpoints'
 
-export const uniFetcher = async url =>
+export const uniFetcher = async (url: string) =>
   await axios.get(url).then(res => res.data)
 
 export type QueryFetcherKey = [string, EndpointProps] | [string]
