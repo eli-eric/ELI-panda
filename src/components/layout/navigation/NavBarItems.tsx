@@ -5,11 +5,10 @@ import { usePathname } from 'next/navigation'
 import type { ElementType } from 'react'
 import { type FC, Fragment, type PropsWithChildren } from 'react'
 
+import { AccessControl } from '@/components/auth/AccesControl'
 import { Tooltip } from '@/components/Tooltip'
-import usePermission from '@/hooks/usePermission'
 import type { NavigationType } from '@/types/constants/paths'
 import { SUPPORT } from '@/types/constants/paths'
-import type { ROLE } from '@/types/constants/roles'
 
 export const NavBarTitle: FC<
   PropsWithChildren<{
@@ -70,7 +69,6 @@ const NavBarItem: FC<PropsWithChildren<NavBarItemProps>> = ({
 interface NavBarLinkProps extends NavBarItemProps {
   href?: string
   className?: string
-  role: ROLE
   setOpen?: (open: boolean) => void
 }
 export const NavBarLink: FC<NavBarLinkProps> = ({
@@ -80,11 +78,8 @@ export const NavBarLink: FC<NavBarLinkProps> = ({
   isExpanded,
   Icon,
   isActive,
-  text,
-  role
+  text
 }) => {
-  const permission = usePermission([role])
-  if (!permission) return null
   return (
     <Link
       href={href}
@@ -190,7 +185,6 @@ interface NavBarMultiLinkProps {
   isExpanded: boolean
   toggleItemExpansion: (itemName: string) => void
   expandedItems: Record<string, boolean>
-  role: ROLE
   setOpen?: (open: boolean) => void
 }
 
@@ -199,13 +193,9 @@ export const NavBarMultiLink: FC<NavBarMultiLinkProps> = ({
   item,
   isExpanded,
   expandedItems,
-  role,
   setOpen
 }) => {
   const pathName = usePathname()
-  const permission = usePermission([role])
-  if (!permission) return null
-
   return (
     <div key={item.name} className="flex flex-col ">
       <NavBarButton
@@ -222,16 +212,16 @@ export const NavBarMultiLink: FC<NavBarMultiLinkProps> = ({
       {expandedItems[item.name] && (
         <Fragment>
           {item.links?.map(subItem => (
-            <NavBarLink
-              className="text-xs pl-10"
-              setOpen={setOpen}
-              role={subItem.role}
-              key={subItem.name}
-              href={subItem.path}
-              isExpanded={isExpanded}
-              text={subItem.name}
-              isActive={pathName.startsWith(subItem.path)}
-            />
+            <AccessControl roles={subItem.role} key={subItem.name}>
+              <NavBarLink
+                className="text-xs pl-10"
+                setOpen={setOpen}
+                href={subItem.path}
+                isExpanded={isExpanded}
+                text={subItem.name}
+                isActive={pathName.startsWith(subItem.path)}
+              />
+            </AccessControl>
           ))}
         </Fragment>
       )}

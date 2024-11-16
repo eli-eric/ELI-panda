@@ -91,7 +91,6 @@ export const SystemDetailStep: FC = () => {
   })
 
   const submit = (data: SystemDetailForm) => {
-    console.log(data)
     updateFormData({ ...data })
     goNext()
   }
