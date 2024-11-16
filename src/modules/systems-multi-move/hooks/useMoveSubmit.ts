@@ -81,6 +81,11 @@ export const useMoveSubmit = ({
 
   const queryClient = useQueryClient()
 
+  const queryKeySubsystems: QueryFetcherKey = [
+    'subsystems',
+    { uid: destinationSystemUid }
+  ]
+
   const onSuccess = () => {
     queryClient.setQueryData<SystemsResponse, QueryFetcherKey>(
       [destinationTableId, { query: destinationTableQuery }],
@@ -132,6 +137,7 @@ export const useMoveSubmit = ({
           : prev
     )
 
+    queryClient.invalidateQueries({ queryKey: queryKeySubsystems })
     resetSelection()
     toast.success('Systems moved successfully')
   }
