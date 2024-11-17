@@ -6,13 +6,12 @@ import type { SystemDetail, SystemsResponse } from '@/types/responses/systems'
 import type { QueryFetcherKey } from '@/utils/fetcher'
 import { queryMutate } from '@/utils/fetcher'
 
+import { useSystemsMoveStore } from '../store/useSystemsMoveStore'
 import type { MoveSystemsBody } from '../types/responses'
 
 interface Props {
   destinationSystemUid: string
   movingSystems: SystemDetail[]
-  destinationTableId: string
-  movingTableId: string
   resetSelection: () => void
 }
 
@@ -72,12 +71,15 @@ const removeMovingRows = (
 export const useMoveSubmit = ({
   destinationSystemUid,
   movingSystems,
-  destinationTableId,
-  movingTableId,
+
   resetSelection
 }: Props) => {
-  const { query: destinationTableQuery } = useQueryManager(destinationTableId)
-  const { query: movingTableQuery } = useQueryManager(movingTableId)
+  const { destinationSystemsTableId, movingSystemsTableId } =
+    useSystemsMoveStore()
+  const { query: destinationTableQuery } = useQueryManager(
+    destinationSystemsTableId
+  )
+  const { query: movingTableQuery } = useQueryManager(movingSystemsTableId)
 
   const queryClient = useQueryClient()
 
@@ -88,7 +90,7 @@ export const useMoveSubmit = ({
 
   const onSuccess = () => {
     queryClient.setQueryData<SystemsResponse, QueryFetcherKey>(
-      [destinationTableId, { query: destinationTableQuery }],
+      [destinationSystemsTableId, { query: destinationTableQuery }],
       prev =>
         prev
           ? {
@@ -98,7 +100,7 @@ export const useMoveSubmit = ({
           : prev
     )
     queryClient.setQueryData<SystemsResponse, QueryFetcherKey>(
-      [movingTableId, { query: movingTableQuery }],
+      [movingSystemsTableId, { query: movingTableQuery }],
       prev =>
         prev
           ? {
@@ -108,7 +110,7 @@ export const useMoveSubmit = ({
           : prev
     )
     queryClient.setQueryData<SystemsResponse, QueryFetcherKey>(
-      [destinationTableId, { query: destinationTableQuery }],
+      [destinationSystemsTableId, { query: destinationTableQuery }],
       prev =>
         prev
           ? {
@@ -123,7 +125,7 @@ export const useMoveSubmit = ({
     )
 
     queryClient.setQueryData<SystemsResponse, QueryFetcherKey>(
-      [movingTableId, { query: movingTableQuery }],
+      [movingSystemsTableId, { query: movingTableQuery }],
       prev =>
         prev
           ? {

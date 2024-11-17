@@ -13,6 +13,7 @@ import { IconCell } from '../systems/components/table/cells/IconCell'
 import { SystemNameCell } from '../systems/components/table/cells/SystemNameCell'
 import { useSubsystems } from '../systems/hooks/useSubsystems'
 import type { ITEM_USAGE } from '../systems/types/constants'
+import { SubmitMoveButton } from './components/submit-move.button'
 import { useSystemsMoveStore } from './store/useSystemsMoveStore'
 
 // eslint-disable-next-line
@@ -113,12 +114,17 @@ export const useMoveSystemsColumns = ({ tableId }: SystemsColumnsProps) => {
         size: 440,
         enableHiding: false,
         cell: props => (
-          <SystemNameCell
-            {...props}
-            hideButtons={true}
-            setUid={setUid}
-            tableId={tableId}
-          />
+          <div className="flex justify-between w-full">
+            <SystemNameCell
+              {...props}
+              hideButtons={true}
+              setUid={setUid}
+              tableId={tableId}
+            />
+            {props.row.getIsSelected() && tableId === 'destination-systems' && (
+              <SubmitMoveButton />
+            )}
+          </div>
         )
       },
       {

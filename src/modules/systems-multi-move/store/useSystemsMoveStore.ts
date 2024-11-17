@@ -4,6 +4,8 @@ import type { SystemDetail } from '@/types/responses/systems'
 
 interface SystemsMoveStore {
   movingSystems: SystemDetail[]
+  destinationSystemsTableId: string
+  movingSystemsTableId: string
   addMovingSystem: (system: SystemDetail) => void
   removeMovingSystem: (uid: string) => void
   destinationSystem: SystemDetail | null
@@ -14,6 +16,8 @@ interface SystemsMoveStore {
 
 export const useSystemsMoveStore = create<SystemsMoveStore>(set => ({
   movingSystems: [],
+  destinationSystemsTableId: 'destination-systems',
+  movingSystemsTableId: 'moving-systems',
   destinationSystem: null,
   addMovingSystem: system =>
     set(state => ({ movingSystems: [...state.movingSystems, system] })),

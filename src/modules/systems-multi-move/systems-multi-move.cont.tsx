@@ -1,53 +1,16 @@
-import { memo, useEffect, useMemo } from 'react'
-
-import { Button } from '@/components/Buttons'
-import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import type { SystemDetail } from '@/types/responses/systems'
 import { classNames } from '@/utils'
 
-import { FilterBadges } from '../shared/form/FilterBadges'
-import { Pagination } from '../shared/table/Pagination'
-import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
-import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
-import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
-import { SearchBar } from '../shared/table/SearchBar'
-import {
-  getColorBySystemLevel,
-  getFontBySystemLevel
-} from '../systemItem/utils'
-import { SystemFilterButtonContainer } from '../systems/components/filters/SystemsFilterButton.cont'
-import { useSystems } from '../systems/hooks/useSystems'
-import { useMoveSubmit } from './hooks/useMoveSubmit'
-import { useMoveSystemsColumns } from './move-systems.columns'
+import { MovingSystemsTable } from './components/moving-systems.table'
 import { useSystemsMoveStore } from './store/useSystemsMoveStore'
 
-const FilterMemoized = memo(SystemFilterButtonContainer)
-
 export const SystemsMultiMoveContainer = () => {
-  const tableId1 = 'destination-systems'
-  const tableId2 = 'moving-systems'
-
-  const sysetms1 = useSystems(tableId1)
-  const sysetms2 = useSystems(tableId2)
-
-  const { reset, movingSystems, destinationSystem } = useSystemsMoveStore()
-
-  const columns1 = useMoveSystemsColumns({
-    tableId: tableId1
-  })
-  const columns2 = useMoveSystemsColumns({
-    tableId: tableId2
-  })
-
-  const tableSettings: PandaTableSettings<SystemDetail> = useMemo(
-    () => ({
-      enableMultiRowSelection: true,
-      enableColumnHiding: true,
-      enableColumnReordering: false,
-      enableQueryURL: false
-    }),
-    []
-  )
+  const {
+    movingSystems,
+    destinationSystem,
+    destinationSystemsTableId,
+    movingSystemsTableId
+  } = useSystemsMoveStore()
 
   const canSelectMovingSystem = (system: SystemDetail) => {
     const isSelectedSameDestination = destinationSystem?.uid === system.uid
@@ -69,6 +32,9 @@ export const SystemsMultiMoveContainer = () => {
     const isSelectedSameMoving = movingSystems.some(
       movingSystem => movingSystem.uid === system.uid
     )
+    if (movingSystems.length === 0) {
+      return false
+    }
     if (isSelectedSameMoving) {
       return false
     }
@@ -76,157 +42,18 @@ export const SystemsMultiMoveContainer = () => {
     return destinationSystem ? destinationSystem?.uid === system.uid : true
   }
 
-  const table = usePandaTable<SystemDetail>({
-    tableId: tableId1,
-    data: sysetms1.systems?.data,
-    columns: columns1.columns,
-    settings: {
-      enableRowSelection: row => canSelectDestinationSystem(row.original),
-      ...tableSettings
-    },
-    getSubRows: row => row.subSystems || []
-  })
-
-  const table2 = usePandaTable<SystemDetail>({
-    tableId: tableId2,
-    data: sysetms2.systems?.data,
-    columns: columns2.columns,
-    settings: {
-      enableRowSelection: row => canSelectMovingSystem(row.original),
-      ...tableSettings
-    },
-    getSubRows: row => row.subSystems || []
-  })
-
-  useEffect(() => {
-    table.setColumnOrder(['icon', 'select'])
-    table2.setColumnOrder(['icon', 'select'])
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const resetSelection = () => {
-    // reset selected rows
-    reset()
-    table2.resetRowSelection()
-    table.resetRowSelection()
-  }
-
-  const { mutate } = useMoveSubmit({
-    destinationTableId: tableId1,
-    movingTableId: tableId2,
-    destinationSystemUid: destinationSystem?.uid as string,
-    movingSystems: movingSystems,
-    resetSelection
-  })
-
-  const submit = () => {
-    mutate({
-      systemsToMoveUids: movingSystems.map(system => system.uid),
-      targetParentSystemUid: destinationSystem?.uid as string
-    })
-  }
-
   return (
     <div className={classNames('grid grid-cols-2')}>
-      <TableLayoutContainer
-        deps={[sysetms2.systems]}
-        className="border-r-4 border-gray-400"
-      >
-        <SearchBar
-          tableId={tableId2}
-          useQuery={false}
-          left={
-            <FilterMemoized
-              panelSlide="right"
-              tableId={tableId2}
-              enableQueryURL={false}
-            />
-          }
-          right={
-            <div className="flex">
-              <FilterBadges enableQueryURL={false} tableId={tableId2} />
-              <Button
-                primary
-                disabled={!destinationSystem || movingSystems.length === 0}
-                loading={false}
-                onClick={submit}
-              >
-                Move Systems
-              </Button>
-            </div>
-          }
-          onChange={() => table.resetExpanded()}
-        />
-        <PandaTableV2
-          data={sysetms2.systems?.data}
-          tableHeading="Systems to Move"
-          tableId={tableId2}
-          table={table2}
-          loading={sysetms2.loading || columns2.pending}
-          className={'relative overflow-scroll scrollbar-style'}
-          settings={tableSettings}
-          getRowProps={({ original }) => ({
-            className: classNames(
-              original?.physicalItem &&
-                'font-bold text-gray-700 dark:text-gray-200',
-              getColorBySystemLevel(original?.systemLevel),
-              getFontBySystemLevel(original?.systemLevel),
-              original?.physicalItem &&
-                'font-bold text-gray-700 dark:text-gray-200',
-              original?.statistics?.sp_coverage != null &&
-                original.statistics.sp_coverage < 1 &&
-                'text-red-500 dark:text-red-500 font-bold'
-            )
-          })}
-        />
-        <Pagination
-          tableId={tableId2}
-          settings={{
-            enableQueryURL: false,
-            pageSizeDefault: 50,
-            total: sysetms2.systems?.totalCount
-          }}
-        />
-      </TableLayoutContainer>
-      <TableLayoutContainer deps={[sysetms1.systems]}>
-        <SearchBar
-          tableId={tableId1}
-          useQuery={false}
-          left={<FilterMemoized tableId={tableId1} enableQueryURL={false} />}
-          right={<FilterBadges enableQueryURL={false} tableId={tableId1} />}
-          onChange={() => table.resetExpanded()}
-        />
-        <PandaTableV2
-          data={sysetms1.systems?.data}
-          tableHeading="Target Parent System"
-          tableId={tableId1}
-          table={table}
-          loading={sysetms1.loading || columns1.pending}
-          className={'relative overflow-scroll scrollbar-style'}
-          settings={tableSettings}
-          getRowProps={({ original }) => ({
-            className: classNames(
-              original?.physicalItem &&
-                'font-bold text-gray-700 dark:text-gray-200',
-              getColorBySystemLevel(original?.systemLevel),
-              getFontBySystemLevel(original?.systemLevel),
-              original?.physicalItem &&
-                'font-bold text-gray-700 dark:text-gray-200',
-              original?.statistics?.sp_coverage != null &&
-                original.statistics.sp_coverage < 1 &&
-                'text-red-500 dark:text-red-500 font-bold'
-            )
-          })}
-        />
-        <Pagination
-          tableId={tableId1}
-          settings={{
-            enableQueryURL: false,
-            pageSizeDefault: 50,
-            total: sysetms1.systems?.totalCount
-          }}
-        />
-      </TableLayoutContainer>
+      <MovingSystemsTable
+        tableId={movingSystemsTableId}
+        canSelectRow={canSelectMovingSystem}
+        tableHeading="Systems to Move"
+      />
+      <MovingSystemsTable
+        tableId={destinationSystemsTableId}
+        canSelectRow={canSelectDestinationSystem}
+        tableHeading="Destination System"
+      />
     </div>
   )
 }
