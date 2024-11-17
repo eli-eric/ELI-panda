@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useState } from 'react'
+import { memo, useEffect, useMemo } from 'react'
 
 import { Button } from '@/components/Buttons'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
@@ -19,31 +19,24 @@ import { SystemFilterButtonContainer } from '../systems/components/filters/Syste
 import { useSystems } from '../systems/hooks/useSystems'
 import { useMoveSubmit } from './hooks/useMoveSubmit'
 import { useMoveSystemsColumns } from './move-systems.columns'
+import { useSystemsMoveStore } from './store/useSystemsMoveStore'
 
 const FilterMemoized = memo(SystemFilterButtonContainer)
 
 export const SystemsMultiMoveContainer = () => {
   const tableId1 = 'destination-systems'
-  const tableId2 = 'source-systems'
+  const tableId2 = 'moving-systems'
 
   const sysetms1 = useSystems(tableId1)
   const sysetms2 = useSystems(tableId2)
 
-  const [table1SelectedUids, setTable1SelectedUids] = useState<string[]>([])
-  const [table2SelectedUids, setTable2SelectedUids] = useState<string[]>([])
-
-  const [, setSelectedRows1] = useState<SystemDetail[]>([])
-  const [selectedRows2, setSelectedRows2] = useState<SystemDetail[]>([])
+  const { reset, movingSystems, destinationSystem } = useSystemsMoveStore()
 
   const columns1 = useMoveSystemsColumns({
-    tableId: tableId1,
-    setSelectedUids: setTable1SelectedUids,
-    setSelectedRows: setSelectedRows1
+    tableId: tableId1
   })
   const columns2 = useMoveSystemsColumns({
-    tableId: tableId2,
-    setSelectedUids: setTable2SelectedUids,
-    setSelectedRows: setSelectedRows2
+    tableId: tableId2
   })
 
   const tableSettings: PandaTableSettings<SystemDetail> = useMemo(
@@ -57,12 +50,12 @@ export const SystemsMultiMoveContainer = () => {
   )
 
   const canSelectMovingSystem = (system: SystemDetail) => {
-    const isSelectedSameDestination = table1SelectedUids.some(
-      uid => system.uid === uid
+    const isSelectedSameDestination = destinationSystem?.uid === system.uid
+
+    const isSelectedParent = system.parentPath?.some(
+      path => destinationSystem?.uid === path.uid
     )
-    const isSelectedParent = system.parentPath?.some(path =>
-      table2SelectedUids.includes(path?.uid)
-    )
+
     if (isSelectedSameDestination) {
       return false
     }
@@ -73,16 +66,14 @@ export const SystemsMultiMoveContainer = () => {
   }
 
   const canSelectDestinationSystem = (system: SystemDetail) => {
-    const isSelectedSameMoving = table2SelectedUids.some(
-      uid => system.uid === uid
+    const isSelectedSameMoving = movingSystems.some(
+      movingSystem => movingSystem.uid === system.uid
     )
     if (isSelectedSameMoving) {
       return false
     }
 
-    return table1SelectedUids.length
-      ? table1SelectedUids.includes(system.uid)
-      : true
+    return destinationSystem ? destinationSystem?.uid === system.uid : true
   }
 
   const table = usePandaTable<SystemDetail>({
@@ -115,10 +106,7 @@ export const SystemsMultiMoveContainer = () => {
 
   const resetSelection = () => {
     // reset selected rows
-    setSelectedRows1([])
-    setSelectedRows2([])
-    setTable1SelectedUids([])
-    setTable2SelectedUids([])
+    reset()
     table2.resetRowSelection()
     table.resetRowSelection()
   }
@@ -126,15 +114,15 @@ export const SystemsMultiMoveContainer = () => {
   const { mutate } = useMoveSubmit({
     destinationTableId: tableId1,
     movingTableId: tableId2,
-    destinationSystemUid: table1SelectedUids[0],
-    movingSystems: selectedRows2,
+    destinationSystemUid: destinationSystem?.uid as string,
+    movingSystems: movingSystems,
     resetSelection
   })
 
   const submit = () => {
     mutate({
-      systemsToMoveUids: table2SelectedUids,
-      targetParentSystemUid: table1SelectedUids[0]
+      systemsToMoveUids: movingSystems.map(system => system.uid),
+      targetParentSystemUid: destinationSystem?.uid as string
     })
   }
 
@@ -159,10 +147,7 @@ export const SystemsMultiMoveContainer = () => {
               <FilterBadges enableQueryURL={false} tableId={tableId2} />
               <Button
                 primary
-                disabled={
-                  table1SelectedUids.length === 0 ||
-                  table2SelectedUids.length === 0
-                }
+                disabled={!destinationSystem || movingSystems.length === 0}
                 loading={false}
                 onClick={submit}
               >

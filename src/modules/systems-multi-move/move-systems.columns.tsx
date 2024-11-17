@@ -1,6 +1,6 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef, Row } from '@tanstack/react-table'
-import type { Dispatch, HTMLProps, SetStateAction } from 'react'
+import type { ChangeEvent, HTMLProps } from 'react'
 import { Fragment, useMemo } from 'react'
 
 import { NewTabLink } from '@/components/decorators'
@@ -13,49 +13,49 @@ import { IconCell } from '../systems/components/table/cells/IconCell'
 import { SystemNameCell } from '../systems/components/table/cells/SystemNameCell'
 import { useSubsystems } from '../systems/hooks/useSubsystems'
 import type { ITEM_USAGE } from '../systems/types/constants'
+import { useSystemsMoveStore } from './store/useSystemsMoveStore'
 
 // eslint-disable-next-line
 
 interface SystemsColumnsProps {
   tableId: string
-  setSelectedUids: Dispatch<SetStateAction<string[]>>
-  setSelectedRows: Dispatch<SetStateAction<SystemDetail[]>>
 }
 
 interface IndeterminateCheckboxProps extends HTMLProps<HTMLInputElement> {
-  setSelectedUids: Dispatch<SetStateAction<string[]>>
   row: Row<SystemDetail>
-  setSelectedRows: Dispatch<SetStateAction<SystemDetail[]>>
+  tableId: string
 }
 
 function IndeterminateCheckbox({
   className,
-  setSelectedUids,
   checked,
   row,
-  setSelectedRows,
+  tableId,
   ...rest
 }: IndeterminateCheckboxProps) {
-  const onChange = () => {
+  const {
+    removeDestinationSystem,
+    removeMovingSystem,
+    setDestinationSystem,
+    addMovingSystem
+  } = useSystemsMoveStore()
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     row.toggleSelected(undefined, { selectChildren: false })
-
-    setSelectedUids(prev => {
-      const index = prev.indexOf(row.original.uid)
-      if (index > -1) {
-        return [...prev.slice(0, index), ...prev.slice(index + 1)]
+    const { checked } = e.target
+    if (checked) {
+      if (tableId === 'destination-systems') {
+        setDestinationSystem(row.original)
       } else {
-        return [...prev, row.original.uid]
+        addMovingSystem(row.original)
       }
-    })
-
-    setSelectedRows(prev => {
-      const index = prev.findIndex(r => r.uid === row.original.uid)
-      if (index > -1) {
-        return [...prev.slice(0, index), ...prev.slice(index + 1)]
+    } else {
+      if (tableId === 'destination-systems') {
+        removeDestinationSystem()
       } else {
-        return [...prev, row.original]
+        removeMovingSystem(row.original.uid)
       }
-    })
+    }
   }
 
   return (
@@ -75,11 +75,7 @@ function IndeterminateCheckbox({
   )
 }
 
-export const useMoveSystemsColumns = ({
-  tableId,
-  setSelectedUids,
-  setSelectedRows
-}: SystemsColumnsProps) => {
+export const useMoveSystemsColumns = ({ tableId }: SystemsColumnsProps) => {
   const { setUid, pending } = useSubsystems(tableId)
   const columns = useMemo(
     (): ColumnDef<SystemDetail, any>[] => [
@@ -104,10 +100,9 @@ export const useMoveSystemsColumns = ({
         cell: ({ row }) => (
           <IndeterminateCheckbox
             row={row}
-            setSelectedRows={setSelectedRows}
             checked={row.getIsSelected()}
             disabled={!row.getCanSelect()}
-            setSelectedUids={setSelectedUids}
+            tableId={tableId}
           />
         )
       },
@@ -125,11 +120,6 @@ export const useMoveSystemsColumns = ({
             tableId={tableId}
           />
         )
-      },
-      {
-        header: 'System Level',
-        accessorFn: row => row.systemLevel,
-        id: 'systemLevel'
       },
       {
         header: 'System Code',
@@ -289,7 +279,7 @@ export const useMoveSystemsColumns = ({
         size: 150
       }
     ],
-    [setUid, tableId, setSelectedUids, setSelectedRows]
+    [setUid, tableId]
   )
 
   return { columns, pending }
