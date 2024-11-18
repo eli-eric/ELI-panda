@@ -1,4 +1,5 @@
 import { Button } from '@/components/Buttons'
+import { Tooltip } from '@/components/Tooltip'
 import { useRowSelection } from '@/modules/shared/table/pandaTable/hooks/useRowSelection'
 
 import { useMoveSubmit } from '../hooks/useMoveSubmit'
@@ -36,6 +37,17 @@ export const SubmitMoveButton = () => {
       systemsToMoveUids: movingSystems.map(system => system.uid),
       targetParentSystemUid: destinationSystem?.uid as string
     })
+  }
+  if (movingSystems.length === 0 || !destinationSystem) {
+    return (
+      <Tooltip content="Please select the systems you want to move before proceeding.">
+        <div>
+          <Button primary loading={false} disabled>
+            Move Systems here
+          </Button>
+        </div>
+      </Tooltip>
+    )
   }
   return (
     <Button primary loading={false} onClick={submit}>

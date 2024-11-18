@@ -141,11 +141,16 @@ export const useMoveSubmit = ({
 
     queryClient.invalidateQueries({ queryKey: queryKeySubsystems })
     resetSelection()
-    toast.success('Systems moved successfully')
+    toast.success('Systems moved successfully', { duration: 3000 })
   }
 
   return useMutation({
     mutationFn: queryMutate<string, MoveSystemsBody>('systemsMove', 'post'),
-    onSuccess
+    onSuccess,
+    onError: () => {
+      toast.error('Something went wrong. Systems didnt move.', {
+        duration: 3000
+      })
+    }
   })
 }

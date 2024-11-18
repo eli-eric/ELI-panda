@@ -15,14 +15,11 @@ export const SystemsMultiMoveContainer = () => {
   const canSelectMovingSystem = (system: SystemDetail) => {
     const isSelectedSameDestination = destinationSystem?.uid === system.uid
 
-    const isSelectedParent = system.parentPath?.some(
-      path => destinationSystem?.uid === path.uid
+    const isSelectedParent = system.parentPath?.some(path =>
+      movingSystems.some(moving => moving.uid === path.uid)
     )
 
-    if (isSelectedSameDestination) {
-      return false
-    }
-    if (isSelectedParent) {
+    if (isSelectedSameDestination || isSelectedParent) {
       return false
     }
     return true
@@ -32,10 +29,16 @@ export const SystemsMultiMoveContainer = () => {
     const isSelectedSameMoving = movingSystems.some(
       movingSystem => movingSystem.uid === system.uid
     )
-    if (movingSystems.length === 0) {
-      return false
-    }
-    if (isSelectedSameMoving) {
+
+    const isSelectedParent = system.parentPath?.some(path =>
+      movingSystems.some(moving => moving.uid === path.uid)
+    )
+
+    if (
+      movingSystems.length === 0 ||
+      isSelectedSameMoving ||
+      isSelectedParent
+    ) {
       return false
     }
 
@@ -52,7 +55,7 @@ export const SystemsMultiMoveContainer = () => {
       <MovingSystemsTable
         tableId={destinationSystemsTableId}
         canSelectRow={canSelectDestinationSystem}
-        tableHeading="Destination System"
+        tableHeading="Target parent system"
       />
     </div>
   )
