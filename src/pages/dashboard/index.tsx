@@ -1,4 +1,5 @@
 import {
+  BookOpenIcon,
   CreditCardIcon,
   LifebuoyIcon,
   PhotoIcon,
@@ -83,7 +84,16 @@ const tiles = [
     link: PATH.LAYOUT,
     Icon: () => (
       <PhotoIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
-    )
+    ),
+    role: ROLE.BASICS
+  },
+  {
+    name: 'Publications',
+    link: PATH.PUBLICATIONS,
+    Icon: () => (
+      <BookOpenIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+    ),
+    role: ROLE.BASICS
   }
 ]
 
