@@ -45,6 +45,25 @@ export const SystemsMultiMoveContainer = () => {
     return destinationSystem ? destinationSystem?.uid === system.uid : true
   }
 
+  function SelectAllCheckbox({ row, tableId }) {
+    const onChange = e => {}
+
+    return (
+      <input
+        type="checkbox"
+        className={classNames(
+          'cursor-pointer',
+          'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',
+          !checked && 'dark:bg-gray-700',
+          rest.disabled && 'bg-gray-300 dark:bg-gray-500'
+        )}
+        onChange={onChange}
+        checked={checked}
+        {...rest}
+      />
+    )
+  }
+
   return (
     <div className={classNames('grid grid-cols-2')}>
       <MovingSystemsTable

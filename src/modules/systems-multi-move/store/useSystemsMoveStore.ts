@@ -6,11 +6,13 @@ interface SystemsMoveStore {
   movingSystems: SystemDetail[]
   destinationSystemsTableId: string
   movingSystemsTableId: string
+  setMovingSystems: (systems: SystemDetail[]) => void
   addMovingSystem: (system: SystemDetail) => void
   removeMovingSystem: (uid: string) => void
   destinationSystem: SystemDetail | null
   setDestinationSystem: (system: SystemDetail) => void
   removeDestinationSystem: () => void
+  resetMovingSystems: () => void
   reset: () => void
 }
 
@@ -19,6 +21,7 @@ export const useSystemsMoveStore = create<SystemsMoveStore>(set => ({
   destinationSystemsTableId: 'destination-systems',
   movingSystemsTableId: 'moving-systems',
   destinationSystem: null,
+  setMovingSystems: systems => set({ movingSystems: systems }),
   addMovingSystem: system =>
     set(state => ({ movingSystems: [...state.movingSystems, system] })),
   removeMovingSystem: uid =>
@@ -27,5 +30,6 @@ export const useSystemsMoveStore = create<SystemsMoveStore>(set => ({
     })),
   setDestinationSystem: system => set({ destinationSystem: system }),
   removeDestinationSystem: () => set({ destinationSystem: null }),
-  reset: () => set({ movingSystems: [], destinationSystem: null })
+  reset: () => set({ movingSystems: [], destinationSystem: null }),
+  resetMovingSystems: () => set({ movingSystems: [] })
 }))
