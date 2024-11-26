@@ -25,8 +25,8 @@ export function SelectAllCheckbox({
       .rows.map(row => (row.id.includes('.') ? row.id.split('.')[0] : row.id))
       .filter((value, index, self) => self.indexOf(value) === index)
 
-    table.setRowSelection(prev => {
-      const newSelection = { ...prev }
+    table.setRowSelection(() => {
+      const newSelection = {}
       // Select all top-level rows
       topLevelRowIds.forEach(id => {
         newSelection[id] = true
