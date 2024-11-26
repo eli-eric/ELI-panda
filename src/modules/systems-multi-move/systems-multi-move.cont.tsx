@@ -14,8 +14,6 @@ export const SystemsMultiMoveContainer = () => {
     movingSystemsTableId
   } = useSystemsMoveStore()
 
-  console.log('render movingSystems', movingSystems)
-
   const canSelectMovingSystem = useCallback(
     (system: SystemDetail) => {
       const isSelectedSameDestination = destinationSystem?.uid === system.uid
