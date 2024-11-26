@@ -100,7 +100,7 @@ export const useMoveSystemsColumns = ({ tableId }: SystemsColumnsProps) => {
           if (tableId === movingSystemsTableId) {
             return (
               <div className="pl-1">
-                <SelectAllCheckbox table={table} tableId={tableId} />
+                <SelectAllCheckbox table={table} />
               </div>
             )
           }
@@ -297,7 +297,7 @@ export const useMoveSystemsColumns = ({ tableId }: SystemsColumnsProps) => {
         size: 150
       }
     ],
-    [setUid, tableId]
+    [setUid, tableId, movingSystemsTableId]
   )
 
   return { columns, pending }

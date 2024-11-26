@@ -8,12 +8,10 @@ import { classNames } from '@/utils'
 import { useSystemsMoveStore } from '../store/useSystemsMoveStore'
 
 interface IndeterminateCheckboxProps extends HTMLProps<HTMLInputElement> {
-  tableId: string
   table: Table<SystemDetail>
 }
 
 export function SelectAllCheckbox({
-  tableId,
   table,
   ...rest
 }: IndeterminateCheckboxProps) {
