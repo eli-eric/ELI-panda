@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import type { SystemDetail } from '@/types/responses/systems'
 import { classNames } from '@/utils'
 
@@ -12,38 +14,46 @@ export const SystemsMultiMoveContainer = () => {
     movingSystemsTableId
   } = useSystemsMoveStore()
 
-  const canSelectMovingSystem = (system: SystemDetail) => {
-    const isSelectedSameDestination = destinationSystem?.uid === system.uid
+  console.log('render movingSystems', movingSystems)
 
-    const isSelectedParent = system.parentPath?.some(path =>
-      movingSystems.some(moving => moving.uid === path.uid)
-    )
+  const canSelectMovingSystem = useCallback(
+    (system: SystemDetail) => {
+      const isSelectedSameDestination = destinationSystem?.uid === system.uid
 
-    if (isSelectedSameDestination || isSelectedParent) {
-      return false
-    }
-    return true
-  }
+      const isSelectedParent = system.parentPath?.some(path =>
+        movingSystems.some(moving => moving.uid === path.uid)
+      )
 
-  const canSelectDestinationSystem = (system: SystemDetail) => {
-    const isSelectedSameMoving = movingSystems.some(
-      movingSystem => movingSystem.uid === system.uid
-    )
+      if (isSelectedSameDestination || isSelectedParent) {
+        return false
+      }
+      return true
+    },
+    [movingSystems, destinationSystem]
+  )
 
-    const isSelectedParent = system.parentPath?.some(path =>
-      movingSystems.some(moving => moving.uid === path.uid)
-    )
+  const canSelectDestinationSystem = useCallback(
+    (system: SystemDetail) => {
+      const isSelectedSameMoving = movingSystems.some(
+        movingSystem => movingSystem.uid === system.uid
+      )
 
-    if (
-      movingSystems.length === 0 ||
-      isSelectedSameMoving ||
-      isSelectedParent
-    ) {
-      return false
-    }
+      const isSelectedParent = system.parentPath?.some(path =>
+        movingSystems.some(moving => moving.uid === path.uid)
+      )
 
-    return destinationSystem ? destinationSystem?.uid === system.uid : true
-  }
+      if (
+        movingSystems.length === 0 ||
+        isSelectedSameMoving ||
+        isSelectedParent
+      ) {
+        return false
+      }
+
+      return destinationSystem ? destinationSystem?.uid === system.uid : true
+    },
+    [movingSystems, destinationSystem]
+  )
 
   return (
     <div className={classNames('grid grid-cols-2')}>
