@@ -49,9 +49,7 @@ export const SystemNameCell = ({
 
   const handleExpand = () => {
     if (!row.getIsExpanded()) {
-      if (!original.subSystems?.length) {
-        setUid?.(original.uid)
-      }
+      setUid?.(original.uid)
     }
     row.toggleExpanded()
   }

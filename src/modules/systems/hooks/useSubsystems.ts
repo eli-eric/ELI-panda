@@ -39,11 +39,8 @@ export const useSubsystems = (tableId: string) => {
         },
         { updatedAt: Date.now() }
       )
-      setUid(null)
     }
-    return () => {
-      setUid(null)
-    }
+    return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response])
 
