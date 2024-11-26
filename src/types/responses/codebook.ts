@@ -1,10 +1,11 @@
+import type { ROLE } from '../constants/roles'
 import type { SystemLevel } from '../gql/graphql'
 
 export type CodeBookMetaData = {
   code: string
   type: string
   nodeLabel?: string
-  roleEdit?: string
+  roleEdit?: ROLE
 }
 
 export type CodebookTypeResponse = {

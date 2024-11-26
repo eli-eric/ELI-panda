@@ -19,6 +19,7 @@ export enum PATH {
   CATALOGUE_ITEM = '/catalogue/item',
   SYSTEMS = '/systems/overview',
   SYSTEMS_MOVING = '/systems/moving',
+  SYSTEMS_MULTI_MOVE = '/systems/multi-move',
   SPARE_PARTS = '/systems/spareparts',
   SYSTEM = '/system',
   SYSTEM_TYPE_EDIT = '/system/type-edit',
@@ -34,7 +35,8 @@ export enum PATH {
   ADMIN = '/administration',
   PROFILE_GENERAL = '/profile/general',
   PROFILE_SECURITY = '/profile/security',
-  PROFILE_TEAM = '/profile/team'
+  PROFILE_TEAM = '/profile/team',
+  LAYOUT = '/layout'
 }
 
 export const SUPPORT =
@@ -69,6 +71,11 @@ export const NAV_BAR_CONFIG: NavigationType[] = [
       {
         path: PATH.SYSTEM_TYPE_EDIT,
         name: 'System Type Edit',
+        role: ROLE.SYSTEM_EDIT
+      },
+      {
+        path: PATH.SYSTEMS_MULTI_MOVE,
+        name: 'Multi Move',
         role: ROLE.SYSTEM_EDIT
       }
     ],
@@ -133,7 +140,8 @@ export const PROTECTED_PATHS = [
   PATH.PROFILE_SECURITY,
   PATH.PROFILE_TEAM,
   PATH.SYSTEMS_MOVING,
-  PATH.SYSTEM_ALIAS
+  PATH.SYSTEM_ALIAS,
+  PATH.LAYOUT
 ]
 
 export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
@@ -170,5 +178,7 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
   [PATH.PROFILE_TEAM]: [ROLE.BASICS],
   [PATH.SYSTEM_ALIAS]: [ROLE.SYSTEMS_VIEW],
   [PATH.SYSTEM_TYPE_EDIT]: [ROLE.SYSTEM_TYPE_EDIT, ROLE.SYSTEM_TYPE_VIEW],
+  [PATH.SYSTEMS_MULTI_MOVE]: [ROLE.SYSTEM_EDIT],
+  [PATH.LAYOUT]: [ROLE.BASICS],
   [PATH.ROOT]: []
 }

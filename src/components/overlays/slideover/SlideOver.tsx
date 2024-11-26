@@ -27,6 +27,7 @@ interface Props {
   buttons?: SlideOverButtons
   RenderSettings?: JSX.Element
   panelSlide?: 'left' | 'right'
+  className?: string
 }
 export const SlideOver: FC<PropsWithChildren<Props>> = ({
   children,
@@ -35,10 +36,15 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
   panelTitle,
   buttons,
   RenderSettings,
-  panelSlide = 'left'
+  panelSlide = 'left',
+  className
 }) => (
   <Transition.Root show={open} as={Fragment}>
-    <Dialog as="div" className="relative z-30" onClose={setOpen}>
+    <Dialog
+      as="div"
+      className={classNames('relative z-30', className)}
+      onClose={setOpen}
+    >
       <div className="fixed inset-0" />
       <div className="fixed inset-0 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
@@ -133,3 +139,5 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
     </Dialog>
   </Transition.Root>
 )
+
+export default SlideOver

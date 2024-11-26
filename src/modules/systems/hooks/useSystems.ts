@@ -10,7 +10,10 @@ import { queryFetcher } from '@/utils/fetcher'
 
 import useQueryManager from '../../../hooks/useQueryManager'
 
-export const useSystems = (tableId: string = 'systems') => {
+export const useSystems = (
+  tableId: string = 'systems',
+  refetchOnMount: boolean = false
+) => {
   const { query } = useQueryManager(tableId)
 
   const queryKey: QueryFetcherKey = [tableId, { query }]
@@ -19,7 +22,7 @@ export const useSystems = (tableId: string = 'systems') => {
     queryKey,
     queryFn: queryFetcher<SystemsResponse>('systemsList'),
     placeholderData: keepPreviousData,
-    refetchOnMount: false,
+    refetchOnMount,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false
   })
@@ -29,6 +32,11 @@ export const useSystems = (tableId: string = 'systems') => {
   const mutate = (mutator: (prev: SystemsResponse) => SystemsResponse) => {
     queryClient.setQueryData(queryKey, mutator)
   }
+
+  const invalidate = () => {
+    queryClient.invalidateQueries({ queryKey })
+  }
+
   return {
     systems: data,
     loading: isFetching,
@@ -37,6 +45,7 @@ export const useSystems = (tableId: string = 'systems') => {
     queryKey,
     dataUpdatedAt,
     refetch,
-    mutate
+    mutate,
+    invalidate
   }
 }

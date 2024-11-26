@@ -12,6 +12,7 @@ interface Props {
   setCategoryFilter?: (value: CodebookType) => void
   path?: CodebookType
   systemLevel?: SystemLevel
+  noIcon?: boolean
 }
 
 export const BreadcrumpItem = ({
@@ -19,7 +20,8 @@ export const BreadcrumpItem = ({
   link,
   setCategoryFilter,
   path,
-  systemLevel
+  systemLevel,
+  noIcon = false
 }: Props) => {
   if (setCategoryFilter && path) {
     return (
@@ -45,10 +47,12 @@ export const BreadcrumpItem = ({
   return (
     <li key={name} className="flex">
       <div className="flex items-center whitespace-nowrap">
-        <ChevronRightIcon
-          className="h-4 w-4 flex-shrink-0 text-gray-400"
-          aria-hidden="true"
-        />
+        {!noIcon && (
+          <ChevronRightIcon
+            className="h-4 w-4 flex-shrink-0 text-gray-400"
+            aria-hidden="true"
+          />
+        )}
         {link ? (
           <Link
             href={{ pathname: link }}

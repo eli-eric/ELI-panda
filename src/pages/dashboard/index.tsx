@@ -1,6 +1,7 @@
 import {
   CreditCardIcon,
   LifebuoyIcon,
+  PhotoIcon,
   RectangleGroupIcon,
   RectangleStackIcon,
   ShoppingCartIcon,
@@ -15,7 +16,7 @@ import { message } from 'src/i18n/src/messages'
 
 import { Tile, TileContainer } from '@/components/card/tile.comp'
 import { ReleasesContainer } from '@/components/Releases.cont'
-import usePermission from '@/hooks/usePermission'
+import { useAccessControl } from '@/hooks/useAccessControl'
 import FileManager from '@/modules/shared/fileManager/FileManager'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { PATH } from '@/types/constants/paths'
@@ -76,6 +77,13 @@ const tiles = [
     Icon: () => (
       <LifebuoyIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
     )
+  },
+  {
+    name: 'Layout',
+    link: PATH.LAYOUT,
+    Icon: () => (
+      <PhotoIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+    )
   }
 ]
 
@@ -84,18 +92,15 @@ const messages = message.dashboardPage
 const DashboardPage: NextPage = (): JSX.Element => {
   const intl = useIntl()
 
-  const hasEditRole = usePermission([ROLE.DASHBOARD_FILES_ADMIN])
+  const hasEditRole = useAccessControl(ROLE.DASHBOARD_FILES_ADMIN)()
+
   return (
     <Fragment>
       <Head>
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-
       <main className="mx-auto max-w-7xl flex-1">
-        {/* <h1 className="text-2xl font-semibold font-mono text-gray-600 dark:text-gray-200 mt-2 ml-1 sm:mt-4 sm:ml-4 uppercase">
-          Dashboard
-        </h1> */}
         <TileContainer>
           {tiles.map(tile => (
             <Tile

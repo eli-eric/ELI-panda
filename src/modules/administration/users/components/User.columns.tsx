@@ -1,6 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
-import { v4 } from 'uuid'
 
 import { Badge } from '@/components/visuals/Badge'
 import type { User } from '@/types/gql/graphql'
@@ -47,7 +46,9 @@ export const useUsersColumns = () => {
         id: 'roles',
         cell: ({ getValue }) => (
           <div>
-            {getValue()?.map(role => <Badge key={v4()}>{role.code}</Badge>)}
+            {getValue()?.map(role => (
+              <Badge key={role.code}>{role.code}</Badge>
+            ))}
           </div>
         ),
         size: 500

@@ -3,7 +3,6 @@ import { useQueryState } from 'next-usequerystate'
 import type { FC } from 'react'
 import { Fragment, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { v4 as uuid } from 'uuid'
 
 import { PlusButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
@@ -63,7 +62,7 @@ export const CodebooksContainer: FC<Props> = () => {
   })
 
   const handleAddNewCodebookValue = () => {
-    const id = uuid()
+    const id = crypto.randomUUID()
     queryClient.setQueryData<CodebookTypeResponse>(
       queryKey,
       prev =>

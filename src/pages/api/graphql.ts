@@ -1,8 +1,4 @@
-import {
-  ApolloServer,
-  BaseContext,
-  GraphQLRequestContext
-} from '@apollo/server'
+import { ApolloServer } from '@apollo/server'
 import { startServerAndCreateNextHandler } from '@as-integrations/next'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { NextAuthOptions } from 'next-auth'
@@ -12,7 +8,6 @@ import { getToken } from 'next-auth/jwt'
 import { neoSchema } from '@/server/apollo/schema'
 
 import { authOptions } from './auth/[...nextauth]'
-import { v4 as uuid } from 'uuid'
 
 const server = async (): Promise<ApolloServer> => {
   const schema = await neoSchema.getSchema()
@@ -25,7 +20,7 @@ const server = async (): Promise<ApolloServer> => {
 }
 
 function logger(session, req, res, next) {
-  const uid = uuid()
+  const uid = crypto.randomUUID()
   const oldEnd = res.end
   console.log(
     new Date().toISOString(),

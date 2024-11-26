@@ -1,6 +1,6 @@
 import 'next-auth'
 
-import type { Role } from '@/types/constants/roles'
+import type { ROLE } from '@/types/constants/roles'
 
 declare module 'next-auth' {
   interface User {
@@ -10,7 +10,7 @@ declare module 'next-auth' {
     fullName: string
     facility: string
     facilityCode: string
-    roles: Array<Role>
+    roles: Array<ROLE>
     apiAccessToken: string
   }
   interface Session {
@@ -25,7 +25,7 @@ declare module 'next-auth/jwt' {
     exp: number
     facility: string
     facilityCode: string
-    roles: Array<Role>
+    roles: Array<ROLE>
     apiAccessToken: string
   }
 }

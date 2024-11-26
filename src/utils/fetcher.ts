@@ -8,7 +8,7 @@ import { BASE_URL } from '@/types/constants/common'
 import type { EndpointProps } from './getEndpoints'
 import { getEndpoints } from './getEndpoints'
 
-export const uniFetcher = async url =>
+export const uniFetcher = async (url: string) =>
   await axios.get(url).then(res => res.data)
 
 export type QueryFetcherKey = [string, EndpointProps] | [string]
@@ -27,7 +27,8 @@ export const queryFetcher = <T>(
 export const queryMutate = <TResponse, TVariables>(
   endpointType: keyof ReturnType<typeof getEndpoints>,
   mutationType: 'post' | 'put' | 'delete',
-  uid?: string
+  uid?: string,
+  isDefaultUrl?: boolean
 ) => {
   const mutateFn: MutateFunction<
     AxiosResponse<TResponse>,
@@ -38,7 +39,10 @@ export const queryMutate = <TResponse, TVariables>(
     if (!endpoint) {
       throw new Error(`Endpoint for type ${endpointType} not found`)
     }
-    return axiosInstance[mutationType](BASE_URL + endpoint, variables || {})
+    return axiosInstance[mutationType](
+      (isDefaultUrl ? '' : BASE_URL) + endpoint,
+      variables || {}
+    )
   }
   return mutateFn
 }

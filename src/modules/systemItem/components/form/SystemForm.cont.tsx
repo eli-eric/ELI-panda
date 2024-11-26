@@ -17,7 +17,7 @@ const MemoizedSystemGallery = memo(ImageGallery)
 import { useRouter } from 'next/router'
 
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
-import Card from '@/components/layout/Card'
+import Card, { FormCard } from '@/components/layout/Card'
 import usePermission from '@/hooks/usePermission'
 import { GraphModalButton } from '@/modules/shared/system/GraphModalButton'
 import { ROLE } from '@/types/constants/roles'
@@ -33,14 +33,6 @@ import type { SystemDetailFormType } from '../../types/form'
 import { getColorBySystemLevel } from '../../utils'
 import { ShowHistoryButton } from '../history/ShowHistoryButton'
 import { SystemItemCard } from './components/SystemItem.card'
-
-interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode
-}
-
-const FormCard = ({ children, className }: CardProps) => (
-  <div className={classNames('mx-auto max-w-7xl', className)}>{children}</div>
-)
 
 //TODO:  split to update and create form
 export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
@@ -112,7 +104,6 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
   }, [parentSystem])
 
   const systemLevel = formMethods.watch('systemLevel')
-  const physicalItem = formMethods.watch('physicalItem')
   const onSubmit = (data: SystemDetailFormType) => {
     // extract from data hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -184,7 +175,7 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
             hasEditRole={hasEditRole}
           />
         </SystemMainForm>
-        {physicalItem && <SystemItemCard />}
+        {uid && <SystemItemCard />}
       </FormCard>
       {children}
     </Form>

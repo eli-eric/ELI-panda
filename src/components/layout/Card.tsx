@@ -4,6 +4,10 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
 }
 
+export const FormCard = ({ children, className }: CardProps) => (
+  <div className={classNames('mx-auto max-w-7xl', className)}>{children}</div>
+)
+
 const Card = ({ children, className }: CardProps) => (
   <div
     className={classNames(

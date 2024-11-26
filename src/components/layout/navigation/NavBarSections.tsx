@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import { type FC } from 'react'
 
+import { AccessControl } from '@/components/auth/AccesControl'
 import { DarkModeSwitch } from '@/components/DarkModeSwitch'
 import EliLogoComponent from '@/components/eli-logo.comp'
 import { NAV_BAR_CONFIG, PATH, USER_NAVIGATION } from '@/types/constants/paths'
@@ -75,28 +76,29 @@ export const MainNavigation: FC<MainNavigationProps> = ({
         }
         if (item.links) {
           return (
-            <NavBarMultiLink
-              key={item.name}
-              setOpen={setOpen}
-              item={item}
-              role={item.role}
-              isExpanded={isExpanded}
-              toggleItemExpansion={toggleItemExpansion}
-              expandedItems={expandedItems}
-            />
+            <AccessControl roles={item.role} key={item.name}>
+              <NavBarMultiLink
+                setOpen={setOpen}
+                item={item}
+                isExpanded={isExpanded}
+                toggleItemExpansion={toggleItemExpansion}
+                expandedItems={expandedItems}
+              />
+            </AccessControl>
           )
         } else {
           return (
-            <NavBarLink
-              key={item.name}
-              setOpen={setOpen}
-              role={item.role}
-              href={item.link}
-              isExpanded={isExpanded}
-              Icon={item.Icon}
-              text={item.name}
-              isActive={pathName.startsWith(item.link || '')}
-            />
+            <AccessControl roles={item.role} key={item.name}>
+              <NavBarLink
+                key={item.name}
+                setOpen={setOpen}
+                href={item.link}
+                isExpanded={isExpanded}
+                Icon={item.Icon}
+                text={item.name}
+                isActive={pathName.startsWith(item.link || '')}
+              />
+            </AccessControl>
           )
         }
       })}
@@ -119,16 +121,16 @@ export const UserSection: FC<UserSectionProps> = ({ setOpen, isExpanded }) => {
     <div>
       <SupportLink isExpanded={isExpanded} />
       {USER_NAVIGATION.map(item => (
-        <NavBarLink
-          key={item.name}
-          setOpen={setOpen}
-          role={item.role}
-          href={item.link}
-          isActive={pathName.startsWith(item.link || '')}
-          isExpanded={isExpanded}
-          Icon={item.Icon}
-          text={item.name}
-        />
+        <AccessControl roles={item.role} key={item.name}>
+          <NavBarLink
+            setOpen={setOpen}
+            href={item.link}
+            isActive={pathName.startsWith(item.link || '')}
+            isExpanded={isExpanded}
+            Icon={item.Icon}
+            text={item.name}
+          />
+        </AccessControl>
       ))}
       <NavBarButton
         onClick={signOutHandler}

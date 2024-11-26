@@ -1,7 +1,9 @@
 import { useSession } from 'next-auth/react'
 import { useMemo } from 'react'
 
-const usePermission = (roles?: string[]) => {
+import type { ROLE } from '@/types/constants/roles'
+
+const usePermission = (roles?: ROLE[]) => {
   const { data } = useSession()
 
   return useMemo(

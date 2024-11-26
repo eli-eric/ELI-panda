@@ -2,6 +2,9 @@ export const messages = {
   common: {
     buttons: {
       close: 'Close',
+      next: 'Next',
+      back: 'Back',
+      finish: 'Finish',
       saveAndExit: 'Save and Exit',
       continue: 'Continue',
       cancel: 'Cancel',
@@ -327,6 +330,8 @@ export const messages = {
         orderLines: 'Order Lines'
       },
       form: {
+        eun: { label: 'EUN', placeholder: 'EUN' },
+        partNumber: { label: 'Part Number', placeholder: 'Part Number' },
         name: { label: 'Name', placeholder: 'Name' },
         orderNumber: { label: 'Order Number', placeholder: 'Order Number' },
         requestNumber: {
@@ -339,6 +344,7 @@ export const messages = {
         },
         supplier: { label: 'Supplier', placeholder: '...type here' },
         orderStatus: { label: 'Order Status' },
+        deliveryStatus: { label: 'Delivery Status' },
         notes: { label: 'Notes' },
         orderDate: { label: 'Order Date' },
         procurementResponsible: {
@@ -419,7 +425,15 @@ export const messages = {
     }
   },
   orderItem: { head: 'ELI Panda - Order Item' },
-  systemItem: { head: 'ELI Panda - System Item' },
+  systemItem: {
+    head: 'ELI Panda - System Item',
+    itemMove: {
+      buttons: {
+        destionationSystem: 'Select Destination System for Item',
+        createNewSystem: 'Create New System for Item'
+      }
+    }
+  },
   systemTypeEdit: { head: 'ELI Panda - System Type Edit' },
   profilePage: {
     head: 'ELI Panda - Profile',
@@ -458,5 +472,8 @@ export const messages = {
         }
       }
     }
+  },
+  layoutPage: {
+    head: 'ELI Panda - Layout'
   }
 }

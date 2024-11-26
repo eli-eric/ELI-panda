@@ -18,6 +18,8 @@ const documents = {
     "\n  query UserSettings($userSettingsWhere: UserSettingsWhere) {\n    userSettings(where: $userSettingsWhere) {\n      uid\n      key\n      name\n      value\n    }\n  }\n": types.UserSettingsDocument,
     "\n  mutation UpdateFilterMutation(\n    $where: UserSettingsWhere\n    $update: UserSettingsUpdateInput\n  ) {\n    updateUserSettings(where: $where, update: $update) {\n      userSettings {\n        name\n        uid\n        value\n      }\n    }\n  }\n": types.UpdateFilterMutationDocument,
     "\n  query GetEmployee($uid: ID!) {\n    employees(where: { uid: $uid }) {\n      uid\n      fullName\n      firstName\n      facility {\n        code\n        name\n      }\n      lastName\n      phone1\n      phone2\n    }\n  }\n": types.GetEmployeeDocument,
+    "\nquery Systems($where: SystemWhere) {\n  systems(where: $where) {\n    name\n    uid\n    systemCode\n    zone {\n      code\n    }\n  }\n}": types.SystemsDocument,
+    "\nquery Query($where: EmployeeWhere) {\n  employees(where: $where) {\n    fullName\n    jobPosition\n    email\n    phone1\n    workplaceName\n    facility {\n      name\n    }\n  }\n}\n": types.QueryDocument,
     "\n  query UserPWDQuery($uid: ID!) {\n    users(where: { uid: $uid }) {\n      uid\n      passwordHash\n    }\n  }\n": types.UserPwdQueryDocument,
     "\n  query GetFacilities {\n    facilities {\n      code\n      name\n    }\n  }\n": types.GetFacilitiesDocument,
     "\n  query GetRoles {\n    roles {\n      name\n      code\n      uid\n    }\n  }\n": types.GetRolesDocument,
@@ -92,6 +94,14 @@ export function gql(source: "\n  mutation UpdateFilterMutation(\n    $where: Use
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetEmployee($uid: ID!) {\n    employees(where: { uid: $uid }) {\n      uid\n      fullName\n      firstName\n      facility {\n        code\n        name\n      }\n      lastName\n      phone1\n      phone2\n    }\n  }\n"): (typeof documents)["\n  query GetEmployee($uid: ID!) {\n    employees(where: { uid: $uid }) {\n      uid\n      fullName\n      firstName\n      facility {\n        code\n        name\n      }\n      lastName\n      phone1\n      phone2\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nquery Systems($where: SystemWhere) {\n  systems(where: $where) {\n    name\n    uid\n    systemCode\n    zone {\n      code\n    }\n  }\n}"): (typeof documents)["\nquery Systems($where: SystemWhere) {\n  systems(where: $where) {\n    name\n    uid\n    systemCode\n    zone {\n      code\n    }\n  }\n}"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nquery Query($where: EmployeeWhere) {\n  employees(where: $where) {\n    fullName\n    jobPosition\n    email\n    phone1\n    workplaceName\n    facility {\n      name\n    }\n  }\n}\n"): (typeof documents)["\nquery Query($where: EmployeeWhere) {\n  employees(where: $where) {\n    fullName\n    jobPosition\n    email\n    phone1\n    workplaceName\n    facility {\n      name\n    }\n  }\n}\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -4473,7 +4473,7 @@ export type Employee = {
   user?: Maybe<User>;
   userAggregate?: Maybe<EmployeeUserUserAggregationSelection>;
   userConnection: EmployeeUserConnection;
-  workPlaceName?: Maybe<Scalars['String']['output']>;
+  workplaceName?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -4534,7 +4534,7 @@ export type EmployeeAggregateSelection = {
   superiorNUmber: StringAggregateSelectionNullable;
   superiorName: StringAggregateSelectionNullable;
   uid: IdAggregateSelectionNonNullable;
-  workPlaceName: StringAggregateSelectionNullable;
+  workplaceName: StringAggregateSelectionNullable;
 };
 
 export type EmployeeConnectInput = {
@@ -4559,7 +4559,7 @@ export type EmployeeCreateInput = {
   superiorNUmber?: InputMaybe<Scalars['String']['input']>;
   superiorName?: InputMaybe<Scalars['String']['input']>;
   user?: InputMaybe<EmployeeUserFieldInput>;
-  workPlaceName?: InputMaybe<Scalars['String']['input']>;
+  workplaceName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type EmployeeDeleteInput = {
@@ -4739,7 +4739,7 @@ export type EmployeeSort = {
   superiorNUmber?: InputMaybe<SortDirection>;
   superiorName?: InputMaybe<SortDirection>;
   uid?: InputMaybe<SortDirection>;
-  workPlaceName?: InputMaybe<SortDirection>;
+  workplaceName?: InputMaybe<SortDirection>;
 };
 
 export type EmployeeUpdateInput = {
@@ -4755,7 +4755,7 @@ export type EmployeeUpdateInput = {
   superiorNUmber?: InputMaybe<Scalars['String']['input']>;
   superiorName?: InputMaybe<Scalars['String']['input']>;
   user?: InputMaybe<EmployeeUserUpdateFieldInput>;
-  workPlaceName?: InputMaybe<Scalars['String']['input']>;
+  workplaceName?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type EmployeeUserAggregateInput = {
@@ -4999,11 +4999,11 @@ export type EmployeeWhere = {
   userConnection?: InputMaybe<EmployeeUserConnectionWhere>;
   userConnection_NOT?: InputMaybe<EmployeeUserConnectionWhere>;
   user_NOT?: InputMaybe<UserWhere>;
-  workPlaceName?: InputMaybe<Scalars['String']['input']>;
-  workPlaceName_CONTAINS?: InputMaybe<Scalars['String']['input']>;
-  workPlaceName_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
-  workPlaceName_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  workPlaceName_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
+  workplaceName?: InputMaybe<Scalars['String']['input']>;
+  workplaceName_CONTAINS?: InputMaybe<Scalars['String']['input']>;
+  workplaceName_ENDS_WITH?: InputMaybe<Scalars['String']['input']>;
+  workplaceName_IN?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  workplaceName_STARTS_WITH?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type EmployeesConnection = {
@@ -5309,7 +5309,7 @@ export type HallContactPersonEmployeeEmployeeNodeAggregateSelection = {
   superiorNUmber: StringAggregateSelectionNullable;
   superiorName: StringAggregateSelectionNullable;
   uid: IdAggregateSelectionNonNullable;
-  workPlaceName: StringAggregateSelectionNullable;
+  workplaceName: StringAggregateSelectionNullable;
 };
 
 export type HallContactPersonEmployeeFieldInput = {
@@ -5471,21 +5471,21 @@ export type HallContactPersonEmployeeNodeAggregationWhereInput = {
   superiorName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   superiorName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   superiorName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type HallContactPersonEmployeeRelationship = {
@@ -10739,21 +10739,21 @@ export type RoomCardContactPersonsDeptNodeAggregationWhereInput = {
   superiorName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   superiorName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   superiorName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type RoomCardContactPersonsDeptRelationship = {
@@ -10920,7 +10920,7 @@ export type RoomCardEmployeeContactPersonsDeptNodeAggregateSelection = {
   superiorNUmber: StringAggregateSelectionNullable;
   superiorName: StringAggregateSelectionNullable;
   uid: IdAggregateSelectionNonNullable;
-  workPlaceName: StringAggregateSelectionNullable;
+  workplaceName: StringAggregateSelectionNullable;
 };
 
 export type RoomCardHallContactPersonContactPersonsHallAggregationSelection = {
@@ -12272,7 +12272,7 @@ export type SystemEmployeeMaintainedByNodeAggregateSelection = {
   superiorNUmber: StringAggregateSelectionNullable;
   superiorName: StringAggregateSelectionNullable;
   uid: IdAggregateSelectionNonNullable;
-  workPlaceName: StringAggregateSelectionNullable;
+  workplaceName: StringAggregateSelectionNullable;
 };
 
 export type SystemEmployeeOperatorsAggregationSelection = {
@@ -12294,7 +12294,7 @@ export type SystemEmployeeOperatorsNodeAggregateSelection = {
   superiorNUmber: StringAggregateSelectionNullable;
   superiorName: StringAggregateSelectionNullable;
   uid: IdAggregateSelectionNonNullable;
-  workPlaceName: StringAggregateSelectionNullable;
+  workplaceName: StringAggregateSelectionNullable;
 };
 
 export type SystemEmployeeResponsibleAggregationSelection = {
@@ -12316,7 +12316,7 @@ export type SystemEmployeeResponsibleNodeAggregateSelection = {
   superiorNUmber: StringAggregateSelectionNullable;
   superiorName: StringAggregateSelectionNullable;
   uid: IdAggregateSelectionNonNullable;
-  workPlaceName: StringAggregateSelectionNullable;
+  workplaceName: StringAggregateSelectionNullable;
 };
 
 export type SystemFacilityAggregateInput = {
@@ -13788,21 +13788,21 @@ export type SystemMaintainedByNodeAggregationWhereInput = {
   superiorName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   superiorName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   superiorName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type SystemOperatorsAggregateInput = {
@@ -13971,21 +13971,21 @@ export type SystemOperatorsNodeAggregationWhereInput = {
   superiorName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   superiorName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   superiorName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type SystemOptions = {
@@ -14381,21 +14381,21 @@ export type SystemResponsibleNodeAggregationWhereInput = {
   superiorName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   superiorName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   superiorName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type SystemResponsibleTeamAggregateInput = {
@@ -16994,7 +16994,7 @@ export type UserEmployeeEmployeeNodeAggregateSelection = {
   superiorNUmber: StringAggregateSelectionNullable;
   superiorName: StringAggregateSelectionNullable;
   uid: IdAggregateSelectionNonNullable;
-  workPlaceName: StringAggregateSelectionNullable;
+  workplaceName: StringAggregateSelectionNullable;
 };
 
 export type UserEmployeeFieldInput = {
@@ -17156,21 +17156,21 @@ export type UserEmployeeNodeAggregationWhereInput = {
   superiorName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
   superiorName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
   superiorName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
-  workPlaceName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
-  workPlaceName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_AVERAGE_LENGTH_EQUAL?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_GT?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_GTE?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_LT?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_AVERAGE_LENGTH_LTE?: InputMaybe<Scalars['Float']['input']>;
+  workplaceName_LONGEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_LONGEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_EQUAL?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_GT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_GTE?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_LT?: InputMaybe<Scalars['Int']['input']>;
+  workplaceName_SHORTEST_LENGTH_LTE?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UserEmployeeRelationship = {
@@ -18779,6 +18779,20 @@ export type GetEmployeeQueryVariables = Exact<{
 
 export type GetEmployeeQuery = { __typename?: 'Query', employees: Array<{ __typename?: 'Employee', uid: string, fullName?: string | null, firstName: string, lastName: string, phone1?: string | null, phone2?: string | null, facility: { __typename?: 'Facility', code: string, name: string } }> };
 
+export type SystemsQueryVariables = Exact<{
+  where?: InputMaybe<SystemWhere>;
+}>;
+
+
+export type SystemsQuery = { __typename?: 'Query', systems: Array<{ __typename?: 'System', name: string, uid: string, systemCode?: string | null, zone?: { __typename?: 'Zone', code: string } | null }> };
+
+export type QueryQueryVariables = Exact<{
+  where?: InputMaybe<EmployeeWhere>;
+}>;
+
+
+export type QueryQuery = { __typename?: 'Query', employees: Array<{ __typename?: 'Employee', fullName?: string | null, jobPosition?: string | null, email?: string | null, phone1?: string | null, workplaceName?: string | null, facility: { __typename?: 'Facility', name: string } }> };
+
 export type UserPwdQueryQueryVariables = Exact<{
   uid: Scalars['ID']['input'];
 }>;
@@ -19069,6 +19083,8 @@ export const DeleteFilterMutationDocument = {"kind":"Document","definitions":[{"
 export const UserSettingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userSettingsWhere"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserSettingsWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userSettingsWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]} as unknown as DocumentNode<UserSettingsQuery, UserSettingsQueryVariables>;
 export const UpdateFilterMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateFilterMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserSettingsWhere"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"update"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UserSettingsUpdateInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateUserSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"update"},"value":{"kind":"Variable","name":{"kind":"Name","value":"update"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]}}]} as unknown as DocumentNode<UpdateFilterMutationMutation, UpdateFilterMutationMutationVariables>;
 export const GetEmployeeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetEmployee"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"employees"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uid"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"facility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"phone1"}},{"kind":"Field","name":{"kind":"Name","value":"phone2"}}]}}]}}]} as unknown as DocumentNode<GetEmployeeQuery, GetEmployeeQueryVariables>;
+export const SystemsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Systems"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"SystemWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"systems"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"systemCode"}},{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]} as unknown as DocumentNode<SystemsQuery, SystemsQueryVariables>;
+export const QueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Query"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"EmployeeWhere"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"employees"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"jobPosition"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"phone1"}},{"kind":"Field","name":{"kind":"Name","value":"workplaceName"}},{"kind":"Field","name":{"kind":"Name","value":"facility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<QueryQuery, QueryQueryVariables>;
 export const UserPwdQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserPWDQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"uid"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"uid"},"value":{"kind":"Variable","name":{"kind":"Name","value":"uid"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uid"}},{"kind":"Field","name":{"kind":"Name","value":"passwordHash"}}]}}]}}]} as unknown as DocumentNode<UserPwdQueryQuery, UserPwdQueryQueryVariables>;
 export const GetFacilitiesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetFacilities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"facilities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetFacilitiesQuery, GetFacilitiesQueryVariables>;
 export const GetRolesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRoles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"roles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"uid"}}]}}]}}]} as unknown as DocumentNode<GetRolesQuery, GetRolesQueryVariables>;

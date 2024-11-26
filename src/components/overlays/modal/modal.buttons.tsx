@@ -1,22 +1,26 @@
 import { Fragment } from 'react'
 
 import type { ModalButtons } from '@/types/form'
+import { classNames } from '@/utils'
 
 import { Button } from '../../Buttons'
 
 interface Props {
   testid?: string
-
   buttons?: ModalButtons
+  className?: string
 }
 
-const ModalButtonsComponent = ({ testid, buttons }: Props) => (
+const ModalButtonsComponent = ({ testid, buttons, className }: Props) => (
   <Fragment>
     {buttons && (
       <div
-        className={`mt-5 sm:mt-6 sm:flex sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3`}
+        className={classNames(
+          `mt-5 sm:mt-6 sm:flex sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3`,
+          className
+        )}
       >
-        {buttons.goBack && (
+        {buttons.goBack && !buttons.goBack.hidden && (
           <Button
             {...buttons.goBack}
             type={buttons.goBack?.type || 'button'}
@@ -24,7 +28,7 @@ const ModalButtonsComponent = ({ testid, buttons }: Props) => (
             className="inline-flex w-full justify-center sm:mt-0 sm:text-sm text-gray-700 dark:text-gray-200"
           />
         )}
-        {buttons.alternative && (
+        {buttons.alternative && !buttons.alternative.hidden && (
           <Button
             {...buttons.alternative}
             type={buttons.alternative?.type || 'button'}
@@ -33,13 +37,15 @@ const ModalButtonsComponent = ({ testid, buttons }: Props) => (
             className="inline-flex w-full justify-center sm:mt-0 sm:text-sm"
           />
         )}
-        <Button
-          {...buttons.goNext}
-          type={buttons?.goNext?.type || 'button'}
-          testid={`${testid}-${buttons.goNext?.testid}`}
-          primary
-          className="inline-flex w-full justify-center sm:mt-0 sm:text-sm"
-        />
+        {!buttons.goNext?.hidden && (
+          <Button
+            {...buttons.goNext}
+            type={buttons?.goNext?.type || 'button'}
+            testid={`${testid}-${buttons.goNext?.testid}`}
+            primary
+            className="inline-flex w-full justify-center sm:mt-0 sm:text-sm"
+          />
+        )}
       </div>
     )}
   </Fragment>

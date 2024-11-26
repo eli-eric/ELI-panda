@@ -5,6 +5,7 @@ import type { DefaultValues, FieldValues } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
+import { useSearchStore } from '@/modules/shared/table/store/useSarchStore'
 import { useFormControlStore } from '@/store/useFormControlStore'
 import useTableStateStore from '@/store/useTableStateStore'
 
@@ -43,8 +44,8 @@ export const useFormFilter = <T extends FieldValues>({
 }: IFilter<T>) => {
   const [storeFilters, setFilters] = useFilters(tableId, enableQueryURL, false)
 
-  const [, setQuerySearch] = useQueryState('search', { history: 'replace' })
-  const { setSearch, instances } = useTableStateStore()
+  const { instances } = useTableStateStore()
+
   const searchInstance = instances[tableId]?.search
 
   const {
@@ -55,6 +56,7 @@ export const useFormFilter = <T extends FieldValues>({
     deleteCustom,
     addCustomFieldIdToSync
   } = useFormControlStore()
+
   const [filterQuery] = useQueryState('filter', { history: 'replace' })
 
   const columnFilters = useMemo(
@@ -127,16 +129,6 @@ export const useFormFilter = <T extends FieldValues>({
     //eslint-disable-next-line
   }, [searchInstance])
 
-  useEffect(() => {
-    if (filterQuery) {
-      startTransition(() => {
-        setQuerySearch(null, { shallow: true })
-        setSearch(tableId, undefined)
-      })
-    }
-    //eslint-disable-next-line
-  }, [filterQuery])
-
   return formMethods
 }
 
@@ -152,6 +144,29 @@ export const useFormFilterState = ({
     enableQueryUrl,
     false
   )
+  const [, setQueryPage] = useQueryState('page', { history: 'replace' })
+  const { setPagination, setSearch } = useTableStateStore()
+
+  const [, setQuerySearch] = useQueryState('search', { history: 'replace' })
+  const { setSearchValue } = useSearchStore()
+
+  const clearPageAndSearch = useCallback(() => {
+    setPagination(tableId, `{"page":${1},"pageSize":${50}}`)
+    setSearch(tableId, '')
+    setSearchValue('')
+    if (enableQueryUrl) {
+      setQueryPage('1', { shallow: true })
+      setQuerySearch(null, { shallow: true })
+    }
+  }, [
+    setPagination,
+    setSearch,
+    setSearchValue,
+    tableId,
+    enableQueryUrl,
+    setQueryPage,
+    setQuerySearch
+  ])
 
   //set filter value to store on change field and remove from store if value is empty
   const setFilter = useCallback(
@@ -162,33 +177,43 @@ export const useFormFilterState = ({
         name: string = id,
         propType?: string
       ) => {
+        clearPageAndSearch()
+        //set filter value to store
         setColumnFilters(prev => {
           const filters = [...prev]
-          const index = prev.findIndex(item => item.id === id)
-          if (index !== -1) {
-            filters[index].value = value
-          } else if (value) {
-            filters.push({ id, value, type, name, propType })
+          let index = filters.findIndex(item => item.id === id)
+
+          // Handle adding or updating filters
+          if (value) {
+            if (index !== -1) {
+              filters[index] = {
+                ...filters[index],
+                value,
+                type,
+                name,
+                propType
+              }
+            } else {
+              filters.push({ id, value, type, name, propType })
+              index = filters.length - 1 // Update index to the new item's index
+            }
           }
-          if (!value) {
-            filters.splice(index, 1)
-          }
-          if (value?.max === null && value?.min === null) {
-            filters.splice(index, 1)
-          }
-          if (value?.max === null && value?.min === undefined) {
-            filters.splice(index, 1)
-          }
-          if (value?.max === undefined && value?.min === null) {
-            filters.splice(index, 1)
-          }
-          if (value?.length === 0) {
+
+          // Conditions for removing filters
+          const shouldRemove =
+            !value ||
+            (value?.max === null && value?.min === null) ||
+            (value?.max === null && value?.min === undefined) ||
+            (value?.max === undefined && value?.min === null) ||
+            value?.length === 0
+
+          if (shouldRemove && index !== -1) {
             filters.splice(index, 1)
           }
           return filters
         })
       },
-    [setColumnFilters]
+    [setColumnFilters, clearPageAndSearch]
   )
 
   return { storeFilters, setFilter, setColumnFilters }
