@@ -32,11 +32,13 @@ export const OrdersFilter = () => {
       <div className="flex flex-col gap-2">
         <Input
           {...fields.name}
+          disabled={false}
           onChange={setFilter(fields.name.name)}
           isFilter={true}
         />
         <Input
           {...fields.orderNumber}
+          disabled={false}
           onChange={setFilter(fields.orderNumber.name)}
           isFilter={true}
         />
@@ -58,36 +60,43 @@ export const OrdersFilter = () => {
       <div className="flex flex-col gap-2">
         <Input
           {...fields.requestNumber}
+          disabled={false}
           onChange={setFilter(fields.requestNumber.name)}
           isFilter={true}
         />
         <Input
           {...fields.contractNumber}
+          disabled={false}
           onChange={setFilter(fields.contractNumber.name)}
           isFilter={true}
         />
         <Combobox
           {...fields.supplier}
+          disabled={false}
           onSelect={setFilter(fields.supplier.name)}
           isFilter={true}
         />
         <Listbox
           {...fields.procurementResponsible}
+          disabled={false}
           onChange={setFilter(fields.procurementResponsible.name)}
           isFilter={true}
         />
         <Combobox
           {...fields.requestor}
+          disabled={false}
           onSelect={setFilter(fields.requestor.name)}
           isFilter={true}
         />
         <Input
           {...fields.eun}
+          disabled={false}
           onChange={setFilter(fields.eun.name)}
           isFilter={true}
         />
         <Input
           {...fields.partNumber}
+          disabled={false}
           onChange={setFilter(fields.partNumber.name)}
           isFilter={true}
         />
@@ -95,6 +104,7 @@ export const OrdersFilter = () => {
       <Input
         className="col-span-2"
         {...fields.notes}
+        disabled={false}
         onChange={setFilter(fields.notes.name)}
         isFilter={true}
       />

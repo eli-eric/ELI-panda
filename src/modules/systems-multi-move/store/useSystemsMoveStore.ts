@@ -18,8 +18,8 @@ interface SystemsMoveStore {
 
 export const useSystemsMoveStore = create<SystemsMoveStore>(set => ({
   movingSystems: [],
-  destinationSystemsTableId: 'destination-systems',
-  movingSystemsTableId: 'moving-systems',
+  destinationSystemsTableId: 'destinationSystems',
+  movingSystemsTableId: 'movingSystems',
   destinationSystem: null,
   setMovingSystems: systems => set({ movingSystems: systems }),
   addMovingSystem: system =>

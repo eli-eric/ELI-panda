@@ -59,6 +59,7 @@ export const CategoryPropFilters = ({
               case PROPERTY_TYPE.TEXT: {
                 return (
                   <Input
+                    disabled={false}
                     rounded="rounded-md"
                     key={property.property.uid}
                     unit={property.property.unit?.name}
@@ -80,6 +81,7 @@ export const CategoryPropFilters = ({
               case PROPERTY_TYPE.NUMBER: {
                 return (
                   <RangeInput
+                    disabled={false}
                     key={property.property.uid}
                     name={property.property.uid}
                     required
@@ -101,6 +103,7 @@ export const CategoryPropFilters = ({
               case PROPERTY_TYPE.RANGE: {
                 return (
                   <RangeInput
+                    disabled={false}
                     key={property.property.uid}
                     name={property.property.uid}
                     placeholder={{ min: 'Value', max: '+/-' }}
@@ -122,6 +125,7 @@ export const CategoryPropFilters = ({
                 return (
                   <Listbox
                     key={property.property.uid}
+                    disabled={false}
                     name={property.property.uid}
                     customLabel={label}
                     onChange={value => {
