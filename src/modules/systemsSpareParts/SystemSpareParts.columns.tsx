@@ -110,11 +110,6 @@ export const useSystemsSparePartsColumns = ({
         )
       },
       {
-        header: 'System Level',
-        accessorFn: row => row.systemLevel,
-        id: 'systemLevel'
-      },
-      {
         header: 'System Code',
         accessorFn: row => row.systemCode,
         id: 'systemCode',

@@ -33,11 +33,13 @@ export const CatalogueFilterForm = ({
       <div className="flex flex-col gap-2">
         <Input
           {...fields.name}
+          disabled={false}
           onChange={setFilter(fields.name.name)}
           isFilter={true}
         />
         <Input
           {...fields.catalogueNumber}
+          disabled={false}
           onChange={setFilter(fields.catalogueNumber.name)}
           isFilter={true}
         />
@@ -45,11 +47,13 @@ export const CatalogueFilterForm = ({
       <div className="flex flex-col gap-2">
         <Input
           {...fields.manufacturerUrl}
+          disabled={false}
           onChange={setFilter(fields.manufacturerUrl.name)}
           isFilter={true}
         />
         <Input
           {...fields.supplier}
+          disabled={false}
           onChange={setFilter(fields.supplier.name)}
           isFilter={true}
         />
@@ -57,6 +61,7 @@ export const CatalogueFilterForm = ({
 
       <ComboboxTreeControlled
         {...fields.category}
+        disabled={false}
         value={categoryQuery ? JSON.parse(categoryQuery) : null}
         customLabel="Category"
         className="col-span-2"
@@ -71,6 +76,7 @@ export const CatalogueFilterForm = ({
 
       <Input
         {...fields.description}
+        disabled={false}
         className="col-span-2"
         onChange={setFilter(fields.description.name)}
         isFilter={true}

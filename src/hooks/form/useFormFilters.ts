@@ -5,7 +5,6 @@ import type { DefaultValues, FieldValues } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
-import { useSearchStore } from '@/modules/shared/table/store/useSarchStore'
 import { useFormControlStore } from '@/store/useFormControlStore'
 import useTableStateStore from '@/store/useTableStateStore'
 
@@ -145,15 +144,14 @@ export const useFormFilterState = ({
     false
   )
   const [, setQueryPage] = useQueryState('page', { history: 'replace' })
-  const { setPagination, setSearch } = useTableStateStore()
+  const { setPagination, setSearch, setSearchValue } = useTableStateStore()
 
   const [, setQuerySearch] = useQueryState('search', { history: 'replace' })
-  const { setSearchValue } = useSearchStore()
 
   const clearPageAndSearch = useCallback(() => {
     setPagination(tableId, `{"page":${1},"pageSize":${50}}`)
     setSearch(tableId, '')
-    setSearchValue('')
+    setSearchValue(tableId, '')
     if (enableQueryUrl) {
       setQueryPage('1', { shallow: true })
       setQuerySearch(null, { shallow: true })

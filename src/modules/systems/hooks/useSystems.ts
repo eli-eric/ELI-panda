@@ -3,6 +3,8 @@ import {
   useQuery,
   useQueryClient
 } from '@tanstack/react-query'
+import { useEffect } from 'react'
+import toast from 'react-hot-toast'
 
 import type { SystemsResponse } from '@/types/responses/systems'
 import type { QueryFetcherKey } from '@/utils/fetcher'
@@ -18,14 +20,22 @@ export const useSystems = (
 
   const queryKey: QueryFetcherKey = [tableId, { query }]
 
-  const { data, isFetching, error, dataUpdatedAt, refetch } = useQuery({
-    queryKey,
-    queryFn: queryFetcher<SystemsResponse>('systemsList'),
-    placeholderData: keepPreviousData,
-    refetchOnMount,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false
-  })
+  const { data, isFetching, isError, error, dataUpdatedAt, refetch } = useQuery(
+    {
+      queryKey,
+      queryFn: queryFetcher<SystemsResponse>('systemsList'),
+      placeholderData: keepPreviousData,
+      refetchOnMount,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false
+    }
+  )
+
+  useEffect(() => {
+    if (isError && error) {
+      toast.error(`Error fetching systems: ${error.message}`)
+    }
+  }, [isError, error])
 
   const queryClient = useQueryClient()
 
