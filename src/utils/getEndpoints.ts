@@ -66,7 +66,8 @@ export const getEndpoints = ({
     systemFilesCopy: `/api/system/images/copy`,
     systemsMove: `/systems/move`,
     publication: `/publication${uid ? '/' + uid : ''}`,
-    publications: `/publications${query}`
+    publications: `/publications${query}`,
+    generateUUID: '/uuid/v4'
   }
   return endpoints
 }

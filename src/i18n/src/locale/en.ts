@@ -425,7 +425,25 @@ export const messages = {
     }
   },
   orderItem: { head: 'ELI Panda - Order Item' },
-  publication: { head: 'ELI Panda - Publication' },
+  publication: {
+    head: 'ELI Panda - Publication',
+    form: {
+      abstract: { label: 'Abstract', placeholder: 'Abstract' },
+      articleTitle: { label: 'Article Title', placeholder: 'Article Title' },
+      keywords: { label: 'Keywords', placeholder: 'Keywords' },
+      longJournalTitle: {
+        label: 'Long Journal Title',
+        placeholder: 'Long Journal Title'
+      },
+      pages: { label: 'Pages', placeholder: 'Pages' },
+      pdfFile: { label: 'PDF File', placeholder: 'PDF File' },
+      publicationDOI: {
+        label: 'Publication DOI',
+        placeholder: 'Publication DOI'
+      },
+      year: { label: 'Year', placeholder: 'Year' }
+    }
+  },
   publications: { head: 'ELI Panda - Publications' },
   systemItem: {
     head: 'ELI Panda - System Item',
