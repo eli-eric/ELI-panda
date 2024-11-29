@@ -425,6 +425,7 @@ export const messages = {
     }
   },
   orderItem: { head: 'ELI Panda - Order Item' },
+  publication: { head: 'ELI Panda - Publication' },
   publications: { head: 'ELI Panda - Publications' },
   systemItem: {
     head: 'ELI Panda - System Item',
