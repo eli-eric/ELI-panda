@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 
 import { LinkDecorator } from '@/components/decorators'
 import { APP_BASE_URL } from '@/types/constants/common'
+import { PATH } from '@/types/constants/paths'
 
 import type { Publication } from '../publication/types/responses'
 
@@ -29,7 +30,16 @@ export const usePublicationColumns = () => {
       {
         id: 'longJournalTitle',
         header: 'Long Journal Title',
-        accessorFn: row => row.longJournalTitle
+        accessorFn: row => row.longJournalTitle,
+        cell: ({ getValue, row: { original } }) => {
+          return (
+            <Link href={PATH.PUBLICATION + '/' + original.uid}>
+              <LinkDecorator>
+                <div>{getValue()}</div>
+              </LinkDecorator>
+            </Link>
+          )
+        }
       },
       {
         id: 'abstract',
