@@ -1,5 +1,9 @@
 import type { ColumnDef } from '@tanstack/react-table'
+import Link from 'next/link'
 import { useMemo } from 'react'
+
+import { LinkDecorator } from '@/components/decorators'
+import { APP_BASE_URL } from '@/types/constants/common'
 
 import type { Publication } from '../publication/types/responses'
 
@@ -9,7 +13,23 @@ export const usePublicationColumns = () => {
       {
         id: 'pdfFile',
         header: 'PDF File',
-        accessorFn: row => row.pdfFile
+        accessorFn: row => row.pdfFile,
+        cell: ({ getValue }) => {
+          const value = getValue()
+          if (!value) return null
+          return (
+            <Link href={APP_BASE_URL + value} target="_blank">
+              <LinkDecorator>
+                <div>PDF File</div>
+              </LinkDecorator>
+            </Link>
+          )
+        }
+      },
+      {
+        id: 'longJournalTitle',
+        header: 'Long Journal Title',
+        accessorFn: row => row.longJournalTitle
       },
       {
         id: 'abstract',
@@ -20,11 +40,6 @@ export const usePublicationColumns = () => {
         id: 'keywords',
         header: 'Keywords',
         accessorFn: row => row.keywords
-      },
-      {
-        id: 'longJournalTitle',
-        header: 'Long Journal Title',
-        accessorFn: row => row.longJournalTitle
       },
       {
         id: 'pages',
