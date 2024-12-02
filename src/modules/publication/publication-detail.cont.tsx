@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { type FC, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
@@ -8,12 +7,12 @@ import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
-import { queryFetcher } from '@/utils/fetcher'
 
 import FileManager from '../shared/fileManager/FileManager'
 import { useFiles } from '../shared/fileManager/hooks/useFiles'
 import { FILE_TYPE } from '../shared/fileManager/types'
 import { PublicationFormComponent } from './components/publication-form.comp'
+import { useGenerateUid } from './hooks/useGenerateUid'
 import { usePublicationMutation } from './hooks/usePublicationMutation'
 import type { PublicationForm } from './types/form'
 import type { Publication } from './types/responses'
@@ -24,12 +23,8 @@ interface Props {
 
 export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
   const router = useRouter()
-  const { data } = useQuery({
-    queryKey: ['uuidGenerate'],
-    queryFn: queryFetcher<string>('generateUUID'),
-    enabled: !publication?.uid,
-    refetchOnMount: true
-  })
+
+  const generatedUid = useGenerateUid(!publication?.uid)
 
   const formMethods = useForm<PublicationForm>({
     defaultValues: publication
@@ -38,16 +33,16 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
   const { setValue } = formMethods
 
   const { data: files } = useFiles({
-    uid: publication?.uid || data,
+    uid: publication?.uid || generatedUid,
     itemType: FILE_TYPE.PUBLICATON
   })
 
   useEffect(() => {
-    if (data && !publication?.uid) {
-      setValue('uid', data)
+    if (generatedUid && !publication?.uid) {
+      setValue('uid', generatedUid)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [generatedUid])
 
   const { mutate } = usePublicationMutation()
 
@@ -98,12 +93,12 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
             uid={publication.uid}
           />
         ) : (
-          data && (
+          generatedUid && (
             <FileManager
               allowMultiple={false}
               hasEditRole={true}
               itemType={FILE_TYPE.PUBLICATON}
-              uid={data}
+              uid={generatedUid}
             />
           )
         )}
