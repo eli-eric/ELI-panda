@@ -1,3 +1,4 @@
+import type { Publication as PublicationItem } from '@/modules/publication/types/responses'
 import type { Employee } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
 
@@ -32,21 +33,10 @@ export type Publication = {
   webLink?: string // odkaz na clanek
   pages: number
   eidScopus?: string // /www.scopus.com - Scopus EID, moznost automatizace
-  authors: Author[] // TBD jak zjistit ELI Alps
   eliAuthors: Employee[] // TBD
-  statistics?: Statistics
 }
 
-interface Author {
-  firstName: string
-  secondName?: string
-  lastName: string
-  affiliation: string // affiliation - codebook? - zjistit dalo by se zjistit kdo z ELI Alps
-}
-
-interface Statistics {
-  total: number
-  eliEric: number
-  eliBeams: number
-  eliAlps: number
+export type PublicationsResponse = {
+  data: PublicationItem[]
+  totalCount: number
 }
