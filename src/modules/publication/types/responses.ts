@@ -1,13 +1,55 @@
+import type { CodebookType } from '@/types/responses/codebook'
+
 export type Publication = {
-  abstract: string
-  articleTitle: string
-  keywords: string
-  longJournalTitle: string
-  pages: number
-  pdfFile: string
-  publicationDOI: string
   uid: string
+  pdfFileName: string
+  pdfFileUrl: string
+  articleTitle: string
+  doi: string
+  journalTitle: string
+  volume: number
+  issue: number
+  pagesFrom: number
+  pagesTo: number
+  pagesTotal: number
+  citationsCount: number
+  impactFactor: number
+  quartile: string
   year: string
+  publishDate: string
+  abstract: string
+  keywords: string
+  oecdFord: string
+  wosNumber: string
+  issn: string
+  eissn: string
+  url: string
+  eidScopus: string
+  userCall: CodebookType
+  useExperiment: CodebookType
+  publicationCategory: CodebookType
+  openAccessType: CodebookType
+  language: CodebookType
+  statistics: PublicationStatistics
+  publicationSupport: CodebookType
+  state: CodebookType
+  authors: PublicationAuthor[]
+}
+
+type PublicationStatistics = {
+  uid: string
+  totalCount: number
+  ericCount: number
+  beamLinesCount: number
+  alpsCount: number
+}
+
+export type PublicationAuthor = {
+  uid: string
+  name: string
+  wosName: string
+  researcherId: string
+  facility: CodebookType
 }
 
 export type Uid = string
