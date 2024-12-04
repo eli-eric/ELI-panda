@@ -92,7 +92,10 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
   })
 
   return (
-    <Form formMethods={formMethods}>
+    <Form
+      formMethods={formMethods}
+      className="bg-neutral-50 dark:bg-neutral-800"
+    >
       <HeaderWithButtons
         editRole={ROLE.BASICS}
         onSubmit={onSubmit}

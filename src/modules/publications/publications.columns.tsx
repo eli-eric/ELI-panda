@@ -14,7 +14,7 @@ export const usePublicationColumns = () => {
       {
         id: 'pdfFile',
         header: 'PDF File',
-        accessorFn: row => row.pdfFile,
+        accessorFn: row => row.pdfFileName,
         cell: ({ getValue }) => {
           const value = getValue()
           if (!value) return null
@@ -30,7 +30,7 @@ export const usePublicationColumns = () => {
       {
         id: 'longJournalTitle',
         header: 'Long Journal Title',
-        accessorFn: row => row.longJournalTitle,
+        accessorFn: row => row.journalTitle,
         cell: ({ getValue, row: { original } }) => {
           return (
             <Link href={PATH.PUBLICATION + '/' + original.uid}>
@@ -54,12 +54,12 @@ export const usePublicationColumns = () => {
       {
         id: 'pages',
         header: 'Pages',
-        accessorFn: row => row.pages
+        accessorFn: row => row.pagesTotal
       },
       {
         id: 'publicationDOI',
         header: 'Publication DOI',
-        accessorFn: row => row.publicationDOI
+        accessorFn: row => row.doi
       },
       {
         id: 'year',

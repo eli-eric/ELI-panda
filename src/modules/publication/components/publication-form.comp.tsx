@@ -1,3 +1,4 @@
+import { Button } from '@/components/Buttons'
 import Combobox from '@/components/form/Combobox'
 import { Input, InputDate, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
@@ -21,8 +22,11 @@ export const PublicationFormComponent = () => {
   return (
     <Card className="py-6">
       <Grid>
-        <Col lg={4}>
+        <Col lg={3}>
           <Input {...fields.doi} />
+        </Col>
+        <Col lg={1}>
+          <Button primary>Load</Button>
         </Col>
         <Col lg={4}>
           <Input {...fields.articleTitle} />
