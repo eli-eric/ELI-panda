@@ -1,5 +1,5 @@
 import Combobox from '@/components/form/Combobox'
-import { Input, TextArea } from '@/components/form/inputs'
+import { Input, InputDate, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
@@ -21,11 +21,14 @@ export const PublicationFormComponent = () => {
   return (
     <Card className="py-6">
       <Grid>
-        <Col lg={6}>
+        <Col lg={4}>
           <Input {...fields.doi} />
         </Col>
-        <Col lg={6}>
+        <Col lg={4}>
           <Input {...fields.articleTitle} />
+        </Col>
+        <Col lg={4}>
+          <InputDate {...fields.publishDate} />
         </Col>
         <Col lg={12}>
           <Input {...fields.journalTitle} />

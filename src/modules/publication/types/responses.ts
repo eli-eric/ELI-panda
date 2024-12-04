@@ -15,7 +15,7 @@ export type Publication = {
   citationsCount: number
   impactFactor: number
   quartile: string
-  year: string
+  year: number
   publishDate: string
   abstract: string
   keywords: string
@@ -29,11 +29,10 @@ export type Publication = {
   useExperiment: CodebookType
   publicationCategory: CodebookType
   openAccessType: CodebookType
-  language: CodebookType
-  statistics: PublicationStatistics
+  language: string
   publicationSupport: CodebookType
-  state: CodebookType
-  authors: PublicationAuthor[]
+  state: string
+  authors?: PublicationAuthor[]
 }
 
 type PublicationStatistics = {

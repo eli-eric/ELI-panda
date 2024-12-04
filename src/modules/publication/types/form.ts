@@ -4,8 +4,6 @@ import type { PublicationAuthor } from './responses'
 
 export type PublicationForm = {
   uid: string
-  pdfFileName: string
-  pdfFileUrl: string
   articleTitle: string
   doi: string
   journalTitle: string
@@ -18,7 +16,7 @@ export type PublicationForm = {
   impactFactor: number
   quartile: string
   year: string
-  publishDate: string
+  publishDate?: string
   abstract: string
   keywords: string
   oecdFord: string
@@ -34,5 +32,7 @@ export type PublicationForm = {
   language: CodebookType
   publicationSupport: CodebookType
   state: CodebookType
-  authors: PublicationAuthor[]
+  authors?: PublicationAuthor[]
+  pdfFileName: string
+  pdfFileLink: string
 }
