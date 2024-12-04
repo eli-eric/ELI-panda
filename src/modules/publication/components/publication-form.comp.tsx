@@ -25,8 +25,10 @@ export const PublicationFormComponent = () => {
         <Col lg={3}>
           <Input {...fields.doi} />
         </Col>
-        <Col lg={1}>
-          <Button primary>Load</Button>
+        <Col lg={1} className="flex-col-reverse">
+          <Button primary className="h-[38px] justify-center">
+            Load
+          </Button>
         </Col>
         <Col lg={4}>
           <Input {...fields.articleTitle} />
