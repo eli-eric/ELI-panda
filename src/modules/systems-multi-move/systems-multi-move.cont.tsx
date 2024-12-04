@@ -40,13 +40,9 @@ export const SystemsMultiMoveContainer = () => {
         movingSystems.some(moving => moving.uid === path.uid)
       )
 
-      if (
-        movingSystems.length === 0 ||
-        isSelectedSameMoving ||
-        isSelectedParent
-      ) {
-        return false
-      }
+      if (isSelectedSameMoving) return false
+      if (isSelectedParent) return false
+      if (movingSystems.length === 0) return false
 
       return destinationSystem ? destinationSystem?.uid === system.uid : true
     },
