@@ -30,7 +30,9 @@ export const AddSystemTypeButton: FC<Props> = ({ selectedGroup, refetch }) => {
   const [open, setOpen] = useState(false)
   const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
 
-  const formMethods = useForm()
+  const formMethods = useForm({
+    defaultValues: { mask: '{STC}{ZC}-{serial(3)}' }
+  })
 
   //TODO: bit refactor after big merge
   const { mutate, isPending } = useMutation({

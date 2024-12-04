@@ -13,6 +13,7 @@ import { IconCell } from '../systems/components/table/cells/IconCell'
 import { SystemNameCell } from '../systems/components/table/cells/SystemNameCell'
 import { useSubsystems } from '../systems/hooks/useSubsystems'
 import type { ITEM_USAGE } from '../systems/types/constants'
+import { SelectAllCheckbox } from './components/select-all.checkbox'
 import { SubmitMoveButton } from './components/submit-move.button'
 import { useSystemsMoveStore } from './store/useSystemsMoveStore'
 
@@ -78,6 +79,7 @@ function IndeterminateCheckbox({
 
 export const useMoveSystemsColumns = ({ tableId }: SystemsColumnsProps) => {
   const { setUid, pending } = useSubsystems(tableId)
+  const { movingSystemsTableId } = useSystemsMoveStore()
   const columns = useMemo(
     (): ColumnDef<SystemDetail, any>[] => [
       {
@@ -94,9 +96,19 @@ export const useMoveSystemsColumns = ({ tableId }: SystemsColumnsProps) => {
       },
       {
         id: 'select',
-        header: 'sel',
+        header: ({ table }) => {
+          if (tableId === movingSystemsTableId) {
+            return (
+              <div className="pl-1">
+                <SelectAllCheckbox table={table} />
+              </div>
+            )
+          }
+          return null
+        },
         size: 41,
         meta: { sticky: true },
+
         enableHiding: false,
         cell: ({ row }) => (
           <IndeterminateCheckbox
@@ -285,7 +297,7 @@ export const useMoveSystemsColumns = ({ tableId }: SystemsColumnsProps) => {
         size: 150
       }
     ],
-    [setUid, tableId]
+    [setUid, tableId, movingSystemsTableId]
   )
 
   return { columns, pending }

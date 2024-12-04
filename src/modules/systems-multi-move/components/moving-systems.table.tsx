@@ -18,6 +18,7 @@ import type { SystemDetail } from '@/types/responses/systems'
 import { classNames } from '@/utils'
 
 import { useMoveSystemsColumns } from '../move-systems.columns'
+import { useSystemsMoveStore } from '../store/useSystemsMoveStore'
 
 interface MovingSystemsTableProps {
   tableId: string
@@ -43,6 +44,7 @@ export const MovingSystemsTable: FC<MovingSystemsTableProps> = ({
   )
 
   const { columns, pending } = useMoveSystemsColumns({ tableId })
+  const { movingSystemsTableId } = useSystemsMoveStore()
 
   const table = usePandaTable<SystemDetail>({
     tableId: tableId,
@@ -69,7 +71,7 @@ export const MovingSystemsTable: FC<MovingSystemsTableProps> = ({
         useQuery={false}
         left={
           <SystemFilterButtonContainer
-            panelSlide="right"
+            panelSlide={tableId === movingSystemsTableId ? 'left' : 'right'}
             tableId={tableId}
             enableQueryURL={false}
           />

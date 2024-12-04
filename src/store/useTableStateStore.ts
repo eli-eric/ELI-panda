@@ -18,6 +18,7 @@ type SortingInstance = {
   filter?: QueryFilter
   columnFilter?: ColumnFilter[]
   search?: string
+  searchBarValue?: string
   custom?: Record<string, any>
   columnVisibility?: VisibilityState
   expanded?: ExpandedState
@@ -46,6 +47,10 @@ type TableState = {
     columnFilter: SortingInstance['columnFilter']
   ) => void
   setSearch: (tableId: string, search: SortingInstance['search']) => void
+  setSearchValue: (
+    tableId: string,
+    searchBarValue: SortingInstance['searchBarValue']
+  ) => void
   setCustom: (tableId: string, custom: SortingInstance['custom']) => void
   setVisibility: (
     tableId: string,
@@ -95,6 +100,8 @@ const useTableStateStore = create<TableState>(set => {
       updateInstance(tableId, 'columnOrder', columnOrder),
     setColumnFilter: (tableId, columnFilter) =>
       updateInstance(tableId, 'columnFilter', columnFilter),
+    setSearchValue: (tableId, searchBarValue) =>
+      updateInstance(tableId, 'searchBarValue', searchBarValue),
     reset: tableId =>
       set(state => {
         const newInstance = {
@@ -103,6 +110,7 @@ const useTableStateStore = create<TableState>(set => {
           pagination: undefined,
           filter: undefined,
           search: undefined,
+          searchBarValue: undefined,
           sortByQueryString: undefined,
           columnFilter: undefined,
           custom: undefined,

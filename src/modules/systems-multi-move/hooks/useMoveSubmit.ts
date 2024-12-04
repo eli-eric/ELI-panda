@@ -25,7 +25,7 @@ const updateDestinationRows = (
     if (row.uid === destinationSystemUid) {
       return {
         ...row,
-        hasSubSystems: true,
+        hasSubsystems: true,
         subSystems: row.subSystems
           ? [...row.subSystems, ...movingSystems]
           : undefined
