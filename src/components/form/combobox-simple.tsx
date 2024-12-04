@@ -76,7 +76,7 @@ export const ComboboxSimple = ({
   const handleClear = () => {
     setQuery('')
     setValue(name, null)
-    onSelect && onSelect(null)
+    onSelect && onSelect('')
   }
 
   const handleChange = e => {
