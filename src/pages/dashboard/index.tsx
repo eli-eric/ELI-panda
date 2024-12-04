@@ -1,4 +1,5 @@
 import {
+  BookOpenIcon,
   CreditCardIcon,
   LifebuoyIcon,
   PhotoIcon,
@@ -22,7 +23,14 @@ import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
-const tiles = [
+type Tile = {
+  name: string
+  link: string
+  Icon: () => JSX.Element
+  role: ROLE
+}
+
+const tiles: Tile[] = [
   {
     name: 'Systems',
     link: PATH.SYSTEMS,
@@ -76,14 +84,24 @@ const tiles = [
     link: 'mailto:jiri.svacha@eli-beams.eu',
     Icon: () => (
       <LifebuoyIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
-    )
+    ),
+    role: ROLE.BASICS
   },
   {
     name: 'Layout',
     link: PATH.LAYOUT,
     Icon: () => (
       <PhotoIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
-    )
+    ),
+    role: ROLE.BASICS
+  },
+  {
+    name: 'Publications',
+    link: PATH.PUBLICATIONS,
+    Icon: () => (
+      <BookOpenIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+    ),
+    role: ROLE.BASICS
   }
 ]
 

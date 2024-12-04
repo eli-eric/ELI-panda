@@ -1,4 +1,5 @@
 import {
+  BookOpenIcon,
   CreditCardIcon,
   HomeIcon,
   RectangleGroupIcon,
@@ -36,7 +37,9 @@ export enum PATH {
   PROFILE_GENERAL = '/profile/general',
   PROFILE_SECURITY = '/profile/security',
   PROFILE_TEAM = '/profile/team',
-  LAYOUT = '/layout'
+  LAYOUT = '/layout',
+  PUBLICATIONS = '/publications',
+  PUBLICATION = '/publication'
 }
 
 export const SUPPORT =
@@ -105,6 +108,12 @@ export const NAV_BAR_CONFIG: NavigationType[] = [
     link: PATH.ROOM_CARDS,
     role: ROLE.ROOM_CARD_VIEW,
     Icon: CreditCardIcon
+  },
+  {
+    name: 'Publications',
+    link: PATH.PUBLICATIONS,
+    role: ROLE.BASICS,
+    Icon: BookOpenIcon
   }
 ]
 
@@ -180,5 +189,7 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
   [PATH.SYSTEM_TYPE_EDIT]: [ROLE.SYSTEM_TYPE_EDIT, ROLE.SYSTEM_TYPE_VIEW],
   [PATH.SYSTEMS_MULTI_MOVE]: [ROLE.SYSTEM_EDIT],
   [PATH.LAYOUT]: [ROLE.BASICS],
-  [PATH.ROOT]: []
+  [PATH.ROOT]: [],
+  [PATH.PUBLICATIONS]: [ROLE.BASICS],
+  [PATH.PUBLICATION]: [ROLE.BASICS]
 }

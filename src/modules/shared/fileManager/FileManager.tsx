@@ -20,13 +20,15 @@ type FileManagerProps = {
   uid: string
   hasEditRole?: boolean
   customTitle?: string
+  allowMultiple?: boolean
 }
 
 const FileManager = ({
   itemType,
   uid,
   hasEditRole,
-  customTitle
+  customTitle,
+  allowMultiple = true
 }: FileManagerProps) => {
   const { data: filesData } = useFiles({ itemType, uid })
   const { data: linksData } = useLinks({ uid })
@@ -67,10 +69,12 @@ const FileManager = ({
     fileInputRef.current?.click() && onClick && onClick(e)
   }
 
+  const canUpload = hasEditRole && (allowMultiple || files.length === 0)
+
   return (
     <div>
       <Heading text={messages.title} customText={customTitle}>
-        {hasEditRole && (
+        {canUpload && (
           <Fragment>
             <div {...restRootProps}>
               <input

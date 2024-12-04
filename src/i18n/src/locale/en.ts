@@ -425,6 +425,58 @@ export const messages = {
     }
   },
   orderItem: { head: 'ELI Panda - Order Item' },
+  publication: {
+    head: 'ELI Panda - Publication',
+    form: {
+      abstract: { label: 'Abstract', placeholder: 'Abstract' },
+      articleTitle: { label: 'Article Title', placeholder: 'Article Title' },
+      citationsCount: {
+        label: 'Citations Count',
+        placeholder: 'Citations Count'
+      },
+      eidScopus: { label: 'EID Scopus', placeholder: 'EID Scopus' },
+      eissn: { label: 'EISSN', placeholder: 'EISSN' },
+      impactFactor: { label: 'Impact Factor', placeholder: 'Impact Factor' },
+      issn: { label: 'ISSN', placeholder: 'ISSN' },
+      issue: { label: 'Issue', placeholder: 'Issue' },
+      keywords: { label: 'Keywords', placeholder: 'Keywords' },
+      language: { label: 'Language', placeholder: 'Language' },
+      oecdFord: { label: 'OECD-FORD', placeholder: 'OECD-FORD' },
+      openAccessType: {
+        label: 'Open Access Type',
+        placeholder: 'Open Access Type'
+      },
+      pagesFrom: { label: 'Pages From', placeholder: 'Pages From' },
+      pagesTo: { label: 'Pages To', placeholder: 'Pages To' },
+      longJournalTitle: {
+        label: 'Long Journal Title',
+        placeholder: 'Long Journal Title'
+      },
+      pagesTotal: { label: 'Pages Total', placeholder: 'Pages Total' },
+      publicationCategory: {
+        label: 'Publication Category',
+        placeholder: 'Publication Category'
+      },
+      publicationSupport: {
+        label: 'Publication Support',
+        placeholder: 'Publication Support'
+      },
+      publishDate: { label: 'Publish Date', placeholder: 'Publish Date' },
+      quartile: { label: 'Quartile', placeholder: 'Quartile' },
+      state: { label: 'State', placeholder: 'State' },
+      webLink: { label: 'Web Link', placeholder: 'Web Link' },
+      userCall: { label: 'User Call', placeholder: 'User Call' },
+      useExperiment: { label: 'Use Experiment', placeholder: 'Use Experiment' },
+      volume: { label: 'Volume', placeholder: 'Volume' },
+      wosNumber: { label: 'WOS Number', placeholder: 'WOS Number' },
+      doi: {
+        label: 'Publication DOI',
+        placeholder: 'Publication DOI'
+      },
+      year: { label: 'Year', placeholder: 'Year' }
+    }
+  },
+  publications: { head: 'ELI Panda - Publications' },
   systemItem: {
     head: 'ELI Panda - System Item',
     itemMove: {

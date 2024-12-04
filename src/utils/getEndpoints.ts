@@ -64,7 +64,10 @@ export const getEndpoints = ({
     physicalItemMove: `/physical-item/move`,
     physicalItemReplace: `/physical-item/replace`,
     systemFilesCopy: `/api/system/images/copy`,
-    systemsMove: `/systems/move`
+    systemsMove: `/systems/move`,
+    publication: `/publication${uid ? '/' + uid : ''}`,
+    publications: `/publications${query}`,
+    generateUUID: '/uuid/v4'
   }
   return endpoints
 }

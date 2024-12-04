@@ -8,7 +8,7 @@ import { ValidationIcon } from '../../Icons'
 import { InputWrapper, Label } from '../shared'
 
 type TextAreaWithErrorProps = FieldProps &
-  React.InputHTMLAttributes<HTMLTextAreaElement>
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>
 
 export const TextArea = ({
   name,
@@ -18,7 +18,8 @@ export const TextArea = ({
   label,
   className,
   isFilter,
-  defaultValue
+  defaultValue,
+  rows
 }: TextAreaWithErrorProps) => {
   const { control } = useFormContext()
   const id = useId()
@@ -36,7 +37,7 @@ export const TextArea = ({
               {...field}
               value={field.value || ''}
               id={id}
-              rows={3}
+              rows={rows || 3}
               disabled={disabled}
               placeholder={placeholder}
               className={classNames(
