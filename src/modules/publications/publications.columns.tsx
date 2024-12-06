@@ -6,10 +6,9 @@ import { FormattedDate } from 'react-intl'
 import { LinkDecorator } from '@/components/decorators'
 import { ShortCell } from '@/components/table/short-cell'
 import { APP_BASE_URL } from '@/types/constants/common'
-import { PATH } from '@/types/constants/paths'
 
-import { ActionButtons } from '../publication/components/action-buttons.comp'
 import type { Publication } from '../publication/types/responses'
+import { ActionButtons } from './components/action-buttons.comp'
 
 export const usePublicationColumns = () => {
   const columns = useMemo(
@@ -46,11 +45,7 @@ export const usePublicationColumns = () => {
         cell: ({ getValue, row: { original } }) => {
           return (
             <div className="relative w-full h-full flex items-center">
-              <Link href={PATH.PUBLICATION + '/' + original.uid}>
-                <LinkDecorator>
-                  <div>{getValue()}</div>
-                </LinkDecorator>
-              </Link>
+              <div>{getValue()}</div>
               <ActionButtons uid={original.uid} />
             </div>
           )
