@@ -15,7 +15,6 @@ import { FILE_TYPE } from '../shared/fileManager/types'
 import { PublicationFormComponent } from './components/publication-form.comp'
 import { useGenerateUid } from './hooks/useGenerateUid'
 import { usePublicationMutation } from './hooks/usePublicationMutation'
-import type { PublicationForm } from './types/form'
 import type { Publication } from './types/responses'
 
 interface Props {
@@ -27,7 +26,11 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
 
   const generatedUid = useGenerateUid(!publication?.uid)
 
-  const formMethods = useForm<PublicationForm>({})
+  const formMethods = useForm<Publication>({
+    defaultValues: {
+      ...publication
+    }
+  })
 
   const { setValue } = formMethods
 
@@ -54,7 +57,7 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
       pagesFrom: Number(data.pagesFrom),
       impactFactor: Number(data.impactFactor),
       issue: Number(data.issue),
-      year: Number(data.year),
+      year: data.year,
       state: data.state.name,
       volume: Number(data.volume),
       citationsCount: Number(data.citationsCount),
@@ -63,7 +66,6 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
       pdfFileName: files?.[0].name || '',
       quartile: 'Q1'
     }
-    console.log(dataToSend)
     mutate(dataToSend, {
       onSuccess: () => {
         router.push(PATH.PUBLICATION + '/' + data.uid)

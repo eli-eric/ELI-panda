@@ -15,7 +15,7 @@ export type Publication = {
   citationsCount: number
   impactFactor: number
   quartile: string
-  year: number
+  year: string
   publishDate: string
   abstract: string
   keywords: string

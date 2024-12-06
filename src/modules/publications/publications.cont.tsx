@@ -23,7 +23,7 @@ export const PublicationsContainer: FC = () => {
   const table = usePandaTable<Publication>({
     tableId,
     columns,
-    data: data || []
+    data: data?.data || []
   })
 
   const handleAdd = () => {
@@ -46,8 +46,14 @@ export const PublicationsContainer: FC = () => {
           />
         }
       />
-      <PandaTableV2 tableId={tableId} table={table} data={data} />
-      <Pagination tableId={tableId} />
+      <PandaTableV2 tableId={tableId} table={table} data={data?.data} />
+      <Pagination
+        tableId={tableId}
+        settings={{
+          total: data?.totalCount,
+          pageSizeDefault: 50
+        }}
+      />
     </TableLayoutContainer>
   )
 }
