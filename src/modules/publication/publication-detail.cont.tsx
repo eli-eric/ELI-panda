@@ -58,10 +58,10 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
       impactFactor: Number(data.impactFactor),
       issue: Number(data.issue),
       year: data.year,
-      state: data.state.name,
+      state: data.state,
       volume: Number(data.volume),
       citationsCount: Number(data.citationsCount),
-      language: data.language.name,
+      language: data.language,
       pdfFileUrl: files?.[0].url || '',
       pdfFileName: files?.[0].name || '',
       quartile: 'Q1'
