@@ -428,6 +428,8 @@ export const messages = {
   publication: {
     head: 'ELI Panda - Publication',
     form: {
+      department: { label: 'ELI Department*', placeholder: 'Select' },
+      authorsCount: { label: 'ELI Department Authors Count*' },
       code: { label: 'Code*', placeholder: 'Code' },
       experimentalSystem: { label: 'Experimental System' },
       userCall: { label: 'User Call', placeholder: 'Select' },
