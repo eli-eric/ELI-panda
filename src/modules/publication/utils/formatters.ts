@@ -1,3 +1,5 @@
+import { convertDate } from '@/utils/formatters'
+
 import type { PublicationForm } from '../types/form'
 import type { Publication } from '../types/responses'
 
@@ -8,7 +10,12 @@ export const formatFormData = (data: PublicationForm): Publication => ({
   volume: Number(data.volume),
   pagesCount: Number(data.pagesCount),
   issue: data.issue ? Number(data.issue) : undefined,
-  impactFactor: data.impactFactor ? Number(data.impactFactor) : undefined
+  impactFactor: data.impactFactor ? Number(data.impactFactor) : undefined,
+  dateOfPublication: convertDate(data.dateOfPublication),
+  authorsDepartments: data.authorsDepartments?.map(author => ({
+    ...author,
+    authorsCount: Number(author.authorsCount)
+  }))
 })
 
 export const formatPublication = (

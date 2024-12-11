@@ -16,7 +16,7 @@ export interface PublicationForm {
   allAuthorsCount: string
   eliAuthors: string
   eliAuthorsCount: string
-  authorsDeparments: AuthorsDepartment[]
+  authorsDepartments: AuthorsDepartment[]
   longJournalTitle: string
   volume: string
   issue?: string

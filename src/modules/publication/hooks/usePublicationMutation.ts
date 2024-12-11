@@ -13,7 +13,7 @@ export const usePublicationMutation = () => {
 
   return useMutation({
     mutationKey: uid ? ['publication', uid] : ['create-publication'],
-    mutationFn: queryMutate<string, Publication>(
+    mutationFn: queryMutate<Publication, Publication>(
       'publication',
       uid ? 'put' : 'post',
       uid

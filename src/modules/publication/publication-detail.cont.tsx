@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { Form } from '@/components/form/Form'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'
+import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
 import FileManager from '../shared/fileManager/FileManager'
@@ -35,22 +36,34 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
   const { mutate } = usePublicationMutation()
 
   const onSubmit = formMethods.handleSubmit(data => {
-    console.log('submit', formatFormData(data))
+    const formattedData = formatFormData(data)
+    console.log(formattedData)
+    mutate(formattedData, {
+      onSuccess: ({ data }) => {
+        router.push(PATH.PUBLICATION + '/' + data.uid)
+      }
+    })
   })
 
   const onSubmitAndExit = formMethods.handleSubmit(data => {
-    console.log('submit and save', formatFormData(data))
+    mutate(formatFormData(data), {
+      onSuccess: () => {
+        router.push(PATH.PUBLICATIONS)
+      }
+    })
   })
 
   return (
-    <Form
-      formMethods={formMethods}
-      className="bg-neutral-50 dark:bg-neutral-800"
-    >
+    <Form formMethods={formMethods} className="h-screen overflow-auto">
       <HeaderWithButtons
         editRole={ROLE.BASICS}
         onSubmit={onSubmit}
         onSubmitAndExit={onSubmitAndExit}
+        customElement={
+          <h1 className="text-xl font-bold">
+            {publication ? 'EDIT PUBLICATION' : 'NEW PUBLICATION'}
+          </h1>
+        }
       />
       <PublicationFormComponent />
       <Card>

@@ -20,6 +20,7 @@ export type Publication = {
 
 export const PublicationFormComponent = () => {
   const fields = usePublicationFields()
+
   return (
     <Card className="py-6">
       <Grid>
