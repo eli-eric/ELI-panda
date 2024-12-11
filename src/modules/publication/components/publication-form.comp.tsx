@@ -1,4 +1,3 @@
-import { Button } from '@/components/Buttons'
 import Combobox from '@/components/form/Combobox'
 import { Input, InputDate, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
@@ -6,6 +5,8 @@ import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
 
 import { usePublicationFields } from '../hooks/usePublicationFields'
+import { DepartmentsComponent } from './departments.comp'
+import { MediaTypeRadio } from './media-type.radio'
 
 export type Publication = {
   abstract: string
@@ -23,93 +24,126 @@ export const PublicationFormComponent = () => {
     <Card className="py-6">
       <Grid>
         <Col lg={3}>
-          <Input {...fields.doi} />
+          <MediaTypeRadio
+            name={'mediaType'}
+            options={[
+              {
+                label: 'Peer-Reviewd Article',
+                value: 'Peer-Reviewd Article',
+                disabled: false
+              },
+              { label: 'Other Article', value: 'Other Article', disabled: true }
+            ]}
+            defaultValue={'Peer-Reviewd Article'}
+          />
         </Col>
-        <Col lg={1} className="flex-col-reverse">
-          <Button primary className="h-[38px] justify-center">
-            Load
-          </Button>
+        <Col lg={9}>
+          <Input {...fields.code} />
         </Col>
         <Col lg={4}>
-          <Input {...fields.articleTitle} />
-        </Col>
-        <Col lg={4}>
-          <InputDate {...fields.publishDate} />
-        </Col>
-        <Col lg={12}>
-          <Input {...fields.journalTitle} />
-        </Col>
-        <Col lg={3}>
-          <Listbox {...fields.state} />
-        </Col>
-        <Col lg={3}>
-          <Listbox {...fields.publicationCategory} />
-        </Col>
-        <Col lg={3}>
-          <Listbox {...fields.openAccessType} />
-        </Col>
-        <Col lg={3}>
-          <Listbox {...fields.publicationSupport} />
-        </Col>
-        <Col lg={3}>
           <Listbox {...fields.userCall} />
         </Col>
-        <Col lg={3}>
-          <Listbox {...fields.useExperiment} />
+        <Col lg={4}>
+          <Listbox {...fields.userExperiment} />
         </Col>
-        <Col lg={3}>
-          <Combobox {...fields.language} />
+        <Col lg={4}>
+          <Input {...fields.experimentalSystem} />
         </Col>
-        <Col lg={3}>
-          <Input {...fields.year} type="number" />
+        <Col lg={4}>
+          <Input {...fields.doi} />
+        </Col>
+        <Col lg={4}>
+          <Input {...fields.webLink} />
+        </Col>
+        <Col lg={4}>
+          <Listbox {...fields.openAccessType} />
         </Col>
         <Col lg={12}>
-          <Input {...fields.url} />
+          <Input {...fields.title} />
+        </Col>
+        <Col lg={6}>
+          <TextArea {...fields.allAuthors} />
+        </Col>
+        <Col lg={6}>
+          <TextArea {...fields.eliAuthors} />
+        </Col>
+        <Col lg={6}>
+          <Input {...fields.allAuthorsCount} />
+        </Col>
+        <Col lg={6}>
+          <Input {...fields.eliAuthorsCount} />
         </Col>
         <Col lg={12}>
-          <Input {...fields.keywords} />
+          <DepartmentsComponent />
+        </Col>
+        <Col lg={6}>
+          <Input {...fields.longJournalTitle} />
+        </Col>
+        <Col lg={6}>
+          <Input {...fields.shortJournalTitle} />
         </Col>
         <Col lg={3}>
-          <Input {...fields.issn} />
+          <Input {...fields.volume} />
         </Col>
         <Col lg={3}>
-          <Input {...fields.eissn} />
+          <Input {...fields.issue} />
         </Col>
         <Col lg={3}>
-          <Input {...fields.eidScopus} />
+          <Input {...fields.pages} />
         </Col>
         <Col lg={3}>
-          <Input {...fields.oeceFord} />
+          <Input {...fields.pagesCount} />
         </Col>
-        <Col lg={3}>
+        <Col lg={12}>
+          <TextArea {...fields.citeAs} />
+        </Col>
+        <Col lg={2}>
+          <Input {...fields.impactFactor} />
+        </Col>
+        <Col lg={2}>
+          <Input {...fields.quartilBasis} />
+        </Col>
+        <Col lg={2}>
+          <Input {...fields.quartil} />
+        </Col>
+        <Col lg={2}>
+          <Input {...fields.yearOfPublication} />
+        </Col>
+        <Col lg={4}>
+          <InputDate {...fields.dateOfPublication} />
+        </Col>
+        <Col lg={6}>
+          <TextArea {...fields.abstract} />
+        </Col>
+        <Col lg={6}>
+          <TextArea {...fields.keywords} />
+        </Col>
+        <Col lg={6}>
+          <Input {...fields.oecdFord} />
+        </Col>
+        <Col lg={6}>
+          <Input {...fields.grant} />
+        </Col>
+        <Col lg={2}>
           <Input {...fields.wosNumber} />
         </Col>
-        <Col lg={3}>
-          <Input {...fields.volume} type="number" />
+        <Col lg={2}>
+          <Input {...fields.issn} />
         </Col>
-        <Col lg={3}>
-          <Input {...fields.issue} type="number" />
+        <Col lg={2}>
+          <Input {...fields.eissn} />
         </Col>
-        <Col lg={3}>
-          <Input {...fields.pages} type="number" />
+        <Col lg={2}>
+          <Input {...fields.eidScopus} />
         </Col>
-        <Col lg={3}>
-          <Input {...fields.pagesFrom} />
-        </Col>
-        <Col lg={3}>
-          <Input {...fields.pagesTo} />
-        </Col>
-        <Col lg={3}>
-          <Combobox {...fields.quartile} />
-        </Col>
-        <Col lg={3}>
-          <Input {...fields.impactFactor} type="number" />
+        <Col lg={4}>
+          <Combobox {...fields.publishingCountry} hasClientFilter={true} />
         </Col>
         <Col lg={12}>
-          <Input {...fields.citationsCount} />
+          <Input {...fields.language} defaultValue={'en'} disabled={true} />
         </Col>
         <Col lg={12}>
-          <TextArea {...fields.abstract} rows={6} />
+          <TextArea {...fields.note} />
         </Col>
       </Grid>
     </Card>

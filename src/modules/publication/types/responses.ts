@@ -1,54 +1,46 @@
 import type { CodebookType } from '@/types/responses/codebook'
 
-export type Publication = {
-  uid: string
-  pdfFileName: string
-  pdfFileUrl: string
-  articleTitle: string
+export interface Publication {
+  uid?: string
+  mediaType: string
+  code: string
+  experimentalSystem?: string
+  userCall?: CodebookType
+  userExperiment?: CodebookType
   doi: string
-  journalTitle: string
+  webLink: string
+  openAccessType: CodebookType
+  title: string
+  allAuthors: string
+  allAuthorsCount: number
+  eliAuthors: string
+  eliAuthorsCount: number
+  authorsDeparments: AuthorsDepartment[]
+  longJournalTitle: string
   volume: number
-  issue: number
-  pagesFrom: number
-  pagesTo: number
-  pagesTotal: number
-  citationsCount: number
-  impactFactor: number
-  quartile: string
-  year: string
-  publishDate: string
+  issue?: number
+  pages: string
+  pagesCount: number
+  citeAs: string
+  impactFactor?: number
+  quartilBasis?: string
+  quartil?: CodebookType
+  yearOfPublication: string
+  dateOfPublication?: string
   abstract: string
   keywords: string
-  oecdFord: string
-  wosNumber: string
-  issn: string
-  eissn: string
-  url: string
-  eidScopus: string
-  userCall: CodebookType
-  useExperiment: CodebookType
-  publicationCategory: CodebookType
-  openAccessType: CodebookType
-  language: string
-  publicationSupport: CodebookType
-  state: string
-  authors?: PublicationAuthor[]
+  oecdFord?: string
+  grant?: string
+  wosNumber?: string
+  issn?: string
+  eissn?: string
+  eidScopus?: string
+  publishingCountry: CodebookType
+  language: CodebookType
+  note?: string
 }
 
-type PublicationStatistics = {
-  uid: string
-  totalCount: number
-  ericCount: number
-  beamLinesCount: number
-  alpsCount: number
+export type AuthorsDepartment = {
+  department: CodebookType | null
+  authorsCount: number
 }
-
-export type PublicationAuthor = {
-  uid: string
-  name: string
-  wosName: string
-  researcherId: string
-  facility: CodebookType
-}
-
-export type Uid = string

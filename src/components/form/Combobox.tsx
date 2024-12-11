@@ -29,10 +29,12 @@ type ComboboxPropsT = FieldProps &
     onClickIcon?: () => void
     onSelect?: (item?: CodebookType | null) => void
     isFilter?: boolean
+    hasClientFilter?: boolean
   }
 
 const Combobox = ({
   codebook,
+  hasClientFilter = false,
   name,
   placeholder,
   customLabel,
@@ -55,16 +57,31 @@ const Combobox = ({
 
   const [query, setQuery] = useState<string>('')
   const codebookResponseData = useMemo(
-    () => ({ data: codebookResponse, metadata: undefined }),
+    () => codebookResponse && { data: codebookResponse, metadata: undefined },
     [codebookResponse]
   )
 
-  const { data } = useCodebook(codebook, { limit, filter, searchText: query })
+  const { data: response } = useCodebook(codebook, {
+    limit,
+    filter,
+    searchText: hasClientFilter ? undefined : query
+  })
 
-  const options = useMemo(
-    () => (data ? data : codebookResponseData),
-    [data, codebookResponseData]
-  )
+  const options = useMemo(() => {
+    const data = codebookResponseData || response
+    if (!data) return { data: [], metadata: undefined }
+    if (hasClientFilter) {
+      return {
+        data: data.data.filter(item =>
+          item.name.toLowerCase().includes(query.toLowerCase())
+        ),
+        metadata: codebookResponseData?.metadata
+      }
+    } else {
+      return data
+    }
+  }, [hasClientFilter, query, codebookResponseData, response])
+
   const { getFormModal, setOpen } = useAddCodebookValue(options?.metadata)
   const { data: session } = useSession()
 
