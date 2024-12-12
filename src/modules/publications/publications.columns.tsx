@@ -16,13 +16,15 @@ export const usePublicationColumns = () => {
       {
         id: 'mediaType',
         header: 'Media Type',
-        accessorFn: row => row.mediaType?.name
+        accessorFn: row => row.mediaType,
+        meta: { sticky: true },
+        size: 150
       },
       {
         id: 'code',
-        header: 'PDF File',
+        header: 'Code',
         accessorFn: row => row.code,
-        size: 100,
+        size: 150,
         meta: {
           sticky: true
         },
@@ -34,7 +36,7 @@ export const usePublicationColumns = () => {
                   <div>{getValue()}</div>
                 </LinkDecorator>
               </Link>
-              <ActionButtons uid={original.uid} />
+              <ActionButtons uid={original?.uid || ''} />
             </div>
           )
         }

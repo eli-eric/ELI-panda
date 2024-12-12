@@ -1,5 +1,5 @@
 import { TrashIcon } from '@heroicons/react/24/outline'
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
@@ -36,10 +36,10 @@ export const DepartmentsComponent = () => {
   return (
     <div className="w-full">
       {fields.map((item, index) => (
-        <div key={item.id} className="flex w-full gap-2 pt-2">
+        <div key={item.id} className="grid grid-cols-12 w-full gap-2 pt-2">
           <Department key={item.id} name={`authorsDepartments.${index}`} />
           <button
-            className="text-red-600 dark:text-gray-400 hover:text-primary-400 dark:hover:text-primary-600 self-end pb-2"
+            className="text-red-600 dark:text-gray-400 col-span-1 hover:text-primary-400 dark:hover:text-primary-600 self-end pb-2"
             onClick={() => handleRemove(index)}
             disabled={fields.length === 1}
           >
@@ -60,19 +60,21 @@ export const DepartmentsComponent = () => {
 const Department = ({ name }) => {
   const { formatMessage: fm } = useIntl()
   return (
-    <div className="flex w-full gap-2 pt-2">
+    <Fragment>
       <Listbox
         name={`${name}.department`}
         label={form.department.label}
-        placeholder={form.department.placeholder}
+        placeholder={fm({ id: form.department.placeholder })}
         codebook={CODEBOOK.DEPARTMENT}
+        className="col-span-6"
       />
       <Input
         name={`${name}.authorsCount`}
         rounded="rounded-md"
         label={fm({ id: form.authorsCount.label })}
         type="number"
+        className="col-span-5"
       />
-    </div>
+    </Fragment>
   )
 }
