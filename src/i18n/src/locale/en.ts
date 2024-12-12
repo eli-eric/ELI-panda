@@ -428,52 +428,43 @@ export const messages = {
   publication: {
     head: 'ELI Panda - Publication',
     form: {
-      abstract: { label: 'Abstract', placeholder: 'Abstract' },
-      articleTitle: { label: 'Article Title', placeholder: 'Article Title' },
-      citationsCount: {
-        label: 'Citations Count',
-        placeholder: 'Citations Count'
-      },
-      eidScopus: { label: 'EID Scopus', placeholder: 'EID Scopus' },
-      eissn: { label: 'EISSN', placeholder: 'EISSN' },
-      impactFactor: { label: 'Impact Factor', placeholder: 'Impact Factor' },
-      issn: { label: 'ISSN', placeholder: 'ISSN' },
-      issue: { label: 'Issue', placeholder: 'Issue' },
-      keywords: { label: 'Keywords', placeholder: 'Keywords' },
-      language: { label: 'Language', placeholder: 'Language' },
-      oecdFord: { label: 'OECD-FORD', placeholder: 'OECD-FORD' },
-      openAccessType: {
-        label: 'Open Access Type',
-        placeholder: 'Open Access Type'
-      },
-      pagesFrom: { label: 'Pages From', placeholder: 'Pages From' },
-      pagesTo: { label: 'Pages To', placeholder: 'Pages To' },
-      longJournalTitle: {
-        label: 'Long Journal Title',
-        placeholder: 'Long Journal Title'
-      },
-      pagesTotal: { label: 'Pages Total', placeholder: 'Pages Total' },
-      publicationCategory: {
-        label: 'Publication Category',
-        placeholder: 'Publication Category'
-      },
-      publicationSupport: {
-        label: 'Publication Support',
-        placeholder: 'Publication Support'
-      },
-      publishDate: { label: 'Publish Date', placeholder: 'Publish Date' },
-      quartile: { label: 'Quartile', placeholder: 'Quartile' },
-      state: { label: 'State', placeholder: 'State' },
-      webLink: { label: 'Web Link', placeholder: 'Web Link' },
-      userCall: { label: 'User Call', placeholder: 'User Call' },
-      useExperiment: { label: 'Use Experiment', placeholder: 'Use Experiment' },
-      volume: { label: 'Volume', placeholder: 'Volume' },
-      wosNumber: { label: 'WOS Number', placeholder: 'WOS Number' },
-      doi: {
-        label: 'Publication DOI',
-        placeholder: 'Publication DOI'
-      },
-      year: { label: 'Year', placeholder: 'Year' }
+      department: { label: 'ELI Department*', placeholder: 'Select' },
+      authorsCount: { label: 'ELI Department Authors Count*' },
+      code: { label: 'Code*', placeholder: 'Code' },
+      experimentalSystem: { label: 'Experimental System' },
+      userCall: { label: 'User Call', placeholder: 'Select' },
+      userExperiment: { label: 'User Experiment', placeholder: 'Select' },
+      doi: { label: 'DOI (R87)*', placeholder: 'DOI' },
+      webLink: { label: 'Web Link (R86)*', placeholder: 'Web Link' },
+      openAccessType: { label: 'Open Access Type (R94)*' },
+      title: { label: 'Title* (R06)', placeholder: 'Title' },
+      allAuthors: { label: 'All Authors list*' },
+      allAuthorsCount: { label: 'All Authors Count (R10)*' },
+      eliAuthors: { label: 'ELI Authors list*' },
+      eliAuthorsCount: { label: 'ELI Authors Count (R11)*' },
+      longJournalTitle: { label: 'Long Journal Title (R16)*' },
+      shortJournalTitle: { label: 'Short Journal Title' },
+      volume: { label: 'Volume (R18)*', placeholder: 'Volume' },
+      issue: { label: 'Issue (R19)', placeholder: 'Issue' },
+      pages: { label: 'Pages (R20)*', placeholder: 'Pages' },
+      pagesCount: { label: 'Pages Count (R21)*' },
+      citeAs: { label: 'Cite-As*' },
+      impactFactor: { label: 'Impact Factor' },
+      quartilBasis: { label: 'Quartil Basis' },
+      quartil: { label: 'Quartil' },
+      yearOfPublication: { label: 'Year of Publication (R09)*' },
+      dateOfPublication: { label: 'Date of Publication' },
+      abstract: { label: 'Abstract*' },
+      keywords: { label: 'Keywords (R13)*' },
+      oecdFord: { label: 'OECD/FORD (R04)' },
+      grant: { label: 'Grant' },
+      wosNumber: { label: 'WOS Number (R67)' },
+      issn: { label: 'ISSN (R14)', placeholder: 'ISSN' },
+      eissn: { label: 'E-ISSN (R15)', placeholder: 'E-ISSN' },
+      eidScopus: { label: 'EID Scopus (R90)' },
+      publishingCountry: { label: 'Publishing Country (R17)*' },
+      language: { label: 'Language (R07)*' },
+      note: { label: 'Note' }
     }
   },
   publications: { head: 'ELI Panda - Publications' },
