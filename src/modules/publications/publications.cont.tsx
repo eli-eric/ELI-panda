@@ -8,6 +8,7 @@ import { ROLE } from '@/types/constants/roles'
 import type { Publication } from '../publication/types/responses'
 import { Pagination } from '../shared/table/Pagination'
 import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
+import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar, SearchBarButtonsComponent } from '../shared/table/SearchBar'
 import { usePublications } from './hooks/usePublications'
@@ -20,10 +21,19 @@ export const PublicationsContainer: FC = () => {
   const columns = usePublicationColumns()
   const { data, refetch } = usePublications(tableId)
 
+  const tableSettings: PandaTableSettings<Publication> = {
+    enableSorting: true,
+    manualSorting: false,
+    enableColumnReordering: true,
+    enableQueryURL: true,
+    enableColumnHiding: true
+  }
+
   const table = usePandaTable<Publication>({
     tableId,
     columns,
-    data: data?.data || []
+    data: data?.data || [],
+    settings: tableSettings
   })
 
   const handleAdd = () => {
@@ -46,14 +56,13 @@ export const PublicationsContainer: FC = () => {
           />
         }
       />
-      <PandaTableV2 tableId={tableId} table={table} data={data?.data} />
-      <Pagination
+      <PandaTableV2
         tableId={tableId}
-        settings={{
-          total: data?.totalCount,
-          pageSizeDefault: 50
-        }}
+        table={table}
+        data={data?.data}
+        settings={tableSettings}
       />
+      <Pagination tableId={tableId} />
     </TableLayoutContainer>
   )
 }

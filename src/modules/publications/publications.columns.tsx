@@ -44,22 +44,26 @@ export const usePublicationColumns = () => {
       {
         id: 'experimentalSystem',
         header: 'Experimental System',
-        accessorFn: row => row.experimentalSystem
+        accessorFn: row => row.experimentalSystem,
+        size: 230
       },
       {
         id: 'userCall',
         header: 'User Call',
-        accessorFn: row => row.userCall?.name
+        accessorFn: row => row.userCall?.name,
+        size: 200
       },
       {
         id: 'userExperiment',
         header: 'User Experiment',
-        accessorFn: row => row?.userExperiment?.name
+        accessorFn: row => row?.userExperiment?.name,
+        size: 200
       },
       {
         id: 'doi',
         header: 'DOI',
-        accessorFn: row => row.doi
+        accessorFn: row => row.doi,
+        size: 150
       },
       {
         id: 'webLink',
@@ -74,17 +78,23 @@ export const usePublicationColumns = () => {
       {
         id: 'openAccessType',
         header: 'Open Access Type',
-        accessorFn: row => row.openAccessType?.name
+        accessorFn: row => row.openAccessType?.name,
+        size: 200
       },
       {
         id: 'title',
         header: 'Title',
-        accessorFn: row => row.title
+        accessorFn: row => row.title,
+        size: 200
       },
       {
         id: 'allAuthors',
         header: 'Authors',
-        accessorFn: row => row.allAuthors
+        accessorFn: row => row.allAuthors,
+        size: 300,
+        cell: ({ getValue }) => (
+          <ShortCell value={getValue()} numberOfChars={30} />
+        )
       },
       {
         id: 'allAuthorsCount',
@@ -94,12 +104,17 @@ export const usePublicationColumns = () => {
       {
         id: 'eliAuthors',
         header: 'ELI Authors',
-        accessorFn: row => row.eliAuthors
+        accessorFn: row => row.eliAuthors,
+        size: 300,
+        cell: ({ getValue }) => (
+          <ShortCell value={getValue()} numberOfChars={30} />
+        )
       },
       {
         id: 'eliAuthorsCount',
         header: 'ELI Authors Count',
-        accessorFn: row => row.eliAuthorsCount
+        accessorFn: row => row.eliAuthorsCount,
+        size: 200
       },
       {
         id: 'longJournalTitle',
@@ -151,13 +166,15 @@ export const usePublicationColumns = () => {
       {
         id: 'yearOfPublication',
         header: 'Year Of Publication',
-        accessorFn: row => row.yearOfPublication
+        accessorFn: row => row.yearOfPublication,
+        size: 200
       },
       {
         id: 'dateOfPublication',
         header: 'Date Of Publication',
         accessorFn: row => row.dateOfPublication,
-        cell: ({ getValue }) => <FormattedDate value={getValue()} />
+        cell: ({ getValue }) => <FormattedDate value={getValue()} />,
+        size: 200
       },
       {
         id: 'abstract',
@@ -208,7 +225,8 @@ export const usePublicationColumns = () => {
       {
         id: 'publishingCountry',
         header: 'Publishing Country',
-        accessorFn: row => row.publishingCountry?.name
+        accessorFn: row => row.publishingCountry?.name,
+        size: 200
       },
       {
         id: 'language',
@@ -218,7 +236,11 @@ export const usePublicationColumns = () => {
       {
         id: 'note',
         header: 'Note',
-        accessorFn: row => row.note
+        accessorFn: row => row.note,
+        size: 300,
+        cell: ({ getValue }) => (
+          <ShortCell value={getValue()} numberOfChars={30} />
+        )
       }
     ],
     []
