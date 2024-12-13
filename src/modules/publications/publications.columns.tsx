@@ -1,7 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 import { useMemo } from 'react'
-import { FormattedDate } from 'react-intl'
 
 import { LinkDecorator } from '@/components/decorators'
 import { ShortCell } from '@/components/table/short-cell'
@@ -173,7 +172,6 @@ export const usePublicationColumns = () => {
         id: 'dateOfPublication',
         header: 'Date Of Publication',
         accessorFn: row => row.dateOfPublication,
-        cell: ({ getValue }) => <FormattedDate value={getValue()} />,
         size: 200
       },
       {

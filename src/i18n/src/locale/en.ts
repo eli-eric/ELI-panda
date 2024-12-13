@@ -35,7 +35,8 @@ export const messages = {
         text: 'You have unsaved changes. Are you sure you want to leave?'
       }
     },
-    files: { title: 'Files' }
+    files: { title: 'Files' },
+    noResults: 'No results found'
   },
   layout: {
     login: 'Log In',
@@ -427,6 +428,8 @@ export const messages = {
   orderItem: { head: 'ELI Panda - Order Item' },
   publication: {
     head: 'ELI Panda - Publication',
+    pdfFileMessage:
+      'In order to upload a PDF you must first fill in all mandatory fields and save the publication.',
     form: {
       department: { label: 'ELI Department*', placeholder: 'Select' },
       authorsCount: { label: 'ELI Department Authors Count*' },
@@ -453,16 +456,19 @@ export const messages = {
       quartilBasis: { label: 'Quartil Basis' },
       quartil: { label: 'Quartil' },
       yearOfPublication: { label: 'Year of Publication (R09)*' },
-      dateOfPublication: { label: 'Date of Publication' },
+      dateOfPublication: { label: 'Date of Publication*' },
       abstract: { label: 'Abstract*' },
       keywords: { label: 'Keywords (R13)*' },
-      oecdFord: { label: 'OECD/FORD (R04)' },
+      oecdFord: { label: 'OECD/FORD (R04)*' },
       grant: { label: 'Grant' },
       wosNumber: { label: 'WOS Number (R67)' },
       issn: { label: 'ISSN (R14)', placeholder: 'ISSN' },
       eissn: { label: 'E-ISSN (R15)', placeholder: 'E-ISSN' },
       eidScopus: { label: 'EID Scopus (R90)' },
-      publishingCountry: { label: 'Publishing Country (R17)*' },
+      publishingCountry: {
+        label: 'Publishing Country (R17)*',
+        placeholder: 'Select'
+      },
       language: { label: 'Language (R07)*' },
       note: { label: 'Note' }
     }

@@ -46,7 +46,7 @@ export const usePublicationFields = () => {
       name: 'webLink',
       label: form.webLink.label,
       rounded: 'rounded-md',
-      disabled
+      disabled: true
     },
     openAccessType: {
       label: form.openAccessType.label,

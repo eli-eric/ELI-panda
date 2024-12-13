@@ -1,5 +1,5 @@
 import Combobox from '@/components/form/Combobox'
-import { Input, InputDate, TextArea } from '@/components/form/inputs'
+import { Input, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
@@ -7,6 +7,7 @@ import Card from '@/components/layout/Card'
 import { usePublicationFields } from '../hooks/usePublicationFields'
 import { DepartmentsComponent } from './departments.comp'
 import { MediaTypeRadio } from './media-type.radio'
+import { WebLinkField } from './web-link.field'
 
 export type Publication = {
   abstract: string
@@ -54,7 +55,7 @@ export const PublicationFormComponent = () => {
           <Input {...fields.doi} />
         </Col>
         <Col lg={4}>
-          <Input {...fields.webLink} />
+          <WebLinkField />
         </Col>
         <Col lg={4}>
           <Listbox {...fields.openAccessType} />
@@ -62,17 +63,14 @@ export const PublicationFormComponent = () => {
         <Col lg={12}>
           <Input {...fields.title} />
         </Col>
-        <Col lg={6}>
+        <Col lg={12}>
           <TextArea {...fields.allAuthors} />
         </Col>
-        <Col lg={6}>
+        <Col lg={12}>
           <TextArea {...fields.eliAuthors} />
         </Col>
-        <Col lg={6}>
+        <Col lg={12}>
           <Input {...fields.allAuthorsCount} />
-        </Col>
-        <Col lg={6}>
-          <Input {...fields.eliAuthorsCount} />
         </Col>
         <Col lg={12}>
           <DepartmentsComponent />
@@ -111,7 +109,7 @@ export const PublicationFormComponent = () => {
           <Input {...fields.yearOfPublication} />
         </Col>
         <Col lg={4}>
-          <InputDate {...fields.dateOfPublication} />
+          <Input {...fields.dateOfPublication} />
         </Col>
         <Col lg={6}>
           <TextArea {...fields.abstract} />

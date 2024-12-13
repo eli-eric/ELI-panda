@@ -17,7 +17,7 @@ const messages = message.common.files
 
 type FileManagerProps = {
   itemType: FILE_TYPE
-  uid: string
+  uid?: string
   hasEditRole?: boolean
   customTitle?: string
   allowMultiple?: boolean
@@ -84,6 +84,7 @@ const FileManager = ({
               />
               <NewFileButton
                 handleNewFile={onClickHandler}
+                hasEditRole={hasEditRole}
                 uid={uid}
                 isDragActive={isDragActive}
               />

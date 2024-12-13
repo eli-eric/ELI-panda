@@ -7,6 +7,8 @@ import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
+
+import { usePublicationFields } from '../hooks/usePublicationFields'
 const { form } = message.publication
 
 export const DepartmentsComponent = () => {
@@ -17,6 +19,8 @@ export const DepartmentsComponent = () => {
 
   const { setValue, control } = useFormContext()
   const authorsDepartments = useWatch({ control, name: 'authorsDepartments' })
+
+  const { eliAuthorsCount } = usePublicationFields()
 
   useEffect(() => {
     const eliAuthorsCountSum = authorsDepartments.reduce((acc, curr) => {
@@ -38,26 +42,37 @@ export const DepartmentsComponent = () => {
       {fields.map((item, index) => (
         <div key={item.id} className="grid grid-cols-12 w-full gap-2 pt-2">
           <Department key={item.id} name={`authorsDepartments.${index}`} />
-          <button
-            className="text-red-600 dark:text-gray-400 col-span-1 hover:text-primary-400 dark:hover:text-primary-600 self-end pb-2"
-            onClick={() => handleRemove(index)}
-            disabled={fields.length === 1}
-          >
-            <TrashIcon className="w-6 h-6" />
-          </button>
+          <div className="col-span-1">
+            <button
+              className="text-red-600 self-end dark:text-gray-400 justify-end hover:text-primary-400 dark:hover:text-primary-600 self-end pt-6"
+              onClick={() => handleRemove(index)}
+              disabled={fields.length === 1}
+            >
+              <TrashIcon className="w-6 h-6" />
+            </button>
+          </div>
         </div>
       ))}
-      <button
-        className="text-gray-600 text-sm dark:text-gray-400 hover:text-primary-400  dark:hover:text-primary-600 pt-2 pl-2"
-        onClick={handleAppend}
-      >
-        + Add Another Eli Department
-      </button>
+      <div className="grid grid-cols-12 pt-2">
+        <div className="col-span-6 items-center">
+          <button
+            className="text-gray-600 underline text-sm dark:text-gray-400 hover:text-primary-400  dark:hover:text-primary-600 pt-2 pl-2"
+            onClick={handleAppend}
+          >
+            + Add Another Eli Department
+          </button>
+        </div>
+        <Input {...eliAuthorsCount} className="col-span-6 pl-1" />
+      </div>
     </div>
   )
 }
 
-const Department = ({ name }) => {
+type DepartmentProps = {
+  name: string
+}
+
+const Department = ({ name }: DepartmentProps) => {
   const { formatMessage: fm } = useIntl()
   return (
     <Fragment>
