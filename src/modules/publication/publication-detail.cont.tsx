@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
 import { FormattedMessage } from 'react-intl'
-import * as yup from 'yup'
 
 import { Form } from '@/components/form/Form'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
@@ -15,7 +14,13 @@ import { ROLE } from '@/types/constants/roles'
 import FileManager from '../shared/fileManager/FileManager'
 import { FILE_TYPE } from '../shared/fileManager/types'
 import { PublicationFormComponent } from './components/publication-form.comp'
+import {
+  validationSchemeOther,
+  validationSchemePeerReviewed
+} from './form/scheme'
+import { useMediaTypeStore } from './hooks/useMediaTypeStore'
 import { usePublicationMutation } from './hooks/usePublicationMutation'
+import { MEDIA_TYPE } from './types/constants'
 import type { PublicationForm } from './types/form'
 import type { Publication } from './types/responses'
 import { formatFormData, formatPublication } from './utils/formatters'
@@ -26,45 +31,10 @@ interface Props {
   publication?: Publication
 }
 
-const validationScheme = yup.object().shape({
-  code: yup.string().required(),
-  doi: yup.string().required(),
-  openAccessType: yup.object().shape({
-    uid: yup.string().required(),
-    name: yup.string().required()
-  }),
-  title: yup.string().required(),
-  allAuthors: yup.string().required(),
-  allAuthorsCount: yup.string().required(),
-  eliAuthors: yup.string().required(),
-  eliAuthorsCount: yup.string().required(),
-  authorsDepartments: yup.array().of(
-    yup.object().shape({
-      department: yup.object().shape({
-        uid: yup.string().required(),
-        name: yup.string().required()
-      }),
-      authorsCount: yup.string().required()
-    })
-  ),
-  longJournalTitle: yup.string().required(),
-  volume: yup.string().required(),
-  pages: yup.string().required(),
-  pagesCount: yup.string().required(),
-  citeAs: yup.string().required(),
-  yearOfPublication: yup.string().required(),
-  abstract: yup.string().required(),
-  keywords: yup.string().required(),
-  oecdFord: yup.string().required(),
-  publishingCountry: yup.object().shape({
-    uid: yup.string().required(),
-    name: yup.string().required()
-  }),
-  dateOfPublication: yup.string().required()
-})
-
 export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
   const router = useRouter()
+
+  const { mediaType } = useMediaTypeStore()
 
   const defaultValues = publication
     ? formatPublication(publication)
@@ -74,7 +44,11 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
 
   const formMethods = useForm<any>({
     defaultValues: publication ? formatPublication(publication) : defaultValues,
-    resolver: yupResolver(validationScheme)
+    resolver: yupResolver(
+      mediaType === MEDIA_TYPE.PeerReviewedArticle
+        ? validationSchemePeerReviewed
+        : validationSchemeOther
+    )
   })
 
   const { mutate } = usePublicationMutation()
@@ -97,10 +71,13 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
   })
 
   return (
-    <Form formMethods={formMethods} className="h-screen overflow-auto">
+    <Form
+      formMethods={formMethods}
+      className="h-screen overflow-auto"
+      enableLeaveWarning={true}
+    >
       <HeaderWithButtons
         editRole={ROLE.BASICS}
-        isFormInvalid={!formMethods.formState.isValid}
         onSubmit={onSubmit}
         onSubmitAndExit={onSubmitAndExit}
         customElement={

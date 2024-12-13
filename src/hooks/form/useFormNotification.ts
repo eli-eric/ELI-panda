@@ -15,7 +15,7 @@ const useFormNotification = <T extends FieldValues>({ control }: Props<T>) => {
       ErrorArray.length > 0 &&
         ErrorArray.forEach(error => {
           const fieldError = errors[error]
-          toast.error(fieldError?.message as string)
+          toast.error(fieldError?.message as string, { duration: 2000 })
         })
     }
   }, [isSubmitted, errors])

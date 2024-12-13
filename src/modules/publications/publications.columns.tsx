@@ -6,6 +6,7 @@ import { LinkDecorator } from '@/components/decorators'
 import { ShortCell } from '@/components/table/short-cell'
 import { PATH } from '@/types/constants/paths'
 
+import { mediaTypeOptions } from '../publication/types/constants'
 import type { Publication } from '../publication/types/responses'
 import { ActionButtons } from './components/action-buttons.comp'
 
@@ -15,9 +16,11 @@ export const usePublicationColumns = () => {
       {
         id: 'mediaType',
         header: 'Media Type',
-        accessorFn: row => row.mediaType,
+        accessorFn: row =>
+          mediaTypeOptions.find(option => option.value === row.mediaType)
+            ?.label,
         meta: { sticky: true },
-        size: 150
+        size: 200
       },
       {
         id: 'code',

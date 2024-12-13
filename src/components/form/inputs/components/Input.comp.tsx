@@ -86,7 +86,7 @@ export const Input = ({
                 className={classNames(
                   'form-field',
                   rounded,
-                  error ? 'border-red-499' : 'border-gray-300',
+                  error ? 'border-red-400' : 'border-gray-300',
                   disabled ? 'bg-gray-100' : '',
                   isFilter ? field.value && 'border-2 border-lime-500' : ''
                 )}
