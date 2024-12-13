@@ -144,7 +144,7 @@ export const PublicationFormComponent = () => {
           <Combobox {...fields.publishingCountry} hasClientFilter={true} />
         </Col>
         <Col lg={12}>
-          <Input {...fields.language} defaultValue={'en'} disabled={true} />
+          <Input {...fields.language} defaultValue={'eng'} disabled={true} />
         </Col>
         <Col lg={12}>
           <TextArea {...fields.note} />
