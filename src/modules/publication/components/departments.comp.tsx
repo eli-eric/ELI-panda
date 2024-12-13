@@ -1,7 +1,7 @@
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { Fragment, useEffect } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
@@ -9,7 +9,7 @@ import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 
 import { usePublicationFields } from '../hooks/usePublicationFields'
-const { form } = message.publication
+const { form, addDepartmentButton } = message.publication
 
 export const DepartmentsComponent = () => {
   const { fields, append, remove } = useFieldArray({
@@ -44,7 +44,7 @@ export const DepartmentsComponent = () => {
           <Department key={item.id} name={`authorsDepartments.${index}`} />
           <div className="col-span-1">
             <button
-              className="text-red-600 self-end dark:text-gray-400 justify-end hover:text-primary-400 dark:hover:text-primary-600 self-end pt-6"
+              className="text-red-600 dark:text-gray-400 justify-end hover:text-primary-400 dark:hover:text-primary-600 self-end pt-6"
               onClick={() => handleRemove(index)}
               disabled={fields.length === 1}
             >
@@ -59,7 +59,7 @@ export const DepartmentsComponent = () => {
             className="text-gray-600 underline text-sm dark:text-gray-400 hover:text-primary-400  dark:hover:text-primary-600 pt-2 pl-2"
             onClick={handleAppend}
           >
-            + Add Another Eli Department
+            <FormattedMessage id={addDepartmentButton} />
           </button>
         </div>
         <Input {...eliAuthorsCount} className="col-span-6 pl-1" />
