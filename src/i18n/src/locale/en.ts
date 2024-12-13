@@ -36,7 +36,7 @@ export const messages = {
       }
     },
     files: { title: 'Files' },
-    noResults: 'No results found'
+    noResults: 'No options.'
   },
   layout: {
     login: 'Log In',
@@ -430,6 +430,7 @@ export const messages = {
     head: 'ELI Panda - Publication',
     pdfFileMessage:
       'In order to upload a PDF you must first fill in all mandatory fields and save the publication.',
+    addDepartmentButton: '+ Add Another ELI Department',
     form: {
       department: { label: 'ELI Department*', placeholder: 'Select' },
       authorsCount: { label: 'ELI Department Authors Count*' },
@@ -457,8 +458,7 @@ export const messages = {
       shortJournalTitle: { label: 'Short Journal Title' },
       volume: {
         label: 'Volume (R18)*',
-        labelOptional: 'Volume (R18)',
-        placeholder: 'Volume'
+        labelOptional: 'Volume (R18)'
       },
       issue: { label: 'Issue (R19)', placeholder: 'Issue' },
       pages: { label: 'Pages (R20)*', placeholder: 'Pages' },
@@ -467,7 +467,10 @@ export const messages = {
       impactFactor: { label: 'Impact Factor' },
       quartilBasis: { label: 'Quartil Basis' },
       quartil: { label: 'Quartil', placeholder: 'Select' },
-      yearOfPublication: { label: 'Year of Publication (R09)*' },
+      yearOfPublication: {
+        label: 'Year of Publication (R09)*',
+        placeholder: 'Select'
+      },
       dateOfPublication: { label: 'Date of Publication*' },
       abstract: { label: 'Abstract*' },
       keywords: { label: 'Keywords (R13)*' },
@@ -479,7 +482,7 @@ export const messages = {
       eidScopus: { label: 'EID Scopus (R90)' },
       publishingCountry: {
         label: 'Publishing Country (R17)*',
-        placeholder: 'Select'
+        placeholder: 'Type to search...'
       },
       language: { label: 'Language (R07)*' },
       note: { label: 'Note' }

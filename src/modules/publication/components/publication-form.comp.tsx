@@ -111,7 +111,10 @@ export const PublicationFormComponent = () => {
           />
         </Col>
         <Col lg={2}>
-          <Input {...fields.yearOfPublication} />
+          <Listbox
+            {...fields.yearOfPublication}
+            customOptions={['2024', '2025']}
+          />
         </Col>
         <Col lg={4}>
           <Input {...fields.dateOfPublication} />
@@ -144,7 +147,11 @@ export const PublicationFormComponent = () => {
           <Combobox {...fields.publishingCountry} hasClientFilter={true} />
         </Col>
         <Col lg={12}>
-          <Input {...fields.language} defaultValue={'eng'} disabled={true} />
+          <Input
+            {...fields.language}
+            defaultValue={'English'}
+            disabled={true}
+          />
         </Col>
         <Col lg={12}>
           <TextArea {...fields.note} />
