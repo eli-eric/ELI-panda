@@ -6,7 +6,7 @@ import { LinkDecorator } from '@/components/decorators'
 import { ShortCell } from '@/components/table/short-cell'
 import { PATH } from '@/types/constants/paths'
 
-import { mediaTypeOptions } from '../publication/types/constants'
+import { MEDIA_TYPE_MAP } from '../publication/types/constants'
 import type { Publication } from '../publication/types/responses'
 import { ActionButtons } from './components/action-buttons.comp'
 
@@ -16,9 +16,7 @@ export const usePublicationColumns = () => {
       {
         id: 'mediaType',
         header: 'Media Type',
-        accessorFn: row =>
-          mediaTypeOptions.find(option => option.value === row.mediaType)
-            ?.label,
+        accessorFn: row => MEDIA_TYPE_MAP[row.mediaType],
         meta: { sticky: true },
         size: 200
       },
@@ -65,7 +63,7 @@ export const usePublicationColumns = () => {
         id: 'doi',
         header: 'DOI',
         accessorFn: row => row.doi,
-        size: 150
+        size: 300
       },
       {
         id: 'webLink',
@@ -87,7 +85,10 @@ export const usePublicationColumns = () => {
         id: 'title',
         header: 'Title',
         accessorFn: row => row.title,
-        size: 200
+        size: 300,
+        cell: ({ getValue }) => (
+          <ShortCell value={getValue()} numberOfChars={30} />
+        )
       },
       {
         id: 'allAuthors',
@@ -148,7 +149,11 @@ export const usePublicationColumns = () => {
       {
         id: 'citeAs',
         header: 'Cite As',
-        accessorFn: row => row.citeAs
+        accessorFn: row => row.citeAs,
+        size: 400,
+        cell: ({ getValue }) => (
+          <ShortCell value={getValue()} numberOfChars={40} />
+        )
       },
       {
         id: 'impactFactor',
@@ -181,14 +186,16 @@ export const usePublicationColumns = () => {
         id: 'abstract',
         header: 'Abstract',
         accessorFn: row => row.abstract,
+        size: 400,
         cell: ({ getValue }) => (
-          <ShortCell value={getValue()} numberOfChars={30} />
+          <ShortCell value={getValue()} numberOfChars={100} />
         )
       },
       {
         id: 'keywords',
         header: 'Keywords',
         accessorFn: row => row.keywords,
+        size: 250,
         cell: ({ getValue }) => (
           <ShortCell value={getValue()} numberOfChars={30} />
         )
@@ -201,7 +208,11 @@ export const usePublicationColumns = () => {
       {
         id: 'grant',
         header: 'Grant',
-        accessorFn: row => row.grant
+        size: 200,
+        accessorFn: row => row.grant,
+        cell: ({ getValue }) => (
+          <ShortCell value={getValue()} numberOfChars={40} />
+        )
       },
       {
         id: 'wosNumber',

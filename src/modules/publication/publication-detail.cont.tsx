@@ -20,7 +20,7 @@ import {
 } from './form/scheme'
 import { useMediaTypeStore } from './hooks/useMediaTypeStore'
 import { usePublicationMutation } from './hooks/usePublicationMutation'
-import { MEDIA_TYPE } from './types/constants'
+import { MEDIA_TYPE_CODE } from './types/constants'
 import type { PublicationForm } from './types/form'
 import type { Publication } from './types/responses'
 import { formatFormData, formatPublication } from './utils/formatters'
@@ -45,7 +45,7 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
   const formMethods = useForm<any>({
     defaultValues: publication ? formatPublication(publication) : defaultValues,
     resolver: yupResolver(
-      mediaType === MEDIA_TYPE.PeerReviewedArticle
+      mediaType === MEDIA_TYPE_CODE.PeerReviewedArticle
         ? validationSchemePeerReviewed
         : validationSchemeOther
     )
