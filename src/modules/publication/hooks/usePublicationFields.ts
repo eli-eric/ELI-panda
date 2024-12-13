@@ -2,11 +2,18 @@ import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 
+import { MEDIA_TYPE } from '../types/constants'
+import { useMediaTypeStore } from './useMediaTypeStore'
+
 // messages
 const { form } = message.publication
 
 export const usePublicationFields = () => {
   const disabled = false
+  const { mediaType } = useMediaTypeStore()
+
+  const isPeerReviewed = mediaType === MEDIA_TYPE.PeerReviewedArticle
+
   return useMakeFormFields({
     code: {
       label: form.code.label,
@@ -37,16 +44,16 @@ export const usePublicationFields = () => {
       codebook: CODEBOOK.USER_EXPERIMENT
     },
     doi: {
-      label: form.doi.label,
+      label: isPeerReviewed ? form.doi.label : form.doi.labelOptional,
       name: 'doi',
       rounded: 'rounded-md',
       disabled
     },
     webLink: {
       name: 'webLink',
-      label: form.webLink.label,
+      label: isPeerReviewed ? form.webLink.label : form.webLink.labelOptional,
       rounded: 'rounded-md',
-      disabled
+      disabled: true
     },
     openAccessType: {
       label: form.openAccessType.label,
@@ -100,7 +107,7 @@ export const usePublicationFields = () => {
       disabled
     },
     volume: {
-      label: form.volume.label,
+      label: isPeerReviewed ? form.volume.label : form.volume.labelOptional,
       rounded: 'rounded-md',
       name: 'volume',
       type: 'number',
@@ -147,6 +154,7 @@ export const usePublicationFields = () => {
     },
     quartil: {
       label: form.quartil.label,
+      placeholder: form.quartil.placeholder,
       rounded: 'rounded-md',
       name: 'quartil',
       disabled
@@ -177,7 +185,7 @@ export const usePublicationFields = () => {
       disabled
     },
     oecdFord: {
-      label: form.oecdFord.label,
+      label: isPeerReviewed ? form.oecdFord.label : form.oecdFord.labelOptional,
       rounded: 'rounded-md',
       name: 'oecdFord',
       disabled

@@ -1,12 +1,16 @@
 import Combobox from '@/components/form/Combobox'
-import { Input, InputDate, TextArea } from '@/components/form/inputs'
+import { Input, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
+import { RadioSelect } from '@/components/form/radio-select.comp'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
 
+import { useMediaTypeStore } from '../hooks/useMediaTypeStore'
 import { usePublicationFields } from '../hooks/usePublicationFields'
+import type { MEDIA_TYPE } from '../types/constants'
+import { mediaTypeOptions } from '../types/constants'
 import { DepartmentsComponent } from './departments.comp'
-import { MediaTypeRadio } from './media-type.radio'
+import { WebLinkField } from './web-link.field'
 
 export type Publication = {
   abstract: string
@@ -20,22 +24,21 @@ export type Publication = {
 
 export const PublicationFormComponent = () => {
   const fields = usePublicationFields()
+  const { setMediaType } = useMediaTypeStore()
+
+  const handleChangeMediaType = (mediaType: string) => {
+    setMediaType(mediaType as MEDIA_TYPE)
+  }
 
   return (
     <Card className="py-6">
       <Grid>
         <Col lg={3}>
-          <MediaTypeRadio
+          <RadioSelect
             name={'mediaType'}
-            options={[
-              {
-                label: 'Peer-Reviewd Article',
-                value: 'Peer-Reviewd Article',
-                disabled: false
-              },
-              { label: 'Other Article', value: 'Other Article', disabled: true }
-            ]}
-            defaultValue={'Peer-Reviewd Article'}
+            options={mediaTypeOptions}
+            defaultValue={mediaTypeOptions[0].value}
+            onChange={handleChangeMediaType}
           />
         </Col>
         <Col lg={9}>
@@ -45,7 +48,7 @@ export const PublicationFormComponent = () => {
           <Listbox {...fields.userCall} />
         </Col>
         <Col lg={4}>
-          <Listbox {...fields.userExperiment} />
+          <Input {...fields.userExperiment} />
         </Col>
         <Col lg={4}>
           <Input {...fields.experimentalSystem} />
@@ -54,7 +57,7 @@ export const PublicationFormComponent = () => {
           <Input {...fields.doi} />
         </Col>
         <Col lg={4}>
-          <Input {...fields.webLink} />
+          <WebLinkField />
         </Col>
         <Col lg={4}>
           <Listbox {...fields.openAccessType} />
@@ -62,17 +65,14 @@ export const PublicationFormComponent = () => {
         <Col lg={12}>
           <Input {...fields.title} />
         </Col>
-        <Col lg={6}>
+        <Col lg={12}>
           <TextArea {...fields.allAuthors} />
         </Col>
-        <Col lg={6}>
+        <Col lg={12}>
           <TextArea {...fields.eliAuthors} />
         </Col>
-        <Col lg={6}>
+        <Col lg={12}>
           <Input {...fields.allAuthorsCount} />
-        </Col>
-        <Col lg={6}>
-          <Input {...fields.eliAuthorsCount} />
         </Col>
         <Col lg={12}>
           <DepartmentsComponent />
@@ -105,13 +105,16 @@ export const PublicationFormComponent = () => {
           <Input {...fields.quartilBasis} />
         </Col>
         <Col lg={2}>
-          <Input {...fields.quartil} />
+          <Listbox
+            {...fields.quartil}
+            customOptions={['Q1', 'Q2', 'Q3', 'Q4']}
+          />
         </Col>
         <Col lg={2}>
           <Input {...fields.yearOfPublication} />
         </Col>
         <Col lg={4}>
-          <InputDate {...fields.dateOfPublication} />
+          <Input {...fields.dateOfPublication} />
         </Col>
         <Col lg={6}>
           <TextArea {...fields.abstract} />
@@ -141,7 +144,7 @@ export const PublicationFormComponent = () => {
           <Combobox {...fields.publishingCountry} hasClientFilter={true} />
         </Col>
         <Col lg={12}>
-          <Input {...fields.language} defaultValue={'en'} disabled={true} />
+          <Input {...fields.language} defaultValue={'eng'} disabled={true} />
         </Col>
         <Col lg={12}>
           <TextArea {...fields.note} />

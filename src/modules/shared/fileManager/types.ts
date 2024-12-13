@@ -19,7 +19,7 @@ export enum FILE_TYPE {
   ITEM = 'item',
   CATEGORY = 'catalogue-category',
   GENERAL = 'general',
-  PUBLICATON = 'publication'
+  PUBLICATION = 'publication'
 }
 
 export type FileLinkResponse = {

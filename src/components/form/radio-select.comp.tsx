@@ -3,7 +3,25 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { InputWrapper, Label } from '@/components/form/inputs/shared'
 import { classNames } from '@/utils'
 
-export const MediaTypeRadio = ({ name, options, defaultValue }) => {
+type Props = {
+  name: string
+  options: RadioSelectOption[]
+  defaultValue: string
+  onChange?: (value: string) => void
+}
+
+export type RadioSelectOption = {
+  label: string
+  value: string
+  disabled?: boolean
+}
+
+export const RadioSelect = ({
+  name,
+  options,
+  defaultValue,
+  onChange
+}: Props) => {
   const { control } = useFormContext()
   const idHtml = name
 
@@ -12,7 +30,7 @@ export const MediaTypeRadio = ({ name, options, defaultValue }) => {
       name={name}
       control={control}
       defaultValue={defaultValue}
-      render={({ field, fieldState: { error } }) => (
+      render={({ field }) => (
         <InputWrapper>
           <Label label="Media Type" />
           <div className="flex space-x-2 pt-2">
@@ -25,7 +43,10 @@ export const MediaTypeRadio = ({ name, options, defaultValue }) => {
                   value={option.value}
                   disabled={option.disabled}
                   checked={field.value === option.value}
-                  onChange={e => field.onChange(e.target.value)}
+                  onChange={e => {
+                    field.onChange(e.target.value)
+                    onChange?.(e.target.value)
+                  }}
                   className={classNames(
                     'form-radio h-4 w-4 text-primary-600 border-gray-300',
                     option.disabled && 'cursor-not-allowed bg-gray-100'

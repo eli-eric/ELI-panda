@@ -35,7 +35,8 @@ export const messages = {
         text: 'You have unsaved changes. Are you sure you want to leave?'
       }
     },
-    files: { title: 'Files' }
+    files: { title: 'Files' },
+    noResults: 'No results found'
   },
   layout: {
     login: 'Log In',
@@ -427,6 +428,8 @@ export const messages = {
   orderItem: { head: 'ELI Panda - Order Item' },
   publication: {
     head: 'ELI Panda - Publication',
+    pdfFileMessage:
+      'In order to upload a PDF you must first fill in all mandatory fields and save the publication.',
     form: {
       department: { label: 'ELI Department*', placeholder: 'Select' },
       authorsCount: { label: 'ELI Department Authors Count*' },
@@ -434,8 +437,16 @@ export const messages = {
       experimentalSystem: { label: 'Experimental System' },
       userCall: { label: 'User Call', placeholder: 'Select' },
       userExperiment: { label: 'User Experiment', placeholder: 'Select' },
-      doi: { label: 'DOI (R87)*', placeholder: 'DOI' },
-      webLink: { label: 'Web Link (R86)*', placeholder: 'Web Link' },
+      doi: {
+        label: 'DOI (R87)*',
+        labelOptional: 'DOI (R87)',
+        placeholder: 'DOI'
+      },
+      webLink: {
+        label: 'Web Link (R86)*',
+        labelOptional: 'Web Link (R86)',
+        placeholder: 'Web Link'
+      },
       openAccessType: { label: 'Open Access Type (R94)*' },
       title: { label: 'Title* (R06)', placeholder: 'Title' },
       allAuthors: { label: 'All Authors list*' },
@@ -444,25 +455,32 @@ export const messages = {
       eliAuthorsCount: { label: 'ELI Authors Count (R11)*' },
       longJournalTitle: { label: 'Long Journal Title (R16)*' },
       shortJournalTitle: { label: 'Short Journal Title' },
-      volume: { label: 'Volume (R18)*', placeholder: 'Volume' },
+      volume: {
+        label: 'Volume (R18)*',
+        labelOptional: 'Volume (R18)',
+        placeholder: 'Volume'
+      },
       issue: { label: 'Issue (R19)', placeholder: 'Issue' },
       pages: { label: 'Pages (R20)*', placeholder: 'Pages' },
       pagesCount: { label: 'Pages Count (R21)*' },
       citeAs: { label: 'Cite-As*' },
       impactFactor: { label: 'Impact Factor' },
       quartilBasis: { label: 'Quartil Basis' },
-      quartil: { label: 'Quartil' },
+      quartil: { label: 'Quartil', placeholder: 'Select' },
       yearOfPublication: { label: 'Year of Publication (R09)*' },
-      dateOfPublication: { label: 'Date of Publication' },
+      dateOfPublication: { label: 'Date of Publication*' },
       abstract: { label: 'Abstract*' },
       keywords: { label: 'Keywords (R13)*' },
-      oecdFord: { label: 'OECD/FORD (R04)' },
+      oecdFord: { label: 'OECD/FORD (R04)*', labelOptional: 'OECD/FORD (R04)' },
       grant: { label: 'Grant' },
       wosNumber: { label: 'WOS Number (R67)' },
       issn: { label: 'ISSN (R14)', placeholder: 'ISSN' },
       eissn: { label: 'E-ISSN (R15)', placeholder: 'E-ISSN' },
       eidScopus: { label: 'EID Scopus (R90)' },
-      publishingCountry: { label: 'Publishing Country (R17)*' },
+      publishingCountry: {
+        label: 'Publishing Country (R17)*',
+        placeholder: 'Select'
+      },
       language: { label: 'Language (R07)*' },
       note: { label: 'Note' }
     }

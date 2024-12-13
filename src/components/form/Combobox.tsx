@@ -5,6 +5,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
 import { useCodebook } from '@/hooks/fetch/useCodebook'
+import { message } from '@/i18n/src/messages'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 import type { CodebookFilter, CodebookType } from '@/types/responses/codebook'
@@ -16,6 +17,8 @@ import { ComboboxInput } from './components/ComboboxInput'
 import { ComboboxOption } from './components/ComboboxOption'
 import { FormXMarkIcon } from './components/FormXMarkIcon'
 import useAddCodebookValue from './shared/useAddCodebookValue'
+
+const messages = message.common
 
 type ComboboxPropsT = FieldProps &
   React.InputHTMLAttributes<HTMLInputElement> & {
@@ -70,6 +73,7 @@ const Combobox = ({
   const options = useMemo(() => {
     const data = codebookResponseData || response
     if (!data) return { data: [], metadata: undefined }
+    if (query === '') return data
     if (hasClientFilter) {
       return {
         data: data.data.filter(item =>
@@ -149,7 +153,7 @@ const Combobox = ({
                 <ComboboxButton onClick={onClickIcon} />
               </div>
 
-              {options?.data && options.data.length > 0 && (
+              {options?.data && (
                 <HUICombobox.Options
                   className={classNames(
                     'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
@@ -163,6 +167,11 @@ const Combobox = ({
                       selected={field.value?.uid === item.uid}
                     />
                   ))}
+                  {options.data.length === 0 && (
+                    <span className="block px-4 py-2 text-gray-700 dark:text-gray-300">
+                      {fm({ id: messages.noResults })}
+                    </span>
+                  )}
                 </HUICombobox.Options>
               )}
             </HUICombobox>
