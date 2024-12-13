@@ -437,14 +437,13 @@ export const messages = {
       code: { label: 'Code*', placeholder: 'Code' },
       experimentalSystem: { label: 'Experimental System' },
       userCall: { label: 'User Call', placeholder: 'Select' },
-      userExperiment: { label: 'User Experiment', placeholder: 'Select' },
+      userExperiment: { label: 'User Experiment' },
       doi: {
         label: 'DOI (R87)*',
-        labelOptional: 'DOI (R87)',
-        placeholder: 'DOI'
+        labelOptional: 'DOI (R87)'
       },
       webLink: {
-        label: 'Web Link (R86)*',
+        label: 'Web Link (R86)',
         labelOptional: 'Web Link (R86)',
         placeholder: 'Web Link'
       },
@@ -484,7 +483,7 @@ export const messages = {
         label: 'Publishing Country (R17)*',
         placeholder: 'Type to search...'
       },
-      language: { label: 'Language (R07)*' },
+      language: { label: 'Language (R07)' },
       note: { label: 'Note' }
     }
   },

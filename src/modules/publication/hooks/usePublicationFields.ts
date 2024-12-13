@@ -2,7 +2,7 @@ import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 
-import { MEDIA_TYPE } from '../types/constants'
+import { MEDIA_TYPE_CODE } from '../types/constants'
 import { useMediaTypeStore } from './useMediaTypeStore'
 
 // messages
@@ -12,7 +12,7 @@ export const usePublicationFields = () => {
   const disabled = false
   const { mediaType } = useMediaTypeStore()
 
-  const isPeerReviewed = mediaType === MEDIA_TYPE.PeerReviewedArticle
+  const isPeerReviewed = mediaType === MEDIA_TYPE_CODE.PeerReviewedArticle
 
   return useMakeFormFields({
     code: {
@@ -37,7 +37,6 @@ export const usePublicationFields = () => {
     },
     userExperiment: {
       label: form.userExperiment.label,
-      placeholder: form.userExperiment.placeholder,
       rounded: 'rounded-md',
       name: 'userExperiment',
       disabled,
@@ -51,7 +50,7 @@ export const usePublicationFields = () => {
     },
     webLink: {
       name: 'webLink',
-      label: isPeerReviewed ? form.webLink.label : form.webLink.labelOptional,
+      label: form.webLink.label,
       rounded: 'rounded-md',
       disabled: true
     },

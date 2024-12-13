@@ -7,7 +7,7 @@ import Card from '@/components/layout/Card'
 
 import { useMediaTypeStore } from '../hooks/useMediaTypeStore'
 import { usePublicationFields } from '../hooks/usePublicationFields'
-import type { MEDIA_TYPE } from '../types/constants'
+import type { MEDIA_TYPE_CODE } from '../types/constants'
 import { mediaTypeOptions } from '../types/constants'
 import { DepartmentsComponent } from './departments.comp'
 import { WebLinkField } from './web-link.field'
@@ -27,7 +27,7 @@ export const PublicationFormComponent = () => {
   const { setMediaType } = useMediaTypeStore()
 
   const handleChangeMediaType = (mediaType: string) => {
-    setMediaType(mediaType as MEDIA_TYPE)
+    setMediaType(mediaType as MEDIA_TYPE_CODE)
   }
 
   return (
@@ -69,10 +69,10 @@ export const PublicationFormComponent = () => {
           <TextArea {...fields.allAuthors} />
         </Col>
         <Col lg={12}>
-          <TextArea {...fields.eliAuthors} />
+          <Input {...fields.allAuthorsCount} />
         </Col>
         <Col lg={12}>
-          <Input {...fields.allAuthorsCount} />
+          <TextArea {...fields.eliAuthors} />
         </Col>
         <Col lg={12}>
           <DepartmentsComponent />
