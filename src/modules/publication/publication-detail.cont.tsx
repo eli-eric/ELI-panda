@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
@@ -7,6 +8,7 @@ import { FormattedMessage } from 'react-intl'
 import { Form } from '@/components/form/Form'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'
+import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
@@ -29,12 +31,22 @@ const messages = message.publication
 
 interface Props {
   publication?: Publication
+  refetch: () => void
 }
 
-export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
+export const PublicationDetailContainer: FC<Props> = ({
+  publication,
+  refetch
+}) => {
   const router = useRouter()
 
+  const hasEditRole = useAccessControl(ROLE.PUBLICATIONS_EDIT)()
+
   const { mediaType } = useMediaTypeStore()
+
+  const publicationsTableId = 'publications'
+
+  const queryClient = useQueryClient()
 
   const defaultValues = publication
     ? formatPublication(publication)
@@ -53,11 +65,17 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
 
   const { mutate } = usePublicationMutation()
 
+  const onSuccessfulSubmit = () => {
+    queryClient.invalidateQueries({ queryKey: [publicationsTableId] })
+    refetch()
+  }
+
   const onSubmit = formMethods.handleSubmit(data => {
     const formattedData = formatFormData(data)
     mutate(formattedData, {
       onSuccess: ({ data }) => {
         router.push(PATH.PUBLICATION + '/' + data.uid)
+        onSuccessfulSubmit()
       }
     })
   })
@@ -66,6 +84,7 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
     mutate(formatFormData(data), {
       onSuccess: () => {
         router.push(PATH.PUBLICATIONS)
+        onSuccessfulSubmit()
       }
     })
   })
@@ -77,7 +96,7 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
       enableLeaveWarning={true}
     >
       <HeaderWithButtons
-        editRole={ROLE.BASICS}
+        editRole={ROLE.PUBLICATIONS_EDIT}
         onSubmit={onSubmit}
         onSubmitAndExit={onSubmitAndExit}
         customElement={
@@ -91,7 +110,7 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
         <FileManager
           customTitle="Publication PDF file"
           allowMultiple={false}
-          hasEditRole={publication ? true : false}
+          hasEditRole={publication ? hasEditRole : false}
           itemType={FILE_TYPE.PUBLICATION}
           uid={publication?.uid as string}
         />

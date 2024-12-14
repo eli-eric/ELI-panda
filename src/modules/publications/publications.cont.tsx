@@ -11,6 +11,7 @@ import { usePandaTable } from '../shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '../shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '../shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar, SearchBarButtonsComponent } from '../shared/table/SearchBar'
+import { ExportButton } from './components/export.button'
 import { usePublications } from './hooks/usePublications'
 import { usePublicationColumns } from './publications.columns'
 
@@ -50,10 +51,12 @@ export const PublicationsContainer: FC = () => {
         tableId={tableId}
         left={
           <SearchBarButtonsComponent
-            editRole={ROLE.BASICS}
+            editRole={ROLE.PUBLICATIONS_EDIT}
             handleAdd={handleAdd}
             handleRefresh={handleRefresh}
-          />
+          >
+            <ExportButton />
+          </SearchBarButtonsComponent>
         }
       />
       <PandaTableV2
@@ -62,7 +65,14 @@ export const PublicationsContainer: FC = () => {
         data={data?.data}
         settings={tableSettings}
       />
-      <Pagination tableId={tableId} />
+      <Pagination
+        tableId={tableId}
+        settings={{
+          enableQueryURL: true,
+          pageSizeDefault: 50,
+          total: data?.totalCount
+        }}
+      />
     </TableLayoutContainer>
   )
 }

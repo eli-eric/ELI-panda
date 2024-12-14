@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query'
-import type { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 
@@ -18,9 +17,8 @@ export const usePublicationMutation = () => {
       uid ? 'put' : 'post',
       uid
     ),
-    onError: (error: AxiosError) => {
-      // TODO: handle error message
-      toast.error('Error')
+    onError: (error: any) => {
+      toast.error(`Error: ${error.response?.data?.message}`)
     }
   })
 }

@@ -4,6 +4,8 @@ import Listbox from '@/components/form/Listbox'
 import { RadioSelect } from '@/components/form/radio-select.comp'
 import { Col, Grid } from '@/components/grid/Grid'
 import Card from '@/components/layout/Card'
+import { useAccessControl } from '@/hooks/useAccessControl'
+import { ROLE } from '@/types/constants/roles'
 
 import { useMediaTypeStore } from '../hooks/useMediaTypeStore'
 import { usePublicationFields } from '../hooks/usePublicationFields'
@@ -25,6 +27,7 @@ export type Publication = {
 export const PublicationFormComponent = () => {
   const fields = usePublicationFields()
   const { setMediaType } = useMediaTypeStore()
+  const disabled = !useAccessControl(ROLE.PUBLICATIONS_EDIT)()
 
   const handleChangeMediaType = (mediaType: string) => {
     setMediaType(mediaType as MEDIA_TYPE_CODE)
@@ -35,6 +38,7 @@ export const PublicationFormComponent = () => {
       <Grid>
         <Col lg={3}>
           <RadioSelect
+            disabled={disabled}
             name={'mediaType'}
             options={mediaTypeOptions}
             defaultValue={mediaTypeOptions[0].value}

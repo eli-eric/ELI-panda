@@ -1,6 +1,8 @@
 import { useMakeFormFields } from '@/hooks/form/useMakeFormFields'
+import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
+import { ROLE } from '@/types/constants/roles'
 
 import { MEDIA_TYPE_CODE } from '../types/constants'
 import { useMediaTypeStore } from './useMediaTypeStore'
@@ -9,7 +11,7 @@ import { useMediaTypeStore } from './useMediaTypeStore'
 const { form } = message.publication
 
 export const usePublicationFields = () => {
-  const disabled = false
+  const disabled = !useAccessControl(ROLE.PUBLICATIONS_EDIT)()
   const { mediaType } = useMediaTypeStore()
 
   const isPeerReviewed = mediaType === MEDIA_TYPE_CODE.PeerReviewedArticle
