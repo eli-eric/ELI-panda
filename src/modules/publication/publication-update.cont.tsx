@@ -10,7 +10,13 @@ import { usePublication } from './hooks/usePublication'
 import { PublicationDetailContainer } from './publication-detail.cont'
 
 export const PublicationUpdateContainer = () => {
-  const { data: publication, isLoading, isError, error } = usePublication()
+  const {
+    data: publication,
+    isLoading,
+    isError,
+    error,
+    refetch
+  } = usePublication()
 
   useEffect(() => {
     if (isError) {
@@ -30,5 +36,7 @@ export const PublicationUpdateContainer = () => {
     return <LoaderComponent />
   }
 
-  return <PublicationDetailContainer publication={publication} />
+  return (
+    <PublicationDetailContainer publication={publication} refetch={refetch} />
+  )
 }

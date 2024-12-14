@@ -62,7 +62,14 @@ export const PublicationsContainer: FC = () => {
         data={data?.data}
         settings={tableSettings}
       />
-      <Pagination tableId={tableId} />
+      <Pagination
+        tableId={tableId}
+        settings={{
+          enableQueryURL: true,
+          pageSizeDefault: 50,
+          total: data?.totalCount
+        }}
+      />
     </TableLayoutContainer>
   )
 }

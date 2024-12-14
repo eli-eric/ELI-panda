@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
@@ -29,12 +30,20 @@ const messages = message.publication
 
 interface Props {
   publication?: Publication
+  refetch: () => void
 }
 
-export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
+export const PublicationDetailContainer: FC<Props> = ({
+  publication,
+  refetch
+}) => {
   const router = useRouter()
 
   const { mediaType } = useMediaTypeStore()
+
+  const publicationsTableId = 'publications'
+
+  const queryClient = useQueryClient()
 
   const defaultValues = publication
     ? formatPublication(publication)
@@ -53,11 +62,17 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
 
   const { mutate } = usePublicationMutation()
 
+  const onSuccessfulSubmit = () => {
+    queryClient.invalidateQueries({ queryKey: [publicationsTableId] })
+    refetch()
+  }
+
   const onSubmit = formMethods.handleSubmit(data => {
     const formattedData = formatFormData(data)
     mutate(formattedData, {
       onSuccess: ({ data }) => {
         router.push(PATH.PUBLICATION + '/' + data.uid)
+        onSuccessfulSubmit()
       }
     })
   })
@@ -66,6 +81,7 @@ export const PublicationDetailContainer: FC<Props> = ({ publication }) => {
     mutate(formatFormData(data), {
       onSuccess: () => {
         router.push(PATH.PUBLICATIONS)
+        onSuccessfulSubmit()
       }
     })
   })
