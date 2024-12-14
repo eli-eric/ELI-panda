@@ -31,7 +31,7 @@ const messages = message.publication
 
 interface Props {
   publication?: Publication
-  refetch: () => void
+  refetch?: () => void
 }
 
 export const PublicationDetailContainer: FC<Props> = ({
@@ -67,7 +67,7 @@ export const PublicationDetailContainer: FC<Props> = ({
 
   const onSuccessfulSubmit = () => {
     queryClient.invalidateQueries({ queryKey: [publicationsTableId] })
-    refetch()
+    refetch?.()
   }
 
   const onSubmit = formMethods.handleSubmit(data => {
