@@ -24,7 +24,7 @@ export const usePublicationColumns = () => {
         id: 'code',
         header: 'Code',
         accessorFn: row => row.code,
-        size: 150,
+        size: 200,
         meta: {
           sticky: true
         },

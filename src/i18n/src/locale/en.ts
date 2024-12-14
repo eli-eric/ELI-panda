@@ -452,7 +452,7 @@ export const messages = {
       allAuthors: { label: 'All Authors list*' },
       allAuthorsCount: { label: 'All Authors Count (R10)*' },
       eliAuthors: { label: 'ELI Authors list*' },
-      eliAuthorsCount: { label: 'ELI Authors Count (R11)*' },
+      eliAuthorsCount: { label: 'ELI Authors Count (R11)' },
       longJournalTitle: { label: 'Long Journal Title (R16)*' },
       shortJournalTitle: { label: 'Short Journal Title' },
       volume: {

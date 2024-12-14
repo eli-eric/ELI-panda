@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl'
 import { Form } from '@/components/form/Form'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'
+import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
@@ -38,6 +39,8 @@ export const PublicationDetailContainer: FC<Props> = ({
   refetch
 }) => {
   const router = useRouter()
+
+  const hasEditRole = useAccessControl(ROLE.PUBLICATIONS_EDIT)()
 
   const { mediaType } = useMediaTypeStore()
 
@@ -93,7 +96,7 @@ export const PublicationDetailContainer: FC<Props> = ({
       enableLeaveWarning={true}
     >
       <HeaderWithButtons
-        editRole={ROLE.BASICS}
+        editRole={ROLE.PUBLICATIONS_EDIT}
         onSubmit={onSubmit}
         onSubmitAndExit={onSubmitAndExit}
         customElement={
@@ -107,7 +110,7 @@ export const PublicationDetailContainer: FC<Props> = ({
         <FileManager
           customTitle="Publication PDF file"
           allowMultiple={false}
-          hasEditRole={publication ? true : false}
+          hasEditRole={publication ? hasEditRole : false}
           itemType={FILE_TYPE.PUBLICATION}
           uid={publication?.uid as string}
         />

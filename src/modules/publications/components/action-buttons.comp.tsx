@@ -1,8 +1,9 @@
 import type { FC } from 'react'
 
 import { TableActionsButtons } from '@/components/Buttons'
+import { useAccessControl } from '@/hooks/useAccessControl'
 import useWarningModal from '@/hooks/useWarningModal'
-import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 
 import { usePublicationDelete } from '../hooks/usePublicationDelete'
 
@@ -14,15 +15,16 @@ export const ActionButtons: FC<Props> = ({ uid }) => {
 
   const withWarning = useWarningModal()
 
+  const canEdit = useAccessControl(ROLE.PUBLICATIONS_EDIT)()
+
   const onDeleteClick = () => {
     withWarning(deletePublication)({})
   }
 
   return (
     <TableActionsButtons
-      detailLink={PATH.PUBLICATION + '/' + uid}
       onDeleteClick={onDeleteClick}
-      canEdit={true}
+      canEdit={canEdit}
       position="right-0"
     />
   )

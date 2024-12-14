@@ -5,8 +5,10 @@ import { FormattedMessage, useIntl } from 'react-intl'
 
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
+import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
+import { ROLE } from '@/types/constants/roles'
 
 import { usePublicationFields } from '../hooks/usePublicationFields'
 const { form, addDepartmentButton } = message.publication
@@ -16,6 +18,7 @@ export const DepartmentsComponent = () => {
     name: 'authorsDepartments',
     rules: { required: 'This field is required', minLength: 1 }
   })
+  const disabled = !useAccessControl(ROLE.PUBLICATIONS_EDIT)()
 
   const { setValue, control } = useFormContext()
   const authorsDepartments = useWatch({ control, name: 'authorsDepartments' })
@@ -41,28 +44,36 @@ export const DepartmentsComponent = () => {
     <div className="w-full">
       {fields.map((item, index) => (
         <div key={item.id} className="grid grid-cols-12 w-full gap-2 pt-2">
-          <Department key={item.id} name={`authorsDepartments.${index}`} />
-          <div className="col-span-1">
-            <button
-              className="text-red-600 dark:text-gray-400 justify-end hover:text-primary-400 dark:hover:text-primary-600 self-end pt-6"
-              onClick={() => handleRemove(index)}
-              disabled={fields.length === 1}
-            >
-              <TrashIcon className="w-6 h-6" />
-            </button>
-          </div>
+          <Department
+            key={item.id}
+            name={`authorsDepartments.${index}`}
+            disabled={disabled}
+          />
+          {!disabled && (
+            <div className="col-span-1">
+              <button
+                className="text-red-600 dark:text-gray-400 justify-end hover:text-primary-400 dark:hover:text-primary-600 self-end pt-6"
+                onClick={() => handleRemove(index)}
+                disabled={fields.length === 1}
+              >
+                <TrashIcon className="w-6 h-6" />
+              </button>
+            </div>
+          )}
         </div>
       ))}
       <div className="grid grid-cols-12 pt-2">
-        <div className="col-span-6 items-center">
-          <button
-            className="text-gray-600 underline text-sm dark:text-gray-400 hover:text-primary-400  dark:hover:text-primary-600 pt-2 pl-2"
-            onClick={handleAppend}
-          >
-            <FormattedMessage id={addDepartmentButton} />
-          </button>
-        </div>
-        <Input {...eliAuthorsCount} className="col-span-6 pl-1" />
+        {!disabled && (
+          <div className="col-span-6 items-center">
+            <button
+              className="text-gray-600 underline text-sm dark:text-gray-400 hover:text-primary-400  dark:hover:text-primary-600 pt-2 pl-2"
+              onClick={handleAppend}
+            >
+              <FormattedMessage id={addDepartmentButton} />
+            </button>
+          </div>
+        )}
+        <Input {...eliAuthorsCount} className="col-span-12 pt-4" />
       </div>
     </div>
   )
@@ -70,9 +81,10 @@ export const DepartmentsComponent = () => {
 
 type DepartmentProps = {
   name: string
+  disabled: boolean
 }
 
-const Department = ({ name }: DepartmentProps) => {
+const Department = ({ name, disabled }: DepartmentProps) => {
   const { formatMessage: fm } = useIntl()
   return (
     <Fragment>
@@ -81,6 +93,7 @@ const Department = ({ name }: DepartmentProps) => {
         label={form.department.label}
         placeholder={fm({ id: form.department.placeholder })}
         codebook={CODEBOOK.DEPARTMENT}
+        disabled={disabled}
         className="col-span-6"
       />
       <Input
@@ -88,6 +101,7 @@ const Department = ({ name }: DepartmentProps) => {
         rounded="rounded-md"
         label={fm({ id: form.authorsCount.label })}
         type="number"
+        disabled={disabled}
         className="col-span-5"
       />
     </Fragment>

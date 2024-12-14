@@ -8,6 +8,7 @@ type Props = {
   options: RadioSelectOption[]
   defaultValue: string
   onChange?: (value: string) => void
+  disabled?: boolean
 }
 
 export type RadioSelectOption = {
@@ -20,6 +21,7 @@ export const RadioSelect = ({
   name,
   options,
   defaultValue,
+  disabled,
   onChange
 }: Props) => {
   const { control } = useFormContext()
@@ -41,7 +43,7 @@ export const RadioSelect = ({
                   id={`${idHtml}-${index}`}
                   type="radio"
                   value={option.value}
-                  disabled={option.disabled}
+                  disabled={option.disabled || disabled}
                   checked={field.value === option.value}
                   onChange={e => {
                     field.onChange(e.target.value)
