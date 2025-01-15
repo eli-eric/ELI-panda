@@ -117,7 +117,7 @@ export const PublicationFormComponent = () => {
         <Col lg={2}>
           <Listbox
             {...fields.yearOfPublication}
-            customOptions={['2024', '2025']}
+            customOptions={['2023', '2024', '2025']}
           />
         </Col>
         <Col lg={4}>
