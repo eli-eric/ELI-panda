@@ -42,17 +42,20 @@ function IndeterminateCheckbox({
     addMovingSystem
   } = useSystemsMoveStore()
 
+  const { destinationSystemsTableId } = useSystemsMoveStore()
+
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     row.toggleSelected(undefined, { selectChildren: false })
+
     const { checked } = e.target
     if (checked) {
-      if (tableId === 'destination-systems') {
+      if (tableId === destinationSystemsTableId) {
         setDestinationSystem(row.original)
       } else {
         addMovingSystem(row.original)
       }
     } else {
-      if (tableId === 'destination-systems') {
+      if (tableId === destinationSystemsTableId) {
         removeDestinationSystem()
       } else {
         removeMovingSystem(row.original.uid)
@@ -79,7 +82,8 @@ function IndeterminateCheckbox({
 
 export const useMoveSystemsColumns = ({ tableId }: SystemsColumnsProps) => {
   const { setUid, pending } = useSubsystems(tableId)
-  const { movingSystemsTableId } = useSystemsMoveStore()
+  const { movingSystemsTableId, destinationSystemsTableId } =
+    useSystemsMoveStore()
   const columns = useMemo(
     (): ColumnDef<SystemDetail, any>[] => [
       {
@@ -133,9 +137,8 @@ export const useMoveSystemsColumns = ({ tableId }: SystemsColumnsProps) => {
               setUid={setUid}
               tableId={tableId}
             />
-            {props.row.getIsSelected() && tableId === 'destination-systems' && (
-              <SubmitMoveButton />
-            )}
+            {props.row.getIsSelected() &&
+              tableId === destinationSystemsTableId && <SubmitMoveButton />}
           </div>
         )
       },
