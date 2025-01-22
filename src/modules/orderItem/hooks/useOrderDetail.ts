@@ -16,7 +16,7 @@ const useOrderDetail = () => {
 
   const queryKey: QueryFetcherKey = ['order', { uid }]
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey,
     queryFn: queryFetcher<OrderDetailFormType>('order'),
     enabled: !!uid,
@@ -33,7 +33,8 @@ const useOrderDetail = () => {
     queryKey,
     disabledEdit,
     uid,
-    orderEndpoint
+    orderEndpoint,
+    refetch
   }
 }
 
