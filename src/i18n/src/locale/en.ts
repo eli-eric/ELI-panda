@@ -179,7 +179,16 @@ export const messages = {
             label: 'Serial Number',
             placeholder: 'Serial Number'
           },
-          order: { label: 'Order', placeholder: 'Order' },
+          orderName: { label: 'Order Name', placeholder: 'Order Name' },
+          orderNumber: { label: 'Order Number', placeholder: 'Order Number' },
+          orderRequestNumber: {
+            label: 'Order Request Number',
+            placeholder: 'Order Request Number'
+          },
+          orderContractNumber: {
+            label: 'Order Contract Number',
+            placeholder: 'Order Contract Number'
+          },
           eun: { label: 'Eun', placeholder: 'Eun' },
           price: { label: 'Price', placeholder: 'Price' },
           procurementStatus: {

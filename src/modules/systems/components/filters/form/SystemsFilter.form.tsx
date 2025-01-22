@@ -56,12 +56,6 @@ export const SystemsFilterForm = ({
           onChange={setFilter(fields.name.name)}
           isFilter={true}
         />
-        <SystemTypeComboBox
-          systemTypeField={fields.systemType}
-          clickIcon={true}
-          onChange={setFilter(fields.systemType.name)}
-          isFilter={true}
-        />
         <Combobox
           {...fields.responsible}
           onSelect={setFilter(fields.responsible.name)}
@@ -80,6 +74,13 @@ export const SystemsFilterForm = ({
         <SelectLocationCombo
           locationField={fields.location}
           onSelect={setFilter(fields.location.name)}
+          isFilter={true}
+        />
+        <FilterCheckboxes
+          name={fields.itemUsage.name}
+          codebook={fields.itemUsage.codebook}
+          label="Item Usage"
+          onChange={setFilter(fields.itemUsage.name)}
           isFilter={true}
         />
         <FilterCheckboxes
@@ -112,16 +113,10 @@ export const SystemsFilterForm = ({
         />
       </div>
       <div className="flex flex-col gap-2">
-        <FilterCheckboxes
-          name={fields.itemUsage.name}
-          codebook={fields.itemUsage.codebook}
-          label="Item Usage"
-          onChange={setFilter(fields.itemUsage.name)}
-          isFilter={true}
-        />
-        <Input
-          {...fields.order}
-          onChange={setFilter(fields.order.name)}
+        <SystemTypeComboBox
+          systemTypeField={fields.systemType}
+          clickIcon={true}
+          onChange={setFilter(fields.systemType.name)}
           isFilter={true}
         />
         <Input
@@ -160,6 +155,26 @@ export const SystemsFilterForm = ({
           name={'price'}
           label={'Price'}
           onChange={setFilter('price')}
+        />
+        <Input
+          {...fields.orderName}
+          onChange={setFilter(fields.orderName.name)}
+          isFilter={true}
+        />
+        <Input
+          {...fields.orderNumber}
+          onChange={setFilter(fields.orderNumber.name)}
+          isFilter={true}
+        />
+        <Input
+          {...fields.orderRequestNumber}
+          onChange={setFilter(fields.orderRequestNumber.name)}
+          isFilter={true}
+        />
+        <Input
+          {...fields.orderContractNumber}
+          onChange={setFilter(fields.orderContractNumber.name)}
+          isFilter={true}
         />
       </div>
       <CategoryPropFilters
