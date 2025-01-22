@@ -97,9 +97,27 @@ export const useSystemsFilterFields = () => {
       rounded: 'rounded-md',
       disabled: disabledEdit
     },
-    order: {
-      name: 'order',
-      label: form.physicalItem.order.label,
+    orderName: {
+      name: 'orderName',
+      label: form.physicalItem.orderName.label,
+      rounded: 'rounded-md',
+      disabled: disabledEdit
+    },
+    orderNumber: {
+      name: 'orderNumber',
+      label: form.physicalItem.orderNumber.label,
+      rounded: 'rounded-md',
+      disabled: disabledEdit
+    },
+    orderRequestNumber: {
+      name: 'orderRequestNumber',
+      label: form.physicalItem.orderRequestNumber.label,
+      rounded: 'rounded-md',
+      disabled: disabledEdit
+    },
+    orderContractNumber: {
+      name: 'orderContractNumber',
+      label: form.physicalItem.orderContractNumber.label,
       rounded: 'rounded-md',
       disabled: disabledEdit
     },
