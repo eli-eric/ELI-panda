@@ -157,13 +157,13 @@ export const useSystemsColumns = ({
       {
         header: 'Sub Systems Count',
         accessorFn: row => row.statistics?.subsystemsCount,
-        id: 'subsystemsCount',
+        id: 'statistics.subsystemsCount',
         size: 200
       },
       {
         header: 'SP Requirement',
         accessorFn: row => row.statistics?.minimalSpareParstCount,
-        id: 'minimalSpareParstCount',
+        id: 'statistics.minimalSpareParstCount',
         size: 200
       },
       {
@@ -173,13 +173,13 @@ export const useSystemsColumns = ({
           (
             parseFloat(Number(row.statistics?.sp_coverage).toFixed(2)) * 100
           ).toString() + '%',
-        id: 'sp_coverage',
+        id: 'statistics.sp_coverage',
         size: 200
       },
       {
         header: 'Price',
         accessorFn: row => row.physicalItem?.price,
-        id: 'price',
+        id: 'physicalItem.price',
         size: 150,
         meta: { className: 'text-right' },
         cell: ({ getValue, row: { original } }) => (
@@ -194,19 +194,19 @@ export const useSystemsColumns = ({
       {
         header: 'Eun',
         accessorFn: row => row.physicalItem?.eun,
-        id: 'eun',
+        id: 'physicalItem.eun',
         size: 150
       },
       {
         header: 'Serial Number',
         accessorFn: row => row.physicalItem?.serialNumber,
-        id: 'serialNumber',
+        id: 'physicalItem.serialNumber',
         size: 150
       },
       {
         header: 'Catalogue Name',
         accessorFn: row => row.physicalItem?.catalogueItem?.name,
-        id: 'catalogueName',
+        id: 'physicalItem.catalogueItem.name',
         size: 300,
         cell: ({ getValue, row: { original } }) => (
           <Tooltip content={getValue()}>
@@ -226,13 +226,13 @@ export const useSystemsColumns = ({
       {
         header: 'Part Number',
         accessorFn: row => row.physicalItem?.catalogueItem?.catalogueNumber,
-        id: 'partNumber',
+        id: 'physicalItem.catalogueItem.partNumber',
         size: 150
       },
       {
         header: 'Catalogue Description',
         accessorFn: row => row.physicalItem?.catalogueItem?.description,
-        id: 'catalogueDescription',
+        id: 'physicalItem.catalogueItem.description',
         size: 200,
         cell: ({ getValue }) => (
           <Fragment>
@@ -247,7 +247,7 @@ export const useSystemsColumns = ({
       {
         header: 'Catalogue Category',
         accessorFn: row => row.physicalItem?.catalogueItem?.category?.name,
-        id: 'catalogueCategory',
+        id: 'physicalItem.catalogueItem.category',
         cell: ({ getValue }) => (
           <Tooltip content={getValue()}>
             <div>{truncateString(getValue(), 17)}</div>
@@ -258,7 +258,7 @@ export const useSystemsColumns = ({
       {
         header: 'Supplier',
         accessorFn: row => row.physicalItem?.catalogueItem?.supplier?.name,
-        id: 'supplier',
+        id: 'physicalItem.catalogueItem.supplier',
         size: 150
       },
       {
@@ -270,7 +270,7 @@ export const useSystemsColumns = ({
             value={getValue()}
           />
         ),
-        id: 'orderNumber',
+        id: 'physicalItem.orderNumber',
         size: 150
       }
     ],
