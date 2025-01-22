@@ -28,14 +28,17 @@ export const queryMutate = <TResponse, TVariables>(
   endpointType: keyof ReturnType<typeof getEndpoints>,
   mutationType: 'post' | 'put' | 'delete',
   uid?: string,
-  isDefaultUrl?: boolean
+  isDefaultUrl?: boolean,
+  endpointVariables?: Record<string, string>
 ) => {
   const mutateFn: MutateFunction<
     AxiosResponse<TResponse>,
     AxiosError,
     TVariables
   > = variables => {
-    const endpoint = getEndpoints({ uid })[endpointType] as string | undefined
+    const endpoint = getEndpoints({ uid, ...endpointVariables })[
+      endpointType
+    ] as string | undefined
     if (!endpoint) {
       throw new Error(`Endpoint for type ${endpointType} not found`)
     }

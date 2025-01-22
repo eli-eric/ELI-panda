@@ -11,7 +11,7 @@ import {
   TableEditButton
 } from '@/components/Buttons'
 import { Heading } from '@/components/card/card.comp'
-import { useToggle } from '@/components/form/Switch'
+import { Toggle } from '@/components/form/Switch'
 import WarningModal from '@/components/overlays/modal/warning/modal-warning.comp'
 import { Tooltip } from '@/components/Tooltip'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
@@ -99,7 +99,6 @@ export const OrderisDeliveredAction = ({
   orderLine: OrderLineFormType
   checked?: boolean
 }) => {
-  const { enabled, toggle, Toggle } = useToggle(checked)
   const uid = useRouter().query.uid as string
   const { orderLineDelivery } = useEndpoint({
     uid: uid,
@@ -116,7 +115,6 @@ export const OrderisDeliveredAction = ({
     endpoint: orderLineDelivery,
     method: 'put',
     onSuccess: data => {
-      toggle()
       setOrderLine({
         ...orderLine,
         id: orderLine.id,
@@ -133,7 +131,7 @@ export const OrderisDeliveredAction = ({
   const [open, setOpen] = useState(false)
 
   const handleCheck = () => {
-    !orderLine.isDelivered ? setOpen(true) : submit({ isDelivered: !enabled })
+    !orderLine.isDelivered ? setOpen(true) : submit({ isDelivered: !checked })
   }
 
   return (
@@ -141,9 +139,9 @@ export const OrderisDeliveredAction = ({
       {orderLine.uid && (
         <Fragment>
           {hasRole ? (
-            <Toggle onChange={handleCheck} enabled={enabled} />
+            <Toggle onChange={handleCheck} enabled={checked || false} />
           ) : (
-            <Toggle enabled={enabled} onChange={() => {}} />
+            <Toggle enabled={checked || false} onChange={() => {}} />
           )}
         </Fragment>
       )}
@@ -154,7 +152,7 @@ export const OrderisDeliveredAction = ({
         onSubmit={data => {
           submit({
             serialNumber: data?.serialNumber,
-            isDelivered: !enabled,
+            isDelivered: !checked,
             eun: data?.eun || undefined
           })
         }}

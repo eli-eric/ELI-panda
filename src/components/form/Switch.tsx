@@ -10,7 +10,7 @@ interface Props {
   className?: string
 }
 
-const Toggle = ({ enabled, onChange, className }: Props) => (
+export const Toggle = ({ enabled, onChange, className }: Props) => (
   <SwitchHUI
     checked={enabled}
     onChange={onChange}
@@ -43,13 +43,15 @@ interface SwitchProps {
   defaultValue?: boolean
   className?: string
   label?: string
+  onChange?: (value: boolean) => void
 }
 
 export const Switch = ({
   name,
   defaultValue = true,
   className,
-  label
+  label,
+  onChange
 }: SwitchProps) => {
   const { control } = useFormContext()
 
@@ -65,6 +67,10 @@ export const Switch = ({
           </span>
           <SwitchHUI
             {...field}
+            onChange={e => {
+              field.onChange(e)
+              onChange?.(e)
+            }}
             className={classNames(
               'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2',
               field.value ? 'bg-primary-500' : 'bg-gray-200',
