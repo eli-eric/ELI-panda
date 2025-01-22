@@ -58,6 +58,7 @@ export const useSystemsColumns = ({
       },
       {
         id: 'icon',
+        header: '',
         size: 41,
         meta: { sticky: true },
         cell: ({ row: { original } }) => (
