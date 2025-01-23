@@ -101,7 +101,7 @@ const tiles: Tile[] = [
     Icon: () => (
       <BookOpenIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
     ),
-    role: ROLE.BASICS
+    role: ROLE.PUBLICATIONS_VIEW
   }
 ]
 
