@@ -49,6 +49,7 @@ export const getEndpoints = ({
     ordersMinMaxPrice: `/orders/order-lines/min-max-prices`,
     order: `/order${uid ? '/' + uid : ''}`,
     orderLineDelivery: `/order/${uid}/orderline/${itemUid}/delivery`,
+    orderLinesDeliverAll: `/order/${uid}/orderlines/delivery`,
     eunforPrint: `/orders/eun-for-print/${uid}${query}`,
     codebook: `/codebook/${path}${query}`,
     codebooks: `/codebooks${query}`,
@@ -64,7 +65,10 @@ export const getEndpoints = ({
     physicalItemMove: `/physical-item/move`,
     physicalItemReplace: `/physical-item/replace`,
     systemFilesCopy: `/api/system/images/copy`,
-    systemsMove: `/systems/move`
+    systemsMove: `/systems/move`,
+    publication: `/publication${uid ? '/' + uid : ''}`,
+    publications: `/publications${query}`,
+    generateUUID: '/uuid/v4'
   }
   return endpoints
 }

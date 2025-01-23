@@ -35,7 +35,8 @@ export const messages = {
         text: 'You have unsaved changes. Are you sure you want to leave?'
       }
     },
-    files: { title: 'Files' }
+    files: { title: 'Files' },
+    noResults: 'No options.'
   },
   layout: {
     login: 'Log In',
@@ -178,7 +179,16 @@ export const messages = {
             label: 'Serial Number',
             placeholder: 'Serial Number'
           },
-          order: { label: 'Order', placeholder: 'Order' },
+          orderName: { label: 'Order Name', placeholder: 'Order Name' },
+          orderNumber: { label: 'Order Number', placeholder: 'Order Number' },
+          orderRequestNumber: {
+            label: 'Order Request Number',
+            placeholder: 'Order Request Number'
+          },
+          orderContractNumber: {
+            label: 'Order Contract Number',
+            placeholder: 'Order Contract Number'
+          },
           eun: { label: 'Eun', placeholder: 'Eun' },
           price: { label: 'Price', placeholder: 'Price' },
           procurementStatus: {
@@ -425,6 +435,68 @@ export const messages = {
     }
   },
   orderItem: { head: 'ELI Panda - Order Item' },
+  publication: {
+    head: 'ELI Panda - Publication',
+    pdfFileMessage:
+      'In order to upload a PDF you must first fill in all mandatory fields and save the publication.',
+    addDepartmentButton: '+ Add Another ELI Department',
+    form: {
+      department: { label: 'ELI Department*', placeholder: 'Select' },
+      authorsCount: { label: 'ELI Department Authors Count*' },
+      code: { label: 'Code*', placeholder: 'Code' },
+      experimentalSystem: { label: 'Experimental System' },
+      userCall: { label: 'User Call', placeholder: 'Select' },
+      userExperiment: { label: 'User Experiment' },
+      doi: {
+        label: 'DOI (R87)*',
+        labelOptional: 'DOI (R87)'
+      },
+      webLink: {
+        label: 'Web Link (R86)',
+        labelOptional: 'Web Link (R86)',
+        placeholder: 'Web Link'
+      },
+      openAccessType: { label: 'Open Access Type (R94)*' },
+      title: { label: 'Title* (R06)', placeholder: 'Title' },
+      allAuthors: { label: 'All Authors list*' },
+      allAuthorsCount: { label: 'All Authors Count (R10)*' },
+      eliAuthors: { label: 'ELI Authors list*' },
+      eliAuthorsCount: { label: 'ELI Authors Count (R11)' },
+      longJournalTitle: { label: 'Long Journal Title (R16)*' },
+      shortJournalTitle: { label: 'Short Journal Title' },
+      volume: {
+        label: 'Volume (R18)*',
+        labelOptional: 'Volume (R18)'
+      },
+      issue: { label: 'Issue (R19)', placeholder: 'Issue' },
+      pages: { label: 'Pages (R20)*', placeholder: 'Pages' },
+      pagesCount: { label: 'Pages Count (R21)*' },
+      citeAs: { label: 'Cite-As*' },
+      impactFactor: { label: 'Impact Factor' },
+      quartilBasis: { label: 'Quartil Basis' },
+      quartil: { label: 'Quartil', placeholder: 'Select' },
+      yearOfPublication: {
+        label: 'Year of Publication (R09)*',
+        placeholder: 'Select'
+      },
+      dateOfPublication: { label: 'Date of Publication*' },
+      abstract: { label: 'Abstract*' },
+      keywords: { label: 'Keywords (R13)*' },
+      oecdFord: { label: 'OECD/FORD (R04)*', labelOptional: 'OECD/FORD (R04)' },
+      grant: { label: 'Grant' },
+      wosNumber: { label: 'WOS Number (R67)' },
+      issn: { label: 'ISSN (R14)', placeholder: 'ISSN' },
+      eissn: { label: 'E-ISSN (R15)', placeholder: 'E-ISSN' },
+      eidScopus: { label: 'EID Scopus (R90)' },
+      publishingCountry: {
+        label: 'Publishing Country (R17)*',
+        placeholder: 'Type to search...'
+      },
+      language: { label: 'Language (R07)' },
+      note: { label: 'Note' }
+    }
+  },
+  publications: { head: 'ELI Panda - Publications' },
   systemItem: {
     head: 'ELI Panda - System Item',
     itemMove: {

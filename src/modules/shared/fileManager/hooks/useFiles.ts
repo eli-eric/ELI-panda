@@ -3,14 +3,17 @@ import toast from 'react-hot-toast'
 
 import axiosInstance from '@/core/axios/axiosInstance'
 
-import type { FileItem } from '../types'
+import type { FILE_TYPE, FileItem } from '../types'
 
-const getFiles = (itemType: string, uid: string): Promise<Array<FileItem>> => {
+const getFiles = async (
+  itemType: string,
+  uid?: string
+): Promise<Array<FileItem>> => {
   const endpoint = `/api/${itemType}/${uid}/files`
   return axiosInstance.get(endpoint).then(res => res.data)
 }
 
-const deleteFile = (
+const deleteFile = async (
   itemType: string,
   uid: string,
   id: string
@@ -19,10 +22,16 @@ const deleteFile = (
   return axiosInstance.delete(endpoint).then(res => res.data)
 }
 
-export const useFiles = ({ itemType, uid }) => {
+interface UseFilesProps {
+  itemType: FILE_TYPE
+  uid?: string
+}
+
+export const useFiles = ({ itemType, uid }: UseFilesProps) => {
   return useQuery({
     queryKey: ['files', itemType, uid],
-    queryFn: () => getFiles(itemType, uid)
+    queryFn: () => getFiles(itemType, uid),
+    enabled: !!uid
   })
 }
 

@@ -13,6 +13,7 @@ interface Props {
   onSubmitAndExit?: () => void
   editRole: ROLE
   customElement?: React.ReactNode
+  isFormInvalid?: boolean
 }
 const messages = message.common.buttons
 
@@ -21,7 +22,8 @@ export const HeaderWithButtons = ({
   onSubmit,
   onSubmitAndExit,
   editRole,
-  customElement
+  customElement,
+  isFormInvalid = false
 }: Props) => {
   const disabledEdit = usePermission([editRole])
   const { back } = useRouter()
@@ -47,7 +49,7 @@ export const HeaderWithButtons = ({
                 buttonSize="large"
                 onClick={onSubmitAndExit}
                 loading={loading}
-                disabled={loading}
+                disabled={loading || isFormInvalid}
                 type="button"
                 text={messages.saveAndExit}
               />
@@ -56,7 +58,7 @@ export const HeaderWithButtons = ({
                 className="ml-2"
                 buttonSize="large"
                 onClick={onSubmit}
-                disabled={loading}
+                disabled={loading || isFormInvalid}
                 loading={loading}
                 type="button"
                 text={messages.save}

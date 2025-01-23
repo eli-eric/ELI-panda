@@ -12,6 +12,7 @@ import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { PATH } from '@/types/constants/paths'
 
+import { DeliveredAllButton } from './deliver-all.button'
 import {
   OrderisDeliveredAction,
   OrderLineActionButtons,
@@ -65,14 +66,24 @@ const useOrderLinesColumns = () => {
         size: 60
       },
       {
-        header: formatMessage({ id: messages.isDelivered }),
+        header: () => {
+          return (
+            <span className="bg-inherit flex flex-col">
+              {formatMessage({ id: messages.isDelivered })}
+              <DeliveredAllButton />
+            </span>
+          )
+        },
         accessorKey: 'isDelivered',
         cell: ({ getValue, row: { original } }) =>
           uid ? (
             <OrderisDeliveredAction orderLine={original} checked={getValue()} />
           ) : null,
         size: 90,
-        meta: { filter: { enableColumnFilter: false, type: 'boolean' } },
+        meta: {
+          filter: { enableColumnFilter: false, type: 'boolean' }
+        },
+        enableSorting: false,
         enableColumnFilter: false
       },
       {

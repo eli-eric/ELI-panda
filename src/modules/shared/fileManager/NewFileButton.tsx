@@ -12,14 +12,16 @@ const buttons = message.common.buttons
 
 interface NewFileButtonProps {
   isDragActive?: boolean
-  uid: string
+  uid?: string
+  hasEditRole?: boolean
   handleNewFile: (e: any) => void
 }
 
 export const NewFileButton: FC<NewFileButtonProps> = ({
   handleNewFile,
   uid,
-  isDragActive
+  isDragActive,
+  hasEditRole
 }) => {
   const [open, setOpen] = useState(false)
   const [openLinkModal, setOpenLinkModal] = useState(false)
@@ -63,6 +65,7 @@ export const NewFileButton: FC<NewFileButtonProps> = ({
         buttonSize="large"
         primary={!isDragActive}
         type={'button'}
+        disabled={!hasEditRole}
         onClick={() => {
           setOpen(true)
         }}

@@ -3,7 +3,7 @@ export const Label = ({
   htmlFor
 }: {
   label?: string
-  htmlFor: string
+  htmlFor?: string
 }) =>
   label ? (
     <label

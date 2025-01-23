@@ -57,29 +57,33 @@ export const TableSettings: FC<Props> = ({
             </li>
             <li>
               <div className="px-4 py-1 flex flex-wrap">
-                {getAllLeafColumns().map(column => (
-                  <div
-                    key={column.id}
-                    className="flex items-center space-x-2 mr-4"
-                  >
-                    <input
-                      type={'checkbox'}
-                      id={`checkbox-${column.id}`}
-                      checked={column.getIsVisible()}
-                      onChange={column.getToggleVisibilityHandler()}
-                      className={classNames(
-                        'focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 dark:text-primary-600 rounded',
-                        !column.getIsVisible() && 'dark:bg-gray-700'
-                      )}
-                    />
-                    <label
-                      htmlFor={`checkbox-${column.id}`}
-                      className="hover:text-primary-600 text-sm text-gray-700 dark:text-gray-200"
+                {getAllLeafColumns().map(column => {
+                  return (
+                    <div
+                      key={column.id}
+                      className="flex items-center space-x-2 mr-4"
                     >
-                      {column.id}
-                    </label>
-                  </div>
-                ))}
+                      <input
+                        type={'checkbox'}
+                        id={`checkbox-${column.id}`}
+                        checked={column.getIsVisible()}
+                        onChange={column.getToggleVisibilityHandler()}
+                        className={classNames(
+                          'focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 dark:text-primary-600 rounded',
+                          !column.getIsVisible() && 'dark:bg-gray-700'
+                        )}
+                      />
+                      <label
+                        htmlFor={`checkbox-${column.id}`}
+                        className="hover:text-primary-600 text-sm text-gray-700 dark:text-gray-200"
+                      >
+                        {typeof column.columnDef?.header === 'string'
+                          ? column.columnDef?.header || column.id
+                          : column.id}
+                      </label>
+                    </div>
+                  )
+                })}
               </div>
             </li>
           </ul>

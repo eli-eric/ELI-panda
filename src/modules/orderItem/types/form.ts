@@ -36,4 +36,5 @@ export interface OrderLineFormType extends FieldValues {
   notes?: string
   isDelivered?: boolean
   serialNumber?: string
+  lastUpdateTime?: string
 }
