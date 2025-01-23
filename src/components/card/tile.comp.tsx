@@ -10,7 +10,7 @@ interface CardProps {
   link?: string
   Icon: () => JSX.Element
   legacyBehavior?: boolean
-  role?: ROLE
+  role: ROLE
 }
 
 export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {

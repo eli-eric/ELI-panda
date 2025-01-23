@@ -20,7 +20,7 @@ class MyDocument extends Document {
             }}
           ></script>
         </Head>
-        <body className=" bg-white  dark:bg-gray-800">
+        <body className="bg-neutral-50  dark:bg-gray-800">
           <Main />
           <NextScript />
         </body>
