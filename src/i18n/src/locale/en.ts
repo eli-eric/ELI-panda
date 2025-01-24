@@ -503,6 +503,7 @@ export const messages = {
     }
   },
   publications: { head: 'ELI Panda - Publications' },
+  services: { head: 'ELI Panda - Services' },
   systemItem: {
     head: 'ELI Panda - System Item',
     itemMove: {
