@@ -23,7 +23,7 @@ import { GraphModalButton } from '@/modules/shared/system/GraphModalButton'
 import { ROLE } from '@/types/constants/roles'
 import type { SystemLevel } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { useSystemCreate } from '../../hooks/useSystemCreate'
 import { useSystemDetail } from '../../hooks/useSystemDetail'
@@ -154,7 +154,7 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
         />
       </Card>
       <FormCard
-        className={classNames(
+        className={cx(
           'shadow-md rounded-lg border',
           getColorBySystemLevel(systemLevel as SystemLevel)
         )}

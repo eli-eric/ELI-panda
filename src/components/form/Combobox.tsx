@@ -9,7 +9,7 @@ import { message } from '@/i18n/src/messages'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 import type { CodebookFilter, CodebookType } from '@/types/responses/codebook'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { PlusButton } from '../Buttons'
 import { ComboboxButton } from './components/ComboboxButton'
@@ -121,7 +121,7 @@ const Combobox = ({
                 onSelect && onSelect(value)
               }}
               disabled={disabled}
-              className={classNames('relative flex flex-col w-full', className)}
+              className={cx('relative flex flex-col w-full', className)}
             >
               {(label || customLabel) && (
                 <HUICombobox.Label className="block text-sm font-medium text-gray-900 dark:text-gray-200">
@@ -155,7 +155,7 @@ const Combobox = ({
 
               {options?.data && (
                 <HUICombobox.Options
-                  className={classNames(
+                  className={cx(
                     'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
                     position === 'top' ? 'bottom-full' : 'top-full'
                   )}

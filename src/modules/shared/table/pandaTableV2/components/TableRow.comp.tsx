@@ -2,7 +2,7 @@ import { type Row } from '@tanstack/react-table'
 import type { VirtualItem } from '@tanstack/react-virtual'
 import type { FC } from 'react'
 
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { RowCellComponent } from './RowCell.comp'
 
@@ -28,7 +28,7 @@ export const TableRowComponent: FC<Props> = ({
 
   return (
     <tr
-      className={classNames(
+      className={cx(
         'min-h-[49px]',
         'flex border-t border-gray-300 group',
         virtualRow.index % 2 === 0

@@ -16,7 +16,7 @@ import { getColorBySystemLevel } from '@/modules/systemItem/utils'
 import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
 import type { SystemDetail } from '@/types/responses/systems'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { SelectLocationCombo } from '../../location/SelectLocation.combo'
 import { useWizardStore } from '../../wizard/store/useWizardStore'
@@ -137,7 +137,7 @@ export const SystemDetailStep: FC = () => {
         </Card>
         <FormCard
           title="System details"
-          className={classNames(
+          className={cx(
             'shadow-md rounded-lg border p-4 mt-2',
             !isMovingToNewSystem && getColorBySystemLevel(system?.systemLevel)
           )}

@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { ROLE } from '@/types/constants/roles'
 import type { Employee } from '@/types/gql/graphql'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { HeaderAddButton } from '../../../roomCard/components/table/HeaderAddButton'
 import { CellWithDelete } from './CellWithDelete'
@@ -66,7 +66,7 @@ export const EmployeeTable = ({
         tableId,
         columns: columnsOperators,
         data: data?.length === 0 ? undefined : data,
-        className: classNames(
+        className: cx(
           'border-l border-r border-gray-400 mb-0 pb-0 h-fit overflow-hidden',
           className
         )

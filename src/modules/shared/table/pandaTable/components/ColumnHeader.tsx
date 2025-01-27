@@ -4,7 +4,7 @@ import { flexRender } from '@tanstack/react-table'
 import React, { type FC, useContext } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { PandaTableContext } from '../PandaTableCotrolled'
 import { Filter } from './Filter'
@@ -92,7 +92,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
             : null
         } as React.CSSProperties
       }
-      className={classNames(
+      className={cx(
         'whitespace-nowrap border-r outline-offset-0 dark:bg-gray-900 border-gray-400 bg-opacity-75 py-2 text-left font-semibold text-gray-900 dark:text-gray-200 backdrop-blur backdrop-filter',
         header.column.columnDef.meta?.sticky
           ? 'sticky top-0 text-ellipsis z-40 backdrop-blur-2xl backdrop-filter border-r'
@@ -103,7 +103,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
       <div
         ref={previewRef}
         {...{
-          className: classNames(
+          className: cx(
             'flex items-center justify-between pl-3',
             header.column.columnDef.meta?.headerClassName
           ),
@@ -115,7 +115,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
         {/* center header */}
         <div className="flex items-center">
           <div
-            className={classNames(
+            className={cx(
               header.column.getCanSort() ? 'cursor-pointer select-none' : '',
               'items-center',
               header.column.getIsFiltered() ? 'text-primary-500' : ''
@@ -134,7 +134,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
             header?.column?.columnDef?.meta?.enableReorder !== false && (
               <button
                 ref={dragRef}
-                className={classNames(header.getContext() && 'pl-2')}
+                className={cx(header.getContext() && 'pl-2')}
               >
                 <ArrowsRightLeftIcon className="w-6 h-6" />
               </button>

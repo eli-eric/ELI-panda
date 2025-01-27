@@ -3,7 +3,7 @@ import type { HTMLProps } from 'react'
 import { useState } from 'react'
 
 import type { SystemDetail } from '@/types/responses/systems'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { useSystemsMoveStore } from '../store/useSystemsMoveStore'
 
@@ -52,7 +52,7 @@ export function SelectAllCheckbox({
   return (
     <input
       type="checkbox"
-      className={classNames(
+      className={cx(
         'cursor-pointer',
         'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',
         !checked && 'dark:bg-gray-700'

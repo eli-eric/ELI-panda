@@ -2,7 +2,7 @@ import type { Column, Header } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
 import { type FC, useMemo } from 'react'
 
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import styles from './RowCell.module.css'
 
@@ -39,7 +39,7 @@ export const HeaderCellComponent: FC<Props> = ({
 
   return (
     <th
-      className={classNames(
+      className={cx(
         'whitespace-nowrap flex border-r outline-offset-0 bg-white dark:bg-gray-900 border-gray-400 bg-opacity-95 p-2 text-left font-semibold text-gray-900 dark:text-gray-200 backdrop-blur backdrop-filter',
         isSticky ? 'sticky top-0 t z-40 ' : 'sticky top-0 z-10',
         styles.cell,
@@ -57,7 +57,7 @@ export const HeaderCellComponent: FC<Props> = ({
       }
     >
       <div
-        className={classNames(
+        className={cx(
           'h-full w-full',
           header.column.getCanSort() ? 'cursor-pointer select-none' : ''
         )}

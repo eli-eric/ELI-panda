@@ -2,7 +2,7 @@ import { Disclosure } from '@headlessui/react'
 import { ChevronDownIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import type { FC } from 'react'
 
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 interface Props {
   getIsAllColumnsVisible: () => boolean
@@ -40,7 +40,7 @@ export const TableSettings: FC<Props> = ({
                       id: 'toggle-all',
                       checked: getIsAllColumnsVisible(),
                       onChange: getToggleAllColumnsVisibilityHandler(),
-                      className: classNames(
+                      className: cx(
                         'focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 dark:text-primary-600 rounded',
                         !getIsAllColumnsVisible() && 'dark:bg-gray-700'
                       )
@@ -68,7 +68,7 @@ export const TableSettings: FC<Props> = ({
                         id={`checkbox-${column.id}`}
                         checked={column.getIsVisible()}
                         onChange={column.getToggleVisibilityHandler()}
-                        className={classNames(
+                        className={cx(
                           'focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 dark:text-primary-600 rounded',
                           !column.getIsVisible() && 'dark:bg-gray-700'
                         )}

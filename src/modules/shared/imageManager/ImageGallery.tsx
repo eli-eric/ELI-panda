@@ -12,7 +12,7 @@ import type { UseFormSetValue } from 'react-hook-form'
 import type { FileItem } from 'src/modules/shared/fileManager/types'
 
 import useWarningModal from '@/hooks/useWarningModal'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 import { uniFetcher } from '@/utils/fetcher'
 
 import { ImagePlaceHolder } from './components/ImagePlaceHolder'
@@ -114,7 +114,7 @@ export const ImageGallery = forwardRef(
         ) : (
           <div
             {...getRootProps()}
-            className={classNames(
+            className={cx(
               'flex flex-col rounded-md',
               isDragActive && 'border-2 border-orange-600 sm:max-h-14',
               className

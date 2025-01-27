@@ -8,7 +8,7 @@ import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps, ModalButtons, Option } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 const messages = message.common.buttons
 
@@ -76,7 +76,7 @@ export const SelectSystemComboBox = ({
                 uid: row.original.uid
               })
             },
-            className: classNames(
+            className: cx(
               selectedSystem?.uid === row.original.uid
                 ? 'bg-primary-200 hover:bg-primary-200 dark:bg-primary-600 dark:hover:bg-primary-600'
                 : '',

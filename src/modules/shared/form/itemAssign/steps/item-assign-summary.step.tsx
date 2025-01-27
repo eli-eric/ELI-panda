@@ -5,7 +5,7 @@ import Card from '@/components/layout/Card'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import { message } from '@/i18n/src/messages'
 import type { ModalButtons } from '@/types/form'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { useMoveWizardSubmit } from '../../itemMoving/hooks/useMoveWizardSubmit'
 import { SummaryListParam } from '../../itemMoving/steps/components/SymmaryListParam.comp'
@@ -38,7 +38,7 @@ export const ItemAssignSummaryStep: FC = () => {
   return (
     <Fragment>
       <Card title="Summary">
-        <div className={classNames('grid grid-cols-2')}>
+        <div className={cx('grid grid-cols-2')}>
           <ul className="grid grid-cols-1">
             <h3 className="font-bold underline text-gray-600 dark:text-gray-200">
               {'Source System:'}

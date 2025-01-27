@@ -8,7 +8,7 @@ import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import { PATH } from '@/types/constants/paths'
 import type { System } from '@/types/gql/graphql'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 export const useSubSystemsColumns = () => {
   const columns = useMemo((): ColumnDef<System, string>[] => {
@@ -36,7 +36,7 @@ export const useSubSystemsColumns = () => {
           >
             <Link href={PATH.SYSTEM + '/' + original.uid}>
               <LinkDecorator
-                className={classNames(
+                className={cx(
                   original?.sp_coverage != null &&
                     original.sp_coverage < 1 &&
                     'text-red-500 dark:text-red-500'

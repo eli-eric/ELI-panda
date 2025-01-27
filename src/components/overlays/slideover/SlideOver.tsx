@@ -4,7 +4,7 @@ import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
 
 import { Button } from '@/components/Buttons'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 type ButtonType = {
   type: 'button' | 'submit'
@@ -42,14 +42,14 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
   <Transition.Root show={open} as={Fragment}>
     <Dialog
       as="div"
-      className={classNames('relative z-30', className)}
+      className={cx('relative z-30', className)}
       onClose={setOpen}
     >
       <div className="fixed inset-0" />
       <div className="fixed inset-0 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <div
-            className={classNames(
+            className={cx(
               'pointer-events-none fixed inset-y-0 flex max-w-full',
               panelSlide === 'left' ? 'left-0' : 'right-0'
             )}
@@ -97,7 +97,7 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
                   )}
                   {buttons && (
                     <div
-                      className={classNames(
+                      className={cx(
                         'flex flex-shrink-0 px-4 py-4 justify-between',
                         buttons.className
                       )}

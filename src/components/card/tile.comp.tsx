@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { type FC, type PropsWithChildren } from 'react'
 
 import type { ROLE } from '@/types/constants/roles'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { AccessControl } from '../auth/AccesControl'
 
@@ -26,7 +26,7 @@ export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
           >
             <li
               key={name}
-              className={classNames(
+              className={cx(
                 'col-span-1 flex flex-col rounded-xl bg-white shadow-md dark:bg-gray-800 text-center cursor-pointer',
                 'dark:text-gray-200 dark:shadow-gray-300',
                 'transform transition-transform duration-300 hover:shadow-2xl hover:-translate-y-3'

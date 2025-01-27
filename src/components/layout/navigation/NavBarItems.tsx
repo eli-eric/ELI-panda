@@ -1,5 +1,4 @@
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
-import classNames from 'classnames'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import type { ElementType } from 'react'
@@ -9,6 +8,7 @@ import { AccessControl } from '@/components/auth/AccesControl'
 import { Tooltip } from '@/components/Tooltip'
 import type { NavigationType } from '@/types/constants/paths'
 import { SUPPORT } from '@/types/constants/paths'
+import { cx } from '@/utils'
 
 export const NavBarTitle: FC<
   PropsWithChildren<{
@@ -19,7 +19,7 @@ export const NavBarTitle: FC<
 > = ({ isActive, isExpanded, children, className }) => {
   return (
     <span
-      className={classNames(
+      className={cx(
         `ml-4 z-0`,
         isExpanded ? 'opacity-100' : 'opacity-0',
         `transition-opacity duration-200 whitespace-nowrap text-gray-600 dark:text-gray-200`,
@@ -46,12 +46,12 @@ const NavBarItem: FC<PropsWithChildren<NavBarItemProps>> = ({
   isActive
 }) => {
   return (
-    <div className={classNames('flex ')}>
+    <div className={cx('flex ')}>
       <Tooltip content={text} placement="top-start" disabled={isExpanded}>
         {Icon && (
           <div>
             <Icon
-              className={classNames(
+              className={cx(
                 'h-6 w-6 text-gray-600 dark:text-gray-200',
                 isActive && 'text-primary-600 dark:text-primary-600'
               )}
@@ -84,7 +84,7 @@ export const NavBarLink: FC<NavBarLinkProps> = ({
     <Link
       href={href}
       onClick={() => setOpen && setOpen(false)}
-      className={classNames(
+      className={cx(
         'flex items-center p-4 overflow-hidden hover:bg-gray-300 hover:dark:bg-gray-700',
         className
       )}
@@ -135,7 +135,7 @@ interface ChevronIconProps {
 export const ChevronIcon: FC<ChevronIconProps> = ({ isExpanded, open }) => {
   return (
     <div
-      className={classNames(
+      className={cx(
         'transition-opacity duration-300',
         isExpanded ? 'opacity-100' : 'opacity-0'
       )}
@@ -164,7 +164,7 @@ export const SupportLink: FC<SupportLinkProps> = ({ isExpanded }) => {
         <Tooltip content="Support" placement="top-start" disabled={isExpanded}>
           <div className="ml-2">
             <span
-              className={classNames(
+              className={cx(
                 'h-6 w-6 text-2xl text-center text-gray-500 dark:text-gray-200'
               )}
             >

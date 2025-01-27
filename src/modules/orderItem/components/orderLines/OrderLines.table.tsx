@@ -6,7 +6,7 @@ import { Heading } from '@/components/layout/Heading'
 import { message } from '@/i18n/src/messages'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import useOrderLinesColumns from './components/OrderLines.columns'
 import { OrderLineForm } from './form/OrderLineForm.cont'
@@ -71,7 +71,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
             tableId={'orderLines'}
             className={'relative overflow-x-auto'}
             getRowProps={({ original: { isDelivered } }) => ({
-              className: classNames(
+              className: cx(
                 isDelivered
                   ? 'bg-green-100 dark:bg-green-700'
                   : 'bg-white dark:bg-gray-800'

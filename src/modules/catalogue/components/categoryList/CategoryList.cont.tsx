@@ -31,9 +31,6 @@ export const CategoryListContainer = ({
             <ChevronDownIcon className="block h-4 w-4" aria-hidden="true" />
           )}
         </Disclosure.Button>
-        {/*  <div className="lg:grid hidden">
-          <CategoryList />
-        </div> */}
         <Disclosure.Panel className={' grid'}>
           <CategoryList setCategoryFilter={setCategoryFilter} />
         </Disclosure.Panel>
