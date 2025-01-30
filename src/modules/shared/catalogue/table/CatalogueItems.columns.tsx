@@ -1,7 +1,7 @@
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
 import Image from 'next/image'
 import { useMemo } from 'react'
-import { useIntl } from 'react-intl'
+import { FormattedDate, FormattedTime, useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
 import { message } from '@/i18n/src/messages'
@@ -14,7 +14,7 @@ import type {
   CatalogueItemsResponse
 } from '@/types/responses/catalogue'
 import type { CodebookType } from '@/types/responses/codebook'
-import { classNames } from '@/utils'
+import { classNames, truncateString } from '@/utils'
 
 import { CategoryName } from './cells/CategoryNameCell'
 import { DescriptionCell } from './cells/DescriptionCell'
@@ -70,7 +70,7 @@ export const useCatalogueItemsColumns = ({
         cell: props => (
           <NameCell {...props} hideButtons={hideButtons} tableId={tableId} />
         ),
-        size: 300,
+        size: 440,
         meta: {
           sticky: hideButtons ? false : true
         }
@@ -84,8 +84,17 @@ export const useCatalogueItemsColumns = ({
       },
       {
         header: intl.formatMessage({ id: messages.partNumber }),
+        size: 250,
         accessorFn: row => row.catalogueNumber,
-        id: 'partNumber'
+        id: 'partNumber',
+        cell: ({ getValue }) => {
+          const value = truncateString(getValue(), 30)
+          return (
+            <Tooltip content={getValue()}>
+              <div>{value}</div>
+            </Tooltip>
+          )
+        }
       },
       {
         header: intl.formatMessage({ id: messages.categoryName }),
@@ -110,7 +119,38 @@ export const useCatalogueItemsColumns = ({
         cell: ManufacturerUrl
       }
     ]
-
+    const updateColumns: ColumnDef<CatalogueItem, any>[] = [
+      {
+        id: 'lastUpdateTime',
+        header: intl.formatMessage({ id: messages.lastUpdatedTime }),
+        accessorFn: row => row.lastUpdateTime,
+        meta: { className: 'justify-end' },
+        size: 240,
+        cell: ({ getValue }: CellContext<CatalogueItem, any>) => {
+          return (
+            <div className="flex gap-2">
+              <span>
+                <FormattedDate
+                  value={getValue()}
+                  day="2-digit"
+                  month="long"
+                  year="numeric"
+                />
+              </span>
+              <span>
+                <FormattedTime value={getValue()} />
+              </span>
+            </div>
+          )
+        }
+      },
+      {
+        id: 'lastUpdateBy',
+        size: 200,
+        header: intl.formatMessage({ id: messages.lastUpdatedBy }),
+        accessorFn: row => row.lastUpdateBy
+      }
+    ]
     if (
       catalogueCategoryProperties &&
       catalogueItems?.data[0]?.details &&
@@ -175,7 +215,7 @@ export const useCatalogueItemsColumns = ({
       }
     }
 
-    return columns
+    return [...columns, ...updateColumns]
     // eslint-disable-next-line
   }, [intl, catalogueItems, tableId, catalogueCategoryProperties, hideButtons])
 
