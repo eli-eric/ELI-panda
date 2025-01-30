@@ -20,7 +20,6 @@ function synchronizeFormFields(
   setValue,
   defValues
 ) {
-  console.log('field to sync', fieldIdToSync)
   fieldIdToSync.forEach(fieldId => {
     setValue(fieldId, defValues[fieldId])
   })
@@ -31,7 +30,6 @@ function synchronizeCustomFormFields(
   setValue,
   setFilters
 ) {
-  console.log('customFieldIdToSync', customFieldIdToSync)
   customFieldIdToSync.forEach(fieldId => {
     setValue(fieldId as any, null as any)
   })

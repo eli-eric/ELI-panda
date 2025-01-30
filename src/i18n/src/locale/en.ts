@@ -96,7 +96,9 @@ export const messages = {
         categoryName: 'Category name',
         supplier: 'Supplier',
         supplierUrl: 'Supplier Url',
-        partNumber: 'Part Number'
+        partNumber: 'Part Number',
+        lastUpdatedTime: 'Last Updated Time',
+        lastUpdatedBy: 'Last Updated By'
       }
     },
     itemDetail: {
