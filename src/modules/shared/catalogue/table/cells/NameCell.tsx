@@ -16,6 +16,8 @@ import { CatalogueStatisticsContainer } from '@/modules/catalogueItem/components
 import { ROLE } from '@/types/constants/roles'
 import type { CatalogueItem } from '@/types/responses/catalogue'
 import { createMessageValues } from '@/utils/formatters'
+import { truncateString } from '@/utils'
+import { Tooltip } from '@/components/Tooltip'
 
 const modalMessage = message.ordersPage.deleteModal
 
@@ -61,28 +63,28 @@ export const NameCell = ({
 
   return (
     <div className="flex items-center">
-      {tableId === 'catalogueItemsModal' ? (
-        <Link
-          href={{ pathname: '/catalogue/item/' + uid }}
-          legacyBehavior
-          className="flex items-center"
-        >
-          <a target="_blank" rel="noopener noreferrer">
+      <Tooltip content={getValue()}>
+        {tableId === 'catalogueItemsModal' ? (
+          <Link
+            href={{ pathname: '/catalogue/item/' + uid }}
+            target="_blank"
+            className="flex items-center"
+          >
             <LinkDecorator>
-              <span>{getValue()}</span>
+              <span>{truncateString(getValue(), 60)}</span>
             </LinkDecorator>
-          </a>
-        </Link>
-      ) : (
-        <Link
-          href={{ pathname: '/catalogue/item/' + uid }}
-          className="flex items-center"
-        >
-          <LinkDecorator>
-            <span>{getValue()}</span>
-          </LinkDecorator>
-        </Link>
-      )}
+          </Link>
+        ) : (
+          <Link
+            href={{ pathname: '/catalogue/item/' + uid }}
+            className="flex items-center"
+          >
+            <LinkDecorator>
+              <span>{truncateString(getValue(), 50)}</span>
+            </LinkDecorator>
+          </Link>
+        )}
+      </Tooltip>
       {!hideButtons && (
         <TableActionsButtons
           onDeleteClick={() => {

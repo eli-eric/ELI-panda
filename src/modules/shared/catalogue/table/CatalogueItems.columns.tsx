@@ -14,7 +14,7 @@ import type {
   CatalogueItemsResponse
 } from '@/types/responses/catalogue'
 import type { CodebookType } from '@/types/responses/codebook'
-import { classNames } from '@/utils'
+import { classNames, truncateString } from '@/utils'
 
 import { CategoryName } from './cells/CategoryNameCell'
 import { DescriptionCell } from './cells/DescriptionCell'
@@ -70,7 +70,7 @@ export const useCatalogueItemsColumns = ({
         cell: props => (
           <NameCell {...props} hideButtons={hideButtons} tableId={tableId} />
         ),
-        size: 300,
+        size: 440,
         meta: {
           sticky: hideButtons ? false : true
         }
@@ -84,8 +84,17 @@ export const useCatalogueItemsColumns = ({
       },
       {
         header: intl.formatMessage({ id: messages.partNumber }),
+        size: 250,
         accessorFn: row => row.catalogueNumber,
-        id: 'partNumber'
+        id: 'partNumber',
+        cell: ({ getValue }) => {
+          const value = truncateString(getValue(), 30)
+          return (
+            <Tooltip content={getValue()}>
+              <div>{value}</div>
+            </Tooltip>
+          )
+        }
       },
       {
         header: intl.formatMessage({ id: messages.categoryName }),
