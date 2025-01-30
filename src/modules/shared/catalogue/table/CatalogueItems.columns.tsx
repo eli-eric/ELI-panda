@@ -1,7 +1,7 @@
 import type { CellContext, ColumnDef } from '@tanstack/react-table'
 import Image from 'next/image'
 import { useMemo } from 'react'
-import { useIntl } from 'react-intl'
+import { FormattedDate, FormattedTime, useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
 import { message } from '@/i18n/src/messages'
@@ -110,7 +110,38 @@ export const useCatalogueItemsColumns = ({
         cell: ManufacturerUrl
       }
     ]
-
+    const updateColumns: ColumnDef<CatalogueItem, any>[] = [
+      {
+        id: 'lastUpdateTime',
+        header: intl.formatMessage({ id: messages.lastUpdatedTime }),
+        accessorFn: row => row.lastUpdateTime,
+        meta: { className: 'justify-end' },
+        size: 240,
+        cell: ({ getValue }: CellContext<CatalogueItem, any>) => {
+          return (
+            <div className="flex gap-2">
+              <span>
+                <FormattedDate
+                  value={getValue()}
+                  day="2-digit"
+                  month="long"
+                  year="numeric"
+                />
+              </span>
+              <span>
+                <FormattedTime value={getValue()} />
+              </span>
+            </div>
+          )
+        }
+      },
+      {
+        id: 'lastUpdateBy',
+        size: 200,
+        header: intl.formatMessage({ id: messages.lastUpdatedBy }),
+        accessorFn: row => row.lastUpdateBy
+      }
+    ]
     if (
       catalogueCategoryProperties &&
       catalogueItems?.data[0]?.details &&
@@ -175,7 +206,7 @@ export const useCatalogueItemsColumns = ({
       }
     }
 
-    return columns
+    return [...columns, ...updateColumns]
     // eslint-disable-next-line
   }, [intl, catalogueItems, tableId, catalogueCategoryProperties, hideButtons])
 

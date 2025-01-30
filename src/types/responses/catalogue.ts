@@ -10,6 +10,8 @@ export interface CatalogueItem {
   manufacturerUrl: string
   catalogueNumber: string
   miniImageUrl?: string[]
+  lastUpdateTime: string
+  lastUpdateBy: string
   details?: CatalogueItemDetail[]
 }
 
