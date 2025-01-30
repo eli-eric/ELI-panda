@@ -20,6 +20,7 @@ function synchronizeFormFields(
   setValue,
   defValues
 ) {
+  console.log('field to sync', fieldIdToSync)
   fieldIdToSync.forEach(fieldId => {
     setValue(fieldId, defValues[fieldId])
   })
@@ -30,6 +31,7 @@ function synchronizeCustomFormFields(
   setValue,
   setFilters
 ) {
+  console.log('customFieldIdToSync', customFieldIdToSync)
   customFieldIdToSync.forEach(fieldId => {
     setValue(fieldId as any, null as any)
   })
@@ -52,8 +54,7 @@ export const useFormFilter = <T extends FieldValues>({
     clearFieldToSync,
     customFieldIdToSync,
     clearCustomFieldToSync,
-    deleteCustom,
-    addCustomFieldIdToSync
+    deleteCustom
   } = useFormControlStore()
 
   const [filterQuery] = useQueryState('filter', { history: 'replace' })
@@ -96,23 +97,22 @@ export const useFormFilter = <T extends FieldValues>({
   //set default values to form from store or from url on first render
   useEffect(() => {
     if (columnFilters.length) {
-      startTransition(() => {
-        columnFilters.forEach(filter => {
-          if (filter.type) {
-            addCustomFieldIdToSync(filter.id)
-          }
-        })
-        reset(
-          columnFilters.reduce((acc, curr) => {
-            if (curr.id === 'systemLevel') {
-              acc[curr.id] = { uid: curr.value, name: curr.value }
-            }
-            acc[curr.id] = curr.value
-
-            return acc
-          }, {})
-        )
+      columnFilters.forEach(filter => {
+        if (filter.type) {
+          setValue(filter.id as any, null as any)
+          setFilters(prev => prev.filter(item => item.id !== filter.id))
+        }
       })
+      reset(
+        columnFilters.reduce((acc, curr) => {
+          if (curr.id === 'systemLevel') {
+            acc[curr.id] = { uid: curr.value, name: curr.value }
+          }
+          acc[curr.id] = curr.value
+
+          return acc
+        }, {})
+      )
     }
     //eslint-disable-next-line
   }, [])
