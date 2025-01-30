@@ -116,7 +116,7 @@ export const useCatalogueItemsColumns = ({
         header: intl.formatMessage({ id: messages.lastUpdatedTime }),
         accessorFn: row => row.lastUpdateTime,
         meta: { className: 'justify-end' },
-        size: 200,
+        size: 240,
         cell: ({ getValue }: CellContext<CatalogueItem, any>) => {
           return (
             <div className="flex gap-2">
