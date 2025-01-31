@@ -41,8 +41,8 @@ export enum PATH {
   LAYOUT = '/layout',
   PUBLICATIONS = '/publications',
   PUBLICATION = '/publication',
-  SERVICES = '/services',
-  SERVICE = '/service'
+  SERVICES = '/catalogue/services',
+  SERVICE = '/catalogue/service'
 }
 
 export const SUPPORT =

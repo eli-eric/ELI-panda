@@ -27,8 +27,8 @@ export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
             <li
               key={name}
               className={cx(
-                'col-span-1 flex flex-col rounded-xl bg-white shadow-md dark:bg-gray-800 text-center cursor-pointer',
-                'dark:text-gray-200 dark:shadow-gray-300',
+                'col-span-1 flex flex-col rounded-xl bg-white shadow-md dark:bg-gray-700 text-center cursor-pointer',
+                'dark:text-gray-200 dark:shadow-black',
                 'transform transition-transform duration-300 hover:shadow-2xl hover:-translate-y-3'
               )}
             >
