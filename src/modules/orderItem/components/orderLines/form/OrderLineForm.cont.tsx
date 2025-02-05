@@ -23,8 +23,21 @@ const orderLineFormSchema = object({
   price: number()
     .transform(value => (Number.isNaN(value) ? null : value))
     .nullable(),
-  quantity: number().min(1).max(100),
-  system: object().nullable().required('Parent system is required field.')
+  quantity: number()
+    .nullable()
+    .max(100)
+    .notRequired()
+    .transform(value => (Number.isNaN(value) ? null : value)),
+  system: object().nullable().required('Parent system is required field.'),
+  serialNumbers: string().nullable(),
+  atLeastOneFilled: string().test(
+    'at-least-one-filled',
+    'At least one of Quantity or Serial Numbers must be filled',
+    function () {
+      const { serialNumbers, quantity } = this.parent
+      return Boolean(serialNumbers || quantity)
+    }
+  )
 })
 
 export const OrderLineForm = ({
@@ -62,10 +75,16 @@ export const OrderLineForm = ({
       delete dataToSend.price
     }
     delete dataToSend.quantity
+    delete dataToSend.serialNumbers
     if (data.quantity) {
       for (let i = 0; i < data.quantity; i++) {
         setOrderLine(dataToSend)
       }
+    } else if (data.serialNumbers) {
+      const serialNumbers = data.serialNumbers.split(',')
+      serialNumbers.forEach(serialNumber => {
+        setOrderLine({ ...dataToSend, serialNumber })
+      })
     } else setOrderLine(dataToSend)
     formMethods.reset(defaultValues)
   }

@@ -65,6 +65,12 @@ const useOrderLineFormFields = (enabled: boolean) =>
       label: form.serialNumber.label,
       placeholder: form.serialNumber.placeholder,
       rounded: 'rounded-md'
+    },
+    serialNumbers: {
+      name: 'serialNumbers',
+      label: form.serialNumbers.label,
+      placeholder: form.serialNumbers.placeholder,
+      rounded: 'rounded-md'
     }
   })
 export default useOrderLineFormFields
