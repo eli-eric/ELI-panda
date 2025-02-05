@@ -390,7 +390,11 @@ export const messages = {
         serialNumber: { label: 'Serial Number', placeholder: 'Serial Number' },
         eun: { label: 'EUN', placeholder: 'EUN' },
         manualEun: { label: 'Set EUN manually' },
-        notes: { label: 'Notes', placeholder: 'Notes' }
+        notes: { label: 'Notes', placeholder: 'Notes' },
+        serialNumbers: {
+          label: 'Serial Numbers',
+          placeholder: 'Fill serial numbers comma separated instead of quantity'
+        }
       },
       orderLinesTable: {
         header: {

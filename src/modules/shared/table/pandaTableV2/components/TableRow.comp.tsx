@@ -38,6 +38,7 @@ export const TableRowComponent: FC<Props> = ({
         className
       )}
       data-index={virtualRow.index} //needed for dynamic row height measurement
+      // TODO:  fix dynamic row height measurement
       ref={node => measureElement(node)} //measure dynamic row height
       style={{
         display: 'flex',
