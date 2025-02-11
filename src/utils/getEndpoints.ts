@@ -69,8 +69,8 @@ export const getEndpoints = ({
     publication: `/publication${uid ? '/' + uid : ''}`,
     publications: `/publications${query}`,
     generateUUID: '/uuid/v4',
-    serviceType: `/service/type${uid ? '/' + uid : ''}`,
-    serviceTypeList: `/service/types${query}`
+    serviceType: `/catalogue/service/type${uid ? '/' + uid : ''}`,
+    serviceTypeList: `/catalogue/service/types${query}`
   }
   return endpoints
 }

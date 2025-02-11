@@ -17,7 +17,9 @@ export const DeleteServiceButton = ({ uid, name }: Props) => {
 
   const { mutate } = useServiceTypeDelete({ uid })
   const handleClick = () => {
-    withWarningModal(() => {})()
+    withWarningModal(() => {
+      mutate(undefined)
+    })()
   }
 
   return (

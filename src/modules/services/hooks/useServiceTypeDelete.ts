@@ -8,6 +8,6 @@ type Props = {
 export const useServiceTypeDelete = ({ uid }: Props) => {
   return useMutation({
     mutationKey: ['service', { uid }],
-    mutationFn: queryMutate<string, undefined>('serviceType', 'delete')
+    mutationFn: queryMutate<string, undefined>('serviceType', 'delete', uid)
   })
 }
