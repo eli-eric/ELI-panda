@@ -9,6 +9,8 @@ import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
 import { useServiceMutation } from '../services/hooks/useServiceMutation'
+import { useServiceType } from '../services/hooks/useServiceType'
+import { useServiceTypeList } from '../services/hooks/useServiceTypeList'
 import type { ServiceTypeResponse } from '../services/types/responses'
 import { ServiceProperties } from './form/serivce-properties.cont'
 import { ServiceTypeForm } from './form/service-type.form'
@@ -31,19 +33,25 @@ export const ServiceTypeContainer: FC<Props> = ({ data, uid }) => {
   })
 
   const { mutate, isPending } = useServiceMutation({ uid })
+  const { refetch: refetchService } = useServiceType(uid)
+  const { refetch } = useServiceTypeList()
 
   const submit = (data, exit?: boolean) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { properties, ...rest } = data
-    const newPropperties = Object.keys(data.properties)
-      .map(key => (data.properties[key] ? key : null))
-      .filter(Boolean)
+    const newPropperties = properties
+      ? Object.keys(data.properties)
+          .map(key => (data.properties[key] ? key : null))
+          .filter(Boolean)
+      : []
     const newData = { ...rest, properties: newPropperties }
     mutate(newData, {
       onSuccess: () => {
         if (exit) {
           router.push(PATH.SERVICES)
         }
+        refetch()
+        refetchService()
       }
     })
   }
