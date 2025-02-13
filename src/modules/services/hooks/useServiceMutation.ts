@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
+import toast from 'react-hot-toast'
 
 import { queryMutate } from '@/utils/fetcher'
 
@@ -13,7 +14,13 @@ export const useServiceMutation = ({ uid }: Props) => {
     mutationKey: ['service', { uid }],
     mutationFn: queryMutate<ServiceTypeResponse, ServiceTypeResponse>(
       'serviceType',
-      uid ? 'put' : 'post'
-    )
+      uid ? 'put' : 'post',
+      uid
+    ),
+    onError: () => {
+      toast.error(
+        'An error occurred while saving the service, try again later.'
+      )
+    }
   })
 }

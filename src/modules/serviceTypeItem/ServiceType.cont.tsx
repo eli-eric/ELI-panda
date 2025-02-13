@@ -1,9 +1,11 @@
+import { useRouter } from 'next/router'
 import type { FC } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card from '@/components/layout/Card'
+import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
 
 import { useServiceMutation } from '../services/hooks/useServiceMutation'
@@ -17,6 +19,7 @@ interface Props {
 }
 
 export const ServiceTypeContainer: FC<Props> = ({ data, uid }) => {
+  const router = useRouter()
   const formMethods = useForm({
     defaultValues: {
       ...data,
@@ -26,20 +29,30 @@ export const ServiceTypeContainer: FC<Props> = ({ data, uid }) => {
       }, {})
     }
   })
+
   const { mutate, isPending } = useServiceMutation({ uid })
 
-  const onSubmit = data => {
-    //eslint-disable-next-line
+  const submit = (data, exit?: boolean) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { properties, ...rest } = data
-    const propertiesArray = Object.keys(data.properties)
+    const newPropperties = Object.keys(data.properties)
       .map(key => (data.properties[key] ? key : null))
       .filter(Boolean)
-    const newData = { ...rest, properties: propertiesArray }
-    mutate(newData)
+    const newData = { ...rest, properties: newPropperties }
+    mutate(newData, {
+      onSuccess: () => {
+        if (exit) {
+          router.push(PATH.SERVICES)
+        }
+      }
+    })
   }
-  const onSubmitAndExit = () => {
-    //TODO: Implement onSubmitAndExit
-    console.log('Submit and exit')
+
+  const onSubmit = data => {
+    submit(data)
+  }
+  const onSubmitAndExit = data => {
+    submit(data, true)
   }
 
   return (

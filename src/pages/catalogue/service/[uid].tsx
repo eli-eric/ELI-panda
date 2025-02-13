@@ -4,6 +4,7 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
+import ErrorPage from '@/components/error/ErrorPage'
 import { useServiceType } from '@/modules/services/hooks/useServiceType'
 import { ServiceTypeContainer } from '@/modules/serviceTypeItem/ServiceType.cont'
 
@@ -15,7 +16,10 @@ interface Props {
 
 const ServiceDetailPage: NextPage = ({ uid }: Props) => {
   const intl = useIntl()
-  const { data, isLoading } = useServiceType(uid)
+  const { data, isLoading, error } = useServiceType(uid)
+  if (error) {
+    return <ErrorPage />
+  }
   return (
     <Fragment>
       <Head>
