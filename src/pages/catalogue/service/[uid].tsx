@@ -4,6 +4,7 @@ import { Fragment } from 'react'
 import { useIntl } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
+import { useServiceType } from '@/modules/services/hooks/useServiceType'
 import { ServiceTypeContainer } from '@/modules/serviceTypeItem/ServiceType.cont'
 
 const messages = message.service
@@ -14,13 +15,15 @@ interface Props {
 
 const ServiceDetailPage: NextPage = ({ uid }: Props) => {
   const intl = useIntl()
+  const { data, isLoading } = useServiceType(uid)
   return (
     <Fragment>
       <Head>
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-      <ServiceTypeContainer uid={uid} />
+      {isLoading && <div>Loading...</div>}
+      {data && <ServiceTypeContainer uid={uid} data={data} />}
     </Fragment>
   )
 }

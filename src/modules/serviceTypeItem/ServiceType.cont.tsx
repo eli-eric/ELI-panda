@@ -7,18 +7,26 @@ import Card from '@/components/layout/Card'
 import { ROLE } from '@/types/constants/roles'
 
 import { useServiceMutation } from '../services/hooks/useServiceMutation'
-import { useServiceType } from '../services/hooks/useServiceType'
+import type { ServiceTypeResponse } from '../services/types/responses'
 import { ServiceProperties } from './form/serivce-properties.cont'
 import { ServiceTypeForm } from './form/service-type.form'
 
 interface Props {
+  data?: ServiceTypeResponse
   uid?: string
 }
 
-export const ServiceTypeContainer: FC<Props> = ({ uid }) => {
-  const formMethods = useForm()
+export const ServiceTypeContainer: FC<Props> = ({ data, uid }) => {
+  const formMethods = useForm({
+    defaultValues: {
+      ...data,
+      properties: data?.properties?.reduce((acc, item) => {
+        acc[item] = true
+        return acc
+      }, {})
+    }
+  })
   const { mutate, isPending } = useServiceMutation({ uid })
-  const { data } = useServiceType(uid)
 
   const onSubmit = data => {
     //eslint-disable-next-line
