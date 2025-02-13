@@ -38,7 +38,7 @@ export const ServiceProperties = () => {
                 className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-4"
               >
                 {details.details?.map(
-                  (detail, index) =>
+                  detail =>
                     detail.propertyGroup === group && (
                       <CheckBox
                         name={`properties.${detail.property.uid}`}
