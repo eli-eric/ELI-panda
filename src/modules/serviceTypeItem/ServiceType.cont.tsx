@@ -8,6 +8,7 @@ import { ROLE } from '@/types/constants/roles'
 
 import { useServiceMutation } from '../services/hooks/useServiceMutation'
 import { useServiceType } from '../services/hooks/useServiceType'
+import { ServiceProperties } from './form/serivce-properties.cont'
 import { ServiceTypeForm } from './form/service-type.form'
 
 interface Props {
@@ -18,13 +19,21 @@ export const ServiceTypeContainer: FC<Props> = ({ uid }) => {
   const formMethods = useForm()
   const { mutate, isPending } = useServiceMutation({ uid })
   const { data } = useServiceType(uid)
+
   const onSubmit = data => {
-    mutate(data)
+    //eslint-disable-next-line
+    const { properties, ...rest } = data
+    const propertiesArray = Object.keys(data.properties)
+      .map(key => (data.properties[key] ? key : null))
+      .filter(Boolean)
+    const newData = { ...rest, properties: propertiesArray }
+    mutate(newData)
   }
   const onSubmitAndExit = () => {
     //TODO: Implement onSubmitAndExit
     console.log('Submit and exit')
   }
+
   return (
     <Form className="h-screen overflow-auto" formMethods={formMethods}>
       <HeaderWithButtons
@@ -36,6 +45,7 @@ export const ServiceTypeContainer: FC<Props> = ({ uid }) => {
       />
       <Card>
         <ServiceTypeForm />
+        <ServiceProperties />
       </Card>
     </Form>
   )
