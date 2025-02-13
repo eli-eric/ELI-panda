@@ -4,11 +4,10 @@ import {
   ChevronRightIcon
 } from '@heroicons/react/24/outline'
 import type { CellContext } from '@tanstack/react-table'
-import classNames from 'classnames'
 import { useDrag } from 'react-dnd'
 
 import { Tooltip } from '@/components/Tooltip'
-import { truncateString } from '@/utils'
+import { cx, truncateString } from '@/utils'
 import type { EndpointProps } from '@/utils/getEndpoints'
 
 import { SystemActionButtons } from './SystemActionButtons'
@@ -59,14 +58,11 @@ export const SystemNameCell = ({
       style={{
         paddingLeft: `${row.depth * 1.01}rem`
       }}
-      className={classNames(
-        isDragging && 'text-primary-500',
-        'flex justify-center'
-      )}
+      className={cx(isDragging && 'text-primary-500', 'flex justify-center')}
     >
       <div className="flex items-center" ref={dragRef}>
         <div
-          className={classNames(
+          className={cx(
             'flex items-center w-full py-1',
             original.hasSubsystems && 'group/expand cursor-pointer'
           )}

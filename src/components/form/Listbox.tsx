@@ -7,7 +7,7 @@ import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { FormXMarkIcon } from './components/FormXMarkIcon'
 import { SelectOption } from './components/SelectOption'
@@ -112,10 +112,7 @@ const Listbox = ({
                 onChange && onChange(v)
               }}
               disabled={disabled}
-              className={classNames(
-                'relative flex flex-col w-full h-min',
-                className
-              )}
+              className={cx('relative flex flex-col w-full h-min', className)}
             >
               {(customLabel || label) && (
                 <HUIListbox.Label className="block text-sm font-medium text-gray-900 dark:text-gray-200">
@@ -126,7 +123,7 @@ const Listbox = ({
               )}
               <div className="relative" onClick={onClick}>
                 <HUIListbox.Button
-                  className={classNames(
+                  className={cx(
                     'form-field-combo h-[38px]',
                     field.value && !disabled ? '' : '',
                     rounded,
@@ -159,7 +156,7 @@ const Listbox = ({
               </div>
               {options?.length > 0 && (
                 <HUIListbox.Options
-                  className={classNames(
+                  className={cx(
                     'absolute z-20 mt-1 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
                     position === 'top' ? 'bottom-full' : 'top-full',
                     optionsSize === 'sm'
@@ -176,7 +173,7 @@ const Listbox = ({
                         customOptions ? item : item.uid === '' ? null : item
                       }
                       className={({ active }) =>
-                        classNames(
+                        cx(
                           'relative cursor-default select-none py-2 pl-3 pr-9',
                           active
                             ? 'bg-primary-500 text-white'

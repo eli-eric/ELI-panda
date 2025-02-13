@@ -9,7 +9,7 @@ import React, { useDeferredValue, useEffect, useState } from 'react'
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { CodebookType } from '@/types/responses/codebook'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 type ComboboxPropsT = {
   codebook?: CODEBOOK
@@ -57,7 +57,7 @@ export const DefferedCombobox = ({
         setValue(v)
         onChange(v)
       }}
-      className={classNames('relative flex flex-col w-full mt-auto', className)}
+      className={cx('relative flex flex-col w-full mt-auto', className)}
     >
       <div className="relative">
         <HUICombobox.Input
@@ -67,7 +67,7 @@ export const DefferedCombobox = ({
           value={query}
           placeholder={placeholder}
           autoComplete="off"
-          className={classNames(
+          className={cx(
             'px-3 py-2 pb-2 border rounded-md placeholder-gray-300 border-gray-300  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full h-[38px] appearance-none text-left',
             value ? 'pr-14' : 'pr-9'
           )}
@@ -90,7 +90,7 @@ export const DefferedCombobox = ({
 
       {options && options.length > 0 && (
         <HUICombobox.Options
-          className={classNames(
+          className={cx(
             'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
             position === 'top' ? 'bottom-full' : 'top-full'
           )}
@@ -101,7 +101,7 @@ export const DefferedCombobox = ({
               value={item}
               defaultValue={''}
               className={({ active }) =>
-                classNames(
+                cx(
                   'relative cursor-default select-none py-2 pl-3 pr-9',
                   active
                     ? 'bg-primary-500 text-white'
@@ -114,7 +114,7 @@ export const DefferedCombobox = ({
                 return (
                   <>
                     <span
-                      className={classNames(
+                      className={cx(
                         'block truncate',
                         selected && 'font-semibold'
                       )}
@@ -123,7 +123,7 @@ export const DefferedCombobox = ({
                     </span>
                     {selected && (
                       <span
-                        className={classNames(
+                        className={cx(
                           'absolute inset-y-0 right-0 flex items-center pr-4',
                           active ? 'text-white' : 'text-primary-500'
                         )}

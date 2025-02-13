@@ -1,10 +1,11 @@
-import classNames from 'classnames'
 import React, {
   startTransition,
   useEffect,
   useLayoutEffect,
   useState
 } from 'react'
+
+import { cx } from '@/utils'
 
 interface Props {
   children: React.ReactNode
@@ -70,7 +71,7 @@ export const TableLayoutContainer = ({ children, deps, className }: Props) => {
       style={{
         height: `calc(100vh - ${height}px)`
       }}
-      className={classNames('flex-col', className)}
+      className={cx('flex-col', className)}
     >
       {children}
     </div>

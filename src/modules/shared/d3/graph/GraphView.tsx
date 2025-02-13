@@ -8,7 +8,7 @@ import {
   PlusButton,
   StatsButton
 } from '@/components/Buttons'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { useForceGraph } from './hooks/useForceGraph'
 import type { GraphNode, SystemGraphResponse } from './types'
@@ -68,7 +68,7 @@ const GraphView: FC<PropsWithChildren<Props>> = ({
         {renderFilter({ open: openFilter })}
         <svg
           ref={svgRef}
-          className={classNames(
+          className={cx(
             'w-full border rounded-md',
             openStats ? 'col-span-7' : openFilter ? 'col-span-8' : 'col-span-12'
           )}

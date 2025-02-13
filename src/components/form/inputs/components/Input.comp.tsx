@@ -6,7 +6,7 @@ import { useDebounce, useIsFirstRender } from 'usehooks-ts'
 
 import { Tooltip } from '@/components/Tooltip'
 import type { FieldProps } from '@/types/form'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { InputWrapper, Label } from '../shared'
 
@@ -83,7 +83,7 @@ export const Input = ({
                   field.onChange(e.target.value)
                 }}
                 placeholder={placeholder}
-                className={classNames(
+                className={cx(
                   'form-field',
                   rounded,
                   error ? 'border-red-400' : 'border-gray-300',

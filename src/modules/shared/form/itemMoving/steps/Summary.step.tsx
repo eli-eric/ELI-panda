@@ -5,7 +5,7 @@ import Card from '@/components/layout/Card'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import { message } from '@/i18n/src/messages'
 import type { ModalButtons } from '@/types/form'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { useMoveWizardSubmit } from '../hooks/useMoveWizardSubmit'
 import { SummaryListParam } from './components/SymmaryListParam.comp'
@@ -41,7 +41,7 @@ export const SummaryStep: FC = () => {
     <Fragment>
       <Card title="Summary">
         <div
-          className={classNames(
+          className={cx(
             oldItemParentSystem ? 'grid grid-cols-3' : 'grid grid-cols-2'
           )}
         >

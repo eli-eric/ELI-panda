@@ -67,8 +67,12 @@ export const CopyCategoryButton: FC<CopyCategoryButtonProps> = ({ uid }) => {
         onClick={() => {
           setOpenCopy(true)
         }}
+        className="h-full z-0 hover:text-primary-400 border-none bg-inherit shadow-none dark:bg-inherit dark:hover:bg-inherit"
       >
-        <DocumentDuplicateIcon className="h-4 w-4" aria-hidden="true" />
+        <DocumentDuplicateIcon
+          className="h-4 w-4 transform transition-transform hover:scale-110 duration-300"
+          aria-hidden="true"
+        />
       </Button>
       <WarningModal
         title={messages.warning}

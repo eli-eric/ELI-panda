@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import type { Order } from '@/types/responses/orders'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
 import { Pagination } from '../shared/table/Pagination'
@@ -53,7 +53,7 @@ const OrdersContainer = () => {
             table,
             settings: tableSettings,
             getRowProps: ({ original: { orderStatus, deliveryStatus } }) => ({
-              className: classNames(
+              className: cx(
                 'bg-white dark:bg-gray-800',
                 getColorClassStatus(orderStatus, deliveryStatus)
               )

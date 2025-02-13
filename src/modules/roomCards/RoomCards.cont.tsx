@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { statusColorMapping } from '../roomCard/utils/constants'
 import { PandaTable } from '../shared/table/pandaTable/PandaTable'
@@ -47,7 +47,7 @@ export const RoomCardsContainer = () => {
         {...{
           tableId,
           getRowProps: ({ original: { status } }) => ({
-            className: classNames(...statusColorMapping(status))
+            className: cx(...statusColorMapping(status))
           }),
           loading,
           error,

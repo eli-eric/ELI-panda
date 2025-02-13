@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 import type { SystemDetail } from '@/types/responses/systems'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { MovingSystemsTable } from './components/moving-systems.table'
 import { useSystemsMoveStore } from './store/useSystemsMoveStore'
@@ -50,7 +50,7 @@ export const SystemsMultiMoveContainer = () => {
   )
 
   return (
-    <div className={classNames('grid grid-cols-2')}>
+    <div className={cx('grid grid-cols-2')}>
       <MovingSystemsTable
         tableId={movingSystemsTableId}
         canSelectRow={canSelectMovingSystem}

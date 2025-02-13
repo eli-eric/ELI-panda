@@ -1,7 +1,7 @@
-import classNames from 'classnames'
 import type { FC } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
+import { cx } from '@/utils'
 
 import {
   getColorBySystemLevel,
@@ -42,7 +42,7 @@ export const SystemsComponent: FC<Props> = ({
         pageSizeDefault={50}
         className={'relative overflow-scroll scrollbar-style'}
         getRowProps={({ original }) => ({
-          className: classNames(
+          className: cx(
             getColorBySystemLevel(original?.systemLevel),
             getFontBySystemLevel(original?.systemLevel),
             original?.physicalItem &&

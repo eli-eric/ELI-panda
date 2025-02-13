@@ -5,7 +5,7 @@ import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PATH } from '@/types/constants/paths'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
@@ -39,7 +39,7 @@ export const SubSystemsContainer = () => {
           className={'relative overflow-x-auto mb-0 pb-0'}
           settings={{ enableColumnReordering: false }}
           getRowProps={({ original }) => ({
-            className: classNames(
+            className: cx(
               original?.physicalItem &&
                 'font-bold text-gray-700 dark:text-gray-200',
               getColorBySystemLevel(original?.systemLevel),

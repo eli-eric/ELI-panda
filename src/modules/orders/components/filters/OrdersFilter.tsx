@@ -4,7 +4,7 @@ import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import useOrderFormFields from '@/modules/orderItem/components/form/OrderForm.fields'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { DELIVERY_STATUS, DeliveryStatusMapping } from '../../types'
 
@@ -26,9 +26,7 @@ export const OrdersFilter = () => {
     }))
 
   return (
-    <div
-      className={classNames('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}
-    >
+    <div className={cx('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
       <div className="flex flex-col gap-2">
         <Input
           {...fields.name}

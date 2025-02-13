@@ -5,7 +5,7 @@ import { Controller } from 'react-hook-form'
 import { useFormContext } from 'react-hook-form'
 
 import type { FieldProps } from '@/types/form'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 import { convertDate } from '@/utils/formatters'
 
 import { ValidationIcon } from './Icons'
@@ -41,7 +41,7 @@ const DateInput = ({
       render={({ field: { onChange }, fieldState: { error } }) => (
         <div
           hidden={hidden}
-          className={classNames(
+          className={cx(
             'block z-10 w-full appearance-none  placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
             className
           )}
@@ -61,7 +61,7 @@ const DateInput = ({
               name={name}
               type="date"
               disabled={disabled}
-              className={classNames(
+              className={cx(
                 'form-field',
                 rounded,
                 error ? 'border-red-500' : 'border-gray-300',

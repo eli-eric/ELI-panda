@@ -4,7 +4,7 @@ import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
 
 import { DarkModeSwitch } from '@/components/DarkModeSwitch'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 interface Props {
   open: boolean
@@ -26,7 +26,7 @@ export const SlideOverNavigation: FC<PropsWithChildren<Props>> = ({
         <div className="fixed inset-0 overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
             <div
-              className={classNames(
+              className={cx(
                 'pointer-events-none fixed inset-y-0 flex w-72',
                 panelSlide === 'left' ? 'left-0 pr-14 ' : 'right-0 pl-14 '
               )}

@@ -7,7 +7,7 @@ import {
 import { Fragment, useState } from 'react'
 import { resolveValue, type Toast, toast } from 'react-hot-toast'
 
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import ButtonLoaderComponent from '../button-loader.comp'
 
@@ -19,7 +19,7 @@ export const Notification = ({ t }: Props) => {
   const [show, setShow] = useState(true)
   return (
     <div
-      className={classNames(
+      className={cx(
         'w-[800px] bg-white dark:bg-gray-800 rounded-lg pointer-events-auto flex',
         t.visible ? 'animate-enter' : 'animate-leave'
       )}

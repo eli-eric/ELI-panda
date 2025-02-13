@@ -15,7 +15,7 @@ import {
 import { SystemFilterButtonContainer } from '@/modules/systems/components/filters/SystemsFilterButton.cont'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import type { SystemDetail } from '@/types/responses/systems'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { useMoveSystemsColumns } from '../move-systems.columns'
 import { useSystemsMoveStore } from '../store/useSystemsMoveStore'
@@ -92,7 +92,7 @@ export const MovingSystemsTable: FC<MovingSystemsTableProps> = ({
         className={'relative overflow-scroll scrollbar-style'}
         settings={tableSettings}
         getRowProps={({ original }) => ({
-          className: classNames(
+          className: cx(
             original?.physicalItem &&
               'font-bold text-gray-700 dark:text-gray-200',
             getColorBySystemLevel(original?.systemLevel),

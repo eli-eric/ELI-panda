@@ -7,7 +7,8 @@ import {
   ShoppingCartIcon,
   TableCellsIcon,
   UserGroupIcon,
-  UserIcon
+  UserIcon,
+  WrenchScrewdriverIcon
 } from '@heroicons/react/24/outline'
 import type { ElementType } from 'react'
 
@@ -39,7 +40,9 @@ export enum PATH {
   PROFILE_TEAM = '/profile/team',
   LAYOUT = '/layout',
   PUBLICATIONS = '/publications',
-  PUBLICATION = '/publication'
+  PUBLICATION = '/publication',
+  SERVICES = '/catalogue/services',
+  SERVICE = '/catalogue/service'
 }
 
 export const SUPPORT =
@@ -114,6 +117,12 @@ export const NAV_BAR_CONFIG: NavigationType[] = [
     link: PATH.PUBLICATIONS,
     role: ROLE.PUBLICATIONS_VIEW,
     Icon: BookOpenIcon
+  },
+  {
+    name: 'Services',
+    link: PATH.SERVICES,
+    role: ROLE.BASICS,
+    Icon: WrenchScrewdriverIcon
   }
 ]
 
@@ -152,6 +161,8 @@ export const PROTECTED_PATHS = [
   PATH.SYSTEM_ALIAS,
   PATH.PUBLICATION,
   PATH.PUBLICATIONS,
+  PATH.SERVICE,
+  PATH.SERVICES,
   PATH.LAYOUT
 ]
 
@@ -193,5 +204,7 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
   [PATH.LAYOUT]: [ROLE.BASICS],
   [PATH.PUBLICATIONS]: [ROLE.PUBLICATIONS_VIEW, ROLE.PUBLICATIONS_EDIT],
   [PATH.PUBLICATION]: [ROLE.PUBLICATIONS_VIEW, ROLE.PUBLICATIONS_EDIT],
+  [PATH.SERVICES]: [ROLE.SERVICE_VIEW, ROLE.SERVICE_EDIT, ROLE.BASICS],
+  [PATH.SERVICE]: [ROLE.SERVICE_VIEW, ROLE.SERVICE_EDIT, ROLE.BASICS],
   [PATH.ROOT]: []
 }

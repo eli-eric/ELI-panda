@@ -1,6 +1,6 @@
 import type { FC, PropsWithChildren } from 'react'
 
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 interface Props {
   className?: string
@@ -9,4 +9,4 @@ interface Props {
 export const LinkDecorator: FC<PropsWithChildren<Props>> = ({
   children,
   className
-}) => <div className={classNames('link', className)}>{children}</div>
+}) => <div className={cx('link', className)}>{children}</div>

@@ -9,7 +9,7 @@ import { AccessControl } from '@/components/auth/AccesControl'
 import { DarkModeSwitch } from '@/components/DarkModeSwitch'
 import EliLogoComponent from '@/components/eli-logo.comp'
 import { NAV_BAR_CONFIG, PATH, USER_NAVIGATION } from '@/types/constants/paths'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 import { queryFetcher } from '@/utils/fetcher'
 
 import {
@@ -38,12 +38,10 @@ export const NavBarHeader: FC<NavBarHeaderProps> = ({
       </button>
       <Link href={PATH.DASHBOARD}>
         <EliLogoComponent
-          customClass={classNames('h-10 w-12 pt-4', !isExpanded && 'hidden')}
+          customClass={cx('h-10 w-12 pt-4', !isExpanded && 'hidden')}
         />
       </Link>
-      <DarkModeSwitch
-        className={classNames(!isExpanded && 'hidden', 'mt-4 mr-2')}
-      />
+      <DarkModeSwitch className={cx(!isExpanded && 'hidden', 'mt-4 mr-2')} />
     </div>
   )
 }

@@ -3,7 +3,7 @@ import { useFormContext, useWatch } from 'react-hook-form'
 
 import { Heading } from '@/components/layout/Heading'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
@@ -37,7 +37,7 @@ export const SparePartsContainer = () => {
         titleNode={
           <div className="flex w-[300px] ml-4 items-center">
             <h3
-              className={classNames(
+              className={cx(
                 'font-medium whitespace-nowrap mr-4',
                 minSparePartsCount
                   ? sparePartsCoverageSum || 0 < minSparePartsCount
@@ -59,7 +59,7 @@ export const SparePartsContainer = () => {
           <PandaTable
             columns={columns}
             getRowProps={({ original }) => ({
-              className: classNames(
+              className: cx(
                 original?.physicalItem &&
                   'font-bold text-gray-700 dark:text-gray-200',
                 getColorBySystemLevel(original?.systemLevel),

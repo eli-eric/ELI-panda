@@ -4,7 +4,7 @@ import { type FC, useState } from 'react'
 import { useDrop } from 'react-dnd'
 
 import type { SystemDetail } from '@/types/responses/systems'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import type { GetRowPropsReturnType } from '../../pandaTable/PandaTable'
 import { RowCellComponent } from './RowCell.comp'
@@ -52,7 +52,7 @@ export const TableRowDNDComponent: FC<Props> = ({
 
   return (
     <tr
-      className={classNames(
+      className={cx(
         'min-h-[49px]',
         'flex border-t border-gray-300 group',
         virtualRow.index % 2 === 0

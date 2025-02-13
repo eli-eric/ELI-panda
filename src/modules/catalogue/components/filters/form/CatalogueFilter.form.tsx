@@ -7,7 +7,7 @@ import useCatalogueFormFields from '@/modules/catalogueItem/components/form/Cata
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { CategoryPropFilters } from '@/modules/shared/form/CategoryPropFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 interface CatalogueFilterFormProps {
   tableId: string
@@ -27,9 +27,7 @@ export const CatalogueFilterForm = ({
   const { toggleDeleteCustom } = useFormControlStore()
 
   return (
-    <div
-      className={classNames('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}
-    >
+    <div className={cx('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
       <div className="flex flex-col gap-2">
         <Input
           {...fields.name}
