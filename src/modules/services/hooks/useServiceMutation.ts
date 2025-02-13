@@ -4,14 +4,16 @@ import toast from 'react-hot-toast'
 import { queryMutate } from '@/utils/fetcher'
 
 import type { ServiceTypeResponse } from '../types/responses'
+import { useServiceTypeList } from './useServiceTypeList'
 
 type Props = {
   uid?: string
 }
 
 export const useServiceMutation = ({ uid }: Props) => {
+  const { refetch } = useServiceTypeList()
   return useMutation({
-    mutationKey: ['service', { uid }],
+    mutationKey: ['serviceType', { uid }],
     mutationFn: queryMutate<ServiceTypeResponse, ServiceTypeResponse>(
       'serviceType',
       uid ? 'put' : 'post',
