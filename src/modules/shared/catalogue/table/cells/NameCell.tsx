@@ -5,6 +5,7 @@ import { useIntl } from 'react-intl'
 
 import { TableActionsButtons, TableStatsButton } from '@/components/Buttons'
 import { LinkDecorator } from '@/components/decorators'
+import { Tooltip } from '@/components/Tooltip'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { useModal } from '@/hooks/useModal'
@@ -15,9 +16,8 @@ import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { CatalogueStatisticsContainer } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.cont'
 import { ROLE } from '@/types/constants/roles'
 import type { CatalogueItem } from '@/types/responses/catalogue'
-import { createMessageValues } from '@/utils/formatters'
 import { truncateString } from '@/utils'
-import { Tooltip } from '@/components/Tooltip'
+import { createMessageValues } from '@/utils/formatters'
 
 const modalMessage = message.ordersPage.deleteModal
 
