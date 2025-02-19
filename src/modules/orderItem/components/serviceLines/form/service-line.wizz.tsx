@@ -1,14 +1,23 @@
 import { useIntl } from 'react-intl'
 
 import { message } from '@/i18n/src/messages'
-import type { WizardStep } from '@/modules/shared/form/wizardV2/types'
+import type { WizardStepConfig } from '@/modules/shared/form/wizardV2/types'
 import { FormWizard } from '@/modules/shared/form/wizardV2/wizard-form.cont'
 
 const messages = message.ordersPage.serviceLines.wizard
 
+// Define the specific form data structure for service lines
+interface ServiceLineFormData {
+  name: string
+  description?: string
+  serviceType?: string
+  item: string
+}
+
 export const ServiceLineWizard = () => {
   const { formatMessage: fm } = useIntl()
-  const steps: WizardStep[] = [
+
+  const steps: WizardStepConfig<ServiceLineFormData>[] = [
     {
       title: fm({ id: messages.steps.step1.title }),
       fields: [
@@ -28,7 +37,14 @@ export const ServiceLineWizard = () => {
             required: false
           }
         }
-      ]
+      ],
+      validation: data => {
+        if (!data.name) return false
+        return data.name.length >= 3
+      },
+      onStepComplete: data => {
+        console.log('Step 1 completed with data:', data)
+      }
     },
     {
       title: fm({ id: messages.steps.step2.title }),
@@ -49,13 +65,27 @@ export const ServiceLineWizard = () => {
             required: true
           }
         }
-      ]
+      ],
+      validation: data => {
+        return !!data.item // Ensure item is selected
+      }
     }
   ]
 
-  const handleSubmit = (formData: any) => {
-    console.log(formData)
+  const handleSubmit = (formData: ServiceLineFormData) => {
+    console.log('Form submitted with data:', formData)
   }
 
-  return <FormWizard steps={steps} onSubmit={handleSubmit} />
+  return (
+    <FormWizard<ServiceLineFormData>
+      steps={steps}
+      onSubmit={handleSubmit}
+      initialData={{
+        name: '',
+        description: '',
+        serviceType: undefined,
+        item: ''
+      }}
+    />
+  )
 }
