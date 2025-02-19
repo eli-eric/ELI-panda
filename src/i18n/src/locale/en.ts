@@ -346,19 +346,20 @@ export const messages = {
             form: {
               name: { label: 'Name', placeholder: 'Name' },
               notes: { label: 'Notes', placeholder: 'Notes' },
-              serviceType: { label: 'Service Type' }
-            }
-          },
-          step2: {
-            title: 'Service Line Details',
-            form: {
-              item: { label: 'System Item' },
+              serviceType: { label: 'Service Type' },
               price: { label: 'Price', placeholder: '0.00' },
               currency: { label: 'Currency' }
             }
           },
+          step2: {
+            title: 'Service Line Details',
+            form: {}
+          },
           step3: {
-            title: 'Details'
+            title: 'Select Items',
+            form: {
+              item: { label: 'System Item' }
+            }
           }
         }
       }

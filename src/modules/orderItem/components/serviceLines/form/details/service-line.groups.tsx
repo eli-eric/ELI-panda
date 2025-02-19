@@ -17,7 +17,7 @@ export const ServiceLineGroups = ({
   category,
   allowedDetails
 }: GroupPropertyProps) => {
-  const { unregister } = useFormContext()
+  const { unregister, watch } = useFormContext()
   const [details, setDetails] = useState<{
     groups?: string[]
     details?: CatalogueItemDetail[]
@@ -25,11 +25,13 @@ export const ServiceLineGroups = ({
 
   const { groups: groupsDetail, groupDetails } = useGroupDetails(category?.uid)
 
+  const formDetails = watch('details')
+
   useEffect(() => {
     const filteredDetails = groupDetails?.filter(detail =>
       allowedDetails?.includes(detail.property.uid)
     )
-    const itemDetails = sortBy(filteredDetails, [
+    const itemDetails = sortBy(formDetails || filteredDetails, [
       'propertyGroup',
       'property.name'
     ])
@@ -37,7 +39,14 @@ export const ServiceLineGroups = ({
       groups: groupsDetail,
       details: itemDetails
     })
-  }, [groupsDetail, groupDetails, category, unregister, allowedDetails])
+  }, [
+    groupsDetail,
+    groupDetails,
+    category,
+    unregister,
+    allowedDetails,
+    formDetails
+  ])
 
   return (
     <Fragment>

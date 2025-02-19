@@ -31,7 +31,7 @@ export const FormWizard = <T extends Record<string, any>>({
   const isCurrentStepValid = () => {
     const currentFields = steps[currentStepIndex].fields
     return currentFields.every(field => {
-      if (!field.field?.required) {
+      if (!field.field.required) {
         return true
       }
       const fieldValue = watch(field.field.name as Path<T>)
@@ -86,7 +86,7 @@ export const FormWizard = <T extends Record<string, any>>({
   )
 
   return (
-    <div className="">
+    <div>
       <StepIndicator
         steps={visibleSteps}
         currentStep={currentStepIndex}

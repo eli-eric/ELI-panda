@@ -5,8 +5,8 @@ import { useServiceTypeList } from '@/modules/services/hooks/useServiceTypeList'
 const messages = message.ordersPage.serviceLines.wizard.steps
 
 export const useServiceLineFields = () => {
-  const { step1, step2 } = messages
-  const formMessage = { ...step1.form, ...step2.form }
+  const { step1, step2, step3 } = messages
+  const formMessage = { ...step1.form, ...step2.form, ...step3.form }
   const { data } = useServiceTypeList()
   return useMakeFormFields({
     name: {

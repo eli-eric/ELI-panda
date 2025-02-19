@@ -11,6 +11,8 @@ export const ServiceLineWizard = () => {
   }
 
   return (
-    <FormWizard<ServiceLineFormType> steps={steps} onSubmit={handleSubmit} />
+    <div className="">
+      <FormWizard<ServiceLineFormType> steps={steps} onSubmit={handleSubmit} />
+    </div>
   )
 }

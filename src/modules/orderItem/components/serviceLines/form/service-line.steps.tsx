@@ -6,6 +6,7 @@ import type { ServiceLineFormType } from '@/modules/orderItem/types/form'
 import type { WizardStepConfig } from '@/modules/shared/form/wizardV2/types'
 
 import { ServiceLineDetails } from './details/service-line.details'
+import { ItemsSelectTable } from './items/items-select.table'
 import { useServiceLineFields } from './service-line.fields'
 
 const messages = message.ordersPage.serviceLines.wizard
@@ -55,6 +56,16 @@ export const useServiceLineSteps = () => {
           componentType: 'component',
           field: { ...fields.item },
           component: <ServiceLineDetails />
+        }
+      ]
+    },
+    {
+      title: fm({ id: messages.steps.step3.title }),
+      fields: [
+        {
+          componentType: 'component',
+          field: { ...fields.item },
+          component: <ItemsSelectTable />
         }
       ]
     }
