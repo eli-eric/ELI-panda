@@ -43,7 +43,7 @@ export const ServiceLineWizard = () => {
         return data.name.length >= 3
       },
       onStepComplete: data => {
-        console.log('Step 1 completed with data:', data)
+        console.log('Step 2 completed with data:', data)
       }
     },
     {
