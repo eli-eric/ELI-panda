@@ -337,6 +337,27 @@ export const messages = {
         lastUpdateBy: 'Last Update By'
       }
     },
+    serviceLines: {
+      head: 'Service Lines',
+      wizard: {
+        steps: {
+          step1: {
+            title: 'Information',
+            form: {
+              name: { label: 'Name', placeholder: 'Name' },
+              description: { label: 'Description', placeholder: 'Description' }
+            }
+          },
+          step2: {
+            title: 'Service',
+            form: {
+              serviceType: { label: 'Service Type' },
+              item: { label: 'System Item' }
+            }
+          }
+        }
+      }
+    },
     orderDetail: {
       sectionHeadings: {
         orderLines: 'Order Lines'

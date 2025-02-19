@@ -30,7 +30,8 @@ export const Input = ({
   unit,
   defaultValue,
   isFilter,
-  step = '0.001'
+  step = '0.001',
+  required
 }: InputProps) => {
   const { control } = useFormContext()
 
@@ -71,6 +72,7 @@ export const Input = ({
                 value={field.value || ''}
                 id={idHtml}
                 hidden={hidden}
+                required={required}
                 type={
                   type === 'password'
                     ? showPassword
