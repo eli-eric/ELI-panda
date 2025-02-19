@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { DefaultValues } from 'react-hook-form'
+import type { DefaultValues, Path } from 'react-hook-form'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
@@ -23,14 +23,24 @@ export const FormWizard = <T extends Record<string, any>>({
   const methods = useForm<T>({
     defaultValues: initialData as DefaultValues<T>
   })
-  const { handleSubmit, getValues } = methods
+  const { handleSubmit, getValues, watch } = methods
 
   const currentStep = steps[currentStepIndex]
   const isLastStep = currentStepIndex === steps.length - 1
 
+  const isCurrentStepValid = () => {
+    const currentFields = steps[currentStepIndex].fields
+    return currentFields.every(field => {
+      if (!field.field?.required) {
+        return true
+      }
+      const fieldValue = watch(field.field.name as Path<T>)
+      return fieldValue !== undefined && fieldValue !== ''
+    })
+  }
+
   const handleNext = () => {
     const currentData = getValues()
-
     // Check if current step has validation
     if (currentStep.validation) {
       const isValid = currentStep.validation(currentData)
@@ -39,10 +49,8 @@ export const FormWizard = <T extends Record<string, any>>({
         return
       }
     }
-
     // Call onStepComplete if defined
     currentStep.onStepComplete?.(currentData)
-
     if (isLastStep) {
       handleSubmit(onSubmit)()
     } else {
@@ -101,6 +109,7 @@ export const FormWizard = <T extends Record<string, any>>({
               primary={isLastStep}
               type="button"
               onClick={handleNext}
+              disabled={!isCurrentStepValid()}
             >
               {isLastStep ? 'Submit' : 'Next'}
             </Button>

@@ -1,4 +1,3 @@
-import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 
 // Define specific field types
@@ -30,13 +29,5 @@ export type WizardStep = {
 export type WizardField = {
   componentType: WizardFieldType
   component?: React.ReactNode
-  field: Field
-}
-
-interface Field extends FieldProps {
-  name: string
-  label: string
-  type?: string
-  codebook?: CODEBOOK
-  required?: boolean
+  field: FieldProps
 }

@@ -345,15 +345,20 @@ export const messages = {
             title: 'Information',
             form: {
               name: { label: 'Name', placeholder: 'Name' },
-              description: { label: 'Description', placeholder: 'Description' }
+              notes: { label: 'Notes', placeholder: 'Notes' },
+              serviceType: { label: 'Service Type' }
             }
           },
           step2: {
-            title: 'Service',
+            title: 'Service Line Details',
             form: {
-              serviceType: { label: 'Service Type' },
-              item: { label: 'System Item' }
+              item: { label: 'System Item' },
+              price: { label: 'Price', placeholder: '0.00' },
+              currency: { label: 'Currency' }
             }
+          },
+          step3: {
+            title: 'Details'
           }
         }
       }

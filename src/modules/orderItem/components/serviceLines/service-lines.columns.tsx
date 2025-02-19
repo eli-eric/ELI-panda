@@ -34,12 +34,12 @@ export const useServiceLinesColumns = () => {
         )
       },
       {
-        header: formatMessage({ id: messages.catalogueNumber }),
-        accessorKey: 'price',
+        header: 'Item',
+        accessorKey: 'item',
         cell: ({ getValue, row: { original } }) => (
           <NewTabLink
-            href={PATH.CATALOGUE_ITEM + '/' + original.catalogueUid}
-            value={getValue()}
+            href={PATH.SYSTEM + '/' + original.item.uid}
+            value={getValue().name}
           />
         )
       },
