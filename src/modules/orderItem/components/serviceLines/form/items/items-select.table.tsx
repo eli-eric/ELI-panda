@@ -13,7 +13,7 @@ export const ItemsSelectTable = () => {
 
   const settings: PandaTableSettings<SystemDetail> = {
     enableMultiRowSelection: true,
-    enableColumnHiding: true,
+    enableColumnHiding: false,
     enableColumnReordering: false,
     enableQueryURL: false,
     enableRowSelection: row => !!row.original.physicalItem?.uid
@@ -31,16 +31,14 @@ export const ItemsSelectTable = () => {
   })
 
   return (
-    <div className="min-h-[320px] overflow-y-auto relative h-[500px]">
+    <div>
       <SearchBar tableId={tableId} useQuery={false} />
       <PandaTableV2
         data={systems?.data}
+        className="overflow-y-auto relative h-[423px]"
         table={table}
         tableId={tableId}
-        settings={{
-          ...settings,
-          enableColumnReordering: true
-        }}
+        settings={settings}
       />
       <Pagination
         tableId={tableId}

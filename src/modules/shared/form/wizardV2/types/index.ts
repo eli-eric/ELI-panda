@@ -14,10 +14,11 @@ export type WizardFieldType =
 
 // Make the step configuration more specific
 export interface WizardStepConfig<T> {
+  id: string
   title: string
   fields: WizardField[]
   validation?: (data: Partial<T>) => boolean
-  onStepComplete?: (data: Partial<T>) => void
+  onStepComplete?: (data: Partial<T>) => void | Promise<void>
   shouldShow?: (data: Partial<T>) => boolean
 }
 

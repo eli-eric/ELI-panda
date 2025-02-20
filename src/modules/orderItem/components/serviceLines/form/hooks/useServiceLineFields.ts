@@ -29,8 +29,8 @@ export const useServiceLineFields = () => {
         uid
       }))
     },
-    item: {
-      name: 'item',
+    items: {
+      name: 'items',
       label: formMessage.item.label,
       rounded: 'rounded-md'
     },
