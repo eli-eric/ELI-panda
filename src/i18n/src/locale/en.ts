@@ -338,6 +338,14 @@ export const messages = {
       }
     },
     serviceLines: {
+      columns: {
+        name: 'Name',
+        serviceType: 'Service Type',
+        notes: 'Notes',
+        item: 'Item',
+        isDelivered: 'Delivered',
+        price: 'Price'
+      },
       head: 'Service Lines',
       wizard: {
         steps: {

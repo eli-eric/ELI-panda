@@ -8,17 +8,17 @@ import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import { message } from '@/i18n/src/messages'
 import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
-import type { ServiceLineFormType } from '@/modules/orderItem/types/form'
+import type { ServiceLine } from '@/modules/orderItem/types/form'
 import { PATH } from '@/types/constants/paths'
 
-const messages = message.ordersPage.orderLines.orderLinesTable.header
+const messages = message.ordersPage.serviceLines.columns
 
 export const useServiceLinesColumns = () => {
   const uid = useRouter().query.uid as string
   const { disabledEdit } = useOrderDetail()
   const { formatMessage } = useIntl()
-  const columns = useMemo((): ColumnDef<ServiceLineFormType, any>[] => {
-    const cols: ColumnDef<ServiceLineFormType, any>[] = [
+  const columns = useMemo((): ColumnDef<ServiceLine, any>[] => {
+    const cols: ColumnDef<ServiceLine, any>[] = [
       {
         header: formatMessage({ id: messages.name }),
         accessorKey: 'name',
@@ -31,6 +31,16 @@ export const useServiceLinesColumns = () => {
         size: 240,
         footer: ({ table: { getRowCount } }) => (
           <span>Total: {getRowCount()} line(s)</span>
+        )
+      },
+      {
+        header: formatMessage({ id: messages.serviceType }),
+        accessorKey: 'serviceType',
+        cell: ({ getValue }) => (
+          <NewTabLink
+            href={PATH.SERVICE + '/' + getValue().uid}
+            value={getValue().name}
+          />
         )
       },
       {

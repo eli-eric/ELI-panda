@@ -16,7 +16,7 @@ export interface OrderDetailFormType extends FieldValues {
 
   procurementResponsible: CodebookType
   requestor: CodebookType
-  serviceLines: ServiceLineFormType[]
+  serviceLines: ServiceLine[]
   orderDate: string
   orderLines: OrderLineFormType[]
 }
@@ -41,14 +41,28 @@ export interface OrderLineFormType extends FieldValues {
   serialNumbers?: string
 }
 
+export interface ServiceLine extends FieldValues {
+  uuid?: string
+  uid?: string
+  name: string
+  serviceType: CodebookType
+  item: CodebookType
+  price: number
+  currency: string
+  notes?: string
+  isDelivered?: boolean
+  lastUpdateTime?: string
+  details?: CatalogueItemDetail[]
+}
+
 export interface ServiceLineFormType extends FieldValues {
   uuid?: string
   uid: string
   name: string
   serviceType: CodebookType
-  item: CodebookType
-  price?: number
-  currency?: string
+  items: CodebookType[]
+  price: number
+  currency: string
   notes?: string
   isDelivered?: boolean
   lastUpdateTime?: string

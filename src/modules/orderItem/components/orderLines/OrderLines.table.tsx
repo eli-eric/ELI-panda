@@ -44,7 +44,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
     }
   })
 
-  const handleAddOrderLine = () => {
+  const handleOpenOrderLineForm = () => {
     setOpenOrderLineForm(true)
   }
 
@@ -57,7 +57,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
               primary
               type="button"
               buttonSize="large"
-              onClick={handleAddOrderLine}
+              onClick={handleOpenOrderLineForm}
               className="mb-2"
             />
           </div>

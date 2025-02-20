@@ -1,5 +1,10 @@
 import { useState } from 'react'
-import type { DefaultValues, Path } from 'react-hook-form'
+import type {
+  DefaultValues,
+  FieldValues,
+  Path,
+  UseFormReset
+} from 'react-hook-form'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
@@ -8,9 +13,9 @@ import FormStep from './components/form-step'
 import { StepIndicator } from './components/step-indicator'
 import type { WizardStepConfig } from './types'
 
-interface FormWizardProps<T> {
+interface FormWizardProps<T extends FieldValues> {
   steps: WizardStepConfig<T>[]
-  onSubmit: (data: T) => void
+  onSubmit: (data: T, reset: UseFormReset<T>) => void
   initialData?: Partial<T>
 }
 
@@ -24,7 +29,7 @@ export const FormWizard = <T extends Record<string, any>>({
   const methods = useForm<T>({
     defaultValues: initialData as DefaultValues<T>
   })
-  const { handleSubmit, getValues, watch } = methods
+  const { handleSubmit, getValues, watch, reset } = methods
 
   const currentStep = steps[currentStepIndex]
   const isLastStep = currentStepIndex === steps.length - 1
@@ -63,7 +68,7 @@ export const FormWizard = <T extends Record<string, any>>({
       }
 
       if (isLastStep) {
-        handleSubmit(onSubmit)()
+        handleSubmit(data => onSubmit(data, reset))()
       } else {
         // Find next visible step
         let nextIndex = currentStepIndex + 1
@@ -107,7 +112,7 @@ export const FormWizard = <T extends Record<string, any>>({
         totalSteps={visibleSteps.length}
       />
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(data => onSubmit(data, reset))}>
           <FormStep fields={currentStep.fields} />
           <div className="mt-6 flex justify-between">
             {currentStepIndex > 0 ? (

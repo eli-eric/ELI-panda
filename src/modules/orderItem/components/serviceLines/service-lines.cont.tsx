@@ -67,29 +67,31 @@ export const ServiceLinesContainer = ({
           </div>
         )}
       </Heading>
-      <div className="flex flex-col max-h-[500px] mb-5">
-        <PandaTableControlled
-          data={serviceLines}
-          table={table}
-          tableId={'orderLines'}
-          className={'relative overflow-x-auto'}
-          getRowProps={({ original: { isDelivered } }) => ({
-            className: cx(
-              isDelivered
-                ? 'bg-green-100 dark:bg-green-700'
-                : 'bg-white dark:bg-gray-800'
-            )
-          })}
-          settings={{
-            enableFooter: true,
-            enableFiltering: true,
-            manualFiltering: false,
-            enableQueryURL: false,
-            enableSorting: true,
-            manualSorting: false
-          }}
-        />
-      </div>
+      {serviceLines?.length && (
+        <div className="flex flex-col max-h-[500px] mb-5">
+          <PandaTableControlled
+            data={serviceLines}
+            table={table}
+            tableId={'serviceLines'}
+            className={'relative overflow-x-auto'}
+            getRowProps={({ original: { isDelivered } }) => ({
+              className: cx(
+                isDelivered
+                  ? 'bg-green-100 dark:bg-green-700'
+                  : 'bg-white dark:bg-gray-800'
+              )
+            })}
+            settings={{
+              enableFooter: true,
+              enableFiltering: true,
+              manualFiltering: false,
+              enableQueryURL: false,
+              enableSorting: true,
+              manualSorting: false
+            }}
+          />
+        </div>
+      )}
       <ModalComponent
         open={openServiceLineForm}
         setOpen={setOpenServiceLineForm}
