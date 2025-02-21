@@ -23,7 +23,7 @@ export const ServiceLineGroups = ({
     details?: CatalogueItemDetail[]
   }>()
 
-  const { groups: groupsDetail, groupDetails } = useGroupDetails(category?.uid)
+  const { groupDetails } = useGroupDetails(category?.uid)
 
   const formDetails = watch('details')
 
@@ -35,18 +35,15 @@ export const ServiceLineGroups = ({
       'propertyGroup',
       'property.name'
     ])
+    const groupsDetail = itemDetails
+      ?.map(item => item.propertyGroup)
+      .filter((value, index, self) => self.indexOf(value) === index)
+
     setDetails({
       groups: groupsDetail,
       details: itemDetails
     })
-  }, [
-    groupsDetail,
-    groupDetails,
-    category,
-    unregister,
-    allowedDetails,
-    formDetails
-  ])
+  }, [groupDetails, category, unregister, allowedDetails, formDetails])
 
   return (
     <Fragment>

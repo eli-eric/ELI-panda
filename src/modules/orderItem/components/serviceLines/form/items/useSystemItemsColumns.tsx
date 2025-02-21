@@ -32,10 +32,27 @@ function IndeterminateCheckbox({
 }: IndeterminateCheckboxProps) {
   const { control } = useFormContext()
 
-  const { append, remove } = useFieldArray({
+  const { append, remove, fields } = useFieldArray({
     control,
     name: 'items'
   })
+
+  const onChange = () => {
+    row.toggleSelected(undefined, { selectChildren: false })
+    if (checked) {
+      const formIndex = fields.findIndex(
+        (field: any) => field.uid === row.original.physicalItem?.uid
+      )
+      if (formIndex !== -1) {
+        remove(formIndex)
+      }
+    } else {
+      append({
+        uid: row.original.physicalItem?.uid,
+        name: row.original.physicalItem?.catalogueItem?.name
+      })
+    }
+  }
 
   return (
     <input
@@ -47,17 +64,7 @@ function IndeterminateCheckbox({
         !checked && 'dark:bg-gray-700',
         rest.disabled && 'bg-gray-300 dark:bg-gray-500'
       )}
-      onChange={() => {
-        row.toggleSelected(undefined, { selectChildren: false })
-        if (checked) {
-          remove(row.index)
-        } else {
-          append({
-            uid: row.original.physicalItem?.uid,
-            name: row.original.physicalItem?.catalogueItem?.name
-          })
-        }
-      }}
+      onChange={onChange}
       checked={checked}
       {...rest}
     />

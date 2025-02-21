@@ -96,7 +96,7 @@ export const ServiceLinesContainer = ({
         open={openServiceLineForm}
         setOpen={setOpenServiceLineForm}
       >
-        <ServiceLineWizard />
+        <ServiceLineWizard setOpen={setOpenServiceLineForm} />
       </ModalComponent>
     </Fragment>
   )
