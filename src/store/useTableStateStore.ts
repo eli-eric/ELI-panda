@@ -107,6 +107,7 @@ const useTableStateStore = create<TableState>(set => {
         const newInstance = {
           ...state.instances[tableId],
           sortBy: undefined,
+          rowSelection: undefined,
           pagination: undefined,
           filter: undefined,
           search: undefined,

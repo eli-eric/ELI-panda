@@ -7,8 +7,8 @@ import { useIsFirstRender } from 'usehooks-ts'
 import useTableStateStore from '@/store/useTableStateStore'
 
 export const useFilters = (
-  tableId,
-  enableQueryURL,
+  tableId: string,
+  enableQueryURL?: boolean,
   useFirstRender = true
 ): [ColumnFiltersState, Dispatch<SetStateAction<ColumnFiltersState>>] => {
   const { setColumnFilter, instances } = useTableStateStore()

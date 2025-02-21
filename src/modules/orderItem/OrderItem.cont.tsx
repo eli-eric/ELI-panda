@@ -19,6 +19,7 @@ import FileManager from '../shared/fileManager/FileManager'
 import OrderFormComponent from './components/form/OrderForm.comp'
 import { schema } from './components/form/OrderForm.schema'
 import OrderLinesTable from './components/orderLines/OrderLines.table'
+import { ServiceLinesContainer } from './components/serviceLines/service-lines.cont'
 import useOrderDetail from './hooks/useOrderDetail'
 import { useOrderSubmit } from './hooks/useOrderSubmit'
 import type { OrderDetailFormType } from './types/form'
@@ -124,6 +125,7 @@ export const OrderItemContainer = () => {
       <OrderFormComponent />
       <Card className="flex flex-col justify-between">
         <OrderLinesTable disabledEdit={disabledEdit} />
+        <ServiceLinesContainer disabledEdit={disabledEdit} />
         {uid && (
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense fallback={<ProgressBarComponent />}>

@@ -14,7 +14,6 @@ import { Layout } from '@/components/layout/Layout'
 import { Notification } from '@/components/Notifications/Notification'
 import { GenereralModal } from '@/components/overlays/modal/modal.comp'
 import { WarningModal } from '@/components/WarningModal'
-import { useLocale } from '@/hooks/useLocale'
 import { useDarkModeStore } from '@/store/useDarkModeStore'
 import { getQueryClient } from '@/utils/queryClient'
 
@@ -29,7 +28,6 @@ const ReactQueryDevtoolsProduction = lazy(() =>
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
   const queryClient = getQueryClient()
 
-  const locale = useLocale()
   const setStoredTheme = useDarkModeStore(state => state.setStoredTheme)
 
   useEffect(() => {
@@ -40,7 +38,7 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={pageProps.dehydratedState}>
         <SessionProvider session={session} refetchOnWindowFocus={false}>
-          <IntlProvider locale={locale} messages={messages['en']}>
+          <IntlProvider locale={'en'} messages={messages.en}>
             <Toaster
               position="top-center"
               reverseOrder={false}

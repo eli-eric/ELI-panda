@@ -1,5 +1,6 @@
 import type { FieldValues } from 'react-hook-form'
 
+import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import type { CodebookType } from '@/types/responses/codebook'
 
 export interface OrderDetailFormType extends FieldValues {
@@ -15,7 +16,7 @@ export interface OrderDetailFormType extends FieldValues {
 
   procurementResponsible: CodebookType
   requestor: CodebookType
-
+  serviceLines: ServiceLine[]
   orderDate: string
   orderLines: OrderLineFormType[]
 }
@@ -38,4 +39,32 @@ export interface OrderLineFormType extends FieldValues {
   serialNumber?: string
   lastUpdateTime?: string
   serialNumbers?: string
+}
+
+export interface ServiceLine extends FieldValues {
+  uuid?: string
+  uid?: string
+  name: string
+  serviceType: CodebookType
+  item: CodebookType
+  price: number
+  currency: string
+  notes?: string
+  isDelivered?: boolean
+  lastUpdateTime?: string
+  details?: CatalogueItemDetail[]
+}
+
+export interface ServiceLineFormType extends FieldValues {
+  uuid?: string
+  uid: string
+  name: string
+  serviceType: CodebookType
+  items: CodebookType[]
+  price: number
+  currency: string
+  notes?: string
+  isDelivered?: boolean
+  lastUpdateTime?: string
+  details?: CatalogueItemDetail[]
 }

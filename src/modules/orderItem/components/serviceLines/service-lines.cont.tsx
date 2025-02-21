@@ -3,29 +3,33 @@ import { useFormContext, useWatch } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
+import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
 import { cx } from '@/utils'
 
-import useOrderLinesColumns from './components/OrderLines.columns'
-import { OrderLineForm } from './form/OrderLineForm.cont'
+import { ServiceLineWizard } from './form/service-line.wizz'
+import { useServiceLinesColumns } from './service-lines.columns'
 
-const messages = message.ordersPage.orderDetail.sectionHeadings
+const messages = message.ordersPage.serviceLines
 
 interface OrderLinesTableProps {
   disabledEdit?: boolean
 }
 
-const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
-  const columns = useOrderLinesColumns()
-  const [openOrderLineForm, setOpenOrderLineForm] = useState(false)
+export const ServiceLinesContainer = ({
+  disabledEdit
+}: OrderLinesTableProps) => {
   const { control } = useFormContext()
-  const orderLines = useWatch({ control, name: 'orderLines' })
 
-  const table = usePandaTable({
-    columns,
-    data: orderLines,
+  const serviceLines = useWatch({ control, name: 'serviceLines' })
+  const sereviceLinesColumns = useServiceLinesColumns()
+  const [openServiceLineForm, setOpenServiceLineForm] = useState(false)
+
+  const table = usePandaTable<any>({
+    columns: sereviceLinesColumns,
+    data: serviceLines,
     tableId: 'orderLines',
     settings: {
       enableFooter: true,
@@ -44,31 +48,31 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
     }
   })
 
-  const handleOpenOrderLineForm = () => {
-    setOpenOrderLineForm(true)
+  const handleAddServiceLine = () => {
+    setOpenServiceLineForm(true)
   }
 
   return (
     <Fragment>
-      <Heading text={messages.orderLines}>
+      <Heading text={messages.head}>
         {!disabledEdit && (
           <div className="flex items-center mr-2">
             <PlusButton
               primary
               type="button"
               buttonSize="large"
-              onClick={handleOpenOrderLineForm}
+              onClick={handleAddServiceLine}
               className="mb-2"
             />
           </div>
         )}
       </Heading>
-      {orderLines?.length && (
+      {serviceLines?.length && (
         <div className="flex flex-col max-h-[500px] mb-5">
           <PandaTableControlled
-            data={orderLines}
+            data={serviceLines}
             table={table}
-            tableId={'orderLines'}
+            tableId={'serviceLines'}
             className={'relative overflow-x-auto'}
             getRowProps={({ original: { isDelivered } }) => ({
               className: cx(
@@ -88,9 +92,12 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
           />
         </div>
       )}
-      <OrderLineForm open={openOrderLineForm} setOpen={setOpenOrderLineForm} />
+      <ModalComponent
+        open={openServiceLineForm}
+        setOpen={setOpenServiceLineForm}
+      >
+        <ServiceLineWizard setOpen={setOpenServiceLineForm} />
+      </ModalComponent>
     </Fragment>
   )
 }
-
-export default OrderLinesTable

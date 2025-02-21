@@ -7,7 +7,6 @@ interface HeadingProps {
   text?: string
   customText?: string
   className?: string
-
   textColor?: string
   titleNode?: React.ReactNode
 }

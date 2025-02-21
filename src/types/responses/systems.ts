@@ -9,6 +9,8 @@ export type SystemsResponse = {
 
 type SystemStatistics = {
   subsystemsCount?: number
+
+  
   sparePartsCount?: number
   minimalSpareParstCount?: number
   sp_coverage?: number
