@@ -93,6 +93,7 @@ export const ServiceLinesContainer = ({
         </div>
       )}
       <ModalComponent
+        zclass="z-20"
         open={openServiceLineForm}
         setOpen={setOpenServiceLineForm}
       >

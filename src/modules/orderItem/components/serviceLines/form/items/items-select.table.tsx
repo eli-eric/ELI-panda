@@ -3,6 +3,7 @@ import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaT
 import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
 import { SearchBar } from '@/modules/shared/table/SearchBar'
+import { SystemFilterButtonContainer } from '@/modules/systems/components/filters/SystemsFilterButton.cont'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import type { SystemDetail } from '@/types/responses/systems'
 
@@ -32,7 +33,16 @@ export const ItemsSelectTable = () => {
 
   return (
     <div>
-      <SearchBar tableId={tableId} useQuery={false} />
+      <SearchBar
+        tableId={tableId}
+        useQuery={false}
+        left={
+          <SystemFilterButtonContainer
+            disabledFields={{ category: true }}
+            tableId={tableId}
+          />
+        }
+      />
       <PandaTableV2
         data={systems?.data}
         className="overflow-y-auto relative h-[423px]"
