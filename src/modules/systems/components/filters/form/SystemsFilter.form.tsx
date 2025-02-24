@@ -19,14 +19,17 @@ import { SystemLevel } from '@/types/gql/graphql'
 import { cx } from '@/utils'
 
 import { CategoryPropFilters } from '../../../../shared/form/CategoryPropFilters'
+import type { DisabledFields } from '../SystemsFilterButton.cont'
 import { useSystemsFilterFields } from './SystemsFilter.fields'
 
 export const SystemsFilterForm = ({
   tableId,
-  enableQueryUrl
+  enableQueryUrl,
+  disabledFields
 }: {
   tableId: string
   enableQueryUrl: boolean
+  disabledFields?: DisabledFields
 }) => {
   const fields = useSystemsFilterFields()
   const systemLevels = Object.values(SystemLevel).map(level => level)
@@ -139,6 +142,7 @@ export const SystemsFilterForm = ({
         />
         <ComboboxTree
           {...fields.category}
+          disabled={disabledFields?.category || fields.category.disabled}
           onSelect={setFilter(fields.category.name)}
           isFilter={true}
         />
