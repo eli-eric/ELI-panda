@@ -1,30 +1,29 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
-import { useRouter } from 'next/router'
 import { Fragment, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import { message } from '@/i18n/src/messages'
-import useOrderDetail from '@/modules/orderItem/hooks/useOrderDetail'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
 import { PATH } from '@/types/constants/paths'
+
+import { ServiceLineActionButtons } from './components/service-lines.actions'
 
 const messages = message.ordersPage.serviceLines.columns
 
 export const useServiceLinesColumns = () => {
-  const uid = useRouter().query.uid as string
-  const { disabledEdit } = useOrderDetail()
   const { formatMessage } = useIntl()
   const columns = useMemo((): ColumnDef<ServiceLine, any>[] => {
     const cols: ColumnDef<ServiceLine, any>[] = [
       {
         header: formatMessage({ id: messages.name }),
         accessorKey: 'name',
-        cell: ({ getValue }) => (
+        cell: ({ getValue, row: { original } }) => (
           <div className="flex items-center">
             <span>{getValue()}</span>
+            <ServiceLineActionButtons serviceLine={original} />
           </div>
         ),
         meta: { sticky: true, className: 'sm:pr-12' },
