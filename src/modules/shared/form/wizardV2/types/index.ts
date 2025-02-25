@@ -1,3 +1,4 @@
+import type { ColSizeProp } from '@/components/grid/ColSizes'
 import type { FieldProps } from '@/types/form'
 
 // Define specific field types
@@ -16,7 +17,8 @@ export type WizardFieldType =
 export interface WizardStepConfig<T> {
   id: string
   title: string
-  fields: WizardField[]
+  fields?: WizardField[]
+  component?: React.ReactElement
   validation?: (data: Partial<T>) => boolean
   onStepComplete?: (data: Partial<T>) => void | Promise<void>
   shouldShow?: (data: Partial<T>) => boolean
@@ -24,11 +26,13 @@ export interface WizardStepConfig<T> {
 
 export type WizardStep = {
   title: string
-  fields: WizardField[]
+  fields?: WizardField[]
+  component?: React.ReactElement
 }
 
 export type WizardField = {
   componentType: WizardFieldType
-  component?: React.ReactNode
+  component?: React.ReactElement
   field: FieldProps
+  colSpan?: ColSizeProp
 }

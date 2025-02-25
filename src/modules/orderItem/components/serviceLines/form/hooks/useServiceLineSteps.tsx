@@ -71,6 +71,7 @@ export const useServiceLineSteps = () => {
         },
         {
           componentType: 'component',
+          colSpan: 8,
           field: {
             ...fields.serviceType
           },
@@ -80,6 +81,7 @@ export const useServiceLineSteps = () => {
         },
         {
           componentType: 'component',
+          colSpan: 4,
           field: { ...fields.price },
           component: (
             <InputAmount {...fields.price}>
@@ -98,25 +100,13 @@ export const useServiceLineSteps = () => {
     {
       id: 'serviceLineDetails',
       title: fm({ id: messages.steps.step2.title }),
-      fields: [
-        {
-          componentType: 'component',
-          field: { ...fields.items },
-          component: <ServiceLineDetails />
-        }
-      ],
+      component: <ServiceLineDetails />,
       shouldShow: shouldShowDetails
     },
     {
       id: 'items',
       title: fm({ id: messages.steps.step3.title }),
-      fields: [
-        {
-          componentType: 'component',
-          field: { ...fields.items },
-          component: <ItemsSelectTable />
-        }
-      ]
+      component: <ItemsSelectTable />
     }
   ]
 

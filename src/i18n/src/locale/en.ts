@@ -352,10 +352,13 @@ export const messages = {
           step1: {
             title: 'Information',
             form: {
-              name: { label: 'Name', placeholder: 'Name' },
+              name: {
+                label: 'Service Description',
+                placeholder: 'Service Description'
+              },
               notes: { label: 'Notes', placeholder: 'Notes' },
               serviceType: { label: 'Service Type' },
-              price: { label: 'Price', placeholder: '0.00' },
+              price: { label: 'Service Price per item', placeholder: '0.00' },
               currency: { label: 'Currency' }
             }
           },
@@ -374,7 +377,7 @@ export const messages = {
     },
     orderDetail: {
       sectionHeadings: {
-        orderLines: 'Order Lines'
+        orderLines: 'Item Order Lines'
       },
       form: {
         eun: { label: 'EUN', placeholder: 'EUN' },
