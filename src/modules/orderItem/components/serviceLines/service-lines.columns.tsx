@@ -48,7 +48,7 @@ export const useServiceLinesColumns = () => {
         accessorKey: 'item',
         cell: ({ getValue, row: { original } }) => (
           <NewTabLink
-            href={PATH.SYSTEM + '/' + original.item.uid}
+            href={PATH.SYSTEM_ITEM + '/' + original.item.uid}
             value={getValue().name}
           />
         )

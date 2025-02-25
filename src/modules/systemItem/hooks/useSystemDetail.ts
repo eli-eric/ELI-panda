@@ -18,7 +18,15 @@ const systemDetailQuery = gql(`
    }
 `)
 
-export const useSystemDetail = (alias?: string, onSuccess?: (data) => void) => {
+type SearchPatterns = {
+  alias?: string
+  itemUid?: string
+}
+
+export const useSystemDetail = (
+  searchPatterns?: SearchPatterns,
+  onSuccess?: (data) => void
+) => {
   const router = useRouter()
   const uid = router.query.uid as string | undefined
 
@@ -28,9 +36,15 @@ export const useSystemDetail = (alias?: string, onSuccess?: (data) => void) => {
     systemDetailQuery,
     {
       variables: {
-        where: { uid, systemCode: alias }
+        where: {
+          uid,
+          systemCode: searchPatterns?.alias,
+          physicalItem: {
+            uid: searchPatterns?.itemUid
+          }
+        }
       },
-      enabled: !!uid || !!alias,
+      enabled: !!uid || !!searchPatterns?.alias || !!searchPatterns?.itemUid,
       refetchOnMount: 'always',
       refetchOnReconnect: 'always'
     }
