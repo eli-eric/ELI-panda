@@ -37,8 +37,6 @@ const SystemItemRedirectPage: NextPage = ({ itemUid }: Props) => {
     }
   )
 
-  console.log('systemDetail', systemDetail)
-
   if (loading) {
     return <LoaderComponent />
   }
