@@ -11,7 +11,9 @@ type Props = {
   alias?: string
 }
 export const SystemDetailInfo: FC<Props> = ({ alias }) => {
-  const { loading, error, systemDetail, catalogueItem } = useSystemDetail(alias)
+  const { loading, error, systemDetail, catalogueItem } = useSystemDetail({
+    alias
+  })
 
   if (loading) {
     return <ProgressBarComponent />
