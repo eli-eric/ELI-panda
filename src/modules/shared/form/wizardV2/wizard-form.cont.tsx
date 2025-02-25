@@ -36,6 +36,9 @@ export const FormWizard = <T extends Record<string, any>>({
 
   const isCurrentStepValid = () => {
     const currentFields = steps[currentStepIndex].fields
+    if (!currentFields) {
+      return true
+    }
     return currentFields.every(field => {
       if (!field.field.required) {
         return true
@@ -113,7 +116,10 @@ export const FormWizard = <T extends Record<string, any>>({
       />
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(data => onSubmit(data, reset))}>
-          <FormStep fields={currentStep.fields} />
+          <FormStep
+            fields={currentStep.fields}
+            component={currentStep.component}
+          />
           <div className="mt-6 flex justify-between">
             {currentStepIndex > 0 ? (
               <Button

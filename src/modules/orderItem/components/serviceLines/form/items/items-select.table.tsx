@@ -14,7 +14,7 @@ export const ItemsSelectTable = () => {
 
   const settings: PandaTableSettings<SystemDetail> = {
     enableMultiRowSelection: true,
-    enableColumnHiding: false,
+    enableColumnHiding: true,
     enableColumnReordering: false,
     enableQueryURL: false,
     enableRowSelection: row => !!row.original.physicalItem?.uid
