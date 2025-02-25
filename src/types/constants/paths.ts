@@ -24,6 +24,7 @@ export enum PATH {
   SYSTEMS_MULTI_MOVE = '/systems/multi-move',
   SPARE_PARTS = '/systems/spareparts',
   SYSTEM = '/system',
+  SYSTEM_ITEM = '/system/item',
   SYSTEM_TYPE_EDIT = '/system/type-edit',
   SYSTEM_ALIAS = '/system/alias',
   REPORTS = '/reports',

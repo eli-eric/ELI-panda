@@ -19,20 +19,25 @@ const { common } = message
 
 interface Props {
   key?: string
-  alias?: string
+  itemUid?: string
 }
 
-const SystemAliasRedirectPage: NextPage = ({ alias }: Props) => {
+const SystemItemRedirectPage: NextPage = ({ itemUid }: Props) => {
   const intl = useIntl()
   const { push } = useRouter()
   const { status } = useSession()
 
-  const { loading, error, systemDetail } = useSystemDetail({ alias }, data => {
-    const uid = data?.systems[0]?.uid
-    if (uid) {
-      push(PATH.SYSTEM + '/' + uid)
+  const { loading, error, systemDetail } = useSystemDetail(
+    { itemUid: itemUid },
+    data => {
+      const uid = data?.systems[0]?.uid
+      if (uid) {
+        push(PATH.SYSTEM + '/' + uid)
+      }
     }
-  })
+  )
+
+  console.log('systemDetail', systemDetail)
 
   if (loading) {
     return <LoaderComponent />
@@ -92,9 +97,9 @@ const SystemAliasRedirectPage: NextPage = ({ alias }: Props) => {
   )
 }
 
-SystemAliasRedirectPage.getInitialProps = ({ query }) => ({
-  key: query.alias,
-  alias: query.alias
+SystemItemRedirectPage.getInitialProps = ({ query }) => ({
+  key: query.itemUid,
+  itemUid: query.itemUid
 })
 
-export default SystemAliasRedirectPage
+export default SystemItemRedirectPage
