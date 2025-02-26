@@ -1,13 +1,11 @@
 import { Fragment } from 'react'
 
-import {
-  TableButtonsWrapper,
-  TableDeleteButton,
-  TableEditButton
-} from '@/components/Buttons'
+import { TableButtonsWrapper, TableDeleteButton } from '@/components/Buttons'
 import useWarningModal from '@/hooks/useWarningModal'
 import { useServiceLine } from '@/modules/orderItem/hooks/useServiceLine'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
+
+import { ServiceLineEdit } from './service-line.edit'
 
 export const ServiceLineActionButtons = ({
   serviceLine
@@ -20,14 +18,10 @@ export const ServiceLineActionButtons = ({
   return (
     <Fragment>
       <TableButtonsWrapper>
-        <TableEditButton
-          onClick={() => {
-            console.log('Edit button clicked')
-          }}
-        />
+        <ServiceLineEdit serviceLine={serviceLine} />
         <TableDeleteButton
           onClick={() => {
-            withWarning(deleteServiceLine)(serviceLine)
+            withWarning(deleteServiceLine)(serviceLine.uuid)
           }}
         />
       </TableButtonsWrapper>
