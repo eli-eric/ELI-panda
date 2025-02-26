@@ -21,8 +21,8 @@ export const useServiceLine = () => {
     }
   }
   //  delete the order line from the form
-  const deleteServiceLine = (serviceLine: ServiceLine) => {
-    const index = fields.findIndex(item => item.uuid === serviceLine.uuid)
+  const deleteServiceLine = (serviceLineUuid?: string) => {
+    const index = fields.findIndex(item => item.uuid === serviceLineUuid)
     remove(index)
   }
 

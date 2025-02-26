@@ -100,7 +100,11 @@ export const useServiceLineSteps = () => {
     {
       id: 'serviceLineDetails',
       title: fm({ id: messages.steps.step2.title }),
-      component: <ServiceLineDetails />,
+      component: (
+        <ServiceLineDetails
+          serviceType={data ? { name: data?.name, uid: data?.uid } : undefined}
+        />
+      ),
       shouldShow: shouldShowDetails
     },
     {

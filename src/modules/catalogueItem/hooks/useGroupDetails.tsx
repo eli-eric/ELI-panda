@@ -6,13 +6,13 @@ import { queryFetcher } from '@/utils/fetcher'
 
 import type { CatalogueItemDetail } from '../types/responses'
 
-const useGroupDetails = (uid?: string) => {
+const useGroupDetails = (categoryUid?: string) => {
   const router = useRouter()
   const itemUid = router.query.uid as string | undefined
   const { data } = useQuery({
     queryKey: [
       'catalogueCategoryProperties',
-      itemUid ? { uid, query: { itemUid } } : { uid }
+      itemUid ? { uid: categoryUid, query: { itemUid } } : { uid: categoryUid }
     ],
     queryFn: queryFetcher<CatalogueItemDetail[]>('catalogueCategoryProperties')
   })

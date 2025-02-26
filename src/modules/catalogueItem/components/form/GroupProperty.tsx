@@ -13,10 +13,12 @@ import type { CatalogueItemDetail } from '../../types/responses'
 interface Props {
   detail: CatalogueItemDetail
   index: number
+  disabled?: boolean
 }
 
-const GroupProperty = ({ detail, index }: Props) => {
-  const disabled = !usePermission([ROLE.CATALOGUE_EDIT])
+const GroupProperty = ({ detail, index, disabled: forceDisabled }: Props) => {
+  const disabledPermission = !usePermission([ROLE.CATALOGUE_EDIT])
+  const disabled = forceDisabled || disabledPermission
   const { setValue } = useFormContext()
 
   useEffect(() => {
