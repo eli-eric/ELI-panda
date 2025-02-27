@@ -166,9 +166,9 @@ type CatalogueCategoryProperty @authentication {
   name: String!
   defaultValue: String!
   unit: Unit @relationship(type: "HAS_UNIT", direction: OUT)
-  catalogueCategoryPropertyGroupsContainsProperty: [CatalogueCategoryPropertyGroup!]!
+  group: [CatalogueCategoryPropertyGroup!]!
     @relationship(type: "CONTAINS_PROPERTY", direction: IN)
-  isPropertyTypeCatalogueCategoryPropertyTypes: [CatalogueCategoryPropertyType!]!
+  type: CatalogueCategoryPropertyType
     @relationship(type: "IS_PROPERTY_TYPE", direction: OUT)
   listOfValues: String!
 }
@@ -186,8 +186,6 @@ type CatalogueCategoryPropertyType @authentication {
   uid: String!
   name: String!
   code: String!
-  catalogueCategoryPropertiesIsPropertyType: [CatalogueCategoryProperty!]!
-    @relationship(type: "IS_PROPERTY_TYPE", direction: IN)
 }
 
 type CatalogueItem @authentication {
