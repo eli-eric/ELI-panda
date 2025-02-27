@@ -46,7 +46,6 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
   const details = formMethods.watch('details')
 
   const submit = (data: ServiceLine) => {
-    console.log('data', data)
     setServiceLine(data)
     setOpenEditForm(false)
   }

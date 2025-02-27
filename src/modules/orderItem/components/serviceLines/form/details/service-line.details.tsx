@@ -1,15 +1,22 @@
 import { useFormContext } from 'react-hook-form'
 
 import { useServiceType } from '@/modules/services/hooks/useServiceType'
+import type { CodebookType } from '@/types/responses/codebook'
 
 import { ServiceLineGroups } from './service-line.groups'
 
-export const ServiceLineDetails = () => {
+interface Props {
+  serviceType?: CodebookType
+}
+
+export const ServiceLineDetails = ({ serviceType }: Props) => {
   const { watch } = useFormContext()
 
   const serviceTypeForm = watch('serviceType')
 
-  const { data, error } = useServiceType(serviceTypeForm?.uid)
+  const { data, error } = useServiceType(
+    serviceType ? serviceType.uid : serviceTypeForm?.uid
+  )
 
   if (error) return <div className="text-red-300">Something went wrong!!</div>
 
