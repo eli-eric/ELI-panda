@@ -99,6 +99,10 @@ export const CatalogueItemFragment = gql(`
         node {
           uid
           name
+          type {
+            name
+            uid
+          }
           unit {
             name
             uid

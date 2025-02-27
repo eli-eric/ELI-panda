@@ -69,18 +69,42 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
             values={createMessageValues({ title: 'Catalgoue Properties' })}
           />
           <ul className="grid grid-cols-4 lg:grid-cols-12 md:grid-cols-6 sm:grid-cols-3 ">
-            {catalogueItemProperties.map(edge => (
-              <li key={edge.node.uid} className="flex col-span-3">
-                <FormattedMessage
-                  id={propertyMessage.property}
-                  values={createMessageValues({
-                    name: edge.node.name,
-                    value: edge.value,
-                    unit: edge.node.unit?.name
-                  })}
-                />
-              </li>
-            ))}
+            {catalogueItemProperties.map(edge => {
+              const type = edge.node.type as unknown as {
+                name: string
+                uid: string
+              }
+              if (type.name === 'Range') {
+                const value = JSON.parse(edge.value || '{}')
+                const min = value.min
+                const max = value.max
+                const stringValue = `${min} - ${max}`
+                return (
+                  <li key={edge.node.uid} className="flex col-span-3">
+                    <FormattedMessage
+                      id={propertyMessage.property}
+                      values={createMessageValues({
+                        name: edge.node.name,
+                        value: stringValue,
+                        unit: edge.node.unit?.name
+                      })}
+                    />
+                  </li>
+                )
+              }
+              return (
+                <li key={edge.node.uid} className="flex col-span-3">
+                  <FormattedMessage
+                    id={propertyMessage.property}
+                    values={createMessageValues({
+                      name: edge.node.name,
+                      value: edge.value,
+                      unit: edge.node.unit?.name
+                    })}
+                  />
+                </li>
+              )
+            })}
           </ul>
         </Col>
       )}
