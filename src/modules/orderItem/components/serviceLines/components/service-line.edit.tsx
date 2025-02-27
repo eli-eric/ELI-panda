@@ -96,15 +96,19 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
                 <TextArea {...fields.notes} />
               </Col>
             </Grid>
-            <DetailPropertiesList
-              details={{
-                details,
-                groups: details
-                  ?.map(detail => detail.propertyGroup)
-                  .filter((value, index, self) => self.indexOf(value) === index)
-              }}
-              disabled={true}
-            />
+            {details && details?.length > 0 && (
+              <DetailPropertiesList
+                details={{
+                  details,
+                  groups: details
+                    ?.map(detail => detail.propertyGroup)
+                    .filter(
+                      (value, index, self) => self.indexOf(value) === index
+                    )
+                }}
+                disabled={true}
+              />
+            )}
           </>
         </Form>
       </ModalComponent>
