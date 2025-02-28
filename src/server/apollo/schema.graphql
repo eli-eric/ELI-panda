@@ -383,10 +383,26 @@ type Item @authentication {
       direction: IN
       properties: "hasOrderLine"
     )
+  serviceItems: [ServiceItem!]!
+    @relationship(type: "IS_SERVICED_BY", direction: OUT)
   itemUsage: ItemUsage @relationship(type: "HAS_ITEM_USAGE", direction: OUT)
   conditionStatus: ItemCondition
     @relationship(type: "HAS_CONDITION_STATUS", direction: OUT)
   notes: String
+}
+
+type ServiceItem @authentication {
+  uid: ID! @id
+  name: String!
+  order: Order @relationship(type: "HAS_SERVICE_LINE", direction: IN)
+  isDelivered: Boolean!
+  servicedItem: Item @relationship(type: "IS_SERVICED_BY", direction: IN)
+  details: [CatalogueCategoryProperty!]!
+    @relationship(
+      type: "HAS_CATALOGUE_PROPERTY"
+      direction: OUT
+      properties: "hasCatalogueProperty"
+    )
 }
 
 type SystemCriticality @authentication {

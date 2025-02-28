@@ -132,6 +132,32 @@ export const PhysicalItemFragment = gql(`
       uid
       name
     }
+    serviceItems {
+      uid
+      name
+      isDelivered
+      order {
+        uid
+        name
+      }
+      detailsConnection {
+        edges {
+          value
+          node {
+            uid
+            name
+            type {
+              name
+              uid
+            }
+            unit {
+              name
+              uid
+            }
+          }
+        }
+      }
+    }
     catalogueItem {
       ...CatalogueItem
     }
@@ -221,26 +247,7 @@ export const SystemDetailFragment = gql(`
       name
     }
     physicalItem {
-      uid
-    eun
-    name
-    notes
-    serialNumber
-    conditionStatus {
-      uid
-      name
-    }
-    order {
-      uid
-      name
-    }
-    itemUsage {
-      uid
-      name
-    }
-    catalogueItem {
-      ...CatalogueItem
-    }
+      ...PhysicalItem
     }
     sparePartsConnection {
       edges {
@@ -268,7 +275,6 @@ export const SystemDetailFragment = gql(`
         ...PhysicalItem
       }
     }
-
   }
 `)
 
@@ -295,6 +301,5 @@ export const UserFragment = gql(`
       name
       code
     }
-
   }
 `)
