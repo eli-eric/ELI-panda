@@ -53,6 +53,10 @@ export const useServiceLinesColumns = () => {
         )
       },
       {
+        header: 'EUN',
+        accessorKey: 'eun'
+      },
+      {
         accessorKey: 'isDelivered',
         size: 90,
         meta: {

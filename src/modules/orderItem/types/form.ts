@@ -50,6 +50,8 @@ export interface ServiceLine extends FieldValues {
   price: number
   currency: string
   notes?: string
+  eun?: string
+  serialNumber?: string
   isDelivered?: boolean
   lastUpdateTime?: string
   details?: CatalogueItemDetail[]
@@ -60,11 +62,16 @@ export interface ServiceLineFormType extends FieldValues {
   uid: string
   name: string
   serviceType: CodebookType
-  items: CodebookType[]
+  items: ServiceLinePhysicalItem[]
   price: number
   currency: string
   notes?: string
   isDelivered?: boolean
   lastUpdateTime?: string
   details?: CatalogueItemDetail[]
+}
+
+export interface ServiceLinePhysicalItem extends CodebookType {
+  serialNumber: string
+  eun: string
 }

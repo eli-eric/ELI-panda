@@ -18,7 +18,13 @@ export const ServiceLineWizard = ({ setOpen }: Props) => {
   const handleSubmit = (data: ServiceLineFormType, reset: () => void) => {
     const { items, ...rest } = data
     items.forEach(item => {
-      setServiceLine({ ...rest, price: Number(rest.price), item })
+      setServiceLine({
+        ...rest,
+        price: Number(rest.price),
+        item: { uid: item.uid, name: item.name },
+        eun: item.eun,
+        serialNumber: item.serialNumber
+      })
     })
     reset()
     resetTable(tableId)
