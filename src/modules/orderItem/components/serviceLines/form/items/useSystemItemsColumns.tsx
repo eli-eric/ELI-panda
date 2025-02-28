@@ -49,7 +49,9 @@ function IndeterminateCheckbox({
     } else {
       append({
         uid: row.original.physicalItem?.uid,
-        name: row.original.physicalItem?.catalogueItem?.name
+        name: row.original.physicalItem?.catalogueItem?.name,
+        eun: row.original.physicalItem?.eun,
+        serialNumber: row.original.physicalItem?.serialNumber
       })
     }
   }
