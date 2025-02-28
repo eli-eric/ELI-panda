@@ -14,7 +14,6 @@ export const useServiceLineDeliver = (serviceLine: ServiceLine) => {
   const uid = useRouter().query.uid as string
 
   const onSuccess = (data: AxiosResponse<OrderLineFormType>) => {
-    console.log(data, serviceLine)
     setServiceLine({
       ...serviceLine,
       isDelivered: data.data?.isDelivered

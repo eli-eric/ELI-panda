@@ -10,6 +10,8 @@ import type { ServiceLine } from '@/modules/orderItem/types/form'
 import { PATH } from '@/types/constants/paths'
 
 import {
+  DeliveredAllButton,
+  PriceFooter,
   ServiceDeliveryAction,
   ServiceLineActionButtons
 } from './components/service-lines.actions'
@@ -61,6 +63,14 @@ export const useServiceLinesColumns = () => {
       },
       {
         accessorKey: 'isDelivered',
+        header: () => {
+          return (
+            <span className="bg-inherit flex flex-col">
+              {formatMessage({ id: messages.isDelivered })}
+              <DeliveredAllButton />
+            </span>
+          )
+        },
         size: 90,
         meta: {
           filter: { enableColumnFilter: false, type: 'boolean' }
@@ -94,7 +104,8 @@ export const useServiceLinesColumns = () => {
             {getValue()}{' '}
             <span className="font-medium ">{original.currency}</span>
           </span>
-        )
+        ),
+        footer: props => <PriceFooter rows={props.table.getRowModel().rows} />
       }
     ]
     return cols

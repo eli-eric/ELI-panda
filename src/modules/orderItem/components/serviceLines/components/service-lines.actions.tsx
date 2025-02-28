@@ -1,16 +1,21 @@
+import type { Row } from '@tanstack/react-table'
 import { Fragment } from 'react'
 
-import { TableButtonsWrapper, TableDeleteButton } from '@/components/Buttons'
+import {
+  Button,
+  TableButtonsWrapper,
+  TableDeleteButton
+} from '@/components/Buttons'
 import { Toggle } from '@/components/form/Switch'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { useServiceLineDeliver } from '@/modules/orderItem/hooks/useServiceDelivery'
+import { useServiceDeliveryAll } from '@/modules/orderItem/hooks/useServiceDeliveryAll'
 import { useServiceLine } from '@/modules/orderItem/hooks/useServiceLine'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
 import { ROLE } from '@/types/constants/roles'
 
 import { ServiceLineEdit } from './service-line.edit'
-
 export const ServiceLineActionButtons = ({
   serviceLine
 }: {
@@ -58,5 +63,46 @@ export const ServiceDeliveryAction = ({
         </Fragment>
       )}
     </Fragment>
+  )
+}
+
+export const PriceFooter = ({ rows }: { rows: Row<ServiceLine>[] }) => {
+  const total = rows.reduce(
+    (sum, { original: { price } }) => sum + (price || 0),
+    0
+  )
+  const totalCurrencyRows = rows.filter(
+    ({ original: { currency } }) => currency != undefined
+  )
+  const totalCurrency =
+    totalCurrencyRows.length > 0 ? totalCurrencyRows[0].original.currency : ''
+  return (
+    <Fragment>
+      {rows.length > 0 && (
+        <div className="flex flex-col whitespace-nowrap py-1">
+          <span className="font-medium">{`${parseFloat(total.toFixed(2))} ${totalCurrency}`}</span>
+        </div>
+      )}
+    </Fragment>
+  )
+}
+
+export const DeliveredAllButton = () => {
+  const { handleDelivery, isPending } = useServiceDeliveryAll()
+
+  const hasRole = usePermission([ROLE.ORDERS_DELIVERY_EDIT, ROLE.ORDERS_EDIT])
+
+  const handleClick = () => {
+    handleDelivery()
+  }
+  return (
+    <Button
+      primary
+      disabled={isPending || !hasRole}
+      className="flex justify-center"
+      onClick={handleClick}
+    >
+      Mark All
+    </Button>
   )
 }

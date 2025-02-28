@@ -5,25 +5,24 @@ import toast from 'react-hot-toast'
 
 import { queryMutate } from '@/utils/fetcher'
 
-import type { OrderLineFormType } from '../types/form'
+import type { ServiceLine } from '../types/form'
 import { useDeliveryHandler } from './useDeliveryHandler'
 import useOrderDetail from './useOrderDetail'
 
-export const useDeliverAll = () => {
+export const useServiceDeliveryAll = () => {
   const { uid, refetch } = useOrderDetail()
   const { control } = useFormContext()
   const { handleSuccessfulDelivery } = useDeliveryHandler()
 
-  const orderLines = useWatch({ control, name: 'orderLines' })
-
-  const { update, fields } = useFieldArray({
+  const serviceLines = useWatch({ control, name: 'serviceLines' })
+  const { fields, update } = useFieldArray({
     control,
-    name: 'orderLines'
+    name: 'serviceLines'
   })
 
   const { mutate, isPending } = useMutation({
-    mutationFn: queryMutate<OrderLineFormType[], string[]>(
-      'orderLinesDeliverAll',
+    mutationFn: queryMutate<ServiceLine[], string[]>(
+      'serviceLinesDeliverAll',
       'put',
       uid
     ),
@@ -38,18 +37,16 @@ export const useDeliverAll = () => {
     }
   })
 
-  const onSuccess = (data: AxiosResponse<OrderLineFormType[]>) => {
+  const onSuccess = (data: AxiosResponse<ServiceLine[]>) => {
     handleSuccessfulDelivery(data.data, { fields, update, refetch })
-    toast.success('Order all delivered successfully')
+    toast.success('Services all delivered successfully')
   }
 
   const handleDelivery = () => {
-    if (
-      orderLines?.some((orderLine: OrderLineFormType) => !orderLine.isDelivered)
-    ) {
-      const uidsToDeliver = (orderLines as OrderLineFormType[])
-        ?.filter(orderLine => !orderLine.isDelivered && orderLine.uid)
-        .map(orderLine => orderLine.uid)
+    if (serviceLines?.some((line: ServiceLine) => !line.isDelivered)) {
+      const uidsToDeliver = (serviceLines as ServiceLine[])
+        ?.filter(line => !line.isDelivered && line.uid)
+        .map(line => line.uid)
         .filter((uid): uid is string => uid !== undefined)
 
       if (uidsToDeliver.length > 0) {
