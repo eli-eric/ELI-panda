@@ -9,7 +9,10 @@ import { message } from '@/i18n/src/messages'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
 import { PATH } from '@/types/constants/paths'
 
-import { ServiceLineActionButtons } from './components/service-lines.actions'
+import {
+  ServiceDeliveryAction,
+  ServiceLineActionButtons
+} from './components/service-lines.actions'
 
 const messages = message.ordersPage.serviceLines.columns
 
@@ -62,6 +65,9 @@ export const useServiceLinesColumns = () => {
         meta: {
           filter: { enableColumnFilter: false, type: 'boolean' }
         },
+        cell: ({ getValue, row: { original } }) => (
+          <ServiceDeliveryAction serviceLine={original} checked={getValue()} />
+        ),
         enableSorting: false,
         enableColumnFilter: false
       },

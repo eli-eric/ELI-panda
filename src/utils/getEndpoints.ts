@@ -50,6 +50,8 @@ export const getEndpoints = ({
     order: `/order${uid ? '/' + uid : ''}`,
     orderLineDelivery: `/order/${uid}/orderline/${itemUid}/delivery`,
     orderLinesDeliverAll: `/order/${uid}/orderlines/delivery`,
+    serviceLineDelivery: `/order/${uid}/serviceline/${itemUid}/delivery`,
+    serviceLinesDeliverAll: `/order/${uid}/servicelines/delivery`,
     eunforPrint: `/orders/eun-for-print/${uid}${query}`,
     codebook: `/codebook/${path}${query}`,
     codebooks: `/codebooks${query}`,
