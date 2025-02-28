@@ -34,7 +34,6 @@ export const OrderItemContainer = () => {
     fm({ id: messages.ordelineMissingModal.message })
   )
 
-  //TODO: type check for resolver
   const formMethods = useForm<OrderDetailFormType>({
     resolver: yupResolver(schema) as any,
     defaultValues: {
