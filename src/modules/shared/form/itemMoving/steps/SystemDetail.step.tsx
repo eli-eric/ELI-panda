@@ -51,19 +51,16 @@ export const SystemDetailStep: FC = () => {
     ]
   }, [system])
 
-  const { physicalItem, systemDetail, catalogueItem } = useSystemDetail()
+  const { physicalItem, catalogueItem } = useSystemDetail()
 
   const defaultValues = isMovingToNewSystem
     ? {
         name: formData?.name || physicalItem?.name || '',
         location: formData?.location || undefined,
-        itemUsage:
-          formData?.itemUsage ||
-          systemDetail?.physicalItem?.itemUsage ||
-          undefined,
+        itemUsage: formData?.itemUsage || physicalItem?.itemUsage || undefined,
         conditionStatus:
           formData?.conditionStatus ||
-          systemDetail?.physicalItem?.conditionStatus ||
+          physicalItem?.conditionStatus ||
           undefined
       }
     : {
@@ -75,13 +72,10 @@ export const SystemDetailStep: FC = () => {
               }
             : undefined,
         name: formData?.name || formData?.system?.name || '',
-        itemUsage:
-          formData?.itemUsage ||
-          systemDetail?.physicalItem?.itemUsage ||
-          undefined,
+        itemUsage: formData?.itemUsage || physicalItem?.itemUsage || undefined,
         conditionStatus:
           formData?.conditionStatus ||
-          systemDetail?.physicalItem?.conditionStatus ||
+          physicalItem?.conditionStatus ||
           undefined
       }
 

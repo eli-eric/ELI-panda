@@ -1,4 +1,7 @@
-import type { SystemDetailFragment } from '@/types/gql/graphql'
+import type {
+  PhysicalItemFragment,
+  SystemDetailFragment
+} from '@/types/gql/graphql'
 import type { SystemDetail } from '@/types/responses/systems'
 import { connectAndDisconnectNode } from '@/utils/graphql/mutations'
 
@@ -6,10 +9,12 @@ import type { SystemDetailFormType } from '../types/form'
 
 export const makeSystemInputBody = ({
   systemForm,
-  systemDetail
+  systemDetail,
+  physicalItem
 }: {
   systemForm: SystemDetailFormType
   systemDetail?: SystemDetailFragment | null
+  physicalItem?: PhysicalItemFragment | null
 }) => ({
   name: systemForm.name,
   description: systemForm.description,
@@ -49,11 +54,11 @@ export const makeSystemInputBody = ({
         serialNumber: systemForm?.physicalItem?.serialNumber,
         itemUsage: connectAndDisconnectNode(
           systemForm?.physicalItem?.itemUsage?.uid,
-          systemDetail?.physicalItem?.itemUsage?.uid
+          physicalItem?.itemUsage?.uid
         ),
         conditionStatus: connectAndDisconnectNode(
           systemForm?.physicalItem?.conditionStatus?.uid,
-          systemDetail?.physicalItem?.conditionStatus?.uid
+          physicalItem?.conditionStatus?.uid
         )
       }
     }

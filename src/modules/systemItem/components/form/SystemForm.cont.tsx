@@ -36,7 +36,7 @@ import { SystemItemCard } from './components/SystemItem.card'
 
 //TODO:  split to update and create form
 export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
-  const { systemDetail, catalogueItem } = useSystemDetail()
+  const { systemDetail, catalogueItem, physicalItem } = useSystemDetail()
   const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
   const { parentPath, parentSystem } = useSystemParent()
 
@@ -56,7 +56,7 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
 
   const { updateSystem, loading } = useSystemUpdate(
     systemImageRef,
-    systemDetail?.physicalItem?.uid
+    physicalItem?.uid
   )
   const { createSystem, loading: createLoading } =
     useSystemCreate(systemImageRef)

@@ -7,6 +7,7 @@ import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql, useFragment } from '@/types/gql'
 import {
   CatalogueItemFragment,
+  PhysicalItemFragment,
   SystemDetailFragment
 } from '@/utils/graphql/fragments'
 
@@ -61,7 +62,10 @@ export const useSystemDetail = (
   }, [error, status, data])
 
   const systemDetail = useFragment(SystemDetailFragment, data?.systems[0])
-  const physicalItem = systemDetail?.physicalItem
+  const physicalItem = useFragment(
+    PhysicalItemFragment,
+    systemDetail?.physicalItem
+  )
   const catalogueItem = useFragment(
     CatalogueItemFragment,
     physicalItem?.catalogueItem
