@@ -113,6 +113,35 @@ export const CatalogueItemFragment = gql(`
   }
 `)
 
+export const ServiceItemFragment = gql(`
+  fragment ServiceItem on ServiceItem {
+    uid
+    name
+    isDelivered
+    order {
+      uid
+      name
+    }
+    detailsConnection {
+      edges {
+        value
+        node {
+          uid
+          name
+          type {
+            name
+            uid
+          }
+          unit {
+            name
+            uid
+          }
+        }
+      }
+    }
+  }
+`)
+
 export const PhysicalItemFragment = gql(`
   fragment PhysicalItem on Item {
     uid
@@ -133,30 +162,7 @@ export const PhysicalItemFragment = gql(`
       name
     }
     serviceItems {
-      uid
-      name
-      isDelivered
-      order {
-        uid
-        name
-      }
-      detailsConnection {
-        edges {
-          value
-          node {
-            uid
-            name
-            type {
-              name
-              uid
-            }
-            unit {
-              name
-              uid
-            }
-          }
-        }
-      }
+      ...ServiceItem
     }
     catalogueItem {
       ...CatalogueItem
