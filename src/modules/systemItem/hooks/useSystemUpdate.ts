@@ -74,7 +74,7 @@ export const useSystemUpdate = (
   const router = useRouter()
   const { mutate: mutateProperties } = usePropertiesUpdate(physicalItemUid)
   const uid = router.query.uid as string
-  const { systemDetail, refetch } = useSystemDetail()
+  const { systemDetail, refetch, physicalItem } = useSystemDetail()
 
   const [saveAndExit, setSaveAndExit] = useState(false)
 
@@ -127,7 +127,7 @@ export const useSystemUpdate = (
       {
         where: { uid },
         update: {
-          ...makeSystemInputBody({ systemForm, systemDetail }),
+          ...makeSystemInputBody({ systemForm, systemDetail, physicalItem }),
           operators: [
             {
               connect: newOperators.map(operator => whereN(operator.uid)),
@@ -161,11 +161,11 @@ export const useSystemUpdate = (
           serialNumber: systemForm?.physicalItem?.serialNumber,
           itemUsage: connectAndDisconnectNode(
             systemForm?.physicalItem?.itemUsage?.uid,
-            systemDetail?.physicalItem?.itemUsage?.uid
+            physicalItem?.itemUsage?.uid
           ),
           conditionStatus: connectAndDisconnectNode(
             systemForm?.physicalItem?.conditionStatus?.uid,
-            systemDetail?.physicalItem?.conditionStatus?.uid
+            physicalItem?.conditionStatus?.uid
           )
         },
         node: 'System',
