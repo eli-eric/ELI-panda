@@ -58,7 +58,7 @@ export const TableRowDNDComponent: FC<Props> = ({
         virtualRow.index % 2 === 0
           ? 'dark:bg-gray-800'
           : 'bg-gray-100 dark:bg-gray-700',
-        'group hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 z-0',
+        'group hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 dark:text-gray-300 z-0',
         className,
         isHoveringDrop ? 'bg-primary-200 dark:bg-primary-600' : ''
       )}

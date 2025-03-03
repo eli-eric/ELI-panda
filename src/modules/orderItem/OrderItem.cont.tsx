@@ -66,11 +66,18 @@ export const OrderItemContainer = () => {
       const { uuid, ...rest } = orderLine
       return rest
     })
+    const serviceLines = data.serviceLines.map(serviceLine => {
+      // extract uuid from serviceLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { uuid, ...rest } = serviceLine
+      return rest
+    })
     if (data.orderLines.length === 0 || !data.orderLines) {
       withWarningModal(submit)(
         {
           ...data,
           orderLines: orderLines,
+          serviceLines: serviceLines,
           orderDate: convertDate(data.orderDate)
         },
         false
@@ -80,6 +87,7 @@ export const OrderItemContainer = () => {
         {
           ...data,
           orderLines: orderLines,
+          serviceLines: serviceLines,
           orderDate: convertDate(data.orderDate)
         },
         false
@@ -94,12 +102,19 @@ export const OrderItemContainer = () => {
       const { uuid, ...rest } = orderLine
       return rest
     })
+    const serviceLines = data.serviceLines.map(serviceLine => {
+      // extract uuid from serviceLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { uuid, ...rest } = serviceLine
+      return rest
+    })
     if (data.orderLines.length === 0 || !data.orderLines) {
       withWarningModal(submit)(
         {
           ...data,
           orderLines: orderLines,
-          orderDate: convertDate(data.orderDate)
+          orderDate: convertDate(data.orderDate),
+          serviceLines: serviceLines
         },
         true
       )
@@ -108,7 +123,8 @@ export const OrderItemContainer = () => {
         {
           ...data,
           orderLines: orderLines,
-          orderDate: convertDate(data.orderDate)
+          orderDate: convertDate(data.orderDate),
+          serviceLines: serviceLines
         },
         true
       )

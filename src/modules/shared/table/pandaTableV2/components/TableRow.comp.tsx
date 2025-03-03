@@ -34,7 +34,7 @@ export const TableRowComponent: FC<Props> = ({
         virtualRow.index % 2 === 0
           ? 'dark:bg-gray-800'
           : 'bg-gray-100 dark:bg-gray-700',
-        'group hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 z-0',
+        'group hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 dark:text-gray-300 z-0',
         className
       )}
       data-index={virtualRow.index} //needed for dynamic row height measurement

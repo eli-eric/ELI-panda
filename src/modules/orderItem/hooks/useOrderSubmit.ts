@@ -46,6 +46,12 @@ export const useOrderSubmit = (formReset: (t: any) => void) => {
             ...orderLine,
             uuid: orderLine.uid
           })),
+        serviceLines:
+          orderDetail?.serviceLines &&
+          orderDetail?.serviceLines.map(serviceLine => ({
+            ...serviceLine,
+            uuid: serviceLine.uid
+          })),
         orderDate: orderDetail?.orderDate,
         orderStatus: orderDetail?.orderStatus || {
           uid: 'c5ef9d00-ac38-44c1-b48a-fde0d7095c54',
