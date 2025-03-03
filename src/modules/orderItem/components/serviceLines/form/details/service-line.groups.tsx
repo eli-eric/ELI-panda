@@ -1,6 +1,5 @@
 import { sortBy } from 'lodash'
-import { useEffect, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useMemo } from 'react'
 
 import useGroupDetails from '@/modules/catalogueItem/hooks/useGroupDetails'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
@@ -17,33 +16,35 @@ export const ServiceLineGroups = ({
   category,
   allowedDetails
 }: GroupPropertyProps) => {
-  const { unregister, watch } = useFormContext()
-  const [details, setDetails] = useState<{
-    groups?: string[]
-    details?: CatalogueItemDetail[]
-  }>()
-
   const { groupDetails } = useGroupDetails(category?.uid)
 
-  const formDetails = watch('details')
-
-  useEffect(() => {
+  const details = useMemo(() => {
     const filteredDetails = groupDetails?.filter(detail =>
       allowedDetails?.includes(detail.property.uid)
     )
-    const itemDetails = sortBy(formDetails || filteredDetails, [
-      'propertyGroup',
-      'property.name'
-    ])
-    const groupsDetail = itemDetails
-      ?.map(item => item.propertyGroup)
-      .filter((value, index, self) => self.indexOf(value) === index)
+    return sortBy(filteredDetails, ['property.name'])
+  }, [groupDetails, allowedDetails])
 
-    setDetails({
-      groups: groupsDetail,
-      details: itemDetails
+  const groups = useMemo(() => {
+    const groups = details?.map(item => item.propertyGroup)
+    return [...new Set(groups)]
+  }, [details])
+
+  const groupMap = useMemo(() => {
+    const map = new Map<string, CatalogueItemDetail[]>()
+    groups?.forEach(group => {
+      const groupDetails = details
+        ?.filter(detail => detail.propertyGroup === group)
+        .map(detail => ({
+          property: detail.property,
+          value: detail.value,
+          propertyGroup: detail.propertyGroup
+        }))
+
+      map.set(group, sortBy(groupDetails, ['property.name']))
     })
-  }, [groupDetails, category, unregister, allowedDetails, formDetails])
+    return map
+  }, [details, groups])
 
-  return <DetailPropertiesList details={details} />
+  return <DetailPropertiesList groupMap={groupMap} />
 }

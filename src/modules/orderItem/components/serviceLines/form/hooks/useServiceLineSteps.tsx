@@ -23,6 +23,9 @@ export const useServiceLineSteps = () => {
   const tableId = 'items-select-table'
 
   const [serviceTypeUid, setUid] = useState<string | undefined>()
+  const [previousServiceType, setPreviousServiceType] = useState<
+    string | undefined
+  >()
 
   const { data } = useServiceType(serviceTypeUid)
 
@@ -53,8 +56,8 @@ export const useServiceLineSteps = () => {
     // eslint-disable-next-line
   }, [data])
 
-  const onChangeService = (v: CodebookType) => {
-    setUid(v.uid)
+  const onChangeService = (v?: CodebookType) => {
+    setUid(v?.uid)
   }
 
   const shouldShowDetails = () =>
@@ -64,6 +67,17 @@ export const useServiceLineSteps = () => {
     {
       id: 'basicInfo',
       title: fm({ id: messages.steps.step1.title }),
+      onStepComplete: async (
+        data: Partial<ServiceLineFormType>,
+        unregister
+      ) => {
+        const currentServiceType = data.serviceType?.uid
+        // If service type has changed, clear details
+        if (previousServiceType !== currentServiceType) {
+          unregister('details')
+          setPreviousServiceType(currentServiceType)
+        }
+      },
       fields: [
         {
           componentType: 'input',

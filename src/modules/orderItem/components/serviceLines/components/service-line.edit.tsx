@@ -1,3 +1,5 @@
+import { DevTool } from '@hookform/devtools'
+import { sortBy } from 'lodash'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -12,12 +14,16 @@ import {
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { message } from '@/i18n/src/messages'
+import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { useServiceLine } from '@/modules/orderItem/hooks/useServiceLine'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
 import type { ModalButtons } from '@/types/form'
 
 import { DetailPropertiesList } from '../form/details/detail-properties.list'
 import { useServiceLineFields } from '../form/hooks/useServiceLineFields'
+
+const messages = message.common.buttons
 
 type Props = {
   serviceLine: ServiceLine
@@ -39,14 +45,15 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
       notes: serviceLine.notes,
       item: serviceLine.item,
       isDelivered: serviceLine.isDelivered,
-      details: serviceLine.details
+      details: Array.isArray(serviceLine.details) ? serviceLine.details : []
     }
   })
 
-  const details = formMethods.watch('details')
-
   const submit = (data: ServiceLine) => {
-    setServiceLine(data)
+    setServiceLine({
+      ...data,
+      details: Array.isArray(data.details) ? data.details : []
+    })
     setOpenEditForm(false)
   }
 
@@ -55,15 +62,35 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
       onClick: () => {
         formMethods.handleSubmit(submit)()
       },
-      text: 'Save'
+      text: messages.save
     },
     goBack: {
       onClick: () => {
         setOpenEditForm(false)
       },
-      text: 'Cancel'
+      text: messages.cancel
     }
   }
+
+  const details = formMethods.watch('details') ?? []
+
+  // Transform details array into a Map grouped by propertyGroup with sorted properties
+  const detailsMap = Array.isArray(details)
+    ? details.reduce((map, detail) => {
+        if (!detail?.propertyGroup) return map
+        const group = detail.propertyGroup
+        if (!map.has(group)) {
+          map.set(group, [])
+        }
+        map.get(group)?.push(detail)
+        return map
+      }, new Map<string, CatalogueItemDetail[]>())
+    : new Map<string, CatalogueItemDetail[]>()
+
+  // Sort properties within each group
+  detailsMap.forEach((properties, group) => {
+    detailsMap.set(group, sortBy(properties, ['property.name']))
+  })
 
   return (
     <>
@@ -95,20 +122,9 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
                 <TextArea {...fields.notes} />
               </Col>
             </Grid>
-            {details && details?.length > 0 && (
-              <DetailPropertiesList
-                details={{
-                  details,
-                  groups: details
-                    ?.map(detail => detail.propertyGroup)
-                    .filter(
-                      (value, index, self) => self.indexOf(value) === index
-                    )
-                }}
-                disabled={true}
-              />
-            )}
+            <DetailPropertiesList groupMap={detailsMap} disabled={true} />
           </>
+          <DevTool control={formMethods.control} />
         </Form>
       </ModalComponent>
     </>

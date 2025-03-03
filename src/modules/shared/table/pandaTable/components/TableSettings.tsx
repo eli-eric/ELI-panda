@@ -15,7 +15,7 @@ export const TableSettings: FC<Props> = ({
   getToggleAllColumnsVisibilityHandler
 }) => (
   <div id="column-hiding">
-    <Disclosure title="Show table options">
+    <Disclosure title="Show table options" defaultOpen={false}>
       <ul className="divide-y divide-gray-200">
         <li>
           <div className="py-1 px-4">

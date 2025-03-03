@@ -29,7 +29,7 @@ export const FormWizard = <T extends Record<string, any>>({
   const methods = useForm<T>({
     defaultValues: initialData as DefaultValues<T>
   })
-  const { handleSubmit, getValues, watch, reset } = methods
+  const { handleSubmit, getValues, watch, reset, unregister } = methods
 
   const currentStep = steps[currentStepIndex]
   const isLastStep = currentStepIndex === steps.length - 1
@@ -67,7 +67,7 @@ export const FormWizard = <T extends Record<string, any>>({
     try {
       // Wait for onStepComplete if it's defined
       if (currentStep.onStepComplete) {
-        await currentStep.onStepComplete(currentData)
+        await currentStep.onStepComplete(currentData, unregister)
       }
 
       if (isLastStep) {

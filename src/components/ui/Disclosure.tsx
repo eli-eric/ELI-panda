@@ -54,7 +54,7 @@ export const Disclosure = ({
   panelClassName = '',
   transparentButton = false
 }: DisclosureProps) => {
-  const [isOpen, setIsOpen] = useState(defaultOpen)
+  const [, setIsOpen] = useState(defaultOpen)
 
   const handleToggle = (newState: boolean) => {
     setIsOpen(newState)

@@ -1,11 +1,7 @@
 import { Col, Grid } from '@/components/grid/Grid'
 import { Disclosure } from '@/components/ui'
-import { message } from '@/i18n/src/messages'
 
 import { ItemProperty } from './ItemProperty'
-
-const propertyMessage =
-  message.systemsPage.systemDetail.form.physicalItem.general.properties
 
 interface ItemPropertiesProps {
   properties: any[] | null | undefined

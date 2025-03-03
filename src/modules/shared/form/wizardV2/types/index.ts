@@ -1,3 +1,6 @@
+import type { UseFormUnregister } from 'react-hook-form'
+import type { FieldValues } from 'react-hook-form'
+
 import type { ColSizeProp } from '@/components/grid/ColSizes'
 import type { FieldProps } from '@/types/form'
 
@@ -14,13 +17,16 @@ export type WizardFieldType =
   | 'combo-system'
 
 // Make the step configuration more specific
-export interface WizardStepConfig<T> {
+export interface WizardStepConfig<T extends FieldValues> {
   id: string
   title: string
   fields?: WizardField[]
   component?: React.ReactElement
   validation?: (data: Partial<T>) => boolean
-  onStepComplete?: (data: Partial<T>) => void | Promise<void>
+  onStepComplete?: (
+    data: Partial<T>,
+    unregister: UseFormUnregister<T>
+  ) => void | Promise<void>
   shouldShow?: (data: Partial<T>) => boolean
 }
 
