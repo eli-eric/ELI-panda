@@ -9,6 +9,7 @@ import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import { Paragraph } from '@/components/layout/Paragraph'
 import ProgressBarComponent from '@/components/progress-bar.comp'
+import { TableExample } from '@/components/ui/TableExample'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import FileManager from '@/modules/shared/fileManager/FileManager'
@@ -21,7 +22,6 @@ import { createMessageValues } from '../../../../../utils/formatters'
 import useSystemFormFields from '../SystemForm.fields'
 import { CatalogueProperties } from './CatalogueProperties'
 import { ItemProperties } from './ItemProperties'
-import { OrderInformation } from './OrderInformation'
 import { ServiceItemProperties } from './ServiceItemProperties'
 
 const propertyMessage =
@@ -94,9 +94,7 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
       </Col>
 
       <Col sm="full" className="w-full">
-        {systemDetail && (
-          <OrderInformation physicalItem={systemDetail.physicalItem} />
-        )}
+        {systemDetail && <TableExample />}
       </Col>
 
       <Col sm="full" className="flex-col">
