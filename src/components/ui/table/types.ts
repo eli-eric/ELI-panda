@@ -1,3 +1,4 @@
+import type { ColumnDef } from '@tanstack/react-table'
 import type { ReactNode } from 'react'
 
 // Define a type for row event handlers
@@ -17,7 +18,7 @@ export interface TableProps<T extends object> {
   /**
    * The columns configuration for the table.
    */
-  columns: any[]
+  columns: ColumnDef<T, any>[]
 
   /**
    * The data to be displayed in the table.

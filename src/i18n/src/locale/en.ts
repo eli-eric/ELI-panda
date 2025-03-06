@@ -436,6 +436,7 @@ export const messages = {
       },
       orderLinesTable: {
         header: {
+          actions: 'Actions',
           name: 'Name',
           catalogueNumber: 'Part Number',
           system: 'Parent System',

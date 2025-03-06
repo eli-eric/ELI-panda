@@ -11,6 +11,7 @@ interface User {
   email: string
   role: string
   status: 'active' | 'inactive'
+  longDescription?: string
 }
 
 // Example static data
@@ -20,28 +21,36 @@ const users: User[] = [
     name: 'John Doe',
     email: 'john@example.com',
     role: 'Admin',
-    status: 'active'
+    status: 'active',
+    longDescription:
+      'This is a very long description that should cause the table to require horizontal scrolling when displayed in a fixed width container.'
   },
   {
     id: '2',
     name: 'Jane Smith',
     email: 'jane@example.com',
     role: 'User',
-    status: 'active'
+    status: 'active',
+    longDescription:
+      'Another long description text that demonstrates horizontal scrolling behavior in the table component.'
   },
   {
     id: '3',
     name: 'Bob Johnson',
     email: 'bob@example.com',
     role: 'User',
-    status: 'inactive'
+    status: 'inactive',
+    longDescription:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
   },
   {
     id: '4',
     name: 'Alice Brown',
     email: 'alice@example.com',
     role: 'Editor',
-    status: 'active'
+    status: 'active',
+    longDescription:
+      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
   }
 ]
 
@@ -58,7 +67,8 @@ const generateRandomUsers = (count: number): User[] => {
       name: faker.person.fullName(),
       email: faker.internet.email(),
       role: randomRole,
-      status: Math.random() > 0.3 ? 'active' : 'inactive' // 70% active, 30% inactive
+      status: Math.random() > 0.3 ? 'active' : 'inactive', // 70% active, 30% inactive
+      longDescription: faker.lorem.paragraph(3) // Add a long description
     }
   })
 }
@@ -68,15 +78,17 @@ export const TableExample: React.FC = () => {
   const [loading, setLoading] = useState(true)
   const [tableData, setTableData] = useState<User[]>([])
   const [useFixedHeight, setUseFixedHeight] = useState(false)
+  const [useFixedWidth, setUseFixedWidth] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   // Use TanStack's columnHelper to create typed columns
   const columnHelper = createColumnHelper<User>()
 
-  // Define columns - let TypeScript infer the correct type
+  // Define columns with specific sizes
   const columns = [
     columnHelper.accessor('name', {
       header: 'Name',
+      size: 150, // Fixed width in pixels
       cell: info => (
         <div className="font-medium text-gray-900 dark:text-white">
           {info.getValue()}
@@ -85,6 +97,7 @@ export const TableExample: React.FC = () => {
     }),
     columnHelper.accessor('email', {
       header: 'Email',
+      size: 200, // Fixed width in pixels
       cell: info => (
         <div className="text-gray-700 dark:text-gray-300">
           {info.getValue()}
@@ -93,6 +106,7 @@ export const TableExample: React.FC = () => {
     }),
     columnHelper.accessor('role', {
       header: 'Role',
+      size: 100, // Fixed width in pixels
       cell: info => (
         <div className="text-gray-700 dark:text-gray-300">
           {info.getValue()}
@@ -101,6 +115,7 @@ export const TableExample: React.FC = () => {
     }),
     columnHelper.accessor('status', {
       header: 'Status',
+      size: 100, // Fixed width in pixels
       cell: info => {
         const status = info.getValue()
         return (
@@ -117,6 +132,15 @@ export const TableExample: React.FC = () => {
           </div>
         )
       }
+    }),
+    columnHelper.accessor('longDescription', {
+      header: 'Description',
+      size: 400, // Fixed width for long text
+      cell: info => (
+        <div className="text-gray-700 dark:text-gray-300 truncate">
+          {info.getValue()}
+        </div>
+      )
     })
   ]
 
@@ -180,8 +204,8 @@ export const TableExample: React.FC = () => {
         </button>
       </div>
 
-      {/* Toggle fixed height */}
-      <div className="flex items-center mb-4">
+      {/* Toggle options */}
+      <div className="flex flex-wrap gap-5 mb-4">
         <label className="inline-flex items-center cursor-pointer">
           <input
             type="checkbox"
@@ -192,6 +216,19 @@ export const TableExample: React.FC = () => {
           <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
           <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
             Use Fixed Height ({useFixedHeight ? 'ON' : 'OFF'})
+          </span>
+        </label>
+
+        <label className="inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            checked={useFixedWidth}
+            onChange={() => setUseFixedWidth(!useFixedWidth)}
+            className="sr-only peer"
+          />
+          <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+          <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+            Use Fixed Width ({useFixedWidth ? 'ON' : 'OFF'})
           </span>
         </label>
       </div>
@@ -219,17 +256,20 @@ export const TableExample: React.FC = () => {
         </div>
       )}
 
-      <Table
-        columns={columns}
-        className="w-full"
-        data={tableData}
-        loading={loading}
-        enableSorting={true}
-        enablePagination={true}
-        defaultPageSize={10}
-        fixedHeight={useFixedHeight ? '400px' : undefined}
-        getRowProps={getRowProps}
-      />
+      {/* Container with fixed width if enabled */}
+      <div style={{ maxWidth: useFixedWidth ? '600px' : '100%' }}>
+        <Table
+          columns={columns}
+          className="w-full"
+          data={tableData}
+          loading={loading}
+          enableSorting={true}
+          enablePagination={true}
+          defaultPageSize={10}
+          fixedHeight={useFixedHeight ? '400px' : undefined}
+          getRowProps={getRowProps}
+        />
+      </div>
     </div>
   )
 }

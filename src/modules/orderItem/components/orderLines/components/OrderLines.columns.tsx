@@ -32,13 +32,19 @@ const useOrderLinesColumns = () => {
         header: formatMessage({ id: messages.name }),
         accessorKey: 'name',
         cell: ({ getValue, row: { original } }) => (
-          <div className="flex items-center">
-            <span>{getValue()}</span>
-            {!disabledEdit && <OrderLineActionButtons orderLine={original} />}
+          <div className="flex items-center ">
+            <span title={getValue()} className="truncate">
+              {getValue()}
+            </span>
+            {!disabledEdit && (
+              <div className="absolute right-0">
+                <OrderLineActionButtons orderLine={original} />
+              </div>
+            )}
           </div>
         ),
-        meta: { sticky: true, className: 'sm:pr-12' },
-        size: 240,
+        meta: { sticky: true, className: 'sm:pr-16 relative' },
+        size: 340,
         footer: ({ table: { getRowCount } }) => (
           <span>Total: {getRowCount()} line(s)</span>
         )
@@ -46,6 +52,7 @@ const useOrderLinesColumns = () => {
       {
         header: formatMessage({ id: messages.catalogueNumber }),
         accessorKey: 'catalogueNumber',
+        size: 240,
         cell: ({ getValue, row: { original } }) => (
           <NewTabLink
             href={PATH.CATALOGUE_ITEM + '/' + original.catalogueUid}
@@ -63,23 +70,27 @@ const useOrderLinesColumns = () => {
         cell: ({ row: { original } }) => (
           <PrintEunButton orderLine={original} />
         ),
-        size: 60
+        size: 120
       },
       {
         header: () => {
           return (
-            <span className="bg-inherit flex flex-col">
-              {formatMessage({ id: messages.isDelivered })}
+            <div className="flex items-center justify-between px-2 w-full">
               <DeliveredAllButton />
-            </span>
+            </div>
           )
         },
         accessorKey: 'isDelivered',
         cell: ({ getValue, row: { original } }) =>
           uid ? (
-            <OrderisDeliveredAction orderLine={original} checked={getValue()} />
+            <div className="flex justify-center w-full">
+              <OrderisDeliveredAction
+                orderLine={original}
+                checked={getValue()}
+              />
+            </div>
           ) : null,
-        size: 90,
+        size: 80,
         meta: {
           filter: { enableColumnFilter: false, type: 'boolean' }
         },
@@ -99,7 +110,7 @@ const useOrderLinesColumns = () => {
           </Fragment>
         ),
         id: 'notes',
-        size: 90
+        size: 110
       },
       {
         header: formatMessage({ id: messages.price }),

@@ -1,15 +1,12 @@
 import type { Row } from '@tanstack/react-table'
 import { useRouter } from 'next/router'
+import type { FC, PropsWithChildren } from 'react'
 import { Fragment, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
-import {
-  TableButtonsWrapper,
-  TableDeleteButton,
-  TableEditButton
-} from '@/components/Buttons'
+import { TableDeleteButton, TableEditButton } from '@/components/Buttons'
 import { Heading } from '@/components/card/card.comp'
 import { Toggle } from '@/components/form/Switch'
 import WarningModal from '@/components/overlays/modal/warning/modal-warning.comp'
@@ -23,10 +20,34 @@ import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
+import { cx } from '@/utils'
 import { createMessageValues } from '@/utils/formatters'
 
 import { OrderLineForm } from '../form/OrderLineForm.cont'
 import { OrderIsDeliveryForm } from './OrderIsDeliveryForm'
+
+// Custom buttons wrapper designed to better fit the table design
+type OrderLineButtonsWrapperProps = {
+  position?: 'left-0' | 'right-0' | 'left-1' | 'right-1'
+  className?: string
+}
+
+export const OrderLineButtonsWrapper: FC<
+  PropsWithChildren<OrderLineButtonsWrapperProps>
+> = ({ children, position = 'right-0', className }) => (
+  <div
+    className={cx(
+      'absolute flex items-center gap-1',
+      'opacity-0 group-hover:opacity-100 transition-opacity duration-150',
+      'z-20',
+      'top-1/2 -translate-y-1/2 -right-1',
+      position !== 'right-0' && position,
+      className
+    )}
+  >
+    {children}
+  </div>
+)
 
 const messages = message.common.buttons
 
@@ -60,7 +81,7 @@ export const OrderLineActionButtons = ({
 
   return (
     <Fragment>
-      <TableButtonsWrapper>
+      <OrderLineButtonsWrapper position="right-1">
         <TableEditButton
           onClick={() => {
             setOpenOrderLineForm(true)
@@ -71,7 +92,7 @@ export const OrderLineActionButtons = ({
             setOpenDeleteWarn(true)
           }}
         />
-      </TableButtonsWrapper>
+      </OrderLineButtonsWrapper>
       <OrderLineForm
         orderLine={orderLine}
         open={openOrderLineForm}
@@ -135,7 +156,7 @@ export const OrderisDeliveredAction = ({
   }
 
   return (
-    <Fragment>
+    <div className="flex items-center justify-center gap-1 w-full">
       {orderLine.uid && (
         <Fragment>
           {hasRole ? (
@@ -160,7 +181,7 @@ export const OrderisDeliveredAction = ({
       >
         <OrderIsDeliveryForm />
       </FormModal>
-    </Fragment>
+    </div>
   )
 }
 

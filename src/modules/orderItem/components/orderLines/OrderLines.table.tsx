@@ -1,12 +1,10 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
+import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
-import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
-import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
-import { cx } from '@/utils'
 
 import useOrderLinesColumns from './components/OrderLines.columns'
 import { OrderLineForm } from './form/OrderLineForm.cont'
@@ -21,28 +19,17 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
   const columns = useOrderLinesColumns()
   const [openOrderLineForm, setOpenOrderLineForm] = useState(false)
   const { control } = useFormContext()
-  const orderLines = useWatch({ control, name: 'orderLines' })
+  const orderLinesData = useWatch({ control, name: 'orderLines' })
 
-  const table = usePandaTable({
-    columns,
-    data: orderLines,
-    tableId: 'orderLines',
-    settings: {
-      enableFooter: true,
-      enableFiltering: true,
-      manualFiltering: false,
-      enableQueryURL: false,
-      enableSorting: true,
-      manualSorting: false,
-      defaultColumnOrder: [
-        'name',
-        'partNumber',
-        'serialNumber',
-        'eun',
-        'isDelivered'
-      ]
-    }
-  })
+  // Memoize the orderLines data to prevent unnecessary re-renders
+  // This will only create a new reference when the data actually changes
+  const orderLines = useMemo(
+    () => orderLinesData,
+    [
+      // Convert to JSON and back to compare actual values, not references
+      JSON.stringify(orderLinesData)
+    ]
+  )
 
   const handleOpenOrderLineForm = () => {
     setOpenOrderLineForm(true)
@@ -63,28 +50,22 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
           </div>
         )}
       </Heading>
-      {orderLines?.length && (
-        <div className="flex flex-col max-h-[500px] mb-5">
-          <PandaTableControlled
+      {orderLines?.length > 0 && (
+        <div className="w-full overflow-hidden">
+          <Table
+            columns={columns}
             data={orderLines}
-            table={table}
-            tableId={'orderLines'}
-            className={'relative overflow-x-auto'}
-            getRowProps={({ original: { isDelivered } }) => ({
-              className: cx(
-                isDelivered
-                  ? 'bg-green-100 dark:bg-green-700'
-                  : 'bg-white dark:bg-gray-800'
-              )
+            enablePagination
+            className="overflow-x-auto overflow-y-auto"
+            headerClassName="whitespace-nowrap sticky"
+            rowClassName="whitespace-nowrap"
+            getRowProps={(orderLine, index) => ({
+              className: orderLine?.isDelivered
+                ? index % 2 === 0
+                  ? 'bg-green-200 dark:bg-green-800'
+                  : 'bg-green-100 dark:bg-green-700'
+                : undefined
             })}
-            settings={{
-              enableFooter: true,
-              enableFiltering: true,
-              manualFiltering: false,
-              enableQueryURL: false,
-              enableSorting: true,
-              manualSorting: false
-            }}
           />
         </div>
       )}

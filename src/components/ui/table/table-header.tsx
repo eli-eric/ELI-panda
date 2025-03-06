@@ -25,40 +25,54 @@ export function TableHeader<T extends object>({
           key={headerGroup.id}
           className="border-b border-gray-200 dark:border-gray-700"
         >
-          {headerGroup.headers.map(header => (
-            <th
-              key={header.id}
-              className={cx(
-                'h-10 px-4 text-left align-middle font-medium text-gray-500 dark:text-gray-400',
-                'hover:bg-gray-200 dark:hover:bg-gray-700',
-                // Apply sticky styles directly to th elements when sticky header is enabled
-                isSticky
-                  ? 'sticky top-0 bg-gray-100 dark:bg-gray-800 z-10'
-                  : '',
-                // Add shadow when sticky to visually separate from content
-                isSticky ? 'shadow-sm' : '',
-                enableSorting && header.column.getCanSort()
-                  ? 'cursor-pointer select-none'
-                  : ''
-              )}
-              onClick={header.column.getToggleSortingHandler()}
-              style={{
-                // Ensure each cell maintains position during scroll
-                position: isSticky ? 'sticky' : undefined,
-                top: isSticky ? 0 : undefined
-              }}
-            >
-              <div className="flex items-center gap-2">
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                {enableSorting && <SortIndicator column={header.column} />}
-              </div>
-            </th>
-          ))}
+          {headerGroup.headers.map(header => {
+            // Get width from column definition if available
+            const width = header.column.getSize()
+              ? header.column.getSize()
+              : undefined
+
+            // Generate column style with width if provided
+            const style: React.CSSProperties = {
+              width: width ? `${width}px` : undefined,
+              minWidth: width ? `${width}px` : '50px',
+              maxWidth: width ? undefined : '1000px',
+              // Ensure each cell maintains position during scroll
+              position: isSticky ? 'sticky' : undefined,
+              top: isSticky ? 0 : undefined
+            }
+
+            return (
+              <th
+                key={header.id}
+                className={cx(
+                  'h-10 px-4 text-left align-middle font-medium text-gray-500 dark:text-gray-400',
+                  'hover:bg-gray-200 dark:hover:bg-gray-700',
+                  'whitespace-nowrap overflow-hidden',
+                  // Apply sticky styles directly to th elements when sticky header is enabled
+                  isSticky
+                    ? 'sticky top-0 bg-gray-100 dark:bg-gray-800 z-10'
+                    : '',
+                  // Add shadow when sticky to visually separate from content
+                  isSticky ? 'shadow-sm' : '',
+                  enableSorting && header.column.getCanSort()
+                    ? 'cursor-pointer select-none'
+                    : ''
+                )}
+                onClick={header.column.getToggleSortingHandler()}
+                style={style}
+              >
+                <div className="flex items-center gap-2 overflow-hidden">
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                  {enableSorting && <SortIndicator column={header.column} />}
+                </div>
+              </th>
+            )
+          })}
         </tr>
       ))}
     </thead>
