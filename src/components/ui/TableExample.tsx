@@ -92,7 +92,7 @@ const PriceFooter = ({ table }: { table: any }) => {
   return (
     <div className="font-medium">
       <div className="text-primary-600 dark:text-primary-400">
-        Total across all pages: {totalUsers} users
+        Total: {totalUsers} users
       </div>
       <div className="text-xs text-gray-500 dark:text-gray-400">
         {activePercentage}% active
