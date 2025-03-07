@@ -111,7 +111,8 @@ export function TableBody<T extends object>({
             {...customRowProps}
             className={cx(
               'border-b border-gray-200 dark:border-gray-700',
-              'transition-colors duration-150 hover:bg-gray-100 hover:dark:bg-gray-700/50',
+              'transition-colors duration-150 hover:bg-gray-100 hover:dark:bg-gray-600',
+              'text-gray-900 dark:text-gray-300',
               defaultBgClass,
               rowClassName,
               customRowProps.className
@@ -163,8 +164,7 @@ export function TableBody<T extends object>({
                 position: isPinned ? 'sticky' : undefined,
                 left: isPinned === 'left' ? `${leftOffset}px` : undefined,
                 right: isPinned === 'right' ? `${rightOffset}px` : undefined,
-                zIndex: isPinned ? 20 : undefined,
-                backgroundColor: 'inherit' // This will inherit from the tr background
+                zIndex: isPinned ? 20 : undefined
               }
 
               return (
@@ -172,12 +172,14 @@ export function TableBody<T extends object>({
                   key={cell.id}
                   className={cx(
                     'px-4 py-2 z-10',
+                    // Add fancy styles for pinned columns
+                    isPinned && ['backdrop-blur-lg '],
                     // Add border styles for pinned columns
-                    isPinned === 'left' && !isFirstColumn
-                      ? 'border-l border-gray-200 dark:border-gray-700'
+                    isPinned === 'left'
+                      ? 'border-r border-gray-200/50 dark:border-gray-700/50'
                       : '',
-                    isPinned === 'right' && !isLastColumn
-                      ? 'border-r border-gray-200 dark:border-gray-700'
+                    isPinned === 'right'
+                      ? 'border-l border-gray-200/50 dark:border-gray-700/50'
                       : ''
                   )}
                   style={style}

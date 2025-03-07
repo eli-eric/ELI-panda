@@ -89,10 +89,7 @@ export function TableFooter<T extends object>({
               position: isPinned ? 'sticky' : undefined,
               left: isPinned === 'left' ? `${leftOffset}px` : undefined,
               right: isPinned === 'right' ? `${rightOffset}px` : undefined,
-              zIndex: isPinned ? 21 : undefined,
-              backgroundColor: isPinned
-                ? 'var(--footer-bg-color, rgb(249 250 251))'
-                : undefined
+              zIndex: isPinned ? 21 : undefined
             }
 
             return (
@@ -102,12 +99,12 @@ export function TableFooter<T extends object>({
                 className={cx(
                   'px-4 py-2 text-left font-medium text-gray-500 dark:text-gray-400',
                   'whitespace-nowrap',
-                  // Add border styles for pinned columns
+                  // Add border and background styles for pinned columns
                   isPinned === 'left' && !isFirstColumn
-                    ? 'border-l border-gray-200 dark:border-gray-700'
+                    ? 'border-l border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
                     : '',
                   isPinned === 'right' && !isLastColumn
-                    ? 'border-r border-gray-200 dark:border-gray-700'
+                    ? 'border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
                     : ''
                 )}
                 style={style}

@@ -63,7 +63,7 @@ const useOrderLinesColumns = () => {
       {
         header: formatMessage({ id: messages.serialNumber }),
         accessorKey: 'serialNumber',
-        size: 200
+        size: 220
       },
       {
         header: formatMessage({ id: messages.eun }),
@@ -71,7 +71,7 @@ const useOrderLinesColumns = () => {
         cell: ({ row: { original } }) => (
           <PrintEunButton orderLine={original} />
         ),
-        size: 120
+        size: 150
       },
       {
         header: () => {
@@ -93,6 +93,7 @@ const useOrderLinesColumns = () => {
           ) : null,
         size: 80,
         enableSorting: false,
+        enablePinning: false,
         enableColumnFilter: false
       },
       {

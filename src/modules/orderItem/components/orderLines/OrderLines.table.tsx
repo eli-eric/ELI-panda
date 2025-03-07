@@ -51,33 +51,28 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
           </div>
         )}
       </Heading>
-      {orderLines?.length > 0 && (
-        <div className="w-full overflow-hidden">
-          <Table
-            columns={columns}
-            data={orderLines}
-            enablePagination
-            enableFiltering
-            enableFooter
-            enablePinning
-            className="overflow-x-auto overflow-y-auto"
-            headerClassName="whitespace-nowrap sticky"
-            rowClassName="whitespace-nowrap group/row"
-            getRowProps={(orderLine, index) => ({
-              className: cx(
-                orderLine?.isDelivered
-                  ? index % 2 === 0
-                    ? 'bg-green-200 dark:bg-green-800 '
-                    : 'bg-green-100 dark:bg-green-700 '
-                  : index % 2 === 0
-                    ? 'bg-white dark:bg-gray-900'
-                    : 'bg-gray-50 dark:bg-gray-800',
-                'transition-colors duration-150 hover:bg-gray-100 hover:dark:bg-gray-700/50'
-              )
-            })}
-          />
-        </div>
-      )}
+      <div className="w-full overflow-hidden">
+        <Table
+          columns={columns}
+          data={orderLines}
+          enablePagination
+          enableFiltering
+          enableFooter
+          enablePinning
+          className="overflow-x-auto overflow-y-auto"
+          headerClassName="whitespace-nowrap sticky"
+          rowClassName="whitespace-nowrap group/row"
+          getRowProps={(orderLine, index) => ({
+            className: cx(
+              orderLine?.isDelivered
+                ? index % 2 === 0
+                  ? 'bg-green-200 dark:bg-green-800 '
+                  : 'bg-green-100 dark:bg-green-700 '
+                : ''
+            )
+          })}
+        />
+      </div>
       <OrderLineForm open={openOrderLineForm} setOpen={setOpenOrderLineForm} />
     </Fragment>
   )

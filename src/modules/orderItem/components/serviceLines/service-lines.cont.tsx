@@ -52,6 +52,7 @@ export const ServiceLinesContainer = ({
           enablePagination
           enableFiltering
           enableFooter
+          enablePinning
           getRowProps={({ isDelivered }, index) => ({
             className: isDelivered
               ? index % 2 === 0

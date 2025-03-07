@@ -85,10 +85,7 @@ export function TableHeader<T extends object>({
               top: isSticky ? 0 : undefined,
               left: isPinned === 'left' ? `${leftOffset}px` : undefined,
               right: isPinned === 'right' ? `${rightOffset}px` : undefined,
-              zIndex: isPinned ? 31 : isSticky ? 30 : undefined,
-              backgroundColor: isPinned
-                ? 'var(--header-bg-color, rgb(243 244 246))'
-                : undefined
+              zIndex: isPinned ? 31 : isSticky ? 30 : undefined
             }
 
             return (
@@ -104,15 +101,14 @@ export function TableHeader<T extends object>({
                     : '',
                   // Add shadow when sticky to visually separate from content
                   isSticky ? 'shadow-sm' : '',
-                  // Add border styles for pinned columns
+                  // Add border and background styles for pinned columns
                   isPinned === 'left' && !isFirstColumn
-                    ? 'border-l border-gray-200 dark:border-gray-700 z-20'
+                    ? 'border-l border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800'
                     : '',
                   isPinned === 'right' && !isLastColumn
-                    ? 'border-r border-gray-200 dark:border-gray-700 z-20'
+                    ? 'border-r border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800'
                     : '',
-                  isPinned && 'z-30',
-                  canSort ? 'cursor-pointer select-none' : ''
+                  isPinned && 'z-30'
                 )}
                 onClick={
                   canSort ? header.column.getToggleSortingHandler() : undefined

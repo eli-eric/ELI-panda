@@ -80,6 +80,7 @@ export const useServiceLinesColumns = () => {
           )
         },
         size: 90,
+        enablePinning: false,
         meta: {
           filter: { enableColumnFilter: false, type: 'boolean' }
         },
