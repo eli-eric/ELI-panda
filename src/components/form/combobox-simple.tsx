@@ -98,8 +98,8 @@ export const ComboboxSimple = ({
               {...field}
               value={query}
               onChange={value => {
-                field.onChange(value)
-                onSelect && onSelect(value)
+                field.onChange(value ?? undefined)
+                onSelect && onSelect(value ?? undefined)
               }}
               disabled={disabled}
               className={cx('relative flex flex-col w-full', className)}

@@ -9,7 +9,6 @@ import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import { Paragraph } from '@/components/layout/Paragraph'
 import ProgressBarComponent from '@/components/progress-bar.comp'
-import { TableExample } from '@/components/ui/TableExample'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import FileManager from '@/modules/shared/fileManager/FileManager'
@@ -63,23 +62,19 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
           <Paragraph>{description}</Paragraph>
         </Col>
       )}
-
       <Col sm="full" className="w-full">
         <CatalogueProperties
           catalogueItemProperties={catalogueItemProperties}
         />
       </Col>
-
       <Col sm="full" className="w-full">
         <ItemProperties properties={properties} />
       </Col>
-
       {lastServiceItem && (
         <Col sm="full" className="w-full">
           <ServiceItemProperties serviceItem={lastServiceItem} />
         </Col>
       )}
-
       <Col sm={3} md={4}>
         <Listbox {...fields.itemUsage} />
       </Col>
@@ -92,10 +87,8 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
       <Col sm="full">
         <TextArea {...fields.itemNotes} />
       </Col>
-
-      <Col sm="full" className="w-full">
-        {systemDetail && <TableExample />}
-      </Col>
+      {/* TODO: This is a placeholder order Info */}
+      <Col sm="full" className="w-full"></Col>
 
       <Col sm="full" className="flex-col">
         <ErrorBoundary fallback={<ErrorPage />}>
