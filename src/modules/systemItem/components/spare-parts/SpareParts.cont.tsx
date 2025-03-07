@@ -10,6 +10,7 @@ import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
 import { AssignSparePartButton } from './AssignSparePartsButton'
 import { SetMinimalSparesButton } from './SetMinimalSparesButton'
 import { useSparePartsColumns } from './SpareParts.columns'
+import { Table } from '@/components/ui'
 
 export const SparePartsContainer = () => {
   const tableId = 'spareParts'
@@ -34,6 +35,7 @@ export const SparePartsContainer = () => {
       <Heading
         className="mt-4"
         customText="Spare Parts"
+        showBorder={false}
         titleNode={
           <div className="flex w-[300px] ml-4 items-center">
             <h3
@@ -56,19 +58,16 @@ export const SparePartsContainer = () => {
       </Heading>
       {systemDetail?.sparePartsConnection.edges &&
         systemDetail.sparePartsConnection.edges.length > 0 && (
-          <PandaTable
+          <Table<any>
             columns={columns}
-            getRowProps={({ original }) => ({
+            getRowProps={({ original }, index) => ({
               className: cx(
                 original?.physicalItem &&
                   'font-bold text-gray-700 dark:text-gray-200',
-                getColorBySystemLevel(original?.systemLevel),
+                getColorBySystemLevel(original?.systemLevel, index),
                 getFontBySystemLevel(original?.systemLevel)
               )
             })}
-            settings={{ enableColumnReordering: false }}
-            tableId={tableId}
-            className={'relative overflow-x-auto mb-0 pb-0'}
             data={systemDetail?.sparePartsConnection.edges}
           />
         )}

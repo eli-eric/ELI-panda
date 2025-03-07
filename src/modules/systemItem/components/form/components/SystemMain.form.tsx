@@ -95,7 +95,6 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
                 <EmployeeTable
                   name="operators"
                   className="w-full"
-                  tableId="systemOperators"
                   data={operators}
                   header={'Authorized Operators'}
                   setNewEmployee={setNewOperator}
@@ -106,7 +105,6 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
                 <EmployeeTable
                   name="maintainedBy"
                   className="w-full"
-                  tableId="systemMainteners"
                   data={maintainedBy}
                   header={'Maintained By'}
                   setNewEmployee={setNewMaintainedBy}

@@ -38,3 +38,49 @@ export const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Return if the item should be filtered in/out
   return itemRank.passed
 }
+
+// Extract scroll-related classes from className
+export const scrollClasses = [
+  'overflow-auto',
+  'overflow-x-auto',
+  'overflow-y-auto',
+  'overflow-hidden',
+  'overflow-x-hidden',
+  'overflow-y-hidden',
+  'overflow-visible',
+  'overflow-x-visible',
+  'overflow-y-visible',
+  'overflow-scroll',
+  'overflow-x-scroll',
+  'overflow-y-scroll'
+]
+
+// Extract min/max width classes
+export const widthClasses = [
+  'min-w-0',
+  'min-w-full',
+  'min-w-min',
+  'min-w-max',
+  'max-w-0',
+  'max-w-none',
+  'max-w-xs',
+  'max-w-sm',
+  'max-w-md',
+  'max-w-lg',
+  'max-w-xl',
+  'max-w-2xl',
+  'max-w-3xl',
+  'max-w-4xl',
+  'max-w-5xl',
+  'max-w-6xl',
+  'max-w-7xl',
+  'max-w-full',
+  'max-w-min',
+  'max-w-max',
+  'max-w-prose',
+  'max-w-screen-sm',
+  'max-w-screen-md',
+  'max-w-screen-lg',
+  'max-w-screen-xl',
+  'max-w-screen-2xl'
+]

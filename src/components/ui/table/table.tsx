@@ -17,7 +17,7 @@ import { TableFooter } from './table-footer'
 import { TableHeader } from './table-header'
 import { TablePagination } from './table-pagination'
 import type { TableProps } from './types'
-import { fuzzyFilter } from './utils'
+import { fuzzyFilter, scrollClasses, widthClasses } from './utils'
 
 /**
  * A reusable table component built on top of TanStack Table.
@@ -37,6 +37,7 @@ export function Table<T extends object>({
   enablePinning = false,
   defaultPageSize = 10,
   loading = false,
+  skipEmptyMessage = false,
   emptyMessage = 'No data available',
   fixedHeight,
   getRowProps
@@ -55,7 +56,6 @@ export function Table<T extends object>({
     if (enablePagination) {
       setPagination(prev => ({ ...prev, pageIndex: 0 }))
     }
-    console.log('Column filters changed:', columnFilters)
   }, [columnFilters, enablePagination])
 
   // Pagination state
@@ -120,59 +120,13 @@ export function Table<T extends object>({
   })
 
   // If there's no data and not loading, show empty message
-  if (tableData.length === 0 && !loading) {
+  if (tableData.length === 0 && !loading && !skipEmptyMessage) {
     return (
       <div className="w-full flex items-center justify-center p-8 text-gray-500 dark:text-gray-400 border rounded-md">
         {emptyMessage}
       </div>
     )
   }
-
-  // Extract scroll-related classes from className
-  const scrollClasses = [
-    'overflow-auto',
-    'overflow-x-auto',
-    'overflow-y-auto',
-    'overflow-hidden',
-    'overflow-x-hidden',
-    'overflow-y-hidden',
-    'overflow-visible',
-    'overflow-x-visible',
-    'overflow-y-visible',
-    'overflow-scroll',
-    'overflow-x-scroll',
-    'overflow-y-scroll'
-  ]
-
-  // Extract min/max width classes
-  const widthClasses = [
-    'min-w-0',
-    'min-w-full',
-    'min-w-min',
-    'min-w-max',
-    'max-w-0',
-    'max-w-none',
-    'max-w-xs',
-    'max-w-sm',
-    'max-w-md',
-    'max-w-lg',
-    'max-w-xl',
-    'max-w-2xl',
-    'max-w-3xl',
-    'max-w-4xl',
-    'max-w-5xl',
-    'max-w-6xl',
-    'max-w-7xl',
-    'max-w-full',
-    'max-w-min',
-    'max-w-max',
-    'max-w-prose',
-    'max-w-screen-sm',
-    'max-w-screen-md',
-    'max-w-screen-lg',
-    'max-w-screen-xl',
-    'max-w-screen-2xl'
-  ]
 
   // Filter className to find scroll and width related classes
   const extractedScrollClasses =
@@ -233,6 +187,7 @@ export function Table<T extends object>({
               loading={loading}
               rowClassName={rowClassName}
               getRowProps={getRowProps}
+              skipEmptyMessage={skipEmptyMessage}
             />
             {enableFooter && (
               <TableFooter table={table} footerClassName={footerClassName} />

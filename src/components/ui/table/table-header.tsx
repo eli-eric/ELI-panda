@@ -65,6 +65,8 @@ export function TableHeader<T extends object>({
               })
             }
 
+            const noHeader = header.column.columnDef.meta?.noHeader
+
             // Calculate right position for pinned right columns
             let rightOffset = 0
             if (isPinned === 'right') {
@@ -115,8 +117,8 @@ export function TableHeader<T extends object>({
                 }
                 style={style}
               >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between gap-2 w-full">
+                  <div className="flex items-center gap-2 w-full">
                     {header.isPlaceholder
                       ? null
                       : flexRender(

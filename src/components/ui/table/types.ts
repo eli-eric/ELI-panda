@@ -117,6 +117,12 @@ export interface TableProps<T extends object> {
    * @default false
    */
   enableFiltering?: boolean
+
+  /**
+   * Whether to skip the empty message.
+   * @default false
+   */
+  skipEmptyMessage?: boolean
 }
 
 export interface TableHeaderProps<T extends object> {
@@ -132,6 +138,7 @@ export interface TableBodyProps<T extends object> {
   loading?: boolean
   rowClassName?: string
   getRowProps?: GetRowProps<T>
+  skipEmptyMessage?: boolean
 }
 
 export interface TablePaginationProps<T extends object> {

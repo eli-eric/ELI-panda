@@ -246,7 +246,7 @@ export const TableDeleteButton = ({
 }: ButtonProps) => (
   <button
     {...props}
-    className="ml-2 hover:text-primary-500 text-red-700"
+    className={cx('ml-2 hover:text-primary-500 text-red-700', props.className)}
     type={type}
   >
     <TrashIcon className="h-4 w-4" aria-hidden="true" />

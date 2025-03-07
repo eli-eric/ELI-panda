@@ -43,7 +43,7 @@ const useOrderLinesColumns = () => {
             )}
           </div>
         ),
-        meta: { sticky: true, className: 'sm:pr-16 relative' },
+        meta: { className: 'sm:pr-16 relative' },
         size: 340,
         footer: ({ table: { getRowCount } }) => (
           <span>Total: {getRowCount()} line(s)</span>

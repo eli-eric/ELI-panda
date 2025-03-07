@@ -14,7 +14,8 @@ export function TableBody<T extends object>({
   columns,
   loading,
   rowClassName,
-  getRowProps
+  getRowProps,
+  skipEmptyMessage
 }: TableBodyProps<T>) {
   if (loading) {
     // Create skeleton rows that match the structure of actual data rows
@@ -77,7 +78,7 @@ export function TableBody<T extends object>({
   // Check if there are any rows to display
   const rows = table.getRowModel().rows
 
-  if (rows.length === 0) {
+  if (rows.length === 0 && !skipEmptyMessage) {
     return (
       <tbody>
         <tr>
