@@ -73,12 +73,42 @@ const generateRandomUsers = (count: number): User[] => {
   })
 }
 
+// Add a new component for demonstrating price summation across all pages
+const PriceFooter = ({ table }: { table: any }) => {
+  // Get ALL filtered rows, not just the current page
+  const allRows = table.getAllFilteredRows
+    ? table.getAllFilteredRows()
+    : table.getFilteredRowModel().rows
+
+  // Calculate total of a numeric field (simulating price calculation)
+  // This is similar to what you'd do in your actual PriceFooter component
+  const totalUsers = allRows.length
+  const activeUsers = allRows.filter(
+    row => row.original.status === 'active'
+  ).length
+  const activePercentage =
+    totalUsers > 0 ? Math.round((activeUsers / totalUsers) * 100) : 0
+
+  return (
+    <div className="font-medium">
+      <div className="text-primary-600 dark:text-primary-400">
+        Total across all pages: {totalUsers} users
+      </div>
+      <div className="text-xs text-gray-500 dark:text-gray-400">
+        {activePercentage}% active
+      </div>
+    </div>
+  )
+}
+
 export const TableExample: React.FC = () => {
   // State for table options
   const [loading, setLoading] = useState(true)
   const [tableData, setTableData] = useState<User[]>([])
   const [useFixedHeight, setUseFixedHeight] = useState(false)
   const [useFixedWidth, setUseFixedWidth] = useState(false)
+  const [enableFiltering, setEnableFiltering] = useState(false)
+  const [enableFooter, setEnableFooter] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   // Use TanStack's columnHelper to create typed columns
@@ -93,6 +123,13 @@ export const TableExample: React.FC = () => {
         <div className="font-medium text-gray-900 dark:text-white">
           {info.getValue()}
         </div>
+      ),
+      // Make filter case-insensitive and works with partial matches
+      filterFn: 'fuzzy',
+      enableColumnFilter: true,
+      // Add a footer that shows total count
+      footer: ({ table }) => (
+        <div className="font-medium">Total: {table.getRowCount()} users</div>
       )
     }),
     columnHelper.accessor('email', {
@@ -102,7 +139,10 @@ export const TableExample: React.FC = () => {
         <div className="text-gray-700 dark:text-gray-300">
           {info.getValue()}
         </div>
-      )
+      ),
+      // Make filter case-insensitive and works with partial matches
+      filterFn: 'fuzzy',
+      enableColumnFilter: true
     }),
     columnHelper.accessor('role', {
       header: 'Role',
@@ -111,7 +151,12 @@ export const TableExample: React.FC = () => {
         <div className="text-gray-700 dark:text-gray-300">
           {info.getValue()}
         </div>
-      )
+      ),
+      // Make filter case-insensitive and works with partial matches
+      filterFn: 'fuzzy',
+      enableColumnFilter: true,
+      // Example of using the PriceFooter component to show cross-page totals
+      footer: props => <PriceFooter table={props.table} />
     }),
     columnHelper.accessor('status', {
       header: 'Status',
@@ -131,6 +176,30 @@ export const TableExample: React.FC = () => {
             </span>
           </div>
         )
+      },
+      // Make filter case-insensitive and works with partial matches
+      filterFn: 'fuzzy',
+      enableColumnFilter: false,
+      // Add a footer that shows active/inactive counts
+      footer: ({ table }) => {
+        const rows = table.getFilteredRowModel().rows
+        const activeCount = rows.filter(
+          row => row.original.status === 'active'
+        ).length
+        const inactiveCount = rows.filter(
+          row => row.original.status === 'inactive'
+        ).length
+
+        return (
+          <div>
+            <div className="text-green-600 dark:text-green-400">
+              Active: {activeCount}
+            </div>
+            <div className="text-red-600 dark:text-red-400">
+              Inactive: {inactiveCount}
+            </div>
+          </div>
+        )
       }
     }),
     columnHelper.accessor('longDescription', {
@@ -140,7 +209,10 @@ export const TableExample: React.FC = () => {
         <div className="text-gray-700 dark:text-gray-300 truncate">
           {info.getValue()}
         </div>
-      )
+      ),
+      // Make filter case-insensitive and works with partial matches
+      filterFn: 'fuzzy',
+      enableColumnFilter: true
     })
   ]
 
@@ -231,6 +303,32 @@ export const TableExample: React.FC = () => {
             Use Fixed Width ({useFixedWidth ? 'ON' : 'OFF'})
           </span>
         </label>
+
+        <label className="inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            checked={enableFiltering}
+            onChange={() => setEnableFiltering(!enableFiltering)}
+            className="sr-only peer"
+          />
+          <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+          <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+            Enable Filtering ({enableFiltering ? 'ON' : 'OFF'})
+          </span>
+        </label>
+
+        <label className="inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            checked={enableFooter}
+            onChange={() => setEnableFooter(!enableFooter)}
+            className="sr-only peer"
+          />
+          <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+          <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+            Enable Footer ({enableFooter ? 'ON' : 'OFF'})
+          </span>
+        </label>
       </div>
 
       {/* Display selected user info */}
@@ -264,6 +362,8 @@ export const TableExample: React.FC = () => {
           data={tableData}
           loading={loading}
           enableSorting={true}
+          enableFiltering={enableFiltering}
+          enableFooter={enableFooter}
           enablePagination={true}
           defaultPageSize={10}
           fixedHeight={useFixedHeight ? '400px' : undefined}

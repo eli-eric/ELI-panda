@@ -32,7 +32,7 @@ type OrderLineButtonsWrapperProps = {
   className?: string
 }
 
-export const OrderLineButtonsWrapper: FC<
+export const ButtonsWrapperNew: FC<
   PropsWithChildren<OrderLineButtonsWrapperProps>
 > = ({ children, position = 'right-0', className }) => (
   <div
@@ -81,7 +81,7 @@ export const OrderLineActionButtons = ({
 
   return (
     <Fragment>
-      <OrderLineButtonsWrapper position="right-1">
+      <ButtonsWrapperNew position="right-1">
         <TableEditButton
           onClick={() => {
             setOpenOrderLineForm(true)
@@ -92,7 +92,7 @@ export const OrderLineActionButtons = ({
             setOpenDeleteWarn(true)
           }}
         />
-      </OrderLineButtonsWrapper>
+      </ButtonsWrapperNew>
       <OrderLineForm
         orderLine={orderLine}
         open={openOrderLineForm}

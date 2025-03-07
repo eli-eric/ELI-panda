@@ -1,8 +1,16 @@
+export * from './filter-dropdown'
 export * from './page-size-dropdown'
 export * from './sort-indicator'
-export * from './table'
-export * from './table-body'
-export * from './table-header'
-export * from './table-pagination'
-export * from './types'
+export { Table } from './table'
+export { TableBody } from './table-body'
+export { TableFooter } from './table-footer'
+export { TableHeader } from './table-header'
+export { TablePagination } from './table-pagination'
+export type {
+  TableBodyProps,
+  TableFooterProps,
+  TableHeaderProps,
+  TablePaginationProps,
+  TableProps
+} from './types'
 export * from './utils'

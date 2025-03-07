@@ -62,7 +62,8 @@ const useOrderLinesColumns = () => {
       },
       {
         header: formatMessage({ id: messages.serialNumber }),
-        accessorKey: 'serialNumber'
+        accessorKey: 'serialNumber',
+        size: 200
       },
       {
         header: formatMessage({ id: messages.eun }),
@@ -91,9 +92,6 @@ const useOrderLinesColumns = () => {
             </div>
           ) : null,
         size: 80,
-        meta: {
-          filter: { enableColumnFilter: false, type: 'boolean' }
-        },
         enableSorting: false,
         enableColumnFilter: false
       },
@@ -110,7 +108,9 @@ const useOrderLinesColumns = () => {
           </Fragment>
         ),
         id: 'notes',
-        size: 110
+        size: 110,
+        enableSorting: false,
+        enableColumnFilter: false
       },
       {
         header: formatMessage({ id: messages.price }),
@@ -121,16 +121,20 @@ const useOrderLinesColumns = () => {
             <span className="font-medium ">{original.currency}</span>
           </span>
         ),
-        footer: props => <PriceFooter rows={props.table.getRowModel().rows} />
+        footer: props => (
+          <PriceFooter rows={props.table.getFilteredRowModel().rows} />
+        )
       },
       {
         header: formatMessage({ id: messages.itemUsage }),
         accessorFn: row => row.itemUsage?.name,
-        cell: ({ getValue }) => <span>{getValue()}</span>
+        cell: ({ getValue }) => <span>{getValue()}</span>,
+        size: 240
       },
       {
         header: formatMessage({ id: messages.system }),
         accessorFn: row => row.system?.name,
+        size: 240,
         cell: ({ getValue, row: { original } }) => (
           <Link
             className="link"

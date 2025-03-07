@@ -9,51 +9,60 @@ import { message } from '@/i18n/src/messages'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
 import { PATH } from '@/types/constants/paths'
 
+import useOrderDetail from '../../hooks/useOrderDetail'
 import {
   DeliveredAllButton,
   PriceFooter,
   ServiceDeliveryAction,
   ServiceLineActionButtons
 } from './components/service-lines.actions'
-
 const messages = message.ordersPage.serviceLines.columns
 
 export const useServiceLinesColumns = () => {
   const { formatMessage } = useIntl()
+  const { disabledEdit } = useOrderDetail()
   const columns = useMemo((): ColumnDef<ServiceLine, any>[] => {
     const cols: ColumnDef<ServiceLine, any>[] = [
       {
         header: formatMessage({ id: messages.name }),
         accessorKey: 'name',
         cell: ({ getValue, row: { original } }) => (
-          <div className="flex items-center">
-            <span>{getValue()}</span>
-            <ServiceLineActionButtons serviceLine={original} />
+          <div className="flex items-center ">
+            <span title={getValue()} className="truncate">
+              {getValue()}
+            </span>
+            {!disabledEdit && (
+              <div className="absolute right-0">
+                <ServiceLineActionButtons serviceLine={original} />
+              </div>
+            )}
           </div>
         ),
-        meta: { sticky: true, className: 'sm:pr-12' },
-        size: 240,
+        meta: { sticky: true, className: 'sm:pr-16 relative' },
+        size: 340,
         footer: ({ table: { getRowCount } }) => (
           <span>Total: {getRowCount()} line(s)</span>
         )
       },
       {
         header: formatMessage({ id: messages.serviceType }),
-        accessorKey: 'serviceType',
-        cell: ({ getValue }) => (
+        accessorFn: ({ serviceType }) => serviceType.name,
+        size: 240,
+        cell: ({ getValue, row: { original } }) => (
           <NewTabLink
-            href={PATH.SERVICE + '/' + getValue().uid}
-            value={getValue().name}
+            href={PATH.SERVICE + '/' + original.serviceType.uid}
+            value={getValue()}
           />
         )
       },
       {
         header: 'Item',
-        accessorKey: 'item',
+        accessorFn: ({ item }) => item.name,
+        size: 340,
         cell: ({ getValue, row: { original } }) => (
           <NewTabLink
             href={PATH.SYSTEM_ITEM + '/' + original.item.uid}
-            value={getValue().name}
+            value={getValue()}
           />
         )
       },
@@ -65,10 +74,9 @@ export const useServiceLinesColumns = () => {
         accessorKey: 'isDelivered',
         header: () => {
           return (
-            <span className="bg-inherit flex flex-col">
-              {formatMessage({ id: messages.isDelivered })}
+            <div className="flex items-center justify-between px-2 w-full">
               <DeliveredAllButton />
-            </span>
+            </div>
           )
         },
         size: 90,
@@ -94,7 +102,9 @@ export const useServiceLinesColumns = () => {
           </Fragment>
         ),
         id: 'notes',
-        size: 90
+        size: 120,
+        enableSorting: false,
+        enableColumnFilter: false
       },
       {
         header: formatMessage({ id: messages.price }),
@@ -109,7 +119,7 @@ export const useServiceLinesColumns = () => {
       }
     ]
     return cols
-  }, [formatMessage])
+  }, [formatMessage, disabledEdit])
 
   return columns
 }

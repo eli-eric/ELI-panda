@@ -346,7 +346,7 @@ export const messages = {
         isDelivered: 'Delivered',
         price: 'Price'
       },
-      head: 'Service Lines',
+      header: 'Service Lines',
       wizard: {
         steps: {
           step1: {

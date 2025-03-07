@@ -1,4 +1,4 @@
-import type { ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef, Table } from '@tanstack/react-table'
 import type { ReactNode } from 'react'
 
 // Define a type for row event handlers
@@ -41,6 +41,11 @@ export interface TableProps<T extends object> {
   rowClassName?: string
 
   /**
+   * Additional CSS class for the table footer.
+   */
+  footerClassName?: string
+
+  /**
    * Whether to enable sorting functionality.
    * @default true
    */
@@ -51,6 +56,12 @@ export interface TableProps<T extends object> {
    * @default false
    */
   enablePagination?: boolean
+
+  /**
+   * Whether to enable footer rendering.
+   * @default false
+   */
+  enableFooter?: boolean
 
   /**
    * Default number of rows per page when pagination is enabled.
@@ -84,11 +95,18 @@ export interface TableProps<T extends object> {
    * Example: (row) => ({ onClick: () => handleRowClick(row), className: row.isSelected ? 'selected' : '' })
    */
   getRowProps?: GetRowProps<T>
+
+  /**
+   * Whether to enable filtering functionality.
+   * @default false
+   */
+  enableFiltering?: boolean
 }
 
 export interface TableHeaderProps<T extends object> {
-  table: any
+  table: Table<T>
   enableSorting?: boolean
+  enableFiltering?: boolean
   headerClassName?: string
 }
 
@@ -104,8 +122,19 @@ export interface TablePaginationProps<T extends object> {
   table: any
 }
 
+export interface TableFooterProps<T extends object> {
+  table: Table<T>
+  footerClassName?: string
+}
+
 export interface SortIndicatorProps {
   column: any
+}
+
+export interface FilterDropdownProps {
+  column: any
+  onFilterChange: (value: string) => void
+  currentFilter: string
 }
 
 export interface PageSizeDropdownProps {

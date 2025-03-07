@@ -37,7 +37,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
 
   return (
     <Fragment>
-      <Heading text={messages.orderLines}>
+      <Heading text={messages.orderLines} showBorder={false}>
         {!disabledEdit && (
           <div className="flex items-center mr-2">
             <PlusButton
@@ -56,6 +56,8 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
             columns={columns}
             data={orderLines}
             enablePagination
+            enableFiltering
+            enableFooter
             className="overflow-x-auto overflow-y-auto"
             headerClassName="whitespace-nowrap sticky"
             rowClassName="whitespace-nowrap"

@@ -1,13 +1,11 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
-import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
-import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
-import { cx } from '@/utils'
 
 import { ServiceLineWizard } from './form/service-line.wizz'
 import { useServiceLinesColumns } from './service-lines.columns'
@@ -27,34 +25,13 @@ export const ServiceLinesContainer = ({
   const sereviceLinesColumns = useServiceLinesColumns()
   const [openServiceLineForm, setOpenServiceLineForm] = useState(false)
 
-  const table = usePandaTable<any>({
-    columns: sereviceLinesColumns,
-    data: serviceLines,
-    tableId: 'orderLines',
-    settings: {
-      enableFooter: true,
-      enableFiltering: true,
-      manualFiltering: false,
-      enableQueryURL: false,
-      enableSorting: true,
-      manualSorting: false,
-      defaultColumnOrder: [
-        'name',
-        'partNumber',
-        'serialNumber',
-        'eun',
-        'isDelivered'
-      ]
-    }
-  })
-
   const handleAddServiceLine = () => {
     setOpenServiceLineForm(true)
   }
 
   return (
-    <Fragment>
-      <Heading text={messages.head}>
+    <div className="pt-4">
+      <Heading text={messages.header} showBorder={false}>
         {!disabledEdit && (
           <div className="flex items-center mr-2">
             <PlusButton
@@ -69,26 +46,20 @@ export const ServiceLinesContainer = ({
       </Heading>
       {serviceLines?.length && (
         <div className="flex flex-col max-h-[500px] mb-5">
-          <PandaTableControlled
+          <Table
             data={serviceLines}
-            table={table}
-            tableId={'serviceLines'}
             className={'relative overflow-x-auto'}
-            getRowProps={({ original: { isDelivered } }) => ({
-              className: cx(
-                isDelivered
-                  ? 'bg-green-100 dark:bg-green-700'
-                  : 'bg-white dark:bg-gray-800'
-              )
+            columns={sereviceLinesColumns}
+            enablePagination
+            enableFiltering
+            enableFooter
+            getRowProps={({ isDelivered }, index) => ({
+              className: isDelivered
+                ? index % 2 === 0
+                  ? 'bg-green-200 dark:bg-green-800'
+                  : 'bg-green-100 dark:bg-green-700'
+                : undefined
             })}
-            settings={{
-              enableFooter: true,
-              enableFiltering: true,
-              manualFiltering: false,
-              enableQueryURL: false,
-              enableSorting: true,
-              manualSorting: false
-            }}
           />
         </div>
       )}
@@ -99,6 +70,6 @@ export const ServiceLinesContainer = ({
       >
         <ServiceLineWizard setOpen={setOpenServiceLineForm} />
       </ModalComponent>
-    </Fragment>
+    </div>
   )
 }

@@ -1,16 +1,19 @@
 import {
+  type ColumnFiltersState,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   type PaginationState,
   type SortingState,
   useReactTable
 } from '@tanstack/react-table'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { cx } from '@/utils'
 
 import { TableBody } from './table-body'
+import { TableFooter } from './table-footer'
 import { TableHeader } from './table-header'
 import { TablePagination } from './table-pagination'
 import type { TableProps } from './types'
@@ -26,8 +29,11 @@ export function Table<T extends object>({
   className,
   headerClassName,
   rowClassName,
+  footerClassName,
   enableSorting = true,
+  enableFiltering = false,
   enablePagination = false,
+  enableFooter = false,
   defaultPageSize = 10,
   loading = false,
   emptyMessage = 'No data available',
@@ -40,24 +46,49 @@ export function Table<T extends object>({
   // Sorting state
   const [sorting, setSorting] = useState<SortingState>([])
 
+  // Filtering state
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    if (enablePagination) {
+      setPagination(prev => ({ ...prev, pageIndex: 0 }))
+    }
+    console.log('Column filters changed:', columnFilters)
+  }, [columnFilters, enablePagination])
+
   // Pagination state
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: defaultPageSize
   })
 
+  // Apply column-specific filter functions
+  const columnsWithFiltering = React.useMemo(() => {
+    if (!enableFiltering) return columns
+
+    // Return columns with filtering enabled
+    return columns.map(col => ({
+      ...col,
+      enableColumnFilter: col.enableColumnFilter !== false
+    }))
+  }, [columns, enableFiltering])
+
   // Setup TanStack table with column sizing
   const table = useReactTable({
     data: tableData,
-    columns,
+    columns: columnsWithFiltering,
     state: {
       sorting,
-      pagination
+      pagination,
+      columnFilters
     },
     onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
     onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: enableSorting ? getSortedRowModel() : undefined,
+    getFilteredRowModel: enableFiltering ? getFilteredRowModel() : undefined,
     getPaginationRowModel: enablePagination
       ? getPaginationRowModel()
       : undefined,
@@ -67,10 +98,22 @@ export function Table<T extends object>({
     // Enable column resizing with fixed-width priority
     enableColumnResizing: true,
     columnResizeMode: 'onChange',
+    // Configure column sorting separately from filtering
+    enableSorting: enableSorting,
+    enableFilters: enableFiltering,
+    enableColumnFilters: enableFiltering,
+    // Enable three-state sorting (unsorted -> asc -> desc -> unsorted)
+    enableMultiSort: false,
+    enableSortingRemoval: true,
+    sortDescFirst: false,
     defaultColumn: {
       minSize: 50, // Minimum column width
-      maxSize: 1000 // Maximum column width
-    }
+      maxSize: 1000, // Maximum column width
+      enableSorting: enableSorting,
+      enableColumnFilter: enableFiltering,
+      filterFn: 'fuzzy' // Default filter function
+    },
+    autoResetPageIndex: true // Reset page index when filters change
   })
 
   // If there's no data and not loading, show empty message
@@ -156,7 +199,7 @@ export function Table<T extends object>({
     <div className={cx('rounded-md border overflow-hidden', filteredClassName)}>
       {/* Container with fixed height if specified */}
       <div
-        className="w-full"
+        className="w-full rounded-md"
         style={fixedHeight ? { height: fixedHeight } : undefined}
       >
         {/* Scrollable container for both horizontal and vertical scrolling */}
@@ -178,6 +221,7 @@ export function Table<T extends object>({
             <TableHeader
               table={table}
               enableSorting={enableSorting}
+              enableFiltering={enableFiltering}
               headerClassName={cx(headerClassName, fixedHeight ? 'sticky' : '')}
             />
             <TableBody
@@ -187,6 +231,9 @@ export function Table<T extends object>({
               rowClassName={rowClassName}
               getRowProps={getRowProps}
             />
+            {enableFooter && (
+              <TableFooter table={table} footerClassName={footerClassName} />
+            )}
           </table>
         </div>
       </div>

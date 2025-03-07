@@ -3,6 +3,7 @@ import React from 'react'
 
 import { cx } from '@/utils'
 
+import { FilterDropdown } from './filter-dropdown'
 import { SortIndicator } from './sort-indicator'
 import type { TableHeaderProps } from './types'
 
@@ -13,23 +14,48 @@ import type { TableHeaderProps } from './types'
 export function TableHeader<T extends object>({
   table,
   enableSorting,
+  enableFiltering,
   headerClassName
 }: TableHeaderProps<T>) {
   // Check if the header should be sticky based on passed classNames
   const isSticky = headerClassName?.includes('sticky') || false
 
   return (
-    <thead className={cx('bg-gray-100 dark:bg-gray-800', headerClassName)}>
+    <thead
+      className={cx(
+        'bg-gray-100 dark:bg-gray-800 rounded-t-md',
+        headerClassName
+      )}
+    >
       {table.getHeaderGroups().map(headerGroup => (
         <tr
           key={headerGroup.id}
           className="border-b border-gray-200 dark:border-gray-700"
         >
-          {headerGroup.headers.map(header => {
+          {headerGroup.headers.map((header, headerIndex) => {
             // Get width from column definition if available
             const width = header.column.getSize()
               ? header.column.getSize()
               : undefined
+
+            const canSort =
+              enableSorting &&
+              !header.isPlaceholder &&
+              header.column.getCanSort()
+            const canFilter =
+              enableFiltering &&
+              !header.isPlaceholder &&
+              header.column.getCanFilter() &&
+              header.column.columnDef.enableColumnFilter !== false
+
+            console.log('canSort', header.id, canSort)
+            console.log(
+              'canFilter',
+              header.id,
+              canFilter,
+              'columnDef.enableColumnFilter:',
+              header.column.columnDef.enableColumnFilter
+            )
 
             // Generate column style with width if provided
             const style: React.CSSProperties = {
@@ -41,34 +67,52 @@ export function TableHeader<T extends object>({
               top: isSticky ? 0 : undefined
             }
 
+            // Check if this is the first column
+
             return (
               <th
                 key={header.id}
                 className={cx(
                   'h-10 px-4 text-left align-middle font-medium text-gray-500 dark:text-gray-400',
                   'hover:bg-gray-200 dark:hover:bg-gray-700',
-                  'whitespace-nowrap overflow-hidden',
+                  'whitespace-nowrap',
                   // Apply sticky styles directly to th elements when sticky header is enabled
                   isSticky
                     ? 'sticky top-0 bg-gray-100 dark:bg-gray-800 z-10'
                     : '',
                   // Add shadow when sticky to visually separate from content
                   isSticky ? 'shadow-sm' : '',
-                  enableSorting && header.column.getCanSort()
-                    ? 'cursor-pointer select-none'
-                    : ''
+                  canSort ? 'cursor-pointer select-none' : ''
                 )}
-                onClick={header.column.getToggleSortingHandler()}
+                onClick={
+                  canSort ? header.column.getToggleSortingHandler() : undefined
+                }
                 style={style}
               >
-                <div className="flex items-center gap-2 overflow-hidden">
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                  {enableSorting && <SortIndicator column={header.column} />}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                    {canSort && <SortIndicator column={header.column} />}
+                  </div>
+
+                  {canFilter && (
+                    <div onClick={e => e.stopPropagation()}>
+                      <FilterDropdown
+                        column={header.column}
+                        onFilterChange={value => {
+                          header.column.setFilterValue(value)
+                        }}
+                        currentFilter={
+                          (header.column.getFilterValue() as string) || ''
+                        }
+                      />
+                    </div>
+                  )}
                 </div>
               </th>
             )
