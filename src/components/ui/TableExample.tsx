@@ -119,7 +119,7 @@ export const TableExample: React.FC = () => {
   const columns = [
     columnHelper.accessor('name', {
       header: 'Name',
-      size: 150,
+      size: 240,
       cell: info => (
         <div className="font-medium text-gray-900 dark:text-white">
           {info.getValue()}
@@ -131,14 +131,11 @@ export const TableExample: React.FC = () => {
         <div className="font-medium">Total: {table.getRowCount()} users</div>
       ),
       // Pin this column to the left by default
-      enablePinning: true,
-      meta: {
-        pin: 'left'
-      }
+      enablePinning: true
     }),
     columnHelper.accessor('email', {
       header: 'Email',
-      size: 200, // Fixed width in pixels
+      size: 300, // Fixed width in pixels
       cell: info => (
         <div className="text-gray-700 dark:text-gray-300">
           {info.getValue()}
@@ -150,7 +147,7 @@ export const TableExample: React.FC = () => {
     }),
     columnHelper.accessor('role', {
       header: 'Role',
-      size: 100, // Fixed width in pixels
+      size: 240, // Fixed width in pixels
       cell: info => (
         <div className="text-gray-700 dark:text-gray-300">
           {info.getValue()}
@@ -164,7 +161,7 @@ export const TableExample: React.FC = () => {
     }),
     columnHelper.accessor('status', {
       header: 'Status',
-      size: 100,
+      size: 200,
       cell: info => {
         const status = info.getValue()
         return (

@@ -38,7 +38,7 @@ export const ButtonsWrapperNew: FC<
   <div
     className={cx(
       'absolute flex items-center gap-1',
-      'opacity-0 group-hover:opacity-100 transition-opacity duration-150',
+      'opacity-0 group-hover/row:opacity-100 transition-opacity duration-150',
       'z-20',
       'top-1/2 -translate-y-1/2 -right-1',
       position !== 'right-0' && position,

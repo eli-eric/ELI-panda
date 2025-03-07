@@ -62,7 +62,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
             enablePinning
             className="overflow-x-auto overflow-y-auto"
             headerClassName="whitespace-nowrap sticky"
-            rowClassName="whitespace-nowrap group"
+            rowClassName="whitespace-nowrap group/row"
             getRowProps={(orderLine, index) => ({
               className: cx(
                 orderLine?.isDelivered
