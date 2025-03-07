@@ -109,6 +109,7 @@ export const TableExample: React.FC = () => {
   const [useFixedWidth, setUseFixedWidth] = useState(false)
   const [enableFiltering, setEnableFiltering] = useState(false)
   const [enableFooter, setEnableFooter] = useState(false)
+  const [enablePinning, setEnablePinning] = useState(false)
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
   // Use TanStack's columnHelper to create typed columns
@@ -118,19 +119,22 @@ export const TableExample: React.FC = () => {
   const columns = [
     columnHelper.accessor('name', {
       header: 'Name',
-      size: 150, // Fixed width in pixels
+      size: 150,
       cell: info => (
         <div className="font-medium text-gray-900 dark:text-white">
           {info.getValue()}
         </div>
       ),
-      // Make filter case-insensitive and works with partial matches
       filterFn: 'fuzzy',
       enableColumnFilter: true,
-      // Add a footer that shows total count
       footer: ({ table }) => (
         <div className="font-medium">Total: {table.getRowCount()} users</div>
-      )
+      ),
+      // Pin this column to the left by default
+      enablePinning: true,
+      meta: {
+        pin: 'left'
+      }
     }),
     columnHelper.accessor('email', {
       header: 'Email',
@@ -160,7 +164,7 @@ export const TableExample: React.FC = () => {
     }),
     columnHelper.accessor('status', {
       header: 'Status',
-      size: 100, // Fixed width in pixels
+      size: 100,
       cell: info => {
         const status = info.getValue()
         return (
@@ -177,10 +181,13 @@ export const TableExample: React.FC = () => {
           </div>
         )
       },
-      // Make filter case-insensitive and works with partial matches
       filterFn: 'fuzzy',
       enableColumnFilter: false,
-      // Add a footer that shows active/inactive counts
+      // Pin this column to the right by default
+      enablePinning: true,
+      meta: {
+        pin: 'right'
+      },
       footer: ({ table }) => {
         const rows = table.getFilteredRowModel().rows
         const activeCount = rows.filter(
@@ -329,6 +336,19 @@ export const TableExample: React.FC = () => {
             Enable Footer ({enableFooter ? 'ON' : 'OFF'})
           </span>
         </label>
+
+        <label className="inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            checked={enablePinning}
+            onChange={() => setEnablePinning(!enablePinning)}
+            className="sr-only peer"
+          />
+          <div className="relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+          <span className="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+            Enable Column Pinning ({enablePinning ? 'ON' : 'OFF'})
+          </span>
+        </label>
       </div>
 
       {/* Display selected user info */}
@@ -364,6 +384,7 @@ export const TableExample: React.FC = () => {
           enableSorting={true}
           enableFiltering={enableFiltering}
           enableFooter={enableFooter}
+          enablePinning={enablePinning}
           enablePagination={true}
           defaultPageSize={10}
           fixedHeight={useFixedHeight ? '400px' : undefined}

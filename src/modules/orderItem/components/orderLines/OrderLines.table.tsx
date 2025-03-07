@@ -5,6 +5,7 @@ import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
+import { cx } from '@/utils'
 
 import useOrderLinesColumns from './components/OrderLines.columns'
 import { OrderLineForm } from './form/OrderLineForm.cont'
@@ -58,15 +59,21 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
             enablePagination
             enableFiltering
             enableFooter
+            enablePinning
             className="overflow-x-auto overflow-y-auto"
             headerClassName="whitespace-nowrap sticky"
-            rowClassName="whitespace-nowrap"
+            rowClassName="whitespace-nowrap group"
             getRowProps={(orderLine, index) => ({
-              className: orderLine?.isDelivered
-                ? index % 2 === 0
-                  ? 'bg-green-200 dark:bg-green-800'
-                  : 'bg-green-100 dark:bg-green-700'
-                : undefined
+              className: cx(
+                orderLine?.isDelivered
+                  ? index % 2 === 0
+                    ? 'bg-green-200 dark:bg-green-800 '
+                    : 'bg-green-100 dark:bg-green-700 '
+                  : index % 2 === 0
+                    ? 'bg-white dark:bg-gray-900'
+                    : 'bg-gray-50 dark:bg-gray-800',
+                'transition-colors duration-150 hover:bg-gray-100 hover:dark:bg-gray-700/50'
+              )
             })}
           />
         </div>

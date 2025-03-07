@@ -44,25 +44,23 @@ export const ServiceLinesContainer = ({
           </div>
         )}
       </Heading>
-      {serviceLines?.length && (
-        <div className="flex flex-col max-h-[500px] mb-5">
-          <Table
-            data={serviceLines}
-            className={'relative overflow-x-auto'}
-            columns={sereviceLinesColumns}
-            enablePagination
-            enableFiltering
-            enableFooter
-            getRowProps={({ isDelivered }, index) => ({
-              className: isDelivered
-                ? index % 2 === 0
-                  ? 'bg-green-200 dark:bg-green-800'
-                  : 'bg-green-100 dark:bg-green-700'
-                : undefined
-            })}
-          />
-        </div>
-      )}
+      <div className="flex flex-col max-h-[500px] mb-5">
+        <Table
+          data={serviceLines}
+          className={'relative overflow-x-auto'}
+          columns={sereviceLinesColumns}
+          enablePagination
+          enableFiltering
+          enableFooter
+          getRowProps={({ isDelivered }, index) => ({
+            className: isDelivered
+              ? index % 2 === 0
+                ? 'bg-green-200 dark:bg-green-800'
+                : 'bg-green-100 dark:bg-green-700'
+              : undefined
+          })}
+        />
+      </div>
       <ModalComponent
         zclass="z-20"
         open={openServiceLineForm}

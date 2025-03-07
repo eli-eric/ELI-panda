@@ -34,6 +34,7 @@ export function Table<T extends object>({
   enableFiltering = false,
   enablePagination = false,
   enableFooter = false,
+  enablePinning = false,
   defaultPageSize = 10,
   loading = false,
   emptyMessage = 'No data available',
@@ -102,6 +103,8 @@ export function Table<T extends object>({
     enableSorting: enableSorting,
     enableFilters: enableFiltering,
     enableColumnFilters: enableFiltering,
+    // Enable column pinning
+    enablePinning: enablePinning,
     // Enable three-state sorting (unsorted -> asc -> desc -> unsorted)
     enableMultiSort: false,
     enableSortingRemoval: true,

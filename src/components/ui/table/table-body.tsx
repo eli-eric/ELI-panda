@@ -94,68 +94,95 @@ export function TableBody<T extends object>({
 
   return (
     <tbody>
-      {rows.map((row, index) => {
-        // Get the original row data
-        const originalRow = row.original as T
-
-        // Get custom row props if provided - similar to PandaTableV2
+      {rows.map((row, rowIndex) => {
         const customRowProps = getRowProps
-          ? getRowProps(originalRow, index)
+          ? getRowProps(row.original, rowIndex)
           : {}
 
-        // Extract className from custom props for proper merging
-        const { className: customClassName, ...restProps } = customRowProps
-        console.log('customClassName', customClassName)
-
-        // Default background colors based on even/odd row
+        // Determine row background color
         const defaultBgClass =
-          row.index % 2 === 0
+          rowIndex % 2 === 0
             ? 'bg-white dark:bg-gray-900'
             : 'bg-gray-50 dark:bg-gray-800'
 
         return (
           <tr
             key={row.id}
+            {...customRowProps}
             className={cx(
-              // Base styling always applied
-              'border-b border-gray-200 dark:border-gray-700 last:border-0 group',
-              // Only apply default background if custom style doesn't define one
-              !customClassName?.includes('bg-') ? defaultBgClass : '',
-              // Apply hover effect
-              'hover:bg-gray-100 dark:hover:bg-gray-700',
-              // Apply custom className from props and default rowClassName
-              customClassName,
-              rowClassName
+              'border-b border-gray-200 dark:border-gray-700',
+              'transition-colors duration-150 hover:bg-gray-100 hover:dark:bg-gray-700/50',
+              defaultBgClass,
+              rowClassName,
+              customRowProps.className
             )}
-            {...restProps}
           >
-            {row.getVisibleCells().map(cell => {
+            {row.getVisibleCells().map((cell, cellIndex) => {
               // Get width from column definition if available
               const width = cell.column.getSize()
+                ? cell.column.getSize()
+                : undefined
 
-              // Get column metadata
-              const meta = cell.column.columnDef.meta as
-                | Record<string, any>
-                | undefined
-              const cellClasses = meta?.className || ''
+              // Get pinning information
+              const isPinned = cell.column.getIsPinned()
+              const isFirstColumn = cellIndex === 0
+              const isLastColumn =
+                cellIndex === row.getVisibleCells().length - 1
+
+              // Calculate left position for pinned left columns
+              let leftOffset = 0
+              if (isPinned === 'left') {
+                row
+                  .getVisibleCells()
+                  .slice(0, cellIndex)
+                  .forEach(c => {
+                    if (c.column.getIsPinned() === 'left') {
+                      leftOffset += c.column.getSize() || 0
+                    }
+                  })
+              }
+
+              // Calculate right position for pinned right columns
+              let rightOffset = 0
+              if (isPinned === 'right') {
+                row
+                  .getVisibleCells()
+                  .slice(cellIndex + 1)
+                  .forEach(c => {
+                    if (c.column.getIsPinned() === 'right') {
+                      rightOffset += c.column.getSize() || 0
+                    }
+                  })
+              }
+
+              // Generate cell style with width and pinning if provided
+              const style: React.CSSProperties = {
+                width: width ? `${width}px` : undefined,
+                minWidth: width ? `${width}px` : '50px',
+                maxWidth: width ? undefined : '1000px',
+                position: isPinned ? 'sticky' : undefined,
+                left: isPinned === 'left' ? `${leftOffset}px` : undefined,
+                right: isPinned === 'right' ? `${rightOffset}px` : undefined,
+                zIndex: isPinned ? 20 : undefined,
+                backgroundColor: 'inherit' // This will inherit from the tr background
+              }
 
               return (
                 <td
                   key={cell.id}
                   className={cx(
-                    'p-2 px-4 text-gray-700 dark:text-gray-300',
-                    'whitespace-nowrap overflow-hidden',
-                    cellClasses
+                    'px-4 py-2 z-10',
+                    // Add border styles for pinned columns
+                    isPinned === 'left' && !isFirstColumn
+                      ? 'border-l border-gray-200 dark:border-gray-700'
+                      : '',
+                    isPinned === 'right' && !isLastColumn
+                      ? 'border-r border-gray-200 dark:border-gray-700'
+                      : ''
                   )}
-                  style={{
-                    width: width ? `${width}px` : undefined,
-                    minWidth: width ? `${width}px` : '50px',
-                    maxWidth: width ? undefined : '1000px'
-                  }}
+                  style={style}
                 >
-                  <div className="overflow-hidden text-ellipsis truncate">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </div>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               )
             })}

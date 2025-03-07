@@ -14,6 +14,16 @@ export type GetRowProps<T extends object> = (
   index: number
 ) => React.HTMLAttributes<HTMLTableRowElement>
 
+// Define a type for column pinning options
+export type PinnedPosition = 'left' | 'right' | false
+
+// Define a type for column meta data
+export interface ColumnMeta {
+  sticky?: boolean
+  className?: string
+  pin?: PinnedPosition
+}
+
 export interface TableProps<T extends object> {
   /**
    * The columns configuration for the table.
@@ -62,6 +72,12 @@ export interface TableProps<T extends object> {
    * @default false
    */
   enableFooter?: boolean
+
+  /**
+   * Whether to enable column pinning.
+   * @default false
+   */
+  enablePinning?: boolean
 
   /**
    * Default number of rows per page when pagination is enabled.

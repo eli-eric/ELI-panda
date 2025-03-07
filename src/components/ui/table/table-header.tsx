@@ -4,6 +4,7 @@ import React from 'react'
 import { cx } from '@/utils'
 
 import { FilterDropdown } from './filter-dropdown'
+import { PinIndicator } from './pin-indicator'
 import { SortIndicator } from './sort-indicator'
 import type { TableHeaderProps } from './types'
 
@@ -24,7 +25,8 @@ export function TableHeader<T extends object>({
     <thead
       className={cx(
         'bg-gray-100 dark:bg-gray-800 rounded-t-md',
-        headerClassName
+        headerClassName,
+        'relative z-30'
       )}
     >
       {table.getHeaderGroups().map(headerGroup => (
@@ -48,26 +50,46 @@ export function TableHeader<T extends object>({
               header.column.getCanFilter() &&
               header.column.columnDef.enableColumnFilter !== false
 
-            console.log('canSort', header.id, canSort)
-            console.log(
-              'canFilter',
-              header.id,
-              canFilter,
-              'columnDef.enableColumnFilter:',
-              header.column.columnDef.enableColumnFilter
-            )
+            // Get pinning information from column meta
+            const isPinned = header.column.getIsPinned()
+            const isFirstColumn = headerIndex === 0
+            const isLastColumn = headerIndex === headerGroup.headers.length - 1
 
-            // Generate column style with width if provided
+            // Calculate left position for pinned left columns
+            let leftOffset = 0
+            if (isPinned === 'left') {
+              headerGroup.headers.slice(0, headerIndex).forEach(h => {
+                if (h.column.getIsPinned() === 'left') {
+                  leftOffset += h.column.getSize() || 0
+                }
+              })
+            }
+
+            // Calculate right position for pinned right columns
+            let rightOffset = 0
+            if (isPinned === 'right') {
+              headerGroup.headers.slice(headerIndex + 1).forEach(h => {
+                if (h.column.getIsPinned() === 'right') {
+                  rightOffset += h.column.getSize() || 0
+                }
+              })
+            }
+
+            // Generate column style with width and pinning if provided
             const style: React.CSSProperties = {
               width: width ? `${width}px` : undefined,
               minWidth: width ? `${width}px` : '50px',
               maxWidth: width ? undefined : '1000px',
               // Ensure each cell maintains position during scroll
-              position: isSticky ? 'sticky' : undefined,
-              top: isSticky ? 0 : undefined
+              position: isPinned ? 'sticky' : isSticky ? 'sticky' : undefined,
+              top: isSticky ? 0 : undefined,
+              left: isPinned === 'left' ? `${leftOffset}px` : undefined,
+              right: isPinned === 'right' ? `${rightOffset}px` : undefined,
+              zIndex: isPinned ? 31 : isSticky ? 30 : undefined,
+              backgroundColor: isPinned
+                ? 'var(--header-bg-color, rgb(243 244 246))'
+                : undefined
             }
-
-            // Check if this is the first column
 
             return (
               <th
@@ -82,6 +104,14 @@ export function TableHeader<T extends object>({
                     : '',
                   // Add shadow when sticky to visually separate from content
                   isSticky ? 'shadow-sm' : '',
+                  // Add border styles for pinned columns
+                  isPinned === 'left' && !isFirstColumn
+                    ? 'border-l border-gray-200 dark:border-gray-700 z-20'
+                    : '',
+                  isPinned === 'right' && !isLastColumn
+                    ? 'border-r border-gray-200 dark:border-gray-700 z-20'
+                    : '',
+                  isPinned && 'z-30',
                   canSort ? 'cursor-pointer select-none' : ''
                 )}
                 onClick={
@@ -100,19 +130,24 @@ export function TableHeader<T extends object>({
                     {canSort && <SortIndicator column={header.column} />}
                   </div>
 
-                  {canFilter && (
-                    <div onClick={e => e.stopPropagation()}>
-                      <FilterDropdown
-                        column={header.column}
-                        onFilterChange={value => {
-                          header.column.setFilterValue(value)
-                        }}
-                        currentFilter={
-                          (header.column.getFilterValue() as string) || ''
-                        }
-                      />
-                    </div>
-                  )}
+                  <div className="flex items-center gap-1">
+                    {header.column.getCanPin() && (
+                      <PinIndicator column={header.column} position="left" />
+                    )}
+                    {canFilter && (
+                      <div onClick={e => e.stopPropagation()}>
+                        <FilterDropdown
+                          column={header.column}
+                          onFilterChange={value => {
+                            header.column.setFilterValue(value)
+                          }}
+                          currentFilter={
+                            (header.column.getFilterValue() as string) || ''
+                          }
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
               </th>
             )
