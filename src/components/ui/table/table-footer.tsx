@@ -31,6 +31,7 @@ export function TableFooter<T extends object>({
     <tfoot
       className={cx(
         'bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700',
+        'relative z-20',
         footerClassName
       )}
     >
@@ -39,17 +40,35 @@ export function TableFooter<T extends object>({
           key={footerGroup.id}
           className="border-t border-gray-200 dark:border-gray-700"
         >
-          {footerGroup.headers.map(header => {
+          {footerGroup.headers.map((header, headerIndex) => {
             // Get width from column definition if available
             const width = header.column.getSize()
               ? header.column.getSize()
               : undefined
 
-            // Generate column style with width if provided
-            const style: React.CSSProperties = {
-              width: width ? `${width}px` : undefined,
-              minWidth: width ? `${width}px` : '50px',
-              maxWidth: width ? undefined : '1000px'
+            // Get pinning information
+            const isPinned = header.column.getIsPinned()
+            const isFirstColumn = headerIndex === 0
+            const isLastColumn = headerIndex === footerGroup.headers.length - 1
+
+            // Calculate left position for pinned left columns
+            let leftOffset = 0
+            if (isPinned === 'left') {
+              footerGroup.headers.slice(0, headerIndex).forEach(h => {
+                if (h.column.getIsPinned() === 'left') {
+                  leftOffset += h.column.getSize() || 0
+                }
+              })
+            }
+
+            // Calculate right position for pinned right columns
+            let rightOffset = 0
+            if (isPinned === 'right') {
+              footerGroup.headers.slice(headerIndex + 1).forEach(h => {
+                if (h.column.getIsPinned() === 'right') {
+                  rightOffset += h.column.getSize() || 0
+                }
+              })
             }
 
             // Create an enhanced context object with access to both
@@ -62,13 +81,34 @@ export function TableFooter<T extends object>({
               }
             }
 
+            // Generate column style with width and pinning if provided
+            const style: React.CSSProperties = {
+              width: width ? `${width}px` : undefined,
+              minWidth: width ? `${width}px` : '50px',
+              maxWidth: width ? undefined : '1000px',
+              position: isPinned ? 'sticky' : undefined,
+              left: isPinned === 'left' ? `${leftOffset}px` : undefined,
+              right: isPinned === 'right' ? `${rightOffset}px` : undefined,
+              zIndex: isPinned ? 21 : undefined,
+              backgroundColor: isPinned
+                ? 'var(--footer-bg-color, rgb(249 250 251))'
+                : undefined
+            }
+
             return (
               <th
                 key={header.id}
                 colSpan={header.colSpan}
                 className={cx(
                   'px-4 py-2 text-left font-medium text-gray-500 dark:text-gray-400',
-                  'whitespace-nowrap'
+                  'whitespace-nowrap',
+                  // Add border styles for pinned columns
+                  isPinned === 'left' && !isFirstColumn
+                    ? 'border-l border-gray-200 dark:border-gray-700'
+                    : '',
+                  isPinned === 'right' && !isLastColumn
+                    ? 'border-r border-gray-200 dark:border-gray-700'
+                    : ''
                 )}
                 style={style}
               >
