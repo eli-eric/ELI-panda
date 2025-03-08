@@ -5,4 +5,5 @@ export { Table } from './table'
 // Table is exported from either './Table.tsx' or './table/index.ts'
 // depending on which version you're using. Both exports are provided
 // during the transition to ensure backward compatibility.
+export { default as ItemPropertiesViewer } from './ItemPropertiesViewer'
 export type { TableProps } from './table/types'

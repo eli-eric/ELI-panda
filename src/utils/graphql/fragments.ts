@@ -99,6 +99,10 @@ export const CatalogueItemFragment = gql(`
         node {
           uid
           name
+          groups {
+            uid
+            name
+          }
           type {
             name
             uid
@@ -128,6 +132,10 @@ export const ServiceItemFragment = gql(`
         node {
           uid
           name
+          groups {
+            uid
+            name
+          }
           type {
             name
             uid
