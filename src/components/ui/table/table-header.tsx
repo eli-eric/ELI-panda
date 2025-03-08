@@ -104,11 +104,11 @@ export function TableHeader<T extends object>({
                   // Add shadow when sticky to visually separate from content
                   isSticky ? 'shadow-sm' : '',
                   // Add border and background styles for pinned columns
-                  isPinned === 'left' && !isFirstColumn
-                    ? 'border-l border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800'
-                    : '',
-                  isPinned === 'right' && !isLastColumn
+                  isPinned === 'left'
                     ? 'border-r border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800'
+                    : '',
+                  isPinned === 'right'
+                    ? 'border-l border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800'
                     : '',
                   isPinned && 'z-30'
                 )}

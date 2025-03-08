@@ -165,16 +165,19 @@ export function TableBody<T extends object>({
                 position: isPinned ? 'sticky' : undefined,
                 left: isPinned === 'left' ? `${leftOffset}px` : undefined,
                 right: isPinned === 'right' ? `${rightOffset}px` : undefined,
-                zIndex: isPinned ? 20 : undefined
+                background: 'inherit',
+                opacity: 0.9,
+                backdropFilter: 'blur(4px)',
+                zIndex: isPinned ? 21 : 20
               }
 
               return (
                 <td
                   key={cell.id}
+                  style={style}
                   className={cx(
-                    'px-4 py-2 z-10',
-                    // Add fancy styles for pinned columns
-                    isPinned && ['backdrop-blur-lg '],
+                    'px-4 py-2 z-[19]',
+                    // Apply both backdrop-blur and background color for better compatibility
                     // Add border styles for pinned columns
                     isPinned === 'left'
                       ? 'border-r border-gray-200/50 dark:border-gray-700/50'
@@ -183,7 +186,6 @@ export function TableBody<T extends object>({
                       ? 'border-l border-gray-200/50 dark:border-gray-700/50'
                       : ''
                   )}
-                  style={style}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
