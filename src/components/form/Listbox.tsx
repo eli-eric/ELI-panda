@@ -1,5 +1,5 @@
 import { Listbox as HUIListbox } from '@headlessui/react'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
@@ -55,10 +55,20 @@ const Listbox = ({
   onClick,
   isFilter
 }: ListboxPropsT) => {
-  const { control, setValue } = useFormContext()
+  const { control, setValue, getValues } = useFormContext()
   const intl = useIntl()
 
   const { data: codebookOptions } = useCodebook(codebook)
+
+  // Set default value on component mount if not already set
+  useEffect(() => {
+    if (defaultValue && name) {
+      const currentValue = getValues(name)
+      if (currentValue === undefined) {
+        setValue(name, defaultValue)
+      }
+    }
+  }, [defaultValue, name, setValue, getValues])
 
   const options = useMemo(() => {
     const targetOptions: CodebookType[] = []

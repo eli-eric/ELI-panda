@@ -32,7 +32,7 @@ export const DetailPropertiesList = ({
           detail: {
             property: property.property,
             propertyGroup: property.propertyGroup,
-            value: property.value
+            value: property.value || property.property.defaultValue
           }
         }
       })

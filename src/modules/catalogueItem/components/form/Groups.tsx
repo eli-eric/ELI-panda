@@ -43,7 +43,7 @@ const Groups = () => {
         .map(detail => ({
           property: detail.property,
           propertyGroup: detail.propertyGroup,
-          value: detail.value
+          value: detail.value || detail.property.defaultValue
         }))
 
       map.set(group, sortBy(groupDetails, ['property.name']))
