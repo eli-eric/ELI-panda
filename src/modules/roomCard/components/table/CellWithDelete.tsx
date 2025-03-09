@@ -23,10 +23,10 @@ export const CellWithDelete = ({
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
   // any type because of react-table and component is for more contexts
   const index = fields.findIndex(
-    (field: any) => field?.uid === uid ?? field?.uuid === uuid
+    (field: any) => field?.uid === uid || field?.uuid === uuid
   )
   const item = fields.find(
-    (field: any) => field?.uid === uid ?? field?.uuid === uuid
+    (field: any) => field?.uid === uid || field?.uuid === uuid
   )
 
   const onDeleteClick = () => {

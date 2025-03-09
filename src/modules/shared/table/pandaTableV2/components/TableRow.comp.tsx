@@ -7,7 +7,7 @@ import { cx } from '@/utils'
 import { RowCellComponent } from './RowCell.comp'
 
 interface Props {
-  virtualRow: VirtualItem<Element>
+  virtualRow: VirtualItem
   measureElement: (node: Element | null) => void
   row: Row<any>
   getRowProps: (row: Row<any>) => Record<string, any>
