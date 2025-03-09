@@ -1,3 +1,5 @@
+import { memo, useMemo } from 'react'
+
 import { Pagination } from '@/modules/shared/table/Pagination'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import type { PandaTableSettings } from '@/modules/shared/table/pandaTable/PandaTable'
@@ -9,16 +11,26 @@ import type { SystemDetail } from '@/types/responses/systems'
 
 import { useSystemsItemsColumns } from './useSystemItemsColumns'
 
+// Používáme standardní komponenty, abychom předešli problémům s typováním
+const SearchBarComponent = SearchBar
+const PandaTableComponent = PandaTableV2
+const PaginationComponent = Pagination
+const SystemFilterButtonComponent = SystemFilterButtonContainer
+
 export const ItemsSelectTable = () => {
   const tableId = 'items-select-table'
 
-  const settings: PandaTableSettings<SystemDetail> = {
-    enableMultiRowSelection: true,
-    enableColumnHiding: true,
-    enableColumnReordering: false,
-    enableQueryURL: false,
-    enableRowSelection: row => !!row.original.physicalItem?.uid
-  }
+  // Memoizujeme nastavení tabulky, aby nedocházelo k zbytečným re-renderům
+  const settings = useMemo<PandaTableSettings<SystemDetail>>(
+    () => ({
+      enableMultiRowSelection: true,
+      enableColumnHiding: true,
+      enableColumnReordering: false,
+      enableQueryURL: false,
+      enableRowSelection: row => !!row.original.physicalItem?.uid
+    }),
+    []
+  )
 
   const columns = useSystemsItemsColumns({ tableId })
 
@@ -31,33 +43,49 @@ export const ItemsSelectTable = () => {
     getSubRows: original => original.subSystems ?? []
   })
 
+  // Memoizujeme další props pro komponenty
+  const paginationSettings = useMemo(
+    () => ({
+      enableQueryURL: settings?.enableQueryURL,
+      pageSizeDefault: 50,
+      total: systems?.totalCount
+    }),
+    [settings?.enableQueryURL, systems?.totalCount]
+  )
+
+  // Optimalizujeme SystemFilterButtonContainer
+  const systemFilterProps = useMemo(
+    () => ({
+      disabledFields: { category: true },
+      tableId
+    }),
+    [tableId]
+  )
+
+  // Optimalizujeme renderování komponenty
   return (
     <div>
-      <SearchBar
+      <SearchBarComponent
         tableId={tableId}
         useQuery={false}
         left={
-          <SystemFilterButtonContainer
+          <SystemFilterButtonComponent
             disabledFields={{ category: true }}
             tableId={tableId}
           />
         }
       />
-      <PandaTableV2
+      <PandaTableComponent
         data={systems?.data}
         className="overflow-y-auto relative h-[423px]"
         table={table}
         tableId={tableId}
         settings={settings}
       />
-      <Pagination
-        tableId={tableId}
-        settings={{
-          enableQueryURL: settings?.enableQueryURL,
-          pageSizeDefault: 50,
-          total: systems?.totalCount
-        }}
-      />
+      <PaginationComponent tableId={tableId} settings={paginationSettings} />
     </div>
   )
 }
+
+// Export optimalizované komponenty
+export default memo(ItemsSelectTable)

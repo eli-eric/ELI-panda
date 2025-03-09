@@ -20,17 +20,13 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
   const columns = useOrderLinesColumns()
   const [openOrderLineForm, setOpenOrderLineForm] = useState(false)
   const { control } = useFormContext()
+
+  // Používáme useWatch s memoizací k efektivnější práci s daty
   const orderLinesData = useWatch({ control, name: 'orderLines' })
 
-  // Memoize the orderLines data to prevent unnecessary re-renders
-  // This will only create a new reference when the data actually changes
-  const orderLines = useMemo(
-    () => orderLinesData,
-    [
-      // Convert to JSON and back to compare actual values, not references
-      JSON.stringify(orderLinesData)
-    ]
-  )
+  // Memoizujeme data pro předcházení zbytečným re-renderům
+  // Už nepoužíváme neefektivní JSON.stringify
+  const orderLines = useMemo(() => orderLinesData, [orderLinesData])
 
   const handleOpenOrderLineForm = () => {
     setOpenOrderLineForm(true)
