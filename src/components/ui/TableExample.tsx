@@ -3,6 +3,7 @@ import { createColumnHelper } from '@tanstack/react-table'
 import React, { useState } from 'react'
 
 import { Table } from './table/table'
+import { fuzzyFilter } from './table/utils'
 
 // Example data type
 interface User {
@@ -215,7 +216,7 @@ export const TableExample: React.FC = () => {
         </div>
       ),
       // Make filter case-insensitive and works with partial matches
-      filterFn: 'fuzzy',
+      filterFn: fuzzyFilter,
       enableColumnFilter: true
     })
   ]
