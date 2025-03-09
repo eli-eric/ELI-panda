@@ -35,6 +35,7 @@ export const ItemsSelectTable = () => {
   const columns = useSystemsItemsColumns({ tableId })
 
   const { systems } = useSystems(tableId)
+
   const table = usePandaTable({
     tableId,
     settings,
@@ -51,15 +52,6 @@ export const ItemsSelectTable = () => {
       total: systems?.totalCount
     }),
     [settings?.enableQueryURL, systems?.totalCount]
-  )
-
-  // Optimalizujeme SystemFilterButtonContainer
-  const systemFilterProps = useMemo(
-    () => ({
-      disabledFields: { category: true },
-      tableId
-    }),
-    [tableId]
   )
 
   // Optimalizujeme renderování komponenty
@@ -88,4 +80,5 @@ export const ItemsSelectTable = () => {
 }
 
 // Export optimalizované komponenty
-export default memo(ItemsSelectTable)
+const MemoizedItemsSelectTable = memo(ItemsSelectTable)
+export default MemoizedItemsSelectTable

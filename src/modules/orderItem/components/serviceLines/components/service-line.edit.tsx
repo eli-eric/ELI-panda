@@ -1,4 +1,3 @@
-import { DevTool } from '@hookform/devtools'
 import { sortBy } from 'lodash'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -124,7 +123,6 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
             </Grid>
             <DetailPropertiesList groupMap={detailsMap} disabled={true} />
           </>
-          <DevTool control={formMethods.control} />
         </Form>
       </ModalComponent>
     </>

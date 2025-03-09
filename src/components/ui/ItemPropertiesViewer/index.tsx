@@ -2,40 +2,12 @@ import type { FC } from 'react'
 import { useMemo } from 'react'
 
 import { Disclosure } from '@/components/ui'
-import { message } from '@/i18n/src/messages'
 import type { FragmentType } from '@/types/gql'
 import { useFragment } from '@/types/gql'
 import {
   CatalogueItemFragment,
   ServiceItemFragment
 } from '@/utils/graphql/fragments'
-
-const propertyMessage =
-  message.systemsPage.systemDetail.form.physicalItem.general.properties
-
-// Type for property node shared between catalogue and service items
-type PropertyNode = {
-  uid: string
-  name: string
-  groups: Array<{
-    uid: string
-    name: string
-  }>
-  type: {
-    name: string
-    uid: string
-  }
-  unit?: {
-    name: string
-    uid: string
-  } | null
-}
-
-// Type for property edge shared between catalogue and service items
-type PropertyEdge = {
-  value: string | null
-  node: PropertyNode
-}
 
 interface PropertyGroupItem {
   key: string
@@ -99,8 +71,17 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
   // Get the actual data or empty arrays if null
   const catalogueItem = catalogueItemProp ? catalogueItemFragment : null
   const serviceItem = serviceItemProp ? serviceItemFragment : null
-  const catalogueProperties = catalogueItem?.propertiesConnection?.edges || []
-  const serviceProperties = serviceItem?.detailsConnection?.edges || []
+
+  // Memoizujeme properties, aby se nevytvářely nové reference při každém renderu
+  const catalogueProperties = useMemo(
+    () => catalogueItem?.propertiesConnection?.edges || [],
+    [catalogueItem?.propertiesConnection?.edges]
+  )
+
+  const serviceProperties = useMemo(
+    () => serviceItem?.detailsConnection?.edges || [],
+    [serviceItem?.detailsConnection?.edges]
+  )
 
   // Check if there are any overridden properties
   const hasOverriddenProperties = useMemo(() => {

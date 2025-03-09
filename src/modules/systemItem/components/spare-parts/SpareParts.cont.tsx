@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { Heading } from '@/components/layout/Heading'
-import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
+import { Table } from '@/components/ui'
 import { cx } from '@/utils'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
@@ -10,10 +10,8 @@ import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
 import { AssignSparePartButton } from './AssignSparePartsButton'
 import { SetMinimalSparesButton } from './SetMinimalSparesButton'
 import { useSparePartsColumns } from './SpareParts.columns'
-import { Table } from '@/components/ui'
 
 export const SparePartsContainer = () => {
-  const tableId = 'spareParts'
   const columns = useSparePartsColumns()
   const { systemDetail } = useSystemDetail()
   const { control } = useFormContext()

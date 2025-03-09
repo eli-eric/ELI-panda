@@ -34,7 +34,6 @@ export function FilterDropdown({
 
   // Clear the filter
   const clearFilter = () => {
-    console.log('Clearing filter for column:', column.id)
     setFilterValue('')
     onFilterChange('')
   }

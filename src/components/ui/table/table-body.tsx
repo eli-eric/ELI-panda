@@ -172,9 +172,8 @@ export function TableBody<T extends object>({
 
                   // Get pinning information
                   const isPinned = cell.column.getIsPinned()
-                  const isFirstColumn = cellIndex === 0
-                  const isLastColumn =
-                    cellIndex === row.getVisibleCells().length - 1
+
+                  cellIndex === row.getVisibleCells().length - 1
 
                   // Calculate left position for pinned left columns
                   let leftOffset = 0
@@ -278,9 +277,6 @@ export function TableBody<T extends object>({
 
                 // Get pinning information
                 const isPinned = cell.column.getIsPinned()
-                const isFirstColumn = cellIndex === 0
-                const isLastColumn =
-                  cellIndex === row.getVisibleCells().length - 1
 
                 // Calculate left position for pinned left columns
                 let leftOffset = 0

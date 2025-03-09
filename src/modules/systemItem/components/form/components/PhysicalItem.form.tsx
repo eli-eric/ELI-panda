@@ -28,11 +28,10 @@ const propertyMessage =
 export const PhysicalItemForm = ({ uid }: { uid: string }) => {
   const fields = useSystemFormFields()
 
-  const { catalogueItem, physicalItem, systemDetail } = useSystemDetail()
+  const { catalogueItem, physicalItem } = useSystemDetail()
 
   const { data: properties } = useItemProperties(uid)
 
-  const catalogueItemProperties = catalogueItem?.propertiesConnection?.edges
   const lastServiceItem = physicalItem?.serviceItems?.[0] || null
 
   const description = catalogueItem?.description

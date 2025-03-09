@@ -36,8 +36,7 @@ export const useSubSystemsColumns = () => {
               className={cx(
                 original?.statistics?.sp_coverage != null &&
                   original.statistics.sp_coverage < 1 &&
-                  'text-red-500 dark:text-red-500',
-                'truncate'
+                  'text-red-500 dark:text-red-500'
               )}
             >
               {getValue()}

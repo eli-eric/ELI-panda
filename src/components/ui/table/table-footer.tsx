@@ -48,9 +48,6 @@ export function TableFooter<T extends object>({
 
             // Get pinning information
             const isPinned = header.column.getIsPinned()
-            const isFirstColumn = headerIndex === 0
-            const isLastColumn = headerIndex === footerGroup.headers.length - 1
-
             // Calculate left position for pinned left columns
             let leftOffset = 0
             if (isPinned === 'left') {

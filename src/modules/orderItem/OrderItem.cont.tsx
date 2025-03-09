@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Suspense, memo, useMemo } from 'react'
+import { memo, Suspense, useMemo } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'

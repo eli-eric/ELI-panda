@@ -22,6 +22,7 @@ export const ServiceLinesContainer = ({
   const { control } = useFormContext()
 
   const serviceLinesData = useWatch({ control, name: 'serviceLines' })
+
   // Memoizujeme data pro lepší výkon
   const serviceLines = useMemo(() => serviceLinesData, [serviceLinesData])
 

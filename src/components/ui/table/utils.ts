@@ -19,9 +19,6 @@ export const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   const itemStr = String(rowValue).toLowerCase()
   const searchStr = String(value).toLowerCase()
 
-  // Log filter operation for debugging
-  console.log(`Filtering ${columnId}: '${itemStr}' with '${searchStr}'`)
-
   // Check for direct substring match first (faster)
   if (itemStr.includes(searchStr)) {
     return true

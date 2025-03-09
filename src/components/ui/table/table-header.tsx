@@ -52,8 +52,6 @@ export function TableHeader<T extends object>({
 
             // Get pinning information from column meta
             const isPinned = header.column.getIsPinned()
-            const isFirstColumn = headerIndex === 0
-            const isLastColumn = headerIndex === headerGroup.headers.length - 1
 
             // Calculate left position for pinned left columns
             let leftOffset = 0

@@ -38,8 +38,8 @@ const useOrderDetail = () => {
   )
 
   // Memoizujeme návratový objekt, aby měl vždy stejnou referenční identitu
-  return useMemo(
-    () => ({
+  return useMemo(() => {
+    return {
       orderDetail: data,
       loading: isLoading,
       error,
@@ -48,18 +48,17 @@ const useOrderDetail = () => {
       uid,
       orderEndpoint,
       refetch
-    }),
-    [
-      data,
-      isLoading,
-      error,
-      queryKey,
-      disabledEdit,
-      uid,
-      orderEndpoint,
-      refetch
-    ]
-  )
+    }
+  }, [
+    data,
+    isLoading,
+    error,
+    queryKey,
+    disabledEdit,
+    uid,
+    orderEndpoint,
+    refetch
+  ])
 }
 
 export default useOrderDetail

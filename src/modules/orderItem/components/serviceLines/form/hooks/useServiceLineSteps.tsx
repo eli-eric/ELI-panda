@@ -68,10 +68,9 @@ export const useServiceLineSteps = () => {
   }, [])
 
   // Použijeme useMemo pro shouldShowDetails
-  const shouldShowDetails = useCallback(
-    () => (data ? Boolean(data?.properties?.length) : true),
-    [data]
-  )
+  const shouldShowDetails = useCallback(() => {
+    return data ? Boolean(data?.properties?.length) : true
+  }, [data])
 
   // Memoizujeme onStepComplete callback
   const handleStepComplete = useCallback(
@@ -87,34 +86,33 @@ export const useServiceLineSteps = () => {
   )
 
   // Memoizujeme jednotlivé komponenty kroků
-  const serviceTypeComponent = useMemo(
-    () => <Listbox {...fields.serviceType} onChange={onChangeService} />,
-    [fields.serviceType, onChangeService]
-  )
+  const serviceTypeComponent = useMemo(() => {
+    return <Listbox {...fields.serviceType} onChange={onChangeService} />
+  }, [fields.serviceType, onChangeService])
 
-  const priceComponent = useMemo(
-    () => (
+  const priceComponent = useMemo(() => {
+    return (
       <InputAmount {...fields.price}>
         <InputCurrency {...fields.currency} />
       </InputAmount>
-    ),
-    [fields.price, fields.currency]
-  )
+    )
+  }, [fields.price, fields.currency])
 
-  const serviceLineDetailsComponent = useMemo(
-    () => (
+  const serviceLineDetailsComponent = useMemo(() => {
+    return (
       <ServiceLineDetails
         serviceType={data ? { name: data?.name, uid: data?.uid } : undefined}
       />
-    ),
-    [data]
-  )
+    )
+  }, [data])
 
-  const itemsSelectComponent = useMemo(() => <ItemsSelectTable />, [])
+  const itemsSelectComponent = useMemo(() => {
+    return <ItemsSelectTable />
+  }, [])
 
   // Memoizujeme celou strukturu kroků
-  const steps = useMemo<WizardStepConfig<ServiceLineFormType>[]>(
-    () => [
+  const steps = useMemo<WizardStepConfig<ServiceLineFormType>[]>(() => {
+    return [
       {
         id: 'basicInfo',
         title: fm({ id: messages.steps.step1.title }),
@@ -157,21 +155,20 @@ export const useServiceLineSteps = () => {
         title: fm({ id: messages.steps.step3.title }),
         component: itemsSelectComponent
       }
-    ],
-    [
-      fm,
-      handleStepComplete,
-      fields.name,
-      fields.serviceType,
-      fields.price,
-      fields.notes,
-      serviceTypeComponent,
-      priceComponent,
-      serviceLineDetailsComponent,
-      shouldShowDetails,
-      itemsSelectComponent
     ]
-  )
+  }, [
+    fm,
+    handleStepComplete,
+    fields.name,
+    fields.serviceType,
+    fields.price,
+    fields.notes,
+    serviceTypeComponent,
+    priceComponent,
+    serviceLineDetailsComponent,
+    shouldShowDetails,
+    itemsSelectComponent
+  ])
 
   return steps
 }

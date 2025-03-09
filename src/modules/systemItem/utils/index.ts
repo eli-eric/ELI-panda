@@ -19,7 +19,7 @@ export const getColorBySystemLevel = (level?: SystemLevel, index?: number) => {
   }
 }
 
-export const getFontBySystemLevel = (level?: SystemLevel, index?: number) => {
+export const getFontBySystemLevel = (level?: SystemLevel) => {
   switch (level) {
     case SystemLevel.KeySystems:
       return 'font-medium dark:text-gray-200'
