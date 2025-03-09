@@ -29,15 +29,15 @@ const orderLineFormSchema = object({
     .notRequired()
     .transform(value => (Number.isNaN(value) ? null : value)),
   system: object().nullable().required('Parent system is required field.'),
-  serialNumbers: string().nullable(),
-  atLeastOneFilled: string().test(
-    'at-least-one-filled',
-    'At least one of Quantity or Serial Numbers must be filled',
-    function () {
-      const { serialNumbers, quantity } = this.parent
-      return Boolean(serialNumbers || quantity)
-    }
-  )
+  serialNumbers: string().nullable()
+  // atLeastOneFilled: string().test(
+  //   'at-least-one-filled',
+  //   'At least one of Quantity or Serial Numbers must be filled',
+  //   function () {
+  //     const { serialNumbers, quantity } = this.parent
+  //     return Boolean(serialNumbers || quantity)
+  //   }
+  // )
 })
 
 export const OrderLineForm = ({

@@ -1,7 +1,7 @@
 import type { CellContext } from '@tanstack/react-table'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
-import { TableActionsButtons } from '@/components/Buttons'
+import { TableDeleteButton } from '@/components/Buttons'
 import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
 
@@ -34,15 +34,14 @@ export const CellWithDelete = ({
     setDeleteItem(item)
   }
   return (
-    <div className="flex items-center">
+    <div className="flex items-center w-full justify-between pr-3">
+      <span>{getValue()}</span>
       {editPersmission && (
-        <TableActionsButtons
-          onDeleteClick={onDeleteClick}
-          canEdit={true}
-          className="mr-5"
+        <TableDeleteButton
+          className="text-primary-400 dark:text-primary-500"
+          onClick={onDeleteClick}
         />
       )}
-      <span>{getValue()}</span>
     </div>
   )
 }

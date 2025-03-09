@@ -1,11 +1,10 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
+import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
-import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
-import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
 import { cx } from '@/utils'
 
 import useOrderLinesColumns from './components/OrderLines.columns'
@@ -21,28 +20,13 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
   const columns = useOrderLinesColumns()
   const [openOrderLineForm, setOpenOrderLineForm] = useState(false)
   const { control } = useFormContext()
-  const orderLines = useWatch({ control, name: 'orderLines' })
 
-  const table = usePandaTable({
-    columns,
-    data: orderLines,
-    tableId: 'orderLines',
-    settings: {
-      enableFooter: true,
-      enableFiltering: true,
-      manualFiltering: false,
-      enableQueryURL: false,
-      enableSorting: true,
-      manualSorting: false,
-      defaultColumnOrder: [
-        'name',
-        'partNumber',
-        'serialNumber',
-        'eun',
-        'isDelivered'
-      ]
-    }
-  })
+  // Používáme useWatch s memoizací k efektivnější práci s daty
+  const orderLinesData = useWatch({ control, name: 'orderLines' })
+
+  // Memoizujeme data pro předcházení zbytečným re-renderům
+  // Už nepoužíváme neefektivní JSON.stringify
+  const orderLines = useMemo(() => orderLinesData, [orderLinesData])
 
   const handleOpenOrderLineForm = () => {
     setOpenOrderLineForm(true)
@@ -50,7 +34,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
 
   return (
     <Fragment>
-      <Heading text={messages.orderLines}>
+      <Heading text={messages.orderLines} showBorder={false}>
         {!disabledEdit && (
           <div className="flex items-center mr-2">
             <PlusButton
@@ -63,31 +47,28 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
           </div>
         )}
       </Heading>
-      {orderLines?.length && (
-        <div className="flex flex-col max-h-[500px] mb-5">
-          <PandaTableControlled
-            data={orderLines}
-            table={table}
-            tableId={'orderLines'}
-            className={'relative overflow-x-auto'}
-            getRowProps={({ original: { isDelivered } }) => ({
-              className: cx(
-                isDelivered
-                  ? 'bg-green-100 dark:bg-green-700'
-                  : 'bg-white dark:bg-gray-800'
-              )
-            })}
-            settings={{
-              enableFooter: true,
-              enableFiltering: true,
-              manualFiltering: false,
-              enableQueryURL: false,
-              enableSorting: true,
-              manualSorting: false
-            }}
-          />
-        </div>
-      )}
+      <div className="w-full overflow-hidden">
+        <Table
+          columns={columns}
+          data={orderLines}
+          enablePagination
+          enableFiltering
+          enableFooter
+          enablePinning
+          className="overflow-x-auto overflow-y-auto"
+          headerClassName="whitespace-nowrap sticky"
+          rowClassName="whitespace-nowrap group/row"
+          getRowProps={(orderLine, index) => ({
+            className: cx(
+              orderLine?.isDelivered
+                ? index % 2 === 0
+                  ? 'bg-green-200 dark:bg-green-800 '
+                  : 'bg-green-100 dark:bg-green-700 '
+                : ''
+            )
+          })}
+        />
+      </div>
       <OrderLineForm open={openOrderLineForm} setOpen={setOpenOrderLineForm} />
     </Fragment>
   )

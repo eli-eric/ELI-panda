@@ -9,6 +9,7 @@ import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import { Paragraph } from '@/components/layout/Paragraph'
 import ProgressBarComponent from '@/components/progress-bar.comp'
+import { ItemPropertiesViewer } from '@/components/ui'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
 import FileManager from '@/modules/shared/fileManager/FileManager'
@@ -19,10 +20,7 @@ import { ROLE } from '@/types/constants/roles'
 
 import { createMessageValues } from '../../../../../utils/formatters'
 import useSystemFormFields from '../SystemForm.fields'
-import { CatalogueProperties } from './CatalogueProperties'
 import { ItemProperties } from './ItemProperties'
-import { OrderInformation } from './OrderInformation'
-import { ServiceItemProperties } from './ServiceItemProperties'
 
 const propertyMessage =
   message.systemsPage.systemDetail.form.physicalItem.general.properties
@@ -30,11 +28,10 @@ const propertyMessage =
 export const PhysicalItemForm = ({ uid }: { uid: string }) => {
   const fields = useSystemFormFields()
 
-  const { catalogueItem, physicalItem, systemDetail } = useSystemDetail()
+  const { catalogueItem, physicalItem } = useSystemDetail()
 
   const { data: properties } = useItemProperties(uid)
 
-  const catalogueItemProperties = catalogueItem?.propertiesConnection?.edges
   const lastServiceItem = physicalItem?.serviceItems?.[0] || null
 
   const description = catalogueItem?.description
@@ -63,23 +60,15 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
           <Paragraph>{description}</Paragraph>
         </Col>
       )}
-
       <Col sm="full" className="w-full">
-        <CatalogueProperties
-          catalogueItemProperties={catalogueItemProperties}
+        <ItemPropertiesViewer
+          catalogueItem={physicalItem?.catalogueItem}
+          serviceItem={lastServiceItem}
         />
       </Col>
-
       <Col sm="full" className="w-full">
         <ItemProperties properties={properties} />
       </Col>
-
-      {lastServiceItem && (
-        <Col sm="full" className="w-full">
-          <ServiceItemProperties serviceItem={lastServiceItem} />
-        </Col>
-      )}
-
       <Col sm={3} md={4}>
         <Listbox {...fields.itemUsage} />
       </Col>
@@ -92,12 +81,8 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
       <Col sm="full">
         <TextArea {...fields.itemNotes} />
       </Col>
-
-      <Col sm="full" className="w-full">
-        {systemDetail && (
-          <OrderInformation physicalItem={systemDetail.physicalItem} />
-        )}
-      </Col>
+      {/* TODO: This is a placeholder order Info */}
+      <Col sm="full" className="w-full"></Col>
 
       <Col sm="full" className="flex-col">
         <ErrorBoundary fallback={<ErrorPage />}>

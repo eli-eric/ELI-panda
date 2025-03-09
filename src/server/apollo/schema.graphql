@@ -166,7 +166,7 @@ type CatalogueCategoryProperty @authentication {
   name: String!
   defaultValue: String!
   unit: Unit @relationship(type: "HAS_UNIT", direction: OUT)
-  group: [CatalogueCategoryPropertyGroup!]!
+  groups: [CatalogueCategoryPropertyGroup!]!
     @relationship(type: "CONTAINS_PROPERTY", direction: IN)
   type: CatalogueCategoryPropertyType
     @relationship(type: "IS_PROPERTY_TYPE", direction: OUT)

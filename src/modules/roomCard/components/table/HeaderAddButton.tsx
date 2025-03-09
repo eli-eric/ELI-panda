@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
 import { mixed, object } from 'yup'
 
@@ -73,11 +73,12 @@ export const HeaderAddButton = ({
   if (!editPersmission) return null
 
   return (
-    <Fragment>
+    <div>
       <PlusButton
         primary
         type="button"
-        onClick={() => {
+        onClick={e => {
+          e.stopPropagation()
           setIsModalOpen(true)
         }}
       />
@@ -95,6 +96,6 @@ export const HeaderAddButton = ({
           />
         </div>
       </FormModal>
-    </Fragment>
+    </div>
   )
 }

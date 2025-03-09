@@ -4,9 +4,15 @@ import { cx } from '@/utils'
 
 interface Props {
   className?: string
+  title?: string
 }
 
 export const LinkDecorator: FC<PropsWithChildren<Props>> = ({
   children,
-  className
-}) => <div className={cx('link', className)}>{children}</div>
+  className,
+  title
+}) => (
+  <div title={title} className={cx('link', className)}>
+    {children}
+  </div>
+)

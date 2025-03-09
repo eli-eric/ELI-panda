@@ -1,11 +1,8 @@
+import { CheckCircleIcon } from '@heroicons/react/24/outline'
 import type { Row } from '@tanstack/react-table'
 import { Fragment } from 'react'
 
-import {
-  Button,
-  TableButtonsWrapper,
-  TableDeleteButton
-} from '@/components/Buttons'
+import { Button, TableDeleteButton } from '@/components/Buttons'
 import { Toggle } from '@/components/form/Switch'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
@@ -15,6 +12,7 @@ import { useServiceLine } from '@/modules/orderItem/hooks/useServiceLine'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
 import { ROLE } from '@/types/constants/roles'
 
+import { ButtonsWrapperNew } from '../../orderLines/components/OrderLine.actions'
 import { ServiceLineEdit } from './service-line.edit'
 export const ServiceLineActionButtons = ({
   serviceLine
@@ -25,16 +23,14 @@ export const ServiceLineActionButtons = ({
   const withWarning = useWarningModal()
 
   return (
-    <Fragment>
-      <TableButtonsWrapper>
-        <ServiceLineEdit serviceLine={serviceLine} />
-        <TableDeleteButton
-          onClick={() => {
-            withWarning(deleteServiceLine)(serviceLine.uuid)
-          }}
-        />
-      </TableButtonsWrapper>
-    </Fragment>
+    <ButtonsWrapperNew position="right-1">
+      <ServiceLineEdit serviceLine={serviceLine} />
+      <TableDeleteButton
+        onClick={() => {
+          withWarning(deleteServiceLine)(serviceLine.uuid)
+        }}
+      />
+    </ButtonsWrapperNew>
   )
 }
 
@@ -99,10 +95,11 @@ export const DeliveredAllButton = () => {
     <Button
       primary
       disabled={isPending || !hasRole}
-      className="flex justify-center"
+      className="flex justify-center items-center p-1 h-7 min-h-0 w-7"
       onClick={handleClick}
+      title="Mark All as Delivered"
     >
-      Mark All
+      <CheckCircleIcon className="h-5 w-5" />
     </Button>
   )
 }

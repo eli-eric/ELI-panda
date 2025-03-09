@@ -1,7 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 
-import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
+import { Table } from '@/components/ui'
 import { ROLE } from '@/types/constants/roles'
 import type { Employee } from '@/types/gql/graphql'
 import { cx } from '@/utils'
@@ -12,7 +12,6 @@ import { CellWithDelete } from './CellWithDelete'
 interface Props {
   name: string
   header: string
-  tableId: string
   setNewEmployee: (employee: Employee) => void
   setDisconnectEmployee: (employee: Employee) => void
   data: Employee[]
@@ -22,55 +21,49 @@ interface Props {
 export const EmployeeTable = ({
   name,
   header,
-  tableId,
   setNewEmployee,
   setDisconnectEmployee,
   data,
   className
 }: Props) => {
   const columnsOperators = useMemo(
-    (): ColumnDef<any, any>[] => [
+    (): ColumnDef<{ fullName: string }, any>[] => [
       {
-        header: header,
-        meta: {
-          headerElement: (
-            <HeaderAddButton
-              setEmployee={setNewEmployee}
-              name={name}
-              editPersmissionRole={ROLE.SYSTEM_EDIT}
-            />
+        header: () => {
+          return (
+            <div className="flex justify-between w-full items-center">
+              <span className="text-sm font-semibold">{header}</span>
+              <HeaderAddButton
+                setEmployee={setNewEmployee}
+                name={name}
+                editPersmissionRole={ROLE.SYSTEM_EDIT}
+              />
+            </div>
           )
         },
-        columns: [
-          {
-            accessorKey: 'fullName',
-            meta: { noHeader: true },
-            cell: props => (
-              <CellWithDelete
-                {...props}
-                name={name}
-                setDeleteItem={setDisconnectEmployee}
-              />
-            ),
-            size: 563
-          }
-        ]
+        accessorKey: 'fullName',
+        enableSorting: false,
+        cell: props => (
+          <CellWithDelete
+            {...props}
+            name={name}
+            setDeleteItem={setDisconnectEmployee}
+          />
+        ),
+        size: 563
       }
     ],
     [setNewEmployee, setDisconnectEmployee, header, name]
   )
 
   return (
-    <PandaTable
-      {...{
-        tableId,
-        columns: columnsOperators,
-        data: data?.length === 0 ? undefined : data,
-        className: cx(
-          'border-l border-r border-gray-400 mb-0 pb-0 h-fit overflow-hidden',
-          className
-        )
-      }}
+    <Table<any>
+      columns={columnsOperators}
+      skipEmptyMessage={true}
+      data={data}
+      headerClassName="whitespace-nowrap sticky"
+      rowClassName="whitespace-nowrap group/row"
+      className={cx(className, 'overflow-x-auto overflow-y-auto')}
     />
   )
 }

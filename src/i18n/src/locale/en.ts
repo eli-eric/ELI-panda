@@ -346,7 +346,7 @@ export const messages = {
         isDelivered: 'Delivered',
         price: 'Price'
       },
-      head: 'Service Lines',
+      header: 'Service Lines',
       wizard: {
         steps: {
           step1: {
@@ -436,6 +436,7 @@ export const messages = {
       },
       orderLinesTable: {
         header: {
+          actions: 'Actions',
           name: 'Name',
           catalogueNumber: 'Part Number',
           system: 'Parent System',

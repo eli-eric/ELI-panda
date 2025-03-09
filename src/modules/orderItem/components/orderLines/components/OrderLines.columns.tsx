@@ -32,13 +32,19 @@ const useOrderLinesColumns = () => {
         header: formatMessage({ id: messages.name }),
         accessorKey: 'name',
         cell: ({ getValue, row: { original } }) => (
-          <div className="flex items-center">
-            <span>{getValue()}</span>
-            {!disabledEdit && <OrderLineActionButtons orderLine={original} />}
+          <div className="flex items-center relative w-full">
+            <span title={getValue()} className="truncate">
+              {getValue()}
+            </span>
+            {!disabledEdit && (
+              <div className="absolute right-0 opacity-0 group-hover/row:opacity-100 transition-opacity duration-150">
+                <OrderLineActionButtons orderLine={original} />
+              </div>
+            )}
           </div>
         ),
-        meta: { sticky: true, className: 'sm:pr-12' },
-        size: 240,
+        meta: { className: 'sm:pr-16 relative' },
+        size: 340,
         footer: ({ table: { getRowCount } }) => (
           <span>Total: {getRowCount()} line(s)</span>
         )
@@ -46,6 +52,7 @@ const useOrderLinesColumns = () => {
       {
         header: formatMessage({ id: messages.catalogueNumber }),
         accessorKey: 'catalogueNumber',
+        size: 240,
         cell: ({ getValue, row: { original } }) => (
           <NewTabLink
             href={PATH.CATALOGUE_ITEM + '/' + original.catalogueUid}
@@ -55,7 +62,8 @@ const useOrderLinesColumns = () => {
       },
       {
         header: formatMessage({ id: messages.serialNumber }),
-        accessorKey: 'serialNumber'
+        accessorKey: 'serialNumber',
+        size: 220
       },
       {
         header: formatMessage({ id: messages.eun }),
@@ -63,27 +71,29 @@ const useOrderLinesColumns = () => {
         cell: ({ row: { original } }) => (
           <PrintEunButton orderLine={original} />
         ),
-        size: 60
+        size: 150
       },
       {
         header: () => {
           return (
-            <span className="bg-inherit flex flex-col">
-              {formatMessage({ id: messages.isDelivered })}
+            <div className="flex items-center justify-between px-2 w-full">
               <DeliveredAllButton />
-            </span>
+            </div>
           )
         },
         accessorKey: 'isDelivered',
         cell: ({ getValue, row: { original } }) =>
           uid ? (
-            <OrderisDeliveredAction orderLine={original} checked={getValue()} />
+            <div className="flex justify-center w-full">
+              <OrderisDeliveredAction
+                orderLine={original}
+                checked={getValue()}
+              />
+            </div>
           ) : null,
-        size: 90,
-        meta: {
-          filter: { enableColumnFilter: false, type: 'boolean' }
-        },
+        size: 80,
         enableSorting: false,
+        enablePinning: false,
         enableColumnFilter: false
       },
       {
@@ -99,7 +109,9 @@ const useOrderLinesColumns = () => {
           </Fragment>
         ),
         id: 'notes',
-        size: 90
+        size: 110,
+        enableSorting: false,
+        enableColumnFilter: false
       },
       {
         header: formatMessage({ id: messages.price }),
@@ -110,16 +122,20 @@ const useOrderLinesColumns = () => {
             <span className="font-medium ">{original.currency}</span>
           </span>
         ),
-        footer: props => <PriceFooter rows={props.table.getRowModel().rows} />
+        footer: props => (
+          <PriceFooter rows={props.table.getFilteredRowModel().rows} />
+        )
       },
       {
         header: formatMessage({ id: messages.itemUsage }),
         accessorFn: row => row.itemUsage?.name,
-        cell: ({ getValue }) => <span>{getValue()}</span>
+        cell: ({ getValue }) => <span>{getValue()}</span>,
+        size: 240
       },
       {
         header: formatMessage({ id: messages.system }),
         accessorFn: row => row.system?.name,
+        size: 240,
         cell: ({ getValue, row: { original } }) => (
           <Link
             className="link"
@@ -133,7 +149,8 @@ const useOrderLinesColumns = () => {
       {
         header: formatMessage({ id: messages.location }),
         accessorFn: row => row.location?.name,
-        cell: ({ getValue }) => <span>{getValue()?.split(' - ')[0]}</span>
+        cell: ({ getValue }) => <span>{getValue()?.split(' - ')[0]}</span>,
+        size: 240
       }
     ]
     return cols
