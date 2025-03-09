@@ -15,14 +15,32 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Install Yarn
-        run: npm install -g yarn
 
-      - run: yarn install
-      - run: yarn build
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.15.5
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - run: pnpm install
+      - run: pnpm build
         env:
           PANDA_API_GW_URL: ${{ env.PANDA_API_GW_URL }}
-      - run: yarn start &
+      - run: pnpm start &
       - run: node_modules/cypress/bin/cypress run --record --key ${{ secrets.CYPRESS_RECORD_KEY }} --browser chrome --tag "chrome,${{ github.event.head_commit.author.name }},${{ github.event.head_commit.message }}"  --env host=http://localhost:5001 --env NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }} --env token=${{ env.CYPRESS_LOGIN_TOKEN }}
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}

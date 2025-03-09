@@ -16,18 +16,36 @@ jobs:
       - name: Use Node 18 🕹️
         uses: actions/setup-node@v3
         with:
-          cache: 'yarn'
-          cache-dependency-path: ./yarn.lock
           node-version: '18'
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.15.5
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Install ⚙️
-        run: yarn install
+        run: pnpm install
 
       - name: Lint 🤓
-        run: yarn lint
+        run: pnpm lint
 
       - name: Test 🧪
-        run: yarn test
+        run: pnpm test
 
   cypress-run:
     name: Cypress run - test
@@ -36,11 +54,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.15.5
+
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
           record: true
           browser: chrome
+          build: pnpm build
+          start: pnpm start
+          install: false
         env:
           CYPRESS_host: http://localhost:5001
           CYPRESS_token: ${{ secrets.CYPRESS_LOGIN_TOKEN }}
