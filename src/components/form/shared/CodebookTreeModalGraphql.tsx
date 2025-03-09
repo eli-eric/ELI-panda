@@ -6,6 +6,7 @@ import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
+import { fuzzyFilter } from '@/modules/shared/table/pandaTable/utils'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
@@ -71,7 +72,7 @@ export const CodebookTreeModalGraphql = ({
         header: 'Name',
         accessorKey: 'name',
         id: 'name',
-        filterFn: 'fuzzy',
+        filterFn: fuzzyFilter,
         size: 300,
         meta: enableFiltering
           ? { filter: { type: 'string', enableColumnFilter: true } }

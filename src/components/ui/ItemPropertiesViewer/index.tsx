@@ -68,20 +68,16 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
     serviceItemProp || null
   )
 
-  // Get the actual data or empty arrays if null
-  const catalogueItem = catalogueItemProp ? catalogueItemFragment : null
-  const serviceItem = serviceItemProp ? serviceItemFragment : null
-
   // Memoizujeme properties, aby se nevytvářely nové reference při každém renderu
-  const catalogueProperties = useMemo(
-    () => catalogueItem?.propertiesConnection?.edges || [],
-    [catalogueItem?.propertiesConnection?.edges]
-  )
+  const catalogueProperties = useMemo(() => {
+    // Use type assertion to tell TypeScript this property exists
+    return (catalogueItemFragment as any)?.propertiesConnection?.edges || []
+  }, [catalogueItemFragment])
 
-  const serviceProperties = useMemo(
-    () => serviceItem?.detailsConnection?.edges || [],
-    [serviceItem?.detailsConnection?.edges]
-  )
+  const serviceProperties = useMemo(() => {
+    // Use type assertion to tell TypeScript this property exists
+    return (serviceItemFragment as any)?.detailsConnection?.edges || []
+  }, [serviceItemFragment])
 
   // Check if there are any overridden properties
   const hasOverriddenProperties = useMemo(() => {
