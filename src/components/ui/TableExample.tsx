@@ -126,7 +126,7 @@ export const TableExample: React.FC = () => {
           {info.getValue()}
         </div>
       ),
-      filterFn: 'fuzzy',
+      filterFn: fuzzyFilter,
       enableColumnFilter: true,
       footer: ({ table }) => (
         <div className="font-medium">Total: {table.getRowCount()} users</div>
@@ -143,7 +143,7 @@ export const TableExample: React.FC = () => {
         </div>
       ),
       // Make filter case-insensitive and works with partial matches
-      filterFn: 'fuzzy',
+      filterFn: fuzzyFilter,
       enableColumnFilter: true
     }),
     columnHelper.accessor('role', {
@@ -155,7 +155,7 @@ export const TableExample: React.FC = () => {
         </div>
       ),
       // Make filter case-insensitive and works with partial matches
-      filterFn: 'fuzzy',
+      filterFn: fuzzyFilter,
       enableColumnFilter: true,
       // Example of using the PriceFooter component to show cross-page totals
       footer: props => <PriceFooter table={props.table} />
@@ -179,7 +179,7 @@ export const TableExample: React.FC = () => {
           </div>
         )
       },
-      filterFn: 'fuzzy',
+      filterFn: fuzzyFilter,
       enableColumnFilter: false,
       // Pin this column to the right by default
       enablePinning: true,
