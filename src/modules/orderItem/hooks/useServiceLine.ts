@@ -17,7 +17,7 @@ export const useServiceLine = () => {
       update(index, dataToSave)
     } else {
       dataToSave.uuid = crypto.randomUUID()
-      insert(fields.length, dataToSave)
+      insert(0, dataToSave)
     }
   }
   //  delete the order line from the form

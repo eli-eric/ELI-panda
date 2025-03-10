@@ -4,6 +4,7 @@ import { useMemo } from 'react'
 
 import { Badge } from '@/components/visuals/Badge'
 import { PATH } from '@/types/constants/paths'
+import { cx } from '@/utils'
 
 export type OrderColumns = {
   type: string
@@ -21,7 +22,15 @@ export const useSystemOrderColumns = () => {
         id: 'type',
         header: 'Type',
         accessorKey: 'type',
-        cell: ({ getValue }) => <Badge>{getValue()}</Badge>
+        cell: ({ getValue }) => (
+          <Badge
+            className={cx(
+              getValue() === 'service' && 'bg-lime-400 dark:bg-lime-600'
+            )}
+          >
+            {getValue()}
+          </Badge>
+        )
       },
       {
         id: 'name',
