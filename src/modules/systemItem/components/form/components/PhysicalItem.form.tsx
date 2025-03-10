@@ -21,6 +21,7 @@ import { ROLE } from '@/types/constants/roles'
 import { createMessageValues } from '../../../../../utils/formatters'
 import useSystemFormFields from '../SystemForm.fields'
 import { ItemProperties } from './ItemProperties'
+import { OrderInformation } from './orderInfo/OrderInformation'
 
 const propertyMessage =
   message.systemsPage.systemDetail.form.physicalItem.general.properties
@@ -28,7 +29,7 @@ const propertyMessage =
 export const PhysicalItemForm = ({ uid }: { uid: string }) => {
   const fields = useSystemFormFields()
 
-  const { catalogueItem, physicalItem } = useSystemDetail()
+  const { catalogueItem, physicalItem, systemDetail } = useSystemDetail()
 
   const { data: properties } = useItemProperties(uid)
 
@@ -82,7 +83,11 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
         <TextArea {...fields.itemNotes} />
       </Col>
       {/* TODO: This is a placeholder order Info */}
-      <Col sm="full" className="w-full"></Col>
+      <Col sm="full" className="w-full">
+        {systemDetail?.physicalItem && (
+          <OrderInformation physicalItem={systemDetail.physicalItem} />
+        )}
+      </Col>
 
       <Col sm="full" className="flex-col">
         <ErrorBoundary fallback={<ErrorPage />}>

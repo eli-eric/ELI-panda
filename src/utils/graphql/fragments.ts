@@ -125,6 +125,7 @@ export const ServiceItemFragment = gql(`
     order {
       uid
       name
+      orderDate
     }
     detailsConnection {
       edges {
@@ -161,8 +162,19 @@ export const PhysicalItemFragment = gql(`
       uid
       name
     }
+    orderConnection {
+      edges {
+        isDelivered
+        node {
+          uid
+          orderDate
+          name
+        }
+      }
+    }
     order {
       uid
+      orderDate
       name
     }
     itemUsage {

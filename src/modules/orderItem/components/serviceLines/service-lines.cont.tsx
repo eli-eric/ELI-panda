@@ -23,24 +23,29 @@ export const ServiceLinesContainer = ({
 
   const serviceLinesData = useWatch({ control, name: 'serviceLines' })
 
-  // Memoizujeme data pro lepší výkon
-  const serviceLines = useMemo(() => serviceLinesData, [serviceLinesData])
+  // Memoize data to prevent unnecessary re-renders
+  // Use JSON.stringify to ensure the memoized value only changes when the actual data content changes
+  const serviceLines = useMemo(
+    () => serviceLinesData || [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [JSON.stringify(serviceLinesData)]
+  )
 
-  // Memoizujeme sloupce pro předcházení zbytečným re-renderům
+  // Memoize columns to prevent unnecessary re-renders
   const serviceLinesColumns = useServiceLinesColumns()
   const [openServiceLineForm, setOpenServiceLineForm] = useState(false)
 
-  // Použijeme useCallback pro funkci handleAddServiceLine
+  // Use useCallback for handleAddServiceLine
   const handleAddServiceLine = useCallback(() => {
     setOpenServiceLineForm(true)
   }, [])
 
-  // Použijeme useCallback pro funkci setOpen - omezíme zbytečné re-rendery modálního okna
+  // Use useCallback for setOpen to prevent unnecessary re-renders of the modal
   const handleSetOpen = useCallback((open: boolean) => {
     setOpenServiceLineForm(open)
   }, [])
 
-  // Memoizujeme props pro tabulku, aby nedocházelo k zbytečným re-renderům
+  // Memoize table props to prevent unnecessary re-renders
   const tableProps = useMemo(
     () => ({
       data: serviceLines,

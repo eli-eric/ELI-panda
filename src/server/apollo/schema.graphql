@@ -367,6 +367,7 @@ enum SystemLevel {
 interface hasOrderLine @relationshipProperties {
   price: Int
   currency: String
+  isDelivered: Boolean
 }
 
 type Item @authentication {
@@ -441,6 +442,12 @@ type SystemType @authentication {
 type Order @authentication {
   uid: ID! @id
   name: String!
+  orderDate: DateTime
+  orderNumber: String
+  requestNumber: String
+  notes: String
+  lastUpdateTime: DateTime
+  created: DateTime
   orderLines: [Item!]! @relationship(type: "HAS_ORDER_LINE", direction: OUT)
 }
 
