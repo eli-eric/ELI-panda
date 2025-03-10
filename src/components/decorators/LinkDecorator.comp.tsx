@@ -12,7 +12,7 @@ export const LinkDecorator: FC<PropsWithChildren<Props>> = ({
   className,
   title
 }) => (
-  <div title={title} className={cx('link', className)}>
+  <span title={title} className={cx('link', className)}>
     {children}
-  </div>
+  </span>
 )

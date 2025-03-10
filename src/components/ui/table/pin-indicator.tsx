@@ -1,6 +1,6 @@
-import { PaperClipIcon } from '@heroicons/react/24/outline'
 import React from 'react'
 
+import { PinIcon } from '@/components/icons/pin'
 import { cx } from '@/utils'
 
 import type { PinnedPosition } from './types'
@@ -31,7 +31,13 @@ export function PinIndicator({ column, position }: PinIndicatorProps) {
       )}
       title={`${isPinned ? 'Unpin' : 'Pin'} column`}
     >
-      <PaperClipIcon className={cx('w-4 h-4', isPinned && '-rotate-45')} />
+      <PinIcon
+        className={cx(
+          'w-4 h-4',
+          isPinned && '-rotate-45',
+          isPinned ? 'text-primary-500' : 'text-gray-400'
+        )}
+      />
     </button>
   )
 }
