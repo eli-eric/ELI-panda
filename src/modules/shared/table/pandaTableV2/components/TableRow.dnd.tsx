@@ -10,7 +10,7 @@ import type { GetRowPropsReturnType } from '../../pandaTable/PandaTable'
 import { RowCellComponent } from './RowCell.comp'
 
 interface Props {
-  virtualRow: VirtualItem
+  virtualRow: VirtualItem<Element>
   measureElement: (node: Element | null) => void
   row: Row<any>
   getRowProps: (row: Row<any>) => GetRowPropsReturnType
