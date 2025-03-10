@@ -57,7 +57,13 @@ export function PandaTableV2<T>({
     measureElement:
       typeof window !== 'undefined' &&
       navigator.userAgent.indexOf('Firefox') === -1
-        ? element => element?.getBoundingClientRect().height
+        ? element => {
+            // Only measure if the element exists and is attached to the DOM
+            if (element && document.body.contains(element)) {
+              return element.getBoundingClientRect().height
+            }
+            return 49 // Return default height if element doesn't exist
+          }
         : undefined,
     overscan: 20
   })

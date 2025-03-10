@@ -10,7 +10,7 @@ import type { GetRowPropsReturnType } from '../../pandaTable/PandaTable'
 import { RowCellComponent } from './RowCell.comp'
 
 interface Props {
-  virtualRow: VirtualItem<Element>
+  virtualRow: VirtualItem
   measureElement: (node: Element | null) => void
   row: Row<any>
   getRowProps: (row: Row<any>) => GetRowPropsReturnType
@@ -63,7 +63,12 @@ export const TableRowDNDComponent: FC<Props> = ({
         isHoveringDrop ? 'bg-primary-200 dark:bg-primary-600' : ''
       )}
       data-index={virtualRow.index} //needed for dynamic row height measurement
-      ref={node => measureElement(node)} //measure dynamic row height
+      ref={node => {
+        // Only call measureElement if the node exists
+        if (node) {
+          measureElement(node)
+        }
+      }} //measure dynamic row height
       style={{
         display: 'flex',
         position: 'absolute',

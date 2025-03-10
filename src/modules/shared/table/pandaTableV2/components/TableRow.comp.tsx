@@ -7,7 +7,7 @@ import { cx } from '@/utils'
 import { RowCellComponent } from './RowCell.comp'
 
 interface Props {
-  virtualRow: VirtualItem<Element>
+  virtualRow: VirtualItem
   measureElement: (node: Element | null) => void
   row: Row<any>
   getRowProps: (row: Row<any>) => Record<string, any>
@@ -39,7 +39,12 @@ export const TableRowComponent: FC<Props> = ({
       )}
       data-index={virtualRow.index} //needed for dynamic row height measurement
       // TODO:  fix dynamic row height measurement
-      ref={node => measureElement(node)} //measure dynamic row height
+      ref={node => {
+        // Only call measureElement if the node exists
+        if (node) {
+          measureElement(node)
+        }
+      }} //measure dynamic row height
       style={{
         display: 'flex',
         position: 'absolute',

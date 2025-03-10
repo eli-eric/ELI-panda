@@ -223,7 +223,7 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
       {groupedProperties.map(group => (
         <div key={group.key} className="mb-4 last:mb-0">
           {group.name !== 'General' && (
-            <h4 className="text-sm font-medium text-slate-900 dark:text-slate-100 mb-2 pb-1 border-b dark:border-slate-700">
+            <h4 className="text-sm font-medium text-slate-900 text-center dark:text-slate-100 mb-2 pb-1 border-b dark:border-slate-700">
               {group.name}
             </h4>
           )}

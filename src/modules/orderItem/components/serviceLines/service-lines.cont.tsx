@@ -50,6 +50,7 @@ export const ServiceLinesContainer = ({
       enableFiltering: true,
       enableFooter: true,
       enablePinning: true,
+      rowClassName: 'group/row',
       getRowProps: ({ isDelivered }: any, index: number) => ({
         className: isDelivered
           ? index % 2 === 0
