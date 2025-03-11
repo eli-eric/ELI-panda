@@ -126,6 +126,12 @@ export function TableBody<T extends object>({
                 ? cell.column.getSize()
                 : undefined
 
+              console.log(
+                cell.column.columnDef.id,
+                cell.column.columnDef.size,
+                width
+              )
+
               // Get pinning information
               const isPinned = cell.column.getIsPinned()
 

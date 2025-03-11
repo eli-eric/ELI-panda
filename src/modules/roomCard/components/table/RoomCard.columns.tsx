@@ -41,29 +41,32 @@ export const useRoomCardsColumns = () => {
         },
         columns: [
           {
-            accessorFn: ({ role }) => role?.name,
             id: 'role',
-            header: 'Role',
+            accessorFn: ({ role }) => role?.name,
             meta: { noHeader: true },
             size: 200,
             cell: props => (
-              <CellWithDelete {...props} formName="contactPersonsHall" />
+              <CellWithDelete
+                {...props}
+                formName="contactPersonsHall"
+                setDeleteItem={setDeleteHallContact}
+              />
             )
           },
           {
+            id: 'fullName',
             accessorFn: ({ employee: { fullName } }) => fullName,
-            header: 'Full Name',
             meta: { noHeader: true },
             size: 200
           },
           {
+            id: 'phone',
             accessorFn: ({ employee: { phone1: p1, phone2: p2 } }) => {
               const phoneArr = [p1, p2].filter(Boolean)
               return phoneArr
             },
-            id: 'phone',
             meta: { noHeader: true },
-            size: 100,
+            size: 150,
             cell: ({ getValue }) =>
               getValue()?.map((phone, index) => (
                 <div key={index}>{formatPhoneNumber(phone)}</div>
@@ -93,11 +96,17 @@ export const useRoomCardsColumns = () => {
         id: 'contactDept',
         columns: [
           {
+            id: 'fullName',
             accessorKey: 'fullName',
             meta: { noHeader: true, className: 'whitespace-nowrap' },
             cell: props => (
-              <CellWithDelete {...props} formName="contactPersonsDept" />
-            )
+              <CellWithDelete
+                {...props}
+                formName="contactPersonsDept"
+                setDeleteItem={setDisconnectDeptContact}
+              />
+            ),
+            size: 200
           },
           {
             id: 'phone',
@@ -106,6 +115,7 @@ export const useRoomCardsColumns = () => {
               return phoneArr
             },
             meta: { noHeader: true },
+            size: 150,
             cell: ({ getValue }) =>
               getValue().map((phone, index) => (
                 <div key={index}>{formatPhoneNumber(phone)}</div>
@@ -130,7 +140,13 @@ export const useRoomCardsColumns = () => {
         },
         id: 'team',
         accessorKey: 'name',
-        cell: props => <CellWithDelete {...props} formName="teams" />
+        cell: props => (
+          <CellWithDelete
+            {...props}
+            formName="teams"
+            setDeleteItem={setDisconnectTeam}
+          />
+        )
       }
     ],
     [setDisconnectTeam]
@@ -142,10 +158,12 @@ export const useRoomCardsColumns = () => {
         header: "Clean Room's parameters",
         columns: [
           {
+            id: 'name',
             accessorKey: 'name',
             meta: { noHeader: true }
           },
           {
+            id: 'value',
             accessorKey: 'value',
             meta: { noHeader: true },
             cell: CellInput

@@ -174,7 +174,7 @@ export function Table<T extends object>({
           }
         >
           {/* The table itself - use table-fixed to respect column sizes */}
-          <table className="w-full min-w-full caption-bottom text-sm table-fixed">
+          <table className="w-full min-w-full caption-bottom text-sm ">
             <TableHeader
               table={table}
               enableSorting={enableSorting}
