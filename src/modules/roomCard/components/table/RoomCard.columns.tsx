@@ -30,28 +30,31 @@ export const useRoomCardsColumns = () => {
   const columnsContactHall = useMemo(
     (): ColumnDef<HallContactPerson, any>[] => [
       {
-        header: 'Contact - Hall',
-        meta: {
-          headerElement: <ContactHallButton />
+        id: 'contactHall',
+        header: () => {
+          return (
+            <div className="flex items-center justify-between px-2 w-full">
+              <span>Contact - Hall</span>
+              <ContactHallButton />
+            </div>
+          )
         },
         columns: [
           {
             accessorFn: ({ role }) => role?.name,
             id: 'role',
+            header: 'Role',
             meta: { noHeader: true },
-            size: 200
+            size: 200,
+            cell: props => (
+              <CellWithDelete {...props} formName="contactPersonsHall" />
+            )
           },
           {
             accessorFn: ({ employee: { fullName } }) => fullName,
-            id: 'fullName',
+            header: 'Full Name',
             meta: { noHeader: true },
-            cell: props => (
-              <CellWithDelete
-                {...props}
-                formName="contactPersonsHall"
-                setDeleteItem={setDeleteHallContact}
-              />
-            )
+            size: 200
           },
           {
             accessorFn: ({ employee: { phone1: p1, phone2: p2 } }) => {
@@ -60,6 +63,7 @@ export const useRoomCardsColumns = () => {
             },
             id: 'phone',
             meta: { noHeader: true },
+            size: 100,
             cell: ({ getValue }) =>
               getValue()?.map((phone, index) => (
                 <div key={index}>{formatPhoneNumber(phone)}</div>
@@ -74,27 +78,25 @@ export const useRoomCardsColumns = () => {
   const columnsContactDept = useMemo(
     (): ColumnDef<Employee, any>[] => [
       {
-        header: 'Contact - Dept. 99',
-        meta: {
-          headerElement: (
-            <HeaderAddButton
-              setEmployee={setNewDeptContact}
-              editPersmissionRole={ROLE.ROOM_CARD_EDIT}
-              name={'contactPersonsDept'}
-            />
+        header: () => {
+          return (
+            <div className="flex items-center justify-between px-2 w-full">
+              <span>Contact - Dept.</span>
+              <HeaderAddButton
+                setEmployee={setNewDeptContact}
+                editPersmissionRole={ROLE.ROOM_CARD_EDIT}
+                name={'contactPersonsDept'}
+              />
+            </div>
           )
         },
-
+        id: 'contactDept',
         columns: [
           {
             accessorKey: 'fullName',
-            meta: { noHeader: true },
+            meta: { noHeader: true, className: 'whitespace-nowrap' },
             cell: props => (
-              <CellWithDelete
-                {...props}
-                formName="contactPersonsDept"
-                setDeleteItem={setDisconnectDeptContact}
-              />
+              <CellWithDelete {...props} formName="contactPersonsDept" />
             )
           },
           {
@@ -118,18 +120,17 @@ export const useRoomCardsColumns = () => {
   const columnsTeam = useMemo(
     (): ColumnDef<Team, any>[] => [
       {
-        header: 'Team',
-        meta: {
-          headerElement: <TeamButton />
+        header: () => {
+          return (
+            <div className="flex items-center justify-between px-2 w-full">
+              <span>Team</span>
+              <TeamButton />
+            </div>
+          )
         },
+        id: 'team',
         accessorKey: 'name',
-        cell: props => (
-          <CellWithDelete
-            {...props}
-            formName="teams"
-            setDeleteItem={setDisconnectTeam}
-          />
-        )
+        cell: props => <CellWithDelete {...props} formName="teams" />
       }
     ],
     [setDisconnectTeam]

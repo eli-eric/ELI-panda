@@ -33,7 +33,11 @@ export const HeaderAddButton = ({
   const formMethods = useForm({ resolver: yupResolver(makeSchema()) })
 
   const { control } = useFormContext()
-  const { insert, fields: arrayFields } = useFieldArray({ control, name })
+  const {
+    insert,
+    fields: arrayFields,
+    append
+  } = useFieldArray({ control, name })
 
   const [employeeUid, setEmployeeUid] = useState<string | null>(null)
 
@@ -41,11 +45,31 @@ export const HeaderAddButton = ({
 
   const onSubmit = () => {
     if (!employee) return
-    insert(arrayFields.length, {
-      ...employee
-    })
-    setEmployee(employee)
-    setEmployeeUid(null)
+
+    try {
+      // Use append instead of insert when array is empty to avoid potential issues
+      if (!arrayFields || arrayFields.length === 0) {
+        // Use append which is more efficient for adding to an empty array
+        append({
+          ...employee
+        })
+      } else {
+        // Use insert only when array already has elements
+        insert(arrayFields.length, {
+          ...employee
+        })
+      }
+
+      // Only update state after successful insertion
+      setEmployee(employee)
+      setEmployeeUid(null)
+
+      // Close modal after successful submission
+      setIsModalOpen(false)
+    } catch (error) {
+      console.error('Error adding employee:', error)
+      // Handle the error appropriately (could show a toast notification)
+    }
   }
 
   function makeSchema() {

@@ -184,7 +184,8 @@ export function TableBody<T extends object>({
                       ? 'border-l border-gray-200/50 dark:border-gray-700/50'
                       : '',
                     // Zajistíme, aby se obsah buněk mohl správně zalamovat
-                    'whitespace-normal break-words'
+                    'whitespace-normal break-words',
+                    cell.column.columnDef.meta?.className
                   )}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
