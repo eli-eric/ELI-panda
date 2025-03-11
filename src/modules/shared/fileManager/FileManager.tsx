@@ -1,17 +1,19 @@
-import { Fragment, useMemo, useRef } from 'react'
+import { DocumentTextIcon, LinkIcon } from '@heroicons/react/24/outline'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 
+import { Button } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import ProgressBarComponent from '@/components/progress-bar.comp'
+import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
 
-import { PandaTable } from '../table/pandaTable/PandaTable'
 import { useFileColumns } from './FileTable.columns'
 import { useFileRequests } from './hooks/useFileRequests'
 import { useFiles } from './hooks/useFiles'
 import { useLinks } from './hooks/useLinks'
-import { NewFileButton } from './NewFileButton'
-import type { FILE_TYPE } from './types'
+import { LinkModal } from './LinkModal'
+import type { FILE_TYPE, FileItemExtended } from './types'
 
 const messages = message.common.files
 
@@ -32,17 +34,18 @@ const FileManager = ({
 }: FileManagerProps) => {
   const { data: filesData } = useFiles({ itemType, uid })
   const { data: linksData } = useLinks({ uid })
+  const [openLinkModal, setOpenLinkModal] = useState(false)
 
   const files = useMemo(() => {
     return [
-      ...(filesData?.map(file => ({ ...file, type: 'FILE' })) || []),
+      ...(filesData?.map(file => ({ ...file, type: 'FILE' as const })) || []),
       ...(linksData?.map(link => ({
         ...link,
         id: link.uid,
-        type: 'LINK',
+        type: 'LINK' as const,
         size: 0
       })) || [])
-    ]
+    ] as FileItemExtended[]
   }, [filesData, linksData])
 
   const { onDrop, handlePut, loading } = useFileRequests({
@@ -50,8 +53,8 @@ const FileManager = ({
     uid
   })
 
-  // Define columns for useGeneralTable
-  const columns = useFileColumns({
+  // Define columns for Table
+  const { columns, modals } = useFileColumns({
     hasEditRole,
     itemType,
     uid,
@@ -63,51 +66,83 @@ const FileManager = ({
     onDrop
   })
 
-  const { onClick, ...restRootProps } = getRootProps()
-
-  const onClickHandler = (e: React.MouseEvent<HTMLElement>) => {
-    fileInputRef.current?.click() && onClick && onClick(e)
-  }
+  const handleFileUpload = useCallback(() => {
+    fileInputRef.current?.click()
+  }, [])
 
   const canUpload = hasEditRole && (allowMultiple || files.length === 0)
 
   return (
     <div>
-      <Heading text={messages.title} customText={customTitle}>
+      <Heading
+        text={messages.title}
+        customText={customTitle}
+        showBorder={false}
+      >
         {canUpload && (
-          <Fragment>
-            <div {...restRootProps}>
-              <input
-                {...getInputProps()}
-                ref={fileInputRef}
-                style={{ display: 'none' }}
-              />
-              <NewFileButton
-                handleNewFile={onClickHandler}
-                hasEditRole={hasEditRole}
-                uid={uid}
-                isDragActive={isDragActive}
-              />
-            </div>
-          </Fragment>
+          <div className="flex space-x-2">
+            <Button
+              primary
+              onClick={handleFileUpload}
+              className="flex items-center space-x-1"
+            >
+              <DocumentTextIcon className="h-4 w-4" />
+              <span>Upload File</span>
+            </Button>
+            <Button
+              primary
+              onClick={() => setOpenLinkModal(true)}
+              className="flex items-center space-x-1"
+            >
+              <LinkIcon className="h-4 w-4" />
+              <span>Add Link</span>
+            </Button>
+            <input
+              {...getInputProps()}
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+            />
+          </div>
         )}
       </Heading>
+
       {loading.some(value => value) && <ProgressBarComponent />}
+
       {files.length > 0 && (
-        <PandaTable
-          {...{
-            tableId: 'filemanager',
-            data: files,
-            columns,
-            settings: {
-              enableSorting: true,
-              manualSorting: false,
-              enableFiltering: true,
-              manualFiltering: false
-            }
-          }}
+        <Table
+          data={files}
+          columns={columns}
+          enableSorting={true}
+          enableFiltering={true}
         />
       )}
+
+      {canUpload && (
+        <div
+          {...getRootProps()}
+          className={`mt-4 border-2 border-dashed rounded-md p-6 text-center ${
+            isDragActive
+              ? 'border-primary-500 bg-primary-50'
+              : 'border-gray-300'
+          }`}
+        >
+          <p className="text-gray-600">
+            Drop File to Upload or{' '}
+            <button
+              className="text-primary-600 cursor-pointer"
+              onClick={handleFileUpload}
+            >
+              Browse
+            </button>
+          </p>
+        </div>
+      )}
+      {modals}
+      <LinkModal
+        open={openLinkModal}
+        setOpen={setOpenLinkModal}
+        parentUid={uid}
+      />
     </div>
   )
 }
