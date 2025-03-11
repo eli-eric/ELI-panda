@@ -126,6 +126,12 @@ export function TableBody<T extends object>({
                 ? cell.column.getSize()
                 : undefined
 
+              console.log(
+                cell.column.columnDef.id,
+                cell.column.columnDef.size,
+                width
+              )
+
               // Get pinning information
               const isPinned = cell.column.getIsPinned()
 
@@ -184,7 +190,8 @@ export function TableBody<T extends object>({
                       ? 'border-l border-gray-200/50 dark:border-gray-700/50'
                       : '',
                     // Zajistíme, aby se obsah buněk mohl správně zalamovat
-                    'whitespace-normal break-words'
+                    'whitespace-normal break-words',
+                    cell.column.columnDef.meta?.className
                   )}
                 >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
