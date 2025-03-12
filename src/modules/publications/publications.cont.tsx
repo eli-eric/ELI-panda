@@ -69,7 +69,7 @@ export const PublicationsContainer: FC = () => {
         tableId={tableId}
         settings={{
           enableQueryURL: true,
-          pageSizeDefault: 50,
+          pageSizeDefault: 100,
           total: data?.totalCount
         }}
       />
