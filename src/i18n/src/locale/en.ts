@@ -531,7 +531,7 @@ export const messages = {
       grant: { label: 'Grant' },
       wosNumber: { label: 'WOS Number (R67)' },
       issn: { label: 'ISSN (R14)', placeholder: 'ISSN' },
-      eissn: { label: 'E-ISSN (R15)', placeholder: 'E-ISSN' },
+      eissn: { label: 'e-ISSN (R15)', placeholder: 'e-ISSN' },
       eidScopus: { label: 'EID Scopus (R90)' },
       publishingCountry: {
         label: 'Publishing Country (R17)*',

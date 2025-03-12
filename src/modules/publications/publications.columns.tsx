@@ -208,7 +208,7 @@ export const usePublicationColumns = () => {
       {
         id: 'grant',
         header: 'Grant',
-        size: 200,
+        size: 300,
         accessorFn: row => row.grant,
         cell: ({ getValue }) => (
           <ShortCell value={getValue()} numberOfChars={40} />
@@ -217,6 +217,7 @@ export const usePublicationColumns = () => {
       {
         id: 'wosNumber',
         header: 'WOS Number',
+        size: 300,
         accessorFn: row => row.wosNumber
       },
       {
