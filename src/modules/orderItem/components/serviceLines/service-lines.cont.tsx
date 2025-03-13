@@ -7,6 +7,7 @@ import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
 
+import type { ServiceLine } from '../../types/form'
 import { ServiceLineWizard } from './form/service-line.wizz'
 import { useServiceLinesColumns } from './service-lines.columns'
 
@@ -45,28 +46,6 @@ export const ServiceLinesContainer = ({
     setOpenServiceLineForm(open)
   }, [])
 
-  // Memoize table props to prevent unnecessary re-renders
-  const tableProps = useMemo(
-    () => ({
-      data: serviceLines,
-      className: 'relative overflow-x-auto',
-      columns: serviceLinesColumns,
-      enablePagination: true,
-      enableFiltering: true,
-      enableFooter: true,
-      enablePinning: true,
-      rowClassName: 'group/row',
-      getRowProps: ({ isDelivered }: any, index: number) => ({
-        className: isDelivered
-          ? index % 2 === 0
-            ? 'bg-green-200 dark:bg-green-800'
-            : 'bg-green-100 dark:bg-green-700'
-          : undefined
-      })
-    }),
-    [serviceLines, serviceLinesColumns]
-  )
-
   return (
     <div className="pt-4">
       <Heading text={messages.header} showBorder={false}>
@@ -82,7 +61,25 @@ export const ServiceLinesContainer = ({
           </div>
         )}
       </Heading>
-      <Table {...tableProps} />
+      <Table<ServiceLine>
+        {...{
+          data: serviceLines,
+          className: 'relative overflow-x-auto',
+          columns: serviceLinesColumns,
+          enablePagination: true,
+          enableFiltering: true,
+          enableFooter: true,
+          enablePinning: true,
+          rowClassName: 'group/row',
+          getRowProps: ({ isDelivered }, index: number) => ({
+            className: isDelivered
+              ? index % 2 === 0
+                ? 'bg-green-200 dark:bg-green-800'
+                : 'bg-green-100 dark:bg-green-700'
+              : undefined
+          })
+        }}
+      />
       <ModalComponent
         zclass="z-20"
         open={openServiceLineForm}

@@ -69,6 +69,7 @@ export interface ServiceLineFormType extends FieldValues {
   isDelivered?: boolean
   lastUpdateTime?: string
   details?: CatalogueItemDetail[]
+  selectedProperties?: string[]
 }
 
 export interface ServiceLinePhysicalItem extends CodebookType {

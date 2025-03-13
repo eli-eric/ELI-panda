@@ -11,7 +11,7 @@ import type { WizardStepConfig } from '@/modules/shared/form/wizardV2/types'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import type { CodebookType } from '@/types/responses/codebook'
 
-import { ServiceLineDetails } from '../details/service-line.details'
+import { SelectableServiceLineDetails } from '../details/selectable-service-line.details'
 import { ItemsSelectTable } from '../items/items-select.table'
 import { useServiceLineFields } from './useServiceLineFields'
 
@@ -98,7 +98,7 @@ export const useServiceLineSteps = () => {
 
   const serviceLineDetailsComponent = useMemo(() => {
     return (
-      <ServiceLineDetails
+      <SelectableServiceLineDetails
         serviceType={data ? { name: data?.name, uid: data?.uid } : undefined}
       />
     )

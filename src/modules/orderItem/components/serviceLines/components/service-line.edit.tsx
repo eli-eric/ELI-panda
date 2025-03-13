@@ -33,20 +33,7 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
   const fields = useServiceLineFields()
   const { setServiceLine } = useServiceLine()
 
-  const formMethods = useForm({
-    defaultValues: {
-      uuid: serviceLine.uuid,
-      uid: serviceLine.uid,
-      name: serviceLine.name,
-      price: serviceLine.price,
-      currency: serviceLine.currency,
-      serviceType: serviceLine.serviceType,
-      notes: serviceLine.notes,
-      item: serviceLine.item,
-      isDelivered: serviceLine.isDelivered,
-      details: Array.isArray(serviceLine.details) ? serviceLine.details : []
-    }
-  })
+  const formMethods = useForm<ServiceLine>()
 
   const submit = (data: ServiceLine) => {
     setServiceLine({
@@ -60,6 +47,7 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
     goNext: {
       onClick: () => {
         formMethods.handleSubmit(submit)()
+        formMethods.reset()
       },
       text: messages.save
     },
@@ -95,6 +83,20 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
     <>
       <TableEditButton
         onClick={() => {
+          formMethods.setValue('uuid', serviceLine.uuid)
+          formMethods.setValue('uid', serviceLine.uid)
+          formMethods.setValue('name', serviceLine.name)
+          formMethods.setValue('price', serviceLine.price)
+          formMethods.setValue('currency', serviceLine.currency)
+          formMethods.setValue('serviceType', serviceLine.serviceType)
+          formMethods.setValue('notes', serviceLine.notes)
+          formMethods.setValue('item', serviceLine.item)
+          formMethods.setValue('isDelivered', serviceLine.isDelivered)
+          formMethods.setValue(
+            'details',
+            Array.isArray(serviceLine.details) ? serviceLine.details : []
+          )
+
           setOpenEditForm(true)
         }}
       />

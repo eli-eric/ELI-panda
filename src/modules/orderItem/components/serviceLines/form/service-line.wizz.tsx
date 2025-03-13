@@ -21,7 +21,15 @@ export const ServiceLineWizard = ({ setOpen }: Props) => {
 
   const handleSubmit = useCallback(
     (data: ServiceLineFormType, reset: () => void) => {
-      const { items, details, ...rest } = data
+      const { items, details, selectedProperties, ...rest } = data
+
+      // Filter details based on selected properties
+      const filteredDetails =
+        Array.isArray(details) && Array.isArray(selectedProperties)
+          ? details.filter(detail =>
+              selectedProperties.includes(detail.property.uid)
+            )
+          : []
 
       if (items && items.length > 0) {
         items.forEach(item => {
@@ -31,7 +39,7 @@ export const ServiceLineWizard = ({ setOpen }: Props) => {
             item: { uid: item.uid, name: item.name },
             eun: item.eun,
             serialNumber: item.serialNumber,
-            details: Array.isArray(details) ? details : []
+            details: filteredDetails
           })
         })
       }

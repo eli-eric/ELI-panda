@@ -75,7 +75,7 @@ export const OrderItemContainer = () => {
   // Memoizujeme funkce pro zpracování onSubmit a onSubmitAndExit, aby nedocházelo k re-renderům
   const onSubmit = useMemo(
     () => (data: OrderDetailFormType) => {
-      const orderLines = data?.orderLines.map(orderLine => {
+      const orderLines = data?.orderLines?.map(orderLine => {
         // extract uuid from orderLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { uuid, ...rest } = orderLine
@@ -83,13 +83,13 @@ export const OrderItemContainer = () => {
       })
       const serviceLines =
         data.serviceLines &&
-        data?.serviceLines.map(serviceLine => {
+        data?.serviceLines?.map(serviceLine => {
           // extract uuid from serviceLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { uuid, ...rest } = serviceLine
           return rest
         })
-      if (data.orderLines.length === 0 || !data.orderLines) {
+      if (data?.orderLines?.length === 0 || !data?.orderLines) {
         withWarningModal(submit)(
           {
             ...data,
@@ -116,19 +116,19 @@ export const OrderItemContainer = () => {
 
   const onSubmitAndExit = useMemo(
     () => (data: OrderDetailFormType) => {
-      const orderLines = data.orderLines.map(orderLine => {
+      const orderLines = data.orderLines?.map(orderLine => {
         // extract uuid from orderLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { uuid, ...rest } = orderLine
         return rest
       })
-      const serviceLines = data.serviceLines.map(serviceLine => {
+      const serviceLines = data?.serviceLines?.map(serviceLine => {
         // extract uuid from serviceLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { uuid, ...rest } = serviceLine
         return rest
       })
-      if (data.orderLines.length === 0 || !data.orderLines) {
+      if (data?.orderLines?.length === 0 || !data?.orderLines) {
         withWarningModal(submit)(
           {
             ...data,
