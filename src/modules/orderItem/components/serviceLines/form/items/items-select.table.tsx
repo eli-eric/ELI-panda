@@ -11,12 +11,6 @@ import type { SystemDetail } from '@/types/responses/systems'
 
 import { useSystemsItemsColumns } from './useSystemItemsColumns'
 
-// Používáme standardní komponenty, abychom předešli problémům s typováním
-const SearchBarComponent = SearchBar
-const PandaTableComponent = PandaTableV2
-const PaginationComponent = Pagination
-const SystemFilterButtonComponent = SystemFilterButtonContainer
-
 export const ItemsSelectTable = () => {
   const tableId = 'items-select-table'
 
@@ -57,24 +51,25 @@ export const ItemsSelectTable = () => {
   // Optimalizujeme renderování komponenty
   return (
     <div>
-      <SearchBarComponent
+      <SearchBar
         tableId={tableId}
-        useQuery={false}
+        useQuery={settings?.enableQueryURL}
         left={
-          <SystemFilterButtonComponent
+          <SystemFilterButtonContainer
             disabledFields={{ category: true }}
             tableId={tableId}
+            enableQueryURL={settings?.enableQueryURL}
           />
         }
       />
-      <PandaTableComponent
+      <PandaTableV2
         data={systems?.data}
         className="overflow-y-auto relative h-[423px]"
         table={table}
         tableId={tableId}
         settings={settings}
       />
-      <PaginationComponent tableId={tableId} settings={paginationSettings} />
+      <Pagination tableId={tableId} settings={paginationSettings} />
     </div>
   )
 }

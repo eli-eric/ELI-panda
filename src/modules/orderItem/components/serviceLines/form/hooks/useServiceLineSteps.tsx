@@ -1,5 +1,5 @@
 import type { ColumnFiltersState } from '@tanstack/react-table'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import { InputAmount, InputCurrency } from '@/components/form/inputs'
@@ -56,11 +56,6 @@ export const useServiceLineSteps = () => {
   }, [data?.category])
 
   // Aplikujeme filtry jen když se změní categoryFilters
-  useEffect(() => {
-    if (categoryFilters) {
-      setColumnFilters(categoryFilters)
-    }
-  }, [categoryFilters, setColumnFilters])
 
   // Použijeme useCallback pro onChangeService
   const onChangeService = useCallback((v?: CodebookType) => {
@@ -81,8 +76,11 @@ export const useServiceLineSteps = () => {
         unregister('details')
         setPreviousServiceType(currentServiceType)
       }
+      if (categoryFilters) {
+        setColumnFilters(categoryFilters)
+      }
     },
-    [previousServiceType]
+    [previousServiceType, categoryFilters, setColumnFilters]
   )
 
   // Memoizujeme jednotlivé komponenty kroků
@@ -105,10 +103,6 @@ export const useServiceLineSteps = () => {
       />
     )
   }, [data])
-
-  const itemsSelectComponent = useMemo(() => {
-    return <ItemsSelectTable />
-  }, [])
 
   // Memoizujeme celou strukturu kroků
   const steps = useMemo<WizardStepConfig<ServiceLineFormType>[]>(() => {
@@ -153,7 +147,7 @@ export const useServiceLineSteps = () => {
       {
         id: 'items',
         title: fm({ id: messages.steps.step3.title }),
-        component: itemsSelectComponent
+        component: <ItemsSelectTable />
       }
     ]
   }, [
@@ -166,8 +160,7 @@ export const useServiceLineSteps = () => {
     serviceTypeComponent,
     priceComponent,
     serviceLineDetailsComponent,
-    shouldShowDetails,
-    itemsSelectComponent
+    shouldShowDetails
   ])
 
   return steps
