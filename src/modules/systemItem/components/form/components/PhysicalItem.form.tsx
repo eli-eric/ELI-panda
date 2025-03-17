@@ -91,6 +91,7 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
           <Suspense fallback={<ProgressBarComponent />}>
             <FileManager
               itemType={FILE_TYPE.ITEM}
+              customTitle="Physical Item Files"
               uid={uid}
               hasEditRole={canEdit}
             />

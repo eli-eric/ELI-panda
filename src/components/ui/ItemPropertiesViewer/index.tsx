@@ -142,13 +142,25 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
 
   // Collect all service item properties
   const allServiceProperties = useMemo(() => {
-    const properties: any[] = []
+    // Create a map to track the latest value for each property by uid
+    const latestPropertyValues = new Map()
+
+    // Iterate through service items (already sorted by newest first)
     sortedServiceItems.forEach(edge => {
       const serviceItem = edge.node
       const serviceItemProperties = serviceItem.detailsConnection?.edges || []
-      properties.push(...serviceItemProperties)
+
+      // Process each property from this service item
+      serviceItemProperties.forEach(prop => {
+        // Only add if we haven't seen this property yet (first occurrence is newest)
+        if (!latestPropertyValues.has(prop.node.uid)) {
+          latestPropertyValues.set(prop.node.uid, prop)
+        }
+      })
     })
-    return properties
+
+    // Convert the map values to an array
+    return Array.from(latestPropertyValues.values())
   }, [sortedServiceItems])
 
   // Group properties by their group

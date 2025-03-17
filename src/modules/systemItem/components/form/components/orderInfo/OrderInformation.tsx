@@ -37,8 +37,7 @@ export const OrderInformation = ({
   const columns = useSystemOrderColumns()
   const mainOrder = physicalItem?.order
   const orderConnection = physicalItem?.orderConnection?.edges?.[0]
-  const serviceItemsFragments =
-    physicalItem?.serviceItemsConnection?.edges?.map(edge => edge.node)
+  const serviceItemsFragments = physicalItem?.serviceItemsConnection?.edges
 
   if (!physicalItem) {
     return null
@@ -68,7 +67,8 @@ export const OrderInformation = ({
 
   // Add service items if they exist
   if (serviceItemsFragments && Array.isArray(serviceItemsFragments)) {
-    serviceItemsFragments.forEach(serviceItem => {
+    serviceItemsFragments.forEach(edge => {
+      const serviceItem = edge.node
       if (serviceItem) {
         tableData.push({
           uid: serviceItem.order?.uid || '',
@@ -76,7 +76,7 @@ export const OrderInformation = ({
           type: 'service',
           description: '',
           isDelivered: serviceItem.isDelivered || false,
-          orderDate: safeFormatDate(serviceItem.order?.orderDate)
+          orderDate: safeFormatDate(edge.created)
         })
       }
     })
