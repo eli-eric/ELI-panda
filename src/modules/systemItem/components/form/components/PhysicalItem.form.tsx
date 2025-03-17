@@ -33,8 +33,6 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
 
   const { data: properties } = useItemProperties(uid)
 
-  const lastServiceItem = physicalItem?.serviceItems?.[0] || null
-
   const description = catalogueItem?.description
   const canEdit = usePermission([ROLE.SYSTEM_EDIT])
 
@@ -64,7 +62,7 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
       <Col sm="full" className="w-full">
         <ItemPropertiesViewer
           catalogueItem={physicalItem?.catalogueItem}
-          serviceItem={lastServiceItem}
+          serviceItems={physicalItem?.serviceItemsConnection.edges}
         />
       </Col>
       <Col sm="full" className="w-full">
@@ -82,7 +80,6 @@ export const PhysicalItemForm = ({ uid }: { uid: string }) => {
       <Col sm="full">
         <TextArea {...fields.itemNotes} />
       </Col>
-      {/* TODO: This is a placeholder order Info */}
       <Col sm="full" className="w-full">
         {systemDetail?.physicalItem && (
           <OrderInformation physicalItem={systemDetail.physicalItem} />

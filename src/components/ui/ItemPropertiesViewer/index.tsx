@@ -1,13 +1,25 @@
+/**
+ * IMPORTANT NOTE ABOUT SERVICE ITEMS:
+ *
+ * This component currently supports a single service item via the serviceItem prop.
+ *
+ * Enhancement to support multiple service items sorted by creation date:
+ * 1. Update the PhysicalItemFragment to use the serviceItemsConnection with the 'created' timestamp on edges
+ * 2. Update this component to accept an array of service items via a serviceItems prop
+ * 3. Sort the service items by 'created' date and process properties giving priority to recent items
+ * 4. Run 'yarn generate' to update the GraphQL types
+ *
+ * The schema changes were already made (isServicedBy relationship with created property), but
+ * the front-end types need to be regenerated to reflect these changes.
+ */
+
 import type { FC } from 'react'
 import { useMemo } from 'react'
 
 import { Disclosure } from '@/components/ui'
 import type { FragmentType } from '@/types/gql'
 import { useFragment } from '@/types/gql'
-import {
-  CatalogueItemFragment,
-  ServiceItemFragment
-} from '@/utils/graphql/fragments'
+import { CatalogueItemFragment } from '@/utils/graphql/fragments'
 
 interface PropertyGroupItem {
   key: string
@@ -23,14 +35,59 @@ interface PropertyGroupItem {
   }>
 }
 
+// Update the interface to accept the data structure we're receiving
 interface ItemPropertiesViewerProps {
-  catalogueItem?: FragmentType<typeof CatalogueItemFragment> | null
-  serviceItem?: FragmentType<typeof ServiceItemFragment> | null
+  catalogueItem?: FragmentType<typeof CatalogueItemFragment>
+  serviceItems?:
+    | Array<{
+        __typename?: string
+        created?: any
+        node: {
+          __typename?: string
+          uid: string
+          name: string
+          isDelivered: boolean
+          order?: {
+            __typename?: string
+            uid: string
+            name: string
+            orderDate?: any
+          } | null
+          detailsConnection: {
+            __typename?: string
+            edges?: Array<{
+              __typename?: string
+              value?: string | null
+              node: {
+                __typename?: string
+                uid: string
+                name: string
+                groups: Array<{
+                  __typename?: string
+                  uid: string
+                  name: string
+                }>
+                type?: {
+                  __typename?: string
+                  name: string
+                  uid: string
+                } | null
+                unit?: {
+                  __typename?: string
+                  name: string
+                  uid: string
+                } | null
+              }
+            }> | null
+          }
+        }
+      }>
+    | undefined
 }
 
 // Helper function to safely parse range values
 const formatRangeValue = (value: string | null | undefined): string => {
-  if (!value) return 'N/A'
+  if (!value) return 'N/A - N/A'
 
   try {
     const parsedValue = JSON.parse(value)
@@ -38,7 +95,7 @@ const formatRangeValue = (value: string | null | undefined): string => {
     const max = parsedValue?.max ?? 'N/A'
     return `${min} - ${max}`
   } catch (error) {
-    return value || 'N/A'
+    return value || 'N/A - N/A'
   }
 }
 
@@ -56,44 +113,43 @@ const getFormattedValue = (
 
 export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
   catalogueItem: catalogueItemProp,
-  serviceItem: serviceItemProp
+  serviceItems: serviceItemsProp
 }) => {
   // Always call hooks unconditionally, handle null cases later
   const catalogueItemFragment = useFragment(
     CatalogueItemFragment,
     catalogueItemProp || null
   )
-  const serviceItemFragment = useFragment(
-    ServiceItemFragment,
-    serviceItemProp || null
-  )
 
   // Get the actual data or empty arrays if null
   const catalogueItem = catalogueItemProp ? catalogueItemFragment : null
-  const serviceItem = serviceItemProp ? serviceItemFragment : null
+  const serviceItems = useMemo(() => serviceItemsProp || [], [serviceItemsProp])
 
-  // Memoizujeme properties, aby se nevytvářely nové reference při každém renderu
+  // Sort service items by creation date (newest first)
+  const sortedServiceItems = useMemo(() => {
+    return [...serviceItems].sort((a, b) => {
+      const dateA = a.created ? new Date(a.created).getTime() : 0
+      const dateB = b.created ? new Date(b.created).getTime() : 0
+      return dateB - dateA
+    })
+  }, [serviceItems])
+
+  // Memoize properties to avoid creating new references on each render
   const catalogueProperties = useMemo(
     () => catalogueItem?.propertiesConnection?.edges || [],
     [catalogueItem?.propertiesConnection?.edges]
   )
 
-  const serviceProperties = useMemo(
-    () => serviceItem?.detailsConnection?.edges || [],
-    [serviceItem?.detailsConnection?.edges]
-  )
-
-  // Check if there are any overridden properties
-  const hasOverriddenProperties = useMemo(() => {
-    if (!serviceProperties.length || !catalogueProperties.length) return false
-
-    return serviceProperties.some(sEdge =>
-      catalogueProperties.some(
-        cEdge =>
-          cEdge.node.uid === sEdge.node.uid && cEdge.value !== sEdge.value
-      )
-    )
-  }, [serviceProperties, catalogueProperties])
+  // Collect all service item properties
+  const allServiceProperties = useMemo(() => {
+    const properties: any[] = []
+    sortedServiceItems.forEach(edge => {
+      const serviceItem = edge.node
+      const serviceItemProperties = serviceItem.detailsConnection?.edges || []
+      properties.push(...serviceItemProperties)
+    })
+    return properties
+  }, [sortedServiceItems])
 
   // Group properties by their group
   const groupedProperties = useMemo(() => {
@@ -149,7 +205,7 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
     })
 
     // Process service properties and mark overrides
-    serviceProperties.forEach(edge => {
+    allServiceProperties.forEach(edge => {
       const typeName = edge.node.type?.name
       const serviceValue = getFormattedValue(edge.value, typeName)
       const groups = edge.node.groups || []
@@ -195,11 +251,18 @@ export const ItemPropertiesViewer: FC<ItemPropertiesViewerProps> = ({
 
     // Convert the record to an array for rendering
     return Object.values(propertyGroups)
-  }, [catalogueProperties, serviceProperties])
+  }, [catalogueProperties, allServiceProperties])
+
+  // Check if there are any overridden properties
+  const hasOverriddenProperties = useMemo(() => {
+    return groupedProperties.some(group =>
+      group.properties.some(prop => prop.isOverridden)
+    )
+  }, [groupedProperties])
 
   if (
     (!catalogueProperties || catalogueProperties.length === 0) &&
-    (!serviceProperties || serviceProperties.length === 0)
+    (!allServiceProperties || allServiceProperties.length === 0)
   ) {
     return null
   }

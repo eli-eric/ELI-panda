@@ -385,11 +385,19 @@ type Item @authentication {
       properties: "hasOrderLine"
     )
   serviceItems: [ServiceItem!]!
-    @relationship(type: "IS_SERVICED_BY", direction: OUT)
+    @relationship(
+      type: "IS_SERVICED_BY"
+      direction: OUT
+      properties: "isServicedBy"
+    )
   itemUsage: ItemUsage @relationship(type: "HAS_ITEM_USAGE", direction: OUT)
   conditionStatus: ItemCondition
     @relationship(type: "HAS_CONDITION_STATUS", direction: OUT)
   notes: String
+}
+
+interface isServicedBy @relationshipProperties {
+  created: DateTime
 }
 
 type ServiceItem @authentication {
@@ -397,7 +405,12 @@ type ServiceItem @authentication {
   name: String!
   order: Order @relationship(type: "HAS_SERVICE_LINE", direction: IN)
   isDelivered: Boolean!
-  servicedItem: Item @relationship(type: "IS_SERVICED_BY", direction: IN)
+  servicedItem: Item
+    @relationship(
+      type: "IS_SERVICED_BY"
+      direction: IN
+      properties: "isServicedBy"
+    )
   details: [CatalogueCategoryProperty!]!
     @relationship(
       type: "HAS_CATALOGUE_PROPERTY"

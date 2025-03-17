@@ -3,10 +3,7 @@ import { Table } from '@/components/ui'
 import type { FragmentType } from '@/types/gql'
 import { useFragment } from '@/types/gql'
 import { formatDate } from '@/utils/formatters'
-import {
-  PhysicalItemFragment,
-  ServiceItemFragment
-} from '@/utils/graphql/fragments'
+import { PhysicalItemFragment } from '@/utils/graphql/fragments'
 
 import { type OrderColumns } from './order.columns'
 import { useSystemOrderColumns } from './order.columns'
@@ -40,10 +37,8 @@ export const OrderInformation = ({
   const columns = useSystemOrderColumns()
   const mainOrder = physicalItem?.order
   const orderConnection = physicalItem?.orderConnection?.edges?.[0]
-  const serviceItemsFragments = useFragment(
-    ServiceItemFragment,
-    physicalItem?.serviceItems
-  )
+  const serviceItemsFragments =
+    physicalItem?.serviceItemsConnection?.edges?.map(edge => edge.node)
 
   if (!physicalItem) {
     return null

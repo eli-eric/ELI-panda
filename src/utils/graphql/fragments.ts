@@ -181,8 +181,41 @@ export const PhysicalItemFragment = gql(`
       uid
       name
     }
-    serviceItems {
-      ...ServiceItem
+    serviceItemsConnection {
+      edges {
+        created
+        node {
+          uid
+    name
+    isDelivered
+    order {
+      uid
+      name
+      orderDate
+    }
+    detailsConnection {
+      edges {
+        value
+        node {
+          uid
+          name
+          groups {
+            uid
+            name
+          }
+          type {
+            name
+            uid
+          }
+          unit {
+            name
+            uid
+          }
+        }
+      }
+    }
+        }
+      }
     }
     catalogueItem {
       ...CatalogueItem
