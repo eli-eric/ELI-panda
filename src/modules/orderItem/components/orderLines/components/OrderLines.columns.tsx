@@ -32,18 +32,12 @@ const useOrderLinesColumns = () => {
         header: formatMessage({ id: messages.name }),
         accessorKey: 'name',
         cell: ({ getValue, row: { original } }) => (
-          <div className="flex items-center relative w-full">
-            <span title={getValue()} className="truncate">
-              {getValue()}
-            </span>
-            {!disabledEdit && (
-              <div className="absolute right-0 opacity-0 group-hover/row:opacity-100 transition-opacity duration-150">
-                <OrderLineActionButtons orderLine={original} />
-              </div>
-            )}
-          </div>
+          <>
+            <div className="pr-12">{getValue()}</div>
+            {!disabledEdit && <OrderLineActionButtons orderLine={original} />}
+          </>
         ),
-        meta: { className: 'sm:pr-16 relative' },
+        meta: { className: 'relative whitespace-nowrap' },
         size: 340,
         footer: ({ table: { getRowCount } }) => (
           <span>Total: {getRowCount()} line(s)</span>

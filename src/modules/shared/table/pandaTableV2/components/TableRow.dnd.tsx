@@ -1,6 +1,6 @@
 import { type Row } from '@tanstack/react-table'
 import type { VirtualItem } from '@tanstack/react-virtual'
-import { type FC, useState } from 'react'
+import { type FC, useEffect, useRef, useState } from 'react'
 import { useDrop } from 'react-dnd'
 
 import type { SystemDetail } from '@/types/responses/systems'
@@ -10,7 +10,7 @@ import type { GetRowPropsReturnType } from '../../pandaTable/PandaTable'
 import { RowCellComponent } from './RowCell.comp'
 
 interface Props {
-  virtualRow: VirtualItem<Element>
+  virtualRow: VirtualItem
   measureElement: (node: Element | null) => void
   row: Row<any>
   getRowProps: (row: Row<any>) => GetRowPropsReturnType
@@ -31,6 +31,13 @@ export const TableRowDNDComponent: FC<Props> = ({
   const { className, dropsettings, ...rest } = getRowProps(row)
   const visibleCells = row.getVisibleCells()
   const [isHoveringDrop, setIsHoveringDrop] = useState(false)
+
+  const rowRef = useRef<HTMLTableRowElement>(null)
+  useEffect(() => {
+    if (rowRef.current) {
+      measureElement(rowRef.current)
+    }
+  }, [measureElement, virtualRow.index])
 
   const [, dropRef] = useDrop<SystemDetail>({
     accept: dropsettings?.accept || 'table-row',
@@ -63,12 +70,7 @@ export const TableRowDNDComponent: FC<Props> = ({
         isHoveringDrop ? 'bg-primary-200 dark:bg-primary-600' : ''
       )}
       data-index={virtualRow.index} //needed for dynamic row height measurement
-      ref={node => {
-        // Only call measureElement if the node exists
-        if (node) {
-          measureElement(node)
-        }
-      }} //measure dynamic row height
+      ref={rowRef} //measure dynamic row height
       style={{
         display: 'flex',
         position: 'absolute',
