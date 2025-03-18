@@ -7,7 +7,7 @@ interface ServiceListProps {
 
 export function ServiceList({ services }: ServiceListProps) {
   return (
-    <div className="bg-white shadow overflow-hidden sm:rounded-md">
+    <div className="bg-white dark:bg-gray-800 shadow overflow-hidden dark:shadow-black sm:rounded-md">
       <ul role="list" className="divide-y divide-gray-200">
         {services.map(service => (
           <ServiceItem key={service.uid} service={service} />

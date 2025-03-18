@@ -19,6 +19,6 @@ export enum ROLE {
   DASHBOARD_FILES_ADMIN = 'dashboard-files-admin',
   PUBLICATIONS_VIEW = 'publications-view',
   PUBLICATIONS_EDIT = 'publications-edit',
-  SERVICE_VIEW = 'service-view',
-  SERVICE_EDIT = 'service-edit'
+  SERVICE_VIEW = 'catalogue-service-view',
+  SERVICE_EDIT = 'catalogue-service-edit'
 }

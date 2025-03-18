@@ -42,8 +42,8 @@ export enum PATH {
   LAYOUT = '/layout',
   PUBLICATIONS = '/publications',
   PUBLICATION = '/publication',
-  SERVICES = '/catalogue/services',
-  SERVICE = '/catalogue/service'
+  SERVICES = '/services',
+  SERVICE = '/service'
 }
 
 export const SUPPORT =
@@ -122,7 +122,7 @@ export const NAV_BAR_CONFIG: NavigationType[] = [
   {
     name: 'Services',
     link: PATH.SERVICES,
-    role: ROLE.BASICS,
+    role: ROLE.SERVICE_VIEW,
     Icon: WrenchScrewdriverIcon
   }
 ]

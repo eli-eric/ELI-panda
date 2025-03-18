@@ -16,7 +16,9 @@ export const DeleteServiceButton = ({ uid, name }: Props) => {
   )
 
   const { mutate } = useServiceTypeDelete({ uid })
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
     withWarningModal(() => {
       mutate(undefined)
     })()

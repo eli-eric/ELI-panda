@@ -67,8 +67,8 @@ export const ServiceTypeContainer: FC<Props> = ({ data, uid }) => {
     <Form className="h-screen overflow-auto" formMethods={formMethods}>
       <HeaderWithButtons
         loading={isPending}
-        customElement={<h1>New Service</h1>}
-        editRole={ROLE.CATALOGUE_EDIT}
+        customElement={<h1>{data ? 'Edit Service' : 'New Service'}</h1>}
+        editRole={ROLE.SERVICE_EDIT}
         onSubmit={formMethods.handleSubmit(onSubmit)}
         onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
       />
