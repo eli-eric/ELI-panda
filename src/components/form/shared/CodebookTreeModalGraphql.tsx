@@ -63,7 +63,9 @@ export const CodebookTreeModalGraphql = ({
   )
   const filterName = filter?.find(item => item.id === 'name')?.value as string
 
-  const { setValue } = useFormContext()
+  // Use optional chaining for formContext to handle case when there's no FormProvider
+  const formContext = useFormContext()
+  const setValue = formContext?.setValue
 
   const columns = useMemo((): ColumnDef<Codebooktree, any>[] => {
     const columns: ColumnDef<Codebooktree, string>[] = [
@@ -120,7 +122,11 @@ export const CodebookTreeModalGraphql = ({
       type: 'button',
       disabled: !item,
       onClick: () => {
-        customSetValue ? customSetValue(item) : name && setValue(name, item)
+        if (customSetValue) {
+          customSetValue(item)
+        } else if (name && setValue) {
+          setValue(name, item)
+        }
         onSelect && onSelect(item)
         setOpen(false)
         setItem(undefined)

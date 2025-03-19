@@ -42,30 +42,61 @@ export const useSystemCreate = (
   ) => {
     const responseUid = systems[0].uid
     const body = systems[0]
-    imageRef?.current?.submit(responseUid, () => {
-      toast.success(`System ${body.name} was saved successfully`)
-      //TODO: mutate
-      /*   mutateEndpoint(
-        systemSubsystems,
-        prev => prev && addSubsystemToSubsystems(prev, body),
-        {
-          revalidate: false
+
+    if (imageRef?.current) {
+      try {
+        imageRef.current.submit(responseUid, () => {
+          toast.success(`System ${body.name} was saved successfully`)
+
+          if (parentUid) {
+            queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
+              if (prev) {
+                return addSubsystem(parentUid, body, prev)
+              }
+              return prev
+            })
+          } else {
+            refetch()
+          }
+
+          if (saveAndExit) {
+            navigateBack()
+          } else {
+            router.replace(PATH.SYSTEM + '/' + responseUid)
+          }
+        })
+      } catch (error) {
+        console.error('Error submitting images:', error)
+        toast.success(
+          `System ${body.name} was saved successfully, but images could not be uploaded.`
+        )
+
+        if (saveAndExit) {
+          navigateBack()
+        } else {
+          router.replace(PATH.SYSTEM + '/' + responseUid)
         }
-      ) */
-      parentUid
-        ? queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
-            if (prev) {
-              return addSubsystem(parentUid, body, prev)
-            }
-            return prev
-          })
-        : refetch()
+      }
+    } else {
+      toast.success(`System ${body.name} was saved successfully`)
+
+      if (parentUid) {
+        queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
+          if (prev) {
+            return addSubsystem(parentUid, body, prev)
+          }
+          return prev
+        })
+      } else {
+        refetch()
+      }
+
       if (saveAndExit) {
         navigateBack()
       } else {
         router.replace(PATH.SYSTEM + '/' + responseUid)
       }
-    })
+    }
   }
 
   const { mutate: create, isPending } = useGraphQLMutation(
@@ -81,61 +112,74 @@ export const useSystemCreate = (
     systemForm: SystemDetailFormType,
     saveAndExit?: boolean
   ) => {
-    create(
-      {
-        input: [
-          {
-            parentSystem: parentUid
-              ? {
-                  connect: whereN(parentUid)
-                }
-              : undefined,
-            name: systemForm.name || '',
-            facility: {
-              connect: whereC(session?.user?.facilityCode)
-            },
-            deleted: false,
-            description: systemForm.description,
-            attribute: connectN(systemForm?.attribute?.uid),
-            responsibleTeam: connectN(systemForm?.responsibleTeam?.uid),
-            minimalSpareParstCount: !systemForm.minimalSpareParstCount
-              ? null
-              : Number(systemForm.minimalSpareParstCount),
-
-            systemCode:
-              systemForm.systemCode === '' ? null : systemForm.systemCode,
-            systemLevel: systemForm?.systemLevel,
-            systemType: connectN(systemForm?.systemType?.uid),
-            location: connectN(systemForm?.location?.uid),
-            zone: connectN(systemForm?.zone?.uid),
-            responsible: connectN(systemForm?.responsible?.uid),
-            operators: {
-              connect: systemForm?.operators?.map(operator => ({
-                where: { node: { uid: operator.uid } }
-              }))
-            },
-            maintainedBy: {
-              connect: systemForm?.maintainedBy?.map(employee => ({
-                where: { node: { uid: employee.uid } }
-              }))
-            },
-            updatedBy: {
-              connect: [
-                {
-                  where: { node: { uid: session?.user?.uid } },
-                  edge: { action: Actions.Insert }
-                }
-              ]
-            }
-          }
-        ]
-      },
-      {
-        onSuccess: response => {
-          onCompleted(response, saveAndExit)
-        }
+    try {
+      // Check if required fields are provided
+      if (!systemForm.name) {
+        toast.error('System name is required')
+        return
       }
-    )
+
+      create(
+        {
+          input: [
+            {
+              parentSystem: parentUid
+                ? {
+                    connect: whereN(parentUid)
+                  }
+                : undefined,
+              name: systemForm.name || '',
+              facility: {
+                connect: whereC(session?.user?.facilityCode)
+              },
+              deleted: false,
+              description: systemForm.description,
+              attribute: connectN(systemForm?.attribute?.uid),
+              responsibleTeam: connectN(systemForm?.responsibleTeam?.uid),
+              minimalSpareParstCount: !systemForm.minimalSpareParstCount
+                ? null
+                : Number(systemForm.minimalSpareParstCount),
+
+              systemCode:
+                systemForm.systemCode === '' ? null : systemForm.systemCode,
+              systemLevel: systemForm?.systemLevel,
+              systemType: connectN(systemForm?.systemType?.uid),
+              location: connectN(systemForm?.location?.uid),
+              zone: connectN(systemForm?.zone?.uid),
+              responsible: connectN(systemForm?.responsible?.uid),
+              operators: {
+                connect: systemForm?.operators?.map(operator => ({
+                  where: { node: { uid: operator.uid } }
+                }))
+              },
+              maintainedBy: {
+                connect: systemForm?.maintainedBy?.map(employee => ({
+                  where: { node: { uid: employee.uid } }
+                }))
+              },
+              updatedBy: {
+                connect: [
+                  {
+                    where: { node: { uid: session?.user?.uid } },
+                    edge: { action: Actions.Insert }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          onSuccess: response => {
+            onCompleted(response, saveAndExit)
+          }
+        }
+      )
+    } catch (error: any) {
+      console.error('Error creating system:', error)
+      toast.error(
+        `Failed to create system: ${error.message || 'Unknown error'}`
+      )
+    }
   }
 
   return { createSystem, loading: isPending }

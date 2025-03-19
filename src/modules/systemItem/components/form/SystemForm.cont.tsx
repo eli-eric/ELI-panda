@@ -1,7 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import type { FC, PropsWithChildren } from 'react'
-import { memo, useEffect, useRef } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 
 import { Form } from '@/components/form/Form'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
@@ -21,7 +22,7 @@ import Card, { FormCard } from '@/components/layout/Card'
 import usePermission from '@/hooks/usePermission'
 import { GraphModalButton } from '@/modules/shared/system/GraphModalButton'
 import { ROLE } from '@/types/constants/roles'
-import type { SystemLevel } from '@/types/gql/graphql'
+import { SystemLevel } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
 import { cx } from '@/utils'
 
@@ -34,11 +35,21 @@ import { getColorBySystemLevel } from '../../utils'
 import { ShowHistoryButton } from '../history/ShowHistoryButton'
 import { SystemItemCard } from './components/SystemItem.card'
 
+// Simple debounce function
+const debounce = (fn: Function, ms = 300) => {
+  let timeoutId: ReturnType<typeof setTimeout>
+  return function (this: any, ...args: any[]) {
+    clearTimeout(timeoutId)
+    timeoutId = setTimeout(() => fn.apply(this, args), ms)
+  }
+}
+
 //TODO:  split to update and create form
 export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
   const { systemDetail, catalogueItem, physicalItem } = useSystemDetail()
   const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
   const { parentPath, parentSystem } = useSystemParent()
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const {
     sparePartsConnection, // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -61,6 +72,8 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
   const { createSystem, loading: createLoading } =
     useSystemCreate(systemImageRef)
 
+  const isCreating = !uid
+
   const formMethods = useForm<any>({
     resolver: yupResolver(schema) as any,
     defaultValues: {
@@ -77,56 +90,155 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
             uid: systemDetail?.zone?.uid,
             name: systemDetail?.zone?.name as string
           }
-        : undefined
+        : undefined,
+      // For new systems, default to SubsystemsAndParts level
+      systemLevel: isCreating ? SystemLevel.SubsystemsAndParts : undefined
     }
   })
 
-  // set default values for responsible, zone and location
   useEffect(() => {
     if (parentSystem) {
-      parentSystem.responsible &&
-        formMethods.setValue('responsible', {
-          uid: parentSystem.responsible?.uid,
-          name: parentSystem.responsible?.fullName
+      const updates = {}
+
+      if (parentSystem.responsible) {
+        updates['responsible'] = {
+          uid: parentSystem.responsible.uid,
+          name: parentSystem.responsible.fullName
+        }
+      }
+
+      if (parentSystem.zone) {
+        updates['zone'] = {
+          uid: parentSystem.zone.uid,
+          name: parentSystem.zone.name as string
+        }
+      }
+
+      if (parentSystem.location) {
+        updates['location'] = {
+          uid: parentSystem.location.uid,
+          name: parentSystem.location.name as string
+        }
+      }
+
+      if (Object.keys(updates).length > 0) {
+        Object.entries(updates).forEach(([field, value]) => {
+          formMethods.setValue(field, value, { shouldDirty: false })
         })
-      parentSystem.zone &&
-        formMethods.setValue('zone', {
-          uid: parentSystem.zone?.uid,
-          name: parentSystem.zone?.name as string
-        })
-      parentSystem.location &&
-        formMethods.setValue('location', {
-          uid: parentSystem.location?.uid,
-          name: parentSystem.location?.name as string
-        })
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [parentSystem])
+  }, [parentSystem, formMethods])
 
   const systemLevel = formMethods.watch('systemLevel')
   const onSubmit = (data: SystemDetailFormType) => {
-    // extract from data hasImageGalleryChanges
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { hasImageGalleryChanges, ...rest } = data
-    if (uid) {
-      updateSystem(rest, false)
-    }
-    if (!uid) {
-      createSystem(rest, false)
+    try {
+      // Prevent multiple submissions
+      if (loading || createLoading) {
+        return
+      }
+
+      // Validate required fields
+      if (!data.name || !data.systemLevel) {
+        toast.error('Name and System Level are required')
+        return
+      }
+
+      // Extract from data hasImageGalleryChanges
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { hasImageGalleryChanges, ...rest } = data
+
+      if (uid) {
+        updateSystem(rest, false)
+      } else {
+        createSystem(rest, false)
+      }
+    } catch (error: any) {
+      console.error('Error submitting form:', error)
+      toast.error(`Failed to save system: ${error.message || 'Unknown error'}`)
     }
   }
 
   const onSubmitAndExit = (data: SystemDetailFormType) => {
-    // extract from data hasImageGalleryChanges
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { hasImageGalleryChanges, ...rest } = data
-    if (uid) {
-      updateSystem(rest, true)
-    }
-    if (!uid) {
-      createSystem(rest, true)
+    try {
+      // Prevent multiple submissions
+      if (loading || createLoading) {
+        return
+      }
+
+      // Validate required fields
+      if (!data.name || !data.systemLevel) {
+        toast.error('Name and System Level are required')
+        return
+      }
+
+      // Extract from data hasImageGalleryChanges
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { hasImageGalleryChanges, ...rest } = data
+
+      if (uid) {
+        updateSystem(rest, true)
+      } else {
+        createSystem(rest, true)
+      }
+    } catch (error: any) {
+      console.error('Error submitting form:', error)
+      toast.error(`Failed to save system: ${error.message || 'Unknown error'}`)
     }
   }
+
+  // Create debounced submit handlers
+  const debouncedSubmit = useRef(
+    debounce(() => {
+      if (isSubmitting) return
+      setIsSubmitting(true)
+
+      try {
+        const values = formMethods.getValues()
+        if (!values.name || !values.systemLevel) {
+          formMethods.trigger(['name', 'systemLevel'])
+          toast.error('Please fill in all required fields')
+          setIsSubmitting(false)
+          return
+        }
+
+        formMethods.handleSubmit(onSubmit)()
+      } catch (error: any) {
+        console.error('Error handling submit:', error)
+        toast.error('Failed to process form submission')
+        setIsSubmitting(false)
+      }
+    }, 300)
+  ).current
+
+  const debouncedSubmitAndExit = useRef(
+    debounce(() => {
+      if (isSubmitting) return
+      setIsSubmitting(true)
+
+      try {
+        const values = formMethods.getValues()
+        if (!values.name || !values.systemLevel) {
+          formMethods.trigger(['name', 'systemLevel'])
+          toast.error('Please fill in all required fields')
+          setIsSubmitting(false)
+          return
+        }
+
+        formMethods.handleSubmit(onSubmitAndExit)()
+      } catch (error: any) {
+        console.error('Error handling submit and exit:', error)
+        toast.error('Failed to process form submission')
+        setIsSubmitting(false)
+      }
+    }, 300)
+  ).current
+
+  // Reset isSubmitting when loading state changes
+  useEffect(() => {
+    if (!loading && !createLoading) {
+      setIsSubmitting(false)
+    }
+  }, [loading, createLoading])
 
   return (
     <Form
@@ -135,10 +247,10 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
       enableLeaveWarning={true}
     >
       <HeaderWithButtons
-        loading={loading || createLoading}
+        loading={loading || createLoading || isSubmitting}
         editRole={ROLE.SYSTEM_EDIT}
-        onSubmit={formMethods.handleSubmit(onSubmit)}
-        onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
+        onSubmit={debouncedSubmit}
+        onSubmitAndExit={debouncedSubmitAndExit}
         customElement={
           <div className="flex gap-2">
             <GraphModalButton uid={uid} />
@@ -165,11 +277,13 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
             setValue={formMethods.setValue}
             config={{
               itemCategory: FILE_TYPE.SYSTEM,
-              itemId: String(uid),
-              additionalParams: {
-                itemCategory: FILE_TYPE.CATALOGUE,
-                itemId: catalogueItem?.uid
-              }
+              itemId: uid ? String(uid) : 'new',
+              additionalParams: catalogueItem?.uid
+                ? {
+                    itemCategory: FILE_TYPE.CATALOGUE,
+                    itemId: catalogueItem?.uid
+                  }
+                : undefined
             }}
             className="w-full"
             hasEditRole={hasEditRole}

@@ -45,7 +45,11 @@ export const highlightText = (
   if (!highlight) {
     return <span>{text}</span>
   }
-  const regex = new RegExp(`(${highlight})`, 'gi')
+
+  // Escape special regex characters to prevent SyntaxError
+  const escapedHighlight = highlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+  const regex = new RegExp(`(${escapedHighlight})`, 'gi')
   const parts = text.split(regex)
   return (
     <span>

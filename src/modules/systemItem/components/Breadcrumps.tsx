@@ -11,21 +11,28 @@ interface BreadcrumbsProps {
   isLink?: boolean
 }
 
-const Breadcrumbs: FC<BreadcrumbsProps> = ({ parentPath, isLink = true }) => (
-  <BreadcrumpContainer homeLink={isLink ? PATH.SYSTEMS : undefined}>
-    <Fragment>
-      {parentPath?.map(system => {
-        const link = isLink ? PATH.SYSTEM + '/' + system.uid : undefined
-        return (
-          <BreadcrumpItem
-            key={system?.uid}
-            name={system?.name}
-            systemLevel={system.systemLevel}
-            link={link}
-          />
-        )
-      })}
-    </Fragment>
-  </BreadcrumpContainer>
-)
+const Breadcrumbs: FC<BreadcrumbsProps> = ({ parentPath, isLink = true }) => {
+  console.log('parentPath', parentPath)
+  if (!parentPath || parentPath.length === 0) {
+    return null
+  }
+  return (
+    <BreadcrumpContainer homeLink={isLink ? PATH.SYSTEMS : undefined}>
+      <Fragment>
+        {parentPath?.map(system => {
+          const link = isLink ? PATH.SYSTEM + '/' + system.uid : undefined
+
+          return (
+            <BreadcrumpItem
+              key={system?.uid}
+              name={system?.name}
+              systemLevel={system.systemLevel}
+              link={link}
+            />
+          )
+        })}
+      </Fragment>
+    </BreadcrumpContainer>
+  )
+}
 export default Breadcrumbs
