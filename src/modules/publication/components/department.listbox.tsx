@@ -16,12 +16,10 @@ type DepartmentListboxProps = {
 
 export function DepartmentListbox({ name, disabled }: DepartmentListboxProps) {
   const { data } = useCodebook(CODEBOOK.DEPARTMENT)
-  console.log(data?.data)
 
   const filteredData = data?.data.filter(department =>
     allowedDepartments.some(code => department.name?.startsWith(code))
   )
-  console.log(filteredData)
   const { formatMessage } = useIntl()
   return (
     <Listbox

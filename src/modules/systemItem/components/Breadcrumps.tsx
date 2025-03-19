@@ -12,7 +12,6 @@ interface BreadcrumbsProps {
 }
 
 const Breadcrumbs: FC<BreadcrumbsProps> = ({ parentPath, isLink = true }) => {
-  console.log('parentPath', parentPath)
   if (!parentPath || parentPath.length === 0) {
     return null
   }

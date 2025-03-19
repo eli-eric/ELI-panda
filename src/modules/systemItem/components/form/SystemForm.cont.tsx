@@ -30,6 +30,7 @@ import { useSystemCreate } from '../../hooks/useSystemCreate'
 import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { useSystemParent } from '../../hooks/useSystemParent'
 import { useSystemUpdate } from '../../hooks/useSystemUpdate'
+import { useSystemItemStore } from '../../store/useSystemItemStore'
 import type { SystemDetailFormType } from '../../types/form'
 import { getColorBySystemLevel } from '../../utils'
 import { ShowHistoryButton } from '../history/ShowHistoryButton'
@@ -91,8 +92,12 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
             name: systemDetail?.zone?.name as string
           }
         : undefined,
-      // For new systems, default to SubsystemsAndParts level
-      systemLevel: isCreating ? SystemLevel.SubsystemsAndParts : undefined
+      // For new systems, always set a default system level
+      systemLevel: isCreating
+        ? SystemLevel.SubsystemsAndParts
+        : rest && 'systemLevel' in rest
+          ? rest.systemLevel
+          : SystemLevel.SubsystemsAndParts
     }
   })
 
@@ -153,7 +158,6 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
         createSystem(rest, false)
       }
     } catch (error: any) {
-      console.error('Error submitting form:', error)
       toast.error(`Failed to save system: ${error.message || 'Unknown error'}`)
     }
   }
@@ -181,7 +185,6 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
         createSystem(rest, true)
       }
     } catch (error: any) {
-      console.error('Error submitting form:', error)
       toast.error(`Failed to save system: ${error.message || 'Unknown error'}`)
     }
   }
@@ -203,7 +206,6 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
 
         formMethods.handleSubmit(onSubmit)()
       } catch (error: any) {
-        console.error('Error handling submit:', error)
         toast.error('Failed to process form submission')
         setIsSubmitting(false)
       }
@@ -226,7 +228,6 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
 
         formMethods.handleSubmit(onSubmitAndExit)()
       } catch (error: any) {
-        console.error('Error handling submit and exit:', error)
         toast.error('Failed to process form submission')
         setIsSubmitting(false)
       }
@@ -239,6 +240,32 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
       setIsSubmitting(false)
     }
   }, [loading, createLoading])
+
+  // Import useSystemItemStore for cleanup
+  const { clear: clearSystemStore } = useSystemItemStore()
+
+  // Reset the form and clear store when component unmounts
+  useEffect(() => {
+    return () => {
+      // Cleanup function when component unmounts
+      clearSystemStore()
+    }
+  }, [clearSystemStore])
+
+  // Reset the form when component unmounts or on successful operation
+  useEffect(() => {
+    const resetForm = () => {
+      if (formMethods) {
+        try {
+          formMethods.reset(formMethods.getValues())
+        } catch (error) {
+          console.error('Error resetting form:', error)
+        }
+      }
+    }
+
+    return resetForm
+  }, [])
 
   return (
     <Form

@@ -58,7 +58,7 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
               <Listbox
                 {...fields.systemLevel}
                 customOptions={systemLevels}
-                defaultValue={SystemLevel.SubsystemsAndParts}
+                defaultValue={systemLevel || SystemLevel.SubsystemsAndParts}
               />
             </Col>
             <Col sm={3} md={6} lg={8}>

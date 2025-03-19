@@ -241,7 +241,6 @@ export const TableExample: React.FC = () => {
       // Add onClick handler for rows
       onClick: () => {
         setSelectedUser(row)
-        console.log('Selected user:', row.name)
       },
       // Add some custom styling for selected rows
       className: isSelected ? 'bg-blue-50 dark:bg-blue-900/30' : undefined,
