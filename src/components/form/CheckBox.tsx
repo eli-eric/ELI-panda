@@ -94,7 +94,8 @@ const CheckBox = ({
               placeholder={placeholder}
               className={cx(
                 'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',
-                !field.value && 'dark:bg-gray-700'
+                !field.value && 'dark:bg-gray-700',
+                disabled && 'cursor-not-allowed bg-neutral-200 '
               )}
             />
           </div>

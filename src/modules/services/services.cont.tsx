@@ -3,7 +3,9 @@ import Link from 'next/link'
 import type { FC } from 'react'
 
 import { Button } from '@/components/Buttons'
+import usePermission from '@/hooks/usePermission'
 import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 
 import { PageLayout } from './components/layout/ServiceLayout'
 import { ServiceList } from './components/serviceTypes/ServiceList'
@@ -12,6 +14,7 @@ import { useServiceTypeList } from './hooks/useServiceTypeList'
 export const ServicesContainer: FC = () => {
   const { data, isLoading } = useServiceTypeList()
 
+  const disabled = !usePermission([ROLE.SERVICE_EDIT])
   const actionButton = (
     <Link href={PATH.SERVICE}>
       <Button buttonSize="large" primary>
@@ -24,7 +27,7 @@ export const ServicesContainer: FC = () => {
   return (
     <PageLayout
       title="Manage Services"
-      actionButton={actionButton}
+      actionButton={disabled ? null : actionButton}
       isPending={isLoading}
     >
       {data && <ServiceList services={data} />}

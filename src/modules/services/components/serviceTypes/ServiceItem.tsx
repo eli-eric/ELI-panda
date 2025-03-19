@@ -1,6 +1,8 @@
 import Link from 'next/link'
 
+import usePermission from '@/hooks/usePermission'
 import { PATH } from '@/types/constants/paths'
+import { ROLE } from '@/types/constants/roles'
 
 import type { ServiceTypeResponse } from '../../types/responses'
 import { DeleteServiceButton } from './DeleteService.btn'
@@ -10,6 +12,7 @@ interface ServiceItemProps {
 }
 
 export function ServiceItem({ service }: ServiceItemProps) {
+  const hasEditRole = usePermission([ROLE.SERVICE_EDIT])
   return (
     <li>
       <Link href={PATH.SERVICE + '/' + service.uid}>
@@ -28,9 +31,11 @@ export function ServiceItem({ service }: ServiceItemProps) {
                 <p className="text-sm text-gray-500">{service.description}</p>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <DeleteServiceButton uid={service.uid} name={service.name} />
-            </div>
+            {hasEditRole && (
+              <div className="flex items-center space-x-2">
+                <DeleteServiceButton uid={service.uid} name={service.name} />
+              </div>
+            )}
           </div>
         </div>
       </Link>

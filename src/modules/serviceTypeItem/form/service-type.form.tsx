@@ -9,7 +9,7 @@ import { ROLE } from '@/types/constants/roles'
 
 export const ServiceTypeForm: React.FC = () => {
   const { setValue } = useFormContext()
-  const disabled = usePermission([ROLE.SERVICE_EDIT])
+  const disabled = !usePermission([ROLE.SERVICE_EDIT])
   const resetProperties = () => {
     setValue('properties', [])
   }

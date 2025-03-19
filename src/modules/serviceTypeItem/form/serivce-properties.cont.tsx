@@ -4,11 +4,14 @@ import { useFormContext } from 'react-hook-form'
 
 import CheckBox from '@/components/form/CheckBox'
 import { Heading } from '@/components/layout/Heading'
+import usePermission from '@/hooks/usePermission'
 import useGroupDetails from '@/modules/catalogueItem/hooks/useGroupDetails'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
+import { ROLE } from '@/types/constants/roles'
 
 export const ServiceProperties = () => {
   const { unregister, watch } = useFormContext()
+  const disabled = !usePermission([ROLE.SERVICE_EDIT])
   const [details, setDetails] = useState<{
     groups?: string[]
     details?: CatalogueItemDetail[]
@@ -44,6 +47,7 @@ export const ServiceProperties = () => {
                         name={`properties.${detail.property.uid}`}
                         key={detail.property.uid}
                         label={detail.property.name}
+                        disabled={disabled}
                       />
                     )
                 )}
