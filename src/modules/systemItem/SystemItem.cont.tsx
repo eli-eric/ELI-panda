@@ -24,6 +24,7 @@ export const SystemItemContainer = ({ uid }: Props) => {
   const [errorState, setErrorState] = useState<Error | null>(null)
 
   const handleError = useCallback((error: Error) => {
+    // eslint-disable-next-line no-console
     console.error('Error in SystemItemContainer:', error)
     setErrorState(error)
     toast.error(`An error occurred: ${error.message}`)
