@@ -74,17 +74,20 @@ export const useSystemUpdate = (
   const router = useRouter()
   const { mutate: mutateProperties } = usePropertiesUpdate(physicalItemUid)
   const uid = router.query.uid as string
-  const { systemDetail, refetch } = useSystemDetail()
+  const { systemDetail, refetch, physicalItem } = useSystemDetail()
 
   const [saveAndExit, setSaveAndExit] = useState(false)
 
   const onFinish = () => {
     setSelectedPhysicalSystem(undefined)
     refetch()
+
     if (saveAndExit) {
+      toast.success('Would navigate back, but staying on page to see payload')
       navigateBack()
     } else {
-      router.reload()
+      toast.success('Would reload page, but staying to see payload')
+      //router.reload()
     }
     toast.success(`System saved successfully`)
   }
@@ -94,12 +97,9 @@ export const useSystemUpdate = (
   })
 
   const {
-    newMaintainedBy,
-    newOperators,
-    disconnectOperators,
-    disconnectMaintainedBy,
     selectedPhysicalSystem,
-    setSelectedPhysicalSystem
+    setSelectedPhysicalSystem,
+    clear: clearStore
   } = useSystemItemStore()
 
   const onCompleted = ({ updateSystems: { systems } }) => {
@@ -113,76 +113,116 @@ export const useSystemUpdate = (
     systemDetailMutation,
     {
       onError: error => {
+        // eslint-disable-next-line no-console
+        console.log('Error:', error)
         toast.error('Something went wrong: ' + error.message)
       }
     }
   )
 
-  const updateSystemQuery = (
+  function updateSystemQuery(
     systemForm: SystemDetailFormType,
     saveAndExit: boolean
-  ) => {
+  ) {
     setSaveAndExit(saveAndExit)
-    update(
-      {
-        where: { uid },
-        update: {
-          ...makeSystemInputBody({ systemForm, systemDetail }),
-          operators: [
-            {
-              connect: newOperators.map(operator => whereN(operator.uid)),
-              disconnect: disconnectOperators.map(operator =>
-                whereN(operator.uid)
-              )
-            }
-          ],
-          maintainedBy: [
-            {
-              connect: newMaintainedBy.map(maintainedBy =>
-                whereN(maintainedBy.uid)
-              ),
-              disconnect: disconnectMaintainedBy.map(maintainedBy =>
-                whereN(maintainedBy.uid)
-              )
-            }
-          ]
-        },
-        updateItemsWhere: {
-          uid: selectedPhysicalSystem?.physicalItem?.uid
-            ? selectedPhysicalSystem?.physicalItem?.uid
-            : null
-        },
-        updateItem: {
-          system: {
-            connect: whereN(uid),
-            disconnect: whereN(selectedPhysicalSystem?.uid)
-          },
-          notes: systemForm?.physicalItem?.notes,
-          serialNumber: systemForm?.physicalItem?.serialNumber,
-          itemUsage: connectAndDisconnectNode(
-            systemForm?.physicalItem?.itemUsage?.uid,
-            systemDetail?.physicalItem?.itemUsage?.uid
-          ),
-          conditionStatus: connectAndDisconnectNode(
-            systemForm?.physicalItem?.conditionStatus?.uid,
-            systemDetail?.physicalItem?.conditionStatus?.uid
-          )
-        },
-        node: 'System',
-        nodeUid: uid,
-        action: 'UPDATE',
-        itemUid: selectedPhysicalSystem?.physicalItem?.uid,
-        systemOriginatedUid: selectedPhysicalSystem?.uid
-      },
-      {
-        onSuccess: response => {
-          onCompleted(response)
-          if (systemForm.physicalItem?.properties) {
-            mutateProperties(systemForm.physicalItem?.properties)
+
+    // Get latest data directly from the store to avoid stale closure values
+    const storeData = useSystemItemStore.getState()
+    const {
+      newOperators,
+      newMaintainedBy,
+      disconnectOperators,
+      disconnectMaintainedBy
+    } = storeData
+
+    // Get operators from both form and store
+    const formOperators = systemForm?.operators || []
+    const allOperators = [...formOperators, ...newOperators]
+    const uniqueOperators = [
+      ...new Map(allOperators.map(op => [op.uid, op])).values()
+    ]
+
+    // Get maintainedBy from both form and store
+    const formMaintainedBy = systemForm?.maintainedBy || []
+    const allMaintainedBy = [...formMaintainedBy, ...newMaintainedBy]
+    const uniqueMaintainedBy = [
+      ...new Map(allMaintainedBy.map(emp => [emp.uid, emp])).values()
+    ]
+
+    // Extract UIDs from disconnect arrays to prevent duplicate node connections
+    const disconnectOperatorUids = disconnectOperators.map(op => op.uid)
+    const disconnectMaintainedByUids = disconnectMaintainedBy.map(
+      emp => emp.uid
+    )
+
+    // Make sure we don't try to connect and disconnect the same node
+    const filteredOperators = uniqueOperators.filter(
+      op => !disconnectOperatorUids.includes(op.uid)
+    )
+    const filteredMaintainedBy = uniqueMaintainedBy.filter(
+      emp => !disconnectMaintainedByUids.includes(emp.uid)
+    )
+
+    const updatePayload = {
+      where: { uid },
+      update: {
+        ...makeSystemInputBody({ systemForm, systemDetail, physicalItem }),
+        operators: [
+          {
+            connect: filteredOperators.map(operator => whereN(operator.uid)),
+            disconnect: disconnectOperators.map(operator =>
+              whereN(operator.uid)
+            )
           }
+        ],
+        maintainedBy: [
+          {
+            connect: filteredMaintainedBy.map(maintainedBy =>
+              whereN(maintainedBy.uid)
+            ),
+            disconnect: disconnectMaintainedBy.map(maintainedBy =>
+              whereN(maintainedBy.uid)
+            )
+          }
+        ]
+      },
+      updateItemsWhere: {
+        uid: selectedPhysicalSystem?.physicalItem?.uid
+          ? selectedPhysicalSystem?.physicalItem?.uid
+          : null
+      },
+      updateItem: {
+        system: {
+          connect: whereN(uid),
+          disconnect: whereN(selectedPhysicalSystem?.uid)
+        },
+        notes: systemForm?.physicalItem?.notes,
+        serialNumber: systemForm?.physicalItem?.serialNumber,
+        itemUsage: connectAndDisconnectNode(
+          systemForm?.physicalItem?.itemUsage?.uid,
+          physicalItem?.itemUsage?.uid
+        ),
+        conditionStatus: connectAndDisconnectNode(
+          systemForm?.physicalItem?.conditionStatus?.uid,
+          physicalItem?.conditionStatus?.uid
+        )
+      },
+      node: 'System',
+      nodeUid: uid,
+      action: 'UPDATE',
+      itemUid: selectedPhysicalSystem?.physicalItem?.uid,
+      systemOriginatedUid: selectedPhysicalSystem?.uid
+    }
+
+    update(updatePayload, {
+      onSuccess: response => {
+        clearStore()
+        onCompleted(response)
+        if (systemForm.physicalItem?.properties) {
+          mutateProperties(systemForm.physicalItem?.properties)
         }
       }
-    )
+    })
   }
 
   return { updateSystem: updateSystemQuery, loading: isPending, update }

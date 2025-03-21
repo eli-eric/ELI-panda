@@ -50,6 +50,8 @@ export const getEndpoints = ({
     order: `/order${uid ? '/' + uid : ''}`,
     orderLineDelivery: `/order/${uid}/orderline/${itemUid}/delivery`,
     orderLinesDeliverAll: `/order/${uid}/orderlines/delivery`,
+    serviceLineDelivery: `/order/${uid}/serviceline/${itemUid}/delivery`,
+    serviceLinesDeliverAll: `/order/${uid}/servicelines/delivery`,
     eunforPrint: `/orders/eun-for-print/${uid}${query}`,
     codebook: `/codebook/${path}${query}`,
     codebooks: `/codebooks${query}`,
@@ -68,7 +70,9 @@ export const getEndpoints = ({
     systemsMove: `/systems/move`,
     publication: `/publication${uid ? '/' + uid : ''}`,
     publications: `/publications${query}`,
-    generateUUID: '/uuid/v4'
+    generateUUID: '/uuid/v4',
+    serviceType: `/catalogue/service/type${uid ? '/' + uid : ''}`,
+    serviceTypeList: `/catalogue/service/types${query}`
   }
   return endpoints
 }

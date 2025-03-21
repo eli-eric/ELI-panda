@@ -42,8 +42,7 @@ export const validationSchemePeerReviewed = yup.object().shape({
       uid: yup.string().required(),
       name: yup.string().required()
     })
-    .required('Publishing Country is required'),
-  dateOfPublication: yup.string().required('Date of Publication is required')
+    .required('Publishing Country is required')
 })
 
 export const validationSchemeOther = yup.object().shape({
@@ -85,6 +84,5 @@ export const validationSchemeOther = yup.object().shape({
       uid: yup.string().required(),
       name: yup.string().required()
     })
-    .required('Publishing Country is required'),
-  dateOfPublication: yup.string().required('Date of Publication is required')
+    .required('Publishing Country is required')
 })

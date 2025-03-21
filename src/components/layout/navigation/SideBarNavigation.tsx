@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/react'
 import { useState } from 'react'
 
 import { ENV, PROCESS_ENV } from '@/types/constants/common'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { MainNavigation, NavBarHeader, UserSection } from './NavBarSections'
 
@@ -34,7 +34,7 @@ export const SidebarNavigation = () => {
 
   return (
     <aside
-      className={classNames(
+      className={cx(
         `hidden lg:flex lg:flex-col lg:justify-between`,
         isExpanded ? 'w-64' : 'w-14',
         `h-full min-h-screen sticky left-0 top-0 bottom-0 truesition-all duration-300 ease-in-out bg-slate-100 border-r border-gray-900 dark:bg-gray-900 dark:border-gray-200 pb-4`,

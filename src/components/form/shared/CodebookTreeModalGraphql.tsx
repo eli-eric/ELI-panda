@@ -9,7 +9,7 @@ import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTab
 import useTableStateStore from '@/store/useTableStateStore'
 import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { ExpandableNameCell } from './ExpandableNameCell'
 
@@ -63,7 +63,9 @@ export const CodebookTreeModalGraphql = ({
   )
   const filterName = filter?.find(item => item.id === 'name')?.value as string
 
-  const { setValue } = useFormContext()
+  // Use optional chaining for formContext to handle case when there's no FormProvider
+  const formContext = useFormContext()
+  const setValue = formContext?.setValue
 
   const columns = useMemo((): ColumnDef<Codebooktree, any>[] => {
     const columns: ColumnDef<Codebooktree, string>[] = [
@@ -120,7 +122,11 @@ export const CodebookTreeModalGraphql = ({
       type: 'button',
       disabled: !item,
       onClick: () => {
-        customSetValue ? customSetValue(item) : name && setValue(name, item)
+        if (customSetValue) {
+          customSetValue(item)
+        } else if (name && setValue) {
+          setValue(name, item)
+        }
         onSelect && onSelect(item)
         setOpen(false)
         setItem(undefined)
@@ -137,7 +143,7 @@ export const CodebookTreeModalGraphql = ({
 
   return (
     <ModalComponent open={open} setOpen={setOpen} buttons={modalButtons}>
-      <div className={classNames('max-h-[300px]', loading && ' opacity-70')}>
+      <div className={cx('max-h-[300px]', loading && ' opacity-70')}>
         <PandaTableControlled
           tableId={tableId}
           data={data}
@@ -176,7 +182,7 @@ export const CodebookTreeModalGraphql = ({
                 })
               }
             },
-            className: classNames(
+            className: cx(
               item?.uid === row.original.uid &&
                 'bg-primary-200 dark:bg-primary-600 hover:bg-primary-200 dark:hover:bg-primary-600',
               'cursor-pointer'

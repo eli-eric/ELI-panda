@@ -20,7 +20,7 @@ import { CODEBOOK } from '@/types/constants/codebook'
 import { BASE_URL } from '@/types/constants/common'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import type { SystemTypesResponse } from '../types'
 const messages = message.common.buttons
@@ -99,7 +99,7 @@ export const SystemTypeItem: FC<Props> = ({
   return (
     <Fragment>
       <li
-        className={classNames(
+        className={cx(
           'py-2 px-4 flex justify-between',
           'cursor-pointer rounded-md',
           'hover:bg-primary-100 dark:hover:bg-primary-400',

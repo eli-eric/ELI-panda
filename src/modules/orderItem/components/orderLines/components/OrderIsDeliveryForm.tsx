@@ -15,13 +15,13 @@ export const OrderIsDeliveryForm = () => {
     <Grid>
       <Col md={12}>
         <Input
+          
           name="serialNumber"
           label={fm({ id: orderLines.form.serialNumber.label })}
           placeholder={fm({ id: orderLines.form.serialNumber.placeholder })}
           rounded="rounded-md"
         />
       </Col>
-
       <Col md={12}>
         <CheckBox
           name="manualEun"

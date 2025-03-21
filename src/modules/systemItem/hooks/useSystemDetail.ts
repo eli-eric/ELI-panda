@@ -7,6 +7,7 @@ import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql, useFragment } from '@/types/gql'
 import {
   CatalogueItemFragment,
+  PhysicalItemFragment,
   SystemDetailFragment
 } from '@/utils/graphql/fragments'
 
@@ -18,7 +19,15 @@ const systemDetailQuery = gql(`
    }
 `)
 
-export const useSystemDetail = (alias?: string, onSuccess?: (data) => void) => {
+type SearchPatterns = {
+  alias?: string
+  itemUid?: string
+}
+
+export const useSystemDetail = (
+  searchPatterns?: SearchPatterns,
+  onSuccess?: (data) => void
+) => {
   const router = useRouter()
   const uid = router.query.uid as string | undefined
 
@@ -28,9 +37,15 @@ export const useSystemDetail = (alias?: string, onSuccess?: (data) => void) => {
     systemDetailQuery,
     {
       variables: {
-        where: { uid, systemCode: alias }
+        where: {
+          uid,
+          systemCode: searchPatterns?.alias,
+          physicalItem: {
+            uid: searchPatterns?.itemUid
+          }
+        }
       },
-      enabled: !!uid || !!alias,
+      enabled: !!uid || !!searchPatterns?.alias || !!searchPatterns?.itemUid,
       refetchOnMount: 'always',
       refetchOnReconnect: 'always'
     }
@@ -47,7 +62,10 @@ export const useSystemDetail = (alias?: string, onSuccess?: (data) => void) => {
   }, [error, status, data])
 
   const systemDetail = useFragment(SystemDetailFragment, data?.systems[0])
-  const physicalItem = systemDetail?.physicalItem
+  const physicalItem = useFragment(
+    PhysicalItemFragment,
+    systemDetail?.physicalItem
+  )
   const catalogueItem = useFragment(
     CatalogueItemFragment,
     physicalItem?.catalogueItem

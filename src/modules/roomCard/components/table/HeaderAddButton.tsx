@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Fragment, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 import { mixed, object } from 'yup'
 
 import { PlusButton } from '@/components/Buttons'
@@ -28,27 +29,16 @@ export const HeaderAddButton = ({
   editPersmissionRole
 }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const editPersmission = usePermission([editPersmissionRole])
-
-  const formMethods = useForm({ resolver: yupResolver(makeSchema()) })
-
-  const { control } = useFormContext()
-  const { insert, fields: arrayFields } = useFieldArray({ control, name })
-
   const [employeeUid, setEmployeeUid] = useState<string | null>(null)
 
-  const { employee } = useEmployee(employeeUid)
+  // Get access to parent form context for field array manipulation
+  const { control } = useFormContext()
+  const { fields: arrayFields, append } = useFieldArray({ control, name })
 
-  const onSubmit = () => {
-    if (!employee) return
-    insert(arrayFields.length, {
-      ...employee
-    })
-    setEmployee(employee)
-    setEmployeeUid(null)
-  }
-
-  function makeSchema() {
+  // Create a schema maker function to avoid re-creating schema on every render
+  const makeSchema = useCallback(fields => {
     return object().shape({
       employee: mixed<Employee>()
         .nullable()
@@ -56,11 +46,60 @@ export const HeaderAddButton = ({
         .test(
           'is-unique',
           'Cannot select the same employee twice',
-          value => !arrayFields.some((field: any) => field?.uid === value?.uid)
+          value => !fields?.some((field: any) => field?.uid === value?.uid)
         )
     })
-  }
+  }, [])
 
+  // Get employee data outside of form context
+  const { employee, isLoading: employeeLoading } = useEmployee(employeeUid)
+
+  // Create an independent form without relying on parent form context
+  const formMethods = useForm({
+    resolver: yupResolver(makeSchema(arrayFields))
+  })
+
+  // Handle employee selection with error handling
+  const handleEmployeeSelect = useCallback(value => {
+    try {
+      setEmployeeUid(value ? value.uid : null)
+    } catch (error) {
+      console.error('Error selecting employee:', error)
+      toast.error('Failed to select employee')
+    }
+  }, [])
+
+  // Optimized submit handler with field array manipulation
+  const onSubmit = useCallback(() => {
+    if (isSubmitting) return
+
+    try {
+      setIsSubmitting(true)
+
+      if (!employee) {
+        setIsSubmitting(false)
+        return
+      }
+
+      // Add the employee to the form array
+      append(employee)
+
+      // Also update the parent state via setEmployee
+      setEmployee(employee)
+
+      // Reset state
+      formMethods.reset()
+      setEmployeeUid(null)
+      setIsModalOpen(false)
+    } catch (error) {
+      console.error('Error adding employee:', error)
+      toast.error('Failed to add employee')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, [employee, formMethods, setEmployee, isSubmitting, append])
+
+  // Create form fields with memoization
   const fields = useMakeFormFields({
     employee: {
       name: 'employee',
@@ -73,28 +112,27 @@ export const HeaderAddButton = ({
   if (!editPersmission) return null
 
   return (
-    <Fragment>
+    <div>
       <PlusButton
         primary
         type="button"
-        onClick={() => {
+        onClick={e => {
+          e.stopPropagation()
           setIsModalOpen(true)
         }}
       />
       <FormModal
         formMethods={formMethods}
         open={isModalOpen}
-        disableSubmit={!(employee && employeeUid)}
+        disableSubmit={!(employee && employeeUid) || employeeLoading}
+        loading={isSubmitting || employeeLoading}
         setOpen={setIsModalOpen}
         onSubmit={onSubmit}
       >
         <div className="flex space-x-3">
-          <Combobox
-            {...fields.employee}
-            onSelect={v => setEmployeeUid(v ? v.uid : null)}
-          />
+          <Combobox {...fields.employee} onSelect={handleEmployeeSelect} />
         </div>
       </FormModal>
-    </Fragment>
+    </div>
   )
 }

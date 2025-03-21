@@ -6,7 +6,7 @@ import { useDebounce, useIsFirstRender } from 'usehooks-ts'
 
 import { Tooltip } from '@/components/Tooltip'
 import type { FieldProps } from '@/types/form'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { InputWrapper, Label } from '../shared'
 
@@ -30,7 +30,8 @@ export const Input = ({
   unit,
   defaultValue,
   isFilter,
-  step = '0.001'
+  step = '0.001',
+  required
 }: InputProps) => {
   const { control } = useFormContext()
 
@@ -71,6 +72,7 @@ export const Input = ({
                 value={field.value || ''}
                 id={idHtml}
                 hidden={hidden}
+                required={required}
                 type={
                   type === 'password'
                     ? showPassword
@@ -83,7 +85,7 @@ export const Input = ({
                   field.onChange(e.target.value)
                 }}
                 placeholder={placeholder}
-                className={classNames(
+                className={cx(
                   'form-field',
                   rounded,
                   error ? 'border-red-400' : 'border-gray-300',

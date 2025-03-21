@@ -12,9 +12,13 @@ export const useLocationModal = () => {
   const tableId = 'location-tree'
   const [open, setOpen] = useState(false)
   const [codebooktree, setCodebooktree] = useState<Codebooktree[]>([])
-  const { locations } = useLocation()
+  const { locations, error: locationsError } = useLocation()
   const [uid, setUid] = useState<string>('')
-  const { subLocations, loading } = useSubLocations(uid)
+  const {
+    subLocations,
+    loading,
+    error: subLocationError
+  } = useSubLocations(uid)
 
   useEffect(() => {
     if (locations) {
@@ -64,6 +68,7 @@ export const useLocationModal = () => {
     additionalColumn,
     loading,
     uid,
-    tableId
+    tableId,
+    error: locationsError || subLocationError
   }
 }

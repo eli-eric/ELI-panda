@@ -42,7 +42,7 @@ export const ImageTabPanels = ({
           <div className=" text-sm text-gray-600 dark:text-gray-200">
             <ImageIcon />
             <div className="relative  rounded-md bg-white dark:bg-gray-800 font-medium text-primary-500">
-              <span>Upload a image</span>
+              <span>Upload an image</span>
             </div>
           </div>
           <p className="text-xs text-gray-500">PNG, JPG up to 10MB</p>

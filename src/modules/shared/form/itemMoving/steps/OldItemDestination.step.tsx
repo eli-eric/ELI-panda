@@ -14,7 +14,7 @@ import {
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import type { ModalButtons } from '@/types/form'
 import type { SystemDetail } from '@/types/responses/systems'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { FilterBadges } from '../../FilterBadges'
 import { useWizardStore } from '../../wizard/store/useWizardStore'
@@ -67,7 +67,7 @@ export const OldItemDestinationStep: FC = () => {
         setOldItemParentSystem(row.original)
       }
     },
-    className: classNames(
+    className: cx(
       getColorBySystemLevel(row.original?.systemLevel),
       getFontBySystemLevel(row.original?.systemLevel),
       row.original?.physicalItem &&

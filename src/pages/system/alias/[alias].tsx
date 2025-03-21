@@ -27,7 +27,7 @@ const SystemAliasRedirectPage: NextPage = ({ alias }: Props) => {
   const { push } = useRouter()
   const { status } = useSession()
 
-  const { loading, error, systemDetail } = useSystemDetail(alias, data => {
+  const { loading, error, systemDetail } = useSystemDetail({ alias }, data => {
     const uid = data?.systems[0]?.uid
     if (uid) {
       push(PATH.SYSTEM + '/' + uid)

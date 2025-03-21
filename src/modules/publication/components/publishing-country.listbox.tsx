@@ -1,0 +1,32 @@
+import Listbox from '@/components/form/Listbox'
+import { useCodebook } from '@/hooks/fetch/useCodebook'
+import { CODEBOOK } from '@/types/constants/codebook'
+
+import { usePublicationFields } from '../hooks/usePublicationFields'
+
+const allowedCountries = [
+  'AU',
+  'CN',
+  'CZ',
+  'DE',
+  'DK',
+  'FR',
+  'GB',
+  'HU',
+  'CH',
+  'JP',
+  'NL',
+  'PL',
+  'RO',
+  'TW',
+  'US'
+]
+
+export function PublishingCountryListbox() {
+  const { publishingCountry } = usePublicationFields()
+  const { data } = useCodebook(CODEBOOK.COUNTRY)
+  const filteredData = data?.data.filter(country =>
+    allowedCountries.includes(country.code ?? '')
+  )
+  return <Listbox {...publishingCountry} codebookResponse={filteredData} />
+}

@@ -3,7 +3,7 @@ import { flexRender } from '@tanstack/react-table'
 import type { FC } from 'react'
 import { useMemo } from 'react'
 
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import styles from './RowCell.module.css'
 
@@ -36,7 +36,7 @@ export const RowCellComponent: FC<Props> = ({ cell, row, loading, index }) => {
             : undefined
         } as React.CSSProperties
       }
-      className={classNames(
+      className={cx(
         'flex items-center',
         'border-r border-b border-gray-400 pl-3 pr-3',
         cell.column.columnDef.meta?.sticky

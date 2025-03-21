@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { FALLBACK_IMAGE } from '@/types/constants/general'
 import type { GetCategoriesQuery } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { CategoryButtons } from '../categoryEdit/components/CategoryButtons'
 
@@ -18,7 +18,14 @@ export const CategoryItemComponent = ({
 }: Props) => {
   const image = category?.miniImageUrl?.split(';')[0]
   return (
-    <div className="flex-row justify-between dark:hover:bg-gray-600 relative flex items-center space-x-3 rounded-lg border border-gray-300 bg-white dark:bg-gray-700 shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2 hover:border-gray-400">
+    <div
+      className={cx(
+        'flex-row justify-between dark:hover:bg-gray-600 relative flex items-center space-x-3 rounded-lg',
+        'transform transition-transform duration-300 ease-in-out hover:-translate-y-1',
+        'dark:bg-gray-700 dark:shadow-black shadow-md hover:shadow-2xl focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2',
+        'group hover:z-50'
+      )}
+    >
       <button
         onClick={() => {
           setCategoryFilter({ uid: category.uid, name: category.name })
@@ -28,7 +35,7 @@ export const CategoryItemComponent = ({
       >
         <div className="flex-shrink-0 mx-6 my-4">
           <Image
-            className={classNames('h-10 w-10 rounded-sm object-contain')}
+            className={cx('h-10 w-10 rounded-sm object-contain')}
             width={200}
             height={200}
             alt={category.name}
@@ -38,13 +45,15 @@ export const CategoryItemComponent = ({
         <div className="min-w-0 flex-1 mx-6 my-4">
           <div className="focus:outline-none">
             <span className="absolute inset-0" aria-hidden="true" />
-            <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
+            <p className="text-xs font-medium text-gray-900 dark:text-gray-200">
               {category.name}
             </p>
           </div>
         </div>
       </button>
-      <CategoryButtons uid={category.uid} />
+      <div className={cx('opacity-0', 'group-hover:opacity-100')}>
+        <CategoryButtons uid={category.uid} />
+      </div>
     </div>
   )
 }

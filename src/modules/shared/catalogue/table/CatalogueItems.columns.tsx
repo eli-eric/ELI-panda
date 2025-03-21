@@ -14,7 +14,7 @@ import type {
   CatalogueItemsResponse
 } from '@/types/responses/catalogue'
 import type { CodebookType } from '@/types/responses/codebook'
-import { classNames, truncateString } from '@/utils'
+import { cx, truncateString } from '@/utils'
 
 import { CategoryName } from './cells/CategoryNameCell'
 import { DescriptionCell } from './cells/DescriptionCell'
@@ -201,7 +201,7 @@ export const useCatalogueItemsColumns = ({
             }
             return (
               <div>
-                <span className={classNames(unit && 'font-bold')}>{value}</span>
+                <span className={cx(unit && 'font-bold')}>{value}</span>
                 {unit && <span> {unit}</span>}
               </div>
             )

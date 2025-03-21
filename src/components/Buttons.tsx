@@ -19,11 +19,10 @@ import { FolderArrowDownIcon } from '@heroicons/react/24/solid'
 import Link from 'next/link'
 import type { FC, PropsWithChildren } from 'react'
 import { Fragment } from 'react'
-import { isMobile } from 'react-device-detect'
 import { FormattedMessage } from 'react-intl'
 import type { UrlObject } from 'url'
 
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import ButtonLoaderComponent from './button-loader.comp'
 
@@ -66,7 +65,7 @@ export const Button = ({
     data-testid={testid}
     disabled={loading ? true : disabled}
     type={type}
-    className={classNames(
+    className={cx(
       'btn',
       rounded,
       loading && 'bg-primary-700',
@@ -247,7 +246,7 @@ export const TableDeleteButton = ({
 }: ButtonProps) => (
   <button
     {...props}
-    className="ml-2 hover:text-primary-500 text-red-700"
+    className={cx('ml-2 hover:text-primary-500 text-red-700', props.className)}
     type={type}
   >
     <TrashIcon className="h-4 w-4" aria-hidden="true" />
@@ -285,10 +284,11 @@ export const TableButtonsWrapper: FC<
   PropsWithChildren<TableButtonWrapperProps>
 > = ({ children, position = 'right-0', className }) => (
   <div
-    className={classNames(
-      'absolute flex items-center bg-inherit pr-1 opacity-0 group-hover:opacity-100',
+    className={cx(
+      'absolute flex items-center bg-inherit pr-1',
+      'sm:opacity-0 sm:group-hover:opacity-100 opacity-100',
+      'z-50',
       position,
-      isMobile && 'opacity-100',
       className
     )}
   >

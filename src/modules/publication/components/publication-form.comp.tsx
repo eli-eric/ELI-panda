@@ -1,4 +1,3 @@
-import Combobox from '@/components/form/Combobox'
 import { Input, TextArea } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { RadioSelect } from '@/components/form/radio-select.comp'
@@ -12,6 +11,7 @@ import { usePublicationFields } from '../hooks/usePublicationFields'
 import type { MEDIA_TYPE_CODE } from '../types/constants'
 import { mediaTypeOptions } from '../types/constants'
 import { DepartmentsComponent } from './departments.comp'
+import { PublishingCountryListbox } from './publishing-country.listbox'
 import { WebLinkField } from './web-link.field'
 
 export type Publication = {
@@ -117,7 +117,7 @@ export const PublicationFormComponent = () => {
         <Col lg={2}>
           <Listbox
             {...fields.yearOfPublication}
-            customOptions={['2023', '2024', '2025']}
+            customOptions={['2023', '2024', '2025', '2026']}
           />
         </Col>
         <Col lg={4}>
@@ -148,7 +148,7 @@ export const PublicationFormComponent = () => {
           <Input {...fields.eidScopus} />
         </Col>
         <Col lg={4}>
-          <Combobox {...fields.publishingCountry} hasClientFilter={true} />
+          <PublishingCountryListbox />
         </Col>
         <Col lg={12}>
           <Input

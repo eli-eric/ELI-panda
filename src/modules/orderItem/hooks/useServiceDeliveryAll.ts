@@ -1,0 +1,59 @@
+import { useMutation } from '@tanstack/react-query'
+import type { AxiosError, AxiosResponse } from 'axios'
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
+import toast from 'react-hot-toast'
+
+import { queryMutate } from '@/utils/fetcher'
+
+import type { ServiceLine } from '../types/form'
+import { useDeliveryHandler } from './useDeliveryHandler'
+import useOrderDetail from './useOrderDetail'
+
+export const useServiceDeliveryAll = () => {
+  const { uid, refetch } = useOrderDetail()
+  const { control } = useFormContext()
+  const { handleSuccessfulDelivery } = useDeliveryHandler()
+
+  const serviceLines = useWatch({ control, name: 'serviceLines' })
+  const { fields, update } = useFieldArray({
+    control,
+    name: 'serviceLines'
+  })
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: queryMutate<ServiceLine[], string[]>(
+      'serviceLinesDeliverAll',
+      'put',
+      uid
+    ),
+    onError: (e: AxiosError) => {
+      if (e.response?.status === 409) {
+        toast.error(
+          'Order was updated by another user. Please refresh the page. And try again.'
+        )
+      } else {
+        toast.error(e.message)
+      }
+    }
+  })
+
+  const onSuccess = (data: AxiosResponse<ServiceLine[]>) => {
+    handleSuccessfulDelivery(data.data, { fields, update, refetch })
+    toast.success('Services all delivered successfully')
+  }
+
+  const handleDelivery = () => {
+    if (serviceLines?.some((line: ServiceLine) => !line.isDelivered)) {
+      const uidsToDeliver = (serviceLines as ServiceLine[])
+        ?.filter(line => !line.isDelivered && line.uid)
+        .map(line => line.uid)
+        .filter((uid): uid is string => uid !== undefined)
+
+      if (uidsToDeliver.length > 0) {
+        mutate(uidsToDeliver, { onSuccess })
+      }
+    }
+  }
+
+  return { handleDelivery, isPending }
+}

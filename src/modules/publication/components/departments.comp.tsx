@@ -4,13 +4,12 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 import { FormattedMessage, useIntl } from 'react-intl'
 
 import { Input } from '@/components/form/inputs'
-import Listbox from '@/components/form/Listbox'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { message } from '@/i18n/src/messages'
-import { CODEBOOK } from '@/types/constants/codebook'
 import { ROLE } from '@/types/constants/roles'
 
 import { usePublicationFields } from '../hooks/usePublicationFields'
+import { DepartmentListbox } from './department.listbox'
 const { form, addDepartmentButton } = message.publication
 
 export const DepartmentsComponent = () => {
@@ -88,14 +87,7 @@ const Department = ({ name, disabled }: DepartmentProps) => {
   const { formatMessage: fm } = useIntl()
   return (
     <Fragment>
-      <Listbox
-        name={`${name}.department`}
-        label={form.department.label}
-        placeholder={fm({ id: form.department.placeholder })}
-        codebook={CODEBOOK.DEPARTMENT}
-        disabled={disabled}
-        className="col-span-6"
-      />
+      <DepartmentListbox name={`${name}.department`} disabled={disabled} />
       <Input
         name={`${name}.authorsCount`}
         rounded="rounded-md"

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { type FC, type PropsWithChildren } from 'react'
 
 import type { ROLE } from '@/types/constants/roles'
+import { cx } from '@/utils'
 
 import { AccessControl } from '../auth/AccesControl'
 
@@ -25,14 +26,17 @@ export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
           >
             <li
               key={name}
-              className="col-span-1 flex flex-col rounded-lg bg-white dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-200 dark:shadow-white text-center shadow cursor-pointer hover:bg-gray-50 transition"
+              className={cx(
+                'col-span-1 flex flex-col rounded-xl bg-white shadow-md dark:bg-gray-700 text-center cursor-pointer',
+                'dark:text-gray-200 dark:shadow-black',
+                'transform transition-transform duration-300 hover:shadow-2xl hover:-translate-y-3'
+              )}
             >
               <div className="flex flex-1 flex-col p-8">
                 <Icon />
                 <h2 className="mt-6 text-xl font-medium text-gray-900 dark:text-gray-200">
                   {name}
                 </h2>
-                <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
               </div>
               <div>
                 <div className="-mt-px flex ">
@@ -52,7 +56,6 @@ export const Tile = ({ name, link, Icon, legacyBehavior, role }: CardProps) => {
               <h2 className="mt-6 text-xl font-medium text-gray-900 dark:text-gray-200">
                 {name}
               </h2>
-              <dl className="mt-1 flex flex-grow flex-col justify-between"></dl>
             </div>
             <div>
               <div className="-mt-px flex ">

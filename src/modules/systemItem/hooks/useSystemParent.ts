@@ -43,13 +43,23 @@ export const useSystemParent = () => {
     enabled: !!uid
   })
 
-  const parentPath =
-    data?.systems[0]?.parentPath && data?.systems[0]?.parentPath?.length > 0
-      ? [
-          ...(data?.systems[0]?.parentPath ?? []),
-          { uid: data?.systems[0]?.uid, name: data?.systems[0]?.name }
-        ]
-      : [{ uid: data?.systems[0]?.uid, name: data?.systems[0]?.name }]
+  const getParentPath = () => {
+    if (!data?.systems[0]?.parentPath) {
+      return []
+    }
+    const parentPath = data?.systems[0]?.parentPath.map((item: any) => ({
+      uid: item.uid,
+      name: item.name,
+      systemLevel: item.systemLevel
+    }))
+    return [
+      ...parentPath,
+      { uid: data?.systems[0]?.uid, name: data?.systems[0]?.name }
+    ]
+  }
+  // Check if parentPath is not empty and map it to the desired format
+
+  const parentPath = getParentPath()
 
   return {
     parentSystem: data?.systems[0],

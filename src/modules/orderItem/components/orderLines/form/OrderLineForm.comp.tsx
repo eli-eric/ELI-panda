@@ -86,6 +86,11 @@ const OrderLineFormComponent = ({ catalogueItem, orderLine }: Props) => {
           <Input {...formFields.quantity} />
         </Col>
       )}
+      {!orderLine?.uuid && (
+        <Col md={12} lg={12}>
+          <Input {...formFields.serialNumbers} />
+        </Col>
+      )}
       {orderLine?.uid && (
         <Col md={6} lg={4}>
           <Input {...formFields.serialNumber} />

@@ -7,7 +7,8 @@ import {
   ShoppingCartIcon,
   TableCellsIcon,
   UserGroupIcon,
-  UserIcon
+  UserIcon,
+  WrenchScrewdriverIcon
 } from '@heroicons/react/24/outline'
 import type { ElementType } from 'react'
 
@@ -23,6 +24,7 @@ export enum PATH {
   SYSTEMS_MULTI_MOVE = '/systems/multi-move',
   SPARE_PARTS = '/systems/spareparts',
   SYSTEM = '/system',
+  SYSTEM_ITEM = '/system/item',
   SYSTEM_TYPE_EDIT = '/system/type-edit',
   SYSTEM_ALIAS = '/system/alias',
   REPORTS = '/reports',
@@ -39,7 +41,9 @@ export enum PATH {
   PROFILE_TEAM = '/profile/team',
   LAYOUT = '/layout',
   PUBLICATIONS = '/publications',
-  PUBLICATION = '/publication'
+  PUBLICATION = '/publication',
+  SERVICES = '/services',
+  SERVICE = '/service'
 }
 
 export const SUPPORT =
@@ -114,6 +118,12 @@ export const NAV_BAR_CONFIG: NavigationType[] = [
     link: PATH.PUBLICATIONS,
     role: ROLE.PUBLICATIONS_VIEW,
     Icon: BookOpenIcon
+  },
+  {
+    name: 'Services',
+    link: PATH.SERVICES,
+    role: ROLE.SERVICE_VIEW,
+    Icon: WrenchScrewdriverIcon
   }
 ]
 
@@ -152,6 +162,8 @@ export const PROTECTED_PATHS = [
   PATH.SYSTEM_ALIAS,
   PATH.PUBLICATION,
   PATH.PUBLICATIONS,
+  PATH.SERVICE,
+  PATH.SERVICES,
   PATH.LAYOUT
 ]
 
@@ -188,10 +200,13 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
   [PATH.PROFILE_SECURITY]: [ROLE.BASICS],
   [PATH.PROFILE_TEAM]: [ROLE.BASICS],
   [PATH.SYSTEM_ALIAS]: [ROLE.SYSTEMS_VIEW],
+  [PATH.SYSTEM_ITEM]: [ROLE.BASICS],
   [PATH.SYSTEM_TYPE_EDIT]: [ROLE.SYSTEM_TYPE_EDIT, ROLE.SYSTEM_TYPE_VIEW],
   [PATH.SYSTEMS_MULTI_MOVE]: [ROLE.SYSTEM_EDIT],
   [PATH.LAYOUT]: [ROLE.BASICS],
   [PATH.PUBLICATIONS]: [ROLE.PUBLICATIONS_VIEW, ROLE.PUBLICATIONS_EDIT],
   [PATH.PUBLICATION]: [ROLE.PUBLICATIONS_VIEW, ROLE.PUBLICATIONS_EDIT],
+  [PATH.SERVICES]: [ROLE.SERVICE_VIEW, ROLE.SERVICE_EDIT, ROLE.BASICS],
+  [PATH.SERVICE]: [ROLE.SERVICE_VIEW, ROLE.SERVICE_EDIT, ROLE.BASICS],
   [PATH.ROOT]: []
 }

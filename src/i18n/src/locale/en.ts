@@ -337,9 +337,47 @@ export const messages = {
         lastUpdateBy: 'Last Update By'
       }
     },
+    serviceLines: {
+      columns: {
+        name: 'Name',
+        serviceType: 'Service Type',
+        notes: 'Notes',
+        item: 'Item',
+        isDelivered: 'Delivered',
+        price: 'Price'
+      },
+      header: 'Service Lines',
+      wizard: {
+        steps: {
+          step1: {
+            title: 'Information',
+            form: {
+              name: {
+                label: 'Service Description',
+                placeholder: 'Service Description'
+              },
+              notes: { label: 'Notes', placeholder: 'Notes' },
+              serviceType: { label: 'Service Type' },
+              price: { label: 'Service Price per item', placeholder: '0.00' },
+              currency: { label: 'Currency' }
+            }
+          },
+          step2: {
+            title: 'Service Line Details',
+            form: {}
+          },
+          step3: {
+            title: 'Select Items',
+            form: {
+              item: { label: 'System Item' }
+            }
+          }
+        }
+      }
+    },
     orderDetail: {
       sectionHeadings: {
-        orderLines: 'Order Lines'
+        orderLines: 'Item Order Lines'
       },
       form: {
         eun: { label: 'EUN', placeholder: 'EUN' },
@@ -390,10 +428,15 @@ export const messages = {
         serialNumber: { label: 'Serial Number', placeholder: 'Serial Number' },
         eun: { label: 'EUN', placeholder: 'EUN' },
         manualEun: { label: 'Set EUN manually' },
-        notes: { label: 'Notes', placeholder: 'Notes' }
+        notes: { label: 'Notes', placeholder: 'Notes' },
+        serialNumbers: {
+          label: 'Serial Numbers',
+          placeholder: 'Fill serial numbers comma separated instead of quantity'
+        }
       },
       orderLinesTable: {
         header: {
+          actions: 'Actions',
           name: 'Name',
           catalogueNumber: 'Part Number',
           system: 'Parent System',
@@ -488,7 +531,7 @@ export const messages = {
       grant: { label: 'Grant' },
       wosNumber: { label: 'WOS Number (R67)' },
       issn: { label: 'ISSN (R14)', placeholder: 'ISSN' },
-      eissn: { label: 'E-ISSN (R15)', placeholder: 'E-ISSN' },
+      eissn: { label: 'e-ISSN (R15)', placeholder: 'e-ISSN' },
       eidScopus: { label: 'EID Scopus (R90)' },
       publishingCountry: {
         label: 'Publishing Country (R17)*',
@@ -499,6 +542,8 @@ export const messages = {
     }
   },
   publications: { head: 'ELI Panda - Publications' },
+  services: { head: 'ELI Panda - Services' },
+  service: { head: 'ELI Panda - Service detail' },
   systemItem: {
     head: 'ELI Panda - System Item',
     itemMove: {
