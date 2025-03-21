@@ -6,6 +6,7 @@ import { FormWizard } from '@/modules/shared/form/wizardV2/wizard-form.cont'
 import useTableStateStore from '@/store/useTableStateStore'
 
 import { useServiceLineSteps } from './hooks/useServiceLineSteps'
+import { useServiceLineSelectionStore } from './details/store/useServiceLineSelectionStore'
 
 type Props = {
   setOpen: (open: boolean) => void
@@ -14,6 +15,7 @@ export const ServiceLineWizard = ({ setOpen }: Props) => {
   const serviceLineSteps = useServiceLineSteps()
 
   const steps = useMemo(() => serviceLineSteps, [serviceLineSteps])
+  const { clearSelections } = useServiceLineSelectionStore()
 
   const { setServiceLine } = useServiceLine()
   const tableId = 'items-select-table'
@@ -46,9 +48,10 @@ export const ServiceLineWizard = ({ setOpen }: Props) => {
 
       reset()
       resetTable(tableId)
+      clearSelections()
       setOpen(false)
     },
-    [setServiceLine, resetTable, tableId, setOpen]
+    [setServiceLine, resetTable, tableId, setOpen, clearSelections]
   )
 
   return (

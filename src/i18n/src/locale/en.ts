@@ -410,7 +410,8 @@ export const messages = {
     },
     ordelineMissingModal: {
       title: 'Warning',
-      message: 'Order lines is missing are you sure you want to continue?'
+      message:
+        'Order lines or Service lines is missing are you sure you want to continue?'
     },
     orderLines: {
       formHeadings: {
