@@ -30,7 +30,7 @@ export const DeleteServiceButton = ({ uid, name }: Props) => {
       onClick={handleClick}
       className="rounded-full bg-red-700 text-gray-200 hover:bg-red-800"
     >
-      <TrashIcon className="h-5 w-5" aria-hidden="true" />
+      <TrashIcon className="h-3 w-3" aria-hidden="true" />
     </Button>
   )
 }

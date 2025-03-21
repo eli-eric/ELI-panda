@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { Fragment } from 'react'
+import { Fragment, useRef } from 'react'
 
 import { BackButton, Button } from '@/components/Buttons'
 import Card from '@/components/layout/Card'
@@ -27,9 +27,37 @@ export const HeaderWithButtons = ({
 }: Props) => {
   const disabledEdit = usePermission([editRole])
   const { back } = useRouter()
+  const DEBOUNCE_TIME = 1500
+  const lastSubmitTimeRef = useRef<number>(0)
 
-  const onBack = () => {
+  const onBack = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (loading) return
+    const now = Date.now()
+    if (now - lastSubmitTimeRef.current < DEBOUNCE_TIME) return
+    lastSubmitTimeRef.current = now
     back()
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!onSubmit) return
+    const now = Date.now()
+    if (now - lastSubmitTimeRef.current < DEBOUNCE_TIME) return
+    lastSubmitTimeRef.current = now
+    onSubmit?.()
+  }
+
+  const handleSubmitAndExit = (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!onSubmitAndExit) return
+    const now = Date.now()
+    if (now - lastSubmitTimeRef.current < DEBOUNCE_TIME) return
+    lastSubmitTimeRef.current = now
+    onSubmitAndExit?.()
   }
 
   return (
@@ -40,6 +68,7 @@ export const HeaderWithButtons = ({
             className="mr-2"
             type="button"
             buttonSize="large"
+            disabled={loading}
             onClick={onBack}
           />
           {disabledEdit && (
@@ -47,8 +76,7 @@ export const HeaderWithButtons = ({
               <Button
                 primary
                 buttonSize="large"
-                onClick={onSubmitAndExit}
-                loading={loading}
+                onClick={handleSubmitAndExit}
                 disabled={loading || isFormInvalid}
                 type="button"
                 text={messages.saveAndExit}
@@ -57,13 +85,20 @@ export const HeaderWithButtons = ({
                 primary
                 className="ml-2"
                 buttonSize="large"
-                onClick={onSubmit}
+                onClick={handleSubmit}
                 disabled={loading || isFormInvalid}
-                loading={loading}
                 type="button"
                 text={messages.save}
               />
             </Fragment>
+          )}
+          {loading && (
+            <Button
+              className="ml-2 bg-inherit border-none shadow-none"
+              buttonSize="large"
+              loading={loading}
+              text={'Saving...'}
+            />
           )}
         </div>
         {customElement}

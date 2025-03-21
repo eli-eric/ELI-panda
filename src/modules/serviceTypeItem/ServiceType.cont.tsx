@@ -23,9 +23,6 @@ interface Props {
 
 export const ServiceTypeContainer: FC<Props> = ({ data, uid }) => {
   const router = useRouter()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const lastSubmitTimeRef = useRef<number>(0)
-  const DEBOUNCE_TIME = 500 // 500ms debounce
 
   const formMethods = useForm({
     defaultValues: {
@@ -42,12 +39,6 @@ export const ServiceTypeContainer: FC<Props> = ({ data, uid }) => {
   const { refetch } = useServiceTypeList()
 
   const submit = (data, exit?: boolean) => {
-    const now = Date.now()
-    if (isSubmitting || now - lastSubmitTimeRef.current < DEBOUNCE_TIME) return
-
-    lastSubmitTimeRef.current = now
-    setIsSubmitting(true)
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { properties, ...rest } = data
     const newPropperties = properties
@@ -67,11 +58,8 @@ export const ServiceTypeContainer: FC<Props> = ({ data, uid }) => {
         } else {
           router.push(PATH.SERVICE + '/' + data.uid)
         }
-        setIsSubmitting(false)
       },
-      onError: () => {
-        setIsSubmitting(false)
-      }
+      onError: () => {}
     })
   }
 
@@ -85,7 +73,7 @@ export const ServiceTypeContainer: FC<Props> = ({ data, uid }) => {
   return (
     <Form className="h-screen overflow-auto" formMethods={formMethods}>
       <HeaderWithButtons
-        loading={isPending || isSubmitting}
+        loading={isPending}
         customElement={<h1>{data ? 'Edit Service' : 'New Service'}</h1>}
         editRole={ROLE.SERVICE_EDIT}
         onSubmit={formMethods.handleSubmit(onSubmit)}
