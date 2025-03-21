@@ -89,7 +89,10 @@ export const OrderItemContainer = () => {
           const { uuid, ...rest } = serviceLine
           return rest
         })
-      if (data?.orderLines?.length === 0 || !data?.orderLines) {
+      if (
+        (data?.orderLines?.length === 0 || !data?.orderLines) &&
+        (data?.serviceLines?.length === 0 || !data?.serviceLines)
+      ) {
         withWarningModal(submit)(
           {
             ...data,
@@ -128,7 +131,10 @@ export const OrderItemContainer = () => {
         const { uuid, ...rest } = serviceLine
         return rest
       })
-      if (data?.orderLines?.length === 0 || !data?.orderLines) {
+      if (
+        (data?.orderLines?.length === 0 || !data?.orderLines) &&
+        (data?.serviceLines?.length === 0 || !data?.serviceLines)
+      ) {
         withWarningModal(submit)(
           {
             ...data,
