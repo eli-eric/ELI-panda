@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import type { FC } from 'react'
 import { useForm } from 'react-hook-form'
+import { useState, useRef } from 'react'
 
 import { Form } from '@/components/form/Form'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
@@ -22,6 +23,10 @@ interface Props {
 
 export const ServiceTypeContainer: FC<Props> = ({ data, uid }) => {
   const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const lastSubmitTimeRef = useRef<number>(0)
+  const DEBOUNCE_TIME = 500 // 500ms debounce
+
   const formMethods = useForm({
     defaultValues: {
       ...data,
@@ -37,6 +42,12 @@ export const ServiceTypeContainer: FC<Props> = ({ data, uid }) => {
   const { refetch } = useServiceTypeList()
 
   const submit = (data, exit?: boolean) => {
+    const now = Date.now()
+    if (isSubmitting || now - lastSubmitTimeRef.current < DEBOUNCE_TIME) return
+
+    lastSubmitTimeRef.current = now
+    setIsSubmitting(true)
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { properties, ...rest } = data
     const newPropperties = properties
@@ -46,12 +57,20 @@ export const ServiceTypeContainer: FC<Props> = ({ data, uid }) => {
       : []
     const newData = { ...rest, properties: newPropperties }
     mutate(newData, {
-      onSuccess: () => {
+      onSuccess: ({ data }) => {
         if (exit) {
           router.push(PATH.SERVICES)
         }
-        refetch()
-        refetchService()
+        if (uid) {
+          refetch()
+          refetchService()
+        } else {
+          router.push(PATH.SERVICE + '/' + data.uid)
+        }
+        setIsSubmitting(false)
+      },
+      onError: () => {
+        setIsSubmitting(false)
       }
     })
   }
@@ -66,7 +85,7 @@ export const ServiceTypeContainer: FC<Props> = ({ data, uid }) => {
   return (
     <Form className="h-screen overflow-auto" formMethods={formMethods}>
       <HeaderWithButtons
-        loading={isPending}
+        loading={isPending || isSubmitting}
         customElement={<h1>{data ? 'Edit Service' : 'New Service'}</h1>}
         editRole={ROLE.SERVICE_EDIT}
         onSubmit={formMethods.handleSubmit(onSubmit)}
