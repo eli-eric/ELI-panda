@@ -166,9 +166,9 @@ type CatalogueCategoryProperty @authentication {
   name: String!
   defaultValue: String!
   unit: Unit @relationship(type: "HAS_UNIT", direction: OUT)
-  catalogueCategoryPropertyGroupsContainsProperty: [CatalogueCategoryPropertyGroup!]!
+  groups: [CatalogueCategoryPropertyGroup!]!
     @relationship(type: "CONTAINS_PROPERTY", direction: IN)
-  isPropertyTypeCatalogueCategoryPropertyTypes: [CatalogueCategoryPropertyType!]!
+  type: CatalogueCategoryPropertyType
     @relationship(type: "IS_PROPERTY_TYPE", direction: OUT)
   listOfValues: String!
 }
@@ -186,8 +186,6 @@ type CatalogueCategoryPropertyType @authentication {
   uid: String!
   name: String!
   code: String!
-  catalogueCategoryPropertiesIsPropertyType: [CatalogueCategoryProperty!]!
-    @relationship(type: "IS_PROPERTY_TYPE", direction: IN)
 }
 
 type CatalogueItem @authentication {
@@ -369,6 +367,7 @@ enum SystemLevel {
 interface hasOrderLine @relationshipProperties {
   price: Int
   currency: String
+  isDelivered: Boolean
 }
 
 type Item @authentication {
@@ -385,10 +384,39 @@ type Item @authentication {
       direction: IN
       properties: "hasOrderLine"
     )
+  serviceItems: [ServiceItem!]!
+    @relationship(
+      type: "IS_SERVICED_BY"
+      direction: OUT
+      properties: "isServicedBy"
+    )
   itemUsage: ItemUsage @relationship(type: "HAS_ITEM_USAGE", direction: OUT)
   conditionStatus: ItemCondition
     @relationship(type: "HAS_CONDITION_STATUS", direction: OUT)
   notes: String
+}
+
+interface isServicedBy @relationshipProperties {
+  created: DateTime
+}
+
+type ServiceItem @authentication {
+  uid: ID! @id
+  name: String!
+  order: Order @relationship(type: "HAS_SERVICE_LINE", direction: IN)
+  isDelivered: Boolean!
+  servicedItem: Item
+    @relationship(
+      type: "IS_SERVICED_BY"
+      direction: IN
+      properties: "isServicedBy"
+    )
+  details: [CatalogueCategoryProperty!]!
+    @relationship(
+      type: "HAS_CATALOGUE_PROPERTY"
+      direction: OUT
+      properties: "hasCatalogueProperty"
+    )
 }
 
 type SystemCriticality @authentication {
@@ -427,6 +455,12 @@ type SystemType @authentication {
 type Order @authentication {
   uid: ID! @id
   name: String!
+  orderDate: DateTime
+  orderNumber: String
+  requestNumber: String
+  notes: String
+  lastUpdateTime: DateTime
+  created: DateTime
   orderLines: [Item!]! @relationship(type: "HAS_ORDER_LINE", direction: OUT)
 }
 

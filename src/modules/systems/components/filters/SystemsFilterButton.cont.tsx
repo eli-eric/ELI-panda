@@ -36,15 +36,21 @@ type SystemFilterType = {
   price: [number | undefined, number | undefined]
   parentSystem: CodebookType | null
 }
+
+export type DisabledFields = {
+  [key: string]: boolean
+}
 interface Props {
   tableId?: string
   enableQueryURL?: boolean
   panelSlide?: 'left' | 'right'
+  disabledFields?: DisabledFields
 }
 export const SystemFilterButtonContainer = ({
   panelSlide,
   tableId = 'systems',
-  enableQueryURL = true
+  enableQueryURL = true,
+  disabledFields
 }: Props) => {
   const [open, setOpen] = useState(false)
   const { minMaxPrice } = useMinMaxPrice()
@@ -140,6 +146,7 @@ export const SystemFilterButtonContainer = ({
           <SystemsFilterForm
             tableId={tableId}
             enableQueryUrl={enableQueryURL}
+            disabledFields={disabledFields}
           />
         </Form>
       </SlideOver>

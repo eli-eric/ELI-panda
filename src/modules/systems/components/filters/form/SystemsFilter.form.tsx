@@ -16,17 +16,20 @@ import { useCategoryItemProperties } from '@/modules/systems/hooks/useCategoryIt
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { useMinMaxPrice } from '@/modules/systems/hooks/useMinMaxPrice'
 import { SystemLevel } from '@/types/gql/graphql'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { CategoryPropFilters } from '../../../../shared/form/CategoryPropFilters'
+import type { DisabledFields } from '../SystemsFilterButton.cont'
 import { useSystemsFilterFields } from './SystemsFilter.fields'
 
 export const SystemsFilterForm = ({
   tableId,
-  enableQueryUrl
+  enableQueryUrl,
+  disabledFields
 }: {
   tableId: string
   enableQueryUrl: boolean
+  disabledFields?: DisabledFields
 }) => {
   const fields = useSystemsFilterFields()
   const systemLevels = Object.values(SystemLevel).map(level => level)
@@ -42,9 +45,7 @@ export const SystemsFilterForm = ({
   const { data: itemProperties } = useCategoryItemProperties(uid)
 
   return (
-    <div
-      className={classNames('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}
-    >
+    <div className={cx('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
       <div className="flex flex-col gap-2">
         <SelectSystemComboBox
           selectSystemField={fields.parentSystem}
@@ -141,6 +142,7 @@ export const SystemsFilterForm = ({
         />
         <ComboboxTree
           {...fields.category}
+          disabled={disabledFields?.category || fields.category.disabled}
           onSelect={setFilter(fields.category.name)}
           isFilter={true}
         />

@@ -6,6 +6,7 @@ import { useEscapeKey } from '@/hooks/useEscapeKey'
 import { message } from '@/i18n/src/messages'
 import { useModalStore } from '@/store/useModalStore'
 import type { ModalButtons } from '@/types/form'
+import { cx } from '@/utils'
 
 import ModalButtonsComponent from './modal.buttons'
 
@@ -17,6 +18,7 @@ interface Props {
   children: React.ReactNode
   testid?: string
   buttons?: ModalButtons
+  zclass?: string
 }
 
 export default function ModalComponent({
@@ -24,6 +26,7 @@ export default function ModalComponent({
   children,
   testid,
   buttons,
+  zclass = 'z-40',
   setOpen
 }: Props) {
   useEscapeKey(() => {
@@ -38,7 +41,7 @@ export default function ModalComponent({
     <Transition.Root show={open} as={Fragment}>
       <Dialog
         as="div"
-        className="relative z-40"
+        className={cx('relative', zclass)}
         onClose={() => {}}
         unmount={false}
       >

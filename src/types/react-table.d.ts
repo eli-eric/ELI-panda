@@ -6,6 +6,7 @@ declare module '@tanstack/table-core' {
   //eslint-disable-next-line
   interface ColumnMeta<TData extends RowData, TValue> {
     sticky?: boolean
+    pin?: 'left' | 'right'
     className?: string
     headerClassName?: string
     filter?: {

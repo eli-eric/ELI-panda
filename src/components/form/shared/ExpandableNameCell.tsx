@@ -1,7 +1,7 @@
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import type { Row } from '@tanstack/react-table'
 
-import { classNames, highlightText } from '@/utils'
+import { cx, highlightText } from '@/utils'
 
 import type { Codebooktree } from './CodebookTreeModalGraphql'
 
@@ -22,7 +22,7 @@ export const ExpandableNameCell = ({
     style={{
       paddingLeft: `${row.depth * 2}rem`
     }}
-    className={classNames('my-1 flex items-center')}
+    className={cx('my-1 flex items-center')}
     onClick={() => {
       if (row.original.isExpandable || row.getCanExpand()) {
         fetchChildren && fetchChildren(row.original.uid)
@@ -32,7 +32,7 @@ export const ExpandableNameCell = ({
   >
     {row.original.isExpandable || row.getCanExpand() ? (
       <div
-        className={classNames(
+        className={cx(
           'flex items-center',
           'cursot-pointer hover:text-gray-400'
         )}

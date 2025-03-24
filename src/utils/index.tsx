@@ -1,6 +1,6 @@
 import { twMerge } from 'tailwind-merge'
 
-export function classNames(...classes) {
+export function cx(...classes) {
   return twMerge(classes.filter(Boolean).join(' '))
 }
 
@@ -45,7 +45,11 @@ export const highlightText = (
   if (!highlight) {
     return <span>{text}</span>
   }
-  const regex = new RegExp(`(${highlight})`, 'gi')
+
+  // Escape special regex characters to prevent SyntaxError
+  const escapedHighlight = highlight.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+  const regex = new RegExp(`(${escapedHighlight})`, 'gi')
   const parts = text.split(regex)
   return (
     <span>

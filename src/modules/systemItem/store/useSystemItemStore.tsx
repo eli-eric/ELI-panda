@@ -23,26 +23,31 @@ export const useSystemItemStore = create<SystemStore>(set => ({
   selectedPhysicalSystem: undefined,
   newMaintainedBy: [],
   disconnectMaintainedBy: [],
-  setNewOperator: (employee: Employee) =>
-    set(state => ({ newOperators: [...state.newOperators, employee] })),
+  setNewOperator: (employee: Employee) => {
+    set(state => ({ newOperators: [...state.newOperators, employee] }))
+  },
   setSelectedPhysicalSystem: (system?: SystemDetail) =>
     set(() => ({ selectedPhysicalSystem: system })),
-  setDisconnectOperator: (employee: Employee) =>
+  setDisconnectOperator: (employee: Employee) => {
     set(state => ({
       disconnectOperators: [...state.disconnectOperators, employee]
-    })),
-  setNewMaintainedBy: (employee: Employee) =>
-    set(state => ({ newMaintainedBy: [...state.newMaintainedBy, employee] })),
-  setDisconnectMaintainedBy: (employee: Employee) =>
+    }))
+  },
+  setNewMaintainedBy: (employee: Employee) => {
+    set(state => ({ newMaintainedBy: [...state.newMaintainedBy, employee] }))
+  },
+  setDisconnectMaintainedBy: (employee: Employee) => {
     set(state => ({
       disconnectMaintainedBy: [...state.disconnectMaintainedBy, employee]
-    })),
+    }))
+  },
 
-  clear: () =>
+  clear: () => {
     set(() => ({
       disconnectOperators: [],
       disconnectMaintainedBy: [],
       newMaintainedBy: [],
       newOperators: []
     }))
+  }
 }))

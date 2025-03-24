@@ -1,7 +1,7 @@
 import { Combobox as HUICombobox } from '@headlessui/react'
 
 import type { CodebookType } from '@/types/responses/codebook'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { SelectOption } from './SelectOption'
 
@@ -16,7 +16,7 @@ export const ComboboxOption = ({ item, selected }: Props) => (
     value={item}
     defaultValue={''}
     className={({ active }) =>
-      classNames(
+      cx(
         'relative cursor-default select-none py-2 pl-3 pr-9',
         active
           ? 'bg-primary-500 text-white'

@@ -1,5 +1,6 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { Fragment, useMemo, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 import { ModalSelect } from '@/components/form/ModalSelect'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
@@ -27,7 +28,12 @@ export const SystemTypeComboBox = ({
   isFilter?: boolean
 }) => {
   const [open, setOpen] = useState(false)
-  const { systemTypeGroups, filter } = useSystemTypeGroups()
+  const { systemTypeGroups, filter, loading, error } = useSystemTypeGroups()
+
+  if (error && open) {
+    toast.error('Failed to load system types')
+    setOpen(false)
+  }
 
   const additionalColumn: ColumnDef<Codebooktree, string> = useMemo(
     () => ({
@@ -45,6 +51,21 @@ export const SystemTypeComboBox = ({
     }),
     [filter.code]
   )
+
+  const treeData = useMemo(() => {
+    if (!systemTypeGroups) return []
+
+    return systemTypeGroups?.map(group => ({
+      name: group.name,
+      uid: group.uid,
+      isExpandable: group?.systemTypes?.length > 0,
+      children: group.systemTypes.map(systemType => ({
+        name: systemType.name,
+        code: systemType.code,
+        uid: systemType.uid
+      }))
+    }))
+  }, [systemTypeGroups])
 
   return (
     <Fragment>
@@ -72,20 +93,12 @@ export const SystemTypeComboBox = ({
       <CodebookTreeModalGraphql
         tableId="systemType-tree"
         onSelect={onChange}
-        data={systemTypeGroups?.map(group => ({
-          name: group.name,
-          uid: group.uid,
-          isExpandable: group?.systemTypes?.length > 0,
-          children: group.systemTypes.map(systemType => ({
-            name: systemType.name,
-            code: systemType.code,
-            uid: systemType.uid
-          }))
-        }))}
+        data={treeData}
         additionalColumn={additionalColumn}
         enableFiltering={true}
         manualFiltering={false}
         open={open}
+        loading={loading}
         selectParent={false}
         setOpen={setOpen}
         name={systemTypeField.name}

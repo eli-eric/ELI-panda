@@ -1,13 +1,14 @@
 import { type Row } from '@tanstack/react-table'
 import type { VirtualItem } from '@tanstack/react-virtual'
 import type { FC } from 'react'
+import { useEffect, useRef } from 'react'
 
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { RowCellComponent } from './RowCell.comp'
 
 interface Props {
-  virtualRow: VirtualItem<Element>
+  virtualRow: VirtualItem
   measureElement: (node: Element | null) => void
   row: Row<any>
   getRowProps: (row: Row<any>) => Record<string, any>
@@ -25,20 +26,29 @@ export const TableRowComponent: FC<Props> = ({
 }) => {
   const { className, ...rest } = getRowProps(row)
   const visibleCells = row.getVisibleCells()
+  const rowRef = useRef<HTMLTableRowElement>(null)
+
+  // Use useEffect to safely measure the row after render
+  useEffect(() => {
+    if (rowRef.current) {
+      measureElement(rowRef.current)
+    }
+  }, [measureElement, virtualRow.index])
 
   return (
     <tr
-      className={classNames(
+      className={cx(
         'min-h-[49px]',
         'flex border-t border-gray-300 group',
         virtualRow.index % 2 === 0
           ? 'dark:bg-gray-800'
           : 'bg-gray-100 dark:bg-gray-700',
-        'group hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 z-0',
+        'group hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 dark:text-gray-300 z-0',
         className
       )}
       data-index={virtualRow.index} //needed for dynamic row height measurement
-      ref={node => measureElement(node)} //measure dynamic row height
+      // TODO:  fix dynamic row height measurement
+      ref={rowRef}
       style={{
         display: 'flex',
         position: 'absolute',

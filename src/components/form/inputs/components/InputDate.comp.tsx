@@ -2,7 +2,7 @@ import { useId } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
 import type { FieldProps } from '@/types/form'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { InputWrapper, Label } from '../shared'
 
@@ -52,7 +52,7 @@ export const InputDate = ({
                   }
                 }}
                 placeholder={placeholder}
-                className={classNames(
+                className={cx(
                   'form-field',
                   rounded,
                   error ? 'border-red-500' : 'border-gray-300',

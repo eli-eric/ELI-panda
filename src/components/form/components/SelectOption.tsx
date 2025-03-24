@@ -2,7 +2,7 @@ import { CheckIcon } from '@heroicons/react/24/outline'
 
 import { Tooltip } from '@/components/Tooltip'
 import type { CodebookType } from '@/types/responses/codebook'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 type Props = {
   item: CodebookType
@@ -13,16 +13,14 @@ type Props = {
 export const SelectOption = ({ item, selected, active }: Props) => (
   <>
     <Tooltip content={item.name}>
-      <span
-        className={classNames('block truncate', selected && 'font-semibold')}
-      >
+      <span className={cx('block truncate', selected && 'font-semibold')}>
         {item?.name}
       </span>
     </Tooltip>
     {selected && (
       <Tooltip content={item.name}>
         <span
-          className={classNames(
+          className={cx(
             'absolute inset-y-0 right-0 flex items-center pr-4',
             active ? 'text-white' : 'text-primary-500'
           )}

@@ -5,7 +5,7 @@ import { SelectLocationCombo } from '@/modules/shared/form/location/SelectLocati
 import { SelectSystemComboBox } from '@/modules/shared/form/systemSelect/SelectSystem.combo'
 import { SystemTypeComboBox } from '@/modules/shared/form/systemType/SelectSystemType.combo'
 import { useSystemsFilterFields } from '@/modules/systems/components/filters/form/SystemsFilter.fields'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 export const FilterForm = ({
   tableId,
@@ -19,9 +19,7 @@ export const FilterForm = ({
   const { setFilter } = useFormFilterState({ tableId, enableQueryUrl })
 
   return (
-    <div
-      className={classNames('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}
-    >
+    <div className={cx('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
       <div className="flex flex-col gap-2">
         <SelectSystemComboBox
           selectSystemField={fields.parentSystem}

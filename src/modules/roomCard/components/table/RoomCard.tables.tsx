@@ -3,8 +3,8 @@ import type { FC } from 'react'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
 import Card from '@/components/layout/Card'
 import { Heading } from '@/components/layout/Heading'
+import { Table } from '@/components/ui'
 import usePermission from '@/hooks/usePermission'
-import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { ROLE } from '@/types/constants/roles'
 import type { CodebookType } from '@/types/responses/codebook'
 
@@ -37,33 +37,46 @@ export const RoomCardTables: FC<Props> = ({
 
   const editPersmission = usePermission([ROLE.ROOM_CARD_EDIT])
 
+  // Safely ensure data is never undefined, always an array
+  const safeContactPersonsHall = contactPersonsHall || []
+  const safeContactPersonsDept = contactPersonsDept || []
+  const safeTeams = teams || []
+  const safeLocations = locations || []
+
   return (
     <Card className="pt-4">
-      <div className="lg:flex justify-between">
-        <PandaTable
+      <div className="flex flex-col xl:flex-row xl:justify-between gap-2">
+        <Table<any>
           {...{
-            tableId: 'roomCard-Contact',
             columns: columnsContactHall,
-            data:
-              contactPersonsHall?.length === 0 ? undefined : contactPersonsHall,
-            className: 'relative border-l pb-0 sm:mb-4 z-0'
+            data: safeContactPersonsHall,
+            skipEmptyMessage: true,
+            rowClassName: 'relative group/row',
+            className: 'min-w-[450px]',
+            enableSorting: false,
+            enableFiltering: false
           }}
         />
-        <PandaTable
+        <Table<any>
           {...{
-            tableId: 'roomCard-Contact-dept',
             columns: columnsContactDept,
-            data:
-              contactPersonsDept?.length === 0 ? undefined : contactPersonsDept,
-            className: 'relative border-l pb-0 sm:mb-4 z-0'
+            data: safeContactPersonsDept,
+            skipEmptyMessage: true,
+            rowClassName: 'relative group/row',
+            className: 'min-w-[300px]',
+            enableSorting: false,
+            enableFiltering: false
           }}
         />
-        <PandaTable
+        <Table<any>
           {...{
-            tableId: 'roomCard-team',
             columns: columnsTeam,
-            data: teams?.length === 0 ? undefined : teams,
-            className: 'relative border-l pb-0 sm:mb-4 z-0'
+            data: safeTeams,
+            skipEmptyMessage: true,
+            rowClassName: 'relative group/row',
+            className: 'min-w-[300px]',
+            enableSorting: false,
+            enableFiltering: false
           }}
         />
       </div>
@@ -71,25 +84,25 @@ export const RoomCardTables: FC<Props> = ({
         customText="LOCATIONS"
         className="mb-0"
         textColor="text-primary-500"
+        showBorder={false}
       >
         {editPersmission && <AddLocationButton />}
       </Heading>
-      <PandaTable
+      <Table<any>
         {...{
-          tableId: 'roomCard-locations',
           columns: locationColumns,
-          className: 'relative border-l pb-0 z-0',
-          data: locations?.length === 0 ? undefined : locations
+          rowClassName: 'relative group/row',
+          data: safeLocations
         }}
       />
       <Heading
         customText="CLEAN ROOMS"
         className="mb-0"
         textColor="text-primary-500"
+        showBorder={false}
       />
-      <PandaTable
+      <Table<any>
         {...{
-          tableId: 'roomCard-cleanRooms',
           columns: columnsCleanRooms,
           data: cleanRooms,
           className: 'relative border-l pb-0 z-0'
@@ -99,10 +112,10 @@ export const RoomCardTables: FC<Props> = ({
         customText="BULDING MAINTENANCE - FM"
         className="mb-0"
         textColor="text-primary-500"
+        showBorder={false}
       />
-      <PandaTable
+      <Table<any>
         {...{
-          tableId: 'roomCard-buildingMaintenance',
           columns: buildingMaintenanceColumns,
           className: 'relative border-l pb-0 z-0',
           data: possibleParameters

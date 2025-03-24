@@ -1,6 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import type { ColumnDef, Table } from '@tanstack/react-table'
-import classNames from 'classnames'
 import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
@@ -11,6 +10,7 @@ import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
+import { cx } from '@/utils'
 import { queryFetcher } from '@/utils/fetcher'
 
 import { ExpandableNameCell } from './ExpandableNameCell'
@@ -138,7 +138,7 @@ export const CodebookTreeModal = ({
             onClick: () => {
               setItem({ uid: row.original.uid, name: row.original.name })
             },
-            className: classNames(
+            className: cx(
               item?.uid === row.original.uid
                 ? 'bg-primary-200 dark:bg-primary-500 hover:bg-primary-200 dark:hover:bg-primary-500'
                 : '',

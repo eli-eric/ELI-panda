@@ -9,5 +9,6 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "editor.codeLens": true
+  "editor.codeLens": true,
+  "i18n-ally.localesPaths": ["src/i18n", "src/i18n/src/locale"]
 }

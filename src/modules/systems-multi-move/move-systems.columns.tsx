@@ -7,7 +7,7 @@ import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import { PATH } from '@/types/constants/paths'
 import type { SystemDetail } from '@/types/responses/systems'
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 import { IconCell } from '../systems/components/table/cells/IconCell'
 import { SystemNameCell } from '../systems/components/table/cells/SystemNameCell'
@@ -66,7 +66,7 @@ function IndeterminateCheckbox({
   return (
     <input
       type="checkbox"
-      className={classNames(
+      className={cx(
         className,
         !rest.disabled && 'cursor-pointer',
         'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',
@@ -300,7 +300,7 @@ export const useMoveSystemsColumns = ({ tableId }: SystemsColumnsProps) => {
         size: 150
       }
     ],
-    [setUid, tableId, movingSystemsTableId]
+    [setUid, tableId, movingSystemsTableId, destinationSystemsTableId]
   )
 
   return { columns, pending }

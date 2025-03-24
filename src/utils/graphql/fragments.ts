@@ -99,6 +99,48 @@ export const CatalogueItemFragment = gql(`
         node {
           uid
           name
+          groups {
+            uid
+            name
+          }
+          type {
+            name
+            uid
+          }
+          unit {
+            name
+            uid
+          }
+        }
+      }
+    }
+  }
+`)
+
+export const ServiceItemFragment = gql(`
+  fragment ServiceItem on ServiceItem {
+    uid
+    name
+    isDelivered
+    order {
+      uid
+      name
+      orderDate
+    }
+    detailsConnection {
+      edges {
+        value
+        node {
+          uid
+          name
+          groups {
+            uid
+            name
+          }
+          type {
+            name
+            uid
+          }
           unit {
             name
             uid
@@ -120,13 +162,60 @@ export const PhysicalItemFragment = gql(`
       uid
       name
     }
+    orderConnection {
+      edges {
+        isDelivered
+        node {
+          uid
+          orderDate
+          name
+        }
+      }
+    }
     order {
       uid
+      orderDate
       name
     }
     itemUsage {
       uid
       name
+    }
+    serviceItemsConnection {
+      edges {
+        created
+        node {
+          uid
+    name
+    isDelivered
+    order {
+      uid
+      name
+      orderDate
+    }
+    detailsConnection {
+      edges {
+        value
+        node {
+          uid
+          name
+          groups {
+            uid
+            name
+          }
+          type {
+            name
+            uid
+          }
+          unit {
+            name
+            uid
+          }
+        }
+      }
+    }
+        }
+      }
     }
     catalogueItem {
       ...CatalogueItem
@@ -217,26 +306,7 @@ export const SystemDetailFragment = gql(`
       name
     }
     physicalItem {
-      uid
-    eun
-    name
-    notes
-    serialNumber
-    conditionStatus {
-      uid
-      name
-    }
-    order {
-      uid
-      name
-    }
-    itemUsage {
-      uid
-      name
-    }
-    catalogueItem {
-      ...CatalogueItem
-    }
+      ...PhysicalItem
     }
     sparePartsConnection {
       edges {
@@ -264,7 +334,6 @@ export const SystemDetailFragment = gql(`
         ...PhysicalItem
       }
     }
-
   }
 `)
 
@@ -291,6 +360,5 @@ export const UserFragment = gql(`
       name
       code
     }
-
   }
 `)

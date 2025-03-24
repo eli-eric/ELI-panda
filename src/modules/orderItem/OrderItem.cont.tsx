@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Suspense } from 'react'
+import { memo, Suspense, useMemo } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
@@ -19,11 +19,18 @@ import FileManager from '../shared/fileManager/FileManager'
 import OrderFormComponent from './components/form/OrderForm.comp'
 import { schema } from './components/form/OrderForm.schema'
 import OrderLinesTable from './components/orderLines/OrderLines.table'
+import { ServiceLinesContainer } from './components/serviceLines/service-lines.cont'
 import useOrderDetail from './hooks/useOrderDetail'
 import { useOrderSubmit } from './hooks/useOrderSubmit'
 import type { OrderDetailFormType } from './types/form'
 
 const messages = message.ordersPage
+
+// Memoizujeme komponenty, aby se snížil počet re-renderů
+const MemoizedOrderLinesTable = memo(OrderLinesTable)
+const MemoizedServiceLinesContainer = memo(ServiceLinesContainer)
+const MemoizedOrderFormComponent = memo(OrderFormComponent)
+const MemoizedFileManager = memo(FileManager)
 
 export const OrderItemContainer = () => {
   const { disabledEdit, uid, orderDetail } = useOrderDetail()
@@ -33,10 +40,9 @@ export const OrderItemContainer = () => {
     fm({ id: messages.ordelineMissingModal.message })
   )
 
-  //TODO: type check for resolver
-  const formMethods = useForm<OrderDetailFormType>({
-    resolver: yupResolver(schema) as any,
-    defaultValues: {
+  // Použití useMemo pro defaultValues, aby se zbytečně nepřepočítávaly
+  const defaultValues = useMemo(
+    () => ({
       ...orderDetail,
       orderLines:
         orderDetail?.orderLines &&
@@ -44,71 +50,116 @@ export const OrderItemContainer = () => {
           ...orderLine,
           uuid: orderLine.uid
         })),
+      serviceLines:
+        orderDetail?.serviceLines &&
+        orderDetail?.serviceLines.map(serviceLine => ({
+          ...serviceLine,
+          uuid: serviceLine.uid
+        })),
       orderDate: orderDetail?.orderDate,
       orderStatus: orderDetail?.orderStatus || {
         uid: 'c5ef9d00-ac38-44c1-b48a-fde0d7095c54',
         name: 'Requested'
       }
-    }
+    }),
+    [orderDetail]
+  )
+
+  const formMethods = useForm<OrderDetailFormType>({
+    resolver: yupResolver(schema) as any,
+    defaultValues
   })
+
   const { submit, loading } = useOrderSubmit(formMethods.reset)
 
-  const onSubmit = (data: OrderDetailFormType) => {
-    const orderLines = data.orderLines.map(orderLine => {
-      // extract uuid from orderLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { uuid, ...rest } = orderLine
-      return rest
-    })
-    if (data.orderLines.length === 0 || !data.orderLines) {
-      withWarningModal(submit)(
-        {
-          ...data,
-          orderLines: orderLines,
-          orderDate: convertDate(data.orderDate)
-        },
-        false
-      )
-    } else {
-      submit(
-        {
-          ...data,
-          orderLines: orderLines,
-          orderDate: convertDate(data.orderDate)
-        },
-        false
-      )
-    }
-  }
+  // Memoizujeme funkce pro zpracování onSubmit a onSubmitAndExit, aby nedocházelo k re-renderům
+  const onSubmit = useMemo(
+    () => (data: OrderDetailFormType) => {
+      const orderLines = data?.orderLines?.map(orderLine => {
+        // extract uuid from orderLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { uuid, ...rest } = orderLine
+        return rest
+      })
+      const serviceLines =
+        data.serviceLines &&
+        data?.serviceLines?.map(serviceLine => {
+          // extract uuid from serviceLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { uuid, ...rest } = serviceLine
+          return rest
+        })
+      if (
+        (data?.orderLines?.length === 0 || !data?.orderLines) &&
+        (data?.serviceLines?.length === 0 || !data?.serviceLines)
+      ) {
+        withWarningModal(submit)(
+          {
+            ...data,
+            orderLines: orderLines,
+            serviceLines: serviceLines,
+            orderDate: convertDate(data.orderDate)
+          },
+          false
+        )
+      } else {
+        submit(
+          {
+            ...data,
+            orderLines: orderLines,
+            serviceLines: serviceLines,
+            orderDate: convertDate(data.orderDate)
+          },
+          false
+        )
+      }
+    },
+    [withWarningModal, submit]
+  )
 
-  const onSubmitAndExit = (data: OrderDetailFormType) => {
-    const orderLines = data.orderLines.map(orderLine => {
-      // extract uuid from orderLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { uuid, ...rest } = orderLine
-      return rest
-    })
-    if (data.orderLines.length === 0 || !data.orderLines) {
-      withWarningModal(submit)(
-        {
-          ...data,
-          orderLines: orderLines,
-          orderDate: convertDate(data.orderDate)
-        },
-        true
-      )
-    } else {
-      submit(
-        {
-          ...data,
-          orderLines: orderLines,
-          orderDate: convertDate(data.orderDate)
-        },
-        true
-      )
-    }
-  }
+  const onSubmitAndExit = useMemo(
+    () => (data: OrderDetailFormType) => {
+      const orderLines = data.orderLines?.map(orderLine => {
+        // extract uuid from orderLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { uuid, ...rest } = orderLine
+        return rest
+      })
+      const serviceLines = data?.serviceLines?.map(serviceLine => {
+        // extract uuid from serviceLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { uuid, ...rest } = serviceLine
+        return rest
+      })
+      if (
+        (data?.orderLines?.length === 0 || !data?.orderLines) &&
+        (data?.serviceLines?.length === 0 || !data?.serviceLines)
+      ) {
+        withWarningModal(submit)(
+          {
+            ...data,
+            orderLines: orderLines,
+            orderDate: convertDate(data.orderDate),
+            serviceLines: serviceLines
+          },
+          true
+        )
+      } else {
+        submit(
+          {
+            ...data,
+            orderLines: orderLines,
+            orderDate: convertDate(data.orderDate),
+            serviceLines: serviceLines
+          },
+          true
+        )
+      }
+    },
+    [withWarningModal, submit]
+  )
 
+  // Komponenty renderujeme s React.memo
   return (
     <Form
       className="h-screen overflow-auto"
@@ -121,13 +172,14 @@ export const OrderItemContainer = () => {
         onSubmit={formMethods.handleSubmit(onSubmit)}
         onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
       />
-      <OrderFormComponent />
+      <MemoizedOrderFormComponent />
       <Card className="flex flex-col justify-between">
-        <OrderLinesTable disabledEdit={disabledEdit} />
+        <MemoizedOrderLinesTable disabledEdit={disabledEdit} />
+        <MemoizedServiceLinesContainer disabledEdit={disabledEdit} />
         {uid && (
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense fallback={<ProgressBarComponent />}>
-              <FileManager
+              <MemoizedFileManager
                 itemType={FILE_TYPE.ORDER}
                 uid={uid}
                 hasEditRole={!disabledEdit}

@@ -1,7 +1,7 @@
 import { HomeIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 interface Props {
   children: React.ReactNode
@@ -12,7 +12,7 @@ export const BreadcrumpContainer = ({ testId, homeLink, children }: Props) => (
   <div
     data-testid={testId}
     id="breadcrump"
-    className={classNames('relative bg-white dark:bg-gray-800')}
+    className={cx('relative bg-white dark:bg-gray-800')}
   >
     <nav className="flex" aria-label="Breadcrumb">
       <ol

@@ -6,12 +6,13 @@ import toast from 'react-hot-toast'
 import { queryMutate } from '@/utils/fetcher'
 
 import type { OrderLineFormType } from '../types/form'
+import { useDeliveryHandler } from './useDeliveryHandler'
 import useOrderDetail from './useOrderDetail'
 
 export const useDeliverAll = () => {
   const { uid, refetch } = useOrderDetail()
-
-  const { setValue, control } = useFormContext()
+  const { control } = useFormContext()
+  const { handleSuccessfulDelivery } = useDeliveryHandler()
 
   const orderLines = useWatch({ control, name: 'orderLines' })
 
@@ -38,23 +39,7 @@ export const useDeliverAll = () => {
   })
 
   const onSuccess = (data: AxiosResponse<OrderLineFormType[]>) => {
-    setValue('lastUpdateTime', data.data[0].lastUpdateTime)
-    const updatedOrderLines = data.data.map(orderLine => {
-      return {
-        ...orderLine,
-        isDelivered: true,
-        uuid: orderLine.uid
-      }
-    })
-
-    updatedOrderLines.forEach(orderLine => {
-      const index = fields.findIndex(
-        (field: any) => field.uuid === orderLine.uid
-      )
-      update(index, orderLine)
-    })
-
-    refetch()
+    handleSuccessfulDelivery(data.data, { fields, update, refetch })
     toast.success('Order all delivered successfully')
   }
 
@@ -65,8 +50,11 @@ export const useDeliverAll = () => {
       const uidsToDeliver = (orderLines as OrderLineFormType[])
         ?.filter(orderLine => !orderLine.isDelivered && orderLine.uid)
         .map(orderLine => orderLine.uid)
+        .filter((uid): uid is string => uid !== undefined)
 
-      mutate(uidsToDeliver, { onSuccess })
+      if (uidsToDeliver.length > 0) {
+        mutate(uidsToDeliver, { onSuccess })
+      }
     }
   }
 

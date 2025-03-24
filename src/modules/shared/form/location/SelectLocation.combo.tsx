@@ -1,4 +1,5 @@
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
+import { toast } from 'react-hot-toast'
 
 import { ModalSelect } from '@/components/form/ModalSelect'
 import { CodebookTreeModalGraphql } from '@/components/form/shared/CodebookTreeModalGraphql'
@@ -24,10 +25,19 @@ export const SelectLocationCombo = ({
     codebooktree,
     fetchChildren,
     loading,
+    error,
     open,
     setOpen,
     tableId
   } = useLocationModal()
+
+  // Handle error with useEffect to prevent infinite loops
+  useEffect(() => {
+    if (error && open) {
+      toast.error('Failed to load locations')
+      setOpen(false)
+    }
+  }, [error, open, setOpen])
 
   return (
     <Fragment>

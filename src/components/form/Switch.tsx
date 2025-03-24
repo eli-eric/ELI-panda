@@ -2,7 +2,7 @@ import { Switch as SwitchHUI } from '@headlessui/react'
 import { useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
-import { classNames } from '@/utils'
+import { cx } from '@/utils'
 
 interface Props {
   enabled: boolean
@@ -14,7 +14,7 @@ export const Toggle = ({ enabled, onChange, className }: Props) => (
   <SwitchHUI
     checked={enabled}
     onChange={onChange}
-    className={classNames(
+    className={cx(
       'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2',
       enabled ? 'bg-primary-500' : 'bg-gray-200 dark:bg-gray-500',
       className
@@ -22,7 +22,7 @@ export const Toggle = ({ enabled, onChange, className }: Props) => (
   >
     <span
       aria-hidden="true"
-      className={classNames(
+      className={cx(
         'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white dark:bg-gray-800 shadow ring-0 transition duration-200 ease-in-out',
         enabled ? 'translate-x-5' : 'translate-x-0'
       )}
@@ -71,7 +71,7 @@ export const Switch = ({
               field.onChange(e)
               onChange?.(e)
             }}
-            className={classNames(
+            className={cx(
               'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2',
               field.value ? 'bg-primary-500' : 'bg-gray-200',
               className
@@ -79,7 +79,7 @@ export const Switch = ({
           >
             <span
               aria-hidden="true"
-              className={classNames(
+              className={cx(
                 'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white dark:bg-gray-800 shadow ring-0 transition duration-200 ease-in-out',
                 field.value ? 'translate-x-5' : 'translate-x-0'
               )}

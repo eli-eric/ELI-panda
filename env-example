@@ -11,9 +11,7 @@ NEO4J_SECRET="stored in gh actions secrets"
 
 
 
-KEYCLOAK_ID="panda"
-KEYCLOAK_SECRET="pandasecret"
-KEYCLOAK_ISSUER="https://panda-keycloak.dev.eli-laser.eu/realms/devel"
+
 
 
 MINIO_ENDPOINT="217.198.121.181"

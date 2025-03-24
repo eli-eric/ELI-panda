@@ -1,6 +1,6 @@
 import type { Row, Table } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import { TableFoot } from '../pandaTable/components/TableFoot'
 import {
@@ -57,12 +57,25 @@ export function PandaTableV2<T>({
     measureElement:
       typeof window !== 'undefined' &&
       navigator.userAgent.indexOf('Firefox') === -1
-        ? element => element?.getBoundingClientRect().height
+        ? element => {
+            // Only measure if the element exists and is attached to the DOM
+            if (element && document.body.contains(element)) {
+              return element.getBoundingClientRect().height
+            }
+            return 49 // Return default height if element doesn't exist
+          }
         : undefined,
     overscan: 20
   })
 
-  const virtualRows = rowVirtualizer.getVirtualItems()
+  const { measureElement: virtualMeasureElement, getVirtualItems } =
+    rowVirtualizer
+
+  const measureElement = useCallback(virtualMeasureElement, [
+    virtualMeasureElement
+  ])
+
+  const virtualRows = getVirtualItems()
 
   return (
     <TableContainer
@@ -123,7 +136,7 @@ export function PandaTableV2<T>({
                 row={row}
                 getRowProps={getRowProps}
                 virtualRow={virtualRow}
-                measureElement={rowVirtualizer.measureElement}
+                measureElement={measureElement}
                 loading={loading}
                 tableId={tableId}
               />
@@ -133,7 +146,7 @@ export function PandaTableV2<T>({
                 row={row}
                 getRowProps={getRowProps}
                 virtualRow={virtualRow}
-                measureElement={rowVirtualizer.measureElement}
+                measureElement={measureElement}
                 loading={loading}
               />
             )

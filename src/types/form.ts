@@ -1,3 +1,5 @@
+import type { CodebookType } from './responses/codebook'
+
 export type ModalButtons = {
   noButtons?: boolean
   goBack?: Button
@@ -17,7 +19,8 @@ export type Button = {
 
 export interface FieldProps {
   name: string
-
+  required?: boolean
+  codebookResponse?: CodebookType[]
   placeholder?: string
   disabled?: boolean
   rounded?:
@@ -29,7 +32,6 @@ export interface FieldProps {
   label?: string
   customLabel?: string
   isFilter?: boolean
-
   type?: string
 }
 
