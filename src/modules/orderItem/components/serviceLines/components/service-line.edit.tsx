@@ -91,6 +91,7 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
           formMethods.setValue('serviceType', serviceLine.serviceType)
           formMethods.setValue('notes', serviceLine.notes)
           formMethods.setValue('item', serviceLine.item)
+          formMethods.setValue('eun', serviceLine.eun)
           formMethods.setValue('isDelivered', serviceLine.isDelivered)
           formMethods.setValue(
             'details',
