@@ -26,7 +26,10 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
 
   // Memoizujeme data pro předcházení zbytečným re-renderům
   // Už nepoužíváme neefektivní JSON.stringify
-  const orderLines = useMemo(() => orderLinesData, [orderLinesData])
+  const orderLines = useMemo(
+    () => orderLinesData,
+    [JSON.stringify(orderLinesData)]
+  )
 
   const handleOpenOrderLineForm = () => {
     setOpenOrderLineForm(true)
