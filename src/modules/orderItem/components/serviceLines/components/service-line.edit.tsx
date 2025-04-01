@@ -36,6 +36,7 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
   const formMethods = useForm<ServiceLine>()
 
   const submit = (data: ServiceLine) => {
+    console.log('data', data)
     setServiceLine({
       ...data,
       details: Array.isArray(data.details) ? data.details : []
@@ -124,7 +125,7 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
                 <TextArea {...fields.notes} />
               </Col>
             </Grid>
-            <DetailPropertiesList groupMap={detailsMap} disabled={true} />
+            <DetailPropertiesList groupMap={detailsMap} disabled={false} />
           </>
         </Form>
       </ModalComponent>

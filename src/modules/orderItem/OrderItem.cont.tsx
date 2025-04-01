@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { memo, Suspense, useMemo } from 'react'
+import { memo, Suspense, useCallback, useMemo } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
@@ -72,9 +72,9 @@ export const OrderItemContainer = () => {
 
   const { submit, loading } = useOrderSubmit(formMethods.reset)
 
-  // Memoizujeme funkce pro zpracování onSubmit a onSubmitAndExit, aby nedocházelo k re-renderům
-  const onSubmit = useMemo(
-    () => (data: OrderDetailFormType) => {
+  const submitData = useCallback(
+    (saveAndExit: boolean, data: OrderDetailFormType) => {
+      console.log('data submit order', data)
       const orderLines = data?.orderLines?.map(orderLine => {
         // extract uuid from orderLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -87,6 +87,7 @@ export const OrderItemContainer = () => {
           // extract uuid from serviceLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { uuid, ...rest } = serviceLine
+          console.log('serviceLine', serviceLine)
           return rest
         })
       if (
@@ -110,53 +111,25 @@ export const OrderItemContainer = () => {
             serviceLines: serviceLines,
             orderDate: convertDate(data.orderDate)
           },
-          false
+          saveAndExit
         )
       }
     },
-    [withWarningModal, submit]
+    [submit, withWarningModal]
   )
 
-  const onSubmitAndExit = useMemo(
-    () => (data: OrderDetailFormType) => {
-      const orderLines = data.orderLines?.map(orderLine => {
-        // extract uuid from orderLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { uuid, ...rest } = orderLine
-        return rest
-      })
-      const serviceLines = data?.serviceLines?.map(serviceLine => {
-        // extract uuid from serviceLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { uuid, ...rest } = serviceLine
-        return rest
-      })
-      if (
-        (data?.orderLines?.length === 0 || !data?.orderLines) &&
-        (data?.serviceLines?.length === 0 || !data?.serviceLines)
-      ) {
-        withWarningModal(submit)(
-          {
-            ...data,
-            orderLines: orderLines,
-            orderDate: convertDate(data.orderDate),
-            serviceLines: serviceLines
-          },
-          true
-        )
-      } else {
-        submit(
-          {
-            ...data,
-            orderLines: orderLines,
-            orderDate: convertDate(data.orderDate),
-            serviceLines: serviceLines
-          },
-          true
-        )
-      }
+  const onSubmit = useCallback(
+    (data: OrderDetailFormType) => {
+      submitData(false, data)
     },
-    [withWarningModal, submit]
+    [submitData]
+  )
+
+  const onSubmitAndExit = useCallback(
+    (data: OrderDetailFormType) => {
+      submitData(true, data)
+    },
+    [submitData]
   )
 
   // Komponenty renderujeme s React.memo
