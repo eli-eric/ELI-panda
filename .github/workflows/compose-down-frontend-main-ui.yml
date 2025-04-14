@@ -5,7 +5,7 @@ on:
 
 jobs:
   compose-down:
-    runs-on: self-hosted
+    runs-on: czechia-server
 
     steps:
       - uses: actions/checkout@v3

@@ -13,6 +13,7 @@ import { IconCell } from '../systems/components/table/cells/IconCell'
 import { SystemNameCell } from '../systems/components/table/cells/SystemNameCell'
 import { useSubsystems } from '../systems/hooks/useSubsystems'
 import type { ITEM_USAGE } from '../systems/types/constants'
+import { SelectAllCheckbox } from './components/select-all.checkbox'
 
 // eslint-disable-next-line
 
@@ -81,7 +82,19 @@ export const useSystemsSparePartsColumns = ({
       },
       {
         id: 'select',
-        header: 'sel',
+        header: ({ table }) => {
+          if (tableId === 'spare-parts') {
+            return (
+              <div className="pl-1">
+                <SelectAllCheckbox
+                  table={table}
+                  setSelectedUids={setSelectedUids}
+                />
+              </div>
+            )
+          }
+          return null
+        },
         size: 41,
         meta: { sticky: true },
         enableHiding: false,

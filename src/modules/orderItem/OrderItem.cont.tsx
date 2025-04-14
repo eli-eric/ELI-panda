@@ -74,7 +74,6 @@ export const OrderItemContainer = () => {
 
   const submitData = useCallback(
     (saveAndExit: boolean, data: OrderDetailFormType) => {
-      console.log('data submit order', data)
       const orderLines = data?.orderLines?.map(orderLine => {
         // extract uuid from orderLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -87,7 +86,6 @@ export const OrderItemContainer = () => {
           // extract uuid from serviceLines array (uuid is not needed for the backend ist is only used for the frontend when no uid is available)
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { uuid, ...rest } = serviceLine
-          console.log('serviceLine', serviceLine)
           return rest
         })
       if (
