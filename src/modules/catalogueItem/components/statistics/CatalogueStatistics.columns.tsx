@@ -14,7 +14,7 @@ export type CatalogueStatistics = {
 }
 
 const FooterBold: FC<PropsWithChildren> = ({ children }) => (
-  <span className="font-bold text-right">{children}</span>
+  <div className="font-bold text-right w-full">{children}</div>
 )
 
 export const useCatalogueStatisticsColumns = (
@@ -136,6 +136,7 @@ export const useCatalogueStatisticsColumns = (
         accessorFn: ({ total }) => total,
         size: 50,
         meta: { className: 'text-right' },
+
         footer: props => {
           const sum = props.table
             .getRowModel()
