@@ -3,14 +3,12 @@ import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 
 import { Heading } from '@/components/layout/Heading'
+import { Table } from '@/components/ui'
 import { useOrderColumns } from '@/modules/orders/components/OrderColumns'
-import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import type { Order } from '@/types/responses/orders'
 import { queryFetcher } from '@/utils/fetcher'
 
 export const CatalogueOrders = () => {
-  const tableId = 'catalogueOrders'
-
   const columns = useOrderColumns({ isReadOnly: true })
   const router = useRouter()
   const { uid } = router.query as { uid: string }
@@ -19,31 +17,17 @@ export const CatalogueOrders = () => {
     queryFn: queryFetcher<Order[]>('catalogueOrders')
   })
 
-  if (!data || data.length === 0) {
-    return (
-      <Fragment>
-        <Heading customText="Orders" />
-        <div className="flex justify-center items-center h-16">
-          <span className="text-2xl text-gray-500">No orders available</span>
-        </div>
-      </Fragment>
-    )
-  }
-
   return (
     <Fragment>
-      <Heading customText="Orders" />
-      {
-        <PandaTable
-          {...{
-            tableId: tableId,
-            data,
-            columns,
-            loading,
-            className: 'relative overflow-x-auto'
-          }}
-        />
-      }
+      <Heading customText="Orders" showBorder={false} />
+      <Table
+        data={data || []}
+        emptyMessage="No orders available"
+        columns={columns}
+        loading={loading}
+        enablePinning={true}
+        className="relative overflow-x-auto"
+      />
     </Fragment>
   )
 }
