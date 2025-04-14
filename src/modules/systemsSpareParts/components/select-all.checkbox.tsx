@@ -7,6 +7,7 @@ import { cx } from '@/utils'
 
 interface IndeterminateCheckboxProps extends HTMLProps<HTMLInputElement> {
   table: Table<SystemDetail>
+  setSelectedUids: (uids: string[]) => void
 }
 
 export function SelectAllCheckbox({
