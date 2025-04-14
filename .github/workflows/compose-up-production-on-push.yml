@@ -7,13 +7,13 @@ on:
 
 jobs:
   use-secret:
-    runs-on: self-hosted
+    runs-on: czechia-server
     steps:
       - name: Show secret stats
         run: |
           echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_PROD }}" | "${{ secrets.MINIO_SECRET_KEY_PROD }}" | "${{ secrets.NEO4J_PASSWORD }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" | "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}" | wc | wc
   unit-tests:
-    runs-on: self-hosted
+    runs-on: czechia-server
     needs: use-secret
     steps:
       - name: Checkout code
@@ -28,7 +28,7 @@ jobs:
       - name: Run unit tests
         run: yarn test
   compose-up:
-    runs-on: self-hosted
+    runs-on: czechia-server
     needs: unit-tests
     steps:
       - uses: actions/checkout@v3
