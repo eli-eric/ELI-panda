@@ -7,7 +7,7 @@ on:
 
 jobs:
   use-secret:
-    runs-on: czechia-server
+    runs-on: czol-ap04
     env:
       NEXTAUTH_SECRET: '${{ secrets.NEXTAUTH_SECRET }}'
       MINIO_ACCESS_KEY_PROD: '${{ secrets.MINIO_ACCESS_KEY_DEV }}'
@@ -21,7 +21,7 @@ jobs:
         run: |
           echo "${{ secrets.NEXTAUTH_SECRET }}" | "${{ secrets.MINIO_ACCESS_KEY_DEV }}" | "${{ secrets.MINIO_SECRET_KEY_DEV }}" | "${{ secrets.NEO4J_PASSWORD }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_ID }}" | "${{ secrets.AZURE_AD_BEAMLINES_CLIENT_SECRET }}" | "${{ secrets.AZURE_AD_BEAMLINES_TENANT_ID }}" | wc
   unit-tests:
-    runs-on: czechia-server
+    runs-on: czol-ap04
     needs: use-secret
     steps:
       - name: Checkout code
@@ -36,7 +36,7 @@ jobs:
       - name: Run unit tests
         run: yarn test
   compose-up:
-    runs-on: czechia-server
+    runs-on: czol-ap04
     needs: unit-tests
     steps:
       - uses: actions/checkout@v3
