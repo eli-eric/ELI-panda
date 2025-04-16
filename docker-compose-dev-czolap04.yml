@@ -1,0 +1,40 @@
+version: '3.9'
+
+networks:
+  panda-net-dev:
+    driver: bridge
+    name: panda-net-dev
+  panda-net-proxy:
+    external: true
+
+services:
+  panda-frontend-ui-main-app-dev:
+    container_name: panda-frontend-ui-main-app-dev
+    restart: unless-stopped
+    environment:
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - MINIO_ACCESS_KEY_PROD=${MINIO_ACCESS_KEY_PROD}
+      - MINIO_SECRET_KEY_PROD=${MINIO_SECRET_KEY_PROD}
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
+      - AZURE_AD_BEAMLINES_CLIENT_ID=${AZURE_AD_BEAMLINES_CLIENT_ID}
+      - AZURE_AD_BEAMLINES_CLIENT_SECRET=${AZURE_AD_BEAMLINES_CLIENT_SECRET}
+      - AZURE_AD_BEAMLINES_TENANT_ID=${AZURE_AD_BEAMLINES_TENANT_ID}
+    build:
+      context: ./
+      dockerfile: Dockerfile.devenv.czolap04
+      labels:
+        - panda-frontend-ui-main-app-dev
+      args:
+        - NEO4J_PASSWORD=${NEO4J_PASSWORD}
+        - PANDA_API_GW_URL=${PANDA_API_GW_URL}
+    networks:
+      - panda-net-dev
+      - panda-net-proxy
+    ports:
+      - '127.0.0.1:5200:5001'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=panda-net-proxy"  # this has to be here if container has multiple networks!
+      - "traefik.http.routers.panda-frontend-ui-main-app-dev.rule=Host(`panda-test02.eli-laser.eu`)"
+      - "traefik.http.routers.panda-frontend-ui-main-app-dev.entrypoints=web,websecure"
+      - "traefik.http.routers.panda-frontend-ui-main-app-dev.tls.certResolver=laser-http-staging"
