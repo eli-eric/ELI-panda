@@ -38,3 +38,4 @@ services:
       - "traefik.http.routers.panda-frontend-ui-main-app-dev.rule=Host(`panda.dev.eli-laser.eu`)"
       - "traefik.http.routers.panda-frontend-ui-main-app-dev.entrypoints=web,websecure"
       - "traefik.http.routers.panda-frontend-ui-main-app-dev.tls.certResolver=laser-http-staging"
+
