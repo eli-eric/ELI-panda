@@ -34,7 +34,7 @@ services:
       - '127.0.0.1:5200:5001'
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=panda-net-dev"  # this has to be here if container has multiple networks!
+      - "traefik.docker.network=panda-net-proxy"  # this has to be here if container has multiple networks!
       - "traefik.http.routers.panda-frontend-ui-main-app-dev.rule=Host(`panda.dev.eli-laser.eu`)"
       - "traefik.http.routers.panda-frontend-ui-main-app-dev.entrypoints=web,websecure"
       - "traefik.http.routers.panda-frontend-ui-main-app-dev.tls.certResolver=laser-http-staging"
