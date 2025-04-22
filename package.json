@@ -6,7 +6,7 @@
     "preinstall": "npx only-allow yarn",
     "dev": "PORT=5001 next dev",
     "build": "next build",
-    "start": "PORT=5001 next start",
+    "start": "PORT=5001 next start --hostname 0.0.0.0",
     "lint": "next lint",
     "format": "prettier --write .",
     "cy:open": "cypress open",
