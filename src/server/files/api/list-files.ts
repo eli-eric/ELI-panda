@@ -21,6 +21,11 @@ async function listFiles(req: NextApiRequest, res: NextApiResponse) {
   try {
     const list = await listObjectsWithMetadata(bucket, prefix)
 
+    if (!list || list.length === 0) {
+      logger.info('No files found', list)
+      return res.status(200).json([])
+    }
+
     const result = list
       .map(obj => {
         const { lastModified, name: objFullPath, metadata } = obj
@@ -43,7 +48,7 @@ async function listFiles(req: NextApiRequest, res: NextApiResponse) {
       })
       .sort((a, b) => b.ts - a.ts)
 
-    logger.info('Successfully listed files')
+    logger.info('Successfully listed files', result)
     res.status(200).json(result)
   } catch (error) {
     logger.error(`Failed to list files: ${error}`)
@@ -62,6 +67,7 @@ const listObjectsWithMetadata = (
 
     stream.on('data', obj => {
       objects.push(obj)
+      logger.debug('Object:', obj)
     })
 
     stream.on('error', reject)
