@@ -13,15 +13,25 @@ const { bucket } = config
 
 async function listFiles(req: NextApiRequest, res: NextApiResponse) {
   const pathInfo = getPathInfo(req)
-  logger.info('Path info:', pathInfo)
+
   if (!pathInfo) {
     return res.status(400).json({ error: 'Invalid path' })
   }
   const { prefix } = pathInfo
-  logger.info('Prefix:', prefix)
+  const normalizedPrefix = prefix.startsWith('/') ? prefix.substring(1) : prefix
 
   try {
-    const list = await listObjectsWithMetadata(bucket, prefix)
+    const bucketExists = await s3Client.bucketExists(bucket)
+    if (!bucketExists) {
+      return res.status(404).json({ error: `Bucket ${bucket} not found` })
+    }
+  } catch (error) {
+    logger.error(`Failed to check bucket: ${error}`)
+    return res.status(500).json({ error: 'Failed to check bucket' })
+  }
+
+  try {
+    const list = await listObjectsWithMetadata(bucket, normalizedPrefix)
 
     if (!list || list.length === 0) {
       logger.info('No files found', list)
@@ -63,40 +73,54 @@ async function listFiles(req: NextApiRequest, res: NextApiResponse) {
 }
 
 // Helper function to list objects with metadata
-const listObjectsWithMetadata = (
+export const listObjectsWithMetadata = async (
   bucket: string,
-  prefix: string
+  prefix: string,
+  recursive: boolean = true
 ): Promise<(BucketItem & { metadata?: BucketItemStat['metaData'] })[]> => {
-  return new Promise((resolve, reject) => {
-    const objects: (BucketItem & { metadata?: BucketItemStat['metaData'] })[] =
-      []
-    const promises: Promise<void>[] = []
+  // Remove leading slash if present
+  const normalizedPrefix = prefix
 
-    const stream = s3Client.listObjectsV2(bucket, prefix, true)
+  try {
+    // Try with recursive=true to get all nested objects
+    const objects: BucketItem[] = []
 
-    stream.on('data', obj => {
-      if (!obj.name) return
+    await new Promise<void>((resolve, reject) => {
+      const stream = s3Client.listObjectsV2(bucket, normalizedPrefix, recursive)
 
-      const p = s3Client
-        .statObject(bucket, obj.name)
-        .then(stat => {
-          objects.push({ ...obj, metadata: stat.metaData })
-        })
-        .catch(err => {
+      stream.on('data', obj => {
+        if (obj.name) objects.push(obj)
+      })
+
+      stream.on('error', error => {
+        reject(error)
+      })
+
+      stream.on('end', () => {
+        resolve()
+      })
+    })
+
+    // Get metadata for the objects
+    const objectsWithMetadata = await Promise.all(
+      objects.map(async obj => {
+        try {
+          const stat = obj.name
+            ? await s3Client.statObject(bucket, obj.name)
+            : null
+          return { ...obj, metadata: stat?.metaData || undefined }
+        } catch (err) {
           logger.error(`Failed to stat object ${obj.name}:`, err)
-          objects.push(obj)
-        })
+          return obj
+        }
+      })
+    )
 
-      promises.push(p)
-    })
-
-    stream.on('error', reject)
-
-    stream.on('end', async () => {
-      await Promise.all(promises)
-      resolve(objects)
-    })
-  })
+    return objectsWithMetadata
+  } catch (error) {
+    logger.error(`Failed to list objects: ${error}`)
+    return []
+  }
 }
 
 export default withErrorHandler(listFiles)

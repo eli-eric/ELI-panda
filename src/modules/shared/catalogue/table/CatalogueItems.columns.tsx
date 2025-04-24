@@ -52,9 +52,20 @@ export const useCatalogueItemsColumns = ({
         },
         accessorFn: row => row?.miniImageUrl?.[0],
         cell: ({ getValue }) => {
+          if (getValue()) {
+            return (
+              <Image
+                src={getValue()}
+                alt="img"
+                width={50}
+                height={50}
+                className="rounded-full w-8 h-8 min-w-8 object-cover justify-center"
+              />
+            )
+          }
           return (
             <Image
-              src={getValue() || FALLBACK_IMAGE.url}
+              src={FALLBACK_IMAGE.url}
               alt="img"
               width={50}
               height={50}

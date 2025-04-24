@@ -1,11 +1,10 @@
-import { nanoid } from 'nanoid'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import logger from '@/server/logger'
 import s3Client, { config } from '@/server/s3client'
 
 import { handleMiniImages } from '../service/image-service'
-import { getPathInfo } from '../utils/path-utils'
+import { getPathInfo, sanitizeS3Key } from '../utils/path-utils'
 import { withErrorHandler } from '../utils/with-error-handler'
 
 const { bucket } = config
@@ -15,10 +14,12 @@ async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
   if (!pathInfo) {
     return res.status(400).json({ error: 'Invalid path' })
   }
+
   const { prefix } = pathInfo
+  const sanitizedPrefix = sanitizeS3Key(prefix)
 
   const { name, payload, tags } = req.body
-  const id = nanoid()
+  const id = crypto.randomUUID()
 
   const regex = /^data:(.*?);base64,(.*)$/
   const match = payload.match(regex)
@@ -41,15 +42,17 @@ async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
     tags: tagsString
   }
 
-  await s3Client.putObject(bucket, prefix + id, buffer, buffer.length, metaData)
+  const objectKey = `${sanitizedPrefix}/${id}`
 
-  const existingObject = await s3Client.statObject(bucket, prefix + id)
+  await s3Client.putObject(bucket, objectKey, buffer, buffer.length, metaData)
+
+  const existingObject = await s3Client.statObject(bucket, objectKey)
   if (!existingObject) return res.status(404).json({})
 
   const isImage = prefix.includes('/image')
   if (isImage) {
     try {
-      await handleMiniImages({ req, res, id, isDelete: false })
+      await handleMiniImages({ req, id, isDelete: false })
     } catch (e) {
       logger.error(e)
       return res.status(500).json({ error: 'Failed to save mini image' })

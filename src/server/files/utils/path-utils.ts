@@ -24,5 +24,30 @@ export const getPathInfo = (req: NextApiRequest): PathInfo | null => {
   const shortPrefix = `/${itemCategory}/${itemId}/`
   const id = fileId
   const fullPath = prefix + id
-  return { prefix, id, fullPath, uid: itemId, shortPrefix }
+  const pathInfo = { prefix, id, fullPath, uid: itemId, shortPrefix }
+
+  return {
+    ...pathInfo,
+    prefix: prefix.startsWith('/') ? prefix.substring(1) : prefix
+  }
+}
+// Add this function:
+
+/**
+ * Sanitizes an S3 object key to ensure it's valid.
+ * - Removes leading slashes
+ * - Ensures no double slashes
+ * - Removes trailing slashes
+ */
+export function sanitizeS3Key(key: string): string {
+  // Remove leading slash
+  let sanitized = key.startsWith('/') ? key.substring(1) : key
+
+  // Replace any double slashes with single slash
+  sanitized = sanitized.replace(/\/+/g, '/')
+
+  // Remove trailing slash if present
+  sanitized = sanitized.endsWith('/') ? sanitized.slice(0, -1) : sanitized
+
+  return sanitized
 }

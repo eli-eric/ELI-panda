@@ -1,10 +1,10 @@
 import Jimp from 'jimp'
-import type { NextApiRequest, NextApiResponse } from 'next'
 import { getToken } from 'next-auth/jwt'
 
 import s3Client, { config } from '@/server/s3client'
 
-import { getPathInfo } from '../utils/path-utils'
+import { listObjectsWithMetadata } from '../api/list-files'
+import { getPathInfo, sanitizeS3Key } from '../utils/path-utils'
 import { streamToBuffer } from '../utils/stream-utils'
 import { saveUrlsToNode } from './node-service'
 
@@ -17,7 +17,7 @@ export const resizeImageAndUpload = async (prefix: string, name: string) => {
     const buffer = await streamToBuffer(fileStream)
 
     if (originalFileMeta.metaData['content-type'] === 'image/webp') {
-      const newDir = `${prefix}image-small`
+      const newDir = `${prefix}/image-small`
       const newFileName = `${newDir}/${name.split('/').pop()}`
       await s3Client.putObject(
         bucket,
@@ -33,7 +33,7 @@ export const resizeImageAndUpload = async (prefix: string, name: string) => {
     image.resize(100, Jimp.AUTO)
     const outputBuffer = await image.getBufferAsync(Jimp.MIME_PNG)
 
-    const newDir = `${prefix}image-small`
+    const newDir = `${prefix}/image-small`
     const newFileName = `${newDir}/${name.split('/').pop()}`
 
     await s3Client.putObject(
@@ -48,26 +48,29 @@ export const resizeImageAndUpload = async (prefix: string, name: string) => {
   }
 }
 
-export const handleMiniImages = async (config: {
-  req: NextApiRequest
-  res: NextApiResponse
+export async function handleMiniImages({
+  req,
+  id,
+  isDelete
+}: {
+  req: any
   id: string
-  isDelete?: boolean
-}) => {
-  const { req, id, isDelete = false } = config
+  isDelete: boolean
+}) {
   const pathInfo = getPathInfo(req)
-  if (!pathInfo) {
-    throw new Error('Invalid path info')
-  }
-  const { prefix, shortPrefix, uid } = pathInfo
+  if (!pathInfo) return
+
+  // Normalize prefix and ensure it doesn't have leading slash
+  const { prefix, uid, shortPrefix } = pathInfo
+  const normalizedPrefix = sanitizeS3Key(shortPrefix)
 
   if (!isDelete) {
-    await resizeImageAndUpload(shortPrefix, prefix + id)
+    await resizeImageAndUpload(normalizedPrefix, prefix + id)
   }
 
   const list = await listObjectsWithMetadata(
     bucket,
-    `/${shortPrefix}image-small`,
+    `${normalizedPrefix}/image-small`,
     true
   )
 
@@ -75,7 +78,7 @@ export const handleMiniImages = async (config: {
 
   const token = await getToken({ req })
 
-  const prefixLabel = prefix.split('/')[1]
+  const prefixLabel = prefix.split('/')[0]
 
   const nodeLabelMap: { [key: string]: string } = {
     catalogue: 'CatalogueItem',
@@ -86,23 +89,4 @@ export const handleMiniImages = async (config: {
   const nodeLabel = nodeLabelMap[prefixLabel]
 
   await saveUrlsToNode(uid, urls, token, nodeLabel)
-}
-
-const listObjectsWithMetadata = (
-  bucket: string,
-  prefix: string,
-  recursive: boolean
-) => {
-  return new Promise<any[]>((resolve, reject) => {
-    const stream = s3Client.extensions.listObjectsV2WithMetadata(
-      bucket,
-      prefix,
-      recursive
-    )
-    const objects: any[] = []
-
-    stream.on('data', obj => objects.push(obj))
-    stream.on('error', reject)
-    stream.on('end', () => resolve(objects))
-  })
 }
