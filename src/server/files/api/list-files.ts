@@ -21,16 +21,6 @@ async function listFiles(req: NextApiRequest, res: NextApiResponse) {
   const normalizedPrefix = prefix.startsWith('/') ? prefix.substring(1) : prefix
 
   try {
-    const bucketExists = await s3Client.bucketExists(bucket)
-    if (!bucketExists) {
-      return res.status(404).json({ error: `Bucket ${bucket} not found` })
-    }
-  } catch (error) {
-    logger.error(`Failed to check bucket: ${error}`)
-    return res.status(500).json({ error: 'Failed to check bucket' })
-  }
-
-  try {
     const list = await listObjectsWithMetadata(bucket, normalizedPrefix)
 
     if (!list || list.length === 0) {
