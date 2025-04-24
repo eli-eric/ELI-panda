@@ -13,11 +13,12 @@ const { bucket } = config
 
 async function listFiles(req: NextApiRequest, res: NextApiResponse) {
   const pathInfo = getPathInfo(req)
-  logger.debug('Path info:', pathInfo)
+  logger.info('Path info:', pathInfo)
   if (!pathInfo) {
     return res.status(400).json({ error: 'Invalid path' })
   }
   const { prefix } = pathInfo
+  logger.info('Prefix:', prefix)
 
   try {
     const list = await listObjectsWithMetadata(bucket, prefix)
@@ -68,7 +69,7 @@ const listObjectsWithMetadata = (
 
     stream.on('data', obj => {
       objects.push(obj)
-      logger.debug('Object:', obj)
+      logger.info('Object:', obj)
     })
 
     stream.on('error', reject)
