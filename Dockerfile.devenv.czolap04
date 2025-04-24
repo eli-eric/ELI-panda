@@ -25,7 +25,7 @@ ARG NEO4J_PASSWORD
 
 ENV PANDA_API_GW_URL="https://panda-api.dev.eli-laser.eu/v1"
 ENV PANDA_ENV="dev"
-ENV MINIO_ENDPOINT="minio02-main"
+ENV MINIO_ENDPOINT="minio-main"
 ENV MINIO_BUCKET_NAME="panda-dev"
 ENV NEO4J_USER="neo4j"
 ENV NEO4J_URI="bolt://panda-neo4j-dev:7687"
@@ -48,7 +48,7 @@ ENV NODE_ENV=production
 ENV PANDA_API_GW_URL="https://panda-api.dev.eli-laser.eu/v1"
 ENV NEXTAUTH_URL="https://panda.dev.eli-laser.eu/"
 ENV PANDA_ENV="dev"
-ENV MINIO_ENDPOINT="minio02-main"
+ENV MINIO_ENDPOINT="minio-main"
 ENV MINIO_BUCKET_NAME="panda-dev"
 ENV NEO4J_USER="neo4j"
 ENV NEO4J_URI="bolt://panda-neo4j-dev:7687"
