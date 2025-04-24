@@ -1,6 +1,6 @@
 // api/listFiles.ts
 
-import type { BucketItemWithMetadata } from 'minio'
+import type { BucketItem, BucketItemStat } from 'minio'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 import logger from '@/server/logger'
@@ -31,9 +31,13 @@ async function listFiles(req: NextApiRequest, res: NextApiResponse) {
     const result = list
       .map(obj => {
         const { lastModified, name: objFullPath, metadata } = obj
+        logger.info('Object:', obj)
+        logger.info('Metadata:', metadata?.['name'])
         const ts = new Date(lastModified || '').getTime()
         const [id] = objFullPath ? objFullPath.split('/').reverse() : []
-        const name = decodeURIComponent(metadata && metadata['X-Amz-Meta-Name'])
+        const name = metadata?.['name']
+          ? decodeURIComponent(metadata['name'])
+          : objFullPath?.split('/').pop() || 'unknown'
         const tags = metadata && metadata['X-Amz-Meta-Tags']
         const type = metadata && metadata['content-type']
         const url = `${req.url}/${id}`
@@ -62,18 +66,36 @@ async function listFiles(req: NextApiRequest, res: NextApiResponse) {
 const listObjectsWithMetadata = (
   bucket: string,
   prefix: string
-): Promise<BucketItemWithMetadata[]> => {
+): Promise<(BucketItem & { metadata?: BucketItemStat['metaData'] })[]> => {
   return new Promise((resolve, reject) => {
-    const stream = s3Client.extensions.listObjectsV2WithMetadata(bucket, prefix)
-    const objects: BucketItemWithMetadata[] = []
+    const objects: (BucketItem & { metadata?: BucketItemStat['metaData'] })[] =
+      []
+    const promises: Promise<void>[] = []
+
+    const stream = s3Client.listObjectsV2(bucket, prefix, true)
 
     stream.on('data', obj => {
-      objects.push(obj)
-      logger.info('Object:', obj)
+      if (!obj.name) return
+
+      const p = s3Client
+        .statObject(bucket, obj.name)
+        .then(stat => {
+          objects.push({ ...obj, metadata: stat.metaData })
+        })
+        .catch(err => {
+          logger.error(`Failed to stat object ${obj.name}:`, err)
+          objects.push(obj)
+        })
+
+      promises.push(p)
     })
 
     stream.on('error', reject)
-    stream.on('end', () => resolve(objects))
+
+    stream.on('end', async () => {
+      await Promise.all(promises)
+      resolve(objects)
+    })
   })
 }
 
