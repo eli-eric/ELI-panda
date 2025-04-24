@@ -59,7 +59,6 @@ ENV AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}"
 
 RUN env
 
-
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 
