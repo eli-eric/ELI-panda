@@ -13,6 +13,7 @@ const { bucket } = config
 
 async function listFiles(req: NextApiRequest, res: NextApiResponse) {
   const pathInfo = getPathInfo(req)
+  logger.debug('Path info:', pathInfo)
   if (!pathInfo) {
     return res.status(400).json({ error: 'Invalid path' })
   }
