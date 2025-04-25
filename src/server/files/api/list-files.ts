@@ -37,7 +37,7 @@ async function listFiles(req: NextApiRequest, res: NextApiResponse) {
         const [id] = objFullPath ? objFullPath.split('/').reverse() : []
         const name = metadata?.['name']
           ? decodeURIComponent(metadata['name'])
-          : objFullPath?.split('/').pop() || 'unknown'
+          : 'unknown'
         const tags = metadata && metadata['X-Amz-Meta-Tags']
         const type = metadata && metadata['content-type']
         const url = `${req.url}/${id}`
