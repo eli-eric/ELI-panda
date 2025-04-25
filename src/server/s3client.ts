@@ -6,13 +6,16 @@ export const config = {
   bucket: process.env.MINIO_BUCKET_NAME as string,
   endPoint: process.env.MINIO_ENDPOINT as string,
   port: Number.parseInt(process.env.MINIO_PORT ?? '9000', 10),
-  accessKey: process.env.MINIO_ACCESS_KEY as string,
-  secretKey: process.env.MINIO_SECRET_KEY as string,
+  accessKey:
+    process.env.MINIO_ACCESS_KEY ||
+    (process.env.MINIO_ACCESS_KEY_PROD as string),
+  secretKey:
+    process.env.MINIO_SECRET_KEY ||
+    (process.env.MINIO_ACCESS_KEY_PROD as string),
   useSSL: process.env.MINIO_USE_SSL?.toLowerCase() === 'true'
 }
 
 const initClient = () => {
-  logger.info('Initializing S3 client...', config)
   try {
     const { bucket, accessKey, secretKey, port, useSSL, endPoint } = config
 
