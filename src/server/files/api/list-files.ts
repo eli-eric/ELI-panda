@@ -31,14 +31,14 @@ async function listFiles(req: NextApiRequest, res: NextApiResponse) {
     const result = list
       .map(obj => {
         const { lastModified, name: objFullPath, metadata } = obj
-        logger.info('MetaData:', metadata)
-        logger.info('X-Amz-Meta-Tags:', metadata?.['X-Amz-Meta-Tags'])
-        logger.info('tags:', metadata?.['tags'])
         const ts = new Date(lastModified || '').getTime()
         const [id] = objFullPath ? objFullPath.split('/').reverse() : []
-        const name = metadata?.['name']
-          ? decodeURIComponent(metadata['name'])
-          : 'unknown'
+        const name =
+          metadata?.['X-Amz-Meta-Name'] || metadata?.['name']
+            ? decodeURIComponent(
+                metadata['X-Amz-Meta-Name'] || metadata['name']
+              )
+            : 'unknown'
         const tags =
           metadata && (metadata['X-Amz-Meta-Tags'] || metadata['tags'])
         const type = metadata && metadata['content-type']

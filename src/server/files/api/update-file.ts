@@ -29,7 +29,7 @@ async function updateFile(req: NextApiRequest, res: NextApiResponse) {
 
     const metaData = {
       ...obj.metaData,
-      name: encodeURIComponent(name),
+      'X-Amz-Meta-Name': encodeURIComponent(name),
       'X-Amz-Meta-Tags': tags
         .map((tag: string) => encodeURIComponent(tag))
         .join(',')
