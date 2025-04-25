@@ -108,8 +108,12 @@ export const listObjectsWithMetadata = async (
 
     return objectsWithMetadata
   } catch (error) {
-    logger.error(`Failed to list objects: ${error}`)
-    return []
+    logger.error(
+      `Failed to list objects: ${error} | Prefix: ${prefix} | Bucket: ${bucket}`
+    )
+    throw new Error(
+      `Failed to list objects: ${error} | Prefix: ${prefix} | Bucket: ${bucket}`
+    )
   }
 }
 
