@@ -15,9 +15,7 @@ const initClient = () => {
   const { bucket, accessKey, secretKey, port, useSSL, endPoint } = config
   try {
     logger.info(
-      `S3 Config - Credentials: ${!!(
-        accessKey && secretKey
-      )} | AccessKey: ${accessKey} | Bucket: ${bucket} | Endpoint: ${endPoint} | Port: ${port} | UseSSL: ${useSSL}`
+      `S3 Config - Credentials: SecretKeyExists: ${!!secretKey} | AccessKey: ${accessKey} | Bucket: ${bucket} | Endpoint: ${endPoint} | Port: ${port} | UseSSL: ${useSSL}`
     )
     if (!config.accessKey || !config.secretKey) {
       logger.error('Missing S3 credentials')
