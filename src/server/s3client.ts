@@ -40,7 +40,7 @@ const initClient = () => {
     }
   } catch (err) {
     logger.error('Error initializing S3 client:', err)
-    throw new Error('Error initializing S3 client')
+    throw new Error(`Error initializing S3 client: ${err}`)
   }
 }
 

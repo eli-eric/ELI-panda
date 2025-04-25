@@ -44,25 +44,29 @@ async function uploadFile(req: NextApiRequest, res: NextApiResponse) {
 
   const objectKey = `${sanitizedPrefix}/${id}`
 
-  await s3Client.putObject(bucket, objectKey, buffer, buffer.length, metaData)
+  try {
+    await s3Client.putObject(bucket, objectKey, buffer, buffer.length, metaData)
+    const existingObject = await s3Client.statObject(bucket, objectKey)
+    if (!existingObject) return res.status(404).json({})
 
-  const existingObject = await s3Client.statObject(bucket, objectKey)
-  if (!existingObject) return res.status(404).json({})
-
-  const isImage = prefix.includes('/image')
-  if (isImage) {
-    try {
-      await handleMiniImages({ req, id, isDelete: false })
-    } catch (e) {
-      logger.error(e)
-      return res.status(500).json({ error: 'Failed to save mini image' })
+    const isImage = prefix.includes('/image')
+    if (isImage) {
+      try {
+        await handleMiniImages({ req, id, isDelete: false })
+      } catch (e) {
+        logger.error(e)
+        throw new Error('Error handling mini images')
+      }
     }
-  }
 
-  logger.info('Successfully saved file')
-  res
-    .status(201)
-    .json({ id, name, url: `${req.url}/${id}`, type: mimeType, tags })
+    logger.info('Successfully saved file')
+    res
+      .status(201)
+      .json({ id, name, url: `${req.url}/${id}`, type: mimeType, tags })
+  } catch (error) {
+    logger.error(`Failed to upload file: ${error}`)
+    throw new Error(`Failed to upload file: ${error}`)
+  }
 }
 
 export default withErrorHandler(uploadFile)
