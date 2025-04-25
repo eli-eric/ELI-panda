@@ -31,14 +31,16 @@ async function listFiles(req: NextApiRequest, res: NextApiResponse) {
     const result = list
       .map(obj => {
         const { lastModified, name: objFullPath, metadata } = obj
-        logger.info('Object:', obj)
-        logger.info('Metadata:', metadata?.['name'])
+        logger.info('MetaData:', metadata)
+        logger.info('X-Amz-Meta-Tags:', metadata?.['X-Amz-Meta-Tags'])
+        logger.info('tags:', metadata?.['tags'])
         const ts = new Date(lastModified || '').getTime()
         const [id] = objFullPath ? objFullPath.split('/').reverse() : []
         const name = metadata?.['name']
           ? decodeURIComponent(metadata['name'])
           : 'unknown'
-        const tags = metadata && metadata['X-Amz-Meta-Tags']
+        const tags =
+          metadata && (metadata['X-Amz-Meta-Tags'] || metadata['tags'])
         const type = metadata && metadata['content-type']
         const url = `${req.url}/${id}`
         const size = obj.size
@@ -54,7 +56,7 @@ async function listFiles(req: NextApiRequest, res: NextApiResponse) {
       })
       .sort((a, b) => b.ts - a.ts)
 
-    logger.info('Successfully listed files', result)
+    logger.info('Successfully listed files')
     res.status(200).json(result)
   } catch (error) {
     logger.error(`Failed to list files: ${error}`)
