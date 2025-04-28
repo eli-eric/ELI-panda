@@ -14,10 +14,6 @@ package-lock.json
 # testing
 /coverage
 
-# ai
-CLAUDE.md
-/.cursor
-
 # next.js
 /.next/
 /out/
