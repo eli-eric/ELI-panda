@@ -100,7 +100,7 @@ export const SelectSystemContainer: FC = () => {
       <SearchBar
         tableId={tableId}
         useQuery={false}
-        left={<FilterButton />}
+        left={<FilterButton tableId={tableId} />}
         right={<FilterBadges tableId={tableId} enableQueryURL={false} />}
       />
       <div className="h-[370px]">
