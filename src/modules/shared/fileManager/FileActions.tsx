@@ -68,7 +68,7 @@ export const FileActions = ({
           handleDeleteSuccess(file.id)
           toast.success(`Deleted ${file.name}`)
           // Invalidate the query to force a fresh fetch after deletion
-          queryClient.invalidateQueries(['files', itemType, uid])
+          queryClient.invalidateQueries({ queryKey: ['files', itemType, uid] })
           // Reset dropzone state to allow re-uploading the same file
           if (onFileDeleted) {
             onFileDeleted()
