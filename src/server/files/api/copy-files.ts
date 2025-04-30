@@ -60,8 +60,8 @@ const copyFiles = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     // Define the source and destination prefixes based on the UIDs.
-    const sourcePrefix = `/system/${sourceUid}/`
-    const destinationPrefix = `/system/${destinationUid}/`
+    const sourcePrefix = `system/${sourceUid}/`
+    const destinationPrefix = `system/${destinationUid}/`
 
     // Log prefixes
     logger.debug(`Source Prefix: ${sourcePrefix}`)
@@ -69,11 +69,6 @@ const copyFiles = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // List all objects under the source UID directory.
     const objects = await listObjects(bucket, sourcePrefix)
-
-    // If no objects are found, return an error response.
-    if (objects.length === 0) {
-      return res.status(404).json({ error: 'No files found to copy' })
-    }
 
     // Copy each object to the destination directory concurrently.
     await Promise.all(

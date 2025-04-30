@@ -77,13 +77,15 @@ interface FileColumnsProps {
   handlePut: (id: string, data: { name?: string; tags?: string[] }) => void
   itemType: string
   uid?: string
+  onFileDeleted?: () => void
 }
 
 export const useFileColumns = ({
   hasEditRole,
   handlePut,
   itemType,
-  uid
+  uid,
+  onFileDeleted
 }: FileColumnsProps) => {
   const { mutate: updateLink } = useLinkUpdate({ parentUid: uid })
 
@@ -228,6 +230,7 @@ export const useFileColumns = ({
             itemType={itemType}
             uid={uid}
             handlePut={handlePut}
+            onFileDeleted={onFileDeleted}
           />
         )
       }

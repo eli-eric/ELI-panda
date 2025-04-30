@@ -27,7 +27,7 @@ async function removeFile(req: NextApiRequest, res: NextApiResponse) {
 
     const isImage = prefix.includes('/image')
     if (isImage) {
-      await handleMiniImages({ req, res, id, isDelete: true })
+      await handleMiniImages({ req, id, isDelete: true })
     }
 
     logger.info('Successfully deleted file')

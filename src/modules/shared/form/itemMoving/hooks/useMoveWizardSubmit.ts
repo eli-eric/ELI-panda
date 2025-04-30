@@ -12,7 +12,7 @@ import { queryMutate } from '@/utils/fetcher'
 
 import { useWizardStore } from '../../wizard/store/useWizardStore'
 import { useModalWizardStore } from '../store/useModalWizardStore'
-import type { ItemMovePost, SystemFileCopy } from '../types'
+import type { ItemMovePost } from '../types'
 import { MOVE_TYPE } from '../types/constants'
 
 export const useMoveWizardSubmit = () => {
@@ -67,21 +67,21 @@ export const useMoveWizardSubmit = () => {
     assignSystemsReload()
   }
 
-  const { mutate: mutateFiles, isPending: isPendingFiles } = useMutation({
-    mutationKey: ['moveFiles'],
-    mutationFn: queryMutate<string, SystemFileCopy>(
-      'systemFilesCopy',
-      'post',
-      undefined,
-      true
-    ),
-    onError: (e: AxiosError) => {
-      toast.error(`Error: ${e.response?.data}`)
-    },
-    onSuccess: (_, data) => {
-      onSuccessfulMove(data.destinationUid)
-    }
-  })
+  // const { mutate: mutateFiles, isPending: isPendingFiles } = useMutation({
+  //   mutationKey: ['moveFiles'],
+  //   mutationFn: queryMutate<string, SystemFileCopy>(
+  //     'systemFilesCopy',
+  //     'post',
+  //     undefined,
+  //     true
+  //   ),
+  //   onError: (e: AxiosError) => {
+  //     toast.error(`Error: ${e.response?.data}`)
+  //   },
+  //   onSuccess: (_, data) => {
+  //     onSuccessfulMove(data.destinationUid)
+  //   }
+  // })
 
   const { mutate, isPending } = useMutation({
     mutationKey: ['moveItem'],
@@ -90,14 +90,14 @@ export const useMoveWizardSubmit = () => {
       toast.error(`Error: ${e.response?.data}`)
     },
     onSuccess: r => {
-      if (isMovingToNewSystem) {
-        mutateFiles({
-          sourceUid: systemDetail?.uid || '',
-          destinationUid: r.data
-        })
-      } else {
-        onSuccessfulMove(r.data)
-      }
+      // if (isMovingToNewSystem) {
+      //   mutateFiles({
+      //     sourceUid: systemDetail?.uid || '',
+      //     destinationUid: r.data
+      //   })
+      // } else {
+      onSuccessfulMove(r.data)
+      // }
     }
   })
 
@@ -111,14 +111,14 @@ export const useMoveWizardSubmit = () => {
       toast.error(`Error: ${e.response?.data}`)
     },
     onSuccess: r => {
-      if (isMovingToNewSystem) {
-        mutateFiles({
-          sourceUid: systemDetail?.uid || '',
-          destinationUid: r.data
-        })
-      } else {
-        onSuccessfulMove(r.data)
-      }
+      // if (isMovingToNewSystem) {
+      //   mutateFiles({
+      //     sourceUid: systemDetail?.uid || '',
+      //     destinationUid: r.data
+      //   })
+      // } else {
+      onSuccessfulMove(r.data)
+      // }
     }
   })
 
@@ -163,7 +163,7 @@ export const useMoveWizardSubmit = () => {
     submitWizard,
     isPending:
       isPending ||
-      isPendingFiles ||
+      // isPendingFiles ||
       isPendingReplace ||
       isLoadingSystems ||
       isLoadingDestination ||
