@@ -92,6 +92,17 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
             name: systemDetail?.zone?.name as string
           }
         : undefined,
+      location: systemDetail?.location
+        ? {
+            uid: systemDetail?.location?.uid,
+            name:
+              systemDetail?.location?.name +
+              ' (' +
+              systemDetail?.location?.code +
+              ')',
+            code: systemDetail?.location?.code
+          }
+        : undefined,
       // For new systems, always set a default system level
       systemLevel: isCreating
         ? SystemLevel.SubsystemsAndParts

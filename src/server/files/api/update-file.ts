@@ -25,11 +25,14 @@ async function updateFile(req: NextApiRequest, res: NextApiResponse) {
 
     const fileStream = await s3Client.getObject(bucket, fullPath)
     const buffer = await streamToBuffer(fileStream)
+    logger.info(tags)
 
     const metaData = {
       ...obj.metaData,
-      name: encodeURIComponent(name),
-      tags: tags.map((tag: string) => encodeURIComponent(tag)).join(',')
+      'X-Amz-Meta-Name': encodeURIComponent(name),
+      'X-Amz-Meta-Tags': tags
+        .map((tag: string) => encodeURIComponent(tag))
+        .join(',')
     }
 
     await s3Client.putObject(bucket, fullPath, buffer, buffer.length, metaData)

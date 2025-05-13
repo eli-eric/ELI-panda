@@ -23,6 +23,7 @@ interface FileActionsProps {
   itemType: string
   uid?: string
   handlePut: (id: string, data: { name?: string; tags?: string[] }) => void
+  onFileDeleted?: () => void
 }
 
 export const FileActions = ({
@@ -30,7 +31,8 @@ export const FileActions = ({
   hasEditRole,
   itemType,
   uid,
-  handlePut
+  handlePut,
+  onFileDeleted
 }: FileActionsProps) => {
   const intl = useIntl()
   const { mutate: deleteLink } = useLinkDelete({ parentUid: uid, uid: file.id })
@@ -65,12 +67,18 @@ export const FileActions = ({
         .then(() => {
           handleDeleteSuccess(file.id)
           toast.success(`Deleted ${file.name}`)
+          // Invalidate the query to force a fresh fetch after deletion
+          queryClient.invalidateQueries({ queryKey: ['files', itemType, uid] })
+          // Reset dropzone state to allow re-uploading the same file
+          if (onFileDeleted) {
+            onFileDeleted()
+          }
         })
         .catch(error => {
           toast.error(`Failed to delete file: ${error}`)
         })
     }
-  }, [file, deleteLink, itemType, uid, handleDeleteSuccess])
+  }, [file, deleteLink, itemType, uid, handleDeleteSuccess, queryClient])
 
   const handleDeleteWithConfirmation = useCallback(() => {
     withWarningModal(() => handleDelete())()

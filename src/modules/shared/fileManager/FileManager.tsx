@@ -48,17 +48,26 @@ const FileManager = ({
     ] as FileItemExtended[]
   }, [filesData, linksData])
 
-  const { onDrop, handlePut, loading } = useFileRequests({
+  const { onDrop, handlePut, loading, resetDropzone } = useFileRequests({
     itemType,
     uid
   })
+  // Enhance resetDropzone to also clear the file input value
+  const handleResetDropzone = useCallback(() => {
+    resetDropzone()
+    // Reset the file input value to allow re-uploading the same file
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }, [resetDropzone])
 
   // Define columns for Table
   const { columns, modals } = useFileColumns({
     hasEditRole,
     itemType,
     uid,
-    handlePut
+    handlePut,
+    onFileDeleted: handleResetDropzone
   })
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)

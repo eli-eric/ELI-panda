@@ -23,7 +23,7 @@ COPY . .
 
 ARG NEO4J_PASSWORD
 
-ENV PANDA_API_GW_URL="https://api-dev.panda.eli-beams.eu/v1"
+ENV PANDA_API_GW_URL="https://panda-api.dev.eli-laser.eu/v1"
 ENV PANDA_ENV="dev"
 ENV MINIO_ENDPOINT="minio-main"
 ENV MINIO_BUCKET_NAME="panda-dev"
@@ -45,8 +45,8 @@ FROM node:18-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-ENV PANDA_API_GW_URL="https://api-dev.panda.eli-beams.eu/v1"
-ENV NEXTAUTH_URL="https://dev.panda.eli-beams.eu/"
+ENV PANDA_API_GW_URL="https://panda-api.dev.eli-laser.eu/v1"
+ENV NEXTAUTH_URL="https://panda.dev.eli-laser.eu/"
 ENV PANDA_ENV="dev"
 ENV MINIO_ENDPOINT="minio-main"
 ENV MINIO_BUCKET_NAME="panda-dev"
@@ -58,7 +58,6 @@ ENV AZURE_AD_BEAMLINES_CLIENT_SECRET="${AZURE_AD_BEAMLINES_CLIENT_SECRET}"
 ENV AZURE_AD_BEAMLINES_TENANT_ID="${AZURE_AD_BEAMLINES_TENANT_ID}"
 
 RUN env
-
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
@@ -75,7 +74,6 @@ USER nextjs
 
 EXPOSE 5001
 
-ENV PORT=5001
-ENV HOSTNAME=0.0.0.0
+ENV PORT 5001
 
 CMD ["node", "server.js"]

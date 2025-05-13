@@ -1,5 +1,6 @@
 import fetch from 'node-fetch'
 
+import logger from '@/server/logger'
 import { BASE_URL } from '@/types/constants/common'
 
 export const saveUrlsToNode = async (
@@ -23,6 +24,10 @@ export const saveUrlsToNode = async (
   )
 
   if (!response.ok) {
+    logger.error(
+      'Error saving URLs to node:',
+      `Status: ${response.status}, StatusText: ${response.statusText}`
+    )
     throw new Error('Failed to save URLs to node')
   }
 
