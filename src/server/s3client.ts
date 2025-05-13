@@ -9,10 +9,12 @@ export const config = {
   accessKey:
     process.env.MINIO_ACCESS_KEY_PROD ??
     process.env.MINIO_ACCESS_KEY ??
+    process.env.MINIO_ACCESS_KEY_DEV ??
     '12345678',
   secretKey:
     process.env.MINIO_SECRET_KEY_PROD ??
     process.env.MINIO_SECRET_KEY ??
+    process.env.MINIO_SECRET_KEY_DEV ??
     '12345678',
   useSSL: process.env.MINIO_USE_SSL?.toLowerCase() === 'true'
 }
