@@ -124,7 +124,12 @@ export const useSystemsColumns = ({
       },
       {
         header: 'Location',
-        accessorFn: row => row.location?.name,
+        accessorFn: row => {
+          return row.location
+            ? row.location.name +
+                (row.location.code ? ' (' + row.location.code + ')' : '')
+            : ''
+        },
         id: 'location',
         size: 150
       },
