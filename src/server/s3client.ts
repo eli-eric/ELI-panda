@@ -6,16 +6,8 @@ export const config = {
   bucket: process.env.MINIO_BUCKET_NAME ?? 'panda-files',
   endPoint: process.env.MINIO_ENDPOINT ?? 'localhost',
   port: Number.parseInt(process.env.MINIO_PORT ?? '9000'),
-  accessKey:
-    process.env.MINIO_ACCESS_KEY_PROD ??
-    process.env.MINIO_ACCESS_KEY ??
-    process.env.MINIO_ACCESS_KEY_DEV ??
-    '12345678',
-  secretKey:
-    process.env.MINIO_SECRET_KEY_PROD ??
-    process.env.MINIO_SECRET_KEY ??
-    process.env.MINIO_SECRET_KEY_DEV ??
-    '12345678',
+  accessKey: '12345678',
+  secretKey: '12345678',
   useSSL: process.env.MINIO_USE_SSL?.toLowerCase() === 'true'
 }
 
