@@ -7,6 +7,7 @@ import { Table } from '@/components/ui'
 import { PATH } from '@/types/constants/paths'
 import { cx } from '@/utils'
 
+import { useSystemSubsystems } from '../../hooks/useSubsystems'
 import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
 import { useSubSystemsColumns } from './SubSustems.columns'
@@ -14,9 +15,8 @@ import type { TableSystem } from './types'
 
 export const SubSystemsContainer = () => {
   const columns = useSubSystemsColumns()
+  const { subsystems, loading } = useSystemSubsystems()
   const { systemDetail } = useSystemDetail()
-  if (!systemDetail?.subSystems || systemDetail.subSystems.length < 1)
-    return null
 
   return (
     <Fragment>
@@ -25,7 +25,7 @@ export const SubSystemsContainer = () => {
           href={{
             pathname: PATH.SYSTEM,
             query: {
-              parentUid: systemDetail.uid
+              parentUid: systemDetail?.uid
             }
           }}
         >
@@ -34,20 +34,21 @@ export const SubSystemsContainer = () => {
       </Heading>
       <Table<TableSystem>
         columns={columns}
+        loading={loading}
         enableFiltering
         enablePagination
         className={'relative overflow-x-auto mb-0 pb-0'}
-        getRowProps={({ physicalItem, systemLevel, statistics }, index) => ({
+        getRowProps={({ physicalItem, systemLevel, sp_coverage }, index) => ({
           className: cx(
             physicalItem && 'font-bold text-gray-700 dark:text-gray-200',
             getColorBySystemLevel(systemLevel || undefined, index),
             getFontBySystemLevel(systemLevel || undefined),
-            statistics?.sp_coverage != null &&
-              statistics.sp_coverage < 1 &&
+            sp_coverage != null &&
+              sp_coverage < 1 &&
               'text-red-500 dark:text-red-500 font-bold'
           )
         })}
-        data={systemDetail?.subSystems as TableSystem[]}
+        data={subsystems as TableSystem[]}
       />
     </Fragment>
   )

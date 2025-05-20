@@ -244,6 +244,7 @@ export const SystemDetailFragment = gql(`
     subSystems {
       uid
       name
+      deleted
       sp_coverage
       minimalSpareParstCount
       location {

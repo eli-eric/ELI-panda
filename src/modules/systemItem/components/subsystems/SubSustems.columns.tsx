@@ -34,8 +34,8 @@ export const useSubSystemsColumns = () => {
             <LinkDecorator
               title={getValue()}
               className={cx(
-                original?.statistics?.sp_coverage != null &&
-                  original.statistics.sp_coverage < 1 &&
+                original?.sp_coverage != null &&
+                  original.sp_coverage < 1 &&
                   'text-red-500 dark:text-red-500'
               )}
             >
@@ -54,8 +54,8 @@ export const useSubSystemsColumns = () => {
       {
         header: 'SP Coverage',
         id: 'sp_coverage',
-        accessorFn: ({ statistics }) =>
-          statistics?.sp_coverage ? statistics.sp_coverage.toFixed(2) : '',
+        accessorFn: ({ sp_coverage }) =>
+          sp_coverage ? sp_coverage.toFixed(2) : '',
         meta: {
           className: 'text-right'
         }

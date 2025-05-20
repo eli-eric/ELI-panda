@@ -4,7 +4,9 @@ import { toast } from 'react-hot-toast'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { PATH } from '@/types/constants/paths'
 import { gql, useFragment } from '@/types/gql'
+import type { SystemDetailQuery } from '@/types/gql/graphql'
 import {
   CatalogueItemFragment,
   PhysicalItemFragment,
@@ -26,7 +28,7 @@ type SearchPatterns = {
 
 export const useSystemDetail = (
   searchPatterns?: SearchPatterns,
-  onSuccess?: (data) => void
+  onSuccess?: (data: SystemDetailQuery) => void
 ) => {
   const router = useRouter()
   const uid = router.query.uid as string | undefined
@@ -38,6 +40,7 @@ export const useSystemDetail = (
     {
       variables: {
         where: {
+          deleted: false,
           uid,
           systemCode: searchPatterns?.alias,
           physicalItem: {
@@ -52,6 +55,9 @@ export const useSystemDetail = (
   )
 
   useEffect(() => {
+    if (data?.systems.length === 0) {
+      router.push(PATH.NOT_FOUND)
+    }
     if (error) {
       toast.error('Failed to fetch system detail')
     }
