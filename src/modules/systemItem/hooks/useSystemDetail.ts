@@ -6,7 +6,6 @@ import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
 import { PATH } from '@/types/constants/paths'
 import { gql, useFragment } from '@/types/gql'
-import type { SystemDetailQuery } from '@/types/gql/graphql'
 import {
   CatalogueItemFragment,
   PhysicalItemFragment,
@@ -28,7 +27,7 @@ type SearchPatterns = {
 
 export const useSystemDetail = (
   searchPatterns?: SearchPatterns,
-  onSuccess?: (data: SystemDetailQuery) => void
+  onSuccess?: (data: any) => void
 ) => {
   const router = useRouter()
   const uid = router.query.uid as string | undefined
