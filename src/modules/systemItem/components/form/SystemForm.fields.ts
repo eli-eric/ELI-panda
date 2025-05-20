@@ -4,12 +4,15 @@ import { message } from '@/i18n/src/messages'
 import { CODEBOOK } from '@/types/constants/codebook'
 import { ROLE } from '@/types/constants/roles'
 
+import { useSystemContext } from '../../store/useSystemContext'
+
 const { form } = message.systemsPage.systemDetail
 const { form: catalogueForm } = message.cataloguePage.itemDetail
 
 const useSystemEditFormFields = () => {
-  const disabledEdit = !usePermission([ROLE.SYSTEM_EDIT])
-  const catalogueEdit = !usePermission([ROLE.CATALOGUE_EDIT])
+  const { blockedEdit } = useSystemContext()
+  const disabledEdit = !usePermission([ROLE.SYSTEM_EDIT]) || blockedEdit
+  const catalogueEdit = !usePermission([ROLE.CATALOGUE_EDIT]) || blockedEdit
   return useMakeFormFields({
     name: {
       name: 'name',
@@ -69,7 +72,7 @@ const useSystemEditFormFields = () => {
       label: form.systemCode.label,
       placeholder: form.systemCode.placeholder,
       rounded: 'rounded-md',
-      disabled: false
+      disabled: disabledEdit
     },
     systemLevel: {
       name: 'systemLevel',

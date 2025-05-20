@@ -62,7 +62,10 @@ export const SystemMainForm = ({ children }: SystemFormComponentProps) => {
               />
             </Col>
             <Col sm={3} md={6} lg={8}>
-              <SelectLocationCombo locationField={fields.location} />
+              <SelectLocationCombo
+                locationField={fields.location}
+                disabled={fields.location.disabled}
+              />
             </Col>
             <Col sm={3} md={6} lg={8}>
               <Combobox {...fields.zone} />
