@@ -43,7 +43,8 @@ export enum PATH {
   PUBLICATIONS = '/publications',
   PUBLICATION = '/publication',
   SERVICES = '/services',
-  SERVICE = '/service'
+  SERVICE = '/service',
+  NOT_FOUND = '/404'
 }
 
 export const SUPPORT =
@@ -208,5 +209,6 @@ export const PATH_ROLES_CONFIG: Record<PATH, ROLE[]> = {
   [PATH.PUBLICATION]: [ROLE.PUBLICATIONS_VIEW, ROLE.PUBLICATIONS_EDIT],
   [PATH.SERVICES]: [ROLE.SERVICE_VIEW, ROLE.SERVICE_EDIT, ROLE.BASICS],
   [PATH.SERVICE]: [ROLE.SERVICE_VIEW, ROLE.SERVICE_EDIT, ROLE.BASICS],
+  [PATH.NOT_FOUND]: [],
   [PATH.ROOT]: []
 }

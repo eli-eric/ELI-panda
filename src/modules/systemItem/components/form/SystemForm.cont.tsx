@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import type { FC, PropsWithChildren } from 'react'
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
@@ -30,6 +30,7 @@ import { useSystemCreate } from '../../hooks/useSystemCreate'
 import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { useSystemParent } from '../../hooks/useSystemParent'
 import { useSystemUpdate } from '../../hooks/useSystemUpdate'
+import { useSystemContext } from '../../store/useSystemContext'
 import { useSystemItemStore } from '../../store/useSystemItemStore'
 import type { SystemDetailFormType } from '../../types/form'
 import { getColorBySystemLevel } from '../../utils'
@@ -50,7 +51,8 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
   const { systemDetail, catalogueItem, physicalItem } = useSystemDetail()
   const hasEditRole = usePermission([ROLE.SYSTEM_EDIT])
   const { parentPath, parentSystem } = useSystemParent()
-  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const { blockedEdit, setBlockedEdit } = useSystemContext()
 
   const {
     sparePartsConnection, // eslint-disable-line @typescript-eslint/no-unused-vars
@@ -203,52 +205,52 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
   // Create debounced submit handlers
   const debouncedSubmit = useRef(
     debounce(() => {
-      if (isSubmitting) return
-      setIsSubmitting(true)
+      if (blockedEdit) return
+      setBlockedEdit(true)
 
       try {
         const values = formMethods.getValues()
         if (!values.name || !values.systemLevel) {
           formMethods.trigger(['name', 'systemLevel'])
           toast.error('Please fill in all required fields')
-          setIsSubmitting(false)
+          setBlockedEdit(false)
           return
         }
 
         formMethods.handleSubmit(onSubmit)()
       } catch (error: any) {
         toast.error('Failed to process form submission')
-        setIsSubmitting(false)
+        setBlockedEdit(false)
       }
     }, 300)
   ).current
 
   const debouncedSubmitAndExit = useRef(
     debounce(() => {
-      if (isSubmitting) return
-      setIsSubmitting(true)
+      if (blockedEdit) return
+      setBlockedEdit(true)
 
       try {
         const values = formMethods.getValues()
         if (!values.name || !values.systemLevel) {
           formMethods.trigger(['name', 'systemLevel'])
           toast.error('Please fill in all required fields')
-          setIsSubmitting(false)
+          setBlockedEdit(false)
           return
         }
 
         formMethods.handleSubmit(onSubmitAndExit)()
       } catch (error: any) {
         toast.error('Failed to process form submission')
-        setIsSubmitting(false)
+        setBlockedEdit(false)
       }
     }, 300)
   ).current
 
-  // Reset isSubmitting when loading state changes
+  // Reset blockedEdit when loading state changes
   useEffect(() => {
     if (!loading && !createLoading) {
-      setIsSubmitting(false)
+      setBlockedEdit(false)
     }
   }, [loading, createLoading])
 
@@ -285,7 +287,7 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
       enableLeaveWarning={true}
     >
       <HeaderWithButtons
-        loading={loading || createLoading || isSubmitting}
+        loading={loading || createLoading || blockedEdit}
         editRole={ROLE.SYSTEM_EDIT}
         onSubmit={debouncedSubmit}
         onSubmitAndExit={debouncedSubmitAndExit}
@@ -324,6 +326,7 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
                 : undefined
             }}
             className="w-full"
+            disabled={blockedEdit}
             hasEditRole={hasEditRole}
           />
         </SystemMainForm>

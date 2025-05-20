@@ -8,7 +8,5 @@ export type TableSystem = {
   physicalItem?: SystemDetail['physicalItem']
   location?: SystemDetail['location']
   parentPath?: SystemDetail['parentPath']
-  statistics?: {
-    sp_coverage?: number
-  }
+  sp_coverage?: number
 }
