@@ -19,12 +19,14 @@ type ImageTabListProps = {
   ) => (arg: any) => void
   selectedIndex: number
   allowMultipleImages: boolean
+  disabled?: boolean
 }
 
 export const ImageTabList = ({
   data,
   canEdit,
   open,
+  disabled,
   getInputProps,
   handleDelete,
   withWarnModal,
@@ -38,6 +40,7 @@ export const ImageTabList = ({
     {canEdit && allowMultipleImages && (
       <div>
         <PlusButton
+          disabled={disabled}
           type="button"
           onClick={open}
           className="h-full flex border-0 border-r rounded-none rounded-tl-md"
@@ -78,7 +81,7 @@ export const ImageTabList = ({
           !allowMultipleImages &&
             'min-w-full items-center justify-center rounded-tl-md border-l-0'
         )}
-        disabled={!data || data.length === 0}
+        disabled={disabled || !data || data.length === 0}
       />
     )}
   </Tab.List>
