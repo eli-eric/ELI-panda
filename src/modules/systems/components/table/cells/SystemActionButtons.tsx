@@ -8,15 +8,12 @@ import {
   TableOpenButton,
   TablePlusButton
 } from '@/components/Buttons'
-import { message } from '@/i18n/src/messages'
 import { GraphModalTableButton } from '@/modules/shared/system/GraphModalButton'
 import { useSystemDelete } from '@/modules/systems/hooks/useSystemDelete'
 import { ShowSpareButton } from '@/modules/systemsSpareParts/components/ShowSpareButton'
 import { PATH } from '@/types/constants/paths'
 import type { SystemDetail } from '@/types/responses/systems'
 import type { EndpointProps } from '@/utils/getEndpoints'
-
-const messages = message.systemsPage.systemDetail.deleteModal
 
 interface Props {
   hideButtons?: boolean
