@@ -223,7 +223,12 @@ export const messages = {
       },
       deleteModal: {
         message:
-          'Are you sure you want to delete this {name} and all sub-systems?'
+          'Are you sure you want to delete this {name} and all sub-systems?',
+        onSuccess: 'System {name} deleted successfully.',
+        onConflict:
+          'System {name} cannot be deleted due to existing relationships.',
+        onError:
+          'Something went wrong while deleting system {name}. Please try again later.'
       }
     },
     itemDetail: {
