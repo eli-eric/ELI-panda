@@ -39,6 +39,8 @@ export interface OrderLineFormType extends FieldValues {
   serialNumber?: string
   lastUpdateTime?: string
   serialNumbers?: string
+  serviceOrderUid?: string
+  serviceItemName?: string
 }
 
 export interface ServiceLine extends FieldValues {

@@ -452,7 +452,8 @@ export const messages = {
           eun: 'EUN',
           isDelivered: 'Delivered',
           serialNumber: 'Serial Number',
-          notes: 'Notes'
+          notes: 'Notes',
+          service: 'Last Service'
         }
       },
       deleteModal: {
