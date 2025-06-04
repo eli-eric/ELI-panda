@@ -145,6 +145,20 @@ const useOrderLinesColumns = () => {
         accessorFn: row => row.location?.name,
         cell: ({ getValue }) => <span>{getValue()?.split(' - ')[0]}</span>,
         size: 240
+      },
+      {
+        header: formatMessage({ id: messages.service }),
+        accessorFn: row => row.serviceItemName,
+        size: 240,
+        cell: ({ getValue, row: { original } }) => (
+          <Link
+            className="link"
+            href={PATH.ORDER + '/' + original.serviceOrderUid}
+            target="_blank"
+          >
+            <span>{getValue()?.split('-')[0]}</span>
+          </Link>
+        )
       }
     ]
     return cols
