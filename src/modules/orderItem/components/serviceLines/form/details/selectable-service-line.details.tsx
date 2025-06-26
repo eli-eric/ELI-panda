@@ -4,7 +4,6 @@ import { useServiceType } from '@/modules/services/hooks/useServiceType'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { SelectableServiceLineGroups } from './selectable-service-line.groups'
-import { useServiceLineSelectionStore } from './store/useServiceLineSelectionStore'
 
 interface Props {
   serviceType?: CodebookType
@@ -12,7 +11,6 @@ interface Props {
 
 export const SelectableServiceLineDetails = ({ serviceType }: Props) => {
   const { watch } = useFormContext()
-  const { setSelectedProperties } = useServiceLineSelectionStore()
 
   const serviceTypeForm = watch('serviceType')
 

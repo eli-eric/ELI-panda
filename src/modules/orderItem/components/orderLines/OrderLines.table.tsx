@@ -28,6 +28,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
   // Už nepoužíváme neefektivní JSON.stringify
   const orderLines = useMemo(
     () => orderLinesData,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [JSON.stringify(orderLinesData)]
   )
 

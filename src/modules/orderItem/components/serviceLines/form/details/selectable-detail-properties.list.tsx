@@ -18,7 +18,7 @@ export const SelectableDetailPropertiesList = ({
   const allProperties = Array.from(groupMap.entries()).flatMap(
     ([group, properties]) => properties.map(property => ({ group, property }))
   )
-  const { setValue, watch } = useFormContext()
+  const { setValue } = useFormContext()
   const { selectedProperties } = useServiceLineSelectionStore()
 
   // Create an array of all details with their indices for useEffect

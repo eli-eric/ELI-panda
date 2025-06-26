@@ -157,7 +157,7 @@ export const TableExample: React.FC = () => {
       filterFn: 'fuzzy',
       enableColumnFilter: true,
       // Example of using the PriceFooter component to show cross-page totals
-      footer: props => <PriceFooter table={props.table} />
+      footer: ({ table }) => <PriceFooter table={table} />
     }),
     columnHelper.accessor('status', {
       header: 'Status',

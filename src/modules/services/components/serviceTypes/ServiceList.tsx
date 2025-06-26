@@ -1,6 +1,6 @@
-import { useMemo } from 'react'
-import { createColumnHelper, type ColumnDef } from '@tanstack/react-table'
+import { type ColumnDef, createColumnHelper } from '@tanstack/react-table'
 import Link from 'next/link'
+import { useMemo } from 'react'
 
 import { ShortCell } from '@/components/table/short-cell'
 import { Table } from '@/components/ui/table'

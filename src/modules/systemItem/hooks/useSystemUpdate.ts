@@ -1,10 +1,11 @@
 import { useMutation as useQueryMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { type MutableRefObject, useState } from 'react'
-import { toast } from 'react-hot-toast'
+import { useIntl } from 'react-intl'
 
 import axiosInstance from '@/core/axios/axiosInstance'
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { message } from '@/i18n/src/messages'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { BASE_URL } from '@/types/constants/common'
 import { gql } from '@/types/gql'
@@ -14,6 +15,11 @@ import { connectAndDisconnectNode, whereN } from '@/utils/graphql/mutations'
 
 import { useSystemItemStore } from '../store/useSystemItemStore'
 import type { SystemDetailFormType } from '../types/form'
+import {
+  getUniqueByUid,
+  showErrorToast,
+  showSuccessToast
+} from '../utils/hookHelpers'
 import { useRecalculate } from './useRecalculate'
 import { useSystemDetail } from './useSystemDetail'
 import { makeSystemInputBody } from './utils'
@@ -57,12 +63,18 @@ const updateItemProperties = async (
 }
 
 const usePropertiesUpdate = uid => {
+  const intl = useIntl()
+
   return useQueryMutation({
     mutationFn: (body: PhysicalItemProperty[]) => {
       return updateItemProperties(uid, body)
     },
     onError: error => {
-      toast.error('Failed to update physical Item properties: ' + error)
+      showErrorToast(
+        intl,
+        message.systemsPage.systemDetail.updateModal.onPropertiesError,
+        { error: error.toString() }
+      )
     }
   })
 }
@@ -71,6 +83,7 @@ export const useSystemUpdate = (
   imageRef?: MutableRefObject<ImageGalleryRef | undefined>,
   physicalItemUid?: string
 ) => {
+  const intl = useIntl()
   const router = useRouter()
   const { mutate: mutateProperties } = usePropertiesUpdate(physicalItemUid)
   const uid = router.query.uid as string
@@ -83,13 +96,12 @@ export const useSystemUpdate = (
     refetch()
 
     if (saveAndExit) {
-      toast.success('Would navigate back, but staying on page to see payload')
       navigateBack()
-    } else {
-      toast.success('Would reload page, but staying to see payload')
-      //router.reload()
     }
-    toast.success(`System saved successfully`)
+    showSuccessToast(
+      intl,
+      message.systemsPage.systemDetail.updateModal.onSuccess
+    )
   }
 
   const [recalculate] = useRecalculate({
@@ -115,7 +127,11 @@ export const useSystemUpdate = (
       onError: error => {
         // eslint-disable-next-line no-console
         console.log('Error:', error)
-        toast.error('Something went wrong: ' + error.message)
+        showErrorToast(
+          intl,
+          message.systemsPage.systemDetail.updateModal.onError,
+          { error: error.message }
+        )
       }
     }
   )
@@ -138,16 +154,12 @@ export const useSystemUpdate = (
     // Get operators from both form and store
     const formOperators = systemForm?.operators || []
     const allOperators = [...formOperators, ...newOperators]
-    const uniqueOperators = [
-      ...new Map(allOperators.map(op => [op.uid, op])).values()
-    ]
+    const uniqueOperators = getUniqueByUid(allOperators)
 
     // Get maintainedBy from both form and store
     const formMaintainedBy = systemForm?.maintainedBy || []
     const allMaintainedBy = [...formMaintainedBy, ...newMaintainedBy]
-    const uniqueMaintainedBy = [
-      ...new Map(allMaintainedBy.map(emp => [emp.uid, emp])).values()
-    ]
+    const uniqueMaintainedBy = getUniqueByUid(allMaintainedBy)
 
     // Extract UIDs from disconnect arrays to prevent duplicate node connections
     const disconnectOperatorUids = disconnectOperators.map(op => op.uid)
