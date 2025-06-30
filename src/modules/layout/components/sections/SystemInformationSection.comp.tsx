@@ -21,7 +21,7 @@ export const SystemInformationSection: FC<SystemInformationSectionProps> = ({
     <Disclosure
       title="System Information"
       defaultOpen={true}
-      className={`w-full border rounded-md ${getColorBySystemLevel(systemDetail.systemLevel as SystemLevel)}`}
+      className={`w-full border rounded-md overflow-hidden ${getColorBySystemLevel(systemDetail.systemLevel as SystemLevel)}`}
       buttonClassName="p-3 hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors"
       panelClassName="px-3 py-3 space-y-2"
       transparentButton={false}

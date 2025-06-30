@@ -17,7 +17,7 @@ export const PhysicalItemSection: FC<PhysicalItemSectionProps> = ({
     <Disclosure
       title="Physical Item"
       defaultOpen={true}
-      className="w-full border rounded-md"
+      className="w-full border rounded-md overflow-hidden"
       buttonClassName="p-3 bg-gray-50 dark:bg-gray-700"
       panelClassName="px-3 py-3 space-y-2"
       transparentButton={false}

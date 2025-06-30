@@ -20,7 +20,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
     <Disclosure
       title={`Subsystems (${systemDetail.subSystems.length})`}
       defaultOpen={false}
-      className="w-full border rounded-md"
+      className="w-full border rounded-md overflow-hidden"
       buttonClassName="p-3 bg-blue-50 dark:bg-blue-900/20"
       panelClassName="px-3 py-3 space-y-2"
       transparentButton={false}

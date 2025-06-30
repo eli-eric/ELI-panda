@@ -78,12 +78,6 @@ export const SystemDetailInfo: FC<Props> = ({ alias }) => {
 
       {/* Physical Item Information */}
       {physicalItem && <PhysicalItemSection physicalItem={physicalItem} />}
-
-      {/* Catalogue Item Information */}
-      {catalogueItem?.uid && (
-        <CatalogueItemSection catalogueItem={catalogueItem} />
-      )}
-
       {/* Item Properties */}
       {catalogueItem && physicalItem && hasProperties && (
         <ItemPropertiesSection
@@ -91,6 +85,11 @@ export const SystemDetailInfo: FC<Props> = ({ alias }) => {
           hasOverriddenProperties={hasOverriddenProperties}
           hasProperties={hasProperties}
         />
+      )}
+
+      {/* Catalogue Item Information */}
+      {catalogueItem?.uid && (
+        <CatalogueItemSection catalogueItem={catalogueItem} />
       )}
 
       {/* Service Items */}

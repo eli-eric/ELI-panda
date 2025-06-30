@@ -3,6 +3,7 @@ import { type FC } from 'react'
 
 import { Button } from '@/components/Buttons'
 import { Disclosure } from '@/components/ui'
+import { PATH } from '@/types/constants/paths'
 
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
 
@@ -32,7 +33,7 @@ export const OrderInformationSection: FC<OrderInformationSectionProps> = ({
     <Disclosure
       title="Order Information"
       defaultOpen={false}
-      className="w-full border rounded-md"
+      className="w-full border rounded-md overflow-hidden"
       buttonClassName="p-3 bg-green-50 dark:bg-green-900/20"
       panelClassName="px-3 py-3 space-y-2"
       transparentButton={false}
@@ -68,7 +69,10 @@ export const OrderInformationSection: FC<OrderInformationSectionProps> = ({
 
         {/* Link to order detail */}
         <div className="pt-2">
-          <Link href={`/orders/${physicalItem.order.uid}`} target="_blank">
+          <Link
+            href={`${PATH.ORDER}/${physicalItem.order.uid}`}
+            target="_blank"
+          >
             <Button className="w-full justify-center text-sm py-2 bg-green-100 dark:bg-green-900/30 hover:bg-green-200 dark:hover:bg-green-900/50">
               View Order Details
             </Button>
