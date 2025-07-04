@@ -1,10 +1,10 @@
-import Link from 'next/link'
 import type { FC } from 'react'
 
-import { LinkDecorator } from '@/components/decorators'
 import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useSystemList } from '@/hooks/graphql/useSystemList'
 import { useEmployeeList } from '@/hooks/useEmployeeList'
+
+import { SystemLink } from './SystemLink.comp'
 
 type LocationInfoProps = {
   locationCode?: string
@@ -39,12 +39,17 @@ export const LocationInfo: FC<LocationInfoProps> = ({ locationCode }) => {
             Related Systems:
           </h1>
           {systems.data?.systems.map(system => (
-            <Link href={`/system/${system.uid}`} key={system.uid}>
-              <LinkDecorator className="flex justify-between">
-                <p>{system.name}</p>
-                <p>{system.systemCode}</p>
-              </LinkDecorator>
-            </Link>
+            <SystemLink
+              href={`/system/${system.uid}`}
+              key={system.uid}
+              variant="button"
+              className="flex justify-between w-full px-3 py-2"
+            >
+              <span>{system.name}</span>
+              <span className="text-gray-500 dark:text-gray-400">
+                {system.systemCode}
+              </span>
+            </SystemLink>
           ))}
         </div>
       )}

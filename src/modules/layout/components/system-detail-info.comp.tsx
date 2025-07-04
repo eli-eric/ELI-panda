@@ -8,6 +8,7 @@ import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 
 import { CatalogueItemSection } from './sections/CatalogueItemSection.comp'
 import { ItemPropertiesSection } from './sections/ItemPropertiesSection.comp'
+import { NotFound } from './sections/NotFound'
 import { OrderInformationSection } from './sections/OrderInformationSection.comp'
 import { PhysicalItemSection } from './sections/PhysicalItemSection.comp'
 import { ServiceItemsSection } from './sections/ServiceItemsSection.comp'
@@ -49,6 +50,11 @@ export const SystemDetailInfo: FC<Props> = ({ alias }) => {
     )
   }
 
+  // Check if no system was found (not loading, no error, but no systemDetail)
+  if (!systemDetail) {
+    return <NotFound code={alias || 'Unknown System Code'} />
+  }
+
   return (
     <div className="space-y-4">
       {/* Image Gallery */}
@@ -73,6 +79,8 @@ export const SystemDetailInfo: FC<Props> = ({ alias }) => {
         </div>
       )}
 
+      {/* System Hierarchy */}
+      {systemDetail && <SystemHierarchySection systemDetail={systemDetail} />}
       {/* System Information */}
       {systemDetail && <SystemInformationSection systemDetail={systemDetail} />}
 
@@ -96,9 +104,6 @@ export const SystemDetailInfo: FC<Props> = ({ alias }) => {
       {serviceItems.length > 0 && (
         <ServiceItemsSection serviceItems={serviceItems} />
       )}
-
-      {/* System Hierarchy */}
-      {systemDetail && <SystemHierarchySection systemDetail={systemDetail} />}
 
       {/* Order Information */}
       {physicalItem && <OrderInformationSection physicalItem={physicalItem} />}

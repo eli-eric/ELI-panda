@@ -1,9 +1,6 @@
-import Link from 'next/link'
 import { type FC } from 'react'
 
-import { Button } from '@/components/Buttons'
 import { Disclosure } from '@/components/ui'
-import { PATH } from '@/types/constants/paths'
 
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
 
@@ -68,17 +65,6 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
               </div>
             </div>
           )}
-      </div>
-
-      <div className="pt-2">
-        <Link
-          href={`${PATH.SYSTEM}/${systemDetail.uid}#spare-parts`}
-          target="_blank"
-        >
-          <Button className="w-full justify-center text-sm py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
-            Manage Spare Parts
-          </Button>
-        </Link>
       </div>
     </Disclosure>
   )

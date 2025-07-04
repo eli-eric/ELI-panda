@@ -1,5 +1,7 @@
 import type { FC } from 'react'
 
+import { cx } from '@/utils'
+
 type Props = {
   title: string
   value?: string | null
@@ -16,7 +18,12 @@ export const SystemDetailParameter: FC<Props> = ({
   unit
 }) => {
   return (
-    <div className="flex justify-between text-xs">
+    <div
+      className={cx(
+        'flex justify-between text-xs px-2 py-1 rounded-md transition-colors duration-200',
+        'hover:bg-gray-300/50 dark:hover:bg-gray-600'
+      )}
+    >
       <span className="font-medium text-gray-600 dark:text-gray-400">
         {title}:
       </span>

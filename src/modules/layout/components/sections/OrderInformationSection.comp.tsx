@@ -1,11 +1,10 @@
-import Link from 'next/link'
 import { type FC } from 'react'
 
-import { Button } from '@/components/Buttons'
 import { Disclosure } from '@/components/ui'
 import { PATH } from '@/types/constants/paths'
 
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
+import { SystemLink } from '../SystemLink.comp'
 
 interface OrderInformationSectionProps {
   physicalItem: {
@@ -39,14 +38,10 @@ export const OrderInformationSection: FC<OrderInformationSectionProps> = ({
       transparentButton={false}
     >
       <div className="grid grid-cols-1 gap-2 text-sm">
-        <div className="flex justify-between items-center">
-          <span className="text-gray-600 dark:text-gray-400">Order:</span>
-          <Link href={`/orders/${physicalItem.order.uid}`} target="_blank">
-            <span className="text-blue-600 dark:text-blue-400 hover:underline text-xs">
-              {physicalItem.order.name}
-            </span>
-          </Link>
-        </div>
+        <SystemDetailParameter
+          title="Order Name"
+          value={physicalItem.order.name || 'N/A'}
+        />
         <SystemDetailParameter
           title="Order Date"
           value={
@@ -69,14 +64,9 @@ export const OrderInformationSection: FC<OrderInformationSectionProps> = ({
 
         {/* Link to order detail */}
         <div className="pt-2">
-          <Link
-            href={`${PATH.ORDER}/${physicalItem.order.uid}`}
-            target="_blank"
-          >
-            <Button className="w-full justify-center text-sm py-2 bg-green-100 dark:bg-green-900/30 hover:bg-green-200 dark:hover:bg-green-900/50">
-              View Order Details
-            </Button>
-          </Link>
+          <SystemLink href={`${PATH.ORDER}/${physicalItem.order.uid}`} external>
+            View Order Details
+          </SystemLink>
         </div>
       </div>
     </Disclosure>
