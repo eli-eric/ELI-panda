@@ -1,10 +1,10 @@
-import Link from 'next/link'
 import { type FC } from 'react'
 
-import { Button } from '@/components/Buttons'
 import { Disclosure } from '@/components/ui'
 import { getColorBySystemLevel } from '@/modules/systemItem/utils'
 import { PATH } from '@/types/constants/paths'
+
+import { SystemLink } from '../SystemLink.comp'
 
 interface SubsystemsSectionProps {
   systemDetail: any
@@ -29,15 +29,13 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
         {systemDetail.subSystems.map((subsystem: any) => (
           <div
             key={subsystem.uid}
-            className={`p-2 rounded border ${getColorBySystemLevel(subsystem.systemLevel || undefined)}`}
+            className={`p-3 rounded border transition-colors duration-200 hover:bg-gray-50 dark:hover:bg-gray-800/50 ${getColorBySystemLevel(subsystem.systemLevel || undefined)}`}
           >
             <div className="flex justify-between items-start">
               <div className="flex-1">
-                <Link href={`${PATH.SYSTEM}/${subsystem.uid}`} target="_blank">
-                  <span className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline">
-                    {subsystem.name}
-                  </span>
-                </Link>
+                <SystemLink href={`${PATH.SYSTEM}/${subsystem.uid}`} external>
+                  {subsystem.name}
+                </SystemLink>
                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                   {subsystem.location?.name && (
                     <span>📍 {subsystem.location.name}</span>
@@ -70,14 +68,14 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
       </div>
 
       <div className="pt-2">
-        <Link
+        <SystemLink
           href={`${PATH.SYSTEM}/${systemDetail.uid}#subsystems`}
-          target="_blank"
+          external
+          variant="button"
+          className="w-full justify-center text-sm py-2"
         >
-          <Button className="w-full justify-center text-sm py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
-            View All Subsystems
-          </Button>
-        </Link>
+          View All Subsystems
+        </SystemLink>
       </div>
     </Disclosure>
   )

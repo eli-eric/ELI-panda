@@ -233,7 +233,7 @@ export const useSystemsColumns = ({
         header: 'Part Number',
         accessorFn: row => row.physicalItem?.catalogueItem?.catalogueNumber,
         id: 'physicalItem.catalogueItem.partNumber',
-        size: 150
+        size: 200
       },
       {
         header: 'Catalogue Description',
@@ -265,17 +265,25 @@ export const useSystemsColumns = ({
         header: 'Supplier',
         accessorFn: row => row.physicalItem?.catalogueItem?.supplier?.name,
         id: 'physicalItem.catalogueItem.supplier',
-        size: 150
+        cell: ({ getValue }) => (
+          <Tooltip content={getValue()}>
+            <div>{truncateString(getValue(), 17)}</div>
+          </Tooltip>
+        ),
+        size: 200
       },
       {
         header: 'Order Number',
-        accessorFn: row => row.physicalItem?.orderNumber,
-        cell: ({ getValue, row: { original } }) => (
-          <NewTabLink
-            href={PATH.ORDER + '/' + original.physicalItem?.orderUid}
-            value={getValue()}
-          />
-        ),
+        accessorFn: row => row.physicalItem?.orderUid,
+        cell: ({ getValue, row: { original } }) => {
+          if (!getValue()) return null
+          return (
+            <NewTabLink
+              href={PATH.ORDER + '/' + getValue()}
+              value={original.physicalItem?.orderNumber || 'Order ->'}
+            />
+          )
+        },
         id: 'physicalItem.orderNumber',
         size: 150
       }

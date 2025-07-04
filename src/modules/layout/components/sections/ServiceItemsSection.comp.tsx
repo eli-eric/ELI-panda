@@ -1,11 +1,10 @@
-import Link from 'next/link'
 import { type FC, Fragment } from 'react'
 
-import { Button } from '@/components/Buttons'
 import { Disclosure } from '@/components/ui'
 import { PATH } from '@/types/constants/paths'
 
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
+import { SystemLink } from '../SystemLink.comp'
 
 interface ServiceItemsSectionProps {
   serviceItems: any[]
@@ -39,14 +38,13 @@ export const ServiceItemsSection: FC<ServiceItemsSectionProps> = ({
                   <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
                     Order:
                   </span>
-                  <Link
+                  <SystemLink
                     href={`/orders/${serviceItem.order.uid}`}
-                    target="_blank"
+                    external
+                    className="text-xs"
                   >
-                    <span className="text-blue-600 dark:text-blue-400 hover:underline text-xs">
-                      {serviceItem.order.name}
-                    </span>
-                  </Link>
+                    {serviceItem.order.name}
+                  </SystemLink>
                 </div>
                 <SystemDetailParameter
                   title="Order Date"
@@ -103,11 +101,14 @@ export const ServiceItemsSection: FC<ServiceItemsSectionProps> = ({
             )}
 
             <div className="pt-2">
-              <Link href={`${PATH.SERVICE}/${serviceItem.uid}`} target="_blank">
-                <Button className="w-full justify-center text-sm py-2 bg-blue-100 dark:bg-blue-900/30 hover:bg-blue-200 dark:hover:bg-blue-900/50">
-                  View Service Details
-                </Button>
-              </Link>
+              <SystemLink
+                href={`${PATH.SERVICE}/${serviceItem.uid}`}
+                external
+                variant="button"
+                className="w-full justify-center text-sm py-2"
+              >
+                View Service Details
+              </SystemLink>
             </div>
           </Disclosure>
         )

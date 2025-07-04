@@ -1,10 +1,9 @@
-import Link from 'next/link'
 import { type FC } from 'react'
 
-import { Button } from '@/components/Buttons'
 import { Disclosure } from '@/components/ui'
 
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
+import { SystemLink } from '../SystemLink.comp'
 
 interface CatalogueItemSectionProps {
   catalogueItem: any
@@ -54,11 +53,9 @@ export const CatalogueItemSection: FC<CatalogueItemSectionProps> = ({
       </div>
 
       <div className="pt-2">
-        <Link href={`/catalogue/item/${catalogueItem.uid}`} target="_blank">
-          <Button className="w-full justify-center text-sm py-2" primary>
-            Open Catalogue Item Detail
-          </Button>
-        </Link>
+        <SystemLink href={`/catalogue/item/${catalogueItem.uid}`} external>
+          Open Catalogue Item Detail
+        </SystemLink>
       </div>
     </Disclosure>
   )

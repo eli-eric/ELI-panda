@@ -4,7 +4,6 @@ import { toast } from 'react-hot-toast'
 
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
-import { PATH } from '@/types/constants/paths'
 import { gql, useFragment } from '@/types/gql'
 import {
   CatalogueItemFragment,
@@ -54,9 +53,9 @@ export const useSystemDetail = (
   )
 
   useEffect(() => {
-    if (data?.systems.length === 0) {
-      router.push(PATH.NOT_FOUND)
-    }
+    // if (data?.systems.length === 0) {
+    //   router.push(PATH.NOT_FOUND)
+    // }
     if (error) {
       toast.error('Failed to fetch system detail')
     }

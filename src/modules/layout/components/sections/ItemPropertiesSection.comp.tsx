@@ -41,30 +41,37 @@ export const ItemPropertiesSection: FC<ItemPropertiesSectionProps> = ({
             </h4>
           )}
           <div className="grid grid-cols-1 gap-2 text-sm">
-            {group.properties.map((property: any) => {
-              const displayValue =
-                property.serviceValue ?? property.value ?? 'N/A'
-              const isOverridden = property.isOverridden
-
-              return (
-                <SystemDetailParameter
-                  key={property.uid}
-                  title={property.name}
-                  value={displayValue}
-                  className={
-                    isOverridden
-                      ? 'text-red-600 dark:text-red-400 font-medium'
-                      : undefined
-                  }
-                  unit={property.unit}
-                  additionalInfo={
-                    isOverridden && property.value
-                      ? `Original: ${property.value}${property.unit ? ` [${property.unit}]` : ''}`
-                      : undefined
-                  }
-                />
+            {group.properties
+              .sort((a: any, b: any) =>
+                (a.name || '').localeCompare(b.name || '', 'cs', {
+                  numeric: true,
+                  sensitivity: 'base'
+                })
               )
-            })}
+              .map((property: any) => {
+                const displayValue =
+                  property.serviceValue ?? property.value ?? 'N/A'
+                const isOverridden = property.isOverridden
+
+                return (
+                  <SystemDetailParameter
+                    key={property.uid}
+                    title={property.name}
+                    value={displayValue}
+                    className={
+                      isOverridden
+                        ? 'text-red-600 dark:text-red-400 font-medium'
+                        : undefined
+                    }
+                    unit={property.unit}
+                    additionalInfo={
+                      isOverridden && property.value
+                        ? `Original: ${property.value}${property.unit ? ` [${property.unit}]` : ''}`
+                        : undefined
+                    }
+                  />
+                )
+              })}
           </div>
         </div>
       ))}

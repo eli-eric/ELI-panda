@@ -1,4 +1,4 @@
-import { Disclosure } from '@headlessui/react'
+import { Disclosure, DisclosureButton } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react'
 
@@ -16,7 +16,7 @@ const DisclosureComponent = ({ title, children, defaultOpen }: Props) => (
       {({ open }) => (
         <Fragment>
           <h3>
-            <Disclosure.Button className="group relative flex w-full items-center justify-between py-6 text-left">
+            <DisclosureButton className="group relative flex w-full items-center justify-between py-6 text-left">
               <span
                 className={cx(
                   'text-sm font-medium',
@@ -38,7 +38,7 @@ const DisclosureComponent = ({ title, children, defaultOpen }: Props) => (
                   />
                 )}
               </span>
-            </Disclosure.Button>
+            </DisclosureButton>
           </h3>
           <Disclosure.Panel as="div" className="pb-6">
             {children}

@@ -1,12 +1,11 @@
-import Link from 'next/link'
 import { type FC } from 'react'
 
-import { Button } from '@/components/Buttons'
 import { Disclosure } from '@/components/ui'
 import { getColorBySystemLevel } from '@/modules/systemItem/utils'
 import type { SystemLevel } from '@/types/gql/graphql'
 
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
+import { SystemLink } from '../SystemLink.comp'
 
 interface SystemInformationSectionProps {
   systemDetail: any
@@ -65,13 +64,9 @@ export const SystemInformationSection: FC<SystemInformationSectionProps> = ({
         )}
       </div>
 
-      <div className="pt-2">
-        <Link href={`/system/${systemDetail.uid}`} target="_blank">
-          <Button className="w-full justify-center text-sm py-2" primary>
-            Open System Detail
-          </Button>
-        </Link>
-      </div>
+      <SystemLink href={`/system/${systemDetail.uid}`} external={true}>
+        Open System Detail
+      </SystemLink>
     </Disclosure>
   )
 }
