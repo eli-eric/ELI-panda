@@ -7,7 +7,7 @@ import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import { PATH } from '@/types/constants/paths'
 import type { SystemDetail } from '@/types/responses/systems'
-import { cx } from '@/utils'
+import { cx, truncateString } from '@/utils'
 
 import { IconCell } from '../systems/components/table/cells/IconCell'
 import { SystemNameCell } from '../systems/components/table/cells/SystemNameCell'
@@ -270,7 +270,7 @@ export const useMoveSystemsColumns = ({ tableId }: SystemsColumnsProps) => {
         header: 'Part Number',
         accessorFn: row => row.physicalItem?.catalogueItem?.catalogueNumber,
         id: 'partNumber',
-        size: 150
+        size: 200
       },
       {
         header: 'Catalogue Description',
@@ -291,12 +291,33 @@ export const useMoveSystemsColumns = ({ tableId }: SystemsColumnsProps) => {
         header: 'Catalogue Category',
         accessorFn: row => row.physicalItem?.catalogueItem?.category?.name,
         id: 'catalogueCategory',
+        cell: ({ getValue }) => (
+          <Tooltip content={getValue()}>
+            <div>{truncateString(getValue(), 17)}</div>
+          </Tooltip>
+        ),
         size: 170
       },
       {
         header: 'Supplier',
         accessorFn: row => row.physicalItem?.catalogueItem?.supplier?.name,
         id: 'supplier',
+
+        size: 150
+      },
+      {
+        header: 'Order',
+        accessorFn: row => row.physicalItem?.orderUid,
+        cell: ({ getValue, row: { original } }) => {
+          if (!getValue()) return null
+          return (
+            <NewTabLink
+              href={PATH.ORDER + '/' + getValue()}
+              value={original.physicalItem?.orderNumber || 'Order ->'}
+            />
+          )
+        },
+        id: 'physicalItem.orderNumber',
         size: 150
       }
     ],

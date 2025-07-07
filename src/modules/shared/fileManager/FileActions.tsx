@@ -78,6 +78,7 @@ export const FileActions = ({
           toast.error(`Failed to delete file: ${error}`)
         })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file, deleteLink, itemType, uid, handleDeleteSuccess, queryClient])
 
   const handleDeleteWithConfirmation = useCallback(() => {

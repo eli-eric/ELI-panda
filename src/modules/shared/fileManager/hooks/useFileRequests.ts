@@ -16,7 +16,6 @@ export const useFileRequests = ({ itemType, uid }) => {
   >([])
 
   const onDrop = useCallback(async (files: File[]) => {
-    console.log('onDrop - called')
     const updatedFiles = await Promise.all(
       files.map(
         file =>
@@ -40,7 +39,6 @@ export const useFileRequests = ({ itemType, uid }) => {
   }, [])
 
   const handlePost = useCallback(() => {
-    console.log('handlePost - called')
     const fileLoading = newFile.map(() => true)
     setLoading(fileLoading)
     newFile.forEach((file, index) => {

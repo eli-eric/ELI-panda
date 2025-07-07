@@ -64,6 +64,7 @@ export const HeaderAddButton = ({
     try {
       setEmployeeUid(value ? value.uid : null)
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error selecting employee:', error)
       toast.error('Failed to select employee')
     }
@@ -92,6 +93,7 @@ export const HeaderAddButton = ({
       setEmployeeUid(null)
       setIsModalOpen(false)
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Error adding employee:', error)
       toast.error('Failed to add employee')
     } finally {

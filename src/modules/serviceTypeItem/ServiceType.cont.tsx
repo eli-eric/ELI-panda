@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import type { FC } from 'react'
 import { useForm } from 'react-hook-form'
-import { useState, useRef } from 'react'
 
 import { Form } from '@/components/form/Form'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'

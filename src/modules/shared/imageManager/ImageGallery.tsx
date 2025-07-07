@@ -1,4 +1,4 @@
-import { Tab } from '@headlessui/react'
+import { TabGroup } from '@headlessui/react'
 import { useQuery } from '@tanstack/react-query'
 import {
   forwardRef,
@@ -118,11 +118,11 @@ export const ImageGallery = forwardRef(
             {...getRootProps()}
             className={cx(
               'flex flex-col rounded-md',
-              isDragActive && 'border-2 border-orange-600 sm:max-h-14',
+              isDragActive && ' border-orange-600 sm:max-h-14',
               className
             )}
           >
-            <Tab.Group key={JSON.stringify(data)}>
+            <TabGroup key={JSON.stringify(data)}>
               {({ selectedIndex }) => (
                 <Fragment>
                   <ImageTabList
@@ -140,10 +140,11 @@ export const ImageGallery = forwardRef(
                     data={data}
                     getRootProps={getRootProps}
                     open={open}
+                    canEdit={hasEditRole}
                   />
                 </Fragment>
               )}
-            </Tab.Group>
+            </TabGroup>
           </div>
         )}
       </Fragment>

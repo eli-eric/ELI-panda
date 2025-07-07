@@ -54,9 +54,6 @@ export const useSystemDetail = (
   )
 
   useEffect(() => {
-    if (data?.systems.length === 0) {
-      router.push(PATH.NOT_FOUND)
-    }
     if (error) {
       toast.error('Failed to fetch system detail')
     }

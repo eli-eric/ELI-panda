@@ -5,8 +5,8 @@ import type { ServiceLineFormType } from '@/modules/orderItem/types/form'
 import { FormWizard } from '@/modules/shared/form/wizardV2/wizard-form.cont'
 import useTableStateStore from '@/store/useTableStateStore'
 
-import { useServiceLineSteps } from './hooks/useServiceLineSteps'
 import { useServiceLineSelectionStore } from './details/store/useServiceLineSelectionStore'
+import { useServiceLineSteps } from './hooks/useServiceLineSteps'
 
 type Props = {
   setOpen: (open: boolean) => void

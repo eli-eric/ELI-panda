@@ -3,7 +3,7 @@ import '../styles/globals.css'
 import { HydrationBoundary, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
-import { lazy, Suspense, useEffect } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { Toaster } from 'react-hot-toast'
@@ -26,7 +26,7 @@ const ReactQueryDevtoolsProduction = lazy(() =>
 )
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
-  const queryClient = getQueryClient()
+  const [queryClient] = useState(() => getQueryClient())
 
   const setStoredTheme = useDarkModeStore(state => state.setStoredTheme)
 

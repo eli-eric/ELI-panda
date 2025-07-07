@@ -36,7 +36,6 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
   const formMethods = useForm<ServiceLine>()
 
   const submit = (data: ServiceLine) => {
-    console.log('data', data)
     setServiceLine({
       ...data,
       details: Array.isArray(data.details) ? data.details : []

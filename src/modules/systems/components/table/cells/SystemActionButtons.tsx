@@ -1,7 +1,4 @@
-import { useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
-import toast from 'react-hot-toast'
-import { useIntl } from 'react-intl'
 
 import {
   TableActionsButtons,
@@ -11,20 +8,12 @@ import {
   TableOpenButton,
   TablePlusButton
 } from '@/components/Buttons'
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
-import { useSubmit } from '@/hooks/fetch/useSubmit'
-import useWarningModal from '@/hooks/useWarningModal'
-import { message } from '@/i18n/src/messages'
 import { GraphModalTableButton } from '@/modules/shared/system/GraphModalButton'
-import { useRecalculate } from '@/modules/systemItem/hooks/useRecalculate'
-import { filterSubsystem } from '@/modules/systems/utils'
+import { useSystemDelete } from '@/modules/systems/hooks/useSystemDelete'
 import { ShowSpareButton } from '@/modules/systemsSpareParts/components/ShowSpareButton'
 import { PATH } from '@/types/constants/paths'
-import type { SystemDetail, SystemsResponse } from '@/types/responses/systems'
-import { createMessageValues } from '@/utils/formatters'
+import type { SystemDetail } from '@/types/responses/systems'
 import type { EndpointProps } from '@/utils/getEndpoints'
-
-const messages = message.systemsPage.systemDetail.deleteModal
 
 interface Props {
   hideButtons?: boolean
@@ -47,42 +36,14 @@ export const SystemActionButtons = ({
   canEdit,
   queryKey
 }: Props) => {
-  const { system } = useEndpoint({ uid: original.uid })
+  const { deleteSystem } = useSystemDelete({
+    system: original,
+    queryKey
+  })
 
-  const queryClient = useQueryClient()
-
-  const onRecalculateFinish = () => {
-    toast.success(`System ${original.name} deleted`)
-    if (queryKey) {
-      queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
-        if (prev) {
-          return filterSubsystem(original.uid, prev)
-        }
-        return prev
-      })
-    }
+  const handleDelete = () => {
+    deleteSystem()
   }
-
-  const [relcalculate] = useRecalculate({
-    onSuccess: onRecalculateFinish
-  })
-
-  const { formatMessage: fm } = useIntl()
-  const { submit } = useSubmit<string>({
-    endpoint: system,
-    method: 'delete',
-    onSuccess: () => {
-      relcalculate(null)
-    },
-    onError: () => {
-      toast.error(`Error deleting system ${original.name}`)
-    }
-  })
-
-  const withWarningModal = useWarningModal(
-    fm({ id: messages.message }, createMessageValues({ name: original.name }))
-  )
-
   return (
     <>
       {!hideButtons && (
@@ -92,11 +53,7 @@ export const SystemActionButtons = ({
               <Link href={PATH.SYSTEM + '/' + original.uid} target="_blank">
                 {canEdit ? <TableEditButton /> : <TableOpenButton />}
               </Link>
-              <TableDeleteButton
-                onClick={() => {
-                  withWarningModal(submit)()
-                }}
-              />
+              <TableDeleteButton onClick={handleDelete} />
               <Link
                 href={{
                   pathname: PATH.SYSTEM,
@@ -115,9 +72,7 @@ export const SystemActionButtons = ({
             </TableButtonsWrapper>
           ) : (
             <TableActionsButtons
-              onDeleteClick={() => {
-                withWarningModal(submit)()
-              }}
+              onDeleteClick={handleDelete}
               addLink={{
                 pathname: PATH.SYSTEM,
                 query: { parentUid: original.uid }

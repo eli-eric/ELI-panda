@@ -32,6 +32,7 @@ export const CellWithDelete = ({
       (field: any) => field?.uid === uid ?? field?.uuid === uuid
     )
     return { index, item }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fields, uid, uuid, name])
 
   // Optimize the delete handler

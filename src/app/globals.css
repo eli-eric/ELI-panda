@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+@layer components {
+  .privacy-container {
+    @apply max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8;
+  }
+
+  .privacy-header {
+    @apply text-center mb-12;
+  }
+
+  .privacy-title {
+    @apply text-4xl font-bold text-gray-900 mb-4;
+  }
+
+  .privacy-subtitle {
+    @apply text-lg text-gray-600 max-w-2xl mx-auto;
+  }
+
+  .privacy-section {
+    @apply mb-8 bg-white rounded-lg shadow-sm border p-6;
+  }
+
+  .privacy-section-title {
+    @apply text-2xl font-semibold text-gray-900 mb-4;
+  }
+
+  .privacy-content {
+    @apply text-gray-700 leading-relaxed;
+  }
+
+  .privacy-list {
+    @apply space-y-2 text-gray-700;
+  }
+
+  .privacy-list-item {
+    @apply flex items-start;
+  }
+
+  .privacy-list-bullet {
+    @apply w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0;
+  }
+
+  .privacy-footer {
+    @apply mt-12 pt-8 border-t border-gray-200 text-center text-sm text-gray-500;
+  }
+}
