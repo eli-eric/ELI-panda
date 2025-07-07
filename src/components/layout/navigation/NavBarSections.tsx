@@ -94,7 +94,7 @@ export const MainNavigation: FC<MainNavigationProps> = ({
                 isExpanded={isExpanded}
                 Icon={item.Icon}
                 text={item.name}
-                isActive={pathName.startsWith(item.link || '')}
+                isActive={pathName?.startsWith(item.link || '')}
               />
             </AccessControl>
           )
@@ -123,7 +123,7 @@ export const UserSection: FC<UserSectionProps> = ({ setOpen, isExpanded }) => {
           <NavBarLink
             setOpen={setOpen}
             href={item.link}
-            isActive={pathName.startsWith(item.link || '')}
+            isActive={pathName?.startsWith(item.link || '')}
             isExpanded={isExpanded}
             Icon={item.Icon}
             text={item.name}
