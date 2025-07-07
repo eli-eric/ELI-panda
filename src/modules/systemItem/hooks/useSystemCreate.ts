@@ -1,10 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { useSession } from 'next-auth/react'
-import type { MutableRefObject } from 'react'
-import { toast } from 'react-hot-toast'
+import { type MutableRefObject, useCallback } from 'react'
+import { useIntl } from 'react-intl'
 
 import { useGraphQLMutation } from '@/hooks/fetch/useGraphQL'
+import { message } from '@/i18n/src/messages'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import { addSubsystem } from '@/modules/systems/utils'
@@ -16,6 +17,13 @@ import { connectN, whereC, whereN } from '@/utils/graphql/mutations'
 
 import { useSystemItemStore } from '../store/useSystemItemStore'
 import type { SystemDetailFormType } from '../types/form'
+import {
+  combineAndDeduplicateUsers,
+  createConnections,
+  showErrorToast,
+  showSuccessToast,
+  validateSystemForm
+} from '../utils/hookHelpers'
 
 const createSystemMutation = gql(`
   mutation CreateSystems($input: [SystemCreateInput!]!) {
@@ -30,180 +38,142 @@ const createSystemMutation = gql(`
 export const useSystemCreate = (
   imageRef?: MutableRefObject<ImageGalleryRef | undefined>
 ) => {
+  const intl = useIntl()
   const router = useRouter()
   const { queryKey, refetch } = useSystems('systems')
   const queryClient = useQueryClient()
   const parentUid = router.query.parentUid as string | undefined
   const { data: session } = useSession()
 
-  // Get access to the store for operators and maintainedBy
   const {
     newOperators,
     newMaintainedBy,
     clear: clearStore
   } = useSystemItemStore()
 
-  const onCompleted = (
-    { createSystems: { systems } },
-    saveAndExit?: boolean
-  ) => {
-    const responseUid = systems[0].uid
-    const body = systems[0]
-
-    // Clear the store after successful creation
-    clearStore()
-
-    if (imageRef?.current) {
-      try {
-        imageRef.current.submit(responseUid, () => {
-          toast.success(`System ${body.name} was saved successfully`)
-
-          if (parentUid) {
-            queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
-              if (prev) {
-                return addSubsystem(parentUid, body, prev)
-              }
-              return prev
-            })
-          } else {
-            refetch()
-          }
-
-          // Comment out navigation to see the payload
-          if (saveAndExit) {
-            toast.success(
-              'Would navigate back, but staying on page to see payload'
-            )
-            navigateBack()
-          } else {
-            toast.success(
-              `Would navigate to /system/${responseUid}, but staying on page to see payload`
-            )
-            router.replace(`/system/${responseUid}`)
-          }
-        })
-      } catch (error) {
-        toast.success(
-          `System ${body.name} was saved successfully, but images could not be uploaded.`
-        )
-
-        // Comment out navigation to see the payload
-        if (saveAndExit) {
-          toast.success(
-            'Would navigate back, but staying on page to see payload'
-          )
-          navigateBack()
-        } else {
-          toast.success(
-            `Would navigate to /system/${responseUid}, but staying on page to see payload`
-          )
-          router.replace(`/system/${responseUid}`)
-        }
+  // Handle navigation logic
+  const handleNavigation = useCallback(
+    (responseUid: string, saveAndExit?: boolean) => {
+      if (saveAndExit) {
+        navigateBack()
+      } else {
+        router.replace(`/system/${responseUid}`)
       }
-    } else {
-      toast.success(`System ${body.name} was saved successfully`)
+    },
+    [router]
+  )
 
+  // Handle cache updates
+  const handleCacheUpdate = useCallback(
+    (body: any) => {
       if (parentUid) {
         queryClient.setQueryData<SystemsResponse>(queryKey, prev => {
-          if (prev) {
-            return addSubsystem(parentUid, body, prev)
-          }
-          return prev
+          return prev ? addSubsystem(parentUid, body, prev) : prev
         })
       } else {
         refetch()
       }
-
-      // Comment out navigation to see the payload
-      if (saveAndExit) {
-        toast.success('Would navigate back, but staying on page to see payload')
-        navigateBack()
-      } else {
-        toast.success(
-          `Would navigate to /system/${responseUid}, but staying on page to see payload`
-        )
-        router.replace(`/system/${responseUid}`)
-      }
-    }
-  }
-
-  const { mutate: create, isPending } = useGraphQLMutation(
-    createSystemMutation,
-    {
-      onError: error => {
-        toast.error('Something went wrong: ' + error.message)
-      }
-    }
+    },
+    [parentUid, queryClient, queryKey, refetch]
   )
 
-  const createSystem = function (
-    systemForm: SystemDetailFormType,
-    saveAndExit?: boolean
-  ) {
-    try {
-      // Check if required fields are provided
-      if (!systemForm.name) {
-        toast.error('System name is required')
+  // Handle success completion
+  const handleSuccess = useCallback(
+    (responseUid: string, body: any, saveAndExit?: boolean) => {
+      showSuccessToast(
+        intl,
+        message.systemsPage.systemDetail.createModal.onSuccess,
+        { name: body.name }
+      )
+      handleCacheUpdate(body)
+      handleNavigation(responseUid, saveAndExit)
+    },
+    [intl, handleCacheUpdate, handleNavigation]
+  )
+
+  // Handle image upload with success/error scenarios
+  const handleImageUpload = useCallback(
+    (responseUid: string, body: any, saveAndExit?: boolean) => {
+      if (!imageRef?.current) {
+        handleSuccess(responseUid, body, saveAndExit)
         return
       }
 
-      // Combine operators from both form and store
-      const formOperators = systemForm?.operators || []
-      const allOperators = [...formOperators, ...newOperators]
-      const uniqueOperators = [
-        ...new Map(allOperators.map(op => [op.uid, op])).values()
-      ]
+      try {
+        imageRef.current.submit(responseUid, () => {
+          handleSuccess(responseUid, body, saveAndExit)
+        })
+      } catch (error) {
+        showSuccessToast(
+          intl,
+          message.systemsPage.systemDetail.createModal.onSuccessWithImageError,
+          { name: body.name }
+        )
+        handleCacheUpdate(body)
+        handleNavigation(responseUid, saveAndExit)
+      }
+    },
+    [intl, imageRef, handleSuccess, handleCacheUpdate, handleNavigation]
+  )
 
-      // Combine maintainedBy from both form and store
-      const formMaintainedBy = systemForm?.maintainedBy || []
-      const allMaintainedBy = [...formMaintainedBy, ...newMaintainedBy]
-      const uniqueMaintainedBy = [
-        ...new Map(allMaintainedBy.map(emp => [emp.uid, emp])).values()
-      ]
+  // Main completion handler
+  const onCompleted = useCallback(
+    ({ createSystems: { systems } }, saveAndExit?: boolean) => {
+      const responseUid = systems[0].uid
+      const body = systems[0]
 
-      // More detailed logging of the entire payload
-      const payload = {
+      clearStore()
+      handleImageUpload(responseUid, body, saveAndExit)
+    },
+    [clearStore, handleImageUpload]
+  )
+
+  // Combine and deduplicate operators and maintainedBy
+  const getCombinedOperators = useCallback(
+    (formOperators: any[] | null | undefined = []) => {
+      return combineAndDeduplicateUsers(formOperators, newOperators)
+    },
+    [newOperators]
+  )
+
+  const getCombinedMaintainedBy = useCallback(
+    (formMaintainedBy: any[] | null | undefined = []) => {
+      return combineAndDeduplicateUsers(formMaintainedBy, newMaintainedBy)
+    },
+    [newMaintainedBy]
+  )
+
+  // Build the mutation payload
+  const buildPayload = useCallback(
+    (systemForm: SystemDetailFormType) => {
+      const uniqueOperators = getCombinedOperators(systemForm.operators)
+      const uniqueMaintainedBy = getCombinedMaintainedBy(
+        systemForm.maintainedBy
+      )
+
+      return {
         input: [
           {
             parentSystem: parentUid
-              ? {
-                  connect: whereN(parentUid)
-                }
+              ? { connect: whereN(parentUid) }
               : undefined,
             name: systemForm.name || '',
-            facility: {
-              connect: whereC(session?.user?.facilityCode)
-            },
+            facility: { connect: whereC(session?.user?.facilityCode) },
             deleted: false,
             description: systemForm.description,
             attribute: connectN(systemForm?.attribute?.uid),
             responsibleTeam: connectN(systemForm?.responsibleTeam?.uid),
-            minimalSpareParstCount: !systemForm.minimalSpareParstCount
-              ? null
-              : Number(systemForm.minimalSpareParstCount),
-            systemCode:
-              systemForm.systemCode === '' ? null : systemForm.systemCode,
+            minimalSpareParstCount: systemForm.minimalSpareParstCount
+              ? Number(systemForm.minimalSpareParstCount)
+              : null,
+            systemCode: systemForm.systemCode || null,
             systemLevel: systemForm?.systemLevel,
             systemType: connectN(systemForm?.systemType?.uid),
             location: connectN(systemForm?.location?.uid),
             zone: connectN(systemForm?.zone?.uid),
             responsible: connectN(systemForm?.responsible?.uid),
-            operators:
-              uniqueOperators.length > 0
-                ? {
-                    connect: uniqueOperators.map(operator => ({
-                      where: { node: { uid: operator.uid } }
-                    }))
-                  }
-                : undefined,
-            maintainedBy:
-              uniqueMaintainedBy.length > 0
-                ? {
-                    connect: uniqueMaintainedBy.map(employee => ({
-                      where: { node: { uid: employee.uid } }
-                    }))
-                  }
-                : undefined,
+            operators: createConnections(uniqueOperators),
+            maintainedBy: createConnections(uniqueMaintainedBy),
             updatedBy: {
               connect: [
                 {
@@ -215,20 +185,56 @@ export const useSystemCreate = (
           }
         ]
       }
+    },
+    [
+      parentUid,
+      session?.user?.facilityCode,
+      session?.user?.uid,
+      getCombinedOperators,
+      getCombinedMaintainedBy
+    ]
+  )
 
-      create(payload, {
-        onSuccess: response => {
-          onCompleted(response, saveAndExit)
-        }
-      })
-    } catch (error: any) {
-      // eslint-disable-next-line no-console
-      console.error('Error creating system:', error)
-      toast.error(
-        `Failed to create system: ${error.message || 'Unknown error'}`
-      )
+  const { mutate: create, isPending } = useGraphQLMutation(
+    createSystemMutation,
+    {
+      onError: error => {
+        showErrorToast(
+          intl,
+          message.systemsPage.systemDetail.createModal.onError,
+          { error: error.message }
+        )
+      }
     }
-  }
+  )
+
+  // Main create system function
+  const createSystem = useCallback(
+    (systemForm: SystemDetailFormType, saveAndExit?: boolean) => {
+      try {
+        if (!validateSystemForm(systemForm, intl)) {
+          return
+        }
+
+        const payload = buildPayload(systemForm)
+
+        create(payload, {
+          onSuccess: response => {
+            onCompleted(response, saveAndExit)
+          }
+        })
+      } catch (error: any) {
+        // eslint-disable-next-line no-console
+        console.error('Error creating system:', error)
+        showErrorToast(
+          intl,
+          message.systemsPage.systemDetail.createModal.onCreateError,
+          { error: error.message || 'Unknown error' }
+        )
+      }
+    },
+    [intl, buildPayload, create, onCompleted]
+  )
 
   return { createSystem, loading: isPending }
 }

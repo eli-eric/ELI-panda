@@ -72,7 +72,6 @@ export const useOrderSubmit = (formReset: (t: any) => void) => {
     }
 
   const submit = (data: OrderDetailFormType, saveAndExit: boolean) => {
-    console.log('data submit order', data)
     mutate(data, {
       onSuccess: handleOnSuccess(saveAndExit)
     })

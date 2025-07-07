@@ -252,6 +252,7 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
     if (!loading && !createLoading) {
       setBlockedEdit(false)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, createLoading])
 
   // Import useSystemItemStore for cleanup
@@ -272,12 +273,14 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
         try {
           formMethods.reset(formMethods.getValues())
         } catch (error) {
+          // eslint-disable-next-line no-console
           console.error('Error resetting form:', error)
         }
       }
     }
 
     return resetForm
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

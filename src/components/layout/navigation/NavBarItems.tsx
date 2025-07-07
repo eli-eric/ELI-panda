@@ -204,7 +204,7 @@ export const NavBarMultiLink: FC<NavBarMultiLinkProps> = ({
         Icon={item.Icon}
         text={item.name}
         isActive={item.links?.some(subItem =>
-          pathName.startsWith(subItem.path)
+          pathName?.startsWith(subItem.path)
         )}
       >
         <ChevronIcon isExpanded={isExpanded} open={expandedItems[item.name]} />
@@ -219,7 +219,7 @@ export const NavBarMultiLink: FC<NavBarMultiLinkProps> = ({
                 href={subItem.path}
                 isExpanded={isExpanded}
                 text={subItem.name}
-                isActive={pathName.startsWith(subItem.path)}
+                isActive={pathName?.startsWith(subItem.path)}
               />
             </AccessControl>
           ))}

@@ -25,7 +25,7 @@ interface TagModalProps {
   onAddTag: (tag: string) => void
 }
 
-const TagModal = ({ isOpen, setIsOpen, file, onAddTag }: TagModalProps) => {
+const TagModal = ({ isOpen, setIsOpen, onAddTag }: TagModalProps) => {
   const [tag, setTag] = useState('')
 
   const modalButtons: ModalButtons = {
@@ -236,6 +236,7 @@ export const useFileColumns = ({
       }
     ]
     return cols
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasEditRole, itemType, uid, handleRemoveTag, handlePut])
 
   return {

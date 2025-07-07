@@ -223,7 +223,32 @@ export const messages = {
       },
       deleteModal: {
         message:
-          'Are you sure you want to delete this {name} and all sub-systems?'
+          'Are you sure you want to delete this {name} and all sub-systems?',
+        onSuccess: 'System {name} deleted successfully.',
+        onConflict:
+          'System {name} cannot be deleted due to existing relationships.',
+        onError:
+          'Something went wrong while deleting system {name}. Please try again later.'
+      },
+      createModal: {
+        onSuccess: 'System {name} was saved successfully',
+        onSuccessWithImageError:
+          'System {name} was saved successfully, but images could not be uploaded.',
+        onError: 'Something went wrong: {error}',
+        onValidationError: 'System name is required',
+        onCreateError: 'Failed to create system: {error}',
+        navigationBack:
+          'Would navigate back, but staying on page to see payload',
+        navigationToSystem:
+          'Would navigate to /system/{uid}, but staying on page to see payload'
+      },
+      updateModal: {
+        onSuccess: 'System saved successfully',
+        onError: 'Something went wrong: {error}',
+        onPropertiesError: 'Failed to update physical Item properties: {error}',
+        navigationBack:
+          'Would navigate back, but staying on page to see payload',
+        reloadPage: 'Would reload page, but staying to see payload'
       }
     },
     itemDetail: {
@@ -447,7 +472,8 @@ export const messages = {
           eun: 'EUN',
           isDelivered: 'Delivered',
           serialNumber: 'Serial Number',
-          notes: 'Notes'
+          notes: 'Notes',
+          service: 'Last Service'
         }
       },
       deleteModal: {

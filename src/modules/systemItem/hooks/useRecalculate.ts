@@ -15,7 +15,7 @@ export const useRecalculate = ({
 }) => {
   const [reloadSystems] = useSystemsReload({ tableId, onSuccess })
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: queryMutate<SystemsResponse, any>(
       'recalculateSpareParts',
       'post'
@@ -28,5 +28,5 @@ export const useRecalculate = ({
     }
   })
 
-  return [mutate]
+  return [mutate, isPending] as const
 }

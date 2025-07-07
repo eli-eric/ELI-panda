@@ -142,7 +142,7 @@ export interface TableBodyProps<T extends object> {
 }
 
 export interface TablePaginationProps<T extends object> {
-  table: any
+  table: Table<T>
 }
 
 export interface TableFooterProps<T extends object> {
