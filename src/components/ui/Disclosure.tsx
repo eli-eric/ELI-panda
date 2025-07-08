@@ -72,7 +72,7 @@ export const Disclosure = ({
       {({ open }) => (
         <div className={cx(`flex flex-col ${className}`)}>
           <HeadlessDisclosure.Button
-            className={cx(`${defaultButtonClasses} ${buttonClassName}`)}
+            className={cx(defaultButtonClasses, buttonClassName)}
             onClick={() => {
               handleToggle(!open)
             }}

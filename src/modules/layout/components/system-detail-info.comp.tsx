@@ -8,6 +8,7 @@ import { useDeviceInfo } from '@/modules/systemItem/hooks/useDeviceInfo'
 
 import { ItemPropertiesSection } from './sections/ItemPropertiesSection.comp'
 import { NotFound } from './sections/NotFound'
+import { OrderInformationSection } from './sections/OrderInformationSection.comp'
 import { PhysicalItemSection } from './sections/PhysicalItemSection.comp'
 import { SubsystemsSection } from './sections/SubsystemsSection.comp'
 import { SystemHierarchySection } from './sections/SystemHierarchySection.comp'
@@ -99,11 +100,16 @@ export const SystemDetailInfo: FC<Props> = ({ alias, uid }) => {
 
       {/* {serviceItems.length > 0 && (
         <ServiceItemsSection serviceItems={serviceItems} />
+      )} */}
+
+      {physicalItem && (
+        <OrderInformationSection
+          physicalItem={physicalItem}
+          serviceItems={serviceItems}
+        />
       )}
 
-      {physicalItem && <OrderInformationSection physicalItem={physicalItem} />}
-
-      {systemDetail && (
+      {/* {systemDetail && (
         <SparePartsCoverageSection systemDetail={systemDetail} />
       )} */}
 

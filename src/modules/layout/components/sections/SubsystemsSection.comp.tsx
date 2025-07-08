@@ -25,21 +25,23 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
     const columns: ColumnDef<TableSystem, any>[] = [
       {
         id: 'icon',
-        size: 10,
-        header: 'Icon',
+        meta: {
+          noHeader: true
+        },
         cell: ({
           row: {
-            original: { physicalItem }
+            original: { physicalItem, name }
           }
         }) => (
-          <IconCell itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE} />
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4">
+              <IconCell
+                itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE}
+              />
+            </div>
+            <span>{name}</span>
+          </div>
         )
-      },
-      {
-        header: 'System Name',
-        accessorKey: 'name',
-        id: 'name',
-        size: 200
       }
     ]
 

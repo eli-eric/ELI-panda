@@ -23,7 +23,7 @@ export const SystemInformationSection: FC<SystemInformationSectionProps> = ({
       defaultOpen={true}
       className={`w-full border rounded-md overflow-hidden shadow-md`}
       buttonClassName={cx(
-        `hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors`,
+        `hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors text-gray-900 dark:text-gray-100`,
         getColorBySystemLevel(systemDetail.systemLevel as SystemLevel)
       )}
       panelClassName="px-3 py-3 space-y-2"

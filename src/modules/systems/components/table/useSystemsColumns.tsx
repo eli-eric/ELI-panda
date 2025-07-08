@@ -51,16 +51,26 @@ export const useSystemsColumns = ({
             <>
               <button
                 onClick={() => {
-                  setUID(original.uid)
-                  setOpenDeviceInfo(true)
+                  if (tableId === 'systems') {
+                    setUID(original.uid)
+                    setOpenDeviceInfo(true)
+                  }
                 }}
+                className={`group ${
+                  tableId === 'systems' ? 'cursor-pointer' : 'cursor-default'
+                }`}
+                disabled={tableId !== 'systems'}
               >
                 <Image
                   src={getValue() || FALLBACK_IMAGE.url}
                   alt="img"
                   width={50}
                   height={50}
-                  className="rounded-full w-8 h-8 min-w-8 object-cover justify-center"
+                  className={`rounded-full w-7 h-7 min-w-8 object-cover justify-center transition-all duration-200 ${
+                    tableId === 'systems'
+                      ? 'hover:scale-110 group-hover:shadow-lg hover:outline hover:outline-2 hover:outline-primary-400 hover:outline-offset-1'
+                      : ''
+                  }`}
                 />
               </button>
             </>

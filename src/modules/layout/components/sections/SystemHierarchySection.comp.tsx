@@ -39,7 +39,7 @@ export const SystemHierarchySection: FC<SystemHierarchySectionProps> = ({
         <div className="flex flex-wrap items-center gap-1">
           {systemDetail.parentPath.map((parent, index) => (
             <Fragment key={parent?.uid || index}>
-              {parent?.uid ? (
+              {parent?.uid && (
                 <SystemLink
                   uid={parent.uid}
                   external
@@ -54,10 +54,6 @@ export const SystemHierarchySection: FC<SystemHierarchySectionProps> = ({
                 >
                   {parent?.name || 'Unknown'}
                 </SystemLink>
-              ) : (
-                <span className="text-gray-900 dark:text-gray-200 bg-gray-100 dark:bg-gray-600 px-2 py-1 rounded text-xs">
-                  {parent?.name || 'Unknown'}
-                </span>
               )}
               {index < systemDetail.parentPath!.length - 1 && (
                 <span className="text-gray-400 mx-1">→</span>
