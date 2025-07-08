@@ -5,7 +5,7 @@ import { useShowDeviceStore } from '@/modules/shared/system/device-info-overlay/
 import { cx } from '@/utils'
 
 interface SystemLinkProps {
-  href: string
+  href?: string
   uid?: string
   children: ReactNode
   icon?: ReactNode
@@ -15,7 +15,6 @@ interface SystemLinkProps {
 }
 
 export const SystemLink: FC<SystemLinkProps> = ({
-  href,
   children,
   icon,
   external = false,
