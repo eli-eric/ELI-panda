@@ -6,6 +6,7 @@ import { Fragment, useMemo } from 'react'
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import usePermission from '@/hooks/usePermission'
+import { useShowDeviceStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import { FALLBACK_IMAGE } from '@/types/constants/common'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
@@ -33,6 +34,7 @@ export const useSystemsColumns = ({
   const { setUid, pending } = useSubsystems(tableId)
   const canEdit = usePermission([ROLE.SYSTEM_EDIT])
   const { queryKey } = useSystems(tableId)
+  const { setUID, setOpenDeviceInfo } = useShowDeviceStore()
 
   const columns = useMemo(
     (): ColumnDef<SystemDetail, any>[] => [
@@ -44,15 +46,24 @@ export const useSystemsColumns = ({
           sticky: true
         },
         accessorFn: row => row?.miniImageUrl?.[0],
-        cell: ({ getValue }) => {
+        cell: ({ getValue, row: { original } }) => {
           return (
-            <Image
-              src={getValue() || FALLBACK_IMAGE.url}
-              alt="img"
-              width={50}
-              height={50}
-              className="rounded-full w-8 h-8 min-w-8 object-cover justify-center"
-            />
+            <>
+              <button
+                onClick={() => {
+                  setUID(original.uid)
+                  setOpenDeviceInfo(true)
+                }}
+              >
+                <Image
+                  src={getValue() || FALLBACK_IMAGE.url}
+                  alt="img"
+                  width={50}
+                  height={50}
+                  className="rounded-full w-8 h-8 min-w-8 object-cover justify-center"
+                />
+              </button>
+            </>
           )
         }
       },
@@ -288,7 +299,16 @@ export const useSystemsColumns = ({
         size: 150
       }
     ],
-    [setUid, canEdit, hideButtons, tableId, enableDragAndDrop, queryKey]
+    [
+      setUid,
+      canEdit,
+      hideButtons,
+      tableId,
+      enableDragAndDrop,
+      queryKey,
+      setUID,
+      setOpenDeviceInfo
+    ]
   )
 
   return { columns, pending }

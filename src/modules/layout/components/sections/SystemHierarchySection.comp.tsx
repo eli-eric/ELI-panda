@@ -30,8 +30,8 @@ export const SystemHierarchySection: FC<SystemHierarchySectionProps> = ({
     <Disclosure
       title="System Hierarchy"
       defaultOpen={true}
-      className="w-full border rounded-md overflow-hidden"
-      buttonClassName="p-3 bg-gray-50 dark:bg-gray-700"
+      className="w-full border rounded-md overflow-hidden shadow-md"
+      buttonClassName="bg-gray-50 dark:bg-gray-700"
       panelClassName="px-3 py-3 space-y-2"
       transparentButton={false}
     >
@@ -41,7 +41,7 @@ export const SystemHierarchySection: FC<SystemHierarchySectionProps> = ({
             <Fragment key={parent?.uid || index}>
               {parent?.uid ? (
                 <SystemLink
-                  href={`/system/${parent.uid}`}
+                  uid={parent.uid}
                   external
                   className={cx(
                     'px-2 py-1 rounded text-xs font-medium hover:bg-opacity-80 transition-colors',

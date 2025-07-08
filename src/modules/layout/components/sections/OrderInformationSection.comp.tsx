@@ -1,10 +1,8 @@
 import { type FC } from 'react'
 
 import { Disclosure } from '@/components/ui'
-import { PATH } from '@/types/constants/paths'
 
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
-import { SystemLink } from '../SystemLink.comp'
 
 interface OrderInformationSectionProps {
   physicalItem: {
@@ -32,8 +30,8 @@ export const OrderInformationSection: FC<OrderInformationSectionProps> = ({
     <Disclosure
       title="Order Information"
       defaultOpen={false}
-      className="w-full border rounded-md overflow-hidden"
-      buttonClassName="p-3 bg-green-50 dark:bg-green-900/20"
+      className="w-full border rounded-md overflow-hidden shadow-md"
+      buttonClassName="bg-green-50 dark:bg-green-900/20"
       panelClassName="px-3 py-3 space-y-2"
       transparentButton={false}
     >
@@ -61,13 +59,6 @@ export const OrderInformationSection: FC<OrderInformationSectionProps> = ({
               }
             />
           )}
-
-        {/* Link to order detail */}
-        <div className="pt-2">
-          <SystemLink href={`${PATH.ORDER}/${physicalItem.order.uid}`} external>
-            View Order Details
-          </SystemLink>
-        </div>
       </div>
     </Disclosure>
   )

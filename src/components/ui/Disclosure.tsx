@@ -4,6 +4,8 @@ import type { ReactNode } from 'react'
 import { useState } from 'react'
 import { isMobile } from 'react-device-detect'
 
+import { cx } from '@/utils'
+
 interface DisclosureProps {
   /**
    * The title to display on the disclosure button
@@ -68,9 +70,9 @@ export const Disclosure = ({
   return (
     <HeadlessDisclosure defaultOpen={defaultOpen}>
       {({ open }) => (
-        <div className={`flex flex-col ${className}`}>
+        <div className={cx(`flex flex-col ${className}`)}>
           <HeadlessDisclosure.Button
-            className={`${defaultButtonClasses} ${buttonClassName}`}
+            className={cx(`${defaultButtonClasses} ${buttonClassName}`)}
             onClick={() => {
               handleToggle(!open)
             }}

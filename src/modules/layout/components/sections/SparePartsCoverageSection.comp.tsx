@@ -17,8 +17,8 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
     <Disclosure
       title="Spare Parts Coverage"
       defaultOpen={true}
-      className="w-full border rounded-md overflow-hidden"
-      buttonClassName="p-3 bg-orange-50 dark:bg-orange-900/20"
+      className="w-full border rounded-md overflow-hidden shadow-md"
+      buttonClassName="bg-orange-50 dark:bg-orange-900/20"
       panelClassName="px-3 py-3 space-y-2"
       transparentButton={false}
     >
