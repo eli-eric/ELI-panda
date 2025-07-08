@@ -10,6 +10,7 @@ import { ItemPropertiesSection } from './sections/ItemPropertiesSection.comp'
 import { NotFound } from './sections/NotFound'
 import { OrderInformationSection } from './sections/OrderInformationSection.comp'
 import { PhysicalItemSection } from './sections/PhysicalItemSection.comp'
+import { SparePartsCoverageSection } from './sections/SparePartsCoverageSection.comp'
 import { SubsystemsSection } from './sections/SubsystemsSection.comp'
 import { SystemHierarchySection } from './sections/SystemHierarchySection.comp'
 import { SystemInformationSection } from './sections/SystemInformationSection.comp'
@@ -98,10 +99,6 @@ export const SystemDetailInfo: FC<Props> = ({ alias, uid }) => {
         />
       )}
 
-      {/* {serviceItems.length > 0 && (
-        <ServiceItemsSection serviceItems={serviceItems} />
-      )} */}
-
       {physicalItem && (
         <OrderInformationSection
           physicalItem={physicalItem}
@@ -109,9 +106,9 @@ export const SystemDetailInfo: FC<Props> = ({ alias, uid }) => {
         />
       )}
 
-      {/* {systemDetail && (
+      {systemDetail && (
         <SparePartsCoverageSection systemDetail={systemDetail} />
-      )} */}
+      )}
 
       {/* Subsystems */}
       {systemDetail && <SubsystemsSection systemDetail={systemDetail} />}

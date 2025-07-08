@@ -1,6 +1,19 @@
-import { type FC } from 'react'
+import type { ColumnDef } from '@tanstack/react-table'
+import { type FC, useMemo } from 'react'
 
-import { Disclosure } from '@/components/ui'
+import { Disclosure, Table } from '@/components/ui'
+import { useShowDeviceStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
+import {
+  getColorBySystemLevel,
+  getFontBySystemLevel
+} from '@/modules/systemItem/utils'
+import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
+import type { ITEM_USAGE } from '@/modules/systems/types/constants'
+import type {
+  SystemInterfaceSparePartsRelationship,
+  SystemLevel
+} from '@/types/gql/graphql'
+import { cx } from '@/utils'
 
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
 
@@ -11,6 +24,39 @@ interface SparePartsCoverageSectionProps {
 export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
   systemDetail
 }) => {
+  const { setUID } = useShowDeviceStore()
+  const columns = useMemo((): ColumnDef<
+    SystemInterfaceSparePartsRelationship,
+    any
+  >[] => {
+    const columns: ColumnDef<SystemInterfaceSparePartsRelationship, any>[] = [
+      {
+        id: 'icon',
+        meta: {
+          noHeader: true
+        },
+        cell: ({
+          row: {
+            original: {
+              node: { physicalItem, name, sp_coverage, sparePartsCoverageSum }
+            }
+          }
+        }) => (
+          <div className="flex items-center gap-2">
+            <span>{String(Number(sparePartsCoverageSum).toFixed(2))}</span>
+            <div className="w-4 h-4">
+              <IconCell
+                itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE}
+              />
+            </div>
+            <span>{name}</span>
+          </div>
+        )
+      }
+    ]
+
+    return columns
+  }, [])
   if (!systemDetail) return null
 
   return (
@@ -39,17 +85,6 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
               : 'text-green-600 dark:text-green-400 font-medium'
           }
         />
-
-        <SystemDetailParameter
-          title="Required Parts"
-          value={systemDetail.minimalSpareParstCount?.toString() || '0'}
-        />
-
-        <SystemDetailParameter
-          title="Available Parts"
-          value={systemDetail.sparePartsCoverageSum?.toFixed(2) || '0.00'}
-        />
-
         {systemDetail.sp_coverage !== null &&
           systemDetail.sp_coverage !== undefined && (
             <div className="mt-2">
@@ -66,6 +101,28 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
             </div>
           )}
       </div>
+      {systemDetail?.sparePartsConnection.edges &&
+        systemDetail.sparePartsConnection.edges.length > 0 && (
+          <Table<SystemInterfaceSparePartsRelationship>
+            columns={columns}
+            getRowProps={({ node }, index) => ({
+              className: cx(
+                node?.physicalItem &&
+                  'font-bold text-gray-700 dark:text-gray-200',
+                getColorBySystemLevel(
+                  String(node?.systemLevel) as SystemLevel,
+                  index
+                ),
+                getFontBySystemLevel(String(node?.systemLevel) as SystemLevel),
+                'cursor-pointer'
+              ),
+              onClick: () => {
+                setUID(node.uid)
+              }
+            })}
+            data={systemDetail?.sparePartsConnection.edges}
+          />
+        )}
     </Disclosure>
   )
 }
