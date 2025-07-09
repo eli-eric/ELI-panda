@@ -9,10 +9,8 @@ import {
 } from '@/modules/systemItem/utils'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
-import type {
-  SystemInterfaceSparePartsRelationship,
-  SystemLevel
-} from '@/types/gql/graphql'
+import type { System, SystemLevel } from '@/types/gql/graphql'
+import type { SystemInterfaceSparePartsRelationship } from '@/types/gql/graphql'
 import { cx } from '@/utils'
 
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
@@ -25,43 +23,59 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
   systemDetail
 }) => {
   const { setUID } = useShowDeviceStore()
-  const columns = useMemo((): ColumnDef<
-    SystemInterfaceSparePartsRelationship,
-    any
-  >[] => {
-    const columns: ColumnDef<SystemInterfaceSparePartsRelationship, any>[] = [
+  console.log('systemDetail', systemDetail)
+  const columns = useMemo(
+    (): ColumnDef<SystemInterfaceSparePartsRelationship, string>[] => [
       {
         id: 'icon',
-        meta: {
-          noHeader: true
-        },
-        cell: ({
-          row: {
-            original: {
-              node: { physicalItem, name, sp_coverage, sparePartsCoverageSum }
-            }
-          }
-        }) => (
-          <div className="flex items-center gap-2">
-            <span>{String(Number(sparePartsCoverageSum).toFixed(2))}</span>
-            <div className="w-4 h-4">
-              <IconCell
-                itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE}
-              />
+        header: 'Spare Parts',
+        cell: ({ row }) => {
+          const { physicalItem, name } = row.original.node
+          return (
+            <div className="flex items-center gap-2">
+              <span>{String(Number(row.original.coverage).toFixed(2))}</span>
+              <div className="w-4 h-4">
+                <IconCell
+                  itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE}
+                />
+              </div>
+              <span>{name}</span>
             </div>
-            <span>{name}</span>
-          </div>
-        )
+          )
+        }
       }
-    ]
+    ],
 
-    return columns
-  }, [])
+    []
+  )
+  const columnsDesignated = useMemo(
+    (): ColumnDef<System, string>[] => [
+      {
+        id: 'icon',
+        header: 'Designated spare part for',
+        cell: ({ row }) => {
+          const { physicalItem, name } = row.original
+          return (
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4">
+                <IconCell
+                  itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE}
+                />
+              </div>
+              <span>{name}</span>
+            </div>
+          )
+        }
+      }
+    ],
+
+    []
+  )
   if (!systemDetail) return null
 
   return (
     <Disclosure
-      title="Spare Parts Coverage"
+      title="Spare Parts"
       defaultOpen={true}
       className="w-full border rounded-md overflow-hidden shadow-md"
       buttonClassName="bg-orange-50 dark:bg-orange-900/20"
@@ -69,36 +83,24 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
       transparentButton={false}
     >
       <div className="grid grid-cols-1 gap-2 text-sm">
-        <SystemDetailParameter
-          title="Current Coverage"
-          value={
-            systemDetail.sp_coverage !== null &&
-            systemDetail.sp_coverage !== undefined
-              ? `${(systemDetail.sp_coverage * 100).toFixed(1)}%`
-              : 'N/A'
-          }
-          className={
-            systemDetail.sp_coverage !== null &&
-            systemDetail.sp_coverage !== undefined &&
-            systemDetail.sp_coverage < 1
-              ? 'text-red-600 dark:text-red-400 font-medium'
-              : 'text-green-600 dark:text-green-400 font-medium'
-          }
-        />
         {systemDetail.sp_coverage !== null &&
           systemDetail.sp_coverage !== undefined && (
-            <div className="mt-2">
-              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                <div
-                  className={`h-2 rounded-full ${
-                    systemDetail.sp_coverage < 1 ? 'bg-red-500' : 'bg-green-500'
-                  }`}
-                  style={{
-                    width: `${Math.min(systemDetail.sp_coverage * 100, 100)}%`
-                  }}
-                />
-              </div>
-            </div>
+            <SystemDetailParameter
+              title="Current Coverage"
+              value={
+                systemDetail.sp_coverage !== null &&
+                systemDetail.sp_coverage !== undefined
+                  ? `${(systemDetail.sp_coverage * 100).toFixed(1)}%`
+                  : 'N/A'
+              }
+              className={
+                systemDetail.sp_coverage !== null &&
+                systemDetail.sp_coverage !== undefined &&
+                systemDetail.sp_coverage < 1
+                  ? 'text-red-600 dark:text-red-400 font-medium'
+                  : 'text-green-600 dark:text-green-400 font-medium'
+              }
+            />
           )}
       </div>
       {systemDetail?.sparePartsConnection.edges &&
@@ -123,6 +125,23 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
             data={systemDetail?.sparePartsConnection.edges}
           />
         )}
+      {systemDetail?.sparePartsFor && systemDetail.sparePartsFor.length > 0 && (
+        <Table<System>
+          columns={columnsDesignated}
+          getRowProps={({ physicalItem, systemLevel, uid }, index) => ({
+            className: cx(
+              physicalItem && 'font-bold text-gray-700 dark:text-gray-200',
+              getColorBySystemLevel(String(systemLevel) as SystemLevel, index),
+              getFontBySystemLevel(String(systemLevel) as SystemLevel),
+              'cursor-pointer'
+            ),
+            onClick: () => {
+              setUID(uid)
+            }
+          })}
+          data={systemDetail?.sparePartsFor}
+        />
+      )}
     </Disclosure>
   )
 }
