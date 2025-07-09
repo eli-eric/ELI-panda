@@ -152,7 +152,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
             <button
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
-              className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 dark:text-gray-300"
             >
               <ChevronLeftIcon className="h-4 w-4" />
             </button>
@@ -171,7 +171,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
                       className={`px-2 py-1 text-xs rounded ${
                         page === currentPage
                           ? 'bg-blue-500 text-white'
-                          : 'hover:bg-gray-100 dark:hover:bg-gray-700'
+                          : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'
                       }`}
                     >
                       {page}
@@ -184,7 +184,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
                   return (
                     <EllipsisHorizontalIcon
                       key={page}
-                      className="h-4 w-4 text-gray-400"
+                      className="h-4 w-4 text-gray-400 dark:text-gray-500"
                     />
                   )
                 }
@@ -195,7 +195,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
             <button
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
-              className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 dark:text-gray-300"
             >
               <ChevronRightIcon className="h-4 w-4" />
             </button>
