@@ -106,9 +106,11 @@ export const SystemDetailInfo: FC<Props> = ({ alias, uid }) => {
         />
       )}
 
-      {systemDetail && (
-        <SparePartsCoverageSection systemDetail={systemDetail} />
-      )}
+      {systemDetail &&
+        (systemDetail?.sparePartsFor.length > 0 ||
+          systemDetail.sparePartsConnection.edges.length > 0) && (
+          <SparePartsCoverageSection systemDetail={systemDetail} />
+        )}
 
       {/* Subsystems */}
       {systemDetail && <SubsystemsSection systemDetail={systemDetail} />}

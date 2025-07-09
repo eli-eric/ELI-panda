@@ -1,17 +1,12 @@
-import type { ColumnDef } from '@tanstack/react-table'
-import { type FC, useMemo } from 'react'
+import { LinkIcon } from '@heroicons/react/24/outline'
+import { type FC } from 'react'
 
-import { Disclosure, Table } from '@/components/ui'
+import { Button } from '@/components/Buttons'
+import { Disclosure } from '@/components/ui'
+import { Badge } from '@/components/visuals/Badge'
 import { useShowDeviceStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
-import {
-  getColorBySystemLevel,
-  getFontBySystemLevel
-} from '@/modules/systemItem/utils'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
-import type { System, SystemLevel } from '@/types/gql/graphql'
-import type { SystemInterfaceSparePartsRelationship } from '@/types/gql/graphql'
-import { cx } from '@/utils'
 
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
 
@@ -23,54 +18,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
   systemDetail
 }) => {
   const { setUID } = useShowDeviceStore()
-  console.log('systemDetail', systemDetail)
-  const columns = useMemo(
-    (): ColumnDef<SystemInterfaceSparePartsRelationship, string>[] => [
-      {
-        id: 'icon',
-        header: 'Spare Parts',
-        cell: ({ row }) => {
-          const { physicalItem, name } = row.original.node
-          return (
-            <div className="flex items-center gap-2">
-              <span>{String(Number(row.original.coverage).toFixed(2))}</span>
-              <div className="w-4 h-4">
-                <IconCell
-                  itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE}
-                />
-              </div>
-              <span>{name}</span>
-            </div>
-          )
-        }
-      }
-    ],
 
-    []
-  )
-  const columnsDesignated = useMemo(
-    (): ColumnDef<System, string>[] => [
-      {
-        id: 'icon',
-        header: 'Designated spare part for',
-        cell: ({ row }) => {
-          const { physicalItem, name } = row.original
-          return (
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4">
-                <IconCell
-                  itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE}
-                />
-              </div>
-              <span>{name}</span>
-            </div>
-          )
-        }
-      }
-    ],
-
-    []
-  )
   if (!systemDetail) return null
 
   return (
@@ -103,44 +51,92 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
             />
           )}
       </div>
-      {systemDetail?.sparePartsConnection.edges &&
+
+      {/* Spare Parts Section */}
+      {systemDetail?.sparePartsConnection?.edges &&
         systemDetail.sparePartsConnection.edges.length > 0 && (
-          <Table<SystemInterfaceSparePartsRelationship>
-            columns={columns}
-            getRowProps={({ node }, index) => ({
-              className: cx(
-                node?.physicalItem &&
-                  'font-bold text-gray-700 dark:text-gray-200',
-                getColorBySystemLevel(
-                  String(node?.systemLevel) as SystemLevel,
-                  index
-                ),
-                getFontBySystemLevel(String(node?.systemLevel) as SystemLevel),
-                'cursor-pointer'
-              ),
-              onClick: () => {
-                setUID(node.uid)
+          <div className="space-y-1">
+            <h4 className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+              Spare Parts:
+            </h4>
+            {systemDetail.sparePartsConnection.edges.map(
+              (edge: any, index: number) => {
+                const { node } = edge
+                const { physicalItem, name } = node
+
+                return (
+                  <button
+                    key={index}
+                    onClick={() => setUID(node.uid)}
+                    className="flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-700 border border-transparent cursor-pointer group w-full"
+                  >
+                    <div className="flex items-center space-x-2 flex-1 min-w-0">
+                      <Badge className="text-[10px] bg-orange-100 dark:bg-orange-600 text-orange-800 dark:text-orange-100">
+                        {String(Number(edge.coverage).toFixed(2))}
+                      </Badge>
+                      <div className="w-4 h-4 flex-shrink-0">
+                        <IconCell
+                          itemUsageUid={
+                            physicalItem?.itemUsage?.uid as ITEM_USAGE
+                          }
+                        />
+                      </div>
+                      <span className="font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors truncate">
+                        {name}
+                      </span>
+                      <LinkIcon className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 flex-shrink-0" />
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Button
+                        onClick={e => {
+                          e.stopPropagation()
+                          // TODO: Implement use spare part functionality
+                        }}
+                        buttonSize={'small'}
+                        className="text-[10px]"
+                        primary
+                        title="Use this spare part"
+                      >
+                        Use Spare
+                      </Button>
+                    </div>
+                  </button>
+                )
               }
-            })}
-            data={systemDetail?.sparePartsConnection.edges}
-          />
+            )}
+          </div>
         )}
+
+      {/* Designated Spare Part For Section */}
       {systemDetail?.sparePartsFor && systemDetail.sparePartsFor.length > 0 && (
-        <Table<System>
-          columns={columnsDesignated}
-          getRowProps={({ physicalItem, systemLevel, uid }, index) => ({
-            className: cx(
-              physicalItem && 'font-bold text-gray-700 dark:text-gray-200',
-              getColorBySystemLevel(String(systemLevel) as SystemLevel, index),
-              getFontBySystemLevel(String(systemLevel) as SystemLevel),
-              'cursor-pointer'
-            ),
-            onClick: () => {
-              setUID(uid)
-            }
+        <div className="space-y-1">
+          <h4 className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
+            Designated spare part for:
+          </h4>
+          {systemDetail.sparePartsFor.map((system: any, index: number) => {
+            const { physicalItem, name, uid } = system
+
+            return (
+              <button
+                key={index}
+                onClick={() => setUID(uid)}
+                className="flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-700 border border-transparent cursor-pointer group w-full"
+              >
+                <div className="flex items-center space-x-2 flex-1 min-w-0">
+                  <div className="w-4 h-4 flex-shrink-0">
+                    <IconCell
+                      itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE}
+                    />
+                  </div>
+                  <span className="font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors truncate">
+                    {name}
+                  </span>
+                  <LinkIcon className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 flex-shrink-0" />
+                </div>
+              </button>
+            )
           })}
-          data={systemDetail?.sparePartsFor}
-        />
+        </div>
       )}
     </Disclosure>
   )
