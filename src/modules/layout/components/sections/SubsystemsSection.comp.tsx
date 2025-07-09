@@ -23,6 +23,8 @@ import { fuzzyFilter } from '@/modules/shared/table/pandaTable/utils'
 import type { TableSystem } from '@/modules/systemItem/components/subsystems/types'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
+import type { SystemLevel } from '@/types/gql/graphql'
+import { cx } from '@/utils'
 
 interface SubsystemsSectionProps {
   systemDetail: any
@@ -70,6 +72,19 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
     }
   })
 
+  const getSystemLevelColors = (
+    systemLevel: SystemLevel | null | undefined
+  ) => {
+    if (systemLevel === 'KEY_SYSTEMS') {
+      return 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
+    }
+    if (systemLevel === 'TECHNOLOGY_UNIT') {
+      return 'text-lime-600 dark:text-lime-400 group-hover:text-lime-700 dark:group-hover:text-lime-300'
+    }
+    // Default blue color for other system levels
+    return 'text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300'
+  }
+
   if (!systemDetail?.subSystems || systemDetail.subSystems.length === 0) {
     return null
   }
@@ -101,7 +116,8 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
       <div className="space-y-1">
         {table.getRowModel().rows.map(row => {
           const subsystem = row.original
-          const { physicalItem, name, uid, sp_coverage } = subsystem
+          const { physicalItem, name, uid, sp_coverage, systemLevel } =
+            subsystem
 
           return (
             <button
@@ -110,12 +126,18 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
               className="flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-700 border border-transparent cursor-pointer group w-full"
             >
               <div className="flex items-center space-x-2 flex-1 min-w-0">
-                <div className="w-4 h-4 flex-shrink-0">
+                <div className={cx('w-4 h-4 flex-shrink-0 rounded-sm')}>
                   <IconCell
                     itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE}
                   />
                 </div>
-                <span className="font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors truncate">
+                <span
+                  className={cx(
+                    'font-medium transition-colors truncate',
+                    physicalItem && 'font-bold',
+                    getSystemLevelColors(systemLevel as SystemLevel)
+                  )}
+                >
                   {name}
                 </span>
                 <LinkIcon className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 flex-shrink-0" />
