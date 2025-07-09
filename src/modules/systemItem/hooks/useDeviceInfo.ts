@@ -1,10 +1,7 @@
-import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
-import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useGraphQL } from '@/hooks/fetch/useGraphQL'
-import { PATH } from '@/types/constants/paths'
 import { gql, useFragment } from '@/types/gql'
 import {
   CatalogueItemFragment,
@@ -21,19 +18,11 @@ const systemDetailQuery = gql(`
 `)
 
 type SearchPatterns = {
-  alias?: string
-  itemUid?: string
+  code?: string
+  uid?: string
 }
 
-export const useSystemDetail = (
-  searchPatterns?: SearchPatterns,
-  onSuccess?: (data: any) => void
-) => {
-  const router = useRouter()
-  const uid = router.query.uid as string | undefined
-
-  const { system: systemEndpoint } = useEndpoint({ uid })
-
+export const useDeviceInfo = ({ code, uid }: SearchPatterns) => {
   const { data, error, isLoading, refetch, status } = useGraphQL(
     systemDetailQuery,
     {
@@ -41,28 +30,18 @@ export const useSystemDetail = (
         where: {
           deleted: false,
           uid,
-          systemCode: searchPatterns?.alias,
-          physicalItem: {
-            uid: searchPatterns?.itemUid
-          }
+          systemCode: code
         }
       },
-      enabled: !!uid || !!searchPatterns?.alias || !!searchPatterns?.itemUid,
+      enabled: !!uid || !!code,
       refetchOnMount: 'always',
       refetchOnReconnect: 'always'
     }
   )
 
   useEffect(() => {
-    if (data?.systems.length === 0) {
-      router.push(PATH.NOT_FOUND)
-    }
- 
     if (error) {
       toast.error('Failed to fetch system detail')
-    }
-    if (status === 'success') {
-      onSuccess?.(data)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error, status, data])
@@ -83,7 +62,6 @@ export const useSystemDetail = (
     catalogueItem,
     loading: isLoading,
     error,
-    refetch,
-    systemEndpoint
+    refetch
   }
 }

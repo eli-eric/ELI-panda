@@ -19,10 +19,10 @@ export const ItemPropertiesSection: FC<ItemPropertiesSectionProps> = ({
 
   return (
     <Disclosure
-      title="Catalogue Properties"
+      title="Physical Item - Properties"
       defaultOpen={true}
-      className="w-full border rounded-md overflow-hidden"
-      buttonClassName="p-3 bg-gray-50 dark:bg-gray-700"
+      className="w-full border rounded-md overflow-hidden shadow-md"
+      buttonClassName="bg-amber-100 dark:bg-amber-600 text-gray-900 dark:text-gray-100 hover:bg-amber-200 dark:hover:bg-amber-700 transition-colors"
       panelClassName="px-3 py-3 space-y-2"
       transparentButton={false}
     >

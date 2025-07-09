@@ -4,14 +4,12 @@ import ProgressBarComponent from '@/components/progress-bar.comp'
 import { useItemPropertiesData } from '@/hooks/useItemPropertiesData'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { ImageGallery } from '@/modules/shared/imageManager/ImageGallery'
-import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
+import { useDeviceInfo } from '@/modules/systemItem/hooks/useDeviceInfo'
 
-import { CatalogueItemSection } from './sections/CatalogueItemSection.comp'
 import { ItemPropertiesSection } from './sections/ItemPropertiesSection.comp'
 import { NotFound } from './sections/NotFound'
 import { OrderInformationSection } from './sections/OrderInformationSection.comp'
 import { PhysicalItemSection } from './sections/PhysicalItemSection.comp'
-import { ServiceItemsSection } from './sections/ServiceItemsSection.comp'
 import { SparePartsCoverageSection } from './sections/SparePartsCoverageSection.comp'
 import { SubsystemsSection } from './sections/SubsystemsSection.comp'
 import { SystemHierarchySection } from './sections/SystemHierarchySection.comp'
@@ -19,12 +17,14 @@ import { SystemInformationSection } from './sections/SystemInformationSection.co
 
 type Props = {
   alias?: string
+  uid?: string
 }
 
-export const SystemDetailInfo: FC<Props> = ({ alias }) => {
+export const SystemDetailInfo: FC<Props> = ({ alias, uid }) => {
   const { loading, error, systemDetail, physicalItem, catalogueItem } =
-    useSystemDetail({
-      alias
+    useDeviceInfo({
+      code: alias,
+      uid
     })
 
   const serviceItems = physicalItem?.serviceItemsConnection?.edges || []
@@ -85,8 +85,12 @@ export const SystemDetailInfo: FC<Props> = ({ alias }) => {
       {systemDetail && <SystemInformationSection systemDetail={systemDetail} />}
 
       {/* Physical Item Information */}
-      {physicalItem && <PhysicalItemSection physicalItem={physicalItem} />}
-      {/* Item Properties */}
+      {physicalItem && (
+        <PhysicalItemSection
+          physicalItem={physicalItem}
+          catalogueItem={catalogueItem}
+        />
+      )}
       {catalogueItem && physicalItem && hasProperties && (
         <ItemPropertiesSection
           groupedProperties={groupedProperties}
@@ -95,20 +99,13 @@ export const SystemDetailInfo: FC<Props> = ({ alias }) => {
         />
       )}
 
-      {/* Catalogue Item Information */}
-      {catalogueItem?.uid && (
-        <CatalogueItemSection catalogueItem={catalogueItem} />
+      {physicalItem && (
+        <OrderInformationSection
+          physicalItem={physicalItem}
+          serviceItems={serviceItems}
+        />
       )}
 
-      {/* Service Items */}
-      {serviceItems.length > 0 && (
-        <ServiceItemsSection serviceItems={serviceItems} />
-      )}
-
-      {/* Order Information */}
-      {physicalItem && <OrderInformationSection physicalItem={physicalItem} />}
-
-      {/* Spare Parts Coverage */}
       {systemDetail && (
         <SparePartsCoverageSection systemDetail={systemDetail} />
       )}
