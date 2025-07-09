@@ -1,15 +1,18 @@
 import { type FC } from 'react'
 
 import { Disclosure } from '@/components/ui'
+import { PATH } from '@/types/constants/paths'
 
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
 
 interface PhysicalItemSectionProps {
   physicalItem: any
+  catalogueItem: any
 }
 
 export const PhysicalItemSection: FC<PhysicalItemSectionProps> = ({
-  physicalItem
+  physicalItem,
+  catalogueItem
 }) => {
   if (!physicalItem) return null
 
@@ -17,9 +20,9 @@ export const PhysicalItemSection: FC<PhysicalItemSectionProps> = ({
     <Disclosure
       title="Physical Item"
       defaultOpen={true}
-      className="w-full border rounded-md overflow-hidden"
-      buttonClassName="p-3 bg-gray-50 dark:bg-gray-700"
-      panelClassName="px-3 py-3 space-y-2"
+      className="w-full border rounded-md overflow-hidden shadow-md"
+      buttonClassName="bg-amber-100 dark:bg-amber-600 text-gray-900 dark:text-gray-100 hover:bg-amber-200 dark:hover:bg-amber-700 transition-colors"
+      panelClassName="px-3 py-3 space-y-2 shadow-md shadow-gray-200 dark:shadow-gray-800"
       transparentButton={false}
     >
       <div className="grid grid-cols-1 gap-2 text-sm">
@@ -38,21 +41,25 @@ export const PhysicalItemSection: FC<PhysicalItemSectionProps> = ({
             value={physicalItem.itemUsage.name}
           />
         )}
+        <SystemDetailParameter
+          title="Part Number"
+          value={catalogueItem.catalogueNumber}
+          href={PATH.CATALOGUE_ITEM + '/' + catalogueItem.uid}
+        />
+        <SystemDetailParameter
+          title="Category"
+          value={catalogueItem.catalogueCategory?.name}
+          href={`${PATH.CATALOGUE}?page=1&category=${encodeURIComponent(JSON.stringify({ uid: catalogueItem.catalogueCategory.uid, name: catalogueItem.catalogueCategory.name }))}`}
+        />
+        <SystemDetailParameter
+          title="Supplier"
+          value={catalogueItem.supplier?.name}
+        />
         {physicalItem.conditionStatus?.name && (
           <SystemDetailParameter
             title="Condition Status"
             value={physicalItem.conditionStatus.name}
           />
-        )}
-        {physicalItem.notes && (
-          <div className="pt-2">
-            <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
-              Notes:
-            </p>
-            <p className="text-xs text-gray-900 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 p-2 rounded">
-              {physicalItem.notes}
-            </p>
-          </div>
         )}
       </div>
     </Disclosure>

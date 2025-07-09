@@ -1,18 +1,15 @@
-import { Fragment, lazy, Suspense, useEffect, useState } from 'react'
+import { Fragment, lazy, useEffect } from 'react'
 
-import { SlideOver } from '@/components/overlays/slideover/SlideOver'
+import { DeviceInfoOverlay } from '../shared/system/device-info-overlay/device-info'
+import { useShowDeviceStore } from '../shared/system/device-info-overlay/store/useShowDeviceStore'
 
 const LayoutDetailInfoContainer = lazy(
   () => import('./components/layout-detail-info.cont')
 )
 
 const LayoutContainer = () => {
-  const [alias, setAlias] = useState<string | undefined>(undefined)
-  const [openDetailInfo, setOpenDetailInfo] = useState(false)
-
-  const [locationCode, setLocationCode] = useState<string | undefined>(
-    undefined
-  )
+  const { setCode, setOpenDeviceInfo, setUID, setLocationCode } =
+    useShowDeviceStore()
 
   useEffect(() => {
     function handleMessage(
@@ -28,23 +25,24 @@ const LayoutContainer = () => {
         const locationCode = query.get('getOfficeInfo')
         if (systemCode) {
           event.preventDefault()
-          setAlias(systemCode)
-          setLocationCode(undefined)
-          setOpenDetailInfo(true)
+          setCode(systemCode)
+          setOpenDeviceInfo(true)
         }
 
         if (locationCode) {
           event.preventDefault()
           setLocationCode(locationCode)
-          setAlias(undefined)
-          setOpenDetailInfo(true)
+          setOpenDeviceInfo(true)
         }
       }
     }
     window.addEventListener('message', handleMessage)
     return () => {
       window.removeEventListener('message', handleMessage)
-      setAlias(undefined)
+      setCode(undefined)
+      setLocationCode(undefined)
+      setUID(undefined)
+      setOpenDeviceInfo(false)
     }
   }, [])
 
@@ -55,21 +53,7 @@ const LayoutContainer = () => {
         className="h-full w-full"
         sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-top-navigation allow-top-navigation-by-user-activation"
       ></iframe>
-      <SlideOver
-        panelSlide="right"
-        panelTitle={
-          alias ? 'Device Info' : `Employees at location: ${locationCode}`
-        }
-        open={openDetailInfo}
-        setOpen={setOpenDetailInfo}
-      >
-        <Suspense>
-          <LayoutDetailInfoContainer
-            systemCode={alias}
-            locationCode={locationCode}
-          />
-        </Suspense>
-      </SlideOver>
+      <DeviceInfoOverlay />
     </Fragment>
   )
 }

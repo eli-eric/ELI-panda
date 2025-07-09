@@ -1,3 +1,5 @@
+import { LinkIcon } from '@heroicons/react/24/outline'
+import Link from 'next/link'
 import type { FC } from 'react'
 
 import { cx } from '@/utils'
@@ -8,6 +10,7 @@ type Props = {
   className?: string
   additionalInfo?: string
   unit?: string
+  href?: string
 }
 
 export const SystemDetailParameter: FC<Props> = ({
@@ -15,21 +18,33 @@ export const SystemDetailParameter: FC<Props> = ({
   value,
   className,
   additionalInfo,
-  unit
+  unit,
+  href
 }) => {
-  return (
-    <div
-      className={cx(
-        'flex justify-between text-xs px-2 py-1 rounded-md transition-colors duration-200',
-        'hover:bg-gray-300/50 dark:hover:bg-gray-600'
-      )}
-    >
-      <span className="font-medium text-gray-600 dark:text-gray-400">
+  const baseClasses = cx(
+    'flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200',
+    href
+      ? 'hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-700 border border-transparent cursor-pointer group'
+      : 'hover:bg-primary-50 dark:hover:bg-primary-800/20 hover:border-primary-200 dark:hover:border-primary-700 border border-transparent group'
+  )
+
+  const content = (
+    <>
+      <span className="font-medium text-gray-600 dark:text-gray-400 flex items-center">
         {title}:
+        {href && (
+          <LinkIcon className="ml-1 h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400" />
+        )}
       </span>
       <div className="text-right max-w-[60%]">
         <span
-          className={`text-gray-900 dark:text-gray-200 truncate ${className || ''}`}
+          className={cx(
+            'truncate',
+            href
+              ? 'text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300'
+              : 'text-gray-900 dark:text-gray-200',
+            className
+          )}
           title={value || 'N/A'}
         >
           {value ? value : 'N/A'} {unit && `[${unit}]`}
@@ -40,6 +55,16 @@ export const SystemDetailParameter: FC<Props> = ({
           </div>
         )}
       </div>
-    </div>
+    </>
   )
+
+  if (href) {
+    return (
+      <Link href={href} target="_blank" className={baseClasses}>
+        {content}
+      </Link>
+    )
+  }
+
+  return <div className={baseClasses}>{content}</div>
 }
