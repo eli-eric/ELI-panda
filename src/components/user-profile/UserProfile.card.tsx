@@ -24,7 +24,7 @@ export const UserProfileCard = () => {
             <FormattedMessage id={messages.fullName} />
           </dt>
           <dd className="mt-1 flex text-sm text-gray-900 dark:text-gray-200 sm:col-span-2 sm:mt-0">
-            <span className="flex-grow">{user?.fullName}</span>
+            <span className="grow">{user?.fullName}</span>
           </dd>
         </div>
         <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
@@ -32,7 +32,7 @@ export const UserProfileCard = () => {
             <FormattedMessage id={messages.email} />
           </dt>
           <dd className="mt-1 flex text-sm text-gray-900 dark:text-gray-200 sm:col-span-2 sm:mt-0">
-            <span className="flex-grow">{user?.email}</span>
+            <span className="grow">{user?.email}</span>
           </dd>
         </div>
         <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
@@ -40,7 +40,7 @@ export const UserProfileCard = () => {
             <FormattedMessage id={messages.facility} />
           </dt>
           <dd className="mt-1 flex text-sm text-gray-900 dark:text-gray-200 sm:col-span-2 sm:mt-0">
-            <span className="flex-grow">{user?.facility}</span>
+            <span className="grow">{user?.facility}</span>
           </dd>
         </div>
         <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">
@@ -48,7 +48,7 @@ export const UserProfileCard = () => {
             <FormattedMessage id={messages.roles} />
           </dt>
           <dd className="mt-1 flex text-sm text-gray-900 dark:text-gray-200 sm:col-span-2 sm:mt-0">
-            <span className="flex-grow">
+            <span className="grow">
               {user?.roles.map(role => <Badge key={role}>{role}</Badge>)}
             </span>
           </dd>
@@ -58,7 +58,7 @@ export const UserProfileCard = () => {
             <FormattedMessage id={securityMessages.apiDocs} />
           </dt>
           <dd className="mt-1 flex text-sm text-gray-900 dark:text-gray-200 sm:col-span-2 sm:mt-0">
-            <span className="flex-grow">
+            <span className="grow">
               <a
                 target="_blank"
                 className="text-primary-600 hover:underline"

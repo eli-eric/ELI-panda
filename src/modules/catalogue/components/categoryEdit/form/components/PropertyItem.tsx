@@ -127,8 +127,8 @@ const PropertyItem = ({
 
   return (
     <div className="flex">
-      <div className="flex-col flex-grow">
-        <div className="flex flex-row flex-grow max-md:flex-wrap">
+      <div className="flex-col grow">
+        <div className="flex flex-row grow max-md:flex-wrap">
           <MoveButtons
             moveDown={moveDown}
             moveUp={moveUp}

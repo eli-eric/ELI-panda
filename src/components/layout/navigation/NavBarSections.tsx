@@ -67,7 +67,7 @@ export const MainNavigation: FC<MainNavigationProps> = ({
   })
 
   return (
-    <div className="flex-grow">
+    <div className="grow">
       {NAV_BAR_CONFIG.map(item => {
         if (item.name === 'Codebooks' && codebooks?.length === 0) {
           return null

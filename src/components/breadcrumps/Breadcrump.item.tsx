@@ -28,7 +28,7 @@ export const BreadcrumpItem = ({
       <li key={name} className="flex">
         <div className="flex items-center whitespace-nowrap">
           <ChevronRightIcon
-            className="h-4 w-4 flex-shrink-0 text-gray-400"
+            className="h-4 w-4 shrink-0 text-gray-400"
             aria-hidden="true"
           />
           <button
@@ -49,7 +49,7 @@ export const BreadcrumpItem = ({
       <div className="flex items-center whitespace-nowrap">
         {!noIcon && (
           <ChevronRightIcon
-            className="h-4 w-4 flex-shrink-0 text-gray-400"
+            className="h-4 w-4 shrink-0 text-gray-400"
             aria-hidden="true"
           />
         )}

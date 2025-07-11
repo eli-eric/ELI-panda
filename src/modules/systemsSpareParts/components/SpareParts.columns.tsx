@@ -62,7 +62,7 @@ export const useSparePartsColumns = ({ tableId }: SystemsColumnsProps) => {
           <Fragment>
             {getValue() && (
               <Tooltip content={getValue()}>
-                <InformationCircleIcon className="h-5 w-5 pr- flex-shrink-0" />
+                <InformationCircleIcon className="h-5 w-5 pr- shrink-0" />
               </Tooltip>
             )}
           </Fragment>

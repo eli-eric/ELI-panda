@@ -39,7 +39,7 @@ export const Notification = ({ t }: Props) => {
           <div className="pointer-events-auto w-full overflow-hidden rounded-lg bg-white dark:bg-primary-700 shadow-lg ring-1 ring-black ring-opacity-5">
             <div className="p-4">
               <div className="flex items-start">
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   {t.type === 'error' && (
                     <ExclamationTriangleIcon
                       className="h-6 w-6 text-red-400 dark:text-black"
@@ -59,7 +59,7 @@ export const Notification = ({ t }: Props) => {
                     {resolveValue(t.message, t)}
                   </p>
                 </div>
-                <div className="ml-4 flex flex-shrink-0">
+                <div className="ml-4 flex shrink-0">
                   <button
                     type="button"
                     className="inline-flex rounded-md bg-white dark:bg-gray-800 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"

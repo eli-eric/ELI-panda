@@ -97,7 +97,7 @@ export const useServiceLinesColumns = () => {
           <Fragment>
             {getValue() && (
               <Tooltip content={getValue()}>
-                <InformationCircleIcon className="h-6 w-6 flex-shrink-0" />
+                <InformationCircleIcon className="h-6 w-6 shrink-0" />
               </Tooltip>
             )}
           </Fragment>

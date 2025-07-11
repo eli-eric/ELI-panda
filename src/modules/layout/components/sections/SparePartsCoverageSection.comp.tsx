@@ -74,7 +74,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                       <Badge className="text-[10px] bg-orange-100 dark:bg-orange-600 text-orange-800 dark:text-orange-100">
                         {String(Number(edge.coverage).toFixed(2))}
                       </Badge>
-                      <div className="w-4 h-4 flex-shrink-0">
+                      <div className="w-4 h-4 shrink-0">
                         <IconCell
                           itemUsageUid={
                             physicalItem?.itemUsage?.uid as ITEM_USAGE
@@ -84,7 +84,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                       <span className="font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors truncate">
                         {name}
                       </span>
-                      <LinkIcon className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 flex-shrink-0" />
+                      <LinkIcon className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
                     </div>
                     <div className="flex items-center space-x-1">
                       <Button
@@ -123,7 +123,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                 className="flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-700 border border-transparent cursor-pointer group w-full"
               >
                 <div className="flex items-center space-x-2 flex-1 min-w-0">
-                  <div className="w-4 h-4 flex-shrink-0">
+                  <div className="w-4 h-4 shrink-0">
                     <IconCell
                       itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE}
                     />
@@ -131,7 +131,7 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                   <span className="font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300 transition-colors truncate">
                     {name}
                   </span>
-                  <LinkIcon className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 flex-shrink-0" />
+                  <LinkIcon className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
                 </div>
               </button>
             )

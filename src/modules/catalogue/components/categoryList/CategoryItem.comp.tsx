@@ -33,7 +33,7 @@ export const CategoryItemComponent = ({
         key={category.code}
         className="flex w-full items-center "
       >
-        <div className="flex-shrink-0 mx-6 my-4">
+        <div className="shrink-0 mx-6 my-4">
           <Image
             className={cn('h-10 w-10 rounded-sm object-contain')}
             width={200}

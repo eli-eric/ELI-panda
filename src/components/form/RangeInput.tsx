@@ -60,7 +60,7 @@ export const RangeInput = ({
                   placeholder={placeholder?.min || 'Min'}
                   disabled={disabled}
                   className={cn(
-                    'form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm',
+                    'form-field rounded-md border-gray-200 border px-2 py-1 text-sm',
                     isFilter && fieldValue?.min && 'border-green-500',
                     error && 'border-red-500',
                     disabled && 'bg-gray-100 cursor-not-allowed'
@@ -90,7 +90,7 @@ export const RangeInput = ({
                     })
                   }}
                   className={cn(
-                    'form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm',
+                    'form-field rounded-md border-gray-200 border px-2 py-1 text-sm',
                     isFilter && fieldValue?.max && 'border-green-500',
                     error && 'border-red-500',
                     disabled && 'bg-gray-100 cursor-not-allowed'

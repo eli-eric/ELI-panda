@@ -7,7 +7,7 @@ interface Props {
 const AuthAlertComponent = ({ message }: Props) => (
   <div className="rounded-md bg-yellow-50 p-4">
     <div className="flex">
-      <div className="flex-shrink-0">
+      <div className="shrink-0">
         <ExclamationTriangleIcon
           className="h-4 w-4
 

@@ -123,7 +123,7 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
                     {buttons && (
                       <div
                         className={cn(
-                          'flex flex-shrink-0 px-4 py-4 justify-between',
+                          'flex shrink-0 px-4 py-4 justify-between',
                           buttons.className
                         )}
                       >

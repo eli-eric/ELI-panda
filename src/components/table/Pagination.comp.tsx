@@ -61,7 +61,7 @@ export default function PaginationComponent({
           onClick={previousPageHandler}
           buttonSize="small"
         >
-          <ChevronLeftIcon className="h-6 w-6 flex-shrink-0 " />
+          <ChevronLeftIcon className="h-6 w-6 shrink-0 " />
         </Button>
 
         <Button
@@ -70,7 +70,7 @@ export default function PaginationComponent({
           className="ml-3 "
           buttonSize="small"
         >
-          <ChevronRightIcon className="h-6 w-6 flex-shrink-0" />
+          <ChevronRightIcon className="h-6 w-6 shrink-0" />
         </Button>
       </div>
     </nav>

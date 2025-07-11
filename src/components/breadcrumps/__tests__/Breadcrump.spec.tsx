@@ -37,7 +37,7 @@ describe('BreadcrumpContainer', () => {
 
     // Ověření, že svg ikona má správné třídy
     const icon = homeLink.querySelector('svg')
-    expect(icon).toHaveClass('h-4 w-4 flex-shrink-0')
+    expect(icon).toHaveClass('h-4 w-4 shrink-0')
   })
 
   it('applies correct class names with multiple items', () => {

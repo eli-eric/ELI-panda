@@ -23,7 +23,7 @@ export function ServiceItem({ service }: ServiceItemProps) {
                 <p className="text-sm font-medium text-primary-600 truncate">
                   {service.name}
                 </p>
-                <p className="ml-2 flex-shrink-0 font-normal text-sm text-gray-500">
+                <p className="ml-2 shrink-0 font-normal text-sm text-gray-500">
                   in {service.category?.name}
                 </p>
               </div>

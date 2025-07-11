@@ -126,7 +126,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
               className="flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-700 border border-transparent cursor-pointer group w-full"
             >
               <div className="flex items-center space-x-2 flex-1 min-w-0">
-                <div className={cn('w-4 h-4 flex-shrink-0 rounded-sm')}>
+                <div className={cn('w-4 h-4 shrink-0 rounded-sm')}>
                   <IconCell
                     itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE}
                   />
@@ -140,7 +140,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
                 >
                   {name}
                 </span>
-                <LinkIcon className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 flex-shrink-0" />
+                <LinkIcon className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
               </div>
 
               {/* Spare Parts Coverage Badge */}

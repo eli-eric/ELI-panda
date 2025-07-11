@@ -11,7 +11,7 @@ const Links = [
     name: 'Users',
     link: PATH.ADMIN_USERS,
     Icon: () => (
-      <UserGroupIcon className="mx-auto h-24 w-324 flex-shrink-0 rounded-full" />
+      <UserGroupIcon className="mx-auto h-24 w-324 shrink-0 rounded-full" />
     ),
     role: ROLE.ADMIN
   }

@@ -28,7 +28,7 @@ const Main = ({
           itemId: String(uid)
         }}
       />
-      <div className="flex flex-col col-span-3 flex-grow ml-10">
+      <div className="flex flex-col col-span-3 grow ml-10">
         <div className="mt-1">
           <Input
             name="name"
