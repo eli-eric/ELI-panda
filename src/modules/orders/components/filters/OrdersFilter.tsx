@@ -3,8 +3,8 @@ import { FilterCheckboxes } from '@/components/form/FIlterCheckboxes'
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { cn } from '@/lib/utils'
 import useOrderFormFields from '@/modules/orderItem/components/form/OrderForm.fields'
-import { cx } from '@/utils'
 
 import { DELIVERY_STATUS, DeliveryStatusMapping } from '../../types'
 
@@ -26,7 +26,7 @@ export const OrdersFilter = () => {
     }))
 
   return (
-    <div className={cx('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
+    <div className={cn('md:grid md:grid-cols-2 md:gap-4 md:min-w-[500px]')}>
       <div className="flex flex-col gap-2">
         <Input
           {...fields.name}

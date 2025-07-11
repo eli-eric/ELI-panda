@@ -5,12 +5,12 @@ import { useFormContext } from 'react-hook-form'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 import { queryFetcher } from '@/utils/fetcher'
 
 import { ExpandableNameCell } from './ExpandableNameCell'
@@ -138,7 +138,7 @@ export const CodebookTreeModal = ({
             onClick: () => {
               setItem({ uid: row.original.uid, name: row.original.name })
             },
-            className: cx(
+            className: cn(
               item?.uid === row.original.uid
                 ? 'bg-primary-200 dark:bg-primary-500 hover:bg-primary-200 dark:hover:bg-primary-500'
                 : '',

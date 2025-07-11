@@ -6,9 +6,9 @@ import { type FC, Fragment, type PropsWithChildren } from 'react'
 
 import { AccessControl } from '@/components/auth/AccesControl'
 import { Tooltip } from '@/components/Tooltip'
+import { cn } from '@/lib/utils'
 import type { NavigationType } from '@/types/constants/paths'
 import { SUPPORT } from '@/types/constants/paths'
-import { cx } from '@/utils'
 
 export const NavBarTitle: FC<
   PropsWithChildren<{
@@ -19,7 +19,7 @@ export const NavBarTitle: FC<
 > = ({ isActive, isExpanded, children, className }) => {
   return (
     <span
-      className={cx(
+      className={cn(
         `ml-4 z-0`,
         isExpanded ? 'opacity-100' : 'opacity-0',
         `transition-opacity duration-200 whitespace-nowrap text-gray-600 dark:text-gray-200`,
@@ -46,12 +46,12 @@ const NavBarItem: FC<PropsWithChildren<NavBarItemProps>> = ({
   isActive
 }) => {
   return (
-    <div className={cx('flex ')}>
+    <div className={cn('flex ')}>
       <Tooltip content={text} placement="top-start" disabled={isExpanded}>
         {Icon && (
           <div>
             <Icon
-              className={cx(
+              className={cn(
                 'h-6 w-6 text-gray-600 dark:text-gray-200',
                 isActive && 'text-primary-600 dark:text-primary-600'
               )}
@@ -84,7 +84,7 @@ export const NavBarLink: FC<NavBarLinkProps> = ({
     <Link
       href={href}
       onClick={() => setOpen && setOpen(false)}
-      className={cx(
+      className={cn(
         'flex items-center p-4 overflow-hidden hover:bg-gray-300 hover:dark:bg-gray-700',
         className
       )}
@@ -135,7 +135,7 @@ interface ChevronIconProps {
 export const ChevronIcon: FC<ChevronIconProps> = ({ isExpanded, open }) => {
   return (
     <div
-      className={cx(
+      className={cn(
         'transition-opacity duration-300',
         isExpanded ? 'opacity-100' : 'opacity-0'
       )}
@@ -164,7 +164,7 @@ export const SupportLink: FC<SupportLinkProps> = ({ isExpanded }) => {
         <Tooltip content="Support" placement="top-start" disabled={isExpanded}>
           <div className="ml-2">
             <span
-              className={cx(
+              className={cn(
                 'h-6 w-6 text-2xl text-center text-gray-500 dark:text-gray-200'
               )}
             >

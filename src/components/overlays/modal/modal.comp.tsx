@@ -4,9 +4,9 @@ import { Fragment } from 'react'
 import { XmarkButton } from '@/components/Buttons'
 import { useEscapeKey } from '@/hooks/useEscapeKey'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { useModalStore } from '@/store/useModalStore'
 import type { ModalButtons } from '@/types/form'
-import { cx } from '@/utils'
 
 import ModalButtonsComponent from './modal.buttons'
 
@@ -41,7 +41,7 @@ export default function ModalComponent({
     <Transition.Root show={open} as={Fragment}>
       <Dialog
         as="div"
-        className={cx('relative', zclass)}
+        className={cn('relative', zclass)}
         onClose={() => {}}
         unmount={false}
       >

@@ -7,7 +7,7 @@ import type { CellContext } from '@tanstack/react-table'
 import { useDrag } from 'react-dnd'
 
 import { Tooltip } from '@/components/Tooltip'
-import { cx, truncateString } from '@/utils'
+import { cn, truncateString } from '@/lib/utils'
 import type { EndpointProps } from '@/utils/getEndpoints'
 
 import { SystemActionButtons } from './SystemActionButtons'
@@ -58,11 +58,11 @@ export const SystemNameCell = ({
       style={{
         paddingLeft: `${row.depth * 1.01}rem`
       }}
-      className={cx(isDragging && 'text-primary-500', 'flex justify-center')}
+      className={cn(isDragging && 'text-primary-500', 'flex justify-center')}
     >
       <div className="flex items-center" ref={dragRef}>
         <div
-          className={cx(
+          className={cn(
             'flex items-center w-full py-1',
             original.hasSubsystems && 'group/expand cursor-pointer'
           )}

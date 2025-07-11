@@ -6,13 +6,13 @@ import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
+import { cn } from '@/lib/utils'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import { SystemNameCell } from '@/modules/systems/components/table/cells/SystemNameCell'
 import { useSubsystems } from '@/modules/systems/hooks/useSubsystems'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import { PATH } from '@/types/constants/paths'
 import type { SystemDetail } from '@/types/responses/systems'
-import { cx } from '@/utils'
 
 // eslint-disable-next-line
 
@@ -59,7 +59,7 @@ function IndeterminateCheckbox({
   return (
     <input
       type="checkbox"
-      className={cx(
+      className={cn(
         className,
         !rest.disabled && 'cursor-pointer',
         'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',

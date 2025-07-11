@@ -1,10 +1,10 @@
 import { type FC } from 'react'
 
 import { Disclosure } from '@/components/ui'
+import { cn } from '@/lib/utils'
 import { getColorBySystemLevel } from '@/modules/systemItem/utils'
 import { PATH } from '@/types/constants/paths'
 import type { SystemLevel } from '@/types/gql/graphql'
-import { cx } from '@/utils'
 
 import { SystemDetailParameter } from '../system-detail-parameter.comp'
 
@@ -22,7 +22,7 @@ export const SystemInformationSection: FC<SystemInformationSectionProps> = ({
       title="System Information"
       defaultOpen={true}
       className={`w-full border rounded-md overflow-hidden shadow-md`}
-      buttonClassName={cx(
+      buttonClassName={cn(
         `hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-colors text-gray-900 dark:text-gray-100`,
         getColorBySystemLevel(systemDetail.systemLevel as SystemLevel)
       )}

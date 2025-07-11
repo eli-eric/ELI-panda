@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import type { FC } from 'react'
 
+import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
-import { cx } from '@/utils'
 import { formatDate } from '@/utils/formatters'
 
 import { HISTORY_TYPE } from '../../types/constants'
@@ -39,7 +39,7 @@ const HistoryFeedItem: FC<HistoryFeedItemProps> = ({ historyItem, isLast }) => {
   return (
     <li className="relative flex gap-x-4 pr-2">
       <div
-        className={cx(
+        className={cn(
           isLast ? 'h-6' : '-bottom-6',
           'absolute left-0 top-0 flex w-6 justify-center'
         )}

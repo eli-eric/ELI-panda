@@ -5,7 +5,7 @@ import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import useOrderLinesColumns from './components/OrderLines.columns'
 import { OrderLineForm } from './form/OrderLineForm.cont'
@@ -63,7 +63,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
           headerClassName="whitespace-nowrap sticky"
           rowClassName="whitespace-nowrap group/row"
           getRowProps={(orderLine, index) => ({
-            className: cx(
+            className: cn(
               orderLine?.isDelivered
                 ? index % 2 === 0
                   ? 'bg-green-200 dark:bg-green-800 '

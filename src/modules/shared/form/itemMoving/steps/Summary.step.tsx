@@ -4,8 +4,8 @@ import { CheckBoxComponent } from '@/components/form/CheckBox'
 import Card from '@/components/layout/Card'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import type { ModalButtons } from '@/types/form'
-import { cx } from '@/utils'
 
 import { useMoveWizardSubmit } from '../hooks/useMoveWizardSubmit'
 import { SummaryListParam } from './components/SymmaryListParam.comp'
@@ -41,7 +41,7 @@ export const SummaryStep: FC = () => {
     <Fragment>
       <Card title="Summary">
         <div
-          className={cx(
+          className={cn(
             oldItemParentSystem ? 'grid grid-cols-3' : 'grid grid-cols-2'
           )}
         >

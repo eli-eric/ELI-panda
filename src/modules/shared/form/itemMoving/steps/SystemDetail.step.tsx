@@ -11,12 +11,12 @@ import Card, { FormCard } from '@/components/layout/Card'
 import { Heading } from '@/components/layout/Heading'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { useSystemDetail } from '@/modules/systemItem/hooks/useSystemDetail'
 import { getColorBySystemLevel } from '@/modules/systemItem/utils'
 import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
 import type { SystemDetail } from '@/types/responses/systems'
-import { cx } from '@/utils'
 
 import { SelectLocationCombo } from '../../location/SelectLocation.combo'
 import { useWizardStore } from '../../wizard/store/useWizardStore'
@@ -131,7 +131,7 @@ export const SystemDetailStep: FC = () => {
         </Card>
         <FormCard
           title="System details"
-          className={cx(
+          className={cn(
             'shadow-md rounded-lg border p-4 mt-2',
             !isMovingToNewSystem && getColorBySystemLevel(system?.systemLevel)
           )}

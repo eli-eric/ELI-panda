@@ -16,11 +16,11 @@ import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { FormModal } from '@/hooks/form/useFormModal'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { useOrderLine } from '@/modules/orderItem/hooks/useOrderLine'
 import type { OrderLineFormType } from '@/modules/orderItem/types/form'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
-import { cx } from '@/utils'
 import { createMessageValues } from '@/utils/formatters'
 
 import { OrderLineForm } from '../form/OrderLineForm.cont'
@@ -36,7 +36,7 @@ export const ButtonsWrapperNew: FC<
   PropsWithChildren<OrderLineButtonsWrapperProps>
 > = ({ children, position = 'right-0', className }) => (
   <div
-    className={cx(
+    className={cn(
       'absolute flex items-center gap-1',
       'opacity-0 group-hover/row:opacity-100 transition-opacity duration-150',
       'z-20',

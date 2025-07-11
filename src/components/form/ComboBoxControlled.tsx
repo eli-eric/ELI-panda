@@ -3,10 +3,10 @@ import React, { useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import { useCodebook } from '@/hooks/fetch/useCodebook'
+import { cn } from '@/lib/utils'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 import type { CodebookFilter, CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 
 import { ComboboxOption } from './components/ComboboxOption'
 import { FormXMarkIcon } from './components/FormXMarkIcon'
@@ -76,7 +76,7 @@ export const ComboboxTreeControlled = ({
         setQuery(value?.name || '')
       }}
       disabled={disabled}
-      className={cx('relative flex flex-col w-full', className)}
+      className={cn('relative flex flex-col w-full', className)}
     >
       {(label || customLabel) && (
         <HUICombobox.Label className="block text-sm font-medium text-gray-900 dark:text-gray-200">
@@ -89,7 +89,7 @@ export const ComboboxTreeControlled = ({
           displayValue={(item: CodebookType) => item?.name}
           placeholder={placeholder}
           autoComplete="off"
-          className={cx(
+          className={cn(
             'form-field',
             value && !disabled ? 'pr-14' : 'pr-9',
             rounded,
@@ -112,7 +112,7 @@ export const ComboboxTreeControlled = ({
       </div>
       {options?.data && options.data.length > 0 && (
         <HUICombobox.Options
-          className={cx(
+          className={cn(
             'absolute z-20 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
             position === 'top' ? 'bottom-full' : 'top-full'
           )}

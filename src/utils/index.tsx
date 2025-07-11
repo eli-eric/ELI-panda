@@ -1,9 +1,3 @@
-import { twMerge } from 'tailwind-merge'
-
-export function cx(...classes) {
-  return twMerge(classes.filter(Boolean).join(' '))
-}
-
 export function generatePassword() {
   const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   const digits = '0123456789'

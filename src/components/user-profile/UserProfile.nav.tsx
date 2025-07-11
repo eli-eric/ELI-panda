@@ -6,8 +6,8 @@ import {
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
+import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
-import { cx } from '@/utils'
 
 const userProfileNavigation = [
   { name: 'General', href: PATH.PROFILE_GENERAL, icon: UserCircleIcon },
@@ -30,7 +30,7 @@ export const UserProfileNav = () => {
             <li key={item.name}>
               <Link
                 href={item.href}
-                className={cx(
+                className={cn(
                   item.href === currentPath
                     ? 'bg-gray-50 dark:bg-gray-700 text-primary-600'
                     : 'text-gray-700 dark:text-gray-200 hover:text-primary-600 hover:bg-gray-50 dark:hover:bg-gray-600',
@@ -38,7 +38,7 @@ export const UserProfileNav = () => {
                 )}
               >
                 <item.icon
-                  className={cx(
+                  className={cn(
                     item.href === currentPath
                       ? 'text-primary-600'
                       : 'text-gray-400 group-hover:text-primary-600',

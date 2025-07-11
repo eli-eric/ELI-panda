@@ -2,7 +2,7 @@ import { Menu, MenuButton, MenuItems, Transition } from '@headlessui/react'
 import { FunnelIcon } from '@heroicons/react/24/outline'
 import React, { Fragment, useEffect, useState } from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 interface FilterDropdownProps {
   column: any
@@ -57,7 +57,7 @@ export function FilterDropdown({
         {({ open }) => (
           <>
             <MenuButton
-              className={cx(
+              className={cn(
                 'inline-flex items-center justify-center p-1 rounded-md',
                 'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
                 currentFilter

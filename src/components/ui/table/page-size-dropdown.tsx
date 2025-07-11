@@ -9,7 +9,7 @@ import { CheckIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { Fragment, useCallback } from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import type { PageSizeDropdownProps } from './types'
 
@@ -35,7 +35,7 @@ export function PageSizeDropdown({
     <Listbox value={value} onChange={handleChange}>
       <div className="relative w-20">
         <ListboxButton
-          className={cx(
+          className={cn(
             'relative w-full cursor-default rounded-md bg-white dark:bg-gray-800 py-1.5 pl-3 pr-8 text-left',
             'text-sm text-gray-700 dark:text-gray-300',
             'border border-gray-300 dark:border-gray-600',
@@ -59,7 +59,7 @@ export function PageSizeDropdown({
         >
           <ListboxOptions
             anchor="bottom start"
-            className={cx(
+            className={cn(
               'absolute z-50 mt-1 max-h-56 w-20 overflow-auto rounded-md',
               'bg-white dark:bg-gray-800 py-1 text-sm shadow-lg',
               'ring-1 ring-black ring-opacity-5 focus:outline-none'
@@ -70,7 +70,7 @@ export function PageSizeDropdown({
                 key={size}
                 value={size}
                 className={({ active }) =>
-                  cx(
+                  cn(
                     'relative cursor-default select-none py-2 pl-3 pr-9',
                     active
                       ? 'bg-primary-50 text-primary-700 dark:bg-primary-900 dark:text-primary-200'
@@ -81,7 +81,7 @@ export function PageSizeDropdown({
                 {({ selected }) => (
                   <>
                     <span
-                      className={cx(
+                      className={cn(
                         'block truncate',
                         selected ? 'font-medium' : 'font-normal'
                       )}

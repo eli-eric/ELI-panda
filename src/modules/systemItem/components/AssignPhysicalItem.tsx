@@ -5,9 +5,9 @@ import { toast } from 'react-hot-toast'
 import { Button } from '@/components/Buttons'
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
 import type { ModalButtons } from '@/types/form'
-import { cx } from '@/utils'
 
 import { useSystemItemStore } from '../store/useSystemItemStore'
 import type { SystemDetailFormType } from '../types/form'
@@ -69,7 +69,7 @@ export const AssignPhysicalItem = () => {
             onClick: () => {
               if (original?.physicalItem) setSelectedPhysicalSystem(original)
             },
-            className: cx(
+            className: cn(
               selectedPhysicalSystem?.uid === original.uid
                 ? 'bg-primary-200 hover:bg-primary-200 dark:hover:bg-primary-600 dark:bg-primary-600'
                 : '',

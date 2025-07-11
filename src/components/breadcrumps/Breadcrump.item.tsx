@@ -1,10 +1,10 @@
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
 
+import { cn } from '@/lib/utils'
 import type { Maybe } from '@/types/gql/graphql'
 import { SystemLevel } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 
 interface Props {
   name?: Maybe<string>
@@ -56,7 +56,7 @@ export const BreadcrumpItem = ({
         {link ? (
           <Link
             href={{ pathname: link }}
-            className={cx(
+            className={cn(
               'ml-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-200 dark:hover:text-primary-600',
               systemLevel === SystemLevel.KeySystems &&
                 'text-primary-600 dark:text-primary-400',

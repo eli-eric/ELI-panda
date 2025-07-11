@@ -3,9 +3,9 @@ import { TableCellsIcon } from '@heroicons/react/24/outline'
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
+import { cn } from '@/lib/utils'
 import type { FieldProps } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 
 import { FormXMarkIcon } from './components/FormXMarkIcon'
 
@@ -55,7 +55,7 @@ export const ModalSelect = ({
               onChange && onChange(v)
             }}
             disabled={disabled}
-            className={cx('relative flex flex-col w-full h-min', className)}
+            className={cn('relative flex flex-col w-full h-min', className)}
           >
             {label && (
               <HUIListbox.Label className="block text-sm font-medium text-gray-900 dark:text-gray-200">
@@ -65,7 +65,7 @@ export const ModalSelect = ({
             <div>
               <HUIListbox.Button
                 type="button"
-                className={cx(
+                className={cn(
                   'form-field-combo h-[38px] rounded-md relative',
                   field.value && !disabled ? '' : '',
                   error ? 'border-red-500' : 'border-gray-300',

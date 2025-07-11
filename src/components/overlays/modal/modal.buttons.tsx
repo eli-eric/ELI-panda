@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 
+import { cn } from '@/lib/utils'
 import type { ModalButtons } from '@/types/form'
-import { cx } from '@/utils'
 
 import { Button } from '../../Buttons'
 
@@ -15,7 +15,7 @@ const ModalButtonsComponent = ({ testid, buttons, className }: Props) => (
   <Fragment>
     {buttons && (
       <div
-        className={cx(
+        className={cn(
           `mt-5 sm:mt-6 sm:flex sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3`,
           className
         )}

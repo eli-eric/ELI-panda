@@ -3,7 +3,7 @@ import Image from 'next/image'
 import type { InputHTMLAttributes } from 'react'
 
 import { DeleteButton, PlusButton } from '@/components/Buttons'
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import type { FileItem } from '../../fileManager/types'
 
@@ -53,7 +53,7 @@ export const ImageTabList = ({
           <Tab key={obj.id}>
             {({ selected }) => (
               <Image
-                className={cx(
+                className={cn(
                   'rounded-full size-5',
                   selected && 'border-2 border-primary-500 size-6'
                 )}
@@ -76,7 +76,7 @@ export const ImageTabList = ({
             `Are you sure you want to delete ${(data ?? [])[selectedIndex]?.name}?`
           )((data ?? [])[selectedIndex])
         }
-        className={cx(
+        className={cn(
           'flex border-0 border-l rounded-none rounded-tr-md',
           !allowMultipleImages &&
             'min-w-full items-center justify-center rounded-tl-md border-l-0'

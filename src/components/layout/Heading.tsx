@@ -1,6 +1,6 @@
 import { FormattedMessage } from 'react-intl'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 interface HeadingProps {
   children?: React.ReactNode
@@ -22,7 +22,7 @@ export const Heading = ({
   showBorder = true
 }: HeadingProps) => (
   <div
-    className={cx(
+    className={cn(
       'border-gray-200 px-2 py-2 sm:px-3',
       showBorder ? 'border-b mb-4' : '',
       className
@@ -30,7 +30,7 @@ export const Heading = ({
   >
     <div className="-ml-2 -mt-1 flex h-12 items-center justify-between">
       <div className="ml-2 mt-1 flex items-center w-full">
-        <h3 className={cx('text-lg font-medium', textColor)}>
+        <h3 className={cn('text-lg font-medium', textColor)}>
           {customText ? customText : <FormattedMessage id={text} />}
         </h3>
         {titleNode}

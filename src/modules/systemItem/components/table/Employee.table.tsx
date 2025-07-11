@@ -2,9 +2,9 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { memo, useMemo } from 'react'
 
 import { Table } from '@/components/ui'
+import { cn } from '@/lib/utils'
 import { ROLE } from '@/types/constants/roles'
 import type { Employee } from '@/types/gql/graphql'
-import { cx } from '@/utils'
 
 import { HeaderAddButton } from '../../../roomCard/components/table/HeaderAddButton'
 import { CellWithDelete } from './CellWithDelete'
@@ -66,7 +66,7 @@ export const EmployeeTable = memo(
         data={data}
         headerClassName="whitespace-nowrap sticky"
         rowClassName="whitespace-nowrap group/row"
-        className={cx(className, 'overflow-x-auto overflow-y-auto')}
+        className={cn(className, 'overflow-x-auto overflow-y-auto')}
       />
     )
   }

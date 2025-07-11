@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { PinIcon } from '@/components/icons/pin'
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import type { PinnedPosition } from './types'
 
@@ -25,14 +25,14 @@ export function PinIndicator({ column, position }: PinIndicatorProps) {
         e.stopPropagation() // Prevent sorting when clicking pin
         column.pin(isPinned ? false : position)
       }}
-      className={cx(
+      className={cn(
         'p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors',
         isPinned ? 'text-primary-500' : 'text-gray-400'
       )}
       title={`${isPinned ? 'Unpin' : 'Pin'} column`}
     >
       <PinIcon
-        className={cx(
+        className={cn(
           'w-4 h-4',
           isPinned && '-rotate-45',
           isPinned ? 'text-primary-500' : 'text-gray-400'

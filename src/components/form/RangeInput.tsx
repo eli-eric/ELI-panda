@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 interface Props {
   name: string
@@ -59,7 +59,7 @@ export const RangeInput = ({
                   pattern="[0-9]*"
                   placeholder={placeholder?.min || 'Min'}
                   disabled={disabled}
-                  className={cx(
+                  className={cn(
                     'form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm',
                     isFilter && fieldValue?.min && 'border-green-500',
                     error && 'border-red-500',
@@ -89,7 +89,7 @@ export const RangeInput = ({
                       max: value
                     })
                   }}
-                  className={cx(
+                  className={cn(
                     'form-field rounded-md border-gray-200 border-1 px-2 py-1 text-sm',
                     isFilter && fieldValue?.max && 'border-green-500',
                     error && 'border-red-500',

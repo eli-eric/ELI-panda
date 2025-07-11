@@ -4,11 +4,11 @@ import { useFormContext } from 'react-hook-form'
 import { ModalSelect } from '@/components/form/ModalSelect'
 import { Modal } from '@/components/overlays/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps, ModalButtons, Option } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 
 const messages = message.common.buttons
 
@@ -76,7 +76,7 @@ export const SelectSystemComboBox = ({
                 uid: row.original.uid
               })
             },
-            className: cx(
+            className: cn(
               selectedSystem?.uid === row.original.uid
                 ? 'bg-primary-200 hover:bg-primary-200 dark:bg-primary-600 dark:hover:bg-primary-600'
                 : '',

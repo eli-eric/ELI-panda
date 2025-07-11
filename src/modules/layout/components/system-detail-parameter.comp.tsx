@@ -2,7 +2,7 @@ import { LinkIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import type { FC } from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 type Props = {
   title: string
@@ -21,7 +21,7 @@ export const SystemDetailParameter: FC<Props> = ({
   unit,
   href
 }) => {
-  const baseClasses = cx(
+  const baseClasses = cn(
     'flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200',
     href
       ? 'hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-700 border border-transparent cursor-pointer group'
@@ -38,7 +38,7 @@ export const SystemDetailParameter: FC<Props> = ({
       </span>
       <div className="text-right max-w-[60%]">
         <span
-          className={cx(
+          className={cn(
             'truncate',
             href
               ? 'text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300'

@@ -3,8 +3,9 @@ import { MoonIcon, SunIcon } from '@heroicons/react/24/outline'
 import type { FC } from 'react'
 import { startTransition, useEffect, useState } from 'react'
 
+import { cn } from '@/lib/utils'
 import { useDarkModeStore } from '@/store/useDarkModeStore'
-import { cx } from '@/utils'
+
 interface Props {
   className?: string
 }
@@ -24,20 +25,20 @@ export const DarkModeSwitch: FC<Props> = ({ className }) => {
     <Switch
       checked={isDark}
       onChange={() => toggleDarkMode()}
-      className={cx(
+      className={cn(
         isDark ? 'bg-gray-500' : 'bg-gray-200',
         'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out',
         className
       )}
     >
       <span
-        className={cx(
+        className={cn(
           isDark ? 'translate-x-5 bg-gray-700' : 'translate-x-0 bg-white',
           'pointer-events-none relative inline-block h-5 w-5 transform rounded-full shadow ring-0 transition duration-200 ease-in-out'
         )}
       >
         <span
-          className={cx(
+          className={cn(
             isDark
               ? 'opacity-0 duration-100 ease-out'
               : 'opacity-100 duration-200 ease-in',
@@ -48,7 +49,7 @@ export const DarkModeSwitch: FC<Props> = ({ className }) => {
           <SunIcon className="h-3 w-3 text-gray-600" aria-hidden="true" />
         </span>
         <span
-          className={cx(
+          className={cn(
             isDark
               ? 'opacity-100 duration-200 ease-in'
               : 'opacity-0 duration-100 ease-out',
@@ -60,7 +61,7 @@ export const DarkModeSwitch: FC<Props> = ({ className }) => {
         </span>
       </span>
       <span
-        className={cx(
+        className={cn(
           isDark
             ? 'opacity-0 duration-100 ease-out'
             : 'opacity-100 duration-200 ease-in',
@@ -71,7 +72,7 @@ export const DarkModeSwitch: FC<Props> = ({ className }) => {
         <MoonIcon className="h-3 w-3 text-gray-600" aria-hidden="true" />
       </span>
       <span
-        className={cx(
+        className={cn(
           isDark
             ? 'opacity-100 duration-200 ease-in'
             : 'opacity-0 duration-100 ease-out',

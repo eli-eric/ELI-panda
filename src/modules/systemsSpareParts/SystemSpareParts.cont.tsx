@@ -5,8 +5,8 @@ import { Button } from '@/components/Buttons'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
 import useQueryManager from '@/hooks/useQueryManager'
 import useWarningModal from '@/hooks/useWarningModal'
+import { cn } from '@/lib/utils'
 import type { SystemDetail } from '@/types/responses/systems'
-import { cx } from '@/utils'
 
 import { FilterBadges } from '../shared/form/FilterBadges'
 import { Pagination } from '../shared/table/Pagination'
@@ -207,7 +207,7 @@ export const SystemsSparePartsContainer = () => {
   }, [])
 
   return (
-    <div className={cx('grid grid-cols-2')}>
+    <div className={cn('grid grid-cols-2')}>
       <TableLayoutContainer
         deps={[sysetms1.systems]}
         className="border-r-4 border-gray-400"
@@ -228,7 +228,7 @@ export const SystemsSparePartsContainer = () => {
           className={'relative overflow-scroll scrollbar-style'}
           settings={tableSettings}
           getRowProps={({ original }) => ({
-            className: cx(
+            className: cn(
               original?.physicalItem &&
                 'font-bold text-gray-700 dark:text-gray-200',
               getColorBySystemLevel(original?.systemLevel),
@@ -288,7 +288,7 @@ export const SystemsSparePartsContainer = () => {
           className={'relative overflow-scroll scrollbar-style'}
           settings={tableSettings}
           getRowProps={({ original }) => ({
-            className: cx(
+            className: cn(
               original?.physicalItem &&
                 'font-bold text-gray-700 dark:text-gray-200',
               getColorBySystemLevel(original?.systemLevel),
