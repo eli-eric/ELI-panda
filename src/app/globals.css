@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
 @import '../styles/eli-busy.css';
 @import '../styles/loader.css';
@@ -10,66 +8,111 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 10% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --background: hsl(0 0% 100%);
+    --foreground: hsl(240 10% 3.9%);
+
+    --card: hsl(0 0% 100%);
+    --card-foreground: hsl(240 10% 3.9%);
+
+    --popover: hsl(0 0% 100%);
+    --popover-foreground: hsl(240 10% 3.9%);
+
+    --primary: hsl(24 90% 40%);
+    --primary-foreground: hsl(0 0% 98%);
+
+    --secondary: hsl(240 4.8% 95.9%);
+    --secondary-foreground: hsl(240 5.9% 10%);
+
+    --muted: hsl(240 4.8% 95.9%);
+    --muted-foreground: hsl(240 3.8% 46.1%);
+
+    --accent: hsl(240 4.8% 95.9%);
+    --accent-foreground: hsl(240 5.9% 10%);
+
+    --destructive: hsl(0 84.2% 60.2%);
+    --destructive-foreground: hsl(0 0% 98%);
+
+    --border: hsl(240 5.9% 90%);
+    --input: hsl(240 5.9% 90%);
+    --ring: hsl(240 10% 3.9%);
+
     --radius: 0.5rem;
+
+    /* Table specific variables */
+    --table-row-even: hsl(0 0% 100%);
+    --table-row-odd: hsl(240 5% 96%);
+    --table-row-hover: hsl(240 5% 94%);
+    --table-header-bg: hsl(240 5% 96%);
+    --table-border: hsl(240 6% 90%);
+    --table-pinned-shadow: hsl(240 5% 90% / 0.5);
+    --table-muted: hsl(240 3% 94%);
+
+    /* sideBar */
+    --sidebar-background: hsl(0 0% 98%);
+    --sidebar-foreground: hsl(240 5.3% 26.1%);
+    --sidebar-primary: hsl(240 5.9% 10%);
+    --sidebar-primary-foreground: hsl(0 0% 98%);
+    --sidebar-accent: hsl(24 90% 40%);
+    --sidebar-accent-foreground: hsl(0 0% 98%);
+    --sidebar-border: hsl(220 13% 91%);
+    --sidebar-ring: hsl(24 90% 40%);
+    --chart-1: hsl(12 76% 61%);
+    --chart-2: hsl(173 58% 39%);
+    --chart-3: hsl(197 37% 24%);
+    --chart-4: hsl(43 74% 66%);
+    --chart-5: hsl(27 87% 67%);
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --background: hsl(240 10% 3.9%);
+    --foreground: hsl(0 0% 98%);
+    --card: hsl(240 10% 3.9%);
+    --card-foreground: hsl(0 0% 98%);
+    --popover: hsl(240 10% 3.9%);
+    --popover-foreground: hsl(0 0% 98%);
+    --primary: hsl(24 90% 40%);
+    --primary-foreground: hsl(240 5.9% 10%);
+    --secondary: hsl(240 3.7% 15.9%);
+    --secondary-foreground: hsl(0 0% 98%);
+    --muted: hsl(240 3.7% 15.9%);
+    --muted-foreground: hsl(240 5% 64.9%);
+    --accent: hsl(240 3.7% 15.9%);
+    --accent-foreground: hsl(0 0% 98%);
+    --destructive: hsl(0 62.8% 30.6%);
+    --destructive-foreground: hsl(0 0% 98%);
+    --border: hsl(240 3.7% 15.9%);
+    --input: hsl(240 3.7% 15.9%);
+    --ring: hsl(240 4.9% 83.9%);
+    /* Table specific variables */
+    --table-row-even: hsl(240 10% 3.9%);
+    --table-row-odd: hsl(240 5% 13%);
+    --table-row-hover: hsl(240 5% 20%);
+    --table-header-bg: hsl(240 5% 13%);
+    --table-border: hsl(240 5% 26%);
+    --table-pinned-shadow: hsl(0 0% 0% / 0.3);
+    /* sideBar */
+    --sidebar-background: hsl(222.2 84% 3%);
+    --sidebar-foreground: hsl(240 4.8% 95.9%);
+    --sidebar-primary: hsl(224.3 76.3% 48%);
+    --sidebar-primary-foreground: hsl(0 0% 100%);
+    --sidebar-accent: hsl(24 90% 30%);
+    --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+    --sidebar-border: hsl(240 3.7% 15.9%);
+    --sidebar-ring: hsl(217.2 91.2% 59.8%);
+    --chart-1: hsl(220 70% 50%);
+    --chart-2: hsl(160 60% 45%);
+    --chart-3: hsl(30 80% 55%);
+    --chart-4: hsl(280 65% 60%);
+    --chart-5: hsl(340 75% 55%);
   }
 
   * {
-    @apply border-border;
+    border-color: var(--border);
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--background);
+    color: var(--foreground);
   }
 
   input[type='number']::-webkit-outer-spin-button,
@@ -82,11 +125,23 @@
   }
 
   table {
-    @apply border-separate border-spacing-0 relative z-0;
+    border-collapse: separate;
+    border-spacing: 0;
+    position: relative;
+    z-index: 0;
   }
 
   h2 {
-    @apply mt-6 text-center text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-200;
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 1.875rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    color: #111827;
+  }
+
+  .dark h2 {
+    color: #e5e7eb;
   }
 
   th {
@@ -96,75 +151,225 @@
 
 @layer components {
   .form-field {
-    @apply block w-full text-left appearance-none border px-3 py-2 placeholder-gray-400 bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-200 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm;
+    display: block;
+    width: 100%;
+    text-align: left;
+    appearance: none;
+    border: 1px solid #d1d5db;
+    padding: 0.5rem 0.75rem;
+    background-color: white;
+    color: #111827;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .form-field::placeholder {
+    color: #9ca3af;
+  }
+
+  .form-field:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 1px var(--ring);
+  }
+
+  .dark .form-field {
+    background-color: #4b5563;
+    color: #e5e7eb;
   }
 
   .form-field-combo {
-    @apply block w-full text-left appearance-none border placeholder-gray-400 bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-200 focus:border-primary focus:outline-none focus:ring-primary sm:text-sm;
+    display: block;
+    width: 100%;
+    text-align: left;
+    appearance: none;
+    border: 1px solid #d1d5db;
+    background-color: white;
+    color: #111827;
+  }
+
+  .form-field-combo::placeholder {
+    color: #9ca3af;
+  }
+
+  .form-field-combo:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 1px var(--ring);
+  }
+
+  .dark .form-field-combo {
+    background-color: #4b5563;
+    color: #e5e7eb;
   }
 
   .btn {
-    @apply relative text-xs font-medium shadow-sm z-10 inline-flex items-center border border-gray-300 focus:outline-none focus:ring-0 focus:ring-primary dark:hover:bg-gray-500;
+    position: relative;
+    font-size: 0.75rem;
+    font-weight: 500;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #d1d5db;
+  }
+
+  .btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 0;
+  }
+
+  .dark .btn:hover {
+    background-color: #6b7280;
   }
 
   .btn-primary {
-    @apply hover:bg-primary/90 text-primary-foreground bg-primary;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  .btn-primary:hover {
+    opacity: 0.9;
   }
 
   .btn-secondary {
-    @apply hover:bg-gray-100 text-gray-600 dark:text-gray-200 bg-white dark:bg-gray-700;
+    background-color: white;
+    color: #4b5563;
+  }
+
+  .btn-secondary:hover {
+    background-color: #f3f4f6;
+  }
+
+  .dark .btn-secondary {
+    background-color: #374151;
+    color: #e5e7eb;
   }
 
   .btn-disabled {
-    @apply cursor-not-allowed opacity-30 bg-gray-300 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-700;
+    cursor: not-allowed;
+    opacity: 0.3;
+    background-color: #d1d5db;
+    color: #374151;
+  }
+
+  .btn-disabled:hover {
+    background-color: #d1d5db;
+  }
+
+  .dark .btn-disabled {
+    background-color: #374151;
+    color: #e5e7eb;
+  }
+
+  .dark .btn-disabled:hover {
+    background-color: #374151;
   }
 
   .link {
-    @apply text-blue-700 dark:text-gray-300 dark:underline cursor-pointer hover:underline;
+    color: #1d4ed8;
+    cursor: pointer;
+  }
+
+  .link:hover {
+    text-decoration: underline;
+  }
+
+  .dark .link {
+    color: #d1d5db;
+    text-decoration: underline;
   }
 
   .privacy-container {
-    @apply max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8;
+    max-width: 896px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .privacy-container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .privacy-container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
   }
 
   .privacy-header {
-    @apply text-center mb-12;
+    text-align: center;
+    margin-bottom: 3rem;
   }
 
   .privacy-title {
-    @apply text-4xl font-bold text-gray-900 mb-4;
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1rem;
   }
 
   .privacy-subtitle {
-    @apply text-lg text-gray-600 max-w-2xl mx-auto;
+    font-size: 1.125rem;
+    color: #4b5563;
+    max-width: 672px;
+    margin: 0 auto;
   }
 
   .privacy-section {
-    @apply mb-8 bg-white rounded-lg shadow-sm border p-6;
+    margin-bottom: 2rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid #e5e7eb;
+    padding: 1.5rem;
   }
 
   .privacy-section-title {
-    @apply text-2xl font-semibold text-gray-900 mb-4;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1rem;
   }
 
   .privacy-content {
-    @apply text-gray-700 leading-relaxed;
+    color: #374151;
+    line-height: 1.625;
   }
 
   .privacy-list {
-    @apply space-y-2 text-gray-700;
+    color: #374151;
+  }
+
+  .privacy-list > * + * {
+    margin-top: 0.5rem;
   }
 
   .privacy-list-item {
-    @apply flex items-start;
+    display: flex;
+    align-items: flex-start;
   }
 
   .privacy-list-bullet {
-    @apply w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #3b82f6;
+    border-radius: 50%;
+    margin-top: 0.5rem;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
   }
 
   .privacy-footer {
-    @apply mt-12 pt-8 border-t border-gray-200 text-center text-sm text-gray-500;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6b7280;
   }
 }
 
