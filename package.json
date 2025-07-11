@@ -9,8 +9,6 @@
     "start": "PORT=5001 next start --hostname 0.0.0.0",
     "lint": "next lint",
     "format": "prettier --write .",
-    "cy:open": "cypress open",
-    "cy:run": "cypress run",
     "generate": "graphql-codegen --config codegen.ts",
     "generate:watch": "graphql-codegen --config --watch",
     "test": "tsc --project tsconfig.jest.json && jest"
@@ -98,8 +96,6 @@
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
     "autoprefixer": "^10.4.16",
-    "cypress": "^13.14.1",
-    "cypress-social-logins": "^1.14.2",
     "eslint": "^8.54.0",
     "eslint-config-next": "14.0.3",
     "eslint-config-prettier": "^9.0.0",
