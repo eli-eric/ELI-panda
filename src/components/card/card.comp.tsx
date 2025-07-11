@@ -10,7 +10,7 @@ export const Heading = ({ text, children }: HeadingProps) => (
           {text}
         </h3>
       </div>
-      {children && <div className="ml-2 mt-1 flex-shrink-0">{children}</div>}
+      {children && <div className="ml-2 mt-1 shrink-0">{children}</div>}
     </div>
   </div>
 )

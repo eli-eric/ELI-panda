@@ -60,7 +60,7 @@ export const SearchBar = ({
   return (
     <div
       id="search-bar"
-      className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white dark:bg-gray-800 border-b"
+      className="sticky top-0 z-10 flex h-16 shrink-0 bg-white dark:bg-gray-800 border-b"
     >
       <div className="flex flex-1 justify-between px-4">
         {left && <div className="flex items-center mr-2">{left}</div>}

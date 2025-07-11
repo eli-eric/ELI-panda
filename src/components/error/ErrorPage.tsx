@@ -4,7 +4,7 @@ function ErrorPage() {
   return (
     <div className="rounded-md bg-red-50 p-4 mt-5">
       <div className="flex">
-        <div className="flex-shrink-0">
+        <div className="shrink-0">
           <XCircleIcon
             className="h-4 w-4
 

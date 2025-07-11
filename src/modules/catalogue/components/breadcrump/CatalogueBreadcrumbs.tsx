@@ -26,7 +26,7 @@ export const CatalogueBreadcrumbs = ({
               setCategoryFilter(null)
             }}
           >
-            <HomeIcon className="h-4 w-4 flex-shrink-0" />
+            <HomeIcon className="h-4 w-4 shrink-0" />
           </button>
         </div>
       </li>

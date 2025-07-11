@@ -192,7 +192,7 @@ const RenameModal = ({
           <input
             id="file-name"
             type="text"
-            className="form-field rounded-md flex-grow"
+            className="form-field rounded-md grow"
             value={nameWithoutExt}
             onChange={e => setNameWithoutExt(e.target.value)}
           />

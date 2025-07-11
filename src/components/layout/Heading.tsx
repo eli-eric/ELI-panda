@@ -35,7 +35,7 @@ export const Heading = ({
         </h3>
         {titleNode}
       </div>
-      {children && <div className="ml-2 mt-1 flex-shrink-0">{children}</div>}
+      {children && <div className="ml-2 mt-1 shrink-0">{children}</div>}
     </div>
   </div>
 )

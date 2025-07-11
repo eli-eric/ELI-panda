@@ -75,9 +75,9 @@ export const widthClasses = [
   'max-w-min',
   'max-w-max',
   'max-w-prose',
-  'max-w-screen-sm',
-  'max-w-screen-md',
-  'max-w-screen-lg',
-  'max-w-screen-xl',
-  'max-w-screen-2xl'
+  'max-w-(--breakpoint-sm)',
+  'max-w-(--breakpoint-md)',
+  'max-w-(--breakpoint-lg)',
+  'max-w-(--breakpoint-xl)',
+  'max-w-(--breakpoint-2xl)'
 ]
