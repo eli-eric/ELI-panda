@@ -3,6 +3,7 @@ import { type FC } from 'react'
 
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { Pagination } from '@/modules/shared/table/Pagination'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableV2 } from '@/modules/shared/table/pandaTableV2/PandaTableV2'
@@ -14,7 +15,6 @@ import {
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import type { ModalButtons } from '@/types/form'
 import type { SystemDetail } from '@/types/responses/systems'
-import { cx } from '@/utils'
 
 import { FilterBadges } from '../../FilterBadges'
 import { FilterButton } from '../../itemMoving/steps/system-selection/filter/FilterButton'
@@ -67,7 +67,7 @@ export const SelectItemStep: FC = () => {
         return
       }
     },
-    className: cx(
+    className: cn(
       getColorBySystemLevel(row.original?.systemLevel),
       getFontBySystemLevel(row.original?.systemLevel),
       row.original?.physicalItem &&

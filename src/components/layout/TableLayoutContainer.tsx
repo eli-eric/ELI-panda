@@ -5,7 +5,7 @@ import React, {
   useState
 } from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 interface Props {
   children: React.ReactNode
@@ -71,7 +71,7 @@ export const TableLayoutContainer = ({ children, deps, className }: Props) => {
       style={{
         height: `calc(100vh - ${height}px)`
       }}
-      className={cx('flex-col', className)}
+      className={cn('flex-col', className)}
     >
       {children}
     </div>

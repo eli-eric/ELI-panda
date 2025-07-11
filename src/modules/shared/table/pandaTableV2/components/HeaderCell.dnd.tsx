@@ -4,7 +4,7 @@ import { flexRender } from '@tanstack/react-table'
 import { type FC, useMemo } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import styles from './RowCell.module.css'
 
@@ -78,7 +78,7 @@ export const HeaderCellDNDComponent: FC<Props> = ({
   return (
     <th
       ref={dropRef}
-      className={cx(
+      className={cn(
         'border-r outline-offset-0 border-gray-400 ',
         'whitespace-nowrap p-2 text-left bg-white dark:bg-gray-900 font-semibold text-gray-900 dark:text-gray-200',
         isSticky
@@ -101,7 +101,7 @@ export const HeaderCellDNDComponent: FC<Props> = ({
     >
       <div
         ref={previewRef}
-        className={cx(
+        className={cn(
           'h-full w-full flex justify-between',
           header.column.getCanSort() ? 'cursor-pointer select-none' : ''
         )}
@@ -117,7 +117,7 @@ export const HeaderCellDNDComponent: FC<Props> = ({
           desc: ' 🔽'
         }[header.column.getIsSorted() as string] ?? null}
         {!isSticky && (
-          <button ref={dragRef} className={cx(header.getContext() && 'pl-2')}>
+          <button ref={dragRef} className={cn(header.getContext() && 'pl-2')}>
             <ArrowsRightLeftIcon className="w-6 h-6" />
           </button>
         )}

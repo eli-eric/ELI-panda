@@ -10,7 +10,7 @@ import {
 } from '@tanstack/react-table'
 import React, { useEffect, useState } from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import { TableBody } from './table-body'
 import { TableFooter } from './table-footer'
@@ -153,7 +153,7 @@ export function Table<T extends object>({
 
   return (
     // Main container - sets the width constraint on the table
-    <div className={cx('rounded-md border overflow-hidden', filteredClassName)}>
+    <div className={cn('rounded-md border overflow-hidden', filteredClassName)}>
       {/* Container with fixed height if specified */}
       <div
         className="w-full rounded-md"
@@ -161,7 +161,7 @@ export function Table<T extends object>({
       >
         {/* Scrollable container for both horizontal and vertical scrolling */}
         <div
-          className={cx(
+          className={cn(
             // Base styles for scrolling
             'overflow-auto',
             // Apply any extracted scroll classes from props
@@ -179,7 +179,7 @@ export function Table<T extends object>({
               table={table}
               enableSorting={enableSorting}
               enableFiltering={enableFiltering}
-              headerClassName={cx(headerClassName, fixedHeight ? 'sticky' : '')}
+              headerClassName={cn(headerClassName, fixedHeight ? 'sticky' : '')}
             />
             <TableBody
               table={table}
@@ -198,7 +198,7 @@ export function Table<T extends object>({
 
       {/* Pagination */}
       {enablePagination && (
-        <div className={cx({ 'border-t': !!fixedHeight })}>
+        <div className={cn({ 'border-t': !!fixedHeight })}>
           <TablePagination table={table} />
         </div>
       )}

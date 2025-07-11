@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import type { ColSizeProp } from './ColSizes'
 import { colSizes, lgColSizes, mdColSizes } from './ColSizes'
@@ -21,7 +21,7 @@ export const Grid = ({
   ...restProps
 }: GridPropsT): JSX.Element => (
   <div
-    className={cx(
+    className={cn(
       `grid grid-cols-3 md:grid-cols-6 lg:grid-cols-12 text-gray-900 `,
       `gap-y-${verticalSpacing}`,
       `gap-x-${horizontalSpacing}`,
@@ -49,7 +49,7 @@ export const Col = ({
   ...restProps
 }: ColType): JSX.Element => (
   <div
-    className={cx(
+    className={cn(
       col && colSizes[col],
       md && mdColSizes[md],
       lg && lgColSizes[lg],

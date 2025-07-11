@@ -1,7 +1,7 @@
 import { flexRender } from '@tanstack/react-table'
 import React from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import type { TableFooterProps } from './types'
 
@@ -29,7 +29,7 @@ export function TableFooter<T extends object>({
 
   return (
     <tfoot
-      className={cx(
+      className={cn(
         'bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700',
         'relative z-20',
         footerClassName
@@ -96,7 +96,7 @@ export function TableFooter<T extends object>({
               <th
                 key={header.id}
                 colSpan={header.colSpan}
-                className={cx(
+                className={cn(
                   'px-4 py-2 text-left font-medium text-gray-500 dark:text-gray-400',
                   'whitespace-nowrap',
                   // Add border and background styles for pinned columns

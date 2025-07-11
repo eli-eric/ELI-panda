@@ -4,8 +4,8 @@ import { type FC } from 'react'
 
 import { Disclosure } from '@/components/ui'
 import { Badge } from '@/components/visuals/Badge'
+import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
-import { cx } from '@/utils'
 
 interface OrderInformationSectionProps {
   physicalItem: {
@@ -124,7 +124,7 @@ export const OrderInformationSection: FC<OrderInformationSectionProps> = ({
               {/* Second line: Type and Status badges with date */}
               <div className="flex items-center space-x-1.5">
                 <Badge
-                  className={cx(
+                  className={cn(
                     data.type === 'service'
                       ? 'bg-lime-100 dark:bg-lime-600 text-lime-800 dark:text-lime-100'
                       : 'bg-blue-100 dark:bg-blue-600 text-blue-800 dark:text-blue-100'
@@ -133,7 +133,7 @@ export const OrderInformationSection: FC<OrderInformationSectionProps> = ({
                   {data.type === 'service' ? 'Service' : 'Order'}
                 </Badge>
                 <Badge
-                  className={cx(
+                  className={cn(
                     data.isDelivered
                       ? 'bg-green-100 dark:bg-green-600 text-green-800 dark:text-green-100'
                       : 'bg-red-100 dark:bg-red-600 text-red-800 dark:text-red-100'

@@ -5,9 +5,9 @@ import { Fragment, useMemo } from 'react'
 
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
+import { cn, truncateString } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 import type { SystemDetail } from '@/types/responses/systems'
-import { cx, truncateString } from '@/utils'
 
 import { IconCell } from '../systems/components/table/cells/IconCell'
 import { SystemNameCell } from '../systems/components/table/cells/SystemNameCell'
@@ -66,7 +66,7 @@ function IndeterminateCheckbox({
   return (
     <input
       type="checkbox"
-      className={cx(
+      className={cn(
         className,
         !rest.disabled && 'cursor-pointer',
         'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',

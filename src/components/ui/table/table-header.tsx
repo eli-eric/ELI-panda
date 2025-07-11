@@ -1,7 +1,7 @@
 import { flexRender } from '@tanstack/react-table'
 import React from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import { FilterDropdown } from './filter-dropdown'
 import { PinIndicator } from './pin-indicator'
@@ -23,7 +23,7 @@ export function TableHeader<T extends object>({
 
   return (
     <thead
-      className={cx(
+      className={cn(
         'bg-gray-100 dark:bg-gray-800 rounded-t-md',
         headerClassName,
         'relative z-30'
@@ -105,7 +105,7 @@ export function TableHeader<T extends object>({
                 <th
                   key={header.id}
                   style={style}
-                  className={cx(
+                  className={cn(
                     'h-10 px-4 text-left align-middle font-medium text-gray-500 dark:text-gray-400',
                     'hover:bg-gray-200 dark:hover:bg-gray-700',
                     'whitespace-nowrap',
@@ -134,7 +134,7 @@ export function TableHeader<T extends object>({
                   colSpan={header.colSpan}
                 >
                   <div
-                    className={cx(
+                    className={cn(
                       'flex items-center justify-between gap-2',
                       // For group headers, ensure the content can fill available space
                       isGroupHeader ? 'w-full' : ''

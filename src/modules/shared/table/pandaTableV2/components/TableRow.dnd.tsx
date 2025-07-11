@@ -3,8 +3,8 @@ import type { VirtualItem } from '@tanstack/react-virtual'
 import { type FC, useEffect, useRef, useState } from 'react'
 import { useDrop } from 'react-dnd'
 
+import { cn } from '@/lib/utils'
 import type { SystemDetail } from '@/types/responses/systems'
-import { cx } from '@/utils'
 
 import type { GetRowPropsReturnType } from '../../pandaTable/PandaTable'
 import { RowCellComponent } from './RowCell.comp'
@@ -59,7 +59,7 @@ export const TableRowDNDComponent: FC<Props> = ({
 
   return (
     <tr
-      className={cx(
+      className={cn(
         'min-h-[49px]',
         'flex border-t border-gray-300 group',
         virtualRow.index % 2 === 0

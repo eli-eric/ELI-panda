@@ -3,6 +3,7 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Build Commands
+
 - Development: `yarn dev` (port 5001)
 - Build: `yarn build`
 - Production: `yarn start` (port 5001)
@@ -14,6 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - GraphQL codegen: `yarn generate` or `yarn generate:watch`
 
 ## Code Style
+
 - TypeScript with strict mode
 - No semicolons, single quotes
 - Import ordering with simple-import-sort
@@ -26,6 +28,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Use data-testid for test selectors
 
 ## Project Structure
+
 - Feature-based organization in `/src/modules`
 - Reusable components in `/src/components`
 - Custom hooks in `/src/hooks`

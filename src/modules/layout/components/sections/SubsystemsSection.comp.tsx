@@ -18,13 +18,13 @@ import { type FC, useMemo, useState } from 'react'
 
 import { Disclosure } from '@/components/ui'
 import { Badge } from '@/components/visuals/Badge'
+import { cn } from '@/lib/utils'
 import { useShowDeviceStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import { fuzzyFilter } from '@/modules/shared/table/pandaTable/utils'
 import type { TableSystem } from '@/modules/systemItem/components/subsystems/types'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import type { SystemLevel } from '@/types/gql/graphql'
-import { cx } from '@/utils'
 
 interface SubsystemsSectionProps {
   systemDetail: any
@@ -126,13 +126,13 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
               className="flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-700 border border-transparent cursor-pointer group w-full"
             >
               <div className="flex items-center space-x-2 flex-1 min-w-0">
-                <div className={cx('w-4 h-4 flex-shrink-0 rounded-sm')}>
+                <div className={cn('w-4 h-4 flex-shrink-0 rounded-sm')}>
                   <IconCell
                     itemUsageUid={physicalItem?.itemUsage?.uid as ITEM_USAGE}
                   />
                 </div>
                 <span
-                  className={cx(
+                  className={cn(
                     'font-medium transition-colors truncate',
                     physicalItem && 'font-bold',
                     getSystemLevelColors(systemLevel as SystemLevel)

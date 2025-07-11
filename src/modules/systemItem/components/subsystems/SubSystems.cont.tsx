@@ -4,8 +4,8 @@ import { Fragment } from 'react'
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import { Table } from '@/components/ui'
+import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
-import { cx } from '@/utils'
 
 import { useSystemSubsystems } from '../../hooks/useSubsystems'
 import { useSystemDetail } from '../../hooks/useSystemDetail'
@@ -39,7 +39,7 @@ export const SubSystemsContainer = () => {
         enablePagination
         className={'relative overflow-x-auto mb-0 pb-0'}
         getRowProps={({ physicalItem, systemLevel, sp_coverage }, index) => ({
-          className: cx(
+          className: cn(
             physicalItem && 'font-bold text-gray-700 dark:text-gray-200',
             getColorBySystemLevel(systemLevel || undefined, index),
             getFontBySystemLevel(systemLevel || undefined),

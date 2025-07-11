@@ -3,7 +3,7 @@ import Image from 'next/image'
 import type { InputHTMLAttributes } from 'react'
 
 import { ImageIcon } from '@/components/SvgIcons'
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import type { FileItem } from '../../fileManager/types'
 
@@ -22,7 +22,7 @@ export const ImageTabPanels = ({
 }: ImageTabPanelsProps) => (
   <TabPanels
     {...getRootProps()}
-    className={cx(
+    className={cn(
       'h-full flex rounded-b-md border border-t-0 border-gray-300 justify-center',
       canEdit ? 'cursor-pointer' : 'cursor-default'
     )}
@@ -41,7 +41,7 @@ export const ImageTabPanels = ({
       ))
     ) : (
       <TabPanel
-        className={cx(
+        className={cn(
           'mt-1 w-full items-center flex cursor-pointer justify-center rounded-md  border-gray-300 px-6 pt-5 pb-6',
           canEdit &&
             'focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2',

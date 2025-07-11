@@ -5,6 +5,7 @@ import { FormattedDate, FormattedTime, useIntl } from 'react-intl'
 
 import { Tooltip } from '@/components/Tooltip'
 import { message } from '@/i18n/src/messages'
+import { cn, truncateString } from '@/lib/utils'
 import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
 import { useCategoryProperties } from '@/modules/systems/hooks/useCategoryProperties'
 import { PROPERTY_TYPE } from '@/types/catalogue/constants'
@@ -14,7 +15,6 @@ import type {
   CatalogueItemsResponse
 } from '@/types/responses/catalogue'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx, truncateString } from '@/utils'
 
 import { CategoryName } from './cells/CategoryNameCell'
 import { DescriptionCell } from './cells/DescriptionCell'
@@ -212,7 +212,7 @@ export const useCatalogueItemsColumns = ({
             }
             return (
               <div>
-                <span className={cx(unit && 'font-bold')}>{value}</span>
+                <span className={cn(unit && 'font-bold')}>{value}</span>
                 {unit && <span> {unit}</span>}
               </div>
             )

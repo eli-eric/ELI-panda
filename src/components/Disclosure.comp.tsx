@@ -2,7 +2,7 @@ import { Disclosure, DisclosureButton } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
 import { Fragment } from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 interface Props {
   title: string
@@ -18,7 +18,7 @@ const DisclosureComponent = ({ title, children, defaultOpen }: Props) => (
           <h3>
             <DisclosureButton className="group relative flex w-full items-center justify-between py-6 text-left">
               <span
-                className={cx(
+                className={cn(
                   'text-sm font-medium',
                   open ? 'text-primary-500' : 'text-gray-900 dark:text-gray-200'
                 )}

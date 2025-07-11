@@ -1,7 +1,7 @@
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import { Fragment } from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 const activity = [
   {
@@ -61,7 +61,7 @@ export const Feeds = () => {
         {activity.map((activityItem, activityItemIdx) => (
           <li key={activityItem.id} className="relative flex gap-x-4">
             <div
-              className={cx(
+              className={cn(
                 activityItemIdx === activity.length - 1 ? 'h-6' : '-bottom-6',
                 'absolute left-0 top-0 flex w-6 justify-center'
               )}

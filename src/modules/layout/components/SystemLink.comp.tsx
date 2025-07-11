@@ -1,8 +1,8 @@
 import { LinkIcon } from '@heroicons/react/24/outline'
 import { type FC, type ReactNode } from 'react'
 
+import { cn } from '@/lib/utils'
 import { useShowDeviceStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
-import { cx } from '@/utils'
 
 interface SystemLinkProps {
   href?: string
@@ -23,7 +23,7 @@ export const SystemLink: FC<SystemLinkProps> = ({
   uid
 }) => {
   const { setUID } = useShowDeviceStore()
-  const baseClasses = cx(
+  const baseClasses = cn(
     'inline-flex items-center gap-2 text-sm font-medium',
     'transition-colors duration-200',
     'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1',
@@ -32,7 +32,7 @@ export const SystemLink: FC<SystemLinkProps> = ({
 
   const variantClasses =
     variant === 'button'
-      ? cx(
+      ? cn(
           'px-3 py-2 rounded-lg border',
           'bg-white dark:bg-gray-800',
           'border-gray-300 dark:border-gray-600',
@@ -40,7 +40,7 @@ export const SystemLink: FC<SystemLinkProps> = ({
           'hover:bg-gray-50 dark:hover:bg-gray-700',
           'hover:border-gray-400 dark:hover:border-gray-500'
         )
-      : cx(
+      : cn(
           'px-3 py-2 rounded-lg',
           'text-primary-600 dark:text-primary-400',
           'hover:text-primary-800 dark:hover:text-primary-300',
@@ -48,7 +48,7 @@ export const SystemLink: FC<SystemLinkProps> = ({
           'border border-transparent hover:border-primary-200 dark:hover:border-primary-800'
         )
 
-  const linkClasses = cx(baseClasses, variantClasses, className)
+  const linkClasses = cn(baseClasses, variantClasses, className)
 
   const content = (
     <>

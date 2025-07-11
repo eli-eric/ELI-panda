@@ -5,8 +5,8 @@ import { useFormContext } from 'react-hook-form'
 import { useDebounce, useIsFirstRender } from 'usehooks-ts'
 
 import { Tooltip } from '@/components/Tooltip'
+import { cn } from '@/lib/utils'
 import type { FieldProps } from '@/types/form'
-import { cx } from '@/utils'
 
 import { InputWrapper, Label } from '../shared'
 
@@ -85,7 +85,7 @@ export const Input = ({
                   field.onChange(e.target.value)
                 }}
                 placeholder={placeholder}
-                className={cx(
+                className={cn(
                   'form-field',
                   rounded,
                   error ? 'border-red-400' : 'border-gray-300',

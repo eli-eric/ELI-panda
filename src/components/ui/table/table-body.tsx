@@ -1,7 +1,7 @@
 import { flexRender } from '@tanstack/react-table'
 import React from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import type { TableBodyProps } from './types'
 
@@ -27,7 +27,7 @@ export function TableBody<T extends object>({
         {Array.from({ length: 5 }).map((_, rowIndex) => (
           <tr
             key={`skeleton-row-${rowIndex}`}
-            className={cx(
+            className={cn(
               'border-b border-gray-200 dark:border-gray-700 last:border-0',
               rowIndex % 2 === 0
                 ? 'bg-white dark:bg-gray-900'
@@ -111,7 +111,7 @@ export function TableBody<T extends object>({
           <tr
             key={row.id}
             {...customRowProps}
-            className={cx(
+            className={cn(
               'border-b border-gray-200 dark:border-gray-700 last:border-0',
               'transition-colors duration-150 hover:bg-gray-100 hover:dark:bg-gray-600',
               'text-gray-900 dark:text-gray-300',
@@ -173,7 +173,7 @@ export function TableBody<T extends object>({
                 <td
                   key={cell.id}
                   style={style}
-                  className={cx(
+                  className={cn(
                     'p-2 px-4',
                     // Apply both backdrop-blur and background color for better compatibility
                     // Add border styles for pinned columns

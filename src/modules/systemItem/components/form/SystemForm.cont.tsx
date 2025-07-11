@@ -20,11 +20,11 @@ import { useRouter } from 'next/router'
 import { HeaderWithButtons } from '@/components/header/HeaderWithButtons'
 import Card, { FormCard } from '@/components/layout/Card'
 import usePermission from '@/hooks/usePermission'
+import { cn } from '@/lib/utils'
 import { GraphModalButton } from '@/modules/shared/system/GraphModalButton'
 import { ROLE } from '@/types/constants/roles'
 import { SystemLevel } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 
 import { useSystemCreate } from '../../hooks/useSystemCreate'
 import { useSystemDetail } from '../../hooks/useSystemDetail'
@@ -309,7 +309,7 @@ export const SystemForm: FC<PropsWithChildren> = ({ children }) => {
         />
       </Card>
       <FormCard
-        className={cx(
+        className={cn(
           'shadow-md rounded-lg border',
           getColorBySystemLevel(systemLevel as SystemLevel)
         )}

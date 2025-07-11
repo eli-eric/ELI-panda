@@ -2,9 +2,9 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
+import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 import { ROLE } from '@/types/constants/roles'
-import { cx } from '@/utils'
 
 import { statusColorMapping } from '../roomCard/utils/constants'
 import { PandaTable } from '../shared/table/pandaTable/PandaTable'
@@ -47,7 +47,7 @@ export const RoomCardsContainer = () => {
         {...{
           tableId,
           getRowProps: ({ original: { status } }) => ({
-            className: cx(...statusColorMapping(status))
+            className: cn(...statusColorMapping(status))
           }),
           loading,
           error,

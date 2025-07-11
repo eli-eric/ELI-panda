@@ -22,7 +22,7 @@ import { Fragment } from 'react'
 import { FormattedMessage } from 'react-intl'
 import type { UrlObject } from 'url'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import ButtonLoaderComponent from './button-loader.comp'
 
@@ -65,7 +65,7 @@ export const Button = ({
     data-testid={testid}
     disabled={loading ? true : disabled}
     type={type}
-    className={cx(
+    className={cn(
       'btn',
       rounded,
       loading && 'bg-primary-700',
@@ -246,7 +246,7 @@ export const TableDeleteButton = ({
 }: ButtonProps) => (
   <button
     {...props}
-    className={cx('ml-2 hover:text-primary-500 text-red-700', props.className)}
+    className={cn('ml-2 hover:text-primary-500 text-red-700', props.className)}
     type={type}
   >
     <TrashIcon className="h-4 w-4" aria-hidden="true" />
@@ -284,7 +284,7 @@ export const TableButtonsWrapper: FC<
   PropsWithChildren<TableButtonWrapperProps>
 > = ({ children, position = 'right-0', className }) => (
   <div
-    className={cx(
+    className={cn(
       'absolute flex items-center bg-inherit pr-1',
       'sm:opacity-0 sm:group-hover:opacity-100 opacity-100',
       'z-50',

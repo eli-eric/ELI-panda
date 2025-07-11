@@ -1,8 +1,8 @@
 import { type FC, Fragment } from 'react'
 
 import { Disclosure } from '@/components/ui'
+import { cn } from '@/lib/utils'
 import type { SystemLevel } from '@/types/gql/graphql'
-import { cx } from '@/utils'
 
 import { SystemLink } from '../SystemLink.comp'
 
@@ -43,7 +43,7 @@ export const SystemHierarchySection: FC<SystemHierarchySectionProps> = ({
                 <SystemLink
                   uid={parent.uid}
                   external
-                  className={cx(
+                  className={cn(
                     'px-2 py-1 rounded text-xs font-medium hover:bg-opacity-80 transition-colors',
                     'bg-gray-100 dark:bg-gray-600 text-gray-900 dark:text-gray-200',
                     parent.systemLevel === 'KEY_SYSTEMS' &&
@@ -62,7 +62,7 @@ export const SystemHierarchySection: FC<SystemHierarchySectionProps> = ({
           ))}
           <span className="text-gray-400 mx-1">→</span>
           <span
-            className={cx(
+            className={cn(
               'px-2 py-1 rounded text-xs font-medium',
               'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
               systemDetail.systemLevel === 'KEY_SYSTEMS' &&

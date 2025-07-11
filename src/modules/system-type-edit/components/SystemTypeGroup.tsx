@@ -15,11 +15,11 @@ import axiosInstance from '@/core/axios/axiosInstance'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { BASE_URL } from '@/types/constants/common'
 import { ROLE } from '@/types/constants/roles'
 import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 
 const messages = message.common.buttons
 
@@ -91,7 +91,7 @@ export const SystemTypeGroup: FC<Props> = ({
   return (
     <Fragment>
       <li
-        className={cx(
+        className={cn(
           'cursor-pointer py-2 px-4 rounded-md flex justify-between',
           'hover:bg-primary-100 dark:hover:bg-primary-400',
           systemTypeGroup.uid === selectedGroup &&

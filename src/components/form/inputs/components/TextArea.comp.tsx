@@ -1,8 +1,8 @@
 import { Fragment, useId } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
+import { cn } from '@/lib/utils'
 import type { FieldProps } from '@/types/form'
-import { cx } from '@/utils'
 
 import { ValidationIcon } from '../../Icons'
 import { InputWrapper, Label } from '../shared'
@@ -40,7 +40,7 @@ export const TextArea = ({
               rows={rows || 3}
               disabled={disabled}
               placeholder={placeholder}
-              className={cx(
+              className={cn(
                 'form-field',
                 rounded,
                 error ? 'border-red-500' : 'border-gray-300',

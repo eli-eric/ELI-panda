@@ -1,9 +1,9 @@
 import Image from 'next/image'
 
+import { cn } from '@/lib/utils'
 import { FALLBACK_IMAGE } from '@/types/constants/general'
 import type { GetCategoriesQuery } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 
 import { CategoryButtons } from '../categoryEdit/components/CategoryButtons'
 
@@ -19,7 +19,7 @@ export const CategoryItemComponent = ({
   const image = category?.miniImageUrl?.split(';')[0]
   return (
     <div
-      className={cx(
+      className={cn(
         'flex-row justify-between dark:hover:bg-gray-600 relative flex items-center space-x-3 rounded-lg',
         'transform transition-transform duration-300 ease-in-out hover:-translate-y-1',
         'dark:bg-gray-700 dark:shadow-black shadow-md hover:shadow-2xl focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2',
@@ -35,7 +35,7 @@ export const CategoryItemComponent = ({
       >
         <div className="flex-shrink-0 mx-6 my-4">
           <Image
-            className={cx('h-10 w-10 rounded-sm object-contain')}
+            className={cn('h-10 w-10 rounded-sm object-contain')}
             width={200}
             height={200}
             alt={category.name}
@@ -51,7 +51,7 @@ export const CategoryItemComponent = ({
           </div>
         </div>
       </button>
-      <div className={cx('opacity-0', 'group-hover:opacity-100')}>
+      <div className={cn('opacity-0', 'group-hover:opacity-100')}>
         <CategoryButtons uid={category.uid} />
       </div>
     </div>

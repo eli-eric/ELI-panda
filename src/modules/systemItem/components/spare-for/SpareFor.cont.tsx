@@ -5,9 +5,9 @@ import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import { Tooltip } from '@/components/Tooltip'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
+import { cn } from '@/lib/utils'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
 import { PATH } from '@/types/constants/paths'
-import { cx } from '@/utils'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
 import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
@@ -50,7 +50,7 @@ export const SparePartsFor = () => {
         <PandaTable
           columns={columns}
           getRowProps={({ original }) => ({
-            className: cx(
+            className: cn(
               original?.physicalItem &&
                 'font-bold text-gray-700 dark:text-gray-200',
               getColorBySystemLevel(original?.systemLevel),

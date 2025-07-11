@@ -1,4 +1,4 @@
-import '../styles/globals.css'
+import '../app/globals.css'
 
 import { HydrationBoundary, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps } from 'next/app'

@@ -4,12 +4,12 @@ import { useFormContext } from 'react-hook-form'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { message } from '@/i18n/src/messages'
+import { cn } from '@/lib/utils'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
-import { cx } from '@/utils'
 
 import { ExpandableNameCell } from './ExpandableNameCell'
 
@@ -143,7 +143,7 @@ export const CodebookTreeModalGraphql = ({
 
   return (
     <ModalComponent open={open} setOpen={setOpen} buttons={modalButtons}>
-      <div className={cx('max-h-[300px]', loading && ' opacity-70')}>
+      <div className={cn('max-h-[300px]', loading && ' opacity-70')}>
         <PandaTableControlled
           tableId={tableId}
           data={data}
@@ -182,7 +182,7 @@ export const CodebookTreeModalGraphql = ({
                 })
               }
             },
-            className: cx(
+            className: cn(
               item?.uid === row.original.uid &&
                 'bg-primary-200 dark:bg-primary-600 hover:bg-primary-200 dark:hover:bg-primary-600',
               'cursor-pointer'

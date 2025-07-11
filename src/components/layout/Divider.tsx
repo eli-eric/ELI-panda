@@ -1,6 +1,6 @@
 import { FormattedMessage } from 'react-intl'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 interface DividerProps {
   text?: string
@@ -10,7 +10,7 @@ interface DividerProps {
 
 export default function Divider({ text, className, children }: DividerProps) {
   return (
-    <div className={cx('relative', className)}>
+    <div className={cn('relative', className)}>
       <div className="absolute inset-0 flex items-center" aria-hidden="true">
         <div className="w-full border-t border-gray-300" />
       </div>

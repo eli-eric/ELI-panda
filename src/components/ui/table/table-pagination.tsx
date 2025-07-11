@@ -6,7 +6,7 @@ import {
 } from '@heroicons/react/24/outline'
 import React from 'react'
 
-import { cx } from '@/utils'
+import { cn } from '@/lib/utils'
 
 import { PageSizeDropdown } from './page-size-dropdown'
 import type { TablePaginationProps } from './types'
@@ -25,7 +25,7 @@ export function TablePagination<T extends object>({
     <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
       <div className="flex items-center gap-2">
         <button
-          className={cx(
+          className={cn(
             'p-1 rounded-md border border-gray-300 dark:border-gray-600',
             'text-gray-500 dark:text-gray-400',
             'hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors',
@@ -39,7 +39,7 @@ export function TablePagination<T extends object>({
           <ChevronDoubleLeftIcon className="h-4 w-4" />
         </button>
         <button
-          className={cx(
+          className={cn(
             'p-1 rounded-md border border-gray-300 dark:border-gray-600',
             'text-gray-500 dark:text-gray-400',
             'hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors',
@@ -60,7 +60,7 @@ export function TablePagination<T extends object>({
           of <span className="font-medium">{table.getPageCount() || 1}</span>
         </span>
         <button
-          className={cx(
+          className={cn(
             'p-1 rounded-md border border-gray-300 dark:border-gray-600',
             'text-gray-500 dark:text-gray-400',
             'hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors',
@@ -74,7 +74,7 @@ export function TablePagination<T extends object>({
           <ChevronRightIcon className="h-4 w-4" />
         </button>
         <button
-          className={cx(
+          className={cn(
             'p-1 rounded-md border border-gray-300 dark:border-gray-600',
             'text-gray-500 dark:text-gray-400',
             'hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors',

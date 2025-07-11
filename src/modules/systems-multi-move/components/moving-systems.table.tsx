@@ -2,6 +2,7 @@ import type { FC } from 'react'
 import { useEffect, useMemo } from 'react'
 
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
+import { cn } from '@/lib/utils'
 import { FilterBadges } from '@/modules/shared/form/FilterBadges'
 import { Pagination } from '@/modules/shared/table/Pagination'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
@@ -15,7 +16,6 @@ import {
 import { SystemFilterButtonContainer } from '@/modules/systems/components/filters/SystemsFilterButton.cont'
 import { useSystems } from '@/modules/systems/hooks/useSystems'
 import type { SystemDetail } from '@/types/responses/systems'
-import { cx } from '@/utils'
 
 import { useMoveSystemsColumns } from '../move-systems.columns'
 import { useSystemsMoveStore } from '../store/useSystemsMoveStore'
@@ -92,7 +92,7 @@ export const MovingSystemsTable: FC<MovingSystemsTableProps> = ({
         className={'relative overflow-scroll scrollbar-style'}
         settings={tableSettings}
         getRowProps={({ original }) => ({
-          className: cx(
+          className: cn(
             original?.physicalItem &&
               'font-bold text-gray-700 dark:text-gray-200',
             getColorBySystemLevel(original?.systemLevel),

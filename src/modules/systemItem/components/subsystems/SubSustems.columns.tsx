@@ -3,10 +3,10 @@ import Link from 'next/link'
 import { useMemo } from 'react'
 
 import { LinkDecorator } from '@/components/decorators'
+import { cn } from '@/lib/utils'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'
 import { PATH } from '@/types/constants/paths'
-import { cx } from '@/utils'
 
 import type { TableSystem } from './types'
 
@@ -33,7 +33,7 @@ export const useSubSystemsColumns = () => {
           <Link href={PATH.SYSTEM + '/' + original.uid}>
             <LinkDecorator
               title={getValue()}
-              className={cx(
+              className={cn(
                 original?.sp_coverage != null &&
                   original.sp_coverage < 1 &&
                   'text-red-500 dark:text-red-500'

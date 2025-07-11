@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { useMemo } from 'react'
 
 import { Badge } from '@/components/visuals/Badge'
+import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
-import { cx } from '@/utils'
 
 export type OrderColumns = {
   type: string
@@ -24,7 +24,7 @@ export const useSystemOrderColumns = () => {
         accessorKey: 'type',
         cell: ({ getValue }) => (
           <Badge
-            className={cx(
+            className={cn(
               getValue() === 'service' && 'bg-lime-400 dark:bg-lime-600'
             )}
           >
