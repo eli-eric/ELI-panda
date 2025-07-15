@@ -15,7 +15,6 @@ export const FilterBadges = ({
 }) => {
   const [filters, setFilters] = useFilters(tableId, enableQueryURL, false)
   const { addFieldIdToSync } = useFormControlStore()
-  //render only client
 
   return (
     <div>
@@ -26,10 +25,10 @@ export const FilterBadges = ({
       )}
       {additionalBadge}
       {filters.map(filter => (
-        <Badge key={filter.id}>
+        <Badge key={filter.id} variant="outline">
           <span>{filter.name}</span>
           <XMarkIcon
-            className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600"
+            className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600 clickable"
             onClick={() => {
               setFilters(filters.filter(f => f.id !== filter.id))
               addFieldIdToSync(filter.id)

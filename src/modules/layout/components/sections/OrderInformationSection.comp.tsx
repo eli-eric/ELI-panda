@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { type FC } from 'react'
 
 import { Disclosure } from '@/components/ui'
-import { Badge } from '@/components/visuals/Badge'
+import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 

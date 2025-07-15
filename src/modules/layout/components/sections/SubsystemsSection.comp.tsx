@@ -17,7 +17,7 @@ import {
 import { type FC, useMemo, useState } from 'react'
 
 import { Disclosure } from '@/components/ui'
-import { Badge } from '@/components/visuals/Badge'
+import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { useShowDeviceStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import { fuzzyFilter } from '@/modules/shared/table/pandaTable/utils'
