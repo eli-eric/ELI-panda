@@ -131,7 +131,7 @@
     "tailwindcss": "^4.1.11",
     "ts-jest": "^29.2.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.8.3"
   },
   "resolutions": {
     "graphql-ws": "5.12.1"
