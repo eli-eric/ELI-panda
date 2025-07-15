@@ -54,7 +54,7 @@ const CatalogueContainer = () => {
   )
 
   return (
-    <div className="z-10">
+    <div className="w-max-full flex flex-col">
       <SearchBar
         left={<SearchBarButtons filterFormMethods={filterFormMethods} />}
         tableId={tableId}
