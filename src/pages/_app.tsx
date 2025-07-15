@@ -3,6 +3,7 @@ import '../app/globals.css'
 import { HydrationBoundary, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps } from 'next/app'
 import { SessionProvider } from 'next-auth/react'
+import { ThemeProvider } from 'next-themes'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -10,7 +11,7 @@ import { Toaster } from 'react-hot-toast'
 import { IntlProvider } from 'react-intl'
 import { messages } from 'src/i18n/src'
 
-import { Layout } from '@/components/layout/Layout'
+import { NewLayout } from '@/components/layout/NewLayout'
 import { Notification } from '@/components/Notifications/Notification'
 import { GenereralModal } from '@/components/overlays/modal/modal.comp'
 import { WarningModal } from '@/components/WarningModal'
@@ -39,18 +40,20 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
       <HydrationBoundary state={pageProps.dehydratedState}>
         <SessionProvider session={session} refetchOnWindowFocus={false}>
           <IntlProvider locale={'en'} messages={messages.en}>
-            <Toaster
-              position="top-center"
-              reverseOrder={false}
-              toastOptions={{ duration: 1000 }}
-            >
-              {t => <Notification t={t} />}
-            </Toaster>
-            <DndProvider backend={HTML5Backend}>
-              <Layout>{<Component {...pageProps} />}</Layout>
-              <GenereralModal />
-              <WarningModal />
-            </DndProvider>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <Toaster
+                position="top-center"
+                reverseOrder={false}
+                toastOptions={{ duration: 1000 }}
+              >
+                {t => <Notification t={t} />}
+              </Toaster>
+              <DndProvider backend={HTML5Backend}>
+                <NewLayout>{<Component {...pageProps} />}</NewLayout>
+                <GenereralModal />
+                <WarningModal />
+              </DndProvider>
+            </ThemeProvider>
           </IntlProvider>
         </SessionProvider>
       </HydrationBoundary>

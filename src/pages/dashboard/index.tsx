@@ -35,7 +35,7 @@ const tiles: Tile[] = [
     name: 'Systems',
     link: PATH.SYSTEMS,
     Icon: () => (
-      <RectangleGroupIcon className="mx-auto h-24 w-324 shrink-0 rounded-full" />
+      <RectangleGroupIcon className="mx-auto h-24 w-32 shrink-0 rounded-full" />
     ),
     role: ROLE.SYSTEMS_VIEW
   },
@@ -43,7 +43,7 @@ const tiles: Tile[] = [
     name: 'Catalogue',
     link: PATH.CATALOGUE,
     Icon: () => (
-      <RectangleStackIcon className="mx-auto h-24 w-324 shrink-0 rounded-full" />
+      <RectangleStackIcon className="mx-auto h-24 w-32 shrink-0 rounded-full" />
     ),
     role: ROLE.CATALOGUE_VIEW
   },
@@ -51,7 +51,7 @@ const tiles: Tile[] = [
     name: 'Orders',
     link: PATH.ORDERS,
     Icon: () => (
-      <ShoppingCartIcon className="mx-auto h-24 w-324 shrink-0 rounded-full" />
+      <ShoppingCartIcon className="mx-auto h-24 w-32 shrink-0 rounded-full" />
     ),
     role: ROLE.ORDERS_VIEW
   },
@@ -59,7 +59,7 @@ const tiles: Tile[] = [
     name: 'Room Cards',
     link: PATH.ROOM_CARDS,
     Icon: () => (
-      <CreditCardIcon className="mx-auto h-24 w-324 shrink-0 rounded-full" />
+      <CreditCardIcon className="mx-auto h-24 w-32 shrink-0 rounded-full" />
     ),
     role: ROLE.ROOM_CARD_VIEW
   },
@@ -67,7 +67,7 @@ const tiles: Tile[] = [
     name: 'Users',
     link: PATH.ADMIN_USERS,
     Icon: () => (
-      <UserGroupIcon className="mx-auto h-24 w-324 shrink-0 rounded-full" />
+      <UserGroupIcon className="mx-auto h-24 w-32 shrink-0 rounded-full" />
     ),
     role: ROLE.ADMIN
   },
@@ -75,7 +75,7 @@ const tiles: Tile[] = [
     name: 'Codebooks',
     link: PATH.CODEBOOKS,
     Icon: () => (
-      <TableCellsIcon className="mx-auto h-24 w-324 shrink-0 rounded-full" />
+      <TableCellsIcon className="mx-auto h-24 w-32 shrink-0 rounded-full" />
     ),
     role: ROLE.CODEBOOKS_ADMIN
   },
@@ -83,7 +83,7 @@ const tiles: Tile[] = [
     name: 'Support/Feedback',
     link: 'mailto:jiri.svacha@eli-beams.eu',
     Icon: () => (
-      <LifebuoyIcon className="mx-auto h-24 w-324 shrink-0 rounded-full" />
+      <LifebuoyIcon className="mx-auto h-24 w-32 shrink-0 rounded-full" />
     ),
     role: ROLE.BASICS
   },
@@ -91,7 +91,7 @@ const tiles: Tile[] = [
     name: 'Layout',
     link: PATH.LAYOUT,
     Icon: () => (
-      <PhotoIcon className="mx-auto h-24 w-324 shrink-0 rounded-full" />
+      <PhotoIcon className="mx-auto h-24 w-32 shrink-0 rounded-full" />
     ),
     role: ROLE.BASICS
   },
@@ -99,7 +99,7 @@ const tiles: Tile[] = [
     name: 'Publications',
     link: PATH.PUBLICATIONS,
     Icon: () => (
-      <BookOpenIcon className="mx-auto h-24 w-324 shrink-0 rounded-full" />
+      <BookOpenIcon className="mx-auto h-24 w-32 shrink-0 rounded-full" />
     ),
     role: ROLE.PUBLICATIONS_VIEW
   }
