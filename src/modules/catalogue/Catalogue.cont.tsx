@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from 'react'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { TableLayoutContainer } from '@/components/layout/TableLayoutContainer'
-import { Badge } from '@/components/visuals/Badge'
+import { Badge } from '@/components/ui/badge'
 import { useFormFilter } from '@/hooks/form/useFormFilters'
 import type { CodebookType } from '@/types/responses/codebook'
 

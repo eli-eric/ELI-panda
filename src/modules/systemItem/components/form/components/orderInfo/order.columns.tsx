@@ -2,7 +2,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 import { useMemo } from 'react'
 
-import { Badge } from '@/components/visuals/Badge'
+import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 

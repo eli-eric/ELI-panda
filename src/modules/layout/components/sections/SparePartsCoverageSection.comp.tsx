@@ -3,7 +3,7 @@ import { type FC } from 'react'
 
 import { Button } from '@/components/Buttons'
 import { Disclosure } from '@/components/ui'
-import { Badge } from '@/components/visuals/Badge'
+import { Badge } from '@/components/ui/badge'
 import { useShowDeviceStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
 import { IconCell } from '@/modules/systems/components/table/cells/IconCell'
 import type { ITEM_USAGE } from '@/modules/systems/types/constants'

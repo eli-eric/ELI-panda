@@ -3,7 +3,7 @@ import toast from 'react-hot-toast'
 import { FormattedMessage } from 'react-intl'
 import { message } from 'src/i18n/src/messages'
 
-import { Badge } from '@/components/visuals/Badge'
+import { Badge } from '@/components/ui/badge'
 
 const messages = message.layout.profile
 const securityMessages = message.profilePage.security

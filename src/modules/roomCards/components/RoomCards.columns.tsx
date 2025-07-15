@@ -1,7 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { useMemo } from 'react'
 
-import { Badge } from '@/components/visuals/Badge'
+import { Badge } from '@/components/ui/badge'
 import type { RoomCard } from '@/types/gql/graphql'
 
 import { LocationCell } from './LocationCell'

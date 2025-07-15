@@ -8,7 +8,7 @@ import { useCallback, useMemo, useState } from 'react'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { fuzzyFilter } from '@/components/ui/table'
-import { Badge } from '@/components/visuals/Badge'
+import { Badge } from '@/components/ui/badge'
 import { message } from '@/i18n/src/messages'
 import type { ModalButtons } from '@/types/form'
 
