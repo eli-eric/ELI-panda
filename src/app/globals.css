@@ -38,6 +38,10 @@
   --input: hsl(240 5.9% 90%);
   --ring: hsl(240 10% 3.9%);
 
+  /* Link colors */
+  --link: hsl(219 95% 45%);
+  --link-foreground: hsl(0 0% 98%);
+
   --radius: 0.5rem;
 
   /* Tooltip specific variables */
@@ -97,6 +101,10 @@
   --border: hsl(240 3.7% 15.9%);
   --input: hsl(240 3.7% 15.9%);
   --ring: hsl(240 4.9% 83.9%);
+
+  /* Link colors */
+  --link: hsl(219 95% 65%);
+  --link-foreground: hsl(240 5.9% 10%);
 
   /* Tooltip specific variables */
   --tooltip-background: hsl(240, 10%, 23%);
@@ -163,6 +171,8 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-link: var(--link);
+  --color-link-foreground: var(--link-foreground);
   --color-sidebar: var(--sidebar-background);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -567,6 +577,31 @@ input[type='number'] {
 /* More specific selectors for dropdown content */
 .bg-popover {
   background-color: hsl(var(--popover)) !important;
+}
+
+.text-popover-foreground {
+  color: hsl(var(--popover-foreground)) !important;
+}
+
+/* Force proper styling for sidebar dropdown */
+[data-slot='sidebar-footer'] [data-radix-dropdown-menu-content] {
+  background-color: hsl(var(--popover)) !important;
+  color: hsl(var(--popover-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+/* Ultimate fallback for dropdown content */
+div[data-radix-dropdown-menu-content] {
+  background-color: hsl(var(--popover)) !important;
+  color: hsl(var(--popover-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+/* Target by role attribute */
+[role='menu'][data-radix-dropdown-menu-content] {
+  background-color: hsl(var(--popover)) !important;
+  color: hsl(var(--popover-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
 }
 
 .text-popover-foreground {

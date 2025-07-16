@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 
 import SlideOver from '@/components/overlays/slideover/SlideOver'
-import LayoutDetailInfoContainer from '@/modules/layout/components/layout-detail-info.cont'
+import LayoutDetailInfoContainer from '@/modules/shared/system/device-info-overlay/components/layout-detail-info.cont'
 
 import { useShowDeviceStore } from './store/useShowDeviceStore'
 
