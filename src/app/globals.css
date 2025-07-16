@@ -387,98 +387,6 @@ input[type='number'] {
     color: #d1d5db;
     text-decoration: underline;
   }
-
-  .privacy-container {
-    max-width: 896px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
-  }
-
-  @media (min-width: 640px) {
-    .privacy-container {
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .privacy-container {
-      padding-left: 2rem;
-      padding-right: 2rem;
-    }
-  }
-
-  .privacy-header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-
-  .privacy-title {
-    font-size: 2.25rem;
-    font-weight: 700;
-    color: #111827;
-    margin-bottom: 1rem;
-  }
-
-  .privacy-subtitle {
-    font-size: 1.125rem;
-    color: #4b5563;
-    max-width: 672px;
-    margin: 0 auto;
-  }
-
-  .privacy-section {
-    margin-bottom: 2rem;
-    background-color: white;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    border: 1px solid #e5e7eb;
-    padding: 1.5rem;
-  }
-
-  .privacy-section-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #111827;
-    margin-bottom: 1rem;
-  }
-
-  .privacy-content {
-    color: #374151;
-    line-height: 1.625;
-  }
-
-  .privacy-list {
-    color: #374151;
-  }
-
-  .privacy-list > * + * {
-    margin-top: 0.5rem;
-  }
-
-  .privacy-list-item {
-    display: flex;
-    align-items: flex-start;
-  }
-
-  .privacy-list-bullet {
-    width: 0.5rem;
-    height: 0.5rem;
-    background-color: #3b82f6;
-    border-radius: 50%;
-    margin-top: 0.5rem;
-    margin-right: 0.75rem;
-    flex-shrink: 0;
-  }
-
-  .privacy-footer {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid #e5e7eb;
-    text-align: center;
-    font-size: 0.875rem;
-    color: #6b7280;
-  }
 }
 
 /* For Firefox */
@@ -555,6 +463,96 @@ input[type='number'] {
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Ensure sidebar tooltip works when collapsed */
+[data-state='collapsed'] [data-radix-tooltip-content] {
+  display: block !important;
+  opacity: 1 !important;
+}
+
+/* Dark mode fixes */
+.dark [data-radix-dropdown-menu-content] {
+  background-color: hsl(var(--popover)) !important;
+  color: hsl(var(--popover-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+.dark [data-radix-tooltip-content] {
+  background-color: hsl(var(--popover)) !important;
+  color: hsl(var(--popover-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+/* More specific selectors for dropdown content */
+.bg-popover {
+  background-color: hsl(var(--popover)) !important;
+}
+
+.text-popover-foreground {
+  color: hsl(var(--popover-foreground)) !important;
+}
+
+/* Force proper styling for sidebar dropdown */
+[data-slot='sidebar-footer'] [data-radix-dropdown-menu-content] {
+  background-color: hsl(var(--popover)) !important;
+  color: hsl(var(--popover-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+/* Ultimate fallback for dropdown content */
+div[data-radix-dropdown-menu-content] {
+  background-color: hsl(var(--popover)) !important;
+  color: hsl(var(--popover-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+/* Target by role attribute */
+[role='menu'][data-radix-dropdown-menu-content] {
+  background-color: hsl(var(--popover)) !important;
+  color: hsl(var(--popover-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+.text-popover-foreground {
+  color: hsl(var(--popover-foreground)) !important;
+}
+
+/* Force proper styling for sidebar dropdown */
+[data-slot='sidebar-footer'] [data-radix-dropdown-menu-content] {
+  background-color: hsl(var(--popover)) !important;
+  color: hsl(var(--popover-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+/* Ultimate fallback for dropdown content */
+div[data-radix-dropdown-menu-content] {
+  background-color: hsl(var(--popover)) !important;
+  color: hsl(var(--popover-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+/* Target by role attribute */
+[role='menu'][data-radix-dropdown-menu-content] {
+  background-color: hsl(var(--popover)) !important;
+  color: hsl(var(--popover-foreground)) !important;
+  border: 1px solid hsl(var(--border)) !important;
+}
+
+/* Override Radix Dialog max-width constraints for wider sheets */
+[data-radix-dialog-content] {
+  max-width: none !important;
+}
+
+/* Specific override for sheet content with custom width */
+[data-slot='sheet-content'] {
+  max-width: none !important;
+}
+
+/* Ensure sheet content respects custom width classes */
+.sheet-content-wide {
+  max-width: none !important;
+  width: var(--sheet-width) !important;
 }
 
 /* Ensure sidebar tooltip works when collapsed */
