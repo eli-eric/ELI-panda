@@ -14,16 +14,19 @@ import { useShowDeviceStore } from './store/useShowDeviceStore'
 const DeviceInfoSkeleton = () => (
   <div className="space-y-4">
     <div className="space-y-2">
-      <Skeleton className="h-4 w-[250px]" />
-      <Skeleton className="h-4 w-[200px]" />
+      <Skeleton className="h-30 w-full" />
     </div>
     <div className="space-y-2">
-      <Skeleton className="h-4 w-[250px]" />
-      <Skeleton className="h-4 w-[200px]" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-full" />
     </div>
     <div className="space-y-2">
-      <Skeleton className="h-4 w-[250px]" />
-      <Skeleton className="h-4 w-[200px]" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-full" />
+    </div>
+    <div className="space-y-2">
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-full" />
     </div>
   </div>
 )
@@ -41,7 +44,7 @@ export const DeviceInfoOverlay = () => {
   return (
     <Sheet open={openDeviceInfo} onOpenChange={setOpenDeviceInfo}>
       <SheetContent
-        className="w-full sm:w-[600px] lg:w-[800px] xl:w-[900px] !max-w-none overflow-y-auto px-2 sm:px-4 lg:px-6"
+        className="w-full sm:w-[200px] lg:w-[400px] xl:w-[600px] !max-w-none overflow-y-auto px-2 sm:px-4 lg:px-6"
         style={{ maxWidth: 'none' }}
       >
         <SheetHeader>

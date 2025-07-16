@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
-import { useGraphQL } from '@/hooks/fetch/useGraphQL'
+import { useSuspenseGraphQL } from '@/hooks/fetch/useGraphQL'
 import { gql, useFragment } from '@/types/gql'
 import {
   CatalogueItemFragment,
@@ -23,7 +23,7 @@ type SearchPatterns = {
 }
 
 export const useDeviceInfo = ({ code, uid }: SearchPatterns) => {
-  const { data, error, isLoading, refetch, status } = useGraphQL(
+  const { data, error, isLoading, refetch, status } = useSuspenseGraphQL(
     systemDetailQuery,
     {
       variables: {

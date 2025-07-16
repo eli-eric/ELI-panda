@@ -25,7 +25,7 @@ export const FilterBadges = ({
       )}
       {additionalBadge}
       {filters.map(filter => (
-        <Badge key={filter.id} variant="outline">
+        <Badge key={filter.id}>
           <span>{filter.name}</span>
           <XMarkIcon
             className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600 clickable"
