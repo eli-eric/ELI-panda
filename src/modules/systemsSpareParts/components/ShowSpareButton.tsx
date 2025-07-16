@@ -86,12 +86,12 @@ export const ShowSpareButton: FC<ShowSpareButtonProps> = ({
     if (hasSparesIn && hasSparesOut) {
       return (
         <div className="flex items-center">
-          <Tooltip content="Spare Parts" placement="top">
+          <Tooltip content="Spare Parts">
             <div className="flex items-center">
               <TableStatsButton onClick={setSpareShow()} />
             </div>
           </Tooltip>
-          <Tooltip content="Spare Part for Systems" placement="top">
+          <Tooltip content="Spare Part for Systems">
             <div className="flex items-center">
               <TableStatsButton onClick={setSpareForShow()} />
             </div>

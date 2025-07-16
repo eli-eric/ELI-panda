@@ -6,7 +6,7 @@ export const getColorClassStatus = (
   orderStatus: CodebookType,
   deliveryStatus: DELIVERY_STATUS
 ) => {
-  if (!orderStatus ?? !deliveryStatus) {
+  if (!orderStatus || !deliveryStatus) {
     return 'bg-white dark:bg-gray-800'
   }
   const statusMappingColor = [

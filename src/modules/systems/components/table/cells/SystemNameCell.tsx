@@ -81,12 +81,6 @@ export const SystemNameCell = ({
             )
               ?.map(v => v.name)
               .join(' > ')}
-            placement="top"
-            className={
-              original.parentPath && original.parentPath?.length > 0
-                ? ''
-                : 'hidden'
-            }
           >
             <div>
               {original.hasSubsystems ? (
