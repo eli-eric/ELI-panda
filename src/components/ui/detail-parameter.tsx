@@ -43,9 +43,7 @@ const DetailParameter = ({
         <span
           className={cn(
             'truncate',
-            href
-              ? 'text-link group-hover:text-link/80'
-              : 'text-foreground',
+            href ? 'text-link group-hover:text-link/80' : 'text-foreground',
             className
           )}
           title={value || 'N/A'}

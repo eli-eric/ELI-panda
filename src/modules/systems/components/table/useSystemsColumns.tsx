@@ -68,7 +68,7 @@ export const useSystemsColumns = ({
                   height={50}
                   className={`rounded-full w-7 h-7 min-w-8 object-cover justify-center transition-all duration-200 ${
                     tableId === 'systems'
-                      ? 'hover:scale-110 group-hover:shadow-lg hover:outline hover:outline-2 hover:outline-primary-400 hover:outline-offset-1'
+                      ? 'hover:scale-110 group-hover:shadow-lg hover:outline hover:outline-2 hover:outline-link/60 hover:outline-offset-1'
                       : ''
                   }`}
                 />
