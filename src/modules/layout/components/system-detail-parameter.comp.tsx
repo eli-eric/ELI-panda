@@ -25,7 +25,7 @@ export const SystemDetailParameter: FC<Props> = ({
     'flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200',
     href
       ? 'hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-700 border border-transparent cursor-pointer group'
-      : 'hover:bg-primary-50 dark:hover:bg-primary-800/20 hover:border-primary-200 dark:hover:border-primary-700 border border-transparent group'
+      : 'hover:bg-orange-50 dark:hover:bg-orange-800/20 hover:border-orange-200 dark:hover:border-orange-700 border border-transparent group'
   )
 
   const content = (
