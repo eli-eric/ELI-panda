@@ -26,7 +26,7 @@ export const SystemLink: FC<SystemLinkProps> = ({
   const baseClasses = cn(
     'inline-flex items-center gap-2 text-sm font-medium',
     'transition-colors duration-200',
-    'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1',
+    'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1',
     'dark:focus:ring-offset-gray-800'
   )
 
@@ -42,10 +42,10 @@ export const SystemLink: FC<SystemLinkProps> = ({
         )
       : cn(
           'px-3 py-2 rounded-lg',
-          'text-primary-600 dark:text-primary-400',
-          'hover:text-primary-800 dark:hover:text-primary-300',
-          'hover:bg-primary-50 dark:hover:bg-primary-900/20',
-          'border border-transparent hover:border-primary-200 dark:hover:border-primary-800'
+          'text-orange-600 dark:text-orange-400',
+          'hover:text-orange-800 dark:hover:text-orange-300',
+          'hover:bg-orange-50 dark:hover:bg-orange-900/20',
+          'border border-transparent hover:border-orange-200 dark:hover:border-orange-800'
         )
 
   const linkClasses = cn(baseClasses, variantClasses, className)

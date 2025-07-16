@@ -103,7 +103,7 @@ export const FileActions = ({
   return (
     <div className="flex items-center gap-2 text-right">
       <button
-        className="text-gray-600 hover:text-primary-500 mr-2"
+        className="text-gray-600 hover:text-orange-500 mr-2"
         onClick={() => setRenameModalOpen(true)}
       >
         <span className="flex items-center">

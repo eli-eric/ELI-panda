@@ -21,7 +21,7 @@ export const CatalogueBreadcrumbs = ({
       <li className="flex">
         <div className="flex items-center">
           <button
-            className="text-gray-400 hover:text-gray-500 dark:text-gray-200 dark:hover:text-primary-600"
+            className="text-gray-400 hover:text-gray-500 dark:text-gray-200 dark:hover:text-orange-600"
             onClick={() => {
               setCategoryFilter(null)
             }}

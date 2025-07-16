@@ -27,7 +27,7 @@ export function PinIndicator({ column, position }: PinIndicatorProps) {
       }}
       className={cn(
         'p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors',
-        isPinned ? 'text-primary-500' : 'text-gray-400'
+        isPinned ? 'text-orange-500' : 'text-gray-400'
       )}
       title={`${isPinned ? 'Unpin' : 'Pin'} column`}
     >
@@ -35,7 +35,7 @@ export function PinIndicator({ column, position }: PinIndicatorProps) {
         className={cn(
           'w-4 h-4',
           isPinned && '-rotate-45',
-          isPinned ? 'text-primary-500' : 'text-gray-400'
+          isPinned ? 'text-orange-500' : 'text-gray-400'
         )}
       />
     </button>

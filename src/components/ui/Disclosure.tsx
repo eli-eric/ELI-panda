@@ -64,8 +64,8 @@ export const Disclosure = ({
   }
 
   const defaultButtonClasses = transparentButton
-    ? ' hover:text-primary-600 text-sm flex items-center justify-between w-full py-[2px] px-4 shadow-sm text-gray-500 bg-transparent dark:bg-transparent hover:bg-transparent dark:hover:bg-transparent'
-    : ' hover:text-primary-600 dark:hover:bg-slate-600 text-sm flex items-center justify-between w-full py-[2px] px-4 shadow-sm text-gray-500 bg-white dark:bg-gray-800 hover:bg-gray-100'
+    ? ' hover:text-orange-600 text-sm flex items-center justify-between w-full py-[2px] px-4 shadow-sm text-gray-500 bg-transparent dark:bg-transparent hover:bg-transparent dark:hover:bg-transparent'
+    : ' hover:text-orange-600 dark:hover:bg-slate-600 text-sm flex items-center justify-between w-full py-[2px] px-4 shadow-sm text-gray-500 bg-white dark:bg-gray-800 hover:bg-gray-100'
 
   return (
     <HeadlessDisclosure defaultOpen={defaultOpen}>

@@ -92,7 +92,7 @@ export const SelectableDetailPropertiesList = ({
           <div className="flex h-5 w-5 items-center justify-center rounded border border-gray-300 dark:border-gray-600">
             <input
               type="checkbox"
-              className="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-primary-600 focus:ring-0 focus:outline-none"
+              className="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-orange-600 focus:ring-0 focus:outline-none"
               checked
               readOnly
             />
@@ -105,7 +105,7 @@ export const SelectableDetailPropertiesList = ({
           <div className="flex h-5 w-5 items-center justify-center rounded border border-gray-300 dark:border-gray-600">
             <input
               type="checkbox"
-              className="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-primary-600 focus:ring-0 focus:outline-none"
+              className="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-orange-600 focus:ring-0 focus:outline-none"
               checked={false}
               readOnly
             />

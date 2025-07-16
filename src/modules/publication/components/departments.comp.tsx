@@ -51,7 +51,7 @@ export const DepartmentsComponent = () => {
           {!disabled && (
             <div className="col-span-1">
               <button
-                className="text-red-600 dark:text-gray-400 justify-end hover:text-primary-400 dark:hover:text-primary-600 self-end pt-6"
+                className="text-red-600 dark:text-gray-400 justify-end hover:text-orange-400 dark:hover:text-orange-600 self-end pt-6"
                 onClick={() => handleRemove(index)}
                 disabled={fields.length === 1}
               >
@@ -65,7 +65,7 @@ export const DepartmentsComponent = () => {
         {!disabled && (
           <div className="col-span-6 items-center">
             <button
-              className="text-gray-600 underline text-sm dark:text-gray-400 hover:text-primary-400  dark:hover:text-primary-600 pt-2 pl-2"
+              className="text-gray-600 underline text-sm dark:text-gray-400 hover:text-orange-400  dark:hover:text-orange-600 pt-2 pl-2"
               onClick={handleAppend}
             >
               <FormattedMessage id={addDepartmentButton} />

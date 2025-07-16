@@ -140,7 +140,7 @@ export const CodebookTreeModal = ({
             },
             className: cn(
               item?.uid === row.original.uid
-                ? 'bg-primary-200 dark:bg-primary-500 hover:bg-primary-200 dark:hover:bg-primary-500'
+                ? 'bg-orange-200 dark:bg-orange-500 hover:bg-orange-200 dark:hover:bg-orange-500'
                 : '',
               'cursor-pointer'
             )

@@ -62,7 +62,7 @@ function IndeterminateCheckbox({
       className={cn(
         className,
         !rest.disabled && 'cursor-pointer',
-        'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',
+        'focus:ring-orange-500 h-5 w-5 text-orange-600 dark:text-orange-600 rounded',
         !checked && 'dark:bg-gray-700',
         rest.disabled && 'bg-gray-300 dark:bg-gray-500'
       )}

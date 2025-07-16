@@ -89,7 +89,7 @@ export const SelectSystemContainer: FC = () => {
         row.original.statistics.sp_coverage < 1 &&
         'text-red-500 dark:text-red-500 font-bold',
       selectedSystem?.uid === row.original.uid
-        ? 'bg-primary-200 hover:bg-primary-200 dark:bg-primary-600 dark:hover:bg-primary-600'
+        ? 'bg-orange-200 hover:bg-orange-200 dark:bg-orange-600 dark:hover:bg-orange-600'
         : '',
       'cursor-pointer'
     )

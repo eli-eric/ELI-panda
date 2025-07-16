@@ -35,7 +35,7 @@ export const CheckBoxComponent = ({
           type="checkbox"
           disabled={disabled}
           className={cn(
-            'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',
+            'focus:ring-orange-500 h-5 w-5 text-orange-600 dark:text-orange-600 rounded',
             !checked && 'dark:bg-gray-700'
           )}
         />
@@ -93,7 +93,7 @@ const CheckBox = ({
               disabled={disabled}
               placeholder={placeholder}
               className={cn(
-                'focus:ring-primary-500 h-5 w-5 text-primary-600 dark:text-primary-600 rounded',
+                'focus:ring-orange-500 h-5 w-5 text-orange-600 dark:text-orange-600 rounded',
                 !field.value && 'dark:bg-gray-700',
                 disabled && 'cursor-not-allowed bg-neutral-200 '
               )}

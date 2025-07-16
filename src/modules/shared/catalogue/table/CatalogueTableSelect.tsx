@@ -49,7 +49,7 @@ const CatalogueTableSelect = ({ setItem, selectedItem }: Props) => {
             className: cn(
               'cursor-pointer',
               row.original.uid === selectedItem?.uid
-                ? 'bg-primary-300 dark:bg-primary-600 hover:bg-color-300 dark:hover:bg-color-600'
+                ? 'bg-orange-300 dark:bg-orange-600 hover:bg-color-300 dark:hover:bg-color-600'
                 : ''
             ),
             onClick: () => {

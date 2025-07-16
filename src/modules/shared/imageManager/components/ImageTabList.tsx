@@ -55,7 +55,7 @@ export const ImageTabList = ({
               <Image
                 className={cn(
                   'rounded-full size-5',
-                  selected && 'border-2 border-primary-500 size-6'
+                  selected && 'border-2 border-orange-500 size-6'
                 )}
                 src={obj.url}
                 alt={obj.name}

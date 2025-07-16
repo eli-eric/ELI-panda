@@ -95,7 +95,7 @@ export const Feeds = () => {
                 <div className="relative flex h-6 w-6 flex-none items-center justify-center bg-white">
                   {activityItem.type === 'paid' ? (
                     <CheckCircleIcon
-                      className="h-6 w-6 text-primary-600"
+                      className="h-6 w-6 text-orange-600"
                       aria-hidden="true"
                     />
                   ) : (

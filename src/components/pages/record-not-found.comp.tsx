@@ -10,7 +10,7 @@ const RecordNotFound: FC<Props> = ({ returnUrl }) => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full text-center">
-        <h1 className="text-6xl font-extrabold text-primary-600 dark:text-primary-400">
+        <h1 className="text-6xl font-extrabold text-orange-600 dark:text-orange-400">
           404
         </h1>
         <p className="mt-4 text-2xl font-semibold text-gray-900 dark:text-gray-200">
@@ -22,7 +22,7 @@ const RecordNotFound: FC<Props> = ({ returnUrl }) => {
         <div className="mt-6">
           <Link
             href={returnUrl}
-            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700"
           >
             Return
           </Link>

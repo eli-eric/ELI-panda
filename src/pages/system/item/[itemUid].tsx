@@ -60,7 +60,7 @@ const SystemItemRedirectPage: NextPage = ({ itemUid }: Props) => {
               </div>
             </div>
             <main className="sm:flex">
-              <p className="text-4xl font-bold tracking-tight text-primary-500 sm:text-5xl">
+              <p className="text-4xl font-bold tracking-tight text-orange-500 sm:text-5xl">
                 <FormattedMessage id={common.custom404.title} />
               </p>
               <div className="sm:ml-6">

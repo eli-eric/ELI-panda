@@ -47,7 +47,7 @@ export const SystemHierarchySection: FC<SystemHierarchySectionProps> = ({
                     'px-2 py-1 rounded text-xs font-medium hover:bg-opacity-80 transition-colors',
                     'bg-gray-100 dark:bg-gray-600 text-gray-900 dark:text-gray-200',
                     parent.systemLevel === 'KEY_SYSTEMS' &&
-                      'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300',
+                      'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300',
                     parent.systemLevel === 'TECHNOLOGY_UNIT' &&
                       'bg-lime-100 dark:bg-lime-900/30 text-lime-700 dark:text-lime-300'
                   )}
@@ -66,7 +66,7 @@ export const SystemHierarchySection: FC<SystemHierarchySectionProps> = ({
               'px-2 py-1 rounded text-xs font-medium',
               'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
               systemDetail.systemLevel === 'KEY_SYSTEMS' &&
-                'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300',
+                'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300',
               systemDetail.systemLevel === 'TECHNOLOGY_UNIT' &&
                 'bg-lime-100 dark:bg-lime-900/30 text-lime-700 dark:text-lime-300'
             )}

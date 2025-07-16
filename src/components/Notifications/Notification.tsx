@@ -36,7 +36,7 @@ export const Notification = ({ t }: Props) => {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="pointer-events-auto w-full overflow-hidden rounded-lg bg-white dark:bg-primary-700 shadow-lg ring-1 ring-black ring-opacity-5">
+          <div className="pointer-events-auto w-full overflow-hidden rounded-lg bg-white dark:bg-orange-700 shadow-lg ring-1 ring-black ring-opacity-5">
             <div className="p-4">
               <div className="flex items-start">
                 <div className="shrink-0">

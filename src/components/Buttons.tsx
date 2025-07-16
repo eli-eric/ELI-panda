@@ -68,7 +68,7 @@ export const Button = ({
     className={cn(
       'btn',
       rounded,
-      loading && 'bg-primary-700',
+      loading && 'bg-orange-700',
       buttonSize === 'small' ? 'px-1 py-1' : 'px-2 py-2',
       primary ? 'btn-primary' : 'btn-secondary',
       disabled && 'btn-disabled',
@@ -215,7 +215,7 @@ export const GraphTreeButton = ({
 )
 
 export const TableEditButton = ({ type = 'button', ...props }: ButtonProps) => (
-  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
+  <button className="ml-2  hover:text-orange-500" type={type} {...props}>
     <PencilSquareIcon className="h-4 w-4" aria-hidden="true" />
   </button>
 )
@@ -223,19 +223,19 @@ export const TableGraphTreeButton = ({
   type = 'button',
   ...props
 }: ButtonProps) => (
-  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
+  <button className="ml-2  hover:text-orange-500" type={type} {...props}>
     <ShareIcon className="h-4 w-4" aria-hidden="true" />
   </button>
 )
 
 export const TableOpenButton = ({ type = 'button', ...props }: ButtonProps) => (
-  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
+  <button className="ml-2  hover:text-orange-500" type={type} {...props}>
     <FolderOpenIcon className="h-4 w-4" aria-hidden="true" />
   </button>
 )
 
 export const XmarkButton = ({ type = 'button', ...props }: ButtonProps) => (
-  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
+  <button className="ml-2  hover:text-orange-500" type={type} {...props}>
     <XMarkIcon className="h-4 w-4" aria-hidden="true" />
   </button>
 )
@@ -246,7 +246,7 @@ export const TableDeleteButton = ({
 }: ButtonProps) => (
   <button
     {...props}
-    className={cn('ml-2 hover:text-primary-500 text-red-700', props.className)}
+    className={cn('ml-2 hover:text-orange-500 text-red-700', props.className)}
     type={type}
   >
     <TrashIcon className="h-4 w-4" aria-hidden="true" />
@@ -257,13 +257,13 @@ export const TableStatsButton = ({
   type = 'button',
   ...props
 }: ButtonProps) => (
-  <button className="ml-2 hover:text-primary-500" type={type} {...props}>
+  <button className="ml-2 hover:text-orange-500" type={type} {...props}>
     <TableCellsIcon className="h-4 w-4" aria-hidden="true" />
   </button>
 )
 
 export const TablePlusButton = ({ type = 'button', ...props }: ButtonProps) => (
-  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
+  <button className="ml-2  hover:text-orange-500" type={type} {...props}>
     <PlusIcon className="h-4 w-4" aria-hidden="true" />
   </button>
 )
@@ -271,7 +271,7 @@ export const TableDownloadButton = ({
   type = 'button',
   ...props
 }: ButtonProps) => (
-  <button className="ml-2  hover:text-primary-500" type={type} {...props}>
+  <button className="ml-2  hover:text-orange-500" type={type} {...props}>
     <ArrowDownTrayIcon className="h-4 w-4" aria-hidden="true" />
   </button>
 )
