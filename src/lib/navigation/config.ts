@@ -1,4 +1,5 @@
 import {
+  Cog,
   CreditCard,
   Home,
   Layers,
@@ -70,7 +71,7 @@ export const NAV_ITEMS: NavigationItem[] = [
     title: 'Services',
     url: PATH.SERVICES,
     role: ROLE.BASICS,
-    icon: Users
+    icon: Cog
   }
 ]
 

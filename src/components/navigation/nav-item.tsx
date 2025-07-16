@@ -3,6 +3,7 @@
 import { ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState } from 'react'
 
 import { AccessControl } from '@/components/auth/AccesControl'
 import {
@@ -28,11 +29,21 @@ interface NavItemProps {
 export function NavItem({ item }: NavItemProps) {
   const pathname = usePathname()
   const isMobile = useIsMobile()
-  const { toggleSidebar } = useSidebar()
+  const { toggleSidebar, state, setOpen } = useSidebar()
   const isActive = pathname?.startsWith(item.url)
   const isSubItemActive = item.items?.some(subItem =>
     pathname?.startsWith(subItem.url)
   )
+
+  // Local state to control collapsible when sidebar is expanded
+  const [isOpen, setIsOpen] = useState(isActive || isSubItemActive)
+
+  const handleCollapsibleClick = () => {
+    if (state === 'collapsed') {
+      // If sidebar is collapsed, first expand it
+      setOpen(true)
+    }
+  }
 
   return (
     <AccessControl roles={[item.role]}>
@@ -40,7 +51,8 @@ export function NavItem({ item }: NavItemProps) {
         <Collapsible
           key={item.title}
           asChild
-          defaultOpen={isActive || isSubItemActive}
+          open={isOpen}
+          onOpenChange={setIsOpen}
           className="group/collapsible"
         >
           <SidebarMenuItem>
@@ -48,6 +60,7 @@ export function NavItem({ item }: NavItemProps) {
               <SidebarMenuButton
                 tooltip={item.title}
                 isActive={isSubItemActive}
+                onClick={handleCollapsibleClick}
               >
                 {item.icon && <item.icon />}
                 <span>{item.title}</span>
