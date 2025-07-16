@@ -29,10 +29,7 @@ export const useSpareForColumns = (tableId?: string) => {
         accessorKey: 'name',
         id: 'name',
         cell: ({ getValue, row: { original } }) => (
-          <Tooltip
-            content={original.parentPath?.map(v => v?.name).join(' > ')}
-            placement="top"
-          >
+          <Tooltip content={original.parentPath?.map(v => v?.name).join(' > ')}>
             <Link href={PATH.SYSTEM + '/' + original.uid}>
               <LinkDecorator>{getValue()}</LinkDecorator>
             </Link>

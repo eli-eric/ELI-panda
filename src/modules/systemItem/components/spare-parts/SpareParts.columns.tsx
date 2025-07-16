@@ -46,10 +46,7 @@ export const useSparePartsColumns = () => {
               }
             }
           }) => (
-            <Tooltip
-              content={parentPath?.map(v => v?.name).join(' > ')}
-              placement="top"
-            >
+            <Tooltip content={parentPath?.map(v => v?.name).join(' > ')}>
               <Link href={PATH.SYSTEM + '/' + uid}>
                 <LinkDecorator>{getValue()}</LinkDecorator>
               </Link>

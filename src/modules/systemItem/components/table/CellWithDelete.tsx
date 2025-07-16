@@ -26,10 +26,10 @@ export const CellWithDelete = ({
   // Memoize index and item finding to reduce calculations
   const itemData = useMemo(() => {
     const index = fields.findIndex(
-      (field: any) => field?.uid === uid ?? field?.uuid === uuid
+      (field: any) => field?.uid === uid || field?.uuid === uuid
     )
     const item = fields.find(
-      (field: any) => field?.uid === uid ?? field?.uuid === uuid
+      (field: any) => field?.uid === uid || field?.uuid === uuid
     )
     return { index, item }
     // eslint-disable-next-line react-hooks/exhaustive-deps
