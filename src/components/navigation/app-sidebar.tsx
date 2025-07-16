@@ -36,7 +36,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer"
           onClick={() => toggleSidebar()}
         >
-          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+          <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-orange-foreground">
             <Image
               src="/logo192.png"
               alt="Panda"

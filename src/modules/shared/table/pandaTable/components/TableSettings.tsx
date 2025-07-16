@@ -27,14 +27,14 @@ export const TableSettings: FC<Props> = ({
                   checked: getIsAllColumnsVisible(),
                   onChange: getToggleAllColumnsVisibilityHandler(),
                   className: cn(
-                    'focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 dark:text-primary-600 rounded',
+                    'focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300 dark:text-orange-600 rounded',
                     !getIsAllColumnsVisible() && 'dark:bg-gray-700'
                   )
                 }}
               />
               <label
                 htmlFor="toggle-all"
-                className="hover:text-primary-600 ml-2 text-sm text-gray-700 dark:text-gray-200"
+                className="hover:text-orange-600 ml-2 text-sm text-gray-700 dark:text-gray-200"
               >
                 Toggle All
               </label>
@@ -55,13 +55,13 @@ export const TableSettings: FC<Props> = ({
                     checked={column.getIsVisible()}
                     onChange={column.getToggleVisibilityHandler()}
                     className={cn(
-                      'focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300 dark:text-primary-600 rounded',
+                      'focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300 dark:text-orange-600 rounded',
                       !column.getIsVisible() && 'dark:bg-gray-700'
                     )}
                   />
                   <label
                     htmlFor={`checkbox-${column.id}`}
-                    className="hover:text-primary-600 text-sm text-gray-700 dark:text-gray-200"
+                    className="hover:text-orange-600 text-sm text-gray-700 dark:text-gray-200"
                   >
                     {typeof column.columnDef?.header === 'string'
                       ? column.columnDef?.header || column.id

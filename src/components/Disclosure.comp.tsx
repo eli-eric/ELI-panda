@@ -20,7 +20,7 @@ const DisclosureComponent = ({ title, children, defaultOpen }: Props) => (
               <span
                 className={cn(
                   'text-sm font-medium',
-                  open ? 'text-primary-500' : 'text-gray-900 dark:text-gray-200'
+                  open ? 'text-orange-500' : 'text-gray-900 dark:text-gray-200'
                 )}
               >
                 {title}
@@ -28,7 +28,7 @@ const DisclosureComponent = ({ title, children, defaultOpen }: Props) => (
               <span className="ml-6 flex items-center">
                 {open ? (
                   <MinusIcon
-                    className="block h-6 w-6 text-primary-400 group-hover:text-primary-500"
+                    className="block h-6 w-6 text-orange-400 group-hover:text-orange-500"
                     aria-hidden="true"
                   />
                 ) : (

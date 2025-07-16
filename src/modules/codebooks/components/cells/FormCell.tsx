@@ -132,7 +132,7 @@ export const FormCell = ({
         }}
       />
       {/* {isDirty && (
-        <button className="ml-2 text-primary-500 hover:text-gray-500" type="submit">
+        <button className="ml-2 text-orange-500 hover:text-gray-500" type="submit">
           Save
         </button>
       )} */}

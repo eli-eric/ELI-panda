@@ -78,7 +78,7 @@ export const SelectSystemComboBox = ({
             },
             className: cn(
               selectedSystem?.uid === row.original.uid
-                ? 'bg-primary-200 hover:bg-primary-200 dark:bg-primary-600 dark:hover:bg-primary-600'
+                ? 'bg-orange-200 hover:bg-orange-200 dark:bg-orange-600 dark:hover:bg-orange-600'
                 : '',
               'cursor-pointer'
             )

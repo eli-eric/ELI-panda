@@ -29,7 +29,7 @@ export function TablePagination<T extends object>({
             'p-1 rounded-md border border-gray-300 dark:border-gray-600',
             'text-gray-500 dark:text-gray-400',
             'hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors',
-            'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:focus:ring-offset-gray-900',
+            'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1 dark:focus:ring-offset-gray-900',
             'disabled:opacity-50 disabled:pointer-events-none'
           )}
           onClick={() => table.setPageIndex(0)}
@@ -43,7 +43,7 @@ export function TablePagination<T extends object>({
             'p-1 rounded-md border border-gray-300 dark:border-gray-600',
             'text-gray-500 dark:text-gray-400',
             'hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors',
-            'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:focus:ring-offset-gray-900',
+            'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1 dark:focus:ring-offset-gray-900',
             'disabled:opacity-50 disabled:pointer-events-none'
           )}
           onClick={() => table.previousPage()}
@@ -64,7 +64,7 @@ export function TablePagination<T extends object>({
             'p-1 rounded-md border border-gray-300 dark:border-gray-600',
             'text-gray-500 dark:text-gray-400',
             'hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors',
-            'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:focus:ring-offset-gray-900',
+            'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1 dark:focus:ring-offset-gray-900',
             'disabled:opacity-50 disabled:pointer-events-none'
           )}
           onClick={() => table.nextPage()}
@@ -78,7 +78,7 @@ export function TablePagination<T extends object>({
             'p-1 rounded-md border border-gray-300 dark:border-gray-600',
             'text-gray-500 dark:text-gray-400',
             'hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors',
-            'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:focus:ring-offset-gray-900',
+            'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1 dark:focus:ring-offset-gray-900',
             'disabled:opacity-50 disabled:pointer-events-none'
           )}
           onClick={() => table.setPageIndex(table.getPageCount() - 1)}

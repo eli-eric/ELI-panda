@@ -184,7 +184,7 @@ export const CodebookTreeModalGraphql = ({
             },
             className: cn(
               item?.uid === row.original.uid &&
-                'bg-primary-200 dark:bg-primary-600 hover:bg-primary-200 dark:hover:bg-primary-600',
+                'bg-orange-200 dark:bg-orange-600 hover:bg-orange-200 dark:hover:bg-orange-600',
               'cursor-pointer'
             )
           })}

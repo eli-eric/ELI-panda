@@ -25,7 +25,7 @@ export const BreadcrumpContainer = ({ testId, homeLink, children }: Props) => (
               <Link
                 data-testid={testId + '-home'}
                 href={{ pathname: homeLink }}
-                className="text-gray-400 hover:text-gray-500 dark:text-gray-200 dark:hover:text-primary-600"
+                className="text-gray-400 hover:text-gray-500 dark:text-gray-200 dark:hover:text-orange-600"
               >
                 <HomeIcon className="h-4 w-4 shrink-0" />
               </Link>

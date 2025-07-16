@@ -44,7 +44,7 @@ export const ImageTabPanels = ({
         className={cn(
           'mt-1 w-full items-center flex cursor-pointer justify-center rounded-md  border-gray-300 px-6 pt-5 pb-6',
           canEdit &&
-            'focus-within:outline-none focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2',
+            'focus-within:outline-none focus-within:ring-2 focus-within:ring-orange-500 focus-within:ring-offset-2',
           !canEdit && 'bg-gray-100 dark:bg-gray-900'
         )}
         onClick={open}
@@ -52,7 +52,7 @@ export const ImageTabPanels = ({
         <div className="space-y-1 text-center">
           <div className=" text-sm text-gray-600 dark:text-gray-200">
             <ImageIcon />
-            <div className="relative  rounded-md font-medium text-primary-500">
+            <div className="relative  rounded-md font-medium text-orange-500">
               <span>Upload an image</span>
             </div>
           </div>

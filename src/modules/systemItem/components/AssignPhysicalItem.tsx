@@ -71,7 +71,7 @@ export const AssignPhysicalItem = () => {
             },
             className: cn(
               selectedPhysicalSystem?.uid === original.uid
-                ? 'bg-primary-200 hover:bg-primary-200 dark:hover:bg-primary-600 dark:bg-primary-600'
+                ? 'bg-orange-200 hover:bg-orange-200 dark:hover:bg-orange-600 dark:bg-orange-600'
                 : '',
               original?.physicalItem && 'cursor-pointer',
               original?.physicalItem &&

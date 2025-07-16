@@ -22,7 +22,7 @@ export const SelectOption = ({ item, selected, active }: Props) => (
         <span
           className={cn(
             'absolute inset-y-0 right-0 flex items-center pr-4',
-            active ? 'text-white' : 'text-primary-500'
+            active ? 'text-white' : 'text-orange-500'
           )}
         >
           <CheckIcon className="h-4 w-4" aria-hidden="true" />

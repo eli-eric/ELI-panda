@@ -61,7 +61,7 @@ export const UserProfileCard = () => {
             <span className="grow">
               <a
                 target="_blank"
-                className="text-primary-600 hover:underline"
+                className="text-orange-600 hover:underline"
                 href={process.env.PANDA_API_GW_URL?.replaceAll('v1', '')}
                 rel="noreferrer"
               >

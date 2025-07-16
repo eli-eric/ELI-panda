@@ -22,7 +22,7 @@ export const CategoryItemComponent = ({
       className={cn(
         'flex-row justify-between dark:hover:bg-gray-600 relative flex items-center space-x-3 rounded-lg',
         'transform transition-transform duration-300 ease-in-out hover:-translate-y-1',
-        'dark:bg-gray-700 dark:shadow-black shadow-md hover:shadow-2xl focus-within:ring-2 focus-within:ring-primary-500 focus-within:ring-offset-2',
+        'dark:bg-gray-700 dark:shadow-black shadow-md hover:shadow-2xl focus-within:ring-2 focus-within:ring-orange-500 focus-within:ring-offset-2',
         'group hover:z-50'
       )}
     >

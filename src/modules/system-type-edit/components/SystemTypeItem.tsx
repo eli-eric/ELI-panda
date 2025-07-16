@@ -102,7 +102,7 @@ export const SystemTypeItem: FC<Props> = ({
         className={cn(
           'py-2 px-4 flex justify-between',
           'cursor-pointer rounded-md',
-          'hover:bg-primary-100 dark:hover:bg-primary-400',
+          'hover:bg-orange-100 dark:hover:bg-orange-400',
           'dark:text-gray-200'
         )}
         key={systemType.uid}

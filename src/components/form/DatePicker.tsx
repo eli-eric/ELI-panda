@@ -42,7 +42,7 @@ const DateInput = ({
         <div
           hidden={hidden}
           className={cn(
-            'block z-10 w-full appearance-none  placeholder-gray-400  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm',
+            'block z-10 w-full appearance-none  placeholder-gray-400  focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm',
             className
           )}
         >

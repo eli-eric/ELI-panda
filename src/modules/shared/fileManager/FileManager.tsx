@@ -130,15 +130,13 @@ const FileManager = ({
         <div
           {...getRootProps()}
           className={`mt-4 border-2 border-dashed rounded-md p-6 text-center ${
-            isDragActive
-              ? 'border-primary-500 bg-primary-50'
-              : 'border-gray-300'
+            isDragActive ? 'border-orange-500 bg-orange-50' : 'border-gray-300'
           }`}
         >
           <p className="text-gray-600">
             Drop File to Upload or{' '}
             <button
-              className="text-primary-600 cursor-pointer"
+              className="text-orange-600 cursor-pointer"
               onClick={handleFileUpload}
             >
               Browse

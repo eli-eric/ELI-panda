@@ -39,7 +39,7 @@ export function PageSizeDropdown({
             'relative w-full cursor-default rounded-md bg-white dark:bg-gray-800 py-1.5 pl-3 pr-8 text-left',
             'text-sm text-gray-700 dark:text-gray-300',
             'border border-gray-300 dark:border-gray-600',
-            'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 dark:focus:ring-offset-gray-900'
+            'focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-1 dark:focus:ring-offset-gray-900'
           )}
         >
           <span className="block truncate">{value}</span>
@@ -73,7 +73,7 @@ export function PageSizeDropdown({
                   cn(
                     'relative cursor-default select-none py-2 pl-3 pr-9',
                     active
-                      ? 'bg-primary-50 text-primary-700 dark:bg-primary-900 dark:text-primary-200'
+                      ? 'bg-orange-50 text-orange-700 dark:bg-orange-900 dark:text-orange-200'
                       : 'text-gray-900 dark:text-gray-200'
                   )
                 }
@@ -90,7 +90,7 @@ export function PageSizeDropdown({
                     </span>
 
                     {selected && (
-                      <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-primary-500">
+                      <span className="absolute inset-y-0 right-0 flex items-center pr-3 text-orange-500">
                         <CheckIcon className="h-4 w-4" aria-hidden="true" />
                       </span>
                     )}

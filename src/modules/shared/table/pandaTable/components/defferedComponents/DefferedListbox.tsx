@@ -62,7 +62,7 @@ export const DefferedListbox = ({
       <div className="relative">
         <HUIListbox.Button
           className={cn(
-            'px-3 py-2 pb-2 border rounded-md placeholder-gray-300 border-gray-300  focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm block w-full h-[38px] appearance-none text-left',
+            'px-3 py-2 pb-2 border rounded-md placeholder-gray-300 border-gray-300  focus:border-orange-500 focus:outline-none focus:ring-orange-500 sm:text-sm block w-full h-[38px] appearance-none text-left',
             value ? 'pr-14' : 'pr-9'
           )}
         >
@@ -104,7 +104,7 @@ export const DefferedListbox = ({
                 cn(
                   'relative cursor-default select-none py-2 pl-3 pr-9',
                   active
-                    ? 'bg-primary-500 text-white'
+                    ? 'bg-orange-500 text-white'
                     : 'text-gray-900 dark:text-gray-200'
                 )
               }
@@ -127,7 +127,7 @@ export const DefferedListbox = ({
                       <span
                         className={cn(
                           'absolute inset-y-0 right-0 flex items-center pr-4',
-                          active ? 'text-white' : 'text-primary-500'
+                          active ? 'text-white' : 'text-orange-500'
                         )}
                       >
                         <CheckIcon

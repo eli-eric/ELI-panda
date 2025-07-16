@@ -20,7 +20,7 @@ export function ServiceItem({ service }: ServiceItemProps) {
           <div className="flex items-center justify-between">
             <div>
               <div className="flex items-center">
-                <p className="text-sm font-medium text-primary-600 truncate">
+                <p className="text-sm font-medium text-orange-600 truncate">
                   {service.name}
                 </p>
                 <p className="ml-2 shrink-0 font-normal text-sm text-gray-500">

@@ -32,16 +32,16 @@ export const UserProfileNav = () => {
                 href={item.href}
                 className={cn(
                   item.href === currentPath
-                    ? 'bg-gray-50 dark:bg-gray-700 text-primary-600'
-                    : 'text-gray-700 dark:text-gray-200 hover:text-primary-600 hover:bg-gray-50 dark:hover:bg-gray-600',
+                    ? 'bg-gray-50 dark:bg-gray-700 text-orange-600'
+                    : 'text-gray-700 dark:text-gray-200 hover:text-orange-600 hover:bg-gray-50 dark:hover:bg-gray-600',
                   'group flex gap-x-3 rounded-md py-2 pl-2 pr-3 text-sm leading-6 font-semibold'
                 )}
               >
                 <item.icon
                   className={cn(
                     item.href === currentPath
-                      ? 'text-primary-600'
-                      : 'text-gray-400 group-hover:text-primary-600',
+                      ? 'text-orange-600'
+                      : 'text-gray-400 group-hover:text-orange-600',
                     'h-6 w-6 shrink-0'
                   )}
                   aria-hidden="true"

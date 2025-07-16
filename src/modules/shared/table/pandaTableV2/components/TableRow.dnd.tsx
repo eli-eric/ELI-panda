@@ -67,7 +67,7 @@ export const TableRowDNDComponent: FC<Props> = ({
           : 'bg-gray-100 dark:bg-gray-700',
         'group hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 dark:text-gray-300 z-0',
         className,
-        isHoveringDrop ? 'bg-primary-200 dark:bg-primary-600' : ''
+        isHoveringDrop ? 'bg-orange-200 dark:bg-orange-600' : ''
       )}
       data-index={virtualRow.index} //needed for dynamic row height measurement
       ref={rowRef} //measure dynamic row height

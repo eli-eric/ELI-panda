@@ -76,7 +76,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
     systemLevel: SystemLevel | null | undefined
   ) => {
     if (systemLevel === 'KEY_SYSTEMS') {
-      return 'text-primary-600 dark:text-primary-400 group-hover:text-primary-700 dark:group-hover:text-primary-300'
+      return 'text-orange-600 dark:text-orange-400 group-hover:text-orange-700 dark:group-hover:text-orange-300'
     }
     if (systemLevel === 'TECHNOLOGY_UNIT') {
       return 'text-lime-600 dark:text-lime-400 group-hover:text-lime-700 dark:group-hover:text-lime-300'

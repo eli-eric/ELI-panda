@@ -66,7 +66,7 @@ export const CellWithDelete = ({
       <span>{getValue()}</span>
       {editPersmission && (
         <TableDeleteButton
-          className="text-primary-400 dark:text-primary-500"
+          className="text-orange-400 dark:text-orange-500"
           onClick={onDeleteClick}
         />
       )}

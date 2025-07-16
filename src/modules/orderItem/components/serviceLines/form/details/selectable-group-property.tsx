@@ -112,7 +112,7 @@ export const SelectableGroupProperty = ({ detail }: Props) => {
           id={`property-${propertyUid}`}
           checked={isSelected}
           onChange={handleCheckboxChange}
-          className="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-primary-600 focus:ring-0 focus:outline-none"
+          className="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-orange-600 focus:ring-0 focus:outline-none"
         />
         <label
           htmlFor={`property-${propertyUid}`}

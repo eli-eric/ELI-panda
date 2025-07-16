@@ -118,7 +118,7 @@ export const ColumnHeader: FC<ColumnHeader> = ({
             className={cn(
               header.column.getCanSort() ? 'cursor-pointer select-none' : '',
               'items-center',
-              header.column.getIsFiltered() ? 'text-primary-500' : ''
+              header.column.getIsFiltered() ? 'text-orange-500' : ''
             )}
             onClick={header.column.getToggleSortingHandler()}
           >

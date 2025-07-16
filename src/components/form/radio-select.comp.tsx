@@ -50,7 +50,7 @@ export const RadioSelect = ({
                     onChange?.(e.target.value)
                   }}
                   className={cn(
-                    'form-radio h-4 w-4 text-primary-600 border-gray-300',
+                    'form-radio h-4 w-4 text-orange-600 border-gray-300',
                     option.disabled && 'cursor-not-allowed bg-gray-100'
                   )}
                 />

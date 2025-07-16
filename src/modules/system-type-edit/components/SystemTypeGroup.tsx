@@ -93,9 +93,9 @@ export const SystemTypeGroup: FC<Props> = ({
       <li
         className={cn(
           'cursor-pointer py-2 px-4 rounded-md flex justify-between',
-          'hover:bg-primary-100 dark:hover:bg-primary-400',
+          'hover:bg-orange-100 dark:hover:bg-orange-400',
           systemTypeGroup.uid === selectedGroup &&
-            'bg-primary-200 dark:bg-primary-500'
+            'bg-orange-200 dark:bg-orange-500'
         )}
         onClick={() => setSelectedGroup(systemTypeGroup.uid)}
         key={systemTypeGroup.uid}

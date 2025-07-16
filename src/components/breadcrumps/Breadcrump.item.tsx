@@ -35,7 +35,7 @@ export const BreadcrumpItem = ({
             onClick={() =>
               setCategoryFilter({ uid: path.uid, name: path.name })
             }
-            className="ml-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-200 dark:hover:text-primary-600"
+            className="ml-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-200 dark:hover:text-orange-600"
           >
             {name}
           </button>
@@ -57,9 +57,9 @@ export const BreadcrumpItem = ({
           <Link
             href={{ pathname: link }}
             className={cn(
-              'ml-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-200 dark:hover:text-primary-600',
+              'ml-1 text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-200 dark:hover:text-orange-600',
               systemLevel === SystemLevel.KeySystems &&
-                'text-primary-600 dark:text-primary-400',
+                'text-orange-600 dark:text-orange-400',
               systemLevel === SystemLevel.TechnologyUnit &&
                 'text-lime-700 dark:text-lime-200'
             )}

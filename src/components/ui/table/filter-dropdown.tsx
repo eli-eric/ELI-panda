@@ -59,9 +59,9 @@ export function FilterDropdown({
             <MenuButton
               className={cn(
                 'inline-flex items-center justify-center p-1 rounded-md',
-                'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500',
+                'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500',
                 currentFilter
-                  ? 'text-primary-500'
+                  ? 'text-orange-500'
                   : 'text-gray-400 hover:text-gray-500'
               )}
               aria-label="Filter"
@@ -99,7 +99,7 @@ export function FilterDropdown({
                   <div className="mt-2">
                     <input
                       type="text"
-                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500"
+                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500"
                       placeholder="Filter value..."
                       value={filterValue}
                       onChange={handleInputChange}
@@ -111,7 +111,7 @@ export function FilterDropdown({
                   <div className="mt-3 flex justify-between">
                     <button
                       type="button"
-                      className="inline-flex items-center rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+                      className="inline-flex items-center rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
                       onClick={e => {
                         e.stopPropagation()
                         clearFilter()
@@ -121,7 +121,7 @@ export function FilterDropdown({
                     </button>
                     <button
                       type="button"
-                      className="inline-flex items-center rounded-md border border-transparent bg-primary-600 px-2.5 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:bg-primary-700 dark:hover:bg-primary-800"
+                      className="inline-flex items-center rounded-md border border-transparent bg-orange-600 px-2.5 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:bg-orange-700 dark:hover:bg-orange-800"
                       onClick={e => {
                         e.stopPropagation()
                         applyFilter()

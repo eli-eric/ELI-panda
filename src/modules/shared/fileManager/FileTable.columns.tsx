@@ -157,7 +157,7 @@ export const useFileColumns = ({
               href={original.url}
               target="_blank"
               rel="noreferrer"
-              className="hover:text-primary-500 cursor-pointer"
+              className="hover:text-orange-500 cursor-pointer"
             >
               {original.name}
             </a>
@@ -189,7 +189,7 @@ export const useFileColumns = ({
                   setSelectedFile(original)
                   setTagModalOpen(true)
                 }}
-                className="text-primary-600 text-sm ml-2 hover:underline"
+                className="text-orange-600 text-sm ml-2 hover:underline"
               >
                 Add Tag
               </button>
