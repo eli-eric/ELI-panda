@@ -7,8 +7,8 @@ import type { ColumnDef } from '@tanstack/react-table'
 import { useCallback, useMemo, useState } from 'react'
 
 import ModalComponent from '@/components/overlays/modal/modal.comp'
-import { fuzzyFilter } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
+import { fuzzyFilter } from '@/components/ui/table'
 import { message } from '@/i18n/src/messages'
 import type { ModalButtons } from '@/types/form'
 
@@ -177,7 +177,7 @@ export const useFileColumns = ({
                   {tag}
                   {hasEditRole && (
                     <XMarkIcon
-                      className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600"
+                      className="h-4 w-4 ml-1 cursor-pointer hover:text-red-600 clickable"
                       onClick={() => handleRemoveTag(original, tag)}
                     />
                   )}
