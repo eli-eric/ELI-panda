@@ -48,9 +48,9 @@ export const UserProfileCard = () => {
             <FormattedMessage id={messages.roles} />
           </dt>
           <dd className="mt-1 flex text-sm text-gray-900 dark:text-gray-200 sm:col-span-2 sm:mt-0">
-            <span className="grow">
+            <div className="gap-1 flex overflow-visible  flex-wrap">
               {user?.roles.map(role => <Badge key={role}>{role}</Badge>)}
-            </span>
+            </div>
           </dd>
         </div>
         <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5">

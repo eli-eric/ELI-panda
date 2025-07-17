@@ -1,6 +1,7 @@
 'use client'
 
 import { BadgeCheck, ChevronsUpDown, CircleHelp } from 'lucide-react'
+import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -19,6 +20,7 @@ import {
   SidebarMenuItem,
   useSidebar
 } from '@/components/ui/sidebar'
+import { PATH, SUPPORT } from '@/types/constants/paths'
 
 import { DarkModeSwitch } from './darkmode-switch'
 import { LogoutButton } from './logout-button'
@@ -76,15 +78,19 @@ export function NavUser() {
             <DarkModeSwitch />
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <CircleHelp />
-                Support
+              <DropdownMenuItem asChild>
+                <Link href={SUPPORT} target="_blank">
+                  <CircleHelp />
+                  Support
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Profile
+              <DropdownMenuItem asChild>
+                <Link href={PATH.PROFILE_GENERAL}>
+                  <BadgeCheck />
+                  Profile
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
