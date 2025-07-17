@@ -7,6 +7,7 @@ import { CheckIcon } from 'lucide-react'
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
+import { Label } from './label'
 
 function Checkbox({
   className,
@@ -31,4 +32,40 @@ function Checkbox({
   )
 }
 
-export { Checkbox }
+interface CheckBoxProps {
+  label?: string
+  id?: string
+  checked?: boolean
+  defaultChecked?: boolean
+  disabled?: boolean
+  hidden?: boolean
+  className?: string
+  onChange?: (checked: boolean) => void
+}
+
+const CheckBoxWithLabel = ({
+  disabled,
+  id,
+  className,
+  hidden,
+  label,
+  checked,
+  defaultChecked,
+  onChange
+}: CheckBoxProps) => {
+  return (
+    <div className={cn('flex items-center space-x-2', className)}>
+      <Checkbox
+        id={id}
+        onCheckedChange={onChange}
+        checked={checked}
+        hidden={hidden}
+        disabled={disabled}
+        defaultChecked={defaultChecked}
+      />
+      {label && <Label htmlFor={id}>{label}</Label>}
+    </div>
+  )
+}
+
+export { Checkbox, CheckBoxWithLabel }
