@@ -1,8 +1,8 @@
 import { type FC, Fragment } from 'react'
 
-import { CheckBoxComponent } from '@/components/form/CheckBox'
 import Card from '@/components/layout/Card'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
+import { CheckBoxWithLabel } from '@/components/ui/checkbox'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import type { ModalButtons } from '@/types/form'
@@ -85,11 +85,11 @@ export const ItemAssignSummaryStep: FC = () => {
           </ul>
         </div>
       </Card>
-      <CheckBoxComponent
+      <CheckBoxWithLabel
         label="DELETE SOURCE SYSTEM?"
         defaultChecked={formData.deleteSourceSystem || false}
-        onChange={e => {
-          updateFormData({ deleteSourceSystem: e.target.checked })
+        onChange={checked => {
+          updateFormData({ deleteSourceSystem: checked })
         }}
       />
       <ModalButtonsComponent buttons={buttons} />

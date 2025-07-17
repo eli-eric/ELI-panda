@@ -1,11 +1,10 @@
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
+import { CheckBoxWithLabel } from '@/components/ui/checkbox'
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { CodebookType } from '@/types/responses/codebook'
-
-import { CheckBoxComponent } from './CheckBox'
 
 interface Props {
   name: string
@@ -42,7 +41,7 @@ export const FilterCheckboxes = ({
           return (
             <div className="w-full">
               {options?.map(option => (
-                <CheckBoxComponent
+                <CheckBoxWithLabel
                   checked={fieldValue?.includes(option) ?? false}
                   onChange={checked => {
                     const value = checked
@@ -57,7 +56,7 @@ export const FilterCheckboxes = ({
                 />
               ))}
               {(customCodebookOptions || codebookOptions?.data)?.map(option => (
-                <CheckBoxComponent
+                <CheckBoxWithLabel
                   checked={fieldValue?.includes(option.uid) ?? false}
                   onChange={checked => {
                     const value = checked

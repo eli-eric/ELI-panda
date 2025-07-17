@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+/* eslint-disable */
 import { cn } from '@/lib/utils'
 
 function Card({ className, ...props }: React.ComponentProps<'div'>) {
