@@ -5,6 +5,7 @@ import { Fragment, useMemo } from 'react'
 
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
+import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 import type { SystemDetail } from '@/types/responses/systems'
@@ -34,29 +35,26 @@ function IndeterminateCheckbox({
   row,
   ...rest
 }: IndeterminateCheckboxProps) {
+  const onChange = (checked: boolean) => {
+    row.toggleSelected(undefined, { selectChildren: false })
+    setSelectedUids(prev => {
+      const index = prev.indexOf(row.original.uid)
+      if (checked) {
+        return index === -1 ? [...prev, row.original.uid] : prev
+      } else {
+        return index > -1
+          ? [...prev.slice(0, index), ...prev.slice(index + 1)]
+          : prev
+      }
+    })
+  }
+
   return (
-    <input
-      type="checkbox"
-      className={cn(
-        className,
-        !rest.disabled && 'cursor-pointer',
-        'focus:ring-orange-500 h-5 w-5 text-orange-600 dark:text-orange-600 rounded',
-        !checked && 'dark:bg-gray-700',
-        rest.disabled && 'bg-gray-300 dark:bg-gray-500'
-      )}
-      onChange={() => {
-        row.toggleSelected(undefined, { selectChildren: false })
-        setSelectedUids(prev => {
-          const index = prev.indexOf(row.original.uid)
-          if (index > -1) {
-            return [...prev.slice(0, index), ...prev.slice(index + 1)]
-          } else {
-            return [...prev, row.original.uid]
-          }
-        })
-      }}
+    <Checkbox
+      className={cn(className, !rest.disabled && 'cursor-pointer')}
+      onCheckedChange={onChange}
       checked={checked}
-      {...rest}
+      disabled={rest.disabled}
     />
   )
 }

@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { Heading } from '@/components/layout/Heading'
+import { Checkbox } from '@/components/ui/checkbox'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 
 import { SelectableGroupProperty } from './selectable-group-property'
@@ -89,27 +90,13 @@ export const SelectableDetailPropertiesList = ({
       {/* Legend */}
       <div className="mt-8 rounded-md bg-gray-50 dark:bg-gray-800 p-4">
         <div className="flex items-center space-x-2">
-          <div className="flex h-5 w-5 items-center justify-center rounded border border-gray-300 dark:border-gray-600">
-            <input
-              type="checkbox"
-              className="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-orange-600 focus:ring-0 focus:outline-none"
-              checked
-              readOnly
-            />
-          </div>
+          <Checkbox checked={true} disabled className="pointer-events-none" />
           <span className="text-sm text-gray-600 dark:text-gray-300">
             Checked properties will be included in the service line
           </span>
         </div>
         <div className="mt-2 flex items-center space-x-2">
-          <div className="flex h-5 w-5 items-center justify-center rounded border border-gray-300 dark:border-gray-600">
-            <input
-              type="checkbox"
-              className="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-orange-600 focus:ring-0 focus:outline-none"
-              checked={false}
-              readOnly
-            />
-          </div>
+          <Checkbox checked={false} disabled className="pointer-events-none" />
           <span className="text-sm text-gray-700 dark:text-gray-300">
             Unchecked properties will be disabled and excluded from the service
             line

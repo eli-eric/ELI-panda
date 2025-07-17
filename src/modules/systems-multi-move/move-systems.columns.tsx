@@ -1,10 +1,11 @@
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 import type { ColumnDef, Row } from '@tanstack/react-table'
-import type { ChangeEvent, HTMLProps } from 'react'
+import type { HTMLProps } from 'react'
 import { Fragment, useMemo } from 'react'
 
 import { NewTabLink } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
+import { Checkbox } from '@/components/ui/checkbox'
 import { cn, truncateString } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 import type { SystemDetail } from '@/types/responses/systems'
@@ -44,10 +45,9 @@ function IndeterminateCheckbox({
 
   const { destinationSystemsTableId } = useSystemsMoveStore()
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (checked: boolean) => {
     row.toggleSelected(undefined, { selectChildren: false })
 
-    const { checked } = e.target
     if (checked) {
       if (tableId === destinationSystemsTableId) {
         setDestinationSystem(row.original)
@@ -64,18 +64,11 @@ function IndeterminateCheckbox({
   }
 
   return (
-    <input
-      type="checkbox"
-      className={cn(
-        className,
-        !rest.disabled && 'cursor-pointer',
-        'focus:ring-orange-500 h-5 w-5 text-orange-600 dark:text-orange-600 rounded',
-        !checked && 'dark:bg-gray-700',
-        rest.disabled && 'bg-gray-300 dark:bg-gray-500'
-      )}
-      onChange={onChange}
+    <Checkbox
+      className={cn(className, !rest.disabled && 'cursor-pointer')}
+      onCheckedChange={onChange}
       checked={checked}
-      {...rest}
+      disabled={rest.disabled}
     />
   )
 }
