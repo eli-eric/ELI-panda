@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 
 import { Disclosure } from '@/components/ui'
-import { cn } from '@/lib/utils'
+import { CheckboxWithLabel } from '@/components/ui/checkbox'
 
 interface Props {
   getIsAllColumnsVisible: () => boolean
@@ -19,55 +19,35 @@ export const TableSettings: FC<Props> = ({
       <ul className="divide-y divide-gray-200">
         <li>
           <div className="py-1 px-4">
-            <div className="flex items-center">
-              <input
-                {...{
-                  type: 'checkbox',
-                  id: 'toggle-all',
-                  checked: getIsAllColumnsVisible(),
-                  onChange: getToggleAllColumnsVisibilityHandler(),
-                  className: cn(
-                    'focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300 dark:text-orange-600 rounded',
-                    !getIsAllColumnsVisible() && 'dark:bg-gray-700'
-                  )
-                }}
-              />
-              <label
-                htmlFor="toggle-all"
-                className="hover:text-orange-600 ml-2 text-sm text-gray-700 dark:text-gray-200"
-              >
-                Toggle All
-              </label>
-            </div>
+            <CheckboxWithLabel
+              id="toggle-all"
+              checked={getIsAllColumnsVisible()}
+              onChange={checked =>
+                getToggleAllColumnsVisibilityHandler()({ target: { checked } })
+              }
+              label="Toggle All"
+              className="hover:text-primary"
+            />
           </div>
         </li>
         <li>
-          <div className="px-4 py-1 flex flex-wrap">
+          <div className="gap-1 py-2 px-4 flex flex-wrap">
             {getAllLeafColumns().map(column => {
               return (
-                <div
+                <CheckboxWithLabel
                   key={column.id}
-                  className="flex items-center space-x-2 mr-4"
-                >
-                  <input
-                    type={'checkbox'}
-                    id={`checkbox-${column.id}`}
-                    checked={column.getIsVisible()}
-                    onChange={column.getToggleVisibilityHandler()}
-                    className={cn(
-                      'focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300 dark:text-orange-600 rounded',
-                      !column.getIsVisible() && 'dark:bg-gray-700'
-                    )}
-                  />
-                  <label
-                    htmlFor={`checkbox-${column.id}`}
-                    className="hover:text-orange-600 text-sm text-gray-700 dark:text-gray-200"
-                  >
-                    {typeof column.columnDef?.header === 'string'
+                  id={`checkbox-${column.id}`}
+                  checked={column.getIsVisible()}
+                  onChange={checked =>
+                    column.getToggleVisibilityHandler()({ target: { checked } })
+                  }
+                  label={
+                    typeof column.columnDef?.header === 'string'
                       ? column.columnDef?.header || column.id
-                      : column.id}
-                  </label>
-                </div>
+                      : column.id
+                  }
+                  className="mr-4 hover:text-primary"
+                />
               )
             })}
           </div>
