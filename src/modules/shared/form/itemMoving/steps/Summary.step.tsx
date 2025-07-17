@@ -2,7 +2,7 @@ import { type FC, Fragment } from 'react'
 
 import Card from '@/components/layout/Card'
 import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
-import { CheckBoxWithLabel } from '@/components/ui/checkbox'
+import { CheckboxWithLabel } from '@/components/ui/checkbox'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import type { ModalButtons } from '@/types/form'
@@ -115,7 +115,8 @@ export const SummaryStep: FC = () => {
           )}
         </div>
       </Card>
-      <CheckBoxWithLabel
+      <CheckboxWithLabel
+        id="delete-source-system"
         label="DELETE SOURCE SYSTEM?"
         defaultChecked={formData.deleteSourceSystem || false}
         onChange={checked => {

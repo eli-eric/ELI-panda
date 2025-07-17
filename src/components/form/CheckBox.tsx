@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form'
 
 import type { FieldProps } from '@/types/form'
 
-import { CheckBoxWithLabel } from '../ui/checkbox'
+import { CheckboxWithLabel } from '../ui/checkbox'
 
 type InputProps = FieldProps & React.InputHTMLAttributes<HTMLInputElement>
 
@@ -27,7 +27,7 @@ const CheckBox = ({
       name={name}
       control={control}
       render={({ field }) => (
-        <CheckBoxWithLabel
+        <CheckboxWithLabel
           id={htmlFor}
           label={label}
           checked={field.value}
