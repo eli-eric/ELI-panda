@@ -43,7 +43,7 @@ interface CheckBoxProps {
   onChange?: (checked: boolean) => void
 }
 
-const CheckBoxWithLabel = ({
+const CheckboxWithLabel = ({
   disabled,
   id,
   className,
@@ -68,4 +68,4 @@ const CheckBoxWithLabel = ({
   )
 }
 
-export { Checkbox, CheckBoxWithLabel }
+export { Checkbox, CheckboxWithLabel }

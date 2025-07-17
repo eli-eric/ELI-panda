@@ -3,7 +3,7 @@ import { useFormContext, useWatch } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
 import { InputDate } from '@/components/form/inputs'
-import { CheckBoxWithLabel } from '@/components/ui/checkbox'
+import { CheckboxWithLabel } from '@/components/ui/checkbox'
 import usePermission from '@/hooks/usePermission'
 import { ROLE } from '@/types/constants/roles'
 import type { CleaningScheduleDay } from '@/types/gql/graphql'
@@ -74,8 +74,9 @@ const PrescribedClothingSelect = () => {
   return (
     <div className="grid grid-cols-4 mt-1">
       {prescribedClothingEnums.map((item, index) => (
-        <CheckBoxWithLabel
+        <CheckboxWithLabel
           key={index}
+          id={item}
           checked={prescribedClothing?.includes(item as any) ? true : false}
           className="mr-1 mb-1 col-span-1"
           label={item.replace(/_/g, ' ')}
