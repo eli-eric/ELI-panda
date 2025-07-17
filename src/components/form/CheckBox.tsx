@@ -5,11 +5,18 @@ import { useFormContext } from 'react-hook-form'
 import { cn } from '@/lib/utils'
 import type { FieldProps } from '@/types/form'
 
+import { Checkbox } from '../ui/checkbox'
+import { Label } from '../ui/label'
+
 //TODO:refactor checkboxes
-interface CheckBoxProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface CheckBoxProps {
   label: string
+  checked?: boolean
   defaultChecked?: boolean
+  disabled?: boolean
   hidden?: boolean
+  className?: string
+  onChange?: (checked: boolean) => void
 }
 
 export const CheckBoxComponent = ({
@@ -18,39 +25,22 @@ export const CheckBoxComponent = ({
   hidden,
   label,
   checked,
-  ...restProps
+  defaultChecked,
+  onChange
 }: CheckBoxProps) => {
   const id = useId()
 
   return (
-    <div className={cn('relative flex items-start', className)}>
-      <div className="flex h-5 items-center">
-        <input
-          id={'checkbox' + id}
-          onChange={e => {
-            restProps.onChange && restProps.onChange(e)
-          }}
-          checked={checked}
-          hidden={hidden}
-          type="checkbox"
-          disabled={disabled}
-          className={cn(
-            'focus:ring-orange-500 h-5 w-5 text-orange-600 dark:text-orange-600 rounded',
-            !checked && 'dark:bg-gray-700'
-          )}
-        />
-      </div>
-      <div className="ml-3 text-sm">
-        <label
-          htmlFor={'checkbox' + id}
-          className="font-medium text-gray-700 dark:text-gray-200"
-        >
-          {label}
-        </label>
-        <span className="text-gray-500">
-          <span className="sr-only">{label}</span>
-        </span>
-      </div>
+    <div className={cn('flex items-center space-x-2', className)}>
+      <Checkbox
+        id={'checkbox' + id}
+        onCheckedChange={onChange}
+        checked={checked}
+        hidden={hidden}
+        disabled={disabled}
+        defaultChecked={defaultChecked}
+      />
+      <Label htmlFor={'checkbox' + id}>{label}</Label>
     </div>
   )
 }
@@ -59,7 +49,6 @@ type InputProps = FieldProps & React.InputHTMLAttributes<HTMLInputElement>
 
 const CheckBox = ({
   name,
-  placeholder,
   disabled,
   className,
   hidden,
@@ -77,39 +66,20 @@ const CheckBox = ({
       name={name}
       control={control}
       render={({ field }) => (
-        <div className={cn('relative flex items-start', className)}>
-          <div className="flex h-5 items-center">
-            <input
-              {...field}
-              id={htmlFor}
-              value={field.value || false}
-              onChange={e => {
-                restProps.onChange && restProps.onChange(e)
-                field.onChange(e)
-              }}
-              checked={field.value || false}
-              hidden={hidden}
-              type="checkbox"
-              disabled={disabled}
-              placeholder={placeholder}
-              className={cn(
-                'focus:ring-orange-500 h-5 w-5 text-orange-600 dark:text-orange-600 rounded',
-                !field.value && 'dark:bg-gray-700',
-                disabled && 'cursor-not-allowed bg-neutral-200 '
-              )}
-            />
-          </div>
-          <div className="ml-3 text-sm">
-            <label
-              htmlFor={htmlFor}
-              className="font-medium text-gray-700 dark:text-gray-200"
-            >
-              {label}
-            </label>
-            <span className="text-gray-500">
-              <span className="sr-only">{label}</span>
-            </span>
-          </div>
+        <div className={cn('flex items-center space-x-2', className)}>
+          <Checkbox
+            id={htmlFor}
+            onCheckedChange={checked => {
+              restProps.onChange &&
+                restProps.onChange({ target: { checked } } as any)
+              field.onChange(checked)
+            }}
+            checked={field.value || false}
+            hidden={hidden}
+            disabled={disabled}
+            defaultChecked={restProps.defaultChecked}
+          />
+          <Label htmlFor={htmlFor}>{label}</Label>
         </div>
       )}
     />

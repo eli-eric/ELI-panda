@@ -44,8 +44,8 @@ export const FilterCheckboxes = ({
               {options?.map(option => (
                 <CheckBoxComponent
                   checked={fieldValue?.includes(option) ?? false}
-                  onChange={e => {
-                    const value = e.target.checked
+                  onChange={checked => {
+                    const value = checked
                       ? [...(fieldValue || []), option]
                       : fieldValue?.filter(item => item !== option)
                     field.onChange(value)
@@ -59,8 +59,8 @@ export const FilterCheckboxes = ({
               {(customCodebookOptions || codebookOptions?.data)?.map(option => (
                 <CheckBoxComponent
                   checked={fieldValue?.includes(option.uid) ?? false}
-                  onChange={e => {
-                    const value = e.target.checked
+                  onChange={checked => {
+                    const value = checked
                       ? [...(fieldValue || []), option.uid]
                       : fieldValue?.filter(item => item !== option.uid)
                     field.onChange(value)
