@@ -15,7 +15,7 @@ export const CategoryButtons: FC<CategoryButtonsProps> = ({ uid }) => {
 
   if (!canEdit) return null
   return (
-    <div className="flex absolute bottom-0 right-0">
+    <div className="flex items-center gap-1 px-2 py-1 relative z-10 pointer-events-auto">
       <EditCategoryButton uid={uid} />
       <CopyCategoryButton uid={uid} />
       <DeleteCategoryButton uid={uid} />

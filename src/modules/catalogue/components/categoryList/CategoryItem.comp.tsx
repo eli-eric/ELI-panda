@@ -20,7 +20,7 @@ export const CategoryItemComponent = ({
   return (
     <div
       className={cn(
-        'flex-row justify-between dark:hover:bg-gray-600 relative flex items-center space-x-3 rounded-lg',
+        'flex-row justify-between dark:hover:bg-gray-600 relative flex items-center rounded-lg',
         'transform transition-transform duration-300 ease-in-out hover:-translate-y-1',
         'dark:bg-gray-700 dark:shadow-black shadow-md hover:shadow-2xl focus-within:ring-2 focus-within:ring-orange-500 focus-within:ring-offset-2',
         'group hover:z-50'
@@ -31,7 +31,7 @@ export const CategoryItemComponent = ({
           setCategoryFilter({ uid: category.uid, name: category.name })
         }}
         key={category.code}
-        className="flex w-full items-center "
+        className="flex flex-1 items-center"
       >
         <div className="shrink-0 mx-6 my-4">
           <Image
@@ -44,14 +44,18 @@ export const CategoryItemComponent = ({
         </div>
         <div className="min-w-0 flex-1 mx-6 my-4">
           <div className="focus:outline-none">
-            <span className="absolute inset-0" aria-hidden="true" />
             <p className="text-xs font-medium text-gray-900 dark:text-gray-200">
               {category.name}
             </p>
           </div>
         </div>
       </button>
-      <div className={cn('opacity-0', 'group-hover:opacity-100')}>
+      <div
+        className={cn(
+          'opacity-0 group-hover:opacity-100 transition-opacity duration-200',
+          'flex items-center justify-end pr-2 relative z-10'
+        )}
+      >
         <CategoryButtons uid={category.uid} />
       </div>
     </div>
