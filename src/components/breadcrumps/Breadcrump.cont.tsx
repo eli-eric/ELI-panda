@@ -9,16 +9,9 @@ interface Props {
   testId?: string
 }
 export const BreadcrumpContainer = ({ testId, homeLink, children }: Props) => (
-  <div
-    data-testid={testId}
-    id="breadcrump"
-    className={cn('relative bg-white dark:bg-gray-800')}
-  >
+  <div data-testid={testId} id="breadcrump" className={cn('relative ')}>
     <nav className="flex" aria-label="Breadcrumb">
-      <ol
-        role="list"
-        className="flex space-x-1 bg-white dark:bg-gray-800 px-3 py-3 overflow-x-auto"
-      >
+      <ol role="list" className="flex space-x-1  px-3 py-3 overflow-x-auto">
         {homeLink && (
           <li className="flex">
             <div className="flex items-center">

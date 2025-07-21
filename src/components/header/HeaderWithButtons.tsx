@@ -61,7 +61,7 @@ export const HeaderWithButtons = ({
   }
 
   return (
-    <div className="sticky top-0 z-20 flex h-16 shrink-0 bg-white dark:bg-gray-800 border-b">
+    <div className="sticky top-0 z-20 flex h-16 shrink-0 ">
       <Card className="flex flex-1 justify-between">
         <div className="flex items-center mr-2">
           <BackButton
