@@ -1,10 +1,11 @@
-import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { Plus, Trash2 } from 'lucide-react'
 import { startTransition, useEffect } from 'react'
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 
-import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import {
   defaultBoolOptions,
   PROPERTY_INPUT_TYPE,
@@ -24,14 +25,20 @@ const ValueItem = ({ removeValue, index, name }) => {
   }
 
   return (
-    <div className="flex">
+    <div className="flex gap-2 mb-2">
       <Input
-        rounded="rounded-l-md"
         name={`${name}.value`}
-        placeholder="Value"
+        placeholder="Enter value"
+        className="flex-1"
       />
-      <Button rounded="rounded-r-md" onClick={handleRemoveValue}>
-        <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        onClick={handleRemoveValue}
+        className="px-3"
+      >
+        <Trash2 className="h-4 w-4 text-destructive" />
       </Button>
     </div>
   )
@@ -93,20 +100,18 @@ const PropertyItem = ({
       case PROPERTY_TYPE.LIST:
         return (
           <Listbox
-            rounded="rounded-l-md"
             name={`${name}.defaultValue`}
             allowEmptyOption={true}
-            emptyOption="Select default"
+            emptyOption="Select default value"
             customOptions={[...listOfValues.map(value => value.value)]}
           />
         )
       case PROPERTY_TYPE.BOOLEAN:
         return (
           <Listbox
-            rounded="rounded-l-md"
             name={`${name}.defaultValue`}
             allowEmptyOption={true}
-            emptyOption="Select default"
+            emptyOption="Select default value"
             customOptions={[...defaultBoolOptions]}
           />
         )
@@ -115,7 +120,6 @@ const PropertyItem = ({
       default:
         return (
           <Input
-            rounded="rounded-l-md"
             name={`${name}.defaultValue`}
             type={type && PROPERTY_INPUT_TYPE[type]}
             placeholder="Default value"
@@ -126,59 +130,109 @@ const PropertyItem = ({
   }
 
   return (
-    <div className="flex">
-      <div className="flex-col grow">
-        <div className="flex flex-row grow max-md:flex-wrap">
+    <Card className="mb-4">
+      <CardContent className="p-4">
+        <div className="flex items-start gap-3">
           <MoveButtons
             moveDown={moveDown}
             moveUp={moveUp}
             lenght={lenght}
             index={index}
           />
-          <Input
-            name={`${name}.name`}
-            placeholder="Property name"
-            rounded="rounded-r-md"
-          />
-          <Listbox
-            name={`${name}.type`}
-            optionsSize={'sm'}
-            emptyOption="Select type"
-            allowEmptyOption={false}
-            codebook={CODEBOOK.CATALOGUE_PROPERTY_TYPE}
-          />
-          <Listbox
-            name={`${name}.unit`}
-            optionsSize={'sm'}
-            emptyOption="Select unit"
-            allowEmptyOption={true}
-            codebook={CODEBOOK.UNIT}
-          />
-          {getDefaultField(type?.uid)}
-          <Button rounded="rounded-r-md" onClick={handleRemoveProp}>
-            <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
-          </Button>
-        </div>
-        {type?.uid === PROPERTY_TYPE.LIST && (
-          <div className="flex flex-col">
-            <h3 className="text-sm">List of Values:</h3>
-            <div className="flex flex-wrap">
-              {fields.map((field, index) => (
-                <ValueItem
-                  removeValue={remove}
-                  key={field.id}
-                  index={index}
-                  name={`${name}.listOfValues.${index}`}
+
+          <div className="flex-1 space-y-4">
+            {/* Property configuration */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground">
+                  Property name
+                </label>
+                <Input
+                  name={`${name}.name`}
+                  placeholder="Enter property name"
                 />
-              ))}
-              <Button onClick={handleAddValue}>
-                <PlusIcon className="h-4 w-4" aria-hidden="true" />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground">
+                  Property type
+                </label>
+                <Listbox
+                  name={`${name}.type`}
+                  optionsSize={'sm'}
+                  emptyOption="Select type"
+                  allowEmptyOption={false}
+                  codebook={CODEBOOK.CATALOGUE_PROPERTY_TYPE}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground">
+                  Unit
+                </label>
+                <Listbox
+                  name={`${name}.unit`}
+                  optionsSize={'sm'}
+                  emptyOption="Select unit"
+                  allowEmptyOption={true}
+                  codebook={CODEBOOK.UNIT}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-muted-foreground">
+                  Default value
+                </label>
+                {getDefaultField(type?.uid)}
+              </div>
+            </div>
+
+            {/* Remove button */}
+            <div className="flex justify-end border-t pt-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleRemoveProp}
+                className="text-destructive hover:text-destructive-foreground hover:bg-destructive"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Remove property
               </Button>
             </div>
+
+            {/* List of values section */}
+            {type?.uid === PROPERTY_TYPE.LIST && (
+              <div className="border-t pt-4">
+                <h4 className="text-sm font-medium mb-3 text-muted-foreground">
+                  List of Values:
+                </h4>
+                <div className="space-y-2">
+                  {fields.map((field, index) => (
+                    <ValueItem
+                      removeValue={remove}
+                      key={field.id}
+                      index={index}
+                      name={`${name}.listOfValues.${index}`}
+                    />
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleAddValue}
+                    className="w-full border-dashed"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Value
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
 
