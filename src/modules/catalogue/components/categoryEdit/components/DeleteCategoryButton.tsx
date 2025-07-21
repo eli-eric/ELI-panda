@@ -51,11 +51,10 @@ export const DeleteCategoryButton: FC<EditCategoryProps> = ({ uid }) => {
   return (
     <Fragment>
       <Button
-        size="sm"
         onClick={() => {
           setOpen(true)
         }}
-        className="h-full z-0 border-none bg-inherit shadow-none dark:bg-inherit dark:hover:bg-inherit"
+        variant="ghost"
       >
         <TrashIcon
           className="h-4 w-4 hover:text-red-500 text-red-700 transform transition-transform hover:scale-110 duration-300"
