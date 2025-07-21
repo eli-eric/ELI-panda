@@ -1,9 +1,15 @@
-import { PencilSquareIcon } from '@heroicons/react/24/outline'
+import { Edit } from 'lucide-react'
 import type { FC } from 'react'
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 
 import { Button } from '@/components/Buttons'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger
+} from '@/components/ui/sheet'
 
 import CategoryEditContainer from '../CategoryEdit.cont'
 
@@ -19,30 +25,34 @@ export const EditCategoryButton: FC<EditCategoryProps> = ({
   const [open, setOpen] = useState(false)
 
   return (
-    <Fragment>
-      <Button
-        buttonSize="small"
-        onClick={() => {
-          setOpen(true)
-        }}
-        className="h-full z-0 hover:text-orange-400 border-none bg-inherit shadow-none dark:bg-inherit dark:hover:bg-inherit"
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button
+          size="sm"
+          variant="ghost"
+          className="h-full z-0 hover:text-orange-400 border-none bg-inherit shadow-none dark:bg-inherit dark:hover:bg-inherit"
+        >
+          <Edit
+            className="h-4 w-4 transform transition-transform hover:scale-110 duration-300"
+            aria-hidden="true"
+          />
+        </Button>
+      </SheetTrigger>
+      <SheetContent
+        className="w-full sm:w-[200px] lg:w-[400px] xl:w-[600px] !max-w-none overflow-y-auto px-2 sm:px-4 lg:px-6"
+        style={{ maxWidth: 'none' }}
       >
-        <PencilSquareIcon
-          className="h-4 w-4 transform transition-transform hover:scale-110 duration-300"
-          aria-hidden="true"
-        />
-      </Button>
-      <ModalComponent
-        open={open}
-        setOpen={setOpen}
-        buttons={{ noButtons: true }}
-      >
+        <SheetHeader>
+          <SheetTitle>
+            {uid ? 'Upravit kategorii' : 'Přidat kategorii'}
+          </SheetTitle>
+        </SheetHeader>
         <CategoryEditContainer
           setOpen={setOpen}
           parentUID={parentUID}
           uid={uid}
         />
-      </ModalComponent>
-    </Fragment>
+      </SheetContent>
+    </Sheet>
   )
 }
