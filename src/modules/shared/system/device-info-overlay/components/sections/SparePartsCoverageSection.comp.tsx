@@ -2,6 +2,7 @@ import { LinkIcon } from '@heroicons/react/24/outline'
 import { type FC } from 'react'
 
 import { Button } from '@/components/Buttons'
+import { Tooltip } from '@/components/Tooltip'
 import { Disclosure } from '@/components/ui'
 import { Badge } from '@/components/ui/badge'
 import { useShowDeviceStore } from '@/modules/shared/system/device-info-overlay/store/useShowDeviceStore'
@@ -87,18 +88,16 @@ export const SparePartsCoverageSection: FC<SparePartsCoverageSectionProps> = ({
                       <LinkIcon className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
                     </div>
                     <div className="flex items-center space-x-1">
-                      <Button
-                        onClick={e => {
-                          e.stopPropagation()
-                          // TODO: Implement use spare part functionality
-                        }}
-                        buttonSize={'small'}
-                        className="text-[10px]"
-                        primary
-                        title="Use this spare part"
-                      >
-                        Use Spare
-                      </Button>
+                      <Tooltip content="Use this spare part">
+                        <Button
+                          onClick={() => {
+                            // TODO: Implement use spare part functionality
+                          }}
+                          className="text-[10px]"
+                        >
+                          Use Spare
+                        </Button>
+                      </Tooltip>
                     </div>
                   </button>
                 )

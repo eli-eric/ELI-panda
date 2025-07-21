@@ -76,7 +76,7 @@ const SystemAliasRedirectPage: NextPage = ({ alias }: Props) => {
                       status === 'authenticated' ? PATH.DASHBOARD : PATH.ROOT
                     }
                   >
-                    <Button primary>
+                    <Button>
                       <FormattedMessage id={common.buttons.home} />
                     </Button>
                   </Link>

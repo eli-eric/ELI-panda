@@ -39,7 +39,7 @@ const Custom404Page: NextPage = (): JSX.Element => {
                 <Link
                   href={status === 'authenticated' ? PATH.DASHBOARD : PATH.ROOT}
                 >
-                  <Button primary>
+                  <Button>
                     <FormattedMessage id={common.buttons.home} />
                   </Button>
                 </Link>

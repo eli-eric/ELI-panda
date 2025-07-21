@@ -116,10 +116,8 @@ export const HeaderAddButton = ({
   return (
     <div>
       <PlusButton
-        primary
         type="button"
-        onClick={e => {
-          e.stopPropagation()
+        onClick={() => {
           setIsModalOpen(true)
         }}
       />

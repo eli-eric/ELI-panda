@@ -46,7 +46,7 @@ export const SetMinimalSparesButton = () => {
   const handleOpen = () => setOpen(true)
   return (
     <Fragment>
-      <Button primary onClick={handleOpen}>
+      <Button onClick={handleOpen}>
         <FormattedMessage id={messages.systemDetail.spareParts.buttons.set} />
       </Button>
       <ModalComponent buttons={buttons} open={open} setOpen={setOpen}>

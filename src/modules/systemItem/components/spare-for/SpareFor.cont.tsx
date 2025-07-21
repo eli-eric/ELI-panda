@@ -29,8 +29,6 @@ export const SparePartsFor = () => {
       <Tooltip content="Redirect to assign Spare Part page">
         <div>
           <PlusButton
-            primary
-            buttonSize="large"
             onClick={() => {
               setFilter('name')(systemDetail?.name)
               router.push(PATH.SPARE_PARTS)

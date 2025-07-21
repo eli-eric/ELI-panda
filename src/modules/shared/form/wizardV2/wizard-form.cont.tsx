@@ -124,7 +124,6 @@ export const FormWizard = <T extends Record<string, any>>({
             {currentStepIndex > 0 ? (
               <Button
                 type="button"
-                buttonSize="large"
                 onClick={handleBack}
                 disabled={isProcessing}
               >
@@ -134,8 +133,7 @@ export const FormWizard = <T extends Record<string, any>>({
               <div />
             )}
             <Button
-              buttonSize="large"
-              primary={isLastStep}
+              variant={isLastStep ? 'secondary' : 'default'}
               type="button"
               onClick={handleNext}
               disabled={!isCurrentStepValid() || isProcessing}

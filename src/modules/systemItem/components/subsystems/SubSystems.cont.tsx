@@ -29,7 +29,7 @@ export const SubSystemsContainer = () => {
             }
           }}
         >
-          <PlusButton buttonSize="large" primary />
+          <PlusButton />
         </Link>
       </Heading>
       <Table<TableSystem>

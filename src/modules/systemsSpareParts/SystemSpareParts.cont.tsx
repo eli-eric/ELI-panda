@@ -265,7 +265,6 @@ export const SystemsSparePartsContainer = () => {
             <div className="flex">
               <FilterBadges enableQueryURL={false} tableId={tableId2} />
               <Button
-                primary
                 disabled={
                   table1SelectedUids.length === 0 ||
                   table2SelectedUids.length === 0

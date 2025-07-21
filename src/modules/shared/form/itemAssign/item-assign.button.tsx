@@ -19,9 +19,7 @@ export const ItemAssignButton: FC = () => {
 
   return (
     <Fragment>
-      <Button primary onClick={handleShow}>
-        Assign Item
-      </Button>
+      <Button onClick={handleShow}>Assign Item</Button>
       <Suspense>
         <ItemMoveModal />
       </Suspense>

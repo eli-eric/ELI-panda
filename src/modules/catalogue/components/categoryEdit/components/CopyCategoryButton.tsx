@@ -63,7 +63,7 @@ export const CopyCategoryButton: FC<CopyCategoryButtonProps> = ({ uid }) => {
   return (
     <Fragment>
       <Button
-        buttonSize="small"
+        size="sm"
         onClick={() => {
           setOpenCopy(true)
         }}

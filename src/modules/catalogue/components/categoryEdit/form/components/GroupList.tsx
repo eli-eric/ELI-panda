@@ -1,5 +1,5 @@
 import { Plus, Trash2 } from 'lucide-react'
-import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
+import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Input } from '@/components/form/inputs'
 import { Button } from '@/components/ui/button'
@@ -28,20 +28,23 @@ const Group = ({
   lenght
 }: groupProps) => {
   const { control } = useFormContext<CategoryFormType>()
-  const groupName = useWatch({ control, name: `${name}.name` })
 
   const handleRemoveGroup = () => {
     remove(index)
   }
 
-  const displayName =
-    groupName && groupName.trim() ? groupName : `Group ${index + 1}`
-
   return (
-    <Card className="border-l-4 border-l-blue-500">
+    <Card className="border-l-4 border-l-primary">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base">{displayName}</CardTitle>
+          <CardTitle className="text-base w-full mr-2">
+            <Input
+              name={`${name}.name`}
+              placeholder="Group name"
+              className="w-full"
+              label="Group name"
+            />
+          </CardTitle>
           <div className="flex items-center gap-2">
             <MoveButtons
               moveDown={moveDown}
@@ -59,9 +62,7 @@ const Group = ({
             </Button>
           </div>
         </div>
-        <div className="mt-2">
-          <Input name={`${name}.name`} placeholder="Group name" />
-        </div>
+        <div className="mt-2"></div>
       </CardHeader>
       <CardContent>
         <PropertyList name={name} />
@@ -93,6 +94,17 @@ const GroupList = () => {
 
   return (
     <div className="space-y-4">
+      <div className="flex justify-center">
+        <Button
+          type="button"
+          onClick={handleAddGroup}
+          variant="outline"
+          className="border-dashed border-2 hover:border-solid"
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          Add Group
+        </Button>
+      </div>
       {fields.length > 0 && (
         <div className="space-y-4">
           {fields.map((field, index) => (
@@ -108,18 +120,6 @@ const GroupList = () => {
           ))}
         </div>
       )}
-
-      <div className="flex justify-center pt-4">
-        <Button
-          type="button"
-          onClick={handleAddGroup}
-          variant="outline"
-          className="border-dashed border-2 hover:border-solid"
-        >
-          <Plus className="h-4 w-4 mr-2" />
-          Add Group
-        </Button>
-      </div>
     </div>
   )
 }

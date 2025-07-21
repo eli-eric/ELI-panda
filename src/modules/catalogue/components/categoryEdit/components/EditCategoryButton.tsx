@@ -43,9 +43,7 @@ export const EditCategoryButton: FC<EditCategoryProps> = ({
         style={{ maxWidth: 'none' }}
       >
         <SheetHeader>
-          <SheetTitle>
-            {uid ? 'Upravit kategorii' : 'Přidat kategorii'}
-          </SheetTitle>
+          <SheetTitle>{uid ? 'Edit Category' : 'Add New Category'}</SheetTitle>
         </SheetHeader>
         <CategoryEditContainer
           setOpen={setOpen}

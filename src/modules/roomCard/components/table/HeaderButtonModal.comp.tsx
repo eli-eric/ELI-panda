@@ -23,7 +23,6 @@ export const HeaderButtonModalComponent: FC<PropsWithChildren<Props>> = ({
 }) => (
   <Fragment>
     <PlusButton
-      primary
       type="button"
       onClick={() => {
         setIsModalOpen(true)

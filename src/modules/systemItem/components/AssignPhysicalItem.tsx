@@ -45,7 +45,6 @@ export const AssignPhysicalItem = () => {
   return (
     <Fragment>
       <Button
-        primary
         className="mt-4 max-h-10"
         type="button"
         onClick={() => {

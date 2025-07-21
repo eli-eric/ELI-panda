@@ -17,7 +17,7 @@ export const ServicesContainer: FC = () => {
   const disabled = !usePermission([ROLE.SERVICE_EDIT])
   const actionButton = (
     <Link href={PATH.SERVICE}>
-      <Button buttonSize="large" primary>
+      <Button>
         <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
         Add New Service
       </Button>

@@ -89,9 +89,7 @@ export const UserForm = () => {
       </Col>
       <Col md={6}>
         <Input {...fields.password} type="password">
-          <Button primary onClick={generatePasswordHandler}>
-            Gen
-          </Button>
+          <Button onClick={generatePasswordHandler}>Gen</Button>
         </Input>
       </Col>
       <Col md={6}>

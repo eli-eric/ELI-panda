@@ -153,7 +153,7 @@ export const ChangePasswordContainer: FC = () => {
           >
             Cancel
           </Button>
-          <Button type="submit" primary loading={loading || isLoading}>
+          <Button type="submit" loading={loading || isLoading}>
             Update Password
           </Button>
         </div>

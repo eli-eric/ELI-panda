@@ -37,8 +37,6 @@ export const AddLocationButton = () => {
   return (
     <Fragment>
       <PlusButton
-        primary
-        buttonSize="large"
         type="button"
         onClick={() => {
           setOpen(true)

@@ -187,26 +187,16 @@ export const FilterSaveSettings = ({
           onClick={handleDeleteFilter}
           disabled={!savedFilter}
           className="pb-2"
-          primary
-          buttonSize="large"
         >
           <TrashIcon className="h-5 w-5" aria-hidden="true" />
         </Button>
         <Listbox name="savedFilter" codebookResponse={filters} position="top" />
-        <Button
-          onClick={applyFilter}
-          disabled={!savedFilter}
-          className="pb-2"
-          primary
-          buttonSize="large"
-        >
+        <Button onClick={applyFilter} disabled={!savedFilter} className="pb-2">
           Apply
         </Button>
         <Button
           onClick={handleUpdateSavedFilter}
           className="pb-2"
-          primary
-          buttonSize="large"
           disabled={storeFilters.length === 0 || !savedFilter}
         >
           Update
@@ -216,9 +206,7 @@ export const FilterSaveSettings = ({
             setOpen(true)
           }}
           className="pb-2 whitespace-nowrap"
-          primary
           disabled={storeFilters.length === 0}
-          buttonSize="large"
         >
           Save new
         </Button>

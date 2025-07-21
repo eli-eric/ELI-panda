@@ -147,7 +147,6 @@ export const SlideOver: FC<PropsWithChildren<Props>> = ({
                         )}
                         <Button
                           type={buttons.goNext.type}
-                          primary
                           onClick={buttons.goNext.onClick}
                           className={buttons.goNext.className}
                         >

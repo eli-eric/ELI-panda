@@ -42,7 +42,7 @@ export const SubmitMoveButton = () => {
     return (
       <Tooltip content="Please select the systems you want to move before proceeding.">
         <div>
-          <Button primary loading={false} disabled>
+          <Button loading={false} disabled>
             Move Systems here
           </Button>
         </div>
@@ -50,7 +50,7 @@ export const SubmitMoveButton = () => {
     )
   }
   return (
-    <Button primary loading={false} onClick={submit}>
+    <Button loading={false} onClick={submit}>
       Move Systems here
     </Button>
   )

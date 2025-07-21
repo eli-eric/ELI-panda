@@ -52,9 +52,7 @@ export const ServiceLinesContainer = ({
         {!disabledEdit && (
           <div className="flex items-center mr-2">
             <PlusButton
-              primary
               type="button"
-              buttonSize="large"
               onClick={handleAddServiceLine}
               className="mb-2"
             />

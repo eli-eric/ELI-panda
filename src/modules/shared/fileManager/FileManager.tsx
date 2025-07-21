@@ -91,7 +91,6 @@ const FileManager = ({
         {canUpload && (
           <div className="flex space-x-2">
             <Button
-              primary
               onClick={handleFileUpload}
               className="flex items-center space-x-1"
             >
@@ -99,7 +98,6 @@ const FileManager = ({
               <span>Upload File</span>
             </Button>
             <Button
-              primary
               onClick={() => setOpenLinkModal(true)}
               className="flex items-center space-x-1"
             >
