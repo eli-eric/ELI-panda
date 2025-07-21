@@ -144,7 +144,7 @@ const Combobox = ({
                     onClick={onClickIcon}
                   >
                     {field.value?.name ||
-                      fm({ id: placeholder }) ||
+                      (placeholder ? fm({ id: placeholder }) : null) ||
                       'Select option...'}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
@@ -158,7 +158,7 @@ const Combobox = ({
                 >
                   <Command>
                     <CommandInput
-                      placeholder={`Search ${fm({ id: label })}...`}
+                      placeholder={`Search ${label ? fm({ id: label }) : 'items'}...`}
                       value={query}
                       onValueChange={setQuery}
                     />

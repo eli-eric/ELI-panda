@@ -28,12 +28,8 @@ export const TextArea = ({
       control={control}
       defaultValue={defaultValue || ''}
       render={({ field, fieldState: { error } }) => (
-        <div className={cn('space-y-2', className)}>
-          {label && (
-            <Label htmlFor={id} className="text-sm font-medium">
-              {label}
-            </Label>
-          )}
+        <div className={cn('space-y-1 w-full', className)}>
+          {label && <Label htmlFor={id}>{label}</Label>}
           <Textarea
             {...field}
             id={id}
