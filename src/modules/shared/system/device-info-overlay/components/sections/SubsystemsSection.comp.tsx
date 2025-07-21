@@ -1,4 +1,3 @@
-import { LinkIcon } from '@heroicons/react/24/outline'
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
@@ -14,6 +13,7 @@ import {
   type SortingState,
   useReactTable
 } from '@tanstack/react-table'
+import { ExternalLink } from 'lucide-react'
 import { type FC, useMemo, useState } from 'react'
 
 import { Disclosure } from '@/components/ui'
@@ -76,13 +76,13 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
     systemLevel: SystemLevel | null | undefined
   ) => {
     if (systemLevel === 'KEY_SYSTEMS') {
-      return 'text-orange-600 dark:text-orange-400 group-hover:text-orange-700 dark:group-hover:text-orange-300'
+      return 'text-orange-600 dark:text-orange-400'
     }
     if (systemLevel === 'TECHNOLOGY_UNIT') {
-      return 'text-lime-600 dark:text-lime-400 group-hover:text-lime-700 dark:group-hover:text-lime-300'
+      return 'text-lime-600 dark:text-lime-400'
     }
-    // Default blue color for other system levels
-    return 'text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300'
+    // Default link color for other system levels
+    return 'text-link'
   }
 
   if (!systemDetail?.subSystems || systemDetail.subSystems.length === 0) {
@@ -123,7 +123,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
             <button
               key={uid}
               onClick={() => setUID(uid)}
-              className="flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-200 dark:hover:border-blue-700 border border-transparent cursor-pointer group w-full"
+              className="flex justify-between text-xs px-2 py-1 rounded-md transition-all duration-200 hover:bg-link/5 hover:border-link/20 border border-transparent cursor-pointer group w-full"
             >
               <div className="flex items-center space-x-2 flex-1 min-w-0">
                 <div className={cn('w-4 h-4 shrink-0 rounded-sm')}>
@@ -140,7 +140,7 @@ export const SubsystemsSection: FC<SubsystemsSectionProps> = ({
                 >
                   {name}
                 </span>
-                <LinkIcon className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-blue-500 dark:text-blue-400 shrink-0" />
+                <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-link/70 shrink-0" />
               </div>
 
               {/* Spare Parts Coverage Badge */}

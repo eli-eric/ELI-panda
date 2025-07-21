@@ -22,7 +22,7 @@ export const Grid = ({
 }: GridPropsT): JSX.Element => (
   <div
     className={cn(
-      `grid grid-cols-3 md:grid-cols-6 lg:grid-cols-12 text-gray-900 `,
+      `grid grid-cols-3 md:grid-cols-6 lg:grid-cols-12`,
       `gap-y-${verticalSpacing}`,
       `gap-x-${horizontalSpacing}`,
       className
