@@ -1,11 +1,10 @@
-import { Fragment, useId } from 'react'
+import { useId } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import { cn } from '@/lib/utils'
 import type { FieldProps } from '@/types/form'
-
-import { ValidationIcon } from '../../Icons'
-import { InputWrapper, Label } from '../shared'
 
 type TextAreaWithErrorProps = FieldProps &
   React.TextareaHTMLAttributes<HTMLTextAreaElement>
@@ -14,7 +13,6 @@ export const TextArea = ({
   name,
   placeholder,
   disabled,
-  rounded,
   label,
   className,
   isFilter,
@@ -30,27 +28,26 @@ export const TextArea = ({
       control={control}
       defaultValue={defaultValue || ''}
       render={({ field, fieldState: { error } }) => (
-        <InputWrapper className={className}>
-          <Fragment>
-            <Label htmlFor={id} label={label} />
-            <textarea
-              {...field}
-              value={field.value || ''}
-              id={id}
-              rows={rows || 3}
-              disabled={disabled}
-              placeholder={placeholder}
-              className={cn(
-                'form-field',
-                rounded,
-                error ? 'border-red-500' : 'border-gray-300',
-                disabled ? 'bg-gray-100' : '',
-                isFilter ? field.value && 'border-2 border-lime-500' : ''
-              )}
-            />
-            {error && <ValidationIcon data-testid="validation-icon" />}
-          </Fragment>
-        </InputWrapper>
+        <div className={cn('space-y-2', className)}>
+          {label && (
+            <Label htmlFor={id} className="text-sm font-medium">
+              {label}
+            </Label>
+          )}
+          <Textarea
+            {...field}
+            id={id}
+            value={field.value || ''}
+            rows={rows || 5}
+            disabled={disabled}
+            placeholder={placeholder}
+            className={cn(
+              error && 'border-destructive',
+              isFilter && field.value && 'border-2 border-lime-500'
+            )}
+            aria-invalid={error ? 'true' : 'false'}
+          />
+        </div>
       )}
     />
   )

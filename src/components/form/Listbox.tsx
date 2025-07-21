@@ -1,17 +1,20 @@
-import { Listbox as HUIListbox } from '@headlessui/react'
 import React, { useEffect, useMemo } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
+import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
 import { useCodebook } from '@/hooks/fetch/useCodebook'
 import { cn } from '@/lib/utils'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
-
-import { FormXMarkIcon } from './components/FormXMarkIcon'
-import { SelectOption } from './components/SelectOption'
-import { ChevronDown } from './Icons'
 
 export type ListboxPropsT = FieldProps & {
   codebook?: CODEBOOK
@@ -34,23 +37,18 @@ export type ListboxPropsT = FieldProps & {
 
 const Listbox = ({
   codebook,
-  optionsSize = 'md',
   defaultValue = null,
   name,
   label,
   disabled,
   allowEmptyOption = false,
   emptyOption = 'None',
-  position = 'bottom',
   className,
-  rounded = 'rounded-md',
-  unit,
   customOptions,
   customLabel,
   codebookResponse,
   placeholder,
   onChange,
-  onClickIcon,
   children,
   onClick,
   isFilter
@@ -95,12 +93,18 @@ const Listbox = ({
     codebookResponse
   ])
 
-  const handleChange = (value: any) =>
-    value?.uid === '' ? null : customOptions ? value.uid : value
+  const handleChange = (value: string) => {
+    if (value === '') {
+      return null
+    }
 
-  const handleClear = () => {
-    setValue(name, null)
-    onChange && onChange(null)
+    if (customOptions) {
+      return value
+    }
+
+    // Find the full object for non-custom options
+    const selectedOption = options.find(option => option.uid === value)
+    return selectedOption || null
   }
 
   return (
@@ -109,107 +113,63 @@ const Listbox = ({
       control={control}
       defaultValue={defaultValue}
       render={({ field, fieldState: { error } }) => {
-        const value =
-          typeof field.value === 'string' ? field.value : field.value?.name
+        const currentValue =
+          typeof field.value === 'string' ? field.value : field.value?.uid || ''
 
         return (
-          <>
-            <HUIListbox
-              as="div"
-              {...field}
-              onChange={v => {
-                field.onChange(handleChange(v))
-                onChange && onChange(v)
+          <div className={cn('space-y-1 w-full', className)}>
+            {(customLabel || label) && (
+              <Label>
+                {customLabel ? customLabel : intl.formatMessage({ id: label })}
+              </Label>
+            )}
+
+            <Select
+              value={currentValue}
+              onValueChange={value => {
+                const processedValue = handleChange(value)
+                field.onChange(processedValue)
+                onChange && onChange(processedValue)
               }}
               disabled={disabled}
-              className={cn('relative flex flex-col w-full h-min', className)}
             >
-              {(customLabel || label) && (
-                <HUIListbox.Label className="block text-sm font-medium text-gray-900 dark:text-gray-200">
-                  {customLabel
-                    ? customLabel
-                    : intl.formatMessage({ id: label })}
-                </HUIListbox.Label>
-              )}
-              <div className="relative" onClick={onClick}>
-                <HUIListbox.Button
-                  className={cn(
-                    'form-field-combo h-[38px]',
-                    field.value && !disabled ? '' : '',
-                    rounded,
-                    error ? 'border-red-500' : 'border-gray-300',
-                    disabled ? 'bg-gray-100' : '',
-                    isFilter ? field.value && 'border-2 border-lime-500' : ''
-                  )}
-                >
-                  <div onClick={onClickIcon} className=" pr-12 ml-3 text-left">
-                    <span className="block truncate">
-                      {value ||
-                        (customOptions && allowEmptyOption && emptyOption)}
-                    </span>
-                    {placeholder && !value && (
-                      <span className="block truncate text-gray-400">
-                        {placeholder}
-                      </span>
-                    )}
-                  </div>
-                  {!disabled && value && (
-                    <FormXMarkIcon onClick={handleClear} />
-                  )}
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-2">
-                    {unit && (
-                      <span className="text-gray-400 sm:text-sm">{unit}</span>
-                    )}
-                    <ChevronDown onClick={onClickIcon} />
-                  </div>
-                </HUIListbox.Button>
-              </div>
-              {options?.length > 0 && (
-                <HUIListbox.Options
-                  className={cn(
-                    'absolute z-20 mt-1 w-full overflow-auto rounded-md bg-white dark:bg-gray-700 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm',
-                    position === 'top' ? 'bottom-full' : 'top-full',
-                    optionsSize === 'sm'
-                      ? 'max-h-40'
-                      : optionsSize === 'lg'
-                        ? 'max-h-64'
-                        : 'max-h-60'
-                  )}
-                >
-                  {options?.map(item => (
-                    <HUIListbox.Option
-                      key={crypto.randomUUID()}
-                      value={
-                        customOptions ? item : item.uid === '' ? null : item
-                      }
-                      className={({ active }) =>
-                        cn(
-                          'relative cursor-default select-none py-2 pl-3 pr-9',
-                          active
-                            ? 'bg-orange-500 text-white'
-                            : 'text-gray-900 dark:text-gray-200'
-                        )
-                      }
-                    >
-                      {({ active }) => {
-                        const selected = customOptions
-                          ? field.value === item.uid
-                          : field.value?.uid === item.uid
-                        return (
-                          <SelectOption
-                            item={item}
-                            selected={selected}
-                            active={active}
-                          />
-                        )
-                      }}
-                    </HUIListbox.Option>
-                  ))}
-                </HUIListbox.Options>
-              )}
-            </HUIListbox>
+              <SelectTrigger
+                className={cn(
+                  'w-full',
+                  error && 'border-destructive',
+                  isFilter && field.value && 'border-2 border-lime-500'
+                )}
+                onClick={onClick}
+                aria-invalid={error ? 'true' : 'false'}
+              >
+                <SelectValue
+                  placeholder={
+                    placeholder ||
+                    (customOptions && allowEmptyOption
+                      ? emptyOption
+                      : 'Select an option')
+                  }
+                />
+              </SelectTrigger>
+
+              <SelectContent>
+                {options?.map(item => (
+                  <SelectItem
+                    key={item.uid || crypto.randomUUID()}
+                    value={item.uid}
+                  >
+                    {item.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {error && (
+              <p className="text-sm text-destructive">{error.message}</p>
+            )}
+
             {children}
-          </>
+          </div>
         )
       }}
     />

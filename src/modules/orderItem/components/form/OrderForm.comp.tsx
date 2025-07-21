@@ -9,8 +9,10 @@ import {
   Card as CardUI,
   CardContent,
   CardDescription,
+  CardHeader,
   CardTitle
 } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
 
 import useOrderFormFields from './OrderForm.fields'
 
@@ -20,43 +22,63 @@ const OrderFormComponent = () => {
 
   return (
     <CardUI className="mx-auto max-w-7xl px-4 py-4 sm:px-6 md:px-8 mt-4">
-      <CardTitle>{uid ? 'EDIT ORDER' : 'NEW ORDER'}</CardTitle>
-      <CardDescription>
-        {uid
-          ? 'Edit the order details below.'
-          : 'Fill in the order details below.'}
-      </CardDescription>
-      <CardContent>
+      <CardHeader>
+        <CardTitle>{uid ? 'Edit Order' : 'New Order'}</CardTitle>
+        <CardDescription>
+          {uid
+            ? 'Edit the order details below.'
+            : 'Fill in the order details below.'}
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="space-y-8">
+        {/* Basic Information */}
         <Grid>
-          <Col lg={6}>
-            <DateInput {...fields.orderDate} />
-          </Col>
-          <Col lg={6}>
+          <Col lg={8}>
             <Input {...fields.name} className="w-full" />
           </Col>
-          <Col lg={6}>
-            <Combobox {...fields.supplier} showAddButton={true} />
+          <Col lg={4}>
+            <DateInput {...fields.orderDate} className="w-full" />
           </Col>
           <Col lg={6}>
-            <Listbox {...fields.procurementResponsible} />
+            <Combobox
+              {...fields.supplier}
+              showAddButton={true}
+              className="w-full"
+            />
           </Col>
           <Col lg={6}>
-            <Combobox {...fields.requestor} />
+            <Listbox {...fields.procurementResponsible} className="w-full" />
           </Col>
-          <Col>
-            <Listbox {...fields.orderStatus} />
+          <Col lg={6}>
+            <Combobox {...fields.requestor} className="w-full" />
           </Col>
-          <Col>
+          <Col lg={6}>
+            <Listbox {...fields.orderStatus} className="w-full" />
+          </Col>
+        </Grid>
+
+        <Separator />
+
+        {/* Order Details */}
+        <Grid>
+          <Col lg={4}>
             <Input {...fields.requestNumber} className="w-full" />
           </Col>
-          <Col>
+          <Col lg={4}>
             <Input {...fields.orderNumber} className="w-full" />
           </Col>
-          <Col>
+          <Col lg={4}>
             <Input {...fields.contractNumber} className="w-full" />
           </Col>
-          <Col sm="full">
-            <TextArea {...fields.notes} />
+        </Grid>
+
+        <Separator />
+
+        {/* Additional Information */}
+        <Grid>
+          <Col lg={12}>
+            <TextArea {...fields.notes} className="w-full" />
           </Col>
         </Grid>
       </CardContent>
