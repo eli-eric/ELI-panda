@@ -19,9 +19,7 @@ export const ItemMoveButton: FC = () => {
 
   return (
     <Fragment>
-      <Button primary onClick={handleShow}>
-        Move Item
-      </Button>
+      <Button onClick={handleShow}>Move Item</Button>
       <Suspense>
         <ItemMoveModal />
       </Suspense>

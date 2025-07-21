@@ -24,18 +24,18 @@ export const PageHeaderButtons = ({
     <div className="flex space-x-2">
       {editPersmission && (
         <Fragment>
-          <Button type="button" primary onClick={onSubmit}>
+          <Button type="button" onClick={onSubmit}>
             Save
           </Button>
           {onSubmitAndExit && (
-            <Button type="button" primary onClick={onSubmitAndExit}>
+            <Button type="button" onClick={onSubmitAndExit}>
               Save and exit
             </Button>
           )}
         </Fragment>
       )}
       <Link href={exitTo}>
-        <BackButton buttonSize="large" />
+        <BackButton />
       </Link>
     </div>
   )

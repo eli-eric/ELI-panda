@@ -33,7 +33,6 @@ const ModalButtonsComponent = ({ testid, buttons, className }: Props) => (
             {...buttons.alternative}
             type={buttons.alternative?.type || 'button'}
             testid={`${testid}-${buttons.alternative?.testid}`}
-            primary
             className="inline-flex w-full justify-center sm:mt-0 sm:text-sm"
           />
         )}
@@ -42,7 +41,6 @@ const ModalButtonsComponent = ({ testid, buttons, className }: Props) => (
             {...buttons.goNext}
             type={buttons?.goNext?.type || 'button'}
             testid={`${testid}-${buttons.goNext?.testid}`}
-            primary
             className="inline-flex w-full justify-center sm:mt-0 sm:text-sm"
           />
         )}

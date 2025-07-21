@@ -42,9 +42,7 @@ const OrderLinesTable = ({ disabledEdit }: OrderLinesTableProps) => {
         {!disabledEdit && (
           <div className="flex items-center mr-2">
             <PlusButton
-              primary
               type="button"
-              buttonSize="large"
               onClick={handleOpenOrderLineForm}
               className="mb-2"
             />

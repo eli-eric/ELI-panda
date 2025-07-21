@@ -30,9 +30,7 @@ export const HeaderWithButtons = ({
   const DEBOUNCE_TIME = 1500
   const lastSubmitTimeRef = useRef<number>(0)
 
-  const onBack = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
+  const onBack = () => {
     if (loading) return
     const now = Date.now()
     if (now - lastSubmitTimeRef.current < DEBOUNCE_TIME) return
@@ -40,9 +38,7 @@ export const HeaderWithButtons = ({
     back()
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
+  const handleSubmit = () => {
     if (!onSubmit) return
     const now = Date.now()
     if (now - lastSubmitTimeRef.current < DEBOUNCE_TIME) return
@@ -50,9 +46,7 @@ export const HeaderWithButtons = ({
     onSubmit?.()
   }
 
-  const handleSubmitAndExit = (e: React.FormEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    e.stopPropagation()
+  const handleSubmitAndExit = () => {
     if (!onSubmitAndExit) return
     const now = Date.now()
     if (now - lastSubmitTimeRef.current < DEBOUNCE_TIME) return
@@ -67,24 +61,19 @@ export const HeaderWithButtons = ({
           <BackButton
             className="mr-2"
             type="button"
-            buttonSize="large"
             disabled={loading}
             onClick={onBack}
           />
           {disabledEdit && (
             <Fragment>
               <Button
-                primary
-                buttonSize="large"
                 onClick={handleSubmitAndExit}
                 disabled={loading || isFormInvalid}
                 type="button"
                 text={messages.saveAndExit}
               />
               <Button
-                primary
                 className="ml-2"
-                buttonSize="large"
                 onClick={handleSubmit}
                 disabled={loading || isFormInvalid}
                 type="button"
@@ -95,7 +84,6 @@ export const HeaderWithButtons = ({
           {loading && (
             <Button
               className="ml-2 bg-inherit border-none shadow-none"
-              buttonSize="large"
               loading={loading}
               text={'Saving...'}
             />

@@ -117,7 +117,7 @@ export const SystemFilterButtonContainer = ({
 
   return (
     <Fragment>
-      <Button className="mr-1" buttonSize="large" onClick={() => setOpen(true)}>
+      <Button className="mr-1" onClick={() => setOpen(true)}>
         {storeFilters.length > 0 ? (
           <FunnelIconFull className="h-4 w-4" aria-hidden="true" />
         ) : (

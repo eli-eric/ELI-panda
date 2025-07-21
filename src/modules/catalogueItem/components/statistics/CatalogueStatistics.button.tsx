@@ -10,11 +10,7 @@ export const ModalStatisticsButtonLarge = () => {
 
   return (
     <Fragment>
-      <StatsButton
-        className="mr-1"
-        buttonSize="large"
-        onClick={() => setOpenStats()()}
-      />
+      <StatsButton className="mr-1" onClick={() => setOpenStats()()} />
     </Fragment>
   )
 }

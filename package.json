@@ -7,7 +7,7 @@
     "dev": "PORT=5001 next dev",
     "build": "next build",
     "start": "PORT=5001 next start --hostname 0.0.0.0",
-    "lint": "next lint",
+    "lint": "next lint && eslint . --ext .ts,.tsx,.js,.jsx --fix",
     "format": "prettier --write .",
     "generate": "graphql-codegen --config codegen.ts",
     "generate:watch": "graphql-codegen --config --watch",

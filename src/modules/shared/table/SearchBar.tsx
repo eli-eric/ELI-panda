@@ -113,19 +113,8 @@ export const SearchBarButtonsComponent = ({
   const canEdit = usePermission([editRole])
   return (
     <div className="flex">
-      <RefreshButton
-        className="mr-1"
-        buttonSize="large"
-        onClick={handleRefresh}
-      />
-      {canEdit && (
-        <PlusButton
-          primary
-          className="mr-1"
-          buttonSize="large"
-          onClick={handleAdd}
-        />
-      )}
+      <RefreshButton className="mr-1" onClick={handleRefresh} />
+      {canEdit && <PlusButton className="mr-1" onClick={handleAdd} />}
       {children}
     </div>
   )

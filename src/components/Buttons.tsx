@@ -136,7 +136,7 @@ export const MinusButton = ({
 )
 
 export const BackButton = ({
-  size = 'sm',
+  size,
   variant = 'outline',
   ...restProps
 }: ButtonProps) => (

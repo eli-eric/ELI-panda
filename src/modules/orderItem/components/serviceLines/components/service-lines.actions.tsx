@@ -4,6 +4,7 @@ import { Fragment } from 'react'
 
 import { Button, TableDeleteButton } from '@/components/Buttons'
 import { Toggle } from '@/components/form/Switch'
+import { Tooltip } from '@/components/Tooltip'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { useServiceLineDeliver } from '@/modules/orderItem/hooks/useServiceDelivery'
@@ -93,14 +94,14 @@ export const DeliveredAllButton = () => {
     handleDelivery()
   }
   return (
-    <Button
-      primary
-      disabled={isPending || !hasRole}
-      className="flex justify-center items-center p-1 h-7 min-h-0 w-7"
-      onClick={handleClick}
-      title="Mark All as Delivered"
-    >
-      <CheckCircleIcon className="h-5 w-5" />
-    </Button>
+    <Tooltip content="Mark All as Delivered">
+      <Button
+        disabled={isPending || !hasRole}
+        className="flex justify-center items-center p-1 h-7 min-h-0 w-7"
+        onClick={handleClick}
+      >
+        <CheckCircleIcon className="h-5 w-5" />
+      </Button>
+    </Tooltip>
   )
 }

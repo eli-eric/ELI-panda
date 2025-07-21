@@ -72,7 +72,6 @@ export const AddSystemTypeButton: FC<Props> = ({ selectedGroup, refetch }) => {
   return (
     <Fragment>
       <PlusButton
-        primary
         disabled={!selectedGroup || !canEdit}
         onClick={() => setOpen(!open)}
       />

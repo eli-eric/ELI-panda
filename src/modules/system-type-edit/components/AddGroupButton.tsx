@@ -65,7 +65,7 @@ export const AddGroupButton: FC<Props> = ({ refetch }) => {
   }
   return (
     <Fragment>
-      <PlusButton primary disabled={!canEdit} onClick={() => setOpen(!open)} />
+      <PlusButton disabled={!canEdit} onClick={() => setOpen(!open)} />
       <ModalComponent open={open} setOpen={setOpen} buttons={buttons}>
         <Form formMethods={formMethods}>
           <Input name="name" label="Name" rounded="rounded-md" />

@@ -22,7 +22,7 @@ export const GraphModalButton: FC<Props> = ({ uid }) => {
 
   return (
     <Fragment>
-      <GraphTreeButton buttonSize="large" onClick={openModal} />
+      <GraphTreeButton onClick={openModal} />
       <GraphModal open={open} setOpen={setOpen} uid={uid} />
     </Fragment>
   )

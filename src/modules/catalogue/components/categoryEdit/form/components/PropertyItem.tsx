@@ -4,6 +4,7 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
+import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -77,6 +78,7 @@ const PropertyItem = ({
     append({ value: '' })
   }
   const type = useWatch({ control, name: `${name}.type` })
+  const propertyName = useWatch({ control, name: `${name}.name` })
 
   //eslint-disable-next-line
   const listOfValues = watch(`${name}.listOfValues`) || []
@@ -130,8 +132,8 @@ const PropertyItem = ({
   }
 
   return (
-    <Card className="mb-4">
-      <CardContent className="p-4">
+    <Card className="mb-4 border-2 border-l-primary/50">
+      <CardContent className="p-4 ">
         <div className="flex items-start gap-3">
           <MoveButtons
             moveDown={moveDown}
@@ -216,16 +218,20 @@ const PropertyItem = ({
                       name={`${name}.listOfValues.${index}`}
                     />
                   ))}
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={handleAddValue}
-                    className="w-full border-dashed"
+                  <Tooltip
+                    content={`Add value to property: ${propertyName || 'Unnamed Property'}`}
                   >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Value
-                  </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleAddValue}
+                      className="w-full border-dashed"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Value
+                    </Button>
+                  </Tooltip>
                 </div>
               </div>
             )}

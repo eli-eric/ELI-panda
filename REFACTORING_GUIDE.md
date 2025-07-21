@@ -532,7 +532,7 @@ npx shadcn-ui@latest add form
 ```typescript
 // ❌ Before: Custom Button
 interface CustomButtonProps {
-  primary?: boolean
+  ?: boolean
   secondary?: boolean
   loading?: boolean
   buttonSize?: 'small' | 'medium' | 'large'
@@ -541,10 +541,10 @@ interface CustomButtonProps {
   children: React.ReactNode
 }
 
-const CustomButton = ({ primary, secondary, loading, buttonSize, ...props }) => {
+const CustomButton = ({ , secondary, loading, buttonSize, ...props }) => {
   const classes = cn(
     'px-4 py-2 rounded',
-    primary && 'bg-blue-500 text-white',
+   && 'bg-blue-500 text-white',
     secondary && 'bg-gray-200 text-gray-900',
     buttonSize === 'large' && 'px-6 py-3 text-lg'
   )

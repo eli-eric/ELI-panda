@@ -18,16 +18,16 @@ export const HeaderButtons = ({ onSubmitAndExit, onSubmit }: Props) => {
     <div className="flex space-x-2">
       {editPersmission && (
         <Fragment>
-          <Button type="button" primary onClick={onSubmit}>
+          <Button type="button" onClick={onSubmit}>
             Save
           </Button>
-          <Button type="button" primary onClick={onSubmitAndExit}>
+          <Button type="button" onClick={onSubmitAndExit}>
             Save and exit
           </Button>
         </Fragment>
       )}
       <Link href={PATH.ROOM_CARDS}>
-        <BackButton buttonSize="large" />
+        <BackButton />
       </Link>
     </div>
   )

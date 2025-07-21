@@ -51,7 +51,7 @@ export const DeleteCategoryButton: FC<EditCategoryProps> = ({ uid }) => {
   return (
     <Fragment>
       <Button
-        buttonSize="small"
+        size="sm"
         onClick={() => {
           setOpen(true)
         }}

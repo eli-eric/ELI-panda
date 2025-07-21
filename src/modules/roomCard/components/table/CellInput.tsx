@@ -49,7 +49,9 @@ const CleaningSchedule = () => {
             }
           }}
           type="button"
-          primary={cleaningScheduleDays?.includes(day) ? true : false}
+          variant={
+            cleaningScheduleDays?.includes(day) ? 'default' : 'secondary'
+          }
         >
           {day.slice(0, 2)}
         </Button>

@@ -1,6 +1,7 @@
 import { Plus } from 'lucide-react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 
+import { Tooltip } from '@/components/Tooltip'
 import { Button } from '@/components/ui/button'
 
 import type { CategoryFormType } from '../../types'
@@ -12,6 +13,7 @@ interface Props {
 
 const PropertyList = ({ name }: Props) => {
   const { control } = useFormContext<CategoryFormType>()
+  const groupName = useWatch({ control, name: `${name}.name` })
   const { fields, append, remove, move } = useFieldArray<CategoryFormType>({
     control,
     name: `${name}.properties`
@@ -39,31 +41,34 @@ const PropertyList = ({ name }: Props) => {
       {fields.length > 0 && (
         <div className="space-y-3">
           {fields.map((field, index) => (
-            <div key={field.id} className="p-3 border rounded-lg bg-muted/30">
-              <PropertyItem
-                removeProp={remove}
-                index={index}
-                name={`${name}.properties.${index}`}
-                length={fields.length}
-                moveDown={handleMoveDown}
-                moveUp={handleMoveUp}
-                lenght={fields.length}
-              />
-            </div>
+            <PropertyItem
+              key={field.id}
+              removeProp={remove}
+              index={index}
+              name={`${name}.properties.${index}`}
+              length={fields.length}
+              moveDown={handleMoveDown}
+              moveUp={handleMoveUp}
+              lenght={fields.length}
+            />
           ))}
         </div>
       )}
 
-      <Button
-        type="button"
-        onClick={handleAddProp}
-        variant="outline"
-        size="sm"
-        className="w-full border-dashed"
+      <Tooltip
+        content={`Add property to group: ${groupName || 'Unnamed Group'}`}
       >
-        <Plus className="h-4 w-4 mr-2" />
-        Add Property
-      </Button>
+        <Button
+          type="button"
+          onClick={handleAddProp}
+          variant="outline"
+          size="sm"
+          className="w-full border-dashed"
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          Add Property
+        </Button>
+      </Tooltip>
     </div>
   )
 }

@@ -29,7 +29,6 @@ export const SystemCodeButton = () => {
   return (
     <div className="flex w-full">
       <Button
-        primary
         loading={loading || pending}
         disabled={disabled}
         onClick={handleGenerate}
@@ -38,7 +37,6 @@ export const SystemCodeButton = () => {
         Generate
       </Button>
       <Button
-        primary
         disabled={disabled}
         loading={loading || pending}
         onClick={handleClear}

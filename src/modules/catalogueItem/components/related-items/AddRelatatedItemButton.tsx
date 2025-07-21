@@ -10,7 +10,7 @@ export const AddRelatatedItemButton = () => {
 
   return (
     <Fragment>
-      <PlusButton primary buttonSize="large" onClick={handleOpen} />
+      <PlusButton onClick={handleOpen} />
       <SelectRelatatedItemsModal {...{ open, setOpen }} />
     </Fragment>
   )
