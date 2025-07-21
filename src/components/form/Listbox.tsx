@@ -70,20 +70,33 @@ const Listbox = ({
 
   const options = useMemo(() => {
     const targetOptions: CodebookType[] = []
-    if (allowEmptyOption) {
-      targetOptions.push({ uid: '', name: emptyOption })
+
+    // Add valid codebook options first
+    if (codebookOptions?.data) {
+      targetOptions.push(
+        ...codebookOptions.data.filter(
+          item => item.uid && item.uid.trim() !== ''
+        )
+      )
     }
+    if (codebookResponse) {
+      targetOptions.push(
+        ...codebookResponse.filter(item => item.uid && item.uid.trim() !== '')
+      )
+    }
+
+    // Add custom options
     if (customOptions) {
       targetOptions.push(
         ...customOptions.map(item => ({ uid: item, name: item }))
       )
     }
-    if (codebookOptions?.data) {
-      targetOptions.push(...codebookOptions.data)
+
+    // Add empty option at the end if allowed
+    if (allowEmptyOption) {
+      targetOptions.push({ uid: '__empty__', name: emptyOption })
     }
-    if (codebookResponse) {
-      targetOptions.push(...codebookResponse)
-    }
+
     return targetOptions
   }, [
     allowEmptyOption,
@@ -94,7 +107,7 @@ const Listbox = ({
   ])
 
   const handleChange = (value: string) => {
-    if (value === '') {
+    if (value === '' || value === '__empty__') {
       return null
     }
 
@@ -113,8 +126,12 @@ const Listbox = ({
       control={control}
       defaultValue={defaultValue}
       render={({ field, fieldState: { error } }) => {
-        const currentValue =
-          typeof field.value === 'string' ? field.value : field.value?.uid || ''
+        const currentValue = (() => {
+          if (!field.value) return allowEmptyOption ? '__empty__' : ''
+          return typeof field.value === 'string'
+            ? field.value
+            : field.value?.uid || ''
+        })()
 
         return (
           <div className={cn('space-y-1 w-full', className)}>
@@ -153,14 +170,16 @@ const Listbox = ({
               </SelectTrigger>
 
               <SelectContent>
-                {options?.map(item => (
-                  <SelectItem
-                    key={item.uid || crypto.randomUUID()}
-                    value={item.uid}
-                  >
-                    {item.name}
-                  </SelectItem>
-                ))}
+                {options
+                  ?.filter(item => item.uid && item.uid.trim() !== '')
+                  .map(item => (
+                    <SelectItem
+                      key={item.uid || crypto.randomUUID()}
+                      value={item.uid}
+                    >
+                      {item.name}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
 

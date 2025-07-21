@@ -1,4 +1,4 @@
-import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { Plus, Trash2 } from 'lucide-react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 
 import { Button } from '@/components/Buttons'
@@ -44,8 +44,8 @@ const Group = ({
               index={index}
             />
             <Input name={`${name}.name`} placeholder="Group Name" />
-            <Button rounded="rounded-r-md" onClick={handleRemoveGroup}>
-              <TrashIcon className="h-4 w-4 text-red-700" aria-hidden="true" />
+            <Button onClick={handleRemoveGroup}>
+              <Trash2 className="h-4 w-4 text-red-600" aria-hidden="true" />
             </Button>
           </span>
         </div>
@@ -106,8 +106,8 @@ const GroupList = () => {
           <div className="w-full border-t border-gray-300" />
         </div>
         <div className="relative flex justify-center">
-          <Button onClick={handleAddGroup}>
-            <PlusIcon className="h-4 w-4" aria-hidden="true" />
+          <Button type="button" onClick={handleAddGroup}>
+            <Plus className="h-4 w-4" aria-hidden="true" />
           </Button>
         </div>
       </div>

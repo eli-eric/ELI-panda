@@ -1,12 +1,6 @@
 'use client'
 import { useQueryClient } from '@tanstack/react-query'
-import {
-  type Dispatch,
-  Fragment,
-  type SetStateAction,
-  useRef,
-  useState
-} from 'react'
+import { type Dispatch, type SetStateAction, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { FormattedMessage } from 'react-intl'
 
@@ -73,8 +67,9 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
   }
 
   if (isLoading) return <ProgressBarComponent />
+
   return (
-    <Fragment>
+    <div>
       {categoryDetail && (
         <CategoryEditForm
           onSubmit={onSubmit}
@@ -83,29 +78,29 @@ const CategoryEditContainer = ({ setOpen, parentUID, uid }: Props) => {
           categoryDetail={categoryDetail as CategoryFormType}
           systemType={catalogueCategory?.systemType as CodebookType}
         >
-          <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-            <Button
-              type="submit"
-              primary
-              loading={loading || loadingSubmit}
-              className="inline-flex w-full justify-center sm:col-start-2 sm:mt-0 sm:text-sm"
-            >
-              <FormattedMessage id={buttons.save} />
-            </Button>
+          <div className="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4 border-t mt-6">
             <Button
               type="button"
               onClick={() => {
                 setOpen(false)
               }}
               disabled={loading}
-              className="inline-flex w-full justify-center sm:col-start-1 sm:mt-0 sm:text-sm text-gray-700 dark:text-gray-200"
+              variant="outline"
+              className="order-2 sm:order-1"
             >
               <FormattedMessage id={buttons.cancel} />
+            </Button>
+            <Button
+              type="submit"
+              loading={loading || loadingSubmit}
+              className="order-1 sm:order-2"
+            >
+              <FormattedMessage id={buttons.save} />
             </Button>
           </div>
         </CategoryEditForm>
       )}
-    </Fragment>
+    </div>
   )
 }
 
