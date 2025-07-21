@@ -63,7 +63,7 @@ export const Input = ({
       control={control}
       defaultValue={defaultValue || ''}
       render={({ field, fieldState: { error } }) => (
-        <div className={cn('space-y-1', className)}>
+        <div className={cn('space-y-1 w-full', className)}>
           {label && <Label htmlFor={idHtml}>{label}</Label>}
           <div className="relative">
             <ShadcnInput

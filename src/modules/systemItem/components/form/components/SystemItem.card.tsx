@@ -3,8 +3,8 @@ import { Fragment } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { LinkDecorator } from '@/components/decorators'
-import Card from '@/components/layout/Card'
 import { Heading } from '@/components/layout/Heading'
+import { Card as CardUI, CardContent } from '@/components/ui/card'
 import { ItemAssignButton } from '@/modules/shared/form/itemAssign/item-assign.button'
 import { ItemMoveButton } from '@/modules/shared/form/itemMoving/item-move.button'
 import { PATH } from '@/types/constants/paths'
@@ -16,8 +16,8 @@ export const SystemItemCard = () => {
   const item = useWatch({ control, name: 'physicalItem' })
 
   return (
-    <Card>
-      <Card className="bg-amber-100 dark:bg-amber-600 rounded-md  shadow-md">
+    <CardUI className="border-2 border-amber-600 rounded-md shadow-md mt-8 ">
+      <CardContent>
         <Fragment>
           <Heading
             customText={'ITEM: ' + (item?.catalogueItem?.name || 'No item')}
@@ -36,7 +36,7 @@ export const SystemItemCard = () => {
           </Heading>
           {item && <PhysicalItemForm uid={item.uid} />}
         </Fragment>
-      </Card>
-    </Card>
+      </CardContent>
+    </CardUI>
   )
 }

@@ -34,7 +34,9 @@ const SystemDetailPage: NextPage = ({ uid }: Props) => {
         <title>{intl.formatMessage({ id: messages.head })}</title>
         <meta name="description" content="...." />
       </Head>
-      {systemDetail && <SystemItemContainer uid={uid} />}
+      <div className="min-h-screen bg-background">
+        {systemDetail && <SystemItemContainer uid={uid} />}
+      </div>
     </Fragment>
   )
 }

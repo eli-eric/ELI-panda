@@ -29,6 +29,7 @@ const useSystemEditFormFields = () => {
     },
     minimalSpareParstCount: {
       name: 'minimalSpareParstCount',
+      label: 'Minimal Spare Parts Count',
       rounded: 'rounded-md',
       disabled: disabledEdit
     },
@@ -114,6 +115,7 @@ const useSystemEditFormFields = () => {
     },
     currency: {
       name: 'physicalItem.currency',
+      label: 'Currency',
       disabled: disabledEdit
     },
     eun: {

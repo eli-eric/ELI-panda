@@ -19,6 +19,19 @@ export const getColorBySystemLevel = (level?: SystemLevel, index?: number) => {
   }
 }
 
+export const getBorderBySystemLevel = (level?: SystemLevel) => {
+  switch (level) {
+    case SystemLevel.KeySystems:
+      return 'border-4 border-orange-500 dark:border-orange-400'
+    case SystemLevel.SubsystemsAndParts:
+      return 'border-4 border-sky-500 dark:border-sky-400'
+    case SystemLevel.TechnologyUnit:
+      return 'border-4 border-lime-500 dark:border-lime-400'
+    default:
+      return ''
+  }
+}
+
 export const getFontBySystemLevel = (level?: SystemLevel) => {
   switch (level) {
     case SystemLevel.KeySystems:
