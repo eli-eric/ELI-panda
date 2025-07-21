@@ -1,41 +1,39 @@
-import {
-  ArrowSmallDownIcon,
-  ArrowSmallUpIcon
-} from '@heroicons/react/24/outline'
+import { ChevronDown, ChevronUp } from 'lucide-react'
 
-import { Button } from '@/components/Buttons'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   index: number
   lenght: number
   moveDown: (index: number) => void
-
   moveUp: (index: number) => void
 }
 
 const MoveButtons = ({ index, lenght, moveDown, moveUp }: Props) => (
-  <div className="flex flex-col">
+  <div className="flex flex-col gap-1">
     <Button
       type="button"
       disabled={index === 0}
-      rounded="rounded-tl-md"
+      variant="outline"
+      size="sm"
       onClick={() => {
         moveUp(index)
       }}
-      buttonSize="small"
+      className="h-8 w-8 p-0"
     >
-      <ArrowSmallUpIcon className="h-[9px] w-[9px]" aria-hidden="true" />
+      <ChevronUp className="h-3 w-3" />
     </Button>
     <Button
       type="button"
       disabled={index === lenght - 1}
-      rounded="rounded-bl-md"
+      variant="outline"
+      size="sm"
       onClick={() => {
         moveDown(index)
       }}
-      buttonSize="small"
+      className="h-8 w-8 p-0"
     >
-      <ArrowSmallDownIcon className="h-[9px] w-[9px]" aria-hidden="true" />
+      <ChevronDown className="h-3 w-3" />
     </Button>
   </div>
 )

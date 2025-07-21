@@ -1,8 +1,8 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Fragment } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { Form } from '@/components/form/Form'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { ImageGalleryRef } from '@/modules/shared/imageManager/types'
 import type { CodebookType } from '@/types/responses/codebook'
 
@@ -39,16 +39,42 @@ const CategoryEditForm = ({
   })
 
   return (
-    <Fragment>
-      <Form formMethods={formMethods} onSubmit={onSubmit}>
-        <div className="flex-1">
-          <Main uid={uid} imageRef={imageRef} />
-          <GroupList />
-          <PhysicalItemProperties />
-          {children}
-        </div>
-      </Form>
-    </Fragment>
+    <Form formMethods={formMethods} onSubmit={onSubmit}>
+      <div className="space-y-6">
+        {/* Basic Information */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Basic Information</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Main uid={uid} imageRef={imageRef} />
+          </CardContent>
+        </Card>
+
+        {/* Property Groups */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Property Groups</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <GroupList />
+          </CardContent>
+        </Card>
+
+        {/* Physical Item Properties */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Physical Properties</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <PhysicalItemProperties />
+          </CardContent>
+        </Card>
+
+        {/* Action Buttons */}
+        {children}
+      </div>
+    </Form>
   )
 }
 

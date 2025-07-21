@@ -39,7 +39,7 @@ export const EditCategoryButton: FC<EditCategoryProps> = ({
         </Button>
       </SheetTrigger>
       <SheetContent
-        className="w-full sm:w-[200px] lg:w-[400px] xl:w-[600px] !max-w-none overflow-y-auto px-2 sm:px-4 lg:px-6"
+        className="w-full sm:w-[400px] lg:w-[600px] xl:w-[800px] !max-w-none overflow-y-auto px-2 sm:px-4 lg:px-6"
         style={{ maxWidth: 'none' }}
       >
         <SheetHeader>

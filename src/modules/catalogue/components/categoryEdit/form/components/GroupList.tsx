@@ -1,8 +1,9 @@
 import { Plus, Trash2 } from 'lucide-react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
+import { useFieldArray, useFormContext, useWatch } from 'react-hook-form'
 
-import { Button } from '@/components/Buttons'
 import { Input } from '@/components/form/inputs'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 import type { CategoryFormType } from '../../types'
 import MoveButtons from './MoveButtons'
@@ -26,36 +27,46 @@ const Group = ({
   moveUp,
   lenght
 }: groupProps) => {
+  const { control } = useFormContext<CategoryFormType>()
+  const groupName = useWatch({ control, name: `${name}.name` })
+
   const handleRemoveGroup = () => {
     remove(index)
   }
+
+  const displayName =
+    groupName && groupName.trim() ? groupName : `Group ${index + 1}`
+
   return (
-    <div className=" flex flex-1 flex-col justify-between">
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center" aria-hidden="true">
-          <div className="w-full border-t border-gray-300" />
-        </div>
-        <div className="relative flex justify-center">
-          <span className="isolate inline-flex rounded-md shadow-sm">
+    <Card className="border-l-4 border-l-blue-500">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-base">{displayName}</CardTitle>
+          <div className="flex items-center gap-2">
             <MoveButtons
               moveDown={moveDown}
               moveUp={moveUp}
               lenght={lenght}
               index={index}
             />
-            <Input name={`${name}.name`} placeholder="Group Name" />
-            <Button onClick={handleRemoveGroup}>
-              <Trash2 className="h-4 w-4 text-red-600" aria-hidden="true" />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRemoveGroup}
+              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+            >
+              <Trash2 className="h-4 w-4" />
             </Button>
-          </span>
+          </div>
         </div>
-      </div>
-      <div className="relative px-3">
-        <div className="w-full flex-1">
-          <PropertyList name={name} />
+        <div className="mt-2">
+          <Input name={`${name}.name`} placeholder="Group name" />
         </div>
-      </div>
-    </div>
+      </CardHeader>
+      <CardContent>
+        <PropertyList name={name} />
+      </CardContent>
+    </Card>
   )
 }
 
@@ -81,35 +92,33 @@ const GroupList = () => {
   }
 
   return (
-    <div className="flex-1">
-      <div className="flex-1">
-        {fields.length > 0 && (
-          <ul role="list">
-            {fields.map((field, index) => (
-              <li key={field.id} className="flex py-2 ">
-                <Group
-                  remove={remove}
-                  index={index}
-                  name={`groups.${index}`}
-                  key={field.id}
-                  moveUp={handleMoveUp}
-                  moveDown={handleMoveDown}
-                  lenght={fields.length}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center" aria-hidden="true">
-          <div className="w-full border-t border-gray-300" />
+    <div className="space-y-4">
+      {fields.length > 0 && (
+        <div className="space-y-4">
+          {fields.map((field, index) => (
+            <Group
+              key={field.id}
+              remove={remove}
+              index={index}
+              name={`groups.${index}`}
+              moveUp={handleMoveUp}
+              moveDown={handleMoveDown}
+              lenght={fields.length}
+            />
+          ))}
         </div>
-        <div className="relative flex justify-center">
-          <Button type="button" onClick={handleAddGroup}>
-            <Plus className="h-4 w-4" aria-hidden="true" />
-          </Button>
-        </div>
+      )}
+
+      <div className="flex justify-center pt-4">
+        <Button
+          type="button"
+          onClick={handleAddGroup}
+          variant="outline"
+          className="border-dashed border-2 hover:border-solid"
+        >
+          <Plus className="h-4 w-4 mr-2" />
+          Add Group
+        </Button>
       </div>
     </div>
   )
