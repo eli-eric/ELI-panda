@@ -1,10 +1,15 @@
-import { DocumentDuplicateIcon } from '@heroicons/react/24/outline'
+import { Copy } from 'lucide-react'
 import type { FC } from 'react'
 import { Fragment, useEffect, useState } from 'react'
 
 import { Button } from '@/components/Buttons'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
 import WarningModal from '@/components/overlays/modal/warning/modal-warning.comp'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle
+} from '@/components/ui/sheet'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import { message } from '@/i18n/src/messages'
@@ -69,7 +74,7 @@ export const CopyCategoryButton: FC<CopyCategoryButtonProps> = ({ uid }) => {
         }}
         variant="ghost"
       >
-        <DocumentDuplicateIcon
+        <Copy
           className="h-4 w-4 transform transition-transform hover:scale-110 duration-300"
           aria-hidden="true"
         />
@@ -84,17 +89,21 @@ export const CopyCategoryButton: FC<CopyCategoryButtonProps> = ({ uid }) => {
         error={copyCategory.error}
       />
       {copyCategoryUid && (
-        <ModalComponent
-          open={openCopyEdit}
-          setOpen={setOpenCopyEdit}
-          buttons={{ noButtons: true }}
-        >
-          <CategoryEditContainer
-            setOpen={setOpenCopyEdit}
-            parentUID={parentUID}
-            uid={copyCategoryUid}
-          />
-        </ModalComponent>
+        <Sheet open={openCopyEdit} onOpenChange={setOpenCopyEdit}>
+          <SheetContent
+            className="w-full sm:w-[400px] lg:w-[600px] xl:w-[800px] !max-w-none overflow-y-auto px-2 sm:px-4 lg:px-6"
+            style={{ maxWidth: 'none' }}
+          >
+            <SheetHeader>
+              <SheetTitle>Copy Category</SheetTitle>
+            </SheetHeader>
+            <CategoryEditContainer
+              setOpen={setOpenCopyEdit}
+              parentUID={parentUID}
+              uid={copyCategoryUid}
+            />
+          </SheetContent>
+        </Sheet>
       )}
     </Fragment>
   )
