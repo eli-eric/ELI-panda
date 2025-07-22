@@ -1,14 +1,15 @@
 import { type ColumnDef } from '@tanstack/react-table'
 import { useEffect, useMemo, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { FormattedMessage } from 'react-intl'
 
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { usePandaTable } from '@/modules/shared/table/pandaTable/hooks/usePandaTable'
 import { PandaTableControlled } from '@/modules/shared/table/pandaTable/PandaTableCotrolled'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import useTableStateStore from '@/store/useTableStateStore'
-import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { ExpandableNameCell } from './ExpandableNameCell'
@@ -39,23 +40,59 @@ interface CodebookTreeModalProps {
   onSelect?: (item?: CodebookType | null) => void
 }
 
-export const CodebookTreeModalGraphql = ({
-  open,
-  setOpen,
-  data,
-  name,
-  fetchChildren,
-  additionalColumn,
-  enableFiltering,
-  loading = false,
-  tableId = 'codebook-tree',
-  selectParent = true,
-  manualFiltering,
-  customSetValue,
-  onSelect
-}: CodebookTreeModalProps) => {
-  const [item, setItem] = useState<Codebooktree | undefined>(undefined)
+/**
+ * Opens the CodebookTreeModalGraphql as a Dialog via the global modal system.
+ * Usage: openCodebookTreeModalGraphql({ ...props })
+ */
+export function openCodebookTreeModalGraphql(
+  props: Omit<CodebookTreeModalProps, 'open' | 'setOpen'>
+) {
+  const { openModal } = useModalGlobalStore.getState()
+  openModal('dialog1', {
+    component: CodebookTreeModalGraphqlContent,
+    props,
+    onClose:
+      typeof props.onSelect === 'function'
+        ? () => {
+            props.onSelect?.(undefined)
+          }
+        : undefined
+  })
+}
 
+/**
+ * Legacy modal component for direct usage (with open/setOpen state).
+ * Used in SystemTypeComboBox and similar.
+ */
+export function CodebookTreeModalGraphql(props: CodebookTreeModalProps) {
+  // This is a wrapper for compatibility with legacy usage
+  // Remove open and setOpen before passing to content
+  const { open, setOpen, ...rest } = props
+  return <CodebookTreeModalGraphqlContent {...rest} />
+}
+
+// The actual modal content, rendered by the global modal system
+export function CodebookTreeModalGraphqlContent(
+  props: Omit<CodebookTreeModalProps, 'open' | 'setOpen'> & {
+    onClose?: () => void
+  }
+) {
+  const {
+    data,
+    name,
+    fetchChildren,
+    additionalColumn,
+    enableFiltering,
+    loading = false,
+    tableId = 'codebook-tree',
+    selectParent = true,
+    manualFiltering,
+    customSetValue,
+    onSelect,
+    onClose
+  } = props
+
+  const [item, setItem] = useState<Codebooktree | undefined>(undefined)
   const { instances } = useTableStateStore()
   const filter = useMemo(
     () => instances[tableId]?.columnFilter,
@@ -116,80 +153,79 @@ export const CodebookTreeModalGraphql = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter])
 
-  const modalButtons: ModalButtons = {
-    goNext: {
-      text: messages.save,
-      type: 'button',
-      disabled: !item,
-      onClick: () => {
-        if (customSetValue) {
-          customSetValue(item)
-        } else if (name && setValue) {
-          setValue(name, item)
-        }
-        onSelect && onSelect(item)
-        setOpen(false)
-        setItem(undefined)
-      }
-    },
-    goBack: {
-      text: messages.close,
-      type: 'button',
-      onClick: () => {
-        setOpen(false)
-      }
-    }
-  }
-
+  // Instead of ModalButtons, use a simple footer with actions
   return (
-    <ModalComponent open={open} setOpen={setOpen} buttons={modalButtons}>
-      <div className={cn('max-h-[300px]', loading && ' opacity-70')}>
-        <PandaTableControlled
-          tableId={tableId}
-          data={data}
-          table={table}
-          loading={loading}
-          settings={{
-            enableRowSelection: true,
-            enableFiltering: enableFiltering,
-            manualFiltering: manualFiltering
+    <div className={cn('max-h-[300px]', loading && ' opacity-70')}>
+      <PandaTableControlled
+        tableId={tableId}
+        data={data}
+        table={table}
+        loading={loading}
+        settings={{
+          enableRowSelection: true,
+          enableFiltering: enableFiltering,
+          manualFiltering: manualFiltering
+        }}
+        className={
+          'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'
+        }
+        getRowProps={row => ({
+          onClick: () => {
+            if (selectParent) {
+              setItem({
+                uid: row.original.uid,
+                name:
+                  row.original.name +
+                  (row.original.code && !customSetValue
+                    ? ` (${row.original.code})`
+                    : ''),
+                code: row.original?.code
+              })
+            }
+            if (!row.original.isExpandable && !selectParent) {
+              setItem({
+                uid: row.original.uid,
+                name:
+                  row.original.name +
+                  (row.original.code && !customSetValue
+                    ? ` (${row.original.code})`
+                    : ''),
+                code: row.original?.code
+              })
+            }
+          },
+          className: cn(
+            item?.uid === row.original.uid &&
+              'bg-orange-200 dark:bg-orange-600 hover:bg-orange-200 dark:hover:bg-orange-600',
+            'cursor-pointer'
+          )
+        })}
+      />
+      <div className="flex justify-end gap-2 mt-4">
+        <Button
+          type="button"
+          onClick={() => {
+            if (onClose) onClose()
           }}
-          className={
-            'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'
-          }
-          getRowProps={row => ({
-            onClick: () => {
-              if (selectParent) {
-                setItem({
-                  uid: row.original.uid,
-                  name:
-                    row.original.name +
-                    (row.original.code && !customSetValue
-                      ? ` (${row.original.code})`
-                      : ''),
-                  code: row.original?.code
-                })
-              }
-              if (!row.original.isExpandable && !selectParent) {
-                setItem({
-                  uid: row.original.uid,
-                  name:
-                    row.original.name +
-                    (row.original.code && !customSetValue
-                      ? ` (${row.original.code})`
-                      : ''),
-                  code: row.original?.code
-                })
-              }
-            },
-            className: cn(
-              item?.uid === row.original.uid &&
-                'bg-orange-200 dark:bg-orange-600 hover:bg-orange-200 dark:hover:bg-orange-600',
-              'cursor-pointer'
-            )
-          })}
-        />
+        >
+          <FormattedMessage id={message.common.buttons.close} />
+        </Button>
+        <Button
+          type="button"
+          disabled={!item}
+          onClick={() => {
+            if (customSetValue) {
+              customSetValue(item)
+            } else if (name && setValue) {
+              setValue(name, item)
+            }
+            onSelect && onSelect(item)
+            if (onClose) onClose()
+          }}
+        >
+          <FormattedMessage id={message.common.buttons.continue} />
+        </Button>
       </div>
-    </ModalComponent>
+    </div>
   )
 }

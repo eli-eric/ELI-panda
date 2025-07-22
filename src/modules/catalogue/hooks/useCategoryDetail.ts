@@ -9,7 +9,7 @@ import type { CategoryFormType } from '../components/categoryEdit/types'
 export const useCategoryDetail = (uid?: string) => {
   const queryKey: QueryFetcherKey = ['categoryDetail', { uid }]
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey,
     queryFn: queryFetcher<CategoryFormType>('catalogueCategoryEdit'),
     enabled: !!uid
@@ -40,5 +40,5 @@ export const useCategoryDetail = (uid?: string) => {
       : { ...data }
   }, [data])
 
-  return { categoryDetail, isLoading, queryKey }
+  return { categoryDetail, isLoading, error, refetch, queryKey }
 }

@@ -1,10 +1,11 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useMemo } from 'react'
+import { useFormContext } from 'react-hook-form'
 import { toast } from 'react-hot-toast'
 
 import { ModalSelect } from '@/components/form/ModalSelect'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
-import { CodebookTreeModalGraphql } from '@/components/form/shared/CodebookTreeModalGraphql'
+import { CodebookTreeModalGraphqlContent } from '@/components/form/shared/CodebookTreeModalGraphql'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps, Option } from '@/types/form'
 import { highlightText } from '@/utils'
@@ -27,12 +28,21 @@ export const SystemTypeComboBox = ({
   onChange?: (value?: any) => void
   isFilter?: boolean
 }) => {
-  const [open, setOpen] = useState(false)
   const { systemTypeGroups, filter, loading, error } = useSystemTypeGroups()
+  const { openModal } =
+    require('@/store/useModalGlobalStore').useModalGlobalStore.getState()
+  const formContext = useFormContext()
+  const setValue = formContext?.setValue
 
-  if (error && open) {
+  const onValueChange = (value?: any) => {
+    if (setValue) {
+      setValue(systemTypeField.name, value)
+    }
+    onChange?.(value)
+  }
+
+  if (error) {
     toast.error('Failed to load system types')
-    setOpen(false)
   }
 
   const additionalColumn: ColumnDef<Codebooktree, string> = useMemo(
@@ -67,41 +77,35 @@ export const SystemTypeComboBox = ({
     }))
   }, [systemTypeGroups])
 
+  const handleOpenDialog = () => {
+    openModal('dialog1', {
+      component: (props: any) => (
+        <CodebookTreeModalGraphqlContent
+          {...props}
+          tableId="systemType-tree"
+          onSelect={onValueChange}
+          data={treeData}
+          additionalColumn={additionalColumn}
+          enableFiltering={true}
+          manualFiltering={false}
+          loading={loading}
+          selectParent={false}
+          name={systemTypeField.name}
+        />
+      ),
+      props: {},
+      onClose: undefined
+    })
+  }
+
   return (
     <Fragment>
-      {clickIcon ? (
-        <ModalSelect
-          {...systemTypeField}
-          className={className}
-          onChange={onChange}
-          onClick={() => {
-            setOpen(true)
-          }}
-          isFilter={isFilter}
-        />
-      ) : (
-        <ModalSelect
-          {...systemTypeField}
-          className={className}
-          onChange={onChange}
-          onClick={() => {
-            setOpen(true)
-          }}
-          isFilter={isFilter}
-        />
-      )}
-      <CodebookTreeModalGraphql
-        tableId="systemType-tree"
-        onSelect={onChange}
-        data={treeData}
-        additionalColumn={additionalColumn}
-        enableFiltering={true}
-        manualFiltering={false}
-        open={open}
-        loading={loading}
-        selectParent={false}
-        setOpen={setOpen}
-        name={systemTypeField.name}
+      <ModalSelect
+        {...systemTypeField}
+        className={className}
+        onChange={onChange}
+        onClick={handleOpenDialog}
+        isFilter={isFilter}
       />
     </Fragment>
   )

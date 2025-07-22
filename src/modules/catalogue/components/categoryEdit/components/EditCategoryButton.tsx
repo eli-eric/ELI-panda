@@ -1,15 +1,7 @@
 import { Edit } from 'lucide-react'
 import type { FC } from 'react'
-import { useState } from 'react'
 
 import { Button } from '@/components/Buttons'
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger
-} from '@/components/ui/sheet'
 
 import CategoryEditContainer from '../CategoryEdit.cont'
 
@@ -18,35 +10,49 @@ interface EditCategoryProps {
   parentUID?: string
 }
 
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
+
+export function EditCategorySheetContent({
+  uid,
+  parentUID,
+  onClose
+}: EditCategoryProps & { onClose?: () => void }) {
+  return (
+    <>
+      <CategoryEditContainer
+        setOpen={() => {
+          if (onClose) onClose()
+        }}
+        parentUID={parentUID}
+        uid={uid}
+      />
+    </>
+  )
+}
+
 export const EditCategoryButton: FC<EditCategoryProps> = ({
   uid,
   parentUID
 }) => {
-  const [open, setOpen] = useState(false)
+  const openEditCategorySheet = () => {
+    const { openModal } = useModalGlobalStore.getState()
+    openModal('sheet', {
+      component: EditCategorySheetContent,
+      props: {
+        uid,
+        parentUID,
+        title: uid ? 'Edit Category' : 'Add New Category'
+      },
+      onClose: undefined
+    })
+  }
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button variant="ghost">
-          <Edit
-            className="h-4 w-4 transform transition-transform hover:scale-110 duration-300"
-            aria-hidden="true"
-          />
-        </Button>
-      </SheetTrigger>
-      <SheetContent
-        className="w-full sm:w-[400px] lg:w-[600px] xl:w-[800px] !max-w-none overflow-y-auto px-2 sm:px-4 lg:px-6"
-        style={{ maxWidth: 'none' }}
-      >
-        <SheetHeader>
-          <SheetTitle>{uid ? 'Edit Category' : 'Add New Category'}</SheetTitle>
-        </SheetHeader>
-        <CategoryEditContainer
-          setOpen={setOpen}
-          parentUID={parentUID}
-          uid={uid}
-        />
-      </SheetContent>
-    </Sheet>
+    <Button variant="ghost" onClick={openEditCategorySheet}>
+      <Edit
+        className="h-4 w-4 transform transition-transform hover:scale-110 duration-300"
+        aria-hidden="true"
+      />
+    </Button>
   )
 }

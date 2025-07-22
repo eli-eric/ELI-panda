@@ -2,14 +2,15 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import type { ColumnDef, Table } from '@tanstack/react-table'
 import { startTransition, useEffect, useMemo, useRef, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
+import { FormattedMessage } from 'react-intl'
 
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { Button } from '@/components/Buttons'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { useFilters } from '@/modules/shared/table/pandaTable/hooks/useFilters'
 import { PandaTable } from '@/modules/shared/table/pandaTable/PandaTable'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import useTableStateStore from '@/store/useTableStateStore'
-import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
 import { queryFetcher } from '@/utils/fetcher'
 
@@ -31,24 +32,40 @@ interface CodebookTreeModalProps {
   onSubmit?: (item?: any) => void
 }
 
-export const CodebookTreeModal = ({
-  open,
-  setOpen,
-  codebook,
-  name,
-  onSubmit
-}: CodebookTreeModalProps) => {
+/**
+ * Opens the CodebookTreeModal as a Dialog via the global modal system.
+ * Usage: openCodebookTreeModal({ ...props })
+ */
+export function openCodebookTreeModal(
+  props: Omit<CodebookTreeModalProps, 'open' | 'setOpen'>
+) {
+  const { openModal } = useModalGlobalStore.getState()
+  openModal('dialog1', {
+    component: CodebookTreeModalContent,
+    props,
+    onClose:
+      typeof props.onSubmit === 'function'
+        ? () => {
+            props.onSubmit?.(undefined)
+          }
+        : undefined
+  })
+}
+
+// The actual modal content, rendered by the global modal system
+export function CodebookTreeModalContent(
+  props: Omit<CodebookTreeModalProps, 'open' | 'setOpen'> & {
+    onClose?: () => void
+  }
+) {
+  const { codebook, name, onSubmit, onClose } = props
+
   const tableId = 'codebook'
-
   const [item, setItem] = useState<CodebookType | undefined>(undefined)
-
   const { setValue } = useFormContext()
   const { reset } = useTableStateStore()
-
   const [filterState] = useFilters(tableId, false, false)
-
   const search = filterState[0]?.value as string
-
   const tableRef = useRef<Table<Codebooktree>>(null)
 
   useEffect(() => {
@@ -94,59 +111,58 @@ export const CodebookTreeModal = ({
     []
   )
 
-  const modalButtons: ModalButtons = {
-    goNext: {
-      text: messages.save,
-      type: 'button',
-      disabled: !item,
-      onClick: () => {
-        onSubmit && onSubmit(item)
-        setValue(name, item)
-        setOpen(false)
-        setItem(undefined)
-        reset(tableId)
-      }
-    },
-    goBack: {
-      text: messages.close,
-      type: 'button',
-      onClick: () => {
-        setOpen(false)
-      }
-    }
-  }
-
   return (
-    <ModalComponent open={open} setOpen={setOpen} buttons={modalButtons}>
-      <div className="max-h-[300px]">
-        <PandaTable
-          ref={tableRef}
-          tableId={tableId}
-          loading={loading}
-          columns={columns}
-          data={response}
-          getSubRows={row => row.children}
-          settings={{
-            enableRowSelection: true,
-            enableFiltering: true,
-            manualFiltering: true
+    <div className="max-h-[300px]">
+      <PandaTable
+        ref={tableRef}
+        tableId={tableId}
+        loading={loading}
+        columns={columns}
+        data={response}
+        getSubRows={row => row.children}
+        settings={{
+          enableRowSelection: true,
+          enableFiltering: true,
+          manualFiltering: true
+        }}
+        className={
+          'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'
+        }
+        getRowProps={row => ({
+          onClick: () => {
+            setItem({ uid: row.original.uid, name: row.original.name })
+          },
+          className: cn(
+            item?.uid === row.original.uid
+              ? 'bg-orange-200 dark:bg-orange-500 hover:bg-orange-200 dark:hover:bg-orange-500'
+              : '',
+            'cursor-pointer'
+          )
+        })}
+      />
+      <div className="flex justify-end gap-2 mt-4">
+        <Button
+          type="button"
+          onClick={() => {
+            if (onClose) onClose()
           }}
-          className={
-            'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'
-          }
-          getRowProps={row => ({
-            onClick: () => {
-              setItem({ uid: row.original.uid, name: row.original.name })
-            },
-            className: cn(
-              item?.uid === row.original.uid
-                ? 'bg-orange-200 dark:bg-orange-500 hover:bg-orange-200 dark:hover:bg-orange-500'
-                : '',
-              'cursor-pointer'
-            )
-          })}
-        />
+        >
+          <FormattedMessage id={message.common.buttons.close} />
+        </Button>
+        <Button
+          type="button"
+          disabled={!item}
+          onClick={() => {
+            onSubmit && onSubmit(item)
+            setValue(name, item)
+            if (onClose) onClose()
+            setItem(undefined)
+            reset(tableId)
+          }}
+        >
+          <FormattedMessage id={message.common.buttons.continue} />
+        </Button>
       </div>
-    </ModalComponent>
+    </div>
   )
 }

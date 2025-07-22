@@ -67,13 +67,21 @@ export const ModalSelect = ({
 
                 <div className="flex items-center gap-1 shrink-0">
                   {!disabled && value && (
-                    <button
-                      type="button"
+                    <div
+                      role="button"
+                      tabIndex={0}
                       onClick={handleClear}
-                      className="p-0.5 hover:bg-accent rounded-sm"
+                      onKeyDown={e => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault()
+                          handleClear(e as any)
+                        }
+                      }}
+                      className="p-0.5 hover:bg-accent rounded-sm cursor-pointer"
+                      aria-label="Clear selection"
                     >
                       <XMarkIcon className="h-3 w-3" />
-                    </button>
+                    </div>
                   )}
                   <TableCellsIcon className="h-4 w-4 opacity-50" />
                 </div>
