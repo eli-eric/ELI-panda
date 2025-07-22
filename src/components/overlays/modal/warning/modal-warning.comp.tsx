@@ -1,12 +1,17 @@
-import { Dialog } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/20/solid'
 import type { Dispatch, SetStateAction } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import ErrorPage from '@/components/error/ErrorPage'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog'
 import type { ModalButtons } from '@/types/form'
-
-import ModalComponent from '../modal.comp'
 
 interface ModalWarningComponentProps {
   title: string
@@ -25,15 +30,16 @@ const ModalWarningComponent = ({
       />
     </div>
     <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-      <Dialog.Title
-        as="h3"
-        className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200"
-      >
-        <FormattedMessage id={title} />
-      </Dialog.Title>
-      <div className="mt-2">
-        <p className="text-sm text-gray-500 dark:text-gray-200">{message}</p>
-      </div>
+      <DialogTitle asChild>
+        <h3 className="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200">
+          <FormattedMessage id={title} />
+        </h3>
+      </DialogTitle>
+      <DialogDescription asChild>
+        <div className="mt-2">
+          <p className="text-sm text-gray-500 dark:text-gray-200">{message}</p>
+        </div>
+      </DialogDescription>
     </div>
   </div>
 )
@@ -56,15 +62,46 @@ const WarningModal = ({
   message,
   testid
 }: WarningModalProps) => (
-  <ModalComponent
-    open={open}
-    setOpen={setOpen}
-    buttons={buttons}
-    testid={testid}
-  >
-    <ModalWarningComponent title={title} message={message} />
-    {error && <ErrorPage />}
-  </ModalComponent>
+  <Dialog open={open} onOpenChange={setOpen}>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>
+          <span className="flex items-center gap-2">
+            <ExclamationTriangleIcon className="h-6 w-6 text-red-600" />
+            <FormattedMessage id={title} />
+          </span>
+        </DialogTitle>
+        <DialogDescription>{message}</DialogDescription>
+      </DialogHeader>
+      {error && <ErrorPage />}
+      <DialogFooter>
+        {buttons.goBack && (
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => {
+              setOpen(false)
+              buttons.goBack?.onClick?.()
+            }}
+          >
+            {buttons.goBack.text}
+          </button>
+        )}
+        {buttons.goNext && (
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => {
+              buttons.goNext?.onClick?.()
+              setOpen(false)
+            }}
+          >
+            {buttons.goNext.text}
+          </button>
+        )}
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 )
 
 export default WarningModal

@@ -1,5 +1,5 @@
 import { DocumentTextIcon, LinkIcon } from '@heroicons/react/24/outline'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 import { Button } from '@/components/Buttons'
@@ -12,7 +12,7 @@ import { useFileColumns } from './FileTable.columns'
 import { useFileRequests } from './hooks/useFileRequests'
 import { useFiles } from './hooks/useFiles'
 import { useLinks } from './hooks/useLinks'
-import { LinkModal } from './LinkModal'
+import { openLinkModal } from './LinkModal'
 import type { FILE_TYPE, FileItemExtended } from './types'
 
 const messages = message.common.files
@@ -34,7 +34,7 @@ const FileManager = ({
 }: FileManagerProps) => {
   const { data: filesData } = useFiles({ itemType, uid })
   const { data: linksData } = useLinks({ uid })
-  const [openLinkModal, setOpenLinkModal] = useState(false)
+  // No local state needed for openLinkModal; use global modal API
 
   const files = useMemo(() => {
     return [
@@ -98,7 +98,7 @@ const FileManager = ({
               <span>Upload File</span>
             </Button>
             <Button
-              onClick={() => setOpenLinkModal(true)}
+              onClick={() => openLinkModal({ parentUid: uid })}
               className="flex items-center space-x-1"
             >
               <LinkIcon className="h-4 w-4" />
@@ -143,11 +143,7 @@ const FileManager = ({
         </div>
       )}
       {modals}
-      <LinkModal
-        open={openLinkModal}
-        setOpen={setOpenLinkModal}
-        parentUid={uid}
-      />
+      {/* LinkModal is now opened via openLinkModal */}
     </div>
   )
 }

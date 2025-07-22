@@ -13,7 +13,6 @@ import { messages } from 'src/i18n/src'
 
 import { NewLayout } from '@/components/layout/NewLayout'
 import { Notification } from '@/components/Notifications/Notification'
-import { GenereralModal } from '@/components/overlays/modal/modal.comp'
 import { WarningModal } from '@/components/WarningModal'
 import { useDarkModeStore } from '@/store/useDarkModeStore'
 import { getQueryClient } from '@/utils/queryClient'
@@ -24,6 +23,12 @@ const ReactQueryDevtoolsProduction = lazy(() =>
       default: d.ReactQueryDevtools
     })
   )
+)
+
+const ModalProvider = lazy(() =>
+  import('@/components/overlays/ModalProvider').then(d => ({
+    default: d.ModalProvider
+  }))
 )
 
 const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
@@ -50,7 +55,9 @@ const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
               </Toaster>
               <DndProvider backend={HTML5Backend}>
                 <NewLayout>{<Component {...pageProps} />}</NewLayout>
-                <GenereralModal />
+                <Suspense fallback={null}>
+                  <ModalProvider />
+                </Suspense>
                 <WarningModal />
               </DndProvider>
             </ThemeProvider>

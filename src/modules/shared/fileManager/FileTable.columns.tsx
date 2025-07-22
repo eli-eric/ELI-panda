@@ -6,11 +6,10 @@ import {
 import type { ColumnDef } from '@tanstack/react-table'
 import { useCallback, useMemo, useState } from 'react'
 
-import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { Badge } from '@/components/ui/badge'
 import { fuzzyFilter } from '@/components/ui/table'
 import { message } from '@/i18n/src/messages'
-import type { ModalButtons } from '@/types/form'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
 import { FileActions } from './FileActions'
 import { useLinkUpdate } from './hooks/useLinks'
@@ -25,31 +24,18 @@ interface TagModalProps {
   onAddTag: (tag: string) => void
 }
 
-const TagModal = ({ isOpen, setIsOpen, onAddTag }: TagModalProps) => {
+export function TagModalContent({
+  file,
+  onAddTag,
+  onClose
+}: {
+  file: FileItemExtended | null
+  onAddTag: (tag: string) => void
+  onClose?: () => void
+}) {
   const [tag, setTag] = useState('')
-
-  const modalButtons: ModalButtons = {
-    goNext: {
-      text: buttons.continue,
-      onClick: () => {
-        if (tag) {
-          onAddTag(tag)
-        }
-        setIsOpen(false)
-        setTag('')
-      }
-    },
-    goBack: {
-      text: buttons.cancel,
-      onClick: () => {
-        setIsOpen(false)
-        setTag('')
-      }
-    }
-  }
-
   return (
-    <ModalComponent open={isOpen} setOpen={setIsOpen} buttons={modalButtons}>
+    <div>
       <div className="mb-6">
         <h3 className="text-lg font-medium text-gray-900">Add Tag</h3>
       </div>
@@ -68,8 +54,42 @@ const TagModal = ({ isOpen, setIsOpen, onAddTag }: TagModalProps) => {
           onChange={e => setTag(e.target.value)}
         />
       </div>
-    </ModalComponent>
+      <div className="flex justify-end gap-2 mt-4">
+        <button type="button" className="btn btn-secondary" onClick={onClose}>
+          {buttons.cancel}
+        </button>
+        <button
+          type="button"
+          className="btn btn-primary"
+          disabled={!tag}
+          onClick={() => {
+            if (tag) {
+              onAddTag(tag)
+            }
+            if (onClose) onClose()
+            setTag('')
+          }}
+        >
+          {buttons.continue}
+        </button>
+      </div>
+    </div>
   )
+}
+
+function openTagModal({
+  file,
+  onAddTag
+}: {
+  file: FileItemExtended | null
+  onAddTag: (tag: string) => void
+}) {
+  const { openModal } = useModalGlobalStore.getState()
+  openModal('dialog1', {
+    component: TagModalContent,
+    props: { file, onAddTag },
+    onClose: undefined
+  })
 }
 
 interface FileColumnsProps {
@@ -187,7 +207,10 @@ export const useFileColumns = ({
               <button
                 onClick={() => {
                   setSelectedFile(original)
-                  setTagModalOpen(true)
+                  openTagModal({
+                    file: original,
+                    onAddTag: tag => handleAddTag(original, tag)
+                  })
                 }}
                 className="text-orange-600 text-sm ml-2 hover:underline"
               >
@@ -241,15 +264,6 @@ export const useFileColumns = ({
 
   return {
     columns,
-    modals: (
-      <>
-        <TagModal
-          isOpen={tagModalOpen}
-          setIsOpen={setTagModalOpen}
-          file={selectedFile}
-          onAddTag={tag => handleAddTag(selectedFile, tag)}
-        />
-      </>
-    )
+    modals: <>{/* Modal is now opened via openTagModal */}</>
   }
 }
