@@ -1,11 +1,11 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
 import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
 import type { ServiceLine } from '../../types/form'
 import { ServiceLineWizard } from './form/service-line.wizz'
@@ -34,17 +34,20 @@ export const ServiceLinesContainer = ({
 
   // Memoize columns to prevent unnecessary re-renders
   const serviceLinesColumns = useServiceLinesColumns()
-  const [openServiceLineForm, setOpenServiceLineForm] = useState(false)
+  const { openModal, closeModal } = useModalGlobalStore()
 
   // Use useCallback for handleAddServiceLine
   const handleAddServiceLine = useCallback(() => {
-    setOpenServiceLineForm(true)
-  }, [])
-
-  // Use useCallback for setOpen to prevent unnecessary re-renders of the modal
-  const handleSetOpen = useCallback((open: boolean) => {
-    setOpenServiceLineForm(open)
-  }, [])
+    openModal('dialog1', {
+      component: () => (
+        <ServiceLineWizard setOpen={() => closeModal('dialog1')} />
+      ),
+      props: {
+        title: 'Add Service Line',
+        size: 'xl'
+      }
+    })
+  }, [openModal, closeModal])
 
   return (
     <div className="pt-4">
@@ -78,13 +81,6 @@ export const ServiceLinesContainer = ({
           })
         }}
       />
-      <ModalComponent
-        zclass="z-20"
-        open={openServiceLineForm}
-        setOpen={handleSetOpen}
-      >
-        <ServiceLineWizard setOpen={handleSetOpen} />
-      </ModalComponent>
     </div>
   )
 }

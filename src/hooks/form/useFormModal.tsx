@@ -1,16 +1,17 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import React from 'react'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import type { DefaultValues, UseFormReturn } from 'react-hook-form'
 import { type FieldValues, FormProvider, useForm } from 'react-hook-form'
+import { FormattedMessage } from 'react-intl'
 import type { ObjectSchema } from 'yup'
 
 import ErrorPage from '@/components/error/ErrorPage'
 import { Form } from '@/components/form/Form'
-import ModalButtonsComponent from '@/components/overlays/modal/modal.buttons'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { Button } from '@/components/ui/button'
+import type { DialogSize } from '@/components/ui/dialog'
 import { message } from '@/i18n/src/messages'
-import type { ModalButtons } from '@/types/form'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
 import useFormNotification from './useFormNotification'
 
@@ -20,6 +21,9 @@ interface useFormModalProps<T> {
   renderForm: (data: T) => JSX.Element
   renderOutsideForm?: (data: T) => JSX.Element
   onSubmit: (data: T) => void
+  title?: string
+  description?: string
+  size?: DialogSize
 
   defaultValues?: DefaultValues<T>
   loading?: boolean
@@ -27,61 +31,100 @@ interface useFormModalProps<T> {
   error?: boolean
 }
 
-const useFormModal = <T extends FieldValues>({
+// Form modal content component for the global modal system
+const FormModalContent = <T extends FieldValues>({
   renderForm,
   renderOutsideForm,
   onSubmit,
-  error = false,
-  loading = false,
   defaultValues,
-  schema
-}: useFormModalProps<T>) => {
-  const [open, setOpen] = useState(false)
+  loading = false,
+  error = false,
+  schema,
+  onClose
+}: useFormModalProps<T> & { onClose?: () => void }) => {
   const formMethods = useForm({
     defaultValues: defaultValues,
     resolver: schema ? yupResolver(schema) : undefined
   })
   const { handleSubmit, reset, control, formState } = formMethods
   useFormNotification({ control })
+
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
       if (!error) {
         reset()
-        setOpen(false)
+        if (onClose) onClose()
       }
     }
-  }, [formState, error, reset])
+  }, [formState, error, reset, onClose])
 
-  const modalButtons: ModalButtons = {
-    goNext: {
-      text: messages.save,
-      loading: formState.isSubmitting || loading,
-      type: 'button',
-      onClick: handleSubmit(onSubmit)
-    },
-    goBack: {
-      text: messages.close,
-      type: 'button',
-      onClick: () => {
-        reset()
-        setOpen(false)
-      }
-    }
+  const handleFormSubmit = () => {
+    handleSubmit(onSubmit)()
   }
 
-  const getFormModal = () => (
-    <ModalComponent open={open} setOpen={setOpen}>
+  return (
+    <div className="space-y-6 min-w-0 max-w-none w-full">
       {renderOutsideForm && renderOutsideForm(defaultValues as T)}
-      <form>
-        <FormProvider {...formMethods}>
+      <FormProvider {...formMethods}>
+        <div className="space-y-4">
           {renderForm(defaultValues as T)}
           {error && <ErrorPage />}
-        </FormProvider>
-        <ModalButtonsComponent buttons={modalButtons} />
-      </form>
-    </ModalComponent>
+        </div>
+      </FormProvider>
+
+      <div className="flex justify-end gap-2 pt-4 border-t">
+        <Button type="button" variant="outline" onClick={onClose}>
+          <FormattedMessage id={messages.close} />
+        </Button>
+        <Button
+          type="button"
+          disabled={formState.isSubmitting || loading}
+          onClick={handleFormSubmit}
+        >
+          {(formState.isSubmitting || loading) && (
+            <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+          )}
+          <FormattedMessage id={messages.save} />
+        </Button>
+      </div>
+    </div>
   )
-  return { getFormModal, setOpen, formMethods }
+}
+
+const useFormModal = <T extends FieldValues>({
+  renderForm,
+  renderOutsideForm,
+  onSubmit,
+  title,
+  description,
+  size = 'l',
+  error = false,
+  loading = false,
+  defaultValues,
+  schema
+}: useFormModalProps<T>) => {
+  const { openModal } = useModalGlobalStore()
+
+  const openFormModal = () => {
+    openModal('dialog1', {
+      component: FormModalContent,
+      props: {
+        renderForm,
+        renderOutsideForm,
+        onSubmit,
+        defaultValues,
+        loading,
+        error,
+        schema,
+        title,
+        description,
+        size
+      },
+      onClose: undefined
+    })
+  }
+
+  return { openFormModal }
 }
 
 export default useFormModal
@@ -97,6 +140,9 @@ interface Props<T extends FieldValues> {
   children?: React.ReactNode
   open: boolean
   setOpen: (open: boolean) => void
+  title?: string
+  description?: string
+  size?: DialogSize
 }
 export const FormModal = <T extends FieldValues>({
   formMethods,
@@ -108,49 +154,95 @@ export const FormModal = <T extends FieldValues>({
   open = false,
   setOpen,
   className,
-  disableSubmit = false
+  disableSubmit = false,
+  title,
+  description,
+  size = 'l'
 }: Props<T>) => {
   const { handleSubmit, reset, formState } = formMethods
+  const { openModal, closeModal } = useModalGlobalStore()
+
   useEffect(() => {
     if (formState.isSubmitSuccessful) {
       if (!error) {
         reset()
         setOpen(false)
+        closeModal('dialog1')
       }
     }
-  }, [formState, error, reset, setOpen])
+  }, [formState, error, reset, setOpen, closeModal])
 
-  const modalButtons: ModalButtons = {
-    goNext: {
-      text: messages.save,
-      loading: formState.isSubmitting || loading,
-      disabled: disableSubmit,
-      type: 'button',
-      onClick: handleSubmit(onSubmit)
-    },
-    goBack: {
-      text: messages.close,
-      type: 'button',
-      onClick: () => {
-        reset()
-        setOpen(false)
-      }
+  useEffect(() => {
+    if (open) {
+      openModal('dialog1', {
+        component: ({ onClose }: { onClose?: () => void }) => (
+          <div className="space-y-6 min-w-0 max-w-none w-full">
+            {renderOutsideForm}
+            <Form
+              formMethods={formMethods}
+              onSubmit={onSubmit}
+              enableLeaveWarning={false}
+              className={className}
+            >
+              {children}
+              {error && <ErrorPage />}
+            </Form>
+
+            <div className="flex justify-end gap-2 pt-4 border-t">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  reset()
+                  setOpen(false)
+                  if (onClose) onClose()
+                }}
+              >
+                <FormattedMessage id={messages.close} />
+              </Button>
+              <Button
+                type="button"
+                disabled={formState.isSubmitting || loading || disableSubmit}
+                onClick={handleSubmit(onSubmit)}
+              >
+                {(formState.isSubmitting || loading) && (
+                  <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                )}
+                <FormattedMessage id={messages.save} />
+              </Button>
+            </div>
+          </div>
+        ),
+        props: { title, description, size },
+        onClose: () => {
+          reset()
+          setOpen(false)
+        }
+      })
+    } else {
+      closeModal('dialog1')
     }
-  }
+  }, [
+    open,
+    openModal,
+    closeModal,
+    formMethods,
+    onSubmit,
+    error,
+    renderOutsideForm,
+    loading,
+    className,
+    children,
+    disableSubmit,
+    title,
+    description,
+    size,
+    handleSubmit,
+    reset,
+    setOpen,
+    formState.isSubmitting
+  ])
 
-  return (
-    <ModalComponent open={open} setOpen={setOpen}>
-      {renderOutsideForm}
-      <Form
-        formMethods={formMethods}
-        onSubmit={onSubmit}
-        enableLeaveWarning={false}
-        className={className}
-      >
-        {children}
-        {error && <ErrorPage />}
-        <ModalButtonsComponent buttons={modalButtons} />
-      </Form>
-    </ModalComponent>
-  )
+  // Return null since the modal is handled by the global system
+  return null
 }

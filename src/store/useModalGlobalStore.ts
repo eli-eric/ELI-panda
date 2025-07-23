@@ -1,11 +1,17 @@
 import { create } from 'zustand'
 
+import type { DialogSize } from '@/components/ui/dialog'
+
 export type ModalSlotType = 'sheet' | 'dialog1' | 'dialog2'
 
 export interface ModalSlot {
   isOpen: boolean
   component: React.ComponentType<any> | null
-  props?: Record<string, any>
+  props?: Record<string, any> & {
+    title?: string
+    description?: string
+    size?: DialogSize
+  }
   onSubmit?: (...args: any[]) => void
   onClose?: () => void
   parentTriggerFn?: (...args: any[]) => void

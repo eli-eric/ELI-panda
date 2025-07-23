@@ -88,7 +88,7 @@ const ModalDialog: React.FC<{
     <Dialog open={slot.isOpen && !!Component} onOpenChange={handleOpenChange}>
       <DialogPortal>
         <DialogOverlay />
-        <DialogContent>
+        <DialogContent size={slot.props?.size || 'l'}>
           <DialogHeader>
             <DialogTitle>{slot.props?.title || 'Dialog'}</DialogTitle>
             {slot.props?.description && (

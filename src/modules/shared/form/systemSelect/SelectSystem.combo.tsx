@@ -1,16 +1,13 @@
-import { Fragment, useState } from 'react'
+import { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { ModalSelect } from '@/components/form/ModalSelect'
-import { Modal } from '@/components/overlays/modal/modal.comp'
-import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
 import { SystemsTable } from '@/modules/systems/components/table/Systems.table'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import type { CODEBOOK } from '@/types/constants/codebook'
-import type { FieldProps, ModalButtons, Option } from '@/types/form'
+import type { FieldProps, Option } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
-
-const messages = message.common.buttons
 
 export const SelectSystemComboBox = ({
   selectSystemField,
@@ -26,42 +23,16 @@ export const SelectSystemComboBox = ({
   onChange?: (value?: any) => void
   isFilter?: boolean
 }) => {
-  const [open, setOpen] = useState(false)
   const [selectedSystem, setSelectedSystem] = useState<CodebookType | null>(
     null
   )
   const { setValue } = useFormContext()
+  const { openModal, closeModal } = useModalGlobalStore()
 
-  const buttons: ModalButtons = {
-    goNext: {
-      text: messages.continue,
-      disabled: !selectedSystem,
-      onClick: () => {
-        setValue(selectSystemField.name, selectedSystem)
-        onChange?.(selectedSystem)
-        setOpen(false)
-      }
-    },
-    goBack: {
-      text: messages.cancel,
-      onClick: () => {
-        setOpen(false)
-      }
-    }
-  }
-
-  return (
-    <Fragment>
-      <ModalSelect
-        {...selectSystemField}
-        className={className}
-        onChange={onChange}
-        onClick={() => {
-          setOpen(true)
-        }}
-        isFilter={isFilter}
-      />
-      <Modal open={open} setOpen={setOpen} buttons={buttons}>
+  const openSystemSelectModal = () => {
+    setSelectedSystem(null)
+    openModal('dialog1', {
+      component: () => (
         <SystemsTable
           tableId={'systemSelect'}
           hideButtons={true}
@@ -84,7 +55,28 @@ export const SelectSystemComboBox = ({
             )
           })}
         />
-      </Modal>
-    </Fragment>
+      ),
+      props: {
+        title: 'Select System',
+        size: 'l'
+      },
+      onSubmit: () => {
+        if (selectedSystem) {
+          setValue(selectSystemField.name, selectedSystem)
+          onChange?.(selectedSystem)
+          closeModal('dialog1')
+        }
+      }
+    })
+  }
+
+  return (
+    <ModalSelect
+      {...selectSystemField}
+      className={className}
+      onChange={onChange}
+      onClick={openSystemSelectModal}
+      isFilter={isFilter}
+    />
   )
 }

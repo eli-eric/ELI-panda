@@ -93,9 +93,7 @@ const Combobox = ({
     }
   }, [hasClientFilter, query, codebookResponseData, response])
 
-  const { getFormModal, setOpen: setModalOpen } = useAddCodebookValue(
-    options?.metadata
-  )
+  const { openFormModal } = useAddCodebookValue(options?.metadata)
   const { data: session } = useSession()
 
   const hasAddPermission =
@@ -204,7 +202,7 @@ const Combobox = ({
                   type="button"
                   variant="default"
                   size="icon"
-                  onClick={() => setModalOpen(true)}
+                  onClick={() => openFormModal()}
                   disabled={disabled}
                 >
                   <Plus className="h-4 w-4" />
@@ -214,7 +212,6 @@ const Combobox = ({
           </div>
         )}
       />
-      {getFormModal()}
     </>
   )
 }
