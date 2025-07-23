@@ -2,8 +2,11 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import axiosInstance from '@/core/axios/axiosInstance'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
@@ -99,8 +102,10 @@ export const FileActions = ({
 
   return (
     <div className="flex items-center gap-2 text-right">
-      <button
-        className="text-gray-600 hover:text-orange-500 mr-2"
+      <Button
+        variant="ghost"
+        size="sm"
+        className="text-gray-600 hover:text-orange-500"
         onClick={() => {
           // Open the modal via the global modal API
           openRenameModal({
@@ -109,20 +114,24 @@ export const FileActions = ({
           })
         }}
       >
-        <span className="flex items-center">
-          <PencilIcon className="h-4 w-4 mr-1" />
-          Rename
-        </span>
-      </button>
-      <button
+        <PencilIcon className="h-4 w-4 mr-1" />
+        <FormattedMessage
+          id="common.buttons.rename"
+          defaultMessage={'Rename'}
+        />
+      </Button>
+      <Button
+        variant="ghost"
+        size="sm"
         className="text-red-600 hover:text-red-700"
         onClick={handleDeleteWithConfirmation}
       >
-        <span className="flex items-center">
-          <TrashIcon className="h-4 w-4 mr-1" />
-          Delete
-        </span>
-      </button>
+        <TrashIcon className="h-4 w-4 mr-1" />
+        <FormattedMessage
+          id="common.buttons.delete"
+          defaultMessage={'Delete'}
+        />
+      </Button>
       {/* Modal is now opened via openRenameModal */}
     </div>
   )
@@ -158,23 +167,15 @@ export function RenameModalContent({
 
   return (
     <div>
-      <div className="mb-6">
-        <h3 className="text-lg font-medium text-gray-900">Rename</h3>
-      </div>
-      <div>
-        <label
-          htmlFor="file-name"
-          className="block text-sm font-medium text-gray-700"
-        >
-          New Name
-        </label>
-        <div className="flex items-center mt-1">
-          <input
+      <div className="space-y-2">
+        <Label htmlFor="file-name">New Name</Label>
+        <div className="flex items-center gap-1">
+          <Input
             id="file-name"
             type="text"
-            className="form-field rounded-md grow"
             value={nameWithoutExt}
             onChange={e => setNameWithoutExt(e.target.value)}
+            className="grow"
           />
           {extension && (
             <span className="ml-1 text-gray-500 font-medium">{extension}</span>
@@ -182,12 +183,11 @@ export function RenameModalContent({
         </div>
       </div>
       <div className="flex justify-end gap-2 mt-4">
-        <button type="button" className="btn btn-secondary" onClick={onClose}>
-          {buttons.cancel}
-        </button>
-        <button
+        <Button type="button" variant="outline" onClick={onClose}>
+          <FormattedMessage id={buttons.cancel} />
+        </Button>
+        <Button
           type="button"
-          className="btn btn-primary"
           onClick={() => {
             const newFullName = extension
               ? `${nameWithoutExt}${extension}`
@@ -196,8 +196,8 @@ export function RenameModalContent({
             if (onClose) onClose()
           }}
         >
-          {buttons.continue}
-        </button>
+          <FormattedMessage id={buttons.continue} />
+        </Button>
       </div>
     </div>
   )
@@ -208,7 +208,7 @@ export function openRenameModal({ file, onRename }: RenameModalProps) {
   const { openModal } = useModalGlobalStore.getState()
   openModal('dialog1', {
     component: RenameModalContent,
-    props: { file, onRename },
+    props: { file, onRename, title: 'Rename File' },
     onClose: undefined
   })
 }
