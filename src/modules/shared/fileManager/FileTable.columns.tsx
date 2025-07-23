@@ -5,8 +5,12 @@ import {
 } from '@heroicons/react/24/outline'
 import type { ColumnDef } from '@tanstack/react-table'
 import { useCallback, useMemo, useState } from 'react'
+import { FormattedMessage } from 'react-intl'
 
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { fuzzyFilter } from '@/components/ui/table'
 import { message } from '@/i18n/src/messages'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
@@ -17,50 +21,32 @@ import type { FileItemExtended } from './types'
 
 const buttons = message.common.buttons
 
-interface TagModalProps {
-  isOpen: boolean
-  setIsOpen: (isOpen: boolean) => void
-  file: FileItemExtended | null
-  onAddTag: (tag: string) => void
-}
-
 export function TagModalContent({
-  file,
   onAddTag,
   onClose
 }: {
-  file: FileItemExtended | null
   onAddTag: (tag: string) => void
   onClose?: () => void
 }) {
   const [tag, setTag] = useState('')
   return (
     <div>
-      <div className="mb-6">
-        <h3 className="text-lg font-medium text-gray-900">Add Tag</h3>
-      </div>
-      <div>
-        <label
-          htmlFor="tag-name"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Tag Name
-        </label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="tag-name">Tag Name</Label>
+        <Input
           id="tag-name"
           type="text"
-          className="mt-1 form-field rounded-md w-full"
           value={tag}
           onChange={e => setTag(e.target.value)}
+          className="w-full"
         />
       </div>
       <div className="flex justify-end gap-2 mt-4">
-        <button type="button" className="btn btn-secondary" onClick={onClose}>
-          {buttons.cancel}
-        </button>
-        <button
+        <Button type="button" variant="outline" onClick={onClose}>
+          <FormattedMessage id={buttons.cancel} />
+        </Button>
+        <Button
           type="button"
-          className="btn btn-primary"
           disabled={!tag}
           onClick={() => {
             if (tag) {
@@ -70,8 +56,8 @@ export function TagModalContent({
             setTag('')
           }}
         >
-          {buttons.continue}
-        </button>
+          <FormattedMessage id={buttons.continue} />
+        </Button>
       </div>
     </div>
   )
@@ -87,7 +73,7 @@ function openTagModal({
   const { openModal } = useModalGlobalStore.getState()
   openModal('dialog1', {
     component: TagModalContent,
-    props: { file, onAddTag },
+    props: { file, onAddTag, title: 'Add Tag' },
     onClose: undefined
   })
 }
@@ -108,11 +94,6 @@ export const useFileColumns = ({
   onFileDeleted
 }: FileColumnsProps) => {
   const { mutate: updateLink } = useLinkUpdate({ parentUid: uid })
-
-  const [tagModalOpen, setTagModalOpen] = useState(false)
-  const [selectedFile, setSelectedFile] = useState<FileItemExtended | null>(
-    null
-  )
 
   const handleAddTag = useCallback(
     (file: FileItemExtended | null, tag: string) => {
@@ -204,18 +185,22 @@ export const useFileColumns = ({
                 </Badge>
               ))}
             {hasEditRole && (
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => {
-                  setSelectedFile(original)
                   openTagModal({
                     file: original,
                     onAddTag: tag => handleAddTag(original, tag)
                   })
                 }}
-                className="text-orange-600 text-sm ml-2 hover:underline"
+                className="text-orange-600 text-sm ml-2 hover:underline h-auto p-0"
               >
-                Add Tag
-              </button>
+                <FormattedMessage
+                  id="common.buttons.addTag"
+                  defaultMessage="Add Tag"
+                />
+              </Button>
             )}
           </div>
         )

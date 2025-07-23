@@ -1,17 +1,15 @@
 import { useState } from 'react'
+import { FormattedMessage } from 'react-intl'
 
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { message } from '@/i18n/src/messages'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
 import { useLinkCreate } from './hooks/useLinks'
 
 const buttons = message.common.buttons
-
-interface LinkModalProps {
-  open: boolean
-  setOpen: (open: boolean) => void
-  parentUid?: string
-}
 
 export function LinkModalContent({
   parentUid,
@@ -34,50 +32,37 @@ export function LinkModalContent({
 
   return (
     <div className="space-y-4">
-      <div>
-        <label
-          htmlFor="link-url"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Link URL
-        </label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="link-url">Link URL</Label>
+        <Input
           id="link-url"
           type="text"
-          className="mt-1 form-field rounded-md w-full"
           placeholder="Paste or type URL here"
           value={linkValue}
           onChange={e => setLinkValue(e.target.value)}
         />
       </div>
-      <div>
-        <label
-          htmlFor="link-name"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Link Name
-        </label>
-        <input
+      <div className="space-y-2">
+        <Label htmlFor="link-name">Link Name</Label>
+        <Input
           id="link-name"
           type="text"
-          className="mt-1 form-field rounded-md w-full"
           placeholder="Enter a name for this link"
           value={linkName}
           onChange={e => setLinkName(e.target.value)}
         />
       </div>
       <div className="flex justify-end gap-2 mt-4">
-        <button type="button" className="btn btn-secondary" onClick={onClose}>
-          {buttons.cancel}
-        </button>
-        <button
+        <Button type="button" variant="outline" onClick={onClose}>
+          <FormattedMessage id={buttons.cancel} />
+        </Button>
+        <Button
           type="button"
-          className="btn btn-primary"
           disabled={!linkValue || !linkName}
           onClick={handleCreateLink}
         >
-          {buttons.continue}
-        </button>
+          <FormattedMessage id={buttons.continue} />
+        </Button>
       </div>
     </div>
   )
@@ -87,7 +72,7 @@ export function openLinkModal({ parentUid }: { parentUid?: string }) {
   const { openModal } = useModalGlobalStore.getState()
   openModal('dialog1', {
     component: LinkModalContent,
-    props: { parentUid },
+    props: { parentUid, title: 'Create Link' },
     onClose: undefined
   })
 }
