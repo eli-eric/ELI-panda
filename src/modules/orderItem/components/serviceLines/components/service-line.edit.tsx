@@ -1,5 +1,4 @@
 import { sortBy } from 'lodash'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { TableEditButton } from '@/components/Buttons'
@@ -12,26 +11,22 @@ import {
 } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
-import { message } from '@/i18n/src/messages'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
 import { useServiceLine } from '@/modules/orderItem/hooks/useServiceLine'
 import type { ServiceLine } from '@/modules/orderItem/types/form'
-import type { ModalButtons } from '@/types/form'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
 import { DetailPropertiesList } from '../form/details/detail-properties.list'
 import { useServiceLineFields } from '../form/hooks/useServiceLineFields'
-
-const messages = message.common.buttons
 
 type Props = {
   serviceLine: ServiceLine
 }
 
 export const ServiceLineEdit = ({ serviceLine }: Props) => {
-  const [openEditForm, setOpenEditForm] = useState(false)
   const fields = useServiceLineFields()
   const { setServiceLine } = useServiceLine()
+  const { openModal, closeModal } = useModalGlobalStore()
 
   const formMethods = useForm<ServiceLine>()
 
@@ -40,23 +35,43 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
       ...data,
       details: Array.isArray(data.details) ? data.details : []
     })
-    setOpenEditForm(false)
+    closeModal('dialog1')
   }
 
-  const buttons: ModalButtons = {
-    goNext: {
-      onClick: () => {
+  const openEditModal = () => {
+    openModal('dialog1', {
+      component: () => (
+        <Form formMethods={formMethods}>
+          <>
+            <Grid>
+              <Col sm={12}>
+                <Input {...fields.name} />
+              </Col>
+              <Col md={8} sm={12}>
+                <Listbox {...fields.serviceType} disabled />
+              </Col>
+              <Col md={4} sm={12}>
+                <InputAmount {...fields.price}>
+                  <InputCurrency {...fields.currency} />
+                </InputAmount>
+              </Col>
+              <Col sm={12}>
+                <TextArea {...fields.notes} />
+              </Col>
+            </Grid>
+            <DetailPropertiesList groupMap={detailsMap} disabled={false} />
+          </>
+        </Form>
+      ),
+      props: {
+        title: 'Edit Service Line',
+        size: 'l'
+      },
+      onSubmit: () => {
         formMethods.handleSubmit(submit)()
         formMethods.reset()
-      },
-      text: messages.save
-    },
-    goBack: {
-      onClick: () => {
-        setOpenEditForm(false)
-      },
-      text: messages.cancel
-    }
+      }
+    })
   }
 
   const details = formMethods.watch('details') ?? []
@@ -98,36 +113,9 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
             Array.isArray(serviceLine.details) ? serviceLine.details : []
           )
 
-          setOpenEditForm(true)
+          openEditModal()
         }}
       />
-      <ModalComponent
-        buttons={buttons}
-        open={openEditForm}
-        setOpen={setOpenEditForm}
-      >
-        <Form formMethods={formMethods}>
-          <>
-            <Grid>
-              <Col sm={12}>
-                <Input {...fields.name} />
-              </Col>
-              <Col md={8} sm={12}>
-                <Listbox {...fields.serviceType} disabled />
-              </Col>
-              <Col md={4} sm={12}>
-                <InputAmount {...fields.price}>
-                  <InputCurrency {...fields.currency} />
-                </InputAmount>
-              </Col>
-              <Col sm={12}>
-                <TextArea {...fields.notes} />
-              </Col>
-            </Grid>
-            <DetailPropertiesList groupMap={detailsMap} disabled={false} />
-          </>
-        </Form>
-      </ModalComponent>
     </>
   )
 }

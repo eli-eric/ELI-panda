@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { FieldValues, FormState } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
@@ -30,6 +30,9 @@ export const FormLeaveWarning = <T extends FieldValues>({
   const { isDirty, isSubmitSuccessful } = formState
   const { onContinue, onCancel } = config ?? {}
 
+  // Track if navigation was confirmed to prevent re-triggering
+  const navigationConfirmedRef = useRef(false)
+
   // handle route change events
   useEffect(() => {
     const handleRouteChange = (url: string) => {
@@ -39,6 +42,18 @@ export const FormLeaveWarning = <T extends FieldValues>({
         // Same page navigation, ignore
         return
       }
+
+      // If navigation was already confirmed, allow it and reset the flag
+      if (navigationConfirmedRef.current) {
+        navigationConfirmedRef.current = false
+        return
+      }
+
+      // If modal is already open for this URL, don't open it again
+      if (isOpen && nextUrl === url) {
+        return
+      }
+
       if (isDirty && !isOpen && !isSubmitSuccessful) {
         events.emit('routeChangeError')
         setNextUrl(url)
@@ -58,15 +73,20 @@ export const FormLeaveWarning = <T extends FieldValues>({
       events.off('routeChangeStart', handleRouteChange)
       window.removeEventListener('beforeunload', handleBeforeUnload)
     }
-  }, [isDirty, events, router, isOpen, isSubmitSuccessful])
+  }, [isDirty, events, router, isOpen, isSubmitSuccessful, nextUrl])
 
   const modalButtons: ModalButtons = {
     goNext: {
       text: messages.buttons.continue,
       loading: false,
       onClick: () => {
-        router.push(nextUrl)
+        navigationConfirmedRef.current = true // Mark navigation as confirmed
+        setIsOpen(false) // Close modal first
         onContinue && onContinue()
+        // Use setTimeout to ensure modal is closed before navigation
+        setTimeout(() => {
+          router.push(nextUrl)
+        }, 0)
       }
     },
     goBack: {

@@ -1,6 +1,5 @@
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
-import { useState } from 'react'
 import type { UseFormReset } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -9,14 +8,13 @@ import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
-import { Modal } from '@/components/overlays/modal/modal.comp'
 import { useFilterCreate } from '@/hooks/filter/useFilterCreate'
 import { useFilterDelete } from '@/hooks/filter/useFilterDelete'
 import { useFilterDetails } from '@/hooks/filter/useFilterDetails'
 import { useFilterUpdate } from '@/hooks/filter/useFilterUpdate'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import { useFormControlStore } from '@/store/useFormControlStore'
-import type { ModalButtons } from '@/types/form'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
 interface Props {
   tableId: string
@@ -33,14 +31,13 @@ export const FilterSaveSettings = ({
   const formMethods = useForm()
   const savedFilter = formMethods.watch('savedFilter')
   const inputFormMethods = useForm()
-  const [open, setOpen] = useState(false)
   const { storeFilters, setColumnFilters } = useFormFilterState({
     tableId,
     enableQueryUrl: enableQueryURL
   })
   const { addCustomFieldIdToSync } = useFormControlStore()
 
-  const { createUserSettings, loading } = useFilterCreate({ tableId })
+  const { createUserSettings } = useFilterCreate({ tableId })
   const { filters, refetch } = useFilterDetails(tableId)
 
   const { updateSavedFilter } = useFilterUpdate()
@@ -98,7 +95,7 @@ export const FilterSaveSettings = ({
         },
         onSuccess: () => {
           refetch()
-          setOpen(false)
+          closeModal('dialog1')
           toast.success('Filter created successfully')
         }
       }
@@ -143,18 +140,28 @@ export const FilterSaveSettings = ({
       }, 1000)
     }
   }
-  const buttons: ModalButtons = {
-    goBack: {
-      text: 'Cancel',
-      onClick: () => setOpen(false)
-    },
-    goNext: {
-      text: 'Save',
-      loading,
-      onClick: () => {
+  const { openModal, closeModal } = useModalGlobalStore()
+
+  const openSaveFilterModal = () => {
+    openModal('dialog1', {
+      component: () => (
+        <Form formMethods={inputFormMethods}>
+          <Input
+            placeholder="Type filter name"
+            name="filterName"
+            rounded="rounded-md"
+            customLabel="Filter Name"
+          />
+        </Form>
+      ),
+      props: {
+        title: 'Save Filter',
+        size: 'm'
+      },
+      onSubmit: () => {
         inputFormMethods.handleSubmit(submitNewFilter)()
       }
-    }
+    })
   }
   const { deleteSavedFilter } = useFilterDelete()
   const handleDeleteFilter = () => {
@@ -202,24 +209,12 @@ export const FilterSaveSettings = ({
           Update
         </Button>
         <Button
-          onClick={() => {
-            setOpen(true)
-          }}
+          onClick={openSaveFilterModal}
           className="pb-2 whitespace-nowrap"
           disabled={storeFilters.length === 0}
         >
           Save new
         </Button>
-      </Form>
-      <Form formMethods={inputFormMethods}>
-        <Modal open={open} setOpen={setOpen} buttons={buttons}>
-          <Input
-            placeholder="Type filter name"
-            name="filterName"
-            rounded="rounded-md"
-            customLabel="Filter Name"
-          />
-        </Modal>
       </Form>
     </div>
   )

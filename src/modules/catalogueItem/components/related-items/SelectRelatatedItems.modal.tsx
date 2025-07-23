@@ -2,30 +2,38 @@ import { useRouter } from 'next/router'
 import { type FC, useState } from 'react'
 import toast from 'react-hot-toast'
 
-import ModalComponent from '@/components/overlays/modal/modal.comp'
-import { message } from '@/i18n/src/messages'
+import { Button } from '@/components/ui/button'
 import CatalogueTableSelect from '@/modules/shared/catalogue/table/CatalogueTableSelect'
-import type { ModalButtons } from '@/types/form'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import type { CatalogueItem } from '@/types/responses/catalogue'
 
 import { useCreateRelatedItem } from '../../hooks/useCreateRelatedItem'
 import { useRelatedItems } from '../../hooks/useRelatedItems'
 
-const messages = message.common.buttons
+/**
+ * Opens the select related items modal
+ */
+export function openSelectRelatedItemsModal() {
+  const { openModal } = useModalGlobalStore.getState()
 
-interface Props {
-  open: boolean
-  setOpen: (open: boolean) => void
+  openModal('dialog1', {
+    component: () => <SelectRelatatedItemsModalContent />,
+    props: {
+      title: 'Select Related Item',
+      size: 'l' as const
+    }
+  })
 }
 
-export const SelectRelatatedItemsModal: FC<Props> = ({ open, setOpen }) => {
+export const SelectRelatatedItemsModalContent: FC = () => {
   const [selectedItem, setSelectedItem] = useState<CatalogueItem | undefined>()
   const { createRelatedItem, loading } = useCreateRelatedItem()
   const { refetch } = useRelatedItems()
+  const { closeModal } = useModalGlobalStore()
   const router = useRouter()
   const itemUid = router.query.uid as string
 
-  const submitModal = () => {
+  const handleSubmit = () => {
     if (selectedItem) {
       createRelatedItem(
         {
@@ -53,7 +61,7 @@ export const SelectRelatatedItemsModal: FC<Props> = ({ open, setOpen }) => {
             toast.error(error.message)
           },
           onSuccess: () => {
-            setOpen(false)
+            closeModal('dialog1')
             setSelectedItem(undefined)
             refetch()
           }
@@ -62,24 +70,20 @@ export const SelectRelatatedItemsModal: FC<Props> = ({ open, setOpen }) => {
     }
   }
 
-  const buttons: ModalButtons = {
-    goBack: {
-      text: messages.close,
-      onClick: () => setOpen(false)
-    },
-    goNext: {
-      text: messages.continue,
-      onClick: submitModal,
-      loading
-    }
-  }
-
   return (
-    <ModalComponent {...{ open, setOpen, buttons }}>
+    <div className="space-y-4">
       <CatalogueTableSelect
         setItem={setSelectedItem}
         selectedItem={selectedItem}
       />
-    </ModalComponent>
+      <div className="flex justify-end gap-2">
+        <Button variant="outline" onClick={() => closeModal('dialog1')}>
+          Cancel
+        </Button>
+        <Button onClick={handleSubmit} disabled={!selectedItem || loading}>
+          {loading ? 'Adding...' : 'Add Related Item'}
+        </Button>
+      </div>
+    </div>
   )
 }
