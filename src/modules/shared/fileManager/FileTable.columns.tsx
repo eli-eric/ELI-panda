@@ -70,6 +70,8 @@ function openTagModal({
   file: FileItemExtended | null
   onAddTag: (tag: string) => void
 }) {
+  if (typeof window === 'undefined') return // Prevent SSR execution
+  
   const { openModal } = useModalGlobalStore.getState()
   openModal('dialog1', {
     component: TagModalContent,

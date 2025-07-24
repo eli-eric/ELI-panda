@@ -26,6 +26,8 @@ interface GraphModalProps {
  * Opens a system graph modal in the global modal system
  */
 export function openGraphModal(uid: string) {
+  if (typeof window === 'undefined') return // Prevent SSR execution
+  
   const { openModal } = useModalGlobalStore.getState()
 
   openModal('dialog1', {
