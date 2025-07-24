@@ -29,8 +29,12 @@ export const SystemTypeComboBox = ({
   isFilter?: boolean
 }) => {
   const { systemTypeGroups, filter, loading, error } = useSystemTypeGroups()
-  const { openModal } =
-    require('@/store/useModalGlobalStore').useModalGlobalStore.getState()
+  
+  const getModalStore = () => {
+    if (typeof window === 'undefined') return null // Prevent SSR execution
+    return require('@/store/useModalGlobalStore').useModalGlobalStore.getState()
+  }
+  
   const formContext = useFormContext()
   const setValue = formContext?.setValue
 
@@ -78,6 +82,10 @@ export const SystemTypeComboBox = ({
   }, [systemTypeGroups])
 
   const handleOpenDialog = () => {
+    const modalStore = getModalStore()
+    if (!modalStore) return
+    
+    const { openModal } = modalStore
     openModal('dialog1', {
       component: (props: any) => (
         <CodebookTreeModalGraphqlContent

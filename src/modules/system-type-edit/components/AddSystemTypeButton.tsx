@@ -1,6 +1,6 @@
 import type { QueryObserverResult, RefetchOptions } from '@tanstack/react-query'
 import { useMutation } from '@tanstack/react-query'
-import { type FC, Fragment, useState } from 'react'
+import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
@@ -8,16 +8,17 @@ import { PlusButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { Button } from '@/components/ui/button'
 import axiosInstance from '@/core/axios/axiosInstance'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { CODEBOOK } from '@/types/constants/codebook'
 import { BASE_URL } from '@/types/constants/common'
 import { ROLE } from '@/types/constants/roles'
-import type { ModalButtons } from '@/types/form'
 
 import type { SystemTypesResponse } from '../types'
+
 const messages = message.common.buttons
 
 interface Props {
@@ -26,15 +27,28 @@ interface Props {
     options?: RefetchOptions | undefined
   ) => Promise<QueryObserverResult<SystemTypesResponse[], Error>>
 }
-export const AddSystemTypeButton: FC<Props> = ({ selectedGroup, refetch }) => {
-  const [open, setOpen] = useState(false)
-  const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
 
+function openAddSystemTypeModal(selectedGroup: string, refetch: Props['refetch']) {
+  if (typeof window === 'undefined') return // Prevent SSR execution
+  
+  const { openModal } = useModalGlobalStore.getState()
+  
+  openModal('dialog1', {
+    component: () => <AddSystemTypeModalContent selectedGroup={selectedGroup} refetch={refetch} />,
+    props: {
+      title: 'Add System Type',
+      size: 'm' as const
+    }
+  })
+}
+
+const AddSystemTypeModalContent: FC<Props> = ({ selectedGroup, refetch }) => {
+  const { closeModal } = useModalGlobalStore()
+  
   const formMethods = useForm({
     defaultValues: { mask: '{STC}{ZC}-{serial(3)}' }
   })
 
-  //TODO: bit refactor after big merge
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       const res = await axiosInstance
@@ -47,48 +61,60 @@ export const AddSystemTypeButton: FC<Props> = ({ selectedGroup, refetch }) => {
     },
     onSuccess: () => {
       refetch()
-      setOpen(false)
+      closeModal('dialog1')
       formMethods.reset()
       toast.success(`System Type was created.`)
     },
     onError: () => {
       toast.error(`Failed to create SystemType.`)
-      setOpen(false)
+      closeModal('dialog1')
     }
   })
 
-  const buttons: ModalButtons = {
-    goNext: {
-      onClick: () => mutate(),
-      text: messages.save,
-      loading: isPending
-    },
-    goBack: {
-      onClick: () => setOpen(false),
-      text: messages.cancel,
-      loading: isPending
-    }
+  const handleSubmit = () => {
+    mutate()
   }
+
   return (
-    <Fragment>
-      <PlusButton
-        disabled={!selectedGroup || !canEdit}
-        onClick={() => setOpen(!open)}
-      />
-      <ModalComponent open={open} setOpen={setOpen} buttons={buttons}>
-        <Form formMethods={formMethods}>
-          <Input name="name" label="Name" rounded="rounded-md" />
-          <Input name="code" label="Code" rounded="rounded-md" />
-          <Input name="mask" label="Mask" rounded="rounded-md" />
-          <Listbox
-            name="systemAttribute"
-            codebook={CODEBOOK.SYSTEM_ATTRIBUTE}
-            rounded="rounded-md"
-            customLabel="System Attribute"
-            emptyOption="Select System Attribute"
-          />
-        </Form>
-      </ModalComponent>
-    </Fragment>
+    <div className="space-y-4">
+      <Form formMethods={formMethods}>
+        <Input name="name" label="Name" rounded="rounded-md" />
+        <Input name="code" label="Code" rounded="rounded-md" />
+        <Input name="mask" label="Mask" rounded="rounded-md" />
+        <Listbox
+          name="systemAttribute"
+          codebook={CODEBOOK.SYSTEM_ATTRIBUTE}
+          rounded="rounded-md"
+          customLabel="System Attribute"
+          emptyOption="Select System Attribute"
+        />
+      </Form>
+      <div className="flex justify-end gap-2">
+        <Button 
+          variant="outline" 
+          onClick={() => closeModal('dialog1')}
+          disabled={isPending}
+        >
+          {messages.cancel}
+        </Button>
+        <Button 
+          onClick={handleSubmit}
+          disabled={isPending}
+        >
+          {isPending ? 'Saving...' : messages.save}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+export const AddSystemTypeButton: FC<Props> = ({ selectedGroup, refetch }) => {
+  const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
+
+  return (
+    <PlusButton
+      disabled={!selectedGroup || !canEdit}
+      onClick={() => selectedGroup && openAddSystemTypeModal(selectedGroup, refetch)}
+    />
   )
 }

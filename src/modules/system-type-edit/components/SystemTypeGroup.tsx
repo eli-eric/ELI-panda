@@ -3,22 +3,22 @@ import {
   type RefetchOptions,
   useMutation
 } from '@tanstack/react-query'
-import { type FC, Fragment, useState } from 'react'
+import { type FC, Fragment } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
 import { DeleteButton, EditButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { Button } from '@/components/ui/button'
 import axiosInstance from '@/core/axios/axiosInstance'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { cn } from '@/lib/utils'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { BASE_URL } from '@/types/constants/common'
 import { ROLE } from '@/types/constants/roles'
-import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
 
 const messages = message.common.buttons
@@ -32,27 +32,29 @@ interface Props {
   ) => Promise<QueryObserverResult<CodebookType[], Error>>
 }
 
-export const SystemTypeGroup: FC<Props> = ({
-  systemTypeGroup,
-  selectedGroup,
-  setSelectedGroup,
-  refetch
-}) => {
-  const [openEdit, setOpenEdit] = useState(false)
+function openEditSystemTypeGroupModal(systemTypeGroup: CodebookType, refetch: Props['refetch']) {
+  if (typeof window === 'undefined') return // Prevent SSR execution
+  
+  const { openModal } = useModalGlobalStore.getState()
+  
+  openModal('dialog1', {
+    component: () => <EditSystemTypeGroupModalContent systemTypeGroup={systemTypeGroup} refetch={refetch} />,
+    props: {
+      title: 'Edit System Type Group',
+      size: 'm' as const
+    }
+  })
+}
 
-  const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
-
-  const withWarningModal = useWarningModal(
-    `Are you sure you want to delete ${systemTypeGroup.name}?`
-  )
-
+const EditSystemTypeGroupModalContent: FC<{systemTypeGroup: CodebookType, refetch: Props['refetch']}> = ({ systemTypeGroup, refetch }) => {
+  const { closeModal } = useModalGlobalStore()
+  
   const formMethods = useForm({
     defaultValues: {
       name: systemTypeGroup.name
     }
   })
 
-  //TODO: bit refactor after big merge
   const { mutate: submit, isPending } = useMutation({
     mutationFn: async () => {
       const res = await axiosInstance
@@ -65,28 +67,54 @@ export const SystemTypeGroup: FC<Props> = ({
     },
     onSuccess: () => {
       refetch()
-      setOpenEdit(false)
+      closeModal('dialog1')
       toast.success(`${systemTypeGroup.name} was updated.`)
     },
     onError: () => {
       toast.error(`Failed to update ${systemTypeGroup.name}.`)
-      setOpenEdit(false)
+      closeModal('dialog1')
     }
   })
 
-  const buttons: ModalButtons = {
-    goNext: {
-      onClick: () => {
-        submit()
-      },
-      text: messages.save,
-      loading: isPending
-    },
-    goBack: {
-      onClick: () => setOpenEdit(false),
-      text: messages.cancel
-    }
+  const handleSubmit = () => {
+    submit()
   }
+
+  return (
+    <div className="space-y-4">
+      <Form formMethods={formMethods}>
+        <Input name="name" label="Name" rounded="rounded-md" />
+      </Form>
+      <div className="flex justify-end gap-2">
+        <Button 
+          variant="outline" 
+          onClick={() => closeModal('dialog1')}
+          disabled={isPending}
+        >
+          {messages.cancel}
+        </Button>
+        <Button 
+          onClick={handleSubmit}
+          disabled={isPending}
+        >
+          {isPending ? 'Saving...' : messages.save}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+export const SystemTypeGroup: FC<Props> = ({
+  systemTypeGroup,
+  selectedGroup,
+  setSelectedGroup,
+  refetch
+}) => {
+  const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
+
+  const withWarningModal = useWarningModal(
+    `Are you sure you want to delete ${systemTypeGroup.name}?`
+  )
 
   return (
     <Fragment>
@@ -106,18 +134,13 @@ export const SystemTypeGroup: FC<Props> = ({
             <EditButton
               className="mr-2"
               onClick={() => {
-                setOpenEdit(true)
+                openEditSystemTypeGroupModal(systemTypeGroup, refetch)
               }}
             />
             <DeleteButton onClick={() => withWarningModal(() => {})()} />
           </div>
         )}
       </li>
-      <ModalComponent open={openEdit} setOpen={setOpenEdit} buttons={buttons}>
-        <Form formMethods={formMethods}>
-          <Input name="name" label="Name" rounded="rounded-md" />
-        </Form>
-      </ModalComponent>
     </Fragment>
   )
 }

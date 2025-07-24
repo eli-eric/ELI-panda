@@ -1,21 +1,21 @@
 import type { QueryObserverResult, RefetchOptions } from '@tanstack/react-query'
 import { useMutation } from '@tanstack/react-query'
 import type { FC } from 'react'
-import { Fragment, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
 import { PlusButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
-import ModalComponent from '@/components/overlays/modal/modal.comp'
+import { Button } from '@/components/ui/button'
 import axiosInstance from '@/core/axios/axiosInstance'
 import usePermission from '@/hooks/usePermission'
 import { message } from '@/i18n/src/messages'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { BASE_URL } from '@/types/constants/common'
 import { ROLE } from '@/types/constants/roles'
-import type { ModalButtons } from '@/types/form'
 import type { CodebookType } from '@/types/responses/codebook'
+
 const messages = message.common.buttons
 
 interface Props {
@@ -24,14 +24,24 @@ interface Props {
   ) => Promise<QueryObserverResult<CodebookType[], Error>>
 }
 
-export const AddGroupButton: FC<Props> = ({ refetch }) => {
-  const [open, setOpen] = useState(false)
+function openAddGroupModal(refetch: Props['refetch']) {
+  if (typeof window === 'undefined') return // Prevent SSR execution
+  
+  const { openModal } = useModalGlobalStore.getState()
+  
+  openModal('dialog1', {
+    component: () => <AddGroupModalContent refetch={refetch} />,
+    props: {
+      title: 'Add Group',
+      size: 'm' as const
+    }
+  })
+}
 
-  const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
-
+const AddGroupModalContent: FC<Props> = ({ refetch }) => {
+  const { closeModal } = useModalGlobalStore()
   const formMethods = useForm()
 
-  //TODO: bit refactor after big merge
   const { mutate, isPending } = useMutation({
     mutationFn: async () => {
       const res = await axiosInstance
@@ -41,36 +51,51 @@ export const AddGroupButton: FC<Props> = ({ refetch }) => {
     },
     onSuccess: () => {
       refetch()
-      setOpen(false)
+      closeModal('dialog1')
       formMethods.reset()
       toast.success(`Group was created.`)
     },
     onError: () => {
       toast.error(`Failed to create group.`)
-      setOpen(false)
+      closeModal('dialog1')
     }
   })
 
-  const buttons: ModalButtons = {
-    goNext: {
-      onClick: () => mutate(),
-      text: messages.save,
-      loading: isPending
-    },
-    goBack: {
-      onClick: () => setOpen(false),
-      text: messages.cancel,
-      loading: isPending
-    }
+  const handleSubmit = () => {
+    mutate()
   }
+
   return (
-    <Fragment>
-      <PlusButton disabled={!canEdit} onClick={() => setOpen(!open)} />
-      <ModalComponent open={open} setOpen={setOpen} buttons={buttons}>
-        <Form formMethods={formMethods}>
-          <Input name="name" label="Name" rounded="rounded-md" />
-        </Form>
-      </ModalComponent>
-    </Fragment>
+    <div className="space-y-4">
+      <Form formMethods={formMethods}>
+        <Input name="name" label="Name" rounded="rounded-md" />
+      </Form>
+      <div className="flex justify-end gap-2">
+        <Button 
+          variant="outline" 
+          onClick={() => closeModal('dialog1')}
+          disabled={isPending}
+        >
+          {messages.cancel}
+        </Button>
+        <Button 
+          onClick={handleSubmit}
+          disabled={isPending}
+        >
+          {isPending ? 'Saving...' : messages.save}
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+export const AddGroupButton: FC<Props> = ({ refetch }) => {
+  const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
+
+  return (
+    <PlusButton 
+      disabled={!canEdit} 
+      onClick={() => openAddGroupModal(refetch)} 
+    />
   )
 }

@@ -47,6 +47,8 @@ interface CodebookTreeModalProps {
 export function openCodebookTreeModalGraphql(
   props: Omit<CodebookTreeModalProps, 'open' | 'setOpen'>
 ) {
+  if (typeof window === 'undefined') return // Prevent SSR execution
+  
   const { openModal } = useModalGlobalStore.getState()
   openModal('dialog1', {
     component: CodebookTreeModalGraphqlContent,
