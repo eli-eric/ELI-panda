@@ -206,7 +206,7 @@ export function RenameModalContent({
 // Usage: openRenameModal({ file, onRename })
 export function openRenameModal({ file, onRename }: RenameModalProps) {
   if (typeof window === 'undefined') return // Prevent SSR execution
-  
+
   const { openModal } = useModalGlobalStore.getState()
   openModal('dialog1', {
     component: RenameModalContent,

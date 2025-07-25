@@ -17,9 +17,9 @@ const messages = message.common.buttons
 
 function openHistoryModal(uid: string) {
   if (typeof window === 'undefined') return // Prevent SSR execution
-  
+
   const { openModal } = useModalGlobalStore.getState()
-  
+
   openModal('dialog1', {
     component: () => <HistoryModalContent uid={uid} />,
     props: {
@@ -31,7 +31,7 @@ function openHistoryModal(uid: string) {
 
 const HistoryModalContent = ({ uid }: { uid: string }) => {
   const { closeModal } = useModalGlobalStore()
-  
+
   const { data, error, isError } = useQuery({
     queryKey: ['history', { uid }],
     queryFn: queryFetcher<HistoryResponse[]>('history'),

@@ -16,9 +16,9 @@ const messages = message.common.buttons
 
 function openAssignPhysicalItemModal() {
   if (typeof window === 'undefined') return // Prevent SSR execution
-  
+
   const { openModal } = useModalGlobalStore.getState()
-  
+
   openModal('dialog1', {
     component: () => <AssignPhysicalItemModalContent />,
     props: {
@@ -29,7 +29,8 @@ function openAssignPhysicalItemModal() {
 }
 
 const AssignPhysicalItemModalContent = () => {
-  const { selectedPhysicalSystem, setSelectedPhysicalSystem } = useSystemItemStore()
+  const { selectedPhysicalSystem, setSelectedPhysicalSystem } =
+    useSystemItemStore()
   const { setValue } = useFormContext<SystemDetailFormType>()
   const { closeModal } = useModalGlobalStore()
 
@@ -68,13 +69,10 @@ const AssignPhysicalItemModalContent = () => {
         hideButtons
       />
       <div className="flex justify-end gap-2">
-        <UIButton 
-          variant="outline" 
-          onClick={() => closeModal('dialog1')}
-        >
+        <UIButton variant="outline" onClick={() => closeModal('dialog1')}>
           {messages.cancel}
         </UIButton>
-        <UIButton 
+        <UIButton
           onClick={handleAssign}
           disabled={!selectedPhysicalSystem?.physicalItem}
         >

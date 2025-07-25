@@ -17,9 +17,9 @@ const messageButtons = message.common.buttons
 
 function openSetMinimalSparesModal() {
   if (typeof window === 'undefined') return // Prevent SSR execution
-  
+
   const { openModal } = useModalGlobalStore.getState()
-  
+
   openModal('dialog1', {
     component: () => <SetMinimalSparesModalContent />,
     props: {
@@ -70,9 +70,7 @@ const SetMinimalSparesModalContent = () => {
         <UIButton variant="outline" onClick={handleCancel}>
           {messageButtons.cancel}
         </UIButton>
-        <UIButton onClick={handleOk}>
-          {messageButtons.ok}
-        </UIButton>
+        <UIButton onClick={handleOk}>{messageButtons.ok}</UIButton>
       </div>
     </div>
   )

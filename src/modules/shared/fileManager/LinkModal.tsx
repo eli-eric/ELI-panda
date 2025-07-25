@@ -70,7 +70,7 @@ export function LinkModalContent({
 
 export function openLinkModal({ parentUid }: { parentUid?: string }) {
   if (typeof window === 'undefined') return // Prevent SSR execution
-  
+
   const { openModal } = useModalGlobalStore.getState()
   openModal('dialog1', {
     component: LinkModalContent,

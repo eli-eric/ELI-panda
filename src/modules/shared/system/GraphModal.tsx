@@ -27,7 +27,7 @@ interface GraphModalProps {
  */
 export function openGraphModal(uid: string) {
   if (typeof window === 'undefined') return // Prevent SSR execution
-  
+
   const { openModal } = useModalGlobalStore.getState()
 
   openModal('dialog1', {
