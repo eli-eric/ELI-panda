@@ -8,9 +8,9 @@ import { ItemAssignContainer } from './item-assign.cont'
 
 export function openItemAssignModal() {
   if (typeof window === 'undefined') return // Prevent SSR execution
-  
+
   const { openModal } = useModalGlobalStore.getState()
-  
+
   openModal('dialog1', {
     component: () => <ItemAssignModalContent />,
     props: {

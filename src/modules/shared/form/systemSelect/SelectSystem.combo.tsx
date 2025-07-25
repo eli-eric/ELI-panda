@@ -31,7 +31,7 @@ export const SelectSystemComboBox = ({
 
   const openSystemSelectModal = () => {
     setSelectedSystem(null)
-    openModal('dialog1', {
+    openModal('dialog2', {
       component: () => (
         <SystemsTable
           tableId={'systemSelect'}

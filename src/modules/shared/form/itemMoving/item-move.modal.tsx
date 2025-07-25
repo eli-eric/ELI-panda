@@ -8,9 +8,9 @@ import { useModalWizardStore } from './store/useModalWizardStore'
 
 export function openItemMoveModal() {
   if (typeof window === 'undefined') return // Prevent SSR execution
-  
+
   const { openModal } = useModalGlobalStore.getState()
-  
+
   openModal('dialog1', {
     component: () => <ItemMoveModalContent />,
     props: {

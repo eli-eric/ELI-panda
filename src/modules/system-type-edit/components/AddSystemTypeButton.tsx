@@ -28,13 +28,21 @@ interface Props {
   ) => Promise<QueryObserverResult<SystemTypesResponse[], Error>>
 }
 
-function openAddSystemTypeModal(selectedGroup: string, refetch: Props['refetch']) {
+function openAddSystemTypeModal(
+  selectedGroup: string,
+  refetch: Props['refetch']
+) {
   if (typeof window === 'undefined') return // Prevent SSR execution
-  
+
   const { openModal } = useModalGlobalStore.getState()
-  
+
   openModal('dialog1', {
-    component: () => <AddSystemTypeModalContent selectedGroup={selectedGroup} refetch={refetch} />,
+    component: () => (
+      <AddSystemTypeModalContent
+        selectedGroup={selectedGroup}
+        refetch={refetch}
+      />
+    ),
     props: {
       title: 'Add System Type',
       size: 'm' as const
@@ -44,7 +52,7 @@ function openAddSystemTypeModal(selectedGroup: string, refetch: Props['refetch']
 
 const AddSystemTypeModalContent: FC<Props> = ({ selectedGroup, refetch }) => {
   const { closeModal } = useModalGlobalStore()
-  
+
   const formMethods = useForm({
     defaultValues: { mask: '{STC}{ZC}-{serial(3)}' }
   })
@@ -90,17 +98,14 @@ const AddSystemTypeModalContent: FC<Props> = ({ selectedGroup, refetch }) => {
         />
       </Form>
       <div className="flex justify-end gap-2">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => closeModal('dialog1')}
           disabled={isPending}
         >
           {messages.cancel}
         </Button>
-        <Button 
-          onClick={handleSubmit}
-          disabled={isPending}
-        >
+        <Button onClick={handleSubmit} disabled={isPending}>
           {isPending ? 'Saving...' : messages.save}
         </Button>
       </div>
@@ -114,7 +119,9 @@ export const AddSystemTypeButton: FC<Props> = ({ selectedGroup, refetch }) => {
   return (
     <PlusButton
       disabled={!selectedGroup || !canEdit}
-      onClick={() => selectedGroup && openAddSystemTypeModal(selectedGroup, refetch)}
+      onClick={() =>
+        selectedGroup && openAddSystemTypeModal(selectedGroup, refetch)
+      }
     />
   )
 }

@@ -13,7 +13,7 @@ export const openModal = (
   } = {}
 ) => {
   if (typeof window === 'undefined') return // Prevent SSR execution
-  
+
   const { openModal } = useModalGlobalStore.getState()
   const { size = 'l', title, description, slot = 'dialog1' } = options
 

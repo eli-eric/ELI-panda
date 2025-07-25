@@ -26,9 +26,9 @@ interface Props {
 
 function openAddGroupModal(refetch: Props['refetch']) {
   if (typeof window === 'undefined') return // Prevent SSR execution
-  
+
   const { openModal } = useModalGlobalStore.getState()
-  
+
   openModal('dialog1', {
     component: () => <AddGroupModalContent refetch={refetch} />,
     props: {
@@ -71,17 +71,14 @@ const AddGroupModalContent: FC<Props> = ({ refetch }) => {
         <Input name="name" label="Name" rounded="rounded-md" />
       </Form>
       <div className="flex justify-end gap-2">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => closeModal('dialog1')}
           disabled={isPending}
         >
           {messages.cancel}
         </Button>
-        <Button 
-          onClick={handleSubmit}
-          disabled={isPending}
-        >
+        <Button onClick={handleSubmit} disabled={isPending}>
           {isPending ? 'Saving...' : messages.save}
         </Button>
       </div>
@@ -93,9 +90,9 @@ export const AddGroupButton: FC<Props> = ({ refetch }) => {
   const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
 
   return (
-    <PlusButton 
-      disabled={!canEdit} 
-      onClick={() => openAddGroupModal(refetch)} 
+    <PlusButton
+      disabled={!canEdit}
+      onClick={() => openAddGroupModal(refetch)}
     />
   )
 }

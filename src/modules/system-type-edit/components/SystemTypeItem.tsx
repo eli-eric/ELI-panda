@@ -34,13 +34,23 @@ interface Props {
   ) => Promise<QueryObserverResult<SystemTypesResponse[], Error>>
 }
 
-function openEditSystemTypeModal(systemType: SystemTypesResponse, groupUid: string | null | undefined, refetch: Props['refetch']) {
+function openEditSystemTypeModal(
+  systemType: SystemTypesResponse,
+  groupUid: string | null | undefined,
+  refetch: Props['refetch']
+) {
   if (typeof window === 'undefined') return // Prevent SSR execution
-  
+
   const { openModal } = useModalGlobalStore.getState()
-  
+
   openModal('dialog1', {
-    component: () => <EditSystemTypeModalContent systemType={systemType} groupUid={groupUid} refetch={refetch} />,
+    component: () => (
+      <EditSystemTypeModalContent
+        systemType={systemType}
+        groupUid={groupUid}
+        refetch={refetch}
+      />
+    ),
     props: {
       title: 'Edit System Type',
       size: 'm' as const
@@ -48,10 +58,14 @@ function openEditSystemTypeModal(systemType: SystemTypesResponse, groupUid: stri
   })
 }
 
-const EditSystemTypeModalContent: FC<{systemType: SystemTypesResponse, groupUid: string | null | undefined, refetch: Props['refetch']}> = ({ systemType, groupUid, refetch }) => {
+const EditSystemTypeModalContent: FC<{
+  systemType: SystemTypesResponse
+  groupUid: string | null | undefined
+  refetch: Props['refetch']
+}> = ({ systemType, groupUid, refetch }) => {
   const { closeModal } = useModalGlobalStore()
   const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
-  
+
   const formMethods = useForm({
     defaultValues: {
       name: systemType.name,
@@ -65,7 +79,8 @@ const EditSystemTypeModalContent: FC<{systemType: SystemTypesResponse, groupUid:
     mutationFn: async () => {
       const res = await axiosInstance
         .put(
-          BASE_URL + `/system/system-type-group/${groupUid}/system-type/${systemType.uid}`,
+          BASE_URL +
+            `/system/system-type-group/${groupUid}/system-type/${systemType.uid}`,
           formMethods.getValues()
         )
         .then(res => res.data)
@@ -117,17 +132,14 @@ const EditSystemTypeModalContent: FC<{systemType: SystemTypesResponse, groupUid:
         />
       </Form>
       <div className="flex justify-end gap-2">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => closeModal('dialog1')}
           disabled={isPending}
         >
           {messages.cancel}
         </Button>
-        <Button 
-          onClick={handleSubmit}
-          disabled={isPending || !canEdit}
-        >
+        <Button onClick={handleSubmit} disabled={isPending || !canEdit}>
           {isPending ? 'Saving...' : messages.save}
         </Button>
       </div>

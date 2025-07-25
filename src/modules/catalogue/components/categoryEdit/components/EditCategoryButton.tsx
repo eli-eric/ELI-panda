@@ -36,7 +36,7 @@ export const EditCategoryButton: FC<EditCategoryProps> = ({
 }) => {
   const openEditCategorySheet = () => {
     if (typeof window === 'undefined') return // Prevent SSR execution
-    
+
     const { openModal } = useModalGlobalStore.getState()
     openModal('sheet', {
       component: EditCategorySheetContent,

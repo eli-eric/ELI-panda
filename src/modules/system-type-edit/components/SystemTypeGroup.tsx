@@ -32,13 +32,21 @@ interface Props {
   ) => Promise<QueryObserverResult<CodebookType[], Error>>
 }
 
-function openEditSystemTypeGroupModal(systemTypeGroup: CodebookType, refetch: Props['refetch']) {
+function openEditSystemTypeGroupModal(
+  systemTypeGroup: CodebookType,
+  refetch: Props['refetch']
+) {
   if (typeof window === 'undefined') return // Prevent SSR execution
-  
+
   const { openModal } = useModalGlobalStore.getState()
-  
+
   openModal('dialog1', {
-    component: () => <EditSystemTypeGroupModalContent systemTypeGroup={systemTypeGroup} refetch={refetch} />,
+    component: () => (
+      <EditSystemTypeGroupModalContent
+        systemTypeGroup={systemTypeGroup}
+        refetch={refetch}
+      />
+    ),
     props: {
       title: 'Edit System Type Group',
       size: 'm' as const
@@ -46,9 +54,12 @@ function openEditSystemTypeGroupModal(systemTypeGroup: CodebookType, refetch: Pr
   })
 }
 
-const EditSystemTypeGroupModalContent: FC<{systemTypeGroup: CodebookType, refetch: Props['refetch']}> = ({ systemTypeGroup, refetch }) => {
+const EditSystemTypeGroupModalContent: FC<{
+  systemTypeGroup: CodebookType
+  refetch: Props['refetch']
+}> = ({ systemTypeGroup, refetch }) => {
   const { closeModal } = useModalGlobalStore()
-  
+
   const formMethods = useForm({
     defaultValues: {
       name: systemTypeGroup.name
@@ -86,17 +97,14 @@ const EditSystemTypeGroupModalContent: FC<{systemTypeGroup: CodebookType, refetc
         <Input name="name" label="Name" rounded="rounded-md" />
       </Form>
       <div className="flex justify-end gap-2">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => closeModal('dialog1')}
           disabled={isPending}
         >
           {messages.cancel}
         </Button>
-        <Button 
-          onClick={handleSubmit}
-          disabled={isPending}
-        >
+        <Button onClick={handleSubmit} disabled={isPending}>
           {isPending ? 'Saving...' : messages.save}
         </Button>
       </div>

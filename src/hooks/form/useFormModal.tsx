@@ -223,24 +223,8 @@ export const FormModal = <T extends FieldValues>({
       closeModal('dialog1')
     }
   }, [
-    open,
-    openModal,
-    closeModal,
-    formMethods,
-    onSubmit,
-    error,
-    renderOutsideForm,
-    loading,
-    className,
-    children,
-    disableSubmit,
-    title,
-    description,
-    size,
-    handleSubmit,
-    reset,
-    setOpen,
-    formState.isSubmitting
+    open
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   ])
 
   // Return null since the modal is handled by the global system

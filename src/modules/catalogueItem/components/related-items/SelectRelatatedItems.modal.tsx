@@ -15,9 +15,9 @@ import { useRelatedItems } from '../../hooks/useRelatedItems'
  */
 export function openSelectRelatedItemsModal() {
   if (typeof window === 'undefined') return // Prevent SSR execution
-  
+
   const { openModal } = useModalGlobalStore.getState()
-  
+
   openModal('dialog1', {
     component: () => <SelectRelatatedItemsModalContent />,
     props: {
@@ -25,7 +25,8 @@ export function openSelectRelatedItemsModal() {
       size: 'l' as const
     }
   })
-}export const SelectRelatatedItemsModalContent: FC = () => {
+}
+export const SelectRelatatedItemsModalContent: FC = () => {
   const [selectedItem, setSelectedItem] = useState<CatalogueItem | undefined>()
   const { createRelatedItem, loading } = useCreateRelatedItem()
   const { refetch } = useRelatedItems()
