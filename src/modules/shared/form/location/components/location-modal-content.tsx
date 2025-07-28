@@ -14,8 +14,6 @@ import { highlightText } from '@/utils'
 
 import { useLocationModal } from '../hooks/useLocationModal'
 
-const messages = message.common.buttons
-
 export type Codebooktree = {
   name: string
   uid: string
@@ -25,7 +23,15 @@ export type Codebooktree = {
 }
 
 interface CodebookTreeModalProps {
+  loading?: boolean
+  enableFiltering?: boolean
+  tableId?: string
+  selectParent?: boolean
+  manualFiltering?: boolean
   onSelect: (item: CodebookType | null) => void
+  // Data props
+  codebooktree?: Codebooktree[]
+  fetchChildren?: (uid: string) => void
 }
 
 // The actual modal content, rendered by the global modal system
@@ -34,10 +40,20 @@ export function CodebookTreeModalGraphqlContent(
     onClose?: () => void
   }
 ) {
-  const { onSelect, onClose } = props
-  const tableId = 'location-tree'
+  const {
+    tableId = 'location-tree',
+    onSelect,
+    onClose,
+    fetchChildren: propFetchChildren,
+    loading: propLoading
+  } = props
 
-  const { codebooktree, fetchChildren, loading, error } = useLocationModal()
+  // Fallback k useLocationModal pokud nejsou poskytnuty props
+  const locationData = useLocationModal()
+
+  const codebooktree = locationData.codebooktree
+  const fetchChildren = propFetchChildren || locationData.fetchChildren
+  const loading = propLoading || locationData.loading
 
   const [item, setItem] = useState<Codebooktree | null>(null)
   const { instances } = useTableStateStore()
@@ -122,15 +138,13 @@ export function CodebookTreeModalGraphqlContent(
         }
         getRowProps={row => ({
           onClick: () => {
-            if (!row.original.isExpandable) {
-              setItem({
-                uid: row.original.uid,
-                name:
-                  row.original.name +
-                  (row.original.code ? ` (${row.original.code})` : ''),
-                code: row.original?.code
-              })
-            }
+            setItem({
+              uid: row.original.uid,
+              name:
+                row.original.name +
+                (row.original.code ? ` (${row.original.code})` : ''),
+              code: row.original?.code
+            })
           },
           className: cn(
             item?.uid === row.original.uid &&
@@ -143,7 +157,7 @@ export function CodebookTreeModalGraphqlContent(
         <Button
           type="button"
           onClick={() => {
-            if (onClose) onClose()
+            onClose?.()
           }}
         >
           <FormattedMessage id={message.common.buttons.close} />
@@ -152,9 +166,8 @@ export function CodebookTreeModalGraphqlContent(
           type="button"
           disabled={!item}
           onClick={() => {
-            console.log('Selected item:', item, onSelect)
-            onSelect && onSelect(item)
-            if (onClose) onClose()
+            onSelect(item)
+            onClose?.()
           }}
         >
           <FormattedMessage id={message.common.buttons.continue} />
