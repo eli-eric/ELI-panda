@@ -43,11 +43,9 @@ export const ModalSelect = ({
       render={({ field, fieldState: { error } }) => {
         const value =
           typeof field.value === 'string' ? field.value : field.value?.name
-
         return (
           <div className={cn('space-y-1 w-full', className)}>
             {label && <Label>{label}</Label>}
-
             <div className="relative">
               <Button
                 type="button"

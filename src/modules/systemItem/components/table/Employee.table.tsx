@@ -1,7 +1,7 @@
 import type { ColumnDef } from '@tanstack/react-table'
 import { memo, useMemo } from 'react'
 
-import { Table } from '@/components/ui'
+import { Table } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 import { ROLE } from '@/types/constants/roles'
 import type { Employee } from '@/types/gql/graphql'

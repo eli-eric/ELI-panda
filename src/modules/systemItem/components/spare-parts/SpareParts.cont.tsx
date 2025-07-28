@@ -2,7 +2,7 @@ import { Fragment } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
 import { Heading } from '@/components/layout/Heading'
-import { Table } from '@/components/ui'
+import { Table } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
