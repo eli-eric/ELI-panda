@@ -25,10 +25,8 @@ export type Codebooktree = {
 }
 
 interface CodebookTreeModalProps {
-  open: boolean
   loading?: boolean
   enableFiltering?: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
   data?: Codebooktree[]
   name?: string
   fetchChildren?: (uid: string) => void
@@ -44,9 +42,7 @@ interface CodebookTreeModalProps {
  * Opens the CodebookTreeModalGraphql as a Dialog via the global modal system.
  * Usage: openCodebookTreeModalGraphql({ ...props })
  */
-export function openCodebookTreeModalGraphql(
-  props: Omit<CodebookTreeModalProps, 'open' | 'setOpen'>
-) {
+export function openCodebookTreeModalGraphql(props: CodebookTreeModalProps) {
   if (typeof window === 'undefined') return // Prevent SSR execution
 
   const { openModal } = useModalGlobalStore.getState()
@@ -62,20 +58,9 @@ export function openCodebookTreeModalGraphql(
   })
 }
 
-/**
- * Legacy modal component for direct usage (with open/setOpen state).
- * Used in SystemTypeComboBox and similar.
- */
-export function CodebookTreeModalGraphql(props: CodebookTreeModalProps) {
-  // This is a wrapper for compatibility with legacy usage
-  // Remove open and setOpen before passing to content
-  const { open, setOpen, ...rest } = props
-  return <CodebookTreeModalGraphqlContent {...rest} />
-}
-
 // The actual modal content, rendered by the global modal system
 export function CodebookTreeModalGraphqlContent(
-  props: Omit<CodebookTreeModalProps, 'open' | 'setOpen'> & {
+  props: CodebookTreeModalProps & {
     onClose?: () => void
   }
 ) {

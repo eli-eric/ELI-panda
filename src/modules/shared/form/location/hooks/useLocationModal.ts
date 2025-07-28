@@ -10,7 +10,6 @@ import { useLocation, useSubLocations } from './useLocation'
 
 export const useLocationModal = () => {
   const tableId = 'location-tree'
-  const [open, setOpen] = useState(false)
   const [codebooktree, setCodebooktree] = useState<Codebooktree[]>([])
   const { locations, error: locationsError } = useLocation()
   const [uid, setUid] = useState<string>('')
@@ -61,8 +60,6 @@ export const useLocationModal = () => {
   }
 
   return {
-    open,
-    setOpen,
     codebooktree,
     fetchChildren,
     additionalColumn,
