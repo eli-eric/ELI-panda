@@ -122,40 +122,43 @@ export function CodebookTreeModalGraphqlContent(
 
   // Instead of ModalButtons, use a simple footer with actions
   return (
-    <div className={cn('max-h-[300px]', loading && ' opacity-70')}>
-      <PandaTableControlled
-        tableId={tableId}
-        data={codebooktree}
-        table={table}
-        loading={loading}
-        settings={{
-          enableRowSelection: true,
-          enableFiltering: true,
-          manualFiltering: true
-        }}
-        className={
-          'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'
-        }
-        getRowProps={row => ({
-          onClick: () => {
-            setItem({
-              uid: row.original.uid,
-              name:
-                row.original.name +
-                (row.original.code ? ` (${row.original.code})` : ''),
-              code: row.original?.code
-            })
-          },
-          className: cn(
-            item?.uid === row.original.uid &&
-              'bg-orange-200 dark:bg-orange-600 hover:bg-orange-200 dark:hover:bg-orange-600',
-            'cursor-pointer'
-          )
-        })}
-      />
+    <div>
+      <div className={cn('max-h-[300px]', loading && ' opacity-70')}>
+        <PandaTableControlled
+          tableId={tableId}
+          data={codebooktree}
+          table={table}
+          loading={loading}
+          settings={{
+            enableRowSelection: true,
+            enableFiltering: true,
+            manualFiltering: true
+          }}
+          className={
+            'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'
+          }
+          getRowProps={row => ({
+            onClick: () => {
+              setItem({
+                uid: row.original.uid,
+                name:
+                  row.original.name +
+                  (row.original.code ? ` (${row.original.code})` : ''),
+                code: row.original?.code
+              })
+            },
+            className: cn(
+              item?.uid === row.original.uid &&
+                'bg-orange-200 dark:bg-orange-600 hover:bg-orange-200 dark:hover:bg-orange-600',
+              'cursor-pointer'
+            )
+          })}
+        />
+      </div>
       <div className="flex justify-end gap-2 mt-4">
         <Button
           type="button"
+          variant={'outline'}
           onClick={() => {
             onClose?.()
           }}
