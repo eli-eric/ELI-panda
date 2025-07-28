@@ -25,11 +25,6 @@ export type Codebooktree = {
 }
 
 interface CodebookTreeModalProps {
-  loading?: boolean
-  enableFiltering?: boolean
-  tableId?: string
-  selectParent?: boolean
-  manualFiltering?: boolean
   onSelect: (item: CodebookType | null) => void
 }
 
@@ -39,14 +34,8 @@ export function CodebookTreeModalGraphqlContent(
     onClose?: () => void
   }
 ) {
-  const {
-    enableFiltering,
-    tableId = 'location-tree',
-    selectParent = true,
-    manualFiltering,
-    onSelect,
-    onClose
-  } = props
+  const { onSelect, onClose } = props
+  const tableId = 'location-tree'
 
   const { codebooktree, fetchChildren, loading, error } = useLocationModal()
 
@@ -68,9 +57,7 @@ export function CodebookTreeModalGraphqlContent(
         id: 'name',
         filterFn: 'fuzzy',
         size: 300,
-        meta: enableFiltering
-          ? { filter: { type: 'string', enableColumnFilter: true } }
-          : undefined,
+        meta: { filter: { type: 'string', enableColumnFilter: true } },
         cell: ({ row, getValue }) => (
           <ExpandableNameCell
             {...{ row, getValue, fetchChildren, filterName }}
@@ -88,7 +75,7 @@ export function CodebookTreeModalGraphqlContent(
     ]
 
     return columns
-  }, [fetchChildren, enableFiltering, filterName, filterCode])
+  }, [fetchChildren, filterName, filterCode])
 
   const table = usePandaTable<Codebooktree>({
     tableId,
@@ -127,24 +114,15 @@ export function CodebookTreeModalGraphqlContent(
         loading={loading}
         settings={{
           enableRowSelection: true,
-          enableFiltering: enableFiltering,
-          manualFiltering: manualFiltering
+          enableFiltering: true,
+          manualFiltering: true
         }}
         className={
           'relative overflow-y-auto h-[300px] border-l border-b border-gray-400'
         }
         getRowProps={row => ({
           onClick: () => {
-            if (selectParent) {
-              setItem({
-                uid: row.original.uid,
-                name:
-                  row.original.name +
-                  (row.original.code ? ` (${row.original.code})` : ''),
-                code: row.original?.code
-              })
-            }
-            if (!row.original.isExpandable && !selectParent) {
+            if (!row.original.isExpandable) {
               setItem({
                 uid: row.original.uid,
                 name:
