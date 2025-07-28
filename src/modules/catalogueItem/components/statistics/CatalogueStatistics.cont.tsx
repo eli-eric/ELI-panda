@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 
 import { Heading } from '@/components/layout/Heading'
-import { Table } from '@/components/ui'
+import { Table } from '@/components/ui/table'
 
 import { useItemsAggregate } from '../../hooks/useItemsAggregate'
 import { useCatalogueStatisticsColumns } from './CatalogueStatistics.columns'

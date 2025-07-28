@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 
 import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
-import { Table } from '@/components/ui'
+import { Table } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 
