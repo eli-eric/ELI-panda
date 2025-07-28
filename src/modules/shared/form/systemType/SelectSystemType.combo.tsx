@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast'
 
 import { ModalSelect } from '@/components/form/ModalSelect'
 import type { Codebooktree } from '@/components/form/shared/CodebookTreeModalGraphql'
-import { CodebookTreeModalGraphqlContent } from '@/components/form/shared/CodebookTreeModalGraphql'
+import { openCodebookTreeModalGraphql } from '@/components/form/shared/CodebookTreeModalGraphql'
 import type { CODEBOOK } from '@/types/constants/codebook'
 import type { FieldProps, Option } from '@/types/form'
 import { highlightText } from '@/utils'
@@ -29,11 +29,6 @@ export const SystemTypeComboBox = ({
   isFilter?: boolean
 }) => {
   const { systemTypeGroups, filter, loading, error } = useSystemTypeGroups()
-
-  const getModalStore = () => {
-    if (typeof window === 'undefined') return null // Prevent SSR execution
-    return require('@/store/useModalGlobalStore').useModalGlobalStore.getState()
-  }
 
   const formContext = useFormContext()
   const setValue = formContext?.setValue
@@ -68,7 +63,6 @@ export const SystemTypeComboBox = ({
 
   const treeData = useMemo(() => {
     if (!systemTypeGroups) return []
-
     return systemTypeGroups?.map(group => ({
       name: group.name,
       uid: group.uid,
@@ -82,27 +76,16 @@ export const SystemTypeComboBox = ({
   }, [systemTypeGroups])
 
   const handleOpenDialog = () => {
-    const modalStore = getModalStore()
-    if (!modalStore) return
-
-    const { openModal } = modalStore
-    openModal('dialog1', {
-      component: (props: any) => (
-        <CodebookTreeModalGraphqlContent
-          {...props}
-          tableId="systemType-tree"
-          onSelect={onValueChange}
-          data={treeData}
-          additionalColumn={additionalColumn}
-          enableFiltering={true}
-          manualFiltering={false}
-          loading={loading}
-          selectParent={false}
-          name={systemTypeField.name}
-        />
-      ),
-      props: {},
-      onClose: undefined
+    openCodebookTreeModalGraphql({
+      tableId: 'systemType-tree',
+      onSelect: onValueChange,
+      data: treeData,
+      additionalColumn,
+      enableFiltering: true,
+      manualFiltering: false,
+      loading,
+      selectParent: false,
+      name: systemTypeField.name
     })
   }
 

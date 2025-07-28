@@ -1,8 +1,8 @@
-import { Fragment, useEffect } from 'react'
+import { useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 
 import { ModalSelect } from '@/components/form/ModalSelect'
-import { CodebookTreeModalGraphql } from '@/components/form/shared/CodebookTreeModalGraphql'
+import { openCodebookTreeModalGraphql } from '@/components/form/shared/CodebookTreeModalGraphql'
 import type { CodebookType } from '@/types/responses/codebook'
 
 import { useLocationModal } from './hooks/useLocationModal'
@@ -26,44 +26,38 @@ export const SelectLocationCombo = ({
     fetchChildren,
     loading,
     error,
-    open,
-    setOpen,
     tableId
   } = useLocationModal()
 
   // Handle error with useEffect to prevent infinite loops
   useEffect(() => {
-    if (error && open) {
+    if (error) {
       toast.error('Failed to load locations')
-      setOpen(false)
     }
-  }, [error, open, setOpen])
+  }, [error])
+
+  const handleOpenModal = () => {
+    openCodebookTreeModalGraphql({
+      fetchChildren,
+      onSelect,
+      tableId,
+      additionalColumn,
+      data: codebooktree,
+      loading,
+      manualFiltering: true,
+      enableFiltering: true,
+      name: locationField.name
+    })
+  }
 
   return (
-    <Fragment>
-      <ModalSelect
-        {...locationField}
-        onSelect={onSelect}
-        className={className}
-        disabled={disabled}
-        onClick={() => {
-          setOpen(true)
-        }}
-        isFilter={isFilter}
-      />
-      <CodebookTreeModalGraphql
-        fetchChildren={fetchChildren}
-        onSelect={onSelect}
-        tableId={tableId}
-        additionalColumn={additionalColumn}
-        data={codebooktree}
-        open={open}
-        loading={loading}
-        manualFiltering={true}
-        enableFiltering={true}
-        setOpen={setOpen}
-        name={locationField.name}
-      />
-    </Fragment>
+    <ModalSelect
+      {...locationField}
+      onSelect={onSelect}
+      className={className}
+      disabled={disabled}
+      onClick={handleOpenModal}
+      isFilter={isFilter}
+    />
   )
 }
