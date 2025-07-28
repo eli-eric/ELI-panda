@@ -4,7 +4,7 @@ import { useFormContext } from 'react-hook-form'
 import { ModalSelect } from '@/components/form/ModalSelect'
 import type { CodebookType } from '@/types/responses/codebook'
 
-import { openCodebookTreeModalGraphql } from './components/openLocationModal'
+import { useLocationSelectionModal } from './hooks/useLocationSelectionModal'
 
 export const SelectLocationCombo = ({
   locationField,
@@ -20,23 +20,20 @@ export const SelectLocationCombo = ({
   isFilter?: boolean
 }) => {
   const formContext = useFormContext()
+  const { openLocationModal } = useLocationSelectionModal()
 
-  const setValue = useCallback(
-    () => (value: CodebookType | null) => {
-      console.log('SelectLocationCombo setValue called with:', value)
-      console.log('formContext exists:', !!formContext)
-      console.log('locationField.name:', locationField.name)
-      formContext?.setValue(locationField.name, value)
+  const handleLocationSelect = useCallback(
+    (value: CodebookType | null) => {
+      if (formContext && locationField.name) {
+        formContext.setValue(locationField.name, value)
+      }
+      onSelect?.(value)
     },
-    [formContext, locationField.name]
+    [formContext, locationField.name, onSelect]
   )
+
   const handleOpenModal = () => {
-    openCodebookTreeModalGraphql({
-      onSelect: setValue,
-      manualFiltering: true,
-      enableFiltering: true,
-      name: locationField.name
-    })
+    openLocationModal(handleLocationSelect)
   }
 
   return (
