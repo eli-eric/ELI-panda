@@ -60,7 +60,7 @@ export const OrderLineActionButtons = ({
 }) => {
   const [openDeleteWarn, setOpenDeleteWarn] = useState(false)
   const { formatMessage: fm } = useIntl()
-  const { deleteOrderLine } = useOrderLine()
+  const { deleteOrderLine, setOrderLine } = useOrderLine()
   const { openOrderLineModal } = useOrderLineModal()
 
   const deleteButtons: ModalButtons = {
@@ -84,7 +84,9 @@ export const OrderLineActionButtons = ({
       <ButtonsWrapperNew position="right-1">
         <TableEditButton
           onClick={() => {
-            openOrderLineModal(orderLine)
+            openOrderLineModal(orderLine, data => {
+              setOrderLine(data)
+            })
           }}
         />
         <TableDeleteButton
