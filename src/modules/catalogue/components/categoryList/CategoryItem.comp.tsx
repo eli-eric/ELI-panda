@@ -30,7 +30,7 @@ const CategoryItemActions = ({ uid }: { uid: string }) => {
   if (!canEdit) return null
   return (
     <div className="flex items-center pl-2">
-      <div className="self-center h-6 w-px bg-muted mx-2" />
+      <div className="self-center h-6 w-px bg-muted mx-1" />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
@@ -69,15 +69,7 @@ export const CategoryItemComponent = ({
         'hover:shadow-lg hover:border-orange-500 border border-transparent',
         'bg-card dark:bg-gray-700 justify-center'
       )}
-      onClick={e => {
-        // Zabrání kliknutí na dropdown menu nebo jeho akce
-        const target = e.target as HTMLElement
-        if (
-          target.closest('.category-actions-trigger') ||
-          target.closest('.category-actions-menu')
-        ) {
-          return
-        }
+      onClick={() => {
         setCategoryFilter({ uid: category.uid, name: category.name })
       }}
       tabIndex={0}

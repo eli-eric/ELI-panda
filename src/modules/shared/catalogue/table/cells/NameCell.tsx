@@ -8,12 +8,12 @@ import { LinkDecorator } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
-import { useModal } from '@/hooks/useModal'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
 import { message } from '@/i18n/src/messages'
 import { useCatalogueItems } from '@/modules/catalogue/hooks/useCatalogueItems'
 import { CatalogueStatisticsContainer } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.cont'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { ROLE } from '@/types/constants/roles'
 import type { CatalogueItem } from '@/types/responses/catalogue'
 import { truncateString } from '@/utils'
@@ -39,9 +39,7 @@ export const NameCell = ({
   const { formatMessage } = useIntl()
   const { refetch, catalogueItems } = useCatalogueItems(tableId)
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
-  const setOpenStats = useModal(
-    <CatalogueStatisticsContainer catalogueItemUid={uid} />
-  )
+  const openModal = useModalGlobalStore(state => state.openModal)
   const withWarningModal = useWarningModal()
 
   const deleteSubmit = useSubmit({
@@ -99,9 +97,15 @@ export const NameCell = ({
           canEdit={canEdit}
         >
           <TableStatsButton
-            onClick={() => {
-              setOpenStats()()
-            }}
+            onClick={() =>
+              openModal('dialog1', {
+                component: CatalogueStatisticsContainer,
+                props: {
+                  catalogueItemUid: uid,
+                  title: 'Statistics: Physical Items Inventory'
+                }
+              })
+            }
           />
         </TableActionsButtons>
       )}

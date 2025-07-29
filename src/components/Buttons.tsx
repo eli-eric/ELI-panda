@@ -64,7 +64,11 @@ export const Button = ({
     size={size}
     disabled={loading || disabled}
     type={type}
-    className={cn(loading && 'opacity-50', 'cursor-pointer', className)}
+    className={cn(
+      loading && 'opacity-50',
+      'cursor-pointer hover:border-primary',
+      className
+    )}
     data-testid={testid}
     onClick={onClick}
     {...restProps}
