@@ -6,6 +6,7 @@ import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver'
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
+import { Tooltip } from '@/components/Tooltip'
 import { useFormFilter, useFormFilterState } from '@/hooks/form/useFormFilters'
 import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
 import { useFormControlStore } from '@/store/useFormControlStore'
@@ -117,13 +118,17 @@ export const SystemFilterButtonContainer = ({
 
   return (
     <Fragment>
-      <Button className="mr-1" onClick={() => setOpen(true)}>
-        {storeFilters.length > 0 ? (
-          <FunnelIconFull className="h-4 w-4" aria-hidden="true" />
-        ) : (
-          <FunnelIconEmpty className="h-4 w-4" aria-hidden="true" />
-        )}
-      </Button>
+      <Tooltip content={storeFilters.length > 0 ? "Filters Applied" : "Open Filters"}>
+        <div>
+          <Button size="sm" variant="outline" onClick={() => setOpen(true)}>
+            {storeFilters.length > 0 ? (
+              <FunnelIconFull className="h-4 w-4" aria-hidden="true" />
+            ) : (
+              <FunnelIconEmpty className="h-4 w-4" aria-hidden="true" />
+            )}
+          </Button>
+        </div>
+      </Tooltip>
       <SlideOver
         RenderSettings={
           <FilterSaveSettings

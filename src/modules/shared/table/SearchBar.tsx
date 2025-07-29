@@ -3,6 +3,7 @@ import { useQueryState } from 'next-usequerystate'
 import React, { useEffect, useRef, useState } from 'react'
 
 import { PlusButton, RefreshButton } from '@/components/Buttons'
+import { Tooltip } from '@/components/Tooltip'
 import usePermission from '@/hooks/usePermission'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { ROLE } from '@/types/constants/roles'
@@ -112,9 +113,19 @@ export const SearchBarButtonsComponent = ({
 }: SearchBarButtonsProps) => {
   const canEdit = usePermission([editRole])
   return (
-    <div className="flex">
-      <RefreshButton className="mr-1" onClick={handleRefresh} />
-      {canEdit && <PlusButton className="mr-1" onClick={handleAdd} />}
+    <div className="flex gap-1">
+      <Tooltip content="Refresh">
+        <div>
+          <RefreshButton onClick={handleRefresh} />
+        </div>
+      </Tooltip>
+      {canEdit && (
+        <Tooltip content="Add New">
+          <div>
+            <PlusButton onClick={handleAdd} />
+          </div>
+        </Tooltip>
+      )}
       {children}
     </div>
   )

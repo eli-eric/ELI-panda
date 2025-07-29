@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 
 import { StatsButton } from '@/components/Buttons'
+import { Tooltip } from '@/components/Tooltip'
 import { useModal } from '@/hooks/useModal'
 
 import { CatalogueStatisticsContainer } from './CatalogueStatistics.cont'
@@ -10,7 +11,9 @@ export const ModalStatisticsButtonLarge = () => {
 
   return (
     <Fragment>
-      <StatsButton className="mr-1" onClick={() => setOpenStats()()} />
+      <Tooltip content="Statistics">
+        <StatsButton onClick={() => setOpenStats()()} />
+      </Tooltip>
     </Fragment>
   )
 }

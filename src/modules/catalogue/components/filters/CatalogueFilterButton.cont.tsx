@@ -9,6 +9,7 @@ import { Button } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import type { SlideOverButtons } from '@/components/overlays/slideover/SlideOver'
 import { SlideOver } from '@/components/overlays/slideover/SlideOver'
+import { Tooltip } from '@/components/Tooltip'
 import { useFormFilterState } from '@/hooks/form/useFormFilters'
 import type { CatalogueItemForm } from '@/modules/catalogueItem/types/responses'
 import { FilterSaveSettings } from '@/modules/shared/filters/FilterSaveSettings'
@@ -93,13 +94,15 @@ export const CatalogueFilterButtonContainer = ({
 
   return (
     <Fragment>
-      <Button className="mr-1" onClick={() => setOpen(true)}>
-        {storeFilters.length > 0 || categoryQuery ? (
-          <FunnelIconFull className="h-4 w-4" aria-hidden="true" />
-        ) : (
-          <FunnelIconEmpty className="h-4 w-4" aria-hidden="true" />
-        )}
-      </Button>
+      <Tooltip content={storeFilters.length > 0 || categoryQuery ? 'Filters Applied' : 'Open Filters'}>
+        <Button size="sm" variant="outline" onClick={() => setOpen(true)}>
+          {storeFilters.length > 0 || categoryQuery ? (
+            <FunnelIconFull className="h-4 w-4" aria-hidden="true" />
+          ) : (
+            <FunnelIconEmpty className="h-4 w-4" aria-hidden="true" />
+          )}
+        </Button>
+      </Tooltip>
       <SlideOver
         RenderSettings={
           <FilterSaveSettings
