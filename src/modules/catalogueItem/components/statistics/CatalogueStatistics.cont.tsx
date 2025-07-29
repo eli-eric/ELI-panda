@@ -1,6 +1,3 @@
-import { Fragment } from 'react'
-
-import { Heading } from '@/components/layout/Heading'
 import { Table } from '@/components/ui/table'
 
 import { useItemsAggregate } from '../../hooks/useItemsAggregate'
@@ -17,19 +14,13 @@ export const CatalogueStatisticsContainer = ({
   const columns = useCatalogueStatisticsColumns(itemStatistics)
 
   return (
-    <Fragment>
-      <Heading
-        customText="Statistics: Physical Items Inventory"
-        showBorder={false}
-      />
-      <Table
-        data={itemStatistics || []}
-        emptyMessage="No statistics available"
-        columns={columns}
-        loading={loading}
-        enableFooter={true}
-        className="relative overflow-x-auto"
-      />
-    </Fragment>
+    <Table
+      data={itemStatistics || []}
+      emptyMessage="No statistics available"
+      columns={columns}
+      loading={loading}
+      enableFooter={true}
+      className="relative overflow-x-auto"
+    />
   )
 }

@@ -19,7 +19,7 @@ export const CategoryList = ({ setCategoryFilter }: CategoryListProps) => {
       {catalogueCategories?.length !== 0 && (
         <div
           className={cn(
-            'px-4 py-5 sm:p-6 bg-white dark:bg-gray-800',
+            'px-4 py-5 sm:p-6 bg-background',
             loading && 'opacity-75'
           )}
         >
