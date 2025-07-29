@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { PlusButton, RefreshButton } from '@/components/Buttons'
 import { Tooltip } from '@/components/Tooltip'
+import { Input } from '@/components/ui/input'
 import usePermission from '@/hooks/usePermission'
 import useTableStateStore from '@/store/useTableStateStore'
 import type { ROLE } from '@/types/constants/roles'
@@ -61,37 +62,31 @@ export const SearchBar = ({
   return (
     <div
       id="search-bar"
-      className="sticky top-0 z-10 flex h-16 shrink-0 bg-white dark:bg-gray-800 border-b"
+      className="sticky top-0 z-10 bg-background border-b px-4 py-2"
     >
-      <div className="flex flex-1 justify-between px-4">
-        {left && <div className="flex items-center mr-2">{left}</div>}
-        <div className="flex flex-1">
-          <div className="flex w-full md:ml-0">
-            <label htmlFor="search-field" className="sr-only">
-              Search...
-            </label>
-            <div className="relative w-full text-gray-400 focus-within:text-gray-600 dark:text-gray-200">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center">
-                <MagnifyingGlassIcon className="h-4 w-4" aria-hidden="true" />
-              </div>
-              <input
-                value={value || ''}
-                onChange={e => {
-                  setSearchValue(tableId, e.target.value)
-                }}
-                id="search-field"
-                className="block h-full w-full dark:bg-gray-800 border-transparent py-2 pl-8 pr-3 text-gray-900 dark:text-gray-200 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm"
-                placeholder="Search..."
-                type="search"
-                name="search"
-              />
-            </div>
+      <div className="flex items-center gap-4">
+        {left && (
+          <div className="flex items-center gap-2 flex-shrink-0">{left}</div>
+        )}
+
+        <div className="flex-1">
+          <div className="relative max-w-md">
+            <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              value={value || ''}
+              onChange={e => {
+                setSearchValue(tableId, e.target.value)
+              }}
+              placeholder="Search..."
+              className="pl-10"
+              type="search"
+              name="search"
+            />
           </div>
         </div>
+
         {right && (
-          <div className="hidden md:hidde lg:flex items-center mr-2">
-            {right}
-          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">{right}</div>
         )}
       </div>
     </div>
