@@ -77,7 +77,9 @@ export const OrderFilterButton = () => {
   }
   return (
     <Fragment>
-      <Tooltip content={storeFilters.length > 0 ? 'Filters Applied' : 'Open Filters'}>
+      <Tooltip
+        content={storeFilters.length > 0 ? 'Filters Applied' : 'Open Filters'}
+      >
         <Button size="sm" variant="outline" onClick={() => setOpen(true)}>
           {storeFilters.length > 0 ? (
             <FunnelIconFull className="h-4 w-4" aria-hidden="true" />
