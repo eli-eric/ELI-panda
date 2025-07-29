@@ -40,18 +40,26 @@ function Button({
   variant,
   size,
   asChild = false,
+  onClick,
   ...props
 }: React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
   }) {
   const Comp = asChild ? Slot : 'button'
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (onClick) {
+      e.stopPropagation()
+      onClick(e)
+    }
+  }
 
   return (
     <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
       {...(props as any)}
+      data-slot="button"
+      onClick={handleClick}
+      className={cn(buttonVariants({ variant, size, className }))}
     />
   )
 }
