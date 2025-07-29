@@ -118,7 +118,9 @@ export const SystemFilterButtonContainer = ({
 
   return (
     <Fragment>
-      <Tooltip content={storeFilters.length > 0 ? "Filters Applied" : "Open Filters"}>
+      <Tooltip
+        content={storeFilters.length > 0 ? 'Filters Applied' : 'Open Filters'}
+      >
         <div>
           <Button size="sm" variant="outline" onClick={() => setOpen(true)}>
             {storeFilters.length > 0 ? (

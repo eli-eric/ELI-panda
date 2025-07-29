@@ -94,7 +94,13 @@ export const CatalogueFilterButtonContainer = ({
 
   return (
     <Fragment>
-      <Tooltip content={storeFilters.length > 0 || categoryQuery ? 'Filters Applied' : 'Open Filters'}>
+      <Tooltip
+        content={
+          storeFilters.length > 0 || categoryQuery
+            ? 'Filters Applied'
+            : 'Open Filters'
+        }
+      >
         <Button size="sm" variant="outline" onClick={() => setOpen(true)}>
           {storeFilters.length > 0 || categoryQuery ? (
             <FunnelIconFull className="h-4 w-4" aria-hidden="true" />
