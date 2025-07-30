@@ -48,8 +48,9 @@ function Button({
   }) {
   const Comp = asChild ? Slot : 'button'
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
     if (onClick) {
-      e.stopPropagation()
+      e.preventDefault()
       onClick(e)
     }
   }

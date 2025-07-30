@@ -1,8 +1,6 @@
 import { Edit } from 'lucide-react'
 import type { FC } from 'react'
 
-import { Button } from '@/components/Buttons'
-
 import CategoryEditContainer from '../CategoryEdit.cont'
 
 interface EditCategoryProps {
@@ -10,6 +8,7 @@ interface EditCategoryProps {
   parentUID?: string
 }
 
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
 export function EditCategorySheetContent({
@@ -34,9 +33,9 @@ export const EditCategoryButton: FC<EditCategoryProps> = ({
   uid,
   parentUID
 }) => {
-  const openEditCategorySheet = () => {
+  const openEditCategorySheet = e => {
+    e.stopPropagation()
     if (typeof window === 'undefined') return // Prevent SSR execution
-
     const { openModal } = useModalGlobalStore.getState()
     openModal('sheet', {
       component: EditCategorySheetContent,
@@ -50,11 +49,15 @@ export const EditCategoryButton: FC<EditCategoryProps> = ({
   }
 
   return (
-    <Button variant="ghost" onClick={openEditCategorySheet}>
+    <DropdownMenuItem
+      onClick={openEditCategorySheet}
+      className="flex items-center gap-2 w-full text-left"
+    >
       <Edit
         className="h-4 w-4 transform transition-transform hover:scale-110 duration-300"
         aria-hidden="true"
       />
-    </Button>
+      <span className="ml-2">Edit Category</span>
+    </DropdownMenuItem>
   )
 }
