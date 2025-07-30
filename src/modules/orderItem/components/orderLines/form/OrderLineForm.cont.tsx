@@ -40,14 +40,12 @@ const OrderLineModalContent = ({
     undefined
   )
   const { closeModal } = useModalGlobalStore()
-
   const modalSubmit = (data: OrderLineFormType) => {
     // Call the onSave callback if provided
     onSave?.(data)
     formMethods.reset(defaultValues)
     closeModal('dialog1')
   }
-
   const defaultValues = useMemo(
     () =>
       orderLine
@@ -60,7 +58,6 @@ const OrderLineModalContent = ({
           },
     [orderLine]
   )
-
   const formMethods = useForm<OrderLineFormType>({
     defaultValues: defaultValues,
     resolver: yupResolver(orderLineFormSchema) as any
@@ -70,7 +67,6 @@ const OrderLineModalContent = ({
   const handleCatalogueItemSelect = useCallback(
     (item: CatalogueItem | undefined) => {
       setCatalogueItem(item)
-
       if (item) {
         // Directly set form values when item is selected
         formMethods.setValue('name', item.name || '')
@@ -105,43 +101,17 @@ const OrderLineModalContent = ({
     [handleCatalogueItemSelect, formMethods]
   )
 
-  // const modalSubmit = (data: OrderLineFormType) => {
-  //   const dataToSend = { ...data }
-  //   if (!dataToSend.price) {
-  //     delete dataToSend.currency
-  //     delete dataToSend.price
-  //   }
-  //   delete dataToSend.quantity
-  //   delete dataToSend.serialNumbers
-  //   if (data.quantity) {
-  //     for (let i = 0; i < data.quantity; i++) {
-  //       setOrderLine({
-  //         ...dataToSend,
-  //         serialNumber: `${i + 1}`
-  //       })
-  //     }
-  //   } else if (data.serialNumbers) {
-  //     const serialNumbers = data.serialNumbers.split(',')
-  //     serialNumbers.forEach(serialNumber => {
-  //       setOrderLine({
-  //         ...dataToSend,
-  //         serialNumber: serialNumber.trim()
-  //       })
-  //     })
-  //   } else setOrderLine(dataToSend)
-  //   formMethods.reset(defaultValues)
-  //   closeModal('dialog1')
-  // }
-
   return (
     <div className="space-y-6 min-w-0 max-w-none w-full">
       {/* Catalogue Table Select */}
-      <div>
-        <CatalogueTableSelect
-          setItem={setItemWrapper}
-          selectedItem={catalogueItem}
-        />
-      </div>
+      {!orderLine && (
+        <div>
+          <CatalogueTableSelect
+            setItem={setItemWrapper}
+            selectedItem={catalogueItem}
+          />
+        </div>
+      )}
 
       {/* Form */}
       <Form

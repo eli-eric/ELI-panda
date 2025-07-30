@@ -1,9 +1,5 @@
-import {
-  Input,
-  InputAmount,
-  InputCurrency,
-  TextArea
-} from '@/components/form/inputs'
+import { Input, TextArea } from '@/components/form/inputs'
+import { InputAmountCurrency } from '@/components/form/inputs/components/InputAmountCurrency.comp'
 import Listbox from '@/components/form/Listbox'
 import { useToggle } from '@/components/form/Switch'
 import { Col, Grid } from '@/components/grid/Grid'
@@ -50,9 +46,12 @@ export const OrderLineFormComponent = ({
         <Input {...formFields.catalogueNumber} />
       </Col>
       <Col lg={!orderLine?.uuid || orderLine?.uid ? 4 : 6} md={6}>
-        <InputAmount {...formFields.price}>
-          <InputCurrency {...formFields.currency} />
-        </InputAmount>
+        <InputAmountCurrency
+          amountName={formFields.price.name}
+          currencyName={formFields.currency.name}
+          label={formFields.price.label}
+          required={formFields.price.required}
+        />
       </Col>
       <Col lg={!orderLine?.uuid || orderLine?.uid ? 4 : 6} md={6}>
         <Listbox {...formFields.itemUsage} position="top" />
