@@ -1,15 +1,13 @@
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
-import { PlusButton } from '@/components/Buttons'
 import { Heading } from '@/components/layout/Heading'
 import { Table } from '@/components/ui/table/table'
 import { message } from '@/i18n/src/messages'
-import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 
 import type { ServiceLine } from '../../types/form'
-import { ServiceLineWizard } from './form/service-line.wizz'
 import { useServiceLinesColumns } from './service-lines.columns'
+import { ServiceLinesAddButton } from './service-lines-add-button'
 
 const messages = message.ordersPage.serviceLines
 
@@ -34,33 +32,11 @@ export const ServiceLinesContainer = ({
 
   // Memoize columns to prevent unnecessary re-renders
   const serviceLinesColumns = useServiceLinesColumns()
-  const { openModal, closeModal } = useModalGlobalStore()
-
-  // Use useCallback for handleAddServiceLine
-  const handleAddServiceLine = useCallback(() => {
-    openModal('dialog1', {
-      component: () => (
-        <ServiceLineWizard setOpen={() => closeModal('dialog1')} />
-      ),
-      props: {
-        title: 'Add Service Line',
-        size: 'xl'
-      }
-    })
-  }, [openModal, closeModal])
 
   return (
     <div className="pt-4">
       <Heading text={messages.header} showBorder={false}>
-        {!disabledEdit && (
-          <div className="flex items-center mr-2">
-            <PlusButton
-              type="button"
-              onClick={handleAddServiceLine}
-              className="mb-2"
-            />
-          </div>
-        )}
+        {!disabledEdit && <ServiceLinesAddButton />}
       </Heading>
       <Table<ServiceLine>
         {...{
