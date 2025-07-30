@@ -2,7 +2,7 @@ import type { ColumnFiltersState } from '@tanstack/react-table'
 import { useCallback, useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 
-import { InputAmount, InputCurrency } from '@/components/form/inputs'
+import { InputAmountCurrency } from '@/components/form/inputs/components/InputAmountCurrency.comp'
 import Listbox from '@/components/form/Listbox'
 import { message } from '@/i18n/src/messages'
 import type { ServiceLineFormType } from '@/modules/orderItem/types/form'
@@ -89,9 +89,12 @@ export const useServiceLineSteps = () => {
 
   const priceComponent = useMemo(() => {
     return (
-      <InputAmount {...fields.price}>
-        <InputCurrency {...fields.currency} />
-      </InputAmount>
+      <InputAmountCurrency
+        amountName={fields.price.name}
+        currencyName={fields.currency.name}
+        label={fields.price.label}
+        required={fields.price.required}
+      />
     )
   }, [fields.price, fields.currency])
 
