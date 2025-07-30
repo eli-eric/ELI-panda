@@ -34,7 +34,6 @@ export const useServiceLineSteps = () => {
   // Memoizujeme filtr pro kategorii, aby nedocházelo k zbytečným re-renderům
   const categoryFilters = useMemo(() => {
     if (!data?.category) return null
-
     return [
       {
         id: 'category',
