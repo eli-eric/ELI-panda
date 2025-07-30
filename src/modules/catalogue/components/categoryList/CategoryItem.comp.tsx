@@ -1,23 +1,33 @@
+import { useMutation } from '@tanstack/react-query'
 import { MoreVertical } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import usePermission from '@/hooks/usePermission'
+import useWarningModal from '@/hooks/useWarningModal'
 import { cn } from '@/lib/utils'
+import { useCategoryUid } from '@/modules/catalogue/hooks/useCategoryUid'
+import { useModalGlobalStore } from '@/store/useModalGlobalStore'
 import { FALLBACK_IMAGE } from '@/types/constants/general'
 import { ROLE } from '@/types/constants/roles'
 import type { GetCategoriesQuery } from '@/types/gql/graphql'
 import type { CodebookType } from '@/types/responses/codebook'
+import { queryMutate } from '@/utils/fetcher'
 
+import { useCategoryList } from '../../hooks/useCategoryList'
 import { CopyCategoryButton } from '../categoryEdit/components/CopyCategoryButton'
 import { DeleteCategoryButton } from '../categoryEdit/components/DeleteCategoryButton'
-import { EditCategoryButton } from '../categoryEdit/components/EditCategoryButton'
+import {
+  EditCategoryButton,
+  EditCategorySheetContent
+} from '../categoryEdit/components/EditCategoryButton'
 
 interface Props {
   category: GetCategoriesQuery['catalogueCategories'][0]
@@ -27,30 +37,76 @@ interface Props {
 // Akční menu vpravo
 const CategoryItemActions = ({ uid }: { uid: string }) => {
   const canEdit = usePermission([ROLE.CATALOGUE_EDIT])
+  const { refetch } = useCategoryList()
+
+  const { mutate } = useMutation({
+    mutationFn: queryMutate('catalogueCategoryEdit', 'delete', uid),
+    onSuccess: () => {
+      refetch()
+      toast.success('Category deleted successfully')
+    }
+  })
+  const withWarningModal = useWarningModal()
+
+  const handleDelete = e => {
+    e.stopPropagation()
+    withWarningModal(
+      mutate,
+      'Are you sure you want to remove this Category?'
+    )({})
+  }
+
+  const parentUID = useCategoryUid()
+
+  const { mutate: copyCategory } = useMutation({
+    mutationFn: queryMutate<string, undefined>(
+      'catalogueCategoryCopy',
+      'post',
+      uid
+    ),
+
+    onSuccess: ({ data }) => {
+      const { openModal } = useModalGlobalStore.getState()
+      openModal('sheet', {
+        component: EditCategorySheetContent,
+        props: {
+          uid: data,
+          parentUID,
+          title: 'Edit Copied Category'
+        },
+        onClose: undefined
+      })
+      refetch()
+    }
+  })
+
+  const handleCopyCategory = e => {
+    e.stopPropagation()
+    withWarningModal(
+      copyCategory,
+      'Are you sure you want to copy this Category?'
+    )(undefined)
+  }
+
   if (!canEdit) return null
   return (
     <div className="flex items-center pl-2">
       <div className="self-center h-6 w-px bg-muted mx-1" />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button
-            className="p-1 rounded hover:bg-muted focus:outline-none focus:ring-2 focus:ring-orange-500"
+          <Button
             aria-label="Category actions"
+            variant="ghost"
             tabIndex={0}
+            className="has-[>svg]:px-1 cursor-pointer"
           >
-            <MoreVertical className="h-4 w-4 text-muted-foreground" />
-          </button>
+            <MoreVertical className="size-4 text-muted-foreground" />
+          </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" sideOffset={4}>
-          <DropdownMenuItem asChild>
-            <EditCategoryButton uid={uid} />
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <CopyCategoryButton uid={uid} />
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild className="text-red-600 focus:text-red-700">
-            <DeleteCategoryButton uid={uid} />
-          </DropdownMenuItem>
+          <EditCategoryButton uid={uid} />
+          <CopyCategoryButton handleCopyCategory={handleCopyCategory} />
+          <DeleteCategoryButton handleDelete={handleDelete} />
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
@@ -66,11 +122,15 @@ export const CategoryItemComponent = ({
     <Card
       className={cn(
         'group relative flex items-center px-2 py-1 gap-2 rounded-md cursor-pointer transition-all min-h-[44px]',
-        'hover:shadow-lg hover:border-orange-500 border border-transparent',
-        'bg-card dark:bg-gray-700 justify-center'
+        'hover:shadow-lg hover:border-orange-500 border border-transparent justify-center'
       )}
-      onClick={() => {
-        setCategoryFilter({ uid: category.uid, name: category.name })
+      onClick={e => {
+        if (
+          !(e.target instanceof HTMLElement) ||
+          !['BUTTON'].includes(e.target.tagName)
+        ) {
+          setCategoryFilter({ uid: category.uid, name: category.name })
+        }
       }}
       tabIndex={0}
       role="button"

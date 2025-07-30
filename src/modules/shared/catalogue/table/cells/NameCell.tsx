@@ -1,11 +1,17 @@
 import type { CellContext } from '@tanstack/react-table'
+import { MoreVertical } from 'lucide-react'
 import Link from 'next/link'
 import { toast } from 'react-hot-toast'
 import { useIntl } from 'react-intl'
 
-import { TableActionsButtons, TableStatsButton } from '@/components/Buttons'
-import { LinkDecorator } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import usePermission from '@/hooks/usePermission'
@@ -35,6 +41,37 @@ export const NameCell = ({
   hideButtons,
   tableId
 }: NameProps) => {
+  return (
+    <div className="flex items-center justify-between w-full flex-row-reverse">
+      {!hideButtons && (
+        <CellActionDropdown tableId={tableId} uid={uid} value={getValue()} />
+      )}
+      <div className="flex-1 min-w-0 flex items-center justify-start">
+        <Tooltip content={getValue()}>
+          <Link
+            href={{ pathname: '/catalogue/item/' + uid }}
+            target={tableId === 'catalogueItemsModal' ? '_blank' : undefined}
+            className="flex items-center"
+          >
+            <Button variant={'link'} className="cursor-pointer">
+              {truncateString(getValue(), 50)}
+            </Button>
+          </Link>
+        </Tooltip>
+      </div>
+    </div>
+  )
+}
+
+const CellActionDropdown = ({
+  tableId,
+  uid,
+  value
+}: {
+  tableId?: string
+  uid: string
+  value: string
+}) => {
   const { catalogueItem } = useEndpoint({ uid })
   const { formatMessage } = useIntl()
   const { refetch, catalogueItems } = useCatalogueItems(tableId)
@@ -47,57 +84,33 @@ export const NameCell = ({
     method: 'delete',
     onSuccess: () => {
       catalogueItems && refetch()
+      toast.success('Successfully deleted ' + value)
     },
     onError: e => {
       if (e?.response?.status === 409) {
-        toast.error(
-          `Can't delete ${getValue()}, it is binded in another items.`
-        )
+        toast.error(`Can't delete ${value}, it is binded in another items.`)
       } else {
-        toast.error(`Error deleting ${getValue()}.`)
+        toast.error(`Error deleting ${value}.`)
       }
     }
   })
 
   return (
-    <div className="flex items-center">
-      <Tooltip content={getValue()}>
-        {tableId === 'catalogueItemsModal' ? (
-          <Link
-            href={{ pathname: '/catalogue/item/' + uid }}
-            target="_blank"
-            className="flex items-center"
+    <div className="flex items-center pl-2">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            aria-label="Item actions"
+            variant="ghost"
+            tabIndex={0}
+            className="has-[>svg]:px-1 cursor-pointer"
           >
-            <LinkDecorator>
-              <span>{truncateString(getValue(), 60)}</span>
-            </LinkDecorator>
-          </Link>
-        ) : (
-          <Link
-            href={{ pathname: '/catalogue/item/' + uid }}
-            className="flex items-center"
-          >
-            <LinkDecorator>
-              <span>{truncateString(getValue(), 50)}</span>
-            </LinkDecorator>
-          </Link>
-        )}
-      </Tooltip>
-      {!hideButtons && (
-        <TableActionsButtons
-          onDeleteClick={() => {
-            withWarningModal(
-              () => deleteSubmit.submit(),
-              formatMessage(
-                { id: modalMessage.message },
-                createMessageValues({ name: getValue() })
-              )
-            )()
-          }}
-          canEdit={canEdit}
-        >
-          <TableStatsButton
-            onClick={() =>
+            <MoreVertical className="size-4 text-muted-foreground" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" sideOffset={4}>
+          <DropdownMenuItem
+            onClick={() => {
               openModal('dialog1', {
                 component: CatalogueStatisticsContainer,
                 props: {
@@ -105,10 +118,28 @@ export const NameCell = ({
                   title: 'Statistics: Physical Items Inventory'
                 }
               })
-            }
-          />
-        </TableActionsButtons>
-      )}
+            }}
+          >
+            Show Statistics
+          </DropdownMenuItem>
+          {canEdit && (
+            <DropdownMenuItem
+              onClick={() => {
+                withWarningModal(
+                  () => deleteSubmit.submit(),
+                  formatMessage(
+                    { id: modalMessage.message },
+                    createMessageValues({ name: value })
+                  )
+                )()
+              }}
+              className="text-destructive"
+            >
+              Delete Item
+            </DropdownMenuItem>
+          )}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   )
 }
