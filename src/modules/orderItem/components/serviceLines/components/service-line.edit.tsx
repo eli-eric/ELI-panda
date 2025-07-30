@@ -1,14 +1,10 @@
 import { sortBy } from 'lodash'
 import { useForm } from 'react-hook-form'
 
-import { TableEditButton } from '@/components/Buttons'
+import { Button, TableEditButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
-import {
-  Input,
-  InputAmount,
-  InputCurrency,
-  TextArea
-} from '@/components/form/inputs'
+import { Input, TextArea } from '@/components/form/inputs'
+import { InputAmountCurrency } from '@/components/form/inputs/components/InputAmountCurrency.comp'
 import Listbox from '@/components/form/Listbox'
 import { Col, Grid } from '@/components/grid/Grid'
 import type { CatalogueItemDetail } from '@/modules/catalogueItem/types/responses'
@@ -40,7 +36,7 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
 
   const openEditModal = () => {
     openModal('dialog1', {
-      component: () => (
+      component: ({ onSubmit }) => (
         <Form formMethods={formMethods}>
           <>
             <Grid>
@@ -51,9 +47,11 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
                 <Listbox {...fields.serviceType} disabled />
               </Col>
               <Col md={4} sm={12}>
-                <InputAmount {...fields.price}>
-                  <InputCurrency {...fields.currency} />
-                </InputAmount>
+                <InputAmountCurrency
+                  amountName={fields.price.name}
+                  label={fields.price.name}
+                  currencyName={fields.currency.name}
+                />
               </Col>
               <Col sm={12}>
                 <TextArea {...fields.notes} />
@@ -61,6 +59,21 @@ export const ServiceLineEdit = ({ serviceLine }: Props) => {
             </Grid>
             <DetailPropertiesList groupMap={detailsMap} disabled={false} />
           </>
+          <div className="flex justify-end gap-2 pt-4 border-t">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                formMethods.reset()
+                closeModal('dialog1')
+              }}
+            >
+              Cancel
+            </Button>
+            <Button type="button" onClick={onSubmit}>
+              Update Service Line
+            </Button>
+          </div>
         </Form>
       ),
       props: {
