@@ -1,8 +1,15 @@
+import { MoreVertical, Trash2 } from 'lucide-react'
 import { Fragment, useState } from 'react'
 import { useIntl } from 'react-intl'
 
-import { TableActionsButtons } from '@/components/Buttons'
 import WarningModal from '@/components/overlays/modal/warning/modal-warning.comp'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import { useEndpoint } from '@/hooks/fetch/useEndpoint'
 import { useSubmit } from '@/hooks/fetch/useSubmit'
 import usePermission from '@/hooks/usePermission'
@@ -55,14 +62,33 @@ export const TableActions = ({ order }: Props) => {
     }
   }
 
+  if (!canEdit) {
+    return null
+  }
+
   return (
     <Fragment>
-      <TableActionsButtons
-        onDeleteClick={() => {
-          setOpenDeleteWarn(true)
-        }}
-        canEdit={canEdit}
-      />
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            aria-label="Order actions"
+            className="h-8 w-8 p-0"
+          >
+            <MoreVertical className="h-4 w-4 text-muted-foreground" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" sideOffset={4}>
+          <DropdownMenuItem
+            onClick={() => setOpenDeleteWarn(true)}
+            className="cursor-pointer text-destructive focus:text-destructive"
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            Delete Order
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       <WarningModal
         buttons={deleteButtons}
         open={openDeleteWarn}

@@ -4,29 +4,41 @@ import Link from 'next/link'
 import { Fragment, useMemo } from 'react'
 import { FormattedDate, useIntl } from 'react-intl'
 
-import { LinkDecorator } from '@/components/decorators'
 import { Tooltip } from '@/components/Tooltip'
+import { Button } from '@/components/ui/button'
 import { message } from '@/i18n/src/messages'
+import { truncateString } from '@/lib/utils'
 import { PATH } from '@/types/constants/paths'
 import type { Order } from '@/types/responses/orders'
 
 import { DeliveryStatusMapping } from '../types'
-import { NameCell } from './cells/NameCell'
+import TableActions from './TableActions'
 
 const messages = message.ordersPage.ordersTable.header
 
 const LinkNameCell = ({
   getValue,
-  row: { original }
-}: CellContext<Order, any>) => (
-  <div className="flex items-center">
-    <Link href={PATH.ORDER + '/' + original.uid} legacyBehavior>
-      <a target={'_blank'} rel="noreferrer">
-        <LinkDecorator>
-          <span>{getValue()}</span>
-        </LinkDecorator>
-      </a>
-    </Link>
+  row: { original },
+  isReadOnly
+}: CellContext<Order, any> & { isReadOnly: boolean }) => (
+  <div className="flex items-center w-full">
+    <div className="flex items-center flex-1 min-w-0">
+      <Button variant={'link'} className="cursor-pointer text-ellipsis">
+        <Tooltip content={getValue()}>
+          <Link
+            href={PATH.ORDER + '/' + original.uid}
+            className="flex items-center cursor-pointer text-ellipsis"
+          >
+            {truncateString(getValue(), 50)}
+          </Link>
+        </Tooltip>
+      </Button>
+    </div>
+    {!isReadOnly && (
+      <div className="flex-shrink-0 ml-2">
+        <TableActions order={original} />
+      </div>
+    )}
   </div>
 )
 
@@ -43,9 +55,9 @@ export const useOrderColumns = ({ isReadOnly }: Props) => {
         id: 'name',
         header: intl.formatMessage({ id: messages.name }),
         accessorKey: 'name',
-        cell: isReadOnly ? LinkNameCell : NameCell,
-        size: 300,
-        meta: { sticky: true, className: 'sm:pr-8' },
+        cell: props => <LinkNameCell {...props} isReadOnly={isReadOnly} />,
+        size: 440,
+        meta: { sticky: true },
         enableHiding: false
       },
       {

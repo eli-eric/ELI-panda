@@ -95,10 +95,7 @@ export const useSystemsColumns = ({
         accessorFn: row => row.name,
         id: 'name',
         size: tableId === 'systemsItem' ? 400 : 480,
-        meta:
-          tableId === 'systemsItem'
-            ? { sticky: true }
-            : { sticky: true, className: 'sm:pr-[70px]' },
+        meta: tableId === 'systemsItem' ? { sticky: true } : { sticky: true },
         enableHiding: false,
         cell: props => (
           <SystemNameCell
