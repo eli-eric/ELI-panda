@@ -3,7 +3,7 @@ import {
   type RefetchOptions,
   useMutation
 } from '@tanstack/react-query'
-import { Edit, Trash2 } from 'lucide-react'
+import { Edit, MoreVertical, Trash2 } from 'lucide-react'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -11,6 +11,12 @@ import toast from 'react-hot-toast'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import axiosInstance from '@/core/axios/axiosInstance'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
@@ -137,29 +143,43 @@ export const SystemTypeGroup: FC<Props> = ({
     >
       <span className="truncate pr-2">{systemTypeGroup.name}</span>
       {canEdit && (
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0"
-            onClick={e => {
-              e.stopPropagation()
-              openEditSystemTypeGroupModal(systemTypeGroup, refetch)
-            }}
-          >
-            <Edit className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-            onClick={e => {
-              e.stopPropagation()
-              withWarningModal(() => {})()
-            }}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+        <div className="flex items-center pl-2">
+          <div className="self-center h-6 w-px bg-muted mx-1" />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                aria-label="Group actions"
+                className="h-8 w-8 p-0"
+                onClick={e => e.stopPropagation()}
+              >
+                <MoreVertical className="h-4 w-4 text-muted-foreground" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" sideOffset={4}>
+              <DropdownMenuItem
+                onClick={e => {
+                  e.stopPropagation()
+                  openEditSystemTypeGroupModal(systemTypeGroup, refetch)
+                }}
+                className="cursor-pointer"
+              >
+                <Edit className="h-4 w-4 mr-2" />
+                Edit Group
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={e => {
+                  e.stopPropagation()
+                  withWarningModal(() => {})()
+                }}
+                className="cursor-pointer text-destructive focus:text-destructive"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete Group
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       )}
     </div>
