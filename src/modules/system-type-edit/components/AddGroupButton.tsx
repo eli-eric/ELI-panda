@@ -4,7 +4,7 @@ import type { FC } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-import { PlusButton } from '@/components/Buttons'
+import { Plus } from 'lucide-react'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
 import { Button } from '@/components/ui/button'
@@ -90,9 +90,15 @@ export const AddGroupButton: FC<Props> = ({ refetch }) => {
   const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
 
   return (
-    <PlusButton
+    <Button
+      variant="outline"
+      size="sm"
       disabled={!canEdit}
       onClick={() => openAddGroupModal(refetch)}
-    />
+      className="gap-2"
+    >
+      <Plus className="h-4 w-4" />
+      Add Group
+    </Button>
   )
 }

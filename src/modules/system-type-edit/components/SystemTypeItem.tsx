@@ -7,7 +7,7 @@ import { type FC, Fragment } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-import { DeleteButton, EditButton } from '@/components/Buttons'
+import { Edit, Trash2 } from 'lucide-react'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
@@ -172,29 +172,41 @@ export const SystemTypeItem: FC<Props> = ({
   })
 
   return (
-    <Fragment>
-      <li
-        className={cn(
-          'py-2 px-4 flex justify-between',
-          'cursor-pointer rounded-md',
-          'hover:bg-orange-100 dark:hover:bg-orange-400',
-          'dark:text-gray-200'
+    <div
+      className={cn(
+        'group p-3 rounded-lg transition-all duration-200',
+        'border border-transparent hover:border-border hover:bg-accent/50',
+        'flex items-center justify-between'
+      )}
+    >
+      <div className="min-w-0 flex-1">
+        <div className="truncate font-medium">{systemType.name}</div>
+        {systemType.code && (
+          <div className="text-sm text-muted-foreground">{systemType.code}</div>
         )}
-        key={systemType.uid}
-      >
-        {systemType.name}
-        <div>
-          <EditButton
-            className="mr-2"
-            onClick={() => {
-              openEditSystemTypeModal(systemType, groupUid, refetch)
-            }}
-          />
-          {canEdit && (
-            <DeleteButton onClick={() => withWarningModal(deleteType)()} />
-          )}
-        </div>
-      </li>
-    </Fragment>
+      </div>
+      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-8 w-8 p-0"
+          onClick={() => {
+            openEditSystemTypeModal(systemType, groupUid, refetch)
+          }}
+        >
+          <Edit className="h-4 w-4" />
+        </Button>
+        {canEdit && (
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+            onClick={() => withWarningModal(deleteType)()}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        )}
+      </div>
+    </div>
   )
 }

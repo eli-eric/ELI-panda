@@ -4,7 +4,7 @@ import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-import { PlusButton } from '@/components/Buttons'
+import { Plus } from 'lucide-react'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
@@ -117,11 +117,17 @@ export const AddSystemTypeButton: FC<Props> = ({ selectedGroup, refetch }) => {
   const canEdit = usePermission([ROLE.SYSTEM_TYPE_EDIT])
 
   return (
-    <PlusButton
+    <Button
+      variant="outline"
+      size="sm"
       disabled={!selectedGroup || !canEdit}
       onClick={() =>
         selectedGroup && openAddSystemTypeModal(selectedGroup, refetch)
       }
-    />
+      className="gap-2"
+    >
+      <Plus className="h-4 w-4" />
+      Add Type
+    </Button>
   )
 }
