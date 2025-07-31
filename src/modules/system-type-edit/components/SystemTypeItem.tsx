@@ -3,15 +3,21 @@ import {
   type RefetchOptions,
   useMutation
 } from '@tanstack/react-query'
-import { type FC, Fragment } from 'react'
+import { Edit, MoreVertical, Trash2 } from 'lucide-react'
+import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-import { Edit, Trash2 } from 'lucide-react'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
 import Listbox from '@/components/form/Listbox'
 import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import axiosInstance from '@/core/axios/axiosInstance'
 import usePermission from '@/hooks/usePermission'
 import useWarningModal from '@/hooks/useWarningModal'
@@ -185,27 +191,40 @@ export const SystemTypeItem: FC<Props> = ({
           <div className="text-sm text-muted-foreground">{systemType.code}</div>
         )}
       </div>
-      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-8 w-8 p-0"
-          onClick={() => {
-            openEditSystemTypeModal(systemType, groupUid, refetch)
-          }}
-        >
-          <Edit className="h-4 w-4" />
-        </Button>
-        {canEdit && (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0 text-destructive hover:text-destructive"
-            onClick={() => withWarningModal(deleteType)()}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        )}
+      <div className="flex items-center pl-2">
+        <div className="self-center h-6 w-px bg-muted mx-1" />
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="sm"
+              aria-label="System type actions"
+              className="h-8 w-8 p-0"
+            >
+              <MoreVertical className="h-4 w-4 text-muted-foreground" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" sideOffset={4}>
+            <DropdownMenuItem
+              onClick={() => {
+                openEditSystemTypeModal(systemType, groupUid, refetch)
+              }}
+              className="cursor-pointer"
+            >
+              <Edit className="h-4 w-4 mr-2" />
+              Edit Type
+            </DropdownMenuItem>
+            {canEdit && (
+              <DropdownMenuItem
+                onClick={() => withWarningModal(deleteType)()}
+                className="cursor-pointer text-destructive focus:text-destructive"
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete Type
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   )
