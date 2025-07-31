@@ -39,11 +39,11 @@ export default function PaginationComponent({
     <nav
       data-testid="paging"
       id="paging"
-      className="flex items-center justify-between border-t border-gray-200 bg-white dark:bg-gray-900 px-3 py-2 sm:px-6 sticky bottom-0 z-10"
+      className="flex items-center justify-between border-t border-border bg-background px-3 py-2 sm:px-6 sticky bottom-0 z-10"
       aria-label="Pagination"
     >
       <div className="hidden sm:block pr-2">
-        <p className="text-sm text-gray-700 dark:text-gray-200">
+        <p className="text-sm text-muted-foreground">
           <FormattedMessage
             id={text}
             values={createMessageValues({

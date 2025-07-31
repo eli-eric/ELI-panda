@@ -1,7 +1,13 @@
-import { Menu, MenuButton, MenuItems, Transition } from '@headlessui/react'
-import { FunnelIcon } from '@heroicons/react/24/outline'
-import React, { Fragment, useEffect, useState } from 'react'
+import { Filter } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
 
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
+import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 
 interface FilterDropdownProps {
@@ -51,91 +57,62 @@ export function FilterDropdown({
   }
 
   return (
-    <div className="relative inline-block text-left">
-      {/* We need this wrapper to prevent any conflicts with table sorting */}
-      <Menu>
-        {({ open }) => (
-          <>
-            <MenuButton
-              className={cn(
-                'inline-flex items-center justify-center p-1 rounded-md',
-                'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500',
-                currentFilter
-                  ? 'text-orange-500'
-                  : 'text-gray-400 hover:text-gray-500'
-              )}
-              aria-label="Filter"
-              title="Filter"
-              onClick={handleButtonClick}
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="sm"
+          className={cn(
+            'h-8 w-8 p-0',
+            currentFilter
+              ? 'text-primary'
+              : 'text-muted-foreground hover:text-foreground'
+          )}
+          aria-label="Filter"
+          title="Filter"
+          onClick={handleButtonClick}
+        >
+          <Filter className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <div className="px-3 py-2">
+          <p className="text-sm font-medium text-foreground mb-2">
+            Filter {column.columnDef.header}
+          </p>
+          <Input
+            type="text"
+            placeholder="Filter value..."
+            value={filterValue}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            onClick={handleButtonClick}
+            autoFocus
+            className="mb-3"
+          />
+          <div className="flex justify-between gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={e => {
+                e.stopPropagation()
+                clearFilter()
+              }}
             >
-              <FunnelIcon className="w-4 h-4" aria-hidden="true" />
-            </MenuButton>
-
-            {open && (
-              <div
-                className="fixed inset-0 z-20"
-                aria-hidden="true"
-                onClick={handleButtonClick}
-              />
-            )}
-
-            <Transition
-              as={Fragment}
-              enter="transition ease-out duration-100"
-              enterFrom="transform opacity-0 scale-95"
-              enterTo="transform opacity-100 scale-100"
-              leave="transition ease-in duration-75"
-              leaveFrom="transform opacity-100 scale-100"
-              leaveTo="transform opacity-0 scale-95"
+              Clear
+            </Button>
+            <Button
+              size="sm"
+              onClick={e => {
+                e.stopPropagation()
+                applyFilter()
+              }}
             >
-              <MenuItems
-                anchor="bottom end"
-                className="bg-gray-50 dark:bg-gray-900 rounded-md shadow-lg shadow-gray-400 dark:shadow-black"
-              >
-                <div className="px-4 py-3">
-                  <p className="text-sm font-medium text-gray-900 dark:text-gray-200">
-                    Filter {column.columnDef.header}
-                  </p>
-                  <div className="mt-2">
-                    <input
-                      type="text"
-                      className="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm placeholder-gray-400 shadow-sm focus:border-orange-500 focus:outline-none focus:ring-1 focus:ring-orange-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500"
-                      placeholder="Filter value..."
-                      value={filterValue}
-                      onChange={handleInputChange}
-                      onKeyDown={handleKeyDown}
-                      onClick={handleButtonClick}
-                      autoFocus
-                    />
-                  </div>
-                  <div className="mt-3 flex justify-between">
-                    <button
-                      type="button"
-                      className="inline-flex items-center rounded-md border border-gray-300 bg-white px-2.5 py-1.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
-                      onClick={e => {
-                        e.stopPropagation()
-                        clearFilter()
-                      }}
-                    >
-                      Clear
-                    </button>
-                    <button
-                      type="button"
-                      className="inline-flex items-center rounded-md border border-transparent bg-orange-600 px-2.5 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 dark:bg-orange-700 dark:hover:bg-orange-800"
-                      onClick={e => {
-                        e.stopPropagation()
-                        applyFilter()
-                      }}
-                    >
-                      Apply
-                    </button>
-                  </div>
-                </div>
-              </MenuItems>
-            </Transition>
-          </>
-        )}
-      </Menu>
-    </div>
+              Apply
+            </Button>
+          </div>
+        </div>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

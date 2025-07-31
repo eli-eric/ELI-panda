@@ -28,10 +28,10 @@ export function TableBody<T extends object>({
           <tr
             key={`skeleton-row-${rowIndex}`}
             className={cn(
-              'border-b border-gray-200 dark:border-gray-700 last:border-0',
+              'border-b border-border last:border-0',
               rowIndex % 2 === 0
-                ? 'bg-white dark:bg-gray-900'
-                : 'bg-gray-50 dark:bg-gray-800',
+                ? 'bg-background'
+                : 'bg-muted/50',
               rowClassName
             )}
           >
@@ -59,14 +59,14 @@ export function TableBody<T extends object>({
                   {colIndex !== columns.length - 1 ? (
                     <div className="animate-pulse">
                       <div
-                        className="h-6 bg-blue-200 dark:bg-blue-700 rounded-md"
+                        className="h-6 bg-primary/20 rounded-md"
                         style={{ width: colIndex === 0 ? '70%' : '85%' }}
                       ></div>
                     </div>
                   ) : (
                     /* For the last column (status), show a badge-like skeleton */
                     <div className="animate-pulse flex justify-center">
-                      <div className="h-6 w-20 bg-green-200 dark:bg-green-700 rounded-full"></div>
+                      <div className="h-6 w-20 bg-primary/20 rounded-full"></div>
                     </div>
                   )}
                 </td>
@@ -84,7 +84,7 @@ export function TableBody<T extends object>({
         <tr>
           <td
             colSpan={columns.length}
-            className="p-6 text-center text-gray-500 dark:text-gray-400"
+            className="p-6 text-center text-muted-foreground"
           >
             No data available
           </td>
@@ -104,17 +104,17 @@ export function TableBody<T extends object>({
         // Determine row background color
         const defaultBgClass =
           rowIndex % 2 === 0
-            ? 'bg-white dark:bg-gray-900'
-            : 'bg-gray-50 dark:bg-gray-800'
+            ? 'bg-background'
+            : 'bg-muted/50'
 
         return (
           <tr
             key={row.id}
             {...customRowProps}
             className={cn(
-              'border-b border-gray-200 dark:border-gray-700 last:border-0',
-              'transition-colors duration-150 hover:bg-gray-100 hover:dark:bg-gray-600',
-              'text-gray-900 dark:text-gray-300',
+              'border-b border-border last:border-0',
+              'transition-colors duration-150 hover:bg-accent',
+              'text-foreground',
               defaultBgClass,
               rowClassName,
               customRowProps.className
@@ -178,10 +178,10 @@ export function TableBody<T extends object>({
                     // Apply both backdrop-blur and background color for better compatibility
                     // Add border styles for pinned columns
                     isPinned === 'left'
-                      ? 'border-r border-gray-200/50 dark:border-gray-700/50'
+                      ? 'border-r border-border/50'
                       : '',
                     isPinned === 'right'
-                      ? 'border-l border-gray-200/50 dark:border-gray-700/50'
+                      ? 'border-l border-border/50'
                       : '',
                     // Zajistíme, aby se obsah buněk mohl správně zalamovat
                     'whitespace-normal break-words',

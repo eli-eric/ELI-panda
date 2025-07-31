@@ -37,7 +37,7 @@ export const TableContainer: FC<PropsWithChildren<Props>> = ({
       {tableHeading && (
         <div
           id="table-heading"
-          className="items-center w-full py-[2px] px-4 text-center shadow-sm  text-orange-600 bg-white dark:bg-gray-800  "
+          className="items-center w-full py-[2px] px-4 text-center shadow-sm text-primary bg-background border-b border-border"
         >
           <span>{tableHeading}</span>
         </div>
