@@ -1,6 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
 import { type FC, useState } from 'react'
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from '@/components/ui/card'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Skeleton } from '@/components/ui/skeleton'
 import type { CodebookType } from '@/types/responses/codebook'
 import { queryFetcher } from '@/utils/fetcher'
 
@@ -13,55 +22,127 @@ import type { SystemTypesResponse } from './types'
 const SystemTypeEditContainer: FC = () => {
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null)
 
-  const { data: systemTypeGroups, refetch: refetchGroups } = useQuery({
+  const {
+    data: systemTypeGroups,
+    refetch: refetchGroups,
+    isLoading: isLoadingGroups
+  } = useQuery({
     queryKey: ['system-type-groups'],
     queryFn: queryFetcher<CodebookType[]>(`systemTypeGroups`)
   })
-  const { data: systemTypes, refetch: refetchSystemTypes } = useQuery({
+  const {
+    data: systemTypes,
+    refetch: refetchSystemTypes,
+    isLoading: isLoadingTypes
+  } = useQuery({
     queryKey: ['system-types', { uid: selectedGroup }],
     queryFn: queryFetcher<SystemTypesResponse[]>(`systemTypeGroupTypes`),
     enabled: !!selectedGroup
   })
 
   return (
-    <div className="flex flex-col pt-4 w-full  dark:shadow-slate-100 dark:text-gray-200">
-      <div className="flex w-full justify-center">
-        <div className="flex-1 mr-2 justify-center">
-          <div className="text-center flex justify-between px-4 py-2 bg-slate-200 dark:bg-slate-600 rounded-md shadow-sm">
-            Groups
-            <AddGroupButton refetch={refetchGroups} />
-          </div>
-          <ul className="">
-            {systemTypeGroups?.map(item => (
-              <SystemTypeGroup
-                key={item.uid}
-                systemTypeGroup={item}
+    <div className="container mx-auto max-w-7xl w-full px-4 py-4 sm:px-6 md:px-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Groups Section */}
+        <Card className="overflow-hidden w-full md:w-[560px] min-w-[340px] max-w-[640px] flex flex-col max-h-[calc(100vh-8rem)]">
+          <CardHeader className="flex-shrink-0">
+            <div className="flex items-center justify-between">
+              <div className="min-w-0 flex-1">
+                <CardTitle className="text-lg font-semibold">
+                  System Type Groups
+                </CardTitle>
+                <CardDescription>
+                  Manage groups for organizing system types
+                </CardDescription>
+              </div>
+              <AddGroupButton refetch={refetchGroups} />
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0 flex-1 min-h-0">
+            <ScrollArea className="h-full">
+            {isLoadingGroups ? (
+              <div className="space-y-1 w-full">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="p-3">
+                    <Skeleton className="h-5 w-full" />
+                  </div>
+                ))}
+              </div>
+            ) : !systemTypeGroups?.length ? (
+              <div className="text-center py-8 text-muted-foreground">
+                No groups found. Create your first group to get started.
+              </div>
+            ) : (
+              <div className="space-y-1">
+                {systemTypeGroups.map(item => (
+                  <SystemTypeGroup
+                    key={item.uid}
+                    systemTypeGroup={item}
+                    selectedGroup={selectedGroup}
+                    setSelectedGroup={setSelectedGroup}
+                    refetch={refetchGroups}
+                  />
+                ))}
+              </div>
+            )}
+            </ScrollArea>
+          </CardContent>
+        </Card>
+
+        {/* System Types Section */}
+        <Card className="overflow-hidden w-full md:w-[560px] min-w-[340px] max-w-[640px] flex flex-col max-h-[calc(100vh-8rem)]">
+          <CardHeader className="flex-shrink-0">
+            <div className="flex items-center justify-between">
+              <div className="min-w-0 flex-1">
+                <CardTitle className="text-lg font-semibold">
+                  System Types
+                </CardTitle>
+                <CardDescription>
+                  {selectedGroup
+                    ? 'Manage system types in the selected group'
+                    : 'Select a group to view and manage system types'}
+                </CardDescription>
+              </div>
+              <AddSystemTypeButton
                 selectedGroup={selectedGroup}
-                setSelectedGroup={setSelectedGroup}
-                refetch={refetchGroups}
-              />
-            ))}
-          </ul>
-        </div>
-        <div className="flex-1 justify-center">
-          <div className="text-center flex justify-between px-4 py-2 bg-slate-200 dark:bg-slate-600 rounded-md shadow-sm">
-            System Types
-            <AddSystemTypeButton
-              selectedGroup={selectedGroup}
-              refetch={refetchSystemTypes}
-            />
-          </div>
-          <ul>
-            {systemTypes?.map(item => (
-              <SystemTypeItem
-                groupUid={selectedGroup}
-                key={item.uid}
-                systemType={item}
                 refetch={refetchSystemTypes}
               />
-            ))}
-          </ul>
-        </div>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0 flex-1 min-h-0">
+            <ScrollArea className="h-full">
+            {!selectedGroup ? (
+              <div className="text-center py-8 text-muted-foreground">
+                Select a group from the left panel to view system types.
+              </div>
+            ) : isLoadingTypes ? (
+              <div className="space-y-1">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <div key={i} className="p-3 w-full">
+                    <Skeleton className="h-5 w-3/4 mb-2" />
+                    <Skeleton className="h-4 w-1/2" />
+                  </div>
+                ))}
+              </div>
+            ) : !systemTypes?.length ? (
+              <div className="text-center py-8 text-muted-foreground">
+                No system types found in this group. Add the first system type.
+              </div>
+            ) : (
+              <div className="space-y-1">
+                {systemTypes.map(item => (
+                  <SystemTypeItem
+                    groupUid={selectedGroup}
+                    key={item.uid}
+                    systemType={item}
+                    refetch={refetchSystemTypes}
+                  />
+                ))}
+              </div>
+            )}
+            </ScrollArea>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

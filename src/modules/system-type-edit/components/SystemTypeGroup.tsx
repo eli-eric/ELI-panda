@@ -3,11 +3,11 @@ import {
   type RefetchOptions,
   useMutation
 } from '@tanstack/react-query'
-import { type FC, Fragment } from 'react'
+import { Edit, Trash2 } from 'lucide-react'
+import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
-import { DeleteButton, EditButton } from '@/components/Buttons'
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
 import { Button } from '@/components/ui/button'
@@ -125,30 +125,43 @@ export const SystemTypeGroup: FC<Props> = ({
   )
 
   return (
-    <Fragment>
-      <li
-        className={cn(
-          'cursor-pointer py-2 px-4 rounded-md flex justify-between',
-          'hover:bg-orange-100 dark:hover:bg-orange-400',
-          systemTypeGroup.uid === selectedGroup &&
-            'bg-orange-200 dark:bg-orange-500'
-        )}
-        onClick={() => setSelectedGroup(systemTypeGroup.uid)}
-        key={systemTypeGroup.uid}
-      >
-        {systemTypeGroup.name}
-        {canEdit && (
-          <div>
-            <EditButton
-              className="mr-2"
-              onClick={() => {
-                openEditSystemTypeGroupModal(systemTypeGroup, refetch)
-              }}
-            />
-            <DeleteButton onClick={() => withWarningModal(() => {})()} />
-          </div>
-        )}
-      </li>
-    </Fragment>
+    <div
+      className={cn(
+        'group cursor-pointer p-3 rounded-lg transition-all duration-200',
+        'border border-transparent hover:border-border hover:bg-accent/50',
+        'flex items-center justify-between',
+        systemTypeGroup.uid === selectedGroup &&
+          'bg-primary/10 border-primary text-primary font-medium'
+      )}
+      onClick={() => setSelectedGroup(systemTypeGroup.uid)}
+    >
+      <span className="truncate pr-2">{systemTypeGroup.name}</span>
+      {canEdit && (
+        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 p-0"
+            onClick={e => {
+              e.stopPropagation()
+              openEditSystemTypeGroupModal(systemTypeGroup, refetch)
+            }}
+          >
+            <Edit className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+            onClick={e => {
+              e.stopPropagation()
+              withWarningModal(() => {})()
+            }}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
+    </div>
   )
 }

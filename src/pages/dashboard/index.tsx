@@ -18,6 +18,7 @@ import { message } from 'src/i18n/src/messages'
 
 import { Tile, TileContainer } from '@/components/card/tile.comp'
 import { ReleasesContainer } from '@/components/Releases.cont'
+import { VersionControl } from '@/components/version/VersionControl'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import FileManager from '@/modules/shared/fileManager/FileManager'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
@@ -148,6 +149,7 @@ const DashboardPage: NextPage = (): JSX.Element => {
                 hasEditRole={hasEditRole}
                 customTitle="GENERAL FILES"
               />
+              <VersionControl />
               <ReleasesContainer />
             </div>
           </div>
