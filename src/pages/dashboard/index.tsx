@@ -20,6 +20,7 @@ import { Tile, TileContainer } from '@/components/card/tile.comp'
 import { ReleasesContainer } from '@/components/Releases.cont'
 import { VersionControl } from '@/components/version/VersionControl'
 import { useAccessControl } from '@/hooks/useAccessControl'
+import { CatalogueStatisticsContainer } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.cont'
 import FileManager from '@/modules/shared/fileManager/FileManager'
 import { FILE_TYPE } from '@/modules/shared/fileManager/types'
 import { PATH } from '@/types/constants/paths'
@@ -36,9 +37,7 @@ const tiles: Tile[] = [
   {
     name: 'Systems',
     link: PATH.SYSTEMS,
-    Icon: () => (
-      <LayoutGrid className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />
-    ),
+    Icon: () => <LayoutGrid className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />,
     role: ROLE.SYSTEMS_VIEW
   },
   {
@@ -58,9 +57,7 @@ const tiles: Tile[] = [
   {
     name: 'Room Cards',
     link: PATH.ROOM_CARDS,
-    Icon: () => (
-      <CreditCard className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />
-    ),
+    Icon: () => <CreditCard className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />,
     role: ROLE.ROOM_CARD_VIEW
   },
   {
@@ -78,17 +75,13 @@ const tiles: Tile[] = [
   {
     name: 'Support/Feedback',
     link: 'mailto:jiri.svacha@eli-beams.eu',
-    Icon: () => (
-      <LifeBuoy className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />
-    ),
+    Icon: () => <LifeBuoy className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />,
     role: ROLE.BASICS
   },
   {
     name: 'Layout',
     link: PATH.LAYOUT,
-    Icon: () => (
-      <ImageIcon className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />
-    ),
+    Icon: () => <ImageIcon className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" />,
     role: ROLE.BASICS
   },
   {
@@ -129,7 +122,7 @@ const DashboardPage: NextPage = (): JSX.Element => {
                 Quick navigation to all system modules
               </p>
             </div>
-            
+
             <TileContainer>
               {tiles.map(tile => (
                 <Tile
@@ -141,7 +134,8 @@ const DashboardPage: NextPage = (): JSX.Element => {
                 />
               ))}
             </TileContainer>
-            
+            <CatalogueStatisticsContainer />
+
             <div className="space-y-6">
               <FileManager
                 itemType={FILE_TYPE.GENERAL}
