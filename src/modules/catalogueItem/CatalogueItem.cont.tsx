@@ -118,7 +118,13 @@ const CatalogueItemContainer = ({
         <Groups />
         {uid && <RelatedItemsContainer />}
         {uid && <CatalogueOrders />}
-        {uid && <CatalogueStatisticsContainer catalogueItemUid={uid} />}
+        {uid && (
+          <CatalogueStatisticsContainer 
+            catalogueItemUid={uid} 
+            variant="page" 
+            className="mt-6"
+          />
+        )}
         {uid && (
           <ErrorBoundary fallback={<ErrorPage />}>
             <Suspense>

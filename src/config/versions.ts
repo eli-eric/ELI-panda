@@ -38,7 +38,11 @@ export const versionsData: VersionData = {
             "Refactored table components with shadcn/ui design system",
             "Replaced HeadlessUI dropdowns with shadcn/ui Select and DropdownMenu",
             "Updated table icons from Heroicons to Lucide React",
-            "Unified table color scheme with CSS variables for dark/light mode"
+            "Unified table color scheme with CSS variables for dark/light mode",
+            "Redesigned statistics component with modern dashboard-style layout",
+            "Replaced table-based statistics with interactive cards and progress bars",
+            "Added facility selector dropdown for statistics filtering",
+            "Implemented color-coded progress visualization for each statistic category"
           ]
         },
         {
