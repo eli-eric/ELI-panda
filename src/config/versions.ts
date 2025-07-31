@@ -34,7 +34,11 @@ export const versionsData: VersionData = {
             "Redesigned dashboard with modern card-based navigation tiles",
             "Updated form components to use shadcn/ui inputs and selects",
             "Implemented new sidebar with shadcn/ui components",
-            "Replaced legacy buttons with shadcn/ui Button variants"
+            "Replaced legacy buttons with shadcn/ui Button variants",
+            "Refactored table components with shadcn/ui design system",
+            "Replaced HeadlessUI dropdowns with shadcn/ui Select and DropdownMenu",
+            "Updated table icons from Heroicons to Lucide React",
+            "Unified table color scheme with CSS variables for dark/light mode"
           ]
         },
         {

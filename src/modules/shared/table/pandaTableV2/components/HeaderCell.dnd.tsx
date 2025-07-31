@@ -1,6 +1,6 @@
-import { ArrowsRightLeftIcon } from '@heroicons/react/24/outline'
 import type { Column, ColumnOrderState, Header } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
+import { ArrowDown, ArrowUp, GripVertical } from 'lucide-react'
 import { type FC, useMemo } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
@@ -79,8 +79,8 @@ export const HeaderCellDNDComponent: FC<Props> = ({
     <th
       ref={dropRef}
       className={cn(
-        'border-r outline-offset-0 border-gray-400 ',
-        'whitespace-nowrap p-2 text-left bg-white dark:bg-gray-900 font-semibold text-gray-900 dark:text-gray-200',
+        'border-r outline-offset-0 border-border',
+        'whitespace-nowrap p-2 text-left bg-background font-semibold text-foreground',
         isSticky
           ? 'sticky top-0 text-ellipsis z-40 backdrop-blur-2xl backdrop-filter border-r'
           : 'sticky top-0 z-10',
@@ -112,15 +112,23 @@ export const HeaderCellDNDComponent: FC<Props> = ({
         }
       >
         {flexRender(header.column.columnDef.header, header.getContext())}
-        {{
-          asc: ' 🔼',
-          desc: ' 🔽'
-        }[header.column.getIsSorted() as string] ?? null}
-        {!isSticky && (
-          <button ref={dragRef} className={cn(header.getContext() && 'pl-2')}>
-            <ArrowsRightLeftIcon className="w-6 h-6" />
-          </button>
-        )}
+        <div className="flex items-center ml-1">
+          {{
+            asc: <ArrowUp className="w-4 h-4 text-primary" />,
+            desc: <ArrowDown className="w-4 h-4 text-primary" />
+          }[header.column.getIsSorted() as string] ?? null}
+          {!isSticky && (
+            <button
+              ref={dragRef}
+              className={cn(
+                'ml-1 p-1 hover:bg-accent rounded transition-colors',
+                header.getContext() && 'opacity-50 hover:opacity-100'
+              )}
+            >
+              <GripVertical className="w-4 h-4 text-muted-foreground" />
+            </button>
+          )}
+        </div>
       </div>
     </th>
   )

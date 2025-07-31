@@ -39,11 +39,11 @@ export const TableRowComponent: FC<Props> = ({
     <tr
       className={cn(
         'min-h-[49px]',
-        'flex border-t border-gray-300 group',
+        'flex border-t border-border group',
         virtualRow.index % 2 === 0
-          ? 'dark:bg-gray-800'
-          : 'bg-gray-100 dark:bg-gray-700',
-        'group hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 dark:text-gray-300 z-0',
+          ? 'bg-background'
+          : 'bg-muted/50',
+        'group hover:bg-accent text-muted-foreground z-0',
         className
       )}
       data-index={virtualRow.index} //needed for dynamic row height measurement

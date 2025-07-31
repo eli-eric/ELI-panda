@@ -122,7 +122,7 @@ export function Table<T extends object>({
   // If there's no data and not loading, show empty message
   if (tableData.length === 0 && !loading && !skipEmptyMessage) {
     return (
-      <div className="w-full flex items-center justify-center p-8 text-gray-500 dark:text-gray-400 border rounded-md">
+      <div className="w-full flex items-center justify-center p-8 text-muted-foreground border border-border rounded-md">
         {emptyMessage}
       </div>
     )
@@ -153,7 +153,7 @@ export function Table<T extends object>({
 
   return (
     // Main container - sets the width constraint on the table
-    <div className={cn('rounded-md border overflow-hidden', filteredClassName)}>
+    <div className={cn('rounded-md border border-border overflow-hidden', filteredClassName)}>
       {/* Container with fixed height if specified */}
       <div
         className="w-full rounded-md"

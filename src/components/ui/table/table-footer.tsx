@@ -30,7 +30,7 @@ export function TableFooter<T extends object>({
   return (
     <tfoot
       className={cn(
-        'bg-gray-50 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700',
+        'bg-muted/50 border-t border-border',
         'relative z-20',
         footerClassName
       )}
@@ -38,7 +38,7 @@ export function TableFooter<T extends object>({
       {table.getFooterGroups().map(footerGroup => (
         <tr
           key={footerGroup.id}
-          className="border-t border-gray-200 dark:border-gray-700"
+          className="border-t border-border"
         >
           {footerGroup.headers.map((header, headerIndex) => {
             // Get width from column definition if available
@@ -97,14 +97,14 @@ export function TableFooter<T extends object>({
                 key={header.id}
                 colSpan={header.colSpan}
                 className={cn(
-                  'px-4 py-2 text-left font-medium text-gray-500 dark:text-gray-400',
+                  'px-4 py-2 text-left font-medium text-muted-foreground',
                   'whitespace-nowrap',
                   // Add border and background styles for pinned columns
                   isPinned === 'left'
-                    ? 'border-r border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
+                    ? 'border-r border-border bg-muted/50'
                     : '',
                   isPinned === 'right'
-                    ? 'border-l border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800'
+                    ? 'border-l border-border bg-muted/50'
                     : ''
                 )}
                 style={style}

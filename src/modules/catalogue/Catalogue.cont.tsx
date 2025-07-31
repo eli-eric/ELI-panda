@@ -81,13 +81,11 @@ const CatalogueContainer = () => {
       <CategoryListContainer
         setCategoryFilter={setCategoryFilter}
         onChange={open => {
+          console.log('setOpen', open)
           setOpen(open)
         }}
       />
-      <TableLayoutContainer
-        deps={[open, catalogueItems, catalogueCategories]}
-        className={'border-t border-gray-300'}
-      >
+      <TableLayoutContainer deps={[open, catalogueItems, catalogueCategories]}>
         <CatalogueTable
           tableId={tableId}
           setCategoryFilter={setCategoryFilter}
