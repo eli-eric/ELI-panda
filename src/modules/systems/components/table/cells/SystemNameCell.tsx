@@ -58,12 +58,12 @@ export const SystemNameCell = ({
       style={{
         paddingLeft: `${row.depth * 1.01}rem`
       }}
-      className={cn(isDragging && 'text-orange-500', 'flex justify-center')}
+      className={cn(isDragging && 'text-orange-500', 'flex items-center w-full')}
     >
-      <div className="flex items-center" ref={dragRef}>
+      <div className="flex items-center flex-1 min-w-0" ref={dragRef}>
         <div
           className={cn(
-            'flex items-center w-full py-1',
+            'flex items-center py-1',
             original.hasSubsystems && 'group/expand cursor-pointer'
           )}
           onClick={handleExpand}
@@ -104,11 +104,12 @@ export const SystemNameCell = ({
             </div>
           </Tooltip>
         </div>
+      </div>
+      <div className="flex-shrink-0 ml-2">
         <SystemActionButtons
           original={original}
           canEdit={canEdit}
           hideButtons={hideButtons}
-          enableDragAndDrop={enableDragAndDrop}
           sparesIn={sparesIn}
           sparesOut={sparesOut}
           queryKey={queryKey}
