@@ -115,7 +115,9 @@ const CellActionDropdown = ({
                 component: CatalogueStatisticsContainer,
                 props: {
                   catalogueItemUid: uid,
-                  title: 'Statistics: Physical Items Inventory'
+                  variant: 'modal',
+                  title: 'Physical Items Statistics',
+                  size: 'xl'
                 }
               })
             }}
