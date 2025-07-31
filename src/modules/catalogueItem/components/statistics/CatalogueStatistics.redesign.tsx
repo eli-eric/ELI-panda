@@ -58,35 +58,47 @@ const StatisticsCard = ({
 }: StatisticsCardProps) => {
   const percentage = total ? Math.round((value / total) * 100) : 0
   const isCompact = variant === 'compact'
+  const isMobile = variant === 'modal' // In modals, assume mobile-like behavior
 
   return (
-    <Card className={cn('relative overflow-hidden', isCompact ? 'p-3' : 'p-4')}>
-      <CardContent className={cn('space-y-2', isCompact ? 'p-0' : 'p-0 pt-2')}>
-        <div className="flex items-center justify-between">
-          <div
-            className={cn(
-              'flex items-center gap-2',
-              isCompact ? 'text-xs' : 'text-sm'
-            )}
-          >
+    <Card className={cn(
+      'relative overflow-hidden', 
+      isCompact ? 'p-2' : isMobile ? 'p-3' : 'p-4'
+    )}>
+      <CardContent className={cn(
+        'space-y-2', 
+        isCompact ? 'p-0' : 'p-0 pt-1'
+      )}>
+        {/* Mobile-first layout: stack on very small screens */}
+        <div className={cn(
+          'flex flex-col sm:flex-row sm:items-center sm:justify-between',
+          'gap-2 sm:gap-3'
+        )}>
+          <div className={cn(
+            'flex items-center gap-2 min-w-0',
+            isCompact ? 'text-xs' : isMobile ? 'text-sm' : 'text-sm'
+          )}>
             <div
               className={cn(
-                'flex items-center justify-center rounded-full',
-                isCompact ? 'h-6 w-6' : 'h-8 w-8',
+                'flex items-center justify-center rounded-full flex-shrink-0',
+                isCompact ? 'h-6 w-6' : isMobile ? 'h-7 w-7' : 'h-8 w-8',
                 color
               )}
             >
               {icon}
             </div>
-            <span className="font-medium text-muted-foreground truncate">
+            <span className={cn(
+              'font-medium text-muted-foreground min-w-0',
+              isMobile ? 'text-xs sm:text-sm' : 'text-sm'
+            )}>
               {label}
             </span>
           </div>
           <Badge
             variant="secondary"
             className={cn(
-              'font-mono',
-              isCompact ? 'text-xs px-1.5 py-0.5' : 'text-sm'
+              'font-mono flex-shrink-0 self-start sm:self-center',
+              isCompact ? 'text-xs px-1.5 py-0.5' : isMobile ? 'text-xs px-2 py-1' : 'text-sm'
             )}
           >
             {value}
@@ -104,9 +116,12 @@ const StatisticsCard = ({
                 style={{ width: `${percentage}%` }}
               />
             </div>
-            <div className="flex justify-between text-xs text-muted-foreground">
+            <div className={cn(
+              'flex justify-between text-muted-foreground',
+              isMobile ? 'text-xs' : 'text-xs'
+            )}>
               <span>{percentage}% of total</span>
-              <span>
+              <span className="font-mono">
                 {value}/{total}
               </span>
             </div>
@@ -260,71 +275,93 @@ export const CatalogueStatisticsRedesign = ({
   const isCompact = variant === 'compact'
   const gridCols =
     variant === 'modal'
-      ? 'grid-cols-2'
+      ? 'grid-cols-1 sm:grid-cols-2'
       : variant === 'compact'
         ? 'grid-cols-1'
-        : 'grid-cols-3'
+        : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
 
   return (
     <Card className={className}>
-      <CardHeader className={cn(isCompact && 'pb-3')}>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <BarChart3 className="h-5 w-5 text-primary" />
-            <CardTitle className={cn(isCompact ? 'text-base' : 'text-lg')}>
-              Physical Items Statistics
-            </CardTitle>
-          </div>
-          <div className="flex items-center gap-2">
-            {/* Facility Selector - always show unless compact */}
-            {variant !== 'compact' && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-2">
-                    <Building2 className="h-4 w-4" />
-                    {selectedFacility === 'all'
-                      ? 'All Facilities'
-                      : selectedFacility}
-                    <ChevronDown className="h-4 w-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuItem
-                    onClick={() => setSelectedFacility('all')}
-                    className={cn(selectedFacility === 'all' && 'bg-accent')}
-                  >
-                    <Package className="h-4 w-4 mr-2" />
-                    All Facilities
-                  </DropdownMenuItem>
-                  {itemStatistics.map(facility => (
-                    <DropdownMenuItem
-                      key={facility.facilityName}
-                      onClick={() => setSelectedFacility(facility.facilityName)}
-                      className={cn(
-                        selectedFacility === facility.facilityName &&
-                          'bg-accent'
-                      )}
-                    >
-                      <Building2 className="h-4 w-4 mr-2" />
-                      {facility.facilityName}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
-            <Badge variant="outline" className="font-mono">
+      <CardHeader className={cn(isCompact && 'pb-3', 'pb-4')}>
+        {/* Mobile-first header layout */}
+        <div className="flex flex-col gap-3 sm:gap-4">
+          {/* Title row - always full width on mobile */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 min-w-0">
+              <BarChart3 className="h-4 w-4 sm:h-5 sm:w-5 text-primary flex-shrink-0" />
+              <CardTitle className={cn(
+                'truncate',
+                isCompact ? 'text-sm' : 'text-base sm:text-lg'
+              )}>
+                Physical Items Statistics
+              </CardTitle>
+            </div>
+            {/* Items badge - always visible */}
+            <Badge variant="outline" className="font-mono flex-shrink-0 text-xs sm:text-sm">
               <Package className="h-3 w-3 mr-1" />
-              {currentData.total} items
+              {currentData.total}
             </Badge>
           </div>
+          
+          {/* Controls row - stack on mobile */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+            {/* Description */}
+            {!isCompact && (
+              <CardDescription className="text-xs sm:text-sm order-2 sm:order-1">
+                {selectedFacility === 'all'
+                  ? `Total across ${itemStatistics.length} facilities`
+                  : `Statistics for ${selectedFacility} facility`}
+              </CardDescription>
+            )}
+            
+            {/* Facility Selector - full width on mobile */}
+            {variant !== 'compact' && (
+              <div className="order-1 sm:order-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full sm:w-auto justify-between sm:justify-center gap-2"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Building2 className="h-4 w-4" />
+                        <span className="truncate max-w-[120px] sm:max-w-none">
+                          {selectedFacility === 'all'
+                            ? 'All Facilities'
+                            : selectedFacility}
+                        </span>
+                      </div>
+                      <ChevronDown className="h-4 w-4 flex-shrink-0" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuItem
+                      onClick={() => setSelectedFacility('all')}
+                      className={cn(selectedFacility === 'all' && 'bg-accent')}
+                    >
+                      <Package className="h-4 w-4 mr-2" />
+                      All Facilities
+                    </DropdownMenuItem>
+                    {itemStatistics.map(facility => (
+                      <DropdownMenuItem
+                        key={facility.facilityName}
+                        onClick={() => setSelectedFacility(facility.facilityName)}
+                        className={cn(
+                          selectedFacility === facility.facilityName &&
+                            'bg-accent'
+                        )}
+                      >
+                        <Building2 className="h-4 w-4 mr-2" />
+                        {facility.facilityName}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
+          </div>
         </div>
-        {!isCompact && (
-          <CardDescription>
-            {selectedFacility === 'all'
-              ? `Total across ${itemStatistics.length} facilities`
-              : `Statistics for ${selectedFacility} facility`}
-          </CardDescription>
-        )}
       </CardHeader>
 
       <CardContent className="space-y-4">

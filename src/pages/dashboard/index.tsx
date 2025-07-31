@@ -18,6 +18,7 @@ import { message } from 'src/i18n/src/messages'
 
 import { Tile, TileContainer } from '@/components/card/tile.comp'
 import { ReleasesContainer } from '@/components/Releases.cont'
+import { Card, CardContent } from '@/components/ui/card'
 import { VersionControl } from '@/components/version/VersionControl'
 import { useAccessControl } from '@/hooks/useAccessControl'
 import { CatalogueStatisticsContainer } from '@/modules/catalogueItem/components/statistics/CatalogueStatistics.cont'
@@ -137,12 +138,16 @@ const DashboardPage: NextPage = (): JSX.Element => {
             <CatalogueStatisticsContainer />
 
             <div className="space-y-6">
-              <FileManager
-                itemType={FILE_TYPE.GENERAL}
-                uid="dashboard-files"
-                hasEditRole={hasEditRole}
-                customTitle="GENERAL FILES"
-              />
+              <Card>
+                <CardContent>
+                  <FileManager
+                    itemType={FILE_TYPE.GENERAL}
+                    uid="dashboard-files"
+                    hasEditRole={hasEditRole}
+                    customTitle="GENERAL FILES"
+                  />
+                </CardContent>
+              </Card>
               <VersionControl />
               <ReleasesContainer />
             </div>
