@@ -7,6 +7,7 @@ import { Edit, MoreVertical, Trash2 } from 'lucide-react'
 import { type FC } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import { FormattedMessage } from 'react-intl'
 
 import { Form } from '@/components/form/Form'
 import { Input } from '@/components/form/inputs'
@@ -108,8 +109,8 @@ const EditSystemTypeModalContent: FC<{
   }
 
   return (
-    <div className="space-y-4">
-      <Form formMethods={formMethods}>
+    <div className="space-y-4 pt-4">
+      <Form formMethods={formMethods} className="flex flex-col gap-2">
         <Input
           name="name"
           label="Name"
@@ -143,10 +144,10 @@ const EditSystemTypeModalContent: FC<{
           onClick={() => closeModal('dialog1')}
           disabled={isPending}
         >
-          {messages.cancel}
+          <FormattedMessage id={messages.cancel} defaultMessage="Cancel" />
         </Button>
         <Button onClick={handleSubmit} disabled={isPending || !canEdit}>
-          {isPending ? 'Saving...' : messages.save}
+          <FormattedMessage id={messages.save} defaultMessage="Save" />
         </Button>
       </div>
     </div>
