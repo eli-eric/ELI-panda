@@ -56,11 +56,7 @@ export const ServiceLinesAddButton = () => {
       clearSelections()
       closeModal('dialog1')
     },
-<<<<<<< HEAD
     [setServiceLine, resetTable, tableId, clearSelections, closeModal]
-=======
-    [setServiceLine, closeModal, resetTable, tableId, clearSelections]
->>>>>>> bfb76827 (fix service line modal)
   )
   // Use useCallback for handleAddServiceLine
   const handleOpenAddServiceLine = () => {
