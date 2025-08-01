@@ -33,6 +33,7 @@ export const useSubSystemsColumns = () => {
           <Link href={PATH.SYSTEM + '/' + original.uid}>
             <Button
               variant={'link'}
+              type="button"
               title={getValue()}
               size={'sm'}
               className={cn(

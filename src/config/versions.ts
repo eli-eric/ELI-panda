@@ -52,7 +52,11 @@ export const versionsData: VersionData = {
             "Modernized FileManager components with shadcn/ui design system",
             "Converted FileManager action buttons to space-efficient dropdown menus",
             "Updated FileManager icons from Heroicons to Lucide React for consistency",
-            "Enhanced drag & drop upload area with modern visual feedback and styling"
+            "Enhanced drag & drop upload area with modern visual feedback and styling",
+            "Redesigned ItemPropertiesViewer with modern shadcn/ui components and compact layout",
+            "Added collapsible functionality to ItemPropertiesViewer for optional viewing",
+            "Improved empty value handling for null, undefined, and empty string properties",
+            "Enhanced Disclosure component to support ReactNode titles for rich content"
           ]
         },
         {

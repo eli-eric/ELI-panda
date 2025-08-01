@@ -52,6 +52,7 @@ export const useSparePartsColumns = () => {
                 <Button
                   variant={'link'}
                   title={getValue()}
+                  type="button"
                   size={'sm'}
                   className={cn(
                     'text-inherit hover:underline h-4 font-sm cursor-pointer'
