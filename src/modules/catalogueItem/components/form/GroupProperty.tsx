@@ -11,14 +11,13 @@ import type { CatalogueItemDetail } from '../../types/responses'
 
 interface Props {
   detail: CatalogueItemDetail
-  index: number
   disabled?: boolean
 }
 
-const GroupProperty = ({ detail, index, disabled: forceDisabled }: Props) => {
+const GroupProperty = ({ detail, disabled: forceDisabled }: Props) => {
   const disabledPermission = !usePermission([ROLE.CATALOGUE_EDIT])
   const disabled = forceDisabled || disabledPermission
-  const fieldName = `details.${index}.value`
+  const fieldName = `details.${detail.property.uid}.value`
 
   switch (detail.property.type.uid) {
     case PROPERTY_TYPE.TEXT:
