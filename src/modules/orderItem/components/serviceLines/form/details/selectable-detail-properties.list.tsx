@@ -48,7 +48,7 @@ export const SelectableDetailPropertiesList = ({
       setValue(`details.${uid}.value`, detail.value)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setValue, detailsWithIndices])
+  }, [setValue, groupMap])
 
   // Use effect to store selected properties in the form
   useEffect(() => {

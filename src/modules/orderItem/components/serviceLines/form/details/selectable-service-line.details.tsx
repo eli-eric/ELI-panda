@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import { useServiceType } from '@/modules/services/hooks/useServiceType'
@@ -18,7 +19,15 @@ export const SelectableServiceLineDetails = ({ serviceType }: Props) => {
     serviceType ? serviceType.uid : serviceTypeForm?.uid
   )
 
-  // Initialize all properties as selected when service type changes
+  // Stabilize allowedDetails to prevent infinite re-renders
+  const allowedDetails = useMemo(() => {
+    return data?.properties || []
+  }, [data?.properties])
+
+  // Stabilize category reference
+  const category = useMemo(() => {
+    return data?.category
+  }, [data?.category])
 
   if (error) return <div className="text-red-300">Something went wrong!!</div>
 
@@ -26,8 +35,8 @@ export const SelectableServiceLineDetails = ({ serviceType }: Props) => {
     <div className="flex flex-col">
       <div className="min-h-[320px]">
         <SelectableServiceLineGroups
-          category={data?.category}
-          allowedDetails={data?.properties}
+          category={category}
+          allowedDetails={allowedDetails}
         />
       </div>
     </div>
