@@ -51,6 +51,7 @@
     "d3": "^7.9.0",
     "date-fns": "^4.1.0",
     "deepmerge": "^4.2.2",
+    "embla-carousel-react": "^8.6.0",
     "env-cmd": "^10.1.0",
     "graphql": "^16.8.1",
     "jimp": "^0.22.12",
