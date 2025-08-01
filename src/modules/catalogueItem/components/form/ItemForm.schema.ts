@@ -1,8 +1,6 @@
-import { array, mixed, object, string } from 'yup'
+import { mixed, object, string } from 'yup'
 
 import type { CodebookType } from '@/types/responses/codebook'
-
-import type { CatalogueCategoryProperty } from '../../types/responses'
 
 export const schema = object({
   uid: string(),
@@ -14,14 +12,22 @@ export const schema = object({
   categoryName: string(),
   supplier: mixed<CodebookType>().nullable(),
   manufacturerUrl: string(),
-  details: mixed().transform((value) => {
-    // If it's an object with UID keys, convert to array
-    if (value && typeof value === 'object' && !Array.isArray(value)) {
-      return Object.values(value)
-    }
-    return value
-  }).test('is-array-or-object', 'details must be valid', (value) => {
-    // Allow either array or object with UID keys
-    return Array.isArray(value) || (value && typeof value === 'object')
-  })
+  details: mixed()
+    .nullable()
+    .transform(value => {
+      // If it's an object with UID keys, convert to array
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        return Object.values(value)
+      }
+      return value
+    })
+    .test('is-array-or-object-or-null', 'details must be valid', value => {
+      // Allow null, undefined, array, or object with UID keys
+      return (
+        value === null ||
+        value === undefined ||
+        Array.isArray(value) ||
+        (value && typeof value === 'object')
+      )
+    })
 })
