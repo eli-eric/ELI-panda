@@ -1,4 +1,3 @@
-import { DevTool } from '@hookform/devtools'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { memo, useEffect, useRef, useState } from 'react'
 import { Suspense } from 'react'
@@ -27,7 +26,7 @@ import { RelatedItemsContainer } from './components/related-items/RelatedItems.c
 import { CatalogueStatisticsContainer } from './components/statistics/CatalogueStatistics.cont'
 import { useCatalogueItem } from './hooks/useItem'
 import { useItemSubmit } from './hooks/useItemSubmit'
-import type { CatalogueItem } from './types/responses'
+import type { CatalogueItem, CatalogueItemDetail } from './types/responses'
 
 const MemoizedGallery = memo(ImageGallery)
 
@@ -56,7 +55,8 @@ const CatalogueItemContainer = ({
     resolver: yupResolver(schema),
     defaultValues: { ...item }
   })
-  const { reset, setValue } = formMethods
+  const { reset, setValue, formState } = formMethods
+  console.log('Form state:', formState)
   const { submit, loading } = useItemSubmit({
     setvalue: setValue,
     imageRef: imageRef,
@@ -76,18 +76,36 @@ const CatalogueItemContainer = ({
   }, [catalogueCategory])
 
   const onSubmit = (catalogueItem: CatalogueForm) => {
+    console.log('Submit data raw:', catalogueItem)
+    
     // extract from catalogueItem hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = catalogueItem
+    
+    // Convert details object with UID keys back to details array for API
+    const details = rest.details ? Object.values(rest.details) : []
+    
+    const finalData = { ...rest, details }
+    console.log('Submit data processed:', finalData)
+    
     setSaveAndExit(false)
-    submit(rest as CatalogueItem)
+    submit(finalData as CatalogueItem)
   }
   const onSubmitAndExit = (catalogueItem: CatalogueForm) => {
+    console.log('SubmitAndExit data raw:', catalogueItem)
+    
     // extract from catalogueItem hasImageGalleryChanges
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { hasImageGalleryChanges, ...rest } = catalogueItem
+    
+    // Convert details object with UID keys back to details array for API
+    const details = rest.details ? Object.values(rest.details) : []
+    
+    const finalData = { ...rest, details }
+    console.log('SubmitAndExit data processed:', finalData)
+    
     setSaveAndExit(true)
-    submit(rest as CatalogueItem)
+    submit(finalData as CatalogueItem)
   }
 
   return (
@@ -99,8 +117,24 @@ const CatalogueItemContainer = ({
       <HeaderWithButtons
         loading={loading}
         editRole={ROLE.CATALOGUE_EDIT}
-        onSubmit={formMethods.handleSubmit(onSubmit)}
-        onSubmitAndExit={formMethods.handleSubmit(onSubmitAndExit)}
+        onSubmit={formMethods.handleSubmit(
+          (data) => {
+            console.log('handleSubmit SUCCESS:', data)
+            onSubmit(data)
+          },
+          (errors) => {
+            console.log('handleSubmit ERRORS:', errors)
+          }
+        )}
+        onSubmitAndExit={formMethods.handleSubmit(
+          (data) => {
+            console.log('handleSubmitAndExit SUCCESS:', data)
+            onSubmitAndExit(data)
+          },
+          (errors) => {
+            console.log('handleSubmitAndExit ERRORS:', errors)
+          }
+        )}
       />
       <Card className="flex flex-col justify-between pb-5">
         <div className="lg:grid lg:grid-cols-3 lg:items-start lg:gap-x-8 pb-3">
@@ -131,7 +165,6 @@ const CatalogueItemContainer = ({
           </ErrorBoundary>
         )}
       </Card>
-      <DevTool control={formMethods.control} placement="bottom-right" />
     </Form>
   )
 }

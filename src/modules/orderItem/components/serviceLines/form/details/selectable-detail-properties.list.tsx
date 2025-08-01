@@ -39,15 +39,16 @@ export const SelectableDetailPropertiesList = ({
       })
   )
 
-  // Use effect to set form values
+  // Use effect to set form values using property.uid instead of index
   useEffect(() => {
-    detailsWithIndices.forEach(({ index, detail }) => {
-      Object.keys(detail).forEach(key => {
-        setValue(`details.${index}.${key}`, detail[key])
-      })
+    detailsWithIndices.forEach(({ detail }) => {
+      const uid = detail.property.uid
+      setValue(`details.${uid}.property`, detail.property)
+      setValue(`details.${uid}.propertyGroup`, detail.propertyGroup)
+      setValue(`details.${uid}.value`, detail.value)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setValue, JSON.stringify(detailsWithIndices)])
+  }, [setValue, detailsWithIndices])
 
   // Use effect to store selected properties in the form
   useEffect(() => {
@@ -72,7 +73,6 @@ export const SelectableDetailPropertiesList = ({
                 return (
                   <SelectableGroupProperty
                     key={property.property.uid}
-                    index={globalIndex}
                     detail={{
                       property: property.property,
                       propertyGroup: property.propertyGroup,

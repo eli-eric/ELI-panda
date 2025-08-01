@@ -38,15 +38,16 @@ export const DetailPropertiesList = ({
       })
   )
 
-  // Use effect to set form values
+  // Use effect to set form values using property.uid instead of index
   useEffect(() => {
-    detailsWithIndices.forEach(({ index, detail }) => {
-      Object.keys(detail).forEach(key => {
-        setValue(`details.${index}.${key}`, detail[key])
-      })
+    detailsWithIndices.forEach(({ detail }) => {
+      const uid = detail.property.uid
+      setValue(`details.${uid}.property`, detail.property)
+      setValue(`details.${uid}.propertyGroup`, detail.propertyGroup)
+      setValue(`details.${uid}.value`, detail.value)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setValue, JSON.stringify(detailsWithIndices)])
+  }, [setValue, detailsWithIndices])
 
   if (allProperties.length === 0) {
     return null
@@ -71,7 +72,6 @@ export const DetailPropertiesList = ({
                 return (
                   <GroupProperty
                     key={property.property.uid}
-                    index={globalIndex}
                     detail={detail}
                     disabled={disabled}
                   />

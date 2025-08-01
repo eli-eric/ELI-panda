@@ -14,11 +14,14 @@ export const schema = object({
   categoryName: string(),
   supplier: mixed<CodebookType>().nullable(),
   manufacturerUrl: string(),
-  details: array().of(
-    object({
-      propertyGroup: string().required(),
-      value: mixed<any>().nullable(),
-      property: mixed<CatalogueCategoryProperty>().nullable().required()
-    })
-  )
+  details: mixed().transform((value) => {
+    // If it's an object with UID keys, convert to array
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      return Object.values(value)
+    }
+    return value
+  }).test('is-array-or-object', 'details must be valid', (value) => {
+    // Allow either array or object with UID keys
+    return Array.isArray(value) || (value && typeof value === 'object')
+  })
 })

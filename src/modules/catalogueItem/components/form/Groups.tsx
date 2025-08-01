@@ -11,7 +11,7 @@ import type { CatalogueItem, CatalogueItemDetail } from '../../types/responses'
 import GroupProperty from './GroupProperty'
 
 const Groups = () => {
-  const { watch, setValue, unregister } = useFormContext<CatalogueItem>()
+  const { watch, setValue, unregister } = useFormContext<any>()
   const category = watch('category')
 
   // Unregister details when category changes
@@ -64,34 +64,29 @@ const Groups = () => {
     groupsDetail
   ])
 
-  // Create details with indices for form setup
-  const detailsWithIndices = useMemo(() => {
+  // Create details for form setup using stable property.uid instead of indices
+  const detailsForForm = useMemo(() => {
     return Array.from(groupMap.entries()).flatMap(([, properties]) =>
-      properties.map(property => {
-        const globalIndex = allProperties.findIndex(
-          p => p.property.property.uid === property.property.uid
-        )
-        return {
-          index: globalIndex,
-          detail: {
-            property: property.property,
-            propertyGroup: property.propertyGroup,
-            value: property.value
-          }
+      properties.map(property => ({
+        uid: property.property.uid,
+        detail: {
+          property: property.property,
+          propertyGroup: property.propertyGroup,
+          value: property.value
         }
-      })
+      }))
     )
-  }, [groupMap, allProperties])
+  }, [groupMap])
 
-  // Use effect to set form values
+  // Use effect to set form values using stable property.uid
   useEffect(() => {
-    detailsWithIndices.forEach(({ index, detail }) => {
-      setValue(`details.${index}.property`, detail.property)
-      setValue(`details.${index}.propertyGroup`, detail.propertyGroup)
-      setValue(`details.${index}.value`, detail.value)
+    detailsForForm.forEach(({ uid, detail }) => {
+      setValue(`details.${uid}.property`, detail.property)
+      setValue(`details.${uid}.propertyGroup`, detail.propertyGroup)
+      setValue(`details.${uid}.value`, detail.value)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setValue, JSON.stringify(detailsWithIndices)])
+  }, [setValue, detailsForForm])
 
   if (allProperties.length === 0) {
     return null
@@ -105,13 +100,9 @@ const Groups = () => {
           <div className="px-4 sm:px-6">
             <dl className="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
               {properties.map(property => {
-                const globalIndex = allProperties.findIndex(
-                  p => p.property.property.uid === property.property.uid
-                )
                 return (
                   <GroupProperty
                     key={property.property.uid}
-                    index={globalIndex}
                     detail={property}
                     disabled={false}
                   />

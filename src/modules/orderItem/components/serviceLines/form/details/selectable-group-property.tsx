@@ -10,14 +10,13 @@ import { useServiceLineSelectionStore } from './store/useServiceLineSelectionSto
 
 interface Props {
   detail: CatalogueItemDetail
-  index: number
 }
 
-export const SelectableGroupProperty = ({ detail, index }: Props) => {
+export const SelectableGroupProperty = ({ detail }: Props) => {
   const { toggleProperty, isPropertySelected } = useServiceLineSelectionStore()
   const propertyUid = detail.property.uid
   const isSelected = isPropertySelected(propertyUid)
-  const fieldName = `details.${index}.value`
+  const fieldName = `details.${detail.property.uid}.value`
 
   // Only enable the field if it's selected
   const disabled = !isSelected
