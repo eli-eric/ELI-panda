@@ -42,7 +42,11 @@ export const versionsData: VersionData = {
             "Redesigned statistics component with modern dashboard-style layout",
             "Replaced table-based statistics with interactive cards and progress bars",
             "Added facility selector dropdown for statistics filtering",
-            "Implemented color-coded progress visualization for each statistic category"
+            "Implemented color-coded progress visualization for each statistic category",
+            "Converted inline table action buttons to dropdown menus for OrderLines and ServiceLines",
+            "Replaced similar order status colors with distinct color palette for better visibility",
+            "Enhanced table row colorization with text coloring instead of background highlighting",
+            "Improved table design consistency across all data tables"
           ]
         },
         {
