@@ -1,6 +1,6 @@
+import { FileText, Link, Upload } from 'lucide-react'
 import { useCallback, useMemo, useRef } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { FileText, Link, Upload } from 'lucide-react'
 
 import { Heading } from '@/components/layout/Heading'
 import ProgressBarComponent from '@/components/progress-bar.comp'
@@ -134,10 +134,10 @@ const FileManager = ({
         <div
           {...getRootProps()}
           className={cn(
-            "mt-4 border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer",
+            'mt-4 border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer',
             isDragActive
-              ? "border-primary bg-primary/5"
-              : "border-muted-foreground/25 hover:border-muted-foreground/50"
+              ? 'border-primary bg-primary/5'
+              : 'border-muted-foreground/25 hover:border-muted-foreground/50'
           )}
         >
           <div className="flex flex-col items-center gap-2">

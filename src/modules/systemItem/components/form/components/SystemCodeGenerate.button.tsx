@@ -32,7 +32,7 @@ export const SystemCodeButton = () => {
         loading={loading || pending}
         disabled={disabled}
         onClick={handleGenerate}
-        className="sm:mt-5 mr-2 mt-6 w-full flex justify-center"
+        className="mr-2 mt-4 flex justify-center"
       >
         Generate
       </Button>
@@ -40,7 +40,7 @@ export const SystemCodeButton = () => {
         disabled={disabled}
         loading={loading || pending}
         onClick={handleClear}
-        className="sm:mt-5 mt-6 w-full flex justify-center"
+        className="mt-4 flex justify-center"
       >
         Release
       </Button>

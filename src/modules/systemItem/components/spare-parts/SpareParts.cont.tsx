@@ -6,7 +6,7 @@ import { Table } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 
 import { useSystemDetail } from '../../hooks/useSystemDetail'
-import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
+import { getFontBySystemLevel } from '../../utils'
 import { AssignSparePartButton } from './AssignSparePartsButton'
 import { SetMinimalSparesButton } from './SetMinimalSparesButton'
 import { useSparePartsColumns } from './SpareParts.columns'
@@ -60,9 +60,7 @@ export const SparePartsContainer = () => {
             columns={columns}
             getRowProps={({ original }, index) => ({
               className: cn(
-                original?.physicalItem &&
-                  'font-bold text-gray-700 dark:text-gray-200',
-                getColorBySystemLevel(original?.systemLevel, index),
+                original?.physicalItem && 'font-bold',
                 getFontBySystemLevel(original?.systemLevel)
               )
             })}

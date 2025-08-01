@@ -1,3 +1,5 @@
+import { ListCollapse } from 'lucide-react'
+
 import { Col, Grid } from '@/components/grid/Grid'
 import { Disclosure } from '@/components/ui'
 
@@ -12,14 +14,20 @@ export const ItemProperties = ({ properties }: ItemPropertiesProps) => {
     return null
   }
 
+  const title = (
+    <div className="flex items-center gap-2">
+      <ListCollapse className="h-4 w-4 text-muted-foreground" />
+      <span>Catalogue Properties</span>
+    </div>
+  )
+
   return (
     <Disclosure
-      title="Item Properties"
-      defaultOpen={true}
-      className="w-full border rounded-md"
-      buttonClassName="p-3"
-      panelClassName="px-3 py-3"
-      transparentButton={true}
+      title={title}
+      defaultOpen={false}
+      className="w-full border rounded-lg"
+      buttonClassName="p-3 text-base font-semibold"
+      panelClassName="p-4 space-y-4 shadow-md rounded-lg"
     >
       <Grid className="w-full">
         {properties.map((property, index) => (

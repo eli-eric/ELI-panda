@@ -9,7 +9,7 @@ import { PATH } from '@/types/constants/paths'
 
 import { useSystemSubsystems } from '../../hooks/useSubsystems'
 import { useSystemDetail } from '../../hooks/useSystemDetail'
-import { getColorBySystemLevel, getFontBySystemLevel } from '../../utils'
+import { getFontBySystemLevel } from '../../utils'
 import { useSubSystemsColumns } from './SubSustems.columns'
 import type { TableSystem } from './types'
 
@@ -40,8 +40,7 @@ export const SubSystemsContainer = () => {
         className={'relative overflow-x-auto mb-0 pb-0'}
         getRowProps={({ physicalItem, systemLevel, sp_coverage }, index) => ({
           className: cn(
-            physicalItem && 'font-bold text-gray-700 dark:text-gray-200',
-            getColorBySystemLevel(systemLevel || undefined, index),
+            physicalItem && 'font-bold',
             getFontBySystemLevel(systemLevel || undefined),
             sp_coverage != null &&
               sp_coverage < 1 &&
